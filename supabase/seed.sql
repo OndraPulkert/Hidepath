@@ -1,0 +1,1 @@
+-- Žádná seed data: instruktážní obsah žije v repozitáři (src/content), uživatelská data vznikají v aplikaci.

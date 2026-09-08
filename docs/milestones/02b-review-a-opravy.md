@@ -1,0 +1,36 @@
+# Review po Milníku 2 a provedené opravy
+
+Datum: 2026-09-07. Dva nezávislé reviewy (kód / produkt-UX-obsah) nad stavem po M1+M2.
+
+## Kritické a závažné nálezy → opraveno
+
+| Nález                                                                                                                                | Oprava                                                                                                                                                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Zástupné id `optimistic` se ukládalo do úložiště a kolizí přepisovalo jiné položky i kontrolní body (po reloadu zbyl jediný záznam). | Úplný záznam s UUID vzniká před spuštěním mutace (`applyInventoryPatch`, `build` v `useToggleCheckpoint`); cache i úložiště sdílí tentýž objekt. Úložiště odmítne id, které není UUID. Regresní testy v `features/data/persistence.test.tsx`. |
+| Fáze lekcí se uzavírala pouhým odškrtáním bodů → „Označit projekt za hotový“ bez jediné dokončené lekce.                             | `isComplete` fáze lekcí = všechny lekce `completed`. Test v `journey.test.ts`.                                                                                                                                                                |
+| Duplicitní záznamy zápisu do projektu a `lesson_progress` při souběžných mutacích.                                                   | Idempotentní id podle existujícího záznamu, mutace téže entity sériově (`scope`).                                                                                                                                                             |
+| Chybí `createdAt`, `userId`; nešlo napojit na §8.                                                                                    | Doplněno do všech záznamů (`userId: null` do M3).                                                                                                                                                                                             |
+| Chyba zápisu do úložiště byla neviditelná; paměťový fallback tichý.                                                                  | `StorageWriteError`, stav „Uložení změny se nezdařilo“ z `useMutationState`, trvalé varování „Data se v tomto prohlížeči neukládají“ při paměťovém fallbacku.                                                                                 |
+| Lekce 1 vyžadovala vidličky, jehly i nit → s objednanými vidličkami nešlo začít vůbec nic.                                           | L1 vyžaduje jen podložky; kontrola nástrojů je nepovinná („až budete mít doma“). Přibylo `recommendedEquipment` u lekcí.                                                                                                                      |
+| „Jste ve fázi Vybavení“ vedle „Pokračovat lekcí 2“.                                                                                  | Aktuální fáze = fáze dostupné lekce, je-li nějaká.                                                                                                                                                                                            |
+| Šablona: přední kapsa 58 mm zakryla celou kartu (54 mm); steh na zadním díle kreslený až k horní hraně.                              | Přední kapsa 42 mm, boky zadního dílu šité jen do 42 mm (`stitchUpToMm`). Stále NÁVRH k ověření na papíru.                                                                                                                                    |
+| Cenová poznámka tvrdila ověření u všech položek.                                                                                     | `priceSource: verified \| estimate`; odhad je v UI označen „odhad“. Ověřené: vidličky, jehly, nit, palička, podložka, lepidlo.                                                                                                                |
+| Smirkový papír chyběl v katalogu, přestože ho lekce 5 a 6 vyžadují.                                                                  | Přidán jako nezbytná položka (běžně doma).                                                                                                                                                                                                    |
+| Tisk šablony: navigace se tiskla, SVG se mohlo zlomit.                                                                               | `print:hidden` na navigaci a stavovém pruhu, `break-inside: avoid`, bílé pozadí v tisku. Ověřeno exportem do PDF (jedna strana A4).                                                                                                           |
+| Fonty z Google CDN (offline, GDPR).                                                                                                  | Self-hostované woff2 v `public/fonts` (OFL), v precache; žádné externí requesty.                                                                                                                                                              |
+
+## Menší nálezy → opraveno
+
+Objednaná položka se zadanou cenou zůstává v rozpočtu se skutečnou cenou; komponenty už nepočítají poměry (v doméně `ownedRatio`/`orderedRatio`); odkaz v zámku vede správně; předchozí/další lekce podle pořadí v poli; filtr nákupů `role="group"` + `aria-pressed`; bezpečnostní box `role="note"`; spodní lišta bez `toolbar`; skip link; unikátní id checkboxů; `queryKeys` sjednoceny; mrtvý kód odstraněn (`PageHeader`, `getProject`, `@mdx-js/react`); `isEnrolled` ignoruje archivované; formulář v dílně se synchronizuje se záznamem; onboarding při odkliknutí vrací předchozí stav; fallback `computeNextAction` neposílá k dokončení projektu; typografie: nezlomitelné mezery (`typo()`, `formatPercent`, `formatCzkRange` „350–600 Kč“), „3,5“ místo „3.5“; h3/h4 v Albert Sans; odkazy cognac-deep a token `brass-deep` kvůli kontrastu (odchylka od styleguidu, zdokumentováno); horní navigace se na lekci na mobilu skrývá; po dokončení lekce se přechází jen na odemčenou lekci; pádové chyby („Zamčeno · chybí: …“), vykání v kontrolních bodech, bez interního žargonu na loginu.
+
+## Ponecháno (vědomě)
+
+- `key={pathname}` na `<main>` kvůli animaci přechodu – při navigaci se stav formuláře ztrácí záměrně.
+- Bundle ~600 kB (gzip 187 kB) – rozdělení podle tras až s M3.
+- E2E (Playwright) a outbox testy – M4/M5 podle plánu.
+- Odborný obsah zůstává `draft`; L2 směr řezu, konvence stehu a rozměry šablony vyžadují korekturu řemeslníka.
+- Zpětná vazba „odemkla se lekce N“ po přepnutí na Mám – zvážit v M3 spolu s toasty.
+
+## Ověření po opravách
+
+typecheck, lint (0 varování), prettier, 16 souborů / 107 testů, build OK (precache 30 položek vč. fontů), screenshoty 1280/390 bez přetečení a bez externích requestů, fonty načtené z vlastního hostingu, PDF export šablony na jednu stranu A4.

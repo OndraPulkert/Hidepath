@@ -1,0 +1,10 @@
+node_modules
+dist
+dev-dist
+pnpm-lock.yaml
+prototype
+styleguide
+.idea
+public/templates
+docs/content/shot-list.md
+supabase/.temp

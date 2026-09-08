@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="cs">
+  <body
+    style="
+      margin: 0;
+      background: #f4efe6;
+      font-family:
+        'Albert Sans',
+        system-ui,
+        -apple-system,
+        Segoe UI,
+        sans-serif;
+      color: #2b211c;
+    "
+  >
+    <table
+      role="presentation"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      style="background: #f4efe6; padding: 32px 16px"
+    >
+      <tr>
+        <td align="center">
+          <table
+            role="presentation"
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
+            style="
+              max-width: 520px;
+              background: #fbf8f2;
+              border: 1px solid rgba(43, 33, 28, 0.14);
+              border-radius: 16px;
+              padding: 32px;
+            "
+          >
+            <tr>
+              <td
+                style="
+                  font-family: Georgia, serif;
+                  font-size: 22px;
+                  font-weight: 600;
+                  padding-bottom: 4px;
+                "
+              >
+                Hidepath
+              </td>
+            </tr>
+            <tr>
+              <td
+                style="
+                  font-family: Georgia, serif;
+                  font-style: italic;
+                  font-size: 13px;
+                  color: #6b5f57;
+                  padding-bottom: 24px;
+                "
+              >
+                From first cut to finished craft.
+              </td>
+            </tr>
+            <tr>
+              <td style="font-size: 16px; line-height: 1.55; padding-bottom: 20px">
+                Dobrý den,<br />tímto odkazem se přihlásíte do Hidepath. Otevřete ho ve stejném
+                prohlížeči, ve kterém jste o něj požádali.
+              </td>
+            </tr>
+            <tr>
+              <td style="padding-bottom: 24px">
+                <a
+                  href="{{ .ConfirmationURL }}"
+                  style="
+                    display: inline-block;
+                    background: #a85f32;
+                    color: #ffffff;
+                    text-decoration: none;
+                    font-weight: 600;
+                    font-size: 15px;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                  "
+                  >Přihlásit se</a
+                >
+              </td>
+            </tr>
+            <tr>
+              <td style="font-size: 15px; line-height: 1.55; padding-bottom: 8px">
+                Pokud odkaz nejde otevřít ve stejném prohlížeči (například na telefonu z instalované
+                aplikace), zadejte v aplikaci tento kód:
+              </td>
+            </tr>
+            <tr>
+              <td
+                style="
+                  font-family: ui-monospace, Menlo, monospace;
+                  font-size: 28px;
+                  letter-spacing: 0.2em;
+                  padding-bottom: 24px;
+                "
+              >
+                {{ .Token }}
+              </td>
+            </tr>
+            <tr>
+              <td style="font-size: 13px; line-height: 1.5; color: #6b5f57">
+                Odkaz i kód platí asi hodinu. Pokud jste o přihlášení nežádali, e-mail ignorujte;
+                bez kliknutí se nic nestane.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

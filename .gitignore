@@ -1,0 +1,31 @@
+# Závislosti a buildy
+node_modules
+dist
+dist-ssr
+*.local
+*.tsbuildinfo
+
+# Logy
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Prostředí – nikdy necommitovat tajné klíče
+.env
+.env.*
+!.env.example
+
+# Vývojářské soubory (Workbox dev SW)
+dev-dist
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+
+# Testy
+coverage
+playwright-report
+test-results
