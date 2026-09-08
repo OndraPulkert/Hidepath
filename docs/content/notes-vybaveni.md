@@ -96,6 +96,30 @@ Neprevzato: seznam ochranných pomůcek (pro projekt bez barev a rozpouštědel 
 „stitching punch“ s kulatými otvory (zajímavé pro přístupnost, ne pro první projekt).
 Šablona klíčenky v průvodci je jen inspirace pro budoucí projekt, vlastní střih nutný.
 
+## Ověření šablony proti CraftPoint Patterns (2026-09-08)
+
+https://patterns.craft-point.com/cs — bezplatný generátor sedlářských střihů v češtině od CraftPointu.
+45 střihů, bez registrace, PDF 1:1 na A4 s kalibračním čtvercem 50 mm, „zdarma i pro komerční
+využití u tvé kožené galanterie“. Formální licenční dokument na stránce není.
+
+Porovnání s naší šablonou (Slim pouzdro na karty):
+
+| Parametr     | CraftPoint                       | Hidepath         |
+| ------------ | -------------------------------- | ---------------- |
+| Tělo         | 102 × 72 mm                      | 100 × 70 mm      |
+| Přední kapsa | 56 mm + volitelný výřez na palec | 42 mm bez výřezu |
+| Rozteč stehu | volby 3,0 / 3,38 / 4,0 mm        | 3,85–4 mm        |
+| Kůže         | třísločiněná 1,2 mm              | 1,2–1,5 mm       |
+| Tisk         | A4 na 100 %, kalibrace 50 mm     | totéž            |
+
+Závěr: rozměry i doporučení materiálu nezávisle potvrzeny (rozdíl 2 mm je v toleranci ručního
+řezu). **Otevřená otázka:** vytažení karty. Oni řeší vysokou kapsou s výřezem na palec, my nízkou
+kapsou 42 mm, ze které karta vyčnívá ~16 mm. Výřez drží kartu bezpečněji a vypadá jako běžné
+pouzdro; nízká kapsa je o jeden oblouk jednodušší na vyříznutí. Rozhodnutí na autorovi.
+
+**Nepřebírat jejich PDF ani geometrii do aplikace** – licence pokrývá výrobu zboží, ne
+redistribuci střihů v jiném produktu.
+
 ## Kandidáti pro další projekty (mimo katalog pouzdra)
 
 | Položka                                                  | Pro projekt                                                      | Priorita                  | Poznámka                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
