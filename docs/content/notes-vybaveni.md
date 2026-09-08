@@ -74,6 +74,23 @@ Pet Hardware (pethardware.com/cs/siti-kuze/ – stránka blokuje automatické na
 CraftPoint, Sedlářské nářadí, Sklad Kůžetvůrce, Andexnite. Návod česky k sedlářskému stehu:
 craft-point.cz/blogs/slovnik/rucni-sit-kuze-sedlarsky-steh.
 
+## Křížové ověření nezávislým zdrojem (2026-09-08)
+
+„Beginner's Leathercraft 101 – Tools & Materials“, Castillo Heritage Crafts, v1.2, květen 2025
+(castilloheritagecrafts.com). Průvodce nástroji a materiály pro začátečníky, bez technik. Licence
+povoluje jen osobní sdílení – **texty ani šablony do aplikace nepřebírat**, slouží jen k ověření.
+
+Potvrzuje: rozteč 3,85 mm jako start, dvě velikosti vidliček (2 + 6/8 hrotů), nekovová palička
+0,5–1 kg, podložka A3, ocelové pravítko s korkem, odlamovací nůž, rýsovací šídlo jako nezbytné,
+kružítko na linie stehu, deska pod děrování (HDPE jako levná varianta), úprava hran volitelná,
+Tokonole / voda, smirek 300–1000, trénink na odřezcích, 1,2 mm (3 oz) pro peněženky a pouzdra.
+
+Převzato jako úprava obsahu: vodní kontaktní lepidlo jako první volba (rozpouštědlová jen
+s větráním); zatavení konců polyesterové nitě jako alternativa k zpětným stehům.
+Neprevzato: seznam ochranných pomůcek (pro projekt bez barev a rozpouštědel nadbytečný),
+„stitching punch“ s kulatými otvory (zajímavé pro přístupnost, ne pro první projekt).
+Šablona klíčenky v průvodci je jen inspirace pro budoucí projekt, vlastní střih nutný.
+
 ## Kandidáti pro další projekty (mimo katalog pouzdra)
 
 | Položka                                                  | Pro projekt                                                      | Priorita                  | Poznámka                                                                                                                                                                                                                                                                                                                                                 |

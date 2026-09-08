@@ -438,7 +438,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'finish-stitch',
         title: 'Ukončení',
-        body: 'Na konci řady prošijte zpět dva otvory, oba konce vyveďte na rub, těsně u kůže odstřihněte a zbytek přimáčkněte. Voskovaná nit drží bez uzlu.',
+        body: 'Na konci řady prošijte zpět dva otvory, oba konce vyveďte na rub, těsně u kůže odstřihněte a zbytek přimáčkněte. Voskovaná nit drží bez uzlu. Polyesterové nitě se dají navíc zajistit: konec dlouhý asi 2 mm krátce přiblížit k plamenu zapalovače a hned přimáčknout; roztaví se do kuličky, která z otvoru nevyklouzne. Jen na rubu a opatrně, plamen nikdy k líci kůže.',
         media: [
           {
             id: 'l4-backstitch',
@@ -493,6 +493,8 @@ export const lessons: readonly LessonDefinition[] = [
     safety: [
       'Lepidlo na rozpouštědlové bázi používejte ve větrané místnosti.',
       'Jehly odkládejte zapíchnuté do odřezku, ne volně na stůl.',
+
+      'Při zatavování konců nitě držte zapalovač dál od kůže i od zbytku nitě; stačí zlomek sekundy.',
     ],
     media: [
       {
@@ -686,7 +688,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'stitch',
         title: 'Sešijte tři strany',
-        body: 'Začněte dvěma zpětnými stehy v horním rohu, aby byl začátek zpevněný, a šijte souvisle bok, spodek, bok. Rohový otvor prošijte jako každý jiný. Na konci dva zpětné stehy a odstřihněte na rubu.',
+        body: 'Začněte dvěma zpětnými stehy v horním rohu, aby byl začátek zpevněný, a šijte souvisle bok, spodek, bok. Rohový otvor prošijte jako každý jiný. Na konci dva zpětné stehy, odstřihněte na rubu a případně konce zatavte jako v lekci 4.',
         media: [
           {
             id: 'l6-stitch-video',

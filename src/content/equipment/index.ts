@@ -602,11 +602,15 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     purpose:
       'Před děrováním dvou vrstev je potřeba díly spojit, aby otvory prošly oběma přesně. Lepidlo drží jen pomocně, pevnost dává steh.',
     buyingGuide: [
-      { label: 'Typ', value: 'kontaktní (nanáší se na obě plochy, chvíli odvětrá, přitiskne)' },
+      {
+        label: 'Typ',
+        value:
+          'kontaktní na vodní bázi (nanáší se na obě plochy, chvíli odvětrá, přitiskne); rozpouštědlové jen jako nouzovka',
+      },
       { label: 'Množství', value: 'malá tuba 35–50 ml vydrží na několik projektů' },
     ],
     cautions: [
-      'Rozpouštědlová lepidla zapáchají; větrejte. Vodní báze je příjemnější, ale dražší.',
+      'Dejte přednost lepidlu na vodní bázi: nemá výpary a přebytek se smyje vodou. Rozpouštědlová lepidla (často s toluenem) používejte jen v dobře větrané místnosti, s aplikátorem, ne prsty.',
       'Lepidlo nanášejte jen do pásu podél hrany, kde půjde steh. Na líci kůže je skvrna nevratná.',
     ],
     avoid: [
@@ -629,7 +633,16 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         shop: 'CraftPoint',
         url: 'https://craft-point.cz/products/fiebings-leather-craft-cement-lepidlo-na-kuzi-118-ml',
         priceCents: 30_900,
-        note: 'Vodní báze, bez výparů, přebytek se smyje vodou. Pohodlnější než rozpouštědlové lepidlo, ale dražší.',
+        note: 'Vodní báze, bez výparů, přebytek se smyje vodou. Doporučená volba; dražší než rozpouštědlová lepidla.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-07',
+      },
+      {
+        title: 'Pattex Butapren bezbarvý 35 ml',
+        shop: 'CraftPoint',
+        url: 'https://craft-point.cz/products/pattex-butapren-bezbarvy-35-ml',
+        priceCents: 6_900,
+        note: 'Rozpouštědlové kontaktní lepidlo. Levné a drží okamžitě, ale zapáchá a vyžaduje větrání. Až druhá volba.',
         availability: 'in_stock',
         checkedAt: '2026-09-07',
       },
