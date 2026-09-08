@@ -62,6 +62,11 @@ Třísločiněná hovězina 1,2–1,5 mm se v ČR prodává převážně po cel�
 štípenky 1,5–2,2 mm (sedlarskenaradi.cz, 35 Kč), na finální díly ne. → V obsahu položky „Kůže“
 výslovně uvést, že přířez je potřeba poptat, a nabídnout odřezky jako tréninkový materiál.
 
+Ověřeno 2026-09-08 jako **nevhodné na trénink**: Kutil-Florenc „Hovězí kůže odřezky čalounických
+kůží mix barev“ (22–189 Kč, 0,9–2,5 mm) – čalounická, tedy měkká chromočiněná kůže; chová se
+jinak než třísločiněná, hrany nejdou zaleštit. Do aplikace nepřidávat. U Kutil-Florence poptat
+odřezky nebo přířez třísločiněné hlazenice (kutil-florenc.cz/hovezi-kuze-kraj-prirodni-trislocinena-p4736).
+
 ## Co v prvním projektu není potřeba (do sekce „Kup později“ / „Nekupujte“)
 
 - Diamantové šídlo: vidličky 4 mm prorazí 2 × 1,2–1,5 mm samy; případně jako první doplněk. Automatické
