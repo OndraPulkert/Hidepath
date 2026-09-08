@@ -1,4 +1,5 @@
 import { type TemplateDefinition } from '@/content/schema';
+import { piecePath } from '@/lib/geometry/piece-path';
 
 export interface TemplateIllustrationProps {
   template: TemplateDefinition;
@@ -31,6 +32,8 @@ export function TemplateIllustration({
     ...p,
     x: margin,
     y: margin + pieces.slice(0, index).reduce((sum, prev) => sum + prev.heightMm + gap, 0),
+    // Popisky nesmí ležet v místě výřezu, jinak text prochází křivkou.
+    labelOffset: p.thumbCutout ? p.thumbCutout.depthMm : 0,
   }));
 
   const sizeProps =
@@ -43,12 +46,15 @@ export function TemplateIllustration({
       <rect width={width} height={height} fill={mode === 'print' ? '#FFFFFF' : '#F4EFE6'} />
       {placed.map((p) => (
         <g key={p.id}>
-          <rect
-            x={p.x}
-            y={p.y}
-            width={p.widthMm}
-            height={p.heightMm}
-            rx={p.cornerRadiusMm}
+          <path
+            d={piecePath({
+              x: p.x,
+              y: p.y,
+              widthMm: p.widthMm,
+              heightMm: p.heightMm,
+              cornerRadiusMm: p.cornerRadiusMm,
+              thumbCutout: p.thumbCutout,
+            })}
             fill="#FBF8F2"
             stroke="#2B211C"
             strokeWidth={0.4}
@@ -70,7 +76,7 @@ export function TemplateIllustration({
           />
           <text
             x={p.x + 4}
-            y={p.y + 6}
+            y={p.y + 6 + p.labelOffset}
             fontFamily="Albert Sans, system-ui, sans-serif"
             fontSize={3.2}
             fill="#2B211C"
@@ -80,7 +86,7 @@ export function TemplateIllustration({
           </text>
           <text
             x={p.x + 4}
-            y={p.y + 10.5}
+            y={p.y + 10.5 + p.labelOffset}
             fontFamily="ui-monospace, Menlo, monospace"
             fontSize={2.6}
             fill="#6B5F57"
@@ -92,12 +98,23 @@ export function TemplateIllustration({
           {p.stitchUpToMm ? (
             <text
               x={p.x + 4}
-              y={p.y + 14.5}
+              y={p.y + 14.5 + p.labelOffset}
               fontFamily="ui-monospace, Menlo, monospace"
               fontSize={2.6}
               fill="#6B5F57"
             >
               boky šité jen do výšky {mm(p.stitchUpToMm)} mm (výška přední kapsy)
+            </text>
+          ) : null}
+          {p.thumbCutout ? (
+            <text
+              x={p.x + 4}
+              y={p.y + 14.5 + p.labelOffset}
+              fontFamily="ui-monospace, Menlo, monospace"
+              fontSize={2.6}
+              fill="#6B5F57"
+            >
+              výřez na palec {mm(p.thumbCutout.widthMm)} × {mm(p.thumbCutout.depthMm)} mm
             </text>
           ) : null}
         </g>

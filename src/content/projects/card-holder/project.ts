@@ -538,7 +538,7 @@ export const lessons: readonly LessonDefinition[] = [
             id: 'l5-template',
             kind: 'illustration',
             caption:
-              'Šablona 1:1: zadní díl 100 × 70 mm, přední kapsa 100 × 42 mm, linie stehu 3,5 mm, kontrolní úsečka 50 mm',
+              'Šablona 1:1: zadní díl 100 × 70 mm, přední kapsa 100 × 56 mm s výřezem na palec, linie stehu 3,5 mm, kontrolní úsečka 50 mm',
             status: 'available',
             illustration: 'template',
           },
@@ -580,6 +580,20 @@ export const lessons: readonly LessonDefinition[] = [
         ],
       },
       {
+        id: 'thumb-cutout',
+        title: 'Vyřízněte výřez na palec',
+        body: 'Výřez je jen na přední kapse, uprostřed horní hrany: 40 mm široký a 12 mm hluboký. Oblouk neřežte jedním tahem. Nasekejte ho pěti až šesti krátkými rovnými řezy kousek vedle linie, nůž kolmo, volná ruka otáčí kůží. Zbytek do linie dobruste smirkovým papírem 220 omotaným kolem tužky nebo tenkého dřívka. Finální tvar dělá smirek, ne nůž, takže oblouk nemusíte trefit napoprvé.',
+        media: [
+          {
+            id: 'l5-thumb-cutout',
+            kind: 'photo',
+            caption:
+              'Přední kapsa s narýsovaným obloukem výřezu, vedle ní hotový výřez dobroušený smirkem na tužce',
+            status: 'planned',
+          },
+        ],
+      },
+      {
         id: 'compare-parts',
         title: 'Porovnejte díly',
         body: 'Přiložte přední díl na zadní a srovnejte spodní hranu a boky. Rozdíl větší než asi půl milimetru zbruste smirkovým papírem na rovné destičce nebo lehce seřízněte.',
@@ -598,11 +612,18 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Přední díl přiložený na zadní lícuje na bocích i dole.',
         required: true,
       },
+      {
+        slug: 'cutout-smooth',
+        title: 'Výřez na palec je plynulý oblouk bez schodů.',
+        description: 'Přejeďte po něm prstem – nesmí drhnout.',
+        required: true,
+      },
     ],
     commonMistakes: [
       'Tisk s přizpůsobením na stránku: šablona je o pár procent menší a karty se nevejdou.',
       'Obtahování na líc kůže: rýha zůstane vidět.',
       'Rohy řezané podle pravítka „nahrubo“: zůstanou hranaté.',
+      'Snaha vyříznout výřez jedním obloukem: nůž uhne a hrana má schody. Krátké řezy a smirek jsou rychlejší.',
     ],
     safety: ['U rohů drží volná ruka kůži za díl daleko od čepele a otáčí kůží, ne nožem.'],
     media: [
@@ -703,7 +724,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'edges',
         title: 'Srovnejte a zalešte hrany',
-        body: 'Smirkovým papírem 220–400 na rovné destičce srovnejte sešité hrany do jedné roviny. Navlhčete hranu vodou nebo pastou a třete leštítkem či kusem plátna, dokud se nezhutní a nezaleskne. Horní hranu obou dílů udělejte také.',
+        body: 'Smirkovým papírem 220–400 na rovné destičce srovnejte sešité hrany do jedné roviny. Navlhčete hranu vodou nebo pastou a třete leštítkem či kusem plátna, dokud se nezhutní a nezaleskne. Horní hrany obou dílů a oblouk výřezu udělejte také – po výřezu jezdí prsty při každém vytažení karty.',
         media: [
           {
             id: 'l6-edges',
@@ -716,7 +737,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'test-cards',
         title: 'Vložte karty',
-        body: 'Vložte čtyři karty. Napoprvé půjdou těsně; třísločiněná kůže se během několika dní přizpůsobí.',
+        body: 'Vložte čtyři karty a palcem je ve výřezu vysuňte. Napoprvé půjdou těsně; třísločiněná kůže se během několika dní přizpůsobí.',
         media: [
           {
             id: 'l6-final',
@@ -739,8 +760,16 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Tři strany jsou sešité, začátek i konec zajištěný zpětnými stehy.',
         required: true,
       },
-      { slug: 'edges-finished', title: 'Hrany jsou srovnané a zaleštěné.', required: true },
-      { slug: 'cards-fit', title: 'Vejdou se čtyři karty.', required: true },
+      {
+        slug: 'edges-finished',
+        title: 'Hrany včetně oblouku výřezu jsou srovnané a zaleštěné.',
+        required: true,
+      },
+      {
+        slug: 'cards-fit',
+        title: 'Vejdou se čtyři karty a jdou palcem vysunout výřezem.',
+        required: true,
+      },
       { slug: 'photo-taken', title: 'Hotové pouzdro je vyfocené.', required: false },
     ],
     commonMistakes: [
@@ -883,8 +912,9 @@ export const cardHolderProject: ProjectDefinition = {
   ],
   lessons: [...lessons],
   template: {
-    // Zadní díl 100 × 70; boky šité jen po výšku přední kapsy. Přední kapsa 42 mm, aby z karty
-    // (54 mm) vyčnívalo asi 16 mm pro uchopení. NÁVRH – ověřit na papírovém modelu a odřezku.
+    // Zadní díl 100 × 70; boky šité jen po výšku přední kapsy. Přední kapsa 56 mm drží kartu
+    // (54 mm) celou uvnitř, ven se vysouvá mělkým výřezem na palec (40 × 12 mm), který odkryje
+    // asi 13 mm karty. NÁVRH – ověřit na papírovém modelu a odřezku.
     pieces: [
       {
         id: 'back',
@@ -894,17 +924,18 @@ export const cardHolderProject: ProjectDefinition = {
         cornerRadiusMm: 6,
         stitchOffsetMm: 3.5,
         openEdge: 'top',
-        stitchUpToMm: 42,
+        stitchUpToMm: 56,
         quantity: 1,
       },
       {
         id: 'front',
         name: 'Přední kapsa',
         widthMm: 100,
-        heightMm: 42,
+        heightMm: 56,
         cornerRadiusMm: 6,
         stitchOffsetMm: 3.5,
         openEdge: 'top',
+        thumbCutout: { widthMm: 40, depthMm: 12 },
         quantity: 1,
       },
     ],
@@ -919,7 +950,7 @@ export const cardHolderProject: ProjectDefinition = {
       id: 'card-holder-assembled',
       kind: 'illustration',
       caption:
-        'Schéma hotového pouzdra: přední kapsa 42 mm na zadním dílu 100 × 70 mm, steh po bocích a dole, karta vyčnívá',
+        'Schéma hotového pouzdra: přední kapsa 56 mm s výřezem na palec na zadním dílu 100 × 70 mm, steh po bocích a dole',
       status: 'available',
       illustration: 'assembled',
     },

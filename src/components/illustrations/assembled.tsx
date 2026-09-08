@@ -1,7 +1,8 @@
 import { type TemplateDefinition } from '@/content/schema';
+import { exposedCardHeightMm, piecePath } from '@/lib/geometry/piece-path';
 
 /**
- * Hotové pouzdro: pohled zepředu (přední kapsa na zadním dílu, karta vyčnívá) a řez z boku.
+ * Hotové pouzdro: pohled zepředu (přední kapsa na zadním dílu, karta se vysouvá výřezem) a řez z boku.
  * Kreslí se ze stejných dat šablony, takže odpovídá tomu, co uživatel vyřízl.
  */
 export function AssembledIllustration({
@@ -38,8 +39,8 @@ export function AssembledIllustration({
     ...holes(ox + o, oy + h - o, ox + w - o, oy + h - o),
     ...holes(ox + w - o, oy + h - o, ox + w - o, oy + h - fh + 2),
   ];
-  const width = ox * 2 + w + 150;
-  const height = oy + h + 30;
+  const width = ox * 2 + w + 170;
+  const height = oy + h + 44;
 
   return (
     <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={title} className="h-auto w-full">
@@ -76,19 +77,18 @@ export function AssembledIllustration({
         stroke="#6B5F57"
         strokeWidth={1}
       />
-      <rect x={cardX + 10} y={cardY + 12} width={22} height={16} rx={3} fill="#E7DCCB" />
-      <text
-        x={cardX + 40}
-        y={cardY + 24}
-        fontFamily="ui-monospace, Menlo, monospace"
-        fontSize={9}
-        fill="#6B5F57"
-      >
-        karta 85,6 × 54
-      </text>
-      {/* přední kapsa */}
+      {/* přední kapsa (spodní rohy zaoblené, horní hrana s výřezem na palec) */}
       <path
-        d={`M${ox} ${oy + h - fh} L${ox + w} ${oy + h - fh} L${ox + w} ${oy + h - r} Q${ox + w} ${oy + h} ${ox + w - r} ${oy + h} L${ox + r} ${oy + h} Q${ox} ${oy + h} ${ox} ${oy + h - r} Z`}
+        d={piecePath({
+          x: ox,
+          y: oy + h - fh,
+          widthMm: w,
+          heightMm: fh,
+          cornerRadiusMm: r,
+          thumbCutout: front.thumbCutout
+            ? { widthMm: front.thumbCutout.widthMm * s, depthMm: front.thumbCutout.depthMm * s }
+            : undefined,
+        })}
         fill="#A85F32"
         stroke="#2B211C"
         strokeWidth={1.2}
@@ -132,22 +132,27 @@ export function AssembledIllustration({
         kapsa {front.heightMm} mm
       </text>
       <text
-        x={ox + w + 17}
-        y={oy + h - fh - 8}
-        fontFamily="Albert Sans, system-ui, sans-serif"
-        fontSize={9}
-        fill="#6B5F57"
-      >
-        karta vyčnívá ≈ {Math.round(54 - front.heightMm + back.stitchOffsetMm)} mm
-      </text>
-      <text
         x={ox}
         y={oy + h + 20}
         fontFamily="Albert Sans, system-ui, sans-serif"
         fontSize={9}
         fill="#6B5F57"
       >
-        steh po bocích a dole, vrch otevřený · přední kapsa leží lícem ven na zadním dílu
+        steh po bocích a dole, vrch otevřený · kartu vysunete palcem ve výřezu
+      </text>
+      <text
+        x={ox}
+        y={oy + h + 34}
+        fontFamily="Albert Sans, system-ui, sans-serif"
+        fontSize={9}
+        fill="#6B5F57"
+      >
+        karta 85,6 × 54 mm ·{' '}
+        {front.thumbCutout
+          ? `výřez ${front.thumbCutout.widthMm} × ${front.thumbCutout.depthMm} mm odkryje ≈ ${Math.round(
+              exposedCardHeightMm(front.heightMm, 54 + back.stitchOffsetMm, front.thumbCutout),
+            )} mm karty`
+          : `karta vyčnívá ≈ ${Math.round(exposedCardHeightMm(front.heightMm, 54 + back.stitchOffsetMm))} mm`}
       </text>
       {/* řez z boku */}
       <g transform={`translate(${ox + w + 95} ${oy})`}>

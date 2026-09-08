@@ -2,7 +2,7 @@
 
 Zdroj: `src/content`. Regenerace: `pnpm content:shot-list`. Neupravovat ručně.
 
-Celkem 51 slotů · k natočení 45 · hotovo 6.
+Celkem 52 slotů · k natočení 46 · hotovo 6.
 
 ## K natočení
 
@@ -29,6 +29,7 @@ Celkem 51 slotů · k natočení 45 · hotovo 6.
 | Lekce 5 · hlavní záběr | foto | Dva vyříznuté díly pouzdra ležící na papírové šabloně |  |
 | Lekce 5 · krok 3: Přeneste obrys | foto | Papírová šablona přilepená páskou na rubu kůže, ruka obtahuje obrys tupou jehlou |  |
 | Lekce 5 · krok 4: Vyřízněte díly | video | Řezání zaobleného rohu krátkými tahy, nůž kolmo k podložce, druhá ruka otáčí kůží | ~40 s |
+| Lekce 5 · krok 5: Vyřízněte výřez na palec | foto | Přední kapsa s narýsovaným obloukem výřezu, vedle ní hotový výřez dobroušený smirkem na tužce |  |
 | Lekce 6 · hlavní záběr | foto | Hotové pouzdro na karty z přírodní třísločiněné kůže, sedlářský steh, detail |  |
 | Lekce 6 · krok 2: Slepte díly | foto | Slepené díly pouzdra z líce: přední kapsa lícuje s boky a spodkem zadního dílu, nahoře přesah |  |
 | Lekce 6 · krok 3: Děrujte boky a spodek | foto | Detail rohu: řada otvorů podél boku končí přesně v rohovém otvoru, odkud pokračuje spodní řada |  |
@@ -58,11 +59,11 @@ Celkem 51 slotů · k natočení 45 · hotovo 6.
 
 | Kde | Typ | Popis | Stav |
 | --- | --- | --- | --- |
-| Projekt · Pouzdro na karty | ilustrace | Schéma hotového pouzdra: přední kapsa 42 mm na zadním dílu 100 × 70 mm, steh po bocích a dole, karta vyčnívá | hotovo |
+| Projekt · Pouzdro na karty | ilustrace | Schéma hotového pouzdra: přední kapsa 56 mm s výřezem na palec na zadním dílu 100 × 70 mm, steh po bocích a dole | hotovo |
 | Lekce 2 · krok 3: Řežte na dva až tři tahy | ilustrace | Schéma úhlu čepele: 45° ve směru řezu, 90° k podložce | hotovo |
 | Lekce 3 · krok 1: Narýsujte linii stehu | ilustrace | Schéma: hrana kůže, linie stehu 3,5 mm od hrany, otvory v rozteči 3,85–4 mm | hotovo |
 | Lekce 4 · krok 3: Začněte steh | ilustrace | Schéma sedlářského stehu: dvě jehly procházejí každým otvorem proti sobě, pořadí a směr | hotovo |
-| Lekce 5 · krok 1: Vytiskněte a zkontrolujte šablonu | ilustrace | Šablona 1:1: zadní díl 100 × 70 mm, přední kapsa 100 × 42 mm, linie stehu 3,5 mm, kontrolní úsečka 50 mm | hotovo |
+| Lekce 5 · krok 1: Vytiskněte a zkontrolujte šablonu | ilustrace | Šablona 1:1: zadní díl 100 × 70 mm, přední kapsa 100 × 56 mm s výřezem na palec, linie stehu 3,5 mm, kontrolní úsečka 50 mm | hotovo |
 | Lekce 6 · krok 2: Slepte díly | ilustrace | Schéma sestavení: přední kapsa lícem ven na zadním dílu, steh po bocích a dole, vrch otevřený | hotovo |
 
 ## Jak natáčet

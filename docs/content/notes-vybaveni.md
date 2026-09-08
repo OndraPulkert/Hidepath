@@ -113,9 +113,15 @@ Porovnání s naší šablonou (Slim pouzdro na karty):
 | Tisk         | A4 na 100 %, kalibrace 50 mm     | totéž            |
 
 Závěr: rozměry i doporučení materiálu nezávisle potvrzeny (rozdíl 2 mm je v toleranci ručního
-řezu). **Otevřená otázka:** vytažení karty. Oni řeší vysokou kapsou s výřezem na palec, my nízkou
-kapsou 42 mm, ze které karta vyčnívá ~16 mm. Výřez drží kartu bezpečněji a vypadá jako běžné
-pouzdro; nízká kapsa je o jeden oblouk jednodušší na vyříznutí. Rozhodnutí na autorovi.
+řezu).
+
+**Rozhodnuto 2026-09-08 (autor):** přejít na vysokou kapsu s výřezem na palec. Kapsa 42 → 56 mm,
+výřez 40 × 12 mm uprostřed horní hrany, boky zadního dílu šité do 56 mm. Karta (54 mm) sedí celá
+uvnitř a ve výřezu se odkryje ~13 mm na palec. Důvod: karta v kapse kalhot nevyklouzne a pouzdro
+vypadá jako běžné; mělký oblouk se řeže snáz než ostrý roh, který v šabloně už je.
+Geometrie je čistá funkce `src/lib/geometry/piece-path.ts` (s testy), takže šablona, tisk
+i schéma sestavení kreslí stejný tvar. Lekce 5 má nový krok „Vyřízněte výřez na palec“
+(krátké řezy po tětivách + dobroušení smirkem na tužce) a kontrolní bod na plynulost oblouku.
 
 **Nepřebírat jejich PDF ani geometrii do aplikace** – licence pokrývá výrobu zboží, ne
 redistribuci střihů v jiném produktu.

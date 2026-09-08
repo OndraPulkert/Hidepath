@@ -192,6 +192,10 @@ export const templatePieceSchema = z.object({
   openEdge: z.enum(['top', 'none']),
   /** Steh na bocích vede od spodku jen do této výšky (např. zadní díl jen po výšku přední kapsy). */
   stitchUpToMm: z.number().positive().optional(),
+  /** Mělký výřez na palec uprostřed horní hrany, kterým se vysouvá karta. */
+  thumbCutout: z
+    .object({ widthMm: z.number().positive(), depthMm: z.number().positive() })
+    .optional(),
   quantity: z.number().int().positive(),
 });
 export type TemplatePiece = z.infer<typeof templatePieceSchema>;
