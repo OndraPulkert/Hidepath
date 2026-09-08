@@ -52,7 +52,7 @@ export function TemplatePrintPage() {
       </div>
       <p className="mt-4 text-meta text-ink-2 print:text-[9pt]">
         Návrh šablony. Před řezáním finální kůže ověřte rozměry na odřezku; rozměry karet
-        85,6\u00a0×\u00a054\u00a0mm.
+        85,6&nbsp;×&nbsp;54&nbsp;mm.
       </p>
     </div>
   );

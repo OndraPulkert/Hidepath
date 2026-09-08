@@ -91,7 +91,7 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
           )}
         </div>
         <p className="text-body text-ink-2">
-          <span aria-hidden>⏱ </span>asi {lesson.estimatedMinutes}\u00a0min
+          <span aria-hidden>⏱ </span>asi {lesson.estimatedMinutes}&nbsp;min
           {phase ? ` · ${phase.name}` : ''}
         </p>
         <h1 className="text-[clamp(30px,8vw,44px)]">{typo(lesson.title)}</h1>

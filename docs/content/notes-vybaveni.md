@@ -29,7 +29,7 @@ Podklady pro Milník 2. Ceny a dostupnost jsou snímek z data ověření; do apl
 
 - Katalog má `priceSource`: ověřené jsou vidličky, jehly, nit, palička, řezací podložka, lepidlo; ostatní jsou odhady a UI je tak označuje.
 - Přidána položka **Smirkový papír 220–400** (nezbytná, běžně doma) – lekce 5 a 6 ho vyžadují.
-- Šablona: přední kapsa snížena na 42 mm (karta 54 mm musí vyčnívat), steh zadního dílu jen po výšku kapsy. Ověřit na papíru.
+- Šablona: přední kapsa 56 mm s výřezem na palec 40 × 12 mm (karta 54 mm se vysouvá výřezem), steh zadního dílu jen po výšku kapsy. Ověřit na papíru.
 
 ## Ověřené příklady výrobků (odkazy dodal autor, ceny ověřeny 2026-09-07)
 
@@ -104,13 +104,13 @@ využití u tvé kožené galanterie“. Formální licenční dokument na strá
 
 Porovnání s naší šablonou (Slim pouzdro na karty):
 
-| Parametr     | CraftPoint                       | Hidepath         |
-| ------------ | -------------------------------- | ---------------- |
-| Tělo         | 102 × 72 mm                      | 100 × 70 mm      |
-| Přední kapsa | 56 mm + volitelný výřez na palec | 42 mm bez výřezu |
-| Rozteč stehu | volby 3,0 / 3,38 / 4,0 mm        | 3,85–4 mm        |
-| Kůže         | třísločiněná 1,2 mm              | 1,2–1,5 mm       |
-| Tisk         | A4 na 100 %, kalibrace 50 mm     | totéž            |
+| Parametr     | CraftPoint                       | Hidepath                 |
+| ------------ | -------------------------------- | ------------------------ |
+| Tělo         | 102 × 72 mm                      | 100 × 70 mm              |
+| Přední kapsa | 56 mm + volitelný výřez na palec | 56 mm + výřez 40 × 12 mm |
+| Rozteč stehu | volby 3,0 / 3,38 / 4,0 mm        | 3,85–4 mm                |
+| Kůže         | třísločiněná 1,2 mm              | 1,2–1,5 mm               |
+| Tisk         | A4 na 100 %, kalibrace 50 mm     | totéž                    |
 
 Závěr: rozměry i doporučení materiálu nezávisle potvrzeny (rozdíl 2 mm je v toleranci ručního
 řezu).

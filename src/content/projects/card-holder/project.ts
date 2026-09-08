@@ -511,7 +511,7 @@ export const lessons: readonly LessonDefinition[] = [
     title: 'Přenesení šablony a řezání dílů',
     order: 5,
     phaseSlug: 'build',
-    estimatedMinutes: 30,
+    estimatedMinutes: 40,
     goal: 'Mít dva přesné díly pouzdra vyříznuté podle šablony 1:1.',
     materials: [
       'vytištěná šablona 1:1 (zkontrolovaná úsečka 50 mm)',
