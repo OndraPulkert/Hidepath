@@ -672,7 +672,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'glue-parts',
         title: 'Slepte díly',
-        body: 'Nejdřív kapsu jen přiložte na zadní díl tak, aby spodní hrana a boky lícovaly (zadní díl přesahuje nahoře), a rýsovacím šídlem lehce označte, kam sahá. Pak podél boků a spodku naneste tenký pás lepidla na obě plochy, nechte odvětrat a přitiskněte přes hadřík. Pozor na jednu věc: rub kapsy lepidlo drží dobře, ale líc zadního dílu je hladký a lepidlo z něj snadno pustí. Pás na zadním dílu proto předem zdrsněte smirkem 180–240, ale jen v místě, které kapsa zakryje – škrábance mimo něj už nezmizí. S oboustrannou páskou zdrsňovat nemusíte, páska drží i na hladkém líci a nalepí se jen na rub kapsy.',
+        body: 'Boky a spodek kapsy lícují s hranami zadního dílu, takže obrys obtahovat není co – jediná linie, kterou potřebujete, je horní hrana kapsy. Narýsujte ji na líc zadního dílu 56 mm od spodní hrany (nebo kapsu přiložte a označte podél jejích horních rohů). Lepidlo patří jen na úzký pás asi 8 mm od hrany podél spodku a obou boků, po bocích jen po tu linii. Střed nechávejte suchý: slepená plocha uprostřed kapsu uzavře a karta se do ní nedostane. Naneste pás na obě plochy, nechte odvětrat a přitiskněte přes hadřík. Pozor na jednu věc: rub kapsy lepidlo drží dobře, ale líc zadního dílu je hladký a lepidlo z něj snadno pustí. Ten pás na zadním dílu proto předem zdrsněte smirkem 180–240 – jen ten pás, ne celou plochu pod kapsou, a nikdy nad linií horní hrany, protože škrábance na viditelné části už nezmizí. S oboustrannou páskou zdrsňovat nemusíte, páska drží i na hladkém líci a nalepí se jen na rub kapsy.',
         media: [
           {
             id: 'l6-assembled-scheme',
@@ -777,6 +777,7 @@ export const lessons: readonly LessonDefinition[] = [
       'Rohový otvor mimo průsečík linií: roh má skok.',
       'Leštění před srovnáním hran: nerovnosti zůstanou.',
       'Zdrsnění líce dál, než kam kapsa dosáhne: matné škrábance na viditelné ploše se nedají odstranit.',
+      'Lepidlo i uprostřed kapsy, ne jen podél hran: kapsa se slepí naplocho a karta do ní nejde vsunout.',
     ],
     safety: [
       'Při děrování dvou vrstev je úder pevnější; prsty držte u spodku vidliček, mimo dráhu paličky.',
