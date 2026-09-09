@@ -124,6 +124,11 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         title: 'Kožařský (ševcovský) nůž na první projekt',
         reason: 'vyžaduje broušení a cvik; přijde vhod až u tvarovaných řezů',
       },
+      {
+        title: 'Sedlářský půlměsíc (head knife, round knife)',
+        reason:
+          'ikonický půlkruhový nůž z videí umí řez, ztenčování i seřezávání hran v jednom, ale musí být ostrý jako břitva a udržet ho takový je samostatná dovednost. V ČR stojí 1 350–2 700 Kč. Na pouzdro nepřinese nic, co neudělá odlamovací nůž za 69 Kč.',
+      },
     ],
     alternatives: [
       { title: 'Nůž, který už máte doma', reason: 'stačí, pokud má 18 mm čepel a nové segmenty' },

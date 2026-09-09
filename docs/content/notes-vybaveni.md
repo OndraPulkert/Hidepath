@@ -196,14 +196,32 @@ u téže položky, ne jako samostatná položka katalogu – dělá stejnou prá
 Dotaz autora: „to držadlo, co se hodně používá při zašívání“. Je to sedlářský koník – dřevěná svěrka
 s čelistmi potaženými kůží, díky které jsou při sedlářském stehu obě ruce volné pro jehly.
 
-| Produkt                                            | Obchod         | Cena      | Stav          | Poznámka                                              |
-| -------------------------------------------------- | -------------- | --------- | ------------- | ----------------------------------------------------- |
-| Sedlářský koník s podstavcem                       | Kutil-Florenc  | 699 Kč    | skladem       | Nejlevnější ověřená varianta, nešroubuje se ke stolu. |
-| Sedlářský koník CraftPoint (WolfBrothers)          | CraftPoint     | 1 543 Kč  | skladem       | Dvě polohy uchycení, magnety na jehly.                |
-| Sedlářský koník Ivan Leather                       | Corium         | 1 999 Kč  | na objednávku | Otočné aretovatelné čelisti, upíná se do svěráku.     |
-| Sedlářský koník v3.0 (výroba ČR)                   | Leatherjan     | 2 150 Kč+ | vyprodáno     | Výroba dle webu pozastavena, do katalogu nedávat.     |
+| Produkt                                   | Obchod        | Cena      | Stav          | Poznámka                                              |
+| ----------------------------------------- | ------------- | --------- | ------------- | ----------------------------------------------------- |
+| Sedlářský koník s podstavcem              | Kutil-Florenc | 699 Kč    | skladem       | Nejlevnější ověřená varianta, nešroubuje se ke stolu. |
+| Sedlářský koník CraftPoint (WolfBrothers) | CraftPoint    | 1 543 Kč  | skladem       | Dvě polohy uchycení, magnety na jehly.                |
+| Sedlářský koník Ivan Leather              | Corium        | 1 999 Kč  | na objednávku | Otočné aretovatelné čelisti, upíná se do svěráku.     |
+| Sedlářský koník v3.0 (výroba ČR)          | Leatherjan    | 2 150 Kč+ | vyprodáno     | Výroba dle webu pozastavena, do katalogu nedávat.     |
 
 Rozhodnutí: zapsán jako položka katalogu `stitching-pony` s prioritou `later` („Kup později“) a jako
 `recommendedEquipment` v lekcích 4 a 6. Na pouzdro není potřeba – nejdelší šev je 100 mm a ušije se
 mezi koleny. Do lekce 4 přidán krok „Uchyťte si díl“ s pořadím variant: kolena → dvě destičky
 v truhlářské svěrce → koník. Katalog má tím 16 položek.
+
+## Sedlářský půlměsíc (head knife / round knife) – ověřeno 2026-09-09
+
+Dotaz autora podle obrázku: půlkruhová čepel s rukojetí uprostřed oblouku. Je to sedlářský půlměsíc,
+anglicky head knife nebo round knife. Podle popisů obchodů slouží k „základnímu dělení kůže,
+ztenčování a seřezávání hran“ – tedy tři funkce v jednom nástroji, oblouk na křivky, přímější konce
+na rovné řezy.
+
+| Produkt                                                      | Obchod           | Cena     | Stav          | Poznámka                                                 |
+| ------------------------------------------------------------ | ---------------- | -------- | ------------- | -------------------------------------------------------- |
+| Nůž na kůži – půl měsíc střední (nerez, čepel 10,5 cm)       | Sedlářské nářadí | 1 350 Kč | není skladem  | Nejlevnější ověřená varianta.                            |
+| Nůž Al Stohlman – Sedlářský půlměsíc (nerez, zrcadlový lesk) | LeaTory          | 1 994 Kč | skladem, 2 ks | Rukojeť 11 cm.                                           |
+| Sedlářský nůž půlměsíc, Vergez-Blanchard (šířka 12,5 cm)     | Dva pásovci      | 2 727 Kč | skladem, 3 ks | Francouzská kovaná uhlíková ocel, rukojeť z višně, 1823. |
+
+Rozhodnutí: do katalogu se nepřidává jako položka, jen jako explicitní záznam v části „Nekupujte“
+u položky `utility-knife`. Důvody: cena 1 350–2 700 Kč, nutnost udržovat břitvovou ostrost jako
+samostatná dovednost, a hlavně to, že na pouzdro nepřinese nic nad odlamovací nůž za 69 Kč.
+Kandidát pro pozdější projekty, kde se ztenčují hrany (peněženka, pásek).
