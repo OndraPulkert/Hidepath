@@ -747,7 +747,8 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       { label: 'Množství', value: 'jeden arch stačí na několik projektů' },
     ],
     cautions: [
-      'Papír přidržte na rovné destičce (dřevo, tvrdý plast) a hranou po něm tahejte. Volný papír v ruce hranu zaoblí nepravidelně.',
+      'Na srovnání hran papír přidržte na rovné destičce (dřevo, tvrdý plast) a hranou po něm tahejte. Volný papír v ruce hranu zaoblí nepravidelně.',
+      'Na zdrsnění líce naopak papír omotejte kolem úzkého hranolku širokého 1–2 cm a jezděte s ním po kůži ležící na stole. Úzký hranolek udrží zdrsněný pás v mezích.',
       'Bruste jen do momentu, kdy jsou vrstvy v rovině. Víc ubírá materiál z dílu.',
       'Líc zdrsňujte výhradně v místě, které druhý díl zakryje. Matné škrábance na viditelné ploše už nezmizí.',
     ],

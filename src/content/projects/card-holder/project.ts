@@ -686,7 +686,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'glue-parts',
         title: 'Slepte díly',
-        body: 'Vyznačený pás na zadním dílu nejdřív zdrsněte smirkem 180–240: rub kapsy lepidlo drží dobře, ale líc zadního dílu je hladký a lepidlo z něj snadno pustí. Pak naneste tenký pás lepidla na zdrsněnou plochu i na odpovídající pás na rubu kapsy, nechte odvětrat podle návodu na obalu a přitiskněte přes hadřík. Střed nechávejte suchý: slepená plocha uprostřed kapsu uzavře a karta se do ní nedostane. Lepidlo drží díly jen proto, aby se při děrování neposunuly, nosnou funkci má steh. S oboustrannou páskou zdrsňovat nemusíte, páska drží i na hladkém líci a nalepí se jen na rub kapsy.',
+        body: 'Vyznačený pás na zadním dílu nejdřív zdrsněte smirkem 180–240: rub kapsy lepidlo drží dobře, ale líc zadního dílu je hladký a lepidlo z něj snadno pustí. Papír si omotejte kolem úzkého kousku dřeva nebo tvrdého plastu širokého asi 1–2 cm; s takovým hranolkem udržíte pás v mezích lépe než prsty, kterými se snadno zajede nad linii. Pak naneste tenký pás lepidla na zdrsněnou plochu i na odpovídající pás na rubu kapsy, nechte odvětrat podle návodu na obalu a přitiskněte přes hadřík. Střed nechávejte suchý: slepená plocha uprostřed kapsu uzavře a karta se do ní nedostane. Lepidlo drží díly jen proto, aby se při děrování neposunuly, nosnou funkci má steh. S oboustrannou páskou zdrsňovat nemusíte, páska drží i na hladkém líci a nalepí se jen na rub kapsy.',
         media: [
           {
             id: 'l6-assembled-scheme',
