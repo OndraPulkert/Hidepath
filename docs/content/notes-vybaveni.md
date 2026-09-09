@@ -54,6 +54,21 @@ Poznámky u příkladů smí obsahovat jen to, co stránka obchodu uvádí (mate
 | Ořezávač hran      | Hranořízek S/M/L                                             | Imago            | 449 Kč                          | skladem                                                   |
 | (nepřidáno) Šídlo  | Sedlářské šídlo 3/4/5 mm                                     | CraftPoint       | 167 Kč                          | vyprodáno; není v katalogu, na první projekt není potřeba |
 
+## Alternativní obchody pro děrovací vidličky (ověřeno 2026-09-09)
+
+| Obchod        | Sada 4 mm (hroty 1+2+4+6)                                 | Cena   | Stav         |
+| ------------- | --------------------------------------------------------- | ------ | ------------ |
+| CraftPoint    | Děrovače na švy 4 mm, sada 4 ks, nerez                    | 338 Kč | skladem      |
+| Kutil-Florenc | Vidličky na děrování nebo značení kůže 4 mm, ocel, 100 mm | 349 Kč | skladem      |
+| Andexnite     | Děrovací dlátka na kůži 4 mm                              | 585 Kč | vyprodáno    |
+| Imago         | Sada děrovacích dlátek na kůži 4 mm, ocel                 | 639 Kč | na objednání |
+
+Neověřeno (Cloudflare blokuje načtení stránky): **Pet Hardware** má podle výsledků hledání
+jednotlivé vidličky od ~53 Kč/ks a 44 variant skladem – potenciálně nejlevnější cesta, pokud
+stačí dvojhrot + šestihrot. Ceny je nutné zkontrolovat ručně v prohlížeči.
+
+Neprověřeno záměrně: čínské sady z AliExpressu a Amazonu – dlouhé dodání, nejistá kvalita hrotů.
+
 ## Kůže – otevřený problém
 
 Třísločiněná hovězina 1,2–1,5 mm se v ČR prodává převážně po celých kůžích (Andexnite od
