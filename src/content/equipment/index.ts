@@ -681,10 +681,11 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     alternatives: [
       {
         title: 'Oboustranná páska 5 mm',
-        reason: 'čisté a bez zápachu; pod stehem občas lepí na jehlu',
+        reason:
+          'pro první projekt často lepší volba než lepidlo: neteče, nezapáchá, nemusí zasychat a nemůže potřísnit líc kůže, kde je skvrna nevratná. Nalepí se na rub jen podél hran, kde půjde steh; pod stehem občas lepí na jehlu',
       },
     ],
-    priceRange: { minCents: 7_000, maxCents: 31_000 },
+    priceRange: { minCents: 8_900, maxCents: 31_000 },
     priceSource: 'verified',
     priceNote: VERIFIED_NOTE,
     alsoUsedFor: ['Pouzdro na karty', 'Peněženka bifold'],
@@ -706,6 +707,15 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         note: 'Rozpouštědlové kontaktní lepidlo. Levné a drží okamžitě, ale zapáchá a vyžaduje větrání. Až druhá volba.',
         availability: 'in_stock',
         checkedAt: '2026-09-07',
+      },
+      {
+        title: 'Transparentní oboustranná páska na kůži 5 nebo 10 mm, 50 m',
+        shop: 'CraftPoint',
+        url: 'https://craft-point.cz/products/transparentni-paska-na-kuzi-oboustranna-5mm-10mm-50mb',
+        priceCents: 8_900,
+        note: 'Pro pouzdro zvolte šířku 5 mm, aby páska zůstala pod linií stehu a nelepila zevnitř na karty. Při ověření byly obě šířky vyprodané; podobná úzká oboustranná páska z papírnictví poslouží stejně.',
+        availability: 'unavailable',
+        checkedAt: '2026-09-09',
       },
     ],
     commonlyAtHome: false,
