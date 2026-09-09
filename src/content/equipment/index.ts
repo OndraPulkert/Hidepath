@@ -752,12 +752,29 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       'Líc zdrsňujte výhradně v místě, které druhý díl zakryje. Matné škrábance na viditelné ploše už nezmizí.',
     ],
     avoid: [{ title: 'Hrubší než 150', reason: 'trhá vlákna kůže a hranu roztřepí' }],
-    alternatives: [{ title: 'Pilník na nehty (jemná strana)', reason: 'na malé pouzdro postačí' }],
+    alternatives: [
+      { title: 'Pilník na nehty (jemná strana)', reason: 'na malé pouzdro postačí' },
+      {
+        title: 'Brusná destička na kůži („brousek“, 100/180)',
+        reason:
+          'hotová destička s brusnou plochou na obou stranách, drží se lépe než volný arch; hrubší stranu 100 použijte jen na zdrsnění lepené plochy, na hrany je moc hrubá',
+      },
+    ],
     priceRange: { minCents: 2_000, maxCents: 5_000 },
     priceSource: 'estimate',
     priceNote: ESTIMATE_NOTE,
     alsoUsedFor: ['Všechny projekty z třísločiněné kůže'],
-    examples: [],
+    examples: [
+      {
+        title: 'Brousek na kůži 18 × 3 cm, zrnitost 100/180',
+        shop: 'Sedlářské nářadí',
+        url: 'https://sedlarskenaradi.cz/brousek-na-kuzi/',
+        priceCents: 5_500,
+        note: 'Brusná destička se dvěma zrnitostmi – hotová varianta místo archu na destičce. Obchod ji popisuje na obrušování hran před hlazením; strana 100 se hodí i na zdrsnění lepené plochy, na hrany je hrubá.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-09',
+      },
+    ],
     commonlyAtHome: true,
     media: [
       {
