@@ -394,7 +394,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     ],
     priceRange: { minCents: 33_800, maxCents: 120_000 },
     priceSource: 'verified',
-    priceNote: `${VERIFIED_NOTE} Levné sady 4 mm od ~340 Kč; přesně 3,85 mm bývá výrazně dražší.`,
+    priceNote: `${VERIFIED_NOTE} Levné sady 4 mm od ~340 Kč; kalené francouzské sady od ~740 Kč.`,
     alsoUsedFor: ['Pouzdro na karty', 'Peněženka bifold', 'Pásek na hodinky'],
     examples: [
       {
@@ -431,6 +431,15 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         priceCents: 58_500,
         note: 'Při ověření vyprodané. Obchod prodává i třísločiněnou kůži.',
         availability: 'unavailable',
+        checkedAt: '2026-09-09',
+      },
+      {
+        title: 'Francouzské děrovače na švy 3,38 mm, sada 3 ks (2 + 5 + 10 hrotů)',
+        shop: 'CraftPoint',
+        url: 'https://craft-point.cz/products/francouzske-derovace-na-svy-3-38-mm-sada-3-ks',
+        priceCents: 73_900,
+        note: 'Kalená ocel a jemnější rozteč, tedy elegantnější steh. Až jako druhá koupě: menší otvory se na prvním stehu protahují těžko a desetihrot potřebuje pevný stůl.',
+        availability: 'in_stock',
         checkedAt: '2026-09-09',
       },
     ],

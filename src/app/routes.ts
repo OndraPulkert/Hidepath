@@ -39,9 +39,9 @@ export function resolveHomeRoute(hasActiveEnrollment: boolean): string {
 
 export interface NavItem {
   to: string;
-  label: string;
   /** Cesty, při kterých je položka zvýrazněná jako aktivní (kromě přesné shody). */
   matchPrefixes: readonly string[];
+  label: string;
 }
 
 /** Hlavní navigace shellu – čtyři položky podle schváleného prototypu. */

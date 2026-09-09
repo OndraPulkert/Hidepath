@@ -69,6 +69,32 @@ stačí dvojhrot + šestihrot. Ceny je nutné zkontrolovat ručně v prohlíže�
 
 Neprověřeno záměrně: čínské sady z AliExpressu a Amazonu – dlouhé dodání, nejistá kvalita hrotů.
 
+## Lepší vidličky – rešerše (2026-09-09, pro zajímavost, mimo katalog)
+
+Střední třída, ověřeno:
+
+| Obchod                | Výrobek                                                                                                  | Cena              | Stav                                 |
+| --------------------- | -------------------------------------------------------------------------------------------------------- | ----------------- | ------------------------------------ |
+| CraftPoint            | Francouzské děrovače 3,38 mm, sada 3 ks (2/5/10), kalená ocel                                            | 739 Kč            | skladem                              |
+| CraftPoint            | Francouzské děrovače CraftPoint 3,85 / 3,38 mm, sada 3 ks, vysoce jakostní kalená ocel, leštěné hroty    | 2 283 Kč          | oba rozměry vyprodané                |
+| CraftPoint            | Kulaté děrovače 6+2, rozteč 4–5 mm                                                                       | 1 711 Kč          | skladem                              |
+| CraftPoint            | Děrovače na švy 4 mm, kulaté otvory 1 mm                                                                 | 567 Kč            | skladem                              |
+| Leatory               | Děrovací set pro ruční šití (Tandy / Weaver), palcové rozteče                                            | 1 661 Kč          | skladem                              |
+| BuyLeatherOnline (IT) | Basic French Style Pricking Iron, HSS, leštěné hroty, 3,0 / 3,38 / **3,85 mm**, jednotlivě i sada 2+5+10 | € 33,50 (~840 Kč) | 11 ks skladem, doprava do EU 2–7 dní |
+
+Pozn.: BuyLeatherOnline je jediný nalezený zdroj s roztečí **3,85 mm**, tedy přesně tou, na kterou
+je aplikace psaná.
+
+**Důležité pro kalené a leštěné vidličky:** CraftPoint u nich sám upozorňuje, že potřebují měkkou
+podložku (typ OKA), jinak hrozí zlomení hrotu, a že se do nich smí tlouct jen sedlářskou nebo
+gumovou paličkou a kolmo. Kdo si koupí drahé vidličky, měl by dokoupit i pryžovou podložku –
+levné prkénko z HDPE už nestačí.
+
+Japonská a korejská špička (Kyoshin Elle, Crimson Hides, KS Blade Punch, Sinabroks, Amy Roke):
+**nenalezen žádný český ani evropský obchod s ověřenou cenou a dostupností.** Americké
+Rocky Mountain Leather Supply je vede, ale to znamená clo a DPH při dovozu. Ceny neověřeny,
+do aplikace nepřidávat.
+
 ## Kůže – otevřený problém
 
 Třísločiněná hovězina 1,2–1,5 mm se v ČR prodává převážně po celých kůžích (Andexnite od
