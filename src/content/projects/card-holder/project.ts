@@ -670,9 +670,23 @@ export const lessons: readonly LessonDefinition[] = [
         media: [],
       },
       {
+        id: 'mark-glue-area',
+        title: 'Vyznačte lepenou plochu na zadním dílu',
+        body: 'Kapsa lícuje s boky i spodkem zadního dílu, obrys tedy obtahovat není co – tři ze čtyř hran splývají s hranami zadního dílu a přesah 14 mm zůstává nahoře. Lepí se jen pás asi 8 mm od hrany podél spodku a obou boků, tedy tvar písmene U s volným vrchem. Osm milimetrů proto, že linie stehu leží 3,5 mm od hrany a lepidlo má držet po obou jejích stranách. Vyznačení má jen dvě čísla. Pravítkem odměřte 56 mm od spodní hrany a na obou bocích udělejte lehkou tužkovou značku; to je horní hrana kapsy a jediná mez, kterou nesmíte překročit. Šířku 8 mm narýsujte rýsovacím kružítkem podél tří hran, nebo si ji jen odměřte tužkou – přesnost tady nehraje roli, celý pás skončí pod kapsou, takže na něm rýha ani tužka vadit nebudou. Ve spodních 56 mm se ani nedá nic zkazit: když zdrsníte víc než těch 8 mm, je to jen práce zbytečně. Nad linií 56 mm ale škrábance zůstanou vidět natrvalo. Kdo chce mít klid, nalepí podél linie malířskou pásku a brousí až k její hraně – pásku předem vyzkoušejte na odřezku, ať víte, že se odlepí bez následků.',
+        media: [
+          {
+            id: 'l6-glue-area',
+            kind: 'photo',
+            caption:
+              'Zadní díl z líce s vyznačeným pásem 8 mm podél spodku a boků, končícím na linii 56 mm; nad linií čistá kůže',
+            status: 'planned',
+          },
+        ],
+      },
+      {
         id: 'glue-parts',
         title: 'Slepte díly',
-        body: 'Boky a spodek kapsy lícují s hranami zadního dílu, takže obrys obtahovat není co – jediná linie, kterou potřebujete, je horní hrana kapsy. Narýsujte ji na líc zadního dílu 56 mm od spodní hrany (nebo kapsu přiložte a označte podél jejích horních rohů). Lepidlo patří jen na úzký pás asi 8 mm od hrany podél spodku a obou boků, po bocích jen po tu linii. Střed nechávejte suchý: slepená plocha uprostřed kapsu uzavře a karta se do ní nedostane. Naneste pás na obě plochy, nechte odvětrat a přitiskněte přes hadřík. Pozor na jednu věc: rub kapsy lepidlo drží dobře, ale líc zadního dílu je hladký a lepidlo z něj snadno pustí. Ten pás na zadním dílu proto předem zdrsněte smirkem 180–240 – jen ten pás, ne celou plochu pod kapsou, a nikdy nad linií horní hrany, protože škrábance na viditelné části už nezmizí. S oboustrannou páskou zdrsňovat nemusíte, páska drží i na hladkém líci a nalepí se jen na rub kapsy.',
+        body: 'Vyznačený pás na zadním dílu nejdřív zdrsněte smirkem 180–240: rub kapsy lepidlo drží dobře, ale líc zadního dílu je hladký a lepidlo z něj snadno pustí. Pak naneste tenký pás lepidla na zdrsněnou plochu i na odpovídající pás na rubu kapsy, nechte odvětrat podle návodu na obalu a přitiskněte přes hadřík. Střed nechávejte suchý: slepená plocha uprostřed kapsu uzavře a karta se do ní nedostane. Lepidlo drží díly jen proto, aby se při děrování neposunuly, nosnou funkci má steh. S oboustrannou páskou zdrsňovat nemusíte, páska drží i na hladkém líci a nalepí se jen na rub kapsy.',
         media: [
           {
             id: 'l6-assembled-scheme',

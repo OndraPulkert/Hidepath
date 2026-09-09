@@ -2,7 +2,7 @@
 
 Zdroj: `src/content`. Regenerace: `pnpm content:shot-list`. Neupravovat ručně.
 
-Celkem 52 slotů · k natočení 46 · hotovo 6.
+Celkem 53 slotů · k natočení 47 · hotovo 6.
 
 ## K natočení
 
@@ -31,11 +31,12 @@ Celkem 52 slotů · k natočení 46 · hotovo 6.
 | Lekce 5 · krok 4: Vyřízněte díly | video | Řezání zaobleného rohu krátkými tahy, nůž kolmo k podložce, druhá ruka otáčí kůží | ~40 s |
 | Lekce 5 · krok 5: Vyřízněte výřez na palec | foto | Přední kapsa s narýsovaným obloukem výřezu, vedle ní hotový výřez dobroušený smirkem na tužce |  |
 | Lekce 6 · hlavní záběr | foto | Hotové pouzdro na karty z přírodní třísločiněné kůže, sedlářský steh, detail |  |
-| Lekce 6 · krok 2: Slepte díly | foto | Slepené díly pouzdra z líce: přední kapsa lícuje s boky a spodkem zadního dílu, nahoře přesah |  |
-| Lekce 6 · krok 3: Děrujte boky a spodek | foto | Detail rohu: řada otvorů podél boku končí přesně v rohovém otvoru, odkud pokračuje spodní řada |  |
-| Lekce 6 · krok 4: Sešijte tři strany | video | Šití rohu pouzdra: průchod rohovým otvorem a pokračování po spodní hraně, obě jehly | ~60 s |
-| Lekce 6 · krok 5: Srovnejte a zalešte hrany | foto | Hrana pouzdra napůl zaleštěná: vlevo matná srovnaná, vpravo hladká a lesklá |  |
-| Lekce 6 · krok 6: Vložte karty | foto | Hotové pouzdro na karty v ruce, vložené karty, detail stehu a zaleštěné hrany |  |
+| Lekce 6 · krok 2: Vyznačte lepenou plochu na zadním dílu | foto | Zadní díl z líce s vyznačeným pásem 8 mm podél spodku a boků, končícím na linii 56 mm; nad linií čistá kůže |  |
+| Lekce 6 · krok 3: Slepte díly | foto | Slepené díly pouzdra z líce: přední kapsa lícuje s boky a spodkem zadního dílu, nahoře přesah |  |
+| Lekce 6 · krok 4: Děrujte boky a spodek | foto | Detail rohu: řada otvorů podél boku končí přesně v rohovém otvoru, odkud pokračuje spodní řada |  |
+| Lekce 6 · krok 5: Sešijte tři strany | video | Šití rohu pouzdra: průchod rohovým otvorem a pokračování po spodní hraně, obě jehly | ~60 s |
+| Lekce 6 · krok 6: Srovnejte a zalešte hrany | foto | Hrana pouzdra napůl zaleštěná: vlevo matná srovnaná, vpravo hladká a lesklá |  |
+| Lekce 6 · krok 7: Vložte karty | foto | Hotové pouzdro na karty v ruce, vložené karty, detail stehu a zaleštěné hrany |  |
 | Vybavení · Kůže – třísločiněná hovězina 1,2–1,5 mm | foto | Přířez přírodní třísločiněné kůže, povrch lícové strany zblízka |  |
 | Vybavení · Kůže – třísločiněná hovězina 1,2–1,5 mm | foto | Rubová vláknitá strana kůže vedle lícové pro srovnání |  |
 | Vybavení · Odlamovací nůž s novou čepelí | foto | Odlamovací nůž s 18 mm čepelí ležící na řezací podložce |  |
@@ -64,7 +65,7 @@ Celkem 52 slotů · k natočení 46 · hotovo 6.
 | Lekce 3 · krok 1: Narýsujte linii stehu | ilustrace | Schéma: hrana kůže, linie stehu 3,5 mm od hrany, otvory v rozteči 3,85–4 mm | hotovo |
 | Lekce 4 · krok 3: Začněte steh | ilustrace | Schéma sedlářského stehu: dvě jehly procházejí každým otvorem proti sobě, pořadí a směr | hotovo |
 | Lekce 5 · krok 1: Vytiskněte a zkontrolujte šablonu | ilustrace | Šablona 1:1: zadní díl 100 × 70 mm, přední kapsa 100 × 56 mm s výřezem na palec, linie stehu 3,5 mm, kontrolní úsečka 50 mm | hotovo |
-| Lekce 6 · krok 2: Slepte díly | ilustrace | Schéma sestavení: přední kapsa lícem ven na zadním dílu, steh po bocích a dole, vrch otevřený | hotovo |
+| Lekce 6 · krok 3: Slepte díly | ilustrace | Schéma sestavení: přední kapsa lícem ven na zadním dílu, steh po bocích a dole, vrch otevřený | hotovo |
 
 ## Jak natáčet
 
