@@ -356,7 +356,8 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     ],
     cautions: [
       'Rozteč se udává různě: 3,85 mm mezi hroty odpovídá asi 7 stehům na palec. Neplést s šířkou hrotu.',
-      'Neleštěné hroty kůži trhají místo řezání a steh je pak roztřepený.',
+      'Neleštěné hroty kůži trhají místo řezání a steh je pak roztřepený. Po doručení přitiskněte vidličky rukou na odřezek: hroty mají být v jedné přímce, stejně dlouhé a stopa má být čistý zářez, ne trhaná dírka. Trhané hroty jde doleštit velmi jemným smirkem.',
+      'Levné sady 4 mm se stejným složením (1 + 2 + 4 + 6 hrotů) nabízí několik obchodů za 338 až 639 Kč. Podle ceny se u nich kvalita poznat nedá – vyšší cena bývá marží, ne lepší ocelí. Doložitelně lepší nástroj je až kalená francouzská sada, která stojí přes 700 Kč.',
       'Tlučte paličkou, ne kovovým kladivem. Hroty se jinak ohnou.',
       'Kupte obě velikosti (2 a víc hrotů). S jednou velikostí rohy nevyjdou.',
     ],
