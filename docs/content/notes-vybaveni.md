@@ -190,3 +190,20 @@ pořád jen brusná plocha v pohodlnějším těle:
 Rozhodnutí: v lekcích 4 a 6 zůstává smirkový papír 180–240 jako hlavní cesta (položka `sandpaper` je
 už povinná a autor ji nejspíš má doma). Brousek je zapsán jako `alternatives` + ověřený `examples`
 u téže položky, ne jako samostatná položka katalogu – dělá stejnou práci a nepřidává krok navíc.
+
+## Sedlářský koník (stitching pony) – ověřeno 2026-09-09
+
+Dotaz autora: „to držadlo, co se hodně používá při zašívání“. Je to sedlářský koník – dřevěná svěrka
+s čelistmi potaženými kůží, díky které jsou při sedlářském stehu obě ruce volné pro jehly.
+
+| Produkt                                            | Obchod         | Cena      | Stav          | Poznámka                                              |
+| -------------------------------------------------- | -------------- | --------- | ------------- | ----------------------------------------------------- |
+| Sedlářský koník s podstavcem                       | Kutil-Florenc  | 699 Kč    | skladem       | Nejlevnější ověřená varianta, nešroubuje se ke stolu. |
+| Sedlářský koník CraftPoint (WolfBrothers)          | CraftPoint     | 1 543 Kč  | skladem       | Dvě polohy uchycení, magnety na jehly.                |
+| Sedlářský koník Ivan Leather                       | Corium         | 1 999 Kč  | na objednávku | Otočné aretovatelné čelisti, upíná se do svěráku.     |
+| Sedlářský koník v3.0 (výroba ČR)                   | Leatherjan     | 2 150 Kč+ | vyprodáno     | Výroba dle webu pozastavena, do katalogu nedávat.     |
+
+Rozhodnutí: zapsán jako položka katalogu `stitching-pony` s prioritou `later` („Kup později“) a jako
+`recommendedEquipment` v lekcích 4 a 6. Na pouzdro není potřeba – nejdelší šev je 100 mm a ušije se
+mezi koleny. Do lekce 4 přidán krok „Uchyťte si díl“ s pořadím variant: kolena → dvě destičky
+v truhlářské svěrce → koník. Katalog má tím 16 položek.

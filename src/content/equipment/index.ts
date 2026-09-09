@@ -1057,6 +1057,82 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       },
     ],
   }),
+
+  draft({
+    slug: 'stitching-pony',
+    name: 'Sedlářský koník',
+    englishName: 'Stitching pony',
+    category: 'stitching',
+    shortDescription:
+      'Svěrka, která drží díl při šití, aby byly obě ruce volné. Pro pouzdro se dá obejít.',
+    purpose:
+      'Sedlářský steh se šije dvěma jehlami současně, takže na držení dílu nezbývá ruka. Koník je dřevěná svěrka s čelistmi potaženými kůží: díl se do ní upne a obě ruce zůstanou volné pro jehly. Švy vyjdou rovnoměrněji, protože se díl mezi stehy neposouvá, a práce je výrazně méně únavná. Na dlouhých švech pásku nebo peněženky je to rozdíl znatelný, u pouzdra na karty je nejdelší šev 100 mm a zvládnete ho i mezi koleny.',
+    buyingGuide: [
+      { label: 'Šířka čelistí', value: 'stačí 6 cm; na pásek je lepší 10 cm a víc' },
+      {
+        label: 'Uchycení',
+        value: 'stolní (šroubem k desce stolu) nebo se sedátkem, na které si sednete',
+      },
+      { label: 'Čelisti', value: 'potažené kůží nebo koženkou, aby neotlačily líc' },
+      { label: 'Magnety', value: 'volitelné, drží jehly při přerušení práce' },
+    ],
+    cautions: [
+      'Utahujte jen tak, aby díl držel. Přetažené čelisti nechají na líci stopu, kterou už nespravíte.',
+      'Stolní variantu potřebujete přišroubovat k desce; zkontrolujte, že se rozsah svěrky vejde na vaši tloušťku stolu.',
+      'Koník kvalitu stehu sám nezlepší. Rozteč a kolmost otvorů určují vidličky.',
+    ],
+    avoid: [],
+    alternatives: [
+      { title: 'Mezi koleny', reason: 'u malých dílů běžná a plně funkční varianta' },
+      {
+        title: 'Truhlářská svěrka a dvě dřevěné destičky',
+        reason: 'díl se sevře mezi destičky a svěrka se upne ke stolu; domácí náhrada za nulu',
+      },
+      { title: 'Velký kancelářský klip na hraně stolu', reason: 'na krátký šev postačí' },
+    ],
+    priceRange: { minCents: 69_900, maxCents: 199_900 },
+    priceSource: 'verified',
+    priceNote: VERIFIED_NOTE,
+    alsoUsedFor: ['Peněženka bifold', 'Pásek', 'Pouzdro na nůž'],
+    examples: [
+      {
+        title: 'Sedlářský koník s podstavcem',
+        shop: 'Kutil-Florenc',
+        url: 'https://www.kutil-florenc.cz/sedlarsky-konik-p5764',
+        priceCents: 69_900,
+        note: 'Nejlevnější ověřená varianta. Podstavec místo šroubování ke stolu.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-09',
+      },
+      {
+        title: 'Sedlářský koník CraftPoint (WolfBrothers)',
+        shop: 'CraftPoint',
+        url: 'https://craft-point.cz/sklep/sedlarstvi-kun-craftpoint/',
+        priceCents: 154_300,
+        note: 'Dvě polohy uchycení dílu a magnety na jehly po stranách.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-09',
+      },
+      {
+        title: 'Sedlářský koník Ivan Leather, otočné čelisti potažené kůží',
+        shop: 'Corium',
+        url: 'https://www.corium.cz/sedlarsky-konik/',
+        priceCents: 199_900,
+        note: 'Čelisti se dají aretovat v libovolné poloze. Upíná se do svěráku pracovního stolu, takže sám o sobě nestojí.',
+        availability: 'preorder',
+        checkedAt: '2026-09-09',
+      },
+    ],
+    commonlyAtHome: false,
+    media: [
+      {
+        id: 'stitching-pony-main',
+        kind: 'photo',
+        caption: 'Sedlářský koník s upnutým dílem pouzdra, obě ruce volné pro jehly',
+        status: 'planned',
+      },
+    ],
+  }),
 ];
 
 export const equipmentCatalog: EquipmentCatalog = Object.fromEntries(

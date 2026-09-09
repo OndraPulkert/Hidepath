@@ -2,7 +2,7 @@
 
 Zdroj: `src/content`. Regenerace: `pnpm content:shot-list`. Neupravovat ručně.
 
-Celkem 53 slotů · k natočení 47 · hotovo 6.
+Celkem 55 slotů · k natočení 49 · hotovo 6.
 
 ## K natočení
 
@@ -23,9 +23,10 @@ Celkem 53 slotů · k natočení 47 · hotovo 6.
 | Lekce 3 · krok 5: Prohlédněte rub | foto | Dva proužky: rovná řada otvorů se stálou roztečí vs. řada s vlnou a zdvojeným otvorem |  |
 | Lekce 4 · hlavní záběr | foto | Dvě ruce se dvěma jehlami uprostřed sedlářského stehu na slepených odřezcích |  |
 | Lekce 4 · krok 1: Slepte díly podél hrany | foto | Rub odřezku s tenkým pásem lepidla podél hrany, druhý odřezek připravený vedle |  |
-| Lekce 4 · krok 4: Rytmus stehu | video | Zblízka: pět stehů sedlářského stehu, obě jehly, vždy stejné pořadí a utažení | ~90 s |
-| Lekce 4 · krok 5: Ukončení | foto | Rub odřezku s ukončením stehu: dva zpětné stehy a odstřižené konce nitě |  |
-| Lekce 4 · krok 6: Porovnejte líc a rub | foto | Dva vzorky vedle sebe: pravidelný skloněný steh vs. steh s přeskočeným pořadím a nerovným utažením |  |
+| Lekce 4 · krok 3: Uchyťte si díl | foto | Odřezek sevřený mezi koleny s linií otvorů nahoru a vedle varianta se dvěma destičkami ve svěrce |  |
+| Lekce 4 · krok 5: Rytmus stehu | video | Zblízka: pět stehů sedlářského stehu, obě jehly, vždy stejné pořadí a utažení | ~90 s |
+| Lekce 4 · krok 6: Ukončení | foto | Rub odřezku s ukončením stehu: dva zpětné stehy a odstřižené konce nitě |  |
+| Lekce 4 · krok 7: Porovnejte líc a rub | foto | Dva vzorky vedle sebe: pravidelný skloněný steh vs. steh s přeskočeným pořadím a nerovným utažením |  |
 | Lekce 5 · hlavní záběr | foto | Dva vyříznuté díly pouzdra ležící na papírové šabloně |  |
 | Lekce 5 · krok 3: Přeneste obrys | foto | Papírová šablona přilepená páskou na rubu kůže, ruka obtahuje obrys tupou jehlou |  |
 | Lekce 5 · krok 4: Vyřízněte díly | video | Řezání zaobleného rohu krátkými tahy, nůž kolmo k podložce, druhá ruka otáčí kůží | ~40 s |
@@ -55,6 +56,7 @@ Celkem 53 slotů · k natočení 47 · hotovo 6.
 | Vybavení · Rýsovací šídlo (hruška) | foto | Rýsovací šídlo s hruškovitou rukojetí obtahuje okraj papírové šablony na rubu kůže |  |
 | Vybavení · Rýsovací kružítko | foto | Kovové rýsovací kružítko vedené po hraně kůže, viditelná jemná linie stehu |  |
 | Vybavení · Ořezávač hran | foto | Ořezávač hran velikosti 1 a odebraný tenký proužek kůže |  |
+| Vybavení · Sedlářský koník | foto | Sedlářský koník s upnutým dílem pouzdra, obě ruce volné pro jehly |  |
 
 ## Hotovo (ilustrace v aplikaci)
 
@@ -63,7 +65,7 @@ Celkem 53 slotů · k natočení 47 · hotovo 6.
 | Projekt · Pouzdro na karty | ilustrace | Schéma hotového pouzdra: přední kapsa 56 mm s výřezem na palec na zadním dílu 100 × 70 mm, steh po bocích a dole | hotovo |
 | Lekce 2 · krok 3: Řežte na dva až tři tahy | ilustrace | Schéma úhlu čepele: 45° ve směru řezu, 90° k podložce | hotovo |
 | Lekce 3 · krok 1: Narýsujte linii stehu | ilustrace | Schéma: hrana kůže, linie stehu 3,5 mm od hrany, otvory v rozteči 3,85–4 mm | hotovo |
-| Lekce 4 · krok 3: Začněte steh | ilustrace | Schéma sedlářského stehu: dvě jehly procházejí každým otvorem proti sobě, pořadí a směr | hotovo |
+| Lekce 4 · krok 4: Začněte steh | ilustrace | Schéma sedlářského stehu: dvě jehly procházejí každým otvorem proti sobě, pořadí a směr | hotovo |
 | Lekce 5 · krok 1: Vytiskněte a zkontrolujte šablonu | ilustrace | Šablona 1:1: zadní díl 100 × 70 mm, přední kapsa 100 × 56 mm s výřezem na palec, linie stehu 3,5 mm, kontrolní úsečka 50 mm | hotovo |
 | Lekce 6 · krok 3: Slepte díly | ilustrace | Schéma sestavení: přední kapsa lícem ven na zadním dílu, steh po bocích a dole, vrch otevřený | hotovo |
 

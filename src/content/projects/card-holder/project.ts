@@ -382,7 +382,13 @@ export const lessons: readonly LessonDefinition[] = [
       'waxed-thread',
       'steel-ruler',
     ],
-    recommendedEquipment: ['contact-cement', 'wing-divider', 'scratch-awl', 'sandpaper'],
+    recommendedEquipment: [
+      'contact-cement',
+      'wing-divider',
+      'scratch-awl',
+      'sandpaper',
+      'stitching-pony',
+    ],
     prerequisiteLessons: [L3],
     steps: [
       {
@@ -404,6 +410,20 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Proděrujte obě vrstvy najednou',
         body: 'Linii stehu 3,5 mm od hrany rýsujte na díl, který bude vidět. Děrujte jako v lekci 3, jen počítejte s větší tloušťkou: úder je pevnější a kontrola rubu důležitější.',
         media: [],
+      },
+      {
+        id: 'hold-work',
+        title: 'Uchyťte si díl',
+        body: 'Sedlářský steh se šije dvěma jehlami současně, takže na držení dílu nezbývá ruka. Nejjednodušší je sevřít odřezek mezi kolena tak, aby linie otvorů koukala nahoru; u tak malých dílů to stačí a takhle šije většina začátečníků. Pohodlnější je sevřít díl mezi dvě dřevěné destičky a celé to upnout truhlářskou svěrkou ke stolu. Hotová pomůcka na tuhle práci se jmenuje sedlářský koník a najdete ji v seznamu vybavení v části „Kup později“; na pouzdro ji nepotřebujete, na dlouhé švy pásku nebo peněženky se vyplatí. Ať zvolíte cokoli, díl musí držet pevně a nesmí se mezi stehy posouvat, jinak nebudou stehy stejně utažené.',
+        media: [
+          {
+            id: 'l4-hold-work',
+            kind: 'photo',
+            caption:
+              'Odřezek sevřený mezi koleny s linií otvorů nahoru a vedle varianta se dvěma destičkami ve svěrce',
+            status: 'planned',
+          },
+        ],
       },
       {
         id: 'start-stitch',
@@ -660,7 +680,13 @@ export const lessons: readonly LessonDefinition[] = [
       'steel-ruler',
       'sandpaper',
     ],
-    recommendedEquipment: ['contact-cement', 'edge-burnisher', 'wing-divider', 'scratch-awl'],
+    recommendedEquipment: [
+      'contact-cement',
+      'edge-burnisher',
+      'wing-divider',
+      'scratch-awl',
+      'stitching-pony',
+    ],
     prerequisiteLessons: [L5],
     steps: [
       {
@@ -925,6 +951,18 @@ export const cardHolderProject: ProjectDefinition = {
       priority: 'later',
       reason: 'U tenké kůže malý efekt; až na pásek nebo peněženku.',
       specification: 'Velikost 0–1.',
+    },
+    {
+      equipmentSlug: 'stitching-pony',
+      priority: 'later',
+      reason:
+        'Drží díl při šití, aby byly obě ruce volné. Nejdelší šev pouzdra je 100 mm a jde ušít i mezi koleny.',
+      specification: 'Čelisti od 6 cm, potažené kůží.',
+      alternatives: [
+        'Mezi koleny',
+        'Truhlářská svěrka a dvě dřevěné destičky',
+        'Velký kancelářský klip na hraně stolu',
+      ],
     },
   ],
   lessons: [...lessons],
