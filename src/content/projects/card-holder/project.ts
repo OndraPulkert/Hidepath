@@ -370,7 +370,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 45,
     goal: 'Slepit dva odřezky, proděrovat je najednou a sešít sedlářským stehem, který je na obou stranách rovný.',
     materials: [
-      '2 odřezky zhruba 40 × 80 mm, ideálně třísločiněné',
+      '3 odřezky zhruba 40 × 80 mm, ideálně třísločiněné (jeden na zkoušku zdrsnění)',
       'nit asi 60 cm',
       'lepidlo nebo oboustranná páska',
     ],
@@ -382,13 +382,13 @@ export const lessons: readonly LessonDefinition[] = [
       'waxed-thread',
       'steel-ruler',
     ],
-    recommendedEquipment: ['contact-cement', 'wing-divider', 'scratch-awl'],
+    recommendedEquipment: ['contact-cement', 'wing-divider', 'scratch-awl', 'sandpaper'],
     prerequisiteLessons: [L3],
     steps: [
       {
         id: 'glue',
         title: 'Slepte díly podél hrany',
-        body: 'Na rub obou odřezků naneste tenký pás lepidla asi 5 mm široký podél jedné delší hrany, nechte podle návodu odvětrat a přitiskněte hrany přesně na sebe. S páskou: nalepte pás na jeden díl, odlepte krycí fólii a přitiskněte druhý díl. Lepidlo drží jen pomocně.',
+        body: 'Slepte odřezky tak, jak to bude na pouzdru: rub jednoho na líc druhého. Podél jedné delší hrany naneste tenký pás lepidla asi 5 mm široký na obě plochy, nechte podle návodu odvětrat a přitiskněte hrany přesně na sebe. Líc je hladký a lepidlo z něj pouští, takže si tady zkuste i to, že pás na líci předem zdrsníte smirkem 180–240; hned uvidíte, o kolik lépe spoj drží. S páskou: nalepte pás na rub jednoho dílu, odlepte krycí fólii a přitiskněte druhý díl. Lepidlo drží jen pomocně.',
         media: [
           {
             id: 'l4-glue-strip',
@@ -672,7 +672,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'glue-parts',
         title: 'Slepte díly',
-        body: 'Tenký pás lepidla nebo pásky na rub předního dílu podél boků a spodku. Přiložte na zadní díl tak, aby spodní hrana a boky lícovaly; zadní díl přesahuje nahoře. Přitiskněte přes hadřík.',
+        body: 'Nejdřív kapsu jen přiložte na zadní díl tak, aby spodní hrana a boky lícovaly (zadní díl přesahuje nahoře), a rýsovacím šídlem lehce označte, kam sahá. Pak podél boků a spodku naneste tenký pás lepidla na obě plochy, nechte odvětrat a přitiskněte přes hadřík. Pozor na jednu věc: rub kapsy lepidlo drží dobře, ale líc zadního dílu je hladký a lepidlo z něj snadno pustí. Pás na zadním dílu proto předem zdrsněte smirkem 180–240, ale jen v místě, které kapsa zakryje – škrábance mimo něj už nezmizí. S oboustrannou páskou zdrsňovat nemusíte, páska drží i na hladkém líci a nalepí se jen na rub kapsy.',
         media: [
           {
             id: 'l6-assembled-scheme',
@@ -776,6 +776,7 @@ export const lessons: readonly LessonDefinition[] = [
       'Steh přes horní hranu předního dílu: pouzdro se nedá otevřít.',
       'Rohový otvor mimo průsečík linií: roh má skok.',
       'Leštění před srovnáním hran: nerovnosti zůstanou.',
+      'Zdrsnění líce dál, než kam kapsa dosáhne: matné škrábance na viditelné ploše se nedají odstranit.',
     ],
     safety: [
       'Při děrování dvou vrstev je úder pevnější; prsty držte u spodku vidliček, mimo dráhu paličky.',

@@ -735,9 +735,9 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     englishName: 'Sandpaper',
     category: 'finishing',
     shortDescription:
-      'Srovná hrany po sešití do jedné roviny před leštěním. Běžný brusný papír z hobbymarketu.',
+      'Srovná hrany po sešití a zdrsní líc kůže před lepením. Běžný brusný papír z hobbymarketu.',
     purpose:
-      'Po sešití dvou vrstev hrany nikdy nelícují dokonale. Jemným brusným papírem na rovné destičce se srovnají do jedné roviny; teprve pak má smysl hrany leštit.',
+      'Dvě práce. Po sešití dvou vrstev hrany nikdy nelícují dokonale – jemným brusným papírem na rovné destičce se srovnají do jedné roviny a teprve pak má smysl je leštit. A před lepením se hrubším papírem zdrsní hladký líc kůže v místě spoje, protože z neporušeného líce kontaktní lepidlo snadno pustí.',
     buyingGuide: [
       { label: 'Zrnitost', value: '220–400 na srovnání; 600–800 volitelně na dohlazení' },
       { label: 'Množství', value: 'jeden arch stačí na několik projektů' },
