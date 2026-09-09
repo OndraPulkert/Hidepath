@@ -873,7 +873,8 @@ export const cardHolderProject: ProjectDefinition = {
       equipmentSlug: 'sandpaper',
       priority: 'required',
       reason: 'Srovnání hran po sešití (lekce 5 a 6).',
-      specification: 'Zrnitost 220–400, jeden arch.',
+      specification:
+        'Zrnitost 180–240 na zdrsnění lepené plochy a 220–400 na srovnání hran; po jednom archu.',
       alternatives: ['Jemný pilník na nehty'],
     },
     {

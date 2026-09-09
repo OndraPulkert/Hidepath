@@ -23,12 +23,12 @@ Podklady pro Milník 2. Ceny a dostupnost jsou snímek z data ověření; do apl
 | Palička              | gumová malá, 112 Kč                                                                                                         | stačí na začátek; poly/nylon je lepší, ale dražší                                             | skladkuzetvurce.cz                                 |
 | Řezací podložka      | KW TriO 45 × 30 cm, 259 Kč                                                                                                  | A3 stačí – kůže se nejdřív hrubě nařeže                                                       | skladkuzetvurce.cz                                 |
 | Lepidlo              | Pattex Butapren 35 ml, 69 Kč · Fiebing's Leather Craft Cement 118 ml, 309 Kč (vodní báze) · oboustranná páska 5 mm od 89 Kč | u pouzdra lepidlo jen přidrží díly, pevnost dává steh; vteřinové lepidlo ne                   | craft-point.cz/k/chemie-kuze/lepidla-na-kuzi/      |
-| Smirkový papír       | zrnitost 220–400 (+ volitelně 600–800)                                                                                      | hobbymarket; brousit na rovné destičce, ne v ruce; hrubší než 150 ne                          | –                                                  |
+| Smirkový papír       | zrnitost 180–400 (+ volitelně 600–800)                                                                                      | hobbymarket; brousit na rovné destičce, ne v ruce; hrubší než 150 ne                          | –                                                  |
 
 ## Doplněno po review (2026-09-07)
 
 - Katalog má `priceSource`: ověřené jsou vidličky, jehly, nit, palička, řezací podložka, lepidlo; ostatní jsou odhady a UI je tak označuje.
-- Přidána položka **Smirkový papír 220–400** (nezbytná, běžně doma) – lekce 5 a 6 ho vyžadují.
+- Přidána položka **Smirkový papír 180–400** (nezbytná, běžně doma) – lekce 5 a 6 ho vyžadují na srovnání hran, lekce 4 a 6 na zdrsnění líce před lepením.
 - Šablona: přední kapsa 56 mm s výřezem na palec 40 × 12 mm (karta 54 mm se vysouvá výřezem), steh zadního dílu jen po výšku kapsy. Ověřit na papíru.
 
 ## Ověřené příklady výrobků (odkazy dodal autor, ceny ověřeny 2026-09-07)

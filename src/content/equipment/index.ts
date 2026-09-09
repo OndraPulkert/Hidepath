@@ -731,7 +731,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
 
   draft({
     slug: 'sandpaper',
-    name: 'Smirkový papír 220–400',
+    name: 'Smirkový papír 180–400',
     englishName: 'Sandpaper',
     category: 'finishing',
     shortDescription:
@@ -739,12 +739,17 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     purpose:
       'Dvě práce. Po sešití dvou vrstev hrany nikdy nelícují dokonale – jemným brusným papírem na rovné destičce se srovnají do jedné roviny a teprve pak má smysl je leštit. A před lepením se hrubším papírem zdrsní hladký líc kůže v místě spoje, protože z neporušeného líce kontaktní lepidlo snadno pustí.',
     buyingGuide: [
-      { label: 'Zrnitost', value: '220–400 na srovnání; 600–800 volitelně na dohlazení' },
+      {
+        label: 'Zrnitost',
+        value:
+          '180–240 na zdrsnění lepené plochy, 220–400 na srovnání hran, 600–800 volitelně na dohlazení',
+      },
       { label: 'Množství', value: 'jeden arch stačí na několik projektů' },
     ],
     cautions: [
       'Papír přidržte na rovné destičce (dřevo, tvrdý plast) a hranou po něm tahejte. Volný papír v ruce hranu zaoblí nepravidelně.',
       'Bruste jen do momentu, kdy jsou vrstvy v rovině. Víc ubírá materiál z dílu.',
+      'Líc zdrsňujte výhradně v místě, které druhý díl zakryje. Matné škrábance na viditelné ploše už nezmizí.',
     ],
     avoid: [{ title: 'Hrubší než 150', reason: 'trhá vlákna kůže a hranu roztřepí' }],
     alternatives: [{ title: 'Pilník na nehty (jemná strana)', reason: 'na malé pouzdro postačí' }],

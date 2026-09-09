@@ -49,7 +49,7 @@ Celkem 52 slotů · k natočení 46 · hotovo 6.
 | Vybavení · Voskovaná nit 0,6 mm | foto | Cívka voskované nitě 0,6 mm v přírodní barvě vedle hotového stehu |  |
 | Vybavení · Palička | foto | Kožařská palička ležící na stole vedle vidliček |  |
 | Vybavení · Kontaktní lepidlo na kůži | foto | Tuba kontaktního lepidla a špachtle, tenký pás lepidla podél hrany kůže |  |
-| Vybavení · Smirkový papír 220–400 | foto | Arch brusného papíru přidržený na dřevěné destičce, hrana pouzdra tažená po papíru |  |
+| Vybavení · Smirkový papír 180–400 | foto | Arch brusného papíru přidržený na dřevěné destičce, hrana pouzdra tažená po papíru |  |
 | Vybavení · Pasta na hrany + leštítko | foto | Dřevěné leštítko a kelímek pasty na hrany, vedle zaleštěná a nezaleštěná hrana |  |
 | Vybavení · Rýsovací šídlo (hruška) | foto | Rýsovací šídlo s hruškovitou rukojetí obtahuje okraj papírové šablony na rubu kůže |  |
 | Vybavení · Rýsovací kružítko | foto | Kovové rýsovací kružítko vedené po hraně kůže, viditelná jemná linie stehu |  |
