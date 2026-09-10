@@ -39,6 +39,8 @@ import {
 /** Řezací soubor pro laser: řez černě, gravírování modře (běžná konvence řezáren). */
 const LASER = {
   cutColor: '#000000',
+  /** Gravírování: vodicí linky a číslice jako tahy. Žádný živý text. */
+  engraveColor: '#0000ff',
   /** Značicí otvor: poloha se skrz šablonu přenáší šídlem, otvor do kůže dělá průbojník. */
   markHoleMm: 2,
   /** Zářez na hraně místo nakreslené linie – čáru uvnitř plastu není jak obtáhnout. */
@@ -450,6 +452,52 @@ export function buildLaserSvg(
 
 /* --------------------- plochá destička pro všechny šířky --------------------- */
 
+/**
+ * Sedmisegmentové číslice kreslené jako tahy, ne jako text.
+ * Živý text s fontem je pro řezárnu důvod k odmítnutí souboru; tahy jsou vektory.
+ * Souřadnice v jednotkovém rámci 0..0,6 × 0..1.
+ */
+const DIGIT_SEGMENTS: Record<string, [number, number, number, number][]> = (() => {
+  const top: [number, number, number, number] = [0, 0, 0.6, 0];
+  const mid: [number, number, number, number] = [0, 0.5, 0.6, 0.5];
+  const bot: [number, number, number, number] = [0, 1, 0.6, 1];
+  const ul: [number, number, number, number] = [0, 0, 0, 0.5];
+  const ur: [number, number, number, number] = [0.6, 0, 0.6, 0.5];
+  const ll: [number, number, number, number] = [0, 0.5, 0, 1];
+  const lr: [number, number, number, number] = [0.6, 0.5, 0.6, 1];
+  return {
+    '0': [top, ul, ur, ll, lr, bot],
+    '1': [ur, lr],
+    '2': [top, ur, mid, ll, bot],
+    '3': [top, ur, mid, lr, bot],
+    '4': [ul, ur, mid, lr],
+    '5': [top, ul, mid, lr, bot],
+    '6': [top, ul, mid, ll, lr, bot],
+    '7': [top, ur, lr],
+    '8': [top, ul, ur, mid, ll, lr, bot],
+    '9': [top, ul, ur, mid, lr, bot],
+  };
+})();
+
+/** Vygravíruje číslice jako tahy. `x`,`y` je levý horní roh prvního znaku. */
+function engraveNumber(x: number, y: number, value: number, height: number): string[] {
+  const out: string[] = [];
+  const advance = height * 0.6 + height * 0.25;
+  [...String(value)].forEach((ch, i) => {
+    const segs = DIGIT_SEGMENTS[ch];
+    if (!segs) return;
+    const ox = x + i * advance;
+    const d = segs
+      .map(
+        ([x1, y1, x2, y2]) =>
+          `M${f(ox + x1 * height)} ${f(y + y1 * height)} L${f(ox + x2 * height)} ${f(y + y2 * height)}`,
+      )
+      .join(' ');
+    out.push(`<path d="${d}" fill="none" stroke="${LASER.engraveColor}" stroke-width="0.15"/>`);
+  });
+  return out;
+}
+
 /** Vodorovný stadion (obdélník se zaoblenými konci) jako uzavřená kontura. */
 function stadiumH(cy: number, x0: number, x1: number, height: number): string {
   const r = height / 2;
@@ -515,6 +563,32 @@ export function buildBeltPlateSvg(
 
   cut.push(hangHole(L.hangHoleX, L.hangHoleY));
 
+  /* --- vodicí linky šířek: srovnáním obou hran pásu se destička sama vystředí --- */
+  const engrave: string[] = [];
+  const lineX0 = L.strapEndChamferMm + 2;
+  // Linky nesmí zajet do vyříznuté špičky ani do závěsného otvoru: laser by
+  // gravíroval do prázdna a linka by byla přerušená.
+  const tipRowX1 = L.tipApexX - 4;
+  const buckleRowX1 = L.hangHoleX - L.hangHoleMm / 2 - 3;
+  L.guides.forEach((g, i) => {
+    // Číslice se posouvají v x, aby se u linek 2,5 mm od sebe nepřekrývaly.
+    const labelX = lineX0 + 2 + i * (L.guideLabelHeightMm * 2.4);
+    for (const rowY of [ay, by]) {
+      const lineX1 = rowY === ay ? tipRowX1 : buckleRowX1;
+      for (const sign of [-1, 1]) {
+        const ly = rowY + sign * g.offsetMm;
+        engrave.push(
+          `<path d="M${f(lineX0)} ${f(ly)} L${f(lineX1)} ${f(ly)}" ` +
+            `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.15"/>`,
+        );
+      }
+      // Popis jen nad horní linkou páru, uvnitř pásma.
+      engrave.push(
+        ...engraveNumber(labelX, rowY - g.offsetMm + 0.6, g.beltWidthMm, L.guideLabelHeightMm),
+      );
+    }
+  });
+
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     `<!-- REZACI SOUBOR - DESTICKA NA OPASEK ${L.minBeltWidthMm}-${L.maxBeltWidthMm} mm.`,
@@ -523,10 +597,15 @@ export function buildBeltPlateSvg(
     '     MATERIAL: CIRY akrylat 3 mm - pres desticku se dívá na narysovanou strednici pasu.',
     `     Otvory Ø ${L.markHoleMm} mm = znacici, neslucovat a nezvetsovat.`,
     `     Otvor Ø ${L.hangHoleMm} mm v rohu = zaveseni.`,
+    `     Vrstva "cut" (${LASER.cutColor}) = REZ, vrstva "engrave" (${LASER.engraveColor}) = GRAVIROVANI.`,
+    '     V gravirovani jsou vodici linky sirek a cisla; cisla jsou TAHY, ne zivy text.',
     '     Kompenzaci kerfu neresit. Neprepocitavat merítko. -->',
     `<svg xmlns="http://www.w3.org/2000/svg" width="${W}mm" height="${H}mm" viewBox="0 0 ${W} ${H}">`,
     '<g id="cut">',
     ...cut,
+    '</g>',
+    '<g id="engrave">',
+    ...engrave,
     '</g>',
     '</svg>',
   ].join('\n');
@@ -598,15 +677,41 @@ async function main(): Promise<void> {
 
   if (process.argv.includes('--multi')) {
     const platePath = resolve(outDir, 'opasek-desticka.svg');
-    writeFileSync(platePath, buildBeltPlateSvg(end, tip), 'utf8');
+    const svg = buildBeltPlateSvg(end, tip);
+    writeFileSync(platePath, svg, 'utf8');
     const L = beltPlateLayout(end, tip);
     console.log(`Zapsáno ${platePath}`);
+
+    // Papírová kontrola před objednáním akrylátu: vytisknout na A4 na šířku na 100 %
+    // a přeměřit obrys. Obrys sám je kalibrace, jiná značka není potřeba.
+    const platePdf = resolve(outDir, 'opasek-desticka-kontrolni-tisk.pdf');
+    const { chromium: cr } = await import('@playwright/test');
+    const br = await cr.launch({ channel: 'chrome' });
+    const pg2 = await br.newPage();
+    await pg2.setContent(
+      `<style>@page{size:A4 landscape;margin:0}html,body{margin:0;padding:0}` +
+        `.s{width:297mm;height:210mm;overflow:hidden}</style><div class="s">${svg}</div>`,
+      { waitUntil: 'load' },
+    );
+    await pg2.pdf({
+      path: platePdf,
+      width: '297mm',
+      height: '210mm',
+      printBackground: true,
+      margin: { top: '0', right: '0', bottom: '0', left: '0' },
+      preferCSSPageSize: true,
+    });
+    await br.close();
+    console.log(`Zapsáno ${platePdf} (kontrolní tisk na A4 na šířku, 100 %)`);
     console.log(
       `Destička ${L.plateWidthMm} × ${L.plateHeightMm} mm pro pásky ${L.minBeltWidthMm}–${L.maxBeltWidthMm} mm, čirý akryl 3 mm.`,
     );
     console.log(
       'Horní řada: špička + 5 dírek (umisťuje se podle prostřední dírky). ' +
         'Dolní řada: konec u přezky (levá hrana destičky = konec pásu).',
+    );
+    console.log(
+      `Před objednáním vytiskni kontrolní PDF na A4 na šířku na 100 % a přeměř obrys: musí být ${L.plateWidthMm} × ${L.plateHeightMm} mm.`,
     );
     return;
   }

@@ -229,19 +229,64 @@ describe('destička na opasek', () => {
   it('soubor existuje a je čistě řezový', () => {
     expect(plate, 'docs/generated/opasek-desticka.svg').toBeDefined();
     expect(plate!).toContain('<g id="cut">');
-    expect(plate!, 'žádný text').not.toContain('<text');
+    expect(plate!, 'žádný živý text – číslice jsou tahy').not.toContain('<text');
     expect([...plate!.matchAll(/fill="(?!none)/g)].length, 'žádná výplň').toBe(0);
-    for (const d of [...plate!.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)) {
-      expect(d.trim().endsWith('Z'), `neuzavřená cesta ${d.slice(0, 40)}…`).toBe(true);
+    const cutLayer = plate!.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
+    for (const d of [...cutLayer.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)) {
+      expect(d.trim().endsWith('Z'), `neuzavřená cesta v řezu ${d.slice(0, 40)}…`).toBe(true);
     }
     expect(plate!).toContain(`width="${L.plateWidthMm}mm"`);
     expect(plate!).toContain(`height="${L.plateHeightMm}mm"`);
   });
 
+  it('má vodicí linky šířek s číslicemi, a to jako tahy, ne jako text', () => {
+    // Vodicí linky jsou způsob vyrovnání: srovnáním obou hran pásu na pár linek
+    // se destička sama vystředí a nemusí se rýsovat střednice.
+    const eng = plate!.split('<g id="engrave">')[1]?.split('</g>')[0] ?? '';
+    expect(eng, 'vrstva gravírování').not.toBe('');
+    expect(eng, 'žádný živý text ani ve gravírování').not.toContain('<text');
+    const lines = [...eng.matchAll(/M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)"/g)]
+      .filter((m) => Math.abs(Number(m[2]) - Number(m[4])) < 0.001)
+      .map((m) => Number(m[2]));
+    for (const rowY of [L.tipRowY, L.buckleRowY]) {
+      for (const g of L.guides) {
+        for (const sign of [-1, 1]) {
+          const want = rowY + sign * g.offsetMm;
+          expect(
+            lines.some((y) => Math.abs(y - want) < 0.001),
+            `linka pro ${g.beltWidthMm} mm na y ${want}`,
+          ).toBe(true);
+        }
+      }
+    }
+    // Číslice jsou samostatné tahy, ne <text>.
+    expect([...eng.matchAll(/<path/g)].length).toBeGreaterThan(2 * 2 * L.guides.length);
+  });
+
+  it('vodicí linky nezajíždějí do vyříznuté špičky ani do závěsného otvoru', () => {
+    const eng = plate!.split('<g id="engrave">')[1]?.split('</g>')[0] ?? '';
+    const horiz = [...eng.matchAll(/M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)"/g)].filter(
+      (m) => Math.abs(Number(m[2]) - Number(m[4])) < 0.001,
+    );
+    for (const m of horiz) {
+      const y = Number(m[2]);
+      const x1 = Number(m[3]);
+      if (Math.abs(y - L.tipRowY) < L.tipCutoutHalfMm) {
+        expect(x1, `linka na y ${y} nesmí dosáhnout k vrcholu špičky`).toBeLessThan(L.tipApexX);
+      }
+      if (Math.abs(y - L.hangHoleY) < L.hangHoleMm) {
+        expect(x1, `linka na y ${y} nesmí dosáhnout k závěsnému otvoru`).toBeLessThan(
+          L.hangHoleX - L.hangHoleMm / 2,
+        );
+      }
+    }
+  });
+
   it('nemá žádnou drážku na značení – jen otvory a vyříznuté tvary', () => {
     // Značení skrz drážku 1,2 mm má přesnost ±0,6 mm; obtažení hrany ±0,1 mm.
     // Jediné dva vyříznuté tvary jsou špička a ovál pro trn.
-    const shapes = [...plate!.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!);
+    const cut = plate!.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
+    const shapes = [...cut.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!);
     expect(shapes.length, 'obrys + špička + ovál').toBe(3);
   });
 
@@ -273,7 +318,8 @@ describe('destička na opasek', () => {
   });
 
   it('obrys má zkosený levý horní roh jako značku konce pásu', () => {
-    const outline = [...plate!.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)[0]!;
+    const cutL = plate!.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
+    const outline = [...cutL.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)[0]!;
     expect(outline, 'zkosení v obrysu').toContain(
       `M0 ${L.strapEndChamferMm} L${L.strapEndChamferMm} 0`,
     );
@@ -287,7 +333,8 @@ describe('destička na opasek', () => {
   });
 
   it('ovál pro trn je 25 × 6 mm a leží na ohybu', () => {
-    const oval = [...plate!.matchAll(/<path d="([^"]+)"/g)]
+    const cutO = plate!.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
+    const oval = [...cutO.matchAll(/<path d="([^"]+)"/g)]
       .map((m) => m[1]!)
       .find((d) => (d.match(/A/g) ?? []).length === 2);
     expect(oval).toBeDefined();

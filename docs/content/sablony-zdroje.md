@@ -810,3 +810,29 @@ a jedenácti v `belt-end.test.ts`.
 
 Postup použití destičky krok za krokem:
 [docs/zadani/opasek-sablona-poptavka.md](../zadani/opasek-sablona-poptavka.md).
+
+### Vodicí linky šířek – oprava mého zdůvodnění
+
+Autor se dvakrát ptal, proč destička nemá víc velikostí na jednom kusu jako komerční desky. Odmítl
+jsem to s tím, že (a) kupuje hotový pás, takže linky na řezání pruhu nepotřebuje, a (b) značky by
+rozbíjely hranu, po které se vede šídlo. **Obojí bylo špatně.**
+
+Hlavní účel těch linek na komerčních deskách **není řezání pruhu z kůže, ale vyrovnání destičky**.
+Srovnáním **obou hran pásu** na symetrický pár linek se destička sama vystředí — a tím padá celý
+krok „narýsuj na pás střednici“. To je u stolu jednodušší než moje původní metoda.
+
+A námitka (b) platila jen pro **zářezy v hraně výřezu**, ne pro **gravírované linky napříč
+destičkou**. Gravírování linek navíc není to riziko, které jsem dřív odstraňoval: problémem byl
+**živý text s fontem**, ne vektorové linie. Čísla jsou proto kreslená jako **sedmisegmentové tahy**,
+tedy taky vektory — žádný font, žádné riziko odmítnutí souboru.
+
+Destička teď nese v obou řadách gravírovaný pár linek pro **30 / 35 / 40 / 45 mm** s číslem u každé.
+Čtyři šířky, ne šest: rozestup sousedních linek je pak 2,5 mm a je čitelný. Kontrola
+`checkBeltPlate` odmítne rozestup pod 2 mm (šest šířek by dalo 1 mm) i linku mimo nejširší pás.
+
+Linky končí **před vyříznutou špičkou a před závěsným otvorem** — jinak by laser gravíroval do
+prázdna a linka by byla přerušená. Ověřeno testem.
+
+Navíc přidán **kontrolní tisk** `opasek-desticka-kontrolni-tisk.pdf` (A4 na šířku, 100 %), aby se
+destička dala ověřit na papíře před objednáním akrylátu. Obrys 270 × 127 mm je sám kalibrací;
+změřeno na renderu 300 dpi jako **269,83 × 127,00 mm**.

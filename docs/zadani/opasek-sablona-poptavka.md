@@ -2,7 +2,9 @@
 
 ## Doporučená varianta: jedna plochá destička
 
-`pnpm pattern:belt-end --multi` → `docs/generated/opasek-desticka.svg`
+`pnpm pattern:belt-end --multi` →
+`docs/generated/opasek-desticka.svg` (řezací soubor) a
+`docs/generated/opasek-desticka-kontrolni-tisk.pdf` (papírová kontrola před objednáním).
 
 **Destička 270 × 127 mm, čirý akrylát 3 mm, pro pásky 28–45 mm.** Dvě řady:
 
@@ -10,26 +12,31 @@
   rozlišovací otvory u prostřední dírky. Umisťuje se **podle prostřední dírky**.
 - **Dolní řada – konec u přezky.** Vyříznutý ovál pro trn, 4 otvory pro nýty, 2 značky linie
   ohybu. Umisťuje se **podle levé krátké hrany destičky = konec pásu**.
+- **Gravírované vodicí linky pro šířky 30 / 35 / 40 / 45 mm** s čísly u každé — v obou řadách.
 - **Zkosený levý horní roh** značí, která krátká hrana je konec pásu.
 - **Závěsný otvor Ø 4 mm** v pravém dolním rohu.
 
 Jedna destička stačí na všechny šířky proto, že polohy všech otvorů podél pásu na šířce nezávisí
 a koncové body zkosení špičky pro všechny šířky leží na jedné a téže přímce. Zkosení se obtáhne
-a **stop určí hrana kupovaného pásu**.
+a **stop určí hrana pásu**.
 
 ### Jak se destička používá
 
-1. **Narýsuj na pás střednici** (dva body ve w/2 od hrany, spojit pravítkem). Přes čirý akrylát ji
-   uvidíš a podle ní destičku vystředíš — proto musí být materiál průhledný.
-2. **Konec u přezky:** přilož destičku dolní řadou na konec pásu, **levou hranou destičky přesně na
-   konec pásu**. Označ šídlem 4 otvory pro nýty a 2 značky linie ohybu, obtáhni ovál pro trn.
+1. **Přilož destičku a srovnej obě hrany pásu na pár linek pro svou šířku** (např. „40“).
+   Tím je destička vystředěná — **střednici na pás rýsovat nemusíš**, k tomu ty linky jsou.
+   Přes čirý akrylát na hrany pásu vidíš.
+2. **Konec u přezky:** dolní řadou, **levou hranou destičky přesně na konec pásu**. Označ šídlem
+   4 otvory pro nýty a 2 značky linie ohybu, obtáhni ovál pro trn.
 3. Vysekni 6mm otvory pro nýty a konce oválu, ovál mezi nimi vyřízni nožem. Spoj obě značky ohybu
    pravítkem. Navlékni poutko, ohni konec kolem přezky, sešroubuj nýty.
 4. **Vyzkoušej pásek na sobě** a označ, kam padne trn. To je prostřední dírka.
-5. **Špička:** přilož destičku horní řadou tak, aby **prostřední otvor** (ten se dvěma
-   rozlišovacími po stranách) ležel na té značce. Označ zbylé 4 dírky a obtáhni zkosení špičky —
-   **jen dokud nedojdeš k hraně pásu**, dál už je výřez záměrně širší než pás.
+5. **Špička:** horní řadou, **prostřední otvor** (ten se dvěma rozlišovacími po stranách) na tu
+   značku, hrany pásu opět na linky své šířky. Označ zbylé 4 dírky a obtáhni zkosení špičky —
+   **jen dokud nedojdeš k hraně pásu**, dál je výřez záměrně širší.
 6. Vysekni 4,5mm dírky a nakonec vyřízni špičku.
+
+**Před objednáním** vytiskni kontrolní PDF na **A4 na šířku na 100 %** a přeměř obrys: musí být
+**270 × 127 mm**. Obrys sám je kalibrace, jiná značka není potřeba.
 
 Poutko na destičce záměrně není: jeho délka závisí na šířce i tloušťce pásu a měří se na složeném
 pásku. Vyřízne se z odřezku podle míry.
@@ -63,9 +70,11 @@ Soubor je **1:1 v milimetrech**, list 210 mm široký. Obsahuje tři díly: kone
 >
 > V souboru je **1 jednotka = 1 mm**. **Zkosený levý horní roh** je záměrný, je to značka
 > orientace. **Vyříznutý trojúhelníkový tvar** a **ovál** jsou funkční výřezy, prosím nevynechávat.
+> Gravírované linky a čísla prosím **nepřesouvat** — jejich poloha je funkční.
 >
-> **Soubor je jen na řez** — jedna vrstva `cut`, žádný text, žádná výplň, všechny kontury uzavřené.
-> Není potřeba nic gravírovat.
+> **Dvě vrstvy:** `cut` (černá, #000000) = **řez**, `engrave` (modrá, #0000FF) = **gravírování**.
+> Ve gravírování jsou vodicí linky šířek a čísla; **čísla jsou vektorové tahy, ne živý text**,
+> takže není potřeba žádný font. Řez neobsahuje text ani výplň, všechny kontury jsou uzavřené.
 >
 > **Přesnost:** potřebuji, aby vzájemné vzdálenosti otvorů odpovídaly souboru **do 0,2 mm**.
 > Absolutní poloha na desce nehraje roli.

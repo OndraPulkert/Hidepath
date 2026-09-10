@@ -353,6 +353,15 @@ export interface BeltPlateSpec {
    */
   tipCutoutOversizeMm: number;
   /**
+   * Šířky pásů, pro které destička nese gravírovaný pár vodicích linek.
+   * Linky nejsou na řezání pruhu z kůže – jsou to **způsob vyrovnání**: srovnáním
+   * obou hran pásu na pár linek se destička sama vystředí a nemusí se rýsovat střednice.
+   * Rozestup sousedních linek musí zůstat čitelný, proto ne víc než čtyři šířky.
+   */
+  guideWidthsMm: number[];
+  /** Výška gravírovaných číslic u vodicích linek. */
+  guideLabelHeightMm: number;
+  /**
    * Zkosení levého **horního** rohu: značí, že tahle krátká hrana je konec pásu.
    * Nahoře proto, že dole by zasáhlo do pásma, kde na destičce leží pás
    * (kontrola `checkBeltPlate` to odhalila).
@@ -369,6 +378,8 @@ export const DEFAULT_BELT_PLATE: BeltPlateSpec = {
   markHoleMm: 2,
   hangHoleMm: 4,
   tipCutoutOversizeMm: 5,
+  guideWidthsMm: [30, 35, 40, 45],
+  guideLabelHeightMm: 2.6,
   strapEndChamferMm: 8,
 };
 
@@ -385,6 +396,9 @@ export interface BeltPlateLayout {
   tipFarX: number;
   /** Poloviční šířka vyříznutého tvaru špičky na širokém konci. */
   tipCutoutHalfMm: number;
+  /** Vodicí linky: šířka pásu a její odsazení od osy. */
+  guides: { beltWidthMm: number; offsetMm: number }[];
+  guideLabelHeightMm: number;
   strapEndChamferMm: number;
   /** Dírky pro trn, x od levé hrany. */
   tipHoleXs: number[];
@@ -436,6 +450,10 @@ export function beltPlateLayout(
     tipApexX: apexX,
     tipFarX: farX,
     tipCutoutHalfMm: cutoutHalf,
+    guides: [...plate.guideWidthsMm]
+      .sort((a, b) => b - a)
+      .map((bw) => ({ beltWidthMm: bw, offsetMm: bw / 2 })),
+    guideLabelHeightMm: plate.guideLabelHeightMm,
     strapEndChamferMm: plate.strapEndChamferMm,
     tipHoleXs: offsets.map((o) => apexX - o),
     middleHoleX: apexX - apexToMiddleHoleMm(tip),
@@ -498,6 +516,22 @@ export function checkBeltPlate(
     'Od zkosení levého horního rohu k pásu na řadě se špičkou',
     L.tipRowY - half - L.strapEndChamferMm,
   );
+  // Vodicí linky musí být čitelně od sebe a vejít se na destičku.
+  const offs = L.guides.map((g) => g.offsetMm).sort((a, b) => a - b);
+  for (let i = 1; i < offs.length; i++) {
+    if (offs[i]! - offs[i - 1]! < 2) {
+      problems.push(
+        `Vodicí linky pro ${2 * offs[i - 1]!} a ${2 * offs[i]!} mm jsou od sebe ` +
+          `${(offs[i]! - offs[i - 1]!).toFixed(1)} mm – necitelné, minimum 2 mm.`,
+      );
+      break;
+    }
+  }
+  if (offs.length > 0 && offs[offs.length - 1]! > half) {
+    problems.push(
+      `Vodicí linka pro ${2 * offs[offs.length - 1]!} mm je mimo nejširší podporovaný pás ${L.maxBeltWidthMm} mm.`,
+    );
+  }
   if (L.tipCutoutHalfMm <= half) {
     problems.push(
       'Vyříznutá špička není širší než nejširší pás; její příčná hrana by ležela na kůži.',
