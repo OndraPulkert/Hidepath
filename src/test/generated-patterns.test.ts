@@ -107,12 +107,21 @@ describe('řezací soubor pro laser', () => {
     expect(lasers.length).toBeGreaterThan(0);
   });
 
-  it('má vrstvu řezu a gravírování a v řezu žádný text', () => {
+  it('je čistě řezový: jedna vrstva, žádný text, žádná výplň, uzavřené kontury', () => {
     for (const { path, svg } of lasers) {
       expect(svg, path).toContain('<g id="cut">');
-      expect(svg, path).toContain('<g id="engrave">');
-      const cut = svg.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
-      expect(cut, `${path}: v řezu nesmí být text`).not.toContain('<text');
+      // Živý text s fontem je pro řezárnu důvod k odmítnutí souboru.
+      expect(svg, `${path}: žádný text`).not.toContain('<text');
+      expect(svg, `${path}: jen jedna vrstva`).toBe(
+        svg.replace(/<g id="engrave">[\s\S]*?<\/g>/, ''),
+      );
+      expect([...svg.matchAll(/fill="(?!none)/g)].length, `${path}: žádná výplň`).toBe(0);
+      const paths = [...svg.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!);
+      expect(paths.length, path).toBeGreaterThan(0);
+      for (const d of paths) {
+        // Otevřená cesta ležící na obrysu = dvojí řez. Zářezy proto patří do kontury.
+        expect(d.trim().endsWith('Z'), `${path}: neuzavřená cesta ${d.slice(0, 40)}…`).toBe(true);
+      }
       expect(svg, path).toContain('width="210mm"');
     }
   });
