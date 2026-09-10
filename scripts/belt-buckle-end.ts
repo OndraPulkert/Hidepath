@@ -609,7 +609,10 @@ export function buildBeltPlateSvg(
   // (nejlevější otvory řad jsou na x = 10 a 16,8, další až na 35).
   const scaleX = 24;
   for (const rowY of [ay, ry, by]) {
-    for (let k = 0; k <= Math.floor(L.tipCutoutHalfMm); k += 1) {
+    // Rozsah jen na nejširší podporovaný pás (+0,5 mm), ne na půlku výřezu špičky:
+    // se ±27 mm se stupnice sousedních řad k sobě přiblížily na 2 mm a v náhledu
+    // vypadaly jako jedna průběžná žebřina přes celou destičku. Teď je mezi nimi 11 mm.
+    for (let k = 0; k <= Math.ceil(L.maxBeltWidthMm / 2) + 1; k += 1) {
       // Drobné rysky kratší (2 mm): se 3 mm splývaly s vodicími linkami vedle.
       const len = k % 10 === 0 ? 7 : k % 5 === 0 ? 4 : 2;
       for (const sign of k === 0 ? [1] : [-1, 1]) {
@@ -642,22 +645,39 @@ export function buildBeltPlateSvg(
   const rulerY = L.rulerYMm;
   const rulerX0 = L.rulerX0Mm;
   const rulerX1 = L.rulerEndXMm;
-  for (let mm = 0; rulerX0 + mm <= rulerX1; mm += 1) {
-    const x = rulerX0 + mm;
+  // Čísla leží DOVNITŘ pásma pravítka, vpravo od své rysky (nad základnou byla „0“
+  // ve zkoseném rohu a laser by ji vyřezal napůl). Proto se nejdřív spočítají jejich
+  // obálky a rysky, které do nich zasahují, se zkrátí — jinak přes číslo osm rysek
+  // projede naskrz a gravíruje se dvakrát. Milimetrová mřížka zůstane celá.
+  const rulerLabelY = rulerY + 1.6;
+  const rulerLabelH = L.guideLabelHeightMm;
+  const rulerLabels: { mm: number; x0: number; x1: number }[] = [];
+  for (let mm = 0; rulerX0 + mm <= rulerX1; mm += 50) {
+    const x0 = rulerX0 + mm + 1.2;
+    rulerLabels.push({ mm, x0, x1: x0 + String(mm).length * rulerLabelH * 0.85 });
+  }
+  const shortTickMm = 1.2;
+  for (let mm = 1; rulerX0 + mm <= rulerX1; mm += 1) {
     // Nula je sama levá hrana destičky, o kterou se měřený pásek opře. Rysku na ni
     // nekreslím: ležela by na řezné linii a kerf by z ní odebral první desetinky.
-    if (mm > 0) {
-      const len = mm % 50 === 0 ? L.rulerLongTickMm : mm % 10 === 0 ? 5 : mm % 5 === 0 ? 3.5 : 2;
-      engrave.push(
-        `<path d="M${f(x)} ${f(rulerY)} L${f(x)} ${f(rulerY + len)}" ` +
-          `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.1"/>`,
-      );
-    }
-    if (mm === 0 || mm % 50 === 0) {
-      // Čísla DOVNITŘ pásma pravítka, vpravo od své rysky. Nad základnou byla
-      // „0“ v zkoseném rohu a laser by ji vyřezal napůl.
-      engrave.push(...engraveNumber(x + 1.2, rulerY + 0.6, mm, L.guideLabelHeightMm));
-    }
+    const x = rulerX0 + mm;
+    const underLabel = rulerLabels.some((l) => x >= l.x0 - 0.05 && x <= l.x1 + 0.05);
+    const len = underLabel
+      ? shortTickMm
+      : mm % 50 === 0
+        ? L.rulerLongTickMm
+        : mm % 10 === 0
+          ? 5
+          : mm % 5 === 0
+            ? 3.5
+            : 2;
+    engrave.push(
+      `<path d="M${f(x)} ${f(rulerY)} L${f(x)} ${f(rulerY + len)}" ` +
+        `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.1"/>`,
+    );
+  }
+  for (const l of rulerLabels) {
+    engrave.push(...engraveNumber(l.x0, rulerLabelY, l.mm, rulerLabelH));
   }
 
   /* --- vodicí linky šířek: srovnáním obou hran pásu se destička sama vystředí --- */

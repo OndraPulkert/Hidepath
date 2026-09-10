@@ -542,6 +542,57 @@ describe('destička na opasek', () => {
     expect(outside, 'gravírované body mimo obrys').toEqual([]);
   });
 
+  it('žádnou gravírovanou číslicí neprochází jiný tah (regrese)', () => {
+    // Obecná verze dvou už opravených chyb: příčné tahy číslic šířek byly
+    // kolineární se svou vodicí linkou a rysky pravítka procházely jeho čísly.
+    // Každá číslice je jeden `<path>` s několika podcestami a malou obálkou;
+    // test hledá jakýkoli cizí tah, který tou obálkou projde.
+    const eng = plate!.split('<g id="engrave"')[1]?.split('</g>')[0] ?? '';
+    type Seg = { x1: number; y1: number; x2: number; y2: number };
+    const perPath: { box: [number, number, number, number]; segs: Seg[] }[] = [];
+    for (const d of [...eng.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)) {
+      const segs: Seg[] = [];
+      for (const sub of d.split('M').slice(1)) {
+        const n = [...sub.matchAll(/-?[\d.]+/g)].map((m) => Number(m[0]));
+        for (let i = 0; i + 3 < n.length; i += 2) {
+          segs.push({ x1: n[i]!, y1: n[i + 1]!, x2: n[i + 2]!, y2: n[i + 3]! });
+        }
+      }
+      if (segs.length === 0) continue;
+      const xs = segs.flatMap((g) => [g.x1, g.x2]);
+      const ys = segs.flatMap((g) => [g.y1, g.y2]);
+      perPath.push({
+        box: [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)],
+        segs,
+      });
+    }
+    // Číslice: malá obálka a víc než jedna podcesta.
+    const glyphs = perPath.filter(
+      (p) => p.segs.length >= 2 && p.box[2] - p.box[0] <= 4 && p.box[3] - p.box[1] <= 4,
+    );
+    expect(glyphs.length, 'gravírované číslice').toBeGreaterThan(20);
+    const crossings: string[] = [];
+    for (const g of glyphs) {
+      const [gx0, gy0, gx1, gy1] = g.box;
+      for (const other of perPath) {
+        if (other === g) continue;
+        for (const sg of other.segs) {
+          // Vzorkování úsečky: stačí hrubé, jde o průchod obálkou, ne o dotyk.
+          for (let t = 0; t <= 1; t += 0.02) {
+            const x = sg.x1 + (sg.x2 - sg.x1) * t;
+            const y = sg.y1 + (sg.y2 - sg.y1) * t;
+            if (x > gx0 + 1e-9 && x < gx1 - 1e-9 && y > gy0 + 1e-9 && y < gy1 - 1e-9) {
+              crossings.push(`${gx0.toFixed(1)},${gy0.toFixed(1)} × tah ${sg.x1},${sg.y1}`);
+              t = 2;
+              break;
+            }
+          }
+        }
+      }
+    }
+    expect([...new Set(crossings)], 'tahy procházející číslicí').toEqual([]);
+  });
+
   it('žádný tah číslice neleží na vodicí lince (regrese)', () => {
     // Příčné tahy číslic 4 a 5 byly kolineární se svou linkou: 2 × 1,2 mm
     // gravírované dvakrát a linka procházela číslem naskrz.

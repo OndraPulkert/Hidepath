@@ -1419,3 +1419,35 @@ to a je to záměr:** naměřené body jsou odečtené z renderu **300 dpi**, kd
 0,0847 mm. Odchylka 0,108 mm je tedy 1,3 pixelu a „vylepšení" na 0,086 mm je fit na jeden pixel
 šumu ručního odečtu. Sklon 0,453 leží mezi oběma nezávisle odměřenými šířkami (0,4521 u 40 mm
 a 0,4542 u 35 mm), což je věcně správnější než sednout na jednu z nich.
+
+### Ještě jednou totéž, jen svisle (2026-09-10)
+
+Autor otevřel hotový soubor v prohlížeči a poslal snímek s otázkou, jestli je to v pořádku.
+Nebylo: **čísla pravítka byla přeškrtnutá vlastními ryskami.** Osm rysek procházelo naskrz
+čísly 0 / 50 / 100 — tedy **úplně tatáž chyba**, jakou jsem o dvě revize dřív opravoval u čísel
+šířek, jen otočená o 90°. Můj tehdejší test hledal jen **vodorovné** tahy číslic na
+**vodorovných** linkách, takže svislou variantu propustil.
+
+Opraveno dvakrát:
+
+1. **V souboru:** rysky, které padnou do obálky čísla, se zkrátí na 1,2 mm. Milimetrová mřížka
+   zůstane celá, číslo je čitelné a nic se negravíruje dvakrát.
+2. **V testu:** nový `žádnou gravírovanou číslicí neprochází jiný tah` už nehledá konkrétní
+   geometrii, ale **obecně**: každá číslice je jeden `<path>` s malou obálkou, a test hledá
+   jakýkoli cizí tah, který tou obálkou projde. Ověřeno prodloužením jedné rysky —
+   padne na `51.2,7.6 × tah 52,6`. Tenhle test by zachytil obě předchozí varianty.
+
+Poučení, které si zapisuju: **oprava konkrétního případu není oprava třídy chyb.** U prvního
+nálezu jsem napsal test na přesně tu geometrii, která mi spadla, a tím jsem si vytvořil dojem,
+že je to pokryté.
+
+Ze snímku vyšla ještě jedna věc: **příčná stupnice sahala ±27 mm od osy**, tedy o 4,5 mm dál, než
+je nejširší podporovaný pás. Stupnice sousedních řad se tím přiblížily na 2 mm a v náhledu čtly
+jako jedna průběžná žebřina přes celou destičku, u které nebylo poznat, která část patří které
+řadě. Zkráceno na ±24 mm → mezi řadami je teď 10 mm volného místa a tři bloky jsou zřetelně
+oddělené.
+
+A jedna věc, kterou jsem podezříval a byla v pořádku: gravírované číslo řady „3" vypadalo na
+náhledu jako tři vodorovné čárky bez pravých svislic. V souboru jsou (`M5.8 150 L5.8 151.5`
+a `M5.8 151.5 L5.8 153`) — jen při 3,8 px/mm zmizely v subpixelu. Číslice jsou sedmisegmentové
+a tahy 0,1 mm; na náhledech se to bude stávat, na díle ne.
