@@ -404,3 +404,47 @@ ověřeno 2026-09-10) uvádí nezávisle na generátoru:
 - Rozteč ozdobného stehu u společenského pásku 3 nebo 4 mm.
 
 Volba 40 mm / 3,0–4,0 mm / 5 dírek po 25 mm v generátoru tedy odpovídá běžné praxi.
+
+## Analýza BFLG-Belt-Hole-Template.pdf (Black Flag Leather Goods)
+
+Soubor `docs/BFLG-Belt-Hole-Template.pdf`, 2 strany, Letter (612 × 792 pt), Inkscape 1.4.2,
+vytvořeno 2025-10-12. Strana 1 je titulní s logem a QR kódem na videonávod na YouTube (návod jsem
+neviděl). Strana 2 je samotná šablona.
+
+**Co to je:** šablona **jen konce u přezky** – ve třech šířkách 1½″, 1¼″ a 1″. Není v ní špička ani
+rozvržení dírek pro trn. Poznámka na listu: „Hole size may vary, depending on your buckle.“
+
+**Geometrie odměřená z PDF** (render 300 dpi, měřeno na střednici; **y-rozvržení je u všech tří
+šířek totožné**):
+
+| Prvek                     | Poloha / rozměr                                                  |
+| ------------------------- | ---------------------------------------------------------------- |
+| Šířky pásu                | 37,7 / 31,3 / 25,0 mm ≈ **1½″ (38,1) / 1¼″ (31,75) / 1″ (25,4)** |
+| **Linie ohybu**           | **střed drážky pro trn**                                         |
+| Drážka pro trn            | **25,0 mm dlouhá × 5,7 mm široká**, na střednici                 |
+| První pár otvorů pro nýty | **± 25,5 mm od ohybu** (≈ 1″)                                    |
+| Druhý pár otvorů pro nýty | **± 73,2 mm od ohybu**                                           |
+| Průměr otvorů             | **≈ 5,7 mm** (tedy 6mm průbojník)                                |
+| Zaoblený konec pásu       | **90,1 mm od ohybu** → **délka přehnutého konce je 90 mm**       |
+| Zubatý okraj dole         | jen značka, že list končí, není to tvar k vyříznutí              |
+
+Oba páry otvorů jsou k ohybu **přesně symetrické** (25,55 / 25,55 a 73,24 / 73,22 mm), takže po
+přehnutí na sebe sednou a projde jimi jeden nýt. Drážka je „stadion“ 25 × 5,7 mm, tedy přesně to,
+co vznikne **dvěma 6mm otvory ve vzdálenosti ± 9,7 mm od ohybu spojenými nožem** – potvrzuje to
+postup navržený výše.
+
+**Křížové ověření proti generátoru CraftPoint:** souhlasí **6mm otvory pro nýty**, **dva nýty**
+i to, že se drážka pro trn **vyřezává**, ne vysekává. Šablona navíc dává číslo, které generátor
+neuvádí: **přehnutý konec 90 mm** – použitelné jako referenční hodnota pro zónu zkosení.
+
+**Na co pozor při použití:**
+
+1. **Žádná z šířek není 40 mm.** 1½″ = 38,1 mm. Náš plán je 40mm pásek. Rozvržení otvorů leží na
+   střednici, takže na 40mm pásu funguje; neodpovídá jen obrys šířky.
+2. **Není tam kalibrační čtverec**, na rozdíl od šablony CraftPoint. Kontrola tisku je proto změřit
+   šířku sloupce: 1″ musí vyjít **≈ 25,4 mm**, 1½″ **≈ 38,1 mm**. V samotném PDF mi vycházejí asi
+   o 0,4 mm méně (24,98 / 37,68), takže ±0,5 mm je v normě.
+3. **Je to Letter, ne A4.** Tisknout na 100 % bez přizpůsobení stránce a zkontrolovat, že se
+   krajní sloupce neodřízly.
+4. Je to jiný výrobce než CraftPoint, takže 90 mm nemusí odpovídat jejich rozvržení. **Před použitím
+   porovnat s linií ohybu na vytištěném PDF z generátoru.**
