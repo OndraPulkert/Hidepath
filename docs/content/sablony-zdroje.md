@@ -58,3 +58,48 @@ Generátor má 45 šablon zdarma v osmi kategoriích, z toho 8 v „Opasky a pop
 `obojek-pro-male-psy`, `obojek-pro-velke-psy`, `reminek-na-hodinky`, `poutko-na-ruku`,
 `penezenka-bifold`, `slim-penezenka-bifold`, `slim-pouzdro-na-karty`, `pouzdro-na-nuz`,
 `obal-na-zapisnik-a5`, `vizitkar` a další.
+
+## Co pásek navíc potřebuje proti pouzdru na karty (ověřeno 2026-09-10)
+
+Dotaz autora: budou k pásku potřeba speciální nástroje a jak náročný projekt to bude? Vychází se
+z varianty podle šablony CraftPoint, tedy hotový pás z obchodu + přezka + dva šroubovací nýty,
+**bez šití**.
+
+### Nutné navíc
+
+| Věc                                      | Kde a kolik                                                                                                              | Poznámka                                                                                                 |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| Kruhový průbojník na dírky pro trn       | CraftPoint jednotlivé 2–20 mm **od 29 Kč**; sada 7 ks (2–5 mm) 396 Kč; revolverový děrovač 2–4,5 mm 510 Kč               | Průměr se odečte od trnu vybrané přezky. Druhý průměr na šroubovací nýty podle jejich dříku.             |
+| Otvor pro trn přezky (podélný průřez)    | CraftPoint podélný otvor 16/20 mm **od 1 083 Kč**                                                                        | **Nekupovat.** Standardní levné řešení: vyrazit kruhovým průbojníkem oba konce otvoru a spojit je nožem. |
+| Hotový pás z přírodní kůže               | CraftPoint „Řemen z přírodní kůže 3,0–3,5 mm, 140 cm, 15–80 mm“ **184 Kč** (2–2,5 mm 155 Kč, 4,5–5 mm 120–130 cm 241 Kč) | Šablona žádá 3,0–4,0 mm. Tím padá potřeba dlouhého řezu z celé kůže.                                     |
+| Opasková přezka 40 mm                    | CraftPoint nerez kartáčovaná **241 Kč** skladem, mosazná 252 Kč skladem                                                  | Gun metal 167 Kč byl při ověření vyprodaný.                                                              |
+| Šroubovací nýty (chicago screws) 10/6 mm | CraftPoint **od 8 Kč/ks**, potřeba 2 ks                                                                                  | Utáhnou se šroubovákem, žádný lis ani razníky.                                                           |
+
+Hrubý součet nového nákupu: **cca 470–520 Kč.**
+
+### Co už máme a využije se jinak
+
+- **Odlamovací nůž:** na 3–4 mm kůži je potřeba víc tahů než na 1,8 mm. Zvládne to, ale je to nejtěžší část, pokud se řeže z celé kůže.
+- **Ořezávač hran a pasta s leštítkem:** u pásku výrazně důležitější než u pouzdra. Hrana měří kolem 2,4 m místo 30 cm a je 4 mm vysoká. Tady se ořezávač hran vyplatí z „Kup později“ posunout.
+- **Vidličky, jehly, nit, palička, sedlářský koník:** u varianty se šroubovacími nýty **vůbec nejsou potřeba**.
+
+### Volitelné, ne nutné
+
+- **Řezačka řemenů (strap cutter)** – to je ten nástroj z videí. Sedlářské nářadí: Craftplus 790 Kč skladem (rozsah 0,5–5 cm), celokovová profi 1 990 Kč (rozsah 1–6 cm, není skladem; bere 18 mm odlamovací čepele). **Má smysl jen když se řeže pás z celé kůže.** S hotovým pásem z obchodu je zbytečná.
+- **Průbojník na konec pásku:** zaoblení 15–45 mm 396 Kč, šipkový/anglický hrot 35/40 mm od 510 Kč. Špičku jde vyříznout nožem podle šablony.
+
+### Náročnost
+
+Technicky **jednodušší než pouzdro na karty**, protože se šroubovacími nýty se vůbec nešije, a šití
+je v naší cestě ta nejnáročnější dovednost. Náročnější je ve třech věcech:
+
+1. **Jeden dlouhý naprosto rovný řez** (~120 cm) ve 3–4 mm kůži. Každé zaváhání je vidět po celé délce. Hotový pás z obchodu tenhle problém úplně odstraní – proto ho šablona doporučuje.
+2. **Umístění dírek.** Musí být v ose a rovnoměrné, průřez pro trn přesně na středové ose, jinak pásek sedí nakřivo.
+3. **Množství hran.** Asi 2,4 m hrany vysoké 4 mm. Není to obtížné, jen dlouhé; tady spolkne projekt většinu času.
+
+Souhrn: **nižší nároky na dovednost, vyšší na trpělivost.** Dobrý druhý projekt. Časový odhad je můj,
+neověřený: s hotovým pásem odpadne řezání a zbyde špička, dírky a hrany.
+
+Varianta pro toho, kdo chce využít steh z pouzdra: konec u přezky se dá místo nýtů prošít. Pak jsou
+potřeba vidličky a jehly, ale děruje se přes dvě vrstvy 4 mm kůže, což je výrazně tvrdší práce než
+u pouzdra. Do prvního pásku bych to nedával.
