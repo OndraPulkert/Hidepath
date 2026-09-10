@@ -517,6 +517,86 @@ describe('destička na opasek', () => {
     const span = Math.max(...xs) - Math.min(...xs);
     expect(ticks.length, 'dílky pravítka').toBeGreaterThan(100);
     expect(span, 'rozsah pravítka').toBeGreaterThanOrEqual(L.maxKeeperStripMm);
+    // Model musí popisovat TUTO kresbu. Dřív si každý počítal po svém: model
+    // 135,3 mm, nakreslených 143 mm, a nic to nehlídalo. Nula je levá hrana
+    // destičky, takže první ryska je na 1 mm a poslední na rulerLengthMm.
+    expect(Math.min(...xs), 'první ryska').toBeCloseTo(L.rulerX0Mm + 1, 6);
+    expect(Math.max(...xs), 'poslední ryska').toBeCloseTo(L.rulerX0Mm + L.rulerLengthMm, 6);
+  });
+
+  it('gravírování celé leží uvnitř obrysu destičky (regrese)', () => {
+    // „0“ pravítka ležela v zkoseném rohu, takže by ji laser vyřezal napůl.
+    const eng = plate!.split('<g id="engrave"')[1]?.split('</g>')[0] ?? '';
+    const ch = L.strapEndChamferMm;
+    const outside: string[] = [];
+    for (const d of [...eng.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)) {
+      const nums = [...d.matchAll(/-?[\d.]+/g)].map((m) => Number(m[0]));
+      for (let i = 0; i + 1 < nums.length; i += 2) {
+        const x = nums[i]!;
+        const y = nums[i + 1]!;
+        if (x < 0 || y < 0 || x > L.plateWidthMm || y > L.plateHeightMm || x + y < ch) {
+          outside.push(`${x} ${y}`);
+        }
+      }
+    }
+    expect(outside, 'gravírované body mimo obrys').toEqual([]);
+  });
+
+  it('žádný tah číslice neleží na vodicí lince (regrese)', () => {
+    // Příčné tahy číslic 4 a 5 byly kolineární se svou linkou: 2 × 1,2 mm
+    // gravírované dvakrát a linka procházela číslem naskrz.
+    const eng = plate!.split('<g id="engrave"')[1]?.split('</g>')[0] ?? '';
+    const segs: { x1: number; y1: number; x2: number; y2: number }[] = [];
+    for (const d of [...eng.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)) {
+      // Po podcestách: skok mezi `M` není úsečka, jinak by test hlásil tahy,
+      // které v souboru nejsou.
+      for (const sub of d.split('M').slice(1)) {
+        const n = [...sub.matchAll(/-?[\d.]+/g)].map((m) => Number(m[0]));
+        for (let i = 0; i + 3 < n.length; i += 2) {
+          segs.push({ x1: n[i]!, y1: n[i + 1]!, x2: n[i + 2]!, y2: n[i + 3]! });
+        }
+      }
+    }
+    const lines = segs.filter((g) => Math.abs(g.y1 - g.y2) < 1e-9 && Math.abs(g.x2 - g.x1) > 20);
+    expect(lines.length, 'vodicí linky').toBeGreaterThan(20);
+    const onLine = segs.filter(
+      (g) =>
+        Math.abs(g.y1 - g.y2) < 1e-9 &&
+        Math.abs(g.x2 - g.x1) > 0.4 &&
+        Math.abs(g.x2 - g.x1) < 3 &&
+        lines.some(
+          (l) =>
+            Math.abs(l.y1 - g.y1) < 1e-9 &&
+            Math.min(l.x1, l.x2) <= Math.min(g.x1, g.x2) &&
+            Math.max(g.x1, g.x2) <= Math.max(l.x1, l.x2),
+        ),
+    );
+    expect(
+      onLine.map((g) => `${g.x1}..${g.x2} @ ${g.y1}`),
+      'tahy číslic na lince',
+    ).toEqual([]);
+  });
+
+  it('nese gravírovaná čísla řad 1/2/3 a čárkovanou linii ohybu', () => {
+    const eng = plate!.split('<g id="engrave"')[1]?.split('</g>')[0] ?? '';
+    // Čísla řad jsou 3 mm vysoké tahy u levého okraje, každé na své ose.
+    for (const rowY of [L.tipRowY, L.roundedRowY, L.buckleRowY]) {
+      const near = [...eng.matchAll(/M([\d.]+) ([\d.]+)/g)].filter((m) => {
+        const x = Number(m[1]);
+        const y = Number(m[2]);
+        return x < 10 && Math.abs(y - rowY) <= 1.6;
+      });
+      expect(near.length, `číslo řady u osy ${rowY}`).toBeGreaterThan(0);
+    }
+    // Čárkovaná linie ohybu: svislé úseky na foldX, mimo ovál.
+    const dashes = [...eng.matchAll(/M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)/g)]
+      .map((m) => ({ x: Number(m[1]), y1: Number(m[2]), x2: Number(m[3]), y2: Number(m[4]) }))
+      .filter((g) => Math.abs(g.x - L.foldX) < 1e-9 && Math.abs(g.x2 - L.foldX) < 1e-9);
+    expect(dashes.length, 'úseky čárkované linie ohybu').toBeGreaterThan(8);
+    for (const d of dashes) {
+      const dy = Math.min(Math.abs(d.y1 - L.buckleRowY), Math.abs(d.y2 - L.buckleRowY));
+      expect(dy, 'čárka zasahuje do oválu').toBeGreaterThanOrEqual(L.slotWidthMm / 2);
+    }
   });
 
   it('vysvětlivky jsou samostatný soubor a nejsou určené řezárně', () => {
@@ -536,7 +616,14 @@ describe('destička na opasek', () => {
     expect(plateGeom).toBeGreaterThan(300);
     // Vysvětlivky mají navíc odkazové linky, nikdy ale méně prvků než řez.
     expect(legendGeom).toBeGreaterThanOrEqual(plateGeom);
-    expect(legend!, 'vrstva řezu ve vysvětlivkách').toContain('<g id="cut"');
+    // Vrstvy jsou přejmenované a přebarvené, aby se soubor nedal poslat na laser.
+    expect(legend!, 'vrstva geometrie ve vysvětlivkách').toContain('<g id="nerezat"');
+    expect(legend!, 'nesmí nést barvu řezu').not.toContain('#ff0000');
+    expect(legend!, 'nesmí nést barvu gravírování').not.toContain('#0000ff');
+    expect(legend!, 'vrstva se nesmí jmenovat REZ').not.toContain('inkscape:label="REZ"');
+    // Tiskne se na A4 na šířku.
+    expect(legend!).toContain('width="297mm"');
+    expect(legend!).toContain('height="210mm"');
     // A skutečně tentýž obrys: obvodová kontura řezu se ve vysvětlivkách najde slovo od slova.
     // Obrys začíná ve zkoseném rohu, tedy na levé hraně pod ním.
     const outline = /<path d="M0 [\d.]+ L[^"]*Z\s*"/.exec(plate!)?.[0];

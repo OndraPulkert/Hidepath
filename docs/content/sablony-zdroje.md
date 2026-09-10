@@ -513,9 +513,11 @@ výkresu souhlasit, jinak si uživatel nemá jak ověřit, co je správně.**
 
 ## Vlastní šablona opasku 40 mm (obě strany)
 
-`pnpm pattern:belt-end` → `docs/generated/opasek-sablona.pdf` (**2 strany A4, 1:1**) a dvě SVG.
+`pnpm pattern:belt-end` → `docs/generated/opasek-sablona-40mm.pdf` (**2 strany A4, 1:1**) a dvě SVG.
 Geometrie a všechna pravidla: `src/lib/geometry/belt-end.ts`, testy `belt-end.test.ts` (49 testů)
-a `src/test/generated-patterns.test.ts` (46 testů nad zapsanými soubory v `docs/generated/`).
+a `src/test/generated-patterns.test.ts` (testy nad zapsanými soubory v `docs/generated/`).
+Počty testů tu neuvádím – zastarávají po každém kole a dvakrát už to byl chybný údaj;
+aktuální číslo dá `pnpm vitest run`.
 Skript `scripts/belt-buckle-end.ts` už jen kreslí.
 
 ### Strana 1 – konec u přezky
@@ -527,7 +529,7 @@ Skript `scripts/belt-buckle-end.ts` už jen kreslí.
 | Ø otvoru pro nýt    | 6 mm                            | CraftPoint i BFLG shodně |
 | Nýty                | ± 25,5 a ± 73,2 mm od ohybu     | odměřeno z BFLG          |
 | **Můstek u drážky** | **10,0 mm**                     | důsledek                 |
-| Kapsa pro poutko    | 47,7 mm rozteč / 41,7 mm světlá | důsledek                 |
+| Kapsa pro poutko    | 47,7 mm rozteč / 37,7 mm světlá | důsledek                 |
 | Přehnutý konec      | 90 mm                           | odměřeno z BFLG          |
 | Poutko              | pásek 111 × 12 mm               | **spočítáno**, neověřeno |
 
@@ -601,7 +603,7 @@ Obvod mění jen hladkou část mezi konci.
 | Nýty od ohybu               | ± 25,5 / ± 73,2 | −25,48 / +25,49 a −73,19 / +73,24 mm                                   |
 | Konce drážky od ohybu       | ± 9,5           | −9,48 / +9,49 mm                                                       |
 | Konec pásu od ohybu         | 90 mm           | +90,00 mm                                                              |
-| Délka hrotu                 | 38,46 mm        | plné šířky dosahuje 83,6 mm pod vrcholem                               |
+| Délka hrotu                 | 38,46 mm        | plné šířky dosahuje na y = 83,46 mm (vrchol je na y = 45)              |
 | Profil špičky vs CraftPoint | ≤ 0,1 mm        | ≤ 0,05 mm mimo vrchol; 0,31 mm ve 0,5 mm od vrcholu (tah linky 0,3 mm) |
 | Dírky od hrotu              | 94,3 → 194,3    | 94,41 / 119,38 / 144,36 / 169,42 / 194,40 mm                           |
 | Rozteč dírek                | 25 mm           | 24,97 / 24,98 / 25,06 / 24,98 mm                                       |
@@ -609,7 +611,7 @@ Obvod mění jen hladkou část mezi konci.
 Odchylky do 0,15 mm jsou tahem linky a rasterizací na 300 dpi (1 px = 0,085 mm).
 
 **Co zůstává neověřené:** délka poutka (111 mm je obvod 96 mm + 15 mm přeplátování), zaoblení konce
-u přezky a hloubka případného zkosení. Vyzkoušet na odřezku pásu. Poutko 12 mm má v kapse 41,7 mm
+u přezky a hloubka případného zkosení. Vyzkoušet na odřezku pásu. Poutko 12 mm má v kapse 37,7 mm
 světlé délky vůli – pro těsné poutko posunout `rivetOffsetsMm` blíž k sobě a přegenerovat.
 
 ### Univerzálnost: co na šířce pásu závisí a co ne (ověřeno 2026-09-10)
@@ -771,7 +773,9 @@ Text poptávky pro řezárnu a postup pro ruční variantu:
 ### Plochá destička pro všechny šířky (`--multi`)
 
 `pnpm pattern:belt-end --multi` → `docs/generated/opasek-desticka.svg`.
-**Destička 270 × 127 mm, čirý akrylát 3 mm, pro pásky 28–45 mm.**
+**Destička 270 × 127 mm, čirý akrylát 3 mm, pro pásky 28–45 mm.** _(Rozměry a počty v téhle
+sekci jsou stav první verze `--multi`; po opravě obráceného trojúhelníku a doplnění třetí řady
+je destička 215 × 184 mm. Aktuální stav je v sekcích níž.)_
 
 První verze byl pásek 45 × 405 mm. Autor poslal fotky komerčních destiček (Tandy-style mosazná
 deska se slotama, Ric's Leather akrylové pásky) a zeptal se, jestli to nejde takhle. Šlo, a je to
@@ -913,7 +917,7 @@ Při 30° je to víc než celá přesnost, o kterou se v návrhu snažíme (můs
 **Původní návrh „používat destičku gravírovanou stranou dolů" byl chybný** (opraveno 2026-09-10):
 gravírování je jednostranné, takže obrácením destičky se **zrcadlí celý layout** — zkosený
 orientační roh skončí vpravo, pravidlo „levá hrana = konec pásu" přestane platit a čísla stupnice
-se čtou zrcadlově. Za 1,7 mm paralaxy při pohledu pod 30° se nevyplatí riskovat zrcadlené
+se čtou zrcadlově. Za asi 1,1 mm paralaxy při pohledu pod 30° se nevyplatí riskovat zrcadlené
 označení. Správná odpověď je dívat se shora, ne otáčet destičku.
 
 ### Poutko nepotřebuje vlastní otvory (2026-09-10)
@@ -936,7 +940,7 @@ vygenerovat; kontroly ohlásí, kdyby se tím zúžil můstek u drážky pro trn
 
 ### Podélné pravítko a vysvětlivky
 
-Doplněno **podélné milimetrové pravítko u horní hrany destičky** (rozsah ~250 mm, dílky po 1 mm,
+Doplněno **podélné milimetrové pravítko u horní hrany destičky** (rozsah 0–145 mm, dílky po 1 mm,
 delší po 5 a 10, čísla po 50). Hlavní důvod je právě poutko: jeho délka se nepočítá, ale **měří na
 složeném konci** — obtočí se papírový pásek, označí přeplátování a délka se odečte na pravítku.
 
@@ -959,7 +963,7 @@ Vedlejší efekt: destička se zkrátila z **270 na 215 mm**, protože délku d�
 Zafixováno testem `vyříznutá špička se zužuje SMĚREM OD dírek, ne k nim`, který kontroluje, že
 široký konec leží mezi nejbližší dírkou a vrcholem.
 
-Při té příležitosti opraveno i pravítko: končí **před širokým koncem výřezu** (135 mm), jinak by
+Při té příležitosti opraveno i pravítko: končí **před širokým koncem výřezu** (145 mm), jinak by
 laser gravíroval do prázdna. Nová kontrola hlásí, kdyby pravítko nepokrylo nejdelší možný pásek na
 poutko (125 mm pro pás 45 mm o tloušťce 5 mm). Ověřeno, že do pásma výřezu nezasahuje žádný
 gravírovaný tah.
@@ -1023,7 +1027,8 @@ tedy **± 0,70 mm** do strany. (Otvor by šídlo vedl až v hloubce, kde má ku�
   Ø 1,4 mm a jeho **střed je střed otvoru**. Prstenec pak celý zmizí ve vyseknuté dírce (razník
   4,5 mm, nýtový otvor 6 mm), takže po něm nezůstane ani stopa.
 - **U dvou značek linie ohybu naklánět šídlo stejným směrem.** Kdyby jedna značka ujela o
-  +0,7 mm a druhá o −0,7 mm, spojnice se přes 40 mm šířky pootočí o 2° a přezka bude nakřivo. Se
+  +0,7 mm a druhá o −0,7 mm, spojnice se pootočí o 3,3° a přezka bude nakřivo (základnou je
+  **rozteč obou značek, 24 mm**, ne šířka pásu – dřív tu stálo 2° počítané ze 40 mm). Se
   stejným náklonem se obě značky posunou stejně a **linie zůstane rovnoběžná** se skutečnou.
 
 #### Obtahování tvarů: tři různé mechanismy (2026-09-10)
@@ -1142,7 +1147,7 @@ byla taky, ale revize ji správně označila za bezobsažnou — středy se ve s
 stejné konstanty, takže si test ověřoval sám sebe. Odstraněna.)
 
 **Destička má nyní 215 × 184 mm**, 7 uzavřených kontur v řezu (obrys, vyříznutá špička, 4 sloty
-zaobleného konce, ovál), 20 značicích otvorů Ø 2 mm, 1 závěsný Ø 4 mm, 0 elementů `<text>`
+zaobleného konce, ovál), 16 značicích otvorů Ø 2 mm, 1 závěsný Ø 4 mm, 0 elementů `<text>`
 a 0 kolizí gravírování s otvory.
 
 ### Třetí revizní kolo: tři agenti nad destičkou (2026-09-10)
@@ -1188,7 +1193,7 @@ použitelnost u ponku) našly dohromady čtrnáct věcí. Všechny opraveny, tad
 
 11. **Čísla stupnice ležela na dílcích** a nebyla vidět nula. Čísla jsou nad dílky, nula je
     označená a stupnice začíná na x = 2.
-12. **Popisky šířek přeškrtávala vedlejší linka.** Text je teď 2,6 mm vysoký a centrovaný na
+12. **Popisky šířek přeškrtávala vedlejší linka.** Text je teď 2 mm vysoký a centrovaný na
     vlastní lince.
 13. **Značky vedle prostřední dírky byly řezané otvory**, tedy další věci k záměně. Nahrazeny
     gravírovanými dílky.
@@ -1212,4 +1217,205 @@ tenhle projekt kupuje pás 3,0–3,5 mm**, což je zároveň rozsah, který pož
 V modelu to hlídá `rivetPostRangeMm` a test, který 6mm dřík na 4mm pásu odmítne a na 3,5mm
 schválí.
 
-Stav po opravách: `tsc -b` čistý, `eslint .` čistý, **216 testů prošlo, 3 přeskočeny**.
+Stav po opravách: `tsc -b` čistý, `eslint .` čistý, celá sada testů zelená.
+
+### Čtvrté revizní kolo: tři agenti nad hotovou destičkou (2026-09-10)
+
+Autor si vyžádal, ať se na destičku podívají agenti ještě jednou — na správnost, na použitelnost
+a hlavně na vyrobitelnost. Tři nezávislé revize. Model prošel čistě: recenzent přepočítal tečnou
+algebru numerickým hledáním kořene, dopočítal ručně všechny kóty a potvrdil, že **každá souřadnice
+v `opasek-desticka.svg` odpovídá modelu na < 0,001 mm**, destička souhlasí s tiskovou šablonou na
+všech společných kótách přesně a všech osm verzovaných SVG se regeneruje bit-identicky. Nálezy
+byly jinde.
+
+#### Chyby v souboru, ověřené měřením
+
+1. **„0" pravítka ležela ve zkoseném rohu, takže by ji laser vyřezal napůl.** Glyf zabíral
+   x 3,50–5,06, y 2,40–5,00 a zkosení odebírá vše s `x + y < 8`. Ze šesti tahů byly dva celé
+   venku. Nikdo si toho nevšiml, protože kontrola „gravírování vs otvory" existovala, ale
+   kontrola **gravírování vs obrys** ne. Opraveno: čísla pravítka jsou uvnitř pásma pravítka,
+   zkosení zmenšeno na 5 mm, `rulerX0Mm` je 0 (nula je sama levá hrana, o kterou se dá pásek
+   opřít) a doplněn test, že **žádný gravírovaný bod neleží mimo obrys**.
+2. **Všech 24 popisek šířek bylo přeškrtnutých vlastní linkou.** Příčné tahy číslic 4 a 5 byly
+   přesně kolineární se svou linkou a uvnitř jejího rozsahu → 2 × 1,2 mm gravírované **dvakrát**
+   na každou popisku, ~58 mm dvojího průjezdu, a linka procházela číslem naskrz. Předchozí kolo
+   to vedlo jako opravené („vycentrováno na vlastní linku") — vycentrování jen prohodilo, která
+   linka to přeškrtává. Teď leží popisek celý v mezeře mezi linkami a je u **každé** linky páru,
+   ne jen u horní. Zafixováno testem `žádný tah číslice neleží na vodicí lince`.
+3. **Model neopisoval pravítko, které skript kreslil:** `rulerLengthMm` počítalo 135,3 mm,
+   nakreslených bylo 143 mm, protože počátek si každý bral po svém. Recenzent formuli zmutoval
+   a **všech 81 testů zůstalo zelených**. Počátek, základna i délka rysky jsou teď v
+   `BeltPlateSpec` a test váže model na kresbu (první ryska, poslední ryska).
+4. **Závěsný otvor ležel strukturálně na pásu.** `hangHoleY = plateHeight − marginMm` je shodou
+   konstrukce identicky `buckleRowY + maxBeltWidth/2`, tedy přesně hrana pásma nejširšího pásu.
+   Posunut 2 mm pod pás; ke spodní hraně mu zbývají 4 mm, což je na zavěšení 130g dílu dost
+   (proto má vlastní, menší minimum – limit `marginMm` je pro přesnost značení, ne pro pevnost).
+   Proti okraji se navíc dřív testoval jen značicí otvor, takže `hangHoleMm: 60` prošlo jako
+   v pořádku.
+5. **Kalibrační kóta 50 mm procházela závěsným otvorem** (její pravá koncová ryska měla přesně
+   `x = hangHoleX`). Odsazena.
+
+#### Kerf: kontrola měřila nominál, ne hotový díl
+
+Nejcennější nález celé revize. Laser řeže **na střednici**, takže z každé strany odebere `kerf/2`:
+slot vyjde o kerf **širší** a žebro o kerf **užší**. Rozteč středních poloměrů je konstantních
+2,5 mm, takže **slot + žebro = 2,5 mm vždycky** — nominální slot 1,0 a žebro 1,5 mm nemohou na
+hotovém díle platit oba. S běžným kerfem 0,2 mm vyjde slot 1,2 a žebro 1,3 mm.
+
+Kontrola `checkBeltPlate` přitom hlídala **nominální** žebro proti limitu 1,4 mm, takže si
+ověřovala něco, co na díle neexistuje, a vlastní pravidlo bylo na každém reálném stroji porušené.
+Opraveno: `kerfMm` je součást specifikace (0,2 mm jako předpoklad, ne měření), kontroly žeber
+i slotů běží na **as-cut** rozměry a limit žebra je 1,2 mm. Do poptávky přidán dotaz na skutečný
+kerf řezárny s nabídkou poslat soubor se slotem `1,0 − kerf`.
+
+Vedlejší důsledek do návodu: značicí otvor vyjde 2,15–2,30 mm, takže vůle šídla není ± 0,70 mm,
+ale **± 0,77 až 0,85 mm**, a vykroužený prstenec má 1,55–1,70 mm místo 1,40. Do 4,5mm dírky se
+pořád celý vejde, takže závěr platí — jen čísla ujela. Opraveno i **zdůvodnění** požadavku
+„kerf nekompenzovat": v poptávce stálo, že jde o rozteče otvorů, ale kompenzace kerfu je
+uniformní offset kontury a **střed kružnice neposune**. Ten důvod ten požadavek nepodpíral.
+
+#### Vysvětlivky byly druhý řezací soubor
+
+Vrstva `REZ` ve vysvětlivkách byla **bajtově totožná** s výrobním souborem včetně `#ff0000`,
+stejné měřítko, a jediná dvě varování byla XML komentář (ten CAM nezobrazí) a živý text (ten CAM
+zahodí). Kdo je pošle na laser, dostane destičku proškrtanou dvaceti odkazovými linkami.
+Opraveno: geometrie ve vysvětlivkách je šedá, vrstvy se jmenují `NEREZAT` / `NEGRAVIROVAT`,
+a test to hlídá (`nesmí nést barvu řezu`). Zároveň se výstup zmenšil na **A4 na šířku**, protože
+list 325 × 210 mm se nedal vytisknout — což jsem si sám rozbil, když jsem list rozšířil kvůli
+přetékajícímu popisku.
+
+#### Procesní požadavky, které za nás jinak rozhodne řezárna
+
+Doplněno do poptávky, žádný nevyžadoval změnu souboru:
+
+- **Nezrcadlit.** Díl je chirální (zkosení vlevo nahoře, referencuje se levá hrana) a nestovací
+  software i překreslení z PDF zrcadlí rutinně. Pootočení je bezpečné, překlopení ne.
+- **Čtyři oblouky řezat nesousedně** (r22,5 → r15 → r20 → r17,5). Dva řezy 1,5 mm od sebe hned
+  po sobě dají obě tepelně ovlivněné zóny do jednoho žebra.
+- **Nežíhat / netemperovat.** Žíhání litého PMMA je standardní lék na napětí po laseru a srazí
+  díl o 0,3–0,5 %, tedy 0,3–0,5 mm přes 100mm rozteč otvorů. Zakazoval jsem brousit a leštit
+  plamenem, ale ne to jediné, co toleranci reálně rozbije.
+- **Fólii sundat z gravírované strany.** Přes fólii vektorově gravírovat nejde (hoří a nechává
+  zbytky v rýze) — a poptávka písemně žádala ponechat ji celou. Na spodní straně zůstat má,
+  ale pak fólie ráda **přidrží výřezek**: 16 slugů a 4 srpky, které je potřeba zkontrolovat.
+- **Srpky roštem nepropadnou.** Jsou 47–71 mm dlouhé a přemostí honeycomb i lamely. Tvrzení
+  „propadnou roštem" bylo vypuštěno, protože nabádá operátora, ať nekontroluje.
+- **Tolerance:** obrys ± 0,5 mm, rozteče otvorů ± 0,2 mm. Dřív tam byla jen ta druhá, vedle
+  příkazu řezat na střednici.
+- **Litá tabule má na 3 mm toleranci ± 10 %**, tedy 2,7–3,3 mm, přitom všechna čísla o šídle
+  jsou počítaná na přesně 3 mm. Doplněna prosba o kus z horní poloviny tolerance.
+
+#### Oprava mého zdůvodnění materiálu
+
+Psal jsem, že litý (GS) chci „kvůli čistotě řezu". **To je obráceně:** skelnou, téměř plamenem
+leštěnou hranu dává **extrudovaný** (XT); litý se řeže do matné. Kdyby bylo kritériem čistota
+hrany, objednávám XT.
+
+Litý je správná volba, ale ze dvou jiných důvodů, z nichž ten hlavní v poptávce vůbec nebyl:
+
+1. **Litý PMMA gravíruje bíle a neprůhledně, extrudovaný téměř čiře.** Celá funkce téhle
+   destičky je čtení gravírovaných linek přes 3 mm čirého materiálu — na XT by nebyly vidět.
+   To je argument, který dělá GS nesmlouvatelným, a řezárna si ho při „ve 3 mm máme jen XT"
+   sama nedomyslí.
+2. Vyšší molekulová hmotnost a nižší vnitřní napětí, tedy podstatně menší náchylnost ke crazingu
+   a opožděnému praskání — přesně to, co 1,3mm žebro vedle svěží tepelně ovlivněné zóny zve.
+
+A protiváha, kterou jsem taky neuváděl: GS má **horší** toleranci tloušťky než XT (± 10 % vs ± 5 %).
+
+#### Volba 3 mm má cenu, a ta nebyla napsaná
+
+3 mm je správně, ale ne bezplatně: 4 mm je 2,4× tuhčí a mnohem odolnější proti upuštění.
+Cena za 4 mm by byla vůle šídla v 1mm slotu jen ± 0,10 mm (dřík je ve 4 mm už 0,80 mm), u 5 mm
+by se šídlo v slotu zaklínilo úplně. **3 mm tedy kupuje 1mm slot a 2mm otvor a platí za to
+destičkou, kterou se musí nosit naplocho.** Kdyby řezárna 1,5mm žebra odmítla, existuje páka:
+tři oblouky (30 / 37,5 / 45 mm) dají rozteč 3,75 mm a žebra 2,75 mm as-cut, se šířkami 35 a 40
+dointerpolovanými na příčné stupnici.
+
+#### Uživatelská revize: co by mě u ponku zastavilo
+
+Nálezy, které vedly ke změně destičky:
+
+1. **Destička se klopí.** 184 mm akrylátu se opře jen o 40mm pruh kůže a zbytek visí 3,5 mm nad
+   stolem; u řady 3 je ten pruh 10 mm od spodní hrany, takže 130 mm dílu je konzole. Jak se
+   přitlačí šídlo, destička se nadzvedne — a nesymetricky, takže si toho člověk nevšimne.
+   Řešení je v postupu: **podložit po obou stranách pásu lištami stejné tloušťky** a pás
+   i podložky přilepit oboustrannou páskou. Klouzání akrylátu po hlazeném líci se tím řeší taky.
+2. **Na destičce nebylo ani slovo o tom, která řada je která.** Dokumentace mluví jazykem
+   „řada 1/2/3" a na dílu to nikde nestálo — a tři pásy modrých linek jsou na první pohled
+   k nerozeznání. Doplněna **gravírovaná čísla 1 / 2 / 3** u levé hrany. Písmena nejde
+   gravírovat (tahový font zná jen číslice), čísla ano a stačí.
+3. **Řada 3 má šest vizuálně identických otvorů Ø 2 mm**, čtyři se prorážejí Ø 6 mm a dva nesmí.
+   Jeden šestimilimetrový otvor uprostřed pásu je zkažený pásek bez nápravy. Gravírovanou značku
+   z toho udělat nelze (značka se musí dát propíchnout), takže řešení je **čárkovaná gravírovaná
+   linie ohybu** mezi oběma otvory: teď je vidět, že ty dva otvory patří k sobě a k ohybu, ne
+   k nýtům. Čárky se lámou před samotnými otvory, aby se do nich negravírovalo.
+4. **„Dva rozlišovací otvory po stranách prostřední dírky" neexistují.** Předchozí kolo je
+   převedlo na gravírované křížky **nad a pod** dírkou a nepropsalo to do čtyř textů ani do
+   popisky vysvětlivek. Uživatel by u ponku hledal otvory, nenašel je a začal dírky počítat —
+   a chyba o jednu dírku je 25 mm mimo míru. Opraveno všude.
+
+Nálezy, které vedly k rozdělení dokumentace: chyběl **nákupní seznam** (hlavně průbojník Ø 6 mm
+a varování, že revolverový děrovač 2–4,5 mm šestku nepokryje), **metoda měření obvodu** existovala
+jen v tomhle 1200řádkovém logu, a doporučený 130cm pás tiše nestačí od obvodu ~106 cm výš.
+Postup navíc končil u řezu špičky, takže hrana nového konce zůstala surová, a barvení v dokumentu
+vůbec nebylo — u třísločiněné kůže je to problém pořadí, po sešroubování se pod ohybem nabarvit
+nedá. Vznikl proto samostatný **`docs/zadani/opasek-postup.md`** (nákup, měření, značení, montáž)
+a poptávka zůstala jen dopisem pro řezárnu.
+
+Nejlepší návrh celé revize je ale procesní: **registrace levé hrany na konec pásu je jediný bod,
+kde chyba 1 mm dá po přehnutí 2 mm rozdíl** mezi párem nýtových otvorů — a do otvoru Ø 6 mm jde
+dřík Ø 6 mm, tedy nulová vůle. Postup proto teď vyseká **jen první dvojici**, přehne, zatáhne
+a druhou dvojici označí **skrz už hotové otvory**. Tím ta kritická registrace přestane hrát roli.
+
+#### Tloušťka pásu: 3,5 mm, ne „3,0–3,5"
+
+Přepočet vlastního pravidla (dřík = spoj − 1…1,5 mm) přes celý rozsah:
+
+| Tloušťka | Spoj | Potřebný dřík | Dřík 6 mm?                    |
+| -------- | ---- | ------------- | ----------------------------- |
+| 3,00 mm  | 6,00 | 4,50–5,00     | **ne** – dřík je o 1 mm delší |
+| 3,25 mm  | 6,50 | 5,00–5,50     | **ne**                        |
+| 3,50 mm  | 7,00 | 5,50–6,00     | ano                           |
+| 3,75 mm  | 7,50 | 6,00–6,50     | ano                           |
+| 4,00 mm  | 8,00 | 6,50–7,00     | **ne** – dřík je krátký       |
+
+Použitelné okno je **3,50–3,75 mm**. Předchozí kolo doporučilo „3,0–3,5 mm", což je u dolní
+hranice špatně — a prakticky zrádné, protože obchody prodávají „3,0–3,5 mm" jako jednu jakost.
+`rivetPostRangeMm` tohle spočítá a test to drží, ale **nehlídá** to žádná kontrola: destička na
+tloušťce nezávisí a tloušťka je nákupní, ne konstrukční parametr. Předchozí formulace „v modelu
+to hlídá `rivetPostRangeMm`" byla nepravdivá.
+
+#### Paralaxa: 1,1 mm, ne 1,7 mm
+
+Číslo 1,73 mm bylo spočítané **geometricky**, tedy `3 · tg 30°`, bez lomu světla. PMMA má
+n = 1,49, takže `sin 30° = 1,49 · sin θ` → θ = 19,6° a skutečný posun je `3 · tg 19,6°`
+= **1,07 mm**. Nadsadil jsem to o 62 %. Rada („koukej se svisle, destičku neobracej") platí
+dál, protože i 1 mm je víc než přesnost, o kterou tu jde — ale číslo bylo prezentované jako
+výpočet.
+
+#### Doplněn záložní formát pro řezárnu
+
+Poptávka slibovala „DXF v milimetrech nebo PDF v křivkách", ale generátor umí jen SVG a kontrolní
+A4. Přitom jedna z oslovených provozoven chce Corel/AutoCAD/Illustrator a RDWorks (software na
+většině levných CO₂ strojů) SVG bere špatně nebo vůbec. Slib se tedy neměl čím splnit. Doplněn
+výstup **`opasek-desticka-1-1.pdf`**: tentýž díl v křivkách, stránka přesně 225 × 194 mm.
+DXF generátor nepíše a poptávka ho už neslibuje.
+
+#### Co revize navrhla a neudělal jsem
+
+- **Zrušit řadu se zaobleným koncem** (znovu). Autor si ji vyžádal, zůstává.
+- **Předsmrštit sloty o kerf hned v souboru.** Bez znalosti kerfu konkrétní řezárny by to byl
+  jen jiný odhad; proto je to dotaz v poptávce a soubor se upraví, až přijde odpověď.
+- **Tři oblouky místo čtyř** kvůli silnějším žebrům. Zapsáno jako záloha, kdyby řezárna
+  1,5mm žebra odmítla.
+- **Druhá příčná stupnice u druhého konce řady**, aby se šířky bez linky daly vyrovnat i na
+  rotaci. Zatím řeším textem („srovnej hrany podle nejbližších linek a stupnicí to zkontroluj").
+
+#### Proč jsem sklon 0,453 nepřefitoval
+
+Revize správně spočítala, že optimalizací max|odchylka| přes odměřené tabulky vychází sklon
+0,4521 s největší odchylkou 0,0858 mm, tedy o 21 % lepší než 0,1083 mm při 0,453. **Neměnil jsem
+to a je to záměr:** naměřené body jsou odečtené z renderu **300 dpi**, kde jeden pixel je
+0,0847 mm. Odchylka 0,108 mm je tedy 1,3 pixelu a „vylepšení" na 0,086 mm je fit na jeden pixel
+šumu ručního odečtu. Sklon 0,453 leží mezi oběma nezávisle odměřenými šířkami (0,4521 u 40 mm
+a 0,4542 u 35 mm), což je věcně správnější než sednout na jednu z nich.

@@ -32,6 +32,7 @@ Všechno ostatní jsou konstanty z odstavce 3 a 4.
 | Délka drážky pro trn                    | **25 mm**                 |
 | Šířka drážky pro trn                    | **6 mm**                  |
 | Průměr otvoru pro nýt                   | **6 mm**                  |
+| Průměr hlavičky nýtu                    | **10 mm**                 |
 | Vzdálenosti nýtů od ohybu               | **25,5 mm** a **73,2 mm** |
 | Délka přehnutého konce od ohybu         | **90 mm**                 |
 | Zobrazená část hlavního pásu nad ohybem | 90 mm                     |
@@ -45,7 +46,7 @@ Odvozené hodnoty:
 mustek            = 25,5 − 6/2 − 25/2                     = 10,0 mm
 konceDrazkyOdOhybu= ±(25/2 − 6/2)                          = ±9,5 mm
 kapsaProPoutko    = 73,2 − 25,5                            = 47,7 mm   (rozteč středů)
-kapsaSvetla       = 47,7 − 6                               = 41,7 mm
+kapsaSvetla       = 47,7 − rivetHead(10)                   = 37,7 mm
 obvodZdvojene     = 2 × (beltWidth + 2 × beltThickness)
 delkaPoutka       = round(obvodZdvojene + 15)
 ```
@@ -119,7 +120,7 @@ Program **odmítne** vygenerovat šablonu, pokud kterákoli neplatí. Každá mu
 Jde o funkční, ověřené rozvržení; agent ho může změnit, pokud projdou akceptační kritéria.
 
 **Strana 1:** levá hrana pásu `x = 22`; linie ohybu `y = 132`; pás od `y = 42` (nahoře otevřený,
-neřezat) do `y = 222` s půlkruhovým zakončením o poloměru `beltWidth/2`. Kalibrační čtverec
+neřezat) do `y = 222` s **plochým** zakončením. Kalibrační čtverec
 `x = 150…200`, `y = 30…80`. Pásek na poutko vodorovně od `x = 22`, `y = 232`, výška 12 mm, se
 stupnicí po 10 mm. Poznámky od `y = 258`, řádkování 4,2 mm.
 
@@ -154,7 +155,7 @@ Popisky nezávislé na šířce (u všech šířek stejné):
 - `nýt ± 73,2 mm od ohybu`, `nýt ± 25,5 mm od ohybu`
 - `drážka 25 × 6 mm, ohyb ji půlí`
 - `můstek u drážky 10 mm`
-- `kapsa pro poutko 47,7 mm (světlá 41,7 mm)`
+- `kapsa pro poutko 47,7 mm (světlá 37,7 mm)`
 - `konec pásu 90 mm od ohybu`
 - `OHYB (příčka přezky)`
 - `vrchol zaoblený r = 4 mm (není ostrý hrot)`
@@ -241,8 +242,9 @@ půlená ohybem, Ø otvoru pro nýt 6 mm, polohy nýtů ±25,5 a ±73,2 mm, dél
 dírky pro trn Ø 4,5 mm v počtu 5 s roztečí 25 mm, 94,3 mm od vrcholu, sklon boku špičky 0,453
 a zaoblení vrcholu 4 mm.
 
-**Zvoleno** (spočítané, ne odzkoušené v praxi): půlkruhové zakončení přehnutého konce, šířka poutka
-12 mm, přeplátování 15 mm, minimální můstek 6 mm (jeden průměr otvoru), rozvržení na listu.
+**Zvoleno** (spočítané, ne odzkoušené v praxi): **ploché** zakončení přehnutého konce (tak to má
+i předloha, ze které je rozvržení odměřené), šířka poutka 12 mm, přeplátování 15 mm, minimální
+můstek 6 mm (jeden průměr otvoru), rozvržení na listu.
 
 Nezávislé potvrzení, které agent může použít jako kontrolu: pro obvod 95 cm vychází celková délka
 dílu 95 + 8 + 14,43 = **117,43 cm** a pro 85 cm **107,43 cm**; obojí odpovídá délkám, které uvádí

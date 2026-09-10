@@ -123,7 +123,7 @@ export function keeperStripLengthMm(spec: BeltEndSpec): number {
 export function checkBeltEndSpec(spec: BeltEndSpec): string[] {
   const problems: string[] = [];
   const [near, far] = spec.rivetOffsetsMm;
-  if (far <= near) {
+  if (!(far > near)) {
     problems.push('rivetOffsetsMm musí být vzestupné (bližší nýt první).');
   }
   const lig = ligamentMm(spec);
@@ -148,7 +148,12 @@ export function checkBeltEndSpec(spec: BeltEndSpec): string[] {
     ['rivetHeadMm', spec.rivetHeadMm],
     ['tailLengthMm', spec.tailLengthMm],
     ['keeperWidthMm', spec.keeperWidthMm],
+    ['keeperOverlapMm', spec.keeperOverlapMm],
+    ['bodyShownMm', spec.bodyShownMm],
     ['minLigamentMm', spec.minLigamentMm],
+    // Dvě nejhlasitější kóty tiskové šablony; bez tohohle projde NaN až do SVG.
+    ['rivetOffsetsMm[0]', spec.rivetOffsetsMm[0]],
+    ['rivetOffsetsMm[1]', spec.rivetOffsetsMm[1]],
   ] as const) {
     if (!(value > 0)) problems.push(`${label} musí být kladné, je ${String(value)}.`);
   }
@@ -300,17 +305,26 @@ export function checkBeltTipSpec(spec: BeltTipSpec): string[] {
   const problems: string[] = [];
   // Validace vstupu musí být první: z neplatného sklonu nebo zaoblení vyjdou
   // odvozené hodnoty Infinity/NaN a chybová hlášení pak míří úplně jinam.
-  if (spec.noseRadiusMm <= 0) {
+  // `!(x > 0)`, ne `x <= 0`: `NaN <= 0` je false, takže by NaN propadl dál
+  // a odvozené hodnoty by z něj vyšly NaN bez jediného hlášení.
+  if (!(spec.noseRadiusMm > 0)) {
     problems.push('noseRadiusMm musí být kladné – ostrý hrot se v kůži krabatí a třepí.');
   }
-  if (spec.taperSlope <= 0) {
+  if (!(spec.taperSlope > 0)) {
     problems.push('taperSlope musí být kladný.');
   }
   if (!Number.isInteger(spec.holeCount) || spec.holeCount < 1) {
     problems.push(`holeCount musí být celé kladné číslo, je ${spec.holeCount}.`);
   }
-  if (!(spec.holeSpacingMm > 0) || !(spec.holeDiameterMm > 0) || !(spec.beltWidthMm > 0)) {
-    problems.push('holeSpacingMm, holeDiameterMm a beltWidthMm musí být kladné.');
+  for (const [label, value] of [
+    ['holeSpacingMm', spec.holeSpacingMm],
+    ['holeDiameterMm', spec.holeDiameterMm],
+    ['beltWidthMm', spec.beltWidthMm],
+    ['apexToFirstHoleMm', spec.apexToFirstHoleMm],
+    // Záporné minimum by tiše vypnulo všechny kontroly můstků v této funkci.
+    ['minLigamentMm', spec.minLigamentMm],
+  ] as const) {
+    if (!(value > 0)) problems.push(`${label} musí být kladné, je ${String(value)}.`);
   }
   if (problems.length > 0) return problems;
 
@@ -409,7 +423,11 @@ export interface BeltPlateSpec {
    * Rozestup sousedních linek musí zůstat čitelný, proto ne víc než čtyři šířky.
    */
   guideWidthsMm: number[];
-  /** Výška gravírovaných číslic u vodicích linek. */
+  /**
+   * Výška gravírovaných číslic u **pravítka a kalibrační kóty**. Popisky vodicích
+   * linek jsou nižší (2 mm), protože rozestup linek je 2,5 mm a musí se vejít do
+   * mezery mezi nimi – tahle hodnota by tam nesedla.
+   */
   guideLabelHeightMm: number;
   /**
    * Šířka slotu pro zaoblený konec. Značí se zevnitř slotu, přesnost je tedy
@@ -423,12 +441,31 @@ export interface BeltPlateSpec {
   /** Největší tloušťka pásu, se kterou destička (a délka jejího pravítka) počítá. */
   maxBeltThicknessMm: number;
   /**
+   * Kde začíná podélné pravítko. Nula musí ležet na **levé hraně destičky**, aby se
+   * o ni dal opřít měřený pásek — proto 0. Model i kresba si tuhle hodnotu berou
+   * odsud, dřív ji každý měl vlastní a délka pravítka v modelu neodpovídala kresbě.
+   */
+  rulerX0Mm: number;
+  /** Svislá poloha základny pravítka a délka nejdelší rysky. */
+  rulerYMm: number;
+  rulerLongTickMm: number;
+  /**
    * Nejmenší šířka slotu, do kterého se ještě dostane rýsovací šídlo.
    * Dřík šídla má ve výšce rovné tloušťce destičky průměr `2 · t · tg α`;
    * pro běžné kulaté šídlo (Ø 3 mm ve 15 mm od hrotu) a destičku 3 mm je to 0,6 mm.
    * Tupé šídlo (Ø 4 mm v 10 mm) má 1,2 mm a do slotu 1 mm se už nevejde.
    */
   minSlotForAwlMm: number;
+  /**
+   * Předpokládaná šířka řezné mezery laseru (kerf). Laser řeže **na střednici**
+   * kontury, takže z každé strany odebere `kerf/2`: vyříznutý slot vyjde o kerf
+   * **širší** a žebro mezi dvěma sousedními sloty o kerf **užší**. Rozteč
+   * středních poloměrů je konstantní, takže `slot + žebro` je vždy 2,5 mm —
+   * nelze mít současně slot 1,0 a žebro 1,5 mm na hotovém díle.
+   * Kontroly žeber i slotů proto běží na **as-cut** rozměry, ne na nominální.
+   * Rozteče středů otvorů kerf neposune, ty zůstávají podle souboru.
+   */
+  kerfMm: number;
   /**
    * Zkosení levého **horního** rohu: značí, že tahle krátká hrana je konec pásu.
    * Nahoře proto, že dole by zasáhlo do pásma, kde na destičce leží pás
@@ -447,11 +484,22 @@ export const DEFAULT_BELT_PLATE: BeltPlateSpec = {
   tipCutoutOversizeMm: 5,
   guideWidthsMm: [30, 35, 40, 45],
   roundedSlotWidthMm: 1,
-  minRoundedRibMm: 1.4,
+  // As-cut limit: s kerfem 0,2 mm vyjde žebro 1,3 mm. 1,2 mm je dolní hranice,
+  // pod kterou už bych 3mm litý akrylát vedle svěží tepelně ovlivněné zóny nechtěl.
+  minRoundedRibMm: 1.2,
   maxBeltThicknessMm: 5,
   minSlotForAwlMm: 1,
   guideLabelHeightMm: 2.6,
-  strapEndChamferMm: 8,
+  // Typický kerf CO2 laseru ve 3mm PMMA. Není to naměřená hodnota konkrétní
+  // řezárny – proto se na ni v poptávce výslovně ptáme.
+  kerfMm: 0.2,
+  // Nula pravítka leží na levé hraně, aby se o ni dal opřít měřený pásek.
+  rulerX0Mm: 0,
+  rulerYMm: 6,
+  rulerLongTickMm: 7,
+  // 5 mm, ne 8: zkosení musí zůstat nepřehlédnutelnou orientační značkou, ale
+  // nesmí zasahovat do nuly pravítka ani do jejího popisku.
+  strapEndChamferMm: 5,
 };
 
 export interface BeltPlateLayout {
@@ -475,7 +523,11 @@ export interface BeltPlateLayout {
    * kterou pro odstup hrotu od první dírky uvádějí komerční šablony (25–100 mm).
    */
   roundedArcs: { beltWidthMm: number; radiusMm: number; centreX: number }[];
+  /** Nominální šířka slotu v souboru. */
   roundedSlotWidthMm: number;
+  /** Šířka slotu na hotovém díle: nominál + kerf (laser řeže na střednici). */
+  roundedSlotAsCutMm: number;
+  kerfMm: number;
   /** Vrchol vyříznuté špičky. */
   tipApexX: number;
   /**
@@ -485,7 +537,12 @@ export interface BeltPlateLayout {
   tipFarX: number;
   /** Poloviční šířka vyříznutého tvaru špičky na širokém konci. */
   tipCutoutHalfMm: number;
-  /** Použitelná délka podélného pravítka u horní hrany. */
+  /** Podélné pravítko: počátek, základna, délka nejdelší rysky, konec a čitelný rozsah. */
+  rulerX0Mm: number;
+  rulerYMm: number;
+  rulerLongTickMm: number;
+  rulerEndXMm: number;
+  /** Použitelný rozsah pravítka, tedy kolik mm se na něm dá odečíst. */
   rulerLengthMm: number;
   /** Nejdelší pásek na poutko, který může být potřeba (nejširší pás, tloušťka 5 mm). */
   maxKeeperStripMm: number;
@@ -551,10 +608,21 @@ export function beltPlateLayout(
       return sorted.map((bw) => ({ beltWidthMm: bw, radiusMm: bw / 2, centreX }));
     })(),
     roundedSlotWidthMm: plate.roundedSlotWidthMm,
+    roundedSlotAsCutMm: plate.roundedSlotWidthMm + plate.kerfMm,
+    kerfMm: plate.kerfMm,
     tipApexX: apexX,
     tipFarX: farX,
     tipCutoutHalfMm: cutoutHalf,
-    rulerLengthMm: Math.min(plateWidth - m, farX - 4) - (plate.strapEndChamferMm + 2),
+    rulerX0Mm: plate.rulerX0Mm,
+    rulerYMm: plate.rulerYMm,
+    rulerLongTickMm: plate.rulerLongTickMm,
+    // Konec pravítka: nesmí zajet do vyříznuté špičky, jinak by laser gravíroval
+    // do prázdna. Kresba si tuhle hodnotu bere odsud, takže model a soubor nemohou
+    // rozejít (dřív každý počítal po svém a lišily se o 7,7 mm).
+    rulerEndXMm: Math.min(plateWidth - m, farX - 4),
+    // Celé milimetry: rysky se kreslí po 1 mm, takže poslední ryska je na
+    // floor(konec − počátek) a to je zároveň nejvyšší čitelná hodnota.
+    rulerLengthMm: Math.floor(Math.min(plateWidth - m, farX - 4) - plate.rulerX0Mm),
     maxKeeperStripMm: keeperStripLengthMm({
       ...end,
       beltWidthMm: plate.maxBeltWidthMm,
@@ -579,7 +647,13 @@ export function beltPlateLayout(
     slotX1: fold + end.slotLengthMm / 2,
     slotWidthMm: end.slotWidthMm,
     hangHoleX: plateWidth - m,
-    hangHoleY: plateHeight - m,
+    // Ne `plateHeight - marginMm`: to je shodou konstrukce přesně hrana pásma
+    // nejširšího pásu na řadě 3, takže otvor ležel pod kůží. Posunutý o 2 mm níž
+    // je 2 mm pod pásem a nechává ke spodní hraně 4 mm materiálu. To je na
+    // zavěšení dost: 4 × 3 mm PMMA v tahu unese řádově stovky newtonů, destička
+    // váží ~130 g. Limit `marginMm` je pro značky u kůže, ne pro tuhle pevnost —
+    // proto má závěsný otvor vlastní, menší minimum.
+    hangHoleY: buckleRowY + plate.maxBeltWidthMm / 2 + plate.hangHoleMm / 2 + 2,
     markHoleMm: plate.markHoleMm,
     hangHoleMm: plate.hangHoleMm,
     maxBeltWidthMm: plate.maxBeltWidthMm,
@@ -596,14 +670,17 @@ export function checkBeltPlate(
   const L = beltPlateLayout(end, tip, plate);
   const min = end.minLigamentMm;
   const problems: string[] = [];
-  const gap = (label: string, value: number): void => {
+  const gap = (label: string, value: number, minOverride?: number): void => {
+    const limit = minOverride ?? min;
     // NaN < min je false, takže bez téhle větve by se vygeneroval soubor plný NaN.
     if (!Number.isFinite(value)) {
       problems.push(`${label}: hodnota není číslo (${String(value)}) – chyba v rozvržení.`);
       return;
     }
     // Epsilon: kóta, která má vyjít přesně na minimum, nesmí spadnout kvůli 1e-15.
-    if (value < min - 1e-9) problems.push(`${label}: ${value.toFixed(2)} mm, minimum ${min} mm.`);
+    if (value < limit - 1e-9) {
+      problems.push(`${label}: ${value.toFixed(2)} mm, minimum ${limit} mm.`);
+    }
   };
   const mr = L.markHoleMm / 2;
   const half = L.maxBeltWidthMm / 2;
@@ -617,19 +694,21 @@ export function checkBeltPlate(
     'Mezi řadou se zaobleným koncem a řadou s přezkou',
     L.buckleRowY - half - (L.roundedRowY + half),
   );
-  if (L.roundedSlotWidthMm < plate.minSlotForAwlMm) {
+  if (L.roundedSlotAsCutMm < plate.minSlotForAwlMm) {
     problems.push(
-      `Slot zaobleného konce je ${L.roundedSlotWidthMm} mm, do tak úzkého se nedostane ` +
-        `rýsovací šídlo (minimum ${plate.minSlotForAwlMm} mm).`,
+      `Slot zaobleného konce vyjde po řezu ${L.roundedSlotAsCutMm.toFixed(2)} mm, do tak úzkého ` +
+        `se nedostane rýsovací šídlo (minimum ${plate.minSlotForAwlMm} mm).`,
     );
   }
   const radii = L.roundedArcs.map((a) => a.radiusMm).sort((a, b) => a - b);
   for (let i = 1; i < radii.length; i++) {
-    const rib = radii[i]! - radii[i - 1]! - L.roundedSlotWidthMm;
+    // As-cut: laser řeže na střednici, takže z každé strany žebra odebere kerf/2.
+    const rib = radii[i]! - radii[i - 1]! - L.roundedSlotAsCutMm;
     if (rib < plate.minRoundedRibMm) {
       problems.push(
         `Žebro mezi sloty zaobleného konce pro ${2 * radii[i - 1]!} a ${2 * radii[i]!} mm je ` +
-          `${rib.toFixed(2)} mm, minimum ${plate.minRoundedRibMm} mm.`,
+          `po řezu ${rib.toFixed(2)} mm, minimum ${plate.minRoundedRibMm} mm ` +
+          `(kerf ${plate.kerfMm} mm).`,
       );
       break;
     }
@@ -661,15 +740,12 @@ export function checkBeltPlate(
     );
   }
   gap('Od nejlevějšího otvoru pro nýt k hraně destičky', L.rivetXs[0]! - mr);
+  // Jen jedna z obou stran: nýty i ovál se konstruují symetricky kolem ohybu,
+  // takže druhá kontrola byla algebraicky totožná.
   gap('Mezi otvorem pro nýt a drážkou pro trn', L.slotX0 - L.rivetXs[1]! - mr);
-  gap('Mezi drážkou pro trn a otvorem pro nýt', L.rivetXs[2]! - L.slotX1 - mr);
   gap(
     'Od značek mimo osu k hraně destičky (řada s přezkou)',
     L.plateHeightMm - (L.buckleRowY + L.offAxisMarkMm) - mr,
-  );
-  gap(
-    'Od závěsného otvoru k poslednímu otvoru pro nýt',
-    L.hangHoleX - L.rivetXs[3]! - L.hangHoleMm / 2,
   );
 
   // Zkosení rohu nesmí zasáhnout do pásma, kde na destičce leží pás.
@@ -678,6 +754,21 @@ export function checkBeltPlate(
     L.tipRowY - half - L.strapEndChamferMm,
   );
   // Pravítko musí pokrýt i nejdelší pásek na poutko, jinak nemá smysl.
+  gap(
+    'Od závěsného otvoru k pravé hraně destičky',
+    L.plateWidthMm - L.hangHoleX - L.hangHoleMm / 2,
+  );
+  // Vlastní minimum 3 mm: nosnost, ne přesnost značení.
+  gap(
+    'Od závěsného otvoru ke spodní hraně destičky',
+    L.plateHeightMm - L.hangHoleY - L.hangHoleMm / 2,
+    3,
+  );
+  gap(
+    'Od závěsného otvoru k pásmu, kde leží nejširší pás',
+    L.hangHoleY - L.hangHoleMm / 2 - (L.buckleRowY + L.maxBeltWidthMm / 2),
+    1,
+  );
   if (L.rulerLengthMm < L.maxKeeperStripMm) {
     problems.push(
       `Pravítko má ${L.rulerLengthMm.toFixed(1)} mm, ale nejdelší pásek na poutko může být ` +

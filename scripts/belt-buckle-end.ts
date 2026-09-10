@@ -610,7 +610,8 @@ export function buildBeltPlateSvg(
   const scaleX = 24;
   for (const rowY of [ay, ry, by]) {
     for (let k = 0; k <= Math.floor(L.tipCutoutHalfMm); k += 1) {
-      const len = k % 10 === 0 ? 7 : k % 5 === 0 ? 5 : 3;
+      // Drobné rysky kratší (2 mm): se 3 mm splývaly s vodicími linkami vedle.
+      const len = k % 10 === 0 ? 7 : k % 5 === 0 ? 4 : 2;
       for (const sign of k === 0 ? [1] : [-1, 1]) {
         const sy = rowY + sign * k;
         engrave.push(
@@ -638,31 +639,31 @@ export function buildBeltPlateSvg(
    * hlavně na **délku pásku na poutko**, která se odečítá na složeném konci
    * (obvod zdvojené části + přeplátování) a závisí na šířce i tloušťce pásu.
    */
-  const rulerY = 6;
-  const rulerX0 = 2;
-  // Pravítko musí skončit před vyříznutou špičkou, jinak by laser gravíroval do prázdna.
-  const rulerX1 = Math.min(W - LASER.marginMm, L.tipFarX - 4);
+  const rulerY = L.rulerYMm;
+  const rulerX0 = L.rulerX0Mm;
+  const rulerX1 = L.rulerEndXMm;
   for (let mm = 0; rulerX0 + mm <= rulerX1; mm += 1) {
-    const len = mm % 50 === 0 ? 7 : mm % 10 === 0 ? 5 : mm % 5 === 0 ? 3.5 : 2;
-    engrave.push(
-      `<path d="M${f(rulerX0 + mm)} ${f(rulerY)} L${f(rulerX0 + mm)} ${f(rulerY + len)}" ` +
-        `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.1"/>`,
-    );
-    if (mm === 0 || mm % 50 === 0) {
-      // Čísla NAD základnu pravítka: na ryskách byla nečitelná.
+    const x = rulerX0 + mm;
+    // Nula je sama levá hrana destičky, o kterou se měřený pásek opře. Rysku na ni
+    // nekreslím: ležela by na řezné linii a kerf by z ní odebral první desetinky.
+    if (mm > 0) {
+      const len = mm % 50 === 0 ? L.rulerLongTickMm : mm % 10 === 0 ? 5 : mm % 5 === 0 ? 3.5 : 2;
       engrave.push(
-        ...engraveNumber(
-          rulerX0 + mm + 1.5,
-          rulerY - 1 - L.guideLabelHeightMm,
-          mm,
-          L.guideLabelHeightMm,
-        ),
+        `<path d="M${f(x)} ${f(rulerY)} L${f(x)} ${f(rulerY + len)}" ` +
+          `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.1"/>`,
       );
+    }
+    if (mm === 0 || mm % 50 === 0) {
+      // Čísla DOVNITŘ pásma pravítka, vpravo od své rysky. Nad základnou byla
+      // „0“ v zkoseném rohu a laser by ji vyřezal napůl.
+      engrave.push(...engraveNumber(x + 1.2, rulerY + 0.6, mm, L.guideLabelHeightMm));
     }
   }
 
   /* --- vodicí linky šířek: srovnáním obou hran pásu se destička sama vystředí --- */
-  const lineX0 = scaleX + 7 + 3;
+  // 8 mm mezera od stupnice: se 3 mm to v náhledu čtlo jako jedna žebřina
+  // přecházející do vodicích linek.
+  const lineX0 = scaleX + 7 + 8;
   // Linky nesmí zajet do vyříznuté špičky ani do závěsného otvoru: laser by
   // gravíroval do prázdna a linka by byla přerušená.
   const tipRowX1 = L.tipFarX - 4;
@@ -687,9 +688,15 @@ export function buildBeltPlateSvg(
           `<path d="M${f(lineX0)} ${f(ly)} L${f(lineX1)} ${f(ly)}" ` +
             `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.1"/>`,
         );
+        // Popisek je u KAŽDÉ linky páru: dolní hranu pásu se nemá srovnávat na
+        // linku, kterou si člověk musí dopočítat zrcadlením.
+        // A leží celý UVNITŘ pásma, ne na lince: příčné tahy číslic 4 a 5 byly
+        // přesně kolineární se svou linkou, takže se 2 × 1,2 mm gravírovalo
+        // dvakrát a linka číslicemi procházela naskrz. Rozestup linek je 2,5 mm,
+        // číslice 2 mm, takže se do mezery vejdou s 0,25 mm rezervou.
+        const labelTop = sign < 0 ? ly + 0.25 : ly - 0.25 - labelH;
+        engrave.push(...engraveNumber(labelX, labelTop, g.beltWidthMm, labelH));
       }
-      // Popis jen nad horní linkou páru, uvnitř pásma.
-      engrave.push(...engraveNumber(labelX, rowY - g.offsetMm - labelH / 2, g.beltWidthMm, labelH));
     }
   });
 
@@ -706,9 +713,44 @@ export function buildBeltPlateSvg(
     }
   }
 
+  // Čísla řad 1/2/3 u levého okraje. Bez nich se destička o sobě nedá nijak
+  // přečíst: dokumentace mluví o „řadě 1/2/3“ a na dílu to slovo nebylo.
+  // Písmena nejde gravírovat (tahový font zná jen číslice), čísla ano a stačí.
+  [ay, ry, by].forEach((rowY, i) => {
+    engrave.push(...engraveNumber(4, rowY - 1.5, i + 1, 3));
+  });
+
+  // Čárkovaná linie ohybu na řadě s přezkou: vede přesně mezi oběma značicími
+  // otvory ohybu a ukazuje, že ohyb ovál půlí. Přes ovál se nekreslí – gravírovat
+  // do výřezu nejde.
+  {
+    const halfBand = L.maxBeltWidthMm / 2;
+    const slotHalf = L.slotWidthMm / 2 + 0.5;
+    for (const [y0, y1] of [
+      [by - halfBand, by - slotHalf],
+      [by + slotHalf, by + halfBand],
+    ] as const) {
+      for (let y = y0; y < y1 - 0.01; y += 3) {
+        const yEnd = Math.min(y + 1.8, y1);
+        // Čárka se nesmí dotknout značicího otvoru ohybu, jinak by se do něj
+        // gravírovalo a šídlo by mělo v otvoru nečistou hranu.
+        const clash = [by - L.offAxisMarkMm, by + L.offAxisMarkMm].some(
+          (my) => yEnd > my - L.markHoleMm / 2 - 0.5 && y < my + L.markHoleMm / 2 + 0.5,
+        );
+        if (clash) continue;
+        engrave.push(
+          `<path d="M${f(L.foldX)} ${f(y)} L${f(L.foldX)} ${f(yEnd)}" ` +
+            `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.1"/>`,
+        );
+      }
+    }
+  }
+
   // Kalibrační kóta 50 mm: na hotovém dílu i na obrazovce je přeškálování hned vidět.
   const calY = H - 4;
-  const calX = W - LASER.marginMm - 50;
+  // Odsazeno od pravého okraje o závěsný otvor: jeho pravá koncová ryska
+  // dřív procházela přesně středem otvoru.
+  const calX = W - LASER.marginMm - 50 - (L.hangHoleMm + 6);
   engrave.push(
     `<path d="M${f(calX)} ${f(calY - 2)} L${f(calX)} ${f(calY + 2)} M${f(calX)} ${f(calY)} ` +
       `L${f(calX + 50)} ${f(calY)} M${f(calX + 50)} ${f(calY - 2)} L${f(calX + 50)} ${f(calY + 2)}" ` +
@@ -766,11 +808,23 @@ export function buildPlateLegendSvg(
   if (from < 0 || to <= from) {
     throw new Error('Vysvětlivky: v řezacím souboru nejde najít vrstva řezu.');
   }
-  const inner = base.slice(from, to);
+  // Vrstvy se přejmenují a přebarví do šedé. Důvod: vrstva řezu je tady bajtově
+  // totožná s výrobním souborem, včetně #ff0000, a jediné varování „není řezací
+  // soubor“ je XML komentář (ten CAM nezobrazí) a živý text (ten CAM zahodí).
+  // Kdo tenhle soubor pošle na laser, dostane destičku proškrtanou odkazovými
+  // linkami. Šedá a jména NEREZAT/NEGRAVIROVAT to udělají viditelným i v CAMu.
+  const inner = base
+    .slice(from, to)
+    .replaceAll(LASER.cutColor, '#8a8a8a')
+    .replaceAll(LASER.engraveColor, '#b0b0b0')
+    .replace('id="cut"', 'id="nerezat"')
+    .replace('inkscape:label="REZ"', 'inkscape:label="NEREZAT"')
+    .replace('id="engrave"', 'id="negravirovat"')
+    .replace('inkscape:label="GRAVIROVANI"', 'inkscape:label="NEGRAVIROVAT"');
   const W = L.plateWidthMm;
   const H = L.plateHeightMm;
   const padL = 6;
-  const padR = 104;
+  const padR = 112;
   const padT = 16;
   const padB = 10;
 
@@ -814,7 +868,7 @@ export function buildPlateLegendSvg(
       L.tipRowY - L.offAxisMarkMm,
       W + 4,
       L.tipRowY - 2,
-      'dva otvory označují, která dírka je prostřední',
+      'dva gravírované křížky NAD a POD prostřední dírkou',
     ],
     [
       L.tipHoleXs[0],
@@ -823,7 +877,15 @@ export function buildPlateLegendSvg(
       L.tipRowY + 4,
       `5 dírek pro trn, rozteč ${cz(tip.holeSpacingMm)} mm`,
     ],
-    [W - LASER.marginMm - 20, 6, W + 4, 10, 'podélné PRAVÍTKO — délka pásku na poutko'],
+    [60, 9, W + 4, 10, 'PRAVÍTKO, nula = levá hrana; měří pásek na poutko'],
+    [4, L.tipRowY, W + 4, 16, 'čísla 1 / 2 / 3 u levé hrany = číslo řady'],
+    [
+      L.roundedArcs[0].centreX,
+      L.roundedRowY - L.roundedArcs[0].radiusMm,
+      W + 4,
+      L.roundedRowY - 10,
+      '4 OBLOUKY: ber ten, který končí na tvé lince šířky',
+    ],
     [
       L.tipRowY > 0 ? 40 : 40,
       L.tipRowY - L.maxBeltWidthMm / 2,
@@ -850,7 +912,7 @@ export function buildPlateLegendSvg(
       L.buckleRowY - L.offAxisMarkMm,
       W + 4,
       L.buckleRowY - 6,
-      'dva otvory = LINIE OHYBU, spoj je pravítkem',
+      'dva otvory = LINIE OHYBU (čárkovaná linka), spoj pravítkem',
     ],
     [
       L.rivetXs[3],
@@ -890,8 +952,10 @@ export function buildPlateLegendSvg(
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<!-- VYSVETLIVKY, ne rezaci soubor. Obsahuje zivy text. -->',
+    // Výstup je A4 na šířku, aby se vysvětlivky daly vytisknout na běžné tiskárně.
+    // Není to 1:1 – je to popisný obrázek, měřítko si bere viewBox.
     `<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" ` +
-      `width="${f(W + padL + padR)}mm" height="${f(H + padT + padB)}mm" ` +
+      `width="297mm" height="210mm" ` +
       `viewBox="${f(-padL)} ${f(-padT)} ${f(W + padL + padR)} ${f(H + padT + padB)}">`,
     `<rect x="${f(-padL)}" y="${f(-padT)}" width="${f(W + padL + padR)}" height="${f(H + padT + padB)}" fill="#ffffff"/>`,
     inner,
@@ -994,8 +1058,31 @@ async function main(): Promise<void> {
       margin: { top: '0', right: '0', bottom: '0', left: '0' },
       preferCSSPageSize: true,
     });
-    await br.close();
     console.log(`Zapsáno ${platePdf} (kontrolní tisk na A4 na šířku, 100 %)`);
+
+    // Záložní formát pro řezárnu: PDF v křivkách, 1:1, stránka přesně velká jako
+    // list v SVG. Většina levných CO2 strojů (RDWorks/LaserWork) bere SVG špatně
+    // nebo vůbec, jedna z oslovených provozoven chce Corel/AutoCAD/Illustrator.
+    // Bez tohohle by slib „pošlu PDF v křivkách“ nebylo čím splnit.
+    const cutPdf = resolve(outDir, 'opasek-desticka-1-1.pdf');
+    const sheetW = L.plateWidthMm + 10;
+    const sheetH = L.plateHeightMm + 10;
+    const pg3 = await br.newPage();
+    await pg3.setContent(
+      `<style>@page{size:${sheetW}mm ${sheetH}mm;margin:0}html,body{margin:0;padding:0}</style>` +
+        `<div style="width:${sheetW}mm;height:${sheetH}mm;overflow:hidden">${svg}</div>`,
+      { waitUntil: 'load' },
+    );
+    await pg3.pdf({
+      path: cutPdf,
+      width: `${sheetW}mm`,
+      height: `${sheetH}mm`,
+      printBackground: false,
+      margin: { top: '0', right: '0', bottom: '0', left: '0' },
+      preferCSSPageSize: true,
+    });
+    await br.close();
+    console.log(`Zapsáno ${cutPdf} (1:1 v křivkách, ${sheetW} × ${sheetH} mm – záložní formát)`);
     console.log(
       `Destička ${L.plateWidthMm} × ${L.plateHeightMm} mm pro pásky ${L.minBeltWidthMm}–${L.maxBeltWidthMm} mm, čirý akryl 3 mm.`,
     );

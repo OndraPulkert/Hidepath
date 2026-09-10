@@ -3,23 +3,36 @@
 ## Doporučená varianta: jedna plochá destička
 
 `pnpm pattern:belt-end --multi` →
-`docs/generated/opasek-desticka.svg` (řezací soubor) a
-`docs/generated/opasek-desticka-kontrolni-tisk.pdf` (papírová kontrola před objednáním).
+`docs/generated/opasek-desticka.svg` (řezací soubor),
+`opasek-desticka-1-1.pdf` (tentýž díl v křivkách, záložní formát pro řezárnu),
+`opasek-desticka-kontrolni-tisk.pdf` (papírová kontrola na A4 před objednáním) a
+`opasek-desticka-vysvetlivky.svg` (popisky, **NEposílat řezárně** — má šedou geometrii
+a vrstvy `NEREZAT`/`NEGRAVIROVAT`, aby se nedal splést s výrobním souborem).
+PDF jsou gitignorovaná, generují se tímhle příkazem.
 
-**Destička 215 × 184 mm, čirý akrylát 3 mm, pro pásky 28–45 mm.** Tři řady:
+**Destička 215 × 184 mm, čirý litý akrylát 3 mm.** Pro **hrot a konec u přezky zvládne
+28–45 mm** (přes příčnou stupnici jakoukoli šířku v tom rozsahu), pro **zaoblený konec jen
+30 / 35 / 40 / 45 mm** — oblouk je pro každou šířku jiný, takže mimo tyhle čtyři pro něj na
+destičce není slot. Tři řady, každá s vygravírovaným číslem u levé hrany:
 
-- **Řada 1 – HROT.** Vyříznutý tvar anglické špičky, 5 otvorů pro dírky na trn, dva rozlišovací
-  otvory u prostřední dírky.
+- **Řada 1 – HROT.** Vyříznutý tvar anglické špičky (**vrchol je oblouk r = 4 mm, ne ostrý
+  hrot** — tak to má i předloha, ze které je odměřený), 5 otvorů pro dírky na trn a dva
+  gravírované křížky nad a pod prostřední dírkou.
 - **Řada 2 – ZAOBLENÝ KONEC.** Čtyři soustředné sloty (r = 15 / 17,5 / 20 / 22,5 mm), 5 otvorů
-  pro dírky, dva rozlišovací. **Konec každého slotu leží přesně na lince své šířky**, takže se
-  linky a oblouky označují navzájem a oblouky nepotřebují čísla.
-- **Řada 3 – KONEC U PŘEZKY.** Vyříznutý ovál pro trn, 4 otvory pro nýty, 2 značky linie ohybu.
-  Umisťuje se **podle levé krátké hrany destičky = konec pásu**.
+  pro dírky a tytéž dva křížky. **Konec každého slotu leží přesně na lince své šířky**, takže se
+  linky a oblouky označují navzájem a oblouky nepotřebují čísla. Je to zároveň kontrola: když
+  obtahovaný oblouk nekončí přesně na obou hranách pásu, je vzatý špatný slot.
+- **Řada 3 – KONEC U PŘEZKY.** Vyříznutý ovál pro trn, 4 otvory pro nýty **v jedné přímce**
+  a 2 značky linie ohybu **mimo tuhle přímku**, spojené gravírovanou čárkovanou linkou.
+  Všech šest otvorů je stejně velkých, takže na tom rozlišení záleží: do značek ohybu se nic
+  neprorazí. Řada se umisťuje **podle levé krátké hrany destičky = konec pásu**.
 - **Gravírované vodicí linky pro šířky 30 / 35 / 40 / 45 mm** s čísly — ve všech třech řadách.
-- **Příčná milimetrová stupnice** ve všech řadách pro šířky bez linky a **podélné pravítko**
-  (135 mm) u horní hrany na měření délky pásku na poutko.
+- **Příčná milimetrová stupnice** ve všech řadách pro šířky bez linky (čte se odstup hrany od
+  střednice, tedy pás 38 mm → obě hrany na 19) a **podélné pravítko 0–145 mm** u horní hrany na
+  měření délky pásku na poutko. **Nula pravítka je sama levá hrana destičky**, aby se o ni dal
+  měřený pásek opřít.
 - **Zkosený levý horní roh** značí, která krátká hrana je konec pásu.
-- **Závěsný otvor Ø 4 mm** v pravém dolním rohu.
+- **Závěsný otvor Ø 4 mm** u pravé dolní hrany, 2 mm pod pásmem nejširšího pásu.
 
 Řady 1 a 2 mají **stejné polohy dírek** a liší se jen tvarem konce — vybereš si, jaký konec chceš.
 Obě se umisťují podle prostřední dírky.
@@ -28,124 +41,17 @@ Jedna destička stačí na všechny šířky proto, že polohy všech otvorů po
 a koncové body zkosení špičky pro všechny šířky leží na jedné a téže přímce. Zaoblený konec je
 naopak polokruh o poloměru `w/2`, tedy pro každou šířku jiný — proto ty čtyři vnořené oblouky.
 
-**Žebra mezi oblouky mají 1,5 mm.** Je to záměr a stejně to mají komerční destičky, ale znamená
-to, že destičku je lepší nosit naplocho a neupustit.
+**Žebra mezi oblouky mají v souboru 1,5 mm, na hotovém díle 1,5 − kerf**, tedy s běžným kerfem
+0,2 mm asi 1,3 mm. Je to záměr a stejně to mají komerční destičky, ale je to nejslabší místo
+dílu: **destičku nosit naplocho a neupustit.** A je to zároveň cena za volbu 3 mm — silnější
+materiál by byl odolnější (4 mm je 2,4× tuhčí), ale do 1mm slotu už se nevejde šídlo
+a značicí otvor Ø 2 mm by byl jen poloviční proti tloušťce.
 
-### Tři věci, které je potřeba vědět, než ji poprvé použiješ
+### Jak se používá a co k tomu koupit
 
-1. **Značí se šídlem, ne tužkou.** Ořezaná tužka je kužel: ve 3 mm nad hrotem má 2,3–3,3 mm,
-   takže se do 2mm otvoru zanoří jen po tuhu a **hrot zůstane 0,5–1,5 mm nad kůží** — nedosáhne.
-   Použij **kulaté rýsovací šídlo** (to z pouzdra na karty; ve 3 mm nad hrotem má 0,6 mm).
-   Tupé šídlo projde otvory, ale ne 1mm sloty zaobleného konce.
-   - **U dírek a nýtů krouži šídlem po stěně otvoru.** Šídlo se v otvoru samo necentruje (vůle
-     ± 0,7 mm), ale vykroužený prstenec Ø 1,4 mm má střed přesně tam, kde má být — a celý zmizí
-     ve vyseknuté dírce.
-   - **U dvou značek linie ohybu naklápěj šídlo stejným směrem.** Opačné náklony pootočí spojnici
-     přes 40 mm šířky o 2° a přezka bude nakřivo; stejný náklon posune obě značky stejně a linie
-     zůstane rovnoběžná.
-   - Do **výřezu špičky** se šídlo dostane prakticky až k vrcholu: 0,2 mm od vrcholu je výřez
-     ještě 2,5 mm široký. Tam se obtahuje hrana výřezu, žádná vůle se neřeší.
-2. **Při vyrovnávání se dívej svisle dolů, ne pod úhlem.** Gravírování je jen na jedné straně
-   a dělí ho od kůže 3 mm akrylátu, takže při pohledu 30° od svislice se linka zdá posunutá
-   o **1,7 mm** — víc než celá přesnost, o kterou se snažíme. Při pohledu shora je chyba nulová.
-   Otvory a výřezy paralaxou netrpí, šídlo se kůže fyzicky dotkne.
-   _(Dřív tu stálo „používej gravírovanou stranou dolů". To je špatná rada: gravírování je
-   jednostranné, takže obrácením destičky se celý layout zrcadlí — zkosený roh skončí vpravo,
-   „levá hrana = konec pásu" přestane platit a čísla se čtou zrcadlově.)_
-3. **Nic z toho není odzkoušené v praxi.** Geometrie je ověřená proti třem komerčním šablonám
-   a křížově proti naší tiskové verzi, ale destičku jsem nikdy nedržel v ruce ani já, ani ty.
-   První pásek je zkouška — proto se před objednáním akrylátu vyplatí vytisknout kontrolní PDF
-   a projít si celý postup na papírové verzi a odřezku.
-
-### Jak se destička používá
-
-1. **Přilož destičku a srovnej obě hrany pásu na pár linek pro svou šířku** (např. „40").
-   Tím je destička vystředěná — **střednici na pás rýsovat nemusíš**, k tomu ty linky jsou.
-   Přes čirý akrylát na hrany pásu vidíš. Šířku mimo linky (38, 32, 33 mm…) vystředíš podle
-   **příčné milimetrové stupnice**: obě hrany musí ležet na stejném čísle.
-   **Pás můžeš položit lícem i rubem nahoru** — každá řada je zrcadlově symetrická k vlastní ose,
-   takže se obrácením pásu nic nezrcadlí. Destička zůstává gravírováním nahoru vždy; obrací se
-   pás, ne destička.
-2. **Nejdřív srovnej konec pásu na kolmo** — o něj se opírá celá řada 3. A zkontroluj, že
-   délka pásu stačí: potřebuješ **obvod + 234,3 mm**.
-3. **Sraz a zalešti dlouhé hrany** na plocho rozloženém pásu, **před montáží**. Je to 2,4 m
-   práce, tedy většina projektu, a po sešroubování je zdvojený konec neohrabaný.
-4. **Konec u přezky (řada 3):** **levou hranou destičky přesně na konec pásu**. Označ šídlem
-   4 otvory pro nýty a 2 značky linie ohybu, obtáhni ovál pro trn.
-5. Vysekni 6mm otvory pro nýty a **oba konce oválu** (Ø 6 mm) — razník zarovnej na obtažené
-   oblouky, ne doprostřed rýhy. Boky oválu pak veď nožem **tečně k oběma vyseknutým dírám**,
-   ne po rýze: šídlo se opírá o hranu výřezu v horním líci destičky, takže obtažený ovál vyjde
-   o 0,3 mm z každé strany menší (24,4 × 5,4 mm místo 25 × 6) a trn by se dřel.
-   Spoj obě značky ohybu pravítkem. **Zónu ohybu navlhči** a ohni ji **kolem příčky přezky**,
-   ne přes hranu — 4 mm třísločiněné kůže nasucho do malého rádiusu popraská.
-   **Navlékni poutko** a teprve pak sešroubuj oba nýty (kapka zajišťovače závitů nebo lak;
-   nýty v nejzatíženějším místě se povolují).
-6. **Vyzkoušej pásek na sobě** a označ, kam padne trn. To je prostřední dírka.
-7. **Konec se špičkou — vyber si tvar:** řada 1 pro **hrot**, řada 2 pro **zaoblený konec**.
-   Přilož tak, aby **prostřední otvor** (ten se dvěma rozlišovacími po stranách) ležel na té
-   značce, a hrany pásu opět na linky své šířky. Označ zbylé 4 dírky a obtáhni tvar konce:
-   u řady 1 vnitřní hranu výřezu **jen dokud nedojdeš k hraně pásu** (dál je výřez záměrně širší),
-   u řady 2 ten slot, který se dotýká linky tvé šířky. Slot je z celé destičky nejlépe vedený
-   prvek — šídlo v něm má vůli jen ± 0,2 mm a musí stát skoro svisle, takže se nedá pokazit.
-8. Vysekni 4,5mm dírky a nakonec vyřízni konec pásu — **veď nůž tak, aby rýhu odebral**.
-   Obtažená linka leží ze stejného důvodu jako u oválu 0,3 mm dovnitř tvaru (obtažený hrot vyjde
-   38,9 mm místo 38,5 mm) a řez po její vnější straně to vyrovná. **Označit dírky i tvar konce musíš
-   v jednom přiložení** — registrovat destičku na už vyseknutou dírku Ø 4,5 mm je nepřesné
-   a právě „jedno přiložení, žádná kumulace chyby" je důvod, proč jsou v jedné řadě.
-
-**Před objednáním** vytiskni kontrolní PDF na **A4 na šířku na 100 %** a přeměř obrys: musí být
-**215 × 184 mm**. Obrys sám je kalibrace. Na výtisku si zároveň zkus **projít celý postup šídlem**
-včetně 1mm slotů zaobleného konce — jestli se do nich tvoje šídlo dostane, poznáš na papíře
-zdarma.
-
-### Délka dříku šroubovacího nýtu — vybírej pás 3,0–3,5 mm
-
-Ověřené pravidlo pro šroubovací nýty (chicago screws): **délka dříku má být o 1–1,5 mm kratší než
-celková tloušťka sešroubovaných vrstev.** Označení „10/6“ znamená **hlavička Ø 10 mm, dřík 6 mm**
-— není to průměr a délka.
-
-Zdvojený konec u přezky je 2 × tloušťka pásu:
-
-| Tloušťka pásu | Zdvojený konec | Potřebný dřík | Vyjde s 10/6? |
-| ------------- | -------------- | ------------- | ------------- |
-| 3,0 mm        | 6,0 mm         | 4,5–5,0 mm    | ano           |
-| 3,5 mm        | 7,0 mm         | 5,5–6,0 mm    | ano, na hranu |
-| 4,0 mm        | 8,0 mm         | 6,5–7,0 mm    | **ne**        |
-
-CraftPoint má v nabídce jen **10/6**, delší dřík ne. Proto: **kup pás 3,0–3,5 mm**, ne 4 mm.
-Shodou okolností to je přesně rozsah, který požaduje i sama předloha (3,0–4,0 mm), a CraftPoint
-takový pás v šířce 40 mm skladem má (287 Kč, ověřeno 2026-09-10). Kdo už 4mm pás má, musí sehnat
-nýt s dříkem 7 mm jinde, nebo konec u přezky **ztenčit ve zdvojené zóně** (to je ale práce
-s ostrým nožem na nejzatíženějším místě pásku — pro první projekt to nedoporučuju).
-
-Destička na tloušťce nezávisí: kontroluje se v ní jen to, že pás není nad 5 mm.
-
-### Poutko: žádné otvory navíc
-
-Poutko **nepotřebuje vlastní otvory**. Je to smyčka navlečená na zdvojenou část konce a **uvězněná
-v kapse mezi dvěma nýty** — přesně k tomu ten druhý nýt je. Proto má destička čtyři otvory (dva
-nýty), a ne jen dva.
-
-Druhá varianta, kdy se oba konce pásku poutka upnou **pod nýt**, by taky žádné otvory navíc
-nevyžadovala (poutko by nýtový otvor sdílelo), ale nešla by sešroubovat: pás + pás + dva konce
-poutka po 2 mm je o **4 mm víc** než samotný zdvojený konec, a už ten je na dřík 6 mm hraniční
-(viz níže). Poutko tedy musí být volné v kapse.
-
-Kapsa mezi nýty je **47,7 mm**, takže poutko v ní má vůli:
-
-| Šířka poutka | Vůle v kapse |
-| ------------ | ------------ |
-| 12 mm        | 35,7 mm      |
-| 20 mm        | 27,7 mm      |
-| 25 mm        | 22,7 mm      |
-
-V praxi to nevadí, protože poutkem prochází volný konec pásku a ten ho drží na místě. Kdo chce
-poutko těsné, ať posune bližší nýt dál nebo vzdálenější blíž (`rivetOffsetsMm`) a destičku
-vygeneruje znovu — kontroly ohlásí, kdyby se tím zúžil můstek u drážky.
-
-**Délka pásku na poutko** se nepočítá, ale **měří na složeném konci**: obtoč kolem něj papírový
-pásek, označ přeplátování a délku odečti na podélném pravítku destičky. Orientačně
-2 × (šířka pásu + 2 × tloušťka) + 15 mm, pro pás 40 × 4 mm tedy 111 mm.
+Je to samostatný dokument: [`opasek-postup.md`](opasek-postup.md). Patří tam nákupní seznam
+(pozor na průbojník Ø 6 mm), metoda měření obvodu, tabulka délek pásu, tloušťka 3,5 mm
+a celý postup značení a montáže.
 
 ## Varianta na míru jedné šířce
 
@@ -156,8 +62,8 @@ docs/generated/opasek-sablona-40mm-laser.svg
 docs/generated/opasek-sablona-35mm-laser.svg   (pnpm pattern:belt-end --width 35 --laser)
 ```
 
-Soubor je **1:1 v milimetrech**, list 210 mm široký. Obsahuje tři díly: konec u přezky, konec se
-špičkou a pásek na poutko.
+Soubor je **1:1 v milimetrech**. Obsahuje tři díly: konec u přezky, konec se špičkou a pásek
+na poutko. Je to starší varianta — destička ji nahrazuje a doporučuju ji.
 
 ## Text poptávky (pro destičku)
 
@@ -165,17 +71,30 @@ Soubor je **1:1 v milimetrech**, list 210 mm široký. Obsahuje tři díly: kone
 >
 > rád bych poptal vyřezání laserem podle přiloženého souboru.
 >
-> **Soubor:** `opasek-desticka.svg` — vektorový, měřítko **1:1**, **1 jednotka = 1 mm**.
-> Prosím **neměnit měřítko**; rozměry jsou funkční, jde o šablonu pro řemeslnou výrobu.
-> Kdybyste potřebovali jiný formát, pošlu **DXF v milimetrech** (nebo PDF v křivkách).
+> **Příloha je jediná: `opasek-desticka.svg`** — vektor, měřítko **1:1**, **1 jednotka = 1 mm**.
+> Kdyby vám SVG nesedělo, mám i **`opasek-desticka-1-1.pdf`** (tentýž díl v křivkách, stránka
+> 225 × 194 mm) — napište a pošlu.
+> Cokoli s `vysvetlivky` v názvu je jen popisný obrázek pro mě, **nevyrábět**.
 >
-> **Hotový díl: 215 × 184 mm** (list v souboru má 5 mm rezervu kolem). Orientace na desce
-> libovolná, klidně pootočte.
+> **Hotový díl: 215 × 184 mm**, list v souboru má 5 mm rezervu kolem.
+> Na obrys prosím toleranci **± 0,5 mm**; na čem mi záleží, jsou **vzájemné rozteče otvorů,
+> tam potřebuji ± 0,2 mm**. Absolutní poloha na desce nehraje roli.
 >
-> **Materiál:** **litý (GS) čirý** akrylát **3 mm**. Litý kvůli žebrům 1,5 mm a čistotě řezu,
-> čirý proto, že se přes destičku dívám na rysku na materiálu — průhlednost je funkční požadavek.
+> **Materiál: litý (GS) čirý akrylát 3 mm.** Litý je tady podmínka, ne preference, a to ze dvou
+> důvodů: litý PMMA **gravíruje bíle a neprůhledně**, zatímco extrudovaný gravíruje téměř čiře —
+> a celá funkce téhle destičky je čtení gravírovaných linek přes materiál. Druhý důvod je nízké
+> vnitřní napětí kvůli 1,5mm žebrům (viz níže). **Čirý**, ne opál ani satén: dívám se přes
+> destičku na rysku na kůži. Kdybyste ve 3 mm měli jen extrudovaný nebo jinou barvu, prosím
+> **nezahajujte výrobu a napište mi** — jinou tloušťku ani jiný typ nechci, radši počkám.
+> Pokud máte volbu, prosím kus z **horní poloviny tolerance** (≥ 3,0 mm); litá tabule má na
+> 3 mm běžně ± 10 % a všechny mé rozměry jsou počítané na 3 mm.
 >
 > **Počet:** prosím nacenit **1 ks i 2 ks** (chtěl bych mít náhradu).
+>
+> **Rozsah práce**, ať se to dá nacenit: **gravírování 764 tahů / ~4 700 mm**,
+> **řez 24 uzavřených kontur / ~1 630 mm**. Gravírování je tedy víc než dvakrát tolik jako řez
+> a jsou to hlavně milimetrové rysky, kde hlava nenabere rychlost. Kdyby vám v náhledu vyšlo
+> víc řezání než gravírování, budou zaměněné vrstvy.
 >
 > **Dvě vrstvy:**
 >
@@ -184,33 +103,61 @@ Soubor je **1:1 v milimetrech**, list 210 mm široký. Obsahuje tři díly: kone
 >
 > Vrstvy jsou i pojmenované (`inkscape:label`). Gravírování jsou jen vodicí linky, stupnice
 > a čísla; **čísla jsou vektorové tahy, ne živý text**, takže není potřeba žádný font.
-> V řezu není text ani výplň a všechny kontury jsou uzavřené.
+> V řezu není text ani výplň, žádný `transform` a všechny kontury jsou uzavřené.
 >
 > **Prosím o tento postup:**
 >
-> 1. nejdřív **gravírování**, pak vnitřní geometrie, **obrys až nakonec** (jinak se díl uvolní
->    a tenká žebra i odpadní srpky se pohnou),
-> 2. gravírování **vektorově, jedním průchodem, nízký výkon** — ne rastrem,
-> 3. řez **na střednici, kerf nekompenzovat** (potřebuji, aby vzájemné vzdálenosti otvorů
->    odpovídaly souboru do **0,2 mm**; absolutní poloha na desce nehraje roli),
-> 4. **bez jakéhokoli dokončení** — nebrousit, neleštit plamenem, nebubnovat,
-> 5. **fólii ponechte** a balte prosím na tvrdou podložku.
+> 1. **Pootočit na desce ano, zrcadlit ne.** Gravírování musí být na téže straně a v téže
+>    orientaci jako v souboru — díl je chirální (zkosený roh vlevo nahoře je orientační značka
+>    a celé rozvržení se od levé hrany referencuje).
+> 2. Nejdřív **gravírování**, pak vnitřní geometrie, **obrys až nakonec** — jinak se díl uvolní
+>    a tenká žebra i odpadní srpky se pohnou.
+> 3. Gravírování **vektorově, jedním průchodem, nízký výkon** — ne rastrem.
+> 4. Řez prosím **jedním průchodem**, ne dvěma na nižší výkon: dvojí teplo do 1,5mm žeber
+>    a do 2mm otvorů nemá co přinést.
+> 5. **Čtyři vnořené oblouky řežte nesousedně** (r22,5 → r15 → r20 → r17,5), ne postupně
+>    dovnitř. Dva řezy 1,5 mm od sebe hned po sobě dají obě tepelně ovlivněné zóny do jednoho
+>    tenkého žebra; nesousedné pořadí dá každému žebru čas vychladnout.
+> 6. **Ofuk zapnutý.** Vím, že bez něj je hrana lesklejší, ale u těch žeber chci plamen dál
+>    od materiálu — a leštěnou hranu tu nepotřebuji vůbec.
+> 7. **Bez jakéhokoli dokončení a bez temperování.** Nebrousit, neleštit plamenem
+>    a hlavně prosím **nežíhat / netemperovat**: žíhání litého PMMA srazí díl o 0,3–0,5 %,
+>    což je přes 100mm rozteč otvorů 0,3–0,5 mm — dvojnásobek tolerance, o kterou tu jde.
+> 8. **Fólii na gravírované (horní) straně prosím sundejte** — přes fólii vektorově gravírovat
+>    nejde. Na spodní straně ji nechte a balte prosím na tvrdou podložku.
 >
-> **Na co upozorňuji:**
+> **Dvě věci, které bych rád potvrdil, než začnete:**
 >
-> - **Čtyři vnořené sloty 1,0 mm** v jedné řadě mají mezi sebou **žebra 1,5 mm**. Je to záměr.
->   Pokud je váš kerf nad 0,25 mm, dejte prosím vědět a pošlu verzi s užšími sloty.
-> - **Otvory Ø 2 mm** jsou značicí, mají zůstat malé — neslučovat a nezvětšovat. Vím, že to je pod
->   obvyklým pravidlem „minimální průměr ≈ tloušťka materiálu“; **prosím potvrďte, že je ve 3mm
->   litém akrylu spolehlivě protáhnete** (nesmí zůstat zaslepené ani výrazně kónické — prostrkuje
->   se jimi šídlo). Kdyby to byl problém, dejte vědět a upravím soubor.
-> - Otvor **Ø 4 mm** v rohu je na zavěšení.
-> - **Zkosený levý horní roh** je záměrný, je to značka orientace.
+> - **Otvory Ø 2 mm** (je jich 16) ve 3mm materiálu. Vím, že je to pod obvyklým pravidlem
+>   „minimální průměr ≈ tloušťka"; potřebuji, aby byly **průchozí a ne výrazně kónické** —
+>   prostrkuje se jimi rýsovací šídlo. Prosím potvrďte, že to u vás vyjde.
+> - **Váš kerf pro 3mm GS.** Sloty čtyř oblouků mají v souboru nominálně 1,0 mm a rozteč
+>   středních poloměrů je konstantní 2,5 mm, takže **slot + žebro = 2,5 mm vždycky**: při řezu
+>   na střednici bez kompenzace vyjde slot 1,0 + kerf a žebro 1,5 − kerf. S kerfem 0,2 mm to je
+>   slot 1,2 a žebro 1,3 mm, s čím počítám. **Napište mi prosím svůj kerf a pošlu soubor se
+>   slotem 1,0 − kerf**, ať na díle vyjde slot 1,0 a žebra 1,5 mm. Rozteče středů otvorů kerf
+>   neposune, ty kompenzujte podle své praxe.
+>
+> **Na co ještě upozorňuji:**
+>
+> - **Otvory Ø 2 mm** jsou značicí — neslučovat a nezvětšovat.
+> - Otvor **Ø 4 mm** u pravé dolní hrany je na zavěšení.
 > - **Vyříznutý trojúhelník** a **ovál** jsou funkční výřezy, prosím nevynechávat.
-> - Čtyři tenké srpky uvnitř slotů jsou **odpad**, propadnou roštem — díl je v pořádku.
+> - Čtyři tenké srpky uvnitř oblouků jsou odpad, ale **roštem nepropadnou** (jsou 47–71 mm
+>   dlouhé). Prosím vyjměte je a zkontrolujte, že **všemi čtyřmi oblouky projde drát Ø 0,8 mm**
+>   a **všech 16 otvorů Ø 2 mm je průchozích** — fólie ráda přidrží výřezek.
 > - Ve gravírování je **kontrolní kóta 50 mm**; podle ní si po vyřezání ověřím měřítko.
 >
-> Prosím o cenu a termín. Děkuji.
+> **Počet a obsah souboru pro kontrolu:** 16× Ø 2 mm, 1× Ø 4 mm, 4 oblouky, 1 ovál,
+> 1 trojúhelníkový výřez, obrys se zkoseným rohem.
+>
+> Prosím o cenu a termín. Vyzvednu osobně / pošlete na adresu … (doplnit).
+>
+> Děkuji,
+> … (jméno, telefon, e-mail)
+
+**Před odesláním doplň:** jméno, telefon, dodací adresu nebo osobní odběr, požadovaný termín
+a jestli jsi fyzická osoba nebo máš IČ. Bez toho se řezárna dvakrát doptá.
 
 ## Kam poptávku poslat
 
