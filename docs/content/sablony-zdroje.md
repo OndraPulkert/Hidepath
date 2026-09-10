@@ -683,3 +683,44 @@ konec pásu 90 mm, dírky Ø 4,5 mm po 25 mm, celková délka „obvod + 234,3 m
 vezme šířku, spočítá hodnoty z `belt-end.ts` a ověří, že je popisky obsahují. Chytí jak zadrátovaný
 titulek, tak zadrátovanou délku poutka nebo hrotu – obojí jsem si ověřil tím, že jsem chybu do SVG
 záměrně vnesl a test spadl.
+
+### Kůže nebo plast jako trvalá šablona (rešerše 2026-09-10)
+
+Autor viděl ve videích obě varianty. Rozdíl mezi nimi je funkční, ne estetický.
+
+**Šablona z kůže.** Používá se, ale **jen na obtahování šídlem, ne jako vodítko nože.** Čepel vedená
+po kožené hraně šablonu odřezává, takže se s každým použitím zvětšuje. Navíc je kůže rozměrově méně
+stabilní než plast (vlhkost, stlačení pod prsty) a vyříznout z ní přesnou šablonu vyžaduje právě tu
+přesnost, kterou šablona má zajistit. Výhoda: neklouže po kůži a nekazí ostří.
+
+**Šablona z plastu.** Tloušťka rozhoduje o způsobu použití:
+
+| Tloušťka   | Materiál     | Použití                                                                                                                     |
+| ---------- | ------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| 0,5–2 mm   | PVC, PP, PET | Řeže se odlamovacím nožem. Obtahuje se šídlem – nůž by po nízké hraně přejel.                                               |
+| **3–5 mm** | akrylát      | Hrana je dost vysoká, aby **vedla čepel nože**. Tohle je důvod, proč jsou v profesionálních videích silné akrylové šablony. |
+
+Hotové akrylové šablony na kůži vedou hlavně americké obchody (Buckleguy, Maker's Leather Supply,
+Ivan) – dovoz, a stejně to nebude naše geometrie.
+
+**Praktická cesta pro naši šablonu:** generátor už vydává **SVG**, což je přesně vstup, který chtějí
+české laserové řezárny. Podle jejich stránek berou `.SVG`, `.DXF` nebo `.PDF` v křivkách a řežou
+**od jednoho kusu**: [plexi.cz](https://www.plexi.cz/zakazkova-vyroba/rezani-a-gravirovani-laserem/),
+[TITAN-Multiplast](https://www.titan-multiplast.cz/sluzby/rezani-plastu-laserem) (plasty 0,5–50 mm),
+MK Plexi Praha (stroj na tenké malé díly),
+[Levné gravírování](https://www.levne-gravirovani.cz/rezani-plastu-a-plexiskla). **Ceny neuvádějí,
+dělají se na dotaz** – nevymýšlet je. Materiál na vlastní řezání: akrylát 3 mm 500 × 250 mm za
+199 Kč (Hornbach, ověřeno 2026-09-10).
+
+**Naše SVG ale není připravené pro laser.** Obsahuje popisky, kalibrační čtverec, čárkovanou linii
+ohybu a střednici. Řezací soubor by měl mít jen:
+
+- obrys dílu v jedné barvě,
+- **značicí otvory Ø 1,5–2 mm** místo plných Ø 6 / Ø 4,5 mm – skrz šablonu se poloha jen přenáší
+  šídlem, otvor se do kůže dělá až průbojníkem,
+- **zářezy na hraně** místo linie ohybu a značky prostřední dírky, protože čáru uvnitř plastu není
+  jak obtáhnout,
+- žádný text (nebo jen gravírovaný popis mimo obrys).
+
+Až se to bude dělat, patří to do generátoru jako samostatný výstupní režim, ne jako ruční úprava
+souboru.
