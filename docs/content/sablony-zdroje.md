@@ -763,3 +763,39 @@ krajními otvory pro nýty. Zafixováno sedmi testy v `src/test/generated-patter
 
 Text poptávky pro řezárnu a postup pro ruční variantu:
 [docs/zadani/opasek-sablona-poptavka.md](../zadani/opasek-sablona-poptavka.md).
+
+### Univerzální deska pro všechny šířky (`--multi`)
+
+`pnpm pattern:belt-end --multi` → `docs/generated/opasek-sablona-univerzalni-deska.svg`.
+**Jedna deska 45 × 405 mm pro pásky 28–45 mm.**
+
+Proč jedna deska stačí, není kompromis, ale přesnější popis té geometrie:
+
+1. **Polohy všech otvorů podél pásu na šířce nezávisí** (ověřeno na PDF CraftPointu pro 35 i 40 mm).
+2. **Sklon boku špičky je konstantní**, takže koncové body zkosení pro všechny šířky leží na
+   **jedné a téže přímce**. Ověřeno pro 30 / 32 / 35 / 38 / 40 / 45 mm: poloviční šířka na té
+   přímce ve výšce `tipLengthMm(w)` vyjde přesně `w/2`. Jeden pár boků obsahuje každou šířku
+   a stop určí hrana kupovaného pásu.
+
+Proto na desce **nejsou značky velikostí**. Byly by zbytečné (hranu pásu má člověk před sebou)
+a hlavně by rozbíjely tu hranu, po které se vede šídlo.
+
+Tři věci, které jedna deska musela vyřešit jinak než šablona na míru:
+
+| Problém                                                      | Řešení                                                                                                           |
+| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| Deska je širší než pás, **zářez v hraně by na pás nedosáhl** | Linie ohybu se značí **dvěma otvory mimo osu** (± 12 mm), které leží na pásu i u nejužší podporované šířky 28 mm |
+| **Vystředění** desky na pásu                                 | **Čirý akrylát** + **vyrovnávací drážka 1,5 × 25 mm na ose**: kouká se přes ni na narýsovanou střednici pásu     |
+| Rozlišit **prostřední** dírku z pěti                         | **Dva otvory po stranách** na téže výšce (± 12 mm)                                                               |
+
+Poutko na desce záměrně není — jeho délka závisí na šířce i tloušťce pásu a měří se na složeném
+pásku, takže univerzální díl pro něj neexistuje.
+
+**Ověřeno parsováním souboru:** list 65 × 425 mm, deska 45 × 405 mm, jedna vrstva `cut`,
+0 elementů `<text>`, žádná výplň, 3 uzavřené cesty. **13 značicích otvorů Ø 2 mm** (5 dírek pro
+trn na 94,3–194,3 mm od vrcholu, 2 rozlišovací na ± 12 mm u prostřední, 4 nýty na ± 25,5 a
+± 73,2 mm od ohybu, 2 značky ohybu na ± 12 mm) a **1 závěsný Ø 4 mm** 6,0 mm od hrany. Drážka pro
+trn 6,00 × 25,00 mm na ohybu ± 12,5 mm, vyrovnávací drážka 1,50 × 25,00 mm na ose. Zkosení dosáhne
+plné šířky 43,98 mm pod vrcholem, spodní hrana přesně 405 mm = ohyb + 90 mm. Zafixováno pěti testy
+v `src/test/generated-patterns.test.ts` a osmi v `belt-end.test.ts` (včetně kontroly, že koncové
+body zkosení pro šest šířek leží na jedné přímce).

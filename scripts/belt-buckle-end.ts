@@ -17,6 +17,8 @@ import {
   type BeltTipSpec,
   DEFAULT_BELT_END,
   DEFAULT_BELT_TIP,
+  DEFAULT_MULTI_PLATE,
+  type MultiPlateSpec,
   adjustmentRangeMm,
   apexToMiddleHoleMm,
   assertBeltEndSpec,
@@ -24,7 +26,10 @@ import {
   doubledPerimeterMm,
   keeperGapMm,
   keeperPocketClearMm,
+  checkMultiPlate,
   keeperStripLengthMm,
+  multiPlateLayout,
+  multiPlateMinBeltWidthMm,
   ligamentMm,
   middleHoleIndex,
   holeOffsetsFromApexMm,
@@ -444,6 +449,87 @@ export function buildLaserSvg(
   ].join('\n');
 }
 
+/* --------------------- univerzální deska pro všechny šířky --------------------- */
+
+/** Stadion (obdélník se zaoblenými konci) jako uzavřená kontura. */
+function stadium(cx: number, y0: number, y1: number, width: number): string {
+  const r = width / 2;
+  return (
+    `<path d="M${f(cx - r)} ${f(y0 + r)} A${f(r)} ${f(r)} 0 0 1 ${f(cx + r)} ${f(y0 + r)} ` +
+    `L${f(cx + r)} ${f(y1 - r)} A${f(r)} ${f(r)} 0 0 1 ${f(cx - r)} ${f(y1 - r)} Z" ` +
+    `fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`
+  );
+}
+
+/**
+ * Jedna deska pro pásky do šířky desky. Řezový soubor, stejná pravidla jako `buildLaserSvg`.
+ * Poutko tu záměrně není: jeho délka závisí na šířce i tloušťce pásu a měří se na složeném
+ * pásku, takže univerzální díl pro něj neexistuje.
+ */
+export function buildMultiPlateSvg(
+  end: BeltEndSpec,
+  tip: BeltTipSpec,
+  plate: MultiPlateSpec = DEFAULT_MULTI_PLATE,
+): string {
+  const problems = checkMultiPlate(end, tip, plate);
+  if (problems.length > 0) {
+    throw new Error(`Neplatné rozvržení desky:\n- ${problems.join('\n- ')}`);
+  }
+  const L = multiPlateLayout(end, tip, plate);
+  const m = LASER.marginMm;
+  const w = L.plateWidthMm;
+  const x0 = m;
+  const cx = x0 + w / 2;
+  const apexY = m;
+  const y = (fromApex: number): number => apexY + fromApex;
+  const tanPt = tipTangentPoint({ ...tip, beltWidthMm: w });
+  const cut: string[] = [];
+
+  // Obrys: zkosená špička nahoře, rovné boky, spodní hrana = konec pásu.
+  cut.push(
+    `<path d="M${f(x0)} ${f(y(L.bottomY))} ` +
+      `L${f(x0)} ${f(y(L.tipLengthAtPlateWidthMm))} ` +
+      `L${f(cx - tanPt.halfWidthMm)} ${f(y(tanPt.fromApexMm))} ` +
+      `A${f(tip.noseRadiusMm)} ${f(tip.noseRadiusMm)} 0 0 1 ${f(cx + tanPt.halfWidthMm)} ${f(y(tanPt.fromApexMm))} ` +
+      `L${f(x0 + w)} ${f(y(L.tipLengthAtPlateWidthMm))} ` +
+      `L${f(x0 + w)} ${f(y(L.bottomY))} Z" ` +
+      `fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`,
+  );
+
+  // Dírky pro trn a dva rozlišovací otvory u prostřední.
+  for (const off of L.tipHoleYs) cut.push(markHole(cx, y(off)));
+  for (const sign of [-1, 1]) {
+    cut.push(markHole(cx + sign * L.offAxisMarkMm, y(L.middleHoleY)));
+  }
+
+  // Vyrovnávací drážka na ose: kouká se přes ni na narýsovanou střednici pásu.
+  cut.push(stadium(cx, y(L.alignSlotY0), y(L.alignSlotY1), L.alignSlotWidthMm));
+  cut.push(hangHole(cx + L.hangHoleX, y(L.hangHoleY)));
+
+  // Konec u přezky: drážka pro trn vyříznutá, čtyři otvory pro nýty,
+  // dvě značky mimo osu pro linii ohybu (zářez v hraně by na užší pás nedosáhl).
+  cut.push(stadium(cx, y(L.slotY0), y(L.slotY1), L.slotWidthMm));
+  for (const ry of L.rivetYs) cut.push(markHole(cx, y(ry)));
+  for (const sign of [-1, 1]) cut.push(markHole(cx + sign * L.offAxisMarkMm, y(L.foldY)));
+
+  const height = Math.ceil(y(L.bottomY) + m);
+  const width = w + 2 * m;
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<!-- REZACI SOUBOR - UNIVERZALNI DESKA. Merítko 1:1, 1 jednotka = 1 mm.',
+    `     Jedna deska pro pasky sirky ${multiPlateMinBeltWidthMm(plate)}-${w} mm.`,
+    '     Vse v jedne vrstve "cut", uzavrene kontury, zadny text, zadna vypln.',
+    `     MATERIAL: CIRY akrylat 3-4 mm - pres desku se dívá na narysovanou strednici pasu.`,
+    `     Uzka drazka ${plate.alignSlotWidthMm} mm na ose = vyrovnani. Otvory Ø ${LASER.markHoleMm} mm = znacici.`,
+    `     Otvor Ø ${LASER.hangHoleMm} mm = zaveseni. Kompenzaci kerfu neresit. Neprepocitavat merítko. -->`,
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${width}mm" height="${height}mm" viewBox="0 0 ${width} ${height}">`,
+    '<g id="cut">',
+    ...cut,
+    '</g>',
+    '</svg>',
+  ].join('\n');
+}
+
 function page(body: string[]): string {
   return [
     '<svg xmlns="http://www.w3.org/2000/svg" width="210mm" height="297mm" viewBox="0 0 210 297">',
@@ -507,6 +593,18 @@ async function main(): Promise<void> {
     `<?xml version="1.0" encoding="UTF-8"?>\n${p2}`,
     'utf8',
   );
+
+  if (process.argv.includes('--multi')) {
+    const multiPath = resolve(outDir, 'opasek-sablona-univerzalni-deska.svg');
+    writeFileSync(multiPath, buildMultiPlateSvg(end, tip), 'utf8');
+    const L = multiPlateLayout(end, tip);
+    console.log(`Zapsáno ${multiPath}`);
+    console.log(
+      `Univerzální deska ${L.plateWidthMm} × ${L.plateLengthMm} mm pro pásky ` +
+        `${multiPlateMinBeltWidthMm(DEFAULT_MULTI_PLATE)}–${L.plateWidthMm} mm, čirý akryl 3–4 mm.`,
+    );
+    return;
+  }
 
   const laserPath = resolve(outDir, `opasek-sablona-${beltWidthMm}mm-laser.svg`);
   writeFileSync(laserPath, buildLaserSvg(end, tip, slotStyle), 'utf8');

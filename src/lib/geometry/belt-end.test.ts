@@ -5,12 +5,16 @@ import {
   type BeltTipSpec,
   DEFAULT_BELT_END,
   DEFAULT_BELT_TIP,
+  DEFAULT_MULTI_PLATE,
   adjustmentRangeMm,
   apexToLastHoleMm,
   apexToMiddleHoleMm,
   checkBeltTipSpec,
+  checkMultiPlate,
   holeOffsetsFromApexMm,
   middleHoleIndex,
+  multiPlateLayout,
+  multiPlateMinBeltWidthMm,
   tipHalfWidthAtMm,
   tipLengthMm,
   tipTangentPoint,
@@ -209,5 +213,65 @@ describe('tvar anglické špičky', () => {
     expect(checkBeltTipSpec(tip({ noseRadiusMm: 0 })).join(' ')).toContain('ostrý hrot');
     expect(checkBeltTipSpec(tip({ taperSlope: 0 })).join(' ')).toContain('taperSlope');
     expect(checkBeltTipSpec(tip({ noseRadiusMm: 40 })).join(' ')).toContain('příliš velké');
+  });
+});
+
+describe('univerzální deska pro všechny šířky', () => {
+  const L = multiPlateLayout(DEFAULT_BELT_END, DEFAULT_BELT_TIP);
+
+  it('rozvržení projde kontrolami', () => {
+    expect(checkMultiPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP)).toEqual([]);
+  });
+
+  it('koncové body zkosení pro všechny šířky leží na jedné přímce', () => {
+    // Tohle je důvod, proč jedna deska stačí: jeden pár boků obsahuje každou šířku.
+    for (const w of [30, 32, 35, 38, 40, 45]) {
+      const t = { ...DEFAULT_BELT_TIP, beltWidthMm: w };
+      // Poloviční šířka na konci hrotu se musí rovnat w/2 – tedy bod leží na téže přímce.
+      expect(tipHalfWidthAtMm(t, tipLengthMm(t))).toBeCloseTo(w / 2, 6);
+      // A tatáž funkce pro nejširší desku dá v té výšce stejnou hodnotu.
+      const widest = { ...DEFAULT_BELT_TIP, beltWidthMm: 45 };
+      expect(tipHalfWidthAtMm(widest, tipLengthMm(t))).toBeCloseTo(w / 2, 6);
+    }
+  });
+
+  it('má správnou délku a polohy značek', () => {
+    expect(L.plateWidthMm).toBe(45);
+    expect(L.plateLengthMm).toBe(405);
+    expect(L.tipHoleYs).toEqual([94.3, 119.3, 144.3, 169.3, 194.3]);
+    expect(L.middleHoleY).toBeCloseTo(144.3, 6);
+    expect(L.foldY).toBe(315);
+    expect(L.rivetYs).toEqual([241.8, 289.5, 340.5, 388.2]);
+    expect(L.slotY0).toBeCloseTo(302.5, 6);
+    expect(L.slotY1).toBeCloseTo(327.5, 6);
+    expect(L.bottomY).toBe(405);
+  });
+
+  it('spodní hrana desky je konec pásu, aby se podle ní dalo odříznout', () => {
+    expect(L.bottomY - L.foldY).toBeCloseTo(DEFAULT_BELT_END.tailLengthMm, 6);
+  });
+
+  it('značky mimo osu leží na pásu i u nejužší podporované šířky', () => {
+    const min = multiPlateMinBeltWidthMm(DEFAULT_MULTI_PLATE);
+    expect(min).toBe(28);
+    // U pásu 28 mm je hrana 14 mm od osy, značka 12 mm – tedy 2 mm od hrany.
+    expect(min / 2 - DEFAULT_MULTI_PLATE.offAxisMarkMm).toBeCloseTo(2, 6);
+  });
+
+  it('odmítne desku užší než pás', () => {
+    const problems = checkMultiPlate(DEFAULT_BELT_END, { ...DEFAULT_BELT_TIP, beltWidthMm: 50 });
+    expect(problems.join(' ')).toContain('užší než pás');
+  });
+
+  it('odmítne rozvržení, kde by se značky dostaly k sobě blíž než minimální můstek', () => {
+    const tight = { ...DEFAULT_MULTI_PLATE, apexToFoldMm: 250 };
+    expect(checkMultiPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, tight).length).toBeGreaterThan(0);
+  });
+
+  it('odmítne značky mimo osu příliš u hrany desky', () => {
+    const wide = { ...DEFAULT_MULTI_PLATE, offAxisMarkMm: 21 };
+    expect(checkMultiPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, wide).join(' ')).toContain(
+      'k hraně desky',
+    );
   });
 });

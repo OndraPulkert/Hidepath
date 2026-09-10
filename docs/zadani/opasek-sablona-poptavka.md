@@ -1,5 +1,28 @@
 # Poptávka na vyřezání šablony opasku (text k odeslání)
 
+## Doporučená varianta: jedna univerzální deska
+
+`pnpm pattern:belt-end --multi` → `docs/generated/opasek-sablona-univerzalni-deska.svg`
+
+**Jedna deska 45 × 405 mm pro pásky šířky 28–45 mm.** Funguje proto, že polohy všech otvorů podél
+pásu na šířce nezávisí a koncové body zkosení špičky pro všechny šířky leží na jedné a téže přímce
+(ověřeno pro 30 / 32 / 35 / 38 / 40 / 45 mm). Zkosení se obtáhne a **stop určí hrana kupovaného
+pásu** — proto na desce nejsou žádné značky velikostí, byly by zbytečné a rozbíjely by hranu, po
+které se vede šídlo.
+
+Deska nese: zkosenou špičku s obloukem vrcholu, 5 dírek pro trn, dva rozlišovací otvory
+u prostřední dírky, vyrovnávací drážku na ose, otvor na zavěšení, vyříznutou drážku pro trn,
+4 otvory pro nýty a 2 značky linie ohybu mimo osu. Spodní hrana desky je konec pásu, dá se podle
+ní označit odříznutí.
+
+**Materiál musí být ČIRÝ akrylát 3–4 mm** — přes desku se dívá na narýsovanou střednici pásu
+a vyrovnává se podle úzké drážky. U neprůhledného materiálu deska nefunguje.
+
+Poutko na desce záměrně není: jeho délka závisí na šířce i tloušťce pásu a měří se na složeném
+pásku, takže univerzální díl pro něj neexistuje. Vyřízne se z odřezku podle míry.
+
+## Varianta na míru jedné šířce
+
 Řezací soubory generuje `pnpm pattern:belt-end --laser`:
 
 ```
@@ -20,9 +43,13 @@ Soubor je **1:1 v milimetrech**, list 210 mm široký. Obsahuje tři díly: kone
 > Prosím **neměnit měřítko ani soubor nepřizpůsobovat formátu**; rozměry jsou funkční, jde
 > o šablonu pro řemeslnou výrobu.
 >
-> **Materiál:** akrylát (plexisklo) **3 mm**, barva libovolná, klidně čirá.
+> **Materiál:** **čirý** akrylát (plexisklo) **3 mm** (klidně 4 mm, deska je dlouhá).
+> Průhlednost je funkční požadavek, ne estetika — přes šablonu se dívám na rysku na materiálu.
 >
-> **Počet:** 1 sada (v souboru jsou tři díly).
+> **Počet:** 1 ks.
+>
+> V souboru je **1 jednotka = 1 mm**. Úzká drážka **1,5 mm** na ose je vyrovnávací a je funkční —
+> prosím nevyplňovat ani nevynechávat.
 >
 > **Soubor je jen na řez** — jedna vrstva `cut`, žádný text, žádná výplň, všechny kontury uzavřené.
 > Není potřeba nic gravírovat.

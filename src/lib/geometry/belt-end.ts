@@ -310,3 +310,149 @@ export function totalStrapLengthMm(waistMm: number, end: BeltEndSpec, tip: BeltT
   const behindMiddle = apexToMiddleHoleMm(tip);
   return waistMm + end.tailLengthMm + behindMiddle;
 }
+
+/* ------------------------------------------------------------------------- */
+/* Jedna univerzální deska pro všechny šířky                                  */
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Univerzální šablona: jedna deska pro pásky do `plateWidthMm`.
+ *
+ * Funguje proto, že podle měření (viz docs/content/sablony-zdroje.md):
+ *  - polohy všech otvorů podél pásu na šířce nezávisí,
+ *  - sklon boku špičky je konstantní, takže koncové body zkosení pro všechny
+ *    šířky leží na **jedné a téže přímce** – jeden pár boků obsahuje každou šířku
+ *    a stop určuje hrana kupovaného pásu.
+ *
+ * Tři věci, které jedna deska musí řešit jinak než šablona na míru:
+ *  1. Deska je širší než pás, takže **zářez v hraně by na pás nedosáhl**. Linie ohybu
+ *     se proto značí dvěma otvory mimo osu (`offAxisMarkMm`), které leží na pásu
+ *     i u nejužší podporované šířky.
+ *  2. Vystředění: deska je z čirého akrylátu a má **vyrovnávací drážku na ose**,
+ *     kterou se dívá na narýsovanou střednici pásu.
+ *  3. Prostřední dírku ze pěti odliší **dva otvory po stranách** na téže výšce.
+ */
+export interface MultiPlateSpec {
+  /** Šířka desky = největší podporovaná šířka pásu. */
+  plateWidthMm: number;
+  /** Od vrcholu špičky k začátku vyrovnávací drážky. */
+  apexToAlignSlotMm: number;
+  alignSlotLengthMm: number;
+  alignSlotWidthMm: number;
+  /** Od vrcholu špičky k linii ohybu na druhém konci desky. */
+  apexToFoldMm: number;
+  /** Vzdálenost značek mimo osu od střednice. */
+  offAxisMarkMm: number;
+  hangHoleMm: number;
+}
+
+export const DEFAULT_MULTI_PLATE: MultiPlateSpec = {
+  plateWidthMm: 45,
+  apexToAlignSlotMm: 205,
+  alignSlotLengthMm: 25,
+  alignSlotWidthMm: 1.5,
+  apexToFoldMm: 315,
+  offAxisMarkMm: 12,
+  hangHoleMm: 4,
+};
+
+export interface MultiPlateLayout {
+  plateWidthMm: number;
+  plateLengthMm: number;
+  /** Dírky pro trn, od vrcholu špičky. */
+  tipHoleYs: number[];
+  /** Výška prostřední dírky a odsazení jejích dvou rozlišovacích otvorů. */
+  middleHoleY: number;
+  offAxisMarkMm: number;
+  alignSlotY0: number;
+  alignSlotY1: number;
+  alignSlotWidthMm: number;
+  hangHoleX: number;
+  hangHoleY: number;
+  hangHoleMm: number;
+  foldY: number;
+  rivetYs: number[];
+  /** Vnější obálka vyříznuté drážky pro trn. */
+  slotY0: number;
+  slotY1: number;
+  slotWidthMm: number;
+  /** Spodní hrana desky = konec pásu, dá se podle ní označit odříznutí. */
+  bottomY: number;
+  /** Délka hrotu při využití celé šířky desky. */
+  tipLengthAtPlateWidthMm: number;
+}
+
+export function multiPlateLayout(
+  end: BeltEndSpec,
+  tip: BeltTipSpec,
+  plate: MultiPlateSpec = DEFAULT_MULTI_PLATE,
+): MultiPlateLayout {
+  const widest: BeltTipSpec = { ...tip, beltWidthMm: plate.plateWidthMm };
+  const fold = plate.apexToFoldMm;
+  return {
+    plateWidthMm: plate.plateWidthMm,
+    plateLengthMm: fold + end.tailLengthMm,
+    tipHoleYs: holeOffsetsFromApexMm(tip),
+    middleHoleY: apexToMiddleHoleMm(tip),
+    offAxisMarkMm: plate.offAxisMarkMm,
+    alignSlotY0: plate.apexToAlignSlotMm,
+    alignSlotY1: plate.apexToAlignSlotMm + plate.alignSlotLengthMm,
+    alignSlotWidthMm: plate.alignSlotWidthMm,
+    hangHoleX: -(plate.plateWidthMm / 2 - plate.hangHoleMm / 2 - end.minLigamentMm),
+    hangHoleY: plate.apexToAlignSlotMm + plate.alignSlotLengthMm / 2,
+    hangHoleMm: plate.hangHoleMm,
+    foldY: fold,
+    rivetYs: [
+      fold - end.rivetOffsetsMm[1],
+      fold - end.rivetOffsetsMm[0],
+      fold + end.rivetOffsetsMm[0],
+      fold + end.rivetOffsetsMm[1],
+    ],
+    slotY0: fold - end.slotLengthMm / 2,
+    slotY1: fold + end.slotLengthMm / 2,
+    slotWidthMm: end.slotWidthMm,
+    bottomY: fold + end.tailLengthMm,
+    tipLengthAtPlateWidthMm: tipLengthMm(widest),
+  };
+}
+
+/** Nejmenší šířka pásu, na které značky mimo osu ještě leží s rezervou 2 mm. */
+export function multiPlateMinBeltWidthMm(plate: MultiPlateSpec): number {
+  return 2 * (plate.offAxisMarkMm + 2);
+}
+
+/** Kontroly rozvržení univerzální desky. Prázdný seznam = v pořádku. */
+export function checkMultiPlate(
+  end: BeltEndSpec,
+  tip: BeltTipSpec,
+  plate: MultiPlateSpec = DEFAULT_MULTI_PLATE,
+): string[] {
+  const L = multiPlateLayout(end, tip, plate);
+  const min = end.minLigamentMm;
+  const problems: string[] = [];
+  const gap = (label: string, value: number): void => {
+    if (value < min) problems.push(`${label}: ${value.toFixed(2)} mm, minimum ${min} mm.`);
+  };
+  const markR = 1;
+  const lastTip = L.tipHoleYs[L.tipHoleYs.length - 1]!;
+  gap('Mezi poslední dírkou pro trn a vyrovnávací drážkou', L.alignSlotY0 - lastTip - markR);
+  gap(
+    'Mezi vyrovnávací drážkou a nejvzdálenějším otvorem pro nýt',
+    L.rivetYs[0]! - L.alignSlotY1 - markR,
+  );
+  gap('Mezi otvorem pro nýt a drážkou pro trn', L.slotY0 - L.rivetYs[1]! - markR);
+  gap('Mezi drážkou pro trn a otvorem pro nýt', L.rivetYs[2]! - L.slotY1 - markR);
+  gap('Za posledním otvorem pro nýt do konce desky', L.bottomY - L.rivetYs[3]! - markR);
+  gap('Od značek mimo osu k hraně desky', L.plateWidthMm / 2 - L.offAxisMarkMm - markR);
+  gap('Mezi značkou mimo osu a drážkou pro trn', L.offAxisMarkMm - markR - L.slotWidthMm / 2);
+  gap('Od závěsného otvoru k hraně desky', L.plateWidthMm / 2 + L.hangHoleX - L.hangHoleMm / 2);
+  if (L.tipLengthAtPlateWidthMm >= L.alignSlotY0) {
+    problems.push('Zkosení špičky zasahuje až do vyrovnávací drážky.');
+  }
+  if (plate.plateWidthMm < tip.beltWidthMm) {
+    problems.push(
+      `Deska ${plate.plateWidthMm} mm je užší než pás ${tip.beltWidthMm} mm, na který se má použít.`,
+    );
+  }
+  return problems;
+}
