@@ -1,291 +1,332 @@
 /**
- * Vygeneruje 1:1 šablonu konce opasku u přezky se čtyřmi otvory pro nýty
- * (dva páry symetrické k ohybu), takže mezi nýty vznikne kapsa pro poutko.
+ * Vykreslí 1:1 šablonu obou konců opasku na dvě strany A4.
  *
- * Výstup: docs/generated/opasek-konec-u-prezky.svg + .pdf (A4, tisk na 100 %).
+ * Strana 1: konec u přezky se čtyřmi otvory pro nýty (dva nýty) a kapsou pro poutko.
+ * Strana 2: konec se špičkou a pěti dírkami pro trn.
+ *
+ * Veškerá geometrie a kontroly jsou v src/lib/geometry/belt-end.ts, aby byly testovatelné.
+ * Tento skript jen kreslí. Výstup: docs/generated/opasek-sablona.svg + .pdf
  * Spuštění: pnpm pattern:belt-end
- *
- * Zdroje rozměrů (viz docs/content/sablony-zdroje.md):
- *  - šířka pásu, drážka 40 × 8 mm půlená ohybem, otvor pro nýt Ø 6 mm
- *    = odměřeno z PDF generátoru CraftPoint 2026-09-10,
- *  - polohy nýtů ±25,5 a ±73,2 mm a délka přehnutého konce 90 mm
- *    = odměřeno ze šablony Black Flag Leather Goods 2026-09-10,
- *  - zaoblení konce a rozměry poutka = volba této šablony, viz DEFAULTS.
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export interface BeltEndSpec {
-  /** Šířka pásu v mm. */
-  beltWidthMm: number;
-  /** Tloušťka pásu v mm – jen pro výpočet délky poutka. */
-  beltThicknessMm: number;
-  /** Délka drážky pro trn (ohyb ji půlí). */
-  slotLengthMm: number;
-  /** Šířka drážky pro trn = průměr průbojníku na její konce. */
-  slotWidthMm: number;
-  /** Průměr otvoru pro šroubovací nýt. */
-  rivetHoleMm: number;
-  /** Vzdálenosti obou nýtů od ohybu. */
-  rivetOffsetsMm: [number, number];
-  /** Délka přehnutého konce od ohybu. */
-  tailLengthMm: number;
-  /** Kolik hlavního pásu nad ohybem šablona zobrazuje. */
-  bodyShownMm: number;
-  /** Šířka pásku poutka. */
-  keeperWidthMm: number;
-  /** Přídavek na přeplátování poutka. */
-  keeperOverlapMm: number;
-}
+import {
+  type BeltEndSpec,
+  type BeltTipSpec,
+  DEFAULT_BELT_END,
+  DEFAULT_BELT_TIP,
+  adjustmentRangeMm,
+  apexToMiddleHoleMm,
+  assertBeltEndSpec,
+  assertBeltTipSpec,
+  doubledPerimeterMm,
+  keeperGapMm,
+  keeperPocketClearMm,
+  keeperStripLengthMm,
+  ligamentMm,
+  middleHoleIndex,
+  holeOffsetsFromApexMm,
+} from '../src/lib/geometry/belt-end.ts';
 
-export const DEFAULTS: BeltEndSpec = {
-  beltWidthMm: 40,
-  beltThicknessMm: 4,
-  slotLengthMm: 40,
-  slotWidthMm: 8,
-  rivetHoleMm: 6,
-  rivetOffsetsMm: [25.5, 73.2],
-  tailLengthMm: 90,
-  bodyShownMm: 90,
-  keeperWidthMm: 12,
-  keeperOverlapMm: 15,
-};
-
-/** Světlá mezera mezi nýty – tam se zachytí poutko. */
-export function keeperGapMm(spec: BeltEndSpec): number {
-  const [near, far] = spec.rivetOffsetsMm;
-  return Math.abs(far - near);
-}
-
-/**
- * Délka pásku na poutko: obvod zdvojené části plus přeplátování.
- * Zdvojená část má tloušťku 2× tloušťka pásu.
- */
-export function keeperStripLengthMm(spec: BeltEndSpec): number {
-  const perimeter = 2 * (spec.beltWidthMm + 2 * spec.beltThicknessMm);
-  return Math.round(perimeter + spec.keeperOverlapMm);
-}
+const INK = '#2b2b2b';
+const RED = '#c0392b';
+const GREEN = '#1f6f43';
+const GREY = '#6a6a6a';
 
 const f = (n: number): string => (Math.round(n * 1000) / 1000).toString();
-
-/** Číslo do popisky s českou desetinnou čárkou. */
 const cz = (n: number): string => f(n).replace('.', ',');
 
-interface Layout {
-  strapX: number;
-  foldY: number;
+const text = (
+  x: number,
+  y: number,
+  s: string,
+  size = 3.2,
+  color = INK,
+  anchor: 'start' | 'end' | 'middle' = 'start',
+): string =>
+  `<text x="${f(x)}" y="${f(y)}" font-family="Helvetica, Arial, sans-serif" font-size="${f(size)}" ` +
+  `fill="${color}" text-anchor="${anchor}">${s}</text>`;
+
+const cross = (cx: number, cy: number, r: number, color = INK): string =>
+  `<path d="M${f(cx - r * 1.3)} ${f(cy)} H${f(cx + r * 1.3)} M${f(cx)} ${f(cy - r * 1.3)} V${f(cy + r * 1.3)}" stroke="${color}" stroke-width="0.2" fill="none"/>`;
+
+const hole = (cx: number, cy: number, d: number, color = INK, sw = 0.3): string =>
+  `<circle cx="${f(cx)}" cy="${f(cy)}" r="${f(d / 2)}" fill="none" stroke="${color}" stroke-width="${f(sw)}"/>` +
+  cross(cx, cy, d / 2, color);
+
+const centreLine = (cx: number, y1: number, y2: number): string =>
+  `<line x1="${f(cx)}" y1="${f(y1)}" x2="${f(cx)}" y2="${f(y2)}" stroke="#b8b8b8" stroke-width="0.15" stroke-dasharray="3 3"/>`;
+
+function dimension(x: number, y1: number, y2: number, color = GREEN): string {
+  return (
+    `<line x1="${f(x)}" y1="${f(y1)}" x2="${f(x)}" y2="${f(y2)}" stroke="${color}" stroke-width="0.3"/>` +
+    [y1, y2]
+      .map(
+        (y) =>
+          `<line x1="${f(x - 2)}" y1="${f(y)}" x2="${f(x + 2)}" y2="${f(y)}" stroke="${color}" stroke-width="0.3"/>`,
+      )
+      .join('')
+  );
 }
 
-function piece(spec: BeltEndSpec, { strapX, foldY }: Layout): string[] {
+function calibration(x: number, y: number): string[] {
+  return [
+    text(x, y - 6, 'KALIBRAČNÍ ČTVEREC', 3, RED),
+    text(x, y - 2, 'po vytištění přeměř 50 × 50 mm', 3, RED),
+    `<rect x="${f(x)}" y="${f(y)}" width="50" height="50" fill="none" stroke="${RED}" stroke-width="0.4"/>`,
+  ];
+}
+
+function notes(x: number, y0: number, lines: string[]): string[] {
+  return lines.map((l, i) => text(x, y0 + i * 4.2, l, 3));
+}
+
+/* -------------------------- strana 1: konec u přezky -------------------------- */
+
+function buckleEndPage(spec: BeltEndSpec): string[] {
+  const strapX = 22;
   const w = spec.beltWidthMm;
   const r = w / 2;
   const cx = strapX + r;
+  const foldY = 132;
   const topY = foldY - spec.bodyShownMm;
   const endY = foldY + spec.tailLengthMm;
+  const textX = strapX + w + 14;
+  const [near, far] = spec.rivetOffsetsMm;
   const out: string[] = [];
 
-  // Obrys: nahoře otevřený (pás pokračuje), dole půlkruhové zakončení.
+  out.push(text(strapX, 16, 'Opasek 40 mm — strana 1: konec u přezky', 4.6));
+  out.push(
+    text(
+      strapX,
+      22,
+      'Měřítko 1:1 · tisk na A4 na 100 %, bez „přizpůsobit stránce“ · 4 otvory = 2 nýty',
+      3,
+      GREY,
+    ),
+  );
+  out.push(...calibration(150, 30));
+
+  // Obrys: nahoře otevřený, dole půlkruh.
   out.push(
     `<path d="M${f(strapX)} ${f(topY)} L${f(strapX)} ${f(endY - r)} ` +
-      `A${f(r)} ${f(r)} 0 0 0 ${f(strapX + w)} ${f(endY - r)} ` +
-      `L${f(strapX + w)} ${f(topY)}" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>`,
+      `A${f(r)} ${f(r)} 0 0 0 ${f(strapX + w)} ${f(endY - r)} L${f(strapX + w)} ${f(topY)}" ` +
+      `fill="none" stroke="${INK}" stroke-width="0.3"/>`,
   );
-  // Střednice pro kontrolu souososti.
-  out.push(
-    `<line x1="${f(cx)}" y1="${f(topY)}" x2="${f(cx)}" y2="${f(endY)}" ` +
-      `stroke="#b0b0b0" stroke-width="0.15" stroke-dasharray="3 3"/>`,
-  );
-  // Linie ohybu.
+  out.push(centreLine(cx, topY, endY));
   out.push(
     `<line x1="${f(strapX - 6)}" y1="${f(foldY)}" x2="${f(strapX + w + 6)}" y2="${f(foldY)}" ` +
-      `stroke="#c0392b" stroke-width="0.4" stroke-dasharray="4 2.5"/>`,
+      `stroke="${RED}" stroke-width="0.4" stroke-dasharray="4 2.5"/>`,
   );
 
   // Drážka pro trn: stadion půlený ohybem.
   const half = spec.slotLengthMm / 2;
   const sr = spec.slotWidthMm / 2;
   out.push(
-    `<path d="M${f(cx - sr)} ${f(foldY - half + sr)} ` +
-      `A${f(sr)} ${f(sr)} 0 0 1 ${f(cx + sr)} ${f(foldY - half + sr)} ` +
-      `L${f(cx + sr)} ${f(foldY + half - sr)} ` +
-      `A${f(sr)} ${f(sr)} 0 0 1 ${f(cx - sr)} ${f(foldY + half - sr)} Z" ` +
-      `fill="none" stroke="#2b2b2b" stroke-width="0.3"/>`,
+    `<path d="M${f(cx - sr)} ${f(foldY - half + sr)} A${f(sr)} ${f(sr)} 0 0 1 ${f(cx + sr)} ${f(foldY - half + sr)} ` +
+      `L${f(cx + sr)} ${f(foldY + half - sr)} A${f(sr)} ${f(sr)} 0 0 1 ${f(cx - sr)} ${f(foldY + half - sr)} Z" ` +
+      `fill="none" stroke="${INK}" stroke-width="0.3"/>`,
   );
-  for (const sign of [-1, 1]) {
-    const y = foldY + sign * (half - sr);
-    out.push(cross(cx, y, sr, '#2b2b2b', 0.2));
-  }
+  for (const sign of [-1, 1]) out.push(cross(cx, foldY + sign * (half - sr), sr));
 
-  // Čtyři otvory pro nýty: dva páry symetrické k ohybu.
-  const hr = spec.rivetHoleMm / 2;
+  // Čtyři otvory pro nýty.
   for (const off of spec.rivetOffsetsMm) {
-    for (const sign of [-1, 1]) {
-      const y = foldY + sign * off;
-      out.push(
-        `<circle cx="${f(cx)}" cy="${f(y)}" r="${f(hr)}" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>`,
-      );
-      out.push(cross(cx, y, hr, '#2b2b2b', 0.2));
-    }
+    for (const sign of [-1, 1]) out.push(hole(cx, foldY + sign * off, spec.rivetHoleMm));
   }
 
-  // Kóta kapsy pro poutko (na přehnutém konci).
-  const [near, far] = spec.rivetOffsetsMm;
-  const gy1 = foldY + near;
-  const gy2 = foldY + far;
-  const gx = strapX + w + 4;
-  out.push(
-    `<line x1="${f(gx)}" y1="${f(gy1)}" x2="${f(gx)}" y2="${f(gy2)}" stroke="#1f6f43" stroke-width="0.3"/>`,
-  );
-  for (const y of [gy1, gy2]) {
-    out.push(
-      `<line x1="${f(gx - 2)}" y1="${f(y)}" x2="${f(gx + 2)}" y2="${f(y)}" stroke="#1f6f43" stroke-width="0.3"/>`,
-    );
-  }
-  return out;
-}
+  out.push(dimension(strapX + w + 4, foldY + near, foldY + far));
 
-function cross(cx: number, cy: number, r: number, color: string, sw: number): string {
-  return (
-    `<path d="M${f(cx - r * 1.3)} ${f(cy)} H${f(cx + r * 1.3)} M${f(cx)} ${f(cy - r * 1.3)} ` +
-    `V${f(cy + r * 1.3)}" stroke="${color}" stroke-width="${f(sw)}" fill="none"/>`
-  );
-}
-
-function keeperStrip(spec: BeltEndSpec, x: number, y: number): string[] {
-  const len = keeperStripLengthMm(spec);
-  const h = spec.keeperWidthMm;
-  const out: string[] = [
-    `<rect x="${f(x)}" y="${f(y)}" width="${f(len)}" height="${f(h)}" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>`,
+  const callouts: [number, string, string][] = [
+    [foldY - far, `nýt ± ${cz(far)} mm od ohybu`, INK],
+    [foldY - near, `nýt ± ${cz(near)} mm od ohybu`, INK],
+    [
+      foldY - near + 9.5,
+      `drážka ${cz(spec.slotLengthMm)} × ${cz(spec.slotWidthMm)} mm, ohyb ji půlí`,
+      INK,
+    ],
+    [foldY, 'OHYB (příčka přezky)', RED],
+    [foldY + near - 9.5, `můstek u drážky ${cz(Math.round(ligamentMm(spec) * 10) / 10)} mm`, GREEN],
+    [
+      foldY + (near + far) / 2,
+      `kapsa pro poutko ${cz(keeperGapMm(spec))} mm (světlá ${cz(keeperPocketClearMm(spec))} mm)`,
+      GREEN,
+    ],
+    [endY, `konec pásu ${cz(spec.tailLengthMm)} mm od ohybu`, INK],
   ];
-  for (let mm = 0; mm <= len; mm += 10) {
-    out.push(
-      `<line x1="${f(x + mm)}" y1="${f(y + h)}" x2="${f(x + mm)}" y2="${f(y + h + 2)}" stroke="#7a7a7a" stroke-width="0.2"/>`,
-    );
-    out.push(
-      `<text x="${f(x + mm)}" y="${f(y + h + 5.2)}" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">${mm}</text>`,
-    );
-  }
-  return out;
-}
-
-function label(x: number, y: number, text: string, size = 3.2, color = '#2b2b2b'): string {
-  return `<text x="${f(x)}" y="${f(y)}" font-family="Helvetica, Arial, sans-serif" font-size="${f(size)}" fill="${color}">${text}</text>`;
-}
-
-export function buildSvg(spec: BeltEndSpec): string {
-  const strapX = 22;
-  const foldY = 132;
-  const [near, far] = spec.rivetOffsetsMm;
-  const gap = keeperGapMm(spec);
-  /** Sloupec popisek vpravo od dílu. */
-  const textX = strapX + spec.beltWidthMm + 14;
-  /** Kalibrační čtverec až za sloupcem popisek, aby se text nekřížil s rámem. */
-  const calX = 150;
-  const calY = 30;
-  const parts: string[] = [];
-
-  parts.push(
-    label(strapX, 16, 'Konec opasku u přezky — 4 otvory pro nýty (kapsa pro poutko)', 4.6),
-  );
-  parts.push(
-    label(
-      strapX,
-      22,
-      `Šířka pásu ${spec.beltWidthMm} mm · měřítko 1:1 · tisk na A4 na 100 %, bez „přizpůsobit stránce“`,
-      3,
-      '#6a6a6a',
-    ),
-  );
-
-  parts.push(label(calX, calY - 6, 'KALIBRAČNÍ ČTVEREC', 3, '#c0392b'));
-  parts.push(label(calX, calY - 2, 'po vytištění přeměř 50 × 50 mm', 3, '#c0392b'));
-  parts.push(
-    `<rect x="${f(calX)}" y="${f(calY)}" width="50" height="50" fill="none" stroke="#c0392b" stroke-width="0.4"/>`,
-  );
-
-  parts.push(...piece(spec, { strapX, foldY }));
-
-  // Popisky. Díl je k ohybu symetrický, proto se každý pár značí jednou s ±.
-  const callouts: [number, string, string?][] = [
-    [foldY - far, `nýt ± ${cz(far)} mm od ohybu`],
-    [foldY - near, `nýt ± ${cz(near)} mm od ohybu`],
-    [foldY - near + 9.5, `drážka ${spec.slotLengthMm} × ${spec.slotWidthMm} mm, ohyb ji půlí`],
-    [foldY, 'OHYB (příčka přezky)', '#c0392b'],
-    [foldY + (near + far) / 2, `kapsa pro poutko ${cz(gap)} mm`, '#1f6f43'],
-    [foldY + spec.tailLengthMm, `konec pásu ${spec.tailLengthMm} mm od ohybu`],
-  ];
-  for (const [y, text, color] of callouts) {
-    parts.push(label(textX, y + 1, text, 3.2, color ?? '#2b2b2b'));
-  }
-  parts.push(
-    label(
-      strapX,
-      foldY - spec.bodyShownMm - 3,
-      'sem pokračuje hlavní pás (nahoře neřezat)',
-      3,
-      '#6a6a6a',
-    ),
-  );
+  for (const [y, s, color] of callouts) out.push(text(textX, y + 1, s, 3.2, color));
+  out.push(text(strapX, topY - 3, 'sem pokračuje hlavní pás (nahoře neřezat)', 3, GREY));
 
   // Poutko.
   const keeperY = 232;
-  parts.push(
-    label(
+  const len = keeperStripLengthMm(spec);
+  out.push(
+    text(
       strapX,
       keeperY - 4,
-      `Poutko — pásek ${keeperStripLengthMm(spec)} × ${spec.keeperWidthMm} mm (obvod zdvojené části ${2 * (spec.beltWidthMm + 2 * spec.beltThicknessMm)} mm + ${spec.keeperOverlapMm} mm přeplátování)`,
+      `Poutko — pásek ${len} × ${spec.keeperWidthMm} mm (obvod zdvojené části ${cz(doubledPerimeterMm(spec))} mm + ${spec.keeperOverlapMm} mm přeplátování)`,
       3,
     ),
   );
-  parts.push(...keeperStrip(spec, strapX, keeperY));
-  parts.push(
-    label(
+  out.push(
+    `<rect x="${f(strapX)}" y="${f(keeperY)}" width="${f(len)}" height="${f(spec.keeperWidthMm)}" fill="none" stroke="${INK}" stroke-width="0.3"/>`,
+  );
+  for (let mm = 0; mm <= len; mm += 10) {
+    out.push(
+      `<line x1="${f(strapX + mm)}" y1="${f(keeperY + spec.keeperWidthMm)}" x2="${f(strapX + mm)}" y2="${f(keeperY + spec.keeperWidthMm + 2)}" stroke="#7a7a7a" stroke-width="0.2"/>`,
+    );
+    out.push(
+      `<text x="${f(strapX + mm)}" y="${f(keeperY + spec.keeperWidthMm + 5.2)}" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">${mm}</text>`,
+    );
+  }
+
+  out.push(
+    ...notes(strapX, 258, [
+      '1. Přenes značky na rub pásu: ohyb, drážku i všechny čtyři otvory.',
+      `2. Vysekni ${cz(spec.rivetHoleMm)}mm otvory pro nýty i konce drážky (stejný průbojník), drážku mezi nimi vyřízni nožem.`,
+      '3. Navlékni poutko na přehnutý konec. Teprve pak ohni konec kolem přezky.',
+      '4. Sešroubuj oba nýty. Poutko zůstane uvězněné v kapse mezi nimi.',
+      'Nýty: 2 kusy, každý prochází oběma vrstvami — proto jsou otvory čtyři.',
+      'Rozměry z šablony Black Flag Leather Goods (jeden zdroj, ať se nemíchají rozteče).',
+      'Délka poutka a zaoblení konce jsou spočítané, ne ověřené — vyzkoušej na odřezku.',
+    ]),
+  );
+  return out;
+}
+
+/* --------------------------- strana 2: konec se špičkou --------------------------- */
+
+function tipPage(tip: BeltTipSpec, end: BeltEndSpec): string[] {
+  const strapX = 22;
+  const w = tip.beltWidthMm;
+  const cx = strapX + w / 2;
+  const apexY = 45;
+  const baseY = apexY + tip.tipLengthMm;
+  const offsets = holeOffsetsFromApexMm(tip);
+  const lastY = apexY + offsets[offsets.length - 1];
+  const strapEndY = lastY + 12;
+  const textX = strapX + w + 14;
+  const mid = middleHoleIndex(tip);
+  const out: string[] = [];
+
+  out.push(text(strapX, 16, 'Opasek 40 mm — strana 2: konec se špičkou', 4.6));
+  out.push(
+    text(
       strapX,
-      keeperY + spec.keeperWidthMm + 11,
-      'Délku odměř na SLOŽENÉM pásku, stupnice je na zkrácení. Kůže na poutko tenčí než pás (1,2–2 mm).',
-      2.9,
-      '#6a6a6a',
+      22,
+      'Měřítko 1:1 · tisk na A4 na 100 % · rozvržení nezávisí na obvodu pasu',
+      3,
+      GREY,
     ),
   );
+  out.push(...calibration(150, 30));
 
-  const notes = [
-    '1. Přenes značky na rub pásu: ohyb, drážku i všechny čtyři otvory.',
-    `2. Vysekni ${spec.rivetHoleMm}mm otvory pro nýty, konce drážky ${spec.slotWidthMm}mm průbojníkem a drážku mezi nimi vyřízni nožem.`,
-    '3. Navlékni poutko na přehnutý konec. Teprve pak ohni konec kolem přezky.',
-    '4. Sešroubuj oba nýty. Poutko zůstane uvězněné v kapse mezi nimi.',
-    `Nýty: 2 kusy, každý prochází oběma vrstvami — proto jsou otvory čtyři.`,
-    'Rozměry: drážka a Ø otvorů podle generátoru CraftPoint, polohy nýtů a délka konce podle šablony BFLG.',
-    'Zaoblení konce a rozměry poutka jsou volba této šablony — před řezáním ověř na odřezku.',
-  ];
-  notes.forEach((n, i) => parts.push(label(strapX, 262 + i * 4.4, n, 3)));
+  // Obrys s anglickou špičkou, dole otevřený.
+  out.push(
+    `<path d="M${f(strapX)} ${f(strapEndY)} L${f(strapX)} ${f(baseY)} L${f(cx)} ${f(apexY)} ` +
+      `L${f(strapX + w)} ${f(baseY)} L${f(strapX + w)} ${f(strapEndY)}" ` +
+      `fill="none" stroke="${INK}" stroke-width="0.3"/>`,
+  );
+  out.push(centreLine(cx, apexY, strapEndY));
 
+  offsets.forEach((off, i) => {
+    const y = apexY + off;
+    const isMid = i === mid;
+    out.push(hole(cx, y, tip.holeDiameterMm, isMid ? RED : INK, isMid ? 0.5 : 0.3));
+  });
+
+  // Kóty.
+  out.push(dimension(strapX - 6, apexY, apexY + offsets[0], GREEN));
+  out.push(text(strapX - 9, (2 * apexY + offsets[0]) / 2, `${cz(offsets[0])} mm`, 3, GREEN, 'end'));
+  out.push(dimension(strapX + w + 4, apexY + offsets[0], apexY + offsets[1], GREEN));
+
+  const midY = apexY + offsets[mid];
+  out.push(text(textX, apexY + tip.tipLengthMm / 2, `hrot ${cz(tip.tipLengthMm)} mm`, 3.2));
+  out.push(
+    text(
+      textX,
+      apexY + (offsets[0] + offsets[1]) / 2,
+      `rozteč ${cz(tip.holeSpacingMm)} mm`,
+      3.2,
+      GREEN,
+    ),
+  );
+  out.push(text(textX, midY - 3, 'PROSTŘEDNÍ DÍRKA = tvoje míra', 3.4, RED));
+  out.push(text(textX, midY + 2, `${cz(apexToMiddleHoleMm(tip))} mm od hrotu`, 3, RED));
+  out.push(
+    text(
+      textX,
+      midY + 6.5,
+      `nastavení ± ${cz(adjustmentRangeMm(tip))} mm (2 dírky sem i tam)`,
+      3,
+      RED,
+    ),
+  );
+  out.push(
+    text(textX, lastY + 1, `poslední dírka ${cz(offsets[offsets.length - 1])} mm od hrotu`, 3),
+  );
+  out.push(text(strapX, strapEndY + 5, 'sem pokračuje hlavní pás (dole neřezat)', 3, GREY));
+
+  const total = apexToMiddleHoleMm(tip) + end.tailLengthMm;
+  out.push(
+    ...notes(strapX, strapEndY + 10, [
+      `Dírky Ø ${cz(tip.holeDiameterMm)} mm, ${tip.holeCount} kusů, rozteč ${cz(tip.holeSpacingMm)} mm.`,
+      `CELKOVÁ DÉLKA PÁSU = naměřený obvod + ${cz(total)} mm`,
+      `   (${cz(end.tailLengthMm)} mm přehnutý konec u přezky + ${cz(apexToMiddleHoleMm(tip))} mm od hrotu k prostřední dírce)`,
+      'Obvod měř na stávajícím opasku od ohybu u přezky k dírce, kterou nosíš.',
+      'Bez opasku: provlékni poutky kalhot krejčovský metr a utáhni na pohodlí.',
+      'Dírky děruj až po zkoušce na těle. Špičku odřízni jako poslední krok.',
+      'Rozvržení odměřeno z PDF generátoru CraftPoint; shodné pro obvod 85 i 95 cm.',
+    ]),
+  );
+  return out;
+}
+
+function page(body: string[]): string {
   return [
-    '<?xml version="1.0" encoding="UTF-8"?>',
     '<svg xmlns="http://www.w3.org/2000/svg" width="210mm" height="297mm" viewBox="0 0 210 297">',
     '<rect width="210" height="297" fill="#ffffff"/>',
-    ...parts,
+    ...body,
     '</svg>',
   ].join('\n');
 }
 
+export function buildPages(end: BeltEndSpec, tip: BeltTipSpec): [string, string] {
+  return [page(buckleEndPage(end)), page(tipPage(tip, end))];
+}
+
 async function main(): Promise<void> {
+  assertBeltEndSpec(DEFAULT_BELT_END);
+  assertBeltTipSpec(DEFAULT_BELT_TIP);
+
   const here = dirname(fileURLToPath(import.meta.url));
   const outDir = resolve(here, '../docs/generated');
   mkdirSync(outDir, { recursive: true });
-  const svgPath = resolve(outDir, 'opasek-konec-u-prezky.svg');
-  const pdfPath = resolve(outDir, 'opasek-konec-u-prezky.pdf');
-  const svg = buildSvg(DEFAULTS);
-  writeFileSync(svgPath, svg, 'utf8');
+  const [p1, p2] = buildPages(DEFAULT_BELT_END, DEFAULT_BELT_TIP);
+  writeFileSync(
+    resolve(outDir, 'opasek-sablona-1-prezka.svg'),
+    `<?xml version="1.0" encoding="UTF-8"?>\n${p1}`,
+    'utf8',
+  );
+  writeFileSync(
+    resolve(outDir, 'opasek-sablona-2-spicka.svg'),
+    `<?xml version="1.0" encoding="UTF-8"?>\n${p2}`,
+    'utf8',
+  );
 
   const { chromium } = await import('@playwright/test');
   const browser = await chromium.launch({ channel: 'chrome' });
-  const page = await browser.newPage();
-  await page.setContent(
-    `<style>@page{size:A4;margin:0}html,body{margin:0;padding:0}</style>${svg}`,
+  const pg = await browser.newPage();
+  await pg.setContent(
+    `<style>@page{size:A4;margin:0}html,body{margin:0;padding:0}
+     .sheet{width:210mm;height:297mm;page-break-after:always;overflow:hidden}
+     .sheet:last-child{page-break-after:auto}</style>` +
+      `<div class="sheet">${p1}</div><div class="sheet">${p2}</div>`,
     { waitUntil: 'load' },
   );
-  await page.pdf({
+  const pdfPath = resolve(outDir, 'opasek-sablona.pdf');
+  await pg.pdf({
     path: pdfPath,
     width: '210mm',
     height: '297mm',
@@ -295,10 +336,18 @@ async function main(): Promise<void> {
   });
   await browser.close();
 
-  console.log(`Zapsáno ${svgPath}`);
-  console.log(`Zapsáno ${pdfPath}`);
+  console.log(`Zapsáno ${pdfPath} (2 strany)`);
   console.log(
-    `Kapsa pro poutko ${keeperGapMm(DEFAULTS)} mm, pásek na poutko ${keeperStripLengthMm(DEFAULTS)} mm.`,
+    `Konec u přezky: můstek ${ligamentMm(DEFAULT_BELT_END).toFixed(1)} mm, kapsa pro poutko ` +
+      `${keeperGapMm(DEFAULT_BELT_END)} mm (světlá ${keeperPocketClearMm(DEFAULT_BELT_END)} mm), ` +
+      `poutko ${keeperStripLengthMm(DEFAULT_BELT_END)} mm.`,
+  );
+  console.log(
+    `Špička: dírky ${holeOffsetsFromApexMm(DEFAULT_BELT_TIP).map(cz).join(' / ')} mm od hrotu, ` +
+      `prostřední ${cz(apexToMiddleHoleMm(DEFAULT_BELT_TIP))} mm.`,
+  );
+  console.log(
+    `Celková délka pásu = obvod + ${cz(apexToMiddleHoleMm(DEFAULT_BELT_TIP) + DEFAULT_BELT_END.tailLengthMm)} mm.`,
   );
 }
 

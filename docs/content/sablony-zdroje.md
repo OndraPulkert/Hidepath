@@ -511,34 +511,76 @@ Titulní strana uvádí v materiálech „**Šroubovací nýty (Chicago šrouby)
 koupit dva. **Pro nás poučení: v našich vlastních šablonách musí seznam materiálu a značky ve
 výkresu souhlasit, jinak si uživatel nemá jak ověřit, co je správně.**
 
-## Vlastní šablona: konec opasku se 4 otvory a poutkem
+## Vlastní šablona opasku 40 mm (obě strany)
 
-`pnpm pattern:belt-end` → `docs/generated/opasek-konec-u-prezky.svg` + `.pdf` (A4, 1:1, PDF je
-ignorovaný jako výstup, SVG je verzované). Generátor: `scripts/belt-buckle-end.ts`, parametry
-v `DEFAULTS`.
+`pnpm pattern:belt-end` → `docs/generated/opasek-sablona.pdf` (**2 strany A4, 1:1**) a dvě SVG.
+Geometrie a všechna pravidla: `src/lib/geometry/belt-end.ts`, testy `belt-end.test.ts` (20 testů).
+Skript `scripts/belt-buckle-end.ts` už jen kreslí.
 
-Doplňuje šablonu CraftPointu tam, kde ona poutko neumožňuje: má **dva nýty**, tedy **čtyři otvory**
-symetrické k ohybu, a mezi nimi kapsu, ve které poutko zůstane uvězněné.
+### Strana 1 – konec u přezky
 
-| Prvek            | Hodnota                         | Odkud                                                                                      |
-| ---------------- | ------------------------------- | ------------------------------------------------------------------------------------------ |
-| Šířka pásu       | 40 mm                           | zadání                                                                                     |
-| Drážka pro trn   | 40 × 8 mm, ohyb ji půlí         | odměřeno z PDF CraftPoint                                                                  |
-| Ø otvoru pro nýt | 6 mm                            | odměřeno z PDF CraftPoint + BFLG                                                           |
-| Nýty             | **± 25,5 a ± 73,2 mm** od ohybu | odměřeno z BFLG                                                                            |
-| Kapsa pro poutko | **47,7 mm**                     | rozdíl obou poloh nýtů                                                                     |
-| Přehnutý konec   | 90 mm                           | odměřeno z BFLG                                                                            |
-| Zaoblení konce   | půlkruh r = 20 mm               | **volba této šablony**                                                                     |
-| Poutko           | pásek **111 × 12 mm**           | **volba této šablony**: obvod zdvojené části 2 × (40 + 2 × 4) = 96 mm + 15 mm přeplátování |
+| Prvek               | Hodnota                         | Odkud                    |
+| ------------------- | ------------------------------- | ------------------------ |
+| Šířka pásu          | 40 mm                           | zadání                   |
+| Drážka pro trn      | 25 × 6 mm, ohyb ji půlí         | odměřeno z BFLG          |
+| Ø otvoru pro nýt    | 6 mm                            | CraftPoint i BFLG shodně |
+| Nýty                | ± 25,5 a ± 73,2 mm od ohybu     | odměřeno z BFLG          |
+| **Můstek u drážky** | **10,0 mm**                     | důsledek                 |
+| Kapsa pro poutko    | 47,7 mm rozteč / 41,7 mm světlá | důsledek                 |
+| Přehnutý konec      | 90 mm                           | odměřeno z BFLG          |
+| Poutko              | pásek 111 × 12 mm               | **spočítáno**, neověřeno |
 
-Nýty se kupují **2 kusy**, ne 4 – každý prochází oběma vrstvami.
+### Strana 2 – konec se špičkou
 
-**Ověření výstupu** (render 300 dpi, stejný postup jako u cizích šablon): list A4 209,9 × 297,0 mm,
-šířka pásu **39,96 mm**, kalibrační čtverec **50,04 × 50,00 mm**, prvky na střednici v 58,76 /
-106,47 / 115,95 / **132,00 (ohyb)** / 147,96 / 157,44 / 205,19 / 221,95 mm – tedy nýty ± 73,2
-a ± 25,5 mm a konce drážky ± 16 mm od ohybu, symetricky do 0,1 mm. Při první verzi měření odhalilo
-kolizi popisky s kalibračním čtvercem; opraveno přesunem čtverce.
+| Prvek                | Hodnota                                  | Odkud                 |
+| -------------------- | ---------------------------------------- | --------------------- |
+| Anglická špička      | hrot 38 mm                               | odměřeno z CraftPoint |
+| Dírky pro trn        | 5 × Ø 4,5 mm, rozteč 25 mm               | odměřeno z CraftPoint |
+| První dírka          | 94,3 mm od hrotu                         | odměřeno z CraftPoint |
+| **Prostřední dírka** | **144,3 mm od hrotu**, nastavení ± 50 mm | důsledek              |
+| Celková délka pásu   | **obvod + 234,3 mm**                     | 90 + 144,3            |
 
-Délka poutka a zaoblení konce jsou **spočítané, ne ověřené praxí** – před řezáním vyzkoušet na
-odřezku. Zvlášť poutko: 12mm pásek má v kapse 47,7 mm vůli, takže se bude posouvat. Kdo chce poutko
-těsné, ať posune nýty blíž k sobě (parametr `rivetOffsetsMm`) a šablonu vygeneruje znovu.
+### Oprava chyby, kterou našel autor
+
+První verze měla drážku 40 mm z CraftPointu **a** nýty ±25,5 mm z BFLG. Ty dvě šablony mají různě
+dlouhou drážku (40 vs 25 mm), takže kombinace dala **můstek jen 2,50 mm** mezi koncem drážky
+a otvorem pro nýt – a to v nejzatíženějším místě pásku. Oprava: celý konec u přezky je teď
+z **jednoho** zdroje (BFLG), tedy drážka 25 × 6 mm → můstek 10,0 mm.
+
+Aby se to nemohlo zopakovat, `checkBeltEndSpec` počítá můstky a odmítne rozměry, kde je kterýkoli
+menší než `minLigamentMm` (volba: 6 mm = jeden průměr otvoru). Kontroluje můstek u drážky, kůži za
+vzdálenějším nýtem, můstek k boční hraně, vzestupnost poloh nýtů a to, že se poutko vejde do kapsy.
+U špičky: nepárový počet dírek, můstek mezi dírkami a odstup první dírky od hrotu. Regresní test
+`odmítne kombinaci drážky CraftPointu s nýty BFLG` drží tu původní chybu zafixovanou.
+
+### Nezávislé potvrzení, že měření sedí
+
+Generátor CraftPoint uvádí pro obvod 95 cm díl **1174,3 mm** a pro 85 cm **1074,3 mm**. Z mých
+odměřených hodnot: obvod + jejich přehnutý konec 80 mm + 144,3 mm od hrotu k prostřední dírce
+= 950 + 80 + 144,3 = **1174,3** a 850 + 80 + 144,3 = **1074,3**. Souhlas na desetinu milimetru
+u dvou různých konfigurací ověřuje délku přehnutého konce i rozvržení špičky naráz. Zafixováno
+testem `reprodukuje délku, kterou uvádí generátor CraftPoint`.
+
+Navíc ověřeno experimentem, že **rozvržení špičky nezávisí na obvodu pasu**: PDF pro 85 a 95 cm mají
+list 1/5 pixel po pixelu shodný (dírky 118,32 / 143,30 / 168,28 / 193,29 / 218,31 mm od hrany listu).
+Obvod mění jen hladkou část mezi konci.
+
+### Změření vytištěného výstupu (render 300 dpi)
+
+| Kontrola              | Cíl             | Naměřeno                                     |
+| --------------------- | --------------- | -------------------------------------------- |
+| Formát listu          | A4              | 209,89 × 297,01 mm                           |
+| Kalibrační čtverec    | 50 × 50 mm      | 50,04 × 50,00 mm (obě strany)                |
+| Šířka pásu            | 40 mm           | 39,96 mm (obě strany, v několika výškách)    |
+| Nýty od ohybu         | ± 25,5 / ± 73,2 | −25,48 / +25,49 a −73,19 / +73,24 mm         |
+| Konce drážky od ohybu | ± 9,5           | −9,48 / +9,49 mm                             |
+| Konec pásu od ohybu   | 90 mm           | +90,00 mm                                    |
+| Délka hrotu           | 38 mm           | 38,13 mm (plné šířky dosahuje v y = 83 mm)   |
+| Dírky od hrotu        | 94,3 → 194,3    | 94,41 / 119,38 / 144,36 / 169,42 / 194,40 mm |
+| Rozteč dírek          | 25 mm           | 24,97 / 24,98 / 25,06 / 24,98 mm             |
+
+Odchylky do 0,15 mm jsou tahem linky a rasterizací na 300 dpi (1 px = 0,085 mm).
+
+**Co zůstává neověřené:** délka poutka (111 mm je obvod 96 mm + 15 mm přeplátování), zaoblení konce
+u přezky a hloubka případného zkosení. Vyzkoušet na odřezku pásu. Poutko 12 mm má v kapse 41,7 mm
+světlé délky vůli – pro těsné poutko posunout `rivetOffsetsMm` blíž k sobě a přegenerovat.
