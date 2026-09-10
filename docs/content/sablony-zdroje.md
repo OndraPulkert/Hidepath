@@ -109,23 +109,35 @@ u pouzdra. Do prvního pásku bych to nedával.
 Ano, hotový nařezaný pás je běžné zboží a je to doporučená cesta: dvě dlouhé hrany přijdou už rovně
 nařezané, takže padá ta nejtěžší část projektu.
 
-**Pozor na CraftPoint.** Při otevření produktových stránek se všechny šířky u všech jejich pásů
-hlásily jako „Varianta je vyprodaná nebo nedostupná“ – u 2–2,5 mm (155 Kč), 3–3,5 mm (184 Kč),
-4,5–5 mm (241 Kč) i u barvené Maya 3,5–4 mm (315 Kč). Dřívější poznámka v tomto dokumentu uváděla
-184 Kč jako dostupné, což neplatí. Může to být i tak, že se stav variant ze stránky nepřečte správně
-před výběrem varianty, takže **před nákupem ověřit v prohlížeči**. Sedlářské nářadí zároveň uvádí
-u řemenů dodací dobu 2–3 týdny „z důvodu nepravidelných dodávek kvalitních kůží“, takže vyprodané
-zásoby jsou v této kategorii reálné.
+**Metodická poznámka (důležitá pro každé další ověřování CraftPointu).** Čtení produktových stránek
+CraftPointu přes automatický fetch hlásí u všech variant „Varianta je vyprodaná nebo nedostupná“,
+i když jsou skladem – načte se stav přepínače variant před výběrem, ne skutečná dostupnost. Kvůli
+tomu tento dokument nejdřív tvrdil, že CraftPoint má pásy i kůži vyprodané. **Neplatí to.**
 
-| Produkt                                                                                                                                 | Síla             | Délka              | Šířky      | Cena                                  | Stav                                             |
-| --------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ------------------ | ---------- | ------------------------------------- | ------------------------------------------------ |
-| [Sedlářské nářadí – Kožený řemen 130](https://sedlarskenaradi.cz/kozeny-remen-130-sila-3-8-4mm/)                                        | 3,8–4 mm         | 130 cm             | 2,0–6,0 cm | **122 Kč**                            | Skladem 130 × 2,0 cm; ostatní rozměry 2–3 týdny. |
-| [Křupson – Hovězí kůže na opasek, přírodní 4 cm](https://www.krupson.cz/hovezi-kuze-na-opasek-prirodni--4-cm-delka--130-cm/)            | 3,5–4 mm         | 130 / 150 / 180 cm | 4 cm       | **299 / 329 / 379 Kč**                | **Skladem všechny délky.**                       |
-| [Imago – Hovězí kůže na opasek, přírodní 4 cm](https://www.imago.cz/kuze-na-opasek-prirodni-4cm)                                        | 3,5–4 mm         | neuvedena          | 4 cm       | **299 Kč**                            | Skladem. Způsob činění stránka neuvádí.          |
-| [skladkuzetvurce.cz – Kožené pásy na výrobu opasků](https://www.skladkuzetvurce.cz/kuzetvorba/Kozene-pasy-na-vyrobu-opasku-c1_22_3.htm) | 2,5 / 3,5 / 4 mm | neuvedena          | na dotaz   | ceny se ze stránky nepodařilo přečíst | Nekatalogové šířky řežou na telefonickou žádost. |
+Spolehlivý způsob: k jakékoli jejich URL přidat `.js` a přečíst JSON s variantami, např.
 
-Doporučení: **Křupson 130 cm za 299 Kč** kvůli dostupnosti přesně 4 cm šířky, nebo **Sedlářské
-nářadí za 122 Kč**, pokud nevadí čekání 2–3 týdny na šířku 4 cm.
+```
+curl -sL https://craft-point.cz/products/<slug>.js
+```
+
+JSON má u každé varianty `available` a `price` (v haléřích). Tím se zároveň zjistí, že **cena se
+u pásů liší podle šířky**, což HTML stránka neuvádí.
+
+Skutečný stav u „Řemen z přírodní kůže 3–3,5 mm, 140 cm“ (ověřeno 2026-09-10, všechny šířky skladem):
+15/19/20 mm 184 Kč, 24/25 mm 207 Kč, 28/30 mm 230 Kč, 33/35 mm 258 Kč, **38/40 mm 287 Kč**,
+45 mm 315 Kč, 50 mm 338 Kč. Pro 4cm pásek je tedy relevantní cena **287 Kč**, ne 184 Kč.
+
+| Produkt                                                                                                                                 | Síla             | Délka              | Šířky      | Cena                                  | Stav                                              |
+| --------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ------------------ | ---------- | ------------------------------------- | ------------------------------------------------- |
+| [Sedlářské nářadí – Kožený řemen 130](https://sedlarskenaradi.cz/kozeny-remen-130-sila-3-8-4mm/)                                        | 3,8–4 mm         | 130 cm             | 2,0–6,0 cm | **122 Kč**                            | Skladem 130 × 2,0 cm; ostatní rozměry 2–3 týdny.  |
+| [CraftPoint – Řemen z přírodní kůže, šířka 40 mm](https://craft-point.cz/products/remen-z-prirodni-kuze-3-35mm-140cm-15-80mm)           | 3,0–3,5 mm       | 140 cm             | 15–80 mm   | **287 Kč** (40 mm)                    | **Skladem** všechny šířky. Třísločiněná, italská. |
+| [Křupson – Hovězí kůže na opasek, přírodní 4 cm](https://www.krupson.cz/hovezi-kuze-na-opasek-prirodni--4-cm-delka--130-cm/)            | 3,5–4 mm         | 130 / 150 / 180 cm | 4 cm       | **299 / 329 / 379 Kč**                | **Skladem všechny délky.**                        |
+| [Imago – Hovězí kůže na opasek, přírodní 4 cm](https://www.imago.cz/kuze-na-opasek-prirodni-4cm)                                        | 3,5–4 mm         | neuvedena          | 4 cm       | **299 Kč**                            | Skladem. Způsob činění stránka neuvádí.           |
+| [skladkuzetvurce.cz – Kožené pásy na výrobu opasků](https://www.skladkuzetvurce.cz/kuzetvorba/Kozene-pasy-na-vyrobu-opasku-c1_22_3.htm) | 2,5 / 3,5 / 4 mm | neuvedena          | na dotaz   | ceny se ze stránky nepodařilo přečíst | Nekatalogové šířky řežou na telefonickou žádost.  |
+
+Doporučení: **CraftPoint 40 mm za 287 Kč** (výslovně třísločiněná, skladem) nebo **Křupson 130 cm za
+299 Kč**. **Sedlářské nářadí za 122 Kč** je výrazně nejlevnější, ale na šířku 4 cm uvádí dodací dobu
+2–3 týdny „z důvodu nepravidelných dodávek kvalitních kůží“.
 
 Na co si dát pozor při výběru:
 
@@ -166,3 +178,39 @@ za příplatek poznal. Dvoutrnovou nebrat – zdvojnásobuje děrování.
 Co v seznamu materiálu šablony **není**: **poutko** (keeper), tedy oko, které drží volný konec pásu.
 Dá se vyříznout z odřezku kůže a slepit nebo prošít do kroužku, nebo se vynechá. Zohlednit, až se
 bude psát obsah projektu.
+
+## Peněženka – kolik kůže a jaká (ověřeno 2026-09-10)
+
+Generátor CraftPoint má dvě varianty a u obou spočítá plochu:
+
+| Šablona                                                                                    | Plocha dílů | S 20 % prořezem | Generátor doporučuje | Rozměr po složení            |
+| ------------------------------------------------------------------------------------------ | ----------- | --------------- | -------------------- | ---------------------------- |
+| [Peněženka bifold](https://patterns.craft-point.com/cs/pattern/penezenka-bifold)           | 605 cm²     | **726 cm²**     | „2 × A4“             | 9,6 × 9,4 cm                 |
+| [Slim peněženka bifold](https://patterns.craft-point.com/cs/pattern/slim-penezenka-bifold) | 472 cm²     | **566 cm²**     | „1 × A4“             | 9,6 × 9,0 cm, karty do 89 mm |
+
+Parametry u obou: poloviční šířka, výška, počet kapes na karty (u bifoldu 2–4 kaskádovitě, každá
+další přidá 16 mm) a rozteč stehu (3,0 mm diamant, 3,38 mm francouzská, 4,0 mm diamant, 1 mm kulatá
+po 4 mm). Kování žádné, **šije se** – délka švu 0,4 m, potřeba asi 2 m nitě, tedy jedna cívka 20 m
+vystačí. To je ta samá nit, kterou kupujeme na pouzdro.
+
+**Tloušťka: „třísločiněná kůže 1.2 mm (vnější i vnitřní část)“.** To je spodní hranice našeho
+katalogového rozsahu 1,2–1,5 mm, takže je to **stejná kůže jako na pouzdro**, jen víc.
+
+Kolik kupovat: A4 je 623,7 cm², A3 je 1 247 cm². Slim se do A4 teoreticky vejde (566 cm²), ale
+zbývá 10 % rezervy – při první peněžence to nestačí na to, aby se dal jeden díl přeříznout znovu.
+**Na obě varianty kupovat A3.**
+
+Ověřená dostupnost 1,2 mm třísločiněné lícové kůže u CraftPointu (přes `.js`, 2026-09-10):
+
+| Kůže                                                                                                      | A4     | A3         | A2       |
+| --------------------------------------------------------------------------------------------------------- | ------ | ---------- | -------- |
+| [Juchtová (nejlevnější)](https://craft-point.cz/products/hovezi-kuze-licova-juchtova-trislocinena-1-2-mm) | 184 Kč | **367 Kč** | 734 Kč   |
+| [Karamelová](https://craft-point.cz/products/trislocinena-hovezi-kuze-licova-1-2-mm-karamelova)           | 252 Kč | **504 Kč** | 1 008 Kč |
+| [Whisky](https://craft-point.cz/products/hovezi-licova-kuze-trislocinena-1-2-mm-whisky)                   | 252 Kč | 504 Kč     | 1 008 Kč |
+| [T. moro](https://craft-point.cz/products/hovezi-kuze-licova-trislocinena-1-2-mm-t-moro)                  | 252 Kč | 504 Kč     | –        |
+
+Vše skladem kromě A5 u varianty Whisky. Další odstíny ve stejné tloušťce: giallo, blu, verde, rosso.
+
+**Pozn. k opravě katalogu:** položka `veg-tan-leather` má u příkladu „Whisky“ zapsáno
+`availability: 'unavailable'` s datem 2026-09-07 na základě špatného čtení stránky. A4, A3 i A2 jsou
+skladem – při další revizi obsahu opravit a přidat juchtovou jako levnější příklad.
