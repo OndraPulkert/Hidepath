@@ -510,3 +510,35 @@ Titulní strana uvádí v materiálech „**Šroubovací nýty (Chicago šrouby)
 šroubovacího nýtu (hlavička + šroubek). Rozlišit to z PDF nejde. Při ceně 8 Kč/ks je bezpečné
 koupit dva. **Pro nás poučení: v našich vlastních šablonách musí seznam materiálu a značky ve
 výkresu souhlasit, jinak si uživatel nemá jak ověřit, co je správně.**
+
+## Vlastní šablona: konec opasku se 4 otvory a poutkem
+
+`pnpm pattern:belt-end` → `docs/generated/opasek-konec-u-prezky.svg` + `.pdf` (A4, 1:1, PDF je
+ignorovaný jako výstup, SVG je verzované). Generátor: `scripts/belt-buckle-end.ts`, parametry
+v `DEFAULTS`.
+
+Doplňuje šablonu CraftPointu tam, kde ona poutko neumožňuje: má **dva nýty**, tedy **čtyři otvory**
+symetrické k ohybu, a mezi nimi kapsu, ve které poutko zůstane uvězněné.
+
+| Prvek            | Hodnota                         | Odkud                                                                                      |
+| ---------------- | ------------------------------- | ------------------------------------------------------------------------------------------ |
+| Šířka pásu       | 40 mm                           | zadání                                                                                     |
+| Drážka pro trn   | 40 × 8 mm, ohyb ji půlí         | odměřeno z PDF CraftPoint                                                                  |
+| Ø otvoru pro nýt | 6 mm                            | odměřeno z PDF CraftPoint + BFLG                                                           |
+| Nýty             | **± 25,5 a ± 73,2 mm** od ohybu | odměřeno z BFLG                                                                            |
+| Kapsa pro poutko | **47,7 mm**                     | rozdíl obou poloh nýtů                                                                     |
+| Přehnutý konec   | 90 mm                           | odměřeno z BFLG                                                                            |
+| Zaoblení konce   | půlkruh r = 20 mm               | **volba této šablony**                                                                     |
+| Poutko           | pásek **111 × 12 mm**           | **volba této šablony**: obvod zdvojené části 2 × (40 + 2 × 4) = 96 mm + 15 mm přeplátování |
+
+Nýty se kupují **2 kusy**, ne 4 – každý prochází oběma vrstvami.
+
+**Ověření výstupu** (render 300 dpi, stejný postup jako u cizích šablon): list A4 209,9 × 297,0 mm,
+šířka pásu **39,96 mm**, kalibrační čtverec **50,04 × 50,00 mm**, prvky na střednici v 58,76 /
+106,47 / 115,95 / **132,00 (ohyb)** / 147,96 / 157,44 / 205,19 / 221,95 mm – tedy nýty ± 73,2
+a ± 25,5 mm a konce drážky ± 16 mm od ohybu, symetricky do 0,1 mm. Při první verzi měření odhalilo
+kolizi popisky s kalibračním čtvercem; opraveno přesunem čtverce.
+
+Délka poutka a zaoblení konce jsou **spočítané, ne ověřené praxí** – před řezáním vyzkoušet na
+odřezku. Zvlášť poutko: 12mm pásek má v kapse 47,7 mm vůli, takže se bude posouvat. Kdo chce poutko
+těsné, ať posune nýty blíž k sobě (parametr `rivetOffsetsMm`) a šablonu vygeneruje znovu.
