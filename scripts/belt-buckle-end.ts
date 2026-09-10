@@ -546,10 +546,11 @@ export function buildBeltPlateSvg(
   const ay = L.tipRowY;
   const tanPt = tipTangentPoint({ ...tip, beltWidthMm: 2 * L.tipCutoutHalfMm });
   // Vyříznutý tvar špičky: obtahuje se jeho vnitřní hrana, materiál drží kolem.
+  // Vrchol vpravo, široký konec vlevo (k dírkám): pás se od dírek k vrcholu zužuje.
   cut.push(
     `<path d="M${f(L.tipFarX)} ${f(ay - L.tipCutoutHalfMm)} ` +
-      `L${f(L.tipApexX + tanPt.fromApexMm)} ${f(ay - tanPt.halfWidthMm)} ` +
-      `A${f(tip.noseRadiusMm)} ${f(tip.noseRadiusMm)} 0 0 0 ${f(L.tipApexX + tanPt.fromApexMm)} ${f(ay + tanPt.halfWidthMm)} ` +
+      `L${f(L.tipApexX - tanPt.fromApexMm)} ${f(ay - tanPt.halfWidthMm)} ` +
+      `A${f(tip.noseRadiusMm)} ${f(tip.noseRadiusMm)} 0 0 1 ${f(L.tipApexX - tanPt.fromApexMm)} ${f(ay + tanPt.halfWidthMm)} ` +
       `L${f(L.tipFarX)} ${f(ay + L.tipCutoutHalfMm)} Z" ` +
       `fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`,
   );
@@ -610,7 +611,8 @@ export function buildBeltPlateSvg(
    */
   const rulerY = 6;
   const rulerX0 = L.strapEndChamferMm + 2;
-  const rulerX1 = W - LASER.marginMm;
+  // Pravítko musí skončit před vyříznutou špičkou, jinak by laser gravíroval do prázdna.
+  const rulerX1 = Math.min(W - LASER.marginMm, L.tipFarX - 4);
   for (let mm = 0; rulerX0 + mm <= rulerX1; mm += 1) {
     const len = mm % 50 === 0 ? 7 : mm % 10 === 0 ? 5 : mm % 5 === 0 ? 3.5 : 2;
     engrave.push(
@@ -626,7 +628,7 @@ export function buildBeltPlateSvg(
   const lineX0 = scaleX + 7 + 3;
   // Linky nesmí zajet do vyříznuté špičky ani do závěsného otvoru: laser by
   // gravíroval do prázdna a linka by byla přerušená.
-  const tipRowX1 = L.tipApexX - 4;
+  const tipRowX1 = L.tipFarX - 4;
   const buckleRowX1 = L.hangHoleX - L.hangHoleMm / 2 - 3;
   L.guides.forEach((g, i) => {
     for (const rowY of [ay, by]) {

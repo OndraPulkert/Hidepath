@@ -392,10 +392,17 @@ export interface BeltPlateLayout {
   buckleRowY: number;
   /** Vrchol vyříznuté špičky. */
   tipApexX: number;
-  /** Kde vyříznutá špička dosáhne své plné šířky. */
+  /**
+   * Kde vyříznutá špička dosáhne své plné šířky. Leží **vlevo od vrcholu**, směrem
+   * k dírkám: pás se od dírek k vrcholu zužuje, ne naopak.
+   */
   tipFarX: number;
   /** Poloviční šířka vyříznutého tvaru špičky na širokém konci. */
   tipCutoutHalfMm: number;
+  /** Použitelná délka podélného pravítka u horní hrany. */
+  rulerLengthMm: number;
+  /** Nejdelší pásek na poutko, který může být potřeba (nejširší pás, tloušťka 5 mm). */
+  maxKeeperStripMm: number;
   /** Vodicí linky: šířka pásu a její odsazení od osy. */
   guides: { beltWidthMm: number; offsetMm: number }[];
   guideLabelHeightMm: number;
@@ -433,9 +440,10 @@ export function beltPlateLayout(
   const lastOffset = offsets[offsets.length - 1]!;
 
   // Řada se špičkou: nejlevější dírka na `m` od hrany určí polohu vrcholu.
+  // Vrchol je nejvíc vpravo, tedy nejdál od dírek – pás se k němu zužuje.
   const apexX = m + lastOffset;
-  const farX = apexX + tipLen;
-  const plateWidth = Math.ceil(farX + m);
+  const farX = apexX - tipLen;
+  const plateWidth = Math.ceil(apexX + m);
 
   const tipRowY = m + cutoutHalf;
   const buckleRowY = tipRowY + plate.rowPitchMm;
@@ -450,6 +458,8 @@ export function beltPlateLayout(
     tipApexX: apexX,
     tipFarX: farX,
     tipCutoutHalfMm: cutoutHalf,
+    rulerLengthMm: Math.min(plateWidth - m, farX - 4) - (plate.strapEndChamferMm + 2),
+    maxKeeperStripMm: 2 * (plate.maxBeltWidthMm + 2 * 5) + end.keeperOverlapMm,
     guides: [...plate.guideWidthsMm]
       .sort((a, b) => b - a)
       .map((bw) => ({ beltWidthMm: bw, offsetMm: bw / 2 })),
@@ -493,8 +503,8 @@ export function checkBeltPlate(
   const half = L.maxBeltWidthMm / 2;
 
   gap('Od nejlevější dírky pro trn k hraně destičky', L.tipHoleXs[L.tipHoleXs.length - 1]! - mr);
-  gap('Od vyříznuté špičky k pravé hraně destičky', L.plateWidthMm - L.tipFarX);
-  gap('Mezi vyříznutou špičkou a nejbližší dírkou pro trn', L.tipApexX - 0 - L.tipHoleXs[0]! - mr);
+  gap('Od vrcholu špičky k pravé hraně destičky', L.plateWidthMm - L.tipApexX);
+  gap('Mezi širokým koncem špičky a nejbližší dírkou pro trn', L.tipFarX - L.tipHoleXs[0]! - mr);
   gap('Mezi řadami', L.buckleRowY - half - (L.tipRowY + L.tipCutoutHalfMm));
   gap('Od vyříznuté špičky k horní hraně', L.tipRowY - L.tipCutoutHalfMm);
   gap('Od osy řady s přezkou ke spodní hraně', L.plateHeightMm - L.buckleRowY - half);
@@ -516,6 +526,14 @@ export function checkBeltPlate(
     'Od zkosení levého horního rohu k pásu na řadě se špičkou',
     L.tipRowY - half - L.strapEndChamferMm,
   );
+  // Pravítko musí pokrýt i nejdelší pásek na poutko, jinak nemá smysl.
+  if (L.rulerLengthMm < L.maxKeeperStripMm) {
+    problems.push(
+      `Pravítko má ${L.rulerLengthMm.toFixed(1)} mm, ale nejdelší pásek na poutko může být ` +
+        `${L.maxKeeperStripMm} mm. Změř ho jinak nebo prodluž destičku.`,
+    );
+  }
+
   // Vodicí linky musí být čitelně od sebe a vejít se na destičku.
   const offs = L.guides.map((g) => g.offsetMm).sort((a, b) => a - b);
   for (let i = 1; i < offs.length; i++) {

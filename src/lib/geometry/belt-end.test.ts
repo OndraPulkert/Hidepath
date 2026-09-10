@@ -232,7 +232,7 @@ describe('plochá destička pro všechny šířky', () => {
   });
 
   it('je kompaktní destička, ne dlouhý pásek', () => {
-    expect(L.plateWidthMm).toBe(270);
+    expect(L.plateWidthMm).toBe(215);
     expect(L.plateHeightMm).toBe(127);
     expect(L.minBeltWidthMm).toBe(28);
     expect(L.maxBeltWidthMm).toBe(45);
@@ -271,6 +271,25 @@ describe('plochá destička pro všechny šířky', () => {
     const tight = { ...DEFAULT_BELT_PLATE, rowPitchMm: 46 };
     expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, tight).join(' ')).toContain(
       'Mezi řadami',
+    );
+  });
+
+  it('vyříznutá špička se zužuje SMĚREM OD dírek, ne k nim', () => {
+    // Regrese: první verze měla trojúhelník obráceně – pás by se rozšiřoval za vrcholem.
+    // Vrchol musí být dál od dírek než široký konec.
+    const nearestHole = Math.max(...L.tipHoleXs);
+    expect(L.tipFarX).toBeGreaterThan(nearestHole);
+    expect(L.tipApexX).toBeGreaterThan(L.tipFarX);
+    // Vrchol je 144,3 mm od prostřední dírky, jako na tiskové šabloně.
+    expect(L.tipApexX - L.middleHoleX).toBeCloseTo(apexToMiddleHoleMm(DEFAULT_BELT_TIP), 6);
+  });
+
+  it('podélné pravítko pokryje i nejdelší pásek na poutko', () => {
+    expect(L.rulerLengthMm).toBeGreaterThanOrEqual(L.maxKeeperStripMm);
+    // Přehnaně velký výřez špičky posune jeho široký konec doleva a pravítko zkrátí.
+    const huge = { ...DEFAULT_BELT_PLATE, tipCutoutOversizeMm: 40 };
+    expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, huge).join(' ')).toContain(
+      'Pravítko má',
     );
   });
 

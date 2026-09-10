@@ -931,3 +931,33 @@ složeném konci** — obtočí se papírový pásek, označí přeplátování 
 Dále `docs/generated/opasek-desticka-vysvetlivky.svg`: tentýž tvar s popisky, co je co.
 **Není to řezací soubor** — obsahuje živý text. Test to odděluje: řezací soubor se hledá jako
 `opasek-desticka` **bez** `vysvetlivky` a ověřuje se, že vysvětlivky text mají a řez ne.
+
+### Obrácený trojúhelník – oprava (2026-09-10)
+
+Autor se podíval na vysvětlivky a zeptal se, jestli nemá být trojúhelník naopak. **Měl.**
+
+Vyříznutý tvar špičky měl vrchol **blíž k dírkám** než široký konec, takže pás by se
+za vrcholem rozšiřoval. Správně se pás od dírek k vrcholu **zužuje** a vrchol je nejdál od přezky —
+tak to má i tisková šablona (vrchol y = 45, dírky y = 139,3…239,3), která je ověřená proti
+CraftPointu. Zrcadlově obráceno: vrchol vpravo (x = 204,30), široký konec vlevo (x = 149,29),
+nejbližší dírka na 110 mm, tedy 39,3 mm od širokého konce.
+
+Vedlejší efekt: destička se zkrátila z **270 na 215 mm**, protože délku dřív určoval široký konec.
+
+Zafixováno testem `vyříznutá špička se zužuje SMĚREM OD dírek, ne k nim`, který kontroluje, že
+široký konec leží mezi nejbližší dírkou a vrcholem.
+
+Při té příležitosti opraveno i pravítko: končí **před širokým koncem výřezu** (135 mm), jinak by
+laser gravíroval do prázdna. Nová kontrola hlásí, kdyby pravítko nepokrylo nejdelší možný pásek na
+poutko (125 mm pro pás 45 mm o tloušťce 5 mm). Ověřeno, že do pásma výřezu nezasahuje žádný
+gravírovaný tah.
+
+### Vejde se tam šídlo?
+
+Dotaz autora. **Šídlo ano, tužka ne.**
+
+- **Otvory Ø 2 mm:** kužel šídla se v otvoru sám vystředí, takže značka sedne na střed a přesnost
+  je lepší než průměr otvoru. Tužka se do 3 mm hlubokého otvoru nedostane a nevystředí se.
+- **Obtahování výřezů:** šídlo hranu sleduje. U samotného vrcholu špičky (rádius 4 mm) se
+  posledních pár milimetrů dotahuje od ruky — je to oblouk, který se tak jako tak řeže a brousí,
+  takže to nevadí.

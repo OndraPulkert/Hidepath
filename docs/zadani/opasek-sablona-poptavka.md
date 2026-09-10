@@ -6,13 +6,15 @@
 `docs/generated/opasek-desticka.svg` (řezací soubor) a
 `docs/generated/opasek-desticka-kontrolni-tisk.pdf` (papírová kontrola před objednáním).
 
-**Destička 270 × 127 mm, čirý akrylát 3 mm, pro pásky 28–45 mm.** Dvě řady:
+**Destička 215 × 127 mm, čirý akrylát 3 mm, pro pásky 28–45 mm.** Dvě řady:
 
 - **Horní řada – špička a dírky pro trn.** Vyříznutý tvar špičky, 5 otvorů pro dírky, dva
   rozlišovací otvory u prostřední dírky. Umisťuje se **podle prostřední dírky**.
 - **Dolní řada – konec u přezky.** Vyříznutý ovál pro trn, 4 otvory pro nýty, 2 značky linie
   ohybu. Umisťuje se **podle levé krátké hrany destičky = konec pásu**.
 - **Gravírované vodicí linky pro šířky 30 / 35 / 40 / 45 mm** s čísly u každé — v obou řadách.
+- **Příčná milimetrová stupnice** v obou řadách pro šířky bez linky a **podélné pravítko** (135 mm)
+  u horní hrany na měření délky pásku na poutko.
 - **Zkosený levý horní roh** značí, která krátká hrana je konec pásu.
 - **Závěsný otvor Ø 4 mm** v pravém dolním rohu.
 
@@ -32,6 +34,9 @@ a **stop určí hrana pásu**.
    paralaxa nulová. Otvory a výřezy paralaxou netrpí, šídlo i nůž se kůže fyzicky dotknou.
 2. **Značkuj rýsovacím šídlem, ne tužkou.** Kužel šídla se v otvoru Ø 2 mm sám vystředí, takže
    značka sedne na střed. Tužka se do 3 mm hlubokého otvoru nedostane a nevystředí se.
+   Totéž u obtahování výřezů: šídlo hranu sleduje, tužka je moc tlustá. U samotného
+   vrcholu špičky (rádius 4 mm) posledních pár milimetrů dotáhni od ruky — je to oblouk,
+   který se tak jako tak řeže a brousí.
 3. **Nic z toho není odzkoušené v praxi.** Geometrie je ověřená proti dvěma komerčním šablonám
    a křížově proti naší tiskové verzi, ale destičku jsem nikdy nedržel v ruce ani já, ani ty.
    První pásek je zkouška — proto se před objednáním akrylátu vyplatí vytisknout kontrolní PDF
@@ -53,7 +58,7 @@ a **stop určí hrana pásu**.
 6. Vysekni 4,5mm dírky a nakonec vyřízni špičku.
 
 **Před objednáním** vytiskni kontrolní PDF na **A4 na šířku na 100 %** a přeměř obrys: musí být
-**270 × 127 mm**. Obrys sám je kalibrace, jiná značka není potřeba.
+**215 × 127 mm**. Obrys sám je kalibrace, jiná značka není potřeba.
 
 ### Poutko: žádné otvory navíc
 

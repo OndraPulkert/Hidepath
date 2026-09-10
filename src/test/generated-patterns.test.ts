@@ -376,6 +376,31 @@ describe('destička na opasek', () => {
     expect(foldMarks.length).toBe(2);
   });
 
+  it('vyříznutá špička míří vrcholem od dírek a nic do ní nezasahuje', () => {
+    const cut = plate!.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
+    const eng = plate!.split('<g id="engrave">')[1]?.split('</g>')[0] ?? '';
+    const tipPath = [...cut.matchAll(/<path d="([^"]+)"/g)]
+      .map((m) => m[1]!)
+      .find((d) => (d.match(/A/g) ?? []).length === 1);
+    expect(tipPath).toBeDefined();
+    const n = [...tipPath!.matchAll(/[-\d.]+/g)].map((m) => Number(m[0]));
+    const farX = n[0]!;
+    expect(farX, 'široký konec je vlevo od vrcholu').toBeLessThan(L.tipApexX);
+    expect(farX, 'široký konec je vpravo od nejbližší dírky').toBeGreaterThan(
+      Math.max(...L.tipHoleXs),
+    );
+    // Do pásma výřezu nesmí zajít žádné gravírování.
+    const intruding = [...eng.matchAll(/M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)/g)]
+      .map((m) => [Number(m[1]), Number(m[2]), Number(m[3]), Number(m[4])] as const)
+      .filter(
+        ([x1, y1, x2, y2]) =>
+          Math.max(x1, x2) > farX + 0.01 &&
+          Math.min(y1, y2) >= L.tipRowY - L.tipCutoutHalfMm &&
+          Math.max(y1, y2) <= L.tipRowY + L.tipCutoutHalfMm,
+      );
+    expect(intruding).toEqual([]);
+  });
+
   it('obrys má zkosený levý horní roh jako značku konce pásu', () => {
     const cutL = plate!.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
     const outline = [...cutL.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)[0]!;
@@ -393,8 +418,8 @@ describe('destička na opasek', () => {
     // Pravítko musí pokrýt aspoň délku pásku na poutko pro nejširší pás.
     const xs = ticks.map((t) => t.x1);
     const span = Math.max(...xs) - Math.min(...xs);
-    expect(ticks.length, 'dílky pravítka').toBeGreaterThan(200);
-    expect(span, 'rozsah pravítka').toBeGreaterThan(2 * (L.maxBeltWidthMm + 2 * 5) + 15);
+    expect(ticks.length, 'dílky pravítka').toBeGreaterThan(100);
+    expect(span, 'rozsah pravítka').toBeGreaterThanOrEqual(L.maxKeeperStripMm);
   });
 
   it('vysvětlivky jsou samostatný soubor a nejsou určené řezárně', () => {
