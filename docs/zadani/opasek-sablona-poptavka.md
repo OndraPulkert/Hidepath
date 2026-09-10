@@ -1,25 +1,38 @@
 # Poptávka na vyřezání šablony opasku (text k odeslání)
 
-## Doporučená varianta: jedna univerzální deska
+## Doporučená varianta: jedna plochá destička
 
-`pnpm pattern:belt-end --multi` → `docs/generated/opasek-sablona-univerzalni-deska.svg`
+`pnpm pattern:belt-end --multi` → `docs/generated/opasek-desticka.svg`
 
-**Jedna deska 45 × 405 mm pro pásky šířky 28–45 mm.** Funguje proto, že polohy všech otvorů podél
-pásu na šířce nezávisí a koncové body zkosení špičky pro všechny šířky leží na jedné a téže přímce
-(ověřeno pro 30 / 32 / 35 / 38 / 40 / 45 mm). Zkosení se obtáhne a **stop určí hrana kupovaného
-pásu** — proto na desce nejsou žádné značky velikostí, byly by zbytečné a rozbíjely by hranu, po
-které se vede šídlo.
+**Destička 270 × 127 mm, čirý akrylát 3 mm, pro pásky 28–45 mm.** Dvě řady:
 
-Deska nese: zkosenou špičku s obloukem vrcholu, 5 dírek pro trn, dva rozlišovací otvory
-u prostřední dírky, vyrovnávací drážku na ose, otvor na zavěšení, vyříznutou drážku pro trn,
-4 otvory pro nýty a 2 značky linie ohybu mimo osu. Spodní hrana desky je konec pásu, dá se podle
-ní označit odříznutí.
+- **Horní řada – špička a dírky pro trn.** Vyříznutý tvar špičky, 5 otvorů pro dírky, dva
+  rozlišovací otvory u prostřední dírky. Umisťuje se **podle prostřední dírky**.
+- **Dolní řada – konec u přezky.** Vyříznutý ovál pro trn, 4 otvory pro nýty, 2 značky linie
+  ohybu. Umisťuje se **podle levé krátké hrany destičky = konec pásu**.
+- **Zkosený levý horní roh** značí, která krátká hrana je konec pásu.
+- **Závěsný otvor Ø 4 mm** v pravém dolním rohu.
 
-**Materiál musí být ČIRÝ akrylát 3–4 mm** — přes desku se dívá na narýsovanou střednici pásu
-a vyrovnává se podle úzké drážky. U neprůhledného materiálu deska nefunguje.
+Jedna destička stačí na všechny šířky proto, že polohy všech otvorů podél pásu na šířce nezávisí
+a koncové body zkosení špičky pro všechny šířky leží na jedné a téže přímce. Zkosení se obtáhne
+a **stop určí hrana kupovaného pásu**.
 
-Poutko na desce záměrně není: jeho délka závisí na šířce i tloušťce pásu a měří se na složeném
-pásku, takže univerzální díl pro něj neexistuje. Vyřízne se z odřezku podle míry.
+### Jak se destička používá
+
+1. **Narýsuj na pás střednici** (dva body ve w/2 od hrany, spojit pravítkem). Přes čirý akrylát ji
+   uvidíš a podle ní destičku vystředíš — proto musí být materiál průhledný.
+2. **Konec u přezky:** přilož destičku dolní řadou na konec pásu, **levou hranou destičky přesně na
+   konec pásu**. Označ šídlem 4 otvory pro nýty a 2 značky linie ohybu, obtáhni ovál pro trn.
+3. Vysekni 6mm otvory pro nýty a konce oválu, ovál mezi nimi vyřízni nožem. Spoj obě značky ohybu
+   pravítkem. Navlékni poutko, ohni konec kolem přezky, sešroubuj nýty.
+4. **Vyzkoušej pásek na sobě** a označ, kam padne trn. To je prostřední dírka.
+5. **Špička:** přilož destičku horní řadou tak, aby **prostřední otvor** (ten se dvěma
+   rozlišovacími po stranách) ležel na té značce. Označ zbylé 4 dírky a obtáhni zkosení špičky —
+   **jen dokud nedojdeš k hraně pásu**, dál už je výřez záměrně širší než pás.
+6. Vysekni 4,5mm dírky a nakonec vyřízni špičku.
+
+Poutko na destičce záměrně není: jeho délka závisí na šířce i tloušťce pásu a měří se na složeném
+pásku. Vyřízne se z odřezku podle míry.
 
 ## Varianta na míru jedné šířce
 
@@ -43,13 +56,13 @@ Soubor je **1:1 v milimetrech**, list 210 mm široký. Obsahuje tři díly: kone
 > Prosím **neměnit měřítko ani soubor nepřizpůsobovat formátu**; rozměry jsou funkční, jde
 > o šablonu pro řemeslnou výrobu.
 >
-> **Materiál:** **čirý** akrylát (plexisklo) **3 mm** (klidně 4 mm, deska je dlouhá).
-> Průhlednost je funkční požadavek, ne estetika — přes šablonu se dívám na rysku na materiálu.
+> **Materiál:** **čirý** akrylát (plexisklo) **3 mm**.
+> Průhlednost je funkční požadavek, ne estetika — přes destičku se dívám na rysku na materiálu.
 >
 > **Počet:** 1 ks.
 >
-> V souboru je **1 jednotka = 1 mm**. Úzká drážka **1,5 mm** na ose je vyrovnávací a je funkční —
-> prosím nevyplňovat ani nevynechávat.
+> V souboru je **1 jednotka = 1 mm**. **Zkosený levý horní roh** je záměrný, je to značka
+> orientace. **Vyříznutý trojúhelníkový tvar** a **ovál** jsou funkční výřezy, prosím nevynechávat.
 >
 > **Soubor je jen na řez** — jedna vrstva `cut`, žádný text, žádná výplň, všechny kontury uzavřené.
 > Není potřeba nic gravírovat.

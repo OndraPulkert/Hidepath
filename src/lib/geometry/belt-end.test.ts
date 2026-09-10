@@ -5,16 +5,15 @@ import {
   type BeltTipSpec,
   DEFAULT_BELT_END,
   DEFAULT_BELT_TIP,
-  DEFAULT_MULTI_PLATE,
+  DEFAULT_BELT_PLATE,
   adjustmentRangeMm,
   apexToLastHoleMm,
   apexToMiddleHoleMm,
   checkBeltTipSpec,
-  checkMultiPlate,
+  checkBeltPlate,
   holeOffsetsFromApexMm,
   middleHoleIndex,
-  multiPlateLayout,
-  multiPlateMinBeltWidthMm,
+  beltPlateLayout,
   tipHalfWidthAtMm,
   tipLengthMm,
   tipTangentPoint,
@@ -216,62 +215,87 @@ describe('tvar anglické špičky', () => {
   });
 });
 
-describe('univerzální deska pro všechny šířky', () => {
-  const L = multiPlateLayout(DEFAULT_BELT_END, DEFAULT_BELT_TIP);
+describe('plochá destička pro všechny šířky', () => {
+  const L = beltPlateLayout(DEFAULT_BELT_END, DEFAULT_BELT_TIP);
 
   it('rozvržení projde kontrolami', () => {
-    expect(checkMultiPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP)).toEqual([]);
+    expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP)).toEqual([]);
   });
 
   it('koncové body zkosení pro všechny šířky leží na jedné přímce', () => {
-    // Tohle je důvod, proč jedna deska stačí: jeden pár boků obsahuje každou šířku.
+    // Tohle je důvod, proč jeden vyříznutý tvar špičky stačí na každou šířku.
+    const widest = { ...DEFAULT_BELT_TIP, beltWidthMm: DEFAULT_BELT_PLATE.maxBeltWidthMm };
     for (const w of [30, 32, 35, 38, 40, 45]) {
       const t = { ...DEFAULT_BELT_TIP, beltWidthMm: w };
-      // Poloviční šířka na konci hrotu se musí rovnat w/2 – tedy bod leží na téže přímce.
-      expect(tipHalfWidthAtMm(t, tipLengthMm(t))).toBeCloseTo(w / 2, 6);
-      // A tatáž funkce pro nejširší desku dá v té výšce stejnou hodnotu.
-      const widest = { ...DEFAULT_BELT_TIP, beltWidthMm: 45 };
       expect(tipHalfWidthAtMm(widest, tipLengthMm(t))).toBeCloseTo(w / 2, 6);
     }
   });
 
-  it('má správnou délku a polohy značek', () => {
-    expect(L.plateWidthMm).toBe(45);
-    expect(L.plateLengthMm).toBe(405);
-    expect(L.tipHoleYs).toEqual([94.3, 119.3, 144.3, 169.3, 194.3]);
-    expect(L.middleHoleY).toBeCloseTo(144.3, 6);
-    expect(L.foldY).toBe(315);
-    expect(L.rivetYs).toEqual([241.8, 289.5, 340.5, 388.2]);
-    expect(L.slotY0).toBeCloseTo(302.5, 6);
-    expect(L.slotY1).toBeCloseTo(327.5, 6);
-    expect(L.bottomY).toBe(405);
+  it('je kompaktní destička, ne dlouhý pásek', () => {
+    expect(L.plateWidthMm).toBe(270);
+    expect(L.plateHeightMm).toBe(127);
+    expect(L.minBeltWidthMm).toBe(28);
+    expect(L.maxBeltWidthMm).toBe(45);
   });
 
-  it('spodní hrana desky je konec pásu, aby se podle ní dalo odříznout', () => {
-    expect(L.bottomY - L.foldY).toBeCloseTo(DEFAULT_BELT_END.tailLengthMm, 6);
+  it('řada se špičkou drží špičku i všech pět dírek, aby stačilo jedno přiložení', () => {
+    [110, 85, 60, 35, 10].forEach((x, i) => {
+      expect(L.tipHoleXs[i]!, `dírka ${i + 1}`).toBeCloseTo(x, 6);
+    });
+    expect(L.middleHoleX).toBeCloseTo(60, 6);
+    // Vrchol špičky je 144,3 mm od prostřední dírky, stejně jako na tiskové šabloně.
+    expect(L.tipApexX - L.middleHoleX).toBeCloseTo(apexToMiddleHoleMm(DEFAULT_BELT_TIP), 6);
+  });
+
+  it('levá hrana destičky je konec pásu, takže ohyb leží 90 mm od ní', () => {
+    expect(L.foldX).toBeCloseTo(DEFAULT_BELT_END.tailLengthMm, 6);
+    [-73.2, -25.5, 25.5, 73.2].forEach((d, i) => {
+      expect(L.rivetXs[i]! - L.foldX, `nýt ${i + 1}`).toBeCloseTo(d, 6);
+    });
+  });
+
+  it('řady jsou od sebe dál než nejširší pás, aby se nepletly', () => {
+    expect(L.buckleRowY - L.tipRowY).toBeGreaterThan(L.maxBeltWidthMm);
   });
 
   it('značky mimo osu leží na pásu i u nejužší podporované šířky', () => {
-    const min = multiPlateMinBeltWidthMm(DEFAULT_MULTI_PLATE);
-    expect(min).toBe(28);
-    // U pásu 28 mm je hrana 14 mm od osy, značka 12 mm – tedy 2 mm od hrany.
-    expect(min / 2 - DEFAULT_MULTI_PLATE.offAxisMarkMm).toBeCloseTo(2, 6);
+    expect(L.minBeltWidthMm / 2 - L.offAxisMarkMm).toBeCloseTo(2, 6);
   });
 
-  it('odmítne desku užší než pás', () => {
-    const problems = checkMultiPlate(DEFAULT_BELT_END, { ...DEFAULT_BELT_TIP, beltWidthMm: 50 });
+  it('odmítne destičku užší než pás', () => {
+    const problems = checkBeltPlate(DEFAULT_BELT_END, { ...DEFAULT_BELT_TIP, beltWidthMm: 50 });
     expect(problems.join(' ')).toContain('užší než pás');
   });
 
-  it('odmítne rozvržení, kde by se značky dostaly k sobě blíž než minimální můstek', () => {
-    const tight = { ...DEFAULT_MULTI_PLATE, apexToFoldMm: 250 };
-    expect(checkMultiPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, tight).length).toBeGreaterThan(0);
+  it('odmítne příliš malý rozestup řad', () => {
+    const tight = { ...DEFAULT_BELT_PLATE, rowPitchMm: 46 };
+    expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, tight).join(' ')).toContain(
+      'Mezi řadami',
+    );
   });
 
-  it('odmítne značky mimo osu příliš u hrany desky', () => {
-    const wide = { ...DEFAULT_MULTI_PLATE, offAxisMarkMm: 21 };
-    expect(checkMultiPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, wide).join(' ')).toContain(
-      'k hraně desky',
+  it('vyříznutá špička je širší než nejširší pás, aby její příčná hrana nebyla na kůži', () => {
+    expect(L.tipCutoutHalfMm).toBeGreaterThan(L.maxBeltWidthMm / 2);
+    // U nejširšího podporovaného pásu leží uzavírací hrana 5 mm za jeho okrajem.
+    expect(L.tipCutoutHalfMm - L.maxBeltWidthMm / 2).toBeCloseTo(5, 6);
+    const flush = { ...DEFAULT_BELT_PLATE, tipCutoutOversizeMm: 0 };
+    expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, flush).join(' ')).toContain(
+      'ležela na kůži',
+    );
+  });
+
+  it('zkosení rohu nesmí zasáhnout do pásma, kde leží pás', () => {
+    expect(L.strapEndChamferMm).toBeGreaterThan(0);
+    const big = { ...DEFAULT_BELT_PLATE, strapEndChamferMm: 20 };
+    expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, big).join(' ')).toContain(
+      'zkosení levého horního rohu',
+    );
+  });
+
+  it('odmítne značky mimo osu mimo nejširší pás', () => {
+    const wide = { ...DEFAULT_BELT_PLATE, offAxisMarkMm: 22 };
+    expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, wide).join(' ')).toContain(
+      'mimo nejširší',
     );
   });
 });

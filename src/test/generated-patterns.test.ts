@@ -10,7 +10,7 @@ import {
   keeperStripLengthMm,
   holeOffsetsFromApexMm,
   ligamentMm,
-  multiPlateLayout,
+  beltPlateLayout,
   tipLengthMm,
 } from '@/lib/geometry/belt-end.ts';
 
@@ -29,7 +29,7 @@ const svgs: Record<string, string> = import.meta.glob('/docs/generated/*.svg', {
 const cz = (n: number): string => (Math.round(n * 1000) / 1000).toString().replace('.', ',');
 const cz1 = (n: number): string => cz(Math.round(n * 10) / 10);
 
-const plate = Object.entries(svgs).find(([path]) => path.includes('univerzalni-deska'))?.[1];
+const plate = Object.entries(svgs).find(([path]) => path.includes('opasek-desticka'))?.[1];
 
 const lasers = Object.entries(svgs)
   .map(([path, svg]) => ({
@@ -219,76 +219,84 @@ describe('řezací soubor pro laser', () => {
   });
 });
 
-describe('univerzální deska', () => {
-  const L = multiPlateLayout(DEFAULT_BELT_END, DEFAULT_BELT_TIP);
+describe('destička na opasek', () => {
+  const L = beltPlateLayout(DEFAULT_BELT_END, DEFAULT_BELT_TIP);
   const circles = (svg: string, r: number): { x: number; y: number }[] =>
     [...svg.matchAll(/<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([\d.]+)"/g)]
       .filter((m) => Number(m[3]) === r)
       .map((m) => ({ x: Number(m[1]), y: Number(m[2]) }));
 
   it('soubor existuje a je čistě řezový', () => {
-    expect(plate, 'docs/generated/opasek-sablona-univerzalni-deska.svg').toBeDefined();
+    expect(plate, 'docs/generated/opasek-desticka.svg').toBeDefined();
     expect(plate!).toContain('<g id="cut">');
     expect(plate!, 'žádný text').not.toContain('<text');
     expect([...plate!.matchAll(/fill="(?!none)/g)].length, 'žádná výplň').toBe(0);
     for (const d of [...plate!.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)) {
       expect(d.trim().endsWith('Z'), `neuzavřená cesta ${d.slice(0, 40)}…`).toBe(true);
     }
+    expect(plate!).toContain(`width="${L.plateWidthMm}mm"`);
+    expect(plate!).toContain(`height="${L.plateHeightMm}mm"`);
   });
 
-  it('má rozměry desky podle rozvržení', () => {
-    const m = 10; // okraj listu
-    expect(plate!).toContain(`width="${L.plateWidthMm + 2 * m}mm"`);
-    expect(plate!).toContain(`height="${L.plateLengthMm + 2 * m}mm"`);
+  it('nemá žádnou drážku na značení – jen otvory a vyříznuté tvary', () => {
+    // Značení skrz drážku 1,2 mm má přesnost ±0,6 mm; obtažení hrany ±0,1 mm.
+    // Jediné dva vyříznuté tvary jsou špička a ovál pro trn.
+    const shapes = [...plate!.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!);
+    expect(shapes.length, 'obrys + špička + ovál').toBe(3);
   });
 
-  it('nese jednu sadu značicích otvorů platnou pro všechny šířky', () => {
-    const marks = circles(plate!, 1);
-    // 5 dírek pro trn + 2 rozlišovací u prostřední + 4 nýty + 2 značky linie ohybu
-    expect(marks.length).toBe(13);
-    expect(circles(plate!, 2).length, 'jeden závěsný otvor').toBe(1);
-    const apex = 10;
-    const axis = 10 + L.plateWidthMm / 2;
-    const onAxis = marks
-      .filter((c) => c.x === axis)
-      .map((c) => c.y - apex)
-      .sort((a, b) => a - b);
-    const wanted = [...L.tipHoleYs, ...L.rivetYs].sort((a, b) => a - b);
-    expect(onAxis.length).toBe(wanted.length);
-    onAxis.forEach((y, i) => {
-      expect(y, `otvor na ose ${i + 1}`).toBeCloseTo(wanted[i]!, 3);
+  it('řada se špičkou: 5 dírek na ose a 2 rozlišovací u prostřední', () => {
+    const marks = circles(plate!, L.markHoleMm / 2);
+    const onTipRow = marks.filter((c) => c.y === L.tipRowY).map((c) => c.x);
+    onTipRow.sort((a, b) => b - a);
+    expect(onTipRow.length).toBe(L.tipHoleXs.length);
+    onTipRow.forEach((x, i) => {
+      expect(x, `dírka ${i + 1}`).toBeCloseTo(L.tipHoleXs[i]!, 3);
     });
-    const offAxis = marks.filter((c) => c.x !== axis);
-    expect(offAxis.length).toBe(4);
-    for (const c of offAxis) {
-      expect(Math.abs(c.x - axis)).toBeCloseTo(L.offAxisMarkMm, 6);
-      const rel = c.y - apex;
-      const nearest = Math.min(Math.abs(rel - L.middleHoleY), Math.abs(rel - L.foldY));
-      expect(nearest, `značka mimo osu na y ${rel}`).toBeLessThan(0.001);
+    const flanking = marks.filter((c) => c.x === L.middleHoleX && c.y !== L.tipRowY);
+    expect(flanking.length).toBe(2);
+    for (const c of flanking) {
+      expect(Math.abs(c.y - L.tipRowY)).toBeCloseTo(L.offAxisMarkMm, 6);
     }
   });
 
-  it('má vyříznutou drážku pro trn i úzkou vyrovnávací drážku', () => {
-    const stadiums = [...plate!.matchAll(/<path d="([^"]+)"/g)]
-      .map((m) => m[1]!)
-      .filter((d) => (d.match(/A/g) ?? []).length === 2 && (d.match(/L/g) ?? []).length === 1)
-      .map((d) => {
-        const n = [...d.matchAll(/[-\d.]+/g)].map((x) => Number(x[0]));
-        return { width: 2 * n[2]!, y0: n[1]! - n[2]!, y1: n[10]! + n[2]! };
-      })
-      .sort((a, b) => a.width - b.width);
-    expect(stadiums.length).toBe(2);
-    expect(stadiums[0]!.width, 'vyrovnávací drážka').toBeCloseTo(L.alignSlotWidthMm, 6);
-    expect(stadiums[1]!.width, 'drážka pro trn').toBeCloseTo(L.slotWidthMm, 6);
-    expect(stadiums[1]!.y1 - stadiums[1]!.y0, 'délka drážky pro trn').toBeCloseTo(
-      DEFAULT_BELT_END.slotLengthMm,
-      6,
+  it('řada s přezkou: 4 nýty na ose a 2 značky linie ohybu', () => {
+    const marks = circles(plate!, L.markHoleMm / 2);
+    const onBuckleRow = marks.filter((c) => c.y === L.buckleRowY).map((c) => c.x);
+    expect(onBuckleRow.length).toBe(4);
+    onBuckleRow.sort((a, b) => a - b);
+    onBuckleRow.forEach((x, i) => {
+      expect(x, `nýt ${i + 1}`).toBeCloseTo(L.rivetXs[i]!, 3);
+    });
+    const foldMarks = marks.filter((c) => c.x === L.foldX && c.y !== L.buckleRowY);
+    expect(foldMarks.length).toBe(2);
+  });
+
+  it('obrys má zkosený levý horní roh jako značku konce pásu', () => {
+    const outline = [...plate!.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)[0]!;
+    expect(outline, 'zkosení v obrysu').toContain(
+      `M0 ${L.strapEndChamferMm} L${L.strapEndChamferMm} 0`,
     );
   });
 
-  it('spodní hrana desky odpovídá konci pásu', () => {
-    const outline = [...plate!.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)[0]!;
-    const n = [...outline.matchAll(/[-\d.]+/g)].map((x) => Number(x[0]));
-    expect(n[1]! - 10, 'spodní hrana od vrcholu').toBeCloseTo(L.bottomY, 6);
+  it('má jeden závěsný otvor v rohu', () => {
+    const hangs = circles(plate!, L.hangHoleMm / 2);
+    expect(hangs.length).toBe(1);
+    expect(hangs[0]!.x).toBeCloseTo(L.hangHoleX, 6);
+    expect(hangs[0]!.y).toBeCloseTo(L.hangHoleY, 6);
+  });
+
+  it('ovál pro trn je 25 × 6 mm a leží na ohybu', () => {
+    const oval = [...plate!.matchAll(/<path d="([^"]+)"/g)]
+      .map((m) => m[1]!)
+      .find((d) => (d.match(/A/g) ?? []).length === 2);
+    expect(oval).toBeDefined();
+    const n = [...oval!.matchAll(/[-\d.]+/g)].map((m) => Number(m[0]));
+    const r = n[4]!;
+    expect(2 * r).toBeCloseTo(DEFAULT_BELT_END.slotWidthMm, 6);
+    const x0 = n[0]! - r;
+    const x1 = n[2]! + r;
+    expect(x1 - x0).toBeCloseTo(DEFAULT_BELT_END.slotLengthMm, 6);
+    expect((x0 + x1) / 2).toBeCloseTo(L.foldX, 6);
   });
 });

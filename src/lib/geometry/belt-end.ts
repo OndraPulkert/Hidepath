@@ -312,147 +312,202 @@ export function totalStrapLengthMm(waistMm: number, end: BeltEndSpec, tip: BeltT
 }
 
 /* ------------------------------------------------------------------------- */
-/* Jedna univerzální deska pro všechny šířky                                  */
+/* Jedna plochá destička pro všechny šířky                                    */
 /* ------------------------------------------------------------------------- */
 
 /**
- * Univerzální šablona: jedna deska pro pásky do `plateWidthMm`.
+ * Univerzální destička: jeden plochý kus pro pásky do `maxBeltWidthMm`.
  *
- * Funguje proto, že podle měření (viz docs/content/sablony-zdroje.md):
- *  - polohy všech otvorů podél pásu na šířce nezávisí,
- *  - sklon boku špičky je konstantní, takže koncové body zkosení pro všechny
- *    šířky leží na **jedné a téže přímce** – jeden pár boků obsahuje každou šířku
- *    a stop určuje hrana kupovaného pásu.
+ * Návrh vyšel z průchodu prací u stolu, ne z kreslení:
+ *  1. Narýsovat střednici pásu.
+ *  2. **Konec u přezky** – destička se umístí podle **konce pásu**, proto je referencí
+ *     levá krátká **hrana destičky**, ne vnitřní značka.
+ *  3. Složit přezku, vyzkoušet na sobě, označit kam padne trn = **prostřední dírka**.
+ *  4. **Špička** – destička se umístí podle **prostřední dírky**. Špička a všech pět dírek
+ *     proto musí být v jedné řadě: jedno přiložení, žádná kumulace chyby.
  *
- * Tři věci, které jedna deska musí řešit jinak než šablona na míru:
- *  1. Deska je širší než pás, takže **zářez v hraně by na pás nedosáhl**. Linie ohybu
- *     se proto značí dvěma otvory mimo osu (`offAxisMarkMm`), které leží na pásu
- *     i u nejužší podporované šířky.
- *  2. Vystředění: deska je z čirého akrylátu a má **vyrovnávací drážku na ose**,
- *     kterou se dívá na narýsovanou střednici pásu.
- *  3. Prostřední dírku ze pěti odliší **dva otvory po stranách** na téže výšce.
+ * Z toho plynou tři rozhodnutí, která opravují první verzi:
+ *  - **Žádná vyrovnávací drážka.** Osu určují samy otvory a ovál; přes čirý akrylát je
+ *    narýsovaná střednice vidět. Drážka byla nadbytečná.
+ *  - **Špička je vyříznutý tvar, ne drážka ani výřez v hraně.** Značení skrz drážku 1,2 mm
+ *    má přesnost ±0,6 mm, obtažení hrany ±0,1 mm. Výřez v krátké hraně by navíc vytvořil
+ *    tenký jazyk, který se v akrylátu odlomí; uzavřený výřez drží materiál kolem.
+ *  - **Konec pásu = krátká hrana destičky.** Žádná další značka není potřeba.
  */
-export interface MultiPlateSpec {
-  /** Šířka desky = největší podporovaná šířka pásu. */
-  plateWidthMm: number;
-  /** Od vrcholu špičky k začátku vyrovnávací drážky. */
-  apexToAlignSlotMm: number;
-  alignSlotLengthMm: number;
-  alignSlotWidthMm: number;
-  /** Od vrcholu špičky k linii ohybu na druhém konci desky. */
-  apexToFoldMm: number;
-  /** Vzdálenost značek mimo osu od střednice. */
+export interface BeltPlateSpec {
+  /** Největší šířka pásu, pro kterou je destička určená. */
+  maxBeltWidthMm: number;
+  /** Okraj destičky bez značek. */
+  marginMm: number;
+  /** Rozestup os obou řad. */
+  rowPitchMm: number;
+  /** Vzdálenost značek mimo osu od střednice (linie ohybu, rozlišení prostřední dírky). */
   offAxisMarkMm: number;
+  /** Od levé hrany destičky (= konec pásu) k linii ohybu. */
+  strapEndToFoldMm: number;
+  markHoleMm: number;
   hangHoleMm: number;
+  /**
+   * O kolik je vyříznutý tvar špičky na širokém konci širší než nejširší pás.
+   * Jeho příčná uzavírací hrana pak leží mimo kůži, takže se nedá omylem obtáhnout.
+   */
+  tipCutoutOversizeMm: number;
+  /**
+   * Zkosení levého **horního** rohu: značí, že tahle krátká hrana je konec pásu.
+   * Nahoře proto, že dole by zasáhlo do pásma, kde na destičce leží pás
+   * (kontrola `checkBeltPlate` to odhalila).
+   */
+  strapEndChamferMm: number;
 }
 
-export const DEFAULT_MULTI_PLATE: MultiPlateSpec = {
-  plateWidthMm: 45,
-  apexToAlignSlotMm: 205,
-  alignSlotLengthMm: 25,
-  alignSlotWidthMm: 1.5,
-  apexToFoldMm: 315,
+export const DEFAULT_BELT_PLATE: BeltPlateSpec = {
+  maxBeltWidthMm: 45,
+  marginMm: 10,
+  rowPitchMm: 57,
   offAxisMarkMm: 12,
+  strapEndToFoldMm: 90,
+  markHoleMm: 2,
   hangHoleMm: 4,
+  tipCutoutOversizeMm: 5,
+  strapEndChamferMm: 8,
 };
 
-export interface MultiPlateLayout {
+export interface BeltPlateLayout {
   plateWidthMm: number;
-  plateLengthMm: number;
-  /** Dírky pro trn, od vrcholu špičky. */
-  tipHoleYs: number[];
-  /** Výška prostřední dírky a odsazení jejích dvou rozlišovacích otvorů. */
-  middleHoleY: number;
+  plateHeightMm: number;
+  /** Osa řady se špičkou a dírkami pro trn. */
+  tipRowY: number;
+  /** Osa řady s koncem u přezky. */
+  buckleRowY: number;
+  /** Vrchol vyříznuté špičky. */
+  tipApexX: number;
+  /** Kde vyříznutá špička dosáhne své plné šířky. */
+  tipFarX: number;
+  /** Poloviční šířka vyříznutého tvaru špičky na širokém konci. */
+  tipCutoutHalfMm: number;
+  strapEndChamferMm: number;
+  /** Dírky pro trn, x od levé hrany. */
+  tipHoleXs: number[];
+  /** Prostřední dírka = datum pro umístění řady. */
+  middleHoleX: number;
   offAxisMarkMm: number;
-  alignSlotY0: number;
-  alignSlotY1: number;
-  alignSlotWidthMm: number;
+  /** Linie ohybu, x od levé hrany. Levá hrana destičky je konec pásu. */
+  foldX: number;
+  rivetXs: number[];
+  slotX0: number;
+  slotX1: number;
+  slotWidthMm: number;
   hangHoleX: number;
   hangHoleY: number;
+  markHoleMm: number;
   hangHoleMm: number;
-  foldY: number;
-  rivetYs: number[];
-  /** Vnější obálka vyříznuté drážky pro trn. */
-  slotY0: number;
-  slotY1: number;
-  slotWidthMm: number;
-  /** Spodní hrana desky = konec pásu, dá se podle ní označit odříznutí. */
-  bottomY: number;
-  /** Délka hrotu při využití celé šířky desky. */
-  tipLengthAtPlateWidthMm: number;
+  maxBeltWidthMm: number;
+  minBeltWidthMm: number;
 }
 
-export function multiPlateLayout(
+export function beltPlateLayout(
   end: BeltEndSpec,
   tip: BeltTipSpec,
-  plate: MultiPlateSpec = DEFAULT_MULTI_PLATE,
-): MultiPlateLayout {
-  const widest: BeltTipSpec = { ...tip, beltWidthMm: plate.plateWidthMm };
-  const fold = plate.apexToFoldMm;
+  plate: BeltPlateSpec = DEFAULT_BELT_PLATE,
+): BeltPlateLayout {
+  const half = plate.maxBeltWidthMm / 2;
+  const m = plate.marginMm;
+  // Vyříznutý tvar je širší než nejširší pás, aby jeho příčná hrana ležela mimo kůži.
+  const cutoutHalf = half + plate.tipCutoutOversizeMm;
+  const tipLen = tipLengthMm({ ...tip, beltWidthMm: 2 * cutoutHalf });
+  const offsets = holeOffsetsFromApexMm(tip);
+  const lastOffset = offsets[offsets.length - 1]!;
+
+  // Řada se špičkou: nejlevější dírka na `m` od hrany určí polohu vrcholu.
+  const apexX = m + lastOffset;
+  const farX = apexX + tipLen;
+  const plateWidth = Math.ceil(farX + m);
+
+  const tipRowY = m + cutoutHalf;
+  const buckleRowY = tipRowY + plate.rowPitchMm;
+  const plateHeight = Math.ceil(buckleRowY + half + m);
+
+  const fold = plate.strapEndToFoldMm;
   return {
-    plateWidthMm: plate.plateWidthMm,
-    plateLengthMm: fold + end.tailLengthMm,
-    tipHoleYs: holeOffsetsFromApexMm(tip),
-    middleHoleY: apexToMiddleHoleMm(tip),
+    plateWidthMm: plateWidth,
+    plateHeightMm: plateHeight,
+    tipRowY,
+    buckleRowY,
+    tipApexX: apexX,
+    tipFarX: farX,
+    tipCutoutHalfMm: cutoutHalf,
+    strapEndChamferMm: plate.strapEndChamferMm,
+    tipHoleXs: offsets.map((o) => apexX - o),
+    middleHoleX: apexX - apexToMiddleHoleMm(tip),
     offAxisMarkMm: plate.offAxisMarkMm,
-    alignSlotY0: plate.apexToAlignSlotMm,
-    alignSlotY1: plate.apexToAlignSlotMm + plate.alignSlotLengthMm,
-    alignSlotWidthMm: plate.alignSlotWidthMm,
-    hangHoleX: -(plate.plateWidthMm / 2 - plate.hangHoleMm / 2 - end.minLigamentMm),
-    hangHoleY: plate.apexToAlignSlotMm + plate.alignSlotLengthMm / 2,
-    hangHoleMm: plate.hangHoleMm,
-    foldY: fold,
-    rivetYs: [
+    foldX: fold,
+    rivetXs: [
       fold - end.rivetOffsetsMm[1],
       fold - end.rivetOffsetsMm[0],
       fold + end.rivetOffsetsMm[0],
       fold + end.rivetOffsetsMm[1],
     ],
-    slotY0: fold - end.slotLengthMm / 2,
-    slotY1: fold + end.slotLengthMm / 2,
+    slotX0: fold - end.slotLengthMm / 2,
+    slotX1: fold + end.slotLengthMm / 2,
     slotWidthMm: end.slotWidthMm,
-    bottomY: fold + end.tailLengthMm,
-    tipLengthAtPlateWidthMm: tipLengthMm(widest),
+    hangHoleX: plateWidth - m,
+    hangHoleY: plateHeight - m,
+    markHoleMm: plate.markHoleMm,
+    hangHoleMm: plate.hangHoleMm,
+    maxBeltWidthMm: plate.maxBeltWidthMm,
+    minBeltWidthMm: 2 * (plate.offAxisMarkMm + 2),
   };
 }
 
-/** Nejmenší šířka pásu, na které značky mimo osu ještě leží s rezervou 2 mm. */
-export function multiPlateMinBeltWidthMm(plate: MultiPlateSpec): number {
-  return 2 * (plate.offAxisMarkMm + 2);
-}
-
-/** Kontroly rozvržení univerzální desky. Prázdný seznam = v pořádku. */
-export function checkMultiPlate(
+/** Kontroly rozvržení destičky. Prázdný seznam = v pořádku. */
+export function checkBeltPlate(
   end: BeltEndSpec,
   tip: BeltTipSpec,
-  plate: MultiPlateSpec = DEFAULT_MULTI_PLATE,
+  plate: BeltPlateSpec = DEFAULT_BELT_PLATE,
 ): string[] {
-  const L = multiPlateLayout(end, tip, plate);
+  const L = beltPlateLayout(end, tip, plate);
   const min = end.minLigamentMm;
   const problems: string[] = [];
   const gap = (label: string, value: number): void => {
     if (value < min) problems.push(`${label}: ${value.toFixed(2)} mm, minimum ${min} mm.`);
   };
-  const markR = 1;
-  const lastTip = L.tipHoleYs[L.tipHoleYs.length - 1]!;
-  gap('Mezi poslední dírkou pro trn a vyrovnávací drážkou', L.alignSlotY0 - lastTip - markR);
+  const mr = L.markHoleMm / 2;
+  const half = L.maxBeltWidthMm / 2;
+
+  gap('Od nejlevější dírky pro trn k hraně destičky', L.tipHoleXs[L.tipHoleXs.length - 1]! - mr);
+  gap('Od vyříznuté špičky k pravé hraně destičky', L.plateWidthMm - L.tipFarX);
+  gap('Mezi vyříznutou špičkou a nejbližší dírkou pro trn', L.tipApexX - 0 - L.tipHoleXs[0]! - mr);
+  gap('Mezi řadami', L.buckleRowY - half - (L.tipRowY + L.tipCutoutHalfMm));
+  gap('Od vyříznuté špičky k horní hraně', L.tipRowY - L.tipCutoutHalfMm);
+  gap('Od osy řady s přezkou ke spodní hraně', L.plateHeightMm - L.buckleRowY - half);
+  gap('Od nejlevějšího otvoru pro nýt k hraně destičky', L.rivetXs[0]! - mr);
+  gap('Mezi otvorem pro nýt a drážkou pro trn', L.slotX0 - L.rivetXs[1]! - mr);
+  gap('Mezi drážkou pro trn a otvorem pro nýt', L.rivetXs[2]! - L.slotX1 - mr);
   gap(
-    'Mezi vyrovnávací drážkou a nejvzdálenějším otvorem pro nýt',
-    L.rivetYs[0]! - L.alignSlotY1 - markR,
+    'Od značek mimo osu k hraně destičky (řada s přezkou)',
+    L.plateHeightMm - (L.buckleRowY + L.offAxisMarkMm) - mr,
   );
-  gap('Mezi otvorem pro nýt a drážkou pro trn', L.slotY0 - L.rivetYs[1]! - markR);
-  gap('Mezi drážkou pro trn a otvorem pro nýt', L.rivetYs[2]! - L.slotY1 - markR);
-  gap('Za posledním otvorem pro nýt do konce desky', L.bottomY - L.rivetYs[3]! - markR);
-  gap('Od značek mimo osu k hraně desky', L.plateWidthMm / 2 - L.offAxisMarkMm - markR);
-  gap('Mezi značkou mimo osu a drážkou pro trn', L.offAxisMarkMm - markR - L.slotWidthMm / 2);
-  gap('Od závěsného otvoru k hraně desky', L.plateWidthMm / 2 + L.hangHoleX - L.hangHoleMm / 2);
-  if (L.tipLengthAtPlateWidthMm >= L.alignSlotY0) {
-    problems.push('Zkosení špičky zasahuje až do vyrovnávací drážky.');
-  }
-  if (plate.plateWidthMm < tip.beltWidthMm) {
+  gap('Od závěsného otvoru k hraně destičky', L.plateWidthMm - L.hangHoleX - L.hangHoleMm / 2);
+  gap(
+    'Od závěsného otvoru k poslednímu otvoru pro nýt',
+    L.hangHoleX - L.rivetXs[3]! - L.hangHoleMm / 2,
+  );
+
+  // Zkosení rohu nesmí zasáhnout do pásma, kde na destičce leží pás.
+  gap(
+    'Od zkosení levého horního rohu k pásu na řadě se špičkou',
+    L.tipRowY - half - L.strapEndChamferMm,
+  );
+  if (L.tipCutoutHalfMm <= half) {
     problems.push(
-      `Deska ${plate.plateWidthMm} mm je užší než pás ${tip.beltWidthMm} mm, na který se má použít.`,
+      'Vyříznutá špička není širší než nejširší pás; její příčná hrana by ležela na kůži.',
     );
+  }
+  if (L.offAxisMarkMm + 2 > half) {
+    problems.push('Značky mimo osu leží mimo nejširší podporovaný pás.');
+  }
+  if (plate.maxBeltWidthMm < tip.beltWidthMm) {
+    problems.push(`Destička pro ${plate.maxBeltWidthMm} mm je užší než pás ${tip.beltWidthMm} mm.`);
   }
   return problems;
 }
