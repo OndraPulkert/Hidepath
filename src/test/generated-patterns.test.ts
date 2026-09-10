@@ -569,6 +569,24 @@ describe('destička na opasek', () => {
     }
   });
 
+  it('každá řada je zrcadlově symetrická, takže lze pracovat z líce i z rubu', () => {
+    // Praktický důsledek: pás se může položit pod destičku kteroukoli stranou nahoru.
+    // Kdyby některá značka ležela mimo osu bez svého protějšku, obrácením pásu by se
+    // celý konec u přezky zrcadlil a nýty by sedly jinam.
+    const marks = circles(plate!, L.markHoleMm / 2);
+    expect(marks.length, 'značicí otvory').toBeGreaterThan(10);
+    const rows = [L.tipRowY, L.roundedRowY, L.buckleRowY];
+    for (const m of marks) {
+      const axis = rows.reduce((a, b) => (Math.abs(b - m.y) < Math.abs(a - m.y) ? b : a));
+      const off = m.y - axis;
+      if (Math.abs(off) < 1e-6) continue;
+      const twin = marks.some(
+        (o) => Math.abs(o.x - m.x) < 1e-6 && Math.abs(o.y - (axis - off)) < 1e-6,
+      );
+      expect(twin, `značka x=${m.x} y=${m.y} nemá protějšek na druhé straně osy`).toBe(true);
+    }
+  });
+
   it('má jeden závěsný otvor v rohu', () => {
     const hangs = circles(plate!, L.hangHoleMm / 2);
     expect(hangs.length).toBe(1);

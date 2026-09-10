@@ -63,13 +63,19 @@ to, že destičku je lepší nosit naplocho a neupustit.
    Tím je destička vystředěná — **střednici na pás rýsovat nemusíš**, k tomu ty linky jsou.
    Přes čirý akrylát na hrany pásu vidíš. Šířku mimo linky (38, 32, 33 mm…) vystředíš podle
    **příčné milimetrové stupnice**: obě hrany musí ležet na stejném čísle.
+   **Pás můžeš položit lícem i rubem nahoru** — každá řada je zrcadlově symetrická k vlastní ose,
+   takže se obrácením pásu nic nezrcadlí. Destička zůstává gravírováním nahoru vždy; obrací se
+   pás, ne destička.
 2. **Nejdřív srovnej konec pásu na kolmo** — o něj se opírá celá řada 3. A zkontroluj, že
    délka pásu stačí: potřebuješ **obvod + 234,3 mm**.
 3. **Sraz a zalešti dlouhé hrany** na plocho rozloženém pásu, **před montáží**. Je to 2,4 m
    práce, tedy většina projektu, a po sešroubování je zdvojený konec neohrabaný.
 4. **Konec u přezky (řada 3):** **levou hranou destičky přesně na konec pásu**. Označ šídlem
    4 otvory pro nýty a 2 značky linie ohybu, obtáhni ovál pro trn.
-5. Vysekni 6mm otvory pro nýty a **oba konce oválu** (Ø 6 mm), ovál mezi nimi vyřízni nožem.
+5. Vysekni 6mm otvory pro nýty a **oba konce oválu** (Ø 6 mm) — razník zarovnej na obtažené
+   oblouky, ne doprostřed rýhy. Boky oválu pak veď nožem **tečně k oběma vyseknutým dírám**,
+   ne po rýze: šídlo se opírá o hranu výřezu v horním líci destičky, takže obtažený ovál vyjde
+   o 0,3 mm z každé strany menší (24,4 × 5,4 mm místo 25 × 6) a trn by se dřel.
    Spoj obě značky ohybu pravítkem. **Zónu ohybu navlhči** a ohni ji **kolem příčky přezky**,
    ne přes hranu — 4 mm třísločiněné kůže nasucho do malého rádiusu popraská.
    **Navlékni poutko** a teprve pak sešroubuj oba nýty (kapka zajišťovače závitů nebo lak;
@@ -79,8 +85,11 @@ to, že destičku je lepší nosit naplocho a neupustit.
    Přilož tak, aby **prostřední otvor** (ten se dvěma rozlišovacími po stranách) ležel na té
    značce, a hrany pásu opět na linky své šířky. Označ zbylé 4 dírky a obtáhni tvar konce:
    u řady 1 vnitřní hranu výřezu **jen dokud nedojdeš k hraně pásu** (dál je výřez záměrně širší),
-   u řady 2 ten slot, který se dotýká linky tvé šířky.
-8. Vysekni 4,5mm dírky a nakonec vyřízni konec pásu. **Označit dírky i tvar konce musíš
+   u řady 2 ten slot, který se dotýká linky tvé šířky. Slot je z celé destičky nejlépe vedený
+   prvek — šídlo v něm má vůli jen ± 0,2 mm a musí stát skoro svisle, takže se nedá pokazit.
+8. Vysekni 4,5mm dírky a nakonec vyřízni konec pásu — **veď nůž tak, aby rýhu odebral**.
+   Obtažená linka leží ze stejného důvodu jako u oválu 0,3 mm dovnitř tvaru (obtažený hrot vyjde
+   38,9 mm místo 38,5 mm) a řez po její vnější straně to vyrovná. **Označit dírky i tvar konce musíš
    v jednom přiložení** — registrovat destičku na už vyseknutou dírku Ø 4,5 mm je nepřesné
    a právě „jedno přiložení, žádná kumulace chyby" je důvod, proč jsou v jedné řadě.
 

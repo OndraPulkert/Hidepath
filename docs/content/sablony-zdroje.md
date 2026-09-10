@@ -1026,6 +1026,49 @@ tedy **± 0,70 mm** do strany. (Otvor by šídlo vedl až v hloubce, kde má ku�
   +0,7 mm a druhá o −0,7 mm, spojnice se přes 40 mm šířky pootočí o 2° a přezka bude nakřivo. Se
   stejným náklonem se obě značky posunou stejně a **linie zůstane rovnoběžná** se skutečnou.
 
+#### Obtahování tvarů: tři různé mechanismy (2026-09-10)
+
+Autor upřesnil, že hlavně potřebuje **obkreslit tvary**, ne jen ťuknout do bodu. To je jiná
+mechanika a destička na ni má tři různé prvky:
+
+| Prvek                                     | Jak se obtahuje             | Odchylka obtažené linky               |
+| ----------------------------------------- | --------------------------- | ------------------------------------- |
+| **Výřez špičky** (řada 1)                 | šídlo jede po vnitřní hraně | 0,30 mm dovnitř tvaru, systematicky   |
+| **Sloty zaobleného konce** (řada 2, 1 mm) | šídlo jede uvnitř slotu     | ± 0,20 mm, **bez systematické chyby** |
+| **Ovál pro trn** (řada 3)                 | šídlo jede po vnitřní hraně | 0,30 mm dovnitř                       |
+
+**Odkud těch 0,30 mm je.** Šídlo se opře o hranu výřezu v **horním líci destičky**, ne u kůže —
+tam má jeho dřík ve výšce 3 mm průměr 0,60 mm, takže hrot se dotkne kůže o 0,30 mm dovnitř tvaru.
+Obecně: obtažená linka je posunutá o **polovinu průměru nástroje v horním líci**.
+
+To zabíjí tužku i na obtahování, a hůř než u bodového značení: kužel tužky má v horním líci
+2,3–3,3 mm, takže by linka ležela **1,15–1,66 mm dovnitř tvaru**. U 40mm pásku by to byl viditelně
+jiný hrot. Mikrotužka 0,5 mm by dala 0,45 mm.
+
+**Co 0,30 mm udělá špičce.** Bok posunutý o 0,30 mm dosáhne plné šířky o 0,73 mm dál a vrchol se
+posune o 0,30 mm, takže obtažený hrot vyjde **38,88 mm místo 38,46 mm** – o 0,4 mm delší a
+štíhlejší. To je 1 % a při řezu nožem se to schová: **řež tak, aby nůž rýhu odebral**, a jsi zpět
+na tvaru destičky.
+
+**U oválu se to ale ignorovat nemá.** Obtažený ovál vyjde 24,4 × 5,4 mm místo 25 × 6 a trn by se
+mohl dřít. Postup, který to obchází: **oba konce oválu vysekni razníkem Ø 6 mm zarovnaným na
+obtažené oblouky** (razník si tím šířku 6 mm vrátí) a **boky pak veď tečně k vyseknutým dírám**,
+ne po rýze.
+
+**Sloty zaobleného konce jsou z celé destičky nejlépe vedený prvek.** Šídlo 0,60 mm v 1mm slotu má
+vůli ± 0,20 mm a slot leží středem na skutečném oblouku, takže tam žádná systematická chyba není —
+a při tak malé vůli je šídlo navíc nuceno stát skoro svisle, čímž mizí i paralaxa.
+
+#### Pracovat lze z líce i z rubu (ověřeno testem)
+
+Každá řada je **zrcadlově symetrická k vlastní ose**: značicí otvory leží buď na ose, nebo
+v symetrickém páru ± 12 mm. Ověřeno testem `každá řada je zrcadlově symetrická…`, který u každé
+mimoosé značky hledá protějšek — s posunutou značkou padá na `značka x=90 y=140.5 nemá protějšek`.
+
+Praktický důsledek: **pás se může položit pod destičku kteroukoli stranou nahoru** a nic se
+nezrcadlí. Destička sama zůstává gravírováním nahoru vždy (viz paralaxa výše) — obrací se pás, ne
+destička.
+
 **Proč otvor nezvětšit ani nezmenšit.** Zvětšit na 4 mm, aby prošla tužka, by vůli zhoršilo na
 ± 1,7 mm. Zmenšit na 1,2 mm, aby vůle klesla na ± 0,3 mm, naráží na laser: obvyklé doporučení je
 **minimální průměr otvoru ≈ tloušťka materiálu**, a 2 mm ve 3mm materiálu už je pod ním. Menší
