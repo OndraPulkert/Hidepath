@@ -20,6 +20,10 @@ Jedna destička stačí na všechny šířky proto, že polohy všech otvorů po
 a koncové body zkosení špičky pro všechny šířky leží na jedné a téže přímce. Zkosení se obtáhne
 a **stop určí hrana pásu**.
 
+**Vysvětlivky k destičce** (co je co, s popisky):
+`docs/generated/opasek-desticka-vysvetlivky.svg` — na pochopení a k vytištění na stěnu.
+**Tenhle soubor řezárně neposílej**, obsahuje text; řezací je `opasek-desticka.svg`.
+
 ### Tři věci, které je potřeba vědět, než ji poprvé použiješ
 
 1. **Používej ji gravírovanou stranou DOLŮ**, tedy v kontaktu s kůží. Gravírování je jen na jedné
@@ -51,8 +55,32 @@ a **stop určí hrana pásu**.
 **Před objednáním** vytiskni kontrolní PDF na **A4 na šířku na 100 %** a přeměř obrys: musí být
 **270 × 127 mm**. Obrys sám je kalibrace, jiná značka není potřeba.
 
-Poutko na destičce záměrně není: jeho délka závisí na šířce i tloušťce pásu a měří se na složeném
-pásku. Vyřízne se z odřezku podle míry.
+### Poutko: žádné otvory navíc
+
+Poutko **nepotřebuje vlastní otvory**. Je to smyčka navlečená na zdvojenou část konce a **uvězněná
+v kapse mezi dvěma nýty** — přesně k tomu ten druhý nýt je. Proto má destička čtyři otvory (dva
+nýty), a ne jen dva.
+
+Druhá varianta, kdy se oba konce pásku poutka upnou **pod nýt**, by taky žádné otvory navíc
+nevyžadovala (poutko by nýtový otvor sdílelo), ale **s našimi nýty nejde**: pás 4 + pás 4 + dva
+konce poutka po 2 mm = **12 mm**, a šroubovací nýt 10/6 obchod uvádí jako vhodný pro dvě vrstvy
+o celkem 4,5–5 mm. Dřík 6 mm na 12 mm nestačí.
+
+Kapsa mezi nýty je **47,7 mm**, takže poutko v ní má vůli:
+
+| Šířka poutka | Vůle v kapse |
+| ------------ | ------------ |
+| 12 mm        | 35,7 mm      |
+| 20 mm        | 27,7 mm      |
+| 25 mm        | 22,7 mm      |
+
+V praxi to nevadí, protože poutkem prochází volný konec pásku a ten ho drží na místě. Kdo chce
+poutko těsné, ať posune bližší nýt dál nebo vzdálenější blíž (`rivetOffsetsMm`) a destičku
+vygeneruje znovu — kontroly ohlásí, kdyby se tím zúžil můstek u drážky.
+
+**Délka pásku na poutko** se nepočítá, ale **měří na složeném konci**: obtoč kolem něj papírový
+pásek, označ přeplátování a délku odečti na podélném pravítku destičky. Orientačně
+2 × (šířka pásu + 2 × tloušťka) + 15 mm, pro pás 40 × 4 mm tedy 111 mm.
 
 ## Varianta na míru jedné šířce
 

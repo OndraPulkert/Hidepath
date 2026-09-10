@@ -905,3 +905,29 @@ Při 30° je to víc než celá přesnost, o kterou se v návrhu snažíme (můs
 **Řešení: používat destičku gravírovanou stranou dolů**, v kontaktu s kůží — paralaxa je pak nulová.
 Otvory a výřezy paralaxou netrpí, protože se šídlo i nůž kůže fyzicky dotknou. Zapsáno do postupu
 použití; do řezacího souboru to nezasahuje, je to věc používání.
+
+### Poutko nepotřebuje vlastní otvory (2026-09-10)
+
+Dotaz autora: neměly by tam být jedna nebo dvě dírky, když tam bude poutko?
+
+**Nemají.** Poutko je smyčka navlečená na zdvojenou část konce a **uvězněná v kapse mezi dvěma
+nýty** — právě k tomu druhý nýt je, a proto má destička čtyři otvory, ne dva.
+
+Alternativa, kdy se oba konce pásku poutka upnou pod nýt, by taky žádné otvory navíc nevyžadovala
+(poutko by nýtový otvor sdílelo), ale **s našimi nýty nejde**: pás 4 + pás 4 + dva konce poutka
+po 2 mm = 12 mm, a šroubovací nýt 10/6 je podle obchodu vhodný pro dvě vrstvy o celkem 4,5–5 mm.
+Dřík 6 mm na 12 mm nestačí. Poutko tedy musí být volné.
+
+Kapsa má 47,7 mm, takže poutko 12 mm v ní má 35,7 mm vůle. V praxi to nevadí, protože poutkem
+prochází volný konec pásku a drží ho. Pro těsnější poutko lze posunout `rivetOffsetsMm` a znovu
+vygenerovat; kontroly ohlásí, kdyby se tím zúžil můstek u drážky pro trn.
+
+### Podélné pravítko a vysvětlivky
+
+Doplněno **podélné milimetrové pravítko u horní hrany destičky** (rozsah ~250 mm, dílky po 1 mm,
+delší po 5 a 10, čísla po 50). Hlavní důvod je právě poutko: jeho délka se nepočítá, ale **měří na
+složeném konci** — obtočí se papírový pásek, označí přeplátování a délka se odečte na pravítku.
+
+Dále `docs/generated/opasek-desticka-vysvetlivky.svg`: tentýž tvar s popisky, co je co.
+**Není to řezací soubor** — obsahuje živý text. Test to odděluje: řezací soubor se hledá jako
+`opasek-desticka` **bez** `vysvetlivky` a ověřuje se, že vysvětlivky text mají a řez ne.

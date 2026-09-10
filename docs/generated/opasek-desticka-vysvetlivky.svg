@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- REZACI SOUBOR - DESTICKA NA OPASEK 28-45 mm.
-     Merítko 1:1, 1 jednotka = 1 mm, destička 270 x 127 mm.
-     Vse v jedne vrstve "cut", uzavrene kontury, zadny text, zadna vypln.
-     MATERIAL: CIRY akrylat 3 mm - pres desticku se dívá na narysovanou strednici pasu.
-     Otvory Ø 2 mm = znacici, neslucovat a nezvetsovat.
-     Otvor Ø 4 mm v rohu = zaveseni.
-     Vrstva "cut" (#000000) = REZ, vrstva "engrave" (#0000ff) = GRAVIROVANI.
-     V gravirovani jsou pricna mm stupnice, vodici linky sirek a cisla;
-     cisla jsou TAHY, ne zivy text.
-     Kompenzaci kerfu neresit. Neprepocitavat merítko. -->
-<svg xmlns="http://www.w3.org/2000/svg" width="270mm" height="127mm" viewBox="0 0 270 127">
+<!-- VYSVETLIVKY, ne rezaci soubor. Obsahuje zivy text. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="372mm" height="153mm" viewBox="-6 -16 372 153">
+<rect x="-6" y="-16" width="372" height="153" fill="#ffffff"/>
 <g id="cut">
 <path d="M0 8 L8 0 L270 0 L270 127 L0 127 Z" fill="none" stroke="#000000" stroke-width="0.1"/>
 <path d="M259.313 10 L206.649 33.856 A4 4 0 0 0 206.649 41.144 L259.313 65 Z" fill="none" stroke="#000000" stroke-width="0.1"/>
@@ -454,4 +446,35 @@
 <path d="M230.28 80.1 L231.84 80.1 M231.84 80.1 L231.84 81.4 M230.28 81.4 L231.84 81.4 M231.84 81.4 L231.84 82.7 M230.28 82.7 L231.84 82.7" fill="none" stroke="#0000ff" stroke-width="0.15"/>
 <path d="M232.49 80.1 L234.05 80.1 M232.49 80.1 L232.49 81.4 M234.05 80.1 L234.05 81.4 M232.49 81.4 L232.49 82.7 M234.05 81.4 L234.05 82.7 M232.49 82.7 L234.05 82.7" fill="none" stroke="#0000ff" stroke-width="0.15"/>
 </g>
+
+<text x="0" y="-8" font-family="Helvetica, Arial, sans-serif" font-size="6" fill="#2b2b2b">Destička na opasek 28–45 mm — co je co</text>
+<text x="0" y="-3" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#6a6a6a">Vysvětlivky. Řezárně posílej opasek-desticka.svg, ne tento soubor.</text>
+<path d="M204.3 37.5 L273 22.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="274" y="23.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">vyříznutý tvar ŠPIČKY — obtáhni jeho vnitřní hranu</text>
+<path d="M60 37.5 L273 28.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="274" y="29.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">PROSTŘEDNÍ dírka = tvoje míra, podle ní řadu umístíš</text>
+<path d="M60 25.5 L273 34.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="274" y="35.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">dva otvory označují, která dírka je prostřední</text>
+<path d="M110 37.5 L273 40.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="274" y="41.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">5 dírek pro trn, rozteč 25 mm</text>
+<path d="M240 6 L273 9" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="274" y="10" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">podélné PRAVÍTKO — délka pásku na poutko</text>
+<path d="M40 15 L273 46.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="274" y="47.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">linky ŠÍŘEK: srovnej obě hrany pásu na svou šířku</text>
+<path d="M28 53.5 L273 52.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="274" y="53.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">příčná STUPNICE: pro šířku bez linky (38 mm → hrany na 19)</text>
+<path d="M90 94.5 L273 81.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="274" y="82.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">OVÁL pro trn 25 × 6 mm, ohyb ho půlí</text>
+<path d="M90 82.5 L273 87.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="274" y="88.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">dva otvory = LINIE OHYBU, spoj je pravítkem</text>
+<path d="M163.2 94.5 L273 93.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="274" y="94.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">4 otvory = 2 NÝTY (± 25,5 a ± 73,2 mm od ohybu)</text>
+<path d="M64.5 94.5 L273 99.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="274" y="100.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">mezi nýty je KAPSA PRO POUTKO 47,7 mm</text>
+<path d="M0 94.5 L273 105.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="274" y="106.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">levá hrana = KONEC PÁSU (ohyb 90 mm od ní)</text>
+<path d="M4 4 L273 111.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="274" y="112.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">zkosený roh značí, která hrana je konec pásu</text>
+<path d="M260 117 L273 117.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="274" y="118.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">závěsný otvor</text>
 </svg>

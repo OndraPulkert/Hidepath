@@ -603,6 +603,25 @@ export function buildBeltPlateSvg(
     }
   }
 
+  /**
+   * Podélné milimetrové pravítko u horní hrany. Slouží k měření přímo na pásu –
+   * hlavně na **délku pásku na poutko**, která se odečítá na složeném konci
+   * (obvod zdvojené části + přeplátování) a závisí na šířce i tloušťce pásu.
+   */
+  const rulerY = 6;
+  const rulerX0 = L.strapEndChamferMm + 2;
+  const rulerX1 = W - LASER.marginMm;
+  for (let mm = 0; rulerX0 + mm <= rulerX1; mm += 1) {
+    const len = mm % 50 === 0 ? 7 : mm % 10 === 0 ? 5 : mm % 5 === 0 ? 3.5 : 2;
+    engrave.push(
+      `<path d="M${f(rulerX0 + mm)} ${f(rulerY)} L${f(rulerX0 + mm)} ${f(rulerY + len)}" ` +
+        `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.12"/>`,
+    );
+    if (mm > 0 && mm % 50 === 0) {
+      engrave.push(...engraveNumber(rulerX0 + mm + 1.5, rulerY + 1, mm, L.guideLabelHeightMm));
+    }
+  }
+
   /* --- vodicí linky šířek: srovnáním obou hran pásu se destička sama vystředí --- */
   const lineX0 = scaleX + 7 + 3;
   // Linky nesmí zajet do vyříznuté špičky ani do závěsného otvoru: laser by
@@ -649,6 +668,141 @@ export function buildBeltPlateSvg(
     '<g id="engrave">',
     ...engrave,
     '</g>',
+    '</svg>',
+  ].join('\n');
+}
+
+/**
+ * Vysvětlivky k destičce: tentýž tvar s popisky, k pochopení a k vytištění na stěnu.
+ * **Není to řezací soubor** – obsahuje živý text a nesmí se posílat řezárně.
+ */
+export function buildPlateLegendSvg(
+  end: BeltEndSpec,
+  tip: BeltTipSpec,
+  plate: BeltPlateSpec = DEFAULT_BELT_PLATE,
+): string {
+  const L = beltPlateLayout(end, tip, plate);
+  const base = buildBeltPlateSvg(end, tip, plate);
+  const inner = base.slice(base.indexOf('<g id="cut">'), base.lastIndexOf('</svg>'));
+  const W = L.plateWidthMm;
+  const H = L.plateHeightMm;
+  const padL = 6;
+  const padR = 96;
+  const padT = 16;
+  const padB = 10;
+
+  const note = (x: number, y: number, s: string, size = 3.4, color = INK): string =>
+    `<text x="${f(x)}" y="${f(y)}" font-family="Helvetica, Arial, sans-serif" ` +
+    `font-size="${f(size)}" fill="${color}">${s}</text>`;
+  const leader = (x1: number, y1: number, x2: number, y2: number): string =>
+    `<path d="M${f(x1)} ${f(y1)} L${f(x2)} ${f(y2)}" fill="none" stroke="#999" stroke-width="0.2"/>`;
+
+  const parts: string[] = [
+    note(0, -8, `Destička na opasek ${L.minBeltWidthMm}–${L.maxBeltWidthMm} mm — co je co`, 6),
+    note(0, -3, 'Vysvětlivky. Řezárně posílej opasek-desticka.svg, ne tento soubor.', 3, GREY),
+  ];
+
+  const callouts: [number, number, number, number, string][] = [
+    [
+      L.tipApexX,
+      L.tipRowY,
+      W + 4,
+      L.tipRowY - 14,
+      'vyříznutý tvar ŠPIČKY — obtáhni jeho vnitřní hranu',
+    ],
+    [
+      L.middleHoleX,
+      L.tipRowY,
+      W + 4,
+      L.tipRowY - 8,
+      'PROSTŘEDNÍ dírka = tvoje míra, podle ní řadu umístíš',
+    ],
+    [
+      L.middleHoleX,
+      L.tipRowY - L.offAxisMarkMm,
+      W + 4,
+      L.tipRowY - 2,
+      'dva otvory označují, která dírka je prostřední',
+    ],
+    [
+      L.tipHoleXs[0],
+      L.tipRowY,
+      W + 4,
+      L.tipRowY + 4,
+      `5 dírek pro trn, rozteč ${cz(tip.holeSpacingMm)} mm`,
+    ],
+    [W - LASER.marginMm - 20, 6, W + 4, 10, 'podélné PRAVÍTKO — délka pásku na poutko'],
+    [
+      L.tipRowY > 0 ? 40 : 40,
+      L.tipRowY - L.maxBeltWidthMm / 2,
+      W + 4,
+      L.tipRowY + 10,
+      'linky ŠÍŘEK: srovnej obě hrany pásu na svou šířku',
+    ],
+    [
+      24 + 4,
+      L.tipRowY + 16,
+      W + 4,
+      L.tipRowY + 16,
+      'příčná STUPNICE: pro šířku bez linky (38 mm → hrany na 19)',
+    ],
+    [
+      L.foldX,
+      L.buckleRowY,
+      W + 4,
+      L.buckleRowY - 12,
+      `OVÁL pro trn ${cz(end.slotLengthMm)} × ${cz(end.slotWidthMm)} mm, ohyb ho půlí`,
+    ],
+    [
+      L.foldX,
+      L.buckleRowY - L.offAxisMarkMm,
+      W + 4,
+      L.buckleRowY - 6,
+      'dva otvory = LINIE OHYBU, spoj je pravítkem',
+    ],
+    [
+      L.rivetXs[3],
+      L.buckleRowY,
+      W + 4,
+      L.buckleRowY,
+      `4 otvory = 2 NÝTY (± ${cz(end.rivetOffsetsMm[0])} a ± ${cz(end.rivetOffsetsMm[1])} mm od ohybu)`,
+    ],
+    [
+      L.rivetXs[1],
+      L.buckleRowY,
+      W + 4,
+      L.buckleRowY + 6,
+      `mezi nýty je KAPSA PRO POUTKO ${cz(keeperGapMm(end))} mm`,
+    ],
+    [
+      0,
+      L.buckleRowY,
+      W + 4,
+      L.buckleRowY + 12,
+      `levá hrana = KONEC PÁSU (ohyb ${cz(end.tailLengthMm)} mm od ní)`,
+    ],
+    [
+      L.strapEndChamferMm / 2,
+      L.strapEndChamferMm / 2,
+      W + 4,
+      L.buckleRowY + 18,
+      'zkosený roh značí, která hrana je konec pásu',
+    ],
+    [L.hangHoleX, L.hangHoleY, W + 4, L.buckleRowY + 24, 'závěsný otvor'],
+  ];
+  for (const [fx, fy, tx, ty, text] of callouts) {
+    parts.push(leader(fx, fy, tx - 1, ty - 1));
+    parts.push(note(tx, ty, text, 3.1));
+  }
+
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<!-- VYSVETLIVKY, ne rezaci soubor. Obsahuje zivy text. -->',
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${f(W + padL + padR)}mm" height="${f(H + padT + padB)}mm" ` +
+      `viewBox="${f(-padL)} ${f(-padT)} ${f(W + padL + padR)} ${f(H + padT + padB)}">`,
+    `<rect x="${f(-padL)}" y="${f(-padT)}" width="${f(W + padL + padR)}" height="${f(H + padT + padB)}" fill="#ffffff"/>`,
+    inner,
+    ...parts,
     '</svg>',
   ].join('\n');
 }
@@ -726,6 +880,10 @@ async function main(): Promise<void> {
 
     // Papírová kontrola před objednáním akrylátu: vytisknout na A4 na šířku na 100 %
     // a přeměřit obrys. Obrys sám je kalibrace, jiná značka není potřeba.
+    const legendPath = resolve(outDir, 'opasek-desticka-vysvetlivky.svg');
+    writeFileSync(legendPath, buildPlateLegendSvg(end, tip), 'utf8');
+    console.log(`Zapsáno ${legendPath} (vysvětlivky – NEposílat řezárně)`);
+
     const platePdf = resolve(outDir, 'opasek-desticka-kontrolni-tisk.pdf');
     const { chromium: cr } = await import('@playwright/test');
     const br = await cr.launch({ channel: 'chrome' });

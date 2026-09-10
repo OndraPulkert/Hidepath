@@ -29,7 +29,12 @@ const svgs: Record<string, string> = import.meta.glob('/docs/generated/*.svg', {
 const cz = (n: number): string => (Math.round(n * 1000) / 1000).toString().replace('.', ',');
 const cz1 = (n: number): string => cz(Math.round(n * 10) / 10);
 
-const plate = Object.entries(svgs).find(([path]) => path.includes('opasek-desticka'))?.[1];
+/** Řezací soubor destičky. Vysvětlivky mají text a záměrně se sem nesmí připlést. */
+const plate = Object.entries(svgs).find(
+  ([path]) => path.includes('opasek-desticka') && !path.includes('vysvetlivky'),
+)?.[1];
+
+const legend = Object.entries(svgs).find(([path]) => path.includes('vysvetlivky'))?.[1];
 
 const lasers = Object.entries(svgs)
   .map(([path, svg]) => ({
@@ -377,6 +382,27 @@ describe('destička na opasek', () => {
     expect(outline, 'zkosení v obrysu').toContain(
       `M0 ${L.strapEndChamferMm} L${L.strapEndChamferMm} 0`,
     );
+  });
+
+  it('má podélné pravítko u horní hrany na měření délky pásku na poutko', () => {
+    const eng = plate!.split('<g id="engrave">')[1]?.split('</g>')[0] ?? '';
+    // Svislé dílky pravítka: stejné x, malý rozdíl y, nahoře nad pásmem obou řad.
+    const ticks = [...eng.matchAll(/M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)/g)]
+      .map((m) => ({ x1: Number(m[1]), y1: Number(m[2]), x2: Number(m[3]), y2: Number(m[4]) }))
+      .filter((g) => Math.abs(g.x1 - g.x2) < 0.001 && g.y1 < L.tipRowY - L.maxBeltWidthMm / 2);
+    // Pravítko musí pokrýt aspoň délku pásku na poutko pro nejširší pás.
+    const xs = ticks.map((t) => t.x1);
+    const span = Math.max(...xs) - Math.min(...xs);
+    expect(ticks.length, 'dílky pravítka').toBeGreaterThan(200);
+    expect(span, 'rozsah pravítka').toBeGreaterThan(2 * (L.maxBeltWidthMm + 2 * 5) + 15);
+  });
+
+  it('vysvětlivky jsou samostatný soubor a nejsou určené řezárně', () => {
+    expect(legend, 'docs/generated/opasek-desticka-vysvetlivky.svg').toBeDefined();
+    // Vysvětlivky text MÍT mají – proto se nesmí posílat řezárně a nesmí se plést s řezem.
+    expect(legend!).toContain('<text');
+    expect(legend!).toContain('Vysvětlivky');
+    expect(plate!, 'řezací soubor zůstává bez textu').not.toContain('<text');
   });
 
   it('má jeden závěsný otvor v rohu', () => {
