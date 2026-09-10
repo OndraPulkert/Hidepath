@@ -33,20 +33,25 @@ to, že destičku je lepší nosit naplocho a neupustit.
 
 ### Tři věci, které je potřeba vědět, než ji poprvé použiješ
 
-1. **Při vyrovnávání se dívej svisle dolů, ne pod úhlem.** Gravírování je jen na jedné straně
+1. **Značí se šídlem, ne tužkou.** Ořezaná tužka je kužel: ve 3 mm nad hrotem má 2,3–3,3 mm,
+   takže se do 2mm otvoru zanoří jen po tuhu a **hrot zůstane 0,5–1,5 mm nad kůží** — nedosáhne.
+   Použij **kulaté rýsovací šídlo** (to z pouzdra na karty; ve 3 mm nad hrotem má 0,6 mm).
+   Tupé šídlo projde otvory, ale ne 1mm sloty zaobleného konce.
+   - **U dírek a nýtů krouži šídlem po stěně otvoru.** Šídlo se v otvoru samo necentruje (vůle
+     ± 0,7 mm), ale vykroužený prstenec Ø 1,4 mm má střed přesně tam, kde má být — a celý zmizí
+     ve vyseknuté dírce.
+   - **U dvou značek linie ohybu naklápěj šídlo stejným směrem.** Opačné náklony pootočí spojnici
+     přes 40 mm šířky o 2° a přezka bude nakřivo; stejný náklon posune obě značky stejně a linie
+     zůstane rovnoběžná.
+   - Do **výřezu špičky** se šídlo dostane prakticky až k vrcholu: 0,2 mm od vrcholu je výřez
+     ještě 2,5 mm široký. Tam se obtahuje hrana výřezu, žádná vůle se neřeší.
+2. **Při vyrovnávání se dívej svisle dolů, ne pod úhlem.** Gravírování je jen na jedné straně
    a dělí ho od kůže 3 mm akrylátu, takže při pohledu 30° od svislice se linka zdá posunutá
    o **1,7 mm** — víc než celá přesnost, o kterou se snažíme. Při pohledu shora je chyba nulová.
    Otvory a výřezy paralaxou netrpí, šídlo se kůže fyzicky dotkne.
    _(Dřív tu stálo „používej gravírovanou stranou dolů". To je špatná rada: gravírování je
    jednostranné, takže obrácením destičky se celý layout zrcadlí — zkosený roh skončí vpravo,
    „levá hrana = konec pásu" přestane platit a čísla se čtou zrcadlově.)_
-2. **Značkuj rýsovacím šídlem, ne tužkou** — a **kulatým, ne tupým**. Kužel šídla se v otvoru
-   Ø 2 mm sám vystředí, takže značka sedne na střed; tužka se do 3 mm hlubokého otvoru nedostane
-   a nevystředí se. Do všech míst destičky se šídlo dostane, včetně **výřezu špičky až prakticky
-   k vrcholu** (0,2 mm od vrcholu je výřez ještě 2,5 mm široký). Jediná podmínka je u **slotů
-   zaobleného konce, které mají 1 mm**: dřík šídla ve výšce 3 mm nad hrotem musí být užší než
-   1 mm. Běžné kulaté šídlo (Ø 3 mm ve 15 mm od hrotu) má 0,6 mm a vejde se; tupé šídlo
-   (Ø 4 mm v 10 mm) má 1,2 mm a do slotu se nedostane.
 3. **Nic z toho není odzkoušené v praxi.** Geometrie je ověřená proti třem komerčním šablonám
    a křížově proti naší tiskové verzi, ale destičku jsem nikdy nedržel v ruce ani já, ani ty.
    První pásek je zkouška — proto se před objednáním akrylátu vyplatí vytisknout kontrolní PDF
@@ -186,7 +191,10 @@ Soubor je **1:1 v milimetrech**, list 210 mm široký. Obsahuje tři díly: kone
 >
 > - **Čtyři vnořené sloty 1,0 mm** v jedné řadě mají mezi sebou **žebra 1,5 mm**. Je to záměr.
 >   Pokud je váš kerf nad 0,25 mm, dejte prosím vědět a pošlu verzi s užšími sloty.
-> - **Otvory Ø 2 mm** jsou značicí, mají zůstat malé — neslučovat a nezvětšovat.
+> - **Otvory Ø 2 mm** jsou značicí, mají zůstat malé — neslučovat a nezvětšovat. Vím, že to je pod
+>   obvyklým pravidlem „minimální průměr ≈ tloušťka materiálu“; **prosím potvrďte, že je ve 3mm
+>   litém akrylu spolehlivě protáhnete** (nesmí zůstat zaslepené ani výrazně kónické — prostrkuje
+>   se jimi šídlo). Kdyby to byl problém, dejte vědět a upravím soubor.
 > - Otvor **Ø 4 mm** v rohu je na zavěšení.
 > - **Zkosený levý horní roh** je záměrný, je to značka orientace.
 > - **Vyříznutý trojúhelník** a **ovál** jsou funkční výřezy, prosím nevynechávat.

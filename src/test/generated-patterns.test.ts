@@ -544,6 +544,31 @@ describe('destička na opasek', () => {
     expect(legend!).toContain(outline!);
   });
 
+  it('žádný popisek vysvětlivek nepřetéká z listu (regrese)', () => {
+    // Šířka textu se odhaduje z počtu znaků. Faktor 0,53 em/znak není odhad:
+    // změřeno přes getComputedTextLength na vyrenderovaných vysvětlivkách, kde
+    // nejširší popisek vyšel na 0,524 em/znak a nejužší na 0,429. Jde jen o to
+    // zachytit popisek, který po prodloužení textu vyleze z listu.
+    const view = /viewBox="([-\d.]+) ([-\d.]+) ([\d.]+) ([\d.]+)"/.exec(legend!);
+    expect(view, 'viewBox vysvětlivek').not.toBeNull();
+    const right = Number(view![1]) + Number(view![3]);
+    const bottom = Number(view![2]) + Number(view![4]);
+    const texts = [
+      ...legend!.matchAll(
+        /<text x="([-\d.]+)" y="([-\d.]+)"[^>]*font-size="([\d.]+)"[^>]*>([^<]*)</g,
+      ),
+    ];
+    expect(texts.length, 'popisky ve vysvětlivkách').toBeGreaterThan(10);
+    for (const m of texts) {
+      const x = Number(m[1]);
+      const y = Number(m[2]);
+      const size = Number(m[3]);
+      const width = m[4]!.length * size * 0.53;
+      expect(x + width, `popisek "${m[4]!.slice(0, 30)}…" vpravo`).toBeLessThanOrEqual(right);
+      expect(y, `popisek "${m[4]!.slice(0, 30)}…" dole`).toBeLessThanOrEqual(bottom);
+    }
+  });
+
   it('má jeden závěsný otvor v rohu', () => {
     const hangs = circles(plate!, L.hangHoleMm / 2);
     expect(hangs.length).toBe(1);

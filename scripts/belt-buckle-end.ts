@@ -770,7 +770,7 @@ export function buildPlateLegendSvg(
   const W = L.plateWidthMm;
   const H = L.plateHeightMm;
   const padL = 6;
-  const padR = 96;
+  const padR = 104;
   const padT = 16;
   const padB = 10;
 
@@ -783,6 +783,15 @@ export function buildPlateLegendSvg(
   const parts: string[] = [
     note(0, -8, `Destička na opasek ${L.minBeltWidthMm}–${L.maxBeltWidthMm} mm — co je co`, 6),
     note(0, -3, 'Vysvětlivky. Řezárně posílej opasek-desticka.svg, ne tento soubor.', 3, GREY),
+    // Praktická past: tužka je kužel a do 2mm otvoru ve 3mm akrylu nedosáhne na kůži.
+    note(
+      0,
+      H + 6,
+      'Značí se kulatým rýsovacím šídlem, ne tužkou: ořezaná tužka má ve 3 mm nad hrotem 2,3–3,3 mm ' +
+        'a do otvoru Ø 2 mm nedosáhne. U dírek krouži šídlem po stěně otvoru – střed prstence je střed dírky.',
+      2.8,
+      GREY,
+    ),
   ];
 
   const callouts: [number, number, number, number, string][] = [
@@ -855,8 +864,7 @@ export function buildPlateLegendSvg(
       L.buckleRowY,
       W + 4,
       L.buckleRowY + 6,
-      `KAPSA PRO POUTKO: ${cz(keeperGapMm(end))} mm mezi nýty, ` +
-        `světlých ${cz(keeperPocketClearMm(end))} mm mezi hlavičkami`,
+      `KAPSA POUTKA: ${cz(keeperGapMm(end))} mm, světlých ${cz(keeperPocketClearMm(end))} mm`,
     ],
     [
       0,

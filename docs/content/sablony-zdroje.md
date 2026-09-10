@@ -994,6 +994,44 @@ vrcholu.
 Rozšířit slot nelze, žebra mezi oblouky by spadla pod 1,4 mm. Doplněna kontrola
 `minSlotForAwlMm`, která užší slot odmítne.
 
+#### Tužkou to nejde (dopočítáno 2026-09-10)
+
+Autor se ptal, jestli otvorem protáhne tužku. **Neprotáhne.** Ořezaná dřevěná tužka není jehla, ale
+kužel: tuha Ø 2 mm vyčnívá 1,5–2,5 mm a za ní se hned rozšiřuje dřevo (hrana 7 mm na kuželu dlouhém
+8–12 mm, tedy poloúhel 16–24°). Průměr **ve 3 mm nad hrotem je 2,3–3,3 mm**, takže tužka se do
+2mm otvoru zanoří jen po tuhu a **hrot zůstane 0,5–1,5 mm nad kůží**. Nedosáhne, ať se tlačí jak
+chce.
+
+| Nástroj                      | Průměr ve 3 mm nad hrotem | Otvor Ø 2 mm      | Slot 1 mm |
+| ---------------------------- | ------------------------- | ----------------- | --------- |
+| Kulaté rýsovací šídlo        | 0,60 mm                   | ano               | ano       |
+| Tupé/silné šídlo             | 1,20 mm                   | ano               | **ne**    |
+| Mikrotužka 0,5 mm (trubička) | 0,90 mm                   | ano               | ano       |
+| **Ořezaná dřevěná tužka**    | **2,3–3,3 mm**            | **ne, nedosáhne** | ne        |
+
+Mikrotužka 0,5 mm projde, ale grafit se z třísločiněné kůže nesmaže a 0,5mm tuha se o kůži láme.
+**Nástroj na tuhle destičku je kulaté rýsovací šídlo** – to samé, které je v seznamu vybavení pro
+pouzdro na karty (`Rýsovací šídlo (hruška)`), takže nic navíc.
+
+#### Boční vůle a jak ji vynulovat
+
+Šídlo je v místě dotyku s kůží tenké, takže se v otvoru **necentruje samo**: 2,00 − 0,60 = 1,40 mm,
+tedy **± 0,70 mm** do strany. (Otvor by šídlo vedl až v hloubce, kde má kužel 2 mm — u běžného šídla
+10 mm nad hrotem, tam ale už dávno stojí na kůži.) Dvě techniky, které tím pádem nejsou kosmetika:
+
+- **U dírek a nýtů kroužit.** Nakloň šídlo a obtáhni jím stěnu otvoru dokola. Vznikne prstenec
+  Ø 1,4 mm a jeho **střed je střed otvoru**. Prstenec pak celý zmizí ve vyseknuté dírce (razník
+  4,5 mm, nýtový otvor 6 mm), takže po něm nezůstane ani stopa.
+- **U dvou značek linie ohybu naklánět šídlo stejným směrem.** Kdyby jedna značka ujela o
+  +0,7 mm a druhá o −0,7 mm, spojnice se přes 40 mm šířky pootočí o 2° a přezka bude nakřivo. Se
+  stejným náklonem se obě značky posunou stejně a **linie zůstane rovnoběžná** se skutečnou.
+
+**Proč otvor nezvětšit ani nezmenšit.** Zvětšit na 4 mm, aby prošla tužka, by vůli zhoršilo na
+± 1,7 mm. Zmenšit na 1,2 mm, aby vůle klesla na ± 0,3 mm, naráží na laser: obvyklé doporučení je
+**minimální průměr otvoru ≈ tloušťka materiálu**, a 2 mm ve 3mm materiálu už je pod ním. Menší
+otvor by mohl zůstat kónický nebo neprojít vůbec. **2 mm je proto strop i podlaha zároveň** — a do
+poptávky patří výslovný dotaz, jestli řezárna 2mm otvory ve 3mm litém akrylu spolehlivě protáhne.
+
 ### Srovnání s komerčními destičkami (2026-09-10)
 
 Autor poslal dvě další: **Realeather Acrylic Belt Template** ($9,99, Hobby Lobby) a **Tandy Belt End
