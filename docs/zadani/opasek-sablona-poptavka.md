@@ -4,12 +4,14 @@
 
 `pnpm pattern:belt-end --multi` →
 `docs/generated/opasek-desticka.svg` (řezací soubor),
-`opasek-desticka-1-1.pdf` (tentýž díl v křivkách, záložní formát pro řezárnu),
+`opasek-desticka.dxf` (totéž jako DXF R12 v milimetrech, oblouky jako `ARC`, dvě vrstvy),
+`opasek-desticka-rez.dxf` (jen řez, pro automatické kalkulačky),
+`opasek-desticka-1-1.pdf` (tentýž díl v křivkách, další záložní formát),
 `opasek-desticka-kontrolni-tisk.pdf` (papírová kontrola na A4 před objednáním) a
 `opasek-desticka-vysvetlivky.svg` (popisky, **NEposílat řezárně** — má šedou geometrii
 a vrstvy `NEREZAT`/`NEGRAVIROVAT`, aby se nedal splést s výrobním souborem; je **zmenšený
 na A4, tedy ne 1:1**, takže se z něj nesmí měřit).
-PDF jsou gitignorovaná, generují se tímhle příkazem.
+PDF jsou gitignorovaná (SVG a DXF ne), generují se tímhle příkazem.
 
 **Destička 215 × 184 mm, čirý litý akrylát 3 mm.** Pro **hrot a konec u přezky zvládne
 28–45 mm** (přes příčnou stupnici jakoukoli šířku v tom rozsahu), pro **zaoblený konec jen
@@ -164,17 +166,32 @@ a jestli jsi fyzická osoba nebo máš IČ. Bez toho se řezárna dvakrát dopt�
 
 ## Kam poptávku poslat
 
-Ověřeno 2026-09-10, že berou vektorová data a řežou od jednoho kusu. **Ceny žádná z nich neuvádí,
-dělají se na dotaz.**
+Ověřeno **2026-09-11** načtením stránek provozoven. **Ceny žádná z nich neuvádí, dělají se na
+dotaz** – poptat radši dvě až tři, u jednorázového malého kusu se liší i násobně.
 
-| Provozovna                | Odkaz                                                                 | Poznámka                                                            |
-| ------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| plexi.cz                  | <https://www.plexi.cz/zakazkova-vyroba/rezani-a-gravirovani-laserem/> | řezání i gravírování plexi                                          |
-| TITAN-Multiplast          | <https://www.titan-multiplast.cz/sluzby/rezani-plastu-laserem>        | plasty 0,5–50 mm                                                    |
-| MK Plexi, Praha 4 Modřany | —                                                                     | stroj na tenké malé díly, berou Corel/AutoCAD/Illustrator i vektory |
-| Levné gravírování         | <https://www.levne-gravirovani.cz/rezani-plastu-a-plexiskla>          | plasty a plexi                                                      |
+### Doporučené: prodejci akrylátu, kteří mají vlastní laser
 
-Poptat radši dvě až tři, ceny za jednorázový malý kus se dost liší.
+Tohle je klíčové kritérium. Kdo akrylát prodává, ten **má lité (GS) skladem** a nemusí se řešit,
+jestli sežene 3mm čirý GS. Kdo jen řeže dodaný materiál, u toho si ho musíš koupit sám.
+
+| Provozovna                                                | Co ověřeno                                                                                                                                                                                                                  | Kontakt                                        |
+| --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| **ALT s.r.o.**, Praha 9 Letňany, Beranových 130           | Na stránce laseru **výslovně píší „extrudované (XT) nebo lité (GS)"** – jediní, kdo ten rozdíl sám pojmenuje. PMMA až 30 mm, čtyři lasery, gravírování vektorově i rastrem, sklad přířezů, výslovně zvou i kutily.          | <alt@alt.cz>, +420 283 920 766, po–pá 9–17     |
+| **plexi.cz** (MK Plexi), Praha 4 Modřany, Mezi Vodami 17a | PMMA až 50 mm, **kusová výroba, termín 1–5 dní**, gravírování vektorově i rastrem. GS/XT rozdíl znají (u backlight desek uvádějí „výhradně lité (GS)"). Data berou z Corelu, AutoCADu, Illustratoru a vektorových programů. | <plexi@plexi.cz>                               |
+| **LIFE VORÁČ** (levne-gravirovani.cz), Jedovnice u Brna   | Plexi **do 6 mm na formátu 630 × 350 mm** (naše destička se vejde), na silnější mají velký laser 3 × 2 m. Gravírování ano. Formáty **cdr, dwg, eps**. GS/XT nerozlišují – je potřeba se doptat.                             | <life@life.cz>, +420 603 501 700               |
+| **Gravírování Klaban**, Kobylnice 50 u Mladé Boleslavi    | **Výslovně od 1 kusu**, řezání i gravírování, „nejvhodnější jsou vektorová data s jasně vyznačenými řeznými liniemi". Tloušťky ani GS/XT neuvádějí. Menší provoz, řežou i přírodní kůži.                                    | <info@gravirovani-klaban.cz>, +420 604 621 934 |
+
+**Doporučené pořadí:** ALT a plexi.cz oslovit oba (jsou to prodejci akrylátu s laserem, tedy
+nejmenší riziko u materiálu), a jako třetí LIFE VORÁČ, když chceš cenu z Moravy.
+
+### Kam to neposílat
+
+- **Automatické online kalkulačky řezání laserem** typu **Grupol** vypadají ideálně (nahraješ DXF,
+  cenu vidíš hned), ale jsou to **pálírny plechu**: v nabídce mají ALU, CRS a HRS, tedy hliník
+  a ocel. **Plexi neřežou a gravírování nedělají.**
+- Obecně: kalkulačka, která chce „pouze tvar výpalku bez textů", umí naceňovat **jen řezané
+  kontury**. Naše destička je ze tří čtvrtin gravírování (~4 700 mm proti ~1 630 mm řezu), takže
+  by z ní vyšel obrys a 17 děr — a nic z toho, co destičku dělá použitelnou.
 
 ## Varianta bez řezárny
 

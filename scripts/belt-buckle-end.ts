@@ -831,6 +831,210 @@ export function buildBeltPlateSvg(
  * Vysvětlivky k destičce: tentýž tvar s popisky, k pochopení a k vytištění na stěnu.
  * **Není to řezací soubor** – obsahuje živý text a nesmí se posílat řezárně.
  */
+/**
+ * Převod destičky do DXF R12. Proč vůbec: české zakázkové řezárny běžně chtějí
+ * Corel/AutoCAD/Illustrator a software na většině levných CO2 strojů (RDWorks)
+ * bere SVG špatně nebo vůbec. Export z Inkscape není řešení – ten oblouky
+ * rozseká na polyliny, což je přesně to, co u oblouků r = 4 až 22,5 mm nechceme.
+ *
+ * Emituje se jen podmnožina, kterou generátor kreslí: LINE, ARC, CIRCLE.
+ * DXF má **osu Y nahoru**, SVG dolů, takže se y zrcadlí (`y' = H − y`).
+ * Směr oblouku se neurčuje úvahou o znaménkách, ale numericky: ARC v DXF jde
+ * vždy proti směru hodinových ručiček, takže se otestuje, jestli cesta proti
+ * směru ze startu do konce prochází skutečným středem oblouku.
+ */
+type DxfEntity =
+  | { kind: 'line'; layer: string; x1: number; y1: number; x2: number; y2: number }
+  | { kind: 'arc'; layer: string; cx: number; cy: number; r: number; a0: number; a1: number }
+  | { kind: 'circle'; layer: string; cx: number; cy: number; r: number };
+
+/** Střed a krajní úhly oblouku z SVG zápisu `A rx ry rot laf sf x y`. */
+function svgArcToCentre(
+  x0: number,
+  y0: number,
+  r: number,
+  largeArc: boolean,
+  sweep: boolean,
+  x1: number,
+  y1: number,
+): { cx: number; cy: number } {
+  const dx = x1 - x0;
+  const dy = y1 - y0;
+  const d = Math.hypot(dx, dy);
+  // Poloměr menší než polovina tětivy by neexistoval; generátor takový nekreslí,
+  // ale kdyby zaokrouhlení sáhlo pod, vezme se mez.
+  const h = Math.sqrt(Math.max(0, r * r - (d / 2) ** 2));
+  const mx = (x0 + x1) / 2;
+  const my = (y0 + y1) / 2;
+  const sign = largeArc === sweep ? 1 : -1;
+  return { cx: mx + (sign * h * -dy) / d, cy: my + (sign * h * dx) / d };
+}
+
+function svgLayerToDxf(svg: string, layerId: string, layer: string, H: number): DxfEntity[] {
+  const start = svg.indexOf(`<g id="${layerId}"`);
+  if (start < 0) throw new Error(`DXF: vrstva ${layerId} v SVG chybí.`);
+  const body = svg.slice(start, svg.indexOf('</g>', start));
+  const out: DxfEntity[] = [];
+  const flip = (y: number): number => H - y;
+
+  for (const m of body.matchAll(/<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([\d.]+)"/g)) {
+    out.push({
+      kind: 'circle',
+      layer,
+      cx: Number(m[1]),
+      cy: flip(Number(m[2])),
+      r: Number(m[3]),
+    });
+  }
+
+  for (const pm of body.matchAll(/<path d="([^"]+)"/g)) {
+    const d = pm[1]!;
+    const tokens = [...d.matchAll(/([MLAZ])([^MLAZ]*)/g)];
+    let cur: [number, number] | null = null;
+    let first: [number, number] | null = null;
+    for (const t of tokens) {
+      const cmd = t[1]!;
+      const nums = [...t[2]!.matchAll(/-?[\d.]+/g)].map((n) => Number(n[0]));
+      if (cmd === 'M') {
+        cur = [nums[0]!, nums[1]!];
+        first = cur;
+      } else if (cmd === 'L') {
+        for (let i = 0; i + 1 < nums.length; i += 2) {
+          const next: [number, number] = [nums[i]!, nums[i + 1]!];
+          if (cur) {
+            out.push({
+              kind: 'line',
+              layer,
+              x1: cur[0],
+              y1: flip(cur[1]),
+              x2: next[0],
+              y2: flip(next[1]),
+            });
+          }
+          cur = next;
+        }
+      } else if (cmd === 'A') {
+        if (!cur) throw new Error('DXF: oblouk bez počátku.');
+        const [rx, , , laf, sf, x1, y1] = nums as unknown as number[];
+        const c = svgArcToCentre(cur[0], cur[1], rx!, laf === 1, sf === 1, x1!, y1!);
+        // Do DXF souřadnic (y nahoru) a pak úhly.
+        const cy = flip(c.cy);
+        const sA = Math.atan2(flip(cur[1]) - cy, cur[0] - c.cx);
+        const eA = Math.atan2(flip(y1!) - cy, x1! - c.cx);
+        // Skutečný střed oblouku v SVG: bod na kružnici v polovině rozsahu.
+        const midSvg = (() => {
+          const a0 = Math.atan2(cur[1] - c.cy, cur[0] - c.cx);
+          const a1 = Math.atan2(y1! - c.cy, x1! - c.cx);
+          let da = a1 - a0;
+          if (sf === 1 && da < 0) da += 2 * Math.PI;
+          if (sf === 0 && da > 0) da -= 2 * Math.PI;
+          const am = a0 + da / 2;
+          return [c.cx + rx! * Math.cos(am), c.cy + rx! * Math.sin(am)] as const;
+        })();
+        const midAngle = Math.atan2(flip(midSvg[1]) - cy, midSvg[0] - c.cx);
+        const inCcw = (a0: number, a1: number, a: number): boolean => {
+          const norm = (v: number): number => ((v % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+          const span = norm(a1 - a0);
+          return norm(a - a0) <= span + 1e-9;
+        };
+        const [a0, a1] = inCcw(sA, eA, midAngle) ? [sA, eA] : [eA, sA];
+        out.push({ kind: 'arc', layer, cx: c.cx, cy, r: rx!, a0, a1 });
+        cur = [x1!, y1!];
+      } else if (cmd === 'Z') {
+        if (cur && first && (cur[0] !== first[0] || cur[1] !== first[1])) {
+          out.push({
+            kind: 'line',
+            layer,
+            x1: cur[0],
+            y1: flip(cur[1]),
+            x2: first[0],
+            y2: flip(first[1]),
+          });
+        }
+        cur = first;
+      }
+    }
+  }
+  return out;
+}
+
+const DXF_LAYERS: { name: string; colour: number }[] = [
+  { name: 'REZ', colour: 1 },
+  { name: 'GRAVIROVANI', colour: 5 },
+];
+
+function dxfDocument(entities: DxfEntity[]): string {
+  const g = (code: number, value: string | number): string => `${code}\n${value}\n`;
+  const num = (v: number): string => v.toFixed(4);
+  const deg = (rad: number): string => (((rad * 180) / Math.PI + 360) % 360).toFixed(4);
+  let out = '';
+  out += g(0, 'SECTION') + g(2, 'HEADER');
+  // $INSUNITS 4 = milimetry, $MEASUREMENT 1 = metrická soustava.
+  out += g(9, '$INSUNITS') + g(70, 4);
+  out += g(9, '$MEASUREMENT') + g(70, 1);
+  out += g(0, 'ENDSEC');
+  out +=
+    g(0, 'SECTION') + g(2, 'TABLES') + g(0, 'TABLE') + g(2, 'LAYER') + g(70, DXF_LAYERS.length);
+  for (const l of DXF_LAYERS) {
+    out += g(0, 'LAYER') + g(2, l.name) + g(70, 0) + g(62, l.colour) + g(6, 'CONTINUOUS');
+  }
+  out += g(0, 'ENDTAB') + g(0, 'ENDSEC');
+  out += g(0, 'SECTION') + g(2, 'ENTITIES');
+  for (const e of entities) {
+    if (e.kind === 'line') {
+      out +=
+        g(0, 'LINE') +
+        g(8, e.layer) +
+        g(10, num(e.x1)) +
+        g(20, num(e.y1)) +
+        g(30, '0.0') +
+        g(11, num(e.x2)) +
+        g(21, num(e.y2)) +
+        g(31, '0.0');
+    } else if (e.kind === 'circle') {
+      out +=
+        g(0, 'CIRCLE') +
+        g(8, e.layer) +
+        g(10, num(e.cx)) +
+        g(20, num(e.cy)) +
+        g(30, '0.0') +
+        g(40, num(e.r));
+    } else {
+      out +=
+        g(0, 'ARC') +
+        g(8, e.layer) +
+        g(10, num(e.cx)) +
+        g(20, num(e.cy)) +
+        g(30, '0.0') +
+        g(40, num(e.r)) +
+        g(50, deg(e.a0)) +
+        g(51, deg(e.a1));
+    }
+  }
+  out += g(0, 'ENDSEC') + g(0, 'EOF');
+  return out;
+}
+
+/**
+ * DXF destičky. `cutOnly` je pro automatické kalkulačky, které chtějí „pouze tvar
+ * výpalku v měřítku 1:1, bez textů" – ty gravírování naceňovat neumí.
+ */
+export function buildBeltPlateDxf(
+  end: BeltEndSpec,
+  tip: BeltTipSpec,
+  plate: BeltPlateSpec = DEFAULT_BELT_PLATE,
+  cutOnly = false,
+): string {
+  const L = beltPlateLayout(end, tip, plate);
+  const svg = buildBeltPlateSvg(end, tip, plate);
+  const H = L.plateHeightMm;
+  const entities = [
+    ...svgLayerToDxf(svg, 'cut', 'REZ', H),
+    ...(cutOnly ? [] : svgLayerToDxf(svg, 'engrave', 'GRAVIROVANI', H)),
+  ];
+  return dxfDocument(entities);
+}
+
 export function buildPlateLegendSvg(
   end: BeltEndSpec,
   tip: BeltTipSpec,
@@ -1080,6 +1284,16 @@ async function main(): Promise<void> {
 
     // Papírová kontrola před objednáním akrylátu: vytisknout na A4 na šířku na 100 %
     // a přeměřit obrys. Obrys sám je kalibrace, jiná značka není potřeba.
+    // DXF: české zakázkové řezárny chtějí Corel/AutoCAD/Illustrator a automatické
+    // kalkulačky přímo DXF. `-rez` je varianta bez gravírování pro kalkulačky,
+    // které naceňují jen řezané kontury.
+    const dxfPath = resolve(outDir, 'opasek-desticka.dxf');
+    writeFileSync(dxfPath, buildBeltPlateDxf(end, tip), 'utf8');
+    console.log(`Zapsáno ${dxfPath} (2 vrstvy, mm, oblouky jako ARC)`);
+    const dxfCutPath = resolve(outDir, 'opasek-desticka-rez.dxf');
+    writeFileSync(dxfCutPath, buildBeltPlateDxf(end, tip, DEFAULT_BELT_PLATE, true), 'utf8');
+    console.log(`Zapsáno ${dxfCutPath} (jen řez, pro automatické kalkulačky)`);
+
     const legendPath = resolve(outDir, 'opasek-desticka-vysvetlivky.svg');
     writeFileSync(legendPath, buildPlateLegendSvg(end, tip), 'utf8');
     console.log(`Zapsáno ${legendPath} (vysvětlivky – NEposílat řezárně)`);

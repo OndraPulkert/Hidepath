@@ -1485,3 +1485,49 @@ Doplněno `cornerRadiusMm: 3` do specifikace; levý horní roh zůstává **zkos
 orientační značka. Na laseru to nic nestojí a nezasahuje do jediné funkční kóty. Test na
 gravírování uvnitř obrysu umí teď i rohové kvadranty, aby se do odebraného materiálu nedalo
 zagravírovat.
+
+### DXF: doplněno, protože bez něj to nejde poptat (2026-09-11)
+
+Autor začal hledat řezárnu a hned narazil na formulář, který chce **DXF** („pro správnou kalkulaci
+musí soubor obsahovat pouze tvar výpalku v měřítku 1:1, bez ohybových čar, razítka, textů;
+tolerance výpalku 0,2 mm"). Revize vyrobitelnosti tohle předpověděla: poptávka DXF slibovala,
+generátor ho neumělo vyrobit, a já jsem ten slib místo doplnění formátu smazal. To bylo špatné
+rozhodnutí – české zakázkové řezárny běžně chtějí Corel/AutoCAD/Illustrator (`cdr`, `dwg`, `eps`)
+a software na většině levných CO₂ strojů bere SVG špatně nebo vůbec.
+
+Doplněn tedy **vlastní export do DXF R12**. Klíčové rozhodnutí: **ne přes Inkscape.** Ten oblouky
+rozseká na polyliny, což je přesně to, co u oblouků r = 4 až 22,5 mm nechceme — laser by řezal
+faseťák. Export emituje `LINE`, `ARC` a `CIRCLE`, tedy přesně tu podmnožinu, kterou generátor
+kreslí.
+
+Dvě pasti, které jsem musel vyřešit:
+
+1. **DXF má osu Y nahoru, SVG dolů**, takže se `y` zrcadlí (`y' = H − y`).
+2. **`ARC` v DXF jde vždy proti směru hodinových ručiček**, zatímco SVG má příznak směru. Když se
+   směr splete, vyjde **doplněk oblouku** — z drážky 45° se stane 315°, a to je díl do koše.
+   Směr proto neurčuji úvahou o znaménkách (tam bych se spletl), ale **numericky**: spočítám
+   skutečný střední bod oblouku a otestuji, jestli cesta proti směru ručiček ze startu do konce
+   tímhle bodem prochází.
+
+Zafixováno testem `DXF má tytéž oblouky jako SVG, včetně směru`, který páruje všech 22 oblouků na
+střed, poloměr **a rozsah** — právě rozsah špatný směr prozradí. Druhý test hlídá jednotky
+(`$INSUNITS 4`, `$MEASUREMENT 1`), absenci textu, obě vrstvy a obálku 215 × 184 s nulou v levém
+dolním rohu.
+
+Vedle plné verze vzniká i **`opasek-desticka-rez.dxf`** bez gravírování — pro automatické
+kalkulačky, které naceňují jen řezané kontury.
+
+### Kam to neposílat: automatické kalkulačky jsou pálírny plechu
+
+Ověřeno na Grupolu, který autor našel: online kalkulace, nahraješ DXF, cena hned. Jenže v nabídce
+materiálů má **ALU, CRS a HRS**, tedy hliník a ocel válcovanou za studena a za tepla. **Plexi
+neřežou a gravírování nedělají.** Obecné pravidlo, které z toho plyne: kalkulačka, která chce
+„pouze tvar výpalku bez textů", umí naceňovat **jen řezané kontury** — a naše destička je ze tří
+čtvrtin gravírování (~4 700 mm proti ~1 630 mm řezu). Vyšel by z ní obrys a 17 děr a nic z toho,
+co ji dělá použitelnou.
+
+Seznam ověřených provozoven (2026-09-11) je v `docs/zadani/opasek-sablona-poptavka.md`.
+Rozhodovací kritérium, které jsem si z rešerše odnesl: **oslovit prodejce akrylátu, který má
+vlastní laser.** Kdo akrylát prodává, má lité (GS) skladem; kdo jen řeže dodaný materiál, u toho
+se 3mm čirý GS musí sehnat samostatně. Z oslovených to jsou ALT (Praha 9) a plexi.cz (Praha 4) —
+a ALT je zároveň jediný, kdo rozdíl GS/XT na své stránce sám pojmenuje.

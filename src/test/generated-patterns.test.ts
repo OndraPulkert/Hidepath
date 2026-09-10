@@ -36,6 +36,16 @@ const plate = Object.entries(svgs).find(
 
 const legend = Object.entries(svgs).find(([path]) => path.includes('vysvetlivky'))?.[1];
 
+const dxfs: Record<string, string> = import.meta.glob('/docs/generated/*.dxf', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+const plateDxf = Object.entries(dxfs).find(
+  ([path]) => path.includes('opasek-desticka') && !path.includes('-rez'),
+)?.[1];
+const plateDxfCut = Object.entries(dxfs).find(([path]) => path.includes('-rez'))?.[1];
+
 const lasers = Object.entries(svgs)
   .map(([path, svg]) => ({
     path,
@@ -740,6 +750,93 @@ describe('destička na opasek', () => {
       const dy = Math.min(Math.abs(d.y1 - L.buckleRowY), Math.abs(d.y2 - L.buckleRowY));
       expect(dy, 'čárka zasahuje do oválu').toBeGreaterThanOrEqual(L.slotWidthMm / 2);
     }
+  });
+
+  it('DXF má tytéž oblouky jako SVG, včetně směru (regrese)', () => {
+    // DXF má osu Y nahoru a ARC vždy proti směru hodinových ručiček, SVG má Y dolů
+    // a příznak směru. Když se směr splete, vyjde doplněk oblouku – tedy z drážky
+    // r = 22,5 mm se stane 315° místo 45°. Porovnává se střed, poloměr a **rozsah**,
+    // protože právě rozsah špatný směr prozradí.
+    expect(plateDxf, 'docs/generated/opasek-desticka.dxf').toBeDefined();
+    const H = L.plateHeightMm;
+    type Arc = { cx: number; cy: number; r: number; span: number };
+    const svgArcs: Arc[] = [];
+    for (const d of [...plate!.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)) {
+      let cur: [number, number] | null = null;
+      for (const t of d.matchAll(/([MLAZ])([^MLAZ]*)/g)) {
+        const n = [...t[2]!.matchAll(/-?[\d.]+/g)].map((m) => Number(m[0]));
+        if (t[1] === 'M') cur = [n[0]!, n[1]!];
+        else if (t[1] === 'L') {
+          for (let i = 0; i + 1 < n.length; i += 2) cur = [n[i]!, n[i + 1]!];
+        } else if (t[1] === 'A') {
+          const [rx, , , laf, sf, x1, y1] = n as unknown as number[];
+          const dx = x1! - cur![0];
+          const dy = y1! - cur![1];
+          const dist = Math.hypot(dx, dy);
+          const h = Math.sqrt(Math.max(0, rx! * rx! - (dist / 2) ** 2));
+          const sign = (laf === 1) === (sf === 1) ? 1 : -1;
+          const cx = (cur![0] + x1!) / 2 + (sign * h * -dy) / dist;
+          const cyS = (cur![1] + y1!) / 2 + (sign * h * dx) / dist;
+          const a0 = Math.atan2(cur![1] - cyS, cur![0] - cx);
+          const a1 = Math.atan2(y1! - cyS, x1! - cx);
+          let da = a1 - a0;
+          if (sf === 1 && da < 0) da += 2 * Math.PI;
+          if (sf === 0 && da > 0) da -= 2 * Math.PI;
+          svgArcs.push({ cx, cy: H - cyS, r: rx!, span: Math.abs(da) });
+          cur = [x1!, y1!];
+        }
+      }
+    }
+    const dxfArcs: Arc[] = [];
+    for (const block of plateDxf!.split('\n0\n')) {
+      if (!block.startsWith('ARC')) continue;
+      const get = (code: number): number =>
+        Number(new RegExp(`\n${code}\n(-?[\\d.]+)`).exec(block)?.[1] ?? NaN);
+      const a0 = get(50);
+      const a1 = get(51);
+      const span = ((((a1 - a0) % 360) + 360) % 360) * (Math.PI / 180);
+      dxfArcs.push({ cx: get(10), cy: get(20), r: get(40), span });
+    }
+    expect(dxfArcs.length, 'ARC v DXF').toBe(svgArcs.length);
+    const used = new Set<number>();
+    for (const sa of svgArcs) {
+      const hit = dxfArcs.findIndex(
+        (da, i) =>
+          !used.has(i) &&
+          Math.abs(da.cx - sa.cx) < 0.002 &&
+          Math.abs(da.cy - sa.cy) < 0.002 &&
+          Math.abs(da.r - sa.r) < 0.002 &&
+          Math.abs(da.span - sa.span) < 1e-4,
+      );
+      expect(
+        hit,
+        `oblouk r=${sa.r.toFixed(2)} u (${sa.cx.toFixed(1)}, ${sa.cy.toFixed(1)}) rozsah ${((sa.span * 180) / Math.PI).toFixed(1)}° v DXF`,
+      ).toBeGreaterThanOrEqual(0);
+      used.add(hit);
+    }
+  });
+
+  it('DXF je v milimetrech, bez textu a se dvěma vrstvami', () => {
+    expect(plateDxf!).toContain('$INSUNITS');
+    expect(plateDxf!).toContain('$MEASUREMENT');
+    expect(plateDxf!, 'žádný text').not.toMatch(/\n0\n(TEXT|MTEXT)\n/);
+    expect(plateDxf!).toContain('\n8\nREZ\n');
+    expect(plateDxf!).toContain('\n8\nGRAVIROVANI\n');
+    // Obálka musí být přesně destička; DXF má nulu v levém DOLNÍM rohu.
+    const xs = [...plateDxf!.matchAll(/\n1[01]\n(-?[\d.]+)\n/g)].map((m) => Number(m[1]));
+    const ys = [...plateDxf!.matchAll(/\n2[01]\n(-?[\d.]+)\n/g)].map((m) => Number(m[1]));
+    expect(Math.min(...xs)).toBeCloseTo(0, 3);
+    expect(Math.max(...xs)).toBeCloseTo(L.plateWidthMm, 3);
+    expect(Math.min(...ys)).toBeCloseTo(0, 3);
+    expect(Math.max(...ys)).toBeCloseTo(L.plateHeightMm, 3);
+    // Varianta pro automatické kalkulačky: jen řez, žádné gravírování.
+    expect(plateDxfCut, 'docs/generated/opasek-desticka-rez.dxf').toBeDefined();
+    expect(plateDxfCut!).toContain('\n8\nREZ\n');
+    expect(plateDxfCut!, 'kalkulační DXF nesmí mít gravírování').not.toContain(
+      '\n8\nGRAVIROVANI\n',
+    );
+    const cutCircles = [...plateDxfCut!.matchAll(/\n0\nCIRCLE\n/g)].length;
+    expect(cutCircles, 'kružnice v řezu').toBe(17);
   });
 
   it('vysvětlivky jsou samostatný soubor a nejsou určené řezárně', () => {
