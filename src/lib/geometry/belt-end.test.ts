@@ -11,6 +11,9 @@ import {
   checkBeltTipSpec,
   holeOffsetsFromApexMm,
   middleHoleIndex,
+  tipHalfWidthAtMm,
+  tipSlope,
+  tipTangentPoint,
   totalStrapLengthMm,
   checkBeltEndSpec,
   doubledPerimeterMm,
@@ -130,5 +133,56 @@ describe('konec se špičkou a dírkami', () => {
     expect(totalStrapLengthMm(950, craftPointEnd, DEFAULT_BELT_TIP)).toBeCloseTo(1174.3, 6);
     // A pro druhou ověřenou konfiguraci: obvod 85 cm → hotový rozměr 108 cm.
     expect(totalStrapLengthMm(850, craftPointEnd, DEFAULT_BELT_TIP)).toBeCloseTo(1074.3, 6);
+  });
+});
+
+describe('tvar anglické špičky', () => {
+  const tip = (over: Partial<BeltTipSpec> = {}): BeltTipSpec => ({ ...DEFAULT_BELT_TIP, ...over });
+
+  it('vrchol je zaoblený, ne ostrý', () => {
+    expect(DEFAULT_BELT_TIP.noseRadiusMm).toBeGreaterThan(0);
+    // Ostrý triangl by ve 1 mm od vrcholu měl poloviční šířku 0,52 mm; oblouk r = 4 mm dá 2,6 mm.
+    expect(tipHalfWidthAtMm(DEFAULT_BELT_TIP, 1)).toBeGreaterThan(2);
+  });
+
+  it('bok je na zaoblení vrcholu tečný', () => {
+    const tan = tipTangentPoint(DEFAULT_BELT_TIP);
+    const r = DEFAULT_BELT_TIP.noseRadiusMm;
+    // Bod dotyku musí ležet na kružnici o poloměru r se středem na střednici ve výšce r.
+    expect(Math.hypot(tan.halfWidthMm, r - tan.fromApexMm)).toBeCloseTo(r, 3);
+    expect(tan.fromApexMm).toBeCloseTo(2.355, 2);
+    expect(tan.halfWidthMm).toBeCloseTo(3.646, 2);
+  });
+
+  it('profil odpovídá špičce odměřené z PDF CraftPoint do 0,1 mm', () => {
+    // Levá hrana odečtená z renderu 300 dpi, přepočtená na poloviční šířku.
+    const measured: [number, number][] = [
+      [0.5, 1.92],
+      [1.0, 2.69],
+      [1.5, 3.19],
+      [2.5, 3.74],
+      [3.0, 3.95],
+      [3.5, 4.17],
+      [4.0, 4.42],
+      [21.0, 12.105],
+      [38.0, 19.685],
+    ];
+    for (const [y, half] of measured) {
+      expect(Math.abs(tipHalfWidthAtMm(DEFAULT_BELT_TIP, y) - half)).toBeLessThan(0.1);
+    }
+  });
+
+  it('sklon boku odpovídá odměřenému 0,45 mm na mm', () => {
+    expect(tipSlope(DEFAULT_BELT_TIP)).toBeCloseTo(0.451, 2);
+  });
+
+  it('na začátku a na konci hrotu dává krajní hodnoty', () => {
+    expect(tipHalfWidthAtMm(DEFAULT_BELT_TIP, 0)).toBe(0);
+    expect(tipHalfWidthAtMm(DEFAULT_BELT_TIP, DEFAULT_BELT_TIP.tipLengthMm)).toBeCloseTo(20, 6);
+  });
+
+  it('odmítne ostrý hrot i příliš velké zaoblení', () => {
+    expect(checkBeltTipSpec(tip({ noseRadiusMm: 0 })).join(' ')).toContain('ostrý hrot');
+    expect(checkBeltTipSpec(tip({ noseRadiusMm: 40 })).join(' ')).toContain('příliš velké');
   });
 });

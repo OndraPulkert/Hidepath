@@ -28,6 +28,7 @@ import {
   ligamentMm,
   middleHoleIndex,
   holeOffsetsFromApexMm,
+  tipTangentPoint,
 } from '../src/lib/geometry/belt-end.ts';
 
 const INK = '#2b2b2b';
@@ -223,8 +224,14 @@ function tipPage(tip: BeltTipSpec, end: BeltEndSpec): string[] {
   out.push(...calibration(150, 30));
 
   // Obrys s anglickou špičkou, dole otevřený.
+  // Vrchol je zaoblený obloukem r; boky jsou na oblouk tečné (viz tipTangentPoint).
+  const tan = tipTangentPoint(tip);
+  const r = tip.noseRadiusMm;
+  const tanY = apexY + tan.fromApexMm;
   out.push(
-    `<path d="M${f(strapX)} ${f(strapEndY)} L${f(strapX)} ${f(baseY)} L${f(cx)} ${f(apexY)} ` +
+    `<path d="M${f(strapX)} ${f(strapEndY)} L${f(strapX)} ${f(baseY)} ` +
+      `L${f(cx - tan.halfWidthMm)} ${f(tanY)} ` +
+      `A${f(r)} ${f(r)} 0 0 1 ${f(cx + tan.halfWidthMm)} ${f(tanY)} ` +
       `L${f(strapX + w)} ${f(baseY)} L${f(strapX + w)} ${f(strapEndY)}" ` +
       `fill="none" stroke="${INK}" stroke-width="0.3"/>`,
   );
@@ -243,6 +250,7 @@ function tipPage(tip: BeltTipSpec, end: BeltEndSpec): string[] {
 
   const midY = apexY + offsets[mid];
   out.push(text(textX, apexY + tip.tipLengthMm / 2, `hrot ${cz(tip.tipLengthMm)} mm`, 3.2));
+  out.push(text(textX, apexY + 4, `vrchol zaoblený r = ${cz(r)} mm (není ostrý hrot)`, 3.2, RED));
   out.push(
     text(
       textX,
@@ -272,6 +280,7 @@ function tipPage(tip: BeltTipSpec, end: BeltEndSpec): string[] {
   out.push(
     ...notes(strapX, strapEndY + 10, [
       `Dírky Ø ${cz(tip.holeDiameterMm)} mm, ${tip.holeCount} kusů, rozteč ${cz(tip.holeSpacingMm)} mm.`,
+      `Vrchol je oblouk r = ${cz(r)} mm, boky jsou na něj tečné — odměřeno z PDF CraftPoint, ne ostrý hrot.`,
       `CELKOVÁ DÉLKA PÁSU = naměřený obvod + ${cz(total)} mm`,
       `   (${cz(end.tailLengthMm)} mm přehnutý konec u přezky + ${cz(apexToMiddleHoleMm(tip))} mm od hrotu k prostřední dírce)`,
       'Obvod měř na stávajícím opasku od ohybu u přezky k dírce, kterou nosíš.',
