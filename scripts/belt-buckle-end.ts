@@ -836,7 +836,13 @@ export function buildPlateLegendSvg(
 
   const parts: string[] = [
     note(0, -8, `Destička na opasek ${L.minBeltWidthMm}–${L.maxBeltWidthMm} mm — co je co`, 6),
-    note(0, -3, 'Vysvětlivky. Řezárně posílej opasek-desticka.svg, ne tento soubor.', 3, GREY),
+    note(
+      0,
+      -3,
+      'Vysvětlivky, NE 1:1 (zmenšeno na A4) – neměř z nich. Řezárně posílej opasek-desticka.svg.',
+      3,
+      GREY,
+    ),
     // Praktická past: tužka je kužel a do 2mm otvoru ve 3mm akrylu nedosáhne na kůži.
     note(
       0,

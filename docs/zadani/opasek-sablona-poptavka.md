@@ -7,7 +7,8 @@
 `opasek-desticka-1-1.pdf` (tentýž díl v křivkách, záložní formát pro řezárnu),
 `opasek-desticka-kontrolni-tisk.pdf` (papírová kontrola na A4 před objednáním) a
 `opasek-desticka-vysvetlivky.svg` (popisky, **NEposílat řezárně** — má šedou geometrii
-a vrstvy `NEREZAT`/`NEGRAVIROVAT`, aby se nedal splést s výrobním souborem).
+a vrstvy `NEREZAT`/`NEGRAVIROVAT`, aby se nedal splést s výrobním souborem; je **zmenšený
+na A4, tedy ne 1:1**, takže se z něj nesmí měřit).
 PDF jsou gitignorovaná, generují se tímhle příkazem.
 
 **Destička 215 × 184 mm, čirý litý akrylát 3 mm.** Pro **hrot a konec u přezky zvládne
