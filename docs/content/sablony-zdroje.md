@@ -329,8 +329,44 @@ ohybu a zajisti šroubovacími nýty“, nic o navlhčení. Jestli ohyb 3–4 mm
 je potřeba **vyzkoušet na odřezku pásu**, než se ohne skutečný pásek. Do obsahu projektu to nepsat,
 dokud to nebude ověřené.
 
-**Ztenčení (skiving) v místě ohybu** je věc z videí, kterou tahle šablona nevyžaduje – zdvojený konec
-má 6–8 mm, ale bez poutka to nikde nevadí. Ztenčovat by znamenalo sáhnout po sedlářském půlměsíci,
-který je v katalogu zapsaný jako „nekupujte“.
+**Ztenčení (skiving) v místě ohybu** viz samostatnou sekci níže – souvisí s poutkem a dřívější
+tvrzení „bez poutka to nikde nevadí“ je potřeba upřesnit.
 
 **Pořadí:** špička se řeže až po zkoušce na těle a po vysekání dírek (viz sekci výše).
+
+### Zkosení (skiving) u přezky a poutko – ověřeno 2026-09-10
+
+Dotaz autora: ve videích konce pásku „nějak orezávají“ a dávají tam poutko. Jde o **zkosení
+(skiving)** – ztenčení kůže v místě ohybu. Termín potvrzuje slovník CraftPointu, který u round knife
+uvádí, že umožňuje „dlouhé, rovné řezy, složité křivky a také **zkosení (skiving)** kůže“.
+
+**Proč se to dělá.** Ohnutý konec ze 3–4 mm kůže má ve dvou vrstvách 6–8 mm. To je tuhý hrbol hned
+za přezkou: netiskne se k tělu, pásek v poutkách kalhot nesedí rovně a je to nejvíc vidět. Ztenčená
+kůže se navíc ochotněji ohne – vnější vlákna v ohybu jsou v tahu.
+
+**Souvislost s poutkem, kterou autor správně vytušil.** Poutko se navléká přes **zdvojenou** část,
+ale volný konec pásku, který jím pak prochází, má jen jednu vrstvu. Bez zkosení musí být poutko
+dimenzované na 8 mm a volný konec v něm potom chrastí. Se zkosením vyjde jedna velikost poutka
+těsná na obojí. **Tím se upřesňuje dřívější poznámka v tomto dokumentu, že bez poutka zkosení
+nevadí: s poutkem vadí.** (Tohle je úvaha z geometrie, ne citace návodu – vyzkoušet na odřezku.)
+
+**Poutko v šabloně CraftPoint není.** Ověřeno v seznamu kování generátoru: „40mm opasková přezka
+× 1“ a „Šroubovací nýty (Chicago šrouby) × 2“, nic víc. Kdo poutko chce, dělá si ho sám:
+
+- Z tenčího pruhu kůže než je pásek – ideálně **z odřezku 1,2 mm kůže z pouzdra na karty**.
+- Slepit nebo prošít do kroužku, spoj na spodní straně.
+- Navléknout **před** ohnutím konce, aby zůstalo mezi přezkou a nýty a nesklouzlo. Schéma z videa ho
+  označuje jako „removable loop“, tedy varianta, kdy se dá vyjmout.
+- Obvod měřit kolem **zdvojené** části, ne kolem volného konce.
+
+**Nástroje na zkosení (ověřeno přes `.js` 2026-09-10):**
+
+| Nástroj                                                                                                           | Cena           | Stav                  |
+| ----------------------------------------------------------------------------------------------------------------- | -------------- | --------------------- |
+| [French skiver ze santalového dřeva 6 mm](https://craft-point.cz/products/french-skiver-ze-santaloveho-dreva-6mm) | 567 Kč         | **skladem**           |
+| [French skiver CraftPoint 10 mm](https://craft-point.cz/products/french-skiver-craftpoint-10mm)                   | 911 Kč         | nedostupné            |
+| Sedlářský půlměsíc                                                                                                | 1 350–2 727 Kč | viz notes-vybaveni.md |
+
+Doporučení pro první pásek: **zkosení vynechat** a poutko udělat z tenkého odřezku dimenzované na
+zdvojenou část. Když bude hrbol vadit, je zkosení ta oprava a French skiver za 567 Kč nejlevnější
+cesta – ale je to nástroj, který se musí brousit a natrénovat, stejně jako půlměsíc.
