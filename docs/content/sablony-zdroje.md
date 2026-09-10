@@ -298,3 +298,39 @@ odstraňuje riziko špatné míry úplně:
 
 Cena za tuhle jistotu je jen to, že se špička řeže na konci místo na začátku. Až se bude psát obsah
 projektu pásek, tohle pořadí kroků do něj patří.
+
+### Tvarování konců pásku
+
+Pásek má dva konce a jen jeden z nich se tvaruje.
+
+**Špička (volný konec).** Generátor nabízí dvě varianty:
+
+- **Anglická špička** – dva rovné řezy podél pravítka, které se sbíhají do hrotu na středové ose.
+  Pravítko odvede práci, jen hrot musí být přesně na ose. Na první pásek jednodušší varianta.
+- **Zaoblená** – u 40mm pásku je to radius kolem 20 mm. Technika je stejná jako u rohů a výřezu na
+  palec v lekci 5: **krátké tečnové řezy a pak dohladit smirkem** omotaným kolem tužky nebo hranolku.
+  Jeden dlouhý oblouk jedním tahem se nedaří, nůž uhne a hrana má schody.
+
+Rozdíl proti pouzdru je tloušťka: 3–4 mm místo 1,8 mm, tedy počítat se třemi až čtyřmi lehkými tahy
+místo dvou. Čepel držet kolmo, netlačit. Obrys kreslit na rub, aby na líci nezůstala rýha (pravidlo
+z lekce 5).
+
+**Konec u přezky se netvaruje.** Zůstává rovný, jen se v něm vyseknou 6mm otvory pro nýty, vyřízne
+drážka pro trn a konec se ohne v označeném místě. Drážku nejjednodušeji tak, že se vyseknou 4,5mm
+otvory na obou koncích drážky a spojí se nožem.
+
+**Co k tomu není potřeba nový nástroj.** Generátor v seznamu nářadí uvádí jen odlamovací nůž 18 mm,
+řezací podložku a řezací pravítko; hranořízek, Tokonole, hladítko a špachtli označuje jako volitelné.
+Existují průbojníky na jeden úder – zaoblení konce 15–45 mm 396 Kč, anglický hrot 35/40 mm od 510 Kč
+(CraftPoint) – ale jsou to komfortní nástroje, ne nutnost.
+
+**Otevřená otázka: ohyb u přezky.** Postup v generátoru říká jen „Ohni konec kolem přezky v místě
+ohybu a zajisti šroubovacími nýty“, nic o navlhčení. Jestli ohyb 3–4 mm kůže nasucho poznamená líc,
+je potřeba **vyzkoušet na odřezku pásu**, než se ohne skutečný pásek. Do obsahu projektu to nepsat,
+dokud to nebude ověřené.
+
+**Ztenčení (skiving) v místě ohybu** je věc z videí, kterou tahle šablona nevyžaduje – zdvojený konec
+má 6–8 mm, ale bez poutka to nikde nevadí. Ztenčovat by znamenalo sáhnout po sedlářském půlměsíci,
+který je v katalogu zapsaný jako „nekupujte“.
+
+**Pořadí:** špička se řeže až po zkoušce na těle a po vysekání dírek (viz sekci výše).
