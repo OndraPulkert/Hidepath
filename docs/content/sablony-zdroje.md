@@ -450,3 +450,63 @@ neuvádí: **přehnutý konec 90 mm** – použitelné jako referenční hodnota
    krajní sloupce neodřízly.
 4. Je to jiný výrobce než CraftPoint, takže 90 mm nemusí odpovídat jejich rozvržení. **Před použitím
    porovnat s linií ohybu na vytištěném PDF z generátoru.**
+
+## Odměřená geometrie PDF z generátoru CraftPoint (2026-09-10)
+
+PDF jsem si vygeneroval sám (Playwright, tlačítko „Stáhnout střih v PDF“) ve výchozím nastavení:
+**obvod pasu 95 cm, šířka 40 mm, anglická špička**. Vlastní délka se s obvodem mění, ale konec
+u přezky by měl být stejný.
+
+Struktura: **6 stran** – strana 1 je titulní s nastavením, materiály, díly, postupem a kalibračním
+čtvercem 50 × 50 mm; strany 2–6 jsou listy 1/5 až 5/5 s dílem 1174,3 × 40 mm rozděleným po délce,
+spojované přes „joins sheet N“ / „overlap with the line on sheet N“. Vše A4, tisk na 100 %.
+**Šířka pásu na výtisku měří přesně 40,0 mm** (ověřeno na renderu 300 dpi).
+
+### List 1/5 – konec se špičkou
+
+| Prvek                        | Poloha (od horní hrany listu)                   |
+| ---------------------------- | ----------------------------------------------- |
+| Anglická špička              | 23,96–61,98 mm, tedy **hrot je 38,1 mm dlouhý** |
+| Dírka pro trn 1              | 118,28 mm                                       |
+| Dírka pro trn 2              | 143,26 mm                                       |
+| Dírka pro trn 3 (prostřední) | 168,32 mm                                       |
+| Dírka pro trn 4              | 193,29 mm                                       |
+| Dírka pro trn 5              | 218,27 mm                                       |
+
+**Rozestupy dírek: 24,98 / 25,06 / 24,98 / 24,98 mm → 25 mm.** Průměr dírek odměřen 4,83 mm včetně
+tahu linky, nominálně tedy **4,5 mm**, jak uvádí postup. Od hrotu k první dírce **94,3 mm** – dobře
+odpovídá „10 cm / 4″“ ze schématu z videa.
+
+### List 5/5 – konec u přezky (to, na co se autor ptal)
+
+| Prvek                                  | Poloha na listu | **Vzdálenost od linie ohybu** |
+| -------------------------------------- | --------------- | ----------------------------- |
+| Horní konec drážky (Ø 8 mm)            | 90,30 mm        | **−16,0 mm**                  |
+| **Linie ohybu (čárkovaná)**            | 106,30 mm       | **0**                         |
+| Dolní konec drážky (Ø 8 mm, s křížkem) | 122,30 mm       | **+16,0 mm**                  |
+| Otvor pro nýt (Ø 6 mm, s křížkem)      | 171,28 mm       | **+65,0 mm**                  |
+| Konec pásu                             | 186,27 mm       | **+80,0 mm**                  |
+
+- **Drážka pro trn je 40 mm dlouhá a 8 mm široká** a linie ohybu ji **přesně půlí** (−16 / +16 mm).
+  Vznikne dvěma Ø8 otvory ±16 mm od ohybu spojenými nožem.
+- **Přehnutý konec je 80 mm dlouhý** (od ohybu ke konci pásu). To je zóna, o které se mluví
+  u zkosení – u BFLG šablony vyšlo 90 mm, takže stejný řádový rozsah.
+- Ohyb je uprostřed drážky, takže po přehnutí obě poloviny drážky splynou v jeden otvor, kterým
+  prochází trn, a příčka přezky sedí v ohybu.
+
+### Proč je otvor pro nýt jen pod ohybem a ne nad ním
+
+Otvor Ø6 je jen jeden a leží **na přehnutém konci**, 65 mm od ohybu. Po přehnutí se dostane nad
+hlavní pás do polohy −65 mm, kde šablona **schválně nic neznačí**: polohu určuje přehnutý konec.
+Postup je tedy vysekat otvor v konci, přehnout a protlačit/označit skrz do hlavního pásu, čímž je
+zaručené, že otvory sednou na sebe. BFLG to řeší opačně – značí **dva páry** otvorů symetricky
+(±25,5 a ±73,2 mm) a počítá s děrováním naplocho před ohnutím.
+
+### Nalezená nesrovnalost v šabloně CraftPoint
+
+Titulní strana uvádí v materiálech „**Šroubovací nýty (Chicago šrouby) × 2**“ a v postupu
+„Vysekni 4,5mm otvory, **6mm otvory pro nýty**“ (množné číslo), ale ve výkresu je označený
+**jediný** Ø6 otvor. Buď v šabloně chybí druhá poloha nýtu, nebo se „× 2“ vztahuje na dvoudílnost
+šroubovacího nýtu (hlavička + šroubek). Rozlišit to z PDF nejde. Při ceně 8 Kč/ks je bezpečné
+koupit dva. **Pro nás poučení: v našich vlastních šablonách musí seznam materiálu a značky ve
+výkresu souhlasit, jinak si uživatel nemá jak ověřit, co je správně.**
