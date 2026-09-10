@@ -370,3 +370,37 @@ nevadí: s poutkem vadí.** (Tohle je úvaha z geometrie, ne citace návodu – 
 Doporučení pro první pásek: **zkosení vynechat** a poutko udělat z tenkého odřezku dimenzované na
 zdvojenou část. Když bude hrbol vadit, je zkosení ta oprava a French skiver za 567 Kč nejlevnější
 cesta – ale je to nástroj, který se musí brousit a natrénovat, stejně jako půlměsíc.
+
+### Zkosení: jak daleko a jak hluboko – NEOVĚŘENO
+
+Dotaz autora. Hledal jsem 2026-09-10 zdroj s konkrétními čísly (generátor CraftPoint, jejich slovník
+včetně článků `co-je-kozeny-pasek` a `prezka-na-pasek-co-to-je`, web search byl nedostupný).
+**Žádný z nich hloubku zkosení ani délku ohybu neuvádí.** Do obsahu tedy žádné číslo nepsat.
+
+Co se z geometrie a ze šablony odvodit dá:
+
+- **Jak daleko:** není to volba, je to na vytištěné šabloně. Generátor „označí ohyb pro přezku“,
+  takže zóna k zkosení je **od linie ohybu ke konci pásu** – ta část, která se přehne a lehne na
+  hlavní pás. Za linii ohybu se nezkosuje, tam pásek zůstává jednovrstvý a viditelný.
+- **Jak hluboko – pouze aritmetika, ne ověřený postup:** cíl je, aby zdvojené místo nebylo výrazně
+  tlustší než zbytek pásku. Při pásu 4 mm to znamená ztenčit přehnutý konec někam k 1–1,5 mm.
+  **Vyzkoušet na odřezku pásu**, přehnout ho kolem přezky a změřit, než se sáhne na skutečný pásek.
+- **Proč to na první pásek nedělat:** ohyb u přezky je nejvíc zatížené místo celého pásku – táhne
+  přes něj celá síla a drží ho jen dva nýty. Zkosení tam ubírá průřez a je nevratné. Experimentovat
+  s tím na díle, který se nedá vyměnit, je špatný nápad.
+
+Až to autor vyzkouší na odřezku, doplnit sem naměřenou hodnotu jako ověřenou.
+
+### Nezávislé potvrzení parametrů pásku
+
+Článek [co-je-kozeny-pasek](https://craft-point.cz/blogs/slovnik/co-je-kozeny-pasek) (CraftPoint,
+ověřeno 2026-09-10) uvádí nezávisle na generátoru:
+
+- **„pět dírek v odstupech 25 mm“** – shodné s generátorem i se schématem z videa.
+- Tloušťky: **3,5–4 mm** klasický pásek do džínů, **2,5–3 mm** společenský, **minimálně 4 mm**
+  pracovní.
+- Šířky: **38 nebo 40 mm** do džínů, **30 nebo 32 mm** společenský, **45 mm** pracovní.
+- Vnitřní šířka přezky musí odpovídat šířce pásku.
+- Rozteč ozdobného stehu u společenského pásku 3 nebo 4 mm.
+
+Volba 40 mm / 3,0–4,0 mm / 5 dírek po 25 mm v generátoru tedy odpovídá běžné praxi.
