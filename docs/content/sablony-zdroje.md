@@ -103,3 +103,36 @@ neověřený: s hotovým pásem odpadne řezání a zbyde špička, dírky a hra
 Varianta pro toho, kdo chce využít steh z pouzdra: konec u přezky se dá místo nýtů prošít. Pak jsou
 potřeba vidličky a jehly, ale děruje se přes dvě vrstvy 4 mm kůže, což je výrazně tvrdší práce než
 u pouzdra. Do prvního pásku bych to nedával.
+
+### Hotové pásy na opasek – ověřená dostupnost 2026-09-10
+
+Ano, hotový nařezaný pás je běžné zboží a je to doporučená cesta: dvě dlouhé hrany přijdou už rovně
+nařezané, takže padá ta nejtěžší část projektu.
+
+**Pozor na CraftPoint.** Při otevření produktových stránek se všechny šířky u všech jejich pásů
+hlásily jako „Varianta je vyprodaná nebo nedostupná“ – u 2–2,5 mm (155 Kč), 3–3,5 mm (184 Kč),
+4,5–5 mm (241 Kč) i u barvené Maya 3,5–4 mm (315 Kč). Dřívější poznámka v tomto dokumentu uváděla
+184 Kč jako dostupné, což neplatí. Může to být i tak, že se stav variant ze stránky nepřečte správně
+před výběrem varianty, takže **před nákupem ověřit v prohlížeči**. Sedlářské nářadí zároveň uvádí
+u řemenů dodací dobu 2–3 týdny „z důvodu nepravidelných dodávek kvalitních kůží“, takže vyprodané
+zásoby jsou v této kategorii reálné.
+
+| Produkt                                                                                                                                 | Síla             | Délka              | Šířky      | Cena                                  | Stav                                             |
+| --------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ------------------ | ---------- | ------------------------------------- | ------------------------------------------------ |
+| [Sedlářské nářadí – Kožený řemen 130](https://sedlarskenaradi.cz/kozeny-remen-130-sila-3-8-4mm/)                                        | 3,8–4 mm         | 130 cm             | 2,0–6,0 cm | **122 Kč**                            | Skladem 130 × 2,0 cm; ostatní rozměry 2–3 týdny. |
+| [Křupson – Hovězí kůže na opasek, přírodní 4 cm](https://www.krupson.cz/hovezi-kuze-na-opasek-prirodni--4-cm-delka--130-cm/)            | 3,5–4 mm         | 130 / 150 / 180 cm | 4 cm       | **299 / 329 / 379 Kč**                | **Skladem všechny délky.**                       |
+| [Imago – Hovězí kůže na opasek, přírodní 4 cm](https://www.imago.cz/kuze-na-opasek-prirodni-4cm)                                        | 3,5–4 mm         | neuvedena          | 4 cm       | **299 Kč**                            | Skladem. Způsob činění stránka neuvádí.          |
+| [skladkuzetvurce.cz – Kožené pásy na výrobu opasků](https://www.skladkuzetvurce.cz/kuzetvorba/Kozene-pasy-na-vyrobu-opasku-c1_22_3.htm) | 2,5 / 3,5 / 4 mm | neuvedena          | na dotaz   | ceny se ze stránky nepodařilo přečíst | Nekatalogové šířky řežou na telefonickou žádost. |
+
+Doporučení: **Křupson 130 cm za 299 Kč** kvůli dostupnosti přesně 4 cm šířky, nebo **Sedlářské
+nářadí za 122 Kč**, pokud nevadí čekání 2–3 týdny na šířku 4 cm.
+
+Na co si dát pozor při výběru:
+
+- **Síla 3,0–4,0 mm** podle šablony. Všechny tři varianty výše sedí.
+- **Délka** musí být aspoň taková, jakou spočítá generátor z obvodu pasu (obvod plus ohyb u přezky
+  a konec za dírkami). 130 cm pokryje většinu pasů, při nejistotě 150 cm.
+- **Činění.** Třísločiněná (veg-tan) kůže se dá barvit a hrany se dají leštit. Imago činění neuvádí,
+  což je u pásku na leštění hran podstatné – doptat se. Sedlářské nářadí uvádí krupon, CraftPoint
+  výslovně třísločiněné.
+- Hotový pás **neznamená hotové hrany.** Hrany se pořád srazí a zaleští, jen se nemusí řezat.
