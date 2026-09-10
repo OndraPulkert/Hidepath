@@ -888,3 +888,20 @@ Obě výstupy popisují ten samý pásek, takže se musí shodnout. Odměřeno z
 | Konec pásu od ohybu      | 90,00 mm                                 | shodně          |
 
 Souhlas na desetinu milimetru u všech kót.
+
+### Paralaxa – riziko, které jsem dlouho neřešil
+
+Gravírované linky jsou jen na jedné straně 3mm akrylátu. Když je ta strana nahoře, dělí linku od
+kůže 3 mm materiálu a při pohledu pod úhlem se linka zdá posunutá:
+
+| Pohled od svislice | Zdánlivý posun |
+| ------------------ | -------------- |
+| 10°                | 0,53 mm        |
+| 20°                | 1,09 mm        |
+| **30°**            | **1,73 mm**    |
+| 45°                | 3,00 mm        |
+
+Při 30° je to víc než celá přesnost, o kterou se v návrhu snažíme (můstky, kóty do 0,15 mm).
+**Řešení: používat destičku gravírovanou stranou dolů**, v kontaktu s kůží — paralaxa je pak nulová.
+Otvory a výřezy paralaxou netrpí, protože se šídlo i nůž kůže fyzicky dotknou. Zapsáno do postupu
+použití; do řezacího souboru to nezasahuje, je to věc používání.

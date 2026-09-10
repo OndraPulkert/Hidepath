@@ -20,6 +20,19 @@ Jedna destička stačí na všechny šířky proto, že polohy všech otvorů po
 a koncové body zkosení špičky pro všechny šířky leží na jedné a téže přímce. Zkosení se obtáhne
 a **stop určí hrana pásu**.
 
+### Tři věci, které je potřeba vědět, než ji poprvé použiješ
+
+1. **Používej ji gravírovanou stranou DOLŮ**, tedy v kontaktu s kůží. Gravírování je jen na jedné
+   straně a když je nahoře, dělí ho od kůže 3 mm akrylátu — při pohledu 30° od svislice se linka
+   zdá posunutá o **1,7 mm**, což je víc než celá přesnost, o kterou se snažíme. Se stranou dolů je
+   paralaxa nulová. Otvory a výřezy paralaxou netrpí, šídlo i nůž se kůže fyzicky dotknou.
+2. **Značkuj rýsovacím šídlem, ne tužkou.** Kužel šídla se v otvoru Ø 2 mm sám vystředí, takže
+   značka sedne na střed. Tužka se do 3 mm hlubokého otvoru nedostane a nevystředí se.
+3. **Nic z toho není odzkoušené v praxi.** Geometrie je ověřená proti dvěma komerčním šablonám
+   a křížově proti naší tiskové verzi, ale destičku jsem nikdy nedržel v ruce ani já, ani ty.
+   První pásek je zkouška — proto se před objednáním akrylátu vyplatí vytisknout kontrolní PDF
+   a projít si celý postup na papírové verzi a odřezku.
+
 ### Jak se destička používá
 
 1. **Přilož destičku a srovnej obě hrany pásu na pár linek pro svou šířku** (např. „40“).
