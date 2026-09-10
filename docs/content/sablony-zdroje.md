@@ -660,3 +660,26 @@ V šabloně proto v každém středu otvoru udělat malou dírku 1,5–2 mm a po
 
 Akrylát 3 mm se odlamovacím nožem neuřízne, na oblouky je potřeba pilka a pilníky. Proto je pro
 první šablonu lepší PVC/PP 1–2 mm.
+
+### Kompletní kontrola obou šířek (2026-09-10)
+
+Autor si všiml, že šablona pro 35mm pásek měla v titulku „Opasek 40 mm“ – šířka v titulku byla
+zadrátovaná. Opraveno; při té příležitosti proběhla úplná kontrola.
+
+**Rozměry.** Z modelu jsem vypsal očekávané hodnoty pro 35 a 40 mm a proti nim změřil oba PDF na
+renderu 300 dpi: **58 kontrol, všechny v toleranci.** Kontrolováno na každé straně: formát listu,
+kalibrační čtverec, šířka pásu, poloha ohybu, všechny čtyři polohy nýtů, oba konce drážky, konec
+pásu, délka pásku na poutko, poloha hrotu, všech pět dírek, čtyři rozteče a délka hrotu. Největší
+odchylky: ±0,16 mm u poloh vztažených k ohybu (tah čárkované linie), ±0,10 mm u dírek, 0,06 mm
+u kalibračního čtverce.
+
+**Popisky.** Vypsal jsem všechny texty s čísly ze všech čtyř SVG a porovnal s modelem. Správně se
+škáluje vše, co na šířce závisí – titulek (35 / 40 mm), délka hrotu (32,9 / 38,5 mm) a poutko
+(101 × 12 mm s obvodem 86 mm / 111 × 12 mm s obvodem 96 mm). Údaje nezávislé na šířce jsou u obou
+shodné, jak mají být: nýty ± 25,5 a ± 73,2 mm, drážka 25 × 6 mm, můstek 10 mm, kapsa 47,7 mm,
+konec pásu 90 mm, dírky Ø 4,5 mm po 25 mm, celková délka „obvod + 234,3 mm“.
+
+**Test proti opakování.** `src/test/generated-patterns.test.ts` čte verzovaná SVG, z názvu souboru
+vezme šířku, spočítá hodnoty z `belt-end.ts` a ověří, že je popisky obsahují. Chytí jak zadrátovaný
+titulek, tak zadrátovanou délku poutka nebo hrotu – obojí jsem si ověřil tím, že jsem chybu do SVG
+záměrně vnesl a test spadl.

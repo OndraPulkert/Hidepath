@@ -99,7 +99,7 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
   const [near, far] = spec.rivetOffsetsMm;
   const out: string[] = [];
 
-  out.push(text(strapX, 16, 'Opasek 40 mm — strana 1: konec u přezky', 4.6));
+  out.push(text(strapX, 16, `Opasek ${cz(w)} mm — strana 1: konec u přezky`, 4.6));
   out.push(
     text(
       strapX,
@@ -213,7 +213,7 @@ function tipPage(tip: BeltTipSpec, end: BeltEndSpec): string[] {
   const mid = middleHoleIndex(tip);
   const out: string[] = [];
 
-  out.push(text(strapX, 16, 'Opasek 40 mm — strana 2: konec se špičkou', 4.6));
+  out.push(text(strapX, 16, `Opasek ${cz(w)} mm — strana 2: konec se špičkou`, 4.6));
   out.push(
     text(
       strapX,
