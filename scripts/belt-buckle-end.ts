@@ -38,7 +38,9 @@ import {
 
 /** Řezací soubor pro laser: řez černě, gravírování modře (běžná konvence řezáren). */
 const LASER = {
-  cutColor: '#000000',
+  // Červená = řez je nejrozšířenější konvence; u černé má část strojů defaultně
+  // raster-gravírování a hrozilo by prohození operací.
+  cutColor: '#ff0000',
   /** Gravírování: vodicí linky a číslice jako tahy. Žádný živý text. */
   engraveColor: '#0000ff',
   /** Značicí otvor: poloha se skrz šablonu přenáší šídlem, otvor do kůže dělá průbojník. */
@@ -80,7 +82,7 @@ const hole = (cx: number, cy: number, d: number, color = INK, sw = 0.3): string 
   cross(cx, cy, d / 2, color);
 
 const centreLine = (cx: number, y1: number, y2: number): string =>
-  `<line x1="${f(cx)}" y1="${f(y1)}" x2="${f(cx)}" y2="${f(y2)}" stroke="#b8b8b8" stroke-width="0.15" stroke-dasharray="3 3"/>`;
+  `<line x1="${f(cx)}" y1="${f(y1)}" x2="${f(cx)}" y2="${f(y2)}" stroke="#b8b8b8" stroke-width="0.1" stroke-dasharray="3 3"/>`;
 
 function dimension(x: number, y1: number, y2: number, color = GREEN): string {
   return (
@@ -334,17 +336,22 @@ function hangHole(cx: number, cy: number): string {
  * Zářez v boční hraně jako **součást obrysové cesty**, ne samostatná čára.
  * Otevřená cesta ležící na obrysu by v laserovém softwaru znamenala dvojí řez
  * nebo chybu; proto se zářez vkládá přímo do kontury.
- * `side` = 'left' jde po hraně dolů, 'right' nahoru.
+ *
+ * `edge` říká, na které hraně zářez je (a tedy kam míří dovnitř materiálu),
+ * `travel` kterým směrem se po hraně jede. To jsou **dvě nezávislé věci** –
+ * když se sloučily do jednoho parametru, vyšly na dílu se špičkou místo zářezů
+ * ostny mimo materiál (nález revize 2026-09-10).
  */
-function notchSegment(edgeX: number, y: number, side: 'left' | 'right'): string {
+function notchSegment(
+  edgeX: number,
+  y: number,
+  edge: 'left' | 'right',
+  travel: 'down' | 'up',
+): string {
   const hw = LASER.notchWidthMm / 2;
-  const d = LASER.notchDepthMm;
-  const inward = side === 'left' ? edgeX + d : edgeX - d;
-  const first = side === 'left' ? y - hw : y - hw;
-  const last = side === 'left' ? y + hw : y + hw;
-  return side === 'left'
-    ? `L${f(edgeX)} ${f(first)} L${f(inward)} ${f(y)} L${f(edgeX)} ${f(last)} `
-    : `L${f(edgeX)} ${f(last)} L${f(inward)} ${f(y)} L${f(edgeX)} ${f(first)} `;
+  const inward = edge === 'left' ? edgeX + LASER.notchDepthMm : edgeX - LASER.notchDepthMm;
+  const [a, b] = travel === 'down' ? [y - hw, y + hw] : [y + hw, y - hw];
+  return `L${f(edgeX)} ${f(a)} L${f(inward)} ${f(y)} L${f(edgeX)} ${f(b)} `;
 }
 
 /**
@@ -376,10 +383,11 @@ export function buildLaserSvg(
   const c1 = b1x + r;
   cut.push(
     `<path d="M${f(b1x)} ${f(m)} ` +
-      notchSegment(b1x, foldY, 'left') +
-      `L${f(b1x)} ${f(b1EndY - r)} ` +
-      `A${f(r)} ${f(r)} 0 0 0 ${f(b1x + w)} ${f(b1EndY - r)} ` +
-      notchSegment(b1x + w, foldY, 'right') +
+      notchSegment(b1x, foldY, 'left', 'down') +
+      // Konec pásu je rovný, stejně jako na tiskové šabloně a jako ho má CraftPoint.
+      // Dřív tu byl půlkruh, takže dva výstupy téhož dílu měly jiný tvar.
+      `L${f(b1x)} ${f(b1EndY)} L${f(b1x + w)} ${f(b1EndY)} ` +
+      notchSegment(b1x + w, foldY, 'right', 'up') +
       `L${f(b1x + w)} ${f(m)} Z" ` +
       `fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`,
   );
@@ -415,12 +423,12 @@ export function buildLaserSvg(
   const midY = apexY + apexToMiddleHoleMm(tip);
   cut.push(
     `<path d="M${f(b2x)} ${f(b2EndY)} ` +
-      notchSegment(b2x, midY, 'right') +
+      notchSegment(b2x, midY, 'left', 'up') +
       `L${f(b2x)} ${f(baseY)} ` +
       `L${f(c2 - tanPt.halfWidthMm)} ${f(apexY + tanPt.fromApexMm)} ` +
       `A${f(tip.noseRadiusMm)} ${f(tip.noseRadiusMm)} 0 0 1 ${f(c2 + tanPt.halfWidthMm)} ${f(apexY + tanPt.fromApexMm)} ` +
       `L${f(b2x + w)} ${f(baseY)} ` +
-      notchSegment(b2x + w, midY, 'left') +
+      notchSegment(b2x + w, midY, 'right', 'down') +
       `L${f(b2x + w)} ${f(b2EndY)} Z" ` +
       `fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`,
   );
@@ -496,7 +504,7 @@ function engraveNumber(x: number, y: number, value: number, height: number): str
           `M${f(ox + x1 * height)} ${f(y + y1 * height)} L${f(ox + x2 * height)} ${f(y + y2 * height)}`,
       )
       .join(' ');
-    out.push(`<path d="${d}" fill="none" stroke="${LASER.engraveColor}" stroke-width="0.15"/>`);
+    out.push(`<path d="${d}" fill="none" stroke="${LASER.engraveColor}" stroke-width="0.1"/>`);
   });
   return out;
 }
@@ -510,7 +518,9 @@ function arcSlot(cx: number, cy: number, r: number, width: number): string {
   const ri = r - width / 2;
   return (
     `<path d="M${f(cx)} ${f(cy - ro)} A${f(ro)} ${f(ro)} 0 0 1 ${f(cx)} ${f(cy + ro)} ` +
-    `L${f(cx)} ${f(cy + ri)} A${f(ri)} ${f(ri)} 0 0 0 ${f(cx)} ${f(cy - ri)} Z" ` +
+    `A${f(width / 2)} ${f(width / 2)} 0 0 0 ${f(cx)} ${f(cy + ri)} ` +
+    `A${f(ri)} ${f(ri)} 0 0 0 ${f(cx)} ${f(cy - ri)} ` +
+    `A${f(width / 2)} ${f(width / 2)} 0 0 0 ${f(cx)} ${f(cy - ro)} Z" ` +
     `fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`
   );
 }
@@ -569,8 +579,6 @@ export function buildBeltPlateSvg(
       `fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`,
   );
   for (const x of L.tipHoleXs) cut.push(markHole(x, ay));
-  // Dva otvory po stranách prostřední dírky – ta je datum pro umístění řady.
-  for (const sign of [-1, 1]) cut.push(markHole(L.middleHoleX, ay + sign * L.offAxisMarkMm));
 
   /* --- prostřední řada: zaoblený konec a dírky pro trn --- */
   const ry = L.roundedRowY;
@@ -578,7 +586,6 @@ export function buildBeltPlateSvg(
     cut.push(arcSlot(arc.centreX, ry, arc.radiusMm, L.roundedSlotWidthMm));
   }
   for (const x of L.tipHoleXs) cut.push(markHole(x, ry));
-  for (const sign of [-1, 1]) cut.push(markHole(L.middleHoleX, ry + sign * L.offAxisMarkMm));
 
   /* --- dolní řada: konec u přezky, levá hrana destičky = konec pásu --- */
   const by = L.buckleRowY;
@@ -608,7 +615,7 @@ export function buildBeltPlateSvg(
         const sy = rowY + sign * k;
         engrave.push(
           `<path d="M${f(scaleX)} ${f(sy)} L${f(scaleX + len)} ${f(sy)}" ` +
-            `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.12"/>`,
+            `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.1"/>`,
         );
         // Čísla vlevo od stupnice, aby nezasahovala do pásma značicích otvorů.
         if (k > 0 && k % 10 === 0) {
@@ -632,17 +639,25 @@ export function buildBeltPlateSvg(
    * (obvod zdvojené části + přeplátování) a závisí na šířce i tloušťce pásu.
    */
   const rulerY = 6;
-  const rulerX0 = L.strapEndChamferMm + 2;
+  const rulerX0 = 2;
   // Pravítko musí skončit před vyříznutou špičkou, jinak by laser gravíroval do prázdna.
   const rulerX1 = Math.min(W - LASER.marginMm, L.tipFarX - 4);
   for (let mm = 0; rulerX0 + mm <= rulerX1; mm += 1) {
     const len = mm % 50 === 0 ? 7 : mm % 10 === 0 ? 5 : mm % 5 === 0 ? 3.5 : 2;
     engrave.push(
       `<path d="M${f(rulerX0 + mm)} ${f(rulerY)} L${f(rulerX0 + mm)} ${f(rulerY + len)}" ` +
-        `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.12"/>`,
+        `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.1"/>`,
     );
-    if (mm > 0 && mm % 50 === 0) {
-      engrave.push(...engraveNumber(rulerX0 + mm + 1.5, rulerY + 1, mm, L.guideLabelHeightMm));
+    if (mm === 0 || mm % 50 === 0) {
+      // Čísla NAD základnu pravítka: na ryskách byla nečitelná.
+      engrave.push(
+        ...engraveNumber(
+          rulerX0 + mm + 1.5,
+          rulerY - 1 - L.guideLabelHeightMm,
+          mm,
+          L.guideLabelHeightMm,
+        ),
+      );
     }
   }
 
@@ -662,39 +677,71 @@ export function buildBeltPlateSvg(
       // Čísla na konci linek, ve volné části řady: u levého okraje kolidovala
       // s rozlišovacím otvorem u prostřední dírky. Odstup v x, aby se u linek
       // 2,5 mm od sebe nepřekrývala.
-      const labelX = lineX1 - 6 - i * (L.guideLabelHeightMm * 2.4);
+      // Popisek nižší než rozestup linek (2,5 mm) a vycentrovaný na výšku SVÉ linky:
+      // dřív jím procházela linka sousední šířky a přiřazení bylo dvojznačné.
+      const labelH = 2;
+      const labelX = lineX1 - 6 - i * (labelH * 2.4);
       for (const sign of [-1, 1]) {
         const ly = rowY + sign * g.offsetMm;
         engrave.push(
           `<path d="M${f(lineX0)} ${f(ly)} L${f(lineX1)} ${f(ly)}" ` +
-            `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.15"/>`,
+            `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.1"/>`,
         );
       }
       // Popis jen nad horní linkou páru, uvnitř pásma.
-      engrave.push(
-        ...engraveNumber(labelX, rowY - g.offsetMm + 0.6, g.beltWidthMm, L.guideLabelHeightMm),
-      );
+      engrave.push(...engraveNumber(labelX, rowY - g.offsetMm - labelH / 2, g.beltWidthMm, labelH));
     }
   });
 
+  // Rozlišení prostřední dírky: gravírované rysky, ne vyříznuté otvory. Vyříznutými
+  // by se dalo omylem značit šídlem přímo do viditelné plochy pásu.
+  for (const rowY of [ay, ry]) {
+    for (const sign of [-1, 1]) {
+      const my = rowY + sign * L.offAxisMarkMm;
+      engrave.push(
+        `<path d="M${f(L.middleHoleX - 3)} ${f(my)} L${f(L.middleHoleX + 3)} ${f(my)} ` +
+          `M${f(L.middleHoleX)} ${f(my - 2)} L${f(L.middleHoleX)} ${f(my + 2)}" ` +
+          `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.1"/>`,
+      );
+    }
+  }
+
+  // Kalibrační kóta 50 mm: na hotovém dílu i na obrazovce je přeškálování hned vidět.
+  const calY = H - 4;
+  const calX = W - LASER.marginMm - 50;
+  engrave.push(
+    `<path d="M${f(calX)} ${f(calY - 2)} L${f(calX)} ${f(calY + 2)} M${f(calX)} ${f(calY)} ` +
+      `L${f(calX + 50)} ${f(calY)} M${f(calX + 50)} ${f(calY - 2)} L${f(calX + 50)} ${f(calY + 2)}" ` +
+      `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.1"/>`,
+  );
+  engrave.push(...engraveNumber(calX + 22, calY - 4.6, 50, L.guideLabelHeightMm));
+
+  const pad = 5;
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     `<!-- REZACI SOUBOR - DESTICKA NA OPASEK ${L.minBeltWidthMm}-${L.maxBeltWidthMm} mm.`,
     `     Merítko 1:1, 1 jednotka = 1 mm, destička ${W} x ${H} mm.`,
-    '     Vse v jedne vrstve "cut", uzavrene kontury, zadny text, zadna vypln.',
-    '     MATERIAL: CIRY akrylat 3 mm. Zebra mezi vnorenymi sloty zaobleneho konce',
+    '     Uzavrene kontury, zadny zivy text, zadna vypln, zadny transform.',
+    '     MATERIAL: LITY (GS) CIRY akrylat 3 mm. Zebra mezi vnorenymi sloty',
     `     jsou ${cz(L.roundedArcs.length > 1 ? 1.5 : 0)} mm - je to zamer, stejne jako u komercnich desticek.`,
     `     Otvory Ø ${L.markHoleMm} mm = znacici, neslucovat a nezvetsovat.`,
     `     Otvor Ø ${L.hangHoleMm} mm v rohu = zaveseni.`,
     `     Vrstva "cut" (${LASER.cutColor}) = REZ, vrstva "engrave" (${LASER.engraveColor}) = GRAVIROVANI.`,
     '     V gravirovani jsou pricna mm stupnice, vodici linky sirek a cisla;',
     '     cisla jsou TAHY, ne zivy text.',
-    '     Kompenzaci kerfu neresit. Neprepocitavat merítko. -->',
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${W}mm" height="${H}mm" viewBox="0 0 ${W} ${H}">`,
-    '<g id="cut">',
+    '     POSTUP: nejdriv GRAVIROVANI, pak vnitrni geometrie, OBRYS AZ NAKONEC.',
+    '     Gravirovani vektorove jednim pruchodem, nizky vykon - ne rastrem.',
+    '     Rez na strednici, kerf nekompenzovat (roztece otvoru zustanou dle souboru).',
+    '     Zebra mezi oblouky 1,5 mm: pri kerfu nad 0,25 mm se prosim ozvete.',
+    '     BEZ dokonceni: nebrousit, nelestit plamenem, nebubnovat. Folii ponechte.',
+    '     Neprepocitavat merítko: 1 jednotka = 1 mm, kontrolni kota 50 mm je dole. -->',
+    `<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" ` +
+      `width="${f(W + 2 * pad)}mm" height="${f(H + 2 * pad)}mm" ` +
+      `viewBox="${f(-pad)} ${f(-pad)} ${f(W + 2 * pad)} ${f(H + 2 * pad)}">`,
+    '<g id="cut" inkscape:groupmode="layer" inkscape:label="REZ">',
     ...cut,
     '</g>',
-    '<g id="engrave">',
+    '<g id="engrave" inkscape:groupmode="layer" inkscape:label="GRAVIROVANI">',
     ...engrave,
     '</g>',
     '</svg>',
@@ -712,7 +759,14 @@ export function buildPlateLegendSvg(
 ): string {
   const L = beltPlateLayout(end, tip, plate);
   const base = buildBeltPlateSvg(end, tip, plate);
-  const inner = base.slice(base.indexOf('<g id="cut">'), base.lastIndexOf('</svg>'));
+  // Bere se celý obsah obou vrstev z řezacího souboru, ať vysvětlivky ukazují přesně
+  // tentýž tvar. Hledá se `<g id="cut"` bez `>` – ta vrstva nese ještě inkscape atributy.
+  const from = base.indexOf('<g id="cut"');
+  const to = base.lastIndexOf('</svg>');
+  if (from < 0 || to <= from) {
+    throw new Error('Vysvětlivky: v řezacím souboru nejde najít vrstva řezu.');
+  }
+  const inner = base.slice(from, to);
   const W = L.plateWidthMm;
   const H = L.plateHeightMm;
   const padL = 6;
@@ -801,7 +855,8 @@ export function buildPlateLegendSvg(
       L.buckleRowY,
       W + 4,
       L.buckleRowY + 6,
-      `mezi nýty je KAPSA PRO POUTKO ${cz(keeperGapMm(end))} mm`,
+      `KAPSA PRO POUTKO: ${cz(keeperGapMm(end))} mm mezi nýty, ` +
+        `světlých ${cz(keeperPocketClearMm(end))} mm mezi hlavičkami`,
     ],
     [
       0,
@@ -827,7 +882,8 @@ export function buildPlateLegendSvg(
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<!-- VYSVETLIVKY, ne rezaci soubor. Obsahuje zivy text. -->',
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${f(W + padL + padR)}mm" height="${f(H + padT + padB)}mm" ` +
+    `<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" ` +
+      `width="${f(W + padL + padR)}mm" height="${f(H + padT + padB)}mm" ` +
       `viewBox="${f(-padL)} ${f(-padT)} ${f(W + padL + padR)} ${f(H + padT + padB)}">`,
     `<rect x="${f(-padL)}" y="${f(-padT)}" width="${f(W + padL + padR)}" height="${f(H + padT + padB)}" fill="#ffffff"/>`,
     inner,

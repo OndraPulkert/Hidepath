@@ -24,6 +24,7 @@ import {
   keeperGapMm,
   keeperPocketClearMm,
   keeperStripLengthMm,
+  rivetPostRangeMm,
   ligamentMm,
   sideMarginMm,
   tailAfterFarRivetMm,
@@ -48,9 +49,33 @@ describe('rozměry konce opasku', () => {
     expect(checkBeltEndSpec(bad).join(' ')).toContain('Můstek mezi drážkou');
   });
 
-  it('kapsa pro poutko je rozteč nýtů a světlá kapsa je o průměr menší', () => {
+  it('světlá kapsa pro poutko se počítá z hlaviček nýtů, ne z otvorů', () => {
     expect(keeperGapMm(DEFAULT_BELT_END)).toBeCloseTo(47.7, 6);
-    expect(keeperPocketClearMm(DEFAULT_BELT_END)).toBeCloseTo(41.7, 6);
+    // Poutko se opírá o hlavičky Ø 10 mm, ne o otvory Ø 6 mm: 47,7 − 10 = 37,7.
+    expect(keeperPocketClearMm(DEFAULT_BELT_END)).toBeCloseTo(37.7, 6);
+  });
+
+  it('spočítá délku dříku nýtu a odhalí, že 6 mm na 4mm pás nestačí', () => {
+    // Pravidlo z praxe: dřík o 1–1,5 mm kratší než tloušťka spoje (2× pás).
+    const r = rivetPostRangeMm(DEFAULT_BELT_END);
+    expect(r.minMm).toBeCloseTo(6.5, 6);
+    expect(r.maxMm).toBeCloseTo(7, 6);
+    expect(6, 'nýt 10/6 má dřík 6 mm').toBeLessThan(r.minMm);
+    const thin = rivetPostRangeMm({ ...DEFAULT_BELT_END, beltThicknessMm: 3.5 });
+    expect(6).toBeGreaterThanOrEqual(thin.minMm);
+    expect(6).toBeLessThanOrEqual(thin.maxMm);
+  });
+
+  it('odmítne drážku širší než dlouhou a nekladné rozměry', () => {
+    expect(checkBeltEndSpec({ ...DEFAULT_BELT_END, slotWidthMm: 30 }).join(' ')).toContain(
+      'protnul sám sebou',
+    );
+    expect(checkBeltEndSpec({ ...DEFAULT_BELT_END, beltThicknessMm: 0 }).join(' ')).toContain(
+      'beltThicknessMm musí být kladné',
+    );
+    expect(checkBeltEndSpec({ ...DEFAULT_BELT_END, rivetHeadMm: 6 }).join(' ')).toContain(
+      'rivetHeadMm musí být větší',
+    );
   });
 
   it('hlásí poutko širší než kapsa', () => {
@@ -300,8 +325,27 @@ describe('plochá destička pro všechny šířky', () => {
     expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, thin).join(' ')).toContain('Žebro');
   });
 
-  it('značky mimo osu leží na pásu i u nejužší podporované šířky', () => {
-    expect(L.minBeltWidthMm / 2 - L.offAxisMarkMm).toBeCloseTo(2, 6);
+  it('nejužší podporovaná šířka projde, o milimetr širší značky mimo osu už ne', () => {
+    // Dřív tu byla tautologie: minBeltWidthMm = 2*(offAxis+2), takže levá strana
+    // byla identicky 2 pro jakékoli vstupy a test nemohl selhat.
+    expect(
+      checkBeltPlate(DEFAULT_BELT_END, { ...DEFAULT_BELT_TIP, beltWidthMm: L.minBeltWidthMm }),
+    ).toEqual([]);
+    const tooWide = { ...DEFAULT_BELT_PLATE, offAxisMarkMm: L.maxBeltWidthMm / 2 - 1 };
+    expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, tooWide).join(' ')).toContain(
+      'mimo nejširší',
+    );
+  });
+
+  it('odmítne prázdný i přeplněný seznam vodicích šířek', () => {
+    const empty = { ...DEFAULT_BELT_PLATE, guideWidthsMm: [] };
+    expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, empty).join(' ')).toContain(
+      'prázdné',
+    );
+    const many = { ...DEFAULT_BELT_PLATE, guideWidthsMm: [26, 30, 35, 40, 45] };
+    expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, many).join(' ')).toContain(
+      'maximum jsou 4',
+    );
   });
 
   it('odmítne destičku užší než pás', () => {

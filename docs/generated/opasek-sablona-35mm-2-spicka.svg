@@ -7,7 +7,7 @@
 <text x="150" y="28" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#c0392b" text-anchor="start">po vytištění přeměř 50 × 50 mm</text>
 <rect x="150" y="30" width="50" height="50" fill="none" stroke="#c0392b" stroke-width="0.4"/>
 <path d="M22 251.3 L22 77.938 L35.856 47.349 A4 4 0 0 1 43.144 47.349 L57 77.938 L57 251.3" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
-<line x1="39.5" y1="45" x2="39.5" y2="251.3" stroke="#b8b8b8" stroke-width="0.15" stroke-dasharray="3 3"/>
+<line x1="39.5" y1="45" x2="39.5" y2="251.3" stroke="#b8b8b8" stroke-width="0.1" stroke-dasharray="3 3"/>
 <circle cx="39.5" cy="139.3" r="2.25" fill="none" stroke="#2b2b2b" stroke-width="0.3"/><path d="M36.575 139.3 H42.425 M39.5 136.375 V142.225" stroke="#2b2b2b" stroke-width="0.2" fill="none"/>
 <circle cx="39.5" cy="164.3" r="2.25" fill="none" stroke="#2b2b2b" stroke-width="0.3"/><path d="M36.575 164.3 H42.425 M39.5 161.375 V167.225" stroke="#2b2b2b" stroke-width="0.2" fill="none"/>
 <circle cx="39.5" cy="189.3" r="2.25" fill="none" stroke="#c0392b" stroke-width="0.5"/><path d="M36.575 189.3 H42.425 M39.5 186.375 V192.225" stroke="#c0392b" stroke-width="0.2" fill="none"/>

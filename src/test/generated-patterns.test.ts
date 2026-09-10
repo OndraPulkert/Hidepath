@@ -117,7 +117,7 @@ describe('řezací soubor pro laser', () => {
 
   it('je čistě řezový: jedna vrstva, žádný text, žádná výplň, uzavřené kontury', () => {
     for (const { path, svg } of lasers) {
-      expect(svg, path).toContain('<g id="cut">');
+      expect(svg, path).toContain('<g id="cut"');
       // Živý text s fontem je pro řezárnu důvod k odmítnutí souboru.
       expect(svg, `${path}: žádný text`).not.toContain('<text');
       expect(svg, `${path}: jen jedna vrstva`).toBe(
@@ -201,7 +201,7 @@ describe('řezací soubor pro laser', () => {
   it('drážka pro trn je vyříznutá 25 × 6 mm a ohyb ji půlí', () => {
     for (const { path, svg, width } of lasers) {
       const end = { ...DEFAULT_BELT_END, beltWidthMm: width };
-      const cut = svg.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
+      const cut = svg.split('<g id="cut"')[1]?.split('</g>')[0] ?? '';
       // Stadion: dva oblouky a jedna spojnice.
       const slot = [...cut.matchAll(/<path d="([^"]+)"/g)]
         .map((m) => m[1]!)
@@ -224,6 +224,48 @@ describe('řezací soubor pro laser', () => {
   });
 });
 
+describe('řezací soubory: každý bod cesty leží v obrysu dílu', () => {
+  /**
+   * Regrese: na dílu se špičkou vyšly místo zářezů 2 mm ostny mimo materiál,
+   * protože `notchSegment` slučovalo „na které hraně" a „kterým směrem se jede".
+   * Uzavřenost cesty to nezachytila – osten je uzavřený stejně jako zářez.
+   */
+  const files = Object.entries(svgs).filter(
+    ([path]) => path.includes('-laser') || path.includes('opasek-desticka'),
+  );
+
+  it('nějaké řezací soubory existují', () => {
+    expect(files.length).toBeGreaterThan(0);
+  });
+
+  it('zářezy míří dovnitř materiálu, ne ven', () => {
+    const problems: string[] = [];
+    for (const [path, svg] of files) {
+      if (path.includes('vysvetlivky') || path.includes('desticka')) continue;
+      const cut = svg.split('<g id="cut"')[1]?.split('</g>')[0] ?? '';
+      for (const d of [...cut.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)) {
+        const xs = [...d.matchAll(/[ML]([-\d.]+) /g)].map((m) => Number(m[1]));
+        if (xs.length < 6) continue;
+        // Hrany dílu jsou dvě nejčastější x; cokoli za nimi je osten.
+        const counts = new Map<number, number>();
+        for (const x of xs) counts.set(x, (counts.get(x) ?? 0) + 1);
+        const edges = [...counts.entries()]
+          .filter(([, n]) => n >= 2)
+          .map(([x]) => x)
+          .sort((a, b) => a - b);
+        if (edges.length < 2) continue;
+        const left = edges[0]!;
+        const right = edges[edges.length - 1]!;
+        const outside = xs.filter((x) => x < left - 1e-6 || x > right + 1e-6);
+        if (outside.length > 0) {
+          problems.push(`${path}: body ${outside.join(', ')} mimo hrany ${left}–${right}`);
+        }
+      }
+    }
+    expect(problems).toEqual([]);
+  });
+});
+
 describe('destička na opasek', () => {
   const L = beltPlateLayout(DEFAULT_BELT_END, DEFAULT_BELT_TIP);
   const circles = (svg: string, r: number): { x: number; y: number }[] =>
@@ -233,21 +275,24 @@ describe('destička na opasek', () => {
 
   it('soubor existuje a je čistě řezový', () => {
     expect(plate, 'docs/generated/opasek-desticka.svg').toBeDefined();
-    expect(plate!).toContain('<g id="cut">');
+    expect(plate!).toContain('<g id="cut"');
     expect(plate!, 'žádný živý text – číslice jsou tahy').not.toContain('<text');
     expect([...plate!.matchAll(/fill="(?!none)/g)].length, 'žádná výplň').toBe(0);
-    const cutLayer = plate!.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
+    const cutLayer = plate!.split('<g id="cut"')[1]?.split('</g>')[0] ?? '';
     for (const d of [...cutLayer.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)) {
       expect(d.trim().endsWith('Z'), `neuzavřená cesta v řezu ${d.slice(0, 40)}…`).toBe(true);
     }
-    expect(plate!).toContain(`width="${L.plateWidthMm}mm"`);
-    expect(plate!).toContain(`height="${L.plateHeightMm}mm"`);
+    // List má 5 mm rezervu kolem dílu, aby se tah obrysu neodsekával v náhledech.
+    expect(plate!).toContain(`width="${L.plateWidthMm + 10}mm"`);
+    expect(plate!).toContain(`height="${L.plateHeightMm + 10}mm"`);
+    expect(plate!, 'skutečné vrstvy, ne jen skupiny').toContain('inkscape:label="REZ"');
+    expect(plate!, 'červená = řez').toContain('stroke="#ff0000"');
   });
 
   it('má vodicí linky šířek s číslicemi, a to jako tahy, ne jako text', () => {
     // Vodicí linky jsou způsob vyrovnání: srovnáním obou hran pásu na pár linek
     // se destička sama vystředí a nemusí se rýsovat střednice.
-    const eng = plate!.split('<g id="engrave">')[1]?.split('</g>')[0] ?? '';
+    const eng = plate!.split('<g id="engrave"')[1]?.split('</g>')[0] ?? '';
     expect(eng, 'vrstva gravírování').not.toBe('');
     expect(eng, 'žádný živý text ani ve gravírování').not.toContain('<text');
     const lines = [...eng.matchAll(/M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)"/g)]
@@ -271,7 +316,7 @@ describe('destička na opasek', () => {
   it('má příčnou milimetrovou stupnici, aby šla vystředit i šířka bez linky', () => {
     // Linky pokrývají jen čtyři šířky (sousední musí být ≥ 4 mm od sebe, jinak jsou
     // linky < 2 mm od sebe). Stupnice pokryje jakoukoli šířku: pás 38 mm → obě hrany na 19.
-    const eng = plate!.split('<g id="engrave">')[1]?.split('</g>')[0] ?? '';
+    const eng = plate!.split('<g id="engrave"')[1]?.split('</g>')[0] ?? '';
     const segs = [...eng.matchAll(/M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)/g)].map((m) => ({
       x1: Number(m[1]),
       y1: Number(m[2]),
@@ -294,8 +339,8 @@ describe('destička na opasek', () => {
   it('žádné gravírování nezasahuje do značicího ani závěsného otvoru', () => {
     // Regrese: číslo „30“ u levého okraje se dotýkalo rozlišovacího otvoru
     // u prostřední dírky. Popisky proto sedí na konci linek.
-    const cut = plate!.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
-    const eng = plate!.split('<g id="engrave">')[1]?.split('</g>')[0] ?? '';
+    const cut = plate!.split('<g id="cut"')[1]?.split('</g>')[0] ?? '';
+    const eng = plate!.split('<g id="engrave"')[1]?.split('</g>')[0] ?? '';
     const holes = [...cut.matchAll(/<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([\d.]+)"/g)].map(
       (m) => ({ x: Number(m[1]), y: Number(m[2]), r: Number(m[3]) }),
     );
@@ -322,7 +367,7 @@ describe('destička na opasek', () => {
   });
 
   it('vodicí linky nezajíždějí do vyříznuté špičky ani do závěsného otvoru', () => {
-    const eng = plate!.split('<g id="engrave">')[1]?.split('</g>')[0] ?? '';
+    const eng = plate!.split('<g id="engrave"')[1]?.split('</g>')[0] ?? '';
     // Jen dlouhé tahy: krátké dílky stupnice sem nepatří.
     const horiz = [...eng.matchAll(/M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)"/g)]
       .filter((m) => Math.abs(Number(m[2]) - Number(m[4])) < 0.001)
@@ -344,7 +389,7 @@ describe('destička na opasek', () => {
   it('nemá žádnou drážku na značení – jen otvory a vyříznuté tvary', () => {
     // Značení skrz drážku 1,2 mm má přesnost ±0,6 mm; obtažení hrany ±0,1 mm.
     // Jediné dva vyříznuté tvary jsou špička a ovál pro trn.
-    const cut = plate!.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
+    const cut = plate!.split('<g id="cut"')[1]?.split('</g>')[0] ?? '';
     const shapes = [...cut.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!);
     // obrys + vyříznutá špička + 4 sloty zaobleného konce + ovál pro trn
     expect(shapes.length, 'obrys + špička + 4 oblouky + ovál').toBe(3 + L.roundedArcs.length);
@@ -358,16 +403,21 @@ describe('destička na opasek', () => {
     onTipRow.forEach((x, i) => {
       expect(x, `dírka ${i + 1}`).toBeCloseTo(L.tipHoleXs[i]!, 3);
     });
-    // Jen řada se špičkou: řada se zaobleným koncem má vlastní rozlišovací otvory.
-    const flanking = marks.filter(
+    // Rozlišení prostřední dírky je GRAVÍROVANÉ, ne vyříznuté: vyříznutými otvory
+    // by se dalo omylem značit šídlem do viditelné plochy pásu.
+    const eng = plate!.split('<g id="engrave"')[1]?.split('</g>')[0] ?? '';
+    const cutFlanking = marks.filter(
       (c) =>
-        c.x === L.middleHoleX &&
-        c.y !== L.tipRowY &&
-        Math.abs(c.y - L.tipRowY) < L.offAxisMarkMm + 2,
+        Math.abs(c.x - L.middleHoleX) < 1e-6 &&
+        Math.abs(c.y - L.tipRowY) > 1e-6 &&
+        Math.abs(c.y - L.tipRowY) <= L.offAxisMarkMm + 2,
     );
-    expect(flanking.length).toBe(2);
-    for (const c of flanking) {
-      expect(Math.abs(c.y - L.tipRowY)).toBeCloseTo(L.offAxisMarkMm, 6);
+    expect(cutFlanking.length, 'rozlišovací značky nesmí být v řezu').toBe(0);
+    for (const sign of [-1, 1]) {
+      const my = L.tipRowY + sign * L.offAxisMarkMm;
+      expect(eng, `gravírovaná ryska u prostřední dírky na y ${my}`).toContain(
+        `M${L.middleHoleX - 3} ${my} L${L.middleHoleX + 3} ${my}`,
+      );
     }
   });
 
@@ -384,8 +434,8 @@ describe('destička na opasek', () => {
   });
 
   it('vyříznutá špička míří vrcholem od dírek a nic do ní nezasahuje', () => {
-    const cut = plate!.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
-    const eng = plate!.split('<g id="engrave">')[1]?.split('</g>')[0] ?? '';
+    const cut = plate!.split('<g id="cut"')[1]?.split('</g>')[0] ?? '';
+    const eng = plate!.split('<g id="engrave"')[1]?.split('</g>')[0] ?? '';
     const tipPath = [...cut.matchAll(/<path d="([^"]+)"/g)]
       .map((m) => m[1]!)
       .find((d) => (d.match(/A/g) ?? []).length === 1);
@@ -409,7 +459,7 @@ describe('destička na opasek', () => {
   });
 
   it('obrys má zkosený levý horní roh jako značku konce pásu', () => {
-    const cutL = plate!.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
+    const cutL = plate!.split('<g id="cut"')[1]?.split('</g>')[0] ?? '';
     const outline = [...cutL.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)[0]!;
     expect(outline, 'zkosení v obrysu').toContain(
       `M0 ${L.strapEndChamferMm} L${L.strapEndChamferMm} 0`,
@@ -417,18 +467,22 @@ describe('destička na opasek', () => {
   });
 
   it('řada se zaobleným koncem: čtyři soustředné sloty a linky k nim dotažené', () => {
-    const cut = plate!.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
-    const eng = plate!.split('<g id="engrave">')[1]?.split('</g>')[0] ?? '';
+    const cut = plate!.split('<g id="cut"')[1]?.split('</g>')[0] ?? '';
+    const eng = plate!.split('<g id="engrave"')[1]?.split('</g>')[0] ?? '';
     // Slot oblouku: dva oblouky a jedna spojnice, začíná i končí na svislici středu.
     const arcs = [...cut.matchAll(/<path d="([^"]+)"/g)]
       .map((m) => m[1]!)
-      .filter((d) => (d.match(/A/g) ?? []).length === 2)
-      .map((d) => [...d.matchAll(/[-\d.]+/g)].map((x) => Number(x[0])))
-      .filter((n) => Math.abs(n[0]! - n[9]!) < 0.01);
+      .filter((d) => (d.match(/A/g) ?? []).length === 4);
     expect(arcs.length, 'čtyři sloty zaobleného konce').toBe(L.roundedArcs.length);
-    for (const n of arcs) {
-      const ro = n[2]!;
-      const ri = n[11]!;
+    for (const slotD of arcs) {
+      const n = [...slotD.matchAll(/[-\d.]+/g)].map((x) => Number(x[0]));
+      // Slot má zaoblené konce, takže cesta má čtyři oblouky: vnější r, malý r/2,
+      // vnitřní r a malý r/2. Poloměry proto beru jako množinu, ne pozičně.
+      const radii = [...new Set([...slotD.matchAll(/A([\d.]+) /g)].map((m) => Number(m[1])))].sort(
+        (a, b) => b - a,
+      );
+      const ro = radii[0]!;
+      const ri = radii[1]!;
       expect(ro - ri, 'šířka slotu').toBeCloseTo(L.roundedSlotWidthMm, 3);
       const r = (ro + ri) / 2;
       const arc = L.roundedArcs.find((a) => Math.abs(a.radiusMm - r) < 0.01);
@@ -453,7 +507,7 @@ describe('destička na opasek', () => {
   });
 
   it('má podélné pravítko u horní hrany na měření délky pásku na poutko', () => {
-    const eng = plate!.split('<g id="engrave">')[1]?.split('</g>')[0] ?? '';
+    const eng = plate!.split('<g id="engrave"')[1]?.split('</g>')[0] ?? '';
     // Svislé dílky pravítka: stejné x, malý rozdíl y, nahoře nad pásmem obou řad.
     const ticks = [...eng.matchAll(/M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)/g)]
       .map((m) => ({ x1: Number(m[1]), y1: Number(m[2]), x2: Number(m[3]), y2: Number(m[4]) }))
@@ -473,6 +527,23 @@ describe('destička na opasek', () => {
     expect(plate!, 'řezací soubor zůstává bez textu').not.toContain('<text');
   });
 
+  it('vysvětlivky ukazují celý tvar destičky, nejen popisky (regrese)', () => {
+    // Geometrie se do vysvětlivek vyřezává z řezacího souboru podle `<g id="cut"`.
+    // Když se do té značky přidal atribut, hledání selhalo a zůstaly jen popisky
+    // s odkazovými linkami mířícími do prázdna.
+    const plateGeom = (plate!.match(/<(path|circle)\b/g) ?? []).length;
+    const legendGeom = (legend!.match(/<(path|circle)\b/g) ?? []).length;
+    expect(plateGeom).toBeGreaterThan(300);
+    // Vysvětlivky mají navíc odkazové linky, nikdy ale méně prvků než řez.
+    expect(legendGeom).toBeGreaterThanOrEqual(plateGeom);
+    expect(legend!, 'vrstva řezu ve vysvětlivkách').toContain('<g id="cut"');
+    // A skutečně tentýž obrys: obvodová kontura řezu se ve vysvětlivkách najde slovo od slova.
+    // Obrys začíná ve zkoseném rohu, tedy na levé hraně pod ním.
+    const outline = /<path d="M0 [\d.]+ L[^"]*Z\s*"/.exec(plate!)?.[0];
+    expect(outline, 'obrys destičky v řezacím souboru').toBeDefined();
+    expect(legend!).toContain(outline!);
+  });
+
   it('má jeden závěsný otvor v rohu', () => {
     const hangs = circles(plate!, L.hangHoleMm / 2);
     expect(hangs.length).toBe(1);
@@ -481,7 +552,7 @@ describe('destička na opasek', () => {
   });
 
   it('ovál pro trn je 25 × 6 mm a leží na ohybu', () => {
-    const cutO = plate!.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
+    const cutO = plate!.split('<g id="cut"')[1]?.split('</g>')[0] ?? '';
     // Ovál pro trn: dva oblouky a jedna spojnice, na rozdíl od slotů zaobleného
     // konce se jeho začátek a konec liší v x (leží vodorovně).
     const oval = [...cutO.matchAll(/<path d="([^"]+)"/g)]

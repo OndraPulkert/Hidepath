@@ -7,20 +7,20 @@
      Kompenzaci kerfu neresit. Neprepocitavat merítko. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="210mm" height="279mm" viewBox="0 0 210 279">
 <g id="cut">
-<path d="M10 10 L10 104.5 L12 106 L10 107.5 L10 178.5 A17.5 17.5 0 0 0 45 178.5 L45 107.5 L43 106 L45 104.5 L45 10 Z" fill="none" stroke="#000000" stroke-width="0.1"/>
-<path d="M24.5 96.5 A3 3 0 0 1 30.5 96.5 L30.5 115.5 A3 3 0 0 1 24.5 115.5 Z" fill="none" stroke="#000000" stroke-width="0.1"/>
-<circle cx="27.5" cy="80.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
-<circle cx="27.5" cy="131.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
-<circle cx="27.5" cy="32.8" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
-<circle cx="27.5" cy="179.2" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
-<circle cx="27.5" cy="21" r="2" fill="none" stroke="#000000" stroke-width="0.1"/>
-<path d="M65 226.3 L65 155.8 L63 154.3 L65 152.8 L65 42.938 L78.856 12.349 A4 4 0 0 1 86.144 12.349 L100 42.938 L100 152.8 L102 154.3 L100 155.8 L100 226.3 Z" fill="none" stroke="#000000" stroke-width="0.1"/>
-<circle cx="82.5" cy="104.3" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
-<circle cx="82.5" cy="129.3" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
-<circle cx="82.5" cy="154.3" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
-<circle cx="82.5" cy="179.3" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
-<circle cx="82.5" cy="204.3" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
-<circle cx="82.5" cy="215.3" r="2" fill="none" stroke="#000000" stroke-width="0.1"/>
-<rect x="10" y="246.3" width="101" height="12" fill="none" stroke="#000000" stroke-width="0.1"/>
+<path d="M10 10 L10 104.5 L12 106 L10 107.5 L10 196 L45 196 L45 107.5 L43 106 L45 104.5 L45 10 Z" fill="none" stroke="#ff0000" stroke-width="0.1"/>
+<path d="M24.5 96.5 A3 3 0 0 1 30.5 96.5 L30.5 115.5 A3 3 0 0 1 24.5 115.5 Z" fill="none" stroke="#ff0000" stroke-width="0.1"/>
+<circle cx="27.5" cy="80.5" r="1" fill="none" stroke="#ff0000" stroke-width="0.1"/>
+<circle cx="27.5" cy="131.5" r="1" fill="none" stroke="#ff0000" stroke-width="0.1"/>
+<circle cx="27.5" cy="32.8" r="1" fill="none" stroke="#ff0000" stroke-width="0.1"/>
+<circle cx="27.5" cy="179.2" r="1" fill="none" stroke="#ff0000" stroke-width="0.1"/>
+<circle cx="27.5" cy="21" r="2" fill="none" stroke="#ff0000" stroke-width="0.1"/>
+<path d="M65 226.3 L65 155.8 L67 154.3 L65 152.8 L65 42.938 L78.856 12.349 A4 4 0 0 1 86.144 12.349 L100 42.938 L100 152.8 L98 154.3 L100 155.8 L100 226.3 Z" fill="none" stroke="#ff0000" stroke-width="0.1"/>
+<circle cx="82.5" cy="104.3" r="1" fill="none" stroke="#ff0000" stroke-width="0.1"/>
+<circle cx="82.5" cy="129.3" r="1" fill="none" stroke="#ff0000" stroke-width="0.1"/>
+<circle cx="82.5" cy="154.3" r="1" fill="none" stroke="#ff0000" stroke-width="0.1"/>
+<circle cx="82.5" cy="179.3" r="1" fill="none" stroke="#ff0000" stroke-width="0.1"/>
+<circle cx="82.5" cy="204.3" r="1" fill="none" stroke="#ff0000" stroke-width="0.1"/>
+<circle cx="82.5" cy="215.3" r="2" fill="none" stroke="#ff0000" stroke-width="0.1"/>
+<rect x="10" y="246.3" width="101" height="12" fill="none" stroke="#ff0000" stroke-width="0.1"/>
 </g>
 </svg>

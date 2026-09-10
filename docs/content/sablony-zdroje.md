@@ -514,7 +514,8 @@ výkresu souhlasit, jinak si uživatel nemá jak ověřit, co je správně.**
 ## Vlastní šablona opasku 40 mm (obě strany)
 
 `pnpm pattern:belt-end` → `docs/generated/opasek-sablona.pdf` (**2 strany A4, 1:1**) a dvě SVG.
-Geometrie a všechna pravidla: `src/lib/geometry/belt-end.ts`, testy `belt-end.test.ts` (20 testů).
+Geometrie a všechna pravidla: `src/lib/geometry/belt-end.ts`, testy `belt-end.test.ts` (49 testů)
+a `src/test/generated-patterns.test.ts` (46 testů nad zapsanými soubory v `docs/generated/`).
 Skript `scripts/belt-buckle-end.ts` už jen kreslí.
 
 ### Strana 1 – konec u přezky
@@ -534,7 +535,7 @@ Skript `scripts/belt-buckle-end.ts` už jen kreslí.
 
 | Prvek                | Hodnota                                  | Odkud                 |
 | -------------------- | ---------------------------------------- | --------------------- |
-| Anglická špička      | hrot 38,6 mm                             | odměřeno z CraftPoint |
+| Anglická špička      | hrot **38,46 mm** (odvozeno)             | odměřeno 38,4 mm      |
 | **Zaoblení vrcholu** | **r = 4 mm, boky na něj tečné**          | odměřeno z CraftPoint |
 | Dírky pro trn        | 5 × Ø 4,5 mm, rozteč 25 mm               | odměřeno z CraftPoint |
 | První dírka          | 94,3 mm od hrotu                         | odměřeno z CraftPoint |
@@ -563,11 +564,13 @@ První verze strany 2 kreslila špičku jako trojúhelník s ostrým vrcholem. Z
 - Vrchol je ale **oblouk o poloměru ≈ 4 mm**, na který jsou boky tečné (bod dotyku 3,65 mm od
   střednice a 2,36 mm od vrcholu). Ostrý trojúhelník se od skutečného tvaru u vrcholu liší
   až o **2,4 mm**.
-- Délka hrotu je **38,6 mm**, ne 38.
+- Délka hrotu je **38,4 mm** odměřeno; model z toho odvozuje 38,46 mm. Rozhodně ne 38 mm.
 
-Model „oblouk + tečné boky“ reprodukuje devět odměřených bodů s největší odchylkou **0,068 mm**.
-Zafixováno testem `profil odpovídá špičce odměřené z PDF CraftPoint do 0,1 mm`; `checkBeltTipSpec`
-navíc odmítne `noseRadiusMm = 0` i zaoblení větší, než délka hrotu unese.
+Model „oblouk + tečné boky“ reprodukuje devět odměřených bodů 40mm pásu s největší odchylkou
+**0,11 mm** a sedm bodů 35mm pásu s odchylkou **0,09 mm**. Zafixováno testy `profil odpovídá
+špičce odměřené z PDF CraftPoint do 0,15 mm` a `profil úzkého pásu … do 0,15 mm`; tolerance je
+0,15 mm proto, že jeden konstantní sklon 0,453 pokrývá obě odměřené šířky (0,4521 a 0,4542).
+`checkBeltTipSpec` navíc odmítne `noseRadiusMm = 0` i zaoblení větší, než délka hrotu unese.
 
 Praktický důvod, proč na tom záleží: ostrý hrot z kůže se krabatí a třepí a nožem se přesně
 nevyřízne. Zaoblení 4 mm se naopak dá dořezat a dohladit smirkem.
@@ -598,7 +601,7 @@ Obvod mění jen hladkou část mezi konci.
 | Nýty od ohybu               | ± 25,5 / ± 73,2 | −25,48 / +25,49 a −73,19 / +73,24 mm                                   |
 | Konce drážky od ohybu       | ± 9,5           | −9,48 / +9,49 mm                                                       |
 | Konec pásu od ohybu         | 90 mm           | +90,00 mm                                                              |
-| Délka hrotu                 | 38,6 mm         | plné šířky dosahuje 83,6 mm pod vrcholem                               |
+| Délka hrotu                 | 38,46 mm        | plné šířky dosahuje 83,6 mm pod vrcholem                               |
 | Profil špičky vs CraftPoint | ≤ 0,1 mm        | ≤ 0,05 mm mimo vrchol; 0,31 mm ve 0,5 mm od vrcholu (tah linky 0,3 mm) |
 | Dírky od hrotu              | 94,3 → 194,3    | 94,41 / 119,38 / 144,36 / 169,42 / 194,40 mm                           |
 | Rozteč dírek                | 25 mm           | 24,97 / 24,98 / 25,06 / 24,98 mm                                       |
@@ -626,7 +629,7 @@ Vygeneroval jsem PDF CraftPointu ještě pro **šířku 35 mm** a porovnal s 40 
 **Závislé na šířce:**
 
 - Obrys, samozřejmě.
-- **Délka hrotu**: 38,4 mm u 40 mm pásu, 32,7 mm u 35 mm. Není to vstup – vychází ze šířky, sklonu
+- **Délka hrotu**: 38,46 mm u 40 mm pásu, 32,94 mm u 35 mm (odměřeno 38,4 a 32,7). Není to vstup – vychází ze šířky, sklonu
   a zaoblení. V modelu je proto `tipLengthMm()` odvozená funkce, ne parametr.
 - **Délka pásku na poutko**: 111 mm pro 40 × 4 mm, 101 mm pro 35 × 4 mm.
 - Průměry otvorů závisí na trnu přezky a nýtu, ne na šířce.
@@ -647,11 +650,11 @@ samostatný proužek s pěti dírkami a používat ho na jakýkoli pásek.
 
 ### Jak z toho udělat trvalou šablonu
 
-| Varianta       | Materiál                                                                                                                                                           | Nástroje                                                         | Výdrž                            |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------- | -------------------------------- |
-| Nejrychlejší   | Výtisk nalepený na kartón z krabice                                                                                                                                | nic navíc                                                        | 2–3 použití, kraje se rozmačkají |
-| **Doporučeno** | Výtisk na **samolepicí A4** nalepený na **PVC/PP desku 1–2 mm**                                                                                                    | odlamovací nůž + řezací podložka, které už má                    | roky                             |
-| Profi          | Akrylát 3 mm ([Hornbach 500 × 250 × 3 mm, 199 Kč](https://www.hornbach.cz/p/plexisklo-gutta-akrylatove-500-x-250-x-3-mm-hladke-opal/8055677/), ověřeno 2026-09-10) | přímočará pilka nebo lupenkovka + pilníky, nebo laser na zakázku | trvale                           |
+| Varianta       | Materiál                                                                                                                                                                                                                             | Nástroje                                                         | Výdrž                            |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------- | -------------------------------- |
+| Nejrychlejší   | Výtisk nalepený na kartón z krabice                                                                                                                                                                                                  | nic navíc                                                        | 2–3 použití, kraje se rozmačkají |
+| **Doporučeno** | Výtisk na **samolepicí A4** nalepený na **PVC/PP desku 1–2 mm**                                                                                                                                                                      | odlamovací nůž + řezací podložka, které už má                    | roky                             |
+| Profi          | Akrylát **čirý** 3 mm (cenu neuvádím – ověřený Hornbach odkaz vedl na variantu „hladké **opál**“, tedy mléčnou, a průhlednost je u destičky funkční požadavek; čirou variantu vybírej v obchodě podle popisu „čirá / transparentní“) | přímočará pilka nebo lupenkovka + pilníky, nebo laser na zakázku | trvale                           |
 
 Zásadní detail, který se snadno opomene: **šablona, kterou se jen obtahuje, přenese obrys, ne otvory.**
 V šabloně proto v každém středu otvoru udělat malou dírku 1,5–2 mm a polohu přenášet rýsovacím
@@ -709,8 +712,9 @@ Ivan) – dovoz, a stejně to nebude naše geometrie.
 [TITAN-Multiplast](https://www.titan-multiplast.cz/sluzby/rezani-plastu-laserem) (plasty 0,5–50 mm),
 MK Plexi Praha (stroj na tenké malé díly),
 [Levné gravírování](https://www.levne-gravirovani.cz/rezani-plastu-a-plexiskla). **Ceny neuvádějí,
-dělají se na dotaz** – nevymýšlet je. Materiál na vlastní řezání: akrylát 3 mm 500 × 250 mm za
-199 Kč (Hornbach, ověřeno 2026-09-10).
+dělají se na dotaz** – nevymýšlet je. Materiál na vlastní řezání: **čirý** akrylát 3 mm, formát
+500 × 250 mm stačí; cenu neuvádím, protože jediný odkaz, který jsem ověřil, byla mléčná varianta
+„opál“ (viz tabulku výše).
 
 **Naše SVG ale není připravené pro laser.** Obsahuje popisky, kalibrační čtverec, čárkovanou linii
 ohybu a střednici. Řezací soubor by měl mít jen:
@@ -902,9 +906,15 @@ kůže 3 mm materiálu a při pohledu pod úhlem se linka zdá posunutá:
 | 45°                | 3,00 mm        |
 
 Při 30° je to víc než celá přesnost, o kterou se v návrhu snažíme (můstky, kóty do 0,15 mm).
-**Řešení: používat destičku gravírovanou stranou dolů**, v kontaktu s kůží — paralaxa je pak nulová.
-Otvory a výřezy paralaxou netrpí, protože se šídlo i nůž kůže fyzicky dotknou. Zapsáno do postupu
-použití; do řezacího souboru to nezasahuje, je to věc používání.
+**Řešení: při vyrovnávání se dívat svisle dolů.** Otvory a výřezy paralaxou netrpí, protože se
+šídlo i nůž kůže fyzicky dotknou; jde jen o gravírované linky. Zapsáno do postupu použití; do
+řezacího souboru to nezasahuje, je to věc používání.
+
+**Původní návrh „používat destičku gravírovanou stranou dolů" byl chybný** (opraveno 2026-09-10):
+gravírování je jednostranné, takže obrácením destičky se **zrcadlí celý layout** — zkosený
+orientační roh skončí vpravo, pravidlo „levá hrana = konec pásu" přestane platit a čísla stupnice
+se čtou zrcadlově. Za 1,7 mm paralaxy při pohledu pod 30° se nevyplatí riskovat zrcadlené
+označení. Správná odpověď je dívat se shora, ne otáčet destičku.
 
 ### Poutko nepotřebuje vlastní otvory (2026-09-10)
 
@@ -915,10 +925,12 @@ nýty** — právě k tomu druhý nýt je, a proto má destička čtyři otvory,
 
 Alternativa, kdy se oba konce pásku poutka upnou pod nýt, by taky žádné otvory navíc nevyžadovala
 (poutko by nýtový otvor sdílelo), ale **s našimi nýty nejde**: pás 4 + pás 4 + dva konce poutka
-po 2 mm = 12 mm, a šroubovací nýt 10/6 je podle obchodu vhodný pro dvě vrstvy o celkem 4,5–5 mm.
-Dřík 6 mm na 12 mm nestačí. Poutko tedy musí být volné.
+po 2 mm je o 4 mm víc než samotný zdvojený konec — a už ten je na dřík 6 mm hraniční (viz
+„Délka dříku" níže). Poutko tedy musí být volné.
 
-Kapsa má 47,7 mm, takže poutko 12 mm v ní má 35,7 mm vůle. V praxi to nevadí, protože poutkem
+Poutko se opírá o **hlavičky nýtů Ø 10 mm**, ne o otvory, takže světlá kapsa je 47,7 − 10
+= **37,7 mm** a poutko 12 mm v ní má 25,7 mm vůle (dřív tu bylo 41,7 / 35,7 mm, počítané chybně
+z průměru otvoru; `keeperPocketClearMm` teď používá `rivetHeadMm`). V praxi to nevadí, protože poutkem
 prochází volný konec pásku a drží ho. Pro těsnější poutko lze posunout `rivetOffsetsMm` a znovu
 vygenerovat; kontroly ohlásí, kdyby se tím zúžil můstek u drážky pro trn.
 
@@ -1044,8 +1056,79 @@ se té linky dotýká. Žádné popisky navíc. Ověřeno, že mezi linkou a kon
 slot (větší oblouky protínají tu výšku až vpravo od středu).
 
 Kontroly `checkBeltPlate` doplněny o: rozestup obou nových párů řad, žebra mezi oblouky (min
-1,4 mm), odstup slotu od nejbližší dírky i od pravé hrany a soustřednost oblouků.
+1,4 mm) a odstup slotu od nejbližší dírky i od pravé hrany. (Kontrola „soustřednosti" tu chvíli
+byla taky, ale revize ji správně označila za bezobsažnou — středy se ve stejné funkci počítají ze
+stejné konstanty, takže si test ověřoval sám sebe. Odstraněna.)
 
 **Destička má nyní 215 × 184 mm**, 7 uzavřených kontur v řezu (obrys, vyříznutá špička, 4 sloty
 zaobleného konce, ovál), 20 značicích otvorů Ø 2 mm, 1 závěsný Ø 4 mm, 0 elementů `<text>`
 a 0 kolizí gravírování s otvory.
+
+### Třetí revizní kolo: tři agenti nad destičkou (2026-09-10)
+
+Autor si vyžádal, ať se na destičku podívají i jiní agenti. Tři revize (geometrie, vyrobitelnost,
+použitelnost u ponku) našly dohromady čtrnáct věcí. Všechny opraveny, tady je záznam proč.
+
+**Chyby, které by se projevily až na vyrobeném díle**
+
+1. **Zářezy mířily z materiálu ven.** Na dílu se špičkou vyrůstaly z boční hrany dva 2mm trny
+   místo zářezů. Příčina: jedna funkce `notchSegment` řešila dvě různé věci najednou (u které
+   hrany jsem a kterým směrem obtahuji obrys) a u obrácené strany se to sečetlo špatně. Rozděleno
+   na parametry `edge` a `travel`. **Zafixováno testem** `zářezy míří dovnitř materiálu, ne ven`,
+   který kontroluje, že žádný bod obrysu neleží mimo hrany pásu — s vrácenou chybou test padne
+   na `body 68 mimo hrany 70–110`.
+2. **Řezací soubor měl přehnutý konec půlkruhový, tisková šablona plochý.** Dvě šablony na tentýž
+   díl si odporovaly. Srovnáno na plochý, jak to má CraftPoint.
+3. **Kapsa pro poutko počítaná z průměru otvoru, ne hlavičky.** Poutko se opírá o hlavičky
+   Ø 10 mm. Skutečná světlá kapsa je 37,7 mm, ne 41,7. Do specifikace přidán `rivetHeadMm`
+   a `keeperPocketClearMm` teď počítá z něj.
+4. **Černá barva řezu.** Většina řezáren rozlišuje operace barvou; černá je nejčastěji default pro
+   gravírování. Řez je teď `#FF0000` a obě vrstvy jsou skutečné inkscape vrstvy s názvy
+   `REZ` / `GRAVIROVANI`.
+5. **Šestnáct ostrých vnitřních rohů** v korýtkách slotů zaobleného konce — každý je koncentrátor
+   napětí a u akrylátu odtud vede prasklina. Konce slotů jsou teď zaoblené (stadion, 4 oblouky).
+
+**Věci, které nelhaly, ale byly na nic**
+
+6. `gap()` neviděla `NaN`: `NaN < min` je `false`, takže by neplatná geometrie prošla jako
+   v pořádku. Doplněna kontrola a epsilon 1e-9, aby hodnota přesně na minimu neshazovala kontrolu
+   kvůli plovoucí aritmetice.
+7. **Pět kontrol bylo algebraicky totožných** s jedinou kontrolou `marginMm`. Sloučeny.
+8. **Konstanta 90 mm byla v modelu dvakrát** (`tailLengthMm` a `strapEndToFoldMm`). Druhá
+   odstraněna, layout si ji bere z první.
+9. `checkBeltTipSpec` počítala odvozenou geometrii **před** validací vstupů, takže na nesmyslném
+   vstupu mohla spadnout dřív, než stihne říct co je špatně. Validace je teď první a vrací se
+   hned.
+10. Doplněny chybějící kontroly: kladnost všech rozměrů, celočíselný `holeCount`,
+    `rivetHeadMm > rivetHoleMm`, smysluplnost drážky pro trn, prázdné i příliš široké
+    `guideWidthsMm`.
+
+**Použitelnost**
+
+11. **Čísla stupnice ležela na dílcích** a nebyla vidět nula. Čísla jsou nad dílky, nula je
+    označená a stupnice začíná na x = 2.
+12. **Popisky šířek přeškrtávala vedlejší linka.** Text je teď 2,6 mm vysoký a centrovaný na
+    vlastní lince.
+13. **Značky vedle prostřední dírky byly řezané otvory**, tedy další věci k záměně. Nahrazeny
+    gravírovanými dílky.
+14. Doplněna **gravírovaná kontrolní kóta 50 mm**, aby se po vyřezání dalo ověřit měřítko, a do
+    hlavičky souboru procesní poznámky pro řezárnu (gravírovat první, obrys poslední, neleštit
+    plamenem, fólii ponechat, kerf nekompenzovat).
+
+**Co revize navrhla a neudělal jsem**
+
+- **Zrušit řadu se zaobleným koncem**, protože „stačí špička". Autor si ji výslovně vyžádal
+  a je to nejčastější tvar u pásků do džín. Zůstává.
+- **Přepočítat rozteč nýtů podle šířky poutka** místo podle BFLG. Kapsa 37,7 mm je pro poutko
+  12 mm velká, ale rozteč nýtů je jedna z hodnot, které mám odměřené z hotové cizí šablony,
+  a měnit ji znamená měnit i můstek u drážky pro trn. Necháno; kdo chce těsnější poutko, posune
+  `rivetOffsetsMm` a kontroly mu ohlásí, jestli si tím nezničil můstek.
+
+**Co z toho vyplynulo pro nákup:** ověřené pravidlo pro šroubovací nýty je _délka dříku o 1–1,5 mm
+kratší než tloušťka sešroubovaných vrstev_. Náš zdvojený konec je 2 × tloušťka pásu, takže na 4mm
+pás by byl potřeba dřík 6,5–7 mm — a CraftPoint má jen 10/6 (hlavička 10, dřík 6). **Proto se pro
+tenhle projekt kupuje pás 3,0–3,5 mm**, což je zároveň rozsah, který požaduje sama předloha.
+V modelu to hlídá `rivetPostRangeMm` a test, který 6mm dřík na 4mm pásu odmítne a na 3,5mm
+schválí.
+
+Stav po opravách: `tsc -b` čistý, `eslint .` čistý, **216 testů prošlo, 3 přeskočeny**.
