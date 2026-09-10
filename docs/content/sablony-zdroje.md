@@ -136,3 +136,33 @@ Na co si dát pozor při výběru:
   což je u pásku na leštění hran podstatné – doptat se. Sedlářské nářadí uvádí krupon, CraftPoint
   výslovně třísločiněné.
 - Hotový pás **neznamená hotové hrany.** Hrany se pořád srazí a zaleští, jen se nemusí řezat.
+
+### Přezky na 4cm pásek – ověřeno 2026-09-10
+
+Pravidlo: údaj „40 mm“ u přezky je **vnitřní světlost**, tedy šířka pásu, který do ní projde. Na 4cm
+pásek se kupuje přezka 40 mm. Šablona CraftPoint žádá jednu přezku 40 mm a dva šroubovací nýty.
+
+Typy, které se na pásek prodávají:
+
+- **Trnová (single prong)** – jeden trn, prochází jednou dírkou. Standard a to, s čím počítá šablona.
+- **Rolnová (roller)** – na příčce je otočná rolna, pás po ní lépe klouže a méně se odírá. Jinak stejné použití.
+- **Dvoutrnová (double prong)** – dva trny, potřebuje dvě dírky vedle sebe. Western/workwear vzhled a o jedno děrování na každou pozici víc.
+
+| Přezka                                                                                                          | Typ                | Cena             | Stav          |
+| --------------------------------------------------------------------------------------------------------------- | ------------------ | ---------------- | ------------- |
+| [andexnite – Opasková přezka 40 mm, staromosaz](https://andexnite.cz/produkt/opaskova-prezka-40-mm-staromosaz/) | trnová             | **95 Kč**        | 53 ks skladem |
+| [Leatory](https://www.leatory.cz/opaskove-prezky/) #32 / #34, staromosaz                                        | trnová             | **134,40 Kč**    | 18 / 4 ks     |
+| Leatory #28 staromosaz / nikl přes mosaz                                                                        | trnová             | 149,80–154,20 Kč | 9 / 20 ks     |
+| Leatory #40 staromosaz / nikl / stříbro                                                                         | trnová             | 191,60–301,80 Kč | 9–13 ks       |
+| Leatory #2434, staromosaz / staronikl                                                                           | rolnová            | 162,90–173,90 Kč | 9 / 10 ks     |
+| Leatory #910R, staromosaz                                                                                       | dvoutrnová + rolna | 189,40 Kč        | 6 ks          |
+| CraftPoint, nerez kartáčovaná / mosazná                                                                         | trnová             | 241 / 252 Kč     | skladem       |
+| CraftPoint, kartáčovaný gun metal                                                                               | trnová             | 167 Kč           | vyprodáno     |
+
+Doporučení: trnová 40 mm, nejlevnější ověřená je andexnite za 95 Kč. Leatory má největší výběr
+modelů a stavů skladem. Rolnová verze je pohodlnější, ale u prvního pásku to není rozdíl, který by se
+za příplatek poznal. Dvoutrnovou nebrat – zdvojnásobuje děrování.
+
+Co v seznamu materiálu šablony **není**: **poutko** (keeper), tedy oko, které drží volný konec pásu.
+Dá se vyříznout z odřezku kůže a slepit nebo prošít do kroužku, nebo se vynechá. Zohlednit, až se
+bude psát obsah projektu.
