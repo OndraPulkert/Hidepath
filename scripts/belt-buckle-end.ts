@@ -32,6 +32,7 @@ import {
   ligamentMm,
   middleHoleIndex,
   holeOffsetsFromApexMm,
+  tipHalfWidthAtMm,
   tipLengthMm,
   tipTangentPoint,
 } from '../src/lib/geometry/belt-end.ts';
@@ -1057,6 +1058,117 @@ export function buildBeltPlateDxf(
   return dxfDocument(entities);
 }
 
+/**
+ * Realistický náhled hotového konce pásku. **Není to výrobní soubor** a nekreslí se
+ * z něj nic – je to odpověď na otázku „jak to bude ve skutečnosti vypadat".
+ *
+ * Geometrie je přesná: obrys se vzorkuje z `tipHalfWidthAtMm` po 0,25 mm a dírky
+ * sedí na `holeOffsetsFromApexMm`. Ilustrativní je jen povrch (odstín, zrno, sražená
+ * hrana). Záměrně **bez šití** – tenhle pásek se nešije, drží na dvou šroubovacích
+ * nýtech, takže nakreslený steh by lhal.
+ */
+export function buildBeltTipPreviewSvg(tip: BeltTipSpec, style: 'point' | 'round'): string {
+  const w = tip.beltWidthMm;
+  const half = w / 2;
+  const holes = holeOffsetsFromApexMm(tip);
+  const shownMm = Math.ceil(holes[holes.length - 1]! + 18);
+  const pad = 8;
+  const cy = pad + half;
+  const apexX = pad + shownMm;
+  const bodyLeft = pad;
+
+  /**
+   * Obrys se skládá ze tří částí: rovná horní hrana, tvar konce, rovná dolní hrana.
+   * `inset` > 0 kreslí tentýž obrys zmenšený dovnitř – tím vzniká sražená
+   * a zaleštěná hrana. (Napoprvé jsem body konce vzal v obráceném pořadí a z pásku
+   * se stala šipka, takže tady na směru záleží.)
+   */
+  const outlinePath = (inset: number): string => {
+    const hEdge = half - inset;
+    const xEnd = apexX - inset;
+    if (style === 'round') {
+      const r = hEdge;
+      const xArc = xEnd - r;
+      return (
+        `M${f(bodyLeft)} ${f(cy - hEdge)} L${f(xArc)} ${f(cy - hEdge)} ` +
+        `A${f(r)} ${f(r)} 0 0 1 ${f(xArc)} ${f(cy + hEdge)} ` +
+        `L${f(bodyLeft)} ${f(cy + hEdge)} Z`
+      );
+    }
+    const len = tipLengthMm(tip);
+    // d = vzdálenost od vrcholu; hw = poloviční šířka pásu v tom místě.
+    const pts: [number, number][] = [];
+    for (let d = 0; d <= len + 1e-9; d += 0.25) {
+      pts.push([xEnd - d, Math.max(0, tipHalfWidthAtMm(tip, Math.min(d, len)) - inset)]);
+    }
+    const topRun = [...pts]
+      .reverse()
+      .map(([x, hw]) => `L${f(x)} ${f(cy - hw)}`)
+      .join(' ');
+    const bottomRun = pts.map(([x, hw]) => `L${f(x)} ${f(cy + hw)}`).join(' ');
+    return (
+      `M${f(bodyLeft)} ${f(cy - hEdge)} L${f(xEnd - len)} ${f(cy - hEdge)} ` +
+      `${topRun} ${bottomRun} ` +
+      `L${f(xEnd - len)} ${f(cy + hEdge)} L${f(bodyLeft)} ${f(cy + hEdge)} Z`
+    );
+  };
+
+  const outline = outlinePath(0);
+  const inner = outlinePath(1.3);
+
+  const holeCircles = holes
+    .map(
+      (o) =>
+        `<circle cx="${f(apexX - o)}" cy="${f(cy)}" r="${f(tip.holeDiameterMm / 2)}" fill="url(#hole)"/>` +
+        `<circle cx="${f(apexX - o)}" cy="${f(cy)}" r="${f(tip.holeDiameterMm / 2)}" ` +
+        `fill="none" stroke="#3a2413" stroke-width="0.25" opacity="0.6"/>`,
+    )
+    .join('\n');
+
+  const W = shownMm + 2 * pad;
+  const H = w + 2 * pad;
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<!-- NAHLED, ne vyrobni soubor. Geometrie z modelu, povrch ilustrativni. -->',
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${f(W)}mm" height="${f(H)}mm" viewBox="0 0 ${f(W)} ${f(H)}">`,
+    '<defs>',
+    '<linearGradient id="leather" x1="0" y1="0" x2="0" y2="1">',
+    '<stop offset="0" stop-color="#8f5f36"/>',
+    '<stop offset="0.42" stop-color="#b98452"/>',
+    '<stop offset="0.6" stop-color="#a97445"/>',
+    '<stop offset="1" stop-color="#75492a"/>',
+    '</linearGradient>',
+    '<radialGradient id="hole" cx="0.5" cy="0.35" r="0.8">',
+    '<stop offset="0" stop-color="#17100a"/>',
+    '<stop offset="0.75" stop-color="#241708"/>',
+    '<stop offset="1" stop-color="#5a3a1d"/>',
+    '</radialGradient>',
+    '<filter id="grain">',
+    '<feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="4" seed="11" result="n"/>',
+    '<feColorMatrix in="n" type="saturate" values="0"/>',
+    '</filter>',
+    '<filter id="soft" x="-30%" y="-30%" width="160%" height="160%">',
+    '<feGaussianBlur stdDeviation="0.7"/>',
+    '</filter>',
+    '<clipPath id="body"><path d="' + outline + '"/></clipPath>',
+    '</defs>',
+    `<rect width="${f(W)}" height="${f(H)}" fill="#efece7"/>`,
+    `<path d="${outline}" fill="#000" opacity="0.2" transform="translate(0.9 1.2)" filter="url(#soft)"/>`,
+    `<path d="${outline}" fill="url(#leather)"/>`,
+    // Zrno: šum přes tělo pásku, jen slabě.
+    `<g clip-path="url(#body)"><rect width="${f(W)}" height="${f(H)}" filter="url(#grain)" opacity="0.13"/></g>`,
+    // Sražená hrana: světlý pruh dovnitř a tmavý obvod.
+    `<path d="${inner}" fill="none" stroke="#e6c295" stroke-width="0.45" opacity="0.4"/>`,
+    `<path d="${outline}" fill="none" stroke="#services"/>`.replace(
+      '#services',
+      '#4a2f18" stroke-width="1.2" opacity="0.85',
+    ),
+    `<path d="${outline}" fill="none" stroke="#2b1a0c" stroke-width="0.35"/>`,
+    holeCircles,
+    '</svg>',
+  ].join('\n');
+}
+
 export function buildPlateLegendSvg(
   end: BeltEndSpec,
   tip: BeltTipSpec,
@@ -1315,6 +1427,17 @@ async function main(): Promise<void> {
     const dxfCutPath = resolve(outDir, 'opasek-desticka-rez.dxf');
     writeFileSync(dxfCutPath, buildBeltPlateDxf(end, tip, DEFAULT_BELT_PLATE, true), 'utf8');
     console.log(`Zapsáno ${dxfCutPath} (jen řez, pro automatické kalkulačky)`);
+
+    // Náhledy hotového konce: odpověď na „jak to bude ve skutečnosti vypadat".
+    // Geometrie z modelu, povrch ilustrativní. Nejsou to výrobní soubory.
+    for (const [style, name] of [
+      ['point', 'opasek-nahled-hrot.svg'],
+      ['round', 'opasek-nahled-zaobleny.svg'],
+    ] as const) {
+      const previewPath = resolve(outDir, name);
+      writeFileSync(previewPath, buildBeltTipPreviewSvg(tip, style), 'utf8');
+      console.log(`Zapsáno ${previewPath} (náhled, ne výrobní soubor)`);
+    }
 
     const legendPath = resolve(outDir, 'opasek-desticka-vysvetlivky.svg');
     writeFileSync(legendPath, buildPlateLegendSvg(end, tip), 'utf8');

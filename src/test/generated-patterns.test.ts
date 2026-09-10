@@ -36,6 +36,12 @@ const plate = Object.entries(svgs).find(
 
 const legend = Object.entries(svgs).find(([path]) => path.includes('vysvetlivky'))?.[1];
 
+const previews = Object.fromEntries(
+  Object.entries(svgs)
+    .filter(([path]) => path.includes('opasek-nahled-'))
+    .map(([path, svg]) => [path.includes('hrot') ? 'point' : 'round', svg]),
+) as Record<'point' | 'round', string | undefined>;
+
 const dxfs: Record<string, string> = import.meta.glob('/docs/generated/*.dxf', {
   query: '?raw',
   import: 'default',
@@ -876,6 +882,34 @@ describe('destička na opasek', () => {
     );
     const cutCircles = [...plateDxfCut!.matchAll(/\n0\nCIRCLE\n/g)].length;
     expect(cutCircles, 'kružnice v řezu').toBe(17);
+  });
+
+  it('náhledy konce mají dírky z modelu a jsou 1:1', () => {
+    // Náhled je ilustrace povrchu, ale geometrie v něm musí být pravdivá – jinak
+    // by odpovídal na otázku „jak to bude vypadat" špatně.
+    for (const style of ['point', 'round'] as const) {
+      const svg = previews[style];
+      expect(svg, `docs/generated/opasek-nahled-${style}`).toBeDefined();
+      const offsets = holeOffsetsFromApexMm(DEFAULT_BELT_TIP);
+      const pad = 8;
+      const shown = Math.ceil(offsets[offsets.length - 1]! + 18);
+      expect(svg!, '1:1 v mm').toContain(`width="${shown + 2 * pad}mm"`);
+      expect(svg!).toContain(`height="${DEFAULT_BELT_TIP.beltWidthMm + 2 * pad}mm"`);
+      const apexX = pad + shown;
+      const cy = pad + DEFAULT_BELT_TIP.beltWidthMm / 2;
+      const holes = [
+        ...svg!.matchAll(/<circle cx="([\d.]+)" cy="([\d.]+)" r="([\d.]+)" fill="url/g),
+      ];
+      expect(holes.length, 'dírky v náhledu').toBe(offsets.length);
+      holes.forEach((m, i) => {
+        expect(Number(m[1]), `dírka ${i + 1} x`).toBeCloseTo(apexX - offsets[i]!, 3);
+        expect(Number(m[2]), `dírka ${i + 1} y`).toBeCloseTo(cy, 3);
+        expect(Number(m[3])).toBeCloseTo(DEFAULT_BELT_TIP.holeDiameterMm / 2, 3);
+      });
+      // Náhled se nesmí splést s řezacím souborem: má výplně a je tak označený.
+      expect(svg!).toContain('NAHLED, ne vyrobni soubor');
+      expect(svg!).toContain('fill="url(#leather)"');
+    }
   });
 
   it('vysvětlivky jsou samostatný soubor a nejsou určené řezárně', () => {

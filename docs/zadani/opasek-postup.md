@@ -94,6 +94,14 @@ a překlopí se nesymetricky, takže si toho nevšimneš.
   se kůže fyzicky dotkne. **Destičku nikdy neobracej** — gravírování je jednostranné, takže
   obrácením se zrcadlí celý layout včetně zkoseného rohu a čísel.
 
+### Jak to bude vypadat
+
+`pnpm pattern:belt-end --multi` vykreslí i dva náhledy hotového konce v 1:1:
+`docs/generated/opasek-nahled-hrot.svg` (řada 1) a `opasek-nahled-zaobleny.svg` (řada 2).
+Geometrie v nich je z modelu, ilustrativní je jen povrch. Nejsou to výrobní soubory.
+Kdo chce rozhodnout fyzicky, vytiskne **druhou stranu** `opasek-sablona-40mm.pdf` na 100 %,
+vystřihne a přiloží k pásku, který nosí.
+
 ## 6. Co je na destičce co
 
 Vlevo u každé řady je vygravírované **číslo řady**. Zkosený roh je **vlevo nahoře** a značí,

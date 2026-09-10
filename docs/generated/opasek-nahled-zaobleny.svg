@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- NAHLED, ne vyrobni soubor. Geometrie z modelu, povrch ilustrativni. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="229mm" height="56mm" viewBox="0 0 229 56">
+<defs>
+<linearGradient id="leather" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#8f5f36"/>
+<stop offset="0.42" stop-color="#b98452"/>
+<stop offset="0.6" stop-color="#a97445"/>
+<stop offset="1" stop-color="#75492a"/>
+</linearGradient>
+<radialGradient id="hole" cx="0.5" cy="0.35" r="0.8">
+<stop offset="0" stop-color="#17100a"/>
+<stop offset="0.75" stop-color="#241708"/>
+<stop offset="1" stop-color="#5a3a1d"/>
+</radialGradient>
+<filter id="grain">
+<feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="4" seed="11" result="n"/>
+<feColorMatrix in="n" type="saturate" values="0"/>
+</filter>
+<filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+<feGaussianBlur stdDeviation="0.7"/>
+</filter>
+<clipPath id="body"><path d="M8 8 L201 8 A20 20 0 0 1 201 48 L8 48 Z"/></clipPath>
+</defs>
+<rect width="229" height="56" fill="#efece7"/>
+<path d="M8 8 L201 8 A20 20 0 0 1 201 48 L8 48 Z" fill="#000" opacity="0.2" transform="translate(0.9 1.2)" filter="url(#soft)"/>
+<path d="M8 8 L201 8 A20 20 0 0 1 201 48 L8 48 Z" fill="url(#leather)"/>
+<g clip-path="url(#body)"><rect width="229" height="56" filter="url(#grain)" opacity="0.13"/></g>
+<path d="M8 9.3 L201 9.3 A18.7 18.7 0 0 1 201 46.7 L8 46.7 Z" fill="none" stroke="#e6c295" stroke-width="0.45" opacity="0.4"/>
+<path d="M8 8 L201 8 A20 20 0 0 1 201 48 L8 48 Z" fill="none" stroke="#4a2f18" stroke-width="1.2" opacity="0.85"/>
+<path d="M8 8 L201 8 A20 20 0 0 1 201 48 L8 48 Z" fill="none" stroke="#2b1a0c" stroke-width="0.35"/>
+<circle cx="126.7" cy="28" r="2.25" fill="url(#hole)"/><circle cx="126.7" cy="28" r="2.25" fill="none" stroke="#3a2413" stroke-width="0.25" opacity="0.6"/>
+<circle cx="101.7" cy="28" r="2.25" fill="url(#hole)"/><circle cx="101.7" cy="28" r="2.25" fill="none" stroke="#3a2413" stroke-width="0.25" opacity="0.6"/>
+<circle cx="76.7" cy="28" r="2.25" fill="url(#hole)"/><circle cx="76.7" cy="28" r="2.25" fill="none" stroke="#3a2413" stroke-width="0.25" opacity="0.6"/>
+<circle cx="51.7" cy="28" r="2.25" fill="url(#hole)"/><circle cx="51.7" cy="28" r="2.25" fill="none" stroke="#3a2413" stroke-width="0.25" opacity="0.6"/>
+<circle cx="26.7" cy="28" r="2.25" fill="url(#hole)"/><circle cx="26.7" cy="28" r="2.25" fill="none" stroke="#3a2413" stroke-width="0.25" opacity="0.6"/>
+</svg>

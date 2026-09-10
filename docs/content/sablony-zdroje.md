@@ -1600,3 +1600,54 @@ Kdyby autor chtěl špičatější, je to parametr `noseRadiusMm` a délka hrotu
 | 6 mm                | 3,52 mm              | 35,61 mm    |
 
 `checkBeltTipSpec` odmítne 0 (ostrý hrot) i zaoblení větší, než délka hrotu unese.
+
+### Náhled hotového konce (2026-09-11)
+
+Autor se ptal, jak to bude ve skutečnosti vypadat — a měl na to právo, protože celý spor
+o „kulatý konec" byl spor o vizuální dojem ze zvětšeného řezacího souboru. Fotku vyrobit neumím,
+ale vykreslit tvar **z téhož modelu** ano, takže `pnpm pattern:belt-end --multi` teď zapisuje
+i `docs/generated/opasek-nahled-hrot.svg` a `opasek-nahled-zaobleny.svg`.
+
+Geometrie v náhledu je pravdivá: obrys se vzorkuje z `tipHalfWidthAtMm` po 0,25 mm a dírky sedí
+na `holeOffsetsFromApexMm`. Ilustrativní je jen povrch (odstín, zrno, sražená hrana). Náhled je
+záměrně **bez šití** — tenhle pásek se nešije, drží na dvou šroubovacích nýtech, takže nakreslený
+steh by lhal. Test `náhledy konce mají dírky z modelu a jsou 1:1` hlídá měřítko, počet i polohu
+dírek a to, že se soubor nedá splést s řezacím (má výplně a je tak označený v komentáři).
+
+Napoprvé mi z toho vyšla **šipka**: body obrysu konce jsem vzal v obráceném pořadí, takže se
+rovná hrana spojila přímo s vrcholem a profil se vracel zpátky. Dobrá připomínka, že u obrysu
+záleží na směru — stejná past jako u zářezů v prvním revizním kole.
+
+### Rešerše tvarů konce z pěti reálných pásků (2026-09-11)
+
+Autor poslal pět fotek prodávaných pásků. Rozdělení tvarů:
+
+| Zdroj                        | Tvar konce                                          |
+| ---------------------------- | --------------------------------------------------- |
+| divokybyk.cz, černý          | **zaoblený konec**, v podstatě půlkruh              |
+| redfir.cz, červený           | **zaoblený konec**, mírně zúžený                    |
+| divokybyk.cz, hnědý          | zkosení s **zaobleným nosem** — nejblíž naší řadě 1 |
+| třísločiněný (náhled 194 px) | **anglická špička**, nejšpičatější z pětice         |
+| kravatak.cz, Lloyd           | **diagonální seříznutí** s malým rádiusem v rohu    |
+
+**Ani jeden nemá matematicky ostrý bod a tři z pěti mají konec výrazně kulatý.** To potvrzuje
+volbu `noseRadiusMm = 4` a zároveň vysvětluje, proč autorovi náš výřez připadal kulatý: koukal na
+řadu 1 (anglickou špičku) a v hlavě měl pásky, které mají konec ještě kulatější. Destička obě
+varianty obsahuje — řada 1 hrot, řada 2 zaoblený konec.
+
+Jedno měření z uživatelovy vlastní fotky (pás s pravítkem na řezací podložce), naše šablona proti
+ní při stejné šířce 38 mm:
+
+| Vzdálenost od konce | Fotka    | Naše šablona |
+| ------------------- | -------- | ------------ |
+| 0,5 mm              | 4,58 mm  | 3,87 mm      |
+| 1 mm                | 6,06 mm  | 5,29 mm      |
+| 2 mm                | 9,30 mm  | 6,93 mm      |
+| 5 mm                | 15,90 mm | 9,69 mm      |
+| 10 mm               | 24,93 mm | 14,22 mm     |
+
+Náš profil je špičatější v každém bodě, a ten závěr nezávisí na předpokládané šířce pásu na
+fotce: náš profil je u vrcholu **stejný pro každou šířku** (nos i sklon jsou konstanty), zatímco
+fotka se s předpokladem škáluje — aby vyšla stejně špičatá, musel by ten pás mít 28 mm.
+Měřeno vlastním PNG dekodérem po sloupcích; omezení: stín přes pás, snímek není kolmý a zaleštěná
+hrana je tmavá, takže hranice může být o desetiny mimo. Na rozdíl 9,3 vs 6,9 mm to nemá vliv.
