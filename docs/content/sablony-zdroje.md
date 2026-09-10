@@ -407,7 +407,9 @@ Volba 40 mm / 3,0–4,0 mm / 5 dírek po 25 mm v generátoru tedy odpovídá bě
 
 ## Analýza BFLG-Belt-Hole-Template.pdf (Black Flag Leather Goods)
 
-Soubor `docs/BFLG-Belt-Hole-Template.pdf`, 2 strany, Letter (612 × 792 pt), Inkscape 1.4.2,
+Soubor `docs/BFLG-Belt-Hole-Template.pdf` – **v repu není verzovaný** (`*.pdf` je v `.gitignore`,
+protože je to cizí šablona s logem výrobce a repozitář je public; verzujeme jen odměřenou geometrii
+níže). 2 strany, Letter (612 × 792 pt), Inkscape 1.4.2,
 vytvořeno 2025-10-12. Strana 1 je titulní s logem a QR kódem na videonávod na YouTube (návod jsem
 neviděl). Strana 2 je samotná šablona.
 

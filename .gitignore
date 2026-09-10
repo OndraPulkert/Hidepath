@@ -29,3 +29,6 @@ dev-dist
 coverage
 playwright-report
 test-results
+
+# Cizí šablony a podklady (nešíříme je v public repu; odměřená geometrie patří do docs/content)
+*.pdf
