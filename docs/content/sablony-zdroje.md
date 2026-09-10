@@ -268,3 +268,33 @@ Stejným způsobem, jen s jiným počátečním bodem. Podle stránky generátor
 - Náročnost ●○○ „vhodné pro začátečníky“, doba práce **1,5–3 h**. To je nezávislé potvrzení odhadu
   výše, že pásek je jednodušší než pouzdro.
 - Šití: „Tento projekt nevyžaduje šití.“
+
+### Když žádný pásek k měření nemám
+
+Generátor i tabulka z videa předpokládají, že je co změřit. Bez referenčního pásku:
+
+**Metoda 1 – krejčovský metr provlečený poutky.** Obleč si kalhoty, ve kterých budeš pásek nosit
+(a zastrč košili, pokud ji tak nosíš), provleč metr nebo provázek poutky a utáhni na sílu, jakou
+bys chtěl mít pásek. Naměřený obvod je **přímo to číslo, které generátor chce**. Vychází to
+geometricky: zapnutý pásek tvoří smyčku od ohybu u přezky kolem těla zpět k dírce, do které padá
+trn, a trn je uchycený na příčce v ohybu. Metr vede skoro tou samou cestou; rozdíl dělá jen tloušťka
+kůže, tedy pár milimetrů proti rozteči dírek 25 mm.
+
+**Metoda 2 – změřit pas kalhot naplocho.** Horší, ale poslouží jako kontrola prvního čísla. Poutka
+leží o kousek dál od těla a nezohledňuje se zastrčená košile.
+
+Retailové pravidlo „velikost kalhot + 2 palce“ existuje, ale je to jen hrubý odhad pro objednání
+hotového pásku. Na vlastní výrobu ho nepoužívat.
+
+**A hlavně: dírky děrovat naposledy.** Pás z obchodu má 130 cm, tedy rezervu. Postup, který
+odstraňuje riziko špatné míry úplně:
+
+1. Přenést ze šablony ohyb a otvory pro nýty, ohnout konec kolem přezky a sešroubovat nýty.
+2. Pásek si vzít na sebe, provléknout poutky a utáhnout na pohodlí.
+3. Označit, kam padá trn – **to je prostřední dírka**.
+4. Zkontrolovat, že značka odpovídá tomu, co šablona vykreslila. Pokud ne, věřit tělu, ne číslu.
+5. Vysekat 4,5mm dírky, po dvou na každou stranu s roztečí 25 mm.
+6. Až teď odříznout konec asi 10 cm za poslední dírkou a vyříznout špičku podle šablony.
+
+Cena za tuhle jistotu je jen to, že se špička řeže na konci místo na začátku. Až se bude psát obsah
+projektu pásek, tohle pořadí kroků do něj patří.
