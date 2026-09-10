@@ -67,13 +67,13 @@ z varianty podle šablony CraftPoint, tedy hotový pás z obchodu + přezka + dv
 
 ### Nutné navíc
 
-| Věc                                      | Kde a kolik                                                                                                              | Poznámka                                                                                                 |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| Kruhový průbojník na dírky pro trn       | CraftPoint jednotlivé 2–20 mm **od 29 Kč**; sada 7 ks (2–5 mm) 396 Kč; revolverový děrovač 2–4,5 mm 510 Kč               | Průměr se odečte od trnu vybrané přezky. Druhý průměr na šroubovací nýty podle jejich dříku.             |
-| Otvor pro trn přezky (podélný průřez)    | CraftPoint podélný otvor 16/20 mm **od 1 083 Kč**                                                                        | **Nekupovat.** Standardní levné řešení: vyrazit kruhovým průbojníkem oba konce otvoru a spojit je nožem. |
-| Hotový pás z přírodní kůže               | CraftPoint „Řemen z přírodní kůže 3,0–3,5 mm, 140 cm, 15–80 mm“ **184 Kč** (2–2,5 mm 155 Kč, 4,5–5 mm 120–130 cm 241 Kč) | Šablona žádá 3,0–4,0 mm. Tím padá potřeba dlouhého řezu z celé kůže.                                     |
-| Opasková přezka 40 mm                    | CraftPoint nerez kartáčovaná **241 Kč** skladem, mosazná 252 Kč skladem                                                  | Gun metal 167 Kč byl při ověření vyprodaný.                                                              |
-| Šroubovací nýty (chicago screws) 10/6 mm | CraftPoint **od 8 Kč/ks**, potřeba 2 ks                                                                                  | Utáhnou se šroubovákem, žádný lis ani razníky.                                                           |
+| Věc                                      | Kde a kolik                                                                                                              | Poznámka                                                                                                                         |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| Kruhové průbojníky **4,5 mm a 6 mm**     | CraftPoint jednotlivé 2–20 mm **od 29 Kč/ks**; sada 7 ks (2–5 mm) 396 Kč; revolverový děrovač 2–4,5 mm 510 Kč            | Průměry určuje šablona: 4,5 mm dírky pro trn, 6 mm otvory pro šroubovací nýty. Revolverový děrovač 2–4,5 mm tedy 6 mm nepokryje. |
+| Otvor pro trn přezky (podélný průřez)    | CraftPoint podélný otvor 16/20 mm **od 1 083 Kč**                                                                        | **Nekupovat.** Standardní levné řešení: vyrazit kruhovým průbojníkem oba konce otvoru a spojit je nožem.                         |
+| Hotový pás z přírodní kůže               | CraftPoint „Řemen z přírodní kůže 3,0–3,5 mm, 140 cm, 15–80 mm“ **184 Kč** (2–2,5 mm 155 Kč, 4,5–5 mm 120–130 cm 241 Kč) | Šablona žádá 3,0–4,0 mm. Tím padá potřeba dlouhého řezu z celé kůže.                                                             |
+| Opasková přezka 40 mm                    | CraftPoint nerez kartáčovaná **241 Kč** skladem, mosazná 252 Kč skladem                                                  | Gun metal 167 Kč byl při ověření vyprodaný.                                                                                      |
+| Šroubovací nýty (chicago screws) 10/6 mm | CraftPoint **od 8 Kč/ks**, potřeba 2 ks                                                                                  | Utáhnou se šroubovákem, žádný lis ani razníky.                                                                                   |
 
 Hrubý součet nového nákupu: **cca 470–520 Kč.**
 
@@ -214,3 +214,57 @@ Vše skladem kromě A5 u varianty Whisky. Další odstíny ve stejné tloušťce
 **Pozn. k opravě katalogu:** položka `veg-tan-leather` má u příkladu „Whisky“ zapsáno
 `availability: 'unavailable'` s datem 2026-09-07 na základě špatného čtení stránky. A4, A3 i A2 jsou
 skladem – při další revizi obsahu opravit a přidat juchtovou jako levnější příklad.
+
+## Jak se u pásku měří délka (ověřeno 2026-09-10)
+
+Dotaz autora podle dvou obrázků z videa (tabulka velikostí a schéma s kótami): co znamená „distance
+to the middle hole“ a „total length of ordered belt“ a jak se to měří.
+
+### Co obrázky říkají
+
+Schéma kótuje pásek od **vnějšího konce přezky**:
+
+- **Distance to the middle hole** – od konce přezky k **prostřední** dírce. To je to číslo, které se
+  na daném webu vybírá jako velikost pásku; v tabulce se „size of your belt“ a „distance to the
+  middle hole“ rovnají (36 → 36″/92 cm).
+- **Total length of ordered belt** – celková délka hotového pásku od konce přezky po špičku.
+- **10 cm / 4″** – konec pásu za poslední dírkou.
+- **Removable loop** – poutko, které se dá vyjmout.
+
+V tabulce je rozdíl mezi oběma sloupci u všech deseti řádků **konstantní: 18 cm** (7″). Je to konec
+za prostřední dírkou: zbývající dírky plus těch 10 cm špičky.
+
+Instrukce na obrázku jsou to podstatné: **neodhaduj z velikosti kalhot.** Vezmi pásek, který nosíš,
+a změř ho od přezky k dírce, kterou skutečně používáš.
+
+### Proč zrovna prostřední dírka
+
+Aby se dalo utáhnout i povolit. Při rozteči 25 mm dávají dvě dírky na každou stranu rozsah asi
+±5 cm, což pokryje změnu hmotnosti i rozdíl mezi tenkými a silnými kalhotami. Kdyby padla vaše míra
+na první dírku, pásek se dá jen povolovat.
+
+### Jak to řeší generátor CraftPoint
+
+Stejným způsobem, jen s jiným počátečním bodem. Podle stránky generátoru:
+
+- Vstup je **„Obvod pasu (cm) – Změř stávající opasek od ohybu u přezky po dírku, kterou používáš“**.
+  Tedy tatáž metoda jako ve videu, ale od **ohybu** kůže kolem příčky přezky, ne od vnějšího konce
+  přezky. Jsou to dva různé body vzdálené o délku přezky, takže se čísla mezi oběma systémy
+  nedají zaměňovat.
+- Šablona pak „spočítá celkovou délku podle tvého obvodu pasu, **rozvrhne 5 dírek** a označí ohyb pro
+  přezku i otvor pro trn“. Prostřední z pěti dírek odpovídá zadané míře – tedy stejný princip jako
+  „middle hole“ ve videu.
+- Kontrolní příklad z výchozího nastavení: pro **obvod 95 cm** vyjde díl **1 174,3 × 40 mm** a
+  „hotový rozměr 118 cm × 40 mm (obvod 95 cm na prostřední dírce)“. Celková délka je tedy asi
+  o 23 cm větší než zadaná míra; rozdíl proti 18 cm z videa jde na účet jiného počátečního bodu
+  a jiného rozvržení dírek.
+
+### Další čísla, která generátor uvádí
+
+- Průměry otvorů: **4,5 mm** dírky pro trn, **6 mm** otvory pro šroubovací nýty. Drážka pro trn se
+  **vyřezává**, na ni průbojník potřeba není.
+- Postup: přenést značky → vysekat otvory a vyříznout drážku → seříznout a uhladit hrany
+  (hranořízek, Tokonole, hladítko) → ohnout konec kolem přezky a zajistit šroubovacími nýty.
+- Náročnost ●○○ „vhodné pro začátečníky“, doba práce **1,5–3 h**. To je nezávislé potvrzení odhadu
+  výše, že pásek je jednodušší než pouzdro.
+- Šití: „Tento projekt nevyžaduje šití.“
