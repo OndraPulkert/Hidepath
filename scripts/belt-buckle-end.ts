@@ -28,6 +28,7 @@ import {
   ligamentMm,
   middleHoleIndex,
   holeOffsetsFromApexMm,
+  tipLengthMm,
   tipTangentPoint,
 } from '../src/lib/geometry/belt-end.ts';
 
@@ -203,7 +204,8 @@ function tipPage(tip: BeltTipSpec, end: BeltEndSpec): string[] {
   const w = tip.beltWidthMm;
   const cx = strapX + w / 2;
   const apexY = 45;
-  const baseY = apexY + tip.tipLengthMm;
+  const tipLen = tipLengthMm(tip);
+  const baseY = apexY + tipLen;
   const offsets = holeOffsetsFromApexMm(tip);
   const lastY = apexY + offsets[offsets.length - 1];
   const strapEndY = lastY + 12;
@@ -249,7 +251,7 @@ function tipPage(tip: BeltTipSpec, end: BeltEndSpec): string[] {
   out.push(dimension(strapX + w + 4, apexY + offsets[0], apexY + offsets[1], GREEN));
 
   const midY = apexY + offsets[mid];
-  out.push(text(textX, apexY + tip.tipLengthMm / 2, `hrot ${cz(tip.tipLengthMm)} mm`, 3.2));
+  out.push(text(textX, apexY + tipLen / 2, `hrot ${cz(Math.round(tipLen * 10) / 10)} mm`, 3.2));
   out.push(text(textX, apexY + 4, `vrchol zaoblený r = ${cz(r)} mm (není ostrý hrot)`, 3.2, RED));
   out.push(
     text(
@@ -305,21 +307,34 @@ export function buildPages(end: BeltEndSpec, tip: BeltTipSpec): [string, string]
   return [page(buckleEndPage(end)), page(tipPage(tip, end))];
 }
 
+function widthFromArgs(): number {
+  const i = process.argv.indexOf('--width');
+  if (i < 0) return DEFAULT_BELT_END.beltWidthMm;
+  const v = Number(process.argv[i + 1]);
+  if (!Number.isFinite(v) || v < 15 || v > 80) {
+    throw new Error('--width musí být šířka pásu v mm mezi 15 a 80.');
+  }
+  return v;
+}
+
 async function main(): Promise<void> {
-  assertBeltEndSpec(DEFAULT_BELT_END);
-  assertBeltTipSpec(DEFAULT_BELT_TIP);
+  const beltWidthMm = widthFromArgs();
+  const end: BeltEndSpec = { ...DEFAULT_BELT_END, beltWidthMm };
+  const tip: BeltTipSpec = { ...DEFAULT_BELT_TIP, beltWidthMm };
+  assertBeltEndSpec(end);
+  assertBeltTipSpec(tip);
 
   const here = dirname(fileURLToPath(import.meta.url));
   const outDir = resolve(here, '../docs/generated');
   mkdirSync(outDir, { recursive: true });
-  const [p1, p2] = buildPages(DEFAULT_BELT_END, DEFAULT_BELT_TIP);
+  const [p1, p2] = buildPages(end, tip);
   writeFileSync(
-    resolve(outDir, 'opasek-sablona-1-prezka.svg'),
+    resolve(outDir, `opasek-sablona-${beltWidthMm}mm-1-prezka.svg`),
     `<?xml version="1.0" encoding="UTF-8"?>\n${p1}`,
     'utf8',
   );
   writeFileSync(
-    resolve(outDir, 'opasek-sablona-2-spicka.svg'),
+    resolve(outDir, `opasek-sablona-${beltWidthMm}mm-2-spicka.svg`),
     `<?xml version="1.0" encoding="UTF-8"?>\n${p2}`,
     'utf8',
   );
@@ -334,7 +349,7 @@ async function main(): Promise<void> {
       `<div class="sheet">${p1}</div><div class="sheet">${p2}</div>`,
     { waitUntil: 'load' },
   );
-  const pdfPath = resolve(outDir, 'opasek-sablona.pdf');
+  const pdfPath = resolve(outDir, `opasek-sablona-${beltWidthMm}mm.pdf`);
   await pg.pdf({
     path: pdfPath,
     width: '210mm',
@@ -347,17 +362,15 @@ async function main(): Promise<void> {
 
   console.log(`Zapsáno ${pdfPath} (2 strany)`);
   console.log(
-    `Konec u přezky: můstek ${ligamentMm(DEFAULT_BELT_END).toFixed(1)} mm, kapsa pro poutko ` +
-      `${keeperGapMm(DEFAULT_BELT_END)} mm (světlá ${keeperPocketClearMm(DEFAULT_BELT_END)} mm), ` +
-      `poutko ${keeperStripLengthMm(DEFAULT_BELT_END)} mm.`,
+    `Konec u přezky: můstek ${ligamentMm(end).toFixed(1)} mm, kapsa pro poutko ` +
+      `${keeperGapMm(end)} mm (světlá ${keeperPocketClearMm(end)} mm), ` +
+      `poutko ${keeperStripLengthMm(end)} mm.`,
   );
   console.log(
-    `Špička: dírky ${holeOffsetsFromApexMm(DEFAULT_BELT_TIP).map(cz).join(' / ')} mm od hrotu, ` +
-      `prostřední ${cz(apexToMiddleHoleMm(DEFAULT_BELT_TIP))} mm.`,
+    `Špička: dírky ${holeOffsetsFromApexMm(tip).map(cz).join(' / ')} mm od hrotu, ` +
+      `prostřední ${cz(apexToMiddleHoleMm(tip))} mm.`,
   );
-  console.log(
-    `Celková délka pásu = obvod + ${cz(apexToMiddleHoleMm(DEFAULT_BELT_TIP) + DEFAULT_BELT_END.tailLengthMm)} mm.`,
-  );
+  console.log(`Celková délka pásu = obvod + ${cz(apexToMiddleHoleMm(tip) + end.tailLengthMm)} mm.`);
 }
 
 await main();

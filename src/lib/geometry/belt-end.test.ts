@@ -12,7 +12,7 @@ import {
   holeOffsetsFromApexMm,
   middleHoleIndex,
   tipHalfWidthAtMm,
-  tipSlope,
+  tipLengthMm,
   tipTangentPoint,
   totalStrapLengthMm,
   checkBeltEndSpec,
@@ -150,11 +150,37 @@ describe('tvar anglické špičky', () => {
     const r = DEFAULT_BELT_TIP.noseRadiusMm;
     // Bod dotyku musí ležet na kružnici o poloměru r se středem na střednici ve výšce r.
     expect(Math.hypot(tan.halfWidthMm, r - tan.fromApexMm)).toBeCloseTo(r, 3);
-    expect(tan.fromApexMm).toBeCloseTo(2.355, 2);
-    expect(tan.halfWidthMm).toBeCloseTo(3.646, 2);
+    expect(tan.fromApexMm).toBeCloseTo(2.35, 2);
+    expect(tan.halfWidthMm).toBeCloseTo(3.64, 2);
   });
 
-  it('profil odpovídá špičce odměřené z PDF CraftPoint do 0,1 mm', () => {
+  it('délka hrotu je odvozená a odpovídá měření pro 40 i 35 mm pás', () => {
+    // Odměřeno z PDF CraftPoint: pás 40 mm → rovný bok dosáhne plné šířky 38,4 mm
+    // pod vrcholem, pás 35 mm → 32,7 mm. Sklon boku je u obou stejný (0,452 / 0,454),
+    // takže délka hrotu není vstup, ale důsledek šířky.
+    expect(tipLengthMm(DEFAULT_BELT_TIP)).toBeCloseTo(38.4, 0);
+    expect(Math.abs(tipLengthMm(DEFAULT_BELT_TIP) - 38.4)).toBeLessThan(0.25);
+    const narrow = tip({ beltWidthMm: 34.92 });
+    expect(Math.abs(tipLengthMm(narrow) - 32.7)).toBeLessThan(0.25);
+  });
+
+  it('profil úzkého pásu odpovídá odměřenému 35mm pásu do 0,15 mm', () => {
+    const narrow = tip({ beltWidthMm: 34.92 });
+    const measured: [number, number][] = [
+      [1.0, 2.56],
+      [2.0, 3.45],
+      [3.0, 3.96],
+      [4.0, 4.42],
+      [10.0, 7.18],
+      [20.0, 11.66],
+      [30.0, 16.23],
+    ];
+    for (const [y, half] of measured) {
+      expect(Math.abs(tipHalfWidthAtMm(narrow, y) - half)).toBeLessThan(0.15);
+    }
+  });
+
+  it('profil odpovídá špičce odměřené z PDF CraftPoint do 0,15 mm', () => {
     // Levá hrana odečtená z renderu 300 dpi, přepočtená na poloviční šířku.
     const measured: [number, number][] = [
       [0.5, 1.92],
@@ -168,21 +194,20 @@ describe('tvar anglické špičky', () => {
       [38.0, 19.685],
     ];
     for (const [y, half] of measured) {
-      expect(Math.abs(tipHalfWidthAtMm(DEFAULT_BELT_TIP, y) - half)).toBeLessThan(0.1);
+      // 0,15 mm: jeden konstantní sklon 0,453 pokrývá naměřené 0,4521 (pás 40 mm)
+      // i 0,4542 (pás 35 mm). Rozdíl je pod přesností řezu nožem.
+      expect(Math.abs(tipHalfWidthAtMm(DEFAULT_BELT_TIP, y) - half)).toBeLessThan(0.15);
     }
-  });
-
-  it('sklon boku odpovídá odměřenému 0,45 mm na mm', () => {
-    expect(tipSlope(DEFAULT_BELT_TIP)).toBeCloseTo(0.451, 2);
   });
 
   it('na začátku a na konci hrotu dává krajní hodnoty', () => {
     expect(tipHalfWidthAtMm(DEFAULT_BELT_TIP, 0)).toBe(0);
-    expect(tipHalfWidthAtMm(DEFAULT_BELT_TIP, DEFAULT_BELT_TIP.tipLengthMm)).toBeCloseTo(20, 6);
+    expect(tipHalfWidthAtMm(DEFAULT_BELT_TIP, tipLengthMm(DEFAULT_BELT_TIP))).toBeCloseTo(20, 6);
   });
 
-  it('odmítne ostrý hrot i příliš velké zaoblení', () => {
+  it('odmítne ostrý hrot, nulový sklon i přehnané zaoblení', () => {
     expect(checkBeltTipSpec(tip({ noseRadiusMm: 0 })).join(' ')).toContain('ostrý hrot');
+    expect(checkBeltTipSpec(tip({ taperSlope: 0 })).join(' ')).toContain('taperSlope');
     expect(checkBeltTipSpec(tip({ noseRadiusMm: 40 })).join(' ')).toContain('příliš velké');
   });
 });

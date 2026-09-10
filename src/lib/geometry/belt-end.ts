@@ -155,8 +155,12 @@ export function assertBeltEndSpec(spec: BeltEndSpec): void {
  */
 export interface BeltTipSpec {
   beltWidthMm: number;
-  /** Délka hrotu od vrcholu k místu, kde pás nabývá plné šířky. */
-  tipLengthMm: number;
+  /**
+   * Sklon boku špičky: o kolik mm přiroste poloviční šířka na 1 mm délky.
+   * Odměřeno z PDF CraftPoint pro šířky 40 mm (0,452) i 35 mm (0,454) – tedy
+   * konstanta nezávislá na šířce pásu. Délka hrotu z ní vychází, není vstupem.
+   */
+  taperSlope: number;
   /**
    * Poloměr zaoblení samotného vrcholu. Anglická špička není ostrý hrot:
    * odměřeno z PDF CraftPoint jako oblouk r ≈ 4 mm, na který jsou boky tečné.
@@ -177,7 +181,7 @@ export interface BeltTipSpec {
 
 export const DEFAULT_BELT_TIP: BeltTipSpec = {
   beltWidthMm: 40,
-  tipLengthMm: 38.6,
+  taperSlope: 0.453,
   noseRadiusMm: 4,
   holeDiameterMm: 4.5,
   holeCount: 5,
@@ -187,31 +191,24 @@ export const DEFAULT_BELT_TIP: BeltTipSpec = {
 };
 
 /**
- * Bod, ve kterém se rovný bok špičky dotýká zaobleného vrcholu.
- * Souřadnice: vzdálenost od střednice a od vrcholu, v mm.
+ * Bod, ve kterém se rovný bok dotýká oblouku vrcholu.
+ * Z podmínky tečnosti: pro oblouk r a sklon s je poloviční šířka v bodě dotyku
+ * r / √(1 + s²) a leží s·(ta šířka) pod středem oblouku.
  */
 export function tipTangentPoint(spec: BeltTipSpec): { halfWidthMm: number; fromApexMm: number } {
   const r = spec.noseRadiusMm;
-  const halfW = spec.beltWidthMm / 2;
-  const L = spec.tipLengthMm;
-  // Střed oblouku leží na střednici ve výšce r nad vrcholem; bok prochází bodem (halfW, L).
-  const dx = halfW;
-  const dy = r - L;
-  const d = Math.hypot(dx, dy);
-  const t = Math.sqrt(d * d - r * r);
-  const a = Math.asin(r / d);
-  const ux = dx / d;
-  const uy = dy / d;
-  // Otočení jednotkového vektoru ke středu o −α dá směr od (halfW, L) k bodu dotyku.
-  const rx = ux * Math.cos(a) + uy * Math.sin(a);
-  const ry = -ux * Math.sin(a) + uy * Math.cos(a);
-  return { halfWidthMm: halfW - t * rx, fromApexMm: L + t * ry };
+  const s = spec.taperSlope;
+  const halfWidthMm = r / Math.sqrt(1 + s * s);
+  return { halfWidthMm, fromApexMm: r - s * halfWidthMm };
 }
 
-/** Sklon boku špičky: kolik milimetrů poloviční šířky přibude na milimetr délky. */
-export function tipSlope(spec: BeltTipSpec): number {
+/**
+ * Délka hrotu od vrcholu k místu, kde pás nabývá plné šířky.
+ * Odvozená hodnota: vychází ze šířky pásu, sklonu boku a zaoblení vrcholu.
+ */
+export function tipLengthMm(spec: BeltTipSpec): number {
   const tan = tipTangentPoint(spec);
-  return (spec.beltWidthMm / 2 - tan.halfWidthMm) / (spec.tipLengthMm - tan.fromApexMm);
+  return tan.fromApexMm + (spec.beltWidthMm / 2 - tan.halfWidthMm) / spec.taperSlope;
 }
 
 /**
@@ -220,13 +217,13 @@ export function tipSlope(spec: BeltTipSpec): number {
  */
 export function tipHalfWidthAtMm(spec: BeltTipSpec, fromApexMm: number): number {
   if (fromApexMm <= 0) return 0;
-  if (fromApexMm >= spec.tipLengthMm) return spec.beltWidthMm / 2;
+  if (fromApexMm >= tipLengthMm(spec)) return spec.beltWidthMm / 2;
   const tan = tipTangentPoint(spec);
   const r = spec.noseRadiusMm;
   if (fromApexMm <= tan.fromApexMm) {
     return Math.sqrt(Math.max(r * r - (r - fromApexMm) ** 2, 0));
   }
-  return tan.halfWidthMm + tipSlope(spec) * (fromApexMm - tan.fromApexMm);
+  return tan.halfWidthMm + spec.taperSlope * (fromApexMm - tan.fromApexMm);
 }
 
 /** Vzdálenosti všech dírek od vrcholu hrotu. */
@@ -268,7 +265,7 @@ export function checkBeltTipSpec(spec: BeltTipSpec): string[] {
       `Můstek mezi dírkami je ${between.toFixed(2)} mm, minimum ${spec.minLigamentMm} mm.`,
     );
   }
-  const afterTip = spec.apexToFirstHoleMm - spec.tipLengthMm - spec.holeDiameterMm / 2;
+  const afterTip = spec.apexToFirstHoleMm - tipLengthMm(spec) - spec.holeDiameterMm / 2;
   if (afterTip < spec.minLigamentMm) {
     problems.push(
       `Mezi koncem hrotu a první dírkou je ${afterTip.toFixed(2)} mm, minimum ${spec.minLigamentMm} mm.`,
@@ -282,11 +279,15 @@ export function checkBeltTipSpec(spec: BeltTipSpec): string[] {
   }
   if (spec.noseRadiusMm <= 0) {
     problems.push('noseRadiusMm musí být kladné – ostrý hrot se v kůži krabatí a třepí.');
-  } else {
+  }
+  if (spec.taperSlope <= 0) {
+    problems.push('taperSlope musí být kladný.');
+  }
+  if (spec.noseRadiusMm > 0 && spec.taperSlope > 0) {
     const tan = tipTangentPoint(spec);
-    if (!Number.isFinite(tan.fromApexMm) || tan.fromApexMm >= spec.tipLengthMm) {
+    if (tan.halfWidthMm >= spec.beltWidthMm / 2) {
       problems.push(
-        `Zaoblení vrcholu ${spec.noseRadiusMm} mm je na délku hrotu ${spec.tipLengthMm} mm příliš velké.`,
+        `Zaoblení vrcholu ${spec.noseRadiusMm} mm je na šířku pásu ${spec.beltWidthMm} mm příliš velké.`,
       );
     }
   }

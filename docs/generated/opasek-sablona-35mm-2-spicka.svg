@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="210mm" height="297mm" viewBox="0 0 210 297">
+<rect width="210" height="297" fill="#ffffff"/>
+<text x="22" y="16" font-family="Helvetica, Arial, sans-serif" font-size="4.6" fill="#2b2b2b" text-anchor="start">Opasek 40 mm — strana 2: konec se špičkou</text>
+<text x="22" y="22" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#6a6a6a" text-anchor="start">Měřítko 1:1 · tisk na A4 na 100 % · rozvržení nezávisí na obvodu pasu</text>
+<text x="150" y="24" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#c0392b" text-anchor="start">KALIBRAČNÍ ČTVEREC</text>
+<text x="150" y="28" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#c0392b" text-anchor="start">po vytištění přeměř 50 × 50 mm</text>
+<rect x="150" y="30" width="50" height="50" fill="none" stroke="#c0392b" stroke-width="0.4"/>
+<path d="M22 251.3 L22 77.938 L35.856 47.349 A4 4 0 0 1 43.144 47.349 L57 77.938 L57 251.3" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
+<line x1="39.5" y1="45" x2="39.5" y2="251.3" stroke="#b8b8b8" stroke-width="0.15" stroke-dasharray="3 3"/>
+<circle cx="39.5" cy="139.3" r="2.25" fill="none" stroke="#2b2b2b" stroke-width="0.3"/><path d="M36.575 139.3 H42.425 M39.5 136.375 V142.225" stroke="#2b2b2b" stroke-width="0.2" fill="none"/>
+<circle cx="39.5" cy="164.3" r="2.25" fill="none" stroke="#2b2b2b" stroke-width="0.3"/><path d="M36.575 164.3 H42.425 M39.5 161.375 V167.225" stroke="#2b2b2b" stroke-width="0.2" fill="none"/>
+<circle cx="39.5" cy="189.3" r="2.25" fill="none" stroke="#c0392b" stroke-width="0.5"/><path d="M36.575 189.3 H42.425 M39.5 186.375 V192.225" stroke="#c0392b" stroke-width="0.2" fill="none"/>
+<circle cx="39.5" cy="214.3" r="2.25" fill="none" stroke="#2b2b2b" stroke-width="0.3"/><path d="M36.575 214.3 H42.425 M39.5 211.375 V217.225" stroke="#2b2b2b" stroke-width="0.2" fill="none"/>
+<circle cx="39.5" cy="239.3" r="2.25" fill="none" stroke="#2b2b2b" stroke-width="0.3"/><path d="M36.575 239.3 H42.425 M39.5 236.375 V242.225" stroke="#2b2b2b" stroke-width="0.2" fill="none"/>
+<line x1="16" y1="45" x2="16" y2="139.3" stroke="#1f6f43" stroke-width="0.3"/><line x1="14" y1="45" x2="18" y2="45" stroke="#1f6f43" stroke-width="0.3"/><line x1="14" y1="139.3" x2="18" y2="139.3" stroke="#1f6f43" stroke-width="0.3"/>
+<text x="13" y="92.15" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#1f6f43" text-anchor="end">94,3 mm</text>
+<line x1="61" y1="139.3" x2="61" y2="164.3" stroke="#1f6f43" stroke-width="0.3"/><line x1="59" y1="139.3" x2="63" y2="139.3" stroke="#1f6f43" stroke-width="0.3"/><line x1="59" y1="164.3" x2="63" y2="164.3" stroke="#1f6f43" stroke-width="0.3"/>
+<text x="71" y="61.469" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#2b2b2b" text-anchor="start">hrot 32,9 mm</text>
+<text x="71" y="49" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#c0392b" text-anchor="start">vrchol zaoblený r = 4 mm (není ostrý hrot)</text>
+<text x="71" y="151.8" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#1f6f43" text-anchor="start">rozteč 25 mm</text>
+<text x="71" y="186.3" font-family="Helvetica, Arial, sans-serif" font-size="3.4" fill="#c0392b" text-anchor="start">PROSTŘEDNÍ DÍRKA = tvoje míra</text>
+<text x="71" y="191.3" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#c0392b" text-anchor="start">144,3 mm od hrotu</text>
+<text x="71" y="195.8" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#c0392b" text-anchor="start">nastavení ± 50 mm (2 dírky sem i tam)</text>
+<text x="71" y="240.3" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">poslední dírka 194,3 mm od hrotu</text>
+<text x="22" y="256.3" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#6a6a6a" text-anchor="start">sem pokračuje hlavní pás (dole neřezat)</text>
+<text x="22" y="261.3" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Dírky Ø 4,5 mm, 5 kusů, rozteč 25 mm.</text>
+<text x="22" y="265.5" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Vrchol je oblouk r = 4 mm, boky jsou na něj tečné — odměřeno z PDF CraftPoint, ne ostrý hrot.</text>
+<text x="22" y="269.7" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">CELKOVÁ DÉLKA PÁSU = naměřený obvod + 234,3 mm</text>
+<text x="22" y="273.9" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">   (90 mm přehnutý konec u přezky + 144,3 mm od hrotu k prostřední dírce)</text>
+<text x="22" y="278.1" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Obvod měř na stávajícím opasku od ohybu u přezky k dírce, kterou nosíš.</text>
+<text x="22" y="282.3" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Bez opasku: provlékni poutky kalhot krejčovský metr a utáhni na pohodlí.</text>
+<text x="22" y="286.5" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Dírky děruj až po zkoušce na těle. Špičku odřízni jako poslední krok.</text>
+<text x="22" y="290.7" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Rozvržení odměřeno z PDF generátoru CraftPoint; shodné pro obvod 85 i 95 cm.</text>
+</svg>

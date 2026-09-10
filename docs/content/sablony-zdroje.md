@@ -608,3 +608,55 @@ Odchylky do 0,15 mm jsou tahem linky a rasterizací na 300 dpi (1 px = 0,085 mm)
 **Co zůstává neověřené:** délka poutka (111 mm je obvod 96 mm + 15 mm přeplátování), zaoblení konce
 u přezky a hloubka případného zkosení. Vyzkoušet na odřezku pásu. Poutko 12 mm má v kapse 41,7 mm
 světlé délky vůli – pro těsné poutko posunout `rivetOffsetsMm` blíž k sobě a přegenerovat.
+
+### Univerzálnost: co na šířce pásu závisí a co ne (ověřeno 2026-09-10)
+
+Vygeneroval jsem PDF CraftPointu ještě pro **šířku 35 mm** a porovnal s 40 mm.
+
+**Nezávislé na šířce** (a tedy univerzální):
+
+- Celková délka dílu: **1174,3 mm** u 35 i 40 mm při stejném obvodu 95 cm.
+- Rozvržení dírek pro trn: 5 × Ø 4,5 mm, rozteč 25 mm, první 94,3 mm od hrotu – u obou šířek
+  shodné do 0,05 mm.
+- **Sklon boku špičky**: 0,4521 (pás 40 mm) a 0,4542 (pás 35 mm) – rozdíl 0,5 %, tedy v rámci
+  přesnosti odečtu. Jeden konstantní sklon **0,453** pokryje obojí do 0,15 mm.
+- **Zaoblení vrcholu r ≈ 4 mm**.
+- U BFLG šablony bylo podélné rozvržení konce u přezky totožné pro 1″, 1¼″ i 1½″.
+
+**Závislé na šířce:**
+
+- Obrys, samozřejmě.
+- **Délka hrotu**: 38,4 mm u 40 mm pásu, 32,7 mm u 35 mm. Není to vstup – vychází ze šířky, sklonu
+  a zaoblení. V modelu je proto `tipLengthMm()` odvozená funkce, ne parametr.
+- **Délka pásku na poutko**: 111 mm pro 40 × 4 mm, 101 mm pro 35 × 4 mm.
+- Průměry otvorů závisí na trnu přezky a nýtu, ne na šířce.
+
+Důsledek: **generátor je univerzální, fyzická šablona ne.** Šířka se volí přepínačem:
+
+```
+pnpm pattern:belt-end            # 40 mm
+pnpm pattern:belt-end --width 35 # 35 mm
+```
+
+Ověření 35mm výstupu (render 300 dpi): šířka pásu 34,97 mm, dírky 94,4 / 119,38 / 144,36 / 169,42 /
+194,39 mm od hrotu, profil špičky proti odměřenému CraftPointu do **0,11 mm** – a to bez jakéhokoli
+dolaďování pro tuhle šířku.
+
+Jediná část, která **je** univerzální i fyzicky, je rozteč dírek 25 mm. Vyplatí se z ní udělat
+samostatný proužek s pěti dírkami a používat ho na jakýkoli pásek.
+
+### Jak z toho udělat trvalou šablonu
+
+| Varianta       | Materiál                                                                                                                                                           | Nástroje                                                         | Výdrž                            |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------- | -------------------------------- |
+| Nejrychlejší   | Výtisk nalepený na kartón z krabice                                                                                                                                | nic navíc                                                        | 2–3 použití, kraje se rozmačkají |
+| **Doporučeno** | Výtisk na **samolepicí A4** nalepený na **PVC/PP desku 1–2 mm**                                                                                                    | odlamovací nůž + řezací podložka, které už má                    | roky                             |
+| Profi          | Akrylát 3 mm ([Hornbach 500 × 250 × 3 mm, 199 Kč](https://www.hornbach.cz/p/plexisklo-gutta-akrylatove-500-x-250-x-3-mm-hladke-opal/8055677/), ověřeno 2026-09-10) | přímočará pilka nebo lupenkovka + pilníky, nebo laser na zakázku | trvale                           |
+
+Zásadní detail, který se snadno opomene: **šablona, kterou se jen obtahuje, přenese obrys, ne otvory.**
+V šabloně proto v každém středu otvoru udělat malou dírku 1,5–2 mm a polohu přenášet rýsovacím
+šídlem skrz. Linii ohybu a prostřední dírku je praktičtější vyznačit **zářezem na hraně** šablony než
+čárou – zářez se dá obtáhnout.
+
+Akrylát 3 mm se odlamovacím nožem neuřízne, na oblouky je potřeba pilka a pilníky. Proto je pro
+první šablonu lepší PVC/PP 1–2 mm.
