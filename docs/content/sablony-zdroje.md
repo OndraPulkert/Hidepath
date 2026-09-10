@@ -534,7 +534,8 @@ Skript `scripts/belt-buckle-end.ts` už jen kreslí.
 
 | Prvek                | Hodnota                                  | Odkud                 |
 | -------------------- | ---------------------------------------- | --------------------- |
-| Anglická špička      | hrot 38 mm                               | odměřeno z CraftPoint |
+| Anglická špička      | hrot 38,6 mm                             | odměřeno z CraftPoint |
+| **Zaoblení vrcholu** | **r = 4 mm, boky na něj tečné**          | odměřeno z CraftPoint |
 | Dírky pro trn        | 5 × Ø 4,5 mm, rozteč 25 mm               | odměřeno z CraftPoint |
 | První dírka          | 94,3 mm od hrotu                         | odměřeno z CraftPoint |
 | **Prostřední dírka** | **144,3 mm od hrotu**, nastavení ± 50 mm | důsledek              |
@@ -553,6 +554,28 @@ vzdálenějším nýtem, můstek k boční hraně, vzestupnost poloh nýtů a to
 U špičky: nepárový počet dírek, můstek mezi dírkami a odstup první dírky od hrotu. Regresní test
 `odmítne kombinaci drážky CraftPointu s nýty BFLG` drží tu původní chybu zafixovanou.
 
+### Druhá oprava, kterou našel autor: špička není ostrý hrot
+
+První verze strany 2 kreslila špičku jako trojúhelník s ostrým vrcholem. Změřil jsem proto profil
+špičky z PDF CraftPoint po půl milimetru (levá hrana, render 300 dpi):
+
+- Boky jsou **rovné** – sklon 0,451 mm poloviční šířky na milimetr délky, lineární do 0,04 mm.
+- Vrchol je ale **oblouk o poloměru ≈ 4 mm**, na který jsou boky tečné (bod dotyku 3,65 mm od
+  střednice a 2,36 mm od vrcholu). Ostrý trojúhelník se od skutečného tvaru u vrcholu liší
+  až o **2,4 mm**.
+- Délka hrotu je **38,6 mm**, ne 38.
+
+Model „oblouk + tečné boky“ reprodukuje devět odměřených bodů s největší odchylkou **0,068 mm**.
+Zafixováno testem `profil odpovídá špičce odměřené z PDF CraftPoint do 0,1 mm`; `checkBeltTipSpec`
+navíc odmítne `noseRadiusMm = 0` i zaoblení větší, než délka hrotu unese.
+
+Praktický důvod, proč na tom záleží: ostrý hrot z kůže se krabatí a třepí a nožem se přesně
+nevyřízne. Zaoblení 4 mm se naopak dá dořezat a dohladit smirkem.
+
+Nedomodelovaná drobnost: CraftPoint má v místě, kde bok přechází do plné šířky, odlehčení asi
+0,2 mm na 2,5 mm délky (malý přechodový rádius). Naše šablona tam má ostré rameno; rozdíl je pod
+rozlišením řezu nožem, proto se nemodeluje.
+
 ### Nezávislé potvrzení, že měření sedí
 
 Generátor CraftPoint uvádí pro obvod 95 cm díl **1174,3 mm** a pro 85 cm **1074,3 mm**. Z mých
@@ -567,17 +590,18 @@ Obvod mění jen hladkou část mezi konci.
 
 ### Změření vytištěného výstupu (render 300 dpi)
 
-| Kontrola              | Cíl             | Naměřeno                                     |
-| --------------------- | --------------- | -------------------------------------------- |
-| Formát listu          | A4              | 209,89 × 297,01 mm                           |
-| Kalibrační čtverec    | 50 × 50 mm      | 50,04 × 50,00 mm (obě strany)                |
-| Šířka pásu            | 40 mm           | 39,96 mm (obě strany, v několika výškách)    |
-| Nýty od ohybu         | ± 25,5 / ± 73,2 | −25,48 / +25,49 a −73,19 / +73,24 mm         |
-| Konce drážky od ohybu | ± 9,5           | −9,48 / +9,49 mm                             |
-| Konec pásu od ohybu   | 90 mm           | +90,00 mm                                    |
-| Délka hrotu           | 38 mm           | 38,13 mm (plné šířky dosahuje v y = 83 mm)   |
-| Dírky od hrotu        | 94,3 → 194,3    | 94,41 / 119,38 / 144,36 / 169,42 / 194,40 mm |
-| Rozteč dírek          | 25 mm           | 24,97 / 24,98 / 25,06 / 24,98 mm             |
+| Kontrola                    | Cíl             | Naměřeno                                                               |
+| --------------------------- | --------------- | ---------------------------------------------------------------------- |
+| Formát listu                | A4              | 209,89 × 297,01 mm                                                     |
+| Kalibrační čtverec          | 50 × 50 mm      | 50,04 × 50,00 mm (obě strany)                                          |
+| Šířka pásu                  | 40 mm           | 39,96 mm (obě strany, v několika výškách)                              |
+| Nýty od ohybu               | ± 25,5 / ± 73,2 | −25,48 / +25,49 a −73,19 / +73,24 mm                                   |
+| Konce drážky od ohybu       | ± 9,5           | −9,48 / +9,49 mm                                                       |
+| Konec pásu od ohybu         | 90 mm           | +90,00 mm                                                              |
+| Délka hrotu                 | 38,6 mm         | plné šířky dosahuje 83,6 mm pod vrcholem                               |
+| Profil špičky vs CraftPoint | ≤ 0,1 mm        | ≤ 0,05 mm mimo vrchol; 0,31 mm ve 0,5 mm od vrcholu (tah linky 0,3 mm) |
+| Dírky od hrotu              | 94,3 → 194,3    | 94,41 / 119,38 / 144,36 / 169,42 / 194,40 mm                           |
+| Rozteč dírek                | 25 mm           | 24,97 / 24,98 / 25,06 / 24,98 mm                                       |
 
 Odchylky do 0,15 mm jsou tahem linky a rasterizací na 300 dpi (1 px = 0,085 mm).
 
