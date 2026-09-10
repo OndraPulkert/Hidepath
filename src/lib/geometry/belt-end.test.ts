@@ -233,7 +233,7 @@ describe('plochá destička pro všechny šířky', () => {
 
   it('je kompaktní destička, ne dlouhý pásek', () => {
     expect(L.plateWidthMm).toBe(215);
-    expect(L.plateHeightMm).toBe(127);
+    expect(L.plateHeightMm).toBe(184);
     expect(L.minBeltWidthMm).toBe(28);
     expect(L.maxBeltWidthMm).toBe(45);
   });
@@ -254,8 +254,36 @@ describe('plochá destička pro všechny šířky', () => {
     });
   });
 
-  it('řady jsou od sebe dál než nejširší pás, aby se nepletly', () => {
-    expect(L.buckleRowY - L.tipRowY).toBeGreaterThan(L.maxBeltWidthMm);
+  it('má tři řady a jsou od sebe dál než nejširší pás', () => {
+    expect(L.roundedRowY - L.tipRowY).toBeGreaterThan(L.maxBeltWidthMm);
+    expect(L.buckleRowY - L.roundedRowY).toBeGreaterThan(L.maxBeltWidthMm);
+  });
+
+  it('zaoblený konec: soustředné oblouky s konstantními žebry', () => {
+    expect(L.roundedArcs.length).toBe(DEFAULT_BELT_PLATE.guideWidthsMm.length);
+    // Společný střed. Varianta se společným vrcholem by se v něm sbíhala a žebra
+    // by tam měla nulovou šířku.
+    const centres = new Set(L.roundedArcs.map((a) => a.centreX));
+    expect(centres.size, 'oblouky musí být soustředné').toBe(1);
+    const radii = L.roundedArcs.map((a) => a.radiusMm).sort((a, b) => a - b);
+    expect(radii).toEqual([15, 17.5, 20, 22.5]);
+    for (let i = 1; i < radii.length; i++) {
+      const rib = radii[i]! - radii[i - 1]! - L.roundedSlotWidthMm;
+      expect(rib, `žebro mezi ${radii[i - 1]!} a ${radii[i]!}`).toBeCloseTo(1.5, 6);
+    }
+  });
+
+  it('konec každého oblouku leží na lince své šířky, takže se označují navzájem', () => {
+    for (const arc of L.roundedArcs) {
+      const line = L.guides.find((g) => Math.abs(g.offsetMm - arc.radiusMm) < 1e-9);
+      expect(line, `linka pro oblouk ${arc.beltWidthMm} mm`).toBeDefined();
+      expect(line!.beltWidthMm).toBe(arc.beltWidthMm);
+    }
+  });
+
+  it('odmítne příliš tenká žebra mezi oblouky', () => {
+    const thin = { ...DEFAULT_BELT_PLATE, roundedSlotWidthMm: 2 };
+    expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, thin).join(' ')).toContain('Žebro');
   });
 
   it('značky mimo osu leží na pásu i u nejužší podporované šířky', () => {
@@ -270,7 +298,7 @@ describe('plochá destička pro všechny šířky', () => {
   it('odmítne příliš malý rozestup řad', () => {
     const tight = { ...DEFAULT_BELT_PLATE, rowPitchMm: 46 };
     expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, tight).join(' ')).toContain(
-      'Mezi řadami',
+      'Mezi řadou',
     );
   });
 

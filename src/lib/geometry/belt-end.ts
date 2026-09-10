@@ -362,6 +362,15 @@ export interface BeltPlateSpec {
   /** Výška gravírovaných číslic u vodicích linek. */
   guideLabelHeightMm: number;
   /**
+   * Šířka slotu pro zaoblený konec. Značí se zevnitř slotu, přesnost je tedy
+   * ± polovina šířky — u oblouku, který se stejně řeže a brousí, to nevadí.
+   * Užší slot znamená silnější žebra mezi vnořenými sloty, což je u 3mm akrylátu
+   * to podstatné.
+   */
+  roundedSlotWidthMm: number;
+  /** Nejmenší přijatelné žebro mezi vnořenými sloty zaobleného konce. */
+  minRoundedRibMm: number;
+  /**
    * Zkosení levého **horního** rohu: značí, že tahle krátká hrana je konec pásu.
    * Nahoře proto, že dole by zasáhlo do pásma, kde na destičce leží pás
    * (kontrola `checkBeltPlate` to odhalila).
@@ -379,6 +388,8 @@ export const DEFAULT_BELT_PLATE: BeltPlateSpec = {
   hangHoleMm: 4,
   tipCutoutOversizeMm: 5,
   guideWidthsMm: [30, 35, 40, 45],
+  roundedSlotWidthMm: 1,
+  minRoundedRibMm: 1.4,
   guideLabelHeightMm: 2.6,
   strapEndChamferMm: 8,
 };
@@ -388,8 +399,23 @@ export interface BeltPlateLayout {
   plateHeightMm: number;
   /** Osa řady se špičkou a dírkami pro trn. */
   tipRowY: number;
+  /** Osa řady se zaobleným koncem a dírkami pro trn. */
+  roundedRowY: number;
   /** Osa řady s koncem u přezky. */
   buckleRowY: number;
+  /**
+   * Vnořené sloty zaobleného konce. Polokruh o poloměru `w/2` je k hranám pásu tečný,
+   * takže na každou šířku patří vlastní oblouk.
+   *
+   * Oblouky jsou **soustředné**, tedy mají společný střed. Varianta se společným
+   * vrcholem (aby konec pásu ležel u všech šířek na stejném x) se na renderu ukázala
+   * jako nepoužitelná: všechny sloty se v tom vrcholu sbíhaly a žebra mezi nimi tam
+   * měla nulovou šířku. Se společným středem jsou žebra konstantní. Cenou je, že konec
+   * pásu leží u každé šířky o něco jinde – rozptyl 7,5 mm, což je dobře uvnitř tolerance,
+   * kterou pro odstup hrotu od první dírky uvádějí komerční šablony (25–100 mm).
+   */
+  roundedArcs: { beltWidthMm: number; radiusMm: number; centreX: number }[];
+  roundedSlotWidthMm: number;
   /** Vrchol vyříznuté špičky. */
   tipApexX: number;
   /**
@@ -446,7 +472,8 @@ export function beltPlateLayout(
   const plateWidth = Math.ceil(apexX + m);
 
   const tipRowY = m + cutoutHalf;
-  const buckleRowY = tipRowY + plate.rowPitchMm;
+  const roundedRowY = tipRowY + plate.rowPitchMm;
+  const buckleRowY = roundedRowY + plate.rowPitchMm;
   const plateHeight = Math.ceil(buckleRowY + half + m);
 
   const fold = plate.strapEndToFoldMm;
@@ -454,7 +481,14 @@ export function beltPlateLayout(
     plateWidthMm: plateWidth,
     plateHeightMm: plateHeight,
     tipRowY,
+    roundedRowY,
     buckleRowY,
+    roundedArcs: (() => {
+      const sorted = [...plate.guideWidthsMm].sort((a, b) => b - a);
+      const centreX = apexX - (sorted[0] ?? 0) / 2;
+      return sorted.map((bw) => ({ beltWidthMm: bw, radiusMm: bw / 2, centreX }));
+    })(),
+    roundedSlotWidthMm: plate.roundedSlotWidthMm,
     tipApexX: apexX,
     tipFarX: farX,
     tipCutoutHalfMm: cutoutHalf,
@@ -505,7 +539,46 @@ export function checkBeltPlate(
   gap('Od nejlevější dírky pro trn k hraně destičky', L.tipHoleXs[L.tipHoleXs.length - 1]! - mr);
   gap('Od vrcholu špičky k pravé hraně destičky', L.plateWidthMm - L.tipApexX);
   gap('Mezi širokým koncem špičky a nejbližší dírkou pro trn', L.tipFarX - L.tipHoleXs[0]! - mr);
-  gap('Mezi řadami', L.buckleRowY - half - (L.tipRowY + L.tipCutoutHalfMm));
+  gap(
+    'Mezi řadou se špičkou a řadou se zaobleným koncem',
+    L.roundedRowY - half - (L.tipRowY + L.tipCutoutHalfMm),
+  );
+  gap(
+    'Mezi řadou se zaobleným koncem a řadou s přezkou',
+    L.buckleRowY - half - (L.roundedRowY + half),
+  );
+  const radii = L.roundedArcs.map((a) => a.radiusMm).sort((a, b) => a - b);
+  for (let i = 1; i < radii.length; i++) {
+    const rib = radii[i]! - radii[i - 1]! - L.roundedSlotWidthMm;
+    if (rib < plate.minRoundedRibMm) {
+      problems.push(
+        `Žebro mezi sloty zaobleného konce pro ${2 * radii[i - 1]!} a ${2 * radii[i]!} mm je ` +
+          `${rib.toFixed(2)} mm, minimum ${plate.minRoundedRibMm} mm.`,
+      );
+      break;
+    }
+  }
+  const biggest = L.roundedArcs[0];
+  if (biggest) {
+    // Nejvzdálenější bod slotu vlevo je jeho konec na svislici středu.
+    gap(
+      'Od slotu zaobleného konce k nejbližší dírce pro trn',
+      biggest.centreX - L.roundedSlotWidthMm / 2 - L.tipHoleXs[0]! - mr,
+    );
+    gap(
+      'Od slotu zaobleného konce k pravé hraně destičky',
+      L.plateWidthMm - (biggest.centreX + biggest.radiusMm + L.roundedSlotWidthMm / 2),
+    );
+    // Sloty se nesmí sbíhat: soustředné oblouky drží žebra konstantní.
+    const centres = new Set(L.roundedArcs.map((a) => a.centreX));
+    if (centres.size !== 1) {
+      problems.push('Oblouky zaobleného konce nejsou soustředné, žebra by se sbíhala.');
+    }
+    // Poznámka: oblouky se odvozují ze stejného seznamu šířek jako vodicí linky,
+    // takže konec každého oblouku leží vždy přesně na lince své šířky. Tím se
+    // oblouky a linky označují navzájem a nepotřebují vlastní čísla. Invariant
+    // drží konstrukce, ověřuje ho test, runtime kontrola by nikdy nemohla selhat.
+  }
   gap('Od vyříznuté špičky k horní hraně', L.tipRowY - L.tipCutoutHalfMm);
   gap('Od osy řady s přezkou ke spodní hraně', L.plateHeightMm - L.buckleRowY - half);
   gap('Od nejlevějšího otvoru pro nýt k hraně destičky', L.rivetXs[0]! - mr);

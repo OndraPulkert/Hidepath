@@ -6,59 +6,30 @@
 `docs/generated/opasek-desticka.svg` (řezací soubor) a
 `docs/generated/opasek-desticka-kontrolni-tisk.pdf` (papírová kontrola před objednáním).
 
-**Destička 215 × 127 mm, čirý akrylát 3 mm, pro pásky 28–45 mm.** Dvě řady:
+**Destička 215 × 184 mm, čirý akrylát 3 mm, pro pásky 28–45 mm.** Tři řady:
 
-- **Horní řada – špička a dírky pro trn.** Vyříznutý tvar špičky, 5 otvorů pro dírky, dva
-  rozlišovací otvory u prostřední dírky. Umisťuje se **podle prostřední dírky**.
-- **Dolní řada – konec u přezky.** Vyříznutý ovál pro trn, 4 otvory pro nýty, 2 značky linie
-  ohybu. Umisťuje se **podle levé krátké hrany destičky = konec pásu**.
-- **Gravírované vodicí linky pro šířky 30 / 35 / 40 / 45 mm** s čísly u každé — v obou řadách.
-- **Příčná milimetrová stupnice** v obou řadách pro šířky bez linky a **podélné pravítko** (135 mm)
-  u horní hrany na měření délky pásku na poutko.
+- **Řada 1 – HROT.** Vyříznutý tvar anglické špičky, 5 otvorů pro dírky na trn, dva rozlišovací
+  otvory u prostřední dírky.
+- **Řada 2 – ZAOBLENÝ KONEC.** Čtyři soustředné sloty (r = 15 / 17,5 / 20 / 22,5 mm), 5 otvorů
+  pro dírky, dva rozlišovací. **Konec každého slotu leží přesně na lince své šířky**, takže se
+  linky a oblouky označují navzájem a oblouky nepotřebují čísla.
+- **Řada 3 – KONEC U PŘEZKY.** Vyříznutý ovál pro trn, 4 otvory pro nýty, 2 značky linie ohybu.
+  Umisťuje se **podle levé krátké hrany destičky = konec pásu**.
+- **Gravírované vodicí linky pro šířky 30 / 35 / 40 / 45 mm** s čísly — ve všech třech řadách.
+- **Příčná milimetrová stupnice** ve všech řadách pro šířky bez linky a **podélné pravítko**
+  (135 mm) u horní hrany na měření délky pásku na poutko.
 - **Zkosený levý horní roh** značí, která krátká hrana je konec pásu.
 - **Závěsný otvor Ø 4 mm** v pravém dolním rohu.
 
+Řady 1 a 2 mají **stejné polohy dírek** a liší se jen tvarem konce — vybereš si, jaký konec chceš.
+Obě se umisťují podle prostřední dírky.
+
 Jedna destička stačí na všechny šířky proto, že polohy všech otvorů podél pásu na šířce nezávisí
-a koncové body zkosení špičky pro všechny šířky leží na jedné a téže přímce. Zkosení se obtáhne
-a **stop určí hrana pásu**.
+a koncové body zkosení špičky pro všechny šířky leží na jedné a téže přímce. Zaoblený konec je
+naopak polokruh o poloměru `w/2`, tedy pro každou šířku jiný — proto ty čtyři vnořené oblouky.
 
-**Vysvětlivky k destičce** (co je co, s popisky):
-`docs/generated/opasek-desticka-vysvetlivky.svg` — na pochopení a k vytištění na stěnu.
-**Tenhle soubor řezárně neposílej**, obsahuje text; řezací je `opasek-desticka.svg`.
-
-### Tři věci, které je potřeba vědět, než ji poprvé použiješ
-
-1. **Používej ji gravírovanou stranou DOLŮ**, tedy v kontaktu s kůží. Gravírování je jen na jedné
-   straně a když je nahoře, dělí ho od kůže 3 mm akrylátu — při pohledu 30° od svislice se linka
-   zdá posunutá o **1,7 mm**, což je víc než celá přesnost, o kterou se snažíme. Se stranou dolů je
-   paralaxa nulová. Otvory a výřezy paralaxou netrpí, šídlo i nůž se kůže fyzicky dotknou.
-2. **Značkuj rýsovacím šídlem, ne tužkou.** Kužel šídla se v otvoru Ø 2 mm sám vystředí, takže
-   značka sedne na střed. Tužka se do 3 mm hlubokého otvoru nedostane a nevystředí se.
-   Totéž u obtahování výřezů: šídlo hranu sleduje, tužka je moc tlustá. U samotného
-   vrcholu špičky (rádius 4 mm) posledních pár milimetrů dotáhni od ruky — je to oblouk,
-   který se tak jako tak řeže a brousí.
-3. **Nic z toho není odzkoušené v praxi.** Geometrie je ověřená proti dvěma komerčním šablonám
-   a křížově proti naší tiskové verzi, ale destičku jsem nikdy nedržel v ruce ani já, ani ty.
-   První pásek je zkouška — proto se před objednáním akrylátu vyplatí vytisknout kontrolní PDF
-   a projít si celý postup na papírové verzi a odřezku.
-
-### Jak se destička používá
-
-1. **Přilož destičku a srovnej obě hrany pásu na pár linek pro svou šířku** (např. „40“).
-   Tím je destička vystředěná — **střednici na pás rýsovat nemusíš**, k tomu ty linky jsou.
-   Přes čirý akrylát na hrany pásu vidíš.
-2. **Konec u přezky:** dolní řadou, **levou hranou destičky přesně na konec pásu**. Označ šídlem
-   4 otvory pro nýty a 2 značky linie ohybu, obtáhni ovál pro trn.
-3. Vysekni 6mm otvory pro nýty a konce oválu, ovál mezi nimi vyřízni nožem. Spoj obě značky ohybu
-   pravítkem. Navlékni poutko, ohni konec kolem přezky, sešroubuj nýty.
-4. **Vyzkoušej pásek na sobě** a označ, kam padne trn. To je prostřední dírka.
-5. **Špička:** horní řadou, **prostřední otvor** (ten se dvěma rozlišovacími po stranách) na tu
-   značku, hrany pásu opět na linky své šířky. Označ zbylé 4 dírky a obtáhni zkosení špičky —
-   **jen dokud nedojdeš k hraně pásu**, dál je výřez záměrně širší.
-6. Vysekni 4,5mm dírky a nakonec vyřízni špičku.
-
-**Před objednáním** vytiskni kontrolní PDF na **A4 na šířku na 100 %** a přeměř obrys: musí být
-**215 × 127 mm**. Obrys sám je kalibrace, jiná značka není potřeba.
+**Žebra mezi oblouky mají 1,5 mm.** Je to záměr a stejně to mají komerční destičky, ale znamená
+to, že destičku je lepší nosit naplocho a neupustit.
 
 ### Poutko: žádné otvory navíc
 

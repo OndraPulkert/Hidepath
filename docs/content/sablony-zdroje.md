@@ -999,3 +999,33 @@ _„either pointed or rounded ends"_. Doplnitelné jako čtyři vnořené oblouk
 stejně řeže a brousí, nevadí. Zatím nepřidáno — náš generátor má nastavený anglický hrot.
 
 Drobnost: obě komerční destičky mají zaoblené rohy, naše ostré se zkosením levého horního.
+
+### Zaoblený konec: třetí řada (2026-09-10)
+
+Autor si vyžádal doplnění zaobleného konce. Promýšlení odhalilo tři věci.
+
+**1. Nemůže být ve stejné řadě jako hrot.** Oba tvary zabírají tutéž oblast 45 × 45 mm na konci
+pásu, a hrot je tam **výřez** — slot obloukem by v něm neměl materiál. Proto vznikla třetí řada
+se stejnými polohami dírek a jiným tvarem konce. Tak to mají i komerční destičky: na Tandyho fotce
+jsou „V" v jedné řadě a „C" v druhé, ne přes sebe.
+
+**2. Oblouky musí být soustředné, ne se společným vrcholem.** Nejdřív jsem je umístil tak, aby
+konec pásu ležel u všech šířek na stejném x — tedy se společným vrcholem. Na renderu se ukázalo,
+že se v tom vrcholu **všechny sloty sbíhají a žebra mezi nimi tam mají nulovou šířku**. Se
+společným středem jsou žebra konstantní **1,5 mm**. Cena: konec pásu leží u každé šířky o něco
+jinde, rozptyl 7,5 mm (odstup od nejbližší dírky 86,8–94,3 mm). To je dobře uvnitř tolerance, kterou
+uvádí Realeather na své destičce: _„Allow 1"–4" between tip and first hole"_.
+
+**3. Jak poznat, který ze čtyř oblouků je můj.** Čísla u nich nejsou a nad ani pod nimi není místo
+(6,5 mm k další řadě). Řešení vyšlo ze geometrie: oblouky jsou soustředné se středem na ose, takže
+**konec oblouku o poloměru r leží přesně na lince šířky 2r**. Stačilo linky dotáhnout až ke středové
+svislici oblouků a **označují se navzájem** — srovnáš pás na linku „40" a tvůj oblouk je ten, který
+se té linky dotýká. Žádné popisky navíc. Ověřeno, že mezi linkou a koncem oblouku není žádný jiný
+slot (větší oblouky protínají tu výšku až vpravo od středu).
+
+Kontroly `checkBeltPlate` doplněny o: rozestup obou nových párů řad, žebra mezi oblouky (min
+1,4 mm), odstup slotu od nejbližší dírky i od pravé hrany a soustřednost oblouků.
+
+**Destička má nyní 215 × 184 mm**, 7 uzavřených kontur v řezu (obrys, vyříznutá špička, 4 sloty
+zaobleného konce, ovál), 20 značicích otvorů Ø 2 mm, 1 závěsný Ø 4 mm, 0 elementů `<text>`
+a 0 kolizí gravírování s otvory.

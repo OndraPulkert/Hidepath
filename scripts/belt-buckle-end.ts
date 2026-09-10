@@ -501,6 +501,20 @@ function engraveNumber(x: number, y: number, value: number, height: number): str
   return out;
 }
 
+/**
+ * Slot ve tvaru polokruhu (zaoblený konec pásu), jako uzavřená kontura.
+ * Polokruh míří vpravo: začíná nad středem, jde přes +x a končí pod středem.
+ */
+function arcSlot(cx: number, cy: number, r: number, width: number): string {
+  const ro = r + width / 2;
+  const ri = r - width / 2;
+  return (
+    `<path d="M${f(cx)} ${f(cy - ro)} A${f(ro)} ${f(ro)} 0 0 1 ${f(cx)} ${f(cy + ro)} ` +
+    `L${f(cx)} ${f(cy + ri)} A${f(ri)} ${f(ri)} 0 0 0 ${f(cx)} ${f(cy - ri)} Z" ` +
+    `fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`
+  );
+}
+
 /** Vodorovný stadion (obdélník se zaoblenými konci) jako uzavřená kontura. */
 function stadiumH(cy: number, x0: number, x1: number, height: number): string {
   const r = height / 2;
@@ -558,6 +572,14 @@ export function buildBeltPlateSvg(
   // Dva otvory po stranách prostřední dírky – ta je datum pro umístění řady.
   for (const sign of [-1, 1]) cut.push(markHole(L.middleHoleX, ay + sign * L.offAxisMarkMm));
 
+  /* --- prostřední řada: zaoblený konec a dírky pro trn --- */
+  const ry = L.roundedRowY;
+  for (const arc of L.roundedArcs) {
+    cut.push(arcSlot(arc.centreX, ry, arc.radiusMm, L.roundedSlotWidthMm));
+  }
+  for (const x of L.tipHoleXs) cut.push(markHole(x, ry));
+  for (const sign of [-1, 1]) cut.push(markHole(L.middleHoleX, ry + sign * L.offAxisMarkMm));
+
   /* --- dolní řada: konec u přezky, levá hrana destičky = konec pásu --- */
   const by = L.buckleRowY;
   cut.push(stadiumH(by, L.slotX0, L.slotX1, L.slotWidthMm));
@@ -579,7 +601,7 @@ export function buildBeltPlateSvg(
   // x zvolené tak, aby stupnice ani její čísla nekolidovaly se značicími otvory
   // (nejlevější otvory řad jsou na x = 10 a 16,8, další až na 35).
   const scaleX = 24;
-  for (const rowY of [ay, by]) {
+  for (const rowY of [ay, ry, by]) {
     for (let k = 0; k <= Math.floor(L.tipCutoutHalfMm); k += 1) {
       const len = k % 10 === 0 ? 7 : k % 5 === 0 ? 5 : 3;
       for (const sign of k === 0 ? [1] : [-1, 1]) {
@@ -631,8 +653,12 @@ export function buildBeltPlateSvg(
   const tipRowX1 = L.tipFarX - 4;
   const buckleRowX1 = L.hangHoleX - L.hangHoleMm / 2 - 3;
   L.guides.forEach((g, i) => {
-    for (const rowY of [ay, by]) {
-      const lineX1 = rowY === ay ? tipRowX1 : buckleRowX1;
+    for (const rowY of [ay, ry, by]) {
+      const lineX1 =
+        // V řadě se zaobleným koncem dotahuji linku až ke středové svislici oblouků:
+        // konec oblouku o poloměru r leží přesně na lince šířky 2r, takže se linky
+        // a oblouky označují navzájem a nejsou potřeba čísla u oblouků.
+        rowY === ay ? tipRowX1 : rowY === ry ? L.roundedArcs[0].centreX : buckleRowX1;
       // Čísla na konci linek, ve volné části řady: u levého okraje kolidovala
       // s rozlišovacím otvorem u prostřední dírky. Odstup v x, aby se u linek
       // 2,5 mm od sebe nepřekrývala.
@@ -656,7 +682,8 @@ export function buildBeltPlateSvg(
     `<!-- REZACI SOUBOR - DESTICKA NA OPASEK ${L.minBeltWidthMm}-${L.maxBeltWidthMm} mm.`,
     `     Merítko 1:1, 1 jednotka = 1 mm, destička ${W} x ${H} mm.`,
     '     Vse v jedne vrstve "cut", uzavrene kontury, zadny text, zadna vypln.',
-    '     MATERIAL: CIRY akrylat 3 mm - pres desticku se dívá na narysovanou strednici pasu.',
+    '     MATERIAL: CIRY akrylat 3 mm. Zebra mezi vnorenymi sloty zaobleneho konce',
+    `     jsou ${cz(L.roundedArcs.length > 1 ? 1.5 : 0)} mm - je to zamer, stejne jako u komercnich desticek.`,
     `     Otvory Ø ${L.markHoleMm} mm = znacici, neslucovat a nezvetsovat.`,
     `     Otvor Ø ${L.hangHoleMm} mm v rohu = zaveseni.`,
     `     Vrstva "cut" (${LASER.cutColor}) = REZ, vrstva "engrave" (${LASER.engraveColor}) = GRAVIROVANI.`,
@@ -909,8 +936,9 @@ async function main(): Promise<void> {
       `Destička ${L.plateWidthMm} × ${L.plateHeightMm} mm pro pásky ${L.minBeltWidthMm}–${L.maxBeltWidthMm} mm, čirý akryl 3 mm.`,
     );
     console.log(
-      'Horní řada: špička + 5 dírek (umisťuje se podle prostřední dírky). ' +
-        'Dolní řada: konec u přezky (levá hrana destičky = konec pásu).',
+      'Řada 1: HROT + 5 dírek · Řada 2: ZAOBLENÝ konec + 5 dírek ' +
+        '(obě se umisťují podle prostřední dírky) · Řada 3: konec u přezky ' +
+        '(levá hrana destičky = konec pásu).',
     );
     console.log(
       `Před objednáním vytiskni kontrolní PDF na A4 na šířku na 100 % a přeměř obrys: musí být ${L.plateWidthMm} × ${L.plateHeightMm} mm.`,

@@ -346,7 +346,8 @@ describe('destička na opasek', () => {
     // Jediné dva vyříznuté tvary jsou špička a ovál pro trn.
     const cut = plate!.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
     const shapes = [...cut.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!);
-    expect(shapes.length, 'obrys + špička + ovál').toBe(3);
+    // obrys + vyříznutá špička + 4 sloty zaobleného konce + ovál pro trn
+    expect(shapes.length, 'obrys + špička + 4 oblouky + ovál').toBe(3 + L.roundedArcs.length);
   });
 
   it('řada se špičkou: 5 dírek na ose a 2 rozlišovací u prostřední', () => {
@@ -357,7 +358,13 @@ describe('destička na opasek', () => {
     onTipRow.forEach((x, i) => {
       expect(x, `dírka ${i + 1}`).toBeCloseTo(L.tipHoleXs[i]!, 3);
     });
-    const flanking = marks.filter((c) => c.x === L.middleHoleX && c.y !== L.tipRowY);
+    // Jen řada se špičkou: řada se zaobleným koncem má vlastní rozlišovací otvory.
+    const flanking = marks.filter(
+      (c) =>
+        c.x === L.middleHoleX &&
+        c.y !== L.tipRowY &&
+        Math.abs(c.y - L.tipRowY) < L.offAxisMarkMm + 2,
+    );
     expect(flanking.length).toBe(2);
     for (const c of flanking) {
       expect(Math.abs(c.y - L.tipRowY)).toBeCloseTo(L.offAxisMarkMm, 6);
@@ -409,6 +416,42 @@ describe('destička na opasek', () => {
     );
   });
 
+  it('řada se zaobleným koncem: čtyři soustředné sloty a linky k nim dotažené', () => {
+    const cut = plate!.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
+    const eng = plate!.split('<g id="engrave">')[1]?.split('</g>')[0] ?? '';
+    // Slot oblouku: dva oblouky a jedna spojnice, začíná i končí na svislici středu.
+    const arcs = [...cut.matchAll(/<path d="([^"]+)"/g)]
+      .map((m) => m[1]!)
+      .filter((d) => (d.match(/A/g) ?? []).length === 2)
+      .map((d) => [...d.matchAll(/[-\d.]+/g)].map((x) => Number(x[0])))
+      .filter((n) => Math.abs(n[0]! - n[9]!) < 0.01);
+    expect(arcs.length, 'čtyři sloty zaobleného konce').toBe(L.roundedArcs.length);
+    for (const n of arcs) {
+      const ro = n[2]!;
+      const ri = n[11]!;
+      expect(ro - ri, 'šířka slotu').toBeCloseTo(L.roundedSlotWidthMm, 3);
+      const r = (ro + ri) / 2;
+      const arc = L.roundedArcs.find((a) => Math.abs(a.radiusMm - r) < 0.01);
+      expect(arc, `oblouk r=${r}`).toBeDefined();
+      expect(n[0]!, 'střed oblouku').toBeCloseTo(arc!.centreX, 3);
+      // Linka šířky musí být dotažená až ke svislici středu, aby oblouk označila.
+      for (const sign of [-1, 1]) {
+        const y = L.roundedRowY + sign * arc!.radiusMm;
+        const line = [...eng.matchAll(/M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)"/g)]
+          .map((m) => [Number(m[1]), Number(m[2]), Number(m[3]), Number(m[4])] as const)
+          .find(
+            ([x1, y1, x2, y2]) =>
+              Math.abs(y1 - y) < 0.001 && Math.abs(y2 - y) < 0.001 && x2 - x1 > 50,
+          );
+        expect(line, `linka pro ${arc!.beltWidthMm} mm na y ${y}`).toBeDefined();
+        expect(line![2], `linka pro ${arc!.beltWidthMm} mm dotažená k oblouku`).toBeCloseTo(
+          arc!.centreX,
+          3,
+        );
+      }
+    }
+  });
+
   it('má podélné pravítko u horní hrany na měření délky pásku na poutko', () => {
     const eng = plate!.split('<g id="engrave">')[1]?.split('</g>')[0] ?? '';
     // Svislé dílky pravítka: stejné x, malý rozdíl y, nahoře nad pásmem obou řad.
@@ -439,9 +482,15 @@ describe('destička na opasek', () => {
 
   it('ovál pro trn je 25 × 6 mm a leží na ohybu', () => {
     const cutO = plate!.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
+    // Ovál pro trn: dva oblouky a jedna spojnice, na rozdíl od slotů zaobleného
+    // konce se jeho začátek a konec liší v x (leží vodorovně).
     const oval = [...cutO.matchAll(/<path d="([^"]+)"/g)]
       .map((m) => m[1]!)
-      .find((d) => (d.match(/A/g) ?? []).length === 2);
+      .filter((d) => (d.match(/A/g) ?? []).length === 2)
+      .find((d) => {
+        const n = [...d.matchAll(/[-\d.]+/g)].map((x) => Number(x[0]));
+        return Math.abs(n[0]! - n[9]!) > 1;
+      });
     expect(oval).toBeDefined();
     const n = [...oval!.matchAll(/[-\d.]+/g)].map((m) => Number(m[0]));
     const r = n[4]!;

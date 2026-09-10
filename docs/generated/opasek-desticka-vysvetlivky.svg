@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- VYSVETLIVKY, ne rezaci soubor. Obsahuje zivy text. -->
-<svg xmlns="http://www.w3.org/2000/svg" width="317mm" height="153mm" viewBox="-6 -16 317 153">
-<rect x="-6" y="-16" width="317" height="153" fill="#ffffff"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="317mm" height="210mm" viewBox="-6 -16 317 210">
+<rect x="-6" y="-16" width="317" height="210" fill="#ffffff"/>
 <g id="cut">
-<path d="M0 8 L8 0 L215 0 L215 127 L0 127 Z" fill="none" stroke="#000000" stroke-width="0.1"/>
+<path d="M0 8 L8 0 L215 0 L215 184 L0 184 Z" fill="none" stroke="#000000" stroke-width="0.1"/>
 <path d="M149.287 10 L201.951 33.856 A4 4 0 0 1 201.951 41.144 L149.287 65 Z" fill="none" stroke="#000000" stroke-width="0.1"/>
 <circle cx="110" cy="37.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
 <circle cx="85" cy="37.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
@@ -12,14 +12,25 @@
 <circle cx="10" cy="37.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
 <circle cx="60" cy="25.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
 <circle cx="60" cy="49.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
-<path d="M80.5 91.5 L99.5 91.5 A3 3 0 0 1 99.5 97.5 L80.5 97.5 A3 3 0 0 1 80.5 91.5 Z" fill="none" stroke="#000000" stroke-width="0.1"/>
-<circle cx="16.8" cy="94.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
-<circle cx="64.5" cy="94.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
-<circle cx="115.5" cy="94.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
-<circle cx="163.2" cy="94.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
-<circle cx="90" cy="82.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
-<circle cx="90" cy="106.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
-<circle cx="205" cy="117" r="2" fill="none" stroke="#000000" stroke-width="0.1"/>
+<path d="M181.8 71.5 A23 23 0 0 1 181.8 117.5 L181.8 116.5 A22 22 0 0 0 181.8 72.5 Z" fill="none" stroke="#000000" stroke-width="0.1"/>
+<path d="M181.8 74 A20.5 20.5 0 0 1 181.8 115 L181.8 114 A19.5 19.5 0 0 0 181.8 75 Z" fill="none" stroke="#000000" stroke-width="0.1"/>
+<path d="M181.8 76.5 A18 18 0 0 1 181.8 112.5 L181.8 111.5 A17 17 0 0 0 181.8 77.5 Z" fill="none" stroke="#000000" stroke-width="0.1"/>
+<path d="M181.8 79 A15.5 15.5 0 0 1 181.8 110 L181.8 109 A14.5 14.5 0 0 0 181.8 80 Z" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="110" cy="94.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="85" cy="94.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="60" cy="94.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="35" cy="94.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="10" cy="94.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="60" cy="82.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="60" cy="106.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<path d="M80.5 148.5 L99.5 148.5 A3 3 0 0 1 99.5 154.5 L80.5 154.5 A3 3 0 0 1 80.5 148.5 Z" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="16.8" cy="151.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="64.5" cy="151.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="115.5" cy="151.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="163.2" cy="151.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="90" cy="139.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="90" cy="163.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="205" cy="174" r="2" fill="none" stroke="#000000" stroke-width="0.1"/>
 </g>
 <g id="engrave">
 <path d="M24 37.5 L31 37.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
@@ -148,6 +159,69 @@
 <path d="M24 120.5 L27 120.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
 <path d="M24 67.5 L27 67.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
 <path d="M24 121.5 L27 121.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 151.5 L31 151.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 150.5 L27 150.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 152.5 L27 152.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 149.5 L27 149.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 153.5 L27 153.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 148.5 L27 148.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 154.5 L27 154.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 147.5 L27 147.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 155.5 L27 155.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 146.5 L29 146.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 156.5 L29 156.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 145.5 L27 145.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 157.5 L27 157.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 144.5 L27 144.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 158.5 L27 158.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 143.5 L27 143.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 159.5 L27 159.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 142.5 L27 142.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 160.5 L27 160.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 141.5 L31 141.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M19.14 140.2 L19.14 141.5 M19.14 141.5 L19.14 142.8" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M19.79 140.2 L21.35 140.2 M19.79 140.2 L19.79 141.5 M21.35 140.2 L21.35 141.5 M19.79 141.5 L19.79 142.8 M21.35 141.5 L21.35 142.8 M19.79 142.8 L21.35 142.8" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M24 161.5 L31 161.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M19.14 160.2 L19.14 161.5 M19.14 161.5 L19.14 162.8" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M19.79 160.2 L21.35 160.2 M19.79 160.2 L19.79 161.5 M21.35 160.2 L21.35 161.5 M19.79 161.5 L19.79 162.8 M21.35 161.5 L21.35 162.8 M19.79 162.8 L21.35 162.8" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M24 140.5 L27 140.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 162.5 L27 162.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 139.5 L27 139.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 163.5 L27 163.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 138.5 L27 138.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 164.5 L27 164.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 137.5 L27 137.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 165.5 L27 165.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 136.5 L29 136.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 166.5 L29 166.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 135.5 L27 135.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 167.5 L27 167.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 134.5 L27 134.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 168.5 L27 168.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 133.5 L27 133.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 169.5 L27 169.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 132.5 L27 132.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 170.5 L27 170.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 131.5 L31 131.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M17.58 130.2 L19.14 130.2 M19.14 130.2 L19.14 131.5 M17.58 131.5 L19.14 131.5 M17.58 131.5 L17.58 132.8 M17.58 132.8 L19.14 132.8" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M19.79 130.2 L21.35 130.2 M19.79 130.2 L19.79 131.5 M21.35 130.2 L21.35 131.5 M19.79 131.5 L19.79 132.8 M21.35 131.5 L21.35 132.8 M19.79 132.8 L21.35 132.8" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M24 171.5 L31 171.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M17.58 170.2 L19.14 170.2 M19.14 170.2 L19.14 171.5 M17.58 171.5 L19.14 171.5 M17.58 171.5 L17.58 172.8 M17.58 172.8 L19.14 172.8" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M19.79 170.2 L21.35 170.2 M19.79 170.2 L19.79 171.5 M21.35 170.2 L21.35 171.5 M19.79 171.5 L19.79 172.8 M21.35 171.5 L21.35 172.8 M19.79 172.8 L21.35 172.8" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M24 130.5 L27 130.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 172.5 L27 172.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 129.5 L27 129.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 173.5 L27 173.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 128.5 L27 128.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 174.5 L27 174.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 127.5 L27 127.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 175.5 L27 175.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 126.5 L29 126.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 176.5 L29 176.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 125.5 L27 125.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 177.5 L27 177.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 124.5 L27 124.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
+<path d="M24 178.5 L27 178.5" fill="none" stroke="#0000ff" stroke-width="0.12"/>
 <path d="M10 6 L10 13" fill="none" stroke="#0000ff" stroke-width="0.12"/>
 <path d="M11 6 L11 8" fill="none" stroke="#0000ff" stroke-width="0.12"/>
 <path d="M12 6 L12 8" fill="none" stroke="#0000ff" stroke-width="0.12"/>
@@ -293,34 +367,50 @@
 <path d="M34 60 L145.287 60" fill="none" stroke="#0000ff" stroke-width="0.15"/>
 <path d="M139.287 15.6 L139.287 16.9 M140.847 15.6 L140.847 16.9 M139.287 16.9 L140.847 16.9 M140.847 16.9 L140.847 18.2" fill="none" stroke="#0000ff" stroke-width="0.15"/>
 <path d="M141.497 15.6 L143.057 15.6 M141.497 15.6 L141.497 16.9 M141.497 16.9 L143.057 16.9 M143.057 16.9 L143.057 18.2 M141.497 18.2 L143.057 18.2" fill="none" stroke="#0000ff" stroke-width="0.15"/>
-<path d="M34 72 L200 72" fill="none" stroke="#0000ff" stroke-width="0.15"/>
-<path d="M34 117 L200 117" fill="none" stroke="#0000ff" stroke-width="0.15"/>
-<path d="M194 72.6 L194 73.9 M195.56 72.6 L195.56 73.9 M194 73.9 L195.56 73.9 M195.56 73.9 L195.56 75.2" fill="none" stroke="#0000ff" stroke-width="0.15"/>
-<path d="M196.21 72.6 L197.77 72.6 M196.21 72.6 L196.21 73.9 M196.21 73.9 L197.77 73.9 M197.77 73.9 L197.77 75.2 M196.21 75.2 L197.77 75.2" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M34 72 L181.8 72" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M34 117 L181.8 117" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M175.8 72.6 L175.8 73.9 M177.36 72.6 L177.36 73.9 M175.8 73.9 L177.36 73.9 M177.36 73.9 L177.36 75.2" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M178.01 72.6 L179.57 72.6 M178.01 72.6 L178.01 73.9 M178.01 73.9 L179.57 73.9 M179.57 73.9 L179.57 75.2 M178.01 75.2 L179.57 75.2" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M34 129 L200 129" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M34 174 L200 174" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M194 129.6 L194 130.9 M195.56 129.6 L195.56 130.9 M194 130.9 L195.56 130.9 M195.56 130.9 L195.56 132.2" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M196.21 129.6 L197.77 129.6 M196.21 129.6 L196.21 130.9 M196.21 130.9 L197.77 130.9 M197.77 130.9 L197.77 132.2 M196.21 132.2 L197.77 132.2" fill="none" stroke="#0000ff" stroke-width="0.15"/>
 <path d="M34 17.5 L145.287 17.5" fill="none" stroke="#0000ff" stroke-width="0.15"/>
 <path d="M34 57.5 L145.287 57.5" fill="none" stroke="#0000ff" stroke-width="0.15"/>
 <path d="M133.047 18.1 L133.047 19.4 M134.607 18.1 L134.607 19.4 M133.047 19.4 L134.607 19.4 M134.607 19.4 L134.607 20.7" fill="none" stroke="#0000ff" stroke-width="0.15"/>
 <path d="M135.257 18.1 L136.817 18.1 M135.257 18.1 L135.257 19.4 M136.817 18.1 L136.817 19.4 M135.257 19.4 L135.257 20.7 M136.817 19.4 L136.817 20.7 M135.257 20.7 L136.817 20.7" fill="none" stroke="#0000ff" stroke-width="0.15"/>
-<path d="M34 74.5 L200 74.5" fill="none" stroke="#0000ff" stroke-width="0.15"/>
-<path d="M34 114.5 L200 114.5" fill="none" stroke="#0000ff" stroke-width="0.15"/>
-<path d="M187.76 75.1 L187.76 76.4 M189.32 75.1 L189.32 76.4 M187.76 76.4 L189.32 76.4 M189.32 76.4 L189.32 77.7" fill="none" stroke="#0000ff" stroke-width="0.15"/>
-<path d="M189.97 75.1 L191.53 75.1 M189.97 75.1 L189.97 76.4 M191.53 75.1 L191.53 76.4 M189.97 76.4 L189.97 77.7 M191.53 76.4 L191.53 77.7 M189.97 77.7 L191.53 77.7" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M34 74.5 L181.8 74.5" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M34 114.5 L181.8 114.5" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M169.56 75.1 L169.56 76.4 M171.12 75.1 L171.12 76.4 M169.56 76.4 L171.12 76.4 M171.12 76.4 L171.12 77.7" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M171.77 75.1 L173.33 75.1 M171.77 75.1 L171.77 76.4 M173.33 75.1 L173.33 76.4 M171.77 76.4 L171.77 77.7 M173.33 76.4 L173.33 77.7 M171.77 77.7 L173.33 77.7" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M34 131.5 L200 131.5" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M34 171.5 L200 171.5" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M187.76 132.1 L187.76 133.4 M189.32 132.1 L189.32 133.4 M187.76 133.4 L189.32 133.4 M189.32 133.4 L189.32 134.7" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M189.97 132.1 L191.53 132.1 M189.97 132.1 L189.97 133.4 M191.53 132.1 L191.53 133.4 M189.97 133.4 L189.97 134.7 M191.53 133.4 L191.53 134.7 M189.97 134.7 L191.53 134.7" fill="none" stroke="#0000ff" stroke-width="0.15"/>
 <path d="M34 20 L145.287 20" fill="none" stroke="#0000ff" stroke-width="0.15"/>
 <path d="M34 55 L145.287 55" fill="none" stroke="#0000ff" stroke-width="0.15"/>
 <path d="M126.807 20.6 L128.367 20.6 M128.367 20.6 L128.367 21.9 M126.807 21.9 L128.367 21.9 M128.367 21.9 L128.367 23.2 M126.807 23.2 L128.367 23.2" fill="none" stroke="#0000ff" stroke-width="0.15"/>
 <path d="M129.017 20.6 L130.577 20.6 M129.017 20.6 L129.017 21.9 M129.017 21.9 L130.577 21.9 M130.577 21.9 L130.577 23.2 M129.017 23.2 L130.577 23.2" fill="none" stroke="#0000ff" stroke-width="0.15"/>
-<path d="M34 77 L200 77" fill="none" stroke="#0000ff" stroke-width="0.15"/>
-<path d="M34 112 L200 112" fill="none" stroke="#0000ff" stroke-width="0.15"/>
-<path d="M181.52 77.6 L183.08 77.6 M183.08 77.6 L183.08 78.9 M181.52 78.9 L183.08 78.9 M183.08 78.9 L183.08 80.2 M181.52 80.2 L183.08 80.2" fill="none" stroke="#0000ff" stroke-width="0.15"/>
-<path d="M183.73 77.6 L185.29 77.6 M183.73 77.6 L183.73 78.9 M183.73 78.9 L185.29 78.9 M185.29 78.9 L185.29 80.2 M183.73 80.2 L185.29 80.2" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M34 77 L181.8 77" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M34 112 L181.8 112" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M163.32 77.6 L164.88 77.6 M164.88 77.6 L164.88 78.9 M163.32 78.9 L164.88 78.9 M164.88 78.9 L164.88 80.2 M163.32 80.2 L164.88 80.2" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M165.53 77.6 L167.09 77.6 M165.53 77.6 L165.53 78.9 M165.53 78.9 L167.09 78.9 M167.09 78.9 L167.09 80.2 M165.53 80.2 L167.09 80.2" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M34 134 L200 134" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M34 169 L200 169" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M181.52 134.6 L183.08 134.6 M183.08 134.6 L183.08 135.9 M181.52 135.9 L183.08 135.9 M183.08 135.9 L183.08 137.2 M181.52 137.2 L183.08 137.2" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M183.73 134.6 L185.29 134.6 M183.73 134.6 L183.73 135.9 M183.73 135.9 L185.29 135.9 M185.29 135.9 L185.29 137.2 M183.73 137.2 L185.29 137.2" fill="none" stroke="#0000ff" stroke-width="0.15"/>
 <path d="M34 22.5 L145.287 22.5" fill="none" stroke="#0000ff" stroke-width="0.15"/>
 <path d="M34 52.5 L145.287 52.5" fill="none" stroke="#0000ff" stroke-width="0.15"/>
 <path d="M120.567 23.1 L122.127 23.1 M122.127 23.1 L122.127 24.4 M120.567 24.4 L122.127 24.4 M122.127 24.4 L122.127 25.7 M120.567 25.7 L122.127 25.7" fill="none" stroke="#0000ff" stroke-width="0.15"/>
 <path d="M122.777 23.1 L124.337 23.1 M122.777 23.1 L122.777 24.4 M124.337 23.1 L124.337 24.4 M122.777 24.4 L122.777 25.7 M124.337 24.4 L124.337 25.7 M122.777 25.7 L124.337 25.7" fill="none" stroke="#0000ff" stroke-width="0.15"/>
-<path d="M34 79.5 L200 79.5" fill="none" stroke="#0000ff" stroke-width="0.15"/>
-<path d="M34 109.5 L200 109.5" fill="none" stroke="#0000ff" stroke-width="0.15"/>
-<path d="M175.28 80.1 L176.84 80.1 M176.84 80.1 L176.84 81.4 M175.28 81.4 L176.84 81.4 M176.84 81.4 L176.84 82.7 M175.28 82.7 L176.84 82.7" fill="none" stroke="#0000ff" stroke-width="0.15"/>
-<path d="M177.49 80.1 L179.05 80.1 M177.49 80.1 L177.49 81.4 M179.05 80.1 L179.05 81.4 M177.49 81.4 L177.49 82.7 M179.05 81.4 L179.05 82.7 M177.49 82.7 L179.05 82.7" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M34 79.5 L181.8 79.5" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M34 109.5 L181.8 109.5" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M157.08 80.1 L158.64 80.1 M158.64 80.1 L158.64 81.4 M157.08 81.4 L158.64 81.4 M158.64 81.4 L158.64 82.7 M157.08 82.7 L158.64 82.7" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M159.29 80.1 L160.85 80.1 M159.29 80.1 L159.29 81.4 M160.85 80.1 L160.85 81.4 M159.29 81.4 L159.29 82.7 M160.85 81.4 L160.85 82.7 M159.29 82.7 L160.85 82.7" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M34 136.5 L200 136.5" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M34 166.5 L200 166.5" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M175.28 137.1 L176.84 137.1 M176.84 137.1 L176.84 138.4 M175.28 138.4 L176.84 138.4 M176.84 138.4 L176.84 139.7 M175.28 139.7 L176.84 139.7" fill="none" stroke="#0000ff" stroke-width="0.15"/>
+<path d="M177.49 137.1 L179.05 137.1 M177.49 137.1 L177.49 138.4 M179.05 137.1 L179.05 138.4 M177.49 138.4 L177.49 139.7 M179.05 138.4 L179.05 139.7 M177.49 139.7 L179.05 139.7" fill="none" stroke="#0000ff" stroke-width="0.15"/>
 </g>
 
 <text x="0" y="-8" font-family="Helvetica, Arial, sans-serif" font-size="6" fill="#2b2b2b">Destička na opasek 28–45 mm — co je co</text>
@@ -339,18 +429,18 @@
 <text x="219" y="47.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">linky ŠÍŘEK: srovnej obě hrany pásu na svou šířku</text>
 <path d="M28 53.5 L218 52.5" fill="none" stroke="#999" stroke-width="0.2"/>
 <text x="219" y="53.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">příčná STUPNICE: pro šířku bez linky (38 mm → hrany na 19)</text>
-<path d="M90 94.5 L218 81.5" fill="none" stroke="#999" stroke-width="0.2"/>
-<text x="219" y="82.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">OVÁL pro trn 25 × 6 mm, ohyb ho půlí</text>
-<path d="M90 82.5 L218 87.5" fill="none" stroke="#999" stroke-width="0.2"/>
-<text x="219" y="88.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">dva otvory = LINIE OHYBU, spoj je pravítkem</text>
-<path d="M163.2 94.5 L218 93.5" fill="none" stroke="#999" stroke-width="0.2"/>
-<text x="219" y="94.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">4 otvory = 2 NÝTY (± 25,5 a ± 73,2 mm od ohybu)</text>
-<path d="M64.5 94.5 L218 99.5" fill="none" stroke="#999" stroke-width="0.2"/>
-<text x="219" y="100.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">mezi nýty je KAPSA PRO POUTKO 47,7 mm</text>
-<path d="M0 94.5 L218 105.5" fill="none" stroke="#999" stroke-width="0.2"/>
-<text x="219" y="106.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">levá hrana = KONEC PÁSU (ohyb 90 mm od ní)</text>
-<path d="M4 4 L218 111.5" fill="none" stroke="#999" stroke-width="0.2"/>
-<text x="219" y="112.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">zkosený roh značí, která hrana je konec pásu</text>
-<path d="M205 117 L218 117.5" fill="none" stroke="#999" stroke-width="0.2"/>
-<text x="219" y="118.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">závěsný otvor</text>
+<path d="M90 151.5 L218 138.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="219" y="139.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">OVÁL pro trn 25 × 6 mm, ohyb ho půlí</text>
+<path d="M90 139.5 L218 144.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="219" y="145.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">dva otvory = LINIE OHYBU, spoj je pravítkem</text>
+<path d="M163.2 151.5 L218 150.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="219" y="151.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">4 otvory = 2 NÝTY (± 25,5 a ± 73,2 mm od ohybu)</text>
+<path d="M64.5 151.5 L218 156.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="219" y="157.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">mezi nýty je KAPSA PRO POUTKO 47,7 mm</text>
+<path d="M0 151.5 L218 162.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="219" y="163.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">levá hrana = KONEC PÁSU (ohyb 90 mm od ní)</text>
+<path d="M4 4 L218 168.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="219" y="169.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">zkosený roh značí, která hrana je konec pásu</text>
+<path d="M205 174 L218 174.5" fill="none" stroke="#999" stroke-width="0.2"/>
+<text x="219" y="175.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" fill="#2b2b2b">závěsný otvor</text>
 </svg>
