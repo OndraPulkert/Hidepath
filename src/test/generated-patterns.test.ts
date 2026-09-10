@@ -120,11 +120,16 @@ describe('řezací soubor pro laser', () => {
   it('obsahuje jen značicí otvory Ø 2 mm, ne otvory v plné velikosti', () => {
     for (const { path, svg } of lasers) {
       const radii = [...svg.matchAll(/<circle[^>]*r="([\d.]+)"/g)].map((m) => Number(m[1]));
-      expect(radii.length, path).toBe(11); // 6 na konci u přezky + 5 dírek pro trn
+      // 4 otvory pro nýty + 5 dírek pro trn; drážka pro trn je vyříznutá, ne značená.
+      const marks = radii.filter((r) => r === 1);
+      expect(marks.length, `${path}: značicí otvory`).toBe(9);
+      // Dva závěsné otvory Ø 4 mm, jeden na každém hlavním dílu.
+      const hangs = radii.filter((r) => r === 2);
+      expect(hangs.length, `${path}: závěsné otvory`).toBe(2);
       expect(
-        radii.every((r) => r === 1),
-        `${path}: poloměry ${radii.join(',')}`,
-      ).toBe(true);
+        radii.length,
+        `${path}: žádné otvory v plné velikosti, poloměry ${radii.join(',')}`,
+      ).toBe(marks.length + hangs.length);
     }
   });
 
@@ -132,18 +137,15 @@ describe('řezací soubor pro laser', () => {
     for (const { path, svg, width } of lasers) {
       const end = { ...DEFAULT_BELT_END, beltWidthMm: width };
       const axis = 10 + width / 2; // střednice prvního dílu podle rozvržení
-      const ys = [...svg.matchAll(/<circle cx="([-\d.]+)" cy="([-\d.]+)"/g)]
-        .filter((m) => Number(m[1]) === axis)
+      const ys = [...svg.matchAll(/<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([\d.]+)"/g)]
+        .filter((m) => Number(m[1]) === axis && Number(m[3]) === 1)
         .map((m) => Number(m[2]))
         .sort((a, b) => a - b);
-      expect(ys.length, path).toBe(6);
-      const fold = (ys[0]! + ys[5]!) / 2;
-      const slotEnd = end.slotLengthMm / 2 - end.slotWidthMm / 2;
+      expect(ys.length, path).toBe(4);
+      const fold = (ys[0]! + ys[3]!) / 2;
       const expected = [
         -end.rivetOffsetsMm[1],
         -end.rivetOffsetsMm[0],
-        -slotEnd,
-        slotEnd,
         end.rivetOffsetsMm[0],
         end.rivetOffsetsMm[1],
       ];
@@ -157,8 +159,8 @@ describe('řezací soubor pro laser', () => {
     for (const { path, svg, width } of lasers) {
       const tip = { ...DEFAULT_BELT_TIP, beltWidthMm: width };
       const axis = 10 + width + 20 + width / 2; // střednice druhého dílu
-      const ys = [...svg.matchAll(/<circle cx="([-\d.]+)" cy="([-\d.]+)"/g)]
-        .filter((m) => Number(m[1]) === axis)
+      const ys = [...svg.matchAll(/<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([\d.]+)"/g)]
+        .filter((m) => Number(m[1]) === axis && Number(m[3]) === 1)
         .map((m) => Number(m[2]))
         .sort((a, b) => a - b);
       expect(ys.length, path).toBe(tip.holeCount);
@@ -176,6 +178,31 @@ describe('řezací soubor pro laser', () => {
       expect(rect, path).not.toBeNull();
       expect(Number(rect![1]), path).toBeCloseTo(keeperStripLengthMm(end), 6);
       expect(Number(rect![2]), path).toBeCloseTo(end.keeperWidthMm, 6);
+    }
+  });
+
+  it('drážka pro trn je vyříznutá 25 × 6 mm a ohyb ji půlí', () => {
+    for (const { path, svg, width } of lasers) {
+      const end = { ...DEFAULT_BELT_END, beltWidthMm: width };
+      const cut = svg.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
+      // Stadion: dva oblouky a jedna spojnice.
+      const slot = [...cut.matchAll(/<path d="([^"]+)"/g)]
+        .map((m) => m[1]!)
+        .find((d) => (d.match(/A/g) ?? []).length === 2 && (d.match(/L/g) ?? []).length === 1);
+      expect(slot, `${path}: drážka pro trn nenalezena`).toBeDefined();
+      const n = [...slot!.matchAll(/[-\d.]+/g)].map((m) => Number(m[0]));
+      const [x1, y1, r, y3] = [n[0]!, n[1]!, n[2]!, n[10]!];
+      expect(2 * r, `${path}: šířka drážky`).toBeCloseTo(end.slotWidthMm, 6);
+      expect(y3 - y1 + 2 * r, `${path}: délka drážky`).toBeCloseTo(end.slotLengthMm, 6);
+      const axis = 10 + width / 2;
+      expect(x1 + r, `${path}: drážka na střednici`).toBeCloseTo(axis, 6);
+      // Ohyb je uprostřed drážky a zároveň uprostřed mezi krajními otvory pro nýty.
+      const rivetYs = [...svg.matchAll(/<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([\d.]+)"/g)]
+        .filter((m) => Number(m[1]) === axis && Number(m[3]) === 1)
+        .map((m) => Number(m[2]))
+        .sort((a, b) => a - b);
+      expect(rivetYs.length, path).toBe(4);
+      expect((rivetYs[0]! + rivetYs[3]!) / 2, `${path}: ohyb`).toBeCloseTo((y1 + y3) / 2, 6);
     }
   });
 });

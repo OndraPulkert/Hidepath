@@ -731,21 +731,35 @@ souboru.
 `docs/generated/opasek-sablona-<šířka>mm-laser.svg` — jeden soubor se všemi třemi díly (konec
 u přezky, konec se špičkou, pásek na poutko), 1:1 v mm, list 210 mm široký.
 
-Rozdíly proti tiskové verzi, všechny čtyři podle rozhodnutí výše:
+Rozdíly proti tiskové verzi:
 
-- **Značicí otvory Ø 2 mm** místo plných Ø 6 / Ø 4,5 mm. Poloha se skrz šablonu přenáší šídlem,
-  otvor do kůže dělá průbojník.
-- **Zářezy do hrany** (3 × 2 mm, trojúhelníkové) místo nakreslené linie ohybu a značky prostřední
-  dírky — čáru uvnitř plastu není jak obtáhnout.
-- **Žádný text ve vrstvě řezu.** Popisky dílů jsou v samostatné vrstvě `engrave` (modře), vrstva
-  `cut` je černě. Odpovídá běžné konvenci řezáren.
-- Bez kót, kalibračního čtverce a střednic.
+- **Drážka pro trn je vyříznutá v plné velikosti 25 × 6 mm.** Její zaoblené konce mají poloměr
+  3 mm, tedy přesně ty dva Ø 6 mm otvory, které se do kůže vysekávají – obtažením se získá celý
+  tvar a značky navíc nejsou potřeba. (Autor si všiml, že první verze měla jen dvě značky; tohle
+  je lepší.) Přepínač `--slot=marks` vrátí původní variantu.
+- **Značicí otvory Ø 2 mm** místo plných Ø 6 / Ø 4,5 mm u nýtů a dírek pro trn. Poloha se přenáší
+  šídlem, otvor do kůže dělá průbojník.
+- **Zářezy v boční hraně** (3 × 2 mm) v místě linie ohybu a prostřední dírky — čáru uvnitř plastu
+  není jak obtáhnout. Zářezy jsou **součástí obrysové cesty**, ne samostatné čáry.
+- **Otvor Ø 4 mm na zavěšení** na obou hlavních dílech; zároveň jednoznačně určuje horní konec.
+- Bez kót, kalibračního čtverce, střednic a **bez jakéhokoli textu.**
 
-Ověřeno parsováním obou vygenerovaných souborů: 11 značicích otvorů (6 na konci u přezky, 5 dírek
-pro trn), všechny r = 1 mm, žádná kružnice v plné velikosti; otvory konce u přezky leží k zářezu
-ohybu symetricky na ±9,5 / ±25,5 / ±73,2 mm; dírky pro trn na 94,3–194,3 mm od hrotu; pásek na
-poutko 111 × 12 mm (40 mm) a 101 × 12 mm (35 mm). Zafixováno šesti testy v
-`src/test/generated-patterns.test.ts`.
+### Co si vyžádala vyrobitelnost
+
+Autor upozornil, že soubor musí někdo skutečně vyrobit. Revize očima řezárny odhalila dvě závady:
+
+1. **Zářezy byly samostatné otevřené cesty ležící na obrysu.** V laserovém softwaru to znamená
+   dvojí řez po obrysu nebo chybu. Opraveno vložením zářezu přímo do obrysové kontury.
+2. **Popisky dílů byly živý text s fontem Helvetica.** Řezárna nemusí font mít a živý text bývá
+   důvod k odmítnutí souboru. Odstraněno celé — díly jsou rozlišitelné tvarem a závěsným otvorem,
+   šířku si lze na hotový akrylát škrábnout šídlem. Soubor je tím čistě řezový, což zakázku
+   zjednodušuje i zlevňuje.
+
+Ověřeno parsováním obou souborů: **jedna vrstva** `cut`, **0 elementů `<text>`**, žádná výplň,
+**všechny tři cesty uzavřené** (`Z`), kružnice jen r = 1 mm (9 značicích) a r = 2 mm (2 závěsné),
+jeden `rect` (poutko), `1 jednotka = 1 mm`. Drážka odměřena z cesty: **délka 25,00 mm, šířka
+6,0 mm**, konce na ±9,5 mm od ohybu, na střednici; ohyb je uprostřed drážky i uprostřed mezi
+krajními otvory pro nýty. Zafixováno sedmi testy v `src/test/generated-patterns.test.ts`.
 
 Text poptávky pro řezárnu a postup pro ruční variantu:
 [docs/zadani/opasek-sablona-poptavka.md](../zadani/opasek-sablona-poptavka.md).

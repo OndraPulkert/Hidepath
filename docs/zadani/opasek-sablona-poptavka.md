@@ -24,18 +24,17 @@ Soubor je **1:1 v milimetrech**, list 210 mm široký. Obsahuje tři díly: kone
 >
 > **Počet:** 1 sada (v souboru jsou tři díly).
 >
-> **Vrstvy v souboru:**
->
-> - `cut` (černá, #000000) = **řez**
-> - `engrave` (modrá, #0000FF) = **gravírování** — jen popisky dílů, prosím negravírovat nic jiného
->
-> Pokud gravírování komplikuje zakázku nebo zdražuje, klidně ho vynechte a řežte jen vrstvu `cut`.
+> **Soubor je jen na řez** — jedna vrstva `cut`, žádný text, žádná výplň, všechny kontury uzavřené.
+> Není potřeba nic gravírovat.
 >
 > **Přesnost:** potřebuji, aby vzájemné vzdálenosti otvorů odpovídaly souboru **do 0,2 mm**.
 > Absolutní poloha na desce nehraje roli.
 >
 > **Otvory Ø 2 mm** jsou značicí, mají zůstat malé — neslučovat je a nezvětšovat.
-> **Zářezy do hrany** dílů jsou záměrné, nejsou to vady kontury.
+> Otvor **Ø 4 mm** je na zavěšení šablony.
+> **Zářezy v bočních hranách** jsou součástí obrysu, jsou záměrné a nejsou to vady kontury.
+> **Kompenzaci kerfu prosím neřešte**, u šablony na kůži nehraje roli.
+> V souboru je **1 jednotka = 1 mm**, list je 210 mm široký.
 >
 > Prosím o cenu a termín. Pokud potřebujete jiný formát, pošlu DXF nebo PDF v křivkách.
 >

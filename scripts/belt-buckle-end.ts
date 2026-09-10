@@ -35,12 +35,14 @@ import {
 /** Řezací soubor pro laser: řez černě, gravírování modře (běžná konvence řezáren). */
 const LASER = {
   cutColor: '#000000',
-  engraveColor: '#0000ff',
   /** Značicí otvor: poloha se skrz šablonu přenáší šídlem, otvor do kůže dělá průbojník. */
   markHoleMm: 2,
   /** Zářez na hraně místo nakreslené linie – čáru uvnitř plastu není jak obtáhnout. */
   notchWidthMm: 3,
   notchDepthMm: 2,
+  /** Otvor na zavěšení šablony na hřebík; zároveň jednoznačně určuje, kde je horní konec. */
+  hangHoleMm: 4,
+  hangHoleFromEdgeMm: 11,
   marginMm: 10,
   gapMm: 20,
 } as const;
@@ -314,24 +316,26 @@ function markHole(cx: number, cy: number): string {
   return `<circle cx="${f(cx)}" cy="${f(cy)}" r="${f(LASER.markHoleMm / 2)}" fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`;
 }
 
-/**
- * Zářez na obou bocích dílu v dané výšce. Trojúhelníkový, aby se do něj dalo
- * zajet hrotem šídla. Vrací dvě cesty, které se řežou spolu s obrysem.
- */
-function edgeNotches(strapX: number, w: number, y: number): string[] {
-  const hw = LASER.notchWidthMm / 2;
-  const d = LASER.notchDepthMm;
-  return [
-    `<path d="M${f(strapX)} ${f(y - hw)} L${f(strapX + d)} ${f(y)} L${f(strapX)} ${f(y + hw)}" fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`,
-    `<path d="M${f(strapX + w)} ${f(y - hw)} L${f(strapX + w - d)} ${f(y)} L${f(strapX + w)} ${f(y + hw)}" fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`,
-  ];
+/** Otvor na zavěšení. Větší než značicí, aby se nedaly zaměnit. */
+function hangHole(cx: number, cy: number): string {
+  return `<circle cx="${f(cx)}" cy="${f(cy)}" r="${f(LASER.hangHoleMm / 2)}" fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`;
 }
 
-function laserLabel(x: number, y: number, s: string): string {
-  return (
-    `<text x="${f(x)}" y="${f(y)}" font-family="Helvetica, Arial, sans-serif" font-size="4" ` +
-    `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.1">${s}</text>`
-  );
+/**
+ * Zářez v boční hraně jako **součást obrysové cesty**, ne samostatná čára.
+ * Otevřená cesta ležící na obrysu by v laserovém softwaru znamenala dvojí řez
+ * nebo chybu; proto se zářez vkládá přímo do kontury.
+ * `side` = 'left' jde po hraně dolů, 'right' nahoru.
+ */
+function notchSegment(edgeX: number, y: number, side: 'left' | 'right'): string {
+  const hw = LASER.notchWidthMm / 2;
+  const d = LASER.notchDepthMm;
+  const inward = side === 'left' ? edgeX + d : edgeX - d;
+  const first = side === 'left' ? y - hw : y - hw;
+  const last = side === 'left' ? y + hw : y + hw;
+  return side === 'left'
+    ? `L${f(edgeX)} ${f(first)} L${f(inward)} ${f(y)} L${f(edgeX)} ${f(last)} `
+    : `L${f(edgeX)} ${f(last)} L${f(inward)} ${f(y)} L${f(edgeX)} ${f(first)} `;
 }
 
 /**
@@ -339,31 +343,56 @@ function laserLabel(x: number, y: number, s: string): string {
  * Bez kót, bez kalibračního čtverce, bez čárkovaných linií – jen obrysy, značicí otvory
  * a zářezy. Popis je v samostatné vrstvě k gravírování.
  */
-export function buildLaserSvg(end: BeltEndSpec, tip: BeltTipSpec): string {
+export function buildLaserSvg(
+  end: BeltEndSpec,
+  tip: BeltTipSpec,
+  slotStyle: SlotStyle = 'cutout',
+): string {
   const w = end.beltWidthMm;
   const r = w / 2;
   const m = LASER.marginMm;
   const cut: string[] = [];
-  const engrave: string[] = [];
 
   /* --- díl 1: konec u přezky --- */
   const b1x = m;
-  const bodyAbove = Math.ceil(end.rivetOffsetsMm[1] + end.rivetHoleMm / 2 + end.minLigamentMm + 5);
+  const bodyAbove = Math.ceil(
+    end.rivetOffsetsMm[1] +
+      end.rivetHoleMm / 2 +
+      end.minLigamentMm +
+      LASER.hangHoleFromEdgeMm +
+      LASER.hangHoleMm / 2,
+  );
   const foldY = m + bodyAbove;
   const b1EndY = foldY + end.tailLengthMm;
   const c1 = b1x + r;
   cut.push(
-    `<path d="M${f(b1x)} ${f(m)} L${f(b1x)} ${f(b1EndY - r)} ` +
-      `A${f(r)} ${f(r)} 0 0 0 ${f(b1x + w)} ${f(b1EndY - r)} L${f(b1x + w)} ${f(m)} Z" ` +
+    `<path d="M${f(b1x)} ${f(m)} ` +
+      notchSegment(b1x, foldY, 'left') +
+      `L${f(b1x)} ${f(b1EndY - r)} ` +
+      `A${f(r)} ${f(r)} 0 0 0 ${f(b1x + w)} ${f(b1EndY - r)} ` +
+      notchSegment(b1x + w, foldY, 'right') +
+      `L${f(b1x + w)} ${f(m)} Z" ` +
       `fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`,
   );
-  cut.push(...edgeNotches(b1x, w, foldY));
   const slotEnd = end.slotLengthMm / 2 - end.slotWidthMm / 2;
-  for (const sign of [-1, 1]) cut.push(markHole(c1, foldY + sign * slotEnd));
+  if (slotStyle === 'cutout') {
+    // Stadion 25 × 6 mm půlený ohybem. Zaoblené konce mají poloměr Ø drážky / 2,
+    // tedy přesně ty dva otvory, které se do kůže vysekávají.
+    const sr = end.slotWidthMm / 2;
+    cut.push(
+      `<path d="M${f(c1 - sr)} ${f(foldY - slotEnd)} ` +
+        `A${f(sr)} ${f(sr)} 0 0 1 ${f(c1 + sr)} ${f(foldY - slotEnd)} ` +
+        `L${f(c1 + sr)} ${f(foldY + slotEnd)} ` +
+        `A${f(sr)} ${f(sr)} 0 0 1 ${f(c1 - sr)} ${f(foldY + slotEnd)} Z" ` +
+        `fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`,
+    );
+  } else {
+    for (const sign of [-1, 1]) cut.push(markHole(c1, foldY + sign * slotEnd));
+  }
   for (const off of end.rivetOffsetsMm) {
     for (const sign of [-1, 1]) cut.push(markHole(c1, foldY + sign * off));
   }
-  engrave.push(laserLabel(b1x + 3, m + 8, `${cz(w)}mm PREZKA`));
+  cut.push(hangHole(c1, m + LASER.hangHoleFromEdgeMm));
 
   /* --- díl 2: konec se špičkou --- */
   const b2x = b1x + w + LASER.gapMm;
@@ -372,20 +401,22 @@ export function buildLaserSvg(end: BeltEndSpec, tip: BeltTipSpec): string {
   const baseY = apexY + tipLengthMm(tip);
   const offsets = holeOffsetsFromApexMm(tip);
   const lastY = apexY + offsets[offsets.length - 1];
-  const b2EndY = lastY + 12;
+  const b2EndY = lastY + 2 * LASER.hangHoleFromEdgeMm;
   const c2 = b2x + w / 2;
+  const midY = apexY + apexToMiddleHoleMm(tip);
   cut.push(
-    `<path d="M${f(b2x)} ${f(b2EndY)} L${f(b2x)} ${f(baseY)} ` +
+    `<path d="M${f(b2x)} ${f(b2EndY)} ` +
+      notchSegment(b2x, midY, 'right') +
+      `L${f(b2x)} ${f(baseY)} ` +
       `L${f(c2 - tanPt.halfWidthMm)} ${f(apexY + tanPt.fromApexMm)} ` +
       `A${f(tip.noseRadiusMm)} ${f(tip.noseRadiusMm)} 0 0 1 ${f(c2 + tanPt.halfWidthMm)} ${f(apexY + tanPt.fromApexMm)} ` +
-      `L${f(b2x + w)} ${f(baseY)} L${f(b2x + w)} ${f(b2EndY)} Z" ` +
+      `L${f(b2x + w)} ${f(baseY)} ` +
+      notchSegment(b2x + w, midY, 'left') +
+      `L${f(b2x + w)} ${f(b2EndY)} Z" ` +
       `fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`,
   );
   for (const off of offsets) cut.push(markHole(c2, apexY + off));
-  // Zářez jen u prostřední dírky, aby se dala najít hmatem.
-  cut.push(...edgeNotches(b2x, w, apexY + apexToMiddleHoleMm(tip)));
-  engrave.push(laserLabel(b2x + 3, baseY + 8, `${cz(w)}mm SPICKA`));
-  engrave.push(laserLabel(b2x + 3, apexY + apexToMiddleHoleMm(tip) - 4, 'STREDNI DIRKA'));
+  cut.push(hangHole(c2, b2EndY - LASER.hangHoleFromEdgeMm));
 
   /* --- díl 3: poutko --- */
   const kLen = keeperStripLengthMm(end);
@@ -395,23 +426,19 @@ export function buildLaserSvg(end: BeltEndSpec, tip: BeltTipSpec): string {
     `<rect x="${f(kx)}" y="${f(ky)}" width="${f(kLen)}" height="${f(end.keeperWidthMm)}" ` +
       `fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`,
   );
-  engrave.push(
-    laserLabel(kx + 3, ky + end.keeperWidthMm + 6, `POUTKO ${kLen}x${end.keeperWidthMm}`),
-  );
 
   const height = Math.ceil(ky + end.keeperWidthMm + 20);
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
-    `<!-- Rezaci soubor. Merítko 1:1, jednotky mm. Cerne (${LASER.cutColor}) = rez,`,
-    `     modre (${LASER.engraveColor}) = gravírování (popis dílu, needitovat rozmery).`,
-    `     Znacici otvory maji Ø ${LASER.markHoleMm} mm - poloha se prenasi sidlem,`,
-    '     otvor do kuze dela prubojnik. Zarezy na hranach = linie ohybu a prostredni dirka. -->',
+    '<!-- REZACI SOUBOR. Merítko 1:1, 1 jednotka = 1 mm, list 210 mm siroky.',
+    '     Vse v jedne vrstve "cut", vse jsou uzavrene kontury, zadny text, zadna vypln.',
+    `     Zarezy v bocnich hranach jsou soucasti obrysu (zamerne, nejsou to vady).`,
+    `     Otvory Ø ${LASER.markHoleMm} mm jsou znacici - neslucovat a nezvetsovat.`,
+    `     Otvor Ø ${LASER.hangHoleMm} mm je na zaveseni sablony.`,
+    '     Kompenzaci kerfu neresit. Neprepocitavat merítko. -->',
     `<svg xmlns="http://www.w3.org/2000/svg" width="210mm" height="${height}mm" viewBox="0 0 210 ${height}">`,
     '<g id="cut">',
     ...cut,
-    '</g>',
-    '<g id="engrave">',
-    ...engrave,
     '</g>',
     '</svg>',
   ].join('\n');
@@ -428,6 +455,23 @@ function page(body: string[]): string {
 
 export function buildPages(end: BeltEndSpec, tip: BeltTipSpec): [string, string] {
   return [page(buckleEndPage(end)), page(tipPage(tip, end))];
+}
+
+/**
+ * Jak řešit drážku pro trn v řezacím souboru.
+ * `cutout` = drážka je v šabloně vyříznutá v plné velikosti, obtáhne se celý tvar;
+ *   její zaoblené konce jsou zároveň ty dva Ø 6 mm otvory, takže značky navíc nejsou potřeba.
+ * `marks` = jen dva značicí otvory ve středech konců drážky; šablona zůstane celistvější,
+ *   ale tvar drážky z ní není vidět.
+ */
+type SlotStyle = 'cutout' | 'marks';
+
+function slotStyleFromArgs(): SlotStyle {
+  const arg = process.argv.find((a) => a.startsWith('--slot'));
+  if (!arg) return 'cutout';
+  const v = arg.includes('=') ? arg.split('=')[1] : process.argv[process.argv.indexOf(arg) + 1];
+  if (v === 'marks' || v === 'cutout') return v;
+  throw new Error('--slot musí být "cutout" nebo "marks".');
 }
 
 function widthFromArgs(): number {
@@ -451,6 +495,7 @@ async function main(): Promise<void> {
   const outDir = resolve(here, '../docs/generated');
   mkdirSync(outDir, { recursive: true });
   const laserOnly = process.argv.includes('--laser');
+  const slotStyle = slotStyleFromArgs();
   const [p1, p2] = buildPages(end, tip);
   writeFileSync(
     resolve(outDir, `opasek-sablona-${beltWidthMm}mm-1-prezka.svg`),
@@ -464,8 +509,10 @@ async function main(): Promise<void> {
   );
 
   const laserPath = resolve(outDir, `opasek-sablona-${beltWidthMm}mm-laser.svg`);
-  writeFileSync(laserPath, buildLaserSvg(end, tip), 'utf8');
-  console.log(`Zapsáno ${laserPath} (řezací soubor, 1:1, mm)`);
+  writeFileSync(laserPath, buildLaserSvg(end, tip, slotStyle), 'utf8');
+  console.log(
+    `Zapsáno ${laserPath} (řezací soubor, 1:1, mm; drážka pro trn: ${slotStyle === 'cutout' ? 'vyříznutá' : 'jen značky'})`,
+  );
   if (laserOnly) {
     console.log('Režim --laser: tisková PDF se nepřegenerovala.');
     return;
