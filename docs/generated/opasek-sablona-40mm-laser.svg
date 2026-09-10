@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Rezaci soubor. Merítko 1:1, jednotky mm. Cerne (#000000) = rez,
+     modre (#0000ff) = gravírování (popis dílu, needitovat rozmery).
+     Znacici otvory maji Ø 2 mm - poloha se prenasi sidlem,
+     otvor do kuze dela prubojnik. Zarezy na hranach = linie ohybu a prostredni dirka. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="210mm" height="269mm" viewBox="0 0 210 269">
+<g id="cut">
+<path d="M10 10 L10 168 A20 20 0 0 0 50 168 L50 10 Z" fill="none" stroke="#000000" stroke-width="0.1"/>
+<path d="M10 96.5 L12 98 L10 99.5" fill="none" stroke="#000000" stroke-width="0.1"/>
+<path d="M50 96.5 L48 98 L50 99.5" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="30" cy="88.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="30" cy="107.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="30" cy="72.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="30" cy="123.5" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="30" cy="24.8" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="30" cy="171.2" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<path d="M70 216.3 L70 48.456 L86.356 12.349 A4 4 0 0 1 93.644 12.349 L110 48.456 L110 216.3 Z" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="90" cy="104.3" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="90" cy="129.3" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="90" cy="154.3" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="90" cy="179.3" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<circle cx="90" cy="204.3" r="1" fill="none" stroke="#000000" stroke-width="0.1"/>
+<path d="M70 152.8 L72 154.3 L70 155.8" fill="none" stroke="#000000" stroke-width="0.1"/>
+<path d="M110 152.8 L108 154.3 L110 155.8" fill="none" stroke="#000000" stroke-width="0.1"/>
+<rect x="10" y="236.3" width="111" height="12" fill="none" stroke="#000000" stroke-width="0.1"/>
+</g>
+<g id="engrave">
+<text x="13" y="18" font-family="Helvetica, Arial, sans-serif" font-size="4" fill="none" stroke="#0000ff" stroke-width="0.1">40mm PREZKA</text>
+<text x="73" y="56.456" font-family="Helvetica, Arial, sans-serif" font-size="4" fill="none" stroke="#0000ff" stroke-width="0.1">40mm SPICKA</text>
+<text x="73" y="150.3" font-family="Helvetica, Arial, sans-serif" font-size="4" fill="none" stroke="#0000ff" stroke-width="0.1">STREDNI DIRKA</text>
+<text x="13" y="254.3" font-family="Helvetica, Arial, sans-serif" font-size="4" fill="none" stroke="#0000ff" stroke-width="0.1">POUTKO 111x12</text>
+</g>
+</svg>

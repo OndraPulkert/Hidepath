@@ -8,6 +8,7 @@ import {
   keeperGapMm,
   keeperPocketClearMm,
   keeperStripLengthMm,
+  holeOffsetsFromApexMm,
   ligamentMm,
   tipLengthMm,
 } from '@/lib/geometry/belt-end.ts';
@@ -27,7 +28,16 @@ const svgs: Record<string, string> = import.meta.glob('/docs/generated/*.svg', {
 const cz = (n: number): string => (Math.round(n * 1000) / 1000).toString().replace('.', ',');
 const cz1 = (n: number): string => cz(Math.round(n * 10) / 10);
 
+const lasers = Object.entries(svgs)
+  .map(([path, svg]) => ({
+    path,
+    svg,
+    width: Number(/-(\d+(?:\.\d+)?)mm-laser/.exec(path)?.[1]),
+  }))
+  .filter((s) => Number.isFinite(s.width));
+
 const sheets = Object.entries(svgs)
+  .filter(([path]) => !path.includes('-laser'))
   .map(([path, svg]) => {
     const width = Number(/-(\d+(?:\.\d+)?)mm-/.exec(path)?.[1]);
     const page = path.includes('prezka') ? 1 : path.includes('spicka') ? 2 : 0;
@@ -88,6 +98,84 @@ describe('vygenerované šablony opasku', () => {
       expect(svg, path).toContain(`Dírky Ø ${cz(tip.holeDiameterMm)} mm, ${tip.holeCount} kusů`);
       const total = apexToMiddleHoleMm(tip) + DEFAULT_BELT_END.tailLengthMm;
       expect(svg, path).toContain(`naměřený obvod + ${cz(total)} mm`);
+    }
+  });
+});
+
+describe('řezací soubor pro laser', () => {
+  it('existuje pro každou vygenerovanou šířku', () => {
+    expect(lasers.length).toBeGreaterThan(0);
+  });
+
+  it('má vrstvu řezu a gravírování a v řezu žádný text', () => {
+    for (const { path, svg } of lasers) {
+      expect(svg, path).toContain('<g id="cut">');
+      expect(svg, path).toContain('<g id="engrave">');
+      const cut = svg.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
+      expect(cut, `${path}: v řezu nesmí být text`).not.toContain('<text');
+      expect(svg, path).toContain('width="210mm"');
+    }
+  });
+
+  it('obsahuje jen značicí otvory Ø 2 mm, ne otvory v plné velikosti', () => {
+    for (const { path, svg } of lasers) {
+      const radii = [...svg.matchAll(/<circle[^>]*r="([\d.]+)"/g)].map((m) => Number(m[1]));
+      expect(radii.length, path).toBe(11); // 6 na konci u přezky + 5 dírek pro trn
+      expect(
+        radii.every((r) => r === 1),
+        `${path}: poloměry ${radii.join(',')}`,
+      ).toBe(true);
+    }
+  });
+
+  it('otvory konce u přezky leží symetricky k zářezu ohybu', () => {
+    for (const { path, svg, width } of lasers) {
+      const end = { ...DEFAULT_BELT_END, beltWidthMm: width };
+      const axis = 10 + width / 2; // střednice prvního dílu podle rozvržení
+      const ys = [...svg.matchAll(/<circle cx="([-\d.]+)" cy="([-\d.]+)"/g)]
+        .filter((m) => Number(m[1]) === axis)
+        .map((m) => Number(m[2]))
+        .sort((a, b) => a - b);
+      expect(ys.length, path).toBe(6);
+      const fold = (ys[0]! + ys[5]!) / 2;
+      const slotEnd = end.slotLengthMm / 2 - end.slotWidthMm / 2;
+      const expected = [
+        -end.rivetOffsetsMm[1],
+        -end.rivetOffsetsMm[0],
+        -slotEnd,
+        slotEnd,
+        end.rivetOffsetsMm[0],
+        end.rivetOffsetsMm[1],
+      ];
+      ys.forEach((y, i) => {
+        expect(y - fold, `${path}: otvor ${i + 1}`).toBeCloseTo(expected[i]!, 6);
+      });
+    }
+  });
+
+  it('dírky pro trn mají správné rozestupy od hrotu', () => {
+    for (const { path, svg, width } of lasers) {
+      const tip = { ...DEFAULT_BELT_TIP, beltWidthMm: width };
+      const axis = 10 + width + 20 + width / 2; // střednice druhého dílu
+      const ys = [...svg.matchAll(/<circle cx="([-\d.]+)" cy="([-\d.]+)"/g)]
+        .filter((m) => Number(m[1]) === axis)
+        .map((m) => Number(m[2]))
+        .sort((a, b) => a - b);
+      expect(ys.length, path).toBe(tip.holeCount);
+      const apex = 10; // horní okraj rozvržení
+      holeOffsetsFromApexMm(tip).forEach((off, i) => {
+        expect(ys[i]! - apex, `${path}: dírka ${i + 1}`).toBeCloseTo(off, 6);
+      });
+    }
+  });
+
+  it('pásek na poutko má délku podle šířky a tloušťky pásu', () => {
+    for (const { path, svg, width } of lasers) {
+      const end = { ...DEFAULT_BELT_END, beltWidthMm: width };
+      const rect = /<rect[^>]*width="([\d.]+)" height="([\d.]+)"/.exec(svg);
+      expect(rect, path).not.toBeNull();
+      expect(Number(rect![1]), path).toBeCloseTo(keeperStripLengthMm(end), 6);
+      expect(Number(rect![2]), path).toBeCloseTo(end.keeperWidthMm, 6);
     }
   });
 });
