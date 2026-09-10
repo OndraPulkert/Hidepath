@@ -371,6 +371,13 @@ export interface BeltPlateSpec {
   /** Nejmenší přijatelné žebro mezi vnořenými sloty zaobleného konce. */
   minRoundedRibMm: number;
   /**
+   * Nejmenší šířka slotu, do kterého se ještě dostane rýsovací šídlo.
+   * Dřík šídla má ve výšce rovné tloušťce destičky průměr `2 · t · tg α`;
+   * pro běžné kulaté šídlo (Ø 3 mm ve 15 mm od hrotu) a destičku 3 mm je to 0,6 mm.
+   * Tupé šídlo (Ø 4 mm v 10 mm) má 1,2 mm a do slotu 1 mm se už nevejde.
+   */
+  minSlotForAwlMm: number;
+  /**
    * Zkosení levého **horního** rohu: značí, že tahle krátká hrana je konec pásu.
    * Nahoře proto, že dole by zasáhlo do pásma, kde na destičce leží pás
    * (kontrola `checkBeltPlate` to odhalila).
@@ -390,6 +397,7 @@ export const DEFAULT_BELT_PLATE: BeltPlateSpec = {
   guideWidthsMm: [30, 35, 40, 45],
   roundedSlotWidthMm: 1,
   minRoundedRibMm: 1.4,
+  minSlotForAwlMm: 1,
   guideLabelHeightMm: 2.6,
   strapEndChamferMm: 8,
 };
@@ -547,6 +555,12 @@ export function checkBeltPlate(
     'Mezi řadou se zaobleným koncem a řadou s přezkou',
     L.buckleRowY - half - (L.roundedRowY + half),
   );
+  if (L.roundedSlotWidthMm < plate.minSlotForAwlMm) {
+    problems.push(
+      `Slot zaobleného konce je ${L.roundedSlotWidthMm} mm, do tak úzkého se nedostane ` +
+        `rýsovací šídlo (minimum ${plate.minSlotForAwlMm} mm).`,
+    );
+  }
   const radii = L.roundedArcs.map((a) => a.radiusMm).sort((a, b) => a - b);
   for (let i = 1; i < radii.length; i++) {
     const rib = radii[i]! - radii[i - 1]! - L.roundedSlotWidthMm;

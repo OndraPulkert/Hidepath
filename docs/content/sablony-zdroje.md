@@ -952,15 +952,35 @@ laser gravíroval do prázdna. Nová kontrola hlásí, kdyby pravítko nepokrylo
 poutko (125 mm pro pás 45 mm o tloušťce 5 mm). Ověřeno, že do pásma výřezu nezasahuje žádný
 gravírovaný tah.
 
-### Vejde se tam šídlo?
+### Vejde se tam šídlo? Propočet (2026-09-10)
 
-Dotaz autora. **Šídlo ano, tužka ne.**
+Autor se ptal dvakrát, podruhé konkrétně na vrchol výřezu špičky. Spočítáno, ne odhadnuto.
 
-- **Otvory Ø 2 mm:** kužel šídla se v otvoru sám vystředí, takže značka sedne na střed a přesnost
-  je lepší než průměr otvoru. Tužka se do 3 mm hlubokého otvoru nedostane a nevystředí se.
-- **Obtahování výřezů:** šídlo hranu sleduje. U samotného vrcholu špičky (rádius 4 mm) se
-  posledních pár milimetrů dotahuje od ruky — je to oblouk, který se tak jako tak řeže a brousí,
-  takže to nevadí.
+Dřík šídla má ve výšce rovné tloušťce destičky (3 mm) průměr `2 · 3 · tg α`, kde α je poloviční
+úhel kužele:
+
+| Šídlo                            | Průměr dříku ve 3 mm nad hrotem |
+| -------------------------------- | ------------------------------- |
+| tenké (Ø 3 mm ve 30 mm od hrotu) | 0,30 mm                         |
+| běžné kulaté (Ø 3 mm ve 15 mm)   | 0,60 mm                         |
+| tupé/silné (Ø 4 mm v 10 mm)      | 1,20 mm                         |
+
+Nejužší místa destičky a jak si s nimi šídlo poradí:
+
+| Místo                          | Rozměr   | tenké | běžné | tupé   |
+| ------------------------------ | -------- | ----- | ----- | ------ |
+| Značicí otvor                  | Ø 2,0 mm | ano   | ano   | ano    |
+| Výřez špičky 0,2 mm od vrcholu | 2,50 mm  | ano   | ano   | ano    |
+| Slot zaobleného konce          | 1,00 mm  | ano   | ano   | **ne** |
+
+Šířka výřezu špičky u vrcholu: 0,2 mm od vrcholu **2,50 mm**, 0,5 mm od vrcholu 3,87 mm, 1 mm od
+vrcholu 5,29 mm. **Oprava dřívějšího tvrzení:** psal jsem, že se u vrcholu posledních pár milimetrů
+dotahuje od ruky. To bylo přehnaně pesimistické — šídlo se tam dostane až na jednotky mikrometrů od
+vrcholu.
+
+**Jediná reálná podmínka** je u slotů zaobleného konce (1 mm): potřebují kulaté šídlo, ne tupé.
+Rozšířit slot nelze, žebra mezi oblouky by spadla pod 1,4 mm. Doplněna kontrola
+`minSlotForAwlMm`, která užší slot odmítne.
 
 ### Srovnání s komerčními destičkami (2026-09-10)
 

@@ -31,6 +31,45 @@ naopak polokruh o poloměru `w/2`, tedy pro každou šířku jiný — proto ty 
 **Žebra mezi oblouky mají 1,5 mm.** Je to záměr a stejně to mají komerční destičky, ale znamená
 to, že destičku je lepší nosit naplocho a neupustit.
 
+### Tři věci, které je potřeba vědět, než ji poprvé použiješ
+
+1. **Používej ji gravírovanou stranou DOLŮ**, tedy v kontaktu s kůží. Gravírování je jen na jedné
+   straně a když je nahoře, dělí ho od kůže 3 mm akrylátu — při pohledu 30° od svislice se linka
+   zdá posunutá o **1,7 mm**, což je víc než celá přesnost, o kterou se snažíme. Se stranou dolů je
+   paralaxa nulová. Otvory a výřezy paralaxou netrpí, šídlo se kůže fyzicky dotkne.
+2. **Značkuj rýsovacím šídlem, ne tužkou** — a **kulatým, ne tupým**. Kužel šídla se v otvoru
+   Ø 2 mm sám vystředí, takže značka sedne na střed; tužka se do 3 mm hlubokého otvoru nedostane
+   a nevystředí se. Do všech míst destičky se šídlo dostane, včetně **výřezu špičky až prakticky
+   k vrcholu** (0,2 mm od vrcholu je výřez ještě 2,5 mm široký). Jediná podmínka je u **slotů
+   zaobleného konce, které mají 1 mm**: dřík šídla ve výšce 3 mm nad hrotem musí být užší než
+   1 mm. Běžné kulaté šídlo (Ø 3 mm ve 15 mm od hrotu) má 0,6 mm a vejde se; tupé šídlo
+   (Ø 4 mm v 10 mm) má 1,2 mm a do slotu se nedostane.
+3. **Nic z toho není odzkoušené v praxi.** Geometrie je ověřená proti třem komerčním šablonám
+   a křížově proti naší tiskové verzi, ale destičku jsem nikdy nedržel v ruce ani já, ani ty.
+   První pásek je zkouška — proto se před objednáním akrylátu vyplatí vytisknout kontrolní PDF
+   a projít si celý postup na papírové verzi a odřezku.
+
+### Jak se destička používá
+
+1. **Přilož destičku a srovnej obě hrany pásu na pár linek pro svou šířku** (např. „40").
+   Tím je destička vystředěná — **střednici na pás rýsovat nemusíš**, k tomu ty linky jsou.
+   Přes čirý akrylát na hrany pásu vidíš. Šířku mimo linky (38, 32, 33 mm…) vystředíš podle
+   **příčné milimetrové stupnice**: obě hrany musí ležet na stejném čísle.
+2. **Konec u přezky (řada 3):** **levou hranou destičky přesně na konec pásu**. Označ šídlem
+   4 otvory pro nýty a 2 značky linie ohybu, obtáhni ovál pro trn.
+3. Vysekni 6mm otvory pro nýty a konce oválu, ovál mezi nimi vyřízni nožem. Spoj obě značky ohybu
+   pravítkem. Navlékni poutko, ohni konec kolem přezky, sešroubuj oba nýty.
+4. **Vyzkoušej pásek na sobě** a označ, kam padne trn. To je prostřední dírka.
+5. **Konec se špičkou — vyber si tvar:** řada 1 pro **hrot**, řada 2 pro **zaoblený konec**.
+   Přilož tak, aby **prostřední otvor** (ten se dvěma rozlišovacími po stranách) ležel na té
+   značce, a hrany pásu opět na linky své šířky. Označ zbylé 4 dírky a obtáhni tvar konce:
+   u řady 1 vnitřní hranu výřezu **jen dokud nedojdeš k hraně pásu** (dál je výřez záměrně širší),
+   u řady 2 ten slot, který se dotýká linky tvé šířky.
+6. Vysekni 4,5mm dírky a nakonec vyřízni konec pásu.
+
+**Před objednáním** vytiskni kontrolní PDF na **A4 na šířku na 100 %** a přeměř obrys: musí být
+**215 × 184 mm**. Obrys sám je kalibrace, jiná značka není potřeba.
+
 ### Poutko: žádné otvory navíc
 
 Poutko **nepotřebuje vlastní otvory**. Je to smyčka navlečená na zdvojenou část konce a **uvězněná

@@ -281,6 +281,20 @@ describe('plochá destička pro všechny šířky', () => {
     }
   });
 
+  it('odmítne slot, do kterého se nedostane šídlo', () => {
+    // Dřík běžného kulatého šídla má 3 mm nad hrotem 0,6 mm; tupé 1,2 mm.
+    const narrow = { ...DEFAULT_BELT_PLATE, roundedSlotWidthMm: 0.6 };
+    expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, narrow).join(' ')).toContain(
+      'rýsovací šídlo',
+    );
+  });
+
+  it('výřez špičky je u vrcholu dost široký na šídlo', () => {
+    // 0,2 mm od vrcholu má výřez 2,5 mm, tedy víc než dřík i tupého šídla (1,2 mm).
+    expect(2 * tipHalfWidthAtMm(DEFAULT_BELT_TIP, 0.2)).toBeGreaterThan(1.2);
+    expect(2 * tipHalfWidthAtMm(DEFAULT_BELT_TIP, 0.2)).toBeCloseTo(2.5, 1);
+  });
+
   it('odmítne příliš tenká žebra mezi oblouky', () => {
     const thin = { ...DEFAULT_BELT_PLATE, roundedSlotWidthMm: 2 };
     expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, thin).join(' ')).toContain('Žebro');
