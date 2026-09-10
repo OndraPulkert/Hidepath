@@ -467,6 +467,13 @@ export interface BeltPlateSpec {
    */
   kerfMm: number;
   /**
+   * Zaoblení tří pravých rohů obrysu. Ostrý roh je na 3mm akrylátu iniciátor
+   * odštípnutí a destička se nosí a padá; obě komerční destičky, které jsem měřil,
+   * rohy zaoblené mají. Na laseru to nic nestojí a nezasahuje do žádné funkční kóty.
+   * Levý horní roh má místo zaoblení zkosení – je to orientační značka.
+   */
+  cornerRadiusMm: number;
+  /**
    * Zkosení levého **horního** rohu: značí, že tahle krátká hrana je konec pásu.
    * Nahoře proto, že dole by zasáhlo do pásma, kde na destičce leží pás
    * (kontrola `checkBeltPlate` to odhalila).
@@ -497,6 +504,7 @@ export const DEFAULT_BELT_PLATE: BeltPlateSpec = {
   rulerX0Mm: 0,
   rulerYMm: 6,
   rulerLongTickMm: 7,
+  cornerRadiusMm: 3,
   // 5 mm, ne 8: zkosení musí zůstat nepřehlédnutelnou orientační značkou, ale
   // nesmí zasahovat do nuly pravítka ani do jejího popisku.
   strapEndChamferMm: 5,
@@ -550,6 +558,7 @@ export interface BeltPlateLayout {
   guides: { beltWidthMm: number; offsetMm: number }[];
   guideLabelHeightMm: number;
   strapEndChamferMm: number;
+  cornerRadiusMm: number;
   /** Dírky pro trn, x od levé hrany. */
   tipHoleXs: number[];
   /** Prostřední dírka = datum pro umístění řady. */
@@ -633,6 +642,7 @@ export function beltPlateLayout(
       .map((bw) => ({ beltWidthMm: bw, offsetMm: bw / 2 })),
     guideLabelHeightMm: plate.guideLabelHeightMm,
     strapEndChamferMm: plate.strapEndChamferMm,
+    cornerRadiusMm: plate.cornerRadiusMm,
     tipHoleXs: offsets.map((o) => apexX - o),
     middleHoleX: apexX - apexToMiddleHoleMm(tip),
     offAxisMarkMm: plate.offAxisMarkMm,

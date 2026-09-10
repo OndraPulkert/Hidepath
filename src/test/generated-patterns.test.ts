@@ -491,14 +491,16 @@ describe('destička na opasek', () => {
       // Linka šířky musí být dotažená až ke svislici středu, aby oblouk označila.
       for (const sign of [-1, 1]) {
         const y = L.roundedRowY + sign * arc!.radiusMm;
-        const line = [...eng.matchAll(/M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)"/g)]
+        // Linka je kvůli popisku přerušená, takže se hledá nejpravější úsek na té výšce.
+        const segs = [...eng.matchAll(/M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)"/g)]
           .map((m) => [Number(m[1]), Number(m[2]), Number(m[3]), Number(m[4])] as const)
-          .find(
+          .filter(
             ([x1, y1, x2, y2]) =>
-              Math.abs(y1 - y) < 0.001 && Math.abs(y2 - y) < 0.001 && x2 - x1 > 50,
+              Math.abs(y1 - y) < 0.001 && Math.abs(y2 - y) < 0.001 && x2 - x1 > 1,
           );
-        expect(line, `linka pro ${arc!.beltWidthMm} mm na y ${y}`).toBeDefined();
-        expect(line![2], `linka pro ${arc!.beltWidthMm} mm dotažená k oblouku`).toBeCloseTo(
+        expect(segs.length, `linka pro ${arc!.beltWidthMm} mm na y ${y}`).toBeGreaterThan(0);
+        const rightEnd = Math.max(...segs.map((g) => g[2]));
+        expect(rightEnd, `linka pro ${arc!.beltWidthMm} mm dotažená k oblouku`).toBeCloseTo(
           arc!.centreX,
           3,
         );
@@ -534,12 +536,102 @@ describe('destička na opasek', () => {
       for (let i = 0; i + 1 < nums.length; i += 2) {
         const x = nums[i]!;
         const y = nums[i + 1]!;
-        if (x < 0 || y < 0 || x > L.plateWidthMm || y > L.plateHeightMm || x + y < ch) {
+        const r = L.cornerRadiusMm;
+        // Tři zaoblené rohy: bod je venku, když leží ve rohovém kvadrantu dál
+        // než r od středu jeho oblouku.
+        const corners: [number, number, number, number][] = [
+          [L.plateWidthMm - r, r, 1, -1],
+          [L.plateWidthMm - r, L.plateHeightMm - r, 1, 1],
+          [r, L.plateHeightMm - r, -1, 1],
+        ];
+        const inCorner = corners.some(
+          ([cx, cy, sx, sy]) =>
+            (x - cx) * sx > 0 && (y - cy) * sy > 0 && Math.hypot(x - cx, y - cy) > r,
+        );
+        if (x < 0 || y < 0 || x > L.plateWidthMm || y > L.plateHeightMm || x + y < ch || inCorner) {
           outside.push(`${x} ${y}`);
         }
       }
     }
     expect(outside, 'gravírované body mimo obrys').toEqual([]);
+  });
+
+  it('popisek vodicí linky říká šířku SVÉ linky (dekódováno z tahů)', () => {
+    // Nejcennější kontrola destičky a okem ji udělat nejde: popisek u špatné linky
+    // znamená pás srovnaný o 2,5 mm mimo osu, u řady 2 oblouk pro o 5 mm jinou šířku.
+    // Číslice jsou sedmisegmentové tahy, takže se dají zpětně přečíst ze souboru.
+    const eng = plate!.split('<g id="engrave"')[1]?.split('</g>')[0] ?? '';
+    type Glyph = { x0: number; y0: number; w: number; h: number; value: string };
+    const TABLE = new Map<string, string>([
+      ['bot,ld,lu,rd,ru,top', '0'],
+      ['rd,ru', '1'],
+      ['bot,ld,mid,ru,top', '2'],
+      ['bot,mid,rd,ru,top', '3'],
+      ['lu,mid,rd,ru', '4'],
+      ['bot,lu,mid,rd,top', '5'],
+      ['bot,ld,lu,mid,rd,top', '6'],
+      ['rd,ru,top', '7'],
+      ['bot,ld,lu,mid,rd,ru,top', '8'],
+      ['bot,lu,mid,rd,ru,top', '9'],
+    ]);
+    const glyphs: Glyph[] = [];
+    for (const d of [...eng.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)) {
+      const segs: [number, number, number, number][] = [];
+      for (const sub of d.split('M').slice(1)) {
+        const n = [...sub.matchAll(/-?[\d.]+/g)].map((m) => Number(m[0]));
+        for (let i = 0; i + 3 < n.length; i += 2) {
+          segs.push([n[i]!, n[i + 1]!, n[i + 2]!, n[i + 3]!]);
+        }
+      }
+      if (segs.length < 2) continue;
+      const xs = segs.flatMap((g) => [g[0], g[2]]);
+      const ys = segs.flatMap((g) => [g[1], g[3]]);
+      const x0 = Math.min(...xs);
+      const y0 = Math.min(...ys);
+      const w = Math.max(...xs) - x0;
+      const h = Math.max(...ys) - y0;
+      if (w > 4 || h > 4 || h < 0.5) continue;
+      const on = new Set<string>();
+      for (const [ax, ay, , by] of segs) {
+        if (Math.abs(ay - by) < 1e-9) {
+          const r = (ay - y0) / h;
+          on.add(r < 0.25 ? 'top' : r > 0.75 ? 'bot' : 'mid');
+        } else {
+          const side = w > 0.1 && (ax - x0) / w < 0.5 ? 'l' : 'r';
+          const r = ((ay + by) / 2 - y0) / h;
+          on.add(r < 0.5 ? `${side}u` : `${side}d`);
+        }
+      }
+      glyphs.push({ x0, y0, w, h, value: TABLE.get([...on].sort().join(',')) ?? '?' });
+    }
+    // Sloučit číslice do čísel: stejná výška, sousedící v x.
+    glyphs.sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0);
+    const numbers: { x0: number; cy: number; value: string }[] = [];
+    for (const g of glyphs) {
+      const last = numbers[numbers.length - 1];
+      const prev = glyphs[glyphs.indexOf(g) - 1];
+      if (last && prev && Math.abs(prev.y0 - g.y0) < 0.01 && g.x0 - (prev.x0 + prev.w) < 1.4) {
+        last.value += g.value;
+      } else {
+        numbers.push({ x0: g.x0, cy: g.y0 + g.h / 2, value: g.value });
+      }
+    }
+    const rows = [L.tipRowY, L.roundedRowY, L.buckleRowY];
+    const checked: string[] = [];
+    for (const n of numbers) {
+      // Popisky linek leží v pásmu řad, vpravo od značicích otvorů a vlevo od
+      // pravého okraje; čísla stupnice, pravítka a kalibrace jsou mimo.
+      if (n.x0 < 40 || n.x0 > L.plateWidthMm - 15) continue;
+      const axis = rows.reduce((a, b) => (Math.abs(b - n.cy) < Math.abs(a - n.cy) ? b : a));
+      // Jen popisky uvnitř pásma řady: čísla pravítka, příčné stupnice
+      // a kalibrační kóty leží mimo.
+      if (Math.abs(n.cy - axis) > L.maxBeltWidthMm / 2 + 0.5) continue;
+      const expected = Math.round(Math.abs(n.cy - axis) * 2);
+      expect(n.value, `popisek na y ${n.cy.toFixed(2)} (osa ${axis})`).toBe(String(expected));
+      checked.push(n.value);
+    }
+    // 3 řady × 4 šířky × 2 poloviny.
+    expect(checked.length, 'zkontrolovaných popisků šířek').toBe(24);
   });
 
   it('žádnou gravírovanou číslicí neprochází jiný tah (regrese)', () => {

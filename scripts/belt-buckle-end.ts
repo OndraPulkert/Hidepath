@@ -561,8 +561,13 @@ export function buildBeltPlateSvg(
 
   // Obrys destičky. Zkosený levý horní roh značí, že levá krátká hrana je konec pásu.
   const ch = L.strapEndChamferMm;
+  const r = L.cornerRadiusMm;
   cut.push(
-    `<path d="M0 ${f(ch)} L${f(ch)} 0 L${f(W)} 0 L${f(W)} ${f(H)} L0 ${f(H)} Z" ` +
+    // Levý horní roh zkosený (orientační značka), ostatní tři zaoblené: ostrý roh
+    // je na 3mm akrylátu iniciátor odštípnutí a destička se nosí a padá.
+    `<path d="M0 ${f(ch)} L${f(ch)} 0 L${f(W - r)} 0 A${f(r)} ${f(r)} 0 0 1 ${f(W)} ${f(r)} ` +
+      `L${f(W)} ${f(H - r)} A${f(r)} ${f(r)} 0 0 1 ${f(W - r)} ${f(H)} ` +
+      `L${f(r)} ${f(H)} A${f(r)} ${f(r)} 0 0 1 0 ${f(H - r)} Z" ` +
       `fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`,
   );
 
@@ -701,21 +706,33 @@ export function buildBeltPlateSvg(
       // Popisek nižší než rozestup linek (2,5 mm) a vycentrovaný na výšku SVÉ linky:
       // dřív jím procházela linka sousední šířky a přiřazení bylo dvojznačné.
       const labelH = 2;
-      const labelX = lineX1 - 6 - i * (labelH * 2.4);
+      // 10 mm od konce linky, ne 6: u řady 2 končí linka na středové svislici
+      // oblouků a za mezerou pro popisek musí zůstat dost linky, aby byl vidět
+      // dotyk oblouku s ní.
+      const labelX = lineX1 - 10 - i * (labelH * 2.4);
+      const labelW = String(g.beltWidthMm).length * labelH * 0.85;
       for (const sign of [-1, 1]) {
         const ly = rowY + sign * g.offsetMm;
-        engrave.push(
-          `<path d="M${f(lineX0)} ${f(ly)} L${f(lineX1)} ${f(ly)}" ` +
-            `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.1"/>`,
-        );
-        // Popisek je u KAŽDÉ linky páru: dolní hranu pásu se nemá srovnávat na
-        // linku, kterou si člověk musí dopočítat zrcadlením.
-        // A leží celý UVNITŘ pásma, ne na lince: příčné tahy číslic 4 a 5 byly
-        // přesně kolineární se svou linkou, takže se 2 × 1,2 mm gravírovalo
-        // dvakrát a linka číslicemi procházela naskrz. Rozestup linek je 2,5 mm,
-        // číslice 2 mm, takže se do mezery vejdou s 0,25 mm rezervou.
-        const labelTop = sign < 0 ? ly + 0.25 : ly - 0.25 - labelH;
-        engrave.push(...engraveNumber(labelX, labelTop, g.beltWidthMm, labelH));
+        // Popisek je u KAŽDÉ linky páru (dolní hranu pásu se nemá srovnávat na
+        // linku, kterou si člověk musí dopočítat zrcadlením) a je **vycentrovaný
+        // na svou linku, ve které se pro něj udělá mezera**. Dvě předchozí varianty
+        // byly obě špatné: na lince se příčné tahy číslic gravírovaly dvakrát,
+        // a odsazený do mezery ležel přesně v půli mezi svou a vedlejší linkou,
+        // tedy 1,25 mm od každé – u řady 2 by to znamenalo oblouk pro o 5 mm jinou
+        // šířku. Přerušená linka je jednoznačná: popisek v ní přímo leží.
+        const gapFrom = labelX - 0.6;
+        const gapTo = labelX + labelW + 0.6;
+        for (const [x0, x1] of [
+          [lineX0, gapFrom],
+          [gapTo, lineX1],
+        ] as const) {
+          if (x1 - x0 < 0.2) continue;
+          engrave.push(
+            `<path d="M${f(x0)} ${f(ly)} L${f(x1)} ${f(ly)}" ` +
+              `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.1"/>`,
+          );
+        }
+        engrave.push(...engraveNumber(labelX, ly - labelH / 2, g.beltWidthMm, labelH));
       }
     }
   });

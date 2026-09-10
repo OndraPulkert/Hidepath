@@ -1451,3 +1451,37 @@ A jedna věc, kterou jsem podezříval a byla v pořádku: gravírované číslo
 náhledu jako tři vodorovné čárky bez pravých svislic. V souboru jsou (`M5.8 150 L5.8 151.5`
 a `M5.8 151.5 L5.8 153`) — jen při 3,8 px/mm zmizely v subpixelu. Číslice jsou sedmisegmentové
 a tahy 0,1 mm; na náhledech se to bude stávat, na díle ne.
+
+### Popisek uprostřed mezery byl pořád dvojznačný (2026-09-10)
+
+Autor poslal další snímek souboru. Vypadal dobře, ale při kontrole jsem si napsal **dekodér
+sedmisegmentových číslic** — číslice jsou tahy, takže se dají ze souboru zpětně přečíst — a ten
+odhalil, co se okem najít nedá: **popisek šířky ležel přesně v půli mezery mezi svou linkou a tou
+vedlejší**, tedy 1,25 mm od každé.
+
+To je třetí varianta téhož problému a všechny tři byly špatně:
+
+1. Popisek **na** lince → příčné tahy číslic kolineární s linkou, dvojí gravír, linka číslem
+   naskrz.
+2. Popisek **odsazený do mezery** → rozestup linek je 2,5 mm a číslice 2 mm, takže odsazený
+   popisek skončí uprostřed. U řady 2 by to znamenalo oblouk pro **o 5 mm jinou šířku**.
+3. Správně: popisek **vycentrovaný na svou linku, ve které se pro něj udělá mezera**. Je to
+   běžná rýsovací konvence, popisek v lince přímo leží, nic se nekříží a nic není dvojznačné.
+
+Z dekodéru se hned stal test **`popisek vodicí linky říká šířku SVÉ linky`**: přečte hodnotu
+z tahů a porovná ji s `2 × |y − osa řady|` pro všech 24 popisků (3 řady × 4 šířky × 2 poloviny).
+Ověřeno posunutím jednoho glyfu na vedlejší linku — padne na `popisek na y 15.00 (osa 37.5):
+expected '5' to be '45'`. Tuhle třídu chyb jsem měl už jednou u tiskové šablony („pro 35 to říká
+40 mm"), takže je to konečně pokryté tam, kde to vzniká.
+
+### Zaoblené rohy (2026-09-10)
+
+Nález revize vyrobitelnosti, který jsem v prvním kole neopravil a ani nezmínil; autor si ho po
+vysvětlení vyžádal. Obrys měl tři pravé úhly a **ostrý roh je na 3mm akrylátu iniciátor
+odštípnutí** — destička se podle vlastního popisu nosí a padá. Obě komerční destičky, které jsem
+měřil, rohy zaoblené mají.
+
+Doplněno `cornerRadiusMm: 3` do specifikace; levý horní roh zůstává **zkosený**, protože je to
+orientační značka. Na laseru to nic nestojí a nezasahuje do jediné funkční kóty. Test na
+gravírování uvnitř obrysu umí teď i rohové kvadranty, aby se do odebraného materiálu nedalo
+zagravírovat.

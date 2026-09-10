@@ -143,6 +143,8 @@ na poutko. Je to starší varianta — destička ji nahrazuje a doporučuju ji.
 >
 > - **Otvory Ø 2 mm** jsou značicí — neslučovat a nezvětšovat.
 > - Otvor **Ø 4 mm** u pravé dolní hrany je na zavěšení.
+> - **Zkosený levý horní roh** je záměrná značka orientace; ostatní tři rohy jsou **zaoblené R3**
+>   (ostrý roh je na 3mm akrylátu iniciátor odštípnutí).
 > - **Vyříznutý trojúhelník** a **ovál** jsou funkční výřezy, prosím nevynechávat.
 > - Čtyři tenké srpky uvnitř oblouků jsou odpad, ale **roštem nepropadnou** (jsou 47–71 mm
 >   dlouhé). Prosím vyjměte je a zkontrolujte, že **všemi čtyřmi oblouky projde drát Ø 0,8 mm**
