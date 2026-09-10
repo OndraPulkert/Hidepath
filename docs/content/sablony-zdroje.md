@@ -961,3 +961,41 @@ Dotaz autora. **Šídlo ano, tužka ne.**
 - **Obtahování výřezů:** šídlo hranu sleduje. U samotného vrcholu špičky (rádius 4 mm) se
   posledních pár milimetrů dotahuje od ruky — je to oblouk, který se tak jako tak řeže a brousí,
   takže to nevadí.
+
+### Srovnání s komerčními destičkami (2026-09-10)
+
+Autor poslal dvě další: **Realeather Acrylic Belt Template** ($9,99, Hobby Lobby) a **Tandy Belt End
+Acrylic Template**. Obě mají tentýž koncept jako naše destička a potvrzují čtyři rozhodnutí:
+
+| Prvek                                         | Realeather / Tandy                               | Naše destička             |
+| --------------------------------------------- | ------------------------------------------------ | ------------------------- |
+| **Dvě řady**, každá z jednoho konce           | ano                                              | ano                       |
+| **Linky šířek** na vystředění                 | ano, značené v palcích (1 / 1¼ / 1½ / 1¾ / 2 in) | ano, 30 / 35 / 40 / 45 mm |
+| **Řada 5 otvorů** pro dírky na trn            | ano                                              | ano                       |
+| **Ovál pro trn + 4 otvory** na konci u přezky | ano                                              | ano                       |
+| **Značí se šídlem**                           | Realeather: „use a scratch awl, pen, or blade"   | ano, doporučeno šídlo     |
+
+Realeather má na destičce i postup: _„Center belt between vertical width lines. Use an awl to mark
+desired tip or end. Adjust template before marking holes for correct positioning."_ — tedy přesně
+ten postup, který máme sepsaný.
+
+**Nezávislé potvrzení jednoho čísla:** Realeather uvádí _„Allow 1"–4" between tip and first hole"_,
+tedy 25–100 mm na výběr. Naše hodnota **94,3 mm** (odměřená z CraftPointu) leží v horní části
+jejich rozsahu.
+
+**Vysvětlení jejich vnořených tvarů.** Dřív jsem je čítal špatně. Na Tandyho destičce jsou dvě
+skupiny:
+
+- **vnořené „V"** = **hrot** (pointed), jeden na každou šířku — jejich hroty jsou zřejmě
+  proporcionální (delší pás = delší hrot), takže mají různý úhel. **Náš hrot má konstantní sklon
+  0,453** (odměřeno u CraftPointu pro 35 i 40 mm), takže jeden vyříznutý tvar obslouží všechny
+  šířky. Proto naše destička nepotřebuje vnořené V.
+- **vnořené oblouky „C"** = **zaoblený konec** (rounded). Ten je půlkruh o rádiusu `w/2`, tedy
+  nutně jeden na každou šířku.
+
+**Jediná věc, kterou naše destička nemá: zaoblený konec.** Realeather to má v popisu výslovně —
+_„either pointed or rounded ends"_. Doplnitelné jako čtyři vnořené oblouky (r = 15 / 17,5 / 20 /
+22,5 mm) ve volné části horní řady; slotem se značí s přesností ±0,6 mm, což u oblouku, který se
+stejně řeže a brousí, nevadí. Zatím nepřidáno — náš generátor má nastavený anglický hrot.
+
+Drobnost: obě komerční destičky mají zaoblené rohy, naše ostré se zkosením levého horního.
