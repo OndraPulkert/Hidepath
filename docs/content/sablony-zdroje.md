@@ -1531,3 +1531,72 @@ Rozhodovací kritérium, které jsem si z rešerše odnesl: **oslovit prodejce a
 vlastní laser.** Kdo akrylát prodává, má lité (GS) skladem; kdo jen řeže dodaný materiál, u toho
 se 3mm čirý GS musí sehnat samostatně. Z oslovených to jsou ALT (Praha 9) a plexi.cz (Praha 4) —
 a ALT je zároveň jediný, kdo rozdíl GS/XT na své stránce sám pojmenuje.
+
+### DXF: rohy se vydouvaly ven a můj test to potvrdil jako správné (2026-09-11)
+
+Autor otevřel vygenerovaný DXF a hned viděl, co jsem neviděl: **rohové oblouky se vydouvaly ven**
+místo aby roh zaoblovaly, a totéž u nosu špičky. Chyba byla v převodu SVG oblouku na střed
+a poloměr — špatné znaménko při volbě z dvou možných středů:
+
+| Výběr středu                     | Střed rohového oblouku `A3 3 0 0 1 215 3` z (212, 0) |
+| -------------------------------- | ---------------------------------------------------- |
+| co jsem měl v kódu (`laf == sf`) | (215,0) — tedy samotný roh, oblouk se vydouvá ven    |
+| správně (`laf != sf`)            | (212,3) — odsazený dovnitř, roh se zaobluje          |
+
+**A horší je, jak to prošlo testem.** Napsal jsem test `DXF má tytéž oblouky jako SVG, včetně
+směru`, který páruje oblouky na střed, poloměr a rozsah — ale střed SVG oblouku v něm počítám
+**tímtéž vzorcem se tímtéž špatným znaménkem**. Test tedy porovnával implementaci sama se sebou
+a spolehlivě potvrdil chybu. Přesně ten druh testu, který dává falešnou jistotu.
+
+Opraveno dvojmo:
+
+1. **Volba středu se už neurčuje znaménkem podle tabulky**, ale z významu příznaků, který se nedá
+   splést: `largeArc = 0` znamená kratší oblouk, tedy rozsah ≤ 180°. Oba kandidáti dávají rozsahy
+   doplňující se do 360°, takže ta podmínka střed jednoznačně určí. Když by nevyšel ani jeden,
+   generátor **spadne**, místo aby tiše vyrobil špatný soubor (ověřeno: s obráceným podmínkou
+   `pnpm pattern:belt-end --multi` skončí s chybou a soubor nepřepíše).
+2. **Testy porovnávají DXF proti modelu, ne proti mému čtení SVG.** `DXF: středy oblouků sedí
+s modelem` kontroluje, že střed rohu je odsazený o `r` dovnitř, nos špičky leží na ose řady
+   o poloměr před vrcholem, konce oválu na ose s přezkou a oblouky zaobleného konce jsou
+   soustředné se středem z modelu. Druhý test `nic nevystupuje z obrysu destičky` vzorkuje každou
+   úsečku, kružnici i oblouk a hlídá obálku včetně zkosení a zaoblených rohů — to je obecná past
+   na jakýkoli špatně převedený oblouk.
+
+Ověřeno posunutím středu rohu v souboru na (215, 0): padnou **oba** nové testy
+(`pravý dolní roh: oblouk r=3 se středem (212, 181) v DXF` a `body DXF mimo obrys:
+ARC (215.00, 187.00)`).
+
+Poučení do sbírky: **test nesmí počítat očekávanou hodnotu stejným kódem jako implementace.**
+U geometrie to znamená porovnávat proti modelu nebo proti invariantu, ne proti druhému parsování
+téhož souboru.
+
+### Kolik z hrotu je vlastně zaoblené (2026-09-11)
+
+Dotaz autora nad zvětšeným náhledem: není ten nos moc zakulacený? Čísla z modelu:
+
+| Údaj                             | Hodnota          |
+| -------------------------------- | ---------------- |
+| Délka hrotu (pás 40 mm)          | 38,46 mm         |
+| Tečný bod: poloviční šířka       | 3,64 mm          |
+| Tečný bod: vzdálenost od vrcholu | **2,35 mm**      |
+| Zaoblená část z délky hrotu      | **6,1 %**        |
+| Šířka hrotu v tečném bodě        | 7,29 mm ze 40 mm |
+
+Takže oblouk přebírá jen **posledních 2,35 mm** z 38,46mm zkosení. Na zvětšeném náhledu to vypadá
+kulatě proto, že je vidět poslední 4 mm z 38mm hrotu.
+
+Poloměr 4 mm navíc **není zvolený, je odměřený** — z PDF generátoru CraftPoint po půl milimetru
+(zápis „Druhá oprava, kterou našel autor" výše). Ostrý trojúhelník se od skutečného tvaru u vrcholu
+lišil až o 2,4 mm. Praktický důvod je taky doložený: ostrý hrot z kůže se krabatí a třepí, nožem
+se přesně nevyřízne a ořezávačem hran se nedá obejít.
+
+Kdyby autor chtěl špičatější, je to parametr `noseRadiusMm` a délka hrotu se přizpůsobí:
+
+| `noseRadiusMm`      | Tečný bod od vrcholu | Délka hrotu |
+| ------------------- | -------------------- | ----------- |
+| 2 mm                | 1,17 mm              | 41,30 mm    |
+| 3 mm                | 1,76 mm              | 39,88 mm    |
+| **4 mm (odměřeno)** | 2,35 mm              | 38,46 mm    |
+| 6 mm                | 3,52 mm              | 35,61 mm    |
+
+`checkBeltTipSpec` odmítne 0 (ostrý hrot) i zaoblení větší, než délka hrotu unese.

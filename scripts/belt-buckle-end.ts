@@ -848,7 +848,16 @@ type DxfEntity =
   | { kind: 'arc'; layer: string; cx: number; cy: number; r: number; a0: number; a1: number }
   | { kind: 'circle'; layer: string; cx: number; cy: number; r: number };
 
-/** Střed a krajní úhly oblouku z SVG zápisu `A rx ry rot laf sf x y`. */
+/**
+ * Střed oblouku z SVG zápisu `A rx ry rot laf sf x y`.
+ *
+ * Středy jsou vždy dva, symetricky po stranách tětivy. **Nevybírám je znaménkem
+ * podle tabulky** – to jsem si jednou spletl a rohy destičky se v DXF vydouvaly
+ * ven místo zaoblení. Vybírá se z **významu příznaků**, který se nedá splést:
+ * `largeArc = 0` znamená kratší oblouk, tedy rozsah ≤ 180°, `largeArc = 1` delší.
+ * Oba kandidáti dávají rozsahy, které se doplňují do 360°, takže podmínka
+ * „≤ 180° ⇔ largeArc = 0" jednoznačně určí, který střed je ten pravý.
+ */
 function svgArcToCentre(
   x0: number,
   y0: number,
@@ -866,8 +875,21 @@ function svgArcToCentre(
   const h = Math.sqrt(Math.max(0, r * r - (d / 2) ** 2));
   const mx = (x0 + x1) / 2;
   const my = (y0 + y1) / 2;
-  const sign = largeArc === sweep ? 1 : -1;
-  return { cx: mx + (sign * h * -dy) / d, cy: my + (sign * h * dx) / d };
+  const candidates = [1, -1].map((sign) => ({
+    cx: mx + (sign * h * -dy) / d,
+    cy: my + (sign * h * dx) / d,
+  }));
+  const spanFor = (c: { cx: number; cy: number }): number => {
+    const a0 = Math.atan2(y0 - c.cy, x0 - c.cx);
+    const a1 = Math.atan2(y1 - c.cy, x1 - c.cx);
+    let da = a1 - a0;
+    if (sweep && da < 0) da += 2 * Math.PI;
+    if (!sweep && da > 0) da -= 2 * Math.PI;
+    return Math.abs(da);
+  };
+  const wanted = candidates.find((c) => spanFor(c) <= Math.PI === !largeArc);
+  if (!wanted) throw new Error('DXF: střed oblouku nejde určit.');
+  return wanted;
 }
 
 function svgLayerToDxf(svg: string, layerId: string, layer: string, H: number): DxfEntity[] {

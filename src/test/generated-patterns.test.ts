@@ -752,68 +752,107 @@ describe('destička na opasek', () => {
     }
   });
 
-  it('DXF má tytéž oblouky jako SVG, včetně směru (regrese)', () => {
-    // DXF má osu Y nahoru a ARC vždy proti směru hodinových ručiček, SVG má Y dolů
-    // a příznak směru. Když se směr splete, vyjde doplněk oblouku – tedy z drážky
-    // r = 22,5 mm se stane 315° místo 45°. Porovnává se střed, poloměr a **rozsah**,
-    // protože právě rozsah špatný směr prozradí.
+  it('DXF: středy oblouků sedí s modelem, ne s mým parsováním SVG (regrese)', () => {
+    // Tenhle test už jednou existoval a byl bezcenný: porovnával DXF proti mému
+    // vlastnímu čtení SVG stejným vzorcem, který měl chybu ve znaménku. Rohy se
+    // v DXF vydouvaly VEN místo zaoblení a test to potvrdil jako správné.
+    // Teď se porovnává proti **modelu**, který o SVG ani o DXF nic neví.
     expect(plateDxf, 'docs/generated/opasek-desticka.dxf').toBeDefined();
     const H = L.plateHeightMm;
-    type Arc = { cx: number; cy: number; r: number; span: number };
-    const svgArcs: Arc[] = [];
-    for (const d of [...plate!.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)) {
-      let cur: [number, number] | null = null;
-      for (const t of d.matchAll(/([MLAZ])([^MLAZ]*)/g)) {
-        const n = [...t[2]!.matchAll(/-?[\d.]+/g)].map((m) => Number(m[0]));
-        if (t[1] === 'M') cur = [n[0]!, n[1]!];
-        else if (t[1] === 'L') {
-          for (let i = 0; i + 1 < n.length; i += 2) cur = [n[i]!, n[i + 1]!];
-        } else if (t[1] === 'A') {
-          const [rx, , , laf, sf, x1, y1] = n as unknown as number[];
-          const dx = x1! - cur![0];
-          const dy = y1! - cur![1];
-          const dist = Math.hypot(dx, dy);
-          const h = Math.sqrt(Math.max(0, rx! * rx! - (dist / 2) ** 2));
-          const sign = (laf === 1) === (sf === 1) ? 1 : -1;
-          const cx = (cur![0] + x1!) / 2 + (sign * h * -dy) / dist;
-          const cyS = (cur![1] + y1!) / 2 + (sign * h * dx) / dist;
-          const a0 = Math.atan2(cur![1] - cyS, cur![0] - cx);
-          const a1 = Math.atan2(y1! - cyS, x1! - cx);
-          let da = a1 - a0;
-          if (sf === 1 && da < 0) da += 2 * Math.PI;
-          if (sf === 0 && da > 0) da -= 2 * Math.PI;
-          svgArcs.push({ cx, cy: H - cyS, r: rx!, span: Math.abs(da) });
-          cur = [x1!, y1!];
-        }
-      }
-    }
-    const dxfArcs: Arc[] = [];
+    const W = L.plateWidthMm;
+    const r = L.cornerRadiusMm;
+    type Arc = { cx: number; cy: number; r: number };
+    const arcs: Arc[] = [];
     for (const block of plateDxf!.split('\n0\n')) {
       if (!block.startsWith('ARC')) continue;
       const get = (code: number): number =>
         Number(new RegExp(`\n${code}\n(-?[\\d.]+)`).exec(block)?.[1] ?? NaN);
-      const a0 = get(50);
-      const a1 = get(51);
-      const span = ((((a1 - a0) % 360) + 360) % 360) * (Math.PI / 180);
-      dxfArcs.push({ cx: get(10), cy: get(20), r: get(40), span });
+      arcs.push({ cx: get(10), cy: get(20), r: get(40) });
     }
-    expect(dxfArcs.length, 'ARC v DXF').toBe(svgArcs.length);
-    const used = new Set<number>();
-    for (const sa of svgArcs) {
-      const hit = dxfArcs.findIndex(
-        (da, i) =>
-          !used.has(i) &&
-          Math.abs(da.cx - sa.cx) < 0.002 &&
-          Math.abs(da.cy - sa.cy) < 0.002 &&
-          Math.abs(da.r - sa.r) < 0.002 &&
-          Math.abs(da.span - sa.span) < 1e-4,
+    const has = (cx: number, cySvg: number, radius: number, label: string): void => {
+      // DXF má nulu v levém dolním rohu, model počítá v SVG (y dolů).
+      const hit = arcs.some(
+        (a) =>
+          Math.abs(a.cx - cx) < 0.01 &&
+          Math.abs(a.cy - (H - cySvg)) < 0.01 &&
+          Math.abs(a.r - radius) < 0.01,
       );
-      expect(
-        hit,
-        `oblouk r=${sa.r.toFixed(2)} u (${sa.cx.toFixed(1)}, ${sa.cy.toFixed(1)}) rozsah ${((sa.span * 180) / Math.PI).toFixed(1)}° v DXF`,
-      ).toBeGreaterThanOrEqual(0);
-      used.add(hit);
+      expect(hit, `${label}: oblouk r=${radius} se středem (${cx}, ${cySvg}) v DXF`).toBe(true);
+    };
+    // Rohy: střed musí být ODSAZENÝ dovnitř o r, ne v samotném rohu.
+    has(W - r, r, r, 'pravý horní roh');
+    has(W - r, H - r, r, 'pravý dolní roh');
+    has(r, H - r, r, 'levý dolní roh');
+    // Nos špičky leží na ose řady, o poloměr před vrcholem.
+    has(
+      L.tipApexX - DEFAULT_BELT_TIP.noseRadiusMm,
+      L.tipRowY,
+      DEFAULT_BELT_TIP.noseRadiusMm,
+      'nos špičky',
+    );
+    // Konce oválu pro trn: na ose řady s přezkou, poloměr = polovina šířky drážky.
+    const ovalR = L.slotWidthMm / 2;
+    has(L.slotX0 + ovalR, L.buckleRowY, ovalR, 'levý konec oválu');
+    has(L.slotX1 - ovalR, L.buckleRowY, ovalR, 'pravý konec oválu');
+    // Oblouky zaobleného konce: soustředné se středem z modelu.
+    for (const arc of L.roundedArcs) {
+      const half = L.roundedSlotWidthMm / 2;
+      has(arc.centreX, L.roundedRowY, arc.radiusMm + half, `slot ${arc.beltWidthMm} mm vně`);
+      has(arc.centreX, L.roundedRowY, arc.radiusMm - half, `slot ${arc.beltWidthMm} mm vnitř`);
     }
+  });
+
+  it('DXF: nic nevystupuje z obrysu destičky (regrese)', () => {
+    // Obecná past na špatně převedený oblouk: vydutý ven vyleze z materiálu.
+    const H = L.plateHeightMm;
+    const W = L.plateWidthMm;
+    const r = L.cornerRadiusMm;
+    const ch = L.strapEndChamferMm;
+    const outside: string[] = [];
+    const check = (x: number, yDxf: number, what: string): void => {
+      const y = H - yDxf; // do SVG souřadnic, kde je model
+      const corners: [number, number, number, number][] = [
+        [W - r, r, 1, -1],
+        [W - r, H - r, 1, 1],
+        [r, H - r, -1, 1],
+      ];
+      const inCorner = corners.some(
+        ([cx, cy, sx, sy]) =>
+          (x - cx) * sx > 1e-9 && (y - cy) * sy > 1e-9 && Math.hypot(x - cx, y - cy) > r + 1e-6,
+      );
+      if (x < -1e-6 || y < -1e-6 || x > W + 1e-6 || y > H + 1e-6 || x + y < ch - 1e-6 || inCorner) {
+        outside.push(`${what} (${x.toFixed(2)}, ${y.toFixed(2)})`);
+      }
+    };
+    for (const block of plateDxf!.split('\n0\n')) {
+      const get = (code: number): number =>
+        Number(new RegExp(`\n${code}\n(-?[\\d.]+)`).exec(block)?.[1] ?? NaN);
+      if (block.startsWith('LINE')) {
+        check(get(10), get(20), 'LINE');
+        check(get(11), get(21), 'LINE');
+      } else if (block.startsWith('CIRCLE')) {
+        const cx = get(10);
+        const cy = get(20);
+        const rad = get(40);
+        for (let i = 0; i < 16; i += 1) {
+          const t = (i / 16) * 2 * Math.PI;
+          check(cx + rad * Math.cos(t), cy + rad * Math.sin(t), 'CIRCLE');
+        }
+      } else if (block.startsWith('ARC')) {
+        const cx = get(10);
+        const cy = get(20);
+        const rad = get(40);
+        const a0 = (get(50) * Math.PI) / 180;
+        const a1 = (get(51) * Math.PI) / 180;
+        let span = a1 - a0;
+        if (span < 0) span += 2 * Math.PI;
+        for (let i = 0; i <= 24; i += 1) {
+          const t = a0 + (span * i) / 24;
+          check(cx + rad * Math.cos(t), cy + rad * Math.sin(t), 'ARC');
+        }
+      }
+    }
+    expect([...new Set(outside)].slice(0, 8), 'body DXF mimo obrys').toEqual([]);
   });
 
   it('DXF je v milimetrech, bez textu a se dvěma vrstvami', () => {
