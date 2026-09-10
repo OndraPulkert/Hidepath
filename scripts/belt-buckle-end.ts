@@ -132,10 +132,13 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
   );
   out.push(...calibration(150, 30));
 
-  // Obrys: nahoře otevřený, dole půlkruh.
+  // Obrys: nahoře otevřený, dole rovný konec.
+  // Rovný, ne zaoblený: kupovaný pás má konec už seříznutý na kolmo, zaoblovat
+  // skrytý konec je práce navíc – a destička (`--multi`) používá právě tuhle rovnou
+  // hranu jako referenci. CraftPoint má konec také rovný (ověřeno měřením jejich PDF).
   out.push(
-    `<path d="M${f(strapX)} ${f(topY)} L${f(strapX)} ${f(endY - r)} ` +
-      `A${f(r)} ${f(r)} 0 0 0 ${f(strapX + w)} ${f(endY - r)} L${f(strapX + w)} ${f(topY)}" ` +
+    `<path d="M${f(strapX)} ${f(topY)} L${f(strapX)} ${f(endY)} ` +
+      `L${f(strapX + w)} ${f(endY)} L${f(strapX + w)} ${f(topY)}" ` +
       `fill="none" stroke="${INK}" stroke-width="0.3"/>`,
   );
   out.push(centreLine(cx, topY, endY));
@@ -563,18 +566,56 @@ export function buildBeltPlateSvg(
 
   cut.push(hangHole(L.hangHoleX, L.hangHoleY));
 
-  /* --- vodicí linky šířek: srovnáním obou hran pásu se destička sama vystředí --- */
+  /* --- vyrovnání --- */
   const engrave: string[] = [];
-  const lineX0 = L.strapEndChamferMm + 2;
+
+  /**
+   * Příčná milimetrová stupnice. Linky šířek pokrývají jen čtyři velikosti (linka leží
+   * ve w/2, takže sousední šířky musí být aspoň 4 mm od sebe – 38 a 40 mm proto na jedné
+   * destičce být nemohou). Stupnice pokryje **jakoukoli** šířku: přečte se, kde hrana
+   * pásu na ní leží. Pás 38 mm → obě hrany na 19, pás 32 mm → obě hrany na 16.
+   */
+  // x zvolené tak, aby stupnice ani její čísla nekolidovaly se značicími otvory
+  // (nejlevější otvory řad jsou na x = 10 a 16,8, další až na 35).
+  const scaleX = 24;
+  for (const rowY of [ay, by]) {
+    for (let k = 0; k <= Math.floor(L.tipCutoutHalfMm); k += 1) {
+      const len = k % 10 === 0 ? 7 : k % 5 === 0 ? 5 : 3;
+      for (const sign of k === 0 ? [1] : [-1, 1]) {
+        const sy = rowY + sign * k;
+        engrave.push(
+          `<path d="M${f(scaleX)} ${f(sy)} L${f(scaleX + len)} ${f(sy)}" ` +
+            `fill="none" stroke="${LASER.engraveColor}" stroke-width="0.12"/>`,
+        );
+        // Čísla vlevo od stupnice, aby nezasahovala do pásma značicích otvorů.
+        if (k > 0 && k % 10 === 0) {
+          const wNum = String(k).length * L.guideLabelHeightMm * 0.85;
+          engrave.push(
+            ...engraveNumber(
+              scaleX - 2 - wNum,
+              sy - L.guideLabelHeightMm / 2,
+              k,
+              L.guideLabelHeightMm,
+            ),
+          );
+        }
+      }
+    }
+  }
+
+  /* --- vodicí linky šířek: srovnáním obou hran pásu se destička sama vystředí --- */
+  const lineX0 = scaleX + 7 + 3;
   // Linky nesmí zajet do vyříznuté špičky ani do závěsného otvoru: laser by
   // gravíroval do prázdna a linka by byla přerušená.
   const tipRowX1 = L.tipApexX - 4;
   const buckleRowX1 = L.hangHoleX - L.hangHoleMm / 2 - 3;
   L.guides.forEach((g, i) => {
-    // Číslice se posouvají v x, aby se u linek 2,5 mm od sebe nepřekrývaly.
-    const labelX = lineX0 + 2 + i * (L.guideLabelHeightMm * 2.4);
     for (const rowY of [ay, by]) {
       const lineX1 = rowY === ay ? tipRowX1 : buckleRowX1;
+      // Čísla na konci linek, ve volné části řady: u levého okraje kolidovala
+      // s rozlišovacím otvorem u prostřední dírky. Odstup v x, aby se u linek
+      // 2,5 mm od sebe nepřekrývala.
+      const labelX = lineX1 - 6 - i * (L.guideLabelHeightMm * 2.4);
       for (const sign of [-1, 1]) {
         const ly = rowY + sign * g.offsetMm;
         engrave.push(
@@ -598,7 +639,8 @@ export function buildBeltPlateSvg(
     `     Otvory Ø ${L.markHoleMm} mm = znacici, neslucovat a nezvetsovat.`,
     `     Otvor Ø ${L.hangHoleMm} mm v rohu = zaveseni.`,
     `     Vrstva "cut" (${LASER.cutColor}) = REZ, vrstva "engrave" (${LASER.engraveColor}) = GRAVIROVANI.`,
-    '     V gravirovani jsou vodici linky sirek a cisla; cisla jsou TAHY, ne zivy text.',
+    '     V gravirovani jsou pricna mm stupnice, vodici linky sirek a cisla;',
+    '     cisla jsou TAHY, ne zivy text.',
     '     Kompenzaci kerfu neresit. Neprepocitavat merítko. -->',
     `<svg xmlns="http://www.w3.org/2000/svg" width="${W}mm" height="${H}mm" viewBox="0 0 ${W} ${H}">`,
     '<g id="cut">',

@@ -836,3 +836,55 @@ prázdna a linka by byla přerušená. Ověřeno testem.
 Navíc přidán **kontrolní tisk** `opasek-desticka-kontrolni-tisk.pdf` (A4 na šířku, 100 %), aby se
 destička dala ověřit na papíře před objednáním akrylátu. Obrys 270 × 127 mm je sám kalibrací;
 změřeno na renderu 300 dpi jako **269,83 × 127,00 mm**.
+
+### Velikosti na destičce: co jde a co nejde (2026-09-10)
+
+Dotaz autora: máme tam všechny, respektive nejpoužívanější velikosti?
+
+**Fyzické omezení.** Vodicí linka leží ve `w/2`, takže sousední šířky musí být aspoň **4 mm** od
+sebe, jinak jsou linky pod 2 mm od sebe a nerozeznají se:
+
+| Pár šířek  | Rozestup linek |       |
+| ---------- | -------------- | ----- |
+| 30 a 32 mm | 1,0 mm         | nelze |
+| 38 a 40 mm | 1,0 mm         | nelze |
+| 30 a 35 mm | 2,5 mm         | lze   |
+| 40 a 45 mm | 2,5 mm         | lze   |
+
+Slovník CraftPointu jmenuje jako běžné **30 nebo 32** (společenský), **38 nebo 40** (do džínů)
+a **45** (pracovní). Z každé dvojice tedy jde na destičku jen jedna. Volba: **30 / 35 / 40 / 45** —
+40 mm je nejběžnější a je to i výchozí hodnota generátoru CraftPointu, 30 mm pokrývá společenský,
+45 mm pracovní a 35 mm je běžná u dodavatelů pásů.
+
+**Řešení pro šířky bez linky: příčná milimetrová stupnice.** V každé řadě je od osy na obě strany
+stupnice po 1 mm (delší dílky po 5, nejdelší po 10, s čísly 10 a 20). Přečte se, kde na ní leží
+hrana pásu, a vystředí se **jakákoli** šířka: pás 38 mm → obě hrany na 19, pás 32 mm → obě hrany
+na 16, pás 33 mm → obě hrany mezi 16 a 17.
+
+Popisky linek sedí **na konci linek**, ne u levého okraje — u okraje se číslo „30“ dotýkalo
+rozlišovacího otvoru u prostřední dírky. Nový test proto počítá vzdálenost každého gravírovaného
+tahu od každého vyříznutého otvoru a spadne, když je pod `r + 0,3 mm`.
+
+### Sjednocení konce přehnutého pásu
+
+Při kontrole „dává to všechno smysl“ se ukázala nesrovnalost mezi mými dvěma výstupy: **tisková
+šablona měla konec přehnutého pásu zaoblený** (podle BFLG), zatímco **destička rovný** (její levá
+hrana je přímka). Změřil jsem, jak to má CraftPoint: plná šířka 39,92 mm až po 186 mm a pak konec —
+tedy **rovný**.
+
+Sjednoceno na **rovný konec**. Důvody: kupovaný pás má konec už seříznutý na kolmo, zaoblovat
+skrytý konec je práce navíc, a destička tuhle rovnou hranu používá jako referenci pro umístění.
+Tisková šablona byla proto upravena.
+
+### Křížové ověření destičky proti tiskové šabloně
+
+Obě výstupy popisují ten samý pásek, takže se musí shodnout. Odměřeno z obou SVG:
+
+| Kóta                     | Destička                                 | Tisková šablona |
+| ------------------------ | ---------------------------------------- | --------------- |
+| Nýty od ohybu            | −73,2 / −25,5 / +25,5 / +73,2 mm         | shodně          |
+| Dírky pro trn od vrcholu | 94,3 / 119,3 / 144,3 / 169,3 / 194,3 mm  | shodně          |
+| Ovál pro trn             | 25,00 × 6,00 mm, konce ±12,5 mm od ohybu | shodně          |
+| Konec pásu od ohybu      | 90,00 mm                                 | shodně          |
+
+Souhlas na desetinu milimetru u všech kót.

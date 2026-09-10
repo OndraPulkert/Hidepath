@@ -263,11 +263,65 @@ describe('destička na opasek', () => {
     expect([...eng.matchAll(/<path/g)].length).toBeGreaterThan(2 * 2 * L.guides.length);
   });
 
+  it('má příčnou milimetrovou stupnici, aby šla vystředit i šířka bez linky', () => {
+    // Linky pokrývají jen čtyři šířky (sousední musí být ≥ 4 mm od sebe, jinak jsou
+    // linky < 2 mm od sebe). Stupnice pokryje jakoukoli šířku: pás 38 mm → obě hrany na 19.
+    const eng = plate!.split('<g id="engrave">')[1]?.split('</g>')[0] ?? '';
+    const segs = [...eng.matchAll(/M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)/g)].map((m) => ({
+      x1: Number(m[1]),
+      y1: Number(m[2]),
+      x2: Number(m[3]),
+      y2: Number(m[4]),
+    }));
+    for (const rowY of [L.tipRowY, L.buckleRowY]) {
+      for (let k = 1; k <= 22; k++) {
+        for (const sign of [-1, 1]) {
+          const want = rowY + sign * k;
+          expect(
+            segs.some((g) => Math.abs(g.y1 - want) < 0.001 && Math.abs(g.y2 - want) < 0.001),
+            `dílek stupnice ${k} mm na y ${want}`,
+          ).toBe(true);
+        }
+      }
+    }
+  });
+
+  it('žádné gravírování nezasahuje do značicího ani závěsného otvoru', () => {
+    // Regrese: číslo „30“ u levého okraje se dotýkalo rozlišovacího otvoru
+    // u prostřední dírky. Popisky proto sedí na konci linek.
+    const cut = plate!.split('<g id="cut">')[1]?.split('</g>')[0] ?? '';
+    const eng = plate!.split('<g id="engrave">')[1]?.split('</g>')[0] ?? '';
+    const holes = [...cut.matchAll(/<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([\d.]+)"/g)].map(
+      (m) => ({ x: Number(m[1]), y: Number(m[2]), r: Number(m[3]) }),
+    );
+    const segs = [...eng.matchAll(/M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)/g)].map((m) => ({
+      x1: Number(m[1]),
+      y1: Number(m[2]),
+      x2: Number(m[3]),
+      y2: Number(m[4]),
+    }));
+    const clashes: string[] = [];
+    for (const h of holes) {
+      for (const g of segs) {
+        const dx = g.x2 - g.x1;
+        const dy = g.y2 - g.y1;
+        const len2 = dx * dx + dy * dy;
+        const t =
+          len2 === 0 ? 0 : Math.max(0, Math.min(1, ((h.x - g.x1) * dx + (h.y - g.y1) * dy) / len2));
+        const d = Math.hypot(h.x - (g.x1 + t * dx), h.y - (g.y1 + t * dy));
+        if (d < h.r + 0.3)
+          clashes.push(`otvor (${h.x}, ${h.y}) r=${h.r} vs tah ve ${d.toFixed(2)} mm`);
+      }
+    }
+    expect(clashes).toEqual([]);
+  });
+
   it('vodicí linky nezajíždějí do vyříznuté špičky ani do závěsného otvoru', () => {
     const eng = plate!.split('<g id="engrave">')[1]?.split('</g>')[0] ?? '';
-    const horiz = [...eng.matchAll(/M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)"/g)].filter(
-      (m) => Math.abs(Number(m[2]) - Number(m[4])) < 0.001,
-    );
+    // Jen dlouhé tahy: krátké dílky stupnice sem nepatří.
+    const horiz = [...eng.matchAll(/M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)"/g)]
+      .filter((m) => Math.abs(Number(m[2]) - Number(m[4])) < 0.001)
+      .filter((m) => Number(m[3]) - Number(m[1]) > 50);
     for (const m of horiz) {
       const y = Number(m[2]);
       const x1 = Number(m[3]);
