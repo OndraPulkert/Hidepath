@@ -70,96 +70,59 @@ na poutko. Je to starší varianta — destička ji nahrazuje a doporučuju ji.
 
 ## Text poptávky (pro destičku)
 
+Krátká verze k odeslání. Technické detaily jsou pod ní — **neposílej je hned**, jsou na doptání.
+
+> **Předmět:** Poptávka – vyřezání laserem, 1 díl z čirého litého akrylátu 3 mm
+>
 > Dobrý den,
 >
-> rád bych poptal vyřezání laserem podle přiloženého souboru.
+> rád bych si nechal vyřezat jeden díl — je to značkovací šablona na kožený opasek, dělám si ji
+> pro sebe. Nespěchám.
 >
-> **Příloha je jediná: `opasek-desticka.svg`** — vektor, měřítko **1:1**, **1 jednotka = 1 mm**.
-> Kdyby vám SVG nesedělo, mám i **`opasek-desticka-1-1.pdf`** (tentýž díl v křivkách, stránka
-> 225 × 194 mm) — napište a pošlu.
-> Cokoli s `vysvetlivky` v názvu je jen popisný obrázek pro mě, **nevyrábět**.
+> - **Rozměr:** 215 × 184 mm
+> - **Materiál:** **litý (GS) čirý** akrylát **3 mm**. Litý a čirý je tady podmínka: dívám se
+>   přes destičku na kůži a gravírování musí být bílé, což extrudovaný neudělá. Kdybyste ve 3 mm
+>   měli jen extrudovaný nebo jinou barvu, prosím napište mi, radši počkám.
+> - **Počet:** prosím nacenit 1 ks i 2 ks
+> - **Data:** v příloze `.dxf`, `.svg` a `.pdf` — tentýž díl, vyberte si, co vám sedne.
+>   Vše **1:1 v milimetrech**, prosím neměnit měřítko.
+> - **Vrstvy:** červená = řez, modrá = gravírování (gravírování je většina práce)
 >
-> **Hotový díl: 215 × 184 mm**, list v souboru má 5 mm rezervu kolem.
-> Na obrys prosím toleranci **± 0,5 mm**; na čem mi záleží, jsou **vzájemné rozteče otvorů,
-> tam potřebuji ± 0,2 mm**. Absolutní poloha na desce nehraje roli.
+> Tři věci k tomu dílu: prosím **nezrcadlit** (není symetrický), **obrys řezat až nakonec**
+> (uvnitř jsou tenká žebra 1,5 mm, která se po uvolnění dílu pohnou) a **žádné dokončení** —
+> nebrousit, neleštit plamenem ani nežíhat, rozměry potřebuju přesně podle souboru.
 >
-> **Materiál: litý (GS) čirý akrylát 3 mm.** Litý je tady podmínka, ne preference, a to ze dvou
-> důvodů: litý PMMA **gravíruje bíle a neprůhledně**, zatímco extrudovaný gravíruje téměř čiře —
-> a celá funkce téhle destičky je čtení gravírovaných linek přes materiál. Druhý důvod je nízké
-> vnitřní napětí kvůli 1,5mm žebrům (viz níže). **Čirý**, ne opál ani satén: dívám se přes
-> destičku na rysku na kůži. Kdybyste ve 3 mm měli jen extrudovaný nebo jinou barvu, prosím
-> **nezahajujte výrobu a napište mi** — jinou tloušťku ani jiný typ nechci, radši počkám.
-> Pokud máte volbu, prosím kus z **horní poloviny tolerance** (≥ 3,0 mm); litá tabule má na
-> 3 mm běžně ± 10 % a všechny mé rozměry jsou počítané na 3 mm.
->
-> **Počet:** prosím nacenit **1 ks i 2 ks** (chtěl bych mít náhradu).
->
-> **Rozsah práce**, ať se to dá nacenit: **gravírování 764 tahů / ~4 700 mm**,
-> **řez 24 uzavřených kontur / ~1 630 mm**. Gravírování je tedy víc než dvakrát tolik jako řez
-> a jsou to hlavně milimetrové rysky, kde hlava nenabere rychlost. Kdyby vám v náhledu vyšlo
-> víc řezání než gravírování, budou zaměněné vrstvy.
->
-> **Dvě vrstvy:**
->
-> - `REZ` (červená #FF0000) = **řez**
-> - `GRAVIROVANI` (modrá #0000FF) = **gravírování**
->
-> Vrstvy jsou i pojmenované (`inkscape:label`). Gravírování jsou jen vodicí linky, stupnice
-> a čísla; **čísla jsou vektorové tahy, ne živý text**, takže není potřeba žádný font.
-> V řezu není text ani výplň, žádný `transform` a všechny kontury jsou uzavřené.
->
-> **Prosím o tento postup:**
->
-> 1. **Pootočit na desce ano, zrcadlit ne.** Gravírování musí být na téže straně a v téže
->    orientaci jako v souboru — díl je chirální (zkosený roh vlevo nahoře je orientační značka
->    a celé rozvržení se od levé hrany referencuje).
-> 2. Nejdřív **gravírování**, pak vnitřní geometrie, **obrys až nakonec** — jinak se díl uvolní
->    a tenká žebra i odpadní srpky se pohnou.
-> 3. Gravírování **vektorově, jedním průchodem, nízký výkon** — ne rastrem.
-> 4. Řez prosím **jedním průchodem**, ne dvěma na nižší výkon: dvojí teplo do 1,5mm žeber
->    a do 2mm otvorů nemá co přinést.
-> 5. **Čtyři vnořené oblouky řežte nesousedně** (r22,5 → r15 → r20 → r17,5), ne postupně
->    dovnitř. Dva řezy 1,5 mm od sebe hned po sobě dají obě tepelně ovlivněné zóny do jednoho
->    tenkého žebra; nesousedné pořadí dá každému žebru čas vychladnout.
-> 6. **Ofuk zapnutý.** Vím, že bez něj je hrana lesklejší, ale u těch žeber chci plamen dál
->    od materiálu — a leštěnou hranu tu nepotřebuji vůbec.
-> 7. **Bez jakéhokoli dokončení a bez temperování.** Nebrousit, neleštit plamenem
->    a hlavně prosím **nežíhat / netemperovat**: žíhání litého PMMA srazí díl o 0,3–0,5 %,
->    což je přes 100mm rozteč otvorů 0,3–0,5 mm — dvojnásobek tolerance, o kterou tu jde.
-> 8. **Fólii na gravírované (horní) straně prosím sundejte** — přes fólii vektorově gravírovat
->    nejde. Na spodní straně ji nechte a balte prosím na tvrdou podložku.
->
-> **Dvě věci, které bych rád potvrdil, než začnete:**
->
-> - **Otvory Ø 2 mm** (je jich 16) ve 3mm materiálu. Vím, že je to pod obvyklým pravidlem
->   „minimální průměr ≈ tloušťka"; potřebuji, aby byly **průchozí a ne výrazně kónické** —
->   prostrkuje se jimi rýsovací šídlo. Prosím potvrďte, že to u vás vyjde.
-> - **Váš kerf pro 3mm GS.** Sloty čtyř oblouků mají v souboru nominálně 1,0 mm a rozteč
->   středních poloměrů je konstantní 2,5 mm, takže **slot + žebro = 2,5 mm vždycky**: při řezu
->   na střednici bez kompenzace vyjde slot 1,0 + kerf a žebro 1,5 − kerf. S kerfem 0,2 mm to je
->   slot 1,2 a žebro 1,3 mm, s čím počítám. **Napište mi prosím svůj kerf a pošlu soubor se
->   slotem 1,0 − kerf**, ať na díle vyjde slot 1,0 a žebra 1,5 mm. Rozteče středů otvorů kerf
->   neposune, ty kompenzujte podle své praxe.
->
-> **Na co ještě upozorňuji:**
->
-> - **Otvory Ø 2 mm** jsou značicí — neslučovat a nezvětšovat.
-> - Otvor **Ø 4 mm** u pravé dolní hrany je na zavěšení.
-> - **Zkosený levý horní roh** je záměrná značka orientace; ostatní tři rohy jsou **zaoblené R3**
->   (ostrý roh je na 3mm akrylátu iniciátor odštípnutí).
-> - **Vyříznutý trojúhelník** a **ovál** jsou funkční výřezy, prosím nevynechávat.
-> - Čtyři tenké srpky uvnitř oblouků jsou odpad, ale **roštem nepropadnou** (jsou 47–71 mm
->   dlouhé). Prosím vyjměte je a zkontrolujte, že **všemi čtyřmi oblouky projde drát Ø 0,8 mm**
->   a **všech 16 otvorů Ø 2 mm je průchozích** — fólie ráda přidrží výřezek.
-> - Ve gravírování je **kontrolní kóta 50 mm**; podle ní si po vyřezání ověřím měřítko.
->
-> **Počet a obsah souboru pro kontrolu:** 16× Ø 2 mm, 1× Ø 4 mm, 4 oblouky, 1 ovál,
-> 1 trojúhelníkový výřez, obrys se zkoseným rohem.
+> Kdyby vám na tom dílu něco přišlo hraniční — jsou tam otvory Ø 2 mm a ta žebra 1,5 mm —
+> napište mi prosím, soubor rád upravím.
 >
 > Prosím o cenu a termín. Vyzvednu osobně / pošlete na adresu … (doplnit).
 >
 > Děkuji,
 > … (jméno, telefon, e-mail)
+
+### Technické detaily (na doptání, neposílat hned)
+
+Tohle si nech pro případ, že se doptají, nebo že první dílna odpoví, že si tím není jistá.
+Věcně je to všechno pravda, ale v prvním mailu to jen odrazuje — půlka z toho vysvětluje
+řezárně její vlastní řemeslo.
+
+| Věc                  | Detail                                                                                                                                                                                                                                                                                 |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Tolerance            | obrys ± 0,5 mm stačí; na vzájemných roztečích otvorů potřebuji ± 0,2 mm. Absolutní poloha na desce nehraje roli.                                                                                                                                                                       |
+| Rozsah práce         | gravírování ~4 700 mm tahů, řez ~1 630 mm ve 24 uzavřených konturách                                                                                                                                                                                                                   |
+| Kerf                 | Sloty čtyř oblouků mají nominálně 1,0 mm a řežou se na střednici, takže vyjdou o kerf širší a žebra o kerf užší (rozteč středních poloměrů je konstantní 2,5 mm, takže slot + žebro = 2,5 mm vždy). Na požádání pošlu verzi se slotem 1,0 − kerf. Rozteče středů otvorů kerf neposune. |
+| Otvory Ø 2 mm        | 16 ks ve 3mm materiálu, tedy pod pravidlem „min. průměr ≈ tloušťka". Musí být průchozí a ne výrazně kónické — prostrkuje se jimi šídlo.                                                                                                                                                |
+| Fólie                | na gravírované straně sundat (přes fólii vektorově gravírovat nejde), na druhé nechat. Pak zkontrolovat, že všech 16 otvorů a 4 oblouky jsou průchozí — fólie ráda přidrží výřezek.                                                                                                    |
+| Pořadí oblouků       | r22,5 → r15 → r20 → r17,5, ne postupně vedle sebe: dva řezy 1,5 mm od sebe hned po sobě dají oba HAZ do jednoho žebra.                                                                                                                                                                 |
+| Gravírování          | vektorově, jeden průchod, nízký výkon — ne rastrem. Číslice jsou tahy, ne živý text, takže není potřeba font.                                                                                                                                                                          |
+| Řez                  | jeden průchod, ne dva na nižší výkon; ofuk zapnutý (lesklou hranu tu nepotřebuji).                                                                                                                                                                                                     |
+| Žíhání               | nežíhat: srazí litý PMMA o 0,3–0,5 %, tedy 0,3–0,5 mm přes 100mm rozteč otvorů.                                                                                                                                                                                                        |
+| Tloušťka             | litá tabule má na 3 mm běžně ± 10 %; pokud je volba, kus z horní poloviny tolerance.                                                                                                                                                                                                   |
+| Druhý důvod pro litý | nízké vnitřní napětí, tedy menší riziko crazingu u 1,3mm žeber vedle svěží HAZ.                                                                                                                                                                                                        |
+| Obsah souboru        | 16× Ø 2 mm, 1× Ø 4 mm (závěsný), 4 oblouky, 1 ovál, 1 trojúhelníkový výřez, obrys se zkoseným levým horním rohem a třemi rohy R3. Zkosení je orientační značka, ne chyba.                                                                                                              |
+| Kontrola měřítka     | ve gravírování je kóta 50 mm                                                                                                                                                                                                                                                           |
+| Čistota souboru      | v řezu není text ani výplň, žádný `transform`, všechny kontury uzavřené; vrstvy pojmenované i přes `inkscape:label`                                                                                                                                                                    |
+| Srpky                | čtyři odpadní srpky uvnitř oblouků jsou 47–71 mm dlouhé, roštem nepropadnou; průchodnost oblouků se dá zkusit drátem Ø 0,8 mm                                                                                                                                                          |
 
 **Před odesláním doplň:** jméno, telefon, dodací adresu nebo osobní odběr, požadovaný termín
 a jestli jsi fyzická osoba nebo máš IČ. Bez toho se řezárna dvakrát doptá.
