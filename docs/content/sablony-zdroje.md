@@ -1716,3 +1716,100 @@ je 0,5 mm od řezané geometrie, takže rohu plochy zbývá 0,5 − w/2·√2 �
 
 Dotek čísel pravítka s vlastní ryskou jsem **neopravoval**: je to kosmetika v 0,05 mm, týká se jen
 varianty s plochami, a posunutí popisků by změnilo výrobní soubor, který je právě naceňovaný.
+
+### Páté revizní kolo: dva agenti nad variantou s plochami (2026-09-12)
+
+#### Nález, který přebíjí všechny ostatní: kreslicí skript neimportoval žádný test
+
+`docs/generated/*` slouží jako golden files, ale **nikdo negeneroval**. `scripts/belt-buckle-end.ts`
+(1 674 řádků, dvakrát tolik kódu co model) nebyl odnikud importován, takže **mutace v kreslení byla
+vždy zelená**, dokud soubory někdo ručně nepřegeneroval. Recenzent to doložil mutačním testem:
+**14 z 24 mutací nechalo sadu zelenou, z toho 11 v tom skriptu.**
+
+Nejhorší podoba: mutace výběru středu oblouku (doslova chyba, kterou jsem opravoval o kolo dřív)
+způsobila, že **generátor spadl**, golden soubory zůstaly staré a `pnpm vitest run` byl **zelený**.
+Rozbitý generátor byl od zdravého k nerozeznání.
+
+Opraveno strukturálně: `await main()` je za podmínkou „spuštěno jako skript", takže modul jde
+importovat, a nový `scripts/generator-golden.test.ts` volá buildery a porovnává jejich návratovou
+hodnotu se souborem na disku. Vitest proto nově zahrnuje i `scripts/**/*.test.ts` — test potřebuje
+typy Node a v projektu aplikace se importovat nedá.
+
+Že to funguje, se ukázalo hned: náhledy konce mezitím z disku zmizely (smazal je některý
+z agentů při mutacích) a **nový test to okamžitě nahlásil**.
+
+#### Chyby ve variantě s plochami
+
+1. **Hlavička nařizovala pravý opak.** Soubor je 770 vyplněných ploch k rastrování, ale v komentáři
+   stálo „zadna vypln" a „Gravirovani vektorove jednim pruchodem — ne rastrem". Přepisoval jsem jen
+   titulek. Řezárna, která si hlavičku přečte, by obtahovala obrysy 3 080 obdélníků.
+2. **Ryska 1 mm splynula s nulou pravítka.** Okno pro zkracování rysek pod popiskem bylo
+   `x0 − 0,05 mm`, ale ryska na x = 1,0 je 0,2 mm vlevo od popisku, takže si nechala plnou délku.
+   Při vlasovém tahu byly ještě 0,1 mm od sebe, při šířce 0,25 mm splynuly do pruhu 0,45 mm.
+   Je to **potřetí tatáž třída chyby** (tah prochází číslicí), jen o jednu rysku vedle. Okno je
+   teď 0,5 mm.
+3. **Můj vzorec pro mez šířky byl špatně.** Psal jsem odstup `0,5 − w/2·√2`; skutečnost je
+   `0,5 − w/2`, protože **všech 770 gravírovaných úseček je osově rovnoběžných** a nejbližší řezaný
+   prvek přiléhá k ploché straně obdélníku, ne k rohu. Naměřené hodnoty (0,375 při 0,25 a 0,300
+   při 0,4) byly správné, vzorec ne. Řezu by se plochy dotkly až při **w = 1,0 mm**, ne 0,7.
+   Vázající omezení je jiné: při 0,4 mm splynou čárky linie ohybu se sousední vodicí linkou.
+   **Mez snížena na 0,3 mm.**
+
+#### Riziko, které bych sám nenašel: even-odd
+
+Rastrové vyplňování v LightBurnu, RDWorks i v Corelu po `Combine` používá scanline **even-odd**,
+takže **průnik dvou překrývajících se uzavřených tvarů zůstane nevygravírovaný**. U 288 rohů
+číslic jde o plošky 0,125 × 0,125 mm, ale u **čtyř křížků, které identifikují prostřední dírku**,
+by zůstal nevygravírovaný čtvereček **0,25 × 0,25 mm přesně uprostřed značky, která se má číst**.
+
+Sjednocení 770 obdélníků v kódu jsem **neudělal** — je to netriviální geometrie kvůli variantě,
+která možná nebude použita. Místo toho je varování v hlavičce souboru i v poptávce: „vyplnit jako
+sjednocení, nekombinovat do jedné křivky s even-odd". Kdyby řezárna variantu skutečně použila,
+sjednocení doplním.
+
+Mimochodem otázka „vadí dvojí vypálení v rozích číslic?" má opačnou odpověď, než jsem čekal:
+**nevadí**, rastr projede skenovací linku jednou bez ohledu na počet tvarů. Dvojí vypálení by
+nastalo jen při vektorovém zpracování — tedy přesně tehdy, kdyby se řezárna řídila tou chybnou
+hlavičkou z bodu 1.
+
+#### Drobnosti z DXF
+
+- **POLYLINE neměla povinný „dummy point" 10/20/30.** `ezdxf` to snese (audit 0 errors), ale je to
+  tolerance čtečky, ne validita. Doplněno.
+- **Jednotky nebyly jednoznačné.** `$INSUNITS` i `$MEASUREMENT` jsou až z R13, takže je čistá R12
+  čtečka ignoruje, a `$ACADVER` v souboru vůbec nebyl. Doplněn `$ACADVER = AC1009` a
+  `$EXTMIN`/`$EXTMAX`.
+- **Plochy měly `stroke="none"`.** Část importérů řídí operaci podle barvy tahu a výplň ignoruje.
+  Doplněn tenký tah téže barvy.
+- Volba **uzavřené POLYLINE** potvrzena jako správná: LWPOLYLINE v R12 neexistuje, HATCH je R13+
+  a levné CAM ho neumí, SOLID nepodporuje LightBurn ani RDWorks. Do Corelu se uzavřená POLYLINE
+  naimportuje jako uzavřená křivka, které jde přiřadit výplň.
+
+#### Testy doplněné podle mutačního auditu
+
+Každý z nich jsem **viděl spadnout** na cílené mutaci:
+
+| Test                                                     | Mutace, na které padá                               |
+| -------------------------------------------------------- | --------------------------------------------------- |
+| `zapsané soubory odpovídají generátoru` (12 souborů)     | rozbitý generátor / zapomenutá regenerace — 4 testy |
+| `řada se zaobleným koncem má dírky na stejných polohách` | dírky řady 2 o +3 mm                                |
+| `sloty zaobleného konce míří doprava, ne zrcadlově`      | sweep 1 → 0 u velkých oblouků                       |
+| `DXF je v milimetrech…` (hodnota, ne existence klíče)    | `$INSUNITS` 4 → 1 (palce)                           |
+| `kontrola žeber počítá s kerfem, ne s nominálem`         | as-cut → nominál a `kerfMm` → 0 — 5 testů           |
+| `sideMarginMm počítá s tím širším z otvorů`              | `Math.max` → `Math.min`                             |
+
+Řada 2 přitom **neměla test poloh vůbec**, přestože se umisťuje podle prostřední dírky stejně jako
+řada 1 — posun o 3 mm znamená pás vyznačený o 3 mm mimo. A test jednotek se jmenoval „DXF je
+v milimetrech", ale kontroloval jen **existenci klíče**, takže prošel i s palci. To byla podle
+recenzenta nejdražší nehlídaná chyba v repu.
+
+#### Co zůstává nehlídané (vědomě)
+
+PDF nikdo nečte — `opasek-desticka-1-1.pdf` je záložní formát slibovaný řezárně a jeho měřítko
+testy nekontrolují (ověřil jsem ho ručně rozbalením obsahu: 215,00 × 184,00 mm na stránce).
+Dál konstanty `LASER` v kreslení a poloha zářezů ohybu vůči otvorům na tiskových šablonách.
+
+#### Hygiena
+
+Do repa se mi předtím dostal adresář `undefined/tmp/plochy.png` — pozůstatek špatně přesměrovaného
+výstupu, když v nové session zmizela proměnná se scratchpadem. Odstraněn.

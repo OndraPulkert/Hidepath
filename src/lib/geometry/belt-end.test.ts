@@ -243,6 +243,34 @@ describe('tvar anglické špičky', () => {
 describe('plochá destička pro všechny šířky', () => {
   const L = beltPlateLayout(DEFAULT_BELT_END, DEFAULT_BELT_TIP);
 
+  it('kontrola žeber počítá s kerfem, ne s nominálem', () => {
+    // `roundedSlotAsCutMm` neměla jedinou aserci: návrat kontroly na nominální
+    // šířku slotu (tedy přesně ta chyba, kterou kerfové kolo opravovalo) byl zelený.
+    const L = beltPlateLayout(DEFAULT_BELT_END, DEFAULT_BELT_TIP, DEFAULT_BELT_PLATE);
+    expect(L.roundedSlotAsCutMm).toBeCloseTo(
+      DEFAULT_BELT_PLATE.roundedSlotWidthMm + DEFAULT_BELT_PLATE.kerfMm,
+      9,
+    );
+    expect(L.roundedSlotAsCutMm).toBeGreaterThan(L.roundedSlotWidthMm);
+
+    // Rozteč středních poloměrů je 2,5 mm, takže žebro po řezu je 2,5 − (1 + kerf).
+    // S kerfem 0,2 vyjde 1,3 mm (limit 1,2 → projde), s kerfem 0,4 vyjde 1,1 mm
+    // (limit 1,2 → musí spadnout). Kdyby kontrola měřila nominál, prošly by obě.
+    const wide = { ...DEFAULT_BELT_PLATE, kerfMm: 0.4 };
+    const problems = checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, wide);
+    expect(problems.join(' '), 'kerf 0,4 mm musí shodit kontrolu žeber').toMatch(/[Žž]ebro/);
+    expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, DEFAULT_BELT_PLATE)).toEqual([]);
+  });
+
+  it('sideMarginMm počítá s tím širším z otvorů, ne s tím prvním', () => {
+    // Ve výchozí konfiguraci je rivetHoleMm === slotWidthMm === 6, takže záměna
+    // max/min nebyla poznat. Tenhle případ je rozliší.
+    const wideSlot = { ...DEFAULT_BELT_END, slotWidthMm: 10, rivetHoleMm: 6 };
+    const wideRivet = { ...DEFAULT_BELT_END, slotWidthMm: 6, rivetHoleMm: 10 };
+    expect(sideMarginMm(wideSlot)).toBeCloseTo(DEFAULT_BELT_END.beltWidthMm / 2 - 5, 9);
+    expect(sideMarginMm(wideRivet)).toBeCloseTo(DEFAULT_BELT_END.beltWidthMm / 2 - 5, 9);
+  });
+
   it('rozvržení projde kontrolami', () => {
     expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP)).toEqual([]);
   });

@@ -10,7 +10,7 @@
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import {
   type BeltEndSpec,
@@ -667,7 +667,10 @@ export function buildBeltPlateSvg(
     // Nula je sama levá hrana destičky, o kterou se měřený pásek opře. Rysku na ni
     // nekreslím: ležela by na řezné linii a kerf by z ní odebral první desetinky.
     const x = rulerX0 + mm;
-    const underLabel = rulerLabels.some((l) => x >= l.x0 - 0.05 && x <= l.x1 + 0.05);
+    // 0,5 mm, ne 0,05: ryska 1 mm je 0,2 mm vlevo od nuly popisku, takže si dřív
+    // nechala plnou délku a projela popiskovým pásmem. Při vlasovém tahu byly ještě
+    // 0,1 mm od sebe, ve variantě s plochami 0,25 mm už splynuly do jednoho pruhu.
+    const underLabel = rulerLabels.some((l) => x >= l.x0 - 0.5 && x <= l.x1 + 0.5);
     const len = underLabel
       ? shortTickMm
       : mm % 50 === 0
@@ -986,15 +989,21 @@ const DXF_LAYERS: { name: string; colour: number }[] = [
   { name: 'GRAVIROVANI', colour: 5 },
 ];
 
-function dxfDocument(entities: DxfEntity[]): string {
+function dxfDocument(entities: DxfEntity[], extents: { w: number; h: number }): string {
   const g = (code: number, value: string | number): string => `${code}\n${value}\n`;
   const num = (v: number): string => v.toFixed(4);
   const deg = (rad: number): string => (((rad * 180) / Math.PI + 360) % 360).toFixed(4);
   let out = '';
   out += g(0, 'SECTION') + g(2, 'HEADER');
-  // $INSUNITS 4 = milimetry, $MEASUREMENT 1 = metrická soustava.
+  // $ACADVER musí být uvedená, jinak si verzi čtečka jen odhaduje z obsahu.
+  out += g(9, '$ACADVER') + g(1, 'AC1009');
+  // $INSUNITS 4 = milimetry, $MEASUREMENT 1 = metrická soustava. Obě jsou až
+  // z R13, takže je čistá R12 čtečka ignoruje — proto jsou v souboru navíc
+  // extenty a v gravírování kontrolní kóta 50 mm, podle které jde měřítko ověřit.
   out += g(9, '$INSUNITS') + g(70, 4);
   out += g(9, '$MEASUREMENT') + g(70, 1);
+  out += g(9, '$EXTMIN') + g(10, '0.0') + g(20, '0.0') + g(30, '0.0');
+  out += g(9, '$EXTMAX') + g(10, num(extents.w)) + g(20, num(extents.h)) + g(30, '0.0');
   out += g(0, 'ENDSEC');
   out +=
     g(0, 'SECTION') + g(2, 'TABLES') + g(0, 'TABLE') + g(2, 'LAYER') + g(70, DXF_LAYERS.length);
@@ -1055,7 +1064,7 @@ export function buildBeltPlateDxf(
     ...svgLayerToDxf(svg, 'cut', 'REZ', H),
     ...(cutOnly ? [] : svgLayerToDxf(svg, 'engrave', 'GRAVIROVANI', H)),
   ];
-  return dxfDocument(entities);
+  return dxfDocument(entities, { w: L.plateWidthMm, h: H });
 }
 
 /**
@@ -1228,13 +1237,29 @@ export function buildBeltPlateAreaSvg(
     const d = segmentRect(seg, widthMm)
       .map(([x, y], i) => `${i === 0 ? 'M' : 'L'}${f(x)} ${f(y)}`)
       .join(' ');
-    return `<path d="${d} Z" fill="${LASER.engraveColor}" stroke="none"/>`;
+    // Tenký tah stejné barvy navíc: část importérů přiřazuje operaci podle barvy
+    // **tahu** a výplň ignoruje. Na geometrii to nic nemění.
+    return (
+      `<path d="${d} Z" fill="${LASER.engraveColor}" ` +
+      `stroke="${LASER.engraveColor}" stroke-width="0.01"/>`
+    );
   });
   return [
-    header.replace(
-      'REZACI SOUBOR',
-      `REZACI SOUBOR - VARIANTA S GRAVIROVANIM JAKO PLOCHY (sirka ${f(widthMm)} mm)\n     REZ`,
-    ),
+    // Hlavička výrobního souboru popisuje pravý opak téhle varianty ("zadna vypln",
+    // "ne rastrem"), takže se přepisují všechny tři věty, ne jen titulek. Řezárna,
+    // která si hlavičku přečte, by jinak obtahovala obrysy 3 080 obdélníků.
+    header
+      .replace(
+        'REZACI SOUBOR',
+        `REZACI SOUBOR - VARIANTA S GRAVIROVANIM JAKO PLOCHY (sirka ${f(widthMm)} mm)\n     REZ`,
+      )
+      .replace('zadna vypln', `gravirovani je VYPLN (${f(widthMm)} mm), rez zustava bez vyplne`)
+      .replace(
+        'Gravirovani vektorove jednim pruchodem, nizky vykon - ne rastrem.',
+        'Gravirovani RASTREM / vyplni ploch. Plochy se misty prekryvaji (rohy cislic,\n' +
+          '     krizeni znacek) - prosim vyplnit jako sjednoceni, nekombinovat do jedne\n' +
+          '     krivky s pravidlem even-odd, jinak zustanou prunikove plochy nevygravirovane.',
+      ),
     cutLayer,
     `<g id="engrave" inkscape:groupmode="layer" inkscape:label="GRAVIROVANI">`,
     ...rects,
@@ -1259,7 +1284,16 @@ export function buildBeltPlateAreaDxf(
   const polys = engraveSegments(base)
     .map((seg) => {
       const pts = segmentRect(seg, widthMm);
-      let out = g(0, 'POLYLINE') + g(8, 'GRAVIROVANI') + g(66, 1) + g(70, 1);
+      // R12 předepisuje u POLYLINE „dummy point" 10/20/30 (elevace). Čtečky ho
+      // většinou dopočítají, ale je to jejich tolerance, ne validita souboru.
+      let out =
+        g(0, 'POLYLINE') +
+        g(8, 'GRAVIROVANI') +
+        g(10, '0.0') +
+        g(20, '0.0') +
+        g(30, '0.0') +
+        g(66, 1) +
+        g(70, 1);
       for (const [x, y] of pts) {
         out +=
           g(0, 'VERTEX') + g(8, 'GRAVIROVANI') + g(10, num(x)) + g(20, num(H - y)) + g(30, '0.0');
@@ -1531,14 +1565,16 @@ async function main(): Promise<void> {
       const i = process.argv.indexOf('--engrave-width');
       if (i < 0) return 0.25;
       const v = Number(process.argv[i + 1]);
-      // Horní mez 0,4 mm není libovolná: nejbližší gravírovaná linka je 0,5 mm od
-      // řezané geometrie, takže při šířce w zbývá rohu plochy 0,5 − w/2·√2.
-      // Pro 0,25 mm je odstup 0,375 mm (změřeno), pro 0,4 mm 0,22 mm, nad 0,7 mm
-      // by plochy začaly lézt do vyříznutých otvorů.
-      if (!Number.isFinite(v) || v < 0.1 || v > 0.4) {
+      // Všech 770 gravírovaných úseček je osově rovnoběžných a nejbližší řezaný
+      // prvek přiléhá k **ploché straně** obdélníku, ne k rohu, takže odstup je
+      // `0,5 − w/2`, ne `0,5 − w/2·√2`: 0,375 mm při 0,25 a 0,300 mm při 0,4
+      // (obojí změřeno). Řezu by se plochy dotkly až při w = 1,0 mm.
+      // Vázající omezení je proto jiné — slévání gravírování mezi sebou: při 0,4 mm
+      // splynou čárky linie ohybu se sousední vodicí linkou. Odtud mez 0,3 mm.
+      if (!Number.isFinite(v) || v < 0.1 || v > 0.3) {
         throw new Error(
-          '--engrave-width musí být v mm mezi 0,1 a 0,4; širší plochy by zasahovaly ' +
-            'do řezané geometrie (nejbližší linka je 0,5 mm od ní).',
+          '--engrave-width musí být v mm mezi 0,1 a 0,3; širší plochy by slévaly ' +
+            'sousední gravírované prvky (čárky linie ohybu jsou 0,2 mm od vodicí linky).',
         );
       }
       return v;
@@ -1671,4 +1707,9 @@ async function main(): Promise<void> {
   console.log(`Celková délka pásu = obvod + ${cz(apexToMiddleHoleMm(tip) + end.tailLengthMm)} mm.`);
 }
 
-await main();
+// Spustí se jen jako skript. Bez téhle podmínky nejde modul importovat, a právě
+// proto ho žádný test neimportoval: mutace v kreslení byla vždy zelená, dokud
+// někdo ručně nepřegeneroval soubory v docs/generated.
+const invokedAsScript =
+  process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.argv[1]).href;
+if (invokedAsScript) await main();

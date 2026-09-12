@@ -41,11 +41,11 @@ const legend = Object.entries(svgs).find(([path]) =>
   path.endsWith('/opasek-desticka-vysvetlivky.svg'),
 )?.[1];
 
-const previews = Object.fromEntries(
-  Object.entries(svgs)
-    .filter(([path]) => path.includes('opasek-nahled-'))
-    .map(([path, svg]) => [path.includes('hrot') ? 'point' : 'round', svg]),
-) as Record<'point' | 'round', string | undefined>;
+// Přesné názvy: `includes('hrot')` by po přidání dalšího náhledu tiše přepsalo klíč.
+const previews: Record<'point' | 'round', string | undefined> = {
+  point: Object.entries(svgs).find(([p]) => p.endsWith('/opasek-nahled-hrot.svg'))?.[1],
+  round: Object.entries(svgs).find(([p]) => p.endsWith('/opasek-nahled-zaobleny.svg'))?.[1],
+};
 
 const dxfs: Record<string, string> = import.meta.glob('/docs/generated/*.dxf', {
   query: '?raw',
@@ -417,6 +417,56 @@ describe('destička na opasek', () => {
     const shapes = [...cut.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!);
     // obrys + vyříznutá špička + 4 sloty zaobleného konce + ovál pro trn
     expect(shapes.length, 'obrys + špička + 4 oblouky + ovál').toBe(3 + L.roundedArcs.length);
+  });
+
+  it('řada se zaobleným koncem má dírky na stejných polohách jako řada s hrotem', () => {
+    // Řada 2 neměla test poloh vůbec — posun dírek o 3 mm byl zelený. Přitom se
+    // umisťuje podle prostřední dírky stejně jako řada 1, takže posun znamená
+    // pás vyznačený o 3 mm mimo.
+    const marks = circles(plate!, L.markHoleMm / 2);
+    const onRow = marks.filter((c) => c.y === L.roundedRowY).map((c) => c.x);
+    onRow.sort((a, b) => b - a);
+    expect(onRow.length, 'dírek na řadě se zaobleným koncem').toBe(L.tipHoleXs.length);
+    onRow.forEach((x, i) => {
+      expect(x, `dírka ${i + 1} na řadě 2`).toBeCloseTo(L.tipHoleXs[i]!, 3);
+    });
+  });
+
+  it('sloty zaobleného konce míří doprava, ne zrcadlově', () => {
+    // Zrcadlení slotu (sweep 1→0) bylo zelené: testy četly jen počet oblouků,
+    // poloměry a střed, tedy hodnoty, které se zrcadlením nemění.
+    const cutLayer = plate!.split('<g id="cut"')[1]?.split('</g>')[0] ?? '';
+    const centreX = L.roundedArcs[0]!.centreX;
+    const slots = [...cutLayer.matchAll(/<path d="(M[\d.]+ [\d.]+ A[^"]+)"/g)]
+      .map((m) => m[1]!)
+      .filter((d) => (d.match(/A/g) ?? []).length >= 4);
+    expect(slots.length, 'sloty zaobleného konce').toBe(L.roundedArcs.length);
+    for (const d of slots) {
+      // Směr vyboulení oblouku plyne ze samotné SVG sémantiky, ne z naší
+      // implementace: pro sweep = 1 (osa y dolů) leží oblouk na straně (dy, −dx)
+      // tětivy, pro sweep = 0 na straně (−dy, dx).
+      let cur: [number, number] | null = null;
+      let big = 0;
+      for (const t of d.matchAll(/([MLA])([^MLAZ]*)/g)) {
+        const n = [...t[2]!.matchAll(/-?[\d.]+/g)].map((m) => Number(m[0]));
+        if (t[1] === 'M') cur = [n[0]!, n[1]!];
+        else if (t[1] === 'L') cur = [n[n.length - 2]!, n[n.length - 1]!];
+        else {
+          const [rx, , , , sweep, x1, y1] = n as unknown as number[];
+          const dy = y1! - cur![1];
+          const bulgeX = sweep === 1 ? dy : -dy;
+          if (rx! >= 14) {
+            big += 1;
+            expect(bulgeX, `oblouk r=${rx} se vydouvá doleva`).toBeGreaterThan(0);
+            expect(cur![0], 'začátek oblouku vlevo od středové svislice').toBeGreaterThanOrEqual(
+              centreX - 1e-6,
+            );
+          }
+          cur = [x1!, y1!];
+        }
+      }
+      expect(big, 'velké oblouky slotu').toBe(2);
+    }
   });
 
   it('řada se špičkou: 5 dírek na ose a 2 rozlišovací u prostřední', () => {
@@ -884,8 +934,13 @@ describe('destička na opasek', () => {
   });
 
   it('DXF je v milimetrech, bez textu a se dvěma vrstvami', () => {
-    expect(plateDxf!).toContain('$INSUNITS');
-    expect(plateDxf!).toContain('$MEASUREMENT');
+    // Hodnota, ne existence klíče: `toContain('$INSUNITS')` prošlo i s palci.
+    expect(plateDxf!, 'jednotky = milimetry').toContain('$INSUNITS\n70\n4\n');
+    expect(plateDxf!, 'metrická soustava').toContain('$MEASUREMENT\n70\n1\n');
+    expect(plateDxf!, 'verze je uvedená, ne odhadovaná').toContain('$ACADVER\n1\nAC1009\n');
+    expect(plateDxf!, 'extenty dokládají měřítko i R12 čtečce').toContain(
+      `$EXTMAX\n10\n${L.plateWidthMm.toFixed(4)}\n20\n${L.plateHeightMm.toFixed(4)}\n`,
+    );
     expect(plateDxf!, 'žádný text').not.toMatch(/\n0\n(TEXT|MTEXT)\n/);
     expect(plateDxf!).toContain('\n8\nREZ\n');
     expect(plateDxf!).toContain('\n8\nGRAVIROVANI\n');
@@ -963,10 +1018,16 @@ describe('destička na opasek', () => {
     };
     const original = segsOf(plate!);
     const areaBody = plateAreas!.slice(plateAreas!.indexOf('<g id="engrave"'));
-    const rects = [...areaBody.matchAll(/<path d="([^"]+)" fill="#0000ff" stroke="none"\/>/g)].map(
+    const rects = [...areaBody.matchAll(/<path d="([^"]+)" fill="#0000ff" stroke="#0000ff"/g)].map(
       (m) => m[1]!,
     );
     expect(rects.length, 'ploch vs úseček').toBe(original.length);
+    // Plochy nesou výplň i tenký tah: část importérů řídí operaci podle barvy tahu.
+    expect(plateAreas!, 'plochy mají i tah').toContain('stroke-width="0.01"');
+    // Hlavička výrobního souboru popisuje opak – musí být přepsaná celá.
+    expect(plateAreas!, 'hlavička nesmí tvrdit „bez výplně"').not.toContain('zadna vypln,');
+    expect(plateAreas!, 'hlavička nesmí nařizovat vektor').not.toContain('ne rastrem');
+    expect(plateAreas!, 'varování o překryvech').toContain('sjednoceni');
     expect(rects.length).toBeGreaterThan(500);
     rects.forEach((d, i) => {
       expect(d.trim().endsWith('Z'), `plocha ${i} uzavřená`).toBe(true);

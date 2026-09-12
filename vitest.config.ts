@@ -19,7 +19,9 @@ export default defineConfig({
     },
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
-    include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    // `scripts/` je tu proto, že kreslicí skript potřebuje typy Node a v projektu
+    // aplikace se importovat nedá. Bez toho ho žádný test neimportoval.
+    include: ['src/**/*.{test,spec}.{ts,tsx}', 'scripts/**/*.{test,spec}.ts'],
     css: false,
   },
   resolve: {
