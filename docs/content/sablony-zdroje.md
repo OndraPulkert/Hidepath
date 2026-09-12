@@ -1685,3 +1685,34 @@ krátké hrany přesně na konci původní úsečky**. Plus kontrola DXF: stejn�
 `opasek-desticka.svg`, začala celá sada tiše testovat **jinou destičku**. Spadlo deset testů
 („žádná výplň: expected 770 to be +0"), což bylo štěstí — kdyby byl nový soubor jen o chlup
 podobnější, mohly projít. Všechny hledače jsou teď na přesný název (`endsWith`), ne na podřetězec.
+
+#### Nezávislé přeměření varianty s plochami
+
+Ověřeno mimo testovou sadu vlastním skriptem (numpy), protože testy mě u DXF už jednou nechaly
+projít chybu, kterou samy kopírovaly:
+
+| Kontrola                                   | Výsledek                                                                                                                              |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Řezová vrstva vs výrobní soubor            | znak po znaku identická (2 591 znaků)                                                                                                 |
+| Počet ploch                                | 770 = počet původních úseček                                                                                                          |
+| Šířka všech ploch                          | 0,250 mm, odchylka 0,00e+00                                                                                                           |
+| Střed krátké hrany vs konec původní úsečky | odchylka 0,00e+00 mm                                                                                                                  |
+| Délka ploch vs délka úseček                | odchylka 0,00e+00 mm                                                                                                                  |
+| Rohy ploch uvnitř obrysu                   | 3 080 / 3 080 (včetně zkosení a tří rohů R3)                                                                                          |
+| Nejmenší odstup plochy od řezané geometrie | **0,375 mm** (u linek 0,500 mm), vzorkováno 30 278 bodů řezu po 0,05 mm                                                               |
+| DXF plochy vs SVG plochy                   | max odchylka 0,000000 mm po zrcadlení y                                                                                               |
+| DXF struktura                              | 3× SECTION/ENDSEC, začíná HEADER, ENDTAB, končí EOF, obě vrstvy v TABLES, 770 POLYLINE s příznakem uzavřeno, 3 080 VERTEX, žádný text |
+
+**Překryvy ploch** (dvojí gravírování) prověřeny skutečným průnikem obdélníků přes separating-axis
+theorem, ne odhadem: **300 dvojic, z toho 288 sdílí koncový bod** — to jsou rohy číslic a lomy
+čar, které vznikají nevyhnutelně, když se z tahu udělá obdélník. Zbylých 12 jsou záměrná křížení:
+čárkovaná linie ohybu přes vodicí linky, zkřížené tahy křížků u prostřední dírky a čísla pravítka
+„0" a „50", která jsou 0,2 mm od své rysky a při 0,25 mm se jí dotknou. Celková překrytá plocha je
+nejvýš 18,75 mm² z 1 131 mm², tedy 1,7 %. **Žádný nechtěný překryv.**
+
+Z toho plyne pojistka: `--engrave-width` je omezená na **0,1–0,4 mm**. Nejbližší gravírovaná linka
+je 0,5 mm od řezané geometrie, takže rohu plochy zbývá 0,5 − w/2·√2 — pro 0,25 mm je to 0,375 mm
+(změřeno), pro 0,4 mm 0,300 mm (změřeno), nad 0,7 mm by plochy lezly do vyříznutých otvorů.
+
+Dotek čísel pravítka s vlastní ryskou jsem **neopravoval**: je to kosmetika v 0,05 mm, týká se jen
+varianty s plochami, a posunutí popisků by změnilo výrobní soubor, který je právě naceňovaný.

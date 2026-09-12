@@ -1531,8 +1531,15 @@ async function main(): Promise<void> {
       const i = process.argv.indexOf('--engrave-width');
       if (i < 0) return 0.25;
       const v = Number(process.argv[i + 1]);
-      if (!Number.isFinite(v) || v < 0.1 || v > 1) {
-        throw new Error('--engrave-width musí být v mm mezi 0,1 a 1.');
+      // Horní mez 0,4 mm není libovolná: nejbližší gravírovaná linka je 0,5 mm od
+      // řezané geometrie, takže při šířce w zbývá rohu plochy 0,5 − w/2·√2.
+      // Pro 0,25 mm je odstup 0,375 mm (změřeno), pro 0,4 mm 0,22 mm, nad 0,7 mm
+      // by plochy začaly lézt do vyříznutých otvorů.
+      if (!Number.isFinite(v) || v < 0.1 || v > 0.4) {
+        throw new Error(
+          '--engrave-width musí být v mm mezi 0,1 a 0,4; širší plochy by zasahovaly ' +
+            'do řezané geometrie (nejbližší linka je 0,5 mm od ní).',
+        );
       }
       return v;
     })();
