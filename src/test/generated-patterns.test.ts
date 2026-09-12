@@ -30,11 +30,16 @@ const cz = (n: number): string => (Math.round(n * 1000) / 1000).toString().repla
 const cz1 = (n: number): string => cz(Math.round(n * 10) / 10);
 
 /** Řezací soubor destičky. Vysvětlivky mají text a záměrně se sem nesmí připlést. */
-const plate = Object.entries(svgs).find(
-  ([path]) => path.includes('opasek-desticka') && !path.includes('vysvetlivky'),
+// Přesné názvy, ne `includes`: po přidání varianty `-plochy` si `includes` vybral
+// ji a celá sada začala tiše testovat jiný soubor.
+const plate = Object.entries(svgs).find(([path]) => path.endsWith('/opasek-desticka.svg'))?.[1];
+const plateAreas = Object.entries(svgs).find(([path]) =>
+  path.endsWith('/opasek-desticka-plochy.svg'),
 )?.[1];
 
-const legend = Object.entries(svgs).find(([path]) => path.includes('vysvetlivky'))?.[1];
+const legend = Object.entries(svgs).find(([path]) =>
+  path.endsWith('/opasek-desticka-vysvetlivky.svg'),
+)?.[1];
 
 const previews = Object.fromEntries(
   Object.entries(svgs)
@@ -47,10 +52,13 @@ const dxfs: Record<string, string> = import.meta.glob('/docs/generated/*.dxf', {
   import: 'default',
   eager: true,
 });
-const plateDxf = Object.entries(dxfs).find(
-  ([path]) => path.includes('opasek-desticka') && !path.includes('-rez'),
+const plateDxf = Object.entries(dxfs).find(([path]) => path.endsWith('/opasek-desticka.dxf'))?.[1];
+const plateDxfCut = Object.entries(dxfs).find(([path]) =>
+  path.endsWith('/opasek-desticka-rez.dxf'),
 )?.[1];
-const plateDxfCut = Object.entries(dxfs).find(([path]) => path.includes('-rez'))?.[1];
+const plateAreasDxf = Object.entries(dxfs).find(([path]) =>
+  path.endsWith('/opasek-desticka-plochy.dxf'),
+)?.[1];
 
 const lasers = Object.entries(svgs)
   .map(([path, svg]) => ({
@@ -577,7 +585,13 @@ describe('destička na opasek', () => {
     // znamená pás srovnaný o 2,5 mm mimo osu, u řady 2 oblouk pro o 5 mm jinou šířku.
     // Číslice jsou sedmisegmentové tahy, takže se dají zpětně přečíst ze souboru.
     const eng = plate!.split('<g id="engrave"')[1]?.split('</g>')[0] ?? '';
-    type Glyph = { x0: number; y0: number; w: number; h: number; value: string };
+    interface Glyph {
+      x0: number;
+      y0: number;
+      w: number;
+      h: number;
+      value: string;
+    }
     const TABLE = new Map<string, string>([
       ['bot,ld,lu,rd,ru,top', '0'],
       ['rd,ru', '1'],
@@ -656,7 +670,12 @@ describe('destička na opasek', () => {
     // Každá číslice je jeden `<path>` s několika podcestami a malou obálkou;
     // test hledá jakýkoli cizí tah, který tou obálkou projde.
     const eng = plate!.split('<g id="engrave"')[1]?.split('</g>')[0] ?? '';
-    type Seg = { x1: number; y1: number; x2: number; y2: number };
+    interface Seg {
+      x1: number;
+      y1: number;
+      x2: number;
+      y2: number;
+    }
     const perPath: { box: [number, number, number, number]; segs: Seg[] }[] = [];
     for (const d of [...eng.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)) {
       const segs: Seg[] = [];
@@ -691,7 +710,6 @@ describe('destička na opasek', () => {
             const y = sg.y1 + (sg.y2 - sg.y1) * t;
             if (x > gx0 + 1e-9 && x < gx1 - 1e-9 && y > gy0 + 1e-9 && y < gy1 - 1e-9) {
               crossings.push(`${gx0.toFixed(1)},${gy0.toFixed(1)} × tah ${sg.x1},${sg.y1}`);
-              t = 2;
               break;
             }
           }
@@ -767,7 +785,11 @@ describe('destička na opasek', () => {
     const H = L.plateHeightMm;
     const W = L.plateWidthMm;
     const r = L.cornerRadiusMm;
-    type Arc = { cx: number; cy: number; r: number };
+    interface Arc {
+      cx: number;
+      cy: number;
+      r: number;
+    }
     const arcs: Arc[] = [];
     for (const block of plateDxf!.split('\n0\n')) {
       if (!block.startsWith('ARC')) continue;
@@ -910,6 +932,78 @@ describe('destička na opasek', () => {
       expect(svg!).toContain('NAHLED, ne vyrobni soubor');
       expect(svg!).toContain('fill="url(#leather)"');
     }
+  });
+
+  it('varianta s plochami má stejný řez a gravírování jako uzavřené obdélníky', () => {
+    // Ústupek řezárnám, které gravírují rastrem. Musí platit dvě věci: řez se
+    // nesmí lišit ani o znak, a každá plocha musí ležet přesně na původní lince —
+    // jinak by se z ústupku stala jiná destička.
+    expect(plateAreas, 'docs/generated/opasek-desticka-plochy.svg').toBeDefined();
+    const cutOf = (svg: string): string => {
+      const a = svg.indexOf('<g id="cut"');
+      return svg.slice(a, svg.indexOf('</g>', a));
+    };
+    expect(cutOf(plateAreas!), 'řezová vrstva identická').toBe(cutOf(plate!));
+
+    const segsOf = (svg: string): [number, number, number, number][] => {
+      const a = svg.indexOf('<g id="engrave"');
+      const body = svg.slice(a, svg.indexOf('</g>', a));
+      const out: [number, number, number, number][] = [];
+      for (const m of body.matchAll(/<path d="([^"]+)"/g)) {
+        for (const sub of m[1]!.split('M').slice(1)) {
+          const n = [...sub.matchAll(/-?[\d.]+/g)].map((v) => Number(v[0]));
+          for (let i = 0; i + 3 < n.length; i += 2) {
+            if (Math.hypot(n[i + 2]! - n[i]!, n[i + 3]! - n[i + 1]!) > 1e-9) {
+              out.push([n[i]!, n[i + 1]!, n[i + 2]!, n[i + 3]!]);
+            }
+          }
+        }
+      }
+      return out;
+    };
+    const original = segsOf(plate!);
+    const areaBody = plateAreas!.slice(plateAreas!.indexOf('<g id="engrave"'));
+    const rects = [...areaBody.matchAll(/<path d="([^"]+)" fill="#0000ff" stroke="none"\/>/g)].map(
+      (m) => m[1]!,
+    );
+    expect(rects.length, 'ploch vs úseček').toBe(original.length);
+    expect(rects.length).toBeGreaterThan(500);
+    rects.forEach((d, i) => {
+      expect(d.trim().endsWith('Z'), `plocha ${i} uzavřená`).toBe(true);
+      const n = [...d.matchAll(/-?[\d.]+/g)].map((v) => Number(v[0]));
+      expect(n.length, `plocha ${i} má 4 rohy`).toBe(8);
+      const [ax, ay, bx, by, cx, cyy, dx, dy] = n as [
+        number,
+        number,
+        number,
+        number,
+        number,
+        number,
+        number,
+        number,
+      ];
+      expect(Math.hypot(ax - dx, ay - dy), `šířka plochy ${i}`).toBeCloseTo(0.25, 3);
+      // Střed krátké hrany musí padnout na konec původní úsečky.
+      const seg = original[i]!;
+      expect((ax + dx) / 2).toBeCloseTo(seg[0], 2);
+      expect((ay + dy) / 2).toBeCloseTo(seg[1], 2);
+      expect((bx + cx) / 2).toBeCloseTo(seg[2], 2);
+      expect((by + cyy) / 2).toBeCloseTo(seg[3], 2);
+    });
+
+    // DXF varianta: tytéž řezové entity a gravírování jako uzavřené polyliny.
+    expect(plateAreasDxf, 'docs/generated/opasek-desticka-plochy.dxf').toBeDefined();
+    const count = (t: string, s: string): number =>
+      [...s.matchAll(new RegExp(`\n0\n${t}\n`, 'g'))].length;
+    for (const entity of ['LINE', 'ARC', 'CIRCLE']) {
+      expect(count(entity, plateAreasDxf!), `${entity} v DXF s plochami`).toBe(
+        count(entity, plateDxfCut!),
+      );
+    }
+    expect(count('POLYLINE', plateAreasDxf!), 'plochy v DXF').toBe(original.length);
+    expect(count('VERTEX', plateAreasDxf!)).toBe(original.length * 4);
+    expect(count('SEQEND', plateAreasDxf!)).toBe(original.length);
+    expect(plateAreasDxf!, 'žádný text').not.toMatch(/\n0\n(TEXT|MTEXT)\n/);
   });
 
   it('vysvětlivky jsou samostatný soubor a nejsou určené řezárně', () => {

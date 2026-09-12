@@ -6,6 +6,9 @@
 `docs/generated/opasek-desticka.svg` (řezací soubor),
 `opasek-desticka.dxf` (totéž jako DXF R12 v milimetrech, oblouky jako `ARC`, dvě vrstvy),
 `opasek-desticka-rez.dxf` (jen řez, pro automatické kalkulačky),
+`opasek-desticka-plochy.svg` a `opasek-desticka-plochy.dxf` (gravírování jako uzavřené plochy
+0,25 mm — **jen pro řezárnu, která gravíruje rastrem a čáry neumí**; šířku lze změnit přes
+`--engrave-width`),
 `opasek-desticka-1-1.pdf` (tentýž díl v křivkách, další záložní formát),
 `opasek-desticka-kontrolni-tisk.pdf` (papírová kontrola na A4 před objednáním) a
 `opasek-desticka-vysvetlivky.svg` (popisky, **NEposílat řezárně** — má šedou geometrii

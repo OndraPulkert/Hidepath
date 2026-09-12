@@ -1651,3 +1651,37 @@ fotce: náš profil je u vrcholu **stejný pro každou šířku** (nos i sklon j
 fotka se s předpokladem škáluje — aby vyšla stejně špičatá, musel by ten pás mít 28 mm.
 Měřeno vlastním PNG dekodérem po sloupcích; omezení: stín přes pás, snímek není kolmý a zaleštěná
 hrana je tmavá, takže hranice může být o desetiny mimo. Na rozdíl 9,3 vs 6,9 mm to nemá vliv.
+
+### Gravírování jako plochy: ústupek, ne vylepšení (2026-09-12)
+
+První nabídka (Klaban, 2 300 Kč/ks včetně dopravy, 2 ks 2 900 Kč) přišla s technickou výhradou:
+_„Části, které požadujete gravírovat, jsou v současných datech připravené jako řezací čáry… Prosím
+upravit data tak, aby byly plochy připravené přímo jako gravírované plochy."_
+
+Je to legitimní dotaz od někoho, kdo gravíruje **rastrem** — ten potřebuje uzavřené vyplněné
+tvary. Naše gravírovací vrstva je naopak čistá čárová grafika: **439 cest, všechny `fill="none"`,
+tah 0,1 mm, 4 525 mm celkem, jen příkazy `M` a `L`** (ověřeno; všech 22 oblouků je v řezu, ne
+v gravírování).
+
+**Správná odpověď je vektorové gravírování**, ne převod na plochy: vodicí linky slouží k srovnání
+hrany pásu, takže šířka linky je sama o sobě nepřesnost. A je to pravděpodobně i důvod té ceny —
+rastrovat 4,5 m linek rozprostřených po 215 × 184 mm znamená projet hlavou celou desku po řádcích.
+
+Pro případ, že to konkrétní provoz vektorově neumí, je připravena varianta:
+`pnpm pattern:belt-end --multi` zapisuje i **`opasek-desticka-plochy.svg`** a
+**`-plochy.dxf`**, kde je každá gravírovaná úsečka převedená na uzavřený obdélník šířky 0,25 mm
+(`--engrave-width` ji změní). Konce jsou „na tupo", takže převod nemění délku ani polohu žádné
+linky, jen jí dá šířku. V DXF jsou plochy jako uzavřené `POLYLINE` (R12), tedy tvary, které jdou
+v Corelu jedním kliknutím vyplnit.
+
+Zafixováno testem `varianta s plochami má stejný řez a gravírování jako uzavřené obdélníky`:
+řezová vrstva musí být **znak po znaku identická** s výrobním souborem, ploch musí být přesně
+tolik co původních úseček (770), každá musí být uzavřená, mít 4 rohy, šířku 0,25 mm a **střed
+krátké hrany přesně na konci původní úsečky**. Plus kontrola DXF: stejné počty `LINE`/`ARC`/
+`CIRCLE` jako v řezovém souboru, 770 `POLYLINE`, 3 080 `VERTEX`, žádný text.
+
+**Past, do které jsem při tom spadl:** testy si soubor hledaly přes
+`path.includes('opasek-desticka')`, a protože `opasek-desticka-plochy.svg` je abecedně dřív než
+`opasek-desticka.svg`, začala celá sada tiše testovat **jinou destičku**. Spadlo deset testů
+(„žádná výplň: expected 770 to be +0"), což bylo štěstí — kdyby byl nový soubor jen o chlup
+podobnější, mohly projít. Všechny hledače jsou teď na přesný název (`endsWith`), ne na podřetězec.

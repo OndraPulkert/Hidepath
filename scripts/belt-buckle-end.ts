@@ -911,19 +911,19 @@ function svgLayerToDxf(svg: string, layerId: string, layer: string, H: number): 
   }
 
   for (const pm of body.matchAll(/<path d="([^"]+)"/g)) {
-    const d = pm[1]!;
+    const d = pm[1];
     const tokens = [...d.matchAll(/([MLAZ])([^MLAZ]*)/g)];
     let cur: [number, number] | null = null;
     let first: [number, number] | null = null;
     for (const t of tokens) {
-      const cmd = t[1]!;
-      const nums = [...t[2]!.matchAll(/-?[\d.]+/g)].map((n) => Number(n[0]));
+      const cmd = t[1];
+      const nums = [...t[2].matchAll(/-?[\d.]+/g)].map((n) => Number(n[0]));
       if (cmd === 'M') {
-        cur = [nums[0]!, nums[1]!];
+        cur = [nums[0], nums[1]];
         first = cur;
       } else if (cmd === 'L') {
         for (let i = 0; i + 1 < nums.length; i += 2) {
-          const next: [number, number] = [nums[i]!, nums[i + 1]!];
+          const next: [number, number] = [nums[i], nums[i + 1]];
           if (cur) {
             out.push({
               kind: 'line',
@@ -938,21 +938,21 @@ function svgLayerToDxf(svg: string, layerId: string, layer: string, H: number): 
         }
       } else if (cmd === 'A') {
         if (!cur) throw new Error('DXF: oblouk bez počátku.');
-        const [rx, , , laf, sf, x1, y1] = nums as unknown as number[];
-        const c = svgArcToCentre(cur[0], cur[1], rx!, laf === 1, sf === 1, x1!, y1!);
+        const [rx, , , laf, sf, x1, y1] = nums;
+        const c = svgArcToCentre(cur[0], cur[1], rx, laf === 1, sf === 1, x1, y1);
         // Do DXF souřadnic (y nahoru) a pak úhly.
         const cy = flip(c.cy);
         const sA = Math.atan2(flip(cur[1]) - cy, cur[0] - c.cx);
-        const eA = Math.atan2(flip(y1!) - cy, x1! - c.cx);
+        const eA = Math.atan2(flip(y1) - cy, x1 - c.cx);
         // Skutečný střed oblouku v SVG: bod na kružnici v polovině rozsahu.
         const midSvg = (() => {
           const a0 = Math.atan2(cur[1] - c.cy, cur[0] - c.cx);
-          const a1 = Math.atan2(y1! - c.cy, x1! - c.cx);
+          const a1 = Math.atan2(y1 - c.cy, x1 - c.cx);
           let da = a1 - a0;
           if (sf === 1 && da < 0) da += 2 * Math.PI;
           if (sf === 0 && da > 0) da -= 2 * Math.PI;
           const am = a0 + da / 2;
-          return [c.cx + rx! * Math.cos(am), c.cy + rx! * Math.sin(am)] as const;
+          return [c.cx + rx * Math.cos(am), c.cy + rx * Math.sin(am)] as const;
         })();
         const midAngle = Math.atan2(flip(midSvg[1]) - cy, midSvg[0] - c.cx);
         const inCcw = (a0: number, a1: number, a: number): boolean => {
@@ -961,8 +961,8 @@ function svgLayerToDxf(svg: string, layerId: string, layer: string, H: number): 
           return norm(a - a0) <= span + 1e-9;
         };
         const [a0, a1] = inCcw(sA, eA, midAngle) ? [sA, eA] : [eA, sA];
-        out.push({ kind: 'arc', layer, cx: c.cx, cy, r: rx!, a0, a1 });
-        cur = [x1!, y1!];
+        out.push({ kind: 'arc', layer, cx: c.cx, cy, r: rx, a0, a1 });
+        cur = [x1, y1];
       } else if (cmd === 'Z') {
         if (cur && first && (cur[0] !== first[0] || cur[1] !== first[1])) {
           out.push({
@@ -1071,7 +1071,7 @@ export function buildBeltTipPreviewSvg(tip: BeltTipSpec, style: 'point' | 'round
   const w = tip.beltWidthMm;
   const half = w / 2;
   const holes = holeOffsetsFromApexMm(tip);
-  const shownMm = Math.ceil(holes[holes.length - 1]! + 18);
+  const shownMm = Math.ceil(holes[holes.length - 1] + 18);
   const pad = 8;
   const cy = pad + half;
   const apexX = pad + shownMm;
@@ -1167,6 +1167,110 @@ export function buildBeltTipPreviewSvg(tip: BeltTipSpec, style: 'point' | 'round
     holeCircles,
     '</svg>',
   ].join('\n');
+}
+
+/**
+ * Varianta pro řezárny, které gravírují **rastrem** a potřebují uzavřené plochy,
+ * ne čáry. Každá gravírovaná úsečka se převede na obdélník o šířce `widthMm`.
+ *
+ * Proč to není výchozí: tahle destička chce **vektorové** gravírování jedním
+ * průchodem, protože vodicí linky slouží k srovnání hrany pásu a šířka linky je
+ * sama o sobě nepřesnost. Plochy jsou ústupek konkrétnímu provozu, ne vylepšení.
+ *
+ * Konce obdélníků jsou „na tupo", tedy přesně jako u původního tahu s butt cap —
+ * převod tím nemění délku ani polohu žádné linky, jen jí dá šířku.
+ */
+function engraveSegments(svg: string): [number, number, number, number][] {
+  const start = svg.indexOf('<g id="engrave"');
+  if (start < 0) throw new Error('Plochy: gravírovací vrstva v SVG chybí.');
+  const body = svg.slice(start, svg.indexOf('</g>', start));
+  const out: [number, number, number, number][] = [];
+  for (const m of body.matchAll(/<path d="([^"]+)"/g)) {
+    for (const sub of m[1].split('M').slice(1)) {
+      const n = [...sub.matchAll(/-?[\d.]+/g)].map((v) => Number(v[0]));
+      for (let i = 0; i + 3 < n.length; i += 2) {
+        const seg: [number, number, number, number] = [n[i], n[i + 1], n[i + 2], n[i + 3]];
+        if (Math.hypot(seg[2] - seg[0], seg[3] - seg[1]) > 1e-9) out.push(seg);
+      }
+    }
+  }
+  return out;
+}
+
+/** Rohy obdélníku kolem úsečky: A±n·w/2, B±n·w/2. */
+function segmentRect(
+  [x1, y1, x2, y2]: [number, number, number, number],
+  widthMm: number,
+): [number, number][] {
+  const len = Math.hypot(x2 - x1, y2 - y1);
+  const nx = (-(y2 - y1) / len) * (widthMm / 2);
+  const ny = ((x2 - x1) / len) * (widthMm / 2);
+  return [
+    [x1 + nx, y1 + ny],
+    [x2 + nx, y2 + ny],
+    [x2 - nx, y2 - ny],
+    [x1 - nx, y1 - ny],
+  ];
+}
+
+export function buildBeltPlateAreaSvg(
+  end: BeltEndSpec,
+  tip: BeltTipSpec,
+  plate: BeltPlateSpec = DEFAULT_BELT_PLATE,
+  widthMm = 0.25,
+): string {
+  const base = buildBeltPlateSvg(end, tip, plate);
+  const cutFrom = base.indexOf('<g id="cut"');
+  const cutTo = base.indexOf('</g>', cutFrom) + 4;
+  const header = base.slice(0, cutFrom);
+  const cutLayer = base.slice(cutFrom, cutTo);
+  const rects = engraveSegments(base).map((seg) => {
+    const d = segmentRect(seg, widthMm)
+      .map(([x, y], i) => `${i === 0 ? 'M' : 'L'}${f(x)} ${f(y)}`)
+      .join(' ');
+    return `<path d="${d} Z" fill="${LASER.engraveColor}" stroke="none"/>`;
+  });
+  return [
+    header.replace(
+      'REZACI SOUBOR',
+      `REZACI SOUBOR - VARIANTA S GRAVIROVANIM JAKO PLOCHY (sirka ${f(widthMm)} mm)\n     REZ`,
+    ),
+    cutLayer,
+    `<g id="engrave" inkscape:groupmode="layer" inkscape:label="GRAVIROVANI">`,
+    ...rects,
+    '</g>',
+    '</svg>',
+  ].join('\n');
+}
+
+/** Totéž v DXF: gravírování jako uzavřené polyliny (R12 POLYLINE/VERTEX/SEQEND). */
+export function buildBeltPlateAreaDxf(
+  end: BeltEndSpec,
+  tip: BeltTipSpec,
+  plate: BeltPlateSpec = DEFAULT_BELT_PLATE,
+  widthMm = 0.25,
+): string {
+  const L = beltPlateLayout(end, tip, plate);
+  const H = L.plateHeightMm;
+  const base = buildBeltPlateSvg(end, tip, plate);
+  const cutOnly = buildBeltPlateDxf(end, tip, plate, true);
+  const g = (code: number, value: string | number): string => `${code}\n${value}\n`;
+  const num = (v: number): string => v.toFixed(4);
+  const polys = engraveSegments(base)
+    .map((seg) => {
+      const pts = segmentRect(seg, widthMm);
+      let out = g(0, 'POLYLINE') + g(8, 'GRAVIROVANI') + g(66, 1) + g(70, 1);
+      for (const [x, y] of pts) {
+        out +=
+          g(0, 'VERTEX') + g(8, 'GRAVIROVANI') + g(10, num(x)) + g(20, num(H - y)) + g(30, '0.0');
+      }
+      return out + g(0, 'SEQEND') + g(8, 'GRAVIROVANI');
+    })
+    .join('');
+  // Vložit před ENDSEC sekce ENTITIES řezu.
+  const marker = `0\nENDSEC\n0\nEOF\n`;
+  if (!cutOnly.endsWith(marker)) throw new Error('Plochy: neočekávaný konec DXF.');
+  return cutOnly.slice(0, -marker.length) + polys + marker;
 }
 
 export function buildPlateLegendSvg(
@@ -1421,6 +1525,23 @@ async function main(): Promise<void> {
     // DXF: české zakázkové řezárny chtějí Corel/AutoCAD/Illustrator a automatické
     // kalkulačky přímo DXF. `-rez` je varianta bez gravírování pro kalkulačky,
     // které naceňují jen řezané kontury.
+    // Varianta pro řezárny, které gravírují rastrem a chtějí uzavřené plochy.
+    // Šířku lze přebít: --engrave-width 0.3
+    const areaWidth = (() => {
+      const i = process.argv.indexOf('--engrave-width');
+      if (i < 0) return 0.25;
+      const v = Number(process.argv[i + 1]);
+      if (!Number.isFinite(v) || v < 0.1 || v > 1) {
+        throw new Error('--engrave-width musí být v mm mezi 0,1 a 1.');
+      }
+      return v;
+    })();
+    const areaSvg = resolve(outDir, 'opasek-desticka-plochy.svg');
+    writeFileSync(areaSvg, buildBeltPlateAreaSvg(end, tip, DEFAULT_BELT_PLATE, areaWidth), 'utf8');
+    const areaDxf = resolve(outDir, 'opasek-desticka-plochy.dxf');
+    writeFileSync(areaDxf, buildBeltPlateAreaDxf(end, tip, DEFAULT_BELT_PLATE, areaWidth), 'utf8');
+    console.log(`Zapsáno ${areaSvg} a ${areaDxf} (gravírování jako plochy ${areaWidth} mm)`);
+
     const dxfPath = resolve(outDir, 'opasek-desticka.dxf');
     writeFileSync(dxfPath, buildBeltPlateDxf(end, tip), 'utf8');
     console.log(`Zapsáno ${dxfPath} (2 vrstvy, mm, oblouky jako ARC)`);
