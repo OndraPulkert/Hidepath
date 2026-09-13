@@ -5,6 +5,7 @@ import { ReadinessTag } from '@/components/equipment/equipment-tags';
 import { StickyActionBar } from '@/components/layout/sticky-action-bar';
 import { CheckpointList } from '@/components/lessons/checkpoint-list';
 import { LessonLockNotice } from '@/components/lessons/lesson-lock-notice';
+import { LessonNotes } from '@/components/lessons/lesson-notes';
 import { MediaSlot } from '@/components/lessons/media-slot';
 import { StepList } from '@/components/lessons/step-list';
 import { Button } from '@/components/ui/button';
@@ -205,6 +206,8 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
           disabled={locked || view.status === 'completed' || isLoading}
         />
       </Card>
+
+      <LessonNotes project={project} lesson={lesson} />
 
       <p className="text-meta text-ink-2">
         Text lekce je návrh a projde odbornou korekturou. Pokud něco nesedí s tím, co vidíte na

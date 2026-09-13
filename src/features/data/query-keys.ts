@@ -6,6 +6,8 @@ export const queryKeys = {
   inventory: (scope: string) => [scope, 'inventory'] as const,
   enrollments: (scope: string) => [scope, 'enrollments'] as const,
   progress: (scope: string, projectSlug: string) => [scope, 'progress', projectSlug] as const,
+  lessonNotes: (scope: string, projectSlug: string) =>
+    [scope, 'lesson-notes', projectSlug] as const,
 };
 
 /** Mutace v jednom scope běží sériově – zabrání dvěma souběžným INSERTům téže entity. */
@@ -13,6 +15,9 @@ export const mutationScopes = {
   inventory: (scope: string) => ({ id: `${scope}:inventory` }),
   enrollments: (scope: string) => ({ id: `${scope}:enrollments` }),
   progress: (scope: string, projectSlug: string) => ({ id: `${scope}:progress:${projectSlug}` }),
+  lessonNotes: (scope: string, projectSlug: string) => ({
+    id: `${scope}:lesson-notes:${projectSlug}`,
+  }),
 };
 
 export const LOCAL_SCOPE = 'local';

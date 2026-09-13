@@ -138,7 +138,11 @@ export function DataProvider({
 
   const value = useMemo<DataContextValue>(
     () => ({
-      repositories: cloud ?? local.repositories,
+      // Poznámky od ponku zůstávají v zařízení i s účtem: cloud pro ně tabulku nemá
+      // a synchronizace přijde s Milníkem 4. Ostatní kolekce jdou do účtu.
+      repositories: cloud
+        ? { ...cloud, lessonNotes: local.repositories.lessonNotes }
+        : local.repositories,
       scope,
       persistent: cloud ? true : local.persistent,
       mode: cloud ? 'cloud' : 'local',

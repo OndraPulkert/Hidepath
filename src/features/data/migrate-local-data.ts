@@ -1,5 +1,9 @@
 import { type CollectionRepository } from '@/features/data/local-collection';
-import { naturalKeys, type Repositories } from '@/features/data/repositories';
+import {
+  naturalKeys,
+  type CloudRepositories,
+  type Repositories,
+} from '@/features/data/repositories';
 
 /**
  * Přenos dat pořízených bez účtu (localStorage) do účtu po prvním přihlášení.
@@ -64,7 +68,7 @@ async function migrateCollection<T extends Timestamped>(
 /** Přenese všechny lokální kolekce do účtu. Bez lokálních dat neudělá jediný vzdálený dotaz. */
 export async function migrateLocalData(
   local: Repositories,
-  remote: Repositories,
+  remote: CloudRepositories,
   signal?: AbortSignal,
 ): Promise<MigrationSummary> {
   const results = await Promise.all([

@@ -2,7 +2,7 @@ import { type PostgrestError, type SupabaseClient } from '@supabase/supabase-js'
 import { z } from 'zod';
 
 import { type CollectionRepository } from '@/features/data/local-collection';
-import { type Repositories } from '@/features/data/repositories';
+import { type CloudRepositories } from '@/features/data/repositories';
 import { type InventoryItem } from '@/features/inventory/types';
 import {
   type CheckpointProgressRecord,
@@ -307,7 +307,7 @@ function createTableRepository<T extends keyof RowSchemas, R extends { id: strin
 export function createSupabaseRepositories(
   client: AppSupabaseClient,
   userId: string,
-): Repositories {
+): CloudRepositories {
   return {
     inventory: createTableRepository(client, 'inventory_items', userId, mappers.inventory),
     enrollments: createTableRepository(client, 'project_enrollments', userId, mappers.enrollments),

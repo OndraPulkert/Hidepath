@@ -27,3 +27,20 @@ export function Label({ className, ...props }: ComponentProps<'label'>) {
     />
   );
 }
+
+/** Vícerádkové pole se stejným vzhledem jako `Input`; výška roste s obsahem přes `rows`. */
+export function Textarea({ className, ...props }: ComponentProps<'textarea'>) {
+  return (
+    <textarea
+      data-slot="textarea"
+      className={cn(
+        'min-h-touch w-full rounded-md border border-line bg-paper px-3.5 py-2.5 text-body text-leather',
+        'placeholder:text-ink-2/70 hover:border-line-strong',
+        'focus-visible:border-cognac focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-cognac',
+        'disabled:opacity-45',
+        className,
+      )}
+      {...props}
+    />
+  );
+}
