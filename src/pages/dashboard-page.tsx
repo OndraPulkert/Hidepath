@@ -9,15 +9,15 @@ import { Kicker } from '@/components/ui/kicker';
 import { LoadingNotice } from '@/components/ui/loading-notice';
 import { ProgressBar } from '@/components/ui/progress-bar';
 import { equipmentCatalog } from '@/content/equipment';
-import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { difficultyLabels } from '@/content/projects';
 import { type NextAction } from '@/features/progress/next-action';
 import { useCompleteProject } from '@/features/progress/use-progress';
+import { useActiveProject } from '@/features/projects/use-active-project';
 import { useProjectState } from '@/features/projects/use-project-state';
 import { formatCzk, formatPercent, pluralizeCs, typo } from '@/lib/utils/format';
 
 export function DashboardPage() {
-  const project = cardHolderProject;
+  const project = useActiveProject();
   const state = useProjectState(project);
   const completeProject = useCompleteProject();
   const { journey, readiness, budget, nextAction } = state;
@@ -165,7 +165,7 @@ function NextActionContent({
   action: NextAction;
   onCompleteProject: () => void;
 }) {
-  const project = cardHolderProject;
+  const project = useActiveProject();
   switch (action.kind) {
     case 'choose_project':
       return (

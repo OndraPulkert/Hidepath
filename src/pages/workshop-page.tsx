@@ -9,10 +9,10 @@ import { Input, Label } from '@/components/ui/input';
 import { Kicker } from '@/components/ui/kicker';
 import { LoadingNotice } from '@/components/ui/loading-notice';
 import { equipmentCatalog, equipmentCategoryLabels } from '@/content/equipment';
-import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { type EquipmentCategory, type EquipmentDefinition } from '@/content/schema';
 import { type InventoryItem } from '@/features/inventory/types';
 import { useUpdateInventoryItem } from '@/features/inventory/use-inventory';
+import { useActiveProject } from '@/features/projects/use-active-project';
 import { useProjectState } from '@/features/projects/use-project-state';
 import { formatCzk, pluralizeCs, typo } from '@/lib/utils/format';
 
@@ -25,7 +25,7 @@ const categories: readonly EquipmentCategory[] = [
 ];
 
 export function WorkshopPage() {
-  const project = cardHolderProject;
+  const project = useActiveProject();
   const { inventory, costs, isLoading } = useProjectState(project);
   const owned = Object.values(inventory).filter((i) => i.status === 'owned');
 

@@ -2,6 +2,8 @@
  * Jediné místo s definicí URL. Komponenty i testy používají tyto buildery,
  * nikdy ručně psané řetězce.
  */
+import { startingProject } from '@/content/projects';
+
 export const routes = {
   home: '/',
   login: '/login',
@@ -26,9 +28,6 @@ export const routePatterns = {
   template: '/projects/:projectSlug/template',
 } as const;
 
-/** Slug jediného MVP projektu. Obsah projektu přijde v Milníku 2. */
-export const CARD_HOLDER_SLUG = 'card-holder';
-
 /**
  * Kam poslat uživatele z kořenové adresy: bez aktivního projektu na onboarding,
  * jinak na přehled.
@@ -50,7 +49,7 @@ export const primaryNavItems: readonly NavItem[] = [
   { to: routes.shopping, label: 'Nákupy', matchPrefixes: [routes.shopping] },
   { to: routes.workshop, label: 'Dílna', matchPrefixes: [routes.workshop] },
   {
-    to: routes.project(CARD_HOLDER_SLUG),
+    to: routes.project(startingProject.slug),
     label: 'Projekt a lekce',
     matchPrefixes: ['/projects'],
   },

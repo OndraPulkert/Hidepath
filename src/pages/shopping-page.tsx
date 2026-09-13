@@ -8,10 +8,10 @@ import { Kicker } from '@/components/ui/kicker';
 import { LoadingNotice } from '@/components/ui/loading-notice';
 import { Segment, SegmentButton } from '@/components/ui/segment';
 import { equipmentCatalog } from '@/content/equipment';
-import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { type EquipmentPriority, type EquipmentStatus } from '@/content/schema';
 import { getEquipmentStatus } from '@/features/inventory/types';
 import { useUpdateInventoryItem } from '@/features/inventory/use-inventory';
+import { useActiveProject } from '@/features/projects/use-active-project';
 import { useProjectState } from '@/features/projects/use-project-state';
 
 type Filter = 'all' | EquipmentStatus;
@@ -19,7 +19,7 @@ const filters: readonly Filter[] = ['all', 'want_to_buy', 'ordered', 'owned'];
 const priorities: readonly EquipmentPriority[] = ['required', 'recommended', 'later'];
 
 export function ShoppingPage() {
-  const project = cardHolderProject;
+  const project = useActiveProject();
   const { inventory, readiness, budget, isLoading } = useProjectState(project);
   const update = useUpdateInventoryItem();
   const [filter, setFilter] = useState<Filter>('all');

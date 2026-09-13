@@ -8,10 +8,10 @@ import { Card } from '@/components/ui/card';
 import { Kicker } from '@/components/ui/kicker';
 import { MediaSlot } from '@/components/lessons/media-slot';
 import { equipmentCatalog } from '@/content/equipment';
-import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { difficultyLabels } from '@/content/projects';
 import { type EquipmentStatus } from '@/content/schema';
 import { useInventory, useUpdateInventoryItem } from '@/features/inventory/use-inventory';
+import { useActiveProject } from '@/features/projects/use-active-project';
 import { buildLoginUrl } from '@/features/auth/session';
 import { useSession } from '@/features/auth/session-provider';
 import { useEnrollment, useEnrollProject } from '@/features/progress/use-progress';
@@ -23,7 +23,7 @@ import { typo } from '@/lib/utils/format';
  * Bez horní navigace. Po dokončení vznikne zápis do projektu a jde se na přehled.
  */
 export function OnboardingPage() {
-  const project = cardHolderProject;
+  const project = useActiveProject();
   const navigate = useNavigate();
   const { enrollment, isLoading } = useEnrollment(project.slug);
   const { session, authAvailable } = useSession();

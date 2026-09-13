@@ -12,8 +12,8 @@ import { Card } from '@/components/ui/card';
 import { NoticeBox } from '@/components/ui/notice-box';
 import { Tag } from '@/components/ui/tag';
 import { equipmentCatalog } from '@/content/equipment';
-import { lessonBodies } from '@/content/projects/card-holder/lesson-bodies';
 import { findProject } from '@/content/projects';
+import { lessonBodiesFor } from '@/content/projects/lesson-bodies';
 import { type ProjectDefinition } from '@/content/schema';
 import { getEquipmentStatus } from '@/features/inventory/types';
 import { isCheckpointCompleted } from '@/features/progress/types';
@@ -49,7 +49,7 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
   const prev = ordered[index - 1];
   const next = ordered[index + 1];
   const nextView = next ? journey.lessonViews.find((v) => v.slug === next.slug) : undefined;
-  const Body = lessonBodies[lesson.slug];
+  const Body = lessonBodiesFor(project.slug)[lesson.slug];
 
   const finish = async () => {
     if (!view.canComplete) return;

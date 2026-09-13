@@ -452,7 +452,7 @@ describe('destička na opasek', () => {
         if (t[1] === 'M') cur = [n[0]!, n[1]!];
         else if (t[1] === 'L') cur = [n[n.length - 2]!, n[n.length - 1]!];
         else {
-          const [rx, , , , sweep, x1, y1] = n as unknown as number[];
+          const [rx, , , , sweep, x1, y1] = n;
           const dy = y1! - cur![1];
           const bulgeX = sweep === 1 ? dy : -dy;
           if (rx! >= 14) {

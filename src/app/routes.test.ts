@@ -1,10 +1,9 @@
-import {
-  isNavItemActive,
-  primaryNavItems,
-  resolveHomeRoute,
-  routes,
-  CARD_HOLDER_SLUG,
-} from './routes';
+import { startingProject } from '@/content/projects';
+
+import { isNavItemActive, primaryNavItems, resolveHomeRoute, routes } from './routes';
+
+// Trasy se testují proti skutečnému slugu prvního projektu, ne proti kopii řetězce.
+const CARD_HOLDER_SLUG = startingProject.slug;
 
 describe('routes', () => {
   it('sestaví dynamické cesty s parametry', () => {

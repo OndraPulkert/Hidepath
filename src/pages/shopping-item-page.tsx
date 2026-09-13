@@ -9,16 +9,17 @@ import { Card } from '@/components/ui/card';
 import { Kicker } from '@/components/ui/kicker';
 import { NoticeBox } from '@/components/ui/notice-box';
 import { equipmentCatalog, equipmentCategoryLabels } from '@/content/equipment';
-import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { getEquipmentStatus } from '@/features/inventory/types';
 import { useInventory, useUpdateInventoryItem } from '@/features/inventory/use-inventory';
+import { useActiveProject } from '@/features/projects/use-active-project';
 import { NotFoundPage } from '@/pages/not-found-page';
 import { formatCzkRange, typo } from '@/lib/utils/format';
 
 export function ShoppingItemPage() {
   const { toolSlug = '' } = useParams<'toolSlug'>();
   const definition = equipmentCatalog[toolSlug];
-  const requirement = cardHolderProject.equipment.find((e) => e.equipmentSlug === toolSlug);
+  const project = useActiveProject();
+  const requirement = project.equipment.find((e) => e.equipmentSlug === toolSlug);
   const inventory = useInventory();
   const update = useUpdateInventoryItem();
 
@@ -94,9 +95,7 @@ export function ShoppingItemPage() {
           </section>
 
           <section>
-            <h2 className="mb-2 text-h2">
-              Co koupit pro {cardHolderProject.title.toLocaleLowerCase('cs')}
-            </h2>
+            <h2 className="mb-2 text-h2">Co koupit pro {project.title.toLocaleLowerCase('cs')}</h2>
             {requirement ? (
               <p className="mb-3 text-body text-ink-2">{requirement.specification}</p>
             ) : null}

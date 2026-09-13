@@ -1,11 +1,12 @@
 import { Navigate } from 'react-router';
 
-import { CARD_HOLDER_SLUG, resolveHomeRoute } from '@/app/routes';
+import { resolveHomeRoute } from '@/app/routes';
+import { startingProject } from '@/content/projects';
 import { useEnrollment } from '@/features/progress/use-progress';
 
 /** Kořen: s aktivním projektem na přehled, bez něj na onboarding. */
 export function HomeRoute() {
-  const { enrollment, isLoading } = useEnrollment(CARD_HOLDER_SLUG);
+  const { enrollment, isLoading } = useEnrollment(startingProject.slug);
   if (isLoading) {
     return (
       <p role="status" className="px-page py-10 text-ink-2">
