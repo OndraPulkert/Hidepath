@@ -27,7 +27,11 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     buyingGuide: [
       { label: 'Činění', value: 'třísločiněná („veg-tan“), ne chromočiněná' },
       { label: 'Tloušťka', value: '1,2–1,5 mm (karty se vejdou, pouzdro není tlusté)' },
-      { label: 'Množství', value: 'přířez A4 na pouzdro + odřezky na trénink' },
+      {
+        label: 'Množství',
+        value:
+          'přířez A4 na pouzdro (oba díly se vejdou i s rezervou) + 2× A5 téže kůže na trénink lekcí 1–4',
+      },
       {
         label: 'Barva',
         value:
@@ -35,8 +39,8 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       },
     ],
     cautions: [
-      'Přířezy A4/A3 v této tloušťce většina obchodů nenabízí v katalogu. Napište prodejci a poptejte přířez; celá kůže stojí tisíce korun.',
-      'Na trénink řezu a děrování stačí levné odřezky, i štípenka (spodní vrstva kůže bez líce). Finální díly ale řežte z lícové kůže, štípenka se chová jinak.',
+      'Přířezy A5–A2 v této tloušťce prodává CraftPoint; jinde je často potřeba přířez poptat, celá kůže stojí tisíce korun.',
+      'Na trénink řezu a děrování (lekce 1–3) stačí levné odřezky, i štípenka (spodní vrstva kůže bez líce). Na lepení a steh v lekci 4 je lepší tenká třísločiněná – nejjednodušší jsou dvě A5 téže kůže. Finální díly řežte z lícové kůže, štípenka se chová jinak.',
       'Kůže má lícovou (hladkou) a rubovou (vláknitou) stranu. Šablonu kreslete na rub.',
     ],
     avoid: [
@@ -57,20 +61,31 @@ export const equipmentList: readonly EquipmentDefinition[] = [
           'na trénink stačí; dílny a obchody je často prodávají po balíčcích za desítky korun',
       },
     ],
-    priceRange: { minCents: 35_000, maxCents: 60_000 },
-    priceSource: 'estimate',
-    priceNote: `${ESTIMATE_NOTE} Cena za přířez zhruba A4 včetně odřezků.`,
+    // A4 183–252 Kč podle odstínu + 2× A5 na trénink 116 Kč (CraftPoint, ověřeno 2026-09-14).
+    priceRange: { minCents: 29_900, maxCents: 36_800 },
+    priceSource: 'verified',
+    priceNote: `${VERIFIED_NOTE} Přířez A4 plus dvě A5 na trénink.`,
     alsoUsedFor: ['Pouzdro na karty', 'Klíčenka', 'Peněženka bifold'],
     examples: [
+      {
+        title: 'Třísločiněná hovězí lícová kůže 1,2 mm – juchtová (přírodní)',
+        shop: 'CraftPoint',
+        url: 'https://craft-point.cz/products/hovezi-kuze-licova-juchtova-trislocinena-1-2-mm',
+        priceCents: 18_300,
+        priceNote: 'A4; A5 58 Kč, A3 366 Kč',
+        note: 'Nejlevnější odstín téže kůže. Na pouzdro A4, na trénink lekcí 1–4 přihoďte 2× A5 – stejná kůže, stejné chování, bez dalšího poštovného.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-14',
+      },
       {
         title: 'Třísločiněná hovězí lícová kůže 1,2 mm – Whisky',
         shop: 'CraftPoint',
         url: 'https://craft-point.cz/products/hovezi-licova-kuze-trislocinena-1-2-mm-whisky',
         priceCents: 25_200,
-        priceNote: 'základní cena; přířezy A5–A2 se prodávají zvlášť, cena podle velikosti',
-        note: 'Lícová kůže 1,2 mm probarvená do odstínu whisky, tedy spodní hranice doporučené tloušťky. Na pouzdro stačí A4. V době ověření byly všechny velikosti vyprodané.',
-        availability: 'unavailable',
-        checkedAt: '2026-09-07',
+        priceNote: 'A4; A3 503 Kč. Stejné ceny mají odstíny karamelová a t. moro.',
+        note: 'Lícová kůže 1,2 mm probarvená do odstínu whisky, tedy spodní hranice doporučené tloušťky. Na pouzdro stačí A4. Dřívější záznam „vyprodáno“ byl chybným čtením stránky; A4–A2 jsou skladem, A5 ne.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-14',
       },
       {
         title: 'Kožené odřezky – štípenka 1,5–2,2 mm',
@@ -78,7 +93,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         url: 'https://sedlarskenaradi.cz/kozene-odrezky-stipenka/',
         priceCents: 3_500,
         priceNote: 'za 100 g',
-        note: 'Jen na trénink řezu, děrování a stehu (lekce 1–4). Na finální díly ne, štípenka se chová jinak než lícová kůže.',
+        note: 'Jen na trénink řezu a děrování (lekce 1–3). Na lepení a steh v lekci 4 radši dvě A5 třísločiněné; na finální díly ne, štípenka se chová jinak než lícová kůže.',
         availability: 'in_stock',
         checkedAt: '2026-09-07',
       },
