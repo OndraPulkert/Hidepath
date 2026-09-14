@@ -48,6 +48,21 @@ věci z nákupního seznamu opasku, které trénink pouzdra nemá – **ořezáv
 Pátou – značení podle destičky – natrénuješ až s destičkou v ruce; do té doby stačí kontrolní tisk
 na papíře a šídlo.
 
+## Pravidlo pro trénink (rozhodnuto 2026-09-14, ADR 002 bod 5)
+
+Trénink se **nedělá na všechno najednou**, ale před každým projektem, a jeho obsah se odvozuje
+z této tabulky:
+
+- **nová technika** → celé cvičení;
+- **známá technika v jiné třídě materiálu** (řez 1,2 mm → 3,5 mm) → cvičení znovu, na odřezcích
+  ze stejného materiálu jako projekt;
+- **známá technika ve stejném materiálu** → volitelné připomenutí (jeden proužek na zahřátí,
+  přeskočitelné), protože dovednost vyprchává.
+
+Důsledek pro nákup: na pouzdro stačí A4 + 2× A5 tenké třísločiněné kůže. Silné odřezky,
+ořezávač hran a průbojníky se kupují **až s pásem**, a trénink opasku se dělá na jeho odřezcích.
+Dřívější doporučení koupit silné zbytky „na všechno" tímto padá.
+
 ## Co s tím udělat v portálu (ne teď)
 
 Tohle je obsahový podklad pro **sdílené návody technik** z ADR 002, bod 3: až budou osnovy tří

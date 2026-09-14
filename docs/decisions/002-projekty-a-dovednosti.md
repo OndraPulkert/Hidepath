@@ -45,6 +45,15 @@ učení podle odhadu je přesně chyba, kterou stálo pět revizních kol u šab
    teprve pak dělení lekce 6, „nedaří se mi" a ukázky. Body 1–3 tohoto ADR na výrobě nezávisí
    a dělají se souběžně.
 
+5. **Trénink před každým projektem, ne všechno najednou** (návrh autora, 2026-09-14). Každý projekt
+   má vlastní tréninkovou fázi – pouzdro ji už má („04 Trénink na odřezku") – a její obsah se
+   **odvozuje**: techniky, které projekt potřebuje, minus techniky už natrénované v předchozích
+   projektech. Jednotkou dovednosti je **technika + třída materiálu** (řez 1,2 mm ≠ řez 3,5 mm),
+   takže stará technika v novém materiálu se trénuje znovu. Stará technika ve stejném materiálu
+   se nabízí jako **volitelné připomenutí** (zkrácené cvičení, jde přeskočit), protože dovednost
+   vyprchává. Důsledek pro nákup: odřezky a nástroje na trénink se kupují **s projektem**, ze
+   stejného materiálu, ne dopředu.
+
 ## Důsledky
 
 - Přidání druhého projektu = jeden záznam v registru, jeden řádek v `lessonBodiesFor`
