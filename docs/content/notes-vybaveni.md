@@ -225,3 +225,23 @@ Rozhodnutí: do katalogu se nepřidává jako položka, jen jako explicitní zá
 u položky `utility-knife`. Důvody: cena 1 350–2 700 Kč, nutnost udržovat břitvovou ostrost jako
 samostatná dovednost, a hlavně to, že na pouzdro nepřinese nic nad odlamovací nůž za 69 Kč.
 Kandidát pro pozdější projekty, kde se ztenčují hrany (peněženka, pásek).
+
+## Odřezky na trénink – rešerše tří zdrojů (ověřeno 2026-09-14)
+
+Kritérium je jediné: **třísločiněná lícová 1,2–1,5 mm**, tedy stejný typ kůže jako finální díl.
+Chromočiněná se chová jinak (měkká, hrana se nezaleští, vidličky jinak propichují) a trénink na ní
+učí špatnou ruku. Sledované obchody, co o činění skutečně píší:
+
+| Zdroj                                                   | Co nabízí                                                                                                                                  | Činění uvedeno?                                    | Verdikt                                                                                       |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| imago.cz „Odřezky kůže 0,5 kg"                          | 249 Kč, 520 g, „tvarově i barevně pestré", černé/hnědé                                                                                     | **ne**                                             | nekupovat na trénink                                                                          |
+| andexnite.cz „ZBYTKY KŮŽE"                              | pytlíky ~60 dm², 230–350 Kč, tloušťka uvedená (např. 522: 1,0–1,4 mm hnědá mix), barevné mixy                                              | **ne** (na stránce jen „čalounictví/oděv/nábytek") | nekupovat; jediný „přírodní" pytlík (552) je 2,5–4 mm a vyprodaný                             |
+| andexnite.cz kategorie třísločiněná hlazenice           | Cognac 1,3–1,4 mm od 300 Kč, černá 1,6 mm od 310 Kč, Crazy Horse 1,6 mm od 210 Kč; prodejna Praha 4                                        | ano                                                | správná kůže, ale nejmenší formát/cena přes API nezjištěn                                     |
+| sijemezkuze.cz „Zbytkové kousky třísločiněné hlazenice" | **skutečně třísločiněné zbytky prodávané po velikostech**: XS 1–2 dm² 19 Kč, S 2–4 dm² 30 Kč, M 4–6 dm² 55 Kč, XL 8–10 dm² 130 Kč, skladem | ano                                                | **dobrý doplněk**, ale jen v 1,8–2,5 mm (a silnější)                                          |
+| sijemezkuze.cz „Valchované kůže slabší 1–1,6 mm"        | nebarvené tříslo po dm²: 1,2–1,4 mm 27,50 Kč/dm², 1–1,5 mm 1. jakost 26,50, 2. jakost 19,90, teletina 1,1–1,3 mm 15,90 Kč/dm²              | ano                                                | správná tloušťka, ale **valchovaná = změkčená**; šablona pouzdra chce pevnou                  |
+| CraftPoint juchtová třísločiněná lícová 1,2 mm          | **A5 58 Kč, A4 183, A3 366**, skladem (přes `.js`)                                                                                         | ano                                                | **nejlepší volba**: tatáž kůže jako finální díl, přihodit k objednávce bez dalšího poštovného |
+
+Doporučení do obsahu: k objednávce kůže na pouzdro přidat **2× A5 juchtové (116 Kč)** na lekce 1–4.
+Sijemezkuze zbytky 1,8–2,5 mm jako levný doplněk na nácvik řezu a hran (silnější kůže se leští
+snáz), ne na nácvik stehu pro 1,2mm díl. Do katalogu doplnit sijemezkuze jako ověřený příklad
+třísločiněných zbytků a opravit „Whisky" u CraftPointu (skladem).
