@@ -158,6 +158,28 @@ o dopravě nic není. Neznamená to, že neposílají; destička váží asi 130
 otázka jednoho řádku v poptávce. Jen s tím počítej, že u prvních dvou je to nezodpovězená otázka,
 ne hotová informace.
 
+### Další ověřené provozovny (2026-09-14)
+
+Rešerše na dotaz, zda existují další výrobci. Ověřeno načtením stránek; u žádné z nich nejsou na
+webu tloušťky ani rozlišení lité/extrudované, takže **věta o materiálu v poptávce je u nich
+klíčová**. Řazeno podle toho, jak pravděpodobně mají lité (GS) skladem.
+
+| Provozovna              | Kde                                    | Co ověřeno                                                                                                                                                                                                                         | Kontakt                                                   |
+| ----------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| **TITAN-Multiplast**    | Smržovka (Liberecko)                   | Zpracovatel plastů se skladem „přes 1 100 tun" – lité GS téměř jistě mají. PMMA 0,5–50 mm, laser 350 W, plocha 2,2 × 3,2 m, „zvlášť malé díly z akrylátu se složitými tvary", gravírování ano. Technický poradce Tomáš Strózewski. | <tomas.strozewski@titan-multiplast.cz>, +420 483 360 901  |
+| **R-DESIGN PLAST**      | Ostrožská Nová Ves (Uherskohradišťsko) | Zpracovatel plastů (ohýbání, frézování, laser), „spolupracujeme s klienty po celé ČR". Řezání i gravírování PMMA. Nejbližší **zpracovatel** k Olomouci, ~100 km.                                                                   | <info@r-designplast.cz>, +420 774 84 99 95                |
+| **Smart Case Solution** | **Olomouc**, Bořivojova 235/1          | „Přesné laserové řezání všech nekovových materiálů" + gravírování, akrylátové výrobky na fotkách. Podrobnosti odkazují na weby nasijuti.cz a hanackadilna.cz. Lokální – kdyby se něco kazilo, dá se tam dojít.                     | <info@smartcasesolution.com>, +420 724 006 527            |
+| **i-reklama**           | **Olomouc**, Brněnská 110/49           | Reklamní dílna, „laser je vhodný k řezání některých plastických hmot a plexiskla" (stojánky, kapsy). Gravírování ano. Reklamní provozy mívají skladem **extrudované** – na lité se doptat výslovně.                                | <ireklama@email.cz>, +420 736 674 245 (Stanislav Pavelka) |
+| **Gravoservis**         | Čelákovice (Praha-východ)              | „Rychlá výroba již od jednoho kusu", gravírování i řezání, po celé ČR. Reklamní gravírování – lité na dotaz.                                                                                                                       | <info@gravoservis.cz>, +420 721 777 100                   |
+
+**Vyřazeno:** PROPERUS Olomouc (jen gravírování, neřeže), GraPro.cz (na webu výslovně „extrudované
+plexisklo do 5 mm" – přesně to, co nechceme), Grupol a podobné kalkulačky (plech).
+
+**Doporučení:** neoslovovat všechny. Tři nabídky (ALT, plexi.cz, Klaban) už běží; smysl má přidat
+nejvýš dvě: **TITAN-Multiplast** (materiál jistý, velký provoz zvyklý na kusovku) a jednu
+olomouckou (**Smart Case Solution**) kvůli blízkosti – kdyby destička přišla s vadou, řeší se to
+osobně za odpoledne, ne poštou za týden.
+
 ### Kam to neposílat
 
 - **Automatické online kalkulačky řezání laserem** typu **Grupol** vypadají ideálně (nahraješ DXF,
