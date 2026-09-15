@@ -10,8 +10,8 @@
 <circle cx="60" cy="37.5" r="1" fill="none" stroke="#8a8a8a" stroke-width="0.1"/>
 <circle cx="35" cy="37.5" r="1" fill="none" stroke="#8a8a8a" stroke-width="0.1"/>
 <circle cx="10" cy="37.5" r="1" fill="none" stroke="#8a8a8a" stroke-width="0.1"/>
-<path d="M184.3 73.5 A21 21 0 0 1 184.3 115.5 A1 1 0 0 0 184.3 113.5 A19 19 0 0 0 184.3 75.5 A1 1 0 0 0 184.3 73.5 Z" fill="none" stroke="#8a8a8a" stroke-width="0.1"/>
-<path d="M184.3 78.5 A16 16 0 0 1 184.3 110.5 A1 1 0 0 0 184.3 108.5 A14 14 0 0 0 184.3 80.5 A1 1 0 0 0 184.3 78.5 Z" fill="none" stroke="#8a8a8a" stroke-width="0.1"/>
+<path d="M184.3 73.5 A21 21 0 0 1 184.3 115.5 A1 1 0 0 1 184.3 113.5 A19 19 0 0 0 184.3 75.5 A1 1 0 0 1 184.3 73.5 Z" fill="none" stroke="#8a8a8a" stroke-width="0.1"/>
+<path d="M184.3 78.5 A16 16 0 0 1 184.3 110.5 A1 1 0 0 1 184.3 108.5 A14 14 0 0 0 184.3 80.5 A1 1 0 0 1 184.3 78.5 Z" fill="none" stroke="#8a8a8a" stroke-width="0.1"/>
 <circle cx="110" cy="94.5" r="1" fill="none" stroke="#8a8a8a" stroke-width="0.1"/>
 <circle cx="85" cy="94.5" r="1" fill="none" stroke="#8a8a8a" stroke-width="0.1"/>
 <circle cx="60" cy="94.5" r="1" fill="none" stroke="#8a8a8a" stroke-width="0.1"/>

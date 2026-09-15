@@ -215,25 +215,28 @@ osobně za odpoledne, ne poštou za týden.
 (_Šesté kolo_): sloty zaobleného konce 2 mm místo 1 mm (dva oblouky místo čtyř, žebro 3 mm)
 a zaoblení vnitřních rohů výřezu špičky R2. Ostatní geometrie beze změny.
 
-### Odpověď pro MK Plexi (odesláno s upravenou sadou)
+### Druhá odpověď MK Plexi (2026-09-15, na dotaz, které špičky)
+
+Screenshot z Corelu: konce slotů zaobleného konce (koncové půlkruhy stočené dovnitř → nulové
+špičky), paprsek 0,2 mm, ostré vnitřní rohy zaoblují na 1–1,5 mm, **sloty 2 mm a mezery 3 mm
+stačí**. Opraveno (`sablony-zdroje.md`, _Druhá odpověď MK Plexi_), sada přegenerována.
+
+### Odpověď pro MK Plexi (k odeslání s opravenou sadou)
 
 > Dobrý den, paní Spálenská,
 >
-> děkuji za nabídku, rád ji využiji. Kalkulace č. 180230.
+> děkuji za screenshot, teď už je to jasné. Ty špičky byly chyba v mém souboru: koncové půlkruhy
+> slotů byly otočené dovnitř. Opravil jsem je, takže konce slotů jsou teď hladké, sloty jsou 2 mm
+> s mezerami 3 mm a oblouky jsou dva místo čtyř. Dva vnitřní rohy výřezu špičky jsem zaoblil na
+> R2, zbytek destičky je beze změny.
 >
-> K Vašim poznámkám: (1) gravírování na pohledovou stranu – ano, přesně tak, díl prosím
-> nezrcadlit; (2) tenké obloučky – upravil jsem soubor: sloty jsou teď 2 mm široké a můstek mezi
-> nimi 3 mm, oblouky jsou jen dva místo čtyř; (3) ostré špičky – vrchol špičky má zaoblení R4,
-> dva vnitřní rohy výřezu jsem zaoblil na R2. Kdyby šlo o jiné místo, napište prosím, upravím.
->
-> V příloze je upravená sada: `opasek-desticka.dxf` (řez + gravír), `opasek-desticka.svg`
+> V příloze je opravená sada: `opasek-desticka.dxf` (řez + gravír), `opasek-desticka.svg`
 > (totéž), `opasek-desticka-rez.dxf` (jen řez) a `opasek-desticka-1-1.pdf` (kontrola měřítka:
-> obrys 215 × 184 mm). Prosím řezat podle nových dat, ne podle původních.
+> obrys 215 × 184 mm). Prosím řezat podle těchto dat, ne podle původních. Gravírování na
+> pohledovou stranu, díl nezrcadlit, kerf nekompenzovat.
 >
-> Dvě otázky: s jakou šířkou řezné spáry (kerf) u 3 mm GS počítáte a jaká nejmenší šířka slotu je
-> pro Vás bezpečná? Pokud by 2 mm bylo málo, nechám jen jeden oblouk.
->
-> Zálohu uhradím po Vašem potvrzení, že data jsou v pořádku; termín po opravě laseru mi nevadí.
+> Kalkulaci č. 180230 tímto potvrzuji. Pošlete mi prosím podklady k úhradě zálohy; termín po
+> opravě laseru mi nevadí.
 >
 > S pozdravem
 > Ondřej Pulkert

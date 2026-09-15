@@ -546,15 +546,21 @@ export function filletCorner(
 /**
  * Slot ve tvaru polokruhu (zaoblený konec pásu), jako uzavřená kontura.
  * Polokruh míří vpravo: začíná nad středem, jde přes +x a končí pod středem.
+ *
+ * Koncové půlkruhy mají sweep 1, tedy vyboulené **ven** ze slotu (doleva za svislici
+ * středu), aby na oblouky navazovaly tečně. Se sweep 0 se stáčely dovnitř slotu
+ * a v obou napojeních vznikla špička s nulovým úhlem — řezárna (MK Plexi,
+ * 2026-09-15) ji poslala na screenshotu: „v ostrém místě se nám paprsek zastaví“.
+ * Testy tehdy hlídaly jen směr velkých oblouků; teď hlídají tečnost všech napojení.
  */
 function arcSlot(cx: number, cy: number, r: number, width: number): string {
   const ro = r + width / 2;
   const ri = r - width / 2;
   return (
     `<path d="M${f(cx)} ${f(cy - ro)} A${f(ro)} ${f(ro)} 0 0 1 ${f(cx)} ${f(cy + ro)} ` +
-    `A${f(width / 2)} ${f(width / 2)} 0 0 0 ${f(cx)} ${f(cy + ri)} ` +
+    `A${f(width / 2)} ${f(width / 2)} 0 0 1 ${f(cx)} ${f(cy + ri)} ` +
     `A${f(ri)} ${f(ri)} 0 0 0 ${f(cx)} ${f(cy - ri)} ` +
-    `A${f(width / 2)} ${f(width / 2)} 0 0 0 ${f(cx)} ${f(cy - ro)} Z" ` +
+    `A${f(width / 2)} ${f(width / 2)} 0 0 1 ${f(cx)} ${f(cy - ro)} Z" ` +
     `fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`
   );
 }

@@ -1871,3 +1871,24 @@ spodní limit šířky slotu daný řezárnou (2 mm), ne jen šídlem (1 mm).
 slot ještě širší, při rozteči 5 mm už to nejde (slot 2,5 mm dá žebro 2,3 mm po řezu, pod limit)
 — pak zůstane jen jeden oblouk pro 40 mm (`roundedWidthsMm: [40]`), kontrola žeber se u jednoho
 oblouku neuplatní a slot může mít i 3 mm.
+
+#### Druhá odpověď MK Plexi: špičky byly konce slotů, ne špička pásu (2026-09-15)
+
+Paní Spálenská poslala screenshot z Corelu a doplnila: paprsek má **0,2 mm** (náš předpoklad
+kerfu seděl), „v ostrém místě se nám paprsek zastaví“, ostré vnitřní rohy upravují na rádius
+1–1,5 mm, **sloty 2 mm a mezery 3 mm stačí**. Na screenshotu nebyl výřez špičky, ale **konce slotů
+zaobleného konce**: koncový půlkruh každého slotu byl stočený **dovnitř** slotu, takže v obou
+napojeních na velké oblouky vznikla špička s nulovým úhlem. Příčina: sweep 0 místo 1 u obou
+koncových oblouků v `arcSlot()`. Chyba byla i v odeslané verzi (tag `poptavka-2026-09-11`) —
+test „sloty míří doprava, ne zrcadlově“ četl jen směr velkých oblouků, konce nikdo nekontroloval,
+a v náhledu je půlkruh o poloměru 0,5 mm neviditelný.
+
+Oprava: sweep 1 u obou koncových půlkruhů (vyboulené ven, za svislici středu). Nový obecný test
+`řezové kontury nemají špičky` spočítá tečny na obou stranách **každého** napojení v každé řezové
+kontuře: napojení s obloukem musí být hladké (< 1°), roh dvou úseček smí odbočit nejvýš o 90°.
+Na starém souboru spadne (odbočení 180° na všech osmi koncích), na novém je největší zlom
+0,02° (zaokrouhlení souřadnic v souboru na 3 desetinná místa). Zaoblení R2 v rozích výřezu špičky zůstává — je správné samo o sobě a řezárna ostré
+vnitřní rohy stejně zaobluje.
+
+Poučení do seznamu kontrol: u každého oblouku hlídat nejen střed a poloměr, ale **stranu
+vyboulení v napojení**; kontrola tečnosti je levná a obecná, měla být od začátku.

@@ -432,6 +432,94 @@ describe('destička na opasek', () => {
     });
   });
 
+  it('řezové kontury nemají špičky: každé napojení s obloukem je tečné', () => {
+    // Řezárna vrátila screenshot: koncové půlkruhy slotů zaobleného konce byly
+    // stočené dovnitř slotu, takže v napojení na oblouky vznikla špička s nulovým
+    // úhlem („v ostrém místě se nám paprsek zastaví“). Dřívější testy četly jen
+    // směr velkých oblouků. Tohle je obecná past: v každém uzavřeném řezu se
+    // spočítají tečny na obou stranách každého napojení; napojení, kde je aspoň
+    // jeden oblouk, musí být hladké, a napojení dvou úseček smí odbočit nejvýš
+    // o 90° (zkosení rohu je 45°; ostrý vnitřní roh výřezu by byl přes 110°).
+    type Pt = readonly [number, number];
+    interface Seg {
+      kind: 'L' | 'A';
+      p0: Pt;
+      p1: Pt;
+      r: number;
+      large: boolean;
+      sweep: boolean;
+    }
+    const parse = (d: string): Seg[] => {
+      const out: Seg[] = [];
+      let cur: Pt | null = null;
+      let first: Pt | null = null;
+      for (const m of d.matchAll(/([MLAZ])([^MLAZ]*)/g)) {
+        const n = [...m[2]!.matchAll(/-?[\d.]+/g)].map((x) => Number(x[0]));
+        if (m[1] === 'M') {
+          cur = [n[0]!, n[1]!];
+          first = cur;
+        } else if (m[1] === 'L') {
+          const p1: Pt = [n[0]!, n[1]!];
+          out.push({ kind: 'L', p0: cur!, p1, r: 0, large: false, sweep: false });
+          cur = p1;
+        } else if (m[1] === 'A') {
+          const p1: Pt = [n[5]!, n[6]!];
+          out.push({ kind: 'A', p0: cur!, p1, r: n[0]!, large: n[3] === 1, sweep: n[4] === 1 });
+          cur = p1;
+        } else if (cur && first && (cur[0] !== first[0] || cur[1] !== first[1])) {
+          out.push({ kind: 'L', p0: cur, p1: first, r: 0, large: false, sweep: false });
+        }
+      }
+      return out;
+    };
+    const unit = (x: number, y: number): Pt => {
+      const l = Math.hypot(x, y);
+      return [x / l, y / l];
+    };
+    // Tečny na začátku a na konci úseku. Oblouk: střed ze sémantiky SVG (strana
+    // vyboulení podle sweep, `large` volí vzdálenější střed), tečna = kolmice na
+    // poloměr ve směru oběhu.
+    const tangents = (s: Seg): [Pt, Pt] => {
+      if (s.kind === 'L') {
+        const t = unit(s.p1[0] - s.p0[0], s.p1[1] - s.p0[1]);
+        return [t, t];
+      }
+      const dx = s.p1[0] - s.p0[0];
+      const dy = s.p1[1] - s.p0[1];
+      const c = Math.hypot(dx, dy);
+      const mid: Pt = [(s.p0[0] + s.p1[0]) / 2, (s.p0[1] + s.p1[1]) / 2];
+      const side = s.sweep ? unit(dy, -dx) : unit(-dy, dx);
+      const h = Math.sqrt(Math.max(0, s.r * s.r - (c / 2) ** 2));
+      const k = s.large ? 1 : -1;
+      const cen: Pt = [mid[0] + k * side[0] * h, mid[1] + k * side[1] * h];
+      const tan = (p: Pt): Pt => {
+        const rx = p[0] - cen[0];
+        const ry = p[1] - cen[1];
+        return s.sweep ? unit(-ry, rx) : unit(ry, -rx);
+      };
+      return [tan(s.p0), tan(s.p1)];
+    };
+    const cut = plate!.split('<g id="cut"')[1]?.split('</g>')[0] ?? '';
+    const paths = [...cut.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!);
+    expect(paths.length).toBeGreaterThan(0);
+    for (const d of paths) {
+      const segs = parse(d);
+      segs.forEach((a, i) => {
+        const b = segs[(i + 1) % segs.length]!;
+        const tIn = tangents(a)[1];
+        const tOut = tangents(b)[0];
+        const dot = Math.max(-1, Math.min(1, tIn[0] * tOut[0] + tIn[1] * tOut[1]));
+        const turn = (Math.acos(dot) * 180) / Math.PI;
+        const where = `${d.slice(0, 24)}… bod (${a.p1[0]}, ${a.p1[1]})`;
+        if (a.kind === 'A' || b.kind === 'A') {
+          expect(turn, `napojení s obloukem musí být tečné: ${where}`).toBeLessThan(1);
+        } else {
+          expect(turn, `roh dvou úseček nesmí být ostrý: ${where}`).toBeLessThanOrEqual(90 + 1e-6);
+        }
+      });
+    }
+  });
+
   it('sloty zaobleného konce míří doprava, ne zrcadlově', () => {
     // Zrcadlení slotu (sweep 1→0) bylo zelené: testy četly jen počet oblouků,
     // poloměry a střed, tedy hodnoty, které se zrcadlením nemění.
