@@ -430,13 +430,22 @@ export interface BeltPlateSpec {
    */
   guideLabelHeightMm: number;
   /**
+   * Šířky pásu, pro které má řada 2 vyříznutý oblouk zaobleného konce. Musí to být
+   * podmnožina `guideWidthsMm`, aby konec každého oblouku ležel na lince své šířky.
+   * Dřív se oblouk řezal pro každou vodicí šířku (rozteč poloměrů 2,5 mm → slot 1 mm,
+   * žebro 1,5 mm). Řezárna (MK Plexi, 2026-09-15) to odmítla: u slotu 1 mm jede
+   * laser dvakrát 1 mm od sebe a pásek uvnitř se speče místo aby vypadl. Proto
+   * jen každá druhá šířka: rozteč poloměrů 5 mm nechá slot 2 mm a žebro 3 mm.
+   */
+  roundedWidthsMm: number[];
+  /**
    * Šířka slotu pro zaoblený konec. Značí se zevnitř slotu, přesnost je tedy
    * ± polovina šířky — u oblouku, který se stejně řeže a brousí, to nevadí.
-   * Užší slot znamená silnější žebra mezi vnořenými sloty, což je u 3mm akrylátu
-   * to podstatné.
+   * 2 mm je dolní hranice, kterou řezárna považuje za spolehlivě vyřezatelnou
+   * ve 3mm akrylátu (užší pásek odpadu se speče, viz `roundedWidthsMm`).
    */
   roundedSlotWidthMm: number;
-  /** Nejmenší přijatelné žebro mezi vnořenými sloty zaobleného konce. */
+  /** Nejmenší přijatelné žebro mezi vnořenými sloty zaobleného konce (po řezu). */
   minRoundedRibMm: number;
   /** Největší tloušťka pásu, se kterou destička (a délka jejího pravítka) počítá. */
   maxBeltThicknessMm: number;
@@ -479,6 +488,13 @@ export interface BeltPlateSpec {
    * (kontrola `checkBeltPlate` to odhalila).
    */
   strapEndChamferMm: number;
+  /**
+   * Zaoblení dvou vnitřních rohů výřezu špičky (kde šikmé boky potkávají příčnou
+   * hranu na širokém konci). Ostrý vnitřní roh se laserem vyrobit nedá a řezárna
+   * ho odmítla; tyhle rohy se neobkreslují (pás pokračuje rovně dál), takže
+   * zaoblení nic nemění na funkci.
+   */
+  tipCutoutCornerRadiusMm: number;
 }
 
 export const DEFAULT_BELT_PLATE: BeltPlateSpec = {
@@ -490,10 +506,13 @@ export const DEFAULT_BELT_PLATE: BeltPlateSpec = {
   hangHoleMm: 4,
   tipCutoutOversizeMm: 5,
   guideWidthsMm: [30, 35, 40, 45],
-  roundedSlotWidthMm: 1,
-  // As-cut limit: s kerfem 0,2 mm vyjde žebro 1,3 mm. 1,2 mm je dolní hranice,
-  // pod kterou už bych 3mm litý akrylát vedle svěží tepelně ovlivněné zóny nechtěl.
-  minRoundedRibMm: 1.2,
+  // Každá druhá šířka, viz komentář u typu: rozteč poloměrů 5 mm = slot 2 + žebro 3.
+  // 40 mm je pás prvního projektu, 30 mm druhá nejběžnější šířka.
+  roundedWidthsMm: [40, 30],
+  roundedSlotWidthMm: 2,
+  // As-cut limit: s kerfem 0,2 mm vyjde žebro 2,8 mm. 2,5 mm nechává rezervu na
+  // kerf až 0,5 mm; užší žebro vedle dvou tepelně ovlivněných zón už nechci.
+  minRoundedRibMm: 2.5,
   maxBeltThicknessMm: 5,
   minSlotForAwlMm: 1,
   guideLabelHeightMm: 2.6,
@@ -508,6 +527,7 @@ export const DEFAULT_BELT_PLATE: BeltPlateSpec = {
   // 5 mm, ne 8: zkosení musí zůstat nepřehlédnutelnou orientační značkou, ale
   // nesmí zasahovat do nuly pravítka ani do jejího popisku.
   strapEndChamferMm: 5,
+  tipCutoutCornerRadiusMm: 2,
 };
 
 export interface BeltPlateLayout {
@@ -545,6 +565,8 @@ export interface BeltPlateLayout {
   tipFarX: number;
   /** Poloviční šířka vyříznutého tvaru špičky na širokém konci. */
   tipCutoutHalfMm: number;
+  /** Zaoblení vnitřních rohů výřezu špičky na širokém konci. */
+  tipCutoutCornerRadiusMm: number;
   /** Podélné pravítko: počátek, základna, délka nejdelší rysky, konec a čitelný rozsah. */
   rulerX0Mm: number;
   rulerYMm: number;
@@ -612,7 +634,8 @@ export function beltPlateLayout(
     roundedRowY,
     buckleRowY,
     roundedArcs: (() => {
-      const sorted = [...plate.guideWidthsMm].sort((a, b) => b - a);
+      // Největší oblouk končí vrcholem na `apexX`, ostatní jsou soustředné.
+      const sorted = [...plate.roundedWidthsMm].sort((a, b) => b - a);
       const centreX = apexX - (sorted[0] ?? 0) / 2;
       return sorted.map((bw) => ({ beltWidthMm: bw, radiusMm: bw / 2, centreX }));
     })(),
@@ -622,6 +645,7 @@ export function beltPlateLayout(
     tipApexX: apexX,
     tipFarX: farX,
     tipCutoutHalfMm: cutoutHalf,
+    tipCutoutCornerRadiusMm: plate.tipCutoutCornerRadiusMm,
     rulerX0Mm: plate.rulerX0Mm,
     rulerYMm: plate.rulerYMm,
     rulerLongTickMm: plate.rulerLongTickMm,
@@ -792,6 +816,29 @@ export function checkBeltPlate(
   if (plate.guideWidthsMm.length > 4) {
     problems.push(
       `guideWidthsMm má ${plate.guideWidthsMm.length} šířek, maximum jsou 4 – při víc už nejsou linky čitelné.`,
+    );
+  }
+  if (plate.roundedWidthsMm.length === 0) {
+    problems.push('roundedWidthsMm je prázdné: řada 2 by neměla žádný oblouk.');
+  }
+  for (const w of plate.roundedWidthsMm) {
+    // Konec oblouku o poloměru w/2 musí ležet na lince šířky w, jinak by oblouk
+    // nebyl označený a uživatel by nepoznal, pro jakou šířku je.
+    if (!plate.guideWidthsMm.includes(w)) {
+      problems.push(
+        `Oblouk pro ${w} mm nemá vodicí linku: roundedWidthsMm musí být podmnožina guideWidthsMm.`,
+      );
+    }
+  }
+  if (new Set(plate.roundedWidthsMm).size !== plate.roundedWidthsMm.length) {
+    problems.push('roundedWidthsMm obsahuje duplicitní šířku.');
+  }
+  if (
+    !(plate.tipCutoutCornerRadiusMm >= 0) ||
+    plate.tipCutoutCornerRadiusMm > L.tipCutoutHalfMm / 2
+  ) {
+    problems.push(
+      `tipCutoutCornerRadiusMm ${plate.tipCutoutCornerRadiusMm} mm musí být 0 až ${L.tipCutoutHalfMm / 2} mm.`,
     );
   }
 

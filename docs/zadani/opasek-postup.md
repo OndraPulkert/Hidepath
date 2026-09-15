@@ -107,11 +107,11 @@ vystřihne a přiloží k pásku, který nosí.
 Vlevo u každé řady je vygravírované **číslo řady**. Zkosený roh je **vlevo nahoře** a značí,
 že tahle krátká hrana je konec pásu.
 
-| Řada  | K čemu                                                | Jak se umisťuje            |
-| ----- | ----------------------------------------------------- | -------------------------- |
-| **1** | HROT (anglická špička) — vyříznutý tvar + 5 dírek     | podle prostřední dírky     |
-| **2** | ZAOBLENÝ konec — 4 vnořené oblouky + 5 dírek          | podle prostřední dírky     |
-| **3** | KONEC U PŘEZKY — ovál pro trn, 4 nýty, 2 značky ohybu | levou hranou na konec pásu |
+| Řada  | K čemu                                                    | Jak se umisťuje            |
+| ----- | --------------------------------------------------------- | -------------------------- |
+| **1** | HROT (anglická špička) — vyříznutý tvar + 5 dírek         | podle prostřední dírky     |
+| **2** | ZAOBLENÝ konec — 2 vnořené oblouky (40 a 30 mm) + 5 dírek | podle prostřední dírky     |
+| **3** | KONEC U PŘEZKY — ovál pro trn, 4 nýty, 2 značky ohybu     | levou hranou na konec pásu |
 
 Řady 1 a 2 jsou **alternativy**: vybereš si tvar konce a druhou řadu ignoruješ. Destička se
 tedy přikládá **dvakrát**: raz na řadu 3, raz na řadu 1 nebo 2.

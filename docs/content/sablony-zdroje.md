@@ -1813,3 +1813,61 @@ Dál konstanty `LASER` v kreslení a poloha zářezů ohybu vůči otvorům na t
 
 Do repa se mi předtím dostal adresář `undefined/tmp/plochy.png` — pozůstatek špatně přesměrovaného
 výstupu, když v nové session zmizela proměnná se scratchpadem. Odstraněn.
+
+### Šesté kolo: první skutečná řezárna vrátila připomínky (2026-09-15)
+
+MK Plexi (plexi.cz) poslala kalkulaci 180230: GS čiré 3 mm, 215 × 184 mm, řez + gravír
+**518,64 Kč**, balné 242 Kč, PPL 173,80 Kč, celkem **934,44 Kč s DPH**, záloha 100 %, platnost
+10 dní; gravírovací laser mají v opravě, řezat by mohli příští týden. Proti Klabanovi
+(2 300 Kč) méně než polovina. K souboru napsala paní Spálenská tři věci:
+
+1. „Gravírování doporučujeme na pohledovou stranu plexi z důvodu přesnosti.“ Souhlasí
+   s návrhem (gravír nahoře, dívat se svisle; viz _Paralaxa_ výše). Beze změny.
+2. „Laserované obloučky v pravé části jsou tenké pouze 1 mm, tam laser pojede dvakrát a materiál
+   se speče.“ Řada 2 měla čtyři vnořené půlkruhové sloty **1 mm** široké s žebry 1,5 mm (rozteč
+   poloměrů 2,5 mm = polovina rozestupu vodicích linek). Dvě řezné dráhy 1 mm od sebe: pásek
+   odpadu uvnitř slotu se roztaví a přilepí místo aby vypadl. Předchozí kola hlídala jen **žebro**
+   (materiál, který zůstává), ne **odpad** (materiál, který musí odejít) — chybějící kritérium.
+3. „Nedokážeme vyrobit špičky s ostrým zakončením.“ Vrchol špičky má R4, ostré jsou jen dva
+   **vnitřní rohy výřezu špičky** na širokém konci (příčná hrana × šikmý bok, ≈ 66°). Ty se
+   neobkreslují (pás pokračuje rovně dál), takže se dají zaoblit bez vlivu na funkci.
+
+**Úprava (soubory přegenerovány, `--multi`):**
+
+| Prvek                             | Před                                      | Po                                                     |
+| --------------------------------- | ----------------------------------------- | ------------------------------------------------------ |
+| Oblouky zaobleného konce (řada 2) | 4 (30/35/40/45 mm), r 15–22,5             | **2 (40 a 30 mm)**, r 20 a 15, soustředné              |
+| Šířka slotu                       | 1 mm (po řezu 1,2)                        | **2 mm** (po řezu 2,2)                                 |
+| Žebro mezi sloty                  | 1,5 mm (po řezu 1,3; limit 1,2)           | **3 mm** (po řezu 2,8; limit 2,5, rezerva na kerf 0,5) |
+| Střed oblouků                     | x = 181,8 (vrchol největšího = 45 mm)     | x = 184,3 (vrchol oblouku 40 mm = vrchol špičky)       |
+| Vnitřní rohy výřezu špičky        | ostré                                     | **R2**, tečné body 3,10 mm od rohu (θ ≈ 66°)           |
+| Hlavička souboru                  | „žebra 1,5 mm, ozvat se při kerfu > 0,25“ | „sloty 2 mm, žebro 3 mm, ozvat se při kerfu > 0,5“     |
+| Vysvětlivky                       | „4 OBLOUKY“                               | „2 OBLOUKY (40 a 30 mm)“                               |
+
+Nic jiného se nezměnilo: obrys, všechny otvory, ovál, gravírování řad 1 a 3 a pravítko jsou
+byte-shodné s tagem `poptavka-2026-09-11` (ověřeno diffem SVG; v řadě 2 se posunuly jen konce
+vodicích linek o 2,5 mm doprava, protože končí na svislici středu oblouků).
+
+**Proč každá druhá šířka, ne užší sloty pro všechny čtyři:** rozteč poloměrů je dána rozestupem
+vodicích linek (2,5 mm) a `slot + žebro = rozteč` je pevná rovnice. Aby byl slot ≥ 2 mm a žebro
+≥ 2,5 mm, musí být rozteč ≥ 4,5 mm, tedy nejméně dvojnásobek. 40 mm je pás prvního projektu,
+30 mm druhá nejběžnější šířka. Uživatel s 35 nebo 45 mm pásem má dál linky a dírky, zaoblený
+konec si narýsuje kružítkem (r = polovina šířky) — to je v postupu pro řadu 1 stejně nutné
+u přesahu výřezu.
+
+**Model:** `roundedWidthsMm` (podmnožina `guideWidthsMm`, kontrola odmítne šířku bez linky,
+prázdný seznam i duplicitu), `roundedSlotWidthMm: 2`, `minRoundedRibMm: 2.5`,
+`tipCutoutCornerRadiusMm: 2` (kontrola 0 až polovina poloviční šířky výřezu). Původní hustá
+konfigurace `[30, 35, 40, 45]` je teď v testu jako případ, který **musí** spadnout.
+**Kresba:** `filletCorner()` počítá tečné body `r / tg(θ/2)` pro libovolný úhel a sweep ze
+znaménka vektorového součinu, stejně jako zaoblené rohy obrysu; DXF převod oblouků se nemění.
+
+**Co jsem se z toho naučil:** dosud jsem kontroloval jen to, co na dílu zůstává (žebra, můstky),
+ne to, co musí odejít. U laseru je úzký odpad stejný problém jako úzké žebro. Do kontrol přibyl
+spodní limit šířky slotu daný řezárnou (2 mm), ne jen šídlem (1 mm).
+
+**K odeslání:** upravená sada (`opasek-desticka.svg/.dxf`, `-rez.dxf`, `-1-1.pdf`,
+`-kontrolni-tisk.pdf`) MK Plexi s dotazem na jejich kerf a nejmenší bezpečný slot. Kdyby chtěli
+slot ještě širší, při rozteči 5 mm už to nejde (slot 2,5 mm dá žebro 2,3 mm po řezu, pod limit)
+— pak zůstane jen jeden oblouk pro 40 mm (`roundedWidthsMm: [40]`), kontrola žeber se u jednoho
+oblouku neuplatní a slot může mít i 3 mm.

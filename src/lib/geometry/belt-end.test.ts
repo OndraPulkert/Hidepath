@@ -253,12 +253,12 @@ describe('plochá destička pro všechny šířky', () => {
     );
     expect(L.roundedSlotAsCutMm).toBeGreaterThan(L.roundedSlotWidthMm);
 
-    // Rozteč středních poloměrů je 2,5 mm, takže žebro po řezu je 2,5 − (1 + kerf).
-    // S kerfem 0,2 vyjde 1,3 mm (limit 1,2 → projde), s kerfem 0,4 vyjde 1,1 mm
-    // (limit 1,2 → musí spadnout). Kdyby kontrola měřila nominál, prošly by obě.
-    const wide = { ...DEFAULT_BELT_PLATE, kerfMm: 0.4 };
+    // Rozteč středních poloměrů je 5 mm, takže žebro po řezu je 5 − (2 + kerf).
+    // S kerfem 0,2 vyjde 2,8 mm (limit 2,5 → projde), s kerfem 0,6 vyjde 2,4 mm
+    // (limit 2,5 → musí spadnout). Kdyby kontrola měřila nominál, prošly by obě.
+    const wide = { ...DEFAULT_BELT_PLATE, kerfMm: 0.6 };
     const problems = checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, wide);
-    expect(problems.join(' '), 'kerf 0,4 mm musí shodit kontrolu žeber').toMatch(/[Žž]ebro/);
+    expect(problems.join(' '), 'kerf 0,6 mm musí shodit kontrolu žeber').toMatch(/[Žž]ebro/);
     expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, DEFAULT_BELT_PLATE)).toEqual([]);
   });
 
@@ -313,17 +313,44 @@ describe('plochá destička pro všechny šířky', () => {
   });
 
   it('zaoblený konec: soustředné oblouky s konstantními žebry', () => {
-    expect(L.roundedArcs.length).toBe(DEFAULT_BELT_PLATE.guideWidthsMm.length);
+    // Jen každá druhá vodicí šířka: řezárna odmítla sloty 1 mm (pásek odpadu se
+    // speče), rozteč poloměrů 5 mm dá slot 2 mm a žebro 3 mm.
+    expect(L.roundedArcs.length).toBe(DEFAULT_BELT_PLATE.roundedWidthsMm.length);
+    expect(L.roundedArcs.length).toBeLessThan(DEFAULT_BELT_PLATE.guideWidthsMm.length);
     // Společný střed. Varianta se společným vrcholem by se v něm sbíhala a žebra
     // by tam měla nulovou šířku.
     const centres = new Set(L.roundedArcs.map((a) => a.centreX));
     expect(centres.size, 'oblouky musí být soustředné').toBe(1);
     const radii = L.roundedArcs.map((a) => a.radiusMm).sort((a, b) => a - b);
-    expect(radii).toEqual([15, 17.5, 20, 22.5]);
+    expect(radii).toEqual([15, 20]);
+    expect(L.roundedSlotWidthMm).toBe(2);
     for (let i = 1; i < radii.length; i++) {
       const rib = radii[i]! - radii[i - 1]! - L.roundedSlotWidthMm;
-      expect(rib, `žebro mezi ${radii[i - 1]!} a ${radii[i]!}`).toBeCloseTo(1.5, 6);
+      expect(rib, `žebro mezi ${radii[i - 1]!} a ${radii[i]!}`).toBeCloseTo(3, 6);
     }
+    // Největší oblouk končí vrcholem tam, kde vrchol špičky: obě řady sdílejí datum.
+    expect(L.roundedArcs[0]!.centreX + L.roundedArcs[0]!.radiusMm).toBeCloseTo(L.tipApexX, 9);
+  });
+
+  it('oblouky jen pro šířky, které mají vodicí linku', () => {
+    const orphan = { ...DEFAULT_BELT_PLATE, roundedWidthsMm: [40, 38] };
+    expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, orphan).join(' ')).toContain(
+      'podmnožina guideWidthsMm',
+    );
+    const none = { ...DEFAULT_BELT_PLATE, roundedWidthsMm: [] };
+    expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, none).join(' ')).toContain(
+      'roundedWidthsMm je prázdné',
+    );
+    const dup = { ...DEFAULT_BELT_PLATE, roundedWidthsMm: [40, 40] };
+    expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, dup).join(' ')).toContain(
+      'duplicitní',
+    );
+  });
+
+  it('všechny čtyři šířky v jedné řadě (rozteč 2,5 mm) už neprojdou', () => {
+    // Přesně původní konfigurace, kterou řezárna vrátila: slot 1 mm, žebro 1,5 mm.
+    const dense = { ...DEFAULT_BELT_PLATE, roundedWidthsMm: [30, 35, 40, 45] };
+    expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, dense).join(' ')).toContain('Žebro');
   });
 
   it('konec každého oblouku leží na lince své šířky, takže se označují navzájem', () => {
@@ -349,7 +376,8 @@ describe('plochá destička pro všechny šířky', () => {
   });
 
   it('odmítne příliš tenká žebra mezi oblouky', () => {
-    const thin = { ...DEFAULT_BELT_PLATE, roundedSlotWidthMm: 2 };
+    // Slot 3 mm při rozteči 5 mm nechá po řezu žebro 1,8 mm.
+    const thin = { ...DEFAULT_BELT_PLATE, roundedSlotWidthMm: 3 };
     expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, thin).join(' ')).toContain('Žebro');
   });
 

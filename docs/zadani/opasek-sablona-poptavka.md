@@ -202,6 +202,42 @@ osobně za odpoledne, ne poštou za týden.
   kontury**. Naše destička je ze tří čtvrtin gravírování (4 525 mm proti 1 625 mm řezu), takže
   by z ní vyšel obrys a 17 děr — a nic z toho, co destičku dělá použitelnou.
 
+## Odpovědi řezáren (stav 2026-09-15)
+
+| Řezárna  | Odpověď                                                                                                                                                           | Stav                                     |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| Klaban   | 2 300 Kč (1 ks) / 2 900 Kč (2 ks) s dopravou, GS není skladem, chce gravír jako plochy                                                                            | draží, náhradní                          |
+| MK Plexi | kalkulace 180230: **934,44 Kč s DPH** vč. balného a PPL, GS čiré 3 mm; gravír na pohledovou stranu; sloty 1 mm „se spečou“; ostré špičky nevyrobí; laser v opravě | **vybraná**, soubory upraveny (viz níže) |
+| ALT      | bez odpovědi                                                                                                                                                      | —                                        |
+| TITAN    | neosloven (MK Plexi má GS skladem)                                                                                                                                | —                                        |
+
+Úprava souborů podle připomínek MK Plexi je popsaná v `docs/content/sablony-zdroje.md`
+(_Šesté kolo_): sloty zaobleného konce 2 mm místo 1 mm (dva oblouky místo čtyř, žebro 3 mm)
+a zaoblení vnitřních rohů výřezu špičky R2. Ostatní geometrie beze změny.
+
+### Odpověď pro MK Plexi (odesláno s upravenou sadou)
+
+> Dobrý den, paní Spálenská,
+>
+> děkuji za nabídku, rád ji využiji. Kalkulace č. 180230.
+>
+> K Vašim poznámkám: (1) gravírování na pohledovou stranu – ano, přesně tak, díl prosím
+> nezrcadlit; (2) tenké obloučky – upravil jsem soubor: sloty jsou teď 2 mm široké a můstek mezi
+> nimi 3 mm, oblouky jsou jen dva místo čtyř; (3) ostré špičky – vrchol špičky má zaoblení R4,
+> dva vnitřní rohy výřezu jsem zaoblil na R2. Kdyby šlo o jiné místo, napište prosím, upravím.
+>
+> V příloze je upravená sada: `opasek-desticka.dxf` (řez + gravír), `opasek-desticka.svg`
+> (totéž), `opasek-desticka-rez.dxf` (jen řez) a `opasek-desticka-1-1.pdf` (kontrola měřítka:
+> obrys 215 × 184 mm). Prosím řezat podle nových dat, ne podle původních.
+>
+> Dvě otázky: s jakou šířkou řezné spáry (kerf) u 3 mm GS počítáte a jaká nejmenší šířka slotu je
+> pro Vás bezpečná? Pokud by 2 mm bylo málo, nechám jen jeden oblouk.
+>
+> Zálohu uhradím po Vašem potvrzení, že data jsou v pořádku; termín po opravě laseru mi nevadí.
+>
+> S pozdravem
+> Ondřej Pulkert
+
 ## Varianta bez řezárny
 
 Když nechceš čekat ani platit za zakázku:

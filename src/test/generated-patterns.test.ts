@@ -415,8 +415,8 @@ describe('destička na opasek', () => {
     // Jediné dva vyříznuté tvary jsou špička a ovál pro trn.
     const cut = plate!.split('<g id="cut"')[1]?.split('</g>')[0] ?? '';
     const shapes = [...cut.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!);
-    // obrys + vyříznutá špička + 4 sloty zaobleného konce + ovál pro trn
-    expect(shapes.length, 'obrys + špička + 4 oblouky + ovál').toBe(3 + L.roundedArcs.length);
+    // obrys + vyříznutá špička + sloty zaobleného konce + ovál pro trn
+    expect(shapes.length, 'obrys + špička + oblouky + ovál').toBe(3 + L.roundedArcs.length);
   });
 
   it('řada se zaobleným koncem má dírky na stejných polohách jako řada s hrotem', () => {
@@ -512,10 +512,23 @@ describe('destička na opasek', () => {
     const eng = plate!.split('<g id="engrave"')[1]?.split('</g>')[0] ?? '';
     const tipPath = [...cut.matchAll(/<path d="([^"]+)"/g)]
       .map((m) => m[1]!)
-      .find((d) => (d.match(/A/g) ?? []).length === 1);
+      .find((d) =>
+        d.includes(`A${DEFAULT_BELT_TIP.noseRadiusMm} ${DEFAULT_BELT_TIP.noseRadiusMm} `),
+      );
     expect(tipPath).toBeDefined();
-    const n = [...tipPath!.matchAll(/[-\d.]+/g)].map((m) => Number(m[0]));
-    const farX = n[0]!;
+    // Příčná hrana na širokém konci leží přesně na tipFarX; vnitřní rohy jsou
+    // zaoblené R2 (řezárna ostrý vnitřní roh odmítla), takže cesta nezačíná v rohu,
+    // ale příčný úsek `L farX …` v ní být musí a nic nesmí být levěji.
+    const farX = L.tipFarX;
+    // Souřadnice v souboru jsou zaokrouhlené na 3 desetinná místa.
+    expect(tipPath!, 'příčná hrana na tipFarX').toContain(`L${Number(farX.toFixed(3))} `);
+    const xs = [...tipPath!.matchAll(/[ML]([\d.]+) /g)].map((m) => Number(m[1]));
+    expect(Math.min(...xs), 'nic vlevo od široké hrany').toBeCloseTo(farX, 3);
+    const rc = L.tipCutoutCornerRadiusMm;
+    expect(
+      (tipPath!.match(new RegExp(`A${rc} ${rc} `, 'g')) ?? []).length,
+      'dva zaoblené rohy',
+    ).toBe(2);
     expect(farX, 'široký konec je vlevo od vrcholu').toBeLessThan(L.tipApexX);
     expect(farX, 'široký konec je vpravo od nejbližší dírky').toBeGreaterThan(
       Math.max(...L.tipHoleXs),
@@ -540,14 +553,14 @@ describe('destička na opasek', () => {
     );
   });
 
-  it('řada se zaobleným koncem: čtyři soustředné sloty a linky k nim dotažené', () => {
+  it('řada se zaobleným koncem: soustředné sloty a linky k nim dotažené', () => {
     const cut = plate!.split('<g id="cut"')[1]?.split('</g>')[0] ?? '';
     const eng = plate!.split('<g id="engrave"')[1]?.split('</g>')[0] ?? '';
     // Slot oblouku: dva oblouky a jedna spojnice, začíná i končí na svislici středu.
     const arcs = [...cut.matchAll(/<path d="([^"]+)"/g)]
       .map((m) => m[1]!)
       .filter((d) => (d.match(/A/g) ?? []).length === 4);
-    expect(arcs.length, 'čtyři sloty zaobleného konce').toBe(L.roundedArcs.length);
+    expect(arcs.length, 'sloty zaobleného konce').toBe(L.roundedArcs.length);
     for (const slotD of arcs) {
       const n = [...slotD.matchAll(/[-\d.]+/g)].map((x) => Number(x[0]));
       // Slot má zaoblené konce, takže cesta má čtyři oblouky: vnější r, malý r/2,

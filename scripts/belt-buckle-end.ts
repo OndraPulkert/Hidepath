@@ -19,6 +19,7 @@ import {
   DEFAULT_BELT_TIP,
   DEFAULT_BELT_PLATE,
   type BeltPlateSpec,
+  type BeltPlateLayout,
   adjustmentRangeMm,
   apexToMiddleHoleMm,
   assertBeltEndSpec,
@@ -511,6 +512,38 @@ function engraveNumber(x: number, y: number, value: number, height: number): str
 }
 
 /**
+ * Zaoblení rohu `p` mezi úsečkami `prev→p` a `p→next` poloměrem `r`.
+ * Vrací tečné body `a` (na příchozí hraně) a `b` (na odchozí hraně) a SVG
+ * sweep flag pro oblouk z `a` do `b`. Tečná vzdálenost je r / tg(θ/2), kde θ je
+ * vnitřní úhel rohu; funguje pro libovolný úhel, ne jen pro pravý.
+ * Sweep se určuje ze znaménka vektorového součinu směrů (osa y dolů): kladné
+ * = zatáčka doprava na obrazovce = sweep 1, stejně jako u zaoblených rohů obrysu.
+ */
+export function filletCorner(
+  prev: readonly [number, number],
+  p: readonly [number, number],
+  next: readonly [number, number],
+  r: number,
+): { a: [number, number]; b: [number, number]; sweep: 0 | 1 } {
+  const unit = (dx: number, dy: number): [number, number] => {
+    const len = Math.hypot(dx, dy);
+    return [dx / len, dy / len];
+  };
+  const u = unit(p[0] - prev[0], p[1] - prev[1]);
+  const v = unit(next[0] - p[0], next[1] - p[1]);
+  // Vnitřní úhel mezi -u a v.
+  const cosTheta = -(u[0] * v[0] + u[1] * v[1]);
+  const theta = Math.acos(Math.max(-1, Math.min(1, cosTheta)));
+  const t = r / Math.tan(theta / 2);
+  const cross = u[0] * v[1] - u[1] * v[0];
+  return {
+    a: [p[0] - u[0] * t, p[1] - u[1] * t],
+    b: [p[0] + v[0] * t, p[1] + v[1] * t],
+    sweep: cross > 0 ? 1 : 0,
+  };
+}
+
+/**
  * Slot ve tvaru polokruhu (zaoblený konec pásu), jako uzavřená kontura.
  * Polokruh míří vpravo: začíná nad středem, jde přes +x a končí pod středem.
  */
@@ -524,6 +557,13 @@ function arcSlot(cx: number, cy: number, r: number, width: number): string {
     `A${f(width / 2)} ${f(width / 2)} 0 0 0 ${f(cx)} ${f(cy - ro)} Z" ` +
     `fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`
   );
+}
+
+/** Nominální žebro mezi sousedními sloty zaobleného konce (0, když je oblouk jen jeden). */
+function roundedRibMm(L: BeltPlateLayout): number {
+  const radii = L.roundedArcs.map((a) => a.radiusMm).sort((a, b) => a - b);
+  if (radii.length < 2) return 0;
+  return radii[1] - radii[0] - L.roundedSlotWidthMm;
 }
 
 /** Vodorovný stadion (obdélník se zaoblenými konci) jako uzavřená kontura. */
@@ -577,11 +617,24 @@ export function buildBeltPlateSvg(
   const tanPt = tipTangentPoint({ ...tip, beltWidthMm: 2 * L.tipCutoutHalfMm });
   // Vyříznutý tvar špičky: obtahuje se jeho vnitřní hrana, materiál drží kolem.
   // Vrchol vpravo, široký konec vlevo (k dírkám): pás se od dírek k vrcholu zužuje.
+  // Dva vnitřní rohy na širokém konci (příčná hrana × šikmý bok) jsou zaoblené:
+  // ostrý vnitřní roh laser nevyrobí a řezárna ho odmítla. Rohy se neobkreslují,
+  // takže zaoblení na funkci nic nemění. Tečné body leží rc / tg(θ/2) od rohu.
+  const rc = L.tipCutoutCornerRadiusMm;
+  const P1: [number, number] = [L.tipFarX, ay - L.tipCutoutHalfMm];
+  const P2: [number, number] = [L.tipApexX - tanPt.fromApexMm, ay - tanPt.halfWidthMm];
+  const P3: [number, number] = [L.tipApexX - tanPt.fromApexMm, ay + tanPt.halfWidthMm];
+  const P4: [number, number] = [L.tipFarX, ay + L.tipCutoutHalfMm];
+  const top = filletCorner(P4, P1, P2, rc);
+  const bottom = filletCorner(P3, P4, P1, rc);
   cut.push(
-    `<path d="M${f(L.tipFarX)} ${f(ay - L.tipCutoutHalfMm)} ` +
-      `L${f(L.tipApexX - tanPt.fromApexMm)} ${f(ay - tanPt.halfWidthMm)} ` +
-      `A${f(tip.noseRadiusMm)} ${f(tip.noseRadiusMm)} 0 0 1 ${f(L.tipApexX - tanPt.fromApexMm)} ${f(ay + tanPt.halfWidthMm)} ` +
-      `L${f(L.tipFarX)} ${f(ay + L.tipCutoutHalfMm)} Z" ` +
+    `<path d="M${f(top.b[0])} ${f(top.b[1])} ` +
+      `L${f(P2[0])} ${f(P2[1])} ` +
+      `A${f(tip.noseRadiusMm)} ${f(tip.noseRadiusMm)} 0 0 1 ${f(P3[0])} ${f(P3[1])} ` +
+      `L${f(bottom.a[0])} ${f(bottom.a[1])} ` +
+      `A${f(rc)} ${f(rc)} 0 0 ${bottom.sweep} ${f(bottom.b[0])} ${f(bottom.b[1])} ` +
+      `L${f(top.a[0])} ${f(top.a[1])} ` +
+      `A${f(rc)} ${f(rc)} 0 0 ${top.sweep} ${f(top.b[0])} ${f(top.b[1])} Z" ` +
       `fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`,
   );
   for (const x of L.tipHoleXs) cut.push(markHole(x, ay));
@@ -805,8 +858,9 @@ export function buildBeltPlateSvg(
     `<!-- REZACI SOUBOR - DESTICKA NA OPASEK ${L.minBeltWidthMm}-${L.maxBeltWidthMm} mm.`,
     `     Merítko 1:1, 1 jednotka = 1 mm, destička ${W} x ${H} mm.`,
     '     Uzavrene kontury, zadny zivy text, zadna vypln, zadny transform.',
-    '     MATERIAL: LITY (GS) CIRY akrylat 3 mm. Zebra mezi vnorenymi sloty',
-    `     jsou ${cz(L.roundedArcs.length > 1 ? 1.5 : 0)} mm - je to zamer, stejne jako u komercnich desticek.`,
+    '     MATERIAL: LITY (GS) CIRY akrylat 3 mm.',
+    `     Sloty zaobleneho konce (vpravo) jsou ${cz(L.roundedSlotWidthMm)} mm siroke, zebro mezi nimi`,
+    `     ${cz(roundedRibMm(L))} mm - je to zamer (kazda druha sirka), aby pasek odpadu ve slotu vypadl.`,
     `     Otvory Ø ${L.markHoleMm} mm = znacici, neslucovat a nezvetsovat.`,
     `     Otvor Ø ${L.hangHoleMm} mm v rohu = zaveseni.`,
     `     Vrstva "cut" (${LASER.cutColor}) = REZ, vrstva "engrave" (${LASER.engraveColor}) = GRAVIROVANI.`,
@@ -815,7 +869,7 @@ export function buildBeltPlateSvg(
     '     POSTUP: nejdriv GRAVIROVANI, pak vnitrni geometrie, OBRYS AZ NAKONEC.',
     '     Gravirovani vektorove jednim pruchodem, nizky vykon - ne rastrem.',
     '     Rez na strednici, kerf nekompenzovat (roztece otvoru zustanou dle souboru).',
-    '     Zebra mezi oblouky 1,5 mm: pri kerfu nad 0,25 mm se prosim ozvete.',
+    `     Zebro mezi oblouky ${cz(roundedRibMm(L))} mm: pri kerfu nad 0,5 mm se prosim ozvete.`,
     '     BEZ dokonceni: nebrousit, nelestit plamenem, nebubnovat. Folii ponechte.',
     '     Neprepocitavat merítko: 1 jednotka = 1 mm, kontrolni kota 50 mm je dole. -->',
     `<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" ` +
@@ -1403,7 +1457,7 @@ export function buildPlateLegendSvg(
       L.roundedRowY - L.roundedArcs[0].radiusMm,
       W + 4,
       L.roundedRowY - 10,
-      '4 OBLOUKY: ber ten, který končí na tvé lince šířky',
+      `${L.roundedArcs.length} OBLOUKY (${L.roundedArcs.map((a) => a.beltWidthMm).join(' a ')} mm): ber ten, který končí na tvé lince šířky`,
     ],
     [
       L.tipRowY > 0 ? 40 : 40,
