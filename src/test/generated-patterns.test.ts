@@ -675,8 +675,10 @@ describe('destička na opasek', () => {
           );
         expect(segs.length, `linka pro ${arc!.beltWidthMm} mm na y ${y}`).toBeGreaterThan(0);
         const rightEnd = Math.max(...segs.map((g) => g[2]));
+        // Linka končí na špičce koncového půlkruhu slotu, tedy se ho dotkne a nezajede
+        // do vyřezávané plochy (to byla po rozšíření slotu na 2 mm celá 1 mm).
         expect(rightEnd, `linka pro ${arc!.beltWidthMm} mm dotažená k oblouku`).toBeCloseTo(
-          arc!.centreX,
+          arc!.centreX - L.roundedSlotWidthMm / 2,
           3,
         );
       }

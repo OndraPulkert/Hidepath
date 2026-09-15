@@ -762,7 +762,14 @@ export function buildBeltPlateSvg(
         // V řadě se zaobleným koncem dotahuji linku až ke středové svislici oblouků:
         // konec oblouku o poloměru r leží přesně na lince šířky 2r, takže se linky
         // a oblouky označují navzájem a nejsou potřeba čísla u oblouků.
-        rowY === ay ? tipRowX1 : rowY === ry ? L.roundedArcs[0].centreX : buckleRowX1;
+        // Konec linky = špička koncového půlkruhu slotu (střed − polovina šířky slotu),
+        // ne svislice středu: ta leží uvnitř půlkruhu a linka by 1 mm gravírovala do
+        // místa, které se vyřízne. Takhle se linka slotu přesně dotkne.
+        rowY === ay
+          ? tipRowX1
+          : rowY === ry
+            ? L.roundedArcs[0].centreX - L.roundedSlotWidthMm / 2
+            : buckleRowX1;
       // Čísla na konci linek, ve volné části řady: u levého okraje kolidovala
       // s rozlišovacím otvorem u prostřední dírky. Odstup v x, aby se u linek
       // 2,5 mm od sebe nepřekrývala.

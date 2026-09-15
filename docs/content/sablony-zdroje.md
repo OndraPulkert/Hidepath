@@ -1892,3 +1892,8 @@ vnitřní rohy stejně zaobluje.
 
 Poučení do seznamu kontrol: u každého oblouku hlídat nejen střed a poloměr, ale **stranu
 vyboulení v napojení**; kontrola tečnosti je levná a obecná, měla být od začátku.
+
+Drobnost při kontrole renderu po opravě: vodicí linky řady 2 končily na svislici středu oblouků,
+která po rozšíření slotu na 2 mm leží 1 mm **uvnitř** koncového půlkruhu — linka by gravírovala do
+místa, které se pak vyřízne. Konec linky je teď na špičce půlkruhu (střed − polovina šířky slotu,
+x = 183,3), takže se slotu přesně dotkne. Test dotažení linek upraven na tuto hodnotu.
