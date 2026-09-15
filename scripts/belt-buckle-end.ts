@@ -607,16 +607,19 @@ export function buildBeltPlateSvg(
   const cut: string[] = [];
 
   // Obrys destičky. Zkosený levý horní roh značí, že levá krátká hrana je konec pásu.
+  // Do vrstvy řezu se vkládá až jako POSLEDNÍ prvek (viz konec funkce): stroj, který
+  // řeže v pořadí souboru, tak vyřízne vnitřní geometrii dřív, než se díl uvolní
+  // z tabule – přesně to, co hlavička souboru žádá slovy. Recenze řezárny 2026-09-15
+  // upozornila, že hlavička to sice říkala, ale soubor měl obrys jako první.
   const ch = L.strapEndChamferMm;
   const r = L.cornerRadiusMm;
-  cut.push(
+  const outline =
     // Levý horní roh zkosený (orientační značka), ostatní tři zaoblené: ostrý roh
     // je na 3mm akrylátu iniciátor odštípnutí a destička se nosí a padá.
     `<path d="M0 ${f(ch)} L${f(ch)} 0 L${f(W - r)} 0 A${f(r)} ${f(r)} 0 0 1 ${f(W)} ${f(r)} ` +
-      `L${f(W)} ${f(H - r)} A${f(r)} ${f(r)} 0 0 1 ${f(W - r)} ${f(H)} ` +
-      `L${f(r)} ${f(H)} A${f(r)} ${f(r)} 0 0 1 0 ${f(H - r)} Z" ` +
-      `fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`,
-  );
+    `L${f(W)} ${f(H - r)} A${f(r)} ${f(r)} 0 0 1 ${f(W - r)} ${f(H)} ` +
+    `L${f(r)} ${f(H)} A${f(r)} ${f(r)} 0 0 1 0 ${f(H - r)} Z" ` +
+    `fill="none" stroke="${LASER.cutColor}" stroke-width="0.1"/>`;
 
   /* --- horní řada: špička a dírky pro trn --- */
   const ay = L.tipRowY;
@@ -879,7 +882,8 @@ export function buildBeltPlateSvg(
     `     Vrstva "cut" (${LASER.cutColor}) = REZ, vrstva "engrave" (${LASER.engraveColor}) = GRAVIROVANI.`,
     '     V gravirovani jsou pricna mm stupnice, vodici linky sirek a cisla;',
     '     cisla jsou TAHY, ne zivy text.',
-    '     POSTUP: nejdriv GRAVIROVANI, pak vnitrni geometrie, OBRYS AZ NAKONEC.',
+    '     POSTUP: nejdriv GRAVIROVANI, pak vnitrni geometrie, OBRYS AZ NAKONEC',
+    '     (v tomto poradi jsou prvky i ulozene: obrys je posledni prvek vrstvy REZ).',
     '     Gravirovani vektorove jednim pruchodem, nizky vykon - ne rastrem.',
     '     Rez na strednici, kerf nekompenzovat (roztece otvoru zustanou dle souboru).',
     `     Zebro mezi oblouky ${cz(roundedRibMm(L))} mm: pri kerfu nad 0,5 mm se prosim ozvete.`,
@@ -890,6 +894,7 @@ export function buildBeltPlateSvg(
       `viewBox="${f(-pad)} ${f(-pad)} ${f(W + 2 * pad)} ${f(H + 2 * pad)}">`,
     '<g id="cut" inkscape:groupmode="layer" inkscape:label="REZ">',
     ...cut,
+    outline,
     '</g>',
     '<g id="engrave" inkscape:groupmode="layer" inkscape:label="GRAVIROVANI">',
     ...engrave,

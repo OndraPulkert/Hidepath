@@ -3,7 +3,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="297mm" height="210mm" viewBox="-6 -16 333 210">
 <rect x="-6" y="-16" width="333" height="210" fill="#ffffff"/>
 <g id="nerezat" inkscape:groupmode="layer" inkscape:label="NEREZAT">
-<path d="M0 5 L5 0 L212 0 A3 3 0 0 1 215 3 L215 181 A3 3 0 0 1 212 184 L3 184 A3 3 0 0 1 0 181 Z" fill="none" stroke="#8a8a8a" stroke-width="0.1"/>
 <path d="M152.113 11.28 L201.951 33.856 A4 4 0 0 1 201.951 41.144 L152.113 63.72 A2 2 0 0 1 149.287 61.898 L149.287 13.102 A2 2 0 0 1 152.113 11.28 Z" fill="none" stroke="#8a8a8a" stroke-width="0.1"/>
 <circle cx="110" cy="37.5" r="1" fill="none" stroke="#8a8a8a" stroke-width="0.1"/>
 <circle cx="85" cy="37.5" r="1" fill="none" stroke="#8a8a8a" stroke-width="0.1"/>
@@ -25,6 +24,7 @@
 <circle cx="90" cy="139.5" r="1" fill="none" stroke="#8a8a8a" stroke-width="0.1"/>
 <circle cx="90" cy="163.5" r="1" fill="none" stroke="#8a8a8a" stroke-width="0.1"/>
 <circle cx="205" cy="178" r="2" fill="none" stroke="#8a8a8a" stroke-width="0.1"/>
+<path d="M0 5 L5 0 L212 0 A3 3 0 0 1 215 3 L215 181 A3 3 0 0 1 212 184 L3 184 A3 3 0 0 1 0 181 Z" fill="none" stroke="#8a8a8a" stroke-width="0.1"/>
 </g>
 <g id="negravirovat" inkscape:groupmode="layer" inkscape:label="NEGRAVIROVAT">
 <path d="M24 37.5 L31 37.5" fill="none" stroke="#b0b0b0" stroke-width="0.1"/>

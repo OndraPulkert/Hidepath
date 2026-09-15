@@ -635,7 +635,16 @@ describe('destička na opasek', () => {
 
   it('obrys má zkosený levý horní roh jako značku konce pásu', () => {
     const cutL = plate!.split('<g id="cut"')[1]?.split('</g>')[0] ?? '';
-    const outline = [...cutL.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!)[0]!;
+    const cutPaths = [...cutL.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]!);
+    // Obrys je záměrně POSLEDNÍ prvek vrstvy řezu: stroj řezající v pořadí souboru
+    // uvolní díl z tabule až po vnitřní geometrii (řezárna 2026-09-15 upozornila,
+    // že hlavička to slibovala, ale soubor měl obrys první).
+    const outline = cutPaths[cutPaths.length - 1]!;
+    expect(outline, 'obrys začíná v levém horním rohu').toMatch(/^M0 /);
+    expect(
+      cutPaths.slice(0, -1).some((d) => d.startsWith('M0 ')),
+      'jediný obrys',
+    ).toBe(false);
     expect(outline, 'zkosení v obrysu').toContain(
       `M0 ${L.strapEndChamferMm} L${L.strapEndChamferMm} 0`,
     );

@@ -11,7 +11,8 @@
      Vrstva "cut" (#ff0000) = REZ, vrstva "engrave" (#0000ff) = GRAVIROVANI.
      V gravirovani jsou pricna mm stupnice, vodici linky sirek a cisla;
      cisla jsou TAHY, ne zivy text.
-     POSTUP: nejdriv GRAVIROVANI, pak vnitrni geometrie, OBRYS AZ NAKONEC.
+     POSTUP: nejdriv GRAVIROVANI, pak vnitrni geometrie, OBRYS AZ NAKONEC
+     (v tomto poradi jsou prvky i ulozene: obrys je posledni prvek vrstvy REZ).
      Gravirovani RASTREM / vyplni ploch. Plochy se misty prekryvaji (rohy cislic,
      krizeni znacek) - prosim vyplnit jako sjednoceni, nekombinovat do jedne
      krivky s pravidlem even-odd, jinak zustanou prunikove plochy nevygravirovane.
@@ -22,7 +23,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="225mm" height="194mm" viewBox="-5 -5 225 194">
 
 <g id="cut" inkscape:groupmode="layer" inkscape:label="REZ">
-<path d="M0 5 L5 0 L212 0 A3 3 0 0 1 215 3 L215 181 A3 3 0 0 1 212 184 L3 184 A3 3 0 0 1 0 181 Z" fill="none" stroke="#ff0000" stroke-width="0.1"/>
 <path d="M152.113 11.28 L201.951 33.856 A4 4 0 0 1 201.951 41.144 L152.113 63.72 A2 2 0 0 1 149.287 61.898 L149.287 13.102 A2 2 0 0 1 152.113 11.28 Z" fill="none" stroke="#ff0000" stroke-width="0.1"/>
 <circle cx="110" cy="37.5" r="1" fill="none" stroke="#ff0000" stroke-width="0.1"/>
 <circle cx="85" cy="37.5" r="1" fill="none" stroke="#ff0000" stroke-width="0.1"/>
@@ -44,6 +44,7 @@
 <circle cx="90" cy="139.5" r="1" fill="none" stroke="#ff0000" stroke-width="0.1"/>
 <circle cx="90" cy="163.5" r="1" fill="none" stroke="#ff0000" stroke-width="0.1"/>
 <circle cx="205" cy="178" r="2" fill="none" stroke="#ff0000" stroke-width="0.1"/>
+<path d="M0 5 L5 0 L212 0 A3 3 0 0 1 215 3 L215 181 A3 3 0 0 1 212 184 L3 184 A3 3 0 0 1 0 181 Z" fill="none" stroke="#ff0000" stroke-width="0.1"/>
 </g>
 <g id="engrave" inkscape:groupmode="layer" inkscape:label="GRAVIROVANI">
 <path d="M24 37.625 L31 37.625 L31 37.375 L24 37.375 Z" fill="#0000ff" stroke="#0000ff" stroke-width="0.01"/>

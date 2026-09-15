@@ -1844,9 +1844,11 @@ MK Plexi (plexi.cz) poslala kalkulaci 180230: GS čiré 3 mm, 215 × 184 mm, ře
 | Hlavička souboru                  | „žebra 1,5 mm, ozvat se při kerfu > 0,25“ | „sloty 2 mm, žebro 3 mm, ozvat se při kerfu > 0,5“     |
 | Vysvětlivky                       | „4 OBLOUKY“                               | „2 OBLOUKY (40 a 30 mm)“                               |
 
-Nic jiného se nezměnilo: obrys, všechny otvory, ovál, gravírování řad 1 a 3 a pravítko jsou
-byte-shodné s tagem `poptavka-2026-09-11` (ověřeno diffem SVG; v řadě 2 se posunuly jen konce
-vodicích linek o 2,5 mm doprava, protože končí na svislici středu oblouků).
+Nic jiného se dnes nezměnilo: obrys, všechny otvory, ovál, gravírování řad 1 a 3 a pravítko
+jsou geometricky shodné s tagem `poptavka-2026-09-11` až na dvě odchylky z dřívějšího pátého
+kola, které řezárny ve své kopii nemají (rysky pravítka pod popisky 0/50/100 zkrácené z 2,0 na
+1,2 mm; hlavička DXF s `$ACADVER` a `$EXTMIN/$EXTMAX`). Nezávislý regresní posudek (níže) to
+potvrdil primitivum po primitivu.
 
 **Proč každá druhá šířka, ne užší sloty pro všechny čtyři:** rozteč poloměrů je dána rozestupem
 vodicích linek (2,5 mm) a `slot + žebro = rozteč` je pevná rovnice. Aby byl slot ≥ 2 mm a žebro
@@ -1897,3 +1899,30 @@ Drobnost při kontrole renderu po opravě: vodicí linky řady 2 končily na svi
 která po rozšíření slotu na 2 mm leží 1 mm **uvnitř** koncového půlkruhu — linka by gravírovala do
 místa, které se pak vyřízne. Konec linky je teď na špičce půlkruhu (střed − polovina šířky slotu,
 x = 183,3), takže se slotu přesně dotkne. Test dotažení linek upraven na tuto hodnotu.
+
+#### Sedmé kolo: dva nezávislí agenti nad opravenou sadou (2026-09-15)
+
+Zadání: první agent jako laserový technik s vlastními parsery SVG i DXF (křížově ezdxf 1.4.4
+a Inkscape 1.4.4), druhý regrese proti tagu `poptavka-2026-09-11` a správnost kódu.
+
+**Výrobnost (agent 1): ano.** 5 uzavřených kontur, 0 volných konců (největší mezera 0,00004 mm),
+z 26 napojení jen 2 se zlomem > 1° a to zkosení 45° na vnějším rohu; ostatních 24 do 0,023°
+(zaokrouhlení na 0,001 mm). Nejmenší vzdálenosti nespojených prvků: 2,000 mm (šířka slotů),
+3,000 mm (žebra), 4,000 mm (závěsný otvor ke spodní hraně — záměr, vlastní minimum 3 mm),
+8,000 mm nejbližší Ø 2 otvor. Gravír: 0 bodů uvnitř vyřezávané plochy, 0 vně obrysu, linky
+řady 2 se slotu dotýkají (0,000 mm). SVG ↔ DXF 1:1 do 0,01 mm ve všech třech DXF; ezdxf
+`recover` 0 chyb, 0 oprav. Jediná věcná poznámka: **obrys byl v souboru uložený jako první
+prvek**, hlavička přitom žádá řezat ho jako poslední. Opraveno: obrys je teď poslední prvek
+vrstvy REZ v SVG i DXF (DXF vzniká ze SVG v pořadí), test to hlídá.
+
+**Regrese (agent 2): HEAD obsahuje přesně zamýšlené změny (a)–(e)**, cut 49 → 43 primitiv
+(19 odebráno, 13 přidáno, všechny klasifikované), gravír 770 → 770 (101 změněno: 96 řada 2,
+5 rysky pravítka z pátého kola). `filletCorner()` ověřen číselně (θ = 65,629°, t = 3,1016,
+střed 2,000 mm od obou hran, vyboulení k odebranému rohu; konvence sweep proti rohům obrysu).
+Test tečnosti na tagu 18 selhání, na HEAD 0. Model: as-cut žebro 2,80 ≥ 2,5, slot k hraně 9,7,
+k dírce 72,3. Drobné poznámky bez akce: `roundedRibMm()` v kresbě duplikuje aritmetiku modelu;
+horní mez `tipCutoutCornerRadiusMm` je hrubá (cutoutHalf/2 místo tečné vzdálenosti).
+
+Vlastní kontrola před agenty (nezávislý parser DXF): 0 volných konců, největší zlom u oblouku
+0,023°, všechny 4 koncové půlkruhy vyboulené ven (x = 183,3); tentýž skript na odeslané verzi
+najde 16 špiček.
