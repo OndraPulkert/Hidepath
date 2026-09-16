@@ -264,3 +264,26 @@ brašnářských potřeb (kůže + nástroje + nitě pod jednou střechou) v Olo
 
 Závěr pro Olomouc: kůže a nástroje zásilkově (CraftPoint, sedlarskenaradi.cz); na místě Hanácká
 dílna na kování a prohlédnutí komponent, řemeslníci na radu.
+
+## Pásy na opasek u Andexnite – kandidát na druhý opasek (ověřeno 2026-09-16)
+
+Andexnite (andexnite.cz, prodejna Praha 4, A. Staška 79) má asi 48 hotových pásů „Hovězí kůže na
+opasek“, všechny výslovně třísločiněné, v šířkách 2/3/3,5/4 cm. Pro postup s šroubovacím nýtem
+10/6 je potřeba pás **3,5–3,75 mm** (dřík o 1–1,5 mm kratší než dvě vrstvy). Prošel jsem modré
+a pár dalších:
+
+| Pás                                                                                                                  | Tloušťka | Délka  | 4 cm             | Verdikt                                          |
+| -------------------------------------------------------------------------------------------------------------------- | -------- | ------ | ---------------- | ------------------------------------------------ |
+| [Modrá, 130 cm, 3,5–3,7 mm](https://andexnite.cz/produkt/hovezi-kuze-na-opasek-modra-130-cm-3-5-3-7-mm/)             | 3,5–3,7  | 130 cm | **260 Kč, 2 ks** | **nejlepší shoda s postupem, druhý opasek**      |
+| [Tmavě modrá, 130 cm, 3,7–3,8 mm](https://andexnite.cz/produkt/hovezi-kuze-na-opasek-tmave-modra-130-cm-3-7-3-8-mm/) | 3,7–3,8  | 130 cm | 320 Kč, skladem  | použitelná, spoj 7,6 mm je na horní hranici      |
+| Modrá, 130 cm, 3,3–3,5 mm (SKU RLPA3)                                                                                | 3,3–3,5  | 130 cm | 360 Kč           | riziko u dolní hranice                           |
+| Tmavě modrá, 130 cm, 3,0–3,2 mm (SKU RNS69)                                                                          | 3,0–3,2  | 130 cm | není skladem     | ne                                               |
+| [Tmavě hnědá, 130 cm, 3,4–3,7 mm](https://andexnite.cz/produkt/hovezi-kuze-na-opasek-tmave-hneda-130cm-3-4-3-7-mm/)  | 3,4–3,7  | 130 cm | 320 Kč, 2 ks     | dobrá alternativa v hnědé                        |
+| [Přírodní, 140 cm, 3,1–3,4 mm](https://andexnite.cz/produkt/hovezi-kuze-na-opasek-prirodni-140-cm-3-1-3-4-mm/)       | 3,1–3,4  | 140 cm | 320 Kč, skladem  | tenčí než chceme; CraftPoint 3,0–3,5 je levnější |
+
+Rozhodnutí autora (2026-09-16): **první opasek z přírodního pásu CraftPoint** (40 mm, 3,0–3,5 mm,
+140 cm, 287 Kč, jedna zásilka s kůží a nářadím, značení vidět, hrany bez dobarvování). **Modrý
+Andexnite 3,5–3,7 mm je poznamenaný jako pás pro druhý opasek** – tloušťkou sedí nejlépe ze všeho,
+co jsme viděli. Poznámky k němu: 130 cm vystačí do obvodu ~106 cm (postup, tabulka délek);
+barvený pás má světlý řez a rub, hranu bude potřeba dobarvit (Andexnite i CraftPoint mají barvu na
+hrany); doprava zdarma od 1 500 Kč, jinak samostatné poštovné.
