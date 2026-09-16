@@ -67,10 +67,11 @@ dřík o víc než 1,5 mm = nedosáhne do závitu hlavičky.
 
 **Jak postupovat prakticky:** pás objednej s poznámkou „prosím blíž k 3,5 mm“ a po doručení
 ho **přeměř na řezu**. Když má 3,5–3,75 mm, stačí nýty 10/6 z téže objednávky. Když má míň, kup
-k němu nýty s dříkem 5 mm, když víc, s dříkem 7–8 mm. Kde: CraftPoint jen 10/6; Andexnite prodává
-šroubovací nýty 5/6/8/12 mm po 10 ks (140–200 Kč), ale u nich není jasné, zda číslo značí dřík,
-nebo průměr hlavičky (píšou „∅“), před nákupem se zeptat; sady chicago screws M5 s dříky
-4/5/6/8/10/12 mm se běžně prodávají na AliExpressu a eBay. Model destičky umí správný rozsah dříku
+k němu nýty s dříkem 5 mm, když víc, s dříkem 7–8 mm. Kde: CraftPoint jen 10/6. **Pozor u Andexnite:** jejich „Sedlářský knoflík/nýt šroubovací
+5/6/8/12 mm“ je sedlářský knoflík (sam browne stud, kulatá hlavička na krčku, na zapínání), číslo
+je průměr hlavičky, ne dřík — ověřeno z výkresu na produktu 2026-09-16. Jejich „Kovový šroubovací
+nýt 8 mm“ délku dříku neuvádí. Ověřený zdroj jiných dříků zatím nemáme; sady chicago screws M5
+s dříky 4/5/6/8/10/12 mm se běžně prodávají na AliExpressu a eBay (konkrétní listing neověřen). Model destičky umí správný rozsah dříku
 spočítat (`rivetPostRangeMm`), destička sama na tloušťce nezávisí.
 
 ## 4. Jak destičku držet
