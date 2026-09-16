@@ -221,25 +221,32 @@ Screenshot z Corelu: konce slotů zaobleného konce (koncové půlkruhy stočen�
 špičky), paprsek 0,2 mm, ostré vnitřní rohy zaoblují na 1–1,5 mm, **sloty 2 mm a mezery 3 mm
 stačí**. Opraveno (`sablony-zdroje.md`, _Druhá odpověď MK Plexi_), sada přegenerována.
 
-### Odpověď pro MK Plexi (k odeslání s opravenou sadou)
+### Odpověď pro MK Plexi (odesláno 2026-09-16 s opravenou sadou)
 
 > Dobrý den, paní Spálenská,
 >
-> děkuji za screenshot, teď už je to jasné. Ty špičky byly chyba v mém souboru: koncové půlkruhy
-> slotů byly otočené dovnitř. Opravil jsem je, takže konce slotů jsou teď hladké, sloty jsou 2 mm
-> s mezerami 3 mm a oblouky jsou dva místo čtyř. Dva vnitřní rohy výřezu špičky jsem zaoblil na
-> R2, zbytek destičky je beze změny.
+> děkuji za screenshot, teď je to jasné. Ty špičky byla chyba v mém souboru: koncové půlkruhy
+> slotů byly otočené dovnitř. Opravil jsem to, konce slotů jsou hladké, sloty mají 2 mm a mezery
+> mezi nimi 3 mm, oblouky jsou dva místo čtyř. Dva vnitřní rohy výřezu špičky jsem zaoblil na R2.
+> Zbytek destičky je beze změny.
 >
-> V příloze je opravená sada: `opasek-desticka.dxf` (řez + gravír), `opasek-desticka.svg`
-> (totéž), `opasek-desticka-rez.dxf` (jen řez) a `opasek-desticka-1-1.pdf` (kontrola měřítka:
-> obrys 215 × 184 mm). Prosím řezat podle těchto dat, ne podle původních. Gravírování na
-> pohledovou stranu, díl nezrcadlit, kerf nekompenzovat.
+> V příloze posílám opravenou sadu: `opasek-desticka.dxf` (řez + gravír ve vrstvách REZ
+> a GRAVIROVANI), `opasek-desticka.svg` (totéž), `opasek-desticka-rez.dxf` (jen řez)
+> a `opasek-desticka-1-1.pdf` (kontrola měřítka, obrys 215 × 184 mm). Prosím řezat podle těchto
+> dat, ne podle původních. Gravírování vektorově čárou na pohledovou stranu, díl nezrcadlit,
+> řeznou spáru nekompenzovat. Obrys je v souboru uložený jako poslední prvek. Kdybyste gravírování
+> raději dělali jako plochy, mám připravenou i tuto variantu a pošlu ji na vyžádání.
 >
-> Kalkulaci č. 180230 tímto potvrzuji. Pošlete mi prosím podklady k úhradě zálohy; termín po
-> opravě laseru mi nevadí.
+> Kalkulaci č. 180230 potvrzuji. Pošlete mi prosím podklady k úhradě zálohy, uhradím ji hned.
+> Celý příští týden (21.–27. 9.) jsem mimo ČR, proto prosím zásilku PPL odesílat nejdřív
+> v pondělí 28. 9.; s termínem po opravě laseru to tedy nijak nespěchá.
 >
 > S pozdravem
 > Ondřej Pulkert
+
+Přílohy: `docs/generated/opasek-desticka.dxf`, `opasek-desticka.svg`, `opasek-desticka-rez.dxf`,
+`opasek-desticka-1-1.pdf`. Neposílat: `-plochy.*`, `-vysvetlivky.svg`, `-kontrolni-tisk.pdf`,
+náhledy.
 
 ## Varianta bez řezárny
 
