@@ -248,6 +248,14 @@ Přílohy: `docs/generated/opasek-desticka.dxf`, `opasek-desticka.svg`, `opasek-
 `opasek-desticka-1-1.pdf`. Neposílat: `-plochy.*`, `-vysvetlivky.svg`, `-kontrolni-tisk.pdf`,
 náhledy.
 
+### Zakázka zadána (2026-09-16)
+
+MK Plexi potvrdila, že upravená data „jsou použitelná“, poslala zálohovou fakturu (kalkulace
+180230, 934,44 Kč s DPH vč. balného a PPL) a zařadila zakázku do výroby s odesláním PPL
+**nejpozději v úterý 29. 9. 2026**. Vyráběná sada = stav repa v tagu `vyroba-2026-09-16`
+(`docs/generated/opasek-desticka.svg/.dxf`, `-rez.dxf`, `-1-1.pdf`). Od této chvíle se soubory
+destičky nemění; případné další úpravy jsou nová verze pro další kus.
+
 ## Varianta bez řezárny
 
 Když nechceš čekat ani platit za zakázku:
