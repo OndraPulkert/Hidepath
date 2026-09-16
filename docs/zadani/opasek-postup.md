@@ -34,33 +34,44 @@ kterou používáš**, měřená na pásku, který ti sedí. Dvě metody:
 
 ## 2. Nákupní seznam
 
-| Věc                                                              | Co si dát pozor                                                                                                 |
-| ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| **Pás z třísločiněné kůže, šířka podle přezky, tloušťka 3,5 mm** | Ne 4 mm, ne 3,0 mm — viz krok 3.                                                                                |
-| **Přezka** ve shodné šířce                                       | Světlost přezky musí odpovídat šířce pásu.                                                                      |
-| **2× šroubovací nýt (chicago screw) 10/6**                       | 10 = Ø hlavičky, 6 = délka dříku.                                                                               |
-| **Průbojník Ø 4,5 mm**                                           | Na dírky pro trn.                                                                                               |
-| **Průbojník Ø 6 mm**                                             | Na nýty a oba konce oválu. **Revolverový děrovač 2–4,5 mm šestku nepokryje** — to je nejčastější nákupní chyba. |
-| **Kulaté rýsovací šídlo**                                        | Tupé projde otvory, ale ne 1mm sloty zaobleného konce.                                                          |
-| **Odřezek kůže na poutko**                                       | Délku změříš pravítkem na destičce.                                                                             |
-| **Ořezávač hran + leštítko** (Tokonole, plátno)                  | Hran je 2,4 m, je to většina práce.                                                                             |
-| **Dvě lišty nebo odřezky stejně silné jako pás**                 | Pod destičku, viz krok 4.                                                                                       |
+| Věc                                                                  | Co si dát pozor                                                                                                 |
+| -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Pás z třísločiněné kůže, šířka podle přezky, tloušťka 3,0–4,0 mm** | Nýt vyber podle změřené tloušťky — viz krok 3.                                                                  |
+| **Přezka** ve shodné šířce                                           | Světlost přezky musí odpovídat šířce pásu.                                                                      |
+| **2× šroubovací nýt (chicago screw) 10/6**                           | 10 = Ø hlavičky, 6 = délka dříku. Sedí na pás 3,5–3,75 mm; jiná tloušťka = jiný dřík, viz krok 3.               |
+| **Průbojník Ø 4,5 mm**                                               | Na dírky pro trn.                                                                                               |
+| **Průbojník Ø 6 mm**                                                 | Na nýty a oba konce oválu. **Revolverový děrovač 2–4,5 mm šestku nepokryje** — to je nejčastější nákupní chyba. |
+| **Kulaté rýsovací šídlo**                                            | Tupé projde otvory, ale ne 1mm sloty zaobleného konce.                                                          |
+| **Odřezek kůže na poutko**                                           | Délku změříš pravítkem na destičce.                                                                             |
+| **Ořezávač hran + leštítko** (Tokonole, plátno)                      | Hran je 2,4 m, je to většina práce.                                                                             |
+| **Dvě lišty nebo odřezky stejně silné jako pás**                     | Pod destičku, viz krok 4.                                                                                       |
 
-## 3. Proč zrovna 3,5 mm
+## 3. Tloušťka pásu a délka dříku nýtu patří k sobě
 
 Šroubovací nýt drží, jen když je **dřík o 1–1,5 mm kratší** než sešroubovaný spoj. U přezky
-je spoj zdvojený, tedy 2 × tloušťka pásu:
+je spoj zdvojený, tedy 2 × tloušťka pásu. Není to ale omezení pásu, je to **pravidlo pro výběr
+nýtu** (postřeh autora, 2026-09-16): pás vyber podle vzhledu a dostupnosti v rozsahu 3,0–4,0 mm
+a nýt kup podle změřeného pásu.
 
-| Tloušťka pásu | Spoj   | Potřebný dřík | Vyjde s nýtem 10/6?                              |
-| ------------- | ------ | ------------- | ------------------------------------------------ |
-| 3,0 mm        | 6,0 mm | 4,5–5,0 mm    | **ne** — dřík je o 1 mm delší, spoj se nedotáhne |
-| 3,5 mm        | 7,0 mm | 5,5–6,0 mm    | ano                                              |
-| 3,75 mm       | 7,5 mm | 6,0–6,5 mm    | ano                                              |
-| 4,0 mm        | 8,0 mm | 6,5–7,0 mm    | **ne** — dřík je krátký                          |
+| Tloušťka pásu | Spoj   | Správný dřík | Nýt                              |
+| ------------- | ------ | ------------ | -------------------------------- |
+| 3,0 mm        | 6,0 mm | 4,5–5,0 mm   | 10/5 (CraftPoint nemá, viz níže) |
+| 3,25 mm       | 6,5 mm | 5,0–5,5 mm   | 10/5                             |
+| 3,5 mm        | 7,0 mm | 5,5–6,0 mm   | **10/6, CraftPoint 8 Kč/ks**     |
+| 3,75 mm       | 7,5 mm | 6,0–6,5 mm   | 10/6                             |
+| 4,0 mm        | 8,0 mm | 6,5–7,0 mm   | dřík 7 mm                        |
 
-Použitelné okno je tedy **3,50–3,75 mm**. Pozor u pultu: obchody prodávají „3,0–3,5 mm" jako
-jednu jakost, takže se dá snadno dostat 3,0. **Ptej se na skutečnou tloušťku a přeměř si ji.**
-Kdo už 4mm pás má, musí sehnat nýt s dříkem 7 mm jinde.
+Nýt **10/6 z CraftPointu** (jediná délka, kterou tam mají) tedy sedí na pás **3,5–3,75 mm**.
+Delší dřík než spoj = hlavička dosedne na dřík dřív, než přitlačí kůži, a nýt se viklá. Kratší
+dřík o víc než 1,5 mm = nedosáhne do závitu hlavičky.
+
+**Jak postupovat prakticky:** pás objednej s poznámkou „prosím blíž k 3,5 mm“ a po doručení
+ho **přeměř na řezu**. Když má 3,5–3,75 mm, stačí nýty 10/6 z téže objednávky. Když má míň, kup
+k němu nýty s dříkem 5 mm, když víc, s dříkem 7–8 mm. Kde: CraftPoint jen 10/6; Andexnite prodává
+šroubovací nýty 5/6/8/12 mm po 10 ks (140–200 Kč), ale u nich není jasné, zda číslo značí dřík,
+nebo průměr hlavičky (píšou „∅“), před nákupem se zeptat; sady chicago screws M5 s dříky
+4/5/6/8/10/12 mm se běžně prodávají na AliExpressu a eBay. Model destičky umí správný rozsah dříku
+spočítat (`rivetPostRangeMm`), destička sama na tloušťce nezávisí.
 
 ## 4. Jak destičku držet
 

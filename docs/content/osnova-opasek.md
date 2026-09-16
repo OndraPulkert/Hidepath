@@ -33,7 +33,7 @@ u přezky, 144,3 mm od prostřední dírky ke konci).
 - **Měření obvodu a volba délky pásu** (metoda přes stávající pásek nebo krejčovský metr
   poutky kalhot; tabulka obvod → délka; 130cm pás stačí jen do ~106 cm obvodu).
 - **Volba tloušťky podle kování**: dřík šroubovacího nýtu musí být o 1–1,5 mm kratší než spoj,
-  proto s nýtem 10/6 jen pás **3,5–3,75 mm** (3,0 nevyjde, 4,0 nevyjde).
+  proto s nýtem 10/6 pás **3,5–3,75 mm**; jiná tloušťka pásu = nýt s jiným dříkem (dřík = 2 × tloušťka − 1 až 1,5 mm), viz postup krok 3.
 - **Ohýbání silné kůže**: zónu ohybu navlhčit, ohnout kolem příčky přezky.
 - **Registrace dvojice otvorů po přehnutí**: vyseknout první dvojici, přehnout, druhou označit
   skrz hotové otvory (chyba 1 mm v registraci = 2 mm rozdíl mezi párem).
@@ -44,12 +44,12 @@ u přezky, 144,3 mm od prostřední dírky ke konci).
 
 ## Materiál a kování (ověřeno 2026-09-10, CraftPoint)
 
-| Položka                               | Poznámka                                             |
-| ------------------------------------- | ---------------------------------------------------- |
-| Pás z třísločiněné kůže 40 mm, 3,5 mm | 287 Kč; jakost „3,0–3,5" – **přeměřit, 3,0 nevyjde** |
-| Přezka 40 mm                          | světlost podle šířky pásu                            |
-| 2× šroubovací nýt 10/6                | od 8 Kč/ks                                           |
-| Odřezek na poutko                     | z pouzdra zbude                                      |
+| Položka                                   | Poznámka                                                              |
+| ----------------------------------------- | --------------------------------------------------------------------- |
+| Pás z třísločiněné kůže 40 mm, 3,0–4,0 mm | 287 Kč; jakost „3,0–3,5" – **přeměřit a podle toho vybrat dřík nýtu** |
+| Přezka 40 mm                              | světlost podle šířky pásu                                             |
+| 2× šroubovací nýt 10/6                    | od 8 Kč/ks                                                            |
+| Odřezek na poutko                         | z pouzdra zbude                                                       |
 
 ## Vybavení navíc oproti pouzdru
 
