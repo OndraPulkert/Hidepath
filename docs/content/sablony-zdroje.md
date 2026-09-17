@@ -1953,3 +1953,24 @@ jejich rozsahu, dřík 6 mm odpovídá ¼″ (u jejich silnější kůže vychá
 přesnější), **3/16″ = 4,76 mm potvrzuje praktickou volbu výsečníku 5 mm**. Liší se poutko (my
 z odřezku 1,2 mm, oni z konce pásu – hezčí, ale vyžaduje ohnout a sešít 3,5 mm kůži, varianta na
 druhý kus se skiverem) a leštění hran (vosk vs. Tokonole; obojí běžné).
+
+### Tři další šablony opasku od autora (2026-09-17)
+
+1. **Navico (navico.co.kr), výkres pásku s poutkem (CC BY-NC-ND):** 5 dírek **Ø 4,5 mm po 25 mm**
+   (shodně s námi), drážka pro trn **20 × 4 mm** („20X4 punch“, tedy oválný výsečník), přezkový konec
+   s prošívaným poutkem a jedním nýtem na každé straně ohybu (otvory Ø 4,5), špička mírně kuželová
+   s tupým koncem. Rozptyl drážek napříč zdroji: Navico 20 × 4, BFLG/my 25 × 6, CraftPoint 40 × 8 –
+   naše hodnota je uprostřed.
+2. **Rock.Leather.Scissors, „40mm belt“, tisk A4 1:1 s kalibrací 1 cm / 1 inch:** **dvoudílný**
+   opasek – samostatný oválný díl konce u přezky s dlouhou drážkou, **dvěma páry chicago screws vedle
+   sebe** na obou koncích a volitelnými stehovými linkami („s nití nejde udělat stavitelný pásek“);
+   díl je oboustranný pro stavitelnou délku. Pás má 5 dírek v jedné řadě a poutko s dírkami na šití.
+   Potvrzuje, že páry nýtů napříč jsou běžná druhá škola (viz AliExpress šablona výše); náš jednodílný
+   konec podle BFLG zůstává.
+3. **Ivan Leathercraft, „Sam Browne Belt“ (PDF, 3 × A4, 2024):** jiný typ zapínání – bez přezky, se
+   **sedlářským knoflíkem** (sam browne stud, tj. přesně ten „knoflík/nýt šroubovací“ z Andexnite),
+   samostatný díl „Hook Fixture“ přišitý k přednímu konci a **klíčové dírky** (kruh + zářez) na konci
+   pásu. Zajímavá varianta bez kování na nýty, ale nesouvisí s naší destičkou; poznámka pro
+   případný pozdější projekt.
+
+Nic z toho nemění destičku ani postup; bod 1 je čtvrté nezávislé potvrzení 4,5 mm / 25 mm.
