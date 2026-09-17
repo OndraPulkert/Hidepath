@@ -145,6 +145,9 @@ otvor uprostřed pásu je zkažený pásek bez nápravy.
 1. **Srovnej konec pásu na kolmo.** O něj se opírá celá řada 3.
 2. **Sraz a zalešti dlouhé hrany** na plocho rozloženém pásu — ale **posledních 30 cm nech
    neopracovaných**, dokud neuřízneš konec. Jinak tu práci odřežeš.
+   Volitelně před leštěním hranu přebrousit postupně 320 → 400 → 600 → 800 (tip z amerického
+   návodu na opasek, 2026-09-17): u 2,4 m dlouhé hrany ze 3,5 mm kůže dá jemnější zrnitost
+   znatelně hladší lesk. U pouzdra to smysl nemá, tam stačí 180–400.
 3. **Nabarvi a napusť pás, pokud chceš.** Musí to být **teď**: po ohnutí a sešroubování se pod
    ohybem nabarvit nedá a nýty se zamažou. Kdo nebarví, ať pás aspoň po zaleštění přetře
    sedlářským tukem — surová třísločiněná kůže se ušpiní hned.
