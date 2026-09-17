@@ -1926,3 +1926,18 @@ horní mez `tipCutoutCornerRadiusMm` je hrubá (cutoutHalf/2 místo tečné vzd�
 Vlastní kontrola před agenty (nezávislý parser DXF): 0 volných konců, největší zlom u oblouku
 0,023°, všechny 4 koncové půlkruhy vyboulené ven (x = 183,3); tentýž skript na odeslané verzi
 najde 16 špiček.
+
+### Dírky pro trn 4,5 mm – je to běžná praxe? (ověřeno 2026-09-17)
+
+Dotaz autora. Hodnota 4,5 mm pochází z generátoru šablony CraftPoint (viz výše). Nezávislé ověření:
+
+- CraftPoint DE, rádce „Zusätzliches Loch im Ledergürtel“: u pánských opasků z třísločiněné kůže
+  3,5–4 mm se běžně dělají dírky **4 nebo 4,5 mm**.
+- British Leather Supplies, „A Beginner's Guide to Punching Perfect Holes“: standardní dírka
+  opasku **4–5 mm**, pokryje většinu trnů.
+- Leathersmith Designs: výsečník volit **o málo větší než trn**; při nejistotě začít menším.
+- Pet Hardware (výsečníky pro řemeny): vedle kulatých i **oválné** dírky (např. 6,3 × 3,5 mm).
+
+Závěr: 4,5 mm je střed běžného rozsahu a zůstává v destičce i postupu. Praktické pravidlo pro
+nákup výsečníku: změřit trn konkrétní přezky u kořene; do 4 mm sedí dírka 4,5 mm, silnější trn →
+5 mm. Oválné dírky jsou varianta pro další kusy, ne pro první opasek.
