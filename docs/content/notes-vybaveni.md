@@ -303,3 +303,20 @@ dává stejný rádius na všech rozích a vede nůž. V ČR nenalezena (CraftPo
 Doporučení: ocelová květina (lob Ø 12 = R6 pro pouzdro, nůž ji neopotřebí). Na **značení** špičky opasku není potřeba (tvar včetně vrcholu R4 dává destička, řada 1), ale hodí se jako **vodítko nože** při řezání vrcholu R4 (lob Ø 8) – po akrylátové hraně destičky se nožem nejezdí. Zaoblený konec R15/R20 přesahuje její rozsah. Postřeh autora 2026-09-17. Nepovinné – pro první pouzdro stačí
 obtáhnout minci nebo víčko (R6 = Ø 12 mm). Nápad do budoucna: malou rohovou šablonu R3–R15 lze
 přidat do vlastní laserové sady (stejný akryl jako destička), až se bude vyrábět další kus.
+
+## Safety skiver – přidán do katalogu jako „Kup později“ (2026-09-17)
+
+Na přání autora přibyla položka `safety-skiver` (Ztenčovač s vyměnitelnou čepelí) do sdíleného
+katalogu a do projektu pouzdra s prioritou `later`. Důvod záznamu: na pouzdru se nepoužívá, patří
+k peněžence a k dalším páskům; v katalogu je proto, aby ho uživatel viděl s vysvětlením, kdy ho
+kupovat, a nezaměnil ho s hranořízkem (obchody používají slovo „skiving“ pro oba).
+
+| Příklad                                           | Cena   | Stav         | Poznámka                                                |
+| ------------------------------------------------- | ------ | ------------ | ------------------------------------------------------- |
+| Safety skiver, Stone's Store (AliExpress, Choice) | 89 Kč  | 4,9 / 1 000+ | 3 čepele v balení; prodejce náhradní čepele zvlášť nemá |
+| Náhradní čepele 10 ks (AliExpress, Choice)        | 39 Kč  | 4,8 / 232    | stejný systém „safety skiver / strander“                |
+| French skiver 6 mm, CraftPoint                    | 566 Kč | skladem      | broušená klasika, podložka na ostření 395 Kč            |
+
+Český zdroj levných čepelí není: Leatory má jen systém TandyPro (nůž 1 278 Kč, čepele 2 ks 415 Kč),
+Andexnite „Nástroj na seřezávání hran kůže“ 199 Kč bez popisu a bez čepelí. QJH Official Store
+pod slovem „skiving“ prodává hranořízky.

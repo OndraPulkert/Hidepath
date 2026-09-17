@@ -953,6 +953,13 @@ export const cardHolderProject: ProjectDefinition = {
       specification: 'Velikost 0–1.',
     },
     {
+      equipmentSlug: 'safety-skiver',
+      priority: 'later',
+      reason:
+        'Na pouzdru se nepoužívá: vrstvy 1,2 mm se lepí naplocho a hrana se zalešťuje jako celek. Hodí se až u přehybů a lepených okrajů peněženky.',
+      specification: 'Safety skiver s vyměnitelnou čepelí, 3 čepele v balení + 10 náhradních.',
+    },
+    {
       equipmentSlug: 'stitching-pony',
       priority: 'later',
       reason:

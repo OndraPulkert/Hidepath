@@ -1153,6 +1153,90 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       },
     ],
   }),
+  draft({
+    slug: 'safety-skiver',
+    name: 'Ztenčovač s vyměnitelnou čepelí (safety skiver)',
+    englishName: 'Safety skiver',
+    category: 'cutting',
+    shortDescription:
+      'Seřezává rub kůže u hrany do klínu, aby přehyb nebo lepený spoj neměl schod. Na pouzdro se nepoužívá.',
+    purpose:
+      'Kde se kůže přehýbá nebo lepí přes sebe, vznikne dvojnásobná tloušťka a tuhý schod: okraj kapsy peněženky, přehnutý lem, konec pásku u přezky. Ztenčovač (skiving) odebírá z rubu tenké hobliny na šířku 5–20 mm od hrany, takže se dvě vrstvy potkají bez hrbolu a ohyb je poddajnější. Bezpečnostní varianta má žiletkovou čepel v kovovém držáku s dorazem, nebrousí se, jen se mění čepel. U pouzdra na karty není co ztenčovat: vrstvy 1,2 mm se lepí naplocho a hrana se srazí a zaleští jako celek. U prvního pásku se ohyb u přezky záměrně neztenčuje, je to nejvíc namáhané místo a řez je nevratný.',
+    buyingGuide: [
+      { label: 'Typ', value: 'safety skiver s vyměnitelnou čepelí, ne broušený french skiver' },
+      {
+        label: 'Čepele',
+        value: '3 v balení; přikoupit 10 náhradních, u nás se zvlášť neprodávají',
+      },
+      { label: 'Materiál', value: 'kovový držák; plastové se kroutí a čepel v nich hraje' },
+    ],
+    cautions: [
+      'Nejdřív na odřezcích: skiver se drží skoro naplocho a odebírá tenké hobliny. První pokusy prořezávají skrz.',
+      'Ztenčovat jen tam, kde se kůže přehýbá nebo překrývá. Na volné hraně to průřez jen zeslabí.',
+      'Čepel vyměnit, když začne trhat místo řezat. Tupá čepel se zakusuje a vytrhává vlákna.',
+    ],
+    avoid: [
+      {
+        title: 'Hranořízek (edge beveler) jako náhrada',
+        reason:
+          'sráží jen roh hrany, tloušťku kůže nemění; je to jiný nástroj se stejným slovem „skiving“ v názvech obchodů',
+      },
+      {
+        title: 'French skiver na začátek',
+        reason:
+          'musí se pravidelně brousit na podložce a trénovat úhel; pro první ztenčení je žiletková varianta shovívavější',
+      },
+    ],
+    alternatives: [
+      {
+        title: 'Řezák s odlamovací čepelí naplocho',
+        reason: 'nouzově jde ztenčit i běžným nožem, ale bez dorazu je hloubka nerovnoměrná',
+      },
+    ],
+    priceRange: { minCents: 8_900, maxCents: 56_600 },
+    priceSource: 'verified',
+    priceNote: `${VERIFIED_NOTE} Levný safety skiver je z AliExpressu (2–4 týdny); český obchod má jen french skiver.`,
+    alsoUsedFor: ['Peněženka bifold', 'Pásek (přehnutý konec, u dalších kusů)', 'Lemování tašek'],
+    examples: [
+      {
+        title: 'Safety skiver, kovový držák, 3 čepele',
+        shop: "AliExpress (Stone's Store)",
+        url: 'https://www.aliexpress.com/item/1005007039414652.html',
+        priceCents: 8_900,
+        note: 'Bezpečnostní ztenčovač s dorazem. Choice, sčítá se s ostatními Choice položkami do dopravy zdarma. Náhradní čepele prodejce zvlášť nemá.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-17',
+      },
+      {
+        title: 'Náhradní čepele do safety skiveru, 10 ks',
+        shop: 'AliExpress',
+        url: 'https://www.aliexpress.com/item/1005006851063544.html',
+        priceCents: 3_900,
+        priceNote: 'za 10 ks',
+        note: 'Standardní čepel „safety skiver / safety beveler“, stejný systém sdílí strander na řemínky. Choice.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-17',
+      },
+      {
+        title: 'French skiver ze santalového dřeva 6 mm',
+        shop: 'CraftPoint',
+        url: 'https://craft-point.cz/products/french-skiver-ze-santaloveho-dreva-6mm',
+        priceCents: 56_600,
+        note: 'Klasický broušený ztenčovač. Kvalitní, ale vyžaduje ostření (podložka 395 Kč) a trénink úhlu.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-17',
+      },
+    ],
+    commonlyAtHome: false,
+    media: [
+      {
+        id: 'safety-skiver-main',
+        kind: 'photo',
+        caption: 'Ztenčení rubu kůže u hrany safety skiverem na odřezku, hobliny a vzniklý klín',
+        status: 'planned',
+      },
+    ],
+  }),
 ];
 
 export const equipmentCatalog: EquipmentCatalog = Object.fromEntries(
