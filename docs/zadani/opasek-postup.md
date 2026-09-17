@@ -34,17 +34,17 @@ kterou používáš**, měřená na pásku, který ti sedí. Dvě metody:
 
 ## 2. Nákupní seznam
 
-| Věc                                                                  | Co si dát pozor                                                                                                 |
-| -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| **Pás z třísločiněné kůže, šířka podle přezky, tloušťka 3,0–4,0 mm** | Nýt vyber podle změřené tloušťky — viz krok 3.                                                                  |
-| **Přezka** ve shodné šířce                                           | Světlost přezky musí odpovídat šířce pásu.                                                                      |
-| **2× šroubovací nýt (chicago screw) 10/6**                           | 10 = Ø hlavičky, 6 = délka dříku. Sedí na pás 3,5–3,75 mm; jiná tloušťka = jiný dřík, viz krok 3.               |
-| **Průbojník Ø 4,5 mm**                                               | Na dírky pro trn.                                                                                               |
-| **Průbojník Ø 6 mm**                                                 | Na nýty a oba konce oválu. **Revolverový děrovač 2–4,5 mm šestku nepokryje** — to je nejčastější nákupní chyba. |
-| **Kulaté rýsovací šídlo**                                            | Tupé projde otvory, ale ne 1mm sloty zaobleného konce.                                                          |
-| **Odřezek kůže na poutko**                                           | Délku změříš pravítkem na destičce.                                                                             |
-| **Ořezávač hran + leštítko** (Tokonole, plátno)                      | Hran je 2,4 m, je to většina práce.                                                                             |
-| **Dvě lišty nebo odřezky stejně silné jako pás**                     | Pod destičku, viz krok 4.                                                                                       |
+| Věc                                                                  | Co si dát pozor                                                                                                                                               |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Pás z třísločiněné kůže, šířka podle přezky, tloušťka 3,0–4,0 mm** | Nýt vyber podle změřené tloušťky — viz krok 3.                                                                                                                |
+| **Přezka** ve shodné šířce                                           | Světlost přezky musí odpovídat šířce pásu.                                                                                                                    |
+| **2× šroubovací nýt (chicago screw) 10/6**                           | 10 = Ø hlavičky, 6 = délka dříku. Sedí na pás 3,5–3,75 mm; jiná tloušťka = jiný dřík, viz krok 3.                                                             |
+| **Výsečník Ø 4,5 mm** (lidově průbojník)                             | Na dírky pro trn. Průměr = trn u kořene + 0,5 mm; u přezky 40 mm obvykle 4,5 mm, silnější trn → 5 mm. Destička dává jen středy dírek, průměr určuje výsečník. |
+| **Průbojník Ø 6 mm**                                                 | Na nýty a oba konce oválu. **Revolverový děrovač 2–4,5 mm šestku nepokryje** — to je nejčastější nákupní chyba.                                               |
+| **Kulaté rýsovací šídlo**                                            | Tupé projde otvory, ale ne 1mm sloty zaobleného konce.                                                                                                        |
+| **Odřezek kůže na poutko**                                           | Délku změříš pravítkem na destičce.                                                                                                                           |
+| **Ořezávač hran + leštítko** (Tokonole, plátno)                      | Hran je 2,4 m, je to většina práce.                                                                                                                           |
+| **Dvě lišty nebo odřezky stejně silné jako pás**                     | Pod destičku, viz krok 4.                                                                                                                                     |
 
 ## 3. Tloušťka pásu a délka dříku nýtu patří k sobě
 
