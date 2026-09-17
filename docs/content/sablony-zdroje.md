@@ -1942,3 +1942,14 @@ Závěr: 4,5 mm je střed běžného rozsahu, ale **výsečník 4,5 mm je v obch
 autora 2026-09-17: sady jdou po celých mm, po půl mm jen do 4). Proto postup říká 4,5–5 mm; pro
 přezku 40 mm bez měření volit **5 mm** (sedne na trny do 4,5 mm), 4 mm jen pro trn do 3,5 mm.
 Destička se nemění, dává jen středy dírek. Oválné dírky jsou varianta pro další kusy, ne pro první opasek.
+
+### Křížová kontrola s americkým návodem na opasek (2026-09-17)
+
+Autor našel seznam „What you will need“ k americké sadě na opasek (podle formulací nejspíš Buckleguy):
+pás 1¼″/1½″ (32/38 mm) 8–12 oz (3,2–4,8 mm), Chicago screws s dříkem ¼″ (6,35 mm), hole punch
+**3/16″ (4,76 mm)**, poutko z konce pásu sešité (~12″ nitě) nebo mosazné, včelí vosk na hrany,
+řezák/odlamovací nůž. Shoduje se s naším postupem ve všem podstatném: 40 mm / 3,5 mm je uvnitř
+jejich rozsahu, dřík 6 mm odpovídá ¼″ (u jejich silnější kůže vychází ¼″, u naší 3,5 mm je 6 mm
+přesnější), **3/16″ = 4,76 mm potvrzuje praktickou volbu výsečníku 5 mm**. Liší se poutko (my
+z odřezku 1,2 mm, oni z konce pásu – hezčí, ale vyžaduje ohnout a sešít 3,5 mm kůži, varianta na
+druhý kus se skiverem) a leštění hran (vosk vs. Tokonole; obojí běžné).
