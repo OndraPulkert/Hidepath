@@ -287,3 +287,19 @@ Andexnite 3,5–3,7 mm je poznamenaný jako pás pro druhý opasek** – tlouš�
 co jsme viděli. Poznámky k němu: 130 cm vystačí do obvodu ~106 cm (postup, tabulka délek);
 barvený pás má světlý řez a rub, hranu bude potřeba dobarvit (Andexnite i CraftPoint mají barvu na
 hrany); doprava zdarma od 1 500 Kč, jinak samostatné poštovné.
+
+## Rohová šablona (corner radius template) – kandidát (ověřeno 2026-09-17)
+
+Autor viděl ve videu akrylovou šablonu s poloměry R5–R15, kterou se obtahují a řežou zaoblené
+rohy. Střih pouzdra má rohy R6, lekce 3 je řeže od ruky podle papírové šablony. Rohová šablona
+dává stejný rádius na všech rozích a vede nůž. V ČR nenalezena (CraftPoint nemá). AliExpress:
+
+| Nástroj                                                                                                    | Poloměry                                            | Cena   | Hodnocení         |
+| ---------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | ------ | ----------------- |
+| [Ocelová „květina“, Metal Corner Cutting Ruler](https://www.aliexpress.com/item/1005006129649426.html)     | rohy 6–24 mm po 2 mm, oblouky R11,5–21,5, dírky 1–4 | 147 Kč | 5,0 / 101 prodáno |
+| [Sada nerezových šablon „Rounded Arc-shaped ruler“](https://www.aliexpress.com/item/1005009345256631.html) | L-šablona R5/10/12,5/15/20, kruhy, úhelník          | 259 Kč | 4,7 / 27 prodáno  |
+| Hisew akrylová (Amazon US)                                                                                 | R3–R28                                              | –      | jen pro úplnost   |
+
+Doporučení: ocelová květina (má R6, nůž ji neopotřebí). Nepovinné – pro první pouzdro stačí
+obtáhnout minci nebo víčko (R6 = Ø 12 mm). Nápad do budoucna: malou rohovou šablonu R3–R15 lze
+přidat do vlastní laserové sady (stejný akryl jako destička), až se bude vyrábět další kus.
