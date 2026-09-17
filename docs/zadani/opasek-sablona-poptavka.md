@@ -204,12 +204,12 @@ osobně za odpoledne, ne poštou za týden.
 
 ## Odpovědi řezáren (stav 2026-09-15)
 
-| Řezárna  | Odpověď                                                                                                                                                           | Stav                                     |
-| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| Klaban   | 2 300 Kč (1 ks) / 2 900 Kč (2 ks) s dopravou, GS není skladem, chce gravír jako plochy                                                                            | draží, náhradní                          |
-| MK Plexi | kalkulace 180230: **934,44 Kč s DPH** vč. balného a PPL, GS čiré 3 mm; gravír na pohledovou stranu; sloty 1 mm „se spečou“; ostré špičky nevyrobí; laser v opravě | **vybraná**, soubory upraveny (viz níže) |
-| ALT      | bez odpovědi                                                                                                                                                      | —                                        |
-| TITAN    | neosloven (MK Plexi má GS skladem)                                                                                                                                | —                                        |
+| Řezárna  | Odpověď                                                                                                                                                                                                                                                       | Stav                                     |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| Klaban   | 2 300 Kč (1 ks) / 2 900 Kč (2 ks) s dopravou, GS není skladem, chce gravír jako plochy                                                                                                                                                                        | draží, náhradní                          |
+| MK Plexi | kalkulace 180230: **934,44 Kč s DPH** vč. balného a PPL, GS čiré 3 mm; gravír na pohledovou stranu; sloty 1 mm „se spečou“; ostré špičky nevyrobí; laser v opravě                                                                                             | **vybraná**, soubory upraveny (viz níže) |
+| ALT      | bez odpovědi                                                                                                                                                                                                                                                  | —                                        |
+| TITAN    | nabídka NA26009382 (2026-09-17, Marek Růžička): 1 ks **2 323 Kč s DPH** (1 800 + pošta 120 bez DPH), 2 ks po 1 400 Kč bez DPH; GS 3 mm; navrhují gravír **dvojitou linkou** pro viditelnost (dražší), bez ní „nepatrně“ levnější; delší termín kvůli vytížení | odmítnuto, zakázka už u MK Plexi         |
 
 Úprava souborů podle připomínek MK Plexi je popsaná v `docs/content/sablony-zdroje.md`
 (_Šesté kolo_): sloty zaobleného konce 2 mm místo 1 mm (dva oblouky místo čtyř, žebro 3 mm)
