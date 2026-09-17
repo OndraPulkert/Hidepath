@@ -300,6 +300,6 @@ dává stejný rádius na všech rozích a vede nůž. V ČR nenalezena (CraftPo
 | [Sada nerezových šablon „Rounded Arc-shaped ruler“](https://www.aliexpress.com/item/1005009345256631.html) | L-šablona R5/10/12,5/15/20, kruhy, úhelník               | 259 Kč | 4,7 / 27 prodáno  |
 | Hisew akrylová (Amazon US)                                                                                 | R3–R28                                                   | –      | jen pro úplnost   |
 
-Doporučení: ocelová květina (lob Ø 12 = R6 pro pouzdro, nůž ji neopotřebí). Na špičku opasku není potřeba – tvar včetně vrcholu R4 dává destička (řada 1); zaoblený konec R15/R20 přesahuje její rozsah. Nepovinné – pro první pouzdro stačí
+Doporučení: ocelová květina (lob Ø 12 = R6 pro pouzdro, nůž ji neopotřebí). Na **značení** špičky opasku není potřeba (tvar včetně vrcholu R4 dává destička, řada 1), ale hodí se jako **vodítko nože** při řezání vrcholu R4 (lob Ø 8) – po akrylátové hraně destičky se nožem nejezdí. Zaoblený konec R15/R20 přesahuje její rozsah. Postřeh autora 2026-09-17. Nepovinné – pro první pouzdro stačí
 obtáhnout minci nebo víčko (R6 = Ø 12 mm). Nápad do budoucna: malou rohovou šablonu R3–R15 lze
 přidat do vlastní laserové sady (stejný akryl jako destička), až se bude vyrábět další kus.

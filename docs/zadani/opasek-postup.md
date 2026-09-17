@@ -173,7 +173,11 @@ otvor uprostřed pásu je zkažený pásek bez nápravy.
 12. **Označit dírky i tvar konce musíš v jednom přiložení.** Registrovat destičku na už
     vyseknutou dírku Ø 4,5 mm je nepřesné — právě „jedno přiložení, žádná kumulace chyby" je
     důvod, proč jsou v jedné řadě.
-13. **Vysekni 4,5mm dírky a uřízni konec pásu.**
+13. **Vysekni 4,5mm dírky a uřízni konec pásu.** Rovné boky špičky řež podle kovového pravítka,
+    ne podle destičky – akrylátová hrana není vodítko pro nůž, čepel by ji poškodila a příště by
+    značila jinde. Vrchol R4 je krátký oblouk od ruky; kdo má ocelovou rohovou šablonu (viz
+    `notes-vybaveni.md`), přiloží lob Ø 8 mm na obtaženou značku a vede nůž po oceli, na 3,5 mm
+    pásu ve 2–3 tazích.
 14. **Sraz a zalešti hranu nového konce i vnitřní hranu oválu** (přes tu jezdí trn). Tenhle krok
     se snadno zapomene, protože pásek už vypadá hotový.
 
