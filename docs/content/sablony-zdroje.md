@@ -1938,6 +1938,7 @@ Dotaz autora. Hodnota 4,5 mm pochází z generátoru šablony CraftPoint (viz v�
 - Leathersmith Designs: výsečník volit **o málo větší než trn**; při nejistotě začít menším.
 - Pet Hardware (výsečníky pro řemeny): vedle kulatých i **oválné** dírky (např. 6,3 × 3,5 mm).
 
-Závěr: 4,5 mm je střed běžného rozsahu a zůstává v destičce i postupu. Praktické pravidlo pro
-nákup výsečníku: změřit trn konkrétní přezky u kořene; do 4 mm sedí dírka 4,5 mm, silnější trn →
-5 mm. Oválné dírky jsou varianta pro další kusy, ne pro první opasek.
+Závěr: 4,5 mm je střed běžného rozsahu, ale **výsečník 4,5 mm je v obchodech vzácný** (postřeh
+autora 2026-09-17: sady jdou po celých mm, po půl mm jen do 4). Proto postup říká 4,5–5 mm; pro
+přezku 40 mm bez měření volit **5 mm** (sedne na trny do 4,5 mm), 4 mm jen pro trn do 3,5 mm.
+Destička se nemění, dává jen středy dírek. Oválné dírky jsou varianta pro další kusy, ne pro první opasek.

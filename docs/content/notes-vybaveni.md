@@ -337,7 +337,7 @@ Průbojník 4/5/6 mm v OBI) – ten díru do kůže neudělá, jen ji promáčkn
 | OBI – Narex Průbojník 4/5/6 mm                                                                                                          | **plný trn, ne výsečník**                       | –        | nekupovat na kůži                                      |
 | Hornbach, Bauhaus                                                                                                                       | vyhledávání nevrátilo nic čitelného (JS)        | –        | neověřeno                                              |
 
-Doporučení: **Ø 6 mm jednotlivě z CraftPointu (29 Kč) s objednávkou pásu.** Dírky pro trn: až
-přijde přezka, změřit trn; Ø 4 mm jednotlivě (29 Kč) stačí pro trn do 4 mm (kůže se mírně
-roztáhne), jinak sada 2–5 mm s 4,5 mm (395 Kč) nebo počkat na 5 mm. OBI sada pokryje jen 6 mm
+Doporučení: **Ø 6 mm jednotlivě z CraftPointu (29 Kč) s objednávkou pásu.** Dírky pro trn:
+**Ø 5 mm** (běžná velikost; CraftPoint teď vyprodán → WUTA jednotlivě na AliExpressu, Choice), 4,5 mm
+je v obchodech vzácné; Ø 4 mm jen pro trn do 3,5 mm. OBI sada pokryje jen 6 mm
 a větší, na dírky pro trn ne.
