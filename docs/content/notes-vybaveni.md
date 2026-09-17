@@ -320,3 +320,24 @@ kupovat, a nezaměnil ho s hranořízkem (obchody používají slovo „skiving�
 Český zdroj levných čepelí není: Leatory má jen systém TandyPro (nůž 1 278 Kč, čepele 2 ks 415 Kč),
 Andexnite „Nástroj na seřezávání hran kůže“ 199 Kč bez popisu a bez čepelí. QJH Official Store
 pod slovem „skiving“ prodává hranořízky.
+
+## Kruhové výsečníky Ø 4,5 a 6 mm na opasek – kde koupit (ověřeno 2026-09-17)
+
+Názvosloví: nástroj na kulaté díry v kůži je **výsečník** (hollow punch, dutý s břitem). Slovo
+**průbojník** používají hobbymarkety pro **plný** trn na vyrážení kolíků a značení kovu (Narex
+Průbojník 4/5/6 mm v OBI) – ten díru do kůže neudělá, jen ji promáčkne. Postup opasku slovo
+„průbojník“ používá lidově; myslí se výsečník.
+
+| Zdroj                                                                                                                                   | Co                                              | Cena     | Stav                                                   |
+| --------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- | -------- | ------------------------------------------------------ |
+| [CraftPoint – Výsečníky na kůži 2–20 mm, průměr dle výběru](https://craft-point.cz/products/vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu) | jednotlivě 2/3/4/5/6/8/10… mm                   | 29 Kč/ks | 6 mm skladem, **4,5 mm není v nabídce**, 5 mm vyprodán |
+| [CraftPoint – Sada výsečníků 7 velikostí 2–5 mm](https://craft-point.cz/products/sada-vysecniku-na-kuzi-7-velikosti-2-5mm)              | rukojeť + hroty 2/2,5/3/3,5/4/4,5/5 mm          | 395 Kč   | skladem                                                |
+| [CraftPoint – Revolverový děrovač 2–4,5 mm](https://craft-point.cz/products/revolverovy-derovac-2-45mm)                                 | kleště, 2–4,5 mm                                | 509 Kč   | skladem; 6 mm nepokryje                                |
+| [OBI – Sada výsečníků 5dílná](https://www.obi.cz/kladiva/sada-vysecniku-5dilna/p/3304573)                                               | 6/8/10/12/15 mm, na lepenku, kůži, pěnovou gumu | 109 Kč   | dle prodejny                                           |
+| OBI – Narex Průbojník 4/5/6 mm                                                                                                          | **plný trn, ne výsečník**                       | –        | nekupovat na kůži                                      |
+| Hornbach, Bauhaus                                                                                                                       | vyhledávání nevrátilo nic čitelného (JS)        | –        | neověřeno                                              |
+
+Doporučení: **Ø 6 mm jednotlivě z CraftPointu (29 Kč) s objednávkou pásu.** Dírky pro trn: až
+přijde přezka, změřit trn; Ø 4 mm jednotlivě (29 Kč) stačí pro trn do 4 mm (kůže se mírně
+roztáhne), jinak sada 2–5 mm s 4,5 mm (395 Kč) nebo počkat na 5 mm. OBI sada pokryje jen 6 mm
+a větší, na dírky pro trn ne.
