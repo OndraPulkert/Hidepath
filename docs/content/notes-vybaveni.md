@@ -294,12 +294,12 @@ Autor viděl ve videu akrylovou šablonu s poloměry R5–R15, kterou se obtahuj
 rohy. Střih pouzdra má rohy R6, lekce 3 je řeže od ruky podle papírové šablony. Rohová šablona
 dává stejný rádius na všech rozích a vede nůž. V ČR nenalezena (CraftPoint nemá). AliExpress:
 
-| Nástroj                                                                                                    | Poloměry                                            | Cena   | Hodnocení         |
-| ---------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | ------ | ----------------- |
-| [Ocelová „květina“, Metal Corner Cutting Ruler](https://www.aliexpress.com/item/1005006129649426.html)     | rohy 6–24 mm po 2 mm, oblouky R11,5–21,5, dírky 1–4 | 147 Kč | 5,0 / 101 prodáno |
-| [Sada nerezových šablon „Rounded Arc-shaped ruler“](https://www.aliexpress.com/item/1005009345256631.html) | L-šablona R5/10/12,5/15/20, kruhy, úhelník          | 259 Kč | 4,7 / 27 prodáno  |
-| Hisew akrylová (Amazon US)                                                                                 | R3–R28                                              | –      | jen pro úplnost   |
+| Nástroj                                                                                                    | Poloměry                                                 | Cena   | Hodnocení         |
+| ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- | ------ | ----------------- |
+| [Ocelová „květina“, Metal Corner Cutting Ruler](https://www.aliexpress.com/item/1005006129649426.html)     | loby Ø 6–24 mm (= R3–R12), oblouky R11,5–21,5, dírky 1–4 | 147 Kč | 5,0 / 101 prodáno |
+| [Sada nerezových šablon „Rounded Arc-shaped ruler“](https://www.aliexpress.com/item/1005009345256631.html) | L-šablona R5/10/12,5/15/20, kruhy, úhelník               | 259 Kč | 4,7 / 27 prodáno  |
+| Hisew akrylová (Amazon US)                                                                                 | R3–R28                                                   | –      | jen pro úplnost   |
 
-Doporučení: ocelová květina (má R6, nůž ji neopotřebí). Nepovinné – pro první pouzdro stačí
+Doporučení: ocelová květina (lob Ø 12 = R6 pro pouzdro, nůž ji neopotřebí). Na špičku opasku není potřeba – tvar včetně vrcholu R4 dává destička (řada 1); zaoblený konec R15/R20 přesahuje její rozsah. Nepovinné – pro první pouzdro stačí
 obtáhnout minci nebo víčko (R6 = Ø 12 mm). Nápad do budoucna: malou rohovou šablonu R3–R15 lze
 přidat do vlastní laserové sady (stejný akryl jako destička), až se bude vyrábět další kus.
