@@ -361,3 +361,21 @@ Type B (590 + 73 = 663 Kč) vs CraftPoint sada 338 Kč: příplatek za leštěn�
 
 Zdroje: [Evropská komise, €3 customs duty for low-value parcels](https://commission.europa.eu/news-and-media/news/ensuring-fairness-and-safety-eur3-customs-duty-low-value-parcels-2026-06-29_en),
 [vatcalc.com](https://www.vatcalc.com/eu/eu-e3-levy-low-value-e-commerce-import-package-july-2026/).
+
+## Deska pod děrování – české e-shopy (ověřeno 2026-09-18)
+
+| Obchod                                        | Produkt                                          | Materiál, rozměr                 | Cena                                           | Stav                                             |
+| --------------------------------------------- | ------------------------------------------------ | -------------------------------- | ---------------------------------------------- | ------------------------------------------------ |
+| IKEA                                          | prkénko LEGITIM                                  | polyetylen, 34 × 24 cm, 8 mm     | 59 Kč                                          | skladem; online po 2 ks                          |
+| Šijeme z kůže                                 | Podložka (prkénko) pro děrování                  | plast, rozměry neuvedeny         | 60 Kč                                          | skladem                                          |
+| Allegro (weibacar, sklad Allegro EU, bez cla) | „Kožená děrovací podložka červená“ = PU podložka | polyuretan, 15 × 10 cm, ~8–10 mm | 55 Kč + doprava 55 (zdarma od 299 Kč se Smart) | 3 ks; dodáno autorem, stránka strojově nečitelná |
+| Leatory                                       | Podložka řezací Tandy Leather (poundo)           | pryž, 15 × 15 cm, 1,3 cm         | 233 Kč                                         | 3 ks; 30 × 30 za 666 Kč na dotaz                 |
+| Corium                                        | Řezací a děrovací podložka polyuretan            | PU, 15 × 15 až 30 × 60 cm, 5 mm  | 299 Kč                                         | na objednávku, ~16. 10.                          |
+| CraftPoint                                    | Děrovací podložka OKA – M                        | pryž (Japonsko), 20 × 15 cm      | 734 Kč                                         | skladem                                          |
+
+Sedlářské nářadí, Imago, Andexnite, Dva pásovci desku pod děrování nemají (jen řezací podložky).
+Doporučení beze změny: **tvrdý polyetylen (IKEA) pod diamantové vidličky** – hroty se zastaví
+hned pod kůží a jdou čistě ven; měkčí PU/pryž (Allegro 55 Kč, Tandy, OKA) tlumí líp a hodí se
+pod kulaté výsečníky a ražení, pod vidličky se hroty zabodávají hlouběji. Allegro PU je levná EU
+náhrada Coria; dobrá druhá vrstva na opasek. Katalog aktualizován (IKEA/Šijeme/OKA re-ověřeny,
+Leatory a Corium přidány; Allegro jen zde – nabídky na tržišti mizí).
