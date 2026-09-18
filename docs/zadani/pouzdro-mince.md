@@ -12,6 +12,8 @@ prvního), až bude první pouzdro fyzicky hotové.
   průchodka, prstenec okna, boční švy, A4).
 - Kresba: `scripts/coin-card-holder.ts` → `docs/generated/pouzdro-mince-sablona.svg` + `.pdf`
   (A4 na výšku, 1:1, kalibrační úsečka 50 mm).
+- Postup skládání jako obrázky: `docs/generated/pouzdro-mince-postup.svg` + `.pdf` (A4 na šířku,
+  8 kroků od vyříznutí po hotové pouzdro zepředu a zezadu; proporce z modelu, ne 1:1).
 - Průměr mince je **proměnná**: `pnpm pattern:coin-holder --coin 50kc` (27,5 mm), `20kc`
   (26 mm, třináctihran), `10kc` (24,5), `5kc` (23), `decision` (40, předloha) nebo číslo v mm.
   `--window 30` = průměr okna podle výsečníku, který máš. `--divider` přidá dělicí panel.
