@@ -1,23 +1,26 @@
 /**
  * Pouzdro na karty s vsazenou mincí – geometrie střihu v milimetrech.
  *
- * Konstrukce podle produktu a videa Red Forest Leather (viz docs/content/notes-vybaveni.md,
- * „Námět: pouzdro s vsazenou mincí“): **jeden díl ve tvaru L**. Pás kůže přeložený ve spodní
- * hraně tvoří dva stejně vysoké panely; z horní hrany jednoho z nich (zadní, s motivem) vybíhá
- * u kraje **úzký jazyk**, který se přehne přes karty a zapne drukem na druhý panel (přední,
- * s kapsou na minci). Vedle jazyka je v horní hraně **půlkruhový výřez na prst**, kterým se
- * karty berou; v protilehlém horním rohu zadního panelu je **průchodka** na šňůrku. Přední
- * panel je nižší než karta (karty vyčnívají a dají se chytit), zadní panel karty kryje celé
- * a jazyk se láme až nad nimi. Vnitřek je jedna kapsa (karty a bankovky složené na čtvrt);
- * dělicí panel předloha nemá, v modelu je jen jako volba.
+ * Předloha: produkt a video Red Forest Leather (rozbor v docs/content/notes-vybaveni.md,
+ * „Námět: pouzdro s vsazenou mincí“, a docs/zadani/pouzdro-mince.md). Co je z předlohy
+ * ověřeno na fotkách a záběrech (v3, 2026-09-18 večer):
+ * - dva **stejně vysoké panely**, karty jsou celé schované;
+ * - z horní hrany zadního panelu vybíhá u jedné hrany **jazyk** (asi polovina šířky, konec
+ *   zaoblený obdélník), přehne se přes karty a zapne drukem na přední panel;
+ * - v horním rohu **předního** panelu na druhé straně je **čtvrtkruhový výřez na prst**, kterým
+ *   je vidět zadní panel s **průchodkou** na šňůrku; zadní panel má horní hranu rovnou;
+ * - na předku je přišitá **kapsa s mincí** (důlek tvarovaný za mokra, okno vyseknuté), mince se
+ *   zasouvá shora; vnitřek je jedna kapsa na karty a složené bankovky.
  *
- * Kapsa s mincí je samostatný díl: důlek se tvaruje za mokra ve formě, pak se vyřízne obrys,
- * vysekne okno a kapsa se přišije po třech stranách na přední panel; mince se zasouvá shora.
+ * Co je v modelu **jinak než u předlohy** (vědomá odchylka pro ruční výrobu začátečníka):
+ * předloha je zřejmě ovinutá přes boky (boční hrany jsou ohyby, dno prošité, boční řady dírek
+ * ozdobné) a u průchodky má víc vrstev. Model používá **jeden díl přeložený ve spodní hraně
+ * a sešitý po bocích** – zepředu i zezadu vypadá jako předloha, jen zadní panel je celý (bez
+ * výřezu v druhé vrstvě) a boční švy nesou nit.
  *
- * Rozměry NEJSOU odměřené z cizího střihu (ten nemáme). Odvozují se z rozměru platební
- * karty, průměru mince a přídavků na steh. Hodnoty označené „volba“ jsou návrh k ověření
- * na papírovém modelu a odřezku. Revize 2026-09-18 po dvou nezávislých posudcích a po
- * záběrech na skutečný střih předlohy.
+ * Rozměry NEJSOU odměřené z cizího střihu (ten nemáme). Odvozují se z rozměru platební karty,
+ * průměru mince a přídavků na steh; poměry (šířka jazyka, poloměr výřezu, poloha druku) jsou
+ * odhad z fotek. Hodnoty označené „volba“ ověřit na papírovém modelu a odřezku.
  */
 
 export interface CoinCardHolderSpec {
@@ -29,10 +32,10 @@ export interface CoinCardHolderSpec {
   cardsCount: number;
   /** Vůle karty na každé straně kapsy – volba. */
   cardSideClearanceMm: number;
-  /** Kolik mm karty vyčnívá nad přední panel (úchop) – volba (8–12 běžné). */
-  cardGripMm: number;
-  /** O kolik zadní panel přečnívá nad karty; jazyk se láme až tam – volba. */
+  /** O kolik panely přečnívají nad karty (karty jsou celé schované) – volba. */
   backOverCardMm: number;
+  /** O kolik je horní hrana předního panelu níž než zadního. Předloha: 0 (hrany lícují). */
+  frontTopDropMm: number;
   /** Odsazení stehu od hrany a rozteč vidličky. */
   stitchOffsetMm: number;
   stitchPitchMm: number;
@@ -53,18 +56,26 @@ export interface CoinCardHolderSpec {
    * Předloha má při pohledu zepředu jazyk vpravo a průchodku vlevo → `right`.
    */
   tabSide: 'left' | 'right';
-  /** Jazyk: šířka, zaoblení konce (`null` = plný půlkruh) – volba podle předlohy. */
+  /** Jazyk: šířka (předloha ≈ polovina šířky pouzdra), zaoblení konce (`null` = plný půlkruh). */
   tabWidthMm: number;
   tabEndRadiusMm: number | null;
   /** Vzdálenost středu druku od horní hrany předního panelu a přesah jazyka za druk – volba. */
   snapFromFrontTopMm: number;
   tabBeyondSnapMm: number;
+  /**
+   * Rezerva délky jazyka na zkoušku s kartami: skutečná délka oblouku závisí na tuhosti kůže
+   * a počtu karet (±3 mm), jazyk se řeže delší a zkracuje až po osazení kloboučku.
+   */
+  tabFitReserveMm: number;
   /** Průměr kloboučku druku (běžný druk 12,5 mm) a rezerva kolem něj. */
   snapDiameterMm: number;
   snapClearanceMm: number;
-  /** Výřez na prst v horní hraně zadního panelu hned vedle jazyka (směrem k průchodce): poloměr – volba. */
-  notchRadiusMm: number;
-  /** Průchodka na šňůrku v horním rohu zadního panelu na opačné straně než jazyk: průměr a odstup od hran. */
+  /**
+   * Čtvrtkruhový výřez na prst v horním rohu PŘEDNÍHO panelu na straně průchodky (naproti
+   * jazyku); poloměr se středem v rohu. `null` = šířka panelu − šířka jazyka. Předloha ≈ 30.
+   */
+  scoopRadiusMm: number | null;
+  /** Průchodka na šňůrku v horním rohu zadního panelu na opačné straně než jazyk (vidět výřezem): průměr a odstup od hran. */
   grommetHoleMm: number;
   grommetFromEdgeMm: number;
   /** Poloměr zaoblení rohů panelů. */
@@ -77,8 +88,13 @@ export interface CoinCardHolderSpec {
    */
   windowDiameterMm: number | null;
   minCoinRingMm: number;
-  /** Vůle otvoru formy kolem mince obalené kůží: otvor = mince + 2·kůže kapsy + vůle. */
+  /**
+   * Vůle otvoru formy kolem mince obalené kůží: otvor = mince + 2·kůže kapsy + vůle. Kůže po
+   * vyschnutí o 1–2 % sedne, vůle pod 1 mm může minci sevřít – volba 1,6.
+   */
   formHoleClearanceMm: number;
+  /** Tloušťka desky formy: musí pojmout minci (≈ 3 mm) i kůži a nechat důlek dosednout – volba. */
+  formPlateThicknessMm: number;
   /** Rovná plocha kůže mezi patou důlku (= otvor formy) a stehem kapsy – volba. */
   pocketFlatMm: number;
   /** Kolik kůže zůstane nad mincí k horní (otevřené) hraně kapsy – volba. */
@@ -97,8 +113,8 @@ export const DEFAULT_COIN_CARD_HOLDER: CoinCardHolderSpec = {
   cardThicknessMm: 0.76,
   cardsCount: 4,
   cardSideClearanceMm: 1.5,
-  cardGripMm: 8,
   backOverCardMm: 2,
+  frontTopDropMm: 0,
   stitchOffsetMm: 3.5,
   stitchPitchMm: 4,
   seamInnerMarginMm: 1,
@@ -107,21 +123,23 @@ export const DEFAULT_COIN_CARD_HOLDER: CoinCardHolderSpec = {
   dividerPanel: false,
   foldAllowanceMm: null,
   tabSide: 'right',
-  tabWidthMm: 26,
-  tabEndRadiusMm: null,
+  tabWidthMm: 33,
+  tabEndRadiusMm: 10,
   snapFromFrontTopMm: 10,
   tabBeyondSnapMm: 9,
+  tabFitReserveMm: 5,
   snapDiameterMm: 12.5,
   snapClearanceMm: 2,
-  notchRadiusMm: 12,
+  scoopRadiusMm: 30,
   grommetHoleMm: 5,
   grommetFromEdgeMm: 9,
   cornerRadiusMm: 6,
   coinDiameterMm: 40,
   windowDiameterMm: null,
   minCoinRingMm: 4,
-  formHoleClearanceMm: 0.6,
-  pocketFlatMm: 3.5,
+  formHoleClearanceMm: 1.6,
+  formPlateThicknessMm: 8,
+  pocketFlatMm: 3,
   coinTopOverlapMm: 3,
   pocketTopRadiusMm: 10,
   pocketFromFoldMinMm: 3,
@@ -158,7 +176,7 @@ export const SHEET_CAPTION_MM = 10;
 export interface CoinCardHolderLayout {
   /** Šířka panelů. */
   panelWidthMm: number;
-  /** Výška předního panelu (karta − úchop) a zadního (karta + přesah). */
+  /** Výška zadního panelu (karta + přesah) a předního (zadní − frontTopDropMm). */
   frontHeightMm: number;
   backHeightMm: number;
   /** Obsah, kolem kterého se tělo ohýbá (karty, případně dělicí panel). */
@@ -169,8 +187,9 @@ export interface CoinCardHolderLayout {
   foldEndMm: number;
   /** Horní hrana předního panelu (konec těla) v soustavě těla. */
   frontTopMm: number;
-  /** Jazyk: délka nad horní hranou zadního panelu, jeho x-rozsah (u pravé hrany při `tabSide: 'right'`), poloměr konce. */
+  /** Jazyk: délka řezu nad horní hranou zadního panelu (včetně rezervy), délka bez rezervy, x-rozsah, poloměr konce. */
   tabLengthMm: number;
+  tabNominalLengthMm: number;
   tabX0Mm: number;
   tabX1Mm: number;
   tabEndRadiusMm: number;
@@ -181,11 +200,11 @@ export interface CoinCardHolderLayout {
   snapXMm: number;
   snapTabYMm: number;
   snapFrontYMm: number;
-  /** Kam na předním panelu dopadne konec jazyka, od horní hrany předku. */
+  /** Kam na předním panelu dopadne konec jazyka (s rezervou, před zkrácením), od horní hrany předku. */
   tabEndOnFrontMm: number;
-  /** Výřez na prst: střed na horní hraně zadního panelu a poloměr. */
-  notchCentreXMm: number;
-  notchRadiusMm: number;
+  /** Výřez na prst: poloměr a x rohu předního panelu, ve kterém má střed (0 nebo šířka panelu). */
+  scoopRadiusMm: number;
+  scoopCornerXMm: number;
   /** Průchodka: střed v soustavě těla. */
   grommetXMm: number;
   grommetYMm: number;
@@ -205,11 +224,16 @@ export interface CoinCardHolderLayout {
   pocketYMm: number;
   /** Kde na kapse začíná šev (pod zaoblením horních rohů), od její horní hrany. */
   pocketSeamTopMm: number;
-  /** Kolik karty vyčnívá nad přední panel. */
+  /** Kolik karty odkryje výřez (poloměr − přesah panelu nad kartou). */
   cardExposedMm: number;
-  /** Boční švy: od `stitchOffsetMm` nad ohybem k `stitchOffsetMm` pod horní hranou předku (stejně na obou panelech). */
-  sideSeamLengthMm: number;
-  sideSeamHoles: number;
+  /**
+   * Boční švy, tečky počítané od ohybu na obou panelech: na straně jazyka od `stitchOffsetMm`
+   * nad ohybem po `stitchOffsetMm` pod horní hranou předku; na straně výřezu končí pod výřezem.
+   */
+  seamLengthTabSideMm: number;
+  seamHolesTabSide: number;
+  seamLengthScoopSideMm: number;
+  seamHolesScoopSide: number;
   /** Dělicí panel (jen když `dividerPanel`). */
   dividerHeightMm: number | null;
 }
@@ -219,8 +243,8 @@ export function coinCardHolderLayout(
 ): CoinCardHolderLayout {
   const seam = spec.stitchOffsetMm + spec.seamInnerMarginMm;
   const panelWidth = round(spec.cardWidthMm + 2 * spec.cardSideClearanceMm + 2 * seam);
-  const frontHeight = round(spec.cardHeightMm - spec.cardGripMm);
   const backHeight = round(spec.cardHeightMm + spec.backOverCardMm);
+  const frontHeight = round(backHeight - spec.frontTopDropMm);
 
   const inner =
     spec.cardsCount * spec.cardThicknessMm + (spec.dividerPanel ? spec.bodyThicknessMm : 0);
@@ -231,24 +255,29 @@ export function coinCardHolderLayout(
   const foldEnd = round(backHeight + foldAllowance);
   const frontTop = round(foldEnd + frontHeight);
 
-  // Jazyk: přes obsah (karty + přední panel) po neutrální ose, pak dolů po předku k druku
-  // a přesah za druk. Konec = půlkruh o poloměru půl šířky, pokud není zadáno jinak.
+  // Jazyk: přes obsah (karty + horní hrana předního panelu, která s zadním lícuje) po neutrální
+  // ose, pak dolů po předku k druku a přesah za druk; navíc rezerva na zkoušku s kartami.
   const tabWrap = round(Math.PI * ((inner + spec.bodyThicknessMm) / 2 + spec.bodyThicknessMm / 2));
-  // Po oblouku klesá jazyk po předku o (zadní − přední) k horní hraně předku a dál k druku.
+  // Po oblouku klesá jazyk po předku o rozdíl výšek panelů (u předlohy 0) a dál k druku.
   const tabDrop = round(backHeight - frontHeight);
-  const tabLength = round(tabWrap + tabDrop + spec.snapFromFrontTopMm + spec.tabBeyondSnapMm);
+  const tabNominal = round(tabWrap + tabDrop + spec.snapFromFrontTopMm + spec.tabBeyondSnapMm);
+  const tabLength = round(tabNominal + spec.tabFitReserveMm);
   const tabEndRadius = Math.min(spec.tabEndRadiusMm ?? spec.tabWidthMm / 2, spec.tabWidthMm / 2);
   const right = spec.tabSide === 'right';
   const snapX = round((right ? panelWidth - spec.tabWidthMm : 0) + spec.tabWidthMm / 2);
   const snapTabY = round(-(tabWrap + tabDrop + spec.snapFromFrontTopMm));
   const snapFrontY = round(frontTop - spec.snapFromFrontTopMm);
-  const tabEndOnFront = round(spec.snapFromFrontTopMm + spec.tabBeyondSnapMm);
+  const tabEndOnFront = round(
+    spec.snapFromFrontTopMm + spec.tabBeyondSnapMm + spec.tabFitReserveMm,
+  );
 
   const tabX0 = right ? round(panelWidth - spec.tabWidthMm) : 0;
   const tabX1 = right ? panelWidth : spec.tabWidthMm;
-  const notchCentreX = right
-    ? round(tabX0 - spec.notchRadiusMm)
-    : round(spec.tabWidthMm + spec.notchRadiusMm);
+  // Výřez na prst v předním panelu v rohu na straně průchodky (naproti jazyku). Přední panel
+  // je v rozloženém těle vzhůru nohama, ale x se ohybem nemění: roh je na stejné straně jako
+  // průchodka zadního panelu, a po přeložení leží přes ni.
+  const scoopRadius = round(spec.scoopRadiusMm ?? panelWidth - spec.tabWidthMm);
+  const scoopCornerX = right ? 0 : panelWidth;
   const grommetX = right ? spec.grommetFromEdgeMm : round(panelWidth - spec.grommetFromEdgeMm);
   const grommetY = spec.grommetFromEdgeMm;
 
@@ -271,11 +300,19 @@ export function coinCardHolderLayout(
     spec.snapClearanceMm;
   const bandBottom = frontHeight - spec.pocketFromFoldMinMm;
   const slack = bandBottom - bandTop - pocketHeight;
-  const pocketY = round(bandTop + Math.max(0, slack) / 2);
   const pocketX = round((panelWidth - pocketWidth) / 2);
+  // Horní roh kapsy na straně výřezu (zaoblený R) musí zůstat aspoň `minLigamentMm` od
+  // oblouku výřezu: kapsa se posune níž, pokud vystředění v pásmu nestačí.
+  const rp = spec.pocketTopRadiusMm;
+  const reach = scoopRadius + spec.minLigamentMm + rp;
+  const dx = pocketX + rp;
+  const pocketYForScoop = reach > dx ? Math.sqrt(reach * reach - dx * dx) - rp : 0;
+  const pocketY = round(Math.max(bandTop + Math.max(0, slack) / 2, pocketYForScoop));
 
-  const sideSeamLength = round(frontHeight - 2 * spec.stitchOffsetMm);
-  const sideSeamHoles = Math.floor(sideSeamLength / spec.stitchPitchMm + 1e-9) + 1;
+  const holes = (len: number): number =>
+    len < 0 ? 0 : Math.floor(len / spec.stitchPitchMm + 1e-9) + 1;
+  const seamLengthTabSide = round(frontHeight - 2 * spec.stitchOffsetMm);
+  const seamLengthScoopSide = round(frontHeight - scoopRadius - 2 * spec.stitchOffsetMm);
 
   return {
     panelWidthMm: panelWidth,
@@ -287,6 +324,7 @@ export function coinCardHolderLayout(
     foldEndMm: foldEnd,
     frontTopMm: frontTop,
     tabLengthMm: tabLength,
+    tabNominalLengthMm: tabNominal,
     tabX0Mm: tabX0,
     tabX1Mm: tabX1,
     tabEndRadiusMm: round(tabEndRadius),
@@ -296,8 +334,8 @@ export function coinCardHolderLayout(
     snapTabYMm: snapTabY,
     snapFrontYMm: snapFrontY,
     tabEndOnFrontMm: tabEndOnFront,
-    notchCentreXMm: notchCentreX,
-    notchRadiusMm: spec.notchRadiusMm,
+    scoopRadiusMm: scoopRadius,
+    scoopCornerXMm: scoopCornerX,
     grommetXMm: grommetX,
     grommetYMm: grommetY,
     bodyLengthMm: round(tabLength + frontTop),
@@ -313,9 +351,11 @@ export function coinCardHolderLayout(
     pocketXMm: pocketX,
     pocketYMm: pocketY,
     pocketSeamTopMm: spec.pocketTopRadiusMm,
-    cardExposedMm: round(spec.cardHeightMm - frontHeight),
-    sideSeamLengthMm: sideSeamLength,
-    sideSeamHoles,
+    cardExposedMm: round(scoopRadius - spec.backOverCardMm - spec.frontTopDropMm),
+    seamLengthTabSideMm: seamLengthTabSide,
+    seamHolesTabSide: holes(seamLengthTabSide),
+    seamLengthScoopSideMm: seamLengthScoopSide,
+    seamHolesScoopSide: holes(seamLengthScoopSide),
     dividerHeightMm: spec.dividerPanel ? frontHeight : null,
   };
 }
@@ -337,47 +377,44 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
   const min = spec.minLigamentMm;
   const so = spec.stitchOffsetMm;
 
-  if (spec.cardGripMm < 6 || spec.cardGripMm > 15) {
-    p.push(`Karta vyčnívá ${spec.cardGripMm} mm; pod 6 mm nejde chytit, nad 15 mm je moc volná.`);
-  }
   if (spec.backOverCardMm < 1) {
-    p.push(
-      'Zadní panel musí přečnívat nad karty aspoň 1 mm, jinak se jazyk láme přes hranu karet.',
-    );
+    p.push('Panely musí přečnívat nad karty aspoň 1 mm, jinak se jazyk láme přes hranu karet.');
   }
-  // Jazyk a výřez musí ležet v šířce panelu a nechat místo na průchodku.
-  // Můstek mezi koncem výřezu (na straně k průchodce) a průchodkou, nezávisle na straně jazyka.
-  const notchFarEdge =
-    spec.tabSide === 'right'
-      ? L.notchCentreXMm - L.notchRadiusMm
-      : L.notchCentreXMm + L.notchRadiusMm;
-  const grommetNearEdge =
-    spec.tabSide === 'right'
-      ? L.grommetXMm + spec.grommetHoleMm / 2
-      : L.grommetXMm - spec.grommetHoleMm / 2;
-  // Znaménko: záporná hodnota = výřez a průchodka se překrývají.
-  const ligament =
-    spec.tabSide === 'right' ? notchFarEdge - grommetNearEdge : grommetNearEdge - notchFarEdge;
-  if (ligament < min) {
-    p.push(
-      `Mezi výřezem na prst a průchodkou zbývá ${ligament.toFixed(1)} mm (minimum ${min}). ` +
-        'Zmenši notchRadiusMm nebo tabWidthMm.',
-    );
+  if (spec.frontTopDropMm > spec.cardHeightMm / 2) {
+    p.push('frontTopDropMm je větší než půl karty – přední panel by karty nedržel.');
   }
-  // Nad předkem je zadní panel jednovrstvý (bez bočního švu), stačí můstek k hraně.
+  // Průchodka: můstek k hranám (nad předkem je zadní panel v rohu jednovrstvý – výřez předku).
   if (spec.grommetFromEdgeMm - spec.grommetHoleMm / 2 < min) {
     p.push(
       `Průchodka je moc blízko hrany (můstek ${(spec.grommetFromEdgeMm - spec.grommetHoleMm / 2).toFixed(1)} mm, minimum ${min}).`,
     );
   }
-  // Výřez nesmí odkrýt víc než ~1/3 karty a musí být hlubší než přesah panelu, aby šlo kartu chytit.
-  if (L.notchRadiusMm <= spec.backOverCardMm + 5) {
+  // Výřez na prst: dost hluboký na palec, ne přes půl panelu, celý mimo jazyk a druk, a musí
+  // odkrýt průchodku zadního panelu (včetně kroužku/přírubky ≈ +3 mm) s můstkem.
+  const R = L.scoopRadiusMm;
+  if (R < 20) {
+    p.push(`Výřez na prst R${R} je mělký; předloha má ≈ 30 mm, pod 20 mm palec kartu nechytí.`);
+  }
+  if (R > L.frontHeightMm / 2) {
+    p.push(`Výřez na prst R${R} je hlubší než půl předního panelu.`);
+  }
+  if (R > L.panelWidthMm - spec.tabWidthMm) {
     p.push(
-      `Výřez na prst hluboký ${L.notchRadiusMm} mm odkryje z karty jen ${(L.notchRadiusMm - spec.backOverCardMm).toFixed(1)} mm – nejde chytit.`,
+      `Výřez na prst R${R} zasahuje pod jazyk (šířka mimo jazyk ${L.panelWidthMm - spec.tabWidthMm} mm).`,
     );
   }
-  if (L.notchRadiusMm > L.backHeightMm / 3) {
-    p.push('Výřez na prst je hlubší než třetina panelu.');
+  const snapToCorner = Math.abs(L.snapXMm - L.scoopCornerXMm);
+  if (R + spec.snapDiameterMm / 2 + spec.snapClearanceMm > snapToCorner) {
+    p.push('Výřez na prst sahá k patici druku; zmenši scoopRadiusMm nebo posuň druk.');
+  }
+  const grommetFromCorner = Math.hypot(spec.grommetFromEdgeMm, spec.grommetFromEdgeMm);
+  if (grommetFromCorner + spec.grommetHoleMm / 2 + 3 + min > R) {
+    p.push(
+      `Průchodka (kroužek do ${(grommetFromCorner + spec.grommetHoleMm / 2 + 3).toFixed(1)} mm od rohu) by výřezem R${R} nebyla celá vidět.`,
+    );
+  }
+  if (L.seamHolesScoopSide < 3) {
+    p.push('Boční šev na straně výřezu má méně než 3 otvory; výřez je moc hluboký.');
   }
   // Jazyk musí pojmout druk s okrajem na šev/hranu z každé strany.
   if (spec.tabWidthMm < 2 * so + spec.snapDiameterMm) {
@@ -404,6 +441,22 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
       `Kapsa s mincí (${L.pocketHeightMm} mm) se nevejde mezi jazyk a pásmo ohybu ` +
         `(k dispozici ${available.toFixed(1)} mm). Zmenši minci nebo tabBeyondSnapMm.`,
     );
+  }
+  // Kapsa posunutá kvůli výřezu nesmí spadnout do pásma ohybu.
+  if (L.pocketYMm + L.pocketHeightMm > L.frontHeightMm - spec.pocketFromFoldMinMm + 1e-9) {
+    p.push(
+      `Kapsa s mincí končí ${(L.pocketYMm + L.pocketHeightMm).toFixed(1)} mm pod horní hranou předku, ` +
+        `pásmo ohybu začíná v ${(L.frontHeightMm - spec.pocketFromFoldMinMm).toFixed(1)}; zmenši scoopRadiusMm nebo minci.`,
+    );
+  }
+  if (spec.tabFitReserveMm < 3) {
+    p.push('tabFitReserveMm pod 3 mm nepokryje nejistotu délky oblouku (±3 mm).');
+  }
+  if (spec.formHoleClearanceMm < 1) {
+    p.push('formHoleClearanceMm pod 1 mm: kůže po vyschnutí sedne a minci sevře.');
+  }
+  if (spec.formPlateThicknessMm < 6) {
+    p.push('formPlateThicknessMm pod 6 mm nepojme minci a kůži, důlek by nedosedl.');
   }
   // Kapsa a boční švy panelu.
   // Hrana kapsy aspoň 1 mm od bočního švu panelu a šev kapsy aspoň `min` od švu panelu.

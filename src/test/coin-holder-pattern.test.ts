@@ -50,19 +50,22 @@ describe('střih pouzdra s mincí (tvar L)', () => {
   it('popisky dílů odpovídají modelu', () => {
     expect(sheet).toContain(`${cz(L.panelWidthMm)} × ${cz(L.backHeightMm)} mm · kryje karty celé`);
     expect(sheet).toContain(
-      `${cz(L.panelWidthMm)} × ${cz(L.frontHeightMm)} mm · karta vyčnívá ${cz(L.cardExposedMm)} mm`,
+      `výřez R${cz(L.scoopRadiusMm)} odkryje ${cz(L.cardExposedMm)} mm karty`,
     );
     expect(sheet).toContain(`OHYB ${cz(L.foldAllowanceMm)} mm`);
     expect(sheet).toContain(
       `${cz(L.pocketWidthMm)} × ${cz(L.pocketHeightMm)} mm · okno Ø ${cz(L.windowDiameterMm)}`,
     );
     expect(sheet).toContain(`otvor Ø ${cz(L.formHoleDiameterMm)}`);
-    expect(sheet).toContain(`${L.sideSeamHoles} otvorů na stranu`);
+    expect(sheet).toContain(
+      `${L.seamHolesTabSide} otvorů na straně jazyka, ${L.seamHolesScoopSide} na straně výřezu`,
+    );
+    expect(sheet).toContain('OBKRESLIT NA RUB');
     expect(sheet).toContain(`Jazyk ${cz(L.tabLengthMm)} mm`);
     expect(sheet).not.toContain('DĚLICÍ PANEL');
   });
 
-  it('obrys těla: jazyk, výřez, rohy a délka odpovídají modelu (souřadnice z cesty)', () => {
+  it('obrys těla: jazyk, výřez v předku, rohy a délka odpovídají modelu (souřadnice z cesty)', () => {
     const body = /<path d="(M[^"]+)" fill="none" stroke="#2b2b2b" stroke-width="0.3"/.exec(
       sheet ?? '',
     )?.[1];
@@ -73,23 +76,31 @@ describe('střih pouzdra s mincí (tvar L)', () => {
       const n = [...cmd[2]!.matchAll(/-?[\d.]+/g)].map((v) => Number(v[0]));
       pts.push([n[n.length - 2]!, n[n.length - 1]!]);
     }
-    const p = (x: number, y: number): string =>
-      `${X(x)} ${Y(y)}`.replace(/(\.\d*?)0+(?= |$)/g, '$1').replace(/\.(?= |$)/g, '');
-    const tabTopY = -L.tabLengthMm + L.tabEndRadiusMm;
-    // Půlkruh konce jazyka (po směru hodin) končí na pravé hraně jazyka.
+    const p = (x: number, y: number): string => `${fmt(X(x))} ${fmt(Y(y))}`;
+    const rt = L.tabEndRadiusMm;
+    const tabTopY = -L.tabLengthMm + rt;
+    // Konec jazyka: dva rohy R a rovná hrana (po směru hodin), končí na pravé hraně jazyka.
     expect(body).toContain(
-      `A${L.tabEndRadiusMm} ${L.tabEndRadiusMm} 0 0 1 ${p(L.tabX1Mm, tabTopY)}`,
+      `A${rt} ${rt} 0 0 1 ${p(L.tabX0Mm + rt, -L.tabLengthMm)} L${p(L.tabX1Mm - rt, -L.tabLengthMm)} ` +
+        `A${rt} ${rt} 0 0 1 ${p(L.tabX1Mm, tabTopY)}`,
     );
-    // Výřez na prst (proti směru, dovnitř) končí na straně jazyka (pravý jazyk → na jeho levé hraně).
-    const notchEnd = spec.tabSide === 'right' ? L.tabX0Mm : L.notchCentreXMm + L.notchRadiusMm;
-    expect(body).toContain(`A${L.notchRadiusMm} ${L.notchRadiusMm} 0 0 0 ${p(notchEnd, 0)}`);
+    // Zadní panel má rovnou horní hranu od levého rohu ke kořeni jazyka (bez výřezu).
+    expect(body).toMatch(
+      new RegExp(`^M${p(spec.cornerRadiusMm, 0)} L${p(L.tabX0Mm - spec.cornerRadiusMm, 0)} A`),
+    );
+    // Výřez na prst: čtvrtkruh (proti směru, dovnitř) v dolním levém rohu = horní roh předku
+    // na straně průchodky; po přeložení leží nad průchodkou zadního panelu.
+    const Rs = L.scoopRadiusMm;
+    expect(L.scoopCornerXMm).toBe(0);
+    expect(body).toContain(`L${p(Rs, L.frontTopMm)} A${Rs} ${Rs} 0 0 0 ${p(0, L.frontTopMm - Rs)}`);
+    expect(Math.hypot(L.grommetXMm, L.grommetYMm) + spec.grommetHoleMm / 2).toBeLessThan(Rs);
     // Jazyk je u pravé hrany (věrně předloze při pohledu zepředu).
     expect(spec.tabSide).toBe('right');
     expect(L.tabX1Mm).toBeCloseTo(L.panelWidthMm, 9);
     // Rozsah: nejvyšší bod = vrchol jazyka, nejnižší = horní hrana předku, šířka = panel.
     const xs = pts.map(([x]) => x);
     const ys = pts.map(([, y]) => y);
-    expect(Math.min(...ys)).toBeCloseTo(Y(tabTopY), 2);
+    expect(Math.min(...ys)).toBeCloseTo(Y(-L.tabLengthMm), 2);
     expect(Math.max(...ys)).toBeCloseTo(Y(L.frontTopMm), 2);
     expect(Math.max(...xs)).toBeCloseTo(X(L.panelWidthMm), 2);
     expect(Math.min(...xs)).toBeCloseTo(X(0), 2);
@@ -112,19 +123,31 @@ describe('střih pouzdra s mincí (tvar L)', () => {
     expect(g!.cy).toBeCloseTo(Y(L.grommetYMm), 2);
     // Naproti jazyku: průchodka vlevo, jazyk vpravo.
     expect(L.grommetXMm).toBeLessThan(L.tabX0Mm);
+    // Čára zkrácení jazyka (bez rezervy) je v listu.
+    const trimY = Y(-L.tabNominalLengthMm);
+    expect(sheet).toContain(
+      `M${fmt(X(L.tabX0Mm))} ${fmt(trimY)} L${fmt(X(L.tabX1Mm))} ${fmt(trimY)}`,
+    );
   });
 
-  it('boční švy: 4 řady po N tečkách, rozteč přesně podle modelu, první tečka od ohybu', () => {
+  it('boční švy: 4 řady, u výřezu kratší, rozteč přesně podle modelu, první tečka od ohybu', () => {
     const dots = circles(sheet ?? '').filter((c) => near(c.r, 0.45));
     const so = spec.stitchOffsetMm;
-    for (const x of [X(so), X(L.panelWidthMm - so)]) {
+    for (const [x, n] of [
+      [X(so), L.seamHolesScoopSide],
+      [X(L.panelWidthMm - so), L.seamHolesTabSide],
+    ] as const) {
       const col = dots
         .filter((c) => near(c.cx, x))
         .map((c) => c.cy)
         .sort((a, b) => a - b);
-      expect(col.length, `sloupec x=${x}`).toBe(2 * L.sideSeamHoles);
-      const back = col.slice(0, L.sideSeamHoles);
-      const front = col.slice(L.sideSeamHoles);
+      expect(col.length, `sloupec x=${x}`).toBe(2 * n);
+      const back = col.slice(0, n);
+      const front = col.slice(n);
+      // Řada u výřezu končí pod výřezem (žádná tečka v místě, kde přední panel není).
+      if (n === L.seamHolesScoopSide) {
+        expect(front[front.length - 1]).toBeLessThan(Y(L.frontTopMm - L.scoopRadiusMm));
+      }
       // Zadní panel: poslední tečka `so` nad ohybem; přední: první tečka `so` pod koncem ohybu.
       expect(back[back.length - 1]).toBeCloseTo(Y(L.foldStartMm - so), 2);
       expect(front[0]).toBeCloseTo(Y(L.foldEndMm + so), 2);
@@ -150,7 +173,7 @@ describe('střih pouzdra s mincí (tvar L)', () => {
     expect(seamHoles % 2).toBe(1);
     // Všech teček dohromady: 4 boční řady + šev kapsy.
     const dots = cs.filter((c) => near(c.r, 0.45));
-    expect(dots.length).toBe(4 * L.sideSeamHoles + seamHoles);
+    expect(dots.length).toBe(2 * (L.seamHolesTabSide + L.seamHolesScoopSide) + seamHoles);
   });
 
   it('čáry ohybu leží přesně na začátku a konci přídavku', () => {

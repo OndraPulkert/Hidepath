@@ -1,4 +1,4 @@
-# Pouzdro na karty s vsazenou mincí – střih (NÁVRH)
+# Pouzdro na karty s vsazenou mincí – střih (NÁVRH v3)
 
 Stav: **návrh k ověření na papíru a odřezku**, ne lekce. Vznikl 2026-09-18 na přání autora podle
 produktu, videa a fotek Red Forest Leather (rozbor v `docs/content/notes-vybaveni.md`, „Námět:
@@ -9,7 +9,7 @@ prvního), až bude první pouzdro fyzicky hotové.
 
 - Model: `src/lib/geometry/coin-card-holder.ts` – rozměry se počítají z karty (54 × 85,6, 4 ks
   po 0,76 mm), průměru mince a přídavků; kontroly hlídají kolize (jazyk × kapsa × druk, výřez ×
-  průchodka, prstenec okna, boční švy, A4).
+  druk × průchodka × kapsa, prstenec okna, boční švy, A4).
 - Kresba: `scripts/coin-card-holder.ts` → `docs/generated/pouzdro-mince-sablona.svg` + `.pdf`
   (A4 na výšku, 1:1, kalibrační úsečka 50 mm).
 - Postup skládání jako obrázky: `docs/generated/pouzdro-mince-postup.svg` + `.pdf` (A4 na šířku,
@@ -23,44 +23,59 @@ prvního), až bude první pouzdro fyzicky hotové.
   list postupu se generuje jen pro výchozí střih. Varianta pro 50 Kč je v repu.
   Tloušťka kůže těla (`bodyThicknessMm`) není přepínač – mění se v `DEFAULT_COIN_CARD_HOLDER`.
 - Strana jazyka je ve specifikaci (`tabSide: 'right'` = jazyk u pravé hrany při pohledu zepředu,
-  průchodka vlevo – tak to má předloha; `'left'` dá zrcadlový střih). Kresba i postup se řídí
-  modelem, ne stranou natvrdo.
-  Jiná než výchozí mince zapíše soubor `…-mince-<průměr>mm` (27,5 → `-mince-27-5mm`); varianta
-  pro 50 Kč je v repu.
+  výřez s průchodkou vlevo – tak to má předloha; `'left'` dá zrcadlový střih). Kresba i postup se
+  řídí modelem, ne stranou natvrdo.
 
-## Konstrukce (v2 – horní hrana NEODPOVÍDÁ předloze, viz „Otevřené body“ dole)
+## Konstrukce (v3 – podle fotek hotového kusu a záběrů střihu, 2026-09-18 večer)
 
-**Jeden díl ve tvaru L**, přeložený ve spodní hraně:
+**Jeden díl přeložený ve spodní hraně, sešitý po bocích**, plus samostatná kapsa s mincí:
 
-| Prvek           | Rozměr (mince 40)                    | Poznámka                                                                           |
-| --------------- | ------------------------------------ | ---------------------------------------------------------------------------------- |
-| Přední panel    | 66 × 77,6 mm                         | karta − 8 mm: karty vyčnívají, dají se chytit; nese kapsu s mincí a patici druku   |
-| Ohyb            | 7,13 mm                              | π·(karty/2 + kůže/2), spočteno pro 4 karty a kůži 1,5 mm                           |
-| Zadní panel     | 66 × 87,6 mm                         | karta + 2 mm: kryje karty celé; motiv/ražení sem                                   |
-| Jazyk           | 26 mm široký, 38,5 mm dlouhý         | u **pravé** hrany zadního panelu (při pohledu zepředu, jako předloha), půlkruh R13 |
-| Výřez na prst   | půlkruh R12 hned za jazykem          | odkryje 10 mm karty pro prst                                                       |
-| Průchodka       | otvor Ø 5, 9 mm od hran              | **levý** horní roh zadního panelu (naproti jazyku), šňůrka                         |
-| Kapsa s mincí   | 57 × 53 mm, horní rohy R10, dolní R6 | samostatný díl 1,2 mm; šev po třech stranách od 10 mm pod horní hranou             |
-| Okno            | Ø 32 (výsečník po celých mm)         | prstenec 4 mm; **vyseká se před přišitím**                                         |
-| Forma pro důlek | otvor Ø 43 v desce 63 × 63           | mince + 2 × 1,2 + 0,6 vůle; dřevo nebo HDPE                                        |
-| Tělo celkem     | 66 × 210,8 mm                        | jazyk + zadní + ohyb + přední; vejde se na A4 na výšku                             |
+| Prvek           | Rozměr (mince 40)                      | Poznámka                                                                                    |
+| --------------- | -------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Zadní panel     | 66 × 87,6 mm                           | karta + 2 mm; motiv/ražení sem; horní hrana rovná od rohu ke kořeni jazyka                  |
+| Přední panel    | 66 × 87,6 mm                           | **stejně vysoký jako zadní** (předloha) – karty jsou celé schované; nese kapsu a patici     |
+| Ohyb            | 7,13 mm                                | π·(karty/2 + kůže/2), spočteno pro 4 karty a kůži 1,5 mm                                    |
+| Jazyk           | 33 mm široký, řez 33,5 mm dlouhý       | u **pravé** hrany zadního panelu (zepředu vpravo), konec zaoblený obdélník R10              |
+| Rezerva jazyka  | 5 mm                                   | řez je delší o rezervu; po zkoušce s kartami a osazení kloboučku se zkrátí (čárkovaná čára) |
+| Výřez na prst   | čtvrtkruh R30 v horním rohu **předku** | na straně průchodky (zepředu vlevo); odkryje 28 mm karty a průchodku zadního panelu         |
+| Průchodka       | otvor Ø 5, 9 mm od hran                | **levý** horní roh zadního panelu; po přeložení je vidět výřezem předku, šňůrka             |
+| Kapsa s mincí   | 57 × 53,5 mm, horní rohy R10, dolní R6 | samostatný díl 1,2 mm; šev po třech stranách od 10 mm pod horní hranou                      |
+| Okno            | Ø 32 (výsečník po celých mm)           | prstenec 4 mm; **vyseká se před přišitím**                                                  |
+| Forma pro důlek | otvor Ø 44 v desce 64 × 64, tl. ≥ 8 mm | mince + 2 × 1,2 + vůle 1,6 (kůže po vyschnutí sedne); dřevo, překližka nebo HDPE            |
+| Tělo celkem     | 66 × 215,8 mm                          | jazyk + zadní + ohyb + přední; vejde se na A4 na výšku                                      |
 
-Jak jazyk dosáhne na druk: z horní hrany zadního panelu obloukem přes karty a přední panel
-(π·(obsah/2 + kůže/2) = 9,5 mm), pak dolů po předku o 10 mm (rozdíl výšek panelů) a dalších
-10 mm k patici, plus 9 mm přesah za druk. Klobouček na jazyku je ve výkresu na spočtené poloze,
-ale **osazuje se až po zkoušce s vloženými kartami** (obtisknout patici) – tloušťka obsahu se
-liší podle počtu karet.
+Jak jazyk dosáhne na druk: z horní hrany zadního panelu obloukem přes karty a horní hranu předku
+(π·(obsah/2 + kůže/2) = 9,5 mm), pak po předku 10 mm k patici, plus 9 mm přesah za druk, plus
+5 mm rezerva. Klobouček na jazyku je ve výkresu na spočtené poloze, ale **osazuje se až po
+zkoušce s vloženými kartami** (obtisknout patici) – skutečná délka oblouku závisí na tuhosti kůže
+a počtu karet (±3 mm), proto rezerva a zkrácení až nakonec.
 
-Boční švy: 3,5 mm od hrany, rozteč 4 mm, jen tam, kde se panely překrývají (od ohybu po horní
-hranu předku), 18 otvorů na stranu, **tečky počítané od ohybu na obou panelech**, takže po
-přeložení lícují otvor na otvor. Nad předním panelem zůstává zadní panel jednovrstvý, bez stehu
-(předloha tam má dekorativní řady dírek – to je ozdoba, ne konstrukce).
+Boční švy: 3,5 mm od hrany, rozteč 4 mm, **tečky počítané od ohybu na obou panelech**, takže po
+přeložení lícují otvor na otvor. Na straně jazyka běží šev po celé výšce (21 otvorů), na straně
+výřezu končí pod výřezem (13 otvorů) – nad ním přední panel není. Předloha má podél boků
+dekorativní řady dírek bez nitě; to je ozdoba, ne konstrukce.
+
+Kapsa s mincí leží na předku pod jazykem a drukem; u mince 40 mm je posunutá níž tak, aby její
+horní roh zůstal 3 mm od oblouku výřezu (dno kapsy 0,6 mm nad pásmem ohybu, hrana kapsy 1 mm od
+bočního švu – obojí na minimu kontroly; menší mince mají rezervu).
+
+**Šablonu obkreslit na RUB (masnou stranu) kůže.** Lícem ven pak vyjde jazyk zepředu vpravo a
+výřez s průchodkou vlevo jako u předlohy; obkreslená na líc by vyšla zrcadlově.
 
 Kůže: tělo 1,5 mm (nebo 1,2 mm, viz Materiál), kapsa s mincí 1,2 mm (musí se tvarovat).
 
+### Vědomé odchylky od předlohy
+
+- Předloha je zřejmě **ovinutá přes boky** (boční hrany jsou ohyby, dno prošité bílou nití, boční
+  řady dírek ozdobné) a u průchodky má víc než dvě vrstvy. Náš střih má ohyb ve dně a boční švy
+  s nití – pro ruční výrobu začátečníka jednodušší a s méně díly. Zepředu i zezadu vypadá jako
+  předloha, jen zadní panel je celý (u předlohy má vnější vrstva zadního panelu stejný výřez).
+- Rozměry nejsou odměřené z cizího střihu; poměry (šířka jazyka ≈ polovina, výřez R30, druk
+  10 mm pod hranou) jsou odhad z fotek s mincí 40 mm jako měřítkem.
+
 ## Materiál (ověřeno 2026-09-18, CraftPoint, skladem)
 
-Díly se vejdou na **jeden arch A4**: tělo 66 × 211 v jednom sloupci, kapsa 57 × 53 vedle. Barvené
+Díly se vejdou na **jeden arch A4**: tělo 66 × 216 v jednom sloupci, kapsa 57 × 54 vedle. Barvené
 třísločiněné lícové usně 1,2 mm z italské koželužny, továrně upravený hladký povrch, A4 = 251 Kč,
 A5 = 57 Kč:
 
@@ -78,22 +93,22 @@ běžná tloušťka, jeden odstín i patina na všech dílech; model pak spustit
 (CraftPoint má pero i váleček na hrany). Tvarování za mokra nejdřív zkusit na A5 stejné barvy
 (57 Kč), některé povrchové úpravy při namočení flekatí.
 
-Meze střihu pro minci 40 mm: hrana kapsy leží přesně 1 mm od bočního švu panelu a dno kapsy
-3,3 mm nad pásmem ohybu – obojí na minimu kontroly. Větší mince než 40 mm se do šířky 66 mm
-nevejde; menší mince mají rezervu.
-
 ## Postup (podle videa výrobce)
 
-1. Vyříznout tělo (tvar L) podle šablony; hrany, které nebudou v švu, srazit.
+1. Vyříznout tělo podle šablony (obkreslené na rub); hrany, které nebudou v švu, srazit. Výřez
+   na prst řezat plynule podle šablony, roh výřezu u horní hrany lehce zabrousit.
 2. Kapsa: kus kůže 1,2 mm větší než díl navlhčit, položit **lícem dolů** na formu, na rub
    minci, zatlačit do otvoru, přiklopit rovnou deskou, stáhnout svěrkami, nechat zaschnout.
 3. Po zaschnutí **vyříznout obrys kapsy** podle šablony se středem na důlku.
 4. **Vyseknout okno** velkým kruhovým výsečníkem: kapsa lícem dolů na formě, pod dno důlku
    špalík (kůže leží rovně, nic se nedeformuje), jedna rána paličkou.
-5. Přišít kapsu na přední panel po třech stranách, otevřenou hranou k horní hraně předku.
-6. Přeložit tělo, prošít oba boky skrz dvě vrstvy (tečky od ohybu lícují).
-7. Osadit průchodku, protáhnout šňůrku.
-8. Druk: patici na přední panel; klobouček na jazyk až po zkoušce s vloženými kartami.
+5. Přišít kapsu na přední panel po třech stranách, otevřenou hranou k horní hraně předku; osadit
+   patici druku.
+6. Přeložit tělo, prošít oba boky skrz dvě vrstvy (tečky od ohybu lícují; u výřezu je řada
+   kratší).
+7. Osadit průchodku do zadního panelu (je vidět výřezem předku), protáhnout šňůrku.
+8. Druk: vložit karty, přehnout jazyk, obtisknout patici, osadit klobouček; **pak** jazyk zkrátit
+   na čárkovanou čáru (nebo podle skutečné polohy kloboučku) a zaoblit konec.
 9. Srazit a zaleštit hrany. Minci zasunout shora; vyjímá se zatlačením zespodu okénkem.
 
 ## Co je nutné ověřit před řezáním kůže
@@ -101,55 +116,33 @@ nevejde; menší mince mají rezervu.
 - Papírový model s kartami: jazyk musí po zapnutí ležet na předku bez tahu; když je krátký,
   zvětšit `cardsCount` (tloušťka obsahu) a přegenerovat.
 - Důlek na odřezku: tvarování za mokra plochu kolem důlku mírně stáhne; ověřit, že se obrys kapsy
-  po zaschnutí pořád vejde a okno sedí soustředně.
+  po zaschnutí pořád vejde a okno sedí soustředně, a že mince po vyschnutí do důlku vklouzne
+  (vůle 1,6 mm ve formě).
 - Okno: použít výsečník, který máš (`--window`), prstenec ≥ 4 mm; u 10 Kč (24,5 mm) vyjde okno
   16 mm, tedy z mince málo vidět – zvážit větší minci.
 - Přídavek na ohyb 7 mm pro 4 karty a kůži 1,5 mm: ověřit s kartami, při více kartách přidat.
+- Výřez R30: na papíru zkusit, že palcem kartu z pouzdra vysuneš a že průchodka se šňůrkou není
+  v cestě.
 
 ## Co střih nemá
 
 Ražený motiv na zadním panelu (vlastní razník) a dekorativní řady dírek podél švů. Vše lze
 doplnit ručně, do generátoru to nepatří.
 
-## Otevřené body po kontrole proti předloze (2026-09-18 večer)
-
-Řemeslný posudek (agent, 13 produktových fotek) a moje porovnání se snímky z videa se shodují:
-
-- **Výřez na prst je u předlohy velký čtvrtkruh (R ≈ 30) v horním rohu PŘEDNÍHO panelu** na
-  straně průchodky; odkrývá vnitřní vrstvu s průchodkou. Zadní panel má rovnou horní hranu od
-  rohu ke kořeni jazyka. Náš půlkruhový výřez R12 v zadním panelu je vymyšlený prvek.
-- **Přední panel je u předlohy stejně vysoký jako zadní** (karty nevyčnívají o 8 mm; horní
-  hrana předku lícuje s horní hranou zadního panelu u jazyka).
-- **Jazyk je širší** (≈ 33 mm, tj. polovina šířky), konec zaoblený obdélník R ≈ 10–12, ne plný
-  půlkruh.
-- Předloha je zřejmě **ovinutá přes boky** (boční hrany jsou ohyby, dno je prošité bílou nití,
-  boční řady dírek jsou ozdobné, bez nitě) a u průchodky má víc než dvě vrstvy. Naše konstrukce
-  „ohyb ve dně + boční švy“ je odchylka – pro ruční výrobu jednodušší, ale je nutné ji tak
-  označit, ne psát „věrně předloze“.
-- Rezerva konce jazyka: klobouček 9 mm od konce při nejistotě polohy ±3 mm je málo; jazyk
-  řezat o 4–5 mm delší a zkrátit až po zkoušce.
-- Forma: vůle 0,6 mm může po vyschnutí kůže (smrštění 1–2 %) minci sevřít – zvážit Ø 44;
-  tloušťka desky formy chybí (≥ 6 mm).
-- Na list doplnit, na kterou stranu kůže se šablona obkresluje (rub/líc) – rozhoduje o tom, zda
-  jazyk vyjde zepředu vpravo.
-
-Rozhodnutí o v3 (přepracování horní hrany) čeká na autora.
-
 ## Historie návrhu
 
 - v1 (2026-09-18 ráno): obdélník s chlopní přes celou šířku a dělicím panelem. Dva nezávislé
   posudky: chlopeň se lámala na úrovni předku a s kartami by se nezapnula (fatální); otvor
   formy bez tloušťky kůže; kapsa bez rovné plochy kolem důlku; ohyb bez přídavku na karty.
-- v2 (2026-09-18 odpoledne): podle fotek skutečného střihu předlohy – tvar L s úzkým jazykem,
-  výřez na prst, průchodka, bez dělicího panelu, karty vyčnívají nad přední panel. Jazyk počítán
-  přes tloušťku obsahu, forma = mince + 2 × kůže, kapsa s rovnou plochou, okno po celých mm.
-- v2.1 (2026-09-18 večer): kontrola hotového vzhledu proti fotkám předlohy – jazyk je u ní při
-  pohledu zepředu **vpravo** a průchodka vlevo; v2 to měla zrcadlově. Strana jazyka je teď
-  parametr (`tabSide`), obrys těla kreslí jedna funkce pro střih i postup, kontrola můstku mezi
-  výřezem a průchodkou počítá se znaménkem (překryv se dřív schoval za absolutní hodnotu).
-  Nezávislá kontrola kódu (agent) na v2: opraveno přepisování verzovaného střihu variantami
-  `--window`/`--divider` (vlastní název souboru), konec jazyka s menším poloměrem (dřív jeden
-  oblouk přes celou šířku, SVG ho natáhl na půlkruh a jazyk byl o 7 mm delší), popisek formy
-  přes řeznou hranu těla na listu pro 50 Kč, tautologická a duplicitní hlášení kontrol, tvrdší
-  testy střihu (poloha čar ohybu, obrys kapsy vůči oknu, počet otvorů švu z délky U, vodicí
-  obrys kapsy na předku).
+- v2 (2026-09-18 odpoledne): jeden díl s úzkým jazykem u kraje, průchodka, bez dělicího panelu.
+  Omylem půlkruhový výřez na prst v zadním panelu vedle jazyka a nižší přední panel (karty
+  vyčnívající o 8 mm) – špatně přečtené záběry střihu. Jazyk počítán přes tloušťku obsahu, forma
+  = mince + 2 × kůže, kapsa s rovnou plochou, okno po celých mm.
+- v2.1 (večer): jazyk zepředu vpravo, průchodka vlevo (`tabSide`); společný obrys pro střih i
+  postup; opravy z kontroly kódu (varianty do vlastních souborů, konec jazyka s menším R, popisek
+  formy, znaménkové a sloučené kontroly, `--coin=`, tvrdší testy).
+- v3 (večer): podle fotek hotového kusu a řemeslného posudku – **přední panel stejně vysoký jako
+  zadní, čtvrtkruhový výřez R30 v předku na straně průchodky, zadní panel s rovnou hranou, jazyk
+  33 mm s konci R10 a rezervou 5 mm na zkrácení, forma s vůlí 1,6 a tloušťkou ≥ 8 mm, boční švy
+  u výřezu kratší, na listu pokyn obkreslit na rub**. Konstrukce těla (ohyb ve dně, boční švy)
+  ponechána jako vědomá odchylka.
