@@ -71,20 +71,23 @@ describe('střih pouzdra s mincí (tvar L)', () => {
       const n = [...cmd[2]!.matchAll(/-?[\d.]+/g)].map((v) => Number(v[0]));
       pts.push([n[n.length - 2]!, n[n.length - 1]!]);
     }
-    // Vrchol jazyka: půlkruh začíná na levé hraně `tabLength − rt` nad horní hranou zadního panelu.
-    expect(pts[0]![0]).toBeCloseTo(X(0), 2);
-    expect(pts[0]![1]).toBeCloseTo(Y(-L.tabLengthMm + L.tabEndRadiusMm), 2);
-    // Půlkruh konce jazyka: poloměr = půl šířky jazyka, konec na pravé hraně jazyka.
+    const p = (x: number, y: number): string =>
+      `${X(x)} ${Y(y)}`.replace(/(\.\d*?)0+(?= |$)/g, '$1').replace(/\.(?= |$)/g, '');
+    const tabTopY = -L.tabLengthMm + L.tabEndRadiusMm;
+    // Půlkruh konce jazyka (po směru hodin) končí na pravé hraně jazyka.
     expect(body).toContain(
-      `A${L.tabEndRadiusMm} ${L.tabEndRadiusMm} 0 0 1 ${X(L.tabX1Mm)} ${cz(Y(-L.tabLengthMm + L.tabEndRadiusMm)).replace(',', '.')}`,
+      `A${L.tabEndRadiusMm} ${L.tabEndRadiusMm} 0 0 1 ${p(L.tabX1Mm, tabTopY)}`,
     );
-    // Výřez na prst: proti směru hodin (dovnitř), od pravé hrany jazyka k jeho konci.
-    expect(body).toContain(
-      `A${L.notchRadiusMm} ${L.notchRadiusMm} 0 0 0 ${X(L.notchCentreXMm + L.notchRadiusMm)} ${Y(0)}`,
-    );
-    // Nejnižší bod obrysu = horní hrana předku (konec těla); pravá hrana = šířka panelu.
+    // Výřez na prst (proti směru, dovnitř) končí na straně jazyka (pravý jazyk → na jeho levé hraně).
+    const notchEnd = spec.tabSide === 'right' ? L.tabX0Mm : L.notchCentreXMm + L.notchRadiusMm;
+    expect(body).toContain(`A${L.notchRadiusMm} ${L.notchRadiusMm} 0 0 0 ${p(notchEnd, 0)}`);
+    // Jazyk je u pravé hrany (věrně předloze při pohledu zepředu).
+    expect(spec.tabSide).toBe('right');
+    expect(L.tabX1Mm).toBeCloseTo(L.panelWidthMm, 9);
+    // Rozsah: nejvyšší bod = vrchol jazyka, nejnižší = horní hrana předku, šířka = panel.
     const xs = pts.map(([x]) => x);
     const ys = pts.map(([, y]) => y);
+    expect(Math.min(...ys)).toBeCloseTo(Y(tabTopY), 2);
     expect(Math.max(...ys)).toBeCloseTo(Y(L.frontTopMm), 2);
     expect(Math.max(...xs)).toBeCloseTo(X(L.panelWidthMm), 2);
     expect(Math.min(...xs)).toBeCloseTo(X(0), 2);
@@ -100,11 +103,13 @@ describe('střih pouzdra s mincí (tvar L)', () => {
     expect(ys[1]).toBeCloseTo(Y(L.snapFrontYMm), 2);
   });
 
-  it('průchodka v pravém horním rohu zadního panelu', () => {
+  it('průchodka v horním rohu zadního panelu naproti jazyku', () => {
     const g = circles(sheet ?? '').find((c) => near(c.r, spec.grommetHoleMm / 2));
     expect(g).toBeDefined();
     expect(g!.cx).toBeCloseTo(X(L.grommetXMm), 2);
     expect(g!.cy).toBeCloseTo(Y(L.grommetYMm), 2);
+    // Naproti jazyku: průchodka vlevo, jazyk vpravo.
+    expect(L.grommetXMm).toBeLessThan(L.tabX0Mm);
   });
 
   it('boční švy: 4 řady po N tečkách, rozteč přesně podle modelu, první tečka od ohybu', () => {

@@ -48,6 +48,11 @@ export interface CoinCardHolderSpec {
    * půlkruh kolem obsahu tedy potřebuje π · (obsah/2 + kůže/2). `null` = spočítat, číslo = přebít.
    */
   foldAllowanceMm: number | null;
+  /**
+   * Jazyk: u které hrany zadního panelu vybíhá (při pohledu na rozložené tělo lícem nahoru).
+   * Předloha má při pohledu zepředu jazyk vpravo a průchodku vlevo → `right`.
+   */
+  tabSide: 'left' | 'right';
   /** Jazyk: šířka, zaoblení konce (`null` = plný půlkruh) – volba podle předlohy. */
   tabWidthMm: number;
   tabEndRadiusMm: number | null;
@@ -57,9 +62,9 @@ export interface CoinCardHolderSpec {
   /** Průměr kloboučku druku (běžný druk 12,5 mm) a rezerva kolem něj. */
   snapDiameterMm: number;
   snapClearanceMm: number;
-  /** Výřez na prst v horní hraně zadního panelu hned vedle jazyka: poloměr – volba. */
+  /** Výřez na prst v horní hraně zadního panelu hned vedle jazyka (směrem k průchodce): poloměr – volba. */
   notchRadiusMm: number;
-  /** Průchodka na šňůrku v horním rohu zadního panelu: průměr otvoru a odstup od hran. */
+  /** Průchodka na šňůrku v horním rohu zadního panelu na opačné straně než jazyk: průměr a odstup od hran. */
   grommetHoleMm: number;
   grommetFromEdgeMm: number;
   /** Poloměr zaoblení rohů panelů. */
@@ -101,6 +106,7 @@ export const DEFAULT_COIN_CARD_HOLDER: CoinCardHolderSpec = {
   pocketThicknessMm: 1.2,
   dividerPanel: false,
   foldAllowanceMm: null,
+  tabSide: 'right',
   tabWidthMm: 26,
   tabEndRadiusMm: null,
   snapFromFrontTopMm: 10,
@@ -160,7 +166,7 @@ export interface CoinCardHolderLayout {
   foldEndMm: number;
   /** Horní hrana předního panelu (konec těla) v soustavě těla. */
   frontTopMm: number;
-  /** Jazyk: délka nad horní hranou zadního panelu, jeho x-rozsah, poloměr konce. */
+  /** Jazyk: délka nad horní hranou zadního panelu, jeho x-rozsah (u pravé hrany při `tabSide: 'right'`), poloměr konce. */
   tabLengthMm: number;
   tabX0Mm: number;
   tabX1Mm: number;
@@ -229,13 +235,18 @@ export function coinCardHolderLayout(
   const tabDrop = round(backHeight - frontHeight);
   const tabLength = round(tabWrap + tabDrop + spec.snapFromFrontTopMm + spec.tabBeyondSnapMm);
   const tabEndRadius = Math.min(spec.tabEndRadiusMm ?? spec.tabWidthMm / 2, spec.tabWidthMm / 2);
-  const snapX = round(spec.tabWidthMm / 2);
+  const right = spec.tabSide === 'right';
+  const snapX = round((right ? panelWidth - spec.tabWidthMm : 0) + spec.tabWidthMm / 2);
   const snapTabY = round(-(tabWrap + tabDrop + spec.snapFromFrontTopMm));
   const snapFrontY = round(frontTop - spec.snapFromFrontTopMm);
   const tabEndOnFront = round(spec.snapFromFrontTopMm + spec.tabBeyondSnapMm);
 
-  const notchCentreX = round(spec.tabWidthMm + spec.notchRadiusMm);
-  const grommetX = round(panelWidth - spec.grommetFromEdgeMm);
+  const tabX0 = right ? round(panelWidth - spec.tabWidthMm) : 0;
+  const tabX1 = right ? panelWidth : spec.tabWidthMm;
+  const notchCentreX = right
+    ? round(tabX0 - spec.notchRadiusMm)
+    : round(spec.tabWidthMm + spec.notchRadiusMm);
+  const grommetX = right ? spec.grommetFromEdgeMm : round(panelWidth - spec.grommetFromEdgeMm);
   const grommetY = spec.grommetFromEdgeMm;
 
   // Okno, forma, kapsa.
@@ -273,8 +284,8 @@ export function coinCardHolderLayout(
     foldEndMm: foldEnd,
     frontTopMm: frontTop,
     tabLengthMm: tabLength,
-    tabX0Mm: 0,
-    tabX1Mm: spec.tabWidthMm,
+    tabX0Mm: tabX0,
+    tabX1Mm: tabX1,
     tabEndRadiusMm: round(tabEndRadius),
     tabWrapMm: tabWrap,
     tabDropMm: tabDrop,
@@ -310,8 +321,11 @@ export function coinCardHolderLayout(
 export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD_HOLDER): string[] {
   const p: string[] = [];
   for (const [k, v] of Object.entries(spec)) {
-    if (v === null || typeof v === 'boolean') continue;
+    if (typeof v !== 'number') continue;
     if (!Number.isFinite(v) || v < 0) p.push(`${k} musí být nezáporné číslo, je ${String(v)}.`);
+  }
+  if (spec.tabSide !== 'left' && spec.tabSide !== 'right') {
+    p.push(`tabSide musí být 'left' nebo 'right', je ${String(spec.tabSide)}.`);
   }
   if (spec.cardsCount < 1) p.push('cardsCount musí být aspoň 1.');
   if (p.length > 0) return p;
@@ -329,15 +343,26 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
     );
   }
   // Jazyk a výřez musí ležet v šířce panelu a nechat místo na průchodku.
-  const notchEnd = L.notchCentreXMm + L.notchRadiusMm;
-  const grommetLeft = L.grommetXMm - spec.grommetHoleMm / 2;
-  if (notchEnd + min > grommetLeft) {
+  // Můstek mezi koncem výřezu (na straně k průchodce) a průchodkou, nezávisle na straně jazyka.
+  const notchFarEdge =
+    spec.tabSide === 'right'
+      ? L.notchCentreXMm - L.notchRadiusMm
+      : L.notchCentreXMm + L.notchRadiusMm;
+  const grommetNearEdge =
+    spec.tabSide === 'right'
+      ? L.grommetXMm + spec.grommetHoleMm / 2
+      : L.grommetXMm - spec.grommetHoleMm / 2;
+  // Znaménko: záporná hodnota = výřez a průchodka se překrývají.
+  const ligament =
+    spec.tabSide === 'right' ? notchFarEdge - grommetNearEdge : grommetNearEdge - notchFarEdge;
+  if (ligament < min) {
     p.push(
-      `Výřez na prst končí v x = ${notchEnd} mm, průchodka začíná v ${grommetLeft.toFixed(1)} mm ` +
-        `(minimum můstku ${min}). Zmenši notchRadiusMm nebo tabWidthMm.`,
+      `Mezi výřezem na prst a průchodkou zbývá ${ligament.toFixed(1)} mm (minimum ${min}). ` +
+        'Zmenši notchRadiusMm nebo tabWidthMm.',
     );
   }
-  if (L.grommetXMm + spec.grommetHoleMm / 2 + 1 > L.panelWidthMm - so) {
+  const grommetToSideEdge = Math.min(L.grommetXMm, L.panelWidthMm - L.grommetXMm);
+  if (grommetToSideEdge - spec.grommetHoleMm / 2 < so + 1) {
     p.push('Průchodka zasahuje do bočního švu; zvětši grommetFromEdgeMm.');
   }
   if (spec.grommetFromEdgeMm - spec.grommetHoleMm / 2 < min) {

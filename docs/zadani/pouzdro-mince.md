@@ -17,6 +17,9 @@ prvního), až bude první pouzdro fyzicky hotové.
 - Průměr mince je **proměnná**: `pnpm pattern:coin-holder --coin 50kc` (27,5 mm), `20kc`
   (26 mm, třináctihran), `10kc` (24,5), `5kc` (23), `decision` (40, předloha) nebo číslo v mm.
   `--window 30` = průměr okna podle výsečníku, který máš. `--divider` přidá dělicí panel.
+- Strana jazyka je ve specifikaci (`tabSide: 'right'` = jazyk u pravé hrany při pohledu zepředu,
+  průchodka vlevo – tak to má předloha; `'left'` dá zrcadlový střih). Kresba i postup se řídí
+  modelem, ne stranou natvrdo.
   Jiná než výchozí mince zapíše soubor `…-mince-<průměr>mm` (27,5 → `-mince-27-5mm`); varianta
   pro 50 Kč je v repu.
 
@@ -24,18 +27,18 @@ prvního), až bude první pouzdro fyzicky hotové.
 
 **Jeden díl ve tvaru L**, přeložený ve spodní hraně:
 
-| Prvek           | Rozměr (mince 40)                    | Poznámka                                                                         |
-| --------------- | ------------------------------------ | -------------------------------------------------------------------------------- |
-| Přední panel    | 66 × 77,6 mm                         | karta − 8 mm: karty vyčnívají, dají se chytit; nese kapsu s mincí a patici druku |
-| Ohyb            | 7,13 mm                              | π·(karty/2 + kůže/2), spočteno pro 4 karty a kůži 1,5 mm                         |
-| Zadní panel     | 66 × 87,6 mm                         | karta + 2 mm: kryje karty celé; motiv/ražení sem                                 |
-| Jazyk           | 26 mm široký, 38,5 mm dlouhý         | u levé hrany zadního panelu, konec plný půlkruh R13, klobouček druku             |
-| Výřez na prst   | půlkruh R12 hned za jazykem          | odkryje 10 mm karty pro prst                                                     |
-| Průchodka       | otvor Ø 5, 9 mm od hran              | pravý horní roh zadního panelu, šňůrka                                           |
-| Kapsa s mincí   | 57 × 53 mm, horní rohy R10, dolní R6 | samostatný díl 1,2 mm; šev po třech stranách od 10 mm pod horní hranou           |
-| Okno            | Ø 32 (výsečník po celých mm)         | prstenec 4 mm; **vyseká se před přišitím**                                       |
-| Forma pro důlek | otvor Ø 43 v desce 63 × 63           | mince + 2 × 1,2 + 0,6 vůle; dřevo nebo HDPE                                      |
-| Tělo celkem     | 66 × 210,8 mm                        | jazyk + zadní + ohyb + přední; vejde se na A4 na výšku                           |
+| Prvek           | Rozměr (mince 40)                    | Poznámka                                                                           |
+| --------------- | ------------------------------------ | ---------------------------------------------------------------------------------- |
+| Přední panel    | 66 × 77,6 mm                         | karta − 8 mm: karty vyčnívají, dají se chytit; nese kapsu s mincí a patici druku   |
+| Ohyb            | 7,13 mm                              | π·(karty/2 + kůže/2), spočteno pro 4 karty a kůži 1,5 mm                           |
+| Zadní panel     | 66 × 87,6 mm                         | karta + 2 mm: kryje karty celé; motiv/ražení sem                                   |
+| Jazyk           | 26 mm široký, 38,5 mm dlouhý         | u **pravé** hrany zadního panelu (při pohledu zepředu, jako předloha), půlkruh R13 |
+| Výřez na prst   | půlkruh R12 hned za jazykem          | odkryje 10 mm karty pro prst                                                       |
+| Průchodka       | otvor Ø 5, 9 mm od hran              | **levý** horní roh zadního panelu (naproti jazyku), šňůrka                         |
+| Kapsa s mincí   | 57 × 53 mm, horní rohy R10, dolní R6 | samostatný díl 1,2 mm; šev po třech stranách od 10 mm pod horní hranou             |
+| Okno            | Ø 32 (výsečník po celých mm)         | prstenec 4 mm; **vyseká se před přišitím**                                         |
+| Forma pro důlek | otvor Ø 43 v desce 63 × 63           | mince + 2 × 1,2 + 0,6 vůle; dřevo nebo HDPE                                        |
+| Tělo celkem     | 66 × 210,8 mm                        | jazyk + zadní + ohyb + přední; vejde se na A4 na výšku                             |
 
 Jak jazyk dosáhne na druk: z horní hrany zadního panelu obloukem přes karty a přední panel
 (π·(obsah/2 + kůže/2) = 9,5 mm), pak dolů po předku o 10 mm (rozdíl výšek panelů) a dalších
@@ -107,3 +110,7 @@ doplnit ručně, do generátoru to nepatří.
 - v2 (2026-09-18 odpoledne): podle fotek skutečného střihu předlohy – tvar L s úzkým jazykem,
   výřez na prst, průchodka, bez dělicího panelu, karty vyčnívají nad přední panel. Jazyk počítán
   přes tloušťku obsahu, forma = mince + 2 × kůže, kapsa s rovnou plochou, okno po celých mm.
+- v2.1 (2026-09-18 večer): kontrola hotového vzhledu proti fotkám předlohy – jazyk je u ní při
+  pohledu zepředu **vpravo** a průchodka vlevo; v2 to měla zrcadlově. Strana jazyka je teď
+  parametr (`tabSide`), obrys těla kreslí jedna funkce pro střih i postup, kontrola můstku mezi
+  výřezem a průchodkou počítá se znaménkem (překryv se dřív schoval za absolutní hodnotu).

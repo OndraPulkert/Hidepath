@@ -59,19 +59,27 @@ describe('pouzdro s vsazenou mincí – model (tvar L podle předlohy)', () => {
     // Patice na předku: od horní hrany předku (v soustavě těla je předek vzhůru nohama).
     expect(L.frontTopMm - L.snapFrontYMm).toBeCloseTo(spec.snapFromFrontTopMm, 6);
     // Druk sedí na ose jazyka a jazyk je u levé hrany, konec jazyka je plný půlkruh.
-    expect(L.snapXMm).toBeCloseTo(spec.tabWidthMm / 2, 9);
-    expect(L.tabX0Mm).toBe(0);
+    expect(L.snapXMm).toBeCloseTo((L.tabX0Mm + L.tabX1Mm) / 2, 9);
     expect(L.tabEndRadiusMm).toBeCloseTo(spec.tabWidthMm / 2, 9);
     expect(L.bodyLengthMm).toBeCloseTo(L.tabLengthMm + L.frontTopMm, 6);
   });
 
-  it('výřez na prst hned za jazykem, průchodka v druhém rohu, mezi nimi můstek', () => {
-    expect(L.notchCentreXMm - L.notchRadiusMm).toBeCloseTo(spec.tabWidthMm, 9);
-    expect(L.grommetXMm).toBeCloseTo(L.panelWidthMm - spec.grommetFromEdgeMm, 9);
-    const notchEnd = L.notchCentreXMm + L.notchRadiusMm;
-    expect(L.grommetXMm - spec.grommetHoleMm / 2 - notchEnd).toBeGreaterThanOrEqual(
+  it('jazyk vpravo (jako předloha), výřez hned za ním, průchodka v levém rohu, mezi nimi můstek', () => {
+    expect(spec.tabSide).toBe('right');
+    expect(L.tabX1Mm).toBeCloseTo(L.panelWidthMm, 9);
+    expect(L.tabX0Mm).toBeCloseTo(L.panelWidthMm - spec.tabWidthMm, 9);
+    expect(L.notchCentreXMm + L.notchRadiusMm).toBeCloseTo(L.tabX0Mm, 9);
+    expect(L.grommetXMm).toBeCloseTo(spec.grommetFromEdgeMm, 9);
+    const notchFar = L.notchCentreXMm - L.notchRadiusMm;
+    expect(notchFar - (L.grommetXMm + spec.grommetHoleMm / 2)).toBeGreaterThanOrEqual(
       spec.minLigamentMm,
     );
+    // Zrcadlová varianta: totéž vlevo.
+    const left = coinCardHolderLayout({ ...spec, tabSide: 'left' });
+    expect(left.tabX0Mm).toBe(0);
+    expect(left.notchCentreXMm - left.notchRadiusMm).toBeCloseTo(spec.tabWidthMm, 9);
+    expect(left.grommetXMm).toBeCloseTo(L.panelWidthMm - spec.grommetFromEdgeMm, 9);
+    expect(checkCoinCardHolder({ ...spec, tabSide: 'left' })).toEqual([]);
     // Výřez odkryje kartu: hlubší než přesah panelu nad kartou.
     expect(L.notchRadiusMm).toBeGreaterThan(spec.backOverCardMm + 5);
   });
@@ -128,7 +136,7 @@ describe('pouzdro s vsazenou mincí – model (tvar L podle předlohy)', () => {
   it('kontroly odhalí kolize a špatné parametry', () => {
     expect(checkCoinCardHolder({ ...spec, tabBeyondSnapMm: 3 }).join(' ')).toMatch(/blízko druku/);
     expect(checkCoinCardHolder({ ...spec, notchRadiusMm: 22 }).join(' ')).toMatch(
-      /Výřez|průchodka/,
+      /výřezem|průchodk/,
     );
     expect(checkCoinCardHolder({ ...spec, windowDiameterMm: 36 }).join(' ')).toMatch(/Prstenec/);
     expect(checkCoinCardHolder({ ...spec, coinDiameterMm: 50 }).length).toBeGreaterThan(0);
