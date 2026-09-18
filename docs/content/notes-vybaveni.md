@@ -413,8 +413,12 @@ Katalog: přidány příklady Yato (INNA-KT) a Narex (Corium), CraftPoint cena o
 
 Autor si oblíbil [pouzdro s „lucky coin“](https://redforestleather.com/products/handmade-green-leather-cartholder-with-lucky-embossing)
 (Red Forest Leather, 70–85 €) a dodal záběry z videa výrobce. **Není to ražení, ale skutečná mince
-(~30 mm) v přední kapse s kruhovým oknem;** mince je vyměnitelná („can be replaced with your own
-personal coin“). Postup z videa (oprava mého původního odhadu, okno se dělá až nakonec):
+v přední kapse s kruhovým oknem;** podle popisu produktu je to **„decision coin“ o průměru 40 mm**
+(ANO/NE), vyměnitelná („can be replaced with your own favorite coin“). Pouzdro má „two main
+compartments“ (karty + přeložené bankovky, vzniklé přeložením a prošitím po stranách, bez vnitřních
+přihrádek) a nerezový druk. S mincí 40 mm jako měřítkem vychází z fotek (±2 mm): pouzdro složené
+~60 × 90 mm (karty na výšku), kapsa s mincí ~45 × 50 mm, okno ~30–32 mm (prstenec 4–5 mm), rozteč
+stehu 4 mm. Tloušťka kůže odhadem tělo 1,4–1,8 mm, kapsa s mincí 1,2–1,5 mm (±0,3). Postup z videa (oprava mého původního odhadu, okno se dělá až nakonec):
 
 1. Odřezek kůže **navlhčit** rozprašovačem.
 2. **Forma:** překližka s kruhovým otvorem (Ø mince + ~1 mm). Kůže rubem dolů na formu, na ni
