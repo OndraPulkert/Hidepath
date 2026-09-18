@@ -386,3 +386,25 @@ hned pod kůží a jdou čistě ven; měkčí PU/pryž (Allegro 55 Kč, Tandy, O
 pod kulaté výsečníky a ražení, pod vidličky se hroty zabodávají hlouběji. Allegro PU je levná EU
 náhrada Coria; dobrá druhá vrstva na opasek. Katalog aktualizován (IKEA/Šijeme/OKA re-ověřeny,
 Leatory a Corium přidány; Allegro jen zde – nabídky na tržišti mizí).
+
+## Nylonová palička – kde levněji než AliExpress (ověřeno 2026-09-18)
+
+Dotaz autora po započtení cla (QJH nylon 380 + 73 = 453 Kč). Brašnářské e-shopy nylonovou paličku
+buď nemají, nebo draze; **levné nylonové paličky prodávají obchody s nářadím** pod názvem
+„klempířská palička s výměnnými úderníky“:
+
+| Zdroj                                | Produkt                                               | Cena         | Stav                    |
+| ------------------------------------ | ----------------------------------------------------- | ------------ | ----------------------- |
+| INNA-KT, Promistry, ahprofi, motora… | Yato YT-4631, 250 g, nylon + PU úderníky Ø 28 mm      | 215–280 Kč   | skladem (INNA do 3 dnů) |
+| Corium                               | Palička s plastovými konci Narex                      | 199 Kč       | externí sklad           |
+| Corium                               | Gumová palička                                        | 89 Kč        | skladem                 |
+| Sklad Kůžetvůrce                     | Palička gumová malá                                   | 112 Kč       | skladem                 |
+| Leatory                              | Dřevěná 217 / Craftool plast 1 149 / rawhide 1 165 Kč |              |                         |
+| Dva pásovci                          | Vergez-Blanchard dřevěná 592, sedlářská 2 263 Kč      |              |                         |
+| CraftPoint                           | Horizontální palička nylon 380 g                      | 507 Kč       | skladem                 |
+| AliExpress QJH                       | nylon                                                 | 380 + 73 clo |                         |
+
+Hobbymarkety (OBI, Hornbach, Bauhaus) nylonovou paličku ve vyhledávání nemají, jen tesařské
+a gumové. Doporučení: **Yato 250 g za ~215–260 Kč** (nylon hroty nezničí, neodskakuje jako guma,
+hmotnost v našem rozsahu 250–400 g); pokud jde o úsporu, gumová Corium 89 Kč / Kůžetvůrce 112 Kč.
+Katalog: přidány příklady Yato (INNA-KT) a Narex (Corium), CraftPoint cena opravena na 507 Kč.
