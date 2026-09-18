@@ -300,6 +300,13 @@ dává stejný rádius na všech rozích a vede nůž. V ČR nenalezena (CraftPo
 | [Sada nerezových šablon „Rounded Arc-shaped ruler“](https://www.aliexpress.com/item/1005009345256631.html) | L-šablona R5/10/12,5/15/20, kruhy, úhelník               | 259 Kč | 4,7 / 27 prodáno  |
 | Hisew akrylová (Amazon US)                                                                                 | R3–R28                                                   | –      | jen pro úplnost   |
 
+Česká alternativa (ověřeno 2026-09-18): [Leatory – Akrylová šablona rohy a kruhy (Tandy)](https://www.leatory.cz/prislusenstvi-naradi/akrylova-sablona-rohy-a-kruhy-2/),
+360 Kč, skladem, čirý akryl 3 mm, 19,3 × 20,8 cm, rohy 1/8″–2″ (3–50 mm) a kruhy 1/4″–2″ – palcové
+poloměry (1/8, 1/4, 1/2, 3/4, 1, 1¼, 1½, 2″), takže R6 ≈ 1/4″ (6,35 mm) sedí přibližně, R4 pro
+vrchol špičky chybí (3,2 nebo 6,35). Akryl je jen na obtahování, ne jako vodítko nože. Jiný český
+obchod (CraftPoint, Andexnite, Corium, Dva pásovci) rohovou šablonu nemá. Ocelová LeaTs z AliExpressu
+stojí 147 + 60 doprava + 73 clo ≈ 280 Kč a je metrická a odolná noži.
+
 Doporučení: ocelová květina (lob Ø 12 = R6 pro pouzdro, nůž ji neopotřebí). Na **značení** špičky opasku není potřeba (tvar včetně vrcholu R4 dává destička, řada 1), ale hodí se jako **vodítko nože** při řezání vrcholu R4 (lob Ø 8) – po akrylátové hraně destičky se nožem nejezdí. Zaoblený konec R15/R20 přesahuje její rozsah. Postřeh autora 2026-09-17. Nepovinné – pro první pouzdro stačí
 obtáhnout minci nebo víčko (R6 = Ø 12 mm). Nápad do budoucna: malou rohovou šablonu R3–R15 lze
 přidat do vlastní laserové sady (stejný akryl jako destička), až se bude vyrábět další kus.
