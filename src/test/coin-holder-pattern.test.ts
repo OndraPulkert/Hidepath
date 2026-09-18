@@ -1,10 +1,15 @@
 import { describe, expect, it } from 'vitest';
 
-import { DEFAULT_COIN_CARD_HOLDER, coinCardHolderLayout } from '@/lib/geometry/coin-card-holder';
+import {
+  A4_SHEET,
+  DEFAULT_COIN_CARD_HOLDER,
+  coinCardHolderLayout,
+} from '@/lib/geometry/coin-card-holder';
 
 /**
  * Verzovaný střih pouzdra s mincí (docs/generated/pouzdro-mince-sablona.svg) musí odpovídat
- * modelu: rozměry dílů v popiskách, průměr okna, kalibrační úsečka 50 mm, stránka A4 1:1.
+ * modelu. Testy čtou geometrii ze souboru (cesty, kružnice, tečky), ne jen popisky, aby
+ * odhalily kresbu, která se od modelu odchýlí, i když golden soubor někdo přegeneruje.
  */
 const svgs: Record<string, string> = import.meta.glob('/docs/generated/*.svg', {
   query: '?raw',
@@ -13,10 +18,27 @@ const svgs: Record<string, string> = import.meta.glob('/docs/generated/*.svg', {
 });
 const sheet = Object.entries(svgs).find(([k]) => k.endsWith('/pouzdro-mince-sablona.svg'))?.[1];
 const cz = (n: number): string => (Math.round(n * 1000) / 1000).toString().replace('.', ',');
+const near = (a: number, b: number, tol = 0.01): boolean => Math.abs(a - b) <= tol;
 
-describe('střih pouzdra s mincí', () => {
+interface Circle {
+  cx: number;
+  cy: number;
+  r: number;
+}
+const circles = (s: string): Circle[] =>
+  [...s.matchAll(/<circle cx="([\d.]+)" cy="([\d.]+)" r="([\d.]+)"/g)].map((m) => ({
+    cx: Number(m[1]),
+    cy: Number(m[2]),
+    r: Number(m[3]),
+  }));
+
+describe('střih pouzdra s mincí (tvar L)', () => {
   const spec = DEFAULT_COIN_CARD_HOLDER;
   const L = coinCardHolderLayout(spec);
+  const m = A4_SHEET.marginMm;
+  // Soustava těla v listu: x = m + xBody, y = m + tabLength + yBody.
+  const X = (x: number): number => m + x;
+  const Y = (y: number): number => m + L.tabLengthMm + y;
 
   it('existuje a je to A4 na výšku v milimetrech', () => {
     expect(sheet).toBeDefined();
@@ -24,45 +46,129 @@ describe('střih pouzdra s mincí', () => {
   });
 
   it('popisky dílů odpovídají modelu', () => {
-    expect(sheet).toContain(`${cz(L.panelWidthMm)} × ${cz(L.frontHeightMm)} mm`);
-    expect(sheet).toContain(`${cz(L.panelWidthMm)} × ${cz(L.backHeightMm)} mm`);
-    expect(sheet).toContain(`${cz(L.panelWidthMm)} × ${cz(L.dividerHeightMm)} mm`);
-    expect(sheet).toContain(`okno Ø ${cz(L.windowDiameterMm)}`);
-    expect(sheet).toContain(`mince Ø ${cz(spec.coinDiameterMm)}`);
+    expect(sheet).toContain(`${cz(L.panelWidthMm)} × ${cz(L.backHeightMm)} mm · kryje karty celé`);
+    expect(sheet).toContain(
+      `${cz(L.panelWidthMm)} × ${cz(L.frontHeightMm)} mm · karta vyčnívá ${cz(L.cardExposedMm)} mm`,
+    );
+    expect(sheet).toContain(`OHYB ${cz(L.foldAllowanceMm)} mm`);
+    expect(sheet).toContain(
+      `${cz(L.pocketWidthMm)} × ${cz(L.pocketHeightMm)} mm · okno Ø ${cz(L.windowDiameterMm)}`,
+    );
     expect(sheet).toContain(`otvor Ø ${cz(L.formHoleDiameterMm)}`);
     expect(sheet).toContain(`${L.sideSeamHoles} otvorů na stranu`);
+    expect(sheet).toContain(`Jazyk ${cz(L.tabLengthMm)} mm`);
+    expect(sheet).not.toContain('DĚLICÍ PANEL');
+  });
+
+  it('obrys těla: jazyk, výřez, rohy a délka odpovídají modelu (souřadnice z cesty)', () => {
+    const body = /<path d="(M[^"]+)" fill="none" stroke="#2b2b2b" stroke-width="0.3"/.exec(
+      sheet ?? '',
+    )?.[1];
+    expect(body).toBeDefined();
+    // Koncové body příkazů M/L/A (u oblouku poslední dvojice), bez poloměrů a příznaků.
+    const pts: [number, number][] = [];
+    for (const cmd of body!.matchAll(/([MLA])([^MLAZ]*)/g)) {
+      const n = [...cmd[2]!.matchAll(/-?[\d.]+/g)].map((v) => Number(v[0]));
+      pts.push([n[n.length - 2]!, n[n.length - 1]!]);
+    }
+    // Vrchol jazyka: půlkruh začíná na levé hraně `tabLength − rt` nad horní hranou zadního panelu.
+    expect(pts[0]![0]).toBeCloseTo(X(0), 2);
+    expect(pts[0]![1]).toBeCloseTo(Y(-L.tabLengthMm + L.tabEndRadiusMm), 2);
+    // Půlkruh konce jazyka: poloměr = půl šířky jazyka, konec na pravé hraně jazyka.
+    expect(body).toContain(
+      `A${L.tabEndRadiusMm} ${L.tabEndRadiusMm} 0 0 1 ${X(L.tabX1Mm)} ${cz(Y(-L.tabLengthMm + L.tabEndRadiusMm)).replace(',', '.')}`,
+    );
+    // Výřez na prst: proti směru hodin (dovnitř), od pravé hrany jazyka k jeho konci.
+    expect(body).toContain(
+      `A${L.notchRadiusMm} ${L.notchRadiusMm} 0 0 0 ${X(L.notchCentreXMm + L.notchRadiusMm)} ${Y(0)}`,
+    );
+    // Nejnižší bod obrysu = horní hrana předku (konec těla); pravá hrana = šířka panelu.
+    const xs = pts.map(([x]) => x);
+    const ys = pts.map(([, y]) => y);
+    expect(Math.max(...ys)).toBeCloseTo(Y(L.frontTopMm), 2);
+    expect(Math.max(...xs)).toBeCloseTo(X(L.panelWidthMm), 2);
+    expect(Math.min(...xs)).toBeCloseTo(X(0), 2);
+    expect(Y(L.frontTopMm) - Y(-L.tabLengthMm)).toBeCloseTo(L.bodyLengthMm, 2);
+  });
+
+  it('druky: klobouček na jazyku a patice na předku sedí na ose jazyka', () => {
+    const snaps = circles(sheet ?? '').filter((c) => near(c.r, spec.snapDiameterMm / 2));
+    expect(snaps.length).toBe(2);
+    for (const c of snaps) expect(c.cx).toBeCloseTo(X(L.snapXMm), 2);
+    const ys = snaps.map((c) => c.cy).sort((a, b) => a - b);
+    expect(ys[0]).toBeCloseTo(Y(L.snapTabYMm), 2);
+    expect(ys[1]).toBeCloseTo(Y(L.snapFrontYMm), 2);
+  });
+
+  it('průchodka v pravém horním rohu zadního panelu', () => {
+    const g = circles(sheet ?? '').find((c) => near(c.r, spec.grommetHoleMm / 2));
+    expect(g).toBeDefined();
+    expect(g!.cx).toBeCloseTo(X(L.grommetXMm), 2);
+    expect(g!.cy).toBeCloseTo(Y(L.grommetYMm), 2);
+  });
+
+  it('boční švy: 4 řady po N tečkách, rozteč přesně podle modelu, první tečka od ohybu', () => {
+    const dots = circles(sheet ?? '').filter((c) => near(c.r, 0.45));
+    const so = spec.stitchOffsetMm;
+    for (const x of [X(so), X(L.panelWidthMm - so)]) {
+      const col = dots
+        .filter((c) => near(c.cx, x))
+        .map((c) => c.cy)
+        .sort((a, b) => a - b);
+      expect(col.length, `sloupec x=${x}`).toBe(2 * L.sideSeamHoles);
+      const back = col.slice(0, L.sideSeamHoles);
+      const front = col.slice(L.sideSeamHoles);
+      // Zadní panel: poslední tečka `so` nad ohybem; přední: první tečka `so` pod koncem ohybu.
+      expect(back[back.length - 1]).toBeCloseTo(Y(L.foldStartMm - so), 2);
+      expect(front[0]).toBeCloseTo(Y(L.foldEndMm + so), 2);
+      for (let i = 1; i < back.length; i++)
+        expect(back[i]! - back[i - 1]!).toBeCloseTo(spec.stitchPitchMm, 2);
+      for (let i = 1; i < front.length; i++)
+        expect(front[i]! - front[i - 1]!).toBeCloseTo(spec.stitchPitchMm, 2);
+    }
+  });
+
+  it('kapsa s mincí: okno, mince a pata důlku jsou soustředné, kapsa má šev od středu dna', () => {
+    const cs = circles(sheet ?? '');
+    const window = cs.filter((c) => near(c.r, L.windowDiameterMm / 2));
+    const coin = cs.filter((c) => near(c.r, spec.coinDiameterMm / 2));
+    const foot = cs.filter((c) => near(c.r, L.formHoleDiameterMm / 2));
+    expect(window.length).toBe(1);
+    expect(coin.length).toBe(1);
+    // Pata důlku je na kapse i na formě.
+    expect(foot.length).toBe(2);
+    expect(window[0]!.cx).toBeCloseTo(coin[0]!.cx, 3);
+    expect(window[0]!.cy).toBeCloseTo(coin[0]!.cy, 3);
+    const seamHoles = Number(/šev (\d+) otvorů od středu dna/.exec(sheet ?? '')?.[1]);
+    expect(seamHoles % 2).toBe(1);
+    // Všech teček dohromady: 4 boční řady + šev kapsy.
+    const dots = cs.filter((c) => near(c.r, 0.45));
+    expect(dots.length).toBe(4 * L.sideSeamHoles + seamHoles);
   });
 
   it('kalibrační úsečka měří 50 mm', () => {
-    // Krajní značky jsou svislé úsečky ±2 mm kolem základny, základna sama je o 2 mm níž.
-    const m = /M([\d.]+) ([\d.]+) V[\d.]+ M\1 ([\d.]+) H([\d.]+)/.exec(sheet ?? '');
-    expect(m).not.toBeNull();
-    expect(Number(m![4]) - Number(m![1])).toBeCloseTo(50, 6);
-    expect(Number(m![3]) - Number(m![2])).toBeCloseTo(2, 6);
+    const c = /M([\d.]+) ([\d.]+) V[\d.]+ M\1 ([\d.]+) H([\d.]+)/.exec(sheet ?? '');
+    expect(c).not.toBeNull();
+    expect(Number(c![4]) - Number(c![1])).toBeCloseTo(50, 6);
+    expect(Number(c![3]) - Number(c![2])).toBeCloseTo(2, 6);
   });
 
-  it('okno a mince jsou soustředné kružnice s poloměry z modelu', () => {
-    const circles = [...(sheet ?? '').matchAll(/<circle cx="([\d.]+)" cy="([\d.]+)" r="([\d.]+)"/g)]
-      .map((m) => ({ cx: Number(m[1]), cy: Number(m[2]), r: Number(m[3]) }))
-      .filter((c) => c.r > 5);
-    const window = circles.find((c) => Math.abs(c.r - L.windowDiameterMm / 2) < 0.01);
-    const coin = circles.find((c) => Math.abs(c.r - spec.coinDiameterMm / 2) < 0.01);
-    expect(window, 'okno').toBeDefined();
-    expect(coin, 'mince').toBeDefined();
-    expect(window!.cx).toBeCloseTo(coin!.cx, 3);
-    expect(window!.cy).toBeCloseTo(coin!.cy, 3);
-  });
-
-  it('počet teček stehu na bočních švech těla odpovídá modelu (2 panely × 2 strany)', () => {
-    const dots = (sheet ?? '').match(/<circle [^>]*r="0\.45" fill/g) ?? [];
-    // tělo: 4 švy; dělicí panel: 2 švy → 6 × holes; kapsa s mincí tečky nemá.
-    expect(dots.length).toBe(6 * L.sideSeamHoles);
-  });
-
-  it('žádný prvek nevystupuje ze stránky', () => {
-    const nums = [...(sheet ?? '').matchAll(/(?:cx|x)="([\d.]+)"/g)].map((m) => Number(m[1]));
-    expect(Math.max(...nums)).toBeLessThanOrEqual(210);
-    const ys = [...(sheet ?? '').matchAll(/(?:cy|y)="([\d.]+)"/g)].map((m) => Number(m[1]));
-    expect(Math.max(...ys)).toBeLessThanOrEqual(297);
+  it('žádný prvek nevystupuje ze stránky (včetně souřadnic v cestách)', () => {
+    const paths = [...(sheet ?? '').matchAll(/ d="([^"]+)"/g)].map((p) => p[1]!);
+    const coords = paths.flatMap((d) =>
+      [...d.matchAll(/([MLAHV]|\s)(-?[\d.]+)[ ,](-?[\d.]+)/g)].map(
+        (q) => [Number(q[2]), Number(q[3])] as const,
+      ),
+    );
+    const xs = coords
+      .map(([x]) => x)
+      .concat([...(sheet ?? '').matchAll(/ cx="([\d.]+)"/g)].map((q) => Number(q[1])));
+    const ys = coords
+      .map(([, y]) => y)
+      .concat([...(sheet ?? '').matchAll(/ cy="([\d.]+)"/g)].map((q) => Number(q[1])));
+    expect(Math.min(...xs)).toBeGreaterThanOrEqual(0);
+    expect(Math.max(...xs)).toBeLessThanOrEqual(A4_SHEET.widthMm);
+    expect(Math.min(...ys)).toBeGreaterThanOrEqual(0);
+    expect(Math.max(...ys)).toBeLessThanOrEqual(A4_SHEET.heightMm);
   });
 });

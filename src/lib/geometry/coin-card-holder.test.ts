@@ -7,7 +7,7 @@ import {
   coinCardHolderLayout,
 } from './coin-card-holder';
 
-describe('pouzdro s vsazenou mincí – model', () => {
+describe('pouzdro s vsazenou mincí – model (tvar L podle předlohy)', () => {
   const spec = DEFAULT_COIN_CARD_HOLDER;
   const L = coinCardHolderLayout(spec);
 
@@ -21,87 +21,132 @@ describe('pouzdro s vsazenou mincí – model', () => {
     expect(inner).toBeGreaterThan(spec.cardWidthMm);
   });
 
-  it('karta vyčnívá nad přední panel o cardGripMm a chlopeň ji zakryje', () => {
+  it('přední panel je nižší než karta o úchop, zadní vyšší o přesah', () => {
+    expect(L.frontHeightMm).toBeCloseTo(spec.cardHeightMm - spec.cardGripMm, 9);
+    expect(L.backHeightMm).toBeCloseTo(spec.cardHeightMm + spec.backOverCardMm, 9);
     expect(L.cardExposedMm).toBeCloseTo(spec.cardGripMm, 9);
-    // Chlopeň sahá na předním panelu až k druku + přesah, tedy pod vršek karty.
-    expect(spec.snapFromFrontTopMm + spec.flapBeyondSnapMm).toBeGreaterThan(0);
-    expect(L.flapLengthMm).toBeCloseTo(spec.snapFromFrontTopMm + spec.flapBeyondSnapMm, 9);
   });
 
-  it('tělo = přední + ohyb + zadní + chlopeň a zadní panel je o přídavek přes obsah vyšší', () => {
-    expect(L.bodyLengthMm).toBeCloseTo(
-      L.frontHeightMm + spec.foldAllowanceMm + L.backHeightMm + L.flapLengthMm,
-      6,
+  it('ohyb má přídavek π·(obsah/2 + kůže/2) bez dělicího panelu', () => {
+    const inner = spec.cardsCount * spec.cardThicknessMm;
+    expect(L.innerThicknessMm).toBeCloseTo(inner, 6);
+    expect(L.foldAllowanceMm).toBeCloseTo(Math.PI * (inner / 2 + spec.bodyThicknessMm / 2), 2);
+    expect(L.foldEndMm - L.foldStartMm).toBeCloseTo(L.foldAllowanceMm, 6);
+    expect(L.frontTopMm).toBeCloseTo(L.backHeightMm + L.foldAllowanceMm + L.frontHeightMm, 6);
+    // S dělicím panelem je ohyb o π·kůže/2 delší.
+    const withDivider = coinCardHolderLayout({ ...spec, dividerPanel: true });
+    expect(withDivider.foldAllowanceMm - L.foldAllowanceMm).toBeCloseTo(
+      (Math.PI * spec.bodyThicknessMm) / 2,
+      2,
     );
-    expect(L.backHeightMm - L.frontHeightMm).toBeCloseTo(spec.flapStackAllowanceMm, 9);
+    expect(withDivider.dividerHeightMm).toBe(L.frontHeightMm);
+    expect(L.dividerHeightMm).toBeNull();
   });
 
-  it('druk na chlopni dopadne po přehnutí na druk na předním panelu', () => {
-    // Chlopeň se láme přes horní hranu obsahu (backHeight nad ohybem) a jde dolů po
-    // předním panelu: vzdálenost druku od zlomu = vzdálenost patice od horní hrany předu.
-    const flapStart = L.foldEndMm + L.backHeightMm;
-    expect(L.snapFlapYMm - flapStart).toBeCloseTo(L.snapFrontYMm, 9);
-    expect(L.snapFrontXMm).toBeCloseTo(L.panelWidthMm / 2, 9);
+  it('jazyk: oblouk přes obsah, pokles po předku, k druku a přesah – vše nezávisle spočtené', () => {
+    // Obsah pod jazykem = karty + přední panel; neutrální osa jazyka v polovině jeho kůže.
+    const content = spec.cardsCount * spec.cardThicknessMm + spec.bodyThicknessMm;
+    const wrap = Math.PI * (content / 2 + spec.bodyThicknessMm / 2);
+    const drop = spec.backOverCardMm + spec.cardGripMm; // zadní − přední výška
+    expect(L.tabWrapMm).toBeCloseTo(wrap, 2);
+    expect(L.tabDropMm).toBeCloseTo(drop, 6);
+    expect(L.tabLengthMm).toBeCloseTo(
+      wrap + drop + spec.snapFromFrontTopMm + spec.tabBeyondSnapMm,
+      1,
+    );
+    // Druk na jazyku měřený od zlomu = oblouk + pokles + vzdálenost patice od horní hrany předku.
+    expect(-L.snapTabYMm).toBeCloseTo(wrap + drop + spec.snapFromFrontTopMm, 1);
+    // Patice na předku: od horní hrany předku (v soustavě těla je předek vzhůru nohama).
+    expect(L.frontTopMm - L.snapFrontYMm).toBeCloseTo(spec.snapFromFrontTopMm, 6);
+    // Druk sedí na ose jazyka a jazyk je u levé hrany, konec jazyka je plný půlkruh.
+    expect(L.snapXMm).toBeCloseTo(spec.tabWidthMm / 2, 9);
+    expect(L.tabX0Mm).toBe(0);
+    expect(L.tabEndRadiusMm).toBeCloseTo(spec.tabWidthMm / 2, 9);
+    expect(L.bodyLengthMm).toBeCloseTo(L.tabLengthMm + L.frontTopMm, 6);
   });
 
-  it('boční švy: stejná délka na předním i zadním panelu, tečky od ohybu', () => {
+  it('výřez na prst hned za jazykem, průchodka v druhém rohu, mezi nimi můstek', () => {
+    expect(L.notchCentreXMm - L.notchRadiusMm).toBeCloseTo(spec.tabWidthMm, 9);
+    expect(L.grommetXMm).toBeCloseTo(L.panelWidthMm - spec.grommetFromEdgeMm, 9);
+    const notchEnd = L.notchCentreXMm + L.notchRadiusMm;
+    expect(L.grommetXMm - spec.grommetHoleMm / 2 - notchEnd).toBeGreaterThanOrEqual(
+      spec.minLigamentMm,
+    );
+    // Výřez odkryje kartu: hlubší než přesah panelu nad kartou.
+    expect(L.notchRadiusMm).toBeGreaterThan(spec.backOverCardMm + 5);
+  });
+
+  it('boční švy jen v překryvu panelů, stejná délka na obou, tečky od ohybu', () => {
     expect(L.sideSeamLengthMm).toBeCloseTo(L.frontHeightMm - 2 * spec.stitchOffsetMm, 9);
     expect(L.sideSeamHoles).toBe(Math.floor(L.sideSeamLengthMm / spec.stitchPitchMm) + 1);
-    // Šev nesmí přesáhnout horní hranu zadního panelu.
     expect(spec.stitchOffsetMm + L.sideSeamLengthMm).toBeLessThan(L.backHeightMm);
   });
 
-  it('mince sedí v kapse s vůlí, okno je menší o dva prstence', () => {
-    expect(L.windowDiameterMm).toBeCloseTo(spec.coinDiameterMm - 2 * spec.coinRingMm, 9);
-    const innerW = L.pocketWidthMm - 2 * (spec.stitchOffsetMm + spec.seamInnerMarginMm);
-    expect(innerW).toBeCloseTo(spec.coinDiameterMm + 2 * spec.coinSideClearanceMm, 9);
-    // Mince celá uvnitř kapsy: horní okraj mince pod horní hranou kapsy o přesah.
-    expect(L.coinCentreYMm - spec.coinDiameterMm / 2).toBeCloseTo(spec.coinTopOverlapMm, 9);
-    // Okno celé uvnitř stehu kapsy.
-    expect(L.coinCentreXMm - L.windowDiameterMm / 2).toBeGreaterThan(
-      spec.stitchOffsetMm + spec.minLigamentMm,
+  it('kapsa: rovná plocha mezi patou důlku a stehem, okno = výsečník po celých mm', () => {
+    const formHole = spec.coinDiameterMm + 2 * spec.pocketThicknessMm + spec.formHoleClearanceMm;
+    expect(L.formHoleDiameterMm).toBeCloseTo(formHole, 6);
+    expect(L.pocketWidthMm).toBeCloseTo(
+      formHole + 2 * (spec.pocketFlatMm + spec.stitchOffsetMm),
+      6,
     );
+    expect(L.pocketHeightMm).toBeCloseTo(
+      spec.stitchOffsetMm + spec.pocketFlatMm + formHole + spec.coinTopOverlapMm,
+      6,
+    );
+    expect(L.coinCentreXMm - L.formHoleDiameterMm / 2 - spec.stitchOffsetMm).toBeCloseTo(
+      spec.pocketFlatMm,
+      6,
+    );
+    expect(
+      L.pocketHeightMm - L.coinCentreYMm - L.formHoleDiameterMm / 2 - spec.stitchOffsetMm,
+    ).toBeCloseTo(spec.pocketFlatMm, 6);
+    expect(Number.isInteger(L.windowDiameterMm)).toBe(true);
+    expect(L.coinRingMm).toBeGreaterThanOrEqual(spec.minCoinRingMm);
+    expect(L.windowDiameterMm).toBe(32);
+    const own = coinCardHolderLayout({ ...spec, windowDiameterMm: 30 });
+    expect(own.windowDiameterMm).toBe(30);
+    expect(own.coinRingMm).toBeCloseTo(5, 9);
   });
 
-  it('kapsa s mincí leží na předním panelu mezi drukem a ohybem', () => {
-    expect(L.pocketYMm + L.pocketHeightMm).toBeCloseTo(L.frontHeightMm - spec.pocketFromFoldMm, 9);
-    expect(L.pocketYMm).toBeGreaterThan(
-      L.snapFrontYMm + spec.snapDiameterMm / 2 + spec.snapClearanceMm,
+  it('kapsa leží na předku pod jazykem a drukem a nad pásmem ohybu, vystředěná', () => {
+    const bandTop =
+      Math.max(spec.snapFromFrontTopMm + spec.snapDiameterMm / 2, L.tabEndOnFrontMm) +
+      spec.snapClearanceMm;
+    expect(L.pocketYMm).toBeGreaterThanOrEqual(bandTop - 1e-9);
+    expect(L.pocketYMm + L.pocketHeightMm).toBeLessThanOrEqual(
+      L.frontHeightMm - spec.pocketFromFoldMinMm + 1e-9,
     );
     expect(L.pocketXMm).toBeCloseTo((L.panelWidthMm - L.pocketWidthMm) / 2, 9);
+    const small = coinCardHolderLayout({ ...spec, coinDiameterMm: 23 });
+    const bandBottom = L.frontHeightMm - spec.pocketFromFoldMinMm;
+    expect(small.pocketYMm - bandTop).toBeCloseTo(
+      bandBottom - (small.pocketYMm + small.pocketHeightMm),
+      1,
+    );
   });
 
-  it('dělicí panel je stejně vysoký jako přední, aby poslední otvor nebyl u jeho hrany', () => {
-    expect(L.dividerHeightMm).toBe(L.frontHeightMm);
+  it('kontroly odhalí kolize a špatné parametry', () => {
+    expect(checkCoinCardHolder({ ...spec, tabBeyondSnapMm: 3 }).join(' ')).toMatch(/blízko druku/);
+    expect(checkCoinCardHolder({ ...spec, notchRadiusMm: 22 }).join(' ')).toMatch(
+      /Výřez|průchodka/,
+    );
+    expect(checkCoinCardHolder({ ...spec, windowDiameterMm: 36 }).join(' ')).toMatch(/Prstenec/);
+    expect(checkCoinCardHolder({ ...spec, coinDiameterMm: 50 }).length).toBeGreaterThan(0);
+    expect(checkCoinCardHolder({ ...spec, cardGripMm: 3 }).join(' ')).toMatch(/vyčnívá/);
+    expect(checkCoinCardHolder({ ...spec, backOverCardMm: 0 }).join(' ')).toMatch(/Zadní panel/);
+    expect(checkCoinCardHolder({ ...spec, cardsCount: 0 }).join(' ')).toMatch(/cardsCount/);
   });
 
-  it('forma pro důlek: otvor o oversize větší než mince', () => {
-    expect(L.formHoleDiameterMm).toBeCloseTo(spec.coinDiameterMm + spec.formHoleOversizeMm, 9);
-  });
-
-  it('kontroly odhalí kolizi chlopně s kapsou i příliš úzký prstenec', () => {
-    const longFlap = { ...spec, flapBeyondSnapMm: 30 };
-    expect(checkCoinCardHolder(longFlap).join(' ')).toMatch(/Konec chlopně/);
-    const thinRing = { ...spec, coinRingMm: 1 };
-    expect(checkCoinCardHolder(thinRing).join(' ')).toMatch(/Prstenec/);
-    const bigCoin = { ...spec, coinDiameterMm: 58 };
-    expect(checkCoinCardHolder(bigCoin).length).toBeGreaterThan(0);
-    const lowSnap = { ...spec, snapFromFrontTopMm: 18 };
-    expect(checkCoinCardHolder(lowSnap).join(' ')).toMatch(/drukem|chlopně/);
-  });
-
-  it('jiná mince přepočítá kapsu, okno i formu, tělo zůstává', () => {
-    const small = coinCardHolderLayout({ ...spec, coinDiameterMm: 30 });
-    expect(small.windowDiameterMm).toBeCloseTo(21, 9);
-    expect(small.pocketWidthMm).toBeCloseTo(L.pocketWidthMm - 10, 9);
-    expect(small.formHoleDiameterMm).toBeCloseTo(31, 9);
-    expect(small.bodyLengthMm).toBe(L.bodyLengthMm);
-    expect(checkCoinCardHolder({ ...spec, coinDiameterMm: 30 })).toEqual([]);
-  });
-
-  it('všechny pojmenované mince dají platný střih', () => {
+  it('všechny pojmenované mince dají platný střih a přepočítají jen kapsu, okno a formu', () => {
     for (const [name, d] of Object.entries(NAMED_COINS)) {
-      expect(checkCoinCardHolder({ ...spec, coinDiameterMm: d }), name).toEqual([]);
+      const s = { ...spec, coinDiameterMm: d };
+      expect(checkCoinCardHolder(s), name).toEqual([]);
+      const l = coinCardHolderLayout(s);
+      expect(l.bodyLengthMm, name).toBe(L.bodyLengthMm);
+      expect(l.formHoleDiameterMm, name).toBeCloseTo(
+        d + 2 * spec.pocketThicknessMm + spec.formHoleClearanceMm,
+        6,
+      );
     }
     expect(NAMED_COINS['50kc']).toBe(27.5);
     expect(NAMED_COINS.decision).toBe(spec.coinDiameterMm);

@@ -411,28 +411,28 @@ Katalog: přidány příklady Yato (INNA-KT) a Narex (Corium), CraftPoint cena o
 
 ## Námět: pouzdro s vsazenou mincí (Red Forest Leather, 2026-09-18)
 
-Autor si oblíbil [pouzdro s „lucky coin“](https://redforestleather.com/products/handmade-green-leather-cartholder-with-lucky-embossing)
-(Red Forest Leather, 70–85 €) a dodal záběry z videa výrobce. **Není to ražení, ale skutečná mince
-v přední kapse s kruhovým oknem;** podle popisu produktu je to **„decision coin“ o průměru 40 mm**
-(ANO/NE), vyměnitelná („can be replaced with your own favorite coin“). Pouzdro má „two main
-compartments“ (karty + přeložené bankovky, vzniklé přeložením a prošitím po stranách, bez vnitřních
-přihrádek) a nerezový druk. S mincí 40 mm jako měřítkem vychází z fotek (±2 mm): pouzdro složené
-~60 × 90 mm (karty na výšku), kapsa s mincí ~45 × 50 mm, okno ~30–32 mm (prstenec 4–5 mm), rozteč
-stehu 4 mm. Tloušťka kůže odhadem tělo 1,4–1,8 mm, kapsa s mincí 1,2–1,5 mm (±0,3). Postup z videa (oprava mého původního odhadu, okno se dělá až nakonec):
+Autor si oblíbil [pouzdro s „decision coin“](https://redforestleather.com/products/handmade-green-leather-cartholder-with-lucky-embossing)
+(Red Forest Leather, 70–85 €) a dodal záběry z videa a fotky výrobce. **Není to ražení, ale
+skutečná mince Ø 40 mm** (podle popisu produktu) v přední kapse s kruhovým oknem, vyměnitelná.
 
-1. Odřezek kůže **navlhčit** rozprašovačem.
-2. **Forma:** překližka s kruhovým otvorem (Ø mince + ~1 mm). Kůže rubem dolů na formu, na ni
-   mince, palci zatlačit do otvoru.
-3. Přiklopit **plexi deskou**, stáhnout **4 svěrkami**, nechat **zaschnout**. Plexi drží okolí
-   rovné, otvor formy nechá minci klesnout → ostrý kruhový důlek.
-4. Až po zaschnutí **vyříznout tvar kapsy** (u nás nůž + pravítko), srazit a zaleštit hrany.
-5. **Přišít kapsu** k tělu po třech stranách, horní hrana otevřená.
-6. **Okno:** na dno důlku velký kruhový **výsečník menší než mince** (~26–27 mm), jedna rána
-   (u nich lis, u nás palička). Zůstane prstenec, který minci rámuje.
-7. Mince se zasune shora, sedne do důlku; vyjímá se vytlačením prstem/tyčkou shora.
+**Konstrukce podle fotek skutečného střihu (ověřeno na 13 záběrech):** jeden díl ve tvaru L,
+přeložený ve spodní hraně. Přední panel nižší než karta (karty vyčnívají, dají se chytit), nese
+kapsu s mincí a patici druku. Zadní panel vyšší než karta (kryje ji), nese motiv; z jeho horní
+hrany u kraje vybíhá **úzký jazyk** (~⅓ šířky) s kloboučkem druku, který se přehne přes karty
+na předek; hned za jazykem je **půlkruhový výřez na prst**, v druhém horním rohu **průchodka**
+se šňůrkou. Vnitřek je jedna kapsa (karty + bankovky složené na čtvrt) – na rubu není žádný
+dělicí díl; „two main compartments“ v popisu = vnitřní kapsa + kapsa na minci. Dekorativní řady
+dírek podél švů a ražený motiv jsou ozdoba.
 
-Zadní motiv LUCK a logo = ražení vlastním razníkem (bez razníku nenapodobíme); dvojité řady dírek
-jsou dekorace. Domácí náhrada formy: HDPE prkénko s vyvrtaným otvorem + rovná deska + svěrky.
-Techniky navíc proti prvnímu pouzdru: mokré tvarování, velký kruhový výsečník (Ø 25–27,
-CraftPoint jednotlivě), řezání dílu až po tvarování. **Námět na druhé pouzdro** (ADR 002 „druhý
-kus s obměnou“), ne na první.
+**Postup kapsy s mincí z videa:** kůže navlhčit, lícem dolů na formu (překližka s otvorem
+≈ mince + 2× kůže), mince na rub, zatlačit, přiklopit plexi deskou, 4 svěrky, nechat zaschnout;
+po zaschnutí vyříznout obrys kapsy, vyseknout okno velkým výsečníkem (u nich lis), přišít po
+třech stranách, horní hrana otevřená; mince se zasouvá shora a vyjímá zatlačením okénkem.
+
+**Náš střih:** `pnpm pattern:coin-holder` → `docs/generated/pouzdro-mince-sablona.pdf` (A4
+1:1), model `src/lib/geometry/coin-card-holder.ts`, zadání a postup `docs/zadani/pouzdro-mince.md`.
+Průměr mince je parametr (`--coin 50kc` atd.). Rozměry odvozené z karty a mince, ne odměřené;
+s mincí 40 mm jako měřítkem z fotek vychází pouzdro ~60 × 90 mm, kapsa ~45–50, okno ~30–32, což
+náš střih (66 × 87,6 / 77,6; kapsa 57 × 53; okno 32) řádově potvrzuje. Kůže odhadem tělo 1,2–1,5 mm,
+kapsa 1,2 mm. **Námět na druhé pouzdro** (ADR 002), ne na první: přidává mokré tvarování,
+velký kruhový výsečník a druk.
