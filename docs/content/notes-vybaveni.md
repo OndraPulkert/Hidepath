@@ -412,12 +412,23 @@ Katalog: přidány příklady Yato (INNA-KT) a Narex (Corium), CraftPoint cena o
 ## Námět: pouzdro s vsazenou mincí (Red Forest Leather, 2026-09-18)
 
 Autor si oblíbil [pouzdro s „lucky coin“](https://redforestleather.com/products/handmade-green-leather-cartholder-with-lucky-embossing)
-(Red Forest Leather, 70–85 €). Z fotek v listingu: **není to ražení, ale skutečná mince (~30 mm)
-v přední kapse s kruhovým oknem** o něco menším než mince (~26–27 mm), kapsa prošitá po třech
-stranách, horní hrana otevřená → mince je vyměnitelná („can be replaced with your own personal
-coin“). Prohlubeň kolem okna = tvarování za mokra přes minci. Logo a motiv LUCK na zadní straně jsou
-ražené vlastním razníkem (to bez razníku nenapodobíme). Na našem střihu by šlo: přední kapsu
-prodloužit o 3–4 mm, vyříznout okno (výsečník Ø 25+ nebo podle víčka), prošít jen tři strany,
-kůži kolem okna navlhčit a přitlačit přes minci. **Dvě techniky navíc (přesný kruhový výřez,
-mokré tvarování) → námět na druhé pouzdro**, ne na první. Vhodné jako varianta v ADR 002
-(„druhý kus s obměnou“), až bude první pouzdro hotové.
+(Red Forest Leather, 70–85 €) a dodal záběry z videa výrobce. **Není to ražení, ale skutečná mince
+(~30 mm) v přední kapse s kruhovým oknem;** mince je vyměnitelná („can be replaced with your own
+personal coin“). Postup z videa (oprava mého původního odhadu, okno se dělá až nakonec):
+
+1. Odřezek kůže **navlhčit** rozprašovačem.
+2. **Forma:** překližka s kruhovým otvorem (Ø mince + ~1 mm). Kůže rubem dolů na formu, na ni
+   mince, palci zatlačit do otvoru.
+3. Přiklopit **plexi deskou**, stáhnout **4 svěrkami**, nechat **zaschnout**. Plexi drží okolí
+   rovné, otvor formy nechá minci klesnout → ostrý kruhový důlek.
+4. Až po zaschnutí **vyříznout tvar kapsy** (u nás nůž + pravítko), srazit a zaleštit hrany.
+5. **Přišít kapsu** k tělu po třech stranách, horní hrana otevřená.
+6. **Okno:** na dno důlku velký kruhový **výsečník menší než mince** (~26–27 mm), jedna rána
+   (u nich lis, u nás palička). Zůstane prstenec, který minci rámuje.
+7. Mince se zasune shora, sedne do důlku; vyjímá se vytlačením prstem/tyčkou shora.
+
+Zadní motiv LUCK a logo = ražení vlastním razníkem (bez razníku nenapodobíme); dvojité řady dírek
+jsou dekorace. Domácí náhrada formy: HDPE prkénko s vyvrtaným otvorem + rovná deska + svěrky.
+Techniky navíc proti prvnímu pouzdru: mokré tvarování, velký kruhový výsečník (Ø 25–27,
+CraftPoint jednotlivě), řezání dílu až po tvarování. **Námět na druhé pouzdro** (ADR 002 „druhý
+kus s obměnou“), ne na první.
