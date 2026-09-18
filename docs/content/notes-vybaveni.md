@@ -341,3 +341,23 @@ Doporučení: **Ø 6 mm jednotlivě z CraftPointu (29 Kč) s objednávkou pásu.
 **Ø 5 mm** (běžná velikost; CraftPoint teď vyprodán → WUTA jednotlivě na AliExpressu, Choice), 4,5 mm
 je v obchodech vzácné; Ø 4 mm jen pro trn do 3,5 mm. OBI sada pokryje jen 6 mm
 a větší, na dírky pro trn ne.
+
+## Clo 3 € za položku na zásilky mimo EU – dopad na nákupy z AliExpressu (2026-09-18)
+
+Od **1. 7. 2026** EU vybírá na zásilkách do 150 € paušální clo **3 € za položku** (za celní
+kategorii v zásilce), dočasně do 1. 7. 2028. AliExpress ho účtuje v košíku („Estimated import
+charges“, s vlastní slevou ~3 €). Autor to zjistil v košíku 2026-09-18: 7 položek → 513,58 Kč cla.
+DPH je v cenách položek, nepočítá se dvakrát. Zásilky ze skladů v EU („Ships from Poland/Spain/CZ“)
+clo nemají.
+
+**Důsledek:** dřívější doporučení „levné doplňky z AliExpressu“ (deska QJH 139 Kč, palička 380 Kč,
+rohová šablona 147 Kč, výsečník Ø 5) po přičtení 73 Kč/položku ztrácejí smysl proti českým zdrojům
+(IKEA prkénko 59 Kč, palička CraftPoint 510 / Kůžetvůrce 112 Kč, CraftPoint výsečník 29 Kč).
+Ořezávač hran PRO (370 + 73 = 443 Kč) je nastejno se Sedlářským nářadím (420 Kč). Vidličky WUTA
+Type B (590 + 73 = 663 Kč) vs CraftPoint sada 338 Kč: příplatek za leštění 325 Kč, volba autora.
+**Z AliExpressu zůstává smysl jen u věcí bez českého zdroje:** safety skiver 89 + 73 Kč a čepele
+39 + 73 Kč (možná jedna celní kategorie). Pravidlo do katalogu: u příkladů z AliExpressu uvádět
+„+ 3 € clo za položku“.
+
+Zdroje: [Evropská komise, €3 customs duty for low-value parcels](https://commission.europa.eu/news-and-media/news/ensuring-fairness-and-safety-eur3-customs-duty-low-value-parcels-2026-06-29_en),
+[vatcalc.com](https://www.vatcalc.com/eu/eu-e3-levy-low-value-e-commerce-import-package-july-2026/).

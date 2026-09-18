@@ -1195,7 +1195,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     ],
     priceRange: { minCents: 8_900, maxCents: 56_600 },
     priceSource: 'verified',
-    priceNote: `${VERIFIED_NOTE} Levný safety skiver je z AliExpressu (2–4 týdny); český obchod má jen french skiver.`,
+    priceNote: `${VERIFIED_NOTE} Levný safety skiver je z AliExpressu (2–4 týdny; od 7/2026 k ceně přičtěte clo 3 € za položku, tedy asi 75 Kč); český obchod má jen french skiver.`,
     alsoUsedFor: ['Peněženka bifold', 'Pásek (přehnutý konec, u dalších kusů)', 'Lemování tašek'],
     examples: [
       {
