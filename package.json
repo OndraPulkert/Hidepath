@@ -22,6 +22,7 @@
     "check": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm test",
     "content:shot-list": "tsx scripts/shot-list.ts",
     "pattern:belt-end": "tsx scripts/belt-buckle-end.ts",
+    "pattern:coin-holder": "tsx scripts/coin-card-holder.ts",
     "test:db": "bash scripts/test-db.sh",
     "db:start": "supabase start -x imgproxy,edge-runtime,logflare,vector,supavisor,realtime,storage-api",
     "db:reset": "supabase db reset",

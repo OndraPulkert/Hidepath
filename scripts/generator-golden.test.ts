@@ -21,6 +21,8 @@ import {
   buildPages,
   buildPlateLegendSvg,
 } from './belt-buckle-end.ts';
+import { buildCoinHolderSheetSvg } from './coin-card-holder.ts';
+import { DEFAULT_COIN_CARD_HOLDER, NAMED_COINS } from '../src/lib/geometry/coin-card-holder.ts';
 
 /**
  * Zapsané soubory v `docs/generated/` slouží jako golden files a zbytek sady je
@@ -56,6 +58,15 @@ describe('zapsané soubory odpovídají generátoru', () => {
     ['opasek-desticka-vysvetlivky.svg', () => buildPlateLegendSvg(end, tip)],
     ['opasek-nahled-hrot.svg', () => buildBeltTipPreviewSvg(tip, 'point')],
     ['opasek-nahled-zaobleny.svg', () => buildBeltTipPreviewSvg(tip, 'round')],
+    ['pouzdro-mince-sablona.svg', () => buildCoinHolderSheetSvg()],
+    [
+      'pouzdro-mince-sablona-mince-27-5mm.svg',
+      () =>
+        buildCoinHolderSheetSvg({
+          ...DEFAULT_COIN_CARD_HOLDER,
+          coinDiameterMm: NAMED_COINS['50kc'],
+        }),
+    ],
   ];
 
   for (const [name, build] of cases) {
