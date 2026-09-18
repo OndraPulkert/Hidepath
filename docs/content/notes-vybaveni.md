@@ -408,3 +408,16 @@ Hobbymarkety (OBI, Hornbach, Bauhaus) nylonovou paličku ve vyhledávání nemaj
 a gumové. Doporučení: **Yato 250 g za ~215–260 Kč** (nylon hroty nezničí, neodskakuje jako guma,
 hmotnost v našem rozsahu 250–400 g); pokud jde o úsporu, gumová Corium 89 Kč / Kůžetvůrce 112 Kč.
 Katalog: přidány příklady Yato (INNA-KT) a Narex (Corium), CraftPoint cena opravena na 507 Kč.
+
+## Námět: pouzdro s vsazenou mincí (Red Forest Leather, 2026-09-18)
+
+Autor si oblíbil [pouzdro s „lucky coin“](https://redforestleather.com/products/handmade-green-leather-cartholder-with-lucky-embossing)
+(Red Forest Leather, 70–85 €). Z fotek v listingu: **není to ražení, ale skutečná mince (~30 mm)
+v přední kapse s kruhovým oknem** o něco menším než mince (~26–27 mm), kapsa prošitá po třech
+stranách, horní hrana otevřená → mince je vyměnitelná („can be replaced with your own personal
+coin“). Prohlubeň kolem okna = tvarování za mokra přes minci. Logo a motiv LUCK na zadní straně jsou
+ražené vlastním razníkem (to bez razníku nenapodobíme). Na našem střihu by šlo: přední kapsu
+prodloužit o 3–4 mm, vyříznout okno (výsečník Ø 25+ nebo podle víčka), prošít jen tři strany,
+kůži kolem okna navlhčit a přitlačit přes minci. **Dvě techniky navíc (přesný kruhový výřez,
+mokré tvarování) → námět na druhé pouzdro**, ne na první. Vhodné jako varianta v ADR 002
+(„druhý kus s obměnou“), až bude první pouzdro hotové.
