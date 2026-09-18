@@ -38,6 +38,31 @@ Odvozené hodnoty a jejich zdroj:
 Kůže: tělo a dělicí panel 1,5 mm, kapsa s mincí 1,2 mm (musí se tvarovat). Odhad z fotek
 předlohy ±0,3 mm.
 
+## Materiál (ověřeno 2026-09-18, CraftPoint, skladem)
+
+Díly se vejdou na **jeden arch A4**: tělo 66 × 178 + dělicí panel 66 × 76 v jednom sloupci
+(254 mm), kapsa 51 × 50 vedle. Barvené třísločiněné lícové usně 1,2 mm z italské koželužny,
+továrně upravený hladký povrch, A4 = 251 Kč, A5 = 57 Kč:
+
+| Barva                                                                                                                                             | Poznámka                                                                                             |
+| ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| [Verde (lahvová zeleň)](https://craft-point.cz/products/trislocinena-hovezi-kuze-licova-usen-1-2-mm-verde)                                        | nejblíž předloze Red Forest; výrobce ji výslovně doporučuje na pouzdra na karty a k mosaznému kování |
+| [Blu (tmavě modrá)](https://craft-point.cz/products/trislocinena-hovezi-kuze-licova-usen-1-2-mm-blu)                                              | stejná řada                                                                                          |
+| [Rosso (červená)](https://craft-point.cz/products/trislocinena-hovezi-licova-kuze-1-2-mm-rosso)                                                   | stejná řada                                                                                          |
+| [T. moro (tmavě hnědá)](https://craft-point.cz/products/hovezi-kuze-licova-trislocinena-1-2-mm-t-moro), Karamelová, Whisky, Černá, Giallo (žlutá) | stejná řada, klasické odstíny                                                                        |
+| [Čokoládová 1,5 mm](https://craft-point.cz/products/hovezi-kuze-licova-cokoladova-1-5-mm), A4 222 Kč                                              | jediná barvená 1,5 mm; kdo chce tužší tělo, kombinuje s 1,2 mm na kapsu                              |
+
+Doporučení: **celé pouzdro z jednoho archu A4 Verde 1,2 mm** (251 Kč). Tělo z 1,2 mm je u pouzdra
+na karty běžné, kapsa s mincí 1,2 mm potřebuje kvůli tvarování, a jedna kůže znamená stejný
+odstín i patinu na všech dílech. Kdo trvá na 1,5 mm těle, vezme čokoládovou 1,5 mm (A4) a kapsu
+z odřezku 1,2 mm v ladícím odstínu (T. moro). Barvená useň má světlý řez: hrany buď zaleštit
+a nechat kontrast, nebo dobarvit barvou na hrany (CraftPoint má pero i váleček). Tvarování za
+mokra na barvené kůži: nejdřív zkusit na A5 stejné barvy (57 Kč), některé úpravy povrchu při
+namočení flekatí.
+
+Andexnite má barvené třísločiněné usně 0,8–1,6 mm také, ale katalog se strojově načíst nepodařilo
+(kategorie prázdná v HTML); pro tento návrh stačí CraftPoint, kde se objednává i ostatní.
+
 ## Postup (podle videa výrobce)
 
 1. Vyříznout tělo a dělicí panel, srazit hrany, které nebudou v švu.
