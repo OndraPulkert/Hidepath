@@ -76,7 +76,7 @@ describe('zapsané soubory odpovídají generátoru', () => {
       expect(onDisk, `docs/generated/${name} chybí`).toBeDefined();
       expect(
         build(),
-        `${name} se rozešel s generátorem – spusť pnpm pattern:belt-end --multi`,
+        `${name} se rozešel s generátorem – spusť ${name.startsWith('pouzdro-mince') ? `pnpm pattern:coin-holder${name.includes('27-5') ? ' --coin 50kc' : ''}` : 'pnpm pattern:belt-end --multi'}`,
       ).toBe(onDisk);
     });
   }

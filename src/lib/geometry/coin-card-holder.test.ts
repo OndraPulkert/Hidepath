@@ -143,6 +143,22 @@ describe('pouzdro s vsazenou mincí – model (tvar L podle předlohy)', () => {
     expect(checkCoinCardHolder({ ...spec, cardGripMm: 3 }).join(' ')).toMatch(/vyčnívá/);
     expect(checkCoinCardHolder({ ...spec, backOverCardMm: 0 }).join(' ')).toMatch(/Zadní panel/);
     expect(checkCoinCardHolder({ ...spec, cardsCount: 0 }).join(' ')).toMatch(/cardsCount/);
+    expect(checkCoinCardHolder({ ...spec, windowDiameterMm: 60 }).join(' ')).toMatch(
+      /menší než mince/,
+    );
+    expect(checkCoinCardHolder({ ...spec, tabEndRadiusMm: 20 }).join(' ')).toMatch(/půl šířky/);
+    // Menší poloměr konce jazyka je platný (kreslí se jako dva rohy + rovná hrana).
+    expect(checkCoinCardHolder({ ...spec, tabEndRadiusMm: 6 })).toEqual([]);
+    expect(coinCardHolderLayout({ ...spec, tabEndRadiusMm: 6 }).tabEndRadiusMm).toBe(6);
+    // Dělicí panel se s mincí 40 mm na A4 nevejde – dokumentovaná mez; s 50 Kč ano.
+    expect(checkCoinCardHolder({ ...spec, dividerPanel: true }).join(' ')).toMatch(/Pravý sloupec/);
+    expect(
+      checkCoinCardHolder({ ...spec, dividerPanel: true, coinDiameterMm: NAMED_COINS['50kc'] }),
+    ).toEqual([]);
+    // Neplatná strana jazyka.
+    expect(checkCoinCardHolder({ ...spec, tabSide: 'top' as unknown as 'left' }).join(' ')).toMatch(
+      /tabSide/,
+    );
   });
 
   it('všechny pojmenované mince dají platný střih a přepočítají jen kapsu, okno a formu', () => {

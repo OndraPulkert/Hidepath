@@ -15,15 +15,20 @@ prvního), až bude první pouzdro fyzicky hotové.
 - Postup skládání jako obrázky: `docs/generated/pouzdro-mince-postup.svg` + `.pdf` (A4 na šířku,
   8 kroků od vyříznutí po hotové pouzdro zepředu a zezadu; proporce z modelu, ne 1:1).
 - Průměr mince je **proměnná**: `pnpm pattern:coin-holder --coin 50kc` (27,5 mm), `20kc`
-  (26 mm, třináctihran), `10kc` (24,5), `5kc` (23), `decision` (40, předloha) nebo číslo v mm.
-  `--window 30` = průměr okna podle výsečníku, který máš. `--divider` přidá dělicí panel.
+  (26 mm, třináctihran), `10kc` (24,5), `5kc` (23), `decision` (40, předloha) nebo číslo v mm
+  (`--coin 30` i `--coin=30`). `--window 30` = průměr okna podle výsečníku, který máš.
+  `--divider` přidá dělicí panel – **s mincí 40 mm se na A4 nevejde** (kontrola to odmítne),
+  s 50 Kč a menšími ano. Každá odchylka od výchozího střihu jde do jiného souboru
+  (`…-mince-27-5mm`, `…-okno-30mm`, `…-delici-panel`), verzovaný výchozí střih se nepřepíše;
+  list postupu se generuje jen pro výchozí střih. Varianta pro 50 Kč je v repu.
+  Tloušťka kůže těla (`bodyThicknessMm`) není přepínač – mění se v `DEFAULT_COIN_CARD_HOLDER`.
 - Strana jazyka je ve specifikaci (`tabSide: 'right'` = jazyk u pravé hrany při pohledu zepředu,
   průchodka vlevo – tak to má předloha; `'left'` dá zrcadlový střih). Kresba i postup se řídí
   modelem, ne stranou natvrdo.
   Jiná než výchozí mince zapíše soubor `…-mince-<průměr>mm` (27,5 → `-mince-27-5mm`); varianta
   pro 50 Kč je v repu.
 
-## Konstrukce (podle předlohy, ověřeno na fotkách 2026-09-18)
+## Konstrukce (v2 – horní hrana NEODPOVÍDÁ předloze, viz „Otevřené body“ dole)
 
 **Jeden díl ve tvaru L**, přeložený ve spodní hraně:
 
@@ -73,6 +78,10 @@ běžná tloušťka, jeden odstín i patina na všech dílech; model pak spustit
 (CraftPoint má pero i váleček na hrany). Tvarování za mokra nejdřív zkusit na A5 stejné barvy
 (57 Kč), některé povrchové úpravy při namočení flekatí.
 
+Meze střihu pro minci 40 mm: hrana kapsy leží přesně 1 mm od bočního švu panelu a dno kapsy
+3,3 mm nad pásmem ohybu – obojí na minimu kontroly. Větší mince než 40 mm se do šířky 66 mm
+nevejde; menší mince mají rezervu.
+
 ## Postup (podle videa výrobce)
 
 1. Vyříznout tělo (tvar L) podle šablony; hrany, které nebudou v švu, srazit.
@@ -102,6 +111,30 @@ běžná tloušťka, jeden odstín i patina na všech dílech; model pak spustit
 Ražený motiv na zadním panelu (vlastní razník) a dekorativní řady dírek podél švů. Vše lze
 doplnit ručně, do generátoru to nepatří.
 
+## Otevřené body po kontrole proti předloze (2026-09-18 večer)
+
+Řemeslný posudek (agent, 13 produktových fotek) a moje porovnání se snímky z videa se shodují:
+
+- **Výřez na prst je u předlohy velký čtvrtkruh (R ≈ 30) v horním rohu PŘEDNÍHO panelu** na
+  straně průchodky; odkrývá vnitřní vrstvu s průchodkou. Zadní panel má rovnou horní hranu od
+  rohu ke kořeni jazyka. Náš půlkruhový výřez R12 v zadním panelu je vymyšlený prvek.
+- **Přední panel je u předlohy stejně vysoký jako zadní** (karty nevyčnívají o 8 mm; horní
+  hrana předku lícuje s horní hranou zadního panelu u jazyka).
+- **Jazyk je širší** (≈ 33 mm, tj. polovina šířky), konec zaoblený obdélník R ≈ 10–12, ne plný
+  půlkruh.
+- Předloha je zřejmě **ovinutá přes boky** (boční hrany jsou ohyby, dno je prošité bílou nití,
+  boční řady dírek jsou ozdobné, bez nitě) a u průchodky má víc než dvě vrstvy. Naše konstrukce
+  „ohyb ve dně + boční švy“ je odchylka – pro ruční výrobu jednodušší, ale je nutné ji tak
+  označit, ne psát „věrně předloze“.
+- Rezerva konce jazyka: klobouček 9 mm od konce při nejistotě polohy ±3 mm je málo; jazyk
+  řezat o 4–5 mm delší a zkrátit až po zkoušce.
+- Forma: vůle 0,6 mm může po vyschnutí kůže (smrštění 1–2 %) minci sevřít – zvážit Ø 44;
+  tloušťka desky formy chybí (≥ 6 mm).
+- Na list doplnit, na kterou stranu kůže se šablona obkresluje (rub/líc) – rozhoduje o tom, zda
+  jazyk vyjde zepředu vpravo.
+
+Rozhodnutí o v3 (přepracování horní hrany) čeká na autora.
+
 ## Historie návrhu
 
 - v1 (2026-09-18 ráno): obdélník s chlopní přes celou šířku a dělicím panelem. Dva nezávislé
@@ -114,3 +147,9 @@ doplnit ručně, do generátoru to nepatří.
   pohledu zepředu **vpravo** a průchodka vlevo; v2 to měla zrcadlově. Strana jazyka je teď
   parametr (`tabSide`), obrys těla kreslí jedna funkce pro střih i postup, kontrola můstku mezi
   výřezem a průchodkou počítá se znaménkem (překryv se dřív schoval za absolutní hodnotu).
+  Nezávislá kontrola kódu (agent) na v2: opraveno přepisování verzovaného střihu variantami
+  `--window`/`--divider` (vlastní název souboru), konec jazyka s menším poloměrem (dřív jeden
+  oblouk přes celou šířku, SVG ho natáhl na půlkruh a jazyk byl o 7 mm delší), popisek formy
+  přes řeznou hranu těla na listu pro 50 Kč, tautologická a duplicitní hlášení kontrol, tvrdší
+  testy střihu (poloha čar ohybu, obrys kapsy vůči oknu, počet otvorů švu z délky U, vodicí
+  obrys kapsy na předku).

@@ -24,6 +24,8 @@ import {
   type CoinCardHolderLayout,
   type CoinCardHolderSpec,
   assertCoinCardHolder,
+  SHEET_CAPTION_MM,
+  SHEET_TITLE_GAP_MM,
   coinCardHolderLayout,
 } from '../src/lib/geometry/coin-card-holder.ts';
 
@@ -159,6 +161,15 @@ function lOutline(
   const rt = L.tabEndRadiusMm;
   const nr = L.notchRadiusMm;
   const tabRight = L.tabX0Mm > 0;
+  /** Konec jazyka z x0 do x1 (zleva doprava): plný půlkruh, dva rohy R + rovná hrana, nebo
+   * jen rovný pahýl, když je kreslená délka menší než poloměr (pohled zezadu v postupu). */
+  const tabEnd = (x0: number, x1: number): string =>
+    tabLen < rt
+      ? `L${X(x0)} ${Y(-tabLen)} L${X(x1)} ${Y(-tabLen)} L${X(x1)} ${Y(-tabLen)}`
+      : rt >= (x1 - x0) / 2 - 1e-9
+        ? `A${R(rt)} ${R(rt)} 0 0 ${cw} ${X(x1)} ${Y(-tabLen + rt)}`
+        : `A${R(rt)} ${R(rt)} 0 0 ${cw} ${X(x0 + rt)} ${Y(-tabLen)} L${X(x1 - rt)} ${Y(-tabLen)} ` +
+          `A${R(rt)} ${R(rt)} 0 0 ${cw} ${X(x1)} ${Y(-tabLen + rt)}`;
   const bottom =
     `L${X(W)} ${Y(bottomY - rc)} A${R(rc)} ${R(rc)} 0 0 ${cw} ${X(W - rc)} ${Y(bottomY)} ` +
     `L${X(rc)} ${Y(bottomY)} A${R(rc)} ${R(rc)} 0 0 ${cw} ${X(0)} ${Y(bottomY - rc)} `;
@@ -167,13 +178,13 @@ function lOutline(
     return (
       `M${X(rc)} ${Y(0)} L${X(L.notchCentreXMm - nr)} ${Y(0)} ` +
       `A${R(nr)} ${R(nr)} 0 0 ${ccw} ${X(L.tabX0Mm)} ${Y(0)} ` +
-      `L${X(L.tabX0Mm)} ${Y(-tabLen + rt)} A${R(rt)} ${R(rt)} 0 0 ${cw} ${X(W)} ${Y(-tabLen + rt)} ` +
+      `L${X(L.tabX0Mm)} ${Y(-tabLen + rt)} ${tabEnd(L.tabX0Mm, W)} ` +
       bottom +
       `L${X(0)} ${Y(rc)} A${R(rc)} ${R(rc)} 0 0 ${cw} ${X(rc)} ${Y(0)} Z`
     );
   }
   return (
-    `M${X(0)} ${Y(-tabLen + rt)} A${R(rt)} ${R(rt)} 0 0 ${cw} ${X(L.tabX1Mm)} ${Y(-tabLen + rt)} ` +
+    `M${X(0)} ${Y(-tabLen + rt)} ${tabEnd(0, L.tabX1Mm)} ` +
     `L${X(L.tabX1Mm)} ${Y(0)} A${R(nr)} ${R(nr)} 0 0 ${ccw} ${X(L.notchCentreXMm + nr)} ${Y(0)} ` +
     `L${X(W - rc)} ${Y(0)} A${R(rc)} ${R(rc)} 0 0 ${cw} ${X(W)} ${Y(rc)} ` +
     bottom +
@@ -238,12 +249,14 @@ export function buildCoinHolderSheetSvg(
   // Boční švy jen tam, kde se panely překrývají (od ohybu po horní hranu předku): tečky od ohybu
   // na obou panelech, stejný počet, aby si po přeložení odpovídaly otvor na otvor.
   for (const x of [bx + so, bx + bw - so]) {
+    // Vodicí čára jen po poslední tečku (řada teček je o zbytek rozteče kratší než překryv).
+    const run = (L.sideSeamHoles - 1) * spec.stitchPitchMm;
     const backBottom = Y(L.foldStartMm - so);
-    const backTop = backBottom - L.sideSeamLengthMm;
+    const backTop = backBottom - run;
     out.push(guide(`M${f(x)} ${f(backTop)} L${f(x)} ${f(backBottom)}`, '0.8 1.2'));
     out.push(stitchDots(x, backBottom, x, backTop, spec.stitchPitchMm));
     const frontBottom = Y(L.foldEndMm + so);
-    const frontTop = frontBottom + L.sideSeamLengthMm;
+    const frontTop = frontBottom + run;
     out.push(guide(`M${f(x)} ${f(frontBottom)} L${f(x)} ${f(frontTop)}`, '0.8 1.2'));
     out.push(stitchDots(x, frontBottom, x, frontTop, spec.stitchPitchMm));
   }
@@ -355,7 +368,7 @@ export function buildCoinHolderSheetSvg(
   }
 
   const kx = dx;
-  const ky = cy + 4;
+  const ky = cy + SHEET_TITLE_GAP_MM;
   out.push(cut(roundedRect(kx, ky, L.pocketWidthMm, L.pocketHeightMm, spec.pocketTopRadiusMm, rc)));
   const seam = pocketSeam(
     kx + so,
@@ -396,10 +409,10 @@ export function buildCoinHolderSheetSvg(
       GUIDE,
     ),
   );
-  cy = ky + L.pocketHeightMm + 10 + gap;
+  cy = ky + L.pocketHeightMm + SHEET_CAPTION_MM + gap;
 
   const fx = dx;
-  const fy = cy + 4;
+  const fy = cy + SHEET_TITLE_GAP_MM;
   const fs = L.formPlateMm;
   out.push(guide(`M${f(fx)} ${f(fy)} h${f(fs)} v${f(fs)} h${f(-fs)} Z`, '1.5 1.5'));
   out.push(circle(fx + fs / 2, fy + fs / 2, L.formHoleDiameterMm / 2, GUIDE, '2 1.5'));
@@ -419,11 +432,14 @@ export function buildCoinHolderSheetSvg(
     text(
       fx + fs / 2,
       fy + fs + 6.6,
-      'kůže LÍCEM DOLŮ na formu, mince na rub, přiklopit deskou, stáhnout svěrkami',
+      'kůže LÍCEM DOLŮ na formu, mince na rub,',
       2.1,
       'middle',
       GUIDE,
     ),
+  );
+  out.push(
+    text(fx + fs / 2, fy + fs + 9.4, 'přiklopit deskou, stáhnout svěrkami', 2.1, 'middle', GUIDE),
   );
 
   /* --- kalibrace a legenda --- */
@@ -619,7 +635,7 @@ export function buildCoinHolderProcessSvg(
     const lx1 = ox + plateW - 4;
     const hx0 = ox + (plateW - hole) / 2;
     const hx1 = ox + (plateW + hole) / 2;
-    const depth = spec.coinDiameterMm > 0 ? 2.6 : 2;
+    const depth = 2.6; // ilustrační hloubka důlku (ne z modelu)
     b.push(
       `<path d="M${f(lx0)} ${f(oy)} L${f(hx0)} ${f(oy)} Q${f(hx0 + 1)} ${f(oy + depth)} ${f(hx0 + 3)} ${f(oy + depth)} L${f(hx1 - 3)} ${f(oy + depth)} Q${f(hx1 - 1)} ${f(oy + depth)} ${f(hx1)} ${f(oy)} L${f(lx1)} ${f(oy)} v-1.4 L${f(hx1)} ${f(oy - 1.4)} Q${f(hx1 - 1)} ${f(oy + depth - 1.4)} ${f(hx1 - 3)} ${f(oy + depth - 1.4)} L${f(hx0 + 3)} ${f(oy + depth - 1.4)} Q${f(hx0 + 1)} ${f(oy + depth - 1.4)} ${f(hx0)} ${f(oy - 1.4)} L${f(lx0)} ${f(oy - 1.4)} Z" fill="${LEATHER}" stroke="${LEATHER_DARK}" stroke-width="0.3"/>`,
     );
@@ -1073,11 +1089,29 @@ export function buildCoinHolderProcessSvg(
   ].join('\n');
 }
 
-/** Název souboru pro daný průměr mince (výchozí mince bez přípony; 27,5 → „-mince-27-5mm“). */
-export function coinHolderFileStem(coinMm: number): string {
-  return coinMm === DEFAULT_COIN_CARD_HOLDER.coinDiameterMm
-    ? 'pouzdro-mince-sablona'
-    : `pouzdro-mince-sablona-mince-${f(coinMm).replace('.', '-')}mm`;
+/**
+ * Název souboru podle odchylek od výchozího střihu, aby varianta nepřepsala verzovaný soubor:
+ * jiná mince → „-mince-27-5mm“, vlastní okno → „-okno-30mm“, dělicí panel → „-delici-panel“.
+ */
+export function coinHolderFileStem(spec: CoinCardHolderSpec): string {
+  const d = DEFAULT_COIN_CARD_HOLDER;
+  const parts = ['pouzdro-mince-sablona'];
+  if (spec.coinDiameterMm !== d.coinDiameterMm) {
+    parts.push(`mince-${f(spec.coinDiameterMm).replace('.', '-')}mm`);
+  }
+  if (spec.windowDiameterMm !== null)
+    parts.push(`okno-${f(spec.windowDiameterMm).replace('.', '-')}mm`);
+  if (spec.dividerPanel) parts.push('delici-panel');
+  return parts.join('-');
+}
+
+/** Hodnota přepínače `--name value` nebo `--name=value`; undefined, když přepínač chybí. */
+function argValue(name: string): string | undefined {
+  const eq = process.argv.find((a) => a.startsWith(`${name}=`));
+  if (eq !== undefined) return eq.slice(name.length + 1);
+  const i = process.argv.indexOf(name);
+  if (i < 0) return undefined;
+  return process.argv[i + 1] ?? '';
 }
 
 function readNumberArg(
@@ -1086,16 +1120,17 @@ function readNumberArg(
   max: number,
   named?: Record<string, number>,
 ): number | undefined {
-  const i = process.argv.indexOf(name);
-  if (i < 0) return undefined;
-  const raw = process.argv[i + 1];
+  const raw = argValue(name);
+  if (raw === undefined) return undefined;
   const names = named ? Object.keys(named).join(', ') : '';
-  if (raw === undefined || raw.startsWith('--')) {
+  if (raw === '' || raw.startsWith('--')) {
     throw new Error(`${name} potřebuje hodnotu${named ? ` (číslo v mm nebo ${names})` : ' v mm'}.`);
   }
   const key = raw.toLowerCase();
   const namedValue = named && Object.hasOwn(named, key) ? named[key] : undefined;
-  const value = namedValue ?? Number(raw.replace(',', '.'));
+  // Jen desetinné číslo s tečkou nebo čárkou (žádné 0x20, 1e1 apod.).
+  const value =
+    namedValue ?? (/^\d+([.,]\d+)?$/.test(raw) ? Number(raw.replace(',', '.')) : Number.NaN);
   if (!Number.isFinite(value) || value < min || value > max) {
     throw new Error(
       `${name} musí být mezi ${min} a ${max} mm${named ? ` nebo jedno z: ${names}` : ''}.`,
@@ -1116,7 +1151,7 @@ async function main(): Promise<void> {
   };
   const outDir = resolve(dirname(fileURLToPath(import.meta.url)), '../docs/generated');
   mkdirSync(outDir, { recursive: true });
-  const stem = coinHolderFileStem(coin);
+  const stem = coinHolderFileStem(spec);
   const svg = buildCoinHolderSheetSvg(spec);
   const svgPath = resolve(outDir, `${stem}.svg`);
   writeFileSync(svgPath, svg, 'utf8');
@@ -1139,7 +1174,8 @@ async function main(): Promise<void> {
     preferCSSPageSize: true,
   });
   console.log(`Zapsáno ${pdfPath} (A4 na výšku, 100 %)`);
-  if (coin === DEFAULT_COIN_CARD_HOLDER.coinDiameterMm && !spec.dividerPanel) {
+  // Postup skládání jen pro výchozí střih (jiná varianta by přepsala verzovaný soubor).
+  if (stem === 'pouzdro-mince-sablona') {
     const proc = buildCoinHolderProcessSvg(spec);
     const procSvg = resolve(outDir, 'pouzdro-mince-postup.svg');
     writeFileSync(procSvg, proc, 'utf8');

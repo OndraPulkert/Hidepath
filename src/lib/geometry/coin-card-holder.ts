@@ -146,6 +146,9 @@ export const NAMED_COINS = {
 export const A4_SHEET = { widthMm: 210, heightMm: 297, marginMm: 12, gapMm: 12 } as const;
 /** Výška legendy pod díly, se kterou kontrola rozvržení počítá. */
 export const LEGEND_HEIGHT_MM = 40;
+/** Svislé mezery pravého sloupce střihu (nadpis nad dílem, popisky pod dílem) – sdílí kontrola i kresba. */
+export const SHEET_TITLE_GAP_MM = 4;
+export const SHEET_CAPTION_MM = 10;
 
 /**
  * Odvozené rozměry. Rozložené tělo se kreslí jako jeden díl v soustavě, kde y = 0 je horní
@@ -361,10 +364,7 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
         'Zmenši notchRadiusMm nebo tabWidthMm.',
     );
   }
-  const grommetToSideEdge = Math.min(L.grommetXMm, L.panelWidthMm - L.grommetXMm);
-  if (grommetToSideEdge - spec.grommetHoleMm / 2 < so + 1) {
-    p.push('Průchodka zasahuje do bočního švu; zvětši grommetFromEdgeMm.');
-  }
+  // Nad předkem je zadní panel jednovrstvý (bez bočního švu), stačí můstek k hraně.
   if (spec.grommetFromEdgeMm - spec.grommetHoleMm / 2 < min) {
     p.push(
       `Průchodka je moc blízko hrany (můstek ${(spec.grommetFromEdgeMm - spec.grommetHoleMm / 2).toFixed(1)} mm, minimum ${min}).`,
@@ -379,11 +379,14 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
   if (L.notchRadiusMm > L.backHeightMm / 3) {
     p.push('Výřez na prst je hlubší než třetina panelu.');
   }
-  // Boční šev vlevo prochází pod jazykem: jazyk musí být širší než 2·so, aby šev zůstal v panelu.
+  // Jazyk musí pojmout druk s okrajem na šev/hranu z každé strany.
   if (spec.tabWidthMm < 2 * so + spec.snapDiameterMm) {
     p.push(
       `Jazyk ${spec.tabWidthMm} mm je užší než druk s okraji (${2 * so + spec.snapDiameterMm} mm).`,
     );
+  }
+  if (spec.tabEndRadiusMm !== null && spec.tabEndRadiusMm > spec.tabWidthMm / 2) {
+    p.push(`tabEndRadiusMm ${spec.tabEndRadiusMm} je větší než půl šířky jazyka.`);
   }
   if (spec.tabBeyondSnapMm < spec.snapDiameterMm / 2 + spec.snapClearanceMm) {
     p.push('Konec jazyka je moc blízko druku; tabBeyondSnapMm zvětši.');
@@ -395,11 +398,6 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
   }
   const bandTop =
     Math.max(snapFromTop + spec.snapDiameterMm / 2, L.tabEndOnFrontMm) + spec.snapClearanceMm;
-  if (L.pocketYMm + 1e-9 < bandTop) {
-    p.push(
-      `Kapsa s mincí začíná v ${L.pocketYMm} mm, jazyk a druk sahají do ${bandTop.toFixed(1)} mm.`,
-    );
-  }
   const available = L.frontHeightMm - spec.pocketFromFoldMinMm - bandTop;
   if (L.pocketHeightMm > available + 1e-9) {
     p.push(
@@ -408,17 +406,17 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
     );
   }
   // Kapsa a boční švy panelu.
-  if (L.pocketXMm - so < 1) {
+  // Hrana kapsy aspoň 1 mm od bočního švu panelu a šev kapsy aspoň `min` od švu panelu.
+  const pocketEdgeMin = Math.max(so + 1, min);
+  if (L.pocketXMm < pocketEdgeMin) {
     p.push(
-      `Hrana kapsy s mincí leží ${(L.pocketXMm - so).toFixed(1)} mm od bočního švu panelu (minimum 1).`,
+      `Hrana kapsy s mincí leží ${(L.pocketXMm - so).toFixed(1)} mm od bočního švu panelu ` +
+        `(minimum ${(pocketEdgeMin - so).toFixed(1)}); zmenši minci nebo pocketFlatMm.`,
     );
   }
-  if (L.pocketXMm < min) {
-    p.push(
-      `Šev kapsy a boční šev panelu jsou jen ${L.pocketXMm.toFixed(1)} mm od sebe (minimum ${min}).`,
-    );
-  }
-  if (L.coinRingMm < spec.minCoinRingMm) {
+  if (L.windowDiameterMm >= spec.coinDiameterMm) {
+    p.push(`Okno ${L.windowDiameterMm} mm musí být menší než mince ${spec.coinDiameterMm} mm.`);
+  } else if (L.coinRingMm < spec.minCoinRingMm) {
     p.push(
       `Prstenec kolem okna je ${L.coinRingMm} mm, minimum ${spec.minCoinRingMm} mm – minci by neudržel.`,
     );
@@ -435,14 +433,16 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
   if (L.bodyLengthMm > usable) {
     p.push(`Tělo ${L.bodyLengthMm} mm se nevejde na A4 na výšku (max ${usable}).`);
   }
+  // Kapsa: nadpis + díl + popisky; mezera; forma: nadpis + díl + popisky (jako v kresbě).
   const rightColumn =
     (L.dividerHeightMm !== null ? L.dividerHeightMm + g : 0) +
+    SHEET_TITLE_GAP_MM +
     L.pocketHeightMm +
-    10 +
+    SHEET_CAPTION_MM +
     g +
-    4 +
+    SHEET_TITLE_GAP_MM +
     L.formPlateMm +
-    8;
+    SHEET_CAPTION_MM;
   if (rightColumn > usable) {
     p.push(`Pravý sloupec střihu (${rightColumn.toFixed(1)} mm) se nevejde na A4 nad legendu.`);
   }

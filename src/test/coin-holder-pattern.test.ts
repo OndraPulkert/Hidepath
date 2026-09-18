@@ -19,6 +19,8 @@ const svgs: Record<string, string> = import.meta.glob('/docs/generated/*.svg', {
 const sheet = Object.entries(svgs).find(([k]) => k.endsWith('/pouzdro-mince-sablona.svg'))?.[1];
 const cz = (n: number): string => (Math.round(n * 1000) / 1000).toString().replace('.', ',');
 const near = (a: number, b: number, tol = 0.01): boolean => Math.abs(a - b) <= tol;
+/** Stejné zaokrouhlení jako generátor (2 desetinná místa, bez koncových nul). */
+const fmt = (n: number): string => (Math.round(n * 100) / 100).toString();
 
 interface Circle {
   cx: number;
@@ -149,6 +151,59 @@ describe('střih pouzdra s mincí (tvar L)', () => {
     // Všech teček dohromady: 4 boční řady + šev kapsy.
     const dots = cs.filter((c) => near(c.r, 0.45));
     expect(dots.length).toBe(4 * L.sideSeamHoles + seamHoles);
+  });
+
+  it('čáry ohybu leží přesně na začátku a konci přídavku', () => {
+    const line = (y: number): string =>
+      `M${fmt(X(0))} ${fmt(Y(y))} L${fmt(X(L.panelWidthMm))} ${fmt(Y(y))}`;
+    expect(sheet).toContain(`d="${line(L.foldStartMm)}" fill="none" stroke="#7a7a7a"`);
+    expect(sheet).toContain(`d="${line(L.foldEndMm)}" fill="none" stroke="#7a7a7a"`);
+  });
+
+  it('kapsa: obrys, okno a šev sedí k sobě, počet otvorů švu vychází z délky U', () => {
+    const cs = circles(sheet ?? '');
+    const window = cs.find((c) => near(c.r, L.windowDiameterMm / 2))!;
+    // Druhá řezaná cesta je díl kapsy; začíná v (kx + R horního rohu, ky).
+    const cuts = [
+      ...(sheet ?? '').matchAll(
+        /<path d="M([\d.]+) ([\d.]+)[^"]*" fill="none" stroke="#2b2b2b" stroke-width="0.3"/g,
+      ),
+    ];
+    expect(cuts.length).toBeGreaterThanOrEqual(2);
+    const kx = Number(cuts[1]![1]) - spec.pocketTopRadiusMm;
+    const ky = Number(cuts[1]![2]);
+    expect(window.cx - kx).toBeCloseTo(L.coinCentreXMm, 2);
+    expect(window.cy - ky).toBeCloseTo(L.coinCentreYMm, 2);
+    // Šev U: od středu dna na obě strany po rozteči; délka poloviny nezávisle spočtená.
+    const rIn = Math.max(0.5, spec.cornerRadiusMm - spec.stitchOffsetMm);
+    const so = spec.stitchOffsetMm;
+    const half =
+      L.pocketWidthMm / 2 -
+      so -
+      rIn +
+      (Math.PI / 2) * rIn +
+      (L.pocketHeightMm - so - rIn - L.pocketSeamTopMm);
+    const seamHoles = Number(/šev (\d+) otvorů od středu dna/.exec(sheet ?? '')?.[1]);
+    expect(seamHoles).toBe(2 * Math.floor(half / spec.stitchPitchMm + 1e-9) + 1);
+    // Krajní tečky švu leží na svislých hranách U ve výšce podle zbytku délky.
+    const seamDots = cs.filter((c) => near(c.r, 0.45) && Math.abs(c.cx - (kx + so)) < 0.01);
+    expect(seamDots.length).toBe(
+      Math.floor(half / spec.stitchPitchMm + 1e-9) -
+        Math.floor(
+          (L.pocketWidthMm / 2 - so - rIn + (Math.PI / 2) * rIn) / spec.stitchPitchMm + 1e-9,
+        ),
+    );
+  });
+
+  it('kapsa na předku: vodicí obrys začíná v poloze z modelu (předek je vzhůru nohama)', () => {
+    const gx = X(L.pocketXMm) + spec.cornerRadiusMm;
+    const gy = Y(L.frontTopMm - L.pocketYMm - L.pocketHeightMm);
+    expect(sheet).toContain(`d="M${fmt(gx)} ${fmt(gy)} L`);
+    expect(sheet).toMatch(
+      new RegExp(
+        `d="M${fmt(gx)} ${fmt(gy)} [^"]*" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1 1"`,
+      ),
+    );
   });
 
   it('kalibrační úsečka měří 50 mm', () => {
