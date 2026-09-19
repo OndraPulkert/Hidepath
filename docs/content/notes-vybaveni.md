@@ -437,6 +437,6 @@ třech stranách, horní hrana otevřená; mince se zasouvá shora a vyjímá za
 1:1), model `src/lib/geometry/coin-card-holder.ts`, zadání a postup `docs/zadani/pouzdro-mince.md`.
 Průměr mince je parametr (`--coin 50kc` atd.). Rozměry odvozené z karty a mince, ne odměřené;
 s mincí 40 mm jako měřítkem z fotek vychází pouzdro ~60 × 90 mm, kapsa ~45–50, okno ~30–32, což
-náš střih (66 × 87,6; kapsa 57 × 53,5; okno 32) řádově potvrzuje. Kůže odhadem tělo 1,2–1,5 mm,
+náš střih (66 × 87,6; kapsa 55 × 52,5; okno 32) řádově potvrzuje. Kůže odhadem tělo 1,2–1,5 mm,
 kapsa 1,2 mm. **Námět na druhé pouzdro** (ADR 002), ne na první: přidává mokré tvarování,
 velký kruhový výsečník a druk.

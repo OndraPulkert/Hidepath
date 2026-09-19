@@ -83,6 +83,7 @@ describe('pouzdro s vsazenou mincí – model (tvar L podle předlohy)', () => {
     expect(L.scoopCornerXMm).toBe(0);
     expect(L.scoopRadiusMm).toBe(30);
     expect(L.grommetXMm).toBeCloseTo(spec.grommetFromEdgeMm, 9);
+    expect(L.grommetYMm).toBeCloseTo(spec.grommetFromEdgeMm, 9);
     // Výřez nezasahuje pod jazyk ani k patici druku.
     expect(L.scoopRadiusMm).toBeLessThanOrEqual(L.tabX0Mm);
     expect(L.scoopRadiusMm + spec.snapDiameterMm / 2 + spec.snapClearanceMm).toBeLessThanOrEqual(
@@ -186,11 +187,22 @@ describe('pouzdro s vsazenou mincí – model (tvar L podle předlohy)', () => {
     // Menší poloměr konce jazyka je platný (kreslí se jako dva rohy + rovná hrana).
     expect(checkCoinCardHolder({ ...spec, tabEndRadiusMm: 6 })).toEqual([]);
     expect(coinCardHolderLayout({ ...spec, tabEndRadiusMm: 6 }).tabEndRadiusMm).toBe(6);
-    // Dělicí panel se s mincí 40 mm na A4 nevejde – dokumentovaná mez; s 50 Kč ano.
+    // Dělicí panel se s formou na jeden A4 nevejde (dokumentovaná mez, předloha panel nemá).
     expect(checkCoinCardHolder({ ...spec, dividerPanel: true }).join(' ')).toMatch(/Pravý sloupec/);
     expect(
-      checkCoinCardHolder({ ...spec, dividerPanel: true, coinDiameterMm: NAMED_COINS['50kc'] }),
-    ).toEqual([]);
+      checkCoinCardHolder({
+        ...spec,
+        dividerPanel: true,
+        coinDiameterMm: NAMED_COINS['50kc'],
+      }).join(' '),
+    ).toMatch(/Pravý sloupec/);
+    // Nulové nebo necelé hodnoty, které by kresbu zacyklily nebo rozbily.
+    expect(checkCoinCardHolder({ ...spec, stitchPitchMm: 0 }).join(' ')).toMatch(/kladné/);
+    expect(checkCoinCardHolder({ ...spec, cardsCount: 2.5 }).join(' ')).toMatch(/celé číslo/);
+    expect(checkCoinCardHolder({ ...spec, cornerRadiusMm: 20 }).join(' ')).toMatch(
+      /cornerRadiusMm/,
+    );
+    expect(checkCoinCardHolder({ ...spec, scoopRadiusMm: null }).length).toBeGreaterThan(0);
     // Neplatná strana jazyka.
     expect(checkCoinCardHolder({ ...spec, tabSide: 'top' as unknown as 'left' }).join(' ')).toMatch(
       /tabSide/,

@@ -84,9 +84,11 @@ describe('střih pouzdra s mincí (tvar L)', () => {
       `A${rt} ${rt} 0 0 1 ${p(L.tabX0Mm + rt, -L.tabLengthMm)} L${p(L.tabX1Mm - rt, -L.tabLengthMm)} ` +
         `A${rt} ${rt} 0 0 1 ${p(L.tabX1Mm, tabTopY)}`,
     );
-    // Zadní panel má rovnou horní hranu od levého rohu ke kořeni jazyka (bez výřezu).
-    expect(body).toMatch(
-      new RegExp(`^M${p(spec.cornerRadiusMm, 0)} L${p(L.tabX0Mm - spec.cornerRadiusMm, 0)} A`),
+    // Zadní panel má rovnou horní hranu od levého rohu ke kořeni jazyka (bez výřezu) a v kořeni
+    // jazyka vydutý oblouček (proti směru = dovnitř), ne ostrý vnitřní roh.
+    const rc = spec.cornerRadiusMm;
+    expect(body).toContain(
+      `M${p(rc, 0)} L${p(L.tabX0Mm - rc, 0)} A${rc} ${rc} 0 0 0 ${p(L.tabX0Mm, -rc)}`,
     );
     // Výřez na prst: čtvrtkruh (proti směru, dovnitř) v dolním levém rohu = horní roh předku
     // na straně průchodky; po přeložení leží nad průchodkou zadního panelu.

@@ -53,7 +53,9 @@ describe('generátor pouzdra s mincí – varianty', () => {
     expect(L.grommetXMm).toBeGreaterThan(L.tabX1Mm);
     expect(svg).toContain('jazyk zepředu vlevo a výřez s průchodkou vpravo');
     // Postup se také vykreslí (bez chyby) a zmiňuje stejné rozměry.
-    expect(buildCoinHolderProcessSvg(left)).toContain('tělo 66 × 215,82 mm');
+    expect(buildCoinHolderProcessSvg(left)).toContain(
+      `tělo 66 × ${String(L.bodyLengthMm).replace('.', ',')} mm`,
+    );
   });
 
   it('konec jazyka se kreslí jako dva rohy a rovná hrana ve správné délce (i plný půlkruh)', () => {
@@ -77,6 +79,43 @@ describe('generátor pouzdra s mincí – varianty', () => {
     )![1];
     expect(bh).toContain(
       `A${Lh.tabEndRadiusMm} ${Lh.tabEndRadiusMm} 0 0 1 ${m + Lh.tabX1Mm} ${top + Lh.tabEndRadiusMm}`,
+    );
+  });
+
+  it('list postupu: výřez předku ve správném rohu, švy u výřezu kratší, jazyk zepředu vpravo', () => {
+    const L = coinCardHolderLayout(spec);
+    const svg = buildCoinHolderProcessSvg(spec);
+    const pad = 8;
+    const cellW = (297 - 2 * pad) / 4;
+    const cellH = (210 - 2 * pad - 10) / 2;
+    // Generátor zapisuje souřadnice na 3 desetinná místa.
+    const r2 = (n: number): string => String(Math.round(n * 1000) / 1000);
+    const Rs = L.scoopRadiusMm;
+    // Buňka 4 (přišití kapsy): přední panel začíná čtvrtkruhem výřezu v levém horním rohu.
+    const k4 = 0.62;
+    const ox4 = pad + 3 * cellW + (cellW - L.panelWidthMm * k4) / 2;
+    const oy4 = pad + 12;
+    expect(svg).toContain(
+      `M${r2(ox4)} ${r2(oy4 + Rs * k4)} A${r2(Rs * k4)} ${r2(Rs * k4)} 0 0 0 ${r2(ox4 + Rs * k4)} ${r2(oy4)}`,
+    );
+    // Buňka 7 (hotovo zepředu): jazyk začíná na x jazyka z modelu (vpravo); stehy vlevo = kratší řada.
+    const k7 = 0.62;
+    const ox7 = pad + 2 * cellW + (cellW - L.panelWidthMm * k7) / 2;
+    const oy7 = pad + cellH + 14;
+    expect(svg).toContain(
+      `M${r2(ox7 + L.tabX0Mm * k7)} ${r2(oy7)} L${r2(ox7 + L.tabX1Mm * k7)} ${r2(oy7)}`,
+    );
+    const threadRuns = (x: number): number => {
+      const paths = [...svg.matchAll(/<path d="(M[^"]+)" stroke="#efe3c2"/g)].map((m) => m[1]);
+      const col = paths.find((d) => d.startsWith(`M${r2(x)} `));
+      return col ? [...col.matchAll(/M/g)].length : -1;
+    };
+    const so = spec.stitchOffsetMm;
+    expect(threadRuns(ox7 + so * k7)).toBe(
+      Math.floor(L.seamLengthScoopSideMm / spec.stitchPitchMm),
+    );
+    expect(threadRuns(ox7 + (L.panelWidthMm - so) * k7)).toBe(
+      Math.floor(L.seamLengthTabSideMm / spec.stitchPitchMm),
     );
   });
 
