@@ -67,6 +67,11 @@ export interface CoinCardHolderSpec {
    */
   foldAllowanceMm: number | null;
   /**
+   * Vůle přidaná k oběma spočteným ohybům, aby je obsah nenapínal (předloha má pásma ohybů
+   * ≈ 11–13 mm) – volba.
+   */
+  foldEaseMm: number;
+  /**
    * Strana jazyka při pohledu na hotové pouzdro **zepředu**. Předloha má jazyk vpravo a výřez
    * s průchodkou vlevo → `right`. V kresbě pásu je pak jazyk u levého konce (zadní panel se
    * při složení otočí).
@@ -138,12 +143,13 @@ export const DEFAULT_COIN_CARD_HOLDER: CoinCardHolderSpec = {
   pocketThicknessMm: 1.2,
   innerPanel: true,
   foldAllowanceMm: null,
+  foldEaseMm: 2,
   tabSide: 'right',
   tabWidthMm: 33,
   tabEndRadiusMm: 10,
-  snapFromTopMm: 10,
+  snapFromTopMm: 9.5,
   tabBeyondSnapMm: 11,
-  tabFitReserveMm: 5,
+  tabFitReserveMm: 7,
   snapDiameterMm: 12.5,
   snapClearanceMm: 2,
   scoopRadiusMm: 34,
@@ -189,8 +195,8 @@ export const A4_PORTRAIT = { widthMm: 210, heightMm: 297, marginMm: 10 } as cons
 export const CALIBRATION_GAP_MM = 4;
 /** Popisek šva dna pod pásem: odsazení od dolní hrany pásu. */
 export const SEAM_LABEL_GAP_MM = 5;
-/** Přibližný poloměr dříku druku a přírůstek příruby průchodky nad poloměr otvoru. */
-export const SNAP_POST_RADIUS_MM = 2.5;
+/** Poloměr patice druku 12,5 mm na rubu (≈ Ø 10) a přírůstek příruby průchodky nad poloměr otvoru. */
+export const SNAP_POST_RADIUS_MM = 5;
 export const GROMMET_FLANGE_MM = 2.5;
 
 /**
@@ -272,10 +278,10 @@ export function coinCardHolderLayout(
   const bills = spec.innerPanel ? spec.billsThicknessMm : 0;
   // Ohyb B obepíná jen karty, ohyb A navíc vnitřní panel a bankovky.
   const foldB = spec.innerPanel
-    ? (spec.foldAllowanceMm ?? round(Math.PI * (cards / 2 + t / 2)))
+    ? (spec.foldAllowanceMm ?? round(Math.PI * (cards / 2 + t / 2) + spec.foldEaseMm))
     : 0;
   const innerStack = spec.innerPanel ? round(cards + t + bills) : cards;
-  const foldA = spec.foldAllowanceMm ?? round(Math.PI * (innerStack / 2 + t / 2));
+  const foldA = spec.foldAllowanceMm ?? round(Math.PI * (innerStack / 2 + t / 2) + spec.foldEaseMm);
 
   const backX0 = 0;
   const backX1 = panelWidth;

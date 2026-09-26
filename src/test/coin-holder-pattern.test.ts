@@ -143,12 +143,23 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
       .filter((c) => near(c.r, 0.45) && near(c.cy, seamY))
       .map((c) => c.cx)
       .sort((a, b) => a - b);
-    expect(dots.length).toBe(L.bottomSeamHoles);
-    expect(dots[0]).toBeCloseTo(X(L.frontX0Mm + spec.stitchOffsetMm), 2);
-    for (let i = 1; i < dots.length; i++) {
-      expect(dots[i]! - dots[i - 1]!).toBeCloseTo(spec.stitchPitchMm, 6);
+    expect(dots.length).toBe(3 * L.bottomSeamHoles);
+    const run = (L.bottomSeamHoles - 1) * spec.stitchPitchMm;
+    const front = dots.filter((x) => x > X(L.frontX0Mm) && x < X(L.frontX1Mm));
+    expect(front.length).toBe(L.bottomSeamHoles);
+    // Na předním panelu vystředěné, rozteč přesně podle modelu, nejméně 3,5 mm od ohybu.
+    expect(front[0]! - X(L.frontX0Mm)).toBeCloseTo((L.panelWidthMm - run) / 2, 2);
+    expect(front[0]! - X(L.frontX0Mm)).toBeGreaterThanOrEqual(spec.stitchOffsetMm);
+    for (let i = 1; i < front.length; i++) {
+      expect(front[i]! - front[i - 1]!).toBeCloseTo(spec.stitchPitchMm, 6);
     }
-    expect(dots[dots.length - 1]).toBeLessThanOrEqual(X(L.frontX1Mm - spec.stitchOffsetMm) + 0.01);
+    // Po přeložení přes oba ohyby padnou otvory zadního a vnitřního panelu na otvory předku.
+    const cA = X((L.backX1Mm + L.frontX0Mm) / 2);
+    const cB = X((L.frontX1Mm + L.innerX0Mm!) / 2);
+    for (const x of front) {
+      expect(dots.some((d) => near(d, 2 * cA - x, 0.01))).toBe(true);
+      expect(dots.some((d) => near(d, 2 * cB - x, 0.01))).toBe(true);
+    }
   });
 
   it('kapsa na předním panelu: vodicí obrys v poloze z modelu, mimo výřez', () => {
@@ -161,13 +172,13 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
     );
   });
 
-  it('perforace ohybů: tři řady v širokém ohybu A, dvě v úzkém ohybu B, mimo šev dna', () => {
+  it('perforace ohybů: tři řady v každém pásmu ohybu, mimo šev dna', () => {
     const perf = circles(sheet ?? '').filter((c) => near(c.r, 0.75));
     const inBand = (x0: number, x1: number): Circle[] =>
       perf.filter((c) => c.cx > X(x0) && c.cx < X(x1));
     for (const [x0, x1, n] of [
       [L.backX1Mm, L.frontX0Mm, 3],
-      [L.frontX1Mm, L.innerX0Mm!, 2],
+      [L.frontX1Mm, L.innerX0Mm!, 3],
     ] as const) {
       const band = inBand(x0, x1);
       const cols = [...new Set(band.map((c) => c.cx))].sort((a, b) => a - b);
@@ -207,7 +218,7 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
     expect(seamHoles % 2).toBe(1);
     expect(cs.filter((c) => near(c.r, 0.45)).length).toBe(seamHoles);
     // Pás na listu 1 má tečky jen ve švu dna.
-    expect(circles(sheet ?? '').filter((c) => near(c.r, 0.45)).length).toBe(L.bottomSeamHoles);
+    expect(circles(sheet ?? '').filter((c) => near(c.r, 0.45)).length).toBe(3 * L.bottomSeamHoles);
   });
 
   it('kalibrační úsečka měří 50 mm', () => {

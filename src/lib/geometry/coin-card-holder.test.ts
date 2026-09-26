@@ -34,7 +34,8 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     expect(L.bottomSeamYMm).toBeCloseTo(L.panelHeightMm - spec.stitchOffsetMm, 9);
     expect(L.cardBelowRimMm).toBe(spec.topOverCardMm);
     // Kování je nad kartami: dřík druku (≈ Ø 5) i příruba průchodky končí nad horní hranou karet.
-    expect(spec.snapFromTopMm + 2.5).toBeLessThanOrEqual(L.cardBelowRimMm);
+    // Patice 12,5 mm má na rubu přírubu ≈ Ø 10.
+    expect(spec.snapFromTopMm + 5).toBeLessThanOrEqual(L.cardBelowRimMm);
     expect(spec.grommetFromEdgeMm + spec.grommetHoleMm / 2 + 2.5).toBeLessThanOrEqual(
       L.cardBelowRimMm,
     );
@@ -48,9 +49,9 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     const cards = spec.cardsCount * spec.cardThicknessMm;
     expect(L.cardsThicknessMm).toBeCloseTo(cards, 6);
     // Ohyb B jen kolem karet, ohyb A kolem karet + vnitřní panel + bankovky.
-    expect(L.foldFrontInnerMm).toBeCloseTo(Math.PI * (cards / 2 + t / 2), 2);
+    expect(L.foldFrontInnerMm).toBeCloseTo(Math.PI * (cards / 2 + t / 2) + spec.foldEaseMm, 2);
     expect(L.foldBackFrontMm).toBeCloseTo(
-      Math.PI * ((cards + t + spec.billsThicknessMm) / 2 + t / 2),
+      Math.PI * ((cards + t + spec.billsThicknessMm) / 2 + t / 2) + spec.foldEaseMm,
       2,
     );
     expect(L.foldBackFrontMm).toBeGreaterThan(L.foldFrontInnerMm);
@@ -68,7 +69,7 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     expect(simple.innerX0Mm).toBeNull();
     expect(simple.grommetXMm).toBeNull();
     expect(simple.foldFrontInnerMm).toBe(0);
-    expect(simple.foldBackFrontMm).toBeCloseTo(Math.PI * (cards / 2 + t / 2), 2);
+    expect(simple.foldBackFrontMm).toBeCloseTo(Math.PI * (cards / 2 + t / 2) + spec.foldEaseMm, 2);
     expect(simple.stripLengthMm).toBeCloseTo(2 * L.panelWidthMm + simple.foldBackFrontMm, 6);
     // Bez vnitřního panelu by jeden bok zůstal otevřený – kontrola to odmítne.
     expect(checkCoinCardHolder({ ...spec, innerPanel: false }).join(' ')).toMatch(/otevřená/);

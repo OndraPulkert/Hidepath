@@ -51,12 +51,14 @@ describe('generátor pouzdra s mincí – varianty', () => {
     const seamDots = [...svg.matchAll(/<circle cx="([\d.]+)" cy="([\d.]+)" r="0.45"/g)].map((q) =>
       Number(q[1]),
     );
-    expect(seamDots.length).toBe(L.bottomSeamHoles);
-    const lo = m + L.stripLengthMm - (L.frontX1Mm - spec.stitchOffsetMm) - 0.01;
-    const hi = m + L.stripLengthMm - (L.frontX0Mm + spec.stitchOffsetMm) + 0.01;
-    for (const x of seamDots) {
-      expect(x).toBeGreaterThanOrEqual(lo);
-      expect(x).toBeLessThanOrEqual(hi);
+    expect(seamDots.length).toBe(3 * L.bottomSeamHoles);
+    const lo = m + L.stripLengthMm - L.frontX1Mm;
+    const hi = m + L.stripLengthMm - L.frontX0Mm;
+    const onFront = seamDots.filter((x) => x > lo && x < hi);
+    expect(onFront.length).toBe(L.bottomSeamHoles);
+    for (const x of onFront) {
+      expect(x).toBeGreaterThanOrEqual(lo + spec.stitchOffsetMm - 0.01);
+      expect(x).toBeLessThanOrEqual(hi - spec.stitchOffsetMm + 0.01);
     }
     // Popisky jazyka leží vně jazyka (vlevo od něj), ne přes řez.
     expect(svg).toContain(`<text x="${r3(m + L.stripLengthMm - L.tabX1Mm - 2)}"`);
