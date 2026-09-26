@@ -43,7 +43,7 @@ describe('generátor pouzdra s mincí – varianty', () => {
     );
     const S = L.scoopRadiusMm;
     expect(body).toContain(
-      `L${X(L.scoopStartXMm)} ${Y(0)} A${S} ${S} 0 0 0 ${X(L.backX1Mm)} ${Y(S)}`,
+      `L${X(L.scoopStartXMm)} ${Y(0)} A${S} ${S} 0 0 1 ${X(L.backX1Mm)} ${Y(S)}`,
     );
     expect(svg).toContain(`<circle cx="${X(L.grommetXMm!)}" cy="${Y(L.grommetYMm!)}" r="2.5"`);
     expect(svg).toContain('Jazyk pak vyjde zepředu vlevo');

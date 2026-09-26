@@ -80,9 +80,13 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
     expect(body).toContain(`A${rf} ${rf} 0 0 0 ${P(L.tabX1Mm + rf, 0)}`);
     // Výřez U: čtvrtkruh dolů, dno přes pásmo ohybu A, čtvrtkruh nahoru.
     expect(body).toContain(
-      `L${P(L.scoopStartXMm, 0)} A${S} ${S} 0 0 1 ${P(L.backX1Mm, S)} ` +
-        `L${P(L.frontX0Mm, S)} A${S} ${S} 0 0 1 ${P(L.scoopEndXMm, 0)}`,
+      `L${P(L.scoopStartXMm, 0)} A${S} ${S} 0 0 0 ${P(L.backX1Mm, S)} ` +
+        `L${P(L.frontX0Mm, S)} A${S} ${S} 0 0 0 ${P(L.scoopEndXMm, 0)}`,
     );
+    // Výkus (ne zaoblený roh): oblouk má střed v rohu panelu na horní hraně u ohybu A, takže
+    // odebere celý čtvrtkruh R×R·π/4. Směr oblouku 0 (proti směru hodin) to v SVG určuje
+    // jednoznačně; zaoblený roh by měl směr 1 a odebral by jen R²·(1 − π/4).
+    expect(body).not.toContain(`A${S} ${S} 0 0 1 ${P(L.backX1Mm, S)}`);
     // Rozsah cesty: vrchol jazyka nahoře, dno pásu dole, celá délka pásu.
     const pts: [number, number][] = [];
     for (const cmd of body!.matchAll(/([MLA])([^MLAZ]*)/g)) {

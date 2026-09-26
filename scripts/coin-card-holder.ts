@@ -172,8 +172,9 @@ function stripOutline(
     `L${P(L.tabX1Mm - rt, top)} A${R(rt)} ${R(rt)} 0 0 ${cw} ${P(L.tabX1Mm, top + rt)} ` +
     `L${P(L.tabX1Mm, -rf)} ` +
     (rf > 0 ? `A${R(rf)} ${R(rf)} 0 0 ${ccw} ${P(L.tabX1Mm + rf, 0)} ` : '') +
-    `L${P(L.scoopStartXMm, 0)} A${R(S)} ${R(S)} 0 0 ${cw} ${P(L.backX1Mm, S)} ` +
-    `L${P(L.frontX0Mm, S)} A${R(S)} ${R(S)} 0 0 ${cw} ${P(L.scoopEndXMm, 0)} ` +
+    // Výkus: čtvrtkruhy se středem v rohu panelu na horní hraně (u ohybu A), tedy dovnitř pásu.
+    `L${P(L.scoopStartXMm, 0)} A${R(S)} ${R(S)} 0 0 ${ccw} ${P(L.backX1Mm, S)} ` +
+    `L${P(L.frontX0Mm, S)} A${R(S)} ${R(S)} 0 0 ${ccw} ${P(L.scoopEndXMm, 0)} ` +
     `L${P(SL - rc, 0)} A${R(rc)} ${R(rc)} 0 0 ${cw} ${P(SL, rc)} ` +
     `L${P(SL, H - rc)} A${R(rc)} ${R(rc)} 0 0 ${cw} ${P(SL - rc, H)} ` +
     `L${P(rc, H)} A${R(rc)} ${R(rc)} 0 0 ${cw} ${P(0, H - rc)} Z`
