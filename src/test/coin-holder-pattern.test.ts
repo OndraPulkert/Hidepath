@@ -172,13 +172,13 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
     );
   });
 
-  it('perforace ohybů: tři řady v každém pásmu ohybu, mimo šev dna', () => {
+  it('perforace ohybů: tři řady v ohybu A, dvě v užším ohybu B, mimo šev dna', () => {
     const perf = circles(sheet ?? '').filter((c) => near(c.r, 0.75));
     const inBand = (x0: number, x1: number): Circle[] =>
       perf.filter((c) => c.cx > X(x0) && c.cx < X(x1));
     for (const [x0, x1, n] of [
       [L.backX1Mm, L.frontX0Mm, 3],
-      [L.frontX1Mm, L.innerX0Mm!, 3],
+      [L.frontX1Mm, L.innerX0Mm!, 2],
     ] as const) {
       const band = inBand(x0, x1);
       const cols = [...new Set(band.map((c) => c.cx))].sort((a, b) => a - b);

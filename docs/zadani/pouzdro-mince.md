@@ -40,7 +40,7 @@ stěny s průchodkou je vidět výřezem zepředu i zezadu. Tomu odpovídá jede
 | Panel           | 72 × 104,1 mm (všechny tři)                  | rozměr předlohy (≈ 72–78 × 100–110 z fotek); šev dna 3,5 + karta 85,6 + 15                                                         |
 | Ohyb A          | 14,63 mm                                     | zadní↔přední, obepíná karty + vnitřní panel + bankovky: π·(6,54/2 + 0,75) + vůle 2                                                 |
 | Ohyb B          | 9,13 mm                                      | přední↔vnitřní, obepíná jen karty: π·(3,04/2 + 0,75) + vůle 2 (předloha ≈ 11–13)                                                   |
-| Perforace ohybů | 3 řady Ø 1,5 v každém pásmu ohybu            | jako předloha; usnadní ohyb a zabrání prasknutí lícu                                                                               |
+| Perforace ohybů | Ø 1,5, 3 řady v ohybu A, 2 v užším ohybu B   | jako předloha; můstek 1,5 mm k čáře ohybu i mezi otvory                                                                            |
 | Pás             | 239,8 × 104,1 mm + jazyk nad ním             | tři panely + dva ohyby                                                                                                             |
 | Jazyk           | 33 mm široký, řez 42,5 mm                    | u levého konce pásu, konec R10; oblouk přes obsah 15 + k druku 9,5 + přesah 11 + rezerva 7; zkracuje se 11 mm za osazený klobouček |
 | Výřez na prst   | výkus U: 2 × čtvrtkruh R34 + dno přes ohyb A | po složení čtvrtkruh R34 v rohu předního i zadního panelu, odkryje 19 mm karty                                                     |
@@ -64,15 +64,16 @@ střed kloboučku (čárkovaná čára je jen orientační) a rohy se znovu zaob
 **Pás se obkresluje na LÍC** (hladkou stranu), stejně jako to dělá výrobce na videu. Kresba je
 pohled zvenku: přední panel je nakreslený tak, jak bude vidět na hotovém kusu.
 
-Mezi kořenem jazyka a výkusem zůstává 5 mm rovné hrany; roh výkusu zabrousit.
+Mezi kořenem jazyka a výkusem zůstávají 3 mm rovné hrany a oblouček R2 v kořeni jazyka; roh
+výkusu zabrousit.
 
 Zadní kapsa (bankovky) je na straně jazyka otevřená i do boku – zadní panel tam končí volnou
 hranou, drží jen šev dna. Předloha to má stejně (na fotce s bankovkami vějíř vychází právě tam).
 
 ### Odchylky od předlohy a nejistoty
 
-- Rozměry nejsou odměřené z cizího střihu; poměry (jazyk ≈ polovina šířky, výřez R28, druk 10 mm
-  pod hranou, kapsa ≈ 30 mm pod hranou) jsou odhad z fotek s mincí 40 mm jako měřítkem.
+- Rozměry nejsou odměřené z cizího střihu; poměry (jazyk ≈ polovina šířky, výřez R34, druk 9,5 mm
+  pod hranou, kapsa ≈ 37 mm pod hranou) jsou odhad z fotek s mincí 40 mm jako měřítkem.
 - Pořadí panelů v pásu (zadní – přední – vnitřní) je odvozené z toho, kde na záběrech leží jazyk,
   výřez a průchodka; jiné pořadí by dalo jiné umístění průchodky.
 - Tloušťku bankovek (2 mm) a počet karet (4) je nutné ověřit na papírovém modelu s tím, co nosíš.
@@ -83,13 +84,13 @@ hranou, drží jen šev dna. Předloha to má stejně (na fotce s bankovkami vě
   15 mm pod horní hranou. Pro 6 karet se ohyb B prodlouží na 9,5, ohyb A na 15 a jazyk o 2,4 mm
   (rezerva 5 mm to pokryje, ohyby ne – přegenerovat s `cardsCount`); 8 karet už nevychází.
 - **Bankovky** (ČNB 140–170 × 69–74): složené **napůl** mají 69–74 mm napříč a vejdou se do zadní
-  kapsy (tisícovka a vyšší na doraz); na třetiny volně.
+  kapsy do 1000 Kč (tisícovka 74 mm na doraz); dvoutisícovka a pětitisícovka jen na třetiny.
 - **Vytahování:** karty předním výřezem (palec na odkrytých 19 mm karty), bankovky zadním
   výřezem nebo bokem u jazyka.
 - **Kování nad kartami:** příruba patice druku končí 14,5 mm a průchodky 14 mm pod horní hranou (ověřit s koupeným drukem),
   karty začínají v 15 mm. Průchodka dvoudílná s podložkou (hladká z obou stran).
 - **Mince:** zasouvá se shora, vyjímá se palcem oknem posunutím nahoru. Nad mincí 5 mm kůže.
-- **Kapsa vs. výřez a jazyk:** horní roh kapsy ≥ 3 mm od oblouku výřezu, zkrácený jazyk končí
+- **Kapsa vs. výřez a jazyk:** horní roh kapsy 5,4 mm od oblouku výřezu, zkrácený jazyk končí
   20,5 mm pod hranou, kapsa začíná v 36,55 mm; dno kapsy 9,5 mm nad švem dna. Při zapnutém
   jazyku karty nevyndáš (jazyk kryje 33 mm ze 72) – stejně jako u předlohy.
 
@@ -102,8 +103,8 @@ hranou, drží jen šev dna. Předloha to má stejně (na fotce s bankovkami vě
 
 ## Materiál (ověřeno 2026-09-18, CraftPoint, skladem)
 
-Pás 236 × 145 mm (s jazykem) a odřezek na kapsu ≥ 70 × 70 se vejdou na **jeden arch A4**
-(297 × 210). Barvené třísločiněné lícové usně 1,2 mm z italské koželužny, A4 = 251 Kč, A5 = 57 Kč:
+Pás 240 × 147 mm (s jazykem) potřebuje arch A4 (297 × 210); odřezek na kapsu ≥ 70 × 70 se vedle
+nevejde, je potřeba ještě kus A5 (nebo větší arch). Barvené třísločiněné lícové usně 1,2 mm z italské koželužny, A4 = 251 Kč, A5 = 57 Kč:
 
 | Barva                                                                                                                                     | Poznámka                                                                                             |
 | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |

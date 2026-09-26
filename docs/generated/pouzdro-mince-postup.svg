@@ -87,7 +87,7 @@
 <text x="152.5" y="106.5" font-family="Helvetica, Arial, sans-serif" font-size="6" text-anchor="start" fill="#a2471f">7</text>
 <text x="158.5" y="106.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" text-anchor="start" fill="#2b2b2b">Hotovo – zepředu</text>
 <path d="M165.025 114 L202.225 114 A3.72 3.72 0 0 1 205.945 117.72 L205.945 174.822 A3.72 3.72 0 0 1 202.225 178.542 L165.025 178.542 A3.72 3.72 0 0 1 161.305 174.822 L161.305 117.72 A3.72 3.72 0 0 1 165.025 114 Z" fill="#8fae97" stroke="#2f5240" stroke-width="0.4"/>
-<circle cx="166.885" cy="119.58" r="2.48" fill="#9a9a9a" stroke="#666" stroke-width="0.3"/>
+<circle cx="166.885" cy="119.58" r="3.1" fill="#9a9a9a" stroke="#666" stroke-width="0.3"/>
 <path d="M166.885 119.58 q-6 -8 -10 -2" stroke="#2f5240" stroke-width="1" fill="none"/>
 <rect x="166.885" y="123.3" width="33.48" height="14.26" rx="1" fill="#f4efe6" stroke="#bbb" stroke-width="0.3"/>
 <path d="M161.305 135.08 A21.08 21.08 0 0 0 182.385 114 L202.225 114 A3.72 3.72 0 0 1 205.945 117.72 L205.945 174.822 A3.72 3.72 0 0 1 202.225 178.542 L165.025 178.542 A3.72 3.72 0 0 1 161.305 174.822 Z" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.4"/>
@@ -106,7 +106,7 @@
 <text x="222.75" y="106.5" font-family="Helvetica, Arial, sans-serif" font-size="6" text-anchor="start" fill="#a2471f">8</text>
 <text x="228.75" y="106.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" text-anchor="start" fill="#2b2b2b">Hotovo – zezadu</text>
 <path d="M235.275 114 L272.475 114 A3.72 3.72 0 0 1 276.195 117.72 L276.195 174.822 A3.72 3.72 0 0 1 272.475 178.542 L235.275 178.542 A3.72 3.72 0 0 1 231.555 174.822 L231.555 117.72 A3.72 3.72 0 0 1 235.275 114 Z" fill="#5a8a6b" stroke="#2f5240" stroke-width="0.4"/>
-<circle cx="270.615" cy="119.58" r="2.48" fill="#9a9a9a" stroke="#666" stroke-width="0.3"/>
+<circle cx="270.615" cy="119.58" r="3.1" fill="#9a9a9a" stroke="#666" stroke-width="0.3"/>
 <path d="M270.615 119.58 q8 6 6 14 q-1 5 -4 8" stroke="#2f5240" stroke-width="1" fill="none"/>
 <path d="M231.555 117.72 A3.72 3.72 0 0 1 235.275 114 L255.115 114 A21.08 21.08 0 0 0 276.195 135.08 L276.195 174.822 A3.72 3.72 0 0 1 272.475 178.542 L235.275 178.542 A3.72 3.72 0 0 1 231.555 174.822 Z" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.4"/>
 <rect x="238.995" y="130.12" width="24.8" height="18.6" rx="2" fill="none" stroke="#2f5240" stroke-width="0.4" stroke-dasharray="1 1"/>

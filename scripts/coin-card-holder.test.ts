@@ -95,6 +95,32 @@ describe('generátor pouzdra s mincí – varianty', () => {
     );
   });
 
+  it('nulové poloměry kreslí rovné čáry, žádné degenerované oblouky', () => {
+    const svg = buildCoinHolderSheetSvg({ ...spec, cornerRadiusMm: 0 });
+    expect(svg).not.toMatch(/A0 0 /);
+  });
+
+  it('list postupu: kování a jazyk na správných stranách v buňkách 6 a 7', () => {
+    const L = coinCardHolderLayout(spec);
+    const svg = buildCoinHolderProcessSvg(spec);
+    const pad = 8;
+    const cellW = (297 - 2 * pad) / 4;
+    const cellH = (210 - 2 * pad - 10) / 2;
+    const k7 = Math.min(0.62, (cellH - 26) / L.panelHeightMm);
+    const ox7 = pad + 2 * cellW + (cellW - L.panelWidthMm * k7) / 2;
+    const oy7 = pad + cellH + 14;
+    // průchodka vlevo nahoře (strana výřezu), jazyk vpravo
+    expect(svg).toContain(
+      `<circle cx="${r3(ox7 + spec.grommetFromEdgeMm * k7)}" cy="${r3(oy7 + spec.grommetFromEdgeMm * k7)}"`,
+    );
+    const S7 = L.scoopRadiusMm * k7;
+    expect(svg).toContain(
+      `M${r3(ox7)} ${r3(oy7 + S7)} A${r3(S7)} ${r3(S7)} 0 0 0 ${r3(ox7 + S7)} ${r3(oy7)}`,
+    );
+    const tx0 = ox7 + (L.panelWidthMm - spec.tabWidthMm) * k7;
+    expect(svg).toContain(`M${r3(tx0)} ${r3(oy7)} L${r3(ox7 + L.panelWidthMm * k7)} ${r3(oy7)}`);
+  });
+
   it('vlastní okno se propíše jen přes spec', () => {
     expect(buildCoinHolderPocketSvg({ ...spec, windowDiameterMm: 30 })).toContain('okno Ø 30');
     expect(buildCoinHolderPocketSvg(spec)).toContain('okno Ø 32');

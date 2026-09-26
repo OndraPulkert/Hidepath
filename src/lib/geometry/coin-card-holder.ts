@@ -471,10 +471,31 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
   if (R > L.panelHeightMm / 2) {
     p.push(`Výřez na prst R${R} je hlubší než půl výšky panelu.`);
   }
+  // Přebitý přídavek na ohyb nesmí být menší, než kolik potřebuje obsah (jinak se pouzdro nezavře).
+  if (spec.foldAllowanceMm !== null) {
+    const t = spec.bodyThicknessMm;
+    const needB = Math.PI * (L.cardsThicknessMm / 2 + t / 2);
+    const needA = Math.PI * ((L.cardsThicknessMm + t + L.billsThicknessMm) / 2 + t / 2);
+    if (spec.foldAllowanceMm < Math.max(needA, needB)) {
+      p.push(
+        `foldAllowanceMm ${fmt(spec.foldAllowanceMm)} je méně, než obsah potřebuje (ohyb A ${fmt(needA)} mm).`,
+      );
+    }
+  }
+  for (const band of [L.foldBackFrontMm, L.foldFrontInnerMm]) {
+    if (band > 0 && foldPerforation(band).rows === 0) {
+      p.push(
+        `Pásmo ohybu ${fmt(band)} mm je tak úzké, že se do něj perforace nevejde; zvětši foldEaseMm.`,
+      );
+    }
+  }
+  if (spec.stitchPitchMm < PERFORATION_HOLE_MM + PERFORATION_LIGAMENT_MM) {
+    p.push('stitchPitchMm je menší než 3 mm – perforace i otvory stehu by splývaly.');
+  }
   // Mezi kořenem jazyka a výkusem musí zůstat rovná hrana (můstek), jinak vznikne špička.
   if (L.scoopStartXMm - spec.tabWidthMm < min + 1) {
     p.push(
-      `Mezi jazykem a výřezem zbývá ${fmt(L.scoopStartXMm - spec.tabWidthMm)} mm hrany (minimum ${fmt(min + 1)}); zmenši scoopRadiusMm nebo tabWidthMm.`,
+      `Mezi jazykem a výřezem zbývá ${fmt(L.scoopStartXMm - spec.tabWidthMm)} mm (potřeba ${fmt(min + 1)}: rovná hrana ${fmt(min)} + oblouček v kořeni jazyka); zmenši scoopRadiusMm nebo tabWidthMm.`,
     );
   }
   if (spec.snapFromTopMm - spec.snapDiameterMm / 2 < spec.snapClearanceMm) {
@@ -501,13 +522,13 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
   if (L.grommetXMm !== null) {
     if (spec.grommetFromEdgeMm - spec.grommetHoleMm / 2 < min) {
       p.push(
-        `Průchodka je moc blízko hrany (můstek ${(spec.grommetFromEdgeMm - spec.grommetHoleMm / 2).toFixed(1)} mm, minimum ${min}).`,
+        `Průchodka je moc blízko hrany (můstek ${fmt(spec.grommetFromEdgeMm - spec.grommetHoleMm / 2)} mm, minimum ${fmt(min)}).`,
       );
     }
     const fromCorner = Math.hypot(spec.grommetFromEdgeMm, spec.grommetFromEdgeMm);
-    if (fromCorner + spec.grommetHoleMm / 2 + 3 + min > R) {
+    if (fromCorner + spec.grommetHoleMm / 2 + GROMMET_FLANGE_MM + min > R) {
       p.push(
-        `Průchodka (kroužek do ${(fromCorner + spec.grommetHoleMm / 2 + 3).toFixed(1)} mm od rohu) by výřezem R${R} nebyla celá vidět.`,
+        `Průchodka (kroužek do ${fmt(fromCorner + spec.grommetHoleMm / 2 + GROMMET_FLANGE_MM)} mm od rohu) by výřezem R${R} nebyla celá vidět.`,
       );
     }
   }
@@ -535,7 +556,7 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
     p.push(`Okno ${L.windowDiameterMm} mm musí být menší než mince ${spec.coinDiameterMm} mm.`);
   } else if (L.coinRingMm < spec.minCoinRingMm) {
     p.push(
-      `Prstenec kolem okna je ${L.coinRingMm} mm, minimum ${spec.minCoinRingMm} mm – minci by neudržel.`,
+      `Prstenec kolem okna je ${fmt(L.coinRingMm)} mm, minimum ${fmt(spec.minCoinRingMm)} mm – minci by neudržel.`,
     );
   }
   if (L.windowDiameterMm < 10) {
@@ -569,6 +590,23 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
     p.push(`Kapsa a forma (${fmt(pocketColumn)} mm) se nevejdou na A4 na výšku.`);
   }
   return p;
+}
+
+/** Perforace ohybu: otvor Ø 1,5, můstek k čáře ohybu i mezi otvory aspoň 1,5 mm. */
+export const PERFORATION_HOLE_MM = 1.5;
+export const PERFORATION_LIGAMENT_MM = 1.5;
+
+/**
+ * Kolik řad perforace se vejde do pásma ohybu šířky `bandMm` (0–3) a jejich rozestup středů.
+ * Řady jsou souměrné kolem středu pásma; když se nevejde ani jedna, pásmo se neperforuje.
+ */
+export function foldPerforation(bandMm: number): { rows: number; spacingMm: number } {
+  const d = PERFORATION_HOLE_MM;
+  const lig = PERFORATION_LIGAMENT_MM;
+  const avail = bandMm - 2 * (lig + d / 2); // prostor pro středy otvorů
+  if (avail < 0) return { rows: 0, spacingMm: 0 };
+  const rows = Math.min(3, Math.floor(avail / (d + lig) + 1e-9) + 1);
+  return { rows, spacingMm: rows > 1 ? Math.min(4, avail / (rows - 1)) : 0 };
 }
 
 export function assertCoinCardHolder(spec: CoinCardHolderSpec): void {

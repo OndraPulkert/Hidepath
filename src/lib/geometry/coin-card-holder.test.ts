@@ -8,6 +8,7 @@ import {
   LEGEND_HEIGHT_MM,
   NAMED_COINS,
   checkCoinCardHolder,
+  foldPerforation,
   coinCardHolderLayout,
 } from './coin-card-holder';
 
@@ -178,6 +179,43 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     expect(L.stripLengthMm + 2 * m).toBeLessThanOrEqual(W);
     // Delší rezerva jazyka se na list nevejde – kontrola to musí hlásit.
     expect(checkCoinCardHolder({ ...spec, tabFitReserveMm: 20 }).join(' ')).toMatch(/A4/);
+  });
+
+  it('perforace ohybu: řady se vejdou s můstkem 1,5 mm, v úzkém pásmu méně řad nebo žádné', () => {
+    for (const band of [L.foldBackFrontMm, L.foldFrontInnerMm, 3.55, 4, 4.74, 6.74, 10.24]) {
+      const { rows, spacingMm } = foldPerforation(band);
+      if (rows === 0) continue;
+      // Krajní otvor 1,5 mm od čáry ohybu, mezi otvory 1,5 mm kůže.
+      const span = (rows - 1) * spacingMm;
+      expect((band - span) / 2 - 0.75, `pásmo ${band}`).toBeGreaterThanOrEqual(1.5 - 1e-9);
+      if (rows > 1) expect(spacingMm - 1.5, `pásmo ${band}`).toBeGreaterThanOrEqual(1.5 - 1e-9);
+    }
+    expect(foldPerforation(L.foldBackFrontMm).rows).toBe(3);
+    // Užší ohyb B (9,1 mm) má dvě řady, aby zůstal můstek 1,5 mm.
+    expect(foldPerforation(L.foldFrontInnerMm).rows).toBe(2);
+    expect(foldPerforation(4).rows).toBe(0);
+    expect(checkCoinCardHolder({ ...spec, foldAllowanceMm: 4 }).join(' ')).toMatch(
+      /méně, než obsah potřebuje/,
+    );
+    expect(checkCoinCardHolder({ ...spec, stitchPitchMm: 2 }).join(' ')).toMatch(/menší než 3 mm/);
+  });
+
+  it('kořen jazyka: oblouček a rovná hrana k výkusu aspoň můstek; kapsa vystředěná v pásmu', () => {
+    const flat = L.scoopStartXMm - L.tabX1Mm - L.tabRootFilletMm;
+    expect(flat).toBeGreaterThanOrEqual(spec.minLigamentMm);
+    expect(L.tabRootFilletMm).toBeGreaterThan(0);
+    expect(checkCoinCardHolder({ ...spec, tabWidthMm: 35 }).join(' ')).toMatch(/Mezi jazykem/);
+    // Kapsa: střed mince z rozměrů kapsy, poloha vystředěná mezi pásmem pod jazykem a švem dna.
+    const fh = L.formHoleDiameterMm;
+    expect(L.coinCentreYMm).toBeCloseTo(
+      L.pocketHeightMm - spec.stitchOffsetMm - spec.pocketFlatMm - fh / 2,
+      6,
+    );
+    const limit = L.bottomSeamYMm - spec.pocketFromBottomMinMm;
+    const slack = limit - L.pocketBandTopMm - L.pocketHeightMm;
+    expect(L.pocketYMm).toBeCloseTo(L.pocketBandTopMm + slack / 2, 1);
+    // Hlášky používají desetinnou čárku.
+    expect(checkCoinCardHolder({ ...spec, windowDiameterMm: 33 }).join(' ')).toMatch(/3,5 mm/);
   });
 
   it('kontroly odhalí kolize a špatné parametry', () => {
