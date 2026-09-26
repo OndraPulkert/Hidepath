@@ -1,138 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 297 210">
 <rect width="297" height="210" fill="#ffffff"/>
-<path d="M10 20 A10 10 0 0 1 20 10 L33 10 A10 10 0 0 1 43 20 L43 50.49 A2 2 0 0 0 45 52.49 L48 52.49 A34 34 0 0 0 82 86.49 L96.63 86.49 A34 34 0 0 0 130.63 52.49 L243.76 52.49 A6 6 0 0 1 249.76 58.49 L249.76 150.59 A6 6 0 0 1 243.76 156.59 L16 156.59 A6 6 0 0 1 10 150.59 Z" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
-<path d="M82 86.49 L82 156.59" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
-<path d="M96.63 86.49 L96.63 156.59" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
-<text x="89.315" y="49.49" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">OHYB A 14,63</text>
-<path d="M168.63 52.49 L168.63 156.59" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
-<path d="M177.76 52.49 L177.76 156.59" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
-<text x="173.195" y="49.49" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">OHYB B 9,13</text>
-<path d="M10 153.09 L249.76 153.09" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="0.8 1.2"/>
-<circle cx="100.63" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="104.63" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="108.63" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="112.63" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="116.63" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="120.63" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="124.63" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="128.63" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="132.63" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="136.63" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="140.63" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="144.63" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="148.63" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="152.63" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="156.63" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="160.63" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="164.63" cy="153.09" r="0.45" fill="#2b2b2b"/>
-<circle cx="14" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="18" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="22" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="26" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="30" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="34" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="38" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="42" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="46" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="50" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="54" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="58" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="62" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="66" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="70" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="74" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="78" cy="153.09" r="0.45" fill="#2b2b2b"/>
-<circle cx="181.76" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="185.76" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="189.76" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="193.76" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="197.76" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="201.76" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="205.76" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="209.76" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="213.76" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="217.76" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="221.76" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="225.76" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="229.76" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="233.76" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="237.76" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="241.76" cy="153.09" r="0.45" fill="#2b2b2b"/><circle cx="245.76" cy="153.09" r="0.45" fill="#2b2b2b"/>
-<text x="132.63" y="161.59" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">ŠEV DNA 3,5 mm od hrany · 17 otvorů na panel · prosekat naplocho, po složení lícují</text>
-<text x="89.315" y="56.49" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#7a7a7a">VÝŘEZ NA PRST R34</text>
-<text x="89.315" y="60.09" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#7a7a7a">odkryje 19 mm karty</text>
-<circle cx="26.5" cy="28" r="6.25" fill="none" stroke="#a2471f" stroke-width="0.2" stroke-dasharray="1.5 1"/>
-<path d="M25 28 L28 28 M26.5 26.5 L26.5 29.5" stroke="#2b2b2b" stroke-width="0.25"/>
-<text x="45" y="27.5" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#a2471f">druk – klobouček</text>
-<text x="45" y="30.4" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="start" fill="#a2471f">poloha orientační – obtisknout z patice při zkoušce</text>
-<path d="M10 17 L43 17" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1 1"/>
-<text x="45" y="15.5" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="start" fill="#7a7a7a">orientační konec jazyka</text>
-<text x="45" y="18.2" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="start" fill="#7a7a7a">zkrátit 11 mm za střed osazeného kloboučku, rohy R10</text>
-<text x="26.5" y="38.75" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#2b2b2b">JAZYK</text>
-<text x="46" y="104.54" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">ZADNÍ PANEL</text>
-<text x="46" y="107.94" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">72 × 104,1 mm</text>
-<text x="46" y="110.94" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">motiv / ražení na tuto stranu</text>
-<text x="213.76" y="104.54" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">VNITŘNÍ PANEL</text>
-<text x="213.76" y="107.94" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">dělí karty (vepředu)</text>
-<text x="213.76" y="110.94" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">a bankovky (vzadu)</text>
-<circle cx="152.13" cy="61.99" r="6.25" fill="none" stroke="#a2471f" stroke-width="0.2" stroke-dasharray="1.5 1"/>
-<path d="M150.63 61.99 L153.63 61.99 M152.13 60.49 L152.13 63.49" stroke="#2b2b2b" stroke-width="0.25"/>
-<text x="152.13" y="71.24" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#a2471f">druk – patice</text>
-<path d="M121.38 95.29 L143.88 95.29 A10 10 0 0 1 153.88 105.29 L153.88 131.29 A6 6 0 0 1 147.88 137.29 L117.38 137.29 A6 6 0 0 1 111.38 131.29 L111.38 105.29 A10 10 0 0 1 121.38 95.29 Z" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1 1"/>
-<text x="132.63" y="108.29" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">PŘEDNÍ PANEL</text>
-<text x="132.63" y="111.69" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">sem přišít kapsu s mincí (na líc)</text>
-<text x="132.63" y="114.69" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">42,8 mm od horní hrany, 14,75 mm od boků</text>
-<text x="132.63" y="118.69" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">otevřená hrana kapsy nahoru</text>
-<circle cx="240.76" cy="61.49" r="2.5" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
-<path d="M239.76 61.49 L241.76 61.49 M240.76 60.49 L240.76 62.49" stroke="#2b2b2b" stroke-width="0.25"/>
-<text x="240.76" y="67.49" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="middle" fill="#7a7a7a">průchodka Ø 5</text>
-<circle cx="85.315" cy="90.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="85.315" cy="94.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="85.315" cy="98.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="85.315" cy="102.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="85.315" cy="106.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="85.315" cy="110.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="85.315" cy="114.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="85.315" cy="118.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="85.315" cy="122.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="85.315" cy="126.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="85.315" cy="130.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="85.315" cy="134.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="85.315" cy="138.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="85.315" cy="142.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="85.315" cy="146.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="89.315" cy="90.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="89.315" cy="94.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="89.315" cy="98.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="89.315" cy="102.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="89.315" cy="106.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="89.315" cy="110.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="89.315" cy="114.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="89.315" cy="118.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="89.315" cy="122.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="89.315" cy="126.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="89.315" cy="130.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="89.315" cy="134.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="89.315" cy="138.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="89.315" cy="142.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="89.315" cy="146.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="93.315" cy="90.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="93.315" cy="94.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="93.315" cy="98.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="93.315" cy="102.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="93.315" cy="106.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="93.315" cy="110.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="93.315" cy="114.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="93.315" cy="118.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="93.315" cy="122.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="93.315" cy="126.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="93.315" cy="130.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="93.315" cy="134.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="93.315" cy="138.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="93.315" cy="142.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="93.315" cy="146.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="56.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="60.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="64.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="68.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="72.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="76.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="80.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="84.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="88.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="92.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="96.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="100.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="104.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="108.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="112.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="116.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="120.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="124.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="128.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="132.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="136.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="140.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="144.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="171.195" cy="148.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="56.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="60.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="64.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="68.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="72.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="76.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="80.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="84.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="88.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="92.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="96.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="100.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="104.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="108.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="112.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="116.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="120.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="124.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="128.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="132.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="136.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="140.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="144.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="175.195" cy="148.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<path d="M10 20 A10 10 0 0 1 20 10 L33 10 A10 10 0 0 1 43 20 L43 52.49 A2 2 0 0 0 45 54.49 L48 54.49 A34 34 0 0 0 82 88.49 L98.63 88.49 A34 34 0 0 0 132.63 54.49 L245.76 54.49 A6 6 0 0 1 251.76 60.49 L251.76 152.59 A6 6 0 0 1 245.76 158.59 L16 158.59 A6 6 0 0 1 10 152.59 Z" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
+<path d="M82 88.49 L82 158.59" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
+<path d="M98.63 88.49 L98.63 158.59" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
+<text x="90.315" y="51.49" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">OHYB A 16,63</text>
+<path d="M170.63 54.49 L170.63 158.59" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
+<path d="M179.76 54.49 L179.76 158.59" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
+<text x="175.195" y="51.49" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">OHYB B 9,13</text>
+<path d="M10 155.09 L251.76 155.09" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="0.8 1.2"/>
+<circle cx="102.63" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="106.63" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="110.63" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="114.63" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="118.63" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="122.63" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="126.63" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="130.63" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="134.63" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="138.63" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="142.63" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="146.63" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="150.63" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="154.63" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="158.63" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="162.63" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="166.63" cy="155.09" r="0.45" fill="#2b2b2b"/>
+<circle cx="14" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="18" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="22" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="26" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="30" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="34" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="38" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="42" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="46" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="50" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="54" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="58" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="62" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="66" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="70" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="74" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="78" cy="155.09" r="0.45" fill="#2b2b2b"/>
+<circle cx="183.76" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="187.76" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="191.76" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="195.76" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="199.76" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="203.76" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="207.76" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="211.76" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="215.76" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="219.76" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="223.76" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="227.76" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="231.76" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="235.76" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="239.76" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="243.76" cy="155.09" r="0.45" fill="#2b2b2b"/><circle cx="247.76" cy="155.09" r="0.45" fill="#2b2b2b"/>
+<text x="134.63" y="163.59" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">ŠEV DNA 3,5 mm od hrany · 17 otvorů na panel · prosekat naplocho, po složení lícují</text>
+<text x="90.315" y="58.49" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#7a7a7a">VÝŘEZ NA PRST R34</text>
+<text x="90.315" y="62.09" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#7a7a7a">odkryje 19 mm karty</text>
+<circle cx="26.5" cy="26" r="6.25" fill="none" stroke="#a2471f" stroke-width="0.2" stroke-dasharray="1.5 1"/>
+<path d="M25 26 L28 26 M26.5 24.5 L26.5 27.5" stroke="#2b2b2b" stroke-width="0.25"/>
+<text x="45" y="25.5" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#a2471f">druk – klobouček</text>
+<text x="45" y="28.4" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="start" fill="#a2471f">poloha orientační – obtisknout z patice při zkoušce</text>
+<path d="M10 15 L43 15" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1 1"/>
+<text x="45" y="13.5" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="start" fill="#7a7a7a">orientační konec jazyka</text>
+<text x="45" y="16.2" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="start" fill="#7a7a7a">zkrátit 11 mm za střed osazeného kloboučku, rohy R10</text>
+<text x="26.5" y="36.75" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#2b2b2b">JAZYK</text>
+<text x="46" y="106.54" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">ZADNÍ PANEL</text>
+<text x="46" y="109.94" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">72 × 104,1 mm</text>
+<text x="46" y="112.94" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">motiv / ražení na tuto stranu</text>
+<text x="215.76" y="106.54" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">VNITŘNÍ PANEL</text>
+<text x="215.76" y="109.94" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">dělí karty (vepředu)</text>
+<text x="215.76" y="112.94" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">a bankovky (vzadu)</text>
+<circle cx="154.13" cy="63.99" r="6.25" fill="none" stroke="#a2471f" stroke-width="0.2" stroke-dasharray="1.5 1"/>
+<path d="M152.63 63.99 L155.63 63.99 M154.13 62.49 L154.13 65.49" stroke="#2b2b2b" stroke-width="0.25"/>
+<text x="154.13" y="73.24" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#a2471f">druk – patice</text>
+<path d="M123.38 96.29 L145.88 96.29 A10 10 0 0 1 155.88 106.29 L155.88 132.29 A6 6 0 0 1 149.88 138.29 L119.38 138.29 A6 6 0 0 1 113.38 132.29 L113.38 106.29 A10 10 0 0 1 123.38 96.29 Z" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1 1"/>
+<text x="134.63" y="109.29" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">PŘEDNÍ PANEL</text>
+<text x="134.63" y="112.69" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">sem přišít kapsu s mincí (na líc)</text>
+<text x="134.63" y="115.69" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">41,8 mm od horní hrany, 14,75 mm od boků</text>
+<text x="134.63" y="119.69" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">otevřená hrana kapsy nahoru</text>
+<circle cx="242.76" cy="63.49" r="2.5" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
+<path d="M241.76 63.49 L243.76 63.49 M242.76 62.49 L242.76 64.49" stroke="#2b2b2b" stroke-width="0.25"/>
+<text x="242.76" y="69.49" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="middle" fill="#7a7a7a">průchodka Ø 5</text>
+<circle cx="86.315" cy="92.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="86.315" cy="96.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="86.315" cy="100.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="86.315" cy="104.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="86.315" cy="108.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="86.315" cy="112.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="86.315" cy="116.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="86.315" cy="120.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="86.315" cy="124.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="86.315" cy="128.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="86.315" cy="132.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="86.315" cy="136.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="86.315" cy="140.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="86.315" cy="144.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="86.315" cy="148.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="90.315" cy="92.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="90.315" cy="96.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="90.315" cy="100.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="90.315" cy="104.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="90.315" cy="108.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="90.315" cy="112.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="90.315" cy="116.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="90.315" cy="120.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="90.315" cy="124.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="90.315" cy="128.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="90.315" cy="132.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="90.315" cy="136.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="90.315" cy="140.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="90.315" cy="144.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="90.315" cy="148.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="94.315" cy="92.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="94.315" cy="96.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="94.315" cy="100.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="94.315" cy="104.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="94.315" cy="108.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="94.315" cy="112.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="94.315" cy="116.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="94.315" cy="120.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="94.315" cy="124.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="94.315" cy="128.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="94.315" cy="132.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="94.315" cy="136.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="94.315" cy="140.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="94.315" cy="144.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="94.315" cy="148.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="58.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="62.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="66.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="70.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="74.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="78.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="82.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="86.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="90.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="94.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="98.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="102.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="106.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="110.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="114.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="118.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="122.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="126.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="130.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="134.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="138.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="142.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="146.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="173.195" cy="150.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="58.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="62.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="66.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="70.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="74.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="78.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="82.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="86.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="90.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="94.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="98.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="102.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="106.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="110.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="114.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="118.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="122.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="126.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="130.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="134.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="138.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="142.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="146.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="177.195" cy="150.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
 <path d="M10 166 V170 M10 168 H60 M60 166 V170" stroke="#2b2b2b" stroke-width="0.3" fill="none"/>
 <text x="63" y="169" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#2b2b2b">KONTROLA MĚŘÍTKA: tato úsečka musí měřit přesně 50 mm</text>
 <text x="10" y="176" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">POUZDRO NA KARTY S VSAZENOU MINCÍ – LIST 1/2: PÁS. Tisk na A4 NA ŠÍŘKU na 100 % (bez „přizpůsobit stránce“). Kapsa s mincí a forma jsou na listu 2. NÁVRH k ověření na papíru.</text>

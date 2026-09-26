@@ -49,12 +49,13 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     const t = spec.bodyThicknessMm;
     const cards = spec.cardsCount * spec.cardThicknessMm;
     expect(L.cardsThicknessMm).toBeCloseTo(cards, 6);
-    // Ohyb B jen kolem karet, ohyb A kolem karet + vnitřní panel + bankovky.
-    expect(L.foldFrontInnerMm).toBeCloseTo(Math.PI * (cards / 2 + t / 2) + spec.foldEaseMm, 2);
-    expect(L.foldBackFrontMm).toBeCloseTo(
-      Math.PI * ((cards + t + spec.billsThicknessMm) / 2 + t / 2) + spec.foldEaseMm,
-      2,
-    );
+    // Ohyb dlouhý L ohnutý o 180° odsune další panel o 2L/π (neutrální osy). Obě kapsy mají dostat
+    // vůli 2·foldEase/π navíc k obsahu a tloušťce kůže.
+    const g = (2 * spec.foldEaseMm) / Math.PI;
+    const zInner = (2 * L.foldFrontInnerMm) / Math.PI;
+    const zBack = (2 * L.foldBackFrontMm) / Math.PI;
+    expect(zInner - t - cards).toBeCloseTo(g, 1);
+    expect(zBack - zInner - t - spec.billsThicknessMm).toBeCloseTo(g, 1);
     expect(L.foldBackFrontMm).toBeGreaterThan(L.foldFrontInnerMm);
     // Hranice panelů na sebe navazují a pás je jejich součet.
     expect(L.backX1Mm - L.backX0Mm).toBeCloseTo(L.panelWidthMm, 9);
@@ -70,7 +71,7 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     expect(simple.innerX0Mm).toBeNull();
     expect(simple.grommetXMm).toBeNull();
     expect(simple.foldFrontInnerMm).toBe(0);
-    expect(simple.foldBackFrontMm).toBeCloseTo(Math.PI * (cards / 2 + t / 2) + spec.foldEaseMm, 2);
+    expect(simple.foldBackFrontMm).toBeCloseTo((Math.PI * (t + cards)) / 2 + spec.foldEaseMm, 2);
     expect(simple.stripLengthMm).toBeCloseTo(2 * L.panelWidthMm + simple.foldBackFrontMm, 6);
     // Bez vnitřního panelu by jeden bok zůstal otevřený – kontrola to odmítne.
     expect(checkCoinCardHolder({ ...spec, innerPanel: false }).join(' ')).toMatch(/otevřená/);
@@ -78,9 +79,9 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
 
   it('jazyk: oblouk přes celý obsah, k druku, přesah a rezerva na zkoušku', () => {
     const t = spec.bodyThicknessMm;
-    // Od neutrální osy zadního panelu k neutrální ose jazyka na předku je celá tloušťka stohu.
-    const stack = 2 * t + spec.cardsCount * spec.cardThicknessMm + t + spec.billsThicknessMm;
-    expect(L.tabWrapMm).toBeCloseTo((Math.PI * stack) / 2, 1);
+    // Jazyk jde od osy zadního panelu (odsunutého ohybem A o 2·A/π) k ose jazyka na předku (+ t).
+    const zBack = (2 * L.foldBackFrontMm) / Math.PI;
+    expect(L.tabWrapMm).toBeCloseTo((Math.PI * (zBack + t)) / 2, 1);
     expect(L.tabNominalLengthMm).toBeCloseTo(
       L.tabWrapMm + spec.snapFromTopMm + spec.tabBeyondSnapMm,
       6,

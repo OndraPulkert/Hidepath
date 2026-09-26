@@ -149,7 +149,7 @@ export const DEFAULT_COIN_CARD_HOLDER: CoinCardHolderSpec = {
   tabEndRadiusMm: 10,
   snapFromTopMm: 9.5,
   tabBeyondSnapMm: 11,
-  tabFitReserveMm: 7,
+  tabFitReserveMm: 5,
   snapDiameterMm: 12.5,
   snapClearanceMm: 2,
   scoopRadiusMm: 34,
@@ -276,12 +276,14 @@ export function coinCardHolderLayout(
 
   const cards = round(spec.cardsCount * spec.cardThicknessMm);
   const bills = spec.innerPanel ? spec.billsThicknessMm : 0;
-  // Ohyb B obepíná jen karty, ohyb A navíc vnitřní panel a bankovky.
-  const foldB = spec.innerPanel
-    ? (spec.foldAllowanceMm ?? round(Math.PI * (cards / 2 + t / 2) + spec.foldEaseMm))
-    : 0;
-  const innerStack = spec.innerPanel ? round(cards + t + bills) : cards;
-  const foldA = spec.foldAllowanceMm ?? round(Math.PI * (innerStack / 2 + t / 2) + spec.foldEaseMm);
+  // Ohyby z potřebných odstupů neutrálních os vrstev: ohyb dlouhý L ohnutý o 180° odsune další
+  // panel o 2·L/π. Každá kapsa dostane stejnou vůli g = 2·foldEase/π (ověřeno virtuálním
+  // složením – dřív se vůle ohybu A spotřebovala na posun vnitřního panelu a bankovkám nezbyla).
+  const g = (2 * spec.foldEaseMm) / Math.PI;
+  const sepB = t + cards + g; // přední ↔ vnitřní
+  const sepA = spec.innerPanel ? sepB + t + bills + g : t + cards + g; // přední ↔ zadní
+  const foldB = spec.innerPanel ? (spec.foldAllowanceMm ?? round((Math.PI * sepB) / 2)) : 0;
+  const foldA = spec.foldAllowanceMm ?? round((Math.PI * sepA) / 2);
 
   const backX0 = 0;
   const backX1 = panelWidth;
@@ -294,10 +296,9 @@ export function coinCardHolderLayout(
   // Jazyk: u levého konce pásu; po složení dopadne na pravou hranu předního panelu.
   const tabX0 = 0;
   const tabX1 = spec.tabWidthMm;
-  const stack = round(2 * t + innerStack); // přední + obsah (+ vnitřní) + zadní
-  // Jazyk jde od neutrální osy zadního panelu k neutrální ose jazyka na předním panelu: půlkruh
-  // o průměru rovném celé tloušťce stohu (osa zadního ↔ osa jazyka = stack).
-  const tabWrap = round((Math.PI * stack) / 2);
+  // Jazyk jde od neutrální osy zadního panelu k neutrální ose jazyka ležícího na předním panelu:
+  // půlkruh o průměru = skutečný odstup zadního a předního panelu (2·ohyb A/π) + tloušťka kůže.
+  const tabWrap = round((Math.PI * ((2 * foldA) / Math.PI + t)) / 2);
   const tabNominal = round(tabWrap + spec.snapFromTopMm + spec.tabBeyondSnapMm);
   const tabLength = round(tabNominal + spec.tabFitReserveMm);
   const tabEndRadius = Math.min(spec.tabEndRadiusMm ?? spec.tabWidthMm / 2, spec.tabWidthMm / 2);
