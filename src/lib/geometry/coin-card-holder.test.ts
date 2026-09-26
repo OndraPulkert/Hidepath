@@ -101,11 +101,15 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
   });
 
   it('výřez na prst: jeden oblouk U přes pásmo ohybu A, po složení čtvrtkruh v obou panelech', () => {
-    expect(L.scoopStartXMm).toBeCloseTo(L.backX1Mm - L.scoopRadiusMm, 9);
+    // Na zadním panelu začíná výkus přímo na hraně jazyka (plynulý přechod bez zubu).
+    expect(L.scoopStartXMm).toBeCloseTo(L.tabX1Mm, 9);
+    expect(L.backScoopRxMm).toBeCloseTo(L.panelWidthMm - spec.tabWidthMm, 9);
+    expect(L.backScoopRxMm).toBeGreaterThanOrEqual(L.scoopRadiusMm);
     expect(L.scoopEndXMm).toBeCloseTo(L.frontX0Mm + L.scoopRadiusMm, 9);
-    expect(L.scoopEndXMm - L.scoopStartXMm).toBeCloseTo(2 * L.scoopRadiusMm + L.foldBackFrontMm, 6);
-    // Mezi kořenem jazyka a začátkem výřezu zbývá můstek.
-    expect(L.scoopStartXMm - L.tabX1Mm).toBeGreaterThanOrEqual(spec.minLigamentMm);
+    expect(L.scoopEndXMm - L.scoopStartXMm).toBeCloseTo(
+      L.backScoopRxMm + L.scoopRadiusMm + L.foldBackFrontMm,
+      6,
+    );
     // Výřez odkryje karty a je hlubší než přesah panelu nad nimi.
     expect(L.cardExposedMm).toBeCloseTo(L.scoopRadiusMm - L.cardBelowRimMm, 6);
     expect(L.cardExposedMm).toBeGreaterThanOrEqual(15);
@@ -201,11 +205,11 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     expect(checkCoinCardHolder({ ...spec, stitchPitchMm: 2 }).join(' ')).toMatch(/menší než 3 mm/);
   });
 
-  it('kořen jazyka: oblouček a rovná hrana k výkusu aspoň můstek; kapsa vystředěná v pásmu', () => {
-    const flat = L.scoopStartXMm - L.tabX1Mm - L.tabRootFilletMm;
-    expect(flat).toBeGreaterThanOrEqual(spec.minLigamentMm);
-    expect(L.tabRootFilletMm).toBeGreaterThan(0);
-    expect(checkCoinCardHolder({ ...spec, tabWidthMm: 35 }).join(' ')).toMatch(/Mezi jazykem/);
+  it('kořen jazyka přechází do výkusu; kapsa vystředěná v pásmu', () => {
+    expect(checkCoinCardHolder({ ...spec, tabWidthMm: 40 }).join(' ')).toMatch(
+      /nevejdou vedle sebe/,
+    );
+    expect(checkCoinCardHolder({ ...spec, tabWidthMm: 20 }).join(' ')).toMatch(/o moc širší/);
     // Kapsa: střed mince z rozměrů kapsy, poloha vystředěná mezi pásmem pod jazykem a švem dna.
     const fh = L.formHoleDiameterMm;
     expect(L.coinCentreYMm).toBeCloseTo(
@@ -220,9 +224,13 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
   });
 
   it('kontroly odhalí kolize a špatné parametry', () => {
-    expect(checkCoinCardHolder({ ...spec, scoopRadiusMm: 45 }).join(' ')).toMatch(/Mezi jazykem/);
+    expect(checkCoinCardHolder({ ...spec, scoopRadiusMm: 45 }).join(' ')).toMatch(
+      /nevejdou vedle sebe/,
+    );
     expect(checkCoinCardHolder({ ...spec, scoopRadiusMm: 15 }).join(' ')).toMatch(/mělký/);
-    expect(checkCoinCardHolder({ ...spec, tabWidthMm: 36 }).join(' ')).toMatch(/Mezi jazykem/);
+    expect(checkCoinCardHolder({ ...spec, tabWidthMm: 39 }).join(' ')).toMatch(
+      /nevejdou vedle sebe/,
+    );
     expect(checkCoinCardHolder({ ...spec, topOverCardMm: 10 }).join(' ')).toMatch(/Dřík druku/);
     expect(checkCoinCardHolder({ ...spec, topOverCardMm: 10 }).join(' ')).toMatch(
       /Příruba průchodky/,

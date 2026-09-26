@@ -235,8 +235,13 @@ export interface CoinCardHolderLayout {
   snapYTabMm: number;
   snapXFrontMm: number;
   snapYFrontMm: number;
-  /** Výřez na prst: poloměr a x, kde oblouk U začíná a končí na horní hraně. */
+  /**
+   * Výřez na prst: poloměr (hloubka a šířka na předním panelu) a x, kde oblouk U začíná a končí
+   * na horní hraně. Na zadním panelu začíná oblouk přímo na hraně jazyka (plynulý přechod bez
+   * schodku, jako na šabloně předlohy), proto je tam výkus širší: vodorovná poloosa backScoopRx.
+   */
   scoopRadiusMm: number;
+  backScoopRxMm: number;
   scoopStartXMm: number;
   scoopEndXMm: number;
   /** Průchodka ve vnitřním panelu (null bez vnitřního panelu). */
@@ -245,8 +250,7 @@ export interface CoinCardHolderLayout {
   /** Šev dna: y stehu a počet otvorů na jeden panel (sekají se skrz všechny vrstvy najednou). */
   bottomSeamYMm: number;
   bottomSeamHoles: number;
-  /** Vydutý oblouček v kořeni jazyka a horní hranice pásma kapsy (pod jazykem a drukem). */
-  tabRootFilletMm: number;
+  /** Horní hranice pásma kapsy (pod jazykem a drukem). */
   pocketBandTopMm: number;
   /** Kolik karty odkryje výřez a jak hluboko karta sedí pod horní hranou (karta stojí na švu dna). */
   cardBelowRimMm: number;
@@ -311,7 +315,9 @@ export function coinCardHolderLayout(
 
   // Výřez na prst: oblouk U přes pásmo ohybu A (čtvrtkruh + dno + čtvrtkruh).
   const scoop = spec.scoopRadiusMm;
-  const scoopStartX = round(backX1 - scoop);
+  // Zadní panel: výkus od hrany jazyka k ohybu A (elipsa s poloosami backScoopRx × scoop).
+  const backScoopRx = round(backX1 - spec.tabWidthMm);
+  const scoopStartX = round(backX1 - backScoopRx);
   const scoopEndX = round(frontX0 + scoop);
 
   const grommetX = innerX1 === null ? null : round(innerX1 - spec.grommetFromEdgeMm);
@@ -374,18 +380,13 @@ export function coinCardHolderLayout(
     snapXFrontMm: snapXFront,
     snapYFrontMm: snapYFront,
     scoopRadiusMm: scoop,
+    backScoopRxMm: backScoopRx,
     scoopStartXMm: scoopStartX,
     scoopEndXMm: scoopEndX,
     grommetXMm: grommetX,
     grommetYMm: grommetY,
     bottomSeamYMm: bottomSeamY,
     bottomSeamHoles,
-    tabRootFilletMm: round(
-      Math.max(
-        0,
-        Math.min(spec.cornerRadiusMm, scoopStartX - spec.tabWidthMm - spec.minLigamentMm),
-      ),
-    ),
     pocketBandTopMm: round(bandTop),
     cardBelowRimMm: spec.topOverCardMm,
     cardExposedMm: round(scoop - spec.topOverCardMm),
@@ -493,10 +494,15 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
   if (spec.stitchPitchMm < PERFORATION_HOLE_MM + PERFORATION_LIGAMENT_MM) {
     p.push('stitchPitchMm je menší než 3 mm – perforace i otvory stehu by splývaly.');
   }
-  // Mezi kořenem jazyka a výkusem musí zůstat rovná hrana (můstek), jinak vznikne špička.
-  if (L.scoopStartXMm - spec.tabWidthMm < min + 1) {
+  // Na zadním panelu přechází hrana jazyka plynule do výkusu. Výkus tam nesmí být užší než na
+  // předku (jinak by jazyk zasahoval pod výřez) a nemá být o moc širší (tvar by se rozešel).
+  if (L.backScoopRxMm < R) {
     p.push(
-      `Mezi jazykem a výřezem zbývá ${fmt(L.scoopStartXMm - spec.tabWidthMm)} mm (potřeba ${fmt(min + 1)}: rovná hrana ${fmt(min)} + oblouček v kořeni jazyka); zmenši scoopRadiusMm nebo tabWidthMm.`,
+      `Jazyk ${fmt(spec.tabWidthMm)} mm a výřez R${fmt(R)} se na zadním panelu (šířka ${fmt(L.panelWidthMm)}) nevejdou vedle sebe; zmenši scoopRadiusMm nebo tabWidthMm.`,
+    );
+  } else if (L.backScoopRxMm > R + 12) {
+    p.push(
+      `Výkus na zadním panelu (${fmt(L.backScoopRxMm)} mm) je o moc širší než na předku (R${fmt(R)}); zvětši tabWidthMm nebo scoopRadiusMm.`,
     );
   }
   if (spec.snapFromTopMm - spec.snapDiameterMm / 2 < spec.snapClearanceMm) {

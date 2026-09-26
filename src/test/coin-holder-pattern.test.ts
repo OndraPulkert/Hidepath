@@ -76,14 +76,13 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
     expect(body).toContain(
       `L${P(L.tabX1Mm - rt, -L.tabLengthMm)} A${rt} ${rt} 0 0 1 ${P(L.tabX1Mm, -L.tabLengthMm + rt)}`,
     );
-    // Vydutý oblouček v kořeni jazyka (proti směru), pak rovná horní hrana k výřezu.
-    const rf = L.tabRootFilletMm;
-    expect(rf).toBeGreaterThan(0);
+    // Hrana jazyka jde rovně dolů až do výkusu (žádný schodek ani zub mezi jazykem a výřezem).
     expect(rc).toBeGreaterThan(0);
-    expect(body).toContain(`A${rf} ${rf} 0 0 0 ${P(L.tabX1Mm + rf, 0)}`);
-    // Výřez U: čtvrtkruh dolů, dno přes pásmo ohybu A, čtvrtkruh nahoru.
+    expect(L.scoopStartXMm).toBeCloseTo(L.tabX1Mm, 9);
+    const rx = L.backScoopRxMm;
+    // Výřez U: čtvrtelipsa na zadním, dno přes pásmo ohybu A, čtvrtkruh na předku.
     expect(body).toContain(
-      `L${P(L.scoopStartXMm, 0)} A${S} ${S} 0 0 0 ${P(L.backX1Mm, S)} ` +
+      `L${P(L.tabX1Mm, 0)} A${rx} ${S} 0 0 0 ${P(L.backX1Mm, S)} ` +
         `L${P(L.frontX0Mm, S)} A${S} ${S} 0 0 0 ${P(L.scoopEndXMm, 0)}`,
     );
     // Výkus (ne zaoblený roh): oblouk má střed v rohu panelu na horní hraně u ohybu A, takže

@@ -4,7 +4,7 @@
 <rect x="9" y="9" width="68.25" height="90" rx="2" fill="#fbfaf7" stroke="#ddd" stroke-width="0.3"/>
 <text x="12" y="14.5" font-family="Helvetica, Arial, sans-serif" font-size="6" text-anchor="start" fill="#a2471f">1</text>
 <text x="18" y="14.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" text-anchor="start" fill="#2b2b2b">Vyříznout pás</text>
-<path d="M16 24.244 A2.244 2.244 0 0 1 18.244 22 L21.161 22 A2.244 2.244 0 0 1 23.405 24.244 L23.405 31.535 A0.449 0.449 0 0 0 23.854 31.983 L24.527 31.983 A7.629 7.629 0 0 0 32.157 39.613 L35.888 39.613 A7.629 7.629 0 0 0 43.518 31.983 L68.904 31.983 A1.346 1.346 0 0 1 70.25 33.33 L70.25 53.997 A1.346 1.346 0 0 1 68.904 55.343 L17.346 55.343 A1.346 1.346 0 0 1 16 53.997 Z" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.4"/>
+<path d="M16 24.244 A2.244 2.244 0 0 1 18.244 22 L21.161 22 A2.244 2.244 0 0 1 23.405 24.244 L23.405 31.983 A8.751 7.629 0 0 0 32.157 39.613 L35.888 39.613 A7.629 7.629 0 0 0 43.518 31.983 L68.904 31.983 A1.346 1.346 0 0 1 70.25 33.33 L70.25 53.997 A1.346 1.346 0 0 1 68.904 55.343 L17.346 55.343 A1.346 1.346 0 0 1 16 53.997 Z" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.4"/>
 <path d="M32.157 39.613 L32.157 55.343" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1.2 1"/>
 <path d="M35.888 39.613 L35.888 55.343" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1.2 1"/>
 <path d="M52.045 31.983 L52.045 55.343" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1.2 1"/>

@@ -64,8 +64,8 @@ střed kloboučku (čárkovaná čára je jen orientační) a rohy se znovu zaob
 **Pás se obkresluje na LÍC** (hladkou stranu), stejně jako to dělá výrobce na videu. Kresba je
 pohled zvenku: přední panel je nakreslený tak, jak bude vidět na hotovém kusu.
 
-Mezi kořenem jazyka a výkusem zůstávají 3 mm rovné hrany a oblouček R2 v kořeni jazyka; roh
-výkusu zabrousit.
+Na zadním panelu přechází hrana jazyka plynule do výkusu (bez schodku, jako na šabloně předlohy):
+výkus je tam čtvrtelipsa 39 × 34 mm, na předku čtvrtkruh R34. Roh výkusu na předku zabrousit.
 
 Zadní kapsa (bankovky) je na straně jazyka otevřená i do boku – zadní panel tam končí volnou
 hranou, drží jen šev dna. Předloha to má stejně (na fotce s bankovkami vějíř vychází právě tam).
@@ -155,6 +155,8 @@ mokra nejdřív zkusit na A5 stejné barvy.
   nechytil). Po dvou posudcích rozměr předlohy 72 × 104 mm (kování bylo na kartách, bankovky jen
   na třetiny), perforace ohybů, oblouk jazyka π·stoh/2, průchodka naplocho ve 4. kroku, kapsa a
   forma na druhém listu, opravy zrcadlené varianty, přísnější kontroly A4 a CLI.
+- v4.5 (2026-09-26): na přání autora zmizel „zub“ mezi jazykem a výřezem – hrana jazyka přechází
+  na zadním panelu plynule do výkusu (čtvrtelipsa), jako na papírové šabloně předlohy.
 - v4.4 (2026-09-26): virtuální složení (test na nakresleném SVG) ukázalo, že bankovky neměly vůli
   a jazyk byl o 2 mm krátký – ohyby se teď počítají z odstupů vrstev (každá kapsa 1,3 mm vůle) a
   oblouk jazyka ze skutečného odstupu zadního a předního panelu.

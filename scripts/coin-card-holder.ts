@@ -173,7 +173,6 @@ function stripOutline(
   const arc = (r: number, sweep: number, x: number, y: number): string =>
     r > 0 ? `A${f(r * k)} ${f(r * k)} 0 0 ${sweep} ${P(x, y)} ` : `L${P(x, y)} `;
   const rt = L.tabEndRadiusMm;
-  const rf = L.tabRootFilletMm;
   const S = L.scoopRadiusMm;
   const H = L.panelHeightMm;
   const SL = L.stripLengthMm;
@@ -184,11 +183,10 @@ function stripOutline(
     arc(rt, cw, rt, top) +
     (straightEnd ? `L${P(L.tabX1Mm - rt, top)} ` : '') +
     arc(rt, cw, L.tabX1Mm, top + rt) +
-    `L${P(L.tabX1Mm, -rf)} ` +
-    (rf > 0 ? arc(rf, ccw, L.tabX1Mm + rf, 0) : '') +
-    // Výkus: čtvrtkruhy se středem v rohu panelu na horní hraně (u ohybu A), tedy dovnitř pásu.
+    // Hrana jazyka přejde plynule (svisle tečně) do výkusu zadního panelu: čtvrtelipsa se středem
+    // v rohu u ohybu A, poloosy backScoopRx × R. Pak dno přes ohyb A a čtvrtkruh R na předku.
     `L${P(L.scoopStartXMm, 0)} ` +
-    arc(S, ccw, L.backX1Mm, S) +
+    `A${f(L.backScoopRxMm * k)} ${f(S * k)} 0 0 ${ccw} ${P(L.backX1Mm, S)} ` +
     `L${P(L.frontX0Mm, S)} ` +
     arc(S, ccw, L.scoopEndXMm, 0) +
     `L${P(SL - rc, 0)} ` +

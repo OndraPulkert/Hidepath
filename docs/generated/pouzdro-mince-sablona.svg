@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 297 210">
 <rect width="297" height="210" fill="#ffffff"/>
-<path d="M10 20 A10 10 0 0 1 20 10 L33 10 A10 10 0 0 1 43 20 L43 52.49 A2 2 0 0 0 45 54.49 L48 54.49 A34 34 0 0 0 82 88.49 L98.63 88.49 A34 34 0 0 0 132.63 54.49 L245.76 54.49 A6 6 0 0 1 251.76 60.49 L251.76 152.59 A6 6 0 0 1 245.76 158.59 L16 158.59 A6 6 0 0 1 10 152.59 Z" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
+<path d="M10 20 A10 10 0 0 1 20 10 L33 10 A10 10 0 0 1 43 20 L43 54.49 A39 34 0 0 0 82 88.49 L98.63 88.49 A34 34 0 0 0 132.63 54.49 L245.76 54.49 A6 6 0 0 1 251.76 60.49 L251.76 152.59 A6 6 0 0 1 245.76 158.59 L16 158.59 A6 6 0 0 1 10 152.59 Z" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
 <path d="M82 88.49 L82 158.59" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
 <path d="M98.63 88.49 L98.63 158.59" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
 <text x="90.315" y="51.49" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">OHYB A 16,63</text>
