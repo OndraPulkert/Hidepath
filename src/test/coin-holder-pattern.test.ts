@@ -17,6 +17,7 @@ const svgs: Record<string, string> = import.meta.glob('/docs/generated/*.svg', {
   eager: true,
 });
 const sheet = Object.entries(svgs).find(([k]) => k.endsWith('/pouzdro-mince-sablona.svg'))?.[1];
+const pocketSheet = Object.entries(svgs).find(([k]) => k.endsWith('/pouzdro-mince-kapsa.svg'))?.[1];
 const cz = (n: number): string => (Math.round(n * 1000) / 1000).toString().replace('.', ',');
 const near = (a: number, b: number, tol = 0.01): boolean => Math.abs(a - b) <= tol;
 /** Stejné zaokrouhlení jako generátor (3 desetinná místa, bez koncových nul). */
@@ -76,7 +77,9 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
       `L${P(L.tabX1Mm - rt, -L.tabLengthMm)} A${rt} ${rt} 0 0 1 ${P(L.tabX1Mm, -L.tabLengthMm + rt)}`,
     );
     // Vydutý oblouček v kořeni jazyka (proti směru), pak rovná horní hrana k výřezu.
-    const rf = Math.min(rc, L.scoopStartXMm - L.tabX1Mm);
+    const rf = L.tabRootFilletMm;
+    expect(rf).toBeGreaterThan(0);
+    expect(rc).toBeGreaterThan(0);
     expect(body).toContain(`A${rf} ${rf} 0 0 0 ${P(L.tabX1Mm + rf, 0)}`);
     // Výřez U: čtvrtkruh dolů, dno přes pásmo ohybu A, čtvrtkruh nahoru.
     expect(body).toContain(
@@ -158,21 +161,53 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
     );
   });
 
-  it('kapsa s mincí: okno, mince a pata důlku soustředné, šev od středu dna', () => {
-    const cs = circles(sheet ?? '');
+  it('perforace ohybů: tři řady v širokém ohybu A, dvě v úzkém ohybu B, mimo šev dna', () => {
+    const perf = circles(sheet ?? '').filter((c) => near(c.r, 0.75));
+    const inBand = (x0: number, x1: number): Circle[] =>
+      perf.filter((c) => c.cx > X(x0) && c.cx < X(x1));
+    for (const [x0, x1, n] of [
+      [L.backX1Mm, L.frontX0Mm, 3],
+      [L.frontX1Mm, L.innerX0Mm!, 2],
+    ] as const) {
+      const band = inBand(x0, x1);
+      const cols = [...new Set(band.map((c) => c.cx))].sort((a, b) => a - b);
+      expect(cols.length).toBe(n);
+      // Mezi sousedními otvory i k čáře ohybu zůstane aspoň 1 mm kůže.
+      for (let i = 1; i < cols.length; i++)
+        expect(cols[i]! - cols[i - 1]! - 1.5).toBeGreaterThan(1);
+      expect(cols[0]! - 0.75 - X(x0)).toBeGreaterThan(0.4);
+      expect(Math.max(...band.map((c) => c.cy))).toBeLessThan(Y(L.bottomSeamYMm));
+    }
+    // Pásmo ohybu A začíná pod výkusem.
+    expect(Math.min(...inBand(L.backX1Mm, L.frontX0Mm).map((c) => c.cy))).toBeGreaterThan(
+      Y(L.scoopRadiusMm),
+    );
+  });
+
+  it('list kapsy: A4 na výšku, okno, mince a pata důlku soustředné, šev od středu dna', () => {
+    expect(pocketSheet).toBeDefined();
+    expect(pocketSheet).toContain('width="210mm" height="297mm" viewBox="0 0 210 297"');
+    const cs = circles(pocketSheet ?? '');
     const coin = cs.filter((c) => near(c.r, spec.coinDiameterMm / 2));
     const foot = cs.filter((c) => near(c.r, L.formHoleDiameterMm / 2));
     expect(coin.length).toBe(1);
-    // Pata důlku je na kapse i jako otvor formy.
     expect(foot.length).toBe(1);
-    const window = /<path d="M([\d.]+) ([\d.]+) A16 16 /.exec(sheet ?? '');
+    const rw = L.windowDiameterMm / 2;
+    const window = new RegExp(`<path d="M([\\d.]+) ([\\d.]+) A${rw} ${rw} `).exec(
+      pocketSheet ?? '',
+    );
     expect(window).not.toBeNull();
-    expect(Number(window![1]) - coin[0]!.cx).toBeCloseTo(L.windowDiameterMm / 2, 2);
+    expect(Number(window![1]) - coin[0]!.cx).toBeCloseTo(rw, 2);
     expect(Number(window![2])).toBeCloseTo(coin[0]!.cy, 2);
-    const seamHoles = Number(/šev (\d+) otvorů od středu dna/.exec(sheet ?? '')?.[1]);
+    // Střed mince v kapse podle modelu (kapsa začíná na okraji listu pod nadpisem).
+    const m2 = 10;
+    expect(coin[0]!.cx).toBeCloseTo(m2 + L.coinCentreXMm, 2);
+    expect(coin[0]!.cy).toBeCloseTo(m2 + 4 + L.coinCentreYMm, 2);
+    const seamHoles = Number(/šev (\d+) otvorů od středu dna/.exec(pocketSheet ?? '')?.[1]);
     expect(seamHoles % 2).toBe(1);
-    const dots = cs.filter((c) => near(c.r, 0.45));
-    expect(dots.length).toBe(L.bottomSeamHoles + seamHoles);
+    expect(cs.filter((c) => near(c.r, 0.45)).length).toBe(seamHoles);
+    // Pás na listu 1 má tečky jen ve švu dna.
+    expect(circles(sheet ?? '').filter((c) => near(c.r, 0.45)).length).toBe(L.bottomSeamHoles);
   });
 
   it('kalibrační úsečka měří 50 mm', () => {

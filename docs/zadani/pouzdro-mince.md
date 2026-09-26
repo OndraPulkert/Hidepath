@@ -1,4 +1,4 @@
-# Pouzdro na karty s vsazenou mincí – střih (NÁVRH v4)
+# Pouzdro na karty s vsazenou mincí – střih (NÁVRH v4.1)
 
 Stav: **návrh k ověření na papíru a odřezku**, ne lekce. Vznikl 2026-09-18 na přání autora podle
 produktu, videa a fotek Red Forest Leather (rozbor v `docs/content/notes-vybaveni.md`, „Námět:
@@ -10,16 +10,17 @@ prvního), až bude první pouzdro fyzicky hotové.
 - Model: `src/lib/geometry/coin-card-holder.ts` – rozměry se počítají z karty (54 × 85,6, 4 ks
   po 0,76 mm), tloušťky bankovek, průměru mince a přídavků; kontroly hlídají kolize (výřez × jazyk
   × druk × kapsa × průchodka, prstenec okna, šev dna, A4).
-- Kresba: `scripts/coin-card-holder.ts` → `docs/generated/pouzdro-mince-sablona.svg` + `.pdf`
-  (**A4 na šířku**, 1:1, kalibrační úsečka 50 mm). Pás je přes 200 mm dlouhý, na výšku se nevejde.
+- Kresba: `scripts/coin-card-holder.ts` → **dva listy 1:1** s kalibrační úsečkou 50 mm:
+  `docs/generated/pouzdro-mince-sablona.svg` + `.pdf` (pás, **A4 na šířku** – je 236 mm dlouhý) a
+  `docs/generated/pouzdro-mince-kapsa.svg` + `.pdf` (kapsa s mincí a otvor formy, A4 na výšku).
 - Postup skládání: `docs/generated/pouzdro-mince-postup.svg` + `.pdf` (A4 na šířku, 8 kroků od
   vyříznutí po hotové pouzdro zepředu a zezadu; proporce z modelu, ne 1:1).
 - Průměr mince je **proměnná**: `pnpm pattern:coin-holder --coin 50kc` (27,5 mm), `20kc`
   (26 mm, třináctihran), `10kc` (24,5), `5kc` (23), `decision` (40, předloha) nebo číslo v mm
   (`--coin 30` i `--coin=30`). `--window 30` = průměr okna podle výsečníku, který máš.
-  `--simple` = bez vnitřního panelu (jedna kapsa, kratší pás). Každá odchylka jde do vlastního
-  souboru (`…-mince-27-5mm`, `…-okno-30mm`, `…-bez-vnitrniho-panelu`), verzovaný výchozí střih se
-  nepřepíše; list postupu se generuje jen pro výchozí střih. Neznámý přepínač je chyba.
+  Každá odchylka jde do vlastního souboru (`…-mince-27-5mm`, `…-okno-30mm`), verzovaný výchozí
+  střih se nepřepíše; list postupu se generuje jen pro výchozí střih. Neznámý nebo zdvojený
+  přepínač je chyba. Varianta bez vnitřního panelu je zakázaná (jeden bok by zůstal otevřený).
 - Strana jazyka je ve specifikaci (`tabSide: 'right'` = zepředu jazyk vpravo, výřez s průchodkou
   vlevo – jako předloha; `'left'` dá zrcadlový střih).
 
@@ -36,22 +37,23 @@ stěny s průchodkou je vidět výřezem zepředu i zezadu. Tomu odpovídá jede
 
 | Prvek           | Rozměr (mince 40)                            | Poznámka                                                                                  |
 | --------------- | -------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| Panel           | 63 × 91,1 mm (všechny tři)                   | karta 54 + 2 × 1,5 vůle + 2 × 3 k ohybu; výška = šev dna 3,5 + karta + 2                  |
+| Panel           | 72 × 104,1 mm (všechny tři)                  | rozměr předlohy (≈ 72–78 × 100–110 z fotek); šev dna 3,5 + karta 85,6 + 15                |
 | Ohyb A          | 12,63 mm                                     | zadní↔přední, obepíná karty + vnitřní panel + bankovky: π·(6,54/2 + 0,75)                 |
 | Ohyb B          | 7,13 mm                                      | přední↔vnitřní, obepíná jen karty: π·(3,04/2 + 0,75)                                      |
-| Pás             | 208,76 × 91,1 mm + jazyk nad ním             | tři panely + dva ohyby                                                                    |
-| Jazyk           | 32 mm široký, řez 43,3 mm (bez rezervy 38,3) | u levého konce pásu, konec R10; přes celý obsah 17,3 + k druku 10 + přesah 11 + rezerva 5 |
-| Výřez na prst   | oblouk U: 2 × R28 + dno přes ohyb A          | po složení čtvrtkruh R28 v rohu předního i zadního panelu, odkryje 24,5 mm karty          |
-| Průchodka       | otvor Ø 5, 9 mm od hran vnitřního panelu     | po složení padne přesně do rohu s výřezem, vidět z obou stran                             |
-| Druk            | patice 10 mm pod horní hranou předku         | u pravého boku, na ose jazyka                                                             |
-| Kapsa s mincí   | 55 × 54,5 mm, horní rohy R10, dolní R6       | samostatný díl 1,2 mm; 29,3 mm pod horní hranou, 4 mm od boků                             |
-| Okno            | Ø 32 (výsečník po celých mm)                 | prstenec 4 mm; vyseká se před přišitím                                                    |
+| Perforace ohybů | 3 řady Ø 1,5 v každém pásmu ohybu            | jako předloha; usnadní ohyb a zabrání prasknutí lícu                                      |
+| Pás             | 235,8 × 104,1 mm + jazyk nad ním             | tři panely + dva ohyby                                                                    |
+| Jazyk           | 33 mm široký, řez 41 mm (bez rezervy 36)     | u levého konce pásu, konec R10; oblouk přes obsah 15 + k druku 10 + přesah 11 + rezerva 5 |
+| Výřez na prst   | výkus U: 2 × čtvrtkruh R34 + dno přes ohyb A | po složení čtvrtkruh R34 v rohu předního i zadního panelu, odkryje 19 mm karty            |
+| Průchodka       | Ø 5, 9 mm od hran vnitřního panelu           | po složení v rohu s výřezem, **nad kartami** (karty začínají 15 mm pod hranou)            |
+| Druk            | patice 10 mm pod horní hranou předku         | u pravého boku na ose jazyka; dřík nad kartami                                            |
+| Kapsa s mincí   | 55 × 54,5 mm, horní rohy R10, dolní R6       | list 2; na předek 35,8 mm pod horní hranou, 8,5 mm od boků                                |
+| Okno            | Ø 32 (výsečník po celých mm)                 | prstenec 4 mm (předloha má okno skoro přes celou minci, drží hůř)                         |
 | Forma pro důlek | otvor Ø 44, deska ≥ 74 × 74, tl. ≥ 8 mm      | mince + 2 × 1,2 + vůle 1,6; hranu otvoru zaoblit                                          |
 
 Jak se to skládá: vnitřní panel se ohne ohybem B za přední, zadní panel se ohybem A přehne přes
 všechno. Vrstvy odpředu: přední (líc ven, kapsa s mincí) – karty – vnitřní – bankovky – zadní
 (líc ven, motiv). Obě boční hrany jsou ohyby a nešijí se, dno se prošije skrz všechny tři vrstvy
-(15 otvorů, rozteč 4 mm, 3,5 mm od hrany). Otvory dna se sekají až po složení; tečky na šabloně
+(17 otvorů, rozteč 4 mm, 3,5 mm od hrany). Otvory dna se sekají až po složení; tečky na šabloně
 udávají jen počet a polohu na předním panelu.
 
 Jazyk vybíhá u levého konce pásu (zadní panel); po přeložení ohybem A skončí u pravého boku,
@@ -62,24 +64,33 @@ Klobouček se osazuje až po zkoušce s vloženými kartami i bankovkami, pak se
 **Pás se obkresluje na LÍC** (hladkou stranu), stejně jako to dělá výrobce na videu. Kresba je
 pohled zvenku: přední panel je nakreslený tak, jak bude vidět na hotovém kusu.
 
+Mezi kořenem jazyka a výkusem zůstává 5 mm rovné hrany; roh výkusu zabrousit.
+
+Zadní kapsa (bankovky) je na straně jazyka otevřená i do boku – zadní panel tam končí volnou
+hranou, drží jen šev dna. Předloha to má stejně (na fotce s bankovkami vějíř vychází právě tam).
+
 ### Odchylky od předlohy a nejistoty
 
 - Rozměry nejsou odměřené z cizího střihu; poměry (jazyk ≈ polovina šířky, výřez R28, druk 10 mm
   pod hranou, kapsa ≈ 30 mm pod hranou) jsou odhad z fotek s mincí 40 mm jako měřítkem.
 - Pořadí panelů v pásu (zadní – přední – vnitřní) je odvozené z toho, kde na záběrech leží jazyk,
   výřez a průchodka; jiné pořadí by dalo jiné umístění průchodky.
-- Předloha má podél boků řady dírek bez nitě – ozdoba, střih je nekreslí.
 - Tloušťku bankovek (2 mm) a počet karet (4) je nutné ověřit na papírovém modelu s tím, co nosíš.
 
 ## Funkce a kapacita (spočteno z modelu)
 
-- **Karty:** mezi boky 57 mm, karta 54 → 1,5 mm na stranu; karta sedí 3,5 mm pod horní hranou.
-  Pro 6 karet se ohyby i jazyk prodlouží (ohyb B 9,5, ohyb A 15, jazyk +2,4 mm), rezerva jazyka
-  5 mm to pokryje, ohyby ne – přegenerovat s `cardsCount`.
-- **Bankovky** (ČNB 140–170 × 69–74, euro 120–160 × 62–82): přeložené **na třetiny**
-  (47–57 × 69–74) se do zadní kapsy vejdou, napůl ne (70–85 > 57).
+- **Karty:** panel 72 mm, karta 54 → karty mají v kapse vůli (jako předloha), sedí na švu dna
+  15 mm pod horní hranou. Pro 6 karet se ohyb B prodlouží na 9,5, ohyb A na 15 a jazyk o 2,4 mm
+  (rezerva 5 mm to pokryje, ohyby ne – přegenerovat s `cardsCount`); 8 karet už nevychází.
+- **Bankovky** (ČNB 140–170 × 69–74): složené **napůl** mají 69–74 mm napříč a vejdou se do zadní
+  kapsy (tisícovka a vyšší na doraz); na třetiny volně.
+- **Vytahování:** karty předním výřezem (palec na odkrytých 19 mm karty), bankovky zadním
+  výřezem nebo bokem u jazyka.
+- **Kování nad kartami:** dřík druku končí 12,5 mm a příruba průchodky 14 mm pod horní hranou,
+  karty začínají v 15 mm. Průchodka dvoudílná s podložkou (hladká z obou stran).
 - **Mince:** zasouvá se shora, vyjímá se palcem oknem posunutím nahoru. Nad mincí 5 mm kůže.
-- **Kapsa vs. výřez:** horní roh kapsy má 3 mm od oblouku výřezu, dno kapsy 3,8 mm nad švem dna.
+- **Kapsa vs. výřez a jazyk:** horní roh kapsy ≥ 3 mm od oblouku výřezu, zkrácený jazyk končí
+  21 mm pod hranou, kapsa začíná v 35,8 mm; dno kapsy 10 mm nad švem dna.
 
 ## Nářadí navíc oproti prvnímu pouzdru
 
@@ -90,7 +101,7 @@ pohled zvenku: přední panel je nakreslený tak, jak bude vidět na hotovém ku
 
 ## Materiál (ověřeno 2026-09-18, CraftPoint, skladem)
 
-Pás 209 × 135 mm (s jazykem) a odřezek na kapsu ≥ 70 × 70 se vejdou na **jeden arch A4**
+Pás 236 × 145 mm (s jazykem) a odřezek na kapsu ≥ 70 × 70 se vejdou na **jeden arch A4**
 (297 × 210). Barvené třísločiněné lícové usně 1,2 mm z italské koželužny, A4 = 251 Kč, A5 = 57 Kč:
 
 | Barva                                                                                                                                     | Poznámka                                                                                             |
@@ -102,23 +113,24 @@ Pás 209 × 135 mm (s jazykem) a odřezek na kapsu ≥ 70 × 70 se vejdou na **j
 | [Čokoládová 1,5 mm](https://craft-point.cz/products/hovezi-kuze-licova-cokoladova-1-5-mm), A4 222 Kč                                      | jediná barvená 1,5 mm                                                                                |
 
 Doporučení: **celé pouzdro z Verde 1,2 mm** – šev dna jde skrz tři vrstvy, s 1,2 mm je to 3,6 mm
-místo 4,5 mm. Model pak spustit s `bodyThicknessMm: 1.2` (ohyby a jazyk se zkrátí). Tvarování za
+místo 4,5 mm. Model pak spustit s `bodyThicknessMm: 1.2` (ohyby 6,7 a 11,7 mm, jazyk 39,6 mm). Tvarování za
 mokra nejdřív zkusit na A5 stejné barvy.
 
 ## Postup
 
-1. Vyříznout pás podle šablony (obkreslené na líc) a odřezek na kapsu ≥ 70 × 70.
-2. Kapsa: do odřezku orýsovat obrys a prosekat otvory švu (U od 10 mm pod horní hranou), pak
-   navlhčit, položit **lícem dolů** na formu, na rub minci, přiklopit deskou, stáhnout svěrkami,
-   nechat zaschnout.
-3. Vyříznout obrys kapsy se středem na důlku a vyseknout okno (kapsa lícem dolů na formě, pod dno
-   špalík).
-4. Přišít kapsu na přední panel (29,3 mm pod horní hranou, 4 mm od boků), osadit patici druku.
+1. Vyříznout pás podle listu 1 (obkreslený na líc) a odřezek na kapsu ≥ 70 × 70. Prosekat
+   perforace ohybů. Zaleštit hrany, které budou po složení uvnitř (horní hrana vnitřního panelu,
+   oblouk výkusu, jazyk).
+2. Kapsa (list 2): do odřezku orýsovat obrys a prosekat otvory švu, pak navlhčit, položit
+   **lícem dolů** na formu, na rub minci, přiklopit deskou, stáhnout svěrkami, nechat zaschnout.
+3. Vyříznout obrys kapsy se středem na důlku a vyseknout okno.
+4. Přišít kapsu na přední panel (35,8 mm pod horní hranou, 8,5 mm od boků), osadit patici druku
+   a **průchodku do vnitřního panelu – obojí naplocho, před složením**.
 5. Složit: vnitřní panel ohybem B za přední, zadní panel ohybem A přes všechno.
 6. Slepit dno, orýsovat 3,5 mm od hrany, prosekat skrz všechny vrstvy a prošít.
-7. Osadit průchodku do vnitřního panelu, protáhnout šňůrku.
-8. Vložit karty i bankovky, přehnout jazyk, obtisknout patici, osadit klobouček, jazyk zkrátit.
-9. Srazit a zaleštit hrany (i oblouk výřezu).
+7. Vložit karty i bankovky, které nosíš, přehnout jazyk, obtisknout patici, osadit klobouček,
+   jazyk zkrátit na čárkovanou čáru a rohy znovu zaoblit R10.
+8. Srazit a zaleštit vnější hrany. Protáhnout šňůrku průchodkou.
 
 ## Co je nutné ověřit před řezáním kůže
 
@@ -137,3 +149,7 @@ mokra nejdřív zkusit na A5 stejné barvy.
 - **v4 (2026-09-19):** podle záběrů skládání, papírové šablony na kůži a zadní strany hotového
   kusu – pás tří panelů ohýbaný na obou bocích, šité jen dno, vnitřní panel dělí karty a
   bankovky a nese průchodku, výřez jako oblouk U přes ohyb A, list A4 na šířku, obkreslení na líc.
+- **v4.1 (2026-09-26):** výřez opraven na výkus (kresba měla zaoblený roh a palec by kartu
+  nechytil). Po dvou posudcích rozměr předlohy 72 × 104 mm (kování bylo na kartách, bankovky jen
+  na třetiny), perforace ohybů, oblouk jazyka π·stoh/2, průchodka naplocho ve 4. kroku, kapsa a
+  forma na druhém listu, opravy zrcadlené varianty, přísnější kontroly A4 a CLI.

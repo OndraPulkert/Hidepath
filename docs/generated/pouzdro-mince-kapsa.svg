@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="210mm" height="297mm" viewBox="0 0 210 297">
+<rect width="210" height="297" fill="#ffffff"/>
+<text x="10" y="12.5" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="start" fill="#2b2b2b">KAPSA S MINCÍ (horní hrana otevřená)</text>
+<path d="M20 14 L55 14 A10 10 0 0 1 65 24 L65 62.5 A6 6 0 0 1 59 68.5 L16 68.5 A6 6 0 0 1 10 62.5 L10 24 A10 10 0 0 1 20 14 Z" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
+<path d="M13.5 24 L13.5 62.5 A2.5 2.5 0 0 0 16 65 L59 65 A2.5 2.5 0 0 0 61.5 62.5 L61.5 24" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="0.8 1.2"/>
+<circle cx="37.5" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="33.5" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="41.5" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="29.5" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="45.5" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="25.5" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="49.5" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="21.5" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="53.5" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="17.5" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="57.5" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="13.896" cy="63.851" r="0.45" fill="#2b2b2b"/><circle cx="61.104" cy="63.851" r="0.45" fill="#2b2b2b"/><circle cx="13.5" cy="59.927" r="0.45" fill="#2b2b2b"/><circle cx="61.5" cy="59.927" r="0.45" fill="#2b2b2b"/><circle cx="13.5" cy="55.927" r="0.45" fill="#2b2b2b"/><circle cx="61.5" cy="55.927" r="0.45" fill="#2b2b2b"/><circle cx="13.5" cy="51.927" r="0.45" fill="#2b2b2b"/><circle cx="61.5" cy="51.927" r="0.45" fill="#2b2b2b"/><circle cx="13.5" cy="47.927" r="0.45" fill="#2b2b2b"/><circle cx="61.5" cy="47.927" r="0.45" fill="#2b2b2b"/><circle cx="13.5" cy="43.927" r="0.45" fill="#2b2b2b"/><circle cx="61.5" cy="43.927" r="0.45" fill="#2b2b2b"/><circle cx="13.5" cy="39.927" r="0.45" fill="#2b2b2b"/><circle cx="61.5" cy="39.927" r="0.45" fill="#2b2b2b"/><circle cx="13.5" cy="35.927" r="0.45" fill="#2b2b2b"/><circle cx="61.5" cy="35.927" r="0.45" fill="#2b2b2b"/><circle cx="13.5" cy="31.927" r="0.45" fill="#2b2b2b"/><circle cx="61.5" cy="31.927" r="0.45" fill="#2b2b2b"/><circle cx="13.5" cy="27.927" r="0.45" fill="#2b2b2b"/><circle cx="61.5" cy="27.927" r="0.45" fill="#2b2b2b"/>
+<path d="M53.5 41 A16 16 0 1 0 21.5 41 A16 16 0 1 0 53.5 41 Z" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
+<circle cx="37.5" cy="41" r="20" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="2 1.5"/>
+<circle cx="37.5" cy="41" r="22" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="0.8 1.2"/>
+<path d="M36 41 L39 41 M37.5 39.5 L37.5 42.5" stroke="#2b2b2b" stroke-width="0.25"/>
+<text x="71" y="18" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">55 × 54,5 mm</text>
+<text x="71" y="21.6" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">okno Ø 32 (plná čára)</text>
+<text x="71" y="25.2" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">mince Ø 40 (čárkovaně)</text>
+<text x="71" y="28.8" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">pata důlku Ø 44 (tečkovaně)</text>
+<text x="71" y="32.4" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">šev 31 otvorů od středu dna</text>
+<text x="71" y="36" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">otvory švu prosekat PŘED tvarováním,</text>
+<text x="71" y="39.6" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">obrys vyříznout až po zaschnutí,</text>
+<text x="71" y="43.2" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">okno vyseknout před přišitím</text>
+<text x="71" y="46.8" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">na přední panel: 35,8 mm pod horní hranou,</text>
+<text x="71" y="50.4" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">8,5 mm od boků, otevřenou hranou nahoru</text>
+<text x="10" y="87" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="start" fill="#2b2b2b">OTVOR FORMY PRO DŮLEK</text>
+<path d="M54 110.5 A22 22 0 1 0 10 110.5 A22 22 0 1 0 54 110.5 Z" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
+<path d="M30.5 110.5 L33.5 110.5 M32 109 L32 112" stroke="#2b2b2b" stroke-width="0.25"/>
+<text x="60" y="94.5" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">Ø 44 = mince 40 + 2 × kůže 1,2 + vůle 1,6</text>
+<text x="60" y="98.1" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">deska ≥ 74 × 74 mm, tloušťka ≥ 8 mm</text>
+<text x="60" y="101.7" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">překližka, dřevo nebo HDPE; hranu otvoru zaoblit smirkem</text>
+<text x="60" y="105.3" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">kůže LÍCEM DOLŮ na formu, mince na rub, přiklopit deskou, svěrky</text>
+<path d="M10 253 V257 M10 255 H60 M60 253 V257" stroke="#2b2b2b" stroke-width="0.3" fill="none"/>
+<text x="63" y="256" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#2b2b2b">KONTROLA MĚŘÍTKA: 50 mm</text>
+<text x="10" y="263" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">POUZDRO NA KARTY S VSAZENOU MINCÍ – LIST 2/2: KAPSA A FORMA.</text>
+<text x="10" y="266.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Tisk na A4 NA VÝŠKU na 100 % (bez „přizpůsobit stránce“).</text>
+<text x="10" y="269.4" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Kapsa z kůže 1,2 mm; odřezek ≥ 70 × 70 mm.</text>
+<text x="10" y="272.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Plná čára = řez, tečky = otvory stehu, čárkovaně/tečkovaně = pomocné kružnice.</text>
+</svg>

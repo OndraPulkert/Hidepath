@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import {
   A4_SHEET,
+  CALIBRATION_GAP_MM,
+  SEAM_LABEL_GAP_MM,
   DEFAULT_COIN_CARD_HOLDER,
   LEGEND_HEIGHT_MM,
   NAMED_COINS,
@@ -30,7 +32,15 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     expect(L.panelWidthMm - 2 * spec.sideMarginMm).toBeGreaterThan(spec.cardWidthMm);
     // Šev dna je pod kartou, karta sedí pod horní hranou o přesah + půl tloušťky obsahu.
     expect(L.bottomSeamYMm).toBeCloseTo(L.panelHeightMm - spec.stitchOffsetMm, 9);
-    expect(L.cardBelowRimMm).toBeCloseTo(spec.topOverCardMm + L.cardsThicknessMm / 2, 9);
+    expect(L.cardBelowRimMm).toBe(spec.topOverCardMm);
+    // Kování je nad kartami: dřík druku (≈ Ø 5) i příruba průchodky končí nad horní hranou karet.
+    expect(spec.snapFromTopMm + 2.5).toBeLessThanOrEqual(L.cardBelowRimMm);
+    expect(spec.grommetFromEdgeMm + spec.grommetHoleMm / 2 + 2.5).toBeLessThanOrEqual(
+      L.cardBelowRimMm,
+    );
+    // Rozměr předlohy ≈ 72 × 104 mm, bankovky složené napůl (69–74 napříč) se vejdou.
+    expect(L.panelWidthMm).toBeGreaterThanOrEqual(70);
+    expect(L.panelHeightMm).toBeGreaterThan(100);
   });
 
   it('pás: tři panely a dva ohyby, ohyb A obepíná vnitřní panel i obsah', () => {
@@ -60,13 +70,15 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     expect(simple.foldFrontInnerMm).toBe(0);
     expect(simple.foldBackFrontMm).toBeCloseTo(Math.PI * (cards / 2 + t / 2), 2);
     expect(simple.stripLengthMm).toBeCloseTo(2 * L.panelWidthMm + simple.foldBackFrontMm, 6);
-    expect(checkCoinCardHolder({ ...spec, innerPanel: false })).toEqual([]);
+    // Bez vnitřního panelu by jeden bok zůstal otevřený – kontrola to odmítne.
+    expect(checkCoinCardHolder({ ...spec, innerPanel: false }).join(' ')).toMatch(/otevřená/);
   });
 
   it('jazyk: oblouk přes celý obsah, k druku, přesah a rezerva na zkoušku', () => {
     const t = spec.bodyThicknessMm;
+    // Od neutrální osy zadního panelu k neutrální ose jazyka na předku je celá tloušťka stohu.
     const stack = 2 * t + spec.cardsCount * spec.cardThicknessMm + t + spec.billsThicknessMm;
-    expect(L.tabWrapMm).toBeCloseTo(Math.PI * (stack / 2 + t / 2), 1);
+    expect(L.tabWrapMm).toBeCloseTo((Math.PI * stack) / 2, 1);
     expect(L.tabNominalLengthMm).toBeCloseTo(
       L.tabWrapMm + spec.snapFromTopMm + spec.tabBeyondSnapMm,
       6,
@@ -93,7 +105,7 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     expect(L.scoopStartXMm - L.tabX1Mm).toBeGreaterThanOrEqual(spec.minLigamentMm);
     // Výřez odkryje karty a je hlubší než přesah panelu nad nimi.
     expect(L.cardExposedMm).toBeCloseTo(L.scoopRadiusMm - L.cardBelowRimMm, 6);
-    expect(L.cardExposedMm).toBeGreaterThan(20);
+    expect(L.cardExposedMm).toBeGreaterThanOrEqual(15);
   });
 
   it('průchodka je ve vnitřním panelu naproti jazyku a celá se vejde do výřezu', () => {
@@ -155,17 +167,26 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     expect(NAMED_COINS.decision).toBe(spec.coinDiameterMm);
   });
 
-  it('střih se vejde na A4 na šířku i s kapsou a formou vedle pásu', () => {
-    const { widthMm: W, heightMm: H, marginMm: m, gapMm: g } = A4_SHEET;
+  it('pás se vejde na A4 na šířku nad kalibrační úsečku, kapsa na A4 na výšku', () => {
+    const { widthMm: W, heightMm: H, marginMm: m } = A4_SHEET;
     expect(W).toBe(297);
-    expect(L.tabLengthMm + L.panelHeightMm).toBeLessThanOrEqual(H - 2 * m - LEGEND_HEIGHT_MM);
-    expect(L.stripLengthMm + g + L.pocketWidthMm + 2 * m).toBeLessThanOrEqual(W);
+    const calY = H - m - LEGEND_HEIGHT_MM - CALIBRATION_GAP_MM;
+    expect(m + L.tabLengthMm + L.panelHeightMm + SEAM_LABEL_GAP_MM + 1).toBeLessThanOrEqual(
+      calY - 3,
+    );
+    expect(L.stripLengthMm + 2 * m).toBeLessThanOrEqual(W);
+    // Delší rezerva jazyka se na list nevejde – kontrola to musí hlásit.
+    expect(checkCoinCardHolder({ ...spec, tabFitReserveMm: 20 }).join(' ')).toMatch(/A4/);
   });
 
   it('kontroly odhalí kolize a špatné parametry', () => {
-    expect(checkCoinCardHolder({ ...spec, scoopRadiusMm: 45 }).join(' ')).toMatch(/překrývají/);
+    expect(checkCoinCardHolder({ ...spec, scoopRadiusMm: 45 }).join(' ')).toMatch(/Mezi jazykem/);
     expect(checkCoinCardHolder({ ...spec, scoopRadiusMm: 15 }).join(' ')).toMatch(/mělký/);
-    expect(checkCoinCardHolder({ ...spec, tabWidthMm: 34 }).join(' ')).toMatch(/kořeni jazyka/);
+    expect(checkCoinCardHolder({ ...spec, tabWidthMm: 36 }).join(' ')).toMatch(/Mezi jazykem/);
+    expect(checkCoinCardHolder({ ...spec, topOverCardMm: 10 }).join(' ')).toMatch(/Dřík druku/);
+    expect(checkCoinCardHolder({ ...spec, topOverCardMm: 10 }).join(' ')).toMatch(
+      /Příruba průchodky/,
+    );
     expect(checkCoinCardHolder({ ...spec, grommetFromEdgeMm: 20 }).join(' ')).toMatch(
       /nebyla celá vidět/,
     );

@@ -1,66 +1,143 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 297 210">
 <rect width="297" height="210" fill="#ffffff"/>
-<path d="M10 20 A10 10 0 0 1 20 10 L32 10 A10 10 0 0 1 42 20 L42 50.34 A3 3 0 0 0 45 53.34 L45 53.34 A28 28 0 0 0 73 81.34 L85.63 81.34 A28 28 0 0 0 113.63 53.34 L212.76 53.34 A6 6 0 0 1 218.76 59.34 L218.76 138.44 A6 6 0 0 1 212.76 144.44 L16 144.44 A6 6 0 0 1 10 138.44 Z" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
-<path d="M73 81.34 L73 144.44" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
-<path d="M85.63 81.34 L85.63 144.44" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
-<text x="79.315" y="50.34" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">OHYB A 12,63</text>
-<path d="M148.63 53.34 L148.63 144.44" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
-<path d="M155.76 53.34 L155.76 144.44" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
-<text x="152.195" y="50.34" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">OHYB B 7,13</text>
-<path d="M10 140.94 L218.76 140.94" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="0.8 1.2"/>
-<circle cx="89.13" cy="140.94" r="0.45" fill="#2b2b2b"/><circle cx="93.13" cy="140.94" r="0.45" fill="#2b2b2b"/><circle cx="97.13" cy="140.94" r="0.45" fill="#2b2b2b"/><circle cx="101.13" cy="140.94" r="0.45" fill="#2b2b2b"/><circle cx="105.13" cy="140.94" r="0.45" fill="#2b2b2b"/><circle cx="109.13" cy="140.94" r="0.45" fill="#2b2b2b"/><circle cx="113.13" cy="140.94" r="0.45" fill="#2b2b2b"/><circle cx="117.13" cy="140.94" r="0.45" fill="#2b2b2b"/><circle cx="121.13" cy="140.94" r="0.45" fill="#2b2b2b"/><circle cx="125.13" cy="140.94" r="0.45" fill="#2b2b2b"/><circle cx="129.13" cy="140.94" r="0.45" fill="#2b2b2b"/><circle cx="133.13" cy="140.94" r="0.45" fill="#2b2b2b"/><circle cx="137.13" cy="140.94" r="0.45" fill="#2b2b2b"/><circle cx="141.13" cy="140.94" r="0.45" fill="#2b2b2b"/><circle cx="145.13" cy="140.94" r="0.45" fill="#2b2b2b"/>
-<text x="117.13" y="149.44" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">ŠEV DNA 3,5 mm od hrany · 15 otvorů · sekat skrz všechny vrstvy</text>
-<text x="79.315" y="57.34" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#7a7a7a">VÝŘEZ NA PRST R28</text>
-<text x="79.315" y="60.94" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#7a7a7a">odkryje 24,48 mm karty</text>
-<circle cx="26" cy="26" r="6.25" fill="none" stroke="#a2471f" stroke-width="0.2" stroke-dasharray="1.5 1"/>
-<path d="M24.5 26 L27.5 26 M26 24.5 L26 27.5" stroke="#2b2b2b" stroke-width="0.25"/>
-<text x="44" y="25.5" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#a2471f">druk – klobouček</text>
-<text x="44" y="28.4" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="start" fill="#a2471f">osadit až po zkoušce s kartami</text>
-<path d="M10 15 L42 15" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1 1"/>
-<text x="44" y="13.5" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="start" fill="#7a7a7a">sem jazyk zkrátit po zkoušce</text>
-<text x="44" y="16.2" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="start" fill="#7a7a7a">(rezerva 5, rohy znovu R10)</text>
-<text x="26" y="36.75" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#2b2b2b">JAZYK</text>
-<text x="41.5" y="98.89" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">ZADNÍ PANEL</text>
-<text x="41.5" y="102.29" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">63 × 91,1 mm</text>
-<text x="41.5" y="105.29" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">motiv / ražení na tuto stranu</text>
-<text x="187.26" y="98.89" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">VNITŘNÍ PANEL</text>
-<text x="187.26" y="102.29" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">dělí karty (vepředu)</text>
-<text x="187.26" y="105.29" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">a bankovky (vzadu)</text>
-<circle cx="132.63" cy="63.34" r="6.25" fill="none" stroke="#a2471f" stroke-width="0.2" stroke-dasharray="1.5 1"/>
-<path d="M131.13 63.34 L134.13 63.34 M132.63 61.84 L132.63 64.84" stroke="#2b2b2b" stroke-width="0.25"/>
-<text x="132.63" y="72.59" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#a2471f">druk – patice</text>
-<path d="M99.63 82.64 L134.63 82.64 A10 10 0 0 1 144.63 92.64 L144.63 131.14 A6 6 0 0 1 138.63 137.14 L95.63 137.14 A6 6 0 0 1 89.63 131.14 L89.63 92.64 A10 10 0 0 1 99.63 82.64 Z" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1 1"/>
-<text x="117.13" y="101.89" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">PŘEDNÍ PANEL</text>
-<text x="117.13" y="105.29" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">sem přišít kapsu s mincí (na líc)</text>
-<text x="117.13" y="108.29" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">29,3 mm od horní hrany, 4 mm od boků</text>
-<text x="117.13" y="112.29" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">otevřená hrana kapsy nahoru</text>
-<circle cx="209.76" cy="62.34" r="2.5" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
-<path d="M208.76 62.34 L210.76 62.34 M209.76 61.34 L209.76 63.34" stroke="#2b2b2b" stroke-width="0.25"/>
-<text x="209.76" y="68.34" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="middle" fill="#7a7a7a">průchodka Ø 5</text>
-<text x="224.76" y="12.5" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#2b2b2b">KAPSA S MINCÍ (horní hrana otevřená)</text>
-<path d="M234.76 14 L269.76 14 A10 10 0 0 1 279.76 24 L279.76 62.5 A6 6 0 0 1 273.76 68.5 L230.76 68.5 A6 6 0 0 1 224.76 62.5 L224.76 24 A10 10 0 0 1 234.76 14 Z" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
-<path d="M228.26 24 L228.26 62.5 A2.5 2.5 0 0 0 230.76 65 L273.76 65 A2.5 2.5 0 0 0 276.26 62.5 L276.26 24" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="0.8 1.2"/>
-<circle cx="252.26" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="248.26" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="256.26" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="244.26" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="260.26" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="240.26" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="264.26" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="236.26" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="268.26" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="232.26" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="272.26" cy="65" r="0.45" fill="#2b2b2b"/><circle cx="228.656" cy="63.851" r="0.45" fill="#2b2b2b"/><circle cx="275.864" cy="63.851" r="0.45" fill="#2b2b2b"/><circle cx="228.26" cy="59.927" r="0.45" fill="#2b2b2b"/><circle cx="276.26" cy="59.927" r="0.45" fill="#2b2b2b"/><circle cx="228.26" cy="55.927" r="0.45" fill="#2b2b2b"/><circle cx="276.26" cy="55.927" r="0.45" fill="#2b2b2b"/><circle cx="228.26" cy="51.927" r="0.45" fill="#2b2b2b"/><circle cx="276.26" cy="51.927" r="0.45" fill="#2b2b2b"/><circle cx="228.26" cy="47.927" r="0.45" fill="#2b2b2b"/><circle cx="276.26" cy="47.927" r="0.45" fill="#2b2b2b"/><circle cx="228.26" cy="43.927" r="0.45" fill="#2b2b2b"/><circle cx="276.26" cy="43.927" r="0.45" fill="#2b2b2b"/><circle cx="228.26" cy="39.927" r="0.45" fill="#2b2b2b"/><circle cx="276.26" cy="39.927" r="0.45" fill="#2b2b2b"/><circle cx="228.26" cy="35.927" r="0.45" fill="#2b2b2b"/><circle cx="276.26" cy="35.927" r="0.45" fill="#2b2b2b"/><circle cx="228.26" cy="31.927" r="0.45" fill="#2b2b2b"/><circle cx="276.26" cy="31.927" r="0.45" fill="#2b2b2b"/><circle cx="228.26" cy="27.927" r="0.45" fill="#2b2b2b"/><circle cx="276.26" cy="27.927" r="0.45" fill="#2b2b2b"/>
-<path d="M268.26 41 A16 16 0 1 0 236.26 41 A16 16 0 1 0 268.26 41 Z" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
-<circle cx="252.26" cy="41" r="20" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="2 1.5"/>
-<circle cx="252.26" cy="41" r="22" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="0.8 1.2"/>
-<path d="M250.76 41 L253.76 41 M252.26 39.5 L252.26 42.5" stroke="#2b2b2b" stroke-width="0.25"/>
-<text x="224.76" y="72" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">55 × 54,5 mm · okno Ø 32 (plná)</text>
-<text x="224.76" y="75" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">mince Ø 40 (čárkovaně) · pata důlku Ø 44 (tečkovaně)</text>
-<text x="224.76" y="78" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">šev 31 otvorů od středu dna · prosekat PŘED tvarováním</text>
-<text x="224.76" y="87" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#2b2b2b">OTVOR FORMY PRO DŮLEK</text>
-<path d="M268.76 110.5 A22 22 0 1 0 224.76 110.5 A22 22 0 1 0 268.76 110.5 Z" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
-<path d="M245.26 110.5 L248.26 110.5 M246.76 109 L246.76 112" stroke="#2b2b2b" stroke-width="0.25"/>
-<text x="224.76" y="136" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">Ø 44 = mince + 2 × kůže 1,2 + vůle 1,6</text>
-<text x="224.76" y="139" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">deska ≥ 74 × 74, tl. ≥ 8 mm, hranu otvoru zaoblit</text>
-<path d="M10 160 V164 M10 162 H60 M60 160 V164" stroke="#2b2b2b" stroke-width="0.3" fill="none"/>
-<text x="63" y="163" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#2b2b2b">KONTROLA MĚŘÍTKA: tato úsečka musí měřit přesně 50 mm</text>
-<text x="10" y="170" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">POUZDRO NA KARTY S VSAZENOU MINCÍ – střih 1:1, tisk na A4 NA ŠÍŘKU na 100 % (bez „přizpůsobit stránce“). NÁVRH k ověření na papíru a odřezku.</text>
-<text x="10" y="173.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Karta 54 × 85,6 (4 ks) + bankovky složené na třetiny, mince Ø 40, kůže tělo 1,5 mm, kapsa 1,2 mm.</text>
-<text x="10" y="176.4" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Jeden pás: ZADNÍ panel + ohyb A + PŘEDNÍ panel + ohyb B + VNITŘNÍ panel (dělí karty a bankovky, nese průchodku). Po složení jsou obě boční hrany OHYBY, šije se jen dno a horní hrana zůstává otevřená.</text>
-<text x="10" y="179.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">PÁS OBKRESLIT NA LÍC (hladkou stranu) kůže – přední panel je nakreslený tak, jak bude vidět. Jazyk pak vyjde zepředu vpravo (zezadu vlevo), výřez naproti němu.</text>
-<text x="10" y="182.8" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Plná čára = řez, čárkovaně = ohyb, tečky = otvory stehu (rozteč 4 mm). Otvory dna se sekají až po složení, skrz všechny vrstvy najednou.</text>
-<text x="10" y="186" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Pořadí: 1 pás + odřezek na kapsu · 2 důlek za mokra (kůže LÍCEM DOLŮ na formu) · 3 obrys kapsy a OKNO · 4 přišít kapsu na přední panel, patice druku · 5 složit (vnitřní za přední, zadní přes vše)</text>
-<text x="10" y="189.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">· 6 prošít dno · 7 průchodka do vnitřního panelu a šňůrka · 8 klobouček druku až po zkoušce s kartami i bankovkami, pak jazyk zkrátit · 9 srazit a zaleštit hrany.</text>
+<path d="M10 20 A10 10 0 0 1 20 10 L33 10 A10 10 0 0 1 43 20 L43 48.99 A2 2 0 0 0 45 50.99 L48 50.99 A34 34 0 0 0 82 84.99 L94.63 84.99 A34 34 0 0 0 128.63 50.99 L239.76 50.99 A6 6 0 0 1 245.76 56.99 L245.76 149.09 A6 6 0 0 1 239.76 155.09 L16 155.09 A6 6 0 0 1 10 149.09 Z" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
+<path d="M82 84.99 L82 155.09" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
+<path d="M94.63 84.99 L94.63 155.09" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
+<text x="88.315" y="47.99" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">OHYB A 12,63</text>
+<path d="M166.63 50.99 L166.63 155.09" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
+<path d="M173.76 50.99 L173.76 155.09" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
+<text x="170.195" y="47.99" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">OHYB B 7,13</text>
+<path d="M10 151.59 L245.76 151.59" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="0.8 1.2"/>
+<circle cx="98.13" cy="151.59" r="0.45" fill="#2b2b2b"/><circle cx="102.13" cy="151.59" r="0.45" fill="#2b2b2b"/><circle cx="106.13" cy="151.59" r="0.45" fill="#2b2b2b"/><circle cx="110.13" cy="151.59" r="0.45" fill="#2b2b2b"/><circle cx="114.13" cy="151.59" r="0.45" fill="#2b2b2b"/><circle cx="118.13" cy="151.59" r="0.45" fill="#2b2b2b"/><circle cx="122.13" cy="151.59" r="0.45" fill="#2b2b2b"/><circle cx="126.13" cy="151.59" r="0.45" fill="#2b2b2b"/><circle cx="130.13" cy="151.59" r="0.45" fill="#2b2b2b"/><circle cx="134.13" cy="151.59" r="0.45" fill="#2b2b2b"/><circle cx="138.13" cy="151.59" r="0.45" fill="#2b2b2b"/><circle cx="142.13" cy="151.59" r="0.45" fill="#2b2b2b"/><circle cx="146.13" cy="151.59" r="0.45" fill="#2b2b2b"/><circle cx="150.13" cy="151.59" r="0.45" fill="#2b2b2b"/><circle cx="154.13" cy="151.59" r="0.45" fill="#2b2b2b"/><circle cx="158.13" cy="151.59" r="0.45" fill="#2b2b2b"/><circle cx="162.13" cy="151.59" r="0.45" fill="#2b2b2b"/>
+<text x="130.63" y="160.09" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">ŠEV DNA 3,5 mm od hrany · 17 otvorů · sekat skrz všechny vrstvy</text>
+<text x="88.315" y="54.99" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#7a7a7a">VÝŘEZ NA PRST R34</text>
+<text x="88.315" y="58.59" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#7a7a7a">odkryje 19 mm karty</text>
+<circle cx="26.5" cy="26" r="6.25" fill="none" stroke="#a2471f" stroke-width="0.2" stroke-dasharray="1.5 1"/>
+<path d="M25 26 L28 26 M26.5 24.5 L26.5 27.5" stroke="#2b2b2b" stroke-width="0.25"/>
+<text x="45" y="25.5" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#a2471f">druk – klobouček</text>
+<text x="45" y="28.4" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="start" fill="#a2471f">osadit až po zkoušce s kartami</text>
+<path d="M10 15 L43 15" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1 1"/>
+<text x="45" y="13.5" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="start" fill="#7a7a7a">sem jazyk zkrátit po zkoušce</text>
+<text x="45" y="16.2" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="start" fill="#7a7a7a">(rezerva 5, rohy znovu R10)</text>
+<text x="26.5" y="36.75" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#2b2b2b">JAZYK</text>
+<text x="46" y="103.04" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">ZADNÍ PANEL</text>
+<text x="46" y="106.44" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">72 × 104,1 mm</text>
+<text x="46" y="109.44" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">motiv / ražení na tuto stranu</text>
+<text x="209.76" y="103.04" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">VNITŘNÍ PANEL</text>
+<text x="209.76" y="106.44" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">dělí karty (vepředu)</text>
+<text x="209.76" y="109.44" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">a bankovky (vzadu)</text>
+<circle cx="150.13" cy="60.99" r="6.25" fill="none" stroke="#a2471f" stroke-width="0.2" stroke-dasharray="1.5 1"/>
+<path d="M148.63 60.99 L151.63 60.99 M150.13 59.49 L150.13 62.49" stroke="#2b2b2b" stroke-width="0.25"/>
+<text x="150.13" y="70.24" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#a2471f">druk – patice</text>
+<path d="M113.13 86.79 L148.13 86.79 A10 10 0 0 1 158.13 96.79 L158.13 135.29 A6 6 0 0 1 152.13 141.29 L109.13 141.29 A6 6 0 0 1 103.13 135.29 L103.13 96.79 A10 10 0 0 1 113.13 86.79 Z" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1 1"/>
+<text x="130.63" y="106.04" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">PŘEDNÍ PANEL</text>
+<text x="130.63" y="109.44" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">sem přišít kapsu s mincí (na líc)</text>
+<text x="130.63" y="112.44" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">35,8 mm od horní hrany, 8,5 mm od boků</text>
+<text x="130.63" y="116.44" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">otevřená hrana kapsy nahoru</text>
+<circle cx="236.76" cy="59.99" r="2.5" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
+<path d="M235.76 59.99 L237.76 59.99 M236.76 58.99 L236.76 60.99" stroke="#2b2b2b" stroke-width="0.25"/>
+<text x="236.76" y="65.99" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="middle" fill="#7a7a7a">průchodka Ø 5</text>
+<circle cx="84.315" cy="88.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="84.315" cy="92.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="84.315" cy="96.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="84.315" cy="100.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="84.315" cy="104.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="84.315" cy="108.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="84.315" cy="112.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="84.315" cy="116.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="84.315" cy="120.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="84.315" cy="124.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="84.315" cy="128.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="84.315" cy="132.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="84.315" cy="136.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="84.315" cy="140.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="84.315" cy="144.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="88.315" cy="88.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="88.315" cy="92.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="88.315" cy="96.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="88.315" cy="100.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="88.315" cy="104.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="88.315" cy="108.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="88.315" cy="112.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="88.315" cy="116.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="88.315" cy="120.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="88.315" cy="124.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="88.315" cy="128.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="88.315" cy="132.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="88.315" cy="136.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="88.315" cy="140.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="88.315" cy="144.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="92.315" cy="88.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="92.315" cy="92.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="92.315" cy="96.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="92.315" cy="100.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="92.315" cy="104.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="92.315" cy="108.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="92.315" cy="112.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="92.315" cy="116.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="92.315" cy="120.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="92.315" cy="124.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="92.315" cy="128.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="92.315" cy="132.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="92.315" cy="136.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="92.315" cy="140.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="92.315" cy="144.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="54.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="58.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="62.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="66.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="70.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="74.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="78.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="82.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="86.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="90.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="94.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="98.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="102.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="106.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="110.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="114.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="118.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="122.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="126.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="130.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="134.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="138.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="142.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="168.595" cy="146.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="54.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="58.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="62.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="66.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="70.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="74.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="78.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="82.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="86.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="90.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="94.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="98.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="102.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="106.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="110.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="114.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="118.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="122.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="126.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="130.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="134.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="138.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="142.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<circle cx="171.795" cy="146.99" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
+<path d="M10 166 V170 M10 168 H60 M60 166 V170" stroke="#2b2b2b" stroke-width="0.3" fill="none"/>
+<text x="63" y="169" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#2b2b2b">KONTROLA MĚŘÍTKA: tato úsečka musí měřit přesně 50 mm</text>
+<text x="10" y="176" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">POUZDRO NA KARTY S VSAZENOU MINCÍ – LIST 1/2: PÁS. Tisk na A4 NA ŠÍŘKU na 100 % (bez „přizpůsobit stránce“). Kapsa s mincí a forma jsou na listu 2. NÁVRH k ověření na papíru.</text>
+<text x="10" y="179.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Karty 54 × 85,6 (4 ks) vepředu, bankovky složené napůl vzadu, mince Ø 40, kůže tělo 1,5 mm.</text>
+<text x="10" y="182.4" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Jeden pás: ZADNÍ + ohyb A + PŘEDNÍ + ohyb B + VNITŘNÍ panel. Po složení jsou obě boční hrany OHYBY, šije se jen dno (skrz všechny vrstvy), horní hrana zůstává otevřená.</text>
+<text x="10" y="185.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">PÁS OBKRESLIT NA LÍC – přední panel je nakreslený tak, jak bude vidět. Jazyk vyjde zepředu vpravo (zezadu vlevo), výřez na prst naproti němu.</text>
+<text x="10" y="188.8" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Plná čára = řez, čárkovaně = ohyb, tečky = otvory stehu (rozteč 4 mm, sekat až po složení), kroužky v ohybech = perforace Ø 1,5 (jako předloha; usnadní ohyb).</text>
+<text x="10" y="192" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Pořadí: 1 pás · 2–3 kapsa (list 2) · 4 přišít kapsu, osadit patici druku a průchodku NAPLOCHO · 5 složit (vnitřní za přední, zadní přes vše) · 6 slepit a prošít dno</text>
+<text x="10" y="195.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">· 7 klobouček až po zkoušce s kartami i bankovkami, pak jazyk zkrátit a znovu zaoblit · 8 srazit a zaleštit hrany (i výřez a horní hranu vnitřního panelu – předem).</text>
 </svg>

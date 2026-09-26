@@ -6,6 +6,7 @@ import {
   coinCardHolderLayout,
 } from '../src/lib/geometry/coin-card-holder.ts';
 import {
+  buildCoinHolderPocketSvg,
   buildCoinHolderProcessSvg,
   buildCoinHolderSheetSvg,
   coinHolderFileStem,
@@ -16,7 +17,7 @@ describe('generátor pouzdra s mincí – varianty', () => {
   const spec = DEFAULT_COIN_CARD_HOLDER;
   const r3 = (n: number): string => String(Math.round(n * 1000) / 1000);
 
-  it('název souboru odliší minci, okno i chybějící vnitřní panel', () => {
+  it('název souboru odliší minci, okno i stranu jazyka', () => {
     expect(coinHolderFileStem(spec)).toBe('pouzdro-mince-sablona');
     expect(coinHolderFileStem({ ...spec, coinDiameterMm: NAMED_COINS['50kc'] })).toBe(
       'pouzdro-mince-sablona-mince-27-5mm',
@@ -24,8 +25,8 @@ describe('generátor pouzdra s mincí – varianty', () => {
     expect(coinHolderFileStem({ ...spec, windowDiameterMm: 30 })).toBe(
       'pouzdro-mince-sablona-okno-30mm',
     );
-    expect(coinHolderFileStem({ ...spec, innerPanel: false })).toBe(
-      'pouzdro-mince-sablona-bez-vnitrniho-panelu',
+    expect(coinHolderFileStem({ ...spec, tabSide: 'left' })).toBe(
+      'pouzdro-mince-sablona-jazyk-vlevo',
     );
   });
 
@@ -46,20 +47,24 @@ describe('generátor pouzdra s mincí – varianty', () => {
       `L${X(L.scoopStartXMm)} ${Y(0)} A${S} ${S} 0 0 1 ${X(L.backX1Mm)} ${Y(S)}`,
     );
     expect(svg).toContain(`<circle cx="${X(L.grommetXMm!)}" cy="${Y(L.grommetYMm!)}" r="2.5"`);
-    expect(svg).toContain('Jazyk pak vyjde zepředu vlevo');
+    // Tečky dna zůstanou na předním panelu (zrcadlení se nesmí použít dvakrát).
+    const seamDots = [...svg.matchAll(/<circle cx="([\d.]+)" cy="([\d.]+)" r="0.45"/g)].map((q) =>
+      Number(q[1]),
+    );
+    expect(seamDots.length).toBe(L.bottomSeamHoles);
+    const lo = m + L.stripLengthMm - (L.frontX1Mm - spec.stitchOffsetMm) - 0.01;
+    const hi = m + L.stripLengthMm - (L.frontX0Mm + spec.stitchOffsetMm) + 0.01;
+    for (const x of seamDots) {
+      expect(x).toBeGreaterThanOrEqual(lo);
+      expect(x).toBeLessThanOrEqual(hi);
+    }
+    // Popisky jazyka leží vně jazyka (vlevo od něj), ne přes řez.
+    expect(svg).toContain(`<text x="${r3(m + L.stripLengthMm - L.tabX1Mm - 2)}"`);
+    expect(svg).toContain('Jazyk vyjde zepředu vlevo');
   });
 
-  it('bez vnitřního panelu: dva panely, jeden ohyb, bez průchodky', () => {
-    const simple = { ...spec, innerPanel: false };
-    const L = coinCardHolderLayout(simple);
-    const svg = buildCoinHolderSheetSvg(simple);
-    expect(svg).not.toContain('VNITŘNÍ PANEL');
-    expect(svg).not.toContain('průchodka');
-    expect(svg).toContain('ZADNÍ PANEL');
-    expect(L.stripLengthMm).toBeLessThan(coinCardHolderLayout(spec).stripLengthMm);
-    // Kružnice průchodky ve výkresu chybí.
-    const holes = [...svg.matchAll(/<circle [^>]*r="2.5"/g)];
-    expect(holes.length).toBe(0);
+  it('bez vnitřního panelu kresba odmítne (jeden bok by zůstal otevřený)', () => {
+    expect(() => buildCoinHolderSheetSvg({ ...spec, innerPanel: false })).toThrow(/otevřená/);
   });
 
   it('list postupu: pás v kroku 1, výřez předku vlevo, dno prošité skrz vrstvy', () => {
@@ -89,7 +94,7 @@ describe('generátor pouzdra s mincí – varianty', () => {
   });
 
   it('vlastní okno se propíše jen přes spec', () => {
-    expect(buildCoinHolderSheetSvg({ ...spec, windowDiameterMm: 30 })).toContain('okno Ø 30');
-    expect(buildCoinHolderSheetSvg(spec)).toContain('okno Ø 32');
+    expect(buildCoinHolderPocketSvg({ ...spec, windowDiameterMm: 30 })).toContain('okno Ø 30');
+    expect(buildCoinHolderPocketSvg(spec)).toContain('okno Ø 32');
   });
 });

@@ -21,7 +21,11 @@ import {
   buildPages,
   buildPlateLegendSvg,
 } from './belt-buckle-end.ts';
-import { buildCoinHolderProcessSvg, buildCoinHolderSheetSvg } from './coin-card-holder.ts';
+import {
+  buildCoinHolderPocketSvg,
+  buildCoinHolderProcessSvg,
+  buildCoinHolderSheetSvg,
+} from './coin-card-holder.ts';
 import { DEFAULT_COIN_CARD_HOLDER, NAMED_COINS } from '../src/lib/geometry/coin-card-holder.ts';
 
 /**
@@ -60,6 +64,15 @@ describe('zapsané soubory odpovídají generátoru', () => {
     ['opasek-nahled-zaobleny.svg', () => buildBeltTipPreviewSvg(tip, 'round')],
     ['pouzdro-mince-sablona.svg', () => buildCoinHolderSheetSvg()],
     ['pouzdro-mince-postup.svg', () => buildCoinHolderProcessSvg()],
+    ['pouzdro-mince-kapsa.svg', () => buildCoinHolderPocketSvg()],
+    [
+      'pouzdro-mince-kapsa-mince-27-5mm.svg',
+      () =>
+        buildCoinHolderPocketSvg({
+          ...DEFAULT_COIN_CARD_HOLDER,
+          coinDiameterMm: NAMED_COINS['50kc'],
+        }),
+    ],
     [
       'pouzdro-mince-sablona-mince-27-5mm.svg',
       () =>
