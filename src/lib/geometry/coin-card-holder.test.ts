@@ -1,13 +1,15 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  A4_SHEET,
   DEFAULT_COIN_CARD_HOLDER,
+  LEGEND_HEIGHT_MM,
   NAMED_COINS,
   checkCoinCardHolder,
   coinCardHolderLayout,
 } from './coin-card-holder';
 
-describe('pouzdro s vsazenou mincí – model (tvar L podle předlohy)', () => {
+describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na bocích)', () => {
   const spec = DEFAULT_COIN_CARD_HOLDER;
   const L = coinCardHolderLayout(spec);
 
@@ -15,107 +17,104 @@ describe('pouzdro s vsazenou mincí – model (tvar L podle předlohy)', () => {
     expect(checkCoinCardHolder(spec)).toEqual([]);
   });
 
-  it('karta se vejde na šířku s vůlí a nedře o steh', () => {
-    const inner = L.panelWidthMm - 2 * (spec.stitchOffsetMm + spec.seamInnerMarginMm);
-    expect(inner).toBeCloseTo(spec.cardWidthMm + 2 * spec.cardSideClearanceMm, 9);
-    expect(inner).toBeGreaterThan(spec.cardWidthMm);
-  });
-
-  it('panely jsou stejně vysoké (karta + přesah), karty jsou schované, výřez odkryje jejich roh', () => {
-    expect(L.backHeightMm).toBeCloseTo(spec.cardHeightMm + spec.backOverCardMm, 9);
-    expect(L.frontHeightMm).toBeCloseTo(L.backHeightMm - spec.frontTopDropMm, 9);
-    expect(spec.frontTopDropMm).toBe(0);
-    expect(L.cardExposedMm).toBeCloseTo(L.scoopRadiusMm - spec.backOverCardMm, 9);
-    expect(L.cardExposedMm).toBeGreaterThanOrEqual(20);
-  });
-
-  it('ohyb má přídavek π·(obsah/2 + kůže/2) bez dělicího panelu', () => {
-    const inner = spec.cardsCount * spec.cardThicknessMm;
-    expect(L.innerThicknessMm).toBeCloseTo(inner, 6);
-    expect(L.foldAllowanceMm).toBeCloseTo(Math.PI * (inner / 2 + spec.bodyThicknessMm / 2), 2);
-    expect(L.foldEndMm - L.foldStartMm).toBeCloseTo(L.foldAllowanceMm, 6);
-    expect(L.frontTopMm).toBeCloseTo(L.backHeightMm + L.foldAllowanceMm + L.frontHeightMm, 6);
-    // S dělicím panelem je ohyb o π·kůže/2 delší.
-    const withDivider = coinCardHolderLayout({ ...spec, dividerPanel: true });
-    expect(withDivider.foldAllowanceMm - L.foldAllowanceMm).toBeCloseTo(
-      (Math.PI * spec.bodyThicknessMm) / 2,
-      2,
-    );
-    expect(withDivider.dividerHeightMm).toBe(L.frontHeightMm);
-    expect(L.dividerHeightMm).toBeNull();
-  });
-
-  it('jazyk: oblouk přes obsah, pokles po předku, k druku a přesah – vše nezávisle spočtené', () => {
-    // Obsah pod jazykem = karty + přední panel; neutrální osa jazyka v polovině jeho kůže.
-    const content = spec.cardsCount * spec.cardThicknessMm + spec.bodyThicknessMm;
-    const wrap = Math.PI * (content / 2 + spec.bodyThicknessMm / 2);
-    const drop = spec.frontTopDropMm; // zadní − přední výška
-    expect(L.tabWrapMm).toBeCloseTo(wrap, 2);
-    expect(L.tabDropMm).toBeCloseTo(drop, 6);
-    expect(L.tabNominalLengthMm).toBeCloseTo(
-      wrap + drop + spec.snapFromFrontTopMm + spec.tabBeyondSnapMm,
-      1,
-    );
-    // Řez je o rezervu delší; konec na předku se počítá s rezervou (nejhorší případ před zkrácením).
-    expect(L.tabLengthMm).toBeCloseTo(L.tabNominalLengthMm + spec.tabFitReserveMm, 6);
-    expect(L.tabEndOnFrontMm).toBeCloseTo(
-      spec.snapFromFrontTopMm + spec.tabBeyondSnapMm + spec.tabFitReserveMm,
-      6,
-    );
-    // Druk na jazyku měřený od zlomu = oblouk + pokles + vzdálenost patice od horní hrany předku.
-    expect(-L.snapTabYMm).toBeCloseTo(wrap + drop + spec.snapFromFrontTopMm, 1);
-    // Patice na předku: od horní hrany předku (v soustavě těla je předek vzhůru nohama).
-    expect(L.frontTopMm - L.snapFrontYMm).toBeCloseTo(spec.snapFromFrontTopMm, 6);
-    // Druk sedí na ose jazyka; konec jazyka je zaoblený obdélník (R < půl šířky), jako u předlohy.
-    expect(L.snapXMm).toBeCloseTo((L.tabX0Mm + L.tabX1Mm) / 2, 9);
-    expect(L.tabEndRadiusMm).toBe(spec.tabEndRadiusMm);
-    expect(L.tabEndRadiusMm).toBeLessThan(spec.tabWidthMm / 2);
-    // Jazyk je zhruba půl šířky pouzdra (předloha).
-    expect(spec.tabWidthMm / L.panelWidthMm).toBeGreaterThan(0.45);
-    expect(spec.tabWidthMm / L.panelWidthMm).toBeLessThan(0.55);
-    expect(L.bodyLengthMm).toBeCloseTo(L.tabLengthMm + L.frontTopMm, 6);
-  });
-
-  it('jazyk vpravo (jako předloha), výřez v předku vlevo, průchodka v levém rohu zadního panelu pod výřezem', () => {
-    expect(spec.tabSide).toBe('right');
-    expect(L.tabX1Mm).toBeCloseTo(L.panelWidthMm, 9);
-    expect(L.tabX0Mm).toBeCloseTo(L.panelWidthMm - spec.tabWidthMm, 9);
-    expect(L.scoopCornerXMm).toBe(0);
-    expect(L.scoopRadiusMm).toBe(30);
-    expect(L.grommetXMm).toBeCloseTo(spec.grommetFromEdgeMm, 9);
-    expect(L.grommetYMm).toBeCloseTo(spec.grommetFromEdgeMm, 9);
-    // Výřez nezasahuje pod jazyk ani k patici druku.
-    expect(L.scoopRadiusMm).toBeLessThanOrEqual(L.tabX0Mm);
-    expect(L.scoopRadiusMm + spec.snapDiameterMm / 2 + spec.snapClearanceMm).toBeLessThanOrEqual(
-      L.snapXMm,
-    );
-    // Průchodka (i s kroužkem ≈ +3 mm) je celá ve výřezu, s můstkem.
-    const gr = Math.hypot(L.grommetXMm, L.grommetYMm) + spec.grommetHoleMm / 2 + 3;
-    expect(gr + spec.minLigamentMm).toBeLessThanOrEqual(L.scoopRadiusMm);
-    // `null` = šířka mimo jazyk.
-    expect(coinCardHolderLayout({ ...spec, scoopRadiusMm: null }).scoopRadiusMm).toBeCloseTo(
-      L.panelWidthMm - spec.tabWidthMm,
+  it('panel: karta s vůlí a okraj k ohybu, výška z karty a stehu dna', () => {
+    expect(L.panelWidthMm).toBeCloseTo(
+      spec.cardWidthMm + 2 * spec.cardSideClearanceMm + 2 * spec.sideMarginMm,
       9,
     );
-    // Zrcadlová varianta: totéž vlevo.
-    const left = coinCardHolderLayout({ ...spec, tabSide: 'left' });
-    expect(left.tabX0Mm).toBe(0);
-    expect(left.scoopCornerXMm).toBeCloseTo(L.panelWidthMm, 9);
-    expect(left.grommetXMm).toBeCloseTo(L.panelWidthMm - spec.grommetFromEdgeMm, 9);
-    expect(checkCoinCardHolder({ ...spec, tabSide: 'left' })).toEqual([]);
+    expect(L.panelHeightMm).toBeCloseTo(
+      spec.stitchOffsetMm + spec.cardHeightMm + spec.topOverCardMm,
+      9,
+    );
+    // Karta se vejde mezi boční ohyby s vůlí na obou stranách.
+    expect(L.panelWidthMm - 2 * spec.sideMarginMm).toBeGreaterThan(spec.cardWidthMm);
+    // Šev dna je pod kartou, karta sedí pod horní hranou o přesah + půl tloušťky obsahu.
+    expect(L.bottomSeamYMm).toBeCloseTo(L.panelHeightMm - spec.stitchOffsetMm, 9);
+    expect(L.cardBelowRimMm).toBeCloseTo(spec.topOverCardMm + L.cardsThicknessMm / 2, 9);
   });
 
-  it('boční švy: u jazyka celý překryv, u výřezu jen pod výřezem, tečky od ohybu', () => {
-    const so = spec.stitchOffsetMm;
-    expect(L.seamLengthTabSideMm).toBeCloseTo(L.frontHeightMm - 2 * so, 9);
-    expect(L.seamHolesTabSide).toBe(Math.floor(L.seamLengthTabSideMm / spec.stitchPitchMm) + 1);
-    expect(L.seamLengthScoopSideMm).toBeCloseTo(L.frontHeightMm - L.scoopRadiusMm - 2 * so, 9);
-    expect(L.seamHolesScoopSide).toBe(Math.floor(L.seamLengthScoopSideMm / spec.stitchPitchMm) + 1);
-    expect(L.seamHolesScoopSide).toBeLessThan(L.seamHolesTabSide);
-    expect(so + L.seamLengthTabSideMm).toBeLessThan(L.backHeightMm);
+  it('pás: tři panely a dva ohyby, ohyb A obepíná vnitřní panel i obsah', () => {
+    const t = spec.bodyThicknessMm;
+    const cards = spec.cardsCount * spec.cardThicknessMm;
+    expect(L.cardsThicknessMm).toBeCloseTo(cards, 6);
+    // Ohyb B jen kolem karet, ohyb A kolem karet + vnitřní panel + bankovky.
+    expect(L.foldFrontInnerMm).toBeCloseTo(Math.PI * (cards / 2 + t / 2), 2);
+    expect(L.foldBackFrontMm).toBeCloseTo(
+      Math.PI * ((cards + t + spec.billsThicknessMm) / 2 + t / 2),
+      2,
+    );
+    expect(L.foldBackFrontMm).toBeGreaterThan(L.foldFrontInnerMm);
+    // Hranice panelů na sebe navazují a pás je jejich součet.
+    expect(L.backX1Mm - L.backX0Mm).toBeCloseTo(L.panelWidthMm, 9);
+    expect(L.frontX0Mm - L.backX1Mm).toBeCloseTo(L.foldBackFrontMm, 6);
+    expect(L.frontX1Mm - L.frontX0Mm).toBeCloseTo(L.panelWidthMm, 9);
+    expect(L.innerX0Mm! - L.frontX1Mm).toBeCloseTo(L.foldFrontInnerMm, 6);
+    expect(L.stripLengthMm).toBeCloseTo(
+      3 * L.panelWidthMm + L.foldBackFrontMm + L.foldFrontInnerMm,
+      6,
+    );
+    // Bez vnitřního panelu zbydou dva panely a jeden ohyb kolem karet.
+    const simple = coinCardHolderLayout({ ...spec, innerPanel: false });
+    expect(simple.innerX0Mm).toBeNull();
+    expect(simple.grommetXMm).toBeNull();
+    expect(simple.foldFrontInnerMm).toBe(0);
+    expect(simple.foldBackFrontMm).toBeCloseTo(Math.PI * (cards / 2 + t / 2), 2);
+    expect(simple.stripLengthMm).toBeCloseTo(2 * L.panelWidthMm + simple.foldBackFrontMm, 6);
+    expect(checkCoinCardHolder({ ...spec, innerPanel: false })).toEqual([]);
   });
 
-  it('kapsa: rovná plocha mezi patou důlku a stehem, okno = výsečník po celých mm', () => {
+  it('jazyk: oblouk přes celý obsah, k druku, přesah a rezerva na zkoušku', () => {
+    const t = spec.bodyThicknessMm;
+    const stack = 2 * t + spec.cardsCount * spec.cardThicknessMm + t + spec.billsThicknessMm;
+    expect(L.tabWrapMm).toBeCloseTo(Math.PI * (stack / 2 + t / 2), 1);
+    expect(L.tabNominalLengthMm).toBeCloseTo(
+      L.tabWrapMm + spec.snapFromTopMm + spec.tabBeyondSnapMm,
+      6,
+    );
+    expect(L.tabLengthMm).toBeCloseTo(L.tabNominalLengthMm + spec.tabFitReserveMm, 6);
+    // Jazyk je u levého konce pásu (po složení dopadne na pravou hranu předku).
+    expect(L.tabX0Mm).toBe(0);
+    expect(L.tabX1Mm).toBe(spec.tabWidthMm);
+    expect(spec.tabWidthMm / L.panelWidthMm).toBeGreaterThan(0.45);
+    expect(spec.tabWidthMm / L.panelWidthMm).toBeLessThan(0.55);
+    // Klobouček na ose jazyka, patice na předku pod jeho dráhou.
+    expect(L.snapXTabMm).toBeCloseTo(spec.tabWidthMm / 2, 9);
+    expect(-L.snapYTabMm).toBeCloseTo(L.tabWrapMm + spec.snapFromTopMm, 6);
+    expect(L.snapXFrontMm).toBeCloseTo(L.frontX1Mm - spec.tabWidthMm / 2, 9);
+    expect(L.snapYFrontMm).toBe(spec.snapFromTopMm);
+    expect(L.tabEndRadiusMm).toBe(spec.tabEndRadiusMm);
+  });
+
+  it('výřez na prst: jeden oblouk U přes pásmo ohybu A, po složení čtvrtkruh v obou panelech', () => {
+    expect(L.scoopStartXMm).toBeCloseTo(L.backX1Mm - L.scoopRadiusMm, 9);
+    expect(L.scoopEndXMm).toBeCloseTo(L.frontX0Mm + L.scoopRadiusMm, 9);
+    expect(L.scoopEndXMm - L.scoopStartXMm).toBeCloseTo(2 * L.scoopRadiusMm + L.foldBackFrontMm, 6);
+    // Mezi kořenem jazyka a začátkem výřezu zbývá můstek.
+    expect(L.scoopStartXMm - L.tabX1Mm).toBeGreaterThanOrEqual(spec.minLigamentMm);
+    // Výřez odkryje karty a je hlubší než přesah panelu nad nimi.
+    expect(L.cardExposedMm).toBeCloseTo(L.scoopRadiusMm - L.cardBelowRimMm, 6);
+    expect(L.cardExposedMm).toBeGreaterThan(20);
+  });
+
+  it('průchodka je ve vnitřním panelu naproti jazyku a celá se vejde do výřezu', () => {
+    expect(L.grommetXMm).toBeCloseTo(L.innerX1Mm! - spec.grommetFromEdgeMm, 9);
+    expect(L.grommetYMm).toBeCloseTo(spec.grommetFromEdgeMm, 9);
+    // Po složení leží roh vnitřního panelu přesně v rohu s výřezem.
+    const foldBCentre = L.frontX1Mm + L.foldFrontInnerMm / 2;
+    expect(2 * foldBCentre - L.innerX1Mm!).toBeCloseTo(L.frontX0Mm, 6);
+    const fromCorner = Math.hypot(spec.grommetFromEdgeMm, spec.grommetFromEdgeMm);
+    expect(fromCorner + spec.grommetHoleMm / 2 + 3 + spec.minLigamentMm).toBeLessThanOrEqual(
+      L.scoopRadiusMm,
+    );
+  });
+
+  it('šev dna: jedna řada na panel, rozteč ze specifikace, tečky se sekají po složení', () => {
+    const run = L.panelWidthMm - 2 * spec.stitchOffsetMm;
+    expect(L.bottomSeamHoles).toBe(Math.floor(run / spec.stitchPitchMm) + 1);
+    expect(L.bottomSeamYMm + spec.stitchOffsetMm).toBeCloseTo(L.panelHeightMm, 9);
+  });
+
+  it('kapsa: rovná plocha kolem důlku, okno po celých mm, pod jazykem a nad švem dna', () => {
     const formHole = spec.coinDiameterMm + 2 * spec.pocketThicknessMm + spec.formHoleClearanceMm;
     expect(L.formHoleDiameterMm).toBeCloseTo(formHole, 6);
     expect(L.pocketWidthMm).toBeCloseTo(
@@ -126,95 +125,27 @@ describe('pouzdro s vsazenou mincí – model (tvar L podle předlohy)', () => {
       spec.stitchOffsetMm + spec.pocketFlatMm + formHole + spec.coinTopOverlapMm,
       6,
     );
-    expect(L.coinCentreXMm - L.formHoleDiameterMm / 2 - spec.stitchOffsetMm).toBeCloseTo(
-      spec.pocketFlatMm,
-      6,
-    );
-    expect(
-      L.pocketHeightMm - L.coinCentreYMm - L.formHoleDiameterMm / 2 - spec.stitchOffsetMm,
-    ).toBeCloseTo(spec.pocketFlatMm, 6);
     expect(Number.isInteger(L.windowDiameterMm)).toBe(true);
     expect(L.coinRingMm).toBeGreaterThanOrEqual(spec.minCoinRingMm);
-    expect(L.windowDiameterMm).toBe(32);
-    const own = coinCardHolderLayout({ ...spec, windowDiameterMm: 30 });
-    expect(own.windowDiameterMm).toBe(30);
-    expect(own.coinRingMm).toBeCloseTo(5, 9);
-  });
-
-  it('kapsa leží na předku pod jazykem a drukem, nad pásmem ohybu a mimo výřez', () => {
-    const bandTop =
-      Math.max(spec.snapFromFrontTopMm + spec.snapDiameterMm / 2, L.tabEndOnFrontMm) +
-      spec.snapClearanceMm;
-    expect(L.pocketYMm).toBeGreaterThanOrEqual(bandTop - 1e-9);
-    expect(L.pocketYMm + L.pocketHeightMm).toBeLessThanOrEqual(
-      L.frontHeightMm - spec.pocketFromFoldMinMm + 1e-9,
-    );
     expect(L.pocketXMm).toBeCloseTo((L.panelWidthMm - L.pocketWidthMm) / 2, 9);
-    // Nejbližší bod zaobleného horního rohu kapsy k rohu s výřezem je aspoň můstek za obloukem.
+    // Pod koncem jazyka i s rezervou a nad švem dna.
+    expect(L.pocketYMm).toBeGreaterThanOrEqual(L.tabEndOnFrontMm + spec.snapClearanceMm - 1e-9);
+    expect(L.pocketYMm + L.pocketHeightMm).toBeLessThanOrEqual(
+      L.bottomSeamYMm - spec.pocketFromBottomMinMm + 1e-9,
+    );
+    // Horní roh kapsy nechá můstek od oblouku výřezu (v soustavě předního panelu je výřez vlevo).
     const rp = spec.pocketTopRadiusMm;
     const d = Math.hypot(L.pocketXMm + rp, L.pocketYMm + rp) - rp;
-    expect(d).toBeGreaterThanOrEqual(L.scoopRadiusMm + spec.minLigamentMm - 0.02);
-    // Menší mince: kapsa vystředěná v pásmu (výřez ji netlačí).
-    const small = coinCardHolderLayout({ ...spec, coinDiameterMm: 23 });
-    const bandBottom = L.frontHeightMm - spec.pocketFromFoldMinMm;
-    expect(small.pocketYMm - bandTop).toBeCloseTo(
-      bandBottom - (small.pocketYMm + small.pocketHeightMm),
-      1,
-    );
+    expect(d).toBeGreaterThanOrEqual(L.scoopRadiusMm + spec.minLigamentMm - 0.05);
   });
 
-  it('kontroly odhalí kolize a špatné parametry', () => {
-    expect(checkCoinCardHolder({ ...spec, tabBeyondSnapMm: 3 }).join(' ')).toMatch(/blízko druku/);
-    expect(checkCoinCardHolder({ ...spec, scoopRadiusMm: 40 }).join(' ')).toMatch(/pod jazyk/);
-    expect(checkCoinCardHolder({ ...spec, scoopRadiusMm: 15 }).join(' ')).toMatch(/mělký/);
-    expect(checkCoinCardHolder({ ...spec, grommetFromEdgeMm: 20 }).join(' ')).toMatch(
-      /nebyla celá vidět/,
-    );
-    expect(checkCoinCardHolder({ ...spec, tabFitReserveMm: 0 }).join(' ')).toMatch(
-      /tabFitReserveMm/,
-    );
-    expect(checkCoinCardHolder({ ...spec, formHoleClearanceMm: 0.6 }).join(' ')).toMatch(/sevře/);
-    expect(checkCoinCardHolder({ ...spec, formPlateThicknessMm: 3 }).join(' ')).toMatch(/nedosedl/);
-    expect(checkCoinCardHolder({ ...spec, windowDiameterMm: 36 }).join(' ')).toMatch(/Prstenec/);
-    expect(checkCoinCardHolder({ ...spec, coinDiameterMm: 50 }).length).toBeGreaterThan(0);
-    expect(checkCoinCardHolder({ ...spec, frontTopDropMm: 50 }).join(' ')).toMatch(/půl karty/);
-    expect(checkCoinCardHolder({ ...spec, backOverCardMm: 0 }).join(' ')).toMatch(/Panely/);
-    expect(checkCoinCardHolder({ ...spec, cardsCount: 0 }).join(' ')).toMatch(/cardsCount/);
-    expect(checkCoinCardHolder({ ...spec, windowDiameterMm: 60 }).join(' ')).toMatch(
-      /menší než mince/,
-    );
-    expect(checkCoinCardHolder({ ...spec, tabEndRadiusMm: 20 }).join(' ')).toMatch(/půl šířky/);
-    // Menší poloměr konce jazyka je platný (kreslí se jako dva rohy + rovná hrana).
-    expect(checkCoinCardHolder({ ...spec, tabEndRadiusMm: 6 })).toEqual([]);
-    expect(coinCardHolderLayout({ ...spec, tabEndRadiusMm: 6 }).tabEndRadiusMm).toBe(6);
-    // Dělicí panel se s formou na jeden A4 nevejde (dokumentovaná mez, předloha panel nemá).
-    expect(checkCoinCardHolder({ ...spec, dividerPanel: true }).join(' ')).toMatch(/Pravý sloupec/);
-    expect(
-      checkCoinCardHolder({
-        ...spec,
-        dividerPanel: true,
-        coinDiameterMm: NAMED_COINS['50kc'],
-      }).join(' '),
-    ).toMatch(/Pravý sloupec/);
-    // Nulové nebo necelé hodnoty, které by kresbu zacyklily nebo rozbily.
-    expect(checkCoinCardHolder({ ...spec, stitchPitchMm: 0 }).join(' ')).toMatch(/kladné/);
-    expect(checkCoinCardHolder({ ...spec, cardsCount: 2.5 }).join(' ')).toMatch(/celé číslo/);
-    expect(checkCoinCardHolder({ ...spec, cornerRadiusMm: 20 }).join(' ')).toMatch(
-      /cornerRadiusMm/,
-    );
-    expect(checkCoinCardHolder({ ...spec, scoopRadiusMm: null }).length).toBeGreaterThan(0);
-    // Neplatná strana jazyka.
-    expect(checkCoinCardHolder({ ...spec, tabSide: 'top' as unknown as 'left' }).join(' ')).toMatch(
-      /tabSide/,
-    );
-  });
-
-  it('všechny pojmenované mince dají platný střih a přepočítají jen kapsu, okno a formu', () => {
+  it('všechny pojmenované mince dají platný střih a mění jen kapsu, okno a formu', () => {
     for (const [name, d] of Object.entries(NAMED_COINS)) {
       const s = { ...spec, coinDiameterMm: d };
       expect(checkCoinCardHolder(s), name).toEqual([]);
       const l = coinCardHolderLayout(s);
-      expect(l.bodyLengthMm, name).toBe(L.bodyLengthMm);
+      expect(l.stripLengthMm, name).toBe(L.stripLengthMm);
+      expect(l.tabLengthMm, name).toBe(L.tabLengthMm);
       expect(l.formHoleDiameterMm, name).toBeCloseTo(
         d + 2 * spec.pocketThicknessMm + spec.formHoleClearanceMm,
         6,
@@ -222,5 +153,36 @@ describe('pouzdro s vsazenou mincí – model (tvar L podle předlohy)', () => {
     }
     expect(NAMED_COINS['50kc']).toBe(27.5);
     expect(NAMED_COINS.decision).toBe(spec.coinDiameterMm);
+  });
+
+  it('střih se vejde na A4 na šířku i s kapsou a formou vedle pásu', () => {
+    const { widthMm: W, heightMm: H, marginMm: m, gapMm: g } = A4_SHEET;
+    expect(W).toBe(297);
+    expect(L.tabLengthMm + L.panelHeightMm).toBeLessThanOrEqual(H - 2 * m - LEGEND_HEIGHT_MM);
+    expect(L.stripLengthMm + g + L.pocketWidthMm + 2 * m).toBeLessThanOrEqual(W);
+  });
+
+  it('kontroly odhalí kolize a špatné parametry', () => {
+    expect(checkCoinCardHolder({ ...spec, scoopRadiusMm: 45 }).join(' ')).toMatch(/překrývají/);
+    expect(checkCoinCardHolder({ ...spec, scoopRadiusMm: 15 }).join(' ')).toMatch(/mělký/);
+    expect(checkCoinCardHolder({ ...spec, tabWidthMm: 34 }).join(' ')).toMatch(/kořeni jazyka/);
+    expect(checkCoinCardHolder({ ...spec, grommetFromEdgeMm: 20 }).join(' ')).toMatch(
+      /nebyla celá vidět/,
+    );
+    expect(checkCoinCardHolder({ ...spec, coinDiameterMm: 50 }).length).toBeGreaterThan(0);
+    expect(checkCoinCardHolder({ ...spec, windowDiameterMm: 60 }).join(' ')).toMatch(
+      /menší než mince/,
+    );
+    expect(checkCoinCardHolder({ ...spec, tabFitReserveMm: 0 }).join(' ')).toMatch(
+      /tabFitReserveMm/,
+    );
+    expect(checkCoinCardHolder({ ...spec, sideMarginMm: 1 }).join(' ')).toMatch(/sideMarginMm/);
+    expect(checkCoinCardHolder({ ...spec, topOverCardMm: 0 }).join(' ')).toMatch(/Panely/);
+    expect(checkCoinCardHolder({ ...spec, stitchPitchMm: 0 }).join(' ')).toMatch(/kladné/);
+    expect(checkCoinCardHolder({ ...spec, cardsCount: 2.5 }).join(' ')).toMatch(/celé číslo/);
+    expect(checkCoinCardHolder({ ...spec, cardsCount: 0 }).join(' ')).toMatch(/cardsCount/);
+    expect(checkCoinCardHolder({ ...spec, tabSide: 'top' as unknown as 'left' }).join(' ')).toMatch(
+      /tabSide/,
+    );
   });
 });

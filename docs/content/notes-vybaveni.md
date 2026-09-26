@@ -415,18 +415,15 @@ Autor si oblíbil [pouzdro s „decision coin“](https://redforestleather.com/p
 (Red Forest Leather, 70–85 €) a dodal záběry z videa a fotky výrobce. **Není to ražení, ale
 skutečná mince Ø 40 mm** (podle popisu produktu) v přední kapse s kruhovým oknem, vyměnitelná.
 
-**Konstrukce podle fotek a záběrů (revize v3, 2026-09-18 večer, po řemeslném posudku):** dva
-**stejně vysoké panely**, karty jsou celé schované. Z horní hrany zadního panelu (s motivem)
-vybíhá u jedné hrany **jazyk** – asi polovina šířky, konec zaoblený obdélník – s kloboučkem druku,
-přehne se přes karty na předek. V horním rohu **předního** panelu na druhé straně je **velký
-čtvrtkruhový výřez na prst** (R ≈ 30), kterým je vidět zadní panel s **průchodkou** a šňůrkou;
-zadní panel má horní hranu rovnou. Při pohledu zepředu je jazyk vpravo, výřez s průchodkou
-vlevo. Předloha je zřejmě **ovinutá přes boky** (boční hrany jsou ohyby, dno prošité bílou nití,
-boční řady dírek jen ozdobné) a u průchodky má víc vrstev – to náš střih **nekopíruje**: tělo je
-jeden díl přeložený ve spodní hraně a sešitý po bocích, zadní panel celý. Vnitřek je jedna kapsa
-(karty + bankovky složené na čtvrt); „two main compartments“ v popisu = vnitřní kapsa + kapsa
-na minci. Dekorativní řady dírek a ražený motiv jsou ozdoba. (v2 měla omylem půlkruhový výřez
-v zadním panelu a nižší přední panel – vyvráceno fotkami hotového kusu.)
+**Konstrukce podle záběrů skládání a zadní strany hotového kusu (revize v4, 2026-09-19):**
+jeden vodorovný pás tří panelů – zadní (motiv, jazyk), přední (kapsa s mincí), vnitřní (dělicí
+stěna s průchodkou) – ohýbaný na **obou bocích**, šitý jen **ve dně** bílou nití skrz všechny
+vrstvy. Uvnitř jsou dvě kapsy (karty vepředu, bankovky vzadu), proto výrobce píše „two main
+compartments“. Velký výřez na prst je v rozloženém pásu jeden oblouk U přes ohyb mezi zadním a
+předním panelem; po složení vznikne čtvrtkruh v rohu obou vnějších panelů a mezi nimi je vidět
+roh vnitřní stěny s průchodkou a šňůrkou. Jazyk vybíhá z horní hrany zadního panelu na opačné
+straně a zapíná se drukem shora na přední panel. Výrobce obkresluje šablonu na líc. (v2 a v3 měly
+konstrukci špatně: výřez v zadním panelu, resp. ohyb ve dně a šité boky.)
 
 **Postup kapsy s mincí z videa:** kůže navlhčit, lícem dolů na formu (překližka s otvorem
 ≈ mince + 2× kůže), mince na rub, zatlačit, přiklopit plexi deskou, 4 svěrky, nechat zaschnout;
@@ -437,6 +434,6 @@ třech stranách, horní hrana otevřená; mince se zasouvá shora a vyjímá za
 1:1), model `src/lib/geometry/coin-card-holder.ts`, zadání a postup `docs/zadani/pouzdro-mince.md`.
 Průměr mince je parametr (`--coin 50kc` atd.). Rozměry odvozené z karty a mince, ne odměřené;
 s mincí 40 mm jako měřítkem z fotek vychází pouzdro ~60 × 90 mm, kapsa ~45–50, okno ~30–32, což
-náš střih (66 × 87,6; kapsa 55 × 52,5; okno 32) řádově potvrzuje. Kůže odhadem tělo 1,2–1,5 mm,
+náš střih (panel 63 × 91,1; kapsa 55 × 54,5; okno 32) řádově potvrzuje. Kůže odhadem tělo 1,2–1,5 mm,
 kapsa 1,2 mm. **Námět na druhé pouzdro** (ADR 002), ne na první: přidává mokré tvarování,
 velký kruhový výsečník a druk.
