@@ -68,6 +68,14 @@ describe('zapsané soubory odpovídají generátoru', () => {
     ['pouzdro-mince-kapsa.svg', () => buildCoinHolderPocketSvg()],
     ['pouzdro-mince-papirovy-model.svg', () => buildCoinHolderPaperModelSvg()],
     [
+      'pouzdro-mince-papirovy-model-mince-27-5mm.svg',
+      () =>
+        buildCoinHolderPaperModelSvg({
+          ...DEFAULT_COIN_CARD_HOLDER,
+          coinDiameterMm: NAMED_COINS['50kc'],
+        }),
+    ],
+    [
       'pouzdro-mince-kapsa-mince-27-5mm.svg',
       () =>
         buildCoinHolderPocketSvg({

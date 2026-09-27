@@ -185,7 +185,7 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
     const inBand = (x0: number, x1: number): Circle[] =>
       perf.filter((c) => c.cx > X(x0) && c.cx < X(x1));
     expect(inBand(L.frontX1Mm, L.innerX0Mm!).length).toBe(0);
-    expect(sheet).toContain('fill="url(#skive)"');
+    expect(sheet).toContain('class="skive-zone"');
     for (const [x0, x1, n] of [[L.backX1Mm, L.frontX0Mm, 3]] as const) {
       const band = inBand(x0, x1);
       const cols = [...new Set(band.map((c) => c.cx))].sort((a, b) => a - b);

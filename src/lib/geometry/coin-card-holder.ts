@@ -16,7 +16,8 @@
  * - Vnitřní panel dělí obsah na **dvě kapsy** (karty vepředu, složené bankovky vzadu) – proto
  *   výrobce uvádí „two main compartments“.
  * - Velký **výřez na prst** je jeden oblouk ve tvaru U přes pásmo ohybu A: po složení z něj
- *   vznikne čtvrtkruh v rohu předního i zadního panelu a mezi nimi je vidět vnitřní panel
+ *   vznikne čtvrtkruh v rohu předního panelu a čtvrtelipsa v rohu zadního (hrana jazyka do ní
+ *   přechází plynule), mezi nimi je vidět vnitřní panel
  *   s **průchodkou** na šňůrku (na fotkách hotového kusu je vidět z obou stran).
  * - **Jazyk** vybíhá z horní hrany zadního panelu na opačné straně, přehne se přes celý obsah
  *   a zapne drukem na přední panel; na předním panelu je přišitá **kapsa s mincí**.
@@ -67,8 +68,8 @@ export interface CoinCardHolderSpec {
    */
   foldAllowanceMm: number | null;
   /**
-   * Vůle přidaná k oběma spočteným ohybům, aby je obsah nenapínal (předloha má pásma ohybů
-   * ≈ 11–13 mm) – volba.
+   * Vůle pro obsah každé kapsy: odstup vrstev se zvětší o 2·foldEase/π, takže ohyb B je delší
+   * o foldEase a ohyb A (obepíná obě kapsy) o 2·foldEase (předloha má pásma ohybů ≈ 11–13 mm) – volba.
    */
   foldEaseMm: number;
   /**
@@ -106,8 +107,9 @@ export interface CoinCardHolderSpec {
   snapDiameterMm: number;
   snapClearanceMm: number;
   /**
-   * Výřez na prst: poloměr čtvrtkruhu v rohu předního (a zrcadlově zadního) panelu. V rozloženém
-   * pásu je to jeden oblouk U přes pásmo ohybu A. Předloha ≈ 30.
+   * Výřez na prst: poloměr čtvrtkruhu v rohu předního panelu (a hloubka čtvrtelipsy v rohu
+   * zadního, viz backScoopRxMm). V rozloženém pásu je to jeden oblouk U přes pásmo ohybu A.
+   * Předloha ≈ 30–34.
    */
   scoopRadiusMm: number;
   /** Průchodka na šňůrku ve vnitřním panelu (vidět výřezem): průměr a odstup od hran. */

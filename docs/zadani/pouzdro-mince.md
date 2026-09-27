@@ -1,4 +1,4 @@
-# Pouzdro na karty s vsazenou mincí – střih (NÁVRH v4.7)
+# Pouzdro na karty s vsazenou mincí – střih (NÁVRH v4.8)
 
 Stav: **návrh k ověření na papíru a odřezku**, ne lekce. Vznikl 2026-09-18 na přání autora podle
 produktu, videa a fotek Red Forest Leather (rozbor v `docs/content/notes-vybaveni.md`, „Námět:
@@ -195,3 +195,7 @@ doplnit ručně, do generátoru to nepatří.
   ohybu B +0,79 mm za posun neutrální osy, roh výřezu R2,5, přepínače `--cards` a `--thickness`,
   papírový model s místem pro kapsu, čarou švu, přírubou patice a seznamem k zapsání, dílenské
   kroky (mokření ohybů, lepení dna, nit, přenos ztenčení na rub, zapečetění rubu vnitřního panelu).
+- v4.8 (2026-09-27): šrafa ztenčení jako vektorové čáry (v PDF se nerastruje), pohled zezadu
+  v postupu kreslí výřez stejnou čtvrtelipsou jako šablona, jednotné názvy listů (PÁS, KAPSA),
+  skloňování počtu karet, přísnější virtuální složení (vůle ≥ 1,2 mm, klobouček ±0,3 mm) a testy
+  zrcadlené varianty, ztenčení a papírového modelu pro minci 27,5 mm.

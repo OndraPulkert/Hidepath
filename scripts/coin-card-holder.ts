@@ -1,5 +1,6 @@
 /**
- * Vykreslí 1:1 střih pouzdra na karty s vsazenou mincí na dva listy A4 (pás na šířku, kapsa na výšku).
+ * Vykreslí 1:1 střih pouzdra na karty s vsazenou mincí: papírový model a pás (A4 na šířku), kapsa
+ * s formou (A4 na výšku), postup skládání a všechno v jednom PDF.
  *
  *   pnpm pattern:coin-holder                 # mince 40 mm (výchozí, „decision coin“ z předlohy)
  *   pnpm pattern:coin-holder --coin 50kc     # česká padesátikoruna (27,5 mm), dále 20kc/10kc/5kc
@@ -50,6 +51,9 @@ const ACCENT = '#a2471f';
 const DOT_R = 0.45;
 
 type Anchor = 'start' | 'middle' | 'end';
+
+/** „1 kartu“, „2–4 karty“, „5 karet“. */
+const cardsWord = (n: number): string => `${n} ${n === 1 ? 'kartu' : n <= 4 ? 'karty' : 'karet'}`;
 
 /** Obdélník se zaoblenými rohy; volitelně jiné poloměry nahoře a dole. */
 function roundedRect(
@@ -221,6 +225,8 @@ function panelPath(
   k: number,
   scoop: 'left' | 'right' | null,
 ): string {
+  // Zepředu čtvrtkruh R, zezadu čtvrtelipsa backScoopRx × R (hrana jazyka přejde plynule).
+  const RX = (scoop === 'right' ? L.backScoopRxMm : L.scoopRadiusMm) * k;
   const W = L.panelWidthMm * k;
   const H = L.panelHeightMm * k;
   const r = rc * k;
@@ -231,7 +237,7 @@ function panelPath(
       : `M${f(ox)} ${f(oy + r)} A${f(r)} ${f(r)} 0 0 1 ${f(ox + r)} ${f(oy)} `;
   const topRight =
     scoop === 'right'
-      ? `L${f(ox + W - S)} ${f(oy)} A${f(S)} ${f(S)} 0 0 0 ${f(ox + W)} ${f(oy + S)} `
+      ? `L${f(ox + W - RX)} ${f(oy)} A${f(RX)} ${f(S)} 0 0 0 ${f(ox + W)} ${f(oy + S)} `
       : `L${f(ox + W - r)} ${f(oy)} A${f(r)} ${f(r)} 0 0 1 ${f(ox + W)} ${f(oy + r)} `;
   return (
     topLeft +
@@ -266,8 +272,21 @@ export function buildCoinHolderSheetSvg(
   if (spec.foldSkiveThicknessMm !== null) {
     for (const z of skiveZones(L, spec)) {
       const x0 = Math.min(X(z.x0), X(z.x1));
+      const y0 = Y(z.y0);
+      const w = z.x1 - z.x0;
+      const h = z.y1 - z.y0;
+      // Šrafa jako skutečné čáry pod 45° oříznuté na obdélník (vzor <pattern> Chromium v PDF
+      // rastruje a tiskne se rozmazaně).
+      const step = 2;
+      const segs: string[] = [];
+      for (let c = x0 - (y0 + h); c <= x0 + w - y0; c += step) {
+        const ya = Math.max(y0, x0 - c);
+        const yb = Math.min(y0 + h, x0 + w - c);
+        if (yb - ya > 0.05) segs.push(`M${f(ya + c)} ${f(ya)} L${f(yb + c)} ${f(yb)}`);
+      }
+      out.push(`<path d="${segs.join(' ')}" stroke="#b9c3bc" stroke-width="0.3" fill="none"/>`);
       out.push(
-        `<rect x="${f(x0)}" y="${f(Y(z.y0))}" width="${f(z.x1 - z.x0)}" height="${f(z.y1 - z.y0)}" fill="url(#skive)" stroke="none"/>`,
+        `<rect class="skive-zone" x="${f(x0)}" y="${f(y0)}" width="${f(w)}" height="${f(h)}" fill="none" stroke="#b9c3bc" stroke-width="0.2"/>`,
       );
     }
   }
@@ -483,7 +502,7 @@ export function buildCoinHolderSheetSvg(
   const front = spec.tabSide === 'right' ? 'vpravo' : 'vlevo';
   const back = spec.tabSide === 'right' ? 'vlevo' : 'vpravo';
   const legend = [
-    `POUZDRO NA KARTY S VSAZENOU MINCÍ – LIST 1/2: PÁS. Tisk na A4 NA ŠÍŘKU na 100 % (bez „přizpůsobit stránce“). Kapsa s mincí a forma jsou na listu 2. NÁVRH k ověření na papíru.`,
+    `POUZDRO NA KARTY S VSAZENOU MINCÍ – LIST PÁS. Tisk na A4 NA ŠÍŘKU na 100 % (bez „přizpůsobit stránce“). Kapsa s mincí a forma jsou na listu KAPSA. NÁVRH k ověření na papíru.`,
     `Karty ${cz(spec.cardWidthMm)} × ${cz(spec.cardHeightMm)} (${spec.cardsCount} ks) vepředu, bankovky složené napůl vzadu, mince Ø ${cz(spec.coinDiameterMm)}, kůže tělo ${cz(spec.bodyThicknessMm)} mm.`,
     `Jeden pás: ZADNÍ + ohyb A + PŘEDNÍ + ohyb B + VNITŘNÍ panel. Po složení jsou obě boční hrany OHYBY, šije se jen dno (skrz všechny vrstvy), horní hrana zůstává otevřená.`,
     `PÁS OBKRESLIT NA LÍC – přední panel je nakreslený tak, jak bude vidět. Jazyk vyjde zepředu ${front} (zezadu ${back}), výřez na prst naproti němu.`,
@@ -501,7 +520,6 @@ export function buildCoinHolderSheetSvg(
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     `<svg xmlns="http://www.w3.org/2000/svg" width="${W}mm" height="${H}mm" viewBox="0 0 ${W} ${H}">`,
-    `<defs><pattern id="skive" patternUnits="userSpaceOnUse" width="1.6" height="1.6" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="1.6" stroke="#b9c3bc" stroke-width="0.3"/></pattern></defs>`,
     `<rect width="${W}" height="${H}" fill="#ffffff"/>`,
     ...out,
     '</svg>',
@@ -695,9 +713,9 @@ export function buildCoinHolderPaperModelSvg(
   const legend = [
     'PAPÍROVÝ MODEL – NE z kůže. Tisk na A4 NA ŠÍŘKU na 100 %, obrys je stejný jako list pásu. Vytisknout na papír 160 g a nalepit na tenkou lepenku (krabice od cereálií), aby byl tuhý.',
     'Prokáže: polohu jazyka a kloboučku, výřez, průchodku, vytahování karty a místo pro kapsu. Neprokáže přídavky ohybů (papír je tenčí než kůže): ohyby jen přehnout do smyčky, nepřekládat na ostro.',
-    `☐ ① vnitřní panel dozadu za přední (ohyb B)   ☐ ② zadní přes všechno (ohyb A)   ☐ dno slepit páskou podél čáry švu   ☐ vložit ${spec.cardsCount} karty vpředu a bankovky napůl vzadu`,
+    `☐ ① vnitřní panel dozadu za přední (ohyb B)   ☐ ② zadní přes všechno (ohyb A)   ☐ dno slepit páskou podél čáry švu   ☐ vložit ${cardsWord(spec.cardsCount)} vpředu a bankovky napůl vzadu`,
     '☐ přehnout jazyk přes horní hranu, patici propíchnout do jazyka a změřit odchylku od kloboučku   ☐ průchodka je celá ve výřezu zepředu i zezadu',
-    '☐ palcem vysunout kartu výřezem   ☐ konec jazyka je nad místem pro kapsu   → výsledky zapsat vpravo, teprve pak řezat kůži (listy 1 a 2).',
+    '☐ palcem vysunout kartu výřezem   ☐ konec jazyka je nad místem pro kapsu   → výsledky zapsat vpravo, teprve pak řezat kůži (listy PÁS a KAPSA).',
   ];
   legend.forEach((t, i) =>
     out.push(text(m, H - m - LEGEND_HEIGHT_MM + 4 + i * 3.4, t, 2.3, 'start', GUIDE)),
@@ -787,7 +805,7 @@ export function buildCoinHolderPocketSvg(
   );
   out.push(text(m + 53, calY + 1, 'KONTROLA MĚŘÍTKA: 50 mm', 2.4, 'start'));
   const legend = [
-    'POUZDRO NA KARTY S VSAZENOU MINCÍ – LIST 2/2: KAPSA A FORMA.',
+    'POUZDRO NA KARTY S VSAZENOU MINCÍ – LIST KAPSA A FORMA.',
     'Tisk na A4 NA VÝŠKU na 100 % (bez „přizpůsobit stránce“).',
     `Kapsa z kůže ${cz(spec.pocketThicknessMm)} mm; odřezek ≥ ${cz(L.formPlateMm - 4)} × ${cz(L.formPlateMm - 4)} mm.`,
     'Plná čára = řez, tečky = otvory stehu, čárkovaně/tečkovaně = pomocné kružnice.',

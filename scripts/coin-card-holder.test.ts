@@ -87,13 +87,15 @@ describe('generátor pouzdra s mincí – varianty', () => {
     );
     expect(svg).toContain(`dno prošít skrz všechny vrstvy: ${L.bottomSeamHoles} otvorů`);
     expect(svg).toContain('nejdřív vnitřní za přední (B), pak zadní přes vše (A)');
-    // Hotovo zezadu: výřez je v pravém horním rohu (zrcadlově).
+    // Hotovo zezadu: výřez je v pravém horním rohu jako čtvrtelipsa zadního panelu
+    // (šířka backScoopRx od hrany jazyka, hloubka R) – stejně jako na šabloně.
     const k8 = k4;
     const ox8 = pad + 3 * cellW + (cellW - L.panelWidthMm * k8) / 2;
     const oy8 = pad + cellH + 14;
     const W8 = L.panelWidthMm * k8;
+    const RX8 = L.backScoopRxMm * k8;
     expect(svg).toContain(
-      `L${r3(ox8 + W8 - S4)} ${r3(oy8)} A${r3(S4)} ${r3(S4)} 0 0 0 ${r3(ox8 + W8)} ${r3(oy8 + S4)}`,
+      `L${r3(ox8 + W8 - RX8)} ${r3(oy8)} A${r3(RX8)} ${r3(S4)} 0 0 0 ${r3(ox8 + W8)} ${r3(oy8 + S4)}`,
     );
   });
 
@@ -128,7 +130,7 @@ describe('generátor pouzdra s mincí – varianty', () => {
     const leather = buildCoinHolderSheetSvg(spec);
     const paper = buildCoinHolderPaperModelSvg(spec);
     const outline = (svg: string): string =>
-      /<path d="(M[^"]+)" fill="none" stroke="#2b2b2b" stroke-width="0.3"/.exec(svg)![1]!;
+      /<path d="(M[^"]+)" fill="none" stroke="#2b2b2b" stroke-width="0.3"/.exec(svg)![1];
     expect(outline(paper)).toBe(outline(leather));
     expect(paper).toContain('width="297mm" height="210mm"');
     // Bez otvorů stehu a perforací (papír se jen ohýbá).
@@ -160,15 +162,15 @@ describe('generátor pouzdra s mincí – varianty', () => {
     // Výchozí: ztenčuje se jen užší ohyb B; s 'AB' i ohyb A (pod výkusem).
     expect(zones.length).toBe(1);
     const mm = spec.foldSkiveMarginMm;
-    expect(zones[0]!.x0).toBeCloseTo(L.frontX1Mm - mm, 9);
-    expect(zones[0]!.x1).toBeCloseTo(L.innerX0Mm! + mm, 9);
-    expect(zones[0]!.y0).toBe(0);
+    expect(zones[0].x0).toBeCloseTo(L.frontX1Mm - mm, 9);
+    expect(zones[0].x1).toBeCloseTo(L.innerX0Mm! + mm, 9);
+    expect(zones[0].y0).toBe(0);
     const both = skiveZones(coinCardHolderLayout({ ...spec, foldSkiveBands: 'AB' }), {
       ...spec,
       foldSkiveBands: 'AB',
     });
     expect(both.length).toBe(2);
-    expect(both[0]!.y0).toBe(L.scoopRadiusMm);
+    expect(both[0].y0).toBe(L.scoopRadiusMm);
     // Ztenčení prodlouží ohyb B o π·(t − s)/2 (posun neutrální osy).
     const plain = coinCardHolderLayout({ ...spec, foldSkiveThicknessMm: null });
     expect(L.foldFrontInnerMm - plain.foldFrontInnerMm).toBeCloseTo(
@@ -178,23 +180,58 @@ describe('generátor pouzdra s mincí – varianty', () => {
     const svg = buildCoinHolderSheetSvg(spec);
     const rects = [
       ...svg.matchAll(
-        /<rect x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="([\d.]+)" fill="url\(#skive\)"/g,
+        /<rect class="skive-zone" x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="([\d.]+)"/g,
       ),
     ];
     expect(rects.length).toBe(1);
-    expect(Number(rects[0]![1])).toBeCloseTo(10 + zones[0]!.x0, 2);
-    expect(Number(rects[0]![3])).toBeCloseTo(zones[0]!.x1 - zones[0]!.x0, 2);
-    expect(svg).toContain('<pattern id="skive"');
+    const z = zones[0];
+    const r0 = rects[0];
+    expect(Number(r0[1])).toBeCloseTo(10 + z.x0, 2);
+    expect(Number(r0[2])).toBeCloseTo(10 + L.tabLengthMm + z.y0, 2);
+    expect(Number(r0[3])).toBeCloseTo(z.x1 - z.x0, 2);
+    expect(Number(r0[4])).toBeCloseTo(z.y1 - z.y0, 2);
+    expect(zones[0].x1).toBeCloseTo(L.innerX0Mm! + mm, 9);
+    // Šrafa je vektor (čáry), ne <pattern> – Chromium by vzor v PDF rastroval.
+    expect(svg).not.toContain('<pattern');
     expect(svg).toContain(
       `ztenčit na ${String(spec.foldSkiveThicknessMm).replace('.', ',')} mm z rubu`,
     );
-    // Bez ztenčení žádná šrafa; nesmyslná tloušťka neprojde kontrolou.
+    // Zrcadlená varianta: pás je otočený, zóna leží na zrcadlové pozici.
+    const left = { ...spec, tabSide: 'left' as const };
+    const lsvg = buildCoinHolderSheetSvg(left);
+    const lr = /<rect class="skive-zone" x="([\d.]+)"/.exec(lsvg)!;
+    expect(Number(lr[1])).toBeCloseTo(10 + L.stripLengthMm - z.x1, 2);
+    // Bez ztenčení žádná šrafa; nesmyslné hodnoty neprojdou kontrolou.
     expect(buildCoinHolderSheetSvg({ ...spec, foldSkiveThicknessMm: null })).not.toContain(
-      'url(#skive)',
+      'skive-zone',
     );
-    expect(() => buildCoinHolderSheetSvg({ ...spec, foldSkiveThicknessMm: 1.6 })).toThrow(
+    expect(() => buildCoinHolderSheetSvg({ ...spec, foldSkiveThicknessMm: 1.4 })).toThrow(
       /Ztenčení/,
     );
+    expect(() => buildCoinHolderSheetSvg({ ...spec, foldSkiveThicknessMm: 0.5 })).toThrow(
+      /Ztenčení/,
+    );
+    expect(() => buildCoinHolderSheetSvg({ ...spec, foldSkiveMarginMm: 9 })).toThrow(
+      /foldSkiveMarginMm/,
+    );
+  });
+
+  it('papírový model zrcadleně: obrys shodný se zrcadleným pásem, rámeček karty zrcadlený', () => {
+    const left = { ...spec, tabSide: 'left' as const };
+    const L = coinCardHolderLayout(left);
+    const outline = (svg: string): string =>
+      /<path d="(M[^"]+)" fill="none" stroke="#2b2b2b" stroke-width="0.3"/.exec(svg)![1];
+    expect(outline(buildCoinHolderPaperModelSvg(left))).toBe(
+      outline(buildCoinHolderSheetSvg(left)),
+    );
+    const cardX0 = L.frontX0Mm + (L.panelWidthMm - spec.cardWidthMm) / 2;
+    const xLeftEdge = 10 + L.stripLengthMm - (cardX0 + spec.cardWidthMm);
+    expect(buildCoinHolderPaperModelSvg(left)).toContain(
+      `M${r3(xLeftEdge)} ${r3(10 + L.tabLengthMm + L.bottomSeamYMm - spec.cardHeightMm)} h${spec.cardWidthMm}`,
+    );
+    // Skloňování v kontrolním seznamu.
+    expect(buildCoinHolderPaperModelSvg(spec)).toContain('vložit 4 karty');
+    expect(buildCoinHolderPaperModelSvg({ ...spec, cardsCount: 5 })).toContain('vložit 5 karet');
   });
 
   it('vlastní okno se propíše jen přes spec', () => {

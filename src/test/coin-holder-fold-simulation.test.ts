@@ -49,7 +49,7 @@ const backToFront = (x: number): number => frontX(a1 + (a0 - x));
 const innerToFront = (x: number): number => frontX(b0 - (x - b1));
 // Ztenčené pásmo (šrafa v listu) má neutrální osu blíž lícu: panely jsou o (t − s) blíž, než
 // kolik by dala délka pásma u plné tloušťky.
-const skivedB = [...sheet.matchAll(/<rect x="([\d.]+)" [^>]*fill="url\(#skive\)"/g)].some(
+const skivedB = [...sheet.matchAll(/<rect class="skive-zone" x="([\d.]+)"/g)].some(
   (m) => Number(m[1]) < b0 && Number(m[1]) > a1,
 );
 const skiveOffB = skivedB ? t - (spec.foldSkiveThicknessMm ?? t) : 0;
@@ -68,8 +68,8 @@ describe('virtuální složení nakresleného střihu (papírový model v počí
     const cards = spec.cardsCount * spec.cardThicknessMm;
     const cardsGap = zInner - t;
     const billsGap = zBack - zInner - t;
-    expect(cardsGap - cards).toBeGreaterThanOrEqual(1);
-    expect(billsGap - spec.billsThicknessMm).toBeGreaterThanOrEqual(1);
+    expect(cardsGap - cards).toBeGreaterThanOrEqual(1.2);
+    expect(billsGap - spec.billsThicknessMm).toBeGreaterThanOrEqual(1.2);
   });
 
   it('otvory dna na zadním a vnitřním panelu padnou po složení na otvory předku', () => {
@@ -107,8 +107,7 @@ describe('virtuální složení nakresleného střihu (papírový model v počí
     // Oblouk přes horní hranu: od osy zadního panelu (hloubka zBack) k ose jazyka na předku (-t).
     const wrap = (Math.PI * (zBack + t)) / 2;
     const capBelowTop = top - cap.y - wrap;
-    expect(capBelowTop).toBeCloseTo(socket.y - top, 0);
-    expect(Math.abs(capBelowTop - (socket.y - top))).toBeLessThanOrEqual(1);
+    expect(Math.abs(capBelowTop - (socket.y - top))).toBeLessThanOrEqual(0.3);
     // Ve vodorovném směru: zadní panel se otočí kolem ohybu A.
     expect(backToFront(cap.x)).toBeCloseTo(frontX(socket.x), 1);
     // Patice i s přírubou je nad kartami.
