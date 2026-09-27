@@ -249,6 +249,11 @@ export interface CoinCardHolderLayout {
   tabEndRadiusMm: number;
   /** Oblouk jazyka přes celý obsah a kam na předním panelu dopadne jeho konec (s rezervou). */
   tabWrapMm: number;
+  /**
+   * Šířka hotového složeného pouzdra: panel + vnější poloměr obou ohybů (neutrální poloměr
+   * ohyb/π + půl tloušťky kůže v ohybu, u ztenčeného ohybu půl ztenčené tloušťky).
+   */
+  foldedWidthMm: number;
   tabEndOnFrontMm: number;
   /** Druk: klobouček na jazyku (y záporné) a patice na předním panelu. */
   snapXTabMm: number;
@@ -327,6 +332,14 @@ export function coinCardHolderLayout(
   const innerX0 = spec.innerPanel ? round(frontX1 + foldB) : null;
   const innerX1 = innerX0 === null ? null : round(innerX0 + panelWidth);
   const stripLength = innerX1 ?? frontX1;
+  const outerRadius = (fold: number, skived: boolean): number =>
+    fold / Math.PI + (skived ? (spec.foldSkiveThicknessMm ?? t) : t) / 2;
+  const skivedA = spec.foldSkiveThicknessMm !== null && spec.foldSkiveBands === 'AB';
+  const foldedWidth = round(
+    panelWidth +
+      outerRadius(foldA, skivedA) +
+      (spec.innerPanel ? outerRadius(foldB, spec.foldSkiveThicknessMm !== null) : 0),
+  );
 
   // Jazyk: u levého konce pásu; po složení dopadne na pravou hranu předního panelu.
   const tabX0 = 0;
@@ -408,6 +421,7 @@ export function coinCardHolderLayout(
     tabNominalLengthMm: tabNominal,
     tabEndRadiusMm: round(tabEndRadius),
     tabWrapMm: tabWrap,
+    foldedWidthMm: foldedWidth,
     tabEndOnFrontMm: tabEndOnFront,
     snapXTabMm: snapXTab,
     snapYTabMm: snapYTab,

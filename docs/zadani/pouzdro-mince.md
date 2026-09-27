@@ -38,21 +38,22 @@ průchodkou je vidět výřezem zepředu i zezadu. Jeden pás:
 [ZADNÍ panel][ohyb A][PŘEDNÍ panel][ohyb B][VNITŘNÍ panel]
 ```
 
-| Prvek           | Rozměr (kůže 1,5 mm, mince 40)                  | Poznámka                                                                                 |
-| --------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| Panel           | 72 × 104,1 mm (všechny tři)                     | rozměr předlohy; šev dna 3,5 + karta 85,6 + 15 (kování nad kartami)                      |
-| Ohyb A          | 16,63 mm                                        | zadní↔přední: π/2 · odstup vrstev; karty i bankovky mají každé 1,3 mm vůle               |
-| Ohyb B          | 9,92 mm                                         | přední↔vnitřní: π/2 · (kůže + karty + vůle) + 0,79 za ztenčení na 1 mm                   |
-| Ztenčení        | ohyb B + 3 mm na obě strany, na 1 mm z rubu     | šrafa na listu; protažení lícu v ohybu B klesne z ≈ 26 % na ≈ 16 %; ohyb A se neztenčuje |
-| Perforace       | jen ohyb A: 3 řady Ø 1,5, rozteč 4              | jako předloha; ztenčený ohyb B se neperforuje (obojí zeslabuje)                          |
-| Pás             | 242,6 × 104,1 mm + jazyk nad ním                | tři panely + dva ohyby                                                                   |
-| Jazyk           | 33 mm široký, řez 44,5 mm                       | u levého konce pásu, konec R10; oblouk 19 + k druku 9,5 + přesah 11 + rezerva 5          |
-| Výřez na prst   | předek čtvrtkruh R34, zadek čtvrtelipsa 39 × 34 | na zadku přechází hrana jazyka plynule do výkusu; roh výřezu na předku zaoblený R2,5     |
-| Průchodka       | Ø 5, 9 mm od hran vnitřního panelu              | po složení v rohu s výřezem, 16 mm uvnitř oblouku, nad kartami                           |
-| Druk            | patice 9,5 mm pod horní hranou předku           | u pravého boku na ose jazyka; příruba patice (≈ Ø 10) končí 14,5 mm, karty začínají v 15 |
-| Kapsa s mincí   | 55 × 54,5 mm, horní rohy R10, dolní R6          | list kapsy; na předek 35,55 mm pod horní hranou, 8,5 mm od boků                          |
-| Okno            | Ø 32 (výsečník po celých mm)                    | prstenec 4 mm (předloha má okno skoro přes celou minci, drží hůř)                        |
-| Forma pro důlek | otvor Ø 44, deska ≥ 74 × 74, tl. ≥ 8 mm         | mince + 2 × 1,2 + vůle 1,6; hranu otvoru zaoblit                                         |
+| Prvek           | Rozměr (kůže 1,5 mm, mince 40)                  | Poznámka                                                                                    |
+| --------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Panel           | 72 × 104,1 mm (všechny tři)                     | karta 54 + vůle 2 × 1,5 + okraj 2 × 7,5; šev dna 3,5 + karta 85,6 + 15 (kování nad kartami) |
+| Hotové pouzdro  | ≈ 82 × 104 mm                                   | panel 72 + vnější oblouk ohybu A ≈ 6,0 + ohybu B ≈ 3,7 (`foldedWidthMm`)                    |
+| Ohyb A          | 16,63 mm                                        | zadní↔přední: π/2 · odstup vrstev; karty i bankovky mají každé 1,3 mm vůle                  |
+| Ohyb B          | 9,92 mm                                         | přední↔vnitřní: π/2 · (kůže + karty + vůle) + 0,79 za ztenčení na 1 mm                      |
+| Ztenčení        | ohyb B + 3 mm na obě strany, na 1 mm z rubu     | šrafa na listu; protažení lícu v ohybu B klesne z ≈ 26 % na ≈ 16 %; ohyb A se neztenčuje    |
+| Perforace       | jen ohyb A: 3 řady Ø 1,5, rozteč 4              | jako předloha; ztenčený ohyb B se neperforuje (obojí zeslabuje)                             |
+| Pás             | 242,6 × 104,1 mm + jazyk nad ním                | tři panely + dva ohyby                                                                      |
+| Jazyk           | 33 mm široký, řez 44,5 mm                       | u levého konce pásu, konec R10; oblouk 19 + k druku 9,5 + přesah 11 + rezerva 5             |
+| Výřez na prst   | předek čtvrtkruh R34, zadek čtvrtelipsa 39 × 34 | na zadku přechází hrana jazyka plynule do výkusu; roh výřezu na předku zaoblený R2,5        |
+| Průchodka       | Ø 5, 9 mm od hran vnitřního panelu              | po složení v rohu s výřezem, 16 mm uvnitř oblouku, nad kartami                              |
+| Druk            | patice 9,5 mm pod horní hranou předku           | u pravého boku na ose jazyka; příruba patice (≈ Ø 10) končí 14,5 mm, karty začínají v 15    |
+| Kapsa s mincí   | 55 × 54,5 mm, horní rohy R10, dolní R6          | list kapsy; na předek 35,55 mm pod horní hranou, 8,5 mm od boků                             |
+| Okno            | Ø 32 (výsečník po celých mm)                    | prstenec 4 mm (předloha má okno skoro přes celou minci, drží hůř)                           |
+| Forma pro důlek | otvor Ø 44, deska ≥ 74 × 74, tl. ≥ 8 mm         | mince + 2 × 1,2 + vůle 1,6; hranu otvoru zaoblit                                            |
 
 Skládání: vnitřní panel ohybem B za přední, zadní panel ohybem A přes všechno. Vrstvy odpředu:
 přední (líc ven, kapsa s mincí) – karty – vnitřní – bankovky – zadní (líc ven, motiv). Obě boční
@@ -69,7 +70,8 @@ jazyk se zkrátí 11 mm za střed kloboučku (čárkovaná čára je jen orienta
 zvenku: přední panel je nakreslený tak, jak bude vidět.
 
 Výkus zadního panelu je o 5 mm širší než předního (39 vs. 34 mm u horní hrany, u ohybu stejný);
-rozdíl schová vnitřní panel mezi nimi, shora je vidět jen jako 5mm schodek na horní hraně.
+rozdíl schová vnitřní panel mezi nimi. Přední výkus končí zaoblením R2,5 až 36,4 mm od ohybu, takže
+shora je vidět jen schodek ≈ 2,6 mm na horní hraně.
 
 ### Odchylky od předlohy a nejistoty
 
@@ -85,7 +87,8 @@ rozdíl schová vnitřní panel mezi nimi, shora je vidět jen jako 5mm schodek 
   pod horní hranou; výřez jich odkryje 19 mm. `--cards 6`: ohyb B 12,3, ohyb A 19,0, jazyk +2,4 mm
   (list se ještě vejde na A4); 7 karet už ne.
 - **Bankovky** (ČNB 140–170 × 69–74): složené napůl se vejdou do zadní kapsy do 1000 Kč
-  (tisícovka 74 mm na doraz); dvoutisícovka a pětitisícovka jen na třetiny.
+  (tisícovka 74 mm na doraz); dvoutisícovka a pětitisícovka mají stejnou výšku 74 mm a napůl
+  82 a 85 mm, takže se vejdou také (kapsa je ≈ 100 mm hluboká) – ověřit na papírovém modelu.
 - **Vytahování:** karty předním výřezem (palcem), bankovky bokem u jazyka (zadní kapsa je tam
   otevřená i do boku, stejně jako u předlohy). Při zapnutém jazyku karty nevyndáš.
 - **Mince:** zasouvá se shora, vyjímá se palcem oknem posunutím nahoru. Nad mincí 5 mm kůže.
@@ -108,9 +111,9 @@ rozdíl schová vnitřní panel mezi nimi, shora je vidět jen jako 5mm schodek 
 
 ## Materiál (ověřeno 2026-09-18, CraftPoint, skladem)
 
-Pás 243 × 149 mm (s jazykem) potřebuje arch A4 (297 × 210); odřezek na kapsu ≥ 70 × 70 se vedle
+Pás 243 × 149 mm (s jazykem) potřebuje arch A4 (297 × 210); kůže na kapsu ≥ 70 × 70 se vedle
 nevejde, je potřeba ještě kus A5 (nebo větší arch). Barvené třísločiněné lícové usně 1,2 mm
-z italské koželužny, A4 = 251 Kč, A5 = 57 Kč:
+z italské koželužny, A4 = 250 Kč, A5 = 57 Kč:
 
 | Barva                                                                                                                                     | Poznámka                                                                                             |
 | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -118,7 +121,7 @@ z italské koželužny, A4 = 251 Kč, A5 = 57 Kč:
 | [Blu (tmavě modrá)](https://craft-point.cz/products/trislocinena-hovezi-kuze-licova-usen-1-2-mm-blu)                                      | stejná řada                                                                                          |
 | [Rosso (červená)](https://craft-point.cz/products/trislocinena-hovezi-licova-kuze-1-2-mm-rosso)                                           | stejná řada                                                                                          |
 | [T. moro (tmavě hnědá)](https://craft-point.cz/products/hovezi-kuze-licova-trislocinena-1-2-mm-t-moro), Karamelová, Whisky, Černá, Giallo | stejná řada, klasické odstíny                                                                        |
-| [Čokoládová 1,5 mm](https://craft-point.cz/products/hovezi-kuze-licova-cokoladova-1-5-mm), A4 222 Kč                                      | jediná barvená 1,5 mm – pro ni jsou výchozí listy                                                    |
+| [Čokoládová 1,5 mm](https://craft-point.cz/products/hovezi-kuze-licova-cokoladova-1-5-mm), A4 222 Kč                                      | barvená 1,5 mm – pro ni jsou výchozí listy                                                           |
 
 Doporučení: **Verde 1,2 mm** – šev dna jde skrz tři vrstvy, s 1,2 mm je to 3,6 mm místo 4,5 mm, a
 ztenčování odpadá. Listy pak vygenerovat `pnpm pattern:coin-holder --thickness 1.2` (ohyb A 15,7,
@@ -130,14 +133,15 @@ ohyb B 8,7, jazyk 43,1 mm). Tvarování za mokra nejdřív zkusit na A5 stejné 
    cereálií), vystřihnout, ohyby jen přehnout do smyčky (nepřekládat na ostro), vložit karty a
    bankovky, projít kontrolní seznam a zapsat výsledky. Papír prokáže polohu jazyka a kloboučku,
    výřez, průchodku, vytahování karty a místo pro kapsu; přídavky ohybů neprokáže (je tenčí).
-1. **Pás:** obkreslit na líc, vyříznout (výřez plynule), odřezek na kapsu ≥ 70 × 70.
+1. **Pás:** obkreslit na líc, vyříznout (výřez plynule). Kapsa se dělá ze samostatného kusu kůže
+   1,2 mm ≥ 70 × 70 (forma Ø 44 počítá s 1,2 mm; i když je pás z 1,5 mm).
    **Ztenčení ohybu B:** šídlem propíchnout oba konce obou čar ohybu B skrz, na rubu je spojit,
    odsadit 3 mm na obě strany a v tomto pásu ztenčit z rubu na 1 mm. Pak prosekat perforace ohybu
    A a otvory dna na všech třech panelech (naplocho). Zaleštit hrany, které budou uvnitř (horní
    hrana vnitřního panelu, oblouk výkusu, jazyk), a zapečetit rub vnitřního panelu.
 2. **Kapsa** (list kapsy): do odřezku orýsovat obrys a prosekat otvory švu, pak navlhčit, položit
    **lícem dolů** na formu, na rub minci, přiklopit deskou, stáhnout svěrkami, nechat zaschnout.
-3. Vyříznout obrys kapsy se středem na důlku a vyseknout okno (kapsa lícem dolů na formě, pod dno
+3. Vyříznout obrys kapsy podle orýsování (forma vystředěná na křížek, aby důlek seděl s otvory) a vyseknout okno (kapsa lícem dolů na formě, pod dno
    špalík).
 4. Přišít kapsu na přední panel (35,55 mm pod horní hranou, 8,5 mm od boků), osadit patici druku
    a **průchodku do vnitřního panelu – obojí naplocho, před složením**.
@@ -202,3 +206,7 @@ doplnit ručně, do generátoru to nepatří.
   Po revizi kódu: přídavek za ztenčení ohybu A (režim AB) už neprodlužuje jazyk, čára švu dna
   končí uvnitř zaoblených rohů, `--cards` jen 1–6 (víc se nevejde na A4), odsazené pokračování
   řádků v seznamu k zapsání, testy názvů souborů a automatického vypnutí ztenčení.
+  Po řemeslné kontrole: návod na přenesení ztenčení na rub přímo na listu PÁS, kapsa výslovně
+  ze samostatné kůže 1,2 mm, forma vystředěná na křížek a obrys kapsy podle orýsování, rozměr
+  hotového pouzdra s oblouky ohybů (≈ 82 × 104), opravené tvrzení o dvou- a pětitisícovce,
+  schodek výkusu 2,6 mm, cena A4 250 Kč, položka „přesah bankovek“ v seznamu k zapsání.

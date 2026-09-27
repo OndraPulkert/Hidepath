@@ -259,7 +259,7 @@ function panelPath(
 }
 
 /**
- * List 1/2 (A4 **na šířku**, 1:1): rozložený pás (tři panely, jazyk, výřez, perforace ohybů,
+ * List PÁS (A4 **na šířku**, 1:1): rozložený pás (tři panely, jazyk, výřez, perforace ohybů,
  * šev dna); kapsa s mincí a otvor formy jsou na listu 2. Soustava pásu: x = 0 levý konec (u jazyka), y = 0 horní otevřená hrana.
  */
 export function buildCoinHolderSheetSvg(
@@ -333,6 +333,15 @@ export function buildCoinHolderSheetSvg(
         GUIDE,
       ),
     );
+    // Šrafa se obkreslí jen na líc; na rub (kde se ztenčuje) se musí přenést.
+    if (spec.foldSkiveThicknessMm !== null) {
+      const cB = X((L.frontX1Mm + L.innerX0Mm) / 2);
+      [
+        `ztenčení z rubu na ${cz(spec.foldSkiveThicknessMm)} mm:`,
+        `konce čar ohybu${spec.foldSkiveBands === 'AB' ? 'ů A i' : ''} B propíchnout šídlem,`,
+        `na rubu spojit a odsadit ${cz(spec.foldSkiveMarginMm)} mm na obě strany`,
+      ].forEach((t, i) => out.push(text(cB, Y(-16 + i * 3), t, 2.1, 'middle', GUIDE)));
+    }
   }
 
   /* --- šev dna: čára přes celý pás, tečky na všech třech panelech (po přeložení lícují) --- */
@@ -524,7 +533,7 @@ export function buildCoinHolderSheetSvg(
     `Jeden pás: ZADNÍ + ohyb A + PŘEDNÍ + ohyb B + VNITŘNÍ panel. Po složení jsou obě boční hrany OHYBY, šije se jen dno (skrz všechny vrstvy), horní hrana zůstává otevřená.`,
     `PÁS OBKRESLIT NA LÍC – přední panel je nakreslený tak, jak bude vidět. Jazyk vyjde zepředu ${front} (zezadu ${back}), výřez na prst naproti němu.`,
     `Plná čára = řez, čárkovaně = ohyb, tečky = otvory stehu (rozteč ${cz(spec.stitchPitchMm)} mm; dno prosekat naplocho), kroužky = perforace Ø 1,5, šrafa = ${spec.foldSkiveThicknessMm !== null ? `ztenčit na ${cz(spec.foldSkiveThicknessMm)} mm z rubu` : 'bez ztenčení'}.`,
-    `Pořadí: 1 pás · 2–3 kapsa (list 2) · 4 přišít kapsu, osadit patici druku a průchodku NAPLOCHO · 5 složit (vnitřní za přední, zadní přes vše) · 6 slepit a prošít dno`,
+    `Pořadí: 1 pás · 2–3 kapsa (list KAPSA) · 4 přišít kapsu, osadit patici druku a průchodku NAPLOCHO · 5 složit (vnitřní za přední, zadní přes vše) · 6 slepit a prošít dno`,
     `· 7 klobouček podle obtisku patice se vším obsahem, pak jazyk zkrátit ${cz(spec.tabBeyondSnapMm)} mm za klobouček a zaoblit · 8 srazit a zaleštit hrany (vnitřní předem).`,
   ];
   const legendLine = 3.2;
@@ -695,6 +704,7 @@ export function buildCoinHolderPaperModelSvg(
     '4 průchodka celá vidět',
     '+zepředu i zezadu?',
     '5 bankovky: které jdou napůl',
+    '+a kolik přečnívají (mm)',
     '6 konec jazyka ↔ kapsa (mm)',
     '7 počet karet a bankovek',
   ].forEach((t, i) => {
@@ -758,7 +768,7 @@ export function buildCoinHolderPaperModelSvg(
 }
 
 /**
- * List 2/2 (A4 na výšku, 1:1): kapsa s mincí a otvor formy pro důlek.
+ * List KAPSA (A4 na výšku, 1:1): kapsa s mincí a otvor formy pro důlek.
  */
 export function buildCoinHolderPocketSvg(
   spec: CoinCardHolderSpec = DEFAULT_COIN_CARD_HOLDER,
@@ -803,7 +813,8 @@ export function buildCoinHolderPocketSvg(
     `pata důlku Ø ${cz(L.formHoleDiameterMm)} (tečkovaně)`,
     `šev ${seam.holes} otvorů od středu dna`,
     'otvory švu prosekat PŘED tvarováním,',
-    'obrys vyříznout až po zaschnutí,',
+    'formu vystředit na křížek, obrys',
+    'vyříznout po zaschnutí podle orýsování,',
     'okno vyseknout před přišitím',
     `na přední panel: ${cz(L.pocketYMm)} mm pod horní hranou,`,
     `${cz(L.pocketXMm)} mm od boků, otevřenou hranou nahoru`,
@@ -834,8 +845,8 @@ export function buildCoinHolderPocketSvg(
   out.push(text(m + 53, calY + 1, 'KONTROLA MĚŘÍTKA: 50 mm', 2.4, 'start'));
   const legend = [
     'POUZDRO NA KARTY S VSAZENOU MINCÍ – LIST KAPSA A FORMA.',
-    'Tisk na A4 NA VÝŠKU na 100 % (bez „přizpůsobit stránce“).',
-    `Kapsa z kůže ${cz(spec.pocketThicknessMm)} mm; odřezek ≥ ${cz(L.formPlateMm - 4)} × ${cz(L.formPlateMm - 4)} mm.`,
+    'Tisk na A4 na 100 % (bez „přizpůsobit stránce“); samostatný list na výšku.',
+    `Kapsa ze samostatné kůže ${cz(spec.pocketThicknessMm)} mm (i když je pás silnější); kus ≥ ${cz(L.formPlateMm - 4)} × ${cz(L.formPlateMm - 4)} mm.`,
     'Plná čára = řez, tečky = otvory stehu, čárkovaně/tečkovaně = pomocné kružnice.',
   ];
   legend.forEach((t, i) =>
@@ -970,9 +981,9 @@ export function buildCoinHolderProcessSvg(
     );
     b.push(
       text(
-        ox + (blank + 3) * k1,
+        ox + blank * k1 + 2,
         oy + (L.panelHeightMm + 6 + blank / 2) * k1,
-        `odřezek na kapsu ≥ ${cz(blank)} × ${cz(blank)}`,
+        `kůže ${cz(spec.pocketThicknessMm)} mm na kapsu ≥ ${cz(blank)} × ${cz(blank)}`,
         2.1,
         'start',
         GUIDE,
@@ -1061,7 +1072,7 @@ export function buildCoinHolderProcessSvg(
     );
     b.push(
       ...caption(2, [
-        'po zaschnutí vyříznout obrys kapsy se středem na důlku',
+        'po zaschnutí vyříznout obrys kapsy podle orýsování',
         `okno Ø ${cz(L.windowDiameterMm)}: kapsa lícem dolů na formě, pod dno špalík`,
         `prstenec ${cz(L.coinRingMm)} mm drží minci`,
       ]),
@@ -1224,7 +1235,7 @@ export function buildCoinHolderProcessSvg(
     b.push(
       ...caption(6, [
         'zepředu: jazyk zapnutý, výřezem vidět kartu a nad ní průchodku',
-        `složené ≈ ${cz(L.panelWidthMm)} × ${cz(L.panelHeightMm)} mm`,
+        `složené ≈ ${cz(Math.round(L.foldedWidthMm))} × ${cz(Math.round(L.panelHeightMm))} mm (s oblouky ohybů)`,
       ]),
     );
     cell(6, 'Hotovo – zepředu', b);

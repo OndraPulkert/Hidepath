@@ -433,7 +433,9 @@ třech stranách, horní hrana otevřená; mince se zasouvá shora a vyjímá za
 **Náš střih:** `pnpm pattern:coin-holder` → `docs/generated/pouzdro-mince-sablona.pdf` (A4
 1:1), model `src/lib/geometry/coin-card-holder.ts`, zadání a postup `docs/zadani/pouzdro-mince.md`.
 Průměr mince je parametr (`--coin 50kc` atd.). Rozměry odvozené z karty a mince, ne odměřené;
-s mincí 40 mm jako měřítkem z fotek vychází pouzdro ~60 × 90 mm, kapsa ~45–50, okno ~30–32, což
-náš střih (panel 72 × 104,1 jako předloha; kapsa 55 × 54,5; okno 32) řádově potvrzuje. Kůže odhadem tělo 1,2–1,5 mm,
+s mincí 40 mm jako měřítkem z fotek vychází pouzdro ~60 × 90 mm, kapsa ~45–50, okno ~30–32 (hrubý
+odhad). Náš střih je větší – panel 72 × 104,1, hotové pouzdro s oblouky ohybů ≈ 82 × 104 mm, protože
+kování je nad kartami a ohyby mají vůli; kapsa 55 × 54,5 a okno 32 odhadu odpovídají. Velikost
+proti předloze ověřit na papírovém modelu. Kůže odhadem tělo 1,2–1,5 mm,
 kapsa 1,2 mm. **Námět na druhé pouzdro** (ADR 002), ne na první: přidává mokré tvarování,
 velký kruhový výsečník a druk.

@@ -10,7 +10,7 @@
 <path d="M51.927 31.951 L51.927 55.234" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1.2 1"/>
 <path d="M54.146 31.951 L54.146 55.234" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1.2 1"/>
 <rect x="16" y="56.576" width="15.657" height="15.657" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.4" stroke-dasharray="1 0.8"/>
-<text x="32.328" y="64.405" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">odřezek na kapsu ≥ 70 × 70</text>
+<text x="33.657" y="64.405" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">kůže 1,2 mm na kapsu ≥ 70 × 70</text>
 <text x="43.125" y="89.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">pás 242,55 × 104,1 mm + jazyk 44,49 (s rezervou 5)</text>
 <text x="43.125" y="92.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">po zkoušce na papíře: obkreslit na LÍC, ohyb B ztenčit z rubu,</text>
 <text x="43.125" y="96" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">prosekat perforace a otvory dna, zapečetit rub vnitřního panelu</text>
@@ -33,7 +33,7 @@
 <path d="M168.75 20 L198.5 20 A8.5 8.5 0 0 1 207 28.5 L207 61.225 A5.1 5.1 0 0 1 201.9 66.325 L165.35 66.325 A5.1 5.1 0 0 1 160.25 61.225 L160.25 28.5 A8.5 8.5 0 0 1 168.75 20 Z" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.5"/>
 <circle cx="183.625" cy="42.95" r="18.7" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.4"/>
 <circle cx="183.625" cy="42.95" r="13.6" fill="#fbfaf7" stroke="#2f5240" stroke-width="0.4"/>
-<text x="183.625" y="89.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">po zaschnutí vyříznout obrys kapsy se středem na důlku</text>
+<text x="183.625" y="89.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">po zaschnutí vyříznout obrys kapsy podle orýsování</text>
 <text x="183.625" y="92.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">okno Ø 32: kapsa lícem dolů na formě, pod dno špalík</text>
 <text x="183.625" y="96" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">prstenec 4 mm drží minci</text>
 <rect x="219.75" y="9" width="68.25" height="90" rx="2" fill="#fbfaf7" stroke="#ddd" stroke-width="0.3"/>
@@ -102,7 +102,7 @@
 <path d="M185.485 114 L205.945 114 L205.945 120.51 A6.2 6.2 0 0 1 199.745 126.71 L191.685 126.71 A6.2 6.2 0 0 1 185.485 120.51 Z" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.5"/>
 <circle cx="195.715" cy="119.89" r="3.875" fill="#9a9a9a" stroke="#666" stroke-width="0.3"/>
 <text x="183.625" y="184.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">zepředu: jazyk zapnutý, výřezem vidět kartu a nad ní průchodku</text>
-<text x="183.625" y="188" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">složené ≈ 72 × 104,1 mm</text>
+<text x="183.625" y="188" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">složené ≈ 82 × 104 mm (s oblouky ohybů)</text>
 <rect x="219.75" y="101" width="68.25" height="90" rx="2" fill="#fbfaf7" stroke="#ddd" stroke-width="0.3"/>
 <text x="222.75" y="106.5" font-family="Helvetica, Arial, sans-serif" font-size="6" text-anchor="start" fill="#a2471f">8</text>
 <text x="228.75" y="106.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" text-anchor="start" fill="#2b2b2b">Hotovo – zezadu</text>

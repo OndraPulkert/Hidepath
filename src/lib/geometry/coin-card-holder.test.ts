@@ -217,6 +217,14 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     expect(Math.abs(AB.tabLengthMm - B.tabLengthMm)).toBeLessThanOrEqual(0.011);
   });
 
+  it('hotové pouzdro je širší než panel o vnější oblouky obou ohybů', () => {
+    const L = coinCardHolderLayout(spec);
+    // Ohyb A 16,63 (neztenčený, 1,5 mm): 16,63/π + 0,75; ohyb B 9,92 (ztenčený na 1 mm): 9,92/π + 0,5.
+    const expected = 72 + 16.63 / Math.PI + 0.75 + 9.92 / Math.PI + 0.5;
+    expect(L.foldedWidthMm).toBeCloseTo(expected, 2);
+    expect(Math.round(L.foldedWidthMm)).toBe(82);
+  });
+
   it('ztenčení se vypne u kůže, ze které by ubralo méně než 0,3 mm', () => {
     expect(foldSkiveFor(1.5)).toBe(1);
     expect(foldSkiveFor(1.3)).toBe(1);
