@@ -142,10 +142,12 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
     expect(L.grommetXMm!).toBeGreaterThan(L.frontX1Mm);
   });
 
-  it('šev dna: čára přes celý pás, tečky na předním panelu s roztečí z modelu', () => {
+  it('šev dna: čára přes celý pás (uvnitř rohů), tečky na předním panelu s roztečí z modelu', () => {
     const seamY = Y(L.bottomSeamYMm);
+    const rc = spec.cornerRadiusMm;
+    const inset = rc - Math.sqrt(rc * rc - (rc - spec.stitchOffsetMm) ** 2);
     expect(sheet).toContain(
-      `M${fmt(X(0))} ${fmt(seamY)} L${fmt(X(L.stripLengthMm))} ${fmt(seamY)}`,
+      `M${fmt(X(inset))} ${fmt(seamY)} L${fmt(X(L.stripLengthMm - inset))} ${fmt(seamY)}`,
     );
     const dots = circles(sheet ?? '')
       .filter((c) => near(c.r, 0.45) && near(c.cy, seamY))

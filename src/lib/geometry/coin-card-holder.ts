@@ -333,7 +333,10 @@ export function coinCardHolderLayout(
   const tabX1 = spec.tabWidthMm;
   // Jazyk jde od neutrální osy zadního panelu k neutrální ose jazyka ležícího na předním panelu:
   // půlkruh o průměru = skutečný odstup zadního a předního panelu (2·ohyb A/π) + tloušťka kůže.
-  const tabWrap = round((Math.PI * ((2 * foldA) / Math.PI + t)) / 2);
+  // Přídavek za ztenčení ohybu A odstup panelů nezvětší (jen vrací posun neutrální osy), proto
+  // se do obvodu jazyka nepočítá.
+  const foldAGap = foldA - (spec.foldAllowanceMm === null ? extraA : 0);
+  const tabWrap = round((Math.PI * ((2 * foldAGap) / Math.PI + t)) / 2);
   const tabNominal = round(tabWrap + spec.snapFromTopMm + spec.tabBeyondSnapMm);
   const tabLength = round(tabNominal + spec.tabFitReserveMm);
   const tabEndRadius = Math.min(spec.tabEndRadiusMm ?? spec.tabWidthMm / 2, spec.tabWidthMm / 2);
@@ -654,6 +657,15 @@ export const PERFORATION_LIGAMENT_MM = 1.5;
  * Kolik řad perforace se vejde do pásma ohybu šířky `bandMm` (0–3) a jejich rozestup středů.
  * Řady jsou souměrné kolem středu pásma; když se nevejde ani jedna, pásmo se neperforuje.
  */
+/**
+ * Ztenčení ohybu pro danou tloušťku kůže těla: výchozí 1 mm, ale jen když z kůže ubere aspoň
+ * 0,3 mm (tenčí kůže se ohne i bez něj); jinak null = neztenčovat.
+ */
+export function foldSkiveFor(bodyThicknessMm: number): number | null {
+  const s = DEFAULT_COIN_CARD_HOLDER.foldSkiveThicknessMm;
+  return s !== null && Math.round((bodyThicknessMm - s) * 1000) >= 300 ? s : null;
+}
+
 export function foldPerforation(bandMm: number): { rows: number; spacingMm: number } {
   const d = PERFORATION_HOLE_MM;
   const lig = PERFORATION_LIGAMENT_MM;

@@ -33,6 +33,7 @@ import {
   SNAP_POST_RADIUS_MM,
   PERFORATION_HOLE_MM,
   foldPerforation,
+  foldSkiveFor,
   GROMMET_FLANGE_MM,
   CALIBRATION_GAP_MM,
   SEAM_LABEL_GAP_MM,
@@ -156,6 +157,16 @@ function pocketSeam(
     dots.push(dot(ax, ay), dot(bx, by));
   }
   return { path, dots: dots.join(''), holes: 2 * n + 1 };
+}
+
+/**
+ * O kolik zkrátit čáru švu dna na každém konci, aby nevyčnívala za zaoblený roh pásu
+ * (roh R, šev ve vzdálenosti stitchOffset od hrany).
+ */
+function seamLineInset(spec: CoinCardHolderSpec): number {
+  const rc = spec.cornerRadiusMm;
+  const so = spec.stitchOffsetMm;
+  return so >= rc ? 0 : rc - Math.sqrt(rc * rc - (rc - so) * (rc - so));
 }
 
 /**
@@ -326,7 +337,13 @@ export function buildCoinHolderSheetSvg(
 
   /* --- šev dna: čára přes celý pás, tečky na všech třech panelech (po přeložení lícují) --- */
   const seamY = L.bottomSeamYMm;
-  out.push(guide(`M${f(X(0))} ${f(Y(seamY))} L${f(X(L.stripLengthMm))} ${f(Y(seamY))}`, '0.8 1.2'));
+  const seamInset = seamLineInset(spec);
+  out.push(
+    guide(
+      `M${f(X(seamInset))} ${f(Y(seamY))} L${f(X(L.stripLengthMm - seamInset))} ${f(Y(seamY))}`,
+      '0.8 1.2',
+    ),
+  );
   const run = (L.bottomSeamHoles - 1) * spec.stitchPitchMm;
   // Na předním panelu vystředěné, na zadní a vnitřní panel zrcadlené přes střed ohybu: po složení
   // padnou otvor na otvor a dají se prosekat naplocho jako u předlohy.
@@ -662,7 +679,7 @@ export function buildCoinHolderPaperModelSvg(
   );
   out.push(
     guide(
-      `M${f(X(0))} ${f(Y(L.bottomSeamYMm))} L${f(X(L.stripLengthMm))} ${f(Y(L.bottomSeamYMm))}`,
+      `M${f(X(seamLineInset(spec)))} ${f(Y(L.bottomSeamYMm))} L${f(X(L.stripLengthMm - seamLineInset(spec)))} ${f(Y(L.bottomSeamYMm))}`,
       '0.8 1.2',
     ),
   );
@@ -671,18 +688,29 @@ export function buildCoinHolderPaperModelSvg(
   [
     'ZAPSAT PŘI ZKOUŠCE',
     '1 klobouček: kolik mm',
-    '   od značky a kterým směrem',
+    '+od značky a kterým směrem',
     '2 kolik jazyka zbývá za ním',
-    '   (cíl 11 + rezerva)',
+    '+(cíl 11 + rezerva)',
     '3 karta ve výřezu (cíl 19 mm)',
     '4 průchodka celá vidět',
-    '   zepředu i zezadu?',
+    '+zepředu i zezadu?',
     '5 bankovky: které jdou napůl',
     '6 konec jazyka ↔ kapsa (mm)',
     '7 počet karet a bankovek',
-  ].forEach((t, i) =>
-    out.push(text(nx, sy + 4 + i * 3.6, t, i === 0 ? 2.3 : 2.1, 'start', i === 0 ? INK : GUIDE)),
-  );
+  ].forEach((t, i) => {
+    // „+“ = pokračování řádku: odsadit posunem x (mezery na začátku SVG text zahodí).
+    const cont = t.startsWith('+');
+    out.push(
+      text(
+        nx + (cont ? 2.5 : 0),
+        sy + 4 + i * 3.6,
+        cont ? t.slice(1) : t,
+        i === 0 ? 2.3 : 2.1,
+        'start',
+        i === 0 ? INK : GUIDE,
+      ),
+    );
+  });
   if (L.grommetXMm !== null && L.grommetYMm !== null) {
     out.push(circle(X(L.grommetXMm), Y(L.grommetYMm), spec.grommetHoleMm / 2));
     out.push(
@@ -1301,12 +1329,15 @@ function readNumberArg(
   min: number,
   max: number,
   named?: Record<string, number>,
+  unit = ' mm',
 ): number | undefined {
   const raw = argValue(name);
   if (raw === undefined) return undefined;
   const names = named ? Object.keys(named).join(', ') : '';
   if (raw === '' || raw.startsWith('--')) {
-    throw new Error(`${name} potřebuje hodnotu${named ? ` (číslo v mm nebo ${names})` : ' v mm'}.`);
+    throw new Error(
+      `${name} potřebuje hodnotu${named ? ` (číslo v mm nebo ${names})` : unit ? ` v${unit}` : ''}.`,
+    );
   }
   const key = raw.toLowerCase();
   const namedValue = named && Object.hasOwn(named, key) ? named[key] : undefined;
@@ -1315,7 +1346,7 @@ function readNumberArg(
     namedValue ?? (/^\d+([.,]\d+)?$/.test(raw) ? Number(raw.replace(',', '.')) : Number.NaN);
   if (!Number.isFinite(value) || value < min || value > max) {
     throw new Error(
-      `${name} musí být mezi ${min} a ${max} mm${named ? ` nebo jedno z: ${names}` : ''}.`,
+      `${name} musí být mezi ${min} a ${max}${unit}${named ? ` nebo jedno z: ${names}` : ''}.`,
     );
   }
   return value;
@@ -1325,7 +1356,8 @@ async function main(): Promise<void> {
   const coin =
     readNumberArg('--coin', 15, 60, NAMED_COINS) ?? DEFAULT_COIN_CARD_HOLDER.coinDiameterMm;
   const window = readNumberArg('--window', 8, 60);
-  const cards = readNumberArg('--cards', 1, 8);
+  // Víc než 6 karet už se pás nevejde na A4 na šířku (kontrola modelu by to odmítla).
+  const cards = readNumberArg('--cards', 1, 6, undefined, '');
   const thickness = readNumberArg('--thickness', 1, 2);
   // Neznámý přepínač = chyba: překlep by jinak potichu přegeneroval verzovaný výchozí střih.
   const known = ['--coin', '--window', '--cards', '--thickness'];
@@ -1349,10 +1381,7 @@ async function main(): Promise<void> {
   const d = DEFAULT_COIN_CARD_HOLDER;
   const body = thickness ?? d.bodyThicknessMm;
   // U tenké kůže (např. Verde 1,2 mm) ztenčení ohybu na 1 mm nemá smysl – vypne se.
-  const skive =
-    d.foldSkiveThicknessMm !== null && body - d.foldSkiveThicknessMm >= 0.3
-      ? d.foldSkiveThicknessMm
-      : null;
+  const skive = foldSkiveFor(body);
   if (skive === null && d.foldSkiveThicknessMm !== null) {
     console.log(`Kůže ${cz(body)} mm: ztenčení ohybu vypnuto (rozdíl pod 0,3 mm).`);
   }

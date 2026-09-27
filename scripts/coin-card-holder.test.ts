@@ -30,6 +30,11 @@ describe('generátor pouzdra s mincí – varianty', () => {
     expect(coinHolderFileStem({ ...spec, tabSide: 'left' })).toBe(
       'pouzdro-mince-sablona-jazyk-vlevo',
     );
+    // Jiný počet karet / tloušťka kůže nesmí přepsat verzovaný výchozí střih.
+    expect(coinHolderFileStem({ ...spec, cardsCount: 6 })).toBe('pouzdro-mince-sablona-karty-6');
+    expect(coinHolderFileStem({ ...spec, bodyThicknessMm: 1.2 })).toBe(
+      'pouzdro-mince-sablona-kuze-1-2mm',
+    );
   });
 
   it('jazyk vlevo: pás je zrcadlově, výřez a průchodka na opačné straně', () => {
@@ -97,6 +102,18 @@ describe('generátor pouzdra s mincí – varianty', () => {
     expect(svg).toContain(
       `L${r3(ox8 + W8 - RX8)} ${r3(oy8)} A${r3(RX8)} ${r3(S4)} 0 0 0 ${r3(ox8 + W8)} ${r3(oy8 + S4)}`,
     );
+  });
+
+  it('čára švu dna končí uvnitř zaoblených rohů (nevyčnívá za řez)', () => {
+    const L = coinCardHolderLayout(spec);
+    const rc = spec.cornerRadiusMm;
+    const d = rc - spec.stitchOffsetMm;
+    const inset = rc - Math.sqrt(rc * rc - d * d);
+    expect(inset).toBeGreaterThan(0.5);
+    const y = r3(10 + L.tabLengthMm + L.bottomSeamYMm);
+    const line = `M${r3(10 + inset)} ${y} L${r3(10 + L.stripLengthMm - inset)} ${y}`;
+    expect(buildCoinHolderSheetSvg(spec)).toContain(line);
+    expect(buildCoinHolderPaperModelSvg(spec)).toContain(line);
   });
 
   it('nulové poloměry kreslí rovné čáry, žádné degenerované oblouky', () => {
@@ -193,6 +210,30 @@ describe('generátor pouzdra s mincí – varianty', () => {
     expect(zones[0].x1).toBeCloseTo(L.innerX0Mm! + mm, 9);
     // Šrafa je vektor (čáry), ne <pattern> – Chromium by vzor v PDF rastroval.
     expect(svg).not.toContain('<pattern');
+    // Každá čára šrafy leží uvnitř svého obdélníku (ořez nesmí přetéct do panelů).
+    for (const sv of [
+      svg,
+      buildCoinHolderSheetSvg({ ...spec, tabSide: 'left', foldSkiveBands: 'AB' }),
+    ]) {
+      const boxes = [
+        ...sv.matchAll(
+          /<rect class="skive-zone" x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="([\d.]+)"/g,
+        ),
+      ].map((m) => m.slice(1, 5).map(Number) as [number, number, number, number]);
+      const hatches = [...sv.matchAll(/<path d="([^"]+)" stroke="#b9c3bc" stroke-width="0.3"/g)];
+      expect(hatches.length).toBe(boxes.length);
+      hatches.forEach((h, i) => {
+        const [bx, by, bw, bh] = boxes[i];
+        const nums = [...h[1].matchAll(/-?[\d.]+/g)].map((n) => Number(n[0]));
+        expect(nums.length).toBeGreaterThan(8);
+        for (let k = 0; k < nums.length; k += 2) {
+          expect(nums[k]).toBeGreaterThanOrEqual(bx - 1e-3);
+          expect(nums[k]).toBeLessThanOrEqual(bx + bw + 1e-3);
+          expect(nums[k + 1]).toBeGreaterThanOrEqual(by - 1e-3);
+          expect(nums[k + 1]).toBeLessThanOrEqual(by + bh + 1e-3);
+        }
+      });
+    }
     expect(svg).toContain(
       `ztenčit na ${String(spec.foldSkiveThicknessMm).replace('.', ',')} mm z rubu`,
     );

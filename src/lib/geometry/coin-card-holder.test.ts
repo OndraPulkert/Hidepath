@@ -9,6 +9,7 @@ import {
   NAMED_COINS,
   checkCoinCardHolder,
   foldPerforation,
+  foldSkiveFor,
   coinCardHolderLayout,
 } from './coin-card-holder';
 
@@ -201,6 +202,26 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     // Užší ohyb B (9,1 mm) má dvě řady, aby zůstal můstek 1,5 mm.
     expect(foldPerforation(L.foldFrontInnerMm).rows).toBe(2);
     expect(foldPerforation(4).rows).toBe(0);
+  });
+
+  it('ztenčení ohybu A (režim AB) přidá jen posun neutrální osy a jazyk neprodlouží', () => {
+    const B = coinCardHolderLayout(spec);
+    const AB = coinCardHolderLayout({ ...spec, foldSkiveBands: 'AB' });
+    const t = spec.bodyThicknessMm;
+    const s = spec.foldSkiveThicknessMm!;
+    expect(AB.foldBackFrontMm - B.foldBackFrontMm).toBeCloseTo((Math.PI * (t - s)) / 2, 1);
+    expect(AB.foldFrontInnerMm).toBe(B.foldFrontInnerMm);
+    // Odstup zadního a předního panelu je stejný, takže i jazyk musí mít stejný obvod.
+    // (±0,01 z mezizaokrouhlení ohybu; bez opravy by rozdíl byl 0,79 mm)
+    expect(Math.abs(AB.tabWrapMm - B.tabWrapMm)).toBeLessThanOrEqual(0.011);
+    expect(Math.abs(AB.tabLengthMm - B.tabLengthMm)).toBeLessThanOrEqual(0.011);
+  });
+
+  it('ztenčení se vypne u kůže, ze které by ubralo méně než 0,3 mm', () => {
+    expect(foldSkiveFor(1.5)).toBe(1);
+    expect(foldSkiveFor(1.3)).toBe(1);
+    expect(foldSkiveFor(1.29)).toBeNull();
+    expect(foldSkiveFor(1.2)).toBeNull();
     expect(checkCoinCardHolder({ ...spec, foldAllowanceMm: 4 }).join(' ')).toMatch(
       /méně, než obsah potřebuje/,
     );

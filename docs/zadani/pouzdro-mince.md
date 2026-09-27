@@ -21,7 +21,7 @@ prvního), až bude první pouzdro fyzicky hotové.
     otočená o 90° – měřítko zůstává 1:1 –, postup).
 - Přepínače (`pnpm pattern:coin-holder …`): `--coin 50kc` (27,5 mm; dále `20kc`, `10kc`, `5kc`,
   `decision` nebo číslo v mm), `--window 30` (průměr okna podle výsečníku), `--cards 6` (počet karet
-  v přední kapse, 1–7), `--thickness 1.2` (tloušťka kůže těla; pod 1,3 mm se ztenčení ohybu vypne).
+  v přední kapse, 1–6), `--thickness 1.2` (tloušťka kůže těla; pod 1,3 mm se ztenčení ohybu vypne).
   Každá odchylka jde do vlastních souborů (`…-mince-27-5mm`, `…-okno-30mm`, `…-karty-6`,
   `…-kuze-1-2mm`); verzovaný výchozí střih se nepřepíše. Neznámý nebo zdvojený přepínač je chyba.
   PDF se v repu neverzují, vzniknou lokálně tímto příkazem.
@@ -199,3 +199,6 @@ doplnit ručně, do generátoru to nepatří.
   v postupu kreslí výřez stejnou čtvrtelipsou jako šablona, jednotné názvy listů (PÁS, KAPSA),
   skloňování počtu karet, přísnější virtuální složení (vůle ≥ 1,2 mm, klobouček ±0,3 mm) a testy
   zrcadlené varianty, ztenčení a papírového modelu pro minci 27,5 mm.
+  Po revizi kódu: přídavek za ztenčení ohybu A (režim AB) už neprodlužuje jazyk, čára švu dna
+  končí uvnitř zaoblených rohů, `--cards` jen 1–6 (víc se nevejde na A4), odsazené pokračování
+  řádků v seznamu k zapsání, testy názvů souborů a automatického vypnutí ztenčení.
