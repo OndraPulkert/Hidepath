@@ -72,6 +72,12 @@ export interface CoinCardHolderSpec {
    */
   foldEaseMm: number;
   /**
+   * Ztenčení kůže v pásmech ohybů (skiving): na kolik mm a o kolik mm za čáry ohybu na každou
+   * stranu. Ohyb B má u kůže 1,5 mm poloměr jen ≈ 3 mm a líc by mohl praskat. `null` = neztenčovat.
+   */
+  foldSkiveThicknessMm: number | null;
+  foldSkiveMarginMm: number;
+  /**
    * Strana jazyka při pohledu na hotové pouzdro **zepředu**. Předloha má jazyk vpravo a výřez
    * s průchodkou vlevo → `right`. V kresbě pásu je pak jazyk u levého konce (zadní panel se
    * při složení otočí).
@@ -144,6 +150,8 @@ export const DEFAULT_COIN_CARD_HOLDER: CoinCardHolderSpec = {
   innerPanel: true,
   foldAllowanceMm: null,
   foldEaseMm: 2,
+  foldSkiveThicknessMm: 1,
+  foldSkiveMarginMm: 3,
   tabSide: 'right',
   tabWidthMm: 33,
   tabEndRadiusMm: 10,
@@ -489,6 +497,17 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
       p.push(
         `Pásmo ohybu ${fmt(band)} mm je tak úzké, že se do něj perforace nevejde; zvětši foldEaseMm.`,
       );
+    }
+  }
+  if (spec.foldSkiveThicknessMm !== null) {
+    const body = spec.bodyThicknessMm;
+    if (spec.foldSkiveThicknessMm >= body || spec.foldSkiveThicknessMm < 0.6) {
+      p.push(
+        `Ztenčení ohybů na ${fmt(spec.foldSkiveThicknessMm)} mm nedává smysl (má být 0,6 mm až méně než tloušťka kůže ${fmt(body)} mm).`,
+      );
+    }
+    if (spec.foldSkiveMarginMm > 8) {
+      p.push('foldSkiveMarginMm nad 8 mm by ztenčil i plochu panelů.');
     }
   }
   if (spec.stitchPitchMm < PERFORATION_HOLE_MM + PERFORATION_LIGAMENT_MM) {

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 297 210">
+<defs><pattern id="skive" patternUnits="userSpaceOnUse" width="1.6" height="1.6" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="1.6" stroke="#b9c3bc" stroke-width="0.3"/></pattern></defs>
 <rect width="297" height="210" fill="#ffffff"/>
+<rect x="79" y="88.49" width="22.63" height="70.1" fill="url(#skive)" stroke="none"/>
+<rect x="167.63" y="54.49" width="15.13" height="104.1" fill="url(#skive)" stroke="none"/>
 <path d="M10 20 A10 10 0 0 1 20 10 L33 10 A10 10 0 0 1 43 20 L43 54.49 A39 34 0 0 0 82 88.49 L98.63 88.49 A34 34 0 0 0 132.63 54.49 L245.76 54.49 A6 6 0 0 1 251.76 60.49 L251.76 152.59 A6 6 0 0 1 245.76 158.59 L16 158.59 A6 6 0 0 1 10 152.59 Z" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
 <path d="M82 88.49 L82 158.59" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
 <path d="M98.63 88.49 L98.63 158.59" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
@@ -139,7 +142,7 @@
 <text x="10" y="179.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Karty 54 × 85,6 (4 ks) vepředu, bankovky složené napůl vzadu, mince Ø 27,5, kůže tělo 1,5 mm.</text>
 <text x="10" y="182.4" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Jeden pás: ZADNÍ + ohyb A + PŘEDNÍ + ohyb B + VNITŘNÍ panel. Po složení jsou obě boční hrany OHYBY, šije se jen dno (skrz všechny vrstvy), horní hrana zůstává otevřená.</text>
 <text x="10" y="185.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">PÁS OBKRESLIT NA LÍC – přední panel je nakreslený tak, jak bude vidět. Jazyk vyjde zepředu vpravo (zezadu vlevo), výřez na prst naproti němu.</text>
-<text x="10" y="188.8" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Plná čára = řez, čárkovaně = ohyb, tečky = otvory stehu (rozteč 4 mm; dno prosekat naplocho, po složení lícují), kroužky v ohybech = perforace Ø 1,5 (jako předloha).</text>
+<text x="10" y="188.8" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Plná čára = řez, čárkovaně = ohyb, tečky = otvory stehu (rozteč 4 mm; dno prosekat naplocho), kroužky = perforace Ø 1,5, šrafa = ztenčit na 1 mm z rubu.</text>
 <text x="10" y="192" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Pořadí: 1 pás · 2–3 kapsa (list 2) · 4 přišít kapsu, osadit patici druku a průchodku NAPLOCHO · 5 složit (vnitřní za přední, zadní přes vše) · 6 slepit a prošít dno</text>
 <text x="10" y="195.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">· 7 klobouček podle obtisku patice se vším obsahem, pak jazyk zkrátit 11 mm za klobouček a zaoblit · 8 srazit a zaleštit hrany (vnitřní předem).</text>
 </svg>

@@ -22,6 +22,7 @@ import {
   buildPlateLegendSvg,
 } from './belt-buckle-end.ts';
 import {
+  buildCoinHolderPaperModelSvg,
   buildCoinHolderPocketSvg,
   buildCoinHolderProcessSvg,
   buildCoinHolderSheetSvg,
@@ -65,6 +66,7 @@ describe('zapsané soubory odpovídají generátoru', () => {
     ['pouzdro-mince-sablona.svg', () => buildCoinHolderSheetSvg()],
     ['pouzdro-mince-postup.svg', () => buildCoinHolderProcessSvg()],
     ['pouzdro-mince-kapsa.svg', () => buildCoinHolderPocketSvg()],
+    ['pouzdro-mince-papirovy-model.svg', () => buildCoinHolderPaperModelSvg()],
     [
       'pouzdro-mince-kapsa-mince-27-5mm.svg',
       () =>
