@@ -78,6 +78,14 @@ export interface CoinCardHolderSpec {
   foldSkiveThicknessMm: number | null;
   foldSkiveMarginMm: number;
   /**
+   * Který ohyb ztenčit. Ohyb B má poloměr ≈ 3 mm (protažení lícu ≈ 26 % bez ztenčení, ≈ 16 % se
+   * ztenčením na 1 mm), ohyb A ≈ 5 mm (≈ 14 %) – ztenčení tam není potřeba a u výkusu by zeslabilo
+   * hranu. Pásmo, které se ztenčuje, se neperforuje (obojí zeslabuje ohyb).
+   */
+  foldSkiveBands: 'B' | 'AB';
+  /** Zaoblení rohu, kde výřez na předním panelu potkává horní hranu (tam pracuje palec). */
+  scoopCornerRadiusMm: number;
+  /**
    * Strana jazyka při pohledu na hotové pouzdro **zepředu**. Předloha má jazyk vpravo a výřez
    * s průchodkou vlevo → `right`. V kresbě pásu je pak jazyk u levého konce (zadní panel se
    * při složení otočí).
@@ -152,6 +160,8 @@ export const DEFAULT_COIN_CARD_HOLDER: CoinCardHolderSpec = {
   foldEaseMm: 2,
   foldSkiveThicknessMm: 1,
   foldSkiveMarginMm: 3,
+  foldSkiveBands: 'B',
+  scoopCornerRadiusMm: 2.5,
   tabSide: 'right',
   tabWidthMm: 33,
   tabEndRadiusMm: 10,
@@ -193,7 +203,7 @@ export const NAMED_COINS = {
 /** List pásu: A4 na šířku (pás je přes 200 mm dlouhý), okraj a mezera mezi díly. */
 export const A4_SHEET = { widthMm: 297, heightMm: 210, marginMm: 10, gapMm: 6 } as const;
 /** Výška legendy pod díly, se kterou kontrola rozvržení počítá. */
-export const LEGEND_HEIGHT_MM = 28;
+export const LEGEND_HEIGHT_MM = 25;
 /** Svislé mezery pravého sloupce střihu (nadpis nad dílem, popisky pod dílem). */
 export const SHEET_TITLE_GAP_MM = 4;
 export const SHEET_CAPTION_MM = 10;
@@ -250,6 +260,9 @@ export interface CoinCardHolderLayout {
    */
   scoopRadiusMm: number;
   backScoopRxMm: number;
+  /** Zaoblení rohu výřezu na předním panelu u horní hrany a kde na horní hraně končí. */
+  scoopCornerRadiusMm: number;
+  scoopCornerEndXMm: number;
   scoopStartXMm: number;
   scoopEndXMm: number;
   /** Průchodka ve vnitřním panelu (null bez vnitřního panelu). */
@@ -294,8 +307,16 @@ export function coinCardHolderLayout(
   const g = (2 * spec.foldEaseMm) / Math.PI;
   const sepB = t + cards + g; // přední ↔ vnitřní
   const sepA = spec.innerPanel ? sepB + t + bills + g : t + cards + g; // přední ↔ zadní
-  const foldB = spec.innerPanel ? (spec.foldAllowanceMm ?? round((Math.PI * sepB) / 2)) : 0;
-  const foldA = spec.foldAllowanceMm ?? round((Math.PI * sepA) / 2);
+  // Ztenčení z rubu posune neutrální osu každého ramene ohybu o (t − s)/2 ven: ohyb potřebuje
+  // o π·(t − s)/2 víc, jinak by ztenčením přišla kapsa o vůli.
+  const skiveExtra =
+    spec.foldSkiveThicknessMm === null ? 0 : (Math.PI * (t - spec.foldSkiveThicknessMm)) / 2;
+  const extraB = spec.foldSkiveThicknessMm === null ? 0 : skiveExtra;
+  const extraA = spec.foldSkiveBands === 'AB' ? skiveExtra : 0;
+  const foldB = spec.innerPanel
+    ? (spec.foldAllowanceMm ?? round((Math.PI * sepB) / 2 + extraB))
+    : 0;
+  const foldA = spec.foldAllowanceMm ?? round((Math.PI * sepA) / 2 + extraA);
 
   const backX0 = 0;
   const backX1 = panelWidth;
@@ -389,6 +410,11 @@ export function coinCardHolderLayout(
     snapYFrontMm: snapYFront,
     scoopRadiusMm: scoop,
     backScoopRxMm: backScoopRx,
+    scoopCornerRadiusMm: spec.scoopCornerRadiusMm,
+    // Zaoblení je kružnice tečná k horní hraně a vně tečná ke kružnici výřezu.
+    scoopCornerEndXMm: round(
+      frontX0 + Math.sqrt(scoop * scoop + 2 * scoop * spec.scoopCornerRadiusMm),
+    ),
     scoopStartXMm: scoopStartX,
     scoopEndXMm: scoopEndX,
     grommetXMm: grommetX,
@@ -501,9 +527,9 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
   }
   if (spec.foldSkiveThicknessMm !== null) {
     const body = spec.bodyThicknessMm;
-    if (spec.foldSkiveThicknessMm >= body || spec.foldSkiveThicknessMm < 0.6) {
+    if (spec.foldSkiveThicknessMm > body - 0.3 || spec.foldSkiveThicknessMm < 0.6) {
       p.push(
-        `Ztenčení ohybů na ${fmt(spec.foldSkiveThicknessMm)} mm nedává smysl (má být 0,6 mm až méně než tloušťka kůže ${fmt(body)} mm).`,
+        `Ztenčení ohybů na ${fmt(spec.foldSkiveThicknessMm)} mm nedává smysl (0,6 mm až o 0,3 mm méně než kůže ${fmt(body)} mm; u tenké kůže ztenčení vypni).`,
       );
     }
     if (spec.foldSkiveMarginMm > 8) {

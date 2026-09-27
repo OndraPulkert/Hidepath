@@ -1,33 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 297 210">
 <rect width="297" height="210" fill="#ffffff"/>
-<path d="M10 20 A10 10 0 0 1 20 10 L33 10 A10 10 0 0 1 43 20 L43 54.49 A39 34 0 0 0 82 88.49 L98.63 88.49 A34 34 0 0 0 132.63 54.49 L245.76 54.49 A6 6 0 0 1 251.76 60.49 L251.76 152.59 A6 6 0 0 1 245.76 158.59 L16 158.59 A6 6 0 0 1 10 152.59 Z" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
+<path d="M10 20 A10 10 0 0 1 20 10 L33 10 A10 10 0 0 1 43 20 L43 54.49 A39 34 0 0 0 82 88.49 L98.63 88.49 A34 34 0 0 0 132.546 56.819 A2.5 2.5 0 0 1 135.04 54.49 L246.55 54.49 A6 6 0 0 1 252.55 60.49 L252.55 152.59 A6 6 0 0 1 246.55 158.59 L16 158.59 A6 6 0 0 1 10 152.59 Z" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
 <path d="M82 88.49 L82 158.59" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
 <path d="M98.63 88.49 L98.63 158.59" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
 <text x="90.315" y="51.49" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#a2471f">② OHYB A: zadní přes vše</text>
 <path d="M170.63 54.49 L170.63 158.59" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
-<path d="M179.76 54.49 L179.76 158.59" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
-<text x="175.195" y="51.49" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#a2471f">① OHYB B: vnitřní za přední</text>
+<path d="M180.55 54.49 L180.55 158.59" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
+<text x="175.59" y="51.49" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#a2471f">① OHYB B: vnitřní za přední</text>
 <path d="M107.63 69.49 h54 v85.6 h-54 Z" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1.5 1"/>
 <text x="134.63" y="112.29" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#7a7a7a">KARTA sem (za přední panel)</text>
 <text x="134.63" y="115.69" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#7a7a7a">54 × 85,6 mm, horní hrana 15 mm pod okrajem</text>
 <circle cx="26.5" cy="26" r="6.25" fill="none" stroke="#a2471f" stroke-width="0.2" stroke-dasharray="1.5 1"/>
 <text x="26.5" y="27" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#a2471f">klobouček</text>
-<circle cx="154.13" cy="63.99" r="6.25" fill="none" stroke="#a2471f" stroke-width="0.2" stroke-dasharray="1.5 1"/>
+<circle cx="154.13" cy="63.99" r="5" fill="none" stroke="#a2471f" stroke-width="0.2" stroke-dasharray="1.5 1"/>
 <text x="154.13" y="64.99" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#a2471f">patice</text>
-<circle cx="242.76" cy="63.49" r="2.5" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
-<text x="237.76" y="64.29" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="end" fill="#7a7a7a">průchodka – propíchnout</text>
+<path d="M123.38 96.29 L145.88 96.29 A10 10 0 0 1 155.88 106.29 L155.88 132.29 A6 6 0 0 1 149.88 138.29 L119.38 138.29 A6 6 0 0 1 113.38 132.29 L113.38 106.29 A10 10 0 0 1 123.38 96.29 Z" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1 1"/>
+<text x="134.63" y="101.29" font-family="Helvetica, Arial, sans-serif" font-size="2" text-anchor="middle" fill="#7a7a7a">místo pro kapsu s mincí</text>
+<path d="M10 155.09 L252.55 155.09" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="0.8 1.2"/>
+<text x="257.55" y="58.49" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#2b2b2b">ZAPSAT PŘI ZKOUŠCE</text>
+<text x="257.55" y="62.09" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">1 klobouček: kolik mm</text>
+<text x="257.55" y="65.69" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">   od značky a kterým směrem</text>
+<text x="257.55" y="69.29" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">2 kolik jazyka zbývá za ním</text>
+<text x="257.55" y="72.89" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">   (cíl 11 + rezerva)</text>
+<text x="257.55" y="76.49" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">3 karta ve výřezu (cíl 19 mm)</text>
+<text x="257.55" y="80.09" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">4 průchodka celá vidět</text>
+<text x="257.55" y="83.69" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">   zepředu i zezadu?</text>
+<text x="257.55" y="87.29" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">5 bankovky: které jdou napůl</text>
+<text x="257.55" y="90.89" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">6 konec jazyka ↔ kapsa (mm)</text>
+<text x="257.55" y="94.49" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">7 počet karet a bankovek</text>
+<circle cx="243.55" cy="63.49" r="2.5" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
+<text x="238.55" y="64.29" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="end" fill="#7a7a7a">průchodka – propíchnout</text>
 <text x="46" y="146.59" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">ZADNÍ PANEL</text>
 <text x="46" y="149.99" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#7a7a7a">tahle strana ven (zezadu)</text>
 <text x="134.63" y="146.59" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">PŘEDNÍ PANEL</text>
 <text x="134.63" y="149.99" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#7a7a7a">tahle strana ven (zepředu)</text>
-<text x="215.76" y="146.59" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">VNITŘNÍ PANEL</text>
-<text x="215.76" y="149.99" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#7a7a7a">dělí karty a bankovky</text>
-<path d="M10 166 V170 M10 168 H60 M60 166 V170" stroke="#2b2b2b" stroke-width="0.3" fill="none"/>
-<text x="63" y="169" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#2b2b2b">KONTROLA MĚŘÍTKA: 50 mm</text>
-<text x="10" y="176" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#7a7a7a">PAPÍROVÝ MODEL – vystřihnout z tvrdšího papíru (160–200 g/m²), NE z kůže. Tisk na A4 NA ŠÍŘKU na 100 %. Obrys je stejný jako na listu pásu.</text>
-<text x="10" y="179.4" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#7a7a7a">☐ ① ohnout vnitřní panel dozadu za přední (ohyb B)   ☐ ② přehnout zadní panel přes všechno (ohyb A)   ☐ dno slepit páskou</text>
-<text x="10" y="182.8" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#7a7a7a">☐ vložit 4 karty do přední kapsy a bankovky složené napůl do zadní   ☐ obě boční hrany se ohnou bez tahu</text>
-<text x="10" y="186.2" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#7a7a7a">☐ přehnout jazyk přes horní hranu: klobouček padne na patici (poznamenat odchylku v mm)   ☐ průchodka je vidět ve výřezu zepředu i zezadu</text>
-<text x="10" y="189.6" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#7a7a7a">☐ palcem vysunout kartu výřezem   ☐ jazyk nepřekrývá místo pro kapsu s mincí   → teprve pak řezat kůži (list 1 a 2).</text>
+<text x="216.55" y="146.59" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">VNITŘNÍ PANEL</text>
+<text x="216.55" y="149.99" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#7a7a7a">dělí karty a bankovky</text>
+<path d="M10 169 V173 M10 171 H60 M60 169 V173" stroke="#2b2b2b" stroke-width="0.3" fill="none"/>
+<text x="63" y="172" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#2b2b2b">KONTROLA MĚŘÍTKA: 50 mm</text>
+<text x="10" y="179" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#7a7a7a">PAPÍROVÝ MODEL – NE z kůže. Tisk na A4 NA ŠÍŘKU na 100 %, obrys je stejný jako list pásu. Vytisknout na papír 160 g a nalepit na tenkou lepenku (krabice od cereálií), aby byl tuhý.</text>
+<text x="10" y="182.4" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#7a7a7a">Prokáže: polohu jazyka a kloboučku, výřez, průchodku, vytahování karty a místo pro kapsu. Neprokáže přídavky ohybů (papír je tenčí než kůže): ohyby jen přehnout do smyčky, nepřekládat na ostro.</text>
+<text x="10" y="185.8" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#7a7a7a">☐ ① vnitřní panel dozadu za přední (ohyb B)   ☐ ② zadní přes všechno (ohyb A)   ☐ dno slepit páskou podél čáry švu   ☐ vložit 4 karty vpředu a bankovky napůl vzadu</text>
+<text x="10" y="189.2" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#7a7a7a">☐ přehnout jazyk přes horní hranu, patici propíchnout do jazyka a změřit odchylku od kloboučku   ☐ průchodka je celá ve výřezu zepředu i zezadu</text>
+<text x="10" y="192.6" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#7a7a7a">☐ palcem vysunout kartu výřezem   ☐ konec jazyka je nad místem pro kapsu   → výsledky zapsat vpravo, teprve pak řezat kůži (listy 1 a 2).</text>
 </svg>

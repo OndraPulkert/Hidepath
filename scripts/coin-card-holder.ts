@@ -29,6 +29,7 @@ import {
   type CoinCardHolderSpec,
   assertCoinCardHolder,
   A4_PORTRAIT,
+  SNAP_POST_RADIUS_MM,
   PERFORATION_HOLE_MM,
   foldPerforation,
   GROMMET_FLANGE_MM,
@@ -188,7 +189,16 @@ function stripOutline(
     `L${P(L.scoopStartXMm, 0)} ` +
     `A${f(L.backScoopRxMm * k)} ${f(S * k)} 0 0 ${ccw} ${P(L.backX1Mm, S)} ` +
     `L${P(L.frontX0Mm, S)} ` +
-    arc(S, ccw, L.scoopEndXMm, 0) +
+    (L.scoopCornerRadiusMm > 0
+      ? (() => {
+          // Výřez přejde do horní hrany zaoblením r: bod dotyku na kružnici výřezu, pak konvexní oblouk.
+          const r = L.scoopCornerRadiusMm;
+          const cx = L.scoopCornerEndXMm;
+          const px = L.frontX0Mm + ((cx - L.frontX0Mm) * S) / (S + r);
+          const py = (r * S) / (S + r);
+          return arc(S, ccw, px, py) + arc(r, cw, cx, 0);
+        })()
+      : arc(S, ccw, L.scoopEndXMm, 0)) +
     `L${P(SL - rc, 0)} ` +
     arc(rc, cw, SL, rc) +
     `L${P(SL, H - rc)} ` +
@@ -449,8 +459,11 @@ export function buildCoinHolderSheetSvg(
       }
     }
   };
-  perforate(L.backX1Mm, L.frontX0Mm, S + 4);
-  if (L.innerX0Mm !== null) perforate(L.frontX1Mm, L.innerX0Mm, 4);
+  // Pásmo, které se ztenčuje, se neperforuje (obojí by ohyb zeslabilo dvakrát).
+  const skivedA = spec.foldSkiveThicknessMm !== null && spec.foldSkiveBands === 'AB';
+  const skivedB = spec.foldSkiveThicknessMm !== null;
+  if (!skivedA) perforate(L.backX1Mm, L.frontX0Mm, S + 4);
+  if (L.innerX0Mm !== null && !skivedB) perforate(L.frontX1Mm, L.innerX0Mm, 4);
 
   /* --- kalibrace a legenda --- */
   const calX = m;
@@ -503,10 +516,17 @@ export function skiveZones(
   L: CoinCardHolderLayout,
   spec: CoinCardHolderSpec,
 ): { x0: number; x1: number; y0: number; y1: number }[] {
+  if (spec.foldSkiveThicknessMm === null) return [];
   const m = spec.foldSkiveMarginMm;
-  const zones = [
-    { x0: L.backX1Mm - m, x1: L.frontX0Mm + m, y0: L.scoopRadiusMm, y1: L.panelHeightMm },
-  ];
+  const zones: { x0: number; x1: number; y0: number; y1: number }[] = [];
+  if (spec.foldSkiveBands === 'AB') {
+    zones.push({
+      x0: L.backX1Mm - m,
+      x1: L.frontX0Mm + m,
+      y0: L.scoopRadiusMm,
+      y1: L.panelHeightMm,
+    });
+  }
   if (L.innerX0Mm !== null) {
     zones.push({ x0: L.frontX1Mm - m, x1: L.innerX0Mm + m, y0: 0, y1: L.panelHeightMm });
   }
@@ -595,8 +615,56 @@ export function buildCoinHolderPaperModelSvg(
   const sr = spec.snapDiameterMm / 2;
   out.push(circle(X(L.snapXTabMm), Y(L.snapYTabMm), sr, ACCENT, '1.5 1'));
   out.push(text(X(L.snapXTabMm), Y(L.snapYTabMm) + 1, 'klobouček', 2.1, 'middle', ACCENT));
-  out.push(circle(X(L.snapXFrontMm), Y(L.snapYFrontMm), sr, ACCENT, '1.5 1'));
+  // Patice: skutečná příruba ≈ Ø 10 (klobouček Ø 12,5 je na jazyku venku).
+  out.push(circle(X(L.snapXFrontMm), Y(L.snapYFrontMm), SNAP_POST_RADIUS_MM, ACCENT, '1.5 1'));
   out.push(text(X(L.snapXFrontMm), Y(L.snapYFrontMm) + 1, 'patice', 2.1, 'middle', ACCENT));
+  // Kde bude kapsa s mincí a šev dna (páskou slepit podél něj).
+  out.push(
+    guide(
+      roundedRect(
+        Math.min(X(L.frontX0Mm + L.pocketXMm), X(L.frontX0Mm + L.pocketXMm + L.pocketWidthMm)),
+        Y(L.pocketYMm),
+        L.pocketWidthMm,
+        L.pocketHeightMm,
+        spec.pocketTopRadiusMm,
+        rc,
+      ),
+      '1 1',
+    ),
+  );
+  out.push(
+    text(
+      X(L.frontX0Mm + L.pocketXMm + L.pocketWidthMm / 2),
+      Y(L.pocketYMm + 5),
+      'místo pro kapsu s mincí',
+      2,
+      'middle',
+      GUIDE,
+    ),
+  );
+  out.push(
+    guide(
+      `M${f(X(0))} ${f(Y(L.bottomSeamYMm))} L${f(X(L.stripLengthMm))} ${f(Y(L.bottomSeamYMm))}`,
+      '0.8 1.2',
+    ),
+  );
+  // Co si při zkoušce zapsat (sloupec vpravo od pásu).
+  const nx = m + L.stripLengthMm + 5;
+  [
+    'ZAPSAT PŘI ZKOUŠCE',
+    '1 klobouček: kolik mm',
+    '   od značky a kterým směrem',
+    '2 kolik jazyka zbývá za ním',
+    '   (cíl 11 + rezerva)',
+    '3 karta ve výřezu (cíl 19 mm)',
+    '4 průchodka celá vidět',
+    '   zepředu i zezadu?',
+    '5 bankovky: které jdou napůl',
+    '6 konec jazyka ↔ kapsa (mm)',
+    '7 počet karet a bankovek',
+  ].forEach((t, i) =>
+    out.push(text(nx, sy + 4 + i * 3.6, t, i === 0 ? 2.3 : 2.1, 'start', i === 0 ? INK : GUIDE)),
+  );
   if (L.grommetXMm !== null && L.grommetYMm !== null) {
     out.push(circle(X(L.grommetXMm), Y(L.grommetYMm), spec.grommetHoleMm / 2));
     out.push(
@@ -625,11 +693,11 @@ export function buildCoinHolderPaperModelSvg(
   );
   out.push(text(m + 53, calY + 1, 'KONTROLA MĚŘÍTKA: 50 mm', 2.4, 'start'));
   const legend = [
-    'PAPÍROVÝ MODEL – vystřihnout z tvrdšího papíru (160–200 g/m²), NE z kůže. Tisk na A4 NA ŠÍŘKU na 100 %. Obrys je stejný jako na listu pásu.',
-    '☐ ① ohnout vnitřní panel dozadu za přední (ohyb B)   ☐ ② přehnout zadní panel přes všechno (ohyb A)   ☐ dno slepit páskou',
-    `☐ vložit ${spec.cardsCount} karty do přední kapsy a bankovky složené napůl do zadní   ☐ obě boční hrany se ohnou bez tahu`,
-    '☐ přehnout jazyk přes horní hranu: klobouček padne na patici (poznamenat odchylku v mm)   ☐ průchodka je vidět ve výřezu zepředu i zezadu',
-    '☐ palcem vysunout kartu výřezem   ☐ jazyk nepřekrývá místo pro kapsu s mincí   → teprve pak řezat kůži (list 1 a 2).',
+    'PAPÍROVÝ MODEL – NE z kůže. Tisk na A4 NA ŠÍŘKU na 100 %, obrys je stejný jako list pásu. Vytisknout na papír 160 g a nalepit na tenkou lepenku (krabice od cereálií), aby byl tuhý.',
+    'Prokáže: polohu jazyka a kloboučku, výřez, průchodku, vytahování karty a místo pro kapsu. Neprokáže přídavky ohybů (papír je tenčí než kůže): ohyby jen přehnout do smyčky, nepřekládat na ostro.',
+    `☐ ① vnitřní panel dozadu za přední (ohyb B)   ☐ ② zadní přes všechno (ohyb A)   ☐ dno slepit páskou podél čáry švu   ☐ vložit ${spec.cardsCount} karty vpředu a bankovky napůl vzadu`,
+    '☐ přehnout jazyk přes horní hranu, patici propíchnout do jazyka a změřit odchylku od kloboučku   ☐ průchodka je celá ve výřezu zepředu i zezadu',
+    '☐ palcem vysunout kartu výřezem   ☐ konec jazyka je nad místem pro kapsu   → výsledky zapsat vpravo, teprve pak řezat kůži (listy 1 a 2).',
   ];
   legend.forEach((t, i) =>
     out.push(text(m, H - m - LEGEND_HEIGHT_MM + 4 + i * 3.4, t, 2.3, 'start', GUIDE)),
@@ -867,10 +935,11 @@ export function buildCoinHolderProcessSvg(
     b.push(
       ...caption(0, [
         `pás ${cz(L.stripLengthMm)} × ${cz(L.panelHeightMm)} mm + jazyk ${cz(L.tabLengthMm)} (s rezervou ${cz(spec.tabFitReserveMm)})`,
-        'obkreslit na LÍC, kapsu zatím jen jako odřezek',
+        'po zkoušce na papíře: obkreslit na LÍC, ohyb B ztenčit z rubu,',
+        'prosekat perforace a otvory dna, zapečetit rub vnitřního panelu',
       ]),
     );
-    cell(0, 'Vyříznout pás', b);
+    cell(0, 'Papír, pak pás z kůže', b);
   }
 
   /* 2 – tvarování důlku */
@@ -1008,9 +1077,9 @@ export function buildCoinHolderProcessSvg(
     b.push(text(ox + w / 2, lay(2) + 7, '↓ pohled zepředu ↓', 2, 'middle', ACCENT));
     b.push(
       ...caption(4, [
-        'řez shora (dopředu = dolů): vnitřní se ohne za přední (ohyb B),',
-        'zadní panel se přehne přes všechno (ohyb A)',
-        'obě boční hrany pouzdra jsou ohyby, nešijí se',
+        'ohyby navlhčit, ohnout kolem obsahu zabaleného ve fólii,',
+        'sepnout sponkami přes podložku a nechat zaschnout',
+        'nejdřív vnitřní za přední (B), pak zadní přes vše (A)',
       ]),
     );
     cell(4, 'Složit pás', b);
@@ -1052,7 +1121,7 @@ export function buildCoinHolderProcessSvg(
     b.push(
       ...caption(5, [
         `dno prošít skrz všechny vrstvy: ${L.bottomSeamHoles} otvorů, rozteč ${cz(spec.stitchPitchMm)} mm`,
-        'otvory prosekané naplocho lícují; dno slepit a prošít',
+        'lepidlo jen pod čáru švu, zarovnat jehlami přes otvory',
       ]),
     );
     cell(5, 'Prošít dno', b);
@@ -1194,6 +1263,9 @@ export function coinHolderFileStem(spec: CoinCardHolderSpec): string {
     parts.push(`okno-${f(spec.windowDiameterMm).replace('.', '-')}mm`);
   if (spec.tabSide !== d.tabSide)
     parts.push(`jazyk-${spec.tabSide === 'left' ? 'vlevo' : 'vpravo'}`);
+  if (spec.cardsCount !== d.cardsCount) parts.push(`karty-${spec.cardsCount}`);
+  if (spec.bodyThicknessMm !== d.bodyThicknessMm)
+    parts.push(`kuze-${f(spec.bodyThicknessMm).replace('.', '-')}mm`);
   return parts.join('-');
 }
 
@@ -1235,13 +1307,15 @@ async function main(): Promise<void> {
   const coin =
     readNumberArg('--coin', 15, 60, NAMED_COINS) ?? DEFAULT_COIN_CARD_HOLDER.coinDiameterMm;
   const window = readNumberArg('--window', 8, 60);
+  const cards = readNumberArg('--cards', 1, 8);
+  const thickness = readNumberArg('--thickness', 1, 2);
   // Neznámý přepínač = chyba: překlep by jinak potichu přegeneroval verzovaný výchozí střih.
-  const known = ['--coin', '--window'];
+  const known = ['--coin', '--window', '--cards', '--thickness'];
   const args = process.argv.slice(2);
   const bad = args.filter((a, i) => {
     if (a.startsWith('--')) return !known.includes(a.split('=')[0] ?? a);
     const prev = args[i - 1];
-    return !(prev === '--coin' || prev === '--window');
+    return !(prev !== undefined && known.includes(prev));
   });
   if (bad.length > 0) {
     throw new Error(`Neznámý přepínač: ${bad.join(' ')}. Povolené: ${known.join(', ')}.`);
@@ -1251,10 +1325,26 @@ async function main(): Promise<void> {
       throw new Error(`Přepínač ${k} je zadaný víckrát.`);
     }
   }
+  if (cards !== undefined && !Number.isInteger(cards)) {
+    throw new Error('--cards musí být celé číslo (počet karet v přední kapse).');
+  }
+  const d = DEFAULT_COIN_CARD_HOLDER;
+  const body = thickness ?? d.bodyThicknessMm;
+  // U tenké kůže (např. Verde 1,2 mm) ztenčení ohybu na 1 mm nemá smysl – vypne se.
+  const skive =
+    d.foldSkiveThicknessMm !== null && body - d.foldSkiveThicknessMm >= 0.3
+      ? d.foldSkiveThicknessMm
+      : null;
+  if (skive === null && d.foldSkiveThicknessMm !== null) {
+    console.log(`Kůže ${cz(body)} mm: ztenčení ohybu vypnuto (rozdíl pod 0,3 mm).`);
+  }
   const spec: CoinCardHolderSpec = {
-    ...DEFAULT_COIN_CARD_HOLDER,
+    ...d,
     coinDiameterMm: coin,
     windowDiameterMm: window ?? null,
+    cardsCount: cards ?? d.cardsCount,
+    bodyThicknessMm: body,
+    foldSkiveThicknessMm: skive,
   };
   const outDir = resolve(dirname(fileURLToPath(import.meta.url)), '../docs/generated');
   mkdirSync(outDir, { recursive: true });

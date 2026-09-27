@@ -26,10 +26,10 @@
 <text x="60" y="98.1" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">deska ≥ 74 × 74 mm, tloušťka ≥ 8 mm</text>
 <text x="60" y="101.7" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">překližka, dřevo nebo HDPE; hranu otvoru zaoblit smirkem</text>
 <text x="60" y="105.3" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">kůže LÍCEM DOLŮ na formu, mince na rub, přiklopit deskou, svěrky</text>
-<path d="M10 253 V257 M10 255 H60 M60 253 V257" stroke="#2b2b2b" stroke-width="0.3" fill="none"/>
-<text x="63" y="256" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#2b2b2b">KONTROLA MĚŘÍTKA: 50 mm</text>
-<text x="10" y="263" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">POUZDRO NA KARTY S VSAZENOU MINCÍ – LIST 2/2: KAPSA A FORMA.</text>
-<text x="10" y="266.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Tisk na A4 NA VÝŠKU na 100 % (bez „přizpůsobit stránce“).</text>
-<text x="10" y="269.4" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Kapsa z kůže 1,2 mm; odřezek ≥ 70 × 70 mm.</text>
-<text x="10" y="272.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Plná čára = řez, tečky = otvory stehu, čárkovaně/tečkovaně = pomocné kružnice.</text>
+<path d="M10 256 V260 M10 258 H60 M60 256 V260" stroke="#2b2b2b" stroke-width="0.3" fill="none"/>
+<text x="63" y="259" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#2b2b2b">KONTROLA MĚŘÍTKA: 50 mm</text>
+<text x="10" y="266" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">POUZDRO NA KARTY S VSAZENOU MINCÍ – LIST 2/2: KAPSA A FORMA.</text>
+<text x="10" y="269.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Tisk na A4 NA VÝŠKU na 100 % (bez „přizpůsobit stránce“).</text>
+<text x="10" y="272.4" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Kapsa z kůže 1,2 mm; odřezek ≥ 70 × 70 mm.</text>
+<text x="10" y="275.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Plná čára = řez, tečky = otvory stehu, čárkovaně/tečkovaně = pomocné kružnice.</text>
 </svg>

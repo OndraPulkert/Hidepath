@@ -3,16 +3,17 @@
 <rect width="297" height="210" fill="#ffffff"/>
 <rect x="9" y="9" width="68.25" height="90" rx="2" fill="#fbfaf7" stroke="#ddd" stroke-width="0.3"/>
 <text x="12" y="14.5" font-family="Helvetica, Arial, sans-serif" font-size="6" text-anchor="start" fill="#a2471f">1</text>
-<text x="18" y="14.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" text-anchor="start" fill="#2b2b2b">Vyříznout pás</text>
-<path d="M16 24.244 A2.244 2.244 0 0 1 18.244 22 L21.161 22 A2.244 2.244 0 0 1 23.405 24.244 L23.405 31.983 A8.751 7.629 0 0 0 32.157 39.613 L35.888 39.613 A7.629 7.629 0 0 0 43.518 31.983 L68.904 31.983 A1.346 1.346 0 0 1 70.25 33.33 L70.25 53.997 A1.346 1.346 0 0 1 68.904 55.343 L17.346 55.343 A1.346 1.346 0 0 1 16 53.997 Z" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.4"/>
-<path d="M32.157 39.613 L32.157 55.343" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1.2 1"/>
-<path d="M35.888 39.613 L35.888 55.343" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1.2 1"/>
-<path d="M52.045 31.983 L52.045 55.343" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1.2 1"/>
-<path d="M54.093 31.983 L54.093 55.343" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1.2 1"/>
-<rect x="16" y="56.689" width="15.708" height="15.708" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.4" stroke-dasharray="1 0.8"/>
-<text x="32.381" y="64.543" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">odřezek na kapsu ≥ 70 × 70</text>
-<text x="43.125" y="92.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">pás 241,76 × 104,1 mm + jazyk 44,49 (s rezervou 5)</text>
-<text x="43.125" y="96" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">obkreslit na LÍC, kapsu zatím jen jako odřezek</text>
+<text x="18" y="14.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" text-anchor="start" fill="#2b2b2b">Papír, pak pás z kůže</text>
+<path d="M16 24.237 A2.237 2.237 0 0 1 18.237 22 L21.144 22 A2.237 2.237 0 0 1 23.381 24.237 L23.381 31.951 A8.723 7.605 0 0 0 32.104 39.555 L35.823 39.555 A7.605 7.605 0 0 0 43.409 32.472 A0.559 0.559 0 0 1 43.967 31.951 L68.908 31.951 A1.342 1.342 0 0 1 70.25 33.293 L70.25 53.892 A1.342 1.342 0 0 1 68.908 55.234 L17.342 55.234 A1.342 1.342 0 0 1 16 53.892 Z" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.4"/>
+<path d="M32.104 39.555 L32.104 55.234" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1.2 1"/>
+<path d="M35.823 39.555 L35.823 55.234" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1.2 1"/>
+<path d="M51.927 31.951 L51.927 55.234" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1.2 1"/>
+<path d="M54.146 31.951 L54.146 55.234" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1.2 1"/>
+<rect x="16" y="56.576" width="15.657" height="15.657" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.4" stroke-dasharray="1 0.8"/>
+<text x="32.328" y="64.405" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">odřezek na kapsu ≥ 70 × 70</text>
+<text x="43.125" y="89.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">pás 242,55 × 104,1 mm + jazyk 44,49 (s rezervou 5)</text>
+<text x="43.125" y="92.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">po zkoušce na papíře: obkreslit na LÍC, ohyb B ztenčit z rubu,</text>
+<text x="43.125" y="96" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">prosekat perforace a otvory dna, zapečetit rub vnitřního panelu</text>
 <rect x="79.25" y="9" width="68.25" height="90" rx="2" fill="#fbfaf7" stroke="#ddd" stroke-width="0.3"/>
 <text x="82.25" y="14.5" font-family="Helvetica, Arial, sans-serif" font-size="6" text-anchor="start" fill="#a2471f">2</text>
 <text x="88.25" y="14.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" text-anchor="start" fill="#2b2b2b">Vytvarovat důlek za mokra</text>
@@ -64,9 +65,9 @@
 <text x="34.063" y="143.4" font-family="Helvetica, Arial, sans-serif" font-size="2" text-anchor="middle" fill="#8a7a55">karty</text>
 <text x="43.125" y="149.6" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#7a7a7a">PŘEDNÍ (líc ven, kapsa s mincí)</text>
 <text x="43.125" y="153" font-family="Helvetica, Arial, sans-serif" font-size="2" text-anchor="middle" fill="#a2471f">↓ pohled zepředu ↓</text>
-<text x="43.125" y="181.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">řez shora (dopředu = dolů): vnitřní se ohne za přední (ohyb B),</text>
-<text x="43.125" y="184.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">zadní panel se přehne přes všechno (ohyb A)</text>
-<text x="43.125" y="188" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">obě boční hrany pouzdra jsou ohyby, nešijí se</text>
+<text x="43.125" y="181.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">ohyby navlhčit, ohnout kolem obsahu zabaleného ve fólii,</text>
+<text x="43.125" y="184.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">sepnout sponkami přes podložku a nechat zaschnout</text>
+<text x="43.125" y="188" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">nejdřív vnitřní za přední (B), pak zadní přes vše (A)</text>
 <rect x="79.25" y="101" width="68.25" height="90" rx="2" fill="#fbfaf7" stroke="#ddd" stroke-width="0.3"/>
 <text x="82.25" y="106.5" font-family="Helvetica, Arial, sans-serif" font-size="6" text-anchor="start" fill="#a2471f">6</text>
 <text x="88.25" y="106.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" text-anchor="start" fill="#2b2b2b">Prošít dno</text>
@@ -82,7 +83,7 @@
 <path d="M126.286 166.236 L126.286 164.73 M126.286 164.085 L126.286 162.578 M126.286 161.933 L126.286 160.427 M126.286 159.781 L126.286 158.275 M126.286 157.629 L126.286 156.123 M126.286 155.477 L126.286 153.971 M126.286 153.326 L126.286 151.819 M126.286 151.174 L126.286 149.668 M126.286 149.022 L126.286 147.516 M126.286 146.87 L126.286 145.364" stroke="#efe3c2" stroke-width="0.592" stroke-linecap="round" fill="none"/>
 <path d="M96.215 174.117 L97.721 174.117 M98.366 174.117 L99.873 174.117 M100.518 174.117 L102.024 174.117 M102.67 174.117 L104.176 174.117 M104.822 174.117 L106.328 174.117 M106.973 174.117 L108.48 174.117 M109.125 174.117 L110.631 174.117 M111.277 174.117 L112.783 174.117 M113.429 174.117 L114.935 174.117 M115.581 174.117 L117.087 174.117 M117.732 174.117 L119.239 174.117 M119.884 174.117 L121.39 174.117 M122.036 174.117 L123.542 174.117 M124.188 174.117 L125.694 174.117 M126.339 174.117 L127.846 174.117 M128.491 174.117 L129.997 174.117" stroke="#efe3c2" stroke-width="0.592" stroke-linecap="round" fill="none"/>
 <text x="113.375" y="184.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">dno prošít skrz všechny vrstvy: 17 otvorů, rozteč 4 mm</text>
-<text x="113.375" y="188" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">otvory prosekané naplocho lícují; dno slepit a prošít</text>
+<text x="113.375" y="188" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">lepidlo jen pod čáru švu, zarovnat jehlami přes otvory</text>
 <rect x="149.5" y="101" width="68.25" height="90" rx="2" fill="#fbfaf7" stroke="#ddd" stroke-width="0.3"/>
 <text x="152.5" y="106.5" font-family="Helvetica, Arial, sans-serif" font-size="6" text-anchor="start" fill="#a2471f">7</text>
 <text x="158.5" y="106.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" text-anchor="start" fill="#2b2b2b">Hotovo – zepředu</text>

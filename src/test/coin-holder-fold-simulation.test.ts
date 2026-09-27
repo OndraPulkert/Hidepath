@@ -47,7 +47,13 @@ const frontX = (x: number): number => x - a1;
 const backToFront = (x: number): number => frontX(a1 + (a0 - x));
 /** Vnitřní panel (vpravo od ohybu B) se otočí kolem ohybu B. */
 const innerToFront = (x: number): number => frontX(b0 - (x - b1));
-const zInner = (2 * bandB) / Math.PI;
+// Ztenčené pásmo (šrafa v listu) má neutrální osu blíž lícu: panely jsou o (t − s) blíž, než
+// kolik by dala délka pásma u plné tloušťky.
+const skivedB = [...sheet.matchAll(/<rect x="([\d.]+)" [^>]*fill="url\(#skive\)"/g)].some(
+  (m) => Number(m[1]) < b0 && Number(m[1]) > a1,
+);
+const skiveOffB = skivedB ? t - (spec.foldSkiveThicknessMm ?? t) : 0;
+const zInner = (2 * bandB) / Math.PI - skiveOffB;
 const zBack = (2 * bandA) / Math.PI;
 const W = b0 - a1;
 

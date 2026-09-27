@@ -86,7 +86,7 @@ describe('generátor pouzdra s mincí – varianty', () => {
       `M${r3(ox4)} ${r3(oy4 + S4)} A${r3(S4)} ${r3(S4)} 0 0 0 ${r3(ox4 + S4)} ${r3(oy4)}`,
     );
     expect(svg).toContain(`dno prošít skrz všechny vrstvy: ${L.bottomSeamHoles} otvorů`);
-    expect(svg).toContain('obě boční hrany pouzdra jsou ohyby, nešijí se');
+    expect(svg).toContain('nejdřív vnitřní za přední (B), pak zadní přes vše (A)');
     // Hotovo zezadu: výřez je v pravém horním rohu (zrcadlově).
     const k8 = k4;
     const ox8 = pad + 3 * cellW + (cellW - L.panelWidthMm * k8) / 2;
@@ -157,20 +157,31 @@ describe('generátor pouzdra s mincí – varianty', () => {
   it('ztenčení v ohybech: šrafovaná pásma = pásmo ohybu ± okraj, ohyb A pod výkusem', () => {
     const L = coinCardHolderLayout(spec);
     const zones = skiveZones(L, spec);
-    expect(zones.length).toBe(2);
+    // Výchozí: ztenčuje se jen užší ohyb B; s 'AB' i ohyb A (pod výkusem).
+    expect(zones.length).toBe(1);
     const mm = spec.foldSkiveMarginMm;
-    expect(zones[0]!.x0).toBeCloseTo(L.backX1Mm - mm, 9);
-    expect(zones[0]!.x1).toBeCloseTo(L.frontX0Mm + mm, 9);
-    expect(zones[0]!.y0).toBe(L.scoopRadiusMm);
-    expect(zones[1]!.x0).toBeCloseTo(L.frontX1Mm - mm, 9);
-    expect(zones[1]!.y0).toBe(0);
+    expect(zones[0]!.x0).toBeCloseTo(L.frontX1Mm - mm, 9);
+    expect(zones[0]!.x1).toBeCloseTo(L.innerX0Mm! + mm, 9);
+    expect(zones[0]!.y0).toBe(0);
+    const both = skiveZones(coinCardHolderLayout({ ...spec, foldSkiveBands: 'AB' }), {
+      ...spec,
+      foldSkiveBands: 'AB',
+    });
+    expect(both.length).toBe(2);
+    expect(both[0]!.y0).toBe(L.scoopRadiusMm);
+    // Ztenčení prodlouží ohyb B o π·(t − s)/2 (posun neutrální osy).
+    const plain = coinCardHolderLayout({ ...spec, foldSkiveThicknessMm: null });
+    expect(L.foldFrontInnerMm - plain.foldFrontInnerMm).toBeCloseTo(
+      (Math.PI * (spec.bodyThicknessMm - spec.foldSkiveThicknessMm!)) / 2,
+      1,
+    );
     const svg = buildCoinHolderSheetSvg(spec);
     const rects = [
       ...svg.matchAll(
         /<rect x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="([\d.]+)" fill="url\(#skive\)"/g,
       ),
     ];
-    expect(rects.length).toBe(2);
+    expect(rects.length).toBe(1);
     expect(Number(rects[0]![1])).toBeCloseTo(10 + zones[0]!.x0, 2);
     expect(Number(rects[0]![3])).toBeCloseTo(zones[0]!.x1 - zones[0]!.x0, 2);
     expect(svg).toContain('<pattern id="skive"');

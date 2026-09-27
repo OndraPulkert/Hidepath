@@ -52,7 +52,9 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     // Ohyb dlouhý L ohnutý o 180° odsune další panel o 2L/π (neutrální osy). Obě kapsy mají dostat
     // vůli 2·foldEase/π navíc k obsahu a tloušťce kůže.
     const g = (2 * spec.foldEaseMm) / Math.PI;
-    const zInner = (2 * L.foldFrontInnerMm) / Math.PI;
+    // Ztenčený ohyb B má neutrální osu o (t − s)/2 dál na každém rameni: odečíst (t − s).
+    const skiveOff = spec.foldSkiveThicknessMm === null ? 0 : t - spec.foldSkiveThicknessMm;
+    const zInner = (2 * L.foldFrontInnerMm) / Math.PI - skiveOff;
     const zBack = (2 * L.foldBackFrontMm) / Math.PI;
     expect(zInner - t - cards).toBeCloseTo(g, 1);
     expect(zBack - zInner - t - spec.billsThicknessMm).toBeCloseTo(g, 1);

@@ -83,7 +83,16 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
     // Výřez U: čtvrtelipsa na zadním, dno přes pásmo ohybu A, čtvrtkruh na předku.
     expect(body).toContain(
       `L${P(L.tabX1Mm, 0)} A${rx} ${S} 0 0 0 ${P(L.backX1Mm, S)} ` +
-        `L${P(L.frontX0Mm, S)} A${S} ${S} 0 0 0 ${P(L.scoopEndXMm, 0)}`,
+        `L${P(L.frontX0Mm, S)} A${S} ${S} 0 0 0 `,
+    );
+    // Roh výřezu na předku je zaoblený: kružnice r tečná k horní hraně a vně tečná k výřezu.
+    const r = spec.scoopCornerRadiusMm;
+    const xc = L.frontX0Mm + Math.sqrt(S * S + 2 * S * r);
+    expect(L.scoopCornerEndXMm).toBeCloseTo(xc, 2);
+    const px = L.frontX0Mm + ((L.scoopCornerEndXMm - L.frontX0Mm) * S) / (S + r);
+    const py = (r * S) / (S + r);
+    expect(body).toContain(
+      `A${S} ${S} 0 0 0 ${P(px, py)} A${r} ${r} 0 0 1 ${P(L.scoopCornerEndXMm, 0)}`,
     );
     // Výkus (ne zaoblený roh): oblouk má střed v rohu panelu na horní hraně u ohybu A, takže
     // odebere celý čtvrtkruh R×R·π/4. Směr oblouku 0 (proti směru hodin) to v SVG určuje
@@ -171,14 +180,13 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
     );
   });
 
-  it('perforace ohybů: tři řady v ohybu A, dvě v užším ohybu B, mimo šev dna', () => {
+  it('perforace jen v ohybu A (tři řady), ohyb B se místo nich ztenčuje', () => {
     const perf = circles(sheet ?? '').filter((c) => near(c.r, 0.75));
     const inBand = (x0: number, x1: number): Circle[] =>
       perf.filter((c) => c.cx > X(x0) && c.cx < X(x1));
-    for (const [x0, x1, n] of [
-      [L.backX1Mm, L.frontX0Mm, 3],
-      [L.frontX1Mm, L.innerX0Mm!, 2],
-    ] as const) {
+    expect(inBand(L.frontX1Mm, L.innerX0Mm!).length).toBe(0);
+    expect(sheet).toContain('fill="url(#skive)"');
+    for (const [x0, x1, n] of [[L.backX1Mm, L.frontX0Mm, 3]] as const) {
       const band = inBand(x0, x1);
       const cols = [...new Set(band.map((c) => c.cx))].sort((a, b) => a - b);
       expect(cols.length).toBe(n);
