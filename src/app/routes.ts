@@ -11,7 +11,9 @@ export const routes = {
   shopping: '/shopping',
   workshop: '/workshop',
   offline: '/offline',
-  shoppingItem: (toolSlug: string) => `/shopping/${encodeURIComponent(toolSlug)}`,
+  /** S `projectSlug` detail ukáže požadavek toho projektu (např. z lekce neaktivního projektu). */
+  shoppingItem: (toolSlug: string, projectSlug?: string) =>
+    `/shopping/${encodeURIComponent(toolSlug)}${projectSlug ? `?projekt=${encodeURIComponent(projectSlug)}` : ''}`,
   project: (projectSlug: string) => `/projects/${encodeURIComponent(projectSlug)}`,
   lesson: (projectSlug: string, lessonSlug: string) =>
     `/projects/${encodeURIComponent(projectSlug)}/lessons/${encodeURIComponent(lessonSlug)}`,

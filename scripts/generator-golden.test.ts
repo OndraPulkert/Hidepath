@@ -24,10 +24,22 @@ import {
 import {
   buildCoinHolderPaperModelSvg,
   buildCoinHolderPocketSvg,
+  buildCoinHolderProcessStepSvg,
   buildCoinHolderProcessSvg,
   buildCoinHolderSheetSvg,
 } from './coin-card-holder.ts';
-import { DEFAULT_COIN_CARD_HOLDER, NAMED_COINS } from '../src/lib/geometry/coin-card-holder.ts';
+import {
+  buildDrukSvg,
+  buildLepeniDnaSvg,
+  buildPoradiOhybuSvg,
+  buildPrenosZnacekSvg,
+  buildProsekavaniDnaSvg,
+} from './coin-card-holder-illustrations.ts';
+import {
+  DEFAULT_COIN_CARD_HOLDER,
+  foldSkiveFor,
+  NAMED_COINS,
+} from '../src/lib/geometry/coin-card-holder.ts';
 
 /**
  * Zapsané soubory v `docs/generated/` slouží jako golden files a zbytek sady je
@@ -65,6 +77,10 @@ describe('zapsané soubory odpovídají generátoru', () => {
     ['opasek-nahled-zaobleny.svg', () => buildBeltTipPreviewSvg(tip, 'round')],
     ['pouzdro-mince-sablona.svg', () => buildCoinHolderSheetSvg()],
     ['pouzdro-mince-postup.svg', () => buildCoinHolderProcessSvg()],
+    ...Array.from({ length: 8 }, (_, i): [string, () => string] => [
+      `pouzdro-mince-postup-krok-${i + 1}.svg`,
+      () => buildCoinHolderProcessStepSvg(i + 1),
+    ]),
     ['pouzdro-mince-kapsa.svg', () => buildCoinHolderPocketSvg()],
     ['pouzdro-mince-papirovy-model.svg', () => buildCoinHolderPaperModelSvg()],
     [
@@ -91,6 +107,50 @@ describe('zapsané soubory odpovídají generátoru', () => {
           coinDiameterMm: NAMED_COINS['50kc'],
         }),
     ],
+    // Kůže 1,2 mm (Verde): bez ztenčení, jak ho nastaví --thickness 1.2.
+    [
+      'pouzdro-mince-sablona-kuze-1-2mm.svg',
+      () =>
+        buildCoinHolderSheetSvg({
+          ...DEFAULT_COIN_CARD_HOLDER,
+          bodyThicknessMm: 1.2,
+          foldSkiveThicknessMm: foldSkiveFor(1.2),
+        }),
+    ],
+    [
+      'pouzdro-mince-sablona-mince-27-5mm-kuze-1-2mm.svg',
+      () =>
+        buildCoinHolderSheetSvg({
+          ...DEFAULT_COIN_CARD_HOLDER,
+          coinDiameterMm: NAMED_COINS['50kc'],
+          bodyThicknessMm: 1.2,
+          foldSkiveThicknessMm: foldSkiveFor(1.2),
+        }),
+    ],
+    [
+      'pouzdro-mince-papirovy-model-mince-27-5mm-kuze-1-2mm.svg',
+      () =>
+        buildCoinHolderPaperModelSvg({
+          ...DEFAULT_COIN_CARD_HOLDER,
+          coinDiameterMm: NAMED_COINS['50kc'],
+          bodyThicknessMm: 1.2,
+          foldSkiveThicknessMm: foldSkiveFor(1.2),
+        }),
+    ],
+    [
+      'pouzdro-mince-papirovy-model-kuze-1-2mm.svg',
+      () =>
+        buildCoinHolderPaperModelSvg({
+          ...DEFAULT_COIN_CARD_HOLDER,
+          bodyThicknessMm: 1.2,
+          foldSkiveThicknessMm: foldSkiveFor(1.2),
+        }),
+    ],
+    ['pouzdro-mince-ilustrace-prosekavani-dna.svg', () => buildProsekavaniDnaSvg()],
+    ['pouzdro-mince-ilustrace-poradi-ohybu.svg', () => buildPoradiOhybuSvg()],
+    ['pouzdro-mince-ilustrace-druk.svg', () => buildDrukSvg()],
+    ['pouzdro-mince-ilustrace-lepeni-dna.svg', () => buildLepeniDnaSvg()],
+    ['pouzdro-mince-ilustrace-prenos-znacek.svg', () => buildPrenosZnacekSvg()],
   ];
 
   for (const [name, build] of cases) {
@@ -99,7 +159,7 @@ describe('zapsané soubory odpovídají generátoru', () => {
       expect(onDisk, `docs/generated/${name} chybí`).toBeDefined();
       expect(
         build(),
-        `${name} se rozešel s generátorem – spusť ${name.startsWith('pouzdro-mince') ? `pnpm pattern:coin-holder${name.includes('27-5') ? ' --coin 50kc' : ''}` : 'pnpm pattern:belt-end --multi'}`,
+        `${name} se rozešel s generátorem – spusť ${name.startsWith('pouzdro-mince-ilustrace') ? 'pnpm pattern:coin-holder-illustrations' : name.startsWith('pouzdro-mince') ? `pnpm pattern:coin-holder${`${name.includes('27-5') ? ' --coin 50kc' : ''}${name.includes('kuze-1-2') ? ' --thickness 1.2' : ''}`}` : 'pnpm pattern:belt-end --multi'}`,
       ).toBe(onDisk);
     });
   }

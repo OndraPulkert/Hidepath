@@ -44,6 +44,8 @@ export const mediaSlotSchema = z.object({
     .union([
       z.url().regex(/^https:\/\//, 'jen https'),
       z.string().regex(/^\/[^\s]+$/, 'relativní cesta od kořene'),
+      // Malé SVG z generátoru Vite vloží jako data URL (assetsInlineLimit).
+      z.string().regex(/^data:image\/svg\+xml[;,]/, 'vložené SVG'),
     ])
     .optional(),
   /** Pro video: délka v sekundách. */

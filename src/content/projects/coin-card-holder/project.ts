@@ -1,3 +1,4 @@
+import { illustration, processStep } from '@/content/projects/coin-card-holder/illustrations';
 import {
   type LessonDefinition,
   type PhaseDefinition,
@@ -6,7 +7,7 @@ import {
 
 /**
  * Projekt 02 – Pouzdro na karty s vsazenou mincí. Obsah je NÁVRH (draft), stejně jako střih
- * samotný (docs/zadani/pouzdro-mince.md, v4.8). Druhý projekt podle ADR 002: staví na
+ * samotný (docs/zadani/pouzdro-mince.md, v4.9). Druhý projekt podle ADR 002: staví na
  * dovednostech pouzdra na karty (rovný řez, děrování vidličkami, sedlářský steh, hrany) a
  * trénuje jen to, co je nové – mokré tvarování, ztenčení kůže, kování a šití třemi vrstvami.
  * Forma na tvarování: docs/zadani/pouzdro-mince-forma.md.
@@ -45,20 +46,20 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 30,
     goal: 'Poskládat papírový model se skutečnými kartami a bankovkami a zapsat, co ukázal, dřív než se řízne do kůže.',
     materials: [
-      'vytištěný list PAPÍROVÝ MODEL na papír 160 g (zkontrolovaná kalibrační úsečka 50 mm)',
+      'vytištěný list PAPÍROVÝ MODEL na papír 160 g (zkontrolovaná kalibrační úsečka 50 mm); u mince 50 Kč nebo u kůže 1,2 mm vytiskněte příslušnou variantu listu',
       'tenká lepenka na podlepení (krabice od cereálií)',
-      'nůžky a lepidlo v tyčince',
+      'nůžky, lepidlo v tyčince a lepicí páska (na slepení dna podél čáry švu)',
       'karty a bankovky, které opravdu nosíte',
       'tužka a papír na zapsání výsledků',
     ],
     requiredEquipment: [],
-    recommendedEquipment: ['steel-ruler'],
+    recommendedEquipment: ['steel-ruler', 'scratch-awl'],
     prerequisiteLessons: [],
     steps: [
       {
         id: 'print-check',
         title: 'Vytiskněte a zkontrolujte list',
-        body: 'Tisk na A4 bez přizpůsobení velikosti („skutečná velikost“, 100 %). Změřte kalibrační úsečku: musí mít přesně 50 mm. Papírový model prokáže polohu jazyka a kloboučku, výřez, průchodku, vytahování karty a místo pro kapsu – neprokáže ale přídavek ohybů, protože papír je tenčí než kůže.',
+        body: 'Tisk na A4 bez přizpůsobení velikosti („skutečná velikost“, 100 %). Pokud stavíte na minci 50 Kč, vytiskněte odpovídající variantu papírového modelu – mění se jí jen místo kapsy a je na ní menší otvor formy a okno; ohyby a jazyk zůstávají stejné. Pokud stavíte na kůži 1,2 mm (Verde), vytiskněte tu variantu – ta naopak mění ohyby i jazyk (ztenčení ohybu B odpadá). Změřte kalibrační úsečku: musí mít přesně 50 mm. Papírový model prokáže polohu jazyka a kloboučku, výřez, průchodku, vytahování karty a místo pro kapsu – neprokáže ale přídavek ohybů, protože papír je tenčí než kůže.',
         media: [],
       },
       {
@@ -81,6 +82,12 @@ export const lessons: readonly LessonDefinition[] = [
         media: [],
       },
       {
+        id: 'tape-bottom',
+        title: 'Slepte dno páskou',
+        body: 'Lepicí páskou spojte dno modelu podél čáry švu, aby model při vkládání a vytahování obsahu držel tvar.',
+        media: [],
+      },
+      {
         id: 'insert-contents',
         title: 'Vložte karty a bankovky',
         body: 'Vložte karty i bankovky, které opravdu nosíte, přehněte jazyk přes horní hranu a přiložte ho přes vytištěnou značku patice. Šídlem tam propíchněte skrz obě vrstvy, abyste si na jazyku zaznamenali přesné místo – papír na rozdíl od kůže obtisk sám neukáže.',
@@ -97,7 +104,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'checklist',
         title: 'Projděte kontrolní seznam a zapište výsledky',
-        body: 'Zapište: (1) o kolik mm a kterým směrem se propíchnuté místo liší od vytištěné značky patice a kolik jazyka zbývá za ním (cíl 11 mm + rezerva); (2) kolik mm karty je vidět ve výřezu (cíl 19 mm) a jestli jde palcem vysunout; (3) je celý kroužek průchodky vidět zepředu i zezadu; (4) které bankovky jdou napůl a kolik mm přečnívají nahoře a v boku; (5) konec jazyka vůči horní hraně kapsy po zkrácení (cíl asi 15 mm nad ní); (6) skutečný počet karet a tloušťku bankovek, které opravdu nosíte, oproti výchozím 4 × 0,76 mm a 2 mm. Pokud se liší, střih by bylo potřeba přepočítat – to zatím aplikace neumí.',
+        body: 'Zapište: (1) o kolik mm a kterým směrem se propíchnuté místo liší od vytištěné značky patice a kolik jazyka zbývá za ním (cíl 11 mm + rezerva); (2) kolik mm karty je vidět ve výřezu (cíl 19 mm) a jestli jde palcem vysunout; (3) je celý kroužek průchodky vidět zepředu i zezadu; (4) které bankovky jdou napůl a kolik mm přečnívají nahoře a v boku; (5) konec jazyka (na papíru ještě nezkráceného) vůči horní hraně kapsy – cíl je asi 10 mm u výchozí mince 40 mm, asi 16 mm u mince 50 Kč (kapsa u ní začíná níž), protože jazyk na modelu není zkrácený; v kůži po zkrácení podle kloboučku to bude asi 15 mm (u mince 50 Kč asi 21 mm); (6) skutečný počet karet a tloušťku bankovek, které opravdu nosíte, oproti výchozím 4 × 0,76 mm a 2 mm. Pokud se liší, střih by bylo potřeba přepočítat – to zatím aplikace neumí.',
         media: [],
       },
     ],
@@ -105,7 +112,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         slug: 'model-folded',
         title:
-          'Papírový model je slepený, ohyby přehnuté do smyčky (ne na ostro) a karty i bankovky se do něj vejdou.',
+          'Papírový model je slepený, ohyby přehnuté do smyčky (ne na ostro), dno je slepené páskou podél čáry švu a karty i bankovky se do něj vejdou.',
         required: true,
       },
       {
@@ -143,7 +150,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 30,
     goal: 'Vyvrtat formu na tvarování, vytvarovat na ní za mokra důlek na minci do odřezku kůže a poznat, jak vypadá dost hluboký důlek.',
     materials: [
-      'vytištěný list KAPSA (zkontrolovaná kalibrační úsečka 50 mm)',
+      'vytištěný list KAPSA (zkontrolovaná kalibrační úsečka 50 mm; u mince 50 Kč vytiskněte variantu pro 50 Kč – mění se jí otvor formy)',
       'dvě desky na formu a víko (překližka nebo tvrdý plast, aspoň 8 mm) a odpadní prkno pod vrtání',
       'aku vrtačka s vykružovací pilou nebo Forstnerovým vrtákem podle průměru otvoru',
       'odřezek třísločiněné kůže 1,2 mm, aspoň 70 × 70 mm',
@@ -158,6 +165,9 @@ export const lessons: readonly LessonDefinition[] = [
       'clamps',
       'scratch-awl',
       'sandpaper',
+      'stitching-chisels',
+      'mallet',
+      'punching-board',
     ],
     recommendedEquipment: [],
     prerequisiteLessons: [L1],
@@ -165,13 +175,13 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'drill-form',
         title: 'Vyvrtejte formu',
-        body: 'Vytiskněte list KAPSA na 100 % (zkontrolujte úsečku 50 mm), vystřihněte kružnici otvoru formy a nalepte na desku. Desku upněte svěrkou ke stolu, pod ni dejte odpadní prkno. Vrtejte na první rychlost, bez příklepu, netlačte silou, s nabitou baterií. Vykružovací pilou provrtejte do půlky, desku otočte a dokončete z druhé strany podle dírky středicího vrtáku. Forstnerovým vrtákem (sukovníkem) místo toho vrtejte rovnou skrz a průběžně ho vytahujte, ať se zbaví pilin. Nakonec zaoblete horní hranu otvoru smirkovým papírem.',
+        body: 'Vytiskněte list KAPSA na 100 % (zkontrolujte úsečku 50 mm), vystřihněte kružnici otvoru formy a nalepte na desku. Desku upněte svěrkou ke stolu, pod ni dejte odpadní prkno. Vrtejte na první rychlost, bez příklepu, netlačte silou, s nabitou baterií. Vykružovací pilou provrtejte do půlky, desku otočte a dokončete z druhé strany podle dírky středicího vrtáku. Forstnerovým vrtákem (sukovníkem) ho místo toho průběžně vytahujte, ať se zbaví pilin. Nakonec zaoblete horní hranu otvoru smirkovým papírem. Na desku narýsujte obě osy otvoru (vodorovnou i svislou), protažené až k jejím okrajům – podle nich pak na formě zarovnáte osy narýsované na kůži.',
         media: [],
       },
       {
         id: 'mark-outline',
-        title: 'Orýsujte obrys a střed',
-        body: 'Na odřezek orýsujte obrys kapsy a střed (křížek) podle listu KAPSA – podle křížku forma vystředíte. Otvory švu na tréninkovém odřezku dělat nemusíte, jde jen o důlek.',
+        title: 'Orýsujte obrys a prosekejte otvory švu',
+        body: 'List KAPSA přiložte na LÍC odřezku a šídlem propíchněte skrz: tečky švu, konce obou os a rohy obrysu kapsy. Vidličkami s roztečí 4 mm naplocho na desce prosekejte otvory švu z líce podle propíchnutých teček, stejně jako u skutečné kapsy, která se děruje ještě před navlhčením. Pak na rub podle propíchnutých míst narýsujte obrys kapsy a obě osy (protažené až k okraji kůže). Otvory švu leží jen asi 2 mm vně dna důlku, proto na přesném vystředění záleží; tady si tu kombinaci vyzkoušíte na odřezku.',
         media: [],
       },
       {
@@ -189,8 +199,16 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'press-and-clamp',
         title: 'Vtlačte do formy a stáhněte svěrkami',
-        body: 'Kůži lícem dolů položte na formu, křížek (střed) nad středem otvoru. Zabalenou minci položte na rub nad otvor, přiklopte víkem a dvěma svěrkami proti sobě rovnoměrně stáhněte, aby se víko nenaklonilo.',
+        body: 'Kůži lícem dolů položte na formu; rub je teď nahoře, zarovnejte na něm narýsované osy s osami narýsovanými na okraji desky. Zabalenou minci položte na rub nad otvor, přiklopte víkem a dvěma svěrkami proti sobě rovnoměrně stáhněte, aby se víko nenaklonilo.',
         media: [
+          {
+            id: 'postup-2',
+            kind: 'illustration',
+            caption:
+              'Kůže lícem dolů na formě, mince na rubu, přiklopit deskou a stáhnout svěrkami (krok 2 listu postupu)',
+            status: 'available',
+            src: processStep[1],
+          },
           {
             id: 'cch-l2-clamped',
             kind: 'photo',
@@ -203,7 +221,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'dry-and-inspect',
         title: 'Nechte zaschnout a prohlédněte důlek',
-        body: 'Nechte úplně zaschnout, jistější je přes noc. Pak rozepněte a zkontrolujte: důlek má být dost hluboký a bez zvrásnění na okraji; mince do něj má jít zasunout i vysunout, forma počítá se záměrnou vůlí.',
+        body: 'Nechte úplně zaschnout, jistější je přes noc. Pak rozepněte a zkontrolujte: důlek má být dost hluboký a bez zvrásnění na okraji; mince do něj má jít zasunout i vysunout, forma počítá se záměrnou vůlí. Podívejte se i na zkušební otvory u kraje – mají zůstat kulaté, ne protažené nebo potrhané.',
         media: [
           {
             id: 'cch-l2-dimple',
@@ -231,12 +249,18 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Druhý pokus vyšel lépe než první.',
         required: false,
       },
+      {
+        slug: 'seam-holes-ok',
+        title: 'Zkušební otvory podél linie švu zůstaly po tvarování kulaté, nepotrhaly se.',
+        required: false,
+      },
     ],
     commonMistakes: [
       'Mělký nebo na okraji zvrásněný důlek: kůže byla málo vlhká, nebo svěrky utažené slabě.',
       'Kůže v důlku moc ztenčená: byla moc mokrá, nebo svěrky přetažené.',
       'Svěrky utažené jen z jedné strany: víko se nakloní.',
       'Mince bez fólie: mokrá třísločiněná kůže se od kovu může tmavě zabarvit.',
+      'Kůže špatně vystředěná podle os: otvory švu jsou od dna důlku jen asi 2 mm, i malé posunutí je zatáhne do důlku nebo je moc oddálí.',
     ],
     safety: ['Celý postup nejdřív zkuste na odřezku, ne na finální kapse.'],
     media: [
@@ -257,8 +281,9 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 35,
     goal: 'Ztenčit pásmo ohybu na odřezku na 1 mm a naplocho osadit druk i průchodku, než to zkusíte na finálním pásu.',
     materials: [
-      '2–3 odřezky třísločiněné kůže na osazení kování; na trénink ztenčení odřezek silnější než 1,3 mm – při kůži 1,2 mm (Verde) se ztenčení i tenhle krok přeskakuje',
+      '2–3 odřezky třísločiněné kůže na osazení kování; na trénink ztenčení odřezek silnější než 1,3 mm – při kůži 1,2 mm (Verde) se ztenčení i tenhle krok přeskakují',
       'kus dřeva nebo tvrdé desky pod osazování kování',
+      'posuvné měřítko, pokud ho máte (na průběžnou kontrolu tloušťky při ztenčení)',
     ],
     requiredEquipment: [
       'scratch-awl',
@@ -295,19 +320,35 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'punch-post-hole',
         title: 'Vysekněte otvor pro dřík druku',
-        body: 'Výsečníkem na dřík, který je součástí sady druku, vysekněte otvor pro dřík patice. Dřík je stavěný na 2 × 1,5 mm kůže (dvě vrstvy) – to je jeho délka, ne velikost otvoru, který jen odpovídá průměru dříku.',
+        body: 'Výsečníkem na dřík, který je součástí sady druku, vysekněte otvor pro dřík. Druk je čtyřdílný: dřík a hlavička jdou na přední panel, zdířka a klobouček na jazyk. Každá polovina svírá jen jednu vrstvu kůže 1,5 mm – otvor odpovídá průměru dříku, ne žádné délce na víc vrstev.',
         media: [],
       },
       {
         id: 'set-snap-post',
-        title: 'Osaďte patici druku',
-        body: 'Patici osaďte naplocho osazovačem a jedním pevným úderem paličky, přesně na značku. Zkontrolujte, že sedí naplocho a pevně.',
+        title: 'Osaďte dřík druku',
+        body: 'Dřík s hlavičkou osaďte naplocho osazovačem na kovadlince ze sady, paličkou přesně na značku. Zkontrolujte, že sedí naplocho a pevně.',
         media: [
           {
             id: 'cch-l3-snap',
             kind: 'photo',
-            caption: 'Osazovač druku nad patici na odřezku, palička ve výchozí poloze nad ním',
+            caption:
+              'Osazovač druku na kovadlince nad dříkem na odřezku, palička ve výchozí poloze nad ním',
             status: 'planned',
+          },
+        ],
+      },
+      {
+        id: 'practice-snap-cap',
+        title: 'Vyzkoušejte i kloboučkovou polovinu druku',
+        body: 'Na druhém odřezku výsečníkem na kloboučkovou polovinu druku (velikost podle sady – nemusí být stejná jako výsečník na dřík) vysekněte otvor pro zdířku a osaďte klobouček se zdířkou stejným způsobem jako dřík. Zacvakněte ho na osazený dřík a zkontrolujte, že druk jde zavřít i znovu otevřít – v hotovém pouzdru už tuhle kombinaci nezkusíte dřív, než bude jazyk zkrácený.',
+        media: [
+          {
+            id: 'ilustrace-druk-l3',
+            kind: 'illustration',
+            caption:
+              'Čtyři díly druku: klobouček a zdířka na jazyk, hlavička a dřík na přední panel, každá polovina svírá jednu vrstvu',
+            status: 'available',
+            src: illustration.druk,
           },
         ],
       },
@@ -320,7 +361,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'set-grommet',
         title: 'Osaďte průchodku',
-        body: 'Obě půlky průchodky s podložkou osaďte naplocho osazovačem, přesně na značku. Zkontrolujte, že sedí naplocho a pevně.',
+        body: 'Průchodku (očko i podložku) osaďte naplocho osazovačem na kovadlince, přesně na značku. Zkontrolujte, že sedí naplocho a pevně.',
         media: [],
       },
     ],
@@ -333,13 +374,18 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         slug: 'hardware-set',
-        title: 'Patice druku i průchodka sedí naplocho, pevně a přesně na značce.',
+        title: 'Dřík druku i průchodka sedí naplocho, pevně a přesně na značce.',
+        required: true,
+      },
+      {
+        slug: 'snap-opens-closes',
+        title: 'Klobouček se zdířkou zacvaknutý na osazený dřík jde zavřít i znovu otevřít.',
         required: true,
       },
     ],
     commonMistakes: [
       'Ztenčovač skoro kolmo místo naplocho: prořízne kůži naskrz.',
-      'Otvor pro dřík moc velký: patice se v kůži viklá.',
+      'Otvor pro dřík moc velký: dřík se v kůži viklá.',
       'Úder osazovače šikmo: kování nesedne souose a drží volně.',
     ],
     safety: ['Čepel vyměňte, jakmile začne trhat místo řezat.'],
@@ -362,12 +408,12 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 45,
     goal: 'Naplocho prosekat otvory zrcadlené přes ohyby, poskládat proužek do dvou ohybů kolem skutečného obsahu a sešít tři vrstvy dohromady, dřív než to uděláte na finálním pásu.',
     materials: [
-      'jeden souvislý proužek kůže se třemi panely a dvěma ohyby (dost velký odřezek)',
-      'pár karet zabalených v potravinové fólii jako náhrada obsahu',
+      'jeden kus stejné kůže jako na finální pás, asi 130 × 40 mm: tři panely po asi 30 mm (3 × 30 = 90 mm) a oba ohyby – u kůže 1,5 mm ohyb A asi 16,6 mm a ohyb B asi 9,9 mm, u kůže 1,2 mm (Verde) ohyb A asi 15,7 mm a ohyb B asi 8,7 mm (obojí z modelu) – dohromady asi 117 mm, plus rezerva na konce asi 130 mm',
+      'pár karet zabalených v potravinové fólii jako náhrada obsahu, a kus přeloženého papíru asi 2 mm silný jako náhrada bankovek',
       'houbička a voda na navlhčení ohybů',
       'kostěná rozhrnovačka (bone folder) nebo hrana pravítka',
       'sponky s podložkou na sepnutí ohybů při schnutí',
-      'nit asi 1 m',
+      'nit asi 0,8 m',
     ],
     requiredEquipment: [
       'veg-tan-leather',
@@ -380,20 +426,41 @@ export const lessons: readonly LessonDefinition[] = [
       'contact-cement',
       'sandpaper',
     ],
-    recommendedEquipment: ['scratch-awl', 'wing-divider'],
-    prerequisiteLessons: [L1],
+    recommendedEquipment: ['scratch-awl', 'wing-divider', 'safety-skiver'],
+    prerequisiteLessons: [L1, L3],
     steps: [
       {
         id: 'mark-mirrored-dots',
         title: 'Vyznačte otvory dna zrcadlené přes ohyby',
-        body: 'Na plochém, ještě nepřeloženém proužku narýsujte linii švu 3,5 mm od dolní hrany na všech třech panelech. Polohu otvorů odměřte od obou čar ohybu tak, aby byly na sousedních panelech zrcadlené kolem ohybu – jen tak budou po složení lícovat.',
+        body: 'Na plochém, ještě nepřeloženém proužku narýsujte linii švu 3,5 mm od dolní hrany na všech třech panelech. Polohu otvorů odměřte od obou čar ohybu tak, aby byly na sousedních panelech zrcadlené kolem ohybu – jen tak budou po složení lícovat. Na panel dlouhý asi 30 mm s roztečí 4 mm a okrajem 3,5 mm vyjde asi 7 otvorů ((30 − 2 × 3) / 4 + 1 ≈ 7, stejně jako na listu PÁS) – přesný počet upravte podle skutečné délky vašeho panelu.',
+        media: [],
+      },
+      {
+        id: 'mark-skive-band',
+        title: 'Vyznačte pásmo ztenčení ohybu B',
+        body: 'U kůže 1,5 mm narýsujte mezi prostředním a jedním krajním panelem pásmo ohybu B asi 9,9 mm široké a odsaďte 3 mm na obě strany (asi 16 mm celkem), stejně jako v lekci 3. U kůže 1,2 mm tenhle krok i ztenčení přeskočte.',
+        media: [],
+      },
+      {
+        id: 'skive-fold-b',
+        title: 'Ztenčete ohyb B',
+        body: 'U kůže 1,5 mm ztenčete v odsazeném pásu kůži z rubu na 1 mm bezpečnostním ztenčovačem, stejně jako v lekci 3. U kůže 1,2 mm se ztenčení přeskakuje.',
         media: [],
       },
       {
         id: 'punch-flat',
         title: 'Prosekejte otvory naplocho',
-        body: 'Prosekejte vidličkami otvory dna na plochém proužku, panel po panelu – přesně jako to čeká finální pás. Naplocho, ještě nepřeložené, se to prosekává čistěji než skrz už složené vrstvy.',
-        media: [],
+        body: 'Prosekejte vidličkami otvory dna na plochém proužku, panel po panelu: prostřední panel (zastupuje přední) z líce, oba krajní panely (zastupují zadní a vnitřní) z rubu – přesně jako to čeká finální pás. Ohyb panel zrcadlově převrátí, takže šikmé otvory prosekané ze stejné strany by se po složení zkřížily a jehla by jimi neprošla.',
+        media: [
+          {
+            id: 'ilustrace-prosekavani-l4',
+            kind: 'illustration',
+            caption:
+              'Přední panel prosekat z líce, zadní a vnitřní z rubu – po složení pak šikmé otvory lícují',
+            status: 'available',
+            src: illustration.prosekavaniDna,
+          },
+        ],
       },
       {
         id: 'wet-fold-zones',
@@ -404,7 +471,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'fold-around-content',
         title: 'Přeložte kolem obsahu',
-        body: 'Přeložte proužek kolem zabalených karet, přejeďte rozhrnovačkou nebo hranou pravítka a sepněte sponkami přes podložku. Než necháte zaschnout, zkontrolujte, že se naplocho prosekané otvory na sousedních panelech po složení lícují. Ohyb A se neztenčuje, jen se přeloží – pokud je na odřezku moc tuhý, zapište si to do poznámek z tréninku. Nasucho nebo na ostro přeložený líc nejspíš praská – proto je navlhčení a smyčka místo ostrého přehybu klíčové.',
+        body: 'Karty zabalené v potravinové fólii položte mezi prostřední panel (zastupuje přední) a přiléhající krajní panel (zastupuje vnitřní), pak přeložte ohyb B. Jako náhradu bankovek použijte přeložený papír silný asi 2 mm a položte ho mezi krajní panel, který zastupuje vnitřní, a druhý krajní panel (zastupuje zadní) – stejné pořadí vrstev jako u finálního pásu (přední – karty – vnitřní – bankovky – zadní). Teprve pak přeložte ohyb A přes všechno. Přejeďte rozhrnovačkou nebo hranou pravítka a sepněte sponkami přes podložku. Než necháte zaschnout, zkontrolujte, že se naplocho prosekané otvory na sousedních panelech po složení lícují. Ohyb A se neztenčuje, jen se přeloží – pokud je na odřezku moc tuhý, zapište si to do poznámek z tréninku. Nasucho nebo na ostro přeložený líc nejspíš praská – proto je navlhčení a smyčka místo ostrého přehybu klíčové.',
         media: [
           {
             id: 'cch-l4-fold',
@@ -431,8 +498,8 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         id: 'unfold-roughen-glue',
-        title: 'Rozepněte, zdrsněte a slepte',
-        body: 'Ohyby rozepněte, aby šlo lepidlo nanést naplocho na rovnou kůži. V pruhu 0–3,5 mm od hrany (pod čárou švu – lepidlo výš by ubralo místo, kde má obsah vůli) zdrsněte smirkem plochy, které se budou lepit. Lepidlo naneste naplocho na oba spoje, nechte odvětrat podle návodu na obalu, přeložte zpátky a před přitlačením zarovnejte jehlami přes otvory.',
+        title: 'Zdrsněte a slepte, spoj po spoji',
+        body: 'Zaschlé ohyby rozevřete jen tolik, aby šel proužek natřít – zhruba do pravého úhlu, ne úplně naplocho (suchý neztenčený ohyb A by mohl na líci prasknout). Spoje jsou dva a lepí se po jednom, ne najednou: v pruhu 0–3,5 mm od hrany (pod čárou švu – lepidlo výš by ubralo místo, kde má obsah vůli) zdrsněte smirkem plochy prvního spoje, naneste lepidlo naplocho, nechte odvětrat podle návodu na obalu, přeložte zpátky, zarovnejte jehlami přes otvory a přitiskněte. Teprve pak stejně zopakujte druhý spoj.',
         media: [],
       },
       {
@@ -471,11 +538,19 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Zapsali jste si, jak moc tuhý je ohyb A na odřezku (ztenčuje se jen ohyb B).',
         required: false,
       },
+      {
+        slug: 'skive-band-even',
+        title:
+          'U kůže 1,5 mm je ztenčené pásmo ohybu B rovnoměrné, asi 1 mm. U kůže 1,2 mm se přeskakuje.',
+        required: false,
+      },
     ],
     commonMistakes: [
       'Otvory odměřené jen od hrany, ne zrcadlené od ohybu: po složení nelícují.',
+      'Otvory prosekané ze stejné strany na sousedních panelech: po složení se šikmé otvory zkříží a jehla jimi neprojde.',
       'Ohyb nasucho nebo na ostro: líc praská.',
       'Lepidlo výš než na čáru švu: vrstvy se slepí naplocho tam, kde má zůstat vůle pro obsah.',
+      'Oba spoje slepené najednou místo po jednom: hůř se zarovnávají jehlami před zaschnutím lepidla.',
     ],
     safety: ['Vidličky držte pevně u spodku, palička dopadá na horní konec, ne na prsty.'],
     media: [
@@ -497,8 +572,9 @@ export const lessons: readonly LessonDefinition[] = [
     goal: 'Vyříznout pás podle šablony na líc kůže, přenést ztenčení ohybu B a proseknout otvory dna.',
     materials: [
       'přířez třísločiněné kůže 1,5 mm (nebo 1,2 mm Verde – pak ztenčení ohybu B odpadá) na pás, aspoň A4',
-      'vytištěná šablona PÁS (zkontrolovaná úsečka 50 mm; pro kůži 1,2 mm vytiskněte variantu pro 1,2 mm)',
+      'vytištěná šablona PÁS (zkontrolovaná úsečka 50 mm; pro kůži 1,2 mm nebo minci 50 Kč vytiskněte odpovídající variantu)',
       'přípravek na zapečetění rubu (Tokonole nebo gum tragacanth – stejná pasta jako u leštění hran)',
+      'barva na hrany (u barvené kůže)',
     ],
     requiredEquipment: [
       'veg-tan-leather',
@@ -510,7 +586,7 @@ export const lessons: readonly LessonDefinition[] = [
       'mallet',
       'punching-board',
     ],
-    recommendedEquipment: ['wing-divider', 'corner-template', 'edge-burnisher', 'safety-skiver'],
+    recommendedEquipment: ['corner-template', 'edge-burnisher', 'safety-skiver'],
     prerequisiteLessons: [L2, L3, L4],
     steps: [
       {
@@ -528,8 +604,16 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'cut-strip',
         title: 'Vyřízněte pás',
-        body: 'Rovné strany řežte podle pravítka na dva až tři lehké tahy, výřez na prst řežte plynule bez pravítka.',
+        body: 'Rovné strany řežte podle pravítka na dva až tři lehké tahy. Malé zaoblení R2,5 na předním panelu, kde oblouk výřezu R34 potkává horní hranu, je vypouklé (ven z kůže) – vyřízněte ho nožem podle vyznačené čáry na šabloně. Když si nejste jistí, nechte tam raději pravý úhel a zaoblete ho až smirkovým papírem. Zbytek výřezu na prst (oblouk R34 vepředu, čtvrtelipsa vzadu) řežte plynule bez pravítka.',
         media: [
+          {
+            id: 'postup-1',
+            kind: 'illustration',
+            caption:
+              'Pás obkreslený na líc a vyříznutý, stranou kus kůže na kapsu (krok 1 listu postupu)',
+            status: 'available',
+            src: processStep[0],
+          },
           {
             id: 'cch-l5-cut',
             kind: 'photo',
@@ -539,15 +623,24 @@ export const lessons: readonly LessonDefinition[] = [
         ],
       },
       {
-        id: 'mark-hardware-centres',
-        title: 'Propíchněte středy druku a průchodky',
-        body: 'Šablonu ještě jednou přiložte na pás a šídlem propíchněte střed patice druku (na předním panelu) a střed průchodky (na vnitřním panelu) skrz – tenká dírka po šídle udrží přesnou polohu pro osazení kování v lekci 6.',
-        media: [],
+        id: 'transfer-marks-awl',
+        title: 'Přeneste značky šídlem',
+        body: 'Šablonu ještě jednou přiložte na pás a šídlem propíchněte skrz: konce obou čar ohybu A i B (asi 1 mm od hrany pásu, ne přesně na ní), rohy místa pro kapsu (asi 1 mm dovnitř od zaobleného rohu, ne v jeho pomyslném ostrém vrcholu – jinak by značka zůstala vidět na líci mimo přišitou kapsu), střed dříku druku (na předním panelu), střed průchodky (na vnitřním panelu) a všechny tečky dna. Propíchnutá dírka je vidět z obou stran, takže tím zároveň dostanete tečky na rub zadního a vnitřního panelu, odkud se budou prosekávat.',
+        media: [
+          {
+            id: 'ilustrace-prenos-znacek',
+            kind: 'illustration',
+            caption:
+              'Kam šídlem propíchnout list: konce čar ohybů, rohy kapsy, středy patice a průchodky, tečky dna',
+            status: 'available',
+            src: illustration.prenosZnacek,
+          },
+        ],
       },
       {
         id: 'mark-skive-band',
         title: 'Vyznačte pásmo ztenčení ohybu B',
-        body: 'Pokud šijete z kůže tenčí než 1,3 mm (Verde 1,2 mm), tenhle krok i ztenčení přeskočte. U kůže 1,5 mm: šídlem propíchněte oba konce obou čar ohybu B skrz, na rubu je spojte a od každé čáry odsaďte dalších 3 mm ven – ztenčovat se bude celé pásmo ohybu B plus tento přesah na obou stranách (asi 16 mm celkem). Ohyb A se ztenčovat nebude.',
+        body: 'Pokud šijete z kůže tenčí než 1,3 mm (Verde 1,2 mm), tenhle krok i ztenčení přeskočte. U kůže 1,5 mm: na rubu spojte čárou konce obou čar ohybu B propíchnuté v předchozím kroku a od každé čáry odsaďte dalších 3 mm ven – ztenčovat se bude celé pásmo ohybu B plus tento přesah na obou stranách (asi 16 mm celkem). Ohyb A se ztenčovat nebude.',
         media: [],
       },
       {
@@ -559,13 +652,23 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'punch-bottom-holes',
         title: 'Prosekejte otvory dna',
-        body: 'Naplocho prosekejte vidličkami otvory dna na všech třech panelech (tečky, rozteč 4 mm).',
-        media: [],
+        body: 'Naplocho prosekejte vidličkami otvory dna podle propíchnutých teček na všech třech panelech (rozteč přesně 4 mm): přední panel z líce, zadní a vnitřní panel z rubu. Ohyb panel zrcadlově převrátí, takže šikmé otvory prosekané ze stejné strany by se po složení zkřížily a jehla by jimi neprošla.',
+        media: [
+          {
+            id: 'ilustrace-prosekavani-l5',
+            kind: 'illustration',
+            caption:
+              'Přední panel prosekat z líce, zadní a vnitřní z rubu – po složení pak šikmé otvory lícují',
+            status: 'available',
+            src: illustration.prosekavaniDna,
+          },
+        ],
       },
       {
-        id: 'burnish-inner-edges',
-        title: 'Zaleštěte vnitřní hrany a zapečeťte rub',
-        body: 'Zaleštěte hrany, které po složení zůstanou uvnitř: horní hranu vnitřního panelu, oblouk výřezu a jazyk. Rub vnitřního panelu zapečeťte (Tokonole nebo gum tragacanth) – po složení je vidět výřezem nad kartami.',
+        id: 'dye-burnish-and-seal',
+        title:
+          'Obarvěte a zaleštěte hrany, na které se po složení špatně dostanete, a zapečeťte rub',
+        body: 'Hrany, na které se po složení špatně dostanete (horní hrana vnitřního panelu, jeho volná svislá hrana – skončí uvnitř smyčky ohybu A, je vidět výřezem, ale nedosáhnete na ni –, oblouk výřezu a jazyk), teď obarvěte (barva na hrany, u barvené kůže) a zaleštěte – v hotovém pouzdru už na ně nedosáhnete. Rub vnitřního panelu zapečeťte (Tokonole nebo gum tragacanth) kromě spodního proužku 0–3,5 mm od hrany (pod čárou švu) – ten se v lekci 7 lepí, na zapečetěném povrchu by lepidlo nedrželo. Zapečetěný rub je po složení vidět výřezem nad kartami.',
         media: [
           {
             id: 'cch-l5-sealed',
@@ -591,14 +694,17 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         slug: 'inner-edges-burnished',
-        title: 'Vnitřní hrany jsou zaleštěné a rub vnitřního panelu je zapečetěný.',
+        title:
+          'Hrany, na které se po složení špatně dostanete (včetně volné svislé hrany vnitřního panelu), jsou obarvené (u barvené kůže) a zaleštěné a rub vnitřního panelu je zapečetěný (kromě pruhu pod čárou švu).',
         required: false,
       },
     ],
     commonMistakes: [
       'Obtažení na rub místo na líc: přední panel vyjde zrcadlově obráceně.',
       'Záměna ohybů: u kůže 1,5 mm se ztenčuje jen ohyb B (šrafa); ohyb A se neztenčuje.',
+      'Otvory dna prosekané ze stejné strany na sousedních panelech: po složení se zkříží a jehla jimi neprojde – přední panel je z líce, zadní a vnitřní z rubu.',
       'Zapomenutý zapečetěný rub vnitřního panelu: je vidět výřezem nad kartami.',
+      'Zapečetěný rub i v pruhu pod čárou švu: lepidlo v lekci 7 na takovém povrchu nedrží.',
     ],
     safety: ['Volná ruka drží kůži u výřezu za okraj dílu, daleko od čepele.'],
     media: [
@@ -619,10 +725,10 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 60,
     goal: 'Vytvarovat kapsu s mincí ze samostatné kůže 1,2 mm, vyseknout okno, přišít ji na přední panel a naplocho osadit patici druku a průchodku do vnitřního panelu.',
     materials: [
-      'kůže 1,2 mm na kapsu, aspoň 70 × 70 mm (i když je pás z 1,5 mm)',
-      'vytištěná šablona KAPSA',
+      'kůže 1,2 mm na kapsu, aspoň 70 × 70 mm (i když je pás z 1,5 mm; u mince 50 Kč stačí menší kus, podle listu KAPSA)',
+      'vytištěná šablona KAPSA (u mince 50 Kč vytiskněte variantu pro 50 Kč)',
       'mince, potravinová fólie',
-      'nit asi 0,8 m na šev kapsy',
+      'nit asi 0,8 m na šev kapsy (31 otvorů; u mince 50 Kč 23 otvorů, vystačíte s méně)',
     ],
     requiredEquipment: [
       'veg-tan-leather',
@@ -648,14 +754,14 @@ export const lessons: readonly LessonDefinition[] = [
     steps: [
       {
         id: 'trace-and-punch-pocket',
-        title: 'Orýsujte kapsu a prosekněte otvory švu',
-        body: 'Na samostatný kus kůže 1,2 mm orýsujte obrys kapsy podle listu KAPSA a prosekněte otvory švu – oboje ještě před navlhčením.',
+        title: 'Orýsujte kapsu a prosekněte otvory švu z líce',
+        body: 'List KAPSA přiložte na LÍC kůže 1,2 mm a šídlem propíchněte skrz: tečky švu, konce obou os a rohy obrysu kapsy. Vidličkami prosekněte otvory švu z líce podle propíchnutých teček – kapsa bude na předním panelu sedět lícem ven, proto se švové otvory prosekávají z líce; při opětovném prosekávání skrz obě vrstvy v pozdějším kroku musí vidličky vstupovat do stejné strany, aby si otvory lícovaly. Pak na rub podle propíchnutých míst narýsujte obrys kapsy, obě osy (protažené až k okraji kůže) a kružnici okna – podle ní budete okno v pozdějším kroku vystřeďovat. Oboje udělejte ještě před navlhčením.',
         media: [],
       },
       {
         id: 'form-dimple',
         title: 'Vytvarujte důlek na formě',
-        body: 'Kůži navlhčete, položte lícem dolů na formu vystředěnou na křížek, minci zabalenou ve fólii na rub nad otvor, přiklopte deskou a dvěma svěrkami proti sobě rovnoměrně stáhněte, aby se víko nenaklonilo. Nechte zaschnout, jistější je přes noc.',
+        body: 'Kůži navlhčete, položte lícem dolů na formu a zarovnejte narýsované osy na kůži s osami narýsovanými na desce, minci zabalenou ve fólii položte na rub nad otvor, přiklopte deskou a dvěma svěrkami proti sobě rovnoměrně stáhněte, aby se víko nenaklonilo. Nechte zaschnout, jistější je přes noc.',
         media: [
           {
             id: 'cch-l6-form',
@@ -669,8 +775,16 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'cut-outline-and-window',
         title: 'Vyřízněte obrys a vysekněte okno',
-        body: 'Vyřízněte obrys kapsy podle orýsování z prvního kroku – forma vystředěná na křížek zajistí, že důlek sedí s otvory švu. Okno Ø 32 mm vysekněte na formě: kapsu položte lícem dolů zpátky na formu a pod důlek podložte špalík, aby měl důlek při úderu pevnou oporu.',
+        body: 'Vyřízněte obrys kapsy podle orýsování z prvního kroku. Okno vysekněte na formě: kapsu položte lícem dolů zpátky na formu (osy na kůži na osy desky) a pod důlek podložte špalík užší než otvor formy (pod 44 mm, u mince 50 Kč pod 31,5 mm) a zároveň širší než okno (přes 32 mm, u mince 50 Kč přes 19 mm) – má se dotýkat jen dna důlku zespodu, ne ho nadzvedávat. Výsečník vystřeďte podle kružnice okna narýsované na rubu v prvním kroku, nebo zkontrolujte, že prstenec kůže kolem důlku je stejně široký po celém obvodu, a teprve pak Ø 32 mm (u mince 50 Kč Ø 19 mm) okno vysekněte.',
         media: [
+          {
+            id: 'postup-3',
+            kind: 'illustration',
+            caption:
+              'Vyříznutý obrys kapsy a vyseknuté okno s prstencem kolem mince (krok 3 listu postupu)',
+            status: 'available',
+            src: processStep[2],
+          },
           {
             id: 'cch-l6-window',
             kind: 'photo',
@@ -680,27 +794,63 @@ export const lessons: readonly LessonDefinition[] = [
         ],
       },
       {
+        id: 'dye-burnish-pocket-edges',
+        title: 'Obarvěte a zaleštěte hrany kapsy',
+        body: 'Hrany kapsy (oblouk okna i vnější obrys) teď obarvěte (barva na hrany, u barvené kůže) a zaleštěte, stejně jako v lekci 5 – po přišití na přední panel už na vnější obrys nedosáhnete a na okno jen omezeně.',
+        media: [],
+      },
+      {
         id: 'glue-pocket',
         title: 'Nalepte kapsu na přední panel',
-        body: 'Kapsu kontaktním lepidlem nalepte na vyznačené místo na předním panelu: 35,55 mm pod horní hranou, 8,5 mm od obou boků. Horní hranu kapsy, kterou se bude zasouvat mince, nelepte.',
+        body: 'Na předním panelu smirkem lehce zdrsněte jen plochu pod okrajem kapsy (tam, kam přijde lepidlo), zbytek líc nechte hladký. Kontaktní lepidlo naneste jen do úzkého pruhu při okraji kapsy (do šířky švového okraje, ne přes celou plochu) na rub kapsy a na odpovídající zdrsněné místo na předním panelu – 35,55 mm pod horní hranou, 8,5 mm od obou boků (u mince 50 Kč 41,8 mm pod horní hranou, 14,75 mm od obou boků) – ať se nerozteče na viditelný líc kolem kapsy. Horní hranu kapsy, kterou se bude zasouvat mince, nelepte.',
         media: [],
       },
       {
         id: 'stitch-pocket',
         title: 'Prosekněte a přišijte kapsu',
-        body: 'Kapsa má otvory švu prosekané už v prvním kroku, ještě před tvarováním. Naplocho na děrovací desce teď vidličkami projeďte znovu přes tytéž otvory, tentokrát skrz obě vrstvy najednou – kapsu i přední panel pod ní. Pak kapsu sedlářským stehem přišijte, horní hrana zůstává volná.',
+        body: 'Kapsa má otvory švu prosekané už v prvním kroku z líce, ještě před tvarováním. Naplocho na děrovací desce teď vidličkami projeďte znovu přes tytéž otvory ze stejné strany (z líce kapsy), tentokrát skrz obě vrstvy najednou – kapsu i přední panel pod ní; jen tak si otvory po prosekání lícují. Pak kapsu sedlářským stehem přišijte, horní hrana zůstává volná.',
+        media: [
+          {
+            id: 'postup-4',
+            kind: 'illustration',
+            caption:
+              'Kapsa přišitá na přední panel, horní hrana otevřená; patice a průchodka naplocho (krok 4 listu postupu)',
+            status: 'available',
+            src: processStep[3],
+          },
+        ],
+      },
+      {
+        id: 'punch-post-hole',
+        title: 'Vysekněte otvor pro dřík',
+        body: 'Výsečníkem na dřík ze sady druku vysekněte otvor pro dřík v předním panelu, na značku propíchnutou v lekci 5 (9,5 mm pod horní hranou na ose jazyka).',
         media: [],
       },
       {
         id: 'set-snap-post',
-        title: 'Osaďte patici druku',
-        body: 'Patici druku osaďte naplocho do předního panelu na značku propíchnutou v lekci 5 (9,5 mm pod horní hranou na ose jazyka) – ještě před složením pásu, v hotovém pouzdru už na ni nedosáhnete.',
+        title: 'Osaďte dřík druku',
+        body: 'Dřík s hlavičkou osaďte naplocho do vyseknutého otvoru v předním panelu, osazovačem na kovadlince ze sady – ještě před složením pásu, v hotovém pouzdru už na něj nedosáhnete.',
+        media: [
+          {
+            id: 'ilustrace-druk-l6',
+            kind: 'illustration',
+            caption:
+              'Čtyři díly druku: hlavička a dřík na přední panel, klobouček a zdířka později na jazyk',
+            status: 'available',
+            src: illustration.druk,
+          },
+        ],
+      },
+      {
+        id: 'punch-grommet-hole',
+        title: 'Vysekněte otvor pro průchodku',
+        body: 'Výsečníkem Ø 5 mm vysekněte otvor pro průchodku ve vnitřním panelu, na značku propíchnutou v lekci 5: 9 mm od horní hrany a 9 mm od volného (vnějšího bočního) konce panelu.',
         media: [],
       },
       {
         id: 'set-grommet',
         title: 'Osaďte průchodku',
-        body: 'Průchodku osaďte naplocho do vnitřního panelu na značku propíchnutou v lekci 5: 9 mm od horní hrany a 9 mm od volného (vnějšího bočního) konce panelu – stejně jako patici, ještě před složením.',
+        body: 'Průchodku osaďte naplocho do vyseknutého otvoru ve vnitřním panelu, osazovačem na kovadlince ze sady – stejně jako dřík, ještě před složením. Hezčí strana jde na rub vnitřního panelu, protože po složení je právě rub vidět zepředu výřezem.',
         media: [
           {
             id: 'cch-l6-hardware',
@@ -721,7 +871,8 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         slug: 'window-cut',
-        title: 'Okno Ø 32 mm je vyseknuté a kolem mince zůstává prstenec asi 4 mm.',
+        title:
+          'Okno Ø 32 mm (u mince 50 Kč Ø 19 mm) je vyseknuté a kolem mince zůstává prstenec asi 4 mm (u 50 Kč 4,25 mm).',
         required: true,
       },
       {
@@ -731,21 +882,29 @@ export const lessons: readonly LessonDefinition[] = [
         required: true,
       },
       {
+        slug: 'pocket-edges-finished',
+        title: 'Hrany kapsy (okno i vnější obrys) jsou obarvené (u barvené kůže) a zaleštěné.',
+        required: false,
+      },
+      {
         slug: 'hardware-flat-set',
-        title: 'Patice druku i průchodka jsou osazené naplocho, oboje ještě před složením.',
+        title: 'Dřík druku i průchodka jsou osazené naplocho, oboje ještě před složením.',
         required: true,
       },
     ],
     commonMistakes: [
       'Kapsa vystřižená bez orýsování z formy: obrys neodpovídá poloze důlku.',
-      'Patice nebo průchodka osazené až po složení: v uzavřeném pásu už na ně nedosáhnete.',
+      'Otvory švu kapsy prosekané při přišití z opačné strany, než byly poprvé: šikmé otvory si nelícují a jehla jimi neprojde.',
+      'Kontaktní lepidlo nanesené přes celou plochu kapsy: rozteče se i na viditelný líc kolem ní.',
+      'Špalík širší než otvor formy: nadzvedává důlek místo aby ho jen podepřel.',
+      'Dřík nebo průchodka osazené až po složení: v uzavřeném pásu už na ně nedosáhnete.',
     ],
     safety: ['Výsečník tlučte kolmo, ruka mimo dráhu paličky.'],
     media: [
       {
         id: 'cch-l6-hero',
         kind: 'photo',
-        caption: 'Přední panel s hotovou kapsou, oknem a mincí zasunutou zezadu',
+        caption: 'Přední panel s hotovou kapsou, oknem a mincí zasunutou shora',
         status: 'planned',
       },
     ],
@@ -764,10 +923,10 @@ export const lessons: readonly LessonDefinition[] = [
       'houbička a voda na navlhčení ohybů',
       'kostěná rozhrnovačka (bone folder) nebo hrana pravítka',
       'sponky s podložkou na sepnutí ohybů při schnutí',
-      'nit asi 0,6 m na šev dna (ověřit na odřezku)',
+      'nit asi 0,8 m na šev dna (raději víc – ověřit na odřezku)',
     ],
     requiredEquipment: ['contact-cement', 'sandpaper', 'harness-needles', 'waxed-thread'],
-    recommendedEquipment: ['wing-divider', 'scratch-awl'],
+    recommendedEquipment: [],
     prerequisiteLessons: [L6],
     steps: [
       {
@@ -779,14 +938,22 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'fold-inner-b',
         title: 'Přeložte vnitřní panel ohybem B',
-        body: 'Nejdřív přeložte vnitřní panel ohybem B za přední panel.',
+        body: 'Karty zabalené v potravinové fólii položte na rub předního panelu (tam, kde po přeložení sedne vnitřní panel) a přeložte přes ně vnitřní panel ohybem B.',
         media: [],
       },
       {
         id: 'fold-back-a',
         title: 'Přeložte zadní panel ohybem A',
-        body: 'Pak přeložte zadní panel ohybem A přes všechno – kolem skutečného obsahu zabaleného v potravinové fólii, ne naprázdno.',
+        body: 'Bankovky zabalené v potravinové fólii položte na líc vnitřního panelu – vrstvy odpředu jsou přední – karty – vnitřní – bankovky – zadní. Pak přeložte zadní panel ohybem A přes všechno, kolem skutečného obsahu, ne naprázdno.',
         media: [
+          {
+            id: 'ilustrace-poradi-ohybu',
+            kind: 'illustration',
+            caption:
+              'Pořadí ohybů v řezu: nejdřív vnitřní za přední (ohyb B), pak zadní přes všechno (ohyb A)',
+            status: 'available',
+            src: illustration.poradiOhybu,
+          },
           {
             id: 'cch-l7-fold',
             kind: 'video',
@@ -800,26 +967,45 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'press-and-clamp',
         title: 'Přitiskněte a nechte zaschnout',
-        body: 'Přejeďte rozhrnovačkou, sepněte sponkami přes podložku a nechte zaschnout. Nasucho nebo na ostro přeložený líc v tomto kroku nejspíš praská.',
-        media: [],
+        body: 'Přejeďte rozhrnovačkou. Sponky s podložkou nasaďte na panely těsně vedle obou ohybů, přes obsah, ne na samotnou smyčku ohybu. Nechte zaschnout. Nasucho nebo na ostro přeložený líc v tomto kroku nejspíš praská.',
+        media: [
+          {
+            id: 'postup-5',
+            kind: 'illustration',
+            caption:
+              'Složený pás v řezu: vrstvy přední, karty, vnitřní, bankovky, zadní (krok 5 listu postupu)',
+            status: 'available',
+            src: processStep[4],
+          },
+        ],
       },
       {
         id: 'roughen-and-glue-bottom',
-        title: 'Rozepněte, zdrsněte a slepte dno',
-        body: 'Oba zaschlé ohyby rozepněte, aby šlo lepidlo nanést naplocho na rovnou kůži. V pruhu 0–3,5 mm od hrany (pod čárou švu; karty i bankovky stojí na švu, lepidlo výš by jim ubralo hloubku) zdrsněte smirkem slepované plochy ve spodním proužku – jsou to dva spoje, přední panel s vnitřním a vnitřní panel se zadním; přední a zadní panel se přímo nedotýkají, mezi nimi je pořád vnitřní panel. Lepidlo naneste naplocho na oba spoje, nechte odvětrat podle návodu na obalu a ohyby znovu přeložte.',
-        media: [],
-      },
-      {
-        id: 'align-and-press',
-        title: 'Zarovnejte jehlami a přitiskněte',
-        body: 'Před přitlačením zarovnejte díly jehlami přes otvory – kontaktní lepidlo po dotyku už nejde posunout. Pak přitiskněte.',
-        media: [],
+        title: 'Zdrsněte a slepte dno, spoj po spoji',
+        body: 'Vyjměte zabalené karty i bankovky. Zaschlé ohyby rozevřete jen tolik, aby šel spodní proužek natřít – zhruba do pravého úhlu, ne úplně naplocho (suchý neztenčený ohyb A by mohl na líci prasknout). Spoje jsou dva – přední panel s vnitřním a vnitřní panel se zadním; přední a zadní panel se přímo nedotýkají, mezi nimi je pořád vnitřní panel – a lepí se po jednom, ne najednou: nejdřív spoj přední↔vnitřní, pak vnitřní↔zadní. V pruhu 0–3,5 mm od hrany (pod čárou švu; karty i bankovky stojí na švu, lepidlo výš by jim ubralo hloubku) zdrsněte smirkem plochy spoje přední↔vnitřní, naneste lepidlo naplocho, nechte odvětrat podle návodu na obalu, přeložte, zarovnejte jehlami přes otvory a přitiskněte – kontaktní lepidlo po dotyku už nejde posunout. Teprve pak stejně zopakujte spoj vnitřní↔zadní.',
+        media: [
+          {
+            id: 'ilustrace-lepeni-dna',
+            kind: 'illustration',
+            caption:
+              'Lepení dna po jednom spoji, ohyb rozevřený jen asi do pravého úhlu, lepidlo 0–3,5 mm od hrany',
+            status: 'available',
+            src: illustration.lepeniDna,
+          },
+        ],
       },
       {
         id: 'stitch-bottom',
         title: 'Prošijte dno',
         body: 'Prošijte dno skrz všechny tři vrstvy (17 otvorů na panel, rozteč 4 mm, 3,5 mm od hrany). Začátek i konec zajistěte zpětnými stehy.',
         media: [
+          {
+            id: 'postup-6',
+            kind: 'illustration',
+            caption: 'Dno prošité skrz všechny tři vrstvy (krok 6 listu postupu)',
+            status: 'available',
+            src: processStep[5],
+          },
           {
             id: 'cch-l7-stitch',
             kind: 'illustration',
@@ -849,7 +1035,9 @@ export const lessons: readonly LessonDefinition[] = [
     ],
     commonMistakes: [
       'Ohyb nasucho: líc v ohybu praská.',
+      'Sponky nasazené na smyčku ohybu místo na panel vedle ní: nedrží obsah přitisknutý.',
       'Lepidlo výš než 3,5 mm od hrany: karty ztratí místo, kde stojí na švu.',
+      'Oba spoje slepené najednou: hůř se zarovnávají jehlami, než lepidlo zatuhne.',
       'Přitlačení bez zarovnání jehlami: hotové otvory na jednotlivých vrstvách se po slepení rozejdou a jehla jimi neprojde rovně.',
     ],
     safety: ['Kontaktní lepidlo na rozpouštědlové bázi používejte ve větrané místnosti.'],
@@ -874,6 +1062,7 @@ export const lessons: readonly LessonDefinition[] = [
       'hotové tělo pouzdra z lekce 7',
       'karty a bankovky, které nosíte',
       'barva na hrany (barvená kůže má světlý řez)',
+      'šňůrka do průchodky (volitelné)',
     ],
     requiredEquipment: [
       'snap-fastener',
@@ -895,20 +1084,28 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'imprint-cap-position',
         title: 'Obtiskněte polohu kloboučku',
-        body: 'Přeložený jazyk přitiskněte přes patici, aby se na kůži obtiskla. Zjistěte, o kolik mm od původní značky a kterým směrem se obtisk posunul: pás je nastřižený na nejhorší případ, ve skutečnosti druk okraj stáhne, takže jazyk vyjde delší, než ukazoval papírový model.',
+        body: 'Přeložený jazyk přitiskněte přes hlavičku na předním panelu, aby se na kůži obtiskla. Zjistěte, o kolik mm od původní značky a kterým směrem se obtisk posunul: pás je nastřižený na nejhorší případ, ve skutečnosti druk okraj stáhne, takže jazyk vyjde delší, než ukazoval papírový model.',
         media: [],
       },
       {
         id: 'punch-cap-hole',
-        title: 'Prosekněte otvor pro klobouček',
-        body: 'Výsečníkem na dřík ze sady druku proražte otvor pro klobouček přesně v obtisknutém místě na jazyku.',
+        title: 'Vysekněte otvor pro klobouček',
+        body: 'Výsečníkem na kloboučkovou polovinu druku (velikost podle sady – nemusí být stejná jako výsečník na dřík) proražte otvor pro zdířku přesně v obtisknutém místě na jazyku.',
         media: [],
       },
       {
         id: 'set-cap',
         title: 'Osaďte klobouček',
-        body: 'Klobouček 12,5 mm osaďte přesně na obtisknuté místo osazovačem a paličkou, ne podle původní odhadované značky.',
+        body: 'Klobouček se zdířkou osaďte přesně na obtisknuté místo osazovačem na kovadlince ze sady a paličkou, ne podle původní odhadované značky. Klobouček (Ø 12,5 mm) jde na líc jazyka (ven, viditelný po zapnutí) přes svůj vlastní trn, zdířka na rub jazyka pod ním, obrácená k přednímu panelu.',
         media: [
+          {
+            id: 'ilustrace-druk-l8',
+            kind: 'illustration',
+            caption:
+              'Klobouček na líc jazyka, zdířka na jeho rub; zdířka cvakne na hlavičku na předním panelu',
+            status: 'available',
+            src: illustration.druk,
+          },
           {
             id: 'cch-l8-cap',
             kind: 'photo',
@@ -922,7 +1119,16 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'shorten-tongue',
         title: 'Zkraťte jazyk a zaoblete rohy',
         body: 'Jazyk zkraťte 11 mm za střed kloboučku a rohy znovu zaoblete na R10 – rohovou šablonou (lob 20), nebo obtažením mince či víčka stejné velikosti.',
-        media: [],
+        media: [
+          {
+            id: 'postup-7',
+            kind: 'illustration',
+            caption:
+              'Hotové pouzdro zepředu se zapnutým jazykem a kartou ve výřezu (krok 7 listu postupu)',
+            status: 'available',
+            src: processStep[6],
+          },
+        ],
       },
       {
         id: 'sand-flat-bottom',
@@ -947,14 +1153,22 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'thread-cord',
         title: 'Protáhněte šňůrku průchodkou',
         body: 'Pokud šňůrku používáte, protáhněte ji teď průchodkou.',
-        media: [],
+        media: [
+          {
+            id: 'postup-8',
+            kind: 'illustration',
+            caption: 'Hotové pouzdro zezadu s průchodkou a šňůrkou (krok 8 listu postupu)',
+            status: 'available',
+            src: processStep[7],
+          },
+        ],
       },
     ],
     checkpoints: [
       {
         slug: 'cap-fits',
         title:
-          'Druk drží a jazyk po zkrácení končí asi 15 mm nad horní hranou kapsy, nezasahuje do ní.',
+          'Druk drží a jazyk po zkrácení končí asi 15 mm nad horní hranou kapsy (u mince 50 Kč asi 21 mm), nezasahuje do ní.',
         required: true,
       },
       {
@@ -1005,9 +1219,6 @@ export const coinCardHolderProject: ProjectDefinition = {
   ],
   phases: [...phases],
   equipment: [
-    // Pořadí = pořadí nákupu: nejdřív vybavení na trénink (lekce 1–4), pak kůže a kování na
-    // finální pouzdro (lekce 5–8). Vybavení sdílené s pouzdrem na karty je zkráceně
-    // přeformulované pro tento projekt; celý popis nástroje je ve sdíleném katalogu.
     {
       equipmentSlug: 'veg-tan-leather',
       priority: 'required',
@@ -1015,77 +1226,6 @@ export const coinCardHolderProject: ProjectDefinition = {
         'Pás těla (lekce 5–7) i samostatný list kapsy s mincí (lekce 6) potřebují jiný kus kůže než pouzdro na karty.',
       specification:
         'Tělo: třísločiněná lícová 1,5 mm, přířez A4 (nebo 1,2 mm Verde – ztenčení ohybu B pak odpadá). Kapsa: samostatný kus 1,2 mm, aspoň 70 × 70 mm, i když je tělo z 1,5 mm. K tomu odřezky na trénink v lekcích 2–4.',
-    },
-    {
-      equipmentSlug: 'utility-knife',
-      priority: 'required',
-      reason: 'Vyříznutí pásu a zkrácení jazyka po osazení kloboučku.',
-      specification: 'Odlamovací nůž 18 mm s novými čepelemi.',
-    },
-    {
-      equipmentSlug: 'steel-ruler',
-      priority: 'required',
-      reason: 'Vedení nože, rýsování a měření odsazení při zkoušce papírového modelu.',
-      specification: 'Ocelové 30 cm.',
-    },
-    {
-      equipmentSlug: 'cutting-mat',
-      priority: 'required',
-      reason: 'Podklad pro řezání pásu.',
-      specification: 'Samohojivá A3.',
-    },
-    {
-      equipmentSlug: 'punching-board',
-      priority: 'required',
-      reason: 'Podklad pod děrování a osazování kování.',
-      specification: 'HDPE deska nebo plastové prkénko.',
-    },
-    {
-      equipmentSlug: 'stitching-chisels',
-      priority: 'required',
-      reason:
-        'Otvory dna se prosekají naplocho přes všechny tři panely pásu, dřív než se pás složí, a pak se jimi šije; stejnými vidličkami se v lekci 6 prosekává i šev kapsy skrz obě vrstvy.',
-      specification: 'Rozteč 3,85–4 mm, sada 2 + 4/6 hrotů (stejné jako u prvního pouzdra).',
-    },
-    {
-      equipmentSlug: 'mallet',
-      priority: 'required',
-      reason: 'Úder do vidliček i do osazovačů kování.',
-      specification: 'Gumová nebo plastová.',
-    },
-    {
-      equipmentSlug: 'harness-needles',
-      priority: 'required',
-      reason: 'Sedlářský steh dna i kapsy.',
-      specification: 'Tupé sedlářské, k niti 0,6 mm, 4 ks.',
-    },
-    {
-      equipmentSlug: 'waxed-thread',
-      priority: 'required',
-      reason: 'Šev dna (skrz tři vrstvy) a šev kapsy.',
-      specification:
-        'Voskovaný polyester 0,6–0,8 mm. Orientačně asi 4× délka švu: dno (64 mm skrz 4,5 mm kůže) ≈ 0,6 m, kapsa (31 otvorů) ≈ 0,8 m – ověřit na odřezku.',
-    },
-    {
-      equipmentSlug: 'contact-cement',
-      priority: 'required',
-      reason:
-        'Přilepí kapsu na přední panel v lekci 6 a přidrží dno před prošitím skrz tři vrstvy v lekci 7.',
-      specification: 'U dna se nanáší jen do pruhu 0–3,5 mm od hrany pod čárou švu.',
-    },
-    {
-      equipmentSlug: 'sandpaper',
-      priority: 'required',
-      reason: 'Zdrsnění lepené plochy dna a srovnání hran po sešití, přebroušení dna do roviny.',
-      specification: 'Zrnitost 180–240 na zdrsnění, 220–400 na srovnání hran.',
-    },
-    {
-      equipmentSlug: 'safety-skiver',
-      priority: 'recommended',
-      reason:
-        'U kůže 1,5 mm se ohyb B ztenčuje na 1 mm z rubu, aby protažení líce kleslo z asi 26 % na 16 %. Při kůži 1,2 mm (Verde) se ztenčení přeskakuje, takže ztenčovač není nutný.',
-      specification:
-        'Safety skiver s vyměnitelnou čepelí; ztenčuje se celé pásmo ohybu B plus 3 mm přesahu za každou jeho čárou (asi 16 mm celkem).',
     },
     {
       equipmentSlug: 'coin-forming-block',
@@ -1101,24 +1241,61 @@ export const coinCardHolderProject: ProjectDefinition = {
       specification: 'Dvě svěrky proti sobě, vyložení aspoň na střed formy 8 × 8 cm.',
     },
     {
+      equipmentSlug: 'scratch-awl',
+      priority: 'required',
+      reason:
+        'Orýsování obrysu kapsy, vyznačení pásma ztenčení, propíchnutí středů kování a odsazení kování.',
+      specification: 'Kulaté rýsovací šídlo s hruškovitou rukojetí.',
+    },
+    {
+      equipmentSlug: 'sandpaper',
+      priority: 'required',
+      reason: 'Zdrsnění lepené plochy dna a srovnání hran po sešití, přebroušení dna do roviny.',
+      specification: 'Zrnitost 180–240 na zdrsnění, 220–400 na srovnání hran.',
+    },
+    {
+      equipmentSlug: 'stitching-chisels',
+      priority: 'required',
+      reason:
+        'Otvory dna se prosekají naplocho přes všechny tři panely pásu, dřív než se pás složí, a pak se jimi šije; stejnými vidličkami se v lekci 6 prosekává i šev kapsy skrz obě vrstvy.',
+      specification:
+        'Rozteč přesně 4 mm (s 3,85 mm by otvory dna po složení nelícovaly), sada 2 + 4/6 hrotů.',
+    },
+    {
+      equipmentSlug: 'mallet',
+      priority: 'required',
+      reason: 'Úder do vidliček i do osazovačů kování.',
+      specification: 'Gumová nebo plastová.',
+    },
+    {
+      equipmentSlug: 'punching-board',
+      priority: 'required',
+      reason: 'Podklad pod děrování a osazování kování.',
+      specification: 'HDPE deska nebo plastové prkénko.',
+    },
+    {
+      equipmentSlug: 'safety-skiver',
+      priority: 'recommended',
+      reason:
+        'U kůže 1,5 mm se ohyb B ztenčuje na 1 mm z rubu, aby protažení líce kleslo z asi 26 % na 16 %. Při kůži 1,2 mm (Verde) se ztenčení přeskakuje, takže ztenčovač není nutný.',
+      specification:
+        'Safety skiver s vyměnitelnou čepelí; ztenčuje se celé pásmo ohybu B plus 3 mm přesahu za každou jeho čárou (asi 16 mm celkem).',
+    },
+    {
       equipmentSlug: 'snap-fastener',
       priority: 'required',
       reason:
-        'Zapínání jazyka drukem, patice naplocho v lekci 6, klobouček podle obtisku v lekci 8.',
+        'Zapínání jazyka drukem: dřík s hlavičkou naplocho do předního panelu v lekci 6, klobouček se zdířkou podle obtisku na jazyk v lekci 8.',
       specification:
-        'Klobouček 12,5 mm, dřík na 2 × 1,5 mm kůže, s osazovačem a průbojníkem na dřík.',
+        'Čtyřdílný: dřík + hlavička na přední panel, zdířka + klobouček (Ø 12,5 mm) na jazyk; každá polovina jen na jednu vrstvu kůže 1,5 mm. Osazovač s kovadlinkou a výsečník/průbojník na dřík.',
     },
     {
       equipmentSlug: 'grommet',
       priority: 'required',
-      reason: 'Očko v rohu vnitřního panelu pro šňůrku, osazuje se naplocho v lekci 6.',
-      specification: 'Průchodka Ø 5 mm, dvoudílná s podložkou, s osazovačem.',
-    },
-    {
-      equipmentSlug: 'round-punch-32mm',
-      priority: 'required',
-      reason: 'Okno kapsy, kterým je vidět mince.',
-      specification: 'Kruhový dutý výsečník Ø 32 mm.',
+      reason:
+        'Očko v rohu vnitřního panelu pro šňůrku, osazuje se naplocho v lekci 6; hezčí strana jde na rub, který je vidět zepředu výřezem.',
+      specification:
+        'Průchodka Ø 5 mm, dvoudílná s podložkou, na jednu vrstvu kůže 1,5 mm, s osazovačem.',
     },
     {
       equipmentSlug: 'hole-punch-5mm',
@@ -1127,11 +1304,50 @@ export const coinCardHolderProject: ProjectDefinition = {
       specification: 'Kruhový dutý výsečník Ø 5 mm.',
     },
     {
-      equipmentSlug: 'scratch-awl',
+      equipmentSlug: 'harness-needles',
+      priority: 'required',
+      reason: 'Sedlářský steh dna i kapsy.',
+      specification: 'Tupé sedlářské, k niti 0,6 mm, 4 ks.',
+    },
+    {
+      equipmentSlug: 'waxed-thread',
+      priority: 'required',
+      reason: 'Šev dna (skrz tři vrstvy) a šev kapsy.',
+      specification:
+        'Voskovaný polyester 0,6–0,8 mm. Orientačně asi 4× délka švu: dno (64 mm skrz 4,5 mm kůže) ≈ 0,6 m, raději 0,8 m; kapsa 31 otvorů ≈ 0,8 m (u mince 50 Kč 23 otvorů, méně) – ověřit na odřezku.',
+    },
+    {
+      equipmentSlug: 'steel-ruler',
+      priority: 'required',
+      reason: 'Vedení nože, rýsování a měření odsazení při zkoušce papírového modelu.',
+      specification: 'Ocelové 30 cm.',
+    },
+    {
+      equipmentSlug: 'contact-cement',
       priority: 'required',
       reason:
-        'Orýsování obrysu kapsy, vyznačení pásma ztenčení, propíchnutí středů kování a odsazení kování.',
-      specification: 'Kulaté rýsovací šídlo s hruškovitou rukojetí.',
+        'Přilepí kapsu na přední panel v lekci 6 a přidrží dno před prošitím skrz tři vrstvy v lekci 7.',
+      specification:
+        'U kapsy jen do úzkého pruhu při okraji, u dna jen do pruhu 0–3,5 mm od hrany pod čárou švu.',
+    },
+    {
+      equipmentSlug: 'utility-knife',
+      priority: 'required',
+      reason: 'Vyříznutí pásu a zkrácení jazyka po osazení kloboučku.',
+      specification: 'Odlamovací nůž 18 mm s novými čepelemi.',
+    },
+    {
+      equipmentSlug: 'cutting-mat',
+      priority: 'required',
+      reason: 'Podklad pro řezání pásu.',
+      specification: 'Samohojivá A3.',
+    },
+    {
+      equipmentSlug: 'round-punch-32mm',
+      priority: 'required',
+      reason: 'Okno kapsy, kterým je vidět mince.',
+      specification:
+        'Kruhový dutý výsečník Ø 32 mm pro výchozí minci 40 mm (Ø 19 mm pro minci 50 Kč).',
     },
     {
       equipmentSlug: 'wing-divider',
@@ -1142,7 +1358,8 @@ export const coinCardHolderProject: ProjectDefinition = {
     {
       equipmentSlug: 'edge-burnisher',
       priority: 'recommended',
-      reason: 'Zaleštění vnitřních hran v lekci 5 a vnějších hran v lekci 8.',
+      reason:
+        'Zaleštění hran, na které se po složení špatně dostane, v lekci 5 a vnějších hran v lekci 8.',
       specification: 'Pasta na hrany + dřevěné leštítko.',
     },
     {
@@ -1222,7 +1439,7 @@ export const coinCardHolderProject: ProjectDefinition = {
       {
         id: 'kapsa-50kc',
         title: 'Kapsa – mince 50 Kč',
-        note: 'Stejný list jako výchozí kapsa, otvor formy přepočítaný pro minci 50 Kč (27,5 mm → otvor 31,5 mm).',
+        note: 'Stejný list jako výchozí kapsa, přepočítaný pro minci 50 Kč (27,5 mm): okno Ø 19 mm, kapsa 42,5 × 42 mm, otvor formy 31,5 mm.',
         orientation: 'portrait',
         widthMm: 210,
         heightMm: 297,
@@ -1231,7 +1448,7 @@ export const coinCardHolderProject: ProjectDefinition = {
       {
         id: 'papirovy-model-kuze-1-2',
         title: 'Papírový model – kůže 1,2 mm (Verde)',
-        note: 'Stejný obrys jako výchozí papírový model, přepočítaný pro kůži 1,2 mm bez ztenčení ohybu B: pás 240,35 × 104,1 mm, ohyb A 15,69 mm, ohyb B 8,66 mm, jazyk 43,07 mm.',
+        note: 'Stejný list jako výchozí papírový model, přepočítaný pro kůži 1,2 mm bez ztenčení ohybu B – pás je kratší: 240,35 × 104,1 mm, ohyb A 15,69 mm, ohyb B 8,66 mm, jazyk 43,07 mm.',
         orientation: 'landscape',
         widthMm: 297,
         heightMm: 210,
@@ -1240,18 +1457,36 @@ export const coinCardHolderProject: ProjectDefinition = {
       {
         id: 'sablona-kuze-1-2',
         title: 'Pás (šablona) – kůže 1,2 mm (Verde)',
-        note: 'Stejný list jako výchozí pás, přepočítaný pro kůži 1,2 mm bez ztenčení ohybu B: pás 240,35 × 104,1 mm, ohyb A 15,69 mm, ohyb B 8,66 mm, jazyk 43,07 mm. List KAPSA je stejný jako výchozí – kapsa se vždycky dělá z kůže 1,2 mm bez ohledu na tloušťku těla.',
+        note: 'Stejný list jako výchozí pás, přepočítaný pro kůži 1,2 mm bez ztenčení ohybu B – pás je kratší: 240,35 × 104,1 mm, ohyb A 15,69 mm, ohyb B 8,66 mm, jazyk 43,07 mm. List KAPSA je stejný jako výchozí – kapsa se vždycky dělá z kůže 1,2 mm bez ohledu na tloušťku těla.',
         orientation: 'landscape',
         widthMm: 297,
         heightMm: 210,
         variant: 'kůže 1,2 mm (Verde), bez ztenčování',
+      },
+      {
+        id: 'papirovy-model-50kc-kuze-1-2',
+        title: 'Papírový model – mince 50 Kč, kůže 1,2 mm (Verde)',
+        note: 'Stejný list jako výchozí papírový model, přepočítaný pro minci 50 Kč (27,5 mm) a kůži 1,2 mm bez ztenčení ohybu B: pás 240,35 × 104,1 mm, ohyb A 15,69 mm, ohyb B 8,66 mm, jazyk 43,07 mm.',
+        orientation: 'landscape',
+        widthMm: 297,
+        heightMm: 210,
+        variant: 'mince 27,5 mm (50 Kč), kůže 1,2 mm (Verde)',
+      },
+      {
+        id: 'sablona-50kc-kuze-1-2',
+        title: 'Pás (šablona) – mince 50 Kč, kůže 1,2 mm (Verde)',
+        note: 'Stejný list jako výchozí pás, přepočítaný pro minci 50 Kč (27,5 mm) a kůži 1,2 mm bez ztenčení ohybu B: pás 240,35 × 104,1 mm, ohyb A 15,69 mm, ohyb B 8,66 mm, jazyk 43,07 mm. List KAPSA je kapsa-50kc (okno Ø 19 mm, kapsa 42,5 × 42 mm, otvor formy 31,5 mm) – kapsa se vždycky dělá z kůže 1,2 mm bez ohledu na tloušťku těla.',
+        orientation: 'landscape',
+        widthMm: 297,
+        heightMm: 210,
+        variant: 'mince 27,5 mm (50 Kč), kůže 1,2 mm (Verde)',
       },
     ],
     calibrationMm: 50,
     printNote:
       'Tisk na A4 bez přizpůsobení velikosti (100 %). Kontrolní úsečka na okraji musí měřit 50 mm.',
     variantsNote:
-      'V aplikaci jsou listy pro výchozí minci 40 mm, pro minci 50 Kč (27,5 mm) a pro kůži 1,2 mm (Verde). Jiná mince, jiný počet karet nebo jiná tloušťka kůže v aplikaci zatím nejsou, protože se s nimi mění ohyby, jazyk i otvor formy.',
+      'V aplikaci jsou listy pro výchozí minci 40 mm, pro minci 50 Kč (27,5 mm), pro kůži 1,2 mm (Verde) a pro jejich kombinaci. Jiná mince mění jen místo kapsy, okno a otvor formy, ne ohyby ani jazyk. Jiná tloušťka kůže nebo jiný počet karet v aplikaci zatím nejsou, protože ty naopak mění ohyby i jazyk.',
   },
   media: [
     {

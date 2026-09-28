@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="160mm" height="100mm" viewBox="0 0 160 100">
+<rect width="160" height="100" fill="#ffffff"/>
+<text x="80" y="6" font-family="Helvetica, Arial, sans-serif" font-size="3.8" text-anchor="middle" fill="#2b2b2b">Lepení dna – po jednom spoji, ohyb jen do pravého úhlu</text>
+<path d="M23.787 45.213 L43.65 19.5 A5.85 5.85 0 0 1 46.35 19.5 L66.213 45.213 L63.031 48.395 L46.35 22.65 L43.65 22.65 L26.969 48.395 Z" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.4"/>
+<path d="M23.787 45.213 L26.332 47.759 M24.579 44.421 L27.124 46.967 M25.371 43.629 L27.916 46.175 M26.163 42.837 L28.708 45.383 M26.955 42.045 L29.5 44.591 M27.747 41.253 L30.292 43.799" stroke="#a2471f" stroke-width="0.5"/><circle cx="27.747" cy="41.253" r="0.7" fill="#2b2b2b"/>
+<path d="M66.213 45.213 L63.668 47.759 M65.421 44.421 L62.876 46.967 M64.629 43.629 L62.084 46.175 M63.837 42.837 L61.292 45.383 M63.045 42.045 L60.5 44.591 M62.253 41.253 L59.708 43.799" stroke="#a2471f" stroke-width="0.5"/><circle cx="62.253" cy="41.253" r="0.7" fill="#2b2b2b"/>
+<path d="M27.747 41.253 L62.253 41.253" stroke="#7a7a7a" stroke-width="0.3" stroke-dasharray="0.8 0.8"/>
+<text x="21.787" y="48.213" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="end" fill="#7a7a7a">přední</text>
+<text x="68.213" y="48.213" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="start" fill="#7a7a7a">vnitřní</text>
+<text x="45" y="54" font-family="Helvetica, Arial, sans-serif" font-size="3.6" text-anchor="middle" fill="#a2471f">SPOJ 1: přední ↔ vnitřní</text>
+<text x="45" y="59" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#7a7a7a">(ohyb B)</text>
+<path d="M118 26 L103.858 40.142" stroke="#2f5240" stroke-width="3" stroke-linecap="round"/>
+<path d="M116.586 30.808 L105.555 41.839" stroke="#3f6b4f" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M118 26 L132.142 40.142" stroke="#3f6b4f" stroke-width="3" stroke-linecap="round"/>
+<path d="M117 26.3 A1.4 1.4 0 0 1 119 26.3" fill="none" stroke="#2f5240" stroke-width="1"/>
+<path d="M105.555 41.839 L106.799 43.084 M106.347 41.047 L107.591 42.292 M107.139 40.255 L108.383 41.5 M107.931 39.463 L109.175 40.708 M108.723 38.671 L109.967 39.916 M109.515 37.879 L110.759 39.124" stroke="#a2471f" stroke-width="0.5"/><circle cx="109.515" cy="37.879" r="0.7" fill="#2b2b2b"/>
+<path d="M132.142 40.142 L130.445 41.839 M131.35 39.35 L129.653 41.047 M130.558 38.558 L128.861 40.255 M129.766 37.766 L128.069 39.463 M128.974 36.974 L127.277 38.671 M128.182 36.182 L126.485 37.879" stroke="#a2471f" stroke-width="0.5"/><circle cx="128.182" cy="36.182" r="0.7" fill="#2b2b2b"/>
+<path d="M109.515 37.879 L128.182 36.182" stroke="#7a7a7a" stroke-width="0.3" stroke-dasharray="0.8 0.8"/>
+<text x="101.858" y="43.142" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="end" fill="#7a7a7a">přední+vnitřní</text>
+<text x="134.142" y="43.142" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="start" fill="#7a7a7a">zadní</text>
+<text x="118" y="52" font-family="Helvetica, Arial, sans-serif" font-size="3.2" text-anchor="middle" fill="#a2471f">SPOJ 2: (přední+vnitřní) ↔ zadní</text>
+<text x="118" y="57" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#7a7a7a">(ohyb A spojuje přední a zadní; vnitřní je uvnitř)</text>
+<text x="80" y="80" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#2b2b2b">lepidlo jen na pruh 0–3,5 mm od hrany, tečky švu v 3,5 mm</text>
+<text x="80" y="85" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#7a7a7a">rozevřít asi do pravého úhlu, ne naplocho – suchý líc by mohl prasknout</text>
+<text x="80" y="90" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#7a7a7a">před přitlačením zarovnat jehlami přes otvory</text>
+<text x="80" y="96" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#7a7a7a">lepit po jednom spoji, druhý spoj počká</text>
+</svg>

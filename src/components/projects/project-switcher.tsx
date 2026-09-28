@@ -63,7 +63,7 @@ export function ProjectSwitcher({ activeProject }: { activeProject: ProjectDefin
                 <p className="kicker">
                   Projekt {project.code} ·{' '}
                   <span className={cn(isActive && 'text-cognac')}>
-                    {isActive
+                    {isActive && status !== 'none'
                       ? status === 'completed'
                         ? 'Aktivní · hotový'
                         : 'Pracujete na něm'

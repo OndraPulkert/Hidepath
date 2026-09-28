@@ -30,7 +30,10 @@ function renderIllustration(media: MediaSlotDefinition, template: TemplateDefini
     case 'blade-angle':
       return <BladeAngleIllustration title={media.caption} />;
     default:
-      return null;
+      // Ilustrace ze souboru (např. krok listu postupu z generátoru střihu).
+      return media.src ? (
+        <img src={media.src} alt={media.caption} loading="lazy" className="w-full bg-white" />
+      ) : null;
   }
 }
 

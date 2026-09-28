@@ -121,6 +121,12 @@ function ProjectView({ project }: { project: ProjectDefinition }) {
                   {current.order}
                 </Link>
               </Button>
+            ) : journey.totalLessons > 0 && journey.completedLessons === journey.totalLessons ? (
+              <Button asChild>
+                <Link to={routes.dashboard} className="text-white no-underline hover:text-white">
+                  {isActive ? 'Dokončit projekt na přehledu' : 'Všechny lekce hotové'}
+                </Link>
+              </Button>
             ) : (
               <Button asChild variant="secondary">
                 <Link to={routes.shopping} className="no-underline">
@@ -213,7 +219,7 @@ function ProjectView({ project }: { project: ProjectDefinition }) {
                     className="flex items-center justify-between gap-3 py-2 text-body"
                   >
                     <Link
-                      to={routes.shoppingItem(req.equipmentSlug)}
+                      to={routes.shoppingItem(req.equipmentSlug, project.slug)}
                       className={cn(
                         'inline-flex min-h-touch items-center text-leather no-underline hover:text-cognac',
                         status !== 'owned' && 'text-ink-2',

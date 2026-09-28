@@ -19,17 +19,16 @@
 <text x="134.63" y="95.04" font-family="Helvetica, Arial, sans-serif" font-size="2" text-anchor="middle" fill="#7a7a7a">místo pro kapsu s mincí</text>
 <path d="M10.546 155.09 L252.004 155.09" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="0.8 1.2"/>
 <text x="257.55" y="58.49" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#2b2b2b">ZAPSAT PŘI ZKOUŠCE</text>
-<text x="257.55" y="62.09" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">1 klobouček: kolik mm</text>
-<text x="260.05" y="65.69" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">od značky a kterým směrem</text>
-<text x="257.55" y="69.29" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">2 kolik jazyka zbývá za ním</text>
-<text x="260.05" y="72.89" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">(cíl 11 + rezerva)</text>
-<text x="257.55" y="76.49" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">3 karta ve výřezu (cíl 19 mm)</text>
-<text x="257.55" y="80.09" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">4 průchodka celá vidět</text>
-<text x="260.05" y="83.69" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">zepředu i zezadu?</text>
-<text x="257.55" y="87.29" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">5 bankovky: které jdou napůl</text>
-<text x="260.05" y="90.89" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">a kolik přečnívají (mm)</text>
-<text x="257.55" y="94.49" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">6 konec jazyka ↔ kapsa (mm)</text>
-<text x="257.55" y="98.09" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">7 počet karet a bankovek</text>
+<text x="257.55" y="62.09" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">1 klobouček: kolik mm od značky,</text>
+<text x="260.05" y="65.69" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">kterým směrem, kolik jazyka zbývá</text>
+<text x="260.05" y="69.29" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">(cíl 11 + rezerva)</text>
+<text x="257.55" y="72.89" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">2 karta ve výřezu (cíl 19 mm)</text>
+<text x="257.55" y="76.49" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">3 průchodka celá vidět</text>
+<text x="260.05" y="80.09" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">zepředu i zezadu?</text>
+<text x="257.55" y="83.69" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">4 bankovky: které jdou napůl</text>
+<text x="260.05" y="87.29" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">a kolik přečnívají (mm)</text>
+<text x="257.55" y="90.89" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">5 konec jazyka ↔ kapsa (mm)</text>
+<text x="257.55" y="94.49" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">6 počet karet a tloušťka bankovek</text>
 <circle cx="243.55" cy="63.49" r="2.5" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
 <text x="238.55" y="64.29" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="end" fill="#7a7a7a">průchodka – propíchnout</text>
 <text x="46" y="146.59" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">ZADNÍ PANEL</text>

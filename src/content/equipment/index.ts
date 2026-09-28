@@ -418,6 +418,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       'Levné sady 4 mm se stejným složením (1 + 2 + 4 + 6 hrotů) nabízí několik obchodů za 338 až 639 Kč. Podle ceny se u nich kvalita poznat nedá – vyšší cena bývá marží, ne lepší ocelí. Doložitelně lepší nástroj je až kalená francouzská sada, která stojí přes 700 Kč.',
       'Tlučte paličkou, ne kovovým kladivem. Hroty se jinak ohnou.',
       'Kupte obě velikosti (2 a víc hrotů). S jednou velikostí rohy nevyjdou.',
+      'Pro pouzdro s mincí musí mít vidličky rozteč přesně 4 mm – s 3,85 mm otvory dna po složení nelícují.',
     ],
     avoid: [
       {
@@ -1355,7 +1356,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     priceRange: { minCents: 9_900, maxCents: 29_900 },
     priceSource: 'verified',
     priceNote: `${VERIFIED_NOTE} Rozsah je za sadu vrtáků (99–299 Kč); překližku popisuje samostatný příklad níže, do rozsahu se nepočítá.`,
-    alsoUsedFor: ['Pouzdro s mincí'],
+    alsoUsedFor: [],
     examples: [
       {
         title: 'LUX-TOOLS Sada vykružovacích pil, 7 ks',
@@ -1454,7 +1455,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     priceRange: { minCents: 10_900, maxCents: 23_800 },
     priceSource: 'verified',
     priceNote: VERIFIED_NOTE,
-    alsoUsedFor: ['Pouzdro s mincí'],
+    alsoUsedFor: [],
     examples: [
       {
         title: 'ELLIX sada truhlářských svěrek 150 × 50 a 200 × 50 mm',
@@ -1494,33 +1495,39 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     englishName: 'Snap fastener + setter',
     category: 'forming',
     shortDescription:
-      'Kovové zapínání jazyka. Patice se osazuje naplocho před složením, klobouček až podle obtisku na hotovém kuse.',
+      'Čtyřdílné kovové zapínání jazyka. Patice se osazuje naplocho před složením, klobouček až podle obtisku na hotovém kuse.',
     purpose:
-      'Druk zapíná jazyk na přední panel: patice se osadí naplocho do předního panelu ještě před složením pásu, klobouček se osadí až na konci na jazyk, přesně na místo, které se na něm otisklo přiložením přes patici po přeložení jazyka přes horní hranu. Přeložený jazyk s kloboučkem pak na patici zacvakne. Pro tento střih patří patice na dřík 2 × 1,5 mm a klobouček o průměru 12,5 mm.',
+      'Druk je čtyřdílný: dřík (patice) a hlavička jdou na přední panel, zdířka a klobouček na jazyk. Dřík se osadí naplocho z rubu předního panelu ještě před složením pásu, hlavička zůstane na jeho líci. Klobouček se s vloženou zdířkou osadí až na konci na jazyk – na líc, přesně na místo, které se otisklo přiložením přes hlavičku po přeložení jazyka přes horní hranu; zdířka na jeho rubu (u přeloženého jazyka směrem k přednímu panelu) pak na hlavičku zacvakne. Každá polovina svírá jen jednu vrstvu kůže 1,5 mm. Pro tento střih patří klobouček o průměru 12,5 mm.',
     buyingGuide: [
       { label: 'Velikost kloboučku', value: '12,5 mm' },
-      { label: 'Dřík', value: 'na kůži 2 × 1,5 mm (dvě vrstvy této tloušťky)' },
-      { label: 'Sada', value: 'osazovač (na dřík i klobouček) a průbojník na otvor pro dřík' },
+      { label: 'Dřík', value: 'na jednu vrstvu kůže 1,5 mm (ne na dvě vrstvy)' },
+      {
+        label: 'Sada',
+        value:
+          'osazovač s kovadlinkou (na dřík i klobouček) a výsečník/průbojník na otvor pro dřík',
+      },
       { label: 'Materiál', value: 'mosaz nebo poniklovaná ocel' },
     ],
     cautions: [
-      'Patice se osazuje naplocho do předního panelu ještě před složením pásu – v uzavřeném pouzdru už na ni nedosáhnete.',
-      'Klobouček se naopak osazuje až úplně nakonec, podle obtisku patice na přeloženém jazyku, ne podle odhadované značky.',
-      'Otvor pro dřík dělejte přesně na jeho velikost; moc velký otvor a patice se v kůži viklá.',
+      'Dřík (patice) se osazuje naplocho z rubu předního panelu ještě před složením pásu – v uzavřeném pouzdru už na něj nedosáhnete.',
+      'Klobouček se naopak osazuje až úplně nakonec, podle obtisku hlavičky na přeloženém jazyku, ne podle odhadované značky.',
+      'Osazuje se na kovadlince ze sady, paličkou přesně na značku.',
+      'Otvor pro dřík dělejte přesně na jeho velikost; moc velký otvor a dřík se v kůži viklá.',
     ],
     avoid: [],
     alternatives: [],
     priceRange: { minCents: 0, maxCents: 0 },
     priceSource: 'unknown',
     priceNote: 'Cena zatím neověřena – před nákupem zjistěte v obchodě.',
-    alsoUsedFor: ['Pouzdro s mincí'],
+    alsoUsedFor: [],
     examples: [],
     commonlyAtHome: false,
     media: [
       {
         id: 'snap-fastener-main',
         kind: 'photo',
-        caption: 'Rozložený druk – patice, klobouček a osazovač – vedle otvoru pro dřík v kůži',
+        caption:
+          'Rozložený čtyřdílný druk – dřík, hlavička, zdířka, klobouček a osazovač s kovadlinkou – vedle otvoru pro dřík v kůži',
         status: 'planned',
       },
     ],
@@ -1534,19 +1541,25 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     shortDescription:
       'Kovové očko v rohu vnitřního panelu, kterým prochází šňůrka. Dvoudílná s podložkou, osazuje se naplocho.',
     purpose:
-      'Průchodka je dvoudílné kovové očko s podložkou, které zpevní otvor v kůži, aby se netrhal, a kterým může procházet šňůrka. V tomto střihu sedí v rohu vnitřního panelu, 9 mm od obou hran, a osazuje se naplocho ještě před složením pásu.',
+      'Průchodka je dvoudílné kovové očko s podložkou, na otvor Ø 5 mm v jedné vrstvě kůže 1,5 mm; zpevní otvor, aby se netrhal, a může jím procházet šňůrka. V tomto střihu sedí v rohu vnitřního panelu, 9 mm od obou hran, a osazuje se naplocho na kovadlince ze sady ještě před složením pásu. Hezčí strana jde na rub vnitřního panelu – po složení je to strana vidět zepředu výřezem.',
     buyingGuide: [
       { label: 'Průměr', value: 'Ø 5 mm, dvoudílná s podložkou' },
       {
         label: 'Sada',
         value:
-          'osazovač a kruhový výsečník na otvor Ø 5 mm (dutý s břitem, ne plný průbojník na kov)',
+          'osazovač s kovadlinkou a kruhový výsečník na otvor Ø 5 mm (dutý s břitem, ne plný průbojník na kov)',
       },
       { label: 'Materiál', value: 'mosaz nebo poniklovaná ocel' },
+      {
+        label: 'Trubička (dřík)',
+        value: 'musí projít otvorem Ø 5 mm v jedné vrstvě kůže 1,5 mm',
+      },
     ],
     cautions: [
       'Otvor pro průchodku vysekněte kulatým výsečníkem (dutý, s břitem), ne plným průbojníkem na kov – ten kůži jen promáčkne.',
+      'Hezčí strana průchodky patří na rub vnitřního panelu, protože po složení je právě rub vidět zepředu výřezem.',
       'Osaďte ji naplocho do vnitřního panelu před složením; po složení je roh s průchodkou vidět výřezem zepředu i zezadu, ale sáhnout na ni už nejde.',
+      'Obchody často uvádí velikost podle vnitřního průměru (světlosti) hotového očka, ne podle otvoru v kůži – před nákupem si ověřte vnější průměr trubičky, aby prošla otvorem Ø 5 mm v jedné vrstvě kůže 1,5 mm.',
     ],
     avoid: [
       {
@@ -1559,7 +1572,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     priceRange: { minCents: 0, maxCents: 0 },
     priceSource: 'unknown',
     priceNote: 'Cena zatím neověřena – před nákupem zjistěte v obchodě.',
-    alsoUsedFor: ['Pouzdro s mincí'],
+    alsoUsedFor: [],
     examples: [],
     commonlyAtHome: false,
     media: [
@@ -1574,35 +1587,39 @@ export const equipmentList: readonly EquipmentDefinition[] = [
 
   draft({
     slug: 'round-punch-32mm',
-    name: 'Kruhový výsečník 32 mm',
-    englishName: 'Round hollow punch 32 mm',
+    name: 'Kruhový výsečník na okno (Ø 32 mm, u 50 Kč Ø 19 mm)',
+    englishName: 'Round hollow punch, window',
     category: 'cutting',
     shortDescription:
       'Vyseknutí okna kapsy, kterým je vidět mince. Velký dutý výsečník, ne plný průbojník.',
     purpose:
-      'Okno (kruh kůže uprostřed kapsy) se vyseká jedním úderem dutého kruhového výsečníku Ø 32 mm; kolem něj zůstává prstenec kůže asi 4 mm, který drží minci, aby oknem nevypadla.',
+      'Okno (kruh kůže uprostřed kapsy) se vyseká jedním úderem dutého kruhového výsečníku Ø 32 mm pro výchozí minci 40 mm (Ø 19 mm pro minci 50 Kč, 27,5 mm); kolem něj zůstává prstenec kůže asi 4 mm (u 50 Kč 4,25 mm), který drží minci, aby oknem nevypadla.',
     buyingGuide: [
       {
         label: 'Typ',
         value: 'dutý kruhový výsečník (hollow punch) s ostrým břitem, ne plný průbojník',
       },
-      { label: 'Průměr', value: '32 mm (prstenec kolem mince asi 4 mm)' },
+      {
+        label: 'Průměr',
+        value:
+          '32 mm pro výchozí minci 40 mm (19 mm pro minci 50 Kč); prstenec kolem mince 4 mm (4,25 mm u 50 Kč)',
+      },
       {
         label: 'Podložka',
         value: 'měkčí PU/pryž (OKA, Tandy) tlumí úder líp než tvrdá deska',
       },
     ],
     cautions: [
-      'Sekejte jedním pevným úderem, kolmo.',
-      'Kapsu při vysekávání okna položte lícem dolů zpátky na formu (nad otvorem) a pod důlek podložte špalík, aby měl důlek při úderu pevnou oporu.',
-      'Menší kruhové výsečníky (do 20 mm) prodávají české e-shopy jednotlivě po pár desítkách korun; výsečník přesně Ø 32 mm nebyl u žádného českého obchodu ověřen – dostupnost i cenu zjistěte před nákupem.',
+      'Sekejte kolmo, vystředěné podle kružnice okna narýsované na rubu kapsy před tvarováním (nebo podle stejně širokého prstence kůže kolem důlku).',
+      'Kapsu při vysekávání okna položte lícem dolů zpátky na formu (nad otvorem) a pod důlek podložte špalík užší než otvor formy (pod 44 mm, u mince 50 Kč pod 31,5 mm) a zároveň širší než okno (přes 32 mm, u mince 50 Kč přes 19 mm) – má se dotýkat jen dna důlku zespodu, ne ho nadzvedávat.',
+      'Menší kruhové výsečníky (do 20 mm) prodávají české e-shopy jednotlivě po pár desítkách korun; výsečník přesně Ø 32 mm nebyl u žádného českého obchodu ověřen – dostupnost i cenu zjistěte před nákupem. U mince 50 Kč (Ø 19 mm) je jednotlivě ověřená jen nabídka CraftPointu do menších průměrů (2/3/4/5/6/8/10… mm) – Ø 19 mm skladem neověřeno.',
     ],
     avoid: [{ title: 'Plný průbojník na kov', reason: 'kůži jen promáčkne, díru neudělá.' }],
     alternatives: [],
     priceRange: { minCents: 0, maxCents: 0 },
     priceSource: 'unknown',
     priceNote: 'Cena zatím neověřena – před nákupem zjistěte v obchodě.',
-    alsoUsedFor: ['Pouzdro s mincí'],
+    alsoUsedFor: [],
     examples: [],
     commonlyAtHome: false,
     media: [
@@ -1626,7 +1643,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       { label: 'Typ', value: 'dutý kruhový výsečník, ne plný průbojník na kov' },
       { label: 'Průměr', value: '5 mm (běžná velikost)' },
     ],
-    cautions: ['Vysekávejte na tvrdé podložce, jedním pevným úderem, kolmo.'],
+    cautions: ['Vysekávejte na tvrdé podložce, kolmo.'],
     avoid: [
       {
         title: 'Plný „průbojník“ 5 mm z hobbymarketu (Narex apod.)',
@@ -1637,7 +1654,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     priceRange: { minCents: 2_900, maxCents: 39_200 },
     priceSource: 'verified',
     priceNote: `${VERIFIED_NOTE} Jednotlivě Ø 5 mm bylo u CraftPointu k datu ověření vyprodané; sada 2–5 mm, která velikost 5 mm také obsahuje, je skladem.`,
-    alsoUsedFor: ['Pouzdro s mincí'],
+    alsoUsedFor: [],
     examples: [
       {
         title: 'Výsečníky na kůži 2–20 mm, průměr dle výběru',
@@ -1713,7 +1730,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     priceRange: { minCents: 14_700, maxCents: 36_000 },
     priceSource: 'verified',
     priceNote: `${VERIFIED_NOTE} Ceny z AliExpressu jsou bez cla; od 7/2026 přičtěte asi 3 € (cca 75 Kč) za položku.`,
-    alsoUsedFor: ['Pouzdro s mincí'],
+    alsoUsedFor: [],
     examples: [
       {
         title: 'Ocelová „květina“, Metal Corner Cutting Ruler',

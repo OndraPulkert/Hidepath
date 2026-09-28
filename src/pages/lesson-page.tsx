@@ -119,7 +119,7 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
                 className="flex min-h-touch items-center justify-between gap-3 py-2 text-body"
               >
                 <Link
-                  to={routes.shoppingItem(slug)}
+                  to={routes.shoppingItem(slug, project.slug)}
                   className="text-leather no-underline hover:text-cognac"
                 >
                   {equipmentCatalog[slug]?.name ?? slug}
@@ -129,7 +129,6 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
             );
           })}
           {lesson.recommendedEquipment.map((slug) => {
-            const req = project.equipment.find((e) => e.equipmentSlug === slug);
             const status = getEquipmentStatus(inventory, slug);
             return (
               <li
@@ -137,12 +136,12 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
                 className="flex min-h-touch items-center justify-between gap-3 py-2 text-body"
               >
                 <Link
-                  to={routes.shoppingItem(slug)}
+                  to={routes.shoppingItem(slug, project.slug)}
                   className="text-ink-2 no-underline hover:text-cognac"
                 >
                   {equipmentCatalog[slug]?.name ?? slug}
                 </Link>
-                <ReadinessTag status={status} priority={req?.priority ?? 'recommended'} />
+                <ReadinessTag status={status} priority="recommended" />
               </li>
             );
           })}

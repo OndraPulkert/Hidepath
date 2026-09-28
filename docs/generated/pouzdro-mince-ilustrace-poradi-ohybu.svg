@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="160mm" height="100mm" viewBox="0 0 160 100">
+<rect width="160" height="100" fill="#ffffff"/>
+<text x="80" y="6" font-family="Helvetica, Arial, sans-serif" font-size="4" text-anchor="middle" fill="#2b2b2b">Pořadí ohybů (pohled shora, v řezu)</text>
+<rect x="4" y="14" width="74" height="56" rx="2" fill="#fbfaf7" stroke="#ddd" stroke-width="0.3"/>
+<text x="41" y="20" font-family="Helvetica, Arial, sans-serif" font-size="3.4" text-anchor="middle" fill="#a2471f">① OHYB B: vnitřní za přední</text>
+<path d="M17 48 L8 48" stroke="#2f5240" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M12.5 46 L12.5 35" stroke="#7a7a7a" stroke-width="0.3" stroke-dasharray="1 1"/>
+<text x="43" y="32" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#7a7a7a">zadní (zatím rovně)</text>
+<path d="M17 40 L69 40" stroke="#8fae97" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M17 48 L69 48" stroke="#3f6b4f" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M69 40 A4 4 0 0 1 69 48" fill="none" stroke="#2f5240" stroke-width="2.4"/>
+<text x="68" y="38" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="end" fill="#7a7a7a">vnitřní (průchodka)</text>
+<text x="30" y="45" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#8a7a55">karty</text>
+<text x="43" y="52.5" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#7a7a7a">přední (líc ven)</text>
+<path d="M43 54 L43 58 M41.5 56.5 L43 58 L44.5 56.5" stroke="#a2471f" stroke-width="0.5" fill="none"/>
+<text x="43" y="62" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#a2471f">pohled zepředu ↓</text>
+<rect x="82" y="14" width="74" height="56" rx="2" fill="#fbfaf7" stroke="#ddd" stroke-width="0.3"/>
+<text x="119" y="20" font-family="Helvetica, Arial, sans-serif" font-size="3.4" text-anchor="middle" fill="#a2471f">② OHYB A: zadní přes vše</text>
+<path d="M95 32 L147 32" stroke="#2f5240" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M95 32 A8 8 0 0 0 95 48" fill="none" stroke="#2f5240" stroke-width="2.4"/>
+<text x="121" y="29" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#7a7a7a">zadní (motiv ven)</text>
+<text x="108" y="37" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#8a7a55">bankovky</text>
+<path d="M106 40 L147 40" stroke="#8fae97" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M95 48 L147 48" stroke="#2f5240" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M147 40 A4 4 0 0 1 147 48" fill="none" stroke="#2f5240" stroke-width="2.4"/>
+<text x="146" y="38" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="end" fill="#7a7a7a">vnitřní (průchodka)</text>
+<text x="108" y="45" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#8a7a55">karty</text>
+<text x="121" y="52.5" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#7a7a7a">přední (líc ven)</text>
+<path d="M121 54 L121 58 M119.5 56.5 L121 58 L122.5 56.5" stroke="#a2471f" stroke-width="0.5" fill="none"/>
+<text x="121" y="62" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#a2471f">pohled zepředu ↓</text>
+<text x="80" y="92" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#7a7a7a">Ohyb B (vpravo) spojuje přední s vnitřním, ohyb A (vlevo) přední se zadním.</text>
+<text x="80" y="97" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#7a7a7a">Nejdřív vnitřní za přední (ohyb B), pak zadní přes všechno (ohyb A).</text>
+</svg>

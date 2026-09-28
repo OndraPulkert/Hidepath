@@ -4,9 +4,11 @@ import kapsa50 from '../../../docs/generated/pouzdro-mince-kapsa-mince-27-5mm.sv
 import papirovyModel from '../../../docs/generated/pouzdro-mince-papirovy-model.svg?url';
 import papirovyModel50 from '../../../docs/generated/pouzdro-mince-papirovy-model-mince-27-5mm.svg?url';
 import papirovyModel12 from '../../../docs/generated/pouzdro-mince-papirovy-model-kuze-1-2mm.svg?url';
+import papirovyModel5012 from '../../../docs/generated/pouzdro-mince-papirovy-model-mince-27-5mm-kuze-1-2mm.svg?url';
 import postup from '../../../docs/generated/pouzdro-mince-postup.svg?url';
 import sablona from '../../../docs/generated/pouzdro-mince-sablona.svg?url';
 import sablona12 from '../../../docs/generated/pouzdro-mince-sablona-kuze-1-2mm.svg?url';
+import sablona5012 from '../../../docs/generated/pouzdro-mince-sablona-mince-27-5mm-kuze-1-2mm.svg?url';
 import sablona50 from '../../../docs/generated/pouzdro-mince-sablona-mince-27-5mm.svg?url';
 
 /**
@@ -25,6 +27,8 @@ const registry: Readonly<Record<string, Readonly<Record<string, string>>>> = {
     'kapsa-50kc': kapsa50,
     'papirovy-model-kuze-1-2': papirovyModel12,
     'sablona-kuze-1-2': sablona12,
+    'papirovy-model-50kc-kuze-1-2': papirovyModel5012,
+    'sablona-50kc-kuze-1-2': sablona5012,
   },
 };
 

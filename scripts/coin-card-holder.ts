@@ -510,7 +510,7 @@ export function buildCoinHolderSheetSvg(
     `Karty ${cz(spec.cardWidthMm)} × ${cz(spec.cardHeightMm)} (${spec.cardsCount} ks) vepředu, bankovky složené napůl vzadu, mince Ø ${cz(spec.coinDiameterMm)}, kůže tělo ${cz(spec.bodyThicknessMm)} mm.`,
     `Jeden pás: ZADNÍ + ohyb A + PŘEDNÍ + ohyb B + VNITŘNÍ panel. Po složení jsou obě boční hrany OHYBY, šije se jen dno (skrz všechny vrstvy), horní hrana zůstává otevřená.`,
     `PÁS OBKRESLIT NA LÍC – přední panel je nakreslený tak, jak bude vidět. Jazyk vyjde zepředu ${front} (zezadu ${back}), výřez na prst naproti němu.`,
-    `Plná čára = řez, čárkovaně = ohyb, tečky = otvory stehu (rozteč ${cz(spec.stitchPitchMm)} mm; dno prosekat naplocho), šrafa = ${spec.foldSkiveThicknessMm !== null ? `ztenčit na ${cz(spec.foldSkiveThicknessMm)} mm z rubu` : 'bez ztenčení'}.`,
+    `Plná čára = řez, čárkovaně = ohyb, tečky = otvory dna (vidličky přesně ${cz(spec.stitchPitchMm)} mm; naplocho: přední panel z líce, zadní a vnitřní z rubu)${spec.foldSkiveThicknessMm !== null ? `, šrafa = ztenčit na ${cz(spec.foldSkiveThicknessMm)} mm z rubu` : '; ohyby se neztenčují'}.`,
     `Pořadí: 1 pás · 2–3 kapsa (list KAPSA) · 4 přišít kapsu, osadit patici druku a průchodku NAPLOCHO · 5 složit (vnitřní za přední, zadní přes vše) · 6 slepit a prošít dno`,
     `· 7 klobouček podle obtisku patice se vším obsahem, pak jazyk zkrátit ${cz(spec.tabBeyondSnapMm)} mm za klobouček a zaoblit · 8 srazit a zaleštit hrany (vnitřní předem).`,
   ];
@@ -674,17 +674,16 @@ export function buildCoinHolderPaperModelSvg(
   const nx = m + L.stripLengthMm + 5;
   [
     'ZAPSAT PŘI ZKOUŠCE',
-    '1 klobouček: kolik mm',
-    '+od značky a kterým směrem',
-    '2 kolik jazyka zbývá za ním',
+    '1 klobouček: kolik mm od značky,',
+    '+kterým směrem, kolik jazyka zbývá',
     '+(cíl 11 + rezerva)',
-    '3 karta ve výřezu (cíl 19 mm)',
-    '4 průchodka celá vidět',
+    '2 karta ve výřezu (cíl 19 mm)',
+    '3 průchodka celá vidět',
     '+zepředu i zezadu?',
-    '5 bankovky: které jdou napůl',
+    '4 bankovky: které jdou napůl',
     '+a kolik přečnívají (mm)',
-    '6 konec jazyka ↔ kapsa (mm)',
-    '7 počet karet a bankovek',
+    '5 konec jazyka ↔ kapsa (mm)',
+    '6 počet karet a tloušťka bankovek',
   ].forEach((t, i) => {
     // „+“ = pokračování řádku: odsadit posunem x (mezery na začátku SVG text zahodí).
     const cont = t.startsWith('+');
@@ -783,15 +782,24 @@ export function buildCoinHolderPocketSvg(
   out.push(circle(ccx, ccy, spec.coinDiameterMm / 2, GUIDE, '2 1.5'));
   out.push(circle(ccx, ccy, L.formHoleDiameterMm / 2, GUIDE, '0.8 1.2'));
   out.push(cross(ccx, ccy));
+  // Osy přes celý díl až za obrys: na kůži se protáhnou k okraji a podle nich se kůže vystředí
+  // na formě (křížek sám je pod kůží schovaný) a vystředí výsečník okna.
+  out.push(
+    guide(
+      `M${f(kx - 4)} ${f(ccy)} H${f(kx + L.pocketWidthMm + 4)} M${f(ccx)} ${f(ky)} V${f(ky + L.pocketHeightMm + 4)}`,
+      '3 1 0.6 1',
+    ),
+  );
   const tx = kx + L.pocketWidthMm + 6;
   const lines = [
     `${cz(L.pocketWidthMm)} × ${cz(L.pocketHeightMm)} mm`,
     `okno Ø ${cz(L.windowDiameterMm)} (plná čára)`,
     `mince Ø ${cz(spec.coinDiameterMm)} (čárkovaně)`,
+    'čerchovaně osy – protáhnout až k okraji kůže',
     `pata důlku Ø ${cz(L.formHoleDiameterMm)} (tečkovaně)`,
     `šev ${seam.holes} otvorů od středu dna`,
     'otvory švu prosekat PŘED tvarováním,',
-    'formu vystředit na křížek, obrys',
+    'na formě vystředit podle os, obrys',
     'vyříznout po zaschnutí podle orýsování,',
     'okno vyseknout před přišitím',
     `na přední panel: ${cz(L.pocketYMm)} mm pod horní hranou,`,
@@ -806,11 +814,20 @@ export function buildCoinHolderPocketSvg(
   const fcy = fy + L.formHoleDiameterMm / 2;
   out.push(ring(fcx, fcy, L.formHoleDiameterMm / 2));
   out.push(cross(fcx, fcy));
+  const fr = L.formHoleDiameterMm / 2 + 4;
+  out.push(
+    guide(
+      `M${f(fcx - fr)} ${f(fcy)} H${f(fcx + fr)} M${f(fcx)} ${f(fcy - fr)} V${f(fcy + fr)}`,
+      '3 1 0.6 1',
+    ),
+  );
   const flines = [
     `Ø ${cz(L.formHoleDiameterMm)} = mince ${cz(spec.coinDiameterMm)} + 2 × kůže ${cz(spec.pocketThicknessMm)} + vůle ${cz(spec.formHoleClearanceMm)}`,
     `deska ≥ ${cz(L.formPlateMm)} × ${cz(L.formPlateMm)} mm, tloušťka ≥ ${cz(spec.formPlateThicknessMm)} mm`,
     'překližka, dřevo nebo HDPE; hranu otvoru zaoblit smirkem',
-    'kůže LÍCEM DOLŮ na formu, mince na rub, přiklopit deskou, svěrky',
+    'osy otvoru narýsovat na desce až k jejím okrajům',
+    'kůže LÍCEM DOLŮ na formu, osy na kůži na osy desky,',
+    'mince na rub, přiklopit deskou, svěrky',
   ];
   flines.forEach((t, i) =>
     out.push(text(kx + L.formHoleDiameterMm + 6, fy + 6 + i * 3.6, t, 2.4, 'start', GUIDE)),
@@ -1022,7 +1039,7 @@ export function buildCoinHolderProcessSvg(
     );
     b.push(
       ...caption(1, [
-        `otvor Ø ${cz(L.formHoleDiameterMm)} = mince ${cz(spec.coinDiameterMm)} + 2 × ${cz(spec.pocketThicknessMm)} + ${cz(spec.formHoleClearanceMm)}`,
+        `otvor Ø ${cz(L.formHoleDiameterMm)} = mince ${cz(spec.coinDiameterMm)} + 2 × ${cz(spec.pocketThicknessMm)} + ${cz(spec.formHoleClearanceMm)} · otvory švu prosekat předem`,
         `navlhčit · kůže LÍCEM DOLŮ na formu (tl. ≥ ${cz(spec.formPlateThicknessMm)}) · mince na rub`,
         'přiklopit deskou, stáhnout svěrkami, nechat zaschnout',
       ]),
@@ -1074,9 +1091,9 @@ export function buildCoinHolderProcessSvg(
     );
     b.push(
       ...caption(3, [
-        'sedlářský steh po 3 stranách, horní hrana kapsy otevřená',
-        `patice druku ${cz(spec.snapFromTopMm)} mm pod horní hranou, na ose jazyka`,
-        'průchodku do vnitřního panelu osadit teď, naplocho',
+        'kapsu přilepit na značky, vidličkami projet její otvory',
+        'i předním panelem a přišít (horní hrana zůstane otevřená)',
+        `patice ${cz(spec.snapFromTopMm)} mm pod hranou na ose jazyka, průchodka – naplocho`,
       ]),
     );
     cell(3, 'Přišít kapsu, osadit kování', b);
@@ -1155,7 +1172,7 @@ export function buildCoinHolderProcessSvg(
     );
     b.push(
       ...caption(5, [
-        `dno prošít skrz všechny vrstvy: ${L.bottomSeamHoles} otvorů, rozteč ${cz(spec.stitchPitchMm)} mm`,
+        `dno prošít skrz všechny vrstvy: ${L.bottomSeamHoles} otvorů na panel, rozteč ${cz(spec.stitchPitchMm)} mm`,
         'lepidlo jen pod čáru švu, zarovnat jehlami přes otvory',
       ]),
     );
@@ -1212,8 +1229,8 @@ export function buildCoinHolderProcessSvg(
     );
     b.push(
       ...caption(6, [
-        'zepředu: jazyk zapnutý, výřezem vidět kartu a nad ní průchodku',
-        `složené ≈ ${cz(Math.round(L.foldedWidthMm))} × ${cz(Math.round(L.panelHeightMm))} mm (s oblouky ohybů)`,
+        `klobouček podle obtisku patice, jazyk zkrátit ${cz(spec.tabBeyondSnapMm)} mm za ním, R${cz(L.tabEndRadiusMm)}`,
+        `výřezem vidět kartu a průchodku · složené ≈ ${cz(Math.round(L.foldedWidthMm))} × ${cz(Math.round(L.panelHeightMm))} mm`,
       ]),
     );
     cell(6, 'Hotovo – zepředu', b);
@@ -1261,6 +1278,7 @@ export function buildCoinHolderProcessSvg(
       ...caption(7, [
         'zezadu: motiv, jazyk odchází přes horní hranu dopředu,',
         'výřez s průchodkou a šňůrkou naproti jazyku',
+        'nakonec hrany srazit a zaleštit',
       ]),
     );
     cell(7, 'Hotovo – zezadu', b);
@@ -1284,6 +1302,40 @@ export function buildCoinHolderProcessSvg(
     '</svg>',
   ].join('\n');
 }
+
+/** Počet buněk listu postupu (a tedy obrázků kroků pro lekce). */
+export const PROCESS_STEP_COUNT = 8;
+
+/**
+ * Jedna buňka listu postupu jako samostatný obrázek pro lekci: stejná kresba, jen výřez
+ * (viewBox) na buňku `step` (1–8). Geometrie buněk je stejná jako v `buildCoinHolderProcessSvg`.
+ */
+export function buildCoinHolderProcessStepSvg(
+  step: number,
+  spec: CoinCardHolderSpec = DEFAULT_COIN_CARD_HOLDER,
+): string {
+  if (!Number.isInteger(step) || step < 1 || step > PROCESS_STEP_COUNT) {
+    throw new Error(`Krok postupu musí být 1–${PROCESS_STEP_COUNT}, ne ${step}.`);
+  }
+  const W = 297;
+  const H = 210;
+  const pad = 8;
+  const cellW = (W - 2 * pad) / 4;
+  const cellH = (H - 2 * pad - 10) / 2;
+  const i = step - 1;
+  const x = pad + (i % 4) * cellW + 1;
+  const y = pad + Math.floor(i / 4) * cellH + 1;
+  const w = cellW - 2;
+  const h = cellH - 2;
+  const full = buildCoinHolderProcessSvg(spec);
+  const root = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}mm" height="${H}mm" viewBox="0 0 ${W} ${H}">`;
+  if (!full.includes(root)) throw new Error('List postupu změnil kořen SVG – uprav výřez kroků.');
+  return full.replace(
+    root,
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${f(w)}mm" height="${f(h)}mm" viewBox="${f(x)} ${f(y)} ${f(w)} ${f(h)}">`,
+  );
+}
+
 /**
  * Název souboru podle odchylek od výchozího střihu, aby varianta nepřepsala verzovaný soubor:
  * jiná mince → „-mince-27-5mm“, vlastní okno → „-okno-30mm“, jazyk na druhé straně → „-jazyk-vlevo“.
@@ -1479,6 +1531,14 @@ async function main(): Promise<void> {
       preferCSSPageSize: true,
     });
     console.log(`Zapsáno ${procSvg} + .pdf (postup skládání, ilustrace, ne 1:1)`);
+    for (let step = 1; step <= PROCESS_STEP_COUNT; step++) {
+      writeFileSync(
+        resolve(outDir, `pouzdro-mince-postup-krok-${step}.svg`),
+        buildCoinHolderProcessStepSvg(step, spec),
+        'utf8',
+      );
+    }
+    console.log(`Zapsáno pouzdro-mince-postup-krok-1…${PROCESS_STEP_COUNT}.svg (kroky pro lekce)`);
   }
   await browser.close();
   const L = coinCardHolderLayout(spec);

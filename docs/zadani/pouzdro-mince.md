@@ -98,9 +98,13 @@ shora je vidět jen schodek ≈ 2,6 mm na horní hraně.
 
 ## Nářadí a materiál navíc oproti prvnímu pouzdru
 
-- Bezpečnostní ztenčovač (skiver) na ohyb B (jen u kůže 1,5 mm); vidlička 4 mm.
-- Osazovač druku pro klobouček 12,5 mm, druk s dříkem na 2 × 1,5 mm, průbojník na dřík.
-- Průchodka Ø 5 (dvoudílná s podložkou), osazovač, průbojník 5 mm.
+- Bezpečnostní ztenčovač (skiver) na ohyb B (jen u kůže 1,5 mm); vidličky s roztečí **přesně 4 mm**
+  (s 3,85 mm by 17 otvorů vyšlo o 2,4 mm kratší a panely by po složení nelícovaly).
+- Druk je čtyřdílný: **klobouček + zdířka** na jazyk, **patice (dřík) + hlavička** na přední panel.
+  Každá polovina svírá jen jednu vrstvu 1,5 mm, dřík tedy na jednu vrstvu 1,5 mm (ne 2 × 1,5).
+  Osazovač pro klobouček 12,5 mm s kovadlinkou, průbojník na dřík.
+- Průchodka dvoudílná s podložkou do otvoru 5 mm, na jednu vrstvu 1,5 mm; osazovač s kovadlinkou,
+  výsečník 5 mm. Hezčí strana průchodky na rub vnitřního panelu (ten je vidět zepředu výřezem).
 - Kruhový výsečník 32 mm na okno (nebo `--window` podle toho, co seženeš).
 - Forma: překližka/HDPE ≥ 8 mm s otvorem Ø 44 (děrovka 44 mm), rovná přítlačná deska, 2–4 svěrky.
   Co koupit, jak formu vyvrtat aku vrtačkou a otvory pro další mince:
@@ -137,8 +141,13 @@ ohyb B 8,7, jazyk 43,1 mm). Tvarování za mokra nejdřív zkusit na A5 stejné 
 1. **Pás:** obkreslit na líc, vyříznout (výřez plynule). Kapsa se dělá ze samostatného kusu kůže
    1,2 mm ≥ 70 × 70 (forma Ø 44 počítá s 1,2 mm; i když je pás z 1,5 mm).
    **Ztenčení ohybu B:** šídlem propíchnout oba konce obou čar ohybu B skrz, na rubu je spojit,
-   odsadit 3 mm na obě strany a v tomto pásu ztenčit z rubu na 1 mm. Pak prosekat otvory dna na
-   všech třech panelech (naplocho). Zaleštit hrany, které budou uvnitř (horní
+   odsadit 3 mm na obě strany a v tomto pásu ztenčit z rubu na 1 mm. Šídlem přes list přenést na
+   kůži konce čar ohybů A i B, rohy místa pro kapsu, středy patice a průchodky a všechny tečky dna.
+   Pak prosekat otvory dna na všech třech panelech (naplocho): **přední panel z líce, zadní
+   a vnitřní z rubu** (podle propíchnutých teček). Ohyb panel zrcadlově převrátí; šikmé otvory
+   proseknuté ze stejné strany by se po složení zkřížily a jehla by jimi neprošla. Rub ve spodním
+   proužku 0–3,5 mm (lepí se) nezapečeťovat; hrany, na které se po složení špatně dostane, obarvit
+   a zaleštit hned. Zaleštit hrany, které budou uvnitř (horní
    hrana vnitřního panelu, oblouk výkusu, jazyk), a zapečetit rub vnitřního panelu.
 2. **Kapsa** (list kapsy): do odřezku orýsovat obrys a prosekat otvory švu, pak navlhčit, položit
    **lícem dolů** na formu, na rub minci, přiklopit deskou, stáhnout svěrkami, nechat zaschnout.
@@ -153,9 +162,11 @@ ohyb B 8,7, jazyk 43,1 mm). Tvarování za mokra nejdřív zkusit na A5 stejné 
    přejet rozhrnovačkou, sepnout sponkami přes podložku a nechat zaschnout. Tady líc nejspíš
    praskne, když se ohne nasucho nebo na ostro.
 6. **Dno:** kontaktní lepidlo jen na pruh pod čáru švu (0–3,5 mm od hrany; karty stojí na švu,
-   lepidlo výš by ubralo hloubku). Lícovou stranu vnitřního panelu v tom pruhu zdrsnit. Nanést
-   naplocho, nechat zavadnout, přeložit a před přitlačením zarovnat jehlami přes otvory (kontaktní
-   lepidlo po dotyku nejde posunout). Prošít skrz všechny vrstvy.
+   lepidlo výš by ubralo hloubku). Spoje jsou dva: přední↔vnitřní a vnitřní↔zadní; lepit **po
+   jednom**. Zaschlý ohyb rozevřít jen tolik, aby šel proužek natřít (zhruba do pravého úhlu, ne
+   úplně naplocho – suchý neztenčený ohyb A by mohl na líci prasknout), zdrsnit, natřít, nechat
+   zavadnout, přeložit a před přitlačením zarovnat jehlami přes otvory (kontaktní lepidlo po
+   dotyku nejde posunout). Prošít skrz všechny vrstvy; nit raději 0,8 m.
 7. Vložit karty i bankovky, které nosíš, přehnout jazyk, obtisknout patici, osadit klobouček,
    jazyk zkrátit 11 mm za střed kloboučku a zaoblit R10.
 8. Dno přebrousit do roviny (tři vrstvy), srazit, obarvit a zaleštit vnější hrany. Protáhnout
@@ -217,3 +228,12 @@ doplnit ručně, do generátoru to nepatří.
   „jako předloha“ vznikla nejspíš záměnou s ozdobnými dírkami na bocích); ohyb A se jen ohne
   a jeho ohyb se ověří na odřezku. Kapsa se přišije tak, že se přilepí na značky a jejími
   otvory se vidličkami prosekne i přední panel. Listy pro kůži 1,2 mm (bez ztenčení).
+- v4.9 (doplněno po řemeslné kontrole 2026-09-28): vidličky přesně 4 mm; druk čtyřdílný, každá
+  polovina na jednu vrstvu 1,5 mm (dříve chybně „2 × 1,5“); otvory dna předního panelu z líce,
+  zadního a vnitřního z rubu (jinak se šikmé otvory po složení zkříží); přenos čar ohybů, místa
+  kapsy a teček dna šídlem; lepení dna po jednom spoji, ohyb rozevřít jen asi do pravého úhlu;
+  lepený proužek nezapečeťovat; nit na dno 0,8 m.
+- v4.9 (doplněno 2026-09-28 večer): na listu KAPSA osy přes celý díl i přes otvor formy – kůže se
+  na formě vystředí osami (osy na kůži na osy desky), ne křížkem, který je pod kůží schovaný;
+  zaoblení R2,5 v rohu výřezu je vypouklé (vyřízne se nožem). Listy i pro minci 50 Kč s kůží
+  1,2 mm. Kroky listu postupu jako samostatné obrázky do lekcí.

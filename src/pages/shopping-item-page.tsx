@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router';
+import { Link, useParams, useSearchParams } from 'react-router';
 
 import { routes } from '@/app/routes';
 import { PriorityTag } from '@/components/equipment/equipment-tags';
@@ -9,6 +9,7 @@ import { Card } from '@/components/ui/card';
 import { Kicker } from '@/components/ui/kicker';
 import { NoticeBox } from '@/components/ui/notice-box';
 import { equipmentCatalog, equipmentCategoryLabels } from '@/content/equipment';
+import { findProject } from '@/content/projects';
 import { getEquipmentStatus } from '@/features/inventory/types';
 import { useInventory, useUpdateInventoryItem } from '@/features/inventory/use-inventory';
 import { useActiveProject } from '@/features/projects/use-active-project';
@@ -19,7 +20,13 @@ import { typo } from '@/lib/utils/format';
 export function ShoppingItemPage() {
   const { toolSlug = '' } = useParams<'toolSlug'>();
   const definition = equipmentCatalog[toolSlug];
-  const project = useActiveProject();
+  const activeProject = useActiveProject();
+  // Z lekce nebo stránky jiného než aktivního projektu přijde `?projekt=`: detail pak ukáže
+  // požadavek toho projektu a zpět vede na jeho stránku, ne na nákupy aktivního projektu.
+  const [searchParams] = useSearchParams();
+  const fromProject = findProject(searchParams.get('projekt') ?? '');
+  const project = fromProject ?? activeProject;
+  const backToProject = fromProject && fromProject.slug !== activeProject.slug;
   const requirement = project.equipment.find((e) => e.equipmentSlug === toolSlug);
   const inventory = useInventory();
   const update = useUpdateInventoryItem();
@@ -30,8 +37,11 @@ export function ShoppingItemPage() {
 
   return (
     <>
-      <Link to={routes.shopping} className="mb-6 inline-flex min-h-touch items-center text-body">
-        ← Nákupní seznam
+      <Link
+        to={backToProject ? routes.project(project.slug) : routes.shopping}
+        className="mb-6 inline-flex min-h-touch items-center text-body"
+      >
+        {backToProject ? `← ${project.title}` : '← Nákupní seznam'}
       </Link>
 
       <div className="grid [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] gap-8">
