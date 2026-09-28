@@ -22,6 +22,7 @@ const categories: readonly EquipmentCategory[] = [
   'stitching',
   'gluing',
   'finishing',
+  'forming',
 ];
 
 export function WorkshopPage() {

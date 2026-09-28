@@ -31,8 +31,6 @@ import {
   assertCoinCardHolder,
   A4_PORTRAIT,
   SNAP_POST_RADIUS_MM,
-  PERFORATION_HOLE_MM,
-  foldPerforation,
   foldSkiveFor,
   GROMMET_FLANGE_MM,
   CALIBRATION_GAP_MM,
@@ -259,7 +257,7 @@ function panelPath(
 }
 
 /**
- * List PÁS (A4 **na šířku**, 1:1): rozložený pás (tři panely, jazyk, výřez, perforace ohybů,
+ * List PÁS (A4 **na šířku**, 1:1): rozložený pás (tři panely, jazyk, výřez,
  * šev dna); kapsa s mincí a otvor formy jsou na listu 2. Soustava pásu: x = 0 levý konec (u jazyka), y = 0 horní otevřená hrana.
  */
 export function buildCoinHolderSheetSvg(
@@ -490,26 +488,6 @@ export function buildCoinHolderSheetSvg(
     );
   }
 
-  /* --- perforace ohybů (jako předloha): řady Ø 1,5 přes pásmo ohybu --- */
-  const perfR = PERFORATION_HOLE_MM / 2;
-  const perforate = (x0: number, x1: number, yTop: number): void => {
-    const c = (x0 + x1) / 2;
-    // Počet řad podle šířky pásma: můstek 1,5 mm k čáře ohybu i mezi otvory (foldPerforation).
-    const { rows, spacingMm } = foldPerforation(x1 - x0);
-    const n = Math.floor((L.bottomSeamYMm - 4 - yTop) / spec.stitchPitchMm) + 1;
-    const offsets = Array.from({ length: rows }, (_, i) => (i - (rows - 1) / 2) * spacingMm);
-    for (const dx of offsets) {
-      for (let i = 0; i < n; i++) {
-        out.push(circle(X(c + dx), Y(yTop + i * spec.stitchPitchMm), perfR, GUIDE));
-      }
-    }
-  };
-  // Pásmo, které se ztenčuje, se neperforuje (obojí by ohyb zeslabilo dvakrát).
-  const skivedA = spec.foldSkiveThicknessMm !== null && spec.foldSkiveBands === 'AB';
-  const skivedB = spec.foldSkiveThicknessMm !== null;
-  if (!skivedA) perforate(L.backX1Mm, L.frontX0Mm, S + 4);
-  if (L.innerX0Mm !== null && !skivedB) perforate(L.frontX1Mm, L.innerX0Mm, 4);
-
   /* --- kalibrace a legenda --- */
   const calX = m;
   const calY = H - m - LEGEND_HEIGHT_MM - CALIBRATION_GAP_MM;
@@ -532,7 +510,7 @@ export function buildCoinHolderSheetSvg(
     `Karty ${cz(spec.cardWidthMm)} × ${cz(spec.cardHeightMm)} (${spec.cardsCount} ks) vepředu, bankovky složené napůl vzadu, mince Ø ${cz(spec.coinDiameterMm)}, kůže tělo ${cz(spec.bodyThicknessMm)} mm.`,
     `Jeden pás: ZADNÍ + ohyb A + PŘEDNÍ + ohyb B + VNITŘNÍ panel. Po složení jsou obě boční hrany OHYBY, šije se jen dno (skrz všechny vrstvy), horní hrana zůstává otevřená.`,
     `PÁS OBKRESLIT NA LÍC – přední panel je nakreslený tak, jak bude vidět. Jazyk vyjde zepředu ${front} (zezadu ${back}), výřez na prst naproti němu.`,
-    `Plná čára = řez, čárkovaně = ohyb, tečky = otvory stehu (rozteč ${cz(spec.stitchPitchMm)} mm; dno prosekat naplocho), kroužky = perforace Ø 1,5, šrafa = ${spec.foldSkiveThicknessMm !== null ? `ztenčit na ${cz(spec.foldSkiveThicknessMm)} mm z rubu` : 'bez ztenčení'}.`,
+    `Plná čára = řez, čárkovaně = ohyb, tečky = otvory stehu (rozteč ${cz(spec.stitchPitchMm)} mm; dno prosekat naplocho), šrafa = ${spec.foldSkiveThicknessMm !== null ? `ztenčit na ${cz(spec.foldSkiveThicknessMm)} mm z rubu` : 'bez ztenčení'}.`,
     `Pořadí: 1 pás · 2–3 kapsa (list KAPSA) · 4 přišít kapsu, osadit patici druku a průchodku NAPLOCHO · 5 složit (vnitřní za přední, zadní přes vše) · 6 slepit a prošít dno`,
     `· 7 klobouček podle obtisku patice se vším obsahem, pak jazyk zkrátit ${cz(spec.tabBeyondSnapMm)} mm za klobouček a zaoblit · 8 srazit a zaleštit hrany (vnitřní předem).`,
   ];
@@ -993,7 +971,7 @@ export function buildCoinHolderProcessSvg(
       ...caption(0, [
         `pás ${cz(L.stripLengthMm)} × ${cz(L.panelHeightMm)} mm + jazyk ${cz(L.tabLengthMm)} (s rezervou ${cz(spec.tabFitReserveMm)})`,
         'po zkoušce na papíře: obkreslit na LÍC, ohyb B ztenčit z rubu,',
-        'prosekat perforace a otvory dna, zapečetit rub vnitřního panelu',
+        'prosekat otvory dna, zapečetit rub vnitřního panelu',
       ]),
     );
     cell(0, 'Papír, pak pás z kůže', b);

@@ -1,7 +1,8 @@
 import { NavLink, useLocation } from 'react-router';
 
-import { isNavItemActive, primaryNavItems } from '@/app/routes';
+import { isNavItemActive, primaryNavItemsFor } from '@/app/routes';
 import { useSession } from '@/features/auth/session-provider';
+import { useActiveProject } from '@/features/projects/use-active-project';
 import { Brand } from '@/components/layout/brand';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils/cn';
@@ -18,6 +19,7 @@ export interface TopNavProps {
 export function TopNav({ hideOnMobile = false }: TopNavProps) {
   const { pathname } = useLocation();
   const { session, signOut } = useSession();
+  const activeProject = useActiveProject();
 
   return (
     <header
@@ -35,7 +37,7 @@ export function TopNav({ hideOnMobile = false }: TopNavProps) {
       <div className="mx-auto flex max-w-app flex-wrap items-center gap-x-4 gap-y-1.5">
         <Brand className="mr-auto" />
         <nav aria-label="Hlavní navigace" className="flex flex-wrap gap-1">
-          {primaryNavItems.map((item) => {
+          {primaryNavItemsFor(activeProject.slug).map((item) => {
             const active = isNavItemActive(item, pathname);
             return (
               <NavLink

@@ -116,3 +116,23 @@ describe('computeRecordedCosts', () => {
     expect(c.recordedCents).toBe(0);
   });
 });
+
+describe('neověřená cena', () => {
+  it('položka s priceSource unknown se do součtu nepočítá, jen se spočítá', () => {
+    const unknownItem: EquipmentDefinition = { ...def('snap', 0, 0), priceSource: 'unknown' };
+    const project = {
+      equipment: [
+        {
+          equipmentSlug: unknownItem.slug,
+          priority: 'required' as const,
+          reason: 'x',
+          specification: 'y',
+        },
+      ],
+    };
+    const budget = computeRemainingBudget(project, { [unknownItem.slug]: unknownItem }, {});
+    expect(budget.totalCents).toBe(0);
+    expect(budget.unpricedCount).toBe(1);
+    expect(budget.lines).toHaveLength(0);
+  });
+});

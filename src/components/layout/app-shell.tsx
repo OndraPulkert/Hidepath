@@ -21,7 +21,7 @@ export function AppShell() {
       <main
         id="obsah"
         key={pathname}
-        className="mx-auto w-full max-w-app flex-1 animate-hp-in px-page pt-[clamp(16px,3vw,40px)] pb-24"
+        className="mx-auto w-full max-w-app flex-1 animate-hp-in px-page pt-[clamp(16px,3vw,40px)] pb-24 print:max-w-none print:animate-none print:p-0"
       >
         <Outlet />
       </main>

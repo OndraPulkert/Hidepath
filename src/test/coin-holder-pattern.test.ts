@@ -182,26 +182,11 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
     );
   });
 
-  it('perforace jen v ohybu A (tři řady), ohyb B se místo nich ztenčuje', () => {
-    const perf = circles(sheet ?? '').filter((c) => near(c.r, 0.75));
-    const inBand = (x0: number, x1: number): Circle[] =>
-      perf.filter((c) => c.cx > X(x0) && c.cx < X(x1));
-    expect(inBand(L.frontX1Mm, L.innerX0Mm!).length).toBe(0);
+  it('ohyby bez perforací (v4.9), ohyb B se jen ztenčuje', () => {
+    // Perforace Ø 1,5 (r 0,75) nebyly doložené na předloze a byly odstraněny.
+    expect(circles(sheet ?? '').filter((c) => near(c.r, 0.75))).toHaveLength(0);
     expect(sheet).toContain('class="skive-zone"');
-    for (const [x0, x1, n] of [[L.backX1Mm, L.frontX0Mm, 3]] as const) {
-      const band = inBand(x0, x1);
-      const cols = [...new Set(band.map((c) => c.cx))].sort((a, b) => a - b);
-      expect(cols.length).toBe(n);
-      // Mezi sousedními otvory i k čáře ohybu zůstane aspoň 1 mm kůže.
-      for (let i = 1; i < cols.length; i++)
-        expect(cols[i]! - cols[i - 1]! - 1.5).toBeGreaterThan(1);
-      expect(cols[0]! - 0.75 - X(x0)).toBeGreaterThan(0.4);
-      expect(Math.max(...band.map((c) => c.cy))).toBeLessThan(Y(L.bottomSeamYMm));
-    }
-    // Pásmo ohybu A začíná pod výkusem.
-    expect(Math.min(...inBand(L.backX1Mm, L.frontX0Mm).map((c) => c.cy))).toBeGreaterThan(
-      Y(L.scoopRadiusMm),
-    );
+    expect(sheet).not.toContain('perforace');
   });
 
   it('list kapsy: A4 na výšku, okno, mince a pata důlku soustředné, šev od středu dna', () => {

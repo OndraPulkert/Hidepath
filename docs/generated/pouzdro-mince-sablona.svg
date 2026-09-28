@@ -45,58 +45,13 @@
 <circle cx="243.55" cy="63.49" r="2.5" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
 <path d="M242.55 63.49 L244.55 63.49 M243.55 62.49 L243.55 64.49" stroke="#2b2b2b" stroke-width="0.25"/>
 <text x="243.55" y="69.49" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="middle" fill="#7a7a7a">průchodka Ø 5</text>
-<circle cx="86.315" cy="92.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="86.315" cy="96.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="86.315" cy="100.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="86.315" cy="104.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="86.315" cy="108.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="86.315" cy="112.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="86.315" cy="116.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="86.315" cy="120.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="86.315" cy="124.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="86.315" cy="128.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="86.315" cy="132.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="86.315" cy="136.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="86.315" cy="140.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="86.315" cy="144.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="86.315" cy="148.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="90.315" cy="92.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="90.315" cy="96.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="90.315" cy="100.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="90.315" cy="104.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="90.315" cy="108.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="90.315" cy="112.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="90.315" cy="116.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="90.315" cy="120.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="90.315" cy="124.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="90.315" cy="128.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="90.315" cy="132.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="90.315" cy="136.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="90.315" cy="140.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="90.315" cy="144.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="90.315" cy="148.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="94.315" cy="92.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="94.315" cy="96.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="94.315" cy="100.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="94.315" cy="104.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="94.315" cy="108.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="94.315" cy="112.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="94.315" cy="116.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="94.315" cy="120.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="94.315" cy="124.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="94.315" cy="128.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="94.315" cy="132.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="94.315" cy="136.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="94.315" cy="140.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="94.315" cy="144.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
-<circle cx="94.315" cy="148.49" r="0.75" fill="none" stroke="#7a7a7a" stroke-width="0.2"/>
 <path d="M10 169 V173 M10 171 H60 M60 169 V173" stroke="#2b2b2b" stroke-width="0.3" fill="none"/>
 <text x="63" y="172" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#2b2b2b">KONTROLA MĚŘÍTKA: tato úsečka musí měřit přesně 50 mm</text>
 <text x="10" y="179" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">POUZDRO NA KARTY S VSAZENOU MINCÍ – LIST PÁS. Tisk na A4 NA ŠÍŘKU na 100 % (bez „přizpůsobit stránce“). Kapsa s mincí a forma jsou na listu KAPSA. NÁVRH k ověření na papíru.</text>
 <text x="10" y="182.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Karty 54 × 85,6 (4 ks) vepředu, bankovky složené napůl vzadu, mince Ø 40, kůže tělo 1,5 mm.</text>
 <text x="10" y="185.4" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Jeden pás: ZADNÍ + ohyb A + PŘEDNÍ + ohyb B + VNITŘNÍ panel. Po složení jsou obě boční hrany OHYBY, šije se jen dno (skrz všechny vrstvy), horní hrana zůstává otevřená.</text>
 <text x="10" y="188.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">PÁS OBKRESLIT NA LÍC – přední panel je nakreslený tak, jak bude vidět. Jazyk vyjde zepředu vpravo (zezadu vlevo), výřez na prst naproti němu.</text>
-<text x="10" y="191.8" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Plná čára = řez, čárkovaně = ohyb, tečky = otvory stehu (rozteč 4 mm; dno prosekat naplocho), kroužky = perforace Ø 1,5, šrafa = ztenčit na 1 mm z rubu.</text>
+<text x="10" y="191.8" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Plná čára = řez, čárkovaně = ohyb, tečky = otvory stehu (rozteč 4 mm; dno prosekat naplocho), šrafa = ztenčit na 1 mm z rubu.</text>
 <text x="10" y="195" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Pořadí: 1 pás · 2–3 kapsa (list KAPSA) · 4 přišít kapsu, osadit patici druku a průchodku NAPLOCHO · 5 složit (vnitřní za přední, zadní přes vše) · 6 slepit a prošít dno</text>
 <text x="10" y="198.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">· 7 klobouček podle obtisku patice se vším obsahem, pak jazyk zkrátit 11 mm za klobouček a zaoblit · 8 srazit a zaleštit hrany (vnitřní předem).</text>
 </svg>

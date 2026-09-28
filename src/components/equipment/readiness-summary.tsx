@@ -3,7 +3,7 @@ import { Kicker } from '@/components/ui/kicker';
 import { ProgressBar } from '@/components/ui/progress-bar';
 import { type EquipmentReadiness } from '@/features/inventory/readiness';
 import { type RemainingBudget } from '@/features/shopping/budget';
-import { formatCzk, formatPercent } from '@/lib/utils/format';
+import { formatCzk, formatPercent, pluralizeCs } from '@/lib/utils/format';
 
 /** Souhrn nad nákupním seznamem: připravenost nezbytného, počet, očekávané náklady, vysvětlení. */
 export function ReadinessSummary({
@@ -49,6 +49,9 @@ export function ReadinessSummary({
           {formatCzk(budget.recommendedCents)}
           {budget.laterCents > 0 ? ` · později ${formatCzk(budget.laterCents)}` : ''}
           {budget.orderedCents > 0 ? ` · z toho objednáno ${formatCzk(budget.orderedCents)}` : ''}
+          {budget.unpricedCount > 0
+            ? ` · bez ${pluralizeCs(budget.unpricedCount, ['položky', 'položek', 'položek'])} s neověřenou cenou`
+            : ''}
         </p>
       </div>
       <p className="self-center text-body text-ink-2">{explanation}</p>

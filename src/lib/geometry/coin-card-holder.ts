@@ -81,7 +81,7 @@ export interface CoinCardHolderSpec {
   /**
    * Který ohyb ztenčit. Ohyb B má poloměr ≈ 3 mm (protažení lícu ≈ 26 % bez ztenčení, ≈ 16 % se
    * ztenčením na 1 mm), ohyb A ≈ 5 mm (≈ 14 %) – ztenčení tam není potřeba a u výkusu by zeslabilo
-   * hranu. Pásmo, které se ztenčuje, se neperforuje (obojí zeslabuje ohyb).
+   * hranu. Ohyby se neperforují (v4.9: perforace nebyly doložené na předloze).
    */
   foldSkiveBands: 'B' | 'AB';
   /** Zaoblení rohu, kde výřez na předním panelu potkává horní hranu (tam pracuje palec). */
@@ -537,13 +537,6 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
       );
     }
   }
-  for (const band of [L.foldBackFrontMm, L.foldFrontInnerMm]) {
-    if (band > 0 && foldPerforation(band).rows === 0) {
-      p.push(
-        `Pásmo ohybu ${fmt(band)} mm je tak úzké, že se do něj perforace nevejde; zvětši foldEaseMm.`,
-      );
-    }
-  }
   if (spec.foldSkiveThicknessMm !== null) {
     const body = spec.bodyThicknessMm;
     if (spec.foldSkiveThicknessMm > body - 0.3 || spec.foldSkiveThicknessMm < 0.6) {
@@ -555,8 +548,8 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
       p.push('foldSkiveMarginMm nad 8 mm by ztenčil i plochu panelů.');
     }
   }
-  if (spec.stitchPitchMm < PERFORATION_HOLE_MM + PERFORATION_LIGAMENT_MM) {
-    p.push('stitchPitchMm je menší než 3 mm – perforace i otvory stehu by splývaly.');
+  if (spec.stitchPitchMm < 3) {
+    p.push('stitchPitchMm je menší než 3 mm – otvory stehu by splývaly.');
   }
   // Na zadním panelu přechází hrana jazyka plynule do výkusu. Výkus tam nesmí být užší než na
   // předku (jinak by jazyk zasahoval pod výřez) a nemá být o moc širší (tvar by se rozešel).
@@ -663,14 +656,6 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
   return p;
 }
 
-/** Perforace ohybu: otvor Ø 1,5, můstek k čáře ohybu i mezi otvory aspoň 1,5 mm. */
-export const PERFORATION_HOLE_MM = 1.5;
-export const PERFORATION_LIGAMENT_MM = 1.5;
-
-/**
- * Kolik řad perforace se vejde do pásma ohybu šířky `bandMm` (0–3) a jejich rozestup středů.
- * Řady jsou souměrné kolem středu pásma; když se nevejde ani jedna, pásmo se neperforuje.
- */
 /**
  * Ztenčení ohybu pro danou tloušťku kůže těla: výchozí 1 mm, ale jen když z kůže ubere aspoň
  * 0,3 mm (tenčí kůže se ohne i bez něj); jinak null = neztenčovat.
@@ -678,15 +663,6 @@ export const PERFORATION_LIGAMENT_MM = 1.5;
 export function foldSkiveFor(bodyThicknessMm: number): number | null {
   const s = DEFAULT_COIN_CARD_HOLDER.foldSkiveThicknessMm;
   return s !== null && Math.round((bodyThicknessMm - s) * 1000) >= 300 ? s : null;
-}
-
-export function foldPerforation(bandMm: number): { rows: number; spacingMm: number } {
-  const d = PERFORATION_HOLE_MM;
-  const lig = PERFORATION_LIGAMENT_MM;
-  const avail = bandMm - 2 * (lig + d / 2); // prostor pro středy otvorů
-  if (avail < 0) return { rows: 0, spacingMm: 0 };
-  const rows = Math.min(3, Math.floor(avail / (d + lig) + 1e-9) + 1);
-  return { rows, spacingMm: rows > 1 ? Math.min(4, avail / (rows - 1)) : 0 };
 }
 
 export function assertCoinCardHolder(spec: CoinCardHolderSpec): void {

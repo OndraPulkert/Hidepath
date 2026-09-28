@@ -2,8 +2,6 @@
  * Jediné místo s definicí URL. Komponenty i testy používají tyto buildery,
  * nikdy ručně psané řetězce.
  */
-import { startingProject } from '@/content/projects';
-
 export const routes = {
   home: '/',
   login: '/login',
@@ -43,17 +41,22 @@ export interface NavItem {
   label: string;
 }
 
-/** Hlavní navigace shellu – čtyři položky podle schváleného prototypu. */
-export const primaryNavItems: readonly NavItem[] = [
-  { to: routes.dashboard, label: 'Přehled', matchPrefixes: [routes.dashboard] },
-  { to: routes.shopping, label: 'Nákupy', matchPrefixes: [routes.shopping] },
-  { to: routes.workshop, label: 'Dílna', matchPrefixes: [routes.workshop] },
-  {
-    to: routes.project(startingProject.slug),
-    label: 'Projekt a lekce',
-    matchPrefixes: ['/projects'],
-  },
-];
+/**
+ * Hlavní navigace shellu – čtyři položky podle schváleného prototypu. „Projekt a lekce“
+ * vede na aktivní projekt (volba z přehledu), proto se položky skládají podle jeho slugu.
+ */
+export function primaryNavItemsFor(activeProjectSlug: string): readonly NavItem[] {
+  return [
+    { to: routes.dashboard, label: 'Přehled', matchPrefixes: [routes.dashboard] },
+    { to: routes.shopping, label: 'Nákupy', matchPrefixes: [routes.shopping] },
+    { to: routes.workshop, label: 'Dílna', matchPrefixes: [routes.workshop] },
+    {
+      to: routes.project(activeProjectSlug),
+      label: 'Projekt a lekce',
+      matchPrefixes: ['/projects'],
+    },
+  ];
+}
 
 /** Zda je položka navigace aktivní pro danou cestu. */
 export function isNavItemActive(item: NavItem, pathname: string): boolean {

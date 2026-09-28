@@ -41,7 +41,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     cautions: [
       'Přířezy A5–A2 v této tloušťce prodává CraftPoint; jinde je často potřeba přířez poptat, celá kůže stojí tisíce korun.',
       'Na trénink řezu a děrování (lekce 1–3) stačí levné odřezky, i štípenka (spodní vrstva kůže bez líce). Na lepení a steh v lekci 4 je lepší tenká třísločiněná – nejjednodušší jsou dvě A5 téže kůže. Finální díly řežte z lícové kůže, štípenka se chová jinak.',
-      'Kůže má lícovou (hladkou) a rubovou (vláknitou) stranu. Šablonu kreslete na rub.',
+      'Kůže má lícovou (hladkou) a rubovou (vláknitou) stranu. U pouzdra na karty se šablona kreslí na rub; u pouzdra s vsazenou mincí se pás kreslí na líc – kresba je tam pohled zvenku.',
     ],
     avoid: [
       {
@@ -62,10 +62,10 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       },
     ],
     // A4 183–252 Kč podle odstínu + 2× A5 na trénink 116 Kč (CraftPoint, ověřeno 2026-09-14).
-    priceRange: { minCents: 29_900, maxCents: 36_800 },
+    priceRange: { minCents: 22_200, maxCents: 36_800 },
     priceSource: 'verified',
     priceNote: `${VERIFIED_NOTE} Přířez A4 plus dvě A5 na trénink.`,
-    alsoUsedFor: ['Pouzdro na karty', 'Klíčenka', 'Peněženka bifold'],
+    alsoUsedFor: ['Pouzdro na karty', 'Klíčenka', 'Peněženka bifold', 'Pouzdro s mincí'],
     examples: [
       {
         title: 'Třísločiněná hovězí lícová kůže 1,2 mm – juchtová (přírodní)',
@@ -96,6 +96,26 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         note: 'Jen na trénink řezu a děrování (lekce 1–3). Na lepení a steh v lekci 4 radši dvě A5 třísločiněné; na finální díly ne, štípenka se chová jinak než lícová kůže.',
         availability: 'in_stock',
         checkedAt: '2026-09-07',
+      },
+      {
+        title: 'Třísločiněná hovězí lícová kůže 1,5 mm – Čokoládová',
+        shop: 'CraftPoint',
+        url: 'https://craft-point.cz/products/hovezi-kuze-licova-cokoladova-1-5-mm',
+        priceCents: 22_200,
+        priceNote: 'A4',
+        note: 'Horní hranice doporučené tloušťky, barvená. Pro ni jsou výchozí listy pouzdra s mincí (kůže 1,5 mm).',
+        availability: 'in_stock',
+        checkedAt: '2026-09-18',
+      },
+      {
+        title: 'Třísločiněná hovězí lícová kůže 1,2 mm – Verde (lahvová zeleň)',
+        shop: 'CraftPoint',
+        url: 'https://craft-point.cz/products/trislocinena-hovezi-kuze-licova-usen-1-2-mm-verde',
+        priceCents: 25_000,
+        priceNote: 'A4',
+        note: 'U pouzdra s mincí odpadá ztenčení ohybu B; pro ni jsou listy pro kůži 1,2 mm.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-18',
       },
     ],
     commonlyAtHome: false,
@@ -433,7 +453,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     priceRange: { minCents: 33_800, maxCents: 120_000 },
     priceSource: 'verified',
     priceNote: `${VERIFIED_NOTE} Levné sady 4 mm od ~340 Kč; kalené francouzské sady od ~740 Kč.`,
-    alsoUsedFor: ['Pouzdro na karty', 'Peněženka bifold', 'Pásek na hodinky'],
+    alsoUsedFor: ['Pouzdro na karty', 'Peněženka bifold', 'Pásek na hodinky', 'Pouzdro s mincí'],
     examples: [
       {
         title: 'Děrovače na švy 4 mm – sada 4 kusů',
@@ -744,7 +764,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     priceRange: { minCents: 8_900, maxCents: 31_000 },
     priceSource: 'verified',
     priceNote: VERIFIED_NOTE,
-    alsoUsedFor: ['Pouzdro na karty', 'Peněženka bifold'],
+    alsoUsedFor: ['Pouzdro na karty', 'Peněženka bifold', 'Pouzdro s mincí'],
     examples: [
       {
         title: "Fiebing's Leather Craft Cement 118 ml",
@@ -1064,7 +1084,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     priceRange: { minCents: 30_000, maxCents: 70_000 },
     priceSource: 'verified',
     priceNote: VERIFIED_NOTE,
-    alsoUsedFor: ['Pouzdro na karty', 'Pásek', 'Peněženka bifold'],
+    alsoUsedFor: ['Pouzdro na karty', 'Pásek', 'Peněženka bifold', 'Pouzdro s mincí'],
     examples: [
       {
         title: 'Hranořízek, velikosti 1–4 (záběr 0,8 / 1,0 / 1,2 / 1,4 mm)',
@@ -1149,7 +1169,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     priceRange: { minCents: 69_900, maxCents: 199_900 },
     priceSource: 'verified',
     priceNote: VERIFIED_NOTE,
-    alsoUsedFor: ['Peněženka bifold', 'Pásek', 'Pouzdro na nůž'],
+    alsoUsedFor: ['Peněženka bifold', 'Pásek', 'Pouzdro na nůž', 'Pouzdro s mincí'],
     examples: [
       {
         title: 'Sedlářský koník s podstavcem',
@@ -1195,9 +1215,9 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     englishName: 'Safety skiver',
     category: 'cutting',
     shortDescription:
-      'Seřezává rub kůže u hrany do klínu, aby přehyb nebo lepený spoj neměl schod. Na pouzdro se nepoužívá.',
+      'Seřezává rub kůže u hrany do klínu, aby přehyb nebo lepený spoj neměl schod. U pouzdra na karty se nepoužívá, u pouzdra s mincí ztenčuje celé pásmo přes ohyb B.',
     purpose:
-      'Kde se kůže přehýbá nebo lepí přes sebe, vznikne dvojnásobná tloušťka a tuhý schod: okraj kapsy peněženky, přehnutý lem, konec pásku u přezky. Ztenčovač (skiving) odebírá z rubu tenké hobliny na šířku 5–20 mm od hrany, takže se dvě vrstvy potkají bez hrbolu a ohyb je poddajnější. Bezpečnostní varianta má žiletkovou čepel v kovovém držáku s dorazem, nebrousí se, jen se mění čepel. U pouzdra na karty není co ztenčovat: vrstvy 1,2 mm se lepí naplocho a hrana se srazí a zaleští jako celek. U prvního pásku se ohyb u přezky záměrně neztenčuje, je to nejvíc namáhané místo a řez je nevratný.',
+      'Kde se kůže přehýbá nebo lepí přes sebe, vznikne dvojnásobná tloušťka a tuhý schod: okraj kapsy peněženky, přehnutý lem, konec pásku u přezky, nebo – jinak než u hrany – celé pásmo přes ohyb, jako ohyb B pouzdra s mincí. Ztenčovač (skiving) odebírá z rubu tenké hobliny na šířku 5–20 mm od hrany, nebo v pásu přes celou šířku ohybu, takže se dvě vrstvy potkají bez hrbolu a ohyb je poddajnější. Bezpečnostní varianta má žiletkovou čepel v kovovém držáku s dorazem, nebrousí se, jen se mění čepel. U pouzdra na karty není co ztenčovat: vrstvy 1,2 mm se lepí naplocho a hrana se srazí a zaleští jako celek. U pouzdra s mincí ztenčuje celé pásmo ohybu B (asi 16 mm) na 1 mm, aby líc kůže 1,5 mm v ostrém ohybu nepraskal – u kůže 1,2 mm se ztenčení přeskakuje. U prvního pásku se ohyb u přezky záměrně neztenčuje, je to nejvíc namáhané místo a řez je nevratný.',
     buyingGuide: [
       { label: 'Typ', value: 'safety skiver s vyměnitelnou čepelí, ne broušený french skiver' },
       {
@@ -1232,7 +1252,12 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     priceRange: { minCents: 8_900, maxCents: 56_600 },
     priceSource: 'verified',
     priceNote: `${VERIFIED_NOTE} Levný safety skiver je z AliExpressu (2–4 týdny; od 7/2026 k ceně přičtěte clo 3 € za položku, tedy asi 75 Kč); český obchod má jen french skiver.`,
-    alsoUsedFor: ['Peněženka bifold', 'Pásek (přehnutý konec, u dalších kusů)', 'Lemování tašek'],
+    alsoUsedFor: [
+      'Peněženka bifold',
+      'Pásek (přehnutý konec, u dalších kusů)',
+      'Lemování tašek',
+      'Pouzdro s mincí (ztenčení ohybu B)',
+    ],
     examples: [
       {
         title: 'Safety skiver, kovový držák, 3 čepele',
@@ -1273,6 +1298,461 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       },
     ],
   }),
+
+  draft({
+    slug: 'coin-forming-block',
+    name: 'Forma na tvarování důlku',
+    englishName: 'Coin dimple forming block',
+    category: 'forming',
+    shortDescription: 'Deska s kulatým otvorem, do které se za mokra vtlačí kůže s mincí.',
+    purpose:
+      'Do otvoru přesně o minci větší se navlhčená kůže s mincí na rubu vtlačí a nechá zaschnout – vznikne pevný důlek, který minci drží. Otvor musí sedět na velikost mince (mince + 2× kůže kapsy 1,2 mm + vůle 1,6 mm); víko z druhé desky formu uzavírá a rozkládá tlak svěrek rovnoměrně.',
+    buyingGuide: [
+      { label: 'Materiál', value: 'překližka nebo tvrdý plast, tloušťka 10–12 mm (min. 8 mm)' },
+      {
+        label: 'Velikost',
+        value: 'dva kusy aspoň 74 × 74 mm (forma i víko), ideálně 8 × 8 cm kvůli vyložení svěrek',
+      },
+      {
+        label: 'Otvor',
+        value:
+          'Ø 44 mm pro výchozí minci 40 mm; Ø 31,5–32 mm pro minci 50 Kč (27,5 mm); jiný průměr podle vlastní mince',
+      },
+      {
+        label: 'Vrtání',
+        value: 'vykružovací pila (hole saw) nebo Forstnerův vrták do dřeva, na aku vrtačku',
+      },
+    ],
+    cautions: [
+      'Dostupné vrtáky nemusí trefit přesný průměr – o 1–1,5 mm větší otvor (45 místo 44, 30 místo 28,5) nejspíš půjde, jen okraj důlku bude měkčí; neověřeno, nejdřív vyzkoušejte na odřezku. Hranu otvoru navíc zaobleňte smirkem – ostrá hrana by v kůži udělala rýhu.',
+      'Vrtejte na 1. rychlost bez příklepu, s nabitou baterií; průměry kolem 44–45 mm jsou pro menší aku vrtačky nejnáročnější. Provrtejte do půlky, desku otočte a dokončete z druhé strany podle dírky středicího vrtáku.',
+      'List KAPSA má otvor formy nakreslený 1:1 pro danou minci – vytiskněte ho na 100 % a nalepte na desku, ať je střed přesný.',
+      'Bez vykružováku jde otvor i navrtat dokola děrami 5–6 mm těsně u čáry, střed vylomit a dopilovat na čáru.',
+    ],
+    avoid: [
+      {
+        title: 'Plexisklo/polystyren na víko',
+        reason:
+          'OBI pod „plexisklo“ prodává polystyren: 2 mm se pod svěrkou prohne, 4 mm je jen jako velká deska za přes tisíc korun a pod šroubovou svěrkou může prasknout. Překližka je tužší a levnější.',
+      },
+      {
+        title: 'Diamantová vykružovací pila na dlaždice',
+        reason:
+          'v OBI se prodává i vykružovací pila na dlaždice za 919 Kč – je na kámen, ne na dřevo.',
+      },
+    ],
+    alternatives: [
+      {
+        title: 'Odřezek překližky z přířezu',
+        reason:
+          'stačí kousek 8 × 8 cm; přířez dělá HORNBACH (ne na všech prodejnách, předem zavolat), BAUHAUS (min. rozměr desky 250 × 500 mm) a OBI (jen zúčastněné prodejny) – ne všude a ne vždy zadarmo, cenu si na místě ověřte.',
+      },
+      {
+        title: 'Staré plastové prkénko z domácnosti',
+        reason: 'když je aspoň 8 mm silné, poslouží místo překližky.',
+      },
+    ],
+    priceRange: { minCents: 9_900, maxCents: 29_900 },
+    priceSource: 'verified',
+    priceNote: `${VERIFIED_NOTE} Rozsah je za sadu vrtáků (99–299 Kč); překližku popisuje samostatný příklad níže, do rozsahu se nepočítá.`,
+    alsoUsedFor: ['Pouzdro s mincí'],
+    examples: [
+      {
+        title: 'LUX-TOOLS Sada vykružovacích pil, 7 ks',
+        shop: 'OBI',
+        url: 'https://www.obi.cz/vykruzovaci-pily/lux-sada-vykruzovacich-pil-7-ks/p/1698885',
+        priceCents: 9_900,
+        note: 'Průměry 25, 32, 38, 45, 50, 56, 62 mm, univerzální unášecí talíř a středicí vrták, na dřevo. Pokryje 32 mm (mince 50 Kč) i 45 mm (výchozí mince 40 mm, o 1 mm víc než potřebných 44 mm – vyzkoušet na odřezku). Dostupnost na prodejně neověřena.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-27',
+      },
+      {
+        title: 'Sada Forstnerových vrtáků (sukovníků) 15–35 mm, 5 ks',
+        shop: 'OBI',
+        url: 'https://www.obi.cz/vrtaky-do-dreva/sada-forstnerovych-vrtaku-15-mm-35-mm-5dilna/p/2021962',
+        priceCents: 17_900,
+        note: 'Průměry 15, 20, 25, 30, 35 mm, pro měkké dřevo a překližku. Z ní 30 mm na minci 20 Kč nebo 10 Kč. Dostupnost na prodejně neověřena.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-27',
+      },
+      {
+        title: 'Sada vykružovacích pil ø 19–82 mm, 12 ks',
+        shop: 'BAUHAUS',
+        url: 'https://www.bauhaus.cz/sada-vykruzovacich-pil-21443110',
+        priceCents: 29_900,
+        note: 'Má přesně 44 mm a 2 unášecí hlavičky, do dřeva a překližky. Jen online, na prodejnách není; nemá 32 mm.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-27',
+      },
+      {
+        title: 'Pilový vykružovák HiKOKI Ø 44 mm',
+        shop: 'HORNBACH',
+        url: 'https://www.hornbach.cz/p/pilovy-vykruzovak-hikoki-o-44-mm/5578355/',
+        priceCents: 19_500,
+        note: 'Bimetal, přesně 44 mm, skladem na prodejně. Stránka neuvádí, jestli je v balení unášecí talíř – na prodejně se zeptat, jinak dokoupit.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-27',
+      },
+      {
+        title: 'Překližka borová 10 × 600 × 1200 mm',
+        shop: 'HORNBACH',
+        url: 'https://www.hornbach.cz/p/preklizka-borova-10-x-600-x-1200-mm/6571171/',
+        priceCents: 48_900,
+        note: 'Na formu zbytečně velká celá deska – výhodnější je poptat odřezek v přířezu (HORNBACH, BAUHAUS, vybrané OBI). Dostupnost na prodejně neověřena.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-27',
+      },
+    ],
+    commonlyAtHome: false,
+    media: [
+      {
+        id: 'coin-forming-block-main',
+        kind: 'photo',
+        caption: 'Dvoudílná forma z překližky s vyvrtaným otvorem a smirkem zaoblenou hranou',
+        status: 'planned',
+      },
+    ],
+  }),
+
+  draft({
+    slug: 'clamps',
+    name: 'Svěrky',
+    englishName: 'Clamps',
+    category: 'forming',
+    shortDescription:
+      'Stáhnou formu na tvarování důlku rovnoměrně ze dvou stran, než kůže s mincí zaschne.',
+    purpose:
+      'Dvě svěrky proti sobě rovnoměrně stáhnou formu a víko přes navlhčenou kůži s mincí, aby se víko nenaklonilo a důlek vyšel souměrný.',
+    buyingGuide: [
+      { label: 'Počet', value: '2–4 kusy, vždy v párech proti sobě' },
+      {
+        label: 'Vyložení',
+        value: 'aspoň tak hluboko, aby dosáhly na střed formy 8 × 8 cm',
+      },
+      { label: 'Typ', value: 'truhlářské (rychlosvěrky) nebo šroubové z temperované litiny' },
+    ],
+    cautions: [
+      'Vyložení je, jak hluboko od okraje desky svěrka dosáhne. Otvor s mincí proto musí být blíž než asi 4 cm od hrany formy, jinak svěrka tlačí vedle mince, ne na ni.',
+      'Dvě svěrky dejte vždy proti sobě (z každé strany jednu), aby se víko nenaklonilo.',
+    ],
+    avoid: [
+      {
+        title: 'Jedna svěrka uprostřed',
+        reason: 'víko se nakloní.',
+      },
+      {
+        title: 'Předimenzovaná šroubová svěrka (přes 500 Kč/ks)',
+        reason: 'na formu 8 × 8 cm je zbytečně silná; levnější varianty stačí stejně.',
+      },
+    ],
+    alternatives: [
+      {
+        title: 'Truhlářský svěrák přišroubovaný ke stolu',
+        reason: 'vyplatí se, jen pokud ho využijete i jinde – stojí přes 700 Kč.',
+      },
+    ],
+    priceRange: { minCents: 10_900, maxCents: 23_800 },
+    priceSource: 'verified',
+    priceNote: VERIFIED_NOTE,
+    alsoUsedFor: ['Pouzdro s mincí'],
+    examples: [
+      {
+        title: 'ELLIX sada truhlářských svěrek 150 × 50 a 200 × 50 mm',
+        shop: 'OBI',
+        url: 'https://www.obi.cz/upinaci-nastroje/ellix-sada-truhlarskych-sverek-2dilna/p/5400296',
+        priceCents: 10_900,
+        priceNote: 'za 2 ks',
+        note: 'Stačí s formou 8 × 8 cm. Dostupnost na prodejně neověřena.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-27',
+      },
+      {
+        title: 'Šroubová svěrka z temperované litiny 250 × 80 mm',
+        shop: 'OBI',
+        url: 'https://www.obi.cz/upinaci-nastroje/sroubova-sverka-z-temperovane-litiny-250-x-80-mm/p/5410782',
+        priceCents: 11_900,
+        priceNote: 'za kus, kupte 2',
+        note: 'Vyložení 80 mm, pevnější sevření; nejlepší poměr ceny a výkonu z ověřených nabídek. Dostupnost na prodejně neověřena.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-27',
+      },
+    ],
+    commonlyAtHome: false,
+    media: [
+      {
+        id: 'clamps-main',
+        kind: 'photo',
+        caption: 'Dvě svěrky proti sobě stahující formu s víkem na tvarování důlku',
+        status: 'planned',
+      },
+    ],
+  }),
+
+  draft({
+    slug: 'snap-fastener',
+    name: 'Druk (patice, klobouček) a osazovač',
+    englishName: 'Snap fastener + setter',
+    category: 'forming',
+    shortDescription:
+      'Kovové zapínání jazyka. Patice se osazuje naplocho před složením, klobouček až podle obtisku na hotovém kuse.',
+    purpose:
+      'Druk zapíná jazyk na přední panel: patice se osadí naplocho do předního panelu ještě před složením pásu, klobouček se osadí až na konci na jazyk, přesně na místo, které se na něm otisklo přiložením přes patici po přeložení jazyka přes horní hranu. Přeložený jazyk s kloboučkem pak na patici zacvakne. Pro tento střih patří patice na dřík 2 × 1,5 mm a klobouček o průměru 12,5 mm.',
+    buyingGuide: [
+      { label: 'Velikost kloboučku', value: '12,5 mm' },
+      { label: 'Dřík', value: 'na kůži 2 × 1,5 mm (dvě vrstvy této tloušťky)' },
+      { label: 'Sada', value: 'osazovač (na dřík i klobouček) a průbojník na otvor pro dřík' },
+      { label: 'Materiál', value: 'mosaz nebo poniklovaná ocel' },
+    ],
+    cautions: [
+      'Patice se osazuje naplocho do předního panelu ještě před složením pásu – v uzavřeném pouzdru už na ni nedosáhnete.',
+      'Klobouček se naopak osazuje až úplně nakonec, podle obtisku patice na přeloženém jazyku, ne podle odhadované značky.',
+      'Otvor pro dřík dělejte přesně na jeho velikost; moc velký otvor a patice se v kůži viklá.',
+    ],
+    avoid: [],
+    alternatives: [],
+    priceRange: { minCents: 0, maxCents: 0 },
+    priceSource: 'unknown',
+    priceNote: 'Cena zatím neověřena – před nákupem zjistěte v obchodě.',
+    alsoUsedFor: ['Pouzdro s mincí'],
+    examples: [],
+    commonlyAtHome: false,
+    media: [
+      {
+        id: 'snap-fastener-main',
+        kind: 'photo',
+        caption: 'Rozložený druk – patice, klobouček a osazovač – vedle otvoru pro dřík v kůži',
+        status: 'planned',
+      },
+    ],
+  }),
+
+  draft({
+    slug: 'grommet',
+    name: 'Průchodka Ø 5 mm a osazovač',
+    englishName: 'Grommet + setter',
+    category: 'forming',
+    shortDescription:
+      'Kovové očko v rohu vnitřního panelu, kterým prochází šňůrka. Dvoudílná s podložkou, osazuje se naplocho.',
+    purpose:
+      'Průchodka je dvoudílné kovové očko s podložkou, které zpevní otvor v kůži, aby se netrhal, a kterým může procházet šňůrka. V tomto střihu sedí v rohu vnitřního panelu, 9 mm od obou hran, a osazuje se naplocho ještě před složením pásu.',
+    buyingGuide: [
+      { label: 'Průměr', value: 'Ø 5 mm, dvoudílná s podložkou' },
+      {
+        label: 'Sada',
+        value:
+          'osazovač a kruhový výsečník na otvor Ø 5 mm (dutý s břitem, ne plný průbojník na kov)',
+      },
+      { label: 'Materiál', value: 'mosaz nebo poniklovaná ocel' },
+    ],
+    cautions: [
+      'Otvor pro průchodku vysekněte kulatým výsečníkem (dutý, s břitem), ne plným průbojníkem na kov – ten kůži jen promáčkne.',
+      'Osaďte ji naplocho do vnitřního panelu před složením; po složení je roh s průchodkou vidět výřezem zepředu i zezadu, ale sáhnout na ni už nejde.',
+    ],
+    avoid: [
+      {
+        title: 'Plný „průbojník“ (Narex apod.) místo výsečníku',
+        reason:
+          'hobbymarkety prodávají pod slovem „průbojník“ plný trn na kov, který díru do kůže neudělá, jen ji promáčkne.',
+      },
+    ],
+    alternatives: [],
+    priceRange: { minCents: 0, maxCents: 0 },
+    priceSource: 'unknown',
+    priceNote: 'Cena zatím neověřena – před nákupem zjistěte v obchodě.',
+    alsoUsedFor: ['Pouzdro s mincí'],
+    examples: [],
+    commonlyAtHome: false,
+    media: [
+      {
+        id: 'grommet-main',
+        kind: 'photo',
+        caption: 'Dvoudílná průchodka s podložkou a osazovačem vedle otvoru v rohu panelu',
+        status: 'planned',
+      },
+    ],
+  }),
+
+  draft({
+    slug: 'round-punch-32mm',
+    name: 'Kruhový výsečník 32 mm',
+    englishName: 'Round hollow punch 32 mm',
+    category: 'cutting',
+    shortDescription:
+      'Vyseknutí okna kapsy, kterým je vidět mince. Velký dutý výsečník, ne plný průbojník.',
+    purpose:
+      'Okno (kruh kůže uprostřed kapsy) se vyseká jedním úderem dutého kruhového výsečníku Ø 32 mm; kolem něj zůstává prstenec kůže asi 4 mm, který drží minci, aby oknem nevypadla.',
+    buyingGuide: [
+      {
+        label: 'Typ',
+        value: 'dutý kruhový výsečník (hollow punch) s ostrým břitem, ne plný průbojník',
+      },
+      { label: 'Průměr', value: '32 mm (prstenec kolem mince asi 4 mm)' },
+      {
+        label: 'Podložka',
+        value: 'měkčí PU/pryž (OKA, Tandy) tlumí úder líp než tvrdá deska',
+      },
+    ],
+    cautions: [
+      'Sekejte jedním pevným úderem, kolmo.',
+      'Kapsu při vysekávání okna položte lícem dolů zpátky na formu (nad otvorem) a pod důlek podložte špalík, aby měl důlek při úderu pevnou oporu.',
+      'Menší kruhové výsečníky (do 20 mm) prodávají české e-shopy jednotlivě po pár desítkách korun; výsečník přesně Ø 32 mm nebyl u žádného českého obchodu ověřen – dostupnost i cenu zjistěte před nákupem.',
+    ],
+    avoid: [{ title: 'Plný průbojník na kov', reason: 'kůži jen promáčkne, díru neudělá.' }],
+    alternatives: [],
+    priceRange: { minCents: 0, maxCents: 0 },
+    priceSource: 'unknown',
+    priceNote: 'Cena zatím neověřena – před nákupem zjistěte v obchodě.',
+    alsoUsedFor: ['Pouzdro s mincí'],
+    examples: [],
+    commonlyAtHome: false,
+    media: [
+      {
+        id: 'round-punch-32mm-main',
+        kind: 'photo',
+        caption: 'Velký kruhový výsečník položený nad kůží s vyznačeným středem okna',
+        status: 'planned',
+      },
+    ],
+  }),
+
+  draft({
+    slug: 'hole-punch-5mm',
+    name: 'Výsečník Ø 5 mm',
+    englishName: 'Round hollow punch 5 mm',
+    category: 'cutting',
+    shortDescription: 'Otvor pro průchodku. Malý dutý výsečník, běžná velikost v nabídce obchodů.',
+    purpose: 'Kulatý dutý výsečník Ø 5 mm proseká otvor pro dvoudílnou průchodku.',
+    buyingGuide: [
+      { label: 'Typ', value: 'dutý kruhový výsečník, ne plný průbojník na kov' },
+      { label: 'Průměr', value: '5 mm (běžná velikost)' },
+    ],
+    cautions: ['Vysekávejte na tvrdé podložce, jedním pevným úderem, kolmo.'],
+    avoid: [
+      {
+        title: 'Plný „průbojník“ 5 mm z hobbymarketu (Narex apod.)',
+        reason: 'je to plný trn na kov, díru do kůže neudělá, jen ji promáčkne.',
+      },
+    ],
+    alternatives: [],
+    priceRange: { minCents: 2_900, maxCents: 39_200 },
+    priceSource: 'verified',
+    priceNote: `${VERIFIED_NOTE} Jednotlivě Ø 5 mm bylo u CraftPointu k datu ověření vyprodané; sada 2–5 mm, která velikost 5 mm také obsahuje, je skladem.`,
+    alsoUsedFor: ['Pouzdro s mincí'],
+    examples: [
+      {
+        title: 'Výsečníky na kůži 2–20 mm, průměr dle výběru',
+        shop: 'CraftPoint',
+        url: 'https://craft-point.cz/products/vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu',
+        priceCents: 2_900,
+        priceNote: 'za kus',
+        note: 'Jednotlivé průměry 2–20 mm se objednávají podle výběru; 5 mm bylo v době ověření vyprodané, 6 mm skladem.',
+        availability: 'unavailable',
+        checkedAt: '2026-09-28',
+      },
+      {
+        title: 'Sada výsečníků na kůži 7 velikostí (2–5 mm)',
+        shop: 'CraftPoint',
+        url: 'https://craft-point.cz/products/sada-vysecniku-na-kuzi-7-velikosti-2-5mm',
+        priceCents: 39_200,
+        note: 'Rukojeť + 7 vyměnitelných hrotů 2 / 2,5 / 3 / 3,5 / 4 / 4,5 / 5 mm. Řeší otvor pro průchodku, i když je jednotlivý hrot Ø 5 mm zrovna vyprodaný.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-28',
+      },
+    ],
+    commonlyAtHome: false,
+    media: [
+      {
+        id: 'hole-punch-5mm-main',
+        kind: 'photo',
+        caption: 'Malý kruhový výsečník Ø 5 mm položený vedle otvoru pro průchodku',
+        status: 'planned',
+      },
+    ],
+  }),
+
+  draft({
+    slug: 'corner-template',
+    name: 'Rohová šablona (ocelová „květina“)',
+    englishName: 'Corner radius template',
+    category: 'cutting',
+    shortDescription:
+      'Vede nůž nebo šídlo při zaoblování rohů na daný poloměr. Pro tento střih se hodí lob R6 a R10.',
+    purpose:
+      'Kovová nebo akrylová šablona s několika oblouky různého poloměru na jednom kotouči (loby, číslované podle průměru). Přiložením správného lobu obtáhnete nebo vedete nůž po stejném rádiusu na všech rozích. Pro tento střih se hodí lob 12 (R6, dolní rohy kapsy) a lob 20 (R10, jazyk, horní rohy kapsy).',
+    buyingGuide: [
+      {
+        label: 'Typ',
+        value: 'ocelová „květina“ (kotouč s otvory různého průměru) nebo akrylová L-šablona',
+      },
+      {
+        label: 'Poloměry',
+        value: 'aspoň R6 a R10; R2,5 (roh výřezu) žádná dostupná šablona nemá přesně',
+      },
+      {
+        label: 'Materiál',
+        value: 'ocel odolá noži jako vodítku; akryl je jen na obtahování tužkou nebo šídlem',
+      },
+    ],
+    cautions: [
+      'Číslo na lobu ocelové „květiny“ je průměr, ne poloměr: lob 12 = R6, lob 20 = R10.',
+      'Akrylová hrana se noži jako vodítko nehodí, jen na obtažení; jako vodítko nože poslouží jen ocelová varianta.',
+      'V ČR nebyl nalezen obchod s ocelovou variantou; počítejte s dovozem z AliExpressu a od 7/2026 s clem asi 3 € za položku.',
+    ],
+    avoid: [],
+    alternatives: [
+      {
+        title: 'Obtažení mince nebo víčka',
+        reason: 'R6 = Ø 12 mm – stačí obtáhnout minci nebo víčko tohoto průměru.',
+      },
+      {
+        title: 'Akrylová šablona rohy a kruhy (Leatory, Tandy)',
+        reason:
+          'český sklad, ale rohy jen v palcových poloměrech (1/8″–2″), R6 sedí jen přibližně (1/4″ = 6,35 mm) a je to jen vodítko na obtažení, ne na nůž.',
+      },
+    ],
+    priceRange: { minCents: 14_700, maxCents: 36_000 },
+    priceSource: 'verified',
+    priceNote: `${VERIFIED_NOTE} Ceny z AliExpressu jsou bez cla; od 7/2026 přičtěte asi 3 € (cca 75 Kč) za položku.`,
+    alsoUsedFor: ['Pouzdro s mincí'],
+    examples: [
+      {
+        title: 'Ocelová „květina“, Metal Corner Cutting Ruler',
+        shop: 'AliExpress',
+        url: 'https://www.aliexpress.com/item/1005006129649426.html',
+        priceCents: 14_700,
+        note: 'Loby Ø 6–24 mm (R3–R12), oblouky R11,5–21,5, dírky na značení 1–4 mm. Lob Ø 12 = R6, lob Ø 20 = R10 – oba poloměry tohoto střihu.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-17',
+      },
+      {
+        title: 'Sada nerezových šablon „Rounded Arc-shaped ruler“',
+        shop: 'AliExpress',
+        url: 'https://www.aliexpress.com/item/1005009345256631.html',
+        priceCents: 25_900,
+        note: 'L-šablona s poloměry R5/10/12,5/15/20, navíc kruhy a úhelník.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-17',
+      },
+      {
+        title: 'Akrylová šablona rohy a kruhy (Tandy)',
+        shop: 'Leatory',
+        url: 'https://www.leatory.cz/prislusenstvi-naradi/akrylova-sablona-rohy-a-kruhy-2/',
+        priceCents: 36_000,
+        note: 'Čirý akryl 3 mm, rohy 1/8″–2″ (3–50 mm) a kruhy 1/4″–2″ v palcových krocích; R6 sedí jen přibližně, jen na obtažení, ne jako vodítko nože.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-18',
+      },
+    ],
+    commonlyAtHome: false,
+    media: [
+      {
+        id: 'corner-template-main',
+        kind: 'photo',
+        caption: 'Ocelová rohová šablona přiložená na roh kapsy, obtažení tužkou podle lobu',
+        status: 'planned',
+      },
+    ],
+  }),
 ];
 
 export const equipmentCatalog: EquipmentCatalog = Object.fromEntries(
@@ -1291,4 +1771,5 @@ export const equipmentCategoryLabels: Record<EquipmentDefinition['category'], st
   stitching: 'Šití',
   gluing: 'Lepení',
   finishing: 'Úprava hran',
+  forming: 'Tvarování a kování',
 };

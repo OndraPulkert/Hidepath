@@ -13,7 +13,8 @@ import { getEquipmentStatus } from '@/features/inventory/types';
 import { useInventory, useUpdateInventoryItem } from '@/features/inventory/use-inventory';
 import { useActiveProject } from '@/features/projects/use-active-project';
 import { NotFoundPage } from '@/pages/not-found-page';
-import { formatCzkRange, typo } from '@/lib/utils/format';
+import { formatPriceRange, priceSourceLabels } from '@/features/shopping/price';
+import { typo } from '@/lib/utils/format';
 
 export function ShoppingItemPage() {
   const { toolSlug = '' } = useParams<'toolSlug'>();
@@ -81,9 +82,9 @@ export function ShoppingItemPage() {
               disabled={inventory.isLoading}
             />
             <span className="text-body font-medium">
-              {formatCzkRange(definition.priceRange.minCents, definition.priceRange.maxCents)}
+              {formatPriceRange(definition)}
               <span className="ml-2 text-meta font-normal text-ink-2">
-                {definition.priceSource === 'verified' ? 'ověřený rozsah' : 'odhad'}
+                {priceSourceLabels[definition.priceSource]}
               </span>
             </span>
           </div>

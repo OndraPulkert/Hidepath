@@ -2,6 +2,8 @@ import { type ComponentType } from 'react';
 
 import { lessonBodies as cardHolderLessonBodies } from '@/content/projects/card-holder/lesson-bodies';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
+import { lessonBodies as coinCardHolderLessonBodies } from '@/content/projects/coin-card-holder/lesson-bodies';
+import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
 
 /**
  * Dlouhé texty lekcí (MDX) podle projektu. Stránka lekce si je bere odsud podle
@@ -10,6 +12,7 @@ import { cardHolderProject } from '@/content/projects/card-holder/project';
  */
 const registry: Readonly<Record<string, Readonly<Record<string, ComponentType>>>> = {
   [cardHolderProject.slug]: cardHolderLessonBodies,
+  [coinCardHolderProject.slug]: coinCardHolderLessonBodies,
 };
 
 export function lessonBodiesFor(projectSlug: string): Readonly<Record<string, ComponentType>> {

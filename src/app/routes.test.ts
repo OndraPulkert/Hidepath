@@ -1,6 +1,6 @@
 import { startingProject } from '@/content/projects';
 
-import { isNavItemActive, primaryNavItems, resolveHomeRoute, routes } from './routes';
+import { isNavItemActive, primaryNavItemsFor, resolveHomeRoute, routes } from './routes';
 
 // Trasy se testují proti skutečnému slugu prvního projektu, ne proti kopii řetězce.
 const CARD_HOLDER_SLUG = startingProject.slug;
@@ -30,7 +30,7 @@ describe('resolveHomeRoute', () => {
 });
 
 describe('isNavItemActive', () => {
-  const [dashboard, shopping, , project] = primaryNavItems;
+  const [dashboard, shopping, , project] = primaryNavItemsFor(CARD_HOLDER_SLUG);
 
   it('zvýrazní Nákupy i na detailu položky', () => {
     expect(isNavItemActive(shopping!, '/shopping')).toBe(true);
@@ -40,6 +40,10 @@ describe('isNavItemActive', () => {
 
   it('zvýrazní Projekt a lekce i v detailu lekce', () => {
     expect(isNavItemActive(project!, '/projects/card-holder/lessons/02-straight-cut')).toBe(true);
+  });
+
+  it('Projekt a lekce vede na aktivní projekt', () => {
+    expect(primaryNavItemsFor('coin-card-holder')[3]!.to).toBe(routes.project('coin-card-holder'));
   });
 
   it('přehled není aktivní na jiných trasách', () => {

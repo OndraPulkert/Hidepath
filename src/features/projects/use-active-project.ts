@@ -1,12 +1,16 @@
-import { startingProject } from '@/content/projects';
+import { projects, startingProject } from '@/content/projects';
 import { type ProjectDefinition } from '@/content/schema';
+import { useEnrollments } from '@/features/progress/use-progress';
+import { resolveActiveProject } from '@/features/projects/active-project';
+import { useActiveProjectPreference } from '@/features/projects/active-project-preference';
 
 /**
- * Projekt, se kterým uživatel právě pracuje. Dnes existuje jediný, takže je to
- * první zastávka cesty učení; až budou projekty dva, rozhodne tady zápis
- * (enrollment) a stránky se nemění. Je to hook, ne konstanta, právě proto, aby
- * ten přechod nevyžadoval úpravu volajících.
+ * Projekt, se kterým uživatel právě pracuje: volba z přehledu, jinak poslední zápis, jinak
+ * první zastávka cesty (pravidla v `resolveActiveProject`). Stránky se na konkrétní projekt
+ * nikdy neodkazují (ADR 002).
  */
 export function useActiveProject(): ProjectDefinition {
-  return startingProject;
+  const { data: enrollments } = useEnrollments();
+  const preferred = useActiveProjectPreference();
+  return resolveActiveProject(projects, enrollments ?? [], preferred, startingProject);
 }

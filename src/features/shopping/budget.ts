@@ -29,6 +29,8 @@ export interface RemainingBudget {
   laterCents: number;
   /** Část z totalCents, která připadá na objednané položky – v UI označit „objednáno“. */
   orderedCents: number;
+  /** Chybějící položky bez známé ceny (`priceSource: 'unknown'`) – v součtu nejsou. */
+  unpricedCount: number;
   lines: readonly BudgetLine[];
 }
 
@@ -43,6 +45,7 @@ export function computeRemainingBudget(
   inventory: InventoryState,
 ): RemainingBudget {
   const lines: BudgetLine[] = [];
+  let unpricedCount = 0;
   for (const req of project.equipment) {
     const status = getEquipmentStatus(inventory, req.equipmentSlug);
     if (status === 'owned') continue;
@@ -54,6 +57,10 @@ export function computeRemainingBudget(
       continue;
     }
     const recorded = status === 'ordered' ? item?.purchasePriceCents : null;
+    if (recorded == null && def.priceSource === 'unknown') {
+      unpricedCount += 1;
+      continue;
+    }
     lines.push({
       equipmentSlug: req.equipmentSlug,
       priority: req.priority,
@@ -70,6 +77,7 @@ export function computeRemainingBudget(
     recommendedCents: sum((l) => l.priority === 'recommended'),
     laterCents: sum((l) => l.priority === 'later'),
     orderedCents: sum((l) => l.status === 'ordered'),
+    unpricedCount,
     lines,
   };
 }

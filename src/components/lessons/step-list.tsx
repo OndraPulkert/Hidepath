@@ -7,7 +7,7 @@ export function StepList({
   template,
 }: {
   steps: readonly LessonStep[];
-  template: TemplateDefinition;
+  template: TemplateDefinition | undefined;
 }) {
   return (
     <ol className="flex flex-col gap-6">

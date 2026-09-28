@@ -1,11 +1,12 @@
 import { cardHolderProject } from '@/content/projects/card-holder/project';
+import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
 import { type ProjectDefinition } from '@/content/schema';
 
-export const projects: readonly ProjectDefinition[] = [cardHolderProject];
+export const projects: readonly ProjectDefinition[] = [cardHolderProject, coinCardHolderProject];
 
 /**
- * První zastávka cesty učení: projekt, na který nový uživatel nastupuje a ke
- * kterému se vztahuje přehled, dílna i nákupy, dokud existuje jediný projekt.
+ * První zastávka cesty učení: projekt, na který nový uživatel nastupuje (onboarding) a který
+ * je aktivní, dokud se uživatel nezapíše jinam (`resolveActiveProject`).
  * **Jediné místo v aplikaci, které pouzdro jmenuje.** Stránky ho neimportují
  * přímo – berou si aktivní projekt přes `useActiveProject()`, aby druhý projekt
  * (peněženka, pásek) nevyžadoval zásah do sedmi souborů jako dosud.

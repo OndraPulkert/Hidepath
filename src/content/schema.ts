@@ -20,6 +20,7 @@ export const equipmentCategorySchema = z.enum([
   'stitching',
   'gluing',
   'finishing',
+  'forming',
 ]);
 export type EquipmentCategory = z.infer<typeof equipmentCategorySchema>;
 
@@ -82,37 +83,46 @@ export const productExampleSchema = z.object({
 export type ProductExample = z.infer<typeof productExampleSchema>;
 
 /** Nástroj nebo materiál – sdílený napříč projekty. */
-export const equipmentDefinitionSchema = z.object({
-  slug,
-  name: z.string().min(1),
-  englishName: z.string().min(1),
-  category: equipmentCategorySchema,
-  /** Jedna věta do řádku seznamu. */
-  shortDescription: z.string().min(1),
-  /** „K čemu slouží“ – odstavec. */
-  purpose: z.string().min(1),
-  /** „Co koupit“ – parametry. */
-  buyingGuide: z.array(labeledValueSchema),
-  /** „Na co si dát pozor“. */
-  cautions: z.array(z.string().min(1)),
-  /** „Nekupujte“. */
-  avoid: z.array(titledReasonSchema),
-  /** „Levnější nebo domácí alternativy“. */
-  alternatives: z.array(titledReasonSchema),
-  /** Orientační cenový rozsah; zdroj a datum v `priceNote`. */
-  priceRange: priceRangeSchema,
-  /** `verified` = rozsah odpovídá ověřeným nabídkám (docs/content/notes-vybaveni.md); `estimate` = odhad. */
-  priceSource: z.enum(['verified', 'estimate']),
-  priceNote: z.string().min(1),
-  /** Kde se hodí i mimo tento projekt (jen text). */
-  alsoUsedFor: z.array(z.string().min(1)),
-  /** Ověřené příklady výrobků s odkazy do obchodů. */
-  examples: z.array(productExampleSchema),
-  /** Věc běžně v domácnosti – nabídne se v onboardingu „Co už máte doma?“. */
-  commonlyAtHome: z.boolean(),
-  media: z.array(mediaSlotSchema),
-  reviewStatus: reviewStatusSchema,
-});
+export const equipmentDefinitionSchema = z
+  .object({
+    slug,
+    name: z.string().min(1),
+    englishName: z.string().min(1),
+    category: equipmentCategorySchema,
+    /** Jedna věta do řádku seznamu. */
+    shortDescription: z.string().min(1),
+    /** „K čemu slouží“ – odstavec. */
+    purpose: z.string().min(1),
+    /** „Co koupit“ – parametry. */
+    buyingGuide: z.array(labeledValueSchema),
+    /** „Na co si dát pozor“. */
+    cautions: z.array(z.string().min(1)),
+    /** „Nekupujte“. */
+    avoid: z.array(titledReasonSchema),
+    /** „Levnější nebo domácí alternativy“. */
+    alternatives: z.array(titledReasonSchema),
+    /** Orientační cenový rozsah; zdroj a datum v `priceNote`. */
+    priceRange: priceRangeSchema,
+    /**
+     * `verified` = rozsah odpovídá ověřeným nabídkám (docs/content/notes-vybaveni.md); `estimate` = odhad;
+     * `unknown` = cenu zatím nemáme odkud vzít (rozsah 0–0), do rozpočtu se nepočítá a UI to řekne.
+     */
+    priceSource: z.enum(['verified', 'estimate', 'unknown']),
+    priceNote: z.string().min(1),
+    /** Kde se hodí i mimo tento projekt (jen text). */
+    alsoUsedFor: z.array(z.string().min(1)),
+    /** Ověřené příklady výrobků s odkazy do obchodů. */
+    examples: z.array(productExampleSchema),
+    /** Věc běžně v domácnosti – nabídne se v onboardingu „Co už máte doma?“. */
+    commonlyAtHome: z.boolean(),
+    media: z.array(mediaSlotSchema),
+    reviewStatus: reviewStatusSchema,
+  })
+  .refine(
+    (e) =>
+      e.priceSource !== 'unknown' || (e.priceRange.minCents === 0 && e.priceRange.maxCents === 0),
+    'priceSource unknown musí mít rozsah 0–0 (žádná vymyšlená čísla)',
+  );
 export type EquipmentDefinition = z.infer<typeof equipmentDefinitionSchema>;
 
 export const equipmentRequirementSchema = z.object({
@@ -210,6 +220,33 @@ export const templateDefinitionSchema = z.object({
 });
 export type TemplateDefinition = z.infer<typeof templateDefinitionSchema>;
 
+/**
+ * List střihu vygenerovaný skriptem (SVG v mm, 1:1). Pro projekty, jejichž díly nejsou obdélníky
+ * a kreslí je generátor (`scripts/*.ts`), ne `TemplateIllustration`. Soubor k listu dodá registr
+ * `patternSheetUrlsFor(projectSlug)` podle `id`.
+ */
+export const patternSheetSchema = z.object({
+  id: slug,
+  title: z.string().min(1),
+  /** Jedna věta: co na listu je a kdy ho použít. */
+  note: z.string().min(1),
+  orientation: z.enum(['portrait', 'landscape']),
+  widthMm: z.number().positive(),
+  heightMm: z.number().positive(),
+  /** Např. „mince 27,5 mm (50 Kč)“; bez varianty = výchozí střih. */
+  variant: z.string().min(1).optional(),
+});
+export type PatternSheet = z.infer<typeof patternSheetSchema>;
+
+export const patternSheetsDefinitionSchema = z.object({
+  sheets: z.array(patternSheetSchema).min(1),
+  calibrationMm: z.number().positive(),
+  printNote: z.string().min(1),
+  /** Jak si vygenerovat další varianty (příkaz generátoru). */
+  variantsNote: z.string().min(1).optional(),
+});
+export type PatternSheetsDefinition = z.infer<typeof patternSheetsDefinitionSchema>;
+
 export const projectDefinitionSchema = z
   .object({
     slug,
@@ -224,12 +261,39 @@ export const projectDefinitionSchema = z
     phases: z.array(phaseDefinitionSchema).min(1),
     equipment: z.array(equipmentRequirementSchema).min(1),
     lessons: z.array(lessonDefinitionSchema).min(1),
-    template: templateDefinitionSchema,
+    /** Šablona z obdélníkových dílů (kreslí ji aplikace). Projekt má buď tuto, nebo `patternSheets`. */
+    template: templateDefinitionSchema.optional(),
+    /** Listy střihu z generátoru (SVG 1:1). */
+    patternSheets: patternSheetsDefinitionSchema.optional(),
     media: z.array(mediaSlotSchema),
     contentVersion: z.number().int().positive(),
     reviewStatus: reviewStatusSchema,
   })
   .superRefine((project, ctx) => {
+    if ((project.template === undefined) === (project.patternSheets === undefined)) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `Projekt ${project.slug}: potřebuje právě jedno z template / patternSheets`,
+      });
+    }
+    if (!project.template) {
+      const media = [
+        ...project.media,
+        ...project.lessons.flatMap((l) => [...l.media, ...l.steps.flatMap((s) => s.media)]),
+      ];
+      for (const m of media) {
+        if (m.illustration === 'template' || m.illustration === 'assembled') {
+          ctx.addIssue({
+            code: 'custom',
+            message: `Projekt ${project.slug}: ilustrace ${m.illustration} (${m.id}) potřebuje obdélníkovou šablonu`,
+          });
+        }
+      }
+    }
+    const sheetIds = project.patternSheets?.sheets.map((s) => s.id) ?? [];
+    if (new Set(sheetIds).size !== sheetIds.length) {
+      ctx.addIssue({ code: 'custom', message: `Projekt ${project.slug}: duplicitní id listu` });
+    }
     const phaseSlugs = new Set(project.phases.map((p) => p.slug));
     const equipmentSlugs = new Set(project.equipment.map((e) => e.equipmentSlug));
     const sortedOrders = [...project.lessons].map((l) => l.order).sort((a, b) => a - b);

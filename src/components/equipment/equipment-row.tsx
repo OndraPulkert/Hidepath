@@ -3,7 +3,8 @@ import { Link } from 'react-router';
 import { routes } from '@/app/routes';
 import { StatusSegment } from '@/components/equipment/status-segment';
 import { type EquipmentDefinition, type EquipmentStatus } from '@/content/schema';
-import { formatCzkRange, typo } from '@/lib/utils/format';
+import { formatPriceRange, priceSourceLabels } from '@/features/shopping/price';
+import { typo } from '@/lib/utils/format';
 
 export interface EquipmentRowProps {
   definition: EquipmentDefinition;
@@ -37,9 +38,9 @@ export function EquipmentRow({ definition, status, onChange, disabled }: Equipme
         </p>
         <p className="mt-1.5 flex flex-wrap items-center gap-x-3 text-body">
           <span className="font-medium">
-            {formatCzkRange(definition.priceRange.minCents, definition.priceRange.maxCents)}
+            {formatPriceRange(definition)}
             <span className="ml-1.5 text-meta font-normal text-ink-2">
-              {definition.priceSource === 'verified' ? 'ověřený rozsah' : 'odhad'}
+              {priceSourceLabels[definition.priceSource]}
             </span>
           </span>
           <Link

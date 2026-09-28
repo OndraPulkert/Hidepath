@@ -72,3 +72,22 @@ učení podle odhadu je přesně chyba, kterou stálo pět revizních kol u šab
   přehledu?). Rozhodne se s druhým projektem.
 - Zda mají mít dovednosti vlastní stránku („připomenout a procvičit"), nebo jen odkaz na
   sdílený návod techniky. Rozhodne se podle seznamu zádrhelů z první výroby.
+
+## Dodatek 2026-09-28 – druhý projekt a volba aktivního projektu
+
+Na výslovné přání autora vzniká druhý projekt **Pouzdro na karty s vsazenou mincí**
+(`coin-card-holder`, projekt 02) dřív, než bylo fyzicky vyrobené první pouzdro (bod 4 výše).
+Obsah je celý NÁVRH; střih je ověřený výpočtem a virtuálním složením, ne na kůži.
+
+- **Aktivní projekt:** přepínač „Vaše projekty“ na přehledu. Volba je vlastnost zařízení
+  (`hidepath.v1.activeProject` v localStorage, stejně jako poznámky od ponku), ne účtu.
+  `resolveActiveProject()` (`src/features/projects/active-project.ts`): zvolený projekt, pokud je
+  do něj zápis → jinak naposledy změněný aktivní zápis → dokončený → `startingProject`.
+  Volba bez zápisu se ignoruje. Nezačatý projekt se tlačítkem „Začít projekt“ zapíše a stane se
+  aktivním. Navigace „Projekt a lekce“ vede na aktivní projekt (`primaryNavItemsFor`).
+- **Šablona:** projekt má buď `template` (obdélníkové díly, kreslí aplikace), nebo
+  `patternSheets` (listy SVG 1:1 z generátoru, soubory v registru `patternSheetUrlsFor`).
+  Tisková stránka tiskne každý list na vlastní stránku A4 bez okrajů (list má své okraje
+  i kontrolní úsečku).
+- Model dovedností se zatím **nezavádí**; osnovy a seznam zádrhelů z první výroby zůstávají
+  podmínkou pro sdílené návody technik.

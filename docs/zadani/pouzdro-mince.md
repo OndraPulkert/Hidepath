@@ -1,4 +1,4 @@
-# Pouzdro na karty s vsazenou mincí – střih (NÁVRH v4.8)
+# Pouzdro na karty s vsazenou mincí – střih (NÁVRH v4.9)
 
 Stav: **návrh k ověření na papíru a odřezku**, ne lekce. Vznikl 2026-09-18 na přání autora podle
 produktu, videa a fotek Red Forest Leather (rozbor v `docs/content/notes-vybaveni.md`, „Námět:
@@ -9,7 +9,7 @@ prvního), až bude první pouzdro fyzicky hotové.
 
 - Model: `src/lib/geometry/coin-card-holder.ts` – rozměry z karty (54 × 85,6, 4 ks po 0,76 mm),
   tloušťky bankovek, průměru mince, tloušťky kůže a přídavků; kontroly hlídají kolize (výřez ×
-  jazyk × druk × kapsa × průchodka, prstenec okna, šev dna, perforace, ztenčení, A4).
+  jazyk × druk × kapsa × průchodka, prstenec okna, šev dna, ztenčení, A4).
 - Kresba (`scripts/coin-card-holder.ts`), všechny listy 1:1 s kalibrační úsečkou 50 mm:
   - `pouzdro-mince-papirovy-model.svg/.pdf` – **papírový model** (A4 na šířku): stejný obrys jako
     pás, bez otvorů; čísla kroků u ohybů, rámeček karty, místo pro kapsu, čára švu, kontrolní
@@ -45,7 +45,6 @@ průchodkou je vidět výřezem zepředu i zezadu. Jeden pás:
 | Ohyb A          | 16,63 mm                                        | zadní↔přední: π/2 · odstup vrstev; karty i bankovky mají každé 1,3 mm vůle                  |
 | Ohyb B          | 9,92 mm                                         | přední↔vnitřní: π/2 · (kůže + karty + vůle) + 0,79 za ztenčení na 1 mm                      |
 | Ztenčení        | ohyb B + 3 mm na obě strany, na 1 mm z rubu     | šrafa na listu; protažení lícu v ohybu B klesne z ≈ 26 % na ≈ 16 %; ohyb A se neztenčuje    |
-| Perforace       | jen ohyb A: 3 řady Ø 1,5, rozteč 4              | jako předloha; ztenčený ohyb B se neperforuje (obojí zeslabuje)                             |
 | Pás             | 242,6 × 104,1 mm + jazyk nad ním                | tři panely + dva ohyby                                                                      |
 | Jazyk           | 33 mm široký, řez 44,5 mm                       | u levého konce pásu, konec R10; oblouk 19 + k druku 9,5 + přesah 11 + rezerva 5             |
 | Výřez na prst   | předek čtvrtkruh R34, zadek čtvrtelipsa 39 × 34 | na zadku přechází hrana jazyka plynule do výkusu; roh výřezu na předku zaoblený R2,5        |
@@ -99,11 +98,13 @@ shora je vidět jen schodek ≈ 2,6 mm na horní hraně.
 
 ## Nářadí a materiál navíc oproti prvnímu pouzdru
 
-- Bezpečnostní ztenčovač (skiver) na ohyb B; průbojník Ø 1,5 na perforace; vidlička 4 mm.
+- Bezpečnostní ztenčovač (skiver) na ohyb B (jen u kůže 1,5 mm); vidlička 4 mm.
 - Osazovač druku pro klobouček 12,5 mm, druk s dříkem na 2 × 1,5 mm, průbojník na dřík.
 - Průchodka Ø 5 (dvoudílná s podložkou), osazovač, průbojník 5 mm.
 - Kruhový výsečník 32 mm na okno (nebo `--window` podle toho, co seženeš).
 - Forma: překližka/HDPE ≥ 8 mm s otvorem Ø 44 (děrovka 44 mm), rovná přítlačná deska, 2–4 svěrky.
+  Co koupit, jak formu vyvrtat aku vrtačkou a otvory pro další mince:
+  [pouzdro-mince-forma.md](pouzdro-mince-forma.md).
 - Kontaktní lepidlo, kostěná rozhrnovačka (bone folder), sponky s podložkou, potravinová fólie.
 - Nit: voskovaná polyesterová 0,6–0,8 mm. Orientačně ≈ 4 × délka švu + konce: šev dna (64 mm skrz
   4,5 mm kůže) ≈ 0,6 m, šev kapsy (31 otvorů) ≈ 0,8 m. Ověřit na odřezku.
@@ -136,14 +137,16 @@ ohyb B 8,7, jazyk 43,1 mm). Tvarování za mokra nejdřív zkusit na A5 stejné 
 1. **Pás:** obkreslit na líc, vyříznout (výřez plynule). Kapsa se dělá ze samostatného kusu kůže
    1,2 mm ≥ 70 × 70 (forma Ø 44 počítá s 1,2 mm; i když je pás z 1,5 mm).
    **Ztenčení ohybu B:** šídlem propíchnout oba konce obou čar ohybu B skrz, na rubu je spojit,
-   odsadit 3 mm na obě strany a v tomto pásu ztenčit z rubu na 1 mm. Pak prosekat perforace ohybu
-   A a otvory dna na všech třech panelech (naplocho). Zaleštit hrany, které budou uvnitř (horní
+   odsadit 3 mm na obě strany a v tomto pásu ztenčit z rubu na 1 mm. Pak prosekat otvory dna na
+   všech třech panelech (naplocho). Zaleštit hrany, které budou uvnitř (horní
    hrana vnitřního panelu, oblouk výkusu, jazyk), a zapečetit rub vnitřního panelu.
 2. **Kapsa** (list kapsy): do odřezku orýsovat obrys a prosekat otvory švu, pak navlhčit, položit
    **lícem dolů** na formu, na rub minci, přiklopit deskou, stáhnout svěrkami, nechat zaschnout.
 3. Vyříznout obrys kapsy podle orýsování (forma vystředěná na křížek, aby důlek seděl s otvory) a vyseknout okno (kapsa lícem dolů na formě, pod dno
    špalík).
-4. Přišít kapsu na přední panel (35,55 mm pod horní hranou, 8,5 mm od boků), osadit patici druku
+4. Přišít kapsu na přední panel (35,55 mm pod horní hranou, 8,5 mm od boků): kapsu s už
+   proseknutými otvory přilepit na značky, vidličkami proseknout jejími otvory i přední panel
+   (naplocho na desce) a přišít. Osadit patici druku
    a **průchodku do vnitřního panelu – obojí naplocho, před složením**.
 5. **Ohyby:** pásma ohybů navlhčit, nejdřív vnitřní panel ohybem B za přední, pak zadní ohybem A
    přes všechno. Ohnout kolem skutečného obsahu (karty a bankovky zabalené v potravinové fólii),
@@ -210,3 +213,7 @@ doplnit ručně, do generátoru to nepatří.
   ze samostatné kůže 1,2 mm, forma vystředěná na křížek a obrys kapsy podle orýsování, rozměr
   hotového pouzdra s oblouky ohybů (≈ 82 × 104), opravené tvrzení o dvou- a pětitisícovce,
   schodek výkusu 2,6 mm, cena A4 250 Kč, položka „přesah bankovek“ v seznamu k zapsání.
+- v4.9 (2026-09-28): **perforace ohybů odstraněny** – na předloze nebyly doložené (poznámka
+  „jako předloha“ vznikla nejspíš záměnou s ozdobnými dírkami na bocích); ohyb A se jen ohne
+  a jeho ohyb se ověří na odřezku. Kapsa se přišije tak, že se přilepí na značky a jejími
+  otvory se vidličkami prosekne i přední panel. Listy pro kůži 1,2 mm (bez ztenčení).

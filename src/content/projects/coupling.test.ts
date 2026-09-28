@@ -7,7 +7,12 @@ import { describe, expect, it } from 'vitest';
  * pouzdro smí jmenovat, je registr projektů v `src/content/projects`.
  */
 const sources: Record<string, string> = import.meta.glob(
-  ['/src/app/**/*.{ts,tsx}', '/src/pages/**/*.{ts,tsx}', '/src/features/**/*.{ts,tsx}'],
+  [
+    '/src/app/**/*.{ts,tsx}',
+    '/src/pages/**/*.{ts,tsx}',
+    '/src/features/**/*.{ts,tsx}',
+    '/src/components/**/*.{ts,tsx}',
+  ],
   { query: '?raw', import: 'default', eager: true },
 );
 
@@ -15,7 +20,9 @@ describe('vazba aplikace na konkrétní projekt', () => {
   it('nic mimo registr projektů neimportuje pouzdro přímo', () => {
     const offenders = Object.entries(sources)
       .filter(([path]) => !path.includes('.test.'))
-      .filter(([, src]) => /from ['"]@\/content\/projects\/card-holder\//.test(src))
+      .filter(([, src]) =>
+        /from ['"][^'"]*content\/projects\/(card-holder|coin-card-holder)\//.test(src),
+      )
       .map(([path]) => path);
     expect(offenders, 'soubory, které jmenují pouzdro přímo').toEqual([]);
   });
@@ -23,7 +30,7 @@ describe('vazba aplikace na konkrétní projekt', () => {
   it('nic mimo registr nezná slug pouzdra jako literál', () => {
     const offenders = Object.entries(sources)
       .filter(([path]) => !path.includes('.test.'))
-      .filter(([, src]) => /['"]card-holder['"]/.test(src))
+      .filter(([, src]) => /['"](card-holder|coin-card-holder)['"]/.test(src))
       .map(([path]) => path);
     expect(offenders, 'soubory se zadrátovaným slugem').toEqual([]);
   });

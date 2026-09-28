@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/card';
 import { Kicker } from '@/components/ui/kicker';
 import { MediaSlot } from '@/components/lessons/media-slot';
 import { equipmentCatalog } from '@/content/equipment';
-import { difficultyLabels } from '@/content/projects';
+import { difficultyLabels, projects } from '@/content/projects';
 import { type EquipmentStatus } from '@/content/schema';
 import { useInventory, useUpdateInventoryItem } from '@/features/inventory/use-inventory';
 import { useActiveProject } from '@/features/projects/use-active-project';
@@ -115,7 +115,14 @@ export function OnboardingPage() {
                   Další projekty
                 </span>
                 <p className="text-body">
-                  Klíčenka a peněženka přijdou, až bude pouzdro na karty ověřené prvními uživateli.
+                  {projects.length > 1
+                    ? `${projects
+                        .filter((p) => p.slug !== project.slug)
+                        .map((p) => p.title)
+                        .join(
+                          ', ',
+                        )}: najdete na přehledu. Začněte tímto projektem, další na něj navazují.`
+                    : 'Další projekty přibudou, až bude první pouzdro ověřené prvními uživateli.'}
                 </p>
               </Card>
             </div>
