@@ -58,6 +58,13 @@ describe('obsah – validace schématem', () => {
     }
   });
 
+  it('příklad je v položce jednoznačný podle URL a varianty', () => {
+    for (const e of equipmentList) {
+      const keys = e.examples.map((x) => `${x.url} ${x.variant ?? ''}`);
+      expect(new Set(keys).size, e.slug).toBe(keys.length);
+    }
+  });
+
   it('příklady výrobků mají https odkaz, cenu a datum ověření', () => {
     const examples = equipmentList.flatMap((e) => e.examples.map((x) => ({ slug: e.slug, ...x })));
     expect(examples.length).toBeGreaterThan(10);

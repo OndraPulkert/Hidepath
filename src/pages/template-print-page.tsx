@@ -158,7 +158,9 @@ function PatternSheetsPrint({
           <legend className="mb-2 kicker">Co vytisknout</legend>
           {groups.map((group) => (
             <div key={group.variant ?? 'default'} className="flex flex-col gap-2">
-              <p className="text-meta font-medium">{group.variant ?? 'Výchozí střih'}</p>
+              <p className="text-meta font-medium">
+                {group.variant ?? definition.defaultVariantLabel ?? 'Výchozí střih'}
+              </p>
               {group.sheets.map((sheet) => (
                 <label key={sheet.id} className="flex min-h-touch items-start gap-3 text-body">
                   <input

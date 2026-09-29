@@ -10,7 +10,7 @@
 <path d="M17 40 L69 40" stroke="#8fae97" stroke-width="2.4" stroke-linecap="round"/>
 <path d="M17 48 L69 48" stroke="#3f6b4f" stroke-width="2.4" stroke-linecap="round"/>
 <path d="M69 40 A4 4 0 0 1 69 48" fill="none" stroke="#2f5240" stroke-width="2.4"/>
-<text x="68" y="38" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="end" fill="#7a7a7a">vnitřní (průchodka)</text>
+<text x="68" y="38" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="end" fill="#7a7a7a">vnitřní</text>
 <text x="30" y="45" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#8a7a55">karty</text>
 <text x="43" y="52.5" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#7a7a7a">přední (líc ven)</text>
 <path d="M43 54 L43 58 M41.5 56.5 L43 58 L44.5 56.5" stroke="#a2471f" stroke-width="0.5" fill="none"/>
@@ -24,7 +24,7 @@
 <path d="M106 40 L147 40" stroke="#8fae97" stroke-width="2.4" stroke-linecap="round"/>
 <path d="M95 48 L147 48" stroke="#2f5240" stroke-width="2.4" stroke-linecap="round"/>
 <path d="M147 40 A4 4 0 0 1 147 48" fill="none" stroke="#2f5240" stroke-width="2.4"/>
-<text x="146" y="38" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="end" fill="#7a7a7a">vnitřní (průchodka)</text>
+<text x="146" y="38" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="end" fill="#7a7a7a">vnitřní</text>
 <text x="108" y="45" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#8a7a55">karty</text>
 <text x="121" y="52.5" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#7a7a7a">přední (líc ven)</text>
 <path d="M121 54 L121 58 M119.5 56.5 L121 58 L122.5 56.5" stroke="#a2471f" stroke-width="0.5" fill="none"/>

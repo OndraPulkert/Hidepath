@@ -7,6 +7,7 @@ import {
   buildPrenosZnacekSvg,
   buildProsekavaniDnaSvg,
 } from './coin-card-holder-illustrations.ts';
+import { DEFAULT_COIN_CARD_HOLDER } from '../src/lib/geometry/coin-card-holder.ts';
 
 describe('ilustrace pouzdra s mincí – klíčová fakta', () => {
   it('prosekávání dna: přední panel z líce, zadní a vnitřní z rubu', () => {
@@ -42,13 +43,18 @@ describe('ilustrace pouzdra s mincí – klíčová fakta', () => {
     expect(svg).toContain('SPOJ 2');
   });
 
-  it('přenos značek: popisuje konce čar ohybů, rohy kapsy, patici, průchodku a tečky dna', () => {
+  it('přenos značek: popisuje konce čar ohybů, rohy kapsy, patici a tečky dna; průchodku jen u varianty', () => {
     const svg = buildPrenosZnacekSvg();
     expect(svg).toContain('konce čar ohybů');
     expect(svg).toContain('rohy kapsy');
     expect(svg).toContain('střed patice');
-    expect(svg).toContain('střed průchodky');
     expect(svg).toContain('tečky dna');
+    // Od v4.11 je průchodka volitelná: výchozí ilustrace ji nemá, varianta ano.
+    expect(svg).not.toContain('průchod');
+    expect(buildPrenosZnacekSvg({ ...DEFAULT_COIN_CARD_HOLDER, grommet: true })).toContain(
+      'střed průchodky',
+    );
+    expect(buildPoradiOhybuSvg()).not.toContain('průchod');
   });
 
   it('všech pět ilustrací má viewBox 160 × 100 mm', () => {

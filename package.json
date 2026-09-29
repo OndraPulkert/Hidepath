@@ -24,6 +24,8 @@
     "pattern:belt-end": "tsx scripts/belt-buckle-end.ts",
     "pattern:coin-holder": "tsx scripts/coin-card-holder.ts",
     "pattern:coin-holder-illustrations": "tsx scripts/coin-card-holder-illustrations.ts",
+    "pattern:wallet": "tsx scripts/minimal-wallet.ts",
+    "pattern:wallet-lid": "tsx scripts/lid-wallet.ts",
     "test:db": "bash scripts/test-db.sh",
     "db:start": "supabase start -x imgproxy,edge-runtime,logflare,vector,supavisor,realtime,storage-api",
     "db:reset": "supabase db reset",

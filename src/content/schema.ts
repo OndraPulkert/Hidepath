@@ -74,6 +74,11 @@ export const productExampleSchema = z.object({
   shop: z.string().min(1),
   url: z.url().regex(/^https:\/\//, 'jen https'),
   priceCents: z.number().int().nonnegative(),
+  /**
+   * Varianta nabídky (velikost přířezu, zrnitost…), když katalog pod stejnou URL uvádí víc cen.
+   * Spolu s `url` jednoznačně určuje příklad, na který odkazuje nákupní plán projektu.
+   */
+  variant: z.string().min(1).optional(),
   /** Např. „za kus, potřebujete 4“, „cena za 100 g“. */
   priceNote: z.string().min(1).optional(),
   /** Co o výrobku říct začátečníkovi (proč právě tento). */
@@ -235,7 +240,7 @@ export const patternSheetSchema = z.object({
   orientation: z.enum(['portrait', 'landscape']),
   widthMm: z.number().positive(),
   heightMm: z.number().positive(),
-  /** Např. „mince 27,5 mm (50 Kč)“; bez varianty = výchozí střih. */
+  /** Např. „mince 40 mm (předloha)“; bez varianty = výchozí střih. */
   variant: z.string().min(1).optional(),
 });
 export type PatternSheet = z.infer<typeof patternSheetSchema>;
@@ -246,8 +251,37 @@ export const patternSheetsDefinitionSchema = z.object({
   printNote: z.string().min(1),
   /** Jak si vygenerovat další varianty (příkaz generátoru). */
   variantsNote: z.string().min(1).optional(),
+  /** Nadpis skupiny listů bez varianty na tiskové stránce (např. pro jakou minci a kůži); jinak „Výchozí střih“. */
+  defaultVariantLabel: z.string().min(1).optional(),
 });
 export type PatternSheetsDefinition = z.infer<typeof patternSheetsDefinitionSchema>;
+
+/**
+ * Řádek nákupního plánu: kolik kusů kterého ověřeného příkladu z katalogu koupit. Cenu, obchod
+ * a dostupnost plán neopisuje – bere je z příkladu (`url` + případně `variant`), aby se ceny
+ * nevedly na dvou místech.
+ */
+export const shoppingPlanLineSchema = z.object({
+  equipmentSlug: slug,
+  url: z.url().regex(/^https:\/\//, 'jen https'),
+  variant: z.string().min(1).optional(),
+  quantity: z.number().int().positive(),
+  /** Na co se kupuje, např. „pás těla 240,35 × 104,1 mm“. */
+  purpose: z.string().min(1).optional(),
+});
+export type ShoppingPlanLine = z.infer<typeof shoppingPlanLineSchema>;
+
+/**
+ * „Co koupit“ pro jednu konkrétní sestavu projektu (mince, tloušťka kůže, kování). Každá
+ * nezbytná a doporučená položka projektu je buď v `lines`, nebo v `skipped` s důvodem.
+ */
+export const shoppingPlanSchema = z.object({
+  /** Pro jakou sestavu plán platí. */
+  title: z.string().min(1),
+  lines: z.array(shoppingPlanLineSchema).min(1),
+  skipped: z.array(z.object({ equipmentSlug: slug, reason: z.string().min(1) })),
+});
+export type ShoppingPlan = z.infer<typeof shoppingPlanSchema>;
 
 export const projectDefinitionSchema = z
   .object({
@@ -267,6 +301,8 @@ export const projectDefinitionSchema = z
     template: templateDefinitionSchema.optional(),
     /** Listy střihu z generátoru (SVG 1:1). */
     patternSheets: patternSheetsDefinitionSchema.optional(),
+    /** Nákupní plán „Co koupit“ (volitelný); ceny a odkazy bere z příkladů v katalogu. */
+    shoppingPlan: shoppingPlanSchema.optional(),
     media: z.array(mediaSlotSchema),
     contentVersion: z.number().int().positive(),
     reviewStatus: reviewStatusSchema,
@@ -298,6 +334,41 @@ export const projectDefinitionSchema = z
     }
     const phaseSlugs = new Set(project.phases.map((p) => p.slug));
     const equipmentSlugs = new Set(project.equipment.map((e) => e.equipmentSlug));
+    if (project.shoppingPlan) {
+      const plan = project.shoppingPlan;
+      const planned = new Set(plan.lines.map((l) => l.equipmentSlug));
+      const skipped = new Set(plan.skipped.map((s) => s.equipmentSlug));
+      for (const s of [...planned, ...skipped]) {
+        if (!equipmentSlugs.has(s)) {
+          ctx.addIssue({
+            code: 'custom',
+            message: `Projekt ${project.slug}: nákupní plán zmiňuje ${s}, které v projektu není`,
+          });
+        }
+        if (planned.has(s) && skipped.has(s)) {
+          ctx.addIssue({
+            code: 'custom',
+            message: `Projekt ${project.slug}: ${s} je v plánu zároveň ke koupi i vynechané`,
+          });
+        }
+      }
+      for (const req of project.equipment) {
+        if (req.priority === 'later') continue;
+        if (!planned.has(req.equipmentSlug) && !skipped.has(req.equipmentSlug)) {
+          ctx.addIssue({
+            code: 'custom',
+            message: `Projekt ${project.slug}: nákupní plán neříká nic o ${req.equipmentSlug}`,
+          });
+        }
+      }
+      const keys = plan.lines.map((l) => `${l.equipmentSlug} ${l.url} ${l.variant ?? ''}`);
+      if (new Set(keys).size !== keys.length) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `Projekt ${project.slug}: duplicitní řádek plánu`,
+        });
+      }
+    }
     const sortedOrders = [...project.lessons].map((l) => l.order).sort((a, b) => a - b);
     sortedOrders.forEach((order, index) => {
       if (order !== index + 1) {

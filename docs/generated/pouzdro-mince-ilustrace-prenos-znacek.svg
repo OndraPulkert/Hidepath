@@ -16,12 +16,11 @@
 <path d="M95.018 72.653 L97.818 72.653 M96.418 71.253 L96.418 74.053" stroke="#a2471f" stroke-width="0.4"/>
 <path d="M100.416 16 L103.216 16 M101.816 14.6 L101.816 17.4" stroke="#a2471f" stroke-width="0.4"/>
 <path d="M100.416 72.653 L103.216 72.653 M101.816 71.253 L101.816 74.053" stroke="#a2471f" stroke-width="0.4"/>
-<path d="M60.46 35.347 L63.26 35.347 M61.86 33.947 L61.86 36.747" stroke="#a2471f" stroke-width="0.4"/>
-<path d="M90.392 35.347 L93.192 35.347 M91.792 33.947 L91.792 36.747" stroke="#a2471f" stroke-width="0.4"/>
-<path d="M60.46 65.007 L63.26 65.007 M61.86 63.607 L61.86 66.407" stroke="#a2471f" stroke-width="0.4"/>
-<path d="M90.392 65.007 L93.192 65.007 M91.792 63.607 L91.792 66.407" stroke="#a2471f" stroke-width="0.4"/>
+<path d="M63.861 38.748 L66.661 38.748 M65.261 37.348 L65.261 40.148" stroke="#a2471f" stroke-width="0.4"/>
+<path d="M86.99 38.748 L89.79 38.748 M88.39 37.348 L88.39 40.148" stroke="#a2471f" stroke-width="0.4"/>
+<path d="M63.861 61.605 L66.661 61.605 M65.261 60.205 L65.261 63.005" stroke="#a2471f" stroke-width="0.4"/>
+<path d="M86.99 61.605 L89.79 61.605 M88.39 60.205 L88.39 63.005" stroke="#a2471f" stroke-width="0.4"/>
 <path d="M86.038 21.17 L88.838 21.17 M87.438 19.77 L87.438 22.57" stroke="#a2471f" stroke-width="0.4"/>
-<path d="M134.702 20.898 L137.502 20.898 M136.102 19.498 L136.102 22.298" stroke="#a2471f" stroke-width="0.4"/>
 <path d="M9.505 70.748 L12.305 70.748 M10.905 69.348 L10.905 72.148" stroke="#a2471f" stroke-width="0.4"/>
 <path d="M18.348 70.748 L21.148 70.748 M19.748 69.348 L19.748 72.148" stroke="#a2471f" stroke-width="0.4"/>
 <path d="M27.192 70.748 L29.992 70.748 M28.592 69.348 L28.592 72.148" stroke="#a2471f" stroke-width="0.4"/>
@@ -39,12 +38,10 @@
 <path d="M137.695 70.748 L140.495 70.748 M139.095 69.348 L139.095 72.148" stroke="#a2471f" stroke-width="0.4"/>
 <path d="M57.234 16 L55.234 12" stroke="#7a7a7a" stroke-width="0.3" fill="none"/>
 <text x="53.734" y="13" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="end" fill="#2b2b2b">konce čar ohybů</text>
-<path d="M61.86 35.347 L59.86 32.347" stroke="#7a7a7a" stroke-width="0.3" fill="none"/>
-<text x="58.36" y="33.347" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="end" fill="#2b2b2b">rohy kapsy</text>
-<path d="M87.438 21.17 L89.438 17.17" stroke="#7a7a7a" stroke-width="0.3" fill="none"/>
-<text x="90.938" y="18.17" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="start" fill="#2b2b2b">střed patice</text>
-<path d="M136.102 20.898 L133.102 15.898" stroke="#7a7a7a" stroke-width="0.3" fill="none"/>
-<text x="131.602" y="16.898" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="end" fill="#2b2b2b">střed průchodky</text>
+<path d="M65.261 38.748 L63.261 35.748" stroke="#7a7a7a" stroke-width="0.3" fill="none"/>
+<text x="61.761" y="36.748" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="end" fill="#2b2b2b">rohy kapsy</text>
+<path d="M87.438 21.17 L84.438 18.17" stroke="#7a7a7a" stroke-width="0.3" fill="none"/>
+<text x="82.938" y="19.17" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="end" fill="#2b2b2b">střed patice</text>
 <text x="80" y="88" font-family="Helvetica, Arial, sans-serif" font-size="3.2" text-anchor="middle" fill="#2b2b2b">tečky dna (propíchnout skrz)</text>
 <text x="80" y="93" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#7a7a7a">u zadního a vnitřního panelu se otvory prosekávají z rubu</text>
 <text x="80" y="98" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#7a7a7a">ZADNÍ · OHYB A · PŘEDNÍ · OHYB B · VNITŘNÍ</text>

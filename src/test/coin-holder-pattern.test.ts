@@ -134,12 +134,10 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
     expect(sheet).toContain(`M${fmt(X(0))} ${fmt(trimY)} L${fmt(X(L.tabX1Mm))} ${fmt(trimY)}`);
   });
 
-  it('průchodka je ve vnitřním panelu a po složení padne do výřezu', () => {
-    const g = circles(sheet ?? '').find((c) => near(c.r, spec.grommetHoleMm / 2));
-    expect(g).toBeDefined();
-    expect(g!.cx).toBeCloseTo(X(L.grommetXMm!), 2);
-    expect(g!.cy).toBeCloseTo(Y(L.grommetYMm!), 2);
-    expect(L.grommetXMm!).toBeGreaterThan(L.frontX1Mm);
+  it('výchozí list je bez průchodky (od v4.11 volitelná, --grommet)', () => {
+    expect(L.grommetXMm).toBeNull();
+    expect(circles(sheet ?? '').some((c) => near(c.r, spec.grommetHoleMm / 2))).toBe(false);
+    expect(sheet).not.toContain('průchodka');
   });
 
   it('šev dna: čára přes celý pás (uvnitř rohů), tečky na předním panelu s roztečí z modelu', () => {

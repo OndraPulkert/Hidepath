@@ -29,7 +29,7 @@ export function ProductExamples({ examples }: { examples: readonly ProductExampl
         {sorted.map((e) => {
           const label = availabilityLabel[e.availability];
           return (
-            <li key={e.url}>
+            <li key={`${e.url} ${e.variant ?? ''}`}>
               <Card className="flex flex-col gap-2 transition-colors hover:border-line-strong">
                 <a
                   href={e.url}
@@ -37,7 +37,10 @@ export function ProductExamples({ examples }: { examples: readonly ProductExampl
                   rel="noreferrer noopener"
                   className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-leather no-underline hover:text-leather"
                 >
-                  <span className="text-body font-semibold">{typo(e.title)}</span>
+                  <span className="text-body font-semibold">
+                    {typo(e.title)}
+                    {e.variant ? ` – ${e.variant}` : ''}
+                  </span>
                   <span className="text-body font-medium text-leather">
                     {formatCzk(e.priceCents)}
                     {e.priceNote ? (

@@ -5,13 +5,20 @@ import { type EquipmentReadiness } from '@/features/inventory/readiness';
 import { type RemainingBudget } from '@/features/shopping/budget';
 import { formatCzk, formatPercent, pluralizeCs } from '@/lib/utils/format';
 
-/** Souhrn nad nákupním seznamem: připravenost nezbytného, počet, očekávané náklady, vysvětlení. */
+/**
+ * Souhrn nad nákupním seznamem: připravenost nezbytného, počet, očekávané náklady, vysvětlení.
+ * Má-li projekt nákupní plán („Co koupit“), je rozpočet jen orientační ze všech položek seznamu
+ * (středy cenových rozsahů, i položky, které plán vynechává) – `hasShoppingPlan` to v UI řekne,
+ * aby se dvě různé částky na stránce nepletly.
+ */
 export function ReadinessSummary({
   readiness,
   budget,
+  hasShoppingPlan = false,
 }: {
   readiness: EquipmentReadiness;
   budget: RemainingBudget;
+  hasShoppingPlan?: boolean;
 }) {
   const req = readiness.byPriority.required;
   const explanation = readiness.requiredReady
@@ -42,7 +49,7 @@ export function ReadinessSummary({
         <p className="mt-1.5 text-meta text-ink-2">bez nich nelze začít šít</p>
       </div>
       <div>
-        <Kicker>Očekávané náklady</Kicker>
+        <Kicker>{hasShoppingPlan ? 'Orientační rozpočet' : 'Očekávané náklady'}</Kicker>
         <p className="mt-1 font-serif text-stat font-medium">{formatCzk(budget.totalCents)}</p>
         <p className="mt-1.5 text-meta text-ink-2">
           nezbytné {formatCzk(budget.requiredCents)} · doporučené{' '}
@@ -53,6 +60,12 @@ export function ReadinessSummary({
             ? ` · bez ${pluralizeCs(budget.unpricedCount, ['položky', 'položek', 'položek'])} s neověřenou cenou`
             : ''}
         </p>
+        {hasShoppingPlan ? (
+          <p className="mt-1.5 text-meta text-ink-2">
+            Odhad ze středů cenových rozsahů všech položek seznamu, včetně těch, které plán
+            tentokrát vynechává. Kolik zaplatíte za doporučenou sestavu, ukazuje Co koupit výše.
+          </p>
+        ) : null}
       </div>
       <p className="self-center text-body text-ink-2">{explanation}</p>
     </Card>

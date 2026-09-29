@@ -34,9 +34,11 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     // Šev dna je pod kartou, karta sedí pod horní hranou o přesah + půl tloušťky obsahu.
     expect(L.bottomSeamYMm).toBeCloseTo(L.panelHeightMm - spec.stitchOffsetMm, 9);
     expect(L.cardBelowRimMm).toBe(spec.topOverCardMm);
-    // Kování je nad kartami: dřík druku (≈ Ø 5) i příruba průchodky končí nad horní hranou karet.
-    // Patice 12,5 mm má na rubu přírubu ≈ Ø 10.
+    // Kování je nad kartami: model počítá s přírubou patice ≈ Ø 10; skutečná smí mít nejvýš
+    // Ø 11 mm (po nákupu změřit), jinak by tlačila na karty. Totéž platí pro volitelnou průchodku.
     expect(spec.snapFromTopMm + 5).toBeLessThanOrEqual(L.cardBelowRimMm);
+    expect(L.snapFlangeMaxMm).toBe(11);
+    expect(spec.snapFromTopMm + L.snapFlangeMaxMm / 2).toBeLessThanOrEqual(L.cardBelowRimMm);
     expect(spec.grommetFromEdgeMm + spec.grommetHoleMm / 2 + 2.5).toBeLessThanOrEqual(
       L.cardBelowRimMm,
     );
@@ -117,9 +119,17 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     expect(L.cardExposedMm).toBeGreaterThanOrEqual(15);
   });
 
-  it('průchodka je ve vnitřním panelu naproti jazyku a celá se vejde do výřezu', () => {
-    expect(L.grommetXMm).toBeCloseTo(L.innerX1Mm! - spec.grommetFromEdgeMm, 9);
-    expect(L.grommetYMm).toBeCloseTo(spec.grommetFromEdgeMm, 9);
+  it('průchodka je od v4.11 volitelná: výchozí bez ní, s ní ve vnitřním panelu a celá ve výřezu', () => {
+    expect(spec.grommet).toBe(false);
+    expect(L.grommetXMm).toBeNull();
+    expect(L.grommetYMm).toBeNull();
+    const withGrommet = { ...spec, grommet: true };
+    expect(checkCoinCardHolder(withGrommet)).toEqual([]);
+    const G = coinCardHolderLayout(withGrommet);
+    // Průchodka nemění nic jiného než svou polohu.
+    expect({ ...G, grommetXMm: null, grommetYMm: null }).toEqual(L);
+    expect(G.grommetXMm).toBeCloseTo(L.innerX1Mm! - spec.grommetFromEdgeMm, 9);
+    expect(G.grommetYMm).toBeCloseTo(spec.grommetFromEdgeMm, 9);
     // Po složení leží roh vnitřního panelu přesně v rohu s výřezem.
     const foldBCentre = L.frontX1Mm + L.foldFrontInnerMm / 2;
     expect(2 * foldBCentre - L.innerX1Mm!).toBeCloseTo(L.frontX0Mm, 6);
@@ -173,7 +183,64 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
       );
     }
     expect(NAMED_COINS['50kc']).toBe(27.5);
-    expect(NAMED_COINS.decision).toBe(spec.coinDiameterMm);
+    expect(NAMED_COINS.decision).toBe(40);
+  });
+
+  it('výchozí mince je 50 Kč: okno Ø 20 (výsečník), prstenec 3,75, otvor formy 31,5, kapsa 42,5 × 42', () => {
+    expect(spec.coinDiameterMm).toBe(NAMED_COINS['50kc']);
+    expect(spec.minCoinRingMm).toBe(3.75);
+    expect(L.windowDiameterMm).toBe(20);
+    expect(L.coinRingMm).toBe(3.75);
+    // Okno o 1 mm větší by prstenec zúžilo pod minimum – kontrola to hlásí.
+    expect(checkCoinCardHolder({ ...spec, windowDiameterMm: 21 }).join(' ')).toMatch(
+      /Prstenec kolem okna je 3,25 mm, minimum 3,75 mm/,
+    );
+    expect(L.formHoleDiameterMm).toBe(31.5);
+    expect(L.pocketWidthMm).toBe(42.5);
+    expect(L.pocketHeightMm).toBe(42);
+    expect(L.pocketXMm).toBe(14.75);
+    expect(L.pocketYMm).toBe(41.8);
+    // Varianta 40 mm (mince z předlohy): okno Ø 32 (prstenec 4), otvor formy 44.
+    const big = coinCardHolderLayout({ ...spec, coinDiameterMm: 40 });
+    expect(big.windowDiameterMm).toBe(32);
+    expect(big.coinRingMm).toBe(4);
+    expect(big.formHoleDiameterMm).toBe(44);
+  });
+
+  it('klobouček 12 mm (Prym Anorak, výchozí), 13,5 i 15 mm projde kontrolami a rozložení nezmění', () => {
+    expect(spec.snapDiameterMm).toBe(12);
+    for (const coinDiameterMm of [27.5, 40]) {
+      for (const bodyThicknessMm of [1.5, 1.2]) {
+        const base = {
+          ...spec,
+          coinDiameterMm,
+          bodyThicknessMm,
+          foldSkiveThicknessMm: foldSkiveFor(bodyThicknessMm),
+        };
+        for (const snapDiameterMm of [12, 13.5, 15]) {
+          const s = { ...base, snapDiameterMm };
+          expect(checkCoinCardHolder(s)).toEqual([]);
+          expect(coinCardHolderLayout(s)).toEqual(coinCardHolderLayout(base));
+        }
+      }
+    }
+    // Odstupy kloboučku: od horní hrany předku (min. snapClearance 2), od boků jazyka a od konce
+    // zkráceného jazyka (11 mm za středem). 15 mm nechá k horní hraně jen minimum 2 mm (těsné).
+    for (const [d, top, side, end] of [
+      [12, 3.5, 10.5, 5],
+      [13.5, 2.75, 9.75, 4.25],
+      [15, 2, 9, 3.5],
+    ] as const) {
+      expect(spec.snapFromTopMm - d / 2, `${d}`).toBeCloseTo(top, 9);
+      expect((spec.tabWidthMm - d) / 2, `${d}`).toBeCloseTo(side, 9);
+      expect(spec.tabBeyondSnapMm - d / 2, `${d}`).toBeCloseTo(end, 9);
+    }
+    // Klobouček 16 mm už k horní hraně nenechá ani 2 mm.
+    expect(checkCoinCardHolder({ ...spec, snapDiameterMm: 16 }).join(' ')).toMatch(
+      /zasahuje k horní hraně/,
+    );
+    // Pásmo kapsy určuje konec jazyka s rezervou, ne klobouček.
+    expect(L.pocketBandTopMm).toBe(L.tabEndOnFrontMm + spec.snapClearanceMm);
   });
 
   it('pás se vejde na A4 na šířku nad kalibrační úsečku, kapsa na A4 na výšku', () => {
@@ -235,7 +302,9 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     const slack = limit - L.pocketBandTopMm - L.pocketHeightMm;
     expect(L.pocketYMm).toBeCloseTo(L.pocketBandTopMm + slack / 2, 1);
     // Hlášky používají desetinnou čárku.
-    expect(checkCoinCardHolder({ ...spec, windowDiameterMm: 33 }).join(' ')).toMatch(/3,5 mm/);
+    expect(
+      checkCoinCardHolder({ ...spec, coinDiameterMm: 40, windowDiameterMm: 33 }).join(' '),
+    ).toMatch(/3,5 mm/);
   });
 
   it('kontroly odhalí kolize a špatné parametry', () => {
@@ -247,12 +316,14 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
       /nevejdou vedle sebe/,
     );
     expect(checkCoinCardHolder({ ...spec, topOverCardMm: 10 }).join(' ')).toMatch(/Dřík druku/);
-    expect(checkCoinCardHolder({ ...spec, topOverCardMm: 10 }).join(' ')).toMatch(
+    expect(checkCoinCardHolder({ ...spec, grommet: true, topOverCardMm: 10 }).join(' ')).toMatch(
       /Příruba průchodky/,
     );
-    expect(checkCoinCardHolder({ ...spec, grommetFromEdgeMm: 20 }).join(' ')).toMatch(
-      /nebyla celá vidět/,
-    );
+    expect(
+      checkCoinCardHolder({ ...spec, grommet: true, grommetFromEdgeMm: 20 }).join(' '),
+    ).toMatch(/nebyla celá vidět/);
+    // Bez průchodky se její kontroly nevolají.
+    expect(checkCoinCardHolder({ ...spec, grommetFromEdgeMm: 20 })).toEqual([]);
     expect(checkCoinCardHolder({ ...spec, coinDiameterMm: 50 }).length).toBeGreaterThan(0);
     expect(checkCoinCardHolder({ ...spec, windowDiameterMm: 60 }).join(' ')).toMatch(
       /menší než mince/,

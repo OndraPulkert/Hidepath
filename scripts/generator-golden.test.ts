@@ -36,6 +36,13 @@ import {
   buildProsekavaniDnaSvg,
 } from './coin-card-holder-illustrations.ts';
 import {
+  buildLidBackSvg,
+  buildLidJigsSvg,
+  buildLidPartsSvg,
+  buildLidSheetSvg,
+} from './lid-wallet.ts';
+import { buildWalletBackSvg, buildWalletJigsSvg, buildWalletSheetSvg } from './minimal-wallet.ts';
+import {
   DEFAULT_COIN_CARD_HOLDER,
   foldSkiveFor,
   NAMED_COINS,
@@ -84,27 +91,27 @@ describe('zapsané soubory odpovídají generátoru', () => {
     ['pouzdro-mince-kapsa.svg', () => buildCoinHolderPocketSvg()],
     ['pouzdro-mince-papirovy-model.svg', () => buildCoinHolderPaperModelSvg()],
     [
-      'pouzdro-mince-papirovy-model-mince-27-5mm.svg',
+      'pouzdro-mince-papirovy-model-mince-40mm.svg',
       () =>
         buildCoinHolderPaperModelSvg({
           ...DEFAULT_COIN_CARD_HOLDER,
-          coinDiameterMm: NAMED_COINS['50kc'],
+          coinDiameterMm: NAMED_COINS.decision,
         }),
     ],
     [
-      'pouzdro-mince-kapsa-mince-27-5mm.svg',
+      'pouzdro-mince-kapsa-mince-40mm.svg',
       () =>
         buildCoinHolderPocketSvg({
           ...DEFAULT_COIN_CARD_HOLDER,
-          coinDiameterMm: NAMED_COINS['50kc'],
+          coinDiameterMm: NAMED_COINS.decision,
         }),
     ],
     [
-      'pouzdro-mince-sablona-mince-27-5mm.svg',
+      'pouzdro-mince-sablona-mince-40mm.svg',
       () =>
         buildCoinHolderSheetSvg({
           ...DEFAULT_COIN_CARD_HOLDER,
-          coinDiameterMm: NAMED_COINS['50kc'],
+          coinDiameterMm: NAMED_COINS.decision,
         }),
     ],
     // Kůže 1,2 mm (Verde): bez ztenčení, jak ho nastaví --thickness 1.2.
@@ -118,21 +125,21 @@ describe('zapsané soubory odpovídají generátoru', () => {
         }),
     ],
     [
-      'pouzdro-mince-sablona-mince-27-5mm-kuze-1-2mm.svg',
+      'pouzdro-mince-sablona-mince-40mm-kuze-1-2mm.svg',
       () =>
         buildCoinHolderSheetSvg({
           ...DEFAULT_COIN_CARD_HOLDER,
-          coinDiameterMm: NAMED_COINS['50kc'],
+          coinDiameterMm: NAMED_COINS.decision,
           bodyThicknessMm: 1.2,
           foldSkiveThicknessMm: foldSkiveFor(1.2),
         }),
     ],
     [
-      'pouzdro-mince-papirovy-model-mince-27-5mm-kuze-1-2mm.svg',
+      'pouzdro-mince-papirovy-model-mince-40mm-kuze-1-2mm.svg',
       () =>
         buildCoinHolderPaperModelSvg({
           ...DEFAULT_COIN_CARD_HOLDER,
-          coinDiameterMm: NAMED_COINS['50kc'],
+          coinDiameterMm: NAMED_COINS.decision,
           bodyThicknessMm: 1.2,
           foldSkiveThicknessMm: foldSkiveFor(1.2),
         }),
@@ -151,6 +158,13 @@ describe('zapsané soubory odpovídají generátoru', () => {
     ['pouzdro-mince-ilustrace-druk.svg', () => buildDrukSvg()],
     ['pouzdro-mince-ilustrace-lepeni-dna.svg', () => buildLepeniDnaSvg()],
     ['pouzdro-mince-ilustrace-prenos-znacek.svg', () => buildPrenosZnacekSvg()],
+    ['penezenka-sablona.svg', () => buildWalletSheetSvg()],
+    ['penezenka-rub.svg', () => buildWalletBackSvg()],
+    ['penezenka-pripravky.svg', () => buildWalletJigsSvg()],
+    ['penezenka-vicko-sablona.svg', () => buildLidSheetSvg()],
+    ['penezenka-vicko-rub.svg', () => buildLidBackSvg()],
+    ['penezenka-vicko-dily.svg', () => buildLidPartsSvg()],
+    ['penezenka-vicko-pripravky.svg', () => buildLidJigsSvg()],
   ];
 
   for (const [name, build] of cases) {
@@ -159,7 +173,7 @@ describe('zapsané soubory odpovídají generátoru', () => {
       expect(onDisk, `docs/generated/${name} chybí`).toBeDefined();
       expect(
         build(),
-        `${name} se rozešel s generátorem – spusť ${name.startsWith('pouzdro-mince-ilustrace') ? 'pnpm pattern:coin-holder-illustrations' : name.startsWith('pouzdro-mince') ? `pnpm pattern:coin-holder${`${name.includes('27-5') ? ' --coin 50kc' : ''}${name.includes('kuze-1-2') ? ' --thickness 1.2' : ''}`}` : 'pnpm pattern:belt-end --multi'}`,
+        `${name} se rozešel s generátorem – spusť ${name.startsWith('penezenka-vicko') ? 'pnpm pattern:wallet-lid' : name.startsWith('penezenka') ? 'pnpm pattern:wallet' : name.startsWith('pouzdro-mince-ilustrace') ? 'pnpm pattern:coin-holder-illustrations' : name.startsWith('pouzdro-mince') ? `pnpm pattern:coin-holder${`${name.includes('mince-40mm') ? ' --coin 40' : ''}${name.includes('kuze-1-2') ? ' --thickness 1.2' : ''}`}` : 'pnpm pattern:belt-end --multi'}`,
       ).toBe(onDisk);
     });
   }

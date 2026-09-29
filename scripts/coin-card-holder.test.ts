@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   DEFAULT_COIN_CARD_HOLDER,
+  GROMMET_FLANGE_MM,
   NAMED_COINS,
   coinCardHolderLayout,
 } from '../src/lib/geometry/coin-card-holder.ts';
@@ -21,8 +22,15 @@ describe('generátor pouzdra s mincí – varianty', () => {
 
   it('název souboru odliší minci, okno i stranu jazyka', () => {
     expect(coinHolderFileStem(spec)).toBe('pouzdro-mince-sablona');
+    // Výchozí mince je 50 Kč (bez přípony), mince 40 mm z předlohy dostane příponu.
     expect(coinHolderFileStem({ ...spec, coinDiameterMm: NAMED_COINS['50kc'] })).toBe(
-      'pouzdro-mince-sablona-mince-27-5mm',
+      'pouzdro-mince-sablona',
+    );
+    expect(coinHolderFileStem({ ...spec, coinDiameterMm: NAMED_COINS.decision })).toBe(
+      'pouzdro-mince-sablona-mince-40mm',
+    );
+    expect(coinHolderFileStem({ ...spec, coinDiameterMm: 40, bodyThicknessMm: 1.2 })).toBe(
+      'pouzdro-mince-sablona-mince-40mm-kuze-1-2mm',
     );
     expect(coinHolderFileStem({ ...spec, windowDiameterMm: 30 })).toBe(
       'pouzdro-mince-sablona-okno-30mm',
@@ -35,10 +43,59 @@ describe('generátor pouzdra s mincí – varianty', () => {
     expect(coinHolderFileStem({ ...spec, bodyThicknessMm: 1.2 })).toBe(
       'pouzdro-mince-sablona-kuze-1-2mm',
     );
+    // Volitelná průchodka (od v4.11 není ve výchozím střihu) jde do vlastního souboru.
+    expect(coinHolderFileStem({ ...spec, grommet: true })).toBe('pouzdro-mince-sablona-pruchodka');
+  });
+
+  it('výchozí listy jsou bez průchodky, --grommet ji vrátí se stejnou geometrií', () => {
+    const G = { ...spec, grommet: true };
+    const L = coinCardHolderLayout(G);
+    const X = (x: number): string => r3(10 + x);
+    const Y = (y: number): string => r3(10 + L.tabLengthMm + y);
+    const hole = `<circle cx="${X(L.grommetXMm!)}" cy="${Y(L.grommetYMm!)}" r="2.5"`;
+    expect(buildCoinHolderSheetSvg(G)).toContain(hole);
+    expect(buildCoinHolderSheetSvg(G)).toContain('průchodka Ø 5');
+    expect(buildCoinHolderPaperModelSvg(G)).toContain('průchodka – propíchnout');
+    expect(buildCoinHolderSheetSvg(spec)).not.toContain(hole);
+    for (const svg of [
+      buildCoinHolderSheetSvg(spec),
+      buildCoinHolderPaperModelSvg(spec),
+      buildCoinHolderProcessSvg(spec),
+    ]) {
+      expect(svg).not.toMatch(/průchod/i);
+    }
+    // Virtuální složení listu s průchodkou: vnitřní panel se otočí kolem středu ohybu B, kroužek
+    // (otvor + příruba) musí padnout do výřezu R na předku s rezervou 3 mm a nad karty.
+    const sheet = buildCoinHolderSheetSvg(G);
+    const folds = [
+      ...sheet.matchAll(
+        /<path d="M([\d.]+) ([\d.]+) L\1 ([\d.]+)" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/g,
+      ),
+    ]
+      .map((q) => ({ x: Number(q[1]), y0: Number(q[2]) }))
+      .sort((a, b) => a.x - b.x);
+    expect(folds.length).toBe(4);
+    const [, a1, b0, b1] = folds.map((q) => q.x) as [number, number, number, number];
+    const top = folds[2].y0;
+    const g = [...sheet.matchAll(/<circle cx="([\d.]+)" cy="([\d.]+)" r="2.5"/g)].map((q) => ({
+      x: Number(q[1]),
+      y: Number(q[2]),
+    }));
+    expect(g.length).toBe(1);
+    const gx = b0 - (g[0].x - b1) - a1;
+    const gy = g[0].y - top;
+    const R = Number(/VÝŘEZ NA PRST R(\d+(?:,\d+)?)/.exec(sheet)![1].replace(',', '.'));
+    const flange = spec.grommetHoleMm / 2 + GROMMET_FLANGE_MM;
+    expect(Math.hypot(gx, gy) + flange).toBeLessThanOrEqual(R - 3);
+    expect(gy + flange).toBeLessThanOrEqual(spec.topOverCardMm);
+    // Seznam k zapsání se bez průchodky čísluje souvisle 1–5.
+    const paper = buildCoinHolderPaperModelSvg(spec);
+    expect(paper).toContain('>5 počet karet a tloušťka bankovek<');
+    expect(buildCoinHolderPaperModelSvg(G)).toContain('>6 počet karet a tloušťka bankovek<');
   });
 
   it('jazyk vlevo: pás je zrcadlově, výřez a průchodka na opačné straně', () => {
-    const left = { ...spec, tabSide: 'left' as const };
+    const left = { ...spec, tabSide: 'left' as const, grommet: true };
     const L = coinCardHolderLayout(left);
     const svg = buildCoinHolderSheetSvg(left);
     const m = 10;
@@ -123,7 +180,7 @@ describe('generátor pouzdra s mincí – varianty', () => {
 
   it('list postupu: kování a jazyk na správných stranách v buňkách 6 a 7', () => {
     const L = coinCardHolderLayout(spec);
-    const svg = buildCoinHolderProcessSvg(spec);
+    const svg = buildCoinHolderProcessSvg({ ...spec, grommet: true });
     const pad = 8;
     const cellW = (297 - 2 * pad) / 4;
     const cellH = (210 - 2 * pad - 10) / 2;
@@ -160,17 +217,19 @@ describe('generátor pouzdra s mincí – varianty', () => {
     expect(paper).toContain(
       `M${r3(cx0)} ${r3(Y0 + L.bottomSeamYMm - spec.cardHeightMm)} h${spec.cardWidthMm} v${spec.cardHeightMm}`,
     );
-    for (const t of [
-      '① OHYB B',
-      '② OHYB A',
-      'klobouček',
-      'patice',
-      'průchodka',
-      'KONTROLA MĚŘÍTKA',
-      '☐',
-    ]) {
+    for (const t of ['① OHYB B', '② OHYB A', 'klobouček', 'patice', 'KONTROLA MĚŘÍTKA', '☐']) {
       expect(paper).toContain(t);
     }
+  });
+
+  it('papírový model uvádí minci a kůži těla (výtisky pro 1,5 a 1,2 mm se jinak nerozliší)', () => {
+    expect(buildCoinHolderPaperModelSvg(spec)).toContain(
+      'Model pro: mince Ø 27,5, kůže tělo 1,5 mm (ohyb B ztenčit na 1 mm).',
+    );
+    const thin = { ...spec, bodyThicknessMm: 1.2, foldSkiveThicknessMm: null };
+    expect(buildCoinHolderPaperModelSvg(thin)).toContain(
+      'Model pro: mince Ø 27,5, kůže tělo 1,2 mm (bez ztenčení).',
+    );
   });
 
   it('ztenčení v ohybech: šrafovaná pásma = pásmo ohybu ± okraj, ohyb A pod výkusem', () => {
@@ -276,7 +335,9 @@ describe('generátor pouzdra s mincí – varianty', () => {
   });
 
   it('vlastní okno se propíše jen přes spec', () => {
-    expect(buildCoinHolderPocketSvg({ ...spec, windowDiameterMm: 30 })).toContain('okno Ø 30');
-    expect(buildCoinHolderPocketSvg(spec)).toContain('okno Ø 32');
+    expect(buildCoinHolderPocketSvg({ ...spec, windowDiameterMm: 18 })).toContain('okno Ø 18');
+    expect(buildCoinHolderPocketSvg(spec)).toContain('okno Ø 20');
+    expect(buildCoinHolderPocketSvg(spec)).toContain('prstenec');
+    expect(buildCoinHolderPocketSvg({ ...spec, coinDiameterMm: 40 })).toContain('okno Ø 32');
   });
 });

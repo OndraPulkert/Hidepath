@@ -1,7 +1,7 @@
 /**
  * Pět instruktážních ilustrací pro lekce projektu 02 (pouzdro na karty s vsazenou mincí).
  * Nejsou to střihy 1:1 jako `coin-card-holder.ts` – jde o schematické nákresy, které ale
- * poměry (rozměry panelů, poloha kapsy, druku a průchodky) berou z modelu
+ * poměry (rozměry panelů, poloha kapsy a druku, u varianty s průchodkou i ta) berou z modelu
  * `coinCardHolderLayout(DEFAULT_COIN_CARD_HOLDER)` v `src/lib/geometry/coin-card-holder.ts`.
  *
  *   pnpm pattern:coin-holder-illustrations
@@ -259,7 +259,16 @@ export function buildPoradiOhybuSvg(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
     out.push(
       `<path d="M${f(ox + w)} ${f(lay(1))} A${f(rB)} ${f(rB)} 0 0 1 ${f(ox + w)} ${f(lay(2))}" fill="none" stroke="${LEATHER_DARK}" stroke-width="2.4"/>`,
     );
-    out.push(text(ox + w - 1, lay(1) - 2, 'vnitřní (průchodka)', 3, 'end', GUIDE));
+    out.push(
+      text(
+        ox + w - 1,
+        lay(1) - 2,
+        spec.grommet ? 'vnitřní (průchodka)' : 'vnitřní',
+        3,
+        'end',
+        GUIDE,
+      ),
+    );
     out.push(text(ox + w * 0.25, (lay(1) + lay(2)) / 2 + 1, 'karty', 3, 'middle', '#8a7a55'));
     out.push(text(ox + w / 2, lay(2) + 4.5, 'přední (líc ven)', 3, 'middle', GUIDE));
     out.push(
@@ -587,7 +596,7 @@ export function buildLepeniDnaSvg(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD_H
 
 /**
  * 5/5 – Přenos značek šídlem z listu na kůži: konce čar ohybů, rohy kapsy, střed patice
- * a průchodky, tečky dna.
+ * (u varianty s průchodkou i její střed), tečky dna.
  */
 export function buildPrenosZnacekSvg(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD_HOLDER): string {
   assertCoinCardHolder(spec);
@@ -636,7 +645,7 @@ export function buildPrenosZnacekSvg(spec: CoinCardHolderSpec = DEFAULT_COIN_CAR
     [pxs, pys + L.pocketHeightMm],
     [pxs + L.pocketWidthMm, pys + L.pocketHeightMm],
   ].forEach(([x, y]) => out.push(mark(x, y)));
-  // Střed patice a průchodky.
+  // Střed patice (a volitelné průchodky).
   out.push(mark(L.snapXFrontMm, L.snapYFrontMm));
   if (L.grommetXMm !== null && L.grommetYMm !== null) out.push(mark(L.grommetXMm, L.grommetYMm));
   // Tečky dna – zjednodušeně pár na každém panelu.
@@ -669,10 +678,11 @@ export function buildPrenosZnacekSvg(spec: CoinCardHolderSpec = DEFAULT_COIN_CAR
   callout(
     L.snapXFrontMm,
     L.snapYFrontMm,
-    X(L.snapXFrontMm) + 2,
-    Y(L.snapYFrontMm) - 4,
+    // Vlevo od značky: vpravo by popisek přeškrtly čáry ohybu B.
+    X(L.snapXFrontMm) - 3,
+    Y(L.snapYFrontMm) - 3,
     'střed patice',
-    'start',
+    'end',
   );
   if (L.grommetXMm !== null && L.grommetYMm !== null) {
     callout(

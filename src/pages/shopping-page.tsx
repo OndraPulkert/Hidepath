@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { EquipmentRow } from '@/components/equipment/equipment-row';
 import { prioritySubtitles, priorityLabels } from '@/components/equipment/equipment-tags';
 import { ReadinessSummary } from '@/components/equipment/readiness-summary';
+import { ShoppingPlanSummary } from '@/components/equipment/shopping-plan-summary';
 import { equipmentStatusLabels } from '@/components/equipment/status-segment';
 import { Kicker } from '@/components/ui/kicker';
 import { LoadingNotice } from '@/components/ui/loading-notice';
@@ -13,6 +14,7 @@ import { getEquipmentStatus } from '@/features/inventory/types';
 import { useUpdateInventoryItem } from '@/features/inventory/use-inventory';
 import { useActiveProject } from '@/features/projects/use-active-project';
 import { useProjectState } from '@/features/projects/use-project-state';
+import { resolveShoppingPlan } from '@/features/shopping/plan';
 
 type Filter = 'all' | EquipmentStatus;
 const filters: readonly Filter[] = ['all', 'want_to_buy', 'ordered', 'owned'];
@@ -29,6 +31,7 @@ export function ShoppingPage() {
     ordered: readiness.ordered,
     owned: readiness.owned,
   };
+  const plan = resolveShoppingPlan(project, equipmentCatalog, inventory);
   const visible = project.equipment.filter(
     (req) => filter === 'all' || getEquipmentStatus(inventory, req.equipmentSlug) === filter,
   );
@@ -49,7 +52,13 @@ export function ShoppingPage() {
         </Segment>
       </header>
 
-      {isLoading ? <LoadingNotice /> : <ReadinessSummary readiness={readiness} budget={budget} />}
+      {plan ? <ShoppingPlanSummary plan={plan} projectSlug={project.slug} /> : null}
+
+      {isLoading ? (
+        <LoadingNotice />
+      ) : (
+        <ReadinessSummary readiness={readiness} budget={budget} hasShoppingPlan={plan !== null} />
+      )}
 
       {priorities.map((priority) => {
         const items = visible.filter((req) => req.priority === priority);

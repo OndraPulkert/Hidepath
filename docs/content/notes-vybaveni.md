@@ -432,10 +432,103 @@ třech stranách, horní hrana otevřená; mince se zasouvá shora a vyjímá za
 
 **Náš střih:** `pnpm pattern:coin-holder` → `docs/generated/pouzdro-mince-sablona.pdf` (A4
 1:1), model `src/lib/geometry/coin-card-holder.ts`, zadání a postup `docs/zadani/pouzdro-mince.md`.
-Průměr mince je parametr (`--coin 50kc` atd.). Rozměry odvozené z karty a mince, ne odměřené;
-s mincí 40 mm jako měřítkem z fotek vychází pouzdro ~60 × 90 mm, kapsa ~45–50, okno ~30–32 (hrubý
-odhad). Náš střih je větší – panel 72 × 104,1, hotové pouzdro s oblouky ohybů ≈ 82 × 104 mm, protože
-kování je nad kartami a ohyby mají vůli; kapsa 55 × 54,5 a okno 32 odhadu odpovídají. Velikost
+Výchozí mince je od v4.10 padesátikoruna (27,5 mm), mince 40 mm z předlohy je varianta
+`--coin 40`. Rozměry odvozené z karty a mince, ne odměřené; s mincí 40 mm jako měřítkem z fotek
+vychází předloha ~60 × 90 mm, kapsa ~45–50, okno ~30–32 (hrubý odhad). Náš střih je větší – panel
+72 × 104,1, hotové pouzdro s oblouky ohybů ≈ 82 × 104 mm, protože kování je nad kartami a ohyby
+mají vůli. Výchozí kapsa pro 50 Kč je 42,5 × 42 mm s oknem Ø 20 mm (prstenec 3,75 mm, držení ověřit na odřezku); varianta `--coin 40` má
+kapsu 55 × 54,5 a okno Ø 32, což odhadu z předlohy odpovídá. Velikost
 proti předloze ověřit na papírovém modelu. Kůže odhadem tělo 1,2–1,5 mm,
 kapsa 1,2 mm. **Námět na druhé pouzdro** (ADR 002), ne na první: přidává mokré tvarování,
 velký kruhový výsečník a druk.
+
+## Pouzdro s mincí v4.10 – kování a výsečníky (ověřeno 2026-09-29, nahrazeno v4.11)
+
+Stav z v4.10, pro `round-punch-32mm` a `snap-fastener` už neplatí – ty stojí na nabídkách
+z oddílu v4.11 níž. Tady zůstává podklad pro `priceSource: 'verified'` jen u položek
+`hole-punch-5mm` a `grommet` (`src/content/equipment/index.ts`). Ceny a sklad k 29. 9. 2026.
+
+- [Kruhový výsečník Format 19 mm – Enaradinastroje](https://www.enaradinastroje.cz/kruhovy-vysecnik-format-19mm/),
+  **304 Kč**, skladem do 48 hodin. Dřívější volba pro okno Ø 19 mm (v4.10), v katalogu už není.
+- [Kruhový výsečník Format 32 mm – Enaradinastroje](https://www.enaradinastroje.cz/kruhovy-vysecnik-format-32mm/),
+  **745 Kč**, skladem do 48 hodin. Jen pro variantu s mincí 40 mm.
+- [Výsečník, děrovač na látky 25/26/28/32 mm – Stoklasa](https://www.stoklasa.cz/vysecnik-derovac-na-latky-25-mm-26-mm-28-mm-32-mm-x143127),
+  **704,37 Kč** (varianta 32 mm). Jen pro minci 40 mm; určený na látky, na kůži ověřit.
+- [Kruhový výsečník Format 5 mm – Enaradinastroje](https://www.enaradinastroje.cz/kruhovy-vysecnik-format-5mm/),
+  **125 Kč**, skladem do 48 hodin. Otvor pro průchodku. Výsečníky Format jsou podle prodejce na
+  kůži, pryž, plsť a pěnové materiály.
+- [Výsečníky na kůži 2–20 mm, průměr dle výběru – CraftPoint](https://craft-point.cz/products/vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu),
+  **29 Kč/ks**. Ø 5 mm vyprodaný, Ø 6 mm skladem; v4.10 počítala s Ø 3 mm na otvor pro dřík druku. Jednotlivě
+  nabízí 18 a 20 mm, ne 19 mm.
+- [Nýtovací knoflíky stiskací – druky WUK 5/6 Nikl, 10 ks – Leatory](https://www.leatory.cz/nyty--ozdoby-a-ostatni/nytovaci-knofliky-stiskaci-druky-wuk-5-6-nikl-10ks/),
+  **48,90 Kč** za 10 ks. Klobouček Ø 13,5 mm, podle prodejce na kůži 0,5–1,5 mm, osazuje se
+  sadou Tandy 8108-10 nebo 8105-00. Délka dříku pro jednu vrstvu 1,2 mm neuvedená. V4.10 hledala
+  druky s kloboučkem 12,5 mm, v českých obchodech jsme je nenašli.
+- [Hlavičkář k nýtování druků Tandy 8108-10 – Leatory](https://www.leatory.cz/prislusenstvi-naradi/hlavickar-k-nytovani-druku/),
+  **499 Kč**. Jestli je v balení kovadlinka, stránka jasně neříká – ověřit u prodejce.
+  Výsečník na dřík v nabídce druků ani hlavičkáře uvedený není (v4.10 proto počítala se samostatným Ø 3 mm).
+- [Průchodky s podložkou vnitřní Ø 4 mm, vnější Ø 8 mm, 20 párů s mini lisem – Stoklasa](https://www.stoklasa.cz/pruchodky-s-podlozkou-vnitrni-4-mm-vnejsi-8-mm-x137410),
+  **69,53 Kč**. Mosaz, dvoudílná, v balení ruční mini lis; prodejce
+  uvádí materiál 1–3 mm. Vnější průměr trubičky neuvádí – jestli projde otvorem Ø 5 mm v jedné
+  vrstvě 1,2 mm, ověřit u prodejce a na odřezku.
+
+## Pouzdro s mincí v4.11 – okno Ø 20 mm, druk 12 mm, bez průchodky (ověřeno 2026-09-29)
+
+Podklad pro `priceSource: 'verified'` u položek `snap-fastener`, `round-punch-32mm`
+a `small-hole-punch` (`src/content/equipment/index.ts`) od v4.11. Stránky načtené 29. 9. 2026
+(CraftPoint přes `<url>.js`, cena v haléřích).
+
+- [Knoflík stiskací ANORAK s aplikátorem – PRYM – Ráj šití](https://www.raj-siti.cz/knoflik-stiskaci-anorak-s-aplikatorem-prym_z77891/),
+  **12 mm 189 Kč** (nikl, zlatá), 15 mm 197 Kč, vše skladem; balení 10 ks + aplikátor + nástavce,
+  12 a 15 mm se osazují kladivem, trojnožkou nebo kleštěmi Vario. Obchod: střední uzavírací
+  síla, pružinový drát, nerezová ocel, „textilie vyrobené z jemné kůže“. Velikost otvoru pro
+  dřík ani průměr příruby neuvádí.
+- [Knoflíky stiskací s kroužkem Ø 13,5 mm na silné látky – Stoklasa](https://www.stoklasa.cz/knofliky-stiskaci-s-krouzkem-13-5-mm-na-silne-latky-x161360),
+  **134,96 Kč** za kartu 10 ks, skladem; mini lis v balení, podle prodejce na materiál 1–3 mm.
+- [Knoflíky stiskací s pérkem WUK Ø 15 mm, staromosaz – Dřevěný svět](https://www.drevenysvet.online/knoflik-stiskaci-wuk-15-mm-staromosaz/?variantId=430498),
+  **172 Kč** za 10 ks s mini lisem, „odesíláme do tří dnů“; podle prodejce na látky 0,5–1,5 mm.
+  Klobouček 15 mm nechá k horní hraně předního panelu jen 2 mm.
+- [Knoflík stiskací JERSEY s aplikátorem – PRYM – Ráj šití](https://www.raj-siti.cz/knoflik-stiskaci-jersey-s-aplikatorem-prym_z77890/):
+  podle obchodu pro tenčí a pružné látky, bez otvoru, drží vroubkovaným kroužkem – do tuhé
+  třísločiněné kůže nevhodné (položka „Nekupujte“).
+- [Výsečníky na kůži 2–20 mm – CraftPoint](https://craft-point.cz/products/vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu):
+  **20 mm 69 Kč** skladem (okno pro minci 50 Kč), 18 mm 58 Kč skladem, **2 mm a 3 mm 29 Kč**
+  skladem (otvor pro dřík, jen pokud ho návod druku vyžaduje), 5 mm vyprodaný.
+
+## Pouzdro s mincí – nákupní plán „Co koupit“ pro sestavu 50 Kč / kůže 1,2 mm (ověřeno 2026-09-29)
+
+Podklad pro `shoppingPlan` projektu `coin-card-holder` a pro přeceněné příklady v katalogu.
+CraftPoint přes `https://craft-point.cz/products/<handle>.js` (`variants[].price` v haléřích,
+`variants[].available`), ostatní obchody načtením stránky (curl; HORNBACH vrací curl stránku
+„Client Challenge“, proto přes WebFetch). Vše skladem, pokud není uvedeno jinak.
+
+- CraftPoint, kůže 1,2 mm: **Blu** (`trislocinena-hovezi-kuze-licova-usen-1-2-mm-blu`) A5 57 Kč,
+  A4 251 Kč, A3 502 Kč, A2 1 004 Kč; **juchtová** (`hovezi-kuze-licova-juchtova-trislocinena-1-2-mm`)
+  A5 57 Kč, A4 183 Kč, A3 365 Kč; Whisky a Verde A5 57 / A4 251 Kč (Whisky A5 už skladem);
+  Čokoládová 1,5 mm A4 223 Kč.
+- CraftPoint, nástroje: špachtle na nanášení lepidla 129 Kč; dřevěné hladítko na hrany 80 Kč;
+  Tokonole 120 ml 339 Kč; wing divider 150 mm 223 Kč; Fiebing's Leather Craft Cement 118 ml
+  309 Kč; šídlo hruška 52 Kč; nitě Slam béžová 20 m 0,6 mm 40 Kč (0,8 mm 42 Kč, 1,0 mm 44 Kč);
+  jehly John James 004 15 Kč/ks; horizontální palička 508 Kč; děrovače 4 mm sada 4 ks 337 Kč;
+  řezací pravítko 30 cm 223 Kč (20 cm vyprodané); řezací podložka A3 194 Kč; nůž s odlamovací
+  čepelí 18 mm 68 Kč; brusný arch na plátně 230 × 280 mm 11 Kč (zrnitosti 60–240, nejjemnější
+  240); výsečník 20 mm 69 Kč, 2 mm 29 Kč.
+  Košík autora uváděl u palice 507, děrovačů 336, pravítka a kružítka 222 Kč – `.js` i
+  `products.json` ukazují o korunu víc; v katalogu jsou ceny z `.js`.
+- [LUX-TOOLS Sada vykružovacích pil, 7 ks – OBI](https://www.obi.cz/vykruzovaci-pily/lux-sada-vykruzovacich-pil-7-ks/p/1698885):
+  **99 Kč**, popis výrobku: „obsahuje průměr 25 mm, 32 mm, 38 mm, 45 mm, 50 mm, 56 mm a 62 mm“ a
+  unášecí talíř a středicí vrták 8 mm → 32 mm na otvor formy Ø 31,5 mm je v sadě.
+- [Sada Forstnerových vrtáků 15–35 mm – OBI](https://www.obi.cz/vrtaky-do-dreva/sada-forstnerovych-vrtaku-15-mm-35-mm-5dilna/p/2021962):
+  179 Kč, průměry 15, 20, 25, 30, 35 mm – 32 mm nemá.
+- [ELLIX sada truhlářských svěrek 2dílná – OBI](https://www.obi.cz/upinaci-nastroje/ellix-sada-truhlarskych-sverek-2dilna/p/5400296):
+  109 Kč, 150 × 50 a 200 × 50 mm. [Šroubová svěrka 250 × 80 mm – OBI](https://www.obi.cz/upinaci-nastroje/sroubova-sverka-z-temperovane-litiny-250-x-80-mm/p/5410782):
+  119 Kč/ks. U OBI je na stránce „Do nákupního košíku“ s dodáním 2–3 dny; dostupnost na
+  konkrétní prodejně neověřena.
+- [Překližka borová 10 × 600 × 1200 mm – HORNBACH](https://www.hornbach.cz/p/preklizka-borova-10-x-600-x-1200-mm/6571171/):
+  489 Kč/ks, online dodání 1–2 pracovní dny, na prodejně Praha Černý Most 27 ks.
+- [LEGITIM kuchyňské prkénko – IKEA](https://www.ikea.com/cz/cs/p/legitim-kuchynske-prkenko-bila-90202268/):
+  59 Kč/ks, „Online se prodává v sadách po 2 ks“, skladem.
+- [Knoflík stiskací ANORAK – PRYM – Ráj šití](https://www.raj-siti.cz/knoflik-stiskaci-anorak-s-aplikatorem-prym_z77891/):
+  12 mm nikl i zlatá 189 Kč, skladem.
+- Přeověřeny i vynechané doporučené položky: hranořízek (Sedlářské nářadí) 420 Kč skladem,
+  akrylová šablona rohy a kruhy (Leatory) 360 Kč skladem (3 ks).

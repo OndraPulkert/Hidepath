@@ -1,14 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  DEFAULT_COIN_CARD_HOLDER,
-  GROMMET_FLANGE_MM,
-  SNAP_POST_RADIUS_MM,
-} from '@/lib/geometry/coin-card-holder';
+import { DEFAULT_COIN_CARD_HOLDER, SNAP_POST_RADIUS_MM } from '@/lib/geometry/coin-card-holder';
 
 /**
  * Virtuální papírový model: vezme vygenerovaný střih (docs/generated/pouzdro-mince-sablona.svg),
- * přečte z něj čáry ohybů, otvory, průchodku a druky a „složí“ ho ohybem s konstantní délkou
+ * přečte z něj čáry ohybů, otvory a druky a „složí“ ho ohybem s konstantní délkou
  * pásma (pásmo délky L ohnuté o 180° má poloměr L/π a odsune další panel o 2L/π). Nepoužívá
  * vzorce modelu – ověřuje, že to, co je NAKRESLENÉ, po složení funguje.
  */
@@ -88,16 +84,11 @@ describe('virtuální složení nakresleného střihu (papírový model v počí
     expect(bottom - seamY).toBeCloseTo(spec.stitchOffsetMm, 1);
   });
 
-  it('průchodka vnitřního panelu padne do výřezu předku i s přírubou a nad karty', () => {
-    const g = circles.find((c) => near(c.r, spec.grommetHoleMm / 2))!;
-    const gx = innerToFront(g.x);
-    const gy = g.y - top;
-    // Výřez: čtvrtkruh se středem v levém horním rohu předního panelu. Poloměr čteme z listu:
-    // oblouk výkusu končí na horní hraně ve vzdálenosti R od čáry ohybu.
-    const R = Number(/VÝŘEZ NA PRST R(\d+(?:,\d+)?)/.exec(sheet)![1]!.replace(',', '.'));
-    const flange = spec.grommetHoleMm / 2 + GROMMET_FLANGE_MM;
-    expect(Math.hypot(gx, gy) + flange).toBeLessThanOrEqual(R - 3);
-    expect(gy + flange).toBeLessThanOrEqual(spec.topOverCardMm);
+  // Volitelnou průchodku (--grommet) skládá virtuálně scripts/coin-card-holder.test.ts.
+  it('výchozí střih je od v4.11 bez průchodky (volitelná, --grommet)', () => {
+    expect(spec.grommet).toBe(false);
+    expect(sheet).not.toMatch(/průchodka/);
+    expect(circles.some((c) => near(c.r, spec.grommetHoleMm / 2))).toBe(false);
   });
 
   it('jazyk přehnutý přes horní hranu dopadne kloboučkem na patici (± 1 mm)', () => {

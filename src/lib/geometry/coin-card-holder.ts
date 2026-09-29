@@ -17,8 +17,8 @@
  *   výrobce uvádí „two main compartments“.
  * - Velký **výřez na prst** je jeden oblouk ve tvaru U přes pásmo ohybu A: po složení z něj
  *   vznikne čtvrtkruh v rohu předního panelu a čtvrtelipsa v rohu zadního (hrana jazyka do ní
- *   přechází plynule), mezi nimi je vidět vnitřní panel
- *   s **průchodkou** na šňůrku (na fotkách hotového kusu je vidět z obou stran).
+ *   přechází plynule), mezi nimi je vidět vnitřní panel. Předloha má v jeho rohu **průchodku**
+ *   na šňůrku; od v4.11 je průchodka jen volitelná (`grommet: true`, přepínač `--grommet`).
  * - **Jazyk** vybíhá z horní hrany zadního panelu na opačné straně, přehne se přes celý obsah
  *   a zapne drukem na přední panel; na předním panelu je přišitá **kapsa s mincí**.
  *
@@ -27,7 +27,9 @@
  *
  * Rozměry NEJSOU odměřené z cizího střihu. Odvozují se z rozměru platební karty, průměru mince
  * a přídavků; poměry (šířka jazyka, poloměr výřezu, poloha druku) jsou odhad z fotek s mincí
- * 40 mm jako měřítkem. Hodnoty označené „volba“ ověřit na papírovém modelu a odřezku.
+ * 40 mm jako měřítkem. Výchozí mince je od v4.10 česká padesátikoruna (27,5 mm; od v4.11 okno Ø 20 mm),
+ * mince 40 mm z předlohy zůstává jako varianta (`--coin 40`). Hodnoty označené „volba“ ověřit
+ * na papírovém modelu a odřezku.
  */
 
 export interface CoinCardHolderSpec {
@@ -103,7 +105,11 @@ export interface CoinCardHolderSpec {
    * (±3 mm), jazyk se řeže delší a zkracuje až po osazení kloboučku.
    */
   tabFitReserveMm: number;
-  /** Průměr kloboučku druku (běžný druk 12,5 mm) a rezerva kolem něj. */
+  /**
+   * Průměr kloboučku druku a rezerva kolem něj. Výchozí od v4.11 12 mm (Prym Anorak 12 mm);
+   * model projde i s 13,5 mm (Stoklasa, WUK 5/6) a 15 mm (WUK 15 mm, od horní hrany zbydou jen
+   * 2 mm) – rozložení se nemění, jen se zmenší odstupy kloboučku od hran.
+   */
   snapDiameterMm: number;
   snapClearanceMm: number;
   /**
@@ -112,16 +118,24 @@ export interface CoinCardHolderSpec {
    * Předloha ≈ 30–34.
    */
   scoopRadiusMm: number;
-  /** Průchodka na šňůrku ve vnitřním panelu (vidět výřezem): průměr a odstup od hran. */
+  /**
+   * Volitelná průchodka na šňůrku ve vnitřním panelu (vidět výřezem). Od v4.11 je výchozí střih
+   * **bez průchodky** (`false`); `true` ji vrátí se stejnou geometrií jako dřív: průměr otvoru
+   * a odstup středu od horní a volné boční hrany vnitřního panelu.
+   */
+  grommet: boolean;
   grommetHoleMm: number;
   grommetFromEdgeMm: number;
   /** Poloměr zaoblení volných rohů pásu. */
   cornerRadiusMm: number;
-  /** Průměr mince. */
+  /** Průměr mince. Výchozí 27,5 mm = česká padesátikoruna (mince 40 mm z předlohy jako varianta). */
   coinDiameterMm: number;
   /**
    * Průměr okna = průměr kruhového výsečníku, který máš. `null` = odvodit z mince tak, aby
    * prstenec kůže kolem okna byl aspoň `minCoinRingMm`, zaokrouhleno na celé mm dolů.
+   * Nejmenší prstenec je od v4.11 3,75 mm (dřív 4): u mince 50 Kč z něj vyjde okno Ø 20 mm
+   * (rozhodnutí autora, výsečník 20 mm je běžně k dostání), u mince 40 mm dál Ø 32 (prstenec 4).
+   * Že prstenec 3,75 mm minci udrží, je nutné ověřit na odřezku z tvarovací zkoušky.
    */
   windowDiameterMm: number | null;
   minCoinRingMm: number;
@@ -170,15 +184,16 @@ export const DEFAULT_COIN_CARD_HOLDER: CoinCardHolderSpec = {
   snapFromTopMm: 9.5,
   tabBeyondSnapMm: 11,
   tabFitReserveMm: 5,
-  snapDiameterMm: 12.5,
+  snapDiameterMm: 12,
   snapClearanceMm: 2,
   scoopRadiusMm: 34,
+  grommet: false,
   grommetHoleMm: 5,
   grommetFromEdgeMm: 9,
   cornerRadiusMm: 6,
-  coinDiameterMm: 40,
+  coinDiameterMm: 27.5,
   windowDiameterMm: null,
-  minCoinRingMm: 4,
+  minCoinRingMm: 3.75,
   formHoleClearanceMm: 1.6,
   formPlateThicknessMm: 8,
   pocketFlatMm: 2,
@@ -191,8 +206,8 @@ export const DEFAULT_COIN_CARD_HOLDER: CoinCardHolderSpec = {
 /**
  * Pojmenované mince pro `--coin`. Průměry českých mincí podle ČNB (technické parametry,
  * ověřeno 2026-09-18): 50 Kč 27,5 mm (bimetal), 20 Kč 26 mm (třináctihran – v kulatém okně
- * budou vidět rohy), 10 Kč 24,5 mm, 5 Kč 23 mm. „decision“ je mince z předlohy Red Forest
- * (40 mm podle popisu produktu).
+ * budou vidět rohy), 10 Kč 24,5 mm, 5 Kč 23 mm. Výchozí střih je pro 50 Kč. „decision“ je
+ * mince z předlohy Red Forest (40 mm podle popisu produktu), stejně jako `--coin 40`.
  */
 export const NAMED_COINS = {
   decision: 40,
@@ -215,7 +230,11 @@ export const A4_PORTRAIT = { widthMm: 210, heightMm: 297, marginMm: 10 } as cons
 export const CALIBRATION_GAP_MM = 4;
 /** Popisek šva dna pod pásem: odsazení od dolní hrany pásu. */
 export const SEAM_LABEL_GAP_MM = 5;
-/** Poloměr patice druku 12,5 mm na rubu (≈ Ø 10) a přírůstek příruby průchodky nad poloměr otvoru. */
+/**
+ * Poloměr patice druku na rubu předního panelu, se kterým model počítá (≈ Ø 10; u Prym Anorak
+ * 12 mm neuvedeno – změřit po nákupu), a přírůstek příruby průchodky nad poloměr otvoru.
+ * Skutečná příruba smí mít nejvýš `snapFlangeMaxMm` z rozvržení (u výchozího střihu Ø 11 mm).
+ */
 export const SNAP_POST_RADIUS_MM = 5;
 export const GROMMET_FLANGE_MM = 2.5;
 
@@ -255,6 +274,11 @@ export interface CoinCardHolderLayout {
    */
   foldedWidthMm: number;
   tabEndOnFrontMm: number;
+  /**
+   * Největší průměr příruby patice druku na rubu předního panelu, aby nesahala na karty:
+   * 2 · (topOverCard − snapFromTop). U výchozího střihu 11 mm – po nákupu druku změřit.
+   */
+  snapFlangeMaxMm: number;
   /** Druk: klobouček na jazyku (y záporné) a patice na předním panelu. */
   snapXTabMm: number;
   snapYTabMm: number;
@@ -272,7 +296,7 @@ export interface CoinCardHolderLayout {
   scoopCornerEndXMm: number;
   scoopStartXMm: number;
   scoopEndXMm: number;
-  /** Průchodka ve vnitřním panelu (null bez vnitřního panelu). */
+  /** Volitelná průchodka ve vnitřním panelu (null bez průchodky nebo bez vnitřního panelu). */
   grommetXMm: number | null;
   grommetYMm: number | null;
   /** Šev dna: y stehu a počet otvorů na jeden panel (sekají se skrz všechny vrstvy najednou). */
@@ -367,8 +391,9 @@ export function coinCardHolderLayout(
   const scoopStartX = round(backX1 - backScoopRx);
   const scoopEndX = round(frontX0 + scoop);
 
-  const grommetX = innerX1 === null ? null : round(innerX1 - spec.grommetFromEdgeMm);
-  const grommetY = innerX1 === null ? null : spec.grommetFromEdgeMm;
+  const hasGrommet = spec.grommet && innerX1 !== null;
+  const grommetX = hasGrommet ? round(innerX1 - spec.grommetFromEdgeMm) : null;
+  const grommetY = hasGrommet ? spec.grommetFromEdgeMm : null;
 
   const bottomSeamY = round(panelHeight - spec.stitchOffsetMm);
   const seamRun = round(panelWidth - 2 * spec.stitchOffsetMm);
@@ -423,6 +448,7 @@ export function coinCardHolderLayout(
     tabWrapMm: tabWrap,
     foldedWidthMm: foldedWidth,
     tabEndOnFrontMm: tabEndOnFront,
+    snapFlangeMaxMm: round(2 * (spec.topOverCardMm - spec.snapFromTopMm)),
     snapXTabMm: snapXTab,
     snapYTabMm: snapYTab,
     snapXFrontMm: snapXFront,
@@ -465,6 +491,9 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
     if (typeof v !== 'number') continue;
     if (!Number.isFinite(v) || v < 0) p.push(`${k} musí být nezáporné číslo, je ${String(v)}.`);
   }
+  if (typeof spec.grommet !== 'boolean') {
+    p.push(`grommet musí být true nebo false, je ${String(spec.grommet)}.`);
+  }
   if (spec.tabSide !== 'left' && spec.tabSide !== 'right') {
     p.push(`tabSide musí být 'left' nebo 'right', je ${String(spec.tabSide)}.`);
   }
@@ -501,13 +530,15 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
       'Bez vnitřního panelu by jedna boční strana zůstala otevřená (šije se jen dno) a karty by vypadly.',
     );
   }
-  // Kování nad kartami: dřík druku a příruba průchodky nesmí ležet v kapse na kartách.
+  // Kování nad kartami: dřík druku a příruba průchodky nesmí ležet v kapse na kartách. Počítá se
+  // s přírubou patice ≈ Ø 10 (SNAP_POST_RADIUS_MM); skutečná smí mít nejvýš snapFlangeMaxMm (11).
   if (spec.snapFromTopMm + SNAP_POST_RADIUS_MM > spec.topOverCardMm) {
     p.push(
       `Dřík druku sahá ${fmt(spec.snapFromTopMm + SNAP_POST_RADIUS_MM)} mm pod horní hranu, karty začínají v ${fmt(spec.topOverCardMm)} – ležel by na kartách; zvětši topOverCardMm.`,
     );
   }
   if (
+    spec.grommet &&
     spec.innerPanel &&
     spec.grommetFromEdgeMm + spec.grommetHoleMm / 2 + GROMMET_FLANGE_MM > spec.topOverCardMm
   ) {
@@ -617,7 +648,9 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
     );
   }
   if (L.windowDiameterMm >= spec.coinDiameterMm) {
-    p.push(`Okno ${L.windowDiameterMm} mm musí být menší než mince ${spec.coinDiameterMm} mm.`);
+    p.push(
+      `Okno ${fmt(L.windowDiameterMm)} mm musí být menší než mince ${fmt(spec.coinDiameterMm)} mm.`,
+    );
   } else if (L.coinRingMm < spec.minCoinRingMm) {
     p.push(
       `Prstenec kolem okna je ${fmt(L.coinRingMm)} mm, minimum ${fmt(spec.minCoinRingMm)} mm – minci by neudržel.`,
@@ -674,7 +707,7 @@ export function assertCoinCardHolder(spec: CoinCardHolderSpec): void {
 
 /** Číslo s desetinnou čárkou pro hlášky kontrol. */
 function fmt(v: number): string {
-  return (Math.round(v * 10) / 10).toString().replace('.', ',');
+  return (Math.round(v * 100) / 100).toString().replace('.', ',');
 }
 
 function round(v: number): number {

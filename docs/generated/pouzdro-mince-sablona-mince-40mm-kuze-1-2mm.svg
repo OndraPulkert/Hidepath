@@ -15,38 +15,36 @@
 <text x="133.69" y="162.17" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">ŠEV DNA 3,5 mm od hrany · 17 otvorů na panel · prosekat naplocho, po složení lícují</text>
 <text x="89.845" y="57.07" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#7a7a7a">VÝŘEZ NA PRST R34</text>
 <text x="89.845" y="60.67" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#7a7a7a">odkryje 19 mm karty</text>
-<circle cx="26.5" cy="26" r="6.25" fill="none" stroke="#a2471f" stroke-width="0.2" stroke-dasharray="1.5 1"/>
+<circle cx="26.5" cy="26" r="6" fill="none" stroke="#a2471f" stroke-width="0.2" stroke-dasharray="1.5 1"/>
 <path d="M25 26 L28 26 M26.5 24.5 L26.5 27.5" stroke="#2b2b2b" stroke-width="0.25"/>
 <text x="45" y="25.5" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#a2471f">druk – klobouček</text>
 <text x="45" y="28.4" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="start" fill="#a2471f">poloha orientační – obtisknout z patice při zkoušce</text>
 <path d="M10 15 L43 15" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1 1"/>
 <text x="45" y="13.5" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="start" fill="#7a7a7a">orientační konec jazyka</text>
 <text x="45" y="16.2" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="start" fill="#7a7a7a">zkrátit 11 mm za střed osazeného kloboučku, rohy R10</text>
-<text x="26.5" y="36.75" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#2b2b2b">JAZYK</text>
+<text x="26.5" y="36.5" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#2b2b2b">JAZYK</text>
 <text x="46" y="105.12" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">ZADNÍ PANEL</text>
 <text x="46" y="108.52" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">72 × 104,1 mm</text>
 <text x="46" y="111.52" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">motiv / ražení na tuto stranu</text>
 <text x="214.35" y="105.12" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">VNITŘNÍ PANEL</text>
 <text x="214.35" y="108.52" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">dělí karty (vepředu)</text>
 <text x="214.35" y="111.52" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">a bankovky (vzadu)</text>
-<circle cx="153.19" cy="62.57" r="6.25" fill="none" stroke="#a2471f" stroke-width="0.2" stroke-dasharray="1.5 1"/>
+<circle cx="153.19" cy="62.57" r="6" fill="none" stroke="#a2471f" stroke-width="0.2" stroke-dasharray="1.5 1"/>
 <path d="M151.69 62.57 L154.69 62.57 M153.19 61.07 L153.19 64.07" stroke="#2b2b2b" stroke-width="0.25"/>
-<text x="153.19" y="71.82" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#a2471f">druk – patice</text>
-<path d="M122.44 94.87 L144.94 94.87 A10 10 0 0 1 154.94 104.87 L154.94 130.87 A6 6 0 0 1 148.94 136.87 L118.44 136.87 A6 6 0 0 1 112.44 130.87 L112.44 104.87 A10 10 0 0 1 122.44 94.87 Z" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1 1"/>
+<text x="153.19" y="71.57" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#a2471f">druk – patice</text>
+<path d="M116.19 88.62 L151.19 88.62 A10 10 0 0 1 161.19 98.62 L161.19 137.12 A6 6 0 0 1 155.19 143.12 L112.19 143.12 A6 6 0 0 1 106.19 137.12 L106.19 98.62 A10 10 0 0 1 116.19 88.62 Z" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1 1"/>
 <text x="133.69" y="107.87" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="middle" fill="#2b2b2b">PŘEDNÍ PANEL</text>
 <text x="133.69" y="111.27" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">sem přišít kapsu s mincí (na líc)</text>
-<text x="133.69" y="114.27" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">41,8 mm od horní hrany, 14,75 mm od boků</text>
-<text x="133.69" y="118.27" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">otevřená hrana kapsy nahoru</text>
-<circle cx="241.35" cy="62.07" r="2.5" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
-<path d="M240.35 62.07 L242.35 62.07 M241.35 61.07 L241.35 63.07" stroke="#2b2b2b" stroke-width="0.25"/>
-<text x="241.35" y="68.07" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="middle" fill="#7a7a7a">průchodka Ø 5</text>
+<text x="133.69" y="114.27" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">35,55 mm od horní hrany,</text>
+<text x="133.69" y="117.07" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">8,5 mm od boků</text>
+<text x="133.69" y="120.47" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">otevřená hrana kapsy nahoru</text>
 <path d="M10 169 V173 M10 171 H60 M60 169 V173" stroke="#2b2b2b" stroke-width="0.3" fill="none"/>
 <text x="63" y="172" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#2b2b2b">KONTROLA MĚŘÍTKA: tato úsečka musí měřit přesně 50 mm</text>
 <text x="10" y="179" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">POUZDRO NA KARTY S VSAZENOU MINCÍ – LIST PÁS. Tisk na A4 NA ŠÍŘKU na 100 % (bez „přizpůsobit stránce“). Kapsa s mincí a forma jsou na listu KAPSA. NÁVRH k ověření na papíru.</text>
-<text x="10" y="182.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Karty 54 × 85,6 (4 ks) vepředu, bankovky složené napůl vzadu, mince Ø 27,5, kůže tělo 1,2 mm.</text>
+<text x="10" y="182.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Karty 54 × 85,6 (4 ks) vepředu, bankovky složené napůl vzadu, mince Ø 40, kůže tělo 1,2 mm.</text>
 <text x="10" y="185.4" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Jeden pás: ZADNÍ + ohyb A + PŘEDNÍ + ohyb B + VNITŘNÍ panel. Po složení jsou obě boční hrany OHYBY, šije se jen dno (skrz všechny vrstvy), horní hrana zůstává otevřená.</text>
 <text x="10" y="188.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">PÁS OBKRESLIT NA LÍC – přední panel je nakreslený tak, jak bude vidět. Jazyk vyjde zepředu vpravo (zezadu vlevo), výřez na prst naproti němu.</text>
 <text x="10" y="191.8" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Plná čára = řez, čárkovaně = ohyb, tečky = otvory dna (vidličky přesně 4 mm; naplocho: přední panel z líce, zadní a vnitřní z rubu); ohyby se neztenčují.</text>
-<text x="10" y="195" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Pořadí: 1 pás · 2–3 kapsa (list KAPSA) · 4 přišít kapsu, osadit patici druku a průchodku NAPLOCHO · 5 složit (vnitřní za přední, zadní přes vše) · 6 slepit a prošít dno</text>
+<text x="10" y="195" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">Pořadí: 1 pás · 2–3 kapsa (list KAPSA) · 4 přišít kapsu, osadit patici druku NAPLOCHO · 5 složit (vnitřní za přední, zadní přes vše) · 6 slepit a prošít dno</text>
 <text x="10" y="198.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="start" fill="#7a7a7a">· 7 klobouček podle obtisku patice se vším obsahem, pak jazyk zkrátit 11 mm za klobouček a zaoblit · 8 srazit a zaleštit hrany (vnitřní předem).</text>
 </svg>
