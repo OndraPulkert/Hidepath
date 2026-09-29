@@ -22,8 +22,8 @@ uložte ho do správce hesel. Potřebujete ho jen pro `supabase link` na jiném 
   s `HIDEPATH_TEST_SUPABASE_*` mířícími na hostovaný projekt): izolace uživatelů, granty, CHECK, trigger profilu.
   Testovací účty se po testu mažou.
 - Auth konfigurace pushnutá z `supabase/config.toml` (`supabase config push`):
-  Site URL `http://localhost:5173`, Redirect URLs pro localhost 5173/4173. **Po nasazení doplnit doménu
-  aplikace** (`https://<domena>/**`) do `additional_redirect_urls` a `site_url`, pak `supabase config push`.
+  Site URL `https://hidepath.ondrejpulkert.workers.dev` (od 29. 9. 2026, nasazení na Cloudflare), Redirect URLs
+  tato adresa `/**` + localhost 5173/4173 pro vývoj.
 - E-mailový limit 1 odkaz / minutu (`[auth.email] max_frequency`). Výchozí SMTP Supabase má nízký denní limit;
   pro reálné uživatele nastavit vlastní SMTP (Dashboard → Authentication → SMTP).
 
