@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="160mm" height="100mm" viewBox="0 0 160 100">
+<rect width="160" height="100" fill="#ffffff"/>
+<text x="80" y="5.5" font-family="Helvetica, Arial, sans-serif" font-size="3.8" text-anchor="middle" fill="#2b2b2b">Konec jazýčku: magnet, podšívka L1 a šev S7 do U</text>
+<rect x="32.8" y="35.8" width="62.4" height="57.2" fill="none" stroke="#7a7a7a" stroke-width="0.3" stroke-dasharray="1 0.8"/>
+<path d="M38 17.6 L38 54 L38.222 57.394 L38.886 60.729 L39.979 63.95 L41.483 67 L43.373 69.828 L45.615 72.385 L48.172 74.627 L51 76.517 L54.05 78.021 L57.271 79.114 L60.606 79.778 L64 80 L67.394 79.778 L70.729 79.114 L73.95 78.021 L77 76.517 L79.828 74.627 L82.385 72.385 L84.627 69.828 L86.517 67 L88.021 63.95 L89.114 60.729 L89.778 57.394 L90 54 L90 17.6" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.4"/>
+<circle cx="64" cy="61.8" r="10.4" fill="#444444" stroke="none" stroke-width="0.3"/>
+<path d="M38 35.8 L38 54 L38.222 57.394 L38.886 60.729 L39.979 63.95 L41.483 67 L43.373 69.828 L45.615 72.385 L48.172 74.627 L51 76.517 L54.05 78.021 L57.271 79.114 L60.606 79.778 L64 80 L67.394 79.778 L70.729 79.114 L73.95 78.021 L77 76.517 L79.828 74.627 L82.385 72.385 L84.627 69.828 L86.517 67 L88.021 63.95 L89.114 60.729 L89.778 57.394 L90 54 L90 35.8 Z" fill="#e8d6b0" stroke="#7a7a7a" stroke-width="0.3" fill-opacity="0.72"/>
+<circle cx="64" cy="61.8" r="10.4" fill="none" stroke="#2b2b2b" stroke-width="0.35" stroke-dasharray="1 0.6"/>
+<text x="64" y="62.8" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#2b2b2b">magnet pod L1</text>
+<path d="M46.857 73.548 L48.172 74.627 L49.555 75.618 L51 76.517 L52.5 77.319 L54.05 78.021 L55.643 78.62 L57.271 79.114 L58.928 79.5 L60.606 79.778 L62.3 79.944 L64 80 L65.7 79.944 L67.394 79.778 L69.072 79.5 L70.729 79.114 L72.357 78.62 L73.95 78.021 L75.5 77.319 L77 76.517 L78.445 75.618 L79.828 74.627 L81.143 73.548 Z" fill="#b89c70" stroke="none" stroke-width="0" fill-opacity="0.8"/>
+<path d="M30.2 73.5 L97.8 73.5" stroke="#a2471f" stroke-width="0.3" fill="none" stroke-dasharray="0.8 0.6"/>
+<circle cx="48.4" cy="64.4" r="0.75" fill="#a2471f" stroke="none" stroke-width="0.3"/>
+<circle cx="48.4" cy="54" r="0.75" fill="#a2471f" stroke="none" stroke-width="0.3"/>
+<circle cx="48.4" cy="43.6" r="0.75" fill="#a2471f" stroke="none" stroke-width="0.3"/>
+<circle cx="58.8" cy="43.6" r="0.75" fill="#a2471f" stroke="none" stroke-width="0.3"/>
+<circle cx="69.2" cy="43.6" r="0.75" fill="#a2471f" stroke="none" stroke-width="0.3"/>
+<circle cx="79.6" cy="43.6" r="0.75" fill="#a2471f" stroke="none" stroke-width="0.3"/>
+<circle cx="79.6" cy="54" r="0.75" fill="#a2471f" stroke="none" stroke-width="0.3"/>
+<circle cx="79.6" cy="64.4" r="0.75" fill="#a2471f" stroke="none" stroke-width="0.3"/>
+<path d="M100.4 80 L100.4 61.8" stroke="#a2471f" stroke-width="0.3" fill="none"/><path d="M99.2 80 L101.6 80" stroke="#a2471f" stroke-width="0.3" fill="none"/><path d="M99.2 61.8 L101.6 61.8" stroke="#a2471f" stroke-width="0.3" fill="none"/><text x="102.2" y="71.9" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#a2471f">7 mm</text>
+<path d="M64 80 L103 80" stroke="#7a7a7a" stroke-width="0.2" fill="none" stroke-dasharray="0.6 0.5"/>
+<path d="M64 61.8 L116 61.8" stroke="#7a7a7a" stroke-width="0.2" fill="none" stroke-dasharray="0.6 0.5"/>
+<path d="M113.4 61.8 L113.4 35.8" stroke="#a2471f" stroke-width="0.3" fill="none"/><path d="M112.2 61.8 L114.6 61.8" stroke="#a2471f" stroke-width="0.3" fill="none"/><path d="M112.2 35.8 L114.6 35.8" stroke="#a2471f" stroke-width="0.3" fill="none"/><text x="115.2" y="49.8" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#a2471f">10 mm</text>
+<path d="M38 14.6 L90 14.6" stroke="#a2471f" stroke-width="0.3" fill="none"/><path d="M38 13.4 L38 15.8" stroke="#a2471f" stroke-width="0.3" fill="none"/><path d="M90 13.4 L90 15.8" stroke="#a2471f" stroke-width="0.3" fill="none"/><text x="64" y="13.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="middle" fill="#a2471f">jazýček 20 mm</text>
+<text x="64" y="9.1" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="middle" fill="#7a7a7a">pohled na rub jazýčku</text>
+<text x="2" y="36.8" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="start" fill="#2b2b2b">ryska horní hrany L1</text>
+<text x="2" y="44.6" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="start" fill="#a2471f">S7: 8 otvorů do U</text>
+<text x="2" y="77.75" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="start" fill="#a2471f">klín jen posl. 2,5 mm</text>
+<text x="2" y="91.4" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="start" fill="#7a7a7a">přířez L1 24 × 22</text>
+<text x="64" y="97" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#7a7a7a">U je ke špičce otevřené; jazýček a L1 se ořežou najednou po nalepení</text>
+<text x="138" y="15" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#2b2b2b">Vrstvy u magnetu</text>
+<rect x="124" y="20" width="9" height="5" fill="#9c6b43" stroke="#2b2b2b" stroke-width="0.2"/>
+<text x="135" y="23.5" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="start" fill="#2b2b2b">jazýček 1</text>
+<rect x="124" y="25" width="9" height="7.5" fill="#444444" stroke="#2b2b2b" stroke-width="0.2"/>
+<text x="135" y="29.75" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="start" fill="#2b2b2b">magnet 1,5</text>
+<rect x="124" y="32.5" width="9" height="3" fill="#e8d6b0" stroke="#2b2b2b" stroke-width="0.2"/>
+<text x="135" y="35" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="start" fill="#2b2b2b">L1 0,6</text>
+<rect x="124" y="35.5" width="9" height="5" fill="#9c6b43" stroke="#2b2b2b" stroke-width="0.2"/>
+<text x="135" y="39" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="start" fill="#2b2b2b">F 1</text>
+<rect x="124" y="40.5" width="9" height="2.5" fill="#9a9a9a" stroke="#2b2b2b" stroke-width="0.2"/>
+<text x="135" y="42.75" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="start" fill="#2b2b2b">plíšek 0,5</text>
+<rect x="124" y="43" width="9" height="3" fill="#e8d6b0" stroke="#2b2b2b" stroke-width="0.2"/>
+<text x="135" y="45.5" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="start" fill="#2b2b2b">D1 0,6</text>
+<path d="M122 32.5 L122 40.5" stroke="#a2471f" stroke-width="0.5" fill="none"/>
+<text x="121" y="37.5" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="end" fill="#a2471f">1,6</text>
+<text x="116" y="62" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#a2471f">mezera magnet–plíšek 1,6 mm</text>
+<text x="116" y="65.9" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#a2471f">= L1 + F</text>
+<text x="116" y="69.8" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">S7 ≥ 2,08 mm od magnetu</text>
+<text x="116" y="73.7" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">a ≥ 3,2 mm od hrany</text>
+<text x="116" y="77.6" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">magnet epoxidem, L1 až po</text>
+<text x="116" y="81.5" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#a2471f">ztuhnutí; přes magnet</text>
+<text x="116" y="85.4" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#a2471f">paličkou netlouct</text>
+</svg>

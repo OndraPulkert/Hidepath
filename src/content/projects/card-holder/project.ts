@@ -1007,6 +1007,118 @@ export const cardHolderProject: ProjectDefinition = {
     printNote:
       'Tisk na A4 bez přizpůsobení velikosti (100 %). Kontrolní úsečka na okraji musí měřit 50 mm.',
   },
+  shoppingPlan: {
+    title:
+      'Sestava: juchtová kůže 1,2 mm (A4 na pouzdro, 2× A5 na trénink), nářadí z CraftPointu, prkénko z IKEA',
+    lines: [
+      {
+        equipmentSlug: 'veg-tan-leather',
+        url: 'https://craft-point.cz/products/hovezi-kuze-licova-juchtova-trislocinena-1-2-mm',
+        variant: 'A4 (30 × 21 cm)',
+        quantity: 1,
+        purpose: 'zadní díl 100 × 70 mm a přední kapsa 100 × 56 mm (lekce 5 a 6), s rezervou',
+      },
+      {
+        equipmentSlug: 'veg-tan-leather',
+        url: 'https://craft-point.cz/products/hovezi-kuze-licova-juchtova-trislocinena-1-2-mm',
+        variant: 'A5 (21 × 15 cm)',
+        quantity: 2,
+        purpose:
+          'trénink lekcí 1–4 ze stejné kůže: zkušební údery, odřezek aspoň 60 × 120 mm na rovný řez a tři odřezky asi 40 × 80 mm na lepení a steh',
+      },
+      {
+        equipmentSlug: 'cutting-mat',
+        url: 'https://craft-point.cz/products/oboustranna-samoobnovovaci-rezaci-podlozka-a3-craftpoint',
+        quantity: 1,
+      },
+      {
+        equipmentSlug: 'utility-knife',
+        url: 'https://craft-point.cz/products/nuz-na-kuzi-s-odlamovaci-cepeli-18mm',
+        quantity: 1,
+      },
+      {
+        equipmentSlug: 'steel-ruler',
+        url: 'https://craft-point.cz/products/rezaci-pravitko-s-protiskluzovou-vlozkou-20cm-30cm',
+        variant: '30 cm',
+        quantity: 1,
+      },
+      {
+        equipmentSlug: 'stitching-chisels',
+        url: 'https://craft-point.cz/products/derovace-na-svy-4mm-sada-4-kusu',
+        quantity: 1,
+        purpose: 'rozteč 4 mm',
+      },
+      {
+        equipmentSlug: 'mallet',
+        url: 'https://craft-point.cz/products/horizontalni-palicka-na-kuzi',
+        quantity: 1,
+      },
+      {
+        equipmentSlug: 'harness-needles',
+        url: 'https://craft-point.cz/products/sedlarske-jehly-john-james-velikost-004',
+        quantity: 4,
+      },
+      {
+        equipmentSlug: 'waxed-thread',
+        url: 'https://craft-point.cz/products/nite-slam-bezova-beige-20m',
+        variant: '0,6 mm',
+        quantity: 1,
+        purpose: '20 m vystačí na trénink i pouzdro',
+      },
+      {
+        equipmentSlug: 'sandpaper',
+        url: 'https://craft-point.cz/products/brusny-arch-na-platne-230x280-mm-ruzne-zrnitosti',
+        variant: 'zrnitost 180',
+        quantity: 1,
+        purpose: 'zdrsnění lepené plochy (lekce 4 a 6)',
+      },
+      {
+        equipmentSlug: 'sandpaper',
+        url: 'https://craft-point.cz/products/brusny-arch-na-platne-230x280-mm-ruzne-zrnitosti',
+        variant: 'zrnitost 240',
+        quantity: 1,
+        purpose: 'srovnání hran a výřezu na palec',
+      },
+      {
+        equipmentSlug: 'scratch-awl',
+        url: 'https://craft-point.cz/products/sedlarske-sidlo-hruska',
+        quantity: 1,
+      },
+      {
+        equipmentSlug: 'contact-cement',
+        url: 'https://craft-point.cz/products/fiebings-leather-craft-cement-lepidlo-na-kuzi-118-ml',
+        quantity: 1,
+      },
+      {
+        equipmentSlug: 'contact-cement',
+        url: 'https://craft-point.cz/products/spachtle-na-nanaseni-lepidla',
+        quantity: 1,
+        purpose: 'k lepidlu, na úzký pás u hrany',
+      },
+      {
+        equipmentSlug: 'wing-divider',
+        url: 'https://craft-point.cz/products/wing-divider-sedlarske-kruzitko-150-mm',
+        quantity: 1,
+      },
+      {
+        equipmentSlug: 'edge-burnisher',
+        url: 'https://craft-point.cz/products/tokonole-120-ml-2',
+        quantity: 1,
+      },
+      {
+        equipmentSlug: 'edge-burnisher',
+        url: 'https://craft-point.cz/products/drevene-hladitko-na-hrany',
+        quantity: 1,
+      },
+      {
+        equipmentSlug: 'punching-board',
+        url: 'https://www.ikea.com/cz/cs/p/legitim-kuchynske-prkenko-bila-90202268/',
+        quantity: 2,
+        purpose: 'online jen po 2 ks; v obchodním domě stačí 1',
+      },
+    ],
+    skipped: [],
+  },
   media: [
     {
       id: 'card-holder-assembled',

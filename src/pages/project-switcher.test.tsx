@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
+import { lidWalletProject } from '@/content/projects/lid-wallet/project';
 import { setActiveProjectPreference } from '@/features/projects/active-project-preference';
 import { enrollment } from '@/test/factories';
 import { createTestRepositories, renderApp } from '@/test/render';
@@ -94,5 +95,29 @@ describe('více projektů', () => {
     expect(screen.getAllByRole('img', { name: /^List střihu:/ })).toHaveLength(
       coinCardHolderProject.patternSheets!.sheets.filter((s) => !s.variant).length,
     );
+  });
+  it('třetí projekt (peněženka Víčko) je v přepínači a tiskne 4 listy výchozího střihu', async () => {
+    const repositories = createTestRepositories();
+    await repositories.enrollments.upsert({
+      ...enrollment(cardHolderProject.slug),
+      id: crypto.randomUUID(),
+    });
+    renderApp('/dashboard', { repositories });
+    expect(
+      await screen.findByRole('button', { name: `Začít projekt ${lidWalletProject.title}` }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Projekt 03 ·/)).toBeInTheDocument();
+  });
+
+  it('tisková stránka peněženky Víčko nabízí všechny 4 listy zaškrtnuté', async () => {
+    renderApp(`/projects/${lidWalletProject.slug}/template`);
+    await screen.findByRole('heading', { level: 1, name: /Listy střihu 1:1/ });
+    // Zaškrtávátka listů (formulář „Listy pro vaši kůži“ má vlastní zaškrtávátka záloh).
+    const boxes = screen.getAllByRole('checkbox').filter((c) => c.id.startsWith('sheet-'));
+    expect(boxes.map((c) => c.id).sort()).toEqual(
+      lidWalletProject.patternSheets!.sheets.map((s) => `sheet-${s.id}`).sort(),
+    );
+    expect(boxes.every((c) => (c as HTMLInputElement).checked)).toBe(true);
+    expect(screen.getAllByRole('img', { name: /^List střihu:/ })).toHaveLength(4);
   });
 });

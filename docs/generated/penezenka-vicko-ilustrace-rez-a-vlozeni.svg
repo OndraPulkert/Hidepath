@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="160mm" height="100mm" viewBox="0 0 160 100">
+<rect width="160" height="100" fill="#ffffff"/>
+<text x="80" y="5.5" font-family="Helvetica, Arial, sans-serif" font-size="3.8" text-anchor="middle" fill="#2b2b2b">Co kam patří: řez v ose a pohled shora do ústí</text>
+<path d="M29.28 92.495 L29.28 81.1 L33.492 78.52 L33.492 72.5 L36.092 72.5 L36.092 78.52 L31.88 81.1 L31.88 92.495 Z" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.2"/>
+<path d="M33.492 33.8 L33.492 23.91 L36.092 23.91 L36.092 33.8 Z" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.2"/>
+<path d="M31.932 78.52 L31.932 72.5 L33.492 72.5 L33.492 78.52 Z" fill="#4e3322" stroke="none" stroke-width="0.2"/>
+<path d="M31.932 33.8 L31.932 23.48 L33.492 23.48 L33.492 33.8 Z" fill="#4e3322" stroke="none" stroke-width="0.2"/>
+<path d="M27.46 92.28 L27.46 71.64 L30.112 69.92 L30.112 32.94 L31.932 32.94 L31.932 69.92 L29.28 71.64 L29.28 92.28 Z" fill="#f4f1e8" stroke="#7a7a7a" stroke-width="0.2"/>
+<path d="M25.9 92.28 L25.9 71.64 L28.552 69.92 L28.552 23.91 L30.112 23.91 L30.112 69.92 L27.46 71.64 L27.46 92.28 Z" fill="#e8d6b0" stroke="#7a7a7a" stroke-width="0.2"/>
+<rect x="28.552" y="23.91" width="1.56" height="1.204" fill="#a2471f" stroke="none" stroke-width="0.3"/>
+<rect x="24.6" y="73.36" width="1.3" height="17.63" fill="#9a9a9a" stroke="#2b2b2b" stroke-width="0.2"/>
+<rect x="24.6" y="24.564" width="1.976" height="46.423" fill="#dfe8f0" stroke="#2b2b2b" stroke-width="0.2"/>
+<rect x="24.6" y="29.328" width="1.976" height="8.841" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<rect x="26.576" y="24.564" width="1.976" height="46.423" fill="#dfe8f0" stroke="#2b2b2b" stroke-width="0.2"/>
+<rect x="26.576" y="29.328" width="1.976" height="8.841" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<path d="M22 92.495 L22 40.68 L24.6 40.68 L24.6 92.495 Z" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.2"/>
+<path d="M22 92.495 L22.042 92.708 L22.168 92.918 L22.376 93.12 L22.662 93.312 L23.021 93.49 L23.447 93.65 L23.933 93.791 L24.47 93.91 L25.05 94.005 L25.661 94.073 L26.295 94.115 L26.94 94.129 L27.585 94.115 L28.219 94.073 L28.83 94.005 L29.41 93.91 L29.947 93.791 L30.433 93.65 L30.859 93.49 L31.218 93.312 L31.504 93.12 L31.712 92.918 L31.838 92.708 L31.88 92.495 L29.28 92.495 L29.26 92.596 L29.2 92.695 L29.102 92.791 L28.966 92.882 L28.796 92.966 L28.595 93.042 L28.365 93.109 L28.11 93.165 L27.835 93.21 L27.546 93.243 L27.245 93.262 L26.94 93.269 L26.635 93.262 L26.334 93.243 L26.045 93.21 L25.77 93.165 L25.515 93.109 L25.285 93.042 L25.084 92.966 L24.914 92.882 L24.778 92.791 L24.68 92.695 L24.62 92.596 L24.6 92.495 Z" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.2"/>
+<path d="M19.4 22.19 L36.092 22.19 L36.092 23.91 L33.492 23.91 L33.492 23.05 L22 23.05 L22 39.82 L19.4 39.82 Z" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.2"/>
+<path d="M13.94 89.786 L13.94 75.166 L19.4 72.586 L19.4 39.82 L22 39.82 L22 72.586 L16.54 75.166 L16.54 89.786 Z" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.2"/>
+<rect x="16.54" y="80.326" width="3.9" height="6.88" fill="#444444" stroke="none" stroke-width="0.3"/>
+<path d="M16.54 89.786 L16.54 87.894 L20.44 87.206 L20.44 80.326 L16.54 79.638 L16.54 75.166 L18.1 75.166 L18.1 79.638 L22 80.326 L22 87.206 L18.1 87.894 L18.1 89.786 Z" fill="#e8d6b0" stroke="#7a7a7a" stroke-width="0.2"/>
+<text x="3" y="21.9" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#7a7a7a">závěs</text>
+<text x="3" y="34.8" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#7a7a7a">víčko</text>
+<text x="3" y="77.886" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#7a7a7a">L1</text>
+<text x="3" y="84.766" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#7a7a7a">magnet</text>
+<text x="3" y="89.926" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#7a7a7a">jazýček</text>
+<path d="M13 83.766 L16.54 83.766" stroke="#7a7a7a" stroke-width="0.2" fill="none"/>
+<path d="M8 76.886 L16.54 76.886" stroke="#7a7a7a" stroke-width="0.2" fill="none"/>
+<path d="M26.576 33.748 L39.092 33.748" stroke="#7a7a7a" stroke-width="0.2" fill="none"/>
+<text x="39.892" y="34.748" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#2b2b2b">karty, proužek k horní hraně</text>
+<path d="M29.332 23.91 L39.092 23.91" stroke="#7a7a7a" stroke-width="0.2" fill="none"/>
+<text x="39.892" y="24.91" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#a2471f">D1, barevná hrana</text>
+<path d="M31.022 42.4 L39.092 42.4" stroke="#7a7a7a" stroke-width="0.2" fill="none"/>
+<text x="39.892" y="43.4" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#2b2b2b">bankovka napůl</text>
+<path d="M31.932 58.31 L39.092 58.31" stroke="#7a7a7a" stroke-width="0.2" fill="none"/>
+<text x="39.892" y="59.31" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#2b2b2b">okénko bankovek</text>
+<path d="M25.25 85.83 L39.092 85.83" stroke="#7a7a7a" stroke-width="0.2" fill="none"/>
+<text x="39.892" y="86.83" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#2b2b2b">plíšek na rubu F</text>
+<path d="M22 89.055 L39.092 89.055" stroke="#7a7a7a" stroke-width="0.2" fill="none"/>
+<text x="39.892" y="90.055" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#2b2b2b">F · ohyb dna · B</text>
+<text x="3" y="99" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="start" fill="#7a7a7a">řez v ose, stav B; tloušťky zvětšené</text>
+<text x="125" y="16" font-family="Helvetica, Arial, sans-serif" font-size="3.2" text-anchor="middle" fill="#2b2b2b">Pohled shora do ústí</text>
+<text x="125" y="20.5" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#7a7a7a">vpředu (strana jazýčku) je dole</text>
+<rect x="96" y="67.2" width="58" height="2.8" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.2"/>
+<rect x="100.422" y="62.944" width="49.156" height="4.256" fill="#dfe8f0" stroke="#2b2b2b" stroke-width="0.2"/>
+<rect x="98.297" y="61.264" width="53.406" height="1.68" fill="#a2471f" stroke="none" stroke-width="0.3"/>
+<rect x="100.594" y="59.304" width="48.812" height="1.96" fill="#f4f1e8" stroke="#7a7a7a" stroke-width="0.2"/>
+<rect x="96" y="57.624" width="58" height="1.68" fill="#4e3322" stroke="none" stroke-width="0.3"/>
+<rect x="99.302" y="50.624" width="15.792" height="7" fill="#9a9a9a" stroke="#2b2b2b" stroke-width="0.2"/>
+<rect x="134.906" y="50.624" width="15.792" height="7" fill="#9a9a9a" stroke="#2b2b2b" stroke-width="0.2"/>
+<rect x="116.099" y="50.624" width="17.802" height="7" fill="#4e3322" stroke="none" stroke-width="0" fill-opacity="0.35"/>
+<text x="125" y="55.124" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="middle" fill="#ffffff">slepeno</text>
+<rect x="96" y="47.824" width="58" height="2.8" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.2"/>
+<circle cx="93" cy="65.072" r="1.7" fill="#ffffff" stroke="#a2471f" stroke-width="0.3"/>
+<text x="93" y="66.072" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#a2471f">1</text>
+<circle cx="93" cy="60.284" r="1.7" fill="#ffffff" stroke="#a2471f" stroke-width="0.3"/>
+<text x="93" y="61.284" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#a2471f">2</text>
+<circle cx="93" cy="54.124" r="1.7" fill="#ffffff" stroke="#a2471f" stroke-width="0.3"/>
+<text x="93" y="55.124" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#a2471f">3</text>
+<text x="125" y="76.8" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#7a7a7a">F – líc vpředu</text>
+<text x="125" y="45.824" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#7a7a7a">B – záda s okénky</text>
+<text x="91" y="80" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="start" fill="#2b2b2b">1  karty do první štěrbiny u přední stěny,</text>
+<text x="95" y="83.6" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="start" fill="#2b2b2b">kartu s proužkem proužkem k horní hraně (k víčku)</text>
+<text x="91" y="87.8" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="start" fill="#2b2b2b">2  bankovky napůl za barevnou hranu D1</text>
+<text x="91" y="92" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="start" fill="#2b2b2b">3  mince za tmavou D2, do levého nebo pravého sloupce</text>
+<text x="91" y="96.2" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="start" fill="#a2471f">Do štěrbiny 2 nikdy kartu: ležela by u magnetu.</text>
+</svg>

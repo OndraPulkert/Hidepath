@@ -1,14 +1,19 @@
-import { type CSSProperties, useState } from 'react';
+import { type ComponentType, type CSSProperties, useState } from 'react';
 import { Link, useParams } from 'react-router';
 
 import { routes } from '@/app/routes';
 import { AssembledIllustration } from '@/components/illustrations/assembled';
 import { TemplateIllustration } from '@/components/illustrations/template';
+import {
+  type GeneratedPatternSheet,
+  LidWalletSheetGenerator,
+} from '@/components/projects/lid-wallet-sheet-generator';
 import { groupPatternSheets } from '@/components/projects/pattern-sheet-list';
 import { Button } from '@/components/ui/button';
 import { findProject } from '@/content/projects';
 import { patternSheetUrlsFor } from '@/content/projects/pattern-sheets';
 import {
+  type PatternSheet,
   type PatternSheetsDefinition,
   type ProjectDefinition,
   type TemplateDefinition,
@@ -95,6 +100,22 @@ function PiecesTemplate({
 }
 
 /**
+ * Projekty, jejichž listy umí aplikace vygenerovat v prohlížeči pro změřenou kůži. Formulář
+ * předá hotové listy stránce jako další skupinu k zaškrtnutí.
+ */
+const sheetGenerators: Readonly<
+  Record<
+    NonNullable<PatternSheetsDefinition['browserGenerator']>,
+    ComponentType<{
+      baseSheets: readonly PatternSheet[];
+      onGenerated: (sheets: GeneratedPatternSheet[]) => void;
+    }>
+  >
+> = {
+  'lid-wallet-thickness': LidWalletSheetGenerator,
+};
+
+/**
  * Listy střihu z generátoru. Každý list je SVG přesně A4 i s vlastními okraji a kontrolní
  * úsečkou, proto se tiskne bez okrajů stránky (`margin: 0`) a s pojmenovanou stránkou podle
  * orientace. Vytiskne se jen to, co je zaškrtnuté.
@@ -106,12 +127,25 @@ function PatternSheetsPrint({
   project: ProjectDefinition;
   definition: PatternSheetsDefinition;
 }) {
-  const urls = patternSheetUrlsFor(project.slug);
-  const groups = groupPatternSheets(definition.sheets);
+  const Generator = definition.browserGenerator
+    ? sheetGenerators[definition.browserGenerator]
+    : undefined;
+  const [generated, setGenerated] = useState<GeneratedPatternSheet[]>([]);
+  const urls: Readonly<Record<string, string>> = {
+    ...patternSheetUrlsFor(project.slug),
+    ...Object.fromEntries(generated.map((g) => [g.id, g.url])),
+  };
+  const sheets: readonly PatternSheet[] = [...definition.sheets, ...generated];
+  const groups = groupPatternSheets(sheets);
   const [selected, setSelected] = useState<ReadonlySet<string>>(
     () => new Set(groups[0]?.sheets.map((s) => s.id) ?? []),
   );
-  const printable = definition.sheets.filter((s) => selected.has(s.id) && urls[s.id]);
+  const printable = sheets.filter((s) => selected.has(s.id) && urls[s.id]);
+  const onGenerated = (next: GeneratedPatternSheet[]) => {
+    setGenerated(next);
+    // Vygenerované listy nahradí k tisku výchozí střih; výchozí jde zaškrtnout zpátky.
+    setSelected(new Set(next.map((s) => s.id)));
+  };
   const orientations = new Set(printable.map((s) => s.orientation));
   const toggle = (id: string) =>
     setSelected((prev) => {
@@ -154,6 +188,7 @@ function PatternSheetsPrint({
         {definition.variantsNote ? (
           <p className="mb-6 max-w-prose text-meta text-ink-2">{typo(definition.variantsNote)}</p>
         ) : null}
+        {Generator ? <Generator baseSheets={definition.sheets} onGenerated={onGenerated} /> : null}
         <fieldset className="mb-8 flex flex-col gap-4">
           <legend className="mb-2 kicker">Co vytisknout</legend>
           {groups.map((group) => (

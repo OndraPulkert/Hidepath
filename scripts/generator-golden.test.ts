@@ -41,6 +41,14 @@ import {
   buildLidPartsSvg,
   buildLidSheetSvg,
 } from './lid-wallet.ts';
+import {
+  buildJazycekMagnetSvg,
+  buildRezSvg,
+  buildVlozkaDnaSvg,
+  buildVyrezProPalecSvg,
+  buildZadaOkenkaSvg,
+  buildZavesPresObsahSvg,
+} from './lid-wallet-illustrations.ts';
 import { buildWalletBackSvg, buildWalletJigsSvg, buildWalletSheetSvg } from './minimal-wallet.ts';
 import {
   DEFAULT_COIN_CARD_HOLDER,
@@ -165,6 +173,12 @@ describe('zapsané soubory odpovídají generátoru', () => {
     ['penezenka-vicko-rub.svg', () => buildLidBackSvg()],
     ['penezenka-vicko-dily.svg', () => buildLidPartsSvg()],
     ['penezenka-vicko-pripravky.svg', () => buildLidJigsSvg()],
+    ['penezenka-vicko-ilustrace-rez-a-vlozeni.svg', () => buildRezSvg()],
+    ['penezenka-vicko-ilustrace-vlozka-dna.svg', () => buildVlozkaDnaSvg()],
+    ['penezenka-vicko-ilustrace-zaves-pres-obsah.svg', () => buildZavesPresObsahSvg()],
+    ['penezenka-vicko-ilustrace-jazycek-magnet.svg', () => buildJazycekMagnetSvg()],
+    ['penezenka-vicko-ilustrace-zada-okenka.svg', () => buildZadaOkenkaSvg()],
+    ['penezenka-vicko-ilustrace-vyrez-pro-palec.svg', () => buildVyrezProPalecSvg()],
   ];
 
   for (const [name, build] of cases) {
@@ -173,7 +187,7 @@ describe('zapsané soubory odpovídají generátoru', () => {
       expect(onDisk, `docs/generated/${name} chybí`).toBeDefined();
       expect(
         build(),
-        `${name} se rozešel s generátorem – spusť ${name.startsWith('penezenka-vicko') ? 'pnpm pattern:wallet-lid' : name.startsWith('penezenka') ? 'pnpm pattern:wallet' : name.startsWith('pouzdro-mince-ilustrace') ? 'pnpm pattern:coin-holder-illustrations' : name.startsWith('pouzdro-mince') ? `pnpm pattern:coin-holder${`${name.includes('mince-40mm') ? ' --coin 40' : ''}${name.includes('kuze-1-2') ? ' --thickness 1.2' : ''}`}` : 'pnpm pattern:belt-end --multi'}`,
+        `${name} se rozešel s generátorem – spusť ${name.startsWith('penezenka-vicko-ilustrace') ? 'pnpm pattern:wallet-lid-illustrations' : name.startsWith('penezenka-vicko') ? 'pnpm pattern:wallet-lid' : name.startsWith('penezenka') ? 'pnpm pattern:wallet' : name.startsWith('pouzdro-mince-ilustrace') ? 'pnpm pattern:coin-holder-illustrations' : name.startsWith('pouzdro-mince') ? `pnpm pattern:coin-holder${`${name.includes('mince-40mm') ? ' --coin 40' : ''}${name.includes('kuze-1-2') ? ' --thickness 1.2' : ''}`}` : 'pnpm pattern:belt-end --multi'}`,
       ).toBe(onDisk);
     });
   }

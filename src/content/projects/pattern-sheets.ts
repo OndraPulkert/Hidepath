@@ -1,4 +1,9 @@
 import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
+import { lidWalletProject } from '@/content/projects/lid-wallet/project';
+import vickoDily from '../../../docs/generated/penezenka-vicko-dily.svg?url';
+import vickoPripravky from '../../../docs/generated/penezenka-vicko-pripravky.svg?url';
+import vickoRub from '../../../docs/generated/penezenka-vicko-rub.svg?url';
+import vickoSablona from '../../../docs/generated/penezenka-vicko-sablona.svg?url';
 import kapsa from '../../../docs/generated/pouzdro-mince-kapsa.svg?url';
 import kapsa40 from '../../../docs/generated/pouzdro-mince-kapsa-mince-40mm.svg?url';
 import papirovyModel from '../../../docs/generated/pouzdro-mince-papirovy-model.svg?url';
@@ -29,6 +34,12 @@ const registry: Readonly<Record<string, Readonly<Record<string, string>>>> = {
     'kapsa-40mm': kapsa40,
     'papirovy-model-40mm-kuze-1-2': papirovyModel4012,
     'sablona-40mm-kuze-1-2': sablona4012,
+  },
+  [lidWalletProject.slug]: {
+    sablona: vickoSablona,
+    rub: vickoRub,
+    dily: vickoDily,
+    pripravky: vickoPripravky,
   },
 };
 

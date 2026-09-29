@@ -14,8 +14,11 @@ describe('formatCzk', () => {
     expect(formatCzk(0)).toBe('0 Kč');
   });
 
-  it('zaokrouhluje haléře', () => {
-    expect(formatCzk(19_950)).toBe('200 Kč');
+  it('částku s haléři ukáže na haléře, celé koruny bez desetinných míst', () => {
+    expect(formatCzk(19_950).replace(/\s/g, ' ')).toBe('199,50 Kč');
+    expect(formatCzk(1_990).replace(/\s/g, ' ')).toBe('19,90 Kč');
+    expect(formatCzk(458_732).replace(/\s/g, ' ')).toBe('4 587,32 Kč');
+    expect(formatCzk(19_900).replace(/\s/g, ' ')).toBe('199 Kč');
   });
 });
 
@@ -23,6 +26,10 @@ describe('formatCzkRange', () => {
   it('spojí rozsah pomlčkou s jednotkou jen na konci', () => {
     expect(formatCzkRange(35_000, 60_000)).toBe('350–600\u00a0Kč');
     expect(formatCzkRange(34_000, 120_000)).toBe('340–1\u00a0200\u00a0Kč');
+  });
+
+  it('dolní mez s haléři ukáže na haléře', () => {
+    expect(formatCzkRange(1_212, 2_032).replace(/\s/g, ' ')).toBe('12,12–20,32 Kč');
   });
 
   it('shodné hodnoty vrátí jako jednu částku', () => {

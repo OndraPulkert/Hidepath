@@ -129,6 +129,18 @@ describe('generátor peněženky VÍČKO', () => {
     }
     expect(layer(sheet, 'CUT')).not.toContain('bill-window');
     expect(layer(sheet, 'GUIDE')).toContain('class="bill-window"');
+    // Kolo 11: okénko bankovek 14 × 45, konce R7 výsečníkem Ø 14 (Ø 15 CraftPoint nemá)
+    const bill = [
+      ...layer(sheet, 'GUIDE').matchAll(/<path d="([^"]+)"[^>]*class="bill-window"/g),
+    ].map((m) => nums(m[1]));
+    expect(bill).toHaveLength(1);
+    expect(bill[0][7] - bill[0][0]).toBeCloseTo(14, 6);
+    expect(bill[0][2]).toBeCloseTo(7, 6);
+    expect(bill[0][10] - bill[0][1] + 14).toBeCloseTo(45, 6);
+    expect(sheet).toContain('okénko bankovek 14 × 45');
+    expect(sheet).toContain('x 43,5–57,5, y 25–70');
+    expect(sheet).toContain('výsečník Ø 14, řezat po G3 skrz D2 + B');
+    expect(sheet).toContain('výsečníky Ø 8, 10, 12, 14');
   });
 
   it('ohyb dna a dva přehyby závěsu jsou ve FOLD přes celou šířku', () => {
@@ -280,7 +292,10 @@ describe('generátor peněženky VÍČKO', () => {
   it('list 4: čísla pro postup a okno lepení magnetu dané varianty', () => {
     expect(jigs).toContain(`Značka magnetu y_m,B (krok 17): ${cz(L.magnetYB)}`);
     expect(jigs).toContain(`okno lepení ${cz(L.magnetYBMin)}–${cz(L.magnetYBMax)}`);
-    expect(jigs).toContain(`hrana vložky dna (krok 11): v ${cz(L.v.insertEdge)}`);
+    expect(jigs).toContain(
+      `hrana vložky dna (krok 11): v ${cz(L.v.insertEdge)} (${cz(L.v.insertEdge - L.v.foldAxis)} za rýhou)`,
+    );
+    expect(jigs).toContain('(1,96 za rýhou)');
     expect(jigs).toContain(`plíšek y ${cz(L.plate.y0)}–${cz(L.plate.y1)}`);
     // přepážky 0,8: jiná čísla a úzké okno (0,13 mm) s upozorněním
     const d8 = lidSpecFromArgs(['--divider', '0.8']).spec;

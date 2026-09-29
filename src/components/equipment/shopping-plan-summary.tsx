@@ -125,6 +125,19 @@ export function ShoppingPlanSummary({
         </div>
       ) : null}
 
+      {plan.alsoNeeded.length > 0 ? (
+        <div>
+          <p className="text-meta font-semibold text-ink-2">
+            Mějte doma nebo dokupte (bez ověřené ceny, mimo součet)
+          </p>
+          <ul className="mt-1 list-disc pl-5 text-meta text-ink-2">
+            {plan.alsoNeeded.map((thing) => (
+              <li key={thing}>{typo(thing)}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
       <p className="text-meta text-ink-2">
         Ceny a dostupnost ověřeny{' '}
         {plan.checkedFrom === plan.checkedTo

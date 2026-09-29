@@ -36,6 +36,8 @@ export interface ResolvedShoppingPlan {
   checkedFrom: string;
   checkedTo: string;
   skipped: readonly { equipmentSlug: string; equipmentName: string; reason: string }[];
+  /** Drobnosti bez ověřené ceny (mít doma nebo dokoupit), mimo součet. */
+  alsoNeeded: readonly string[];
 }
 
 /** Najde v katalogu příklad, na který řádek plánu odkazuje (URL + varianta). */
@@ -100,5 +102,6 @@ export function resolveShoppingPlan(
       ...s,
       equipmentName: catalog[s.equipmentSlug]?.name ?? s.equipmentSlug,
     })),
+    alsoNeeded: plan.alsoNeeded ?? [],
   };
 }

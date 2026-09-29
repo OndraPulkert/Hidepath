@@ -4,6 +4,7 @@ import {
   CONTENT_STATES,
   DEFAULT_LID_WALLET,
   LID_P1_FALLBACK_MM,
+  LID_PUNCH_SIZES_MM,
   LID_SKIVE_FALLBACK_MM,
   PRINT_SHEET,
   SHEET_FOOTER_MM,
@@ -14,6 +15,7 @@ import {
   hingeContent,
   hingePath,
   lidWalletLayout,
+  lidWalletPunches,
   lidWalletVariant,
   type LidWalletSpec,
 } from './lid-wallet';
@@ -95,16 +97,29 @@ describe('peněženka VÍČKO – model střihu', () => {
       expect(L.ceilingY - L.d2TopY).toBeLessThan(spec.coinThicknessMinMm);
     });
 
-    it('okénko bankovek 15 × 45: tah 30, stokoruna vyčnívá ≥ 15, každá bankovka ho překryje', () => {
-      expect(L.billWindow).toEqual({ cx: 50.5, y0: 25, y1: 70, width: 15 });
+    it('okénko bankovek 14 × 45 (Kolo 11, výsečník Ø 14): tah 30, stokoruna vyčnívá ≥ 15, každá bankovka ho překryje', () => {
+      expect(L.billWindow).toEqual({ cx: 50.5, y0: 25, y1: 70, width: 14 });
       expect(L.billPushMm).toBe(45 - 15);
       const mouthY = Math.max(L.d1TopY, L.d2TopY);
       expect(L.billProtrusionMm).toEqual([2 + 69 + 30 - mouthY, 2 + 74 + 30 - mouthY]);
       expect(L.billProtrusionMm[0]).toBeGreaterThanOrEqual(15);
-      expect(L.billWindowCoverX[0]).toBeLessThanOrEqual(50.5 - 7.5);
-      expect(L.billWindowCoverX[1]).toBeGreaterThanOrEqual(50.5 + 7.5);
-      // mince 1 Kč Ø 20 okénkem neprojde (šířka ≤ Ø − 5)
+      expect(L.billWindowCoverX[0]).toBeLessThanOrEqual(50.5 - 7);
+      expect(L.billWindowCoverX[1]).toBeGreaterThanOrEqual(50.5 + 7);
+      // mince 1 Kč Ø 20 okénkem neprojde (šířka ≤ Ø − 5, rezerva 6)
       expect(L.billWindow.width).toBeLessThanOrEqual(spec.coinDiameterMinMm - 5);
+      // okénko x 43,5–57,5: od švů sloupců S2/S3 (x 36, 65) 7,5, od sloupců (35, 66) 8,5, od S1 3
+      expect([50.5 - 7 - L.seamColumnX[0], L.seamColumnX[1] - (50.5 + 7)]).toEqual([7.5, 7.5]);
+      expect([50.5 - 7 - L.columnLeft[1], L.columnRight[0] - (50.5 + 7)]).toEqual([8.5, 8.5]);
+      expect(L.billWindow.y0 - L.s1Y).toBe(3);
+    });
+
+    it('výsečníky: střih potřebuje přesně Ø 8, 10, 12, 14 a všechny jsou v nabídce', () => {
+      expect(lidWalletPunches(spec).map((u) => u.diameterMm)).toEqual([8, 10, 12, 14]);
+      for (const u of lidWalletPunches(spec)) expect(LID_PUNCH_SIZES_MM).toContain(u.diameterMm);
+      expect(LID_PUNCH_SIZES_MM).not.toContain(15);
+      expect(with_({ billWindowWidthMm: 15 }).join('\n')).toMatch(
+        /Výsečník Ø 15 \(okénko bankovek\) není v nabídce/,
+      );
     });
 
     it('mince: sloupec ≥ 2 × 27,5 + 1 i při horším klínu, horní mince vyčnívá ≥ 8', () => {
@@ -517,7 +532,9 @@ describe('peněženka VÍČKO – model střihu', () => {
         expect(Lv.magnetYB).toBeLessThanOrEqual(Lv.magnetYBMax);
         expect(Math.abs(Lv.magnetYB * 20 - Math.round(Lv.magnetYB * 20))).toBeLessThan(1e-6);
       }
-      expect(lidWalletLayout({ ...spec, cardsMax: 5, leatherMm: 0.8 }).magnetYB).toBe(11.55);
+      // Kolo 11: okno 11,527–11,577 (0,05) je pod minimem 0,1, dno karet 24,5 → 25,0, y_m,B 11,55 → 11,8
+      const L5 = lidWalletLayout({ ...spec, cardsMax: 5, leatherMm: 0.8 });
+      expect([L5.cardFloorY, L5.magnetYB, L5.magnetWindowMm]).toEqual([25, 11.8, 0.55]);
     });
 
     it('záloha B závěs: plné ztenčení pokryje oba přehyby i ve stavu C při k max, náběhy vně pásu (Kolo 8)', () => {
@@ -629,6 +646,39 @@ describe('peněženka VÍČKO – model střihu', () => {
       }
       // 0,70 by se zaokrouhlením dna karet na 25,5 mělo okno jen 11,61–11,63
       expect(lidWalletLayout(lidWalletVariant({ dividerMm: 0.7 })).cardFloorY).toBe(26);
+    });
+
+    it('Kolo 11: okno lepení magnetu je pro přepážky 0,69–0,75 aspoň 0,1 mm, jinak česká hláška', () => {
+      for (let i = 69; i <= 75; i++) {
+        const s = lidWalletVariant({ dividerMm: i / 100 });
+        const Lv = lidWalletLayout(s);
+        const problems = checkLidWallet(s);
+        if (Lv.magnetWindowMm >= 0.1 - 1e-9) {
+          expect(problems, String(i / 100)).toEqual([]);
+          expect(Lv.magnetYB).toBeGreaterThanOrEqual(Lv.magnetYBMin);
+          expect(Lv.magnetYB).toBeLessThanOrEqual(Lv.magnetYBMax);
+        } else {
+          expect(problems.join('\n'), String(i / 100)).toMatch(/Okno pro lepení magnetu/);
+        }
+        // podle modelu projdou všechny: dno karet se u 0,72–0,75 zvedne na 26,0
+        expect(Lv.magnetWindowMm, String(i / 100)).toBeGreaterThanOrEqual(0.1);
+        expect(Lv.cardFloorY, String(i / 100)).toBe(26);
+      }
+      // dno karet podle tloušťky přepážek: 0,6 / 0,7 / 0,72 / 0,8 / 0,9
+      const cf = [0.6, 0.7, 0.72, 0.8, 0.9].map(
+        (d) => lidWalletLayout(lidWalletVariant({ dividerMm: d })).cardFloorY,
+      );
+      expect(cf).toEqual([26, 26, 26, 25.5, 25.5]);
+      // 0,72 dřív dostala dno 25,5 a okno jen 11,59–11,63 (0,04 mm)
+      const L72 = lidWalletLayout(lidWalletVariant({ dividerMm: 0.72 }));
+      expect([L72.magnetYBMin, L72.magnetYBMax]).toEqual([11.59, 12.134]);
+      // 0,77 má na dně 25,5 okno 0,102 → dno zůstane; 0,8 má 0,136
+      expect(lidWalletLayout(lidWalletVariant({ dividerMm: 0.77 })).cardFloorY).toBe(25.5);
+      // nesplnitelné minimum (dno se zvedne nejvýš o 2 kroky) odmítne kontrola česky
+      const hard = { ...lidWalletVariant({ dividerMm: 0.72 }), magnetWindowMinMm: 5 };
+      expect(checkLidWallet(hard).join('\n')).toMatch(
+        /Okno pro lepení magnetu ve stavu B y .* je široké jen .* mm \(minimum 5\) – na hotovém kusu se rukou nedá trefit/,
+      );
     });
   });
 });

@@ -253,6 +253,11 @@ export const patternSheetsDefinitionSchema = z.object({
   variantsNote: z.string().min(1).optional(),
   /** Nadpis skupiny listů bez varianty na tiskové stránce (např. pro jakou minci a kůži); jinak „Výchozí střih“. */
   defaultVariantLabel: z.string().min(1).optional(),
+  /**
+   * Listy umí aplikace vygenerovat i v prohlížeči pro změřené hodnoty (formulář na stránce tisku).
+   * Klíč vybere formulář; výpočet a kreslení jsou v `src/lib/patterns`.
+   */
+  browserGenerator: z.enum(['lid-wallet-thickness']).optional(),
 });
 export type PatternSheetsDefinition = z.infer<typeof patternSheetsDefinitionSchema>;
 
@@ -280,6 +285,11 @@ export const shoppingPlanSchema = z.object({
   title: z.string().min(1),
   lines: z.array(shoppingPlanLineSchema).min(1),
   skipped: z.array(z.object({ equipmentSlug: slug, reason: z.string().min(1) })),
+  /**
+   * Drobnosti z domácnosti, papírnictví nebo hobby marketu, které postup potřebuje, ale katalog
+   * je nevede a cenu neověřujeme (maskovací páska, čtvrtka…). Do součtu se nepočítají.
+   */
+  alsoNeeded: z.array(z.string().min(1)).optional(),
 });
 export type ShoppingPlan = z.infer<typeof shoppingPlanSchema>;
 

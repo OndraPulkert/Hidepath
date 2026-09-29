@@ -21,7 +21,7 @@ describe('vazba aplikace na konkrétní projekt', () => {
     const offenders = Object.entries(sources)
       .filter(([path]) => !path.includes('.test.'))
       .filter(([, src]) =>
-        /from ['"][^'"]*content\/projects\/(card-holder|coin-card-holder)\//.test(src),
+        /from ['"][^'"]*content\/projects\/(card-holder|coin-card-holder|lid-wallet)\//.test(src),
       )
       .map(([path]) => path);
     expect(offenders, 'soubory, které jmenují pouzdro přímo').toEqual([]);
@@ -30,7 +30,7 @@ describe('vazba aplikace na konkrétní projekt', () => {
   it('nic mimo registr nezná slug pouzdra jako literál', () => {
     const offenders = Object.entries(sources)
       .filter(([path]) => !path.includes('.test.'))
-      .filter(([, src]) => /['"](card-holder|coin-card-holder)['"]/.test(src))
+      .filter(([, src]) => /['"](card-holder|coin-card-holder|lid-wallet)['"]/.test(src))
       .map(([path]) => path);
     expect(offenders, 'soubory se zadrátovaným slugem').toEqual([]);
   });

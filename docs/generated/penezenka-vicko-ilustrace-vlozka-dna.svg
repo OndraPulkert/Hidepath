@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="160mm" height="100mm" viewBox="0 0 160 100">
+<rect width="160" height="100" fill="#ffffff"/>
+<text x="80" y="5.5" font-family="Helvetica, Arial, sans-serif" font-size="3.8" text-anchor="middle" fill="#2b2b2b">Vložka dna: hrana vložky leží za rýhou, ne na ní</text>
+<rect x="8" y="14" width="142.8" height="30" fill="#efe2cf" stroke="#6e4a2c" stroke-width="0.3"/>
+<rect x="58.555" y="14" width="16.493" height="30" fill="#e2c9a6" stroke="none" stroke-width="0" fill-opacity="0.9"/>
+<rect x="75.049" y="11" width="75.751" height="36" fill="#dfe8f0" stroke="#2b2b2b" stroke-width="0.3" fill-opacity="0.85"/>
+<path d="M66.8 12 L66.8 46" stroke="#a2471f" stroke-width="0.5" fill="none" stroke-dasharray="1.2 0.8"/>
+<path d="M75.049 11 L75.049 47" stroke="#2b2b2b" stroke-width="0.6" fill="none"/>
+<text x="10" y="19" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="start" fill="#6e4a2c">F (přední stěna)</text>
+<text x="148.8" y="19" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="end" fill="#2b2b2b">B (záda) – vložka leží tady</text>
+<text x="148.8" y="23" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="end" fill="#7a7a7a">vložka 111 × 25 × 1,5</text>
+<text x="148.8" y="26.6" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="end" fill="#7a7a7a">(4 staré karty, 2 vrstvy)</text>
+<text x="65.8" y="36" font-family="Helvetica, Arial, sans-serif" font-size="2.7" text-anchor="end" fill="#a2471f">rýha v 62,21</text>
+<text x="76.049" y="36" font-family="Helvetica, Arial, sans-serif" font-size="2.7" text-anchor="start" fill="#2b2b2b">hrana vložky v 64,18</text>
+<path d="M66.8 52 L75.049 52" stroke="#a2471f" stroke-width="0.3" fill="none"/><path d="M66.8 50.8 L66.8 53.2" stroke="#a2471f" stroke-width="0.3" fill="none"/><path d="M75.049 50.8 L75.049 53.2" stroke="#a2471f" stroke-width="0.3" fill="none"/><text x="70.924" y="50.6" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="middle" fill="#a2471f">1,96 mm</text>
+<text x="57.555" y="42" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="end" fill="#6e4a2c">pás oblouku 3,93 mm</text>
+<text x="8" y="57" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#7a7a7a">rub nahoře; čáry i rysky na obou bocích dílu</text>
+<rect x="30" y="80" width="110" height="6" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.3"/>
+<rect x="30" y="71" width="100" height="9" fill="#dfe8f0" stroke="#2b2b2b" stroke-width="0.3"/>
+<text x="90" y="76.5" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="middle" fill="#2b2b2b">vložka (rovná hrana)</text>
+<rect x="30" y="65" width="110" height="6" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.3"/>
+<path d="M30 86 L28.629 85.91 L27.282 85.642 L25.982 85.201 L24.75 84.593 L23.608 83.83 L22.575 82.925 L21.67 81.892 L20.907 80.75 L20.299 79.518 L19.858 78.218 L19.59 76.871 L19.5 75.5 L19.59 74.129 L19.858 72.782 L20.299 71.482 L20.907 70.25 L21.67 69.108 L22.575 68.075 L23.608 67.17 L24.75 66.407 L25.982 65.799 L27.282 65.358 L28.629 65.09 L30 65 L30 71 L29.413 71.038 L28.835 71.153 L28.278 71.343 L27.75 71.603 L27.261 71.93 L26.818 72.318 L26.43 72.761 L26.103 73.25 L25.843 73.778 L25.653 74.335 L25.538 74.913 L25.5 75.5 L25.538 76.087 L25.653 76.665 L25.843 77.222 L26.103 77.75 L26.43 78.239 L26.818 78.682 L27.261 79.07 L27.75 79.397 L28.278 79.657 L28.835 79.847 L29.413 79.962 L30 80 Z" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.3"/>
+<circle cx="25.5" cy="75.5" r="0.9" fill="#a2471f" stroke="none" stroke-width="0.3"/>
+<path d="M17.5 63.5 L24.9 74.7" stroke="#a2471f" stroke-width="0.3" fill="none"/>
+<text x="15.5" y="62.5" font-family="Helvetica, Arial, sans-serif" font-size="2.7" text-anchor="start" fill="#a2471f">rýha (na rubu) = vrchol ohybu</text>
+<text x="60" y="91" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#7a7a7a">schéma; skutečný střed ohybu ověří V12</text>
+<path d="M30 63.5 L30 88" stroke="#2b2b2b" stroke-width="0.3" fill="none" stroke-dasharray="1 0.8"/>
+<text x="31" y="91" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#2b2b2b">hrana vložky</text>
+<text x="142" y="83" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="start" fill="#6e4a2c">B</text>
+<text x="142" y="68" font-family="Helvetica, Arial, sans-serif" font-size="2.8" text-anchor="start" fill="#6e4a2c">F</text>
+<text x="138" y="63.8" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="end" fill="#7a7a7a">líc</text>
+<text x="138" y="89.2" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="end" fill="#7a7a7a">líc</text>
+<text x="80" y="97" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="middle" fill="#7a7a7a">Vložku položte na rub B hranou na čáru, F přehněte přes ni lícem ven, fólie mezi líc a prkénka, přes noc.</text>
+</svg>

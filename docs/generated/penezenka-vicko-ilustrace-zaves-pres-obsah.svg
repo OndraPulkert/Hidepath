@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="160mm" height="100mm" viewBox="0 0 160 100">
+<rect width="160" height="100" fill="#ffffff"/>
+<text x="80" y="5.5" font-family="Helvetica, Arial, sans-serif" font-size="3.8" text-anchor="middle" fill="#2b2b2b">Závěs se tvaruje zavřený přes obsah, přes noc pod knihou</text>
+<rect x="4" y="70" width="152" height="3" fill="#c9a878" stroke="none" stroke-width="0.3"/>
+<text x="6" y="77.5" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#7a7a7a">stůl</text>
+<rect x="24.1" y="66.8" width="95.7" height="3.2" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.2"/>
+<rect x="43.6" y="64.88" width="76.8" height="1.92" fill="#4e3322" stroke="none" stroke-width="0.2"/>
+<rect x="24.4" y="62.64" width="78" height="2.24" fill="#f4f1e8" stroke="#7a7a7a" stroke-width="0.2"/>
+<rect x="24.4" y="60.72" width="95.4" height="1.92" fill="#e8d6b0" stroke="#7a7a7a" stroke-width="0.2"/>
+<rect x="54.112" y="55.856" width="64.776" height="4.864" fill="#dfe8f0" stroke="#2b2b2b" stroke-width="0.2"/>
+<rect x="24.1" y="52.656" width="72.3" height="3.2" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.2"/>
+<path d="M24.1 70 L22.968 69.926 L21.856 69.705 L20.781 69.34 L19.764 68.838 L18.821 68.208 L17.968 67.46 L17.22 66.607 L16.59 65.664 L16.088 64.647 L15.723 63.572 L15.502 62.46 L15.428 61.328 L15.502 60.196 L15.723 59.084 L16.088 58.009 L16.59 56.992 L17.22 56.049 L17.968 55.196 L18.821 54.448 L19.764 53.818 L20.781 53.316 L21.856 52.951 L22.968 52.73 L24.1 52.656 L24.1 55.856 L23.386 55.903 L22.684 56.042 L22.006 56.273 L21.364 56.589 L20.769 56.987 L20.231 57.459 L19.759 57.997 L19.361 58.592 L19.045 59.234 L18.814 59.912 L18.675 60.614 L18.628 61.328 L18.675 62.042 L18.814 62.744 L19.045 63.422 L19.361 64.064 L19.759 64.659 L20.231 65.197 L20.769 65.669 L21.364 66.067 L22.006 66.383 L22.684 66.614 L23.386 66.753 L24.1 66.8 Z" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.2"/>
+<path d="M119.8 52.656 L120.932 52.73 L122.044 52.951 L123.119 53.316 L124.136 53.818 L125.079 54.448 L125.932 55.196 L126.68 56.049 L127.31 56.992 L127.812 58.009 L128.177 59.084 L128.398 60.196 L128.472 61.328 L128.398 62.46 L128.177 63.572 L127.812 64.647 L127.31 65.664 L126.68 66.607 L125.932 67.46 L125.079 68.208 L124.136 68.838 L123.119 69.34 L122.044 69.705 L120.932 69.926 L119.8 70 L119.8 66.8 L120.514 66.753 L121.216 66.614 L121.894 66.383 L122.536 66.067 L123.131 65.669 L123.669 65.197 L124.141 64.659 L124.539 64.064 L124.855 63.422 L125.086 62.744 L125.225 62.042 L125.272 61.328 L125.225 60.614 L125.086 59.912 L124.855 59.234 L124.539 58.592 L124.141 57.997 L123.669 57.459 L123.131 56.987 L122.536 56.589 L121.894 56.273 L121.216 56.042 L120.514 55.903 L119.8 55.856 Z" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.2"/>
+<rect x="27.88" y="49.456" width="68.52" height="3.2" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.2"/>
+<path d="M96.4 49.456 L100 52.656 L119.8 52.656 L119.8 55.856 L100 55.856 L96.4 52.656 Z" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.2"/>
+<rect x="113.8" y="51.456" width="14.805" height="19.744" fill="#7fb2d6" stroke="none" stroke-width="0" fill-opacity="0.18"/>
+<path d="M18 48.656 L134.472 48.656" stroke="#7fb2d6" stroke-width="0.8" fill="none"/>
+<rect x="14" y="31.056" width="119.4" height="17" fill="#8a3f3f" stroke="#5e2a2a" stroke-width="0.4"/>
+<text x="72.1" y="41.056" font-family="Helvetica, Arial, sans-serif" font-size="3.2" text-anchor="middle" fill="#ffffff">kniha (lehká zátěž)</text>
+<text x="135.472" y="49.656" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#7fb2d6">fólie</text>
+<path d="M90.112 58.288 L90.112 82" stroke="#7a7a7a" stroke-width="0.2" fill="none"/>
+<text x="90.112" y="85" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="middle" fill="#2b2b2b">2 staré karty</text>
+<path d="M46 63.76 L46 87" stroke="#7a7a7a" stroke-width="0.2" fill="none"/>
+<text x="46" y="90" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="middle" fill="#2b2b2b">papír ≈ 0,7 mm místo bankovky</text>
+<path d="M35.08 51.056 L35.08 82" stroke="#7a7a7a" stroke-width="0.2" fill="none"/>
+<text x="35.08" y="85" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="middle" fill="#2b2b2b">jazýček po přední stěně</text>
+<text x="121.8" y="77" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#a2471f">navlhčit jen pás závěsu</text>
+<text x="80" y="97" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="middle" fill="#7a7a7a">Zavřené přes noc (12–24 h, ne u topení). Magnet ještě není. Potom otevřené víčko samo nestojí – tak to má být.</text>
+<text x="4" y="14" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#7a7a7a">obsah pod závěsem T = 3,42 mm (stav B)</text>
+</svg>

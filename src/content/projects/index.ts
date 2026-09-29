@@ -1,8 +1,13 @@
 import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
+import { lidWalletProject } from '@/content/projects/lid-wallet/project';
 import { type ProjectDefinition } from '@/content/schema';
 
-export const projects: readonly ProjectDefinition[] = [cardHolderProject, coinCardHolderProject];
+export const projects: readonly ProjectDefinition[] = [
+  cardHolderProject,
+  coinCardHolderProject,
+  lidWalletProject,
+];
 
 /**
  * První zastávka cesty učení: projekt, na který nový uživatel nastupuje (onboarding) a který

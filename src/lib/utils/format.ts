@@ -3,10 +3,23 @@ const czkFormatter = new Intl.NumberFormat('cs-CZ', {
   currency: 'CZK',
   maximumFractionDigits: 0,
 });
+const czkCentsFormatter = new Intl.NumberFormat('cs-CZ', {
+  style: 'currency',
+  currency: 'CZK',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
 
-/** Naformátuje částku v haléřích jako české koruny bez desetinných míst, např. „1 850 Kč“. */
+/**
+ * Naformátuje částku v haléřích jako české koruny: celé koruny bez desetinných míst („1 850 Kč“),
+ * částku s haléři na haléře („19,90 Kč“). Nezaokrouhluje, aby se zobrazené řádky plánu sečetly
+ * na zobrazený součet.
+ */
 export function formatCzk(amountCents: number): string {
-  return czkFormatter.format(Math.round(amountCents / 100));
+  const cents = Math.round(amountCents);
+  return cents % 100 === 0
+    ? czkFormatter.format(cents / 100)
+    : czkCentsFormatter.format(cents / 100);
 }
 
 const NBSP = '\u00a0';
@@ -14,9 +27,11 @@ const NBSP = '\u00a0';
 /** Rozsah cen „350–600 Kč“; při shodných hodnotách vrátí jednu částku. */
 export function formatCzkRange(minCents: number, maxCents: number): string {
   if (minCents === maxCents) return formatCzk(minCents);
-  const min = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 0 }).format(
-    Math.round(minCents / 100),
-  );
+  const fraction = Math.round(minCents) % 100 === 0 ? 0 : 2;
+  const min = new Intl.NumberFormat('cs-CZ', {
+    minimumFractionDigits: fraction,
+    maximumFractionDigits: fraction,
+  }).format(Math.round(minCents) / 100);
   return `${min}–${formatCzk(maxCents)}`;
 }
 

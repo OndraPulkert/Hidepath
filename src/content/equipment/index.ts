@@ -1,3 +1,4 @@
+import { lidWalletEquipment } from '@/content/equipment/lid-wallet';
 import { type EquipmentCatalog, type EquipmentDefinition } from '@/content/schema';
 
 /**
@@ -266,8 +267,9 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         title: 'Řezací pravítko s protiskluzovou vložkou 30 cm',
         shop: 'CraftPoint',
         url: 'https://craft-point.cz/products/rezaci-pravitko-s-protiskluzovou-vlozkou-20cm-30cm',
+        variant: '30 cm',
         priceCents: 22_300,
-        note: 'Kov s gumovou vložkou, nepodjíždí. Dražší než pravítko z papírnictví, ale drží na kůži. Varianta 30 cm skladem (29. 9. 2026), 20 cm vyprodaná.',
+        note: 'Kov s gumovou vložkou, nepodjíždí. Dražší než pravítko z papírnictví, ale drží na kůži. Varianta 30 cm skladem (29. 9. 2026), 20 cm (137 Kč) vyprodaná.',
         availability: 'in_stock',
         checkedAt: '2026-09-29',
       },
@@ -655,11 +657,12 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     alsoUsedFor: ['Všechny šité projekty'],
     examples: [
       {
-        title: 'Nitě Slam – béžová, 0,6 mm, 20 m',
+        title: 'Nitě Slam – béžová, 20 m',
         shop: 'CraftPoint',
         url: 'https://craft-point.cz/products/nite-slam-bezova-beige-20m',
+        variant: '0,6 mm',
         priceCents: 4_000,
-        note: 'Splétaný voskovaný polyester C.T.Point; vyberte tloušťku 0,6 mm. Tmavší odstín schová první nepřesnosti. Tloušťka 0,6 mm skladem (29. 9. 2026), stejně jako 0,8 a 1,0 mm.',
+        note: 'Splétaný voskovaný polyester C.T.Point; vyberte tloušťku 0,6 mm. Tmavší odstín schová první nepřesnosti. Tloušťka 0,6 mm skladem (29. 9. 2026), stejně jako 0,8 mm (42 Kč) a 1,0 mm (44 Kč).',
         availability: 'in_stock',
         checkedAt: '2026-09-29',
       },
@@ -881,7 +884,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     // Dva archy na plátně (180 + 240) à 11 Kč až brousek 55 Kč (ověřeno 2026-09-29 / 2026-09-09).
     priceRange: { minCents: 2_200, maxCents: 5_500 },
     priceSource: 'verified',
-    priceNote: `${VERIFIED_NOTE} Dva archy (zrnitost 180 a 240) nebo jeden brousek.`,
+    priceNote: `${VERIFIED_NOTE} Dva archy ve zrnitostech podle projektu (u pouzdra 180 a 240) nebo jeden brousek.`,
     alsoUsedFor: ['Všechny projekty z třísločiněné kůže'],
     examples: [
       {
@@ -903,6 +906,28 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         variant: 'zrnitost 240',
         priceNote: 'za arch',
         note: 'Jemnější z dvojice: srovnání sešitých hran do roviny před leštěním. Jemnější než 240 obchod v této řadě nemá; na volitelné dohlazení má vodní brusný papír od zrnitosti 800.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-29',
+      },
+      {
+        title: 'Brusný arch na plátně 230 × 280 mm',
+        shop: 'CraftPoint',
+        url: 'https://craft-point.cz/products/brusny-arch-na-platne-230x280-mm-ruzne-zrnitosti',
+        priceCents: 1_100,
+        variant: 'zrnitost 120',
+        priceNote: 'za arch',
+        note: 'Hrubší arch: na kov (otřep a rohy kovového dílu na desce), na hrany kůže je hrubý.',
+        availability: 'in_stock',
+        checkedAt: '2026-09-29',
+      },
+      {
+        title: 'Brusný arch na plátně 230 × 280 mm',
+        shop: 'CraftPoint',
+        url: 'https://craft-point.cz/products/brusny-arch-na-platne-230x280-mm-ruzne-zrnitosti',
+        priceCents: 1_100,
+        variant: 'zrnitost 80',
+        priceNote: 'za arch',
+        note: 'Hrubý arch na ubírání materiálu na hranolku; na hrany kůže je moc hrubý.',
         availability: 'in_stock',
         checkedAt: '2026-09-29',
       },
@@ -2035,6 +2060,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       },
     ],
   }),
+  ...lidWalletEquipment,
 ];
 
 export const equipmentCatalog: EquipmentCatalog = Object.fromEntries(

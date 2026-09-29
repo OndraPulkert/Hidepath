@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="160mm" height="100mm" viewBox="0 0 160 100">
+<rect width="160" height="100" fill="#ffffff"/>
+<text x="80" y="5.5" font-family="Helvetica, Arial, sans-serif" font-size="3.8" text-anchor="middle" fill="#2b2b2b">Záda: sloupce mincí a okénko bankovek</text>
+<rect x="6" y="23.91" width="86.86" height="70.09" fill="#9c6b43" stroke="#6e4a2c" stroke-width="0.4"/>
+<path d="M6 78.52 L92.86 78.52" stroke="#f5e6d0" stroke-width="0.3" fill="none" stroke-dasharray="1.2 0.8"/>
+<rect x="9.44" y="23.91" width="26.66" height="50.31" fill="none" stroke="#f5e6d0" stroke-width="0.3" stroke-dasharray="1 0.8"/>
+<circle cx="22.77" cy="61.32" r="11.825" fill="none" stroke="#f5e6d0" stroke-width="0.3" stroke-dasharray="0.8 0.6"/>
+<circle cx="22.77" cy="37.67" r="11.825" fill="none" stroke="#f5e6d0" stroke-width="0.3" stroke-dasharray="0.8 0.6"/>
+<rect x="62.76" y="23.91" width="26.66" height="50.31" fill="none" stroke="#f5e6d0" stroke-width="0.3" stroke-dasharray="1 0.8"/>
+<circle cx="76.09" cy="61.32" r="11.825" fill="none" stroke="#f5e6d0" stroke-width="0.3" stroke-dasharray="0.8 0.6"/>
+<circle cx="76.09" cy="37.67" r="11.825" fill="none" stroke="#f5e6d0" stroke-width="0.3" stroke-dasharray="0.8 0.6"/>
+<path d="M27.93 33.8 L27.886 33.126 L27.754 32.464 L27.537 31.825 L27.239 31.22 L26.864 30.659 L26.419 30.151 L25.911 29.706 L25.35 29.331 L24.745 29.033 L24.106 28.816 L23.444 28.684 L22.77 28.64 L22.096 28.684 L21.434 28.816 L20.795 29.033 L20.19 29.331 L19.629 29.706 L19.121 30.151 L18.676 30.659 L18.301 31.22 L18.003 31.825 L17.786 32.464 L17.654 33.126 L17.61 33.8 L17.61 64.76 L17.654 65.434 L17.786 66.096 L18.003 66.735 L18.301 67.34 L18.676 67.901 L19.121 68.409 L19.629 68.854 L20.19 69.229 L20.795 69.527 L21.434 69.744 L22.096 69.876 L22.77 69.92 L23.444 69.876 L24.106 69.744 L24.745 69.527 L25.35 69.229 L25.911 68.854 L26.419 68.409 L26.864 67.901 L27.239 67.34 L27.537 66.735 L27.754 66.096 L27.886 65.434 L27.93 64.76 Z" fill="#ffffff" stroke="#2b2b2b" stroke-width="0.4"/>
+<path d="M81.25 33.8 L81.206 33.126 L81.074 32.464 L80.857 31.825 L80.559 31.22 L80.184 30.659 L79.739 30.151 L79.231 29.706 L78.67 29.331 L78.065 29.033 L77.426 28.816 L76.764 28.684 L76.09 28.64 L75.416 28.684 L74.754 28.816 L74.115 29.033 L73.51 29.331 L72.949 29.706 L72.441 30.151 L71.996 30.659 L71.621 31.22 L71.323 31.825 L71.106 32.464 L70.974 33.126 L70.93 33.8 L70.93 64.76 L70.974 65.434 L71.106 66.096 L71.323 66.735 L71.621 67.34 L71.996 67.901 L72.441 68.409 L72.949 68.854 L73.51 69.229 L74.115 69.527 L74.754 69.744 L75.416 69.876 L76.09 69.92 L76.764 69.876 L77.426 69.744 L78.065 69.527 L78.67 69.229 L79.231 68.854 L79.739 68.409 L80.184 67.901 L80.559 67.34 L80.857 66.735 L81.074 66.096 L81.206 65.434 L81.25 64.76 Z" fill="#ffffff" stroke="#2b2b2b" stroke-width="0.4"/>
+<path d="M55.45 39.82 L55.398 39.034 L55.245 38.262 L54.992 37.516 L54.643 36.81 L54.206 36.155 L53.687 35.563 L53.095 35.044 L52.44 34.607 L51.734 34.258 L50.988 34.005 L50.216 33.852 L49.43 33.8 L48.644 33.852 L47.872 34.005 L47.126 34.258 L46.42 34.607 L45.765 35.044 L45.173 35.563 L44.654 36.155 L44.217 36.81 L43.868 37.516 L43.615 38.262 L43.462 39.034 L43.41 39.82 L43.41 66.48 L43.462 67.266 L43.615 68.038 L43.868 68.784 L44.217 69.49 L44.654 70.145 L45.173 70.737 L45.765 71.256 L46.42 71.693 L47.126 72.042 L47.872 72.295 L48.644 72.448 L49.43 72.5 L50.216 72.448 L50.988 72.295 L51.734 72.042 L52.44 71.693 L53.095 71.256 L53.687 70.737 L54.206 70.145 L54.643 69.49 L54.992 68.784 L55.245 68.038 L55.398 67.266 L55.45 66.48 Z" fill="#ffffff" stroke="#2b2b2b" stroke-width="0.4"/>
+<circle cx="49.43" cy="66.48" r="0.5" fill="#a2471f" stroke="none" stroke-width="0.3"/>
+<circle cx="49.43" cy="39.82" r="0.5" fill="#a2471f" stroke="none" stroke-width="0.3"/>
+<circle cx="15.03" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="18.47" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="21.91" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="25.35" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="28.79" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="32.23" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="35.67" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="39.11" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="42.55" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="45.99" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="49.43" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="52.87" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="56.31" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="59.75" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="63.19" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="66.63" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="70.07" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="73.51" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="76.95" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="80.39" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="83.83" cy="75.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="36.96" cy="69.92" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="36.96" cy="66.48" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="36.96" cy="63.04" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="36.96" cy="59.6" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="36.96" cy="56.16" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="36.96" cy="52.72" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="36.96" cy="49.28" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="36.96" cy="45.84" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="36.96" cy="42.4" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="36.96" cy="38.96" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="36.96" cy="35.52" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="36.96" cy="32.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="36.96" cy="28.64" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="61.9" cy="69.92" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="61.9" cy="66.48" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="61.9" cy="63.04" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="61.9" cy="59.6" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="61.9" cy="56.16" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="61.9" cy="52.72" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="61.9" cy="49.28" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="61.9" cy="45.84" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="61.9" cy="42.4" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="61.9" cy="38.96" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="61.9" cy="35.52" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="61.9" cy="32.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="61.9" cy="28.64" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="8.58" cy="87.12" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="8.58" cy="83.68" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="8.58" cy="80.24" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="8.58" cy="76.8" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="8.58" cy="73.36" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="8.58" cy="69.92" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="8.58" cy="66.48" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="8.58" cy="63.04" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="8.58" cy="59.6" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="8.58" cy="56.16" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="8.58" cy="52.72" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="8.58" cy="49.28" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="8.58" cy="45.84" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="8.58" cy="42.4" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="8.58" cy="38.96" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="8.58" cy="35.52" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="8.58" cy="32.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="8.58" cy="28.64" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="90.28" cy="87.12" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="90.28" cy="83.68" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="90.28" cy="80.24" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="90.28" cy="76.8" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="90.28" cy="73.36" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="90.28" cy="69.92" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="90.28" cy="66.48" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="90.28" cy="63.04" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="90.28" cy="59.6" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="90.28" cy="56.16" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="90.28" cy="52.72" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="90.28" cy="49.28" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="90.28" cy="45.84" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="90.28" cy="42.4" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="90.28" cy="38.96" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="90.28" cy="35.52" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="90.28" cy="32.08" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<circle cx="90.28" cy="28.64" r="0.45" fill="#2b2b2b" stroke="none" stroke-width="0.3"/>
+<path d="M76.09 31.22 L95.86 22" stroke="#7a7a7a" stroke-width="0.2" fill="none"/>
+<text x="96.86" y="23" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#2b2b2b">okénka mincí 12 × 48 (výsečník Ø 12)</text>
+<path d="M87.7 39.82 L95.86 30" stroke="#7a7a7a" stroke-width="0.2" fill="none"/>
+<text x="96.86" y="31" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#2b2b2b">sloupec 31 × 57: 2 mince nad sebou</text>
+<path d="M55.45 40.68 L95.86 40" stroke="#7a7a7a" stroke-width="0.2" fill="none"/>
+<text x="96.86" y="41" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#a2471f">okénko bankovek 14 × 45</text>
+<text x="96.86" y="44.6" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="start" fill="#7a7a7a">(výsečník Ø 14, středy y 32 a 63)</text>
+<text x="96.86" y="48.8" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="start" fill="#7a7a7a">tah prstem 30 mm, bankovka pak vyčnívá 19–24 mm</text>
+<path d="M61.9 51 L95.86 58" stroke="#7a7a7a" stroke-width="0.2" fill="none"/>
+<text x="96.86" y="59" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#2b2b2b">švy sloupců S2 / S3 (x 36 a 65)</text>
+<path d="M66.2 75.08 L95.86 68" stroke="#7a7a7a" stroke-width="0.2" fill="none"/>
+<text x="96.86" y="69" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#2b2b2b">S1 dno mincí (y 22)</text>
+<path d="M90.28 83.68 L95.86 76" stroke="#7a7a7a" stroke-width="0.2" fill="none"/>
+<text x="96.86" y="77" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#2b2b2b">boční švy S4 / S5 (3 mm od hrany)</text>
+<path d="M83.4 78.52 L95.86 84" stroke="#7a7a7a" stroke-width="0.2" fill="none"/>
+<text x="96.86" y="85" font-family="Helvetica, Arial, sans-serif" font-size="2.6" text-anchor="start" fill="#7a7a7a">spodní hrana D2 (y 18, zevnitř)</text>
+<text x="49.43" y="21.41" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="middle" fill="#7a7a7a">pohled na líc zad zvenku</text>
+<text x="49.43" y="99" font-family="Helvetica, Arial, sans-serif" font-size="2.5" text-anchor="middle" fill="#7a7a7a">mince 1 Kč (Ø 20) okénkem nepropadne</text>
+</svg>

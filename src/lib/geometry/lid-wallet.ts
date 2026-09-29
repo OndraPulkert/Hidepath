@@ -189,6 +189,11 @@ export interface LidWalletSpec {
   thumbNotchSideReserveMm: number;
   /** O kolik může dno bankovek ležet níž než billFloorMm (tolerance 1,0–2,0, oddíl 4.4). */
   billFloorToleranceMm: number;
+  /**
+   * Nejmenší šířka okna lepení magnetu ⟨y_m,B,min; y_m,B,max⟩ (Kolo 11). Užší okno se na hotovém
+   * kusu rukou netrefí, proto se dno karet zvedne o krok (jako záloha A: 0,1 mm).
+   */
+  magnetWindowMinMm: number;
 }
 
 export const DEFAULT_LID_WALLET: LidWalletSpec = {
@@ -257,7 +262,7 @@ export const DEFAULT_LID_WALLET: LidWalletSpec = {
   d2SkiveWedgeMm: 3.0,
   d1BelowCeilingMm: 1.0,
   d2BelowCeilingMm: 0.5,
-  billWindowWidthMm: 15,
+  billWindowWidthMm: 14,
   billWindowBottomMm: 25,
   billWindowTopMm: 70,
   fingerContactMm: 15,
@@ -282,7 +287,29 @@ export const DEFAULT_LID_WALLET: LidWalletSpec = {
   thumbNotchCornerRadiusMm: 1,
   thumbNotchSideReserveMm: 1,
   billFloorToleranceMm: 1.0,
+  magnetWindowMinMm: 0.1,
 };
+
+/**
+ * Průměry výsečníků, které CraftPoint nabízí (craft-point.cz, „Výsečníky na kůži 2-20mm“, ověřeno
+ * 29. 9. 2026 přes `.js`): 2–6, 8, 10, 12, 14, 16, 18, 20. Ø 15 v nabídce není (Kolo 11).
+ */
+export const LID_PUNCH_SIZES_MM: readonly number[] = [2, 3, 4, 5, 6, 8, 10, 12, 14, 16, 18, 20];
+
+/** Výsečníky, které střih potřebuje: napojení jazýčku, výřez pro palec, okénka mincí a bankovek. */
+export function lidWalletPunches(spec: LidWalletSpec): { diameterMm: number; use: string }[] {
+  const uses: { diameterMm: number; use: string }[] = [
+    { diameterMm: 2 * spec.tongueJoinRadiusMm, use: 'napojení jazýčku na pás' },
+    { diameterMm: spec.thumbNotchWidthMm, use: 'výřez pro palec v F' },
+    { diameterMm: spec.coinWindowWidthMm, use: 'okénka mincí' },
+    { diameterMm: spec.billWindowWidthMm, use: 'okénko bankovek' },
+  ];
+  const byD = new Map<number, string[]>();
+  for (const u of uses) byD.set(u.diameterMm, [...(byD.get(u.diameterMm) ?? []), u.use]);
+  return [...byD.entries()]
+    .sort((a, b) => a[0] - b[0])
+    .map(([diameterMm, us]) => ({ diameterMm, use: us.join(', ') }));
+}
 
 /** Kolik se odstřihne z hrany karet vložky dna, která jde do ohybu (Kolo 9, zaoblené rohy karet). */
 export const LID_SPACER_EDGE_TRIM_MM = 4;
@@ -507,8 +534,10 @@ export interface LidWalletLayout {
   magnetYB: number;
   magnetYBMin: number;
   magnetYBMax: number;
-  /** V okně ⟨min; max⟩ leží aspoň jeden bod mřížky 0,05 (jinak je okno lepení nepoužitelně úzké). */
+  /** V okně ⟨min; max⟩ leží aspoň jeden bod mřížky 0,05. */
   magnetYBOnGrid: boolean;
+  /** Šířka okna lepení magnetu y_m,B,max − y_m,B,min (≥ magnetWindowMinMm, Kolo 11). */
+  magnetWindowMm: number;
   bandFromMagnetMm: number;
   plate: { x0: number; x1: number; y0: number; y1: number };
   magnetX: [number, number];
@@ -805,13 +834,19 @@ export function lidWalletLayout(spec: LidWalletSpec = DEFAULT_LID_WALLET): LidWa
       cf - spec.stepMarginMm - rMag - spec.kDesign * (PC - PB),
       cf - spec.plateBelowFloorMm - spec.plateMarginMm - rMag - spec.kMax * (PC - PB),
     );
-  // Okno lepení magnetu ⟨min; max⟩ musí obsahovat bod mřížky 0,05. Když ho po zaokrouhlení dna
-  // karet nahoru neobsahuje (např. přepážky 0,69–0,71, Kolo 9), zvedne se dno karet o jeden krok.
+  // Okno lepení magnetu ⟨min; max⟩ musí být široké aspoň magnetWindowMinMm (0,1). Když po
+  // zaokrouhlení dna karet nahoru užší je (např. přepážky 0,72–0,76 dávaly 0,04–0,09, Kolo 11;
+  // dřív stačil bod mřížky 0,05, Kolo 9), zvedne se dno karet o krok, nejvýš o dva; zbytek
+  // odmítne kontrola.
   const cardFloorRaw = roundUpTo(Math.max(cardFloorYStep, cardFloorYPlate), step);
-  const cardFloorY =
-    roundUpTo(magnetYBMin, 0.05) <= roundDownTo(magnetMaxFor(cardFloorRaw), 0.05) + 1e-9
-      ? cardFloorRaw
-      : cardFloorRaw + step;
+  let cardFloorY = cardFloorRaw;
+  for (
+    let i = 0;
+    i < 2 && magnetMaxFor(cardFloorY) - magnetYBMin < spec.magnetWindowMinMm - 1e-9;
+    i++
+  ) {
+    cardFloorY += step;
+  }
   const magnetYBMax = magnetMaxFor(cardFloorY);
   // Poloha lepení: střed okna na 0,1; když tam neleží, nejbližší bod mřížky 0,05 uvnitř okna.
   // Zaokrouhluje se až uvnitř ⟨min; max⟩, aby hodnota nepřelezla mez (dřív round() po ořezu
@@ -1399,6 +1434,7 @@ export function lidWalletLayout(spec: LidWalletSpec = DEFAULT_LID_WALLET): LidWa
     magnetYBMin: round(magnetYBMin),
     magnetYBMax: round(magnetYBMax),
     magnetYBOnGrid,
+    magnetWindowMm: round(magnetYBMax - magnetYBMin),
     bandFromMagnetMm: round(bandFromMagnetMm),
     plate,
     magnetX,
@@ -1540,6 +1576,7 @@ export function checkLidWallet(spec: LidWalletSpec = DEFAULT_LID_WALLET): string
     'kDesign',
     'kMax',
     'roundStepMm',
+    'magnetWindowMinMm',
   ];
   for (const k of positive) {
     const val = spec[k];
@@ -1676,9 +1713,9 @@ export function checkLidWallet(spec: LidWalletSpec = DEFAULT_LID_WALLET): string
       p.push(`Stav ${s.state.label}: karty narážejí do závěsu (posun ${fmt(s.cardShiftNomMm)}).`);
     }
   }
-  if (!L.magnetYBOnGrid) {
+  if (L.magnetWindowMm < spec.magnetWindowMinMm - 1e-9 || !L.magnetYBOnGrid) {
     p.push(
-      `Okno pro lepení magnetu ve stavu B y ${fmt(L.magnetYBMin)}–${fmt(L.magnetYBMax)} je užší než krok 0,05 – na hotovém kusu se nedá trefit.`,
+      `Okno pro lepení magnetu ve stavu B y ${fmt(L.magnetYBMin)}–${fmt(L.magnetYBMax)} je široké jen ${fmt(L.magnetWindowMm)} mm (minimum ${fmt(spec.magnetWindowMinMm)}) – na hotovém kusu se rukou nedá trefit.`,
     );
   }
   if (L.magnetYB < L.magnetYBMin - 1e-9 || L.magnetYB > L.magnetYBMax + 1e-9) {
@@ -1780,6 +1817,14 @@ export function checkLidWallet(spec: LidWalletSpec = DEFAULT_LID_WALLET): string
     );
   }
 
+  // Výsečníky: jen průměry z nabídky (Ø 15 u CraftPointu není, Kolo 11).
+  for (const u of lidWalletPunches(spec)) {
+    if (!LID_PUNCH_SIZES_MM.some((d) => Math.abs(d - u.diameterMm) < 1e-9)) {
+      p.push(
+        `Výsečník Ø ${fmt(u.diameterMm)} (${u.use}) není v nabídce (${LID_PUNCH_SIZES_MM.map(fmt).join(', ')}).`,
+      );
+    }
+  }
   // Okénka.
   if (spec.billWindowWidthMm > spec.coinDiameterMinMm - 5 + 1e-9) {
     p.push(

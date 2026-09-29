@@ -1512,8 +1512,8 @@ export const coinCardHolderProject: ProjectDefinition = {
       {
         equipmentSlug: 'steel-ruler',
         url: 'https://craft-point.cz/products/rezaci-pravitko-s-protiskluzovou-vlozkou-20cm-30cm',
+        variant: '30 cm',
         quantity: 1,
-        purpose: 'varianta 30 cm',
       },
       {
         equipmentSlug: 'cutting-mat',
@@ -1561,8 +1561,9 @@ export const coinCardHolderProject: ProjectDefinition = {
       {
         equipmentSlug: 'waxed-thread',
         url: 'https://craft-point.cz/products/nite-slam-bezova-beige-20m',
+        variant: '0,6 mm',
         quantity: 1,
-        purpose: 'varianta 0,6 mm; 20 m vystačí na šev dna i kapsy s velkou rezervou',
+        purpose: '20 m vystačí na šev dna i kapsy s velkou rezervou',
       },
       {
         equipmentSlug: 'contact-cement',
