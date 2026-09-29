@@ -27,6 +27,14 @@ https://developers.cloudflare.com/pages/platform/limits/).
 
 Směrování SPA: v `dist/` není `404.html`, takže Pages vrací `index.html` pro neznámé cesty (režim SPA).
 
+## Varianta: Workers se statickými soubory (nové rozhraní Cloudflare)
+
+Nové rozhraní „Create application“ zakládá **Worker** z Git repozitáře (Build command + Deploy command
+`npx wrangler deploy`). Funguje to taky: `wrangler.jsonc` v kořeni říká, že se servíruje `dist/`
+a neznámé cesty vrací `index.html`. Proměnné `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` a
+`PNPM_VERSION` patří do **build variables** (Settings → Build → Variables and secrets, v průvodci
+„Advanced settings“), ne do runtime proměnných Workeru – Vite je čte při buildu.
+
 ## Po prvním nasazení
 
 1. Do `supabase/config.toml` doplnit adresu aplikace: `site_url = "https://<projekt>.pages.dev"` a

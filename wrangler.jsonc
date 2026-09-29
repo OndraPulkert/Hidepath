@@ -1,0 +1,10 @@
+// Cloudflare Workers se statickými soubory: servíruje build z dist/ (Vite PWA).
+// Neznámé cesty vrací index.html (SPA). Data a přihlášení řeší Supabase.
+{
+  "name": "hidepath",
+  "compatibility_date": "2026-09-29",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
