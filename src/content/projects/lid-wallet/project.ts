@@ -8,7 +8,7 @@ import {
 
 /**
  * Projekt 03 – Peněženka Víčko. Obsah je NÁVRH (draft), stejně jako střih sám
- * (docs/zadani/penezenka-vicko.md, po Kole 11). Čísla v textu jsou pro výchozí střih (P1 1,0 mm,
+ * (docs/zadani/penezenka-vicko.md, po Kole 12). Čísla v textu jsou pro výchozí střih (P1 1,0 mm,
  * přepážky D1/D2 a podšívka L1 0,6 mm) a počítá je `src/lib/geometry/lid-wallet.ts`; test
  * `project.test.ts` hlídá, že odpovídají modelu. S koupenou kůží jiné tloušťky platí čísla
  * z rámečku „Čísla pro postup“ na listu 4 listů vygenerovaných pro změřenou tloušťku.
@@ -708,7 +708,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'remove-spacer',
         title: 'Vysuňte vložku',
-        body: 'Po vyschnutí vysuňte vložku bokem. Boky ještě nejsou slepené, takže F jde odklopit do asi 90° na lepení plíšku a D1 v příští lekci. Když ohyb po vyschnutí trochu odpruží, udrží ho lepení G4 a boční švy.',
+        body: 'Po vyschnutí vysuňte vložku bokem. Boky ještě nejsou slepené, takže F jde odklopit do asi 90° na lepení plíšku a D1 v příští lekci: F pak leží rubem nahoru na desce a B stojí nad ohybem nahoru. Když ohyb po vyschnutí trochu odpruží, udrží ho lepení G4 a boční švy.',
         media: [],
       },
     ],
@@ -752,25 +752,25 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'g1',
         title: 'G1: plíšek na rub přední stěny',
-        body: `${NUMBERS_NOTE} F odklopte do asi 90°. Plíšek přilepte kontaktním lepidlem na rub F do plochy G1: x 43,5–57,5, y 3,5–24 (přilnavost lepidla k oceli ověřte na odřezku). Po tomto kroku už plíšek vyměnit nejde, magnet ano.`,
+        body: `${NUMBERS_NOTE} F (přední stěnu) položte naplocho rubem nahoru na PE desku, celou na desce, ohyb dna u hrany desky. B (zadní stěna s přišitou D2) stojí nad ohybem nahoru a ohyb dna zůstává asi 90°. Viset dolů přes hranu stolu jako u švu S6 B tady nemůže: s F rubem nahoru by se ohyb musel přehnout obráceně. Vyschlý ohyb chce B sklopit zpátky k F, proto ji zezadu opřete o knihu nebo krabičku a horní hranu k ní přichyťte kolíčkem nebo páskou, ať nespadne na lepidlo. Plíšek přilepte kontaktním lepidlem na rub F do plochy G1: x 43,5–57,5, y 3,5–24 (přilnavost lepidla k oceli ověřte na odřezku). Po tomto kroku už plíšek vyměnit nejde, magnet ano.`,
         media: [],
       },
       {
         id: 'g2',
         title: 'G2 a G2b: přepážka D1',
-        body: 'D1 přilepte rubem na rub F: G2 v y 2–26 (x 4–97) přes plíšek a boky G2b v x 4–5 a 96–97 do y 61. D1 má šířku přesně 93 mm bez montážní vůle, proto na D1 i na rub F vyznačte osu x 50,5 a D1 přikládejte podle osy zdola od y 2 nahoru. Pásy G2b (1 mm) ohraničte maskovací páskou z obou stran a lepidlo nanášejte párátkem, ať nepřeteče do kapsy karet. Přetok nad y 26 hned setřete.',
+        body: 'D1 přilepte rubem na rub F: G2 v y 2–26 (x 4–97) přes plíšek a boky G2b v x 4–5 a 96–97 do y 61. D1 má šířku přesně 93 mm bez montážní vůle, proto na D1 i na rub F vyznačte osu x 50,5 a D1 přikládejte podle osy zdola od y 2 nahoru. Pásy G2b (1 mm) ohraničte maskovací páskou z obou stran a lepidlo nanášejte párátkem, ať nepřeteče do kapsy karet. Pásky strhněte hned po nanesení lepidla, ještě než zavadne a než přiložíte D1, jinak zůstanou zalepené pod D1. Přetok nad y 26 hned setřete.',
         media: [],
       },
       {
         id: 'check-d1',
         title: 'Změřte polohu D1',
-        body: 'Po přiložení změřte: kapsa karet mezi pásy G2b musí mít aspoň 90,5 mm a D1 musí být od hrany F aspoň 3,5 mm, jinak zasáhne do bočního švu S4 na x 3. Pak přitlačte paličkou přes desku.',
+        body: 'Po přiložení změřte: kapsa karet mezi pásy G2b musí mít aspoň 90,5 mm a D1 musí být od hrany F aspoň 3,5 mm, jinak zasáhne do bočního švu S4 na x 3. Pak přitlačte paličkou přes desku položenou na D1; F leží na PE desce, takže úder má oporu.',
         media: [],
       },
       {
         id: 's6',
         title: 'Šev dna karet S6',
-        body: 'Mezi lepením a S6 nechte aspoň 1 h. F položte naplocho lícem nahoru na tvrdou desku u hrany stolu a B nechte viset přes hranu (ohyb dna na hraně desky). Otvory S6 podle šablony z listu 1 na líci F propíchněte jehlou a děrujte vidličkou: y 25 (výchozí), x 10,5 až 38,5 a 62,5 až 90,5, dvakrát 8 otvorů. Střed kolem plíšku a jazýčku šev vynechává, drží ho jen lepení G2. Vidlička natočená při pohledu na líc F horní hranou od sebe. Šijte sedlovým stehem, konce 2 otvory zpět.',
+        body: 'Mezi lepením a S6 nechte aspoň 1 h. Díl otočte: F teď položte naplocho lícem nahoru na tvrdou desku u hrany stolu a B nechte viset přes hranu (ohyb dna na hraně desky). Otvory S6 podle šablony z listu 1 na líci F propíchněte jehlou a děrujte vidličkou: y 25 (výchozí), x 10,5 až 38,5 a 62,5 až 90,5, dvakrát 8 otvorů. Střed kolem plíšku a jazýčku šev vynechává, drží ho jen lepení G2. Vidlička natočená při pohledu na líc F horní hranou od sebe. Šijte sedlovým stehem, konce 2 otvory zpět.',
         media: [
           ill(
             'lw-l8-section',
@@ -796,6 +796,8 @@ export const lessons: readonly LessonDefinition[] = [
     commonMistakes: [
       'D1 přikládaná od kraje místo podle osy: chyba se nerozdělí na obě strany.',
       'Lepidlo přeteklé z G2b do kapsy karet.',
+      'Maskovací páska kolem G2b nechaná na místě při přikládání D1: zůstane zalepená pod D1.',
+      'Lepení na svisle odklopenou F: palička přes desku pak nemá oporu, F má ležet rubem nahoru na desce.',
       'Děrování S6 hned po lepení, bez hodinové přestávky.',
     ],
     safety: [],
