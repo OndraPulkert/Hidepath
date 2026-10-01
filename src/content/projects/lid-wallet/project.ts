@@ -379,11 +379,11 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 120,
     goal: 'Lekce 4–12 projdete nejdřív celé na zkušebním kuse: vyříznout pro něj pás P1, přepážky D1 a D2, přířez podšívky L1 a jeden plíšek K2 podle platných listů a přenést na rub P1 všechny čáry a hranice lepení.',
     materials: [
-      'platné listy 1–4 (po P0 a V12 případně znovu vygenerované) a tvrdý papír na šablony',
+      'platné listy 1–4 (po P0 a V12 případně znovu vygenerované), list 1 a list 3 navíc ještě jednou (první výtisk se při řezání rozřeže), tvrdý papír na šablony',
       'šablony konce jazýčku a výřezu pro palec z lekce 2',
       'bezbarvý lak na nehty (hrany plíšku)',
       'jehla na propichování (rýsovací šídlo z projektu 02 dělá větší vpich – jestli poslouží, ověřit na odřezku), tužka',
-      'maskovací páska (volitelně, na přilepení šablony)',
+      'maskovací páska (na přilepení listů 1 a 3 při řezání)',
     ],
     requiredEquipment: [
       'veg-tan-leather-1mm',
@@ -409,21 +409,45 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'valid-sheets',
         title: 'Platné listy a šablony',
-        body: `${NUMBERS_NOTE} Když P0, V12 nebo zkušební kus něco změnily, vygenerujte listy znovu jedním příkazem se vším, co platí (záloha z V12, „--divider“, „--lining“, případně „--p1“), vytiskněte a znovu zkontrolujte úsečku 50 mm a kótu P1. Pak nalepte na tvrdý papír a vyřízněte šablonu z listu 1 (obrys pásu s okénky a otvory švů) a šablony z listu 4 (okénka, plíšek, proužek otvorů bočních švů). Šablony konce jazýčku a výřezu pro palec máte z lekce 2, na variantě z V12 nezávisí.`,
+        body: `${NUMBERS_NOTE} Když P0, V12 nebo zkušební kus něco změnily, vygenerujte listy znovu jedním příkazem se vším, co platí (záloha z V12, „--divider“, „--lining“, případně „--p1“), vytiskněte a znovu zkontrolujte úsečku 50 mm a kótu P1. Tiskněte nejlépe na matný papír pro inkoustové tiskárny 120 g, jinak na obyčejný papír. List 1 a list 3 vytiskněte dvakrát: první výtisk se při řezání rozřeže (hlavní způsob níže), druhý nalepte na tvrdý papír a vyřízněte přesně jako šablonu. Přes šablonu z listu 1 se později propichují otvory švů S1–S3 (lekce 6) a S6 (lekce 8), D2 z listu 3 poslouží v lekci 6 při značení S1–S3 způsobem (b). Šablony z listu 4 (okénka, plíšek, proužek otvorů bočních švů) nalepte na tvrdý papír a vyřízněte. Šablony konce jazýčku a výřezu pro palec máte z lekce 2, na variantě z V12 nezávisí. Na finální kus vytiskněte listy 1 a 3 znovu, z listů, které po zkušebním kuse platí.`,
+        media: [],
+      },
+      {
+        id: 'tape-sheet-1',
+        title: 'Hlavní způsob: list 1 přilepte na líc',
+        body: 'První výtisk listu 1 vystřihněte jen nahrubo, s okrajem 1–2 cm kolem obrysu P1 – přesně po čáře ho nestříhejte, řezat se bude až nožem skrz papír i kůži. List 1 je P1 z líce, proto ho položte na LÍC usně a přilepte maskovací páskou na okrajích, mimo linii řezu, z několika stran, aby se nemohl posunout. Pásku nejdřív zkuste na odřezku usně – silnější páska může na líci nechat lesklou stopu nebo vytrhnout vlákna.',
+        media: [],
+      },
+      {
+        id: 'prick-p1',
+        title: 'Před řezáním propíchněte značky P1',
+        body: 'Dokud je list přilepený a nic není vyříznuté, propíchněte skrz papír: konce osy ohybu dna a obou přehybů závěsu těsně u hrany na obou bocích a středy výsečníků – Ø 8 na napojení jazýčku (vysekává se hned v dalším kroku), Ø 12 na koncích okének mincí a Ø 10 výřezu pro palec (ty se vysekávají až v lekci 5). Otvory švů S1–S3 a S6 teď nepropichujte: propichují se až v lekcích 6 a 8 přes šablonu z druhého výtisku listu 1.',
         media: [],
       },
       {
         id: 'cut-p1',
-        title: 'Vyřízněte pás P1',
-        body: 'P1 je 101 mm široký a dlouhý podle kóty z rámečku na listu 4 (výchozí 231,66 mm). Rovné řezy veďte nožem u pravítka, obrys jazýčku a pásu víčka podle listu 1. Šablonu z listu 1 můžete přilepit maskovací páskou na okrajích (ne přes linii řezu) a řezat podél jejího okraje; do šablony nezařezávejte, přes ni se později propichují otvory švů. Pásku nejdřív zkuste na odřezku usně – silnější páska může na líci nechat lesklou stopu nebo vytrhnout vlákna – a strhávejte ji pomalu pod ostrým úhlem. Konec jazýčku nechte rovný v plné délce kóty P1 – je v ní rezerva 5 mm na ořez (list 1: „jazýček … + 5 rezerva“). Špičku R10 teď neřežte: řežete ji až v lekci 11 spolu s podšívkou L1, 7,0 mm pod značkou magnetu nalepeného na hotové peněžence. Výřez pro palec zatím nedělejte (lekce 5). Napojení jazýčku na pás je vyduté (R4): nejdřív výsečník Ø 8, pak tečné rovné řezy nožem.',
+        title: 'Vyřízněte pás P1 skrz papír',
+        body: 'P1 je 101 mm široký a dlouhý podle kóty z rámečku na listu 4 (výchozí 231,66 mm). Řežte skrz papír i kůži přesně po vytištěné čáře. Napojení jazýčku na pás je vyduté (R4): nejdřív výsečník Ø 8 skrz papír, pak tečné rovné řezy nožem. Rovné úseky veďte s ocelovým pravítkem položeným na čáru, na dva až tři lehké tahy, nůž kolmo; oblouky pomalu bez pravítka. Když začne řez třepit papír nebo kůži, odlomte článek čepele. Konec jazýčku nechte rovný v plné délce kóty P1 – je v ní rezerva 5 mm na ořez (list 1: „jazýček … + 5 rezerva“). Špičku R10 teď neřežte: řežete ji až v lekci 11 spolu s podšívkou L1, 7,0 mm pod značkou magnetu nalepeného na hotové peněžence. Výřez pro palec zatím nedělejte (lekce 5).',
         media: [
           photo('lw-l4-p1', 'Vyříznutý pás P1 s jazýčkem, vyduté napojení jazýčku výsečníkem Ø 8'),
         ],
       },
       {
+        id: 'peel-p1',
+        title: 'Sejměte list a zkontrolujte značky',
+        body: 'Pásku strhávejte pomalu pod ostrým úhlem, skoro rovnoběžně s kůží. Zkontrolujte, že se přenesly všechny značky: konce osy ohybu dna a přehybů závěsu na obou bocích a středy okének mincí a výřezu pro palec. Rozřezaný list už znovu nepoužijete.',
+        media: [],
+      },
+      {
         id: 'cut-parts',
         title: 'Přepážky D1, D2 a přířez L1',
-        body: 'Pro zkušební kus po jednom kusu: D1 93 × 79,5 mm s horními rohy R3 z nebarvené kozinky, D2 103 × 64 mm z čokoládové kozinky, přířez podšívky L1 24 × 22 mm z nebarvené kozinky. Rozměry berte z listu 3 dané varianty.',
+        body: 'Pro zkušební kus po jednom kusu: D1 93 × 79,5 mm s horními rohy R3 z nebarvené kozinky, D2 103 × 64 mm z čokoládové kozinky, přířez podšívky L1 24 × 22 mm z nebarvené kozinky. Rozměry berte z listu 3 dané varianty. Stejně jako u P1: z prvního výtisku listu 3 vystřihněte každý díl nahrubo s okrajem 1–2 cm a přilepte ho maskovací páskou na rub kozinky (díly jsou souměrné, takže na straně šablony tvar nezávisí, a propíchnuté značky zůstanou na rubu). U D1 a D2 propíchněte konce osy x 50,5 na horní a spodní hraně – podle osy se přepážky později přikládají. Pak řežte skrz papír po vytištěné čáře: rovné strany s ocelovým pravítkem na čáře, rohy R3 pomalu bez pravítka. Pásku strhněte pomalu pod ostrým úhlem a zkontrolujte značky.',
+        media: [],
+      },
+      {
+        id: 'transfer-other',
+        title: 'Jinak: šablona vyříznutá přesně',
+        body: 'Šablonu můžete také nalepit na tvrdý papír, vyříznout přesně po čáře, přilepit na okrajích a řezat podél jejího okraje. Hlavní způsob je přesnější, protože se řeže přímo po vytištěné čáře.',
         media: [],
       },
       {
@@ -449,6 +473,12 @@ export const lessons: readonly LessonDefinition[] = [
         required: true,
       },
       {
+        slug: 'marks-transferred',
+        title:
+          'Po sejmutí listů jsou vidět všechny propíchnuté značky (konce osy ohybu a přehybů závěsu na bocích P1, středy okének a výřezu, osa D1 a D2) a druhý výtisk listu 1 a 3 je vyříznutý jako šablona.',
+        required: false,
+      },
+      {
         slug: 'back-marked',
         title:
           'Na rubu P1 je osa ohybu dna, pás závěsu, hranice G1–G4, čáry S1–S3 a S6, poloha D1 a D2 a značky L; osa ohybu a přehyby závěsu i na bocích.',
@@ -457,6 +487,9 @@ export const lessons: readonly LessonDefinition[] = [
     ],
     commonMistakes: [
       'Výřez pro palec vyříznutý hned: dělá se až v lekci 5.',
+      'List 1 jen v jednom výtisku: rozřeže se při řezání P1 a na propichování S1–S3 a S6 pak nemáte šablonu. Vytiskněte ho dvakrát.',
+      'Řez podél okraje papíru s nožem přitlačeným k papíru místo k pravítku: nůž uhne a hrana není rovná. Řežte po vytištěné čáře a rovné úseky podle pravítka.',
+      'Páska přes linii řezu: nůž jde přes pásku a řez uhne.',
       'Špička jazýčku R10 vyříznutá hned podle obrysu: přijdete o rezervu 5 mm a poloha magnetu vůči špičce přestane platit. Konec jazýčku nechte rovný (kóta P1 včetně rezervy 5 mm), špičku R10 řežete až v lekci 11 spolu s L1, 7,0 mm pod značkou magnetu.',
       'Díly finálního kusu vyříznuté spolu se zkušebním: zkušební kus může změnit variantu a rozměry.',
       'Plíšek z nerezu: austenitická nerez je prakticky nemagnetická, plech vyzkoušejte magnetem.',
@@ -1368,7 +1401,7 @@ export const lidWalletProject: ProjectDefinition = {
       equipmentSlug: 'masking-tape',
       priority: 'recommended',
       reason:
-        'Šablona z listu 1 při řezání P1 (lekce 4), ohraničení úzkých pásů lepení G2b a G3 a lepených míst před Tokonole (lekce 5, 6 a 8), značka magnetu (lekce 11). Stejná role jako u projektů 01 a 02.',
+        'Listy 1 a 3 při řezání P1, D1, D2 a L1 skrz papír (lekce 4), ohraničení úzkých pásů lepení G2b a G3 a lepených míst před Tokonole (lekce 5, 6 a 8), značka magnetu (lekce 11). Stejná role jako u projektů 01 a 02.',
       specification:
         'Papírová maskovací páska kolem 25 mm s nízkou lepivostí (na citlivé povrchy); na líci i rubu nejdřív zkouška na odřezku.',
     },
@@ -1425,7 +1458,7 @@ export const lidWalletProject: ProjectDefinition = {
     ],
     calibrationMm: 50,
     printNote:
-      'Tisk na A4 na výšku bez přizpůsobení velikosti (100 %). Kontrolní úsečka musí měřit 50 mm. Úsečka neodhalí chybu měřítka 0,5 %, proto změřte i kótu P1 na listu 1 (výchozí 231,66 mm) a porovnejte ji s rámečkem „Čísla pro postup“ na listu 4 (tolerance ±0,5 mm).',
+      'Tisk na A4 na výšku bez přizpůsobení velikosti (100 %). Kontrolní úsečka musí měřit 50 mm. Úsečka neodhalí chybu měřítka 0,5 %, proto změřte i kótu P1 na listu 1 (výchozí 231,66 mm) a porovnejte ji s rámečkem „Čísla pro postup“ na listu 4 (tolerance ±0,5 mm). Jak přenést listy na kůži: vystřihnout nahrubo s okrajem 1–2 cm, přilepit páskou (list 1 na líc), propíchnout značky a řezat skrz papír po čáře (lekce 4). Rozřezaný list je na jedno použití, proto list 1 a 3 tiskněte dvakrát.',
     defaultVariantLabel: 'Výchozí střih – P1 1,0 mm, přepážky D1/D2 a podšívka L1 0,6 mm',
     browserGenerator: 'lid-wallet-thickness',
     variantsNote:

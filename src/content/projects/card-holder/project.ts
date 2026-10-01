@@ -535,9 +535,9 @@ export const lessons: readonly LessonDefinition[] = [
     goal: 'Mít dva přesné díly pouzdra vyříznuté podle šablony 1:1.',
     materials: [
       'vytištěná šablona 1:1 (zkontrolovaná úsečka 50 mm)',
-      'nůžky na vystřižení šablony',
+      'nůžky na vystřižení šablony nahrubo (s okrajem 1–2 cm)',
       'finální kůže 1,2–1,5 mm',
-      'maskovací páska nebo svorky',
+      'maskovací páska',
     ],
     requiredEquipment: [
       'veg-tan-leather',
@@ -552,7 +552,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'print-check',
         title: 'Vytiskněte a zkontrolujte šablonu',
-        body: 'Tisk na A4 bez přizpůsobení velikosti („skutečná velikost“, 100 %). Změřte kontrolní úsečku: musí mít přesně 50 mm. Když ne, upravte nastavení tisku a tiskněte znovu.',
+        body: 'Tiskněte na A4 bez přizpůsobení velikosti („skutečná velikost“, 100 %), nejlépe na matný papír pro inkoustové tiskárny 120 g, jinak na obyčejný papír. Změřte kontrolní úsečku: musí mít přesně 50 mm. Když ne, upravte nastavení tisku a tiskněte znovu.',
         media: [
           {
             id: 'l5-template',
@@ -572,28 +572,34 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         id: 'transfer',
-        title: 'Přeneste obrys',
-        body: 'Šablonu vystřihněte, položte na rub kůže a přilepte maskovací páskou na okrajích, ne přes linii řezu. Obrys obtáhněte rýsovacím šídlem, tupou jehlou nebo tužkou. Rohy označte tečkou, zaoblení dokreslíte podle šablony. Jde to i bez obkreslení: šablonu přilepenou na okrajích nechte na kůži a řežte podél jejího okraje – papír se tím poničí, je na jedno použití. Pásku nejdřív zkuste na odřezku téže kůže (může vytrhnout vlákna nebo na líci nechat lesklou stopu) a strhávejte ji pomalu pod ostrým úhlem.',
+        title: 'Hlavní způsob: přilepte šablonu na rub',
+        body: 'Šablonu vystřihněte jen nahrubo, s okrajem 1–2 cm kolem obrysu – přesně po čáře ji nestříhejte, řezat se bude až nožem skrz papír i kůži. Každý díl vystřihněte zvlášť. Položte ji na rub kůže a přilepte maskovací páskou na okrajích, mimo linii řezu, z několika stran, aby se nemohla posunout. Pásku nejdřív zkuste na odřezku téže kůže (může vytrhnout vlákna nebo na líci nechat lesklou stopu). Šablona se tím rozřeže a je na jedno použití: na každý další díl nebo pouzdro vytiskněte novou.',
         media: [
           {
             id: 'l5-transfer',
             kind: 'photo',
             caption:
-              'Papírová šablona přilepená páskou na rubu kůže, ruka obtahuje obrys tupou jehlou',
+              'Papírová šablona vystřižená s okrajem 1–2 cm, přilepená maskovací páskou za okraje na rubu kůže',
             status: 'planned',
           },
         ],
       },
       {
+        id: 'prick-marks',
+        title: 'Před řezáním propíchněte značky',
+        body: 'Dokud je šablona přilepená a ještě nic není vyříznuté, propíchněte šídlem skrz papír do kůže všechny značky: rohy (začátky a konce zaoblení) a oba konce oblouku výřezu na palec. Po vyříznutí už šablona na díl přesně nedosedne.',
+        media: [],
+      },
+      {
         id: 'cut-parts',
-        title: 'Vyřízněte díly',
-        body: 'Rovné strany řežte podle pravítka jako v lekci 2, na dva až tři lehké tahy. Zaoblené rohy řežte krátkými tahy bez pravítka, nůž kolmo. Nejdřív hrubě vyřízněte celý díl s rezervou, pak přesně.',
+        title: 'Řežte skrz papír po vytištěné čáře',
+        body: 'Řežte skrz papír i kůži přesně po vytištěné plné čáře. Rovné strany s ocelovým pravítkem položeným na čáru, jako v lekci 2; zaoblené rohy pomalu bez pravítka, krátkými tahy. Nůž držte kolmo a každý řez veďte na dva až tři lehké tahy. Když začne řez třepit papír nebo kůži, odlomte článek čepele.',
         media: [
           {
             id: 'l5-corner-cut',
             kind: 'video',
             caption:
-              'Řezání zaobleného rohu krátkými tahy, nůž kolmo k podložce, druhá ruka otáčí kůží',
+              'Řezání zaobleného rohu skrz šablonu krátkými tahy, nůž kolmo k podložce, druhá ruka otáčí kůží',
             status: 'planned',
             durationSeconds: 40,
           },
@@ -602,7 +608,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'thumb-cutout',
         title: 'Vyřízněte výřez na palec',
-        body: 'Výřez je jen na přední kapse, uprostřed horní hrany: 40 mm široký a 12 mm hluboký. Oblouk neřežte jedním tahem. Nasekejte ho pěti až šesti krátkými rovnými řezy kousek vedle linie, nůž kolmo, volná ruka otáčí kůží. Zbytek do linie dobruste smirkovým papírem 220 omotaným kolem tužky nebo tenkého dřívka. Finální tvar dělá smirek, ne nůž, takže oblouk nemusíte trefit napoprvé.',
+        body: 'Výřez je jen na přední kapse, uprostřed horní hrany: 40 mm široký a 12 mm hluboký. Řežte ho ještě s přilepenou šablonou, ať čáru vidíte. Oblouk neřežte jedním tahem. Nasekejte ho pěti až šesti krátkými rovnými řezy kousek vedle linie, nůž kolmo, volná ruka otáčí kůží. Zbytek do linie dobrousíte po sejmutí šablony.',
         media: [
           {
             id: 'l5-thumb-cutout',
@@ -612,6 +618,18 @@ export const lessons: readonly LessonDefinition[] = [
             status: 'planned',
           },
         ],
+      },
+      {
+        id: 'peel-template',
+        title: 'Sejměte šablonu a zkontrolujte značky',
+        body: 'Pásku strhávejte pomalu pod ostrým úhlem, skoro rovnoběžně s kůží. Zkontrolujte, že se přenesly všechny propíchnuté značky. Pak výřez na palec dobruste do linie smirkovým papírem 220 omotaným kolem tužky nebo tenkého dřívka. Finální tvar dělá smirek, ne nůž, takže oblouk nemusíte trefit napoprvé.',
+        media: [],
+      },
+      {
+        id: 'transfer-other',
+        title: 'Jinak: obkreslení',
+        body: 'Šablonu můžete vystřihnout i přesně po čáře, přilepit na rub a obtáhnout šídlem, tupou jehlou nebo tužkou, nebo řezat podél okraje papíru. Hlavní způsob výše je přesnější, protože se řeže přímo po vytištěné čáře.',
+        media: [],
       },
       {
         id: 'compare-parts',
@@ -628,6 +646,11 @@ export const lessons: readonly LessonDefinition[] = [
       },
       { slug: 'two-parts', title: 'Mám dva díly podle šablony s kolmými hranami.', required: true },
       {
+        slug: 'marks-transferred',
+        title: 'Po sejmutí šablony jsou na rubu vidět všechny propíchnuté značky.',
+        required: false,
+      },
+      {
         slug: 'parts-match',
         title: 'Přední díl přiložený na zadní lícuje na bocích i dole.',
         required: true,
@@ -641,7 +664,9 @@ export const lessons: readonly LessonDefinition[] = [
     ],
     commonMistakes: [
       'Tisk s přizpůsobením na stránku: šablona je o pár procent menší a karty se nevejdou.',
-      'Obtahování na líc kůže: rýha zůstane vidět.',
+      'Šablona přilepená na líc místo na rub: propíchnuté značky zůstanou na hotovém pouzdru vidět.',
+      'Řez podél okraje papíru s nožem přitlačeným k papíru místo k pravítku: nůž uhne a hrana není rovná. Řežte po vytištěné čáře a rovné strany podle pravítka.',
+      'Páska přes linii řezu: nůž jde přes pásku a řez uhne.',
       'Rohy řezané podle pravítka „nahrubo“: zůstanou hranaté.',
       'Snaha vyříznout výřez jedním obloukem: nůž uhne a hrana má schody. Krátké řezy a smirek jsou rychlejší.',
     ],
@@ -692,7 +717,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'mark-stitch-lines',
         title: 'Linie stehu na přední díl',
-        body: 'Na líc předního dílu narýsujte linii 3,5 mm od hrany po obou bocích a dole. Linie stehu se rýsuje na líc, protože podle ní se děruje shora; obrys dílů se naopak kreslil na rub, aby na hotové věci nebyl vidět. Horní hrana zůstává bez stehu, tou se vkládají karty.',
+        body: 'Na líc předního dílu narýsujte linii 3,5 mm od hrany po obou bocích a dole. Linie stehu se rýsuje na líc, protože podle ní se děruje shora; obrys a značky dílů se naopak přenášely na rub, aby na hotové věci nebyly vidět. Horní hrana zůstává bez stehu, tou se vkládají karty.',
         media: [],
       },
       {
@@ -921,7 +946,7 @@ export const cardHolderProject: ProjectDefinition = {
     {
       equipmentSlug: 'scratch-awl',
       priority: 'recommended',
-      reason: 'Obkreslení šablony a rýsování linie stehu (lekce 3, 5 a 6).',
+      reason: 'Propíchnutí značek přes šablonu a rýsování linie stehu (lekce 3, 5 a 6).',
       specification: 'Kulaté rýsovací šídlo s hruškovitou rukojetí.',
       alternatives: ['Tupá sedlářská jehla', 'Tužka na rub kůže'],
     },
@@ -929,7 +954,7 @@ export const cardHolderProject: ProjectDefinition = {
       equipmentSlug: 'masking-tape',
       priority: 'recommended',
       reason:
-        'Přidrží šablonu na kůži při obkreslování nebo při řezání podél jejího okraje (lekce 5). Jedna role vystačí i na projekty 02 a 03.',
+        'Přidrží šablonu na rubu kůže, zatímco propichujete značky a řežete skrz papír po vytištěné čáře (lekce 5). Jedna role vystačí i na projekty 02 a 03.',
       specification:
         'Papírová maskovací páska kolem 25 mm, nejlépe s nízkou lepivostí (na citlivé povrchy).',
       alternatives: ['Svorky nebo závaží na šablonu'],
@@ -1014,7 +1039,7 @@ export const cardHolderProject: ProjectDefinition = {
     threadLabel: 'nit 0,6 mm',
     calibrationMm: 50,
     printNote:
-      'Tisk na A4 bez přizpůsobení velikosti (100 %). Kontrolní úsečka na okraji musí měřit 50 mm.',
+      'Tisk na A4 bez přizpůsobení velikosti (100 %). Kontrolní úsečka na okraji musí měřit 50 mm. Jak přenést šablonu na kůži: vystřihnout nahrubo s okrajem 1–2 cm, přilepit páskou na rub, propíchnout značky a řezat skrz papír po čáře (lekce 5). Šablona je na jedno použití, na každý kus vytiskněte novou.',
   },
   shoppingPlan: {
     title:

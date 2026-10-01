@@ -2068,7 +2068,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     shortDescription:
       'Přidrží papírovou šablonu na kůži, ohraničí úzké pásy lepidla a poslouží na značky. Jedna role na všechny projekty.',
     purpose:
-      'Papírová páska, která jde strhnout bez zbytků. Šablonu jí přilepíte na kůži za okraje, aby se při obkreslování nebo řezání podél jejího okraje neposunula. U peněženky Víčko s ní navíc ohraničíte úzké pásy lepení (G2b, hranice G3, Tokonole jen mimo lepená místa) a označíte značku magnetu. Jedna role 25 mm vystačí na všechny tři projekty.',
+      'Papírová páska, která jde strhnout bez zbytků. Šablonu vystřiženou nahrubo s okrajem 1–2 cm jí přilepíte na kůži za okraje, aby se při propichování značek a řezání skrz papír po vytištěné čáře neposunula – to je hlavní způsob přenesení šablony ve všech třech projektech. U peněženky Víčko s ní navíc ohraničíte úzké pásy lepení (G2b, hranice G3, Tokonole jen mimo lepená místa) a označíte značku magnetu. Jedna role 25 mm vystačí na všechny tři projekty.',
     buyingGuide: [
       { label: 'Šířka', value: 'kolem 25 mm (užší na úzké pásy lepení jde natrhnout podélně)' },
       {
@@ -2081,7 +2081,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       'Pásku nejdřív vyzkoušejte na odřezku téže kůže, hlavně na líci. Silnější páska může na líci nechat lesklou stopu nebo na rubu vytrhnout vlákna.',
       'Strhávejte ji pomalu, pod ostrým úhlem (páska skoro rovnoběžně s kůží), ne kolmo nahoru. Na kůži ji nenechávejte déle, než je potřeba.',
       'Šablonu lepte jen na okrajích, ne přes linii řezu – nůž by šel přes pásku a řez by uhnul.',
-      'Obyčejná papírová šablona se při řezání podél okraje nožem poničí; počítejte s tím, že je na jedno použití, a na další kus vytiskněte novou.',
+      'Šablona se při řezání skrz papír rozřeže, je na jedno použití: na každý další kus vytiskněte novou.',
     ],
     avoid: [
       {
@@ -2100,7 +2100,8 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       },
       {
         title: 'Svorky nebo závaží na šablonu',
-        reason: 'u obkreslování stačí; páska je potřeba na hranice lepení a značky',
+        reason:
+          'u obkreslování stačí; při řezání skrz šablonu (hlavní způsob), na hranice lepení a značky je potřeba páska',
       },
     ],
     // tesa Basic 50 m 55 Kč (OBI) až tesa Professional Sensitive 25 m 139 Kč (OBI), ověřeno 2026-10-01.
@@ -2143,7 +2144,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         id: 'masking-tape-main',
         kind: 'photo',
         caption:
-          'Papírová šablona přilepená maskovací páskou za okraje na kůži, nůž vede řez podél okraje šablony',
+          'Papírová šablona vystřižená s okrajem, přilepená maskovací páskou za okraje na kůži, nůž řeže skrz papír po vytištěné čáře podél pravítka',
         status: 'planned',
       },
     ],
