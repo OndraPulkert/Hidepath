@@ -537,7 +537,7 @@ export const lessons: readonly LessonDefinition[] = [
       'vytištěná šablona 1:1 (zkontrolovaná úsečka 50 mm)',
       'nůžky na vystřižení šablony',
       'finální kůže 1,2–1,5 mm',
-      'lepicí páska nebo svorky',
+      'maskovací páska nebo svorky',
     ],
     requiredEquipment: [
       'veg-tan-leather',
@@ -546,7 +546,7 @@ export const lessons: readonly LessonDefinition[] = [
       'cutting-mat',
       'sandpaper',
     ],
-    recommendedEquipment: ['scratch-awl'],
+    recommendedEquipment: ['scratch-awl', 'masking-tape'],
     prerequisiteLessons: [L2, L3, L4],
     steps: [
       {
@@ -573,7 +573,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'transfer',
         title: 'Přeneste obrys',
-        body: 'Šablonu vystřihněte, položte na rub kůže a přilepte páskou. Obrys obtáhněte rýsovacím šídlem, tupou jehlou nebo tužkou. Rohy označte tečkou, zaoblení dokreslíte podle šablony.',
+        body: 'Šablonu vystřihněte, položte na rub kůže a přilepte maskovací páskou na okrajích, ne přes linii řezu. Obrys obtáhněte rýsovacím šídlem, tupou jehlou nebo tužkou. Rohy označte tečkou, zaoblení dokreslíte podle šablony. Jde to i bez obkreslení: šablonu přilepenou na okrajích nechte na kůži a řežte podél jejího okraje – papír se tím poničí, je na jedno použití. Pásku nejdřív zkuste na odřezku téže kůže (může vytrhnout vlákna nebo na líci nechat lesklou stopu) a strhávejte ji pomalu pod ostrým úhlem.',
         media: [
           {
             id: 'l5-transfer',
@@ -926,6 +926,15 @@ export const cardHolderProject: ProjectDefinition = {
       alternatives: ['Tupá sedlářská jehla', 'Tužka na rub kůže'],
     },
     {
+      equipmentSlug: 'masking-tape',
+      priority: 'recommended',
+      reason:
+        'Přidrží šablonu na kůži při obkreslování nebo při řezání podél jejího okraje (lekce 5). Jedna role vystačí i na projekty 02 a 03.',
+      specification:
+        'Papírová maskovací páska kolem 25 mm, nejlépe s nízkou lepivostí (na citlivé povrchy).',
+      alternatives: ['Svorky nebo závaží na šablonu'],
+    },
+    {
       equipmentSlug: 'contact-cement',
       priority: 'recommended',
       reason: 'Přidrží díly před děrováním.',
@@ -1115,6 +1124,13 @@ export const cardHolderProject: ProjectDefinition = {
         url: 'https://www.ikea.com/cz/cs/p/legitim-kuchynske-prkenko-bila-90202268/',
         quantity: 2,
         purpose: 'online jen po 2 ks; v obchodním domě stačí 1',
+      },
+      {
+        equipmentSlug: 'masking-tape',
+        url: 'https://www.obi.cz/lepici-pasky/tesa-maskovaci-paska-professional-sensitive-pro-citlive-povrchy-25-m-x-25-mm/p/4754180',
+        quantity: 1,
+        purpose:
+          'šablona na kůži (lekce 5); jedna role na všechny projekty – stačí i podobná páska z papírnictví nebo hobby marketu',
       },
     ],
     skipped: [],

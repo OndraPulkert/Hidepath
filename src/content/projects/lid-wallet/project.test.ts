@@ -175,12 +175,14 @@ describe('obsah – peněženka Víčko', () => {
   describe('nákupní plán „Co koupit“', () => {
     const plan = lidWalletProject.shoppingPlan!;
 
-    it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026', () => {
+    it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10. 2026)', () => {
       for (const line of plan.lines) {
         const example = findPlanExample(line, equipmentCatalog);
         expect(example, `${line.equipmentSlug} ${line.url} ${line.variant ?? ''}`).toBeDefined();
         expect(example!.availability, line.url).toBe('in_stock');
-        expect(example!.checkedAt, line.url).toBe('2026-09-29');
+        expect(example!.checkedAt, line.url).toBe(
+          line.equipmentSlug === 'masking-tape' ? '2026-10-01' : '2026-09-29',
+        );
       }
     });
 
@@ -209,20 +211,23 @@ describe('obsah – peněženka Víčko', () => {
         ['CraftPoint', 324_200],
         ['ELIDIS', 1_212],
         ['Orodian', 820],
-        ['OBI', 51_600],
+        ['OBI', 65_500],
         ['UNI HOBBY', 89_900],
         ['IKEA', 11_800],
       ]);
-      expect(resolved.totalCents).toBe(513_132);
+      expect(resolved.totalCents).toBe(527_032);
       expect(lines).toHaveLength(plan.lines.length);
       expect(resolved.notInStockCount).toBe(0);
     });
 
     it('drobnosti mimo katalog jsou v seznamu „mějte doma nebo dokupte“', () => {
       const also = plan.alsoNeeded!.join(' ');
-      for (const thing of ['maskovací páska', 'lak na nehty', 'kolík Ø 8', 'čtvrtka']) {
+      for (const thing of ['lepicí páska', 'lak na nehty', 'kolík Ø 8', 'čtvrtka']) {
         expect(also, thing).toContain(thing);
       }
+      // Maskovací páska je v katalogu (masking-tape) a v plánu, ne mezi drobnostmi.
+      expect(also).not.toContain('maskovací páska');
+      expect(plan.lines.some((l) => l.equipmentSlug === 'masking-tape')).toBe(true);
       expect(plan.lines.some((l) => l.equipmentSlug === 'leather-balm')).toBe(true);
     });
 

@@ -383,6 +383,7 @@ export const lessons: readonly LessonDefinition[] = [
       'šablony konce jazýčku a výřezu pro palec z lekce 2',
       'bezbarvý lak na nehty (hrany plíšku)',
       'jehla na propichování (rýsovací šídlo z projektu 02 dělá větší vpich – jestli poslouží, ověřit na odřezku), tužka',
+      'maskovací páska (volitelně, na přilepení šablony)',
     ],
     requiredEquipment: [
       'veg-tan-leather-1mm',
@@ -396,7 +397,7 @@ export const lessons: readonly LessonDefinition[] = [
       'steel-sheet',
       'sandpaper',
     ],
-    recommendedEquipment: ['hacksaw', 'scratch-awl'],
+    recommendedEquipment: ['hacksaw', 'scratch-awl', 'masking-tape'],
     prerequisiteLessons: [L2, L3],
     steps: [
       {
@@ -414,7 +415,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'cut-p1',
         title: 'Vyřízněte pás P1',
-        body: 'P1 je 101 mm široký a dlouhý podle kóty z rámečku na listu 4 (výchozí 231,66 mm). Rovné řezy veďte nožem u pravítka, obrys jazýčku a pásu víčka podle listu 1. Konec jazýčku nechte rovný v plné délce kóty P1 – je v ní rezerva 5 mm na ořez (list 1: „jazýček … + 5 rezerva“). Špičku R10 teď neřežte: řežete ji až v lekci 11 spolu s podšívkou L1, 7,0 mm pod značkou magnetu nalepeného na hotové peněžence. Výřez pro palec zatím nedělejte (lekce 5). Napojení jazýčku na pás je vyduté (R4): nejdřív výsečník Ø 8, pak tečné rovné řezy nožem.',
+        body: 'P1 je 101 mm široký a dlouhý podle kóty z rámečku na listu 4 (výchozí 231,66 mm). Rovné řezy veďte nožem u pravítka, obrys jazýčku a pásu víčka podle listu 1. Šablonu z listu 1 můžete přilepit maskovací páskou na okrajích (ne přes linii řezu) a řezat podél jejího okraje; do šablony nezařezávejte, přes ni se později propichují otvory švů. Pásku nejdřív zkuste na odřezku usně – silnější páska může na líci nechat lesklou stopu nebo vytrhnout vlákna – a strhávejte ji pomalu pod ostrým úhlem. Konec jazýčku nechte rovný v plné délce kóty P1 – je v ní rezerva 5 mm na ořez (list 1: „jazýček … + 5 rezerva“). Špičku R10 teď neřežte: řežete ji až v lekci 11 spolu s podšívkou L1, 7,0 mm pod značkou magnetu nalepeného na hotové peněžence. Výřez pro palec zatím nedělejte (lekce 5). Napojení jazýčku na pás je vyduté (R4): nejdřív výsečník Ø 8, pak tečné rovné řezy nožem.',
         media: [
           photo('lw-l4-p1', 'Vyříznutý pás P1 s jazýčkem, vyduté napojení jazýčku výsečníkem Ø 8'),
         ],
@@ -492,7 +493,7 @@ export const lessons: readonly LessonDefinition[] = [
       'sandpaper',
       'edge-paint',
     ],
-    recommendedEquipment: ['edge-burnisher', 'edge-beveler'],
+    recommendedEquipment: ['edge-burnisher', 'edge-beveler', 'masking-tape'],
     prerequisiteLessons: [L4],
     steps: [
       {
@@ -603,7 +604,7 @@ export const lessons: readonly LessonDefinition[] = [
       'waxed-thread',
       'sandpaper',
     ],
-    recommendedEquipment: ['edge-burnisher'],
+    recommendedEquipment: ['edge-burnisher', 'masking-tape'],
     prerequisiteLessons: [L5],
     steps: [
       {
@@ -746,7 +747,7 @@ export const lessons: readonly LessonDefinition[] = [
       'waxed-thread',
       'digital-caliper',
     ],
-    recommendedEquipment: [],
+    recommendedEquipment: ['masking-tape'],
     prerequisiteLessons: [L7],
     steps: [
       {
@@ -823,7 +824,7 @@ export const lessons: readonly LessonDefinition[] = [
       'utility-knife',
       'steel-ruler',
     ],
-    recommendedEquipment: ['edge-burnisher', 'wing-divider', 'edge-beveler'],
+    recommendedEquipment: ['edge-burnisher', 'wing-divider', 'edge-beveler', 'masking-tape'],
     prerequisiteLessons: [L8],
     steps: [
       {
@@ -992,7 +993,7 @@ export const lessons: readonly LessonDefinition[] = [
       'waxed-thread',
       'digital-caliper',
     ],
-    recommendedEquipment: ['edge-burnisher'],
+    recommendedEquipment: ['edge-burnisher', 'masking-tape'],
     prerequisiteLessons: [L10],
     steps: [
       {
@@ -1364,6 +1365,14 @@ export const lidWalletProject: ProjectDefinition = {
       alternatives: ['jehla na propichování'],
     },
     {
+      equipmentSlug: 'masking-tape',
+      priority: 'recommended',
+      reason:
+        'Šablona z listu 1 při řezání P1 (lekce 4), ohraničení úzkých pásů lepení G2b a G3 a lepených míst před Tokonole (lekce 5, 6 a 8), značka magnetu (lekce 11). Stejná role jako u projektů 01 a 02.',
+      specification:
+        'Papírová maskovací páska kolem 25 mm s nízkou lepivostí (na citlivé povrchy); na líci i rubu nejdřív zkouška na odřezku.',
+    },
+    {
       equipmentSlug: 'wing-divider',
       priority: 'recommended',
       reason: 'Z projektu 02: čára bočních švů 3,0 mm od hrany.',
@@ -1634,6 +1643,13 @@ export const lidWalletProject: ProjectDefinition = {
         quantity: 2,
         purpose: 'z projektu 02; online jen po 2 ks, v obchodním domě stačí 1',
       },
+      {
+        equipmentSlug: 'masking-tape',
+        url: 'https://www.obi.cz/lepici-pasky/tesa-maskovaci-paska-professional-sensitive-pro-citlive-povrchy-25-m-x-25-mm/p/4754180',
+        quantity: 1,
+        purpose:
+          'šablona P1, pásy lepení G2b a G3, značka magnetu; jedna role na všechny projekty – máte-li ji z projektu 01 nebo 02, nekupujte',
+      },
     ],
     skipped: [
       {
@@ -1643,7 +1659,7 @@ export const lidWalletProject: ProjectDefinition = {
       },
     ],
     alsoNeeded: [
-      'maskovací páska (lekce 5, 6, 8, 9 a 11) a lepicí páska (vložka dna, papírový model)',
+      'lepicí páska (vložka dna, papírový model)',
       'bezbarvý lak na nehty na hrany plíšku (lekce 4)',
       'tvrdší papír nebo čtvrtka na papírový model a šablony (lekce 2 a 4)',
       'dřevěný kolík Ø 8–12 mm a akuvrtačka na leštění vydutých hran (lekce 5)',

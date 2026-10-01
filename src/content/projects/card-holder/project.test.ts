@@ -6,12 +6,14 @@ import { findPlanExample, resolveShoppingPlan } from '@/features/shopping/plan';
 describe('obsah – pouzdro na karty: nákupní plán „Co koupit“', () => {
   const plan = cardHolderProject.shoppingPlan!;
 
-  it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026', () => {
+  it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10. 2026)', () => {
     for (const line of plan.lines) {
       const example = findPlanExample(line, equipmentCatalog);
       expect(example, `${line.equipmentSlug} ${line.url} ${line.variant ?? ''}`).toBeDefined();
       expect(example!.availability, line.url).toBe('in_stock');
-      expect(example!.checkedAt, line.url).toBe('2026-09-29');
+      expect(example!.checkedAt, line.url).toBe(
+        line.equipmentSlug === 'masking-tape' ? '2026-10-01' : '2026-09-29',
+      );
     }
   });
 
@@ -52,17 +54,18 @@ describe('obsah – pouzdro na karty: nákupní plán „Co koupit“', () => {
     }
   });
 
-  it('součet po obchodech: CraftPoint 2 881 Kč + IKEA 118 Kč = 2 999 Kč', () => {
+  it('součet po obchodech: CraftPoint 2 881 Kč + IKEA 118 Kč + OBI 139 Kč = 3 138 Kč', () => {
     const resolved = resolveShoppingPlan(cardHolderProject, equipmentCatalog, {})!;
     const lines = resolved.shops.flatMap((s) => s.lines);
     expect(lines).toHaveLength(plan.lines.length);
     expect(resolved.shops.map((s) => [s.shop, s.totalCents])).toEqual([
       ['CraftPoint', 288_100],
       ['IKEA', 11_800],
+      ['OBI', 13_900],
     ]);
-    expect(resolved.totalCents).toBe(299_900);
+    expect(resolved.totalCents).toBe(313_800);
     expect(resolved.notInStockCount).toBe(0);
     expect(resolved.checkedFrom).toBe('2026-09-29');
-    expect(resolved.checkedTo).toBe('2026-09-29');
+    expect(resolved.checkedTo).toBe('2026-10-01');
   });
 });

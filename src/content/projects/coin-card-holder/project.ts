@@ -591,6 +591,7 @@ export const lessons: readonly LessonDefinition[] = [
       'vytištěná šablona PÁS (zkontrolovaná úsečka 50 mm; výchozí list je pro minci 50 Kč a kůži 1,5 mm; u kůže 1,2 mm vytiskněte místo něj Pás (šablona) – kůže 1,2 mm, u mince 40 mm Pás – mince 40 mm; viz první krok)',
       'přípravek na zapečetění rubu (Tokonole nebo gum tragacanth – stejná pasta jako u leštění hran)',
       'barva na hrany (u barvené kůže)',
+      'maskovací páska (volitelně, na přilepení šablony)',
     ],
     requiredEquipment: [
       'veg-tan-leather',
@@ -602,7 +603,7 @@ export const lessons: readonly LessonDefinition[] = [
       'mallet',
       'punching-board',
     ],
-    recommendedEquipment: ['corner-template', 'edge-burnisher', 'safety-skiver'],
+    recommendedEquipment: ['corner-template', 'edge-burnisher', 'safety-skiver', 'masking-tape'],
     prerequisiteLessons: [L2, L3, L4],
     steps: [
       {
@@ -614,7 +615,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'transfer-face',
         title: 'Přeneste obrys na líc',
-        body: 'Šablonu obkreslete na LÍC kůže, ne na rub – kresba je pohled zvenku, přední panel je nakreslený tak, jak bude vidět. To je rozdíl oproti pouzdru na karty, kde se obkreslovalo na rub.',
+        body: 'Šablonu obkreslete na LÍC kůže, ne na rub – kresba je pohled zvenku, přední panel je nakreslený tak, jak bude vidět. To je rozdíl oproti pouzdru na karty, kde se obkreslovalo na rub. Šablonu můžete také přilepit maskovací páskou na okrajích (ne přes linii řezu) a řezat podél jejího okraje; papír se tím poničí a na další pás vytisknete nový. Na líci pásku nejdřív zkuste na odřezku téže kůže – silnější páska může nechat lesklou stopu nebo vytrhnout vlákna. Strhávejte ji pomalu pod ostrým úhlem, nebo použijte pásku na citlivé povrchy.',
         media: [],
       },
       {
@@ -1241,6 +1242,15 @@ export const coinCardHolderProject: ProjectDefinition = {
       specification: 'Kulaté rýsovací šídlo s hruškovitou rukojetí.',
     },
     {
+      equipmentSlug: 'masking-tape',
+      priority: 'recommended',
+      reason:
+        'Přidrží šablonu PÁS na líci při obkreslování nebo při řezání podél jejího okraje (lekce 5). Stejná role jako u projektu 01 a 03.',
+      specification:
+        'Papírová maskovací páska kolem 25 mm s nízkou lepivostí (na citlivé povrchy); na líci nejdřív zkouška na odřezku.',
+      alternatives: ['Šablonu jen přidržet rukou nebo závažím a obkreslit'],
+    },
+    {
       equipmentSlug: 'sandpaper',
       priority: 'required',
       reason: 'Zdrsnění lepené plochy dna a srovnání hran po sešití, přebroušení dna do roviny.',
@@ -1631,6 +1641,13 @@ export const coinCardHolderProject: ProjectDefinition = {
         quantity: 1,
         purpose:
           'dvě desky 61,5 × 61,5 mm (ideálně 8 × 8 cm) na formu a víko; celá deska je zbytečně velká – levnější je odřezek z přířezu nebo kus překližky, který už máte',
+      },
+      {
+        equipmentSlug: 'masking-tape',
+        url: 'https://www.obi.cz/lepici-pasky/tesa-maskovaci-paska-professional-sensitive-pro-citlive-povrchy-25-m-x-25-mm/p/4754180',
+        quantity: 1,
+        purpose:
+          'šablona PÁS na líci (lekce 5); jedna role na všechny projekty – máte-li ji z projektu 01, nekupujte',
       },
     ],
     skipped: [

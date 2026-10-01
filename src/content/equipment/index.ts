@@ -2060,6 +2060,94 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       },
     ],
   }),
+  draft({
+    slug: 'masking-tape',
+    name: 'Maskovací (malířská) krepová páska 25 mm',
+    englishName: 'Masking tape',
+    category: 'cutting',
+    shortDescription:
+      'Přidrží papírovou šablonu na kůži, ohraničí úzké pásy lepidla a poslouží na značky. Jedna role na všechny projekty.',
+    purpose:
+      'Papírová páska, která jde strhnout bez zbytků. Šablonu jí přilepíte na kůži za okraje, aby se při obkreslování nebo řezání podél jejího okraje neposunula. U peněženky Víčko s ní navíc ohraničíte úzké pásy lepení (G2b, hranice G3, Tokonole jen mimo lepená místa) a označíte značku magnetu. Jedna role 25 mm vystačí na všechny tři projekty.',
+    buyingGuide: [
+      { label: 'Šířka', value: 'kolem 25 mm (užší na úzké pásy lepení jde natrhnout podélně)' },
+      {
+        label: 'Lepivost',
+        value: 'nízká – „na citlivé povrchy“ (sensitive); běžná malířská jen po zkoušce na odřezku',
+      },
+      { label: 'Délka', value: 'stačí nejkratší role (25 m)' },
+    ],
+    cautions: [
+      'Pásku nejdřív vyzkoušejte na odřezku téže kůže, hlavně na líci. Silnější páska může na líci nechat lesklou stopu nebo na rubu vytrhnout vlákna.',
+      'Strhávejte ji pomalu, pod ostrým úhlem (páska skoro rovnoběžně s kůží), ne kolmo nahoru. Na kůži ji nenechávejte déle, než je potřeba.',
+      'Šablonu lepte jen na okrajích, ne přes linii řezu – nůž by šel přes pásku a řez by uhnul.',
+      'Obyčejná papírová šablona se při řezání podél okraje nožem poničí; počítejte s tím, že je na jedno použití, a na další kus vytiskněte novou.',
+    ],
+    avoid: [
+      {
+        title: 'Kancelářská průhledná páska (izolepa)',
+        reason: 'lepí silně, z líce trhá vlákna a nechává lepidlo',
+      },
+      {
+        title: 'Lepicí páska typu „duct tape“ nebo izolační páska',
+        reason: 'na kůži nechá lepkavou stopu, nedá se natrhnout na úzký pás',
+      },
+    ],
+    alternatives: [
+      {
+        title: 'Malířská páska z papírnictví nebo hobby marketu',
+        reason: 'jakákoli papírová maskovací páska kolem 19–25 mm poslouží, po zkoušce na odřezku',
+      },
+      {
+        title: 'Svorky nebo závaží na šablonu',
+        reason: 'u obkreslování stačí; páska je potřeba na hranice lepení a značky',
+      },
+    ],
+    // tesa Basic 50 m 55 Kč (OBI) až tesa Professional Sensitive 25 m 139 Kč (OBI), ověřeno 2026-10-01.
+    priceRange: { minCents: 5_500, maxCents: 13_900 },
+    priceSource: 'verified',
+    priceNote: `${VERIFIED_NOTE} Jedna role na všechny projekty.`,
+    alsoUsedFor: ['Všechny projekty'],
+    examples: [
+      {
+        title: 'tesa Maskovací páska Professional SENSITIVE pro citlivé povrchy, 25 m × 25 mm',
+        shop: 'OBI',
+        url: 'https://www.obi.cz/lepici-pasky/tesa-maskovaci-paska-professional-sensitive-pro-citlive-povrchy-25-m-x-25-mm/p/4754180',
+        priceCents: 13_900,
+        note: 'Stránka uvádí: na citlivé povrchy, v interiéru odstranitelná do 14 dnů bez zbytků lepidla, růžová. Nízká lepivost je pro šablonu na líci nejbezpečnější volba; i tak nejdřív zkuste na odřezku. Online „Do nákupního košíku“, dodání 2–3 pracovní dny; dostupnost v prodejně ověřit.',
+        availability: 'in_stock',
+        checkedAt: '2026-10-01',
+      },
+      {
+        title: 'Maskovací páska tesa Perfect Sensitive 25 mm × 25 m',
+        shop: 'HORNBACH',
+        url: 'https://www.hornbach.cz/p/paska-maskovaci-perfect-sensitive-25-mm-x-25-m/8182032/',
+        priceCents: 11_500,
+        note: 'Páska na citlivé povrchy bez rozpouštědel, podle stránky odstranitelná beze zbytku do 14 dnů. Online dodání asi 1–2 pracovní dny, na prodejně Praha při ověření 38 ks.',
+        availability: 'in_stock',
+        checkedAt: '2026-10-01',
+      },
+      {
+        title: 'tesa Maskovací páska Basic, 50 m × 25 mm',
+        shop: 'OBI',
+        url: 'https://www.obi.cz/lepici-pasky/tesa-maskovaci-paska-basic-50-m-x-25-mm/p/5190558',
+        priceCents: 5_500,
+        note: 'Běžná malířská páska z polokrepového papíru, trhá se rukou, podle stránky jde odstranit beze zbytků. Lepí silněji než Sensitive – na líc kůže jen po zkoušce na odřezku. Online „Do nákupního košíku“; dostupnost v prodejně ověřit.',
+        availability: 'in_stock',
+        checkedAt: '2026-10-01',
+      },
+    ],
+    commonlyAtHome: true,
+    media: [
+      {
+        id: 'masking-tape-main',
+        kind: 'photo',
+        caption:
+          'Papírová šablona přilepená maskovací páskou za okraje na kůži, nůž vede řez podél okraje šablony',
+        status: 'planned',
+      },
+    ],
+  }),
   ...lidWalletEquipment,
 ];
 
