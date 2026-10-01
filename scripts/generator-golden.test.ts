@@ -21,6 +21,7 @@ import {
   buildPages,
   buildPlateLegendSvg,
 } from './belt-buckle-end.ts';
+import { buildPracticeSheetSvg } from './card-holder-practice.ts';
 import {
   buildCoinHolderPaperModelSvg,
   buildCoinHolderPocketSvg,
@@ -90,6 +91,7 @@ describe('zapsané soubory odpovídají generátoru', () => {
     ['opasek-desticka-vysvetlivky.svg', () => buildPlateLegendSvg(end, tip)],
     ['opasek-nahled-hrot.svg', () => buildBeltTipPreviewSvg(tip, 'point')],
     ['opasek-nahled-zaobleny.svg', () => buildBeltTipPreviewSvg(tip, 'round')],
+    ['pouzdro-karty-cvicna-sablona.svg', () => buildPracticeSheetSvg()],
     ['pouzdro-mince-sablona.svg', () => buildCoinHolderSheetSvg()],
     ['pouzdro-mince-postup.svg', () => buildCoinHolderProcessSvg()],
     ...Array.from({ length: 8 }, (_, i): [string, () => string] => [
@@ -187,7 +189,7 @@ describe('zapsané soubory odpovídají generátoru', () => {
       expect(onDisk, `docs/generated/${name} chybí`).toBeDefined();
       expect(
         build(),
-        `${name} se rozešel s generátorem – spusť ${name.startsWith('penezenka-vicko-ilustrace') ? 'pnpm pattern:wallet-lid-illustrations' : name.startsWith('penezenka-vicko') ? 'pnpm pattern:wallet-lid' : name.startsWith('penezenka') ? 'pnpm pattern:wallet' : name.startsWith('pouzdro-mince-ilustrace') ? 'pnpm pattern:coin-holder-illustrations' : name.startsWith('pouzdro-mince') ? `pnpm pattern:coin-holder${`${name.includes('mince-40mm') ? ' --coin 40' : ''}${name.includes('kuze-1-2') ? ' --thickness 1.2' : ''}`}` : 'pnpm pattern:belt-end --multi'}`,
+        `${name} se rozešel s generátorem – spusť ${name.startsWith('pouzdro-karty') ? 'pnpm pattern:card-holder-practice' : name.startsWith('penezenka-vicko-ilustrace') ? 'pnpm pattern:wallet-lid-illustrations' : name.startsWith('penezenka-vicko') ? 'pnpm pattern:wallet-lid' : name.startsWith('penezenka') ? 'pnpm pattern:wallet' : name.startsWith('pouzdro-mince-ilustrace') ? 'pnpm pattern:coin-holder-illustrations' : name.startsWith('pouzdro-mince') ? `pnpm pattern:coin-holder${`${name.includes('mince-40mm') ? ' --coin 40' : ''}${name.includes('kuze-1-2') ? ' --thickness 1.2' : ''}`}` : 'pnpm pattern:belt-end --multi'}`,
       ).toBe(onDisk);
     });
   }

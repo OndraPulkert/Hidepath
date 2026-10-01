@@ -156,6 +156,11 @@ export const lessonStepSchema = z.object({
   title: z.string().min(1),
   body: z.string().min(1),
   media: z.array(mediaSlotSchema),
+  /**
+   * Odkaz pod krokem na tiskovou stránku: `practice-sheets` = cvičné listy projektu
+   * (`practiceSheets`), např. cvičná šablona k vyzkoušení přenosu šablony na odřezku.
+   */
+  printLink: z.enum(['practice-sheets']).optional(),
 });
 export type LessonStep = z.infer<typeof lessonStepSchema>;
 
@@ -311,6 +316,12 @@ export const projectDefinitionSchema = z
     template: templateDefinitionSchema.optional(),
     /** Listy střihu z generátoru (SVG 1:1). */
     patternSheets: patternSheetsDefinitionSchema.optional(),
+    /**
+     * Cvičné listy z generátoru (SVG 1:1) na trénink na odřezku, ne díly výrobku. Mají vlastní
+     * tiskovou stránku, takže je může mít i projekt s obdélníkovou `template`. Soubory dodá stejný
+     * registr jako u `patternSheets` (`patternSheetUrlsFor`), id se nesmí s listy střihu opakovat.
+     */
+    practiceSheets: patternSheetsDefinitionSchema.optional(),
     /** Nákupní plán „Co koupit“ (volitelný); ceny a odkazy bere z příkladů v katalogu. */
     shoppingPlan: shoppingPlanSchema.optional(),
     media: z.array(mediaSlotSchema),
@@ -338,7 +349,10 @@ export const projectDefinitionSchema = z
         }
       }
     }
-    const sheetIds = project.patternSheets?.sheets.map((s) => s.id) ?? [];
+    const sheetIds = [
+      ...(project.patternSheets?.sheets.map((s) => s.id) ?? []),
+      ...(project.practiceSheets?.sheets.map((s) => s.id) ?? []),
+    ];
     if (new Set(sheetIds).size !== sheetIds.length) {
       ctx.addIssue({ code: 'custom', message: `Projekt ${project.slug}: duplicitní id listu` });
     }
@@ -415,6 +429,14 @@ export const projectDefinitionSchema = z
           ctx.addIssue({
             code: 'custom',
             message: `Lekce ${lesson.slug}: vybavení ${e} není v projektu`,
+          });
+        }
+      }
+      for (const step of lesson.steps) {
+        if (step.printLink === 'practice-sheets' && !project.practiceSheets) {
+          ctx.addIssue({
+            code: 'custom',
+            message: `Lekce ${lesson.slug}: krok ${step.id} odkazuje na cvičné listy, projekt žádné nemá`,
           });
         }
       }

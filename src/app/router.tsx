@@ -15,7 +15,7 @@ import { ProjectPage } from '@/pages/project-page';
 import { RouteErrorPage } from '@/pages/route-error-page';
 import { ShoppingItemPage } from '@/pages/shopping-item-page';
 import { ShoppingPage } from '@/pages/shopping-page';
-import { TemplatePrintPage } from '@/pages/template-print-page';
+import { PracticeSheetsPrintPage, TemplatePrintPage } from '@/pages/template-print-page';
 import { WorkshopPage } from '@/pages/workshop-page';
 
 /**
@@ -45,6 +45,7 @@ export const appRoutes: RouteObject[] = [
               { path: routePatterns.project, element: <ProjectPage /> },
               { path: routePatterns.lesson, element: <LessonPage /> },
               { path: routePatterns.template, element: <TemplatePrintPage /> },
+              { path: routePatterns.practiceSheets, element: <PracticeSheetsPrintPage /> },
               { path: '*', element: <NotFoundPage /> },
             ],
           },

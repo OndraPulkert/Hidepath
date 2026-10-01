@@ -18,6 +18,9 @@ export const routes = {
   lesson: (projectSlug: string, lessonSlug: string) =>
     `/projects/${encodeURIComponent(projectSlug)}/lessons/${encodeURIComponent(lessonSlug)}`,
   template: (projectSlug: string) => `/projects/${encodeURIComponent(projectSlug)}/template`,
+  /** Cvičné listy 1:1 (trénink na odřezku), vlastní tisková stránka vedle šablony. */
+  practiceSheets: (projectSlug: string) =>
+    `/projects/${encodeURIComponent(projectSlug)}/practice-sheets`,
 } as const;
 
 /** Vzory tras pro React Router (s parametry). */
@@ -26,6 +29,7 @@ export const routePatterns = {
   project: '/projects/:projectSlug',
   lesson: '/projects/:projectSlug/lessons/:lessonSlug',
   template: '/projects/:projectSlug/template',
+  practiceSheets: '/projects/:projectSlug/practice-sheets',
 } as const;
 
 /**

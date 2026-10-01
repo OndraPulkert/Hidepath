@@ -2,6 +2,7 @@ import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { routes } from '@/app/routes';
+import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { lidWalletProject } from '@/content/projects/lid-wallet/project';
 import { renderApp } from '@/test/render';
 
@@ -42,5 +43,46 @@ describe('tisk listů – peněženka Víčko pro změřenou kůži', () => {
 
     expect(await screen.findByText(/Listy nevznikly/)).toBeInTheDocument();
     expect(screen.queryByText(/^Pro změřenou kůži:/)).not.toBeInTheDocument();
+  });
+});
+
+/** Projekt 01 má obdélníkovou šablonu a vedle ní cvičnou šablonu k lekci 2 na vlastní stránce. */
+describe('tisk – pouzdro na karty: šablona a cvičná šablona', () => {
+  it('stránka šablony zůstává obdélníková šablona 1:1', async () => {
+    renderApp(routes.template(cardHolderProject.slug));
+    expect(
+      await screen.findByRole('heading', { name: /^Šablona 1:1 · Pouzdro na karty/ }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+  });
+
+  it('cvičné listy nabídnou cvičnou šablonu zaškrtnutou k tisku', async () => {
+    renderApp(routes.practiceSheets(cardHolderProject.slug));
+    expect(
+      await screen.findByRole('heading', { name: /^Cvičné listy 1:1 · Pouzdro na karty/ }),
+    ).toBeInTheDocument();
+    const box = screen.getByRole('checkbox', { name: /Cvičná šablona: řez podle přilepené/ });
+    expect(box).toBeChecked();
+    const img = screen.getByRole('img', { name: /^List střihu: Cvičná šablona/ });
+    expect(img.getAttribute('src')).toBeTruthy();
+    expect(screen.getByText(/musí mít přesně/)).toHaveTextContent('50 mm');
+  });
+
+  it('lekce 2 odkazuje z cvičení na tisk cvičné šablony', async () => {
+    renderApp(routes.lesson(cardHolderProject.slug, '02-straight-cut'));
+    expect(
+      await screen.findByRole('heading', { name: 'Cvičení: řez podle přilepené šablony' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Vytisknout cvičnou šablonu 1:1/ })).toHaveAttribute(
+      'href',
+      routes.practiceSheets(cardHolderProject.slug),
+    );
+  });
+
+  it('projekt bez cvičných listů na jejich trase ukáže 404', async () => {
+    renderApp(routes.practiceSheets(lidWalletProject.slug));
+    expect(
+      await screen.findByRole('heading', { name: 'Tuhle stránku nemáme' }),
+    ).toBeInTheDocument();
   });
 });

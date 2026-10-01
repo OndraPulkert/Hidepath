@@ -207,6 +207,22 @@ function ProjectView({ project }: { project: ProjectDefinition }) {
             </Card>
           ) : null}
 
+          {project.practiceSheets ? (
+            <Card className="flex flex-col gap-3">
+              <Kicker>Cvičné listy</Kicker>
+              <PatternSheetList
+                sheets={project.practiceSheets.sheets}
+                urls={patternSheetUrlsFor(project.slug)}
+              />
+              <p className="text-meta text-ink-2">{typo(project.practiceSheets.printNote)}</p>
+              <Button variant="secondary" asChild className="self-start">
+                <Link to={routes.practiceSheets(project.slug)} className="no-underline">
+                  Vytisknout cvičné listy 1:1
+                </Link>
+              </Button>
+            </Card>
+          ) : null}
+
           <Card id="vybaveni" className="flex scroll-mt-24 flex-col gap-2">
             <Kicker>Potřebné vybavení</Kicker>
             <ul className="divide-y divide-dashed divide-line">

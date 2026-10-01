@@ -37,6 +37,23 @@ export function TemplatePrintPage() {
   return <NotFoundPage />;
 }
 
+/**
+ * Cvičné listy 1:1 (`practiceSheets`): trénink na odřezku, ne díly výrobku. Vlastní trasa, aby
+ * projekt s obdélníkovou šablonou (projekt 01) nepřišel o svou stránku šablony.
+ */
+export function PracticeSheetsPrintPage() {
+  const { projectSlug = '' } = useParams<'projectSlug'>();
+  const project = findProject(projectSlug);
+  if (!project?.practiceSheets) return <NotFoundPage />;
+  return (
+    <PatternSheetsPrint
+      project={project}
+      definition={project.practiceSheets}
+      heading="Cvičné listy 1:1"
+    />
+  );
+}
+
 function BackAndPrint({
   project,
   canPrint = true,
@@ -123,9 +140,11 @@ const sheetGenerators: Readonly<
 function PatternSheetsPrint({
   project,
   definition,
+  heading = 'Listy střihu 1:1',
 }: {
   project: ProjectDefinition;
   definition: PatternSheetsDefinition;
+  heading?: string;
 }) {
   const Generator = definition.browserGenerator
     ? sheetGenerators[definition.browserGenerator]
@@ -169,7 +188,9 @@ function PatternSheetsPrint({
       }`}</style>
       <BackAndPrint project={project} canPrint={printable.length > 0} />
       <div className="print:hidden">
-        <h1 className="mb-2 text-[clamp(24px,3vw,32px)]">Listy střihu 1:1 · {project.title}</h1>
+        <h1 className="mb-2 text-[clamp(24px,3vw,32px)]">
+          {heading} · {project.title}
+        </h1>
         <p className="mb-2 max-w-prose text-body text-ink-2">{typo(definition.printNote)}</p>
         <p className="mb-3 max-w-prose text-body text-ink-2">
           V dialogu tisku nechte měřítko na 100 % („Výchozí“) a papír A4. Každý list se vytiskne na

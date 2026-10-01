@@ -22,6 +22,7 @@
     "check": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm test",
     "content:shot-list": "tsx scripts/shot-list.ts",
     "pattern:belt-end": "tsx scripts/belt-buckle-end.ts",
+    "pattern:card-holder-practice": "tsx scripts/card-holder-practice.ts",
     "pattern:coin-holder": "tsx scripts/coin-card-holder.ts",
     "pattern:coin-holder-illustrations": "tsx scripts/coin-card-holder-illustrations.ts",
     "pattern:wallet": "tsx scripts/minimal-wallet.ts",

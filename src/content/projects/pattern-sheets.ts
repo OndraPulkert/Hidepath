@@ -1,9 +1,11 @@
+import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
 import { lidWalletProject } from '@/content/projects/lid-wallet/project';
 import vickoDily from '../../../docs/generated/penezenka-vicko-dily.svg?url';
 import vickoPripravky from '../../../docs/generated/penezenka-vicko-pripravky.svg?url';
 import vickoRub from '../../../docs/generated/penezenka-vicko-rub.svg?url';
 import vickoSablona from '../../../docs/generated/penezenka-vicko-sablona.svg?url';
+import cvicnaSablona from '../../../docs/generated/pouzdro-karty-cvicna-sablona.svg?url';
 import kapsa from '../../../docs/generated/pouzdro-mince-kapsa.svg?url';
 import kapsa40 from '../../../docs/generated/pouzdro-mince-kapsa-mince-40mm.svg?url';
 import papirovyModel from '../../../docs/generated/pouzdro-mince-papirovy-model.svg?url';
@@ -18,10 +20,13 @@ import sablona40 from '../../../docs/generated/pouzdro-mince-sablona-mince-40mm.
 
 /**
  * Soubory listů střihu (SVG 1:1 z generátorů v `scripts/`) podle projektu a `id` listu
- * z `patternSheets`. Stejně jako `lessonBodiesFor`: stránka šablony si soubory bere odsud
- * podle slugu z trasy, druhý generovaný projekt se přidá řádkem tady.
+ * z `patternSheets` nebo `practiceSheets`. Stejně jako `lessonBodiesFor`: stránka šablony si
+ * soubory bere odsud podle slugu z trasy, druhý generovaný projekt se přidá řádkem tady.
  */
 const registry: Readonly<Record<string, Readonly<Record<string, string>>>> = {
+  [cardHolderProject.slug]: {
+    'cvicna-sablona': cvicnaSablona,
+  },
   [coinCardHolderProject.slug]: {
     'papirovy-model': papirovyModel,
     sablona,

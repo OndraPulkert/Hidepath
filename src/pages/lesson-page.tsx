@@ -163,7 +163,7 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
         <h2 id="postup" className="mb-4 border-b border-line pb-2 text-h2">
           Postup
         </h2>
-        <StepList steps={lesson.steps} template={project.template} />
+        <StepList steps={lesson.steps} template={project.template} projectSlug={project.slug} />
       </section>
 
       {lesson.commonMistakes.length > 0 ? (

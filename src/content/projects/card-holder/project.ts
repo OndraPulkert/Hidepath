@@ -153,11 +153,17 @@ export const lessons: readonly LessonDefinition[] = [
     title: 'Rovný řez kůže',
     order: 2,
     phaseSlug: 'practice',
-    estimatedMinutes: 20,
-    goal: 'Uříznout rovný proužek 20 × 100 mm na dva až tři lehké tahy s kolmou hranou.',
-    materials: ['odřezek kůže aspoň 60 × 120 mm (stačí levná štípenka)', 'nová čepel v noži'],
+    estimatedMinutes: 40,
+    goal: 'Uříznout rovný proužek 20 × 100 mm na dva až tři lehké tahy s kolmou hranou a na odřezku vyzkoušet řez podle přilepené šablony.',
+    materials: [
+      'odřezek kůže aspoň 60 × 120 mm (stačí levná štípenka)',
+      'nová čepel v noži',
+      'na cvičení se šablonou: zbytek juchtové A5 asi 210 × 80 mm (tři tvary zaberou 210 × 40 mm)',
+      'vytištěná cvičná šablona 1:1 (A4, zkontrolovaná úsečka 50 mm)',
+      'nůžky na vystřižení šablony nahrubo (s okrajem asi 1,5 cm)',
+    ],
     requiredEquipment: ['utility-knife', 'steel-ruler', 'cutting-mat'],
-    recommendedEquipment: ['scratch-awl'],
+    recommendedEquipment: ['scratch-awl', 'masking-tape'],
     prerequisiteLessons: [L1],
     steps: [
       {
@@ -216,6 +222,13 @@ export const lessons: readonly LessonDefinition[] = [
           },
         ],
       },
+      {
+        id: 'practice-template',
+        title: 'Cvičení: řez podle přilepené šablony',
+        body: 'Na odřezku si vyzkoušíte hlavní způsob přenosu šablony, kterým v lekci 5 vyříznete díly pouzdra. Cvičnou šablonu vytiskněte na A4 bez přizpůsobení velikosti (100 %) a změřte kontrolní úsečku: musí mít přesně 50 mm. Každý ze tří tvarů vystřihněte nůžkami jen nahrubo, po čárkované čáře s okrajem asi 1,5 cm. Tvar položte na rub juchtového odřezku a přilepte maskovací páskou na okrajích, mimo plnou čáru, z několika stran, aby se nemohl posunout. U tvaru 3 šídlem propíchněte obě tečky skrz papír do kůže, dokud je šablona přilepená. Pak řežte nožem skrz papír i kůži přesně po plné čáře: rovné strany s ocelovým pravítkem položeným na čáru, roh a výřez pomalu bez pravítka, vždy na dva až tři lehké tahy. Pásku strhávejte pomalu pod ostrým úhlem, skoro rovnoběžně s kůží. Tvary dělejte jeden po druhém vedle sebe po delší straně odřezku. Kousek pásky přilepte i na líc odřezku mimo tvary a stejně ho strhněte: uvidíte, jestli páska na líci nenechá lesklou stopu, ještě než ji použijete na pouzdro.',
+        media: [],
+        printLink: 'practice-sheets',
+      },
     ],
     checkpoints: [
       {
@@ -233,11 +246,21 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Mám tři proužky a poslední je lepší než první.',
         required: false,
       },
+      // Nepovinný jako `marks-transferred` v lekci 5: povinný bod by změnil stav už dokončených lekcí.
+      {
+        slug: 'practice-template-cut',
+        title:
+          'Hrana cvičných tvarů vede po vytištěné čáře, tečky jsou propíchnuté a páska nenechala na líci stopu.',
+        description:
+          'Když páska na líci stopu nechala, zkuste ještě před lekcí 5 jinou, s nižší lepivostí (na citlivé povrchy).',
+        required: false,
+      },
     ],
     commonMistakes: [
       'Jeden silový tah: čepel se ohne a uteče od pravítka.',
       'Nůž nakloněný do strany: hrana je zkosená a díly pak nelícují.',
       'Pravítko na straně odpadu: když nůž ujede, poškodí díl.',
+      'Páska přes linii řezu u cvičné šablony: nůž jde přes pásku a řez uhne.',
     ],
     safety: [
       'Prsty volné ruky vždy mimo dráhu čepele, i kdyby ujela. Nikdy nedržte kůži před čepelí.',
@@ -946,7 +969,8 @@ export const cardHolderProject: ProjectDefinition = {
     {
       equipmentSlug: 'scratch-awl',
       priority: 'recommended',
-      reason: 'Propíchnutí značek přes šablonu a rýsování linie stehu (lekce 3, 5 a 6).',
+      reason:
+        'Propíchnutí značek přes šablonu (cvičení v lekci 2 a lekce 5) a rýsování linií (lekce 2, 3 a 6).',
       specification: 'Kulaté rýsovací šídlo s hruškovitou rukojetí.',
       alternatives: ['Tupá sedlářská jehla', 'Tužka na rub kůže'],
     },
@@ -954,7 +978,7 @@ export const cardHolderProject: ProjectDefinition = {
       equipmentSlug: 'masking-tape',
       priority: 'recommended',
       reason:
-        'Přidrží šablonu na rubu kůže, zatímco propichujete značky a řežete skrz papír po vytištěné čáře (lekce 5). Jedna role vystačí i na projekty 02 a 03.',
+        'Přidrží šablonu na rubu kůže, zatímco propichujete značky a řežete skrz papír po vytištěné čáře (cvičení na odřezku v lekci 2, díly pouzdra v lekci 5). Jedna role vystačí i na projekty 02 a 03.',
       specification:
         'Papírová maskovací páska kolem 25 mm, nejlépe s nízkou lepivostí (na citlivé povrchy).',
       alternatives: ['Svorky nebo závaží na šablonu'],
@@ -1041,6 +1065,22 @@ export const cardHolderProject: ProjectDefinition = {
     printNote:
       'Tisk na A4 bez přizpůsobení velikosti (100 %). Kontrolní úsečka na okraji musí měřit 50 mm. Jak přenést šablonu na kůži: vystřihnout nahrubo s okrajem 1–2 cm, přilepit páskou na rub, propíchnout značky a řezat skrz papír po čáře (lekce 5). Šablona je na jedno použití, na každý kus vytiskněte novou.',
   },
+  practiceSheets: {
+    sheets: [
+      {
+        id: 'cvicna-sablona',
+        title: 'Cvičná šablona: řez podle přilepené šablony',
+        note: 'Tři tvary 60 × 40 mm na odřezek k lekci 2: rovné řezy, roh R10 a výřez 20 × 12 mm s tečkami k propíchnutí. Nejsou to díly pouzdra.',
+        orientation: 'portrait',
+        widthMm: 210,
+        heightMm: 297,
+      },
+    ],
+    calibrationMm: 50,
+    printNote:
+      'Tisk na A4 bez přizpůsobení velikosti (100 %), kontrolní úsečka musí měřit 50 mm. Tři tvary se vejdou na zbytek juchtové A5 asi 210 × 80 mm: vedle sebe po delší straně zaberou 210 × 40 mm, s papírovým okrajem 70 mm na výšku. Cvičení je v lekci 2; postup je stejný jako u šablony pouzdra v lekci 5.',
+    defaultVariantLabel: 'Na odřezek k lekci 2',
+  },
   shoppingPlan: {
     title:
       'Sestava: juchtová kůže 1,2 mm (A4 na pouzdro, 2× A5 na trénink), nářadí z CraftPointu, prkénko z IKEA',
@@ -1058,7 +1098,7 @@ export const cardHolderProject: ProjectDefinition = {
         variant: 'A5 (21 × 15 cm)',
         quantity: 2,
         purpose:
-          'trénink lekcí 1–4 ze stejné kůže: zkušební údery, odřezek aspoň 60 × 120 mm na rovný řez a tři odřezky asi 40 × 80 mm na lepení a steh',
+          'trénink lekcí 1–4 ze stejné kůže: zkušební údery, odřezek aspoň 60 × 120 mm na rovný řez, zbytek asi 210 × 80 mm na cvičnou šablonu a tři odřezky asi 40 × 80 mm na lepení a steh',
       },
       {
         equipmentSlug: 'cutting-mat',
@@ -1155,7 +1195,7 @@ export const cardHolderProject: ProjectDefinition = {
         url: 'https://www.obi.cz/lepici-pasky/tesa-maskovaci-paska-professional-sensitive-pro-citlive-povrchy-25-m-x-25-mm/p/4754180',
         quantity: 1,
         purpose:
-          'šablona na kůži (lekce 5); jedna role na všechny projekty – stačí i podobná páska z papírnictví nebo hobby marketu',
+          'šablona na kůži (cvičení v lekci 2, lekce 5); jedna role na všechny projekty – stačí i podobná páska z papírnictví nebo hobby marketu',
       },
     ],
     skipped: [],
