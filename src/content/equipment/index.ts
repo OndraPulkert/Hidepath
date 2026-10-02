@@ -1390,7 +1390,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
 
   draft({
     slug: 'coin-forming-block',
-    name: 'Forma na tvarování důlku',
+    name: 'Forma na tvarování důlku (překližka + vykružovací pila 32 mm)',
     englishName: 'Coin dimple forming block',
     category: 'forming',
     shortDescription: 'Deska s kulatým otvorem, do které se za mokra vtlačí kůže s mincí.',
