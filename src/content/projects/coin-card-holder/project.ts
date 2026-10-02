@@ -152,7 +152,7 @@ export const lessons: readonly LessonDefinition[] = [
     materials: [
       'vytištěný list KAPSA (zkontrolovaná kalibrační úsečka 50 mm; výchozí list je pro minci 50 Kč, u mince 40 mm vytiskněte variantu pro 40 mm – mění se jí otvor formy)',
       'dvě desky na formu a víko (překližka nebo tvrdý plast, aspoň 8 mm) a odpadní prkno pod vrtání',
-      'aku vrtačka s vykružovací pilou 32 mm (např. ze sady LUX-TOOLS) pro výchozí minci 50 Kč (otvor 31,5 mm); Forstnerův vrták jen v průměru 32 mm – v ověřené sadě 15–35 mm je jen 30 mm (menší než otvor) a 35 mm; u mince 40 mm vykružovací pila 45 nebo 44 mm',
+      'aku vrtačka s vykružovací pilou 32 mm (např. Wolfcraft bimetal Ø 32 mm) pro výchozí minci 50 Kč (otvor 31,5 mm); Forstnerův vrták jen v průměru 32 mm – v ověřené sadě 15–35 mm je jen 30 mm (menší než otvor) a 35 mm; u mince 40 mm vykružovací pila 45 nebo 44 mm',
       '2 odřezky třísločiněné kůže 1,2 mm, každý aspoň 57,5 × 57,5 mm (u mince 40 mm aspoň 70 × 70 mm) – druhý pro případné opakování zkoušky okna',
       'mince, na kterou stavíte střih (výchozí 50 Kč)',
       'potravinová fólie',
@@ -177,7 +177,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'drill-form',
         title: 'Vyvrtejte formu',
-        body: 'Vytiskněte list KAPSA na 100 % (zkontrolujte úsečku 50 mm), vystřihněte kružnici otvoru formy a nalepte na desku. Desku upněte svěrkou ke stolu, pod ni dejte odpadní prkno. Vrtejte na první rychlost, bez příklepu, netlačte silou, s nabitou baterií. Vykružovací pilou provrtejte do půlky, desku otočte a dokončete z druhé strany podle dírky středicího vrtáku. Forstnerovým vrtákem (sukovníkem) ho místo toho průběžně vytahujte, ať se zbaví pilin. Nakonec zaoblete horní hranu otvoru smirkovým papírem. Na desku narýsujte obě osy otvoru (vodorovnou i svislou), protažené až k jejím okrajům – podle nich pak na formě zarovnáte osy narýsované na kůži.',
+        body: 'Vytiskněte list KAPSA na 100 % (zkontrolujte úsečku 50 mm), vystřihněte kružnici otvoru formy a nalepte na desku. Desku upněte svěrkou ke stolu, pod ni dejte odpadní prkno. Otvor pro výchozí minci 50 Kč vrtejte vykružovací pilou Ø 32 mm (u mince 40 mm Ø 44 mm), na 1. rychlost, bez příklepu, netlačte silou, s nabitou baterií. Vykružovací pilou provrtejte do půlky, desku otočte a dokončete z druhé strany podle dírky středicího vrtáku. Forstnerovým vrtákem (sukovníkem) ho místo toho průběžně vytahujte, ať se zbaví pilin. Nakonec zaoblete horní hranu otvoru smirkovým papírem. Na desku narýsujte obě osy otvoru (vodorovnou i svislou), protažené až k jejím okrajům – podle nich pak na formě zarovnáte osy narýsované na kůži.',
         media: [],
       },
       {
@@ -1646,10 +1646,10 @@ export const coinCardHolderProject: ProjectDefinition = {
       },
       {
         equipmentSlug: 'coin-forming-block',
-        url: 'https://www.obi.cz/vykruzovaci-pily/lux-sada-vykruzovacich-pil-7-ks/p/1698885',
+        url: 'https://www.hornbach.cz/shop/Bimetalovy-vykruzovak-Wolfcraft-32-mm/7416284/artikl.html',
         quantity: 1,
         purpose:
-          'obsahuje 32 mm na otvor formy Ø 31,5 mm; vyřízne otvor aspoň o 0,5 mm větší než model (vůle kolem zabalené mince asi 2,1 mm místo 1,6 mm) – tvarování to nezkazí, jen okraj důlku bude o něco měkčí; ověříte na zkoušce v lekci 2',
+          'bimetal Ø 32 mm na otvor formy Ø 31,5 mm, středicí vrták v balení, šestihranná stopka 9,5 mm rovnou do sklíčidla (bez unášecího talíře); vyřízne otvor aspoň o 0,5 mm větší než model (vůle kolem zabalené mince asi 2,1 mm místo 1,6 mm) – tvarování to nezkazí, jen okraj důlku bude o něco měkčí; ověříte na zkoušce v lekci 2',
       },
       {
         equipmentSlug: 'clamps',

@@ -515,9 +515,16 @@ CraftPoint přes `https://craft-point.cz/products/<handle>.js` (`variants[].pric
   240); výsečník 20 mm 69 Kč, 2 mm 29 Kč.
   Košík autora uváděl u palice 507, děrovačů 336, pravítka a kružítka 222 Kč – `.js` i
   `products.json` ukazují o korunu víc; v katalogu jsou ceny z `.js`.
+- [Bimetalový vykružovák Wolfcraft Ø 32 mm – HORNBACH](https://www.hornbach.cz/shop/Bimetalovy-vykruzovak-Wolfcraft-32-mm/7416284/artikl.html)
+  (ověřeno 2. 10. 2026 přes WebFetch): **239 Kč**, online dodání 1–2 pracovní dny, na prodejně
+  Praha Černý Most 24 ks; středicí vrták Ø 6 mm v balení, šestihranná stopka 9,5 mm (bez
+  unášecího talíře, do sklíčidla 13 mm), max. hloubka řezu 40 mm; hodnocení 4,9/5 (10). Nahradil
+  sadu LUX-TOOLS jako doporučený vykružovák pro formu (výchozí mince 50 Kč).
 - [LUX-TOOLS Sada vykružovacích pil, 7 ks – OBI](https://www.obi.cz/vykruzovaci-pily/lux-sada-vykruzovacich-pil-7-ks/p/1698885):
   **99 Kč**, popis výrobku: „obsahuje průměr 25 mm, 32 mm, 38 mm, 45 mm, 50 mm, 56 mm a 62 mm“ a
-  unášecí talíř a středicí vrták 8 mm → 32 mm na otvor formy Ø 31,5 mm je v sadě.
+  unášecí talíř a středicí vrták 8 mm → 32 mm na otvor formy Ø 31,5 mm je v sadě. Od 2. 10. 2026
+  už jen jako varovaná alternativa: recenze na OBI si stěžují, že se v aku vrtačce protáčí a po
+  jednom otvoru tupí; samostatný LUX bimetal 32 mm na OBI vrací 404.
 - [Sada Forstnerových vrtáků 15–35 mm – OBI](https://www.obi.cz/vrtaky-do-dreva/sada-forstnerovych-vrtaku-15-mm-35-mm-5dilna/p/2021962):
   179 Kč, průměry 15, 20, 25, 30, 35 mm – 32 mm nemá.
 - [ELLIX sada truhlářských svěrek 2dílná – OBI](https://www.obi.cz/upinaci-nastroje/ellix-sada-truhlarskych-sverek-2dilna/p/5400296):

@@ -106,14 +106,17 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
   describe('nákupní plán „Co koupit“', () => {
     const plan = coinCardHolderProject.shoppingPlan!;
 
-    it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10. 2026)', () => {
+    it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10., vykružovák Wolfcraft z 2. 10. 2026)', () => {
+      const checkedAtFor = (line: (typeof plan.lines)[number]) => {
+        if (line.equipmentSlug === 'masking-tape') return '2026-10-01';
+        if (line.url.includes('Wolfcraft')) return '2026-10-02';
+        return '2026-09-29';
+      };
       for (const line of plan.lines) {
         const example = findPlanExample(line, equipmentCatalog);
         expect(example, `${line.equipmentSlug} ${line.url} ${line.variant ?? ''}`).toBeDefined();
         expect(example!.availability, line.url).toBe('in_stock');
-        expect(example!.checkedAt, line.url).toBe(
-          line.equipmentSlug === 'masking-tape' ? '2026-10-01' : '2026-09-29',
-        );
+        expect(example!.checkedAt, line.url).toBe(checkedAtFor(line));
       }
     });
 

@@ -1442,20 +1442,25 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         title: 'Staré plastové prkénko z domácnosti',
         reason: 'když je aspoň 8 mm silné, poslouží místo překližky.',
       },
+      {
+        title: 'Sada vykružovacích pil LUX-TOOLS, 7 ks (OBI, 99 Kč)',
+        reason:
+          'levná sada – podle recenzí se v aku vrtačce protáčí a rychle tupí (i po jednom otvoru); obsahuje 32 i 45 mm, ale počítejte s tím, že vydrží sotva na formu.',
+      },
     ],
-    priceRange: { minCents: 9_900, maxCents: 9_900 },
+    priceRange: { minCents: 23_900, maxCents: 23_900 },
     priceSource: 'verified',
-    priceNote: `${VERIFIED_NOTE} Cena je za sadu vykružovacích pil LUX-TOOLS s 32 mm pro výchozí minci 50 Kč (99 Kč). Nabídky jen pro minci 40 mm (BAUHAUS 299 Kč, HiKOKI 195 Kč) a sada Forstnerových vrtáků (179 Kč, pro mince 20 a 10 Kč) jsou níže jako varianty a do ceny se nepočítají, stejně jako překližka.`,
+    priceNote: `${VERIFIED_NOTE} Cena je za bimetalový vykružovák Wolfcraft Ø 32 mm pro výchozí minci 50 Kč (239 Kč, HORNBACH, ověřeno 2. 10. 2026). Nabídky jen pro minci 40 mm (BAUHAUS 299 Kč, HiKOKI 195 Kč) a sada Forstnerových vrtáků (179 Kč, pro mince 20 a 10 Kč) jsou níže jako varianty a do ceny se nepočítají, stejně jako překližka.`,
     alsoUsedFor: [],
     examples: [
       {
-        title: 'LUX-TOOLS Sada vykružovacích pil, 7 ks',
-        shop: 'OBI',
-        url: 'https://www.obi.cz/vykruzovaci-pily/lux-sada-vykruzovacich-pil-7-ks/p/1698885',
-        priceCents: 9_900,
-        note: 'Průměry 25, 32, 38, 45, 50, 56, 62 mm, univerzální unášecí talíř a středicí vrták, na dřevo. Pokryje 32 mm (výchozí mince 50 Kč, o 0,5 mm víc než potřebných 31,5 mm) i 45 mm (mince 40 mm, o 1 mm víc než potřebných 44 mm) – obojí vyzkoušet na odřezku. Dostupnost na prodejně neověřena.',
+        title: 'Bimetalový vykružovák Wolfcraft Ø 32 mm',
+        shop: 'HORNBACH',
+        url: 'https://www.hornbach.cz/shop/Bimetalovy-vykruzovak-Wolfcraft-32-mm/7416284/artikl.html',
+        priceCents: 23_900,
+        note: 'Doporučený pro výchozí minci 50 Kč: bimetal Ø 32 mm (o 0,5 mm víc než potřebných 31,5 mm – vyzkoušet na odřezku), max. hloubka řezu 40 mm. Středicí vrták Ø 6 mm je v balení a unášecí talíř není potřeba – šestihranná stopka 9,5 mm se upne přímo do sklíčidla 13 mm. Online dodání 1–2 pracovní dny, na prodejně Praha Černý Most 24 ks; hodnocení 4,9/5 (10 recenzí).',
         availability: 'in_stock',
-        checkedAt: '2026-09-29',
+        checkedAt: '2026-10-02',
       },
       {
         title: 'Sada Forstnerových vrtáků (sukovníků) 15–35 mm, 5 ks',
