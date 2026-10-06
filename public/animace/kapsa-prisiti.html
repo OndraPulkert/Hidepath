@@ -129,15 +129,15 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 const STRIP="M10 20 A10 10 0 0 1 20 10 L33 10 A10 10 0 0 1 43 20 L43 53.07 A39 34 0 0 0 82 87.07 L97.69 87.07 A34 34 0 0 0 131.606 55.399 A2.5 2.5 0 0 1 134.1 53.07 L244.35 53.07 A6 6 0 0 1 250.35 59.07 L250.35 151.17 A6 6 0 0 1 244.35 157.17 L16 157.17 A6 6 0 0 1 10 151.17 Z";
 const FX=97.69, FY=53.07, PW=72, PH=104.1;           // front panel (between fold A and fold B)
 const PX=112.44, PY=94.87, PKW=42.5, PKH=42;          // pocket place on the front panel (T)
-// pocket-local (KAPSA sheet shifted by -10,-14)
+// pocket-local = list KAPSA (pouzdro-mince-kapsa.svg) posunutý o -10,-18 (obrys kapsy tam začíná v 10,18)
 const OUTL="M10 0 L32.5 0 A10 10 0 0 1 42.5 10 L42.5 36 A6 6 0 0 1 36.5 42 L6 42 A6 6 0 0 1 0 36 L0 10 A10 10 0 0 1 10 0 Z";
 const CXL=21.25, CYL=20.75, R_WIN=10, R_COIN=13.75, R_FOOT=15.75;
 const circ=(cx,cy,r)=>`M${cx+r} ${cy} A${r} ${r} 0 1 0 ${cx-r} ${cy} A${r} ${r} 0 1 0 ${cx+r} ${cy} Z`;
 const WINL=circ(CXL,CYL,R_WIN);
-const DOTS_K=[[13.5,25.177],[13.5,29.177],[13.5,33.177],[13.5,37.177],[13.5,41.177],[13.5,45.177],[13.5,49.177],[15.261,52.388],
- [19.25,52.5],[23.25,52.5],[27.25,52.5],[31.25,52.5],[35.25,52.5],[39.25,52.5],[43.25,52.5],[47.239,52.388],
- [49,49.177],[49,45.177],[49,41.177],[49,37.177],[49,33.177],[49,29.177],[49,25.177]];
-const DOTSL=DOTS_K.map(([x,y])=>[+(x-10).toFixed(3),+(y-14).toFixed(3)]);
+const DOTS_K=[[13.5,29.177],[13.5,33.177],[13.5,37.177],[13.5,41.177],[13.5,45.177],[13.5,49.177],[13.5,53.177],[15.261,56.388],
+ [19.25,56.5],[23.25,56.5],[27.25,56.5],[31.25,56.5],[35.25,56.5],[39.25,56.5],[43.25,56.5],[47.239,56.388],
+ [49,53.177],[49,49.177],[49,45.177],[49,41.177],[49,37.177],[49,33.177],[49,29.177]];
+const DOTSL=DOTS_K.map(([x,y])=>[+(x-10).toFixed(3),+(y-18).toFixed(3)]);
 // glue / roughening band: seam allowance 3.5 mm along sides and bottom, top edge free
 const BANDL="M1.75 10 L1.75 36 A4.25 4.25 0 0 0 6 40.25 L36.5 40.25 A4.25 4.25 0 0 0 40.75 36 L40.75 10";
 // corner marks: ~1 mm inside the rounded corner (on the 45° diagonal), not the sharp vertex
@@ -352,7 +352,7 @@ add('B','Přiložte kapsu na 4 značky','Hotovou kapsu – vytvarovanou, s vyř�
   s+=inset('PŘILOŽIT',notes([['na 4 značky','tw'],['lícem nahoru,'],['otevřenou hranou'],['nahoru'],['značky leží ~1 mm'],['uvnitř rohů –'],['kapsa je zakryje']]));
   if(t>.85) s+=tick(91,67)+lbl(95,68.5,'sedí','tok');
   return s;
-},'lic');
+},'lic','Tip (lekce to neuvádí): přiložení nanečisto, ještě bez lepidla – uvidíte, kde přesně leží okraj kapsy a kde zdrsnit.');
 
 add('B','Zdrsněte jen pruh pod okrajem kapsy','Kapsu zase sundejte. Na předním panelu smirkem lehce zdrsněte jen plochu pod okrajem kapsy, tam, kam přijde lepidlo. Zbytek líce nechte hladký.',6400,t=>{
   const p=es(t,.08,.88);
@@ -393,7 +393,8 @@ add('B','Nechte lepidlo odvětrat','Nanesené lepidlo na obou dílech nechte odv
 add('B','Přitiskněte kapsu přesně na značky','Kapsu otočte lícem nahoru a přiložte ji přesně na 4 značky, otevřenou hranou nahoru – kontaktní lepidlo po dotyku už nejde posunout (lekce 7). Přitiskněte ji po okraji, kde je lepidlo.',8000,t=>{
   const m=es(t,.04,.5), press=seg(t,.55,.95);
   let s=clipMain('cb5',G(camT(POCKC),stripLeather({rough:1,glue:1,dry:1})+(m<.98?rings(CORN,'var(--ok)',1.5,.45):'')));
-  s+=inset('PŘITISKNOUT',notes([['přesně na značky','tw'],['po dotyku už'],['nejde posunout'],['tlačit po okraji,'],['kde je lepidlo']])+
+  // texty se objeví, až kapsa z výřezu odletí (jinak by ji na začátku překrývaly)
+  s+=inset('PŘITISKNOUT',`<g opacity="${f(seg(t,.3,.42))}">`+notes([['přesně na značky','tw'],['po dotyku už'],['nejde posunout'],['tlačit po okraji,'],['kde je lepidlo']])+'</g>'+
     `<g opacity="${f(seg(t,.6,.7))}">${lbl(89,52,'Tip:','ta')}${notes([['důlek nemačkat'],['(lekce to neuvádí)']],57.5,5.2)}</g>`);
   // pocket travels from inset (rub up) to the panel (líc up)
   const c0=[89.5+CXL*.95,IPY+21*.95], c1=tv(POCKC,PX+CXL,PY+21);
@@ -479,18 +480,22 @@ add('C','Řez: otvory lícují skrz obě vrstvy','V řezu je vidět, že vidlič
 },'lic');
 
 // ---------- D: sew ----------
-add('D','Připravte nit asi 0,8 m','Orientačně asi 4× délka švu. Šev kapsy vede 23 otvory po bocích a dnem, asi '+Math.round(SEAM_LEN)+' mm – čtyřnásobek je asi 0,35 m. Lekce počítá s nití asi 0,8 m: vystačí s rezervou. Voskovaný polyester 0,6–0,8 mm.',6400,t=>{
+const SEAM4=4*SEAM_LEN/1000, THR_LO=SEAM4+.25, THR_HI=SEAM4+.30;   // m: 4 × šev + 25–30 cm rezervy
+const m2=(v,d=2)=>cz((+v.toFixed(d)).toString());
+const THR_RANGE=`${m2(Math.round(THR_LO*20)/20)}–${m2(Math.round(THR_HI*20)/20)}`;   // zaokrouhleno na 5 cm
+add('D','Připravte nit asi 0,8 m','Orientačně 4 × délka švu + 25–30 cm rezervy na konce (návod „Jak odměřit nit“). Šev kapsy vede 23 otvory po bocích a dnem, asi '+Math.round(SEAM_LEN)+' mm: 4 × '+cz((SEAM_LEN/10).toFixed(1))+' cm ≈ '+Math.round(SEAM4*100)+' cm, s rezervou asi '+THR_RANGE+' m. Lekce počítá s nití asi 0,8 m – vystačí s rezervou. Voskovaný polyester 0,6–0,8 mm.',6400,t=>{
   const p=es(t,.05,.6), b=es(t,.62,.95);
   const poly='M'+DOTSL.map(([x,y])=>`${x} ${y}`).join(' L');
   let inner=stripLeather()+G(POCK_T,pocketLic()+`<path d="${poly}" fill="none" stroke="var(--accent)" stroke-width=".7" pathLength="1" stroke-dasharray="${f(p)} 2" stroke-linecap="round"/>`+noTop(seg(t,.5,.6)));
   let s=clipMain('cd1',G(camT(POCKC),inner));
   s+=pill(4,86,`šev ≈ ${Math.round(SEAM_LEN*p)} mm`,'ta');
-  const W=40, x0=89.5, y=52;
-  let ib=notes([[`šev ≈ ${Math.round(SEAM_LEN)} mm`,'t'],['4 × ≈ 0,35 m'],['+ rezerva'],['nit asi 0,8 m','tok']],18,5.8);
-  const w1=W*.35/.8*b, w2=W*b;
-  if(b>0){ib+=`<path d="M${x0} ${y} h${f(w2)}" stroke="var(--thread-d)" stroke-width="1.1" stroke-dasharray="1.4 1" stroke-linecap="round"/>`+
-    `<path d="M${x0} ${y} h${f(w1)}" stroke="var(--thread-d)" stroke-width="2.3" stroke-linecap="round"/><path d="M${x0} ${y} h${f(w1)}" stroke="var(--thread)" stroke-width="1.5" stroke-linecap="round"/>`;}
-  ib+=`<g opacity="${f(seg(t,.9,1))}"><path d="M${f(x0+W*.35/.8)} ${y-3} v6 M${x0+W} ${y-3} v6" stroke="var(--muted)" stroke-width=".3"/>${lbl(x0,y-4.5,'4× šev','ts')}${lbl(x0+W*.35/.8+1.5,y-4.5,'rezerva','ts')}${lbl(x0+W*.35/.8,y+7,'0,35','ts','middle')}${lbl(x0+W,y+7,'0,8 m','ts','end')}${notes([['voskovaný polyester'],['0,6–0,8 mm']],70,5)}</g>`;
+  const W=40, x0=89.5, y=54, sc=W/.8, xa=x0+SEAM4*sc, xb=x0+THR_HI*sc;
+  let ib=notes([[`šev ≈ ${Math.round(SEAM_LEN)} mm`,'t'],[`4 × šev ≈ ${m2(SEAM4)} m`],['+ 25–30 cm rezerva'],[`≈ ${THR_RANGE} m`],['lekce: asi 0,8 m','tok']],18,5.6);
+  if(b>0){const c=x=>x0+(x-x0)*b;
+    ib+=`<path d="M${f(c(xb))} ${y} H${f(c(x0+W))}" stroke="var(--thread-d)" stroke-width=".9" stroke-dasharray=".5 .9" stroke-linecap="round"/>`+
+    `<path d="M${f(c(xa))} ${y} H${f(c(xb))}" stroke="var(--thread-d)" stroke-width="1.1" stroke-dasharray="1.4 1" stroke-linecap="round"/>`+
+    `<path d="M${x0} ${y} H${f(c(xa))}" stroke="var(--thread-d)" stroke-width="2.3" stroke-linecap="round"/><path d="M${x0} ${y} H${f(c(xa))}" stroke="var(--thread)" stroke-width="1.5" stroke-linecap="round"/>`;}
+  ib+=`<g opacity="${f(seg(t,.9,1))}"><path d="M${f(xa)} ${y-3} v6 M${f(xb)} ${y-3} v6 M${x0+W} ${y-3} v6" stroke="var(--muted)" stroke-width=".3"/>${lbl(x0,y-4.5,'4× šev','ts')}${lbl(xa+1.2,y-4.5,'rezerva','ts')}${lbl(xa,y+7,m2(SEAM4),'ts','middle')}${lbl(xb,y+7,m2(THR_HI),'ts','middle')}${lbl(x0+W,y+12,'0,8 m (lekce)','ts','end')}${notes([['voskovaný polyester'],['0,6–0,8 mm']],73,5)}</g>`;
   s+=inset('NIT',ib);
   return s;
 },'lic');
@@ -505,7 +510,9 @@ add('D','Přišijte kapsu sedlářským stehem','Sedlářský steh jako u pouzdr
   s+=pill(4,86,t<.93?`stehy: ${n} / 22`:'horní hrana volná','t');
   // saddle stitch diagram
   const hx=[92,98,104,110,116,122,128], yT=31, yB=39, kk=Math.min(6,Math.floor(n/22*6.99));
-  let ib=`<rect x="89" y="${yT+1}" width="42" height="3" fill="var(--lic)"/><rect x="89" y="${yT+4}" width="42" height="3" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".15"/>`;
+  // dvě vrstvy: nahoře kapsa (líc nahoru), pod ní přední panel (líc nahoru); tenký pruh = líc
+  let ib=`<rect x="89" y="${yT+1}" width="42" height="3" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".15"/><rect x="89" y="${yT+1}" width="42" height=".8" fill="var(--lic)"/>`+
+    `<rect x="89" y="${yT+4}" width="42" height="3" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".15"/><rect x="89" y="${yT+4}" width="42" height=".8" fill="var(--lic)"/>`;
   ib+=hx.map(x=>`<rect x="${x-.4}" y="${yT+1}" width=".8" height="6" fill="var(--hole)"/>`).join('');
   for(let i=0;i<kk;i++){const a=hx[i],b=hx[i+1];const c1=i%2?'var(--thread2)':'var(--thread-d)', c2=i%2?'var(--thread-d)':'var(--thread2)';
     ib+=`<path d="M${a} ${yT} H${b}" stroke="${c1}" stroke-width=".8"/><path d="M${a} ${yB} H${b}" stroke="${c2}" stroke-width=".8"/><path d="M${b-.25} ${yT} V${yB} M${b+.25} ${yT} V${yB}" stroke="${c1}" stroke-width=".35"/>`;}
