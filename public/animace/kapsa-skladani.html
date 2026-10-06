@@ -1,0 +1,770 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Složení pouzdra a šev dna</title>
+<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+<!-- Self-hostované fonty aplikace (public/fonts), aby stránka fungovala i offline v PWA. -->
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f3efe9;--panel:#fffdf9;--stage:#f7f2ea;--ink:#2a211b;--muted:#6c6158;--line:#ddd5cc;
+  --accent:#b3261e;--ok:#2f6b3a;--btn:#2a211b;--btn-ink:#fffdf9;
+  --lic:#b8773f;--lic-d:#8a5228;--lic-hi:#d39a63;
+  --rub:#dcc4a2;--rub-d:#b99a72;--rub-fib:#c7a87f;
+  --hole:#2b2018;--paper:#fcfbf7;--paper-edge:#cfc8bb;--print:#2b2b2b;--print-m:#7a7a7a;
+  --graphite:#4f545a;--steel:#a3abb3;--steel-d:#5c656e;--tape:#eedc95;
+  --coin-o:#c4683f;--coin-o-d:#7a3a1c;--coin-i:#dcb94f;--coin-i-d:#93752a;--chip-lic:#b8773f;--chip-rub:#dcc4a2;
+  --glue:#e0ad35;--board:#eceff1;--board-d:#aab2ba;--thread:#f6efdc;--thread-d:#8f8166;--thread2:#7aa6cf;
+  --sand:#c9a26b;--sand-d:#8a6a3c;--skin:#e9b996;--skin-d:#b98563;
+  --card:#b9a88c;--card-d:#857559;--bill:#a9c39b;--bill-d:#6f8a62;--foil:#9fc3dc;--wet:#3a2414;
+  --clip:#3d4247;--pad:#e8e2d4;--bone:#efe7d2;--bone-d:#a99b7a;--sponge:#f2d24b;--sponge-d:#b8961d;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
+  --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
+  --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
+  --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;
+  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--graphite:#3f4449;
+  --steel:#9099a2;--steel-d:#4d555d;--tape:#d9c67d;
+  --glue:#c8962a;--board:#a9b1b8;--board-d:#6c747c;--thread:#efe6cf;--thread-d:#7d705a;--thread2:#86b0d6;
+  --sand:#b8935f;--sand-d:#7a5d33;--skin:#d6a684;--skin-d:#a57454;
+  --card:#a29275;--card-d:#6e6048;--bill:#8fa883;--bill-d:#5c7350;--foil:#86a9c0;--wet:#140b05;
+  --clip:#8a9097;--pad:#cfc8b8;--bone:#ddd3bb;--bone-d:#8f8163;--sponge:#d9bb3f;--sponge-d:#9c7e17;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
+  --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
+  --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
+  --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;
+  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--graphite:#3f4449;
+  --steel:#9099a2;--steel-d:#4d555d;--tape:#d9c67d;
+  --glue:#c8962a;--board:#a9b1b8;--board-d:#6c747c;--thread:#efe6cf;--thread-d:#7d705a;--thread2:#86b0d6;
+  --sand:#b8935f;--sand-d:#7a5d33;--skin:#d6a684;--skin-d:#a57454;
+  --card:#a29275;--card-d:#6e6048;--bill:#8fa883;--bill-d:#5c7350;--foil:#86a9c0;--wet:#140b05;
+  --clip:#8a9097;--pad:#cfc8b8;--bone:#ddd3bb;--bone-d:#8f8163;--sponge:#d9bb3f;--sponge-d:#9c7e17;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 "Albert Sans",system-ui,sans-serif;padding:22px 16px 44px;overflow-x:hidden}
+.wrap{max-width:860px;margin:0 auto;display:grid;gap:16px}
+h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
+.lead{color:var(--muted);margin:6px 0 0;max-width:70ch}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:10px;min-width:0}
+.stagewrap{position:relative;background:var(--stage);border-radius:8px;overflow:hidden}
+#stage{display:block;width:100%;height:auto;aspect-ratio:3/2}
+.badge{position:absolute;top:8px;left:8px;display:flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-weight:700;font-size:13px;letter-spacing:.06em;transition:opacity .2s}
+.badge i{width:16px;height:16px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.2)}
+.badge small{font-weight:500;letter-spacing:0;color:var(--muted);font-size:12px}
+.badge[hidden]{display:none}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.controls button{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);width:40px;height:40px;border-radius:10px;display:grid;place-items:center;cursor:pointer;padding:0}
+.controls button.play{background:var(--btn);color:var(--btn-ink);border-color:var(--btn)}
+.controls button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.controls svg{width:18px;height:18px;fill:currentColor}
+.counter{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+.prog{display:flex;gap:6px;align-items:stretch}
+.pseg{flex:1;display:grid;gap:4px;min-width:0;cursor:pointer;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left}
+.pseg .bars{display:flex;gap:2px;height:6px}
+.pseg .bars span{flex:1;background:var(--line);border-radius:2px;position:relative;overflow:hidden}
+.pseg .bars span b{position:absolute;inset:0;background:var(--lic);transform-origin:left;transform:scaleX(0)}
+.pseg .pl{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:520px){.pl span{display:none}}
+.pseg.on .pl{color:var(--ink);font-weight:600}
+.cap{min-height:6.6em}
+.cap .no{display:inline-block;font-weight:700;color:var(--lic-d);margin-right:6px;font-variant-numeric:tabular-nums}
+:root[data-theme="dark"] .cap .no{color:var(--lic-hi)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cap .no{color:var(--lic-hi)}}
+.cap h2{display:inline;font-size:1.05rem;margin:0}
+.cap p{margin:4px 0 0;color:var(--ink)}
+.cap .tip{display:block;margin-top:6px;color:var(--muted);font-size:14px}
+.cap .tip b{color:var(--accent);font-weight:700}
+.note{font-size:13px;color:var(--muted);margin:0}
+/* svg text */
+.t{font:600 4.1px "Albert Sans",sans-serif;fill:var(--ink)}
+.ts{font:500 3.7px "Albert Sans",sans-serif;fill:var(--muted)}
+.tw{font:700 4.6px "Albert Sans",sans-serif;fill:var(--ink)}
+.ta{font:700 4.1px "Albert Sans",sans-serif;fill:var(--accent)}
+.tok{font:700 4.1px "Albert Sans",sans-serif;fill:var(--ok)}
+.lead-l{stroke:var(--muted);stroke-width:.25;fill:none}
+@media (min-width:700px){.t,.ta,.tok{font-size:2.8px}.ts{font-size:2.5px}.tw{font-size:3.2px}}
+.panelbox{fill:var(--panel);stroke:var(--line);stroke-width:.35}
+.pillbg{fill:var(--panel);stroke:var(--line);stroke-width:.3;opacity:.95}
+@media (max-width:520px){.badge small{display:none}.cap{min-height:9.5em}.counter{width:100%;margin-left:0;order:9}}
+/* Hidepath: návrat do lekce */
+.backlink{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--ink);font-weight:600;font-size:15px;text-decoration:none;justify-self:start}
+.backlink:hover{text-decoration:underline}
+.backlink:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+<a class="backlink" href="/" data-back>← Zpět do lekce</a>
+<h1>Složení pouzdra a šev dna</h1>
+<p class="lead">Projekt 02 „Pouzdro s vsazenou mincí“, mince 50 Kč, kůže 1,2 mm (bez ztenčení). Jak se pás složí za mokra kolem karet a bankovek a jak se dno slepí spoj po spoji a prošije skrz tři vrstvy – lekce 7 „Skládání, lepení dna a šití“. Stejný postup v malém trénuje lekce 4 „Skládání a šev tří vrstev na odřezku“. Kreslené v měřítku podle šablony PÁS pro kůži 1,2 mm: panely 72 × 104,1 mm, ohyb A 15,69 mm, ohyb B 8,66 mm, šev dna 17 otvorů na panel, rozteč 4 mm, 3,5 mm od dolní hrany.</p>
+</header>
+
+<section class="card" aria-label="Animace postupu">
+  <div class="stagewrap">
+    <svg id="stage" viewBox="0 0 135 90" role="img" aria-label="Animovaný postup složení pouzdra, lepení a šití dna"></svg>
+    <div class="badge" id="badge" hidden><i id="chip"></i><span id="side">LÍC</span><small id="sidesub"></small></div>
+  </div>
+  <div class="prog" id="prog"></div>
+  <div class="controls">
+    <button id="bRestart" aria-label="Od začátku" title="Od začátku"><svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/></svg></button>
+    <button id="bPrev" aria-label="Předchozí krok" title="Předchozí krok"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg></button>
+    <button id="bPlay" class="play" aria-label="Přehrát" title="Přehrát / pozastavit"><svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg></button>
+    <button id="bNext" aria-label="Další krok" title="Další krok"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
+    <span class="counter" id="counter">krok 1 / 15</span>
+  </div>
+  <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
+</section>
+<p class="note">Postup podle lekce 7 (kroky 1–6 a kontrolní body); otvory dna podle lekcí 4 a 5. Na odřezku v lekci 4 je to totéž v malém: panely asi 30 mm, 6 otvorů na panel, místo bankovek přeložený papír asi 2 mm. Řezy jsou schematické; kde je to napsané, jsou tloušťky zvětšené. Kroky a poznámky označené „Tip“ lekce výslovně neuvádí.</p>
+</div>
+
+<script>
+(()=>{
+// ---------- geometry (mm) ----------
+// T = souřadnice šablony PÁS pro kůži 1,2 mm (pouzdro-mince-sablona-kuze-1-2mm.svg), stejné jako v kapsa-prisiti.html
+const STRIP="M10 20 A10 10 0 0 1 20 10 L33 10 A10 10 0 0 1 43 20 L43 53.07 A39 34 0 0 0 82 87.07 L97.69 87.07 A34 34 0 0 0 131.606 55.399 A2.5 2.5 0 0 1 134.1 53.07 L244.35 53.07 A6 6 0 0 1 250.35 59.07 L250.35 151.17 A6 6 0 0 1 244.35 157.17 L16 157.17 A6 6 0 0 1 10 151.17 Z";
+const FY=53.07, FB=157.17, PW=72, PH=104.1;
+const BX0=10, AX0=82, FX=97.69, BXF=169.69, IX0=178.35, IX1=250.35;      // zadní | ohyb A | přední | ohyb B | vnitřní
+const LA=15.69, LB=8.66, T12=1.2, CARDS=3.04, BILLS=2;                       // model coin-card-holder.ts, kůže 1,2 mm
+const SEPA=2*LA/Math.PI, SEPB=2*LB/Math.PI;                                  // odstup panelů po složení: 9,99 / 5,51 mm
+const CA=(AX0+FX)/2, CB=(BXF+IX0)/2;                                         // osy ohybů (zrcadlení)
+const OUT_A=SEPA/2+T12/2, OUT_B=SEPB/2+T12/2;                                // vnější poloměr smyček (šířka hotového ≈ 80,95)
+const PX=112.44, PY=94.87, PKW=42.5, PKH=42;
+const OUTL="M10 0 L32.5 0 A10 10 0 0 1 42.5 10 L42.5 36 A6 6 0 0 1 36.5 42 L6 42 A6 6 0 0 1 0 36 L0 10 A10 10 0 0 1 10 0 Z";
+const CXL=21.25, CYL=20.75, R_WIN=10, R_COIN=13.75, R_FOOT=15.75;
+const circ=(cx,cy,r)=>`M${cx+r} ${cy} A${r} ${r} 0 1 0 ${cx-r} ${cy} A${r} ${r} 0 1 0 ${cx+r} ${cy} Z`;
+const WINL=circ(CXL,CYL,R_WIN);
+const DOTS_K=[[13.5,29.177],[13.5,33.177],[13.5,37.177],[13.5,41.177],[13.5,45.177],[13.5,49.177],[13.5,53.177],[15.261,56.388],
+ [19.25,56.5],[23.25,56.5],[27.25,56.5],[31.25,56.5],[35.25,56.5],[39.25,56.5],[43.25,56.5],[47.239,56.388],
+ [49,53.177],[49,49.177],[49,45.177],[49,41.177],[49,37.177],[49,33.177],[49,29.177]];
+const DOTSL=DOTS_K.map(([x,y])=>[+(x-10).toFixed(3),+(y-18).toFixed(3)]);
+const SNAP=[153.19,62.57];
+const SEAM_Y=FB-3.5, NH=17, PITCH=4;
+const holes=x0=>Array.from({length:NH},(_,i)=>+(x0+4+PITCH*i).toFixed(2));
+const HB=holes(BX0), HF=holes(FX), HI=holes(IX0);                             // 4 mm od hran panelu = zrcadlově od čar ohybů
+const SEAM_LEN=(NH-1)*PITCH;                                                  // 64 mm
+
+// ---------- helpers ----------
+const cl=t=>Math.max(0,Math.min(1,t));
+const seg=(t,a,b)=>cl((t-a)/(b-a));
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const es=(t,a,b)=>ease(seg(t,a,b));
+const L=(a,b,t)=>a+(b-a)*t;
+const f=n=>(+n).toFixed(2);
+const G=(tr,s,extra='')=>`<g transform="${tr}" ${extra}>${s}</g>`;
+const SHADOW='filter="url(#sh)"';
+const cz=n=>String(n).replace('.',',');
+const camL=(a,b,u)=>{const o={};for(const k in a)o[k]=L(a[k],b[k],u);return o};
+const camT=c=>`translate(${f(c.sx)} ${f(c.sy)}) scale(${f(c.k)}) translate(${f(-c.cx)} ${f(-c.cy)})`;
+const tv=(c,x,y)=>[c.sx+(x-c.cx)*c.k,c.sy+(y-c.cy)*c.k];
+const POCK_T=`translate(${PX} ${PY})`;
+let UID=0;const uid=p=>`${p}${++UID}`;
+
+function lbl(x,y,t,cls='t',anchor='start'){return `<text x="${f(x)}" y="${f(y)}" class="${cls}" text-anchor="${anchor}">${t}</text>`}
+const pillG=(...a)=>pill(...a);
+function pill(x,y,t,cls='t',anchor='start'){return `<g class="pill"><rect class="pillbg" rx="1.2" x="${f(x)}" y="${f(y-4)}" width="1" height="1"/>${lbl(x,y,t,cls,anchor)}</g>`}
+function lead(x1,y1,x2,y2){return `<path d="M${f(x1)} ${f(y1)} L${f(x2)} ${f(y2)}" class="lead-l"/><circle cx="${f(x2)}" cy="${f(y2)}" r=".5" fill="var(--muted)"/>`}
+function tick(x,y,s=1){return `<path d="M${x-1.6*s} ${y} l${1.2*s} ${1.2*s} l${2.4*s} -2.6" stroke="var(--ok)" stroke-width="${.7*s}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`}
+function cross(x,y,r=1,w=.5){return `<path d="M${f(x-r)} ${f(y-r)} L${f(x+r)} ${f(y+r)} M${f(x-r)} ${f(y+r)} L${f(x+r)} ${f(y-r)}" stroke="var(--accent)" stroke-width="${w}" stroke-linecap="round"/>`}
+function inset(title,body,{x=86,y=6,w=47,h=78}={}){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" class="panelbox"/><text x="${x+3}" y="${y+5.5}" class="ts" style="font-weight:700;letter-spacing:.06em">${title}</text>${body}`}
+function notes(lines,y0=18,step=5.6,x=89){return lines.map((l,i)=>lbl(x,y0+i*step,l[0],l[1]||'ts')).join('')}
+function clipMain(body,w=84){const id=uid('cm');return `<clipPath id="${id}"><rect x="0" y="0" width="${f(w)}" height="90"/></clipPath><g clip-path="url(#${id})">${body}</g>`}
+function clock(x,y,p){const a=-Math.PI/2+p*2*Math.PI;return `<circle cx="${x}" cy="${y}" r="5" fill="var(--panel)" stroke="var(--ink)" stroke-width=".5"/><path d="M${x} ${y} L${f(x+3.6*Math.cos(a))} ${f(y+3.6*Math.sin(a))} M${x} ${y} L${x} ${y-2.4}" stroke="var(--ink)" stroke-width=".5" stroke-linecap="round"/><circle cx="${x}" cy="${y}" r=".6" fill="var(--ink)"/>`}
+function arrow(x1,y1,x2,y2,col='var(--accent)',w=.5,mk='ar'){return `<path d="M${f(x1)} ${f(y1)} L${f(x2)} ${f(y2)}" stroke="${col}" stroke-width="${w}" marker-end="url(#${mk})"/>`}
+
+// ---------- tools ----------
+function sandpaper(x,y,a=0){return G(`translate(${f(x)} ${f(y)}) rotate(${f(a)})`,`<rect x="-4.5" y="-3" width="9" height="6" rx="1.2" fill="var(--sand)" stroke="var(--sand-d)" stroke-width=".3"/><path d="M-3 -1.5 h1 M0 -1 h1 M2 .5 h1 M-2.5 1.2 h1 M.5 1.8 h1" stroke="var(--sand-d)" stroke-width=".35"/>`)}
+function brush(x,y){return G(`translate(${f(x)} ${f(y)}) rotate(35)`,`<path d="M-1.4 0 L1.4 0 L1.1 -3 L-1.1 -3 Z" fill="var(--glue)" stroke="#8a6a1c" stroke-width=".2"/><rect x="-1.2" y="-4.4" width="2.4" height="1.6" fill="var(--steel)"/><rect x="-.7" y="-15" width="1.4" height="10.8" rx=".6" fill="#7b5a3a"/>`)}
+function sponge(x,y){return `<rect x="${f(x-4.5)}" y="${f(y-3.2)}" width="9" height="6.4" rx="1.6" fill="var(--sponge)" stroke="var(--sponge-d)" stroke-width=".3"/><circle cx="${f(x-2)}" cy="${f(y-1)}" r=".5" fill="var(--sponge-d)" opacity=".6"/><circle cx="${f(x+1.5)}" cy="${f(y+.8)}" r=".45" fill="var(--sponge-d)" opacity=".6"/><circle cx="${f(x+2.4)}" cy="${f(y-1.5)}" r=".35" fill="var(--sponge-d)" opacity=".6"/>`}
+function needle(x,y,a,op=1){return G(`translate(${f(x)} ${f(y)}) rotate(${f(a)})`,`<path d="M0 0 L11 0" stroke="var(--steel-d)" stroke-width=".55" stroke-linecap="round"/><ellipse cx="9.6" cy="0" rx="1" ry=".32" fill="none" stroke="var(--steel)" stroke-width=".22"/>`,`opacity="${f(op)}"`)}
+function finger(x,y,op=1){return `<g opacity="${f(op)}"><ellipse cx="${f(x)}" cy="${f(y)}" rx="2.6" ry="3.6" fill="var(--skin)" stroke="var(--skin-d)" stroke-width=".3"/><ellipse cx="${f(x)}" cy="${f(y-1.6)}" rx="1.5" ry="1.3" fill="#fff" opacity=".35"/></g>`}
+// 50 Kč (ČNB): Ø 27,5, mezikruží poměděná ocel (měď), střed Ø 17 plátovaný mosazí
+function coinTop(cx,cy,r){return `<circle cx="${f(cx)}" cy="${f(cy)}" r="${r}" fill="var(--coin-o)" stroke="var(--coin-o-d)" stroke-width=".25"/><circle cx="${f(cx)}" cy="${f(cy)}" r="${f(r*8.5/13.75)}" fill="var(--coin-i)" stroke="var(--coin-i-d)" stroke-width=".2"/>`}
+// šikmý zářez vidličky: 'lic' = „/“ (pohled na stranu, ze které se sekalo), 'rub' = „\“
+function slit(x,y,dir,d=.45,w=.42,col='var(--hole)'){return dir==='/'?`<path d="M${f(x-d)} ${f(y+d)} L${f(x+d)} ${f(y-d)}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`:`<path d="M${f(x-d)} ${f(y-d)} L${f(x+d)} ${f(y+d)}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`}
+
+// ---------- pocket on the front panel (local mm, líc up) ----------
+function pocketLic(coin=true){
+  let s='';
+  if(coin) s+=coinTop(CXL,CYL,R_COIN);
+  s+=`<path d="${OUTL} ${WINL}" fill-rule="evenodd" fill="url(#licG)" stroke="var(--lic-d)" stroke-width=".55"/>`;
+  s+=`<path d="${circ(CXL,CYL,R_FOOT)} ${WINL}" fill-rule="evenodd" fill="url(#dimL)"/><circle cx="${CXL}" cy="${CYL}" r="${R_FOOT}" fill="none" stroke="var(--lic-d)" stroke-width=".25" opacity=".45"/>`;
+  s+=`<path d="${WINL}" fill="none" stroke="var(--lic-d)" stroke-width=".5"/>`;
+  for(let i=0;i<22;i++){const [x1,y1]=DOTSL[i],[x2,y2]=DOTSL[i+1];const d=Math.hypot(x2-x1,y2-y1),ux=(x2-x1)/d,uy=(y2-y1)/d;
+    const a=[x1+ux*.4,y1+uy*.4],b=[x2-ux*.4,y2-uy*.4];
+    s+=`<path d="M${f(a[0])} ${f(a[1])} L${f(b[0])} ${f(b[1])}" stroke="var(--thread-d)" stroke-width="1" stroke-linecap="round"/><path d="M${f(a[0])} ${f(a[1])} L${f(b[0])} ${f(b[1])}" stroke="var(--thread)" stroke-width=".7" stroke-linecap="round"/>`;}
+  return s;
+}
+function snapStud(x,y,s=1){return `<circle cx="${f(x)}" cy="${f(y)}" r="${2.6*s}" fill="var(--steel)" stroke="var(--steel-d)" stroke-width="${.3*s}"/><circle cx="${f(x)}" cy="${f(y)}" r="${1.2*s}" fill="none" stroke="var(--steel-d)" stroke-width="${.25*s}"/>`}
+
+// ---------- plan view of the strip (líc up, T coords) ----------
+const STRIPC={cx:130.2,cy:84.6,sx:67.5,sy:44,k:.465};
+function clipX(x0,x1,body){const id=uid('cx');return `<clipPath id="${id}"><rect x="${x0}" y="0" width="${x1-x0}" height="170"/></clipPath><g clip-path="url(#${id})">${body}</g>`}
+const SLD=1.1, SLW=.62; // zářezy v plánu zvětšené, aby byly vidět
+function bottomSlits(xs,dir,col){return xs.map(x=>slit(x,SEAM_Y,dir,SLD,SLW,col)).join('')}
+function frontStuff(){return G(POCK_T,pocketLic())+snapStud(...SNAP)}
+function planBack(){return clipX(0,AX0,`<path d="${STRIP}" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".4"/>`)+bottomSlits(HB,'\\')}
+function planInner(){return clipX(IX0,260,`<path d="${STRIP}" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".4"/>`)+bottomSlits(HI,'\\')}
+function planMid(){return clipX(AX0,IX0,`<path d="${STRIP}" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".4"/>`)+frontStuff()+bottomSlits(HF,'/')}
+function zones(op=.55){return `<g opacity="${f(op)}"><rect x="${AX0}" y="87.07" width="${FX-AX0}" height="${FB-87.07}" fill="url(#zoneP)"/><rect x="${BXF}" y="${FY}" width="${IX0-BXF}" height="${PH}" fill="url(#zoneP)"/></g>`}
+function wetZones(pa,pb){
+  let s='';
+  if(pa>0) s+=`<rect x="${AX0}" y="87.07" width="${FX-AX0}" height="${f((FB-87.07)*pa)}" fill="var(--wet)" opacity=".32"/>`;
+  if(pb>0) s+=`<rect x="${BXF}" y="${FY}" width="${IX0-BXF}" height="${f(PH*pb)}" fill="var(--wet)" opacity=".32"/>`;
+  return s;
+}
+
+// ---------- section across the panels (mm, y up; front panel x 0..72, fold A at x=0, fold B at x=72) ----------
+function chainPts(P,h,sg,Larc,th,Ll){
+  const pts=[];let x=P.x,y=P.y;const N=28;
+  if(th<1e-4){pts.push({x,y,h});x+=Math.cos(h)*Larc;y+=Math.sin(h)*Larc;pts.push({x,y,h});}
+  else{const R=Larc/th;const nx=sg>0?-Math.sin(h):Math.sin(h),ny=sg>0?Math.cos(h):-Math.cos(h);const cx=x+R*nx,cy=y+R*ny,vx=x-cx,vy=y-cy;
+    for(let i=0;i<=N;i++){const a=sg*th*i/N;pts.push({x:cx+vx*Math.cos(a)-vy*Math.sin(a),y:cy+vx*Math.sin(a)+vy*Math.cos(a),h:h+a})}
+    x=pts[N].x;y=pts[N].y;h=h+sg*th;}
+  const arcEnd=pts.length-1;
+  pts.push({x:x+Math.cos(h)*Ll,y:y+Math.sin(h)*Ll,h});
+  return {pts,arcEnd};
+}
+function secGeom(thA,thB){
+  const A=chainPts({x:0,y:0},Math.PI,-1,LA,thA,PW), B=chainPts({x:PW,y:0},0,1,LB,thB,PW);
+  const rA=A.pts.slice().reverse().map(p=>({x:p.x,y:p.y,h:p.h+Math.PI}));
+  const pts=[...rA,{x:0,y:0,h:0},{x:PW,y:0,h:0},...B.pts];
+  const iF=rA.length; // index předního panelu
+  return {pts,A,B,rA,iF,
+    backMid:{x:(A.pts[A.arcEnd].x+A.pts[A.pts.length-1].x)/2,y:(A.pts[A.arcEnd].y+A.pts[A.pts.length-1].y)/2},
+    innerMid:{x:(B.pts[B.arcEnd].x+B.pts[B.pts.length-1].x)/2,y:(B.pts[B.arcEnd].y+B.pts[B.pts.length-1].y)/2},
+    aMid:A.pts[Math.floor(A.arcEnd/2)], bMid:B.pts[Math.floor(B.arcEnd/2)]};
+}
+const toS=(c,x,y)=>[c.sx+(x-c.cx)*c.k,c.sy-(y-c.cy)*c.k];
+function offPoly(c,pts,o1,o2){
+  const P=(p,o)=>toS(c,p.x-Math.sin(p.h)*o,p.y+Math.cos(p.h)*o);
+  const a=pts.map(p=>P(p,o1)),b=pts.slice().reverse().map(p=>P(p,o2));
+  return 'M'+[...a,...b].map(q=>`${f(q[0])} ${f(q[1])}`).join(' L')+' Z';
+}
+const MINW=1.1; // nejtenčí kůže na scéně (jednotky scény) – pod tím se tloušťka zvětší
+const wOf=c=>Math.max(T12,MINW/c.k);
+function rectS(c,x0,y0,x1,y1,attrs){const [a,b]=toS(c,x0,y1),[d,e]=toS(c,x1,y0);return `<rect x="${f(a)}" y="${f(b)}" width="${f(d-a)}" height="${f(e-b)}" ${attrs}/>`}
+// karty / bankovky ve fólii; y0 = spodní hrana obsahu
+function content(c,kind,x0,x1,y0,op=1,dy=0){
+  const th=kind==='cards'?CARDS:BILLS, fill=kind==='cards'?'var(--card)':'var(--bill)', st=kind==='cards'?'var(--card-d)':'var(--bill-d)';
+  let s=rectS(c,x0-.35,y0+dy-.12,x1+.35,y0+dy+th+.12,`rx=".6" fill="var(--foil)" opacity=".45"`);
+  s+=rectS(c,x0,y0+dy,x1,y0+dy+th,`fill="${fill}" stroke="${st}" stroke-width=".2"`);
+  if(kind==='cards') for(let i=1;i<4;i++){const y=y0+dy+i*CARDS/4;const [a,b]=toS(c,x0,y),[d]=toS(c,x1,y);s+=`<path d="M${f(a)} ${f(b)} H${f(d)}" stroke="${st}" stroke-width=".15"/>`}
+  else {const y=y0+dy+BILLS/2;const [a,b]=toS(c,x0,y),[d]=toS(c,x1,y);s+=`<path d="M${f(a)} ${f(b)} H${f(d)}" stroke="${st}" stroke-width=".15"/>`}
+  return `<g opacity="${f(op)}">${s}</g>`;
+}
+function leatherSec(c,g,o={}){
+  const w=wOf(c), lb=Math.min(w*.32,.5);
+  let s=`<path d="${offPoly(c,g.pts,w/2,-w/2)}" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".18" stroke-linejoin="round"/>`;
+  s+=`<path d="${offPoly(c,g.pts,-w/2,-w/2+lb)}" fill="var(--lic)"/>`;
+  if(o.wet){const a=g.rA.slice(g.rA.length-1-g.A.arcEnd),b=g.B.pts.slice(0,g.B.arcEnd+1);
+    s+=`<path d="${offPoly(c,a,w/2,-w/2)}" fill="var(--wet)" opacity="${f(.3*o.wet)}"/><path d="${offPoly(c,b,w/2,-w/2)}" fill="var(--wet)" opacity="${f(.3*o.wet)}"/>`;}
+  return s;
+}
+// plochy spoje: seg = dva body přímého úseku, side +1 = rub (+N), -1 = líc
+function faceStrip(c,segPts,side,p=1,col='var(--glue)',gw=.9){
+  const w=wOf(c);const a=segPts[0],b=segPts[1];const q={x:L(a.x,b.x,p),y:L(a.y,b.y,p),h:a.h};
+  return `<path d="${offPoly(c,[a,q],side*(w/2),side*(w/2+gw/c.k))}" fill="${col}"/>`;
+}
+function clipJaw(c,x,yTop,yBot,dy=0,op=1){
+  const [a,t]=toS(c,x-3.2,yTop+dy),[b]=toS(c,x+3.2,yTop),[,u]=toS(c,x,yBot-dy);
+  const pw=b-a;
+  return `<g opacity="${f(op)}"><rect x="${f(a)}" y="${f(t-1)}" width="${f(pw)}" height="1" fill="var(--pad)" stroke="var(--bone-d)" stroke-width=".15"/><rect x="${f(a-.6)}" y="${f(t-2.4)}" width="${f(pw+1.2)}" height="1.4" rx=".3" fill="var(--clip)"/>`+
+    `<rect x="${f(a)}" y="${f(u)}" width="${f(pw)}" height="1" fill="var(--pad)" stroke="var(--bone-d)" stroke-width=".15"/><rect x="${f(a-.6)}" y="${f(u+1)}" width="${f(pw+1.2)}" height="1.4" rx=".3" fill="var(--clip)"/>`+
+    `<path d="M${f((a+b)/2)} ${f(t-2.4)} v-1.6 M${f((a+b)/2)} ${f(u+2.4)} v1.6" stroke="var(--clip)" stroke-width=".5" opacity=".7"/></g>`;
+}
+function boneFolder(x,y){return G(`translate(${f(x)} ${f(y)}) rotate(-18)`,`<path d="M-1 -.2 Q-1 -1.6 1 -1.6 L14 -1.6 Q15 -1.6 15 -.6 L15 .2 Q15 1 14 1 L1 1 Q-1 1 -1 -.2 Z" fill="var(--bone)" stroke="var(--bone-d)" stroke-width=".25"/>`)}
+function secTag(c,x=131,y=6){return pill(x,y,'ŘEZ · pohled shora','ts','end')+(wOf(c)>T12+.01?pill(x,y+5.2,'tloušťky zvětšené','ts','end'):'')}
+
+// cameras for the section
+const CAM_FLAT={cx:36,cy:5,sx:67.5,sy:50,k:.9};
+const CAM_B={cx:20,cy:6,sx:67.5,sy:48,k:.9};
+const CAM_FOLDL={cx:35,cy:5,sx:42,sy:45,k:1.0};
+const CAM_FOLD={cx:35,cy:5,sx:67.5,sy:42,k:1.45};
+const CAM_OPEN={cx:34,cy:40,sx:42,sy:45,k:.78};
+// obsah: karty 54 mm uprostřed panelu 72 (vůle a okraj 9 mm na každé straně); bankovky napříč skoro celou šířkou
+const CARD_X=[9,63], BILL_X=[3,69];
+function secLabels(c,g,o={}){
+  let s='';const w=wOf(c);
+  const pill=(x,y,t,cls,a)=>{const W=t.length*1.9+3;if(a==='middle')x=Math.max(4+W/2,Math.min(131-W/2,x));else if(a==='start')x=Math.max(4,Math.min(131-W,x));else x=Math.max(4+W,Math.min(131,x));return pillG(x,y,t,cls,a)};
+  if(o.front!==false){const [x,y]=toS(c,36,-w/2);s+=pill(x,y+(o.frontDy??5.5),o.frontText||'PŘEDNÍ (líc ven, kapsa s mincí)','t','middle')}
+  if(o.inner){const [x,y]=toS(c,g.innerMid.x,g.innerMid.y);s+=pill(x+(o.inner.dx||0),y+(o.inner.dy||0),o.inner.t||'VNITŘNÍ','t',o.inner.a||'middle')}
+  if(o.back){const [x,y]=toS(c,g.backMid.x,g.backMid.y);s+=pill(x+(o.back.dx||0),y+(o.back.dy||0),o.back.t||'ZADNÍ','t',o.back.a||'middle')}
+  if(o.a){const [x,y]=toS(c,g.aMid.x,g.aMid.y);s+=pill(x+(o.a.dx||0),y+(o.a.dy||0),o.a.t||'ohyb A','ta',o.a.a||'end')}
+  if(o.b){const [x,y]=toS(c,g.bMid.x,g.bMid.y);s+=pill(x+(o.b.dx||0),y+(o.b.dy||0),o.b.t||'ohyb B','ta',o.b.a||'start')}
+  return s;
+}
+
+// ---------- side section through the bottom seam (u = tloušťka, v = mm od dolní hrany) ----------
+const SIDEC={cu:5.2,cv:9.5,sx:44,sy:47,k:3.5};
+const sv=(u,v)=>[SIDEC.sx+(u-SIDEC.cu)*SIDEC.k,SIDEC.sy-(v-SIDEC.cv)*SIDEC.k];
+const VMAX=19, HOLE_V=3.5;
+const smooth=x=>{x=cl(x);return x*x*(3-2*x)};
+// levá plocha vrstvy: v pruhu u dna leží vrstvy na sobě, nad švem se rozestoupí (karty, bankovky)
+const uFront=v=>0;
+const uInner=v=>T12+(SEPB-T12/2-T12)*smooth((v-5)/7);
+const uBack=v=>2*T12+(SEPA-T12/2-2*T12)*smooth((v-5)/7);
+function layerPoly(fn,du){const a=[],b=[];for(let v=0;v<=VMAX+1e-6;v+=.5){a.push(sv(fn(v)+du,v));b.push(sv(fn(v)+du+T12,v))}
+  return 'M'+[...a,...b.reverse()].map(q=>`${f(q[0])} ${f(q[1])}`).join(' L')+' Z'}
+function layerLic(fn,du,right){const a=[],b=[],lb=.32;for(let v=0;v<=VMAX+1e-6;v+=.5){const u0=fn(v)+du+(right?T12-lb:0);a.push(sv(u0,v));b.push(sv(u0+lb,v))}
+  return 'M'+[...a,...b.reverse()].map(q=>`${f(q[0])} ${f(q[1])}`).join(' L')+' Z'}
+function sideLayer(fn,du,licRight,o={}){
+  let s=`<path d="${layerPoly(fn,du)}" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".2"/><path d="${layerLic(fn,du,licRight)}" fill="var(--lic)"/>`;
+  // otvor ve výšce švu
+  const [x0,y0]=sv(fn(HOLE_V)+du,HOLE_V+.45),[x1,y1]=sv(fn(HOLE_V)+du+T12,HOLE_V-.45);
+  s+=`<rect x="${f(x0)}" y="${f(y0)}" width="${f(x1-x0)}" height="${f(y1-y0)}" fill="var(--hole)"/>`;
+  // lepidlo na ploše v pruhu 0–3,5
+  for(const side of (o.glue||[])){const u=fn(1)+du+(side==='R'?T12:0);const [gx,gy0]=sv(u,3.5),[,gy1]=sv(u,0);
+    s+=`<rect x="${f(gx-(side==='R'?0:.9))}" y="${f(gy0)}" width=".9" height="${f(gy1-gy0)}" fill="var(--glue)" opacity="${f(o.gop??1)}"/>`;}
+  return s;
+}
+function sideFrame(){const [x0,y0]=sv(-3,0),[x1]=sv(15,0);const [,yt]=sv(0,VMAX);
+  return `<path d="M${f(x0)} ${f(y0)} H${f(x1)}" stroke="var(--muted)" stroke-width=".25" stroke-dasharray="1 .8"/>${lbl(x0,y0-1.5,'dno','ts')}`+
+    `<path d="M${f(x0)} ${f(sv(0,HOLE_V)[1])} H${f(sv(-1,0)[0])}" stroke="var(--accent)" stroke-width=".3"/>${lbl(sv(-.9,0)[0],sv(0,HOLE_V)[1]-1.2,'šev 3,5','ta','end')}`+
+    `<path d="M${f(x0)} ${f(yt)} H${f(x1)}" stroke="var(--stage)" stroke-width="1.2"/>`}
+function sideNeedle(p,uEnd){ // jehla vodorovně skrz otvor, hrot vpravo
+  const tipU=L(-9,uEnd,p);const [x,y]=sv(tipU,HOLE_V);
+  return `<path d="M${f(x-13)} ${f(y)} L${f(x)} ${f(y)}" stroke="var(--steel-d)" stroke-width=".6" stroke-linecap="round"/><ellipse cx="${f(x-11.6)}" cy="${f(y)}" rx="1" ry=".32" fill="none" stroke="var(--steel)" stroke-width=".22"/>`}
+
+// ---------- front view of the folded pouch (T coords, pohled na líc předního panelu) ----------
+const FRONTC={cx:132.5,cy:118,sx:42,sy:45,k:.98};
+const FULLC={cx:132.5,cy:83.6,sx:42,sy:45,k:.53};
+const MOVES=[[2,1],[1,0]];for(let i=0;i<NH-1;i++)MOVES.push([i,i+1]);MOVES.push([16,15],[15,14]);   // 20 tahů
+function stitchSeg(a,b,col='var(--thread)',w=.75){const x1=HF[a],x2=HF[b];const dx=Math.sign(x2-x1)*.55;
+  return `<path d="M${f(x1+dx)} ${SEAM_Y} L${f(x2-dx)} ${SEAM_Y}" stroke="var(--thread-d)" stroke-width="${w+.3}" stroke-linecap="round"/><path d="M${f(x1+dx)} ${SEAM_Y} L${f(x2-dx)} ${SEAM_Y}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`}
+function frontView(o={}){
+  let s='';
+  // jazyk zadního panelu zrcadlený přes ohyb A (vidět je jeho rub), za ním vnitřní panel (rub, zapečetěný)
+  const tx0=2*CA-43, tx1=2*CA-10;
+  s+=`<path d="M${f(tx0)} ${FY} V20 A10 10 0 0 1 ${f(tx0+10)} 10 H${f(tx1-10)} A10 10 0 0 1 ${f(tx1)} 20 V${FY} Z" fill="url(#rubP)" stroke="var(--rub-d)" stroke-width=".4"/>`;
+  s+=`<rect x="${FX}" y="${FY}" width="${PW}" height="${PH}" fill="url(#rubP)" stroke="var(--rub-d)" stroke-width=".4"/>`;
+  // smyčky ohybů (líc ven)
+  s+=`<path d="M${FX} 87.07 H${f(FX-OUT_A+2)} Q${f(FX-OUT_A)} 87.07 ${f(FX-OUT_A)} 89.07 V${f(FB-2)} Q${f(FX-OUT_A)} ${FB} ${f(FX-OUT_A+2)} ${FB} H${FX} Z" fill="url(#loopA)" stroke="var(--lic-d)" stroke-width=".4"/>`;
+  s+=`<path d="M${BXF} ${FY} H${f(BXF+OUT_B-1.5)} Q${f(BXF+OUT_B)} ${FY} ${f(BXF+OUT_B)} ${f(FY+1.5)} V${f(FB-1.5)} Q${f(BXF+OUT_B)} ${FB} ${f(BXF+OUT_B-1.5)} ${FB} H${BXF} Z" fill="url(#loopB)" stroke="var(--lic-d)" stroke-width=".4"/>`;
+  s+=clipX(FX,BXF,`<path d="${STRIP}" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".4"/>`);
+  s+=G(POCK_T,pocketLic(o.coin!==false))+snapStud(...SNAP);
+  s+=HF.map(x=>slit(x,SEAM_Y,'/',.5,.45)).join('');
+  const n=o.moves??0;
+  for(let j=0;j<Math.min(n,MOVES.length);j++){const [a,b]=MOVES[j];s+=stitchSeg(a,b)}
+  if(o.backHi){for(const j of [0,1,18,19]) if(j<n){const [a,b]=MOVES[j];s+=`<path d="M${HF[a]} ${SEAM_Y} L${HF[b]} ${SEAM_Y}" stroke="var(--accent)" stroke-width=".35" fill="none" transform="translate(0 2.1)" opacity="${f(o.backHi)}"/>`}}
+  return s;
+}
+
+// ---------- steps ----------
+const PARTS={A:'Pás a otvory dna',B:'Ohyby za mokra',C:'Lepení dna',D:'Šev dna',E:'Kontrola'};
+const S=[];
+const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,side,tip});
+
+// A1 — which panel is which
+add('A','Pás po lekci 6: tři panely, dva ohyby','Pás leží lícem nahoru, tak jak ho kreslí šablona PÁS pro kůži 1,2 mm: zadní panel s jazykem, ohyb A (15,69 mm), přední panel s přišitou kapsou s mincí a naplocho osazeným dříkem druku (na líci je vidět jeho hlavička), ohyb B (8,66 mm) a vnitřní panel. Všechny tři panely mají 72 × 104,1 mm; u kůže 1,2 mm se ohyb B neztenčuje. Po složení je přední panel vpředu (kapsa ven), vnitřní uprostřed a zadní vzadu (líc ven).',7600,t=>{
+  const c=STRIPC; let inner=planBack()+planMid()+planInner()+zones(.6);
+  let s=G(camT(c),inner);
+  const L5=[['ZADNÍ',46,108,'t'],['ohyb A',CA,128,'ta'],['PŘEDNÍ',133.69,147,'t'],['ohyb B',CB,128,'ta'],['VNITŘNÍ',214.35,108,'t']];
+  L5.forEach(([tx,x,y,cls],i)=>{const o=seg(t,.06+i*.1,.14+i*.1);if(o>0){const [a,b]=tv(c,x,y);s+=`<g opacity="${f(o)}">${pill(a,b,tx,cls,'middle')}</g>`}});
+  const o2=seg(t,.6,.7);
+  if(o2>0){const [a,b]=tv(c,PX+CXL,PY-4);s+=`<g opacity="${f(o2)}">${pill(a,b,'kapsa s mincí','ts','middle')}${pill(...tv(c,SNAP[0]+9,SNAP[1]+1.5),'hlavička druku','ts','start')}</g>`}
+  const o3=seg(t,.72,.85);
+  if(o3>0) s+=`<g opacity="${f(o3)}">${pill(4,87,'po složení: přední vpředu · vnitřní uprostřed · zadní vzadu','t')}</g>`;
+  return s;
+},'lic');
+
+// A2 — mirrored holes
+add('A','Otvory dna jsou zrcadlené přes ohyby','Otvory dna jsou proseknuté naplocho už v lekci 5: 17 na každém panelu, rozteč přesně 4 mm, 3,5 mm od dolní hrany – přední panel z líce, zadní a vnitřní z rubu. Na sousedních panelech leží zrcadlově kolem ohybu (na šabloně PÁS je krajní otvor 4 mm od čáry ohybu), takže po složení padnou přesně na sebe a šikmé zářezy mají stejný sklon.',11000,t=>{
+  const c=STRIPC;
+  const pB=es(t,.3,.55), pA=es(t,.6,.85);   // pořadí jako v lekci 7: nejdřív ohyb B, pak A
+  const sxA=Math.cos(Math.PI*pA), sxB=Math.cos(Math.PI*pB);
+  const flip=(cx,sx,body,under)=>G(`translate(${cx} 0) scale(${f(Math.abs(sx)<.02?.02*Math.sign(sx||1):sx)} 1) translate(${-cx} 0)`,body,under?'opacity=".42"':'');
+  let inner='';
+  // panely „pod“ předním (už přeložené) se kreslí pod ním, poloprůhledně
+  if(sxA<0) inner+=flip(CA,sxA,planBack(),true);
+  if(sxB<0) inner+=flip(CB,sxB,planInner(),true);
+  inner+=clipX(AX0,IX0,`<path d="${STRIP}" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".4"/>`)+frontStuff();
+  inner+=zones(.45);
+  if(sxA<0) inner+=`<g opacity=".9">${HB.map(x=>slit(2*CA-x,SEAM_Y,'/',SLD,SLW,'var(--ok)')).join('')}</g>`;
+  if(sxB<0) inner+=`<g opacity=".9">${HI.map(x=>slit(2*CB-x,SEAM_Y,'/',SLD,SLW,'var(--ok)')).join('')}</g>`;
+  inner+=bottomSlits(HF,'/');
+  if(sxA>=0) inner+=flip(CA,sxA,planBack(),false);
+  if(sxB>=0) inner+=flip(CB,sxB,planInner(),false);
+  // vzdálenost 4 mm od čar ohybů
+  const hm=seg(t,.06,.14)*(1-seg(t,.26,.3));
+  if(hm>0) inner+=`<g opacity="${f(hm)}">${[[HB[16],AX0],[HF[0],FX],[HF[16],BXF],[HI[0],IX0]].map(([x,e])=>`<circle cx="${x}" cy="${SEAM_Y}" r="2.6" fill="none" stroke="var(--accent)" stroke-width=".5"/><path d="M${e} ${SEAM_Y-5} V${SEAM_Y+3}" stroke="var(--accent)" stroke-width=".35" stroke-dasharray="1 .7"/>`).join('')}</g>`;
+  let s=G(camT(c),inner);
+  if(hm>0) s+=`<g opacity="${f(hm)}">${pill(4,87,'krajní otvory 4 mm od čar ohybů – zrcadlově','ta')}</g>`;
+  const ps=[[seg(t,.14,.2),'přední z líce „/“, zadní a vnitřní z rubu (z líce „\\“)','t']];
+  if(t>=.14&&t<.3) s+=`<g opacity="${f(ps[0][0])}">${pill(4,87,ps[0][1],'t')}</g>`;
+  if(t>=.3&&t<.6) s+=pill(4,87,'vnitřní za přední přes ohyb B: zářezy se zrcadlí','t');
+  if(t>=.6&&t<.9) s+=pill(4,87,'zadní přes ohyb A za všechno','t');
+  if(t>=.9) s+=pill(4,87,'po složení leží otvory všech tří panelů na sobě','tok');
+  if(t>.6){const [a,b]=tv(c,CA,95);s+=pill(a,b-2,'A','ta','middle')}
+  if(t>.3){const [a,b]=tv(c,CB,95);s+=pill(a,b-2,'B','ta','middle')}
+  // detail: tři zářezy na sobě
+  const dt=seg(t,.88,.96);
+  if(dt>0){const x=104,y=10;let d=`<rect x="${x}" y="${y}" width="28" height="22" rx="2" class="panelbox"/>`;
+    d+=lbl(x+2.5,y+5,'DETAIL','ts');
+    d+=slit(x+10,y+11.5,'/',3,1.5,'var(--lic-d)')+slit(x+14,y+11.5,'/',3,1.1,'var(--ok)')+slit(x+18,y+11.5,'/',3,.8,'var(--hole)');
+    d+=lbl(x+14,y+20,'P · V · Z lícují','tok','middle');
+    s+=`<g opacity="${f(dt)}">${d}</g>`;}
+  return s;
+},'lic');
+
+// ---------- B: folds ----------
+add('B','Navlhčete pásma obou ohybů','Houbičkou navlhčete jen pásma obou ohybů – A (15,69 mm) a B (8,66 mm) –, ne celou plochu pásu. Nasucho nebo na ostro přeložený líc v ohybu nejspíš praská.',7000,t=>{
+  const c=STRIPC; const pa=es(t,.08,.45), pb=es(t,.5,.88);
+  let inner=planBack()+planMid()+planInner()+zones(.35)+wetZones(pa,pb);
+  let s=G(camT(c),inner);
+  if(t>.06&&t<.47){const y=L(90,FB-4,pa);s+=sponge(...tv(c,CA+Math.sin(t*60)*1.5,y))}
+  if(t>.5&&t<.9){const y=L(FY+4,FB-4,pb);s+=sponge(...tv(c,CB+Math.sin(t*60)*1.2,y))}
+  if(pa>.2){const [a,b]=tv(c,CA,84);s+=pill(a,b,'ohyb A','ta','middle')}
+  if(pb>.2){const [a,b]=tv(c,CB,50);s+=pill(a,b,'ohyb B','ta','middle')}
+  s+=pill(4,87,t<.9?'mokřit jen pásma ohybů, ne celou plochu':'obě pásma mokrá – hned skládat','t');
+  return s;
+},'lic','Tip (lekce to neuvádí): ze které strany mokřit, lekce neurčuje; animace ukazuje líc.');
+
+add('B','Karty ve fólii na rub předního, přes ně ohyb B','Karty, které nosíte, zabalené v potravinové fólii, položte na rub předního panelu (tam, kde po přeložení sedne vnitřní panel) a přeložte přes ně vnitřní panel ohybem B. Ohyb se ohne do smyčky kolem obsahu, ne na ostro.',10500,t=>{
+  const cam=camL(CAM_FLAT,CAM_B,es(t,.4,.9));
+  const thB=Math.PI*es(t,.42,.88);
+  const g=secGeom(0,thB), w=wOf(cam);
+  const cIn=es(t,.1,.35);
+  let s=leatherSec(cam,g,{wet:1});
+  s+=content(cam,'cards',...CARD_X,w/2,cIn>0?1:0,L(14,0,cIn));
+  s+=secLabels(cam,g,{frontDy:6,frontText:'PŘEDNÍ (rub nahoru)',inner:{dy:thB>2?-4:6},back:{dy:6,a:'start'},a:{dy:6,a:'middle',t:'A'},b:{dy:thB>2?8:6,a:'middle',t:'B'}});
+  if(cIn>.5){const [x,y]=toS(cam,40,w/2+CARDS);s+=`<g opacity="${f(seg(t,.3,.4)*(1-seg(t,.42,.5)))}">${lead(x+6,y-12,x,y-.3)}${pill(x+7,y-12.5,'karty ve fólii','t')}</g>`}
+  if(t>.85){const [x,y]=toS(cam,12,w/2+CARDS/2);s+=`<g opacity="${f(seg(t,.85,.92))}">${lead(x-7,y+11,x,y)}${pill(x-9,y+15,'karty','ts','middle')}</g>`+pill(4,87,'smyčka kolem karet, ne na ostro','tok')}
+  s+=secTag(cam);
+  return s;
+},null,'Tip (lekce to neuvádí): aby šly karty položit na rub předního panelu, leží pás v řezu rubem nahoru.');
+
+function foldedLabels(cam,o={}){
+  const w=wOf(cam);let s='';
+  const [bx,by]=toS(cam,36,SEPA+w/2);s+=pill(bx,by-5,'ZADNÍ (líc ven)','t','middle');
+  const [fx,fy]=toS(cam,36,-w/2);s+=pill(fx,fy+(o.fdy||7),'PŘEDNÍ (líc ven, kapsa s mincí)','t','middle');
+  const [ax,ay]=toS(cam,-OUT_A,0);s+=pill(Math.max(4,ax),ay+13,'ohyb A','ta','start');
+  const [qx,qy]=toS(cam,PW+OUT_B,0);s+=pill(Math.min(131,qx),qy+13,'ohyb B','ta','end');
+  if(o.content){
+    const [cx,cy]=toS(cam,14,w/2+CARDS/2),[lx,ly]=toS(cam,64,SEPB+w/2+BILLS/2),[ix,iy]=toS(cam,PW-1,SEPB);
+    s=lead(cx-3,cy+16,cx,cy)+lead(lx+4,ly-16,lx,ly)+lead(124,iy-12,ix,iy)+s;
+    s+=pill(cx-3,cy+20.5,'karty','ts','middle')+pill(lx-8,ly-17,'bankovky','ts','end')+pill(131,iy-13,'VNITŘNÍ','t','end');
+  }
+  return s;
+}
+add('B','Bankovky na líc vnitřního, zadní ohybem A přes všechno','Bankovky zabalené ve fólii položte na líc vnitřního panelu. Pak přeložte zadní panel ohybem A přes všechno – kolem skutečného obsahu, ne naprázdno. Vrstvy odpředu: přední – karty – vnitřní – bankovky – zadní. Na odřezku v lekci 4: ohyb A se neztenčuje, jen se přeloží – když je moc tuhý, zapište si to.',10500,t=>{
+  const cam=camL(CAM_B,CAM_FOLD,es(t,.36,.95));
+  const thA=Math.PI*es(t,.38,.85);
+  const g=secGeom(thA,Math.PI), w=wOf(cam);
+  const bIn=es(t,.06,.3);
+  let s=leatherSec(cam,g,{wet:1});
+  s+=content(cam,'cards',...CARD_X,w/2);
+  s+=content(cam,'bills',...BILL_X,SEPB+w/2,bIn>0?1:0,L(14,0,bIn));
+  const fin=t>.9;
+  if(!fin) s+=secLabels(cam,g,{frontDy:6,frontText:'PŘEDNÍ',back:{dy:thA>2?-4:6,t:'ZADNÍ'},a:{dy:7,a:'middle',t:'A'},b:{dy:7,a:'middle',t:'B'}});
+  if(bIn>.5&&!fin){const [x,y]=toS(cam,40,SEPB+w/2+BILLS);s+=`<g opacity="${f(seg(t,.25,.33)*(1-seg(t,.4,.48)))}">${lead(x+6,y-12,x,y-.3)}${pill(x+7,y-12.5,'bankovky ve fólii','t')}</g>`}
+  if(fin) s+=`<g opacity="${f(seg(t,.9,.97))}">${foldedLabels(cam,{content:true})}</g>`;
+  s+=secTag(cam);
+  return s;
+},null);
+
+add('B','Rozhrnovačka, sponky vedle ohybů, zaschnout','Přejeďte rozhrnovačkou. Sponky s podložkou nasaďte na panely těsně vedle obou ohybů, přes obsah – ne na samotnou smyčku ohybu – a nechte zaschnout. Ještě před zaschnutím zkontrolujte, že se otvory dna na sousedních panelech lícují (lekce 4).',9000,t=>{
+  const cam=CAM_FOLD, g=secGeom(Math.PI,Math.PI), w=wOf(cam);
+  const dry=es(t,.66,.95);
+  let s=leatherSec(cam,g,{wet:1-dry});
+  s+=content(cam,'cards',...CARD_X,w/2)+content(cam,'bills',...BILL_X,SEPB+w/2);
+  const bf=seg(t,.04,.34);
+  if(bf>0&&bf<1){const x=L(68,2,bf);const [a,b]=toS(cam,x,SEPA+w/2);s+=boneFolder(a,b-1.6)}
+  const cp=es(t,.38,.6), top=SEPA+w/2, bot=-w/2;
+  for(const x of [12,60]) s+=clipJaw(cam,x,top,bot,L(8,0,cp),cp>0?1:0);
+  s+=foldedLabels(cam,{fdy:10.5});
+  if(cp>.9){const o=seg(t,.58,.66);
+    s+=`<g opacity="${f(o)}">${pill(...toS(cam,12,top+7),'sponka s podložkou','ts','middle')}${pill(...toS(cam,60,top+7),'přes obsah','ts','middle')}</g>`;
+    const [ax,ay]=toS(cam,-OUT_A,SEPA/2),[bx,by]=toS(cam,PW+OUT_B,SEPB/2);
+    s+=`<g opacity="${f(o)}">${cross(ax+2,ay,1.4,.55)}${cross(bx-1.6,by,1.4,.55)}</g>`;}
+  if(t>.64){s+=clock(124,74,seg(t,.66,.95))+pill(117,75.5,'zaschnout','t','end')}
+  if(t<.36&&t>.04) s+=pill(4,87,'přejeďte rozhrnovačkou','t');
+  else if(t>.4&&t<.64) s+=pill(4,87,'otvory dna lícují? (lekce 4)','t');
+  else if(t>=.64) s+=pill(4,87,'sponky ne na smyčku ohybu','ta');
+  s+=secTag(cam);
+  return s;
+},null);
+
+// ---------- C: glue the bottom ----------
+add('C','Vyjměte obsah a rozevřete jen do pravého úhlu','Vyjměte zabalené karty i bankovky. Zaschlé ohyby rozevřete jen tolik, aby šel spodní proužek natřít – zhruba do pravého úhlu, ne úplně naplocho: suchý neztenčený ohyb A by mohl na líci prasknout.',8600,t=>{
+  const cam=camL(CAM_FOLDL,CAM_OPEN,es(t,.25,.6));
+  const thA=Math.PI-es(t,.3,.58)*Math.PI/2, thB=Math.PI-es(t,.6,.85)*Math.PI/2;   // nejdřív A: zadní panel leží přes vnitřní (pořadí lekce neurčuje – tip)
+  const g=secGeom(thA,thB), w=wOf(cam);
+  const out=seg(t,.04,.24);
+  let s=leatherSec(cam,g);
+  if(out<1) s+=content(cam,'cards',...CARD_X,w/2,1-out)+content(cam,'bills',...BILL_X,SEPB+w/2,1-out);
+  s=clipMain(s);
+  if(t<.3) s+=`<g opacity="${f(seg(t,.04,.1))}">${pill(4,87,'obsah vyjmout','t')}</g>`;
+  if(t>.86){const o=seg(t,.86,.94);
+    const [ax,ay]=toS(cam,-SEPA/2,SEPA/2),[bx,by]=toS(cam,PW+SEPB/2,SEPB/2);
+    s+=`<g opacity="${f(o)}">${pill(ax+8,ay-6,'≈ 90°','ta','start')}${pill(bx-8,by-6,'≈ 90°','ta','end')}</g>`;}
+  if(t>.86) s+=`<g opacity="${f(seg(t,.86,.94))}">${jointLabels(cam,g,0)}</g>`;
+  s+=inset('ROZEVŘÍT',notes([['jen asi do','tw'],['pravého úhlu'],['ne naplocho'],['ohyb A se'],['neztenčuje –'],['suchý líc by'],['mohl prasknout']]));
+  s+=secTag(cam,84,6);
+  return s;
+},null,'Tip (lekce to neuvádí): pořadí rozevření lekce neurčuje; animace rozevírá nejdřív ohyb A, protože zadní panel leží přes vnitřní.');
+
+// popisky pro rozevřený stav (n = 0 jen panely, 1 spoj 1, 2 spoj 2)
+function jointLabels(cam,g,n){
+  let s='';const w=wOf(cam);
+  const [fx,fy]=toS(cam,36,-w/2);s+=pill(fx,fy+6,n===2?'PŘEDNÍ (už slepený)':n===1?'PŘEDNÍ (rub)':'PŘEDNÍ','t','middle');
+  const bb=g.pts[0], bt=toS(cam,(g.pts[0].x+g.pts[1].x)/2,(g.pts[0].y+g.pts[1].y)/2);
+  const li=g.pts[g.pts.length-1], lj=g.pts[g.pts.length-2], it=toS(cam,(li.x+lj.x)/2,(li.y+lj.y)/2);
+  s+=pill(bt[0]+3,bt[1]-8,n===1?'ZADNÍ – počká':n===2?'ZADNÍ (rub)':'ZADNÍ','t','start');
+  if(n===2) s+=pill(it[0],it[1]-4,'VNITŘNÍ (líc)','t','middle');
+  else s+=pill(it[0]-3,it[1]+8,n===1?'VNITŘNÍ (rub)':'VNITŘNÍ','t','end');
+  return s;
+}
+
+function bandPanel(x0,y0,label,face,dir,rough,glue,dry=0){
+  const k=.58,W=PW*k,H=18*k,bh=3.5*k;
+  let s=lbl(x0,y0-1.4,label,'ts');
+  s+=`<rect x="${x0}" y="${y0}" width="${f(W)}" height="${f(H)}" fill="${face==='rub'?'url(#rubP)':'url(#licG)'}" stroke="${face==='rub'?'var(--rub-d)':'var(--lic-d)'}" stroke-width=".3"/>`;
+  if(rough>0) s+=`<rect x="${x0}" y="${f(y0+H-bh)}" width="${f(W*rough)}" height="${f(bh)}" fill="url(#roughP)"/>`;
+  if(glue>0) s+=`<rect x="${x0}" y="${f(y0+H-bh)}" width="${f(W*glue)}" height="${f(bh)}" fill="var(--glue)" opacity="${f(L(.9,.6,dry))}"/>`;
+  for(let i=0;i<NH;i++) s+=slit(x0+(4+4*i)*k,y0+H-bh,dir,.42,.32);
+  s+=`<path d="M${f(x0+W+.8)} ${f(y0+H-bh)} v${f(bh)}" stroke="var(--accent)" stroke-width=".3"/>`;
+  return s;
+}
+function joint(n,t,rough,glue){
+  const cam=CAM_OPEN; const th1=n===1?Math.PI/2:Math.PI;
+  const g=secGeom(Math.PI/2,th1), w=wOf(cam);
+  let s=leatherSec(cam,g);
+  const front=[g.pts[g.iF],g.pts[g.iF+1]], innerSeg=[g.pts[g.pts.length-2],g.pts[g.pts.length-1]], back=[g.pts[1],g.pts[0]].map(p=>({x:p.x,y:p.y,h:p.h}));
+  const segs=n===1?[[front,1],[innerSeg,1]]:[[innerSeg,-1],[[g.pts[0],g.pts[1]],1]];
+  for(const [sg,side] of segs){
+    if(rough>0) s+=faceStrip(cam,sg,side,rough,'url(#roughP)');
+    if(glue>0) s+=faceStrip(cam,sg,side,glue,'var(--glue)');
+  }
+  s=clipMain(s)+jointLabels(cam,g,n);
+  s+=pill(4,9,`SPOJ ${n}`,'ta');
+  // inset
+  const r1=n===1?'rub předního':'líc vnitřního', r2=n===1?'rub vnitřního':'rub zadního';
+  const d1=n===1?'\\':'\\', d2='/';
+  let ib=bandPanel(89,16,r1,n===1?'rub':'lic',d1,rough,glue)+bandPanel(89,35,r2,'rub',d2,rough,glue);
+  ib+=notes([['pruh 0–3,5 mm','t'],['od dolní hrany,'],['pod čárou švu'],['výš ne: karty'],['i bankovky stojí'],['na švu']],53,5);
+  s+=inset('PRUH U DNA',ib);
+  // nástroje v insetu
+  const k=.58,W=PW*k;
+  if(rough>0&&rough<1) s+=sandpaper(89+W*rough,16+18*k-1.6+Math.sin(t*120)*.4,10)+sandpaper(89+W*rough,35+18*k-1.6-Math.sin(t*120)*.4,10);
+  if(glue>0&&glue<1) s+=brush(89+W*glue,16+18*k-1)+brush(89+W*glue,35+18*k-1);
+  s+=secTag(cam,84,6);
+  return s;
+}
+add('C','Spoj 1: přední ↔ vnitřní – zdrsnit a natřít','Spoje jsou dva a lepí se po jednom, ne najednou. Nejdřív přední panel s vnitřním: v pruhu 0–3,5 mm od dolní hrany (pod čárou švu) zdrsněte smirkem obě plochy spoje – rub předního i rub vnitřního panelu – a naneste kontaktní lepidlo naplocho. Výš ne: karty i bankovky stojí na švu a lepidlo výš by jim ubralo hloubku. Kontaktní lepidlo na rozpouštědlové bázi používejte ve větrané místnosti.',9000,t=>{
+  const r=es(t,.06,.45), g=es(t,.5,.92);
+  let s=joint(1,t,r,g);
+  return s;
+},null);
+
+add('C','Odvětrat, přeložit, zarovnat jehlami, přitisknout','Lepidlo nechte odvětrat podle návodu na obalu. Vnitřní panel přeložte zpátky, otvory zarovnejte jehlami prostrčenými skrz obě vrstvy a teprve pak přitiskněte – kontaktní lepidlo po dotyku už nejde posunout.',9800,t=>{
+  const dry=es(t,.03,.22), app=es(t,.24,.5), nd=es(t,.52,.7), pr=es(t,.74,.88);
+  const du=L(12,1.6,app)*(1-pr)+0*pr;
+  let s=sideFrame();
+  s+=sideLayer(uFront,0,false,{glue:['R'],gop:L(1,.65,dry)});
+  s+=sideLayer(uInner,du,true,{glue:['L'],gop:L(1,.65,dry)});
+  if(nd>0&&pr<1) s+=sideNeedle(nd,T12*2+du+2);
+  if(pr>0&&pr<1){const [x,y]=sv(-1.5,1.8),[x2]=sv(T12*2+du+1.5,1.8);s+=arrow(x-7,y,x-1,y,'var(--ink)',.5,'arI')+arrow(x2+7,y,x2+1,y,'var(--ink)',.5,'arI')}
+  const [lx,ly]=sv(-.2,13),[ix,iy]=sv(uInner(15)+du+T12,15);
+  s=clipMain(s)+pill(lx-1,ly,'přední','t','end');
+  if(du<4) s+=pill(ix+1.5,iy,'vnitřní','t');
+  s+=pill(83,9,'ŘEZ DNEM · SPOJ 1','ta','end')+pill(83,15,'zadní zatím odklopený','ts','end');
+  let ib=clock(96,22,dry)+lbl(104,21,'odvětrat','t')+lbl(104,26,'podle obalu','ts');
+  ib+=notes([['přeložit zpátky','t'],['jehly skrz otvory'],['obou vrstev'],['teprve pak'],['přitisknout'],['po dotyku už','ta'],['nejde posunout','ta']],37,5.4);
+  s+=inset('PŘILOŽIT',ib);
+  if(t>.9) s+=pill(4,87,'spoj 1 slepený, otvory lícují','tok');
+  else if(nd>0&&pr===0) s+=pill(4,87,'jehla prochází oběma otvory','t');
+  return s;
+},null);
+
+add('C','Spoj 2: vnitřní ↔ zadní – stejně','Teprve teď stejně zopakujte druhý spoj: líc vnitřního panelu a rub zadního panelu v pruhu 0–3,5 mm od hrany zdrsněte, natřete lepidlem naplocho a nechte odvětrat. Přední a zadní panel se přímo nedotýkají – mezi nimi je pořád vnitřní panel.',8600,t=>{
+  const r=es(t,.06,.45), g=es(t,.5,.92);
+  let s=joint(2,t,r,g);
+  return s;
+},null);
+
+add('C','Přeložit zadní, zarovnat jehlami skrz tři vrstvy','Po odvětrání přeložte zadní panel zpátky, zarovnejte jehlami přes otvory – teď skrz všechny tři vrstvy – a přitiskněte. Dno je slepené a zarovnané, otvory na všech vrstvách lícují.',9400,t=>{
+  const dry=es(t,.03,.2), app=es(t,.22,.48), nd=es(t,.5,.7), pr=es(t,.74,.88);
+  const du=L(12,1.6,app)*(1-pr);
+  let s=sideFrame();
+  s+=sideLayer(uFront,0,false,{glue:['R'],gop:.65});
+  s+=sideLayer(uInner,0,true,{glue:['L','R'],gop:L(1,.65,dry)});
+  s+=sideLayer(uBack,du,true,{glue:['L'],gop:L(1,.65,dry)});
+  if(nd>0&&pr<1) s+=sideNeedle(nd,T12*3+du+2);
+  if(pr>0&&pr<1){const [x,y]=sv(-1.5,1.8),[x2]=sv(T12*3+du+1.5,1.8);s+=arrow(x-7,y,x-1,y,'var(--ink)',.5,'arI')+arrow(x2+7,y,x2+1,y,'var(--ink)',.5,'arI')}
+  const [lx,ly]=sv(-.2,13),[ix,iy]=sv(uInner(15)+T12,15),[bx,by]=sv(uBack(11)+du+T12,11);
+  s=clipMain(s)+pill(lx-1,ly,'přední','t','end')+pill(ix-.6,iy+8,'vnitřní','t','end');
+  if(du<4) s+=pill(bx+1.5,by,'zadní','t');
+  s+=pill(83,9,'ŘEZ DNEM · SPOJ 2','ta','end');
+  const dt=seg(t,.88,.96);
+  let ib=clock(96,22,dry)+lbl(104,21,'odvětrat','t')+lbl(104,26,'podle obalu','ts');
+  ib+=notes([['přeložit zadní','t'],['jehly skrz'],['tři vrstvy'],['přitisknout']],37,5.4);
+  ib+=`<g opacity="${f(dt)}">${lbl(89,63,'pohled zepředu:','ts')}${slit(97,73,'/',3.4,1.5,'var(--lic-d)')}${slit(101,73,'/',3.4,1.1,'var(--ok)')}${slit(105,73,'/',3.4,.8,'var(--hole)')}${lbl(110,74.5,'P V Z','tok')}</g>`;
+  s+=inset('PŘILOŽIT',ib);
+  if(t>.9) s+=pill(4,87,'dno slepené, otvory lícují skrz tři vrstvy','tok');
+  return s;
+},null);
+
+// ---------- D: stitch ----------
+const THR4=4*SEAM_LEN/1000, THR5=5*SEAM_LEN/1000;   // m
+const m2=v=>cz((Math.round(v*100)/100).toFixed(2));
+add('D','Nit na šev dna','Pravidlo z návodu „Jak odměřit nit“: 4 × délka švu + 25–30 cm rezervy. Šev dna má 17 otvorů s roztečí 4 mm, tedy 16 × 4 = 64 mm: 4 × 6,4 cm ≈ 26 cm, s rezervou asi '+m2(THR4+.25)+'–'+m2(THR4+.30)+' m. Pro šev přes tři vrstvy návod radí počítat 5× – asi '+m2(THR5+.25)+'–'+m2(THR5+.30)+' m. Lekce 7 počítá s nití asi 0,8 m na šev dna – raději víc, ověřit na odřezku.',7200,t=>{
+  const p=es(t,.05,.5), b=es(t,.55,.92);
+  let inner=frontView();
+  inner+=`<path d="M${HF[0]} ${SEAM_Y} H${f(L(HF[0],HF[16],p))}" stroke="var(--accent)" stroke-width=".8" stroke-linecap="round"/>`;
+  let s=clipMain(G(camT(FRONTC),inner));
+  s+=pill(4,87,`šev dna ≈ ${Math.round(SEAM_LEN*p)} mm`,'ta');
+  const W=40,x0=89.5,y=58,sc=W/.8,xa=x0+THR4*sc,x5=x0+THR5*sc,xb=x0+(THR5+.30)*sc;
+  let ib=notes([['šev 64 mm','t'],['4 × 6,4 ≈ 26 cm'],['+ 25–30 cm'],[`≈ ${m2(THR4+.25)}–${m2(THR4+.30)} m`],['3 vrstvy (5×):'],[`≈ ${m2(THR5+.25)}–${m2(THR5+.30)} m`],['lekce: asi 0,8 m','tok']],16,5.2);
+  if(b>0){const c=x=>x0+(x-x0)*b;
+    ib+=`<path d="M${f(c(xb))} ${y} H${f(c(x0+W))}" stroke="var(--thread-d)" stroke-width=".9" stroke-dasharray=".5 .9" stroke-linecap="round"/>`+
+      `<path d="M${f(c(xa))} ${y} H${f(c(xb))}" stroke="var(--thread-d)" stroke-width="1.1" stroke-dasharray="1.4 1" stroke-linecap="round"/>`+
+      `<path d="M${x0} ${y} H${f(c(xa))}" stroke="var(--thread-d)" stroke-width="2.3" stroke-linecap="round"/><path d="M${x0} ${y} H${f(c(xa))}" stroke="var(--thread)" stroke-width="1.5" stroke-linecap="round"/>`;}
+  ib+=`<g opacity="${f(seg(t,.9,1))}"><path d="M${f(xa)} ${y-2.5} v5 M${f(x5)} ${y-2.5} v5 M${x0+W} ${y-2.5} v5" stroke="var(--muted)" stroke-width=".3"/>${lbl(x0,y-4,'4×','ts')}${lbl(f(x5),y-4,'5×','ts','middle')}${lbl(x0+W,y+7,'0,8 m (lekce)','ts','end')}${lbl(x0,y+12.5,'raději víc –','ts')}${lbl(x0,y+17,'ověřit na odřezku','ts')}</g>`;
+  s+=inset('NIT',ib);
+  return s;
+},{v:'LÍC',sub:'přední panel'});
+
+function saddle3(kk){
+  const hx=[92,98,104,110,116,122,128], yT=30, lh=1.8,   // v měřítku rozteče: 6 = 4 mm, 1,8 = 1,2 mm
+  yB=yT+1+3*lh+1;
+  let s='';
+  for(let i=0;i<3;i++){const y=yT+1+i*lh;s+=`<rect x="89" y="${f(y)}" width="42" height="${lh}" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".15"/>`;
+    if(i===0) s+=`<rect x="89" y="${f(y)}" width="42" height=".5" fill="var(--lic)"/>`;
+    else s+=`<rect x="89" y="${f(y+lh-.5)}" width="42" height=".5" fill="var(--lic)"/>`;}
+  s+=hx.map(x=>`<rect x="${x-.4}" y="${yT+1}" width=".8" height="${3*lh}" fill="var(--hole)"/>`).join('');
+  for(let i=0;i<kk;i++){const a=hx[i],b=hx[i+1];const c1=i%2?'var(--thread2)':'var(--thread-d)', c2=i%2?'var(--thread-d)':'var(--thread2)';
+    s+=`<path d="M${a} ${yT} H${b}" stroke="${c1}" stroke-width=".8"/><path d="M${a} ${yB} H${b}" stroke="${c2}" stroke-width=".8"/><path d="M${b-.25} ${yT} V${yB} M${b+.25} ${yT} V${yB}" stroke="${c1}" stroke-width=".35"/>`;}
+  s+=lbl(89,25.5,'líc předního','ts')+lbl(89,yB+5,'líc zadního','ts');
+  return s;
+}
+add('D','Prošijte dno skrz tři vrstvy','Sedlářským stehem jako u pouzdra na karty (lekce 4) – dvě jehly proti sobě, každým otvorem, vždy stejné pořadí a stejné utažení – prošijte dno skrz všechny tři vrstvy: 17 otvorů, rozteč 4 mm, 3,5 mm od hrany. Začátek zajistěte zpětnými stehy.',12000,t=>{
+  const u=es(t,.04,.92)*18, n=Math.floor(u), fr=u-n;
+  let inner=frontView({moves:n,backHi:1});
+  let s=clipMain(G(camT(FRONTC),inner));
+  if(t<.93){const j=Math.min(17,n);const [a,b]=MOVES[j];const [x,y]=tv(FRONTC,HF[b],SEAM_Y);const dir=b>a?0:180;
+    s+=needle(x,y,dir+150-fr*20)+needle(x,y,dir+210+fr*20,.55);}
+  s+=pill(4,87,n<2?'začátek: zpětné stehy':`stehy: ${Math.min(16,n-2)} / 16`,n<2?'ta':'t');
+  if(n>=2){const [x0,y0]=tv(FRONTC,HF[0],SEAM_Y),[x1]=tv(FRONTC,HF[2],SEAM_Y);s+=pill((x0+x1)/2,y0-4,'zpětné','ta','middle')}
+  let ib=saddle3(Math.min(6,Math.floor(n/18*6.99)));
+  ib+=notes([['dvě jehly proti','t'],['sobě, každým'],['otvorem, stejné'],['pořadí i utažení']],54,5.2);
+  s+=inset('3 VRSTVY',ib);
+  return s;
+},{v:'LÍC',sub:'přední panel'},'Tip (lekce 7 počet ani stranu neuvádí): u pouzdra na karty (projekt 01) jsou na začátku i na konci dva zpětné stehy; animace začíná u ohybu A.');
+
+add('D','Konec zajistěte zpětnými stehy, zkontrolujte druhou stranu','Na konci řady zajistěte šev zpětnými stehy. Pak zkontrolujte druhou stranu švu (zadní panel) – steh má být stejně rovný jako na líci předního panelu a na líci mají všechny stehy stejný sklon (kontrola z lekce 4).',7600,t=>{
+  const u=es(t,.04,.5)*2, n=18+Math.floor(u), fr=u-Math.floor(u);
+  let inner=frontView({moves:Math.min(20,n+(t>.5?1:0)),backHi:1});
+  let s=clipMain(G(camT(FRONTC),inner));
+  if(t<.5){const j=Math.min(19,n);const [a,b]=MOVES[j];const [x,y]=tv(FRONTC,HF[b],SEAM_Y);
+    s+=needle(x,y,330-fr*20)+needle(x,y,30+fr*20,.55);}
+  const [x0,y0]=tv(FRONTC,HF[14],SEAM_Y),[x1]=tv(FRONTC,HF[16],SEAM_Y);
+  if(t>.3) s+=pill((x0+x1)/2,y0-4,'zpětné','ta','middle');
+  const ck=[['zpětné stehy',.55],['na začátku i konci',.55],['druhá strana rovná',.7],['stejný sklon',.82]];
+  let ib='';ck.forEach(([tx,at],i)=>{const o=seg(t,at,at+.08);ib+=`<g opacity="${f(o)}">${i===1?'':tick(91.5,17.5+i*7)}${lbl(96,19+i*7,tx,'t')}</g>`});
+  ib+=notes([['Tip (lekce to','ta'],['neuvádí): dva','ta'],['zpětné stehy jako'],['u pouzdra na karty'],['(projekt 01)']],52,5.2);
+  s+=inset('KONEC',ib);
+  if(t>.92) s+=pill(4,87,'dno prošité skrz tři vrstvy','tok');
+  return s;
+},{v:'LÍC',sub:'přední panel'});
+
+// ---------- E: checkpoints ----------
+add('E','Kontrolní body lekce 7','Oba ohyby drží tvar smyčky, líc bez prasklin. Dno je slepené a zarovnané, otvory na všech vrstvách lícují. Dno je prošité skrz tři vrstvy, začátek i konec zajištěný zpětnými stehy. Dál pokračuje lekce 8: klobouček druku podle obtisku, zkrácení jazyka, dno přebrousit do roviny a hrany.',9000,t=>{
+  const z=es(t,0,.3); const cam=camL(FRONTC,FULLC,z);
+  let inner=frontView({moves:20});
+  let s=clipMain(G(camT(cam),inner));
+  if(z>.95){const o=seg(t,.3,.4);
+    const [ax,ay]=tv(FULLC,FX-OUT_A,120),[bx,by]=tv(FULLC,BXF+OUT_B,100),[dx,dy]=tv(FULLC,FX+20,SEAM_Y),[jx,jy]=tv(FULLC,2*CA-26.5,22),[ex,ey]=tv(FULLC,HF[16],SEAM_Y);
+    s+=`<g opacity="${f(o)}">${lead(ax-8,ay+6,ax+.6,ay)}${pill(ax-8,ay+10,'ohyb A','ta','middle')}${lead(bx+8,by-6,bx-.6,by)}${pill(bx+8,by-8,'ohyb B','ta','middle')}${lead(ex+3,ey-5,ex-1,ey-.3)}${pill(ex+3.5,ey-5,'šev dna','ta','start')}${lead(jx-9,jy+8,jx,jy)}${pill(jx-9.5,jy+10,'jazyk – lekce 8','ts','end')}</g>`;}
+  const ck=[['ohyby: smyčka,',.4,1],['líc bez prasklin',.4,0],['dno slepené,',.55,1],['otvory lícují',.55,0],['prošité 3 vrstvy,',.7,1],['zpětné stehy',.7,0]];
+  let ib='';ck.forEach(([tx,at,tk],i)=>{const o=seg(t,at,at+.1);ib+=`<g opacity="${f(o)}">${tk?tick(91.5,16+i*5.6):''}${lbl(96,17.5+i*5.6,tx,'t')}</g>`});
+  ib+=`<g opacity="${f(seg(t,.86,.96))}">${notes([['dál lekce 8:','t'],['klobouček, jazyk,'],['dno do roviny,'],['hrany']],58,5.2)}</g>`;
+  s+=inset('KONTROLA',ib);
+  if(t>.96) s+=`<circle cx="76" cy="64" r="5.5" fill="var(--panel)" stroke="var(--ok)" stroke-width=".7"/>`+tick(76,64.5,1.3);
+  return s;
+},{v:'LÍC',sub:'přední panel'});
+
+// ---------- engine ----------
+const svg=document.getElementById('stage');
+const DEFS=`<defs>
+<filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx=".6" dy="1" stdDeviation=".8" flood-opacity=".28"/></filter>
+<linearGradient id="licG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--lic-hi)"/><stop offset=".55" stop-color="var(--lic)"/><stop offset="1" stop-color="var(--lic-d)"/></linearGradient>
+<linearGradient id="licS" x1="0" y1="0" x2="1" y2=".4"><stop offset="0" stop-color="var(--lic-hi)"/><stop offset=".6" stop-color="var(--lic)"/><stop offset="1" stop-color="var(--lic-d)"/></linearGradient>
+<linearGradient id="loopA" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="var(--lic)"/><stop offset="1" stop-color="var(--lic-d)"/></linearGradient>
+<linearGradient id="loopB" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="var(--lic)"/><stop offset="1" stop-color="var(--lic-d)"/></linearGradient>
+<pattern id="rubP" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="var(--rub)"/><path d="M.5 1.2 l1.6 .5 M3.2 .6 l1.4 -.4 M1.4 3.8 l1.2 .8 M4 3.1 l1.5 .3 M2.6 5.2 l1.3 -.5 M.2 4.9 l.9 .3" stroke="var(--rub-fib)" stroke-width=".35" stroke-linecap="round"/></pattern>
+<pattern id="roughP" width="1.4" height="1.4" patternUnits="userSpaceOnUse"><rect width="1.4" height="1.4" fill="var(--rub)"/><circle cx=".35" cy=".4" r=".2" fill="var(--rub-d)"/><circle cx="1" cy="1" r=".17" fill="var(--lic-hi)"/></pattern>
+<pattern id="zoneP" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="3" height="3" fill="none"/><path d="M0 0 V3" stroke="var(--lic-d)" stroke-width=".7"/></pattern>
+<radialGradient id="dimL" cx=".4" cy=".38"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset=".8" stop-color="#fff" stop-opacity=".05"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></radialGradient>
+<marker id="ar" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--accent)"/></marker>
+<marker id="arI" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--ink)"/></marker>
+</defs>`;
+const badge=document.getElementById('badge'),sideEl=document.getElementById('side'),chip=document.getElementById('chip'),sub=document.getElementById('sidesub');
+const capNo=document.getElementById('capNo'),capT=document.getElementById('capT'),capB=document.getElementById('capB'),counter=document.getElementById('counter');
+const prog=document.getElementById('prog');
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const partKeys=Object.keys(PARTS);const barEls=[];const segEls={};
+partKeys.forEach(k=>{const b=document.createElement('button');b.className='pseg';b.type='button';b.setAttribute('aria-label',`Část ${k}: ${PARTS[k]}`);
+  const bars=document.createElement('div');bars.className='bars';S.forEach((st,i)=>{if(st.part===k){const sp=document.createElement('span');const bb=document.createElement('b');sp.appendChild(bb);bars.appendChild(sp);barEls[i]=bb;}});
+  const pl=document.createElement('div');pl.className='pl';pl.innerHTML=`<b>${k}</b><span> · ${PARTS[k]}</span>`;b.append(bars,pl);prog.appendChild(b);segEls[k]=b;
+  b.addEventListener('click',()=>{setPlay(false);go(S.findIndex(s=>s.part===k),1)});});
+let idx=0,tt=1,playing=false,last=0,raf=0;
+function numInPart(i){const p=S[i].part;return S.slice(0,i+1).filter(s=>s.part===p).length}
+function setSide(st){
+  const side=st.side; if(!side){badge.hidden=true;return}
+  badge.hidden=false; let v,sb='';
+  if(typeof side==='object'){v=side.v;sb=side.sub||''} else {v=side==='rub'?'RUB':'LÍC'}
+  sideEl.textContent=v; chip.style.background=v==='LÍC'?'var(--chip-lic)':'var(--chip-rub)'; sub.textContent=sb;
+}
+function fitPills(){svg.querySelectorAll('g.pill').forEach(g=>{const tx=g.querySelector('text'),r=g.querySelector('rect');try{const b=tx.getBBox();if(!b.width)return;r.setAttribute('x',f(b.x-1.2));r.setAttribute('y',f(b.y-.5));r.setAttribute('width',f(b.width+2.4));r.setAttribute('height',f(b.height+1))}catch(e){}})}
+function render(){
+  const st=S[idx]; UID=0;
+  let body='';
+  try{ body=st.draw(tt);}catch(e){console.error(e)}
+  svg.innerHTML=DEFS+body; fitPills();
+  setSide(st);
+  capNo.textContent=`${st.part}${numInPart(idx)}`; capT.textContent=st.title; capB.textContent=st.body;
+  if(st.tip){const sp=document.createElement('span');sp.className='tip';const m=st.tip.match(/^(Tip[^:]*:)\s*(.*)$/);if(m){const b=document.createElement('b');b.textContent=m[1];sp.append(b,' '+m[2])}else sp.textContent=st.tip;capB.appendChild(sp)}
+  counter.textContent=`krok ${idx+1} / ${S.length}`;
+  barEls.forEach((b,i)=>{b.style.transform=`scaleX(${i<idx?1:i===idx?tt:0})`});
+  partKeys.forEach(k=>segEls[k].classList.toggle('on',k===st.part));
+}
+function go(i,t=0){idx=Math.max(0,Math.min(S.length-1,i));tt=reduce?1:t;hold=0;render();}
+function setPlay(p){playing=p;document.getElementById('playIcon').innerHTML=p?'<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';document.getElementById('bPlay').setAttribute('aria-label',p?'Pozastavit':'Přehrát');if(p){last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}}
+let hold=0;
+function loop(now){if(!playing)return;const dt=now-last;last=now;
+  if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
+  else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
+  raf=requestAnimationFrame(loop)}
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} else if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
+document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
+document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
+document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};
+// deep links #A–#E
+function partFromHash(){const h=(location.hash||'').replace('#','').toUpperCase();return PARTS[h]?h:null}
+let auto=false;
+const hp=partFromHash();
+if(hp){auto=true;go(S.findIndex(s=>s.part===hp),1)} else go(0,1); // meaningful still
+window.addEventListener('hashchange',()=>{const p=partFromHash();if(p){auto=true;setPlay(false);go(S.findIndex(s=>s.part===p),1)}});
+window.__skladani={go:(i,t)=>{auto=true;setPlay(false);idx=i;tt=t;render()},steps:S.length,parts:S.map(s=>s.part),
+  geo:{panelW:PW,panelH:PH,foldA:LA,foldB:LB,sepA:+SEPA.toFixed(2),sepB:+SEPB.toFixed(2),foldedWidth:+(PW+OUT_A+OUT_B).toFixed(2),holesPerPanel:NH,seamLen:SEAM_LEN,
+    mirrorA:HB.map(x=>+(2*CA-x).toFixed(2)).sort((a,b)=>a-b).every((x,i)=>Math.abs(x-HF[i])<.01),mirrorB:HI.map(x=>+(2*CB-x).toFixed(2)).sort((a,b)=>a-b).every((x,i)=>Math.abs(x-HF[i])<.01)}};
+if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!auto){auto=true;io.disconnect();go(0,0);setPlay(true)}})},{threshold:.45});io.observe(svg)}
+})();
+</script>
+<script>
+// Hidepath: „Zpět do lekce“ = krok zpět v historii, když se sem přišlo z aplikace; jinak úvod aplikace.
+(function(){var a=document.querySelector('[data-back]');if(!a)return;a.addEventListener('click',function(e){var o='';try{o=document.referrer?new URL(document.referrer).origin:'';}catch(_){}if(o===location.origin&&history.length>1){e.preventDefault();history.back();}});})();
+</script>
+</body>
+</html>

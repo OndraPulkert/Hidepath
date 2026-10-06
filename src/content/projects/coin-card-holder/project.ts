@@ -349,12 +349,14 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'punch-post-hole',
         title: 'Otvor pro dřík druku (pokud ho návod vyžaduje)',
         body: 'Šídlem propíchněte na odřezku bod 9,5 mm od okraje (jako střed dříku na předním panelu, 9,5 mm pod horní hranou) – to je značka pro dřík a zároveň si ověříte, jak se druk chová u hrany. Velikost otvoru pro dřík obchod neuvádí. Řiďte se návodem v balení druku. Když návod otvor vyžaduje a velikost neuvádí, začněte nejmenším výsečníkem (2 mm) a dřík přiložte – má otvorem projít těsně; když neprojde, zkuste o krok větší (3 mm). Moc velký otvor a dřík se v kůži viklá. Druk je čtyřdílný: dřík a hlavička jdou na přední panel, zdířka a klobouček na jazyk (skladbu dílů ověřte podle obalu). Každá polovina svírá jen jednu vrstvu kůže těla (1,2 nebo 1,5 mm).',
+        animationLinks: [animationLink('snap', 'A')],
         media: [],
       },
       {
         id: 'set-snap-post',
         title: 'Osaďte dřík druku',
         body: 'Dřík s hlavičkou osaďte naplocho aplikátorem z balení druku a paličkou na tvrdé podložce, kolmo a přesně na značku – pořadí dílů a stranu aplikátoru podle návodu na obalu. Zkontrolujte, že sedí naplocho a pevně a že kůže kolem dříku nepopraskala. Když dřík neroznýtuje, viklá se nebo kůže kolem praskne, zopakujte to na dalším odřezku (balení Prym Anorak má 10 ks). Když to nevyjde ani napodruhé, na pás druk neosazujte a vyzkoušejte na odřezku alternativu z vybavení (Stoklasa Ø 13,5 mm na silné látky – na kůži ověřit na odřezku).',
+        animationLinks: [animationLink('snap', 'A')],
         media: [
           {
             id: 'cch-l3-snap',
@@ -368,6 +370,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'practice-snap-cap',
         title: 'Vyzkoušejte i kloboučkovou polovinu druku',
         body: 'Na druhém odřezku osaďte kloboučkovou polovinu druku. Pokud návod vyžaduje otvor, postupujte stejně jako u dříku: nejmenší výsečník (2 mm), a teprve když trn kloboučku neprojde, o krok větší (3 mm) – průměr ověřte na odřezku, ne až na jazyku. Klobouček se zdířkou osaďte aplikátorem a paličkou stejným způsobem jako dřík. Zacvakněte ho na osazený dřík a zkontrolujte, že druk jde zavřít i znovu otevřít a drží – v hotovém pouzdru už tuhle kombinaci nezkusíte dřív, než bude jazyk zkrácený. Zapište si, který výsečník (nebo žádný) sedl.',
+        animationLinks: [animationLink('snap', 'A')],
         media: [
           {
             id: 'ilustrace-druk-l3',
@@ -383,6 +386,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'measure-flange',
         title: 'Změřte přírubu patice',
         body: 'Na rubu odřezku změřte posuvným měřítkem průměr příruby osazené patice (dříku); když ho nemáte, stačí ocelové pravítko – jde jen o to, jestli je příruba do 11 mm. Smí mít nejvýš 11 mm: střed patice je na předním panelu 9,5 mm pod horní hranou a karty začínají 15 mm pod ní, takže větší příruba by na rubu tlačila na karty. Když má víc, střih s tímhle drukem nepoužívejte a zapište si to.',
+        animationLinks: [animationLink('snap', 'A')],
         media: [],
       },
     ],
@@ -493,12 +497,14 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'wet-fold-zones',
         title: 'Navlhčete pásma ohybů',
         body: 'Obě pásma ohybů navlhčete houbičkou, ne kůži plošně.',
+        animationLinks: [animationLink('pouchFold', 'B')],
         media: [],
       },
       {
         id: 'fold-around-content',
         title: 'Přeložte kolem obsahu',
         body: 'Karty zabalené v potravinové fólii položte mezi prostřední panel (zastupuje přední) a přiléhající krajní panel (zastupuje vnitřní), pak přeložte ohyb B. Jako náhradu bankovek použijte přeložený papír silný asi 2 mm a položte ho mezi krajní panel, který zastupuje vnitřní, a druhý krajní panel (zastupuje zadní) – stejné pořadí vrstev jako u finálního pásu (přední – karty – vnitřní – bankovky – zadní). Teprve pak přeložte ohyb A přes všechno. Přejeďte rozhrnovačkou nebo hranou pravítka a sepněte sponkami přes podložku. Než necháte zaschnout, zkontrolujte, že se naplocho prosekané otvory na sousedních panelech po složení lícují. Ohyb A se neztenčuje, jen se přeloží – pokud je na odřezku moc tuhý, zapište si to do poznámek z tréninku. Nasucho nebo na ostro přeložený líc nejspíš praská – proto je navlhčení a smyčka místo ostrého přehybu klíčové.',
+        animationLinks: [animationLink('pouchFold', 'B')],
         media: [
           {
             id: 'cch-l4-fold',
@@ -527,13 +533,14 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'unfold-roughen-glue',
         title: 'Zdrsněte a slepte, spoj po spoji',
         body: 'Zaschlé ohyby rozevřete jen tolik, aby šel proužek natřít – zhruba do pravého úhlu, ne úplně naplocho (suchý neztenčený ohyb A by mohl na líci prasknout). Spoje jsou dva a lepí se po jednom, ne najednou: v pruhu 0–3,5 mm od hrany (pod čárou švu – lepidlo výš by ubralo místo, kde má obsah vůli) zdrsněte smirkem plochy prvního spoje, naneste lepidlo naplocho, nechte odvětrat podle návodu na obalu, přeložte zpátky, zarovnejte jehlami přes otvory a přitiskněte. Teprve pak stejně zopakujte druhý spoj.',
+        animationLinks: [animationLink('pouchFold', 'C')],
         media: [],
       },
       {
         id: 'stitch-through-layers',
         title: 'Přitiskněte a sešijte tři vrstvy',
         body: 'Přitiskněte slepené vrstvy k sobě a sešijte sedlářským stehem skrz všechny tři vrstvy předem prosekanými otvory a zkontrolujte rub – steh má být stejně rovný jako na líci.',
-        animationLinks: [animationLink('threadLength')],
+        animationLinks: [animationLink('pouchFold', 'D'), animationLink('threadLength')],
         media: [
           {
             id: 'cch-l4-stitch',
@@ -880,12 +887,14 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'punch-post-hole',
         title: 'Otvor pro dřík (pokud ho návod vyžaduje)',
         body: 'Pokud návod druku vyžaduje otvor, vysekněte ho výsečníkem, který vám na odřezku v lekci 3 sedl na dřík (začínali jste nejmenším, 2 mm), v předním panelu na značku propíchnutou v lekci 5 (9,5 mm pod horní hranou na ose jazyka).',
+        animationLinks: [animationLink('snap', 'B')],
         media: [],
       },
       {
         id: 'set-snap-post',
         title: 'Osaďte dřík druku',
         body: 'Dřík s hlavičkou osaďte naplocho na značku v předním panelu aplikátorem z balení a paličkou na tvrdé podložce, stejně jako na odřezku v lekci 3 – ještě před složením pásu, v hotovém pouzdru už na něj nedosáhnete.',
+        animationLinks: [animationLink('snap', 'B')],
         media: [
           {
             id: 'ilustrace-druk-l6',
@@ -978,18 +987,21 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'wet-fold-zones',
         title: 'Navlhčete pásma obou ohybů',
         body: 'Navlhčete houbičkou pásma obou ohybů, ne celou plochu pásu.',
+        animationLinks: [animationLink('pouchFold', 'B')],
         media: [],
       },
       {
         id: 'fold-inner-b',
         title: 'Přeložte vnitřní panel ohybem B',
         body: 'Karty zabalené v potravinové fólii položte na rub předního panelu (tam, kde po přeložení sedne vnitřní panel) a přeložte přes ně vnitřní panel ohybem B.',
+        animationLinks: [animationLink('pouchFold', 'B')],
         media: [],
       },
       {
         id: 'fold-back-a',
         title: 'Přeložte zadní panel ohybem A',
         body: 'Bankovky zabalené v potravinové fólii položte na líc vnitřního panelu – vrstvy odpředu jsou přední – karty – vnitřní – bankovky – zadní. Pak přeložte zadní panel ohybem A přes všechno, kolem skutečného obsahu, ne naprázdno.',
+        animationLinks: [animationLink('pouchFold', 'B')],
         media: [
           {
             id: 'ilustrace-poradi-ohybu',
@@ -1013,6 +1025,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'press-and-clamp',
         title: 'Přitiskněte a nechte zaschnout',
         body: 'Přejeďte rozhrnovačkou. Sponky s podložkou nasaďte na panely těsně vedle obou ohybů, přes obsah, ne na samotnou smyčku ohybu. Nechte zaschnout. Nasucho nebo na ostro přeložený líc v tomto kroku nejspíš praská.',
+        animationLinks: [animationLink('pouchFold', 'B')],
         media: [
           {
             id: 'postup-5',
@@ -1028,6 +1041,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'roughen-and-glue-bottom',
         title: 'Zdrsněte a slepte dno, spoj po spoji',
         body: 'Vyjměte zabalené karty i bankovky. Zaschlé ohyby rozevřete jen tolik, aby šel spodní proužek natřít – zhruba do pravého úhlu, ne úplně naplocho (suchý neztenčený ohyb A by mohl na líci prasknout). Spoje jsou dva – přední panel s vnitřním a vnitřní panel se zadním; přední a zadní panel se přímo nedotýkají, mezi nimi je pořád vnitřní panel – a lepí se po jednom, ne najednou: nejdřív spoj přední↔vnitřní, pak vnitřní↔zadní. V pruhu 0–3,5 mm od hrany (pod čárou švu; karty i bankovky stojí na švu, lepidlo výš by jim ubralo hloubku) zdrsněte smirkem plochy spoje přední↔vnitřní, naneste lepidlo naplocho, nechte odvětrat podle návodu na obalu, přeložte, zarovnejte jehlami přes otvory a přitiskněte – kontaktní lepidlo po dotyku už nejde posunout. Teprve pak stejně zopakujte spoj vnitřní↔zadní.',
+        animationLinks: [animationLink('pouchFold', 'C')],
         media: [
           {
             id: 'ilustrace-lepeni-dna',
@@ -1043,7 +1057,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'stitch-bottom',
         title: 'Prošijte dno',
         body: 'Prošijte dno skrz všechny tři vrstvy (17 otvorů na panel, rozteč 4 mm, 3,5 mm od hrany). Začátek i konec zajistěte zpětnými stehy.',
-        animationLinks: [animationLink('threadLength')],
+        animationLinks: [animationLink('pouchFold', 'D'), animationLink('threadLength')],
         media: [
           {
             id: 'postup-6',
@@ -1124,24 +1138,28 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'insert-content',
         title: 'Vložte obsah a přehněte jazyk',
         body: 'Vložte karty i bankovky, které nosíte, a přehněte jazyk přes horní hranu.',
+        animationLinks: [animationLink('snap', 'C')],
         media: [],
       },
       {
         id: 'imprint-cap-position',
         title: 'Obtiskněte polohu kloboučku',
         body: 'Přeložený jazyk přitiskněte přes hlavičku na předním panelu, aby se na kůži obtiskla. Zjistěte, o kolik mm od původní značky a kterým směrem se obtisk posunul: pás je nastřižený na nejhorší případ, ve skutečnosti druk okraj stáhne, takže jazyk vyjde delší, než ukazoval papírový model.',
+        animationLinks: [animationLink('snap', 'C')],
         media: [],
       },
       {
         id: 'punch-cap-hole',
         title: 'Otvor pro klobouček (pokud ho návod vyžaduje)',
         body: 'Pokud návod druku vyžaduje otvor pro klobouček, proražte ho výsečníkem, který vám v lekci 3 na odřezku sedl na trn kloboučku, přesně v obtisknutém místě na jazyku.',
+        animationLinks: [animationLink('snap', 'C')],
         media: [],
       },
       {
         id: 'set-cap',
         title: 'Osaďte klobouček',
         body: 'Klobouček se zdířkou osaďte přesně na obtisknuté místo aplikátorem z balení a paličkou, ne podle původní odhadované značky. Klobouček (Ø 12 mm u Prym Anorak 12 mm) jde na líc jazyka (ven, viditelný po zapnutí), zdířka na rub jazyka pod ním, obrácená k přednímu panelu – pořadí dílů podle návodu na obalu, stejně jako na odřezku v lekci 3.',
+        animationLinks: [animationLink('snap', 'C')],
         media: [
           {
             id: 'ilustrace-druk-l8',
@@ -1164,6 +1182,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'shorten-tongue',
         title: 'Zkraťte jazyk a zaoblete rohy',
         body: 'Jazyk zkraťte 11 mm za střed kloboučku a rohy znovu zaoblete na R10 – rohovou šablonou (lob 20), nebo obtažením mince či víčka stejné velikosti.',
+        animationLinks: [animationLink('snap', 'C')],
         media: [
           {
             id: 'postup-7',

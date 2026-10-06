@@ -8,6 +8,7 @@ import { type AnimationLink } from '@/content/schema';
  * `sections` = kotvy, které stránka umí otevřít, s popiskem pro tlačítko v kroku:
  * - kapsa-postup: `#A`–`#E` skočí na první krok dané části a přehrává od ní,
  * - kapsa-prisiti: `#A`–`#D` otevře první krok dané části (zastavený, přehrání tlačítkem),
+ * - kapsa-skladani (`#A`–`#E`) a kapsa-druk (`#A`–`#D`): stejně jako kapsa-prisiti,
  * - Víčko: `#anim-…` posune stránku na danou animaci (spustí se, když je vidět).
  */
 export const animationPages = {
@@ -30,6 +31,27 @@ export const animationPages = {
       B: 'Část B – lepení',
       C: 'Část C – prosekání skrz obě vrstvy',
       D: 'Část D – šití',
+    },
+  },
+  pouchFold: {
+    path: '/animace/kapsa-skladani.html',
+    title: 'Složení pouzdra a šev dna',
+    sections: {
+      A: 'Část A – pás a otvory dna',
+      B: 'Část B – ohyby za mokra',
+      C: 'Část C – lepení dna',
+      D: 'Část D – šev dna',
+      E: 'Část E – kontrola',
+    },
+  },
+  snap: {
+    path: '/animace/kapsa-druk.html',
+    title: 'Druk krok za krokem',
+    sections: {
+      A: 'Část A – zkouška na odřezku',
+      B: 'Část B – dřík naplocho',
+      C: 'Část C – klobouček a zkrácení jazyka',
+      D: 'Část D – zavřít a otevřít',
     },
   },
   threadLength: {

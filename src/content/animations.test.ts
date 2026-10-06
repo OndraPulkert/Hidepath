@@ -111,7 +111,27 @@ describe('animace postupu – stránky v public/animace', () => {
     expect(hasAnchor(source!, 'E')).toBe(false);
   });
 
-  it.each(['kapsa-postup', 'kapsa-prisiti'])(
+  it.each([
+    ['kapsa-skladani', 'pouchFold', ['A', 'B', 'C', 'D', 'E'], 'F'],
+    ['kapsa-druk', 'snap', ['A', 'B', 'C', 'D'], 'E'],
+  ] as const)(
+    '%s: samostatná stránka s favicon, návratem do lekce a kotvami svých částí',
+    (name, key, anchors, missing) => {
+      const source = pageSource(`/animace/${name}.html`);
+      expect(source).toBeDefined();
+      expect(animationPages[key].path).toBe(`/animace/${name}.html`);
+      expect(source).not.toMatch(/googleapis|gstatic|Instrument Sans/);
+      expect(source).not.toMatch(/(?:src|href)\s*=\s*["']?https?:|url\(\s*["']?https?:|@import/);
+      expect(source).toContain('<link rel="stylesheet" href="/fonts/fonts.css">');
+      expect(source).toContain('<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">');
+      expect(source).toContain('<a class="backlink" href="/" data-back>← Zpět do lekce</a>');
+      expect(Object.keys(animationPages[key].sections)).toEqual(anchors);
+      for (const anchor of anchors) expect(hasAnchor(source!, anchor)).toBe(true);
+      expect(hasAnchor(source!, missing)).toBe(false);
+    },
+  );
+
+  it.each(['kapsa-postup', 'kapsa-prisiti', 'kapsa-skladani', 'kapsa-druk'])(
     '%s: mince 50 Kč je měděné mezikruží a mosazný střed Ø 17',
     (name) => {
       const source = pageSource(`/animace/${name}.html`)!;
@@ -178,6 +198,49 @@ describe('animace postupu – odkazy z lekcí', () => {
     expect(hrefOf(6, 'glue-pocket')).toEqual([prisiti('B')]);
     // Přišití kapsy: animace prosekání a šití a hned vedle návod, kolik nitě odměřit.
     expect(hrefOf(6, 'stitch-pocket')).toEqual([prisiti('C'), animationPages.threadLength.path]);
+  });
+});
+
+describe('animace postupu – složení pouzdra a druk v lekcích', () => {
+  const lessonOf = (n: number) =>
+    projects.find((p) => p.slug === 'coin-card-holder')!.lessons.find((l) => l.order === n)!;
+  const hrefOf = (n: number, stepId: string) =>
+    lessonOf(n)
+      .steps.find((s) => s.id === stepId)
+      ?.animationLinks?.map((l) => l.href);
+  const skladani = (part: string) => `/animace/kapsa-skladani.html#${part}`;
+  const druk = (part: string) => `/animace/kapsa-druk.html#${part}`;
+
+  it('lekce 4 a 7: ohyby, lepení dna a šev otevírají správné části skládání', () => {
+    expect(hrefOf(4, 'wet-fold-zones')).toEqual([skladani('B')]);
+    expect(hrefOf(4, 'fold-around-content')).toEqual([skladani('B')]);
+    expect(hrefOf(4, 'unfold-roughen-glue')).toEqual([skladani('C')]);
+    for (const id of ['wet-fold-zones', 'fold-inner-b', 'fold-back-a', 'press-and-clamp']) {
+      expect(hrefOf(7, id), id).toEqual([skladani('B')]);
+    }
+    expect(hrefOf(7, 'roughen-and-glue-bottom')).toEqual([skladani('C')]);
+    // Šití: animace švu a hned vedle návod, kolik nitě odměřit.
+    const thread = animationPages.threadLength.path;
+    expect(hrefOf(4, 'stitch-through-layers')).toEqual([skladani('D'), thread]);
+    expect(hrefOf(7, 'stitch-bottom')).toEqual([skladani('D'), thread]);
+  });
+
+  it('lekce 3, 6 a 8: zkouška druku, dřík naplocho a klobouček podle obtisku', () => {
+    for (const id of ['punch-post-hole', 'set-snap-post', 'practice-snap-cap', 'measure-flange']) {
+      expect(hrefOf(3, id), id).toEqual([druk('A')]);
+    }
+    for (const id of ['punch-post-hole', 'set-snap-post']) {
+      expect(hrefOf(6, id), id).toEqual([druk('B')]);
+    }
+    for (const id of [
+      'insert-content',
+      'imprint-cap-position',
+      'punch-cap-hole',
+      'set-cap',
+      'shorten-tongue',
+    ]) {
+      expect(hrefOf(8, id), id).toEqual([druk('C')]);
+    }
   });
 });
 
