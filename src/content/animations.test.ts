@@ -1,4 +1,4 @@
-import { animationLink, animationPages } from '@/content/animations';
+import { animationButtonText, animationLink, animationPages } from '@/content/animations';
 import { projects } from '@/content/projects';
 import { animationLinkSchema, lessonStepSchema, projectDefinitionSchema } from '@/content/schema';
 
@@ -127,5 +127,12 @@ describe('animace postupu – odkazy z lekcí', () => {
       [`${lessonOf(6)}/form-dimple`]: kapsa('D'),
       [`${lessonOf(6)}/cut-outline-and-window`]: kapsa('E'),
     });
+  });
+});
+
+describe('animationButtonText', () => {
+  it('pojmenuje návod na délku nitě jinak než animace', () => {
+    expect(animationButtonText(animationPages.threadLength.path)).toBe('Jak odměřit nit');
+    expect(animationButtonText(`${animationPages.kapsa.path}#B`)).toBe('Animace postupu');
   });
 });

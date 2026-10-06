@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { routes } from '@/app/routes';
 import { MediaSlot } from '@/components/lessons/media-slot';
 import { Button } from '@/components/ui/button';
+import { animationButtonText, animationPages } from '@/content/animations';
 import { type LessonStep, type TemplateDefinition } from '@/content/schema';
 import { typo } from '@/lib/utils/format';
 
@@ -51,7 +52,8 @@ export function StepList({
               >
                 <a href={step.animationLink.href}>
                   <span>
-                    <span aria-hidden>▶ </span>Animace postupu
+                    <span aria-hidden>{isThreadGuide(step.animationLink.href) ? '📏 ' : '▶ '}</span>
+                    {animationButtonText(step.animationLink.href)}
                   </span>
                   <span className="text-[14px] font-normal text-ink-2">
                     {typo(step.animationLink.label)}
@@ -73,3 +75,5 @@ export function StepList({
     </ol>
   );
 }
+
+const isThreadGuide = (href: string) => href.startsWith(animationPages.threadLength.path);

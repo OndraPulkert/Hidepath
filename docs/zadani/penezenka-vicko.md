@@ -583,7 +583,7 @@ jen uvedené pravidlo.** Značka „L“ se dává na rub F a na rub B zvlášť
   na odřezku se švem). Vidlička i jehly jsou ocelové a magnet je přitahuje: děrovat opatrně,
   s kouskem jazýčku pevně na podložce, nejdřív na odřezku. Stehy budou vidět na líci víčka (schváleno autorem, Kolo 6).
 - Nit: tenká voskovaná, která projde otvory vidliček 4 mm (ověřit na odřezku). Délka orientačně
-  4 × délka švu + 2 × 15 cm (ověřit na zkušebním švu).
+  4 × délka švu + 25–30 cm rezervy, tj. 2 × 15 cm na konce (ověřit na zkušebním švu).
 - Čáru švu rýsuj až na slepeném kusu: kružidlem nebo rýhovačem 3,0 od hrany, bez nich tužkou
   u pravítka (3,0 od hrany odměř na proužku z listu 4). Polohy otvorů S4/S5 přenes z papírového
   proužku na listu 4.

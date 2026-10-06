@@ -41,7 +41,7 @@ ul{margin:0;padding-left:18px;display:grid;gap:4px}
 <header>
 <a class="backlink" href="/" data-back>← Zpět do lekce</a>
 <h1>Kolik nitě na šev</h1>
-<p class="lead">Pravidlo pro sedlový steh: <b>délka nitě ≈ 4× délka švu + 25 cm rezerva</b>. Přes 3 vrstvy nebo silnější kůži počítej 5×. Nit prochází každým otvorem dvakrát (jednou z každé strany) a ohýbá se přes tloušťku kůže.</p>
+<p class="lead">Pravidlo pro sedlový steh: <b>délka nitě ≈ 4× délka švu + 25–30 cm rezerva</b>. Přes 3 vrstvy nebo silnější kůži počítej 5×. Nit prochází každým otvorem dvakrát (jednou z každé strany) a ohýbá se přes tloušťku kůže.</p>
 </header>
 
 <section class="card">
@@ -72,8 +72,8 @@ ul{margin:0;padding-left:18px;display:grid;gap:4px}
 
 <section class="card">
 <div class="step"><div class="num">2</div><div>
-<h2>Vynásob 4× a přidej 25 cm</h2>
-<p class="small">Příklad: šev 18 cm → 4 × 18 = 72 cm + 25 cm rezerva = <b>asi 1 m nitě</b>.</p>
+<h2>Vynásob 4× a přidej 25–30 cm</h2>
+<p class="small">Příklad: šev 18 cm → 4 × 18 = 72 cm + 25–30 cm rezerva = <b>asi 1 m nitě</b>. Kalkulačka počítá s horní hranicí 30 cm (2 × 15 cm na konce).</p>
 </div></div>
 <svg viewBox="0 0 640 120" role="img" aria-label="Pruh nitě rozdělený na čtyři délky švu a rezervu">
   <g font-family="Albert Sans,sans-serif">
@@ -87,7 +87,7 @@ ul{margin:0;padding-left:18px;display:grid;gap:4px}
   <text x="189" y="56" text-anchor="middle" class="sm" style="fill:#5a4520">2× šev</text>
   <text x="303" y="56" text-anchor="middle" class="sm" style="fill:#5a4520">3× šev</text>
   <text x="417" y="56" text-anchor="middle" class="sm" style="fill:#5a4520">4× šev</text>
-  <text x="548" y="56" text-anchor="middle" class="sm">+ 25 cm</text>
+  <text x="548" y="56" text-anchor="middle" class="sm">+ 25–30 cm</text>
   <text x="246" y="28" text-anchor="middle" class="lbl">4 × délka švu</text>
   <text x="548" y="28" text-anchor="middle" class="lbl">rezerva</text>
   <text x="320" y="96" text-anchor="middle" class="sm">rezerva = navléknutí do jehel + zpětné stehy na konci</text>
@@ -137,8 +137,8 @@ ul{margin:0;padding-left:18px;display:grid;gap:4px}
 const len=document.getElementById('len'),lay=document.getElementById('lay'),out=document.getElementById('out'),note=document.getElementById('note');
 const cz=n=>n.toLocaleString('cs-CZ',{maximumFractionDigits:0});
 function upd(){const l=parseFloat(String(len.value).replace(',','.'));if(!(l>0)){out.textContent='–';note.textContent='';return;}
-const k=+lay.value,t=l*k+25;out.textContent=cz(t)+' cm';
-note.textContent=cz(l)+' × '+k+' = '+cz(l*k)+' cm + 25 cm rezerva'+(t>150?' · přes 1,5 m – zvaž rozdělení švu':'');}
+const k=+lay.value,t=l*k+30;out.textContent=cz(t)+' cm';
+note.textContent=cz(l)+' × '+k+' = '+cz(l*k)+' cm + 30 cm rezerva'+(t>150?' · přes 1,5 m – zvaž rozdělení švu':'');}
 len.addEventListener('input',upd);lay.addEventListener('change',upd);upd();
 </script>
 <script>

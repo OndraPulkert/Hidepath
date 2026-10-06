@@ -50,6 +50,11 @@ export const animationPages = {
 export type AnimationPageKey = keyof typeof animationPages;
 type SectionOf<P extends AnimationPageKey> = keyof (typeof animationPages)[P]['sections'] & string;
 
+/** Text tlačítka v kroku: návod s kalkulačkou délky nitě není animace. */
+export function animationButtonText(href: string): string {
+  return href.startsWith(animationPages.threadLength.path) ? 'Jak odměřit nit' : 'Animace postupu';
+}
+
 /** Odkaz z kroku lekce na animaci; bez `section` se stránka otevře od začátku. */
 export function animationLink<P extends AnimationPageKey>(
   page: P,

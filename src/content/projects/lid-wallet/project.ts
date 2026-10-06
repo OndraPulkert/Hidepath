@@ -1328,7 +1328,7 @@ export const lidWalletProject: ProjectDefinition = {
       priority: 'required',
       reason: 'Švy S1–S6 a šev S7 kolem magnetu.',
       specification:
-        'Tenká voskovaná nit, která projde otvory vidliček 4 mm (ověřit na odřezku); délka orientačně 4 × délka švu + 2 × 15 cm.',
+        'Tenká voskovaná nit, která projde otvory vidliček 4 mm (ověřit na odřezku); délka orientačně 4 × délka švu + 25–30 cm rezervy (2 × 15 cm na konce).',
     },
     {
       equipmentSlug: 'contact-cement',
