@@ -1,0 +1,1193 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ohyby peněženky Víčko</title>
+<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+<!-- Self-hostované fonty aplikace (public/fonts), aby stránka fungovala i offline v PWA. -->
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}[hidden]:not([hidden=until-found i]){display:none!important}
+[id]{scroll-margin-top:12px}
+:root{
+  --bg:#f1eee9; --surface:#ffffff; --ink:#2a211b; --muted:#6c6158; --line:#ddd5cc;
+  --accent:#8a5a36; --ok:#2e7d4f; --warn:#a86a12; --bad:#b3261e; --canvas:#f7f4ef;
+  --kuze:#b9875a; --lic:#5b331b; --rub:#f0d9b5; --kuzeplan:#e9d6ba;
+  --d1:#d8c7a6; --d1edge:#c23b22; --d2:#34495e; --jig:#8796a5; --jigedge:#4f5d6b;
+  --wood:#d9b98a; --woodedge:#9c7a4c; --foil:#2f86c7; --wet:#3d8fd6; --steel:#9aa2aa;
+  --table:#d6cec3; --dim:#4a4038; --notch:#d1461f;
+  --skin:#efc3a0; --skinedge:#b07a57; --nail:#f9e1d4; --damp:#2b1608; --moon:#d9a21b; --card:#fbfaf7; --bill:#cfe0bf; --billedge:#6f8a5a;
+  --font:"Albert Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#16120f; --surface:#1f1915; --ink:#ece4dc; --muted:#a89a8e; --line:#3a3029;
+  --accent:#d9a577; --ok:#6cc08d; --warn:#e0a54a; --bad:#f08a80; --canvas:#1a1512;
+  --kuze:#9a6a42; --lic:#f2b77a; --rub:#5e4028; --kuzeplan:#4a3726;
+  --d1:#c9b48e; --d1edge:#ff6a4d; --d2:#6f8fb0; --jig:#6d7c8b; --jigedge:#b4c2cf;
+  --wood:#7c6340; --woodedge:#c9a674; --foil:#5fb2ee; --wet:#4f9fe6; --steel:#7f8890;
+  --table:#3a332c; --dim:#d6cbbf; --notch:#ff7a4f;
+  --skin:#c48f6d; --skinedge:#f0c7a8; --nail:#e7bca3; --damp:#000000; --moon:#f0c24e; --card:#d9d4cb; --bill:#6c8a5c; --billedge:#b9d3a6; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#16120f; --surface:#1f1915; --ink:#ece4dc; --muted:#a89a8e; --line:#3a3029;
+  --accent:#d9a577; --ok:#6cc08d; --warn:#e0a54a; --bad:#f08a80; --canvas:#1a1512;
+  --kuze:#9a6a42; --lic:#f2b77a; --rub:#5e4028; --kuzeplan:#4a3726;
+  --d1:#c9b48e; --d1edge:#ff6a4d; --d2:#6f8fb0; --jig:#6d7c8b; --jigedge:#b4c2cf;
+  --wood:#7c6340; --woodedge:#c9a674; --foil:#5fb2ee; --wet:#4f9fe6; --steel:#7f8890;
+  --table:#3a332c; --dim:#d6cbbf; --notch:#ff7a4f;
+  --skin:#c48f6d; --skinedge:#f0c7a8; --nail:#e7bca3; --damp:#000000; --moon:#f0c24e; --card:#d9d4cb; --bill:#6c8a5c; --billedge:#b9d3a6; color-scheme:dark;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.55}
+.wrap{max-width:1120px;margin:0 auto;padding:20px 16px 48px;display:grid;gap:22px}
+h1{font-size:1.6rem;line-height:1.2;margin:0;font-weight:600;text-wrap:balance}
+h2{font-size:1.3rem;margin:0;font-weight:600;text-wrap:balance}
+h3{font-size:1rem;margin:0;font-weight:600}
+p{margin:0}
+.lead{color:var(--muted);max-width:78ch;margin-top:6px}
+.mono,.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.num{font-size:.92em;white-space:nowrap}
+nav{display:flex;gap:8px;flex-wrap:wrap}
+nav a{font-size:13px;font-weight:500;color:var(--ink);text-decoration:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px}
+nav a:hover{border-color:var(--accent)}
+section{display:grid;gap:14px;min-width:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:10px;min-width:0;align-content:start}
+.alert{border-left:4px solid var(--bad)}
+.alert.amber{border-left-color:var(--warn)}
+.alert h3{color:var(--bad)} .alert.amber h3{color:var(--warn)}
+.alert ol,.alert ul,.card ul{margin:0;padding-left:1.2rem;display:grid;gap:6px}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;letter-spacing:.02em;border-radius:4px;padding:1px 6px;margin-right:4px;vertical-align:1px}
+.tag.bad{background:color-mix(in srgb,var(--bad) 16%,transparent);color:var(--bad)}
+.tag.warn{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.tag.ok{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.tag.ver{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.meta{font-size:13px;color:var(--muted)}
+.legend{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:18px;height:10px;border-radius:2px;background:var(--c);border:1px solid var(--line)}
+.legend i.ln{height:0;border:0;border-top:3px solid var(--c);border-radius:0}
+.legend i.dash{height:0;border:0;border-top:3px dashed var(--c);border-radius:0}
+.steps{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr))}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:8px;align-content:start;min-width:0}
+.step header{display:flex;gap:10px;align-items:baseline}
+.step .n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--surface);font:600 13px/24px var(--font);text-align:center}
+.step p,.step li{font-size:14px}
+.parts{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--ink);background:var(--canvas);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.parts>b:first-child{flex-basis:100%;font-size:12.5px;color:var(--muted);font-weight:600}
+.parts span b{font-family:var(--mono);font-weight:500;color:var(--accent)}
+.fig{background:var(--canvas);border:1px solid var(--line);border-radius:8px;padding:6px;min-width:0}
+.fig svg{display:block;width:100%;height:auto}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+figcaption,.cap{font-size:12.5px;color:var(--muted);margin-top:4px}
+.two{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.inter{display:grid;gap:12px;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
+@media (max-width:820px){.inter{grid-template-columns:minmax(0,1fr)}}
+.ctrl{display:grid;gap:8px}
+.ctrl label.row{display:grid;grid-template-columns:1fr auto;gap:4px 10px;font-size:14px;align-items:center}
+.ctrl input[type=range]{grid-column:1/-1;width:100%;accent-color:var(--accent)}
+.val{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+.btnrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.btnrow button{font:500 13px var(--font);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:5px 10px;cursor:pointer}
+.btnrow button:hover{border-color:var(--accent)}
+.radio{display:flex;flex-direction:column;gap:4px;font-size:14px}
+.radio label,.chk{display:flex;gap:8px;align-items:flex-start;font-size:14px}
+.radio input,.chk input{accent-color:var(--accent);margin-top:4px}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.readout{font-size:13.5px;background:var(--canvas);border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:grid;gap:3px}
+.readout b{font-weight:600}
+.tools{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
+.tools li{font-size:14px}
+table{border-collapse:collapse;font-size:13px;width:100%}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px}
+td.num{font-family:var(--mono)}
+.tblwrap{overflow-x:auto}
+footer{font-size:12.5px;color:var(--muted)}
+/* SVG */
+svg text{fill:var(--ink);font-family:var(--font);paint-order:stroke;stroke:var(--canvas);stroke-linejoin:round}
+svg text.m{fill:var(--muted)}
+svg text.b{fill:var(--bad);font-weight:600}
+svg text.w{fill:var(--warn);font-weight:600}
+svg text.on{fill:#fff;stroke:none}
+svg .kz{fill:var(--kuze)}
+svg .kzp{fill:var(--kuzeplan);stroke:var(--woodedge);stroke-width:1;vector-effect:non-scaling-stroke}
+svg .lic{fill:none;stroke:var(--lic);stroke-width:2.6;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+svg .rub{fill:none;stroke:var(--rub);stroke-width:2.6;stroke-dasharray:4 2.5;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+svg .wet{stroke:var(--wet);stroke-width:1.6;vector-effect:non-scaling-stroke}
+svg .wetb{fill:none;stroke:var(--wet);stroke-width:2.2;vector-effect:non-scaling-stroke}
+svg .wetp{fill:var(--wet);opacity:.28}
+svg .d1{fill:var(--d1)} svg .d1e{stroke:var(--d1edge);stroke-width:3;vector-effect:non-scaling-stroke;fill:none}
+svg .d2{fill:var(--d2)}
+svg .jig{fill:var(--jig);stroke:var(--jigedge);stroke-width:1.2;vector-effect:non-scaling-stroke}
+svg .jigh{fill:none;stroke:var(--jigedge);stroke-width:1.2;stroke-dasharray:5 3;vector-effect:non-scaling-stroke}
+svg .bad{fill:none;stroke:var(--bad);stroke-width:2;stroke-dasharray:6 3;vector-effect:non-scaling-stroke}
+svg .badf{fill:color-mix(in srgb,var(--bad) 12%,transparent);stroke:var(--bad);stroke-width:2;stroke-dasharray:6 3;vector-effect:non-scaling-stroke}
+svg .badl{stroke:var(--bad);stroke-width:1.6;fill:none;vector-effect:non-scaling-stroke}
+svg .wood{fill:var(--wood);stroke:var(--woodedge);stroke-width:1;vector-effect:non-scaling-stroke}
+svg .foil{fill:none;stroke:var(--foil);stroke-width:2.2;vector-effect:non-scaling-stroke}
+svg .steel{fill:var(--steel);stroke:var(--jigedge);stroke-width:1;vector-effect:non-scaling-stroke}
+svg .table{fill:var(--table)}
+svg .tline{stroke:var(--dim);stroke-width:1.2;vector-effect:non-scaling-stroke}
+svg .dim{stroke:var(--dim);stroke-width:1;fill:none;vector-effect:non-scaling-stroke}
+svg .lead{stroke:var(--muted);stroke-width:1;fill:none;vector-effect:non-scaling-stroke}
+svg .guide{stroke:var(--muted);stroke-width:1;stroke-dasharray:4 3;fill:none;vector-effect:non-scaling-stroke}
+svg .mark{stroke:var(--ink);stroke-width:1.8;vector-effect:non-scaling-stroke}
+svg .notch{fill:var(--notch)}
+svg .ok{fill:none;stroke:var(--ok);stroke-width:2;vector-effect:non-scaling-stroke}
+svg .thick{fill:none;stroke:var(--kuze);stroke-linejoin:round;stroke-linecap:butt}
+svg .thin{fill:none;stroke-linecap:butt}
+svg .ring{fill:none;stroke:var(--accent);stroke-width:2;vector-effect:non-scaling-stroke}
+svg .sec{stroke:var(--woodedge);stroke-width:1;vector-effect:non-scaling-stroke}
+svg .creaseL{stroke:var(--notch);stroke-width:1.6;stroke-dasharray:4 3;vector-effect:non-scaling-stroke}
+svg .water{fill:var(--wet)}
+svg .sponge{fill:#e8c95a;stroke:#9c8030;stroke-width:1;vector-effect:non-scaling-stroke}
+svg .pen{fill:var(--steel);stroke:var(--jigedge);stroke-width:1;vector-effect:non-scaling-stroke}
+svg .arrow{fill:var(--accent)}
+svg .arrowl{stroke:var(--accent);stroke-width:2;fill:none;vector-effect:non-scaling-stroke}
+svg .fing{stroke:var(--skin);stroke-linecap:round;fill:none}
+svg .finge{stroke:var(--skinedge);stroke-linecap:round;fill:none}
+svg .nail{stroke:var(--nail);stroke-linecap:round;fill:none}
+svg .damp{fill:var(--damp)}
+svg .clk{fill:var(--surface);stroke:var(--ink);stroke-width:1.5;vector-effect:non-scaling-stroke}
+svg .hand{stroke:var(--ink);stroke-width:1.8;stroke-linecap:round;vector-effect:non-scaling-stroke}
+svg .moon{fill:var(--moon)}
+svg .okc{fill:var(--ok)}
+svg .okm{fill:none;stroke:var(--surface);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+svg .cards{fill:var(--card);stroke:var(--muted);stroke-width:1;vector-effect:non-scaling-stroke}
+svg .bills{fill:var(--bill);stroke:var(--billedge);stroke-width:1;vector-effect:non-scaling-stroke}
+svg .book{fill:var(--wood);stroke:var(--woodedge);stroke-width:1.2;vector-effect:non-scaling-stroke}
+/* animace */
+.anim{gap:12px}
+.astage{display:grid;gap:10px;grid-template-columns:minmax(0,1fr) minmax(0,210px);align-items:start}
+.astage.hz{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.astage figure{margin:0;min-width:0}
+@media (max-width:700px){.astage,.astage.hz{grid-template-columns:minmax(0,1fr)}.astage .aside{max-width:150px;width:100%;margin:0 auto}.astage.hz .aside{max-width:none}}
+.aprog{height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+.aprog i{display:block;height:100%;width:0;background:var(--accent)}
+.acap{font-size:14.5px;min-height:4.8em;max-width:80ch}
+.acap b{font-weight:600}
+.abtn button[data-a=play]{min-width:96px}
+/* Hidepath: návrat do lekce */
+.backlink{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--ink);font-weight:600;font-size:15px;text-decoration:none;justify-self:start}
+.backlink:hover{text-decoration:underline}
+.backlink:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <a class="backlink" href="/" data-back>← Zpět do lekce</a>
+  <h1>Ohyby peněženky Víčko</h1>
+  <p class="lead">Jak doma vytvarovat oba ohyby pásu P1: <b>ohyb dna</b> (krok 11) přes vložku ze starých karet a <b>závěs</b> (krok 16) jednoduše přes běžný obsah pod knihou. Čísla jsou z modelu <span class="mono">lidWalletLayout()</span> pro výchozí střih (useň 1,0, nic se neztenčuje). Všechny rozměry jsou v mm. Celý návrh je <b>NÁVRH k ověření na prototypu</b>.</p>
+</header>
+<nav aria-label="Obsah">
+  <a href="#kde">Kde jsou ohyby</a><a href="#dno">1. Ohyb dna</a><a href="#anim-dno">Animace dna</a><a href="#zaves">2. Závěs</a><a href="#anim-zaves">Animace závěsu</a>
+</nav>
+<div class="legend" aria-label="Legenda">
+  <span><i style="--c:var(--kuze)"></i>useň P1 1,0</span>
+  <span><i class="ln" style="--c:var(--lic)"></i>líc (lícová strana)</span>
+  <span><i class="dash" style="--c:var(--rub)"></i>rub (masová strana)</span>
+  <span><i style="--c:var(--wet)"></i>vlhčený pás</span>
+  <span><i style="--c:var(--notch)"></i>rýha / rysky</span>
+  <span><i style="--c:var(--d1)"></i>D1</span>
+  <span><i style="--c:var(--d2)"></i>D2</span>
+  <span><i style="--c:var(--jig)"></i>vložka (staré karty)</span>
+  <span><i style="--c:var(--card)"></i>karty</span>
+  <span><i style="--c:var(--bill)"></i>bankovky</span>
+  <span><i style="--c:var(--wood)"></i>prkénko, kniha</span>
+  <span><i class="ln" style="--c:var(--foil)"></i>fólie</span>
+  <span><i class="dash" style="--c:var(--bad)"></i>takhle ne</span>
+</div>
+<div class="parts" aria-label="Názvy dílů"><b>Názvy dílů</b><span><b>P1</b> hlavní pás: F – ohyb dna – B – závěs – víčko – jazýček</span><span><b>F</b> přední stěna</span><span><b>B</b> zadní stěna</span><span><b>D1</b> přepážka karty / bankovky</span><span><b>D2</b> přepážka bankovky / mince (kontrastní)</span><span><b>L1</b> podšívka přes magnet</span><span><b>rub</b> masová strana, <b>líc</b> hladká</span></div>
+
+<section id="kde" aria-labelledby="h-kde">
+  <h2 id="h-kde">Kde na peněžence ohyby jsou</h2>
+  <div class="card">
+    <div class="fig scroll"><div data-fig="strip" data-minw="640"></div></div>
+    <p class="cap">Rozvinutý pás P1 <span class="num">101 × 231,66</span>, pohled na rub (tak se značí). Souřadnice v se měří po pásu od horní hrany F. Obrys je zjednodušený (bez výřezu pro palec a okének).</p>
+    <div class="two">
+      <figure style="margin:0"><div class="fig"><div data-fig="sideClosed" data-maxw="300" style="margin:0 auto"></div></div><figcaption>Zavřená peněženka z boku, schéma bez vnitřních dílů. Měřítko 1:1, dno zjednodušené (skutečná mezera u dna je 1,5).</figcaption></figure>
+      <figure style="margin:0"><div class="fig"><div data-fig="sideOpen" data-maxw="340" style="margin:0 auto"></div></div><figcaption>Otevřené víčko samo nestojí a padá dozadu. Při vytahování bankovek ho přidržíš palcem. Schéma 1:1.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="dno" aria-labelledby="h-dno">
+  <h2 id="h-dno">1. Ohyb dna</h2>
+  <p class="meta">Krok 11 (na noc po 2. večeru), před lepením G1/G2, aby plíšek nebyl u vlhké usně. Rýhu dělá krok 4 (1. večer), vložku krok 0(b). Nejdřív celé na odřezku jako zkouška V12. Useň 1,0 se neztenčuje, ohýbá se za mokra přes vložku 1,5 ze starých karet.</p>
+  <div class="card alert amber">
+    <h3>Tip: hranu vložky dej asi 2 mm za rýhu</h3>
+    <p>Rýha v <span class="num">62,21</span> má skončit uprostřed oblouku ohybu (oblouk <span class="num">60,25–64,18</span>, délka <span class="num">3,93</span> po střednici). Když se F přehýbá přes vložku ležící na B, oblouk začíná u hrany vložky. Proto hranu vložky polož asi <b class="num">2</b> za rýhu směrem k B (v <span class="num">64,18</span>, přesně <span class="num">1,96</span>). Kdyby ležela přímo na rýze, střed ohybu by se posunul o <span class="num">1,96</span> k F: F by vyšla o tolik nižší a B vyšší, vzájemně <span class="num">3,93</span>, a tolerance hrany víčka vůči F je jen ±1. Jak těsně useň hranu obejme, a tedy skutečný posun, ukáže odřezek V12: po vyschnutí změř, kde je rýha <span class="tag ver">ověřit na prototypu</span>. Přepínač v interaktivním obrázku ohybu dna ukáže obě polohy.</p>
+  </div>
+  <div class="card anim" id="anim-dno" aria-labelledby="h-adno">
+    <h3 id="h-adno">Animace: ohyb dna krok za krokem</h3>
+    <div class="astage">
+      <figure class="amain"><div class="fig"><div data-fig="aFold"></div></div><figcaption>Řez napříč ohybem, 1:1: useň 1,0 a vložka 1,5 v jednom měřítku. Hrot, houbička, prkénka a svěrka jsou schematické.</figcaption></figure>
+      <figure class="aside"><div class="fig"><div data-fig="aFoldPlan"></div></div><figcaption>Pohled shora na rub, 1:1.</figcaption></figure>
+    </div>
+    <div class="aprog" aria-hidden="true"><i></i></div>
+    <p class="acap" aria-live="polite"></p>
+    <div class="btnrow abtn">
+      <button type="button" data-a="restart" aria-label="Přehrát od začátku">↺ Znovu</button>
+      <button type="button" data-a="prev" aria-label="Předchozí krok">◀ Zpět</button>
+      <button type="button" data-a="play">▶ Přehrát</button>
+      <button type="button" data-a="next" aria-label="Další krok">Další ▶</button>
+    </div>
+  </div>
+  <div class="steps">
+    <article class="step">
+      <header><span class="n">1</span><h3>Rýha na rubu u pravítka</h3></header>
+      <p>Na rub vytlač podél osy ohybu <b class="num">v 62,21</b> (od horní hrany F) rýhu tupým hrotem u ocelového pravítka. Nic neřež, tlač stejně po celé šířce <span class="num">101</span>. Nejdřív na odřezku z V12. Osu vyznač ryskou i na obou bocích dílu (krok 3), podle nich pak přikládáš vložku. Rýha bude na vnitřní straně ohybu.</p>
+      <div class="fig"><div data-fig="crease"></div></div>
+      <p class="cap">Řez napříč rýhou, 1:1. Hloubku rýhy specifikace neuvádí, jen „vtlačit, neřezat“. Tvar vtlačení je naznačený.</p>
+    </article>
+    <article class="step">
+      <header><span class="n">2</span><h3>Navlhčit jen pás ohybu</h3></header>
+      <p>Houbičkou navlhči jen pás <b class="num">v 58,21–66,21</b> (<span class="num">8</span>, rýha uprostřed), ne celý díl. Počkej <span class="num">5–10</span> min, až se barva usně skoro vrátí k suché, a teprve potom ohýbej (9.1).</p>
+      <div class="fig"><div data-fig="damp"></div></div>
+      <p class="cap">Řez, 1:1. Modře je vlhčený pás.</p>
+    </article>
+    <article class="step">
+      <header><span class="n">3</span><h3>Vložka 1,5 ze starých karet, hranou ≈ 2 za rýhu</h3></header>
+      <p>Vložka: <b>2 staré karty na sobě</b> (<span class="num">1,52</span>). Karta je dlouhá jen <span class="num">85,6</span> a díl má <span class="num">101</span>, proto dej <b>dvě dvojice vedle sebe a slep je páskou</b>. Stačí i jakýkoli rovný pruh tloušťky <span class="num">1,5</span>. Vložka má být aspoň <span class="num">111 × 25</span>, tedy o <span class="num">5</span> delší na každé straně, aby měl ohyb oporu po celé šířce. B polož lícem na stůl a vložku přilož na její rub, srovnanou podle rysek na bocích. Hranu dej asi <b class="num">2</b> za rýhu směrem k B (v <span class="num">64,18</span>), ne přímo na rýhu (tip nahoře). Pak střed ohybu padne na rýhu.</p>
+      <div class="fig"><div data-fig="insert"></div></div>
+      <p class="cap">Řez, 1:1. Plně: správně, hrana o 1,96 dál. Červeně čárkovaně: hrana přímo na rýze, takhle ne.</p>
+    </article>
+  </div>
+
+  <div class="card">
+    <h3>4. Přehnout F lícem ven přes hranu vložky</h3>
+    <p>F přehni nahoru přes vložku. Useň obejme hranu vložky a vnitřní poloměr vyjde z poloviny její tloušťky: <b class="num">r = 0,75</b>. Střednice má poloměr <span class="num">1,25</span> a oblouk po ní je <span class="num">3,93</span> dlouhý. Líc jde ven, rub dovnitř.</p>
+    <div class="inter">
+      <figure style="margin:0"><div class="fig"><div data-fig="fold"></div></div><figcaption>Řez ohybem, 1:1. F se otáčí, B leží na stole.</figcaption></figure>
+      <div class="ctrl">
+        <figure style="margin:0"><div class="fig"><div data-fig="foldZoom"></div></div><figcaption>Detail kolem hrany vložky, 1:1. Tloušťka usně 1,0 i vložky 1,5 v jednom měřítku.</figcaption></figure>
+        <label class="row" for="phi">Úhel ohybu <span class="val" id="phiV"></span>
+          <input id="phi" type="range" min="0" max="180" step="1" value="180"></label>
+        <div class="btnrow"><button type="button" data-phi="0">0°</button><button type="button" data-phi="90">90°</button><button type="button" data-phi="180">180°</button></div>
+        <div class="radio" role="radiogroup" aria-label="Poloha hrany vložky">
+          <label><input type="radio" name="edge" value="model" checked> hrana vložky o 1,96 dál, v v 64,18 (správně)</label>
+          <label><input type="radio" name="edge" value="spec"> hrana vložky přímo na rýze (střed ohybu se posune)</label>
+        </div>
+        <div class="readout" id="foldOut" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="steps">
+    <article class="step">
+      <header><span class="n">5</span><h3>Fólie, prkénka, svěrky, přes noc</h3></header>
+      <p>Mezi vlhký líc a prkénka dej potravinovou fólii, aby na líci nezůstaly otisky a skvrny od dřeva. Spodních <b class="num">20</b> stáhni mezi dvěma hladkými prkénky svěrkami. Bez svěrek je zatiž knihami nebo závažím, nebo je stáhni silnými gumičkami či kancelářskými klipy (tlak ověř na odřezku). Nech schnout přes noc, <b class="num">12–24 h</b>, ne u topení <span class="tag ver">ověřit</span>.</p>
+      <div class="fig"><div data-fig="clamp"></div></div>
+      <p class="cap">Řez, 1:1 kromě fólie (její tloušťka je zvětšená). Tloušťku prkének specifikace neurčuje.</p>
+    </article>
+    <article class="step">
+      <header><span class="n">6</span><h3>Vložku vysunout bokem</h3></header>
+      <p>Po vyschnutí vložku vysuň bokem, uchopíš ji za přesah na boku. Boky ještě nejsou slepené, takže F jde potom odklopit do ~90°: na lepení G1/G2 leží F rubem nahoru na desce a B stojí nahoru (krok 12), na šití S6 leží F lícem nahoru a B visí přes hranu stolu (krok 13). Když ohyb trochu odpruží, udrží ho lepení G4 a švy S4/S5. To samo není důvod k záloze (kolo 8). Jestli G4 u ohybu drží, ukáže zkušební kus (P2-2).</p>
+      <div class="fig"><div data-fig="slide"></div></div>
+      <p class="cap">Pohled shora na přehnutou F, 1:1. Vložka (tady nejmenších 111) je vidět jen v přesazích.</p>
+    </article>
+  </div>
+
+  <div class="tools">
+    <div class="card">
+      <h3>Nářadí a pomůcky – ohyb dna</h3>
+      <ul>
+        <li>tupý hrot na rýhu (třeba vypsaná propiska, ověřit na odřezku), ocelové pravítko, tužka na rysky</li>
+        <li>houbička a voda</li>
+        <li>vložka tloušťky <span class="num">1,5</span>, aspoň <span class="num">111 × 25</span>: 2 staré karty na sobě (<span class="num">1,52</span>), dvě dvojice vedle sebe slepené páskou, nebo jakýkoli rovný pruh <span class="num">1,5</span></li>
+        <li>lepicí páska</li>
+        <li>potravinová fólie</li>
+        <li>2 hladká prkénka a svěrky (náhrada: knihy nebo závaží, silné gumičky, kancelářské klipy)</li>
+        <li>levná digitální posuvka (tloušťka usně a vložky)</li>
+      </ul>
+    </div>
+    <div class="card alert amber">
+      <h3>Když se nepovede</h3>
+      <ul>
+        <li><b>Líc v ohybu popraská.</b> To se pozná už na odřezku ve <b>V12</b> (krok 0(d), před řezem P1): namočit, přehnout lícem ven přes vložku 1,5, přes noc mezi prkénky, pak prohlédnout lupou nebo fotkou makrem. Dělá se na dvou odřezcích, z levné i z finální usně, a rozhoduje horší výsledek.</li>
+        <li>Popraská → <b>přednostně záloha A</b>: celý P1 z koupené usně 0,8 (<span class="mono">--p1 0.8</span>), nic se neztenčuje, V12 zopakovat na odřezku 0,8. Čísla A: P1 <span class="num">230,23</span>, rýha v <span class="num">61,76</span>, pás ohybu <span class="num">57,76–65,76</span>, H <span class="num">82,8</span>. Vložka zůstává stejná.</li>
+        <li>Záloha B (ztenčit pás ohybu na 0,6, <span class="mono">--skive-fold 0.6</span>, pás v <span class="num">57,80–65,80</span>) jen když useň 0,8 nesehnáš nebo popraská i ona. Když praská i záloha: zkusit jinou useň, neřezat.</li>
+        <li><b>Ohyb po vyschnutí odpruží:</b> to není důvod k záloze, jen to zapiš.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="zaves" aria-labelledby="h-zaves">
+  <h2 id="h-zaves">2. Závěs: zavřít přes obsah a nechat přes noc pod knihou</h2>
+  <p class="meta">Krok 16, na noc po 4. večeru. Peněženka je sešitá a boky zarovnané (krok 15), magnet ještě není. Závěs je plný 1,0 bez ztenčení, bez stehů a lepidla, líc ven. Závěs se vytvaruje jednoduše přes běžný obsah, přes noc pod knihou, a dál se zajezdí používáním. Otevřené víčko samo nestojí, přidržíš ho palcem.</p>
+  <div class="card anim" id="anim-zaves" aria-labelledby="h-azaves">
+    <h3 id="h-azaves">Animace: závěs krok za krokem</h3>
+    <div class="astage hz">
+      <figure class="amain"><div class="fig"><div data-fig="aHinge"></div></div><figcaption>Řez ve středu šířky, 1:1: B, D2, D1, obsah a F. Obsah je zjednodušený (bankovky jsou ve skutečnosti mezi D1 a D2). Víčko nad y 122 je oříznuté. Prsty, houbička a kniha jsou schematické.</figcaption></figure>
+      <figure class="aside"><div class="fig"><div data-fig="aHingeFront"></div></div><figcaption>Pohled zepředu, 1:1. Karty jsou vpředu před D1, bankovky za D1.</figcaption></figure>
+    </div>
+    <div class="aprog" aria-hidden="true"><i></i></div>
+    <p class="acap" aria-live="polite"></p>
+    <div class="btnrow abtn">
+      <button type="button" data-a="restart" aria-label="Přehrát od začátku">↺ Znovu</button>
+      <button type="button" data-a="prev" aria-label="Předchozí krok">◀ Zpět</button>
+      <button type="button" data-a="play">▶ Přehrát</button>
+      <button type="button" data-a="next" aria-label="Další krok">Další ▶</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Řez horní částí: zavřené ↔ otevřené víčko</h3>
+    <p>Vrstvy zepředu dozadu: víčko, F (jen do y 62), obsah, D1, D2, B. S typickým obsahem (2–3 karty a pár bankovek) obepne zavřený plochý vrch asi <span class="num">3,42</span> jako ve stavu B. Oba přehyby tvaruješ prsty a knihou, žádná forma uvnitř není.</p>
+    <div class="inter">
+      <figure style="margin:0"><div class="fig"><div data-fig="hinge"></div></div><figcaption>Řez ve středu šířky, 1:1. Víčko nad y 122 a pod y 57 je oříznuté.</figcaption></figure>
+      <div class="ctrl">
+        <figure style="margin:0"><div class="fig"><div data-fig="hingeZoom"></div></div><figcaption>Detail obou přehybů, 1:1.</figcaption></figure>
+        <label class="row" for="rot">Víčko: zavřené ↔ otevřené <span class="val" id="rotV"></span>
+          <input id="rot" type="range" min="0" max="100" step="1" value="0"></label>
+        <div class="btnrow"><button type="button" data-rot="0">zavřené</button><button type="button" data-rot="50">napůl</button><button type="button" data-rot="100">otevřené</button></div>
+        <div class="readout" id="hingeOut" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="steps">
+    <article class="step">
+      <header><span class="n">1</span><h3>Dát dovnitř běžný obsah</h3></header>
+      <p>Vlož to, co v peněžence budeš nosit: <b>2–3 karty</b> do přední kapsy před D1 a <b>pár bankovek</b> napůl mezi D1 a D2. Závěs se pak vytvaruje přesně na tuhle tloušťku.</p>
+    </article>
+    <article class="step">
+      <header><span class="n">2</span><h3>Lehce navlhčit jen pás závěsu</h3></header>
+      <p>Houbičkou <b>lehce</b> navlhči jen pás <b class="num">v 142,99–150,99</b> (8), nenamáčej celé. Na hotovém kusu začíná vzadu v y <span class="num">80,57</span> (kde končí lepení G3), vede přes horní hranu a končí <span class="num">0,93</span> za předním přehybem. Počkej <span class="num">5–10</span> min, až se barva skoro vrátí k suché.</p>
+      <div class="fig"><div data-fig="hingeDamp"></div></div>
+      <p class="cap">Detail zavřeného závěsu, 1:1. Modrý je vlhčený pás, černé čárky jsou rysky přehybů v 145,10 a 148,88.</p>
+    </article>
+    <article class="step">
+      <header><span class="n">3</span><h3>Zavřít víčko a přitisknout přehyby</h3></header>
+      <p>Víčko zavři přes obsah. Prsty jemně přitiskni oba přehyby podle rysek, vzadu v <span class="num">145,10</span> a vpředu v <span class="num">148,88</span>, aby plochý vrch ležel rovně na obsahu.</p>
+    </article>
+    <article class="step">
+      <header><span class="n">4</span><h3>Přes noc pod knihou</h3></header>
+      <p>Zavřenou peněženku polož na stůl a navrch dej knihu. Nech ji tak přes noc, <b class="num">12–24 h</b>, ne u topení <span class="tag ver">ověřit</span>. Obsah zůstává uvnitř.</p>
+    </article>
+    <article class="step">
+      <header><span class="n">5</span><h3>Ráno: otevřít a zavřít</h3></header>
+      <p>Knihu sundej, víčko otevři a zase zavři. Závěs drží tvar se dvěma přehyby a dál <b>se zajezdí používáním</b>.</p>
+    </article>
+    <article class="step">
+      <header><span class="n">6</span><h3>Otevřené víčko přidrží palec</h3></header>
+      <p>Otevřené víčko samo nestojí a padá dozadu. Když vytahuješ bankovky, drží ho palec ruky, která drží peněženku (P0-8). Potom můžeš změřit k (krok 16) a zkontrolovat, že <span class="num">k ≤ 1,24</span>.</p>
+    </article>
+  </div>
+
+  <div class="tools">
+    <div class="card">
+      <h3>Nářadí a pomůcky – závěs</h3>
+      <ul>
+        <li>houbička a voda</li>
+        <li>běžný obsah: 2–3 karty a pár bankovek</li>
+        <li>kniha (rovná a těžší)</li>
+        <li>tužka na rysky přehybů (už z kroku 3)</li>
+      </ul>
+    </div>
+    <div class="card alert amber">
+      <h3>Když se nepovede</h3>
+      <ul>
+        <li><b>Líc závěsu praská.</b> V12 pokrývá i neztenčený závěs (přehyby mají r_i 1,0, ohyb dna 0,75). Neprojde → <b>přednostně záloha A</b>, celý P1 z usně 0,8 (<span class="mono">--p1 0.8</span>): pás závěsu v <span class="num">141,92–149,92</span>, přehyby v <span class="num">144,11 / 147,73</span>.</li>
+        <li>O výdrži rozhoduje <b>zkušební kus</b> (po běžném používání bez prasklin), únavu V12 neukáže. Až když závěs neprojde ani v záloze A, zbývá záloha B: ztenčit pás závěsu na 0,6 (<span class="mono">--skive-hinge 0.6</span>, plné ztenčení v <span class="num">142,68–157,80</span>, náběh 2 vně).</li>
+        <li><b>Víčko se samo otvírá</b> nebo nesedí rovně: zopakuj navlhčení a noc pod knihou. Magnet ho pak musí udržet zavřené proti pružení závěsu (zkušební kus).</li>
+        <li><b>k > 1,24</b> po tvarování: nepokračovat, přepočítat (12.3).</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Zdroje: <span class="mono">docs/zadani/penezenka-vicko.md</span> (5.8, kroky 0, 3, 4, 11, 15, 16 oddílu 9, 9.1, 10, V12, P0-8), <span class="mono">src/lib/geometry/lid-wallet.ts</span> (<span class="mono">lidWalletLayout()</span>: <span class="mono">v</span>, <span class="mono">bottomSpacer</span>). Postup závěsu je zjednodušený podle rozhodnutí autora: přes běžný obsah, přes noc pod knihou.</p>
+</footer>
+</div>
+
+<script>
+const M = {"W":101,"H":83.5,"P1":231.659,"v":{"frontEnd":60.25,"foldArc":3.927,"foldAxis":62.213,"backStart":64.177,"hingeStart":143.927,"hingeLenB":6.132,"hingeEnd":150.059,"rearCrease":145.105,"frontCrease":148.881,"bandEnd":174.999,"tip":226.659,"cutEnd":231.659,"foldBand":[58.213,66.213],"hingeBand":[142.993,150.993]},"cardFloorY":26,"ceilingY":82.5,"hingeStartY":81.5,"frontTopY":62,"d1TopY":81.5,"d2TopY":82,"topGlueY":80.56619449019234,"flatFromY":1.75,"s6Y":25,"spacer":1.5,"t":1,"tD":0.6,"ri":1,"rm":1.5,"TA":1.2,"TB":3.42,"PB":6.132,"handle":15,"clear":1,"overhang":5,"jig":{"thicknessMm":2.22,"thicknessRangeMm":[2,2.5],"widthMm":89,"heightMm":71.5,"topRadiusMm":1},"spacerJig":{"widthMm":111,"depthMm":25},"support":{"widthMm":111,"heightMm":83.5,"angleDeg":30,"depthMm":48.209},"cardPocketX":[5,96],"notch":{"x0":45.5,"x1":55.5,"bottomY":50},"band":{"A":53.883,"B":56.56,"C":62.5},"tongueX":[40.5,60.5],"A":{"P1":230.231,"H":82.8,"foldAxis":61.756,"foldBand":[57.756,65.756],"hingeBand":[141.922,149.922],"rear":144.112,"front":147.732}};
+const PI = Math.PI;
+const SM = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+const f = (v, d = 1) => (Math.round(v * 10 ** d) / 10 ** d).toFixed(d).replace('.', ',').replace('-', '−');
+const r3 = (v) => Math.round(v * 1000) / 1000;
+const P = (x, y) => `${r3(x)},${r3(-y)}`;
+const D = (pts, close) => 'M' + pts.map((p) => P(p[0], p[1])).join('L') + (close ? 'Z' : '');
+let FS = 1, CUR = 'x';
+function svgWrap(vb, inner, label, extra = '') {
+  const [x0, y0, x1, y1] = vb;
+  const ps = r3(FS * 0.55);
+  const defs = `<defs><pattern id="wp-${CUR}" patternUnits="userSpaceOnUse" width="${ps}" height="${ps}" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="${ps}" class="wet"/></pattern></defs>`;
+  return `<svg viewBox="${x0} ${-y1} ${x1 - x0} ${y1 - y0}" role="img" aria-label="${label}" ${extra}>${defs}<g stroke-width="${r3(FS * 0.32)}">${inner}</g></svg>`;
+}
+function T(x, y, s, o = {}) {
+  const fs = (o.k || 1) * FS;
+  return `<text x="${r3(x)}" y="${r3(-y)}" font-size="${r3(fs)}" stroke-width="${r3(fs * 0.3)}" text-anchor="${o.a || 'start'}" dominant-baseline="${o.bl || 'alphabetic'}" class="${o.c || ''}">${s}</text>`;
+}
+const Ln = (x1, y1, x2, y2, c = 'lead') => `<line x1="${r3(x1)}" y1="${r3(-y1)}" x2="${r3(x2)}" y2="${r3(-y2)}" class="${c}"/>`;
+const Rect = (x0, y0, x1, y1, c, extra = '') => `<rect x="${r3(Math.min(x0, x1))}" y="${r3(-Math.max(y0, y1))}" width="${r3(Math.abs(x1 - x0))}" height="${r3(Math.abs(y1 - y0))}" class="${c}" ${extra}/>`;
+const Poly = (pts, c, extra = '') => `<path d="${D(pts, true)}" class="${c}" ${extra}/>`;
+const PathO = (pts, c) => `<path d="${D(pts)}" class="${c}"/>`;
+function dimV(x, y1, y2, label, side = 1, o = {}) {
+  const t = FS * 0.35;
+  let s = Ln(x, y1, x, y2, 'dim') + Ln(x - t, y1, x + t, y1, 'dim') + Ln(x - t, y2, x + t, y2, 'dim');
+  if (label) s += T(x + side * FS * 0.35, (y1 + y2) / 2, label, { a: side > 0 ? 'start' : 'end', bl: 'middle', c: o.c, k: o.k });
+  return s;
+}
+function dimH(y, x1, x2, label, below = true, o = {}) {
+  const t = FS * 0.35;
+  let s = Ln(x1, y, x2, y, 'dim') + Ln(x1, y - t, x1, y + t, 'dim') + Ln(x2, y - t, x2, y + t, 'dim');
+  if (label) s += T(o.tx ?? (x1 + x2) / 2, below ? y - FS * 1.1 : y + FS * 0.45, label, { a: o.a || 'middle', c: o.c, k: o.k });
+  return s;
+}
+function arcPts(cx, cy, r, a0, a1, n = 24) { const out = []; for (let i = 0; i <= n; i++) { const a = a0 + (a1 - a0) * i / n; out.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]); } return out; }
+function hatch(x0, y0, x1, y1, step) {
+  let s = ''; for (let x = x0 - (y1 - y0); x < x1; x += step) { const xa = Math.max(x, x0), ya = y1 - (xa - x); const xb = Math.min(x + (y1 - y0), x1), yb = y1 - (xb - x); if (xb > xa) s += Ln(xa, ya, xb, yb, 'lead'); }
+  return Rect(x0, y0, x1, y1, 'table') + s;
+}
+/* useň z bodů střednice {x,y,nx,ny,s}; n míří na líc */
+function leather(pts, t, o = {}) {
+  const g = pts.map((p) => [p.x + p.nx * t / 2, p.y + p.ny * t / 2]);
+  const fl = pts.map((p) => [p.x - p.nx * t / 2, p.y - p.ny * t / 2]);
+  let out = Poly(g.concat(fl.slice().reverse()), 'kz', o.id ? `id="${o.id}"` : '');
+  if (o.wet) {
+    const idx = []; pts.forEach((p, i) => { if (p.s >= o.wet[0] && p.s <= o.wet[1]) idx.push(i); });
+    if (idx.length > 1) { const a = idx[0], b = idx[idx.length - 1]; out += Poly(g.slice(a, b + 1).concat(fl.slice(a, b + 1).reverse()), '', `fill="url(#wp-${CUR})"`); }
+  }
+  out += PathO(g, 'lic') + PathO(fl, 'rub');
+  return out;
+}
+function nearest(pts, s) { let bi = 0, bd = 1e9; pts.forEach((p, i) => { const d = Math.abs(p.s - s); if (d < bd) { bd = d; bi = i; } }); return bi; }
+function notchAt(pts, s, t, size = 0.22) {
+  const i = nearest(pts, s), p = pts[i], q = pts[Math.min(pts.length - 1, i + 1)], o = pts[Math.max(0, i - 1)];
+  let tx = q.x - o.x, ty = q.y - o.y; const l = Math.hypot(tx, ty) || 1; tx /= l; ty /= l;
+  const fx = p.x - p.nx * t / 2, fy = p.y - p.ny * t / 2;
+  return Poly([[fx - tx * size, fy - ty * size], [fx + tx * size, fy + ty * size], [fx + p.nx * size * 1.1, fy + p.ny * size * 1.1]], 'notch');
+}
+function markAt(pts, s, t) { const p = pts[nearest(pts, s)]; return Ln(p.x + p.nx * t / 2, p.y + p.ny * t / 2, p.x - p.nx * t / 2, p.y - p.ny * t / 2, 'mark'); }
+
+/* ---------- ohyb dna: B leží na stole (líc dole), vložka na rubu B s hranou v x = 0, F se přehýbá ---------- */
+const RF = M.spacer / 2 + M.t / 2;          // poloměr střednice 1,25
+const RI_F = M.spacer / 2;                  // vnitřní poloměr 0,75
+const HALF = PI * RF / 2;                   // polovina oblouku 1,963
+function foldPts(phi, sMin, sMax, ds = 0.04) {
+  const C = [0, M.spacer / 2 + M.t], out = [];
+  for (let s = sMin; s <= sMax + 1e-9; s += ds) {
+    let x, y, nx, ny;
+    if (s <= 0) { x = -s; y = M.t / 2; nx = 0; ny = -1; }
+    else if (s <= phi * RF) { const ps = s / RF; nx = -Math.sin(ps); ny = -Math.cos(ps); x = C[0] + RF * nx; y = C[1] + RF * ny; }
+    else { const ax = C[0] - RF * Math.sin(phi), ay = C[1] - RF * Math.cos(phi), u = s - phi * RF; x = ax - Math.cos(phi) * u; y = ay + Math.sin(phi) * u; nx = -Math.sin(phi); ny = -Math.cos(phi); }
+    out.push({ s, x, y, nx, ny });
+  }
+  return out;
+}
+const st = { phi: PI, edge: 'model', rot: 0 };
+const vEdge = () => (st.edge === 'spec' ? M.v.foldAxis : M.v.backStart);   // v na hraně vložky
+const sOfV = (v) => vEdge() - v;                                            // s roste k F
+
+function figFold() {
+  const vb = [-8, -4.2, 40, 27];
+  const sMax = st.phi * RF + 26.2;
+  const pts = foldPts(st.phi, -26.2, sMax);
+  const wet = [sOfV(M.v.foldBand[1]), sOfV(M.v.foldBand[0])];
+  let s = hatch(-8, -1.2, 40, 0, 1.4) + Ln(-8, 0, 40, 0, 'tline');
+  s += Rect(0, M.t, M.spacerJig.depthMm, M.t + M.spacer, 'jig', 'id="insMain"');
+  s += leather(pts, M.t, { wet, id: 'leatherMain' }) + notchAt(pts, sOfV(M.v.foldAxis), M.t, 0.45);
+  s += T(12, -3.1, 'B leží lícem na stole', { a: 'middle', c: 'm' });
+  s += Ln(25, 1.75, 26.9, 1.75) + T(27.1, 1.75, 'vložka 1,5', { bl: 'middle' });
+  const sl = 5 + 11 * (st.phi / PI), p = pts[nearest(pts, sl)];
+  const outer = st.phi > 0.7 ? 1 : -1, off = 2.6;
+  const lx = p.x + p.nx * off * outer, ly = p.y + p.ny * off * outer;
+  s += T(lx, ly, st.phi > 2.6 ? 'F (líc nahoře)' : 'F', { a: Math.abs(p.nx) > 0.6 ? (p.nx * outer < 0 ? 'end' : 'start') : 'middle', bl: 'middle' });
+  return svgWrap(vb, s, 'Řez ohybem dna s vložkou');
+}
+function figFoldZoom() {
+  const vb = [-3.8, -1.2, 3.4, 4.4];
+  const pts = foldPts(st.phi, -4, st.phi * RF + 6, 0.02);
+  const wet = [sOfV(M.v.foldBand[1]), sOfV(M.v.foldBand[0])];
+  let s = hatch(-3.8, -1.2, 3.4, 0, 0.3) + Ln(-3.8, 0, 3.4, 0, 'tline');
+  s += Rect(0, M.t, 3.6, M.t + M.spacer, 'jig', 'id="insZoom"');
+  s += leather(pts, M.t, { wet }) + notchAt(pts, sOfV(M.v.foldAxis), M.t, 0.14);
+  const C = [0, M.spacer / 2 + M.t];
+  s += Ln(C[0] - 0.08, C[1], C[0] + 0.08, C[1], 'dim') + Ln(C[0], C[1] - 0.08, C[0], C[1] + 0.08, 'dim');
+  if (st.phi > 2.3) { const a = PI * 0.8; s += Ln(C[0], C[1], C[0] + RI_F * Math.cos(a), C[1] + RI_F * Math.sin(a), 'dim'); s += T(-0.62, 2.75, 'r 0,75', { a: 'end', bl: 'middle' }); }
+  s += dimV(2.95, 0, M.t, '1,0', -1) + dimV(2.2, M.t, M.t + M.spacer, '1,5', -1);
+  const a = st.phi / 2, rr = RF + M.t / 2 + 0.28;
+  const lx = C[0] - rr * Math.sin(a), ly = C[1] - rr * Math.cos(a);
+  s += T(lx, ly, 'líc ven', { a: Math.sin(a) > 0.35 ? 'end' : 'middle', bl: Math.cos(a) > 0.5 ? 'hanging' : 'middle' });
+  return svgWrap(vb, s, 'Detail ohybu dna u hrany vložky');
+}
+function foldReadout() {
+  const deg = Math.round(st.phi * 180 / PI);
+  const apexV = vEdge() - HALF;
+  const shift = M.v.foldAxis - apexV;
+  const html = [`<div><b>Úhel ${deg}°</b>, vnitřní poloměr ${f(RI_F, 2)}, oblouk po střednici ${f(PI * RF, 2)}.</div>`];
+  html.push(`<div>Hrana vložky v v ${f(vEdge(), 2)}. Střed ohybu po přehnutí v v ${f(apexV, 2)}, rýha v ${f(M.v.foldAxis, 2)}.</div>`);
+  if (Math.abs(shift) > 0.01) html.push(`<div style="color:var(--warn)"><b>Rýha skončí ${f(shift, 2)} od středu ohybu</b>, u spodní hrany vložky. F vyjde o ${f(shift, 2)} nižší, B o ${f(shift, 2)} vyšší (ověřit na odřezku V12).</div>`);
+  else html.push(`<div style="color:var(--ok)"><b>Rýha skončí uprostřed ohybu</b>, jak počítá model (F do v 60,25, B od v 64,18).</div>`);
+  return html.join('');
+}
+
+function figCrease() {
+  const vb = [-14, -3.4, 14, 9];
+  let s = Rect(-14, -3, 14, 0, 'table') + Ln(-14, 0, 14, 0, 'tline');
+  const top = M.t, dep = 0.22, w = 0.35;
+  const body = [[-14, 0], [14, 0], [14, top], [w, top], [0, top - dep], [-w, top], [-14, top]];
+  s += Poly(body, 'kz') + PathO([[-14, 0], [14, 0]], 'lic') + PathO([[-14, top], [-w, top], [0, top - dep], [w, top], [14, top]], 'rub');
+  s += Poly([[-0.12, top - dep + 0.02], [0.12, top - dep + 0.02], [0, top - dep - 0.16]], 'notch');
+  s += Rect(0.62, top, 14, top + 1.1, 'steel');
+  s += `<circle cx="0.12" cy="${r3(-(top - dep + 0.5))}" r="0.5" class="pen"/>`;
+  s += Poly([[-0.35, top - dep + 0.85], [0.6, top - dep + 0.85], [1.4, 4.6], [1.4, 9], [-1.2, 9], [-1.2, 4.6]], 'pen');
+  s += T(-13.6, 7.6, 'tupý hrot', {}) + T(-13.6, 6.1, '(vypsaná propiska)', { c: 'm' }) + Ln(-8.4, 7.9, -1.3, 7.4);
+  s += T(3, 5.6, 'rýha: vtlačit,', {}) + T(3, 4.3, 'nic neřezat', {}) + Ln(2.9, 4.1, 0.25, 0.9);
+  s += T(7.3, 2.75, 'ocelové pravítko', { a: 'middle' });
+  s += T(-13.6, 2.9, 'rub nahoře', {}) + Ln(-9, 2.4, -8, 1.05);
+  s += T(-13.6, -1.75, 'líc dole na podložce', { bl: 'middle' });
+  s += T(13.6, -1.75, `osa v ${f(M.v.foldAxis, 2)}`, { a: 'end', bl: 'middle', c: 'm' });
+  return svgWrap(vb, s, 'Vytlačení rýhy na rubu');
+}
+function figDamp() {
+  const vb = [-15, -3.6, 15, 9.2];
+  const pts = foldPts(0, -15, 15, 0.1);
+  let s = Rect(-15, -1.2, 15, 0, 'table') + Ln(-15, 0, 15, 0, 'tline');
+  s += leather(pts, M.t, { wet: [-4, 4] }) + notchAt(pts, 0, M.t, 0.3);
+  s += `<rect x="-5" y="${r3(-6.6)}" width="10" height="3.6" rx="0.8" class="sponge"/>`;
+  [[-3, 2.4], [0, 2.1], [2.8, 2.5], [-1.6, 1.7], [1.5, 1.8]].forEach(([x, y]) => { s += `<ellipse cx="${x}" cy="${-y}" rx="0.2" ry="0.3" class="water"/>`; });
+  s += T(6, 5.3, 'houbička', {}) + Ln(5.8, 5.2, 5, 5);
+  s += dimH(-2.2, -4, 4, '8 = v 58,21–66,21', true);
+  s += T(-14.6, 3.2, 'suché', { c: 'm' }) + T(14.6, 3.2, 'suché', { a: 'end', c: 'm' });
+  s += T(-10, 1.55, 'F', { a: 'middle' }) + T(10, 1.55, 'B', { a: 'middle' });
+  return svgWrap(vb, s, 'Vlhčení pásu ohybu');
+}
+function figInsert() {
+  const vb = [-8, -3, 12, 7.2];
+  const pts = foldPts(0, -12, 8, 0.1);
+  let s = Rect(-8, -1, 12, 0, 'table') + Ln(-8, 0, 12, 0, 'tline');
+  s += leather(pts, M.t) + notchAt(pts, 0, M.t, 0.28);
+  s += Rect(HALF, M.t, 12, M.t + M.spacer, 'jig');
+  s += Rect(0, M.t, HALF, M.t + M.spacer, 'bad');
+  s += T(-7.7, 6.1, 'ne: hrana přímo na rýze', { c: 'b' }) + Ln(-1.2, 5.75, 0, M.t + M.spacer + 0.1, 'badl');
+  s += T(2.4, 4.4, 'správně: o 1,96 dál (v 64,18)', {}) + Ln(2.35, 4.15, HALF, M.t + M.spacer + 0.1);
+  s += dimH(-1.7, 0, HALF, '1,96', true, { tx: HALF + 0.3, a: 'start' });
+  s += T(-5, -2.3, 'F', { a: 'middle' }) + T(8, -2.3, 'B', { a: 'middle' });
+  return svgWrap(vb, s, 'Přiložení vložky k rýze');
+}
+function figClamp() {
+  const vb = [-11, -12.2, 34, 14.6];
+  const pts = foldPts(PI, -27, PI * RF + 27, 0.04);
+  const bx1 = -M.flatFromY + 20;
+  let s = Ln(-11, -7.2, 34, -7.2, 'tline');
+  s += Rect(-2.6, -7.2, bx1, -0.2, 'wood') + Rect(-2.6, 3.7, bx1, 10.7, 'wood');
+  s += Rect(0, M.t, M.spacerJig.depthMm, M.t + M.spacer, 'jig');
+  s += leather(pts, M.t);
+  const foil = [[27, -0.14], [0, -0.14]].concat(arcPts(0, 1.75, 1.89, -PI / 2, -3 * PI / 2, 30)).concat([[27, 3.64]]);
+  s += PathO(foil, 'foil');
+  s += T(-10.6, 1.75, 'fólie', { bl: 'middle' }) + Ln(-7, 1.75, -1.95, 1.75);
+  s += T(8, -3.7, 'prkénko', { a: 'middle', bl: 'middle' }) + T(8, 7.2, 'prkénko', { a: 'middle', bl: 'middle' });
+  s += Ln(27.4, 1.75, 28, 1.75) + T(28.1, 1.75, 'vložka', { bl: 'middle' });
+  [3, 13].forEach((x) => { s += Poly([[x - 1.1, 13.4], [x + 1.1, 13.4], [x + 1.1, 12.4], [x + 2, 12.4], [x, 10.9], [x - 2, 12.4], [x - 1.1, 12.4]], 'arrow'); });
+  s += T(15.6, 12.4, 'svěrky', { bl: 'middle' });
+  s += dimH(-8.7, -M.flatFromY, bx1, 'spodních 20 stáhnout', true);
+  s += T(33.6, 5.4, 'F líc nahoře', { a: 'end', c: 'm' }) + T(33.6, -2.5, 'B líc dole', { a: 'end', c: 'm' });
+  return svgWrap(vb, s, 'Stažení ohybu mezi prkénky');
+}
+function figSlide() {
+  const vb = [-14, -12, 122, 42];
+  let s = Rect(0, 0, 101, 36, 'kzp');
+  s += Rect(-M.overhang, 0, 0, M.spacerJig.depthMm, 'jig') + Rect(101, 0, 101 + M.overhang, M.spacerJig.depthMm, 'jig');
+  s += Rect(0, 0, 101, M.spacerJig.depthMm, 'jigh');
+  s += Ln(0, 0, 101, 0, 'lic');
+  s += PathO([[108, 12.5], [118, 12.5]], 'arrowl') + Poly([[118, 14.3], [121.5, 12.5], [118, 10.7]], 'arrow');
+  s += T(111, 17.4, 'vysunout', { a: 'middle' });
+  s += dimH(-4.5, -M.overhang, 101 + M.overhang, 'vložka aspoň 111', true);
+  s += dimH(39, 0, 101, '101 díl', false);
+  s += T(50.5, 30, 'F lícem nahoru (pokračuje)', { a: 'middle', c: 'm' });
+  s += T(50.5, 12.5, 'vložka pod F', { a: 'middle', c: 'm', bl: 'middle' });
+  s += T(-2.5, 29, '5', { a: 'middle' }) + T(103.5, 29, '5', { a: 'middle' });
+  return svgWrap(vb, s, 'Vysunutí vložky bokem');
+}
+
+/* ---------- přehled ---------- */
+function figStrip() {
+  const vb = [-6, -26, 240, 116];
+  const v = M.v, W = M.W;
+  let s = Rect(0, 0, v.bandEnd, W, 'kzp');
+  const tw = M.tongueX[1] - M.tongueX[0], ty0 = M.tongueX[0], rr = tw / 2;
+  const tong = [[v.bandEnd, ty0], [v.cutEnd - rr, ty0]].concat(arcPts(v.cutEnd - rr, ty0 + rr, rr, -PI / 2, PI / 2, 20)).concat([[v.bandEnd, ty0 + tw]]);
+  s += Poly(tong, 'kzp');
+  s += Rect(v.foldBand[0], 0, v.foldBand[1], W, 'wetp') + Rect(v.hingeBand[0], 0, v.hingeBand[1], W, 'wetp');
+  [v.frontEnd, v.backStart, v.hingeStart, v.hingeEnd].forEach((x) => { s += Ln(x, 0, x, W, 'sec'); });
+  s += Ln(v.foldAxis, -2, v.foldAxis, W + 2, 'creaseL') + Ln(v.rearCrease, -2, v.rearCrease, W + 2, 'creaseL') + Ln(v.frontCrease, -2, v.frontCrease, W + 2, 'creaseL');
+  s += T(30, 50.5, 'F', { a: 'middle', bl: 'middle' }) + T(104, 50.5, 'B', { a: 'middle', bl: 'middle' });
+  s += T(162.5, 50.5, 'víčko', { a: 'middle', bl: 'middle' }) + T(203, 50.5, 'jazýček', { a: 'middle', bl: 'middle' });
+  s += T(v.foldAxis, W + 5, 'ohyb dna', { a: 'middle' }) + T((v.hingeBand[0] + v.hingeBand[1]) / 2, W + 5, 'závěs', { a: 'middle' });
+  s += Ln(v.foldAxis, -2, v.foldAxis, -5.5) + T(40, -10, `pás ohybu v ${f(v.foldBand[0], 2)}–${f(v.foldBand[1], 2)} · rýha v ${f(v.foldAxis, 2)}`, {});
+  const hm = (v.hingeBand[0] + v.hingeBand[1]) / 2;
+  s += Ln(hm, -2, hm, -15.5) + T(100, -20, `pás závěsu v ${f(v.hingeBand[0], 2)}–${f(v.hingeBand[1], 2)} · přehyby v ${f(v.rearCrease, 2)} a ${f(v.frontCrease, 2)}`, {});
+  s += T(0, -20, 'v 0 = horní hrana F', { c: 'm' }) + T(238, -10, `celkem ${f(M.P1, 2)}`, { a: 'end', c: 'm' });
+  return svgWrap(vb, s, 'Rozvinutý pás P1 s pásy ohybů');
+}
+function hingePts(k, sMin, ds = 0.05, T0 = M.TB, tilt = 1) {
+  const t = M.t, zr = t / 2, zf = -T0 - t / 2, Wd = zr - zf, r = Math.min(M.rm, Wd / 2), fl = Wd - 2 * r, q = PI * r / 2;
+  const aC = (s) => (s < 0 ? 0 : s < q ? s / r : s < q + fl ? PI / 2 : s < 2 * q + fl ? PI / 2 + (s - q - fl) / r : PI);
+  const aO = (s) => (s < 0 ? 0 : -(PI / 6) * tilt * Math.min(1, s / M.PB));
+  const a = (s) => aO(s) + (aC(s) - aO(s)) * k;
+  const L = M.v.cutEnd - M.v.hingeStart, out = [];
+  for (let s = sMin; s < 0; s += 0.5) out.push({ s, x: zr, y: M.hingeStartY + s, a: 0 });
+  let x = zr, y = M.hingeStartY;
+  for (let s = 0; s <= L + 1e-9; s += ds) { out.push({ s, x, y, a: a(s) }); const am = a(s + ds / 2); x += -Math.sin(am) * ds; y += Math.cos(am) * ds; }
+  const off = t * SM(0.85, 1, k), sLid = 2 * q + fl + 1;
+  return out.map((p) => { const nx = Math.cos(p.a), ny = Math.sin(p.a); let X = p.x, Y = p.y; if (p.s > sLid && off > 0) { const dd = off * (1 - SM(M.frontTopY - 0.4, M.frontTopY + 0.4, Y)); X += nx * dd; Y += ny * dd; } return { s: p.s, x: X, y: Y, nx, ny }; });
+}
+function figSide(open) {
+  const K = 1, vb = open ? [-34, -6, 50, 165] : [-34, -6, 26, 94];
+  const pts = hingePts(open ? 0 : 1, -(M.hingeStartY - M.flatFromY), 0.2);
+  const X = (w) => w * K;
+  const fx = -M.TB - M.t / 2, bx = M.t / 2;
+  const cx = (fx + bx) / 2, rr = (bx - fx) / 2;
+  const bottom = arcPts(0, 0, 1, PI, 2 * PI, 30).map(([c, sN]) => [X(cx + rr * c), M.flatFromY + 1.25 * sN]);
+  const Fl = [[X(fx), M.frontTopY], [X(fx), M.flatFromY]].concat(bottom.slice(1)).concat(pts.map((p) => [X(p.x), p.y]));
+  let s = Ln(-46, 0, vb[2], 0, 'tline');
+  s += `<path d="${D(Fl)}" class="thick" stroke-width="${K * M.t}"/>`;
+  s += `<circle cx="${r3(X(cx))}" cy="${-1.2}" r="4.5" class="ring"/>`;
+  const hy = open ? 85 : 82.3, hx = open ? 1.2 : -1.7;
+  s += `<circle cx="${r3(hx)}" cy="${-hy}" r="5" class="ring"/>`;
+  s += T(-33, 12, 'ohyb dna', {}) + Ln(-18, 11, X(cx) - 3.5, 3);
+  s += T(-33, open ? 100 : 92, 'závěs', {}) + Ln(-24, open ? 99 : 91, hx - 4, hy + 2);
+  s += T(-33, 40, 'F', {}) + Ln(-30, 41, X(fx) - 1, 41);
+  s += T(7, 40, 'B', {}) + Ln(6.5, 41, X(bx) + 0.8, 41);
+  if (open) {
+    s += T(20, 128, 'víčko', { a: 'end' });
+    s += thumbOn(pts, 40, 9, 1, 22);
+    s += T(-33, 150, 'samo padá dozadu,', {}) + T(-33, 150 - FS * 1.25, 'přidrž ho palcem', {});
+    const ar = arcPts(0.5, 87, 55, PI / 3 - 0.06, PI / 4 - 0.04, 12);
+    s += PathO(ar.slice(0, -1), 'arrowl') + arrowTo(ar[ar.length - 3][0], ar[ar.length - 3][1], ar[ar.length - 1][0], ar[ar.length - 1][1]);
+    s += T(49, 90, 'palec', { a: 'end' });
+  }
+  else { s += T(-33, 70, 'víčko', {}) + Ln(-25, 71, X(fx - 1) - 1, 71); s += dimV(X(bx) + 10, 0, M.H, '83,5', 1); }
+  return svgWrap(vb, s, open ? 'Bokorys s otevřeným víčkem přidrženým palcem' : 'Bokorys zavřené peněženky');
+}
+
+/* ---------- řez závěsem ---------- */
+const kOf = () => 1 - st.rot / 100;
+function roundTop(w0, w1, yb, yt, r) {
+  return [[w1, yb], [w1, yt - r]].concat(arcPts(w1 - r, yt - r, r, 0, PI / 2, 12)).concat(arcPts(w0 + r, yt - r, r, PI / 2, PI, 12)).concat([[w0, yb]]);
+}
+/* obsah: karty před D1 (2–3 ks), bankovky napůl (ve skutečnosti mezi D1 a D2, tady zjednodušeně těsně před D1) */
+const CARD_TOP = M.cardFloorY + 54, BILL_BOT = 2, BILL_TOP = 76;
+const CX = [-M.TB, -M.TB + 1.8], BX = [-M.TB + 1.9, -2 * M.tD - 0.02];
+function contents(yb, cDy = 0, bDy = 0, cOp = 1, bOp = 1) {
+  let s = '';
+  const b0 = Math.max(yb, BILL_BOT + bDy), b1 = BILL_TOP + bDy;
+  if (bOp > 0.01 && b1 > b0) s += `<g opacity="${r3(bOp)}">${Rect(BX[0], b0, BX[1], b1, 'bills', 'id="aBills"')}</g>`;
+  const c0 = Math.max(yb, M.cardFloorY + cDy), c1 = CARD_TOP + cDy;
+  if (cOp > 0.01 && c1 > c0) s += `<g opacity="${r3(cOp)}">${Rect(CX[0], c0, CX[1], c1, 'cards', 'id="aCards"')}</g>`;
+  return s;
+}
+function hingeLayers(yb, withContents = true) {
+  const tD = M.tD;
+  let s = '';
+  s += Poly(roundTop(-tD, 0, yb, M.d2TopY, 0.25), 'd2');
+  s += Poly(roundTop(-2 * tD, -tD, yb, M.d1TopY, 0.25), 'd1') + Ln(-2 * tD + 0.1, M.d1TopY, -tD - 0.1, M.d1TopY, 'd1e');
+  if (withContents) s += contents(yb);
+  s += Rect(-M.TB - M.t, yb, -M.TB, M.frontTopY, 'kz') + Ln(-M.TB - M.t, yb, -M.TB - M.t, M.frontTopY, 'lic') + Ln(-M.TB, yb, -M.TB, M.frontTopY, 'rub');
+  return s;
+}
+/* palec zezadu na víčku (strana k +x), w šířka prstu */
+function thumbOn(pts, sAt, w, op, len, gap = 0) {
+  if (op <= 0.01) return '';
+  const p = pts[nearest(pts, sAt)], sg = p.nx > 0 ? 1 : -1, nx = sg * p.nx, ny = sg * p.ny;
+  const d = M.t / 2 + w / 2 + 0.05 + gap, tx = p.x + nx * d, ty = p.y + ny * d;
+  return finger(tx, ty, tx + nx * len, ty + ny * len, w, op);
+}
+const hingeWet = () => [M.v.hingeBand[0] - M.v.hingeStart, M.v.hingeBand[1] - M.v.hingeStart];
+function figHinge() {
+  const vb = [-17, 57, 40, 122];
+  const k = kOf(), pts = hingePts(k, -(M.hingeStartY - 57));
+  let s = hingeLayers(57);
+  s += leather(pts, M.t, { wet: hingeWet() });
+  s += markAt(pts, M.v.rearCrease - M.v.hingeStart, M.t) + markAt(pts, M.v.frontCrease - M.v.hingeStart, M.t);
+  s += T(-16.5, 59, 'F', {}) + Ln(-14.5, 59.4, -M.TB - M.t / 2 - (k > 0.9 ? 1.2 : 0), 59.4);
+  s += T(-16.5, 63, 'D1', {}) + Ln(-13.8, 63.4, -0.9, 63.4);
+  s += T(-16.5, 67, 'karty', {}) + Ln(-11.4, 67.4, -2.5, 67.4);
+  s += T(-16.5, 71, 'bankovky', {}) + Ln(-8.6, 71.4, (BX[0] + BX[1]) / 2, 71.4);
+  s += T(5, 66, 'D2', {}) + Ln(4.6, 66.4, -0.3, 66.4);
+  s += T(5, 71, 'B', {}) + Ln(4.6, 71.4, 0.5, 71.4);
+  if (k > 0.5) s += T(-16.5, 75, 'víčko', {}) + Ln(-11.4, 75.4, -M.TB - M.t / 2, 75.4);
+  if (k < 0.12) {
+    const top = pts[nearest(pts, 34)];
+    s += T(top.x - 2.5, top.y, 'otevřené víčko', { a: 'end' });
+    s += thumbOn(pts, 22, 9, 1, 20);
+    s += T(39, 80, 'samo nestojí,', { a: 'end' }) + T(39, 80 - FS * 1.25, 'přidrží ho palec', { a: 'end', c: 'm' });
+  }
+  s += T(39, 58.5, 'řez 1:1', { a: 'end', c: 'm' });
+  return svgWrap(vb, s, 'Řez horní částí peněženky se závěsem');
+}
+function figHingeZoom(forceClosed) {
+  const vb = [-5.6, 77.6, 2.6, 86.4];
+  const k = forceClosed ? 1 : kOf(), pts = hingePts(k, -5, 0.02).filter((p) => p.s < 14);
+  let s = hingeLayers(77.6);
+  s += leather(pts, M.t, { wet: hingeWet() });
+  s += markAt(pts, M.v.rearCrease - M.v.hingeStart, M.t) + markAt(pts, M.v.frontCrease - M.v.hingeStart, M.t);
+  const y0 = 78.35;
+  s += T(0.5, y0, 'B', { a: 'middle', bl: 'middle', k: 0.8 }) + T(-0.3, y0, 'D2', { a: 'middle', bl: 'middle', c: 'on', k: 0.62 }) + T(-0.9, y0, 'D1', { a: 'middle', bl: 'middle', k: 0.62 }) + T((CX[0] + CX[1]) / 2, y0, 'karty', { a: 'middle', bl: 'middle', k: 0.7 });
+  if (k > 0.9) {
+    s += T(-3.92, 79.4, 'víčko', { a: 'middle', bl: 'middle', k: 0.62 });
+    s += T(-5.45, 86.0, 'plochý vrch 1,42', { k: 0.85 }) + Ln(-2.6, 85.7, -1.7, 83.6);
+    s += T(2.5, 86.0, 'přehyb vzadu', { a: 'end', k: 0.85 }) + T(2.5, 85.35, 'v 145,10', { a: 'end', c: 'm', k: 0.85 }) + Ln(0.4, 85.15, -0.1, 83.6);
+    s += T(-5.45, 81.3, 'přehyb vpředu', { k: 0.85 }) + T(-5.45, 80.65, 'v 148,88', { c: 'm', k: 0.85 }) + Ln(-4.8, 81.8, -4.35, 82.3);
+    s += T(-0.25, 82.95, 'rᵢ 1,0', { a: 'middle', bl: 'middle', k: 0.7 });
+    s += T(2.5, 81.0, 'strop 82,5', { a: 'end', c: 'm', k: 0.75 }) + Ln(1.7, 81.25, -1.4, 82.45);
+    s += T(2.5, 84.6, 'H 83,5', { a: 'end', c: 'm', k: 0.75 }) + Ln(1.9, 84.4, 1.2, 83.55);
+  } else if (k < 0.12) {
+    s += T(-5.45, 85.6, 'otevřeno: oba', { k: 0.85 }) + T(-5.45, 84.95, 'přehyby rozevřené', { k: 0.85 });
+    s += T(-5.45, 81.4, 'ústí otevřené', { k: 0.85, c: 'm' });
+  }
+  return svgWrap(vb, s, 'Detail přehybů závěsu');
+}
+function hingeReadout() {
+  const k = kOf();
+  if (k > 0.98) return `<div><b>Zavřené víčko.</b> Plochý vrch obepíná obsah (2–3 karty, pár bankovek), D1 a D2, asi ${f(M.TB, 2)} jako ve stavu B.</div><div>Přehyb vzadu: v = ${f(M.v.rearCrease, 2)}, přehyb vpředu: v = ${f(M.v.frontCrease, 2)}.</div>`;
+  if (k < 0.02) return `<div><b>Otevřené víčko.</b> Oba přehyby se rozevřou a ústí je volné.</div><div>Samo víčko nestojí a padá dozadu. Při vytahování bankovek ho přidrž palcem.</div>`;
+  return `<div><b>Víčko otevřené z ${st.rot} %.</b> Oba přehyby se postupně rozevírají.</div>`;
+}
+
+/* ---------- animace: společné ---------- */
+const AF = { i: 0, u: 0 }, AH = { i: 0, u: 0 };
+const EZ = (u) => SM(0, 1, u);
+function finger(x1, y1, x2, y2, w, op = 1) {
+  if (op <= 0.01) return '';
+  const L = (c, ww) => `<line x1="${r3(x1)}" y1="${r3(-y1)}" x2="${r3(x2)}" y2="${r3(-y2)}" class="${c}" stroke-width="${r3(ww)}"/>`;
+  const l = Math.hypot(x2 - x1, y2 - y1) || 1, dx = (x2 - x1) / l, dy = (y2 - y1) / l;
+  const n1 = [x1 + dx * w * 0.02, y1 + dy * w * 0.02], n2 = [x1 + dx * w * 0.42, y1 + dy * w * 0.42];
+  const nail = `<line x1="${r3(n1[0])}" y1="${r3(-n1[1])}" x2="${r3(n2[0])}" y2="${r3(-n2[1])}" class="nail" stroke-width="${r3(w * 0.5)}"/>`;
+  return `<g opacity="${r3(op)}">${L('finge', w)}${L('fing', w - FS * 0.16)}${nail}</g>`;
+}
+function clockIcon(cx, cy, ang, k = 1.15) {
+  const r = FS * k;
+  return `<circle cx="${r3(cx)}" cy="${r3(-cy)}" r="${r3(r)}" class="clk"/>` + Ln(cx, cy, cx + 0.5 * r * Math.sin(ang / 12), cy + 0.5 * r * Math.cos(ang / 12), 'hand') + Ln(cx, cy, cx + 0.78 * r * Math.sin(ang), cy + 0.78 * r * Math.cos(ang), 'hand');
+}
+function moonIcon(cx, cy, k = 1.1) {
+  const r = FS * k, X = r3(cx), Y = r3(-cy);
+  return `<path d="M${X},${r3(Y - r)} A${r3(r)},${r3(r)} 0 1 0 ${X},${r3(Y + r)} A${r3(r * 0.5)},${r3(r)} 0 1 1 ${X},${r3(Y - r)}Z" class="moon"/>`;
+}
+function checkIcon(cx, cy, op = 1, k = 1.25) {
+  if (op <= 0.01) return '';
+  const r = FS * k * (0.6 + 0.4 * op);
+  return `<g opacity="${r3(op)}"><circle cx="${r3(cx)}" cy="${r3(-cy)}" r="${r3(r)}" class="okc"/>${PathO([[cx - r * 0.45, cy], [cx - r * 0.1, cy - r * 0.38], [cx + r * 0.48, cy + r * 0.36]], 'okm')}</g>`;
+}
+function bandPoly(pts, a, b, t) {
+  const g = [], fl = [];
+  pts.forEach((p) => { if (p.s >= a && p.s <= b) { g.push([p.x + p.nx * t / 2, p.y + p.ny * t / 2]); fl.push([p.x - p.nx * t / 2, p.y - p.ny * t / 2]); } });
+  return g.length > 1 ? g.concat(fl.reverse()) : null;
+}
+/* useň s vlhkým pásem, w = 0..1 (tmavnutí) */
+function leatherW(pts, t, band, w, id) {
+  const g = pts.map((p) => [p.x + p.nx * t / 2, p.y + p.ny * t / 2]);
+  const fl = pts.map((p) => [p.x - p.nx * t / 2, p.y - p.ny * t / 2]);
+  let out = Poly(g.concat(fl.slice().reverse()), 'kz', id ? `id="${id}"` : '');
+  if (w > 0.005) {
+    const bp = bandPoly(pts, band[0], band[1], t);
+    if (bp) out += Poly(bp, 'damp', `opacity="${r3(0.5 * w)}"`) + Poly(bp, '', `fill="url(#wp-${CUR})" opacity="${r3(Math.min(1, 0.25 + w))}"`);
+  }
+  return out + PathO(g, 'lic') + PathO(fl, 'rub');
+}
+function arrowTo(x1, y1, x2, y2) {
+  const l = Math.hypot(x2 - x1, y2 - y1) || 1, dx = (x2 - x1) / l, dy = (y2 - y1) / l, h = FS * 0.55;
+  return Ln(x1, y1, x2 - dx * h * 0.8, y2 - dy * h * 0.8, 'arrowl') + Poly([[x2, y2], [x2 - dx * h - dy * h * 0.6, y2 - dy * h + dx * h * 0.6], [x2 - dx * h + dy * h * 0.6, y2 - dy * h - dx * h * 0.6]], 'arrow');
+}
+const cut = (pts, frac) => {
+  if (frac >= 1) return pts;
+  const L = []; let acc = 0; L.push(0);
+  for (let j = 1; j < pts.length; j++) { acc += Math.hypot(pts[j][0] - pts[j - 1][0], pts[j][1] - pts[j - 1][1]); L.push(acc); }
+  const tgt = acc * frac, out = [pts[0]];
+  for (let j = 1; j < pts.length; j++) {
+    if (L[j] <= tgt) out.push(pts[j]);
+    else { const q = (tgt - L[j - 1]) / (L[j] - L[j - 1] || 1); out.push([pts[j - 1][0] + (pts[j][0] - pts[j - 1][0]) * q, pts[j - 1][1] + (pts[j][1] - pts[j - 1][1]) * q]); break; }
+  }
+  return out;
+};
+
+/* ---------- animace 1: ohyb dna ---------- */
+const FOLD_STEPS = [
+  { d: 3.6, c: 'Rýha: tupým hrotem u ocelového pravítka vytlač na rubu rýhu v ose ohybu <span class="num">v 62,21</span>. Nic neřež, tlač stejně po celé šířce <span class="num">101</span>, od rysky k rysce na bocích.' },
+  { d: 3.2, c: 'Houbičkou navlhči <b>jen pás ohybu</b> <span class="num">v 58,21–66,21</span> (8, rýha uprostřed), ne celý díl. Useň v pásu ztmavne.' },
+  { d: 3, c: 'Počkej <span class="num">5–10</span> min, až se barva usně skoro vrátí k suché. Teprve potom ohýbej.' },
+  { d: 3.8, c: 'Vložku z <b>2 starých karet na sobě</b> (<span class="num">1,52</span>, dvě dvojice vedle sebe slepené páskou) polož na rub B hranou <b>asi 2 za rýhu směrem k B</b> (v <span class="num">64,18</span>), ne přímo na rýhu. Pak střed ohybu padne na rýhu. Přesný posun ověř na odřezku V12.' },
+  { d: 4, c: 'F přehni nahoru <b>lícem ven</b> přes hranu vložky. Useň hranu obejme, vnitřní poloměr <span class="num">0,75</span>, rýha skončí uprostřed ohybu.' },
+  { d: 2.6, c: 'Kolem ohybu dej potravinovou fólii, aby na vlhkém líci nezůstaly otisky ani skvrny od dřeva.' },
+  { d: 3, c: 'Spodních <span class="num">20</span> dej mezi dvě hladká prkénka.' },
+  { d: 3, c: 'Stáhni svěrkami. Bez svěrek stačí knihy, závaží, silné gumičky nebo kancelářské klipy (tlak ověř na odřezku).' },
+  { d: 3.6, c: 'Nech schnout <b>přes noc</b>, <span class="num">12–24 h</span>, ne u topení.' },
+  { d: 4, c: 'Povol svěrky, sundej prkénka a fólii. Vložku <b>vysuň bokem</b>, chytíš ji za přesah na boku.' },
+  { d: 2.8, c: 'Hotovo: tvar U, líc venku, rýha uprostřed ohybu. Boky ještě nejsou slepené, F jde odklopit na lepení G1/G2.' },
+];
+const FXC = M.v.foldAxis - M.v.backStart;            // rýha vůči hraně vložky (−1,96)
+const FBAND = [M.v.backStart - M.v.foldBand[1], M.v.backStart - M.v.foldBand[0]]; // s pásu
+function foldState(i, u) {
+  const S = {};
+  S.phi = i < 4 ? 0 : i === 4 ? PI * SM(0.05, 0.92, u) : PI;
+  S.cp = i === 0 ? SM(0.15, 0.85, u) : 1;
+  S.nv = i === 0 ? SM(0.1, 0.2, u) : 1;
+  S.pen = i === 0 ? 1 - SM(0.9, 1, u) : 0;
+  S.penLift = i === 0 ? 2.2 * (1 - SM(0, 0.12, u)) + 2.2 * SM(0.86, 1, u) : 3;
+  S.ruler = i === 0 ? 1 - SM(0.9, 1, u) : 0;
+  S.sweep = i === 1 ? SM(0.3, 0.78, u) : i > 1 ? 1 : 0;
+  S.w = i < 1 ? 0 : i === 1 ? S.sweep : i === 2 ? 1 - 0.6 * EZ(u) : i < 8 ? 0.4 : i === 8 ? 0.4 * (1 - EZ(u)) : 0;
+  S.sponge = i === 1 ? SM(0, 0.12, u) * (1 - SM(0.88, 1, u)) : 0;
+  S.spY = i === 1 ? 4 * (1 - SM(0.12, 0.3, u)) + 4 * SM(0.8, 0.95, u) : 4;
+  S.clock = i === 2 ? SM(0, 0.15, u) * (1 - SM(0.9, 1, u)) : 0;
+  S.ins = i >= 3 && i <= 9;
+  S.insDx = i === 3 ? 30 * (1 - SM(0, 0.5, u)) : 0;
+  S.insLift = i === 3 ? 3 * (1 - SM(0.45, 0.65, u)) : 0;
+  S.dim = i === 3 ? SM(0.62, 0.75, u) : 0;
+  S.insOut = i === 9 ? SM(0.45, 0.95, u) : 0;
+  S.foil = i < 5 ? 0 : i === 5 ? SM(0.05, 0.9, u) : i < 9 ? 1 : 0;
+  S.foilOp = i === 9 ? 1 - SM(0.3, 0.45, u) : 1;
+  if (i === 9) S.foil = 1;
+  S.lowB = i < 6 ? 0 : i === 6 ? SM(0, 0.45, u) : i < 9 ? 1 : i === 9 ? 1 - SM(0.2, 0.4, u) : 0;
+  S.topB = i < 6 ? 0 : i === 6 ? SM(0.5, 0.95, u) : i < 9 ? 1 : i === 9 ? 1 - SM(0.1, 0.3, u) : 0;
+  S.clamp = i < 7 ? 0 : i === 7 ? SM(0, 0.25, u) : i === 8 ? 1 : i === 9 ? 1 - SM(0, 0.12, u) : 0;
+  S.tight = i === 7 ? SM(0.3, 0.9, u) : i === 8 ? 1 : i === 9 ? 1 - SM(0, 0.08, u) : 0;
+  S.night = i === 8 ? SM(0, 0.12, u) * (1 - SM(0.9, 1, u)) : 0;
+  S.done = i === 10 ? SM(0.1, 0.5, u) : 0;
+  return S;
+}
+const BT = 4, FOILY = 0.14, BTOP0 = M.t + M.spacer + M.t + 0.22;  // tloušťka prkénka, spodní líc horního prkénka
+function figAFold() {
+  const S = foldState(AF.i, AF.u);
+  const vb = [-12, -7.6, 36, 17.6];
+  const pts = foldPts(S.phi, -38, S.phi * RF + 42, 0.06);
+  let s = `<g opacity="${r3(1 - S.lowB)}">${hatch(-12, -1.2, 36, 0, 1.4)}${Ln(-12, 0, 36, 0, 'tline')}</g>`;
+  const bx1 = 20 - M.flatFromY;                                  // spodních 20 od dna
+  if (S.lowB > 0) { const dx = -48 * (1 - S.lowB); s += Rect(-2.6 + dx, -0.28 - BT, bx1 + dx, -0.28, 'wood'); }
+  if (S.ins && S.insOut < 1) s += `<g opacity="${r3(1 - S.insOut)}" transform="translate(${r3(S.insDx)},${r3(-S.insLift)})">${Rect(0, M.t, M.spacerJig.depthMm, M.t + M.spacer, 'jig', 'id="aInsert"')}</g>`;
+  s += leatherW(pts, M.t, FBAND, S.w, 'aLeather');
+  if (S.nv > 0.01) s += `<g opacity="${r3(S.nv)}">${notchAt(pts, -FXC, M.t, 0.36)}</g>`;
+  if (S.foil > 0 && S.foilOp > 0.01) {
+    const fp = [[27, -FOILY], [0, -FOILY]].concat(arcPts(0, 1.75, 1.75 + FOILY, -PI / 2, -3 * PI / 2, 30)).concat([[27, 3.5 + FOILY]]);
+    s += `<g opacity="${r3(S.foilOp)}">${PathO(cut(fp, S.foil), 'foil')}</g>`;
+  }
+  if (S.topB > 0) { const dy = 7 * (1 - S.topB); s += `<g opacity="${r3(Math.min(1, S.topB * 2.5))}">${Rect(-2.6, BTOP0 + dy, bx1, BTOP0 + BT + dy, 'wood')}</g>`; }
+  if (S.clamp > 0) {
+    const pad = BTOP0 + BT + 2.4 * (1 - S.tight), armT = BTOP0 + BT + 3.4, armB = -0.28 - BT - 1.8;
+    let c = Rect(-10, armB, -8.4, armT + 1.4, 'steel') + Rect(-10, armT, 7.5, armT + 1.4, 'steel') + Rect(-10, armB, 7.5, armB + 1.4, 'steel');
+    c += Rect(2.5, armB + 1.4, 6.5, -0.28 - BT, 'steel');
+    c += Rect(4.1, pad + 0.8, 4.9, armT + 3.2 + (pad - BTOP0 - BT), 'steel') + Rect(2.5, pad, 6.5, pad + 0.8, 'steel');
+    const hw = 2.8 * Math.abs(Math.cos(S.tight * 5 * PI)) + 0.5, hy = armT + 3.2 + (pad - BTOP0 - BT);
+    c += Rect(4.5 - hw, hy, 4.5 + hw, hy + 0.8, 'steel');
+    if (S.tight > 0.02 && S.tight < 0.98) c += arrowTo(10.2, hy + 1.2, 10.2, hy - 1.6);
+    s += `<g opacity="${r3(S.clamp)}">${c}</g>`;
+    s += `<g opacity="${r3(S.clamp)}">${T(9.4, armT + 0.7, 'svěrka', { bl: 'middle' })}</g>`;
+  }
+  // nářadí pro rýhu
+  if (S.ruler > 0.01) s += `<g opacity="${r3(S.ruler)}">${Rect(FXC + 0.62, M.t, 16, M.t + 1.1, 'steel')}${T(9, M.t + 2.1, 'ocelové pravítko', { a: 'middle' })}</g>`;
+  if (S.pen > 0.01) {
+    const x = FXC, y0 = M.t - 0.2 * SM(0.12, 0.2, AF.u) * (1 - SM(0.86, 0.95, AF.u)) + S.penLift;
+    const pen = Poly([[x - 0.35, y0 + 0.5], [x + 0.35, y0 + 0.5], [x + 1.3, y0 + 4], [x + 1.3, 19], [x - 1.3, 19], [x - 1.3, y0 + 4]], 'pen') + `<circle cx="${r3(x)}" cy="${r3(-(y0 + 0.45))}" r="0.45" class="pen"/>`;
+    s += `<g opacity="${r3(S.pen)}">${pen}${T(x - 2, 12.5, 'tupý hrot', { a: 'end' })}${T(35.6, 15.8, 'hrot jede po celé šířce (pohled shora)', { a: 'end', c: 'm', k: 0.9 })}</g>`;
+  }
+  if (AF.i === 0) s += T(FXC, -3.2, `osa v ${f(M.v.foldAxis, 2)}`, { a: 'middle', c: 'm', k: 0.9 });
+  if (S.sponge > 0.01) {
+    const y = M.t + 0.05 + S.spY;
+    s += `<g opacity="${r3(S.sponge)}"><rect x="${r3(FXC - 5)}" y="${r3(-(y + 3.6))}" width="10" height="3.6" rx="0.8" class="sponge"/>${T(FXC + 5.6, y + 2.6, 'houbička', {})}</g>`;
+    s += `<g opacity="${r3(SM(0.25, 0.4, AF.u))}">${dimH(-2.4, FXC - 4, FXC + 4, 'jen pás ohybu 8', true)}</g>`;
+  }
+  if (S.clock > 0.01) s += `<g opacity="${r3(S.clock)}">${clockIcon(FXC, 7.5, AF.u * 2 * PI * 2)}${T(FXC + FS * 1.6, 7.5, '5–10 min', { bl: 'middle' })}${T(FXC + FS * 1.6, 7.5 - FS * 1.2, 'barva se vrací k suché', { bl: 'middle', c: 'm', k: 0.9 })}</g>`;
+  if (S.dim > 0.01) {
+    const yd = M.t + M.spacer + 1.1;
+    s += `<g opacity="${r3(S.dim)}">${Ln(FXC, M.t + 0.2, FXC, yd + 0.5, 'guide')}${Ln(0, M.t + M.spacer, 0, yd + 0.5, 'guide')}${dimH(yd, FXC, 0, '', true)}`;
+    s += T(-11.6, 9.6, '≈ 2 mm', { c: 'w' }) + T(-11.6, 9.6 - FS * 1.25, '(ověřit na odřezku V12)', { c: 'w', k: 0.9 }) + Ln(-4.5, 9.6 - FS * 1.25 - FS * 0.35, FXC / 2, yd + 0.1) + T(26.4, 1.75, 'vložka 1,5', { bl: 'middle' }) + '</g>';
+  }
+  if (AF.i === 9) s += `<g opacity="${r3(SM(0.4, 0.5, AF.u) * (1 - SM(0.95, 1, AF.u)))}">${T(35.6, 15.8, 'vložka ven bokem (pohled shora)', { a: 'end', c: 'm', k: 0.9 })}</g>`;
+  if (S.night > 0.01) s += `<g opacity="${r3(S.night)}">${moonIcon(24, 12.6)}${clockIcon(24 + FS * 2.8, 12.6, AF.u * 2 * PI * 6)}${T(24 + FS * 4.4, 12.6, 'přes noc', { bl: 'middle' })}${T(24 + FS * 4.4, 12.6 - FS * 1.2, '12–24 h', { bl: 'middle', c: 'm' })}</g>`;
+  if (AF.i === 4 && AF.u > 0.9 || AF.i === 10) {
+    const op = AF.i === 10 ? 1 : SM(0.9, 1, AF.u);
+    s += `<g opacity="${r3(op)}">${T(-11.6, 7.4, 'rýha uprostřed ohybu', {})}${Ln(-6, 7.4 - FS * 0.35, -1.2, 2.1)}</g>`;
+  }
+  if (S.done > 0) s += checkIcon(26, 9.2, S.done) + `<g opacity="${r3(S.done)}">${T(26 + FS * 1.9, 9.2, 'hotové U', { bl: 'middle' })}</g>`;
+  // F a B
+  if (S.phi < 0.3) s += T(-9.5, M.t + 1.6, 'F', { a: 'middle' });
+  else if (S.phi > 2.6) s += T(32, 3.5 + FS * 0.9, 'F', { a: 'middle' });
+  s += T(31, -3.2, 'B, líc dole', { a: 'middle', c: 'm' });
+  return svgWrap(vb, s, 'Animace ohybu dna, řez');
+}
+function figAFoldPlan() {
+  const S = foldState(AF.i, AF.u);
+  const vb = [-26, -14, 34, 120];
+  let s = Rect(-26, -14, 34, 120, 'table');
+  const pts = foldPts(S.phi, -38, S.phi * RF + 42, 0.25);
+  let xmin = 1e9; pts.forEach((p) => { xmin = Math.min(xmin, p.x - Math.abs(p.nx) * M.t / 2); });
+  s += Rect(Math.max(xmin, -30), 0, 40, M.W, 'kzp');
+  if (S.phi < PI / 2 && S.w > 0.005) {
+    const yh = M.W * S.sweep;
+    s += Rect(FBAND[0] * -1, 0, -FBAND[1], yh, 'damp', `opacity="${r3(0.5 * S.w)}"`) + Rect(-FBAND[0], 0, -FBAND[1], yh, '', `fill="url(#wp-${CUR})" opacity="${r3(Math.min(1, 0.25 + S.w))}"`);
+  }
+  if (S.phi < PI / 2) {
+    if (S.cp > 0) s += Ln(FXC, 0, FXC, M.W * S.cp, 'creaseL');
+    s += Ln(FXC, -2.2, FXC, 0, 'mark') + Ln(FXC, M.W, FXC, M.W + 2.2, 'mark');
+  }
+  if (S.ins && S.insOut < 1) { const dy = 125 * S.insOut; s += Rect(S.insDx, -M.overhang + dy, S.insDx + M.spacerJig.depthMm, M.W + M.overhang + dy, 'jig'); }
+  if (S.phi >= PI / 2) {
+    let a = 1e9, b = -1e9; pts.forEach((p) => { if (p.s > S.phi * RF) { a = Math.min(a, p.x); b = Math.max(b, p.x); } });
+    s += Rect(Math.min(a, -RF - M.t / 2), 0, Math.min(b, 40), M.W, 'kz') + Ln(-RF - M.t / 2, 0, -RF - M.t / 2, M.W, 'lic');
+  }
+  if (S.topB > 0) s += `<g opacity="${r3(Math.min(1, S.topB * 2.5) * 0.92)}">${Rect(-2.6, -9, 20 - M.flatFromY, 110, 'wood')}</g>`;
+  if (S.clamp > 0) s += `<g opacity="${r3(S.clamp)}">${Rect(-10, 12, 7.5, 18, 'steel')}${Rect(-10, 83, 7.5, 89, 'steel')}</g>`;
+  if (S.ruler > 0.01) s += `<g opacity="${r3(S.ruler)}">${Rect(FXC + 0.62, -9, FXC + 20, 110, 'steel')}</g>`;
+  if (S.pen > 0.01) s += `<g opacity="${r3(S.pen)}"><circle cx="${r3(FXC)}" cy="${r3(-M.W * S.cp)}" r="1.6" class="pen"/></g>`;
+  if (S.sponge > 0.01) { const yc = 9 + (M.W - 18) * S.sweep; s += `<g opacity="${r3(S.sponge)}"><rect x="${r3(FXC - 5)}" y="${r3(-(yc + 9))}" width="10" height="18" rx="1.5" class="sponge"/></g>`; }
+  if (AF.i === 9 && AF.u > 0.4 && AF.u < 0.97) s += arrowTo(12.5, 104, 12.5, 116);
+  // popisky
+  if (S.phi < PI / 2) { s += T(-8.5, M.W * 0.38, 'F', { a: 'middle', bl: 'middle' }); if (!S.ins) s += T(22, M.W / 2, 'B', { a: 'middle', bl: 'middle' }); }
+  else s += T(16, M.W / 2, 'F', { a: 'middle', bl: 'middle' });
+  if (S.ins && S.phi < PI / 2 && S.insDx < 1) s += T(12.5, M.W / 2, 'vložka', { a: 'middle', bl: 'middle' });
+  if (AF.i === 0) s += T(FXC - 1.2, M.W + 4.6, 'rýha', { a: 'end' });
+  if (S.dim > 0.01) s += `<g opacity="${r3(S.dim)}">${T(FXC - 1.2, M.W + 4.6, '≈ 2', { a: 'end', c: 'w' })}${Ln(FXC, M.W + 1.4, 0, M.W + 1.4, 'dim')}</g>`;
+  if (AF.i === 0) s += `<g opacity="${r3(1 - SM(0.9, 1, AF.u))}">${dimV(-22, 0, M.W, '101', 1)}</g>`;
+  s += T(4, -11, 'pohled shora', { a: 'middle', c: 'm' });
+  return svgWrap(vb, s, 'Animace ohybu dna, pohled shora');
+}
+
+/* ---------- animace 2: závěs přes obsah pod knihou ---------- */
+const HINGE_STEPS = [
+  { d: 4, c: 'Do peněženky dej běžný obsah: <b>2–3 karty</b> do přední kapsy před D1 a <b>pár bankovek</b> napůl za D1. Na tuhle tloušťku se závěs vytvaruje.' },
+  { d: 3.4, c: 'Houbičkou <b>lehce</b> navlhči jen pás závěsu <span class="num">v 142,99–150,99</span>, nenamáčej celé. Useň v pásu ztmavne.' },
+  { d: 3, c: 'Počkej <span class="num">5–10</span> min, až se barva skoro vrátí k suché.' },
+  { d: 3.2, c: 'Víčko zavři přes obsah. Plochý vrch obepne karty, bankovky, D1 a D2, asi <span class="num">3,42</span>.' },
+  { d: 3.4, c: 'Prsty jemně přitiskni oba přehyby, vzadu v <span class="num">145,10</span> a vpředu v <span class="num">148,88</span>.' },
+  { d: 3.4, c: 'Peněženku polož na stůl a navrch dej knihu. Tady je kreslená nastojato: stůl je vpravo a kniha tlačí zleva na víčko.' },
+  { d: 3.6, c: 'Nech ji pod knihou <b>přes noc</b>, <span class="num">12–24 h</span>, ne u topení. Obsah zůstává uvnitř.' },
+  { d: 4.2, c: 'Knihu sundej. Víčko otevři a zase zavři: drží tvar se dvěma přehyby. Dál se závěs <b>zajezdí používáním</b>.' },
+  { d: 4.4, c: 'Otevřené víčko <b>samo nestojí</b> a padá dozadu. Při vytahování bankovek ho přidrž palcem.' },
+];
+function hingeState(i, u) {
+  const S = {};
+  S.k = i < 3 ? 0 : i === 3 ? SM(0.05, 0.95, u) : i < 7 ? 1 : i === 7 ? 1 - SM(0.3, 0.55, u) + SM(0.66, 0.9, u) : 1 - SM(0.02, 0.3, u);
+  S.tilt = i < 7 ? 0 : i === 7 ? 0.5 : 1.7 * SM(0.15, 0.5, u) - 0.8 * SM(0.62, 0.85, u);
+  S.bSlide = i === 0 ? SM(0.05, 0.35, u) : 1;    // bankovky ze strany nad kapsu
+  S.bIn = i === 0 ? SM(0.3, 0.6, u) : 1;         // bankovky dolů
+  S.cIn = i === 0 ? SM(0.5, 0.95, u) : 1;        // karty dolů
+  S.sweep = i === 1 ? SM(0.3, 0.75, u) : 0;
+  S.w = i < 1 ? 0 : i === 1 ? S.sweep : i === 2 ? 1 - 0.6 * EZ(u) : i < 6 ? 0.4 : i === 6 ? 0.4 * (1 - EZ(u)) : 0;
+  S.sponge = i === 1 ? SM(0, 0.12, u) * (1 - SM(0.88, 1, u)) : 0;
+  S.spX = i === 1 ? 7 * (1 - SM(0.1, 0.3, u)) + 7 * SM(0.78, 0.95, u) : 7;
+  S.clock = i === 2 ? SM(0, 0.15, u) * (1 - SM(0.9, 1, u)) : 0;
+  S.press = i === 4 ? SM(0, 0.15, u) * (1 - SM(0.88, 1, u)) : 0;
+  S.pressOff = i === 4 ? 5 * (1 - SM(0.1, 0.35, u)) + 5 * SM(0.8, 0.95, u) : 5;
+  S.book = i === 5 ? SM(0.05, 0.6, u) : i === 6 ? 1 : i === 7 ? 1 - SM(0, 0.25, u) : 0;
+  S.table = i === 5 ? SM(0, 0.2, u) : i === 6 ? 1 : i === 7 ? 1 - SM(0, 0.25, u) : 0;
+  S.night = i === 6 ? SM(0, 0.12, u) * (1 - SM(0.9, 1, u)) : 0;
+  S.works = i === 7 ? SM(0.9, 1, u) : 0;
+  S.fall = i === 8 ? SM(0.22, 0.32, u) * (1 - SM(0.6, 0.7, u)) : 0;
+  S.thumb = i === 8 ? SM(0.48, 0.6, u) : 0;
+  S.thumbGap = i === 8 ? 10 * (1 - SM(0.48, 0.62, u)) : 0;
+  S.held = i === 8 ? SM(0.8, 0.92, u) : 0;
+  return S;
+}
+function figAHinge() {
+  const S = hingeState(AH.i, AH.u);
+  const vb = [-17, 57, 40, 122];
+  const pts = hingePts(S.k, -(M.hingeStartY - 57), 0.1, M.TB, S.tilt);
+  const tD = M.tD;
+  let s = '';
+  if (S.table > 0.01) s += `<g opacity="${r3(S.table)}">${hatch(M.t + 0.02, 57, 4.4, 97, 1.4)}${Ln(M.t + 0.02, 57, M.t + 0.02, 97, 'tline')}</g>`;
+  s += Poly(roundTop(-tD, 0, 57, M.d2TopY, 0.25), 'd2');
+  s += Poly(roundTop(-2 * tD, -tD, 57, M.d1TopY, 0.25), 'd1') + Ln(-2 * tD + 0.1, M.d1TopY, -tD - 0.1, M.d1TopY, 'd1e');
+  s += contents(57, 62 * (1 - S.cIn), 84 * (1 - S.bIn));
+  s += Rect(-M.TB - M.t, 57, -M.TB, M.frontTopY, 'kz', 'id="aF"') + Ln(-M.TB - M.t, 57, -M.TB - M.t, M.frontTopY, 'lic') + Ln(-M.TB, 57, -M.TB, M.frontTopY, 'rub');
+  s += leatherW(pts, M.t, hingeWet(), S.w, 'aHLeather');
+  s += markAt(pts, M.v.rearCrease - M.v.hingeStart, M.t) + markAt(pts, M.v.frontCrease - M.v.hingeStart, M.t);
+  // kniha zleva na víčko (peněženka ve skutečnosti leží na zádech)
+  if (S.book > 0.01) {
+    let bx1 = 1e9; pts.forEach((p) => { if (p.s > 0.5) bx1 = Math.min(bx1, p.x - Math.abs(p.nx) * M.t / 2); });
+    bx1 -= 0.03; const bx0 = bx1 - 11, dx = -14 * (1 - S.book);
+    let b = Rect(bx0, 57, bx1, 97, 'book', 'id="aBook"') + `<g opacity="${r3(SM(0.75, 0.95, S.book))}">${T((bx0 + bx1) / 2, 78, 'kniha', { a: 'middle', bl: 'middle' })}</g>`;
+    if (S.book > 0.98) b += arrowTo(bx0 + 1.2, 66, bx1 - 1.2, 66) + arrowTo(bx0 + 1.2, 90, bx1 - 1.2, 90);
+    s += `<g opacity="${r3(Math.min(1, S.book * 1.6))}" transform="translate(${r3(dx)},0)">${b}</g>`;
+  }
+  if (S.table > 0.01) s += `<g opacity="${r3(S.table)}">${T(5, 76, 'stůl', { bl: 'middle' })}${T(39, 117, 'kreslené nastojato', { a: 'end', c: 'm' })}${T(39, 117 - FS * 1.25, 've skutečnosti leží na zádech', { a: 'end', c: 'm', k: 0.9 })}</g>`;
+  // prsty
+  const gw = 9;
+  if (S.press > 0.01) {
+    const o = S.pressOff, cx = -0.25;
+    s += finger(1 + gw / 2 + o, 80.8, 1 + gw / 2 + o + 30, 80.8, gw, S.press * 0.85);
+    s += finger(cx, M.H + gw / 2 + o, cx, M.H + gw / 2 + o + 30, gw, S.press * 0.85);
+  }
+  if (S.press > 0.01) s += `<g opacity="${r3(S.press)}">${T(39, 117, 'jemně přitisknout', { a: 'end' })}${T(39, 117 - FS * 1.25, 'oba přehyby', { a: 'end', c: 'm' })}</g>`;
+  if (S.thumb > 0.01) s += thumbOn(pts, 22, gw, S.thumb, 22, S.thumbGap);
+  if (S.sponge > 0.01) { const x0 = 1.3 + S.spX; s += `<g opacity="${r3(S.sponge)}"><rect x="${r3(x0)}" y="${r3(-90.5)}" width="5" height="11" rx="0.8" class="sponge"/>${T(x0 + 6, 85, 'houbička', { bl: 'middle' })}</g>`; }
+  if (AH.i === 1) s += `<g opacity="${r3(SM(0.25, 0.4, AH.u))}">${T(39, 117, 'jen pás závěsu, lehce', { a: 'end' })}</g>`;
+  if (S.clock > 0.01) s += `<g opacity="${r3(S.clock)}">${clockIcon(10, 101, AH.u * 4 * PI)}${T(10 + FS * 1.6, 101, '5–10 min', { bl: 'middle' })}</g>`;
+  if (S.night > 0.01) s += `<g opacity="${r3(S.night)}">${moonIcon(-13.5, 112)}${clockIcon(-13.5 + FS * 2.7, 112, AH.u * 12 * PI)}${T(-13.5 + FS * 4.3, 112, 'přes noc', { bl: 'middle' })}${T(-13.5 + FS * 4.3, 112 - FS * 1.2, '12–24 h', { bl: 'middle', c: 'm' })}</g>`;
+  if (S.works > 0.01) s += checkIcon(14, 97, S.works) + `<g opacity="${r3(S.works)}">${T(14 + FS * 1.9, 97, 'otvírá i zavírá', { bl: 'middle' })}${T(14 + FS * 1.9, 97 - FS * 1.25, 'zajezdí se', { bl: 'middle', c: 'm' })}</g>`;
+  if (S.fall > 0.01) s += `<g opacity="${r3(S.fall)}">${T(-2, 117, 'padá dozadu', { a: 'end' })}${arrowTo(-1.2, 113.2, 9, 110.6)}</g>`;
+  if (S.held > 0.01) s += `<g opacity="${r3(S.held)}">${T(39, 80, 'palec přidrží víčko', { a: 'end' })}${T(39, 80 - FS * 1.25, 'při vytahování bankovek', { a: 'end', c: 'm' })}</g>`;
+  // popisky vrstev (schované pod knihou)
+  const lo = 1 - Math.min(1, S.book * 3);
+  if (lo > 0.01) {
+    let L = T(-16.5, 59, 'F', {}) + Ln(-14.5, 59.4, -M.TB - M.t / 2 - (S.k > 0.9 ? 1.2 : 0), 59.4);
+    L += T(-16.5, 63, 'D1', {}) + Ln(-13.8, 63.4, -0.9, 63.4);
+    if (S.cIn > 0.98) L += T(-16.5, 67, 'karty', {}) + Ln(-11.4, 67.4, -2.5, 67.4);
+    if (S.bIn > 0.98) L += T(-16.5, 71, 'bankovky', {}) + Ln(-8.6, 71.4, (BX[0] + BX[1]) / 2, 71.4);
+    if (S.k > 0.5) L += T(-16.5, 75, 'víčko', {}) + Ln(-11.4, 75.4, -M.TB - M.t / 2, 75.4);
+    L += T(5, 66, 'D2', {}) + Ln(4.6, 66.4, -0.3, 66.4) + T(5, 71, 'B', {}) + Ln(4.6, 71.4, 0.5, 71.4);
+    s += `<g opacity="${r3(lo)}">${L}</g>`;
+  }
+  if (AH.i === 0) s += `<g opacity="${r3(1 - SM(0.9, 1, AH.u))}">${T(39, 117, '2–3 karty', { a: 'end' })}${T(39, 117 - FS * 1.25, '+ pár bankovek', { a: 'end', c: 'm' })}</g>`;
+  s += T(39, 58.5, 'řez 1:1', { a: 'end', c: 'm' });
+  return svgWrap(vb, s, 'Animace závěsu, řez');
+}
+function figAHingeFront() {
+  const S = hingeState(AH.i, AH.u);
+  const vb = [-6, -4, 140, 128];
+  const W = M.W, n = M.notch, nr = (n.x1 - n.x0) / 2;
+  const pts = hingePts(S.k, 0, 0.25, M.TB, S.tilt);
+  const bandS = M.v.bandEnd - M.v.hingeStart, frontX = -M.TB - 0.3;
+  const ext = (pred) => { let a = 1e9, b = -1e9; pts.forEach((p) => { if (pred(p)) { a = Math.min(a, p.y); b = Math.max(b, p.y); } }); return a < b ? [a, b] : null; };
+  const lid = (front, c) => {
+    let o = '';
+    const bd = ext((p) => p.s > 0 && p.s <= bandS && (p.x < frontX) === front), tg = ext((p) => p.s > bandS && (p.x < frontX) === front);
+    if (bd) o += Rect(0, bd[0], W, bd[1], c);
+    if (tg) o += Rect(M.tongueX[0], tg[0], M.tongueX[1], tg[1], c);
+    return o;
+  };
+  let s = Ln(-6, 0, 140, 0, 'tline');
+  s += lid(false, 'kzp');
+  s += Rect(0, 0, W, M.hingeStartY, 'kzp');
+  // bankovky napůl za D1: přijedou zboku nad kapsu a zasunou se dolů
+  const bdx = 38 * (1 - S.bSlide), bdy = 40 * (1 - S.bIn), bw = 40;
+  s += Rect(W / 2 - bw + bdx, BILL_BOT + bdy, W / 2 + bw + bdx, BILL_TOP + bdy, 'bills', 'id="aBillsF"');
+  if (AH.i === 0 && S.bIn < 0.9) s += T(W / 2 + bdx + 20, BILL_TOP + bdy - 8, 'bankovky', { a: 'middle', bl: 'middle' });
+  s += Rect(4, M.frontTopY, 97, M.d1TopY, 'd1') + Ln(4, M.d1TopY, 97, M.d1TopY, 'd1e');
+  const wetF = () => {
+    if (S.w <= 0.005) return '';
+    const wb = ext((p) => p.s >= hingeWet()[0] + 0.93 && p.s <= hingeWet()[1]);
+    const y0 = Math.min(M.topGlueY, wb ? wb[0] : M.topGlueY), y1 = wb ? wb[1] : M.H;
+    return Rect(0, y0, W, y1, 'damp', `opacity="${r3(0.5 * S.w)}"`) + Rect(0, y0, W, y1, '', `fill="url(#wp-${CUR})" opacity="${r3(Math.min(1, 0.25 + S.w))}"`);
+  };
+  if (S.k < 0.5) s += wetF();
+  const cdy = 60 * (1 - S.cIn);
+  s += Rect(W / 2 - 42.8, M.cardFloorY + cdy, W / 2 + 42.8, CARD_TOP + cdy, 'cards', 'id="aCardsF"');
+  s += T(W / 2, (S.cIn < 0.5 ? 102 : 72) + (S.cIn < 0.5 ? cdy - 40 : 0), 'karty', { a: 'middle', bl: 'middle' });
+  const Fp = [[0, 0], [W, 0], [W, M.frontTopY], [n.x1, M.frontTopY], [n.x1, n.bottomY + nr]].concat(arcPts(n.x0 + nr, n.bottomY + nr, nr, 0, -PI, 16)).concat([[n.x0, M.frontTopY], [0, M.frontTopY]]);
+  s += Poly(Fp, 'kzp');
+  s += Rect(W / 2 - 42.8, Math.max(M.cardFloorY + cdy, n.bottomY), W / 2 + 42.8, Math.max(Math.min(CARD_TOP + cdy, M.frontTopY), n.bottomY), 'jigh');
+  s += T(80.5, 14, 'F', { a: 'middle', c: 'm' }) + T(80.5, 14 - FS * 1.2, 'přední stěna', { a: 'middle', c: 'm' });
+  s += lid(true, 'kz');
+  if (S.k >= 0.5) s += wetF();
+  if (S.press > 0.01) s += finger(W / 2, M.H + 5 + S.pressOff, W / 2, M.H + 40 + S.pressOff, 10, S.press);
+  const lo = S.bSlide > 0.98 && S.book < 0.01 ? 1 : 0;
+  if (lo) {
+    s += Ln(-2, M.ceilingY, W + 2, M.ceilingY, 'guide');
+    s += T(103, M.ceilingY - 1, 'strop 82,5', { bl: 'hanging', c: 'm' });
+    s += T(103, M.frontTopY - 1, 'F 62,0', { bl: 'hanging', c: 'm' });
+    s += T(103, M.cardFloorY - 1, 'dno karet', { bl: 'hanging', c: 'm' });
+  }
+  s += Ln(M.cardPocketX[0], M.cardFloorY, M.cardPocketX[1], M.cardFloorY, 'guide');
+  if (S.book > 0.01) {
+    const dy = 70 * (1 - S.book);
+    s += `<g opacity="${r3(Math.min(1, S.book * 1.6) * 0.86)}">${Rect(-4, -2 + dy, W + 8, M.H + 10 + dy, 'book', 'id="aBookF"')}</g>` + `<g opacity="${r3(Math.min(1, S.book * 1.6))}">${T(W / 2 + 2, 44 + dy, 'kniha', { a: 'middle', bl: 'middle' })}</g>`;
+  }
+  s += T(139, 121, 'zepředu', { a: 'end', c: 'm' });
+  return svgWrap(vb, s, 'Animace závěsu, pohled zepředu');
+}
+
+/* ---------- ovládání animací ---------- */
+const RM = window.matchMedia ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+function makeAnim(root, A, steps, figs) {
+  const cap = root.querySelector('.acap'), bar = root.querySelector('.aprog i'), bPlay = root.querySelector('[data-a=play]');
+  const n = steps.length;
+  let raf = 0, last = 0, one = false, lastCap = -1, auto = false;
+  A.playing = false;
+  function ui() {
+    if (lastCap !== A.i) { cap.innerHTML = `<b>Krok ${A.i + 1} z ${n}.</b> ${steps[A.i].c}`; lastCap = A.i; }
+    bar.style.width = (((A.i + A.u) / n) * 100).toFixed(2) + '%';
+    const lbl = A.playing ? '❚❚ Pauza' : '▶ Přehrát';
+    if (bPlay.textContent !== lbl) bPlay.textContent = lbl;
+    bPlay.setAttribute('aria-label', A.playing ? 'Pozastavit animaci' : 'Přehrát animaci');
+  }
+  const draw = () => { figs.forEach(render); ui(); };
+  function stop() { cancelAnimationFrame(raf); A.playing = false; ui(); }
+  function tick(ts) {
+    const dt = last ? Math.min(0.1, (ts - last) / 1000) : 0; last = ts;
+    A.u += dt / steps[A.i].d;
+    if (A.u >= 1) {
+      if (!one && A.i < n - 1) { A.i++; A.u = 0; }
+      else { A.u = 1; draw(); stop(); return; }
+    }
+    draw(); raf = requestAnimationFrame(tick);
+  }
+  function play(single) { cancelAnimationFrame(raf); A.playing = true; one = single; last = 0; raf = requestAnimationFrame(tick); ui(); }
+  const act = {
+    play() { if (A.playing) return stop(); if (A.i === n - 1 && A.u >= 1) { A.i = 0; A.u = 0; } play(false); },
+    next() {
+      stop();
+      if (A.u >= 1) { if (A.i >= n - 1) return; A.i++; A.u = 0; }
+      if (RM.matches) { A.u = 1; draw(); } else play(true);
+    },
+    prev() { stop(); if (A.i === 0) A.u = 0; else { A.i--; A.u = 1; } draw(); },
+    restart() { stop(); A.i = 0; A.u = 0; draw(); if (!RM.matches) play(false); },
+  };
+  root.querySelectorAll('[data-a]').forEach((b) => b.addEventListener('click', () => act[b.dataset.a]()));
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => { es.forEach((e) => { if (e.isIntersecting && !auto) { auto = true; io.disconnect(); if (!RM.matches && !A.playing && A.i === 0 && A.u === 0) play(false); } }); }, { threshold: 0.5 });
+    io.observe(root.querySelector('.astage'));
+  }
+  A.set = (i, u) => { stop(); A.i = i; A.u = u; draw(); };
+  A.stop = stop; A.act = act; A.n = n;
+  ui();
+}
+
+/* ---------- vykreslení ---------- */
+const FIGS = {
+  strip: [figStrip, 246], sideClosed: [() => figSide(false), 60], sideOpen: [() => figSide(true), 84],
+  crease: [figCrease, 28], damp: [figDamp, 30], insert: [figInsert, 20], fold: [figFold, 48], foldZoom: [figFoldZoom, 7.2],
+  clamp: [figClamp, 45], slide: [figSlide, 136],
+  hinge: [figHinge, 57], hingeZoom: [() => figHingeZoom(false), 8.2], hingeDamp: [() => figHingeZoom(true), 8.2],
+  aFold: [figAFold, 48], aFoldPlan: [figAFoldPlan, 60], aHinge: [figAHinge, 57], aHingeFront: [figAHingeFront, 146],
+};
+function render(name) {
+  const el = document.querySelector(`[data-fig="${name}"]`); if (!el) return;
+  const [fn, vbW] = FIGS[name];
+  const minw = +(el.dataset.minw || 0);
+  if (minw) el.style.minWidth = minw + 'px';
+  if (el.dataset.maxw) el.style.maxWidth = el.dataset.maxw + 'px';
+  const w = Math.max(minw, el.clientWidth || 300);
+  FS = 12.5 * vbW / w; CUR = name;
+  el.innerHTML = fn();
+}
+function renderAll() { Object.keys(FIGS).forEach(render); updOut(); }
+function updOut() {
+  document.getElementById('phiV').textContent = Math.round(st.phi * 180 / PI) + '°';
+  document.getElementById('foldOut').innerHTML = foldReadout();
+  document.getElementById('rotV').textContent = st.rot === 0 ? 'zavřené' : st.rot === 100 ? 'otevřené' : st.rot + ' %';
+  document.getElementById('hingeOut').innerHTML = hingeReadout();
+}
+const $ = (id) => document.getElementById(id);
+$('phi').addEventListener('input', (e) => { st.phi = +e.target.value * PI / 180; render('fold'); render('foldZoom'); updOut(); });
+document.querySelectorAll('[data-phi]').forEach((b) => b.addEventListener('click', () => { $('phi').value = b.dataset.phi; $('phi').dispatchEvent(new Event('input')); }));
+document.querySelectorAll('input[name=edge]').forEach((r) => r.addEventListener('change', () => { st.edge = document.querySelector('input[name=edge]:checked').value; render('fold'); render('foldZoom'); updOut(); }));
+$('rot').addEventListener('input', (e) => { st.rot = +e.target.value; render('hinge'); render('hingeZoom'); updOut(); });
+document.querySelectorAll('[data-rot]').forEach((b) => b.addEventListener('click', () => { $('rot').value = b.dataset.rot; $('rot').dispatchEvent(new Event('input')); }));
+let rz, lastW = ''; const widths = () => [...document.querySelectorAll('[data-fig]')].map((el) => el.parentElement.clientWidth).join(',');
+const ro = new ResizeObserver(() => { cancelAnimationFrame(rz); rz = requestAnimationFrame(() => { const w = widths(); if (w !== lastW) { lastW = w; renderAll(); } }); });
+document.querySelectorAll('[data-fig]').forEach((el) => ro.observe(el.parentElement));
+renderAll();
+makeAnim(document.getElementById('anim-dno'), AF, FOLD_STEPS, ['aFold', 'aFoldPlan']);
+makeAnim(document.getElementById('anim-zaves'), AH, HINGE_STEPS, ['aHinge', 'aHingeFront']);
+window.__ohyby = { st, M, render, renderAll, AF, AH };
+</script>
+<script>
+// Hidepath: „Zpět do lekce“ = krok zpět v historii, když se sem přišlo z aplikace; jinak úvod aplikace.
+(function(){var a=document.querySelector('[data-back]');if(!a)return;a.addEventListener('click',function(e){var o='';try{o=document.referrer?new URL(document.referrer).origin:'';}catch(_){}if(o===location.origin&&history.length>1){e.preventDefault();history.back();}});})();
+</script>
+<script>
+// Hidepath: odkaz s kotvou (#anim-…) posune stránku na sekci i po vykreslení obrázků skriptem.
+(function(){var moved=false;['wheel','touchstart','keydown'].forEach(function(t){addEventListener(t,function(){moved=true;},{once:true,passive:true});});
+function go(){var id=decodeURIComponent(location.hash.slice(1));var el=id&&document.getElementById(id);if(el)requestAnimationFrame(function(){el.scrollIntoView({block:'start'});});}
+go();addEventListener('hashchange',go);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){if(!moved&&location.hash)go();});})();
+</script>
+</body>
+</html>

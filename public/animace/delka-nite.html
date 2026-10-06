@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Délka nitě na šev</title>
+<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+<!-- Self-hostované fonty aplikace (public/fonts), aby stránka fungovala i offline v PWA. -->
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{--bg:#f3efe9;--panel:#fffdf9;--ink:#2a211b;--muted:#6c6158;--line:#ddd5cc;--leather:#a3714a;--leather-d:#6e4a2f;--thread:#e6d7a8;--thread-d:#b89a4a;--accent:#b3261e;--ruler:#d9d4c7;--ok:#2f6b3a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#16120f;--panel:#1f1915;--ink:#ece4dc;--muted:#a89a8e;--line:#352c25;--ruler:#4a443b;--ok:#7cc28a;--accent:#ff8a80}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#16120f;--panel:#1f1915;--ink:#ece4dc;--muted:#a89a8e;--line:#352c25;--ruler:#4a443b;--ok:#7cc28a;--accent:#ff8a80}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 "Albert Sans",system-ui,sans-serif;padding-inline:16px;padding-block:22px 44px}
+.wrap{max-width:900px;margin:0 auto;display:grid;gap:18px}
+h1{font-size:1.55rem;margin:0;text-wrap:balance}
+h2{font-size:1.05rem;margin:0}
+p{margin:0}
+.lead{color:var(--muted);max-width:66ch}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:10px}
+.step{display:grid;grid-template-columns:2.2rem 1fr;gap:12px;align-items:start}
+.num{width:2.2rem;height:2.2rem;border-radius:50%;background:var(--leather);color:#fff;display:grid;place-items:center;font-weight:700}
+svg{width:100%;height:auto;display:block}
+.lbl{font:600 13px "Albert Sans",sans-serif;fill:var(--ink)}
+.sm{font:500 11.5px "Albert Sans",sans-serif;fill:var(--muted)}
+.red{fill:var(--accent)}
+.calc{display:flex;flex-wrap:wrap;gap:14px;align-items:end}
+label{display:grid;gap:4px;font-size:14px;color:var(--muted)}
+input,select{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);min-width:9rem}
+.res{font-size:1.25rem;font-weight:700;font-variant-numeric:tabular-nums}
+.small{font-size:13px;color:var(--muted)}
+ul{margin:0;padding-left:18px;display:grid;gap:4px}
+/* Hidepath: návrat do lekce */
+.backlink{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--ink);font-weight:600;font-size:15px;text-decoration:none;justify-self:start}
+.backlink:hover{text-decoration:underline}
+.backlink:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<a class="backlink" href="/" data-back>← Zpět do lekce</a>
+<h1>Kolik nitě na šev</h1>
+<p class="lead">Pravidlo pro sedlový steh: <b>délka nitě ≈ 4× délka švu + 25 cm rezerva</b>. Přes 3 vrstvy nebo silnější kůži počítej 5×. Nit prochází každým otvorem dvakrát (jednou z každé strany) a ohýbá se přes tloušťku kůže.</p>
+</header>
+
+<section class="card">
+<div class="step"><div class="num">1</div><div>
+<h2>Změř délku švu po linii stehu</h2>
+<p class="small">Ne po okraji kůže, ale po čárkované linii stehu. Rovné úseky pravítkem. Přes oblouk polož provázek nebo nit, pak ji narovnej a změř.</p>
+</div></div>
+<svg viewBox="0 0 640 250" role="img" aria-label="Pouzdro s vyznačenou linií stehu po bocích a dole a měřením">
+  <rect x="150" y="20" width="300" height="200" rx="16" fill="var(--leather)" stroke="var(--leather-d)" stroke-width="2"/>
+  <path d="M164 60 V196 a10 10 0 0 0 10 10 H426 a10 10 0 0 0 10 -10 V60" fill="none" stroke="var(--thread)" stroke-width="3" stroke-dasharray="7 6"/>
+  <text x="300" y="45" text-anchor="middle" class="lbl" style="fill:#fff">vrch nešitý</text>
+  <!-- labels for segments -->
+  <path d="M132 60 V206" stroke="var(--accent)" stroke-width="1.6"/>
+  <path d="M126 60 H138 M126 206 H138" stroke="var(--accent)" stroke-width="1.6"/>
+  <text x="122" y="136" text-anchor="end" class="lbl red">bok</text>
+  <path d="M174 236 H426" stroke="var(--accent)" stroke-width="1.6"/>
+  <path d="M174 230 V242 M426 230 V242" stroke="var(--accent)" stroke-width="1.6"/>
+  <text x="300" y="250" text-anchor="middle" class="lbl red" dy="-2">dno</text>
+  <path d="M468 60 V206" stroke="var(--accent)" stroke-width="1.6"/>
+  <path d="M462 60 H474 M462 206 H474" stroke="var(--accent)" stroke-width="1.6"/>
+  <text x="478" y="136" class="lbl red">bok</text>
+  <text x="520" y="80" class="sm">délka švu =</text>
+  <text x="520" y="98" class="sm">bok + dno + bok</text>
+  <text x="520" y="122" class="sm">čárkovaně = linie</text>
+  <text x="520" y="138" class="sm">stehu</text>
+</svg>
+</section>
+
+<section class="card">
+<div class="step"><div class="num">2</div><div>
+<h2>Vynásob 4× a přidej 25 cm</h2>
+<p class="small">Příklad: šev 18 cm → 4 × 18 = 72 cm + 25 cm rezerva = <b>asi 1 m nitě</b>.</p>
+</div></div>
+<svg viewBox="0 0 640 120" role="img" aria-label="Pruh nitě rozdělený na čtyři délky švu a rezervu">
+  <g font-family="Albert Sans,sans-serif">
+  <rect x="20" y="40" width="110" height="22" rx="4" fill="var(--thread)" stroke="var(--thread-d)"/>
+  <rect x="134" y="40" width="110" height="22" rx="4" fill="var(--thread)" stroke="var(--thread-d)"/>
+  <rect x="248" y="40" width="110" height="22" rx="4" fill="var(--thread)" stroke="var(--thread-d)"/>
+  <rect x="362" y="40" width="110" height="22" rx="4" fill="var(--thread)" stroke="var(--thread-d)"/>
+  <rect x="476" y="40" width="144" height="22" rx="4" fill="none" stroke="var(--thread-d)" stroke-dasharray="5 4"/>
+  </g>
+  <text x="75" y="56" text-anchor="middle" class="sm" style="fill:#5a4520">1× šev</text>
+  <text x="189" y="56" text-anchor="middle" class="sm" style="fill:#5a4520">2× šev</text>
+  <text x="303" y="56" text-anchor="middle" class="sm" style="fill:#5a4520">3× šev</text>
+  <text x="417" y="56" text-anchor="middle" class="sm" style="fill:#5a4520">4× šev</text>
+  <text x="548" y="56" text-anchor="middle" class="sm">+ 25 cm</text>
+  <text x="246" y="28" text-anchor="middle" class="lbl">4 × délka švu</text>
+  <text x="548" y="28" text-anchor="middle" class="lbl">rezerva</text>
+  <text x="320" y="96" text-anchor="middle" class="sm">rezerva = navléknutí do jehel + zpětné stehy na konci</text>
+</svg>
+</section>
+
+<section class="card">
+<div class="step"><div class="num">3</div><div>
+<h2>Navleč obě jehly a nit vyrovnej na půl</h2>
+<p class="small">Nit protáhni prvním otvorem tak, aby na obou stranách zůstala stejná délka. Pak šiješ oběma jehlami proti sobě.</p>
+</div></div>
+<svg viewBox="0 0 640 130" role="img" aria-label="Nit se dvěma jehlami, uprostřed první otvor v kůži">
+  <rect x="270" y="40" width="100" height="50" rx="6" fill="var(--leather)" stroke="var(--leather-d)"/>
+  <circle cx="320" cy="65" r="4" fill="var(--bg)" stroke="var(--leather-d)"/>
+  <path d="M40 65 H316 M324 65 H600" stroke="var(--thread-d)" stroke-width="3" fill="none"/>
+  <path d="M20 65 l26 -4 v8 z" fill="var(--muted)"/>
+  <path d="M620 65 l-26 -4 v8 z" fill="var(--muted)"/>
+  <text x="30" y="98" class="sm">jehla</text>
+  <text x="610" y="98" text-anchor="end" class="sm">jehla</text>
+  <text x="180" y="54" text-anchor="middle" class="lbl">½ nitě</text>
+  <text x="460" y="54" text-anchor="middle" class="lbl">½ nitě</text>
+  <text x="320" y="116" text-anchor="middle" class="sm">první otvor</text>
+</svg>
+</section>
+
+<section class="card">
+<h2>Kalkulačka</h2>
+<div class="calc">
+<label>Délka švu (cm)<input id="len" type="number" inputmode="decimal" min="1" step="0.5" value="18"></label>
+<label>Šev přes
+<select id="lay"><option value="4">2 vrstvy (4×)</option><option value="5">3 vrstvy nebo silnější kůže (5×)</option></select></label>
+<div><div class="small">Odměř nit</div><div class="res" id="out"></div></div>
+</div>
+<p class="small" id="note"></p>
+</section>
+
+<section class="card">
+<h2>Tipy</h2>
+<ul>
+<li>Raději o kus delší: napojovat nit uprostřed švu je nepříjemné, přebytek se ustřihne.</li>
+<li>Vychází přes 1,5 m? Nit se plete a třepí, šev raději rozděl na dvě části.</li>
+<li>Při tréninku (lekce 4) si změř, kolik nitě jsi opravdu spotřeboval, a pravidlo si dolaď.</li>
+</ul>
+</section>
+</div>
+<script>
+const len=document.getElementById('len'),lay=document.getElementById('lay'),out=document.getElementById('out'),note=document.getElementById('note');
+const cz=n=>n.toLocaleString('cs-CZ',{maximumFractionDigits:0});
+function upd(){const l=parseFloat(String(len.value).replace(',','.'));if(!(l>0)){out.textContent='–';note.textContent='';return;}
+const k=+lay.value,t=l*k+25;out.textContent=cz(t)+' cm';
+note.textContent=cz(l)+' × '+k+' = '+cz(l*k)+' cm + 25 cm rezerva'+(t>150?' · přes 1,5 m – zvaž rozdělení švu':'');}
+len.addEventListener('input',upd);lay.addEventListener('change',upd);upd();
+</script>
+<script>
+// Hidepath: „Zpět do lekce“ = krok zpět v historii, když se sem přišlo z aplikace; jinak úvod aplikace.
+(function(){var a=document.querySelector('[data-back]');if(!a)return;a.addEventListener('click',function(e){var o='';try{o=document.referrer?new URL(document.referrer).origin:'';}catch(_){}if(o===location.origin&&history.length>1){e.preventDefault();history.back();}});})();
+</script>
+</body>
+</html>

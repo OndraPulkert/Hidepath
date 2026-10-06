@@ -154,7 +154,7 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
       </section>
 
       {Body ? (
-        <section className="max-w-prose text-body-lg [&_p+p]:mt-3">
+        <section className="max-w-prose text-body-lg [&_a]:text-leather [&_a]:underline [&_a:hover]:text-cognac [&_p+p]:mt-3">
           <Body />
         </section>
       ) : null}

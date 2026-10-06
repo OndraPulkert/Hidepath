@@ -67,11 +67,13 @@ export default defineConfig(({ command, mode }) => {
         },
         workbox: {
           // App shell: JS, CSS, HTML, self-hostované fonty (public/fonts) a ikony se precachují.
+          // Patří sem i animace postupu (public/animace/*.html), takže fungují offline.
           globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
           // SPA fallback – všechny navigace obslouží precachovaný index.html,
-          // včetně explicitní stránky /offline.
+          // včetně explicitní stránky /offline. Animace jsou samostatné stránky, ne trasy SPA:
+          // obslouží je precache (nebo síť), nikdy index.html.
           navigateFallback: '/index.html',
-          navigateFallbackDenylist: [/^\/api\//],
+          navigateFallbackDenylist: [/^\/api\//, /^\/animace\//],
           cleanupOutdatedCaches: true,
           clientsClaim: false,
           skipWaiting: false,

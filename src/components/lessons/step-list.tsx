@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 
 import { routes } from '@/app/routes';
 import { MediaSlot } from '@/components/lessons/media-slot';
+import { Button } from '@/components/ui/button';
 import { type LessonStep, type TemplateDefinition } from '@/content/schema';
 import { typo } from '@/lib/utils/format';
 
@@ -39,6 +40,24 @@ export function StepList({
               >
                 {printLinkLabels[step.printLink]} →
               </Link>
+            ) : null}
+            {step.animationLink ? (
+              // Obyčejný odkaz, ne router <Link>: animace je statická stránka mimo SPA
+              // (public/animace, offline z precache service workeru).
+              <Button
+                asChild
+                variant="secondary"
+                className="h-auto flex-col items-start gap-0.5 self-start py-2 text-left whitespace-normal"
+              >
+                <a href={step.animationLink.href}>
+                  <span>
+                    <span aria-hidden>▶ </span>Animace postupu
+                  </span>
+                  <span className="text-[14px] font-normal text-ink-2">
+                    {typo(step.animationLink.label)}
+                  </span>
+                </a>
+              </Button>
             ) : null}
             {step.media.map((m) => (
               <MediaSlot

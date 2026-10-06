@@ -151,6 +151,23 @@ export const checkpointDefinitionSchema = z.object({
 });
 export type CheckpointDefinition = z.infer<typeof checkpointDefinitionSchema>;
 
+/**
+ * Odkaz z kroku na animaci postupu: samostatná stránka v `public/animace` (precachovaná
+ * service workerem, funguje offline), volitelně s kotvou části (`#B`, `#anim-dno`).
+ * Odkazy se skládají přes `animationLink()` z `@/content/animations`, ne ručně.
+ */
+export const animationLinkSchema = z.object({
+  href: z
+    .string()
+    .regex(
+      /^\/animace\/[a-z0-9-]+\.html(#[A-Za-z0-9-]+)?$/,
+      'animationLink.href musí mířit na /animace/<soubor>.html, volitelně s kotvou',
+    ),
+  /** Která část animace se otevře, např. „Část B – 1. výtisk na líc“. */
+  label: z.string().min(1),
+});
+export type AnimationLink = z.infer<typeof animationLinkSchema>;
+
 export const lessonStepSchema = z.object({
   id: slug,
   title: z.string().min(1),
@@ -161,6 +178,8 @@ export const lessonStepSchema = z.object({
    * (`practiceSheets`), např. cvičná šablona k vyzkoušení přenosu šablony na odřezku.
    */
   printLink: z.enum(['practice-sheets']).optional(),
+  /** Odkaz pod krokem na animaci postupu (tlačítko „▶ Animace postupu“). */
+  animationLink: animationLinkSchema.optional(),
 });
 export type LessonStep = z.infer<typeof lessonStepSchema>;
 
