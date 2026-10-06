@@ -752,6 +752,9 @@ export function buildCoinHolderPaperModelSvg(
   ].join('\n');
 }
 
+/** O kolik konce os na listu KAPSA přesahují obrys kapsy (mm). */
+export const POCKET_AXIS_OVERRUN_MM = 4;
+
 /**
  * List KAPSA (A4 na výšku, 1:1): kapsa s mincí a otvor formy pro důlek.
  */
@@ -772,7 +775,8 @@ export function buildCoinHolderPocketSvg(
   let cy = m;
   out.push(text(m, cy + 2.5, 'KAPSA S MINCÍ (horní hrana otevřená)', 2.8, 'start'));
   const kx = m;
-  const ky = cy + SHEET_TITLE_GAP_MM;
+  // Kapsa je o přesah os níž, aby horní konec svislé osy (nad obrysem) nepřeškrtl nadpis.
+  const ky = cy + SHEET_TITLE_GAP_MM + POCKET_AXIS_OVERRUN_MM;
   out.push(cut(roundedRect(kx, ky, L.pocketWidthMm, L.pocketHeightMm, spec.pocketTopRadiusMm, rc)));
   const seam = pocketSeam(
     kx + so,
@@ -791,10 +795,13 @@ export function buildCoinHolderPocketSvg(
   out.push(circle(ccx, ccy, L.formHoleDiameterMm / 2, GUIDE, '0.8 1.2'));
   out.push(cross(ccx, ccy));
   // Osy přes celý díl až za obrys: na kůži se protáhnou k okraji a podle nich se kůže vystředí
-  // na formě (křížek sám je pod kůží schovaný) a vystředí výsečník okna.
+  // na formě (křížek sám je pod kůží schovaný) a vystředí výsečník okna. Všechny 4 konce leží
+  // POCKET_AXIS_OVERRUN_MM za obrysem: propichují se na líci a musí odpadnout s odřezkem
+  // (konec na hraně by nechal zářez v otevřené horní hraně kapsy).
+  const ov = POCKET_AXIS_OVERRUN_MM;
   out.push(
     guide(
-      `M${f(kx - 4)} ${f(ccy)} H${f(kx + L.pocketWidthMm + 4)} M${f(ccx)} ${f(ky)} V${f(ky + L.pocketHeightMm + 4)}`,
+      `M${f(kx - ov)} ${f(ccy)} H${f(kx + L.pocketWidthMm + ov)} M${f(ccx)} ${f(ky - ov)} V${f(ky + L.pocketHeightMm + ov)}`,
       '3 1 0.6 1',
     ),
   );

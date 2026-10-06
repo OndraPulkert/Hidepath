@@ -202,15 +202,55 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
     expect(window).not.toBeNull();
     expect(Number(window![1]) - coin[0]!.cx).toBeCloseTo(rw, 2);
     expect(Number(window![2])).toBeCloseTo(coin[0]!.cy, 2);
-    // Střed mince v kapse podle modelu (kapsa začíná na okraji listu pod nadpisem).
+    // Střed mince v kapse podle modelu (kapsa začíná na okraji listu pod nadpisem, o přesah
+    // os níž, aby horní konec svislé osy nepřeškrtl nadpis).
     const m2 = 10;
     expect(coin[0]!.cx).toBeCloseTo(m2 + L.coinCentreXMm, 2);
-    expect(coin[0]!.cy).toBeCloseTo(m2 + 4 + L.coinCentreYMm, 2);
+    expect(coin[0]!.cy).toBeCloseTo(m2 + 4 + 4 + L.coinCentreYMm, 2);
     const seamHoles = Number(/šev (\d+) otvorů od středu dna/.exec(pocketSheet ?? '')?.[1]);
     expect(seamHoles % 2).toBe(1);
     expect(cs.filter((c) => near(c.r, 0.45)).length).toBe(seamHoles);
     // Pás na listu 1 má tečky jen ve švu dna.
     expect(circles(sheet ?? '').filter((c) => near(c.r, 0.45)).length).toBe(3 * L.bottomSeamHoles);
+  });
+
+  it('list kapsy: 4 konce os leží ≥ 3 mm vně obrysu kapsy a uvnitř odřezku i listu', () => {
+    // Konce os se propichují na LÍC; musí odpadnout s odřezkem, jinak by v (otevřené horní)
+    // hraně kapsy zůstal zářez.
+    const kx = 10;
+    const ky = 10 + 4 + 4;
+    const ax =
+      /<path d="M([\d.]+) ([\d.]+) H([\d.]+) M([\d.]+) ([\d.]+) V([\d.]+)"[^>]*stroke-dasharray="3 1 0.6 1"/.exec(
+        pocketSheet ?? '',
+      );
+    expect(ax).not.toBeNull();
+    const [left, cyAx, right, cxAx, top, bottom] = ax!.slice(1).map(Number) as [
+      number,
+      number,
+      number,
+      number,
+      number,
+      number,
+    ];
+    expect(cxAx).toBeCloseTo(kx + L.coinCentreXMm, 2);
+    expect(cyAx).toBeCloseTo(ky + L.coinCentreYMm, 2);
+    // Obrys je u konců os rovný (zaoblené jsou jen rohy), takže vzdálenost od obrysu je rozdíl
+    // souřadnic.
+    const outside = [
+      kx - left,
+      right - (kx + L.pocketWidthMm),
+      ky - top,
+      bottom - (ky + L.pocketHeightMm),
+    ];
+    for (const d of outside) expect(d).toBeGreaterThanOrEqual(3);
+    // Kapsa vystředěná na odřezku ≥ (forma − 4) mm: konce os se na něj musí vejít.
+    const blank = L.formPlateMm - 4;
+    expect(right - left).toBeLessThanOrEqual(blank - 2);
+    expect(bottom - top).toBeLessThanOrEqual(blank - 2);
+    // Uvnitř listu a pod nadpisem (účaří 12,5 mm).
+    expect(left).toBeGreaterThanOrEqual(0);
+    expect(right).toBeLessThanOrEqual(210);
+    expect(top).toBeGreaterThan(13);
   });
 
   it('kalibrační úsečka měří 50 mm', () => {

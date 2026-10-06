@@ -125,10 +125,14 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 <script>
 (()=>{
 // ---------- geometry from the sheet (mm, sheet coordinates) ----------
+// Kapsa je na listu o 4 mm níž (horní hrana y = 18, aby konec svislé osy nepřeškrtl nadpis);
+// tady se kreslí v soustavě listu posunuté o 4 mm nahoru (horní hrana y = 14). Celý list (A1)
+// se kreslí s posunem SHEET_DY. Konce os leží 4 mm vně obrysu (vlevo, vpravo, nahoře, dole).
 const OUT="M20 14 L42.5 14 A10 10 0 0 1 52.5 24 L52.5 50 A6 6 0 0 1 46.5 56 L16 56 A6 6 0 0 1 10 50 L10 24 A10 10 0 0 1 20 14 Z";
 const SEAM="M13.5 24 L13.5 50 A2.5 2.5 0 0 0 16 52.5 L46.5 52.5 A2.5 2.5 0 0 0 49 50 L49 24";
 const CX=31.25, CY=34.75, R_WIN=10, R_COIN=13.75, R_FOOT=15.75;
-const AXE=[[6,34.75],[56.5,34.75],[31.25,14],[31.25,60]];
+const AXE=[[6,34.75],[56.5,34.75],[31.25,10],[31.25,60]];
+const SHEET_DY=4;
 // 23 seam dots in seam order (left side down, bottom, right side up)
 const DOTS=[[13.5,25.177],[13.5,29.177],[13.5,33.177],[13.5,37.177],[13.5,41.177],[13.5,45.177],[13.5,49.177],[15.261,52.388],
  [19.25,52.5],[23.25,52.5],[27.25,52.5],[31.25,52.5],[35.25,52.5],[39.25,52.5],[43.25,52.5],[47.239,52.388],
@@ -163,7 +167,7 @@ function printKapsa(o={}){
   s+=`<circle cx="${CX}" cy="${CY}" r="${R_COIN}" fill="none" stroke="${m}" stroke-width=".2" stroke-dasharray="2 1.5"/>`;
   s+=`<circle cx="${CX}" cy="${CY}" r="${R_FOOT}" fill="none" stroke="${m}" stroke-width=".2" stroke-dasharray=".8 1.2"/>`;
   s+=`<path d="M29.75 34.75 L32.75 34.75 M31.25 33.25 L31.25 36.25" stroke="${ink}" stroke-width=".25"/>`;
-  const ax = o.axClip ? `M10 34.75 H52.5 M31.25 14 V56` : `M6 34.75 H56.5 M31.25 14 V60`;
+  const ax = o.axClip ? `M10 34.75 H52.5 M31.25 14 V56` : `M6 34.75 H56.5 M31.25 10 V60`;
   s+=`<path d="${ax}" fill="none" stroke="${m}" stroke-width=".2" stroke-dasharray="3 1 .6 1"/>`;
   return s;
 }
@@ -313,20 +317,20 @@ const add=(part,title,body,dur,draw,side)=>S.push({part,title,body,dur,draw,side
 add('A','Vystřihněte výkres OTVOR FORMY','Na listu KAPSA je samostatný výkres „OTVOR FORMY PRO DŮLEK“ – kružnice Ø 31,5 mm s osami. Vystřihněte ho jako čtverec asi 7 × 7 cm, s okrajem kolem kružnice, aby na papíru zůstaly celé osy. Samotnou kružnici nevystřihujte.',4200,t=>{
   const k=.5, ox=6, oy=8; let s='';
   const fade=1-.7*es(t,.72,.95);
-  let sheet=`${paperRect(0,0,210,150)}${G('',printKapsa())}`;
-  sheet+=`<text x="10" y="12.5" style="font:600 2.8px Albert Sans,sans-serif;fill:var(--print)">KAPSA S MINCÍ</text><text x="10" y="74.5" style="font:600 2.8px Albert Sans,sans-serif;fill:var(--print)">OTVOR FORMY PRO DŮLEK</text>`;
-  for(let i=0;i<12;i++)sheet+=`<rect x="58.5" y="${16+i*3.6}" width="${60+((i*37)%40)}" height="1.1" fill="#cfcac0"/>`;
-  sheet+=`<circle cx="25.75" cy="91.75" r="15.75" fill="none" stroke="var(--print)" stroke-width=".3"/><path d="M24.25 91.75 H27.25 M25.75 90.25 V93.25" stroke="var(--print)" stroke-width=".25"/><path d="M6 91.75 H45.5 M25.75 75.5 V111.5" stroke="var(--print-m)" stroke-width=".2" stroke-dasharray="3 1 .6 1"/>`;
-  for(let i=0;i<6;i++)sheet+=`<rect x="47.5" y="${80.5+i*3.6}" width="${55+((i*29)%35)}" height="1.1" fill="#cfcac0"/>`;
-  s+=G(`translate(${ox} ${oy}) scale(${k})`,G('',sheet,`opacity="${f(fade)}"`)+(t<.72?`<rect x="0" y="60.5" width="70" height="70" fill="none" stroke="var(--accent)" stroke-width=".7" stroke-dasharray="2 1.2" opacity=".55"/>`:''));
+  let sheet=`${paperRect(0,0,210,150)}${G(`translate(0 ${SHEET_DY})`,printKapsa())}`;
+  sheet+=`<text x="10" y="12.5" style="font:600 2.8px Albert Sans,sans-serif;fill:var(--print)">KAPSA S MINCÍ</text><text x="10" y="78.5" style="font:600 2.8px Albert Sans,sans-serif;fill:var(--print)">OTVOR FORMY PRO DŮLEK</text>`;
+  for(let i=0;i<12;i++)sheet+=`<rect x="58.5" y="${20+i*3.6}" width="${60+((i*37)%40)}" height="1.1" fill="#cfcac0"/>`;
+  sheet+=`<circle cx="25.75" cy="95.75" r="15.75" fill="none" stroke="var(--print)" stroke-width=".3"/><path d="M24.25 95.75 H27.25 M25.75 94.25 V97.25" stroke="var(--print)" stroke-width=".25"/><path d="M6 95.75 H45.5 M25.75 79.5 V115.5" stroke="var(--print-m)" stroke-width=".2" stroke-dasharray="3 1 .6 1"/>`;
+  for(let i=0;i<6;i++)sheet+=`<rect x="47.5" y="${84.5+i*3.6}" width="${55+((i*29)%35)}" height="1.1" fill="#cfcac0"/>`;
+  s+=G(`translate(${ox} ${oy}) scale(${k})`,G('',sheet,`opacity="${f(fade)}"`)+(t<.72?`<rect x="0" y="64.5" width="70" height="70" fill="none" stroke="var(--accent)" stroke-width=".7" stroke-dasharray="2 1.2" opacity=".55"/>`:''));
   // cut line progress: top -> right -> bottom (left edge = sheet edge)
   const c=es(t,.12,.66);
-  const pts=[[0,60.5],[70,60.5],[70,130.5],[0,130.5]]; const segL=[70,70,70]; let rem=c*210, d=`M0 60.5`, cur=[0,60.5];
+  const pts=[[0,64.5],[70,64.5],[70,134.5],[0,134.5]]; const segL=[70,70,70]; let rem=c*210, d=`M0 64.5`, cur=[0,64.5];
   for(let i=0;i<3&&rem>0;i++){const a=pts[i],b=pts[i+1],u=Math.min(1,rem/segL[i]);cur=[L(a[0],b[0],u),L(a[1],b[1],u)];d+=` L${f(cur[0])} ${f(cur[1])}`;rem-=segL[i];}
   if(t<.72){s+=G(`translate(${ox} ${oy}) scale(${k})`,`<path d="${d}" stroke="var(--accent)" stroke-width=".8" fill="none"/>`);
     if(c>0&&c<1) s+=scissors(ox+cur[0]*k,oy+cur[1]*k, c<1/3?0:c<2/3?90:180);}
   // square moves out
-  const m=es(t,.72,1); const sx=L(ox,62,m), sy=L(oy+60.5*k,14,m), sk=L(k,.85,m);
+  const m=es(t,.72,1); const sx=L(ox,62,m), sy=L(oy+64.5*k,14,m), sk=L(k,.85,m);
   s+=G(`translate(${f(sx)} ${f(sy)}) scale(${f(sk)})`,formSquare(),m>0?SHADOW:'');
   if(m>.6){const a=seg(t,.85,1);s+=`<g opacity="${f(a)}">${lbl(62,77,'čtverec asi 7 × 7 cm','t')}${lbl(62,82.5,'Ø 31,5 – kružnici nevystřihujte','ts')}${lead(98,30,84.5,40.5)}${lbl(99,29.5,'křížek os','ts')}</g>`}
   return s;
