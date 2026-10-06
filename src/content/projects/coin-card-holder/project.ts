@@ -150,8 +150,8 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 30,
     goal: 'Vyvrtat formu na tvarování, vytvarovat na ní za mokra důlek na minci do odřezku kůže, poznat, jak vypadá dost hluboký důlek, a na odřezku s vyseknutým oknem Ø 20 mm ověřit, že prstenec 3,75 mm minci udrží.',
     materials: [
-      'vytištěný list KAPSA (zkontrolovaná kalibrační úsečka 50 mm; výchozí list je pro minci 50 Kč, u mince 40 mm vytiskněte variantu pro 40 mm – mění se jí otvor formy)',
-      'dvě desky na formu a víko (překližka nebo tvrdý plast, aspoň 8 mm) a odpadní prkno pod vrtání',
+      'list KAPSA ve 3 výtiscích: 1 na vrtání formy, 1 na orýsování značek, 1 na vystřižení přesně po obrysu kapsy (zkontrolovaná kalibrační úsečka 50 mm; výchozí list je pro minci 50 Kč, u mince 40 mm vytiskněte variantu pro 40 mm – mění se jí otvor formy)',
+      'dvě desky na formu a víko (překližka nebo tvrdý plast, aspoň 8 mm; jako forma poslouží i bukové kuchyňské prkénko asi 1,5 cm silné, např. Orion) a odpadní prkno pod vrtání',
       'aku vrtačka s vykružovací pilou 32 mm (např. Wolfcraft bimetal Ø 32 mm) pro výchozí minci 50 Kč (otvor 31,5 mm); Forstnerův vrták jen v průměru 32 mm – v ověřené sadě 15–35 mm je jen 30 mm (menší než otvor) a 35 mm; u mince 40 mm vykružovací pila 45 nebo 44 mm',
       '2 odřezky třísločiněné kůže 1,2 mm, každý aspoň 57,5 × 57,5 mm (u mince 40 mm aspoň 70 × 70 mm) – druhý pro případné opakování zkoušky okna',
       'mince, na kterou stavíte střih (výchozí 50 Kč)',
@@ -170,6 +170,8 @@ export const lessons: readonly LessonDefinition[] = [
       'mallet',
       'punching-board',
       'round-punch-32mm',
+      'utility-knife',
+      'steel-ruler',
     ],
     recommendedEquipment: ['masking-tape'],
     prerequisiteLessons: [L1],
@@ -177,13 +179,13 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'drill-form',
         title: 'Vyvrtejte formu',
-        body: 'Vytiskněte list KAPSA na 100 % (zkontrolujte úsečku 50 mm), vystřihněte kružnici otvoru formy a nalepte na desku. Desku upněte svěrkou ke stolu, pod ni dejte odpadní prkno. Otvor pro výchozí minci 50 Kč vrtejte vykružovací pilou Ø 32 mm (u mince 40 mm Ø 44 mm), na 1. rychlost, bez příklepu, netlačte silou, s nabitou baterií. Vykružovací pilou provrtejte do půlky, desku otočte a dokončete z druhé strany podle dírky středicího vrtáku. Forstnerovým vrtákem (sukovníkem) ho místo toho průběžně vytahujte, ať se zbaví pilin. Nakonec zaoblete horní hranu otvoru (stranu, na kterou budete pokládat kůži – označte si ji tužkou): smirkový papír 180 oviňte kolem prstu nebo tužky a hranu po celém obvodu sražte šikmo asi pod 45° do malého oblouku kolem 1 mm. Průměr otvoru nezvětšujte. Stěnu otvoru jen lehce přejeďte, aby netrčely třísky, a plochu kolem otvoru přebruste naplocho. Hrana nesmí pod prstem řezat ani drhnout; zabalená mince s odřezkem kůže musí jít do otvoru volně. Na desku narýsujte obě osy otvoru (vodorovnou i svislou), protažené až k jejím okrajům – podle nich pak na formě zarovnáte osy narýsované na kůži.',
+        body: 'Vytiskněte list KAPSA na 100 % (zkontrolujte úsečku 50 mm). Formou je deska z překližky nebo tvrdého plastu, poslouží i bukové kuchyňské prkénko asi 1,5 cm silné (např. Orion). Na listu je samostatný výkres „OTVOR FORMY PRO DŮLEK“ – kružnice Ø 31,5 mm s osami. Vystřihněte ho jako čtverec asi 7 × 7 cm, s okrajem asi 2 cm kolem kružnice, aby na papíru zůstaly celé osy. Samotnou kružnici nevystřihujte. Čtverec položte na desku doprostřed její šířky, střed otvoru asi 4–5 cm od konce naproti rukojeti (má-li deska rukojeť), osy rovnoběžně s okraji desky. Přilepte ho lepicí tyčinkou nebo páskou na okrajích. Ještě před vrtáním protáhněte obě osy tužkou podle pravítka až k okrajům desky – podle nich pak na formě zarovnáte osy narýsované na kůži. Desku upněte svěrkou ke stolu, pod ni dejte odpadní prkno. Středicí vrták nasaďte do křížku os. Otvor pro výchozí minci 50 Kč vrtejte vykružovací pilou Ø 32 mm (u mince 40 mm Ø 44 mm), na 1. rychlost, bez příklepu, netlačte silou, s nabitou baterií. Vykružovací pilou provrtejte do půlky, desku otočte a dokončete z druhé strany podle dírky středicího vrtáku. Forstnerovým vrtákem (sukovníkem) ho místo toho průběžně vytahujte, ať se zbaví pilin. Pak papír sundejte. Nakonec zaoblete horní hranu otvoru (stranu, na kterou budete pokládat kůži – označte si ji tužkou): smirkový papír 180 oviňte kolem prstu nebo tužky a hranu po celém obvodu sražte šikmo asi pod 45° do malého oblouku kolem 1 mm. Průměr otvoru nezvětšujte. Stěnu otvoru jen lehce přejeďte, aby netrčely třísky, a plochu kolem otvoru přebruste naplocho. Hrana nesmí pod prstem řezat ani drhnout; zabalená mince s odřezkem kůže musí jít do otvoru volně. Pokud se osy při broušení setřely, obtáhněte je znovu až k okrajům desky.',
         media: [],
       },
       {
         id: 'mark-outline',
         title: 'Orýsujte obrys a prosekejte otvory švu',
-        body: 'List KAPSA vystřihněte nahrubo s okrajem 1–2 cm, položte na LÍC odřezku a přilepte maskovací páskou na okrajích, mimo obrys, z několika stran (pásku nejdřív zkuste na kousku téže kůže). Šídlem propíchněte skrz: tečky švu, konce obou os a rohy obrysu kapsy. Pásku strhněte pomalu pod ostrým úhlem a zkontrolujte, že se přenesly všechny značky. Vidličkami s roztečí 4 mm naplocho na desce prosekejte otvory švu z líce podle propíchnutých teček, stejně jako u skutečné kapsy, která se děruje ještě před navlhčením. Pak na rub podle propíchnutých míst narýsujte obrys kapsy, obě osy (protažené až k okraji kůže) a kružnici okna – podle ní vystředíte zkušební okno na konci lekce. Otvory švu leží jen asi 2 mm vně dna důlku, proto na přesném vystředění záleží; tady si tu kombinaci vyzkoušíte na odřezku.',
+        body: 'Použijete dva výtisky listu KAPSA. 1. výtisk vystřihněte nahrubo s okrajem 1–2 cm, položte na LÍC odřezku a přilepte maskovací páskou na okrajích, mimo obrys, z několika stran (pásku nejdřív zkuste na kousku téže kůže). Šídlem propíchněte skrz tečky švu a 4 konce os – čtyři body, kde končí čerchované osy (vlevo, vpravo, nahoře, dole). Pásku strhněte pomalu pod ostrým úhlem, list sundejte a zkontrolujte, že se přenesly všechny značky. Protilehlé propíchnuté konce os spojte podle pravítka a osy protáhněte až k okrajům kůže; narýsujte je přes propíchnuté dírky i na rubu. Vidličkami s roztečí 4 mm naplocho na desce prosekejte otvory švu z líce podle propíchnutých teček, stejně jako u skutečné kapsy, která se děruje ještě před navlhčením. 2. výtisk vystřihněte přesně po obrysu kapsy (plná čára se zaoblenými rohy), položte ho na RUB, zarovnejte na osy a obrys obtáhněte šídlem nebo tužkou. Na rub, ne na líc: škrábnutí na líci třísločiněné kůže zůstane vidět. Přeneste i kružnici okna – propíchněte její střed a několik bodů na kružnici; podle ní vystředíte zkušební okno na konci lekce. Obrys se teď neřeže, odřezek se po něm řízne až po vytvarování. Vystřižený 2. výtisk si schovejte: když se čára při tvarování rozmaže, obtáhnete ji podle něj znovu. Otvory švu leží jen asi 2 mm vně dna důlku, proto na přesném vystředění záleží; tady si tu kombinaci vyzkoušíte na odřezku.',
         media: [],
       },
       {
@@ -236,7 +238,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'test-window-retention',
         title: 'Vysekněte zkušební okno a vyzkoušejte, že mince drží',
-        body: 'Okno Ø 20 mm nechává kolem mince 50 Kč prstenec kůže jen 3,75 mm (dřív střih počítal se 4 mm), a právě ten má minci držet, aby oknem nevypadla. Že to na vaší kůži stačí, se musí ověřit tady, na odřezku, ne až na hotové kapse. Zaschlý odřezek položte lícem dolů zpátky na formu (osy na kůži na osy desky), pod důlek podložte špalík (užší než otvor formy, širší než okno) a výsečníkem Ø 20 mm (u mince 40 mm Ø 32 mm) vystředěným podle narýsované kružnice okna vysekněte okno. Pak zkoušejte: (1) minci vložte z rubu do důlku, odřezek otočte oknem dolů a zatřeste – mince nesmí vypadnout; (2) na minci z rubu zatlačte palcem směrem k oknu – nesmí oknem projít ani prstenec vytlačit ven; (3) prstenec zkontrolujte po celém obvodu – má být stejně široký, bez natržení. Když mince oknem projde, zapište to a Ø 20 mm do skutečné kapsy nesekejte. Nejdřív zkontrolujte hloubku důlku: mělký důlek může být příčina, pak tvarování zopakujte (ověřit na odřezku). Potom na druhém odřezku zopakujte kroky 2–6 (orýsování, zabalení mince, navlhčení, tvarování ve formě a schnutí přes noc) a vysekněte menší okno Ø 18 mm (CraftPoint, stejná nabídka výsečníků 2–20 mm, 29. 9. 2026 za 58 Kč skladem; 19 mm v nabídce není). Prstenec je pak 4,75 mm a z mince je v okně vidět o něco méně. List KAPSA se použije dál na vystředění (osy jsou stejné), jen výsečník je menší než narýsovaná kružnice okna; list s kružnicí Ø 18 mm vytiskne `pnpm pattern:coin-holder --window 18`. Do skutečné kapsy pak sekejte tím průměrem, se kterým vám zkouška vyšla.',
+        body: 'Okno Ø 20 mm nechává kolem mince 50 Kč prstenec kůže jen 3,75 mm (dřív střih počítal se 4 mm), a právě ten má minci držet, aby oknem nevypadla. Že to na vaší kůži stačí, se musí ověřit tady, na odřezku, ne až na hotové kapse. Zaschlý odřezek položte lícem dolů zpátky na formu: důlek do otvoru, osy na kůži na osy desky. Důlek visí v otvoru volně, nic ho nemačká. Nejdřív si na formě vyzkoušejte řez obrysu jako u skutečné kapsy: obrys vede asi 5 mm vně důlku, nad dřevem, takže nůž řeže na desce, ne nad důlkem. Řežte 2–3 lehkými tahy a kůži přidržujte na rovné části (je-li čára rozmazaná, obtáhněte ji znovu podle 2. výtisku). Desku můžete chránit kouskem kartonu s otvorem Ø 32 mm (u mince 40 mm Ø 44 mm) položeným na formu. Pak na formě pod důlek podložte špalík (užší než otvor formy, širší než okno) a výsečníkem Ø 20 mm (u mince 40 mm Ø 32 mm) vystředěným podle narýsované kružnice okna vysekněte okno. Pak zkoušejte: (1) minci vložte z rubu do důlku, odřezek otočte oknem dolů a zatřeste – mince nesmí vypadnout; (2) na minci z rubu zatlačte palcem směrem k oknu – nesmí oknem projít ani prstenec vytlačit ven; (3) prstenec zkontrolujte po celém obvodu – má být stejně široký, bez natržení. Když mince oknem projde, zapište to a Ø 20 mm do skutečné kapsy nesekejte. Nejdřív zkontrolujte hloubku důlku: mělký důlek může být příčina, pak tvarování zopakujte (ověřit na odřezku). Potom na druhém odřezku zopakujte kroky 2–6 (orýsování, zabalení mince, navlhčení, tvarování ve formě a schnutí přes noc) a vysekněte menší okno Ø 18 mm (CraftPoint, stejná nabídka výsečníků 2–20 mm, 29. 9. 2026 za 58 Kč skladem; 19 mm v nabídce není). Prstenec je pak 4,75 mm a z mince je v okně vidět o něco méně. List KAPSA se použije dál na vystředění (osy jsou stejné), jen výsečník je menší než narýsovaná kružnice okna; list s kružnicí Ø 18 mm vytiskne `pnpm pattern:coin-holder --window 18`. Do skutečné kapsy pak sekejte tím průměrem, se kterým vám zkouška vyšla.',
         media: [],
       },
     ],
@@ -765,7 +767,7 @@ export const lessons: readonly LessonDefinition[] = [
     goal: 'Vytvarovat kapsu s mincí ze samostatné kůže 1,2 mm, vyseknout okno Ø 20 mm (nebo menší průměr, se kterým vám vyšla zkouška v lekci 2), přišít ji na přední panel a naplocho osadit patici druku.',
     materials: [
       'kůže 1,2 mm na kapsu, aspoň 57,5 × 57,5 mm (i když je pás z 1,5 mm; u mince 40 mm aspoň 70 × 70 mm, podle listu KAPSA)',
-      'vytištěná šablona KAPSA (výchozí pro minci 50 Kč; u mince 40 mm vytiskněte variantu pro 40 mm)',
+      'list KAPSA ve 3 výtiscích: 1 na vrtání formy (odpadá, pokud máte formu z lekce 2), 1 na orýsování značek, 1 na vystřižení přesně po obrysu kapsy (výchozí pro minci 50 Kč; u mince 40 mm vytiskněte variantu pro 40 mm)',
       'mince (výchozí 50 Kč), potravinová fólie',
       'nit asi 0,8 m na šev kapsy (23 otvorů; u mince 40 mm 31 otvorů)',
     ],
@@ -792,7 +794,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'trace-and-punch-pocket',
         title: 'Orýsujte kapsu a prosekněte otvory švu z líce',
-        body: 'List KAPSA vystřihněte nahrubo s okrajem 1–2 cm, položte na LÍC kůže 1,2 mm a přilepte maskovací páskou na okrajích, mimo obrys, z několika stran (na líci nejdřív zkouška na odřezku). Šídlem propíchněte skrz: tečky švu, konce obou os a rohy obrysu kapsy. Obrys se tady skrz papír neřeže – kapsa se řeže až po vytvarování, podle orýsování. Pásku proto teď strhněte pomalu pod ostrým úhlem a zkontrolujte, že se přenesly všechny značky. Vidličkami prosekněte otvory švu z líce podle propíchnutých teček – kapsa bude na předním panelu sedět lícem ven, proto se švové otvory prosekávají z líce; při opětovném prosekávání skrz obě vrstvy v pozdějším kroku musí vidličky vstupovat do stejné strany, aby si otvory lícovaly. Pak na rub podle propíchnutých míst narýsujte obrys kapsy, obě osy (protažené až k okraji kůže) a kružnici okna – podle ní budete okno v pozdějším kroku vystřeďovat. Oboje udělejte ještě před navlhčením.',
+        body: 'Použijete dva výtisky listu KAPSA, stejně jako v lekci 2. 1. výtisk vystřihněte nahrubo s okrajem 1–2 cm, položte na LÍC kůže 1,2 mm a přilepte maskovací páskou na okrajích, mimo obrys, z několika stran (na líci nejdřív zkouška na odřezku). Šídlem propíchněte skrz tečky švu a 4 konce os – čtyři body, kde končí čerchované osy (vlevo, vpravo, nahoře, dole). Pásku strhněte pomalu pod ostrým úhlem, list sundejte a zkontrolujte, že se přenesly všechny značky. Protilehlé propíchnuté konce os spojte podle pravítka a osy protáhněte až k okrajům kůže; narýsujte je přes propíchnuté dírky i na rubu. Vidličkami prosekněte otvory švu z líce podle propíchnutých teček – kapsa bude na předním panelu sedět lícem ven, proto se švové otvory prosekávají z líce; při opětovném prosekávání skrz obě vrstvy v pozdějším kroku musí vidličky vstupovat do stejné strany, aby si otvory lícovaly. 2. výtisk vystřihněte přesně po obrysu kapsy (plná čára se zaoblenými rohy), položte ho na RUB, zarovnejte na osy a obrys obtáhněte šídlem nebo tužkou. Na rub, ne na líc: škrábnutí na líci třísločiněné kůže zůstane vidět. Přeneste i kružnici okna – propíchněte její střed a několik bodů na kružnici; podle ní budete okno v pozdějším kroku vystřeďovat. Obrys se teď neřeže – kapsa se řeže až po vytvarování. Vystřižený 2. výtisk si schovejte: když se čára při tvarování rozmaže, obtáhnete ji podle něj znovu. Všechno udělejte ještě před navlhčením.',
         media: [],
       },
       {
@@ -812,7 +814,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'cut-outline-and-window',
         title: 'Vyřízněte obrys a vysekněte okno',
-        body: 'Vyřízněte obrys kapsy podle orýsování z prvního kroku. Okno vysekněte na formě: kapsu položte lícem dolů zpátky na formu (osy na kůži na osy desky) a pod důlek podložte špalík užší než otvor formy (pod 31,5 mm, u mince 40 mm pod 44 mm) a zároveň širší než okno (přes 20 mm, u mince 40 mm přes 32 mm) – má se dotýkat jen dna důlku zespodu, ne ho nadzvedávat. Výsečník vystřeďte podle kružnice okna narýsované na rubu v prvním kroku, nebo zkontrolujte, že prstenec kůže kolem důlku je stejně široký po celém obvodu, a teprve pak Ø 20 mm (u mince 40 mm Ø 32 mm) okno vysekněte. Prstenec 3,75 mm je úzký: okno Ø 20 mm sekejte jen tehdy, když vám zkouška držení mince na odřezku v lekci 2 vyšla (jinak menší výsečník, se kterým zkouška vyšla). Než kapsu přišijete, vložte do ní minci a zkuste, že oknem nepropadne.',
+        body: 'Obrys i okno se dělají na formě. Zaschlou kapsu položte lícem dolů zpátky na formu: důlek do otvoru, osy na kůži na osy desky. Důlek visí v otvoru volně, nic ho nemačká. Obrys vede asi 5 mm vně důlku, nad dřevem, takže nůž řeže na desce, ne nad důlkem. Vyřízněte ho podle orýsování na rubu 2–3 lehkými tahy a kůži přitom přidržujte na rovné části; je-li čára po tvarování rozmazaná, nejdřív ji obtáhněte znovu podle 2. výtisku. Desku můžete chránit kouskem kartonu s otvorem Ø 32 mm (u mince 40 mm Ø 44 mm) položeným na formu. Pak na formě vysekněte okno: pod důlek podložte špalík užší než otvor formy (pod 31,5 mm, u mince 40 mm pod 44 mm) a zároveň širší než okno (přes 20 mm, u mince 40 mm přes 32 mm) – má se dotýkat jen dna důlku zespodu, ne ho nadzvedávat. Výsečník vystřeďte podle kružnice okna narýsované na rubu v prvním kroku, nebo zkontrolujte, že prstenec kůže kolem důlku je stejně široký po celém obvodu, a teprve pak Ø 20 mm (u mince 40 mm Ø 32 mm) okno vysekněte. Prstenec 3,75 mm je úzký: okno Ø 20 mm sekejte jen tehdy, když vám zkouška držení mince na odřezku v lekci 2 vyšla (jinak menší výsečník, se kterým zkouška vyšla). Než kapsu přišijete, vložte do ní minci a zkuste, že oknem nepropadne.',
         media: [
           {
             id: 'postup-3',
@@ -917,6 +919,7 @@ export const lessons: readonly LessonDefinition[] = [
     ],
     commonMistakes: [
       'Kapsa vystřižená bez orýsování z formy: obrys neodpovídá poloze důlku.',
+      'Obrys kapsy obtažený šídlem na líci místo na rubu: škrábnutí na líci třísločiněné kůže zůstane vidět.',
       'Otvory švu kapsy prosekané při přišití z opačné strany, než byly poprvé: šikmé otvory si nelícují a jehla jimi neprojde.',
       'Kontaktní lepidlo nanesené přes celou plochu kapsy: rozteče se i na viditelný líc kolem ní.',
       'Špalík širší než otvor formy: nadzvedává důlek místo aby ho jen podepřel.',
@@ -1248,7 +1251,7 @@ export const coinCardHolderProject: ProjectDefinition = {
       priority: 'required',
       reason: 'Tvarování důlku na minci za mokra (lekce 2 a 6).',
       specification:
-        'Dvoudílná forma z překližky, otvor Ø 31,5 mm pro výchozí minci 50 Kč (vykružovací pila 32 mm – ověřit na odřezku; Forstnerův vrták jen 32 mm); Ø 44 mm pro minci 40 mm.',
+        'Dvoudílná forma z překližky (jako forma poslouží i bukové kuchyňské prkénko asi 1,5 cm silné, např. Orion), otvor Ø 31,5 mm pro výchozí minci 50 Kč (vykružovací pila 32 mm – ověřit na odřezku; Forstnerův vrták jen 32 mm); Ø 44 mm pro minci 40 mm.',
     },
     {
       equipmentSlug: 'clamps',
@@ -1504,7 +1507,7 @@ export const coinCardHolderProject: ProjectDefinition = {
     ],
     calibrationMm: 50,
     printNote:
-      'Tisk na A4 bez přizpůsobení velikosti (100 %). Kontrolní úsečka na okraji musí měřit 50 mm. Jak přenést šablonu PÁS na kůži: vystřihnout nahrubo s okrajem 1–2 cm, přilepit páskou na líc, propíchnout značky a řezat skrz papír po čáře (lekce 5). Šablona je na jedno použití, na každý pás vytiskněte novou.',
+      'Tisk na A4 bez přizpůsobení velikosti (100 %). Kontrolní úsečka na okraji musí měřit 50 mm. Jak přenést šablonu PÁS na kůži: vystřihnout nahrubo s okrajem 1–2 cm, přilepit páskou na líc, propíchnout značky a řezat skrz papír po čáře (lekce 5). Šablona je na jedno použití, na každý pás vytiskněte novou. List KAPSA vytiskněte 3×: 1 na vrtání formy, 1 na orýsování značek (lekce 2 a 6), 1 na vystřižení přesně po obrysu kapsy.',
     defaultVariantLabel: 'Výchozí střih – mince 50 Kč, kůže 1,5 mm',
     variantsNote:
       'V aplikaci jsou listy pro výchozí minci 50 Kč (27,5 mm), pro kůži 1,2 mm (např. Verde; platí pro třísločiněnou kůži 1,2 mm z jakékoli nabídky), pro minci 40 mm z předlohy a pro kombinaci mince 40 mm s kůží 1,2 mm. Jiná mince mění jen místo kapsy, okno a otvor formy, ne ohyby ani jazyk; tloušťka kůže naopak mění ohyby i jazyk. Jiný počet karet ani jiná tloušťka kůže než 1,5 a 1,2 mm v aplikaci zatím nejsou.',
