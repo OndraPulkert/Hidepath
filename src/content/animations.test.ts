@@ -86,6 +86,27 @@ describe('animace postupu – stránky v public/animace', () => {
       }
     },
   );
+
+  it('přišití kapsy: samostatná stránka s návratem do lekce a kotvami #A–#D', () => {
+    const source = pageSource('/animace/kapsa-prisiti.html');
+    expect(source).toBeDefined();
+    expect(source).not.toMatch(/googleapis|gstatic|Instrument Sans/);
+    expect(source).not.toMatch(/(?:src|href)\s*=\s*["']?https?:|url\(\s*["']?https?:|@import/);
+    expect(source).toContain('<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">');
+    expect(source).toContain('<a class="backlink" href="/" data-back>← Zpět do lekce</a>');
+    expect(Object.keys(animationPages.pocketAttach.sections)).toEqual(['A', 'B', 'C', 'D']);
+    for (const anchor of ['A', 'B', 'C', 'D']) expect(hasAnchor(source!, anchor)).toBe(true);
+    expect(hasAnchor(source!, 'E')).toBe(false);
+  });
+
+  it.each(['kapsa-postup', 'kapsa-prisiti'])(
+    '%s: mince 50 Kč je měděné mezikruží a mosazný střed Ø 17',
+    (name) => {
+      const source = pageSource(`/animace/${name}.html`)!;
+      expect(source).toContain('--coin-o:#c4683f;--coin-o-d:#7a3a1c;--coin-i:#dcb94f;');
+      expect(source).not.toContain('#c3c7cb');
+    },
+  );
 });
 
 describe('animace postupu – odkazy z lekcí', () => {
@@ -127,6 +148,17 @@ describe('animace postupu – odkazy z lekcí', () => {
       [`${lessonOf(6)}/form-dimple`]: kapsa('D'),
       [`${lessonOf(6)}/cut-outline-and-window`]: kapsa('E'),
     });
+  });
+
+  it('kroky lekcí 5 a 6 pouzdra s mincí otevírají správné části animace přišití kapsy', () => {
+    const lessonOf = (n: number) =>
+      projects.find((p) => p.slug === 'coin-card-holder')!.lessons.find((l) => l.order === n)!;
+    const hrefOf = (n: number, stepId: string) =>
+      lessonOf(n).steps.find((s) => s.id === stepId)?.animationLink?.href;
+    const prisiti = (part: string) => `/animace/kapsa-prisiti.html#${part}`;
+    expect(hrefOf(5, 'transfer-marks-awl')).toBe(prisiti('A'));
+    expect(hrefOf(6, 'glue-pocket')).toBe(prisiti('B'));
+    expect(hrefOf(6, 'stitch-pocket')).toBe(prisiti('C'));
   });
 });
 

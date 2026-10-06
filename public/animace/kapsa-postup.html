@@ -17,7 +17,7 @@
   --wood:#e4c794;--wood-d:#b8935a;--wood-g:#cfae76;--wood-side:#caa66c;
   --hole:#2b2018;--paper:#fcfbf7;--paper-edge:#cfc8bb;--print:#2b2b2b;--print-m:#7a7a7a;
   --graphite:#4f545a;--steel:#a3abb3;--steel-d:#5c656e;--tape:#eedc95;
-  --coin-o:#d1b04f;--coin-i:#c3c7cb;--foil:#9fc3dc;--card:#b9a88c;--chip-lic:#b8773f;--chip-rub:#dcc4a2;
+  --coin-o:#c4683f;--coin-o-d:#7a3a1c;--coin-i:#dcb94f;--coin-i-d:#93752a;--foil:#9fc3dc;--card:#b9a88c;--chip-lic:#b8773f;--chip-rub:#dcc4a2;
   --wet:rgba(70,35,10,.38);--night:rgba(20,24,48,.0);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
@@ -231,8 +231,10 @@ function fork(x,y,a){ // pricking iron, 4 prongs 4 mm pitch, centred on x,y alon
   let pr='';for(let i=0;i<4;i++)pr+=`<rect x="${-6.6+i*4}" y="-1.2" width=".8" height="1.2" fill="var(--steel-d)"/>`;
   return G(`translate(${f(x)} ${f(y)}) rotate(${f(a)})`,`${pr}<rect x="-7.4" y="-4.2" width="14.8" height="3" rx=".5" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-1.6" y="-14" width="3.2" height="9.8" rx="1" fill="#6b4c32"/>`)}
 function sponge(x,y){return `<rect x="${f(x-6)}" y="${f(y-4)}" width="12" height="8" rx="2" fill="#f2d24b" stroke="#b8961d" stroke-width=".3"/><rect x="${f(x-6)}" y="${f(y+1.6)}" width="12" height="2.4" rx="1" fill="#3f8f5a"/>`}
-function coinTop(cx,cy,r,foil=true){ // 50 Kč: gold ring, silver centre (bimetal)
-  return `${foil?`<circle cx="${cx}" cy="${cy}" r="${f(r+1.1)}" fill="var(--foil)" fill-opacity=".35" stroke="var(--foil)" stroke-width=".3"/>`:''}<circle cx="${cx}" cy="${cy}" r="${r}" fill="var(--coin-o)" stroke="#8d7530" stroke-width=".25"/><circle cx="${cx}" cy="${cy}" r="${f(r*0.66)}" fill="var(--coin-i)" stroke="#8b9095" stroke-width=".2"/>`;
+// 50 Kč (ČNB): bimetal, mezikruží poměděná ocel (měď), střed Ø 17 plátovaný slitinou Cu-Zn 75:25 (mosaz)
+const R_COIN_IN=8.5;
+function coinTop(cx,cy,r,foil=true){
+  return `${foil?`<circle cx="${cx}" cy="${cy}" r="${f(r+1.1)}" fill="var(--foil)" fill-opacity=".35" stroke="var(--foil)" stroke-width=".3"/>`:''}<circle cx="${cx}" cy="${cy}" r="${r}" fill="var(--coin-o)" stroke="var(--coin-o-d)" stroke-width=".25"/><circle cx="${cx}" cy="${cy}" r="${f(r*R_COIN_IN/R_COIN)}" fill="var(--coin-i)" stroke="var(--coin-i-d)" stroke-width=".2"/>`;
 }
 
 // ---------- board, top view (board mm coords) ----------
@@ -284,7 +286,7 @@ function sec(o){
     const col=l.side==='rubUp'?'var(--rub)':'var(--lic)';
     s+=`<g ${clip}><path d="${p}" fill="none" stroke="var(--lic-d)" stroke-width="1.5"/><path d="${p}" fill="none" stroke="var(--rub)" stroke-width="1.2"/><path d="${p}" fill="none" stroke="var(--lic)" stroke-width=".55" transform="translate(0 .32)"/>${l.wet?`<path d="${p}" fill="none" stroke="var(--wet)" stroke-width="1.2" opacity="${f(l.wet)}"/>`:''}</g>`;
   }
-  if(o.coin){const c=o.coin; s+=`${c.foil?`<rect x="-14.45" y="${f(c.y-2.5-.6)}" width="28.9" height="3.7" rx="1" fill="var(--foil)" fill-opacity=".35" stroke="var(--foil)" stroke-width=".25"/>`:''}<rect x="-13.75" y="${f(c.y-2.5)}" width="27.5" height="2.5" rx=".5" fill="var(--coin-o)" stroke="#8d7530" stroke-width=".2"/><rect x="-9" y="${f(c.y-2.5)}" width="18" height="2.5" fill="var(--coin-i)"/>`}
+  if(o.coin){const c=o.coin; s+=`${c.foil?`<rect x="-14.45" y="${f(c.y-2.5-.6)}" width="28.9" height="3.7" rx="1" fill="var(--foil)" fill-opacity=".35" stroke="var(--foil)" stroke-width=".25"/>`:''}<rect x="-13.75" y="${f(c.y-2.5)}" width="27.5" height="2.5" rx=".5" fill="var(--coin-o)" stroke="var(--coin-o-d)" stroke-width=".2"/><rect x="-8.5" y="${f(c.y-2.5)}" width="17" height="2.5" fill="var(--coin-i)"/>`}
   if(o.lid){s+=`<rect x="-33" y="${f(o.lid.y-12)}" width="66" height="12" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".25"/><path d="M-32 ${f(o.lid.y-8)} H32 M-32 ${f(o.lid.y-4)} H32" stroke="var(--wood-g)" stroke-width=".3"/>`}
   if(o.clamps){const ly=o.lid.y-12;
     for(const sg of [-1,1]){const x=sg*30;
@@ -658,7 +660,7 @@ add('E','Zkouška: mince nepropadne','Minci vložte z rubu do důlku, kus otočt
   const d=1.9;const p=`M-21.25 -.6 L-17 -.6 C-15.2 -.6 -15.4 ${d} -13.2 ${d} L13.2 ${d} C15.4 ${d} 15.2 -.6 17 -.6 L21.25 -.6`;
   let pc=`<clipPath id="wn"><rect x="-99" y="-50" width="89" height="100"/><rect x="10" y="-50" width="89" height="100"/></clipPath><g clip-path="url(#wn)"><path d="${p}" fill="none" stroke="var(--lic-d)" stroke-width="1.5"/><path d="${p}" fill="none" stroke="var(--rub)" stroke-width="1.2"/><path d="${p}" fill="none" stroke="var(--lic)" stroke-width=".55" transform="translate(0 .32)"/></g>`;
   const cy=L(-14,1.3,cin);
-  pc+=`<rect x="-13.75" y="${f(cy-2.5)}" width="27.5" height="2.5" rx=".5" fill="var(--coin-o)" stroke="#8d7530" stroke-width=".2"/><rect x="-9" y="${f(cy-2.5)}" width="18" height="2.5" fill="var(--coin-i)"/>`;
+  pc+=`<rect x="-13.75" y="${f(cy-2.5)}" width="27.5" height="2.5" rx=".5" fill="var(--coin-o)" stroke="var(--coin-o-d)" stroke-width=".2"/><rect x="-8.5" y="${f(cy-2.5)}" width="17" height="2.5" fill="var(--coin-i)"/>`;
   let s=G(tr,pc);
   if(t>.4){s+=`<path d="M${f(56-10*1.6)} 48 H${f(56+10*1.6)}" stroke="var(--accent)" stroke-width=".3" marker-start="url(#ar)" marker-end="url(#ar)"/>`+lbl(56,54,'okno Ø 20','ta','middle');
     s+=`<path d="M${f(56-13.75*1.6)} 26 H${f(56+13.75*1.6)}" stroke="var(--muted)" stroke-width=".3" marker-start="url(#ar)" marker-end="url(#ar)"/>`+lbl(56,23,'mince Ø 27,5','t','middle');
@@ -666,7 +668,7 @@ add('E','Zkouška: mince nepropadne','Minci vložte z rubu do důlku, kus otočt
   if(t>.45) s+=lbl(56,84,'oknem dolů, zatřást','t','middle');
   if(t>.86) s+=tick(86,82.5)+lbl(90,84,'mince drží','tok');
   // view from below: lic with coin visible through window
-  const ins=G(`translate(116 40) scale(.62) translate(${-CX} ${-CY})`,`<path d="${OUT}" fill="url(#licG)" stroke="var(--lic-d)" stroke-width=".4"/><circle cx="${CX}" cy="${CY}" r="${R_FOOT}" fill="url(#dimL)"/>`+DOTS.map(([x,y],i)=>slit(x,y,'lic',undefined,i)).join('')+`<circle cx="${CX}" cy="${CY}" r="${R_WIN}" fill="var(--hole)"/>`+(cin>.9?`<circle cx="${CX}" cy="${CY}" r="${R_WIN}" fill="var(--coin-o)"/><circle cx="${CX}" cy="${CY}" r="${f(R_COIN*.66)}" fill="var(--coin-i)"/>`:''));
+  const ins=G(`translate(116 40) scale(.62) translate(${-CX} ${-CY})`,`<path d="${OUT}" fill="url(#licG)" stroke="var(--lic-d)" stroke-width=".4"/><circle cx="${CX}" cy="${CY}" r="${R_FOOT}" fill="url(#dimL)"/>`+DOTS.map(([x,y],i)=>slit(x,y,'lic',undefined,i)).join('')+`<circle cx="${CX}" cy="${CY}" r="${R_WIN}" fill="var(--hole)"/>`+(cin>.9?`<circle cx="${CX}" cy="${CY}" r="${R_WIN}" fill="var(--coin-o)"/><circle cx="${CX}" cy="${CY}" r="${R_COIN_IN}" fill="var(--coin-i)" stroke="var(--coin-i-d)" stroke-width=".2"/>`:''));
   s+=`<rect x="100" y="16" width="32" height="40" rx="2" class="panelbox"/>`+ins+lbl(116,21,'zespodu (líc)','ts','middle');
   return s;
 },'licBottom');

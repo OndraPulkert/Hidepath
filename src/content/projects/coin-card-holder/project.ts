@@ -633,6 +633,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'transfer-marks-awl',
         title: 'Před řezáním propíchněte značky',
+        animationLink: animationLink('pocketAttach', 'A'),
         body: 'Dokud je šablona přilepená a nic není vyříznuté, propíchněte šídlem skrz papír: konce obou čar ohybu A i B (asi 1 mm od hrany pásu, ne přesně na ní), rohy místa pro kapsu (asi 1 mm dovnitř od zaobleného rohu, ne v jeho pomyslném ostrém vrcholu – jinak by značka zůstala vidět na líci mimo přišitou kapsu), střed dříku druku (na předním panelu) a všechny tečky dna. Propíchnutá dírka je vidět z obou stran, takže tím zároveň dostanete tečky na rub zadního a vnitřního panelu, odkud se budou prosekávat.',
         media: [
           {
@@ -855,6 +856,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'glue-pocket',
         title: 'Nalepte kapsu na přední panel',
+        animationLink: animationLink('pocketAttach', 'B'),
         body: 'Na předním panelu smirkem lehce zdrsněte jen plochu pod okrajem kapsy (tam, kam přijde lepidlo), zbytek líc nechte hladký. Kontaktní lepidlo naneste jen do úzkého pruhu při okraji kapsy (do šířky švového okraje, ne přes celou plochu) na rub kapsy a na odpovídající zdrsněné místo na předním panelu – 41,8 mm pod horní hranou, 14,75 mm od obou boků (u mince 40 mm 35,55 mm pod horní hranou, 8,5 mm od obou boků) – ať se nerozteče na viditelný líc kolem kapsy. Horní hranu kapsy, kterou se bude zasouvat mince, nelepte.',
         media: [],
       },
@@ -862,7 +864,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'stitch-pocket',
         title: 'Prosekněte a přišijte kapsu',
         body: 'Kapsa má otvory švu prosekané už v prvním kroku z líce, ještě před tvarováním. Naplocho na děrovací desce teď vidličkami projeďte znovu přes tytéž otvory ze stejné strany (z líce kapsy), tentokrát skrz obě vrstvy najednou – kapsu i přední panel pod ní; jen tak si otvory po prosekání lícují. Pak kapsu sedlářským stehem přišijte, horní hrana zůstává volná.',
-        animationLink: animationLink('threadLength'),
+        animationLink: animationLink('pocketAttach', 'C'),
         media: [
           {
             id: 'postup-4',

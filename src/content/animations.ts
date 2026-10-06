@@ -7,6 +7,7 @@ import { type AnimationLink } from '@/content/schema';
  *
  * `sections` = kotvy, které stránka umí otevřít, s popiskem pro tlačítko v kroku:
  * - kapsa-postup: `#A`–`#E` skočí na první krok dané části a přehrává od ní,
+ * - kapsa-prisiti: `#A`–`#D` otevře první krok dané části (zastavený, přehrání tlačítkem),
  * - Víčko: `#anim-…` posune stránku na danou animaci (spustí se, když je vidět).
  */
 export const animationPages = {
@@ -19,6 +20,16 @@ export const animationPages = {
       C: 'Část C – osy a 2. výtisk na rub',
       D: 'Část D – tvarování',
       E: 'Část E – řez a okno na formě',
+    },
+  },
+  pocketAttach: {
+    path: '/animace/kapsa-prisiti.html',
+    title: 'Přišití kapsy na pouzdro',
+    sections: {
+      A: 'Část A – značky ze šablony',
+      B: 'Část B – lepení',
+      C: 'Část C – prosekání skrz obě vrstvy',
+      D: 'Část D – šití',
     },
   },
   threadLength: {
