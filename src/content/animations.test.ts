@@ -1,4 +1,9 @@
-import { animationButtonText, animationLink, animationPages } from '@/content/animations';
+import {
+  animationButtonText,
+  animationLink,
+  animationPages,
+  animationStepTitle,
+} from '@/content/animations';
 import { projects } from '@/content/projects';
 import { animationLinkSchema, lessonStepSchema, projectDefinitionSchema } from '@/content/schema';
 
@@ -13,10 +18,30 @@ function pageSource(href: string): string | undefined {
   return pages[`/public${href.split('#')[0]}`];
 }
 
-/** Umí stránka otevřít kotvu? Kapsa má části A–E v `PARTS`, ostatní mají `id` v HTML. */
+/** Kroky stránky po částech v pořadí `add('B','název',…)` – tak je stránka čísluje (B1, B2…). */
+function pageSteps(source: string): Record<string, string[]> {
+  const steps: Record<string, string[]> = {};
+  for (const [, part, title] of source.matchAll(/\badd\('([A-Z])','([^']*)'/g)) {
+    (steps[part!] ??= []).push(title!);
+  }
+  return steps;
+}
+
+/**
+ * Umí stránka otevřít kotvu? Kapsa má části A–E v `PARTS` a kroky (`B3`) z `add(…)`, umí je
+ * otevřít přes `stepFromHash`; ostatní mají `id` v HTML.
+ */
 function hasAnchor(source: string, anchor: string): boolean {
   if (source.includes(`id="${anchor}"`)) return true;
   const parts = /const PARTS=\{([^}]*)\}/.exec(source)?.[1] ?? '';
+  const step = /^([A-Z])([1-9][0-9]*)$/.exec(anchor);
+  if (step) {
+    return (
+      source.includes('function stepFromHash()') &&
+      new RegExp(`(^|,)${step[1]}:`).test(parts) &&
+      (pageSteps(source)[step[1]!]?.length ?? 0) >= Number(step[2])
+    );
+  }
   return new RegExp(`(^|,)${anchor}:`).test(parts);
 }
 
@@ -67,6 +92,19 @@ describe('animace postupu – schéma odkazu', () => {
     expect(
       animationLinkSchema.safeParse({ href: '/animace/kapsa-postup.html', label: '' }).success,
     ).toBe(false);
+  });
+
+  it('animationLink skládá odkaz na krok s číslem a názvem kroku', () => {
+    expect(animationLink('pouchFold', 'B3')).toEqual({
+      href: '/animace/kapsa-skladani.html#B3',
+      label: 'Krok B3 – Bankovky na líc vnitřního, zadní ohybem A přes všechno',
+    });
+    expect(animationLinkSchema.safeParse(animationLink('snap', 'A7')).success).toBe(true);
+    expect(() => animationLink('snap', 'A8')).toThrow(/nemá kotvu #A8/);
+    expect(() => animationLink('pouchFold', 'F1' as 'E1')).toThrow(/nemá kotvu #F1/);
+    expect(animationStepTitle('snap', 'C5')).toBe('Zkraťte jazyk 11 mm za střed kloboučku');
+    expect(animationStepTitle('snap', 'C0')).toBeUndefined();
+    expect(animationStepTitle('lidBends', 'A1')).toBeUndefined();
   });
 
   it('animationLink skládá href s kotvou a popisek části', () => {
@@ -131,6 +169,28 @@ describe('animace postupu – stránky v public/animace', () => {
     },
   );
 
+  const steppedPages = Object.entries(animationPages).flatMap(([key, page]) =>
+    'steps' in page ? [{ key, path: page.path, sections: page.sections, steps: page.steps }] : [],
+  );
+
+  it('kroky mají právě čtyři stránky kapsy', () => {
+    expect(steppedPages.map((p) => p.key)).toEqual(['kapsa', 'pocketAttach', 'pouchFold', 'snap']);
+  });
+
+  it.each(steppedPages)('$key: seznam kroků odpovídá stránce a umí otevřít každý krok', (page) => {
+    const source = pageSource(page.path)!;
+    expect(pageSteps(source)).toEqual(page.steps);
+    expect(Object.keys(page.steps)).toEqual(Object.keys(page.sections));
+    expect(source).toContain('function stepFromHash()');
+    expect(source).not.toContain('partFromHash');
+    for (const [part, titles] of Object.entries<readonly string[]>(page.steps)) {
+      titles.forEach((_, i) => expect(hasAnchor(source, `${part}${i + 1}`)).toBe(true));
+      expect(hasAnchor(source, `${part}${titles.length + 1}`), `${part}${titles.length + 1}`).toBe(
+        false,
+      );
+    }
+  });
+
   it.each(['kapsa-postup', 'kapsa-prisiti', 'kapsa-skladani', 'kapsa-druk'])(
     '%s: mince 50 Kč je měděné mezikruží a mosazný střed Ø 17',
     (name) => {
@@ -163,7 +223,7 @@ describe('animace postupu – odkazy z lekcí', () => {
     }
   });
 
-  it('kroky lekcí 2 a 6 pouzdra s mincí otevírají správné části animace kapsy', () => {
+  it('kroky lekcí 2 a 6 pouzdra s mincí otevírají správné kroky animace kapsy', () => {
     const hrefs = Object.fromEntries(
       allSteps
         .filter(({ where, step }) => where.startsWith('coin-card-holder/') && step.animationLinks)
@@ -172,32 +232,34 @@ describe('animace postupu – odkazy z lekcí', () => {
           step.animationLinks!.map((l) => l.href),
         ]),
     );
-    const kapsa = (part: string) => [`/animace/kapsa-postup.html#${part}`];
+    const kapsa = (anchor: string) => [`/animace/kapsa-postup.html#${anchor}`];
     const lessonOf = (n: number) =>
       projects.find((p) => p.slug === 'coin-card-holder')!.lessons.find((l) => l.order === n)!.slug;
     expect(hrefs).toMatchObject({
-      [`${lessonOf(2)}/drill-form`]: kapsa('A'),
-      [`${lessonOf(2)}/mark-outline`]: kapsa('B'),
-      [`${lessonOf(2)}/press-and-clamp`]: kapsa('D'),
-      [`${lessonOf(2)}/test-window-retention`]: kapsa('E'),
-      [`${lessonOf(6)}/trace-and-punch-pocket`]: kapsa('B'),
-      [`${lessonOf(6)}/form-dimple`]: kapsa('D'),
-      [`${lessonOf(6)}/cut-outline-and-window`]: kapsa('E'),
+      [`${lessonOf(2)}/drill-form`]: kapsa('A1'),
+      [`${lessonOf(2)}/mark-outline`]: kapsa('B1'),
+      [`${lessonOf(2)}/wet`]: kapsa('D1'),
+      [`${lessonOf(2)}/press-and-clamp`]: kapsa('D2'),
+      [`${lessonOf(2)}/dry-and-inspect`]: kapsa('D4'),
+      [`${lessonOf(2)}/test-window-retention`]: kapsa('E1'),
+      [`${lessonOf(6)}/trace-and-punch-pocket`]: kapsa('B1'),
+      [`${lessonOf(6)}/form-dimple`]: kapsa('D1'),
+      [`${lessonOf(6)}/cut-outline-and-window`]: kapsa('E1'),
     });
   });
 
-  it('kroky lekcí 5 a 6 pouzdra s mincí otevírají správné části animace přišití kapsy', () => {
+  it('kroky lekcí 5 a 6 pouzdra s mincí otevírají správné kroky animace přišití kapsy', () => {
     const lessonOf = (n: number) =>
       projects.find((p) => p.slug === 'coin-card-holder')!.lessons.find((l) => l.order === n)!;
     const hrefOf = (n: number, stepId: string) =>
       lessonOf(n)
         .steps.find((s) => s.id === stepId)
         ?.animationLinks?.map((l) => l.href);
-    const prisiti = (part: string) => `/animace/kapsa-prisiti.html#${part}`;
-    expect(hrefOf(5, 'transfer-marks-awl')).toEqual([prisiti('A')]);
-    expect(hrefOf(6, 'glue-pocket')).toEqual([prisiti('B')]);
+    const prisiti = (anchor: string) => `/animace/kapsa-prisiti.html#${anchor}`;
+    expect(hrefOf(5, 'transfer-marks-awl')).toEqual([prisiti('A2')]);
+    expect(hrefOf(6, 'glue-pocket')).toEqual([prisiti('B2')]);
     // Přišití kapsy: animace prosekání a šití a hned vedle návod, kolik nitě odměřit.
-    expect(hrefOf(6, 'stitch-pocket')).toEqual([prisiti('C'), animationPages.threadLength.path]);
+    expect(hrefOf(6, 'stitch-pocket')).toEqual([prisiti('C1'), animationPages.threadLength.path]);
   });
 });
 
@@ -208,38 +270,48 @@ describe('animace postupu – složení pouzdra a druk v lekcích', () => {
     lessonOf(n)
       .steps.find((s) => s.id === stepId)
       ?.animationLinks?.map((l) => l.href);
-  const skladani = (part: string) => `/animace/kapsa-skladani.html#${part}`;
-  const druk = (part: string) => `/animace/kapsa-druk.html#${part}`;
+  const skladani = (anchor: string) => `/animace/kapsa-skladani.html#${anchor}`;
+  const druk = (anchor: string) => `/animace/kapsa-druk.html#${anchor}`;
+  const thread = animationPages.threadLength.path;
 
-  it('lekce 4 a 7: ohyby, lepení dna a šev otevírají správné části skládání', () => {
-    expect(hrefOf(4, 'wet-fold-zones')).toEqual([skladani('B')]);
-    expect(hrefOf(4, 'fold-around-content')).toEqual([skladani('B')]);
-    expect(hrefOf(4, 'unfold-roughen-glue')).toEqual([skladani('C')]);
-    for (const id of ['wet-fold-zones', 'fold-inner-b', 'fold-back-a', 'press-and-clamp']) {
-      expect(hrefOf(7, id), id).toEqual([skladani('B')]);
-    }
-    expect(hrefOf(7, 'roughen-and-glue-bottom')).toEqual([skladani('C')]);
-    // Šití: animace švu a hned vedle návod, kolik nitě odměřit.
-    const thread = animationPages.threadLength.path;
-    expect(hrefOf(4, 'stitch-through-layers')).toEqual([skladani('D'), thread]);
-    expect(hrefOf(7, 'stitch-bottom')).toEqual([skladani('D'), thread]);
+  it('lekce 4 a 7: ohyby, lepení dna a šev otevírají přesný krok skládání', () => {
+    expect(hrefOf(4, 'wet-fold-zones')).toEqual([skladani('B1')]);
+    expect(hrefOf(4, 'fold-around-content')).toEqual([skladani('B2')]);
+    expect(hrefOf(4, 'unfold-roughen-glue')).toEqual([skladani('C1')]);
+    // Odřezek má krátký šev: krok šití, ne výpočet nitě pro šev dna 64 mm.
+    expect(hrefOf(4, 'stitch-through-layers')).toEqual([skladani('D2'), thread]);
+    // A2 popisuje už proseknutý finální pás (lekce 5, 17 otvorů), ne značení na odřezku.
+    expect(hrefOf(4, 'mark-mirrored-dots')).toBeUndefined();
+    expect(hrefOf(7, 'wet-fold-zones')).toEqual([skladani('B1')]);
+    expect(hrefOf(7, 'fold-inner-b')).toEqual([skladani('B2')]);
+    expect(hrefOf(7, 'fold-back-a')).toEqual([skladani('B3')]);
+    expect(hrefOf(7, 'press-and-clamp')).toEqual([skladani('B4')]);
+    expect(hrefOf(7, 'roughen-and-glue-bottom')).toEqual([skladani('C1')]);
+    // Krok lekce je šití dna (D2); nit k němu ukazuje návod „Kolik nitě na šev“, D1 je hned před ním.
+    expect(hrefOf(7, 'stitch-bottom')).toEqual([skladani('D2'), thread]);
   });
 
-  it('lekce 3, 6 a 8: zkouška druku, dřík naplocho a klobouček podle obtisku', () => {
-    for (const id of ['punch-post-hole', 'set-snap-post', 'practice-snap-cap', 'measure-flange']) {
-      expect(hrefOf(3, id), id).toEqual([druk('A')]);
-    }
-    for (const id of ['punch-post-hole', 'set-snap-post']) {
-      expect(hrefOf(6, id), id).toEqual([druk('B')]);
-    }
-    for (const id of [
-      'insert-content',
-      'imprint-cap-position',
-      'punch-cap-hole',
-      'set-cap',
-      'shorten-tongue',
-    ]) {
-      expect(hrefOf(8, id), id).toEqual([druk('C')]);
+  it('lekce 3, 6 a 8: každý krok druku otevírá svůj krok animace', () => {
+    expect(hrefOf(3, 'why-scrap-first')).toEqual([druk('A1')]);
+    expect(hrefOf(3, 'punch-post-hole')).toEqual([druk('A2')]);
+    expect(hrefOf(3, 'set-snap-post')).toEqual([druk('A4')]);
+    expect(hrefOf(3, 'practice-snap-cap')).toEqual([druk('A5')]);
+    expect(hrefOf(3, 'measure-flange')).toEqual([druk('A7')]);
+    expect(hrefOf(6, 'punch-post-hole')).toEqual([druk('B2')]);
+    expect(hrefOf(6, 'set-snap-post')).toEqual([druk('B3')]);
+    expect(hrefOf(8, 'insert-content')).toEqual([druk('C1')]);
+    expect(hrefOf(8, 'imprint-cap-position')).toEqual([druk('C2')]);
+    expect(hrefOf(8, 'punch-cap-hole')).toEqual([druk('C3')]);
+    expect(hrefOf(8, 'set-cap')).toEqual([druk('C4')]);
+    expect(hrefOf(8, 'shorten-tongue')).toEqual([druk('C5')]);
+  });
+
+  it('pouzdro s mincí odkazuje na kapsu jen kotvou kroku, ne celé části', () => {
+    const coin = allSteps.filter(({ where }) => where.startsWith('coin-card-holder/'));
+    for (const { where, step } of coin) {
+      for (const { href } of step.animationLinks ?? []) {
+        if (href.includes('#')) expect(href, where).toMatch(/#[A-E][1-9][0-9]*$/);
+      }
     }
   });
 });

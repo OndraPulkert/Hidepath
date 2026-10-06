@@ -727,17 +727,17 @@ document.getElementById('bPlay').onclick=()=>{if(!playing&&idx===S.length-1&&tt>
 document.getElementById('bRestart').onclick=()=>{go(0,0);setPlay(true)};
 document.getElementById('bPrev').onclick=()=>{setPlay(false);go(idx-1,1)};
 document.getElementById('bNext').onclick=()=>{setPlay(false);go(idx+1,1)};
-// Hidepath: deep link #A–#E otevře první krok dané části a přehrává od ní; bez kotvy jako dřív.
-const hashPart=()=>{const k=decodeURIComponent(location.hash.slice(1)).trim().toUpperCase();return Object.prototype.hasOwnProperty.call(PARTS,k)?k:null};
-const partStart=k=>S.findIndex(s=>s.part===k);
+// Hidepath: deep link na část (#A–#E) skočí na její první krok, na krok (#B3) přímo na ten krok,
+// a přehrává od něj; bez kotvy jako dřív.
+function stepFromHash(){const m=/^([A-Z])([0-9]+)?$/.exec(decodeURIComponent((location.hash||'').slice(1)).trim().toUpperCase());if(!m||!Object.prototype.hasOwnProperty.call(PARTS,m[1]))return -1;const ix=[];S.forEach((s,i)=>{if(s.part===m[1])ix.push(i)});const n=m[2]===undefined?1:+m[2];return n>=1&&n<=ix.length?ix[n-1]:-1}
 // first frame: meaningful still
-{const k=hashPart();go(k?partStart(k):0,1);}
-addEventListener('hashchange',()=>{const k=hashPart();if(!k)return;setPlay(false);go(partStart(k),0);if(!reduce)setPlay(true);});
+{const i=stepFromHash();go(i>=0?i:0,1);}
+addEventListener('hashchange',()=>{const i=stepFromHash();if(i<0)return;setPlay(false);go(i,0);if(!reduce)setPlay(true);});
 // expose for testing
 window.__kapsa={go:(i,t)=>{setPlay(false);idx=i;tt=t;render()},steps:S.length,DOTS,R_WIN,R_FOOT,R_COIN};
 // autoplay once when in view
 let auto=false;
-if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!auto){auto=true;io.disconnect();const k=hashPart();go(k?partStart(k):0,0);setPlay(true)}})},{threshold:.45});io.observe(svg)}
+if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!auto){auto=true;io.disconnect();const i=stepFromHash();go(i>=0?i:0,0);setPlay(true)}})},{threshold:.45});io.observe(svg)}
 })();
 </script>
 <script>

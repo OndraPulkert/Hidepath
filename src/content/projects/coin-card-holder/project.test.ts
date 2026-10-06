@@ -103,6 +103,84 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
     });
   });
 
+  describe('texty lekcí po řemeslné kontrole', () => {
+    const lesson = (n: number) => coinCardHolderProject.lessons.find((l) => l.order === n)!;
+    const step = (n: number, id: string) => lesson(n).steps.find((x) => x.id === id)!.body;
+
+    it('lekce 4: délka proužku pro obě tloušťky a krajní otvory podle modelu a listu PÁS', () => {
+      const thick = coinCardHolderLayout(DEFAULT_COIN_CARD_HOLDER);
+      const thin = coinCardHolderLayout({
+        ...DEFAULT_COIN_CARD_HOLDER,
+        bodyThicknessMm: 1.2,
+        foldSkiveThicknessMm: null,
+      });
+      const strip = lesson(4).materials[0]!;
+      for (const [label, L] of [
+        ['1,5 mm', thick],
+        ['1,2 mm', thin],
+      ] as const) {
+        const total = Math.round(90 + L.foldBackFrontMm + L.foldFrontInnerMm);
+        expect(strip, label).toContain(`u kůže ${label} asi ${total} mm`);
+      }
+      expect(strip).not.toContain('dohromady asi 117 mm');
+
+      // Krajní otvor dna: řada vystředěná na panelu (generátor listu PÁS).
+      const pitch = DEFAULT_COIN_CARD_HOLDER.stitchPitchMm;
+      const edge = (thick.panelWidthMm - (thick.bottomSeamHoles - 1) * pitch) / 2;
+      expect(edge).toBe(4);
+      const dots = step(4, 'mark-mirrored-dots');
+      expect(dots).toContain(`(72 − 16 × 4) / 2 = ${edge} mm od čar ohybů i od hran`);
+      expect(dots).toContain(
+        `Na listu PÁS vyjde stejným výpočtem z panelu 72 mm ${thick.bottomSeamHoles} otvorů`,
+      );
+      expect(dots).toContain('(30 − 5 × 4) / 2 = 5 mm');
+    });
+
+    it('lepení dna: lepidlo v tenké vrstvě, ohyb ne úplně naplocho; spoj 2 líc vnitřního ↔ rub zadního', () => {
+      for (const [n, id] of [
+        [4, 'unfold-roughen-glue'],
+        [7, 'roughen-and-glue-bottom'],
+      ] as const) {
+        expect(step(n, id)).toContain('ne úplně naplocho');
+        expect(step(n, id)).toContain('naneste lepidlo v tenké rovnoměrné vrstvě');
+        expect(step(n, id)).not.toContain('lepidlo naplocho');
+      }
+      expect(step(7, 'roughen-and-glue-bottom')).toContain('rub předního a rub vnitřního panelu');
+      expect(step(7, 'roughen-and-glue-bottom')).toContain('líc vnitřního a rub zadního panelu');
+    });
+
+    it('lekce 7: šev dna sedlářským stehem s kontrolou rubu, lícování otvorů před zaschnutím', () => {
+      expect(step(7, 'stitch-bottom')).toContain('sedlářským stehem');
+      expect(step(7, 'stitch-bottom')).toContain('steh na rubu má být stejně rovný jako na líci');
+      expect(step(7, 'press-and-clamp')).toMatch(
+        /Než necháte zaschnout, zkontrolujte, že se otvory dna na sousedních panelech po složení lícují/,
+      );
+      // Nit 0,8 m zůstává, ale s důvodem z návodu „Jak odměřit nit“.
+      expect(lesson(7).materials.join(' ')).toContain(
+        'asi na 0,6 m; 0,8 m nechává začátečníkovi rezervu',
+      );
+      expect(lesson(4).materials.join(' ')).toContain('0,8 m nechává začátečníkovi rezervu');
+    });
+
+    it('druk: díly v lekci 3 na začátku, strana dříku v lekci 6, klobouček podle obtisku v lekci 8', () => {
+      expect(step(3, 'why-scrap-first')).toContain('Druk je čtyřdílný');
+      expect(step(3, 'punch-post-hole')).not.toContain('Druk je čtyřdílný');
+      expect(step(6, 'set-snap-post')).toContain(
+        'Dřík jde z rubu předního panelu, hlavička zůstane na jeho líci',
+      );
+      const l8 = JSON.stringify(lesson(8));
+      expect(l8).not.toMatch(/původní (odhadovan[áé] )?značk/);
+      expect(step(8, 'imprint-cap-position')).toContain('Střed obtisku je střed kloboučku');
+      expect(step(8, 'imprint-cap-position')).toContain('ověřit na odřezku');
+      expect(step(8, 'shorten-tongue')).toContain('na líci jazyka 11 mm od středu kloboučku');
+      expect(lesson(8).requiredEquipment).toEqual(
+        expect.arrayContaining(['steel-ruler', 'scratch-awl']),
+      );
+      const capFits = lesson(8).checkpoints.find((c) => c.slug === 'cap-fits')!.title;
+      expect(capFits).toContain('jde znovu rozepnout');
+    });
+  });
+
   describe('nákupní plán „Co koupit“', () => {
     const plan = coinCardHolderProject.shoppingPlan!;
 

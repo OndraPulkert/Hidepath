@@ -473,7 +473,7 @@ add('B','Bankovky na líc vnitřního, zadní ohybem A přes všechno','Bankovky
   return s;
 },null);
 
-add('B','Rozhrnovačka, sponky vedle ohybů, zaschnout','Přejeďte rozhrnovačkou. Sponky s podložkou nasaďte na panely těsně vedle obou ohybů, přes obsah – ne na samotnou smyčku ohybu – a nechte zaschnout. Ještě před zaschnutím zkontrolujte, že se otvory dna na sousedních panelech lícují (lekce 4).',9000,t=>{
+add('B','Rozhrnovačka, sponky vedle ohybů, zaschnout','Přejeďte rozhrnovačkou. Sponky s podložkou nasaďte na panely těsně vedle obou ohybů, přes obsah – ne na samotnou smyčku ohybu – a nechte zaschnout. Ještě před zaschnutím zkontrolujte, že se otvory dna na sousedních panelech lícují (lekce 7, stejně jako v lekci 4).',9000,t=>{
   const cam=CAM_FOLD, g=secGeom(Math.PI,Math.PI), w=wOf(cam);
   const dry=es(t,.66,.95);
   let s=leatherSec(cam,g,{wet:1-dry});
@@ -489,7 +489,7 @@ add('B','Rozhrnovačka, sponky vedle ohybů, zaschnout','Přejeďte rozhrnovačk
     s+=`<g opacity="${f(o)}">${cross(ax+2,ay,1.4,.55)}${cross(bx-1.6,by,1.4,.55)}</g>`;}
   if(t>.64){s+=clock(124,74,seg(t,.66,.95))+pill(117,75.5,'zaschnout','t','end')}
   if(t<.36&&t>.04) s+=pill(4,87,'přejeďte rozhrnovačkou','t');
-  else if(t>.4&&t<.64) s+=pill(4,87,'otvory dna lícují? (lekce 4)','t');
+  else if(t>.4&&t<.64) s+=pill(4,87,'otvory dna lícují?','t');
   else if(t>=.64) s+=pill(4,87,'sponky ne na smyčku ohybu','ta');
   s+=secTag(cam);
   return s;
@@ -561,7 +561,7 @@ function joint(n,t,rough,glue){
   s+=secTag(cam,84,6);
   return s;
 }
-add('C','Spoj 1: přední ↔ vnitřní – zdrsnit a natřít','Spoje jsou dva a lepí se po jednom, ne najednou. Nejdřív přední panel s vnitřním: v pruhu 0–3,5 mm od dolní hrany (pod čárou švu) zdrsněte smirkem obě plochy spoje – rub předního i rub vnitřního panelu – a naneste kontaktní lepidlo naplocho. Výš ne: karty i bankovky stojí na švu a lepidlo výš by jim ubralo hloubku. Kontaktní lepidlo na rozpouštědlové bázi používejte ve větrané místnosti.',9000,t=>{
+add('C','Spoj 1: přední ↔ vnitřní – zdrsnit a natřít','Spoje jsou dva a lepí se po jednom, ne najednou. Nejdřív přední panel s vnitřním: v pruhu 0–3,5 mm od dolní hrany (pod čárou švu) zdrsněte smirkem obě plochy spoje – rub předního i rub vnitřního panelu – a naneste kontaktní lepidlo v tenké rovnoměrné vrstvě. Výš ne: karty i bankovky stojí na švu a lepidlo výš by jim ubralo hloubku. Kontaktní lepidlo na rozpouštědlové bázi používejte ve větrané místnosti.',9000,t=>{
   const r=es(t,.06,.45), g=es(t,.5,.92);
   let s=joint(1,t,r,g);
   return s;
@@ -587,7 +587,7 @@ add('C','Odvětrat, přeložit, zarovnat jehlami, přitisknout','Lepidlo nechte 
   return s;
 },null);
 
-add('C','Spoj 2: vnitřní ↔ zadní – stejně','Teprve teď stejně zopakujte druhý spoj: líc vnitřního panelu a rub zadního panelu v pruhu 0–3,5 mm od hrany zdrsněte, natřete lepidlem naplocho a nechte odvětrat. Přední a zadní panel se přímo nedotýkají – mezi nimi je pořád vnitřní panel.',8600,t=>{
+add('C','Spoj 2: vnitřní ↔ zadní – stejně','Teprve teď stejně zopakujte druhý spoj: líc vnitřního panelu a rub zadního panelu v pruhu 0–3,5 mm od hrany zdrsněte, natřete lepidlem v tenké rovnoměrné vrstvě a nechte odvětrat. Přední a zadní panel se přímo nedotýkají – mezi nimi je pořád vnitřní panel.',8600,t=>{
   const r=es(t,.06,.45), g=es(t,.5,.92);
   let s=joint(2,t,r,g);
   return s;
@@ -618,7 +618,7 @@ add('C','Přeložit zadní, zarovnat jehlami skrz tři vrstvy','Po odvětrání 
 // ---------- D: stitch ----------
 const THR4=4*SEAM_LEN/1000, THR5=5*SEAM_LEN/1000;   // m
 const m2=v=>cz((Math.round(v*100)/100).toFixed(2));
-add('D','Nit na šev dna','Pravidlo z návodu „Jak odměřit nit“: 4 × délka švu + 25–30 cm rezervy. Šev dna má 17 otvorů s roztečí 4 mm, tedy 16 × 4 = 64 mm: 4 × 6,4 cm ≈ 26 cm, s rezervou asi '+m2(THR4+.25)+'–'+m2(THR4+.30)+' m. Pro šev přes tři vrstvy návod radí počítat 5× – asi '+m2(THR5+.25)+'–'+m2(THR5+.30)+' m. Lekce 7 počítá s nití asi 0,8 m na šev dna – raději víc, ověřit na odřezku.',7200,t=>{
+add('D','Nit na šev dna','Pravidlo z návodu „Jak odměřit nit“: 4 × délka švu + 25–30 cm rezervy. Šev dna má 17 otvorů s roztečí 4 mm, tedy 16 × 4 = 64 mm: 4 × 6,4 cm ≈ 26 cm, s rezervou asi '+m2(THR4+.25)+'–'+m2(THR4+.30)+' m. Pro šev přes tři vrstvy návod radí počítat 5× – asi '+m2(THR5+.25)+'–'+m2(THR5+.30)+' m. Lekce 7 počítá s nití asi 0,8 m na šev dna: pravidlo dává asi 0,6 m, 0,8 m nechává začátečníkovi rezervu (ověřit na odřezku).',7200,t=>{
   const p=es(t,.05,.5), b=es(t,.55,.92);
   let inner=frontView();
   inner+=`<path d="M${HF[0]} ${SEAM_Y} H${f(L(HF[0],HF[16],p))}" stroke="var(--accent)" stroke-width=".8" stroke-linecap="round"/>`;
@@ -648,7 +648,7 @@ function saddle3(kk){
   s+=lbl(89,25.5,'líc předního','ts')+lbl(89,yB+5,'líc zadního','ts');
   return s;
 }
-add('D','Prošijte dno skrz tři vrstvy','Sedlářským stehem jako u pouzdra na karty (lekce 4) – dvě jehly proti sobě, každým otvorem, vždy stejné pořadí a stejné utažení – prošijte dno skrz všechny tři vrstvy: 17 otvorů, rozteč 4 mm, 3,5 mm od hrany. Začátek zajistěte zpětnými stehy.',12000,t=>{
+add('D','Prošijte dno skrz tři vrstvy','Sedlářským stehem (lekce 7) jako u pouzdra na karty a v lekci 4 – dvě jehly proti sobě, každým otvorem, vždy stejné pořadí a stejné utažení – prošijte dno skrz všechny tři vrstvy: 17 otvorů, rozteč 4 mm, 3,5 mm od hrany. Začátek zajistěte zpětnými stehy.',12000,t=>{
   const u=es(t,.04,.92)*18, n=Math.floor(u), fr=u-n;
   let inner=frontView({moves:n,backHi:1});
   let s=clipMain(G(camT(FRONTC),inner));
@@ -662,7 +662,7 @@ add('D','Prošijte dno skrz tři vrstvy','Sedlářským stehem jako u pouzdra na
   return s;
 },{v:'LÍC',sub:'přední panel'},'Tip (lekce 7 počet ani stranu neuvádí): u pouzdra na karty (projekt 01) jsou na začátku i na konci dva zpětné stehy; animace začíná u ohybu A.');
 
-add('D','Konec zajistěte zpětnými stehy, zkontrolujte druhou stranu','Na konci řady zajistěte šev zpětnými stehy. Pak zkontrolujte druhou stranu švu (zadní panel) – steh má být stejně rovný jako na líci předního panelu a na líci mají všechny stehy stejný sklon (kontrola z lekce 4).',7600,t=>{
+add('D','Konec zajistěte zpětnými stehy, zkontrolujte druhou stranu','Na konci řady zajistěte šev zpětnými stehy. Pak zkontrolujte rub švu (stranu zadního panelu) – steh na rubu má být stejně rovný jako na líci předního panelu (lekce 7). Na líci mají všechny stehy stejný sklon (kontrolní bod lekce 4).',7600,t=>{
   const u=es(t,.04,.5)*2, n=18+Math.floor(u), fr=u-Math.floor(u);
   let inner=frontView({moves:Math.min(20,n+(t>.5?1:0)),backHi:1});
   let s=clipMain(G(camT(FRONTC),inner));
@@ -670,7 +670,7 @@ add('D','Konec zajistěte zpětnými stehy, zkontrolujte druhou stranu','Na konc
     s+=needle(x,y,330-fr*20)+needle(x,y,30+fr*20,.55);}
   const [x0,y0]=tv(FRONTC,HF[14],SEAM_Y),[x1]=tv(FRONTC,HF[16],SEAM_Y);
   if(t>.3) s+=pill((x0+x1)/2,y0-4,'zpětné','ta','middle');
-  const ck=[['zpětné stehy',.55],['na začátku i konci',.55],['druhá strana rovná',.7],['stejný sklon',.82]];
+  const ck=[['zpětné stehy',.55],['na začátku i konci',.55],['rub švu rovný',.7],['stejný sklon',.82]];
   let ib='';ck.forEach(([tx,at],i)=>{const o=seg(t,at,at+.08);ib+=`<g opacity="${f(o)}">${i===1?'':tick(91.5,17.5+i*7)}${lbl(96,19+i*7,tx,'t')}</g>`});
   ib+=notes([['Tip (lekce to','ta'],['neuvádí): dva','ta'],['zpětné stehy jako'],['u pouzdra na karty'],['(projekt 01)']],52,5.2);
   s+=inset('KONEC',ib);
@@ -750,12 +750,12 @@ document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.len
 document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
 document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
 document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};
-// deep links #A–#E
-function partFromHash(){const h=(location.hash||'').replace('#','').toUpperCase();return PARTS[h]?h:null}
+// deep links: část (#A–#E) otevře svůj první krok, krok (#B3) přímo ten krok; zastavené
+function stepFromHash(){const m=/^([A-Z])([0-9]+)?$/.exec(decodeURIComponent((location.hash||'').slice(1)).trim().toUpperCase());if(!m||!Object.prototype.hasOwnProperty.call(PARTS,m[1]))return -1;const ix=[];S.forEach((s,i)=>{if(s.part===m[1])ix.push(i)});const n=m[2]===undefined?1:+m[2];return n>=1&&n<=ix.length?ix[n-1]:-1}
 let auto=false;
-const hp=partFromHash();
-if(hp){auto=true;go(S.findIndex(s=>s.part===hp),1)} else go(0,1); // meaningful still
-window.addEventListener('hashchange',()=>{const p=partFromHash();if(p){auto=true;setPlay(false);go(S.findIndex(s=>s.part===p),1)}});
+const hs=stepFromHash();
+if(hs>=0){auto=true;go(hs,1)} else go(0,1); // meaningful still
+window.addEventListener('hashchange',()=>{const i=stepFromHash();if(i>=0){auto=true;setPlay(false);go(i,1)}});
 window.__skladani={go:(i,t)=>{auto=true;setPlay(false);idx=i;tt=t;render()},steps:S.length,parts:S.map(s=>s.part),
   geo:{panelW:PW,panelH:PH,foldA:LA,foldB:LB,sepA:+SEPA.toFixed(2),sepB:+SEPB.toFixed(2),foldedWidth:+(PW+OUT_A+OUT_B).toFixed(2),holesPerPanel:NH,seamLen:SEAM_LEN,
     mirrorA:HB.map(x=>+(2*CA-x).toFixed(2)).sort((a,b)=>a-b).every((x,i)=>Math.abs(x-HF[i])<.01),mirrorB:HI.map(x=>+(2*CB-x).toFixed(2)).sort((a,b)=>a-b).every((x,i)=>Math.abs(x-HF[i])<.01)}};

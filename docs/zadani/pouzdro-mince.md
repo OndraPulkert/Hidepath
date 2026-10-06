@@ -63,7 +63,8 @@ Jeden pás:
 Skládání: vnitřní panel ohybem B za přední, zadní panel ohybem A přes všechno. Vrstvy odpředu:
 přední (líc ven, kapsa s mincí) – karty – vnitřní – bankovky – zadní (líc ven, motiv). Obě boční
 hrany jsou ohyby, dno se prošije skrz tři vrstvy (17 otvorů na panel, rozteč 4, 3,5 mm od hrany).
-Tečky jsou na všech třech panelech zrcadlené přes ohyby, prosekají se naplocho a po složení lícují.
+Tečky jsou na všech třech panelech zrcadlené přes ohyby (řada vystředěná na panelu, krajní otvor
+(72 − 16 × 4) / 2 = 4 mm od čáry ohybu i od hrany), prosekají se naplocho a po složení lícují.
 
 Jazyk vybíhá u levého konce pásu (zadní panel); po přeložení ohybem A skončí u pravého boku,
 přehne se přes horní hranu a zapne drukem na přední panel – **druk je shora**, jako u předlohy.
@@ -202,20 +203,27 @@ ohyb B 8,7, jazyk 43,1 mm). Tvarování za mokra nejdřív zkusit na A5 stejné 
 4. Přišít kapsu na přední panel (41,8 mm pod horní hranou, 14,75 mm od boků; u mince 40 mm
    35,55 / 8,5): kapsu s už
    proseknutými otvory přilepit na značky, vidličkami proseknout jejími otvory i přední panel
-   (naplocho na desce) a přišít. Osadit patici druku **naplocho, před složením** (druk předtím
-   vyzkoušený na odřezku); volitelnou průchodku do vnitřního panelu stejně.
+   (naplocho na desce) a přišít. Osadit patici druku **naplocho, před složením** – dřík z rubu,
+   hlavička na líci předního panelu (druk předtím vyzkoušený na odřezku); volitelnou průchodku
+   do vnitřního panelu stejně.
 5. **Ohyby:** pásma ohybů navlhčit, nejdřív vnitřní panel ohybem B za přední, pak zadní ohybem A
    přes všechno. Ohnout kolem skutečného obsahu (karty a bankovky zabalené v potravinové fólii),
-   přejet rozhrnovačkou, sepnout sponkami přes podložku a nechat zaschnout. Tady líc nejspíš
-   praskne, když se ohne nasucho nebo na ostro.
+   přejet rozhrnovačkou, sepnout sponkami přes podložku, před zaschnutím zkontrolovat, že otvory
+   dna na sousedních panelech lícují, a nechat zaschnout. Tady líc nejspíš praskne, když se ohne
+   nasucho nebo na ostro.
 6. **Dno:** kontaktní lepidlo jen na pruh pod čáru švu (0–3,5 mm od hrany; karty stojí na švu,
-   lepidlo výš by ubralo hloubku). Spoje jsou dva: přední↔vnitřní a vnitřní↔zadní; lepit **po
-   jednom**. Zaschlý ohyb rozevřít jen tolik, aby šel proužek natřít (zhruba do pravého úhlu, ne
-   úplně naplocho – suchý neztenčený ohyb A by mohl na líci prasknout), zdrsnit, natřít, nechat
-   zavadnout, přeložit a před přitlačením zarovnat jehlami přes otvory (kontaktní lepidlo po
-   dotyku nejde posunout). Prošít skrz všechny vrstvy; nit raději 0,8 m.
-7. Vložit karty i bankovky, které nosíš, přehnout jazyk, obtisknout patici, osadit klobouček,
-   jazyk zkrátit 11 mm za střed kloboučku a zaoblit R10.
+   lepidlo výš by ubralo hloubku). Spoje jsou dva: přední↔vnitřní (rub předního + rub
+   vnitřního) a vnitřní↔zadní (líc vnitřního + rub zadního); lepit **po jednom**. Zaschlý ohyb
+   rozevřít jen tolik, aby šel proužek natřít (zhruba do pravého úhlu, ne úplně naplocho – suchý
+   neztenčený ohyb A by mohl na líci prasknout), zdrsnit, natřít v tenké rovnoměrné vrstvě,
+   nechat zavadnout, přeložit a před přitlačením zarovnat jehlami přes otvory (kontaktní lepidlo
+   po dotyku nejde posunout). Prošít sedlářským stehem skrz všechny vrstvy a zkontrolovat rub (steh
+   na rubu stejně rovný jako na líci); nit raději 0,8 m (pravidlo „Jak odměřit nit“ dává pro tři
+   vrstvy ≈ 0,6 m, 0,8 m je rezerva pro začátečníka).
+7. Vložit karty i bankovky, které nosíš, přehnout jazyk, obtisknout patici (obtisk na rubu jazyka
+   určuje střed kloboučku, kružnice na šabloně je jen orientační; střed doporučeně propíchnout
+   šídlem na líc – ověřit na odřezku), osadit klobouček, ověřit, že druk drží a jde znovu
+   rozepnout, jazyk zkrátit 11 mm za střed kloboučku (měřit na líci) a zaoblit R10.
 8. Dno přebrousit do roviny (tři vrstvy), srazit, obarvit a zaleštit vnější hrany. U volitelné
    průchodky protáhnout šňůrku.
 

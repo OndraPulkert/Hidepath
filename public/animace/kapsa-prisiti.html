@@ -595,12 +595,12 @@ document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.len
 document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
 document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
 document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};
-// deep links #A–#D
-function partFromHash(){const h=(location.hash||'').replace('#','').toUpperCase();return PARTS[h]?h:null}
+// deep links: část (#A–#D) otevře svůj první krok, krok (#B3) přímo ten krok; zastavené
+function stepFromHash(){const m=/^([A-Z])([0-9]+)?$/.exec(decodeURIComponent((location.hash||'').slice(1)).trim().toUpperCase());if(!m||!Object.prototype.hasOwnProperty.call(PARTS,m[1]))return -1;const ix=[];S.forEach((s,i)=>{if(s.part===m[1])ix.push(i)});const n=m[2]===undefined?1:+m[2];return n>=1&&n<=ix.length?ix[n-1]:-1}
 let auto=false;
-const hp=partFromHash();
-if(hp){auto=true;go(S.findIndex(s=>s.part===hp),1)} else go(0,1); // meaningful still
-window.addEventListener('hashchange',()=>{const p=partFromHash();if(p){auto=true;setPlay(false);go(S.findIndex(s=>s.part===p),1)}});
+const hs=stepFromHash();
+if(hs>=0){auto=true;go(hs,1)} else go(0,1); // meaningful still
+window.addEventListener('hashchange',()=>{const i=stepFromHash();if(i>=0){auto=true;setPlay(false);go(i,1)}});
 window.__prisiti={go:(i,t)=>{auto=true;setPlay(false);idx=i;tt=t;render()},steps:S.length,parts:S.map(s=>s.part),
   geo:{pocketFromTop:+(PY-FY).toFixed(2),pocketFromLeft:+(PX-FX).toFixed(2),pocketFromRight:+(FX+PW-(PX+PKW)).toFixed(2),pocketW:PKW,pocketH:PKH,holes:DOTSL.length,panelW:PW,panelH:PH,seamLen:+SEAM_LEN.toFixed(2),corners:CORN.map(([x,y])=>[+(x-FX).toFixed(2),+(y-FY).toFixed(2)]),snap:[+(SNAP[0]-FX).toFixed(2),+(SNAP[1]-FY).toFixed(2)]}};
 if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!auto){auto=true;io.disconnect();go(0,0);setPlay(true)}})},{threshold:.45});io.observe(svg)}

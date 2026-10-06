@@ -1618,7 +1618,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       'Celý druk nejdřív vyzkoušejte na odřezku stejné kůže jako tělo (lekce 3), teprve pak na pásu. Obchod u Prym Anorak uvádí „textilie vyrobené z jemné kůže“; třísločiněná kůže 1,2–1,5 mm je tužší – jestli dřík v jedné vrstvě dobře roznýtuje a druk jde zavřít i otevřít, ověřte na odřezku.',
       'Velikost otvoru pro dřík a klobouček obchod neuvádí. Řiďte se návodem na obalu; když otvor vyžaduje a velikost neuvádí, zkuste na odřezku nejdřív nejmenší výsečník (2 mm) a teprve když dřík neprojde, o krok větší (3 mm). Moc velký otvor a dřík se v kůži viklá.',
       'Dřík (patice) se osazuje naplocho z rubu předního panelu ještě před složením pásu – v uzavřeném pouzdru už na něj nedosáhnete.',
-      'Klobouček se naopak osazuje až úplně nakonec, podle obtisku hlavičky na přeloženém jazyku, ne podle odhadované značky.',
+      'Klobouček se naopak osazuje až úplně nakonec, podle obtisku hlavičky na přeloženém jazyku, ne podle orientační kružnice ze šablony PÁS.',
       'Aplikátorem z balení a paličkou na tvrdé podložce, kolmo a přesně na značku; pořadí dílů a strana aplikátoru podle návodu na obalu.',
       'Patice (dřík) na rubu předního panelu nesmí zasahovat pod horní hranu karet (15 mm pod horní hranou). Střed patice je 9,5 mm pod hranou, takže příruba smí mít nejvýš Ø 11 mm – po nákupu ji posuvným měřítkem změřte, ověřit na prototypu.',
     ],

@@ -315,6 +315,15 @@ function holderBody(o={}){
   if(o.stud!==false) s+=studTop(HSX,HSY);
   return s;
 }
+// pouzdro zezadu v souřadnicích pohledu zepředu (kreslí se zrcadlově): zadní panel s výkusem
+// od jazyka k ohybu A (čtvrtelipsa 39 × 34 podle šablony PÁS), výkusem je vidět vnitřní část
+function holderBack(){
+  let s=`<rect x="0" y="0" width="40" height="40" fill="url(#licS)"/><rect x="0" y="0" width="40" height="40" fill="var(--lic-d)" opacity=".25"/>`;
+  s+=`<path d="M0 34 L-5.59 34 Q-5.59 34 -5.59 36 L-5.59 104.1 L0 104.1 Z" fill="url(#foldA)" stroke="var(--lic-d)" stroke-width=".3"/>`;
+  s+=`<rect x="72" y="0" width="3.36" height="104.1" fill="url(#foldB)" stroke="var(--lic-d)" stroke-width=".3"/>`;
+  s+=`<path d="M0 34 A39 34 0 0 0 ${TX0} 0 L${PW} 0 L${PW} 104.1 L0 104.1 Z" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".4"/>`;
+  return s;
+}
 // přeložený jazyk (líc), konec v yEnd pod horní hranou
 function tongueFolded(yEnd,o={}){
   let s=`<path d="${tongueShape(-5.6,yEnd)}" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".4" ${o.shadow?SHADOW:''}/>`;
@@ -385,7 +394,7 @@ const S=[];
 const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,side,tip});
 
 // ===== A =====
-add('A','Druk má čtyři díly','Druk se na finální pás osazuje až v lekci 6 a na jazyk v lekci 8 – nejdřív ho celý vyzkoušejte tady, na odřezku stejné kůže jako tělo. Obchod u Prym Anorak uvádí „textilie vyrobené z jemné kůže“, třísločiněná kůže je tužší; jestli dřík v jedné vrstvě dobře roznýtuje a druk jde zavřít i otevřít, ukáže jen zkouška. Druk je čtyřdílný: dřík a hlavička jdou na přední panel, zdířka a klobouček na jazyk (skladbu dílů ověřte podle obalu). Každá polovina svírá jen jednu vrstvu kůže těla (1,2 mm). Podle položky vybavení Druk a lekce 8: hlavička na líc předního panelu, dřík z jeho rubu; klobouček (Ø 12 mm) na líc jazyka, zdířka na jeho rub, obrácená k přednímu panelu.',8200,t=>{
+add('A','Druk má čtyři díly','Druk se na finální pás osazuje až v lekci 6 a na jazyk v lekci 8 – nejdřív ho celý vyzkoušejte tady, na odřezku stejné kůže jako tělo. Obchod u Prym Anorak uvádí „textilie vyrobené z jemné kůže“, třísločiněná kůže je tužší; jestli dřík v jedné vrstvě dobře roznýtuje a druk jde zavřít i otevřít, ukáže jen zkouška – ověřit na odřezku. Návod z obalu mějte po ruce: je na něm, jak se konkrétní druk osazuje. Druk je čtyřdílný: dřík a hlavička jdou na přední panel, zdířka a klobouček na jazyk (skladbu dílů ověřte podle obalu). Každá polovina svírá jen jednu vrstvu kůže těla (1,2 mm). Podle položky vybavení Druk a lekcí 6 a 8: hlavička na líc předního panelu, dřík z jeho rubu; klobouček (Ø 12 mm) na líc jazyka, zdířka na jeho rub, obrácená k přednímu panelu.',8200,t=>{
   const e=es(t,.05,.4), c=es(t,.6,.85);
   const k=2.3, ox=50, yF=62, yT=L(27,yF-5*k,c), sp=3.4*(1-c);
   const tongue=leatherSec(-13,13,0,{gap:1})+G(`translate(0 ${f(-sp)})`,capSec(1))+G(`translate(0 ${f(sp)})`,socketSec());
@@ -403,7 +412,7 @@ add('A','Druk má čtyři díly','Druk se na finální pás osazuje až v lekci 
   return s;
 },null);
 
-add('A','Značka pro dřík 9,5 mm od okraje','Šídlem propíchněte na odřezku bod 9,5 mm od okraje – jako střed dříku na předním panelu, 9,5 mm pod horní hranou. Je to značka pro dřík a zároveň si ověříte, jak se druk chová u hrany. Návod z obalu mějte po ruce: je na něm, jak se konkrétní druk osazuje.',6400,t=>{
+add('A','Značka pro dřík 9,5 mm od okraje','Šídlem propíchněte na odřezku bod 9,5 mm od okraje – jako střed dříku na předním panelu, 9,5 mm pod horní hranou. Je to značka pro dřík a zároveň si ověříte, jak se druk chová u hrany.',6400,t=>{
   const pr=seg(t,.25,.6), d=seg(t,.62,.75);
   let inner=offcut();
   if(pr>.5) inner+=pricks([MK],.45);
@@ -537,7 +546,7 @@ add('B','Otvor pro dřík (pokud ho návod vyžaduje)','Pokud návod druku vyža
   return s;
 },'lic','Bezpečnost (lekce 6): výsečník tlučte kolmo, ruka mimo dráhu paličky.');
 
-add('B','Dřík z rubu, hlavička na líci – naplocho','Dřík s hlavičkou osaďte naplocho na značku v předním panelu aplikátorem z balení a paličkou na tvrdé podložce, stejně jako na odřezku v lekci 3 – ještě před složením pásu, v hotovém pouzdru už na něj nedosáhnete. Podle položky vybavení Druk jde dřík z rubu předního panelu a hlavička zůstane na jeho líci.',10500,t=>{
+add('B','Dřík z rubu, hlavička na líci – naplocho','Dřík s hlavičkou osaďte naplocho na značku v předním panelu aplikátorem z balení a paličkou na tvrdé podložce, stejně jako na odřezku v lekci 3 – ještě před složením pásu, v hotovém pouzdru už na něj nedosáhnete. Dřík jde z rubu předního panelu a hlavička zůstane na jeho líci (lekce 6, vybavení Druk).',10500,t=>{
   const {g}=setSection(t,'post');
   let s=clipMain('b3',g)+secTag();
   s+=setLabels(t,'post','hlavička','dřík','přední panel');
@@ -590,7 +599,7 @@ add('C','Vložte obsah a přehněte jazyk','Do hotového těla pouzdra z lekce 7
   return s;
 },{v:'LÍC',sub:'pohled zepředu'},'Tip (lekce to neuvádí): jazyk vybíhá ze zadního panelu; přes horní hranu jde dopředu na přední panel a leží přes hlavičku.');
 
-add('C','Obtiskněte polohu kloboučku','Přeložený jazyk přitiskněte přes hlavičku na předním panelu, aby se na kůži obtiskla. Zjistěte, o kolik mm od původní značky a kterým směrem se obtisk posunul: pás je nastřižený na nejhorší případ, ve skutečnosti druk okraj stáhne, takže jazyk vyjde delší, než ukazoval papírový model.',10000,t=>{
+add('C','Obtiskněte polohu kloboučku','Přeložený jazyk přitiskněte přes hlavičku na předním panelu, aby se na rubu jazyka obtiskla. Střed obtisku je střed kloboučku – podle něj se klobouček osazuje. Kružnice kloboučku na šabloně PÁS je jen orientační a na kůži se nepřenáší; že obtisk vyjde jinde, je v pořádku: pás je nastřižený na nejhorší případ, ve skutečnosti druk okraj stáhne, takže jazyk vyjde delší, než ukazoval papírový model. Obtisk je na rubu jazyka, klobouček ale jde na líc: doporučujeme propíchnout střed obtisku šídlem skrz jazyk, aby byl střed vidět i na líci – ověřit na odřezku.',10000,t=>{
   const pr=seg(t,.08,.4), bump=Math.sin(Math.min(1,pr)*Math.PI);
   let inner=holderBody()+tongueFolded(TAB_END_LONG,{bump:pr>0?.4+.6*bump:0});
   let s=clipMain('c2',G(camT(HTOP),inner));
@@ -605,11 +614,14 @@ add('C','Obtiskněte polohu kloboučku','Přeložený jazyk přitiskněte přes 
   tg+=imprint(HSX,-IMP,ap);
   let ib=G(`translate(${f(110.5-HSX*k)} ${oy}) scale(${k})`,tg)+`<path d="M${f(110.5-TAB_W/2*k-1)} ${oy} H${f(110.5+TAB_W/2*k+1)}" stroke="var(--muted)" stroke-width=".3"/>`;
   ib+=lbl(110.5,oy+4.2,'horní hrana','ts','middle');
-  ib+=fade(sh,lbl(89,oy+10.5,'čárkovaně: šablona','ts')+lbl(89,oy+15,'posun např. 2 mm','ta')+lbl(89,oy+19.5,'skutečný změřte','ts'));
+  ib+=fade(sh,lbl(89,oy+10.5,'čárkovaně: šablona','ts')+lbl(89,oy+15,'jen orientační','ta')+lbl(89,oy+19.5,'platí obtisk','ts'));
+  // střed obtisku propíchnout šídlem skrz na líc (lekce 8: doporučení, ověřit na odřezku)
+  const aw=seg(t,.76,.94);
+  if(aw>0&&aw<1) ib+=awl(110.5,oy-IMP*k,aw<.5?aw*2:2-aw*2);
   s+=inset('RUB JAZYKA',ib);
   if(t>.45) s+=fade(seg(t,.45,.55),pill(4,86,'obtisk na rubu jazyka','tok'));
   return s;
-},{v:'LÍC',sub:'vpravo rub jazyka'},'Tip (lekce to neuvádí): obtisk vznikne na rubu jazyka, klobouček ale jde na líc – střed obtisku proto propíchněte šídlem skrz. Původní značku tu zastupuje orientační poloha kloboučku ze šablony PÁS (čárkovaně) – na kůži se nepropichuje; posun 2 mm je jen příklad.');
+},{v:'LÍC',sub:'vpravo rub jazyka'},'Tip (lekce to neuvádí): v kresbě je čárkovaně orientační kružnice kloboučku ze šablony PÁS a posun obtisku o 2 mm je jen příklad.');
 
 add('C','Otvor pro klobouček (pokud ho návod vyžaduje)','Pokud návod druku vyžaduje otvor pro klobouček, proražte ho výsečníkem, který vám v lekci 3 na odřezku sedl na trn kloboučku, přesně v obtisknutém místě na jazyku.',7200,t=>{
   const pu=seg(t,.25,.6), hole=t>.42?1:0;
@@ -620,11 +632,11 @@ add('C','Otvor pro klobouček (pokud ho návod vyžaduje)','Pokud návod druku v
   if(t>.15&&t<.66) s+=punch(mx,my,HTONG.k,pu<.5?pu*2:2-pu*2);
   s+=pill(4,86,'jen pokud návod otvor vyžaduje','ta');
   s+=inset('KLOBOUČEK',notes([['výsečník, který','tw'],['sedl na trn'],['kloboučku'],['v lekci 3'],['přesně v místě'],['obtisku']])+
-    fade(seg(t,.65,.8),notes([['ne podle','ta'],['odhadované'],['značky']],56,5.4)));
+    fade(seg(t,.65,.8),notes([['ne podle','ta'],['kružnice'],['ze šablony']],56,5.4)));
   return s;
 },{v:'RUB',sub:'jazyk narovnaný'},'Tip (lekce to neuvádí): jazyk při tom narovnejte za horní hranu naplocho na děrovací desku, ať pod ním není přední panel.');
 
-add('C','Osaďte klobouček se zdířkou','Klobouček se zdířkou osaďte přesně na obtisknuté místo aplikátorem z balení a paličkou, ne podle původní odhadované značky. Klobouček (Ø 12 mm) jde na líc jazyka – ven, viditelný po zapnutí –, zdířka na rub jazyka pod ním, obrácená k přednímu panelu. Pořadí dílů podle návodu na obalu, stejně jako na odřezku v lekci 3.',10500,t=>{
+add('C','Osaďte klobouček se zdířkou','Klobouček se zdířkou osaďte přesně na obtisknuté místo aplikátorem z balení a paličkou, ne podle orientační kružnice ze šablony PÁS. Klobouček (Ø 12 mm) jde na líc jazyka – ven, viditelný po zapnutí –, zdířka na rub jazyka pod ním, obrácená k přednímu panelu. Pořadí dílů podle návodu na obalu, stejně jako na odřezku v lekci 3.',10500,t=>{
   const {g}=setSection(t,'cap');
   let s=clipMain('c4',g)+secTag();
   s+=setLabels(t,'cap','klobouček','zdířka','jazyk');
@@ -638,33 +650,35 @@ add('C','Osaďte klobouček se zdířkou','Klobouček se zdířkou osaďte přes
   return s;
 },null,'Tip (lekce to neuvádí): v kresbě je líc jazyka s kloboučkem nahoře a aplikátor shora – jen schéma, pořadí dílů podle návodu na obalu.');
 
-add('C','Zkraťte jazyk 11 mm za střed kloboučku','Jazyk zkraťte 11 mm za střed kloboučku a rohy znovu zaoblete na R10 – rohovou šablonou (lob 20), nebo obtažením mince či víčka stejné velikosti. Nůž veďte tahem od prstů volné ruky.',11000,t=>{
+add('C','Zkraťte jazyk 11 mm za střed kloboučku','Ocelovým pravítkem odměřte na líci jazyka 11 mm od středu kloboučku a jazyk tam zkraťte. Rohy znovu zaoblete na R10 – rohovou šablonou (lob 20), nebo obtažením mince či víčka stejné velikosti. Nůž veďte tahem od prstů volné ruky.',11000,t=>{
   const ms=seg(t,.05,.25), cut=es(t,.3,.55), away=es(t,.55,.68), rr=es(t,.7,.95);
   const yCut=-(IMP+BEYOND);
-  let inner=holderBody()+`<rect x="28" y="-52" width="56" height="51" rx="1" fill="var(--mat)" stroke="var(--mat-d)" stroke-width=".3"/>`;
+  // pohled zezadu: pouzdro leží zadním panelem nahoru, kreslí se v souřadnicích zepředu a zrcadlí
+  let inner=holderBack()+`<rect x="28" y="-52" width="56" height="51" rx="1" fill="var(--mat)" stroke="var(--mat-d)" stroke-width=".3"/>`;
   for(let i=1;i<6;i++) inner+=`<path d="M28 ${-52+i*10} h56 M${28+i*10} -52 v51" stroke="var(--mat-d)" stroke-width=".15" opacity=".6"/>`;
   // zbytek jazyka (po řezu rovný konec, pak rohy R10)
-  if(cut<1) inner+=`<path d="${tongueShape(0,-TAB_CUT)}" fill="url(#rubP)" stroke="var(--rub-d)" stroke-width=".4"/>`;
-  else if(away<1){inner+=G(`translate(0 ${f(-away*14)})`,`<path d="M${TX0} ${f(yCut)} L${TX1} ${f(yCut)} L${TX1} ${f(-TAB_CUT+10)} A10 10 0 0 0 ${TX1-10} ${-TAB_CUT} L${TX0+10} ${-TAB_CUT} A10 10 0 0 0 ${TX0} ${f(-TAB_CUT+10)} Z" fill="url(#rubP)" stroke="var(--rub-d)" stroke-width=".4"/>`,`opacity="${f(1-away)}"`)}
-  if(cut>=1) inner+=`<path d="${tongueShape(0,yCut,rr*10)}" fill="url(#rubP)" stroke="var(--rub-d)" stroke-width=".4"/>`;
+  if(cut<1) inner+=`<path d="${tongueShape(0,-TAB_CUT)}" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".4"/>`;
+  else if(away<1){inner+=G(`translate(0 ${f(-away*14)})`,`<path d="M${TX0} ${f(yCut)} L${TX1} ${f(yCut)} L${TX1} ${f(-TAB_CUT+10)} A10 10 0 0 0 ${TX1-10} ${-TAB_CUT} L${TX0+10} ${-TAB_CUT} A10 10 0 0 0 ${TX0} ${f(-TAB_CUT+10)} Z" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".4"/>`,`opacity="${f(1-away)}"`)}
+  if(cut>=1) inner+=`<path d="${tongueShape(0,yCut,rr*10)}" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".4"/>`;
   if(rr>0&&rr<1){
     // šablona Ø 20 v rozích
     inner+=`<circle cx="${TX1-10}" cy="${f(yCut+10)}" r="10" fill="none" stroke="var(--accent)" stroke-width=".3" stroke-dasharray="1 .7"/><circle cx="${TX0+10}" cy="${f(yCut+10)}" r="10" fill="none" stroke="var(--accent)" stroke-width=".3" stroke-dasharray="1 .7"/>`;
   }
-  inner+=socketTop(HSX,-IMP);
+  inner+=capTop(HSX,-IMP);
   // míra 11 mm
   if(ms>0&&rr<.3) inner+=`<g opacity="${f(ms*(1-seg(t,.66,.7)))}"><path d="M${TX0-3} ${f(-IMP)} V${f(yCut)}" stroke="var(--accent)" stroke-width=".35" marker-start="url(#ar)" marker-end="url(#ar)"/><path d="M${TX0-4.5} ${f(-IMP)} H${HSX}" stroke="var(--accent)" stroke-width=".2" stroke-dasharray=".7 .5"/><path d="M${TX0-5} ${f(yCut)} H${TX1+3}" stroke="var(--accent)" stroke-width=".3" stroke-dasharray="1.2 .8"/></g>`;
-  let s=clipMain('c5',G(camT(HTONG),inner));
-  if(ms>0&&rr<.3){const [lx,ly]=tv(HTONG,TX0-3,(-IMP+yCut)/2);s+=fade(ms*(1-seg(t,.66,.7)),pill(lx-1.5,ly+1.5,'11','ta','end'))}
-  if(cut>0&&cut<1){const [kx,ky]=tv(HTONG,L(TX1+2,TX0-2,cut),yCut);s+=knife(kx,ky,-20)}
+  const cam={...HTONG,cx:PW-HTONG.cx}, M=x=>PW-x;
+  let s=clipMain('c5',G(camT(cam),G(`translate(${PW} 0) scale(-1 1)`,inner)));
+  if(ms>0&&rr<.3){const [lx,ly]=tv(cam,M(TX0-3),(-IMP+yCut)/2);s+=fade(ms*(1-seg(t,.66,.7)),pill(lx+1.5,ly+1.5,'11','ta','start'))}
+  if(cut>0&&cut<1){const [kx,ky]=tv(cam,M(L(TX1+2,TX0-2,cut)),yCut);s+=knife(kx,ky,20)}
   s+=pill(4,86,rr>0?'rohy R10':'11 mm za střed kloboučku','t');
-  s+=inset('ZKRÁTIT',notes([['11 mm za střed','tw'],['kloboučku'],['rohy R10:'],['rohová šablona'],['(lob 20), mince'],['či víčko Ø 20']])+
+  s+=inset('ZKRÁTIT',notes([['11 mm od středu','tw'],['kloboučku na líci'],['rohy R10:'],['rohová šablona'],['(lob 20), mince'],['či víčko Ø 20']])+
     fade(seg(t,.9,1),notes([['od kraje kloboučku','tok'],['zbyde 5 mm']],56,5.4)));
   return s;
-},{v:'RUB',sub:'jazyk narovnaný'},'Tip (lekce to neuvádí): jazyk při řezání narovnejte za horní hranu na řezací podložku a měřte od středu zdířky – je přesně pod středem kloboučku.');
+},{v:'LÍC',sub:'jazyk narovnaný, zezadu'},'Tip (lekce to neuvádí): pouzdro položte zadním panelem nahoru a jazyk narovnejte za horní hranu na řezací podložku – líc jazyka s kloboučkem je pak nahoře.');
 
 // ===== D =====
-add('D','Kontrola: druk drží','Kontrola lekce 8: druk drží. Zdířka na rubu jazyka cvakne na hlavičku na předním panelu (vybavení Druk).',9000,t=>{
+add('D','Kontrola: druk drží','Kontrola lekce 8: druk drží a jde znovu rozepnout – stejně jako na odřezku v lekci 3. Zdířka na rubu jazyka cvakne na hlavičku na předním panelu (vybavení Druk).',9000,t=>{
   // 0–.4 zavřít, .45–.6 drží, .62–.85 otevřít, .88–1 zavřít znovu
   const c1=es(t,.04,.38), o1=es(t,.6,.8), c2=es(t,.86,.98);
   const p= t<.6? c1 : t<.86? 1-o1 : c2;
@@ -683,9 +697,9 @@ add('D','Kontrola: druk drží','Kontrola lekce 8: druk drží. Zdířka na rubu
   ib+=`<clipPath id="d1i"><rect x="87" y="38" width="45" height="45"/></clipPath><g clip-path="url(#d1i)">`+G(`translate(${ox} ${oy}) scale(${k})`,sec)+`</g>`;
   s+=inset('ZKOUŠKA',ib);
   return s;
-},{v:'LÍC',sub:'pohled zepředu'},'Tip (lekce to neuvádí): jazyk přehněte přes horní hranu, zacvakněte a zkuste druk i znovu otevřít – stejně jako na odřezku v lekci 3.');
+},{v:'LÍC',sub:'pohled zepředu'});
 
-add('D','Kontrola: jazyk končí asi 21 mm nad kapsou','Druk drží a jazyk po zkrácení končí asi 21 mm nad horní hranou kapsy, nezasahuje do ní (kontrola lekce 8). Podle šablony PÁS: konec jazyka 9,5 + 11 = 20,5 mm pod horní hranou, kapsa začíná ve 41,8 mm. Podle vybavení Druk má klobouček Ø 12 mm k horní hraně 3,5 mm, k bokům jazyka 10,5 mm a ke konci jazyka 5 mm. Lekce 8 pak pokračuje přebroušením dna do roviny a obarvením a zaleštěním hran.',8400,t=>{
+add('D','Kontrola: jazyk končí asi 21 mm nad kapsou','Druk drží a jde znovu rozepnout; jazyk po zkrácení končí asi 21 mm nad horní hranou kapsy, nezasahuje do ní (kontrola lekce 8). Podle šablony PÁS: konec jazyka 9,5 + 11 = 20,5 mm pod horní hranou, kapsa začíná ve 41,8 mm. Podle vybavení Druk má klobouček Ø 12 mm k horní hraně 3,5 mm, k bokům jazyka 10,5 mm a ke konci jazyka 5 mm. Lekce 8 pak pokračuje přebroušením dna do roviny a obarvením a zaleštěním hran.',8400,t=>{
   const d1=seg(t,.15,.3), d2=seg(t,.35,.5), d3=seg(t,.55,.7);
   let inner=holderBody()+tongueFolded(TAB_END_SHORT,{cap:1});
   const cam={cx:40,cy:30,sx:40,sy:44,k:1.05};
@@ -762,12 +776,12 @@ document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.len
 document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
 document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
 document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};
-// deep links #A–#D
-function partFromHash(){const h=(location.hash||'').replace('#','').toUpperCase();return PARTS[h]?h:null}
+// deep links: část (#A–#D) otevře svůj první krok, krok (#B3) přímo ten krok; zastavené
+function stepFromHash(){const m=/^([A-Z])([0-9]+)?$/.exec(decodeURIComponent((location.hash||'').slice(1)).trim().toUpperCase());if(!m||!Object.prototype.hasOwnProperty.call(PARTS,m[1]))return -1;const ix=[];S.forEach((s,i)=>{if(s.part===m[1])ix.push(i)});const n=m[2]===undefined?1:+m[2];return n>=1&&n<=ix.length?ix[n-1]:-1}
 let auto=false;
-const hp=partFromHash();
-if(hp){auto=true;go(S.findIndex(s=>s.part===hp),1)} else go(0,1); // meaningful still
-window.addEventListener('hashchange',()=>{const p=partFromHash();if(p){auto=true;setPlay(false);go(S.findIndex(s=>s.part===p),1)}});
+const hs=stepFromHash();
+if(hs>=0){auto=true;go(hs,1)} else go(0,1); // meaningful still
+window.addEventListener('hashchange',()=>{const i=stepFromHash();if(i>=0){auto=true;setPlay(false);go(i,1)}});
 window.__druk={go:(i,t)=>{auto=true;setPlay(false);idx=i;tt=t;render()},steps:S.length,parts:S.map(s=>s.part),
   geo:{snapFromTop:SNAP_TOP,snapFromFoldB:+(FX+PW-SNAP[0]).toFixed(2),snapT:SNAP,tabWidth:TAB_W,tabCut:TAB_CUT,capD:CAP_D,flangeMax:FLANGE_MAX,beyond:BEYOND,tabEndShort:TAB_END_SHORT,gapToPocket:+(PFY-TAB_END_SHORT).toFixed(2)}};
 if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!auto){auto=true;io.disconnect();go(0,0);setPlay(true)}})},{threshold:.45});io.observe(svg)}
