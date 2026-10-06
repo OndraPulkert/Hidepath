@@ -182,14 +182,14 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'drill-form',
         title: 'Vyvrtejte formu',
         body: 'Vytiskněte list KAPSA na 100 % (zkontrolujte úsečku 50 mm). Formou je deska z překližky nebo tvrdého plastu, poslouží i bukové kuchyňské prkénko asi 1,5 cm silné (např. Orion). Na listu je samostatný výkres „OTVOR FORMY PRO DŮLEK“ – kružnice Ø 31,5 mm s osami. Vystřihněte ho jako čtverec asi 7 × 7 cm, s okrajem asi 2 cm kolem kružnice, aby na papíru zůstaly celé osy. Samotnou kružnici nevystřihujte. Čtverec položte na desku doprostřed její šířky, střed otvoru asi 4–5 cm od konce naproti rukojeti (má-li deska rukojeť), osy rovnoběžně s okraji desky. Přilepte ho lepicí tyčinkou nebo páskou na okrajích. Ještě před vrtáním protáhněte obě osy tužkou podle pravítka až k okrajům desky – podle nich pak na formě zarovnáte osy narýsované na kůži. Desku upněte svěrkou ke stolu, pod ni dejte odpadní prkno. Středicí vrták nasaďte do křížku os. Otvor pro výchozí minci 50 Kč vrtejte vykružovací pilou Ø 32 mm (u mince 40 mm Ø 44 mm), na 1. rychlost, bez příklepu, netlačte silou, s nabitou baterií. Vykružovací pilou provrtejte do půlky, desku otočte a dokončete z druhé strany podle dírky středicího vrtáku. Forstnerovým vrtákem (sukovníkem) ho místo toho průběžně vytahujte, ať se zbaví pilin. Pak papír sundejte. Nakonec zaoblete horní hranu otvoru (stranu, na kterou budete pokládat kůži – označte si ji tužkou): smirkový papír 180 oviňte kolem prstu nebo tužky a hranu po celém obvodu sražte šikmo asi pod 45° do malého oblouku kolem 1 mm. Průměr otvoru nezvětšujte. Stěnu otvoru jen lehce přejeďte, aby netrčely třísky, a plochu kolem otvoru přebruste naplocho. Hrana nesmí pod prstem řezat ani drhnout; zabalená mince s odřezkem kůže musí jít do otvoru volně. Pokud se osy při broušení setřely, obtáhněte je znovu až k okrajům desky.',
-        animationLink: animationLink('kapsa', 'A'),
+        animationLinks: [animationLink('kapsa', 'A')],
         media: [],
       },
       {
         id: 'mark-outline',
         title: 'Orýsujte obrys a prosekejte otvory švu',
         body: 'Použijete dva výtisky listu KAPSA. 1. výtisk vystřihněte nahrubo s okrajem 1–2 cm, položte na LÍC odřezku a přilepte maskovací páskou na okrajích, mimo obrys, z několika stran (pásku nejdřív zkuste na kousku téže kůže). Šídlem propíchněte skrz tečky švu a 4 konce os – čtyři body, kde končí čerchované osy (vlevo, vpravo, nahoře, dole). Pásku strhněte pomalu pod ostrým úhlem, list sundejte a zkontrolujte, že se přenesly všechny značky. Na líci nic nekreslete – zůstanou na něm jen propíchnuté dírky: tečky švu a 4 konce os. Konce os leží vně obrysu kapsy a při řezu obrysu odpadnou; čára přes kapsu na líci by na hotové kapse zůstala vidět mezi oknem a obrysem. Vidličkami s roztečí 4 mm naplocho na desce prosekejte otvory švu z líce podle propíchnutých teček, stejně jako u skutečné kapsy, která se děruje ještě před navlhčením. Pak kůži otočte: propíchnuté konce os (i proseknuté otvory švu) jsou vidět na RUBU. Na rubu spojte protilehlé konce os podle pravítka a osy narýsujte tužkou HB nebo 2B, lehce (když tužka na kůži není vidět, lehce šídlem), až k okrajům kůže. 2. výtisk vystřihněte přesně po obrysu kapsy (plná čára se zaoblenými rohy), položte ho na RUB, zarovnejte na osy a obrys obtáhněte šídlem nebo tužkou. Na rub, ne na líc: škrábnutí na líci třísločiněné kůže zůstane vidět. Přeneste i kružnici okna – propíchněte její střed a několik bodů na kružnici; podle ní vystředíte zkušební okno na konci lekce. Obrys se teď neřeže, odřezek se po něm řízne až po vytvarování. Vystřižený 2. výtisk si schovejte: když se čára při tvarování rozmaže, obtáhnete ji podle něj znovu. Otvory švu leží jen asi 2 mm vně dna důlku, proto na přesném vystředění záleží; tady si tu kombinaci vyzkoušíte na odřezku.',
-        animationLink: animationLink('kapsa', 'B'),
+        animationLinks: [animationLink('kapsa', 'B')],
         media: [],
       },
       {
@@ -202,14 +202,14 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'wet',
         title: 'Navlhčete kůži',
         body: 'Kůži navlhčete houbičkou, nemáčejte ji. Počkejte, až povrch začne zase mírně světlat – to je správná chvíle na tvarování.',
-        animationLink: animationLink('kapsa', 'D'),
+        animationLinks: [animationLink('kapsa', 'D')],
         media: [],
       },
       {
         id: 'press-and-clamp',
         title: 'Vtlačte do formy a stáhněte svěrkami',
         body: 'Kůži lícem dolů položte na formu; rub je teď nahoře, zarovnejte na něm narýsované osy s osami narýsovanými na okraji desky. Zabalenou minci položte na rub nad otvor, přiklopte víkem a dvěma svěrkami proti sobě rovnoměrně stáhněte, aby se víko nenaklonilo.',
-        animationLink: animationLink('kapsa', 'D'),
+        animationLinks: [animationLink('kapsa', 'D')],
         media: [
           {
             id: 'postup-2',
@@ -232,7 +232,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'dry-and-inspect',
         title: 'Nechte zaschnout a prohlédněte důlek',
         body: 'Nechte úplně zaschnout, jistější je přes noc. Pak rozepněte a zkontrolujte: důlek má být dost hluboký a bez zvrásnění na okraji; mince do něj má jít zasunout i vysunout, forma počítá se záměrnou vůlí. Podívejte se i na zkušební otvory u kraje – mají zůstat kulaté, ne protažené nebo potrhané.',
-        animationLink: animationLink('kapsa', 'D'),
+        animationLinks: [animationLink('kapsa', 'D')],
         media: [
           {
             id: 'cch-l2-dimple',
@@ -246,7 +246,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'test-window-retention',
         title: 'Vysekněte zkušební okno a vyzkoušejte, že mince drží',
         body: 'Okno Ø 20 mm nechává kolem mince 50 Kč prstenec kůže jen 3,75 mm (dřív střih počítal se 4 mm), a právě ten má minci držet, aby oknem nevypadla. Že to na vaší kůži stačí, se musí ověřit tady, na odřezku, ne až na hotové kapse. Zaschlý odřezek položte lícem dolů zpátky na formu: důlek do otvoru, osy na rubu kůže na osy desky. Důlek visí v otvoru volně, nic ho nemačká. Nejdřív si na formě vyzkoušejte řez obrysu jako u skutečné kapsy: obrys vede asi 5 mm vně důlku, nad dřevem, takže nůž řeže na desce, ne nad důlkem. Řežte 2–3 lehkými tahy a kůži přidržujte na rovné části (je-li čára rozmazaná, obtáhněte ji znovu podle 2. výtisku). Desku můžete chránit kouskem kartonu s otvorem Ø 32 mm (u mince 40 mm Ø 44 mm) položeným na formu. Pak na formě pod důlek podložte špalík (užší než otvor formy, širší než okno) a výsečníkem Ø 20 mm (u mince 40 mm Ø 32 mm) vystředěným podle narýsované kružnice okna vysekněte okno. Pak zkoušejte: (1) minci vložte z rubu do důlku, odřezek otočte oknem dolů a zatřeste – mince nesmí vypadnout; (2) na minci z rubu zatlačte palcem směrem k oknu – nesmí oknem projít ani prstenec vytlačit ven; (3) prstenec zkontrolujte po celém obvodu – má být stejně široký, bez natržení. Když mince oknem projde, zapište to a Ø 20 mm do skutečné kapsy nesekejte. Nejdřív zkontrolujte hloubku důlku: mělký důlek může být příčina, pak tvarování zopakujte (ověřit na odřezku). Potom na druhém odřezku zopakujte kroky 2–6 (orýsování, zabalení mince, navlhčení, tvarování ve formě a schnutí přes noc) a vysekněte menší okno Ø 18 mm (CraftPoint, stejná nabídka výsečníků 2–20 mm, 29. 9. 2026 za 58 Kč skladem; 19 mm v nabídce není). Prstenec je pak 4,75 mm a z mince je v okně vidět o něco méně. List KAPSA se použije dál na vystředění (osy jsou stejné), jen výsečník je menší než narýsovaná kružnice okna; list s kružnicí Ø 18 mm vytiskne `pnpm pattern:coin-holder --window 18`. Do skutečné kapsy pak sekejte tím průměrem, se kterým vám zkouška vyšla.',
-        animationLink: animationLink('kapsa', 'E'),
+        animationLinks: [animationLink('kapsa', 'E')],
         media: [],
       },
     ],
@@ -533,7 +533,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'stitch-through-layers',
         title: 'Přitiskněte a sešijte tři vrstvy',
         body: 'Přitiskněte slepené vrstvy k sobě a sešijte sedlářským stehem skrz všechny tři vrstvy předem prosekanými otvory a zkontrolujte rub – steh má být stejně rovný jako na líci.',
-        animationLink: animationLink('threadLength'),
+        animationLinks: [animationLink('threadLength')],
         media: [
           {
             id: 'cch-l4-stitch',
@@ -633,7 +633,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'transfer-marks-awl',
         title: 'Před řezáním propíchněte značky',
-        animationLink: animationLink('pocketAttach', 'A'),
+        animationLinks: [animationLink('pocketAttach', 'A')],
         body: 'Dokud je šablona přilepená a nic není vyříznuté, propíchněte šídlem skrz papír: konce obou čar ohybu A i B (asi 1 mm od hrany pásu, ne přesně na ní), rohy místa pro kapsu (asi 1 mm dovnitř od zaobleného rohu, ne v jeho pomyslném ostrém vrcholu – jinak by značka zůstala vidět na líci mimo přišitou kapsu), střed dříku druku (na předním panelu) a všechny tečky dna. Propíchnutá dírka je vidět z obou stran, takže tím zároveň dostanete tečky na rub zadního a vnitřního panelu, odkud se budou prosekávat.',
         media: [
           {
@@ -807,14 +807,14 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'trace-and-punch-pocket',
         title: 'Orýsujte kapsu a prosekněte otvory švu z líce',
         body: 'Použijete dva výtisky listu KAPSA, stejně jako v lekci 2. 1. výtisk vystřihněte nahrubo s okrajem 1–2 cm, položte na LÍC kůže 1,2 mm a přilepte maskovací páskou na okrajích, mimo obrys, z několika stran (na líci nejdřív zkouška na odřezku). Šídlem propíchněte skrz tečky švu a 4 konce os – čtyři body, kde končí čerchované osy (vlevo, vpravo, nahoře, dole). Pásku strhněte pomalu pod ostrým úhlem, list sundejte a zkontrolujte, že se přenesly všechny značky. Na líci nic nekreslete – zůstanou na něm jen propíchnuté dírky: tečky švu a 4 konce os. Konce os leží vně obrysu kapsy a při řezu obrysu odpadnou; čára přes kapsu na líci by na hotové kapse zůstala vidět mezi oknem a obrysem. Vidličkami prosekněte otvory švu z líce podle propíchnutých teček – kapsa bude na předním panelu sedět lícem ven, proto se švové otvory prosekávají z líce; při opětovném prosekávání skrz obě vrstvy v pozdějším kroku musí vidličky vstupovat do stejné strany, aby si otvory lícovaly. Pak kůži otočte: propíchnuté konce os (i proseknuté otvory švu) jsou vidět na RUBU. Na rubu spojte protilehlé konce os podle pravítka a osy narýsujte tužkou HB nebo 2B, lehce (když tužka na kůži není vidět, lehce šídlem), až k okrajům kůže. 2. výtisk vystřihněte přesně po obrysu kapsy (plná čára se zaoblenými rohy), položte ho na RUB, zarovnejte na osy a obrys obtáhněte šídlem nebo tužkou. Na rub, ne na líc: škrábnutí na líci třísločiněné kůže zůstane vidět. Přeneste i kružnici okna – propíchněte její střed a několik bodů na kružnici; podle ní budete okno v pozdějším kroku vystřeďovat. Obrys se teď neřeže – kapsa se řeže až po vytvarování. Vystřižený 2. výtisk si schovejte: když se čára při tvarování rozmaže, obtáhnete ji podle něj znovu. Všechno udělejte ještě před navlhčením.',
-        animationLink: animationLink('kapsa', 'B'),
+        animationLinks: [animationLink('kapsa', 'B')],
         media: [],
       },
       {
         id: 'form-dimple',
         title: 'Vytvarujte důlek na formě',
         body: 'Kůži navlhčete, položte lícem dolů na formu a zarovnejte osy narýsované na rubu kůže s osami narýsovanými na desce, minci zabalenou ve fólii položte na rub nad otvor, přiklopte deskou a dvěma svěrkami proti sobě rovnoměrně stáhněte, aby se víko nenaklonilo. Nechte zaschnout, jistější je přes noc.',
-        animationLink: animationLink('kapsa', 'D'),
+        animationLinks: [animationLink('kapsa', 'D')],
         media: [
           {
             id: 'cch-l6-form',
@@ -829,7 +829,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'cut-outline-and-window',
         title: 'Vyřízněte obrys a vysekněte okno',
         body: 'Obrys i okno se dělají na formě. Zaschlou kapsu položte lícem dolů zpátky na formu: důlek do otvoru, osy na rubu kůže na osy desky. Důlek visí v otvoru volně, nic ho nemačká. Obrys vede asi 5 mm vně důlku, nad dřevem, takže nůž řeže na desce, ne nad důlkem. Vyřízněte ho podle orýsování na rubu 2–3 lehkými tahy a kůži přitom přidržujte na rovné části; je-li čára po tvarování rozmazaná, nejdřív ji obtáhněte znovu podle 2. výtisku. Desku můžete chránit kouskem kartonu s otvorem Ø 32 mm (u mince 40 mm Ø 44 mm) položeným na formu. Pak na formě vysekněte okno: pod důlek podložte špalík užší než otvor formy (pod 31,5 mm, u mince 40 mm pod 44 mm) a zároveň širší než okno (přes 20 mm, u mince 40 mm přes 32 mm) – má se dotýkat jen dna důlku zespodu, ne ho nadzvedávat. Výsečník vystřeďte podle kružnice okna narýsované na rubu v prvním kroku, nebo zkontrolujte, že prstenec kůže kolem důlku je stejně široký po celém obvodu, a teprve pak Ø 20 mm (u mince 40 mm Ø 32 mm) okno vysekněte. Prstenec 3,75 mm je úzký: okno Ø 20 mm sekejte jen tehdy, když vám zkouška držení mince na odřezku v lekci 2 vyšla (jinak menší výsečník, se kterým zkouška vyšla). Než kapsu přišijete, vložte do ní minci a zkuste, že oknem nepropadne.',
-        animationLink: animationLink('kapsa', 'E'),
+        animationLinks: [animationLink('kapsa', 'E')],
         media: [
           {
             id: 'postup-3',
@@ -856,7 +856,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'glue-pocket',
         title: 'Nalepte kapsu na přední panel',
-        animationLink: animationLink('pocketAttach', 'B'),
+        animationLinks: [animationLink('pocketAttach', 'B')],
         body: 'Na předním panelu smirkem lehce zdrsněte jen plochu pod okrajem kapsy (tam, kam přijde lepidlo), zbytek líc nechte hladký. Kontaktní lepidlo naneste jen do úzkého pruhu při okraji kapsy (do šířky švového okraje, ne přes celou plochu) na rub kapsy a na odpovídající zdrsněné místo na předním panelu – 41,8 mm pod horní hranou, 14,75 mm od obou boků (u mince 40 mm 35,55 mm pod horní hranou, 8,5 mm od obou boků) – ať se nerozteče na viditelný líc kolem kapsy. Horní hranu kapsy, kterou se bude zasouvat mince, nelepte.',
         media: [],
       },
@@ -864,7 +864,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'stitch-pocket',
         title: 'Prosekněte a přišijte kapsu',
         body: 'Kapsa má otvory švu prosekané už v prvním kroku z líce, ještě před tvarováním. Naplocho na děrovací desce teď vidličkami projeďte znovu přes tytéž otvory ze stejné strany (z líce kapsy), tentokrát skrz obě vrstvy najednou – kapsu i přední panel pod ní; jen tak si otvory po prosekání lícují. Pak kapsu sedlářským stehem přišijte, horní hrana zůstává volná.',
-        animationLink: animationLink('pocketAttach', 'C'),
+        animationLinks: [animationLink('pocketAttach', 'C'), animationLink('threadLength')],
         media: [
           {
             id: 'postup-4',
@@ -1043,7 +1043,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'stitch-bottom',
         title: 'Prošijte dno',
         body: 'Prošijte dno skrz všechny tři vrstvy (17 otvorů na panel, rozteč 4 mm, 3,5 mm od hrany). Začátek i konec zajistěte zpětnými stehy.',
-        animationLink: animationLink('threadLength'),
+        animationLinks: [animationLink('threadLength')],
         media: [
           {
             id: 'postup-6',

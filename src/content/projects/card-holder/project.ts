@@ -453,7 +453,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'start-stitch',
         title: 'Začněte steh',
         body: 'Jehlu protáhněte prvním otvorem tak, aby na obou stranách zůstala stejná délka nitě. Teď máte jednu jehlu vpředu, jednu vzadu.',
-        animationLink: animationLink('threadLength'),
+        animationLinks: [animationLink('threadLength')],
         media: [
           {
             id: 'l4-saddle-stitch',

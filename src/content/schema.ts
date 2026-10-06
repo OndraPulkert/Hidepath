@@ -178,8 +178,11 @@ export const lessonStepSchema = z.object({
    * (`practiceSheets`), např. cvičná šablona k vyzkoušení přenosu šablony na odřezku.
    */
   printLink: z.enum(['practice-sheets']).optional(),
-  /** Odkaz pod krokem na animaci postupu (tlačítko „▶ Animace postupu“). */
-  animationLink: animationLinkSchema.optional(),
+  /**
+   * Odkazy pod krokem na animace postupu a návod na délku nitě, každý jako vlastní tlačítko
+   * („▶ Animace postupu“, „📏 Jak odměřit nit“) v pořadí pole. Bez odkazů pole vynechte.
+   */
+  animationLinks: z.array(animationLinkSchema).min(1).optional(),
 });
 export type LessonStep = z.infer<typeof lessonStepSchema>;
 

@@ -36,9 +36,21 @@ describe('animace postupu – schéma odkazu', () => {
         title: 'Krok',
         body: 'Text',
         media: [],
-        animationLink: animationLink('lidBends', 'anim-dno'),
+        animationLinks: [animationLink('lidBends', 'anim-dno')],
       }).success,
     ).toBe(true);
+  });
+
+  it('krok může mít víc odkazů, ale ne prázdné pole', () => {
+    const step = { id: 'krok', title: 'Krok', body: 'Text', media: [] };
+    expect(
+      lessonStepSchema.safeParse({
+        ...step,
+        animationLinks: [animationLink('pocketAttach', 'C'), animationLink('threadLength')],
+      }).success,
+    ).toBe(true);
+    expect(lessonStepSchema.safeParse({ ...step, animationLinks: [] }).success).toBe(false);
+    expect(lessonStepSchema.safeParse(step).success).toBe(true);
   });
 
   it.each([
@@ -110,7 +122,9 @@ describe('animace postupu – stránky v public/animace', () => {
 });
 
 describe('animace postupu – odkazy z lekcí', () => {
-  const linked = allSteps.filter(({ step }) => step.animationLink);
+  const links = allSteps.flatMap(({ where, step }) =>
+    (step.animationLinks ?? []).map((link) => ({ where, href: link.href })),
+  );
 
   it('všechny projekty s odkazy na animace odpovídají schématu', () => {
     for (const project of projects) {
@@ -120,9 +134,8 @@ describe('animace postupu – odkazy z lekcí', () => {
   });
 
   it('každý odkaz míří na existující stránku a existující kotvu', () => {
-    expect(linked.length).toBeGreaterThan(0);
-    for (const { where, step } of linked) {
-      const href = step.animationLink!.href;
+    expect(links.length).toBeGreaterThan(0);
+    for (const { where, href } of links) {
       const source = pageSource(href);
       expect(source, `${where}: ${href}`).toBeDefined();
       const anchor = href.split('#')[1];
@@ -132,11 +145,14 @@ describe('animace postupu – odkazy z lekcí', () => {
 
   it('kroky lekcí 2 a 6 pouzdra s mincí otevírají správné části animace kapsy', () => {
     const hrefs = Object.fromEntries(
-      linked
-        .filter(({ where }) => where.startsWith('coin-card-holder/'))
-        .map(({ where, step }) => [where.split('/').slice(1).join('/'), step.animationLink!.href]),
+      allSteps
+        .filter(({ where, step }) => where.startsWith('coin-card-holder/') && step.animationLinks)
+        .map(({ where, step }) => [
+          where.split('/').slice(1).join('/'),
+          step.animationLinks!.map((l) => l.href),
+        ]),
     );
-    const kapsa = (part: string) => `/animace/kapsa-postup.html#${part}`;
+    const kapsa = (part: string) => [`/animace/kapsa-postup.html#${part}`];
     const lessonOf = (n: number) =>
       projects.find((p) => p.slug === 'coin-card-holder')!.lessons.find((l) => l.order === n)!.slug;
     expect(hrefs).toMatchObject({
@@ -154,11 +170,14 @@ describe('animace postupu – odkazy z lekcí', () => {
     const lessonOf = (n: number) =>
       projects.find((p) => p.slug === 'coin-card-holder')!.lessons.find((l) => l.order === n)!;
     const hrefOf = (n: number, stepId: string) =>
-      lessonOf(n).steps.find((s) => s.id === stepId)?.animationLink?.href;
+      lessonOf(n)
+        .steps.find((s) => s.id === stepId)
+        ?.animationLinks?.map((l) => l.href);
     const prisiti = (part: string) => `/animace/kapsa-prisiti.html#${part}`;
-    expect(hrefOf(5, 'transfer-marks-awl')).toBe(prisiti('A'));
-    expect(hrefOf(6, 'glue-pocket')).toBe(prisiti('B'));
-    expect(hrefOf(6, 'stitch-pocket')).toBe(prisiti('C'));
+    expect(hrefOf(5, 'transfer-marks-awl')).toEqual([prisiti('A')]);
+    expect(hrefOf(6, 'glue-pocket')).toEqual([prisiti('B')]);
+    // Přišití kapsy: animace prosekání a šití a hned vedle návod, kolik nitě odměřit.
+    expect(hrefOf(6, 'stitch-pocket')).toEqual([prisiti('C'), animationPages.threadLength.path]);
   });
 });
 

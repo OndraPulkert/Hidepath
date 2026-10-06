@@ -42,24 +42,27 @@ export function StepList({
                 {printLinkLabels[step.printLink]} →
               </Link>
             ) : null}
-            {step.animationLink ? (
-              // Obyčejný odkaz, ne router <Link>: animace je statická stránka mimo SPA
+            {step.animationLinks ? (
+              // Obyčejné odkazy, ne router <Link>: animace jsou statické stránky mimo SPA
               // (public/animace, offline z precache service workeru).
-              <Button
-                asChild
-                variant="secondary"
-                className="h-auto flex-col items-start gap-0.5 self-start py-2 text-left whitespace-normal"
-              >
-                <a href={step.animationLink.href}>
-                  <span>
-                    <span aria-hidden>{isThreadGuide(step.animationLink.href) ? '📏 ' : '▶ '}</span>
-                    {animationButtonText(step.animationLink.href)}
-                  </span>
-                  <span className="text-[14px] font-normal text-ink-2">
-                    {typo(step.animationLink.label)}
-                  </span>
-                </a>
-              </Button>
+              <div className="flex flex-wrap gap-2">
+                {step.animationLinks.map((link) => (
+                  <Button
+                    key={link.href}
+                    asChild
+                    variant="secondary"
+                    className="h-auto flex-col items-start gap-0.5 py-2 text-left whitespace-normal"
+                  >
+                    <a href={link.href}>
+                      <span>
+                        <span aria-hidden>{isThreadGuide(link.href) ? '📏 ' : '▶ '}</span>
+                        {animationButtonText(link.href)}
+                      </span>
+                      <span className="text-[14px] font-normal text-ink-2">{typo(link.label)}</span>
+                    </a>
+                  </Button>
+                ))}
+              </div>
             ) : null}
             {step.media.map((m) => (
               <MediaSlot

@@ -3,7 +3,7 @@ import { type AnimationLink } from '@/content/schema';
 /**
  * Animace postupu: samostatné HTML stránky v `public/animace`. Build je zkopíruje do `dist/`,
  * service worker je precachuje (fungují offline v nainstalované PWA) a Worker je servíruje
- * přímo jako soubor, ne jako SPA. Kroky lekcí na ně odkazují přes `animationLink`.
+ * přímo jako soubor, ne jako SPA. Kroky lekcí na ně odkazují přes `animationLinks`.
  *
  * `sections` = kotvy, které stránka umí otevřít, s popiskem pro tlačítko v kroku:
  * - kapsa-postup: `#A`–`#E` skočí na první krok dané části a přehrává od ní,

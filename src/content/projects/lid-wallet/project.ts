@@ -669,7 +669,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'stitch-s1-s3',
         title: 'Děrovat a šít S1, S2, S3',
         body: 'Děrujte z líce D2 na tvrdé desce, vidlička vždy stejně natočená při pohledu na líc D2, horní hranou od sebe – tím mají šikmé otvory na zádech stejný sklon. S1 (dno mincí) má 21 otvorů od x 10,5 do 90,5, S2 a S3 (boky sloupců) po 13 otvorech od y 28 do 76. Šijte sedlovým stehem, na obou koncích 2 otvory zpět.',
-        animationLink: animationLink('threadLength'),
+        animationLinks: [animationLink('threadLength')],
         media: [
           photo('lw-l6-seams', 'Ušité švy S1–S3 na líci D2, sloupce mincí a okénko bankovek'),
         ],
@@ -719,7 +719,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'wet',
         title: 'Navlhčete pás ohybu',
         body: `${NUMBERS_NOTE} Pás ohybu dna navlhčete houbičkou a počkejte, až se barva usně skoro vrátí k suché (5–10 min). Ohyb se dělá před lepením plíšku, aby plíšek nebyl u vlhké usně.`,
-        animationLink: animationLink('lidBends', 'anim-dno'),
+        animationLinks: [animationLink('lidBends', 'anim-dno')],
         media: [],
       },
       {
@@ -790,7 +790,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'g1',
         title: 'G1: plíšek na rub přední stěny',
         body: `${NUMBERS_NOTE} F (přední stěnu) položte naplocho rubem nahoru na PE desku, celou na desce, ohyb dna u hrany desky. B (zadní stěna s přišitou D2) stojí nad ohybem nahoru a ohyb dna zůstává asi 90°. Viset dolů přes hranu stolu jako u švu S6 B tady nemůže: s F rubem nahoru by se ohyb musel přehnout obráceně. Vyschlý ohyb chce B sklopit zpátky k F, proto ji zezadu opřete o knihu nebo krabičku a horní hranu k ní přichyťte kolíčkem nebo páskou, ať nespadne na lepidlo. Plíšek přilepte kontaktním lepidlem na rub F do plochy G1: x 43,5–57,5, y 3,5–24 (přilnavost lepidla k oceli ověřte na odřezku). Po tomto kroku už plíšek vyměnit nejde, magnet ano.`,
-        animationLink: animationLink('lidMagnet', 'anim-plisek'),
+        animationLinks: [animationLink('lidMagnet', 'anim-plisek')],
         media: [],
       },
       {
@@ -809,7 +809,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 's6',
         title: 'Šev dna karet S6',
         body: 'Mezi lepením a S6 nechte aspoň 1 h. Díl otočte: F teď položte naplocho lícem nahoru na tvrdou desku u hrany stolu a B nechte viset přes hranu (ohyb dna na hraně desky). Otvory S6 podle šablony z listu 1 na líci F propíchněte jehlou a děrujte vidličkou: y 25 (výchozí), x 10,5 až 38,5 a 62,5 až 90,5, dvakrát 8 otvorů. Střed kolem plíšku a jazýčku šev vynechává, drží ho jen lepení G2. Vidlička natočená při pohledu na líc F horní hranou od sebe. Šijte sedlovým stehem, konce 2 otvory zpět.',
-        animationLink: animationLink('threadLength'),
+        animationLinks: [animationLink('threadLength')],
         media: [
           ill(
             'lw-l8-section',
@@ -887,7 +887,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'punch-sew',
         title: 'Děrovat a šít boky',
         body: 'Mezi lepením G4 a děrováním nechte aspoň 1 h. Děrujte zepředu skrz všechny vrstvy: y 8–60 z líce F, y 64–76 z líce D2. Horní hrana F (y 62) leží přesně mezi otvory 60 a 64, proto v úseku y 56–68 děrujte po jednom otvoru a pod hranu F podložte odřezek 1,0 mm (schod F/D2). Šijte od 76 dolů, steh 60–64 zdvojte (zpevňuje ústí karet), konce 2 otvory zpět.',
-        animationLink: animationLink('threadLength'),
+        animationLinks: [animationLink('threadLength')],
         media: [],
       },
       {
@@ -942,7 +942,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'contents-b',
         title: 'Vložte obsah stavu B',
         body: `${NUMBERS_NOTE} Do kapsy karet dejte 2 staré karty a místo bankovky papír asi 70 × 65 mm, přeložený nebo v několika vrstvách, až posuvka ukáže asi 0,7 mm (nebo skutečnou bankovku zabalenou ve fólii, aby nezvlhla). Mince ne. Obsah pod závěsem je pak 3,42 mm jako ve výpočtu.`,
-        animationLink: animationLink('lidBends', 'anim-zaves'),
+        animationLinks: [animationLink('lidBends', 'anim-zaves')],
         media: [],
       },
       {
@@ -1040,7 +1040,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'find-plate',
         title: 'Najděte plíšek a označte polohu magnetu',
         body: `${NUMBERS_NOTE} Peněženka ve stavu B: 2 staré karty, v bankovkách 1 bankovka nebo papír 0,7 mm z lekce 10 – ne karta – a bez mincí. Zkušebním magnetem najděte po líci F hrany plíšku (mají vyjít y plíšku z rámečku, výchozí 3,5 a 24,0) a páskou označte značku magnetu z rámečku (výchozí y 11,9). Okno lepení je ve výchozím střihu 11,73–12,13; s přepážkami 0,8 jen 11,50–11,63. Značku proto měřte posuvkou od spodní hrany a po nalepení pásky přeměřte. Zavřete víčko a značku přeneste ryskami na boky jazýčku.`,
-        animationLink: animationLink('lidMagnet', 'anim-magnet'),
+        animationLinks: [animationLink('lidMagnet', 'anim-magnet')],
         media: [],
       },
       {
@@ -1083,7 +1083,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 's7',
         title: 'Šev S7 kolem magnetu',
         body: 'Šablonu konce jazýčku z listu 4 přiložte na líc jazýčku podle obrysu špičky a propíchněte jehlou 8 otvorů S7: U kolem magnetu, ke špičce otevřené. Jazýček leží rubem dolů a magnet s L1 z rubu vystupuje, proto si připravte podložku s otvorem: dva slepené odřezky usně 1,0 mm (nebo odřezek desky 2 mm) proseknuté uprostřed výsečníkem Ø 10. Magnet leží v otvoru, kůže kolem naplocho. Děrujte z líce jazýčku vidličkou 4 mm: svislé boky (x 44,5 a 56,5) dvouzubou částí svisle, horní řadu (14 mm nad špičkou) vodorovně, rohové otvory jen jedním krajním zubem nasazeným do otvoru řady. Natočení zubů na bocích zvolte tak, aby šikmé otvory měly stejný sklon jako v horní řadě – vyzkoušejte na odřezku. Náhrada: otvory předpíchnout jehlou přes šablonu a vidličkou je jen dorazit. Šijte sedlovým stehem, konce 2 otvory zpět. Pak hrany jazýčku zkoste, vybruste a vyleštěte.',
-        animationLink: animationLink('threadLength'),
+        animationLinks: [animationLink('threadLength')],
         media: [photo('lw-l11-s7', 'Šev S7 do U kolem magnetu na líci jazýčku')],
       },
     ],
