@@ -804,7 +804,8 @@ export function buildCoinHolderPocketSvg(
     `okno Ø ${cz(L.windowDiameterMm)} (plná čára)`,
     `prstenec ${cz(L.coinRingMm)} mm – držení ověřit na odřezku`,
     `mince Ø ${cz(spec.coinDiameterMm)} (čárkovaně)`,
-    'čerchovaně osy – protáhnout až k okraji kůže',
+    'čerchovaně osy – na líci jen propíchnout konce,',
+    'na RUBU spojit a protáhnout až k okraji kůže',
     `pata důlku Ø ${cz(L.formHoleDiameterMm)} (tečkovaně)`,
     `šev ${seam.holes} otvorů od středu dna`,
     'otvory švu prosekat PŘED tvarováním,',
@@ -837,7 +838,7 @@ export function buildCoinHolderPocketSvg(
     `deska ≥ ${cz(L.formPlateMm)} × ${cz(L.formPlateMm)} mm, tloušťka ≥ ${cz(spec.formPlateThicknessMm)} mm`,
     'překližka, dřevo nebo HDPE; hranu otvoru zaoblit smirkem',
     'osy otvoru narýsovat na desce až k jejím okrajům',
-    'kůže LÍCEM DOLŮ na formu, osy na kůži na osy desky,',
+    'kůže LÍCEM DOLŮ na formu, osy na rubu na osy desky,',
     'mince na rub, přiklopit deskou, svěrky',
   ];
   flines.forEach((t, i) =>
