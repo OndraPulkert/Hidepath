@@ -77,3 +77,18 @@ describe('StepList – odkazy na animace postupu', () => {
     expect(hrany).toHaveAttribute('href', '/animace/hrany.html#G2');
   });
 });
+
+describe('StepList – doplňky pod krokem', () => {
+  it('vykreslí renderStepExtras pod každým krokem s indexem od 0', () => {
+    renderWithProviders(
+      <StepList
+        steps={steps}
+        template={undefined}
+        projectSlug="p"
+        renderStepExtras={(step, index) => <p>{`doplněk ${index}: ${step.id}`}</p>}
+      />,
+    );
+    expect(within(stepItem('Orýsujte obrys')).getByText('doplněk 0: mark-outline')).toBeVisible();
+    expect(within(stepItem('Přišijte kapsu')).getByText('doplněk 2: stitch-pocket')).toBeVisible();
+  });
+});

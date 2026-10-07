@@ -6,13 +6,12 @@ import { Input, Label } from '@/components/ui/input';
 import { type PatternSheet } from '@/content/schema';
 import { fmt } from '@/lib/geometry/lid-wallet';
 import {
-  EMPTY_LID_P0_FIELDS,
-  type LidMeasuredInput,
+  DEFAULT_LID_GENERATOR_FORM,
+  type LidGeneratorForm,
   type LidP0Fields,
   lidP0ModelValues,
   lidSheetsForMeasured,
-  parseLidP0Fields,
-  parseMm,
+  parseLidGeneratorForm,
 } from '@/lib/patterns/lid-wallet-input';
 import { LID_FILE_STEM } from '@/lib/patterns/lid-wallet-sheets';
 import { typo } from '@/lib/utils/format';
@@ -84,48 +83,48 @@ const P0_FIELDS: readonly { key: keyof LidP0Fields; label: string; hint: string 
 export function LidWalletSheetGenerator({
   baseSheets,
   onGenerated,
+  initial,
 }: {
   /** Listy výchozího střihu – z nich se převezme název, orientace a rozměr listu. */
   baseSheets: readonly PatternSheet[];
   onGenerated: (sheets: GeneratedPatternSheet[]) => void;
+  /**
+   * Předvyplnění ze zápisníku (`lidGeneratorPrefill`): hodnoty formuláře a co se předvyplnilo.
+   * Čte se jen při prvním vykreslení; pak formulář patří uživateli.
+   */
+  initial?: { form: LidGeneratorForm; filled: readonly string[] } | null | undefined;
 }) {
   const id = useId();
-  const [p1, setP1] = useState('1,0');
-  const [divider, setDivider] = useState('');
-  const [lining, setLining] = useState('');
-  const [skiveFold, setSkiveFold] = useState(false);
-  const [skiveHinge, setSkiveHinge] = useState(false);
-  const [p0Fields, setP0Fields] = useState<LidP0Fields>(EMPTY_LID_P0_FIELDS);
+  // Předvyplnění platí jen pro první vykreslení – poznámka musí sedět k hodnotám ve formuláři,
+  // i když se zápisník mezitím znovu načte.
+  const [prefilled] = useState(initial);
+  const start = prefilled?.form ?? DEFAULT_LID_GENERATOR_FORM;
+  const [p1, setP1] = useState(start.p1);
+  const [divider, setDivider] = useState(start.divider);
+  const [lining, setLining] = useState(start.lining);
+  const [skiveFold, setSkiveFold] = useState(start.skiveFold);
+  const [skiveHinge, setSkiveHinge] = useState(start.skiveHinge);
+  const [p0Fields, setP0Fields] = useState<LidP0Fields>(start.p0);
   const [problems, setProblems] = useState<string[]>([]);
   const [done, setDone] = useState<string | null>(null);
+  const p0Prefilled = Object.values(start.p0).some((v) => v !== '');
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
     setDone(null);
-    const values = { p1: parseMm(p1), divider: parseMm(divider), lining: parseMm(lining) };
-    const missing = [
-      values.p1 === undefined ? 'Zadejte tloušťku P1 v mm (např. 0,95).' : null,
-      values.divider === undefined
-        ? 'Zadejte tloušťku přepážek v mm – větší z D1 a D2 (např. 0,8).'
-        : null,
-      values.lining === undefined ? 'Zadejte tloušťku podšívky L1 v mm (např. 0,9).' : null,
-    ].filter((m): m is string => m !== null);
-    const p0 = parseLidP0Fields(p0Fields);
-    if ('problems' in p0) missing.push(...p0.problems);
-    if (missing.length > 0 || 'problems' in p0) {
-      setProblems(missing);
-      return;
-    }
-    const input: LidMeasuredInput = {
-      p1Mm: values.p1!,
-      dividerMm: values.divider!,
-      liningMm: values.lining!,
+    const parsed = parseLidGeneratorForm({
+      p1,
+      divider,
+      lining,
       skiveFold,
       skiveHinge,
-      p0: p0.p0,
-      ...(p0.magnetThicknessMm !== undefined ? { magnetThicknessMm: p0.magnetThicknessMm } : {}),
-    };
-    const result = lidSheetsForMeasured(input);
+      p0: p0Fields,
+    });
+    if ('problems' in parsed) {
+      setProblems(parsed.problems);
+      return;
+    }
+    const result = lidSheetsForMeasured(parsed.input);
     if (!result.ok) {
       setProblems(result.problems);
       return;
@@ -164,6 +163,15 @@ export function LidWalletSheetGenerator({
           )}
         </p>
       </div>
+      {prefilled && prefilled.filled.length > 0 ? (
+        <p
+          role="note"
+          className="rounded-control border border-forest bg-forest-tint px-4 py-3 text-body"
+        >
+          <span className="font-medium">Předvyplněno ze zápisníku:</span>{' '}
+          {typo(prefilled.filled.join(', '))}. Před generováním hodnoty zkontrolujte.
+        </p>
+      ) : null}
       <form onSubmit={submit} noValidate className="flex flex-col gap-4">
         <div className="grid gap-4 sm:grid-cols-3">
           <div>
@@ -227,7 +235,7 @@ export function LidWalletSheetGenerator({
             <span>{typo('B2 – ztenčit pás závěsu na 0,6 mm (--skive-hinge 0.6)')}</span>
           </label>
         </fieldset>
-        <details className="rounded-control border border-line px-4 py-2">
+        <details className="rounded-control border border-line px-4 py-2" open={p0Prefilled}>
           <summary className="min-h-touch cursor-pointer text-body font-medium">
             Výsledky P0 a jiný magnet (lekce 2, 10 a 11)
           </summary>

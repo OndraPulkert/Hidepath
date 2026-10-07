@@ -1,7 +1,7 @@
-import { type ComponentType, type CSSProperties, useState } from 'react';
-import { Link, useParams } from 'react-router';
+import { type ComponentType, type CSSProperties, useMemo, useState } from 'react';
+import { Link, useParams, useSearchParams } from 'react-router';
 
-import { routes } from '@/app/routes';
+import { PRINT_SHEET_PARAM, routes } from '@/app/routes';
 import { AssembledIllustration } from '@/components/illustrations/assembled';
 import { TemplateIllustration } from '@/components/illustrations/template';
 import {
@@ -19,6 +19,12 @@ import {
   type TemplateDefinition,
 } from '@/content/schema';
 import { typo } from '@/lib/utils/format';
+import {
+  type LidGeneratorPrefill,
+  lidGeneratorPrefill,
+} from '@/features/notebook/lid-wallet-prefill';
+import { type LessonRecordEntry } from '@/features/notebook/types';
+import { useLessonRecords } from '@/features/notebook/use-lesson-records';
 import { NotFoundPage } from '@/pages/not-found-page';
 
 /**
@@ -116,21 +122,56 @@ function PiecesTemplate({
   );
 }
 
+type GeneratorKey = NonNullable<PatternSheetsDefinition['browserGenerator']>;
+
 /**
  * Projekty, jejichž listy umí aplikace vygenerovat v prohlížeči pro změřenou kůži. Formulář
- * předá hotové listy stránce jako další skupinu k zaškrtnutí.
+ * předá hotové listy stránce jako další skupinu k zaškrtnutí; `initial` je předvyplnění
+ * ze zápisníku (`prefill`).
  */
 const sheetGenerators: Readonly<
   Record<
-    NonNullable<PatternSheetsDefinition['browserGenerator']>,
-    ComponentType<{
-      baseSheets: readonly PatternSheet[];
-      onGenerated: (sheets: GeneratedPatternSheet[]) => void;
-    }>
+    GeneratorKey,
+    {
+      Component: ComponentType<{
+        baseSheets: readonly PatternSheet[];
+        onGenerated: (sheets: GeneratedPatternSheet[]) => void;
+        initial?: LidGeneratorPrefill | null | undefined;
+      }>;
+      prefill: (
+        entries: readonly LessonRecordEntry[],
+        projectSlug: string,
+      ) => LidGeneratorPrefill | null;
+    }
   >
 > = {
-  'lid-wallet-thickness': LidWalletSheetGenerator,
+  'lid-wallet-thickness': { Component: LidWalletSheetGenerator, prefill: lidGeneratorPrefill },
 };
+
+/**
+ * Formulář generátoru se vykreslí, až je zápisník načtený, aby předvyplnění nepřepsalo,
+ * co uživatel začal psát. Když se zápisník načíst nepodaří, formulář je prázdný.
+ */
+function SheetGeneratorSlot({
+  generator,
+  projectSlug,
+  baseSheets,
+  onGenerated,
+}: {
+  generator: GeneratorKey;
+  projectSlug: string;
+  baseSheets: readonly PatternSheet[];
+  onGenerated: (sheets: GeneratedPatternSheet[]) => void;
+}) {
+  const { Component, prefill } = sheetGenerators[generator];
+  const records = useLessonRecords(projectSlug);
+  const initial = useMemo(
+    () => (records.data ? prefill(records.data, projectSlug) : null),
+    [prefill, records.data, projectSlug],
+  );
+  if (records.isPending) return null;
+  return <Component baseSheets={baseSheets} onGenerated={onGenerated} initial={initial} />;
+}
 
 /**
  * Listy střihu z generátoru. Každý list je SVG přesně A4 i s vlastními okraji a kontrolní
@@ -146,9 +187,7 @@ function PatternSheetsPrint({
   definition: PatternSheetsDefinition;
   heading?: string;
 }) {
-  const Generator = definition.browserGenerator
-    ? sheetGenerators[definition.browserGenerator]
-    : undefined;
+  const [searchParams] = useSearchParams();
   const [generated, setGenerated] = useState<GeneratedPatternSheet[]>([]);
   const urls: Readonly<Record<string, string>> = {
     ...patternSheetUrlsFor(project.slug),
@@ -156,9 +195,13 @@ function PatternSheetsPrint({
   };
   const sheets: readonly PatternSheet[] = [...definition.sheets, ...generated];
   const groups = groupPatternSheets(sheets);
-  const [selected, setSelected] = useState<ReadonlySet<string>>(
-    () => new Set(groups[0]?.sheets.map((s) => s.id) ?? []),
-  );
+  // `?list=<id>` (i opakovaně) předvybere k tisku konkrétní listy, např. z „Připravte si“.
+  const [selected, setSelected] = useState<ReadonlySet<string>>(() => {
+    const wanted = searchParams
+      .getAll(PRINT_SHEET_PARAM)
+      .filter((id) => definition.sheets.some((s) => s.id === id));
+    return new Set(wanted.length > 0 ? wanted : (groups[0]?.sheets.map((s) => s.id) ?? []));
+  });
   const printable = sheets.filter((s) => selected.has(s.id) && urls[s.id]);
   const onGenerated = (next: GeneratedPatternSheet[]) => {
     setGenerated(next);
@@ -209,7 +252,14 @@ function PatternSheetsPrint({
         {definition.variantsNote ? (
           <p className="mb-6 max-w-prose text-meta text-ink-2">{typo(definition.variantsNote)}</p>
         ) : null}
-        {Generator ? <Generator baseSheets={definition.sheets} onGenerated={onGenerated} /> : null}
+        {definition.browserGenerator ? (
+          <SheetGeneratorSlot
+            generator={definition.browserGenerator}
+            projectSlug={project.slug}
+            baseSheets={definition.sheets}
+            onGenerated={onGenerated}
+          />
+        ) : null}
         <fieldset className="mb-8 flex flex-col gap-4">
           <legend className="mb-2 kicker">Co vytisknout</legend>
           {groups.map((group) => (

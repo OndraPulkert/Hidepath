@@ -45,6 +45,96 @@ describe('obsah – pouzdro na karty: steh', () => {
   });
 });
 
+describe('obsah – pouzdro na karty: časovače, zápisník a „Připravte si“', () => {
+  const lesson = (order: number) => cardHolderProject.lessons.find((l) => l.order === order)!;
+  const step = (order: number, id: string) => lesson(order).steps.find((s) => s.id === id)!;
+
+  it('čekání jen tam, kde text říká „odvětrat podle návodu“: orientačně 10–15 min, upravitelné', () => {
+    const withWaits = cardHolderProject.lessons.flatMap((l) =>
+      l.steps.filter((s) => s.waits).map((s) => `${l.order}:${s.id}`),
+    );
+    expect(withWaits).toEqual(['4:glue', '6:glue-parts']);
+    for (const [order, id] of [
+      [4, 'glue'],
+      [6, 'glue-parts'],
+    ] as const) {
+      expect(step(order, id).body).toContain('odvětrat podle návodu');
+      expect(step(order, id).waits).toEqual([
+        {
+          id: 'glue-open',
+          label: 'Odvětrání lepidla',
+          minutes: 10,
+          maxMinutes: 15,
+          basis: 'manufacturer',
+        },
+      ]);
+    }
+  });
+
+  it('zápisník: rozteč, kontrolní úsečky, páska a zkouška zdrsnění s cíli z textu', () => {
+    const fields = cardHolderProject.lessons.flatMap((l) =>
+      l.steps.flatMap((s) => (s.records ?? []).map((f) => `${l.order}:${s.id}:${f.id}`)),
+    );
+    expect(fields).toEqual([
+      '1:check-chisels:chisel-spacing',
+      '2:practice-template:practice-sheet-calibration',
+      '2:practice-template:tape-mark',
+      '4:glue:roughened-grip',
+      '5:print-check:template-calibration',
+    ]);
+    const spacing = step(1, 'check-chisels').records![0]!;
+    expect(spacing).toMatchObject({ unit: 'mm', target: { min: 3.85, max: 4 } });
+    expect(step(1, 'check-chisels').body).toContain('musí vyjít 3,85–4 mm');
+    for (const [order, id] of [
+      [2, 'practice-template'],
+      [5, 'print-check'],
+    ] as const) {
+      expect(step(order, id).body).toContain('musí mít přesně 50 mm');
+      expect(step(order, id).records![0]).toMatchObject({ target: { min: 50, max: 50 } });
+    }
+  });
+
+  it('páska z lekce 2 se připomene tam, kde ji lekce 5 používá', () => {
+    expect(step(5, 'transfer').body).toContain(
+      'Použijte pásku, která v lekci 2 nenechala na líci stopu',
+    );
+    expect(step(5, 'transfer').recalls).toEqual([
+      { fieldId: 'tape-mark', label: 'Páska v lekci 2' },
+    ]);
+  });
+
+  it('tisk: cvičná šablona v lekci 2, šablona v lekci 5, v lekci 6 jen když chybí papírový díl', () => {
+    expect(lesson(2).prints).toMatchObject([
+      { source: 'practice-sheets', sheetId: 'cvicna-sablona', copies: 1 },
+    ]);
+    expect(lesson(5).prints).toMatchObject([{ source: 'template', copies: 1 }]);
+    expect(lesson(5).prints![0]!.paper).toContain('matný papír 120 g');
+    expect(lesson(6).prints).toMatchObject([
+      { source: 'template', copies: 1, condition: 'Jen když nemáte papírový zadní díl z lekce 5.' },
+    ]);
+    expect(step(6, 'mark-glue-area').body).toContain('nebo novou šablonu vystřiženou po plné čáře');
+    for (const l of cardHolderProject.lessons) {
+      expect(
+        l.materials.some((m) => m.includes('vytištěn')),
+        l.slug,
+      ).toBe(false);
+    }
+  });
+
+  it('z předchozích lekcí: proužek do lekce 4, díly a papírový zadní díl do lekce 6', () => {
+    expect(lesson(4).requires!.map((r) => [r.id, r.fromLesson])).toEqual([
+      ['practice-strip', '02-straight-cut'],
+    ]);
+    expect(step(4, 'glue').body).toContain('přilepte na něj proužek z lekce 2');
+    expect(lesson(6).requires!.map((r) => [r.id, r.fromLesson])).toEqual([
+      ['leather-parts', '05-transfer-and-cut'],
+      ['paper-back', '05-transfer-and-cut'],
+    ]);
+    expect(step(5, 'peel-template').body).toContain('si schovejte na lekci 6');
+    expect(lesson(6).materials).not.toContain('díly z lekce 5');
+  });
+});
+
 describe('obsah – pouzdro na karty: nákupní plán „Co koupit“', () => {
   const plan = cardHolderProject.shoppingPlan!;
 

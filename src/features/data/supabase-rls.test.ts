@@ -5,7 +5,11 @@
  */
 import { createClient } from '@supabase/supabase-js';
 
-import { createSupabaseRepositories } from '@/features/data/supabase-repositories';
+import {
+  createSupabaseRepositories,
+  isStaleWriteError,
+} from '@/features/data/supabase-repositories';
+import { type LessonRecordEntry } from '@/features/notebook/types';
 import { type Database } from '@/lib/supabase/database.types';
 import { item } from '@/test/factories';
 
@@ -158,5 +162,126 @@ describeDb('Supabase – RLS a repozitáře (lokální instance)', () => {
     // Profil vznikl triggerem.
     const profile = await a.client.from('profiles').select('id').eq('id', a.userId).maybeSingle();
     expect(profile.data?.id).toBe(a.userId);
+  });
+
+  describe('zápisník a příprava (lesson_records, lesson_prep_checks)', () => {
+    const entry = (userId: string, patch: Partial<LessonRecordEntry> = {}): LessonRecordEntry => ({
+      id: crypto.randomUUID(),
+      userId,
+      projectSlug: 'lid-wallet',
+      lessonSlug: '01-measure',
+      fieldId: 'p1-thickness',
+      value: 1.4,
+      contentVersion: 1,
+      createdAt: '2026-10-07T10:00:00.000Z',
+      updatedAt: '2026-10-07T10:00:00.000Z',
+      ...patch,
+    });
+
+    it('B nevidí zápisy A, cizí user_id RLS odmítne a anon nemá přístup', async () => {
+      const a = await signedInClient(`rls-e-${run}@example.com`, password);
+      const b = await signedInClient(`rls-f-${run}@example.com`, password);
+      const reposA = createSupabaseRepositories(a.client, a.userId);
+      const reposB = createSupabaseRepositories(b.client, b.userId);
+
+      await reposA.lessonRecords!.upsert(entry(a.userId));
+      await reposA.prepChecks!.upsert({
+        id: crypto.randomUUID(),
+        userId: a.userId,
+        projectSlug: 'lid-wallet',
+        lessonSlug: '01-measure',
+        itemKey: 'print:template',
+        checked: true,
+        createdAt: '2026-10-07T10:00:00.000Z',
+        updatedAt: '2026-10-07T10:00:00.000Z',
+      });
+      expect(await reposB.lessonRecords!.list()).toEqual([]);
+      expect(await reposB.prepChecks!.list()).toEqual([]);
+
+      const forged = await b.client.from('lesson_records').insert({
+        id: crypto.randomUUID(),
+        user_id: a.userId,
+        project_slug: 'lid-wallet',
+        lesson_slug: '01-measure',
+        field_id: 'd1-thickness',
+        value: 1,
+        content_version: 1,
+      });
+      expect(forged.error).not.toBeNull();
+
+      const anon = createClient<Database>(url, anonKey, { auth: { persistSession: false } });
+      // anon nemá na tabulky žádná práva (permission denied), natož řádky.
+      const anonRead = await anon.from('lesson_records').select('*');
+      expect(anonRead.error).not.toBeNull();
+      const anonPrep = await anon.from('lesson_prep_checks').select('*');
+      expect(anonPrep.error).not.toBeNull();
+    });
+
+    it('hodnota musí být skalár (číslo, text, null) do 2000 znaků; item_key 1..120', async () => {
+      const a = await signedInClient(`rls-g-${run}@example.com`, password);
+      const insert = (field: string, value: unknown) =>
+        a.client.from('lesson_records').insert({
+          id: crypto.randomUUID(),
+          user_id: a.userId,
+          project_slug: 'lid-wallet',
+          lesson_slug: '01-measure',
+          field_id: field,
+          value: value as never,
+          content_version: 1,
+        });
+      expect((await insert('f-number', 1.25)).error).toBeNull();
+      expect((await insert('f-text', 'záloha-a')).error).toBeNull();
+      expect((await insert('f-null', null)).error).toBeNull();
+      expect((await insert('f-bool', true)).error?.code).toBe('23514');
+      expect((await insert('f-object', { a: 1 })).error?.code).toBe('23514');
+      expect((await insert('f-array', [1])).error?.code).toBe('23514');
+      expect((await insert('f-big', 'x'.repeat(2100))).error?.code).toBe('23514');
+      // Limit je ve znacích: 1000 znaků s diakritikou a zalomením (víc než 2000 bajtů) projde.
+      expect((await insert('f-czech', 'ěščřžýáíé\n'.repeat(100))).error).toBeNull();
+      expect((await insert('Neplatne_ID', 1)).error?.code).toBe('23514');
+
+      const longKey = await a.client.from('lesson_prep_checks').insert({
+        id: crypto.randomUUID(),
+        user_id: a.userId,
+        project_slug: 'lid-wallet',
+        lesson_slug: '01-measure',
+        item_key: 'x'.repeat(121),
+        checked: true,
+      });
+      expect(longKey.error?.code).toBe('23514');
+    });
+
+    it('starší zápis nepřepíše novější (reject_stale_update) a repozitář hlásí stale', async () => {
+      const a = await signedInClient(`rls-h-${run}@example.com`, password);
+      const repos = createSupabaseRepositories(a.client, a.userId);
+      const newer = entry(a.userId, { value: 1.6, updatedAt: '2026-10-07T12:00:00.000Z' });
+      await repos.lessonRecords!.upsert(newer);
+
+      // Stejné id, starší čas → trigger zápis zahodí.
+      const sameId: unknown = await repos
+        .lessonRecords!.upsert({ ...newer, value: 1.1, updatedAt: '2026-10-07T09:00:00.000Z' })
+        .catch((e: unknown) => e);
+      expect(isStaleWriteError(sameId)).toBe(true);
+
+      // Jiné zařízení (jiné id, stejný přirozený klíč), starší čas → také zahozeno.
+      const otherDevice: unknown = await repos
+        .lessonRecords!.upsert(
+          entry(a.userId, { value: 1.2, updatedAt: '2026-10-07T09:30:00.000Z' }),
+        )
+        .catch((e: unknown) => e);
+      expect(isStaleWriteError(otherDevice)).toBe(true);
+
+      const list = await repos.lessonRecords!.list();
+      expect(list).toHaveLength(1);
+      expect(list[0]).toMatchObject({ id: newer.id, value: 1.6 });
+
+      // Novější zápis projde.
+      const later = await repos.lessonRecords!.upsert({
+        ...newer,
+        value: 1.8,
+        updatedAt: '2026-10-07T13:00:00.000Z',
+      });
+      expect(later.value).toBe(1.8);
+    });
   });
 });

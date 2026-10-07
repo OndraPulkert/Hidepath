@@ -71,4 +71,24 @@ describe('describeSyncStatus', () => {
       }),
     ).toMatchObject({ tone: 'update', action: 'update' });
   });
+
+  it('selhaná synchronizace outboxu: chyba s opakováním, data jsou v zařízení', () => {
+    expect(describeSyncStatus({ ...base, pendingCount: 1, syncFailed: true })).toMatchObject({
+      tone: 'error',
+      label: 'Synchronizace se nezdařila',
+      action: 'retry',
+    });
+  });
+
+  it('chyba přímého zápisu má přednost před selháním outboxu', () => {
+    expect(describeSyncStatus({ ...base, hasFailed: true, syncFailed: true }).label).toBe(
+      'Uložení změny se nezdařilo',
+    );
+  });
+
+  it('offline s čekajícími změnami řekne, kolik jich odejde po připojení', () => {
+    expect(describeSyncStatus({ ...base, online: false, pendingCount: 5 }).hint).toBe(
+      '5 změn čeká na odeslání po připojení.',
+    );
+  });
 });

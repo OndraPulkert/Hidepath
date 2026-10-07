@@ -2,6 +2,11 @@
  * Jediné místo s definicí URL. Komponenty i testy používají tyto buildery,
  * nikdy ručně psané řetězce.
  */
+/** Parametr dotazu s číslem kroku v dílenském režimu. */
+export const LESSON_FOCUS_STEP_PARAM = 'krok';
+/** Parametr dotazu na stránce tisku: id listu, který se má předvybrat (lze opakovat). */
+export const PRINT_SHEET_PARAM = 'list';
+
 export const routes = {
   home: '/',
   login: '/login',
@@ -17,17 +22,32 @@ export const routes = {
   project: (projectSlug: string) => `/projects/${encodeURIComponent(projectSlug)}`,
   lesson: (projectSlug: string, lessonSlug: string) =>
     `/projects/${encodeURIComponent(projectSlug)}/lessons/${encodeURIComponent(lessonSlug)}`,
-  template: (projectSlug: string) => `/projects/${encodeURIComponent(projectSlug)}/template`,
+  /**
+   * Dílenský režim lekce na celou obrazovku. `step` = číslo kroku od 1 (`?krok=N`);
+   * 0 = „Než začnete“ (příprava). Bez `step` začne stránka od začátku.
+   */
+  lessonFocus: (projectSlug: string, lessonSlug: string, step?: number) =>
+    `/projects/${encodeURIComponent(projectSlug)}/lessons/${encodeURIComponent(lessonSlug)}/focus${
+      step === undefined ? '' : `?${LESSON_FOCUS_STEP_PARAM}=${step}`
+    }`,
+  /** Šablona / listy střihu k tisku; `sheetId` předvybere list (`?list=<id>`). */
+  template: (projectSlug: string, sheetId?: string) =>
+    `/projects/${encodeURIComponent(projectSlug)}/template${printSheetQuery(sheetId)}`,
   /** Cvičné listy 1:1 (trénink na odřezku), vlastní tisková stránka vedle šablony. */
-  practiceSheets: (projectSlug: string) =>
-    `/projects/${encodeURIComponent(projectSlug)}/practice-sheets`,
+  practiceSheets: (projectSlug: string, sheetId?: string) =>
+    `/projects/${encodeURIComponent(projectSlug)}/practice-sheets${printSheetQuery(sheetId)}`,
 } as const;
+
+function printSheetQuery(sheetId: string | undefined): string {
+  return sheetId ? `?${PRINT_SHEET_PARAM}=${encodeURIComponent(sheetId)}` : '';
+}
 
 /** Vzory tras pro React Router (s parametry). */
 export const routePatterns = {
   shoppingItem: '/shopping/:toolSlug',
   project: '/projects/:projectSlug',
   lesson: '/projects/:projectSlug/lessons/:lessonSlug',
+  lessonFocus: '/projects/:projectSlug/lessons/:lessonSlug/focus',
   template: '/projects/:projectSlug/template',
   practiceSheets: '/projects/:projectSlug/practice-sheets',
 } as const;

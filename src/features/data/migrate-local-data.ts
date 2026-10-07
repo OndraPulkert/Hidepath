@@ -65,13 +65,29 @@ async function migrateCollection<T extends Timestamped>(
   return { uploaded: plan.toUpload.length, skipped: plan.skipped.length };
 }
 
-/** Přenese všechny lokální kolekce do účtu. Bez lokálních dat neudělá jediný vzdálený dotaz. */
+/**
+ * Přenese všechny lokální kolekce do účtu. Bez lokálních dat neudělá jediný vzdálený dotaz.
+ * Zápisník a přípravu přenáší, jen když je cloud má; jinak zůstanou v zařízení.
+ */
 export async function migrateLocalData(
   local: Repositories,
   remote: CloudRepositories,
   signal?: AbortSignal,
 ): Promise<MigrationSummary> {
   const results = await Promise.all([
+    ...(remote.lessonRecords
+      ? [
+          migrateCollection(
+            local.lessonRecords,
+            remote.lessonRecords,
+            naturalKeys.lessonRecords,
+            signal,
+          ),
+        ]
+      : []),
+    ...(remote.prepChecks
+      ? [migrateCollection(local.prepChecks, remote.prepChecks, naturalKeys.prepChecks, signal)]
+      : []),
     migrateCollection(local.enrollments, remote.enrollments, naturalKeys.enrollments, signal),
     migrateCollection(local.inventory, remote.inventory, naturalKeys.inventory, signal),
     migrateCollection(
@@ -96,13 +112,21 @@ export async function migrateLocalData(
   );
 }
 
-/** Má lokální úložiště vůbec něco k přenosu? Levná kontrola bez dotazů do sítě. */
-export async function hasLocalData(local: Repositories): Promise<boolean> {
+/**
+ * Má lokální úložiště vůbec něco k přenosu? Levná kontrola bez dotazů do sítě. Zápisník
+ * a přípravu počítá, jen když je `remote` má (jinak se nepřenášejí a přenos by nic neudělal).
+ */
+export async function hasLocalData(
+  local: Repositories,
+  remote?: CloudRepositories,
+): Promise<boolean> {
   const lists = await Promise.all([
     local.enrollments.list(),
     local.inventory.list(),
     local.lessonProgress.list(),
     local.checkpointProgress.list(),
+    ...(remote?.lessonRecords ? [local.lessonRecords.list()] : []),
+    ...(remote?.prepChecks ? [local.prepChecks.list()] : []),
   ]);
   return lists.some((l) => l.length > 0);
 }

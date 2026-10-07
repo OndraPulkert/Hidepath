@@ -4,6 +4,7 @@ import { routePatterns } from '@/app/routes';
 
 import { TopNav } from '@/components/layout/top-nav';
 import { ConnectionStatus } from '@/components/sync/connection-status';
+import { ActiveTimersBar } from '@/components/workshop/active-timers-bar';
 
 /**
  * Aplikační shell: sticky navigace, stavový pruh synchronizace a hlavní obsah
@@ -18,6 +19,7 @@ export function AppShell() {
     <div className="flex min-h-dvh flex-col">
       <TopNav hideOnMobile={isLesson} />
       <ConnectionStatus />
+      <ActiveTimersBar />
       <main
         id="obsah"
         key={pathname}

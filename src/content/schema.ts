@@ -168,6 +168,79 @@ export const animationLinkSchema = z.object({
 });
 export type AnimationLink = z.infer<typeof animationLinkSchema>;
 
+/**
+ * Čekání v kroku (schnutí lepidla, přes noc pod zátěží…), ze kterého si uživatel spustí časovač.
+ * Čísla se berou jen z textu lekce nebo zadání (`basis: 'text'`). Kde text říká „podle návodu“,
+ * je `basis: 'manufacturer'`: UI ukáže „orientačně, řiďte se návodem“ a dobu jde upravit.
+ */
+export const stepWaitSchema = z
+  .object({
+    id: slug,
+    /** Co se čeká, např. „Zavadnutí lepidla“. */
+    label: z.string().min(1),
+    minutes: z.number().int().positive(),
+    /** Horní mez rozsahu („10–15 min“); chybí = pevná doba. */
+    maxMinutes: z.number().int().positive().optional(),
+    basis: z.enum(['text', 'manufacturer']),
+    /** Pozdější krok téže lekce, se kterým se musí počkat, než čekání doběhne. */
+    blocksStepId: slug.optional(),
+  })
+  .refine((w) => w.maxMinutes === undefined || w.maxMinutes >= w.minutes, {
+    message: 'maxMinutes musí být ≥ minutes',
+  });
+export type StepWait = z.infer<typeof stepWaitSchema>;
+
+export const recordUnitSchema = z.enum(['mm', 'cm', 'min', 'ks', '×', '']);
+export type RecordUnit = z.infer<typeof recordUnitSchema>;
+
+const recordFieldBase = {
+  /** Unikátní v celém projektu; na pole se odkazují `recalls` a předvyplnění listů. */
+  id: slug,
+  label: z.string().min(1),
+  hint: z.string().min(1).optional(),
+};
+
+/** Pole zápisníku v kroku: číslo (naměřená hodnota), volba, nebo krátký text. */
+export const recordFieldSchema = z.discriminatedUnion('kind', [
+  z.object({
+    kind: z.literal('number'),
+    ...recordFieldBase,
+    unit: recordUnitSchema,
+    min: z.number().optional(),
+    max: z.number().optional(),
+    /** Počet desetinných míst při zobrazení. */
+    decimals: z.number().int().min(0).max(3).optional(),
+    /** Cílové rozmezí z textu lekce; mimo něj UI upozorní. */
+    target: z
+      .object({
+        min: z.number().optional(),
+        max: z.number().optional(),
+        /** Např. „cíl 50 mm“. */
+        label: z.string().min(1),
+      })
+      .optional(),
+  }),
+  z.object({
+    kind: z.literal('choice'),
+    ...recordFieldBase,
+    options: z.array(z.object({ value: slug, label: z.string().min(1) })).min(2),
+  }),
+  z.object({
+    kind: z.literal('text'),
+    ...recordFieldBase,
+    maxLength: z.number().int().positive().max(1000).optional(),
+  }),
+]);
+export type RecordField = z.infer<typeof recordFieldSchema>;
+
+/** Připomínka hodnoty zapsané dříve (v dřívější lekci nebo dřívějším kroku téže lekce). */
+export const stepRecallSchema = z.object({
+  fieldId: slug,
+  /** Např. „Výsečník, který vám sedl v lekci 3“. */
+  label: z.string().min(1),
+});
+export type StepRecall = z.infer<typeof stepRecallSchema>;
+
 export const lessonStepSchema = z.object({
   id: slug,
   title: z.string().min(1),
@@ -185,6 +258,12 @@ export const lessonStepSchema = z.object({
    * („▶ Animace postupu“, „📏 Jak odměřit nit“) v pořadí pole. Bez odkazů pole vynechte.
    */
   animationLinks: z.array(animationLinkSchema).min(1).optional(),
+  /** Čekání v kroku, ze kterých jde spustit časovač. */
+  waits: z.array(stepWaitSchema).min(1).optional(),
+  /** Pole zápisníku: co si v tomto kroku zapsat. */
+  records: z.array(recordFieldSchema).min(1).optional(),
+  /** Hodnoty zapsané dříve, které se v tomto kroku hodí připomenout. */
+  recalls: z.array(stepRecallSchema).min(1).optional(),
 });
 export type LessonStep = z.infer<typeof lessonStepSchema>;
 
@@ -200,6 +279,32 @@ export const phaseDefinitionSchema = z.object({
   kind: z.enum(['enrollment', 'equipment', 'lessons', 'completion']),
 });
 export type PhaseDefinition = z.infer<typeof phaseDefinitionSchema>;
+
+/**
+ * Co si před lekcí vytisknout. `sheetId` je id listu z `patternSheets` / `practiceSheets`
+ * (povinné kromě `template`, kde se tiskne celá šablona projektu).
+ */
+export const lessonPrintSchema = z.object({
+  source: z.enum(['pattern-sheets', 'practice-sheets', 'template']),
+  sheetId: slug.optional(),
+  copies: z.number().int().positive(),
+  /** K čemu výtisk slouží v lekci. */
+  purpose: z.string().min(1),
+  /** Např. „čtvrtka“, „obyčejný papír A4“. */
+  paper: z.string().min(1).optional(),
+  /** Kdy tisknout, např. „jen když zkouška okna nevyšla“. */
+  condition: z.string().min(1).optional(),
+});
+export type LessonPrint = z.infer<typeof lessonPrintSchema>;
+
+/** Co si přinést z dřívější lekce (vyschlý díl, vyříznutá šablona…). */
+export const lessonRequirementSchema = z.object({
+  id: slug,
+  fromLesson: slug,
+  label: z.string().min(1),
+  note: z.string().min(1).optional(),
+});
+export type LessonRequirement = z.infer<typeof lessonRequirementSchema>;
 
 export const lessonDefinitionSchema = z.object({
   slug,
@@ -222,6 +327,10 @@ export const lessonDefinitionSchema = z.object({
   /** Hlavní záběr lekce. */
   media: z.array(mediaSlotSchema),
   reviewStatus: reviewStatusSchema,
+  /** „Připravte si → Vytisknout“. */
+  prints: z.array(lessonPrintSchema).min(1).optional(),
+  /** „Připravte si → Z předchozích lekcí“. */
+  requires: z.array(lessonRequirementSchema).min(1).optional(),
 });
 export type LessonDefinition = z.infer<typeof lessonDefinitionSchema>;
 
@@ -483,6 +592,9 @@ export const projectDefinitionSchema = z
           });
         }
       }
+      checkLessonPrints(project, lesson, ctx);
+      checkLessonRequires(project.lessons, lesson, ctx);
+      checkStepWaits(lesson, ctx);
       if (!lesson.checkpoints.some((c) => c.required)) {
         ctx.addIssue({
           code: 'custom',
@@ -490,8 +602,169 @@ export const projectDefinitionSchema = z
         });
       }
     }
+    checkRecords(project.lessons, ctx);
   });
 export type ProjectDefinition = z.infer<typeof projectDefinitionSchema>;
 
 /** Mapa slug → definice vybavení. */
 export type EquipmentCatalog = Readonly<Record<string, EquipmentDefinition>>;
+
+/* Kontroly polí kroků a lekcí (časovače, zápisník, „Připravte si“). */
+
+type Ctx = z.core.$RefinementCtx<unknown>;
+type ProjectShape = Pick<ProjectDefinition, 'template' | 'patternSheets' | 'practiceSheets'>;
+
+function checkLessonPrints(project: ProjectShape, lesson: LessonDefinition, ctx: Ctx) {
+  for (const print of lesson.prints ?? []) {
+    if (print.source === 'template') {
+      if (!project.template) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `Lekce ${lesson.slug}: tisk šablony, projekt žádnou obdélníkovou šablonu nemá`,
+        });
+      }
+      if (print.sheetId !== undefined) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `Lekce ${lesson.slug}: tisk šablony nemá sheetId`,
+        });
+      }
+      continue;
+    }
+    const sheets =
+      print.source === 'pattern-sheets' ? project.patternSheets : project.practiceSheets;
+    if (print.sheetId === undefined) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `Lekce ${lesson.slug}: tisk z ${print.source} potřebuje sheetId`,
+      });
+    } else if (!sheets?.sheets.some((s) => s.id === print.sheetId)) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `Lekce ${lesson.slug}: list ${print.sheetId} v ${print.source} neexistuje`,
+      });
+    }
+  }
+}
+
+function checkLessonRequires(
+  lessons: readonly LessonDefinition[],
+  lesson: LessonDefinition,
+  ctx: Ctx,
+) {
+  const ids = new Set<string>();
+  for (const req of lesson.requires ?? []) {
+    if (ids.has(req.id)) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `Lekce ${lesson.slug}: duplicitní id požadavku ${req.id}`,
+      });
+    }
+    ids.add(req.id);
+    const from = lessons.find((l) => l.slug === req.fromLesson);
+    if (!from) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `Lekce ${lesson.slug}: požadavek ${req.id} z neznámé lekce ${req.fromLesson}`,
+      });
+    } else if (from.order >= lesson.order) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `Lekce ${lesson.slug}: požadavek ${req.id} musí být z dřívější lekce`,
+      });
+    }
+  }
+}
+
+function checkStepWaits(lesson: LessonDefinition, ctx: Ctx) {
+  lesson.steps.forEach((step, index) => {
+    const ids = new Set<string>();
+    for (const wait of step.waits ?? []) {
+      if (ids.has(wait.id)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `Lekce ${lesson.slug}: krok ${step.id} má duplicitní čekání ${wait.id}`,
+        });
+      }
+      ids.add(wait.id);
+      if (wait.blocksStepId === undefined) continue;
+      const target = lesson.steps.findIndex((s) => s.id === wait.blocksStepId);
+      if (target === -1) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `Lekce ${lesson.slug}: čekání ${wait.id} blokuje neznámý krok ${wait.blocksStepId}`,
+        });
+      } else if (target <= index) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `Lekce ${lesson.slug}: čekání ${wait.id} smí blokovat jen pozdější krok`,
+        });
+      }
+    }
+  });
+}
+
+/** Pozice pole zápisníku v projektu: pořadí lekce a index kroku. */
+interface FieldPosition {
+  lessonOrder: number;
+  stepIndex: number;
+}
+
+function checkRecords(lessons: readonly LessonDefinition[], ctx: Ctx) {
+  const positions = new Map<string, FieldPosition>();
+  for (const lesson of lessons) {
+    lesson.steps.forEach((step, stepIndex) => {
+      for (const field of step.records ?? []) {
+        if (positions.has(field.id)) {
+          ctx.addIssue({
+            code: 'custom',
+            message: `Lekce ${lesson.slug}: pole zápisníku ${field.id} už v projektu je`,
+          });
+        }
+        positions.set(field.id, { lessonOrder: lesson.order, stepIndex });
+        checkRecordField(lesson.slug, field, ctx);
+      }
+    });
+  }
+  for (const lesson of lessons) {
+    lesson.steps.forEach((step, stepIndex) => {
+      for (const recall of step.recalls ?? []) {
+        const at = positions.get(recall.fieldId);
+        if (!at) {
+          ctx.addIssue({
+            code: 'custom',
+            message: `Lekce ${lesson.slug}: krok ${step.id} připomíná neznámé pole ${recall.fieldId}`,
+          });
+        } else if (
+          at.lessonOrder > lesson.order ||
+          (at.lessonOrder === lesson.order && at.stepIndex >= stepIndex)
+        ) {
+          ctx.addIssue({
+            code: 'custom',
+            message: `Lekce ${lesson.slug}: krok ${step.id} smí připomínat jen dříve zapsané pole (${recall.fieldId})`,
+          });
+        }
+      }
+    });
+  }
+}
+
+function checkRecordField(lessonSlug: string, field: RecordField, ctx: Ctx) {
+  const issue = (what: string) =>
+    ctx.addIssue({ code: 'custom', message: `Lekce ${lessonSlug}: pole ${field.id}: ${what}` });
+  if (field.kind === 'number') {
+    if (field.min !== undefined && field.max !== undefined && field.min > field.max) {
+      issue('min musí být ≤ max');
+    }
+    const t = field.target;
+    if (t) {
+      if (t.min === undefined && t.max === undefined) issue('cíl potřebuje min nebo max');
+      if (t.min !== undefined && t.max !== undefined && t.min > t.max) {
+        issue('cíl: min musí být ≤ max');
+      }
+    }
+  } else if (field.kind === 'choice') {
+    const values = field.options.map((o) => o.value);
+    if (new Set(values).size !== values.length) issue('duplicitní hodnota volby');
+  }
+}

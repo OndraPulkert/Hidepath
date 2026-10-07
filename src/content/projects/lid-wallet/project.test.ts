@@ -1,7 +1,10 @@
 import { equipmentCatalog, equipmentList } from '@/content/equipment';
 import { lidWalletProject } from '@/content/projects/lid-wallet/project';
+import { LID_RECORD_IDS, LID_V12_VARIANTS } from '@/content/projects/lid-wallet/record-ids';
 import { patternSheetUrlsFor } from '@/content/projects/pattern-sheets';
 import { projectDefinitionSchema } from '@/content/schema';
+import { lidGeneratorPrefill } from '@/features/notebook/lid-wallet-prefill';
+import { type LessonRecordEntry } from '@/features/notebook/types';
 import { findPlanExample, resolveShoppingPlan } from '@/features/shopping/plan';
 import {
   DEFAULT_LID_WALLET,
@@ -9,6 +12,7 @@ import {
   lidWalletLayout,
   lidWalletPunches,
 } from '@/lib/geometry/lid-wallet';
+import { lidSheetsForMeasured, parseLidGeneratorForm } from '@/lib/patterns/lid-wallet-input';
 
 /** Číslo tak, jak ho píše obsah (desetinná čárka, zaokrouhlené na `d` míst). */
 const cz = (n: number, d = 2): string =>
@@ -258,6 +262,255 @@ describe('obsah – peněženka Víčko', () => {
       `${DEFAULT_LID_WALLET.magnetFromTipMm.toFixed(1).replace('.', ',')} mm pod značkou`,
     );
     expect(lessonText('11-magnet-lining-s7')).toContain(`${L.lining.seamHoles.length} otvorů S7`);
+  });
+
+  describe('dílenský režim, zápisník a „Připravte si“', () => {
+    const lessonOf = (order: number) => lidWalletProject.lessons.find((l) => l.order === order)!;
+    const stepAt = (order: number, id: string) => lessonOf(order).steps.find((s) => s.id === id)!;
+    const allSteps = lidWalletProject.lessons.flatMap((l) =>
+      l.steps.map((step) => ({ lesson: l, step })),
+    );
+
+    it('čekání: doby jen z textu lekcí (nebo tabulky 9.1 zadání u lepidla podle návodu)', () => {
+      const waits = allSteps.flatMap(({ lesson, step }) =>
+        (step.waits ?? []).map(
+          (w) =>
+            `${lesson.order}/${step.id}/${w.id} ${w.minutes}${w.maxMinutes ? `–${w.maxMinutes}` : ''} ${w.basis}${w.blocksStepId ? ` → ${w.blocksStepId}` : ''}`,
+        ),
+      );
+      expect(waits).toEqual([
+        '3/wet-and-fold/dampen 5–10 text',
+        '3/dry/overnight 720–1440 text → inspect',
+        '4/plate/plate-glue-test 1440 text',
+        '5/d1-paint/coat 20–30 text',
+        '6/g3/tack 10–15 text',
+        '6/g3/cure 60 text → stitch-s1-s3',
+        '7/wet/dampen 5–10 text',
+        '7/fold-clamp/overnight 720–1440 text → remove-spacer',
+        '8/g1/tack 10–15 manufacturer',
+        '8/g2/tack 10–15 manufacturer',
+        '8/g2/cure 60 text → s6',
+        '9/g4/tack 10–15 manufacturer',
+        '9/g4/cure 60 text → punch-sew',
+        '10/overnight/overnight 720–1440 text → measure-k',
+        '11/epoxy/set 30 manufacturer → lining',
+        '11/lining/tack 10–15 manufacturer',
+        '11/cure/cure 1440 text → s7',
+        '12/magnet-swap/set 30 manufacturer',
+        '12/magnet-swap/cure 1440 text',
+      ]);
+      // Doby „text“ stojí v textu kroku; 1 h před děrováním v textu blokovaného kroku.
+      expect(stepAt(3, 'wet-and-fold').body).toContain('(5–10 min)');
+      expect(stepAt(7, 'wet').body).toContain('(5–10 min)');
+      for (const [order, id] of [
+        [3, 'dry'],
+        [7, 'fold-clamp'],
+        [10, 'overnight'],
+      ] as const) {
+        expect(stepAt(order, id).body).toContain('přes noc');
+        expect(stepAt(order, id).body).toContain('12–24 h');
+      }
+      expect(stepAt(4, 'plate').body).toContain('po 24 h');
+      expect(stepAt(5, 'd1-paint').body).toContain('mezi nimi 20–30 min');
+      expect(stepAt(6, 'g3').body).toContain('zavadnout 10–15 min');
+      expect(stepAt(6, 'g3').body).toContain('Děrujte nejdřív za 1 h');
+      expect(stepAt(8, 's6').body).toContain('Po lepení počkejte aspoň 1 h');
+      expect(stepAt(9, 'punch-sew').body).toContain('Po lepení G4 počkejte aspoň 1 h');
+      expect(stepAt(11, 'epoxy').body).toContain('podle návodu (orientačně 30 min, ověřte)');
+      expect(stepAt(11, 'cure').body).toContain('Nechte 24 h vytvrdit, teprve pak šijte S7');
+      expect(stepAt(12, 'magnet-swap').body).toContain('Po 24 h');
+      // Zavadnutí v lekcích 8, 9 a 11 lekce nečísluje: tabulka 9.1 zadání, „podle návodu“.
+      expect(
+        lidWalletProject.equipment.find((e) => e.equipmentSlug === 'contact-cement')!.specification,
+      ).toContain('zavadnout 10–15 min, děrovat nejdřív za 1 h');
+    });
+
+    it('zápisník: pole pro předvyplnění listů jsou v krocích podle record-ids', () => {
+      const where = new Map(
+        allSteps.flatMap(({ lesson, step }) =>
+          (step.records ?? []).map((f) => [f.id, { at: `${lesson.order}/${step.id}`, f }] as const),
+        ),
+      );
+      const expected: Record<keyof typeof LID_RECORD_IDS, string> = {
+        p1Thickness: '1/measure',
+        d1Thickness: '1/measure',
+        d2Thickness: '1/measure',
+        liningThickness: '1/measure',
+        billSheet: '2/bills',
+        billHeightMin: '2/bills',
+        billHeightMax: '2/bills',
+        billHalfWidthMin: '2/bills',
+        billHalfWidthMax: '2/bills',
+        p0K: '2/k',
+        cardLift: '2/coins-wedge',
+        coinLift: '2/coins-wedge',
+        v12Offset: '3/inspect',
+        v12Variant: '3/decide',
+        kMeasured: '10/measure-k',
+        magnetThickness: '11/magnet-dry-test',
+      };
+      for (const [key, at] of Object.entries(expected)) {
+        const id = LID_RECORD_IDS[key as keyof typeof LID_RECORD_IDS];
+        const found = where.get(id);
+        expect(found?.at, id).toBe(at);
+        expect(found?.f.kind, id).toBe(key === 'v12Variant' ? 'choice' : 'number');
+      }
+      const variant = where.get(LID_RECORD_IDS.v12Variant)!.f;
+      expect(variant.kind === 'choice' && variant.options.map((o) => o.value)).toEqual(
+        Object.values(LID_V12_VARIANTS),
+      );
+      // Cíle jen z čísel lekcí.
+      const target = (id: string) => {
+        const f = where.get(id)!.f;
+        return f.kind === 'number' ? f.target : undefined;
+      };
+      expect(target(LID_RECORD_IDS.d1Thickness)?.max).toBe(0.92);
+      expect(target(LID_RECORD_IDS.d2Thickness)?.max).toBe(0.92);
+      expect(target(LID_RECORD_IDS.p0K)?.max).toBe(DEFAULT_LID_WALLET.kMax);
+      expect(target(LID_RECORD_IDS.kMeasured)?.max).toBe(DEFAULT_LID_WALLET.kMax);
+      expect(target(LID_RECORD_IDS.v12Offset)?.max).toBe(0.3);
+      expect(target('p0-bill-protrusion')?.min).toBe(15);
+      expect(target('card-pocket-width')?.min).toBe(90.5);
+      expect(target('d1-from-f-edge')?.min).toBe(3.5);
+      expect(stepAt(1, 'measure').body).toContain('víc než 0,92 mm');
+      expect(stepAt(2, 'k').body).toContain('nad 1,24');
+      expect(stepAt(3, 'inspect').body).toContain('Do 0,3 mm nechte čáru z listu');
+      expect(stepAt(2, 'bills').body).toContain('Cíl je aspoň 15 mm');
+      expect(stepAt(8, 'check-d1').body).toContain('aspoň 90,5 mm');
+      expect(stepAt(8, 'check-d1').body).toContain('aspoň 3,5 mm');
+      // Nápovědy „model počítá s …“ odpovídají modelu.
+      const hint = (id: string) => where.get(id)!.f.hint ?? '';
+      expect(hint(LID_RECORD_IDS.billHeightMin)).toContain(
+        `${DEFAULT_LID_WALLET.billHeightMinMm} mm`,
+      );
+      expect(hint(LID_RECORD_IDS.billHeightMax)).toContain(
+        `${DEFAULT_LID_WALLET.billHeightMaxMm} mm`,
+      );
+      expect(hint(LID_RECORD_IDS.billHalfWidthMin)).toContain(
+        `${DEFAULT_LID_WALLET.billHalfWidthMinMm} mm`,
+      );
+      expect(hint(LID_RECORD_IDS.billHalfWidthMax)).toContain(
+        `${DEFAULT_LID_WALLET.billHalfWidthMaxMm} mm`,
+      );
+      expect(hint(LID_RECORD_IDS.billSheet)).toContain(`${cz(DEFAULT_LID_WALLET.billSheetMm)} mm`);
+      expect(hint(LID_RECORD_IDS.cardLift)).toContain(
+        `${cz(DEFAULT_LID_WALLET.wedgeLiftNom * DEFAULT_LID_WALLET.cardsMax * DEFAULT_LID_WALLET.cardThicknessMm)} mm`,
+      );
+      expect(hint(LID_RECORD_IDS.coinLift)).toContain(
+        `${cz(DEFAULT_LID_WALLET.wedgeLiftNom * DEFAULT_LID_WALLET.coinThicknessMaxMm)} mm`,
+      );
+      expect(hint(LID_RECORD_IDS.magnetThickness)).toContain(
+        `výchozí ${cz(DEFAULT_LID_WALLET.magnetThicknessMm)}`,
+      );
+    });
+
+    it('zápisy z polí lekcí předvyplní formulář listů, který listy vytvoří', () => {
+      const values: Partial<Record<string, number | string>> = {
+        [LID_RECORD_IDS.p1Thickness]: 0.95,
+        [LID_RECORD_IDS.d1Thickness]: 0.7,
+        [LID_RECORD_IDS.d2Thickness]: 0.75,
+        [LID_RECORD_IDS.liningThickness]: 0.7,
+        [LID_RECORD_IDS.v12Variant]: LID_V12_VARIANTS.backupB1,
+        [LID_RECORD_IDS.p0K]: 1.1,
+        [LID_RECORD_IDS.magnetThickness]: 1.5,
+      };
+      const entries: LessonRecordEntry[] = allSteps.flatMap(({ lesson, step }) =>
+        (step.records ?? [])
+          .filter((f) => values[f.id] !== undefined)
+          .map((f) => ({
+            id: crypto.randomUUID(),
+            userId: null,
+            projectSlug: lidWalletProject.slug,
+            lessonSlug: lesson.slug,
+            fieldId: f.id,
+            value: values[f.id]!,
+            contentVersion: lidWalletProject.contentVersion,
+            createdAt: '2026-10-07T10:00:00.000Z',
+            updatedAt: '2026-10-07T10:00:00.000Z',
+          })),
+      );
+      expect(entries).toHaveLength(Object.keys(values).length);
+      const prefill = lidGeneratorPrefill(entries, lidWalletProject.slug)!;
+      expect(prefill.form).toMatchObject({ p1: '0,95', divider: '0,75', lining: '0,7' });
+      expect(prefill.form.skiveFold).toBe(true);
+      const parsed = parseLidGeneratorForm(prefill.form);
+      expect('input' in parsed && lidSheetsForMeasured(parsed.input).ok).toBe(true);
+    });
+
+    it('připomínky: varianta V12, čára hrany vložky, k a magnet tam, kde se s nimi pracuje', () => {
+      const recalls = allSteps.flatMap(({ lesson, step }) =>
+        (step.recalls ?? []).map((r) => `${lesson.order}/${step.id} ← ${r.fieldId}`),
+      );
+      expect(recalls).toEqual(
+        expect.arrayContaining([
+          `1/sheets-for-thickness ← ${LID_RECORD_IDS.p1Thickness}`,
+          `2/record ← ${LID_RECORD_IDS.p0K}`,
+          `4/valid-sheets ← ${LID_RECORD_IDS.v12Variant}`,
+          `4/mark-back ← ${LID_RECORD_IDS.v12Offset}`,
+          '4/mark-back ← v12-shift',
+          `5/skive-backup ← ${LID_RECORD_IDS.v12Variant}`,
+          `7/place-spacer ← ${LID_RECORD_IDS.v12Offset}`,
+          '7/place-spacer ← v12-shift',
+          `10/k-too-high ← ${LID_RECORD_IDS.kMeasured}`,
+          `12/magnet-swap ← ${LID_RECORD_IDS.magnetThickness}`,
+          `12/final-piece ← ${LID_RECORD_IDS.v12Variant}`,
+          '12/final-piece ← z2-result',
+        ]),
+      );
+      // Kroky s připomínkou opravdu s hodnotou pracují.
+      expect(stepAt(4, 'valid-sheets').body).toContain('Pokud P0, V12 nebo zkušební kus');
+      expect(stepAt(4, 'mark-back').body).toContain('posunutou podle V12');
+      expect(stepAt(7, 'place-spacer').body).toContain('posunutou podle V12');
+      expect(stepAt(5, 'skive-backup').body).toContain('Jen pro zálohu B1');
+      expect(stepAt(10, 'k-too-high').body).toContain('Zapište k');
+    });
+
+    it('připravte si: listy k tisku podle textu lekcí a díly z dřívějších lekcí', () => {
+      const prints = lidWalletProject.lessons.flatMap((l) =>
+        (l.prints ?? []).map((p) => `${l.order}/${p.sheetId}×${p.copies}`),
+      );
+      expect(prints).toEqual([
+        '1/sablona×1',
+        '1/rub×1',
+        '1/dily×1',
+        '1/pripravky×1',
+        '2/pripravky×1',
+        '2/sablona×1',
+        '4/sablona×2',
+        '4/rub×1',
+        '4/dily×2',
+        '4/pripravky×1',
+      ]);
+      expect(stepAt(4, 'valid-sheets').body).toContain('List 1 a list 3 vytiskněte dvakrát');
+      expect(stepAt(4, 'valid-sheets').body).toContain('matný papír 120 g');
+      expect(stepAt(2, 'templates').body).toContain('nalepte list 4 a list 1 na tvrdý papír');
+      expect(stepAt(1, 'sheets-rule').body).toContain('Listy vytiskněte hned');
+
+      const requires = lidWalletProject.lessons.flatMap((l) =>
+        (l.requires ?? []).map((r) => `${l.order} ← ${r.fromLesson.slice(0, 2)} ${r.id}`),
+      );
+      expect(requires).toEqual([
+        '2 ← 01 model-sheets',
+        '3 ← 01 spacer',
+        '5 ← 03 v12-scrap',
+        '5 ← 02 notch-template',
+        '5 ← 04 coin-window-template',
+        '6 ← 04 d2-template',
+        '6 ← 04 bill-window-template',
+        '6 ← 04 sheet1-template',
+        '7 ← 01 spacer',
+        '8 ← 04 plate',
+        '8 ← 04 sheet1-template',
+        '9 ← 04 side-strip',
+        '11 ← 02 tongue-template',
+        '11 ← 04 lining-blank',
+      ]);
+      // Co je v „Z předchozích lekcí“, není znovu mezi materiály.
+      for (const l of lidWalletProject.lessons) {
+        for (const m of l.materials)
+          expect(m, `${l.order}: ${m}`).not.toMatch(/\(lekce \d+\)$|z lekce 1$/);
+      }
+    });
   });
 
   describe('nákupní plán „Co koupit“', () => {

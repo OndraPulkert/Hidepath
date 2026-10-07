@@ -284,6 +284,180 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
     });
   });
 
+  describe('čekání, zápisník a „Připravte si“', () => {
+    const lesson = (n: number) => coinCardHolderProject.lessons.find((l) => l.order === n)!;
+    const stepOf = (n: number, id: string) => lesson(n).steps.find((x) => x.id === id)!;
+
+    it('čekání jsou jen tam, kde lekce čeká, s dobou podle textu nebo návodu', () => {
+      const waits = coinCardHolderProject.lessons.flatMap((l) =>
+        l.steps.flatMap((s) =>
+          (s.waits ?? []).map((w) => ({
+            at: `${l.order}/${s.id}/${w.id}`,
+            body: s.body,
+            w,
+          })),
+        ),
+      );
+      expect(waits.map((x) => x.at)).toEqual([
+        '2/dry-and-inspect/dry-overnight',
+        '4/unfold-roughen-glue/glue-front-inner',
+        '4/unfold-roughen-glue/glue-inner-back',
+        '4/try-edge-paint/edge-paint-dry',
+        '5/dye-burnish-and-seal/edge-paint-dry',
+        '6/form-dimple/dry-overnight',
+        '6/dye-burnish-pocket-edges/edge-paint-dry',
+        '6/glue-pocket/glue-pocket',
+        '7/roughen-and-glue-bottom/glue-front-inner',
+        '7/roughen-and-glue-bottom/glue-inner-back',
+        '8/dye-and-burnish-edges/edge-paint-dry',
+      ]);
+      for (const { at, body, w } of waits) {
+        if (w.id === 'dry-overnight') {
+          // „přes noc“ z lekce = 12–24 h jako v zadání (docs/zadani/penezenka-vicko.md §9.1).
+          expect(body, at).toContain('přes noc');
+          expect([w.minutes, w.maxMinutes, w.basis], at).toEqual([720, 1440, 'text']);
+        } else if (w.id.startsWith('glue')) {
+          // Lekce říká „odvětrat podle návodu“; výchozí doba z tabulky zadání, orientačně.
+          expect(body, at).toMatch(/odvětr/);
+          expect([w.minutes, w.maxMinutes, w.basis], at).toEqual([10, 15, 'manufacturer']);
+        } else {
+          expect(body, at).toMatch(/obarv|barv/);
+          expect([w.minutes, w.maxMinutes, w.basis], at).toEqual([20, 30, 'manufacturer']);
+        }
+      }
+    });
+
+    it('schnutí přes noc blokuje krok se zaschlým dílem', () => {
+      for (const [n, from, to] of [
+        [2, 'dry-and-inspect', 'test-window-retention'],
+        [6, 'form-dimple', 'cut-outline-and-window'],
+      ] as const) {
+        expect(stepOf(n, from).waits![0]!.blocksStepId).toBe(to);
+        expect(stepOf(n, to).body).toMatch(/^Zaschl/);
+      }
+    });
+
+    it('pole zápisníku jsou v krocích, které říkají „zapište“ nebo „změřte“', () => {
+      const fields = (n: number, id: string) => (stepOf(n, id).records ?? []).map((f) => f.id);
+      expect(fields(1, 'checklist')).toHaveLength(8);
+      expect(stepOf(1, 'checklist').body).toContain('Zapište');
+      expect(fields(1, 'decide')).toEqual(['model-fits', 'model-mismatch']);
+      expect(fields(2, 'test-window-retention')).toEqual(['window-diameter']);
+      expect(fields(3, 'punch-post-hole')).toEqual(['post-hole-punch']);
+      expect(fields(3, 'practice-snap-cap')).toEqual(['cap-hole-punch']);
+      expect(stepOf(3, 'practice-snap-cap').body).toContain('Zapište si, který výsečník sedl');
+      expect(fields(3, 'measure-flange')).toEqual(['flange-diameter']);
+      expect(fields(4, 'fold-around-content')).toEqual([
+        'practice-holes-offset',
+        'fold-a-stiffness',
+      ]);
+      expect(fields(4, 'try-edge-paint')).toEqual(['edge-paint-coats', 'edge-paint-dry-minutes']);
+      expect(stepOf(4, 'try-edge-paint').body).toContain('Zapište si počet vrstev a dobu schnutí');
+    });
+
+    it('cíle polí jsou čísla z textu lekce', () => {
+      const number = (n: number, step: string, id: string) => {
+        const f = stepOf(n, step).records!.find((x) => x.id === id)!;
+        if (f.kind !== 'number') throw new Error(id);
+        return f;
+      };
+      expect(number(3, 'measure-flange', 'flange-diameter').target).toEqual({
+        max: 11,
+        label: 'nejvýš 11 mm',
+      });
+      expect(stepOf(3, 'measure-flange').body).toContain('nejvýš 11 mm');
+      expect(number(1, 'checklist', 'model-tongue-behind-snap').target!.min).toBe(11);
+      expect(stepOf(1, 'checklist').body).toContain('cíl 11 mm + rezerva');
+      expect(number(1, 'checklist', 'model-card-visible').hint).toContain('19 mm');
+      expect(stepOf(1, 'checklist').body).toContain('cíl 19 mm');
+    });
+
+    it('připomínky jsou v krocích, které na dřívější výsledek odkazují', () => {
+      const fieldLesson = new Map(
+        coinCardHolderProject.lessons.flatMap((l) =>
+          l.steps.flatMap((s) => (s.records ?? []).map((f) => [f.id, l.order] as const)),
+        ),
+      );
+      const recalls = coinCardHolderProject.lessons.flatMap((l) =>
+        l.steps.flatMap((s) =>
+          (s.recalls ?? []).map((r) => ({ at: `${l.order}/${s.id}`, body: s.body, r })),
+        ),
+      );
+      expect(recalls.map((x) => `${x.at}<-${x.r.fieldId}`)).toEqual([
+        '5/dye-burnish-and-seal<-edge-paint-coats',
+        '5/dye-burnish-and-seal<-edge-paint-dry-minutes',
+        '6/trace-pocket-template<-window-diameter',
+        '6/cut-outline-and-window<-window-diameter',
+        '6/dye-burnish-pocket-edges<-edge-paint-coats',
+        '6/dye-burnish-pocket-edges<-edge-paint-dry-minutes',
+        '6/punch-post-hole<-post-hole-punch',
+        '7/press-and-clamp<-practice-holes-offset',
+        '8/punch-cap-hole<-cap-hole-punch',
+        '8/dye-and-burnish-edges<-edge-paint-coats',
+        '8/dye-and-burnish-edges<-edge-paint-dry-minutes',
+      ]);
+      for (const { at, body, r } of recalls) {
+        const from = fieldLesson.get(r.fieldId)!;
+        expect(body, at).toMatch(new RegExp(`lekc[ie] ${from}\\b`));
+        expect(r.label, at).toContain(`lekc`);
+      }
+    });
+
+    it('výtisky: výchozí varianta listu, počty podle lekcí', () => {
+      const prints = coinCardHolderProject.lessons.flatMap((l) =>
+        (l.prints ?? []).map((p) => `${l.order}:${p.sheetId}×${p.copies}${p.condition ? '?' : ''}`),
+      );
+      expect(prints).toEqual([
+        '1:papirovy-model-kuze-1-2×1',
+        '2:kapsa×3',
+        '2:kapsa-okno-18×1?',
+        '4:cvicny-prouzek-kuze-1-2×1',
+        '5:sablona-kuze-1-2×1',
+        '6:kapsa×1',
+        '6:kapsa×2?',
+        '6:kapsa-okno-18×1?',
+      ]);
+      expect(stepOf(2, 'drill-form').body).toContain('3× na 100 %');
+      const sheets = [
+        ...coinCardHolderProject.patternSheets!.sheets,
+        ...coinCardHolderProject.practiceSheets!.sheets,
+      ];
+      for (const l of coinCardHolderProject.lessons) {
+        for (const p of l.prints ?? []) {
+          const sheet = sheets.find((s) => s.id === p.sheetId)!;
+          // Výchozí skupina (bez varianty); záložní okno Ø 18 mm má jen jednu variantu.
+          if (p.sheetId !== 'kapsa-okno-18') expect(sheet.variant, p.sheetId).toBeUndefined();
+        }
+        // Každá lekce s odkazem na tisk pod krokem má i výtisk v „Připravte si“.
+        const linked = new Set(l.steps.flatMap((s) => (s.printLink ? [s.printLink] : [])));
+        for (const source of linked) {
+          expect(
+            (l.prints ?? []).some((p) => p.source === source),
+            `${l.order} ${source}`,
+          ).toBe(true);
+        }
+        // Výtisky nejsou zároveň v materiálu.
+        expect(l.materials.join(' '), `${l.order}`).not.toMatch(
+          /\blist (KAPSA|Papírový)|šablona PÁS/,
+        );
+      }
+    });
+
+    it('díly z předchozích lekcí: forma a špalík z lekce 2, pás, tělo', () => {
+      const requires = coinCardHolderProject.lessons.flatMap((l) =>
+        (l.requires ?? []).map((r) => `${l.order}:${r.id}<-${r.fromLesson.slice(0, 2)}`),
+      );
+      expect(requires).toEqual([
+        '6:strip<-05',
+        '6:form<-02',
+        '6:block<-02',
+        '7:strip-with-pocket<-06',
+        '8:body<-07',
+      ]);
+      expect(stepOf(6, 'cut-outline-and-window').body).toContain('špalík z lekce 2');
+    });
+  });
+
   describe('nákupní plán „Co koupit“', () => {
     const plan = coinCardHolderProject.shoppingPlan!;
 

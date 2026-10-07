@@ -1,6 +1,14 @@
+import { matchPath } from 'react-router';
+
 import { startingProject } from '@/content/projects';
 
-import { isNavItemActive, primaryNavItemsFor, resolveHomeRoute, routes } from './routes';
+import {
+  isNavItemActive,
+  primaryNavItemsFor,
+  resolveHomeRoute,
+  routePatterns,
+  routes,
+} from './routes';
 
 // Trasy se testují proti skutečnému slugu prvního projektu, ne proti kopii řetězce.
 const CARD_HOLDER_SLUG = startingProject.slug;
@@ -12,6 +20,26 @@ describe('routes', () => {
     expect(routes.lesson(CARD_HOLDER_SLUG, '02-straight-cut')).toBe(
       '/projects/card-holder/lessons/02-straight-cut',
     );
+  });
+
+  it('dílenský režim lekce s volitelným krokem', () => {
+    expect(routes.lessonFocus(CARD_HOLDER_SLUG, '02-straight-cut')).toBe(
+      '/projects/card-holder/lessons/02-straight-cut/focus',
+    );
+    expect(routes.lessonFocus(CARD_HOLDER_SLUG, '02-straight-cut', 3)).toBe(
+      '/projects/card-holder/lessons/02-straight-cut/focus?krok=3',
+    );
+    expect(routes.lessonFocus(CARD_HOLDER_SLUG, '02-straight-cut', 0)).toBe(
+      '/projects/card-holder/lessons/02-straight-cut/focus?krok=0',
+    );
+  });
+
+  it('vzor trasy dílenského režimu odpovídá builderu', () => {
+    const match = matchPath(
+      routePatterns.lessonFocus,
+      routes.lessonFocus(CARD_HOLDER_SLUG, '02-straight-cut'),
+    );
+    expect(match?.params).toEqual({ projectSlug: 'card-holder', lessonSlug: '02-straight-cut' });
   });
 
   it('escapuje nebezpečné znaky ve slugu', () => {

@@ -2,10 +2,12 @@ import { createBrowserRouter, type RouteObject } from 'react-router';
 
 import { routePatterns, routes } from '@/app/routes';
 import { AppShell } from '@/components/layout/app-shell';
+import { RootLayout } from '@/components/layout/root-layout';
 import { RequireAuth } from '@/features/auth/require-auth';
 import { AuthCallbackPage } from '@/pages/auth-callback-page';
 import { DashboardPage } from '@/pages/dashboard-page';
 import { HomeRoute } from '@/pages/home-route';
+import { LessonFocusPage } from '@/pages/lesson-focus-page';
 import { LessonPage } from '@/pages/lesson-page';
 import { LoginPage } from '@/pages/login-page';
 import { NotFoundPage } from '@/pages/not-found-page';
@@ -25,6 +27,7 @@ import { WorkshopPage } from '@/pages/workshop-page';
  */
 export const appRoutes: RouteObject[] = [
   {
+    element: <RootLayout />,
     errorElement: <RouteErrorPage />,
     children: [
       { path: routes.login, element: <LoginPage /> },
@@ -35,6 +38,8 @@ export const appRoutes: RouteObject[] = [
         element: <RequireAuth />,
         children: [
           { path: routes.home, element: <HomeRoute /> },
+          // Dílenský režim je na celou obrazovku, bez navigace shellu.
+          { path: routePatterns.lessonFocus, element: <LessonFocusPage /> },
           {
             element: <AppShell />,
             children: [

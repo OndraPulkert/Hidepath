@@ -75,6 +75,17 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'check-chisels',
         title: 'Zkontrolujte vidličky (pokud už je máte)',
         body: 'Kroky 3 až 5 udělejte, až budete mít vidličky, jehly a nit doma; do té doby pokračujte lekcí 2. Přiložte vidličky hroty na odřezek a přitiskněte rukou, bez paličky. Pravítkem změřte vzdálenost první a poslední značky a vydělte ji počtem mezer mezi značkami: musí vyjít 3,85–4 mm.',
+        records: [
+          {
+            kind: 'number',
+            id: 'chisel-spacing',
+            label: 'Rozteč vidliček',
+            hint: 'Vzdálenost první a poslední značky vydělená počtem mezer.',
+            unit: 'mm',
+            decimals: 2,
+            target: { min: 3.85, max: 4, label: 'cíl 3,85–4 mm' },
+          },
+        ],
         media: [
           {
             id: 'l1-chisel-marks',
@@ -161,8 +172,17 @@ export const lessons: readonly LessonDefinition[] = [
     materials: [
       'první tréninková A5: podél delší strany z ní odřízněte pás 70 mm na proužky (řežte jako v krocích 1–3), zbylý pás asi 210 × 80 mm nechte celý na cvičnou šablonu',
       'nová čepel v noži',
-      'vytištěná cvičná šablona 1:1 (A4, zkontrolovaná úsečka 50 mm)',
       'nůžky',
+    ],
+    prints: [
+      {
+        source: 'practice-sheets',
+        sheetId: 'cvicna-sablona',
+        copies: 1,
+        purpose:
+          'Tři cvičné tvary na řez podle přilepené šablony (krok 5). Tiskněte bez přizpůsobení velikosti (100 %), kontrolní úsečka musí měřit 50 mm.',
+        paper: 'A4',
+      },
     ],
     requiredEquipment: ['utility-knife', 'steel-ruler', 'cutting-mat'],
     recommendedEquipment: ['scratch-awl', 'masking-tape'],
@@ -228,6 +248,26 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'practice-template',
         title: 'Vyzkoušejte řez podle přilepené šablony',
         body: 'Takhle budete v lekci 5 řezat díly pouzdra. Cvičnou šablonu vytiskněte na A4 bez přizpůsobení velikosti (100 %) a změřte kontrolní úsečku: musí mít přesně 50 mm. Tři tvary vystřihněte nůžkami po čárkované čáře (okraj asi 1,5 cm). Tvary dělejte jeden po druhém na pásu 80 mm, vedle sebe podél delší strany, 5 mm od kraje a 10 mm od sebe. Tvar položte na rub pásu a přilepte maskovací páskou z několika stran, jen na okrajích mimo plnou čáru. U tvaru 3 propíchněte šídlem obě tečky skrz papír do kůže; po sejmutí šablony musí být na rubu vidět. Pak řežte skrz papír i kůži po plné čáře na dva až tři lehké tahy: rovné strany podle ocelového pravítka položeného na čáru, roh a výřez pomalu bez pravítka. Pásku strhávejte pomalu, skoro rovnoběžně s kůží. Nakonec nalepte kousek pásky na líc odřezku, strhněte ho a zkontrolujte, že nenechal lesklou stopu.',
+        records: [
+          {
+            kind: 'number',
+            id: 'practice-sheet-calibration',
+            label: 'Kontrolní úsečka na cvičné šabloně',
+            unit: 'mm',
+            decimals: 1,
+            target: { min: 50, max: 50, label: 'cíl přesně 50 mm' },
+          },
+          {
+            kind: 'choice',
+            id: 'tape-mark',
+            label: 'Páska na líci odřezku',
+            hint: 'Když nechala stopu, sežeňte před lekcí 5 jinou, s nižší lepivostí.',
+            options: [
+              { value: 'clean', label: 'Bez stopy' },
+              { value: 'mark', label: 'Nechala stopu' },
+            ],
+          },
+        ],
         media: [],
         printLink: 'practice-sheets',
       },
@@ -409,11 +449,41 @@ export const lessons: readonly LessonDefinition[] = [
     ],
     recommendedEquipment: ['contact-cement', 'wing-divider', 'scratch-awl', 'sandpaper'],
     prerequisiteLessons: [L3],
+    requires: [
+      {
+        id: 'practice-strip',
+        fromLesson: L2,
+        label: 'Proužek z lekce 2',
+        note: 'Na zkoušku zdrsnění v kroku 1.',
+      },
+    ],
     steps: [
       {
         id: 'glue',
         title: 'Slepte díly podél hrany',
         body: 'Slepte odřezky jako na pouzdru: rub horního na líc spodního, jen podél jedné delší hrany. Na líci spodního odřezku tento pás nejdřív zdrsněte smirkem 180, z hladkého líce lepidlo pouští. Stěrkou naneste na obě plochy tenký pás lepidla asi 5 mm široký. Nechte ho odvětrat podle návodu a hrany přitiskněte přesně na sebe. S oboustrannou páskou: nalepte pás na rub horního odřezku, sejměte krycí fólii a přitiskněte; zdrsňovat pak nemusíte. Lepidlo drží díly jen pomocně. Rozdíl vyzkoušejte na třetím odřezku: zdrsněte jen polovinu pásu, přilepte na něj proužek z lekce 2 a po zaschnutí ho zkuste na obou polovinách odtrhnout.',
+        waits: [
+          {
+            id: 'glue-open',
+            label: 'Odvětrání lepidla',
+            minutes: 10,
+            maxMinutes: 15,
+            basis: 'manufacturer',
+          },
+        ],
+        records: [
+          {
+            kind: 'choice',
+            id: 'roughened-grip',
+            label: 'Zdrsněná polovina pásu drží',
+            hint: 'Zkouška na třetím odřezku po zaschnutí. S oboustrannou páskou vynechte.',
+            options: [
+              { value: 'better', label: 'Lépe' },
+              { value: 'same', label: 'Stejně' },
+              { value: 'worse', label: 'Hůř' },
+            ],
+          },
+        ],
         media: [
           {
             id: 'l4-glue-strip',
@@ -557,7 +627,6 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 40,
     goal: 'Mít dva přesné díly pouzdra vyříznuté podle šablony 1:1.',
     materials: [
-      'vytištěná šablona 1:1 (zkontrolovaná úsečka 50 mm)',
       'nůžky na vystřižení šablony nahrubo (s okrajem 1–2 cm)',
       'kůže A4 na pouzdro (1,2–1,5 mm)',
       'maskovací páska',
@@ -571,12 +640,31 @@ export const lessons: readonly LessonDefinition[] = [
     ],
     recommendedEquipment: ['scratch-awl', 'masking-tape'],
     prerequisiteLessons: [L2, L3, L4],
+    prints: [
+      {
+        source: 'template',
+        copies: 1,
+        purpose:
+          'Oba díly pouzdra k přilepení na rub kůže (krok 1). Tiskněte bez přizpůsobení velikosti (100 %), kontrolní úsečka musí měřit 50 mm.',
+        paper: 'A4, nejlépe matný papír 120 g pro inkoustové tiskárny, jinak obyčejný',
+      },
+    ],
     steps: [
       {
         id: 'print-check',
         title: 'Vytiskněte a zkontrolujte šablonu',
         printLink: 'template',
         body: 'Šablonu otevřete odkazem pod tímto krokem. Tiskněte na A4 bez přizpůsobení velikosti („skutečná velikost“, 100 %), nejlépe na matný papír 120 g pro inkoustové tiskárny, jinak na obyčejný. Změřte kontrolní úsečku: musí mít přesně 50 mm. Když nemá, upravte nastavení tisku a tiskněte znovu.',
+        records: [
+          {
+            kind: 'number',
+            id: 'template-calibration',
+            label: 'Kontrolní úsečka na šabloně',
+            unit: 'mm',
+            decimals: 1,
+            target: { min: 50, max: 50, label: 'cíl přesně 50 mm' },
+          },
+        ],
         media: [
           {
             id: 'l5-template',
@@ -598,6 +686,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'transfer',
         title: 'Přilepte šablonu na rub',
         body: 'Každý díl šablony vystřihněte zvlášť a jen nahrubo, s okrajem 1–2 cm (mezi díly střihněte středem mezery). Po plné čáře budete řezat až nožem. Čárkovaná čára je linie stehu, tu nestříhejte ani neřežte. Díl položte na rub kůže a přilepte maskovací páskou z několika stran, jen na okrajích mimo plnou čáru. Použijte pásku, která v lekci 2 nenechala na líci stopu. Šablona se řezáním zničí, na každý další díl nebo pouzdro vytiskněte novou.',
+        recalls: [{ fieldId: 'tape-mark', label: 'Páska v lekci 2' }],
         media: [
           {
             id: 'l5-transfer',
@@ -715,13 +804,7 @@ export const lessons: readonly LessonDefinition[] = [
     phaseSlug: 'build',
     estimatedMinutes: 90,
     goal: 'Sešít oba díly po třech stranách sedlářským stehem a zaleštit hrany: pouzdro na 4–6 karet.',
-    materials: [
-      'díly z lekce 5',
-      'nit asi 1 m',
-      'lepidlo nebo páska',
-      'čistý hadřík',
-      'trochu vody',
-    ],
+    materials: ['nit asi 1 m', 'lepidlo nebo páska', 'čistý hadřík', 'trochu vody'],
     requiredEquipment: [
       'veg-tan-leather',
       'stitching-chisels',
@@ -740,6 +823,23 @@ export const lessons: readonly LessonDefinition[] = [
       'masking-tape',
     ],
     prerequisiteLessons: [L5],
+    prints: [
+      {
+        source: 'template',
+        copies: 1,
+        purpose: 'Zadní díl vystřižený po plné čáře k vyznačení lepené plochy (krok 2).',
+        condition: 'Jen když nemáte papírový zadní díl z lekce 5.',
+      },
+    ],
+    requires: [
+      { id: 'leather-parts', fromLesson: L5, label: 'Dva vyříznuté díly pouzdra' },
+      {
+        id: 'paper-back',
+        fromLesson: L5,
+        label: 'Papírový zadní díl s čárkami 56 mm',
+        note: 'Na vyznačení lepené plochy (krok 2). Když ho nemáte, vytiskněte novou šablonu.',
+      },
+    ],
     steps: [
       {
         id: 'mark-stitch-lines',
@@ -765,6 +865,15 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'glue-parts',
         title: 'Slepte díly',
         body: 'Vyznačený pás na zadním dílu zdrsněte smirkem 180, z hladkého líce lepidlo pouští. Smirek omotejte kolem hranolku asi 1–2 cm širokého, pás tak udržíte v mezích lépe než prsty. Stěrkou naneste tenký pás lepidla na zdrsněný pás i na stejný pás na rubu kapsy a nechte odvětrat podle návodu. Kapsu přiložte lícem nahoru, spodek a boky přesně na hrany zadního dílu, a přitiskněte přes hadřík. Střed nechte suchý, jinak se kapsa slepí a karta do ní nevejde. Oboustrannou pásku nalepte jen na rub kapsy, zdrsňovat pak nemusíte.',
+        waits: [
+          {
+            id: 'glue-open',
+            label: 'Odvětrání lepidla',
+            minutes: 10,
+            maxMinutes: 15,
+            basis: 'manufacturer',
+          },
+        ],
         media: [
           {
             id: 'l6-assembled-scheme',

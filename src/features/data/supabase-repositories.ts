@@ -4,6 +4,8 @@ import { z } from 'zod';
 import { type CollectionRepository } from '@/features/data/local-collection';
 import { type CloudRepositories } from '@/features/data/repositories';
 import { type InventoryItem } from '@/features/inventory/types';
+import { type LessonRecordEntry } from '@/features/notebook/types';
+import { type PrepCheckRecord } from '@/features/prep/types';
 import {
   type CheckpointProgressRecord,
   type EnrollmentRecord,
@@ -24,6 +26,13 @@ type TableName = keyof Tables;
 type Insert<T extends TableName> = Tables[T]['Insert'];
 
 const UNIQUE_VIOLATION = '23505';
+/** PostgREST: `.single()` nedostal žádný řádek. */
+const NO_ROWS = 'PGRST116';
+/** Tabulky s triggerem `reject_stale_update`: 0 řádků po zápisu = server má novější verzi. */
+const STALE_GUARDED: ReadonlySet<TableName> = new Set<TableName>([
+  'lesson_records',
+  'lesson_prep_checks',
+]);
 
 const base = {
   id: z.uuid(),
@@ -65,6 +74,21 @@ const rowSchemasDefinition = {
     lesson_slug: z.string(),
     checkpoint_slug: z.string(),
     completed: z.boolean(),
+  }),
+  lesson_records: z.object({
+    ...base,
+    project_slug: z.string(),
+    lesson_slug: z.string(),
+    field_id: z.string(),
+    value: z.union([z.number(), z.string()]).nullable(),
+    content_version: z.number().int(),
+  }),
+  lesson_prep_checks: z.object({
+    ...base,
+    project_slug: z.string(),
+    lesson_slug: z.string(),
+    item_key: z.string(),
+    checked: z.boolean(),
   }),
 };
 
@@ -197,6 +221,67 @@ export const mappers = {
       checkpoint_slug: r.checkpointSlug,
     }),
   },
+  lessonRecords: {
+    fromRow(row: RowOf<'lesson_records'>): LessonRecordEntry {
+      return {
+        id: row.id,
+        userId: row.user_id,
+        projectSlug: row.project_slug,
+        lessonSlug: row.lesson_slug,
+        fieldId: row.field_id,
+        value: row.value,
+        contentVersion: row.content_version,
+        createdAt: row.created_at,
+        updatedAt: row.updated_at,
+      };
+    },
+    toRow(record: LessonRecordEntry, userId: string): Insert<'lesson_records'> {
+      return {
+        id: record.id,
+        user_id: userId,
+        project_slug: record.projectSlug,
+        lesson_slug: record.lessonSlug,
+        field_id: record.fieldId,
+        value: record.value,
+        content_version: record.contentVersion,
+        updated_at: record.updatedAt,
+      };
+    },
+    naturalKey: (r: LessonRecordEntry): Record<string, string> => ({
+      project_slug: r.projectSlug,
+      field_id: r.fieldId,
+    }),
+  },
+  prepChecks: {
+    fromRow(row: RowOf<'lesson_prep_checks'>): PrepCheckRecord {
+      return {
+        id: row.id,
+        userId: row.user_id,
+        projectSlug: row.project_slug,
+        lessonSlug: row.lesson_slug,
+        itemKey: row.item_key,
+        checked: row.checked,
+        createdAt: row.created_at,
+        updatedAt: row.updated_at,
+      };
+    },
+    toRow(record: PrepCheckRecord, userId: string): Insert<'lesson_prep_checks'> {
+      return {
+        id: record.id,
+        user_id: userId,
+        project_slug: record.projectSlug,
+        lesson_slug: record.lessonSlug,
+        item_key: record.itemKey,
+        checked: record.checked,
+        updated_at: record.updatedAt,
+      };
+    },
+    naturalKey: (r: PrepCheckRecord): Record<string, string> => ({
+      project_slug: r.projectSlug,
+      lesson_slug: r.lessonSlug,
+      item_key: r.itemKey,
+    }),
+  },
 };
 
 export class SupabaseRepositoryError extends Error {
@@ -204,6 +289,21 @@ export class SupabaseRepositoryError extends Error {
     super(`${operation} ${table}: ${cause.message}`, { cause });
     this.name = 'SupabaseRepositoryError';
   }
+}
+
+/**
+ * Server má novější verzi řádku: trigger `reject_stale_update` starší zápis zahodil a upsert
+ * nevrátil žádný řádek. Není to porucha – synchronizace si novější stav stáhne (pull).
+ */
+export class StaleWriteError extends SupabaseRepositoryError {
+  constructor(table: string) {
+    super('upsert', table, new Error('na serveru je novější verze záznamu'));
+    this.name = 'StaleWriteError';
+  }
+}
+
+export function isStaleWriteError(error: unknown): error is StaleWriteError {
+  return error instanceof StaleWriteError;
 }
 
 interface TableMapper<T extends keyof RowSchemas, R extends { id: string }> {
@@ -268,6 +368,8 @@ function createTableRepository<T extends keyof RowSchemas, R extends { id: strin
         .select('*')
         .single();
       if (!first.error) return parseRow(first.data);
+      if (first.error.code === NO_ROWS && STALE_GUARDED.has(table))
+        throw new StaleWriteError(table);
       if (first.error.code !== UNIQUE_VIOLATION)
         throw new SupabaseRepositoryError('upsert', table, first.error);
 
@@ -288,6 +390,8 @@ function createTableRepository<T extends keyof RowSchemas, R extends { id: strin
         .eq('user_id', userId)
         .select('*')
         .single();
+      if (updated.error?.code === NO_ROWS && STALE_GUARDED.has(table))
+        throw new StaleWriteError(table);
       if (updated.error) throw new SupabaseRepositoryError('update', table, updated.error);
       return parseRow(updated.data);
     },
@@ -323,5 +427,8 @@ export function createSupabaseRepositories(
       userId,
       mappers.checkpointProgress,
     ),
+    // Přímý přístup k tabulkám; provider je obalí synchronizovanou kolekcí (lokál + outbox).
+    lessonRecords: createTableRepository(client, 'lesson_records', userId, mappers.lessonRecords),
+    prepChecks: createTableRepository(client, 'lesson_prep_checks', userId, mappers.prepChecks),
   };
 }

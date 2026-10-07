@@ -1,13 +1,15 @@
 /**
- * Čistý popis stavu synchronizace pro stavový pruh. Počet čekajících změn dodá v Milníku 4
- * outbox v IndexedDB; chyby zápisu, přenos lokálních dat, online/offline a aktualizace
- * aplikace fungují už teď.
+ * Čistý popis stavu synchronizace pro stavový pruh. Počet čekajících a selhaných změn
+ * dodává outbox (zatím zápisník a příprava); chyby přímých zápisů, přenos lokálních dat,
+ * online/offline a aktualizace aplikace sem přicházejí z ostatních zdrojů.
  */
 export interface SyncStatusInput {
   online: boolean;
   pendingCount: number;
   /** Poslední zápis selhal a od té doby žádný neuspěl. */
   hasFailed: boolean;
+  /** Některou změnu z outboxu se nepodařilo odeslat (je uložená v zařízení, zkusí se znovu). */
+  syncFailed?: boolean;
   updateAvailable: boolean;
   /** `false` = data jsou jen v paměti prohlížeče a po zavření záložky zmizí. */
   storagePersistent: boolean;
@@ -51,7 +53,9 @@ export function describeSyncStatus(input: SyncStatusInput): SyncStatusView {
       label: 'Offline',
       hint: input.hasFailed
         ? 'Poslední změna se bez připojení neuložila. Po připojení ji zopakujte.'
-        : 'Stažený obsah je dostupný, změny se uloží po připojení.',
+        : input.pendingCount > 0
+          ? `${pluralPending(input.pendingCount)} na odeslání po připojení.`
+          : 'Stažený obsah je dostupný, změny se uloží po připojení.',
       action: 'none',
     };
   }
@@ -71,6 +75,14 @@ export function describeSyncStatus(input: SyncStatusInput): SyncStatusView {
       tone: 'error',
       label: 'Uložení změny se nezdařilo',
       hint: 'Zkuste to znovu. Pokud se to opakuje, může být plné úložiště prohlížeče nebo výpadek služby.',
+      action: 'retry',
+    };
+  }
+  if (input.syncFailed) {
+    return {
+      tone: 'error',
+      label: 'Synchronizace se nezdařila',
+      hint: 'Změny jsou uložené v zařízení a zkusíme je odeslat znovu.',
       action: 'retry',
     };
   }

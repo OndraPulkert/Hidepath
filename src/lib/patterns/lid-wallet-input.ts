@@ -292,3 +292,67 @@ export function lidSheetsForMeasured(input: LidMeasuredInput): LidSheetsResult {
   if (problems.length > 0) return { ok: false, problems };
   return { ok: true, spec, label: lidVariantLabel(spec), sheets: buildLidSheets(spec) };
 }
+
+/** Stav formuláře „Listy pro vaši kůži“: textová pole tak, jak je uživatel napsal. */
+export interface LidGeneratorForm {
+  p1: string;
+  divider: string;
+  lining: string;
+  skiveFold: boolean;
+  skiveHinge: boolean;
+  p0: LidP0Fields;
+}
+
+/** Prázdný formulář: P1 předvyplněná výchozí 1,0, ostatní tloušťky prázdné, bez záloh. */
+export const DEFAULT_LID_GENERATOR_FORM: LidGeneratorForm = {
+  p1: '1,0',
+  divider: '',
+  lining: '',
+  skiveFold: false,
+  skiveHinge: false,
+  p0: EMPTY_LID_P0_FIELDS,
+};
+
+/**
+ * Přečte celý formulář na vstup generátoru. Chybějící tloušťka nebo nesmyslná hodnota P0
+ * vrátí česky, co opravit; meze střihu a kontroly modelu hlídá až `lidSheetsForMeasured`.
+ * Formulář i předvyplnění ze zápisníku jdou přes tuto funkci, takže dávají stejné listy.
+ */
+export function parseLidGeneratorForm(
+  form: LidGeneratorForm,
+): { input: LidMeasuredInput } | { problems: string[] } {
+  const values = {
+    p1: parseMm(form.p1),
+    divider: parseMm(form.divider),
+    lining: parseMm(form.lining),
+  };
+  const problems = [
+    values.p1 === undefined ? 'Zadejte tloušťku P1 v mm (např. 0,95).' : null,
+    values.divider === undefined
+      ? 'Zadejte tloušťku přepážek v mm – větší z D1 a D2 (např. 0,8).'
+      : null,
+    values.lining === undefined ? 'Zadejte tloušťku podšívky L1 v mm (např. 0,9).' : null,
+  ].filter((m): m is string => m !== null);
+  const p0 = parseLidP0Fields(form.p0);
+  if ('problems' in p0) problems.push(...p0.problems);
+  if (
+    problems.length > 0 ||
+    'problems' in p0 ||
+    values.p1 === undefined ||
+    values.divider === undefined ||
+    values.lining === undefined
+  ) {
+    return { problems };
+  }
+  return {
+    input: {
+      p1Mm: values.p1,
+      dividerMm: values.divider,
+      liningMm: values.lining,
+      skiveFold: form.skiveFold,
+      skiveHinge: form.skiveHinge,
+      p0: p0.p0,
+      ...(p0.magnetThicknessMm !== undefined ? { magnetThicknessMm: p0.magnetThicknessMm } : {}),
+    },
+  };
+}

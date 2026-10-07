@@ -1,3 +1,4 @@
+import { type ReactNode } from 'react';
 import { Link } from 'react-router';
 
 import { routes } from '@/app/routes';
@@ -25,10 +26,13 @@ export function StepList({
   steps,
   template,
   projectSlug,
+  renderStepExtras,
 }: {
   steps: readonly LessonStep[];
   template: TemplateDefinition | undefined;
   projectSlug: string;
+  /** Doplňky pod textem kroku (časovače, zápisník, připomínky); `index` od 0. */
+  renderStepExtras?: (step: LessonStep, index: number) => ReactNode;
 }) {
   return (
     <ol className="flex flex-col gap-6">
@@ -73,6 +77,7 @@ export function StepList({
                 ))}
               </div>
             ) : null}
+            {renderStepExtras?.(step, index)}
             {step.media.map((m) => (
               <MediaSlot
                 key={m.id}

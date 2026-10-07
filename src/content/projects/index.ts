@@ -3,6 +3,12 @@ import { coinCardHolderProject } from '@/content/projects/coin-card-holder/proje
 import { lidWalletProject } from '@/content/projects/lid-wallet/project';
 import { type ProjectDefinition } from '@/content/schema';
 
+/**
+ * Id polí zápisníku Víčka pro předvyplnění formuláře listů (`browserGenerator`
+ * `lid-wallet-thickness`). Přes registr, aby aplikace neimportovala obsah projektu přímo.
+ */
+export { LID_RECORD_IDS, LID_V12_VARIANTS } from '@/content/projects/lid-wallet/record-ids';
+
 export const projects: readonly ProjectDefinition[] = [
   cardHolderProject,
   coinCardHolderProject,

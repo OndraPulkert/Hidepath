@@ -1,10 +1,15 @@
 import { animationLink } from '@/content/animations';
 import { illustration } from '@/content/projects/lid-wallet/illustrations';
+import { LID_RECORD_IDS, LID_V12_VARIANTS } from '@/content/projects/lid-wallet/record-ids';
 import {
   type LessonDefinition,
+  type LessonPrint,
   type MediaSlot,
   type PhaseDefinition,
   type ProjectDefinition,
+  type RecordField,
+  type StepRecall,
+  type StepWait,
 } from '@/content/schema';
 
 /**
@@ -49,6 +54,113 @@ const photo = (id: string, caption: string): MediaSlot => ({
 const NUMBERS_NOTE =
   'Čísla v lekci platí pro výchozí střih. Máte-li listy pro změřenou kůži nebo pro zálohu, berte čísla z rámečku „Čísla pro postup“ na listu 4.';
 
+/*
+ * Časovače, zápisník a „Připravte si“. Doby čekání jsou jen z textu lekcí a z tabulky 9.1
+ * zadání (docs/zadani/penezenka-vicko.md): kde je lekce neuvádí a zadání je bere „podle návodu
+ * lepidla“, je `basis: 'manufacturer'`.
+ */
+
+/** Zavadnutí kontaktního lepidla 10–15 min (lekce 6; tabulka 9.1 zadání „podle návodu“). */
+const tack = (id: string, label: string, basis: StepWait['basis']): StepWait => ({
+  id,
+  label,
+  minutes: 10,
+  maxMinutes: 15,
+  basis,
+});
+
+/** Mezi lepením a děrováním aspoň 1 h (lekce 6, 8 a 9). */
+const beforePunching = (id: string, label: string, blocksStepId: string): StepWait => ({
+  id,
+  label,
+  minutes: 60,
+  basis: 'text',
+  blocksStepId,
+});
+
+/** Navlhčení: počkat, až se barva usně skoro vrátí k suché (5–10 min). */
+const dampen = (label: string): StepWait => ({
+  id: 'dampen',
+  label,
+  minutes: 5,
+  maxMinutes: 10,
+  basis: 'text',
+});
+
+/** Sušení přes noc (12–24 h, ne u topení). */
+const overnight = (label: string, blocksStepId: string): StepWait => ({
+  id: 'overnight',
+  label,
+  minutes: 12 * 60,
+  maxMinutes: 24 * 60,
+  basis: 'text',
+  blocksStepId,
+});
+
+/** Tloušťka kůže v mm z lekce 1. */
+const thickness = (id: string, label: string, hint: string): RecordField => ({
+  kind: 'number',
+  id,
+  label,
+  hint,
+  unit: 'mm',
+  decimals: 2,
+});
+
+/** Max. tloušťka přepážky (lekce 1: „nesmí mít nikde víc než 0,92 mm“). */
+const DIVIDER_MAX = { max: 0.92, label: 'nejvýš 0,92 mm' };
+
+/** k do 1,24 listy platí (lekce 2 a 10). */
+const K_TARGET = { max: 1.24, label: 'nejvýš 1,24' };
+
+const variantField: RecordField = {
+  kind: 'choice',
+  id: LID_RECORD_IDS.v12Variant,
+  label: 'Varianta střihu',
+  options: [
+    { value: LID_V12_VARIANTS.default, label: 'Výchozí střih' },
+    { value: LID_V12_VARIANTS.backupA, label: 'Záloha A (P1 0,8)' },
+    { value: LID_V12_VARIANTS.backupB1, label: 'Záloha B1 (ztenčený ohyb dna)' },
+  ],
+};
+
+/** Posun čáry hrany vložky podle V12 (lekce 3, krok inspect). */
+const V12_SHIFT_ID = 'v12-shift';
+
+const variantRecall: StepRecall = {
+  fieldId: LID_RECORD_IDS.v12Variant,
+  label: 'Varianta ze zkoušky V12 (lekce 3)',
+};
+
+/** Čára hrany vložky podle V12 – lekce 4 (značení) a 7 (pokládání vložky). */
+const v12LineRecalls: StepRecall[] = [
+  { fieldId: LID_RECORD_IDS.v12Offset, label: 'Odchylka rýhy od vrcholu ohybu (lekce 3)' },
+  { fieldId: V12_SHIFT_ID, label: 'Čára hrany vložky podle V12' },
+];
+
+/** Výsledek zkoušky Z-1 až Z-4: prošlo, nebo co dál. */
+const testResult = (
+  id: string,
+  label: string,
+  failures: { value: string; label: string }[],
+): RecordField => ({
+  kind: 'choice',
+  id,
+  label,
+  options: [{ value: 'pass', label: 'Prošlo' }, ...failures],
+});
+
+/** Papír na listy pro řez a šablony (lekce 4). */
+const PLAIN_PAPER = 'nejlépe matný 120 g pro inkoustové tiskárny, jinak obyčejný';
+
+/** Výtisk listu střihu (id listů výchozího střihu; listy pro změřenou kůži mají stejná). */
+const sheet = (
+  sheetId: 'sablona' | 'rub' | 'dily' | 'pripravky',
+  copies: number,
+  purpose: string,
+  extra: Pick<LessonPrint, 'paper' | 'condition'> = {},
+): LessonPrint => ({ source: 'pattern-sheets', sheetId, copies, purpose, ...extra });
+
 const L1 = '01-measure-and-sheets';
 const L2 = '02-paper-model';
 const L3 = '03-bend-test';
@@ -86,6 +198,34 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Změřte tloušťku kůže',
         body: 'Přířezy si na kůži předem obkreslete: u kaštanu dva přířezy P1 110 × 240 mm za sebou podél delší strany kusu, odřezky na zkoušky z pruhu vedle nich. Posuvkou změřte na několika místech tloušťku P1 (kaštan), D1 a L1 (nebarvená kozinka) a D2 (čokoládová kozinka) – vždy tam, odkud díl vyříznete – a zapište. Do listů zadejte průměr měření v místě dílu (doporučení, ověřte na zkušebním kuse), u přepážek větší z D1 a D2. Přepážka nesmí mít nikde víc než 0,92 mm: jinak ji vyřízněte z tenčího místa, nebo kupte tenčí kozinku.',
         media: [photo('lw-l1-measure', 'Posuvka měří tloušťku kozinky na okraji kusu')],
+        records: [
+          thickness(
+            LID_RECORD_IDS.p1Thickness,
+            'P1 (kaštan)',
+            'Průměr měření v místě, odkud P1 vyříznete.',
+          ),
+          {
+            ...thickness(
+              LID_RECORD_IDS.d1Thickness,
+              'D1 (nebarvená kozinka)',
+              'Průměr v místě dílu. Nikde víc než 0,92 mm.',
+            ),
+            target: DIVIDER_MAX,
+          },
+          {
+            ...thickness(
+              LID_RECORD_IDS.d2Thickness,
+              'D2 (čokoládová kozinka)',
+              'Průměr v místě dílu. Nikde víc než 0,92 mm.',
+            ),
+            target: DIVIDER_MAX,
+          },
+          thickness(
+            LID_RECORD_IDS.liningThickness,
+            'L1 (nebarvená kozinka)',
+            'Průměr v místě dílu.',
+          ),
+        ],
       },
       {
         id: 'sheets-for-thickness',
@@ -93,6 +233,12 @@ export const lessons: readonly LessonDefinition[] = [
         printLink: 'pattern-sheets',
         body: 'Předem vytištěné listy platí jen pro výchozí střih (P1 1,0 mm, přepážky a L1 0,6 mm); s jinou tloušťkou se mění skoro všechna čísla. Na stránce Listy střihu v části „Listy pro vaši kůži“ zadejte změřenou P1, větší z D1 a D2 a L1 a stiskněte Vygenerovat listy. Když střih s touto kůží neplatí, aplikace listy nevytvoří a napíše proč.',
         media: [],
+        recalls: [
+          { fieldId: LID_RECORD_IDS.p1Thickness, label: 'P1' },
+          { fieldId: LID_RECORD_IDS.d1Thickness, label: 'D1' },
+          { fieldId: LID_RECORD_IDS.d2Thickness, label: 'D2' },
+          { fieldId: LID_RECORD_IDS.liningThickness, label: 'L1' },
+        ],
       },
       {
         id: 'sheets-rule',
@@ -158,6 +304,16 @@ export const lessons: readonly LessonDefinition[] = [
       'Tloušťka změřená jinde, než odkud se díl vyřízne.',
     ],
     safety: [],
+    prints: [
+      sheet('sablona', 1, 'Kontrola měřítka (úsečka 50 mm, kóta P1) a papírový model v lekci 2', {
+        paper: 'tvrdší papír (čtvrtka)',
+      }),
+      sheet('rub', 1, 'Papírový model v lekci 2', { paper: 'tvrdší papír (čtvrtka)' }),
+      sheet('dily', 1, 'Přepážky D1 a D2 papírového modelu v lekci 2', {
+        paper: 'tvrdší papír (čtvrtka)',
+      }),
+      sheet('pripravky', 1, 'Rámeček „Čísla pro postup“ (kóta P1) a vložka dna'),
+    ],
     media: [photo('lw-l1-hero', 'Vytištěné listy 1–4 peněženky Víčko, posuvka měří kótu P1')],
   }),
 
@@ -169,8 +325,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 90,
     goal: 'Slepit papírový model 1:1 a se skutečným obsahem ověřit, že se vejde 6 karet, bankovky napůl a 4 mince, víčko se zavře a výřez pro palec funguje.',
     materials: [
-      'listy 1–3 pro změřenou kůži (lekce 1) vytištěné 1:1 na tvrdší papír',
-      'list 4 a list 1 ještě jednou na šablony, čtvrtka a lepidlo na papír',
+      'čtvrtka a lepidlo na papír (šablony)',
       'lepicí páska místo švů a lepení, nůžky, nůž a pravítko',
       '6 karet, bankovky 100–5000 Kč (které máte) a 4 mince 50 Kč',
       'papír a tužka na zápis výsledků',
@@ -203,17 +358,96 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Bankovky (P0-1, P0-2)',
         body: 'Změřte a zapište rozměry a tloušťku 10 bankovek: délku rozložené ocelovým pravítkem, výšku, šířku složené a tloušťku posuvkou. Vejdou se všechny bankovky 100–5000 Kč složené napůl? Pak posuňte nízkou stokorunu ukazováčkem v okénku bankovek nahoru a zapište, kolik mm vyčnívá nad ústí. Cíl je aspoň 15 mm (model počítá s 19 mm). Při menší hodnotě by se okénko muselo prodloužit dolů.',
         media: [],
+        records: [
+          {
+            kind: 'number',
+            id: LID_RECORD_IDS.billHeightMin,
+            label: 'Výška bankovky – nejmenší',
+            hint: 'Model počítá s 69 mm.',
+            unit: 'mm',
+            decimals: 1,
+          },
+          {
+            kind: 'number',
+            id: LID_RECORD_IDS.billHeightMax,
+            label: 'Výška bankovky – největší',
+            hint: 'Model počítá s 74 mm.',
+            unit: 'mm',
+            decimals: 1,
+          },
+          {
+            kind: 'number',
+            id: LID_RECORD_IDS.billHalfWidthMin,
+            label: 'Šířka složené napůl – nejmenší',
+            hint: 'Model počítá s 70 mm.',
+            unit: 'mm',
+            decimals: 1,
+          },
+          {
+            kind: 'number',
+            id: LID_RECORD_IDS.billHalfWidthMax,
+            label: 'Šířka složené napůl – největší',
+            hint: 'Model počítá s 85 mm.',
+            unit: 'mm',
+            decimals: 1,
+          },
+          {
+            kind: 'number',
+            id: LID_RECORD_IDS.billSheet,
+            label: 'Tloušťka nejtlustší bankovky',
+            hint: 'Jedna nesložená bankovka. Model počítá s 0,1 mm.',
+            unit: 'mm',
+            decimals: 2,
+          },
+          {
+            kind: 'choice',
+            id: 'p0-bills-fit',
+            label: 'Vejdou se všechny bankovky složené napůl?',
+            options: [
+              { value: 'yes', label: 'Ano' },
+              { value: 'no', label: 'Ne' },
+            ],
+          },
+          {
+            kind: 'number',
+            id: 'p0-bill-protrusion',
+            label: 'Stokoruna vyčnívá nad ústí',
+            hint: 'Model počítá s 19 mm.',
+            unit: 'mm',
+            decimals: 1,
+            target: { min: 15, label: 'aspoň 15 mm' },
+          },
+        ],
       },
       {
         id: 'k',
         title: 'Poloha víčka (P0-3)',
         body: 'Na jazýček udělejte rysku a zapište její výšku od spodní hrany ve stavu A (prázdná), B (2 karty, 1 bankovka, 1 mince), C (6 karet, 3 bankovky, 4 × 50 Kč) a C s 2 + 2 mincemi nahoře, zvlášť nad sloupci a nad středem. Spočítejte k = (y_C − y_A) / (P(C) − P(A)); dělitel je v rámečku na listu 4 (výchozí 8,62). Vyjde-li k nad 1,24, musí se zvednout dno karet a výška, nebo přijmout menší plnost.',
         media: [],
+        records: [
+          {
+            kind: 'number',
+            id: LID_RECORD_IDS.p0K,
+            label: 'k z papírového modelu',
+            hint: 'Do 1,24 listy platí.',
+            unit: '',
+            decimals: 2,
+            target: K_TARGET,
+          },
+        ],
       },
       {
         id: 'thumb-notch',
         title: 'Výřez pro palec (P0-4)',
         body: 'S 1, 2 a 6 kartami vysuňte přední kartu palcem ve výřezu a vytáhněte zadní kartu po vyndání předních. Zapište, jestli to jde a jak dlouho to trvá. Zkuste i kartu s vystouplým písmem a prohnutou kartu: zachytí se o dno výřezu? Pak 20× zavřete víčko ve stavu A, s 1 kartou, ve stavu B a C a s jazýčkem posunutým o 3 mm vlevo i vpravo. Zachytí se špička jazýčku o výřez, nebo zajede pod dno výřezu či za přední stěnu?',
+        records: [
+          {
+            kind: 'text',
+            id: 'p0-thumb-notch',
+            label: 'Výřez pro palec (P0-4): jde to, jak dlouho, co se zachytí',
+            maxLength: 500,
+          },
+        ],
         media: [
           ill(
             'lw-l2-notch',
@@ -227,24 +461,68 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Mince a zvednutí na klínu dna (P0-5, P0-6)',
         body: 'Vyzkoušejte vysunutí mince okénkem sloupce a vložení mince do ústí; mince 50 Kč má ve sloupci volně klouzat. Změřte, o kolik výš nad lepením G2 sedí spodní hrana svazku 6 karet a o kolik výš nad lepením G3a sedí sloupec 2 × 50 Kč. Model počítá s 2,28 mm a 1,25 mm, jiné hodnoty zapište.',
         media: [],
+        records: [
+          {
+            kind: 'number',
+            id: LID_RECORD_IDS.cardLift,
+            label: 'Zvednutí svazku 6 karet nad G2',
+            hint: 'Model počítá s 2,28 mm.',
+            unit: 'mm',
+            decimals: 2,
+          },
+          {
+            kind: 'number',
+            id: LID_RECORD_IDS.coinLift,
+            label: 'Zvednutí sloupce 2 × 50 Kč nad G3a',
+            hint: 'Model počítá s 1,25 mm.',
+            unit: 'mm',
+            decimals: 2,
+          },
+        ],
       },
       {
         id: 'full-and-sequence',
         title: 'Plný stav a celý sled (P0-7, P0-8)',
         body: 'Vložte plný stav (6 karet, 3 bankovky, 4 × 50 Kč) a vyzkoušejte celý sled s otevřeným víčkem. Otevřené víčko samo nestojí a pruží zpět – to je v pořádku. Drží ho palec ruky, která peněženku drží; ukazováček téže ruky posouvá bankovku v okénku (nebo minci v okénku sloupce) a druhá ruka bere. Víčko držte zhruba svisle, nepřeklápějte ho na záda.',
         media: [],
+        records: [
+          {
+            kind: 'text',
+            id: 'p0-full-sequence',
+            label: 'Plný stav a celý sled (P0-7, P0-8): co šlo a co ne',
+            maxLength: 500,
+          },
+        ],
       },
       {
         id: 'slots-p09',
         title: 'Tři štěrbiny (P0-9)',
         body: 'Zkuste zasunout kartu u boku za D1 a omylem do ústí bankovek. Je ústí bankovek dobře vidět? Když ne, dejte hraně D1 výraznější barvu.',
         media: [],
+        records: [
+          {
+            kind: 'choice',
+            id: 'p0-bill-slot-visible',
+            label: 'Je ústí bankovek dobře vidět (P0-9)?',
+            options: [
+              { value: 'yes', label: 'Ano' },
+              { value: 'no', label: 'Ne, hrana D1 výraznější barvou' },
+            ],
+          },
+        ],
       },
       {
         id: 'record',
         title: 'Zapište výsledky a nechte přepočítat',
-        body: 'Když P0 dopadne podle modelu (bankovky se vejdou, stokoruna vyčnívá aspoň 15 mm, k do 1,24, zvednutí 2,28 a 1,25 mm, plný stav se vejde), platí listy z lekce 1. Když se něco liší, zapište naměřené hodnoty a zadejte je ve formuláři „Listy pro vaši kůži“ na stránce Listy střihu pod „Výsledky P0 a jiný magnet“: k, zvednutí karet a mincí, výšku, šířku napůl a tloušťku bankovek. Zároveň zadejte tloušťky kůže (a zálohu, je-li) a vygenerujte listy znovu. Když střih s těmito hodnotami neplatí, aplikace listy nevytvoří a napíše proč. Do nových listů nic z kůže neřežte a šablony nevyřezávejte. Zkoušku ohybu V12 (lekce 3) udělat můžete, na P0 nezávisí.',
+        body: 'Když P0 dopadne podle modelu (bankovky se vejdou, stokoruna vyčnívá aspoň 15 mm, k do 1,24, zvednutí 2,28 a 1,25 mm, plný stav se vejde), platí listy z lekce 1. Když se něco liší, zapište naměřené hodnoty do polí u kroků výše. Formulář „Listy pro vaši kůži“ na stránce Listy střihu je pod „Výsledky P0 a jiný magnet“ předvyplní: k, zvednutí karet a mincí, výšku, šířku napůl a tloušťku bankovek; zkontrolujte je. Zároveň zadejte tloušťky kůže (a zálohu, je-li) a vygenerujte listy znovu. Když střih s těmito hodnotami neplatí, aplikace listy nevytvoří a napíše proč. Do nových listů nic z kůže neřežte a šablony nevyřezávejte. Zkoušku ohybu V12 (lekce 3) udělat můžete, na P0 nezávisí.',
         media: [],
+        recalls: [
+          { fieldId: 'p0-bills-fit', label: 'Bankovky se vejdou' },
+          { fieldId: 'p0-bill-protrusion', label: 'Stokoruna vyčnívá' },
+          { fieldId: LID_RECORD_IDS.p0K, label: 'k' },
+          { fieldId: LID_RECORD_IDS.cardLift, label: 'Zvednutí karet' },
+          { fieldId: LID_RECORD_IDS.coinLift, label: 'Zvednutí mincí' },
+        ],
       },
       {
         id: 'templates',
@@ -287,6 +565,26 @@ export const lessons: readonly LessonDefinition[] = [
       'Model slepený páskou po celé ploše: sloupce mincí a kapsa karet pak nejdou vyzkoušet.',
     ],
     safety: ['Nůž veďte tahem od prstů volné ruky.'],
+    prints: [
+      sheet(
+        'pripravky',
+        1,
+        'Šablona konce jazýčku (z platných listů, když P0 něco změnil, z nových): nalepit na tvrdý papír a vyříznout',
+      ),
+      sheet(
+        'sablona',
+        1,
+        'Šablona výřezu pro palec (z platných listů): nalepit na tvrdý papír a vyříznout',
+      ),
+    ],
+    requires: [
+      {
+        id: 'model-sheets',
+        fromLesson: L1,
+        label: 'Listy 1–3 pro změřenou kůži vytištěné 1:1 na tvrdší papír',
+        note: 'na papírový model',
+      },
+    ],
     media: [
       photo('lw-l2-hero', 'Papírový model s 6 kartami, bankovkami a 4 mincemi, víčko zavřené'),
     ],
@@ -301,7 +599,6 @@ export const lessons: readonly LessonDefinition[] = [
     goal: 'Na odřezku ověřit, že líc v mokrém ohybu přes vložku 1,5 mm nepopraská, změřit polohu rýhy vůči vrcholu ohybu a zvolit variantu střihu.',
     materials: [
       'odřezek kaštanu aspoň 30 × 40 mm ze stejné kůže jako P1, z volného pruhu vedle obkreslených přířezů P1 (ne ze středu kusu)',
-      'vložka dna z lekce 1',
       'houbička a voda',
       'potravinová fólie',
       '2 hladká prkénka',
@@ -322,6 +619,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'wet-and-fold',
         title: 'Navlhčete a přehněte přes vložku',
         body: 'Odřezek navlhčete houbičkou a počkejte, až se barva usně skoro vrátí k suché (5–10 min). Vložku položte na rub hranou na čáru hrany vložky, celou na straně dál od rýhy. Volnou část odřezku přes ni přehněte lícem ven. Mezi vlhký líc a prkénka dejte potravinovou fólii.',
+        waits: [dampen('Navlhčený odřezek V12')],
         media: [
           ill(
             'lw-l3-fold',
@@ -335,11 +633,33 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Stáhněte a nechte přes noc',
         body: 'Odřezek stáhněte mezi prkénky svěrkami a nechte přes noc vyschnout (12–24 h, ne u topení). Bez svěrek prkénka zatižte knihami nebo stáhněte silnými gumičkami či klipy (tlak ověřte na odřezku).',
         media: [],
+        waits: [overnight('Schnutí odřezku V12', 'inspect')],
       },
       {
         id: 'inspect',
         title: 'Prohlédněte líc a změřte polohu rýhy',
         body: 'Vyjměte vložku a líc v ohybu prohlédněte lupou nebo mobilem s makrem. Na boku odřezku změřte posuvkou, jak daleko je ryska rýhy od vrcholu ohybu. Do 0,3 mm nechte čáru z listu. Při větší odchylce posuňte čáru hrany vložky na P1 o tuto odchylku. Přehnutá část odřezku odpovídá přední stěně F: leží-li rýha od vrcholu blíž k ní, posuňte čáru k F.',
+        records: [
+          {
+            kind: 'number',
+            id: LID_RECORD_IDS.v12Offset,
+            label: 'Odchylka rysky rýhy od vrcholu ohybu',
+            unit: 'mm',
+            decimals: 2,
+            target: { max: 0.3, label: 'do 0,3 mm nechte čáru z listu' },
+          },
+          {
+            kind: 'choice',
+            id: V12_SHIFT_ID,
+            label: 'Čára hrany vložky',
+            hint: 'Posunout o odchylku, jen když je větší než 0,3 mm.',
+            options: [
+              { value: 'keep', label: 'Nechat z listu' },
+              { value: 'toward-f', label: 'Posunout k F' },
+              { value: 'toward-b', label: 'Posunout k B' },
+            ],
+          },
+        ],
         media: [
           photo('lw-l3-inspect', 'Detail líce v ohybu odřezku po vyschnutí, posuvka u rysky rýhy'),
         ],
@@ -349,6 +669,7 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Rozhodněte variantu střihu',
         body: 'Líc nepopraskal: výchozí střih (nic se neztenčuje). Líc popraskal: záloha A – celý P1 z usně 0,8 mm (v aplikaci zadejte P1 0,8) a zkoušku zopakujte na odřezku 0,8. Záloha B1 – ztenčit pás ohybu dna na 0,6 mm, v aplikaci zaškrtněte B1 („--skive-fold 0.6“) – jen když useň 0,8 nejde sehnat nebo popraská i ona; zkoušku zopakujte na ztenčeném odřezku (lekce 5). Popraská i záloha: neřežte a zkuste jinou useň do P1 (ověřte zkouškou V12). Mírné odpružení ohybu po vyschnutí není důvod k záloze. Zálohu B2 (závěs) V12 nevybírá, o té rozhodne zkouška Z-2. Varianta platí pro zkušební i finální kus; pro zálohu vygenerujte listy znovu (lekce 1).',
         media: [],
+        records: [variantField],
       },
     ],
     checkpoints: [
@@ -371,6 +692,7 @@ export const lessons: readonly LessonDefinition[] = [
       'Odřezek ze středu kusu: nevejdou se pak oba přířezy P1.',
     ],
     safety: [],
+    requires: [{ id: 'spacer', fromLesson: L1, label: 'Vložka dna ze starých karet' }],
     media: [photo('lw-l3-hero', 'Odřezek po zkoušce ohybu V12 vedle vložky ze starých karet')],
   }),
 
@@ -382,7 +704,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 120,
     goal: 'Vyříznout díly zkušebního kusu (P1, D1, D2, přířez L1 a plíšek K2) a přenést na rub P1 čáry z listu 2.',
     materials: [
-      'platné listy 1–4, list 1 a list 3 navíc podruhé (první výtisk se při řezání rozřeže), tvrdý papír na šablony',
+      'tvrdý papír na šablony',
       'šablony konce jazýčku a výřezu pro palec z lekce 2',
       'bezbarvý lak na nehty (hrany plíšku)',
       'jehla na propichování (rýsovací šídlo dělá větší vpich – ověřte na odřezku), tužka',
@@ -415,6 +737,7 @@ export const lessons: readonly LessonDefinition[] = [
         printLink: 'pattern-sheets',
         body: `${NUMBERS_NOTE} Pokud P0, V12 nebo zkušební kus něco změnily, vygenerujte listy znovu se vším, co platí, vytiskněte je a zkontrolujte úsečku 50 mm a kótu P1. Tiskněte nejlépe na matný papír 120 g pro inkoustové tiskárny, jinak na obyčejný. List 1 a list 3 vytiskněte dvakrát: první výtisk se při řezání rozřeže, druhý nalepte na tvrdý papír a vyřízněte jako šablonu (S1–S3 a D2 v lekci 6, S6 v lekci 8). Z listu 4 nalepte na tvrdý papír a vyřízněte šablony okének mincí (lekce 5), okénka bankovek (lekce 6), plíšku (tato lekce) a proužek otvorů bočních švů (lekce 9). Na finální kus vytiskněte listy 1 a 3 znovu z listů, které po zkušebním kuse platí.`,
         media: [],
+        recalls: [variantRecall],
       },
       {
         id: 'tape-sheet-1',
@@ -471,6 +794,14 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'plate',
         title: 'Plíšek K2',
         body: 'Plíšek má ve výchozím střihu 14 × 20,5 mm (jinak podle listu 3 a 4). Rozměr přeneste na plech ze šablony plíšku z listu 4. Vyřízněte jeden plíšek pro zkušební kus z pozinkovaného plechu 0,5 mm, který jste v obchodě vyzkoušeli magnetem: pilkou na kov, nebo plech nařízněte nožem u pravítka a v rýze zlomte ohýbáním (ověřte na odřezku plechu). Rohy R3 a otřep zabruste brusným papírem 120 na desce. Hrany přelakujte bezbarvým lakem na nehty – železo dělá na vlhké usni tmavé skvrny. Jestli na plechu drží kontaktní lepidlo, ověří zkušební kus. Chcete-li to vědět dřív, přilepte odstřižek plechu na odřezek usně jako v lekci 8 a po 24 h zkuste, jestli drží.',
+        waits: [
+          {
+            id: 'plate-glue-test',
+            label: 'Zkouška lepidla na plechu (volitelná)',
+            minutes: 24 * 60,
+            basis: 'text',
+          },
+        ],
         media: [
           photo('lw-l4-plate', 'Plíšek 14 × 20,5 mm se zabroušenými rohy R3 vedle tabule plechu'),
         ],
@@ -488,6 +819,7 @@ export const lessons: readonly LessonDefinition[] = [
         ],
         body: 'List 2 nalepte na tvrdý papír, vyřízněte po obrysu a přiložte na rub P1. Tužkou (nic nezařezávejte) přeneste, co list 2 kreslí: osu ohybu dna a pás závěsu (výchozí v 62,21 a 142,99–150,99; pás se nelepí ani nešije), čáru hrany vložky (výchozí v 64,18, případně posunutou podle V12), hranice lepení G1–G4, okénka mincí a polohu D1 a D2. Rohy ploch a konce čar propíchněte jehlou a tečky spojte tužkou u pravítka. Osu ohybu, hranu vložky a přehyby závěsu (výchozí v 145,10 a 148,88; v lekci 10 podle nich zkontrolujete přehyby) označte i ryskami na obou bocích. Na rub F a na rub B napište „L“ tam, kde je na listu 2 (levá strana). Čáry švů S1–S3 a S6 ani okénko bankovek na rub nekreslete: otvory švů se přenesou později z líce přes šablonu z listu 1 – propíchnou se jehlou a děrují vidličkou (S1–S3 v lekci 6, S6 v lekci 8).',
         media: [],
+        recalls: v12LineRecalls,
       },
     ],
     checkpoints: [
@@ -525,6 +857,28 @@ export const lessons: readonly LessonDefinition[] = [
       'Uříznutý plech má ostré hrany a otřep: plíšek berte za plochu, dokud otřep a rohy nezabrousíte.',
       'Prsty držící výsečník mějte u spodku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',
     ],
+    prints: [
+      sheet(
+        'sablona',
+        2,
+        'První výtisk na řez P1 skrz papír, druhý jako šablona otvorů S1–S3 a S6',
+        {
+          paper: PLAIN_PAPER,
+        },
+      ),
+      sheet('rub', 1, 'Značení na rub P1: nalepit na tvrdý papír a vyříznout', {
+        paper: PLAIN_PAPER,
+      }),
+      sheet('dily', 2, 'První výtisk na řez D1, D2 a L1 skrz papír, druhý jako šablona D2', {
+        paper: PLAIN_PAPER,
+      }),
+      sheet(
+        'pripravky',
+        1,
+        'Šablony okének mincí a bankovek, plíšku a proužek otvorů S4/S5: nalepit na tvrdý papír',
+        { paper: PLAIN_PAPER },
+      ),
+    ],
     media: [
       photo(
         'lw-l4-hero',
@@ -541,12 +895,9 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 120,
     goal: 'Vytlačit rýhu ohybu dna, vyseknout okénka mincí a výřez pro palec a dokončit hrany, na které po sestavení nedosáhnete.',
     materials: [
-      'odřezek z V12 na vyzkoušení rýhy',
       'tupý hrot na rýhu, maskovací páska, párátka',
       'dřevěný kolík Ø 8 do aku vrtačky (broušení a leštění vydutých hran)',
       'odřezek kozinky na zkoušku barvy na hrany',
-      'šablona okénka mincí z listu 4 (lekce 4)',
-      'šablona výřezu pro palec z listu 1 na tvrdém papíře (lekce 2)',
     ],
     requiredEquipment: [
       'steel-ruler',
@@ -572,6 +923,7 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Jen záloha B1 nebo B2: ztenčení',
         body: 'Jen pro zálohu B1 (pás ohybu dna) nebo B2 (pás závěsu; jen pro finální kus, když závěs zkušebního kusu neprojde zkouškou Z-2 ani v záloze A). Jinak krok přeskočte. Nejdřív vygenerujte listy se zálohou a pás ztenčujte z rubu z 1,0 na 0,6 mm v poloze podle listu 1 této varianty. (a) Nejlépe v ševcovské nebo brašnářské dílně zvonovým ztenčovačem: pás ohybu 8 × 101 mm včetně náběhů, pás závěsu 15,1 × 101 mm celý na plno a náběh 2 mm vně na obou stranách. P1 doneste s pásem vyznačeným na rubu. (b) Jinak brusným papírem 80 na rovném hranolku, pás ohraničte maskovací páskou: u ohybu (8 mm) bruste na plno jen střed 4 mm a 2 mm na každé straně nechte jako náběh; závěs (15,1 mm) bruste celý na plno a náběh 2 mm udělejte vně čar. Nožem jen hrubě a nikdy pod 0,8 mm. (c) Posuvkou hlídejte 0,6–0,8 mm, okraje jako náběh, ne schod. (d) Nejdřív na odřezku, ten poslouží i k opakování V12. Postup je neověřený, ověřte ho na zkušebním kuse.',
         media: [],
+        recalls: [variantRecall],
       },
       {
         id: 'd2-edge',
@@ -631,6 +983,15 @@ export const lessons: readonly LessonDefinition[] = [
         animationLinks: [animationLink('edges', 'G2')],
         body: 'Horní hranu D1 natřete párátkem barvou na hrany v tónu D2, ve 2 tenkých vrstvách, mezi nimi 20–30 min. Nejdřív na odřezku kozinky: přilnavost na tak tenké hraně je neověřená.',
         media: [],
+        waits: [
+          {
+            id: 'coat',
+            label: 'Schnutí barvy na hraně D1 mezi vrstvami',
+            minutes: 20,
+            maxMinutes: 30,
+            basis: 'text',
+          },
+        ],
       },
       {
         id: 'tokonole',
@@ -669,6 +1030,20 @@ export const lessons: readonly LessonDefinition[] = [
       'Prsty držící výsečník mějte u spodku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',
       'Aku vrtačku používejte podle návodu výrobce. Kolík s brusným papírem pevně upněte a prsty držte mimo točící se kolík.',
     ],
+    requires: [
+      {
+        id: 'v12-scrap',
+        fromLesson: L3,
+        label: 'Odřezek ze zkoušky V12',
+        note: 'na vyzkoušení rýhy',
+      },
+      {
+        id: 'notch-template',
+        fromLesson: L2,
+        label: 'Šablona výřezu pro palec z listu 1 na tvrdém papíře',
+      },
+      { id: 'coin-window-template', fromLesson: L4, label: 'Šablona okénka mincí z listu 4' },
+    ],
     media: [photo('lw-l5-hero', 'Pás P1 s vyseknutými okénky mincí a výřezem pro palec')],
   }),
 
@@ -679,12 +1054,7 @@ export const lessons: readonly LessonDefinition[] = [
     phaseSlug: 'build',
     estimatedMinutes: 150,
     goal: 'Přilepit D2 na záda jen v pásech lepení, proseknout okénko bankovek skrz obě vrstvy a ušít švy sloupců mincí S1–S3.',
-    materials: [
-      'maskovací páska',
-      'jehla na propichování',
-      'odřezek D2 + B na zkoušku děrování',
-      'šablona okénka bankovek z listu 4 (lekce 4)',
-    ],
+    materials: ['maskovací páska', 'jehla na propichování', 'odřezek D2 + B na zkoušku děrování'],
     requiredEquipment: [
       'contact-cement',
       'round-punches-8-14',
@@ -712,6 +1082,10 @@ export const lessons: readonly LessonDefinition[] = [
         ],
         body: `${NUMBERS_NOTE} D2 lepte rubem na rub B jen v pásech G3: dno mincí (y 18–23), boky (x 0–4 a 97–101) a střed mezi sloupci (x 35–66); boky a střed jen do y 80,57 (čára na listu 2). Sloupce mincí a horních 1,43 mm D2 (pás závěsu) nelepte. Na rubu B máte hranice z lekce 4. Na rub D2 je přeneste ze šablony D2 z listu 3 (kreslí D2 z rubu, pásy G3 šrafované): přiložte ji na rub D2 podle hran, rohy pásů propíchněte jehlou a spojte tužkou u pravítka. Hranice lepení na B i na D2 přelepte maskovací páskou. Kontaktní lepidlo naneste na obě strany a pásku hned strhněte. Nechte zavadnout 10–15 min. D2 přiložte do polohy z listu 2: osa x 50,5 na osu, spodní hrana na y 18, na každém boku přesah 1 mm. Přitlačte. Děrujte nejdřív za 1 h.`,
         media: [],
+        waits: [
+          tack('tack', 'Zavadnutí lepidla G3', 'text'),
+          beforePunching('cure', 'Lepení G3 před děrováním', 'stitch-s1-s3'),
+        ],
       },
       {
         id: 'bill-window',
@@ -785,6 +1159,21 @@ export const lessons: readonly LessonDefinition[] = [
       'Prsty držící výsečník nebo vidličku mějte u spodku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',
       'Kontaktní lepidlo používejte ve větrané místnosti a podle návodu na obalu.',
     ],
+    requires: [
+      {
+        id: 'd2-template',
+        fromLesson: L4,
+        label: 'Šablona D2 z listu 3 (druhý výtisk)',
+        note: 'pásy G3 a otvory S1–S3',
+      },
+      { id: 'bill-window-template', fromLesson: L4, label: 'Šablona okénka bankovek z listu 4' },
+      {
+        id: 'sheet1-template',
+        fromLesson: L4,
+        label: 'Šablona z listu 1 (druhý výtisk)',
+        note: 'otvory S1–S3',
+      },
+    ],
     media: [photo('lw-l6-hero', 'Záda s přilepenou D2, okénky a ušitými švy sloupců mincí')],
   }),
 
@@ -795,12 +1184,7 @@ export const lessons: readonly LessonDefinition[] = [
     phaseSlug: 'build',
     estimatedMinutes: 30,
     goal: 'Ohnout dno za mokra přes vložku 1,5 mm tak, aby střed ohybu padl na rýhu, a nechat ho přes noc vyschnout.',
-    materials: [
-      'vložka dna (aspoň 111 × 25 × 1,5 mm, z karet asi 111 × 50) z lekce 1',
-      'houbička a voda',
-      'potravinová fólie',
-      '2 hladká prkénka',
-    ],
+    materials: ['houbička a voda', 'potravinová fólie', '2 hladká prkénka'],
     requiredEquipment: [],
     recommendedEquipment: ['clamps'],
     prerequisiteLessons: [L6],
@@ -809,6 +1193,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'wet',
         title: 'Navlhčete pás ohybu',
         body: `${NUMBERS_NOTE} Pás ohybu dna navlhčete houbičkou a počkejte, až se barva usně skoro vrátí k suché (5–10 min).`,
+        waits: [dampen('Navlhčený pás ohybu dna')],
         animationLinks: [animationLink('lidBends', 'A2'), animationLink('lidBends', 'A3')],
         media: [],
       },
@@ -817,6 +1202,7 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Vložku položte hranou na čáru hrany vložky',
         animationLinks: [animationLink('lidBends', 'A4')],
         body: 'Vložku položte na rub zad B hranou na čáru hrany vložky (výchozí v 64,18, tedy 1,96 mm za rýhou směrem k B, nebo posunutou podle V12). Hrana vložky míří k F, na straně F vložka neleží – tak padne střed ohybu na rýhu. Vložka přesahuje díl na každé straně o 5 mm.',
+        recalls: v12LineRecalls,
         media: [
           ill(
             'lw-l7-spacer',
@@ -836,6 +1222,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidBends', 'A9'),
         ],
         body: 'F přehněte nahoru přes vložku lícem ven. Mezi vlhký líc a prkénka dejte potravinovou fólii. Spodních 20 mm stáhněte mezi prkénky svěrkami a nechte přes noc vyschnout (12–24 h, ne u topení). Bez svěrek použijte knihy nebo silné gumičky (tlak ověřte na odřezku).',
+        waits: [overnight('Schnutí ohybu dna', 'remove-spacer')],
         media: [
           photo('lw-l7-clamp', 'Ohyb dna stažený mezi prkénky s fólií, vložka zasunutá v ohybu'),
         ],
@@ -861,6 +1248,14 @@ export const lessons: readonly LessonDefinition[] = [
       'Plíšek přilepený před mokrým ohybem.',
     ],
     safety: [],
+    requires: [
+      {
+        id: 'spacer',
+        fromLesson: L1,
+        label: 'Vložka dna ze starých karet',
+        note: 'aspoň 111 × 25 × 1,5 mm, z karet asi 111 × 50',
+      },
+    ],
     media: [photo('lw-l7-hero', 'Vyschlý ohyb dna z boku, rovný po celé šířce')],
   }),
 
@@ -889,6 +1284,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'g1',
         title: 'G1: plíšek na rub přední stěny',
         body: `${NUMBERS_NOTE} F položte rubem nahoru celou na tvrdou desku, ohyb dna u hrany desky; B stojí nad ohybem nahoru (ohyb asi 90°). Vyschlý ohyb táhne B zpátky k F: opřete ji zezadu o knihu nebo krabičku a horní hranu přichyťte kolíčkem nebo páskou, ať nespadne na lepidlo. Plíšek přilepte kontaktním lepidlem na rub F do plochy G1: x 43,5–57,5, y 3,5–24 (přilnavost k oceli ověří zkušební kus). Pak už plíšek vyměnit nejde, magnet ano.`,
+        waits: [tack('tack', 'Zavadnutí lepidla G1 (plíšek)', 'manufacturer')],
         animationLinks: [animationLink('lidMagnet', 'A1'), animationLink('lidMagnet', 'A2')],
         media: [],
       },
@@ -896,6 +1292,10 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'g2',
         title: 'G2 a G2b: přepážka D1',
         body: 'D1 přilepte rubem na rub F: G2 v y 2–26 (x 4–97) přes plíšek a boky G2b v x 4–5 a 96–97 do y 61. D1 má přesně 93 mm bez vůle: na D1 i na rub F vyznačte osu x 50,5 a D1 přikládejte podle osy, zdola od y 2. Pásy G2b (1 mm) ohraničte maskovací páskou z obou stran a lepidlo naneste párátkem. Pásky strhněte hned po nanesení lepidla, ještě než přiložíte D1. Přetok nad y 26 hned setřete.',
+        waits: [
+          tack('tack', 'Zavadnutí lepidla G2 (D1)', 'manufacturer'),
+          beforePunching('cure', 'Lepení G1 a G2 před děrováním S6', 's6'),
+        ],
         animationLinks: [animationLink('lidMagnet', 'A3'), animationLink('lidMagnet', 'A4')],
         media: [],
       },
@@ -903,6 +1303,24 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'check-d1',
         title: 'Změřte polohu D1',
         body: 'Po přiložení změřte: kapsa karet mezi pásy G2b musí mít aspoň 90,5 mm a D1 musí být od hrany F aspoň 3,5 mm, jinak zasáhne do bočního švu S4. Pak přitlačte paličkou přes desku položenou na D1.',
+        records: [
+          {
+            kind: 'number',
+            id: 'card-pocket-width',
+            label: 'Kapsa karet mezi pásy G2b',
+            unit: 'mm',
+            decimals: 1,
+            target: { min: 90.5, label: 'aspoň 90,5 mm' },
+          },
+          {
+            kind: 'number',
+            id: 'd1-from-f-edge',
+            label: 'D1 od hrany F',
+            unit: 'mm',
+            decimals: 1,
+            target: { min: 3.5, label: 'aspoň 3,5 mm' },
+          },
+        ],
         animationLinks: [animationLink('lidMagnet', 'A5')],
         media: [],
       },
@@ -944,6 +1362,15 @@ export const lessons: readonly LessonDefinition[] = [
       'Prsty držící vidličku mějte u spodku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',
       'Kontaktní lepidlo používejte ve větrané místnosti a podle návodu na obalu.',
     ],
+    requires: [
+      { id: 'plate', fromLesson: L4, label: 'Plíšek K2 s přelakovanými hranami' },
+      {
+        id: 'sheet1-template',
+        fromLesson: L4,
+        label: 'Šablona z listu 1 (druhý výtisk)',
+        note: 'otvory S6',
+      },
+    ],
     media: [photo('lw-l8-hero', 'Přední stěna s přilepenou D1 a ušitým švem dna karet S6')],
   }),
 
@@ -957,7 +1384,6 @@ export const lessons: readonly LessonDefinition[] = [
     materials: [
       'odřezek usně 1,0 mm na vyrovnání schodu u horní hrany F',
       'tužka, jehla na propichování, maskovací páska',
-      'proužek otvorů S4/S5 z listu 4 (lekce 4)',
     ],
     requiredEquipment: [
       'contact-cement',
@@ -990,6 +1416,10 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidBodySides', 'B4'),
         ],
         body: 'Lepte boční pásy x 0–4 a 97–101: rub F na líc D2 (líc D2 zdrsněte) v y 18–62 a rub F na rub B v y 1,75–18. Přikládejte od ohybu dna nahoru a F rovnejte podle boků B. Mezi pásy G4 zůstane kapsa 93 mm.',
+        waits: [
+          tack('tack', 'Zavadnutí lepidla G4', 'manufacturer'),
+          beforePunching('cure', 'Lepení G4 před děrováním boků', 'punch-sew'),
+        ],
         media: [],
       },
       {
@@ -1047,6 +1477,7 @@ export const lessons: readonly LessonDefinition[] = [
       'Prsty držící vidličku mějte u spodku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',
       'Kontaktní lepidlo používejte ve větrané místnosti a podle návodu na obalu.',
     ],
+    requires: [{ id: 'side-strip', fromLesson: L4, label: 'Proužek otvorů S4/S5 z listu 4' }],
     media: [photo('lw-l9-hero', 'Sešité tělo peněženky zepředu, víčko zatím otevřené')],
   }),
 
@@ -1082,12 +1513,22 @@ export const lessons: readonly LessonDefinition[] = [
         animationLinks: [animationLink('lidBends', 'B2'), animationLink('lidBends', 'B3')],
         body: 'Houbičkou navlhčete jen pás závěsu. Víčko zavřete přes obsah a jazýček položte na přední stěnu. Kopyto ani opěrka nejsou potřeba. Rysky přehybů z lekce 4 (výchozí v 145,10 a 148,88) ukazují, kde přehyby čeká model; tvar ale dává obsah. Podívejte se, jestli přehyby vyšly zhruba u nich, a jinou polohu si zapište (poloměr přehybů 1,0 mm je předpoklad, ověří ho zkušební kus).',
         media: [],
+        records: [
+          {
+            kind: 'text',
+            id: 'hinge-creases',
+            label: 'Kde vyšly přehyby závěsu',
+            hint: 'Jen když jinde než u rysek z lekce 4.',
+            maxLength: 300,
+          },
+        ],
       },
       {
         id: 'overnight',
         title: 'Přes noc pod knihou',
         animationLinks: [animationLink('lidBends', 'B4'), animationLink('lidBends', 'B5')],
         body: 'Mezi vlhký závěs a knihu dejte potravinovou fólii a nechte peněženku zavřenou pod lehkou zátěží přes noc (12–24 h, ne u topení).',
+        waits: [overnight('Schnutí závěsu pod knihou', 'measure-k')],
         media: [
           ill(
             'lw-l10-hinge',
@@ -1101,12 +1542,24 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Změřte k',
         body: 'Ve stavech A (prázdná), B a C (6 karet, 3 bankovky, 4 × 50 Kč) změřte výšku y hrany pásu víčka od spodní hrany, zvlášť nad sloupci a nad středem. Měříte-li od horní hrany F, je y = 62,0 minus naměřená vzdálenost (výchozí; jinak výška F z listu). Spočítejte k = (y_C − y_A) / 8,62 (dělitel je v rámečku na listu 4). Model čeká A 53,9 / B 56,6 / C 62,5 mm, při nejhorším k 1,24 A 53,2 a C 63,9.',
         media: [],
+        records: [
+          {
+            kind: 'number',
+            id: LID_RECORD_IDS.kMeasured,
+            label: 'k na hotovém závěsu',
+            hint: 'k = (y_C − y_A) / dělitel z rámečku na listu 4.',
+            unit: '',
+            decimals: 2,
+            target: K_TARGET,
+          },
+        ],
       },
       {
         id: 'k-too-high',
         title: 'Když vyjde k nad 1,24',
         body: 'Zapište k. Pro finální kus ho zadejte ve formuláři „Listy pro vaši kůži“ na stránce Listy střihu (pole k, spolu se vším, co platí, jako v lekci 2) a vygenerujte listy znovu: zvedne se dno karet a výška. Zkušební kus mezitím dokončete, magnet se umisťuje až na hotovém kuse. Finální kus řežte až z nových listů.',
         media: [],
+        recalls: [{ fieldId: LID_RECORD_IDS.kMeasured, label: 'Vaše k' }],
       },
       {
         id: 'lid-behaviour',
@@ -1174,6 +1627,16 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'find-plate',
         title: 'Najděte plíšek a označte polohu magnetu',
         body: `${NUMBERS_NOTE} Vložte obsah stavu B: 2 staré karty, 1 bankovku nebo papír 0,7 mm z lekce 10 (ne kartu), bez mincí. Zkušebním magnetem najděte po líci F hrany plíšku (výchozí y 3,5 a 24,0). Značku magnetu (výchozí y 11,9) odměřte posuvkou od spodní hrany, označte páskou a po nalepení pásky přeměřte. Okno lepení je ve výchozím střihu 11,73–12,13, s přepážkami 0,8 jen 11,50–11,63. Zavřete víčko a značku přeneste ryskami na boky jazýčku.`,
+        records: [
+          {
+            kind: 'number',
+            id: 'magnet-mark-y',
+            label: 'Značka magnetu od spodní hrany',
+            hint: 'Po nalepení pásky přeměřená. Okno lepení je v rámečku na listu 4.',
+            unit: 'mm',
+            decimals: 2,
+          },
+        ],
         animationLinks: [animationLink('lidMagnet', 'B1')],
         media: [],
       },
@@ -1181,6 +1644,16 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'magnet-dry-test',
         title: 'Nanečisto: který magnet',
         body: 'Sílu magnetu můžete vyzkoušet nanečisto (orientačně, rozhodne až zkouška Z-1): magnet s kouskem kozinky přes něj přichyťte tenkou páskou na rub jazýčku na značku, víčko zavřete, zatřeste, otočte dnem vzhůru a otevřete jedním prstem za špičku. Postupně zkuste Ø 8 × 1, 8 × 1,5 a 8 × 2. Výchozí je magnet 1,5 mm. Vyberete-li jinou tloušťku, zadejte ji ve formuláři „Listy pro vaši kůži“ na stránce Listy střihu (pole tloušťka magnetu, spolu se vším, co platí, jako v lekci 2). Lepte, až když aplikace listy vytvoří – pak s tímto magnetem kontroly prošly.',
+        records: [
+          {
+            kind: 'number',
+            id: LID_RECORD_IDS.magnetThickness,
+            label: 'Tloušťka vybraného magnetu Ø 8',
+            hint: 'Ø 8 × 1, 8 × 1,5 nebo 8 × 2; výchozí 1,5.',
+            unit: 'mm',
+            decimals: 1,
+          },
+        ],
         animationLinks: [animationLink('lidMagnet', 'B2')],
         media: [],
       },
@@ -1188,6 +1661,15 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'epoxy',
         title: 'Magnet epoxidem',
         body: 'Rub konce jazýčku zdrsněte. Magnet přilepte dvousložkovým epoxidem středem na spojnici rysek značky a na osu jazýčku a nechte ztuhnout podle návodu (orientačně 30 min, ověřte), ať se při lepení L1 neposune.',
+        waits: [
+          {
+            id: 'set',
+            label: 'Ztuhnutí epoxidu pod magnetem',
+            minutes: 30,
+            basis: 'manufacturer',
+            blocksStepId: 'lining',
+          },
+        ],
         animationLinks: [animationLink('lidMagnet', 'B3'), animationLink('lidMagnet', 'B4')],
         media: [],
       },
@@ -1195,6 +1677,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'lining',
         title: 'Podšívka L1 přes magnet',
         body: 'Po ztuhnutí epoxidu přiložte na rub šablonu konce jazýčku křížkem na střed magnetu a tužkou udělejte rysku horní hrany L1. Pak natřete kontaktním lepidlem rub jazýčku kolem magnetu i L1, nechte zavadnout a L1 přiložte horní hranou na rysku 10 mm nad středem magnetu (šablona z listu 4). Přitlačte prsty nebo převalujte kolíkem. Přes magnet paličkou netlučte – neodym se může odštípnout.',
+        waits: [tack('tack', 'Zavadnutí lepidla pod L1', 'manufacturer')],
         animationLinks: [animationLink('lidMagnet', 'B5'), animationLink('lidMagnet', 'B6')],
         media: [
           ill(
@@ -1209,6 +1692,15 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Nechte 24 h vytvrdit',
         body: 'Peněženku položte zády na stůl a víčko narovnejte vodorovně jako prodloužení zad (ne zavřené, ne přehnuté přes záda). Pás víčka lehce zatižte knihou mimo magnet; magnet musí být aspoň pár cm od plíšku. Bez zátěže víčko nenechávejte, samo se zavře. Nechte 24 h vytvrdit, teprve pak šijte S7 a zkoušejte držení. Závěs nenavlhčujte (jestli rovná poloha nezmění jeho tvar, ukáže zkouška Z-2).',
         animationLinks: [animationLink('lidMagnet', 'B7')],
+        waits: [
+          {
+            id: 'cure',
+            label: 'Vytvrzení magnetu a L1',
+            minutes: 24 * 60,
+            basis: 'text',
+            blocksStepId: 's7',
+          },
+        ],
         media: [],
       },
       {
@@ -1261,6 +1753,15 @@ export const lessons: readonly LessonDefinition[] = [
       'Kontaktní lepidlo používejte ve větrané místnosti a podle návodu na obalu.',
       'Nůž veďte tahem od prstů volné ruky.',
       'Prsty držící výsečník nebo vidličku mějte u spodku, palička dopadá na horní konec.',
+    ],
+    requires: [
+      {
+        id: 'tongue-template',
+        fromLesson: L2,
+        label: 'Šablona konce jazýčku z listu 4',
+        note: 'ryska L1, ořez špičky a otvory S7',
+      },
+      { id: 'lining-blank', fromLesson: L4, label: 'Přířez podšívky L1 24 × 22 mm' },
     ],
     media: [photo('lw-l11-hero', 'Jazýček s podšívkou L1 a švem S7, magnet pod podšívkou')],
   }),
@@ -1317,11 +1818,38 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Z-1 Magnet',
         body: 'Ve stavech A, B a C víčko zavřete, zatřeste a otočte dnem vzhůru, pak ho otevřete jedním prstem za špičku. Projde, když víčko zůstane zavřené (i proti pružení závěsu) a otevře se jedním prstem. Drží slabě nebo moc silně: vyměňte magnet za silnější nebo slabší Ø 8 (další krok) a zkuste znovu. Nepomůže-li ani to, dejte do finálního kusu plíšek z pozinkovaného plechu 0,8 mm místo 0,5 (lekce 4 a 8; rozměr z listu 3 platí, listy se negenerují; peněženka je u magnetu o 0,3 mm tlustší). Plech 0,8 v nákupním plánu není, v obchodě ho vyzkoušejte magnetem. Na zkušebním kuse to vyzkoušet nejde – ověřte to nejlépe dalším zkušebním kusem.',
         media: [],
+        records: [
+          testResult('z1-result', 'Výsledek Z-1', [
+            { value: 'weak', label: 'Drží slabě' },
+            { value: 'strong', label: 'Drží moc silně' },
+          ]),
+        ],
       },
       {
         id: 'magnet-swap',
         title: 'Výměna magnetu (jen když Z-1 neprojde)',
         body: 'Postup je neověřený, zkuste ho napřed na zkušebním kuse. Plíšek vyměnit nejde, magnet ano. (1) Stehy S7 na líci přestřihněte malými nůžkami nebo páráčkem (kůži nenařízněte) a nit vytáhněte; otvory použijete znovu. (2) L1 pomalu odlepte od horní hrany ke špičce a počítejte s novou L1 z nebarvené kozinky (přířez 24 × 22), stará se nejspíš roztrhne. (3) Magnet sundejte bez tlučení a bez páčení ostrou hranou, neodym je křehký. Zbytky lepidla opatrně obruste a rub znovu zdrsněte. (4) Nový magnet Ø 8: silnější (vyšší třída nebo tlustší), nebo slabší (nižší třída nebo tenčí); třídu, tloušťku a sílu ověřte u prodejce. Má-li jinou tloušťku než 1,5 mm, před lepením ji zadejte ve formuláři „Listy pro vaši kůži“ jako v lekci 11 a lepte, až když aplikace listy vytvoří. (5) Magnet přilepte epoxidem na stejné místo (osa x 50,5, 7,0 mm nad špičkou), nechte ztuhnout a přilepte novou L1 kontaktním lepidlem s přesahem (přes magnet netlučte). L1 ořízněte podle hran jazýčku (jazýček znovu neřežte) a znovu zbruste klín jen mezi ryskou a špičkou (lekce 11). (6) Po 24 h propíchněte z líce jehlou starými otvory S7 i skrz L1 a ušijte S7 znovu; u tlustšího magnetu zesilte podložku o rozdíl tloušťky. Hrany jazýčku znovu vybruste, zkoste a vyleštěte. Pak zopakujte Z-1 a po několika dnech používání prohlédněte šev S7.',
+        recalls: [
+          { fieldId: 'z1-result', label: 'Výsledek Z-1' },
+          {
+            fieldId: LID_RECORD_IDS.magnetThickness,
+            label: 'Magnet v zápisníku (lekce 11, po výměně ho tam přepište)',
+          },
+        ],
+        waits: [
+          {
+            id: 'set',
+            label: 'Ztuhnutí epoxidu pod novým magnetem',
+            minutes: 30,
+            basis: 'manufacturer',
+          },
+          {
+            id: 'cure',
+            label: 'Vytvrzení nového magnetu a L1',
+            minutes: 24 * 60,
+            basis: 'text',
+          },
+        ],
         animationLinks: [
           animationLink('lidMagnet', 'vymena'),
           animationLink('saddleStitch', 'E2'),
@@ -1335,24 +1863,49 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Z-2 Závěs',
         body: 'Otevřené víčko musí jít palcem držící ruky udržet tak, že bankovka jde okénkem vysunout a minci vzít; samo stát nemusí. Po několika dnech používání prohlédněte líc i rub pásu závěsu. Praskliny: finální kus v záloze A (P1 0,8); až když ani ta nestačí, záloha B2 – ztenčení závěsu na 0,6 mm, v aplikaci zaškrtněte B2 („--skive-hinge 0.6“), postup v lekci 5.',
         media: [],
+        records: [
+          testResult('z2-result', 'Výsledek Z-2', [
+            { value: 'cracks-backup-a', label: 'Praskliny: finální kus v záloze A' },
+            { value: 'cracks-backup-b2', label: 'Praskliny i v záloze A: záloha B2' },
+          ]),
+        ],
       },
       {
         id: 'z3',
         title: 'Z-3 Výřez pro palec',
         body: 'Zopakujte v kůži gesta z papírového modelu: vysunout přední kartu, zadní po vyndání předních, zavírání ve stavu A, s 1 kartou a s jazýčkem posunutým o 3 mm. Po dnech používání zkontrolujte, jestli se horní hrana F u výřezu neodklápí a na víčku nevzniká důlek. Když ano, výřez upravte (zaoblete, zkoste rub dna výřezu, zužte), nebo ho ve finálním kusu vynechte.',
         media: [],
+        records: [
+          testResult('z3-result', 'Výsledek Z-3', [
+            { value: 'adjust', label: 'Výřez upravit' },
+            { value: 'omit', label: 'Ve finálním kusu vynechat' },
+          ]),
+        ],
       },
       {
         id: 'z4',
         title: 'Z-4 Retence',
         body: 'Stav B zavřete a 30× prudce zatřeste dnem vzhůru. Pak totéž s 1 Kč za D2 ve stavu A i B a s 0 kartami a 1 × 5000 Kč. Projde, když se nic nepřesune do jiného oddílu ani nevypadne.',
         media: [],
+        records: [
+          testResult('z4-result', 'Výsledek Z-4', [
+            { value: 'fail', label: 'Něco se přesunulo nebo vypadlo' },
+          ]),
+        ],
       },
       {
         id: 'final-piece',
         title: 'Finální kus',
         body: 'Finální kus postavte stejným postupem s tím, co na zkušebním kuse fungovalo (vyměněný magnet, jiná varianta, upravený výřez). Když se varianta změnila až po zkušebním kuse, je v ní finální kus neověřený – nejlépe postavte další zkušební kus. Kůži na něj nákupní plán nepočítá: dokupte stejnou useň na další přířez P1 110 × 240 mm (v záloze A useň 0,8). Na finálním kuse stačí zkontrolovat, že víčko drží, otevře se jedním prstem a otevřené jde palcem udržet.',
         media: [],
+        recalls: [
+          variantRecall,
+          { fieldId: LID_RECORD_IDS.magnetThickness, label: 'Magnet (lekce 11)' },
+          { fieldId: 'z1-result', label: 'Z-1 magnet' },
+          { fieldId: 'z2-result', label: 'Z-2 závěs' },
+          { fieldId: 'z3-result', label: 'Z-3 výřez pro palec' },
+          { fieldId: 'z4-result', label: 'Z-4 retence' },
+        ],
       },
     ],
     checkpoints: [

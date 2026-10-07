@@ -75,6 +75,8 @@ export default defineConfig(({ command, mode }) => {
           navigateFallback: '/index.html',
           navigateFallbackDenylist: [/^\/api\//, /^\/animace\//],
           cleanupOutdatedCaches: true,
+          // Kliknutí na notifikaci doběhlého časovače otevře krok lekce (public/sw-notifications.js).
+          importScripts: ['/sw-notifications.js'],
           clientsClaim: false,
           skipWaiting: false,
         },

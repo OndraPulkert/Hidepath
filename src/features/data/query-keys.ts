@@ -8,6 +8,9 @@ export const queryKeys = {
   progress: (scope: string, projectSlug: string) => [scope, 'progress', projectSlug] as const,
   lessonNotes: (scope: string, projectSlug: string) =>
     [scope, 'lesson-notes', projectSlug] as const,
+  lessonRecords: (scope: string, projectSlug: string) =>
+    [scope, 'lesson-records', projectSlug] as const,
+  prepChecks: (scope: string, projectSlug: string) => [scope, 'prep-checks', projectSlug] as const,
 };
 
 /** Mutace v jednom scope běží sériově – zabrání dvěma souběžným INSERTům téže entity. */
@@ -17,6 +20,12 @@ export const mutationScopes = {
   progress: (scope: string, projectSlug: string) => ({ id: `${scope}:progress:${projectSlug}` }),
   lessonNotes: (scope: string, projectSlug: string) => ({
     id: `${scope}:lesson-notes:${projectSlug}`,
+  }),
+  lessonRecords: (scope: string, projectSlug: string) => ({
+    id: `${scope}:lesson-records:${projectSlug}`,
+  }),
+  prepChecks: (scope: string, projectSlug: string) => ({
+    id: `${scope}:prep-checks:${projectSlug}`,
   }),
 };
 

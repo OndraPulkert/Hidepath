@@ -47,7 +47,6 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 30,
     goal: 'Složit papírový model se skutečným obsahem a zapsat výsledky, než začnete řezat kůži.',
     materials: [
-      'list Papírový model na papíře 160 g (výchozí je pro minci 50 Kč a kůži 1,2 mm; jiné varianty viz první krok)',
       'tenká lepenka (krabice od cereálií)',
       'nůžky, lepidlo v tyčince a lepicí páska',
       'karty a bankovky, které opravdu nosíte',
@@ -108,12 +107,97 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Zapište výsledky',
         body: 'Zapište: (1) o kolik mm a kterým směrem je propíchnuté místo od vytištěné značky patice a kolik jazyka za ním zbývá (cíl 11 mm + rezerva); (2) kolik mm karty je vidět ve výřezu (cíl 19 mm) a jestli jde palcem vysunout; (3) které bankovky jdou napůl a kolik mm přečnívají nahoře a v boku; (4) jak daleko nad horní hranou kapsy končí jazyk – cíl asi 16 mm, u mince 40 mm asi 10 mm (jazyk je zatím nezkrácený; v kůži po zkrácení to bude asi 21 mm, u mince 40 mm asi 15 mm); (5) kolik karet a jak silné bankovky opravdu nosíte, oproti výchozím 4 × 0,76 mm a 2 mm.',
         media: [],
+        records: [
+          {
+            kind: 'text',
+            id: 'model-snap-offset',
+            label: '(1) Patice: o kolik mm a kterým směrem od vytištěné značky',
+            maxLength: 200,
+          },
+          {
+            kind: 'number',
+            id: 'model-tongue-behind-snap',
+            label: '(1) Jazyk za propíchnutým místem',
+            unit: 'mm',
+            min: 0,
+            decimals: 1,
+            target: { min: 11, label: 'cíl 11 mm + rezerva' },
+          },
+          {
+            kind: 'number',
+            id: 'model-card-visible',
+            label: '(2) Karta vidět ve výřezu',
+            hint: 'Cíl 19 mm.',
+            unit: 'mm',
+            min: 0,
+            decimals: 1,
+          },
+          {
+            kind: 'choice',
+            id: 'model-card-thumb',
+            label: '(2) Jde karta palcem vysunout?',
+            options: [
+              { value: 'ano', label: 'Ano' },
+              { value: 'ne', label: 'Ne' },
+            ],
+          },
+          {
+            kind: 'text',
+            id: 'model-bills',
+            label: '(3) Bankovky: které jdou napůl a kolik mm přečnívají nahoře a v boku',
+            maxLength: 300,
+          },
+          {
+            kind: 'number',
+            id: 'model-tongue-above-pocket',
+            label: '(4) Konec jazyka nad horní hranou kapsy',
+            hint: 'Cíl asi 16 mm, u mince 40 mm asi 10 mm (jazyk je zatím nezkrácený).',
+            unit: 'mm',
+            decimals: 1,
+          },
+          {
+            kind: 'number',
+            id: 'model-card-count',
+            label: '(5) Kolik karet nosíte',
+            hint: 'Výchozí 4 karty po 0,76 mm.',
+            unit: 'ks',
+            min: 0,
+            decimals: 0,
+          },
+          {
+            kind: 'number',
+            id: 'model-bill-thickness',
+            label: '(5) Tloušťka bankovek',
+            hint: 'Výchozí 2 mm.',
+            unit: 'mm',
+            min: 0,
+            decimals: 1,
+          },
+        ],
       },
       {
         id: 'decide',
         title: 'Rozhodněte, jestli pokračovat',
         body: 'Když se obsah nevejde, karta nejde palcem vysunout nebo jazyk nedosáhne přes značku patice, kůži neřežte a zapište, co nesedí a o kolik mm. Nejdřív vylučte chybu tisku: znovu změřte úsečku (50 mm) a zkontrolujte, že máte list pro svou kůži a minci; případně vytiskněte list znovu a model složte znovu. Když model nesedí ani tak, střih pro svůj obsah nepoužívejte – jiný počet karet ani tloušťku bankovek aplikace zatím přepočítat neumí. Pokračujte, až model se vším, co nosíte, sedí.',
         media: [],
+        records: [
+          {
+            kind: 'choice',
+            id: 'model-fits',
+            label: 'Sedí model se vším, co nosíte?',
+            options: [
+              { value: 'sedi', label: 'Sedí, pokračuji' },
+              { value: 'nesedi', label: 'Nesedí, kůži neřežu' },
+            ],
+          },
+          {
+            kind: 'text',
+            id: 'model-mismatch',
+            label: 'Co nesedí a o kolik mm',
+            hint: 'Jen když model nesedí.',
+            maxLength: 300,
+          },
+        ],
       },
     ],
     checkpoints: [
@@ -139,6 +223,16 @@ export const lessons: readonly LessonDefinition[] = [
       'Nezapsané výsledky: bez čísel z modelu jen odhadujete, jestli se obsah vejde.',
     ],
     safety: ['Nůžky odkládejte hroty od sebe, ne přes okraj stolu.'],
+    prints: [
+      {
+        source: 'pattern-sheets',
+        sheetId: 'papirovy-model-kuze-1-2',
+        copies: 1,
+        purpose:
+          'papírový model na lepenku; výchozí je pro minci 50 Kč a kůži 1,2 mm, jiné varianty viz první krok',
+        paper: 'papír 160 g, A4, 100 %',
+      },
+    ],
     media: [
       {
         id: 'cch-l1-hero',
@@ -157,7 +251,6 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 30,
     goal: 'Vyvrtat formu, vytvarovat na odřezku důlek na minci a vyzkoušet, že prstenec 3,75 mm kolem okna Ø 20 mm minci udrží.',
     materials: [
-      'list KAPSA ve 3 výtiscích (u mince 40 mm varianta pro 40 mm): na vrtání formy, na značky na líci a na šablonu na rub; když zkouška okna Ø 20 mm nevyjde, ještě list Kapsa – záložní okno Ø 18 mm',
       'dvě desky na formu a víko, aspoň 61,5 × 61,5 mm (ideálně 8 × 8 cm; u mince 40 mm aspoň 74 × 74 mm) a aspoň 8 mm silné (překližka, tvrdý plast nebo bukové prkénko asi 1,5 cm, např. Orion), a odpadní prkno pod vrtání',
       'aku vrtačka s vykružovací pilou Ø 32 mm (např. Wolfcraft bimetal), u mince 40 mm Ø 44 nebo 45 mm; Forstnerův vrták jen Ø 32 mm (30 ani 35 mm ze sady nesedí)',
       '2 odřezky třísločiněné kůže 1,2 mm, každý aspoň 57,5 × 57,5 mm (u mince 40 mm 70 × 70 mm); druhý na případné opakování zkoušky okna. Třetí stejný odřezek jen tehdy, když mince projde oknem Ø 20 mm i podruhé (u sestavy z nákupního plánu z kusu Blu A5, viz poslední krok)',
@@ -249,6 +342,16 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Nechte zaschnout a prohlédněte důlek',
         body: 'Nechte úplně zaschnout, nejlépe přes noc. Rozepněte a zkontrolujte: okraj důlku je bez zvrásnění a mince jde zasunout i vysunout. Hloubka: odřezek položte rubem nahoru a minci vložte do důlku – nesmí vyčnívat nad okolní rub, má být v rovině nebo níž. Když vyčnívá, je důlek mělký: kůže byla málo vlhká nebo svěrky slabě utažené. Zkušební otvory švu mají zůstat kulaté, ne protažené nebo potrhané.',
         animationLinks: [animationLink('kapsa', 'D4')],
+        waits: [
+          {
+            id: 'dry-overnight',
+            label: 'Schnutí důlku přes noc',
+            minutes: 720,
+            maxMinutes: 1440,
+            basis: 'text',
+            blocksStepId: 'test-window-retention',
+          },
+        ],
         media: [
           {
             id: 'cch-l2-dimple',
@@ -265,6 +368,18 @@ export const lessons: readonly LessonDefinition[] = [
         printLink: 'pattern-sheets',
         animationLinks: [animationLink('kapsa', 'E1')],
         media: [],
+        records: [
+          {
+            kind: 'choice',
+            id: 'window-diameter',
+            label: 'Okno, se kterým zkouška vyšla',
+            options: [
+              { value: 'okno-20', label: 'Ø 20 mm' },
+              { value: 'okno-18', label: 'Ø 18 mm' },
+              { value: 'okno-32', label: 'Ø 32 mm (mince 40 mm)' },
+            ],
+          },
+        ],
       },
     ],
     checkpoints: [
@@ -310,6 +425,22 @@ export const lessons: readonly LessonDefinition[] = [
       'Aku vrtačku používejte podle návodu výrobce. Desku vždy upněte svěrkou ke stolu, nedržte ji v ruce; prsty mimo vrták.',
       'Nůž veďte tahem od prstů volné ruky.',
       'Prsty držící výsečník nebo vidličku mějte u spodku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',
+    ],
+    prints: [
+      {
+        source: 'pattern-sheets',
+        sheetId: 'kapsa',
+        copies: 3,
+        purpose:
+          'na vrtání formy, na značky na líci a na šablonu na rub (u mince 40 mm varianta pro 40 mm)',
+      },
+      {
+        source: 'pattern-sheets',
+        sheetId: 'kapsa-okno-18',
+        copies: 1,
+        purpose: 'šablona na rub s oknem Ø 18 mm',
+        condition: 'zkouška okna Ø 20 mm nevyjde (poslední krok)',
+      },
     ],
     media: [
       {
@@ -374,6 +505,19 @@ export const lessons: readonly LessonDefinition[] = [
         body: 'Šídlem označte na odřezku bod 9,5 mm od okraje – stejně daleko bude dřík od horní hrany předního panelu. Když návod vyžaduje otvor, řiďte se jím. Když velikost neuvádí, vysekněte otvor výsečníkem 2 mm a přiložte dřík: má projít těsně. Když neprojde, zkuste 3 mm. V moc velkém otvoru se dřík viklá.',
         animationLinks: [animationLink('snap', 'A2')],
         media: [],
+        records: [
+          {
+            kind: 'choice',
+            id: 'post-hole-punch',
+            label: 'Otvor pro dřík: který výsečník sedl',
+            options: [
+              { value: 'vysecnik-2', label: '2 mm' },
+              { value: 'vysecnik-3', label: '3 mm' },
+              { value: 'podle-navodu', label: 'Jiný podle návodu' },
+              { value: 'bez-otvoru', label: 'Bez otvoru' },
+            ],
+          },
+        ],
       },
       {
         id: 'set-snap-post',
@@ -400,6 +544,19 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Osaďte kloboučkovou polovinu',
         body: 'Na druhém odřezku osaďte klobouček se zdířkou do propíchnutého bodu, aplikátorem a paličkou jako dřík: klobouček na líc, zdířku na rub. Když návod vyžaduje otvor a neuvádí velikost, začněte výsečníkem 2 mm, a jen když trn neprojde, vezměte 3 mm. Zacvakněte druk na dřík a zkontrolujte, že drží, jde zavřít i otevřít a okraje odřezků sedí jako při obtisku. Zapište si, který výsečník sedl (nebo žádný).',
         animationLinks: [animationLink('snap', 'A5')],
+        records: [
+          {
+            kind: 'choice',
+            id: 'cap-hole-punch',
+            label: 'Otvor pro klobouček: který výsečník sedl',
+            options: [
+              { value: 'vysecnik-2', label: '2 mm' },
+              { value: 'vysecnik-3', label: '3 mm' },
+              { value: 'podle-navodu', label: 'Jiný podle návodu' },
+              { value: 'bez-otvoru', label: 'Žádný' },
+            ],
+          },
+        ],
         media: [
           {
             id: 'ilustrace-druk-l3',
@@ -417,6 +574,17 @@ export const lessons: readonly LessonDefinition[] = [
         body: 'Na rubu prvního odřezku změřte průměr příruby dříku (měřítkem nebo pravítkem). Smí mít nejvýš 11 mm, jinak by na rubu tlačila na karty. Když má víc, střih s tímto drukem nepoužívejte.',
         animationLinks: [animationLink('snap', 'A7')],
         media: [],
+        records: [
+          {
+            kind: 'number',
+            id: 'flange-diameter',
+            label: 'Průměr příruby dříku',
+            unit: 'mm',
+            min: 0,
+            decimals: 1,
+            target: { max: 11, label: 'nejvýš 11 mm' },
+          },
+        ],
       },
     ],
     checkpoints: [
@@ -569,6 +737,21 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Přeložte kolem obsahu',
         body: 'Zabalené karty položte na rub předního (prostředního) panelu a přeložte přes ně vnitřní panel ohybem B. Na líc vnitřního panelu položte přeložený papír místo bankovek a přes všechno přeložte zadní panel ohybem A (pořadí: přední – karty – vnitřní – bankovky – zadní). Ohyby tvarujte do smyčky, ne na ostro – nasucho nebo na ostro líc praská. Přejeďte rozhrnovačkou a sepněte sponkami přes podložku. Než necháte zaschnout, zkontrolujte, že otvory na sousedních panelech lícují. Když ne, dokud je kůže vlhká, ohyb rozevřete a přeložte se smyčkou posunutou tak, aby seděly; malý zbytek srovnáte při lepení jehlami. Když nesedí ani pak, zapište si, o kolik mm a u kterého ohybu (příčinou bývá odměření teček; co s větším posunem, ověřte na odřezku). Zapište si i, jak tuhý je ohyb A. Nechte zaschnout.',
         animationLinks: [animationLink('pouchFold', 'B2'), animationLink('bottomHoles', 'E2')],
+        records: [
+          {
+            kind: 'text',
+            id: 'practice-holes-offset',
+            label: 'Otvory nelícují: o kolik mm a u kterého ohybu',
+            hint: 'Jen když nesedí ani po přeložení.',
+            maxLength: 200,
+          },
+          {
+            kind: 'text',
+            id: 'fold-a-stiffness',
+            label: 'Jak tuhý je ohyb A',
+            maxLength: 200,
+          },
+        ],
         media: [
           {
             id: 'cch-l4-fold',
@@ -585,6 +768,22 @@ export const lessons: readonly LessonDefinition[] = [
         body: 'Vyjměte obsah. Zaschlé ohyby rozevřete jen zhruba do pravého úhlu, ne úplně naplocho – suchý ohyb A by mohl prasknout. Dva spoje lepte po jednom. Nejdřív přední s vnitřním: zdrsněte smirkem rub předního a rub vnitřního panelu v pruhu 0–3,5 mm od hrany (ne výš než čára švu), naneste lepidlo v tenké rovnoměrné vrstvě a nechte odvětrat podle návodu. Přeložte zpátky, zarovnejte jehlami přes otvory a přitiskněte. Pak stejně vnitřní se zadním: líc vnitřního a rub zadního panelu.',
         animationLinks: [animationLink('pouchFold', 'C1')],
         media: [],
+        waits: [
+          {
+            id: 'glue-front-inner',
+            label: 'Odvětrání lepidla: přední s vnitřním',
+            minutes: 10,
+            maxMinutes: 15,
+            basis: 'manufacturer',
+          },
+          {
+            id: 'glue-inner-back',
+            label: 'Odvětrání lepidla: vnitřní se zadním',
+            minutes: 10,
+            maxMinutes: 15,
+            basis: 'manufacturer',
+          },
+        ],
       },
       {
         id: 'saddle-stitch-reminder',
@@ -627,6 +826,33 @@ export const lessons: readonly LessonDefinition[] = [
         body: 'Jen u barvené kůže (sestava z nákupního plánu Blu). Na hraně odřezku vyzkoušejte barvu na hrany: hranu srovnejte smirkem, barvu naneste podle návodu, nechte zaschnout a zaleštěte. Zkontrolujte, že nezatekla na líc. Zapište si počet vrstev a dobu schnutí – podle toho postupujte v lekcích 5, 6 a 8.',
         animationLinks: [animationLink('edges', 'C1'), animationLink('edges', 'D1')],
         media: [],
+        waits: [
+          {
+            id: 'edge-paint-dry',
+            label: 'Schnutí barvy na hrany',
+            minutes: 20,
+            maxMinutes: 30,
+            basis: 'manufacturer',
+          },
+        ],
+        records: [
+          {
+            kind: 'number',
+            id: 'edge-paint-coats',
+            label: 'Počet vrstev barvy',
+            unit: '×',
+            min: 1,
+            decimals: 0,
+          },
+          {
+            kind: 'number',
+            id: 'edge-paint-dry-minutes',
+            label: 'Doba schnutí barvy',
+            unit: 'min',
+            min: 1,
+            decimals: 0,
+          },
+        ],
       },
     ],
     checkpoints: [
@@ -675,6 +901,15 @@ export const lessons: readonly LessonDefinition[] = [
       'Kontaktní lepidlo na rozpouštědlové bázi používejte ve větrané místnosti.',
       'Jen u kůže 1,5 mm: ztenčovač držte skoro naplocho, prsty volné ruky mimo dráhu čepele.',
     ],
+    prints: [
+      {
+        source: 'practice-sheets',
+        sheetId: 'cvicny-prouzek-kuze-1-2',
+        copies: 1,
+        purpose: 'obrys proužku, čáry ohybů a tečky dna (u kůže 1,5 mm varianta pro 1,5 mm)',
+        paper: 'A4, 100 %',
+      },
+    ],
     media: [
       {
         id: 'cch-l4-hero',
@@ -694,7 +929,6 @@ export const lessons: readonly LessonDefinition[] = [
     goal: 'Vyříznout pás podle šablony na líci, narýsovat čáry ohybů (u kůže 1,5 mm i ztenčení) a prosekat otvory dna.',
     materials: [
       'kůže na pás, aspoň A4: třísločiněná 1,2 mm (výchozí, např. Blu nebo Verde), nebo 1,5 mm (pak se ohyb B ztenčuje)',
-      'šablona PÁS pro vaši kůži a minci (viz první krok)',
       'tužka HB nebo 2B',
       'Tokonole nebo gum tragacanth na zapečetění rubu',
       'barva na hrany (u barvené kůže)',
@@ -837,6 +1071,19 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Dokončete skryté hrany a zapečeťte rub',
         animationLinks: [animationLink('edges', 'F1')],
         body: 'Hrany, na které po složení nedosáhnete, teď obarvěte (u barvené kůže, jak jste zkoušeli v lekci 4) a zaleštěte: horní a volnou svislou hranu vnitřního panelu, celý oblouk výřezu na prst a jazyk. Pak zapečeťte rub vnitřního panelu – je vidět výřezem. Pruh 0–3,5 mm od dolní hrany nechte volný, bude se lepit: přelepte maskovací páskou, horní okraj pásky na čáru švu. Pastu (Tokonole nebo gum tragacanth) naneste na rub v tenké vrstvě a přetřete leštítkem (hustotu a počet vrstev ověřte na odřezku). Na líc ji nedávejte – nechá lesklou skvrnu. Po zaschnutí pásku pomalu strhněte.',
+        waits: [
+          {
+            id: 'edge-paint-dry',
+            label: 'Schnutí barvy na hrany',
+            minutes: 20,
+            maxMinutes: 30,
+            basis: 'manufacturer',
+          },
+        ],
+        recalls: [
+          { fieldId: 'edge-paint-coats', label: 'Vrstvy barvy z lekce 4' },
+          { fieldId: 'edge-paint-dry-minutes', label: 'Schnutí barvy z lekce 4' },
+        ],
         media: [
           {
             id: 'cch-l5-sealed',
@@ -893,6 +1140,16 @@ export const lessons: readonly LessonDefinition[] = [
       'Vidličky držte u spodku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',
       'Jen u kůže 1,5 mm: ztenčovač držte skoro naplocho, prsty volné ruky mimo dráhu čepele.',
     ],
+    prints: [
+      {
+        source: 'pattern-sheets',
+        sheetId: 'sablona-kuze-1-2',
+        copies: 1,
+        purpose:
+          'šablona PÁS na líc kůže, rozřeže se; výchozí je pro minci 50 Kč a kůži 1,2 mm, jiné varianty viz první krok',
+        paper: 'nejlépe matný papír 120 g, A4, 100 %',
+      },
+    ],
     media: [
       {
         id: 'cch-l5-hero',
@@ -912,7 +1169,6 @@ export const lessons: readonly LessonDefinition[] = [
     goal: 'Vytvarovat kapsu s mincí z kůže 1,2 mm, vyseknout okno, přišít kapsu na přední panel a osadit dřík druku.',
     materials: [
       'kůže 1,2 mm na kapsu, aspoň 57,5 × 57,5 mm (u mince 40 mm 70 × 70 mm), i když je pás z 1,5 mm',
-      'list KAPSA (u mince 40 mm varianta pro 40 mm): 1 výtisk na značky na líci, další na formu a šablonu s oknem jen tehdy, když je nemáte z lekce 2 (pro okno Ø 18 mm list Kapsa – záložní okno Ø 18 mm)',
       'barva na hrany (u barvené kůže)',
       'mince (výchozí 50 Kč) a potravinová fólie',
       'nit 0,6 mm, asi 0,8 m (23 otvorů, u mince 40 mm 31)',
@@ -959,6 +1215,9 @@ export const lessons: readonly LessonDefinition[] = [
         body: 'Kůži otočte. Konce os spojte na rubu tužkou podle pravítka a osy protáhněte až k okrajům kůže. Vezměte šablonu s oknem z lekce 2 v průměru, kterým budete sekat (Ø 20 mm nebo Ø 18 mm, u mince 40 mm Ø 32 mm). Když ji nemáte, vytiskněte list znovu (odkaz pod krokem), vystřihněte ho přesně po obrysu kapsy a vysekněte do něj okno výsečníkem postaveným na vytištěnou kružnici. Šablonu položte na RUB a zarovnejte na osy. Obrys obtáhněte šídlem nebo tužkou, vnitřní hranu okna lehce tužkou. Obrys teď neřežte. Všechno udělejte před navlhčením.',
         printLink: 'pattern-sheets',
         animationLinks: [animationLink('kapsa', 'C1')],
+        recalls: [
+          { fieldId: 'window-diameter', label: 'Okno, se kterým vám vyšla zkouška v lekci 2' },
+        ],
         media: [],
       },
       {
@@ -966,6 +1225,16 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Vytvarujte důlek na formě',
         body: 'Jako v lekci 2: minci zabalte do fólie, kůži navlhčete houbičkou a počkejte, až povrch začne znovu mírně světlat. Položte ji lícem dolů na formu (zaoblenou hranou otvoru nahoru), osy na rubu na osy desky, a minci na rub nad otvor. Přiklopte víkem a rovnoměrně stáhněte dvěma svěrkami proti sobě. Nechte úplně zaschnout, nejlépe přes noc. Zkontrolujte: okraj důlku je bez zvrásnění a mince vložená z rubu nad okolní rub nevyčnívá.',
         animationLinks: [animationLink('kapsa', 'D1')],
+        waits: [
+          {
+            id: 'dry-overnight',
+            label: 'Schnutí kapsy přes noc',
+            minutes: 720,
+            maxMinutes: 1440,
+            basis: 'text',
+            blocksStepId: 'cut-outline-and-window',
+          },
+        ],
         media: [
           {
             id: 'cch-l6-form',
@@ -981,6 +1250,9 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Vyřízněte obrys a vysekněte okno',
         body: 'Zaschlou kapsu položte lícem dolů zpátky na formu: důlek do otvoru, osy na osy. Rozmazané čáry nejdřív obtáhněte podle šablony. Obrys vyřízněte nožem 2–3 lehkými tahy, kůži přidržujte na rovné části (desku můžete chránit kartonem s otvorem Ø 32 mm, u mince 40 mm Ø 44 mm). Formu položte na děrovací desku a do otvoru pod důlek postavte špalík z lekce 2 – dna se jen dotýká, nenadzvedává ho. Výsečník postavte na narýsovanou kružnici, zkontrolujte, že prstenec je po celém obvodu stejně široký, a vysekněte okno. Ø 20 mm (u mince 40 mm Ø 32 mm) sekejte jen tehdy, když vám zkouška v lekci 2 vyšla – jinak průměrem, se kterým vyšla. Pak vložte minci a vyzkoušejte, že oknem nepropadne.',
         animationLinks: [animationLink('kapsa', 'E1')],
+        recalls: [
+          { fieldId: 'window-diameter', label: 'Okno, se kterým vám vyšla zkouška v lekci 2' },
+        ],
         media: [
           {
             id: 'postup-3',
@@ -1004,6 +1276,19 @@ export const lessons: readonly LessonDefinition[] = [
         animationLinks: [animationLink('edges', 'F2')],
         body: 'Hrany kapsy (okno i vnější obrys) obarvěte (u barvené kůže, jak jste zkoušeli v lekci 4) a zaleštěte. Po přišití už na ně nedosáhnete.',
         media: [],
+        waits: [
+          {
+            id: 'edge-paint-dry',
+            label: 'Schnutí barvy na hrany',
+            minutes: 20,
+            maxMinutes: 30,
+            basis: 'manufacturer',
+          },
+        ],
+        recalls: [
+          { fieldId: 'edge-paint-coats', label: 'Vrstvy barvy z lekce 4' },
+          { fieldId: 'edge-paint-dry-minutes', label: 'Schnutí barvy z lekce 4' },
+        ],
       },
       {
         id: 'glue-pocket',
@@ -1011,6 +1296,15 @@ export const lessons: readonly LessonDefinition[] = [
         animationLinks: [animationLink('pocketAttach', 'B1'), animationLink('pocketAttach', 'B2')],
         body: 'Kapsu nasucho přiložte otevřenou hranou nahoru na 4 propíchnuté značky rohů na předním panelu a pravítkem zkontrolujte polohu: 41,8 mm pod horní hranou a 14,75 mm od boků (u mince 40 mm 35,55 mm a 8,5 mm). Kolem kapsy nalepte na přední panel maskovací pásku těsně podél jejího okraje a kapsu sundejte – páska ohraničí místo pro kapsu a chrání líc kolem. Na předním panelu lehce zdrsněte smirkem jen pruh od pásky dovnitř po čáru švu kapsy (3,5 mm), po bocích a dole; zbytek nechte hladký. Kontaktní lepidlo naneste jen do tohoto pruhu a do stejného pruhu na rubu kapsy, po bocích a dole (šířku pruhu ověřte na odřezku). Horní hranu kapsy nelepte – tudy se zasouvá mince. Po odvětrání kapsu přitiskněte přesně na značky do rámečku z pásky; pak už nejde posunout. Pásku pomalu strhněte.',
         media: [],
+        waits: [
+          {
+            id: 'glue-pocket',
+            label: 'Odvětrání lepidla',
+            minutes: 10,
+            maxMinutes: 15,
+            basis: 'manufacturer',
+          },
+        ],
       },
       {
         id: 'stitch-pocket',
@@ -1039,6 +1333,9 @@ export const lessons: readonly LessonDefinition[] = [
         body: 'Když návod vyžaduje otvor, vysekněte ho do předního panelu na značku dříku (9,5 mm pod horní hranou) výsečníkem, který vám sedl v lekci 3.',
         animationLinks: [animationLink('snap', 'B2')],
         media: [],
+        recalls: [
+          { fieldId: 'post-hole-punch', label: 'Výsečník pro dřík, který vám sedl v lekci 3' },
+        ],
       },
       {
         id: 'set-snap-post',
@@ -1105,6 +1402,38 @@ export const lessons: readonly LessonDefinition[] = [
       'Výsečník, vidličky i aplikátor držte u spodku a tlučte kolmo, ruka mimo dráhu paličky. Děrujte jen na tvrdé desce.',
       'Kontaktní lepidlo na rozpouštědlové bázi používejte ve větrané místnosti.',
     ],
+    prints: [
+      {
+        source: 'pattern-sheets',
+        sheetId: 'kapsa',
+        copies: 1,
+        purpose: 'na značky na líci kapsy (u mince 40 mm varianta pro 40 mm)',
+      },
+      {
+        source: 'pattern-sheets',
+        sheetId: 'kapsa',
+        copies: 2,
+        purpose: 'na formu a na šablonu s oknem',
+        condition: 'je nemáte z lekce 2',
+      },
+      {
+        source: 'pattern-sheets',
+        sheetId: 'kapsa-okno-18',
+        copies: 1,
+        purpose: 'šablona s oknem Ø 18 mm',
+        condition: 'sekáte okno Ø 18 mm a šablonu nemáte z lekce 2',
+      },
+    ],
+    requires: [
+      {
+        id: 'strip',
+        fromLesson: L5,
+        label: 'Vyříznutý pás s prosekanými otvory dna',
+        note: 'Se značkami rohů kapsy a středu dříku.',
+      },
+      { id: 'form', fromLesson: L2, label: 'Vyvrtaná forma s víkem' },
+      { id: 'block', fromLesson: L2, label: 'Špalík pod důlek' },
+    ],
     media: [
       {
         id: 'cch-l6-hero',
@@ -1123,7 +1452,6 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 70,
     goal: 'Poskládat pás kolem karet a bankovek, slepit a sešít dno skrz tři vrstvy.',
     materials: [
-      'pás z lekce 6 s přišitou kapsou a dříkem',
       'karty a bankovky, které nosíte, a potravinová fólie na zabalení',
       'houbička a voda',
       'kostěná rozhrnovačka nebo hrana pravítka',
@@ -1177,6 +1505,7 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Přitiskněte a nechte zaschnout',
         body: 'Přejeďte rozhrnovačkou. Sponky s podložkou nasaďte na panely těsně vedle obou ohybů, ne na smyčku. Než necháte zaschnout, zkontrolujte, že se otvory dna na sousedních panelech po složení lícují. Když ne, dokud je kůže vlhká, ohyb rozevřete a přeložte se smyčkou posunutou tak, aby seděly (stále mezi čarami z lekce 5). Malý zbytek srovnáte při lepení jehlami. Když se otvory nesrovnají ani tak, nelepte naslepo – postup ověřte na odřezku z lekce 4. Nechte zaschnout.',
         animationLinks: [animationLink('pouchFold', 'B4')],
+        recalls: [{ fieldId: 'practice-holes-offset', label: 'Posun otvorů na odřezku v lekci 4' }],
         media: [
           {
             id: 'postup-5',
@@ -1193,6 +1522,22 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Zdrsněte a slepte dno, spoj po spoji',
         body: 'Vyjměte obsah. Zaschlé ohyby rozevřete jen zhruba do pravého úhlu, ne úplně naplocho – suchý ohyb A by mohl prasknout. Dva spoje lepte po jednom. Nejdřív přední s vnitřním: v pruhu 0–3,5 mm od hrany (ne výš než čára švu) zdrsněte rub předního a rub vnitřního panelu, naneste lepidlo v tenké rovnoměrné vrstvě a nechte odvětrat podle návodu. Přeložte, zarovnejte jehlami přes otvory a přitiskněte – po dotyku už nejde posunout. Pak stejně spoj vnitřní se zadním: líc vnitřního a rub zadního panelu.',
         animationLinks: [animationLink('pouchFold', 'C1')],
+        waits: [
+          {
+            id: 'glue-front-inner',
+            label: 'Odvětrání lepidla: přední s vnitřním',
+            minutes: 10,
+            maxMinutes: 15,
+            basis: 'manufacturer',
+          },
+          {
+            id: 'glue-inner-back',
+            label: 'Odvětrání lepidla: vnitřní se zadním',
+            minutes: 10,
+            maxMinutes: 15,
+            basis: 'manufacturer',
+          },
+        ],
         media: [
           {
             id: 'ilustrace-lepeni-dna',
@@ -1256,6 +1601,13 @@ export const lessons: readonly LessonDefinition[] = [
       'Přitlačení bez zarovnání jehlami: otvory se rozejdou a jehla jimi neprojde rovně.',
     ],
     safety: ['Kontaktní lepidlo na rozpouštědlové bázi používejte ve větrané místnosti.'],
+    requires: [
+      {
+        id: 'strip-with-pocket',
+        fromLesson: L6,
+        label: 'Pás s přišitou kapsou a osazeným dříkem',
+      },
+    ],
     media: [
       {
         id: 'cch-l7-hero',
@@ -1273,11 +1625,7 @@ export const lessons: readonly LessonDefinition[] = [
     phaseSlug: 'build',
     estimatedMinutes: 50,
     goal: 'Vložit obsah, osadit klobouček druku podle obtisku, zkrátit jazyk a zaleštit vnější hrany.',
-    materials: [
-      'hotové tělo pouzdra z lekce 7',
-      'karty a bankovky, které nosíte',
-      'barva na hrany (u barvené kůže)',
-    ],
+    materials: ['karty a bankovky, které nosíte', 'barva na hrany (u barvené kůže)'],
     requiredEquipment: [
       'snap-fastener',
       'utility-knife',
@@ -1317,6 +1665,9 @@ export const lessons: readonly LessonDefinition[] = [
         body: 'Když návod vyžaduje otvor: jazyk narovnejte nahoru do roviny zadního panelu a pouzdro položte zadním panelem na děrovací desku, aby pod jazykem nebyl přední panel. Otvor vysekněte přesně v obtisknutém místě výsečníkem, který vám sedl v lekci 3.',
         animationLinks: [animationLink('snap', 'C3')],
         media: [],
+        recalls: [
+          { fieldId: 'cap-hole-punch', label: 'Výsečník pro klobouček, který vám sedl v lekci 3' },
+        ],
       },
       {
         id: 'set-cap',
@@ -1369,6 +1720,19 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Obarvěte a zaleštěte vnější hrany',
         animationLinks: [animationLink('edges', 'F3'), animationLink('edges', 'C1')],
         body: 'U barvené kůže obarvěte řez barvou na hrany jako v lekci 4 a nechte zaschnout. Pak zaleštěte všechny vnější hrany včetně nového konce jazyka, jako u pouzdra na karty.',
+        waits: [
+          {
+            id: 'edge-paint-dry',
+            label: 'Schnutí barvy na hrany',
+            minutes: 20,
+            maxMinutes: 30,
+            basis: 'manufacturer',
+          },
+        ],
+        recalls: [
+          { fieldId: 'edge-paint-coats', label: 'Vrstvy barvy z lekce 4' },
+          { fieldId: 'edge-paint-dry-minutes', label: 'Schnutí barvy z lekce 4' },
+        ],
         media: [
           {
             id: 'cch-l8-edges',
@@ -1414,6 +1778,7 @@ export const lessons: readonly LessonDefinition[] = [
       'Nůž na zkrácení jazyka veďte tahem od prstů volné ruky.',
       'Výsečník i aplikátor držte u spodku, palička dopadá na horní konec. Pracujte na tvrdé desce.',
     ],
+    requires: [{ id: 'body', fromLesson: L7, label: 'Hotové tělo pouzdra s prošitým dnem' }],
     media: [
       {
         id: 'cch-l8-hero',

@@ -1,22 +1,21 @@
 import { Link, useNavigate, useParams } from 'react-router';
 
 import { routes } from '@/app/routes';
-import { ReadinessTag } from '@/components/equipment/equipment-tags';
 import { StickyActionBar } from '@/components/layout/sticky-action-bar';
 import { CheckpointList } from '@/components/lessons/checkpoint-list';
 import { LessonLockNotice } from '@/components/lessons/lesson-lock-notice';
 import { LessonNotes } from '@/components/lessons/lesson-notes';
+import { LessonPrep } from '@/components/lessons/lesson-prep';
 import { MediaSlot } from '@/components/lessons/media-slot';
+import { StepExtras } from '@/components/lessons/step-extras';
 import { StepList } from '@/components/lessons/step-list';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { NoticeBox } from '@/components/ui/notice-box';
 import { Tag } from '@/components/ui/tag';
-import { equipmentCatalog } from '@/content/equipment';
 import { findProject } from '@/content/projects';
 import { lessonBodiesFor } from '@/content/projects/lesson-bodies';
 import { type ProjectDefinition } from '@/content/schema';
-import { getEquipmentStatus } from '@/features/inventory/types';
 import { isCheckpointCompleted } from '@/features/progress/types';
 import { useCompleteLesson, useToggleCheckpoint } from '@/features/progress/use-progress';
 import { useProjectState } from '@/features/projects/use-project-state';
@@ -99,59 +98,18 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
         <p className="text-lead">
           <strong>Cíl:</strong> <span className="text-ink-2">{typo(lesson.goal)}</span>
         </p>
+        <Button asChild variant="secondary" className="self-start">
+          <Link to={routes.lessonFocus(project.slug, lesson.slug)} className="no-underline">
+            Dílenský režim <span aria-hidden>→</span>
+          </Link>
+        </Button>
       </header>
 
       {locked ? <LessonLockNotice project={project} blockers={view.blockers} /> : null}
 
       {lesson.media[0] ? <MediaSlot media={lesson.media[0]} aspect="photo" /> : null}
 
-      <section aria-labelledby="pripravte">
-        <h2 id="pripravte" className="mb-2 border-b border-line pb-2 text-h2">
-          Připravte si
-        </h2>
-        <ul className="divide-y divide-dashed divide-line">
-          {lesson.requiredEquipment.map((slug) => {
-            const req = project.equipment.find((e) => e.equipmentSlug === slug);
-            const status = getEquipmentStatus(inventory, slug);
-            return (
-              <li
-                key={slug}
-                className="flex min-h-touch items-center justify-between gap-3 py-2 text-body"
-              >
-                <Link
-                  to={routes.shoppingItem(slug, project.slug)}
-                  className="text-leather no-underline hover:text-cognac"
-                >
-                  {equipmentCatalog[slug]?.name ?? slug}
-                </Link>
-                <ReadinessTag status={status} priority={req?.priority ?? 'required'} />
-              </li>
-            );
-          })}
-          {lesson.recommendedEquipment.map((slug) => {
-            const status = getEquipmentStatus(inventory, slug);
-            return (
-              <li
-                key={slug}
-                className="flex min-h-touch items-center justify-between gap-3 py-2 text-body"
-              >
-                <Link
-                  to={routes.shoppingItem(slug, project.slug)}
-                  className="text-ink-2 no-underline hover:text-cognac"
-                >
-                  {equipmentCatalog[slug]?.name ?? slug}
-                </Link>
-                <ReadinessTag status={status} priority="recommended" />
-              </li>
-            );
-          })}
-          {lesson.materials.map((m) => (
-            <li key={m} className="flex min-h-touch items-center py-2 text-body text-ink-2">
-              {typo(m)}
-            </li>
-          ))}
-        </ul>
-      </section>
+      <LessonPrep project={project} lesson={lesson} inventory={inventory} />
 
       {Body ? (
         <section className="max-w-prose text-body-lg [&_a]:text-leather [&_a]:underline [&_a:hover]:text-cognac [&_p+p]:mt-3">
@@ -163,7 +121,12 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
         <h2 id="postup" className="mb-4 border-b border-line pb-2 text-h2">
           Postup
         </h2>
-        <StepList steps={lesson.steps} template={project.template} projectSlug={project.slug} />
+        <StepList
+          steps={lesson.steps}
+          template={project.template}
+          projectSlug={project.slug}
+          renderStepExtras={(step) => <StepExtras project={project} lesson={lesson} step={step} />}
+        />
       </section>
 
       {lesson.commonMistakes.length > 0 ? (

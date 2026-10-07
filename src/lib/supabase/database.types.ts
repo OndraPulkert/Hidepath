@@ -106,6 +106,39 @@ export type Database = {
         };
         Relationships: [];
       };
+      lesson_prep_checks: {
+        Row: {
+          checked: boolean;
+          created_at: string;
+          id: string;
+          item_key: string;
+          lesson_slug: string;
+          project_slug: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          checked?: boolean;
+          created_at?: string;
+          id: string;
+          item_key: string;
+          lesson_slug: string;
+          project_slug: string;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          checked?: boolean;
+          created_at?: string;
+          id?: string;
+          item_key?: string;
+          lesson_slug?: string;
+          project_slug?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       lesson_progress: {
         Row: {
           completed_at: string | null;
@@ -139,6 +172,42 @@ export type Database = {
           status?: string;
           updated_at?: string;
           user_id?: string;
+        };
+        Relationships: [];
+      };
+      lesson_records: {
+        Row: {
+          content_version: number;
+          created_at: string;
+          field_id: string;
+          id: string;
+          lesson_slug: string;
+          project_slug: string;
+          updated_at: string;
+          user_id: string;
+          value: Json | null;
+        };
+        Insert: {
+          content_version: number;
+          created_at?: string;
+          field_id: string;
+          id: string;
+          lesson_slug: string;
+          project_slug: string;
+          updated_at?: string;
+          user_id: string;
+          value?: Json | null;
+        };
+        Update: {
+          content_version?: number;
+          created_at?: string;
+          field_id?: string;
+          id?: string;
+          lesson_slug?: string;
+          project_slug?: string;
+          updated_at?: string;
+          user_id?: string;
+          value?: Json | null;
         };
         Relationships: [];
       };

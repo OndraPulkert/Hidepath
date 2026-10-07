@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router';
 
 import { routes } from '@/app/routes';
 import { MediaSlot } from '@/components/lessons/media-slot';
+import { ProjectFindings } from '@/components/notebook/project-findings';
 import { AssembledIllustration } from '@/components/illustrations/assembled';
 import { TemplateIllustration } from '@/components/illustrations/template';
 import { LessonList } from '@/components/projects/lesson-list';
@@ -162,6 +163,7 @@ function ProjectView({ project }: { project: ProjectDefinition }) {
         </section>
 
         <div className="flex flex-col gap-4">
+          <ProjectFindings project={project} />
           {project.template ? (
             <Card className="flex flex-col gap-3">
               <Kicker>Šablona 1:1</Kicker>

@@ -24,6 +24,9 @@ import {
   STORAGE_KEYS,
 } from '@/features/data/repositories';
 import { createSupabaseRepositories } from '@/features/data/supabase-repositories';
+import { type SyncEntity } from '@/features/sync/outbox';
+import { createUserSync, type SyncController } from '@/features/sync/synced-collection';
+import { useSyncDriver } from '@/features/sync/use-sync-driver';
 import { supabase } from '@/lib/supabase/client';
 
 export type DataMode = 'local' | 'cloud';
@@ -45,7 +48,18 @@ export interface DataContextValue {
   /** Přenos lokálně pořízených dat do účtu po přihlášení. */
   migration: MigrationState;
   retryMigration: () => void;
+  /**
+   * Synchronizace zápisníku a přípravy (outbox) v cloud režimu; bez účtu `null`.
+   * Volitelné kvůli zpětné kompatibilitě testovacích kontextů.
+   */
+  sync?: SyncController | null;
 }
+
+/** Segment klíče dotazu (`query-keys.ts`) pro synchronizovanou entitu. */
+const queryKeySegment: Record<SyncEntity, string> = {
+  lesson_records: 'lesson-records',
+  lesson_prep_checks: 'prep-checks',
+};
 
 const DataContext = createContext<DataContextValue | null>(null);
 
@@ -78,10 +92,32 @@ export function DataProvider({
     };
   }, [repositories]);
 
-  const cloud = useMemo(
-    () => (userId && supabase ? createSupabaseRepositories(supabase, userId) : null),
-    [userId],
-  );
+  const cloud = useMemo(() => {
+    if (!userId || !supabase) return null;
+    const remote = createSupabaseRepositories(supabase, userId);
+    if (!remote.lessonRecords || !remote.prepChecks) return { repositories: remote, sync: null };
+    // Zápisník a příprava: lokálně nejdřív (per-user klíče) + outbox, server dostává změny
+    // na pozadí. Ostatní kolekce zůstávají přímo na serveru.
+    const userSync = createUserSync({
+      storage: local.storage ?? resolveBrowserStorage().storage,
+      userId,
+      remote: { lessonRecords: remote.lessonRecords, prepChecks: remote.prepChecks },
+      onRemoteChange: (entity) => {
+        void queryClient.invalidateQueries({
+          queryKey: entity ? [userId, queryKeySegment[entity]] : [userId],
+        });
+      },
+    });
+    return {
+      repositories: {
+        ...remote,
+        lessonRecords: userSync.lessonRecords,
+        prepChecks: userSync.prepChecks,
+      },
+      sync: userSync.controller,
+    };
+  }, [userId, local, queryClient]);
+  useSyncDriver(cloud?.sync ?? null);
   const scope = cloud && userId ? userId : LOCAL_SCOPE;
 
   const previousScope = useRef(scope);
@@ -98,12 +134,13 @@ export function DataProvider({
 
   useEffect(() => {
     if (!cloud || !userId) return;
+    const remote = cloud.repositories;
     const flagKey = `${STORAGE_KEYS.migrated}.${userId}`;
     const controller = new AbortController();
 
     const run = async () => {
       if (local.storage?.getItem(flagKey) === '1' && attempt === 0) return;
-      if (!(await hasLocalData(local.repositories))) {
+      if (!(await hasLocalData(local.repositories, remote))) {
         local.storage?.setItem(flagKey, '1');
         return;
       }
@@ -112,7 +149,7 @@ export function DataProvider({
       for (let i = 0; i < 3; i += 1) {
         if (controller.signal.aborted) return;
         try {
-          const summary = await migrateLocalData(local.repositories, cloud, controller.signal);
+          const summary = await migrateLocalData(local.repositories, remote, controller.signal);
           if (controller.signal.aborted) return;
           local.storage?.setItem(flagKey, '1');
           setMigration({ status: 'done', summary });
@@ -138,16 +175,23 @@ export function DataProvider({
 
   const value = useMemo<DataContextValue>(
     () => ({
-      // Poznámky od ponku zůstávají v zařízení i s účtem: cloud pro ně tabulku nemá
-      // a synchronizace přijde s Milníkem 4. Ostatní kolekce jdou do účtu.
+      // Poznámky od ponku zůstávají v zařízení i s účtem: cloud pro ně tabulku nemá.
+      // Zápisník a příprava jdou přes synchronizovanou kolekci (lokální kopie per uživatel
+      // + outbox). Ostatní kolekce jdou přímo do účtu.
       repositories: cloud
-        ? { ...cloud, lessonNotes: local.repositories.lessonNotes }
+        ? {
+            ...cloud.repositories,
+            lessonNotes: local.repositories.lessonNotes,
+            lessonRecords: cloud.repositories.lessonRecords ?? local.repositories.lessonRecords,
+            prepChecks: cloud.repositories.prepChecks ?? local.repositories.prepChecks,
+          }
         : local.repositories,
       scope,
       persistent: cloud ? true : local.persistent,
       mode: cloud ? 'cloud' : 'local',
       migration,
       retryMigration,
+      sync: cloud?.sync ?? null,
     }),
     [cloud, local, migration, retryMigration, scope],
   );
