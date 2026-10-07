@@ -271,6 +271,7 @@ describe('animace postupu – odkazy z lekcí', () => {
     expect(hrefOf(6, 'stitch-pocket')).toEqual([
       prisiti('C1'),
       '/animace/sedlarsky-steh.html#D1',
+      '/animace/sedlarsky-steh.html#E2',
       animationPages.threadLength.path,
     ]);
   });
@@ -294,6 +295,7 @@ describe('animace postupu – složení pouzdra a druk v lekcích', () => {
     // Odřezek má krátký šev: krok šití, ne výpočet nitě pro šev dna 64 mm.
     expect(hrefOf(4, 'stitch-through-layers')).toEqual([
       skladani('D2'),
+      '/animace/sedlarsky-steh.html#E2',
       '/animace/sedlarsky-steh.html#G2',
       thread,
     ]);
@@ -377,6 +379,8 @@ describe('animace postupu – sedlářský steh a hrany ve všech projektech', (
     ['lid-wallet', 9, 'edges', [hrany('G3')]],
     ['lid-wallet', 11, 'trim-tip', [hrany('G4')]],
     ['lid-wallet', 11, 's7', [steh('E2'), thread, hrany('G4')]],
+    // Výměna magnetu ušije S7 znovu a hrany jazýčku dokončí stejně jako lekce 11.
+    ['lid-wallet', 12, 'magnet-swap', [steh('E2'), thread, hrany('G4')]],
   ] as const)('%s lekce %i, krok %s', (projectSlug, order, stepId, expected) => {
     expect(hrefsOf(projectSlug, order, stepId)).toEqual(expected);
   });

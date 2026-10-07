@@ -515,7 +515,7 @@ export const lessons: readonly LessonDefinition[] = [
     materials: [
       'odřezek z V12 na vyzkoušení rýhy',
       'tupý hrot na rýhu, maskovací páska, párátka',
-      'dřevěný kolík Ø 8–12 do akuvrtačky (leštění vydutých hran)',
+      'dřevěný kolík Ø 8 do akuvrtačky (broušení a leštění vydutých hran)',
       'odřezek kozinky na zkoušku barvy na hrany',
     ],
     requiredEquipment: [
@@ -553,7 +553,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'coin-windows',
         title: 'Okénka mincí v zádech',
         animationLinks: [animationLink('edges', 'G4')],
-        body: 'Dvě okénka mincí 12 × 48 mm v zadní stěně B: výsečníkem Ø 12 vysekněte oba konce (středy y 34 a 70), mezi nimi veďte rovné řezy nožem. Okénka zkoste z líce, konce vybruste papírem namotaným na kolíku Ø 8–10 a vyleštěte.',
+        body: 'Dvě okénka mincí 12 × 48 mm v zadní stěně B: výsečníkem Ø 12 vysekněte oba konce (středy y 34 a 70), mezi nimi veďte rovné řezy nožem. Konce vybruste brusným papírem namotaným na kolíku Ø 8 ve vrtačce, okénka zkoste z líce a vyleštěte jako ostatní hrany (krok „Předběžné dokončení hran“).',
         media: [
           ill(
             'lw-l5-back',
@@ -578,7 +578,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'edges',
         title: 'Předběžné dokončení hran',
         animationLinks: [animationLink('edges', 'G1')],
-        body: 'Horní hrany D1 a D2, horní hranu F i s výřezem, spodní hranu a boky pásu víčka a boky jazýčku zkoste (zkosovačem hran, když ho máte z projektu 01 nebo 02; bez něj je zaoblete brusným papírem na hranolku), vybruste a vyleštěte. Výřez pro palec zaoblete z líce i z rubu, protože o rubovou hranu dna výřezu se může zachytit karta; vnitřek vybruste a vyleštěte kolíkem Ø 8 ve vrtačce.',
+        body: 'Horní hranu F i s výřezem, spodní hranu a boky pásu víčka a boky jazýčku vybruste smirkem 220–400 na rovné destičce, zkoste z líce (zkosovačem hran, pokud ho máte; jinak je zaoblete brusným papírem na hranolku) a vyleštěte: hranu navlhčete vodou nebo Tokonole (jen mimo lepená místa, viz poslední krok) a třete leštítkem nebo kusem plátna, dokud se nezhutní a nezaleskne. Horní hrany D1 a D2 jen vybruste (horní hranu D2 lehce zaoblete, vede přes ni závěs) a vyleštěte stejně. Výřez pro palec zaoblete z líce i z rubu, protože o rubovou hranu dna výřezu se může zachytit karta; vnitřek vybruste brusným papírem namotaným na kolíku Ø 8 ve vrtačce a stejným kolíkem vyleštěte.',
         media: [],
       },
       {
@@ -611,7 +611,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         slug: 'edges-prefinished',
         title:
-          'Horní hrany D1, D2 a F, hrany pásu víčka a jazýčku jsou vyleštěné a horní hrana D1 natřená kontrastní barvou.',
+          'Horní hrany D1, D2 a F, hrany pásu víčka a jazýčku jsou vybroušené a vyleštěné (F, pás víčka a jazýček zkosené z líce) a horní hrana D1 natřená kontrastní barvou.',
         required: true,
       },
     ],
@@ -892,7 +892,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'punch-sew',
         title: 'Děrovat a šít boky',
-        body: 'Mezi lepením G4 a děrováním nechte aspoň 1 h. Děrujte zepředu skrz všechny vrstvy: y 8–60 z líce F, y 64–76 z líce D2. Horní hrana F (y 62) leží přesně mezi otvory 60 a 64, proto v úseku y 56–68 děrujte po jednom otvoru a pod hranu F podložte odřezek 1,0 mm (schod F/D2). Šijte od 76 dolů, steh 60–64 zdvojte (zpevňuje ústí karet), konce 2 otvory zpět.',
+        body: 'Mezi lepením G4 a děrováním nechte aspoň 1 h. Děrujte zepředu skrz všechny vrstvy: y 8–60 z líce F, y 64–76 z líce D2. Horní hrana F (y 62) leží přesně mezi otvory 60 a 64, proto v úseku y 56–68 děrujte po jednom otvoru a pod hranu F podložte odřezek 1,0 mm (schod F/D2). Šijte od 76 dolů, steh 60–64 zdvojte (zpevňuje ústí karet), konce 2 otvory zpět. Nit odměřte 5 × délka švu + 25–30 cm rezervy: v úseku y 20–60 jde šev přes tři vrstvy (F + D2 + B), a pro ty návod „Jak odměřit nit“ počítá 5 ×.',
         animationLinks: [animationLink('saddleStitch', 'E2'), animationLink('threadLength')],
         media: [],
       },
@@ -900,7 +900,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'edges',
         title: 'Zarovnat a vyleštit boky',
         animationLinks: [animationLink('edges', 'G3')],
-        body: 'Boky zarovnejte nožem na 101,0 mm (D2 přečnívá). Spodní rohy nechte hranaté – nic nevyplňujte ani nezaoblujte. Boky vybruste, zkoste z obou líců (zkosovačem, když ho máte, jinak zaoblete brusným papírem na hranolku) a vyleštěte jako jeden svazek, i u ohybu dna.',
+        body: 'Boky zarovnejte nožem na 101,0 mm (D2 přečnívá). Spodní rohy nechte hranaté – nic nevyplňujte ani nezaoblujte. Boky vybruste smirkem 220–400 na rovné destičce, zkoste z obou líců (zkosovačem hran, pokud ho máte; jinak je zaoblete brusným papírem na hranolku) a vyleštěte jako jeden svazek, i u ohybu dna: navlhčete vodou nebo Tokonole a třete leštítkem nebo kusem plátna.',
         media: [
           photo('lw-l9-edges', 'Vyleštěný bok peněženky s bočním švem a hranatým spodním rohem'),
         ],
@@ -1084,13 +1084,13 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'trim-tip',
         title: 'Ořízněte špičku a boky L1',
         animationLinks: [animationLink('edges', 'G4')],
-        body: 'Špičku uřízněte 7,0 mm pod značkou (rysky) podle šablony nožem skrz jazýček i L1 najednou a zároveň seřízněte boky L1 načisto s boky jazýčku (přířez 24 mm je o 2 mm na každé straně širší než jazýček 20 mm). Střed oblouku R10 leží 10,0 mm nad špičkou, tedy 3,0 mm nad středem magnetu. Pak jen posledních 2,5 mm špičky zbruste do klínu brusným papírem na hranolku z líce i z rubu, ne nožem, a ne blíž než 2,5 mm od špičky (ryska). Stačí, když je hrana na konci asi 0,5–0,7 mm a zaoblená.',
+        body: 'Špičku uřízněte 7,0 mm pod značkou (rysky) podle šablony nožem skrz jazýček i L1 najednou a zároveň seřízněte boky L1 načisto s boky jazýčku (přířez 24 mm je o 2 mm na každé straně širší než jazýček 20 mm). Střed oblouku R10 leží 10,0 mm nad špičkou, tedy 3,0 mm nad středem magnetu. Pak špičku zbruste do klínu, ale jen v posledních 2,5 mm: 2,5 mm od špičky si udělejte rysku a brusným papírem na hranolku bruste z líce i z rubu jen mezi ryskou a špičkou, ne nožem. Za ryskou (dál od špičky) už nebruste, aby magnet neležel na ztenčeném místě. Stačí, když je hrana na konci asi 0,5–0,7 mm a zaoblená.',
         media: [],
       },
       {
         id: 's7',
         title: 'Šev S7 kolem magnetu',
-        body: 'Šablonu konce jazýčku z listu 4 přiložte na líc jazýčku podle obrysu špičky a propíchněte jehlou 8 otvorů S7: U kolem magnetu, ke špičce otevřené. Jazýček leží rubem dolů a magnet s L1 z rubu vystupuje, proto si připravte podložku s otvorem: dva slepené odřezky usně 1,0 mm (nebo odřezek desky 2 mm) proseknuté uprostřed výsečníkem Ø 10. Magnet leží v otvoru, kůže kolem naplocho. Děrujte z líce jazýčku vidličkou 4 mm: svislé boky (x 44,5 a 56,5) dvouzubou částí svisle, horní řadu (14 mm nad špičkou) vodorovně, rohové otvory jen jedním krajním zubem nasazeným do otvoru řady. Natočení zubů na bocích zvolte tak, aby šikmé otvory měly stejný sklon jako v horní řadě – vyzkoušejte na odřezku. Náhrada: otvory předpíchnout jehlou přes šablonu a vidličkou je jen dorazit. Šijte sedlovým stehem, konce 2 otvory zpět. Pak hrany jazýčku zkoste, vybruste a vyleštěte.',
+        body: 'Šablonu konce jazýčku z listu 4 přiložte na líc jazýčku podle obrysu špičky a propíchněte jehlou 8 otvorů S7: U kolem magnetu, ke špičce otevřené. Jazýček leží rubem dolů a magnet s L1 z rubu vystupuje, proto si připravte podložku s otvorem: dva slepené odřezky usně 1,0 mm (nebo odřezek desky 2 mm) proseknuté uprostřed výsečníkem Ø 10. Magnet leží v otvoru, kůže kolem naplocho. Děrujte z líce jazýčku vidličkou 4 mm: svislé boky (x 44,5 a 56,5) dvouzubou částí svisle, horní řadu (14 mm nad špičkou) vodorovně, rohové otvory jen jedním krajním zubem nasazeným do otvoru řady. Natočení zubů na bocích zvolte tak, aby šikmé otvory měly stejný sklon jako v horní řadě – vyzkoušejte na odřezku. Náhrada: otvory předpíchnout jehlou přes šablonu a vidličkou je jen dorazit. Šijte sedlovým stehem, konce 2 otvory zpět. Pak hrany jazýčku vybruste, zkoste a vyleštěte jako v lekci 5.',
         animationLinks: [
           animationLink('saddleStitch', 'E2'),
           animationLink('threadLength'),
@@ -1168,7 +1168,12 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'magnet-swap',
         title: 'Výměna magnetu (jen když Z-1 neprojde)',
-        body: 'Neověřený postup – ověřit na prototypu, napřed na zkušebním kuse. Plíšek vyměnit nejde, magnet ano: sedí jen pod L1 a švem S7. (1) Vypárejte S7: stehy na líci jazýčku přestřihněte malými nůžkami nebo páráčkem (kůži nenařízněte) a nit vytáhněte; otvory S7 zůstanou a použijí se znovu. (2) Odlepte L1 pomalu od horní hrany ke špičce a počítejte s novou L1 – ve špičce je s jazýčkem zbroušená do společného klínu a nejspíš se roztrhne. Novou vyřízněte z nebarvené kozinky (přířez 24 × 22). (3) Sundejte magnet: netlučte do něj a nepáčte ho ostrou hranou, neodym je křehký. Zbytky lepidla opatrně obruste brusným papírem a rub znovu zdrsněte. (4) Nový magnet stejného Ø 8 – silnější (vyšší třída nebo tlustší), nebo slabší (nižší třída nebo tenčí); třídu, tloušťku a sílu ověřte u prodejce. Stejný průměr nechá beze změny polohu magnetu, plíšek i otvory S7. Jiná tloušťka magnetu ale mění tloušťku peněženky u magnetu a odhad pole: podle návrhu se dosadí do magnetThicknessMm a kontroly se přepočítají. Formulář v aplikaci to neumí: tloušťku nového magnetu si zapište a přepočet nechte na tom, kdo střih udržuje (třeba v Claude Code nad repozitářem: pole magnetThicknessMm v modelu src/lib/geometry/lid-wallet.ts, oddíl 12.1 zadání). (5) Magnet epoxidem na stejné místo (osa x 50,5, 7,0 mm nad špičkou, místo ohraničují otvory S7), nechte ztuhnout, pak L1 kontaktním lepidlem (přes magnet netlučte). Novou L1 přilepte s přesahem a ořízněte podle hran hotového jazýčku (jazýček se znovu neřeže). Znovu zbruste klín posledních 2,5 mm špičky jako v lekci 11. Po 24 h vytvrzení propíchněte z líce jehlou starými otvory S7 i skrz L1 a ušijte S7 znovu; u tlustšího magnetu zesilte podložku s otvorem o rozdíl tloušťky. Nakonec hrany jazýčku znovu zkoste, vybruste a vyleštěte. Jestli staré otvory druhé šití vydrží, ověřit na prototypu.',
+        body: 'Neověřený postup – ověřit na prototypu, napřed na zkušebním kuse. Plíšek vyměnit nejde, magnet ano: sedí jen pod L1 a švem S7. (1) Vypárejte S7: stehy na líci jazýčku přestřihněte malými nůžkami nebo páráčkem (kůži nenařízněte) a nit vytáhněte; otvory S7 zůstanou a použijí se znovu. (2) Odlepte L1 pomalu od horní hrany ke špičce a počítejte s novou L1 – ve špičce je s jazýčkem zbroušená do společného klínu a nejspíš se roztrhne. Novou vyřízněte z nebarvené kozinky (přířez 24 × 22). (3) Sundejte magnet: netlučte do něj a nepáčte ho ostrou hranou, neodym je křehký. Zbytky lepidla opatrně obruste brusným papírem a rub znovu zdrsněte. (4) Nový magnet stejného Ø 8 – silnější (vyšší třída nebo tlustší), nebo slabší (nižší třída nebo tenčí); třídu, tloušťku a sílu ověřte u prodejce. Stejný průměr nechá beze změny polohu magnetu, plíšek i otvory S7. Jiná tloušťka magnetu ale mění tloušťku peněženky u magnetu a odhad pole: podle návrhu se dosadí do magnetThicknessMm a kontroly se přepočítají. Formulář v aplikaci to neumí: tloušťku nového magnetu si zapište a přepočet nechte na tom, kdo střih udržuje (třeba v Claude Code nad repozitářem: pole magnetThicknessMm v modelu src/lib/geometry/lid-wallet.ts, oddíl 12.1 zadání). (5) Magnet epoxidem na stejné místo (osa x 50,5, 7,0 mm nad špičkou, místo ohraničují otvory S7), nechte ztuhnout, pak L1 kontaktním lepidlem (přes magnet netlučte). Novou L1 přilepte s přesahem a ořízněte podle hran hotového jazýčku (jazýček se znovu neřeže). Znovu zbruste klín v posledních 2,5 mm špičky (jen mezi ryskou a špičkou) jako v lekci 11. Po 24 h vytvrzení propíchněte z líce jehlou starými otvory S7 i skrz L1 a ušijte S7 znovu; u tlustšího magnetu zesilte podložku s otvorem o rozdíl tloušťky. Nakonec hrany jazýčku znovu vybruste, zkoste a vyleštěte. Jestli staré otvory druhé šití vydrží, ověřit na prototypu.',
+        animationLinks: [
+          animationLink('saddleStitch', 'E2'),
+          animationLink('threadLength'),
+          animationLink('edges', 'G4'),
+        ],
         media: [],
       },
       {
@@ -1333,14 +1338,14 @@ export const lidWalletProject: ProjectDefinition = {
       equipmentSlug: 'harness-needles',
       priority: 'required',
       reason: 'Sedlový steh.',
-      specification: 'Tupé sedlářské jehly, 2 ks.',
+      specification: 'Tupé nebo poloostré sedlářské jehly, 2 ks.',
     },
     {
       equipmentSlug: 'waxed-thread',
       priority: 'required',
       reason: 'Švy S1–S6 a šev S7 kolem magnetu.',
       specification:
-        'Tenká voskovaná nit, která projde otvory vidliček 4 mm (ověřit na odřezku); délka orientačně 4 × délka švu + 25–30 cm rezervy (2 × 15 cm na konce).',
+        'Tenká voskovaná nit, která projde otvory vidliček 4 mm (ověřit na odřezku); délka orientačně 4 × délka švu + 25–30 cm rezervy (2 × 15 cm na konce), u bočních švů S4 a S5 (v úseku y 20–60 tři vrstvy F + D2 + B) podle návodu „Jak odměřit nit“ 5 × délka švu.',
     },
     {
       equipmentSlug: 'contact-cement',
@@ -1355,7 +1360,7 @@ export const lidWalletProject: ProjectDefinition = {
       reason:
         'Rohy a otřep plíšku (120), zdrsnění lepených míst, zaoblení hran, klín špičky jazýčku a spodní hrany D2; v záloze B ztenčení (80).',
       specification:
-        'Zrnitost 120 a jemnější (180/240 z projektu 02), 80 jen na zálohu B; na rovném hranolku.',
+        'Zrnitost 120 a jemnější (180/240 z projektu 02; na hrany 220–400 jako u projektu 01), 80 jen na zálohu B; na rovném hranolku nebo destičce.',
     },
     {
       equipmentSlug: 'neodymium-magnet',
@@ -1436,7 +1441,7 @@ export const lidWalletProject: ProjectDefinition = {
     {
       equipmentSlug: 'edge-beveler',
       priority: 'recommended',
-      reason: 'Zkosení viditelných hran, když ho máte z projektu 01 nebo 02.',
+      reason: 'Zkosení viditelných hran, pokud ho máte; jinak brusným papírem na hranolku.',
       specification: 'Malá velikost na tenkou useň.',
       alternatives: ['hrany zaoblit brusným papírem na hranolku'],
     },
@@ -1709,14 +1714,14 @@ export const lidWalletProject: ProjectDefinition = {
       {
         equipmentSlug: 'edge-beveler',
         reason:
-          'Jen když ho máte z projektu 01 nebo 02; jinak hrany zaoblíte brusným papírem na hranolku.',
+          'Jen pokud ho máte (v projektech 01 a 02 je volitelný); jinak hrany zaoblíte brusným papírem na hranolku.',
       },
     ],
     alsoNeeded: [
       'lepicí páska (vložka dna, papírový model)',
       'bezbarvý lak na nehty na hrany plíšku (lekce 4)',
       'tvrdší papír nebo čtvrtka na papírový model a šablony (lekce 2 a 4)',
-      'dřevěný kolík Ø 8–12 mm a akuvrtačka na leštění vydutých hran (lekce 5)',
+      'dřevěný kolík Ø 8 mm a akuvrtačka na broušení a leštění vydutých hran (lekce 5)',
       'potravinová fólie, houbička a 2 hladká prkénka (lekce 3, 7 a 10)',
       '6 starých karet (4 na vložku dna, 2 na tvarování závěsu), párátka, jehla na propichování',
       'lupa nebo mobil s makrem na prohlídku líce (lekce 3, volitelně)',

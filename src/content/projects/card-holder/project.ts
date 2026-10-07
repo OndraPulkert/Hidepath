@@ -454,7 +454,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'start-stitch',
         title: 'Začněte steh',
-        body: 'Jehlu protáhněte prvním otvorem tak, aby na obou stranách zůstala stejná délka nitě. Teď máte jednu jehlu vpředu, jednu vzadu.',
+        body: 'Jehlu protáhněte prvním otvorem tak, aby na obou stranách zůstala stejná délka nitě. Teď máte jednu jehlu vpředu, jednu vzadu. Na odřezku začínáte bez zpětných stehů, pro trénink to stačí; zpětné stehy si tu vyzkoušíte na konci řady. Na pouzdře v lekci 6 přidáte dva zpětné stehy i na začátek.',
         animationLinks: [animationLink('saddleStitch', 'C1'), animationLink('threadLength')],
         media: [
           {
@@ -487,7 +487,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'finish-stitch',
         title: 'Ukončení',
         animationLinks: [animationLink('saddleStitch', 'E1'), animationLink('saddleStitch', 'F1')],
-        body: 'Na konci řady prošijte zpět dva otvory, oba konce vyveďte na rub, těsně u kůže odstřihněte a zbytek přimáčkněte. Voskovaná nit drží bez uzlu. Polyesterové nitě se dají navíc zajistit: konec dlouhý asi 2 mm krátce přiblížit k plamenu zapalovače a hned přimáčknout; roztaví se do kuličky, která z otvoru nevyklouzne. Jen na rubu a opatrně, plamen nikdy k líci kůže.',
+        body: 'Na konci řady prošijte zpět dva otvory a oba konce vyveďte na rub. Když konce nezatavujete, odstřihněte je těsně u kůže a zbytek přimáčkněte; voskovaná nit drží bez uzlu. Polyesterové nitě se dají navíc zajistit zatavením: konce pak odstřihněte tak, aby z kůže vyčnívaly asi 2 mm, krátce je přibližte k plamenu zapalovače a hned přimáčkněte; roztaví se do kuličky, která z otvoru nevyklouzne. Jen na rubu a opatrně, plamen nikdy k líci kůže.',
         media: [
           {
             id: 'l4-backstitch',
@@ -501,7 +501,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'compare',
         title: 'Porovnejte líc a rub',
         animationLinks: [animationLink('saddleStitch', 'G1')],
-        body: 'Steh na líci má mít všechny stehy stejně skloněné a stejně utažené. Rub je u sedlářského stehu vždy trochu méně pravidelný, to je normální.',
+        body: 'Steh na líci má mít všechny stehy stejně skloněné a stejně utažené. Rub je u sedlářského stehu vždy trochu méně pravidelný než líc, to je normální. Stehy na rubu ale musí být stejně utažené, v jedné řadě a bez smyček. Otvory na rubu mají být stejně rovné jako na líci; když nejsou, vidličky nebyly při děrování kolmo (lekce 3).',
         media: [
           {
             id: 'l4-good-bad-stitch',
@@ -805,7 +805,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'stitch',
         title: 'Sešijte tři strany',
         animationLinks: [animationLink('saddleStitch', 'E2'), animationLink('saddleStitch', 'F2')],
-        body: 'Začněte dvěma zpětnými stehy v horním rohu, aby byl začátek zpevněný, a šijte souvisle bok, spodek, bok. Rohový otvor prošijte jako každý jiný. Na konci dva zpětné stehy, odstřihněte na rubu a případně konce zatavte jako v lekci 4.',
+        body: 'Začněte dvěma zpětnými stehy v horním rohu, aby byl začátek zpevněný, a šijte souvisle bok, spodek, bok. Rohový otvor prošijte jako každý jiný. Na konci dva zpětné stehy. Oba konce vyveďte na rub a odstřihněte těsně u kůže, nebo je jako v lekci 4 nechte asi 2 mm dlouhé a zatavte.',
         media: [
           {
             id: 'l6-stitch-video',
@@ -878,6 +878,7 @@ export const lessons: readonly LessonDefinition[] = [
     ],
     safety: [
       'Při děrování dvou vrstev je úder pevnější; prsty držte u spodku vidliček, mimo dráhu paličky.',
+      'Při zatavování konců nitě držte zapalovač dál od kůže i od zbytku nitě; stačí zlomek sekundy.',
     ],
     media: [
       {
@@ -952,7 +953,7 @@ export const cardHolderProject: ProjectDefinition = {
       equipmentSlug: 'harness-needles',
       priority: 'required',
       reason: 'Sedlářský steh dvěma jehlami.',
-      specification: 'Tupé sedlářské, k niti 0,6 mm, 4 ks.',
+      specification: 'Tupé nebo poloostré sedlářské, k niti 0,6 mm, 4 ks.',
     },
     {
       equipmentSlug: 'waxed-thread',

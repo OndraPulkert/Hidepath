@@ -231,7 +231,7 @@ export const animationPages = {
         'Srovnejte hrany smirkem 220–400 na rovné destičce',
       ],
       B: [
-        'Zkosení: pouzdro na karty ne, pouzdro s mincí „srazte hrany“',
+        'Zkosení: pouzdro na karty ne, pouzdro s mincí srazí hrany dna',
         'Víčko: zkosovačem, nebo brusným papírem na hranolku',
       ],
       C: ['Barva na hrany – jen u barvené kůže'],

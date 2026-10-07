@@ -541,9 +541,10 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'stitch-through-layers',
         title: 'Přitiskněte a sešijte tři vrstvy',
-        body: 'Přitiskněte slepené vrstvy k sobě a sešijte sedlářským stehem skrz všechny tři vrstvy předem prosekanými otvory a zkontrolujte rub – steh má být stejně rovný jako na líci.',
+        body: 'Přitiskněte slepené vrstvy k sobě a sešijte sedlářským stehem skrz všechny tři vrstvy předem prosekanými otvory, na začátku i na konci dva zpětné stehy. Pak zkontrolujte rub. Rub je u sedlářského stehu vždy trochu méně pravidelný než líc, to je normální. Stehy na rubu ale musí být stejně utažené, v jedné řadě a bez smyček. Otvory na rubu mají být stejně rovné jako na líci; když nejsou, vidličky nebyly při děrování kolmo (lekce 3 pouzdra na karty).',
         animationLinks: [
           animationLink('pouchFold', 'D2'),
+          animationLink('saddleStitch', 'E2'),
           animationLink('saddleStitch', 'G2'),
           animationLink('threadLength'),
         ],
@@ -725,7 +726,7 @@ export const lessons: readonly LessonDefinition[] = [
         title:
           'Obarvěte a zaleštěte hrany, na které se po složení špatně dostanete, a zapečeťte rub',
         animationLinks: [animationLink('edges', 'F1')],
-        body: 'Hrany, na které se po složení špatně dostanete (horní hrana vnitřního panelu, jeho volná svislá hrana – skončí uvnitř smyčky ohybu A, je vidět výřezem, ale nedosáhnete na ni –, oblouk výřezu a jazyk), teď obarvěte (barva na hrany, u barvené kůže) a zaleštěte – v hotovém pouzdru už na ně nedosáhnete. Rub vnitřního panelu zapečeťte (Tokonole nebo gum tragacanth) kromě spodního proužku 0–3,5 mm od hrany (pod čárou švu) – ten se v lekci 7 lepí, na zapečetěném povrchu by lepidlo nedrželo. Zapečetěný rub je po složení vidět výřezem nad kartami.',
+        body: 'Hrany, na které se po složení špatně dostanete (horní hrana vnitřního panelu, jeho volná svislá hrana – skončí uvnitř smyčky ohybu A, je vidět výřezem, ale nedosáhnete na ni –, oblouk výřezu na prst a jazyk), teď obarvěte (barva na hrany, u barvené kůže; naneste ji podle návodu na obalu a před leštěním ji nechte zaschnout (ověřit na odřezku)) a zaleštěte – v hotovém pouzdru už na ně nedosáhnete. Oblouk výřezu na prst je celý výkus ve tvaru U přes pásmo ohybu A: čtvrtkruh R34 na předním panelu, přechod přes ohyb A a čtvrtelipsa na zadním panelu. Rub vnitřního panelu zapečeťte (Tokonole nebo gum tragacanth) kromě spodního proužku 0–3,5 mm od hrany (pod čárou švu) – ten se v lekci 7 lepí, na zapečetěném povrchu by lepidlo nedrželo. Zapečetěný rub je po složení vidět výřezem nad kartami.',
         media: [
           {
             id: 'cch-l5-sealed',
@@ -865,7 +866,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'dye-burnish-pocket-edges',
         title: 'Obarvěte a zaleštěte hrany kapsy',
         animationLinks: [animationLink('edges', 'F2')],
-        body: 'Hrany kapsy (oblouk okna i vnější obrys) teď obarvěte (barva na hrany, u barvené kůže) a zaleštěte, stejně jako v lekci 5 – po přišití na přední panel už na vnější obrys nedosáhnete a na okno jen omezeně.',
+        body: 'Hrany kapsy (oblouk okna i vnější obrys) teď obarvěte (barva na hrany, u barvené kůže; naneste ji podle návodu na obalu a před leštěním ji nechte zaschnout (ověřit na odřezku)) a zaleštěte, stejně jako v lekci 5 – po přišití na přední panel už na vnější obrys nedosáhnete a na okno jen omezeně.',
         media: [],
       },
       {
@@ -878,10 +879,11 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'stitch-pocket',
         title: 'Prosekněte a přišijte kapsu',
-        body: 'Kapsa má otvory švu prosekané už v prvním kroku z líce, ještě před tvarováním. Naplocho na děrovací desce teď vidličkami projeďte znovu přes tytéž otvory ze stejné strany (z líce kapsy), tentokrát skrz obě vrstvy najednou – kapsu i přední panel pod ní; jen tak si otvory po prosekání lícují. Pak kapsu sedlářským stehem přišijte, horní hrana zůstává volná.',
+        body: 'Kapsa má otvory švu prosekané už v prvním kroku z líce, ještě před tvarováním. Naplocho na děrovací desce teď vidličkami projeďte znovu přes tytéž otvory ze stejné strany (z líce kapsy), tentokrát skrz obě vrstvy najednou – kapsu i přední panel pod ní; jen tak si otvory po prosekání lícují. Pak kapsu sedlářským stehem přišijte, na začátku i na konci dva zpětné stehy; horní hrana zůstává volná.',
         animationLinks: [
           animationLink('pocketAttach', 'C1'),
           animationLink('saddleStitch', 'D1'),
+          animationLink('saddleStitch', 'E2'),
           animationLink('threadLength'),
         ],
         media: [
@@ -1068,7 +1070,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'stitch-bottom',
         title: 'Prošijte dno',
-        body: 'Prošijte dno sedlářským stehem skrz všechny tři vrstvy (17 otvorů na panel, rozteč 4 mm, 3,5 mm od hrany). Začátek i konec zajistěte zpětnými stehy. Pak zkontrolujte rub švu (stranu zadního panelu) – steh na rubu má být stejně rovný jako na líci.',
+        body: 'Prošijte dno sedlářským stehem skrz všechny tři vrstvy (17 otvorů na panel, rozteč 4 mm, 3,5 mm od hrany). Na začátku i na konci ušijte dva zpětné stehy. Pak zkontrolujte rub švu (stranu zadního panelu). Rub je u sedlářského stehu vždy trochu méně pravidelný než líc, to je normální. Stehy na rubu ale musí být stejně utažené, v jedné řadě a bez smyček. Otvory na rubu mají být stejně rovné jako na líci; když nejsou, vidličky nebyly při děrování kolmo (lekce 3 pouzdra na karty).',
         animationLinks: [
           animationLink('pouchFold', 'D2'),
           animationLink('saddleStitch', 'E2'),
@@ -1216,14 +1218,14 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'sand-flat-bottom',
         title: 'Přebruste dno do roviny',
         animationLinks: [animationLink('edges', 'F3'), animationLink('edges', 'B1')],
-        body: 'Dno přebruste smirkem do jedné roviny přes všechny tři vrstvy a srazte hrany.',
+        body: 'Dno přebruste smirkem 220–400 na rovné destičce do jedné roviny přes všechny tři vrstvy. Pak hrany dna srazte z obou vnějších líců (přední i zadní panel): zaoblete je brusným papírem na hranolku, ořezávačem hran jen pokud ho máte (nákupní sestava pouzdra ho nemá).',
         media: [],
       },
       {
         id: 'dye-and-burnish-edges',
         title: 'Obarvěte a zaleštěte vnější hrany',
         animationLinks: [animationLink('edges', 'F3'), animationLink('edges', 'C1')],
-        body: 'U barvené kůže je řez světlý – obarvěte ho barvou na hrany. Všechny vnější hrany pak zaleštěte jako u pouzdra na karty.',
+        body: 'U barvené kůže je řez světlý – obarvěte ho barvou na hrany; naneste ji podle návodu na obalu a před leštěním ji nechte zaschnout (ověřit na odřezku). Všechny vnější hrany – včetně nového konce jazyka po zkrácení a zaoblení rohů na R10 – pak zaleštěte jako u pouzdra na karty.',
         media: [
           {
             id: 'cch-l8-edges',
@@ -1250,7 +1252,8 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         slug: 'edges-finished',
-        title: 'Vnější hrany jsou srovnané, obarvené (u barvené kůže) a zaleštěné.',
+        title:
+          'Vnější hrany včetně zkráceného konce jazyka jsou srovnané, obarvené (u barvené kůže) a zaleštěné.',
         required: true,
       },
       {
@@ -1387,14 +1390,14 @@ export const coinCardHolderProject: ProjectDefinition = {
       equipmentSlug: 'harness-needles',
       priority: 'required',
       reason: 'Sedlářský steh dna i kapsy.',
-      specification: 'Tupé sedlářské, k niti 0,6 mm, 4 ks.',
+      specification: 'Tupé nebo poloostré sedlářské, k niti 0,6 mm, 4 ks.',
     },
     {
       equipmentSlug: 'waxed-thread',
       priority: 'required',
       reason: 'Šev dna (skrz tři vrstvy) a šev kapsy.',
       specification:
-        'Voskovaný polyester 0,6–0,8 mm. Orientačně asi 4× délka švu: dno (64 mm skrz 4,5 mm kůže) ≈ 0,6 m, raději 0,8 m; kapsa 23 otvorů (u mince 40 mm 31) – 0,8 m vystačí s rezervou; ověřit na odřezku.',
+        'Voskovaný polyester 0,6 mm – tlustší nit 0,8 mm do otvorů vidliček 4 mm nejde (karta vybavení Voskovaná nit). Délka podle návodu „Jak odměřit nit“: 4 × délka švu + 25–30 cm rezervy, přes tři vrstvy 5 ×: dno (64 mm skrz tři vrstvy) ≈ 0,6 m, raději 0,8 m; kapsa 23 otvorů (u mince 40 mm 31) – 0,8 m vystačí s rezervou; ověřit na odřezku.',
     },
     {
       equipmentSlug: 'steel-ruler',
@@ -1740,7 +1743,7 @@ export const coinCardHolderProject: ProjectDefinition = {
       },
       {
         equipmentSlug: 'edge-beveler',
-        reason: 'Tentokrát ne: hrany se jen srovnají brusným archem a zaleští.',
+        reason: 'Tentokrát ne: hrany se srovnají a zaoblí brusným archem a zaleští.',
       },
       {
         equipmentSlug: 'corner-template',

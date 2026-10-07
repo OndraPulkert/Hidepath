@@ -3,6 +3,24 @@ import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
 import { findPlanExample, resolveShoppingPlan } from '@/features/shopping/plan';
 
+describe('obsah – pouzdro na karty: steh', () => {
+  const step = (order: number, id: string) =>
+    cardHolderProject.lessons.find((l) => l.order === order)!.steps.find((s) => s.id === id)!.body;
+
+  it('konce nitě: bez zatavení těsně u kůže, k zatavení asi 2 mm', () => {
+    expect(step(4, 'finish-stitch')).toContain(
+      'Když konce nezatavujete, odstřihněte je těsně u kůže',
+    );
+    expect(step(4, 'finish-stitch')).toContain('vyčnívaly asi 2 mm');
+    expect(step(6, 'stitch')).toContain('nechte asi 2 mm dlouhé a zatavte');
+  });
+
+  it('rub: méně pravidelný je normální, ale utažený, v řadě a bez smyček', () => {
+    expect(step(4, 'compare')).toContain('stejně utažené, v jedné řadě a bez smyček');
+    expect(step(4, 'compare')).toContain('vidličky nebyly při děrování kolmo (lekce 3)');
+  });
+});
+
 describe('obsah – pouzdro na karty: nákupní plán „Co koupit“', () => {
   const plan = cardHolderProject.shoppingPlan!;
 

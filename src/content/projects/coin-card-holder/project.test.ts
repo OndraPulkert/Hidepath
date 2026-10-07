@@ -151,7 +151,16 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
 
     it('lekce 7: šev dna sedlářským stehem s kontrolou rubu, lícování otvorů před zaschnutím', () => {
       expect(step(7, 'stitch-bottom')).toContain('sedlářským stehem');
-      expect(step(7, 'stitch-bottom')).toContain('steh na rubu má být stejně rovný jako na líci');
+      expect(step(7, 'stitch-bottom')).toContain('Na začátku i na konci ušijte dva zpětné stehy');
+      // Rub stejně jako u pouzdra na karty: méně pravidelný je normální, ale utažený a v řadě.
+      for (const [n, id] of [
+        [4, 'stitch-through-layers'],
+        [7, 'stitch-bottom'],
+      ] as const) {
+        expect(step(n, id)).toContain('trochu méně pravidelný než líc, to je normální');
+        expect(step(n, id)).toContain('stejně utažené, v jedné řadě a bez smyček');
+        expect(step(n, id)).not.toContain('stejně rovný jako na líci');
+      }
       expect(step(7, 'press-and-clamp')).toMatch(
         /Než necháte zaschnout, zkontrolujte, že se otvory dna na sousedních panelech po složení lícují/,
       );

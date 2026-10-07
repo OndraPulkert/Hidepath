@@ -102,6 +102,18 @@ describe('obsah – peněženka Víčko', () => {
     );
   });
 
+  it('hrany: všude pořadí vybrousit → zkosit → vyleštit, smirek 220–400, kolík Ø 8, klín jen do rysky 2,5', () => {
+    const all = lidWalletProject.lessons.map((l) => JSON.stringify(l)).join(' ');
+    expect(all).not.toMatch(/zkoste, vybruste/);
+    expect(all).not.toMatch(/Ø 8–1[02]/);
+    expect(all).not.toContain('z projektu 01 nebo 02');
+    expect(lessonText('05-crease-windows-edges')).toContain('vybruste smirkem 220–400');
+    expect(lessonText('05-crease-windows-edges')).toContain('leštítkem nebo kusem plátna');
+    expect(lessonText('09-side-seams')).toContain('5 × délka švu');
+    expect(lessonText('11-magnet-lining-s7')).toContain('jen mezi ryskou a špičkou');
+    expect(lessonText('11-magnet-lining-s7')).not.toContain('ne blíž než 2,5 mm');
+  });
+
   it('čísla v lekcích a listech odpovídají modelu (výchozí střih)', () => {
     const sheets = new Map(lidWalletProject.patternSheets!.sheets.map((s) => [s.id, s.note]));
     expect(sheets.get('sablona')).toContain(`${cz(L.widthMm)} × ${cz(L.p1LengthMm)} mm`);

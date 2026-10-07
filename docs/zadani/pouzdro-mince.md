@@ -130,8 +130,9 @@ shora je vidět jen schodek ≈ 2,6 mm na horní hraně.
   Co koupit, jak formu vyvrtat aku vrtačkou a otvory pro další mince:
   [pouzdro-mince-forma.md](pouzdro-mince-forma.md).
 - Kontaktní lepidlo, kostěná rozhrnovačka (bone folder), sponky s podložkou, potravinová fólie.
-- Nit: voskovaná polyesterová 0,6–0,8 mm. Orientačně ≈ 4 × délka švu + konce: šev dna (64 mm skrz
-  4,5 mm kůže) ≈ 0,6 m, šev kapsy (23 otvorů, u mince 40 mm 31) ≈ 0,8 m. Ověřit na odřezku.
+- Nit: voskovaná polyesterová 0,6 mm (0,8 mm do otvorů vidliček 4 mm nejde). Orientačně ≈ 4 × délka
+  švu + 25–30 cm, přes tři vrstvy 5 ×: šev dna (64 mm skrz 4,5 mm kůže) ≈ 0,6 m, šev kapsy (23
+  otvorů, u mince 40 mm 31) ≈ 0,8 m. Ověřit na odřezku.
 - Barva na hrany (barvená useň má světlý řez), smirkový papír, leštidlo na hrany.
 
 ### Druk 12 mm (Prym Anorak) – kontrola modelem (v4.11)
@@ -193,7 +194,8 @@ ohyb B 8,7, jazyk 43,1 mm). Tvarování za mokra nejdřív zkusit na A5 stejné 
    proseknuté ze stejné strany by se po složení zkřížily a jehla by jimi neprošla. Rub ve spodním
    proužku 0–3,5 mm (lepí se) nezapečeťovat; hrany, na které se po složení špatně dostane, obarvit
    a zaleštit hned. Zaleštit hrany, které budou uvnitř (horní
-   hrana vnitřního panelu, oblouk výkusu, jazyk), a zapečetit rub vnitřního panelu.
+   hrana vnitřního panelu, oblouk výkusu – celé U přes ohyb A, čtvrtkruh R34 na předku
+   i čtvrtelipsa na zadku –, jazyk), a zapečetit rub vnitřního panelu.
 2. **Kapsa** (list kapsy): do odřezku orýsovat obrys a prosekat otvory švu, pak navlhčit, položit
    **lícem dolů** na formu, na rub minci, přiklopit deskou, stáhnout svěrkami, nechat zaschnout.
    Obrys i kružnice okna se orýsují na rub podle 2. výtisku vystřiženého po obrysu, do kterého je
@@ -225,14 +227,17 @@ ohyb B 8,7, jazyk 43,1 mm). Tvarování za mokra nejdřív zkusit na A5 stejné 
    rozevřít jen tolik, aby šel proužek natřít (zhruba do pravého úhlu, ne úplně naplocho – suchý
    neztenčený ohyb A by mohl na líci prasknout), zdrsnit, natřít v tenké rovnoměrné vrstvě,
    nechat zavadnout, přeložit a před přitlačením zarovnat jehlami přes otvory (kontaktní lepidlo
-   po dotyku nejde posunout). Prošít sedlářským stehem skrz všechny vrstvy a zkontrolovat rub (steh
-   na rubu stejně rovný jako na líci); nit raději 0,8 m (pravidlo „Jak odměřit nit“ dává pro tři
+   po dotyku nejde posunout). Prošít sedlářským stehem skrz všechny vrstvy, na začátku i na konci
+   dva zpětné stehy, a zkontrolovat rub (trochu méně pravidelný než líc je normální, stehy ale
+   stejně utažené, v jedné řadě, bez smyček); nit raději 0,8 m (pravidlo „Jak odměřit nit“ dává pro tři
    vrstvy ≈ 0,6 m, 0,8 m je rezerva pro začátečníka).
 7. Vložit karty i bankovky, které nosíš, přehnout jazyk, obtisknout patici (obtisk na rubu jazyka
    určuje střed kloboučku, kružnice na šabloně je jen orientační; střed doporučeně propíchnout
    šídlem na líc – ověřit na odřezku), osadit klobouček, ověřit, že druk drží a jde znovu
    rozepnout, jazyk zkrátit 11 mm za střed kloboučku (měřit na líci) a zaoblit R10.
-8. Dno přebrousit do roviny (tři vrstvy), srazit, obarvit a zaleštit vnější hrany. U volitelné
+8. Dno přebrousit do roviny (tři vrstvy), srazit z obou vnějších líců (brusným papírem, ořezávač hran jen
+   pokud ho máš), obarvit (podle návodu na obalu, před leštěním nechat zaschnout – ověřit na
+   odřezku) a zaleštit vnější hrany včetně zkráceného konce jazyka. U volitelné
    průchodky protáhnout šňůrku.
 
 ## Co zapsat při zkoušce na papíře (a podle čeho upravit střih)

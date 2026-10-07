@@ -648,7 +648,7 @@ function saddle3(kk){
   s+=lbl(89,25.5,'líc předního','ts')+lbl(89,yB+5,'líc zadního','ts');
   return s;
 }
-add('D','Prošijte dno skrz tři vrstvy','Sedlářským stehem (lekce 7) jako u pouzdra na karty a v lekci 4 – dvě jehly proti sobě, každým otvorem, vždy stejné pořadí a stejné utažení – prošijte dno skrz všechny tři vrstvy: 17 otvorů, rozteč 4 mm, 3,5 mm od hrany. Začátek zajistěte zpětnými stehy.',12000,t=>{
+add('D','Prošijte dno skrz tři vrstvy','Sedlářským stehem (lekce 7) jako u pouzdra na karty a v lekci 4 – dvě jehly proti sobě, každým otvorem, vždy stejné pořadí a stejné utažení – prošijte dno skrz všechny tři vrstvy: 17 otvorů, rozteč 4 mm, 3,5 mm od hrany. Na začátku ušijte dva zpětné stehy (lekce 7).',12000,t=>{
   const u=es(t,.04,.92)*18, n=Math.floor(u), fr=u-n;
   let inner=frontView({moves:n,backHi:1});
   let s=clipMain(G(camT(FRONTC),inner));
@@ -660,9 +660,9 @@ add('D','Prošijte dno skrz tři vrstvy','Sedlářským stehem (lekce 7) jako u 
   ib+=notes([['dvě jehly proti','t'],['sobě, každým'],['otvorem, stejné'],['pořadí i utažení']],54,5.2);
   s+=inset('3 VRSTVY',ib);
   return s;
-},{v:'LÍC',sub:'přední panel'},'Tip (lekce 7 počet ani stranu neuvádí): u pouzdra na karty (projekt 01) jsou na začátku i na konci dva zpětné stehy; animace začíná u ohybu A.');
+},{v:'LÍC',sub:'přední panel'},'Tip (lekce 7 stranu neuvádí): animace začíná u ohybu A.');
 
-add('D','Konec zajistěte zpětnými stehy, zkontrolujte druhou stranu','Na konci řady zajistěte šev zpětnými stehy. Pak zkontrolujte rub švu (stranu zadního panelu) – steh na rubu má být stejně rovný jako na líci předního panelu (lekce 7). Na líci mají všechny stehy stejný sklon (kontrolní bod lekce 4).',7600,t=>{
+add('D','Konec zajistěte zpětnými stehy, zkontrolujte druhou stranu','Na konci řady ušijte dva zpětné stehy (lekce 7). Pak zkontrolujte rub švu (stranu zadního panelu): je u sedlářského stehu vždy trochu méně pravidelný než líc, to je normální, stehy na něm ale musí být stejně utažené, v jedné řadě a bez smyček (lekce 7). Na líci mají všechny stehy stejný sklon (kontrolní bod lekce 4).',7600,t=>{
   const u=es(t,.04,.5)*2, n=18+Math.floor(u), fr=u-Math.floor(u);
   let inner=frontView({moves:Math.min(20,n+(t>.5?1:0)),backHi:1});
   let s=clipMain(G(camT(FRONTC),inner));
@@ -670,9 +670,9 @@ add('D','Konec zajistěte zpětnými stehy, zkontrolujte druhou stranu','Na konc
     s+=needle(x,y,330-fr*20)+needle(x,y,30+fr*20,.55);}
   const [x0,y0]=tv(FRONTC,HF[14],SEAM_Y),[x1]=tv(FRONTC,HF[16],SEAM_Y);
   if(t>.3) s+=pill((x0+x1)/2,y0-4,'zpětné','ta','middle');
-  const ck=[['zpětné stehy',.55],['na začátku i konci',.55],['rub švu rovný',.7],['stejný sklon',.82]];
+  const ck=[['zpětné stehy',.55],['na začátku i konci',.55],['rub: v řadě, utažený',.7],['stejný sklon',.82]];
   let ib='';ck.forEach(([tx,at],i)=>{const o=seg(t,at,at+.08);ib+=`<g opacity="${f(o)}">${i===1?'':tick(91.5,17.5+i*7)}${lbl(96,19+i*7,tx,'t')}</g>`});
-  ib+=notes([['Tip (lekce to','ta'],['neuvádí): dva','ta'],['zpětné stehy jako'],['u pouzdra na karty'],['(projekt 01)']],52,5.2);
+  ib+=notes([['lekce 7: dva','t'],['zpětné stehy'],['na začátku'],['i na konci']],52,5.2);
   s+=inset('KONEC',ib);
   if(t>.92) s+=pill(4,87,'dno prošité skrz tři vrstvy','tok');
   return s;

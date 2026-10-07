@@ -566,9 +566,9 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     shortDescription:
       'Jehly s tupou (poloostrou) špičkou a velkým očkem. Šije se dvěma najednou, kupte čtyři.',
     purpose:
-      'Sedlářský steh se šije dvěma jehlami proti sobě. Tupá špička projde předem proraženým otvorem a nezachytí vlákna kůže ani nit druhé jehly.',
+      'Sedlářský steh se šije dvěma jehlami proti sobě. Tupá (poloostrá) špička projde předem proraženým otvorem a nezachytí vlákna kůže ani nit druhé jehly.',
     buyingGuide: [
-      { label: 'Typ', value: 'sedlářské, tupé (harness needles)' },
+      { label: 'Typ', value: 'sedlářské, tupé nebo poloostré (harness needles)' },
       {
         label: 'Velikost',
         value: 'k niti 0,6 mm tenčí velikost (např. John James 004, Ø 0,86 mm)',
