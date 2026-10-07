@@ -650,32 +650,71 @@ add('C','Osaďte klobouček se zdířkou','Klobouček se zdířkou osaďte přes
   return s;
 },null,'Tip (lekce to neuvádí): v kresbě je líc jazyka s kloboučkem nahoře a aplikátor shora – jen schéma, pořadí dílů podle návodu na obalu.');
 
-add('C','Zkraťte jazyk 11 mm za střed kloboučku','Ocelovým pravítkem odměřte na líci jazyka 11 mm od středu kloboučku a jazyk tam zkraťte. Rohy znovu zaoblete na R10 – rohovou šablonou (lob 20), nebo obtažením mince či víčka stejné velikosti. Nůž veďte tahem od prstů volné ruky.',11000,t=>{
-  const ms=seg(t,.05,.25), cut=es(t,.3,.55), away=es(t,.55,.68), rr=es(t,.7,.95);
-  const yCut=-(IMP+BEYOND);
+// ocelové pravítko (mm): lokálně u podél pravítka od nuly (konec pravítka), v napříč −RW…0, dílky mm na obou hranách
+const RW=13, RL=80;
+function rulerMM(e,fy,deg,op=1){
+  let s=`<rect x="0" y="${-RW}" width="${RL}" height="${RW}" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".25" ${SHADOW}/><rect x="0" y="${-RW*.62}" width="${RL}" height="${RW*.24}" fill="#fff" opacity=".14"/>`;
+  let d='';for(let i=0;i<=RL;i++){const h=i%10===0?3.2:i%5===0?2.2:1.3;d+=`M${i} 0 v${-h} M${i} ${-RW} v${h} `}
+  s+=`<path d="${d}" stroke="var(--steel-d)" stroke-width=".13"/>`;
+  return `<g transform="translate(${f(e)} ${f(fy)}) rotate(${f(deg)})" opacity="${f(op)}">${s}</g>`;
+}
+add('C','Zkraťte jazyk 11 mm za střed kloboučku','Ocelovým pravítkem odměřte na líci jazyka 11 mm od středu kloboučku a jazyk tam zkraťte. Rohy znovu zaoblete na R10 – rohovou šablonou (lob 20), nebo obtažením mince či víčka stejné velikosti. Nůž veďte tahem od prstů volné ruky.',14000,t=>{
+  const rIn=es(t,0,.06), mv=es(t,.22,.3), rot=es(t,.42,.52), cut=es(t,.54,.72), away=es(t,.72,.8), rr=es(t,.8,.97);
+  const yCut=-(IMP+BEYOND), CY=-IMP, MG=6.6;
+  // poloha pravítka: A vpravo od kloboučku (v obraze vlevo), B na druhé straně, C napříč, hranou na čáře řezu
+  const A={e:HSX+7+RW,f:CY,d:-90}, B={e:HSX-7,f:CY,d:-90}, C={e:TX0-8,f:yCut,d:0};
+  const P0=rot>0?B:A, P1=rot>0?C:B, pu=rot>0?rot:mv;
+  const R={e:L(P0.e,P1.e,pu)+(1-rIn)*8,f:L(P0.f,P1.f,pu),d:L(P0.d,P1.d,pu)};
+  const rOp=rIn*(1-away);
   // pohled zezadu: pouzdro leží zadním panelem nahoru, kreslí se v souřadnicích zepředu a zrcadlí
   let inner=holderBack()+`<rect x="28" y="-52" width="56" height="51" rx="1" fill="var(--mat)" stroke="var(--mat-d)" stroke-width=".3"/>`;
   for(let i=1;i<6;i++) inner+=`<path d="M28 ${-52+i*10} h56 M${28+i*10} -52 v51" stroke="var(--mat-d)" stroke-width=".15" opacity=".6"/>`;
-  // zbytek jazyka (po řezu rovný konec, pak rohy R10)
+  // jazyk (po řezu rovný konec, pak rohy R10)
   if(cut<1) inner+=`<path d="${tongueShape(0,-TAB_CUT)}" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".4"/>`;
   else if(away<1){inner+=G(`translate(0 ${f(-away*14)})`,`<path d="M${TX0} ${f(yCut)} L${TX1} ${f(yCut)} L${TX1} ${f(-TAB_CUT+10)} A10 10 0 0 0 ${TX1-10} ${-TAB_CUT} L${TX0+10} ${-TAB_CUT} A10 10 0 0 0 ${TX0} ${f(-TAB_CUT+10)} Z" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".4"/>`,`opacity="${f(1-away)}"`)}
   if(cut>=1) inner+=`<path d="${tongueShape(0,yCut,rr*10)}" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".4"/>`;
-  if(rr>0&&rr<1){
-    // šablona Ø 20 v rozích
-    inner+=`<circle cx="${TX1-10}" cy="${f(yCut+10)}" r="10" fill="none" stroke="var(--accent)" stroke-width=".3" stroke-dasharray="1 .7"/><circle cx="${TX0+10}" cy="${f(yCut+10)}" r="10" fill="none" stroke="var(--accent)" stroke-width=".3" stroke-dasharray="1 .7"/>`;
+  if(rr>0&&rr<1) inner+=`<circle cx="${TX1-10}" cy="${f(yCut+10)}" r="10" fill="none" stroke="var(--accent)" stroke-width=".3" stroke-dasharray="1 .7"/><circle cx="${TX0+10}" cy="${f(yCut+10)}" r="10" fill="none" stroke="var(--accent)" stroke-width=".3" stroke-dasharray="1 .7"/>`;
+  inner+=capTop(HSX,CY);
+  // vpichy šídlem na 11 mm po obou stranách kloboučku (na čáře řezu)
+  const m1=t>.15, m2=t>.35;
+  if(cut<1){
+    if(m1) inner+=`<circle cx="${f(HSX+MG)}" cy="${f(yCut)}" r=".35" fill="var(--hole)"/>`;
+    if(m2) inner+=`<circle cx="${f(HSX-MG)}" cy="${f(yCut)}" r=".35" fill="var(--hole)"/>`;
   }
-  inner+=capTop(HSX,-IMP);
-  // míra 11 mm
-  if(ms>0&&rr<.3) inner+=`<g opacity="${f(ms*(1-seg(t,.66,.7)))}"><path d="M${TX0-3} ${f(-IMP)} V${f(yCut)}" stroke="var(--accent)" stroke-width=".35" marker-start="url(#ar)" marker-end="url(#ar)"/><path d="M${TX0-4.5} ${f(-IMP)} H${HSX}" stroke="var(--accent)" stroke-width=".2" stroke-dasharray=".7 .5"/><path d="M${TX0-5} ${f(yCut)} H${TX1+3}" stroke="var(--accent)" stroke-width=".3" stroke-dasharray="1.2 .8"/></g>`;
-  const cam={...HTONG,cx:PW-HTONG.cx}, M=x=>PW-x;
+  // čára řezu podél hrany pravítka
+  if(rot>.6&&cut<1) inner+=`<path d="M${TX0-2} ${f(yCut)} H${TX1+2}" stroke="var(--accent)" stroke-width=".3" stroke-dasharray="1.2 .8" opacity="${f(seg(rot,.6,1))}"/>`;
+  if(cut>0&&cut<1) inner+=`<path d="M${TX1} ${f(yCut)} H${f(L(TX1,TX0,cut))}" stroke="var(--hole)" stroke-width=".35"/>`;
+  // nula pravítka na středu kloboučku
+  const zOp=seg(t,.04,.1)*(1-seg(t,.4,.44));
+  if(zOp>0) inner+=`<path d="M${HSX} ${f(CY)} H${f(R.d<-89?R.e-RW:R.e)}" stroke="var(--accent)" stroke-width=".25" stroke-dasharray=".8 .5" opacity="${f(zOp)}"/>`;
+  // pravítko
+  if(rOp>0){
+    let rg=rulerMM(R.e,R.f-away*14,R.d,rOp);
+    // dílek 11 mm zvýrazněný (jen při měření)
+    const hOp=seg(t,.08,.12)*(1-seg(t,.42,.46));
+    if(hOp>0) rg+=`<g transform="translate(${f(R.e)} ${f(R.f)}) rotate(${f(R.d)})" opacity="${f(hOp)}"><path d="M0 0 v${-RW} M11 0 v${-RW}" stroke="var(--accent)" stroke-width=".3"/></g>`;
+    inner+=rg;
+  }
+  const cam={...HTONG,cx:PW-HTONG.cx,cy:-25,sy:50,k:1.2}, M=x=>PW-x;
   let s=clipMain('c5',G(camT(cam),G(`translate(${PW} 0) scale(-1 1)`,inner)));
-  if(ms>0&&rr<.3){const [lx,ly]=tv(cam,M(TX0-3),(-IMP+yCut)/2);s+=fade(ms*(1-seg(t,.66,.7)),pill(lx+1.5,ly+1.5,'11','ta','start'))}
+  // čísla na pravítku (mimo zrcadlo, ať se dají číst)
+  const loc=(u,v)=>{const a=R.d*Math.PI/180;return tv(cam,M(R.e+u*Math.cos(a)-v*Math.sin(a)),R.f+u*Math.sin(a)+v*Math.cos(a))};
+  const nOp=rOp*(1-seg(t,.4,.44));
+  if(nOp>0){let ns='';for(const [u,tx] of [[0,'0'],[10,'1'],[20,'2']]){const [x,y]=loc(u,-RW/2);ns+=lbl(x+(u?0:1.6),y+1,tx,'ts','middle').replace('<text','<text style="fill:var(--steel-d);font-weight:700"')}s+=fade(nOp,ns)}
+  if(seg(t,.08,.12)>0&&t<.44){const [x,y]=loc(11,R.d<-89?-RW-1:0);s+=fade(seg(t,.08,.12)*(1-seg(t,.4,.44)),pill(x+1.5,y+1.4,'11 mm','ta'))}
+  // šídlo
+  const aw=(a,b)=>{const p=seg(t,a,b);return p>0&&p<1?(p<.5?p*2:2-p*2):-1};
+  let p=aw(.1,.2); if(p>=0){const [x,y]=tv(cam,M(HSX+MG),yCut);s+=awl(x,y,p)}
+  p=aw(.3,.4); if(p>=0){const [x,y]=tv(cam,M(HSX-MG),yCut);s+=awl(x,y,p)}
+  // prsty volné ruky drží pravítko, nůž tahem od nich
+  if(rot>.9&&away<.3){const [x,y]=tv(cam,M(TX1+5),yCut-RW*.55);s+=finger(x,y,1-seg(away,0,.3))}
   if(cut>0&&cut<1){const [kx,ky]=tv(cam,M(L(TX1+2,TX0-2,cut)),yCut);s+=knife(kx,ky,20)}
-  s+=pill(4,86,rr>0?'rohy R10':'11 mm za střed kloboučku','t');
-  s+=inset('ZKRÁTIT',notes([['11 mm od středu','tw'],['kloboučku na líci'],['rohy R10:'],['rohová šablona'],['(lob 20), mince'],['či víčko Ø 20']])+
-    fade(seg(t,.9,1),notes([['od kraje kloboučku','tok'],['zbyde 5 mm']],56,5.4)));
+  const msg= rr>0?'rohy R10': cut>0?'řez podél pravítka': rot>0?'pravítko přes obě značky': t>.1?'11 mm od středu kloboučku':'nula na středu kloboučku';
+  s+=pill(4,86,msg,'t');
+  s+=inset('ZKRÁTIT',notes([['11 mm od středu','tw'],['kloboučku na líci'],['ocelovým'],['pravítkem'],['rohy R10:'],['rohová šablona'],['(lob 20), mince'],['či víčko Ø 20']],18,5.2)+
+    fade(seg(t,.95,1),notes([['od kraje kloboučku','tok'],['zbyde 5 mm']],64,5.4)));
   return s;
-},{v:'LÍC',sub:'jazyk narovnaný, zezadu'},'Tip (lekce to neuvádí): pouzdro položte zadním panelem nahoru a jazyk narovnejte za horní hranu na řezací podložku – líc jazyka s kloboučkem je pak nahoře.');
+},{v:'LÍC',sub:'jazyk narovnaný, zezadu'},'Tip (lekce to neuvádí): pouzdro položte zadním panelem nahoru a jazyk narovnejte za horní hranu na řezací podložku – líc jazyka s kloboučkem je pak nahoře. Nulu pravítka srovnejte se středem kloboučku vedle něj, 11 mm označte drobným vpichem šídla po obou stranách kloboučku (škrábnutí na líci zůstane vidět) a pravítko pak přiložte napříč přes obě značky na odřezávanou část – na zbytku jazyka je klobouček.');
 
 // ===== D =====
 add('D','Kontrola: druk drží','Kontrola lekce 8: druk drží a jde znovu rozepnout – stejně jako na odřezku v lekci 3. Zdířka na rubu jazyka cvakne na hlavičku na předním panelu (vybavení Druk).',9000,t=>{
