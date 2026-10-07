@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react';
 import { Link } from 'react-router';
 
-import { routes } from '@/app/routes';
+import { LESSON_ANCHORS, routes } from '@/app/routes';
 import { MediaSlot } from '@/components/lessons/media-slot';
 import { Button } from '@/components/ui/button';
 import { animationButtonText, animationPages } from '@/content/animations';
@@ -37,7 +37,7 @@ export function StepList({
   return (
     <ol className="flex flex-col gap-6">
       {steps.map((step, index) => (
-        <li key={step.id} className="flex gap-4">
+        <li key={step.id} id={LESSON_ANCHORS.step(index + 1)} className="flex scroll-mt-24 gap-4">
           <span
             aria-hidden
             className="mt-0.5 inline-flex size-10 shrink-0 items-center justify-center rounded-full border-[1.5px] border-leather font-serif text-[18px] font-medium"

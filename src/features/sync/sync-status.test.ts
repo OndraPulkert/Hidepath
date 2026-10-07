@@ -91,4 +91,23 @@ describe('describeSyncStatus', () => {
       '5 změn čeká na odeslání po připojení.',
     );
   });
+
+  it('bez účtu offline neslibuje uložení až po připojení – změny se ukládají v prohlížeči', () => {
+    const view = describeSyncStatus({ ...base, online: false, mode: 'local' });
+    expect(view.tone).toBe('offline');
+    expect(view.hint).not.toMatch(/po připojení/);
+    expect(view.hint).toMatch(/v tomto prohlížeči/);
+  });
+
+  it('s účtem offline bez čekajících změn říká, že změny odejdou po připojení', () => {
+    expect(describeSyncStatus({ ...base, online: false, mode: 'cloud' }).hint).toMatch(
+      /po připojení/,
+    );
+  });
+
+  it('s účtem bez úložiště varuje, že zmizí neodeslané změny (postup je v účtu)', () => {
+    const view = describeSyncStatus({ ...base, storagePersistent: false, mode: 'cloud' });
+    expect(view.tone).toBe('volatile');
+    expect(view.hint).toMatch(/Neodeslané změny/);
+  });
 });

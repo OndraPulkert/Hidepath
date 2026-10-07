@@ -159,3 +159,41 @@ describe('zápisník – cíl z lekce', () => {
     expect(evaluateTarget(offsetMax, 0.31)).toBe('warn');
   });
 });
+
+describe('zápisník – přesnost podle decimals', () => {
+  const divider: RecordField = {
+    kind: 'number',
+    id: 'd1-thickness',
+    label: 'D1',
+    unit: 'mm',
+    decimals: 2,
+    target: { max: 0.92, label: 'nejvýš 0,92 mm' },
+  };
+  const calibration: RecordField = {
+    kind: 'number',
+    id: 'print-line',
+    label: 'Úsečka',
+    unit: 'mm',
+    decimals: 1,
+    target: { min: 50, max: 50, label: 'cíl přesně 50 mm' },
+  };
+
+  it('uloží číslo zaokrouhlené na decimals – zobrazení, pole i cíl se shodnou', () => {
+    const parsed = parseRecordInput(divider, '0,921');
+    expect(parsed).toEqual({ ok: true, value: 0.92 });
+    const value = parsed.ok ? parsed.value : null;
+    expect(formatRecordValue(divider, value)).toBe(`0,92${NBSP}mm`);
+    expect(recordInputText(divider, value)).toBe('0,92');
+    expect(evaluateTarget(divider, value)).toBe('ok');
+  });
+
+  it('kalibrační úsečka 50,04 s decimals 1 je 50,0 a v cíli', () => {
+    const parsed = parseRecordInput(calibration, '50,04');
+    expect(parsed).toEqual({ ok: true, value: 50 });
+    expect(evaluateTarget(calibration, parsed.ok ? parsed.value : null)).toBe('ok');
+  });
+
+  it('meze pole se kontrolují na zaokrouhlené hodnotě', () => {
+    expect(parseRecordInput(mm, '2,004')).toEqual({ ok: true, value: 2 });
+  });
+});

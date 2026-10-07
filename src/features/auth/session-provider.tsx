@@ -2,6 +2,9 @@ import { type Session as SupabaseSession } from '@supabase/supabase-js';
 import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 
 import { type Session, type SessionUser } from '@/features/auth/session';
+import { resolveBrowserStorage } from '@/features/data/local-collection';
+import { clearUserSyncData } from '@/features/sync/synced-collection';
+import { timerStore } from '@/features/timers/timer-store';
 import { supabase } from '@/lib/supabase/client';
 
 export interface SessionContextValue {
@@ -51,7 +54,15 @@ export function SessionProvider({
         if (!supabase) return;
         // Odhlásit jen toto zařízení – telefon v dílně zůstane přihlášený (§10 offline použití).
         const { error } = await supabase.auth.signOut({ scope: 'local' });
-        if (error) console.error('[auth] Odhlášení selhalo', error);
+        if (error) {
+          console.error('[auth] Odhlášení selhalo', error);
+          return;
+        }
+        // Na sdíleném zařízení nesmí po odhlášení zůstat zápisník, příprava, fronta změn
+        // ani běžící časovače (ty by dál upozorňovaly dalšího uživatele).
+        const userId = session.user?.id;
+        if (userId) clearUserSyncData(resolveBrowserStorage().storage, userId);
+        timerStore.update(() => []);
       },
     }),
     [session],

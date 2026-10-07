@@ -187,7 +187,9 @@ export function DataProvider({
           }
         : local.repositories,
       scope,
-      persistent: cloud ? true : local.persistent,
+      // I s účtem: poznámky, zápisník, příprava a neodeslané změny (outbox) leží v úložišti
+      // prohlížeče – když je jen v paměti, po zavření záložky zmizí.
+      persistent: local.persistent,
       mode: cloud ? 'cloud' : 'local',
       migration,
       retryMigration,

@@ -1,4 +1,5 @@
 import { type StorageLike } from '@/features/data/local-collection';
+import { waitBlocksLaterStep } from '@/features/timers/timer-links';
 import {
   dueUnfired,
   markFired,
@@ -17,8 +18,8 @@ export interface TimerStore {
   update: (updater: (timers: readonly TimerRecord[]) => TimerRecord[]) => readonly TimerRecord[];
   /**
    * Převezme doběhlé, dosud neohlášené časovače: nejdřív do úložiště zapíše `firedAt`
-   * a teprve pak je vrátí k ohlášení. Druhá karta nebo druhý běh tak stejný časovač
-   * neohlásí znovu.
+   * a teprve pak je vrátí k ohlášení. Druhý běh v téže kartě tak stejný časovač neohlásí
+   * znovu; mezi kartami (různé procesy) to zaručí až `claimDueAcrossTabs`.
    */
   claimDue: (now: number) => TimerRecord[];
   subscribe: (listener: () => void) => () => void;
@@ -28,13 +29,15 @@ export interface TimerStoreOptions {
   /** Okno pro událost `storage` (změna z jiné karty). */
   target?: Pick<Window, 'addEventListener' | 'removeEventListener'> | undefined;
   now?: () => number;
+  /** Zavřené časovače, které úklid nesmaže (viz `pruneTimers`). */
+  keepDismissed?: (timer: TimerRecord) => boolean;
 }
 
 const EMPTY: readonly TimerRecord[] = Object.freeze([]);
 
 export function createTimerStore(
   storage: StorageLike | null,
-  { target, now = Date.now }: TimerStoreOptions = {},
+  { target, now = () => Date.now(), keepDismissed }: TimerStoreOptions = {},
 ): TimerStore {
   const listeners = new Set<() => void>();
   let cachedRaw: string | null | undefined;
@@ -99,7 +102,7 @@ export function createTimerStore(
   return {
     getSnapshot: read,
     update(updater) {
-      const next = pruneTimers(updater(read()), now());
+      const next = pruneTimers(updater(read()), now(), keepDismissed);
       write(next);
       return read();
     },
@@ -127,6 +130,45 @@ export function createTimerStore(
   };
 }
 
+/** Zámek sdílený kartami (podmnožina `navigator.locks`). */
+export interface TabLocks {
+  request<T>(name: string, callback: () => Promise<T>): Promise<T>;
+}
+
+/** Jak dlouho držet zámek po převzetí: zápis do localStorage se do jiných karet (procesů)
+ * nepropíše okamžitě – druhá karta by jinak ještě četla `firedAt: null`. */
+export const CLAIM_HOLD_MS = 1000;
+
+function browserLocks(): TabLocks | undefined {
+  if (typeof navigator === 'undefined' || !('locks' in navigator)) return undefined;
+  return navigator.locks;
+}
+
+/**
+ * Převezme doběhlé časovače pod zámkem sdíleným všemi kartami a ohlásí je (`announce`) jen
+ * v kartě, která je převzala. Zámek drží ještě `CLAIM_HOLD_MS`, než se zápis `firedAt`
+ * rozšíří do ostatních karet. Bez `navigator.locks` (starší prohlížeče) převezme přímo.
+ */
+export async function claimDueAcrossTabs(
+  store: Pick<TimerStore, 'claimDue'>,
+  now: () => number,
+  announce: (due: TimerRecord[]) => void,
+  locks: TabLocks | undefined = browserLocks(),
+): Promise<void> {
+  const claim = () => {
+    const due = store.claimDue(now());
+    if (due.length > 0) announce(due);
+    return due.length;
+  };
+  if (!locks) {
+    claim();
+    return;
+  }
+  await locks.request('hidepath-timers-claim', async () => {
+    if (claim() > 0) await new Promise((resolve) => setTimeout(resolve, CLAIM_HOLD_MS));
+  });
+}
+
 function browserStorage(): StorageLike | null {
   try {
     return typeof window === 'undefined' ? null : window.localStorage;
@@ -138,4 +180,5 @@ function browserStorage(): StorageLike | null {
 /** Sdílené úložiště časovačů aplikace (localStorage). */
 export const timerStore: TimerStore = createTimerStore(browserStorage(), {
   target: typeof window === 'undefined' ? undefined : window,
+  keepDismissed: (timer) => waitBlocksLaterStep(timer),
 });

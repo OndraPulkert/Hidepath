@@ -1,10 +1,14 @@
-import { type ReactNode, useId, useMemo } from 'react';
+import { type ReactNode, useId, useMemo, useRef } from 'react';
 import { Link } from 'react-router';
 
 import { ProgressBar } from '@/components/ui/progress-bar';
 import { Tag } from '@/components/ui/tag';
 import { equipmentCatalog } from '@/content/equipment';
-import { type LessonDefinition, type ProjectDefinition } from '@/content/schema';
+import {
+  type EquipmentStatus,
+  type LessonDefinition,
+  type ProjectDefinition,
+} from '@/content/schema';
 import { useDataContext } from '@/features/data/data-provider';
 import { type InventoryState } from '@/features/inventory/types';
 import { useUpdateInventoryItem } from '@/features/inventory/use-inventory';
@@ -18,6 +22,7 @@ import {
 import { usePrepChecks, useSetPrepCheck } from '@/features/prep/use-prep-checks';
 import { EMPTY_PROGRESS } from '@/features/progress/types';
 import { useProgress } from '@/features/progress/use-progress';
+import { useOnlineStatus } from '@/lib/pwa/use-online-status';
 import { cn } from '@/lib/utils/cn';
 import { formatCzk, formatOrdinalCode, pluralizeCs, typo } from '@/lib/utils/format';
 
@@ -38,7 +43,11 @@ export function LessonPrep({ project, lesson, inventory }: LessonPrepProps) {
   const checksQuery = usePrepChecks(project.slug);
   const setCheck = useSetPrepCheck(project.slug);
   const updateInventory = useUpdateInventoryItem();
-  const { migration } = useDataContext();
+  const { migration, mode } = useDataContext();
+  const online = useOnlineStatus();
+  // Stav nástroje před „Mám“ (např. Objednáno), aby ho zrušení „Mám“ vrátilo – ne vždy
+  // „Chci koupit“, které by zahodilo objednávku.
+  const statusBeforeOwned = useRef(new Map<string, EquipmentStatus>());
 
   const progress = progressQuery.data ?? EMPTY_PROGRESS;
   const checks = checksQuery.data;
@@ -98,12 +107,20 @@ export function LessonPrep({ project, lesson, inventory }: LessonPrepProps) {
               key={item.slug}
               item={item}
               disabled={migration.status === 'running'}
-              onToggle={(checked) =>
+              onToggle={(checked) => {
+                const before = inventory[item.slug]?.status;
+                if (checked && before && before !== 'owned') {
+                  statusBeforeOwned.current.set(item.slug, before);
+                }
                 updateInventory.mutate({
                   equipmentSlug: item.slug,
-                  patch: { status: checked ? 'owned' : 'want_to_buy' },
-                })
-              }
+                  patch: {
+                    status: checked
+                      ? 'owned'
+                      : (statusBeforeOwned.current.get(item.slug) ?? 'want_to_buy'),
+                  },
+                });
+              }}
             />
           ))}
         </PrepGroup>
@@ -137,7 +154,9 @@ export function LessonPrep({ project, lesson, inventory }: LessonPrepProps) {
 
       {setCheck.isError || updateInventory.isError ? (
         <p role="alert" className="text-body text-cognac-deep">
-          Uložení se nepovedlo. Zkuste to prosím znovu.
+          {updateInventory.isError && !online && mode === 'cloud'
+            ? 'Stav nástroje se ukládá do účtu a bez připojení se neuložil. Zkuste to po připojení.'
+            : 'Uložení se nepovedlo. Zkuste to prosím znovu.'}
         </p>
       ) : null}
     </section>

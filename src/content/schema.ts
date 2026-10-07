@@ -170,8 +170,10 @@ export type AnimationLink = z.infer<typeof animationLinkSchema>;
 
 /**
  * Čekání v kroku (schnutí lepidla, přes noc pod zátěží…), ze kterého si uživatel spustí časovač.
- * Čísla se berou jen z textu lekce nebo zadání (`basis: 'text'`). Kde text říká „podle návodu“,
- * je `basis: 'manufacturer'`: UI ukáže „orientačně, řiďte se návodem“ a dobu jde upravit.
+ * Čísla se berou jen z textu lekce nebo zadání (`basis: 'text'`, UI „Podle lekce: …“). Kde text
+ * říká „podle návodu“, je `basis: 'manufacturer'`: UI ukáže, že výchozí doba je orientační
+ * a má se nastavit podle návodu. Kde text dobu neuvádí vůbec (např. „nejlépe přes noc“), je
+ * `basis: 'estimate'`: výchozí doba je jen odhad k úpravě. Obojí jde upravit.
  */
 export const stepWaitSchema = z
   .object({
@@ -181,9 +183,14 @@ export const stepWaitSchema = z
     minutes: z.number().int().positive(),
     /** Horní mez rozsahu („10–15 min“); chybí = pevná doba. */
     maxMinutes: z.number().int().positive().optional(),
-    basis: z.enum(['text', 'manufacturer']),
+    basis: z.enum(['text', 'manufacturer', 'estimate']),
     /** Pozdější krok téže lekce, se kterým se musí počkat, než čekání doběhne. */
     blocksStepId: slug.optional(),
+    /**
+     * Pole zápisníku v minutách (z dřívějšího kroku), jehož zapsaná hodnota je výchozí doba
+     * časovače – např. doba schnutí barvy, kterou si uživatel ověřil na odřezku.
+     */
+    initialFromField: slug.optional(),
   })
   .refine((w) => w.maxMinutes === undefined || w.maxMinutes >= w.minutes, {
     message: 'maxMinutes musí být ≥ minutes',
@@ -711,7 +718,7 @@ interface FieldPosition {
 }
 
 function checkRecords(lessons: readonly LessonDefinition[], ctx: Ctx) {
-  const positions = new Map<string, FieldPosition>();
+  const positions = new Map<string, FieldPosition & { field: RecordField }>();
   for (const lesson of lessons) {
     lesson.steps.forEach((step, stepIndex) => {
       for (const field of step.records ?? []) {
@@ -721,13 +728,36 @@ function checkRecords(lessons: readonly LessonDefinition[], ctx: Ctx) {
             message: `Lekce ${lesson.slug}: pole zápisníku ${field.id} už v projektu je`,
           });
         }
-        positions.set(field.id, { lessonOrder: lesson.order, stepIndex });
+        positions.set(field.id, { lessonOrder: lesson.order, stepIndex, field });
         checkRecordField(lesson.slug, field, ctx);
       }
     });
   }
+  const isEarlier = (at: FieldPosition, lesson: LessonDefinition, stepIndex: number) =>
+    at.lessonOrder < lesson.order || (at.lessonOrder === lesson.order && at.stepIndex < stepIndex);
   for (const lesson of lessons) {
     lesson.steps.forEach((step, stepIndex) => {
+      for (const wait of step.waits ?? []) {
+        if (wait.initialFromField === undefined) continue;
+        const at = positions.get(wait.initialFromField);
+        const where = `Lekce ${lesson.slug}: čekání ${wait.id}`;
+        if (!at) {
+          ctx.addIssue({
+            code: 'custom',
+            message: `${where} přebírá dobu z neznámého pole ${wait.initialFromField}`,
+          });
+        } else if (!isEarlier(at, lesson, stepIndex)) {
+          ctx.addIssue({
+            code: 'custom',
+            message: `${where} smí převzít dobu jen z dříve zapsaného pole (${wait.initialFromField})`,
+          });
+        } else if (at.field.kind !== 'number' || at.field.unit !== 'min') {
+          ctx.addIssue({
+            code: 'custom',
+            message: `${where}: pole ${wait.initialFromField} není v minutách`,
+          });
+        }
+      }
       for (const recall of step.recalls ?? []) {
         const at = positions.get(recall.fieldId);
         if (!at) {
@@ -735,10 +765,7 @@ function checkRecords(lessons: readonly LessonDefinition[], ctx: Ctx) {
             code: 'custom',
             message: `Lekce ${lesson.slug}: krok ${step.id} připomíná neznámé pole ${recall.fieldId}`,
           });
-        } else if (
-          at.lessonOrder > lesson.order ||
-          (at.lessonOrder === lesson.order && at.stepIndex >= stepIndex)
-        ) {
+        } else if (!isEarlier(at, lesson, stepIndex)) {
           ctx.addIssue({
             code: 'custom',
             message: `Lekce ${lesson.slug}: krok ${step.id} smí připomínat jen dříve zapsané pole (${recall.fieldId})`,

@@ -69,9 +69,23 @@ describe('LessonFocusPage', () => {
     expect(await screen.findByText('Krok 7 / 7')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Ke kontrolním bodům' })).toHaveAttribute(
       'href',
-      LESSON,
+      `${LESSON}#kontrolni-body`,
     );
-    expect(screen.getByRole('link', { name: /ukončit/i })).toHaveAttribute('href', LESSON);
+    // Ukončit vrátí na právě otevřený krok v lekci, ne na její začátek.
+    expect(screen.getByRole('link', { name: /ukončit/i })).toHaveAttribute(
+      'href',
+      `${LESSON}#krok-7`,
+    );
+  });
+
+  it('„Ke kontrolním bodům“ otevře lekci posunutou na kontrolní body', async () => {
+    const scrollIntoView = vi.fn();
+    Element.prototype.scrollIntoView = scrollIntoView;
+    const { user } = setup(focusUrl(7));
+    await user.click(await screen.findByRole('link', { name: 'Ke kontrolním bodům' }));
+    const heading = await screen.findByRole('heading', { level: 2, name: 'Kontrolní body' });
+    expect(scrollIntoView).toHaveBeenCalled();
+    expect(scrollIntoView.mock.contexts.at(-1)).toBe(heading.closest('#kontrolni-body'));
   });
 
   it('šipky nepřebíjí psaní do pole', async () => {
@@ -138,31 +152,37 @@ describe('LessonFocusPage', () => {
     await first.user.click(within(card).getByRole('button', { name: /spustit 10/i }));
 
     act(() => vi.advanceTimersByTime(10 * MIN + 100));
-    const alert = await screen.findByRole('alert');
-    expect(alert).toHaveTextContent('Hotovo: Test: zavadnutí lepidla');
-    expect(alert).toHaveTextContent('Krok 1');
+    // Na kroku s časovačem stačí „✓ Hotovo“ v kroku – horní upozornění by ho jen zdvojilo.
+    expect(await within(card).findByRole('status')).toHaveTextContent('✓ Hotovo');
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: 'Rozumím' })).toHaveLength(1);
+    expect(screen.queryByRole('button', { name: /upozornit mě/i })).not.toBeInTheDocument();
     expect(beep).toHaveBeenCalledTimes(1);
 
     act(() => vi.advanceTimersByTime(5 * MIN));
     expect(beep).toHaveBeenCalledTimes(1);
 
     first.unmount();
-    const second = setup(focusUrl(1));
+    const second = setup(focusUrl(2));
     const again = await screen.findByRole('alert');
+    expect(again).toHaveTextContent('Hotovo: Test: zavadnutí lepidla');
+    expect(again).toHaveTextContent('Krok 1');
     expect(again).toHaveTextContent(/doběhlo před 5/);
     expect(beep).toHaveBeenCalledTimes(1);
 
     await second.user.click(within(again).getByRole('button', { name: 'Rozumím' }));
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    await second.user.click(screen.getByRole('button', { name: /zpět/i }));
     expect(
-      within(screen.getByRole('region', { name: /test: zavadnutí lepidla/i })).getByRole('button', {
-        name: /spustit 10/i,
-      }),
+      within(await screen.findByRole('region', { name: /test: zavadnutí lepidla/i })).getByRole(
+        'button',
+        { name: /spustit 10/i },
+      ),
     ).toBeInTheDocument();
   });
 
   it('časovač končící mimo takt odpočtu po ohlášení ukáže Hotovo, nezamrzne na 0:01', async () => {
-    vi.spyOn(appBeeper, 'beep').mockImplementation(() => undefined);
+    const beep = vi.spyOn(appBeeper, 'beep').mockImplementation(() => undefined);
     const now = Date.now();
     // Spuštěný dřív (např. před reloadem): konec nepadá na sekundový tik odpočtu.
     localStorage.setItem(
@@ -186,9 +206,9 @@ describe('LessonFocusPage', () => {
     setup(focusUrl(1));
     const card = await screen.findByRole('region', { name: /test: zavadnutí lepidla/i });
     act(() => vi.advanceTimersByTime(10 * MIN + 400));
-    expect(await screen.findByRole('alert')).toHaveTextContent('Hotovo: Test: zavadnutí lepidla');
+    expect(await within(card).findByRole('status')).toHaveTextContent('Hotovo');
+    expect(beep).toHaveBeenCalledTimes(1);
     expect(within(card).queryByRole('timer')).not.toBeInTheDocument();
-    expect(within(card).getByRole('status')).toHaveTextContent('Hotovo');
   });
 
   it('časovač doběhlý při zavřené aplikaci se ohlásí po návratu', async () => {
@@ -242,9 +262,20 @@ describe('Dílenský režim z lekce a pruh časovačů v aplikaci', () => {
     );
     const card = screen.getByRole('region', { name: /test: zavadnutí lepidla/i });
     await user.click(within(card).getByRole('button', { name: /spustit 10/i }));
-    // Běžící časovač je vidět i v pruhu aplikace s odkazem na krok.
+    // Běžící časovač je vidět i v pruhu aplikace s odkazem na krok – v lekci, odkud se
+    // spustil (ne v dílenském režimu, který uživatel neotevřel).
     const bar = screen.getByRole('navigation', { name: 'Běžící časovače' });
-    expect(within(bar).getByRole('link')).toHaveAttribute('href', `${LESSON}/focus?krok=1`);
+    expect(within(bar).getByRole('link')).toHaveAttribute('href', `${LESSON}#krok-1`);
     expect(bar).toHaveTextContent('10:00');
+  });
+
+  it('časovač spuštěný v dílenském režimu vede zpět do dílenského režimu', async () => {
+    const first = setup(focusUrl(1));
+    const card = await screen.findByRole('region', { name: /test: zavadnutí lepidla/i });
+    await first.user.click(within(card).getByRole('button', { name: /spustit 10/i }));
+    first.unmount();
+    setup('/dashboard');
+    const bar = await screen.findByRole('navigation', { name: 'Běžící časovače' });
+    expect(within(bar).getByRole('link')).toHaveAttribute('href', `${LESSON}/focus?krok=1`);
   });
 });

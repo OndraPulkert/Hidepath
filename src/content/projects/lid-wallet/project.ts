@@ -107,8 +107,11 @@ const thickness = (id: string, label: string, hint: string): RecordField => ({
   decimals: 2,
 });
 
-/** Max. tloušťka přepážky (lekce 1: „nesmí mít nikde víc než 0,92 mm“). */
-const DIVIDER_MAX = { max: 0.92, label: 'nejvýš 0,92 mm' };
+/**
+ * Max. tloušťka přepážky (lekce 1: „nesmí mít nikde víc než 0,92 mm“). Pole drží průměr
+ * (pro předvyplnění listů), proto cíl říká „průměr“ – každé místo hlídá nápověda a kontrolní bod.
+ */
+const DIVIDER_MAX = { max: 0.92, label: 'průměr nejvýš 0,92 mm' };
 
 /** k do 1,24 listy platí (lekce 2 a 10). */
 const K_TARGET = { max: 1.24, label: 'nejvýš 1,24' };
@@ -208,7 +211,7 @@ export const lessons: readonly LessonDefinition[] = [
             ...thickness(
               LID_RECORD_IDS.d1Thickness,
               'D1 (nebarvená kozinka)',
-              'Průměr v místě dílu. Nikde víc než 0,92 mm.',
+              'Průměr v místě dílu. Zkontrolujte, že ani jedno měření nemá víc než 0,92 mm.',
             ),
             target: DIVIDER_MAX,
           },
@@ -216,7 +219,7 @@ export const lessons: readonly LessonDefinition[] = [
             ...thickness(
               LID_RECORD_IDS.d2Thickness,
               'D2 (čokoládová kozinka)',
-              'Průměr v místě dílu. Nikde víc než 0,92 mm.',
+              'Průměr v místě dílu. Zkontrolujte, že ani jedno měření nemá víc než 0,92 mm.',
             ),
             target: DIVIDER_MAX,
           },
@@ -708,7 +711,6 @@ export const lessons: readonly LessonDefinition[] = [
       'šablony konce jazýčku a výřezu pro palec z lekce 2',
       'bezbarvý lak na nehty (hrany plíšku)',
       'jehla na propichování (rýsovací šídlo dělá větší vpich – ověřte na odřezku), tužka',
-      'maskovací páska',
     ],
     requiredEquipment: [
       'veg-tan-leather-1mm',
@@ -895,7 +897,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 120,
     goal: 'Vytlačit rýhu ohybu dna, vyseknout okénka mincí a výřez pro palec a dokončit hrany, na které po sestavení nedosáhnete.',
     materials: [
-      'tupý hrot na rýhu, maskovací páska, párátka',
+      'tupý hrot na rýhu, párátka',
       'dřevěný kolík Ø 8 do aku vrtačky (broušení a leštění vydutých hran)',
       'odřezek kozinky na zkoušku barvy na hrany',
     ],
@@ -1054,7 +1056,7 @@ export const lessons: readonly LessonDefinition[] = [
     phaseSlug: 'build',
     estimatedMinutes: 150,
     goal: 'Přilepit D2 na záda jen v pásech lepení, proseknout okénko bankovek skrz obě vrstvy a ušít švy sloupců mincí S1–S3.',
-    materials: ['maskovací páska', 'jehla na propichování', 'odřezek D2 + B na zkoušku děrování'],
+    materials: ['jehla na propichování', 'odřezek D2 + B na zkoušku děrování'],
     requiredEquipment: [
       'contact-cement',
       'round-punches-8-14',
@@ -1266,7 +1268,7 @@ export const lessons: readonly LessonDefinition[] = [
     phaseSlug: 'build',
     estimatedMinutes: 120,
     goal: 'Přilepit plíšek a přes něj přepážku D1 na rub přední stěny a ušít šev dna karet S6.',
-    materials: ['maskovací páska, párátka', 'jehla na propichování'],
+    materials: ['párátka', 'jehla na propichování'],
     requiredEquipment: [
       'contact-cement',
       'steel-sheet',
@@ -1383,7 +1385,7 @@ export const lessons: readonly LessonDefinition[] = [
     goal: 'Slepit boky, ušít boční švy S4 a S5 skrz všechny vrstvy a boky zarovnat na 101 mm a vyleštit.',
     materials: [
       'odřezek usně 1,0 mm na vyrovnání schodu u horní hrany F',
-      'tužka, jehla na propichování, maskovací páska',
+      'tužka, jehla na propichování',
     ],
     requiredEquipment: [
       'contact-cement',
@@ -1600,7 +1602,7 @@ export const lessons: readonly LessonDefinition[] = [
     goal: 'Nalepit magnet na hotové peněžence přesně na značku, přikrýt ho podšívkou L1, oříznout špičku a ušít šev S7.',
     materials: [
       'zkušební (hledací) magnet',
-      'maskovací páska, tužka',
+      'tužka',
       'hladký kolík na převalování',
       'kniha na zatížení víčka',
       'podložka pod šev S7: dva odřezky usně 1,0 mm slepené na sebe (nebo odřezek desky 2 mm)',
@@ -1774,7 +1776,6 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 60,
     goal: 'Dokončit peněženku a na zkušebním kuse projít povinné zkoušky Z-1 až Z-4, podle kterých se řídí finální kus.',
     materials: [
-      'balzám na kůži (snášenlivost ověřit na odřezku)',
       'karty, bankovky a mince na stavy A, B a C, 1 Kč na zkoušku retence',
       'papír na upozornění',
       'jen při výměně magnetu: malé nůžky nebo páráček, kousek nebarvené kozinky na novou L1, podložka s otvorem z lekce 11, jehla na propichování',

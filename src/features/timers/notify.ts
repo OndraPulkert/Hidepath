@@ -13,6 +13,12 @@ export interface NotificationApi {
 
 export interface SwRegistrationLike {
   showNotification(title: string, options?: NotificationOptions): Promise<void>;
+  getNotifications?(filter?: { tag?: string }): Promise<readonly { close(): void }[]>;
+}
+
+/** Tag systémové notifikace časovače – stejné čekání se nezobrazí dvakrát a jde zavřít. */
+export function timerNotificationTag(id: string): string {
+  return `hidepath-timer-${id}`;
 }
 
 export interface NotifyEnv {
@@ -99,7 +105,7 @@ async function showSystemNotifications(
     for (const n of notices) {
       await registration.showNotification(n.title, {
         body: n.body,
-        tag: `hidepath-timer-${n.id}`,
+        tag: timerNotificationTag(n.id),
         icon: '/icons/icon-192.png',
         data: { url: n.url },
       });
@@ -107,6 +113,23 @@ async function showSystemNotifications(
     return true;
   } catch {
     return false;
+  }
+}
+
+/**
+ * Zavře už zobrazenou systémovou notifikaci časovače (uživatel ho zavřel nebo zrušil v aplikaci),
+ * aby v liště nezůstalo zastaralé „Hotovo“. Jen pokus – chyba nic neshodí.
+ */
+export async function closeTimerNotification(
+  id: string,
+  env: Pick<NotifyEnv, 'getRegistration'>,
+): Promise<void> {
+  try {
+    const registration = await env.getRegistration?.();
+    const shown = await registration?.getNotifications?.({ tag: timerNotificationTag(id) });
+    for (const n of shown ?? []) n.close();
+  } catch {
+    // Notifikace zmizí nejpozději po klepnutí.
   }
 }
 
@@ -137,7 +160,9 @@ export function createBeeper(Ctor: AudioContextCtor | undefined): Beeper {
     if (!Ctor) return null;
     try {
       ctx ??= new Ctor();
-      if (ctx.state === 'suspended') void ctx.resume().catch(() => undefined);
+      // 'suspended' bez gesta i 'interrupted' (iOS po návratu z pozadí) – obojí probudit.
+      if (ctx.state !== 'running' && ctx.state !== 'closed')
+        void ctx.resume().catch(() => undefined);
       return ctx;
     } catch {
       return null;

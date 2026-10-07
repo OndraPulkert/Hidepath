@@ -1,4 +1,5 @@
-import { equipmentList } from '@/content/equipment';
+import { equipmentCatalog, equipmentList } from '@/content/equipment';
+import { projects } from '@/content/projects';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
 import {
   equipmentDefinitionSchema,
@@ -7,6 +8,7 @@ import {
   projectDefinitionSchema,
   type RecordField,
 } from '@/content/schema';
+import { formatWaitRange } from '@/features/timers/timers';
 
 describe('obsah – validace schématem', () => {
   it('každá položka vybavení odpovídá schématu a má unikátní slug', () => {
@@ -359,5 +361,87 @@ describe('obsah – čekání, zápisník a „Připravte si“', () => {
     );
     const req = { id: 'r', fromLesson: lesson1.slug, label: 'Díl' };
     expect(issuesOf(withRequires(1, [req, req]))).toContain('duplicitní id požadavku r');
+  });
+
+  it('čekání může převzít výchozí dobu z dříve zapsaného pole v minutách', () => {
+    const minutes = (id: string): RecordField => ({
+      kind: 'number',
+      id,
+      label: 'Schnutí',
+      unit: 'min',
+    });
+    const wait = {
+      id: 'w',
+      label: 'Schnutí barvy',
+      minutes: 20,
+      basis: 'manufacturer' as const,
+      initialFromField: 'dry',
+    };
+    const earlier = withLesson(0, (l) =>
+      withStep(withStep(l, 0, { records: [minutes('dry')] }), 1, { waits: [wait] }),
+    );
+    expect(issuesOf(earlier)).toBe('');
+    expect(issuesOf(withLesson(0, (l) => withStep(l, 0, { waits: [wait] })))).toContain(
+      'přebírá dobu z neznámého pole dry',
+    );
+    const later = withLesson(1, (l) => withStep(l, 0, { records: [minutes('dry')] }));
+    expect(issuesOf(withLesson(0, (l) => withStep(l, 0, { waits: [wait] }), later))).toContain(
+      'jen z dříve zapsaného pole',
+    );
+    const mm = withLesson(0, (l) =>
+      withStep(withStep(l, 0, { records: [mmField('dry')] }), 1, { waits: [wait] }),
+    );
+    expect(issuesOf(mm)).toContain('pole dry není v minutách');
+  });
+});
+
+describe('obsah – čekání a „Připravte si“ ve skutečných lekcích', () => {
+  const steps = projects.flatMap((p) =>
+    p.lessons.flatMap((l) => l.steps.map((s) => ({ p, l, s, at: `${p.slug}/${l.slug}/${s.id}` }))),
+  );
+  const nbsp = (t: string) => t.replace(/\u00a0/g, ' ');
+
+  it('doba „podle lekce“ (basis text) stojí v textu kroku nebo kroku, který blokuje', () => {
+    const missing: string[] = [];
+    for (const { l, s, at } of steps) {
+      for (const w of s.waits ?? []) {
+        if (w.basis !== 'text') continue;
+        const blocked = l.steps.find((x) => x.id === w.blocksStepId);
+        const text = nbsp(`${s.body} ${blocked?.body ?? ''}`);
+        const range = nbsp(formatWaitRange(w));
+        if (!text.includes(range)) missing.push(`${at}/${w.id}: „${range}“`);
+      }
+    }
+    expect(missing).toEqual([]);
+  });
+
+  it('materiál lekce neopakuje nástroj téže lekce (jinak dvě „Mám“ za jednu věc)', () => {
+    const words = (t: string) =>
+      t
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9 ]+/g, ' ')
+        .trim()
+        .split(/\s+/);
+    // Kůži z nákupu materiál upřesňuje (který kus, jaký rozměr) – není to duplicita.
+    const isLeather = (name: string) => /^(kůže|kozinka)/i.test(name);
+    const duplicates: string[] = [];
+    for (const p of projects) {
+      for (const l of p.lessons) {
+        const tools = [...l.requiredEquipment, ...l.recommendedEquipment]
+          .map((slug) => equipmentCatalog[slug]?.name ?? slug)
+          .filter((name) => !isLeather(name));
+        for (const material of l.materials) {
+          for (const part of material.split(/[,;] /)) {
+            const head = words(part).slice(0, 2);
+            // Název nástroje začíná tím podstatným („Maskovací páska…“, „Druk…“, „Barva…“).
+            const tool = tools.find((name) => head.includes(words(name)[0]!));
+            if (tool) duplicates.push(`${p.slug} L${l.order}: „${part}“ = ${tool}`);
+          }
+        }
+      }
+    }
+    expect(duplicates).toEqual([]);
   });
 });

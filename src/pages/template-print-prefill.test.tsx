@@ -70,6 +70,36 @@ describe('tisk listů – předvýběr listu z odkazu', () => {
     expect(screen.getAllByRole('img', { name: /^List střihu:/ })).toHaveLength(1);
   });
 
+  it('se změřenou kůží v zápisníku nepředvybere výchozí list; po vygenerování vybere jen ten list', async () => {
+    const user = userEvent.setup();
+    const repositories = createTestRepositories();
+    for (const e of [
+      entry(LID_RECORD_IDS.p1Thickness, 1.0),
+      entry(LID_RECORD_IDS.d1Thickness, 0.75),
+      entry(LID_RECORD_IDS.d2Thickness, 0.8),
+      entry(LID_RECORD_IDS.liningThickness, 0.9),
+    ]) {
+      await repositories.lessonRecords.upsert(e);
+    }
+    renderApp(routes.template(lidWalletProject.slug, 'sablona'), { repositories });
+
+    await screen.findByText(/Předvyplněno ze zápisníku:/);
+    const fieldset = screen.getByText('Co vytisknout').closest('fieldset')!;
+    expect(within(fieldset).getByRole('checkbox', { name: /^List 1/ })).not.toBeChecked();
+    expect(screen.queryAllByRole('img', { name: /^List střihu:/ })).toHaveLength(0);
+    expect(screen.getByRole('button', { name: /vytisknout/i })).toBeDisabled();
+    expect(screen.getByText(/nejdřív vygenerujte listy pro svou kůži/i)).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Vygenerovat listy' }));
+    const images = await screen.findAllByRole('img', { name: /^List střihu:/ });
+    expect(images).toHaveLength(1);
+    const checked = within(fieldset)
+      .getAllByRole('checkbox')
+      .filter((c) => (c as HTMLInputElement).checked);
+    expect(checked).toHaveLength(1);
+    expect(checked[0]!.id).toBe('sheet-zmerena-sablona');
+  });
+
   it('neznámé id listu ponechá výchozí výběr', async () => {
     renderApp(routes.template(lidWalletProject.slug, 'neni'));
     const fieldset = (await screen.findByText('Co vytisknout')).closest('fieldset')!;

@@ -366,6 +366,11 @@ describe('obsah – peněženka Víčko', () => {
       };
       expect(target(LID_RECORD_IDS.d1Thickness)?.max).toBe(0.92);
       expect(target(LID_RECORD_IDS.d2Thickness)?.max).toBe(0.92);
+      // Pole drží průměr, pravidlo lekce platí pro každé místo: „V cíli“ nesmí tvrdit víc.
+      for (const id of [LID_RECORD_IDS.d1Thickness, LID_RECORD_IDS.d2Thickness]) {
+        expect(target(id)?.label, id).toBe('průměr nejvýš 0,92 mm');
+        expect(where.get(id)!.f.hint, id).toMatch(/ani jedno měření nemá víc než 0,92 mm/);
+      }
       expect(target(LID_RECORD_IDS.p0K)?.max).toBe(DEFAULT_LID_WALLET.kMax);
       expect(target(LID_RECORD_IDS.kMeasured)?.max).toBe(DEFAULT_LID_WALLET.kMax);
       expect(target(LID_RECORD_IDS.v12Offset)?.max).toBe(0.3);

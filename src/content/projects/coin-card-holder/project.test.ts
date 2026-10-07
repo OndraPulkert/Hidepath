@@ -313,16 +313,20 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
       ]);
       for (const { at, body, w } of waits) {
         if (w.id === 'dry-overnight') {
-          // „přes noc“ z lekce = 12–24 h jako v zadání (docs/zadani/penezenka-vicko.md §9.1).
+          // Lekce ani zadání hodiny neuvádí („nejlépe přes noc“) – jen odhad k úpravě, ne „Podle lekce“.
           expect(body, at).toContain('přes noc');
-          expect([w.minutes, w.maxMinutes, w.basis], at).toEqual([720, 1440, 'text']);
+          expect([w.minutes, w.maxMinutes, w.basis], at).toEqual([720, undefined, 'estimate']);
         } else if (w.id.startsWith('glue')) {
-          // Lekce říká „odvětrat podle návodu“; výchozí doba z tabulky zadání, orientačně.
+          // Lekce říká „odvětrat podle návodu“; výchozí doba je jen orientační (UI to říká).
           expect(body, at).toMatch(/odvětr/);
           expect([w.minutes, w.maxMinutes, w.basis], at).toEqual([10, 15, 'manufacturer']);
         } else {
           expect(body, at).toMatch(/obarv|barv/);
           expect([w.minutes, w.maxMinutes, w.basis], at).toEqual([20, 30, 'manufacturer']);
+          // Po lekci 4 začíná časovač dobou schnutí, kterou si uživatel ověřil a zapsal.
+          expect(w.initialFromField, at).toBe(
+            at.startsWith('4/') ? undefined : 'edge-paint-dry-minutes',
+          );
         }
       }
     });
@@ -414,9 +418,12 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
         '4:cvicny-prouzek-kuze-1-2×1',
         '5:sablona-kuze-1-2×1',
         '6:kapsa×1',
-        '6:kapsa×2?',
+        // Jen šablona s oknem (forma je hotová z lekce 2): 1 výtisk, když chybí.
+        '6:kapsa×1?',
         '6:kapsa-okno-18×1?',
       ]);
+      const l6 = coinCardHolderProject.lessons.find((l) => l.order === 6)!;
+      expect(l6.prints?.map((p) => p.purpose).join(' | ')).not.toMatch(/form/);
       expect(stepOf(2, 'drill-form').body).toContain('3× na 100 %');
       const sheets = [
         ...coinCardHolderProject.patternSheets!.sheets,
@@ -451,10 +458,14 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
         '6:strip<-05',
         '6:form<-02',
         '6:block<-02',
+        '6:window-template<-02',
         '7:strip-with-pocket<-06',
         '8:body<-07',
       ]);
       expect(stepOf(6, 'cut-outline-and-window').body).toContain('špalík z lekce 2');
+      // Šablonu s oknem si lekce 2 schovává pro lekci 6.
+      expect(stepOf(2, 'trace-template').body).toContain('použijete ji i na kapsu v lekci 6');
+      expect(stepOf(6, 'trace-pocket-template').body).toContain('šablonu s oknem z lekce 2');
     });
   });
 

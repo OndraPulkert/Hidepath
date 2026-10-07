@@ -15,6 +15,7 @@ import {
   parseOutbox,
   SYNCING_TIMEOUT_MS,
 } from '@/features/sync/outbox';
+import { nextUpdatedAt } from '@/features/sync/merge';
 import {
   createStorageCache,
   createSyncedCollection,
@@ -352,6 +353,144 @@ describe('createSyncedCollection', () => {
     await second.collection.flush();
     expect(second.outbox.list()).toEqual([]);
     expect(await second.server.list()).toHaveLength(1);
+  });
+});
+
+/**
+ * Server přesně podle SQL: reject_stale_update (starší updated_at → 0 řádků) a set_updated_at
+ * (stejné updated_at → now() serveru). Volitelně ztratí odpověď na už potvrzený zápis.
+ */
+function createSqlLikeRemote(serverNow: () => number) {
+  const inner = createStorageCollection<LessonRecordEntry>(
+    createMemoryStorage(),
+    'server',
+    naturalKeys.lessonRecords,
+  );
+  const state = { dropNextResponse: false };
+  const remote: CollectionRepository<LessonRecordEntry> = {
+    list: () => inner.list(),
+    async upsert(record) {
+      const old = (await inner.list()).find(
+        (r) => naturalKeys.lessonRecords(r) === naturalKeys.lessonRecords(record),
+      );
+      let row = { ...record, id: old?.id ?? record.id, userId: USER };
+      if (old) {
+        if (Date.parse(record.updatedAt) < Date.parse(old.updatedAt))
+          throw new StaleWriteError('lesson_records');
+        if (Date.parse(record.updatedAt) === Date.parse(old.updatedAt))
+          row = { ...row, updatedAt: new Date(serverNow()).toISOString() };
+      }
+      const saved = await inner.upsert(row);
+      if (state.dropNextResponse) {
+        state.dropNextResponse = false;
+        throw new Error('network: response lost after commit');
+      }
+      return saved;
+    },
+    remove: (id) => inner.remove(id),
+    clear: () => inner.clear(),
+  };
+  return { remote, server: inner, state };
+}
+
+function syncedDevice(
+  remote: CollectionRepository<LessonRecordEntry>,
+  options: { storage?: StorageLike; isOnline?: () => boolean } = {},
+) {
+  const storage = options.storage ?? createMemoryStorage();
+  const outbox = createOutboxStore(storage, 'outbox');
+  const collection = createSyncedCollection<LessonRecordEntry>({
+    entity: 'lesson_records',
+    userId: USER,
+    local: createStorageCache(storage, 'cache', naturalKeys.lessonRecords),
+    remote,
+    outbox,
+    naturalKey: naturalKeys.lessonRecords,
+    isOnline: options.isOnline ?? (() => true),
+  });
+  /** Úprava jako v useSaveLessonRecord: razítko z hodin zařízení, monotónně vůči známému stavu. */
+  const edit = async (value: number, deviceClock: string) => {
+    const existing = (await collection.list()).find((r) => r.fieldId === 'p1-thickness');
+    return collection.upsert({
+      ...entry('p1-thickness', value, '00:00', existing?.id ?? ID1),
+      updatedAt: nextUpdatedAt(existing?.updatedAt, Date.parse(deviceClock)),
+    });
+  };
+  return { collection, outbox, storage, edit };
+}
+
+describe('hodiny zařízení a ztracené odpovědi (LWW podle klientského času)', () => {
+  const REAL_NOW = Date.parse('2026-10-07T12:00:00.000Z');
+
+  it('pozdější úprava ze zařízení se správnými hodinami přebije zápis z hodin „napřed“', async () => {
+    const { remote, server } = createSqlLikeRemote(() => REAL_NOW);
+    const phone = syncedDevice(remote); // hodiny +10 min
+    const laptop = syncedDevice(remote); // správné hodiny
+
+    await phone.edit(2, '2026-10-07T12:10:00.000Z');
+    await phone.collection.flush();
+    await laptop.collection.pull();
+    await laptop.edit(1.6, '2026-10-07T12:05:00.000Z');
+    const result = await laptop.collection.flush();
+
+    expect(result).toEqual({ sent: 1, failed: 0, stale: 0 });
+    expect((await server.list())[0]?.value).toBe(1.6);
+    expect((await laptop.collection.list())[0]?.value).toBe(1.6);
+  });
+
+  it('hodiny pozadu + opakování po ztracené odpovědi: další úprava se neztratí jako stale', async () => {
+    const { remote, server, state } = createSqlLikeRemote(() => REAL_NOW);
+    const phone = syncedDevice(remote); // hodiny −5 min
+    await phone.edit(2, '2026-10-07T11:50:00.000Z');
+    await phone.collection.flush();
+    state.dropNextResponse = true; // zápis projde, odpověď se ztratí
+    await phone.edit(3, '2026-10-07T11:55:00.000Z');
+    await phone.collection.flush();
+    await phone.collection.flush({ force: true }); // stejné updated_at → server dá now() = 12:00
+
+    await phone.edit(4, '2026-10-07T11:56:00.000Z');
+    const result = await phone.collection.flush();
+    expect(result.stale).toBe(0);
+    expect((await server.list())[0]?.value).toBe(4);
+  });
+
+  it('nový záznam, jehož zápis do outboxu selhal, pull lokálně nesmaže a odešle ho', async () => {
+    const { remote, server } = createSqlLikeRemote(() => REAL_NOW);
+    const base = createMemoryStorage();
+    let failOutbox = false;
+    const storage: StorageLike = {
+      getItem: (k) => base.getItem(k),
+      removeItem: (k) => base.removeItem(k),
+      setItem: (k, v) => {
+        if (failOutbox && k === 'outbox') throw new DOMException('quota', 'QuotaExceededError');
+        base.setItem(k, v);
+      },
+    };
+    const d = syncedDevice(remote, { storage });
+    failOutbox = true;
+    await expect(d.edit(2, '2026-10-07T12:00:00.000Z')).rejects.toThrow();
+    failOutbox = false;
+    expect(await d.collection.list()).toHaveLength(1);
+
+    await d.collection.pull();
+    expect(await d.collection.list()).toEqual([expect.objectContaining({ value: 2 })]);
+    await d.collection.flush();
+    expect(await server.list()).toEqual([expect.objectContaining({ value: 2 })]);
+  });
+
+  it('smazání záznamu vytvořeného offline pod jiným id smaže serverový řádek se stejným klíčem', async () => {
+    const { remote, server } = createSqlLikeRemote(() => REAL_NOW);
+    await server.upsert({ ...entry('p1-thickness', 1, '10:00', ID2), userId: USER });
+    const online = { value: false };
+    const d = syncedDevice(remote, { isOnline: () => online.value });
+    await d.collection.upsert(entry('p1-thickness', 2, '11:00', ID1));
+    await d.collection.remove(ID1);
+
+    online.value = true;
+    await d.collection.flush();
+    await d.collection.pull();
+    expect(await server.list()).toEqual([]);
+    expect(await d.collection.list()).toEqual([]);
   });
 });
 

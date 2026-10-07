@@ -21,7 +21,14 @@ export interface TimerRecord {
   firedAt: number | null;
   /** Kdy uživatel hotový časovač zavřel. */
   dismissedAt: number | null;
+  /**
+   * Odkud se časovač spustil: z běžné lekce (`lesson`), nebo z dílenského režimu (`focus`,
+   * výchozí i pro starší záznamy). Podle toho vedou odkazy „Ke kroku“ zpět.
+   */
+  origin?: TimerOrigin | undefined;
 }
+
+export type TimerOrigin = 'lesson' | 'focus';
 
 export type TimerStatus = 'running' | 'done' | 'dismissed';
 
@@ -50,6 +57,7 @@ const timerRecordSchema = z.object({
   durationMin: z.number().positive(),
   firedAt: z.number().nullable(),
   dismissedAt: z.number().nullable(),
+  origin: z.enum(['lesson', 'focus']).optional(),
 });
 
 /**
@@ -83,6 +91,7 @@ export function findTimer(timers: readonly TimerRecord[], ref: WaitRef): TimerRe
 export interface StartTimerInput extends WaitRef {
   label: string;
   durationMin: number;
+  origin?: TimerOrigin;
 }
 
 /**
@@ -108,6 +117,7 @@ export function startTimer(
     durationMin,
     firedAt: null,
     dismissedAt: null,
+    ...(input.origin ? { origin: input.origin } : {}),
   };
   return [...timers.filter((t) => !sameWait(t, input)), timer];
 }
@@ -167,10 +177,19 @@ export function nextEndsAt(timers: readonly TimerRecord[], now: number): number 
   return next;
 }
 
-/** Smaže zavřené časovače starší než `DISMISSED_RETENTION_MS`. */
-export function pruneTimers(timers: readonly TimerRecord[], now: number): TimerRecord[] {
+/**
+ * Smaže zavřené časovače starší než `DISMISSED_RETENTION_MS`. Výjimka `keepDismissed`: zavřený
+ * záznam čekání, které blokuje pozdější krok, je jediný doklad, že čekání doběhlo – bez něj by
+ * krok znovu hlásil „nejdřív spusťte…“. Jedno čekání má nejvýš jeden záznam, takže jich je málo.
+ */
+export function pruneTimers(
+  timers: readonly TimerRecord[],
+  now: number,
+  keepDismissed: (timer: TimerRecord) => boolean = () => false,
+): TimerRecord[] {
   return timers.filter(
-    (t) => t.dismissedAt === null || now - t.dismissedAt < DISMISSED_RETENTION_MS,
+    (t) =>
+      t.dismissedAt === null || now - t.dismissedAt < DISMISSED_RETENTION_MS || keepDismissed(t),
   );
 }
 
@@ -193,12 +212,14 @@ export interface WaitDurationBounds {
 
 /**
  * Meze doby čekání. Doba z textu lekce (`basis: 'text'`) jde měnit jen uvnitř rozsahu, který
- * text uvádí; pevnou dobu z textu měnit nejde. Doba „podle návodu“ (`manufacturer`) je jen
- * orientační, uživatel ji upraví podle návodu na obalu.
+ * text uvádí; pevnou dobu z textu měnit nejde. Doba „podle návodu“ (`manufacturer`) i odhad
+ * (`estimate`) jsou jen orientační, uživatel je upraví. `recorded` = doba ze zápisníku
+ * (`initialFromField`), má přednost před výchozí dobou z obsahu.
  */
-export function waitDurationBounds(wait: StepWait): WaitDurationBounds {
-  if (wait.basis === 'manufacturer') {
-    return { initial: wait.minutes, min: 1, max: MAX_TIMER_MINUTES, adjustable: true };
+export function waitDurationBounds(wait: StepWait, recorded?: number): WaitDurationBounds {
+  if (wait.basis !== 'text') {
+    const initial = recorded === undefined ? wait.minutes : clampMinutes(recorded);
+    return { initial, min: 1, max: MAX_TIMER_MINUTES, adjustable: true };
   }
   const max = wait.maxMinutes ?? wait.minutes;
   return { initial: wait.minutes, min: wait.minutes, max, adjustable: max > wait.minutes };

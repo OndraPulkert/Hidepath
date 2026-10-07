@@ -154,23 +154,37 @@ const sheetGenerators: Readonly<
  */
 function SheetGeneratorSlot({
   generator,
-  projectSlug,
+  notebook,
   baseSheets,
   onGenerated,
 }: {
   generator: GeneratorKey;
-  projectSlug: string;
+  notebook: NotebookPrefill;
   baseSheets: readonly PatternSheet[];
   onGenerated: (sheets: GeneratedPatternSheet[]) => void;
 }) {
-  const { Component, prefill } = sheetGenerators[generator];
+  const { Component } = sheetGenerators[generator];
+  if (notebook.pending) return null;
+  return <Component baseSheets={baseSheets} onGenerated={onGenerated} initial={notebook.initial} />;
+}
+
+interface NotebookPrefill {
+  pending: boolean;
+  initial: LidGeneratorPrefill | null;
+}
+
+/** Předvyplnění generátoru ze zápisníku (projekt bez generátoru: nic). */
+function useNotebookPrefill(
+  generator: GeneratorKey | undefined,
+  projectSlug: string,
+): NotebookPrefill {
   const records = useLessonRecords(projectSlug);
+  const prefill = generator ? sheetGenerators[generator].prefill : undefined;
   const initial = useMemo(
-    () => (records.data ? prefill(records.data, projectSlug) : null),
+    () => (prefill && records.data ? prefill(records.data, projectSlug) : null),
     [prefill, records.data, projectSlug],
   );
-  if (records.isPending) return null;
-  return <Component baseSheets={baseSheets} onGenerated={onGenerated} initial={initial} />;
+  return { pending: Boolean(generator) && records.isPending, initial };
 }
 
 /**
@@ -189,6 +203,7 @@ function PatternSheetsPrint({
 }) {
   const [searchParams] = useSearchParams();
   const [generated, setGenerated] = useState<GeneratedPatternSheet[]>([]);
+  const notebook = useNotebookPrefill(definition.browserGenerator, project.slug);
   const urls: Readonly<Record<string, string>> = {
     ...patternSheetUrlsFor(project.slug),
     ...Object.fromEntries(generated.map((g) => [g.id, g.url])),
@@ -196,26 +211,39 @@ function PatternSheetsPrint({
   const sheets: readonly PatternSheet[] = [...definition.sheets, ...generated];
   const groups = groupPatternSheets(sheets);
   // `?list=<id>` (i opakovaně) předvybere k tisku konkrétní listy, např. z „Připravte si“.
-  const [selected, setSelected] = useState<ReadonlySet<string>>(() => {
-    const wanted = searchParams
-      .getAll(PRINT_SHEET_PARAM)
-      .filter((id) => definition.sheets.some((s) => s.id === id));
-    return new Set(wanted.length > 0 ? wanted : (groups[0]?.sheets.map((s) => s.id) ?? []));
-  });
+  const wanted = searchParams
+    .getAll(PRINT_SHEET_PARAM)
+    .filter((id) => definition.sheets.some((s) => s.id === id));
+  // Se změřenou kůží v zápisníku se výchozí list z odkazu nepředvybere – platí list
+  // vygenerovaný pro změřené tloušťky (`zmerena-<id>`).
+  const awaitingGenerated =
+    wanted.length > 0 && generated.length === 0 && notebook.initial !== null;
+  const defaultSelection = (): ReadonlySet<string> => {
+    if (generated.length > 0) {
+      const fromLink = wanted
+        .map((id) => `zmerena-${id}`)
+        .filter((id) => generated.some((g) => g.id === id));
+      return new Set(fromLink.length > 0 ? fromLink : generated.map((g) => g.id));
+    }
+    if (wanted.length > 0) return new Set(awaitingGenerated ? [] : wanted);
+    return new Set(groups[0]?.sheets.map((s) => s.id) ?? []);
+  };
+  // `null` = uživatel výběr neměnil, platí výchozí výběr (mění se po vygenerování).
+  const [chosen, setChosen] = useState<ReadonlySet<string> | null>(null);
+  const selected = chosen ?? defaultSelection();
   const printable = sheets.filter((s) => selected.has(s.id) && urls[s.id]);
   const onGenerated = (next: GeneratedPatternSheet[]) => {
     setGenerated(next);
     // Vygenerované listy nahradí k tisku výchozí střih; výchozí jde zaškrtnout zpátky.
-    setSelected(new Set(next.map((s) => s.id)));
+    setChosen(null);
   };
   const orientations = new Set(printable.map((s) => s.orientation));
-  const toggle = (id: string) =>
-    setSelected((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
+  const toggle = (id: string) => {
+    const next = new Set(selected);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
+    setChosen(next);
+  };
 
   return (
     <div className="mx-auto max-w-[760px] print:max-w-none">
@@ -246,7 +274,13 @@ function PatternSheetsPrint({
             ? ' Některé tiskárny otočí nebo zmenší list, který má jinou orientaci než ostatní; když úsečka nesedí, vytiskněte listy na výšku a na šířku zvlášť.'
             : ''}
         </p>
-        {printable.length === 0 ? (
+        {awaitingGenerated && chosen === null ? (
+          <p role="note" className="mb-6 max-w-prose text-body font-medium text-leather">
+            {typo(
+              'V zápisníku máte změřenou kůži, výchozí list pro ni nemusí platit. Nejdřív vygenerujte listy pro svou kůži (formulář níže) – list z odkazu se pak vybere k tisku sám.',
+            )}
+          </p>
+        ) : printable.length === 0 ? (
           <p className="mb-6 text-meta text-ink-2">Vyberte alespoň jeden list.</p>
         ) : null}
         {definition.variantsNote ? (
@@ -255,7 +289,7 @@ function PatternSheetsPrint({
         {definition.browserGenerator ? (
           <SheetGeneratorSlot
             generator={definition.browserGenerator}
-            projectSlug={project.slug}
+            notebook={notebook}
             baseSheets={definition.sheets}
             onGenerated={onGenerated}
           />

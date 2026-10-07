@@ -6,6 +6,8 @@ import react from '@vitejs/plugin-react';
 import { defineConfig, loadEnv } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
+import { appContentSecurityPolicy } from './scripts/content-security-policy';
+
 // https://vite.dev/config/
 export default defineConfig(({ command, mode }) => {
   // Produkční build bez Supabase by tiše nasadil aplikaci bez účtu a ochrany tras; build
@@ -34,6 +36,21 @@ export default defineConfig(({ command, mode }) => {
       { enforce: 'pre', ...mdx() },
       react(),
       tailwindcss(),
+      {
+        // CSP aplikace jen v buildu – vývojový server vkládá inline skripty (React Refresh).
+        name: 'hidepath-csp',
+        apply: 'build',
+        transformIndexHtml: () => [
+          {
+            tag: 'meta',
+            attrs: {
+              'http-equiv': 'Content-Security-Policy',
+              content: appContentSecurityPolicy(env.VITE_SUPABASE_URL ?? ''),
+            },
+            injectTo: 'head-prepend',
+          },
+        ],
+      },
       VitePWA({
         // Aktualizace service workeru je explicitní UX stav („nová verze“), ne tichý reload.
         registerType: 'prompt',

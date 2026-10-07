@@ -1,6 +1,7 @@
-import { Link, useNavigate, useParams } from 'react-router';
+import { useEffect } from 'react';
+import { Link, useLocation, useNavigate, useParams } from 'react-router';
 
-import { routes } from '@/app/routes';
+import { LESSON_ANCHORS, routes } from '@/app/routes';
 import { StickyActionBar } from '@/components/layout/sticky-action-bar';
 import { CheckpointList } from '@/components/lessons/checkpoint-list';
 import { LessonLockNotice } from '@/components/lessons/lesson-lock-notice';
@@ -36,8 +37,17 @@ export function LessonPage() {
  */
 function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lessonSlug: string }) {
   const navigate = useNavigate();
+  const { hash } = useLocation();
   const lesson = project.lessons.find((l) => l.slug === lessonSlug)!;
   const { journey, inventory, progress, isLoading } = useProjectState(project);
+
+  // Kotva v adrese (#kontrolni-body, #krok-N): posunout na ni po vykreslení i po načtení dat
+  // (příprava nahoře změní výšku). Efekt běží až po obnovení polohy (ScrollRestoration).
+  useEffect(() => {
+    if (!hash) return;
+    const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+    target?.scrollIntoView?.({ block: 'start' });
+  }, [hash, isLoading]);
   const view = journey.lessonViews.find((v) => v.slug === lesson.slug)!;
   const toggle = useToggleCheckpoint(project.slug);
   const complete = useCompleteLesson(project.slug);
@@ -125,7 +135,9 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
           steps={lesson.steps}
           template={project.template}
           projectSlug={project.slug}
-          renderStepExtras={(step) => <StepExtras project={project} lesson={lesson} step={step} />}
+          renderStepExtras={(step) => (
+            <StepExtras project={project} lesson={lesson} step={step} timerOrigin="lesson" />
+          )}
         />
       </section>
 
@@ -149,7 +161,11 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
         </NoticeBox>
       ) : null}
 
-      <Card tone="forest" className="flex flex-col gap-2">
+      <Card
+        id={LESSON_ANCHORS.checkpoints}
+        tone="forest"
+        className="flex scroll-mt-24 flex-col gap-2"
+      >
         <h2 className="text-h2">Kontrolní body</h2>
         <p id="dokoncit-napoveda" className="text-meta text-ink-2">
           {locked

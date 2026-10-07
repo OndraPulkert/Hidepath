@@ -62,11 +62,12 @@ describe('zápisník v kroku', () => {
       contentVersion: notebookProject.contentVersion,
     });
     expect(isUuid(saved!.id)).toBe(true);
-    expect(await screen.findByText(/Mimo cíl \(cíl 50/)).toBeInTheDocument();
+    // Hodnota mimo cíl se uložila – hláška to musí říct, ne vypadat jako zamítnutí.
+    expect(await screen.findByText(/^Uloženo, ale mimo cíl \(cíl 50/)).toBeInTheDocument();
 
     await user.clear(field);
     await user.type(field, '50,2{Enter}');
-    expect(await screen.findByText(/V cíli \(cíl 50/)).toBeInTheDocument();
+    expect(await screen.findByText(/^Uloženo\. V cíli \(cíl 50/)).toBeInTheDocument();
     const after = await repositories.lessonRecords.list();
     expect(after).toHaveLength(1);
     expect(after[0]).toMatchObject({ id: saved!.id, value: 50.2, createdAt: saved!.createdAt });

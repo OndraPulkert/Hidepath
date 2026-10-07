@@ -126,8 +126,8 @@ function TypedField({ project, lesson, field, entry }: RecordFieldInputProps) {
   const targetText =
     draft === null && target && status !== 'unknown'
       ? status === 'ok'
-        ? `V cíli (${target.label}).`
-        : `Mimo cíl (${target.label}). Vraťte se k postupu v kroku.`
+        ? `Uloženo. V cíli (${target.label}).`
+        : `Uloženo, ale mimo cíl (${target.label}). Vraťte se k postupu v kroku.`
       : null;
   const savedText = targetText ?? (entry && entry.value !== null ? 'Uloženo.' : null);
   const unit = field.kind === 'number' ? field.unit : '';

@@ -1,4 +1,5 @@
 import {
+  closeTimerNotification,
   createBeeper,
   decideChannels,
   notificationSupport,
@@ -132,7 +133,7 @@ describe('povolení notifikací', () => {
 });
 
 describe('createBeeper', () => {
-  function fakeAudio() {
+  function fakeAudio(initialState = 'suspended') {
     const oscillators: { start: ReturnType<typeof vi.fn> }[] = [];
     const resume = vi.fn(async () => Promise.resolve());
     const param = () => ({
@@ -142,7 +143,7 @@ describe('createBeeper', () => {
     });
     let instances = 0;
     class Ctx {
-      state = 'suspended';
+      state = initialState;
       currentTime = 0;
       destination = {} as AudioNode;
       constructor() {
@@ -183,11 +184,44 @@ describe('createBeeper', () => {
     expect(audio.oscillators).toHaveLength(3);
   });
 
+  it('probudí i kontext přerušený systémem (iOS „interrupted“ po návratu z pozadí)', () => {
+    const audio = fakeAudio('interrupted');
+    createBeeper(audio.Ctor).beep();
+    expect(audio.resume).toHaveBeenCalled();
+  });
+
+  it('běžící kontext znovu neprobouzí', () => {
+    const audio = fakeAudio('running');
+    createBeeper(audio.Ctor).beep();
+    expect(audio.resume).not.toHaveBeenCalled();
+  });
+
   it('bez Web Audio nic nedělá a nespadne', () => {
     const beeper = createBeeper(undefined);
     expect(() => {
       beeper.unlock();
       beeper.beep();
     }).not.toThrow();
+  });
+});
+
+describe('closeTimerNotification', () => {
+  it('zavře systémovou notifikaci časovače podle tagu („Rozumím“ v aplikaci)', async () => {
+    const close = vi.fn();
+    const getNotifications = vi.fn(async () => Promise.resolve([{ close }]));
+    await closeTimerNotification('t1', {
+      getRegistration: async () => Promise.resolve({ showNotification: vi.fn(), getNotifications }),
+    });
+    expect(getNotifications).toHaveBeenCalledWith({ tag: 'hidepath-timer-t1' });
+    expect(close).toHaveBeenCalledTimes(1);
+  });
+
+  it('bez service workeru nebo s chybou nic neshodí', async () => {
+    await expect(
+      closeTimerNotification('t1', { getRegistration: undefined }),
+    ).resolves.toBeUndefined();
+    await expect(
+      closeTimerNotification('t1', { getRegistration: async () => Promise.reject(new Error('x')) }),
+    ).resolves.toBeUndefined();
   });
 });

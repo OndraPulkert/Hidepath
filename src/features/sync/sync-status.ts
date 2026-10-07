@@ -15,6 +15,8 @@ export interface SyncStatusInput {
   storagePersistent: boolean;
   /** Přenos lokálně pořízených dat do účtu po přihlášení. */
   migration: 'idle' | 'running' | 'failed' | 'done';
+  /** `local` = bez účtu, změny se ukládají jen v prohlížeči (výchozí `cloud`). */
+  mode?: 'local' | 'cloud';
 }
 
 export type SyncTone = 'ok' | 'offline' | 'pending' | 'error' | 'update' | 'volatile';
@@ -43,7 +45,10 @@ export function describeSyncStatus(input: SyncStatusInput): SyncStatusView {
     return {
       tone: 'volatile',
       label: 'Data se v tomto prohlížeči neukládají',
-      hint: 'Úložiště není dostupné (např. privátní režim). Postup po zavření záložky zmizí.',
+      hint:
+        input.mode === 'local'
+          ? 'Úložiště není dostupné (např. privátní režim). Postup po zavření záložky zmizí.'
+          : 'Úložiště není dostupné (např. privátní režim). Neodeslané změny po zavření záložky zmizí.',
       action: 'none',
     };
   }
@@ -55,7 +60,9 @@ export function describeSyncStatus(input: SyncStatusInput): SyncStatusView {
         ? 'Poslední změna se bez připojení neuložila. Po připojení ji zopakujte.'
         : input.pendingCount > 0
           ? `${pluralPending(input.pendingCount)} na odeslání po připojení.`
-          : 'Stažený obsah je dostupný, změny se uloží po připojení.',
+          : input.mode === 'local'
+            ? 'Stažený obsah je dostupný, změny se ukládají v tomto prohlížeči.'
+            : 'Stažený obsah je dostupný, změny se uloží po připojení.',
       action: 'none',
     };
   }

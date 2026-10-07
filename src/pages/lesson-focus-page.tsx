@@ -1,7 +1,7 @@
 import { useEffect, useEffectEvent, useRef } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router';
 
-import { LESSON_FOCUS_STEP_PARAM, routes } from '@/app/routes';
+import { LESSON_ANCHORS, LESSON_FOCUS_STEP_PARAM, routes } from '@/app/routes';
 import { LessonPrep } from '@/components/lessons/lesson-prep';
 import { Button } from '@/components/ui/button';
 import { ProgressBar } from '@/components/ui/progress-bar';
@@ -97,7 +97,14 @@ function FocusView({ project, lesson }: { project: ProjectDefinition; lesson: Le
       <header className="border-b border-line bg-canvas">
         <div className="mx-auto flex w-full max-w-[760px] items-center justify-between gap-3 px-page py-2">
           <Button asChild variant="secondary" className="bg-paper">
-            <Link to={routes.lesson(project.slug, lesson.slug)} className="no-underline">
+            <Link
+              to={routes.lesson(
+                project.slug,
+                lesson.slug,
+                position > 0 ? LESSON_ANCHORS.step(position) : undefined,
+              )}
+              className="no-underline"
+            >
               <span aria-hidden>✕</span> Ukončit
             </Link>
           </Button>
@@ -226,7 +233,7 @@ function FocusView({ project, lesson }: { project: ProjectDefinition; lesson: Le
             ) : (
               <Button asChild variant="forest" size="lg" className="text-[17px]">
                 <Link
-                  to={routes.lesson(project.slug, lesson.slug)}
+                  to={routes.lesson(project.slug, lesson.slug, LESSON_ANCHORS.checkpoints)}
                   className="text-white no-underline hover:text-white"
                 >
                   Ke kontrolním bodům

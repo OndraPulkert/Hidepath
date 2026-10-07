@@ -13,7 +13,7 @@ import {
 import { typo } from '@/lib/utils/format';
 
 export interface ActiveTimersBarProps {
-  /** Krok, který je právě na obrazovce – jeho běžící časovače už ukazuje sám krok. */
+  /** Krok, který je právě na obrazovce – jeho časovače už ukazuje sám krok. */
   currentStep?: { projectSlug: string; lessonSlug: string; stepId: string } | undefined;
 }
 
@@ -29,7 +29,8 @@ export function ActiveTimersBar({ currentStep }: ActiveTimersBarProps) {
   const active = activeTimers(timers);
   if (active.length === 0) return null;
 
-  const done = active.filter((t) => timerStatus(t, now) === 'done');
+  // Časovače právě zobrazeného kroku (běžící i hotové) ukazuje krok sám, i s „Rozumím“.
+  const done = active.filter((t) => timerStatus(t, now) === 'done' && !isOnStep(t, currentStep));
   const running = active.filter(
     (t) => timerStatus(t, now) === 'running' && !isOnStep(t, currentStep),
   );

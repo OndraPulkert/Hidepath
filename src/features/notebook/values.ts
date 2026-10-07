@@ -38,8 +38,9 @@ const unitSuffix = (unit: Extract<RecordField, { kind: 'number' }>['unit']): str
   unit === '' ? '' : unit === '×' ? '×' : `${NBSP}${unit}`;
 
 /**
- * Přečte text z pole formuláře. Prázdné pole = `null` (zápis se vymaže). Číslo musí být
- * v mezích pole (bez `min` aspoň 0), u `decimals: 0` celé; volba jen z nabídky; text nejvýš
+ * Přečte text z pole formuláře. Prázdné pole = `null` (zápis se vymaže). Číslo se zaokrouhlí
+ * na `decimals` míst a musí být v mezích pole (bez `min` aspoň 0), u `decimals: 0` celé;
+ * volba jen z nabídky; text nejvýš
  * `maxLength` znaků. Chyby jsou krátké a česky, rovnou k zobrazení pod polem.
  */
 export function parseRecordInput(field: RecordField, raw: string): ParseRecordResult {
@@ -47,11 +48,14 @@ export function parseRecordInput(field: RecordField, raw: string): ParseRecordRe
   if (trimmed === '') return { ok: true, value: null };
   switch (field.kind) {
     case 'number': {
-      const v = parseDecimal(trimmed);
-      if (v === undefined) return { ok: false, error: 'Zadejte číslo, např. 0,85.' };
-      if (field.decimals === 0 && !Number.isInteger(v)) {
+      const parsed = parseDecimal(trimmed);
+      if (parsed === undefined) return { ok: false, error: 'Zadejte číslo, např. 0,85.' };
+      if (field.decimals === 0 && !Number.isInteger(parsed)) {
         return { ok: false, error: 'Zadejte celé číslo.' };
       }
+      // Uložit s přesností pole: zobrazení (`decimals`), pole formuláře i cíl pak pracují
+      // se stejným číslem (jinak „0,92 mm“ mimo cíl „nejvýš 0,92 mm“ kvůli uloženým 0,921).
+      const v = field.decimals === undefined ? parsed : Number(parsed.toFixed(field.decimals));
       const min = field.min ?? 0;
       const max = field.max;
       const unit = unitSuffix(field.unit);

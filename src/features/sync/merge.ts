@@ -4,7 +4,9 @@
  *   (u čekajícího smazání se serverový řádek lokálně neobnoví);
  * - jinak vyhraje novější `updatedAt`; při shodě server (je potvrzený);
  * - záznam jen na serveru se přidá;
- * - záznam jen lokálně bez čekající změny už na serveru není (smazán jinde) → zmizí.
+ * - záznam jen lokálně bez čekající změny zůstane a znovu se odešle (`resend`): mazání se
+ *   šíří jen čekající změnou „delete“, takže chybějící položka outboxu (plné úložiště, souběh
+ *   záložek) nesmí vést ke ztrátě nového záznamu.
  * Lokální záznam, který vyhraje nad serverovým se stejným klíčem, převezme id serveru,
  * aby další zápis nevytvářel kolizi přirozeného klíče, a vrátí se v `resend` – bez čekající
  * změny by se na server jinak nikdy nedostal.
@@ -20,6 +22,17 @@ export interface MergeResult<T> {
   changed: boolean;
   /** Lokálně novější záznamy bez čekající změny: znovu zařadit do outboxu. */
   resend: T[];
+}
+
+/**
+ * Razítko `updatedAt` pro novou úpravu: čas zařízení, ale vždy později než známý stav záznamu
+ * (`previous`, např. právě stažený ze serveru). LWW se řídí časem klienta – bez toho by úpravu
+ * ze zařízení s hodinami pozadu tiše přebil starší zápis s razítkem „z budoucnosti“ (jiné
+ * zařízení s hodinami napřed, nebo now() serveru po opakovaném odeslání).
+ */
+export function nextUpdatedAt(previous: string | undefined, now: number): string {
+  const known = previous === undefined ? Number.NaN : Date.parse(previous);
+  return new Date(Number.isNaN(known) ? now : Math.max(now, known + 1)).toISOString();
 }
 
 function time(value: string): number {
@@ -55,7 +68,9 @@ export function mergeRemote<T extends SyncRecord>(
     }
   }
   for (const [key, mine] of localByKey) {
-    if (!remoteByKey.has(key) && pendingKeys.has(key)) out.push(mine);
+    if (remoteByKey.has(key)) continue;
+    out.push(mine);
+    if (!pendingKeys.has(key)) resend.push(mine);
   }
 
   return { records: out, changed: !sameRecords(local, out, naturalKey), resend };

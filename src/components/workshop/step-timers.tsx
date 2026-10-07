@@ -3,8 +3,9 @@ import { useState } from 'react';
 import { type StepExtrasProps } from '@/components/lessons/step-extras';
 import { Button } from '@/components/ui/button';
 import { type StepWait } from '@/content/schema';
+import { useLessonRecords } from '@/features/notebook/use-lesson-records';
 import { buildTimerIcs, icsFileName } from '@/features/timers/ics';
-import { timerContext } from '@/features/timers/timer-links';
+import { timerContinueUrl } from '@/features/timers/timer-links';
 import {
   adjustMinutes,
   findTimer,
@@ -17,6 +18,7 @@ import {
   remainingMs,
   timerStatus,
   waitDurationBounds,
+  type TimerOrigin,
   type TimerRecord,
 } from '@/features/timers/timers';
 import {
@@ -33,7 +35,7 @@ import { typo } from '@/lib/utils/format';
  * Časovače čekání kroku (`step.waits`): volba doby, „Spustit X min“, odpočet a hotovo.
  * Stav drží úložiště časovačů, takže odpočet přežije přechod mezi stránkami i reload.
  */
-export function StepTimers({ project, lesson, step }: StepExtrasProps) {
+export function StepTimers({ project, lesson, step, timerOrigin = 'focus' }: StepExtrasProps) {
   const timers = useTimers();
   const waits = step.waits ?? [];
   const now = useNow(hasUnfired(timers));
@@ -60,11 +62,13 @@ export function StepTimers({ project, lesson, step }: StepExtrasProps) {
           lessonSlug={lesson.slug}
           lessonTitle={lesson.title}
           stepId={step.id}
+          origin={timerOrigin}
           timers={timers}
           now={now}
         />
       ))}
-      {stepTimers.length > 0 ? <NotifyPrompt /> : null}
+      {/* Upozornění má smysl jen na čekání, které ještě běží. */}
+      {stepTimers.some((t) => timerStatus(t, now) === 'running') ? <NotifyPrompt /> : null}
     </div>
   );
 }
@@ -75,6 +79,7 @@ function WaitTimer({
   lessonSlug,
   lessonTitle,
   stepId,
+  origin,
   timers,
   now,
 }: {
@@ -83,13 +88,18 @@ function WaitTimer({
   lessonSlug: string;
   lessonTitle: string;
   stepId: string;
+  origin: TimerOrigin;
   timers: readonly TimerRecord[];
   now: number;
 }) {
   const ref = { projectSlug, lessonSlug, stepId, waitId: wait.id };
   const timer = findTimer(timers, ref);
-  const bounds = waitDurationBounds(wait);
-  const [minutes, setMinutes] = useState(bounds.initial);
+  const recorded = useRecordedMinutes(projectSlug, wait.initialFromField);
+  const bounds = waitDurationBounds(wait, recorded);
+  // `null` = uživatel dobu neměnil: platí výchozí (i když zápisník dorazí až po vykreslení).
+  const [chosen, setChosen] = useState<number | null>(null);
+  const minutes = chosen ?? bounds.initial;
+  const setMinutes = (update: (m: number) => number) => setChosen(update(minutes));
   const { start, cancel, dismiss } = useTimerActions();
   const status = timer ? timerStatus(timer, now) : null;
   const headingId = `cekani-${stepId}-${wait.id}`;
@@ -107,11 +117,7 @@ function WaitTimer({
           <span aria-hidden>⏱ </span>
           {typo(wait.label)}
         </h4>
-        <p className="text-meta text-ink-2">
-          {wait.basis === 'manufacturer'
-            ? 'Orientačně, řiďte se návodem na obalu.'
-            : `Podle lekce: ${formatWaitRange(wait)}`}
-        </p>
+        <p className="text-meta text-ink-2">{waitBasisText(wait, recorded)}</p>
       </div>
 
       {!timer ? (
@@ -146,7 +152,7 @@ function WaitTimer({
           ) : null}
           <Button
             variant="forest"
-            onClick={() => start({ ...ref, label: wait.label, durationMin: minutes })}
+            onClick={() => start({ ...ref, label: wait.label, durationMin: minutes, origin })}
           >
             Spustit {formatMinutes(minutes)}
           </Button>
@@ -198,6 +204,23 @@ function WaitTimer({
   );
 }
 
+/** Odkud je doba čekání: z textu lekce, ze zápisníku, nebo jen orientační výchozí hodnota. */
+function waitBasisText(wait: StepWait, recorded: number | undefined): string {
+  if (wait.basis === 'text') return `Podle lekce: ${formatWaitRange(wait)}`;
+  if (recorded !== undefined) return `Podle vašeho zápisu: ${formatMinutes(recorded)}.`;
+  return wait.basis === 'manufacturer'
+    ? 'Výchozí doba je jen orientační – nastavte ji podle návodu na obalu.'
+    : 'Orientační doba – upravte ji podle sebe.';
+}
+
+/** Kladná doba v minutách zapsaná v poli zápisníku `fieldId`, jinak undefined. */
+function useRecordedMinutes(projectSlug: string, fieldId: string | undefined): number | undefined {
+  const records = useLessonRecords(projectSlug);
+  if (!fieldId) return undefined;
+  const value = records.data?.find((r) => r.fieldId === fieldId)?.value;
+  return typeof value === 'number' && value > 0 ? value : undefined;
+}
+
 /** Nabídka systémových upozornění; o povolení se žádá jen tímto tlačítkem. */
 function NotifyPrompt() {
   const { permission, request } = useNotificationPermission();
@@ -222,11 +245,11 @@ function NotifyPrompt() {
 }
 
 function downloadIcs(timer: TimerRecord, lessonTitle: string) {
-  const ctx = timerContext(timer);
   const ics = buildTimerIcs({
     timer,
     lessonTitle,
-    url: new URL(ctx.url, window.location.origin).toString(),
+    // Událost říká „Pokračujte dalším krokem“ – odkaz tedy vede na krok po čekání.
+    url: new URL(timerContinueUrl(timer), window.location.origin).toString(),
     now: Date.now(),
   });
   const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });

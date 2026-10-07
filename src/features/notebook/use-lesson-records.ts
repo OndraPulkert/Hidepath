@@ -6,6 +6,7 @@ import { newId, nowIso } from '@/features/data/local-collection';
 import { mutationScopes, queryKeys } from '@/features/data/query-keys';
 import { type LessonRecordEntry } from '@/features/notebook/types';
 import { type RecordValue } from '@/features/notebook/values';
+import { nextUpdatedAt } from '@/features/sync/merge';
 
 /** Zápisy zápisníku jednoho projektu (včetně vymazaných – `value: null`). */
 export function useLessonRecords(projectSlug: string) {
@@ -56,7 +57,8 @@ export function useSaveLessonRecord(project: Pick<ProjectDefinition, 'slug' | 'c
         value,
         contentVersion: project.contentVersion,
         createdAt: existing?.createdAt ?? now,
-        updatedAt: now,
+        // Vždy po známém stavu (i ze serveru), jinak by úpravu přebil zápis z hodin „napřed“.
+        updatedAt: nextUpdatedAt(existing?.updatedAt, Date.parse(now)),
       };
       return repos.lessonRecords.upsert(record);
     },

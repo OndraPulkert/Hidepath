@@ -51,6 +51,17 @@ describe('zaškrtnutí přípravy', () => {
     });
   });
 
+  it('updatedAt je pozdější než uložený stav, i když hodiny zařízení jdou pozadu', () => {
+    const fromFuture = { ...existing, updatedAt: '2026-10-07T12:10:00.000Z' };
+    const r = applyPrepCheck(
+      fromFuture,
+      { projectSlug: 'p', lessonSlug: 'l1', itemKey: 'mat:voda', checked: false },
+      'ignored',
+      '2026-10-07T12:05:00.000Z',
+    );
+    expect(r.updatedAt).toBe('2026-10-07T12:10:00.001Z');
+  });
+
   it('findPrepCheck hledá podle projektu, lekce i položky', () => {
     const other = { ...existing, id: 'x', lessonSlug: 'l2' };
     expect(

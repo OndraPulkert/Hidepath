@@ -155,8 +155,10 @@ export function createSyncedCollection<T extends OwnedSyncRecord>(
             }
           });
         } else {
-          const { id } = mutation.payload as { id: string };
-          await remote.remove(id);
+          // Mazat podle přirozeného klíče: lokální id se může lišit od serverového (záznam
+          // vzniklý offline, než se id sladilo), a delete podle id by pak tiše nic nesmazal.
+          const onServer = (await remote.list()).find((r) => naturalKey(r) === mutation.entityId);
+          if (onServer) await remote.remove(onServer.id);
           outbox.update((queue) => acknowledge(queue, mutation.id));
         }
         result.sent += 1;
@@ -365,6 +367,20 @@ export function userSyncKeys(userId: string) {
     prepChecks: `${prefix}.lesson_prep_checks`,
     outbox: `${prefix}.outbox`,
   } as const;
+}
+
+/**
+ * Smaže z prohlížeče lokální kopie a frontu změn uživatele (po odhlášení – sdílené zařízení).
+ * Selhání úložiště nevadí: nic dalšího se s nimi dělat nedá.
+ */
+export function clearUserSyncData(storage: StorageLike, userId: string): void {
+  for (const key of Object.values(userSyncKeys(userId))) {
+    try {
+      storage.removeItem(key);
+    } catch {
+      /* úložiště nedostupné */
+    }
+  }
 }
 
 export interface UserSync {

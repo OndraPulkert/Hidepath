@@ -70,6 +70,9 @@ export function useUpdateInventoryItem() {
   const key = queryKeys.inventory(scope);
 
   const mutation = useMutation({
+    // Bez účtu se ukládá do prohlížeče i offline. S účtem zápis offline hned selže a UI to
+    // řekne – pozastavená mutace by žila jen v paměti a zavřením aplikace by se tiše ztratila.
+    networkMode: 'always',
     scope: mutationScopes.inventory(scope),
     mutationFn: (record: InventoryItem) => repos.inventory.upsert(record),
     onMutate: (record) => {

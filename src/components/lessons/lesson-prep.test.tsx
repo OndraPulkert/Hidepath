@@ -10,7 +10,8 @@ import { coinCardHolderProject } from '@/content/projects/coin-card-holder/proje
 import { type LessonDefinition, type ProjectDefinition } from '@/content/schema';
 import { type Repositories } from '@/features/data/repositories';
 import { useInventory } from '@/features/inventory/use-inventory';
-import { createTestRepositories, renderApp } from '@/test/render';
+import { item } from '@/test/factories';
+import { createTestRepositories, renderApp, setOnline } from '@/test/render';
 
 const ordered = [...coinCardHolderProject.lessons].sort((a, b) => a.order - b.order);
 const base = ordered[2]!;
@@ -135,6 +136,45 @@ describe('Připravte si', () => {
       expect(inv.find((i) => i.equipmentSlug === 'scratch-awl')?.status).toBe('want_to_buy');
     });
     await screen.findByText('Připraveno 0/5');
+  });
+
+  it('„Mám“ a zpět u objednaného nástroje vrátí stav Objednáno (s cenou), ne „Chci koupit“', async () => {
+    const user = userEvent.setup();
+    const repositories = createTestRepositories();
+    await repositories.inventory.upsert({
+      ...item('scratch-awl', 'ordered', { purchasePriceCents: 12_300 }),
+      id: crypto.randomUUID(),
+    });
+    renderPrep(repositories);
+    const name = `Mám: ${equipmentCatalog['scratch-awl']!.name}`;
+    await screen.findByText(/Objednáno/);
+    await user.click(screen.getByRole('button', { name }));
+    await waitFor(async () =>
+      expect((await repositories.inventory.list())[0]?.status).toBe('owned'),
+    );
+    await user.click(screen.getByRole('button', { name }));
+    await waitFor(async () =>
+      expect((await repositories.inventory.list())[0]).toMatchObject({
+        status: 'ordered',
+        purchasePriceCents: 12_300,
+      }),
+    );
+  });
+
+  it('bez připojení se „Mám“ u nástroje uloží (lokální režim) jako ostatní položky', async () => {
+    const user = userEvent.setup();
+    const { repositories } = renderPrep();
+    const name = `Mám: ${equipmentCatalog['scratch-awl']!.name}`;
+    await screen.findByRole('button', { name });
+    setOnline(false);
+    try {
+      await user.click(screen.getByRole('button', { name }));
+      await waitFor(async () =>
+        expect((await repositories.inventory.list())[0]?.status).toBe('owned'),
+      );
+    } finally {
+      setOnline(true);
+    }
   });
 
   it('materiál z „Mějte doma“ nákupního plánu odkazuje na nákupní seznam, jiný ne', async () => {

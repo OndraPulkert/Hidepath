@@ -6,6 +6,12 @@
 export const LESSON_FOCUS_STEP_PARAM = 'krok';
 /** Parametr dotazu na stránce tisku: id listu, který se má předvybrat (lze opakovat). */
 export const PRINT_SHEET_PARAM = 'list';
+/** Kotvy na stránce lekce (`routes.lesson(…, kotva)`). */
+export const LESSON_ANCHORS = {
+  checkpoints: 'kontrolni-body',
+  /** Krok `n` od 1. */
+  step: (n: number) => `krok-${n}`,
+} as const;
 
 export const routes = {
   home: '/',
@@ -20,8 +26,11 @@ export const routes = {
   shoppingItem: (toolSlug: string, projectSlug?: string) =>
     `/shopping/${encodeURIComponent(toolSlug)}${projectSlug ? `?projekt=${encodeURIComponent(projectSlug)}` : ''}`,
   project: (projectSlug: string) => `/projects/${encodeURIComponent(projectSlug)}`,
-  lesson: (projectSlug: string, lessonSlug: string) =>
-    `/projects/${encodeURIComponent(projectSlug)}/lessons/${encodeURIComponent(lessonSlug)}`,
+  /** `anchor` = kotva na stránce (`LESSON_ANCHORS`), stránka se na ni posune. */
+  lesson: (projectSlug: string, lessonSlug: string, anchor?: string) =>
+    `/projects/${encodeURIComponent(projectSlug)}/lessons/${encodeURIComponent(lessonSlug)}${
+      anchor ? `#${anchor}` : ''
+    }`,
   /**
    * Dílenský režim lekce na celou obrazovku. `step` = číslo kroku od 1 (`?krok=N`);
    * 0 = „Než začnete“ (příprava). Bez `step` začne stránka od začátku.

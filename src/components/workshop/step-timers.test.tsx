@@ -1,11 +1,15 @@
-import { act, screen, within } from '@testing-library/react';
+import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { createMemoryRouter, RouterProvider } from 'react-router';
 
+import { AppProviders } from '@/app/providers';
 import { StepTimers } from '@/components/workshop/step-timers';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
+import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
+import { lidWalletProject } from '@/content/projects/lid-wallet/project';
 import { type LessonStep } from '@/content/schema';
 import { resetPermissionListenersForTests } from '@/features/timers/use-timers';
-import { renderWithProviders } from '@/test/render';
+import { createTestRepositories, renderWithProviders } from '@/test/render';
 
 const lesson = cardHolderProject.lessons[0]!;
 const MIN = 60_000;
@@ -69,9 +73,54 @@ describe('StepTimers', () => {
       { id: 'cure', label: 'Vytvrzení lepidla', minutes: 15, basis: 'manufacturer' },
     ]);
     const card = await screen.findByRole('region', { name: /vytvrzení/i });
-    expect(within(card).getByText('Orientačně, řiďte se návodem na obalu.')).toBeInTheDocument();
+    expect(
+      within(card).getByText('Výchozí doba je jen orientační – nastavte ji podle návodu na obalu.'),
+    ).toBeInTheDocument();
     await user.click(within(card).getByRole('button', { name: 'Kratší' }));
     expect(within(card).getByRole('button', { name: /spustit 14/i })).toBeInTheDocument();
+  });
+
+  it('odhad bez čísla v lekci (přes noc) neříká „Podle lekce“ a jde zkrátit', async () => {
+    const { user } = renderStep([
+      { id: 'night', label: 'Schnutí přes noc', minutes: 720, basis: 'estimate' },
+    ]);
+    const card = await screen.findByRole('region', { name: /schnutí/i });
+    expect(within(card).queryByText(/Podle lekce/)).not.toBeInTheDocument();
+    expect(within(card).getByText(/Orientační doba/)).toBeInTheDocument();
+    await user.click(within(card).getByRole('button', { name: 'Kratší' }));
+    expect(within(card).getByRole('button', { name: /spustit 11\sh/i })).toBeInTheDocument();
+  });
+
+  it('výchozí doba ze zápisníku (initialFromField) má přednost před dobou z obsahu', async () => {
+    const coin = coinCardHolderProject;
+    const l5 = coin.lessons.find((l) => l.steps.some((s) => s.id === 'dye-burnish-and-seal'))!;
+    const step = l5.steps.find((s) => s.id === 'dye-burnish-and-seal')!;
+    const repositories = createTestRepositories();
+    await repositories.lessonRecords.upsert({
+      id: crypto.randomUUID(),
+      userId: null,
+      projectSlug: coin.slug,
+      lessonSlug: 'x',
+      fieldId: 'edge-paint-dry-minutes',
+      value: 60,
+      contentVersion: coin.contentVersion,
+      createdAt: '2026-10-07T10:00:00.000Z',
+      updatedAt: '2026-10-07T10:00:00.000Z',
+    });
+    const router = createMemoryRouter(
+      [{ path: '*', element: <StepTimers project={coin} lesson={l5} step={step} /> }],
+      { initialEntries: ['/'] },
+    );
+    render(
+      <AppProviders repositories={repositories}>
+        <RouterProvider router={router} />
+      </AppProviders>,
+    );
+    const card = await screen.findByRole('region', { name: /barvy na hrany/i });
+    expect(
+      await within(card).findByRole('button', { name: 'Spustit 1\u00a0h' }),
+    ).toBeInTheDocument();
+    expect(within(card).getByText(/Podle vašeho zápisu: 1\sh/)).toBeInTheDocument();
   });
 
   it('běžící časovač jde zrušit', async () => {
@@ -123,6 +172,38 @@ describe('StepTimers', () => {
     expect(requestPermission).not.toHaveBeenCalled();
     await user.click(screen.getByRole('button', { name: /upozornit mě/i }));
     expect(requestPermission).toHaveBeenCalledTimes(1);
+  });
+
+  it('po doběhnutí už nenabízí „Upozornit mě“', async () => {
+    stubNotification('default');
+    const { user } = renderStep([{ id: 'tack', label: 'Zavadnutí', minutes: 10, basis: 'text' }]);
+    const card = await screen.findByRole('region', { name: /zavadnutí/i });
+    await user.click(within(card).getByRole('button', { name: /spustit/i }));
+    expect(screen.getByRole('button', { name: /upozornit mě/i })).toBeInTheDocument();
+    act(() => vi.advanceTimersByTime(11 * MIN));
+    expect(within(card).getByRole('status')).toHaveTextContent('✓ Hotovo');
+    expect(screen.queryByRole('button', { name: /upozornit mě/i })).not.toBeInTheDocument();
+  });
+
+  it('kalendář u čekání přes noc vede na krok, kterým se pokračuje', async () => {
+    let blob: Blob | undefined;
+    const createObjectURL = vi.fn((b: Blob) => {
+      blob = b;
+      return 'blob:x';
+    });
+    vi.stubGlobal('URL', Object.assign(URL, { createObjectURL, revokeObjectURL: vi.fn() }));
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined);
+    const bend = lidWalletProject.lessons.find((l) => l.steps.some((s) => s.id === 'inspect'))!;
+    const dry = bend.steps.find((s) => s.id === 'dry')!;
+    const user = userEvent.setup({ advanceTimers: (ms) => vi.advanceTimersByTime(ms) });
+    renderWithProviders(<StepTimers project={lidWalletProject} lesson={bend} step={dry} />);
+    const card = await screen.findByRole('region', { name: /schnutí/i });
+    await user.click(within(card).getByRole('button', { name: /spustit 12/i }));
+    await user.click(within(card).getByRole('button', { name: 'Přidat do kalendáře' }));
+    const inspect = bend.steps.findIndex((s) => s.id === 'inspect') + 1;
+    const text = (await blob!.text()).replace(/\r\n /g, '');
+    expect(text).toContain(`/lessons/${bend.slug}/focus?krok=${inspect}`);
+    expect(text).not.toContain(`focus?krok=${inspect - 1}`);
   });
 
   it('bez notifikací vysvětlí, že pípne jen otevřený Hidepath', async () => {

@@ -257,9 +257,7 @@ export const lessons: readonly LessonDefinition[] = [
       'mince, na kterou stavíte (výchozí 50 Kč)',
       'potravinová fólie',
       'houbička a voda',
-      'smirkový papír 180',
       'tužka HB nebo 2B',
-      'kruhový výsečník Ø 20 mm (u mince 40 mm Ø 32 mm)',
       'špalík pod důlek s rovným koncem: užší než otvor formy (pod 31,5 mm, u mince 40 mm pod 44 mm) a širší než okno (přes 20 mm, u mince 40 mm přes 32 mm); u mince 50 Kč třeba kus kulaté tyčky o průměru 21–31 mm (průměr změřte), zkrácený tak, aby se dna důlku na formě jen dotýkal (ověřte na odřezku)',
     ],
     requiredEquipment: [
@@ -346,9 +344,9 @@ export const lessons: readonly LessonDefinition[] = [
           {
             id: 'dry-overnight',
             label: 'Schnutí důlku přes noc',
+            // Lekce ani zadání hodiny neuvádí („nejlépe přes noc“): jen odhad k úpravě.
             minutes: 720,
-            maxMinutes: 1440,
-            basis: 'text',
+            basis: 'estimate',
             blocksStepId: 'test-window-retention',
           },
         ],
@@ -461,7 +459,7 @@ export const lessons: readonly LessonDefinition[] = [
     goal: 'Vyzkoušet osazení druku na odřezku stejné kůže jako tělo; u kůže 1,5 mm navíc ztenčit ohyb na 1 mm.',
     materials: [
       '2–3 odřezky stejné kůže jako tělo, u kůže 1,5 mm ještě jeden na ztenčení; u sestavy z nákupního plánu si na kusu Blu A5 nejdřív obkreslete vedle sebe podél jedné hrany kapsu 57,5 × 57,5 mm a cvičný proužek 130 × 40 mm a odřezky berte ze zbytku (případný třetí odřezek z lekce 2 je už z něj vyříznutý)',
-      'druk s aplikátorem (u Prym Anorak 12 mm je v balení) a návod z obalu',
+      'návod z obalu druku (u Prym Anorak 12 mm je aplikátor v balení)',
       'výsečník 2 mm, případně 3 mm – jen když návod druku vyžaduje otvor',
       'kus dřeva nebo tvrdé desky pod kování',
       'posuvné měřítko, pokud ho máte (jinak ocelové pravítko)',
@@ -931,8 +929,6 @@ export const lessons: readonly LessonDefinition[] = [
       'kůže na pás, aspoň A4: třísločiněná 1,2 mm (výchozí, např. Blu nebo Verde), nebo 1,5 mm (pak se ohyb B ztenčuje)',
       'tužka HB nebo 2B',
       'Tokonole nebo gum tragacanth na zapečetění rubu',
-      'barva na hrany (u barvené kůže)',
-      'maskovací páska',
     ],
     requiredEquipment: [
       'veg-tan-leather',
@@ -1078,6 +1074,8 @@ export const lessons: readonly LessonDefinition[] = [
             minutes: 20,
             maxMinutes: 30,
             basis: 'manufacturer',
+            // Dobu schnutí si uživatel ověřil a zapsal v lekci 4 – časovač začne jí.
+            initialFromField: 'edge-paint-dry-minutes',
           },
         ],
         recalls: [
@@ -1169,7 +1167,6 @@ export const lessons: readonly LessonDefinition[] = [
     goal: 'Vytvarovat kapsu s mincí z kůže 1,2 mm, vyseknout okno, přišít kapsu na přední panel a osadit dřík druku.',
     materials: [
       'kůže 1,2 mm na kapsu, aspoň 57,5 × 57,5 mm (u mince 40 mm 70 × 70 mm), i když je pás z 1,5 mm',
-      'barva na hrany (u barvené kůže)',
       'mince (výchozí 50 Kč) a potravinová fólie',
       'nit 0,6 mm, asi 0,8 m (23 otvorů, u mince 40 mm 31)',
       'tužka HB nebo 2B',
@@ -1229,9 +1226,9 @@ export const lessons: readonly LessonDefinition[] = [
           {
             id: 'dry-overnight',
             label: 'Schnutí kapsy přes noc',
+            // Lekce ani zadání hodiny neuvádí („nejlépe přes noc“): jen odhad k úpravě.
             minutes: 720,
-            maxMinutes: 1440,
-            basis: 'text',
+            basis: 'estimate',
             blocksStepId: 'cut-outline-and-window',
           },
         ],
@@ -1283,6 +1280,8 @@ export const lessons: readonly LessonDefinition[] = [
             minutes: 20,
             maxMinutes: 30,
             basis: 'manufacturer',
+            // Dobu schnutí si uživatel ověřil a zapsal v lekci 4 – časovač začne jí.
+            initialFromField: 'edge-paint-dry-minutes',
           },
         ],
         recalls: [
@@ -1412,9 +1411,9 @@ export const lessons: readonly LessonDefinition[] = [
       {
         source: 'pattern-sheets',
         sheetId: 'kapsa',
-        copies: 2,
-        purpose: 'na formu a na šablonu s oknem',
-        condition: 'je nemáte z lekce 2',
+        copies: 1,
+        purpose: 'na šablonu s oknem (u mince 40 mm varianta pro 40 mm)',
+        condition: 'šablonu s oknem nemáte z lekce 2',
       },
       {
         source: 'pattern-sheets',
@@ -1433,6 +1432,12 @@ export const lessons: readonly LessonDefinition[] = [
       },
       { id: 'form', fromLesson: L2, label: 'Vyvrtaná forma s víkem' },
       { id: 'block', fromLesson: L2, label: 'Špalík pod důlek' },
+      {
+        id: 'window-template',
+        fromLesson: L2,
+        label: 'Šablona kapsy s vyseknutým oknem',
+        note: 'Když ji nemáte, vytiskněte list KAPSA znovu (viz Vytisknout).',
+      },
     ],
     media: [
       {
@@ -1625,7 +1630,7 @@ export const lessons: readonly LessonDefinition[] = [
     phaseSlug: 'build',
     estimatedMinutes: 50,
     goal: 'Vložit obsah, osadit klobouček druku podle obtisku, zkrátit jazyk a zaleštit vnější hrany.',
-    materials: ['karty a bankovky, které nosíte', 'barva na hrany (u barvené kůže)'],
+    materials: ['karty a bankovky, které nosíte'],
     requiredEquipment: [
       'snap-fastener',
       'utility-knife',
@@ -1727,6 +1732,8 @@ export const lessons: readonly LessonDefinition[] = [
             minutes: 20,
             maxMinutes: 30,
             basis: 'manufacturer',
+            // Dobu schnutí si uživatel ověřil a zapsal v lekci 4 – časovač začne jí.
+            initialFromField: 'edge-paint-dry-minutes',
           },
         ],
         recalls: [

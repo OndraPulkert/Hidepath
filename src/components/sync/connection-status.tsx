@@ -39,7 +39,7 @@ export function ConnectionStatus() {
   const online = useOnlineStatus();
   const update = useAppUpdateState();
   const queryClient = useQueryClient();
-  const { persistent, migration, retryMigration, sync = null } = useDataContext();
+  const { persistent, migration, retryMigration, mode, sync = null } = useDataContext();
   const outbox = useOutboxSnapshot(sync);
   const mutations = useMutationState({
     select: (m) => ({ status: m.state.status, at: m.state.submittedAt }),
@@ -58,6 +58,7 @@ export function ConnectionStatus() {
     updateAvailable: update.updateAvailable,
     storagePersistent: persistent,
     migration: migration.status,
+    mode,
   });
 
   const retryFailedMutations = () => {

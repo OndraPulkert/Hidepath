@@ -4,13 +4,14 @@ import { newId } from '@/features/data/local-collection';
 import {
   appBeeper,
   browserNotifyEnv,
+  closeTimerNotification,
   notificationSupport,
   notifyTimersDone,
   requestNotificationPermission,
   type NotificationSupport,
 } from '@/features/timers/notify';
 import { timerNotice } from '@/features/timers/timer-links';
-import { timerStore } from '@/features/timers/timer-store';
+import { claimDueAcrossTabs, timerStore } from '@/features/timers/timer-store';
 import {
   cancelTimer,
   dismissTimer,
@@ -71,9 +72,11 @@ export function useTimerActions() {
   }, []);
   const cancel = useCallback((id: string) => {
     timerStore.update((timers) => cancelTimer(timers, id));
+    void closeTimerNotification(id, browserNotifyEnv(appBeeper));
   }, []);
   const dismiss = useCallback((id: string) => {
     timerStore.update((timers) => dismissTimer(timers, id, Date.now()));
+    void closeTimerNotification(id, browserNotifyEnv(appBeeper));
   }, []);
   return { start, cancel, dismiss };
 }
@@ -114,16 +117,40 @@ export function resetPermissionListenersForTests() {
  */
 export function useTimerDriver() {
   const timers = useTimers();
+  const waiting = hasUnfired(timers);
+
+  // Časovač přežije reload i znovuspuštění PWA, AudioContext ne – a bez gesta ho prohlížeč
+  // (hlavně iOS) nepustí. Dokud se na něco čeká, první klepnutí kamkoli zvuk znovu odemkne.
+  useEffect(() => {
+    if (!waiting) return;
+    const events = ['pointerdown', 'keydown', 'touchend'] as const;
+    const unlock = () => {
+      appBeeper.unlock();
+      remove();
+    };
+    const remove = () => {
+      for (const type of events) document.removeEventListener(type, unlock, true);
+    };
+    for (const type of events) document.addEventListener(type, unlock, true);
+    return remove;
+  }, [waiting]);
+
   useEffect(() => {
     let cancelled = false;
     const check = () => {
       if (cancelled) return;
-      const due = timerStore.claimDue(Date.now());
-      if (due.length === 0) return;
-      void notifyTimersDone(
-        due.map((t) => timerNotice(t)),
-        browserNotifyEnv(appBeeper),
-      );
+      // Pod zámkem sdíleným kartami: stejný časovač ohlásí jen jedna karta.
+      void claimDueAcrossTabs(
+        timerStore,
+        () => Date.now(),
+        (due) =>
+          void notifyTimersDone(
+            due.map((t) => timerNotice(t)),
+            browserNotifyEnv(appBeeper),
+          ),
+      ).catch((error: unknown) => {
+        console.error('[timers] Ohlášení časovačů selhalo', error);
+      });
     };
     check();
     const next = nextEndsAt(timers, Date.now());

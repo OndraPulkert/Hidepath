@@ -326,7 +326,7 @@ export const lessons: readonly LessonDefinition[] = [
     phaseSlug: 'practice',
     estimatedMinutes: 20,
     goal: 'Vyrazit rovnou řadu otvorů s roztečí 3,85–4 mm, 3,5 mm od hrany, bez vynechání a zdvojení.',
-    materials: ['proužek z lekce 2 nebo jiný odřezek', 'tvrdá deska na ručníku'],
+    materials: ['proužek z lekce 2 nebo jiný odřezek', 'složený ručník pod tvrdou desku'],
     requiredEquipment: ['stitching-chisels', 'mallet', 'punching-board', 'steel-ruler'],
     recommendedEquipment: ['wing-divider', 'scratch-awl'],
     prerequisiteLessons: [L2],
@@ -465,7 +465,7 @@ export const lessons: readonly LessonDefinition[] = [
         waits: [
           {
             id: 'glue-open',
-            label: 'Odvětrání lepidla',
+            label: 'Odvětrání lepidla (s páskou nečekáte)',
             minutes: 10,
             maxMinutes: 15,
             basis: 'manufacturer',
@@ -629,7 +629,6 @@ export const lessons: readonly LessonDefinition[] = [
     materials: [
       'nůžky na vystřižení šablony nahrubo (s okrajem 1–2 cm)',
       'kůže A4 na pouzdro (1,2–1,5 mm)',
-      'maskovací páska',
     ],
     requiredEquipment: [
       'veg-tan-leather',
@@ -868,7 +867,7 @@ export const lessons: readonly LessonDefinition[] = [
         waits: [
           {
             id: 'glue-open',
-            label: 'Odvětrání lepidla',
+            label: 'Odvětrání lepidla (s páskou nečekáte)',
             minutes: 10,
             maxMinutes: 15,
             basis: 'manufacturer',

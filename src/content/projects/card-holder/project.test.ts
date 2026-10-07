@@ -62,7 +62,8 @@ describe('obsah – pouzdro na karty: časovače, zápisník a „Připravte si�
       expect(step(order, id).waits).toEqual([
         {
           id: 'glue-open',
-          label: 'Odvětrání lepidla',
+          // S oboustrannou páskou se nečeká – časovač je jen pro lepidlo.
+          label: 'Odvětrání lepidla (s páskou nečekáte)',
           minutes: 10,
           maxMinutes: 15,
           basis: 'manufacturer',
