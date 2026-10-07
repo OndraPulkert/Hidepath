@@ -2,12 +2,14 @@ import { equipmentCatalog, equipmentList } from '@/content/equipment';
 import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
 import { patternSheetUrlsFor } from '@/content/projects/pattern-sheets';
 import { projectDefinitionSchema } from '@/content/schema';
+import { groupPatternSheets } from '@/components/projects/pattern-sheet-list';
 import { findPlanExample, resolveShoppingPlan } from '@/features/shopping/plan';
 import {
   DEFAULT_COIN_CARD_HOLDER,
   NAMED_COINS,
   coinCardHolderLayout,
 } from '@/lib/geometry/coin-card-holder';
+import { practiceStripLayout } from '@/lib/geometry/coin-card-holder-practice';
 
 /** Číslo tak, jak ho píše obsah (desetinná čárka). */
 const cz = (n: number): string => String(n).replace('.', ',');
@@ -103,6 +105,84 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
     });
   });
 
+  it('výchozí skupina listů (předem zaškrtnutá k tisku) je pro kůži 1,2 mm, 1,5 mm je varianta', () => {
+    const groups = groupPatternSheets(coinCardHolderProject.patternSheets!.sheets);
+    expect(groups[0]!.variant).toBeNull();
+    expect(groups[0]!.sheets.map((x) => x.id)).toEqual([
+      'papirovy-model-kuze-1-2',
+      'sablona-kuze-1-2',
+      'kapsa',
+      'postup',
+    ]);
+    const thick = groups.find((g) => g.sheets.some((x) => x.id === 'sablona'))!;
+    expect(thick.variant).toContain('kůže 1,5 mm');
+    expect(coinCardHolderProject.patternSheets!.defaultVariantLabel).toContain('kůže 1,2 mm');
+    // Záložní okno Ø 18 mm: vlastní skupina (nezaškrtnutá), prstenec podle modelu.
+    const w18 = coinCardHolderLayout({ ...DEFAULT_COIN_CARD_HOLDER, windowDiameterMm: 18 });
+    const sheet18 = coinCardHolderProject.patternSheets!.sheets.find(
+      (x) => x.id === 'kapsa-okno-18',
+    )!;
+    expect(sheet18.variant).toBeDefined();
+    expect(sheet18.note).toContain(`prstenec ${cz(w18.coinRingMm)} mm`);
+  });
+
+  it('kroky, které říkají „vytiskněte list“, odkazují na listy střihu', () => {
+    const linked = coinCardHolderProject.lessons.flatMap((l) =>
+      l.steps.filter((s) => s.printLink === 'pattern-sheets').map((s) => `${l.order}/${s.id}`),
+    );
+    expect(linked).toEqual(
+      expect.arrayContaining([
+        '1/print-check',
+        '2/drill-form',
+        '2/test-window-retention',
+        '5/print-check',
+        '6/trace-and-punch-pocket',
+      ]),
+    );
+  });
+
+  describe('cvičný proužek pro lekci 4', () => {
+    const l4 = coinCardHolderProject.lessons.find((l) => l.order === 4)!;
+    const sheets = coinCardHolderProject.practiceSheets!.sheets;
+    /** Na jedno desetinné místo, jak to píše lekce („asi 15,7 mm“). */
+    const cz1 = (n: number): string => cz(Math.round(n * 10) / 10);
+
+    it('cvičné listy mají soubor v registru a id se neplete s listy střihu', () => {
+      const urls = patternSheetUrlsFor(coinCardHolderProject.slug);
+      for (const sheet of sheets) {
+        expect(urls[sheet.id], sheet.id).toMatch(/pouzdro-mince-cvicny-prouzek.*\.svg/);
+      }
+      expect(sheets.find((x) => x.variant === undefined)!.id).toBe('cvicny-prouzek-kuze-1-2');
+    });
+
+    it('krok s cvičným listem na něj odkazuje a jmenuje ho stejně jako list', () => {
+      const s = l4.steps.find((x) => x.id === 'cut-practice-strip')!;
+      expect(s.printLink).toBe('practice-sheets');
+      expect(s.body).toContain(`„${sheets[0]!.title}“`);
+    });
+
+    it.each([
+      [1.2, 'cvicny-prouzek-kuze-1-2'],
+      [1.5, 'cvicny-prouzek'],
+    ])('čísla v lekci a na listu sedí s modelem pro kůži %s mm', (t, id) => {
+      const P = practiceStripLayout(t);
+      const materials = l4.materials.join(' ');
+      const strip = l4.steps.find((x) => x.id === 'cut-practice-strip')!.body;
+      for (const text of [materials, strip]) {
+        expect(text).toContain(`${cz1(P.foldAMm)} mm`);
+        expect(text).toContain(`${cz1(P.foldBMm)} mm`);
+      }
+      expect(materials).toContain(`asi ${Math.round(P.stripLengthMm)} mm`);
+      const note = sheets.find((x) => x.id === id)!.note;
+      expect(note).toContain(`${cz(P.stripLengthMm)} × 40 mm`);
+      expect(note).toContain(`ohyb A ${cz(P.foldAMm)} mm`);
+      expect(note).toContain(`ohyb B ${cz(P.foldBMm)} mm`);
+      const dots = l4.steps.find((x) => x.id === 'mark-mirrored-dots')!.body;
+      expect(dots).toContain(`${P.holesPerPanel} otvorů`);
+      expect(dots).toContain(`= ${P.endHoleOffsetMm} mm od čáry ohybu`);
+    });
+  });
+
   describe('texty lekcí po řemeslné kontrole', () => {
     const lesson = (n: number) => coinCardHolderProject.lessons.find((l) => l.order === n)!;
     const step = (n: number, id: string) => lesson(n).steps.find((x) => x.id === id)!.body;
@@ -169,6 +249,19 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
         'asi na 0,6 m; 0,8 m nechává začátečníkovi rezervu',
       );
       expect(lesson(4).materials.join(' ')).toContain('0,8 m nechává začátečníkovi rezervu');
+    });
+
+    it('lekce 5: páska povinná, čáry ohybů na rub, pečetění rubu mimo pruh lepení', () => {
+      expect(lesson(5).requiredEquipment).toContain('masking-tape');
+      expect(step(5, 'draw-fold-lines')).toContain('4 čáry');
+      expect(step(7, 'wet-fold-zones')).toContain('narýsované tužkou v lekci 5');
+      expect(step(5, 'dye-burnish-and-seal')).toContain('přelepte maskovací páskou');
+      for (const n of [5, 6, 8]) {
+        expect(lesson(n).recommendedEquipment, `lekce ${n}`).toContain('edge-paint');
+      }
+      expect(step(4, 'try-edge-paint')).toContain('Jen u barvené kůže');
+      // Délku nitě pro dno krátký šev odřezku neověří.
+      expect(lesson(7).materials.join(' ')).not.toContain('ověřit na odřezku');
     });
 
     it('druk: díly v lekci 3 na začátku, strana dříku v lekci 6, klobouček podle obtisku v lekci 8', () => {

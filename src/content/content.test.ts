@@ -18,6 +18,25 @@ describe('obsah – validace schématem', () => {
     expect(result.success, JSON.stringify(result.error?.issues, null, 2)).toBe(true);
   });
 
+  it('odkaz kroku na listy střihu potřebuje projekt s listy střihu', () => {
+    const [first, ...rest] = cardHolderProject.lessons;
+    const broken = {
+      ...cardHolderProject,
+      lessons: [
+        {
+          ...first!,
+          steps: first!.steps.map((s, i) =>
+            i === 0 ? { ...s, printLink: 'pattern-sheets' as const } : s,
+          ),
+        },
+        ...rest,
+      ],
+    };
+    const result = projectDefinitionSchema.safeParse(broken);
+    expect(result.success).toBe(false);
+    expect(JSON.stringify(result.error?.issues)).toContain('odkazuje na listy střihu');
+  });
+
   it('projekt odkazuje jen na existující vybavení', () => {
     const known = new Set(equipmentList.map((e) => e.slug));
     for (const req of cardHolderProject.equipment) {

@@ -595,7 +595,9 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
     priceRange: { minCents: 26_900, maxCents: 26_900 },
     priceSource: 'verified',
     priceNote: VERIFIED_NOTE,
-    alsoUsedFor: [],
+    alsoUsedFor: [
+      'Obarvení řezaných hran barvené kůže před leštěním (pouzdro s vsazenou mincí, lekce 4, 5, 6 a 8)',
+    ],
     examples: [
       {
         title: "Fiebing's Edge Kote 118 ml – tmavě hnědá",

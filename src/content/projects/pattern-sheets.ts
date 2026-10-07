@@ -6,7 +6,10 @@ import vickoPripravky from '../../../docs/generated/penezenka-vicko-pripravky.sv
 import vickoRub from '../../../docs/generated/penezenka-vicko-rub.svg?url';
 import vickoSablona from '../../../docs/generated/penezenka-vicko-sablona.svg?url';
 import cvicnaSablona from '../../../docs/generated/pouzdro-karty-cvicna-sablona.svg?url';
+import cvicnyProuzek from '../../../docs/generated/pouzdro-mince-cvicny-prouzek.svg?url';
+import cvicnyProuzek12 from '../../../docs/generated/pouzdro-mince-cvicny-prouzek-kuze-1-2mm.svg?url';
 import kapsa from '../../../docs/generated/pouzdro-mince-kapsa.svg?url';
+import kapsaOkno18 from '../../../docs/generated/pouzdro-mince-kapsa-okno-18mm.svg?url';
 import kapsa40 from '../../../docs/generated/pouzdro-mince-kapsa-mince-40mm.svg?url';
 import papirovyModel from '../../../docs/generated/pouzdro-mince-papirovy-model.svg?url';
 import papirovyModel12 from '../../../docs/generated/pouzdro-mince-papirovy-model-kuze-1-2mm.svg?url';
@@ -37,8 +40,11 @@ const registry: Readonly<Record<string, Readonly<Record<string, string>>>> = {
     'papirovy-model-40mm': papirovyModel40,
     'sablona-40mm': sablona40,
     'kapsa-40mm': kapsa40,
+    'kapsa-okno-18': kapsaOkno18,
     'papirovy-model-40mm-kuze-1-2': papirovyModel4012,
     'sablona-40mm-kuze-1-2': sablona4012,
+    'cvicny-prouzek-kuze-1-2': cvicnyProuzek12,
+    'cvicny-prouzek': cvicnyProuzek,
   },
   [lidWalletProject.slug]: {
     sablona: vickoSablona,

@@ -333,7 +333,7 @@ export function buildCoinHolderSheetSvg(
         GUIDE,
       ),
     );
-    // Šrafa se obkreslí jen na líc; na rub (kde se ztenčuje) se musí přenést.
+    // Šablona leží na líci; na rub (kde se ztenčuje) se šrafa musí přenést.
     if (spec.foldSkiveThicknessMm !== null) {
       const cB = X((L.frontX1Mm + L.innerX0Mm) / 2);
       [
@@ -504,7 +504,7 @@ export function buildCoinHolderSheetSvg(
     `POUZDRO NA KARTY S VSAZENOU MINCÍ – LIST PÁS. Tisk na A4 NA ŠÍŘKU na 100 % (bez „přizpůsobit stránce“). Kapsa s mincí a forma jsou na listu KAPSA. NÁVRH k ověření na papíru.`,
     `Karty ${cz(spec.cardWidthMm)} × ${cz(spec.cardHeightMm)} (${spec.cardsCount} ks) vepředu, bankovky složené napůl vzadu, mince Ø ${cz(spec.coinDiameterMm)}, kůže tělo ${cz(spec.bodyThicknessMm)} mm.`,
     `Jeden pás: ZADNÍ + ohyb A + PŘEDNÍ + ohyb B + VNITŘNÍ panel. Po složení jsou obě boční hrany OHYBY, šije se jen dno (skrz všechny vrstvy), horní hrana zůstává otevřená.`,
-    `PÁS OBKRESLIT NA LÍC – přední panel je nakreslený tak, jak bude vidět. Jazyk vyjde zepředu ${front} (zezadu ${back}), výřez na prst naproti němu.`,
+    `PÁS PŘILEPIT PÁSKOU NA LÍC, propíchnout značky a řezat skrz papír po čáře (lekce 5) – přední panel je nakreslený tak, jak bude vidět. Jazyk vyjde zepředu ${front} (zezadu ${back}), výřez na prst naproti němu.`,
     `Plná čára = řez, čárkovaně = ohyb, tečky = otvory dna (vidličky přesně ${cz(spec.stitchPitchMm)} mm; naplocho: přední panel z líce, zadní a vnitřní z rubu)${spec.foldSkiveThicknessMm !== null ? `, šrafa = ztenčit na ${cz(spec.foldSkiveThicknessMm)} mm z rubu` : '; ohyby se neztenčují'}.`,
     `Pořadí: 1 pás · 2–3 kapsa (list KAPSA) · 4 přišít kapsu, osadit patici druku${L.grommetXMm !== null ? ' a průchodku' : ''} NAPLOCHO · 5 složit (vnitřní za přední, zadní přes vše) · 6 slepit a prošít dno`,
     `· 7 klobouček podle obtisku patice se vším obsahem, pak jazyk zkrátit ${cz(spec.tabBeyondSnapMm)} mm za klobouček a zaoblit · 8 srazit a zaleštit hrany (vnitřní předem).`,
@@ -1006,8 +1006,9 @@ export function buildCoinHolderProcessSvg(
     b.push(
       ...caption(0, [
         `pás ${cz(L.stripLengthMm)} × ${cz(L.panelHeightMm)} mm + jazyk ${cz(L.tabLengthMm)} (s rezervou ${cz(spec.tabFitReserveMm)})`,
-        'po zkoušce na papíře: obkreslit na LÍC, ohyb B ztenčit z rubu,',
-        'prosekat otvory dna, zapečetit rub vnitřního panelu',
+        'po zkoušce na papíře: přilepit na LÍC, řezat skrz papír,',
+        'ohyb B ztenčit z rubu (jen u 1,5 mm), prosekat otvory dna,',
+        'zapečetit rub vnitřního panelu',
       ]),
     );
     cell(0, 'Papír, pak pás z kůže', b);

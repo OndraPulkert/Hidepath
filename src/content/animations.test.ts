@@ -152,6 +152,8 @@ describe('animace postupu – stránky v public/animace', () => {
   it.each([
     ['kapsa-skladani', 'pouchFold', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['kapsa-druk', 'snap', ['A', 'B', 'C', 'D'], 'E'],
+    ['pas-prenos-rez', 'stripTransfer', ['A', 'B', 'C', 'D'], 'E'],
+    ['pas-otvory-dna', 'bottomHoles', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['sedlarsky-steh', 'saddleStitch', ['A', 'B', 'C', 'D', 'E', 'F', 'G'], 'H'],
     ['hrany', 'edges', ['A', 'B', 'C', 'D', 'E', 'F', 'G'], 'H'],
   ] as const)(
@@ -175,12 +177,14 @@ describe('animace postupu – stránky v public/animace', () => {
     'steps' in page ? [{ key, path: page.path, sections: page.sections, steps: page.steps }] : [],
   );
 
-  it('kroky mají čtyři stránky kapsy, sedlářský steh a hrany', () => {
+  it('kroky mají čtyři stránky kapsy, dvě stránky pásu, sedlářský steh a hrany', () => {
     expect(steppedPages.map((p) => p.key)).toEqual([
       'kapsa',
       'pocketAttach',
       'pouchFold',
       'snap',
+      'stripTransfer',
+      'bottomHoles',
       'saddleStitch',
       'edges',
     ]);
@@ -265,8 +269,12 @@ describe('animace postupu – odkazy z lekcí', () => {
         .steps.find((s) => s.id === stepId)
         ?.animationLinks?.map((l) => l.href);
     const prisiti = (anchor: string) => `/animace/kapsa-prisiti.html#${anchor}`;
-    expect(hrefOf(5, 'transfer-marks-awl')).toEqual([prisiti('A2')]);
-    expect(hrefOf(6, 'glue-pocket')).toEqual([prisiti('B2')]);
+    // Všechny značky pásu ukazuje přenos pásu; rohy kapsy podrobně přišití kapsy.
+    expect(hrefOf(5, 'transfer-marks-awl')).toEqual([
+      '/animace/pas-prenos-rez.html#A3',
+      prisiti('A2'),
+    ]);
+    expect(hrefOf(6, 'glue-pocket')).toEqual([prisiti('B1'), prisiti('B2')]);
     // Přišití kapsy: animace prosekání a šití a hned vedle návod, kolik nitě odměřit.
     expect(hrefOf(6, 'stitch-pocket')).toEqual([
       prisiti('C1'),
@@ -290,7 +298,10 @@ describe('animace postupu – složení pouzdra a druk v lekcích', () => {
 
   it('lekce 4 a 7: ohyby, lepení dna a šev otevírají přesný krok skládání', () => {
     expect(hrefOf(4, 'wet-fold-zones')).toEqual([skladani('B1')]);
-    expect(hrefOf(4, 'fold-around-content')).toEqual([skladani('B2')]);
+    expect(hrefOf(4, 'fold-around-content')).toEqual([
+      skladani('B2'),
+      '/animace/pas-otvory-dna.html#E2',
+    ]);
     expect(hrefOf(4, 'unfold-roughen-glue')).toEqual([skladani('C1')]);
     // Odřezek má krátký šev: krok šití, ne výpočet nitě pro šev dna 64 mm.
     expect(hrefOf(4, 'stitch-through-layers')).toEqual([
@@ -299,8 +310,11 @@ describe('animace postupu – složení pouzdra a druk v lekcích', () => {
       '/animace/sedlarsky-steh.html#G2',
       thread,
     ]);
-    // A2 popisuje už proseknutý finální pás (lekce 5, 17 otvorů), ne značení na odřezku.
-    expect(hrefOf(4, 'mark-mirrored-dots')).toBeUndefined();
+    // Skládání A2 popisuje už proseknutý finální pás; tečky proužku ukazuje stránka otvorů dna.
+    expect(hrefOf(4, 'mark-mirrored-dots')).toEqual([
+      '/animace/pas-otvory-dna.html#E1',
+      '/animace/pas-otvory-dna.html#A2',
+    ]);
     expect(hrefOf(7, 'wet-fold-zones')).toEqual([skladani('B1')]);
     expect(hrefOf(7, 'fold-inner-b')).toEqual([skladani('B2')]);
     expect(hrefOf(7, 'fold-back-a')).toEqual([skladani('B3')]);
@@ -339,6 +353,44 @@ describe('animace postupu – složení pouzdra a druk v lekcích', () => {
   });
 });
 
+describe('animace postupu – přenos, řez a otvory dna pásu v lekcích 4 a 5', () => {
+  const lessonOf = (n: number) =>
+    projects.find((p) => p.slug === 'coin-card-holder')!.lessons.find((l) => l.order === n)!;
+  const hrefOf = (n: number, stepId: string) =>
+    lessonOf(n)
+      .steps.find((s) => s.id === stepId)
+      ?.animationLinks?.map((l) => l.href);
+  const prenos = (anchor: string) => `/animace/pas-prenos-rez.html#${anchor}`;
+  const otvory = (anchor: string) => `/animace/pas-otvory-dna.html#${anchor}`;
+
+  it.each([
+    // Lekce 4: proužek se přenáší a řeže stejně jako pás, otvory proužku ukazuje část E.
+    [4, 'cut-practice-strip', [prenos('A2'), prenos('A3'), prenos('B1'), prenos('D3')]],
+    [4, 'punch-flat', [otvory('E1'), otvory('A3'), otvory('D2')]],
+    // Lekce 5: každý krok přenosu, řezu, čar ohybů a otvorů dna.
+    [5, 'transfer-face', [prenos('A2'), prenos('A1')]],
+    [5, 'cut-strip', [prenos('B1'), prenos('C1'), prenos('C2'), prenos('B3')]],
+    [5, 'peel-template', [prenos('D1')]],
+    [5, 'draw-fold-lines', [prenos('D3'), prenos('D2')]],
+    [5, 'punch-bottom-holes', [otvory('B1'), otvory('C1'), otvory('D1'), otvory('D2')]],
+  ] as const)('lekce %i, krok %s', (order, stepId, expected) => {
+    expect(hrefOf(order, stepId)).toEqual(expected);
+  });
+
+  it('popisky tlačítek nesou číslo a název kroku stránky', () => {
+    expect(animationLink('stripTransfer', 'D3')).toEqual({
+      href: prenos('D3'),
+      label: 'Krok D3 – Spojte konce čar tužkou podle pravítka',
+    });
+    expect(animationLink('bottomHoles', 'E1').label).toBe(
+      'Krok E1 – Lekce 4: cvičný proužek stejně, 6 otvorů na panel',
+    );
+    expect(() => animationLink('stripTransfer', 'D5')).toThrow(/nemá kotvu #D5/);
+    expect(() => animationLink('bottomHoles', 'D3')).toThrow(/nemá kotvu #D3/);
+    expect(animationButtonText(prenos('B1'))).toBe('Animace postupu');
+  });
+});
+
 describe('animace postupu – sedlářský steh a hrany ve všech projektech', () => {
   const hrefsOf = (projectSlug: string, order: number, stepId: string) =>
     projects
@@ -362,6 +414,7 @@ describe('animace postupu – sedlářský steh a hrany ve všech projektech', (
     ['card-holder', 6, 'edges', [hrany('A2'), hrany('D1')]],
     // Projekt 02: steh a hrany lekcí 4–8 (šev dna a kapsa ověřují testy výše).
     ['coin-card-holder', 4, 'saddle-stitch-reminder', [steh('D1')]],
+    ['coin-card-holder', 4, 'try-edge-paint', [hrany('C1'), hrany('D1')]],
     ['coin-card-holder', 5, 'dye-burnish-and-seal', [hrany('F1')]],
     ['coin-card-holder', 6, 'dye-burnish-pocket-edges', [hrany('F2')]],
     ['coin-card-holder', 8, 'sand-flat-bottom', [hrany('F3'), hrany('B1')]],

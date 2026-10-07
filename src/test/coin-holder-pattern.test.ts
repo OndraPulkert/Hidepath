@@ -55,7 +55,7 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
     expect(sheet).toContain(`OHYB B ${cz(L.foldFrontInnerMm)}`);
     expect(sheet).toContain(`VÝŘEZ NA PRST R${cz(L.scoopRadiusMm)}`);
     expect(sheet).toContain(`${L.bottomSeamHoles} otvorů`);
-    expect(sheet).toContain('PÁS OBKRESLIT NA LÍC');
+    expect(sheet).toContain('PÁS PŘILEPIT PÁSKOU NA LÍC');
     expect(sheet).toContain('ZADNÍ PANEL');
     expect(sheet).toContain('PŘEDNÍ PANEL');
     expect(sheet).toContain('VNITŘNÍ PANEL');

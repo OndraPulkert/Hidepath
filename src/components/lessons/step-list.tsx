@@ -10,6 +10,13 @@ import { typo } from '@/lib/utils/format';
 /** Text odkazu pod krokem podle `printLink`. */
 const printLinkLabels: Record<NonNullable<LessonStep['printLink']>, string> = {
   'practice-sheets': 'Vytisknout cvičnou šablonu 1:1',
+  'pattern-sheets': 'Listy střihu 1:1 k tisku',
+};
+
+/** Kam vede odkaz pod krokem podle `printLink`. */
+const printLinkRoutes: Record<NonNullable<LessonStep['printLink']>, (slug: string) => string> = {
+  'practice-sheets': routes.practiceSheets,
+  'pattern-sheets': routes.template,
 };
 
 export function StepList({
@@ -34,9 +41,9 @@ export function StepList({
           <div className="flex min-w-0 flex-1 flex-col gap-3">
             <h3 className="text-step font-semibold">{typo(step.title)}</h3>
             <p className="text-body text-ink-2">{typo(step.body)}</p>
-            {step.printLink === 'practice-sheets' ? (
+            {step.printLink ? (
               <Link
-                to={routes.practiceSheets(projectSlug)}
+                to={printLinkRoutes[step.printLink](projectSlug)}
                 className="inline-flex min-h-touch items-center self-start text-body text-leather hover:text-cognac"
               >
                 {printLinkLabels[step.printLink]} →

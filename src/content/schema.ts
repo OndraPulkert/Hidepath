@@ -175,9 +175,10 @@ export const lessonStepSchema = z.object({
   media: z.array(mediaSlotSchema),
   /**
    * Odkaz pod krokem na tiskovou stránku: `practice-sheets` = cvičné listy projektu
-   * (`practiceSheets`), např. cvičná šablona k vyzkoušení přenosu šablony na odřezku.
+   * (`practiceSheets`), např. cvičná šablona k vyzkoušení přenosu šablony na odřezku;
+   * `pattern-sheets` = listy střihu projektu (`patternSheets`), kde krok říká „vytiskněte list …“.
    */
-  printLink: z.enum(['practice-sheets']).optional(),
+  printLink: z.enum(['practice-sheets', 'pattern-sheets']).optional(),
   /**
    * Odkazy pod krokem na animace postupu a návod na délku nitě, každý jako vlastní tlačítko
    * („▶ Animace postupu“, „📏 Jak odměřit nit“) v pořadí pole. Bez odkazů pole vynechte.
@@ -459,6 +460,12 @@ export const projectDefinitionSchema = z
           ctx.addIssue({
             code: 'custom',
             message: `Lekce ${lesson.slug}: krok ${step.id} odkazuje na cvičné listy, projekt žádné nemá`,
+          });
+        }
+        if (step.printLink === 'pattern-sheets' && !project.patternSheets) {
+          ctx.addIssue({
+            code: 'custom',
+            message: `Lekce ${lesson.slug}: krok ${step.id} odkazuje na listy střihu, projekt žádné nemá`,
           });
         }
       }

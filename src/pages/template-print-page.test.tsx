@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import { routes } from '@/app/routes';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
+import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
 import { lidWalletProject } from '@/content/projects/lid-wallet/project';
 import { renderApp } from '@/test/render';
 
@@ -84,5 +85,53 @@ describe('tisk – pouzdro na karty: šablona a cvičná šablona', () => {
     expect(
       await screen.findByRole('heading', { name: 'Tuhle stránku nemáme' }),
     ).toBeInTheDocument();
+  });
+});
+
+/** Projekt 02: výchozí střih je pro kůži 1,2 mm, lekce odkazují na listy střihu. */
+describe('tisk – pouzdro s vsazenou mincí', () => {
+  it('předem zaškrtne listy pro kůži 1,2 mm, ne pro 1,5 mm ani záložní okno', async () => {
+    renderApp(routes.template(coinCardHolderProject.slug));
+    expect(
+      await screen.findByRole('checkbox', { name: /^Pás \(šablona\)Tři panely/ }),
+    ).toBeChecked();
+    expect(
+      screen.getByRole('checkbox', { name: /^Pás \(šablona\)\s–\skůže 1,5\smm/ }),
+    ).not.toBeChecked();
+    expect(
+      screen.getByRole('checkbox', { name: /^Kapsa\s–\száložní okno Ø\s18\smm/ }),
+    ).not.toBeChecked();
+  });
+
+  it('cvičné listy předem zaškrtnou proužek pro kůži 1,2 mm, ne pro 1,5 mm', async () => {
+    renderApp(routes.practiceSheets(coinCardHolderProject.slug));
+    expect(
+      await screen.findByRole('checkbox', { name: /^Cvičný proužek pro lekci 4Proužek 114,35/ }),
+    ).toBeChecked();
+    expect(
+      screen.getByRole('checkbox', { name: /^Cvičný proužek pro lekci 4\s–\skůže 1,5\smm/ }),
+    ).not.toBeChecked();
+  });
+
+  it('lekce 4 odkazuje z cvičného proužku na cvičné listy', async () => {
+    renderApp(routes.lesson(coinCardHolderProject.slug, '04-fold-and-stitch-scrap'));
+    expect(
+      await screen.findByRole('heading', { name: /^Vyřízněte\scvičný proužek/ }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Vytisknout cvičnou šablonu 1:1/ })).toHaveAttribute(
+      'href',
+      routes.practiceSheets(coinCardHolderProject.slug),
+    );
+  });
+
+  it('lekce 1 odkazuje z tisku listu na stránku listů střihu', async () => {
+    renderApp(routes.lesson(coinCardHolderProject.slug, '01-paper-model'));
+    expect(
+      await screen.findByRole('heading', { name: /^Vytiskněte\sa\szkontrolujte list$/ }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Listy střihu 1:1 k tisku/ })).toHaveAttribute(
+      'href',
+      routes.template(coinCardHolderProject.slug),
+    );
   });
 });

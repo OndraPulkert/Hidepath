@@ -9,6 +9,7 @@ import { type AnimationLink } from '@/content/schema';
  * - kapsa-postup: `#A`–`#E` skočí na první krok dané části a přehrává od ní,
  * - kapsa-prisiti: `#A`–`#D` otevře první krok dané části (zastavený, přehrání tlačítkem),
  * - kapsa-skladani (`#A`–`#E`) a kapsa-druk (`#A`–`#D`): stejně jako kapsa-prisiti,
+ * - pas-prenos-rez (`#A`–`#D`) a pas-otvory-dna (`#A`–`#E`): stejně jako kapsa-prisiti,
  * - sedlarsky-steh a hrany (`#A`–`#G`): stejně jako kapsa-prisiti, společné pro všechny projekty,
  * - Víčko: `#anim-…` posune stránku na danou animaci (spustí se, když je vidět).
  *
@@ -168,6 +169,72 @@ export const animationPages = {
         'Zkraťte jazyk 11 mm za střed kloboučku',
       ],
       D: ['Kontrola: druk drží', 'Kontrola: jazyk končí asi 21 mm nad kapsou'],
+    },
+  },
+  stripTransfer: {
+    path: '/animace/pas-prenos-rez.html',
+    title: 'Přenos a řez pásu',
+    sections: {
+      A: 'Část A – šablona a značky',
+      B: 'Část B – rovné řezy',
+      C: 'Část C – výkus a rohy',
+      D: 'Část D – čáry ohybů na rubu',
+    },
+    steps: {
+      A: [
+        'Šablonu PÁS vystřihněte nahrubo',
+        'Přilepte ji na LÍC, páskou mimo čáru řezu',
+        'Propíchněte šídlem všechny značky',
+      ],
+      B: [
+        'Rovné strany podle ocelového pravítka',
+        'Všechny rovné strany pásu',
+        'Třepí se řez? Odlomte článek čepele',
+      ],
+      C: [
+        'Vypouklé zaoblení R2,5',
+        'Výřez na prst pomalu a plynule bez pravítka',
+        'Rohy jazyka R10 a rohy panelů R6',
+      ],
+      D: [
+        'Sejměte šablonu a zkontrolujte značky',
+        'Otočte pás rubem nahoru',
+        'Spojte konce čar tužkou podle pravítka',
+        'Výsledek: pás se značkami a čarami ohybů',
+      ],
+    },
+  },
+  bottomHoles: {
+    path: '/animace/pas-otvory-dna.html',
+    title: 'Otvory dna naplocho',
+    sections: {
+      A: 'Část A – příprava',
+      B: 'Část B – přední z líce',
+      C: 'Část C – zadní a vnitřní z rubu',
+      D: 'Část D – kontrola',
+      E: 'Část E – lekce 4: proužek',
+    },
+    steps: {
+      A: [
+        'Pás naplocho na tvrdé desce, lícem nahoru',
+        'Kde leží otvory dna',
+        'Vidličky kolmo, jeden pevný úder paličkou',
+      ],
+      B: [
+        'Přední panel z líce: první úder',
+        'Navazujte řadu: první hrot do posledního otvoru',
+        'Konec řady dvojhrotem: 17 otvorů',
+      ],
+      C: [
+        'Pás otočte rubem nahoru',
+        'Zadní panel z rubu: 17 otvorů',
+        'Vnitřní panel z rubu: 17 otvorů',
+      ],
+      D: ['Kontrola sklonu a počtu', 'Proč z obou stran: po složení mají všechny tři stejný sklon'],
+      E: [
+        'Lekce 4: cvičný proužek stejně, 6 otvorů na panel',
+        'Lekce 4: po složení zkontrolujte, že otvory lícují',
+      ],
     },
   },
   saddleStitch: {

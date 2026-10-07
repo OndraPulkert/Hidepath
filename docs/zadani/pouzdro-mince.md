@@ -1,4 +1,4 @@
-# Pouzdro na karty s vsazenou mincí – střih (NÁVRH v4.11)
+# Pouzdro na karty s vsazenou mincí – střih (NÁVRH v4.12)
 
 Stav: **návrh k ověření na papíru a odřezku**, ne lekce. Vznikl 2026-09-18 na přání autora podle
 produktu, videa a fotek Red Forest Leather (rozbor v `docs/content/notes-vybaveni.md`, „Námět:
@@ -29,9 +29,24 @@ prvního), až bude první pouzdro fyzicky hotové.
   do vlastních souborů (`…-mince-40mm`, `…-okno-18mm`, `…-karty-6`, `…-kuze-1-2mm`,
   `…-pruchodka`); verzovaný výchozí střih se nepřepíše. Neznámý nebo zdvojený přepínač je chyba.
   PDF se v repu neverzují, vzniknou lokálně tímto příkazem.
-- **Výchozí listy jsou pro minci 50 Kč a kůži 1,5 mm** (např. Čokoládová). Pro Verde 1,2 mm
-  vygeneruj `pnpm pattern:coin-holder --thickness 1.2` (list KAPSA je stejný, kapsa je vždycky
-  z 1,2 mm). Verzované varianty: `--thickness 1.2`, `--coin 40` a `--coin 40 --thickness 1.2`.
+- **Generátor bez přepínačů kreslí minci 50 Kč a kůži 1,5 mm** (soubory bez přípony). **V aplikaci
+  je ale od 2026-10-07 výchozí (předem zaškrtnutá) skupina listů pro kůži 1,2 mm** (např. Blu nebo
+  Verde, bez ztenčení ohybu B; soubory `…-kuze-1-2mm` z `pnpm pattern:coin-holder --thickness 1.2`);
+  listy pro 1,5 mm jsou v aplikaci varianta. List KAPSA je pro obě tloušťky stejný (kapsa je
+  vždycky z 1,2 mm). Verzované varianty: `--thickness 1.2`, `--coin 40`, `--coin 40 --thickness
+1.2` a záložní list kapsy `--window 18` (jen `pouzdro-mince-kapsa-okno-18mm.svg`, v aplikaci
+  nezaškrtnutý list „Kapsa – záložní okno Ø 18 mm“).
+- Cvičný list k lekci 4 (`scripts/coin-card-holder-practice.ts`, `pnpm pattern:coin-holder-practice`,
+  geometrie `src/lib/geometry/coin-card-holder-practice.ts`): **cvičný proužek** (A4 na výšku, 1:1,
+  úsečka 50 mm) – tři panely po 30 mm × 40 mm, ohyby A a B z modelu pásu pro danou tloušťku
+  (nezkracují se, závisí na kůži a obsahu, ne na délce panelu), čára švu 3,5 mm od dolní hrany,
+  6 otvorů na panel (rozteč 4, krajní 5 mm od čáry ohybu i od konce) zrcadlených přes střed ohybu,
+  kroužky k propíchnutí na koncích čar ohybů a švu asi 1 mm od hrany (jako konce čar ohybů na pásu
+  v lekci 5), u 1,5 mm šrafa ztenčení ohybu B (± 3 mm).
+  Kůže 1,2 mm: 114,35 × 40, ohyb A 15,69, ohyb B 8,66 (`pouzdro-mince-cvicny-prouzek-kuze-1-2mm.svg`,
+  v aplikaci předem zaškrtnutý); kůže 1,5 mm: 116,55 × 40, ohyb A 16,63, ohyb B 9,92
+  (`pouzdro-mince-cvicny-prouzek.svg`). Na kusu 130 × 40 zbude na každém konci 7,8 / 6,7 mm
+  rezervy. V aplikaci na stránce Cvičné listy, odkaz z kroku „Vyřízněte cvičný proužek“ v lekci 4.
 
 ## Konstrukce (podle záběrů skládání, papírové šablony a fotek hotového kusu)
 
@@ -72,8 +87,10 @@ Pás je nastřižený na nejhorší případ (panely rozevřené až k horní hr
 okraj stáhne, oblouk je štíhlý a jazyk vyjde delší – klobouček se osazuje podle obtisku patice a
 jazyk se zkrátí 11 mm za střed kloboučku (čárkovaná čára je jen orientační), rohy znovu R10.
 
-**Pás se obkresluje na LÍC** (hladkou stranu), jako to dělá výrobce na videu. Kresba je pohled
-zvenku: přední panel je nakreslený tak, jak bude vidět.
+**Pás se přenáší na LÍC** (hladkou stranu), jako to dělá výrobce na videu: šablona vystřižená
+nahrubo se přilepí maskovací páskou na líc, šídlem se propíchnou značky a řeže se skrz papír po
+vytištěné čáře (lekce 5; text na listu PÁS to od v4.12 říká stejně, dřív „obkreslit“). Kresba je
+pohled zvenku: přední panel je nakreslený tak, jak bude vidět.
 
 Výkus zadního panelu je o 5 mm širší než předního (39 vs. 34 mm u horní hrany, u ohybu stejný);
 rozdíl schová vnitřní panel mezi nimi. Přední výkus končí zaoblením R2,5 až 36,4 mm od ohybu, takže
@@ -132,8 +149,12 @@ shora je vidět jen schodek ≈ 2,6 mm na horní hraně.
 - Kontaktní lepidlo, kostěná rozhrnovačka (bone folder), sponky s podložkou, potravinová fólie.
 - Nit: voskovaná polyesterová 0,6 mm (0,8 mm do otvorů vidliček 4 mm nejde). Orientačně ≈ 4 × délka
   švu + 25–30 cm, přes tři vrstvy 5 ×: šev dna (64 mm skrz 4,5 mm kůže) ≈ 0,6 m, šev kapsy (23
-  otvorů, u mince 40 mm 31) ≈ 0,8 m. Ověřit na odřezku.
-- Barva na hrany (barvená useň má světlý řez), smirkový papír, leštidlo na hrany.
+  otvorů, u mince 40 mm 31) ≈ 0,8 m; bere se 0,8 m s rezervou (krátký šev odřezku délku neprokáže).
+- Barva na hrany (barvená useň má světlý řez; nejdřív zkouška na odřezku v lekci 4), smirkový
+  papír, leštidlo na hrany. Odstín k Blu v katalogu ověřený není (ověřená jen Fiebing's Edge Kote
+  hnědá, tmavě hnědá a černá) – v nákupním plánu mimo součet, cena neověřena.
+- Maskovací páska je v projektu povinná: šablona PÁS (hlavní způsob), list KAPSA, ohraničení
+  nezapečetěného proužku.
 
 ### Druk 12 mm (Prym Anorak) – kontrola modelem (v4.11)
 
@@ -177,25 +198,34 @@ Doporučení: **Verde 1,2 mm** – šev dna jde skrz tři vrstvy, s 1,2 mm je to
 ztenčování odpadá. Listy pak vygenerovat `pnpm pattern:coin-holder --thickness 1.2` (ohyb A 15,7,
 ohyb B 8,7, jazyk 43,1 mm). Tvarování za mokra nejdřív zkusit na A5 stejné barvy.
 
+Sestava nákupního plánu v aplikaci: **Blu 1,2 mm** – A4 na pás; A5 na kapsu 57,5 × 57,5 a cvičný
+proužek 130 × 40 (lekce 4) vedle sebe podél jedné hrany (zaberou 187,5 × 57,5), ze zbylého pruhu
+≈ 210 × 92 odřezky na zkoušku druku a obtisku patice (lekce 3) a barvy na hrany (lekce 4) – stejná
+kůže jako tělo. Juchtová A5 1,2 mm jen na dva odřezky 57,5 × 57,5 pro tvarovací zkoušku (lekce 2).
+
 ## Postup
 
 0. **Papírový model:** vytisknout na papír 160 g, nalepit na tenkou lepenku (krabice od
    cereálií), vystřihnout, ohyby jen přehnout do smyčky (nepřekládat na ostro), vložit karty a
    bankovky, projít kontrolní seznam a zapsat výsledky. Papír prokáže polohu jazyka a kloboučku,
    výřez, vytahování karty a místo pro kapsu; přídavky ohybů neprokáže (je tenčí).
-1. **Pás:** obkreslit na líc, vyříznout (výřez plynule). Kapsa se dělá ze samostatného kusu kůže
-   1,2 mm ≥ 57,5 × 57,5 (forma Ø 31,5 počítá s 1,2 mm; i když je pás z 1,5 mm).
-   **Ztenčení ohybu B:** šídlem propíchnout oba konce obou čar ohybu B skrz, na rubu je spojit,
-   odsadit 3 mm na obě strany a v tomto pásu ztenčit z rubu na 1 mm. Šídlem přes list přenést na
-   kůži konce čar ohybů A i B, rohy místa pro kapsu, střed patice (u varianty i průchodky) a
-   všechny tečky dna.
+1. **Pás:** šablonu přilepit páskou na líc, šídlem přes list přenést na kůži konce čar ohybů A i B,
+   rohy místa pro kapsu, střed patice (u varianty i průchodky) a všechny tečky dna, pak vyříznout
+   skrz papír (výřez plynule). Kapsa se dělá ze samostatného kusu kůže 1,2 mm ≥ 57,5 × 57,5
+   (forma Ø 31,5 počítá s 1,2 mm; i když je pás z 1,5 mm).
+   **Čáry ohybů na rub:** propíchnuté konce všech 4 čar ohybů (A i B, u obou hran) spojit na rubu
+   tužkou podle pravítka; podle nich se v kroku 5 navlhčí pásma ohybů.
+   **Ztenčení ohybu B (jen u kůže 1,5 mm):** od narýsovaných čar ohybu B odsadit 3 mm na obě strany
+   a v tomto pásu ztenčit z rubu na 1 mm.
    Pak prosekat otvory dna na všech třech panelech (naplocho): **přední panel z líce, zadní
    a vnitřní z rubu** (podle propíchnutých teček). Ohyb panel zrcadlově převrátí; šikmé otvory
    proseknuté ze stejné strany by se po složení zkřížily a jehla by jimi neprošla. Rub ve spodním
    proužku 0–3,5 mm (lepí se) nezapečeťovat; hrany, na které se po složení špatně dostane, obarvit
    a zaleštit hned. Zaleštit hrany, které budou uvnitř (horní
    hrana vnitřního panelu, oblouk výkusu – celé U přes ohyb A, čtvrtkruh R34 na předku
-   i čtvrtelipsa na zadku –, jazyk), a zapečetit rub vnitřního panelu.
+   i čtvrtelipsa na zadku –, jazyk), a zapečetit rub vnitřního panelu: proužek 0–3,5 mm přelepit
+   maskovací páskou podél čáry švu, pastu v tenké vrstvě přetřít leštítkem (kolik vrstev, ověřit
+   na odřezku), na líc ne (lesklá skvrna).
 2. **Kapsa** (list kapsy): do odřezku orýsovat obrys a prosekat otvory švu, pak navlhčit, položit
    **lícem dolů** na formu, na rub minci, přiklopit deskou, stáhnout svěrkami, nechat zaschnout.
    Obrys i kružnice okna se orýsují na rub podle 2. výtisku vystřiženého po obrysu, do kterého je
@@ -205,8 +235,11 @@ ohyb B 8,7, jazyk 43,1 mm). Tvarování za mokra nejdřív zkusit na A5 stejné 
    podle ní rozmazaná čára obtáhne znovu (přes důlek neleží rovně, jen pomoc).
    Předtím na odřezku z tvarovací zkoušky vyseknout okno Ø 20 a ověřit, že prstenec 3,75 mm
    minci udrží (zatřesení oknem dolů, zatlačení z rubu); když ne, okno menší (Ø 18 mm na druhém
-   odřezku a k tomu nová šablona: další výtisk listu KAPSA s otvorem Ø 18 mm). List KAPSA tedy
-   3× (forma, značky na líci, šablona s oknem), při záložním okně Ø 18 mm 4×.
+   odřezku a k tomu nová šablona: list „Kapsa – záložní okno Ø 18 mm“, `--window 18`). List KAPSA
+   tedy 3× (forma, značky na líci, šablona s oknem), při záložním okně Ø 18 mm navíc 1× záložní
+   list. Dost hluboký důlek: číslo model nemá (tloušťku mince nepočítá); mince vložená z rubu nemá
+   nad okolní rub vyčnívat – ověřit na odřezku. Špalík pod důlek (tip, ověřit): kus kulaté
+   dřevěné tyčky Ø 21–31 mm s rovným koncem.
 3. Vyříznout obrys kapsy podle orýsování (forma vystředěná na křížek, aby důlek seděl s otvory) a vyseknout okno (kapsa lícem dolů na formě, pod dno
    špalík; výsečník na narýsovanou kružnici, rozhoduje ale prstenec kůže kolem důlku stejně široký
    po celém obvodu).
@@ -219,7 +252,8 @@ ohyb B 8,7, jazyk 43,1 mm). Tvarování za mokra nejdřív zkusit na A5 stejné 
 5. **Ohyby:** pásma ohybů navlhčit, nejdřív vnitřní panel ohybem B za přední, pak zadní ohybem A
    přes všechno. Ohnout kolem skutečného obsahu (karty a bankovky zabalené v potravinové fólii),
    přejet rozhrnovačkou, sepnout sponkami přes podložku, před zaschnutím zkontrolovat, že otvory
-   dna na sousedních panelech lícují, a nechat zaschnout. Tady líc nejspíš praskne, když se ohne
+   dna na sousedních panelech lícují (když ne: dokud je kůže vlhká, ohyb rozevřít a přeložit znovu;
+   malý zbytek srovnají jehly při lepení; větší posun – ověřit na odřezku), a nechat zaschnout. Tady líc nejspíš praskne, když se ohne
    nasucho nebo na ostro.
 6. **Dno:** kontaktní lepidlo jen na pruh pod čáru švu (0–3,5 mm od hrany; karty stojí na švu,
    lepidlo výš by ubralo hloubku). Spoje jsou dva: přední↔vnitřní (rub předního + rub
@@ -230,10 +264,10 @@ ohyb B 8,7, jazyk 43,1 mm). Tvarování za mokra nejdřív zkusit na A5 stejné 
    po dotyku nejde posunout). Prošít sedlářským stehem skrz všechny vrstvy, na začátku i na konci
    dva zpětné stehy, a zkontrolovat rub (trochu méně pravidelný než líc je normální, stehy ale
    stejně utažené, v jedné řadě, bez smyček); nit raději 0,8 m (pravidlo „Jak odměřit nit“ dává pro tři
-   vrstvy ≈ 0,6 m, 0,8 m je rezerva pro začátečníka).
+   vrstvy ≈ 0,6 m, 0,8 m je rezerva pro začátečníka; krátký šev odřezku to neprokáže).
 7. Vložit karty i bankovky, které nosíš, přehnout jazyk, obtisknout patici (obtisk na rubu jazyka
    určuje střed kloboučku, kružnice na šabloně je jen orientační; střed doporučeně propíchnout
-   šídlem na líc – ověřit na odřezku), osadit klobouček, ověřit, že druk drží a jde znovu
+   šídlem na líc – vyzkoušeno předem na odřezku v lekci 3), osadit klobouček, ověřit, že druk drží a jde znovu
    rozepnout, jazyk zkrátit 11 mm za střed kloboučku (měřit na líci) a zaoblit R10.
 8. Dno přebrousit do roviny (tři vrstvy), srazit z obou vnějších líců (brusným papírem, ořezávač hran jen
    pokud ho máš), obarvit (podle návodu na obalu, před leštěním nechat zaschnout – ověřit na
@@ -339,3 +373,15 @@ doplnit ručně, do generátoru to nepatří.
   (`small-hole-punch`, doporučený, jen pokud návod druku vyžaduje otvor); záložní výsečník okna
   Ø 18 mm je zmíněný u výsečníku okna. Když zkouška Ø 20 mm nevyjde, lekce 2 vede na druhý
   odřezek a Ø 18 mm (prstenec 4,75 mm); list KAPSA se použije na vystředění dál.
+- v4.12 (2026-10-07, obsah lekcí, geometrie beze změny): v aplikaci je **výchozí kůže těla 1,2 mm**
+  (předem zaškrtnuté listy, lekce, vybavení), 1,5 mm se ztenčením ohybu B je varianta. Text na
+  listu PÁS a v kroku 1 postupu: „přilepit páskou na líc, propíchnout značky, řezat skrz papír“
+  místo „obkreslit“. Záložní list kapsy s oknem Ø 18 mm (`--window 18`) jako volitelný list
+  v aplikaci (místo příkazu generátoru v lekci 2). Lekce: čáry ohybů tužkou na rub (lekce 5,
+  navlhčení podle nich v lekci 7), cvičný proužek v lekci 4 (cvičný list „Cvičný proužek pro lekci 4“ pro 1,2 i 1,5 mm z
+  `pnpm pattern:coin-holder-practice`, nebo ruční odměření),
+  zkouška obtisku patice na odřezku (lekce 3) a barvy na hrany (lekce 4), co dělat, když otvory
+  po složení nelícují, pečetění rubu s páskou na proužku 0–3,5 mm, rozhodnutí po papírovém modelu,
+  vizuální kontrola hloubky důlku a tip na špalík; odkazy z lekcí na Listy střihu. Odřezky na
+  druk z Blu A5 místo juchtové. Maskovací páska povinná, barva na hrany doporučená (bez ověřené
+  ceny odstínu).

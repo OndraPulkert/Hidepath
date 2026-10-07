@@ -25,6 +25,7 @@
     "pattern:card-holder-practice": "tsx scripts/card-holder-practice.ts",
     "pattern:coin-holder": "tsx scripts/coin-card-holder.ts",
     "pattern:coin-holder-illustrations": "tsx scripts/coin-card-holder-illustrations.ts",
+    "pattern:coin-holder-practice": "tsx scripts/coin-card-holder-practice.ts",
     "pattern:wallet": "tsx scripts/minimal-wallet.ts",
     "pattern:wallet-lid": "tsx scripts/lid-wallet.ts",
     "pattern:wallet-lid-illustrations": "tsx scripts/lid-wallet-illustrations.ts",

@@ -22,6 +22,7 @@ import {
   buildPlateLegendSvg,
 } from './belt-buckle-end.ts';
 import { buildPracticeSheetSvg } from './card-holder-practice.ts';
+import { buildCoinHolderPracticeSvg } from './coin-card-holder-practice.ts';
 import {
   buildCoinHolderPaperModelSvg,
   buildCoinHolderPocketSvg,
@@ -163,6 +164,14 @@ describe('zapsané soubory odpovídají generátoru', () => {
           foldSkiveThicknessMm: foldSkiveFor(1.2),
         }),
     ],
+    // Záložní okno Ø 18 mm (lekce 2 a 6), jak ho nastaví --window 18; v aplikaci jen list KAPSA.
+    [
+      'pouzdro-mince-kapsa-okno-18mm.svg',
+      () => buildCoinHolderPocketSvg({ ...DEFAULT_COIN_CARD_HOLDER, windowDiameterMm: 18 }),
+    ],
+    // Cvičný proužek k lekci 4: kůže 1,5 mm bez přípony, 1,2 mm s příponou (jako listy pásu).
+    ['pouzdro-mince-cvicny-prouzek.svg', () => buildCoinHolderPracticeSvg(1.5)],
+    ['pouzdro-mince-cvicny-prouzek-kuze-1-2mm.svg', () => buildCoinHolderPracticeSvg(1.2)],
     ['pouzdro-mince-ilustrace-prosekavani-dna.svg', () => buildProsekavaniDnaSvg()],
     ['pouzdro-mince-ilustrace-poradi-ohybu.svg', () => buildPoradiOhybuSvg()],
     ['pouzdro-mince-ilustrace-druk.svg', () => buildDrukSvg()],
@@ -189,7 +198,7 @@ describe('zapsané soubory odpovídají generátoru', () => {
       expect(onDisk, `docs/generated/${name} chybí`).toBeDefined();
       expect(
         build(),
-        `${name} se rozešel s generátorem – spusť ${name.startsWith('pouzdro-karty') ? 'pnpm pattern:card-holder-practice' : name.startsWith('penezenka-vicko-ilustrace') ? 'pnpm pattern:wallet-lid-illustrations' : name.startsWith('penezenka-vicko') ? 'pnpm pattern:wallet-lid' : name.startsWith('penezenka') ? 'pnpm pattern:wallet' : name.startsWith('pouzdro-mince-ilustrace') ? 'pnpm pattern:coin-holder-illustrations' : name.startsWith('pouzdro-mince') ? `pnpm pattern:coin-holder${`${name.includes('mince-40mm') ? ' --coin 40' : ''}${name.includes('kuze-1-2') ? ' --thickness 1.2' : ''}`}` : 'pnpm pattern:belt-end --multi'}`,
+        `${name} se rozešel s generátorem – spusť ${name.startsWith('pouzdro-karty') ? 'pnpm pattern:card-holder-practice' : name.startsWith('penezenka-vicko-ilustrace') ? 'pnpm pattern:wallet-lid-illustrations' : name.startsWith('penezenka-vicko') ? 'pnpm pattern:wallet-lid' : name.startsWith('penezenka') ? 'pnpm pattern:wallet' : name.startsWith('pouzdro-mince-ilustrace') ? 'pnpm pattern:coin-holder-illustrations' : name.startsWith('pouzdro-mince-cvicny') ? 'pnpm pattern:coin-holder-practice' : name.startsWith('pouzdro-mince') ? `pnpm pattern:coin-holder${`${name.includes('mince-40mm') ? ' --coin 40' : ''}${name.includes('okno-18mm') ? ' --window 18' : ''}${name.includes('kuze-1-2') ? ' --thickness 1.2' : ''}`}` : 'pnpm pattern:belt-end --multi'}`,
       ).toBe(onDisk);
     });
   }
