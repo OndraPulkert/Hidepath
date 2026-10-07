@@ -364,7 +364,8 @@ function detail(o){
   const yb=yy(Yb),yl=yb+5;
   s+=`<path d="M${f(zx(.5))} ${f(yb)} L${f(zx(.5)-5)} ${f(yl-2.2)} M${f(zx(1.3))} ${f(yb)} L${f(zx(1.3))} ${f(yl-2.2)} M${f(zx(2.1))} ${f(yb)} L${f(zx(2.1)+5)} ${f(yl-2.2)}" class="lead-l"/>`;
   s+=lbl(zx(.5)-5,yl+1,'F','ts','middle')+lbl(zx(1.3),yl+1,'D2','ts','middle')+lbl(zx(2.1)+5,yl+1,'B','ts','middle');
-  if(o.offcut>0) s+=`<g opacity="${f(o.offcut)}">${pill(88.4,yy(66.5)+1,'odřezek','twn')}</g>`;
+  // popisek odřezku: při děrování 64/68 je vlevo nahoře vidlička, proto ho posunout dolů s odkazem na odřezek
+  if(o.offcut>0){const lowL=o.cur!=null&&o.cur>62;s+=`<g opacity="${f(o.offcut)}">${lowL?`<path d="M${f(99)} ${f(yy(57))} L${f(zx(0)-.2)} ${f(yy(63.5))}" class="lead-l"/>`:''}${pill(88.4,lowL?yy(56.5)+1:yy(66.5)+1,'odřezek','twn')}</g>`}
   s+=lbl(89,81,'tloušťky nezvětšené','ts');
   return s;
 }
@@ -401,7 +402,7 @@ add('A','Výchozí stav: řez bokem','Řez bokem v čáře švu x 3. D2 je přil
 });
 
 // A2
-add('A','Nanečisto složte a zkontrolujte','Díl nejdřív složte nanečisto a zkontrolujte, teprve pak lepte – kontaktní lepidlo chytne hned při dotyku. F přiložte na D2 a B a srovnejte ji podle boků B. Horní hrana F je v y 62, spodní hrana D2 v y 18.',8000,t=>{
+add('A','Nanečisto složte a zkontrolujte','Díl nejdřív složte nanečisto a zkontrolujte, teprve pak lepte – kontaktní lepidlo chytne hned při dotyku. F přiložte na D2 a B a zkontrolujte, že boky F a B lícují a D2 přesahuje na každém boku 1 mm. Horní hrana F je v y 62, spodní hrana D2 v y 18.',8000,t=>{
   const cl2=es(t,.08,.4)*(1-es(t,.78,.96));
   const open=OPEN*(1-cl2);
   const fr=mkF(1.75,open);
@@ -410,7 +411,7 @@ add('A','Nanečisto složte a zkontrolujte','Díl nejdřív složte nanečisto a
   s=clipMain(s);
   if(t>.4&&t<.8){s+=`<g opacity="${f(seg(t,.42,.5)*(1-seg(t,.72,.8)))}">${tick(sx(-1)-5,sy(62),1)}${pill(sx(-1)-8,sy(62)+1.4,'sedí?','tok','end')}</g>`}
   s+=tag(t<.4?'nanečisto, bez lepidla':t<.8?'F srovnat podle boků B':'zase odklopit, teprve teď lepidlo');
-  s+=inset('NANEČISTO',notes([['bez lepidla','tw'],['F na D2 a B'],['srovnat podle'],['boků B'],['',''],['lepidlo chytne','t'],['hned při dotyku']],16,5.6));
+  s+=inset('NANEČISTO',notes([['bez lepidla','tw'],['F na D2 a B'],['boky F a B lícují'],['D2 přesahuje 1 mm'],['',''],['lepidlo chytne','t'],['hned při dotyku']],16,5.6));
   return s;
 });
 

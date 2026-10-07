@@ -117,7 +117,7 @@ describe('animace postupu – schéma odkazu', () => {
   it('animationLink skládá href s kotvou a popisek části', () => {
     expect(animationLink('kapsa', 'C')).toEqual({
       href: '/animace/kapsa-postup.html#C',
-      label: 'Část C – osy a 2. výtisk na rub',
+      label: 'Část C – osy a šablona na rub',
     });
     expect(animationLink('threadLength')).toEqual({
       href: '/animace/delka-nite.html',

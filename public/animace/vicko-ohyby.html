@@ -321,7 +321,7 @@ svg .book{fill:var(--wood);stroke:var(--woodedge);stroke-width:1.2;vector-effect
   <div class="card anim" id="anim-zaves" data-part="B" aria-labelledby="h-azaves">
     <h3 id="h-azaves">Animace: závěs krok za krokem</h3>
     <div class="astage hz">
-      <figure class="amain"><div class="fig"><div data-fig="aHinge"></div></div><figcaption>Řez ve středu šířky, 1:1. Obsah je zjednodušený, víčko nad y 122 oříznuté. Palec, houbička, fólie a kniha jsou schematické.</figcaption></figure>
+      <figure class="amain"><div class="fig"><div data-fig="aHinge"></div></div><figcaption>Řez ve středu šířky, 1:1, jen y 57–122. Obsah je zjednodušený. Palec, houbička, fólie a kniha jsou schematické.</figcaption></figure>
       <figure class="aside"><div class="fig"><div data-fig="aHingeFront"></div></div><figcaption>Pohled zepředu, 1:1.</figcaption></figure>
     </div>
     <div class="aprog" aria-hidden="true"><i></i></div>
@@ -822,14 +822,14 @@ function add(part, title, d, c) { STEPS[part].push({ t: title, d, c }); }
 add('A','Výchozí stav: rýha na rubu',3.6,'Hotové z lekce 5: rýha na rubu v ose ohybu <span class="num">v 62,21</span>, vytlačená tupým hrotem u ocelového pravítka stejně po celé šířce <span class="num">101</span>.');
 add('A','Navlhčete pás ohybu',3.2,'Houbičkou navlhčete pás ohybu dna <span class="num">v 58,21–66,21</span> (rýha uprostřed).');
 add('A','Počkejte, až se barva skoro vrátí k suché',3,'Počkejte, až se barva usně skoro vrátí k suché (<span class="num">5–10</span> min). Teprve pak ohýbejte.');
-add('A','Položte vložku hranou na čáru',3.8,'Vložku položte na rub B hranou na <b>čáru hrany vložky</b>: výchozí v <span class="num">64,18</span>, tedy <span class="num">1,96</span> za rýhou směrem k B (nebo posunutou podle V12). Na straně F vložka neleží.');
+add('A','Položte vložku hranou na čáru',3.8,'Vložku položte na rub B hranou na <b>čáru hrany vložky</b>: výchozí v <span class="num">64,18</span>, tedy <span class="num">1,96</span> za rýhou směrem k B (nebo posunutou podle V12). Hrana vložky míří k F, na straně F vložka neleží. Na každé straně přesahuje díl o <span class="num">5</span>.');
 add('A','Přehněte F lícem ven přes vložku',4,'F přehněte nahoru přes vložku <b>lícem ven</b>. Rýha skončí uprostřed ohybu.');
 add('A','Vložte fólii na vlhký líc',2.6,'Mezi vlhký líc a prkénka dejte potravinovou fólii.');
 add('A','Vložte spodních 20 mm mezi prkénka',3,'Spodních <span class="num">20</span> dejte mezi dvě hladká prkénka.');
 add('A','Stáhněte svěrkami',3,'Stáhněte svěrkami. Bez svěrek použijte knihy nebo silné gumičky (tlak ověřte na odřezku).');
 add('A','Nechte vyschnout přes noc',3.6,'Nechte vyschnout <b>přes noc</b>, <span class="num">12–24 h</span>, ne u topení.');
 add('A','Vysuňte vložku bokem',4,'Po vyschnutí sundejte svěrky, prkénka a fólii a vložku <b>vysuňte bokem</b>.');
-add('A','Kontrola: F jde odklopit',2.8,'Tvar U, líc venku, rýha uprostřed ohybu. F jde odklopit asi o 90° na lepení plíšku a D1 (lekce 8). Mírné odpružení nevadí.');
+add('A','Kontrola: F jde odklopit',4.5,'Tvar U, líc venku, rýha uprostřed ohybu. F jde odklopit asi o 90° na lepení plíšku a D1 (lekce 8). Mírné odpružení nevadí.');
 add('B','Vložte obsah stavu B',4,'Do kapsy karet dejte <b>2 staré karty</b> a do oddílu bankovek <b>papír asi 70 × 65</b>, přeložený na asi <span class="num">0,7</span> (nebo bankovku ve fólii). Mince ne. Papír patří mezi D1 a D2, animace ho kreslí před D1.');
 add('B','Navlhčete jen pás závěsu',3.4,'Houbičkou navlhčete <b>jen pás závěsu</b> <span class="num">v 142,99–150,99</span>, nenamáčejte celé.');
 add('B','Zavřete víčko přes obsah',3.4,'Víčko zavřete přes obsah a jazýček položte na přední stěnu. Kopyto ani opěrka nejsou potřeba. Podívejte se, jestli přehyby vyšly zhruba u rysek v <span class="num">145,10</span> a <span class="num">148,88</span>; jinou polohu si zapište.');
@@ -841,7 +841,7 @@ const FXC = M.v.foldAxis - M.v.backStart;            // rýha vůči hraně vlo�
 const FBAND = [M.v.backStart - M.v.foldBand[1], M.v.backStart - M.v.foldBand[0]]; // s pásu
 function foldState(i, u) {
   const S = {};
-  S.phi = i < 4 ? 0 : i === 4 ? PI * SM(0.05, 0.92, u) : PI;
+  S.phi = i < 4 ? 0 : i === 4 ? PI * SM(0.05, 0.92, u) : i === 10 ? PI - (PI / 2) * SM(0.3, 0.5, u) * (1 - SM(0.78, 0.95, u)) : PI;
   S.cp = i === 0 ? SM(0.15, 0.85, u) : 1;
   S.nv = i === 0 ? SM(0.1, 0.2, u) : 1;
   S.pen = i === 0 ? 1 - SM(0.9, 1, u) : 0;
@@ -865,7 +865,7 @@ function foldState(i, u) {
   S.clamp = i < 7 ? 0 : i === 7 ? SM(0, 0.25, u) : i === 8 ? 1 : i === 9 ? 1 - SM(0, 0.12, u) : 0;
   S.tight = i === 7 ? SM(0.3, 0.9, u) : i === 8 ? 1 : i === 9 ? 1 - SM(0, 0.08, u) : 0;
   S.night = i === 8 ? SM(0, 0.12, u) * (1 - SM(0.9, 1, u)) : 0;
-  S.done = i === 10 ? SM(0.1, 0.5, u) : 0;
+  S.done = i === 10 ? SM(0.85, 0.97, u) : 0;
   return S;
 }
 const BT = 4, FOILY = 0.14, BTOP0 = M.t + M.spacer + M.t + 0.22;  // tloušťka prkénka, spodní líc horního prkénka
@@ -920,6 +920,7 @@ function figAFold() {
     const op = AF.i === 10 ? 1 : SM(0.9, 1, AF.u);
     s += `<g opacity="${r3(op)}">${T(-11.6, 7.4, 'rýha uprostřed ohybu', {})}${Ln(-6, 7.4 - FS * 0.35, -1.2, 2.1)}</g>`;
   }
+  if (AF.i === 10) s += `<g opacity="${r3(SM(0.35, 0.45, AF.u) * (1 - SM(0.75, 0.85, AF.u)))}">${T(-3.6, 13, 'F odklopit asi o 90°', { a: 'end' })}</g>`;
   if (S.done > 0) s += checkIcon(26, 9.2, S.done) + `<g opacity="${r3(S.done)}">${T(26 + FS * 1.9, 9.2, 'hotové U', { bl: 'middle' })}</g>`;
   // F a B
   if (S.phi < 0.3) s += T(-9.5, M.t + 1.6, 'F', { a: 'middle' });
@@ -955,7 +956,7 @@ function figAFoldPlan() {
   if (AF.i === 9 && AF.u > 0.4 && AF.u < 0.97) s += arrowTo(12.5, 104, 12.5, 116);
   // popisky
   if (S.phi < PI / 2) { s += T(-8.5, M.W * 0.38, 'F', { a: 'middle', bl: 'middle' }); if (!S.ins) s += T(22, M.W / 2, 'B', { a: 'middle', bl: 'middle' }); }
-  else s += T(16, M.W / 2, 'F', { a: 'middle', bl: 'middle' });
+  else s += T(16, M.W / 2, S.phi > 2.6 ? 'F' : 'B', { a: 'middle', bl: 'middle' });   // F odklopená (A11): shora je vidět B
   if (S.ins && S.phi < PI / 2 && S.insDx < 1) s += T(12.5, M.W / 2, 'vložka', { a: 'middle', bl: 'middle' });
   if (AF.i === 0) s += T(FXC - 1.2, M.W + 4.6, 'rýha', { a: 'end' });
   if (S.dim > 0.01) s += `<g opacity="${r3(S.dim)}">${T(FXC - 1.2, M.W + 4.6, '1,96', { a: 'end', c: 'w' })}${Ln(FXC, M.W + 1.4, 0, M.W + 1.4, 'dim')}</g>`;

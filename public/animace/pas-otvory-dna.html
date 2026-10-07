@@ -289,7 +289,7 @@ const S=[];
 const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,side,tip});
 
 // A1
-add('A','Položte pás lícem nahoru na desku','Vyříznutý pás položte naplocho lícem nahoru na tvrdou desku na ručníku, ne na řezací podložku. Propíchnuté tečky dna (17 na panel) jsou vidět na líci i na rubu.',8200,t=>{
+add('A','Položte pás lícem nahoru na desku','Vyříznutý pás položte naplocho lícem nahoru na děrovací desku. Propíchnuté tečky dna (17 na panel) jsou vidět na líci i na rubu.',8200,t=>{
   const c=OV;
   let s=G(camT(c),BOARD+strip(1,S0,{dot:.75,d:1.1,w:.6}));
   const P=[['ZADNÍ',46,118],['PŘEDNÍ',133.69,118],['VNITŘNÍ',214.35,118]];
@@ -303,7 +303,7 @@ add('A','Položte pás lícem nahoru na desku','Vyříznutý pás položte naplo
   }
   s+=pill(4,87,t<.55?'pás lícem nahoru na tvrdé desce':'tečky dna: 3 × 17, propíchnuté šídlem',t<.55?'t':'ta');
   return s;
-},'lic');
+},'lic','Tip: desku podložte složeným ručníkem, jako u pouzdra na karty.');
 
 // A2
 add('A','Poloha otvorů dna','Otvory leží 3,5 mm od dolní hrany, rozteč přesně 4 mm, 17 na panel. Krajní otvor je 4 mm od čáry ohybu i od hrany. Na sousedních panelech leží zrcadlově – jen tak po složení lícují. Vidličky musí mít rozteč přesně 4 mm.',9000,t=>{
@@ -328,7 +328,7 @@ add('A','Poloha otvorů dna','Otvory leží 3,5 mm od dolní hrany, rozteč pře
 },'lic','Tip: čárkované čáry ohybu jsou jen pro orientaci – na líc se nekreslí.');
 
 // A3
-add('A','Postavte vidličky kolmo a udeřte','Vidličky postavte hroty na tečky, kolmo ve všech směrech. Držte je pevně u spodku a udeřte jednou pevně paličkou na horní konec, ne na prsty. Když neprošly všechny hroty, udeřte ještě jednou bez pohnutí.',10000,t=>{
+add('A','Postavte vidličky kolmo a udeřte','Jako u pouzdra na karty: vidličky postavte hroty na tečky, kolmo ve všech směrech. Držte je pevně u spodku a udeřte jednou pevně paličkou na horní konec, ne na prsty. Když neprošly všechny hroty, udeřte ještě jednou bez pohnutí.',10000,t=>{
   const lt=64, lb=67;   // kůže (schéma, tloušťka zvětšená)
   let s=`<rect x="2" y="${lb}" width="80" height="14" rx="1" fill="var(--board)" stroke="var(--board-d)" stroke-width=".4"/>`;
   s+=`<rect x="4" y="${lt}" width="76" height="${lb-lt}" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".25"/><rect x="4" y="${lt}" width="76" height=".9" fill="var(--lic)"/>`;
@@ -351,7 +351,7 @@ add('A','Postavte vidličky kolmo a udeřte','Vidličky postavte hroty na tečky
   if(t>.3&&t<.76) s+=`<g opacity="${f(seg(t,.3,.36))}">${pill(cx-12,ch.top-4,'horní konec','t','end')}</g>`;
   s+=pill(4,87,t<.5?'hroty na tečky, kolmo':t<.76?'jeden pevný úder':'všechny hroty prošly?',t<.76?'t':'tok');
   // inset
-  let ib=notes([['hroty na tečky','t'],['kolmo ve všech'],['směrech'],['držet u spodku','t'],['jeden pevný úder'],['palička na horní','ta'],['konec, ne na prsty','ta']],15,4.9);
+  let ib=notes([['hroty na tečky','t'],['kolmo ve všech'],['směrech'],['držet u spodku','t'],['jeden pevný úder'],['palička na horní','ta'],['konec, ne na prsty','ta']],18,4.8);
   const wr=seg(t,.6,.72);
   if(wr>0){
     const tl=G(`translate(104 64) rotate(14) scale(.38)`,sideChisel(0,0,4,6.6,{hand:false}).s);
@@ -381,7 +381,7 @@ add('B','Prosekejte přední panel z líce','Přední panel prosekejte z líce. 
 },'lic','Tip: začít můžete u kteréhokoli konce.');
 
 // B2
-add('B','Navazujte řadu do posledního otvoru','Vidličky posuňte tak, aby první hrot zapadl do posledního hotového otvoru – rozteč drží a řada je rovná. Zkontrolujte kolmost a udeřte.',10000,t=>{
+add('B','Navazujte řadu do posledního otvoru','Jako u pouzdra na karty: vidličky posuňte tak, aby první hrot zapadl do posledního hotového otvoru – rozteč drží a řada je rovná. Zkontrolujte kolmost a udeřte.',10000,t=>{
   const {s:sm,r}=frontRow(t,STR17.slice(0,3),new Set(range(6)));
   let s=sm;
   // popisek k prvnímu hrotu
@@ -395,7 +395,7 @@ add('B','Navazujte řadu do posledního otvoru','Vidličky posuňte tak, aby prv
 },'lic','Tip: se 6 hroty 6 → 11 → 16, se 4 hroty 4 → 7 → 10 → 13 → 16, pak dvojhrot.');
 
 // B3
-add('B','Dokončete řadu dvojhrotem','Konec řady dokončete vidličkami se 2 hroty: první hrot do 16. otvoru, druhý na poslední tečku. Zkontrolujte, že je v řadě všech 17 otvorů.',7600,t=>{
+add('B','Dokončete řadu dvojhrotem','Jako u pouzdra na karty dokončete konec řady vidličkami se 2 hroty: první hrot do 16. otvoru, druhý na poslední tečku. Zkontrolujte, že je v řadě všech 17 otvorů.',7600,t=>{
   const {s:sm,r}=frontRow(t,[STR17[3]],new Set(range(16)));
   let s=sm;
   if(r.gp>.12&&r.gp<.62){const [hx,hy]=tv(CF,XS_F[15],SEAM_Y);s+=lead(hx-4,hy+12,hx-1,hy+1.6)+pill(Math.max(4,hx-30),hy+16,'první hrot v 16. otvoru','ta')}
@@ -550,7 +550,7 @@ add('E','Po složení zkontrolujte otvory','Po přeložení proužku kolem obsah
   let s=`<rect x="0" y="12" width="84" height="56" fill="var(--board)" stroke="var(--board-d)" stroke-width=".4"/>`;
   s+=foldMini(PR,PK,POX,POY,pB,pA,{d:.6});
   s=clipMain(s);
-  if(t<.1) s+=pill(4,87,'proužek z předchozího kroku, lícem nahoru','t');
+  if(t<.1) s+=pill(4,87,'proužek lícem nahoru','t');
   else if(t<.48) s+=pill(4,87,'ohyb B: krajní za prostřední','t');
   else if(t<.84) s+=pill(4,87,'ohyb A: druhý krajní přes všechno','t');
   else s+=pill(4,87,'otvory všech tří panelů lícují','tok');

@@ -413,7 +413,7 @@ add('B','Třepí se řez? Odlomte článek čepele','Když řez začne třepit, 
   for(let i=1;i<8;i++) ib+=`<path d="M${bx+i*4.8-1} ${by} L${bx+i*4.8+1.4} ${by-6}" stroke="var(--steel-d)" stroke-width=".25"/>`;
   ib+=G(`translate(${f(sn*1.5)} ${f(sn*8)}) rotate(${f(sn*25)} ${bx+36} ${by-3})`,`<path opacity="${f(1-seg(t,.75,.9))}" d="M${bx+33.6-.4} ${by} L${bx+34} ${by} L${bx+38} ${by-6} L${bx+35.4} ${by-6} Z" fill="var(--steel)" stroke="var(--accent)" stroke-width=".35"/>`);
   ib+=lbl(bx,by+6,'tupý článek pryč','ts');
-  ib+=notes([['třepí se?','tw'],['odlomit článek'],['trhá místo','t'],['řezat?'],['čepel vyměnit']],44,5.6);
+  ib+=notes([['třepí se?','tw'],['odlomit článek']],44,5.6);
   s+=inset('ČEPEL',ib);
   s+=pill(4,87,ok>0?'řez pokračuje čistě':'tupá čepel: třepí se','t');
   return s;
@@ -518,7 +518,7 @@ add('D','Otočte pás rubem nahoru','Pás otočte rubem nahoru. Propíchnuté zn
   s+=inset('OTOČIT',notes([['rubem nahoru','tw'],['dírky po šídle'],['jsou vidět i tady'],['vše zrcadlově:','t'],['zadní panel','t'],['s jazykem vpravo,'],['vnitřní vlevo']],18,5.6));
   s+=pill(4,87,fl<1?'otočit kolem svislé osy':'RUB nahoru: značky prosvítají',fl<1?'t':'tok');
   return s;
-},null);
+},t=>t<.35?'lic':'rub');
 
 // D3 — čáry ohybů tužkou
 const FL=[[AX0,'A'],[FX,'A'],[BXF,'B'],[IX0,'B']].map(([x,w])=>({x:mx(x),y0:w==='A'?88.07:54.07,y1:156.17,w}));
@@ -578,7 +578,7 @@ partKeys.forEach(k=>{const b=document.createElement('button');b.className='pseg'
 let idx=0,tt=1,playing=false,last=0,raf=0;
 function numInPart(i){const p=S[i].part;return S.slice(0,i+1).filter(s=>s.part===p).length}
 function setSide(st){
-  const side=st.side; if(!side){badge.hidden=true;return}
+  const side=typeof st.side==='function'?st.side(tt):st.side; if(!side){badge.hidden=true;return}
   badge.hidden=false; let v,sb='';
   if(typeof side==='object'){v=side.v;sb=side.sub||''} else {v=side==='rub'?'RUB':'LÍC'}
   sideEl.textContent=v; chip.style.background=v==='LÍC'?'var(--chip-lic)':'var(--chip-rub)'; sub.textContent=sb;

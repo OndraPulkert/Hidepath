@@ -43,7 +43,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 20,
     goal: 'Připravit stůl, na kterém se dá bezpečně řezat a děrovat, a vyzkoušet si každý nástroj.',
     materials: [
-      '1–2 odřezky kůže (stačí levná štípenka)',
+      'odřezek kůže: roh druhé tréninkové A5 (první A5 nechte celou na lekci 2)',
       'složený ručník pod desku',
       'dobré světlo',
     ],
@@ -74,7 +74,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'check-chisels',
         title: 'Zkontrolujte vidličky (pokud už je máte)',
-        body: 'Kroky 3 až 5 udělejte, až budete mít vidličky, jehly a nit doma; do té doby pokračujte lekcí 2. Přiložte vidličky hroty na odřezek a přitiskněte rukou, bez paličky. Pravítkem ověřte, že mezi značkami je 3,85–4 mm.',
+        body: 'Kroky 3 až 5 udělejte, až budete mít vidličky, jehly a nit doma; do té doby pokračujte lekcí 2. Přiložte vidličky hroty na odřezek a přitiskněte rukou, bez paličky. Pravítkem změřte vzdálenost první a poslední značky a vydělte ji počtem mezer mezi značkami: musí vyjít 3,85–4 mm.',
         media: [
           {
             id: 'l1-chisel-marks',
@@ -103,7 +103,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'first-strike',
         title: 'Zkuste jeden úder',
-        body: 'Odřezek položte na tvrdou desku, vidličky postavte kolmo a jednou pevně udeřte paličkou. Hroty musí projít skrz. Jde jen o to vyzkoušet, kolik síly je potřeba.',
+        body: 'Odřezek položte lícem nahoru na tvrdou desku, vidličky postavte kolmo, držte je u spodku a jednou pevně udeřte paličkou. Hroty musí projít skrz. Jde jen o to vyzkoušet, kolik síly je potřeba.',
         media: [],
       },
     ],
@@ -138,6 +138,7 @@ export const lessons: readonly LessonDefinition[] = [
     safety: [
       'Nůž nechte zavřený, řezat budete až v lekci 2.',
       'Hroty vidliček jsou ostré. Odkládejte je hroty od sebe, ne přes okraj stolu.',
+      'Při úderu držte vidličky u spodku, prsty mimo dráhu paličky.',
     ],
     media: [
       {
@@ -156,11 +157,10 @@ export const lessons: readonly LessonDefinition[] = [
     order: 2,
     phaseSlug: 'practice',
     estimatedMinutes: 40,
-    goal: 'Uříznout rovný proužek 20 × 100 mm s kolmou hranou na dva až tři lehké tahy a vyzkoušet řez podle přilepené šablony.',
+    goal: 'Uříznout rovný proužek 20 mm široký s kolmou hranou na dva až tři lehké tahy a vyzkoušet řez podle přilepené šablony.',
     materials: [
-      'odřezek kůže aspoň 60 × 120 mm (stačí levná štípenka)',
+      'první tréninková A5: podél delší strany z ní odřízněte pás 70 mm na proužky (řežte jako v krocích 1–3), zbylý pás asi 210 × 80 mm nechte celý na cvičnou šablonu',
       'nová čepel v noži',
-      'na cvičnou šablonu: zbytek juchtové A5 asi 210 × 80 mm',
       'vytištěná cvičná šablona 1:1 (A4, zkontrolovaná úsečka 50 mm)',
       'nůžky',
     ],
@@ -171,7 +171,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'mark-line',
         title: 'Narýsujte linii',
-        body: 'Na rub odřezku narýsujte linii 20 mm od rovné hrany. Použijte rýsovací šídlo, tupou jehlu nebo tužku a rýsujte lehce.',
+        body: 'Na rub pásu 70 mm odměřte na obou koncích 20 mm od rovné hrany a značky spojte podél pravítka. Rýsujte lehce šídlem, tupou jehlou nebo tužkou.',
         media: [],
       },
       {
@@ -227,7 +227,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'practice-template',
         title: 'Vyzkoušejte řez podle přilepené šablony',
-        body: 'Takhle budete v lekci 5 řezat díly pouzdra. Cvičnou šablonu vytiskněte na A4 bez přizpůsobení velikosti (100 %) a změřte kontrolní úsečku: musí mít přesně 50 mm. Tři tvary vystřihněte nůžkami nahrubo po čárkované čáře, s okrajem asi 1,5 cm. Tvary dělejte jeden po druhém, vedle sebe podél delší strany odřezku. Tvar položte na rub odřezku a přilepte maskovací páskou z několika stran, jen na okrajích mimo plnou čáru. U tvaru 3 propíchněte šídlem obě tečky skrz papír do kůže. Pak řežte skrz papír i kůži po plné čáře na dva až tři lehké tahy: rovné strany podle ocelového pravítka položeného na čáru, roh a výřez pomalu bez pravítka. Pásku strhávejte pomalu, skoro rovnoběžně s kůží. Nakonec nalepte kousek pásky na líc odřezku, strhněte ho a zkontrolujte, že nenechal lesklou stopu.',
+        body: 'Takhle budete v lekci 5 řezat díly pouzdra. Cvičnou šablonu vytiskněte na A4 bez přizpůsobení velikosti (100 %) a změřte kontrolní úsečku: musí mít přesně 50 mm. Tři tvary vystřihněte nůžkami po čárkované čáře (okraj asi 1,5 cm). Tvary dělejte jeden po druhém na pásu 80 mm, vedle sebe podél delší strany, 5 mm od kraje a 10 mm od sebe. Tvar položte na rub pásu a přilepte maskovací páskou z několika stran, jen na okrajích mimo plnou čáru. U tvaru 3 propíchněte šídlem obě tečky skrz papír do kůže; po sejmutí šablony musí být na rubu vidět. Pak řežte skrz papír i kůži po plné čáře na dva až tři lehké tahy: rovné strany podle ocelového pravítka položeného na čáru, roh a výřez pomalu bez pravítka. Pásku strhávejte pomalu, skoro rovnoběžně s kůží. Nakonec nalepte kousek pásky na líc odřezku, strhněte ho a zkontrolujte, že nenechal lesklou stopu.',
         media: [],
         printLink: 'practice-sheets',
       },
@@ -235,7 +235,7 @@ export const lessons: readonly LessonDefinition[] = [
     checkpoints: [
       {
         slug: 'strip-cut',
-        title: 'Proužek 20 × 100 mm je uříznutý na dva až tři lehké tahy.',
+        title: 'Proužek 20 mm široký je uříznutý na dva až tři lehké tahy.',
         required: true,
       },
       {
@@ -294,7 +294,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'mark-stitch-line',
         title: 'Narýsujte linii stehu',
-        body: 'Na líc proužku narýsujte lehkou linii 3,5 mm od hrany, podle ní pak přiložíte vidličky. Bez kružítka odměřte 3,5 mm od hrany na obou koncích proužku a značky spojte podél pravítka tupou jehlou.',
+        body: 'Na líc proužku narýsujte lehkou linii 3,5 mm od hrany, podle ní pak přiložíte vidličky. S kružítkem: nastavte 3,5 mm podle pravítka a jeden hrot veďte po hraně. Bez kružítka odměřte 3,5 mm od hrany na obou koncích proužku a značky spojte podél pravítka tupou jehlou.',
         media: [
           {
             id: 'l3-stitch-offset',
@@ -308,7 +308,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'first-punch',
         title: 'Prorazte první otvory',
-        body: 'Kůži položte na tvrdou desku. Vidličky se 4 nebo 6 hroty postavte hroty na linii, kolmo ve všech směrech, a držte je pevně u spodku. Jednou pevně udeřte paličkou. Když všechny hroty neprošly, udeřte ještě jednou, bez pohnutí vidliček.',
+        body: 'Na linii si označte začátek a konec řady, 3,5 mm od obou konců proužku. Kůži položte lícem nahoru na tvrdou desku. Vidličky se 4 nebo 6 hroty postavte první hrot na značku začátku, ostatní na linii, kolmo ve všech směrech, a držte je pevně u spodku. Jednou pevně udeřte paličkou. Když všechny hroty neprošly, udeřte ještě jednou, bez pohnutí vidliček.',
         media: [
           {
             id: 'l3-punch-video',
@@ -337,7 +337,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'corners',
         title: 'Dokončete řadu dvojhrotem',
-        body: 'U konce proužku dokončete řadu vidličkami se 2 hroty, aby poslední otvor vyšel přesně na konec linie. Rohy přijdou v lekci 6.',
+        body: 'U konce proužku dokončete řadu vidličkami se 2 hroty, aby poslední otvor vyšel přesně na značku konce. Stejně budete v lekci 6 trefovat rohy.',
         media: [],
       },
       {
@@ -395,7 +395,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 45,
     goal: 'Slepit dva odřezky, proděrovat je najednou a sešít sedlářským stehem, který je na obou stranách rovný.',
     materials: [
-      '3 odřezky asi 40 × 80 mm, nejlépe třísločiněné (jeden na zkoušku zdrsnění)',
+      'ze druhé tréninkové A5: 3 odřezky asi 40 × 80 mm (jeden na zkoušku zdrsnění)',
       'nit asi 60 cm',
       'lepidlo nebo oboustranná páska',
     ],
@@ -407,19 +407,13 @@ export const lessons: readonly LessonDefinition[] = [
       'waxed-thread',
       'steel-ruler',
     ],
-    recommendedEquipment: [
-      'contact-cement',
-      'wing-divider',
-      'scratch-awl',
-      'sandpaper',
-      'stitching-pony',
-    ],
+    recommendedEquipment: ['contact-cement', 'wing-divider', 'scratch-awl', 'sandpaper'],
     prerequisiteLessons: [L3],
     steps: [
       {
         id: 'glue',
         title: 'Slepte díly podél hrany',
-        body: 'Slepte odřezky jako na pouzdru: rub jednoho na líc druhého. Pás na líci nejdřív zdrsněte smirkem 180–240, z hladkého líce lepidlo pouští. Na třetím odřezku si vyzkoušejte, o kolik lépe drží zdrsněný spoj. Podél delší hrany naneste na obě plochy tenký pás lepidla asi 5 mm široký. Nechte ho odvětrat podle návodu a hrany přitiskněte přesně na sebe. S oboustrannou páskou: nalepte pás na rub jednoho dílu, sejměte krycí fólii a přitiskněte druhý díl. Lepidlo drží díly jen pomocně.',
+        body: 'Slepte odřezky jako na pouzdru: rub horního na líc spodního, jen podél jedné delší hrany. Na líci spodního odřezku tento pás nejdřív zdrsněte smirkem 180, z hladkého líce lepidlo pouští. Stěrkou naneste na obě plochy tenký pás lepidla asi 5 mm široký. Nechte ho odvětrat podle návodu a hrany přitiskněte přesně na sebe. S oboustrannou páskou: nalepte pás na rub horního odřezku, sejměte krycí fólii a přitiskněte; zdrsňovat pak nemusíte. Lepidlo drží díly jen pomocně. Rozdíl vyzkoušejte na třetím odřezku: zdrsněte jen polovinu pásu, přilepte na něj proužek z lekce 2 a po zaschnutí ho zkuste na obou polovinách odtrhnout.',
         media: [
           {
             id: 'l4-glue-strip',
@@ -433,7 +427,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'punch-two-layers',
         title: 'Proděrujte obě vrstvy najednou',
-        body: 'Linii stehu 3,5 mm od hrany narýsujte na díl, který bude vidět. Děrujte jako v lekci 3, jen pevnějším úderem. Pak pečlivě zkontrolujte rub.',
+        body: 'Na líc horního odřezku narýsujte podél slepené hrany linii stehu 3,5 mm od hrany. Děrujte z líce jako v lekci 3, jen pevnějším úderem. Pak pečlivě zkontrolujte rub.',
         media: [],
       },
       {
@@ -543,7 +537,6 @@ export const lessons: readonly LessonDefinition[] = [
     safety: [
       'Lepidlo s rozpouštědlem používejte ve větrané místnosti.',
       'Jehly odkládejte zapíchnuté do odřezku, ne volně na stůl.',
-
       'Při zatavování konců nitě držte zapalovač dál od kůže i od zbytku nitě; stačí zlomek sekundy.',
     ],
     media: [
@@ -566,7 +559,7 @@ export const lessons: readonly LessonDefinition[] = [
     materials: [
       'vytištěná šablona 1:1 (zkontrolovaná úsečka 50 mm)',
       'nůžky na vystřižení šablony nahrubo (s okrajem 1–2 cm)',
-      'finální kůže 1,2–1,5 mm',
+      'kůže A4 na pouzdro (1,2–1,5 mm)',
       'maskovací páska',
     ],
     requiredEquipment: [
@@ -582,7 +575,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'print-check',
         title: 'Vytiskněte a zkontrolujte šablonu',
-        body: 'Tiskněte na A4 bez přizpůsobení velikosti („skutečná velikost“, 100 %), nejlépe na matný papír 120 g pro inkoustové tiskárny, jinak na obyčejný. Změřte kontrolní úsečku: musí mít přesně 50 mm. Když nemá, upravte nastavení tisku a tiskněte znovu.',
+        body: 'Šablonu otevřete na stránce projektu tlačítkem „Vytisknout šablonu 1:1“. Tiskněte na A4 bez přizpůsobení velikosti („skutečná velikost“, 100 %), nejlépe na matný papír 120 g pro inkoustové tiskárny, jinak na obyčejný. Změřte kontrolní úsečku: musí mít přesně 50 mm. Když nemá, upravte nastavení tisku a tiskněte znovu.',
         media: [
           {
             id: 'l5-template',
@@ -603,7 +596,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'transfer',
         title: 'Přilepte šablonu na rub',
-        body: 'Každý díl šablony vystřihněte zvlášť a jen nahrubo, s okrajem 1–2 cm. Po čáře budete řezat až nožem. Díl položte na rub kůže a přilepte maskovací páskou z několika stran, jen na okrajích mimo čáru řezu. Pásku nejdřív vyzkoušejte na odřezku téže kůže (nesmí vytrhnout vlákna ani nechat lesklou stopu). Šablona se řezáním zničí, na každý další díl nebo pouzdro vytiskněte novou.',
+        body: 'Každý díl šablony vystřihněte zvlášť a jen nahrubo, s okrajem 1–2 cm (mezi díly střihněte středem mezery). Po plné čáře budete řezat až nožem. Čárkovaná čára je linie stehu, tu nestříhejte ani neřežte. Díl položte na rub kůže a přilepte maskovací páskou z několika stran, jen na okrajích mimo plnou čáru. Použijte pásku, která v lekci 2 nenechala na líci stopu. Šablona se řezáním zničí, na každý další díl nebo pouzdro vytiskněte novou.',
         media: [
           {
             id: 'l5-transfer',
@@ -615,15 +608,21 @@ export const lessons: readonly LessonDefinition[] = [
         ],
       },
       {
+        id: 'transfer-other',
+        title: 'Jiný způsob: obkreslení',
+        body: 'Šablonu vystřihněte přesně po plné čáře, přilepte na rub a obkreslete obrys šídlem, tupou jehlou nebo tužkou. Pak řežte po obkreslené čáře, rovné strany podle pravítka. Řez skrz papír po vytištěné čáře je ale přesnější.',
+        media: [],
+      },
+      {
         id: 'prick-marks',
         title: 'Před řezáním propíchněte značky',
-        body: 'Dokud je šablona přilepená, propíchněte šídlem skrz papír do kůže všechny značky: začátky a konce zaoblení rohů a oba konce oblouku výřezu na palec. Po vyříznutí už šablona přesně nedosedne.',
+        body: 'Dokud je šablona přilepená, propíchněte šídlem skrz papír do kůže oba konce oblouku výřezu na palec (kde oblouk začíná na horní hraně přední kapsy). Podle nich výřez dorovnáte. Po vyříznutí už šablona přesně nedosedne.',
         media: [],
       },
       {
         id: 'cut-parts',
         title: 'Řežte skrz papír po čáře',
-        body: 'Řežte skrz papír i kůži přesně po plné čáře, nůž kolmo, vždy na dva až tři lehké tahy. Rovné strany řežte podle ocelového pravítka položeného na čáru (jako v lekci 2), zaoblené rohy pomalu bez pravítka, krátkými tahy. Když řez začne třepit papír nebo kůži, odlomte článek čepele.',
+        body: 'Řežte skrz papír i kůži přesně po plné čáře, nůž do strany nenaklánějte, vždy na dva až tři lehké tahy. Výřez na palec zatím vynechte. Rovné strany řežte podle ocelového pravítka položeného na čáru (jako v lekci 2), zaoblené rohy pomalu bez pravítka, krátkými tahy. Když řez začne třepit papír nebo kůži, odlomte článek čepele.',
         media: [
           {
             id: 'l5-corner-cut',
@@ -638,7 +637,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'thumb-cutout',
         title: 'Vyřízněte výřez na palec',
-        body: 'Výřez je jen na přední kapse, uprostřed horní hrany: 40 mm široký a 12 mm hluboký. Řežte ho s přilepenou šablonou. Oblouk nasekejte pěti až šesti krátkými rovnými řezy kousek vedle čáry, nůž kolmo, volnou rukou otáčejte kůží. Dorovnáte ho smirkem v dalším kroku.',
+        body: 'Výřez je jen na přední kapse, uprostřed horní hrany: 40 mm široký a 12 mm hluboký. Řežte ho s přilepenou šablonou. Oblouk nasekejte pěti až šesti krátkými rovnými řezy kousek vedle čáry v odpadu (uvnitř výřezu), nůž kolmo, volnou rukou otáčejte kůží. Dorovnáte ho smirkem v dalším kroku.',
         media: [
           {
             id: 'l5-thumb-cutout',
@@ -652,19 +651,13 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'peel-template',
         title: 'Sejměte šablonu a zkontrolujte značky',
-        body: 'Pásku strhávejte pomalu, skoro rovnoběžně s kůží. Zkontrolujte, že jsou vidět všechny propíchnuté značky. Výřez na palec dobruste smirkem 220 omotaným kolem tužky nebo tenkého dřívka do plynulého oblouku mezi propíchnutými značkami.',
-        media: [],
-      },
-      {
-        id: 'transfer-other',
-        title: 'Jiný způsob: obkreslení',
-        body: 'Šablonu můžete vystřihnout přesně po čáře, přilepit na rub a obtáhnout šídlem, tupou jehlou nebo tužkou, případně řezat podél okraje papíru. Řez po vytištěné čáře je ale přesnější.',
+        body: 'Pásku strhávejte pomalu, skoro rovnoběžně s kůží. Zkontrolujte, že jsou vidět všechny propíchnuté značky. Výřez na palec dobruste smirkem 240 omotaným kolem tužky nebo tenkého dřívka do plynulého oblouku mezi propíchnutými značkami.',
         media: [],
       },
       {
         id: 'compare-parts',
         title: 'Porovnejte díly',
-        body: 'Přiložte přední díl na zadní a srovnejte spodek a boky. Rozdíl větší než asi půl milimetru zbruste smirkem na rovné destičce nebo lehce seřízněte.',
+        body: 'Přiložte přední díl lícem nahoru na líc zadního a srovnejte spodek a boky. Rozdíl větší než asi půl milimetru zbruste smirkem na rovné destičce nebo lehce seřízněte.',
         media: [],
       },
     ],
@@ -700,7 +693,10 @@ export const lessons: readonly LessonDefinition[] = [
       'Rohy řezané podle pravítka: zůstanou hranaté.',
       'Výřez řezaný jedním obloukem: nůž uhne a hrana má schody.',
     ],
-    safety: ['U rohů držte kůži volnou rukou daleko od čepele a otáčejte kůží, ne nožem.'],
+    safety: [
+      'Prsty, které drží pravítko, mějte mimo dráhu čepele a řežte směrem od nich.',
+      'U rohů držte kůži volnou rukou daleko od čepele a otáčejte kůží, ne nožem.',
+    ],
     media: [
       {
         id: 'l5-hero',
@@ -740,20 +736,20 @@ export const lessons: readonly LessonDefinition[] = [
       'edge-burnisher',
       'wing-divider',
       'scratch-awl',
-      'stitching-pony',
+      'masking-tape',
     ],
     prerequisiteLessons: [L5],
     steps: [
       {
         id: 'mark-stitch-lines',
         title: 'Narýsujte linii stehu na přední díl',
-        body: 'Na líc předního dílu narýsujte linii 3,5 mm od hrany po obou bocích a dole. Horní hrana zůstane bez stehu, tudy se vkládají karty.',
+        body: 'Na líc předního dílu narýsujte jako v lekci 3 linii 3,5 mm od hrany po obou bocích a dole. Horní hrana zůstane bez stehu, tudy se vkládají karty.',
         media: [],
       },
       {
         id: 'mark-glue-area',
         title: 'Vyznačte lepenou plochu na zadním dílu',
-        body: 'Na líci zadního dílu se lepí jen pás asi 8 mm podél spodku a obou boků (tvar U, vrch volný), aby lepidlo drželo po obou stranách linie stehu. Na obou bocích odměřte od spodní hrany 56 mm a udělejte lehkou tužkovou značku: to je horní hrana kapsy. Nad ni nezdrsňujte, škrábance by zůstaly vidět. Šířku 8 mm stačí odměřit nahrubo kružítkem nebo tužkou, pás skončí pod kapsou. Chcete-li jistotu, nalepte těsně nad značky malířskou pásku a brouste jen k ní (pásku nejdřív vyzkoušejte na odřezku).',
+        body: 'Na líci zadního dílu se lepí jen pás asi 8 mm podél spodku a obou boků (tvar U, vrch volný), aby lepidlo drželo po obou stranách linie stehu. Na obou bocích odměřte od spodní hrany 56 mm a udělejte lehkou tužkovou značku: to je horní hrana kapsy. Nad ni nezdrsňujte, škrábance by zůstaly vidět. Šířku 8 mm stačí odměřit nahrubo kružítkem nebo tužkou, pás skončí pod kapsou. Pro jistotu nalepte těsně nad značky maskovací pásku a zdrsňujte jen k ní.',
         media: [
           {
             id: 'l6-glue-area',
@@ -767,7 +763,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'glue-parts',
         title: 'Slepte díly',
-        body: 'Vyznačený pás na zadním dílu zdrsněte smirkem 180–240, z hladkého líce lepidlo pouští. Smirek omotejte kolem hranolku asi 1–2 cm širokého, pás tak udržíte v mezích lépe než prsty. Naneste tenký pás lepidla na zdrsněný pás i na odpovídající pás na rubu kapsy, nechte odvětrat podle návodu a přitiskněte přes hadřík. Střed nechte suchý, jinak se kapsa slepí a karta do ní nevejde. Oboustrannou pásku nalepte jen na rub kapsy, zdrsňovat pak nemusíte.',
+        body: 'Vyznačený pás na zadním dílu zdrsněte smirkem 180, z hladkého líce lepidlo pouští. Smirek omotejte kolem hranolku asi 1–2 cm širokého, pás tak udržíte v mezích lépe než prsty. Stěrkou naneste tenký pás lepidla na zdrsněný pás i na stejný pás na rubu kapsy a nechte odvětrat podle návodu. Kapsu přiložte lícem nahoru, spodek a boky přesně na hrany zadního dílu, a přitiskněte přes hadřík. Střed nechte suchý, jinak se kapsa slepí a karta do ní nevejde. Oboustrannou pásku nalepte jen na rub kapsy, zdrsňovat pak nemusíte.',
         media: [
           {
             id: 'l6-assembled-scheme',
@@ -790,7 +786,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'punch-sides',
         title: 'Děrujte boky a spodek',
-        body: 'Děrujte jen tam, kde kapsa leží na zadním dílu; horní část zadního dílu zůstane bez otvorů. Začněte v horním rohu kapsy a pokračujte dolů. U spodního rohu dokončete řadu dvojhrotem tak, aby poslední otvor ležel na průsečíku obou linií. Spodní řadu začněte tímto rohovým otvorem.',
+        body: 'Děrujte z líce kapsy na tvrdé desce, jen tam, kde kapsa leží na zadním dílu; horní část zadního dílu zůstane bez otvorů. První otvor dejte na linii stehu těsně pod zaoblením horního rohu kapsy, kde je bok už rovný (asi 6 mm pod horní hranou). Pokračujte dolů. U spodního rohu dokončete řadu dvojhrotem tak, aby poslední otvor ležel na průsečíku obou linií. Spodní řadu začněte tímto rohovým otvorem a stejně ji ukončete v druhém rohu. Druhý bok děrujte od rohu nahoru a u horního konce řadu dorovnejte dvojhrotem, aby poslední otvor ležel ve stejné výšce jako první otvor na prvním boku.',
         media: [
           {
             id: 'l6-corner-punch',
@@ -805,7 +801,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'stitch',
         title: 'Sešijte tři strany',
         animationLinks: [animationLink('saddleStitch', 'E2'), animationLink('saddleStitch', 'F2')],
-        body: 'Začněte dvěma zpětnými stehy v horním rohu a šijte souvisle bok, spodek, bok. Rohový otvor prošijte jako každý jiný. Na konci udělejte dva zpětné stehy. Konce vyveďte na rub a odstřihněte těsně u kůže, nebo je jako v lekci 4 nechte asi 2 mm dlouhé a zatavte.',
+        body: 'Díl uchyťte jako v lekci 4. Začněte dvěma zpětnými stehy u horní hrany kapsy: nit vyrovnejte ve třetím otvoru od horního konce, ušijte dva stehy zpět k prvnímu otvoru a pak šijte dopředu přes ně, souvisle bok, spodek, bok. Rohový otvor prošijte jako každý jiný. Na konci udělejte dva zpětné stehy. Konce vyveďte na rub a odstřihněte těsně u kůže, nebo je jako v lekci 4 nechte asi 2 mm dlouhé a zatavte.',
         media: [
           {
             id: 'l6-stitch-video',
@@ -877,6 +873,7 @@ export const lessons: readonly LessonDefinition[] = [
       'Lepidlo i uprostřed kapsy: kapsa se slepí a karta do ní nejde vsunout.',
     ],
     safety: [
+      'Lepidlo s rozpouštědlem používejte ve větrané místnosti.',
       'Úder do dvou vrstev je pevnější, prsty držte u spodku vidliček, mimo dráhu paličky.',
       'Při zatavování konců nitě držte zapalovač dál od kůže i od zbytku nitě; stačí zlomek sekundy.',
     ],
@@ -966,12 +963,13 @@ export const cardHolderProject: ProjectDefinition = {
       priority: 'required',
       reason: 'Finální díly pouzdra (lekce 5 a 6). Na trénink v lekcích 1–4 stačí levné odřezky.',
       specification:
-        'Třísločiněná lícová kůže 1,2–1,5 mm, přířez A4; k tomu balíček odřezků na trénink.',
+        'Třísločiněná lícová kůže 1,2–1,5 mm, přířez A4; na trénink 2× A5 téže kůže nebo levné odřezky.',
     },
     {
       equipmentSlug: 'sandpaper',
       priority: 'required',
-      reason: 'Srovnání hran po sešití (lekce 5 a 6).',
+      reason:
+        'Zdrsnění lepené plochy (lekce 4 a 6), dorovnání výřezu na palec (lekce 5) a srovnání hran (lekce 6).',
       specification:
         'Zrnitost 180–240 na zdrsnění lepené plochy a 220–400 na srovnání hran; po jednom archu.',
       alternatives: ['Jemný pilník na nehty'],

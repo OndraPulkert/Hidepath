@@ -618,7 +618,7 @@ add('C','Přeložte zadní panel a přitiskněte','Přeložte zadní panel, zaro
 // ---------- D: stitch ----------
 const THR4=4*SEAM_LEN/1000, THR5=5*SEAM_LEN/1000;   // m
 const m2=v=>cz((Math.round(v*100)/100).toFixed(2));
-add('D','Připravte nit na šev dna','Připravte nit asi 0,8 m. Šev dna má 64 mm; přes tři vrstvy (5 × šev + 25–30 cm) vyjde asi '+m2(THR5+.25)+'–'+m2(THR5+.30)+' m, 0,8 m nechává rezervu.',7200,t=>{
+add('D','Připravte nit na šev dna','Připravte nit 0,6 mm, asi 0,8 m. Šev dna 64 mm přes tři vrstvy vyjde asi na 0,6 m, 0,8 m nechává rezervu.',7200,t=>{
   const p=es(t,.05,.5), b=es(t,.55,.92);
   let inner=frontView();
   inner+=`<path d="M${HF[0]} ${SEAM_Y} H${f(L(HF[0],HF[16],p))}" stroke="var(--accent)" stroke-width=".8" stroke-linecap="round"/>`;
@@ -630,10 +630,10 @@ add('D','Připravte nit na šev dna','Připravte nit asi 0,8 m. Šev dna má 64 
     ib+=`<path d="M${f(c(xb))} ${y} H${f(c(x0+W))}" stroke="var(--thread-d)" stroke-width=".9" stroke-dasharray=".5 .9" stroke-linecap="round"/>`+
       `<path d="M${f(c(xa))} ${y} H${f(c(xb))}" stroke="var(--thread-d)" stroke-width="1.1" stroke-dasharray="1.4 1" stroke-linecap="round"/>`+
       `<path d="M${x0} ${y} H${f(c(xa))}" stroke="var(--thread-d)" stroke-width="2.3" stroke-linecap="round"/><path d="M${x0} ${y} H${f(c(xa))}" stroke="var(--thread)" stroke-width="1.5" stroke-linecap="round"/>`;}
-  ib+=`<g opacity="${f(seg(t,.9,1))}"><path d="M${f(xa)} ${y-2.5} v5 M${f(x5)} ${y-2.5} v5 M${x0+W} ${y-2.5} v5" stroke="var(--muted)" stroke-width=".3"/>${lbl(x0,y-4,'4×','ts')}${lbl(f(x5),y-4,'5×','ts','middle')}${lbl(x0+W,y+7,'0,8 m (lekce)','ts','end')}${lbl(x0,y+12.5,'raději víc –','ts')}${lbl(x0,y+17,'ověřit na odřezku','ts')}</g>`;
+  ib+=`<g opacity="${f(seg(t,.9,1))}"><path d="M${f(xa)} ${y-2.5} v5 M${f(x5)} ${y-2.5} v5 M${x0+W} ${y-2.5} v5" stroke="var(--muted)" stroke-width=".3"/>${lbl(x0,y-4,'4×','ts')}${lbl(f(x5),y-4,'5×','ts','middle')}${lbl(x0+W,y+7,'0,8 m (lekce)','ts','end')}${lbl(x0,y+12.5,'zbytek do 0,8 m','ts')}${lbl(x0,y+17,'je rezerva','ts')}</g>`;
   s+=inset('NIT',ib);
   return s;
-},{v:'LÍC',sub:'přední panel'});
+},{v:'LÍC',sub:'přední panel'},'Tip: podle návodu „Kolik nitě na šev“ přes tři vrstvy 5 × šev + 25–30 cm, tedy asi '+m2(THR5+.25)+'–'+m2(THR5+.30)+' m.');
 
 function saddle3(kk){
   const hx=[92,98,104,110,116,122,128], yT=30, lh=1.8,   // v měřítku rozteče: 6 = 4 mm, 1,8 = 1,2 mm

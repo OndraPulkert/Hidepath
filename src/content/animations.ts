@@ -28,8 +28,8 @@ export const animationPages = {
     title: 'Kapsa na minci krok za krokem',
     sections: {
       A: 'Část A – forma',
-      B: 'Část B – 1. výtisk na líc',
-      C: 'Část C – osy a 2. výtisk na rub',
+      B: 'Část B – značky na líc',
+      C: 'Část C – osy a šablona na rub',
       D: 'Část D – tvarování',
       E: 'Část E – řez a okno na formě',
     },
@@ -42,7 +42,7 @@ export const animationPages = {
         'Sundejte papír, obruste a zaoblete hranu',
       ],
       B: [
-        'Vystřihněte 1. výtisk nahrubo',
+        'Vystřihněte výtisk na značky nahrubo',
         'Přilepte ho maskovací páskou na LÍC',
         'Šídlem propíchněte 23 teček a 4 konce os',
         'Pásku strhněte pomalu',
@@ -52,8 +52,8 @@ export const animationPages = {
       ],
       C: [
         'Otočte kůži a narýsujte osy na rubu',
-        'Vysekněte okno do 2. výtisku',
-        'Položte 2. výtisk na rub a zarovnejte na osy',
+        'Vysekněte okno do výtisku na šablonu',
+        'Položte šablonu na rub a zarovnejte na osy',
         'Obtáhněte obrys šídlem nebo tužkou',
         'Obtáhněte kružnici okna v otvoru papíru',
         'Obrys teď neřežte',

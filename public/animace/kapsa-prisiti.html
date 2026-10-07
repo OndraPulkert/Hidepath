@@ -342,7 +342,7 @@ add('A','Vyřízněte pás a zkontrolujte značky','Pás vyřízněte skrz papí
 // ---------- B: glue ----------
 const IPY=16;
 function insetPocketT(){return `translate(89.5 ${IPY}) scale(.95)`}
-add('B','Přiložte kapsu na 4 značky','Hotovou kapsu přiložte nasucho lícem nahoru, otevřenou hranou nahoru, rohy na 4 propíchnuté značky.',5600,t=>{
+add('B','Přiložte kapsu na 4 značky','Hotovou kapsu přiložte nasucho lícem nahoru, otevřenou hranou nahoru, rohy na 4 propíchnuté značky. Pravítkem zkontrolujte polohu: 41,8 mm pod horní hranou a 14,75 mm od boků.',5600,t=>{
   const m=es(t,.06,.6), pulse=.5+.5*Math.sin(t*Math.PI*8);
   let inner=stripLeather()+rings(CORN,'var(--ok)',1.5+pulse*.4,.45,1-seg(t,.55,.7));
   const dx=L(40,0,m), dy=L(-42,0,m);
@@ -483,7 +483,7 @@ add('C','Řez: otvory lícují skrz obě vrstvy','Vidlička jde stejným otvorem
 const SEAM4=4*SEAM_LEN/1000, THR_LO=SEAM4+.25, THR_HI=SEAM4+.30;   // m: 4 × šev + 25–30 cm rezervy
 const m2=(v,d=2)=>cz((+v.toFixed(d)).toString());
 const THR_RANGE=`${m2(Math.round(THR_LO*20)/20)}–${m2(Math.round(THR_HI*20)/20)}`;   // zaokrouhleno na 5 cm
-add('D','Připravte nit asi 0,8 m','Připravte nit asi 0,8 m, to stačí s rezervou. Pravidlo: 4 × délka švu (asi '+Math.round(SEAM_LEN)+' mm) + 25–30 cm, tedy asi '+THR_RANGE+' m.',6400,t=>{
+add('D','Připravte nit asi 0,8 m','Připravte nit 0,6 mm, asi 0,8 m – to stačí s rezervou.',6400,t=>{
   const p=es(t,.05,.6), b=es(t,.62,.95);
   const poly='M'+DOTSL.map(([x,y])=>`${x} ${y}`).join(' L');
   let inner=stripLeather()+G(POCK_T,pocketLic()+`<path d="${poly}" fill="none" stroke="var(--accent)" stroke-width=".7" pathLength="1" stroke-dasharray="${f(p)} 2" stroke-linecap="round"/>`+noTop(seg(t,.5,.6)));
@@ -498,7 +498,7 @@ add('D','Připravte nit asi 0,8 m','Připravte nit asi 0,8 m, to stačí s rezer
   ib+=`<g opacity="${f(seg(t,.9,1))}"><path d="M${f(xa)} ${y-3} v6 M${f(xb)} ${y-3} v6 M${x0+W} ${y-3} v6" stroke="var(--muted)" stroke-width=".3"/>${lbl(x0,y-4.5,'4× šev','ts')}${lbl(xa+1.2,y-4.5,'rezerva','ts')}${lbl(xa,y+7,m2(SEAM4),'ts','middle')}${lbl(xb,y+7,m2(THR_HI),'ts','middle')}${lbl(x0+W,y+12,'0,8 m (lekce)','ts','end')}${notes([['voskovaný polyester'],['0,6 mm']],73,5)}</g>`;
   s+=inset('NIT',ib);
   return s;
-},'lic');
+},'lic','Tip: podle návodu „Kolik nitě na šev“ 4 × délka švu (asi '+Math.round(SEAM_LEN)+' mm) + 25–30 cm, tedy asi '+THR_RANGE+' m.');
 
 add('D','Přišijte kapsu sedlářským stehem','Přišijte kapsu sedlářským stehem po bocích a dnem, 23 otvory. Na začátku i na konci dva zpětné stehy. Horní hrana zůstává volná.',11000,t=>{
   const u=es(t,.04,.92)*22, n=Math.floor(u), fr=u-n;

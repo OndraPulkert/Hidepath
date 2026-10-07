@@ -36,7 +36,7 @@ describe('StepList – odkazy na animace postupu', () => {
     expect(links).toHaveLength(1);
     expect(links[0]).toHaveAccessibleName(/Animace postupu/);
     expect(links[0]).toHaveAttribute('href', '/animace/kapsa-postup.html#B');
-    expect(links[0]).toHaveTextContent('Část B – 1. výtisk na líc');
+    expect(links[0]).toHaveTextContent('Část B – značky na líc');
     // Krok bez odkazů nedostane žádné tlačítko.
     expect(within(stepItem('Zabalte minci')).queryAllByRole('link')).toHaveLength(0);
   });

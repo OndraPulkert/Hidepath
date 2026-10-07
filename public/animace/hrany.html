@@ -530,7 +530,7 @@ add('F','Přebruste a zaoblete dno, zaleštěte hrany',
 
 // G1
 add('G','Dokončete hrany před sestavením',
- 'Horní hranu F i s výřezem, spodní hranu a boky pásu víčka a boky jazýčku vybruste smirkem 220–400 na rovné destičce, zkoste z líce a vyleštěte (voda nebo Tokonole jen mimo lepená místa, leštítko nebo plátno). Horní hrany D1 a D2 jen vybruste a vyleštěte, D2 lehce zaoblete. Výřez pro palec zaoblete z líce i z rubu, o rubovou hranu by se zachytila karta. Vnitřek výřezu vybruste a vyleštěte kolíkem Ø 8 v aku vrtačce.',
+ 'Horní hranu F i s výřezem, spodní hranu a boky pásu víčka a boky jazýčku vybruste smirkem 220–400 na rovné destičce, zkoste z líce a vyleštěte (voda nebo Tokonole jen mimo lepená místa, leštítko nebo plátno). Horní hrany D1 a D2 jen vybruste a vyleštěte, horní hranu D2 lehce zaoblete. Výřez pro palec zaoblete z líce i z rubu, o rubovou hranu by se zachytila karta. Vnitřek výřezu vybruste a vyleštěte kolíkem Ø 8 v aku vrtačce.',
  11000,t=>{
   const sd=es(t,.06,.32), bv=es(t,.36,.6), bu=es(t,.64,.92);
   const ls=[{t:1.0,lic:'top',kind:'kas'}];
@@ -585,7 +585,7 @@ add('G','Zarovnejte a vyleštěte boky',
   if(t>.03&&t<.27){const yy=L(y0-2.6*kk-6,y0+4,cut);o+=knife(x0+.2,yy,0)}
   if(t>.27&&t<.46){const w=Math.sin(t*120)*1.6;o+=sandBlock(x0+2.1,y0-1.4*kk+w,-90,40)}
   o+=pill(82,13.5,t<.26?'1 · nožem na 101,0 mm':t<.46?'2 · vybrousit':t<.7?'3 · zkosit z obou líců':'4 · vyleštit jako svazek','ta','end');
-  o+=pill(6,y0-2.6*kk-5,'záda B','ts')+pill(6,y0+6,'přední stěna F','ts')+sideTag(x0+(cut<.98?.9*(1-cut)*kk:0),y0-1.4*kk,cut<.98?'D2 přečnívá':'D2',cut<.98?'ta':'ts');
+  o+=pill(6,y0-2.6*kk-5,'záda B','ts')+pill(6,y0+6,'přední stěna F','ts')+sideTag(x0+(cut<.98?(.9*kk-5)*(1-cut):0),y0-1.4*kk,cut<.98?'D2 přečnívá':'D2',cut<.98?'ta':'ts');
   o+=scaleBar(8,80,kk)+zoomTag();
   // inset: spodní roh hranatý
   let ib=lbl(89,17,'spodní roh','t');

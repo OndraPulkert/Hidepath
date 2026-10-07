@@ -359,35 +359,38 @@ add('A','Hranici lepení přelepte maskovací páskou','Hranice lepení přelept
 },SIDE.rubB,'Tip: stejné hranice přelepte i na rubu D2 – pásy G3 jsou na listu 3.');
 
 // A3 — lepidlo na obě strany
-add('A','Naneste lepidlo jen do pásů','Kontaktní lepidlo naneste na rub B i na rub D2, jen do pásů G3: dno <span class="num">y 18–23</span>, boky <span class="num">x 0–4</span> a <span class="num">97–101</span>, střed <span class="num">x 35–66</span>. Boky a střed jen do <span class="num">y 80,57</span>.',9000,t=>{
+add('A','Naneste lepidlo jen do pásů','Kontaktní lepidlo naneste na rub B i na rub D2, jen do pásů G3: dno <span class="num">y 18–23</span>, boky <span class="num">x 0–4</span> a <span class="num">97–101</span>, střed <span class="num">x 35–66</span>. Boky a střed jen do <span class="num">y 80,57</span>. Pásku hned strhněte.',10000,t=>{
   MIR=true;
-  let s=wallB('rub')+pencilB(1)+tapes(true)+glueBands(G3,es(t,.05,.55));
+  const strip=es(t,.84,.97);
+  let s=wallB('rub')+pencilB(1)+op(1-strip,tapes(true))+glueBands(G3,es(t,.05,.5));
   // vpravo rub D2 zmenšeně (k = 0,4), lepidlo do stejných pásů
   const k=.4,ox=88.5,oy=16,X=x=>ox+(M.W-x+1)*k,Y=y=>oy+(82-y)*k;
   let ib=`<rect x="${f(X(102))}" y="${f(Y(82))}" width="${f(103*k)}" height="${f(64*k)}" fill="url(#d2rubP)" stroke="var(--jigedge)" stroke-width=".25"/>`;
   const tp='fill="var(--tape)" stroke="var(--tape-d)" stroke-width=".15" opacity=".93"';
-  [[4,35],[66,97]].forEach(([a,b])=>{ib+=`<rect x="${f(X(b))}" y="${f(Y(M.topGlue))}" width="${f((b-a)*k)}" height="${f((M.topGlue-23)*k)}" ${tp}/>`});
-  ib+=`<rect x="${f(X(102))}" y="${f(Y(82))}" width="${f(103*k)}" height="${f((82-M.topGlue)*k)}" ${tp}/>`;
-  const p2=es(t,.5,.92);
+  let tb='';
+  [[4,35],[66,97]].forEach(([a,b])=>{tb+=`<rect x="${f(X(b))}" y="${f(Y(M.topGlue))}" width="${f((b-a)*k)}" height="${f((M.topGlue-23)*k)}" ${tp}/>`});
+  tb+=`<rect x="${f(X(102))}" y="${f(Y(82))}" width="${f(103*k)}" height="${f((82-M.topGlue)*k)}" ${tp}/>`;
+  ib+=op(1-strip,tb);
+  const p2=es(t,.45,.8);
   G3D2.forEach(g=>{const yt=L(g.y0,g.y1,cl(p2*1.15-(g.y0>20?.1:0)));if(yt>g.y0+.05)ib+=`<rect x="${f(X(g.x1))}" y="${f(Y(yt))}" width="${f((g.x1-g.x0)*k)}" height="${f((yt-g.y0)*k)}" fill="var(--glue)" opacity=".62"/>`});
-  ib+=notes([['rub D2: stejné','t'],['pásy, lepidlo','t'],['na obě strany','t']],50,5.4);
+  ib+=notes([['rub D2: stejné','t'],['pásy, lepidlo','t'],['na obě strany','t'],['',''],['pak pásku','ta'],['hned strhnout','ta']],50,5.4);
   s+=inset('RUB D2',ib);
+  if(strip>0)s+=op(seg(t,.84,.9),bottomPill('pásku hned strhnout'));
   return s;
 },SIDE.rubB,'Tip: hranice G3 na rub D2 přeneste podle listu 3 (ověřte na odřezku).');
 
 // A4 — zavadnout
 add('A','Nechte zavadnout 10–15 min','Lepidlo nechte zavadnout <span class="num">10–15</span> min, pak díly spojte.',5200,t=>{
   MIR=true;
-  let s=wallB('rub')+pencilB(1)+tapes(true)+glueBands(G3,1,L(1,.8,es(t,.1,.9)));
+  let s=wallB('rub')+pencilB(1)+glueBands(G3,1,L(1,.8,es(t,.1,.9)));
   s+=inset('ZAVADNOUT',clock(109.5,36,es(t,.05,.9)*.25,'10–15 min')+notes([['na B i na D2','t'],['až pak spojit']],60,5.4));
   return s;
 },SIDE.rubB);
 
 // A5 — spojit
-add('A','Přiložte D2 rubem na rub B','D2 položte rubem na rub B: spodní hranou na čáru <span class="num">y 18</span>, osou na osu x <span class="num">50,5</span>. Na každé straně přesahuje o <span class="num">1</span> mm.',8600,t=>{
+add('A','Přiložte D2 rubem na rub B','D2 přiložte do polohy z listu 2: rubem na rub B, osou x <span class="num">50,5</span> na osu, spodní hranou na čáru <span class="num">y 18</span>. Na každé straně přesahuje o <span class="num">1</span> mm.',8600,t=>{
   MIR=true;
-  const tp=1-es(t,0,.2);
-  let s=wallB('rub')+pencilB(1)+op(tp,tapes(true))+glueBands(G3,1,.8);
+  let s=wallB('rub')+pencilB(1)+glueBands(G3,1,.8);
   // D2 se spouští shora kolmo na B (zvětšená = výš nad stolem); po lepidle se neposouvá
   const p=es(t,.25,.75), sc=1+(1-p)*.12;
   const [mx,my]=pt(M.axis,50);
@@ -400,7 +403,7 @@ add('A','Přiložte D2 rubem na rub B','D2 položte rubem na rub B: spodní hran
   let ib=notes([['D2 103 × 64','t'],['y 18–82'],['x −1 až 102'],['přesah 1 mm','ta'],['na každé straně'],['',''],['rubem na rub B,','t'],['líc D2 nahoře']],17,5.4);
   s+=inset('SPOJIT',ib);
   return s;
-},SIDE.licD2,'Tip: pásku sundejte před spojením. Lepidlo chytne hned při dotyku – D2 nejdřív srovnejte nad B a pak už neposouvejte.');
+},SIDE.licD2,'Tip: lepidlo chytne hned při dotyku – D2 nejdřív srovnejte nad B a pak už neposouvejte.');
 
 // A6 — přitlačit, sloupce volné
 add('A','Přitlačte, děrujte nejdřív za 1 h','Spoj přitlačte v lepených pásech. Sloupce mincí zůstávají nelepené. Děrujte nejdřív za <span class="num">1</span> h.',9400,t=>{
@@ -589,9 +592,9 @@ add('D','Děrujte z líce D2','Děrujte z líce D2 na tvrdé desce. Díl položt
   s+=chisel(46.5,M.s1Y,false,4,o2);
   s+=chisel(36,76,true,4,o3)+chisel(65,76,true,4,o3);
   s+=op(o3,pill(PX(36)+2.4,PY(70),'stejně','tok')+pill(PX(65)-2.4,PY(70),'stejně','tok','end'));
-  let ib=`<rect x="91" y="11" width="37" height="26" rx="1" fill="var(--board)" stroke="var(--board-d)" stroke-width=".3"/>`+lbl(109.5,42,'tvrdá deska','ts','middle');
-  ib+=`<rect x="96" y="17" width="22" height="13" fill="var(--d2)" stroke="var(--jigedge)" stroke-width=".25"/>`;
-  ib+=arrow(123,31,123,15,'var(--notch)',.5);
+  let ib=`<rect x="91" y="14" width="37" height="24" rx="1" fill="var(--board)" stroke="var(--board-d)" stroke-width=".3"/>`+lbl(109.5,43,'tvrdá deska','ts','middle');
+  ib+=`<rect x="96" y="19.5" width="22" height="13" fill="var(--d2)" stroke="var(--jigedge)" stroke-width=".25"/>`;
+  ib+=arrow(123,33,123,18,'var(--notch)',.5);
   ib+=notes([['horní hranou','t'],['od sebe','ta'],['',''],['vidlička vždy','t'],['stejně natočená'],['při pohledu'],['na líc D2']],50,5.2);
   s+=inset('ORIENTACE',ib);
   return s;

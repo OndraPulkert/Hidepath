@@ -321,7 +321,7 @@ const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,
 const FWD=Array.from({length:NV-1},(_,i)=>[i,i+1]);   // tahy 0→1 … 6→7
 
 // ---------- A: nit a jehly ----------
-add('A','Odměřte nit','Na odřezek (lekce 4) ustřihněte asi 60 cm voskované nitě 0,6 mm, na pouzdro (lekce 6) asi 1 m. Pravidlo: 4 × délka švu + 25–30 cm, přes tři vrstvy 5 ×.',7600,t=>{
+add('A','Odměřte nit','Na nácvik (lekce 1) a odřezek (lekce 4) ustřihněte asi 60 cm voskované nitě 0,6 mm, na pouzdro (lekce 6) asi 1 m. Pravidlo: 4 × délka švu + 25–30 cm, přes tři vrstvy 5 ×.',7600,t=>{
   const k=.075, x0=6;   // 1 cm = 0,75 j. (obě řady ve stejném měřítku)
   let s='';
   const row=(y,seamCm,lessonCm,title,lessonTxt,p)=>{
@@ -496,7 +496,8 @@ add('D','2. Zadní jehlu prostrčte dopředu nad nití','Zadní jehlu prostrčte
   const tipx=L(cx+12,cx+1.2,e), tipy=L(cy-10,cy-1.2,e);
   mh+=G(`translate(${f(tipx)} ${f(tipy)}) rotate(-40)`,`<path d="M0 0 L16 0" stroke="var(--steel-d)" stroke-width="1.1" stroke-linecap="round"/><ellipse cx="14" cy="0" rx="1.6" ry=".5" fill="none" stroke="var(--steel)" stroke-width=".3"/>`);
   mh+=tpath(Q([tipx+11,tipy-9],[tipx+15,tipy-6],[128,cy-20]),1,1.5);
-  ib+=G(`translate(${2*cx} 0) scale(-1 1)`,mh);
+  const dc=uid('dc');
+  ib+=`<clipPath id="${dc}"><rect x="89" y="13" width="41" height="44" rx="1.5"/></clipPath><g clip-path="url(#${dc})">${G(`translate(${2*cx} 0) scale(-1 1)`,mh)}</g>`;
   ib+=pill(128,18.5,'k hraně ↑','ts','end');
   ib+=`<g opacity="${f(seg(t,.65,.75))}">${pill(128,cy+11,'nit v otvoru','ts','end')}${pill(108,cy-14,'nad nití','ta','middle')}</g>`;
   ib+=`<g opacity="${f(seg(t,.78,.88))}">${cross(95,64,1.4,.6)}${lbl(98.5,65.5,'ne pod nití','ta')}${cross(95,71,1.4,.6)}${lbl(98.5,72.5,'nepropíchnout','ta')}${lbl(98.5,77.8,'nit','ta')}</g>`;
@@ -563,15 +564,15 @@ add('E','Na konci prošijte zpět dva otvory','Na konci řady prošijte zpět dv
 },{v:'LÍC',sub:'konec řady'},'Tip: zpět šijte stejným rytmem, jen opačným směrem. Zpětné stehy leží přes hotové.');
 
 const STARTM=[[2,1],[1,0],...FWD];
-add('E','Zajistěte začátek i konec švu','Pouzdro (lekce 6): začněte dvěma zpětnými stehy v horním rohu a šijte souvisle bok, spodek, bok. Rohový otvor prošijte jako každý jiný. Na konci udělejte dva zpětné stehy. Projekty 02 a 03: dva zpětné stehy na začátku i na konci každého švu. Projekt 03, boky S4 a S5: steh 60–64 navíc zdvojte (jak, ověřte na zkušebním kuse).',13000,t=>{
+add('E','Zajistěte začátek i konec švu','Pouzdro (lekce 6): nit vyrovnejte ve třetím otvoru od horního konce, ušijte dva stehy zpět k prvnímu otvoru a šijte dopředu přes ně, souvisle bok, spodek, bok. Rohový otvor prošijte jako každý jiný. Na konci udělejte dva zpětné stehy. Projekty 02 a 03: dva zpětné stehy na začátku i na konci každého švu. Projekt 03, boky S4 a S5: steh 60–64 navíc zdvojte (jak, ověřte na zkušebním kuse).',13000,t=>{
   const v=es(t,.04,.92)*5, n=Math.floor(v), fr=v-n;
   let s=seamScene(STARTM,Math.min(n,5),n<5?Math.max(fr,.001):0,{hiBack:[0,1]});
   s+=viewTag('POHLED NA LÍC · začátek švu');
   if(n>=2) s+=pill((HX(0)+HX(2))/2,SEAM+7,'2 zpětné','ta','middle');
-  s+=pill(4,87,n<2?'začátek: 2 stehy zpět k rohu':'pak dál dopředu přes ně','t');
+  s+=pill(4,87,n<2?'začátek: 2 stehy zpět k 1. otvoru':'pak dál dopředu přes ně','t');
   let ib=notes([['01, 02, 03:','t'],['2 zpět na začátku','ts'],['i na konci','ts'],['','ts'],['03, S4 a S5:','t'],['zdvojit','ts'],['steh 60–64','ts']],16,5.2);
   return s+inset('PODLE PROJEKTU',ib);
-},{v:'LÍC',sub:'začátek švu'},'Tip: nit vyrovnejte ve třetím otvoru od rohu, ušijte dva stehy zpět k rohu a pokračujte dopředu přes ně.');
+},{v:'LÍC',sub:'začátek švu'},'Tip: u projektů 02 a 03 začněte stejně, ve třetím otvoru.');
 
 // ---------- F: konce nitě ----------
 function rubPiece(o={}){return mir(piece('rub',{leftEnd:false,rightEnd:true}))}
@@ -619,7 +620,7 @@ add('F','Polyester zatavte jen na rubu','Polyesterovou nit můžete zatavit: kon
       (fl>0&&fl<1?`<path d="M${f(x)} ${f(SEAM+3.6)} q-1.6 3 0 5.4 q1.6 -2.4 0 -5.4 z" fill="var(--flame)"/><path d="M${f(x)} ${f(SEAM+5.6)} q-.6 1.4 0 2.6 q.6 -1.2 0 -2.6 z" fill="var(--flame-i)"/>`:'')+`</g>`;}
   if(t>.66&&t<.86) s+=finger(x,SEAM+3,0,1-seg(t,.8,.86));
   s+=viewTag('POHLED NA RUB · díl otočený');
-  if(melt>.5) s+=pill(x,SEAM+8,'kulička nevyklouzne','tok','middle');
+  if(t>.86) s+=pill(x,SEAM+8,'zataveno a přimáčknuto','tok','middle');
   s+=pill(4,87,'konec asi 2 mm · zlomek sekundy','ta');
   let ib=notes([['jen polyester,','t'],['jen na rubu','t'],['','ts'],['plamen nikdy','ta'],['k líci','ta'],['','ts'],['zapalovač dál','ts'],['od kůže i nitě','ts']],16,5.2);
   return clipMain(s)+inset('ZATAVENÍ',ib);

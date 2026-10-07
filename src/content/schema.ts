@@ -163,7 +163,7 @@ export const animationLinkSchema = z.object({
       /^\/animace\/[a-z0-9-]+\.html(#[A-Za-z0-9-]+)?$/,
       'animationLink.href musí mířit na /animace/<soubor>.html, volitelně s kotvou',
     ),
-  /** Která část animace se otevře, např. „Část B – 1. výtisk na líc“. */
+  /** Která část animace se otevře, např. „Část B – značky na líc“. */
   label: z.string().min(1),
 });
 export type AnimationLink = z.infer<typeof animationLinkSchema>;

@@ -172,7 +172,7 @@ svg .brush{fill:var(--glue);stroke:var(--woodedge);stroke-width:1;vector-effect:
   <span><i style="--c:var(--rubf)"></i>useň, rub (masová strana)</span>
   <span><i style="--c:var(--d1)"></i>D1, L1 (nebarvená kozinka, výchozí 0,6)</span>
   <span><i style="--c:var(--d2)"></i>D2 (čokoládová kozinka, výchozí 0,6)</span>
-  <span><i style="--c:var(--pe)"></i>PE deska</span>
+  <span><i style="--c:var(--pe)"></i>tvrdá deska</span>
   <span><i style="--c:var(--steel)"></i>plíšek 0,5</span>
   <span><i style="--c:var(--mag)"></i>magnet Ø 8 × 1,5 (výchozí)</span>
   <span><i style="--c:var(--glue)"></i>kontaktní lepidlo</span>
@@ -189,7 +189,7 @@ svg .brush{fill:var(--glue);stroke:var(--woodedge);stroke-width:1;vector-effect:
     <p class="meta">Lekce 8, po ohybu dna (lekce 7). Potom už plíšek vyměnit nejde, magnet ano.</p>
     <div class="parts" aria-label="Názvy dílů"><b>Názvy dílů</b><span><b>P1</b> hlavní pás: F – ohyb dna – B – závěs – víčko – jazýček</span><span><b>F</b> přední stěna</span><span><b>B</b> zadní stěna</span><span><b>D1</b> přepážka karty / bankovky</span><span><b>D2</b> přepážka bankovky / mince (kontrastní)</span><span><b>L1</b> podšívka přes magnet</span><span><b>K2</b> plíšek</span><span><b>rub</b> masová strana, <b>líc</b> hladká</span></div>
     <div class="astage">
-      <figure><div class="fig"><div data-fig="aTop"></div></div><figcaption>Shora na rub F na PE desce, v měřítku. B stojí nahoru, je vidět jen její hrana.</figcaption></figure>
+      <figure><div class="fig"><div data-fig="aTop"></div></div><figcaption>Shora na rub F na tvrdé desce, v měřítku. B stojí nahoru, je vidět jen její hrana.</figcaption></figure>
       <figure><div class="fig"><div data-fig="aSide"></div></div><figcaption>Z boku: F rubem nahoru na desce, B s D2 stojí nahoru. <b>Tloušťky zvětšené 3×</b>, pomůcky schematické.</figcaption></figure>
     </div>
     <div class="aprog" aria-hidden="true"><i></i></div>
@@ -382,7 +382,7 @@ function add(p, t, d, c) { (p === 'A' ? A_STEPS : B_STEPS).push({ t, d, c }); }
 const TIPTAG = '<span class="tag ver">Tip:</span>';
 
 /* ========== A. plíšek (lekce 8) ========== */
-add('A','Položte F rubem nahoru na desku',7,'<b>F</b> položte rubem nahoru celou na PE desku, ohyb dna u hrany desky. <b>B</b> stojí nad ohybem nahoru (ohyb asi <b>90°</b>). Vyschlý ohyb táhne B zpátky k F: opřete ji zezadu o knihu nebo krabičku a horní hranu přichyťte kolíčkem nebo páskou, ať nespadne na lepidlo. Na rub F vyznačte osu <span class="num">x 50,5</span>.');
+add('A','Položte F rubem nahoru na desku',7,'<b>F</b> položte rubem nahoru celou na tvrdou desku, ohyb dna u hrany desky. <b>B</b> stojí nad ohybem nahoru (ohyb asi <b>90°</b>). Vyschlý ohyb táhne B zpátky k F: opřete ji zezadu o knihu nebo krabičku a horní hranu přichyťte kolíčkem nebo páskou, ať nespadne na lepidlo. Na rub F vyznačte osu <span class="num">x 50,5</span>.');
 add('A','G1: přilepte plíšek na rub F',6.5,'Plíšek (výchozí <span class="num">14 × 20,5 × 0,5</span>, s přepážkami 0,8 <span class="num">14 × 20</span>) přilepte <b>kontaktním lepidlem</b> na rub F na osu do plochy <b>G1</b>: výchozí <span class="num">x 43,5–57,5, y 3,5–24,0</span>. Přilnavost k oceli ověří zkušební kus. ' + TIPTAG + ' lepidlo na obě plochy a nechte zavadnout (orientačně 10–15 min, platí návod lepidla).');
 add('A','G2 a G2b: naneste lepidlo',7.5,'Lepidlo <b>G2</b> naneste na rub F přes plíšek i na rub D1: výchozí <span class="num">x 4–97, y 2–26</span>. Boční pásy <b>G2b</b> (<span class="num">1 mm</span>, x 4–5 a 96–97 do y 61) ohraničte <b>maskovací páskou z obou stran</b> a lepidlo naneste <b>párátkem</b>. <b>Pásky strhněte hned po nanesení lepidla</b>, než přiložíte D1. Přetok nad y 26 hned setřete.');
 add('A','Přilepte D1 rubem na rub F',6,'<b>D1 přilepte rubem na rub F</b> přes plíšek. D1 má přesně 93 bez vůle: přikládejte ji podle osy <span class="num">x 50,5</span> (je na obou dílech), <b>zdola od y 2 nahoru</b>.');
@@ -475,8 +475,8 @@ function figASide() {
   // stůl a PE deska (hrana desky pod ohybem)
   s += Rect(-16, -t - peT - 3, 86, -t - peT, 'table') + Ln(-16, -t - peT, 86, -t - peT, 'tline');
   s += Rect(-t, -t - peT, 86, -t, 'pe');
-  s += T(84, -t - peT / 2, 'PE deska', { a: 'end', bl: 'middle', c: 'm', k: 0.8 });
-  s += T(-15, -t - peT - 3.6, 'F leží rubem nahoru na PE desce', { bl: 'hanging', c: 'm', k: 0.85 });
+  s += T(84, -t - peT / 2, 'tvrdá deska', { a: 'end', bl: 'middle', c: 'm', k: 0.8 });
+  s += T(-15, -t - peT - 3.6, 'F leží rubem nahoru na tvrdé desce', { bl: 'hanging', c: 'm', k: 0.85 });
   // kniha a kolíček za B (od konce kroku 1)
   const bk = i === 0 ? SM(0.62, 0.8, u) : 1;
   if (bk > 0.01) {
@@ -517,20 +517,20 @@ function figASide() {
     s += G(bo, mallet(15, w0 + 3.2 + bounce, 0.7, 0));
   }
   s += T(84, 44, 'tloušťky 3×', { a: 'end', c: 'm', k: 0.85 });
-  return svgWrap(vb, s, 'Z boku: F rubem nahoru na PE desce, B stojí nahoru, plíšek a D1 na rubu F');
+  return svgWrap(vb, s, 'Z boku: F rubem nahoru na tvrdé desce, B stojí nahoru, plíšek a D1 na rubu F');
 }
 
 /* ========== B. magnet (lekce 11) ========== */
 add('B','Najděte plíšek a označte polohu magnetu',9,'Vložte obsah <b>stavu B</b>: 2 staré karty, 1 bankovku nebo papír 0,7 z lekce 10 (<b>ne kartu</b>), bez mincí. <b>Zkušebním magnetem</b> najděte po líci F hrany plíšku (výchozí <span class="num">y 3,5 a 24,0</span>). Značku magnetu (výchozí <b class="num">y 11,9</b>) odměřte <b>posuvkou</b> od spodní hrany, označte páskou a po nalepení pásky přeměřte. Okno lepení je ve výchozím střihu <span class="num">11,73–12,13</span>, s přepážkami 0,8 jen <span class="num">11,50–11,63</span>. Zavřete víčko a značku přeneste <b>ryskami na boky jazýčku</b>. Konec jazýčku je zatím rovný.');
-add('B','Nanečisto: který magnet',8,'Sílu magnetu vyzkoušejte nanečisto (orientačně, rozhodne až zkouška Z-1): magnet s kouskem kozinky přichyťte <b>tenkou páskou</b> na rub jazýčku na značku, víčko zavřete, zatřeste, otočte dnem vzhůru a otevřete jedním prstem za špičku. Postupně zkuste <span class="num">Ø 8 × 1, 8 × 1,5 a 8 × 2</span>. S magnetem 1,5 pokračujte. Jinou tloušťku si zapište a nechte střih přepočítat (jako v lekci 2); lepte až po přepočtu, když kontroly projdou.');
+add('B','Nanečisto: který magnet',8,'Sílu magnetu vyzkoušejte nanečisto (orientačně, rozhodne až zkouška Z-1): magnet s kouskem kozinky přichyťte <b>tenkou páskou</b> na rub jazýčku na značku, víčko zavřete, zatřeste, otočte dnem vzhůru a otevřete jedním prstem za špičku. Postupně zkuste <span class="num">Ø 8 × 1, 8 × 1,5 a 8 × 2</span>. Výchozí je magnet 1,5. Jinou tloušťku si zapište a nechte střih přepočítat (jako v lekci 2); lepte až po přepočtu, když kontroly projdou.');
 add('B','Zdrsněte rub konce jazýčku',5.5,'Víčko otevřete, díváte se na <b>rub jazýčku</b>. Rysky na bocích a osa <span class="num">x 50,5</span> dávají střed magnetu. Rub konce jazýčku <b>zdrsněte</b>.');
-add('B','Přilepte magnet epoxidem',6.5,'Magnet (výchozí <span class="num">Ø 8 × 1,5</span>) přilepte <b>dvousložkovým epoxidem</b> středem na značku a na osu, tedy <b class="num">7,0</b> nad budoucí špičkou. Epoxid používejte podle návodu výrobce. Nechte ztuhnout (orientačně 30 min, ověřte), ať se při lepení L1 neposune.');
-add('B','Natřete jazýček a L1 lepidlem',6.5,'Teprve <b>po ztuhnutí epoxidu</b> natřete <b>kontaktním lepidlem</b> rub jazýčku kolem magnetu i L1 (přířez z listu 3, výchozí <span class="num">24 × 22</span>) a nechte zavadnout. ' + TIPTAG + ' orientačně 10–15 min, platí návod lepidla.');
+add('B','Přilepte magnet epoxidem',6.5,'Magnet (výchozí <span class="num">Ø 8 × 1,5</span>) přilepte <b>dvousložkovým epoxidem</b> středem na spojnici rysek značky a na osu jazýčku, tedy <b class="num">7,0</b> nad budoucí špičkou. Epoxid používejte podle návodu výrobce. Nechte ztuhnout (orientačně 30 min, ověřte), ať se při lepení L1 neposune.');
+add('B','Natřete jazýček a L1 lepidlem',8,'Po ztuhnutí epoxidu přiložte na rub <b>šablonu konce jazýčku</b> křížkem na střed magnetu a tužkou udělejte <b>rysku horní hrany L1</b>. Pak natřete <b>kontaktním lepidlem</b> rub jazýčku kolem magnetu i L1 (přířez z listu 3, výchozí <span class="num">24 × 22</span>) a nechte zavadnout. ' + TIPTAG + ' orientačně 10–15 min, platí návod lepidla.');
 add('B','Přiložte L1 na rysku 10 mm',8,'L1 přiložte <b>horní hranou na rysku 10 mm nad středem magnetu</b> (šablona z listu 4). Přířez je na každé straně o 2 širší než jazýček. Přitlačte <b>prsty nebo převalujte kolíkem</b>. <b>Přes magnet paličkou netlučte</b>, neodym se může odštípnout.');
 add('B','Nechte 24 h vytvrdit',7,'Peněženku položte <b>zády na stůl</b> a víčko narovnejte <b>vodorovně jako prodloužení zad</b> (ne zavřené, ne přehnuté přes záda). Pás víčka lehce zatižte <b>knihou mimo magnet</b>; magnet musí být aspoň pár cm od plíšku. Bez zátěže víčko nenechávejte, samo se zavře. Nechte <b>24 h</b> vytvrdit, teprve pak šijte S7 a zkoušejte držení. Závěs nenavlhčujte (jestli rovná poloha nezmění jeho tvar, ukáže zkouška Z-2).');
-add('B','Ořízněte špičku R10 a boky L1',7,'Podle šablony uřízněte nožem špičku <b>R10</b> <b class="num">7,0</b> pod značkou (rysky), <b>skrz jazýček i L1 najednou</b>. Zároveň seřízněte <b>boky L1</b> načisto s boky jazýčku. Střed oblouku leží 3,0 nad středem magnetu.');
+add('B','Ořízněte špičku R10 a boky L1',7,'Šablonu přiložte na <b>líc jazýčku</b> křížkem na rysky značky a na osu a podle ní uřízněte nožem špičku <b>R10</b> <b class="num">7,0</b> pod značkou, <b>skrz jazýček i L1 najednou</b>. Zároveň seřízněte <b>boky L1</b> načisto s boky jazýčku. Střed oblouku leží 3,0 nad středem magnetu. Nůž veďte tahem od prstů volné ruky.');
 add('B','Zbruste klín v posledních 2,5 mm',6,'Udělejte rysku 2,5 od špičky a jen mezi ryskou a špičkou zbruste klín <b>brusným papírem na hranolku</b>, z líce i z rubu, ne nožem. Za ryskou nebruste, magnet nesmí ležet na ztenčeném místě. Konec stačí asi <span class="num">0,5–0,7</span>, zaoblený.');
-add('B','Propíchněte a děrujte S7',10,'Šablonu z <b>listu 4</b> přiložte na <b>líc</b> jazýčku podle obrysu špičky a jehlou propíchněte <b>8 otvorů S7</b> (U kolem magnetu, ke špičce otevřené). Pod jazýček dejte <b>podložku s otvorem Ø 10</b> (dva slepené odřezky usně 1,0 nebo odřezek desky 2 mm), magnet leží v otvoru. Děrujte z líce vidličkou 4 mm: boky (x 44,5 a 56,5) dvěma zuby svisle, horní řadu (14 nad špičkou) vodorovně, rohy jedním krajním zubem. Zuby na bocích natočte tak, aby otvory měly stejný sklon jako horní řada (vyzkoušejte na odřezku). Magnet přitahuje ocelovou vidličku i jehlu: <b>děrujte opatrně</b>, jazýček pevně na podložce.');
+add('B','Propíchněte a děrujte S7',10,'Šablonu z <b>listu 4</b> přiložte na <b>líc</b> jazýčku podle obrysu špičky a jehlou propíchněte <b>8 otvorů S7</b> (U kolem magnetu, ke špičce otevřené). Pod jazýček dejte na tvrdou desku <b>podložku s otvorem Ø 10</b> (dva slepené odřezky usně 1,0 nebo odřezek desky 2 mm), magnet leží v otvoru. Děrujte z líce vidličkou 4 mm: boky (x 44,5 a 56,5) dvěma zuby svisle, horní řadu (14 nad špičkou) vodorovně, rohy jedním krajním zubem. Zuby na bocích natočte tak, aby otvory měly stejný sklon jako horní řada (vyzkoušejte na odřezku). Magnet přitahuje ocelovou vidličku i jehlu: <b>děrujte opatrně</b>, jazýček pevně na podložce.');
 add('B','Ušijte S7, pak dokončete hrany',6.5,'Šijte <b>sedlovým stehem</b>: 8 otvorů, 7 stehů, konce 2 otvory zpět. Pak hrany jazýčku vybruste, zkoste a vyleštěte (jako v lekci 5).');
 add('B','Kontrola: magnet drží přes L1 a F',6.5,'Víčko zavřete. Magnet přitahuje plíšek <b>přes L1 a F</b> (mezera <span class="num">1,6</span> = L1 0,6 + F 1,0; v záloze A je F 0,8). Držení zkoušejte až po vytvrzení, zkouškou Z-1 v lekci 12.');
 function holeMark(h, punched) {
@@ -591,13 +591,15 @@ function figBTop() {
     return svgWrap(vb, s, 'Konec jazýčku na líci F, pohled zepředu');
   }
   // rub nebo líc jazýčku (víčko otevřené)
-  s += T(15.5, 38.5, view === 'rub' ? 'rub jazýčku' : 'líc jazýčku', { c: 'm', bl: 'hanging' });
+  // B8 (i 6): ořez podle šablony na líci; kreslí se ve větvi rubu, ale z líce (L1 pod jazýčkem)
+  const licCut = i === 6;
+  s += T(15.5, 38.5, view === 'rub' && !licCut ? 'rub jazýčku' : 'líc jazýčku', { c: 'm', bl: 'hanging' });
   s += T(15.5, 38.5 - FS * 1.2, 'víčko otevřené', { c: 'm', bl: 'hanging', k: 0.9 });
   const off = i === 6 ? 1 - SM(0.62, 0.85, u) : 0;
   // odřezky (B8)
   const oc = u < 0.6 ? null : 'off';
-  if (i === 6 && off > 0.01) s += G(off, Poly(tongueAt(CUT, L1T), oc || (view === 'rub' ? 'rubf' : 'kzl')) + Rect(L1X[0], L1B, L1X[1], L1T, oc || 'd1'));
-  const tcls = view === 'rub' ? 'rubf' : 'kzl';
+  if (i === 6 && off > 0.01) s += G(off, Rect(L1X[0], L1B, L1X[1], L1T, oc || 'd1') + Poly(tongueAt(CUT, L1T), oc || 'kzl'));
+  const tcls = view === 'rub' && !licCut ? 'rubf' : 'kzl';
   s += Poly(tongueAt(endY, 45), tcls, 'id="bTongue"');
   if (view === 'rub') {
     // rysky a osa
@@ -622,7 +624,7 @@ function figBTop() {
       s += G(SM(0.55, 0.65, u), clockIcon(20, 5, u * 20) + TL(24.5, 5.6, ['podle návodu', 'epoxidu'], { k: 0.9 }));
     }
     // kontaktní lepidlo
-    const gl = at(3, 0.05, 0.35);
+    const gl = at(3, 0.24, 0.42);
     if (gl > 0.01 && i < 5) s += G(gl, Poly(tongueAt(CUT, L1T), 'glue'));
     if (mg > 0.01 && i >= 3 && i < 5) s += Circ(AX, YB, MR, 'mag', 'id="bMag"');
     // L1
@@ -636,12 +638,18 @@ function figBTop() {
         if (i === 3) s += G(at(3, 0.45, 0.6), Rect(x0, y0, x0 + w, y0 + h, 'glue')) + G(bl, TL(x0 + w / 2, y0 + h / 2 + 1, ['L1 24 × 22', 'rub, lepidlo'], { a: 'middle' }));
       } else if (i < 6) {
         s += Rect(L1X[0], L1B, L1X[1], L1T, 'd1', 'id="bL1"');
-      } else {
+      } else if (!licCut) {
         s += Poly(tongue(TIP, L1T), 'd1', 'id="bL1"');
       }
       if (i > 4 || (i === 4 && mv >= 1)) s += Circ(AX, YB, MR, 'hidm', 'id="bMagH"');
     }
-    if (i === 3) s += G(SM(0.1, 0.25, u), TL(15.5, 24, ['kontaktní', 'lepidlo kolem', 'magnetu'], {})) + G(SM(0.6, 0.7, u), clockIcon(20, 3, u * 20) + TL(24.5, 3.6, ['zavadnout', '10–15 min'], { k: 0.9 }));
+    if (i === 3) {
+      // šablona konce jazýčku křížkem na střed magnetu, ryska horní hrany L1
+      const tw = win(A, 3, 0.02, 0.08, 0.18, 0.24);
+      s += G(tw * 0.85, Poly(tongue(TIP, L1T + 2), 'paper')) + G(tw, Ln(AX - 2.2, YB, AX + 2.2, YB, 'mark') + Ln(AX, YB - 2.2, AX, YB + 2.2, 'mark') + TL(15.5, 31, ['šablona: křížek', 'na střed magnetu'], {}));
+      s += G(SM(0.1, 0.16, u), Ln(TX0 - 6, L1T, TX1 + 6, L1T, 'guide')) + G(SM(0.1, 0.16, u) * (1 - SM(0.24, 0.3, u)), TL(TX1 + 2.2, L1T + 4, ['ryska horní', 'hrany L1'], {}));
+    }
+    if (i === 3) s += G(SM(0.28, 0.38, u), TL(15.5, 24, ['kontaktní', 'lepidlo kolem', 'magnetu'], {})) + G(SM(0.6, 0.7, u), clockIcon(20, 3, u * 20) + TL(24.5, 3.6, ['zavadnout', '10–15 min'], { k: 0.9 }));
     if (i === 4) {
       const gd = 1 - SM(0.7, 0.8, u);
       s += G(gd, Ln(TX0 - 6, L1T, TX1 + 6, L1T, 'guide') + TL(15.5, L1T + 4, ['ryska 10 nad', 'středem magnetu'], {}));
@@ -662,6 +670,9 @@ function figBTop() {
     }
     if (i === 6) {
       const path = [[TX0, L1T + 0.01]].concat(tongue(TIP, L1T).slice(1, -1)).concat([[TX1, L1T]]);
+      const tw = win(A, 6, 0, 0.04, 0.6, 0.66);
+      s += G(tw * 0.55, Poly(tongue(TIP, L1T), 'paper')) + G(tw, Ln(AX - 2.2, YB, AX + 2.2, YB, 'mark') + Ln(AX, YB - 2.2, AX, YB + 2.2, 'mark'));
+      s += G(SM(0.02, 0.12, u) * (1 - SM(0.6, 0.66, u)), TL(15.5, 21, ['šablona na líci,', 'křížek na rysky a osu'], { k: 0.9 }));
       const kp = SM(0.05, 0.6, u);
       if (kp > 0.01 && kp < 1) { const pp = cut(path, kp); const hd = pp[pp.length - 1]; s += PathO(pp, 'cutl') + knife(hd[0], hd[1], 0.55, 20); }
       if (kp >= 1 && off > 0.01) s += G(off, PathO(path, 'cutl'));
@@ -783,7 +794,7 @@ function figBSec() {
     }
   } else if (i >= 8) {
     // líc nahoru na podložce s otvorem Ø 10 (i 8) nebo šití (i 9)
-    s += Rect(-6, -0.5 * Z - 2.2, 31, -0.5 * Z, 'pe') + T(30.5, -0.5 * Z - 1.1, 'PE deska', { a: 'end', bl: 'middle', k: 0.85, c: 'm' });
+    s += Rect(-6, -0.5 * Z - 2.2, 31, -0.5 * Z, 'pe') + T(30.5, -0.5 * Z - 1.1, 'tvrdá deska', { a: 'end', bl: 'middle', k: 0.85, c: 'm' });
     const sup = i === 9 ? 1 : SM(0.46, 0.56, u);
     s += G(sup, Rect(-6, -0.5 * Z, YB - 5, 1.5 * Z, 'kzp', 'id="sSup"') + Rect(YB + 5, -0.5 * Z, 31, 1.5 * Z, 'kzp') + dimH(-0.5 * Z - 3.6, YB - 5, YB + 5, 'otvor Ø 10', true, { k: 0.85 }));
     s += `<g transform="${flipT}">${assembly(true, { mag: true })}</g>`;
@@ -803,13 +814,15 @@ function figBSec() {
     // pracovní poloha: rub jazýčku nahoru
     const rough = i >= 1 && at(1, 0.25, 0.85) > 0.3;
     const mg = at(2, 0.22, 0.5);
-    s += Rect(-6, -t - 2, 31, -t, 'table', 'opacity=".6"');
+    // B8 (i 6): řez se kreslí líc nahoru jako v horním obrázku (šablona na líci)
+    const s0 = s; if (i === 6) s = '';
+    if (i !== 6) s += Rect(-6, -t - 2, 31, -t, 'table', 'opacity=".6"');
     s += Poly(band(XS(endY, 31), (x) => -t + wl(x), () => 0), 'kzl', 'id="sTongue"');
     if (i === 6 && trimmed < 1) { const oc = u < 0.6 ? null : 'off'; s += G(1 - trimmed, Poly(band(XS(CUT, TIP), () => -t, () => 0), oc || 'kzl') + Poly(band(XS(L1B, TIP), low, (x) => low(x) + tl), oc || 'd1')); }
     if (rough && i < 5) s += PathO(XS(endY, L1T).filter((_, k) => k % 3 === 0).map((x, k) => [x, k % 2 ? 0.25 : 0]), 'rough');
     if (i === 2 && mg < 1) s += G(at(2, 0.05, 0.2), Rect(YB - 1.8, 0, YB + 1.8, 0.35, 'epo'));
     if (mg > 0.01) s += G(mg, `<g transform="translate(0,${r3(-6 * (1 - mg))})">${Rect(M0, 0.02, M1, tm, 'mag', 'id="sMag"')}</g>`) + (mg >= 1 ? Ln(M0, 0, M1, 0, 'epol') : '');
-    const gl = at(3, 0.05, 0.35);
+    const gl = at(3, 0.24, 0.42);
     if (gl > 0.01 && i < 5 && mv < 0.5) s += G(gl, Ln(endY, 0.1, M0 - 0.2, 0.1, 'gluel') + Ln(M1 + 0.2, 0.1, L1T, 0.1, 'gluel'));
     const bl = at(3, 0.3, 0.45);
     if (bl > 0.01) {
@@ -823,12 +836,12 @@ function figBSec() {
     if (i >= 7) s += G(SM(0.05, 0.2, u), Ln(WEDGE, -t - 0.8, WEDGE, tl + 0.8, 'guide') + T(WEDGE + 0.3, -t - 0.6, 'ryska 2,5', { k: 0.85, bl: 'hanging' }));
     if (i === 7) s += G(SM(0.8, 0.95, u), T(TIP - 0.5, -t - 3.2, 'hrana asi 0,5–0,7', { k: 0.85, bl: 'hanging' }));
     // popisky
-    s += T(30.5, -t / 2, 'jazýček 1,0, rub nahoru', { a: 'end', bl: 'middle', k: 0.9 });
+    if (i === 6) s = s0 + `<g transform="${flipT}">${s}</g>` + T(30.5, tm + tl + t / 2, 'jazýček 1,0, líc nahoru', { a: 'end', bl: 'middle', k: 0.9 }) + T(L1T + 0.5, tm + tl / 2, 'L1 0,6', { bl: 'middle', k: 0.9 }) + G(1 - trimmed, T(CUT, tm + tl + t + 1.4, 'odřezek', { c: 'b', k: 0.85 }));
+    else s += T(30.5, -t / 2, 'jazýček 1,0, rub nahoru', { a: 'end', bl: 'middle', k: 0.9 });
     if (i === 1) s += G(SM(0.3, 0.45, u), T(0, 2.4, 'zdrsnit', { k: 0.9 }));
     if (mg > 0.9 && i < 4) s += T(M1 + 1, tm + 1, 'magnet 1,5 na epoxidu', { k: 0.9 });
     if (i === 3) s += G(gl, T(-5.5, 2.4, 'kontaktní lepidlo', { k: 0.9 })) + G(bl, T(L1T + 0.5, hov + tl / 2, 'L1 0,6', { bl: 'middle', k: 0.9 }));
-    if (i >= 4 && mv > 0.9) s += T(L1T + 0.5, tl / 2 + 0.2, 'L1 0,6', { bl: 'middle', k: 0.9 }) + T(M0 - 0.5, tm + tl + 1, 'L1 přes magnet', { a: 'end', k: 0.9 });
-    if (i === 6) s += G(1 - trimmed, T(CUT, -t - 2.6, 'odřezek', { c: 'b', k: 0.85, bl: 'hanging' }));
+    if (i >= 4 && i !== 6 && mv > 0.9) s += T(L1T + 0.5, tl / 2 + 0.2, 'L1 0,6', { bl: 'middle', k: 0.9 }) + T(M0 - 0.5, tm + tl + 1, 'L1 přes magnet', { a: 'end', k: 0.9 });
   }
   s += T(-5.5, 16.6, 'řez v ose, tloušťky zvětšené 3×', { c: 'm', k: 0.85, bl: 'hanging' });
   return svgWrap(vb, s, 'Řez koncem jazýčku');
