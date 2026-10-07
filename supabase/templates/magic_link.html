@@ -61,9 +61,37 @@
               </td>
             </tr>
             <tr>
-              <td style="font-size: 16px; line-height: 1.55; padding-bottom: 20px">
-                Dobrý den,<br />tímto odkazem se přihlásíte do Hidepath. Otevřete ho ve stejném
-                prohlížeči, ve kterém jste o něj požádali.
+              <td style="font-size: 16px; line-height: 1.55; padding-bottom: 12px">
+                Dobrý den,<br />pro přihlášení do Hidepath opište v aplikaci tento kód:
+              </td>
+            </tr>
+            <tr>
+              <td style="font-size: 16px; font-weight: 600; padding-bottom: 4px">
+                Kód pro přihlášení:
+              </td>
+            </tr>
+            <tr>
+              <td
+                style="
+                  font-family: ui-monospace, Menlo, monospace;
+                  font-size: 32px;
+                  font-weight: 700;
+                  letter-spacing: 0.2em;
+                  padding-bottom: 8px;
+                "
+              >
+                {{ .Token }}
+              </td>
+            </tr>
+            <tr>
+              <td style="font-size: 14px; line-height: 1.5; color: #6b5f57; padding-bottom: 24px">
+                Na iPhonu v aplikaci na ploše opište kód; odkaz by se otevřel v Safari.
+              </td>
+            </tr>
+            <tr>
+              <td style="font-size: 15px; line-height: 1.55; padding-bottom: 12px">
+                V prohlížeči se můžete přihlásit i odkazem. Otevřete ho ve stejném prohlížeči, ve
+                kterém jste o přihlášení požádali.
               </td>
             </tr>
             <tr>
@@ -80,32 +108,14 @@
                     padding: 12px 20px;
                     border-radius: 8px;
                   "
-                  >Přihlásit se</a
+                  >Přihlásit se odkazem</a
                 >
               </td>
             </tr>
             <tr>
-              <td style="font-size: 15px; line-height: 1.55; padding-bottom: 8px">
-                Pokud odkaz nejde otevřít ve stejném prohlížeči (například na telefonu z instalované
-                aplikace), zadejte v aplikaci tento kód:
-              </td>
-            </tr>
-            <tr>
-              <td
-                style="
-                  font-family: ui-monospace, Menlo, monospace;
-                  font-size: 28px;
-                  letter-spacing: 0.2em;
-                  padding-bottom: 24px;
-                "
-              >
-                {{ .Token }}
-              </td>
-            </tr>
-            <tr>
               <td style="font-size: 13px; line-height: 1.5; color: #6b5f57">
-                Odkaz i kód platí asi hodinu. Pokud jste o přihlášení nežádali, e-mail ignorujte;
-                bez kliknutí se nic nestane.
+                Kód i odkaz platí asi hodinu a jen z posledního e-mailu. Pokud jste o přihlášení
+                nežádali, e-mail ignorujte; nic se nestane.
               </td>
             </tr>
           </table>

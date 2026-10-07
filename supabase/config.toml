@@ -216,12 +216,6 @@ web3 = 30
 # provider = "hcaptcha"
 # secret = ""
 
-# Vlastní česká šablona (supabase/templates/magic_link.html) jde na hostovaném projektu zapnout
-# až s vlastním SMTP (free tier s výchozím odesílatelem šablony nepovolí):
-# [auth.email.template.magic_link]
-# subject = "Přihlášení do Hidepath"
-# content_path = "./supabase/templates/magic_link.html"
-
 [auth.email]
 # Allow/disallow new user signups via email to your project.
 enable_signup = true
@@ -248,6 +242,21 @@ otp_expiry = 3600
 # pass = "env(SENDGRID_API_KEY)"
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
+
+# Česká šablona s kódem (OTP) i odkazem – zapnuto pro LOKÁLNÍ vývoj (`supabase start`, e-maily
+# v Mailpitu). Kód potřebuje instalovaná PWA na iPhonu (odkaz z Mailu se otevře v Safari).
+# Pozor: `supabase config push` by šablonu propsal i do hostovaného projektu; tam ji nastavte
+# ručně až po vlastním SMTP (free tier bez něj šablony upravit nedovolí) –
+# postup v docs/deploy/prihlaseni-kodem.md.
+[auth.email.template.magic_link]
+subject = "Přihlášení do Hidepath"
+content_path = "./supabase/templates/magic_link.html"
+
+# Nový uživatel dostane při zapnutém potvrzování (`enable_confirmations`) šablonu Confirm signup;
+# i v ní musí být kód, proto stejný obsah.
+[auth.email.template.confirmation]
+subject = "Přihlášení do Hidepath"
+content_path = "./supabase/templates/magic_link.html"
 
 # Uncomment to customize email template
 # [auth.email.template.invite]

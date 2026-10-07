@@ -1,6 +1,7 @@
 import { type Session as SupabaseSession } from '@supabase/supabase-js';
 import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 
+import { clearPendingLogin, resolvePendingLoginStorage } from '@/features/auth/email-code';
 import { type Session, type SessionUser } from '@/features/auth/session';
 import { resolveBrowserStorage } from '@/features/data/local-collection';
 import { clearUserSyncData } from '@/features/sync/synced-collection';
@@ -63,6 +64,7 @@ export function SessionProvider({
         const userId = session.user?.id;
         if (userId) clearUserSyncData(resolveBrowserStorage().storage, userId);
         timerStore.update(() => []);
+        clearPendingLogin(resolvePendingLoginStorage());
       },
     }),
     [session],

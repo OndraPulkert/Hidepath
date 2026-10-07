@@ -53,10 +53,9 @@ supabase gen types typescript --linked > src/lib/supabase/database.types.ts
 1. **Doména**: v `supabase/config.toml` nastavit `site_url = "https://<domena>"` a
    `additional_redirect_urls = ["https://<domena>/**"]`, localhost položky odebrat, `supabase config push`.
    Dnes hostovaný projekt povoluje jen localhost (pro vývoj proti cloudu).
-2. **Vlastní SMTP** (Resend, Postmark, …) a poté zapnout českou šablonu
-   `supabase/templates/magic_link.html` (odkomentovat `[auth.email.template.magic_link]`). Šablona
-   obsahuje i `{{ .Token }}`, aby šlo do aplikace doplnit zadání kódu pro případ, že se odkaz otevře
-   v jiném prohlížeči (instalovaná PWA). Free tier bez vlastního SMTP šablonu nepovolí.
+2. **Vlastní SMTP** a česká šablona `supabase/templates/magic_link.html` s kódem – bez ní se
+   instalovaná PWA na iPhonu nepřihlásí (aplikace čeká kód z e-mailu). Přesný postup v Dashboardu:
+   [prihlaseni-kodem.md](prihlaseni-kodem.md). Free tier bez vlastního SMTP šablonu nepovolí.
 3. **Captcha** na `signInWithOtp` (`[auth.captcha]`, Turnstile) proti zneužití odesílání e-mailů.
 4. **Rate limity**: `max_frequency = "1m0s"` je nastaveno; s vlastním SMTP nastavit `email_sent`.
 5. **Hesla**: `minimum_password_length = 12` + požadavky – aplikace hesla nepoužívá, platí jen pro

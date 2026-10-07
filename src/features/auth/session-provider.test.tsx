@@ -1,6 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { PENDING_LOGIN_KEY } from '@/features/auth/email-code';
 import { SessionProvider, useSession } from '@/features/auth/session-provider';
 import { userSyncKeys } from '@/features/sync/synced-collection';
 import { TIMERS_STORAGE_KEY, timerStore } from '@/features/timers/timer-store';
@@ -40,9 +41,10 @@ describe('SessionProvider – odhlášení', () => {
     auth.signOut.mockResolvedValue({ error: null });
   });
 
-  it('smaže z prohlížeče zápisník, přípravu, outbox a časovače odhlášeného uživatele', async () => {
+  it('smaže z prohlížeče zápisník, přípravu, outbox, časovače a rozpracované přihlášení odhlášeného uživatele', async () => {
     seed(USER);
     seed(OTHER);
+    localStorage.setItem(PENDING_LOGIN_KEY, '{}');
     timerStore.update(() => [
       {
         id: 't1',
@@ -74,6 +76,7 @@ describe('SessionProvider – odhlášení', () => {
       expect(localStorage.getItem(key)).toBe('[]');
     expect(localStorage.getItem(TIMERS_STORAGE_KEY)).toBeNull();
     expect(timerStore.getSnapshot()).toEqual([]);
+    expect(localStorage.getItem(PENDING_LOGIN_KEY)).toBeNull();
   });
 
   it('když odhlášení selže, data nechá', async () => {
