@@ -1,6 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { type FormEvent, useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { Link, Navigate, useLocation } from 'react-router';
 import { z } from 'zod';
 
@@ -9,6 +7,8 @@ import { Brand } from '@/components/layout/brand';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input, Label } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
+import { Segment, SegmentButton } from '@/components/ui/segment';
 import {
   type AuthErrorLike,
   clearPendingLogin,
@@ -24,18 +24,20 @@ import {
   startPendingLogin,
 } from '@/features/auth/email-code';
 import { buildEmailRedirectUrl } from '@/features/auth/magic-link';
+import { describeSignInError } from '@/features/auth/password';
 import { readReturnTo } from '@/features/auth/session';
 import { useSession } from '@/features/auth/session-provider';
 import { supabase } from '@/lib/supabase/client';
 
-const loginSchema = z.object({
-  email: z.email({ error: 'Zadejte platnou e-mailovou adresu.' }),
-});
+const emailSchema = z.email({ error: 'Zadejte platnou e-mailovou adresu.' });
 
-type LoginValues = z.infer<typeof loginSchema>;
-type SendState = { kind: 'idle' } | { kind: 'sending' } | { kind: 'error'; message: string };
+type Method = 'password' | 'link';
+type FormState =
+  | { kind: 'idle' }
+  | { kind: 'busy' }
+  | { kind: 'error'; message: string; field?: 'email' | 'password' };
 
-/** Odešle e-mail s kódem i odkazem. Odkaz dál funguje v prohlížeči, kód v instalované PWA. */
+/** Odešle e-mail s odkazem (a s kódem, když ho šablona obsahuje). Odkaz funguje v prohlížeči. */
 async function sendLoginEmail(email: string, returnTo: string): Promise<AuthErrorLike | null> {
   if (!supabase) return { message: 'Supabase není nastavený.' };
   const { error } = await supabase.auth.signInWithOtp({
@@ -48,26 +50,42 @@ async function sendLoginEmail(email: string, returnTo: string): Promise<AuthErro
   return error;
 }
 
+async function signInWithPassword(email: string, password: string): Promise<AuthErrorLike | null> {
+  if (!supabase) return { message: 'Supabase není nastavený.' };
+  try {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    return error;
+  } catch {
+    return { message: 'network', name: 'AuthRetryableFetchError' };
+  }
+}
+
 /**
- * Přihlášení bez hesla (Supabase Auth). E-mail nese odkaz (PKCE, návrat přes `returnTo` do
- * callbacku) i kód. Kód se opisuje do aplikace – na iPhonu se odkaz z instalované PWA otevře
- * v Safari s odděleným úložištěm. Rozpracovaný krok s kódem drží localStorage, aby přežil
- * přepnutí do Mailu a zpět. Bez nakonfigurovaného Supabase stránka vysvětlí lokální režim.
+ * Přihlášení (Supabase Auth) dvěma způsoby:
+ * - **E-mail a heslo** (výchozí) – funguje i v instalované PWA na iPhonu, kde se odkaz z e-mailu
+ *   otevře v Safari s odděleným úložištěm. Heslo si člověk nastaví v Účtu po přihlášení odkazem.
+ * - **Odkaz e-mailem** – zakládá účet (registrace heslem tu záměrně není). Návrat přes `returnTo`
+ *   do callbacku. Volitelný krok s kódem z e-mailu zapíná `VITE_AUTH_EMAIL_CODE=1` (výchozí vypnuto).
+ * Bez nakonfigurovaného Supabase stránka vysvětlí lokální režim.
  */
 export function LoginPage() {
   const location = useLocation();
   const { session, authAvailable } = useSession();
   const returnTo = readReturnTo(location.search, routes.dashboard);
+  // Přímé porovnání (ne volání funkce), aby Vite/minifier při vypnutém příznaku krok s kódem
+  // z produkčního buildu úplně vypustil. Pravidlo je stejné jako `isEmailCodeEnabled`.
+  const codeEnabled = import.meta.env.VITE_AUTH_EMAIL_CODE === '1';
   const [storage] = useState(resolvePendingLoginStorage);
   const [pending, setPending] = useState<PendingLogin | null>(() =>
-    authAvailable ? readPendingLogin(storage, Date.now()) : null,
+    authAvailable && codeEnabled ? readPendingLogin(storage, Date.now()) : null,
   );
-  const [state, setState] = useState<SendState>({ kind: 'idle' });
-
-  const form = useForm<LoginValues>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: { email: pending?.email ?? '' },
-  });
+  const [method, setMethod] = useState<Method>(pending ? 'link' : 'password');
+  const [email, setEmail] = useState(pending?.email ?? '');
+  const [password, setPassword] = useState('');
+  const [linkSentTo, setLinkSentTo] = useState<string | null>(null);
+  const [state, setState] = useState<FormState>({ kind: 'idle' });
+  // Pojistka proti dvojímu odeslání (dvojí ťuknutí, Enter + tlačítko) dřív, než se překreslí.
+  const inFlight = useRef(false);
 
   const authenticated = session.status === 'authenticated';
   useEffect(() => {
@@ -82,16 +100,56 @@ export function LoginPage() {
     setPending(next);
   };
 
-  const onSubmit = form.handleSubmit(async ({ email }) => {
-    setState({ kind: 'sending' });
-    const error = await sendLoginEmail(email, returnTo);
+  const switchMethod = (next: Method) => {
+    setMethod(next);
+    setState({ kind: 'idle' });
+  };
+
+  const checkEmail = (): string | null => {
+    const parsed = emailSchema.safeParse(email.trim());
+    if (parsed.success) return parsed.data;
+    setState({ kind: 'error', field: 'email', message: 'Zadejte platnou e-mailovou adresu.' });
+    return null;
+  };
+
+  const submitPassword = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const address = checkEmail();
+    if (!address || inFlight.current) return;
+    if (password.length === 0) {
+      setState({ kind: 'error', field: 'password', message: 'Zadejte heslo.' });
+      return;
+    }
+    inFlight.current = true;
+    setState({ kind: 'busy' });
+    const error = await signInWithPassword(address, password);
+    inFlight.current = false;
+    // Úspěch: SessionProvider zachytí relaci (onAuthStateChange) a stránka přesměruje na
+    // návratovou adresu. Do té doby zůstává „Přihlašujeme…“.
+    if (error) setState({ kind: 'error', message: describeSignInError(error) });
+  };
+
+  const submitLink = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const address = checkEmail();
+    if (!address || inFlight.current) return;
+    inFlight.current = true;
+    setState({ kind: 'busy' });
+    const error = await sendLoginEmail(address, returnTo);
+    inFlight.current = false;
     if (error) {
-      setState({ kind: 'error', message: describeSendError(error).message });
+      setState({ kind: 'error', message: describeSendError(error, codeEnabled).message });
       return;
     }
     setState({ kind: 'idle' });
-    updatePending(startPendingLogin(email));
-  });
+    if (codeEnabled) updatePending(startPendingLogin(address));
+    else setLinkSentTo(address);
+  };
+
+  const busy = state.kind === 'busy';
+  const emailError = state.kind === 'error' && state.field === 'email' ? state.message : null;
+  const passwordError = state.kind === 'error' && state.field === 'password' ? state.message : null;
+  const formError = state.kind === 'error' && !state.field ? state.message : null;
 
   return (
     <div className="flex min-h-dvh flex-col">
@@ -101,8 +159,8 @@ export function LoginPage() {
         </div>
         <h1 className="mb-3 text-[clamp(28px,4vw,40px)]">Přihlášení</h1>
         <p className="mb-6 text-lead text-ink-2">
-          Hidepath vás krok za krokem provede prvním koženým výrobkem. Přihlášení je bez hesla:
-          pošleme vám e-mail s kódem a odkazem a postup se uloží k vašemu účtu.
+          Hidepath vás krok za krokem provede prvním koženým výrobkem. Postup se uloží k vašemu
+          účtu.
         </p>
 
         {!authAvailable ? (
@@ -117,20 +175,57 @@ export function LoginPage() {
               </Link>
             </Button>
           </Card>
-        ) : pending ? (
+        ) : codeEnabled && pending ? (
           <CodeStep
             pending={pending}
             onPendingChange={updatePending}
-            onResend={async (email) => sendLoginEmail(email, returnTo)}
+            onResend={async (address) => sendLoginEmail(address, returnTo)}
             onChangeEmail={() => {
-              form.reset({ email: pending.email });
+              setEmail(pending.email);
               updatePending(null);
             }}
           />
+        ) : linkSentTo ? (
+          <Card tone="forest" role="status">
+            <h2 className="text-h2">Odkaz jsme poslali</h2>
+            <p className="mt-2 text-body">
+              Poslali jsme ho na <strong>{linkSentTo}</strong>. Otevřete ho ve stejném prohlížeči,
+              ve kterém jste o něj požádali. Platí asi hodinu.
+            </p>
+            <p className="mt-3 text-meta text-ink-2">
+              Nepřišel? Zkontrolujte spam, nebo{' '}
+              <button
+                type="button"
+                className="inline-flex min-h-touch items-center underline"
+                onClick={() => setLinkSentTo(null)}
+              >
+                pošlete odkaz znovu
+              </button>
+              .
+            </p>
+          </Card>
         ) : (
           <Card>
+            <Segment role="group" aria-label="Způsob přihlášení" className="mb-5 flex w-full">
+              <SegmentButton
+                active={method === 'password'}
+                className="flex-1"
+                onClick={() => switchMethod('password')}
+              >
+                E-mail a heslo
+              </SegmentButton>
+              <SegmentButton
+                active={method === 'link'}
+                className="flex-1"
+                onClick={() => switchMethod('link')}
+              >
+                Poslat odkaz e-mailem
+              </SegmentButton>
+            </Segment>
             <form
-              onSubmit={(event) => void onSubmit(event)}
+              onSubmit={(event) =>
+                void (method === 'password' ? submitPassword(event) : submitLink(event))
+              }
               noValidate
               className="flex flex-col gap-4"
             >
@@ -138,32 +233,76 @@ export function LoginPage() {
                 <Label htmlFor="email">E-mail</Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   inputMode="email"
-                  autoComplete="email"
+                  autoComplete={method === 'password' ? 'username' : 'email'}
+                  autoCapitalize="off"
+                  spellCheck={false}
                   placeholder="jmeno@priklad.cz"
-                  aria-invalid={form.formState.errors.email ? true : undefined}
-                  aria-describedby={form.formState.errors.email ? 'email-error' : undefined}
-                  {...form.register('email')}
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  aria-invalid={emailError ? true : undefined}
+                  aria-describedby={emailError ? 'email-error' : undefined}
                 />
-                {form.formState.errors.email ? (
+                {emailError ? (
                   <p id="email-error" role="alert" className="mt-1.5 text-meta text-cognac-deep">
-                    {form.formState.errors.email.message}
+                    {emailError}
                   </p>
                 ) : null}
               </div>
-              {state.kind === 'error' ? (
+              {method === 'password' ? (
+                <div>
+                  <Label htmlFor="password">Heslo</Label>
+                  <PasswordInput
+                    id="password"
+                    name="password"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    aria-invalid={passwordError ? true : undefined}
+                    aria-describedby={passwordError ? 'password-error' : undefined}
+                  />
+                  {passwordError ? (
+                    <p
+                      id="password-error"
+                      role="alert"
+                      className="mt-1.5 text-meta text-cognac-deep"
+                    >
+                      {passwordError}
+                    </p>
+                  ) : null}
+                </div>
+              ) : null}
+              {formError ? (
                 <p role="alert" className="text-body text-cognac-deep">
-                  {state.message}
+                  {formError}
                 </p>
               ) : null}
-              <Button type="submit" disabled={state.kind === 'sending'} className="w-full">
-                {state.kind === 'sending' ? 'Odesíláme…' : 'Poslat přihlašovací e-mail'}
-              </Button>
-              <p className="text-meta text-ink-2">
-                Účet vznikne automaticky s prvním přihlášením. Postup uložený v tomto prohlížeči se
-                po přihlášení přenese do vašeho účtu.
-              </p>
+              {method === 'password' ? (
+                <>
+                  <Button type="submit" disabled={busy} className="w-full">
+                    {busy ? 'Přihlašujeme…' : 'Přihlásit'}
+                  </Button>
+                  <p className="text-meta text-ink-2">
+                    Poprvé tady? Zvolte „Poslat odkaz e-mailem“ – účet vznikne s prvním odkazem.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <Button type="submit" disabled={busy} className="w-full">
+                    {busy ? 'Odesíláme…' : 'Poslat odkaz'}
+                  </Button>
+                  <p className="text-meta text-ink-2">
+                    Na iPhonu v aplikaci na ploše použijte heslo – odkaz se otevře v Safari. Heslo
+                    si nastavíte po přihlášení odkazem (Účet → Heslo).
+                  </p>
+                  <p className="text-meta text-ink-2">
+                    Účet vznikne automaticky s prvním odkazem. Postup uložený v tomto prohlížeči se
+                    po přihlášení přenese do vašeho účtu.
+                  </p>
+                </>
+              )}
             </form>
           </Card>
         )}

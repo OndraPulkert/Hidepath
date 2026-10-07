@@ -6,6 +6,8 @@ interface ImportMetaEnv {
   readonly VITE_SUPABASE_URL?: string;
   /** Veřejný anon key Supabase. Service-role key sem nikdy nepatří. */
   readonly VITE_SUPABASE_ANON_KEY?: string;
+  /** `1` zapne krok „Opište kód z e-mailu“ (vyžaduje vlastní SMTP a šablonu). Výchozí vypnuto. */
+  readonly VITE_AUTH_EMAIL_CODE?: string;
   /** Jen pro integrační testy (pnpm test:db); nikdy v klientském buildu. */
   readonly HIDEPATH_TEST_SUPABASE_URL?: string;
   readonly HIDEPATH_TEST_SUPABASE_ANON_KEY?: string;

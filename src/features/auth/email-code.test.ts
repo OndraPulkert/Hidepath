@@ -4,6 +4,7 @@ import {
   clearPendingLogin,
   describeSendError,
   describeVerifyError,
+  isEmailCodeEnabled,
   isValidCode,
   normalizeCode,
   PENDING_LOGIN_KEY,
@@ -62,6 +63,20 @@ describe('odpočet a limity', () => {
     expect(describeSendError({ message: 'Volejte 800 123 456' }).message).toBe(
       'E-mail se nepodařilo odeslat. Zkuste to prosím za chvíli.',
     );
+  });
+
+  it('isEmailCodeEnabled: zapnuto jen přesně „1“, výchozí vypnuto', () => {
+    expect(isEmailCodeEnabled(undefined)).toBe(false);
+    expect(isEmailCodeEnabled('')).toBe(false);
+    expect(isEmailCodeEnabled('0')).toBe(false);
+    expect(isEmailCodeEnabled('true')).toBe(false);
+    expect(isEmailCodeEnabled('1')).toBe(true);
+  });
+
+  it('describeSendError bez kódu neradí kód z e-mailu', () => {
+    const error = { message: 'email rate limit exceeded', code: 'over_email_send_rate_limit' };
+    expect(describeSendError(error, false).message).toMatch(/odkaz z posledního e-mailu/);
+    expect(describeSendError(error, true).message).toMatch(/kód z posledního e-mailu/);
   });
 
   it('describeVerifyError: špatný vs. vypršelý kód podle času odeslání', () => {

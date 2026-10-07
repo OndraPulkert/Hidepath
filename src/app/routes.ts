@@ -19,6 +19,8 @@ export const routes = {
   authCallback: '/auth/callback',
   onboarding: '/onboarding',
   dashboard: '/dashboard',
+  /** Účet přihlášeného uživatele (nastavení hesla). */
+  account: '/account',
   shopping: '/shopping',
   workshop: '/workshop',
   offline: '/offline',

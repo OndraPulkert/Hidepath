@@ -1,10 +1,24 @@
+import { type AuthErrorLike, isNetworkError, OFFLINE_MESSAGE } from '@/features/auth/auth-errors';
 import { type StorageLike } from '@/features/data/local-collection';
+
+export type { AuthErrorLike } from '@/features/auth/auth-errors';
 
 /**
  * Přihlášení kódem z e-mailu (Supabase e-mailové OTP). Instalovaná PWA na iPhonu odkaz z e-mailu
  * nedostane – Mail ho otevře v Safari, které má oddělené úložiště. Kód se proto opíše do aplikace.
  * Tady jsou jen čistá pravidla; stránka přihlášení je jen skládá.
+ *
+ * Krok s kódem je VOLITELNÝ a výchozí VYPNUTÝ: kód se do e-mailu dostane jen z vlastní šablony,
+ * a tu Supabase na free tieru povolí jen s vlastním SMTP. Bez něj iPhone používá heslo
+ * (`password.ts`). Zapíná se při buildu `VITE_AUTH_EMAIL_CODE=1` – viz docs/deploy/prihlaseni-kodem.md.
  */
+
+/** Zda aplikace po odeslání e-mailu ukáže krok „Opište kód“. Hodnota se čte při buildu (Vite). */
+export function isEmailCodeEnabled(
+  flag: string | undefined = import.meta.env.VITE_AUTH_EMAIL_CODE,
+): boolean {
+  return flag === '1';
+}
 
 /** Supabase povoluje délku kódu 6–10 číslic (`auth.email.otp_length`, výchozí 6). */
 export const CODE_MIN_LENGTH = 6;
@@ -38,27 +52,12 @@ export function readRetryAfterSeconds(message: string): number | null {
   return match ? Number(match[1]) : null;
 }
 
-/** Minimální tvar chyby ze Supabase Auth (AuthError), aby šla pravidla testovat bez klienta. */
-export interface AuthErrorLike {
-  message: string;
-  code?: string | undefined;
-  name?: string | undefined;
-  status?: number | undefined;
-}
-
 export type SendFailure =
   | { kind: 'cooldown'; retryAfterSeconds: number; message: string }
   | { kind: 'error'; message: string };
 
-const OFFLINE_MESSAGE =
-  'Nepodařilo se spojit se serverem. Zkontrolujte připojení a zkuste to znovu.';
-
-function isNetworkError(error: AuthErrorLike): boolean {
-  return error.name === 'AuthRetryableFetchError' || /fetch|network/i.test(error.message);
-}
-
 /** Přeloží chybu odeslání e-mailu. Surový text ze serveru se nikdy nezobrazuje. */
-export function describeSendError(error: AuthErrorLike): SendFailure {
+export function describeSendError(error: AuthErrorLike, codeEnabled = true): SendFailure {
   const retryAfter = readRetryAfterSeconds(error.message);
   if (retryAfter !== null || error.code === 'over_request_rate_limit') {
     const seconds = retryAfter ?? RESEND_COOLDOWN_SECONDS;
@@ -71,8 +70,9 @@ export function describeSendError(error: AuthErrorLike): SendFailure {
   if (error.code === 'over_email_send_rate_limit' || /rate limit|too many/i.test(error.message)) {
     return {
       kind: 'error',
-      message:
-        'Odeslali jsme teď příliš mnoho e-mailů. Zkuste to později, nebo použijte kód z posledního e-mailu.',
+      message: codeEnabled
+        ? 'Odeslali jsme teď příliš mnoho e-mailů. Zkuste to později, nebo použijte kód z posledního e-mailu.'
+        : 'Odeslali jsme teď příliš mnoho e-mailů. Zkuste to později, nebo použijte odkaz z posledního e-mailu.',
     };
   }
   if (isNetworkError(error)) return { kind: 'error', message: OFFLINE_MESSAGE };

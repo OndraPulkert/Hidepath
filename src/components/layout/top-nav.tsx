@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from 'react-router';
 
-import { isNavItemActive, primaryNavItemsFor } from '@/app/routes';
+import { isNavItemActive, primaryNavItemsFor, routes } from '@/app/routes';
 import { useSession } from '@/features/auth/session-provider';
 import { useDataContext } from '@/features/data/data-provider';
 import { useActiveProject } from '@/features/projects/use-active-project';
@@ -90,6 +90,13 @@ export function TopNav({ hideOnMobile = false }: TopNavProps) {
             >
               {session.user?.email}
             </span>
+            <NavLink
+              to={routes.account}
+              aria-current={pathname === routes.account ? 'page' : undefined}
+              className="inline-flex min-h-touch items-center rounded-control px-3 text-[14px] font-semibold text-leather no-underline hover:bg-parchment hover:text-leather"
+            >
+              Účet
+            </NavLink>
             <button
               type="button"
               onClick={() => void handleSignOut()}

@@ -4,6 +4,7 @@ import { routePatterns, routes } from '@/app/routes';
 import { AppShell } from '@/components/layout/app-shell';
 import { RootLayout } from '@/components/layout/root-layout';
 import { RequireAuth } from '@/features/auth/require-auth';
+import { AccountPage } from '@/pages/account-page';
 import { AuthCallbackPage } from '@/pages/auth-callback-page';
 import { DashboardPage } from '@/pages/dashboard-page';
 import { HomeRoute } from '@/pages/home-route';
@@ -44,6 +45,7 @@ export const appRoutes: RouteObject[] = [
             element: <AppShell />,
             children: [
               { path: routes.dashboard, element: <DashboardPage /> },
+              { path: routes.account, element: <AccountPage /> },
               { path: routes.shopping, element: <ShoppingPage /> },
               { path: routePatterns.shoppingItem, element: <ShoppingItemPage /> },
               { path: routes.workshop, element: <WorkshopPage /> },

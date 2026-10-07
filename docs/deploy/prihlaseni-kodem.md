@@ -1,10 +1,16 @@
-# Přihlášení kódem z e-mailu (hostovaný Supabase)
+# Přihlášení kódem z e-mailu (hostovaný Supabase) – volitelné, výchozí vypnuto
+
+> **Nepotřebujete to.** iPhone (aplikace na ploše) se přihlašuje heslem –
+> [prihlaseni-heslem.md](prihlaseni-heslem.md), bez SMTP a bez nastavování v Supabase.
+> Krok s kódem je v aplikaci vypnutý a zapne se jen buildem s `VITE_AUTH_EMAIL_CODE=1`. Má smysl
+> teprve, když budete chtít vlastní SMTP (Resend, Brevo…) a šablonu s kódem. Bez příznaku
+> aplikace po odeslání ukáže jen „Odkaz jsme poslali“.
 
 ## Proč
 
 Instalovaná PWA na iPhonu odkaz z e-mailu nedostane: Mail ho otevře v Safari, které má oddělené
-úložiště od aplikace na ploše, takže se přihlásí Safari, ne aplikace. Aplikace proto po odeslání
-e-mailu ukáže krok **„Opište kód z e-mailu“** a kód ověří přes
+úložiště od aplikace na ploše, takže se přihlásí Safari, ne aplikace. Aplikace proto (s `VITE_AUTH_EMAIL_CODE=1`)
+po odeslání e-mailu ukáže krok **„Opište kód z e-mailu“** a kód ověří přes
 `supabase.auth.verifyOtp({ email, token, type: 'email' })`. Odkaz v e-mailu dál funguje v prohlížeči.
 
 Kód (`{{ .Token }}`) se do e-mailu dostane jen z vlastní šablony. Výchozí šablony Supabase obsahují

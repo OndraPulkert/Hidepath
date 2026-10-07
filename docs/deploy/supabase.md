@@ -53,13 +53,14 @@ supabase gen types typescript --linked > src/lib/supabase/database.types.ts
 1. **Doména**: v `supabase/config.toml` nastavit `site_url = "https://<domena>"` a
    `additional_redirect_urls = ["https://<domena>/**"]`, localhost položky odebrat, `supabase config push`.
    Dnes hostovaný projekt povoluje jen localhost (pro vývoj proti cloudu).
-2. **Vlastní SMTP** a česká šablona `supabase/templates/magic_link.html` s kódem – bez ní se
-   instalovaná PWA na iPhonu nepřihlásí (aplikace čeká kód z e-mailu). Přesný postup v Dashboardu:
-   [prihlaseni-kodem.md](prihlaseni-kodem.md). Free tier bez vlastního SMTP šablonu nepovolí.
+2. **Vlastní SMTP** – pro reálné uživatele kvůli limitu výchozího odesílatele (jen členové týmu,
+   2 e-maily/h). iPhone (aplikace na ploše) se přihlašuje heslem a SMTP nepotřebuje
+   ([prihlaseni-heslem.md](prihlaseni-heslem.md)); volitelný kód z e-mailu:
+   [prihlaseni-kodem.md](prihlaseni-kodem.md).
 3. **Captcha** na `signInWithOtp` (`[auth.captcha]`, Turnstile) proti zneužití odesílání e-mailů.
 4. **Rate limity**: `max_frequency = "1m0s"` je nastaveno; s vlastním SMTP nastavit `email_sent`.
-5. **Hesla**: `minimum_password_length = 12` + požadavky – aplikace hesla nepoužívá, platí jen pro
-   testovací účty.
+5. **Hesla**: `minimum_password_length = 12` + malá/velká písmena a číslice – platí pro přihlášení
+   heslem v aplikaci (`PASSWORD_MIN_LENGTH` v `src/features/auth/password.ts` musí sedět).
 6. **Testovací účty**: `pnpm test:db` běží jen proti lokální instanci (remote vyžaduje
    `HIDEPATH_TEST_ALLOW_REMOTE=1`), heslo je náhodné per běh, účty se po testu mažou.
 7. **Build**: `pnpm build` odmítne produkční build bez `VITE_SUPABASE_*` nebo s localhost URL;

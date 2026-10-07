@@ -14,6 +14,7 @@ interface AuthResult {
 const auth = vi.hoisted(() => ({
   listener: null as Listener | null,
   signInWithOtp: vi.fn(),
+  signInWithPassword: vi.fn(),
   verifyOtp: vi.fn(),
 }));
 
@@ -21,6 +22,7 @@ vi.mock('@/lib/supabase/client', () => ({
   supabase: {
     auth: {
       signInWithOtp: auth.signInWithOtp,
+      signInWithPassword: auth.signInWithPassword,
       verifyOtp: auth.verifyOtp,
       signOut: async () => Promise.resolve({ error: null }),
       onAuthStateChange: (listener: Listener) => {
@@ -52,23 +54,176 @@ function renderLogin(url = '/login?returnTo=%2Fworkshop') {
   return { router, ...view };
 }
 
-async function requestCode(user: ReturnType<typeof userEvent.setup>) {
+type User = ReturnType<typeof userEvent.setup>;
+
+async function sendLink(user: User) {
+  await user.click(screen.getByRole('button', { name: 'Poslat odkaz e-mailem' }));
   await user.type(screen.getByLabelText('E-mail'), EMAIL);
-  await user.click(screen.getByRole('button', { name: 'Poslat přihlašovací e-mail' }));
+  await user.click(screen.getByRole('button', { name: 'Poslat odkaz' }));
+}
+
+async function requestCode(user: User) {
+  await sendLink(user);
   await screen.findByRole('heading', { name: 'Opište kód z e-mailu' });
 }
 
-describe('LoginPage – přihlášení kódem z e-mailu', () => {
-  beforeEach(() => {
-    localStorage.clear();
-    auth.listener = null;
-    auth.signInWithOtp.mockReset();
-    auth.signInWithOtp.mockResolvedValue({ error: null } satisfies AuthResult);
-    auth.verifyOtp.mockReset();
+beforeEach(() => {
+  localStorage.clear();
+  auth.listener = null;
+  auth.signInWithOtp.mockReset();
+  auth.signInWithOtp.mockResolvedValue({ error: null } satisfies AuthResult);
+  auth.signInWithPassword.mockReset();
+  auth.verifyOtp.mockReset();
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+  vi.unstubAllEnvs();
+});
+
+describe('LoginPage – e-mail a heslo (výchozí)', () => {
+  it('je výchozí způsob; pole mají autocomplete pro Klíčenku iOS', () => {
+    renderLogin();
+    expect(screen.getByRole('button', { name: 'E-mail a heslo' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    expect(screen.getByLabelText('E-mail')).toHaveAttribute('autocomplete', 'username');
+    expect(screen.getByLabelText('Heslo')).toHaveAttribute('autocomplete', 'current-password');
+    expect(screen.getByLabelText('Heslo')).toHaveAttribute('type', 'password');
   });
 
-  afterEach(() => {
-    vi.useRealTimers();
+  it('správné heslo přihlásí a přesměruje na návratovou adresu', async () => {
+    auth.signInWithPassword.mockImplementation(async () => {
+      auth.listener?.('SIGNED_IN', SIGNED_IN);
+      return Promise.resolve({ data: { session: SIGNED_IN }, error: null });
+    });
+    const user = userEvent.setup();
+    const { router } = renderLogin();
+    await user.type(screen.getByLabelText('E-mail'), EMAIL);
+    await user.type(screen.getByLabelText('Heslo'), 'Tajne-Heslo-123');
+    await user.click(screen.getByRole('button', { name: 'Přihlásit' }));
+
+    expect(auth.signInWithPassword).toHaveBeenCalledWith({
+      email: EMAIL,
+      password: 'Tajne-Heslo-123',
+    });
+    expect(await screen.findByRole('heading', { name: 'Moje dílna' })).toBeInTheDocument();
+    expect(router.state.location.pathname).toBe('/workshop');
+    expect(auth.signInWithOtp).not.toHaveBeenCalled();
+  });
+
+  it('špatné údaje: obecná česká chyba, neprozradí, jestli účet existuje, a poradí odkaz', async () => {
+    auth.signInWithPassword.mockResolvedValue({
+      data: {},
+      error: { message: 'Invalid login credentials', code: 'invalid_credentials', status: 400 },
+    });
+    const user = userEvent.setup();
+    renderLogin();
+    await user.type(screen.getByLabelText('E-mail'), EMAIL);
+    await user.type(screen.getByLabelText('Heslo'), 'spatne');
+    await user.click(screen.getByRole('button', { name: 'Přihlásit' }));
+
+    const alert = await screen.findByRole('alert');
+    expect(alert).toHaveTextContent('E-mail nebo heslo nesedí.');
+    expect(alert).toHaveTextContent(
+      'Ještě nemáte heslo? Přihlaste se odkazem a nastavte si ho v Účtu.',
+    );
+    expect(screen.queryByText(/Invalid login credentials/)).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Přihlásit' })).toBeEnabled();
+  });
+
+  it('chyba sítě: řekne, ať zkontrolujete připojení', async () => {
+    auth.signInWithPassword.mockResolvedValue({
+      data: {},
+      error: { message: 'Failed to fetch', name: 'AuthRetryableFetchError', status: 0 },
+    });
+    const user = userEvent.setup();
+    renderLogin();
+    await user.type(screen.getByLabelText('E-mail'), EMAIL);
+    await user.type(screen.getByLabelText('Heslo'), 'Tajne-Heslo-123');
+    await user.click(screen.getByRole('button', { name: 'Přihlásit' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent(/Zkontrolujte připojení/);
+  });
+
+  it('výjimka klienta (offline) se hlásí jako chyba sítě', async () => {
+    auth.signInWithPassword.mockRejectedValue(new TypeError('Load failed'));
+    const user = userEvent.setup();
+    renderLogin();
+    await user.type(screen.getByLabelText('E-mail'), EMAIL);
+    await user.type(screen.getByLabelText('Heslo'), 'Tajne-Heslo-123');
+    await user.click(screen.getByRole('button', { name: 'Přihlásit' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent(/Zkontrolujte připojení/);
+  });
+
+  it('bez hesla nebo s neplatným e-mailem nic neodešle', async () => {
+    const user = userEvent.setup();
+    renderLogin();
+    await user.type(screen.getByLabelText('E-mail'), 'neni-email');
+    await user.click(screen.getByRole('button', { name: 'Přihlásit' }));
+    expect(screen.getByRole('alert')).toHaveTextContent('Zadejte platnou e-mailovou adresu.');
+    await user.clear(screen.getByLabelText('E-mail'));
+    await user.type(screen.getByLabelText('E-mail'), EMAIL);
+    await user.click(screen.getByRole('button', { name: 'Přihlásit' }));
+    expect(screen.getByRole('alert')).toHaveTextContent('Zadejte heslo.');
+    expect(auth.signInWithPassword).not.toHaveBeenCalled();
+  });
+});
+
+describe('LoginPage – odkaz e-mailem, krok s kódem vypnutý (výchozí)', () => {
+  it('po odeslání jen oznámí odkaz; krok s kódem se neukáže ani po reloadu', async () => {
+    const user = userEvent.setup();
+    const first = renderLogin();
+    await user.click(screen.getByRole('button', { name: 'Poslat odkaz e-mailem' }));
+    expect(screen.getByText(/odkaz se otevře v Safari/)).toBeInTheDocument();
+    expect(screen.getByLabelText('E-mail')).toHaveAttribute('autocomplete', 'email');
+    expect(screen.queryByLabelText('Heslo')).not.toBeInTheDocument();
+    await user.type(screen.getByLabelText('E-mail'), EMAIL);
+    await user.click(screen.getByRole('button', { name: 'Poslat odkaz' }));
+
+    expect(auth.signInWithOtp).toHaveBeenCalledWith({
+      email: EMAIL,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback?returnTo=%2Fworkshop`,
+        shouldCreateUser: true,
+      },
+    });
+    expect(await screen.findByRole('heading', { name: 'Odkaz jsme poslali' })).toBeInTheDocument();
+    expect(screen.getByText(EMAIL)).toBeInTheDocument();
+    expect(screen.queryByLabelText('Kód z e-mailu')).not.toBeInTheDocument();
+    expect(localStorage.getItem(PENDING_LOGIN_KEY)).toBeNull();
+
+    first.unmount();
+    renderLogin();
+    expect(screen.queryByRole('heading', { name: 'Opište kód z e-mailu' })).not.toBeInTheDocument();
+  });
+
+  it('ignoruje rozpracovaný krok s kódem z dřívějška', () => {
+    localStorage.setItem(
+      PENDING_LOGIN_KEY,
+      JSON.stringify({ email: EMAIL, sentAt: Date.now(), resendAt: Date.now() }),
+    );
+    renderLogin();
+    expect(screen.queryByLabelText('Kód z e-mailu')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('Heslo')).toBeInTheDocument();
+  });
+
+  it('limit e-mailů neradí kód, který v e-mailu není', async () => {
+    auth.signInWithOtp.mockResolvedValue({
+      error: { message: 'email rate limit exceeded', code: 'over_email_send_rate_limit' },
+    } satisfies AuthResult);
+    const user = userEvent.setup();
+    renderLogin();
+    await sendLink(user);
+    const alert = await screen.findByRole('alert');
+    expect(alert).toHaveTextContent(/příliš mnoho e-mailů/);
+    expect(alert).not.toHaveTextContent(/kód/);
+  });
+});
+
+describe('LoginPage – přihlášení kódem z e-mailu (VITE_AUTH_EMAIL_CODE=1)', () => {
+  beforeEach(() => {
+    vi.stubEnv('VITE_AUTH_EMAIL_CODE', '1');
   });
 
   it('po odeslání ukáže krok s kódem; odkaz dál míří na callback s návratovou adresou', async () => {
@@ -241,6 +396,7 @@ describe('LoginPage – přihlášení kódem z e-mailu', () => {
     renderLogin();
     await requestCode(user);
     await user.click(screen.getByRole('button', { name: 'Změnit e-mail' }));
+    await user.click(screen.getByRole('button', { name: 'Poslat odkaz e-mailem' }));
     expect(screen.getByLabelText('E-mail')).toHaveValue(EMAIL);
     expect(localStorage.getItem(PENDING_LOGIN_KEY)).toBeNull();
   });
@@ -251,9 +407,8 @@ describe('LoginPage – přihlášení kódem z e-mailu', () => {
     } satisfies AuthResult);
     const user = userEvent.setup();
     renderLogin();
-    await user.type(screen.getByLabelText('E-mail'), EMAIL);
-    await user.click(screen.getByRole('button', { name: 'Poslat přihlašovací e-mail' }));
-    expect(await screen.findByRole('alert')).toHaveTextContent(/příliš mnoho e-mailů/);
+    await sendLink(user);
+    expect(await screen.findByRole('alert')).toHaveTextContent(/použijte kód/);
     expect(screen.queryByLabelText('Kód z e-mailu')).not.toBeInTheDocument();
   });
 });
