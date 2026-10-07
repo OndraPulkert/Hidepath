@@ -122,7 +122,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
   </div>
   <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
 </section>
-<p class="note">Postup podle lekce 5 (kroky „Hlavní způsob: přilepte šablonu na líc“, „Před řezáním propíchněte značky“, „Vyřízněte pás skrz papír“, „Sejměte šablonu a zkontrolujte značky“ a „Narýsujte čáry ohybů na rub“, kontrolní body a bezpečnost). Ztenčení ohybu B se u kůže 1,2 mm přeskakuje; otvory dna se prosekávají až v dalším kroku lekce. Barvy kůže a nástrojů jsou schematické, řez kůží v detailu je zvětšený. Kroky a poznámky označené „Tip“ lekce 5 výslovně neuvádí. Lekce 4 sem odkazuje u cvičného proužku (kroky A2, A3, B1 a D3): postup je stejný, proužek ale nemá kapsu, druk ani oblouky a navíc se propichují konce čáry švu.</p>
+<p class="note">Postup podle lekce 5 (kroky „Hlavní způsob: přilepte šablonu na líc“, „Před řezáním propíchněte značky“, „Vyřízněte pás skrz papír“, „Sejměte šablonu a zkontrolujte značky“ a „Narýsujte čáry ohybů na rub“, kontrolní body a bezpečnost). Ztenčení ohybu B se u kůže 1,2 mm přeskakuje; otvory dna se prosekávají až v dalším kroku lekce. Barvy kůže a nástrojů jsou schematické, řez kůží v detailu je zvětšený. Kroky a poznámky označené „Tip“ lekce 5 výslovně neuvádí. Lekce 4 sem odkazuje u cvičného proužku (kroky A2, A3, B1 a D3): postup je stejný, proužek ale nemá kapsu, druk ani oblouky, list se dolní hranou (dole ustřiženou přesně po obrysu) přikládá na rovnou dolní hranu kusu kůže a navíc se propichují konce čáry švu.</p>
 </div>
 
 <script>
@@ -353,7 +353,7 @@ function cutSection(passes,p){
   s+=`<path d="M${cx+4} ${y0-9} V${y0-4}" stroke="var(--ok)" stroke-width=".35"/>`+lbl(cx+5.5,y0-6,'kolmo','tok');
   return s;
 }
-add('B','Rovné strany podle ocelového pravítka','Řežte skrz papír i kůži přesně po vytištěné čáře obrysu. Rovné strany s ocelovým pravítkem položeným na čáru, na dva až tři lehké tahy, nůž kolmo.',11000,t=>{
+add('B','Rovné strany podle ocelového pravítka','Řežte skrz papír i kůži přesně po vytištěné čáře obrysu. Rovné strany s ocelovým pravítkem položeným na čáru, na dva až tři lehké tahy, nůž kolmo. Pravítko položte na pás, tedy na díl, který si necháváte, ne na odpad: když nůž ujede, poškodí odpad, ne pás.',11000,t=>{
   const c=BOTC, rin=es(t,.02,.14);
   const passes=t<.22?0:t<.46?0:t<.7?1:2;
   const pp=t<.22?0:t<.46?seg(t,.22,.44):t<.7?seg(t,.46,.68):seg(t,.7,.92);
@@ -390,7 +390,7 @@ add('B','Všechny rovné strany pásu','Stejně podle pravítka projeďte všech
   let s=G(camT(c),inner)+tool;
   s+=pill(4,87,n<6?`rovné strany: ${n+1} / 6 – ${STRAIGHT[n].name}`:'rovné strany hotové, oblouky zatím ne',n<6?'t':'tok');
   return s;
-},{v:'LÍC',sub:'šablona na líci'},'Tip (lekce 5 to neuvádí): pořadí rovných stran lekce neurčuje – animace jde dokola od dna. Pravítko leží na pásu, ne na odpadu: když nůž ujede, poškodí odpad, ne díl (lekce 2 pouzdra na karty).');
+},{v:'LÍC',sub:'šablona na líci'},'Tip (lekce 5 to neuvádí): pořadí rovných stran lekce neurčuje – animace jde dokola od dna.');
 
 // B3 — třepí se: odlomit článek
 add('B','Třepí se řez? Odlomte článek čepele','Když začne řez třepit papír nebo kůži, odlomte článek čepele. Čepel vyměňte, jakmile začne trhat místo řezat (bezpečnost lekce 3).',7600,t=>{
@@ -462,7 +462,7 @@ add('C','Výřez na prst pomalu a plynule bez pravítka','Zbytek výřezu na prs
 },{v:'LÍC',sub:'šablona na líci'},'Tip (lekce to neuvádí): přechod přes ohyb A je na šabloně rovný úsek 15,69 mm, na který oba oblouky plynule navazují; animace ho vede jedním tahem s oblouky bez pravítka. Směr řezu lekce neurčuje.');
 
 // C3 — rohy
-add('C','Rohy jazyka R10 a rohy panelů R6','Zbývají rohy obrysu: dva rohy R10 na konci jazyka a tři rohy R6 (dole na zadním panelu, nahoře a dole na vnitřním). Řežte je po vytištěné čáře jako celý obrys. Konec jazyka je zatím orientační – v lekci 8 se zkrátí 11 mm za střed osazeného kloboučku a rohy se znovu zaoblí na R10.',12000,t=>{
+add('C','Rohy jazyka R10 a rohy panelů R6','Zaoblené jsou i rohy obrysu, přesně jak je kreslí šablona: dva rohy R10 na konci jazyka a tři rohy R6 – dole na zadním panelu a nahoře i dole na volném konci vnitřního panelu. Do ostrého rohu je neřežte; vyřízněte je po vytištěné čáře pomalu bez pravítka, krátkými tahy, nůž kolmo – stejně jako zaoblené rohy pouzdra na karty. Konec jazyka je zatím orientační: v lekci 8 se jazyk zkrátí 11 mm za střed osazeného kloboučku a rohy se znovu zaoblí na R10 – tam už bez šablony PÁS, rohovou šablonou (lob 20) nebo obtažením mince či víčka.',12000,t=>{
   const c=LEFTC; const u=es(t,.04,.86)*5, n=Math.min(5,Math.floor(u)), fr=u-Math.floor(u);
   let inner=mat()+leatherSheet()+paperRough()+printStrip()+tapes(1)+pricks(MARKS,.4/c.k);
   inner+=cutsDone(8,c.k);
@@ -477,11 +477,11 @@ add('C','Rohy jazyka R10 a rohy panelů R6','Zbývají rohy obrysu: dva rohy R10
   let ib=`<rect x="${ox}" y="${oy}" width="${f(W*k)}" height="${f(W*k)}" fill="var(--stage)" stroke="var(--line)" stroke-width=".3"/>`+clipRect(ox,oy,W*k,W*k,G(`translate(${ox} ${oy}) scale(${k}) translate(${f(-x0)} ${f(-y0)})`,d));
   if(cp>0&&cp<1){const [x,y,a]=at(cr.P,cp);ib+=clipRect(ox,oy,W*k,W*k,knife(ox+(x-x0)*k,oy+(y-y0)*k,KA(a)))}
   ib+=lbl(ox,oy+W*k+5,`${cr.r} · ${cr.name}`,'t');
-  ib+=notes([['po čáře obrysu','ts'],['jazyk: orientační,','ts'],['zkrátí se v lekci 8','ts']],oy+W*k+11,5);
+  ib+=notes([['po čáře, bez pravítka','ts'],['krátkými tahy','ts'],['jazyk: orientační,','ts'],['zkrátí se v lekci 8','ts']],oy+W*k+11,5);
   s+=inset('ROHY',ib);
   s+=pill(4,87,n<5?`rohy: ${n+1} / 5 – ${cr.r}`:'obrys proříznutý celý',n<5?'t':'tok');
   return s;
-},{v:'LÍC',sub:'šablona na líci'},'Tip (lekce 5 rohy zvlášť nezmiňuje, je to z lekce 5 pouzdra na karty): zaoblené rohy pomalu bez pravítka, krátkými tahy; pořadí rohů je jen ukázka.');
+},{v:'LÍC',sub:'šablona na líci'},'Tip (lekce to neuvádí): pořadí rohů je jen ukázka.');
 
 // ---------- D: sejmutí a čáry ohybů ----------
 add('D','Sejměte šablonu a zkontrolujte značky','Pásku strhávejte pomalu pod ostrým úhlem, skoro rovnoběžně s kůží, a šablonu sejměte. Zkontrolujte, že se přenesly všechny značky: konce čar obou ohybů, rohy kapsy, střed dříku a tečky dna. Chybějící značku už přes rozřezanou šablonu přesně nedoplníte.',11000,t=>{

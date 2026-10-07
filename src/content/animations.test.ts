@@ -369,7 +369,7 @@ describe('animace postupu – přenos, řez a otvory dna pásu v lekcích 4 a 5'
     [4, 'punch-flat', [otvory('E1'), otvory('A3'), otvory('D2')]],
     // Lekce 5: každý krok přenosu, řezu, čar ohybů a otvorů dna.
     [5, 'transfer-face', [prenos('A2'), prenos('A1')]],
-    [5, 'cut-strip', [prenos('B1'), prenos('C1'), prenos('C2'), prenos('B3')]],
+    [5, 'cut-strip', [prenos('B1'), prenos('C1'), prenos('C2'), prenos('C3'), prenos('B3')]],
     [5, 'peel-template', [prenos('D1')]],
     [5, 'draw-fold-lines', [prenos('D3'), prenos('D2')]],
     [5, 'punch-bottom-holes', [otvory('B1'), otvory('C1'), otvory('D1'), otvory('D2')]],

@@ -8,7 +8,9 @@
  * pro danou tloušťku), čáry ohybů, u 1,5 mm šrafa ztenčení ohybu B, čára švu dna 3,5 mm od hrany,
  * zrcadlené tečky otvorů (6 na panel), kroužky k propíchnutí šídlem, kontrolní úsečka 50 mm.
  * Přenos stejně jako list PÁS v lekci 5: vystřihnout nahrubo, přilepit páskou na líc, propíchnout,
- * řezat skrz papír po čáře. Geometrie je v src/lib/geometry/coin-card-holder-practice.ts.
+ * řezat skrz papír po čáře. Navíc (kus kůže je stejně vysoký jako proužek): dole list ustřihnout
+ * přesně po obrysu, přiložit na rovnou dolní hranu kůže (šev 3,5 mm se měří od ní) a pravítkem
+ * ověřit odstup kroužků švu od hrany. Geometrie je v src/lib/geometry/coin-card-holder-practice.ts.
  *
  * Výstup: docs/generated/pouzdro-mince-cvicny-prouzek.svg (kůže 1,5 mm, stejně jako bez přípony
  * u listů pásu) a pouzdro-mince-cvicny-prouzek-kuze-1-2mm.svg.
@@ -158,11 +160,13 @@ export function buildCoinHolderPracticeSvg(bodyThicknessMm = 1.2): string {
   column(out, m, m + 17, [
     '# Postup (lekce 4) – stejně jako u pásu v lekci 5',
     '1. Tiskněte na 100 % a změřte kontrolní úsečku dole: přesně 50 mm. Tloušťka kůže v nadpisu musí sedět na vaši kůži.',
-    '2. Proužek vystřihněte nůžkami nahrubo po čárkované čáře (okraj asi 1,5 cm).',
-    '3. Přilepte ho maskovací páskou na LÍC kůže – páska jen na okrajích papíru, mimo plnou čáru.',
-    '4. Šídlem propíchněte skrz papír všechny kroužky (konce čar ohybů a čáry švu) a všechny tečky dna.',
-    '5. Řežte nožem skrz papír i kůži po plné čáře, s ocelovým pravítkem. Pásku strhávejte pomalu.',
-    `6. Na RUBU spojte propíchnuté konce čar ohybů tužkou podle pravítka${skived ? ', u ohybu B odsaďte pásmo ztenčení.' : '.'}`,
+    '2. Proužek vystřihněte nůžkami nahrubo po čárkované čáře (okraj asi 1,5 cm), jen dole přesně po plné dolní čáře obrysu.',
+    `3. Dolní hranu listu přiložte přesně na rovnou dolní hranu kusu kůže (kus i proužek jsou ${cz(SH)} mm vysoké), po délce obrys vystřeďte.`,
+    '4. Přilepte ho maskovací páskou na LÍC kůže – páska jen na okrajích papíru, mimo plnou čáru.',
+    `5. Pravítkem ověřte, že kroužky na koncích čáry švu leží ${cz(P.stitchOffsetMm)} mm od dolní hrany kůže; když ne, list přiložte znovu.`,
+    '6. Šídlem propíchněte skrz papír všechny kroužky (konce čar ohybů a čáry švu) a všechny tečky dna.',
+    '7. Řežte nožem skrz papír i kůži po plné čáře, s ocelovým pravítkem. Pásku strhávejte pomalu.',
+    `8. Na RUBU spojte propíchnuté konce čar ohybů tužkou podle pravítka${skived ? ', u ohybu B odsaďte pásmo ztenčení.' : '.'}`,
   ]);
 
   /* --- okraj na vystřižení --- */
@@ -281,7 +285,7 @@ export function buildCoinHolderPracticeSvg(bodyThicknessMm = 1.2): string {
     skived
       ? `Šrafa = ohyb B ${cz(P.foldBMm)} mm a ${cz(P.foldSkiveMarginMm)} mm na obě strany (asi ${Math.round(P.foldBMm + 2 * P.foldSkiveMarginMm)} mm): ztenčit z rubu na ${cz(P.foldSkiveThicknessMm ?? 0)} mm jako v lekci 3.`
       : 'Kůže 1,2 mm: ohyby se neztenčují, kroky ztenčení v lekci 4 přeskočte.',
-    `Kus kůže asi ${cz(PRACTICE_STRIP.pieceLengthMm)} × ${cz(SH)} mm (lekce 4): obrys vystřeďte, na každém konci zbude asi ${cz1(P.pieceReserveEachEndMm)} mm`,
+    `Kus kůže asi ${cz(PRACTICE_STRIP.pieceLengthMm)} × ${cz(SH)} mm (lekce 4): dolní čára obrysu na dolní hraně kůže, po délce vystředit, na každém konci zbude asi ${cz1(P.pieceReserveEachEndMm)} mm`,
     'rezervy – hodí se na zkoušku barvy na hrany (lekce 4).',
   ];
   column(out, m, BLOCK_ORIGIN.y + bh + 8, lines, 2.3, 3.5);

@@ -46,7 +46,10 @@ prvního), až bude první pouzdro fyzicky hotové.
   Kůže 1,2 mm: 114,35 × 40, ohyb A 15,69, ohyb B 8,66 (`pouzdro-mince-cvicny-prouzek-kuze-1-2mm.svg`,
   v aplikaci předem zaškrtnutý); kůže 1,5 mm: 116,55 × 40, ohyb A 16,63, ohyb B 9,92
   (`pouzdro-mince-cvicny-prouzek.svg`). Na kusu 130 × 40 zbude na každém konci 7,8 / 6,7 mm
-  rezervy. V aplikaci na stránce Cvičné listy, odkaz z kroku „Vyřízněte cvičný proužek“ v lekci 4.
+  rezervy. Kus i proužek jsou vysoké 40 mm: list se dole ustřihne přesně po obrysu a jeho dolní
+  hrana se přiloží na rovnou dolní hranu kusu kůže (šev 3,5 mm se měří od ní), po délce vystředit;
+  pravítkem ověřit, že kroužky švu leží 3,5 mm od hrany. V aplikaci na stránce Cvičné listy, odkaz
+  z kroku „Vyřízněte cvičný proužek“ v lekci 4.
 
 ## Konstrukce (podle záběrů skládání, papírové šablony a fotek hotového kusu)
 
@@ -211,8 +214,12 @@ kůže jako tělo. Juchtová A5 1,2 mm jen na dva odřezky 57,5 × 57,5 pro tvar
    výřez, vytahování karty a místo pro kapsu; přídavky ohybů neprokáže (je tenčí).
 1. **Pás:** šablonu přilepit páskou na líc, šídlem přes list přenést na kůži konce čar ohybů A i B,
    rohy místa pro kapsu, střed patice (u varianty i průchodky) a všechny tečky dna, pak vyříznout
-   skrz papír (výřez plynule). Kapsa se dělá ze samostatného kusu kůže 1,2 mm ≥ 57,5 × 57,5
-   (forma Ø 31,5 počítá s 1,2 mm; i když je pás z 1,5 mm).
+   skrz papír (výřez plynule; rovné strany podle ocelového pravítka položeného na pás, ne na odpad –
+   když nůž ujede, poškodí odpad; rohy přesně podle šablony, ne do ostra: 2× R10 na konci jazyka,
+   vypouklé R2,5 u výřezu na předku a 3× R6 – dole na zadním panelu, nahoře i dole na volném konci
+   vnitřního; po čáře pomalu bez pravítka, krátkými tahy, jako rohy pouzdra na karty). Kapsa se
+   dělá ze samostatného kusu kůže 1,2 mm ≥ 57,5 × 57,5 (forma Ø 31,5 počítá s 1,2 mm; i když je
+   pás z 1,5 mm).
    **Čáry ohybů na rub:** propíchnuté konce všech 4 čar ohybů (A i B, u obou hran) spojit na rubu
    tužkou podle pravítka; podle nich se v kroku 5 navlhčí pásma ohybů.
    **Ztenčení ohybu B (jen u kůže 1,5 mm):** od narýsovaných čar ohybu B odsadit 3 mm na obě strany
@@ -384,4 +391,6 @@ doplnit ručně, do generátoru to nepatří.
   po složení nelícují, pečetění rubu s páskou na proužku 0–3,5 mm, rozhodnutí po papírovém modelu,
   vizuální kontrola hloubky důlku a tip na špalík; odkazy z lekcí na Listy střihu. Odřezky na
   druk z Blu A5 místo juchtové. Maskovací páska povinná, barva na hrany doporučená (bez ověřené
-  ceny odstínu).
+  ceny odstínu). Lekce 5: zaoblení rohů pásu podle šablony (R10, R2,5, R6) a pravítko na pásu,
+  ne na odpadu; lekce 4 a cvičný list: dolní hrana listu na dolní hranu kusu kůže, kontrola švu
+  3,5 mm pravítkem; krok lekce 5 „Vyřízněte pás skrz papír“ odkazuje i na krok animace C3 (rohy).

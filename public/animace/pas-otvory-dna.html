@@ -513,7 +513,7 @@ function practiceStrip(s0,st){
   g+=row(PR.hZ,st.Z,'\\')+row(PR.hP,st.P,'/')+row(PR.hV,st.V,'\\');
   return G(`translate(${f(PX_(c))} 0) scale(${f(Math.abs(s0)<.02?.02*Math.sign(s0||1):s0)} 1) translate(${f(-PX_(c))} 0)`,g);
 }
-add('E','Lekce 4: cvičný proužek stejně, 6 otvorů na panel','Na odřezku v lekci 4 je to stejné v malém: prostřední panel (zastupuje přední) z líce, oba krajní panely (zastupují zadní a vnitřní) z rubu – přesně jako to čeká finální pás. Z kusu asi 130 × 40 mm je proužek vyříznutý po obrysu cvičného listu pro kůži 1,2 mm: 114,35 × 40 mm, tři panely po 30 mm, ohyb A 15,69 mm a ohyb B 8,66 mm (lekce 4: asi 15,7 a 8,7). Rozteč 4 mm, linie švu 3,5 mm od dolní hrany, 6 otvorů na panel, krajní (30 − 5 × 4) / 2 = 5 mm od čáry ohybu i od konce proužku.',12000,t=>{
+add('E','Lekce 4: cvičný proužek stejně, 6 otvorů na panel','Na odřezku v lekci 4 je to stejné v malém: prostřední panel (zastupuje přední) z líce, oba krajní panely (zastupují zadní a vnitřní) z rubu – přesně jako to čeká finální pás. Z kusu asi 130 × 40 mm je proužek vyříznutý po obrysu cvičného listu pro kůži 1,2 mm (dolní čára obrysu přiložená na rovnou dolní hranu kusu, od ní se měří linie švu 3,5 mm): 114,35 × 40 mm, tři panely po 30 mm, ohyb A 15,69 mm a ohyb B 8,66 mm (lekce 4: asi 15,7 a 8,7). Rozteč 4 mm, linie švu 3,5 mm od dolní hrany, 6 otvorů na panel, krajní (30 − 5 × 4) / 2 = 5 mm od čáry ohybu i od konce proužku.',12000,t=>{
   const pFlip=es(t,.36,.56), s0=Math.cos(Math.PI*pFlip);
   const hitP=seg(t,.1,.3), hitZ=seg(t,.6,.75), hitV=seg(t,.78,.93);
   const st={Z:new Set(hitZ>=.5?range(6):[]),P:new Set(hitP>=.5?range(6):[]),V:new Set(hitV>=.5?range(6):[])};
