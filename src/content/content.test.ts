@@ -37,6 +37,17 @@ describe('obsah – validace schématem', () => {
     expect(JSON.stringify(result.error?.issues)).toContain('odkazuje na listy střihu');
   });
 
+  it('odkaz kroku na šablonu potřebuje projekt s obdélníkovou šablonou', () => {
+    const { template: _template, ...withoutTemplate } = cardHolderProject;
+    const result = projectDefinitionSchema.safeParse({
+      ...withoutTemplate,
+      patternSheets: cardHolderProject.practiceSheets,
+      practiceSheets: undefined,
+    });
+    expect(result.success).toBe(false);
+    expect(JSON.stringify(result.error?.issues)).toContain('odkazuje na šablonu');
+  });
+
   it('projekt odkazuje jen na existující vybavení', () => {
     const known = new Set(equipmentList.map((e) => e.slug));
     for (const req of cardHolderProject.equipment) {

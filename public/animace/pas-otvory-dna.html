@@ -12,31 +12,35 @@
   color-scheme:light;
   --bg:#f3efe9;--panel:#fffdf9;--stage:#f7f2ea;--ink:#2a211b;--muted:#6c6158;--line:#ddd5cc;
   --accent:#b3261e;--ok:#2f6b3a;--btn:#2a211b;--btn-ink:#fffdf9;
-  --lic:#b8773f;--lic-d:#8a5228;--lic-hi:#d39a63;
-  --rub:#dcc4a2;--rub-d:#b99a72;--rub-fib:#c7a87f;
-  --hole:#2b2018;--graphite:#4f545a;--steel:#a3abb3;--steel-d:#5c656e;
-  --chip-lic:#b8773f;--chip-rub:#dcc4a2;
-  --board:#eceff1;--board-d:#aab2ba;--thread2:#3f78b0;
+  --ui:#b8773f;--ui-d:#8a5228;--ui-hi:#d39a63;
+  /* kůže Blu: modře probarvená lícová useň 1,2 mm (barvy schematické) */
+  --lic:#2f5f8f;--lic-d:#1d3d5e;--lic-hi:#4f82b3;
+  --rub:#b7c6d4;--rub-d:#8597a9;--rub-fib:#9fb1c3;
+  --hole:#141a21;--graphite:#4f545a;--steel:#a3abb3;--steel-d:#5c656e;
+  --chip-lic:#2f5f8f;--chip-rub:#b7c6d4;
+  --board:#eceff1;--board-d:#aab2ba;--thread2:#c0601a;--halo:#ffffff;
   --skin:#e9b996;--skin-d:#b98563;--mallet:#d8c7a6;--mallet-d:#8f7a55;--wood:#7b5a3a;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   color-scheme:dark;
   --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
   --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
-  --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
-  --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;
-  --hole:#0e0a08;--graphite:#3f4449;--steel:#9099a2;--steel-d:#4d555d;
-  --board:#a9b1b8;--board-d:#6c747c;--thread2:#6fa0d0;
+  --ui:#a96c38;--ui-d:#7a4822;--ui-hi:#c08654;
+  --lic:#2b557f;--lic-d:#1a3550;--lic-hi:#4775a2;
+  --rub:#a3b2c0;--rub-d:#718395;--rub-fib:#8d9fb1;--chip-lic:#2b557f;--chip-rub:#a3b2c0;
+  --hole:#0b0f13;--graphite:#3f4449;--steel:#9099a2;--steel-d:#4d555d;
+  --board:#a9b1b8;--board-d:#6c747c;--thread2:#e8995a;--halo:#ece9e1;
   --skin:#d6a684;--skin-d:#a57454;--mallet:#c4b291;--mallet-d:#7a6744;--wood:#6b4c32;
 }}
 :root[data-theme="dark"]{
   color-scheme:dark;
   --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
   --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
-  --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
-  --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;
-  --hole:#0e0a08;--graphite:#3f4449;--steel:#9099a2;--steel-d:#4d555d;
-  --board:#a9b1b8;--board-d:#6c747c;--thread2:#6fa0d0;
+  --ui:#a96c38;--ui-d:#7a4822;--ui-hi:#c08654;
+  --lic:#2b557f;--lic-d:#1a3550;--lic-hi:#4775a2;
+  --rub:#a3b2c0;--rub-d:#718395;--rub-fib:#8d9fb1;--chip-lic:#2b557f;--chip-rub:#a3b2c0;
+  --hole:#0b0f13;--graphite:#3f4449;--steel:#9099a2;--steel-d:#4d555d;
+  --board:#a9b1b8;--board-d:#6c747c;--thread2:#e8995a;--halo:#ece9e1;
   --skin:#d6a684;--skin-d:#a57454;--mallet:#c4b291;--mallet-d:#7a6744;--wood:#6b4c32;
 }
 *{box-sizing:border-box}
@@ -62,14 +66,14 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 .pseg{flex:1;display:grid;gap:4px;min-width:0;cursor:pointer;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left}
 .pseg .bars{display:flex;gap:2px;height:6px}
 .pseg .bars span{flex:1;background:var(--line);border-radius:2px;position:relative;overflow:hidden}
-.pseg .bars span b{position:absolute;inset:0;background:var(--lic);transform-origin:left;transform:scaleX(0)}
+.pseg .bars span b{position:absolute;inset:0;background:var(--ui);transform-origin:left;transform:scaleX(0)}
 .pseg .pl{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media (max-width:520px){.pl span{display:none}}
 .pseg.on .pl{color:var(--ink);font-weight:600}
 .cap{min-height:6.6em}
-.cap .no{display:inline-block;font-weight:700;color:var(--lic-d);margin-right:6px;font-variant-numeric:tabular-nums}
-:root[data-theme="dark"] .cap .no{color:var(--lic-hi)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cap .no{color:var(--lic-hi)}}
+.cap .no{display:inline-block;font-weight:700;color:var(--ui-d);margin-right:6px;font-variant-numeric:tabular-nums}
+:root[data-theme="dark"] .cap .no{color:var(--ui-hi)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cap .no{color:var(--ui-hi)}}
 .cap h2{display:inline;font-size:1.05rem;margin:0}
 .cap p{margin:4px 0 0;color:var(--ink)}
 .cap .tip{display:block;margin-top:6px;color:var(--muted);font-size:14px}
@@ -239,7 +243,8 @@ function foldMini(g,k,ox,oy,pB,pA,o={}){
   const sA=Math.cos(Math.PI*pA), sB=Math.cos(Math.PI*pB);
   const d=o.d??1.2, bad=!!o.bad;
   const rect=(a,b,face,extra='')=>`<rect x="${f(X(a))}" y="${f(Y(0))}" width="${f((b-a)*k)}" height="${f(g.H*k)}" fill="${face==='rub'?'url(#rubP)':'url(#licG)'}" stroke="${face==='rub'?'var(--rub-d)':'var(--lic-d)'}" stroke-width=".3" ${extra}/>`;
-  const sl=(xs,dir,col,w)=>xs.map(x=>slit(X(x),Y(g.seam),dir,d,w,col)).join('');
+  // světlý lem pod barevným zářezem, aby byl vidět na modrém líci i na světlém rubu
+  const sl=(xs,dir,col,w)=>xs.map(x=>(col==='var(--hole)'?'':slit(X(x),Y(g.seam),dir,d,w+.35,'var(--halo)'))+slit(X(x),Y(g.seam),dir,d,w,col)).join('');
   const dZV=bad?'/':'\\';
   const flip=(c,s,body)=>G(`translate(${f(X(c))} 0) scale(${f(Math.abs(s)<.02?.02*Math.sign(s||1):s)} 1) translate(${f(-X(c))} 0)`,body);
   const grpV=(slitsOnly)=>flip(cB,sB,(slitsOnly?'':rect(g.B[0],g.V[1],sB<0?'rub':'lic',`stroke-dasharray="${sB<0?'1 .6':'0'}"`))+sl(g.hV,dZV,'var(--thread2)',.62));

@@ -16,6 +16,7 @@ import papirovyModel12 from '../../../docs/generated/pouzdro-mince-papirovy-mode
 import papirovyModel4012 from '../../../docs/generated/pouzdro-mince-papirovy-model-mince-40mm-kuze-1-2mm.svg?url';
 import papirovyModel40 from '../../../docs/generated/pouzdro-mince-papirovy-model-mince-40mm.svg?url';
 import postup from '../../../docs/generated/pouzdro-mince-postup.svg?url';
+import postup12 from '../../../docs/generated/pouzdro-mince-postup-kuze-1-2mm.svg?url';
 import sablona from '../../../docs/generated/pouzdro-mince-sablona.svg?url';
 import sablona12 from '../../../docs/generated/pouzdro-mince-sablona-kuze-1-2mm.svg?url';
 import sablona4012 from '../../../docs/generated/pouzdro-mince-sablona-mince-40mm-kuze-1-2mm.svg?url';
@@ -35,6 +36,7 @@ const registry: Readonly<Record<string, Readonly<Record<string, string>>>> = {
     sablona,
     kapsa,
     postup,
+    'postup-kuze-1-2': postup12,
     'papirovy-model-kuze-1-2': papirovyModel12,
     'sablona-kuze-1-2': sablona12,
     'papirovy-model-40mm': papirovyModel40,

@@ -1,0 +1,57 @@
+import { stitchLinePath, templateMarks } from '@/lib/geometry/template-marks';
+
+const front = { x: 0, y: 0, widthMm: 100, heightMm: 56, cornerRadiusMm: 6 };
+const back = { x: 0, y: 0, widthMm: 100, heightMm: 70, cornerRadiusMm: 6 };
+
+describe('stitchLinePath – linie stehu 3,5 mm od hrany', () => {
+  it('přední kapsa: začíná 6 mm pod vrchem a v rozích jde po zaoblení R 2,5', () => {
+    expect(stitchLinePath({ ...front, offsetMm: 3.5, openTop: true })).toBe(
+      'M3.5 6 L3.5 50 A2.5 2.5 0 0 0 6 52.5 L94 52.5 A2.5 2.5 0 0 0 96.5 50 L96.5 6',
+    );
+  });
+
+  it('zadní díl: boky končí jako na kapse 56 mm, 6 mm pod její horní hranou (50 mm od spodku)', () => {
+    expect(stitchLinePath({ ...back, offsetMm: 3.5, openTop: true, upToMm: 56 })).toBe(
+      'M3.5 20 L3.5 64 A2.5 2.5 0 0 0 6 66.5 L94 66.5 A2.5 2.5 0 0 0 96.5 64 L96.5 20',
+    );
+  });
+
+  it('bod v rohu linie leží 3,5 mm od zaoblené hrany, průsečík rovných linií jen asi 2,5 mm', () => {
+    // Střed rohu R6 je (6, 50); linie má poloměr 2,5 → od hrany 6 − 2,5 = 3,5.
+    const cornerCenterToCrossing = Math.hypot(6 - 3.5, 50 - 52.5);
+    expect(6 - cornerCenterToCrossing).toBeCloseTo(2.46, 2);
+  });
+
+  it('ostré rohy (poloměr ≤ odsazení) kreslí rovné linie bez oblouku', () => {
+    const d = stitchLinePath({ ...front, cornerRadiusMm: 0, offsetMm: 3.5, openTop: false });
+    expect(d).toBe('M3.5 3.5 L3.5 52.5 L96.5 52.5 L96.5 3.5 L3.5 3.5 Z');
+  });
+
+  it('uzavřená linie objede všechny čtyři rohy obloukem', () => {
+    const d = stitchLinePath({ ...front, offsetMm: 3.5, openTop: false });
+    expect(d.match(/A2\.5 2\.5/g)).toHaveLength(4);
+    expect(d.endsWith('Z')).toBe(true);
+  });
+});
+
+describe('templateMarks – značky k propíchnutí', () => {
+  it('konce výřezu 40 mm: svislé čárky 3 mm nad horní hranou na x 30 a 70', () => {
+    expect(templateMarks({ ...front, thumbCutout: { widthMm: 40, depthMm: 12 } })).toEqual([
+      { kind: 'thumb-cutout-end', x1: 30, y1: 0, x2: 30, y2: -3 },
+      { kind: 'thumb-cutout-end', x1: 70, y1: 0, x2: 70, y2: -3 },
+    ]);
+  });
+
+  it('výška kapsy 56 mm na zadním dílu: čárky 8 mm dovnitř z obou boků, 14 mm pod vrchem', () => {
+    expect(
+      templateMarks({ ...back, x: 12, y: 78, heightMark: { fromBottomMm: 56, lengthMm: 8 } }),
+    ).toEqual([
+      { kind: 'height', x1: 12, y1: 92, x2: 20, y2: 92 },
+      { kind: 'height', x1: 112, y1: 92, x2: 104, y2: 92 },
+    ]);
+  });
+
+  it('díl bez výřezu a bez značky výšky nemá žádné značky', () => {
+    expect(templateMarks(back)).toEqual([]);
+  });
+});

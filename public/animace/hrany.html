@@ -248,10 +248,13 @@ const HL_POCKTOP='M0 20 A6 6 0 0 1 6 14 L30 14 Q50 38 70 14 L94 14 A6 6 0 0 1 10
 function holder(tr,s,o={}){
   let d=`<path d="${BACKP}" fill="url(#licG)" stroke="var(--lic-d)" stroke-width="${f(.45/s)}"/>`;
   d+=`<path d="${POCKP}" fill="url(#licG2)" stroke="var(--lic-d)" stroke-width="${f(.45/s)}" filter="url(#sh)"/>`;
-  // steh 3,5 mm od hrany: boky a dno přední kapsy
-  let st='';const sp=3.875;
-  for(let x=3.5;x<96.5-1;x+=sp) st+=`M${f(x+.6)} 66.5 L${f(x+sp-.6)} 66.5 `;
-  for(let yy=66.5;yy>19;yy-=sp){st+=`M3.5 ${f(yy-.6)} L3.5 ${f(yy-sp+.6)} M96.5 ${f(yy-.6)} L96.5 ${f(yy-sp+.6)} `}
+  // steh 3,5 mm od hrany: boky (od 6 mm pod horní hranou kapsy) a dno, v rozích po zaoblení (R 2,5)
+  let st='';const ri=2.5,q=Math.PI*ri/2;
+  const SL=[[44,u=>[3.5,20+u]],[q,u=>{const a=Math.PI-u/ri;return[6+ri*Math.cos(a),64+ri*Math.sin(a)]}],[88,u=>[6+u,66.5]],[q,u=>{const a=Math.PI/2-u/ri;return[94+ri*Math.cos(a),64+ri*Math.sin(a)]}],[44,u=>[96.5,64-u]]];
+  const TOT=SL.reduce((a,[l])=>a+l,0),NH=Math.round(TOT/3.875);
+  const at=d=>{for(const [l,p] of SL){if(d<=l+1e-9)return p(d);d-=l}return SL[4][1](44)};
+  for(let i=0;i<NH;i++){const [x1,y1]=at(TOT*i/NH),[x2,y2]=at(TOT*(i+1)/NH),dx=x2-x1,dy=y2-y1,dl=Math.hypot(dx,dy),k=.6/dl;
+    st+=`M${f(x1+dx*k)} ${f(y1+dy*k)} L${f(x2-dx*k)} ${f(y2-dy*k)} `}
   d+=`<path d="${st}" stroke="var(--thread-d)" stroke-width="${f(1.1/s)}" stroke-linecap="round"/><path d="${st}" stroke="var(--thread)" stroke-width="${f(.7/s)}" stroke-linecap="round"/>`;
   const hl=(p,op,col='var(--accent)',w=1.1)=>op>0?`<path d="${p}" fill="none" stroke="${col}" stroke-width="${f(w/s)}" stroke-linecap="round" stroke-linejoin="round" opacity="${f(op)}"/>`:'';
   if(o.gloss){d+=hl(HL_STITCHED,o.gloss,'var(--burn)',.9)+hl(HL_BACKTOP,o.gloss,'var(--burn)',.9)+hl(HL_POCKTOP,o.gloss,'var(--burn)',.9)}
@@ -597,7 +600,7 @@ add('G','Zarovnejte a vyleštěte boky',
 
 // G4
 add('G','Dokončete hrany okének, D2 a jazýčku',
- 'Okénka mincí (lekce 5): konce vybruste papírem na kolíku Ø 8 v aku vrtačce, okénka zkoste z líce a vyleštěte. Okénko bankovek (lekce 6): zkoste a vyleštěte jako jeden svazek. Spodní hranu D2 (lekce 5) zbruste brusným papírem na hranolku do tenka (klín 3 mm), ne nožem. Jazýček (lekce 11): klín špičky brusným papírem z líce i z rubu jen mezi ryskou 2,5 mm a špičkou, ne nožem; konec asi 0,5–0,7 mm, zaoblený. Po ušití S7 hrany jazýčku vybruste, zkoste a vyleštěte (po výměně magnetu znovu).',
+ 'Okénka mincí (lekce 5): konce vybruste papírem na kolíku Ø 8 v aku vrtačce, okénka zkoste z líce a vyleštěte. Okénko bankovek (lekce 6): zkoste a vyleštěte jako jeden svazek. Spodní hranu D2 (lekce 5) zbruste brusným papírem na hranolku do tenka (klín 3 mm), ne nožem; stranu klínu ověřte na zkušebním kuse. Jazýček (lekce 11): klín špičky brusným papírem z líce i z rubu jen mezi ryskou 2,5 mm a špičkou, ne nožem; konec asi 0,5–0,7 mm, zaoblený. Po ušití S7 hrany jazýčku vybruste, zkoste a vyleštěte (po výměně magnetu znovu).',
  10000,t=>{
   // okénko mincí 12 × 48 v měřítku 1,3
   const s=1.3,cx=42,cy=45,w=48*s,h=12*s,r=h/2;

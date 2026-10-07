@@ -11,8 +11,10 @@ import { LID_P1_RANGE_MM, LID_THIN_LEATHER_RANGE_MM, buildLidSheets } from './li
  * Listy peněženky VÍČKO pro změřenou kůži přímo v aplikaci (bez repozitáře). Dělá totéž co
  * `pnpm pattern:wallet-lid --divider … --lining … [--p1 …] [--skive-fold 0.6] [--skive-hinge 0.6]`
  * (docs/zadani/penezenka-vicko.md, krok 0(a) a krok 1): stejné meze, stejné kontroly modelu,
- * stejné kreslení. Hodnoty z papírového modelu P0 (k, zvednutí na klínu, bankovky) sem nepatří,
- * ty mění výchozí hodnoty modelu; zapíšou se a střih přepočítá ten, kdo ho udržuje (oddíl 12.1).
+ * stejné kreslení. Navíc umí hodnoty z papírového modelu P0 (k, zvednutí na klínu, bankovky)
+ * a jinou tloušťku magnetu: dosadí je do vstupů modelu z oddílu 12.1 (`kDesign`, `kMax`,
+ * `wedgeLiftNom`, `wedgeLiftMax`, `billSheetMm`, `billHeight…`, `billHalfWidth…`,
+ * `magnetThicknessMm`), které generátor bere z `DEFAULT_LID_WALLET`.
  */
 
 /** Tloušťka po ztenčení v záloze B (oddíl 5.8: pás ohybu nebo závěsu z 1,0 na 0,6). */
@@ -35,6 +37,161 @@ export interface LidMeasuredInput {
   skiveFold: boolean;
   /** Záloha B2: ztenčit pás závěsu na 0,6 (`--skive-hinge 0.6`). */
   skiveHinge: boolean;
+  /** Výsledky P0 (lekce 2) a k z lekce 10; chybějící hodnota = hodnota modelu. */
+  p0?: LidP0Input;
+  /** Tloušťka zvoleného magnetu Ø 8 (lekce 11); chybí = 1,5 z modelu. */
+  magnetThicknessMm?: number;
+}
+
+/** Naměřené hodnoty z P0 a lekce 10. Každá je volitelná, chybějící platí podle modelu. */
+export interface LidP0Input {
+  /** k = (y_C − y_A) / (P(C) − P(A)) z P0-3 nebo z lekce 10. */
+  k?: number;
+  /** Δ_k: o kolik výš nad lepením G2 sedí spodní hrana svazku karet (P0-6), mm. */
+  cardLiftMm?: number;
+  /** Δ_c: o kolik výš nad lepením G3a sedí sloupec mincí (P0-6), mm. */
+  coinLiftMm?: number;
+  /** Tloušťka jedné (nesložené) bankovky, nejtlustší z měřených (P0-1). */
+  billSheetMm?: number;
+  /** Výška bankovky, nejmenší a největší z měřených (P0-1). */
+  billHeightMinMm?: number;
+  billHeightMaxMm?: number;
+  /** Šířka bankovky složené napůl, nejmenší a největší z měřených (P0-1). */
+  billHalfWidthMinMm?: number;
+  billHalfWidthMaxMm?: number;
+}
+
+/** Hodnoty modelu, se kterými se P0 porovnává (do formuláře jako „model počítá s …“). */
+export function lidP0ModelValues(base: LidWalletSpec = DEFAULT_LID_WALLET): Required<LidP0Input> & {
+  kMax: number;
+  magnetThicknessMm: number;
+} {
+  return {
+    k: base.kDesign,
+    kMax: base.kMax,
+    cardLiftMm: round2(base.wedgeLiftNom * base.cardsMax * base.cardThicknessMm),
+    coinLiftMm: round2(base.wedgeLiftNom * base.coinThicknessMaxMm),
+    billSheetMm: base.billSheetMm,
+    billHeightMinMm: base.billHeightMinMm,
+    billHeightMaxMm: base.billHeightMaxMm,
+    billHalfWidthMinMm: base.billHalfWidthMinMm,
+    billHalfWidthMaxMm: base.billHalfWidthMaxMm,
+    magnetThicknessMm: base.magnetThicknessMm,
+  };
+}
+
+const round2 = (v: number): number => Math.round(v * 100) / 100;
+const round3 = (v: number): number => Math.round(v * 1000) / 1000;
+
+/**
+ * Výchozí model s dosazenými výsledky P0 a tloušťkou magnetu (oddíl 12.1 a 12.3):
+ * - k do k max (1,24) listy nemění; nad ním `kDesign` = `kMax` = změřené k (oddíl 12.3).
+ * - Δ_k a Δ_c se převedou na δ (Δ_k = δ · n_k · t_k, Δ_c = δ · t_c). Model má jedno δ, proto
+ *   bere větší z obou (chybějící = δ modelu); `wedgeLiftMax` zůstává, jen když je δ větší, zvedne se.
+ * - Rozměry a tloušťka bankovek a tloušťka magnetu se dosadí přímo.
+ */
+export function lidBaseWithP0(
+  p0: LidP0Input = {},
+  magnetThicknessMm?: number,
+  base: LidWalletSpec = DEFAULT_LID_WALLET,
+): LidWalletSpec {
+  const spec: LidWalletSpec = { ...base };
+  if (p0.k !== undefined && p0.k > base.kMax + 1e-9) {
+    spec.kDesign = p0.k;
+    spec.kMax = p0.k;
+  }
+  if (p0.cardLiftMm !== undefined || p0.coinLiftMm !== undefined) {
+    const deltaCards =
+      p0.cardLiftMm !== undefined
+        ? round3(p0.cardLiftMm / (base.cardsMax * base.cardThicknessMm))
+        : base.wedgeLiftNom;
+    const deltaCoins =
+      p0.coinLiftMm !== undefined
+        ? round3(p0.coinLiftMm / base.coinThicknessMaxMm)
+        : base.wedgeLiftNom;
+    spec.wedgeLiftNom = Math.max(deltaCards, deltaCoins);
+    spec.wedgeLiftMax = Math.max(base.wedgeLiftMax, spec.wedgeLiftNom);
+  }
+  if (p0.billSheetMm !== undefined) spec.billSheetMm = p0.billSheetMm;
+  if (p0.billHeightMinMm !== undefined) spec.billHeightMinMm = p0.billHeightMinMm;
+  if (p0.billHeightMaxMm !== undefined) spec.billHeightMaxMm = p0.billHeightMaxMm;
+  if (p0.billHalfWidthMinMm !== undefined) spec.billHalfWidthMinMm = p0.billHalfWidthMinMm;
+  if (p0.billHalfWidthMaxMm !== undefined) spec.billHalfWidthMaxMm = p0.billHalfWidthMaxMm;
+  if (magnetThicknessMm !== undefined) spec.magnetThicknessMm = magnetThicknessMm;
+  return spec;
+}
+
+/** Textová pole formuláře pro P0 a magnet (prázdné = hodnota modelu). */
+export interface LidP0Fields {
+  k: string;
+  cardLift: string;
+  coinLift: string;
+  billSheet: string;
+  billHeightMin: string;
+  billHeightMax: string;
+  billHalfWidthMin: string;
+  billHalfWidthMax: string;
+  magnetThickness: string;
+}
+
+export const EMPTY_LID_P0_FIELDS: LidP0Fields = {
+  k: '',
+  cardLift: '',
+  coinLift: '',
+  billSheet: '',
+  billHeightMin: '',
+  billHeightMax: '',
+  billHalfWidthMin: '',
+  billHalfWidthMax: '',
+  magnetThickness: '',
+};
+
+/**
+ * Přečte pole P0 a magnetu. Prázdné pole = hodnota modelu. Vrací česky, co není číslo nebo
+ * nedává smysl (nula, nejmenší větší než největší); meze střihu pak hlídají kontroly modelu.
+ */
+export function parseLidP0Fields(
+  fields: LidP0Fields,
+  base: LidWalletSpec = DEFAULT_LID_WALLET,
+): { p0: LidP0Input; magnetThicknessMm?: number } | { problems: string[] } {
+  const problems: string[] = [];
+  const read = (raw: string, name: string, zeroOk = false): number | undefined => {
+    if (raw.trim() === '') return undefined;
+    const v = parseMm(raw);
+    if (v === undefined || (!zeroOk && v <= 0)) {
+      problems.push(`${name}: zadejte ${zeroOk ? 'číslo 0 nebo větší' : 'kladné číslo'}.`);
+      return undefined;
+    }
+    return v;
+  };
+  const p0: LidP0Input = {};
+  const set = <K extends keyof LidP0Input>(key: K, v: number | undefined) => {
+    if (v !== undefined) p0[key] = v;
+  };
+  set('k', read(fields.k, 'k'));
+  set('cardLiftMm', read(fields.cardLift, 'Zvednutí karet', true));
+  set('coinLiftMm', read(fields.coinLift, 'Zvednutí mincí', true));
+  set('billSheetMm', read(fields.billSheet, 'Tloušťka bankovky'));
+  set('billHeightMinMm', read(fields.billHeightMin, 'Nejmenší výška bankovky'));
+  set('billHeightMaxMm', read(fields.billHeightMax, 'Největší výška bankovky'));
+  set('billHalfWidthMinMm', read(fields.billHalfWidthMin, 'Nejmenší šířka bankovky napůl'));
+  set('billHalfWidthMaxMm', read(fields.billHalfWidthMax, 'Největší šířka bankovky napůl'));
+  const magnet = read(fields.magnetThickness, 'Tloušťka magnetu');
+  if (problems.length > 0) return { problems };
+  const hMin = p0.billHeightMinMm ?? base.billHeightMinMm;
+  const hMax = p0.billHeightMaxMm ?? base.billHeightMaxMm;
+  if (hMin > hMax) {
+    problems.push(`Nejmenší výška bankovky ${fmt(hMin)} mm je větší než největší ${fmt(hMax)} mm.`);
+  }
+  const wMin = p0.billHalfWidthMinMm ?? base.billHalfWidthMinMm;
+  const wMax = p0.billHalfWidthMaxMm ?? base.billHalfWidthMaxMm;
+  if (wMin > wMax) {
+    problems.push(
+      `Nejmenší šířka bankovky napůl ${fmt(wMin)} mm je větší než největší ${fmt(wMax)} mm.`,
+    );
+  }
+  if (problems.length > 0) return { problems };
+  return magnet !== undefined ? { p0, magnetThicknessMm: magnet } : { p0 };
 }
 
 export interface LidGeneratedSheet {
@@ -73,13 +230,16 @@ export function lidSpecFromMeasured(
     Math.abs(input.p1Mm - DEFAULT_LID_WALLET.leatherMm) < LID_P1_TOLERANCE_MM - 1e-9
       ? DEFAULT_LID_WALLET.leatherMm
       : input.p1Mm;
-  const spec = lidWalletVariant({
-    p1Mm: p1,
-    dividerMm: input.dividerMm,
-    liningMm: input.liningMm,
-    ...(input.skiveFold ? { bottomFoldSkiveMm: LID_SKIVE_BACKUP_MM } : {}),
-    ...(input.skiveHinge ? { hingeSkiveMm: LID_SKIVE_BACKUP_MM } : {}),
-  });
+  const spec = lidWalletVariant(
+    {
+      p1Mm: p1,
+      dividerMm: input.dividerMm,
+      liningMm: input.liningMm,
+      ...(input.skiveFold ? { bottomFoldSkiveMm: LID_SKIVE_BACKUP_MM } : {}),
+      ...(input.skiveHinge ? { hingeSkiveMm: LID_SKIVE_BACKUP_MM } : {}),
+    },
+    lidBaseWithP0(input.p0, input.magnetThicknessMm),
+  );
   return { spec };
 }
 
@@ -94,6 +254,29 @@ export function lidVariantLabel(spec: LidWalletSpec): string {
   if (spec.bottomFoldSkiveMm !== null)
     parts.push(`ohyb dna ztenčený na ${t(spec.bottomFoldSkiveMm)}`);
   if (spec.hingeSkiveMm !== null) parts.push(`závěs ztenčený na ${t(spec.hingeSkiveMm)}`);
+  const d = DEFAULT_LID_WALLET;
+  const differs = (a: number, b: number) => Math.abs(a - b) > 1e-9;
+  if (differs(spec.kDesign, d.kDesign) || differs(spec.kMax, d.kMax)) {
+    parts.push(`k ${fmt(spec.kDesign)}`);
+  }
+  if (differs(spec.wedgeLiftNom, d.wedgeLiftNom) || differs(spec.wedgeLiftMax, d.wedgeLiftMax)) {
+    const m = lidP0ModelValues(spec);
+    parts.push(`zvednutí karet ${fmt(m.cardLiftMm)} a mincí ${fmt(m.coinLiftMm)}`);
+  }
+  if (
+    differs(spec.billSheetMm, d.billSheetMm) ||
+    differs(spec.billHeightMinMm, d.billHeightMinMm) ||
+    differs(spec.billHeightMaxMm, d.billHeightMaxMm) ||
+    differs(spec.billHalfWidthMinMm, d.billHalfWidthMinMm) ||
+    differs(spec.billHalfWidthMaxMm, d.billHalfWidthMaxMm)
+  ) {
+    parts.push(
+      `bankovky v ${fmt(spec.billHeightMinMm)}–${fmt(spec.billHeightMaxMm)}, napůl ${fmt(spec.billHalfWidthMinMm)}–${fmt(spec.billHalfWidthMaxMm)}, list ${fmt(spec.billSheetMm)}`,
+    );
+  }
+  if (differs(spec.magnetThicknessMm, d.magnetThicknessMm)) {
+    parts.push(`magnet Ø ${fmt(spec.magnetDiameterMm)} × ${fmt(spec.magnetThicknessMm)}`);
+  }
   return parts.join(' · ');
 }
 

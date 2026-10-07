@@ -337,7 +337,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'corners',
         title: 'Dokončete řadu dvojhrotem',
-        body: 'U konce proužku dokončete řadu vidličkami se 2 hroty, aby poslední otvor vyšel přesně na značku konce. Stejně budete v lekci 6 trefovat rohy.',
+        body: 'U konce proužku dokončete řadu vidličkami se 2 hroty, aby poslední otvor vyšel přesně na značku konce. Dvojhrot použijete i v lekci 6 na koncích řady a v zaoblených rozích.',
         media: [],
       },
       {
@@ -575,13 +575,14 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'print-check',
         title: 'Vytiskněte a zkontrolujte šablonu',
-        body: 'Šablonu otevřete na stránce projektu tlačítkem „Vytisknout šablonu 1:1“. Tiskněte na A4 bez přizpůsobení velikosti („skutečná velikost“, 100 %), nejlépe na matný papír 120 g pro inkoustové tiskárny, jinak na obyčejný. Změřte kontrolní úsečku: musí mít přesně 50 mm. Když nemá, upravte nastavení tisku a tiskněte znovu.',
+        printLink: 'template',
+        body: 'Šablonu otevřete odkazem pod tímto krokem. Tiskněte na A4 bez přizpůsobení velikosti („skutečná velikost“, 100 %), nejlépe na matný papír 120 g pro inkoustové tiskárny, jinak na obyčejný. Změřte kontrolní úsečku: musí mít přesně 50 mm. Když nemá, upravte nastavení tisku a tiskněte znovu.',
         media: [
           {
             id: 'l5-template',
             kind: 'illustration',
             caption:
-              'Šablona 1:1: zadní díl 100 × 70 mm, přední kapsa 100 × 56 mm s výřezem na palec, linie stehu 3,5 mm, kontrolní úsečka 50 mm',
+              'Šablona 1:1: zadní díl 100 × 70 mm, přední kapsa 100 × 56 mm s výřezem na palec, linie stehu 3,5 mm, čárky k propíchnutí, kontrolní úsečka 50 mm',
             status: 'available',
             illustration: 'template',
           },
@@ -616,7 +617,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'prick-marks',
         title: 'Před řezáním propíchněte značky',
-        body: 'Dokud je šablona přilepená, propíchněte šídlem skrz papír do kůže oba konce oblouku výřezu na palec (kde oblouk začíná na horní hraně přední kapsy). Podle nich výřez dorovnáte. Po vyříznutí už šablona přesně nedosedne.',
+        body: 'Dokud je šablona přilepená, propíchněte šídlem skrz papír do kůže oba konce oblouku výřezu na palec. Na šabloně je u každého krátká čárka nad horní hranou přední kapsy, propíchněte místo, kde čárka končí na plné čáře. Podle nich výřez dorovnáte. Po vyříznutí už šablona přesně nedosedne.',
         media: [],
       },
       {
@@ -651,7 +652,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'peel-template',
         title: 'Sejměte šablonu a zkontrolujte značky',
-        body: 'Pásku strhávejte pomalu, skoro rovnoběžně s kůží. Zkontrolujte, že jsou vidět všechny propíchnuté značky. Výřez na palec dobruste smirkem 240 omotaným kolem tužky nebo tenkého dřívka do plynulého oblouku mezi propíchnutými značkami.',
+        body: 'Pásku strhávejte pomalu, skoro rovnoběžně s kůží. Zkontrolujte, že jsou vidět všechny propíchnuté značky. Výřez na palec dobruste smirkem 240 omotaným kolem tužky nebo tenkého dřívka do plynulého oblouku mezi propíchnutými značkami. Papírový zadní díl s čárkami 56 mm na bocích si schovejte na lekci 6.',
         media: [],
       },
       {
@@ -743,19 +744,19 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'mark-stitch-lines',
         title: 'Narýsujte linii stehu na přední díl',
-        body: 'Na líc předního dílu narýsujte jako v lekci 3 linii 3,5 mm od hrany po obou bocích a dole. Horní hrana zůstane bez stehu, tudy se vkládají karty.',
+        body: 'Na líc předního dílu narýsujte jako v lekci 3 linii 3,5 mm od hrany po obou bocích a dole. Ve spodních rozích veďte linii po zaoblení, i tam 3,5 mm od hrany; kružítko vedené po hraně to udělá samo. Horní hrana zůstane bez stehu, tudy se vkládají karty.',
         media: [],
       },
       {
         id: 'mark-glue-area',
         title: 'Vyznačte lepenou plochu na zadním dílu',
-        body: 'Na líci zadního dílu se lepí jen pás asi 8 mm podél spodku a obou boků (tvar U, vrch volný), aby lepidlo drželo po obou stranách linie stehu. Na obou bocích odměřte od spodní hrany 56 mm a udělejte lehkou tužkovou značku: to je horní hrana kapsy. Nad ni nezdrsňujte, škrábance by zůstaly vidět. Šířku 8 mm stačí odměřit nahrubo kružítkem nebo tužkou, pás skončí pod kapsou. Pro jistotu nalepte těsně nad značky maskovací pásku a zdrsňujte jen k ní.',
+        body: 'Na líci zadního dílu se lepí jen pás asi 8 mm podél spodku a obou boků (tvar U, vrch volný), aby lepidlo drželo po obou stranách linie stehu. Papírový zadní díl z lekce 5 (nebo novou šablonu vystřiženou po plné čáře) přiložte na líc zadního dílu, hrany na hrany. Na obou bocích udělejte šídlem drobný vpich těsně pod vnitřním koncem čárky 56 mm (horní hrana kapsy); kapsa ho zakryje. Nad vpichy nezdrsňujte, škrábance by zůstaly vidět. U samého boku končete asi o 6 mm níž, roh kapsy je zaoblený. Šířku 8 mm stačí odměřit nahrubo kružítkem nebo tužkou. Pro jistotu nalepte těsně nad vpichy maskovací pásku a zdrsňujte jen k ní.',
         media: [
           {
             id: 'l6-glue-area',
             kind: 'photo',
             caption:
-              'Zadní díl z líce s vyznačeným pásem 8 mm podél spodku a boků, končícím na linii 56 mm; nad linií čistá kůže',
+              'Zadní díl z líce s vyznačeným pásem 8 mm podél spodku a boků, končícím u vpichů pod výškou kapsy 56 mm; nad nimi čistá kůže',
             status: 'planned',
           },
         ],
@@ -786,13 +787,12 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'punch-sides',
         title: 'Děrujte boky a spodek',
-        body: 'Děrujte z líce kapsy na tvrdé desce, jen tam, kde kapsa leží na zadním dílu; horní část zadního dílu zůstane bez otvorů. První otvor dejte na linii stehu těsně pod zaoblením horního rohu kapsy, kde je bok už rovný (asi 6 mm pod horní hranou). Pokračujte dolů. U spodního rohu dokončete řadu dvojhrotem tak, aby poslední otvor ležel na průsečíku obou linií. Spodní řadu začněte tímto rohovým otvorem a stejně ji ukončete v druhém rohu. Druhý bok děrujte od rohu nahoru a u horního konce řadu dorovnejte dvojhrotem, aby poslední otvor ležel ve stejné výšce jako první otvor na prvním boku.',
+        body: 'Děrujte z líce kapsy na tvrdé desce, jen tam, kde kapsa leží na zadním dílu; horní část zadního dílu zůstane bez otvorů. První otvor dejte na linii stehu asi 6 mm pod horní hranou kapsy, kde je bok pod zaoblením už rovný. Pokračujte dolů. Spodní roh je zaoblený: veďte řadu po zaoblené linii, i tam 3,5 mm od hrany, ne do průsečíku rovných linií (ten je jen asi 2,5 mm od hrany). Zatáčku děrujte dvojhrotem po jednom otvoru, první hrot vždy v posledním otvoru (ověřte na odřezku). Stejně pokračujte po spodku a druhým rohem. Druhý bok děrujte nahoru a u horního konce řadu dorovnejte dvojhrotem, aby poslední otvor ležel ve stejné výšce jako první otvor na prvním boku.',
         media: [
           {
             id: 'l6-corner-punch',
             kind: 'photo',
-            caption:
-              'Detail rohu: řada otvorů podél boku končí přesně v rohovém otvoru, odkud pokračuje spodní řada',
+            caption: 'Detail spodního rohu: řada otvorů zatáčí po zaoblení, všude 3,5 mm od hrany',
             status: 'planned',
           },
         ],
@@ -800,14 +800,18 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'stitch',
         title: 'Sešijte tři strany',
-        animationLinks: [animationLink('saddleStitch', 'E2'), animationLink('saddleStitch', 'F2')],
-        body: 'Díl uchyťte jako v lekci 4. Začněte dvěma zpětnými stehy u horní hrany kapsy: nit vyrovnejte ve třetím otvoru od horního konce, ušijte dva stehy zpět k prvnímu otvoru a pak šijte dopředu přes ně, souvisle bok, spodek, bok. Rohový otvor prošijte jako každý jiný. Na konci udělejte dva zpětné stehy. Konce vyveďte na rub a odstřihněte těsně u kůže, nebo je jako v lekci 4 nechte asi 2 mm dlouhé a zatavte.',
+        animationLinks: [
+          animationLink('saddleStitch', 'E2'),
+          animationLink('saddleStitch', 'F2'),
+          animationLink('saddleStitch', 'F3'),
+        ],
+        body: 'Díl uchyťte jako v lekci 4. Začněte dvěma zpětnými stehy u horní hrany kapsy: nit vyrovnejte ve třetím otvoru od horního konce, ušijte dva stehy zpět k prvnímu otvoru a pak šijte dopředu přes ně, souvisle bok, spodek, bok. Otvory v rozích prošijte jako všechny ostatní. Na konci udělejte dva zpětné stehy. Konce vyveďte na rub a odstřihněte těsně u kůže, nebo je jako v lekci 4 nechte asi 2 mm dlouhé a zatavte.',
         media: [
           {
             id: 'l6-stitch-video',
             kind: 'video',
             caption:
-              'Šití rohu pouzdra: průchod rohovým otvorem a pokračování po spodní hraně, obě jehly',
+              'Šití rohu pouzdra: průchod otvory v zatáčce a pokračování po spodní hraně, obě jehly',
             status: 'planned',
             durationSeconds: 60,
           },
@@ -845,7 +849,8 @@ export const lessons: readonly LessonDefinition[] = [
     checkpoints: [
       {
         slug: 'punched-all',
-        title: 'Otvory jdou souvisle po obou bocích i spodku, rohy končí na průsečíku linií.',
+        title:
+          'Otvory jdou souvisle po obou bocích i spodku, v rozích po zaoblení 3,5 mm od hrany.',
         required: true,
       },
       {
@@ -867,7 +872,7 @@ export const lessons: readonly LessonDefinition[] = [
     ],
     commonMistakes: [
       'Steh přes horní hranu předního dílu: pouzdro se nedá otevřít.',
-      'Rohový otvor mimo průsečík linií: roh má skok.',
+      'Otvor v rohu na průsečíku rovných linií: je jen asi 2,5 mm od zaoblené hrany.',
       'Leštění před srovnáním hran: nerovnosti zůstanou.',
       'Zdrsnění líce nad kapsou: matné škrábance se nedají odstranit.',
       'Lepidlo i uprostřed kapsy: kapsa se slepí a karta do ní nejde vsunout.',
@@ -1050,6 +1055,8 @@ export const cardHolderProject: ProjectDefinition = {
         stitchOffsetMm: 3.5,
         openEdge: 'top',
         stitchUpToMm: 56,
+        // Čárky 8 mm (šířka lepeného pásu v lekci 6): vpich u vnitřního konce kapsa zakryje i u svého zaobleného rohu.
+        heightMark: { fromBottomMm: 56, lengthMm: 8 },
         quantity: 1,
       },
       {

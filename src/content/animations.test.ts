@@ -430,7 +430,7 @@ describe('animace postupu – sedlářský steh a hrany ve všech projektech', (
     ['card-holder', 4, 'stitch-rhythm', [steh('D1')]],
     ['card-holder', 4, 'finish-stitch', [steh('E1'), steh('F1')]],
     ['card-holder', 4, 'compare', [steh('G1')]],
-    ['card-holder', 6, 'stitch', [steh('E2'), steh('F2')]],
+    ['card-holder', 6, 'stitch', [steh('E2'), steh('F2'), steh('F3')]],
     ['card-holder', 6, 'edges', [hrany('A2'), hrany('D1')]],
     // Projekt 02: steh a hrany lekcí 4–8 (šev dna a kapsa ověřují testy výše).
     ['coin-card-holder', 4, 'saddle-stitch-reminder', [steh('D1')]],
@@ -448,7 +448,12 @@ describe('animace postupu – sedlářský steh a hrany ve všech projektech', (
     ['lid-wallet', 6, 'bill-window', [...okenka('C2', 'C3', 'C4', 'C5'), hrany('G4')]],
     ['lid-wallet', 6, 'stitch-s1-s3', [...zada('D1', 'D2', 'D3', 'D4'), steh('E2'), thread]],
     ['lid-wallet', 8, 's6', [steh('E2'), thread]],
-    ['lid-wallet', 9, 'punch-sew', [...telo('D1', 'D3', 'E2', 'E4'), steh('E2'), thread]],
+    [
+      'lid-wallet',
+      9,
+      'punch-sew',
+      [...telo('D1', 'D2', 'D3', 'D4', 'E2', 'E4'), steh('E2'), thread],
+    ],
     ['lid-wallet', 9, 'edges', [hrany('G3')]],
     ['lid-wallet', 11, 'trim-tip', [magnet('B8'), magnet('B9'), hrany('G4')]],
     ['lid-wallet', 11, 's7', [steh('E2'), magnet('B10'), magnet('B11'), thread, hrany('G4')]],
@@ -542,14 +547,14 @@ describe('animace postupu – ohyby Víčka v lekcích 5, 7 a 10', () => {
 
   it.each([
     [5, 'crease', ['A1']],
-    [7, 'wet', ['A2']],
+    [7, 'wet', ['A2', 'A3']],
     [7, 'place-spacer', ['A4']],
-    [7, 'fold-clamp', ['A5']],
+    [7, 'fold-clamp', ['A5', 'A6', 'A7', 'A8', 'A9']],
     [7, 'remove-spacer', ['A10']],
     [10, 'contents-b', ['B1']],
     [10, 'wet-close', ['B2', 'B3']],
     [10, 'overnight', ['B4', 'B5']],
-    [10, 'lid-behaviour', ['B7']],
+    [10, 'lid-behaviour', ['B6', 'B7']],
   ] as const)('lekce %i, krok %s otevře kroky %j', (order, stepId, anchors) => {
     expect(hrefsOf(order, stepId)).toEqual(anchors.map(ohyby));
   });
@@ -628,7 +633,7 @@ describe('animace postupu – přenos P1, okénka, D2 na záda a boční švy V�
     [5, 'coin-windows', [okenka('A2'), okenka('A3'), okenka('A4'), okenka('A5'), hrany('G4')]],
     [5, 'thumb-notch', [okenka('B2'), okenka('B3'), okenka('B4'), okenka('B5'), okenka('D2')]],
     // Lekce 6: G3, okénko bankovek, značení a šití S1–S3.
-    [6, 'g3', [zada('A1'), zada('A2'), zada('A3'), zada('A5'), zada('A6')]],
+    [6, 'g3', [zada('A1'), zada('A2'), zada('A3'), zada('A4'), zada('A5'), zada('A6')]],
     [6, 'bill-window', [okenka('C2'), okenka('C3'), okenka('C4'), okenka('C5'), hrany('G4')]],
     [6, 'mark-s1-s3', [zada('C1'), zada('C2'), zada('C3'), zada('C4')]],
     [6, 'stitch-s1-s3', [zada('D1'), zada('D2'), zada('D3'), zada('D4'), steh('E2'), thread]],
@@ -636,7 +641,11 @@ describe('animace postupu – přenos P1, okénka, D2 na záda a boční švy V�
     [9, 'dry-fit', [telo('A2')]],
     [9, 'g4', [telo('B1'), telo('B2'), telo('B3'), telo('B4')]],
     [9, 'mark-side', [telo('C1'), telo('C2')]],
-    [9, 'punch-sew', [telo('D1'), telo('D3'), telo('E2'), telo('E4'), steh('E2'), thread]],
+    [
+      9,
+      'punch-sew',
+      [telo('D1'), telo('D2'), telo('D3'), telo('D4'), telo('E2'), telo('E4'), steh('E2'), thread],
+    ],
   ] as const)('lekce %i, krok %s otevírá přesné kroky animace', (order, stepId, expected) => {
     expect(hrefsOf(order, stepId)).toEqual(expected);
   });

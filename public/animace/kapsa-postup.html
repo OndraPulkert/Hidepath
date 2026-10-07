@@ -684,7 +684,7 @@ add('E','Podložte důlek, vysekněte okno Ø 20','Formu položte na děrovací 
   s+=lbl(69,16,'výsečník Ø 20','t');
   return s;
 },'rubTop');
-add('E','Vyzkoušejte, že mince nepropadne','Minci vložte z rubu, kus otočte oknem dolů a zatřeste – nesmí vypadnout. Zatlačte na ni z rubu palcem – oknem nesmí projít. Prstenec (3,75 mm) nesmí být natržený. Když mince projde, Ø 20 mm do kapsy nesekejte. Nejdřív zkontrolujte hloubku důlku, mělký vytvarujte znovu. Pak na druhém odřezku zkuste okno Ø 18 mm (lekce 2).',5200,t=>{
+add('E','Vyzkoušejte, že mince nepropadne','Minci vložte z rubu, kus otočte oknem dolů a zatřeste – nesmí vypadnout. Zatlačte na ni z rubu palcem – oknem nesmí projít. Prstenec (3,75 mm) nesmí být natržený. Když mince projde, Ø 20 mm do kapsy zatím nesekejte. Byl-li důlek mělký, na druhém odřezku vytvarujte hlubší a zkuste znovu Ø 20 mm. Teprve když mince projde i tak, nebo byl důlek dost hluboký už napoprvé, zkuste na dalším odřezku okno Ø 18 mm (lekce 2).',5200,t=>{
   const cin=es(t,.05,.35); const sh=t>.45? Math.sin((t-.45)*60)*1.8*(1-seg(t,.85,1)):0;
   // piece only (cut), window down, coin inside
   const tr=`translate(${f(56+sh)} 38) scale(1.6)`;

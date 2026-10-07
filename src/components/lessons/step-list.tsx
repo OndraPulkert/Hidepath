@@ -11,12 +11,14 @@ import { typo } from '@/lib/utils/format';
 const printLinkLabels: Record<NonNullable<LessonStep['printLink']>, string> = {
   'practice-sheets': 'Vytisknout cvičnou šablonu 1:1',
   'pattern-sheets': 'Listy střihu 1:1 k tisku',
+  template: 'Vytisknout šablonu 1:1',
 };
 
 /** Kam vede odkaz pod krokem podle `printLink`. */
 const printLinkRoutes: Record<NonNullable<LessonStep['printLink']>, (slug: string) => string> = {
   'practice-sheets': routes.practiceSheets,
   'pattern-sheets': routes.template,
+  template: routes.template,
 };
 
 export function StepList({

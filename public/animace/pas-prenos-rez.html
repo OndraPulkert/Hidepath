@@ -310,7 +310,7 @@ add('A','Přilepte šablonu na LÍC','Šablonu položte na LÍC kůže (u pouzdr
 },{v:'LÍC',sub:'kůže Blu 1,2 mm'});
 
 // A3 — propíchnout značky
-add('A','Propíchněte šídlem všechny značky','Před řezáním propíchněte šídlem skrz papír: konce obou čar ohybů A i B (asi 1 mm od hrany pásu), rohy místa pro kapsu (asi 1 mm dovnitř od zaobleného rohu), střed dříku druku a všechny tečky dna.',13000,t=>{
+add('A','Propíchněte šídlem všechny značky','Před řezáním propíchněte šídlem skrz papír i kůži, aby byly značky vidět i na rubu: konce obou čar ohybů A i B (asi 1 mm od hrany pásu), rohy místa pro kapsu (asi 1 mm dovnitř od zaobleného rohu), střed dříku druku a všechny tečky dna.',13000,t=>{
   const c=LEFTC, P=MARKS;
   let n,fr;
   if(t<.62){const u=seg(t,.05,.6)*13;n=Math.min(13,Math.floor(u));fr=u-Math.floor(u)}else{const u=13+seg(t,.62,.94)*51;n=Math.min(P.length,Math.floor(u));fr=u-Math.floor(u)}
@@ -353,7 +353,7 @@ function cutSection(passes,p){
   s+=`<path d="M${cx+4} ${y0-9} V${y0-4}" stroke="var(--ok)" stroke-width=".35"/>`+lbl(cx+5.5,y0-6,'kolmo','tok');
   return s;
 }
-add('B','Řežte rovně podle pravítka','Řežte skrz papír i kůži přesně po čáře. Rovné strany podle ocelového pravítka 2–3 lehkými tahy, nůž kolmo. Pravítko leží na pásu, ne na odpadu.',11000,t=>{
+add('B','Řežte rovně podle pravítka','Řežte skrz papír i kůži přesně po čáře. Rovné strany podle ocelového pravítka 2–3 lehkými tahy, nůž do strany nenaklánějte. Pravítko leží na pásu, ne na odpadu.',11000,t=>{
   const c=BOTC, rin=es(t,.02,.14);
   const passes=t<.22?0:t<.46?0:t<.7?1:2;
   const pp=t<.22?0:t<.46?seg(t,.22,.44):t<.7?seg(t,.46,.68):seg(t,.7,.92);
@@ -372,9 +372,9 @@ add('B','Řežte rovně podle pravítka','Řežte skrz papír i kůži přesně 
   if(t>=.22){const [ax,ay]=tv(c,205,FB+8);s+=fade(seg(t,.22,.3),`<path d="M${f(ax-10)} ${f(ay)} H${f(ax+10)}" stroke="var(--accent)" stroke-width=".45" marker-end="url(#ar)"/>`+pill(ax,ay+6,'tah od prstů','ta','middle'))}
   const [lx,ly]=tv(c,128,FB+16);
   s+=pill(4,87,t<.22?'pravítko na čáru, prsty na pravítko':t<.92?`tah ${passes+1} / 3 – lehce`:'proříznuto skrz papír i kůži',t>=.92?'tok':'t');
-  s+=inset('2–3 TAHY',cutSection(t<.22?0:t>=.92?3:passes,pp)+notes([['ocelové pravítko','t'],['na čáru,'],['lehké tahy,'],['nůž kolmo']],62,5.2));
+  s+=inset('2–3 TAHY',cutSection(t<.22?0:t>=.92?3:passes,pp)+notes([['ocelové pravítko','t'],['na čáru,'],['lehké tahy,'],['nůž do strany'],['nenaklánět']],60,4.8));
   return s;
-},{v:'LÍC',sub:'šablona na líci'},'Tip: jako u pouzdra na karty – nůž sklopte asi na 45° ve směru tahu, do strany ho nenaklánějte. První tah lehce, další dořízne. Řežte od volné ruky, nikdy k prstům na pravítku.');
+},{v:'LÍC',sub:'šablona na líci'},'Tip: jako u pouzdra na karty – nůž sklopte asi na 45° ve směru tahu. První tah lehce, další dořízne. Řežte od volné ruky, nikdy k prstům na pravítku.');
 
 // B2 — všechny rovné strany
 add('B','Prořízněte všechny rovné strany','Stejně projeďte všechny rovné úseky obrysu. Řez končete tam, kde začíná oblouk – oblouky a rohy přijdou bez pravítka.',12000,t=>{

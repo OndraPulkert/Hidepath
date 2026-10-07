@@ -93,7 +93,7 @@ describe('nákupní seznam – přepínání projektů 01 a 02', () => {
 describe('nákupní seznam – peněženka Víčko (projekt 03)', () => {
   afterEach(() => setActiveProjectPreference(null));
 
-  it('ukáže plán se 7 obchody, haléřové ceny a „zbývá koupit“; řádky se sečtou na součet obchodu', async () => {
+  it('ukáže plán s 8 obchody, haléřové ceny a „zbývá koupit“; řádky se sečtou na součet obchodu', async () => {
     const repositories = createTestRepositories();
     await repositories.enrollments.upsert({
       ...enrollment(lidWalletProject.slug),
@@ -103,7 +103,7 @@ describe('nákupní seznam – peněženka Víčko (projekt 03)', () => {
     const plan = resolveShoppingPlan(lidWalletProject, equipmentCatalog, {
       mallet: item('mallet', 'owned'),
     })!;
-    expect(plan.shops).toHaveLength(7);
+    expect(plan.shops).toHaveLength(8);
 
     setActiveProjectPreference(lidWalletProject.slug);
     renderApp('/shopping', { repositories });
@@ -114,10 +114,10 @@ describe('nákupní seznam – peněženka Víčko (projekt 03)', () => {
     await waitFor(() =>
       expect(planText()).toContain(`zbývá koupit ${norm(formatCzk(plan.remainingCents))}`),
     );
-    expect(planText()).toContain(`${norm(formatCzk(plan.totalCents))}celkem v 7 obchodech`);
-    // Haléřové ceny se nezaokrouhlují: 10 × 19,90 Kč = 199 Kč, 5 × 13,90 Kč = 69,50 Kč.
+    expect(planText()).toContain(`${norm(formatCzk(plan.totalCents))}celkem v 8 obchodech`);
+    // Haléřové ceny se nezaokrouhlují: 10 × 19,90 Kč = 199 Kč, 5 × 13,50 Kč = 67,50 Kč.
     expect(planText()).toContain('10 × 19,90 Kč');
-    expect(planText()).toContain('5 × 13,90 Kč69,50 Kč');
+    expect(planText()).toContain('5 × 13,50 Kč67,50 Kč');
     expect(planText()).toContain('1 × 4,80 Kč4,80 Kč');
     expect(within(planCard()).getByText(/Mějte doma nebo dokupte/)).toBeInTheDocument();
 
@@ -129,7 +129,7 @@ describe('nákupní seznam – peněženka Víčko (projekt 03)', () => {
           .replace(',', '.'),
       );
     const groups = within(planCard()).getAllByRole('group');
-    expect(groups).toHaveLength(7);
+    expect(groups).toHaveLength(8);
     for (const group of groups) {
       const summary = group.querySelector('summary')!;
       const shopTotal = parse(summary.lastElementChild!.textContent ?? '');

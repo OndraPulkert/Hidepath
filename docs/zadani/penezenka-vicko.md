@@ -999,10 +999,10 @@ značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,6
    bankovek) přepínač nemá: dosadí se do `DEFAULT_LID_WALLET` v `src/lib/geometry/lid-wallet.ts`
    (pole `kDesign`, `kMax`, `wedgeLiftNom`, `wedgeLiftMax`, `billSheetMm`, `billFoldReserveMm`,
    `billHeightMinMm`, `billHeightMaxMm`, `billHalfWidthMinMm`, `billHalfWidthMaxMm`; oddíl 12.1) a pak
-   se spustí stejný příkaz. Formulář v aplikaci tyto hodnoty ani tloušťku magnetu (`magnetThicknessMm`)
-   nemá: kdo s kódem nepracuje, zapíše si naměřené hodnoty (k, zvednutí na klínu, bankovky, tloušťka
-   magnetu) a střih přepočítá ten, kdo ho udržuje (třeba v Claude Code nad repozitářem: model
-   `src/lib/geometry/lid-wallet.ts`, pole z oddílu 12.1). Teprve pak nalep na tvrdý papír a vyřízni šablony z listu 1 (obrys pásu
+   se spustí stejný příkaz. Formulář „Listy pro vaši kůži“ v aplikaci je má (část „Výsledky P0 a jiný
+   magnet“): k, zvednutí karet Δ_k a mincí Δ_c, bankovky a tloušťku magnetu (`magnetThicknessMm`) dosadí
+   do stejných polí (`src/lib/patterns/lid-wallet-input.ts`: k nad k max → `kDesign` = `kMax` = k;
+   δ = větší z Δ_k / (n_k · t_k) a Δ_c / t_c). Teprve pak nalep na tvrdý papír a vyřízni šablony z listu 1 (obrys pásu
    s okénky a otvory švů; použije se v krocích 2, 5 a 13) a zbylé šablony z listu 4 (okénka – kontrola
    polohy okének mincí v kroku 5 a okénka bankovek v kroku 8, plíšek – rozměr na plech v kroku 2,
    proužek otvorů S4/S5 v kroku 14).
@@ -1440,8 +1440,8 @@ počet cyklů závěsu), nebo když zkušební kus ukáže problém a je potřeb
 **Jak podle toho upravit:** každou změřenou hodnotu (t_bn, k, Δ_k, Δ_c, síla magnetu, rozměry bankovek)
 dosaď do vstupů (oddíl 12.1). Přepínačem jdou zadat jen tloušťky usní (`--p1`, `--divider`,
 `--lining`) a zálohy (`--skive-fold`, `--skive-hinge`); ostatní se dosadí do `DEFAULT_LID_WALLET`
-v `src/lib/geometry/lid-wallet.ts` (pole podle kroku 1). Formulář v aplikaci je nemá: naměřené hodnoty
-se zapíšou a střih přepočítá ten, kdo ho udržuje (třeba v Claude Code nad repozitářem, pole z oddílu 12.1).
+v `src/lib/geometry/lid-wallet.ts` (pole podle kroku 1). Formulář „Listy pro vaši kůži“ v aplikaci má
+k, zvednutí na klínu, bankovky a tloušťku magnetu (krok 1); sílu magnetu ne.
 Pak spusť `pnpm pattern:wallet-lid` se stejnými přepínači jako v kroku 0(a). Mění se jen vstupy, vzorce
 zůstávají. Po P2 zapiš odchylky do tohoto dokumentu jako „Verze 3“.
 

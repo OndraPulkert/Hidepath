@@ -2,10 +2,11 @@ import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { routes } from '@/app/routes';
+import { StepList } from '@/components/lessons/step-list';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
 import { lidWalletProject } from '@/content/projects/lid-wallet/project';
-import { renderApp } from '@/test/render';
+import { renderApp, renderWithProviders } from '@/test/render';
 
 /** Listy peněženky Víčko pro změřenou kůži se generují přímo na stránce tisku (lekce 1). */
 describe('tisk listů – peněženka Víčko pro změřenou kůži', () => {
@@ -34,6 +35,37 @@ describe('tisk listů – peněženka Víčko pro změřenou kůži', () => {
     expect(decodeURIComponent(images[3]!.getAttribute('src')!)).toContain('D1/D2 0,8 · L1 0,9');
   });
 
+  it('zadá výsledky P0 a tloušťku magnetu (lekce 2, 10 a 11) spolu s tloušťkami kůže', async () => {
+    const user = userEvent.setup();
+    renderApp(routes.template(lidWalletProject.slug));
+
+    await user.type(await screen.findByLabelText('Přepážky D1/D2, mm'), '0,8');
+    await user.type(screen.getByLabelText('Podšívka L1, mm'), '0,9');
+    await user.click(screen.getByText('Výsledky P0 a jiný magnet (lekce 2, 10 a 11)'));
+    await user.type(screen.getByLabelText('k (P0-3, lekce 10)'), '1,3');
+    await user.type(screen.getByLabelText('Tloušťka magnetu Ø 8, mm (lekce 11)'), '2');
+    await user.click(screen.getByRole('button', { name: 'Vygenerovat listy' }));
+
+    expect(await screen.findByText(/jsou připravené níže a zaškrtnuté k tisku/)).toHaveTextContent(
+      /P1 1,0 · přepážky 0,8 · L1 0,9 · k 1,3 · magnet Ø 8 × 2/,
+    );
+  });
+
+  it('nesmyslnou hodnotu P0 odmítne česky a nic nevygeneruje', async () => {
+    const user = userEvent.setup();
+    renderApp(routes.template(lidWalletProject.slug));
+
+    await user.type(await screen.findByLabelText('Přepážky D1/D2, mm'), '0,8');
+    await user.type(screen.getByLabelText('Podšívka L1, mm'), '0,9');
+    await user.click(screen.getByText('Výsledky P0 a jiný magnet (lekce 2, 10 a 11)'));
+    await user.type(screen.getByLabelText('Tloušťka magnetu Ø 8, mm (lekce 11)'), '0');
+    await user.click(screen.getByRole('button', { name: 'Vygenerovat listy' }));
+
+    expect(await screen.findByText(/Listy nevznikly/)).toBeInTheDocument();
+    expect(screen.getByText('Tloušťka magnetu: zadejte kladné číslo.')).toBeInTheDocument();
+    expect(screen.queryByText(/^Pro změřenou kůži:/)).not.toBeInTheDocument();
+  });
+
   it('přepážky nad 0,92 mm odmítne a nic nevygeneruje', async () => {
     const user = userEvent.setup();
     renderApp(routes.template(lidWalletProject.slug));
@@ -55,6 +87,41 @@ describe('tisk – pouzdro na karty: šablona a cvičná šablona', () => {
       await screen.findByRole('heading', { name: /^Šablona 1:1 · Pouzdro na karty/ }),
     ).toBeInTheDocument();
     expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+  });
+
+  it('tištěná šablona má čárky na koncích výřezu a výšky kapsy 56 mm a linii stehu po zaoblení', async () => {
+    renderApp(routes.template(cardHolderProject.slug));
+    const svg = await screen.findByRole('img', { name: /^Šablona 1:1: Pouzdro na karty/ });
+    const marks = [...svg.querySelectorAll('[data-mark]')];
+    // Rozložení: okraj 12 mm, zadní díl 100 × 70 nahoře, přední kapsa o 10 mm níž (y 92).
+    expect(marks.map((m) => [m.getAttribute('data-mark'), m.getAttribute('d')])).toEqual([
+      ['height', 'M12 26 L20 26'],
+      ['height', 'M112 26 L104 26'],
+      ['thumb-cutout-end', 'M42 92 L42 89'],
+      ['thumb-cutout-end', 'M82 92 L82 89'],
+    ]);
+    expect(svg).toHaveTextContent('krátká čárka = značka k propíchnutí šídlem (lekce 5 a 6)');
+    const stitch = [...svg.querySelectorAll('path[stroke-dasharray]')].map((p) =>
+      p.getAttribute('d'),
+    );
+    expect(stitch).toContain(
+      'M15.5 98 L15.5 142 A2.5 2.5 0 0 0 18 144.5 L106 144.5 A2.5 2.5 0 0 0 108.5 142 L108.5 98',
+    );
+  });
+
+  it('lekce 5 odkazuje z kontroly tisku na tisk šablony', () => {
+    const lesson5 = cardHolderProject.lessons.find((l) => l.order === 5)!;
+    renderWithProviders(
+      <StepList
+        steps={lesson5.steps.filter((s) => s.id === 'print-check')}
+        template={undefined}
+        projectSlug={cardHolderProject.slug}
+      />,
+    );
+    expect(screen.getByRole('link', { name: /Vytisknout šablonu 1:1/ })).toHaveAttribute(
+      'href',
+      routes.template(cardHolderProject.slug),
+    );
   });
 
   it('cvičné listy nabídnou cvičnou šablonu zaškrtnutou k tisku', async () => {

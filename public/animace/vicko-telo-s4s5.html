@@ -482,7 +482,7 @@ add('C','Narýsujte čáru švu 3,0 mm','Narýsujte čáru švu 3,0 mm od hrany 
 },'Tip: kde čára začíná a končí, lekce neurčuje; animace ji kreslí od y 4 do 80.');
 
 // C2
-add('C','Přeneste otvory z proužku','Proužek z listu 4 přiložte levou hranou na hranu boku F a spodní hranou ke spodní hraně peněženky. Čárka „F 62“ má ležet na horní hraně F. Bez kružidla propíchněte jehlou konce čárkované čáry 3,0 a spojte je tužkou u pravítka. Přeneste otvory S4 a S5: 18 otvorů od y 76 dolů po y 8.',11000,t=>{
+add('C','Přeneste otvory z proužku','Proužek z listu 4 přiložte levou hranou na hranu boku F a spodní hranou ke spodní hraně peněženky. Čárka „F 62“ má ležet na horní hraně F. Bez kružidla propíchněte jehlou konce čárkované čáry 3,0 a spojte je tužkou u pravítka. Přeneste otvory S4 a S5: 18 otvorů od y 76 dolů po y 8. Na pravém boku (S5) proužek obraťte zrcadlově, rubem nahoru: levá hrana opět na hraně boku, spodní hrana dole. Otvory a konce čáry proto na proužku nejdřív propíchněte jehlou, ať jsou vidět i z rubu.',11000,t=>{
   const sIn=es(t,.02,.2),sOut=es(t,.86,.98),m=Math.floor(es(t,.22,.8)*18+1e-9);
   let s=frontBase();
   s+=`<path d="M${f(fx(3))} ${f(fy(80))} V${f(fy(4))}" class="seamln"/>`;
@@ -496,7 +496,7 @@ add('C','Přeneste otvory z proužku','Proužek z listu 4 přiložte levou hrano
     if(sIn>.95&&sOut<.05){s+=pill(fx(11)+1,fy(76)+1.4,'poslední 76','ts')+pill(fx(11)+1,fy(62)+1.4,'F 62','ts')+pill(fx(11)+1,fy(24)+1.4,'dno karet 26 · S1 22','ts')+pill(fx(11)+1,fy(8)+1.4,'první 8','ts')}}
   if(sOut>.5) s+=frontLabels();
   s=clipMain(s)+pill(4,6,'ZEPŘEDU · levý bok (S4)','ts')+pill(4,87,m<18?`od 76 dolů: ${m} / 18`:'18 otvorů, y 8 … 76','t');
-  s+=inset('PROUŽEK S4/S5',notes([['list 4, na tvrdém','t'],['papíru z lekce 4']],16,5)+zoneList(31)+notes([['18 otvorů po 4 mm','t'],['S5 v x 98 stejně'],['bez kružidla: konce','t'],['čáry 3,0 propíchnout,'],['spojit u pravítka']],60,4.8));
+  s+=inset('PROUŽEK S4/S5',notes([['list 4, na tvrdém','t'],['papíru z lekce 4']],16,5)+zoneList(31)+notes([['18 otvorů po 4 mm','t'],['S5: proužek obrátit'],['bez kružidla: konce','t'],['čáry 3,0 propíchnout,'],['spojit u pravítka']],60,4.8));
   return s;
 });
 

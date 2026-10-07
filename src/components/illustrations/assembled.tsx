@@ -26,19 +26,39 @@ export function AssembledIllustration({
   const cardH = 54 * s;
   const cardX = ox + (w - cardW) / 2;
   const cardY = oy + h - o - cardH;
-  const holes = (x1: number, y1: number, x2: number, y2: number) => {
-    const len = Math.hypot(x2 - x1, y2 - y1);
-    const n = Math.floor(len / (4 * s));
-    return Array.from({ length: n + 1 }, (_, i) => {
-      const t = n === 0 ? 0 : i / n;
-      return [x1 + (x2 - x1) * t, y1 + (y2 - y1) * t] as const;
-    });
+  // Steh vede po bocích a dole stále `o` od hrany, v rozích po zaoblení (poloměr r − o),
+  // a začíná pod zaoblením horního rohu kapsy, kde je bok už rovný.
+  const fr = front.cornerRadiusMm * s;
+  const ri = Math.max(fr - o, 0);
+  const left = ox + o;
+  const right = ox + w - o;
+  const bottom = oy + h - o;
+  const sideTop = oy + h - fh + Math.max(fr, o);
+  const corner = (cx: number, from: number, to: number) => (t: number) => {
+    const a = from + (to - from) * t;
+    return [cx + ri * Math.cos(a), bottom - ri + ri * Math.sin(a)] as const;
   };
-  const stitch = [
-    ...holes(ox + o, oy + h - fh + 2, ox + o, oy + h - o),
-    ...holes(ox + o, oy + h - o, ox + w - o, oy + h - o),
-    ...holes(ox + w - o, oy + h - o, ox + w - o, oy + h - fh + 2),
+  const line = (x1: number, y1: number, x2: number, y2: number) => (t: number) =>
+    [x1 + (x2 - x1) * t, y1 + (y2 - y1) * t] as const;
+  const segments = [
+    { len: bottom - ri - sideTop, at: line(left, sideTop, left, bottom - ri) },
+    { len: (Math.PI / 2) * ri, at: corner(left + ri, Math.PI, Math.PI / 2) },
+    { len: right - left - 2 * ri, at: line(left + ri, bottom, right - ri, bottom) },
+    { len: (Math.PI / 2) * ri, at: corner(right - ri, Math.PI / 2, 0) },
+    { len: bottom - ri - sideTop, at: line(right, bottom - ri, right, sideTop) },
   ];
+  const total = segments.reduce((sum, seg) => sum + seg.len, 0);
+  const n = Math.round(total / (4 * s));
+  const stitch = Array.from({ length: n + 1 }, (_, i) => {
+    let d = (total * i) / n;
+    for (const seg of segments) {
+      if (d <= seg.len || seg === segments[segments.length - 1]) {
+        return seg.at(seg.len === 0 ? 0 : Math.min(d / seg.len, 1));
+      }
+      d -= seg.len;
+    }
+    return segments[0]!.at(0);
+  });
   const width = ox * 2 + w + 170;
   const height = oy + h + 44;
 

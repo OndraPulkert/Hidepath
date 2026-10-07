@@ -90,10 +90,11 @@ export const animationPages = {
       ],
       B: [
         'Přiložte kapsu na 4 značky',
-        'Zdrsněte jen pruh pod okrajem kapsy',
-        'Naneste lepidlo do úzkého pruhu',
+        'Olepte kapsu dokola páskou',
+        'Zdrsněte pruh po čáru švu',
+        'Naneste lepidlo do pruhu po čáru švu',
         'Nechte lepidlo odvětrat',
-        'Přitiskněte kapsu přesně na značky',
+        'Přitiskněte kapsu a strhněte pásku',
       ],
       C: [
         'Výchozí stav: otvory jen v kapse',

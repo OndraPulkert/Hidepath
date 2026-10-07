@@ -115,7 +115,7 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
 
   draft({
     slug: 'thin-goatskin',
-    name: 'Kozinka třísločiněná 0,7–1 mm (přepážky a podšívka)',
+    name: 'Kozinka třísločiněná 0,6–0,9 mm (přepážky a podšívka)',
     englishName: 'Thin veg-tan goatskin',
     category: 'material',
     shortDescription:
@@ -132,31 +132,50 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
       {
         label: 'Množství',
         value:
-          'nebarvená 5 dm² (2 × D1 93 × 79,5 mm a 3 × L1 24 × 22 mm), čokoládová 5 dm² (2 × D2 103 × 64 mm)',
+          'nebarvená: 2 × D1 93 × 79,5 mm a 3 × L1 24 × 22 mm (obchod prodává jen celé listy, nejmenší 0,55 m² vystačí mnohonásobně), čokoládová 5 dm² (2 × D2 103 × 64 mm)',
       },
     ],
     cautions: [
       'Listy peněženky se generují pro změřenou tloušťku přepážek (přepínač --divider, zadává se větší z D1 a D2) a podšívky (--lining). Čísla v postupu se pak berou z rámečku „Čísla pro postup“ na listu 4.',
-      'Kus silnější než 0,92 mm na přepážku nepoužijte: vyřízněte díl z tenčího místa, nebo kupte tenčí kozinku. Horní část rozsahu nebarvené kozinky (0,8–1) tak střih odmítne.',
-      'Do poznámky k objednávce: kusy nejvýš 0,9 mm, nejlépe 0,7–0,8 mm. Jestli jsou obě kozinky čistě třísločiněné, ověřit u prodejce.',
+      'Kus silnější než 0,92 mm na přepážku nepoužijte: vyřízněte díl z tenčího místa, nebo kupte tenčí kozinku.',
+      'Nebarvenou kozinku nejvýš 0,9 mm česká nabídka k 7. 10. 2026 nemá: nebarvená kozinka ze Šijeme z kůže je teď 0,8–1,3 mm a CraftPoint kozinku nevede. Proto příklad z Lederversand Berlin (Německo). Ceny jsou v eurech včetně německé DPH 19 %; jestli se pro českého zákazníka přepočítají na 21 %, ověřte v košíku.',
+      'U čokoládové kozinky do poznámky k objednávce: kusy nejvýš 0,9 mm, nejlépe 0,7–0,8 mm. Jestli je čistě třísločiněná, ověřit u prodejce.',
     ],
     avoid: [],
     alternatives: [],
-    // 5 dm² × 13,90 + 5 dm² × 13,50 (Šijeme z kůže, ověřeno 29. 9. 2026).
-    priceRange: { minCents: 13_700, maxCents: 13_700 },
+    // Nebarvená: list 0,45 m² z 2. jakosti (27,00 €) až list 0,55 m² z 1. jakosti (38,50 €),
+    // Lederversand Berlin, ověřeno 7. 10. 2026; přepočet kurzem ČNB 24,430 Kč/€ ze 7. 10. 2026.
+    // Čokoládová: 5 dm² × 13,50 (Šijeme z kůže, ověřeno 29. 9. 2026).
+    priceRange: { minCents: 72_711, maxCents: 100_806 },
     priceSource: 'verified',
-    priceNote: `${VERIFIED_NOTE} Nebarvená 5 dm² (69,50 Kč) a čokoládová 5 dm² (67,50 Kč), bez poštovného (poštovné neověřené).`,
+    priceNote:
+      'Rozsah odpovídá ověřeným nabídkám (viz příklady níže). Před nákupem ověřte. Nebarvená kozinka: celý list 27,00 € (2. jakost) až 38,50 € (1. jakost), v korunách přepočteno kurzem ČNB ze 7. 10. 2026 (24,430 Kč/€), orientačně. Poštovné do Česka 16,99 € (Economy, objednávka do 99,99 €) nebo 19,99 € (DHL) se nepočítá. Čokoládová 5 dm² (67,50 Kč) ze Šijeme z kůže, bez poštovného (poštovné neověřené).',
     alsoUsedFor: [],
     examples: [
       {
-        title: 'Kozinka třísločiněná nebarvená valchovaná 0,8–1 mm',
-        shop: 'Šijeme z kůže',
-        url: 'https://www.sijemezkuze.cz/kozinka-trislocinena-nebarvena-valchovana-0-8-1-mm-p4906',
-        priceCents: 1_390,
-        priceNote: 'za dm² (11,49 Kč bez DPH), minimální odběr 5 dm²',
-        note: 'Světlá přepážka D1 a podšívka L1. Kusy nad 0,92 mm na přepážku nepoužít (po dodání změřit).',
+        title:
+          'Ziegenleder pflanzlich gegerbt natur-braun 0,6–0,8 mm #z125 (kozinka třísločiněná, nebarvená)',
+        shop: 'Lederversand Berlin',
+        url: 'https://www.lederversand-berlin.de/Ziegennappa-z125',
+        variant: 'list 0,55 m²',
+        priceCents: 94_056,
+        priceNote:
+          'za celý list 38,50 € (s německou DPH 19 %), přepočet kurzem ČNB ze 7. 10. 2026 orientačně; poštovné do Česka 16,99 € (Economy) nebo 19,99 € (DHL). Větší listy 0,60–0,75 m² za 42,00–52,50 €.',
+        note: 'Světlá přepážka D1 a podšívka L1. Podle obchodu třísločiněná a nebarvená. Prodává se jen po celých listech. Po dodání změřit; kusy nad 0,92 mm na přepážku nepoužít.',
         availability: 'in_stock',
-        checkedAt: '2026-09-29',
+        checkedAt: '2026-10-07',
+      },
+      {
+        title: 'Ziegenleder naturell pflanzliche Gerbung ungefärbt 0,6–0,8 mm 2. Sortierung #z125b',
+        shop: 'Lederversand Berlin',
+        url: 'https://www.lederversand-berlin.de/z125b',
+        variant: 'list 0,45 m²',
+        priceCents: 65_961,
+        priceNote:
+          'za celý list 27,00 € (s německou DPH 19 %), přepočet kurzem ČNB ze 7. 10. 2026 orientačně; poštovné jako u #z125',
+        note: 'Levnější varianta: stejná kůže ve 2. jakosti, s viditelnými přírodními vadami (jizvy, štípance od hmyzu). Na malé díly D1 a L1 stačí, vady obejděte.',
+        availability: 'in_stock',
+        checkedAt: '2026-10-07',
       },
       {
         title: 'Kozinka třísločiněná čokoládová 0,7–0,9 mm',
@@ -280,7 +299,7 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
     cautions: [
       'Třídu a přídržnou sílu ověřit u prodejce. Odhad pole v návrhu počítá s třídou kolem N42–N52; Ø 8 × 1,5 v této třídě se v prověřených českých obchodech nenašel. Jestli magnet N35 udrží víčko přes mezeru 1,6 mm, ukáže až zkouška Z-1 na zkušebním kusu (ověřit na prototypu).',
       'Síly udávané různými obchody se mezi sebou nedají přímo srovnat, každý je počítá jinak. Rozhodne zkušební kus.',
-      'Jiná tloušťka magnetu mění tloušťku peněženky u magnetu a formulář v aplikaci ji nemá: tloušťku si zapište a střih nechte přepočítat tím, kdo ho udržuje (třeba v Claude Code nad repozitářem: pole magnetThicknessMm v modelu src/lib/geometry/lid-wallet.ts).',
+      'Jiná tloušťka magnetu mění tloušťku peněženky u magnetu: zadejte ji ve formuláři „Listy pro vaši kůži“ na stránce Listy střihu (lekce 11). Když s ní střih neplatí, aplikace listy nevytvoří a napíše proč.',
       'Neodym je křehký: na magnet netlouct paličkou a nepáčit ho ostrou hranou.',
     ],
     avoid: [

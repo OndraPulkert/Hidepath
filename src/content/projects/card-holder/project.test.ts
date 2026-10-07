@@ -15,6 +15,30 @@ describe('obsah – pouzdro na karty: steh', () => {
     expect(step(6, 'stitch')).toContain('nechte asi 2 mm dlouhé a zatavte');
   });
 
+  it('spodní roh: řada po zaoblení 3,5 mm od hrany, ne v průsečíku rovných linií', () => {
+    expect(step(6, 'punch-sides')).toContain('asi 6 mm pod horní hranou kapsy');
+    expect(step(6, 'punch-sides')).toContain('i tam 3,5 mm od hrany, ne do průsečíku');
+    expect(step(6, 'punch-sides')).toContain('(ověřte na odřezku)');
+  });
+
+  it('značky ze šablony: konce výřezu v lekci 5, vpich pod čárkou 56 mm v lekci 6', () => {
+    expect(step(5, 'prick-marks')).toContain('krátká čárka nad horní hranou přední kapsy');
+    expect(step(6, 'mark-glue-area')).toContain('těsně pod vnitřním koncem čárky 56 mm');
+    const back = cardHolderProject.template!.pieces.find((p) => p.id === 'back')!;
+    expect(back.heightMark).toEqual({ fromBottomMm: 56, lengthMm: 8 });
+  });
+
+  it('šití pouzdra odkazuje na zakončení i zatavení konců (E2, F2, F3)', () => {
+    const stitch = cardHolderProject.lessons
+      .find((l) => l.order === 6)!
+      .steps.find((s) => s.id === 'stitch')!;
+    expect(stitch.animationLinks!.map((l) => l.href)).toEqual([
+      '/animace/sedlarsky-steh.html#E2',
+      '/animace/sedlarsky-steh.html#F2',
+      '/animace/sedlarsky-steh.html#F3',
+    ]);
+  });
+
   it('rub: méně pravidelný je normální, ale utažený, v řadě a bez smyček', () => {
     expect(step(4, 'compare')).toContain('stejně utažené, v jedné řadě a bez smyček');
     expect(step(4, 'compare')).toContain('vidličky nebyly při děrování kolmo (lekce 3)');

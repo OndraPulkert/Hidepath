@@ -184,6 +184,13 @@ function ProjectView({ project }: { project: ProjectDefinition }) {
                   />
                   čárkovaná = linie stehu, neřezat (rýsuje se na kůži)
                 </li>
+                <li>
+                  <span
+                    aria-hidden
+                    className="mr-2 inline-block h-3 w-6 border-l border-leather align-middle"
+                  />
+                  krátká čárka = značka k propíchnutí šídlem (lekce 5 a 6)
+                </li>
               </ul>
               <p className="text-meta text-ink-2">{typo(project.template.printNote)}</p>
               <Kicker className="mt-2">Jak vypadá sestavené</Kicker>

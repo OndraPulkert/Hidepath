@@ -10,7 +10,7 @@
  *   pnpm pattern:coin-holder --grommet       # volitelná průchodka ve vnitřním panelu (od v4.11 není ve výchozím)
  *
  * Varianty jdou do vlastních souborů (…-mince-40mm, …-okno-18mm, …-kuze-1-2mm, …-pruchodka); list postupu
- * se generuje jen pro výchozí střih. Neznámý přepínač je chyba, aby překlep nepřepsal verzované soubory.
+ * se generuje jen pro výchozí střih a pro kůži 1,2 mm (pouzdro-mince-postup-kuze-1-2mm, výchozí v aplikaci). Neznámý přepínač je chyba, aby překlep nepřepsal verzované soubory.
  *
  * Výstup: docs/generated/pouzdro-mince-sablona.svg/.pdf (pás, A4 NA ŠÍŘKU),
  * pouzdro-mince-kapsa.svg/.pdf (kapsa a forma, A4 na výšku) a pouzdro-mince-postup.svg/.pdf. Geometrie je celá
@@ -1007,7 +1007,9 @@ export function buildCoinHolderProcessSvg(
       ...caption(0, [
         `pás ${cz(L.stripLengthMm)} × ${cz(L.panelHeightMm)} mm + jazyk ${cz(L.tabLengthMm)} (s rezervou ${cz(spec.tabFitReserveMm)})`,
         'po zkoušce na papíře: přilepit na LÍC, řezat skrz papír,',
-        'ohyb B ztenčit z rubu (jen u 1,5 mm), prosekat otvory dna,',
+        spec.foldSkiveThicknessMm !== null
+          ? 'ohyb B ztenčit z rubu (jen u 1,5 mm), prosekat otvory dna,'
+          : `kůže ${cz(spec.bodyThicknessMm)} mm: ohyby neztenčovat, prosekat otvory dna,`,
         'zapečetit rub vnitřního panelu',
       ]),
     );
@@ -1397,6 +1399,22 @@ export function coinHolderFileStem(spec: CoinCardHolderSpec): string {
   return parts.join('-');
 }
 
+/**
+ * Název listu postupu, nebo null, když se pro tuto variantu list postupu nekreslí: jen výchozí
+ * střih (pouzdro-mince-postup) a varianty lišící se jen tloušťkou kůže těla
+ * (pouzdro-mince-postup-kuze-1-2mm).
+ */
+export function coinHolderProcessFileStem(spec: CoinCardHolderSpec): string | null {
+  const d = DEFAULT_COIN_CARD_HOLDER;
+  const base = coinHolderFileStem({
+    ...spec,
+    bodyThicknessMm: d.bodyThicknessMm,
+    foldSkiveThicknessMm: d.foldSkiveThicknessMm,
+  });
+  if (base !== 'pouzdro-mince-sablona') return null;
+  return coinHolderFileStem(spec).replace('pouzdro-mince-sablona', 'pouzdro-mince-postup');
+}
+
 /** Hodnota přepínače `--name value` nebo `--name=value`; undefined, když přepínač chybí. */
 function argValue(name: string): string | undefined {
   const eq = process.argv.find((a) => a.startsWith(`${name}=`));
@@ -1488,6 +1506,9 @@ async function main(): Promise<void> {
   const outDir = resolve(dirname(fileURLToPath(import.meta.url)), '../docs/generated');
   mkdirSync(outDir, { recursive: true });
   const stem = coinHolderFileStem(spec);
+  // Postup skládání jen pro výchozí střih a jeho variantu s jinou tloušťkou kůže těla (výchozí
+  // v aplikaci je 1,2 mm); jiná varianta by přepsala verzovaný soubor.
+  const procStem = coinHolderProcessFileStem(spec);
   const svg = buildCoinHolderSheetSvg(spec);
   const svgPath = resolve(outDir, `${stem}.svg`);
   writeFileSync(svgPath, svg, 'utf8');
@@ -1565,9 +1586,7 @@ async function main(): Promise<void> {
     [...allPages.map((c) => `<div class="s">${c}</div>`), `<div class="s">${rotated}</div>`].join(
       '',
     ) +
-    (stem === 'pouzdro-mince-sablona'
-      ? `<div class="s">${buildCoinHolderProcessSvg(spec)}</div>`
-      : '');
+    (procStem !== null ? `<div class="s">${buildCoinHolderProcessSvg(spec)}</div>` : '');
   const pa = await browser.newPage();
   await pa.setContent(pagesHtml, { waitUntil: 'load' });
   const allPath = resolve(
@@ -1583,15 +1602,14 @@ async function main(): Promise<void> {
     preferCSSPageSize: true,
   });
   console.log(`Zapsáno ${allPath} (všechny listy v jednom PDF)`);
-  // Postup skládání jen pro výchozí střih (jiná varianta by přepsala verzovaný soubor).
-  if (stem === 'pouzdro-mince-sablona') {
+  if (procStem !== null) {
     const proc = buildCoinHolderProcessSvg(spec);
-    const procSvg = resolve(outDir, 'pouzdro-mince-postup.svg');
+    const procSvg = resolve(outDir, `${procStem}.svg`);
     writeFileSync(procSvg, proc, 'utf8');
     const pg = await browser.newPage();
     await pg.setContent(landscape(proc), { waitUntil: 'load' });
     await pg.pdf({
-      path: resolve(outDir, 'pouzdro-mince-postup.pdf'),
+      path: resolve(outDir, `${procStem}.pdf`),
       width: '297mm',
       height: '210mm',
       printBackground: true,
@@ -1601,12 +1619,12 @@ async function main(): Promise<void> {
     console.log(`Zapsáno ${procSvg} + .pdf (postup skládání, ilustrace, ne 1:1)`);
     for (let step = 1; step <= PROCESS_STEP_COUNT; step++) {
       writeFileSync(
-        resolve(outDir, `pouzdro-mince-postup-krok-${step}.svg`),
+        resolve(outDir, `${procStem}-krok-${step}.svg`),
         buildCoinHolderProcessStepSvg(step, spec),
         'utf8',
       );
     }
-    console.log(`Zapsáno pouzdro-mince-postup-krok-1…${PROCESS_STEP_COUNT}.svg (kroky pro lekce)`);
+    console.log(`Zapsáno ${procStem}-krok-1…${PROCESS_STEP_COUNT}.svg (kroky pro lekce)`);
   }
   await browser.close();
   const L = coinCardHolderLayout(spec);

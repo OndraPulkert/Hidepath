@@ -564,7 +564,7 @@ add('E','Na konci prošijte zpět dva otvory','Na konci řady prošijte zpět dv
 },{v:'LÍC',sub:'konec řady'},'Tip: zpět šijte stejným rytmem, jen opačným směrem. Zpětné stehy leží přes hotové.');
 
 const STARTM=[[2,1],[1,0],...FWD];
-add('E','Zajistěte začátek i konec švu','Pouzdro (lekce 6): nit vyrovnejte ve třetím otvoru od horního konce, ušijte dva stehy zpět k prvnímu otvoru a šijte dopředu přes ně, souvisle bok, spodek, bok. Rohový otvor prošijte jako každý jiný. Na konci udělejte dva zpětné stehy. Projekty 02 a 03: dva zpětné stehy na začátku i na konci každého švu. Projekt 03, boky S4 a S5: steh 60–64 navíc zdvojte (jak, ověřte na zkušebním kuse).',13000,t=>{
+add('E','Zajistěte začátek i konec švu','Pouzdro (lekce 6): nit vyrovnejte ve třetím otvoru od horního konce, ušijte dva stehy zpět k prvnímu otvoru a šijte dopředu přes ně, souvisle bok, spodek, bok. Otvory v rozích prošijte jako všechny ostatní. Na konci udělejte dva zpětné stehy. Projekty 02 a 03: dva zpětné stehy na začátku i na konci každého švu. Projekt 03, boky S4 a S5: steh 60–64 navíc zdvojte (jak, ověřte na zkušebním kuse).',13000,t=>{
   const v=es(t,.04,.92)*5, n=Math.floor(v), fr=v-n;
   let s=seamScene(STARTM,Math.min(n,5),n<5?Math.max(fr,.001):0,{hiBack:[0,1]});
   s+=viewTag('POHLED NA LÍC · začátek švu');

@@ -112,10 +112,11 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
       'papirovy-model-kuze-1-2',
       'sablona-kuze-1-2',
       'kapsa',
-      'postup',
+      'postup-kuze-1-2',
     ]);
     const thick = groups.find((g) => g.sheets.some((x) => x.id === 'sablona'))!;
     expect(thick.variant).toContain('kůže 1,5 mm');
+    expect(thick.sheets.map((x) => x.id)).toContain('postup');
     expect(coinCardHolderProject.patternSheets!.defaultVariantLabel).toContain('kůže 1,2 mm');
     // Záložní okno Ø 18 mm: vlastní skupina (nezaškrtnutá), prstenec podle modelu.
     const w18 = coinCardHolderLayout({ ...DEFAULT_COIN_CARD_HOLDER, windowDiameterMm: 18 });

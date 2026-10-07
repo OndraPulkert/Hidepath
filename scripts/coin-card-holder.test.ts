@@ -12,6 +12,7 @@ import {
   buildCoinHolderProcessSvg,
   buildCoinHolderSheetSvg,
   coinHolderFileStem,
+  coinHolderProcessFileStem,
   skiveZones,
 } from './coin-card-holder.ts';
 
@@ -45,6 +46,16 @@ describe('generátor pouzdra s mincí – varianty', () => {
     );
     // Volitelná průchodka (od v4.11 není ve výchozím střihu) jde do vlastního souboru.
     expect(coinHolderFileStem({ ...spec, grommet: true })).toBe('pouzdro-mince-sablona-pruchodka');
+  });
+
+  it('list postupu jen pro výchozí střih a kůži 1,2 mm (výchozí v aplikaci), ne pro jiné varianty', () => {
+    expect(coinHolderProcessFileStem(spec)).toBe('pouzdro-mince-postup');
+    expect(coinHolderProcessFileStem({ ...spec, bodyThicknessMm: 1.2 })).toBe(
+      'pouzdro-mince-postup-kuze-1-2mm',
+    );
+    expect(coinHolderProcessFileStem({ ...spec, coinDiameterMm: NAMED_COINS.decision })).toBeNull();
+    expect(coinHolderProcessFileStem({ ...spec, windowDiameterMm: 18 })).toBeNull();
+    expect(coinHolderProcessFileStem({ ...spec, grommet: true })).toBeNull();
   });
 
   it('výchozí listy jsou bez průchodky, --grommet ji vrátí se stejnou geometrií', () => {

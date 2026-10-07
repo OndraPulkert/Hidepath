@@ -343,7 +343,7 @@ add('A','Výchozí stav: rub B s čarami','Záda B leží rubem nahoru. Na rubu 
 },SIDE.rubB);
 
 // A2 — páska
-add('A','Hranici lepení přelepte maskovací páskou','Hranice lepení přelepte maskovací páskou, aby lepidlo nezateklo do sloupců mincí ani nad čáru <span class="num">y 80,57</span>. Horních <span class="num">1,43</span> mm D2 (pás závěsu) se nelepí.',7600,t=>{
+add('A','Hranici lepení přelepte maskovací páskou','Na rub D2 přeneste hranice G3 ze šablony D2 z listu 3 (kreslí D2 z rubu): přiložte ji na rub D2 podle hran, rohy pásů propíchněte jehlou a spojte tužkou u pravítka. Hranice lepení na rubu B i D2 přelepte maskovací páskou, aby lepidlo nezateklo do sloupců mincí ani nad čáru <span class="num">y 80,57</span>. Horních <span class="num">1,43</span> mm D2 (pás závěsu) se nelepí.',7600,t=>{
   MIR=true;
   let s;
   const p=es(t,.08,.75);
@@ -353,10 +353,10 @@ add('A','Hranici lepení přelepte maskovací páskou','Hranice lepení přelept
   const o=seg(t,.75,.85);
   const [lx,ly]=pt(19.5,56),[rx]=pt(81.5,56);
   s+=op(o,pill(lx,ly,'sloupec','t','middle')+pill(rx,ly,'sloupec','t','middle')+pill(lx,ly+6,'nelepit','ts','middle')+pill(rx,ly+6,'nelepit','ts','middle'));
-  let ib=notes([['Páska kryje','t'],['volné plochy:'],['sloupce mincí'],['a pás nad y 80,57'],['',''],['Lepené pásy','t'],['zůstanou volné'],['pro lepidlo']],17,5.4);
+  let ib=notes([['Páska kryje','t'],['volné plochy:'],['sloupce mincí'],['a pás nad y 80,57'],['',''],['Lepené pásy','t'],['zůstanou volné'],['pro lepidlo'],['',''],['Rub D2: hranice','t'],['ze šablony D2'],['(list 3), pak páska']],17,5.4);
   s+=inset('PÁSKA',ib);
   return s;
-},SIDE.rubB,'Tip: stejné hranice přelepte i na rubu D2 – pásy G3 jsou na listu 3.');
+},SIDE.rubB);
 
 // A3 — lepidlo na obě strany
 add('A','Naneste lepidlo jen do pásů','Kontaktní lepidlo naneste na rub B i na rub D2, jen do pásů G3: dno <span class="num">y 18–23</span>, boky <span class="num">x 0–4</span> a <span class="num">97–101</span>, střed <span class="num">x 35–66</span>. Boky a střed jen do <span class="num">y 80,57</span>. Pásku hned strhněte.',10000,t=>{
@@ -377,7 +377,7 @@ add('A','Naneste lepidlo jen do pásů','Kontaktní lepidlo naneste na rub B i n
   s+=inset('RUB D2',ib);
   if(strip>0)s+=op(seg(t,.84,.9),bottomPill('pásku hned strhnout'));
   return s;
-},SIDE.rubB,'Tip: hranice G3 na rub D2 přeneste podle listu 3 (ověřte na odřezku).');
+},SIDE.rubB);
 
 // A4 — zavadnout
 add('A','Nechte zavadnout 10–15 min','Lepidlo nechte zavadnout <span class="num">10–15</span> min, pak díly spojte.',5200,t=>{
@@ -474,15 +474,12 @@ add('B','Zkoste a vyleštěte okénko','Okénko <span class="num">14 × 45</span
   MIR=false;
   let s=wallB('lic',{marks:false,bill:true,d2behind:true});
   s+=`<path d="${slotD(M.bill)}" fill="none" stroke="var(--d2)" stroke-width=".55"/>`;
-  const [cx,cy]=pt(50.5,47.5);
-  const o=seg(t,.35,.55);
-  // mince 1 Kč Ø 20 přes okénko 14
-  s+=op(o,`<circle cx="${f(cx)}" cy="${f(cy)}" r="${f(10*K)}" fill="var(--steel)" stroke="var(--jigedge)" stroke-width=".3" opacity=".85"/>`+pill(cx,cy+12,'1 Kč Ø 20 > 14','tok','middle'));
+  const [cx]=pt(50.5,47.5);
   s+=op(seg(t,.05,.2),pill(cx,PY(70)-3,'svazek B + D2','t','middle'));
   let ib=notes([['zkosit, leštit','t'],['jako svazek'],['',''],['postup hran:','t'],['animace Hrany,'],['část G4']],17,5.4);
   s+=inset('OKÉNKO',ib);
   return s;
-},SIDE.licB,'Tip: mince 1 Kč (Ø 20) okénkem nepropadne.');
+},SIDE.licB);
 
 // C1 — způsob (a): šablona P1 z listu 1 na líc B, jehla
 add('C','Způsob (a): propíchněte přes list 1','Způsob (a): šablonu z listu 1 (druhý výtisk na tvrdém papíře) přiložte na líc B podle obrysu. Otvory S1–S3 propíchněte jehlou skrz B i D2. Oba způsoby nejdřív vyzkoušejte na odřezku D2 + B.',10000,t=>{

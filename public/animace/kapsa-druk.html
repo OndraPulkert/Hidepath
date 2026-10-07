@@ -12,12 +12,14 @@
   color-scheme:light;
   --bg:#f3efe9;--panel:#fffdf9;--stage:#f7f2ea;--ink:#2a211b;--muted:#6c6158;--line:#ddd5cc;
   --accent:#b3261e;--ok:#2f6b3a;--btn:#2a211b;--btn-ink:#fffdf9;
-  --lic:#b8773f;--lic-d:#8a5228;--lic-hi:#d39a63;
-  --rub:#dcc4a2;--rub-d:#b99a72;--rub-fib:#c7a87f;
-  --hole:#2b2018;--paper:#fcfbf7;--paper-edge:#cfc8bb;--print:#2b2b2b;--print-m:#7a7a7a;
+  --ui:#b8773f;--ui-d:#8a5228;--ui-hi:#d39a63;
+  /* kůže Blu: modře probarvená lícová useň 1,2 mm (barvy schematické) */
+  --lic:#2f5f8f;--lic-d:#1d3d5e;--lic-hi:#4f82b3;
+  --rub:#b7c6d4;--rub-d:#8597a9;--rub-fib:#9fb1c3;
+  --hole:#141a21;--paper:#fcfbf7;--paper-edge:#cfc8bb;--print:#2b2b2b;--print-m:#7a7a7a;
   --steel:#a3abb3;--steel-d:#5c656e;
   --metal:#c9ced3;--metal-d:#5f676f;--metal-hi:#f1f3f5;
-  --coin-o:#c4683f;--coin-o-d:#7a3a1c;--coin-i:#dcb94f;--coin-i-d:#93752a;--chip-lic:#b8773f;--chip-rub:#dcc4a2;
+  --coin-o:#c4683f;--coin-o-d:#7a3a1c;--coin-i:#dcb94f;--coin-i-d:#93752a;--chip-lic:#2f5f8f;--chip-rub:#b7c6d4;
   --board:#eceff1;--board-d:#aab2ba;--thread:#f6efdc;--thread-d:#8f8166;
   --skin:#e9b996;--skin-d:#b98563;--mallet:#d8c7a6;--mallet-d:#8f7a55;--wood:#7b5a3a;
   --card:#cfdbe6;--card-d:#8aa0b4;--bill:#cfe0c4;--bill-d:#8fa883;--mat:#5f8f73;--mat-d:#3f6b55;
@@ -26,9 +28,10 @@
   color-scheme:dark;
   --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
   --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
-  --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
-  --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;
-  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;
+  --ui:#a96c38;--ui-d:#7a4822;--ui-hi:#c08654;
+  --lic:#2b557f;--lic-d:#1a3550;--lic-hi:#4775a2;
+  --rub:#a3b2c0;--rub-d:#718395;--rub-fib:#8d9fb1;--chip-lic:#2b557f;--chip-rub:#a3b2c0;
+  --hole:#0b0f13;--paper:#ece9e1;--paper-edge:#a9a296;
   --steel:#9099a2;--steel-d:#4d555d;
   --metal:#b3bac1;--metal-d:#4a5259;--metal-hi:#e2e6ea;
   --board:#a9b1b8;--board-d:#6c747c;--thread:#efe6cf;--thread-d:#7d705a;
@@ -39,9 +42,10 @@
   color-scheme:dark;
   --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
   --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
-  --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
-  --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;
-  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;
+  --ui:#a96c38;--ui-d:#7a4822;--ui-hi:#c08654;
+  --lic:#2b557f;--lic-d:#1a3550;--lic-hi:#4775a2;
+  --rub:#a3b2c0;--rub-d:#718395;--rub-fib:#8d9fb1;--chip-lic:#2b557f;--chip-rub:#a3b2c0;
+  --hole:#0b0f13;--paper:#ece9e1;--paper-edge:#a9a296;
   --steel:#9099a2;--steel-d:#4d555d;
   --metal:#b3bac1;--metal-d:#4a5259;--metal-hi:#e2e6ea;
   --board:#a9b1b8;--board-d:#6c747c;--thread:#efe6cf;--thread-d:#7d705a;
@@ -71,14 +75,14 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 .pseg{flex:1;display:grid;gap:4px;min-width:0;cursor:pointer;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left}
 .pseg .bars{display:flex;gap:2px;height:6px}
 .pseg .bars span{flex:1;background:var(--line);border-radius:2px;position:relative;overflow:hidden}
-.pseg .bars span b{position:absolute;inset:0;background:var(--lic);transform-origin:left;transform:scaleX(0)}
+.pseg .bars span b{position:absolute;inset:0;background:var(--ui);transform-origin:left;transform:scaleX(0)}
 .pseg .pl{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media (max-width:520px){.pl span{display:none}}
 .pseg.on .pl{color:var(--ink);font-weight:600}
 .cap{min-height:6.6em}
-.cap .no{display:inline-block;font-weight:700;color:var(--lic-d);margin-right:6px;font-variant-numeric:tabular-nums}
-:root[data-theme="dark"] .cap .no{color:var(--lic-hi)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cap .no{color:var(--lic-hi)}}
+.cap .no{display:inline-block;font-weight:700;color:var(--ui-d);margin-right:6px;font-variant-numeric:tabular-nums}
+:root[data-theme="dark"] .cap .no{color:var(--ui-hi)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cap .no{color:var(--ui-hi)}}
 .cap h2{display:inline;font-size:1.05rem;margin:0}
 .cap p{margin:4px 0 0;color:var(--ink)}
 .cap .tip{display:block;margin-top:6px;color:var(--muted);font-size:14px}
@@ -658,7 +662,7 @@ function rulerMM(e,fy,deg,op=1){
   s+=`<path d="${d}" stroke="var(--steel-d)" stroke-width=".13"/>`;
   return `<g transform="translate(${f(e)} ${f(fy)}) rotate(${f(deg)})" opacity="${f(op)}">${s}</g>`;
 }
-add('C','Zkraťte jazyk 11 mm za střed kloboučku','Jazyk narovnejte lícem nahoru na řezací podložku. Pravítkem odměřte na líci jazyka 11 mm od středu kloboučku ke konci jazyka a vyznačte vpichem šídla po obou stranách kloboučku. Pravítko přiložte přes obě značky a jazyk podle něj uřízněte kolmo k bokům, nůž tahem od prstů volné ruky. Rohy zaoblete na R10 rohovou šablonou (lob 20), nebo obtáhněte kulatý předmět Ø 20 mm (minci, víčko) a řízněte po čáře.',14000,t=>{
+add('C','Zkraťte jazyk 11 mm za střed kloboučku','Jazyk narovnejte lícem nahoru na řezací podložku. Pravítkem odměřte na líci jazyka 11 mm od středu kloboučku ke konci jazyka a vyznačte vpichem šídla po obou stranách kloboučku. Pravítko položte na odřezávanou část (na ponechané by leželo na kloboučku), hranou přes obě značky a s přesahem přes konec jazyka na podložku, aby leželo stabilně. Jazyk podle něj uřízněte kolmo k bokům: řežte pomalu, čepel tiskněte k hraně pravítka, tedy od kloboučku (ověřte na odřezku), nůž tahem od prstů volné ruky. Rohy zaoblete na R10 rohovou šablonou (lob 20), nebo obtáhněte kulatý předmět Ø 20 mm (minci, víčko) a řízněte po čáře.',14000,t=>{
   const rIn=es(t,0,.06), mv=es(t,.22,.3), rot=es(t,.42,.52), cut=es(t,.54,.72), away=es(t,.72,.8), rr=es(t,.8,.97);
   const yCut=-(IMP+BEYOND), CY=-IMP, MG=6.6;
   // poloha pravítka: A vpravo od kloboučku (v obraze vlevo), B na druhé straně, C napříč, hranou na čáře řezu
@@ -711,12 +715,12 @@ add('C','Zkraťte jazyk 11 mm za střed kloboučku','Jazyk narovnejte lícem nah
   // prsty volné ruky drží pravítko, nůž tahem od nich
   if(rot>.9&&away<.3){const [x,y]=tv(cam,M(TX1+5),yCut-RW*.55);s+=finger(x,y,1-seg(away,0,.3))}
   if(cut>0&&cut<1){const [kx,ky]=tv(cam,M(L(TX1+2,TX0-2,cut)),yCut);s+=knife(kx,ky,20)}
-  const msg= rr>0?'rohy R10': cut>0?'řez podél pravítka': rot>0?'pravítko přes obě značky': t>.1?'11 mm od středu kloboučku':'nula na středu kloboučku';
+  const msg= rr>0?'rohy R10': cut>0?'pomalu, čepel k pravítku (od kloboučku)': rot>0?'pravítko na odřezek, přesah na podložku': t>.1?'11 mm od středu kloboučku':'nula na středu kloboučku';
   s+=pill(4,86,msg,'t');
   s+=inset('ZKRÁTIT',notes([['11 mm od středu','tw'],['kloboučku na líci'],['ocelovým'],['pravítkem'],['rohy R10:'],['rohová šablona'],['(lob 20), mince'],['či víčko Ø 20']],18,5.2)+
     fade(seg(t,.95,1),notes([['od kraje kloboučku','tok'],['zbyde 5 mm']],64,5.4)));
   return s;
-},{v:'LÍC',sub:'jazyk narovnaný, zezadu'},'Tip: pravítko leží na odřezávané části – na straně kloboučku by leželo na něm.');
+},{v:'LÍC',sub:'jazyk narovnaný, zezadu'});
 
 // ===== D =====
 add('D','Kontrola: druk drží','Druk drží a jde znovu rozepnout. Zdířka na rubu jazyka cvakne na hlavičku na předním panelu.',9000,t=>{

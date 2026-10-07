@@ -664,10 +664,6 @@ add('C', 'Zkoste a vyleštěte jako svazek', 'lekce 6',
     C = camera(CAM_C, ...VB.main);
     let s = bWithD2();
     s += windowDraw(M.bill, billSt({ plan: false, out: 1 }));
-    const u = es(t, 0.3, 0.7);
-    s += op(seg(t, 0.25, 0.32), circ(50.5, lerp(80, 47.5, u), 10, 'coin') + T(X(50.5), Y(lerp(80, 47.5, u)), '1 Kč', { a: 'middle' }));
-    s += op(seg(t, 0.72, 0.82), line(40.5, 34, 60.5, 34, 'dim') + T(X(50.5), Y(34) + em(0.9), 'Ø 20 > 14', { a: 'middle' }));
-    s += op(seg(t, 0.82, 0.92), okMark(X(70), Y(47.5), 1) + T(X(70) + em(0.9), Y(47.5), 'nepropadne', { c: 'g' }));
     return s;
   }, (t) => {
     // řez napříč hotovým okénkem: B a D2 jako jeden svazek
@@ -680,7 +676,7 @@ add('C', 'Zkoste a vyleštěte jako svazek', 'lekce 6',
     s += Tm(40.5, 5, 'B', { a: 'middle' }) + Tm(60.5, -5.2, 'D2', { a: 'middle' });
     s += line(40.5, 3.8, 40.5, 1.7, 'lead') + line(60.5, -4, 60.5, 0.3, 'lead');
     return s;
-  }, { capA: 'Hrana B a D2 se brousí a leští najednou.', tip: 'Tip: mince 1 Kč (Ø 20) okénkem nepropadne.' });
+  }, { capA: 'Hrana B a D2 se brousí a leští najednou.' });
 
 // ===== D: chyba – řez za tečnu =====
 // řez levého boku okénka mincí jde shora (tečna y 70) dolů a má skončit na dolní tečně y 34

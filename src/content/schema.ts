@@ -176,9 +176,10 @@ export const lessonStepSchema = z.object({
   /**
    * Odkaz pod krokem na tiskovou stránku: `practice-sheets` = cvičné listy projektu
    * (`practiceSheets`), např. cvičná šablona k vyzkoušení přenosu šablony na odřezku;
-   * `pattern-sheets` = listy střihu projektu (`patternSheets`), kde krok říká „vytiskněte list …“.
+   * `pattern-sheets` = listy střihu projektu (`patternSheets`), kde krok říká „vytiskněte list …“;
+   * `template` = obdélníková šablona 1:1 projektu (`template`).
    */
-  printLink: z.enum(['practice-sheets', 'pattern-sheets']).optional(),
+  printLink: z.enum(['practice-sheets', 'pattern-sheets', 'template']).optional(),
   /**
    * Odkazy pod krokem na animace postupu a návod na délku nitě, každý jako vlastní tlačítko
    * („▶ Animace postupu“, „📏 Jak odměřit nit“) v pořadí pole. Bez odkazů pole vynechte.
@@ -237,6 +238,13 @@ export const templatePieceSchema = z.object({
   openEdge: z.enum(['top', 'none']),
   /** Steh na bocích vede od spodku jen do této výšky (např. zadní díl jen po výšku přední kapsy). */
   stitchUpToMm: z.number().positive().optional(),
+  /**
+   * Značka výšky na obou bocích (od spodní hrany), krátká čárka `lengthMm` dovnitř dílu, např.
+   * horní hrana přední kapsy na zadním dílu. Propichuje se šídlem (lekce 6 projektu 01).
+   */
+  heightMark: z
+    .object({ fromBottomMm: z.number().positive(), lengthMm: z.number().positive() })
+    .optional(),
   /** Mělký výřez na palec uprostřed horní hrany, kterým se vysouvá karta. */
   thumbCutout: z
     .object({ widthMm: z.number().positive(), depthMm: z.number().positive() })
@@ -460,6 +468,12 @@ export const projectDefinitionSchema = z
           ctx.addIssue({
             code: 'custom',
             message: `Lekce ${lesson.slug}: krok ${step.id} odkazuje na cvičné listy, projekt žádné nemá`,
+          });
+        }
+        if (step.printLink === 'template' && !project.template) {
+          ctx.addIssue({
+            code: 'custom',
+            message: `Lekce ${lesson.slug}: krok ${step.id} odkazuje na šablonu, projekt žádnou nemá`,
           });
         }
         if (step.printLink === 'pattern-sheets' && !project.patternSheets) {

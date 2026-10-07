@@ -75,6 +75,13 @@ const read = (name: string): string | undefined => {
   return existsSync(path) ? readFileSync(path, 'utf8') : undefined;
 };
 
+/** Výchozí kůže těla v aplikaci: 1,2 mm bez ztenčení, jak ji nastaví `--thickness 1.2`. */
+const THIN = {
+  ...DEFAULT_COIN_CARD_HOLDER,
+  bodyThicknessMm: 1.2,
+  foldSkiveThicknessMm: foldSkiveFor(1.2),
+};
+
 const width = (mm: number): { end: BeltEndSpec; tip: BeltTipSpec } => ({
   end: { ...DEFAULT_BELT_END, beltWidthMm: mm },
   tip: { ...DEFAULT_BELT_TIP, beltWidthMm: mm },
@@ -98,6 +105,12 @@ describe('zapsané soubory odpovídají generátoru', () => {
     ...Array.from({ length: 8 }, (_, i): [string, () => string] => [
       `pouzdro-mince-postup-krok-${i + 1}.svg`,
       () => buildCoinHolderProcessStepSvg(i + 1),
+    ]),
+    // Postup pro výchozí kůži 1,2 mm (bez ztenčení), jak ho zapíše --thickness 1.2.
+    ['pouzdro-mince-postup-kuze-1-2mm.svg', () => buildCoinHolderProcessSvg(THIN)],
+    ...Array.from({ length: 8 }, (_, i): [string, () => string] => [
+      `pouzdro-mince-postup-kuze-1-2mm-krok-${i + 1}.svg`,
+      () => buildCoinHolderProcessStepSvg(i + 1, THIN),
     ]),
     ['pouzdro-mince-kapsa.svg', () => buildCoinHolderPocketSvg()],
     ['pouzdro-mince-papirovy-model.svg', () => buildCoinHolderPaperModelSvg()],
