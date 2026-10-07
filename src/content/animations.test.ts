@@ -61,7 +61,7 @@ describe('animace postupu – schéma odkazu', () => {
         title: 'Krok',
         body: 'Text',
         media: [],
-        animationLinks: [animationLink('lidBends', 'anim-dno')],
+        animationLinks: [animationLink('lidBends', 'A2')],
       }).success,
     ).toBe(true);
   });
@@ -104,7 +104,9 @@ describe('animace postupu – schéma odkazu', () => {
     expect(() => animationLink('pouchFold', 'F1' as 'E1')).toThrow(/nemá kotvu #F1/);
     expect(animationStepTitle('snap', 'C5')).toBe('Zkraťte jazyk 11 mm za střed kloboučku');
     expect(animationStepTitle('snap', 'C0')).toBeUndefined();
-    expect(animationStepTitle('lidBends', 'A1')).toBeUndefined();
+    expect(animationStepTitle('lidBends', 'A1')).toBe('Lekce 5: rýha na rubu');
+    expect(animationStepTitle('lidBends', 'B8')).toBeUndefined();
+    expect(animationStepTitle('threadLength', 'A1')).toBeUndefined();
   });
 
   it('animationLink skládá href s kotvou a popisek části', () => {
@@ -177,7 +179,7 @@ describe('animace postupu – stránky v public/animace', () => {
     'steps' in page ? [{ key, path: page.path, sections: page.sections, steps: page.steps }] : [],
   );
 
-  it('kroky mají čtyři stránky kapsy, dvě stránky pásu, sedlářský steh a hrany', () => {
+  it('kroky mají čtyři stránky kapsy, dvě stránky pásu, sedlářský steh, hrany, ohyby a magnet Víčka', () => {
     expect(steppedPages.map((p) => p.key)).toEqual([
       'kapsa',
       'pocketAttach',
@@ -187,13 +189,18 @@ describe('animace postupu – stránky v public/animace', () => {
       'bottomHoles',
       'saddleStitch',
       'edges',
+      'lidBends',
+      'lidMagnet',
     ]);
   });
 
   it.each(steppedPages)('$key: seznam kroků odpovídá stránce a umí otevřít každý krok', (page) => {
     const source = pageSource(page.path)!;
     expect(pageSteps(source)).toEqual(page.steps);
-    expect(Object.keys(page.steps)).toEqual(Object.keys(page.sections));
+    // Části s kroky jsou jednopísmenné; stránka může mít navíc kotvu rámečku (Víčko: #vymena).
+    expect(Object.keys(page.steps)).toEqual(
+      Object.keys(page.sections).filter((k) => /^[A-Z]$/.test(k)),
+    );
     expect(source).toContain('function stepFromHash()');
     expect(source).not.toContain('partFromHash');
     for (const [part, titles] of Object.entries<readonly string[]>(page.steps)) {
@@ -400,6 +407,7 @@ describe('animace postupu – sedlářský steh a hrany ve všech projektech', (
       ?.animationLinks?.map((l) => l.href);
   const steh = (anchor: string) => `/animace/sedlarsky-steh.html#${anchor}`;
   const hrany = (anchor: string) => `/animace/hrany.html#${anchor}`;
+  const magnet = (anchor: string) => `/animace/vicko-magnet.html#${anchor}`;
   const thread = animationPages.threadLength.path;
 
   it.each([
@@ -430,10 +438,10 @@ describe('animace postupu – sedlářský steh a hrany ve všech projektech', (
     ['lid-wallet', 8, 's6', [steh('E2'), thread]],
     ['lid-wallet', 9, 'punch-sew', [steh('E2'), thread]],
     ['lid-wallet', 9, 'edges', [hrany('G3')]],
-    ['lid-wallet', 11, 'trim-tip', [hrany('G4')]],
-    ['lid-wallet', 11, 's7', [steh('E2'), thread, hrany('G4')]],
+    ['lid-wallet', 11, 'trim-tip', [magnet('B8'), magnet('B9'), hrany('G4')]],
+    ['lid-wallet', 11, 's7', [steh('E2'), magnet('B10'), magnet('B11'), thread, hrany('G4')]],
     // Výměna magnetu ušije S7 znovu a hrany jazýčku dokončí stejně jako lekce 11.
-    ['lid-wallet', 12, 'magnet-swap', [steh('E2'), thread, hrany('G4')]],
+    ['lid-wallet', 12, 'magnet-swap', [magnet('vymena'), steh('E2'), thread, hrany('G4')]],
   ] as const)('%s lekce %i, krok %s', (projectSlug, order, stepId, expected) => {
     expect(hrefsOf(projectSlug, order, stepId)).toEqual(expected);
   });
@@ -448,6 +456,53 @@ describe('animace postupu – sedlářský steh a hrany ve všech projektech', (
   });
 });
 
+describe('animace postupu – magnet Víčka v lekcích 8, 11 a 12', () => {
+  const hrefsOf = (order: number, stepId: string) =>
+    projects
+      .find((p) => p.slug === 'lid-wallet')!
+      .lessons.find((l) => l.order === order)!
+      .steps.find((s) => s.id === stepId)
+      ?.animationLinks?.map((l) => l.href)
+      .filter((href) => href.startsWith('/animace/vicko-magnet.html'));
+  const magnet = (anchor: string) => `/animace/vicko-magnet.html#${anchor}`;
+
+  it.each([
+    [8, 'g1', [magnet('A1'), magnet('A2')]],
+    [8, 'g2', [magnet('A3'), magnet('A4')]],
+    [8, 'check-d1', [magnet('A5')]],
+    [11, 'find-plate', [magnet('B1')]],
+    [11, 'magnet-dry-test', [magnet('B2')]],
+    [11, 'epoxy', [magnet('B3'), magnet('B4')]],
+    [11, 'lining', [magnet('B5'), magnet('B6')]],
+    [11, 'cure', [magnet('B7')]],
+    [11, 'trim-tip', [magnet('B8'), magnet('B9')]],
+    [11, 's7', [magnet('B10'), magnet('B11')]],
+    [12, 'magnet-swap', [magnet('vymena')]],
+  ] as const)('lekce %i, krok %s otevírá přesný krok animace', (order, stepId, expected) => {
+    expect(hrefsOf(order, stepId)).toEqual(expected);
+  });
+
+  it('stará kotva #anim-… zůstává na stránce jako alias části a #vymena jako rámeček', () => {
+    const source = pageSource(animationPages.lidMagnet.path)!;
+    expect(source).toContain(`const PARTS={A:'anim-plisek',B:'anim-magnet'};`);
+    expect(source).toContain('id="anim-plisek"');
+    expect(source).toContain('id="anim-magnet"');
+    expect(source).toContain('id="vymena"');
+    expect(source).toContain('<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">');
+    expect(animationLink('lidMagnet', 'B7')).toEqual({
+      href: magnet('B7'),
+      label: 'Krok B7 – Nechte 24 h vytvrdit',
+    });
+    expect(() => animationLink('lidMagnet', 'B13')).toThrow(/nemá kotvu #B13/);
+    expect(() => animationLink('lidMagnet', 'A7')).toThrow(/nemá kotvu #A7/);
+  });
+
+  it('stránka nepoužívá čísla kroků zadání místo lekcí', () => {
+    const source = pageSource(animationPages.lidMagnet.path)!;
+    expect(source).not.toMatch(/\(krok(y)? 1[1-9]|krok(y)? 2[0-3]\b|5min/);
+  });
+});
+
 describe('animationButtonText', () => {
   it('pojmenuje návod na délku nitě, steh a hrany jinak než animace', () => {
     expect(animationButtonText(animationPages.threadLength.path)).toBe('Jak odměřit nit');
@@ -457,5 +512,50 @@ describe('animationButtonText', () => {
     );
     expect(animationButtonText(`${animationPages.edges.path}#G4`)).toBe('Jak na hrany');
     expect(animationButtonText(animationPages.edges.path)).toBe('Jak na hrany');
+  });
+});
+
+describe('animace postupu – ohyby Víčka v lekcích 5, 7 a 10', () => {
+  const hrefsOf = (order: number, stepId: string) =>
+    projects
+      .find((p) => p.slug === 'lid-wallet')!
+      .lessons.find((l) => l.order === order)!
+      .steps.find((s) => s.id === stepId)
+      ?.animationLinks?.map((l) => l.href);
+  const ohyby = (anchor: string) => `/animace/vicko-ohyby.html#${anchor}`;
+
+  it.each([
+    [5, 'crease', 'A1'],
+    [7, 'wet', 'A2'],
+    [7, 'place-spacer', 'A4'],
+    [7, 'fold-clamp', 'A5'],
+    [7, 'remove-spacer', 'A10'],
+    [10, 'contents-b', 'B1'],
+    [10, 'wet-close', 'B2'],
+    [10, 'overnight', 'B4'],
+    [10, 'lid-behaviour', 'B7'],
+  ] as const)('lekce %i, krok %s otevře krok %s', (order, stepId, anchor) => {
+    expect(hrefsOf(order, stepId)).toEqual([ohyby(anchor)]);
+  });
+
+  it('stránka ohybů bere staré kotvy #anim-dno a #anim-zaves jako části A a B', () => {
+    const source = pageSource('/animace/vicko-ohyby.html')!;
+    expect(source).toContain("const PARTS={A:'anim-dno',B:'anim-zaves'}");
+    expect(source).toContain('id="anim-dno"');
+    expect(source).toContain('id="anim-zaves"');
+    expect(source).toContain('<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">');
+    expect(source).toContain('<a class="backlink" href="/" data-back>← Zpět do lekce</a>');
+  });
+
+  it('závěs v animaci odpovídá lekci 10: obsah stavu B, fólie, lehká zátěž, bez kopyta', () => {
+    const source = pageSource('/animace/vicko-ohyby.html')!;
+    expect(source).toContain('papír asi 70 × 65');
+    expect(source).toContain('Mezi vlhký závěs a knihu dejte potravinovou fólii');
+    expect(source).toContain('kniha (lehká zátěž)');
+    expect(source).toContain('Kopyto ani opěrka nejsou potřeba');
+    expect(source).toContain('nepřeklápějte až na záda');
+    expect(source).not.toMatch(
+      /2–3 karty|pár bankovek|padá dozadu|nepokračovat|Záloha B \(|lidWalletLayout/,
+    );
   });
 });

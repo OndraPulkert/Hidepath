@@ -62,10 +62,14 @@ describe('StepList – odkazy na animace postupu', () => {
       .filter((s) => s.id === 's7' || s.id === 'd1-paint');
     renderWithProviders(<StepList steps={lidSteps} template={undefined} projectSlug={lid.slug} />);
 
-    const [steh, thread] = within(stepItem('Šev S7 kolem magnetu')).getAllByRole('link');
+    const s7Links = within(stepItem('Šev S7 kolem magnetu')).getAllByRole('link');
+    const [steh, magnet] = s7Links;
     expect(steh).toHaveAccessibleName(/Jak šít sedlářský steh/);
     expect(steh).toHaveAttribute('href', '/animace/sedlarsky-steh.html#E2');
     expect(steh).toHaveTextContent('Krok E2 – Zpětné stehy na začátku i na konci švu');
+    expect(magnet).toHaveAccessibleName(/Animace postupu/);
+    expect(magnet).toHaveAttribute('href', '/animace/vicko-magnet.html#B10');
+    const thread = s7Links.find((l) => l.getAttribute('href') === '/animace/delka-nite.html');
     expect(thread).toHaveAccessibleName(/Jak odměřit nit/);
 
     const [hrany] = within(stepItem('Barevná horní hrana D1')).getAllByRole('link');

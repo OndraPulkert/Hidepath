@@ -11,7 +11,10 @@ import { type AnimationLink } from '@/content/schema';
  * - kapsa-skladani (`#A`–`#E`) a kapsa-druk (`#A`–`#D`): stejně jako kapsa-prisiti,
  * - pas-prenos-rez (`#A`–`#D`) a pas-otvory-dna (`#A`–`#E`): stejně jako kapsa-prisiti,
  * - sedlarsky-steh a hrany (`#A`–`#G`): stejně jako kapsa-prisiti, společné pro všechny projekty,
- * - Víčko: `#anim-…` posune stránku na danou animaci (spustí se, když je vidět).
+ * - vicko-ohyby (`#A` ohyb dna, `#B` závěs): stejně jako kapsa-prisiti; staré `#anim-dno`
+ *   a `#anim-zaves` stránka dál bere jako `#A` a `#B`,
+ * - vicko-magnet (`#A`–`#B`): stejně jako kapsa-prisiti; `#vymena` posune na rámeček výměny
+ *   magnetu, staré `#anim-plisek` a `#anim-magnet` stránka dál bere jako `#A` a `#B`.
  *
  * `steps` = názvy kroků každé části ve stejném pořadí jako na stránce (`add('B', 'název', …)`).
  * Stránky kapsy umí otevřít i jednotlivý krok: `#B3` = třetí krok části B, stejně jako ho
@@ -334,16 +337,65 @@ export const animationPages = {
     path: '/animace/vicko-ohyby.html',
     title: 'Ohyby peněženky Víčko',
     sections: {
-      'anim-dno': 'Ohyb dna krok za krokem',
-      'anim-zaves': 'Závěs krok za krokem',
+      A: 'Ohyb dna krok za krokem',
+      B: 'Závěs krok za krokem',
+    },
+    steps: {
+      A: [
+        'Lekce 5: rýha na rubu',
+        'Navlhčete pás ohybu',
+        'Počkejte, až se barva skoro vrátí k suché',
+        'Vložku hranou na čáru hrany vložky',
+        'Přehněte F lícem ven přes vložku',
+        'Fólie mezi vlhký líc a prkénka',
+        'Spodních 20 mm mezi dvě prkénka',
+        'Stáhněte svěrkami',
+        'Nechte vyschnout přes noc',
+        'Vysuňte vložku bokem',
+        'Hotovo: F jde odklopit na lepení plíšku',
+      ],
+      B: [
+        'Vložte obsah stavu B',
+        'Navlhčete jen pás závěsu',
+        'Zavřete víčko přes obsah',
+        'Fólie mezi vlhký závěs a knihu',
+        'Přes noc pod knihou',
+        'Po vyschnutí se víčko vrací k zavřené poloze',
+        'Otevřené víčko drží palec',
+      ],
     },
   },
   lidMagnet: {
     path: '/animace/vicko-magnet.html',
     title: 'Magnet ve Víčku',
     sections: {
-      'anim-plisek': 'Plíšek mezi F a D1',
-      'anim-magnet': 'Magnet a podšívka L1 na jazýčku',
+      A: 'Část A – plíšek mezi F a D1',
+      B: 'Část B – magnet a podšívka L1 na jazýčku',
+      vymena: 'Výměna magnetu',
+    },
+    steps: {
+      A: [
+        'F rubem nahoru na PE desku, B stojí nahoru',
+        'G1: plíšek na rub přední stěny',
+        'G2 a G2b: lepidlo, páska z obou stran',
+        'D1 rubem na rub F podle osy',
+        'Změřte polohu D1 a přitlačte paličkou',
+        'Plíšek je zavřený, vyměnit už nejde',
+      ],
+      B: [
+        'Najděte plíšek a označte polohu magnetu',
+        'Nanečisto: který magnet',
+        'Zdrsněte rub konce jazýčku',
+        'Magnet epoxidem na značku a osu',
+        'Kontaktní lepidlo kolem magnetu a na L1',
+        'L1 horní hranou na rysku 10 mm nad magnetem',
+        'Nechte 24 h vytvrdit',
+        'Ořízněte špičku R10 a boky L1',
+        'Klín jen v posledních 2,5 mm',
+        'Šablona S7 na líc, propíchnout a děrovat',
+        'Sedlový steh S7, pak hrany jazýčku',
+        'Hotovo: magnet drží přes L1 a F',
+      ],
     },
   },
 } as const satisfies Record<

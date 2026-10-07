@@ -533,6 +533,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'crease',
         title: 'Rýha ohybu dna',
+        animationLinks: [animationLink('lidBends', 'A1')],
         body: `${NUMBERS_NOTE} Na rubu vytlačte podél osy ohybu (výchozí v 62,21) rýhu tupým hrotem u ocelového pravítka. Nic neřežte, tlačte stejně po celé šířce, nejdřív na odřezku z V12. Pás závěsu se nijak neupravuje a ve výchozím střihu se nic neztenčuje (další krok je jen pro zálohu B1 nebo B2).`,
         media: [],
       },
@@ -725,12 +726,13 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'wet',
         title: 'Navlhčete pás ohybu',
         body: `${NUMBERS_NOTE} Pás ohybu dna navlhčete houbičkou a počkejte, až se barva usně skoro vrátí k suché (5–10 min). Ohyb se dělá před lepením plíšku, aby plíšek nebyl u vlhké usně.`,
-        animationLinks: [animationLink('lidBends', 'anim-dno')],
+        animationLinks: [animationLink('lidBends', 'A2')],
         media: [],
       },
       {
         id: 'place-spacer',
         title: 'Vložku položte hranou na čáru hrany vložky',
+        animationLinks: [animationLink('lidBends', 'A4')],
         body: 'Vložku položte na rub zad B hranou na čáru hrany vložky (na listu 1 a 2, ve výchozím střihu v 64,18, tedy 1,96 mm za rýhou směrem k B; rysky na obou bocích; případně posunutou podle měření z V12). Hrana vložky míří k přední stěně F, na straně F vložka neleží. Tak padne střed ohybu na rýhu. Vložka je o 5 mm na každé straně širší než díl, aby měl ohyb oporu po celé šířce.',
         media: [
           ill(
@@ -743,6 +745,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'fold-clamp',
         title: 'Přehněte a stáhněte',
+        animationLinks: [animationLink('lidBends', 'A5')],
         body: 'F přehněte nahoru přes vložku lícem ven. Mezi vlhký líc a prkénka dejte potravinovou fólii (jinak zůstanou otisky a skvrny od dřeva). Spodních 20 mm stáhněte mezi dvěma prkénky svěrkami a nechte vyschnout přes noc (12–24 h, ne u topení). Bez svěrek prkénka zatižte knihami nebo je stáhněte silnými gumičkami – tlak ověřte na odřezku.',
         media: [
           photo('lw-l7-clamp', 'Ohyb dna stažený mezi prkénky s fólií, vložka zasunutá v ohybu'),
@@ -751,6 +754,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'remove-spacer',
         title: 'Vysuňte vložku',
+        animationLinks: [animationLink('lidBends', 'A10')],
         body: 'Po vyschnutí vysuňte vložku bokem. Boky ještě nejsou slepené, takže F jde odklopit do asi 90° na lepení plíšku a D1 v příští lekci: F pak leží rubem nahoru na desce a B stojí nad ohybem nahoru. Když ohyb po vyschnutí trochu odpruží, udrží ho lepení G4 a boční švy.',
         media: [],
       },
@@ -796,19 +800,21 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'g1',
         title: 'G1: plíšek na rub přední stěny',
         body: `${NUMBERS_NOTE} F (přední stěnu) položte naplocho rubem nahoru na PE desku, celou na desce, ohyb dna u hrany desky. B (zadní stěna s přišitou D2) stojí nad ohybem nahoru a ohyb dna zůstává asi 90°. Viset dolů přes hranu stolu jako u švu S6 B tady nemůže: s F rubem nahoru by se ohyb musel přehnout obráceně. Vyschlý ohyb chce B sklopit zpátky k F, proto ji zezadu opřete o knihu nebo krabičku a horní hranu k ní přichyťte kolíčkem nebo páskou, ať nespadne na lepidlo. Plíšek přilepte kontaktním lepidlem na rub F do plochy G1: x 43,5–57,5, y 3,5–24 (přilnavost lepidla k oceli ověřte na odřezku). Po tomto kroku už plíšek vyměnit nejde, magnet ano.`,
-        animationLinks: [animationLink('lidMagnet', 'anim-plisek')],
+        animationLinks: [animationLink('lidMagnet', 'A1'), animationLink('lidMagnet', 'A2')],
         media: [],
       },
       {
         id: 'g2',
         title: 'G2 a G2b: přepážka D1',
         body: 'D1 přilepte rubem na rub F: G2 v y 2–26 (x 4–97) přes plíšek a boky G2b v x 4–5 a 96–97 do y 61. D1 má šířku přesně 93 mm bez montážní vůle, proto na D1 i na rub F vyznačte osu x 50,5 a D1 přikládejte podle osy zdola od y 2 nahoru. Pásy G2b (1 mm) ohraničte maskovací páskou z obou stran a lepidlo nanášejte párátkem, ať nepřeteče do kapsy karet. Pásky strhněte hned po nanesení lepidla, ještě než zavadne a než přiložíte D1, jinak zůstanou zalepené pod D1. Přetok nad y 26 hned setřete.',
+        animationLinks: [animationLink('lidMagnet', 'A3'), animationLink('lidMagnet', 'A4')],
         media: [],
       },
       {
         id: 'check-d1',
         title: 'Změřte polohu D1',
         body: 'Po přiložení změřte: kapsa karet mezi pásy G2b musí mít aspoň 90,5 mm a D1 musí být od hrany F aspoň 3,5 mm, jinak zasáhne do bočního švu S4 na x 3. Pak přitlačte paličkou přes desku položenou na D1; F leží na PE desce, takže úder má oporu.',
+        animationLinks: [animationLink('lidMagnet', 'A5')],
         media: [],
       },
       {
@@ -949,18 +955,20 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'contents-b',
         title: 'Vložte obsah stavu B',
         body: `${NUMBERS_NOTE} Do kapsy karet dejte 2 staré karty a místo bankovky papír asi 70 × 65 mm, přeložený nebo v několika vrstvách, až posuvka ukáže asi 0,7 mm (nebo skutečnou bankovku zabalenou ve fólii, aby nezvlhla). Mince ne. Obsah pod závěsem je pak 3,42 mm jako ve výpočtu.`,
-        animationLinks: [animationLink('lidBends', 'anim-zaves')],
+        animationLinks: [animationLink('lidBends', 'B1')],
         media: [],
       },
       {
         id: 'wet-close',
         title: 'Navlhčete jen závěs a zavřete víčko',
+        animationLinks: [animationLink('lidBends', 'B2')],
         body: 'Houbičkou navlhčete jen pás závěsu (nenamáčejte celé). Víčko zavřete přes obsah a jazýček položte po přední stěně. Kopyto ani opěrka nejsou potřeba, formou je peněženka s obsahem.',
         media: [],
       },
       {
         id: 'overnight',
         title: 'Přes noc pod knihou',
+        animationLinks: [animationLink('lidBends', 'B4')],
         body: 'Mezi vlhký závěs a knihu dejte potravinovou fólii a nechte peněženku zavřenou přes noc (12–24 h, ne u topení) pod lehkou zátěží. Magnet v tu chvíli ještě není.',
         media: [
           ill(
@@ -985,6 +993,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'lid-behaviour',
         title: 'Otevřené víčko samo nestojí',
+        animationLinks: [animationLink('lidBends', 'B7')],
         body: 'Po vyschnutí se víčko vrací k zavřené poloze a otevřené samo nestojí. Tak to má být: u karty to nevadí, u bankovek a mincí ho drží palec ruky, která peněženku drží. Víčko nepřeklápějte až na záda – závěs by se ohýbal opačně.',
         media: [],
       },
@@ -1047,25 +1056,28 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'find-plate',
         title: 'Najděte plíšek a označte polohu magnetu',
         body: `${NUMBERS_NOTE} Peněženka ve stavu B: 2 staré karty, v bankovkách 1 bankovka nebo papír 0,7 mm z lekce 10 – ne karta – a bez mincí. Zkušebním magnetem najděte po líci F hrany plíšku (mají vyjít y plíšku z rámečku, výchozí 3,5 a 24,0) a páskou označte značku magnetu z rámečku (výchozí y 11,9). Okno lepení je ve výchozím střihu 11,73–12,13; s přepážkami 0,8 jen 11,50–11,63. Značku proto měřte posuvkou od spodní hrany a po nalepení pásky přeměřte. Zavřete víčko a značku přeneste ryskami na boky jazýčku.`,
-        animationLinks: [animationLink('lidMagnet', 'anim-magnet')],
+        animationLinks: [animationLink('lidMagnet', 'B1')],
         media: [],
       },
       {
         id: 'magnet-dry-test',
         title: 'Nanečisto: který magnet',
         body: 'Než magnet přilepíte napevno, můžete vyzkoušet sílu nanečisto (doporučení, ověřit na prototypu): magnet s kouskem kozinky L1 přes něj přichyťte tenkou páskou na rub jazýčku na značku, víčko zavřete, zatřeste, otočte dnem vzhůru a otevřete jedním prstem za špičku – postupně pro Ø 8 × 1, 8 × 1,5 a 8 × 2. Páska přidá mezeru a výsledek je jen orientační, rozhodne až zkouška Z-1 na hotovém kuse. Když vyberete jinou tloušťku než 1,5 mm, mění se tloušťka peněženky u magnetu: podle návrhu se dosadí do magnetThicknessMm a kontroly se přepočítají (poloha magnetu, plíšek i otvory S7 zůstávají), což formulář v aplikaci neumí. Zapište si tloušťku vybraného magnetu a nechte střih přepočítat tím, kdo ho udržuje (třeba v Claude Code nad repozitářem: pole magnetThicknessMm v modelu src/lib/geometry/lid-wallet.ts, oddíl 12.1 zadání).',
+        animationLinks: [animationLink('lidMagnet', 'B2')],
         media: [],
       },
       {
         id: 'epoxy',
         title: 'Magnet epoxidem',
         body: 'Rub konce jazýčku zdrsněte. Magnet přilepte dvousložkovým epoxidem na rub jazýčku středem na značku a na osu a nechte ztuhnout (podle návodu epoxidu, orientačně 30 min – ověřit), aby se při natírání a přikládání L1 neposunul.',
+        animationLinks: [animationLink('lidMagnet', 'B3'), animationLink('lidMagnet', 'B4')],
         media: [],
       },
       {
         id: 'lining',
         title: 'Podšívka L1 přes magnet',
         body: 'Teprve po ztuhnutí epoxidu natřete rub jazýčku kolem magnetu a L1 kontaktním lepidlem, nechte zavadnout a L1 přiložte horní hranou na rysku 10 mm nad středem magnetu (šablona na listu 4). Přitlačte prsty nebo převalujte hladkým kolíkem. Přes magnet paličkou netlučte – neodym se může odštípnout.',
+        animationLinks: [animationLink('lidMagnet', 'B5'), animationLink('lidMagnet', 'B6')],
         media: [
           ill(
             'lw-l11-tongue',
@@ -1078,12 +1090,17 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'cure',
         title: 'Nechte 24 h vytvrdit',
         body: 'Peněženku položte zády na stůl a víčko narovnejte tak, aby leželo na stole vodorovně jako prodloužení zad: ne zavřené a ne přehnuté přes záda. Pás víčka zatižte lehce knihou mimo magnet. Magnet musí být aspoň pár cm od plíšku, jinak ho plíšek přitáhne. Víčko se samo zavírá, bez zátěže ho nenechávejte. Nechte 24 h vytvrdit, teprve pak šijte S7 a zkoušejte držení víčka. Závěs při tom nenavlhčujte; jestli 24 h v rovné poloze nezmění tvar závěsu z lekce 10, ověřit na prototypu (zkouška Z-2).',
+        animationLinks: [animationLink('lidMagnet', 'B7')],
         media: [],
       },
       {
         id: 'trim-tip',
         title: 'Ořízněte špičku a boky L1',
-        animationLinks: [animationLink('edges', 'G4')],
+        animationLinks: [
+          animationLink('lidMagnet', 'B8'),
+          animationLink('lidMagnet', 'B9'),
+          animationLink('edges', 'G4'),
+        ],
         body: 'Špičku uřízněte 7,0 mm pod značkou (rysky) podle šablony nožem skrz jazýček i L1 najednou a zároveň seřízněte boky L1 načisto s boky jazýčku (přířez 24 mm je o 2 mm na každé straně širší než jazýček 20 mm). Střed oblouku R10 leží 10,0 mm nad špičkou, tedy 3,0 mm nad středem magnetu. Pak špičku zbruste do klínu, ale jen v posledních 2,5 mm: 2,5 mm od špičky si udělejte rysku a brusným papírem na hranolku bruste z líce i z rubu jen mezi ryskou a špičkou, ne nožem. Za ryskou (dál od špičky) už nebruste, aby magnet neležel na ztenčeném místě. Stačí, když je hrana na konci asi 0,5–0,7 mm a zaoblená.',
         media: [],
       },
@@ -1093,6 +1110,8 @@ export const lessons: readonly LessonDefinition[] = [
         body: 'Šablonu konce jazýčku z listu 4 přiložte na líc jazýčku podle obrysu špičky a propíchněte jehlou 8 otvorů S7: U kolem magnetu, ke špičce otevřené. Jazýček leží rubem dolů a magnet s L1 z rubu vystupuje, proto si připravte podložku s otvorem: dva slepené odřezky usně 1,0 mm (nebo odřezek desky 2 mm) proseknuté uprostřed výsečníkem Ø 10. Magnet leží v otvoru, kůže kolem naplocho. Děrujte z líce jazýčku vidličkou 4 mm: svislé boky (x 44,5 a 56,5) dvouzubou částí svisle, horní řadu (14 mm nad špičkou) vodorovně, rohové otvory jen jedním krajním zubem nasazeným do otvoru řady. Natočení zubů na bocích zvolte tak, aby šikmé otvory měly stejný sklon jako v horní řadě – vyzkoušejte na odřezku. Náhrada: otvory předpíchnout jehlou přes šablonu a vidličkou je jen dorazit. Šijte sedlovým stehem, konce 2 otvory zpět. Pak hrany jazýčku vybruste, zkoste a vyleštěte jako v lekci 5.',
         animationLinks: [
           animationLink('saddleStitch', 'E2'),
+          animationLink('lidMagnet', 'B10'),
+          animationLink('lidMagnet', 'B11'),
           animationLink('threadLength'),
           animationLink('edges', 'G4'),
         ],
@@ -1170,6 +1189,7 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Výměna magnetu (jen když Z-1 neprojde)',
         body: 'Neověřený postup – ověřit na prototypu, napřed na zkušebním kuse. Plíšek vyměnit nejde, magnet ano: sedí jen pod L1 a švem S7. (1) Vypárejte S7: stehy na líci jazýčku přestřihněte malými nůžkami nebo páráčkem (kůži nenařízněte) a nit vytáhněte; otvory S7 zůstanou a použijí se znovu. (2) Odlepte L1 pomalu od horní hrany ke špičce a počítejte s novou L1 – ve špičce je s jazýčkem zbroušená do společného klínu a nejspíš se roztrhne. Novou vyřízněte z nebarvené kozinky (přířez 24 × 22). (3) Sundejte magnet: netlučte do něj a nepáčte ho ostrou hranou, neodym je křehký. Zbytky lepidla opatrně obruste brusným papírem a rub znovu zdrsněte. (4) Nový magnet stejného Ø 8 – silnější (vyšší třída nebo tlustší), nebo slabší (nižší třída nebo tenčí); třídu, tloušťku a sílu ověřte u prodejce. Stejný průměr nechá beze změny polohu magnetu, plíšek i otvory S7. Jiná tloušťka magnetu ale mění tloušťku peněženky u magnetu a odhad pole: podle návrhu se dosadí do magnetThicknessMm a kontroly se přepočítají. Formulář v aplikaci to neumí: tloušťku nového magnetu si zapište a přepočet nechte na tom, kdo střih udržuje (třeba v Claude Code nad repozitářem: pole magnetThicknessMm v modelu src/lib/geometry/lid-wallet.ts, oddíl 12.1 zadání). (5) Magnet epoxidem na stejné místo (osa x 50,5, 7,0 mm nad špičkou, místo ohraničují otvory S7), nechte ztuhnout, pak L1 kontaktním lepidlem (přes magnet netlučte). Novou L1 přilepte s přesahem a ořízněte podle hran hotového jazýčku (jazýček se znovu neřeže). Znovu zbruste klín v posledních 2,5 mm špičky (jen mezi ryskou a špičkou) jako v lekci 11. Po 24 h vytvrzení propíchněte z líce jehlou starými otvory S7 i skrz L1 a ušijte S7 znovu; u tlustšího magnetu zesilte podložku s otvorem o rozdíl tloušťky. Nakonec hrany jazýčku znovu vybruste, zkoste a vyleštěte. Jestli staré otvory druhé šití vydrží, ověřit na prototypu.',
         animationLinks: [
+          animationLink('lidMagnet', 'vymena'),
           animationLink('saddleStitch', 'E2'),
           animationLink('threadLength'),
           animationLink('edges', 'G4'),
