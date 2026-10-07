@@ -1345,7 +1345,7 @@ export const lidWalletProject: ProjectDefinition = {
       priority: 'required',
       reason: 'Švy S1–S6 a šev S7 kolem magnetu.',
       specification:
-        'Tenká voskovaná nit, která projde otvory vidliček 4 mm (ověřit na odřezku); délka orientačně 4 × délka švu + 25–30 cm rezervy (2 × 15 cm na konce), u bočních švů S4 a S5 (v úseku y 20–60 tři vrstvy F + D2 + B) podle návodu „Jak odměřit nit“ 5 × délka švu.',
+        'Voskovaná nit 0,6 mm (podle návrhu peněženky; že projde otvory vidliček 4 mm, ověřit na odřezku); délka orientačně 4 × délka švu + 25–30 cm rezervy (2 × 15 cm na konce), u bočních švů S4 a S5 (v úseku y 20–60 tři vrstvy F + D2 + B) podle návodu „Jak odměřit nit“ 5 × délka švu.',
     },
     {
       equipmentSlug: 'contact-cement',
