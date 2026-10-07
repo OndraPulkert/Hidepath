@@ -1167,11 +1167,11 @@ export function buildLidJigsSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): strin
       '  (magnet začíná ' + cz(spec.magnetFromTipMm - spec.magnetDiameterMm / 2) + ' mm od špičky)',
       `čárkovaný obdélník: přířez L1 ${cz(spec.liningBlankWidthMm)} × ${cz(spec.liningBlankHeightMm)} (useň ${cz(spec.liningMm)}),`,
       `  horní hrana ${cz(spec.liningTopAboveMagnetMm)} nad středem magnetu`,
-      'krok 18: křížek magnetu na značku y z kroku 17,',
+      'lekce 11: křížek magnetu na značku y z rámečku,',
       '  přilepit magnet a přes něj L1',
-      'krok 19: podle obrysu R10 seříznout jazýček',
+      'lekce 11: podle obrysu R10 seříznout jazýček',
       '  i s L1 najednou',
-      `krok 20: S7 – ${ln.seamHoles.length} červených otvorů (U kolem magnetu),`,
+      `lekce 11: S7 – ${ln.seamHoles.length} červených otvorů (U kolem magnetu),`,
       `  ≥ ${cz(ln.seamToMagnetMm)} mm od magnetu; propíchnout přes šablonu`,
     ],
     1.8,
@@ -1276,7 +1276,7 @@ export function buildLidJigsSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): strin
   s.text('GUIDE', sx + 5, wy - 2, 'PROUŽEK S4/S5', 1.8, 'middle', { bold: true, fill: COLORS.CUT });
   s.text('GUIDE', sx + 5, SY(0) + 3, 'spodní hrana', 1.6, 'middle');
 
-  /* Čísla pro postup (krok 0–20) pro tuto variantu: kroky je berou odsud, ne z textu. */
+  /* Čísla pro postup pro tuto variantu: lekce je berou odsud, ne z textu. Odkazy jsou na lekce, ne na kroky zadání. */
   const st = (id: string) => L.states.find((q) => q.state.id === id)!;
   const [sA, sB, sC] = [st('A'), st('B'), st('C')];
   const g2b = L.glue.find((g) => g.id === 'G2b')!;
@@ -1290,21 +1290,21 @@ export function buildLidJigsSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): strin
     [
       '# Čísla pro postup (platí pro tento list)',
       `P1 ${czT(spec.leatherMm)} · ohyb dna ${czT(L.bottomFoldMm)} · závěs ${czT(L.hingeMm)}`,
-      `D1/D2 ${cz(spec.dividerMm)} · L1 ${cz(spec.liningMm)} (změřené, krok 0)`,
+      `D1/D2 ${cz(spec.dividerMm)} · L1 ${cz(spec.liningMm)} (změřené, lekce 1)`,
       '',
-      `kóta P1 na listu 1 (krok 0, 2): ${cz(L.p1LengthMm)}`,
-      `osa ohybu, rýha (krok 3, 4): v ${cz(L.v.foldAxis)}`,
-      `hrana vložky dna (krok 11): v ${cz(L.v.insertEdge)} (${cz(L.v.insertEdge - L.v.foldAxis)} za rýhou)`,
-      `pás závěsu (krok 3): v ${cz(L.v.hingeBand[0])}–${cz(L.v.hingeBand[1])}`,
-      `G3 jen do y ${cz(L.hingeBandStartY)} (krok 7)`,
-      `plíšek y ${cz(L.plate.y0)}–${cz(L.plate.y1)} (krok 12, 17)`,
-      `G2 y ${cz(L.d1BottomY)}–${cz(L.cardFloorY)}, boky G2b do y ${cz(g2b.y1)} (krok 12)`,
-      `S6 y ${cz(L.s6Y)} (krok 13)`,
-      `hrana víčka A / B / C (krok 16): ${cz(sA.bandEdgeY)} / ${cz(sB.bandEdgeY)} / ${cz(sC.bandEdgeY)}`,
+      `kóta P1 na listu 1 (lekce 1, 4): ${cz(L.p1LengthMm)}`,
+      `osa ohybu, rýha (lekce 4, 5): v ${cz(L.v.foldAxis)}`,
+      `hrana vložky dna (lekce 3, 4, 7): v ${cz(L.v.insertEdge)} (${cz(L.v.insertEdge - L.v.foldAxis)} za rýhou)`,
+      `pás závěsu (lekce 4): v ${cz(L.v.hingeBand[0])}–${cz(L.v.hingeBand[1])}`,
+      `G3 jen do y ${cz(L.hingeBandStartY)} (lekce 6)`,
+      `plíšek y ${cz(L.plate.y0)}–${cz(L.plate.y1)} (lekce 8, 11)`,
+      `G2 y ${cz(L.d1BottomY)}–${cz(L.cardFloorY)}, boky G2b do y ${cz(g2b.y1)} (lekce 8)`,
+      `S6 y ${cz(L.s6Y)} (lekce 8)`,
+      `hrana víčka A / B / C (lekce 10): ${cz(sA.bandEdgeY)} / ${cz(sB.bandEdgeY)} / ${cz(sC.bandEdgeY)}`,
       `  při k ${cz(spec.kMax)}: A ${cz(sA.bandEdgeYkMax)} / C ${cz(sC.bandEdgeYkMax)}`,
       `  k = (y_C − y_A) / ${cz(sC.hingePathMm - sA.hingePathMm)}`,
       '',
-      `# Značka magnetu y_m,B (krok 17): ${cz(L.magnetYB)}`,
+      `# Značka magnetu y_m,B (lekce 11): ${cz(L.magnetYB)}`,
       `okno lepení ${cz(L.magnetYBMin)}–${cz(L.magnetYBMax)} (šířka ${cz(winMm)} mm)`,
       winMm < 0.2
         ? 'úzké okno: značku měřit posuvkou od spodní hrany'
@@ -1384,7 +1384,7 @@ export function buildLidJigsSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): strin
     ox + bs.widthMm + 8,
     jy + 1,
     [
-      '# Tvarování závěsu (krok 16)',
+      '# Tvarování závěsu (lekce 10)',
       'bez kopyta a bez opěrky: formou je',
       'peněženka s obsahem stavu B',
       `(${sB.state.cards} staré karty + místo bankovky papír`,
@@ -1396,14 +1396,14 @@ export function buildLidJigsSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): strin
       'otevřené víčko samo nestojí,',
       'u bankovek a mincí ho drží palec',
       'ruky, která peněženku drží',
-      'posun víčka k změřit v kroku 16',
+      'posun víčka k změřit v lekci 10',
     ],
     1.75,
     2.55,
   );
   footer(
     s,
-    'Šablony se lepí na tvrdý papír a vyříznou. Poloha magnetu se určuje až na hotovém kusu (krok 17).',
+    'Šablony se lepí na tvrdý papír a vyříznou. Poloha magnetu se určuje až na hotovém kusu (lekce 11).',
   );
   return s.render('VÍČKO – šablony a přípravky');
 }

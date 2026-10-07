@@ -14,7 +14,9 @@ import { type AnimationLink } from '@/content/schema';
  * - vicko-ohyby (`#A` ohyb dna, `#B` závěs): stejně jako kapsa-prisiti; staré `#anim-dno`
  *   a `#anim-zaves` stránka dál bere jako `#A` a `#B`,
  * - vicko-magnet (`#A`–`#B`): stejně jako kapsa-prisiti; `#vymena` posune na rámeček výměny
- *   magnetu, staré `#anim-plisek` a `#anim-magnet` stránka dál bere jako `#A` a `#B`.
+ *   magnetu, staré `#anim-plisek` a `#anim-magnet` stránka dál bere jako `#A` a `#B`,
+ * - vicko-p1-rez (`#A`–`#E`), vicko-okenka (`#A`–`#D`), vicko-d2-zada (`#A`–`#D`)
+ *   a vicko-telo-s4s5 (`#A`–`#E`): stejně jako kapsa-prisiti.
  *
  * `steps` = názvy kroků každé části ve stejném pořadí jako na stránce (`add('B', 'název', …)`).
  * Stránky kapsy umí otevřít i jednotlivý krok: `#B3` = třetí krok části B, stejně jako ho
@@ -395,6 +397,144 @@ export const animationPages = {
         'Šablona S7 na líc, propíchnout a děrovat',
         'Sedlový steh S7, pak hrany jazýčku',
         'Hotovo: magnet drží přes L1 a F',
+      ],
+    },
+  },
+  lidP1Cut: {
+    path: '/animace/vicko-p1-rez.html',
+    title: 'Přenos a řez pásu P1',
+    sections: {
+      A: 'Část A – list 1 na líc',
+      B: 'Část B – propíchnout značky',
+      C: 'Část C – řez P1',
+      D: 'Část D – sejmout list',
+      E: 'Část E – rub podle listu 2',
+    },
+    steps: {
+      A: ['List 1 vystřihněte nahrubo', 'Na LÍC usně, páskou mimo čáru řezu'],
+      B: ['Konce osy, hrany vložky a přehybů na bocích', 'Středy výsečníků: Ø 8, 12, 10, 14'],
+      C: [
+        'Napojení jazýčku: nejdřív výsečník Ø 8',
+        'Tečné rovné řezy u pravítka',
+        'Dlouhé boky P1 u pravítka',
+        'Oblouky pomalu bez pravítka',
+        'Horní hranu F rovně přes výřez pro palec',
+        'Konec jazýčku rovně, s rezervou 5 mm',
+      ],
+      D: ['Pásku pomalu, list sejmout', 'Zkontrolujte značky a kótu P1'],
+      E: [
+        'List 2 na tvrdý papír, vyříznout po obrysu',
+        'P1 rubem nahoru, přiložit šablonu',
+        'Rohy ploch a konce čar propíchnout jehlou',
+        'Tečky spojit tužkou u pravítka',
+        'Rysky na bocích a „L“',
+      ],
+    },
+  },
+  lidWindows: {
+    path: '/animace/vicko-okenka.html',
+    title: 'Okénka a výřez pro palec',
+    sections: {
+      A: 'Část A – okénka mincí',
+      B: 'Část B – výřez pro palec',
+      C: 'Část C – okénko bankovek',
+      D: 'Část D – chyba: řez za tečnu',
+    },
+    steps: {
+      A: [
+        'Kde jsou okénka mincí',
+        'Šablona z listu 4 na propíchnuté středy',
+        'Výsečník Ø 12 na oba konce',
+        'Rovné řezy u pravítka od tečny k tečně',
+        'Druhé okénko stejně, konce dobrousit',
+      ],
+      B: [
+        'Kde je výřez pro palec',
+        'Šablona výřezu: střed na ose, 7,0 pod hranou',
+        'Výsečník Ø 10 přes šablonu',
+        'Rovné řezy od hrany F k tečnám',
+        'Rohy ústí R1 brusným papírem',
+      ],
+      C: [
+        'Až po lepení G3',
+        'Šablona z listu 4: křížky na středy',
+        'Výsečník Ø 14 skrz B i D2',
+        'Rovné řezy skrz obě vrstvy',
+        'Jeden svazek, mince nepropadne',
+      ],
+      D: ['Správně: řez končí na tečně', 'Chyba: nůž přejede tečnu', 'Proč zastavit na tečně'],
+    },
+  },
+  lidBackD2: {
+    path: '/animace/vicko-d2-zada.html',
+    title: 'D2 na záda a švy S1–S3',
+    sections: {
+      A: 'Část A – G3: D2 na rub zad',
+      B: 'Část B – okénko bankovek',
+      C: 'Část C – S1–S3 na líc D2',
+      D: 'Část D – děrovat a šít',
+    },
+    steps: {
+      A: [
+        'Rub B s čarami z lekce 4',
+        'Hranici lepení přelepte maskovací páskou',
+        'Kontaktní lepidlo na obě strany, jen v pásech',
+        'Nechte zavadnout 10–15 min',
+        'D2 rubem na rub B, přesah 1 mm na bocích',
+        'Přitlačte, děrovat nejdřív za 1 h',
+      ],
+      B: [
+        'Lícem B nahoru, šablona na propíchnuté středy',
+        'Výsečník Ø 14 a rovné řezy skrz obě vrstvy',
+        'Zkosit a vyleštit jako jeden svazek',
+      ],
+      C: [
+        'Způsob (a): šablona listu 1 na líc B, propíchnout jehlou',
+        'Způsob (a): otočte, vpichy jsou na líci D2',
+        'Způsob (b): šablona D2 z listu 3, obkreslete čáry',
+        'Způsob (b): otvory po 4 mm od osy a od y 76',
+      ],
+      D: [
+        'Z líce D2 na tvrdé desce, horní hranou od sebe',
+        'S1: 21 otvorů x 10,5–90,5',
+        'S2 a S3: po 13 otvorech y 28–76',
+        'Šijte sedlovým stehem, konce 2 otvory zpět',
+        'Hotovo: kontrolní body lekce 6',
+      ],
+    },
+  },
+  lidBodySides: {
+    path: '/animace/vicko-telo-s4s5.html',
+    title: 'Složení těla a boční švy',
+    sections: {
+      A: 'Část A – nanečisto',
+      B: 'Část B – lepení G4',
+      C: 'Část C – čára a otvory',
+      D: 'Část D – děrování',
+      E: 'Část E – šití',
+    },
+    steps: {
+      A: ['Výchozí stav: řez bokem', 'Nanečisto složte a zkontrolujte'],
+      B: [
+        'Zdrsněte líc D2',
+        'Lepidlo na obě plochy, nechat zavadnout',
+        'Přikládejte od ohybu dna nahoru',
+        'G4 hotové: kapsa 93 mm',
+      ],
+      C: ['Čára švu 3,0 mm od hrany', 'Otvory z proužku, od 76 dolů'],
+      D: [
+        'Mezi lepením a děrováním aspoň 1 h',
+        'y 8–52 z líce F',
+        'y 56–68 po jednom otvoru, odřezek pod hranu F',
+        'y 72–76 z líce D2, hotovo 18 otvorů',
+      ],
+      E: [
+        'Nit: 5 × délka švu + 25–30 cm',
+        'Začátek u 76: konce 2 otvory zpět',
+        'Šijte dolů k horní hraně F',
+        'Steh 60–64 zdvojte',
+        'Dolů k 8, konec 2 otvory zpět',
+        'Kontrolní bod a druhý bok',
       ],
     },
   },

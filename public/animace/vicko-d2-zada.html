@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Víčko: D2 na záda a švy S1–S3</title>
+<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+<!-- Self-hostované fonty aplikace (public/fonts), aby stránka fungovala i offline v PWA. -->
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}[hidden]:not([hidden=until-found i]){display:none!important}
+[id]{scroll-margin-top:12px}
+:root{
+  --bg:#f1eee9; --surface:#ffffff; --ink:#2a211b; --muted:#6c6158; --line:#ddd5cc;
+  --accent:#8a5a36; --ok:#2e7d4f; --warn:#a86a12; --bad:#b3261e; --canvas:#f7f4ef;
+  --kuze:#b9875a; --lic:#5b331b; --rub:#f0d9b5; --kuzeplan:#e9d6ba;
+  --d1:#d8c7a6; --d1edge:#c23b22; --d2:#34495e; --d2rub:#7a8a9a; --steel:#9aa2aa; --jigedge:#4f5d6b;
+  --notch:#d1461f; --skin:#efc3a0; --skinedge:#b07a57; --wood:#d9b98a; --woodedge:#9c7a4c;
+  --glue:#e39a1c; --tape:#f1ead0; --tape-d:#b9a77a; --paper:#fcfbf7; --paper-edge:#cfc8bb; --print:#2b2b2b;
+  --pencil:#4f545a; --pencil2:#d7dee5; --slit:#f6eddc; --slitB:#2b2018; --thread:#f6efdc; --thread-d:#8f8166; --thread2:#7aa6cf;
+  --board:#e6e9ec; --board-d:#aab2ba; --clip:#3d4247;
+  --font:"Albert Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#16120f; --surface:#1f1915; --ink:#ece4dc; --muted:#a89a8e; --line:#3a3029;
+  --accent:#d9a577; --ok:#6cc08d; --warn:#e0a54a; --bad:#f08a80; --canvas:#1a1512;
+  --kuze:#9a6a42; --lic:#f2b77a; --rub:#5e4028; --kuzeplan:#4a3726;
+  --d1:#c9b48e; --d1edge:#ff6a4d; --d2:#6f8fb0; --d2rub:#4b5f74; --steel:#7f8890; --jigedge:#b4c2cf;
+  --notch:#ff7a4f; --skin:#c48f6d; --skinedge:#f0c7a8; --wood:#7c6340; --woodedge:#c9a674;
+  --glue:#d38a1a; --tape:#cfc7a8; --tape-d:#8f8664; --paper:#e4dfd5; --paper-edge:#a9a296; --print:#2b2b2b;
+  --pencil:#d8cfc4; --pencil2:#142030; --slit:#0e0a08; --slitB:#f3e3c8; --thread:#efe6cf; --thread-d:#7d705a; --thread2:#86b0d6;
+  --board:#a9b1b8; --board-d:#6c747c; --clip:#8a9097; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#16120f; --surface:#1f1915; --ink:#ece4dc; --muted:#a89a8e; --line:#3a3029;
+  --accent:#d9a577; --ok:#6cc08d; --warn:#e0a54a; --bad:#f08a80; --canvas:#1a1512;
+  --kuze:#9a6a42; --lic:#f2b77a; --rub:#5e4028; --kuzeplan:#4a3726;
+  --d1:#c9b48e; --d1edge:#ff6a4d; --d2:#6f8fb0; --d2rub:#4b5f74; --steel:#7f8890; --jigedge:#b4c2cf;
+  --notch:#ff7a4f; --skin:#c48f6d; --skinedge:#f0c7a8; --wood:#7c6340; --woodedge:#c9a674;
+  --glue:#d38a1a; --tape:#cfc7a8; --tape-d:#8f8664; --paper:#e4dfd5; --paper-edge:#a9a296; --print:#2b2b2b;
+  --pencil:#d8cfc4; --pencil2:#142030; --slit:#0e0a08; --slitB:#f3e3c8; --thread:#efe6cf; --thread-d:#7d705a; --thread2:#86b0d6;
+  --board:#a9b1b8; --board-d:#6c747c; --clip:#8a9097; color-scheme:dark;}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.55;overflow-x:hidden}
+.wrap{max-width:900px;margin:0 auto;padding:20px 16px 48px;display:grid;gap:18px}
+h1{font-size:1.6rem;line-height:1.2;margin:0;font-weight:600;text-wrap:balance}
+h2{font-size:1.2rem;margin:0;font-weight:600;text-wrap:balance}
+h3{font-size:1rem;margin:0;font-weight:600}
+p{margin:0}
+a{color:var(--accent)}
+.lead{color:var(--muted);max-width:78ch;margin-top:6px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:.92em;white-space:nowrap}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;display:grid;gap:10px;min-width:0;align-content:start}
+.alert{border-left:4px solid var(--warn)}
+.alert h3{color:var(--warn)}
+.card ul{margin:0;padding-left:1.2rem;display:grid;gap:6px}
+.parts{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--ink);background:var(--canvas);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.parts>b:first-child{flex-basis:100%;font-size:12.5px;color:var(--muted);font-weight:600}
+.parts span b{font-family:var(--mono);font-weight:500;color:var(--accent)}
+.legend{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:18px;height:10px;border-radius:2px;background:var(--c);border:1px solid var(--line)}
+.legend i.ln{height:0;border:0;border-top:3px solid var(--c);border-radius:0}
+.legend i.dash{height:0;border:0;border-top:3px dashed var(--c);border-radius:0}
+/* scéna a ovládání (jako kapsa-skladani) */
+.stagewrap{position:relative;background:var(--canvas);border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+#stage{display:block;width:100%;height:auto;aspect-ratio:3/2}
+.badge{position:absolute;top:8px;left:8px;display:flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-weight:700;font-size:13px;letter-spacing:.04em}
+.badge i{width:16px;height:16px;border-radius:50%;display:block;border:1px solid var(--line)}
+.badge small{font-weight:500;letter-spacing:0;color:var(--muted);font-size:12px}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.controls button{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);width:40px;height:40px;border-radius:10px;display:grid;place-items:center;cursor:pointer;padding:0}
+.controls button.play{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.controls svg{width:18px;height:18px;fill:currentColor}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.counter{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+.prog{display:flex;gap:6px;align-items:stretch}
+.pseg{flex:1;display:grid;gap:4px;min-width:0;cursor:pointer;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left}
+.pseg .bars{display:flex;gap:2px;height:6px}
+.pseg .bars span{flex:1;background:var(--line);border-radius:2px;position:relative;overflow:hidden}
+.pseg .bars span b{position:absolute;inset:0;background:var(--accent);transform-origin:left;transform:scaleX(0)}
+.pseg .pl{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pseg.on .pl{color:var(--ink);font-weight:600}
+.cap{min-height:7.5em}
+.cap .no{display:inline-block;font-weight:700;color:var(--accent);margin-right:6px;font-variant-numeric:tabular-nums}
+.cap h2{display:inline;font-size:1.05rem;margin:0}
+.cap p{margin:4px 0 0}
+.cap .tip{display:block;margin-top:6px;color:var(--muted);font-size:14px}
+.cap .tip b{color:var(--warn);font-weight:700}
+.note{font-size:13px;color:var(--muted);margin:0}
+table{border-collapse:collapse;font-size:13px;width:100%}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px}
+.tblwrap{overflow-x:auto}
+td.num{white-space:normal;font-size:12.5px}
+footer{font-size:12.5px;color:var(--muted)}
+/* svg text */
+.t{font:600 4.1px var(--font);fill:var(--ink)}
+.ts{font:500 3.7px var(--font);fill:var(--muted)}
+.ta{font:700 4.1px var(--font);fill:var(--notch)}
+.tok{font:700 4.1px var(--font);fill:var(--ok)}
+.lead-l{stroke:var(--muted);stroke-width:.25;fill:none}
+@media (min-width:700px){.t,.ta,.tok{font-size:2.8px}.ts{font-size:2.5px}}
+.panelbox{fill:var(--surface);stroke:var(--line);stroke-width:.35}
+.pillbg{fill:var(--surface);stroke:var(--line);stroke-width:.3;opacity:.95}
+@media (max-width:520px){.pl span{display:none}.badge small{display:none}.badge{top:6px;left:6px;padding:2px 8px 2px 4px;font-size:11.5px}.badge i{width:12px;height:12px}.cap{min-height:10em}.counter{width:100%;margin-left:0;order:9}}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important}}
+/* Hidepath: návrat do lekce */
+.backlink{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--ink);font-weight:600;font-size:15px;text-decoration:none;justify-self:start}
+.backlink:hover{text-decoration:underline}
+.backlink:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <a class="backlink" href="/" data-back>← Zpět do lekce</a>
+  <h1>Víčko: D2 na záda a švy S1–S3</h1>
+  <p class="lead">Lekce 6 „Lepení D2, okénko bankovek a sloupce mincí“: přepážka D2 se lepí na rub zad B jen v pásech G3, po lepení se proseká okénko bankovek skrz obě vrstvy, na líc D2 se přenesou otvory S1–S3 a švy se ušijí. Kreslené v měřítku z modelu střihu, všechny rozměry v mm, souřadnice x a y jsou souřadnice peněženky (y od dna nahoru, osa x 50,5).</p>
+  <p class="lead"><b>Čísla jsou pro výchozí střih</b> (P1 1,0, přepážky D1/D2 a L1 0,6). Pokud máte listy pro změřenou kůži nebo pro zálohu, berte čísla z rámečku „Čísla pro postup“ na listu 4 a z listů 1 a 3 těchto listů. Co mění záloha A (P1 0,8), je v tabulce pod animací.</p>
+</header>
+
+<div class="parts" aria-label="Názvy dílů"><b>Názvy dílů</b><span><b>P1</b> hlavní pás: F – ohyb dna – B – závěs – víčko – jazýček</span><span><b>F</b> přední stěna</span><span><b>B</b> zadní stěna (záda)</span><span><b>D1</b> přepážka karty / bankovky</span><span><b>D2</b> přepážka bankovky / mince (kontrastní)</span><span><b>L1</b> podšívka přes magnet</span><span><b>rub</b> masová strana, <b>líc</b> hladká</span></div>
+<div class="legend" aria-label="Legenda">
+  <span><i style="--c:var(--kuzeplan)"></i>rub P1</span>
+  <span><i style="--c:var(--kuze)"></i>líc P1</span>
+  <span><i style="--c:var(--d2)"></i>líc D2</span>
+  <span><i style="--c:var(--d2rub)"></i>rub D2</span>
+  <span><i style="--c:var(--glue)"></i>lepidlo G3</span>
+  <span><i style="--c:var(--tape)"></i>maskovací páska</span>
+  <span><i class="dash" style="--c:var(--pencil)"></i>čáry tužkou z lekce 4</span>
+  <span><i style="--c:var(--paper)"></i>šablona z listu</span>
+</div>
+
+<section class="card" id="anim" aria-label="Animace postupu">
+  <div class="stagewrap">
+    <svg id="stage" viewBox="0 0 135 90" role="img" aria-label="Animovaný postup: lepení D2 na záda, okénko bankovek, přenos a šití švů S1 až S3"></svg>
+    <div class="badge" id="badge" hidden><i id="chip"></i><span id="side">RUB B</span><small id="sidesub"></small></div>
+  </div>
+  <div class="prog" id="prog"></div>
+  <div class="controls">
+    <button type="button" id="bRestart" aria-label="Od začátku" title="Od začátku"><svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/></svg></button>
+    <button type="button" id="bPrev" aria-label="Předchozí krok" title="Předchozí krok"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg></button>
+    <button type="button" id="bPlay" class="play" aria-label="Přehrát" title="Přehrát / pozastavit"><svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg></button>
+    <button type="button" id="bNext" aria-label="Další krok" title="Další krok"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
+    <span class="counter" id="counter">krok 1 / 1</span>
+  </div>
+  <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
+</section>
+<p class="note">Pohled zevnitř (rub B a líc D2) je zrcadlový k pohledu zvenku (líc B): díl je souměrný podle osy x 50,5, takže čísla platí v obou. Plochy jsou v měřítku; tloušťky v řezu, šířka zářezů a nitě jsou zvětšené. Kroky a poznámky označené „Tip (lekce to neuvádí)“ v lekcích nejsou.</p>
+
+<section class="card" aria-labelledby="h-cisla">
+  <h2 id="h-cisla">Čísla z modelu</h2>
+  <div class="tblwrap">
+  <table>
+    <thead><tr><th>Co</th><th>Výchozí střih (P1 1,0)</th><th>Záloha A (P1 0,8)</th></tr></thead>
+    <tbody>
+      <tr><td>D2 (díl z listu 3)</td><td class="num">103 × 64, x −1–102, y 18–82</td><td class="num">103 × 64, y 17,5–81,5</td></tr>
+      <tr><td>G3 dno mincí</td><td class="num">y 18–23, x 0–101</td><td class="num">y 17,5–22,5</td></tr>
+      <tr><td>G3 boky a střed</td><td class="num">x 0–4, 97–101, 35–66; do y 80,57</td><td class="num">stejná x; do y 79,91</td></tr>
+      <tr><td>Nelepený vršek D2</td><td class="num">1,43</td><td class="num">1,59</td></tr>
+      <tr><td>Okénka mincí (z lekce 5)</td><td class="num">12 × 48, x 13,5–25,5 a 75,5–87,5, y 28–76</td><td class="num">y 27,5–75,5, x stejné</td></tr>
+      <tr><td>Sloupce mincí (volné)</td><td class="num">x 4–35 a 66–97</td><td class="num">stejné</td></tr>
+      <tr><td>Okénko bankovek</td><td class="num">14 × 45, x 43,5–57,5, y 25–70, středy y 32 a 63</td><td class="num">stejné</td></tr>
+      <tr><td>S1 dno mincí</td><td class="num">y 22,0; 21 otvorů x 10,5–90,5</td><td class="num">y 21,5; x stejné</td></tr>
+      <tr><td>S2 / S3 sloupce</td><td class="num">x 36 / 65; 13 otvorů y 28–76</td><td class="num">x stejné; y 27,5–75,5</td></tr>
+      <tr><td>Šije se skrz</td><td class="num">D2 + B = 1,6</td><td class="num">1,4</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note">Rozteč 4 mm a počty otvorů jsou v obou případech stejné. V záloze A berte čísla z listů 1, 3 a 4 vygenerovaných pro useň 0,8.</p>
+</section>
+
+<section class="card alert" aria-labelledby="h-souv">
+  <h3 id="h-souv">Související animace</h3>
+  <ul>
+    <li><a href="/animace/hrany.html#G4">Dokončení hran, část G4</a>: okénka a jazýček Víčka (zkosení a leštění okénka bankovek).</li>
+    <li><a href="/animace/sedlarsky-steh.html#D">Sedlářský steh, část D</a> (rytmus stehu) a <a href="/animace/sedlarsky-steh.html#E">část E</a> (zpětné stehy).</li>
+    <li><a href="/animace/delka-nite.html">Kolik nitě na šev</a>.</li>
+  </ul>
+</section>
+
+<footer>
+  <p>Postup podle lekce 6 projektu Víčko (kroky „G3: D2 rubem na rub zad“, „Okénko bankovek skrz D2 a záda“, „Otvory S1–S3 na líci D2“, „Děrovat a šít S1, S2, S3“); značky na rubu a šablony podle lekce 4, okénka mincí z lekce 5. Čísla a tvary jsou spočítané z modelu střihu pro výchozí střih. Celý návrh je NÁVRH k ověření na prototypu.</p>
+</footer>
+</div>
+
+<script>
+(()=>{
+// ---------- model (src/lib/geometry/lid-wallet.ts, výchozí střih) ----------
+const M={W:101,axis:50.5,d2:{x0:-1,x1:102,y0:18,y1:82},coinFloor:23,s1Y:22,topGlue:80.566,hingeBand:[80.566,88.566],foldAxisY:-0.21,
+  pocket:[4,97],colL:[4,35],colR:[66,97],center:[35,66],seamX:[36,65],
+  coin:[{cx:19.5,y0:28,y1:76,w:12},{cx:81.5,y0:28,y1:76,w:12}],bill:{cx:50.5,y0:25,y1:70,w:14},billC:[32,63],
+  s1:[10.5,14.5,18.5,22.5,26.5,30.5,34.5,38.5,42.5,46.5,50.5,54.5,58.5,62.5,66.5,70.5,74.5,78.5,82.5,86.5,90.5],
+  col:[28,32,36,40,44,48,52,56,60,64,68,72,76],pitch:4};
+const G3=[{x0:0,x1:101,y0:18,y1:23},{x0:0,x1:4,y0:23,y1:M.topGlue},{x0:97,x1:101,y0:23,y1:M.topGlue},{x0:35,x1:66,y0:23,y1:M.topGlue}];
+// na D2 sahají pásy až k jejím hranám (x −1 a 102), jako šrafa G3 na listu 3
+const G3D2=G3.map(g=>({x0:g.x0===0?M.d2.x0:g.x0,x1:g.x1===101?M.d2.x1:g.x1,y0:g.y0,y1:Math.min(g.y1,M.d2.y1)}));
+
+// ---------- helpers (jako kapsa-skladani) ----------
+const cl=t=>Math.max(0,Math.min(1,t));
+const seg=(t,a,b)=>cl((t-a)/(b-a));
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const es=(t,a,b)=>ease(seg(t,a,b));
+const L=(a,b,t)=>a+(b-a)*t;
+const f=n=>(+n).toFixed(2);
+const G=(tr,s,extra='')=>`<g transform="${tr}" ${extra}>${s}</g>`;
+const op=(o,s)=>o<=0.005?'':o>=0.995?s:`<g opacity="${f(o)}">${s}</g>`;
+let UID=0;const uid=p=>`${p}${++UID}`;
+function lbl(x,y,t,cls='t',anchor='start'){return `<text x="${f(x)}" y="${f(y)}" class="${cls}" text-anchor="${anchor}">${t}</text>`}
+function pill(x,y,t,cls='t',anchor='start'){return `<g class="pill"><rect class="pillbg" rx="1.2" x="${f(x)}" y="${f(y-4)}" width="1" height="1"/>${lbl(x,y,t,cls,anchor)}</g>`}
+function lead(x1,y1,x2,y2){return `<path d="M${f(x1)} ${f(y1)} L${f(x2)} ${f(y2)}" class="lead-l"/><circle cx="${f(x2)}" cy="${f(y2)}" r=".5" fill="var(--muted)"/>`}
+function tick(x,y,s=1){return `<path d="M${x-1.6*s} ${y} l${1.2*s} ${1.2*s} l${2.4*s} -2.6" stroke="var(--ok)" stroke-width="${.7*s}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`}
+function cross(x,y,r=1,w=.5){return `<path d="M${f(x-r)} ${f(y-r)} L${f(x+r)} ${f(y+r)} M${f(x-r)} ${f(y+r)} L${f(x+r)} ${f(y-r)}" stroke="var(--bad)" stroke-width="${w}" stroke-linecap="round"/>`}
+function inset(title,body,{x=86,y=6,w=47,h=78}={}){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" class="panelbox"/><text x="${x+3}" y="${y+5.5}" class="ts" style="font-weight:700;letter-spacing:.06em">${title}</text>${body}`}
+function notes(lines,y0=18,step=5.6,x=89){return lines.map((l,i)=>lbl(x,y0+i*step,l[0],l[1]||'ts')).join('')}
+function clock(x,y,p,label){const a=-Math.PI/2+p*2*Math.PI;return `<circle cx="${x}" cy="${y}" r="5" fill="var(--surface)" stroke="var(--ink)" stroke-width=".5"/><path d="M${x} ${y} L${f(x+3.6*Math.cos(a))} ${f(y+3.6*Math.sin(a))} M${x} ${y} L${x} ${y-2.4}" stroke="var(--ink)" stroke-width=".5" stroke-linecap="round"/><circle cx="${x}" cy="${y}" r=".6" fill="var(--ink)"/>`+(label?lbl(x,y+9,label,'t','middle'):'')}
+function arrow(x1,y1,x2,y2,col='var(--notch)',w=.5){return `<path d="M${f(x1)} ${f(y1)} L${f(x2)} ${f(y2)}" stroke="${col}" stroke-width="${w}" marker-end="url(#ar)"/>`}
+function finger(x,y,o=1){return `<g opacity="${f(o)}"><ellipse cx="${f(x)}" cy="${f(y)}" rx="2.6" ry="3.6" fill="var(--skin)" stroke="var(--skinedge)" stroke-width=".3"/><ellipse cx="${f(x)}" cy="${f(y-1.6)}" rx="1.5" ry="1.3" fill="#fff" opacity=".35"/></g>`}
+function needle(x,y,a,o=1){return G(`translate(${f(x)} ${f(y)}) rotate(${f(a)})`,`<path d="M0 0 L11 0" stroke="var(--jigedge)" stroke-width=".55" stroke-linecap="round"/><ellipse cx="9.6" cy="0" rx="1" ry=".32" fill="none" stroke="var(--steel)" stroke-width=".22"/>`,`opacity="${f(o)}"`)}
+
+// ---------- půdorys: souřadnice peněženky → scéna ----------
+// MIR = pohled zevnitř (rub B, líc D2): x zrcadlené jako na listu 2. Měřítko K, y nahoru.
+const K=.78, OX=2.5, OY=4+94*K;
+let MIR=true;
+const PX=x=>OX+(MIR?(M.W-x):x)*K, PY=y=>OY-y*K;
+const pt=(x,y)=>[PX(x),PY(y)];
+function rectP(x0,y0,x1,y1,attrs){const a=Math.min(PX(x0),PX(x1)),b=Math.max(PX(x0),PX(x1));return `<rect x="${f(a)}" y="${f(PY(y1))}" width="${f(b-a)}" height="${f((y1-y0)*K)}" ${attrs}/>`}
+function slotD(s){const r=s.w/2*K,xa=PX(s.cx)-r,xb=PX(s.cx)+r,ya=PY(s.y1)+r,yb=PY(s.y0)-r;return `M${f(xa)} ${f(ya)} A${f(r)} ${f(r)} 0 0 1 ${f(xb)} ${f(ya)} L${f(xb)} ${f(yb)} A${f(r)} ${f(r)} 0 0 1 ${f(xa)} ${f(yb)} Z`}
+function rectD(x0,y0,x1,y1){const a=Math.min(PX(x0),PX(x1)),b=Math.max(PX(x0),PX(x1));return `M${f(a)} ${f(PY(y1))} H${f(b)} V${f(PY(y0))} H${f(a)} Z`}
+const Y0=-8, Y1=94;
+// díl P1 kolem zad: B, dole ohyb dna (dál F), nahoře pás závěsu (dál víčko); konce zeslábnou
+function wallB(face,o={}){
+  let holes=M.coin.map(slotD).join(' ');
+  let behind='';
+  if(o.d2behind){behind=rectP(M.d2.x0,M.d2.y0,M.d2.x1,M.d2.y1,'fill="url(#d2rubP)" stroke="var(--jigedge)" stroke-width=".25"');}
+  if(o.bill) holes+=' '+slotD(M.bill);
+  let s=behind+`<path d="${rectD(0,Y0,M.W,Y1)} ${holes}" fill-rule="evenodd" fill="${face==='rub'?'url(#rubP)':'var(--kuze)'}" stroke="var(--woodedge)" stroke-width=".3"/>`;
+  if(o.bill&&o.d2behind) s+=`<path d="${slotD(M.bill)}" fill="var(--board)"/>`;
+  s+=`<path d="${holes}" fill="none" stroke="var(--woodedge)" stroke-width=".3"/>`;
+  // pás závěsu a osa ohybu dna (z lekce 4, jen na rubu)
+  if(face==='rub'&&o.marks!==false){
+    s+=rectP(0,M.hingeBand[0],M.W,M.hingeBand[1],'fill="none" stroke="var(--pencil)" stroke-width=".25" stroke-dasharray=".6 .8"');
+    s+=`<path d="M${f(PX(0))} ${f(PY(M.foldAxisY))} H${f(PX(M.W))}" stroke="var(--notch)" stroke-width=".3" stroke-dasharray="1.2 .8"/>`;
+  }
+  s+=rectP(-3,Y1-7,M.W+3,Y1+.5,'fill="url(#fadeT)"')+rectP(-3,Y0-.5,M.W+3,Y0+6,'fill="url(#fadeB)"');
+  return s;
+}
+// čáry tužkou na rubu B z lekce 4: hranice G3, poloha D2, čáry S1–S3
+function pencilB(o=1){
+  const st='stroke="var(--pencil)" stroke-width=".22" fill="none" stroke-dasharray="1 .6"';
+  // poloha D2 (y 18 a 82): na rub B jde nakreslit jen v šířce dílu x 0–101, přesah D2 je mimo kůži
+  let s=`<path d="M${f(PX(0))} ${f(PY(M.d2.y0))} H${f(PX(M.W))} M${f(PX(0))} ${f(PY(M.d2.y1))} H${f(PX(M.W))}" ${st}/>`;
+  s+=`<path d="M${f(PX(0))} ${f(PY(M.coinFloor))} H${f(PX(M.W))} M${f(PX(4))} ${f(PY(M.coinFloor))} V${f(PY(M.topGlue))} M${f(PX(97))} ${f(PY(M.coinFloor))} V${f(PY(M.topGlue))} M${f(PX(35))} ${f(PY(M.coinFloor))} V${f(PY(M.topGlue))} M${f(PX(66))} ${f(PY(M.coinFloor))} V${f(PY(M.topGlue))} M${f(PX(0))} ${f(PY(M.topGlue))} H${f(PX(M.W))}" ${st}/>`;
+  s+=`<path d="M${f(PX(M.s1[0]))} ${f(PY(M.s1Y))} H${f(PX(M.s1[20]))} M${f(PX(36))} ${f(PY(28))} V${f(PY(76))} M${f(PX(65))} ${f(PY(28))} V${f(PY(76))}" stroke="var(--notch)" stroke-width=".22" stroke-dasharray=".7 .6" fill="none"/>`;
+  return op(o,s);
+}
+function glueBands(list,p=1,o=1){
+  // p: jak daleko je lepidlo natřené (0–1, odspodu nahoru)
+  let s='';
+  list.forEach(g=>{const yt=L(g.y0,g.y1,cl(p*1.15-(g.y0>20?.1:0)));if(yt>g.y0+.05) s+=rectP(g.x0,g.y0,g.x1,yt,'fill="var(--glue)" opacity=".62"')+rectP(g.x0,g.y0,g.x1,yt,'fill="url(#glueH)"');});
+  return op(o,s);
+}
+// páska: přes volné sloupce a nad čárou 80,57 (kam lepidlo nesmí)
+function tapes(top,o=1,yTop=86){
+  let s='';
+  const st='fill="var(--tape)" stroke="var(--tape-d)" stroke-width=".2" opacity=".93"';
+  s+=rectP(M.colL[0],M.coinFloor,M.colL[1],M.topGlue,st)+rectP(M.colR[0],M.coinFloor,M.colR[1],M.topGlue,st);
+  if(top) s+=rectP(-1,M.topGlue,M.W+1,yTop,st);
+  return op(o,s);
+}
+// D2 v poloze na zádech; face 'lic' (viditelná zevnitř) nebo 'rub'
+function d2Part(face,o={}){
+  const d=M.d2;let holes='';
+  if(o.bill) holes=' '+slotD(M.bill);
+  const fill=face==='lic'?'var(--d2)':'url(#d2rubP)';
+  let s=`<path d="${rectD(d.x0,d.y0,d.x1,d.y1)}${holes}" fill-rule="evenodd" fill="${fill}" stroke="var(--jigedge)" stroke-width=".3" ${o.shadow?'filter="url(#sh)"':''}/>`;
+  if(o.bill) s+=`<path d="${slotD(M.bill)}" fill="none" stroke="var(--jigedge)" stroke-width=".3"/>`;
+  if(o.coinHidden) s+=M.coin.map(c=>`<path d="${slotD(c)}" fill="none" stroke="var(--pencil2)" stroke-width=".25" stroke-dasharray=".8 .7" opacity=".7"/>`).join('');
+  return s;
+}
+// šikmý zářez vidličky; vert = svislá řada
+function slit(x,y,vert,col='var(--slit)',d=.62,w=.42){const [a,b]=pt(x,y);return vert?`<path d="M${f(a-d*.55)} ${f(b-d)} L${f(a+d*.55)} ${f(b+d)}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`:`<path d="M${f(a-d)} ${f(b+d*.55)} L${f(a+d)} ${f(b-d*.55)}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`}
+function prick(x,y,col='var(--slit)',r=.32){const [a,b]=pt(x,y);return `<circle cx="${f(a)}" cy="${f(b)}" r="${r}" fill="${col}"/>`}
+const ALLH=()=>[...M.s1.map(x=>({x,y:M.s1Y,v:false,s:'S1'})),...M.col.slice().reverse().map(y=>({x:36,y,v:true,s:'S2'})),...M.col.slice().reverse().map(y=>({x:65,y,v:true,s:'S3'}))];
+// vidlička (půdorys): n hrotů po 4 mm, první hrot v (x,y), řada doprava (S1) nebo dolů (S2/S3)
+function chisel(x,y,vert,n=4,o=1,lift=0){
+  let s='';
+  const ps=[];for(let i=0;i<n;i++)ps.push(vert?pt(x,y-i*M.pitch):pt(x+i*M.pitch,y));
+  const xs=ps.map(p=>p[0]),ys=ps.map(p=>p[1]);
+  const x0=Math.min(...xs)-1.6,x1=Math.max(...xs)+1.6,y0=Math.min(...ys)-1.6,y1=Math.max(...ys)+1.6;
+  s+=`<rect x="${f(x0)}" y="${f(y0-lift)}" width="${f(x1-x0)}" height="${f(y1-y0)}" rx=".6" fill="var(--steel)" stroke="var(--jigedge)" stroke-width=".3" opacity=".88" filter="url(#sh)"/>`;
+  ps.forEach(([a,b])=>{s+=vert?`<path d="M${f(a-.34)} ${f(b-.62-lift)} L${f(a+.34)} ${f(b+.62-lift)}" stroke="var(--jigedge)" stroke-width=".5" stroke-linecap="round"/>`:`<path d="M${f(a-.62)} ${f(b+.34-lift)} L${f(a+.62)} ${f(b-.34-lift)}" stroke="var(--jigedge)" stroke-width=".5" stroke-linecap="round"/>`});
+  return op(o,s);
+}
+function mallet(x,y,t,o=1){const up=Math.abs(Math.sin(t*Math.PI))*5;return op(o,`<rect x="${f(x-4)}" y="${f(y-9-up)}" width="8" height="4" rx="1" fill="var(--wood)" stroke="var(--woodedge)" stroke-width=".3"/><rect x="${f(x+3.6)}" y="${f(y-7.7-up)}" width="9" height="1.4" rx=".5" fill="var(--woodedge)"/>`)}
+function knife(x,y,a=-30,o=1){return G(`translate(${f(x)} ${f(y)}) rotate(${f(a)})`,`<path d="M0 0 L5 -1.4 L5 1 Z" fill="var(--steel)" stroke="var(--jigedge)" stroke-width=".2"/><rect x="5" y="-1.6" width="11" height="3" rx=".8" fill="var(--notch)" opacity=".85"/>`,`opacity="${f(o)}"`)}
+function punchTool(x,y,r,o=1){return op(o,`<circle cx="${f(x)}" cy="${f(y)}" r="${f(r+.6)}" fill="var(--steel)" stroke="var(--jigedge)" stroke-width=".3" opacity=".85"/><circle cx="${f(x)}" cy="${f(y)}" r="${f(r)}" fill="none" stroke="var(--jigedge)" stroke-width=".35"/><circle cx="${f(x)}" cy="${f(y)}" r="${f(r*.55)}" fill="var(--steel)" stroke="var(--jigedge)" stroke-width=".25"/>`)}
+function ruler(xa,ya,xb,yb,o=1){const w=2.4;const dx=xb-xa,dy=yb-ya,l=Math.hypot(dx,dy),nx=-dy/l*w,ny=dx/l*w;let s=`<path d="M${f(xa)} ${f(ya)} L${f(xb)} ${f(yb)} L${f(xb+nx)} ${f(yb+ny)} L${f(xa+nx)} ${f(ya+ny)} Z" fill="var(--steel)" stroke="var(--jigedge)" stroke-width=".25" opacity=".85"/>`;for(let i=0;i<=l/(4*K);i++){const u=i*4*K/l;s+=`<path d="M${f(xa+dx*u)} ${f(ya+dy*u)} l${f(nx*.35)} ${f(ny*.35)}" stroke="var(--jigedge)" stroke-width=".18"/>`}return op(o,s)}
+function bottomPill(t,cls='t'){return pill(4,87,t,cls)}
+// popisek vlevo od dílu ve scéně (u y peněženky)
+function yTag(y,t){const [,b]=pt(0,y);return lbl(84.5,b+1,t,'ts','end')}
+
+// ---------- řez napříč zády ve výšce y 50 (pro vložený panel) ----------
+function sectionCols(gl=1,dy=0){
+  const sx=88,sw=43,k=sw/103,X=x=>sx+(MIR?(M.W-x+1):(x+1))*k;   // x −1…102 → sx…sx+sw
+  const yB=46, tB=1.8, tD=1.2, gap=1.4;
+  let s=`<rect x="${f(X(101))}" y="${yB}" width="${f(X(0)-X(101))}" height="${tB}" fill="url(#rubP)" stroke="var(--woodedge)" stroke-width=".2"/>`;
+  // okénka mincí v B (x 13,5–25,5 a 75,5–87,5) jsou ve výšce y 50 prázdná
+  M.coin.forEach(c=>{s+=`<rect x="${f(Math.min(X(c.cx-6),X(c.cx+6)))}" y="${yB-.05}" width="${f(Math.abs(X(c.cx+6)-X(c.cx-6)))}" height="${tB+.1}" fill="var(--surface)"/>`});
+  // D2: nalepená v pásech, nad sloupci volná (sloupec = kapsa pro mince)
+  const yD=yB-tD-dy;
+  const segs=[[-1,4,0],[4,35,1],[35,66,0],[66,97,1],[97,102,0]];
+  segs.forEach(([a,b,free])=>{const xa=Math.min(X(a),X(b)),xb=Math.max(X(a),X(b));const yy=free?yD-gap*gl:yD+0;s+=`<rect x="${f(xa)}" y="${f(yy)}" width="${f(xb-xa)}" height="${tD}" fill="var(--d2)"/>`;});
+  [[0,4],[35,66],[97,101]].forEach(([a,b])=>{const xa=Math.min(X(a),X(b)),xb=Math.max(X(a),X(b));s+=`<rect x="${f(xa)}" y="${f(yB-.35)}" width="${f(xb-xa)}" height=".35" fill="var(--glue)"/>`});
+  s+=lbl(sx+sw/2,yB+tB+4.4,'B (rub nahoře)','ts','middle');
+  s+=lbl(sx+sw/2,yD-gap-2.2,'D2 (líc nahoře)','ts','middle');
+  return s;
+}
+
+// ---------- kroky ----------
+const PARTS={A:'G3: D2 na rub zad',B:'Okénko bankovek',C:'S1–S3 na líc D2',D:'Děrovat a šít'};
+const S=[];
+const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,side,tip});
+const SIDE={rubB:{v:'RUB B',sub:'pohled zevnitř',c:'var(--kuzeplan)'},licB:{v:'LÍC B',sub:'pohled zvenku, záda',c:'var(--kuze)'},licD2:{v:'LÍC D2',sub:'pohled zevnitř',c:'var(--d2)'}};
+
+// A1 — výchozí stav
+add('A','Rub B s čarami z lekce 4','Záda B leží rubem nahoru. Z lekce 4 jsou na rubu tužkou hranice lepení G3, poloha D2 a čáry švů S1–S3, z lekce 5 jsou vyseknutá okénka mincí <span class="num">12 × 48</span>. D2 (<span class="num">103 × 64</span>) má z lekce 4 propíchnuté konce osy x <span class="num">50,5</span> a z lekce 5 spodní hranu zbroušenou do tenka.',8200,t=>{
+  MIR=true;
+  let s=wallB('rub')+pencilB(es(t,.05,.3));
+  const o1=seg(t,.3,.42),o2=seg(t,.45,.57),o3=seg(t,.6,.72);
+  const [cx,cy]=pt(M.coin[1].cx,52),[dx]=pt(M.coin[0].cx,52);
+  s+=op(o1,pill(cx,cy,'okénko','ts','middle')+pill(dx,cy,'okénko','ts','middle')+pill(cx,cy+6,'mincí','ts','middle')+pill(dx,cy+6,'mincí','ts','middle'));
+  const [ax,ay]=pt(50.5,M.topGlue);
+  s+=op(o2,pill(ax,ay+5.2,'konec G3 y 80,57','ta','middle')+`<path d="M${f(PX(35))} ${f(ay)} H${f(PX(66))}" stroke="var(--notch)" stroke-width=".45"/>`);
+  const [fx,fy]=pt(50.5,M.foldAxisY);
+  s+=op(o3,pill(fx,fy+5.2,'osa ohybu dna (dál F)','ts','middle'));
+  let ib=notes([['Lepí se jen G3:','t'],['dno y 18–23'],['boky x 0–4, 97–101'],['střed x 35–66'],['boky a střed do'],['y 80,57'],['',''],['nelepí se:','t'],['sloupce mincí'],['x 4–35 a 66–97'],['pás závěsu nad'],['y 80,57']],17,5.4);
+  s+=op(seg(t,.15,.3),inset('RUB B · Z LEKCE 4',ib));
+  return s;
+},SIDE.rubB);
+
+// A2 — páska
+add('A','Hranici lepení přelepte maskovací páskou','Hranice lepení přelepte maskovací páskou, aby lepidlo nezateklo do sloupců mincí ani nad čáru <span class="num">y 80,57</span>. Nad ní je pás závěsu: horních <span class="num">1,43</span> mm D2 se nelepí.',7600,t=>{
+  MIR=true;
+  let s;
+  const p=es(t,.08,.75);
+  // páska se pokládá postupně odspodu (clip)
+  const id=uid('tc');
+  s=wallB('rub')+pencilB(1)+`<clipPath id="${id}"><rect x="0" y="${f(PY(L(-8,94,p)))}" width="90" height="90"/></clipPath><g clip-path="url(#${id})">${tapes(true)}</g>`;
+  const o=seg(t,.75,.85);
+  const [lx,ly]=pt(19.5,56),[rx]=pt(81.5,56);
+  s+=op(o,pill(lx,ly,'sloupec','t','middle')+pill(rx,ly,'sloupec','t','middle')+pill(lx,ly+6,'nelepit','ts','middle')+pill(rx,ly+6,'nelepit','ts','middle'));
+  let ib=notes([['Páska kryje','t'],['volné plochy:'],['sloupce mincí'],['a pás nad y 80,57'],['',''],['Lepené pásy','t'],['zůstanou volné'],['pro lepidlo']],17,5.4);
+  s+=inset('PÁSKA',ib);
+  return s;
+},SIDE.rubB,'Tip (lekce to neuvádí): páska je kreslená přes celé sloupce, šířku pásky ani způsob lekce neurčuje. Stejné hranice přelepte i na rubu D2 – lepidlo jde na obě strany a šrafa G3 je na D2 na listu 3.');
+
+// A3 — lepidlo na obě strany
+add('A','Kontaktní lepidlo na obě strany, jen v pásech','Kontaktní lepidlo naneste na obě strany – na rub B i na rub D2 – jen do pásů G3: dno <span class="num">y 18–23</span>, boky <span class="num">x 0–4</span> a <span class="num">97–101</span>, střed <span class="num">x 35–66</span>, boky a střed jen do <span class="num">y 80,57</span>.',9000,t=>{
+  MIR=true;
+  let s=wallB('rub')+pencilB(1)+tapes(true)+glueBands(G3,es(t,.05,.55));
+  // vpravo rub D2 zmenšeně (k = 0,4), lepidlo do stejných pásů
+  const k=.4,ox=88.5,oy=16,X=x=>ox+(M.W-x+1)*k,Y=y=>oy+(82-y)*k;
+  let ib=`<rect x="${f(X(102))}" y="${f(Y(82))}" width="${f(103*k)}" height="${f(64*k)}" fill="url(#d2rubP)" stroke="var(--jigedge)" stroke-width=".25"/>`;
+  const tp='fill="var(--tape)" stroke="var(--tape-d)" stroke-width=".15" opacity=".93"';
+  [[4,35],[66,97]].forEach(([a,b])=>{ib+=`<rect x="${f(X(b))}" y="${f(Y(M.topGlue))}" width="${f((b-a)*k)}" height="${f((M.topGlue-23)*k)}" ${tp}/>`});
+  ib+=`<rect x="${f(X(102))}" y="${f(Y(82))}" width="${f(103*k)}" height="${f((82-M.topGlue)*k)}" ${tp}/>`;
+  const p2=es(t,.5,.92);
+  G3D2.forEach(g=>{const yt=L(g.y0,g.y1,cl(p2*1.15-(g.y0>20?.1:0)));if(yt>g.y0+.05)ib+=`<rect x="${f(X(g.x1))}" y="${f(Y(yt))}" width="${f((g.x1-g.x0)*k)}" height="${f((yt-g.y0)*k)}" fill="var(--glue)" opacity=".62"/>`});
+  ib+=notes([['rub D2: stejné','t'],['pásy, lepidlo','t'],['na obě strany','t']],50,5.4);
+  s+=inset('RUB D2',ib);
+  return s;
+},SIDE.rubB,'Tip (lekce to neuvádí): jak dostat hranice G3 na rub D2, lekce neříká (lekce 4 na D2 propichuje jen konce osy). Pásy jsou na D2 vyšrafované na listu 3; kreslené je to podle něj. Ověřit na odřezku.');
+
+// A4 — zavadnout
+add('A','Nechte zavadnout 10–15 min','Lepidlo na obou stranách nechte zavadnout <span class="num">10–15</span> min, teprve pak díly spojte.',5200,t=>{
+  MIR=true;
+  let s=wallB('rub')+pencilB(1)+tapes(true)+glueBands(G3,1,L(1,.8,es(t,.1,.9)));
+  s+=inset('ZAVADNOUT',clock(109.5,36,es(t,.05,.9)*.25,'10–15 min')+notes([['na B i na D2','t'],['až pak spojit']],60,5.4));
+  return s;
+},SIDE.rubB);
+
+// A5 — spojit
+add('A','D2 rubem na rub B, přesah 1 mm na bocích','D2 položte rubem na rub B: spodní hranou na čáru <span class="num">y 18</span> a osou na osu x <span class="num">50,5</span> (konce osy z lekce 4). D2 přesahuje na každé straně o <span class="num">1</span> mm (x <span class="num">−1</span> až <span class="num">102</span>). Kontaktní lepidlo chytne hned při dotyku (lekce 9), proto D2 nejdřív nad B srovnejte a spusťte ji přesně napoprvé, po lepidle ji neposouvejte.',8600,t=>{
+  MIR=true;
+  const tp=1-es(t,0,.2);
+  let s=wallB('rub')+pencilB(1)+op(tp,tapes(true))+glueBands(G3,1,.8);
+  // D2 se spouští shora kolmo na B (zvětšená = výš nad stolem); po lepidle se neposouvá
+  const p=es(t,.25,.75), sc=1+(1-p)*.12;
+  const [mx,my]=pt(M.axis,50);
+  s+=G(`translate(${f(mx)} ${f(my)}) scale(${f(sc)}) translate(${f(-mx)} ${f(-my)})`,d2Part('lic',{coinHidden:p>.98,shadow:p<.98}),`opacity="${f(seg(t,.2,.32))}"`);
+  const o=seg(t,.78,.88);
+  const [ax,ay]=pt(50.5,82),[bx,by]=pt(50.5,18);
+  s+=op(o,`<path d="M${f(ax)} ${f(ay-2.5)} V${f(ay+1.2)} M${f(bx)} ${f(by-1.2)} V${f(by+2.5)}" stroke="var(--notch)" stroke-width=".45"/>`+pill(bx+2,by+5.4,'osa 50,5 · hrana y 18','ta','middle'));
+  const [l1x,l1y]=pt(-1,50),[l0x]=pt(0,50);
+  s+=op(o,`<path d="M${f(l0x)} ${f(l1y)} L${f(l1x+3)} ${f(l1y)}" stroke="var(--notch)" stroke-width=".3"/>`);
+  let ib=notes([['D2 103 × 64','t'],['y 18–82'],['x −1 až 102'],['přesah 1 mm','ta'],['na každé straně'],['',''],['rubem na rub B,','t'],['líc D2 nahoře']],17,5.4);
+  s+=inset('SPOJIT',ib);
+  return s;
+},SIDE.licD2,'Tip (lekce to neuvádí): pásku sundejte před spojením, aby nezůstala mezi B a D2. Přiložení podle osy a čáry y 18 vychází z lekce 4 (konce osy na D2, poloha D2 na rubu B); D2 drží za okraje mimo lepené pásy. Ověřit na odřezku.');
+
+// A6 — přitlačit, sloupce volné
+add('A','Přitlačte, děrovat nejdřív za 1 h','Spoj přitlačte v lepených pásech. Sloupce mincí mezi nimi zůstávají nelepené, aby do nich mince zajely. Děrovat můžete nejdřív za <span class="num">1</span> h.',9400,t=>{
+  MIR=true;
+  let s=wallB('rub')+d2Part('lic',{coinHidden:true});
+  // prst projíždí lepené pásy
+  const u=es(t,.05,.6);
+  const path=[[50.5,20.5],[90,20.5],[99,20.5],[99,78],[50.5,78],[50.5,24],[10,20.5],[2,20.5],[2,78]];
+  const segs=path.length-1, pos=u*segs, i=Math.min(segs-1,Math.floor(pos)), fr=pos-i;
+  const [x,y]=[L(path[i][0],path[i+1][0],fr),L(path[i][1],path[i+1][1],fr)];
+  if(t<.62){const [a,b]=pt(x,y);s+=finger(a,b,seg(t,0,.06)*(1-seg(t,.56,.62)));}
+  const o=seg(t,.6,.7);
+  const [lx,ly]=pt(19.5,50),[rx]=pt(81.5,50);
+  s+=op(o,pill(lx,ly,'volné','tok','middle')+pill(rx,ly,'volné','tok','middle'));
+  let ib=sectionCols(es(t,.62,.8));
+  ib+=lbl(109.5,17,'řez v y 50','ts','middle')+lbl(109.5,22,'tloušťky zvětšené','ts','middle');
+  ib+=op(seg(t,.62,.8),lbl(109.5,30,'sloupce volné:','tok','middle')+lbl(109.5,35,'sem zajedou mince','ts','middle'));
+  ib+=op(seg(t,.82,.9),clock(109.5,62,seg(t,.82,1)*.95,'děrovat až za 1 h'));
+  s+=inset('PŘITLAČIT',ib);
+  return s;
+},SIDE.licD2);
+
+// B1 — šablona okénka
+add('B','Lícem B nahoru, šablona na propíchnuté středy','Až po lepení G3. Díl položte <b>lícem B nahoru</b> na tvrdou desku. Na líci B jsou z lekce 4 propíchnuté středy obou konců okénka bankovek na ose x <span class="num">50,5</span>, <span class="num">y 32</span> a <span class="num">63</span>. Přiložte na ně křížky šablony okénka bankovek z listu 4 (čárkovaná čára šablony na ose) a zkontrolujte, že sedí.',8000,t=>{
+  MIR=false;
+  let s=wallB('lic',{marks:false,d2behind:true});
+  M.billC.forEach(y=>{s+=prick(50.5,y,'var(--slitB)',.42)});
+  // šablona okénka (tvrdý papír) přijíždí shora
+  const p=es(t,.15,.6),dy=(1-p)*-26;
+  const tw=24,th=58,[cx,cy]=pt(50.5,47.5);
+  let tpl=`<rect x="${f(cx-tw*K/2)}" y="${f(cy-th*K/2)}" width="${f(tw*K)}" height="${f(th*K)}" rx=".6" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3" opacity=".92" filter="url(#sh)"/>`;
+  tpl+=`<path d="${slotD(M.bill)}" fill="none" stroke="var(--print)" stroke-width=".3"/>`;
+  tpl+=`<path d="M${f(cx)} ${f(cy-th*K/2+1)} V${f(cy+th*K/2-1)}" stroke="var(--print)" stroke-width=".22" stroke-dasharray="1 .7"/>`;
+  M.billC.forEach(y=>{const [a,b]=pt(50.5,y);tpl+=`<path d="M${f(a-1.4)} ${f(b)} H${f(a+1.4)} M${f(a)} ${f(b-1.4)} V${f(b+1.4)}" stroke="var(--print)" stroke-width=".3"/>`});
+  s+=G(`translate(0 ${f(dy)})`,tpl,`opacity="${f(seg(t,.12,.25))}"`);
+  const o=seg(t,.68,.8);
+  const [ax,ay]=pt(50.5,63);
+  s+=op(o,tick(ax+5,ay,1)+pill(ax+8,ay+1,'sedí','tok'));
+  let ib=notes([['okénko bankovek','t'],['14 × 45'],['x 43,5–57,5'],['y 25–70'],['',''],['středy konců','t'],['x 50,5, y 32 a 63'],['(lekce 4)']],17,5.4);
+  s+=inset('LÍC B',ib);
+  return s;
+},SIDE.licB);
+
+// B2 — výsečník a nůž
+add('B','Výsečník Ø 14 a rovné řezy skrz obě vrstvy','Výsečníkem <b>Ø 14</b> vysekněte z líce B oba konce skrz B i D2, mezi nimi veďte rovné řezy nožem u ocelového pravítka od tečny k tečně skrz obě vrstvy. Nůž veďte tahem od prstů volné ruky. Prsty držící výsečník mějte u spodku, palička dopadá na horní konec.',10400,t=>{
+  MIR=false;
+  const p1=seg(t,.08,.3),p2=seg(t,.32,.54),k1=es(t,.6,.78),k2=es(t,.8,.97);
+  let s=wallB('lic',{marks:false,d2behind:true});
+  // vysekané konce (otvory skrz obě vrstvy: vidět stůl)
+  const r=7*K;
+  M.billC.forEach((y,i)=>{const done=i===0?p1>.6:p2>.6;const [a,b]=pt(50.5,y);if(done)s+=`<circle cx="${f(a)}" cy="${f(b)}" r="${f(r)}" fill="var(--board)" stroke="var(--woodedge)" stroke-width=".3"/>`;else s+=prick(50.5,y,'var(--slitB)',.42);});
+  // řezy
+  const [la,lt]=pt(43.5,63),[,lb]=pt(43.5,32),[ra]=pt(57.5,63);
+  if(k1>0) s+=`<path d="M${f(la)} ${f(lt)} V${f(L(lt,lb,k1))}" stroke="var(--slitB)" stroke-width=".45"/>`;
+  if(k2>0) s+=`<path d="M${f(ra)} ${f(lt)} V${f(L(lt,lb,k2))}" stroke="var(--slitB)" stroke-width=".45"/>`;
+  if(k2>=1) s+=`<path d="${slotD(M.bill)}" fill="var(--board)" stroke="var(--woodedge)" stroke-width=".3"/>`;
+  // nástroje
+  if(t<.56){const y=t<.31?32:63,ph=t<.31?p1:p2;const [a,b]=pt(50.5,y);s+=punchTool(a,b,r,seg(ph,0,.15)*(1-seg(ph,.85,1)))+mallet(a,b-4,ph*2,seg(ph,0,.15)*(1-seg(ph,.85,1)));}
+  if(t>.58&&t<.98){const kk=t<.79?k1:k2,xx=t<.79?la:ra;const rx=t<.79?xx-2.6:xx+2.6;s+=`<rect x="${f(Math.min(rx,xx))}" y="${f(lt-6)}" width="2.6" height="${f(lb-lt+12)}" fill="var(--steel)" stroke="var(--jigedge)" stroke-width=".25" opacity=".85"/>`+knife(xx,L(lt,lb,kk),-60);}
+  let ib=notes([['1. Ø 14 na y 32','t'],['2. Ø 14 na y 63','t'],['3. řez x 43,5','t'],['4. řez x 57,5','t'],['',''],['skrz B i D2','ta'],['od tečny k tečně'],['u ocelového'],['pravítka']],17,5.4);
+  s+=inset('LÍC B · Z LÍCE',ib);
+  return s;
+},SIDE.licB);
+
+// B3 — hrany
+add('B','Zkosit a vyleštit jako jeden svazek','Okénko <span class="num">14 × 45</span> zkoste a vyleštěte jako jeden svazek B + D2. Postup hran je v animaci <a href="/animace/hrany.html#G4">Dokončení hran, část G4</a>. Mince 1 Kč (Ø 20) okénkem nepropadne.',6800,t=>{
+  MIR=false;
+  let s=wallB('lic',{marks:false,bill:true,d2behind:true});
+  s+=`<path d="${slotD(M.bill)}" fill="none" stroke="var(--d2)" stroke-width=".55"/>`;
+  const [cx,cy]=pt(50.5,47.5);
+  const o=seg(t,.35,.55);
+  // mince 1 Kč Ø 20 přes okénko 14
+  s+=op(o,`<circle cx="${f(cx)}" cy="${f(cy)}" r="${f(10*K)}" fill="var(--steel)" stroke="var(--jigedge)" stroke-width=".3" opacity=".85"/>`+pill(cx,cy+12,'1 Kč Ø 20 > 14','tok','middle'));
+  s+=op(seg(t,.05,.2),pill(cx,PY(70)-3,'svazek B + D2','t','middle'));
+  let ib=notes([['zkosit, leštit','t'],['jako svazek'],['',''],['postup hran:','t'],['animace Hrany,'],['část G4']],17,5.4);
+  s+=inset('OKÉNKO',ib);
+  return s;
+},SIDE.licB);
+
+// C1 — způsob (a): šablona P1 z listu 1 na líc B, jehla
+add('C','Způsob (a): šablona listu 1 na líc B, propíchnout jehlou','List 1 (P1 z líce) na líc D2 přiložit nejde. Proto buď (a): šablonu P1 z listu 1 (druhý výtisk nalepený na tvrdém papíře, lekce 4) přiložte na <b>líc B</b> podle obrysu a všechny otvory S1–S3 propíchněte jehlou skrz B i přilepenou D2. Oba způsoby nejdřív vyzkoušejte na odřezku D2 + B.',10000,t=>{
+  MIR=false;
+  let s=wallB('lic',{marks:false,bill:true,d2behind:true});
+  // šablona: P1 kolem zad (papír), otvory S1–S3 vytištěné
+  const p=es(t,.02,.18);
+  let tpl=rectP(0,Y0+2,M.W,Y1-2,'fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3" opacity=".9"');
+  tpl+=M.coin.map(c=>`<path d="${slotD(c)}" fill="none" stroke="var(--print)" stroke-width=".25"/>`).join('')+`<path d="${slotD(M.bill)}" fill="none" stroke="var(--print)" stroke-width=".25" stroke-dasharray="1 .7"/>`;
+  const H=ALLH();
+  H.forEach(h=>{tpl+=prick(h.x,h.y,'var(--print)',.28)});
+  s+=op(p,tpl);
+  const n=Math.floor(es(t,.2,.9)*H.length);
+  for(let i=0;i<n;i++){const [a,b]=pt(H[i].x,H[i].y);s+=`<circle cx="${f(a)}" cy="${f(b)}" r=".5" fill="none" stroke="var(--notch)" stroke-width=".25"/>`}
+  if(t>.2&&t<.92){const h=H[Math.min(H.length-1,n)];const [a,b]=pt(h.x,h.y);s+=needle(a,b,-50);}
+  s+=pill(4,87,`propíchnuto ${n} / 47`,n>=47?'tok':'t');
+  let ib=notes([['šablona P1','t'],['z listu 1 na líc B'],['podle obrysu'],['',''],['jehlou skrz','t'],['B i D2'],['',''],['S1 21 otvorů'],['S2, S3 po 13']],17,5.4);
+  s+=inset('ZPŮSOB (a)',ib);
+  return s;
+},SIDE.licB);
+
+// C2 — vpichy na líci D2
+add('C','Způsob (a): otočte, vpichy jsou na líci D2','Díl otočte a šablonu sejměte: vpichy jsou teď na <b>líci D2</b>. Do nich se v části D děruje vidličkou.',6800,t=>{
+  MIR=true;
+  const fl=es(t,.05,.45);
+  const sx=Math.cos(Math.PI*fl);
+  let face;
+  if(sx>0){MIR=false;face=wallB('lic',{marks:false,bill:true,d2behind:true});}
+  else{MIR=true;face=wallB('rub',{marks:false,bill:true})+d2Part('lic',{bill:true,coinHidden:true});const o=seg(t,.5,.75);let pr='';ALLH().forEach(h=>{pr+=prick(h.x,h.y,'var(--slit)',.36)});face+=op(o,pr);}
+  const cx=OX+M.W*K/2;
+  let s=G(`translate(${f(cx)} 0) scale(${f(Math.max(.02,Math.abs(sx)))} 1) translate(${f(-cx)} 0)`,face);
+  MIR=true;
+  const o=seg(t,.6,.75);
+  const [ax,ay]=pt(M.s1[16],M.s1Y);
+  s+=op(o,pill(ax,ay+6,'vpichy S1','ta','middle'));
+  const [bx,by]=pt(36,60);
+  s+=op(o,pill(bx+3,by,'S2','ta')+pill(PX(65)-3,by,'S3','ta','end'));
+  let ib=notes([['otočit:','t'],['vpichy na líci D2'],['',''],['děruje se z líce D2','t'],['(část D)']],17,5.4);
+  s+=inset('ZPŮSOB (a)',ib);
+  return s;
+},SIDE.licD2);
+
+// C3 — způsob (b): šablona D2 z listu 3, čáry
+add('C','Způsob (b): šablona D2 z listu 3, obkreslete čáry','Nebo (b): přiložte šablonu D2 z listu 3 na líc D2 podle hran a obkreslete čáry <b>S1</b> (<span class="num">y 22,0</span>), <b>S2</b> a <b>S3</b> (<span class="num">x 36</span> a <span class="num">65</span>).',9400,t=>{
+  MIR=true;
+  let s=wallB('rub',{marks:false,bill:true})+d2Part('lic',{bill:true,coinHidden:true});
+  const p=es(t,.02,.25),dy=(1-p)*-20;
+  let tpl=rectP(M.d2.x0,M.d2.y0,M.d2.x1,M.d2.y1,'fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3" opacity=".9" filter="url(#sh)"');
+  tpl+=`<path d="${slotD(M.bill)}" fill="none" stroke="var(--print)" stroke-width=".25" stroke-dasharray="1 .7"/>`;
+  tpl+=`<path d="M${f(PX(M.s1[0]))} ${f(PY(M.s1Y))} H${f(PX(M.s1[20]))} M${f(PX(36))} ${f(PY(28))} V${f(PY(76))} M${f(PX(65))} ${f(PY(28))} V${f(PY(76))}" stroke="var(--print)" stroke-width=".25" stroke-dasharray=".8 .6"/>`;
+  const tOp=1-seg(t,.62,.72);
+  s+=G(`translate(0 ${f(dy)})`,tpl,`opacity="${f(Math.min(seg(t,0,.08),tOp))}"`);
+  // konce čar propíchnout, pak spojit tužkou u pravítka
+  const ends=[[M.s1[0],M.s1Y],[M.s1[20],M.s1Y],[36,28],[36,76],[65,28],[65,76]];
+  const pe=seg(t,.3,.55);
+  ends.forEach((e,i)=>{if(pe>i/6)s+=prick(e[0],e[1],'var(--notch)',.45)});
+  const pl=es(t,.72,.97);
+  if(pl>0){const st='stroke="var(--pencil2)" stroke-width=".3" fill="none"';const x0=PX(M.s1[0]),x1=PX(M.s1[20]);
+    s+=`<path d="M${f(x0)} ${f(PY(M.s1Y))} H${f(L(x0,x1,cl(pl*3)))}" ${st}/>`;
+    if(pl>.33)s+=`<path d="M${f(PX(36))} ${f(PY(76))} V${f(L(PY(76),PY(28),cl(pl*3-1)))}" ${st}/>`;
+    if(pl>.66)s+=`<path d="M${f(PX(65))} ${f(PY(76))} V${f(L(PY(76),PY(28),cl(pl*3-2)))}" ${st}/>`;}
+  s+=op(seg(t,.4,.5),pill(PX(-1)+.5,PY(M.s1Y)+5.5,'S1 y 22,0 (4 nad hranou D2)','ta','end'));
+  let ib=notes([['šablona D2','t'],['z listu 3, podle hran'],['',''],['S1 y 22,0','ta'],['S2 x 36','ta'],['S3 x 65','ta']],17,5.4);
+  s+=inset('ZPŮSOB (b)',ib);
+  return s;
+},SIDE.licD2,'Tip (lekce to neuvádí): přes šablonu se čára přímo obkreslit nedá; kreslené je to jako na rubu v lekci 4 – konce čar propíchnout jehlou a spojit tužkou u pravítka.');
+
+// C4 — způsob (b): otvory po 4 mm
+add('C','Způsob (b): otvory po 4 mm od osy a od y 76','Otvory odměřte po <span class="num">4</span> mm: S1 od osy x <span class="num">50,5</span> na obě strany (<span class="num">21</span> otvorů, x <span class="num">10,5–90,5</span>), S2 a S3 od horního otvoru <span class="num">y 76</span> dolů (po <span class="num">13</span>, až <span class="num">y 28</span>).',9400,t=>{
+  MIR=true;
+  let s=wallB('rub',{marks:false,bill:true})+d2Part('lic',{bill:true,coinHidden:true});
+  const st='stroke="var(--pencil2)" stroke-width=".3" fill="none"';
+  s+=`<path d="M${f(PX(M.s1[0]))} ${f(PY(M.s1Y))} H${f(PX(M.s1[20]))} M${f(PX(36))} ${f(PY(28))} V${f(PY(76))} M${f(PX(65))} ${f(PY(28))} V${f(PY(76))}" ${st}/>`;
+  // S1 od osy ven
+  const p1=es(t,.05,.5);const nk=Math.round(p1*10);
+  for(let j=0;j<=nk;j++){[50.5-4*j,50.5+4*j].forEach(x=>{s+=prick(x,M.s1Y,'var(--slit)',.4)})}
+  const p2=es(t,.52,.95);const nc=Math.round(p2*12);
+  for(let j=0;j<=nc&&p2>0;j++){s+=prick(36,76-4*j,'var(--slit)',.4)+prick(65,76-4*j,'var(--slit)',.4)}
+  // pravítko
+  if(t<.5){const [a,b]=pt(50.5,M.s1Y);s+=ruler(PX(92),b-1,PX(9),b-1,seg(t,0,.06))}
+  else if(t<.97){s+=ruler(PX(36)-.4,PY(78),PX(36)-.4,PY(26),seg(t,.5,.56))}
+  const [ax,ay]=pt(50.5,M.s1Y);
+  s+=op(seg(t,.04,.12),`<path d="M${f(ax)} ${f(ay+1)} V${f(ay+3)}" stroke="var(--notch)" stroke-width=".4"/>`+pill(ax,ay+7.5,'osa 50,5','ta','middle'));
+  s+=op(seg(t,.5,.6),pill(PX(36)-2,PY(76)+1.5,'y 76','ta','end'));
+  s+=pill(4,87,`S1 ${nk*2+1} / 21 · S2 ${p2>0?nc+1:0} / 13 · S3 ${p2>0?nc+1:0} / 13`,nk===10&&nc===12?'tok':'t');
+  let ib=notes([['po 4 mm','t'],['S1 od osy 50,5'],['na obě strany'],['',''],['S2, S3 od y 76','t'],['dolů']],17,5.4);
+  s+=inset('ZPŮSOB (b)',ib);
+  return s;
+},SIDE.licD2);
+
+// D1 — orientace
+add('D','Z líce D2 na tvrdé desce, horní hranou od sebe','Děrujte z líce D2 na tvrdé desce. Díl položte <b>horní hranou od sebe</b> a vidličku držte <b>vždy stejně natočenou</b> při pohledu na líc D2 – tím mají šikmé otvory na zádech stejný sklon. Prsty držící vidličku mějte u spodku, palička dopadá na horní konec.',8600,t=>{
+  MIR=true;
+  let s=wallB('rub',{marks:false,bill:true})+d2Part('lic',{bill:true,coinHidden:true});
+  ALLH().forEach(h=>{s+=prick(h.x,h.y,'var(--slit)',.36)});
+  // šipka „horní hrana od sebe“
+  const o=seg(t,.08,.2);
+  // popisek dole na B pod D2, aby nezakrýval vidličky S2 a S3
+  const [lx,ly]=pt(M.axis,9);
+  s+=op(o,pill(lx,ly,'horní hrana od sebe','ta','middle')+arrow(PX(4),PY(4),PX(4),PY(14)));
+  // vidlička: vodorovně na S1, svisle na S2 a S3 – u obou sloupců stejně, ne zrcadlově
+  const o2=seg(t,.3,.45),o3=seg(t,.55,.7);
+  s+=chisel(46.5,M.s1Y,false,4,o2);
+  s+=chisel(36,76,true,4,o3)+chisel(65,76,true,4,o3);
+  s+=op(o3,pill(PX(36)+2.4,PY(70),'stejně','tok')+pill(PX(65)-2.4,PY(70),'stejně','tok','end'));
+  let ib=`<rect x="91" y="11" width="37" height="26" rx="1" fill="var(--board)" stroke="var(--board-d)" stroke-width=".3"/>`+lbl(109.5,42,'tvrdá deska','ts','middle');
+  ib+=`<rect x="96" y="17" width="22" height="13" fill="var(--d2)" stroke="var(--jigedge)" stroke-width=".25"/>`;
+  ib+=arrow(123,31,123,15,'var(--notch)',.5);
+  ib+=notes([['horní hranou','t'],['od sebe','ta'],['',''],['vidlička vždy','t'],['stejně natočená'],['při pohledu'],['na líc D2']],50,5.2);
+  s+=inset('ORIENTACE',ib);
+  return s;
+},SIDE.licD2,'Tip (lekce to neuvádí): u svislých švů S2 a S3 leží vidlička nutně svisle (otočená o 90° proti S1); „stejně natočená“ je tu kreslené jako stejná poloha u obou sloupců, ne zrcadlově.');
+
+// D2 — S1
+// [první otvor, počet hrotů]: první hrot v předchozím posledním otvoru; konec řady S1 dvojhrotem (jako pas-otvory-dna)
+const HITS_S1=[[0,4],[3,4],[6,4],[9,4],[12,4],[15,4],[18,2],[19,2]];
+const HITS_COL=[0,3,6,9];
+function punchedS1(n){let s='';const hs=new Set();for(let k=0;k<n;k++){for(let j=0;j<HITS_S1[k][1];j++)hs.add(HITS_S1[k][0]+j)}hs.forEach(i=>{s+=slit(M.s1[i],M.s1Y,false)});return {s,c:hs.size}}
+function punchedCol(n,x){let s='';const hs=new Set();for(let k=0;k<n;k++){for(let j=0;j<4;j++)hs.add(HITS_COL[k]+j)}hs.forEach(i=>{s+=slit(x,76-4*i,true)});return {s,c:hs.size}}
+add('D','S1: 21 otvorů x 10,5–90,5','S1 (dno mincí) má <span class="num">21</span> otvorů od x <span class="num">10,5</span> do <span class="num">90,5</span>, v <span class="num">y 22,0</span>. Vidličku nasazujte hroty do vpichů nebo na odměřené značky, skrz D2 i B.',11000,t=>{
+  MIR=true;
+  let s=wallB('rub',{marks:false,bill:true})+d2Part('lic',{bill:true,coinHidden:true});
+  ALLH().forEach(h=>{s+=prick(h.x,h.y,'var(--slit)',.3)});
+  const u=es(t,.04,.92)*HITS_S1.length, n=Math.floor(u), fr=u-n;
+  const r=punchedS1(Math.min(HITS_S1.length,n+(fr>.5?1:0)));
+  s+=r.s;
+  if(n<HITS_S1.length){const [hi,hn]=HITS_S1[n];const x=M.s1[hi];const lift=(1-Math.abs(Math.sin(fr*Math.PI)))*1.2;s+=chisel(x,M.s1Y,false,hn,1,lift);const [a,b]=pt(x+(hn-1)*2,M.s1Y);s+=mallet(a,b+4.4,fr*2,.9);}
+  s+=pill(4,87,`S1: ${r.c} / 21 otvorů`,r.c>=21?'tok':'t');
+  let ib=notes([['S1 dno mincí','t'],['y 22,0'],['x 10,5–90,5'],['21 otvorů','ta'],['',''],['skrz D2 + B (1,6)'],['vidlička stejně','t'],['natočená']],17,5.4);
+  s+=inset('S1',ib);
+  return s;
+},SIDE.licD2,'Tip (lekce to neuvádí): počet hrotů vidličky lekce neurčuje. Kreslená je vidlička se 4 hroty (sada 1 + 2 + 4 + 6 hrotů, rozteč 4 mm, z vybavení); každý další úder má první hrot v posledním otvoru a poslední dva otvory S1 se dokončí dvojhrotem, jako v animaci otvorů dna projektu 02. S2 a S3 (13 otvorů) vyjdou se 4 hroty přesně.');
+
+// D3 — S2, S3
+add('D','S2 a S3: po 13 otvorech y 28–76','S2 a S3 (boky sloupců, x <span class="num">36</span> a <span class="num">65</span>) mají po <span class="num">13</span> otvorech od <span class="num">y 28</span> do <span class="num">76</span>. Vidlička je u obou sloupců natočená stejně.',10800,t=>{
+  MIR=true;
+  let s=wallB('rub',{marks:false,bill:true})+d2Part('lic',{bill:true,coinHidden:true});
+  ALLH().forEach(h=>{s+=prick(h.x,h.y,'var(--slit)',.3)});
+  s+=punchedS1(HITS_S1.length).s;
+  const uA=es(t,.03,.47)*4, uB=es(t,.5,.94)*4;
+  const nA=Math.floor(uA),nB=Math.floor(uB);
+  const a=punchedCol(Math.min(4,nA+(uA-nA>.5?1:0)),36), b=punchedCol(Math.min(4,nB+(uB-nB>.5?1:0)),65);
+  s+=a.s+b.s;
+  const cur=t<.48?{x:36,u:uA,n:nA}:{x:65,u:uB,n:nB};
+  if(cur.n<4&&t<.95){const fr=cur.u-cur.n;const y=76-4*HITS_COL[cur.n];const lift=(1-Math.abs(Math.sin(fr*Math.PI)))*1.2;s+=chisel(cur.x,y,true,4,1,lift);const [px,py]=pt(cur.x,y-6);s+=mallet(px,py+2,fr*2,.9);}
+  s+=pill(4,87,`S2: ${a.c} / 13 · S3: ${b.c} / 13`,a.c>=13&&b.c>=13?'tok':'t');
+  let ib=notes([['S2 x 36, S3 x 65','t'],['y 28–76'],['po 13 otvorech','ta'],['',''],['šikmé otvory','t'],['u obou sloupců'],['se stejným sklonem']],17,5.4);
+  s+=inset('S2 · S3',ib);
+  return s;
+},SIDE.licD2);
+
+// D4 — šití
+function stitchRow(xs,ys,n,back){
+  // n = počet hotových stehů (úseků) ve švu; back = 2 zpětné na začátku i konci
+  let s='';const m=xs.length;
+  const segA=[];for(let i=0;i<m-1;i++)segA.push([i,i+1]);
+  for(let i=0;i<Math.min(n,segA.length);i++){const [p,q]=segA[i];const [a,b]=pt(xs[p],ys[p]),[c,d]=pt(xs[q],ys[q]);
+    s+=`<path d="M${f(a)} ${f(b)} L${f(c)} ${f(d)}" stroke="var(--thread-d)" stroke-width=".95" stroke-linecap="round"/><path d="M${f(a)} ${f(b)} L${f(c)} ${f(d)}" stroke="var(--thread)" stroke-width=".6" stroke-linecap="round"/>`;}
+  if(back){const bs=[[0,1],[1,2]],be=[[m-3,m-2],[m-2,m-1]];
+    const hl=(pr)=>pr.map(([p,q])=>{const [a,b]=pt(xs[p],ys[p]),[c,d]=pt(xs[q],ys[q]);return `<path d="M${f(a)} ${f(b)} L${f(c)} ${f(d)}" stroke="var(--notch)" stroke-width="1.5" stroke-linecap="round" opacity=".55"/>`}).join('');
+    if(back.start) s=hl(bs)+s; if(back.end) s=hl(be)+s;}
+  return s;
+}
+add('D','Šijte sedlovým stehem, konce 2 otvory zpět','Šijte sedlovým stehem voskovanou nití <span class="num">0,6</span> mm (vybavení), na obou koncích každého švu <b>2 otvory zpět</b>. Jak se šije a jak se dělají zpětné stehy, ukazuje animace <a href="/animace/sedlarsky-steh.html#E2">Sedlářský steh, krok E2</a>; kolik nitě odměřit, <a href="/animace/delka-nite.html">Kolik nitě na šev</a>.',12000,t=>{
+  MIR=true;
+  let s=wallB('rub',{marks:false,bill:true})+d2Part('lic',{bill:true,coinHidden:true});
+  s+=punchedS1(HITS_S1.length).s+punchedCol(4,36).s+punchedCol(4,65).s;
+  const xs1=M.s1.slice().reverse(), ys1=M.s1.map(()=>M.s1Y), colY=M.col.slice().reverse();
+  const p1=es(t,.03,.5),p2=es(t,.52,.74),p3=es(t,.76,.98);
+  const n1=Math.round(p1*20),n2=Math.round(p2*12),n3=Math.round(p3*12);
+  s+=stitchRow(xs1,ys1,n1,{start:n1>=2,end:n1>=20});
+  s+=stitchRow(colY.map(()=>36),colY,n2,{start:n2>=2,end:n2>=12});
+  s+=stitchRow(colY.map(()=>65),colY,n3,{start:n3>=2,end:n3>=12});
+  if(n1>=2&&t<.5){const [a,b]=pt(xs1[1],M.s1Y);s+=pill(a,b+6,'2 zpět','ta','middle')}
+  if(n1>=20){const [a,b]=pt(xs1[19],M.s1Y);s+=pill(a,b+6,'2 zpět','ta','middle')}
+  if(t>.03&&t<.97){let x,y;if(t<.5){x=xs1[Math.min(20,n1)];y=M.s1Y}else if(t<.75){x=36;y=colY[Math.min(12,n2)]}else{x=65;y=colY[Math.min(12,n3)]}const [a,b]=pt(x,y);s+=needle(a,b,-140)+needle(a,b,-30,.55);}
+  s+=pill(4,87,`S1 ${n1} / 20 · S2 ${n2} / 12 · S3 ${n3} / 12 stehů`,n1===20&&n2===12&&n3===12?'tok':'t');
+  let ib=notes([['sedlový steh','t'],['dvě jehly, nit 0,6'],['',''],['na obou koncích','t'],['2 otvory zpět','ta'],['',''],['S1 20 stehů'],['S2, S3 po 12']],17,5.4);
+  s+=inset('ŠITÍ',ib);
+  return s;
+},SIDE.licD2,'Tip (lekce to neuvádí): kde šev začít, lekce neurčuje. Animace šije S1 v pohledu zevnitř zleva (od x 90,5) a S2 a S3 od ústí sloupce (y 76) dolů. Zpětné stehy jsou zvýrazněné oranžově.');
+
+// D5 — kontrola
+add('D','Hotovo: kontrolní body lekce 6','D2 je přilepená jen v pásech G3 (dno, boky a střed do <span class="num">y 80,57</span>) a sloupce mincí zůstaly nelepené. Okénko bankovek je proseknuté skrz obě vrstvy a švy S1, S2 a S3 jsou ušité, konce 2 otvory zpět. Dál pokračuje lekce 7: mokrý ohyb dna.',8000,t=>{
+  MIR=true;
+  let s=wallB('rub',{marks:false,bill:true})+d2Part('lic',{bill:true,coinHidden:true});
+  s+=punchedS1(HITS_S1.length).s+punchedCol(4,36).s+punchedCol(4,65).s;
+  const colY=M.col.slice().reverse();
+  s+=stitchRow(M.s1,M.s1.map(()=>M.s1Y),20,null)+stitchRow(colY.map(()=>36),colY,12,null)+stitchRow(colY.map(()=>65),colY,12,null);
+  const o=seg(t,.1,.25);
+  const [lx,ly]=pt(19.5,50),[rx]=pt(81.5,50);
+  s+=op(o,pill(lx,ly,'sloupec','t','middle')+pill(rx,ly,'sloupec','t','middle'));
+  const ck=[['G3 jen v pásech',.2],['sloupce volné',.32],['okénko skrz',.44],['obě vrstvy',.44],['S1, S2, S3 ušité',.56],['konce 2 zpět',.56]];
+  let ib='';ck.forEach(([tx,at],i)=>{const oo=seg(t,at,at+.08);ib+=op(oo,(i===3||i===5?'':tick(91.5,16+i*6))+lbl(96,17.5+i*6,tx,'t'))});
+  ib+=op(seg(t,.7,.8),notes([['dál lekce 7:','t'],['mokrý ohyb dna']],60,5.2));
+  s+=inset('KONTROLA',ib);
+  return s;
+},SIDE.licD2);
+
+// ---------- engine (jako kapsa-skladani) ----------
+const svg=document.getElementById('stage');
+const DEFS=`<defs>
+<filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx=".5" dy=".8" stdDeviation=".7" flood-opacity=".28"/></filter>
+<pattern id="rubP" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="var(--kuzeplan)"/><path d="M.5 1.2 l1.6 .5 M3.2 .6 l1.4 -.4 M1.4 3.8 l1.2 .8 M4 3.1 l1.5 .3 M2.6 5.2 l1.3 -.5" stroke="var(--rub)" stroke-width=".35" stroke-linecap="round"/></pattern>
+<pattern id="d2rubP" width="5" height="5" patternUnits="userSpaceOnUse"><rect width="5" height="5" fill="var(--d2rub)"/><path d="M.6 1 l1.3 .4 M2.8 .5 l1.2 -.3 M1.2 3.3 l1 .6 M3.4 2.7 l1.2 .3" stroke="var(--d2)" stroke-width=".3" stroke-linecap="round" opacity=".6"/></pattern>
+<pattern id="glueH" width="2" height="2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0 V2" stroke="var(--glue)" stroke-width=".5"/></pattern>
+<linearGradient id="fadeT" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--canvas)"/><stop offset="1" stop-color="var(--canvas)" stop-opacity="0"/></linearGradient>
+<linearGradient id="fadeB" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="var(--canvas)"/><stop offset="1" stop-color="var(--canvas)" stop-opacity="0"/></linearGradient>
+<marker id="ar" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--notch)"/></marker>
+</defs>`;
+const badge=document.getElementById('badge'),sideEl=document.getElementById('side'),chip=document.getElementById('chip'),sub=document.getElementById('sidesub');
+const capNo=document.getElementById('capNo'),capT=document.getElementById('capT'),capB=document.getElementById('capB'),counter=document.getElementById('counter');
+const prog=document.getElementById('prog');
+const RM=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)'):{matches:false};
+const reduce=()=>RM.matches;
+const partKeys=Object.keys(PARTS);const barEls=[];const segEls={};
+partKeys.forEach(k=>{const b=document.createElement('button');b.className='pseg';b.type='button';b.setAttribute('aria-label',`Část ${k}: ${PARTS[k]}`);
+  const bars=document.createElement('div');bars.className='bars';S.forEach((st,i)=>{if(st.part===k){const sp=document.createElement('span');const bb=document.createElement('b');sp.appendChild(bb);bars.appendChild(sp);barEls[i]=bb;}});
+  const pl=document.createElement('div');pl.className='pl';pl.innerHTML=`<b>${k}</b><span> · ${PARTS[k]}</span>`;b.append(bars,pl);prog.appendChild(b);segEls[k]=b;
+  b.addEventListener('click',()=>{auto=true;setPlay(false);go(S.findIndex(s=>s.part===k),1)});});
+let idx=0,tt=1,playing=false,last=0,raf=0,hold=0,auto=false;
+function numInPart(i){const p=S[i].part;return S.slice(0,i+1).filter(s=>s.part===p).length}
+function setSide(st){const sd=st.side;if(!sd){badge.hidden=true;return}badge.hidden=false;sideEl.textContent=sd.v;chip.style.background=sd.c;sub.textContent=sd.sub||''}
+function fitPills(){svg.querySelectorAll('g.pill').forEach(g=>{const tx=g.querySelector('text'),r=g.querySelector('rect');try{const b=tx.getBBox();if(!b.width)return;r.setAttribute('x',f(b.x-1.2));r.setAttribute('y',f(b.y-.5));r.setAttribute('width',f(b.width+2.4));r.setAttribute('height',f(b.height+1))}catch(e){}})}
+let lastCap=-1;
+function render(){
+  const st=S[idx]; UID=0;
+  let body='';
+  try{body=st.draw(tt);}catch(e){console.error(e)}
+  svg.innerHTML=DEFS+body; fitPills();
+  setSide(st);
+  if(lastCap!==idx){
+    capNo.textContent=`${st.part}${numInPart(idx)}`; capT.textContent=st.title; capB.innerHTML=st.body;
+    if(st.tip){const sp=document.createElement('span');sp.className='tip';const m=st.tip.match(/^(Tip[^:]*:)\s*(.*)$/);if(m){const b=document.createElement('b');b.textContent=m[1];sp.append(b,' '+m[2])}else sp.textContent=st.tip;capB.appendChild(sp)}
+    lastCap=idx;
+  }
+  counter.textContent=`krok ${idx+1} / ${S.length}`;
+  barEls.forEach((b,i)=>{b.style.transform=`scaleX(${i<idx?1:i===idx?tt:0})`});
+  partKeys.forEach(k=>segEls[k].classList.toggle('on',k===st.part));
+}
+function go(i,t=0){idx=Math.max(0,Math.min(S.length-1,i));tt=reduce()?1:t;hold=0;render();}
+function setPlay(p){playing=p;document.getElementById('playIcon').innerHTML=p?'<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';const bp=document.getElementById('bPlay');bp.setAttribute('aria-label',p?'Pozastavit':'Přehrát');if(p){last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}else cancelAnimationFrame(raf)}
+function loop(now){if(!playing)return;const dt=now-last;last=now;
+  if(reduce()){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
+  else{tt+=dt/S[idx].dur;if(tt>=1){tt=1;render();hold+=dt;if(hold>700){hold=0;if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}}}else render();}
+  raf=requestAnimationFrame(loop)}
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)}else if(!playing&&tt>=1&&!reduce()){go(idx,0)}setPlay(!playing)};
+document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
+document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
+document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};
+// kotvy: část (#A–#D) otevře svůj první krok, krok (#C3) přímo ten krok; zastavené v koncovém stavu
+function stepFromHash(){const m=/^([A-Z])([0-9]+)?$/.exec(decodeURIComponent((location.hash||'').slice(1)).trim().toUpperCase());if(!m||!Object.prototype.hasOwnProperty.call(PARTS,m[1]))return -1;const ix=[];S.forEach((s,i)=>{if(s.part===m[1])ix.push(i)});const n=m[2]===undefined?1:+m[2];return n>=1&&n<=ix.length?ix[n-1]:-1}
+let moved=false;
+['wheel','touchstart','keydown'].forEach(tp=>addEventListener(tp,()=>{moved=true},{once:true,passive:true}));
+function toAnim(){const el=document.getElementById('anim');if(el)requestAnimationFrame(()=>el.scrollIntoView({block:'start'}))}
+const hs=stepFromHash();
+if(hs>=0){auto=true;go(hs,1);toAnim()}else go(0,1);
+window.addEventListener('hashchange',()=>{const i=stepFromHash();if(i>=0){auto=true;setPlay(false);go(i,1);toAnim()}});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{render();if(!moved&&stepFromHash()>=0)toAnim()});
+window.__d2zada={go:(i,t)=>{auto=true;setPlay(false);idx=i;tt=t;lastCap=-1;render()},steps:S.length,parts:S.map(s=>s.part),titles:S.map(s=>s.title),M};
+if(!reduce()&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!auto){auto=true;io.disconnect();go(0,0);setPlay(true)}})},{threshold:.45});io.observe(svg)}
+})();
+</script>
+<script>
+// Hidepath: „Zpět do lekce“ = krok zpět v historii, když se sem přišlo z aplikace; jinak úvod aplikace.
+(function(){var a=document.querySelector('[data-back]');if(!a)return;a.addEventListener('click',function(e){var o='';try{o=document.referrer?new URL(document.referrer).origin:'';}catch(_){}if(o===location.origin&&history.length>1){e.preventDefault();history.back();}});})();
+</script>
+</body>
+</html>

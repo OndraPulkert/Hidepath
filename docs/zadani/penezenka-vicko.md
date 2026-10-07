@@ -1127,7 +1127,7 @@ značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,6
     0,13 mm: značku proto **měř posuvkou** od spodní hrany a po nalepení pásky přeměř. Zavři víčko a ryskami na
     bocích jazýčku přenes značku na jazýček.
 18. **G5 + G6:** rub konce jazýčku zdrsnit. Magnet na rub jazýčku (střed na značce a ose) přilepit
-    **dvousložkovým epoxidem (5min)** a nechat ztuhnout (podle návodu epoxidu, orientačně 30 min –
+    **dvousložkovým epoxidem** (doba zpracování podle obalu) a nechat ztuhnout (podle návodu epoxidu, orientačně 30 min –
     ověřit), aby se magnet při natírání a přikládání L1 neposunul z osy. Teprve pak natřít rub jazýčku
     kolem magnetu a L1 (nebarvená kozinka) kontaktním lepidlem, nechat zavadnout a L1 přiložit horní hranou
     na rysku 10 mm nad středem magnetu (šablona, list 4). Přitlačit prsty nebo převalovat hladkým
@@ -1175,7 +1175,7 @@ Hodnoty jsou orientační, **ověřit podle návodu konkrétního lepidla a barv
 | Úkon                                | Jak a jak dlouho                                                                                                         |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | kontaktní lepidlo (G1–G4, G6)       | nanést na obě strany, nechat zavadnout 10–15 min, spojit a přitlačit; děrovat a šít nejdřív za 1 h, plně zatížit za 24 h |
-| epoxid magnetu (G5)                 | 5min epoxid; než se víčko zatíží zavíráním nebo zkouškou držení, 24 h                                                    |
+| epoxid magnetu (G5)                 | dvousložkový epoxid (doba zpracování podle obalu); než se víčko zatíží zavíráním nebo zkouškou držení, 24 h              |
 | barva na hrany                      | 2 tenké vrstvy, mezi nimi 20–30 min                                                                                      |
 | navlhčení třísločiněné usně         | houbičkou, pak počkat, až se barva usně skoro vrátí k suché (5–10 min), teprve potom ohnout nebo tvarovat                |
 | ohyb dna (krok 11), závěs (krok 16) | sušit přes noc (12–24 h), ne u topení                                                                                    |
@@ -1235,7 +1235,7 @@ Zkušební i finální kus se stavějí stejným rozpisem, žádný večer neče
       plech 0,8 (oddíl 5.4) jen když na zkušebním kusu nepomůže ani výměna magnetu, kupuje se až pak
 - [ ] bezbarvý lak (na nehty) na hrany plíšku
 - [ ] kontaktní lepidlo na kůži
-- [ ] dvousložkový epoxid (5min) na magnet
+- [ ] dvousložkový epoxid (doba zpracování podle obalu) na magnet
 - [ ] barva na hrany v tónu D2 (horní hrana D1, přilnavost ověřit)
 - [ ] Tokonole
 - [ ] voskovaná nit (i na šev S7)

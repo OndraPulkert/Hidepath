@@ -290,10 +290,10 @@ describe('generátor peněženky VÍČKO', () => {
   });
 
   it('list 4: čísla pro postup a okno lepení magnetu dané varianty', () => {
-    expect(jigs).toContain(`Značka magnetu y_m,B (krok 17): ${cz(L.magnetYB)}`);
+    expect(jigs).toContain(`Značka magnetu y_m,B (lekce 11): ${cz(L.magnetYB)}`);
     expect(jigs).toContain(`okno lepení ${cz(L.magnetYBMin)}–${cz(L.magnetYBMax)}`);
     expect(jigs).toContain(
-      `hrana vložky dna (krok 11): v ${cz(L.v.insertEdge)} (${cz(L.v.insertEdge - L.v.foldAxis)} za rýhou)`,
+      `hrana vložky dna (lekce 3, 4, 7): v ${cz(L.v.insertEdge)} (${cz(L.v.insertEdge - L.v.foldAxis)} za rýhou)`,
     );
     expect(jigs).toContain('(1,96 za rýhou)');
     expect(jigs).toContain(`plíšek y ${cz(L.plate.y0)}–${cz(L.plate.y1)}`);
@@ -302,10 +302,13 @@ describe('generátor peněženky VÍČKO', () => {
     const L8 = lidWalletLayout(d8);
     const j8 = buildLidJigsSvg(d8);
     expect(L8.magnetYB).toBe(11.6);
-    expect(j8).toContain('Značka magnetu y_m,B (krok 17): 11,6');
+    expect(j8).toContain('Značka magnetu y_m,B (lekce 11): 11,6');
     expect(j8).toContain('okno lepení 11,5–11,63');
     expect(j8).toContain('úzké okno');
-    expect(j8).toContain(`kóta P1 na listu 1 (krok 0, 2): ${cz(L8.p1LengthMm)}`);
+    expect(j8).toContain(`kóta P1 na listu 1 (lekce 1, 4): ${cz(L8.p1LengthMm)}`);
+    // list 4 odkazuje na lekce, ne na čísla kroků zadání
+    expect(jigs).toContain('hrana víčka A / B / C (lekce 10)');
+    expect(jigs).not.toMatch(/\bkrok(u|y)? \d/);
   });
 
   it('neplatný střih generátor odmítne', () => {

@@ -1,0 +1,921 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Víčko: okénka a výřez pro palec</title>
+<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+<!-- Self-hostované fonty aplikace (public/fonts), aby stránka fungovala i offline v PWA. -->
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}[hidden]:not([hidden=until-found i]){display:none!important}
+[id]{scroll-margin-top:12px}
+:root{
+  --bg:#f1eee9; --surface:#ffffff; --ink:#2a211b; --muted:#6c6158; --line:#ddd5cc;
+  --accent:#8a5a36; --ok:#2e7d4f; --warn:#a86a12; --bad:#b3261e; --canvas:#f7f4ef;
+  --kuze:#b9875a; --lic:#5b331b; --rub:#f0d9b5; --kuzeplan:#e9d6ba;
+  --d1:#d8c7a6; --d1edge:#c23b22; --d2:#34495e; --jig:#8796a5; --jigedge:#4f5d6b;
+  --wood:#d9b98a; --woodedge:#9c7a4c; --steel:#9aa2aa;
+  --table:#d6cec3; --dim:#4a4038; --notch:#d1461f;
+  --paper:#fdfbf6; --paperedge:#8f8578; --pe:#fbfbfa; --peedge:#9aa0a6; --sand:#c9a26b; --sandedge:#8a6a3c; --glue:#e2a93b;
+  --font:"Albert Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#16120f; --surface:#1f1915; --ink:#ece4dc; --muted:#a89a8e; --line:#3a3029;
+  --accent:#d9a577; --ok:#6cc08d; --warn:#e0a54a; --bad:#f08a80; --canvas:#1a1512;
+  --kuze:#9a6a42; --lic:#f2b77a; --rub:#5e4028; --kuzeplan:#4a3726;
+  --d1:#c9b48e; --d1edge:#ff6a4d; --d2:#6f8fb0; --jig:#6d7c8b; --jigedge:#b4c2cf;
+  --wood:#7c6340; --woodedge:#c9a674; --steel:#7f8890;
+  --table:#3a332c; --dim:#d6cbbf; --notch:#ff7a4f;
+  --paper:#2c2620; --paperedge:#b3a797; --pe:#38332e; --peedge:#8c9298; --sand:#b8935f; --sandedge:#e0c290; --glue:#d19a2e; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#16120f; --surface:#1f1915; --ink:#ece4dc; --muted:#a89a8e; --line:#3a3029;
+  --accent:#d9a577; --ok:#6cc08d; --warn:#e0a54a; --bad:#f08a80; --canvas:#1a1512;
+  --kuze:#9a6a42; --lic:#f2b77a; --rub:#5e4028; --kuzeplan:#4a3726;
+  --d1:#c9b48e; --d1edge:#ff6a4d; --d2:#6f8fb0; --jig:#6d7c8b; --jigedge:#b4c2cf;
+  --wood:#7c6340; --woodedge:#c9a674; --steel:#7f8890;
+  --table:#3a332c; --dim:#d6cbbf; --notch:#ff7a4f;
+  --paper:#2c2620; --paperedge:#b3a797; --pe:#38332e; --peedge:#8c9298; --sand:#b8935f; --sandedge:#e0c290; --glue:#d19a2e; color-scheme:dark;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.55;overflow-x:hidden}
+.wrap{max-width:1040px;margin:0 auto;padding:20px 16px 48px;display:grid;gap:18px}
+h1{font-size:1.6rem;line-height:1.2;margin:0;font-weight:600;text-wrap:balance}
+p{margin:0}
+.lead{color:var(--muted);max-width:78ch;margin-top:6px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:.92em;white-space:nowrap}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:10px;min-width:0;align-content:start}
+.legend{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:18px;height:10px;border-radius:2px;background:var(--c);border:1px solid var(--line)}
+.legend i.ln{height:0;border:0;border-top:3px solid var(--c);border-radius:0}
+.legend i.dash{height:0;border:0;border-top:3px dashed var(--c);border-radius:0}
+.legend i.dot{width:10px;height:10px;border-radius:50%}
+.parts{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--ink);background:var(--canvas);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.parts>b:first-child{flex-basis:100%;font-size:12.5px;color:var(--muted);font-weight:600}
+.parts span b{font-family:var(--mono);font-weight:500;color:var(--accent)}
+.fig{background:var(--canvas);border:1px solid var(--line);border-radius:8px;padding:6px;min-width:0}
+.fig svg{display:block;width:100%;height:auto}
+figure{margin:0;min-width:0}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:4px}
+.astage{display:grid;gap:10px;grid-template-columns:minmax(0,1fr) minmax(0,300px);align-items:start}
+@media (max-width:760px){.astage{grid-template-columns:minmax(0,1fr)}.astage figure.side{max-width:340px;width:100%;margin:0 auto}}
+/* ovládání a průběh po částech (jako kapsa-skladani) */
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.controls button{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);width:44px;height:44px;border-radius:10px;display:grid;place-items:center;cursor:pointer;padding:0}
+.controls button.play{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.controls button:hover{border-color:var(--accent)}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.controls svg{width:18px;height:18px;fill:currentColor}
+.counter{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+.prog{display:flex;gap:6px;align-items:stretch}
+.pseg{flex:1;display:grid;gap:4px;min-width:0;cursor:pointer;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left}
+.pseg .bars{display:flex;gap:2px;height:6px}
+.pseg .bars span{flex:1;background:var(--line);border-radius:2px;position:relative;overflow:hidden}
+.pseg .bars span b{position:absolute;inset:0;background:var(--accent);transform-origin:left;transform:scaleX(0)}
+.pseg .pl{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pseg.on .pl{color:var(--ink);font-weight:600}
+@media (max-width:560px){.pl span{display:none}.counter{width:100%;margin-left:0;order:9}}
+.cap{min-height:7.5em;max-width:82ch}
+.cap .no{display:inline-block;font-weight:700;color:var(--accent);margin-right:6px;font-variant-numeric:tabular-nums}
+.cap h2{display:inline;font-size:1.05rem;margin:0}
+.cap .src{display:inline-block;margin-left:8px;font-size:12.5px;color:var(--muted)}
+.cap p{margin:4px 0 0}
+.cap .tip{display:block;margin-top:6px;color:var(--muted);font-size:14px}
+.cap .tip b{color:var(--warn);font-weight:700}
+.cap .alt{display:block;margin-top:6px;color:var(--muted);font-size:14px}
+.cap .alt b{font-weight:600;color:var(--ink)}
+.note{font-size:13px;color:var(--muted)}
+/* SVG */
+svg text{fill:var(--ink);font-family:var(--font);paint-order:stroke;stroke:var(--canvas);stroke-linejoin:round}
+svg text.m{fill:var(--muted)}
+svg text.b{fill:var(--bad);font-weight:600}
+svg text.g{fill:var(--ok);font-weight:600}
+svg text.a{fill:var(--accent);font-weight:600}
+svg .kzp{fill:var(--kuzeplan);stroke:var(--lic);stroke-width:1.3;vector-effect:non-scaling-stroke}
+svg .kz{fill:var(--kuze)}
+svg .licl{fill:none;stroke:var(--lic);stroke-width:2.2;vector-effect:non-scaling-stroke}
+svg .rubl{fill:none;stroke:var(--rub);stroke-width:2.2;stroke-dasharray:4 2.5;vector-effect:non-scaling-stroke}
+svg .open{fill:var(--pe);stroke:var(--lic);stroke-width:1.3;vector-effect:non-scaling-stroke}
+svg .edge{fill:none;stroke:var(--lic);stroke-width:1.3;vector-effect:non-scaling-stroke}
+svg .openF{fill:var(--pe)}
+svg .openD2{fill:var(--d2);stroke:var(--lic);stroke-width:1.3;vector-effect:non-scaling-stroke}
+svg .pe{fill:var(--pe);stroke:var(--peedge);stroke-width:1;vector-effect:non-scaling-stroke}
+svg .d2{fill:var(--d2)}
+svg .d2h{fill:none;stroke:var(--d2);stroke-width:1.2;stroke-dasharray:5 3;vector-effect:non-scaling-stroke}
+svg .glueh{fill:color-mix(in srgb,var(--glue) 22%,transparent);stroke:var(--glue);stroke-width:1;stroke-dasharray:4 3;vector-effect:non-scaling-stroke}
+svg .glue{fill:var(--glue)}
+svg .plan{fill:none;stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3;vector-effect:non-scaling-stroke}
+svg .guide{fill:none;stroke:var(--muted);stroke-width:1;stroke-dasharray:4 3;vector-effect:non-scaling-stroke}
+svg .bandl{fill:none;stroke:var(--muted);stroke-width:1;stroke-dasharray:1.5 3;vector-effect:non-scaling-stroke}
+svg .dot{fill:var(--ink)}
+svg .cutl{fill:none;stroke:var(--lic);stroke-width:2;vector-effect:non-scaling-stroke;stroke-linecap:round}
+svg .badl{fill:none;stroke:var(--bad);stroke-width:2.4;vector-effect:non-scaling-stroke;stroke-linecap:round}
+svg .badf{fill:color-mix(in srgb,var(--bad) 14%,transparent);stroke:var(--bad);stroke-width:1.6;stroke-dasharray:5 3;vector-effect:non-scaling-stroke}
+svg .ring{fill:none;stroke:var(--ok);stroke-width:2;vector-effect:non-scaling-stroke}
+svg .ringb{fill:none;stroke:var(--bad);stroke-width:2;vector-effect:non-scaling-stroke}
+svg .ringa{fill:none;stroke:var(--accent);stroke-width:1.6;vector-effect:non-scaling-stroke}
+svg .paper{fill:var(--paper);fill-opacity:.78;stroke:var(--paperedge);stroke-width:1.2;vector-effect:non-scaling-stroke}
+svg .cross{stroke:var(--ink);stroke-width:1.2;vector-effect:non-scaling-stroke}
+svg .tplaxis{stroke:var(--ink);stroke-width:1;stroke-dasharray:5 3;vector-effect:non-scaling-stroke}
+svg .steel{fill:var(--steel);stroke:var(--jigedge);stroke-width:1;vector-effect:non-scaling-stroke}
+svg .steelr{fill:none;stroke:var(--jigedge);stroke-width:3;vector-effect:non-scaling-stroke}
+svg .handle{fill:var(--accent)}
+svg .wood{fill:var(--wood);stroke:var(--woodedge);stroke-width:1;vector-effect:non-scaling-stroke}
+svg .sand{fill:var(--sand);stroke:var(--sandedge);stroke-width:1;vector-effect:non-scaling-stroke}
+svg .dim{stroke:var(--dim);stroke-width:1;fill:none;vector-effect:non-scaling-stroke}
+svg .lead{stroke:var(--muted);stroke-width:1;fill:none;vector-effect:non-scaling-stroke}
+svg .okc{fill:var(--ok)}
+svg .okm{fill:none;stroke:var(--surface);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+svg .xm{stroke:var(--bad);stroke-width:2.4;stroke-linecap:round;vector-effect:non-scaling-stroke}
+svg .coin{fill:color-mix(in srgb,var(--steel) 70%,transparent);stroke:var(--jigedge);stroke-width:1.2;vector-effect:non-scaling-stroke}
+/* Hidepath: návrat do lekce */
+.backlink{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--ink);font-weight:600;font-size:15px;text-decoration:none;justify-self:start}
+.backlink:hover{text-decoration:underline}
+.backlink:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <a class="backlink" href="/" data-back>← Zpět do lekce</a>
+  <h1>Víčko: okénka a výřez pro palec</h1>
+  <p class="lead">Jak se vysekávají vydutá místa peněženky Víčko: <b>okénka mincí</b> a <b>výřez pro palec</b> (lekce 5) a <b>okénko bankovek</b> skrz B a D2 (lekce 6). Každý vydutý konec se nejdřív vysekne výsečníkem a teprve pak se k tečnám díry dořízne rovně nožem. Rozměry jsou v mm, x se měří od levého boku dílu, y od spodní hrany hotové peněženky.</p>
+  <p class="lead"><b>Čísla jsou pro výchozí střih</b> (P1 1,0, přepážky a L1 0,6, nic se neztenčuje). V <b>záloze A</b> (P1 0,8) se rozměry výřezů nemění, posunou se jen o 0,5 níž okénka mincí (y <span class="num">27,5–75,5</span>, středy <span class="num">33,5</span> a <span class="num">69,5</span>) a výřez pro palec (horní hrana F <span class="num">61,5</span>, střed <span class="num">54,5</span>, pořád 7,0 pod hranou). Okénko bankovek zůstává (středy <span class="num">32</span> a <span class="num">63</span>). Na kůži vždy platí středy, které jste v lekci 4 propíchli skrz list 1 své varianty.</p>
+</header>
+
+<div class="legend" aria-label="Legenda">
+  <span><i style="--c:var(--kuzeplan)"></i>useň P1 1,0, pohled na líc</span>
+  <span><i style="--c:var(--d2)"></i>D2</span>
+  <span><i style="--c:var(--pe)"></i>tvrdá deska pod děrování</span>
+  <span><i style="--c:var(--paper)"></i>šablona (tvrdý papír)</span>
+  <span><i class="dot" style="--c:var(--ink)"></i>propíchnutý střed (lekce 4)</span>
+  <span><i class="ln" style="--c:var(--lic)"></i>řez nožem</span>
+  <span><i class="ln" style="--c:var(--ok)"></i>tečna, správně</span>
+  <span><i class="dash" style="--c:var(--bad)"></i>takhle ne</span>
+</div>
+<div class="parts" aria-label="Názvy dílů"><b>Názvy dílů</b><span><b>P1</b> hlavní pás: F – ohyb dna – B – závěs – víčko – jazýček</span><span><b>F</b> přední stěna</span><span><b>B</b> zadní stěna</span><span><b>D1</b> přepážka karty / bankovky</span><span><b>D2</b> přepážka bankovky / mince (kontrastní)</span><span><b>L1</b> podšívka přes magnet</span><span><b>K1</b> magnet, <b>K2</b> plíšek</span><span><b>rub</b> masová strana, <b>líc</b> hladká</span></div>
+
+<section class="card" id="anim" aria-label="Animace postupu">
+  <div class="astage">
+    <figure><div class="fig"><svg id="stage" viewBox="0 0 140 100" role="img" aria-label="Animace: díl v pohledu shora na líc"></svg></div><figcaption id="capMain">Pohled shora na líc, v měřítku. Nůž, pravítko, výsečník a kolík jsou schematické.</figcaption></figure>
+    <figure class="side"><div class="fig"><svg id="aside" viewBox="0 0 60 56" role="img" aria-label="Detail kroku"></svg></div><figcaption id="capAside"></figcaption></figure>
+  </div>
+  <div class="prog" id="prog"></div>
+  <div class="controls">
+    <button id="bRestart" aria-label="Od začátku" title="Od začátku"><svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/></svg></button>
+    <button id="bPrev" aria-label="Předchozí krok" title="Předchozí krok"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg></button>
+    <button id="bPlay" class="play" aria-label="Přehrát" title="Přehrát / pozastavit"><svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg></button>
+    <button id="bNext" aria-label="Další krok" title="Další krok"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
+    <span class="counter" id="counter">krok 1 / 18</span>
+  </div>
+  <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><span class="src" id="capS"></span><p id="capB"></p></div>
+</section>
+<p class="note">Postup podle lekcí 4, 5 a 6 projektu Víčko (kroky Okénka mincí v zádech, Výřez pro palec, Předběžné dokončení hran a Okénko bankovek skrz D2 a záda). Polohy a rozměry jsou spočítané z modelu střihu a z listů 1 a 4 pro výchozí střih. Poznámky označené „Tip (lekce to neuvádí)“ lekce výslovně neuvádějí. Hrany okének a výřezu dál ukazuje animace Dokončení hran (část G).</p>
+</div>
+
+<script>
+(() => {
+// ---------- model (mm), výchozí střih: lidWalletLayout() ----------
+const M = {
+  W: 101, frontTopY: 62, flatFromY: 1.75, hingeStartY: 81.5,
+  coin: [{ cx: 19.5, y0: 28, y1: 76, w: 12 }, { cx: 81.5, y0: 28, y1: 76, w: 12 }],
+  bill: { cx: 50.5, y0: 25, y1: 70, w: 14 },
+  notch: { cx: 50.5, r: 5, cy: 55, bottom: 50, top: 62, rc: 1 },
+  frontCornerR: 2,
+  d2: { x0: -1, x1: 102, y0: 18, y1: 82 },
+  g3: [[0, 101, 18, 23], [0, 4, 23, 80.566], [97, 101, 23, 80.566], [35, 66, 23, 80.566]],
+  t: 1.0, tD: 0.6,
+  A: { coin: [27.5, 75.5], notchCy: 54.5, frontTopY: 61.5 },
+};
+const PI = Math.PI;
+const cl = (t) => Math.max(0, Math.min(1, t));
+const seg = (t, a, b) => cl((t - a) / (b - a));
+const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+const es = (t, a, b) => ease(seg(t, a, b));
+const lerp = (a, b, t) => a + (b - a) * t;
+const r3 = (v) => Math.round(v * 1000) / 1000;
+const cz = (v, d = 1) => (Math.round(v * 10 ** d) / 10 ** d).toFixed(d).replace('.', ',');
+
+// ---------- kreslení: kamera mm → jednotky viewBoxu ----------
+let U = 0.2;          // jednotek viewBoxu na 1 px (pro velikost písma)
+let C = null;         // aktuální kamera
+function camera(c, W, H) { return { k: c.k, X: (x) => W / 2 + (x - c.cx) * c.k, Y: (y) => H / 2 - (y - c.cy) * c.k }; }
+const camL = (a, b, u) => ({ cx: lerp(a.cx, b.cx, u), cy: lerp(a.cy, b.cy, u), k: lerp(a.k, b.k, u) });
+const X = (x) => C.X(x), Y = (y) => C.Y(y), K = (v) => v * C.k;
+const pt = (p) => `${r3(X(p[0]))},${r3(Y(p[1]))}`;
+const poly = (pts, cls, ex = '') => `<path d="M${pts.map(pt).join('L')}Z" class="${cls}" ${ex}/>`;
+const pline = (pts, cls, ex = '') => `<path d="M${pts.map(pt).join('L')}" class="${cls}" ${ex}/>`;
+const line = (x1, y1, x2, y2, cls, ex = '') => `<line x1="${r3(X(x1))}" y1="${r3(Y(y1))}" x2="${r3(X(x2))}" y2="${r3(Y(y2))}" class="${cls}" ${ex}/>`;
+const rect = (x0, y0, x1, y1, cls, ex = '') => `<rect x="${r3(X(Math.min(x0, x1)))}" y="${r3(Y(Math.max(y0, y1)))}" width="${r3(K(Math.abs(x1 - x0)))}" height="${r3(K(Math.abs(y1 - y0)))}" class="${cls}" ${ex}/>`;
+const circ = (x, y, r, cls, ex = '') => `<circle cx="${r3(X(x))}" cy="${r3(Y(y))}" r="${r3(Math.max(0.01, K(r)))}" class="${cls}" ${ex}/>`;
+const op = (o, s) => (o <= 0.01 ? '' : o >= 0.99 ? s : `<g opacity="${r3(o)}">${s}</g>`);
+function arcPts(cx, cy, r, a0, a1, n = 28) { const o = []; for (let i = 0; i <= n; i++) { const a = a0 + (a1 - a0) * i / n; o.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]); } return o; }
+// text ve viewBoxu (sx, sy jsou už jednotky viewBoxu); k = násobek 12,5 px
+function T(sx, sy, s, o = {}) {
+  const fs = 12.5 * U * (o.k || 1);
+  return `<text x="${r3(sx)}" y="${r3(sy)}" font-size="${r3(fs)}" stroke-width="${r3(fs * 0.32)}" text-anchor="${o.a || 'start'}" dominant-baseline="${o.bl || 'middle'}" class="${o.c || ''}">${s}</text>`;
+}
+const Tm = (x, y, s, o) => T(X(x), Y(y), s, o);           // text v souřadnicích mm
+const em = (n = 1) => 12.5 * U * n;                          // výška řádku
+function lead(x1, y1, x2, y2) { return `<line x1="${r3(x1)}" y1="${r3(y1)}" x2="${r3(x2)}" y2="${r3(y2)}" class="lead"/><circle cx="${r3(x2)}" cy="${r3(y2)}" r="${r3(2 * U)}" fill="var(--muted)"/>`; }
+function okMark(sx, sy, o = 1, s = 1) { if (o <= 0.01) return ''; const r = 9 * U * s; return `<g opacity="${r3(o)}"><circle cx="${r3(sx)}" cy="${r3(sy)}" r="${r3(r)}" class="okc"/><path d="M${r3(sx - r * 0.45)} ${r3(sy)} L${r3(sx - r * 0.1)} ${r3(sy + r * 0.38)} L${r3(sx + r * 0.48)} ${r3(sy - r * 0.36)}" class="okm"/></g>`; }
+function xMark(sx, sy, o = 1, s = 1) { if (o <= 0.01) return ''; const r = 6 * U * s; return `<g opacity="${r3(o)}"><path d="M${r3(sx - r)} ${r3(sy - r)} L${r3(sx + r)} ${r3(sy + r)} M${r3(sx - r)} ${r3(sy + r)} L${r3(sx + r)} ${r3(sy - r)}" class="xm"/></g>`; }
+
+// ---------- tvary (mm) ----------
+// okénko: obdélník mezi tečnami + půlkruhy na koncích; c0, c1 = středy výsečníku
+const ends = (s) => [s.y0 + s.w / 2, s.y1 - s.w / 2];
+function slotPts(s) {
+  const r = s.w / 2, [c0, c1] = ends(s);
+  return arcPts(s.cx, c0, r, PI, 2 * PI).concat(arcPts(s.cx, c1, r, 0, PI));
+}
+// prostřední kus mezi řezy (vypadne po obou řezech)
+function slugPts(s) {
+  const r = s.w / 2, [c0, c1] = ends(s);
+  return arcPts(s.cx, c0, r, 0, PI).reverse().concat([[s.cx - r, c0]]).concat(arcPts(s.cx, c1, r, PI, 2 * PI)).concat([[s.cx + r, c0]]);
+}
+// výřez pro palec: otvor (s rohy R1 podle rc 0..1); nad hranou F přesah, ať je otvor otevřený
+function notchPts(rcF = 1, depthTop = M.notch.top) {
+  const n = M.notch, x0 = n.cx - n.r, x1 = n.cx + n.r, rc = n.rc * rcF, top = depthTop;
+  let p = [[x0 - rc, top + 3]];
+  if (rc > 0.01) p = p.concat(arcPts(x0 - rc, top - rc, rc, PI / 2, 0, 10)); else p.push([x0, top]);
+  p = p.concat(arcPts(n.cx, n.cy, n.r, PI, 2 * PI));
+  if (rc > 0.01) p = p.concat(arcPts(x1 + rc, top - rc, rc, PI, PI / 2, 10)); else p.push([x1, top]);
+  p.push([x1 + rc, top + 3]);
+  return p;
+}
+function notchSlugPts() { const n = M.notch, x0 = n.cx - n.r, x1 = n.cx + n.r; return [[x0, n.top]].concat([[x0, n.cy]]).concat(arcPts(n.cx, n.cy, n.r, PI, 0)).concat([[x1, n.top]]); }
+
+// ---------- nástroje (schematicky, ve viewBoxu) ----------
+// nůž v půdorysu: hrot v bodě (mm), čepel a rukojeť proti směru řezu (dir: 1 = řez dolů po obrazovce)
+function knife(x, y, o = 1) {
+  if (o <= 0.01) return '';
+  const sx = X(x), sy = Y(y), s = 1.25 * U;
+  const b = [[0, 0], [-2.2, -9], [-2.2, -17], [2.2, -17], [2.2, -6]].map(([u, v]) => `${r3(sx + u * s)},${r3(sy + v * s)}`).join(' ');
+  return `<g opacity="${r3(o)}"><polygon points="${b}" class="steel"/><rect x="${r3(sx - 3.2 * s)}" y="${r3(sy - 38 * s)}" width="${r3(6.4 * s)}" height="${r3(21 * s)}" rx="${r3(1.5 * s)}" class="handle"/></g>`;
+}
+// ocelové pravítko podél svislé čáry x, na straně side (−1 vlevo, +1 vpravo), šířka 8 mm (schematicky)
+function ruler(x, ya, yb, side, o = 1) {
+  if (o <= 0.01) return '';
+  const w = 8, x0 = side < 0 ? x - w : x, x1 = side < 0 ? x : x + w;
+  let s = rect(x0, ya, x1, yb, 'steel', 'fill-opacity=".9"');
+  for (let y = Math.ceil(ya); y <= yb; y += 2) { const xe = side < 0 ? x : x; const l = y % 10 === 0 ? 2.2 : 1.1; s += line(xe, y, xe + side * l, y, 'lead'); }
+  return op(o, s);
+}
+// výsečník v půdorysu: kruh břitu + okraj trubky
+function punchTop(x, y, d, o = 1) { if (o <= 0.01) return ''; return op(o, circ(x, y, d / 2 + 0.9, 'steelr') + circ(x, y, d / 2, 'ringa')); }
+function dot(x, y) { return `<circle cx="${r3(X(x))}" cy="${r3(Y(y))}" r="${r3(Math.max(K(0.45), 2 * U))}" class="dot"/>`; }
+function cross(x, y, a = 1, o = 1) { return op(o, line(x - a, y, x + a, y, 'cross') + line(x, y - a, x, y + a, 'cross')); }
+
+// ---------- díly v půdorysu ----------
+// pás P1 kolem B (líc nahoru): B y 1,75–81,5, pás pokračuje k ohybu dna a k závěsu
+function boardAndStrip(y0, y1, o = {}) {
+  let s = rect(-30, -40, 131, 140, 'pe');
+  s += rect(0, y0, M.W, y1, 'kzp');
+  if (o.d2) s += rect(M.d2.x0, M.d2.y0, 0, M.d2.y1, 'd2') + rect(M.W, M.d2.y0, M.d2.x1, M.d2.y1, 'd2');
+  return s;
+}
+// stav okénka: h = [0|1, 0|1] vyseknuté konce, cut = [l, r] 0..1, out 0..1 vypadnutý kus, see = 'pe'|'d2'
+function windowDraw(s, st) {
+  const r = s.w / 2, [c0, c1] = ends(s), seeCls = st.see === 'd2' ? 'openD2' : 'open';
+  let o = '';
+  if (st.plan) o += poly(slotPts(s), 'plan');
+  if (st.out >= 1) return o + poly(slotPts(s), st.done === 'd2' ? 'openD2' : seeCls);
+  [c0, c1].forEach((c, i) => { if (st.h && st.h[i]) o += circ(s.cx, c, r, 'open'); });
+  if (st.out > 0) {
+    o += poly(slotPts(s), seeCls);
+    o += `<g transform="translate(${r3(K(st.out * 26))} ${r3(-K(st.out * 6))})" opacity="${r3(1 - st.out)}">${poly(slugPts(s), 'kzp')}</g>`;
+    return o;
+  }
+  const cut = st.cut || [0, 0];
+  [-1, 1].forEach((sd, i) => { if (cut[i] > 0) o += line(s.cx + sd * r, c1, s.cx + sd * r, lerp(c1, c0, cut[i]), 'cutl'); });
+  return o;
+}
+function prick(s, st) { const [c0, c1] = ends(s); let o = ''; [c0, c1].forEach((c, i) => { if (!(st.h && st.h[i])) o += dot(s.cx, c); }); return o; }
+// šablona okénka z listu 4: tvar okénka z tvrdého papíru, křížky na středech, čárkovaná osa (±2 přes konce)
+function slotTemplate(s, dx = 0, dy = 0, o = 1) {
+  if (o <= 0.01) return '';
+  const sh = { ...s, cx: s.cx + dx, y0: s.y0 + dy, y1: s.y1 + dy }, [c0, c1] = ends(sh);
+  return op(o, poly(slotPts(sh), 'paper') + line(sh.cx, sh.y0 - 2, sh.cx, sh.y1 + 2, 'tplaxis') + cross(sh.cx, c0) + cross(sh.cx, c1));
+}
+
+// ---------- části a kroky ----------
+const PARTS = { A: 'Okénka mincí', B: 'Výřez pro palec', C: 'Okénko bankovek', D: 'Chyba: řez za tečnu' };
+const S = [];
+const add = (part, title, src, body, dur, main, aside, o = {}) => S.push({ part, title, src, body, dur, main, aside, ...o });
+const VB = { main: [140, 100], aside: [60, 56] };
+
+// kamery
+const CAM_B = { cx: 50.5, cy: 44, k: 1.02 };
+const CAM_A1 = { cx: 30, cy: 52, k: 1.5 };
+const CAM_C = { cx: 50.5, cy: 47, k: 1.45 };
+const CAM_F = { cx: 50.5, cy: 36, k: 1.02 };
+const CAM_N = { cx: 50.5, cy: 55, k: 3.1 };
+
+// ---- popisky pásu B ----
+function stripLabels() {
+  let s = '';
+  s += line(0, M.flatFromY, M.W, M.flatFromY, 'bandl') + line(0, M.hingeStartY, M.W, M.hingeStartY, 'bandl');
+  s += Tm(50.5, M.flatFromY - 4, '↓ ohyb dna a F', { a: 'middle', c: 'm' });
+  s += Tm(50.5, M.hingeStartY + 4, '↑ závěs a víčko', { a: 'middle', c: 'm' });
+  return s;
+}
+const coinSt = (o) => ({ plan: true, h: [0, 0], cut: [0, 0], out: 0, see: 'pe', ...o });
+function sideDims(s, side = 1, lbl = true) {
+  // kóty okénka: šířka a délka, vedle okénka
+  const r = s.w / 2, xs = s.cx + side * (r + 3.2);
+  let o = line(xs, s.y0, xs, s.y1, 'dim') + line(xs - 0.8, s.y0, xs + 0.8, s.y0, 'dim') + line(xs - 0.8, s.y1, xs + 0.8, s.y1, 'dim');
+  if (lbl) o += T(X(xs) + side * em(0.35), Y((s.y0 + s.y1) / 2), cz(s.y1 - s.y0, 0), { a: side > 0 ? 'start' : 'end' });
+  return o;
+}
+
+// ===== A: okénka mincí (lekce 5) =====
+add('A', 'Kde jsou okénka mincí', 'lekce 5 · Okénka mincí v zádech',
+  'Dvě okénka mincí <b>12 × 48</b> v zadní stěně B, každé nad jedním sloupcem mincí: x <span class="num">13,5–25,5</span> a <span class="num">75,5–87,5</span>, y <span class="num">28–76</span>. Středy obou konců (y <span class="num">34</span> a <span class="num">70</span>) jste v lekci 4 propíchli skrz list 1. P1 leží rovně lícem nahoru, nic není ohnuté a D2 ještě není přilepená (lekce 6).',
+  7000, (t) => {
+    C = camera(CAM_B, ...VB.main);
+    let s = boardAndStrip(-12, 100);
+    M.coin.forEach((c) => { s += windowDraw(c, coinSt({ plan: t > 0.25 })); s += prick(c, {}); });
+    s += stripLabels();
+    const o1 = seg(t, 0.05, 0.2);
+    M.coin.forEach((c) => { ends(c).forEach((y) => { s += op(o1 * (1 - seg(t, 0.85, 1) * 0.6), circ(c.cx, y, 2.4, 'ringa')); }); });
+    const o2 = seg(t, 0.3, 0.45);
+    s += op(o2, sideDims(M.coin[0], -1) + sideDims(M.coin[1], 1));
+    s += op(seg(t, 0.5, 0.62), Tm(19.5, 22.5, 'okénko mincí', { a: 'middle' }) + Tm(81.5, 22.5, 'okénko mincí', { a: 'middle' }));
+    s += op(seg(t, 0.62, 0.75), Tm(50.5, 52, 'B, líc nahoru', { a: 'middle', c: 'a' }) + Tm(50.5, 52 - 8, 'tečky: středy z lekce 4', { a: 'middle', c: 'm' }));
+    return s;
+  }, (t) => {
+    // rozměry okénka mincí
+    C = camera({ cx: 22, cy: 50, k: 0.9 }, ...VB.aside);
+    const s0 = { cx: 19.5, y0: 28, y1: 76, w: 12 }, [c0, c1] = ends(s0);
+    let s = poly(slotPts(s0), 'open');
+    s += dot(19.5, c0) + dot(19.5, c1);
+    s += line(13.5, c0, 25.5, c0, 'guide') + line(13.5, c1, 25.5, c1, 'guide');
+    s += line(10.5, 28, 10.5, 76, 'dim') + Tm(9.5, 52, '48', { a: 'end' });
+    s += line(13.5, 25, 25.5, 25, 'dim') + Tm(19.5, 22, 'Ø 12', { a: 'middle' });
+    s += line(28.5, c0, 28.5, c1, 'dim') + Tm(29.5, 52, '36', {});
+    s += Tm(29.5, c0, `y ${cz(c0, 0)}`, { c: 'm' }) + Tm(29.5, c1, `y ${cz(c1, 0)}`, { c: 'm' });
+    return s;
+  }, { capA: 'Okénko mincí 12 × 48: dva konce výsečníkem Ø 12, středy 36 od sebe, v měřítku.' });
+
+add('A', 'Šablona z listu 4 na propíchnuté středy', 'lekce 5 · Okénka mincí v zádech',
+  'Šablonu okénka mincí z listu 4 (nalepenou na tvrdý papír a vyříznutou v lekci 4) přiložte na líc B <b>křížky na propíchnuté středy</b> a zkontrolujte, že sedí: oba křížky zároveň na obou vpiších.',
+  8000, (t) => {
+    C = camera(camL(CAM_B, CAM_A1, es(t, 0, 0.3)), ...VB.main);
+    let s = boardAndStrip(-12, 100);
+    M.coin.forEach((c) => { s += windowDraw(c, coinSt({})); s += prick(c, {}); });
+    const u = es(t, 0.25, 0.65);
+    s += slotTemplate(M.coin[0], lerp(-22, 0, u), lerp(9, 0, u), seg(t, 0.22, 0.3));
+    const ok = seg(t, 0.72, 0.82);
+    ends(M.coin[0]).forEach((y) => { s += op(ok, circ(19.5, y, 2.2, 'ring')); });
+    s += op(ok, okMark(X(28.5), Y(52), 1) + T(X(28.5) + em(0.9), Y(52), 'sedí', { c: 'g' }));
+    s += op(seg(t, 0.3, 0.4), Tm(45, 64, 'šablona z listu 4', { c: 'm' }) + lead(X(45) - em(0.2), Y(64), X(23), Y(60)));
+    return s;
+  }, (t) => {
+    // detail: křížek na vpichu
+    C = camera({ cx: 0, cy: 0, k: 9 }, ...VB.aside);
+    const u = es(t, 0.25, 0.65);
+    let s = rect(-4, -4, 4, 4, 'kzp');
+    s += dot(0, 0);
+    const dx = lerp(-1.8, 0, u), dy = lerp(1.2, 0, u);
+    s += op(seg(t, 0.22, 0.3), rect(-4, -2.6 + dy, 4, 4, 'paper') + line(dx, -2.2 + dy, dx, 4, 'tplaxis') + cross(dx, dy, 1));
+    s += op(seg(t, 0.72, 0.82), circ(0, 0, 1.5, 'ring'));
+    s += T(30, 5, 'křížek šablony na vpichu', { a: 'middle' });
+    return s;
+  }, { capA: 'Detail jednoho středu, zvětšeno. Šablona je kreslená průsvitně.', tip: 'Tip (lekce to neuvádí): šablona je tu průsvitná, aby byly vidět vpichy pod křížky. Co dělat, když nesedí, lekce neuvádí – nesekejte a nejdřív zjistěte proč (ověřit).' });
+
+add('A', 'Výsečník Ø 12 na oba konce', 'lekce 5 · Okénka mincí v zádech',
+  'Díl na tvrdou desku. Výsečníkem <b>Ø 12</b> vysekněte oba konce okénka, středem na propíchnutý střed (y <span class="num">34</span> a <span class="num">70</span>), úderem paličky. Prsty držící výsečník mějte u spodku, palička dopadá na horní konec (bezpečnost lekce 6, kde se seká stejně).',
+  8000, (t) => {
+    C = camera(CAM_A1, ...VB.main);
+    let s = boardAndStrip(-12, 100);
+    const h0 = t > 0.42 ? 1 : 0, h1 = t > 0.85 ? 1 : 0;
+    s += windowDraw(M.coin[0], coinSt({ h: [h1, h0] }));
+    s += prick(M.coin[0], { h: [h1, h0] });
+    s += windowDraw(M.coin[1], coinSt({})) + prick(M.coin[1], {});
+    s += slotTemplate(M.coin[0], -22, 9, 1 - seg(t, 0, 0.1));
+    const [c0, c1] = ends(M.coin[0]);
+    if (t < 0.48) s += punchTop(19.5, c1, 12, seg(t, 0.08, 0.16) * (1 - seg(t, 0.44, 0.48)));
+    else if (t < 0.92) s += punchTop(19.5, c0, 12, seg(t, 0.5, 0.58) * (1 - seg(t, 0.88, 0.92)));
+    s += op(seg(t, 0.12, 0.2), Tm(34, c1 + 3, 'výsečník Ø 12', {}));
+    return s;
+  }, (t) => punchSection(t, 12, false, 0.42), { capA: 'Řez středem díry napříč, tloušťky v měřítku. Výsečník a palička jsou schematické.', tip: 'Tip (lekce to neuvádí): jestli nechat šablonu při sekání přiloženou, lekce u okének neříká; animace ji před sekáním odkládá.' });
+
+add('A', 'Rovné řezy u pravítka od tečny k tečně', 'lekce 5 · Okénka mincí v zádech',
+  'Mezi dírami veďte <b>rovné řezy nožem u ocelového pravítka od tečny k tečně</b>, na obou bocích (x <span class="num">13,5</span> a <span class="num">25,5</span>, od y <span class="num">70</span> do <span class="num">34</span>). Nůž veďte tahem od prstů volné ruky (bezpečnost lekce 5). Řez začíná i končí přesně na tečně díry, kus mezi řezy pak vypadne.',
+  10000, (t) => {
+    C = camera(CAM_A1, ...VB.main);
+    let s = boardAndStrip(-12, 100);
+    const cL = es(t, 0.1, 0.42), cR = es(t, 0.55, 0.85), out = es(t, 0.88, 1);
+    s += windowDraw(M.coin[0], coinSt({ plan: false, h: [1, 1], cut: [cL, cR], out }));
+    s += windowDraw(M.coin[1], coinSt({})) + prick(M.coin[1], {});
+    const [c0, c1] = ends(M.coin[0]);
+    if (t < 0.5) { s += ruler(13.5, c0 - 9, c1 + 9, -1, seg(t, 0.02, 0.08) * (1 - seg(t, 0.46, 0.5))); s += line(13.5, c1, 13.5, lerp(c1, c0, cL), 'cutl'); s += knife(13.5, lerp(c1, c0, cL), seg(t, 0.06, 0.1) * (1 - seg(t, 0.44, 0.48))); }
+    else if (t < 0.9) { s += ruler(25.5, c0 - 9, c1 + 9, 1, seg(t, 0.5, 0.55) * (1 - seg(t, 0.86, 0.9))); s += line(25.5, c1, 25.5, lerp(c1, c0, cR), 'cutl'); s += knife(25.5, lerp(c1, c0, cR), seg(t, 0.53, 0.56) * (1 - seg(t, 0.84, 0.88))); }
+    const tg = seg(t, 0.02, 0.1) * (1 - seg(t, 0.9, 1));
+    [[13.5, c0], [13.5, c1], [25.5, c0], [25.5, c1]].forEach(([x, y]) => { s += op(tg, circ(x, y, 1.3, 'ring')); });
+    s += op(tg, Tm(36, c1, 'tečna', { c: 'g' }) + lead(X(36) - em(0.2), Y(c1), X(26.8), Y(c1)));
+    return s;
+  }, (t) => tangentZoom(t, { s: M.coin[0], x: 13.5, cutT: [0.1, 0.42] }), { capA: 'Dolní konec levého řezu, zvětšeno: řez dojede k díře v tečně a tam končí.', tip: 'Tip (lekce to neuvádí): jak vést nůž, lekce 5 u okének nepíše. Animace přebírá pravidlo pro rovné úseky P1 z lekce 4 (pravítko na čáře, nůž kolmo, dva až tři lehké tahy) a kreslí pravítko na straně kůže, která zůstává.' });
+
+add('A', 'Druhé okénko stejně, konce dobrousit', 'lekce 5 · Okénka mincí v zádech, Předběžné dokončení hran',
+  'Druhé okénko (x <span class="num">75,5–87,5</span>) udělejte stejně, od přiložení šablony křížky na propíchnuté středy. Konce vybruste brusným papírem namotaným na <b>kolíku Ø 8 ve vrtačce</b>, okénka zkoste z líce a vyleštěte jako ostatní hrany (krok Předběžné dokončení hran). Kolík pevně upněte a prsty držte mimo točící se kolík. Tím je hotová část kontrolního bodu lekce 5: okénka mincí 12 × 48 jsou vyseknutá a hrany zkosené (výřez pro palec viz část B).',
+  8500, (t) => {
+    C = camera(camL(CAM_A1, CAM_B, es(t, 0, 0.3)), ...VB.main);
+    let s = boardAndStrip(-12, 100);
+    const r1 = seg(t, 0.3, 0.5);
+    s += windowDraw(M.coin[0], coinSt({ plan: false, out: 1 }));
+    if (r1 < 1) s += windowDraw(M.coin[1], coinSt({ h: [r1 > 0.3 ? 1 : 0, r1 > 0.15 ? 1 : 0], cut: [seg(r1, 0.4, 0.7), seg(r1, 0.6, 0.95)] })) + prick(M.coin[1], { h: [r1 > 0.3 ? 1 : 0, r1 > 0.15 ? 1 : 0] });
+    else s += windowDraw(M.coin[1], coinSt({ plan: false, out: 1 }));
+    s += stripLabels();
+    const ok = seg(t, 0.85, 0.95);
+    s += op(ok, okMark(X(19.5), Y(52), 1) + okMark(X(81.5), Y(52), 1));
+    s += op(ok, Tm(50.5, 52, '2 okénka 12 × 48', { a: 'middle', c: 'g' }));
+    return s;
+  }, (t) => {
+    // kolík Ø 8 s brusným papírem v konci okénka
+    C = camera({ cx: 19.5, cy: 68, k: 2.2 }, ...VB.aside);
+    const s0 = M.coin[0];
+    let s = rect(5, 55, 34, 84, 'kzp') + poly(slotPts(s0), 'open');
+    const a = t * 14, dy = 2 + Math.sin(a) * 1.2;
+    s += circ(19.5, 70 + dy - 2, 4.5, 'sand') + circ(19.5, 70 + dy - 2, 4, 'wood');
+    s += Tm(19.5, 59, 'kolík Ø 8 + brusný papír', { a: 'middle' });
+    return s;
+  }, { capA: 'Konec okénka zvětšeně: brusný papír na kolíku Ø 8 ve vrtačce, schematicky.' });
+
+// ===== B: výřez pro palec (lekce 5) =====
+function fStrip(o = {}) {
+  const lo = o.labels === undefined ? 0 : o.labels;
+  // F lícem nahoru: horní hrana y 62 (rohy R2), dolů pokračuje k ohybu dna
+  const r = M.frontCornerR, top = M.frontTopY;
+  let s = rect(-30, -60, 131, 140, 'pe');
+  const out = [[0, -40], [M.W, -40]].concat(arcPts(M.W - r, top - r, r, 0, PI / 2, 8)).concat(arcPts(r, top - r, r, PI / 2, PI, 8));
+  s += poly(out, 'kzp');
+  if (lo > 0.01) { s += op(lo, line(0, M.flatFromY, M.W, M.flatFromY, 'bandl') + Tm(50.5, M.flatFromY + 4, '↓ ohyb dna a B', { a: 'middle', c: 'm' })); }
+  return s;
+}
+// stav výřezu: hole, cut [l, r], out, rc 0..1
+function notchDraw(st) {
+  const n = M.notch, x0 = n.cx - n.r, x1 = n.cx + n.r;
+  let s = '';
+  if (st.plan) s += pline(notchPts(1).slice(1, -1), 'plan');
+  const openN = (rc) => { const p = notchPts(rc); return poly(p, 'openF') + pline(p.slice(1, -1), 'edge'); };
+  if (st.out >= 1) return s + openN(st.rc || 0);
+  if (st.hole) s += circ(n.cx, n.cy, n.r, 'open');
+  if (st.out > 0) {
+    s += openN(0);
+    s += `<g transform="translate(${r3(K(st.out * 9))} ${r3(-K(st.out * 6))})" opacity="${r3(1 - st.out)}">${poly(notchSlugPts(), 'kzp')}</g>`;
+    return s;
+  }
+  const c = st.cut || [0, 0];
+  if (c[0] > 0) s += line(x0, n.top, x0, lerp(n.top, n.cy, c[0]), 'cutl');
+  if (c[1] > 0) s += line(x1, n.top, x1, lerp(n.top, n.cy, c[1]), 'cutl');
+  if (!st.hole) s += dot(n.cx, n.cy);
+  return s;
+}
+// šablona výřezu pro palec (z listu 1, lekce 2): kus papíru s otvorem výřezu, horní hrana na hraně F – tvar schematický
+function notchTemplate(dx = 0, dy = 0, o = 1) {
+  if (o <= 0.01) return '';
+  const n = M.notch, top = n.top + dy, x0 = 36 + dx, x1 = 65 + dx;
+  const hole = notchPts(1).map(([x, y]) => [x + dx, y + dy]);
+  const pts = [[x0, top], [hole[1][0], top]].concat(hole.slice(1, -1)).concat([[hole[hole.length - 2][0], top], [x1, top], [x1, top - 20], [x0, top - 20]]);
+  return op(o, poly(pts, 'paper'));
+}
+add('B', 'Kde je výřez pro palec', 'lekce 5 · Výřez pro palec',
+  'Výřez <b>U 10 × 12</b> uprostřed horní hrany přední stěny F: x <span class="num">45,5–55,5</span>, střed výsečníku na ose x 50,5 <b>7,0 pod horní hranou F</b> (y <span class="num">55,0</span>), dno y <span class="num">50</span>. Horní hranu F jste v lekci 4 uřízli rovně i přes výřez a střed Ø 10 propíchli skrz list 1. V záloze A je hrana F v y <span class="num">61,5</span> a střed v y <span class="num">54,5</span>.',
+  7000, (t) => {
+    C = camera(camL(CAM_F, CAM_N, es(t, 0.35, 0.75)), ...VB.main);
+    let s = fStrip({ labels: 1 - seg(t, 0.3, 0.4) });
+    s += notchDraw({ plan: t > 0.15 });
+    s += op(seg(t, 0.05, 0.15) * (1 - seg(t, 0.3, 0.4)), circ(50.5, 55, 4, 'ringa'));
+    s += op(seg(t, 0.0, 0.1) * (1 - seg(t, 0.3, 0.4)), Tm(50.5, 30, 'F, líc nahoru', { a: 'middle', c: 'a' }));
+    const d = seg(t, 0.75, 0.88);
+    s += op(d, line(42, 55, 42, 62, 'dim') + T(X(42) - em(0.35), Y(58.5), '7,0', { a: 'end' }));
+    s += op(d, line(45.5, 47.5, 55.5, 47.5, 'dim') + T(X(50.5), Y(47.5) + em(0.9), '10', { a: 'middle' }));
+    s += op(d, line(59, 50, 59, 62, 'dim') + T(X(59) + em(0.35), Y(56), '12', {}));
+    s += op(seg(t, 0.88, 1), T(X(50.5), Y(42.5) + em(0.6), 'osa x 50,5', { a: 'middle', c: 'm' }) + line(50.5, 43, 50.5, 49, 'guide'));
+    return s;
+  }, (t) => {
+    C = camera({ cx: 50.5, cy: 55, k: 3.3 }, ...VB.aside);
+    let s = rect(38, 40, 63, 62, 'kzp');
+    s += poly(notchPts(1), 'openF') + pline(notchPts(1).slice(1, -1), 'edge');
+    s += dot(50.5, 55) + line(45.5, 55, 55.5, 55, 'guide');
+    s += Tm(50.5, 58.8, 'Ø 10', { a: 'middle' });
+    s += Tm(58.5, 62.6, 'R1', { c: 'a' }) + lead(X(58.5) - em(0.2), Y(62.6), X(56.1), Y(61.6));
+    s += Tm(42.5, 62.6, 'R1', { a: 'end', c: 'a' }) + lead(X(42.5) + em(0.2), Y(62.6), X(44.9), Y(61.6));
+    s += Tm(42.2, 48.6, 'F, líc', { c: 'm' });
+    return s;
+  }, { capA: 'Hotový tvar výřezu, zvětšeno: dno Ø 10, rovné boky, rohy ústí R1.' });
+
+add('B', 'Šablona výřezu: střed na ose, 7,0 pod hranou', 'lekce 5 · Výřez pro palec (šablona z lekce 2)',
+  'Šablonu výřezu pro palec, kterou jste v lekci 2 vyřízli z listu 1, přiložte na líc F tak, aby střed výsečníku ležel <b>na ose x 50,5, 7,0 pod horní hranou F</b> (y 55,0).',
+  8000, (t) => {
+    C = camera(CAM_N, ...VB.main);
+    let s = fStrip();
+    s += notchDraw({});
+    const u = es(t, 0.1, 0.5);
+    s += notchTemplate(lerp(-14, 0, u), lerp(6, 0, u), seg(t, 0.05, 0.12));
+    const ok = seg(t, 0.62, 0.74);
+    s += op(ok, circ(50.5, 55, 1.3, 'ring') + line(42, 55, 42, 62, 'dim') + T(X(42) - em(0.35), Y(58.5), '7,0', { a: 'end' }));
+    s += op(ok, okMark(X(60.5), Y(56), 1) + T(X(60.5) + em(0.9), Y(56), 'sedí', { c: 'g' }));
+    s += op(seg(t, 0.5, 0.6), T(X(37), Y(44), 'šablona (lekce 2)', { c: 'm' }));
+    return s;
+  }, (t) => {
+    C = camera({ cx: 50.5, cy: 56, k: 3.0 }, ...VB.aside);
+    let s = rect(38, 42, 63, 62, 'kzp') + dot(50.5, 55);
+    s += notchTemplate(0, 0, seg(t, 0.05, 0.12));
+    s += op(seg(t, 0.62, 0.74), circ(50.5, 55, 1.2, 'ring') + line(57.5, 55, 57.5, 62, 'dim') + Tm(58.3, 58.5, '7,0', {}));
+    s += Tm(50.5, 48.3, 'vpich uprostřed oblouku', { a: 'middle' });
+    return s;
+  }, { capA: 'Otvor šablony zvětšeně: propíchnutý střed z lekce 4 má být uprostřed oblouku.', tip: 'Tip (lekce to neuvádí): tvar šablony je kreslený schematicky (kus horní části F s otvorem výřezu), lekce 2 jen říká, že je z listu 1. Že má vpich z lekce 4 ležet uprostřed oblouku a 7,0 se dá přeměřit pravítkem, je odvozené z čísel lekce.' });
+
+add('B', 'Výsečník Ø 10 přes šablonu', 'lekce 5 · Výřez pro palec',
+  'Na tvrdé desce vysekněte <b>výsečníkem Ø 10 přes šablonu</b> dno výřezu. Díra sahá od y <span class="num">50</span> do <span class="num">60</span>, k horní hraně F zbývají 2 mm kůže.',
+  7500, (t) => {
+    C = camera(CAM_N, ...VB.main);
+    let s = fStrip();
+    const h = t > 0.55;
+    s += notchDraw({ hole: h });
+    s += notchTemplate(0, 0, 1 - seg(t, 0.85, 0.95));
+    s += punchTop(50.5, 55, 10, seg(t, 0.1, 0.2) * (1 - seg(t, 0.6, 0.7)));
+    s += op(seg(t, 0.15, 0.25) * (1 - seg(t, 0.6, 0.7)), T(X(58), Y(47), 'výsečník Ø 10', {}));
+    s += op(seg(t, 0.7, 0.8), line(58, 60, 58, 62, 'dim') + T(X(58) + em(0.35), Y(61), '2', {}));
+    return s;
+  }, (t) => punchSection(t, 10, false, 0.55, true), { capA: 'Řez středem díry napříč, tloušťky v měřítku; šablona navrchu. Výsečník a palička jsou schematické.' });
+
+add('B', 'Rovné řezy od hrany F k tečnám', 'lekce 5 · Výřez pro palec',
+  'Pak <b>rovné řezy nožem od horní hrany F k tečnám díry</b> (x <span class="num">45,5</span> a <span class="num">55,5</span>, tečny v y <span class="num">55,0</span>) a <b>zastavit přesně na tečně</b>. Kus mezi řezy vypadne.',
+  9500, (t) => {
+    C = camera(CAM_N, ...VB.main);
+    let s = fStrip();
+    const cL = es(t, 0.1, 0.4), cR = es(t, 0.52, 0.82), out = es(t, 0.86, 1);
+    s += notchDraw({ hole: true, cut: [cL, cR], out });
+    if (t < 0.48) { s += ruler(45.5, 44, 66, -1, seg(t, 0.02, 0.08) * (1 - seg(t, 0.44, 0.48))); s += line(45.5, 62, 45.5, lerp(62, 55, cL), 'cutl'); s += knife(45.5, lerp(62, 55, cL), seg(t, 0.06, 0.1) * (1 - seg(t, 0.42, 0.46))); }
+    else if (t < 0.88) { s += ruler(55.5, 44, 66, 1, seg(t, 0.48, 0.53) * (1 - seg(t, 0.84, 0.88))); s += line(55.5, 62, 55.5, lerp(62, 55, cR), 'cutl'); s += knife(55.5, lerp(62, 55, cR), seg(t, 0.5, 0.54) * (1 - seg(t, 0.82, 0.86))); }
+    const tg = seg(t, 0.02, 0.1) * (1 - seg(t, 0.9, 1));
+    s += op(tg, circ(45.5, 55, 0.9, 'ring') + circ(55.5, 55, 0.9, 'ring'));
+    s += op(tg, T(X(50.5), Y(45.5), 'tečny v y 55', { a: 'middle', c: 'g' }));
+    return s;
+  }, (t) => tangentZoom(t, { notch: true, x: 45.5, cutT: [0.1, 0.4] }), { capA: 'Levý řez zvětšeně: od hrany F dolů, zastavit na tečně díry.', tip: 'Tip (lekce to neuvádí): pravítko u výřezu lekce 5 neuvádí. Animace ho kreslí podle pravidla pro rovné úseky z lekce 4, na straně kůže, která zůstává.' });
+
+add('B', 'Rohy ústí R1 brusným papírem', 'lekce 5 · Výřez pro palec, Předběžné dokončení hran',
+  '<b>Rohy ústí R1 nedělejte nožem</b>, zaoblete je brusným papírem. V kroku Předběžné dokončení hran pak výřez zaoblete z líce i z rubu (o rubovou hranu dna výřezu se může zachytit karta), vnitřek vybruste brusným papírem na kolíku Ø 8 ve vrtačce a stejným kolíkem vyleštěte. Jestli výřez funguje, ověří zkušební kus.',
+  8500, (t) => {
+    C = camera(CAM_N, ...VB.main);
+    let s = fStrip();
+    const rc = es(t, 0.15, 0.75);
+    s += notchDraw({ out: 1, rc });
+    const a = t * 22;
+    if (t > 0.1 && t < 0.8) s += `<g opacity="${r3(seg(t, 0.1, 0.16) * (1 - seg(t, 0.74, 0.8)))}">${rect(41 + Math.sin(a) * 0.6, 60.2, 45.3 + Math.sin(a) * 0.6, 64, 'sand')}${rect(55.7 - Math.sin(a) * 0.6, 60.2, 60 - Math.sin(a) * 0.6, 64, 'sand')}</g>`;
+    s += op(seg(t, 0.2, 0.3) * (1 - seg(t, 0.75, 0.85)), T(X(37), Y(66), 'brusný papír', { c: 'm' }));
+    s += op(seg(t, 0.8, 0.9), okMark(X(50.5), Y(45), 1) + T(X(50.5) + em(0.9), Y(45), 'U 10 × 12, rohy R1', { c: 'g' }));
+    return s;
+  }, (t) => {
+    C = camera({ cx: 45.2, cy: 60.3, k: 8 }, ...VB.aside);
+    let s = rect(40, 56, 50, 66, 'pe') + poly([[40, 56], [45.5, 56], [45.5, 62], [40, 62]], 'kzp');
+    const rc = es(t, 0.15, 0.75);
+    s += poly([[44.5 - 0.0, 62.2]].concat(arcPts(44.5, 61, 1, PI / 2, 0, 10)).concat([[45.6, 61], [45.6, 62.2]]).map(([x, y]) => [x, y]), '', `fill="var(--pe)" opacity="${r3(rc)}"`);
+    s += pline(arcPts(44.5, 61, 1, PI / 2, 0, 12), 'ring', `opacity="${r3(rc)}"`);
+    // nůž přeškrtnutý
+    s += op(seg(t, 0.02, 0.1), T(X(46.4), Y(58.2), 'nožem ne', { c: 'b' }) + xMark(X(46.4) - em(0.8), Y(58.2), 1, 0.8));
+    s += op(seg(t, 0.75, 0.85), Tm(46, 62.6, 'R1', { c: 'g' }));
+    return s;
+  }, { capA: 'Levý roh ústí zvětšeně: ostrý roh po řezu se zaoblí brusným papírem na R1.' });
+
+// ===== C: okénko bankovek (lekce 6) =====
+const billSt = (o) => ({ plan: true, h: [0, 0], cut: [0, 0], out: 0, see: 'pe', ...o });
+function bWithD2(o = {}) {
+  let s = boardAndStrip(-12, 100, { d2: true });
+  M.coin.forEach((c) => { s += windowDraw(c, { out: 1, done: 'd2' }); });
+  if (o.g3) s += op(o.g3, M.g3.map(([x0, x1, y0, y1]) => rect(x0, y0, x1, y1, 'glueh')).join(''));
+  return s;
+}
+add('C', 'Až po lepení G3', 'lekce 6 · G3, Okénko bankovek skrz D2 a záda',
+  'Okénko bankovek se dělá <b>až po lepení G3</b>: D2 je přilepená rubem na rub B v pásech G3 (dno mincí y 18–23, boky x 0–4 a 97–101, střed x 35–66 do y 80,57). Okénko <b>14 × 45</b> uprostřed zad (x <span class="num">43,5–57,5</span>, y <span class="num">25–70</span>) leží v lepeném středním pásu. Lekce 6 u G3 říká děrovat nejdřív za 1 h po spojení. Díl položte lícem B nahoru na tvrdou desku. Vyseknuté před G3 by vrstvy nelícovaly (častá chyba lekce 6).',
+  8000, (t) => {
+    C = camera(camL(CAM_B, CAM_C, es(t, 0.6, 0.95)), ...VB.main);
+    let s = bWithD2({ g3: seg(t, 0.1, 0.25) * (1 - seg(t, 0.85, 1) * 0.7) });
+    s += windowDraw(M.bill, billSt({ plan: t > 0.4 })) + prick(M.bill, {});
+    s += op(seg(t, 0.12, 0.24) * (1 - seg(t, 0.55, 0.62)), Tm(50.5, 84.5, 'G3 na rubu (skryté)', { a: 'middle', c: 'm' }));
+    s += op(seg(t, 0.4, 0.5), sideDims(M.bill, 1));
+    s += op(seg(t, 0.3, 0.4) * (1 - seg(t, 0.55, 0.62)), Tm(19.5, 81 - 1.5, 'D2 v okénku', { a: 'middle', c: 'm' }));
+    return s;
+  }, (t) => layersSection(t), { capA: 'Řez napříč v y 50, tloušťky v měřítku: B 1,0 nahoře lícem, D2 0,6 pod ní, lepidlo G3 ve středním pásu.', alt: '<b>Záloha A (P1 0,8):</b> pásy G3 jsou o 0,5 níž (dno mincí y 17,5–22,5, boky a střed do y 79,91), okénko bankovek zůstává v y 25–70.' });
+
+add('C', 'Šablona z listu 4: křížky na středy', 'lekce 6 · Okénko bankovek skrz D2 a záda',
+  'Na líci B máte propíchnuté středy obou konců z lekce 4 (na ose x 50,5, y <span class="num">32</span> a <span class="num">63</span>). Přiložte na ně <b>křížky šablony okénka bankovek</b> z listu 4, čárkovaná čára šablony na ose, a zkontrolujte, že sedí.',
+  8000, (t) => {
+    C = camera(CAM_C, ...VB.main);
+    let s = bWithD2();
+    s += windowDraw(M.bill, billSt({})) + prick(M.bill, {});
+    const u = es(t, 0.15, 0.55);
+    s += op(seg(t, 0.55, 0.65), line(50.5, 18, 50.5, 84, 'guide') + Tm(52, 75.5, 'osa 50,5', { c: 'm' }));
+    s += slotTemplate(M.bill, lerp(-24, 0, u), lerp(-6, 0, u), seg(t, 0.12, 0.2));
+    const ok = seg(t, 0.68, 0.78);
+    ends(M.bill).forEach((y) => { s += op(ok, circ(50.5, y, 2.2, 'ring')); });
+    s += op(ok, okMark(X(64), Y(47.5), 1) + T(X(64) + em(0.9), Y(47.5), 'sedí', { c: 'g' }));
+    return s;
+  }, (t) => {
+    C = camera({ cx: 0, cy: 0, k: 9 }, ...VB.aside);
+    const u = es(t, 0.15, 0.55);
+    let s = rect(-4, -4, 4, 4, 'kzp') + dot(0, 0);
+    const dx = lerp(-1.6, 0, u), dy = lerp(-1, 0, u);
+    s += op(seg(t, 0.12, 0.2), rect(-4, -2.6 + dy, 4, 4, 'paper') + line(dx, -2.2 + dy, dx, 4, 'tplaxis') + cross(dx, dy, 1));
+    s += op(seg(t, 0.68, 0.78), circ(0, 0, 1.5, 'ring'));
+    s += T(30, 5, 'křížek na vpichu, čárkovaně osa', { a: 'middle' });
+    return s;
+  }, { capA: 'Detail dolního středu (y 32), zvětšeno. Šablona je kreslená průsvitně. Dlouhá čárkovaná osa v hlavním obrázku je jen pomůcka animace, na líci B narýsovaná není.' });
+
+add('C', 'Výsečník Ø 14 skrz B i D2', 'lekce 6 · Okénko bankovek skrz D2 a záda',
+  'Výsečníkem <b>Ø 14</b> vysekněte <b>z líce B</b> oba konce (y <span class="num">32</span> a <span class="num">63</span>) <b>skrz B i D2</b>. Prsty držící výsečník mějte u spodku, palička dopadá na horní konec, děrujte jen na tvrdé desce (bezpečnost lekce 6).',
+  8000, (t) => {
+    C = camera(CAM_C, ...VB.main);
+    let s = bWithD2();
+    const h0 = t > 0.42 ? 1 : 0, h1 = t > 0.85 ? 1 : 0;
+    s += windowDraw(M.bill, billSt({ h: [h1, h0] })) + prick(M.bill, { h: [h1, h0] });
+    s += slotTemplate(M.bill, -24, -6, 1 - seg(t, 0, 0.1));
+    const [c0, c1] = ends(M.bill);
+    if (t < 0.48) s += punchTop(50.5, c1, 14, seg(t, 0.08, 0.16) * (1 - seg(t, 0.44, 0.48)));
+    else if (t < 0.92) s += punchTop(50.5, c0, 14, seg(t, 0.5, 0.58) * (1 - seg(t, 0.88, 0.92)));
+    s += op(seg(t, 0.12, 0.2), Tm(62, c1 + 7, 'výsečník Ø 14', {}));
+    return s;
+  }, (t) => punchSection(t, 14, true, 0.42), { capA: 'Řez středem díry napříč, tloušťky v měřítku: B 1,0 a D2 0,6 se proseknou najednou.', tip: 'Tip (lekce to neuvádí): jestli nechat šablonu při sekání přiloženou, lekce 6 neříká; animace ji před sekáním odkládá, stejně jako u okének mincí.' });
+
+add('C', 'Rovné řezy skrz obě vrstvy', 'lekce 6 · Okénko bankovek skrz D2 a záda',
+  'Mezi dírami veďte <b>rovné řezy nožem u ocelového pravítka od tečny k tečně skrz obě vrstvy</b> (x <span class="num">43,5</span> a <span class="num">57,5</span>, od y <span class="num">63</span> do <span class="num">32</span>). Nůž veďte tahem od prstů volné ruky (bezpečnost lekce 6).',
+  10000, (t) => {
+    C = camera(CAM_C, ...VB.main);
+    let s = bWithD2();
+    const cL = es(t, 0.1, 0.42), cR = es(t, 0.55, 0.85), out = es(t, 0.88, 1);
+    s += windowDraw(M.bill, billSt({ plan: false, h: [1, 1], cut: [cL, cR], out }));
+    const [c0, c1] = ends(M.bill);
+    if (t < 0.5) { s += ruler(43.5, c0 - 9, c1 + 9, -1, seg(t, 0.02, 0.08) * (1 - seg(t, 0.46, 0.5))); s += line(43.5, c1, 43.5, lerp(c1, c0, cL), 'cutl'); s += knife(43.5, lerp(c1, c0, cL), seg(t, 0.06, 0.1) * (1 - seg(t, 0.44, 0.48))); }
+    else if (t < 0.9) { s += ruler(57.5, c0 - 9, c1 + 9, 1, seg(t, 0.5, 0.55) * (1 - seg(t, 0.86, 0.9))); s += line(57.5, c1, 57.5, lerp(c1, c0, cR), 'cutl'); s += knife(57.5, lerp(c1, c0, cR), seg(t, 0.53, 0.56) * (1 - seg(t, 0.84, 0.88))); }
+    const tg = seg(t, 0.02, 0.1) * (1 - seg(t, 0.9, 1));
+    [[43.5, c0], [43.5, c1], [57.5, c0], [57.5, c1]].forEach(([x, y]) => { s += op(tg, circ(x, y, 1.3, 'ring')); });
+    return s;
+  }, (t) => tangentZoom(t, { s: M.bill, x: 43.5, cutT: [0.1, 0.42], two: true }), { capA: 'Dolní konec levého řezu, zvětšeno: skrz B i D2, stop na tečně.', tip: 'Tip (lekce to neuvádí): na kterou stranu řezu pravítko položit, lekce 6 nepíše. Animace ho kreslí na straně kůže, která zůstává, stejně jako u okének mincí.' });
+
+add('C', 'Jeden svazek, mince nepropadne', 'lekce 6 · Okénko bankovek skrz D2 a záda',
+  'Okénko <b>zkoste a vyleštěte jako jeden svazek</b>. Mince 1 Kč (Ø 20) okénkem nepropadne. Tím je hotová první část kontrolního bodu lekce 6: okénko bankovek je proseknuté skrz obě vrstvy (švy S1–S3 následují).',
+  7500, (t) => {
+    C = camera(CAM_C, ...VB.main);
+    let s = bWithD2();
+    s += windowDraw(M.bill, billSt({ plan: false, out: 1 }));
+    const u = es(t, 0.3, 0.7);
+    s += op(seg(t, 0.25, 0.32), circ(50.5, lerp(80, 47.5, u), 10, 'coin') + T(X(50.5), Y(lerp(80, 47.5, u)), '1 Kč', { a: 'middle' }));
+    s += op(seg(t, 0.72, 0.82), line(40.5, 34, 60.5, 34, 'dim') + T(X(50.5), Y(34) + em(0.9), 'Ø 20 > 14', { a: 'middle' }));
+    s += op(seg(t, 0.82, 0.92), okMark(X(70), Y(47.5), 1) + T(X(70) + em(0.9), Y(47.5), 'nepropadne', { c: 'g' }));
+    return s;
+  }, (t) => {
+    // řez napříč hotovým okénkem: B a D2 jako jeden svazek
+    C = camera({ cx: 50.5, cy: 0.6, k: 2.4 }, ...VB.aside);
+    let s = rect(38, -3, 63, 0, 'pe');
+    s += rect(38, 0, 43.5, 0.6, 'd2') + rect(57.5, 0, 63, 0.6, 'd2') + rect(38, 0.6, 43.5, 1.6, 'kz') + rect(57.5, 0.6, 63, 1.6, 'kz');
+    s += line(38, 1.6, 43.5, 1.6, 'licl') + line(57.5, 1.6, 63, 1.6, 'licl');
+    s += op(seg(t, 0.2, 0.3), line(43.5, -0.3, 43.5, 2.1, 'ring') + line(57.5, -0.3, 57.5, 2.1, 'ring'));
+    s += Tm(50.5, 8, 'hrana B + D2 najednou', { a: 'middle' });
+    s += Tm(40.5, 5, 'B', { a: 'middle' }) + Tm(60.5, -5.2, 'D2', { a: 'middle' });
+    s += line(40.5, 3.8, 40.5, 1.7, 'lead') + line(60.5, -4, 60.5, 0.3, 'lead');
+    return s;
+  }, { capA: 'Řez napříč okénkem v měřítku: hrana B a D2 se brousí a leští najednou.' });
+
+// ===== D: chyba – řez za tečnu =====
+// řez levého boku okénka mincí jde shora (tečna y 70) dolů a má skončit na dolní tečně y 34
+const CAM_D = { cx: 19.5, cy: 37, k: 4.4 };
+function dFrame(t, o) {
+  C = camera(CAM_D, ...VB.main);
+  let s = boardAndStrip(-12, 100);
+  s += windowDraw(M.coin[0], coinSt({ plan: false, h: [1, 1], out: o.out || 0 }));
+  return s;
+}
+add('D', 'Správně: řez končí na tečně', 'lekce 5 · úvod lekce, Výřez pro palec',
+  'Rovný bok se k díře výsečníku připojí v <b>tečně</b>, v bodě, kde se přímka boku kružnice jen dotkne. Když nůž zastaví přesně tam, bok přejde plynule do oblouku a oblouk zůstane čistý. Proto se konec vždy nejdřív vysekne a teprve pak se k tečnám dořízne nožem.',
+  7500, (t) => {
+    let s = dFrame(t, {});
+    const c = es(t, 0.1, 0.6), y = lerp(48, 34, c);
+    s += ruler(13.5, 26, 50, -1, seg(t, 0.02, 0.1));
+    s += line(13.5, 50, 13.5, y, 'cutl');
+    s += knife(13.5, y, seg(t, 0.05, 0.1) * (1 - seg(t, 0.66, 0.74)));
+    const ok = seg(t, 0.65, 0.75);
+    s += op(ok, circ(13.5, 34, 0.7, 'ring') + okMark(X(30), Y(44), 1) + T(X(30), Y(44) + em(1.3), 'stop na tečně', { a: 'middle', c: 'g' }));
+    s += op(seg(t, 0.02, 0.1), T(X(19.5), Y(44), 'okénko mincí', { a: 'middle', c: 'm' }));
+    return s;
+  }, (t) => {
+    C = camera({ cx: 50.5, cy: 55, k: 2.6 }, ...VB.aside);
+    let s = rect(30, 30, 71, 80, 'pe') + fStripMini();
+    const c = es(t, 0.1, 0.6);
+    s += notchDraw({ hole: true, cut: [c, c] });
+    s += op(seg(t, 0.65, 0.75), circ(45.5, 55, 0.8, 'ring') + circ(55.5, 55, 0.8, 'ring'));
+    s += op(seg(t, 0.65, 0.75), Tm(50.5, 45.5, 'stop na tečnách', { a: 'middle', c: 'g' }));
+    return s;
+  }, { capA: 'Výřez pro palec: oba řezy od hrany F končí na tečnách díry.' });
+
+add('D', 'Chyba: nůž přejede tečnu', 'lekce 5 · Časté chyby',
+  'Když nůž tečnu přejede, <b>zářez pokračuje do kůže</b> (častá chyba lekce 5): u okénka za oblouk konce, u výřezu pro palec dolů vedle dna výřezu.',
+  8000, (t) => {
+    let s = dFrame(t, {});
+    s += line(13.5, 50, 13.5, 34, 'cutl');
+    const over = 3 * es(t, 0.15, 0.55);
+    s += ruler(13.5, 26, 50, -1, 1 - seg(t, 0.85, 0.95));
+    s += line(13.5, 34, 13.5, 34 - over, 'badl');
+    s += knife(13.5, 34 - over, seg(t, 0.05, 0.12) * (1 - seg(t, 0.6, 0.7)));
+    const b = seg(t, 0.55, 0.65);
+    s += op(b, circ(13.5, 32.5, 2.4, 'ringb') + T(X(15.8), Y(26.7), 'zářez za tečnou', { c: 'b' }));
+    s += op(b, circ(13.5, 34, 0.7, 'ring') + T(X(12), Y(37.5), 'tečna', { c: 'g', a: 'end' }));
+    return s;
+  }, (t) => {
+    C = camera({ cx: 50.5, cy: 55, k: 2.6 }, ...VB.aside);
+    let s = rect(30, 30, 71, 80, 'pe') + fStripMini();
+    s += notchDraw({ hole: true, cut: [1, 1] });
+    const over = 2.5 * es(t, 0.15, 0.55);
+    s += line(45.5, 55, 45.5, 55 - over, 'badl');
+    s += op(seg(t, 0.55, 0.65), circ(45.5, 53.5, 2.2, 'ringb') + Tm(50.5, 45.5, 'zářez pod tečnou', { a: 'middle', c: 'b' }));
+    return s;
+  }, { capA: 'Výřez pro palec: levý řez přejel tečnu a pokračuje dolů do F.', tip: 'Tip (lekce to neuvádí): u okénka bankovek se řeže skrz obě vrstvy, takže by zářez šel skrz B i D2.' });
+
+add('D', 'Proč zastavit na tečně', 'lekce 5 · Časté chyby; lekce 4 · Nejdřív zkušební kus',
+  'Zářez leží za obrysem okénka nebo výřezu: hotové okénko má na konci místo čistého oblouku zářez navíc (lekce 5: zářez pokračuje do kůže). Proto nejdřív výsečník, pak nůž jen k tečně a zastavit na ní. Všechno se dělá nejdřív na zkušebním kuse (lekce 4).',
+  8000, (t) => {
+    let s = dFrame(t, { out: 1 });
+    s += line(13.5, 34, 13.5, 31, 'badl');
+    const sand = seg(t, 0.2, 0.7);
+    if (sand > 0 && sand < 1) { const a = t * 30; s += circ(19.5, 33.5 - Math.sin(a) * 0.8, 4.5, 'sand') + circ(19.5, 33.5 - Math.sin(a) * 0.8, 4, 'wood'); }
+    s += op(seg(t, 0.25, 0.35) * (1 - seg(t, 0.68, 0.72)), T(X(19.5), Y(44), 'konec dobrousit', { a: 'middle', c: 'm' }));
+    const b = seg(t, 0.72, 0.82);
+    s += op(b, circ(13.5, 32.5, 2.4, 'ringb') + T(X(15.8), Y(26.7), 'zářez zůstal', { c: 'b' }));
+    return s;
+  }, (t) => {
+    // konce dvou hotových okének vedle sebe
+    C = camera({ cx: 0, cy: 2, k: 2.2 }, ...VB.aside);
+    const A = { cx: -7.5, y0: -6, y1: 40, w: 12 }, B = { cx: 7.5, y0: -6, y1: 40, w: 12 };
+    let s = rect(-20, -20, 20, 30, 'kzp');
+    s += poly(slotPts(A), 'open') + poly(slotPts(B), 'open');
+    s += line(1.5, 0, 1.5, -3, 'badl');
+    s += Tm(-7.5, -9.5, 'správně', { a: 'middle', c: 'g' }) + Tm(7.5, -9.5, 'za tečnou', { a: 'middle', c: 'b' });
+    s += op(seg(t, 0.1, 0.2), okMark(X(-7.5), Y(6), 1, 0.9) + xMark(X(7.5), Y(6), 1, 0.9));
+    return s;
+  }, { capA: 'Dolní konce dvou okének vedle sebe, schematicky: vlevo čistý oblouk, vpravo zářez navíc.', tip: 'Tip (lekce to neuvádí): přeříznutou kůži nejde spojit zpátky. Broušení a leštění upravuje jen hranu okénka; zářez za tečnou leží mimo ni, takže ho nezahladí. Jak se zářez chová při používání, lekce neuvádí, ověřit na zkušebním kuse.' });
+
+// ---------- pomocné obrázky ----------
+function fStripMini() {
+  const r = M.frontCornerR, top = M.frontTopY;
+  return poly([[30, 40], [71, 40], [71, top], [30, top]], 'kzp');
+}
+// řez napříč při sekání: deska, useň (a D2), výsečník (trubka), palička
+function punchSection(t, d, withD2, hitAt, tpl = false) {
+  C = camera({ cx: 0, cy: 7.5, k: 2.25 }, ...VB.aside);
+  const th = withD2 ? M.t + M.tD : M.t, r = d / 2, w = 1.1;
+  const hit = seg(t, hitAt - 0.12, hitAt), lift = seg(t, hitAt + 0.08, hitAt + 0.3);
+  const zb = lerp(lerp(th + 7, th, seg(t, 0.1, hitAt - 0.12)), 0, hit) + lift * 6;   // spodní hrana břitu
+  let s = rect(-13, -3.5, 13, 0, 'pe');
+  const cut = hit >= 1;
+  const lay = (x0, x1) => {
+    let o = '';
+    if (withD2) o += rect(x0, 0, x1, M.tD, 'd2') + rect(x0, M.tD, x1, th, 'kz');
+    else o += rect(x0, 0, x1, th, 'kz');
+    o += line(x0, th, x1, th, 'licl');
+    return o;
+  };
+  if (!cut) s += lay(-13, 13);
+  else { s += lay(-13, -r) + lay(r, 13); }
+  if (tpl) s += op(1, rect(-13, th, -r - 0.05, th + 0.35, 'paper') + rect(r + 0.05, th, 13, th + 0.35, 'paper'));
+  // trubka výsečníku
+  const top = zb + 15;
+  s += poly([[-r - w, zb + 1.4], [-r, zb], [-r, top], [-r - w, top]], 'steel') + poly([[r + w, zb + 1.4], [r, zb], [r, top], [r + w, top]], 'steel');
+  if (cut) {
+    // výsek uvnitř trubky
+    s += op(1 - seg(lift, 0.8, 1), withD2 ? rect(-r + 0.05, zb, r - 0.05, zb + M.tD, 'd2') + rect(-r + 0.05, zb + M.tD, r - 0.05, zb + th, 'kz') : rect(-r + 0.05, zb, r - 0.05, zb + th, 'kz'));
+  }
+  // palička nad trubkou
+  const mz = top + lerp(9, 0.2, seg(t, hitAt - 0.2, hitAt - 0.02)) + lift * 6;
+  s += op(1 - seg(t, hitAt + 0.25, hitAt + 0.35), rect(-6, mz, 6, mz + 5.5, 'wood'));
+  s += Tm(12.5, -1.75, 'deska', { a: 'end', c: 'm', k: 0.9 });
+  s += Tm(-12.5, th + 2.2, withD2 ? 'B 1,0 + D2 0,6' : 'useň 1,0', { k: 0.9 });
+  s += Tm(-r - w - 0.8, 11, `Ø ${d}`, { c: 'a', a: 'end' });
+  return s;
+}
+// řez napříč v y 50 po G3: střední pás lepený
+function layersSection(t) {
+  C = camera({ cx: 50.5, cy: 0.5, k: 2.0 }, ...VB.aside);
+  let s = rect(36, -3, 65, 0, 'pe');
+  s += rect(36, 0, 65, M.tD, 'd2') + rect(36, M.tD, 65, M.tD + M.t, 'kz') + line(36, M.tD + M.t, 65, M.tD + M.t, 'licl');
+  s += op(seg(t, 0.1, 0.25), rect(36, M.tD - 0.12, 65, M.tD + 0.12, 'glue'));
+  s += op(seg(t, 0.4, 0.5), line(43.5, -1.5, 43.5, 3.5, 'guide') + line(57.5, -1.5, 57.5, 3.5, 'guide') + Tm(50.5, 5.5, 'okénko 43,5–57,5', { a: 'middle' }));
+  s += Tm(37, 9.5, 'B 1,0 líc nahoru', {}) + line(39, 8.3, 39, 1.7, 'lead');
+  s += Tm(64, -7.5, 'D2 0,6', { a: 'end' }) + line(62, -6.3, 62, 0.25, 'lead');
+  s += op(seg(t, 0.1, 0.25), Tm(37, -11.8, 'G3 střed x 35–66', { c: 'm' }));
+  return s;
+}
+// detail tečny: konec okénka nebo výřezu, řez se blíží a končí na tečně
+function tangentZoom(t, o) {
+  if (o.notch) {
+    C = camera({ cx: 45.5, cy: 57.5, k: 5.2 }, ...VB.aside);
+    let s = rect(38, 50, 54, 66, 'pe') + poly([[38, 50], [54, 50], [54, 62], [38, 62]], 'kzp');
+    s += circ(50.5, 55, 5, 'open');
+    const c = es(t, o.cutT[0], o.cutT[1]);
+    s += line(45.5, 62, 45.5, lerp(62, 55, c), 'cutl');
+    s += knife(45.5, lerp(62, 55, c), (1 - seg(t, o.cutT[1] + 0.02, o.cutT[1] + 0.08)) * seg(t, o.cutT[0] - 0.04, o.cutT[0]));
+    s += circ(45.5, 55, 0.6, 'ring');
+    s += Tm(44.6, 55, 'tečna', { a: 'end', c: 'g' });
+    s += op(seg(t, o.cutT[1], o.cutT[1] + 0.06), Tm(44.6, 53.3, 'stop', { a: 'end', c: 'g' }));
+    return s;
+  }
+  const sl = o.s, [c0] = ends(sl), r = sl.w / 2;
+  C = camera({ cx: o.x + 2.5, cy: c0 + 1.5, k: 3.6 }, ...VB.aside);
+  let s = poly([[o.x - 10, c0 - 9], [o.x + 14, c0 - 9], [o.x + 14, c0 + 10], [o.x - 10, c0 + 10]], 'kzp');
+  s += circ(sl.cx, c0, r, 'open');
+  const c = es(t, o.cutT[0], o.cutT[1]), y = lerp(c0 + 9, c0, c);
+  s += line(o.x, c0 + 10, o.x, y, 'cutl');
+  s += knife(o.x, y, seg(t, o.cutT[0] - 0.04, o.cutT[0]) * (1 - seg(t, o.cutT[1] + 0.02, o.cutT[1] + 0.08)));
+  s += circ(o.x, c0, 0.55, 'ring');
+  s += T(X(o.x) - em(0.5), Y(c0), 'tečna', { a: 'end', c: 'g' });
+  s += T(X(o.x) - em(0.5), Y(c0 + 6), o.two ? 'skrz B i D2' : 'řez', { a: 'end', c: 'm' });
+  s += op(seg(t, o.cutT[1], o.cutT[1] + 0.06), T(X(o.x) + em(0.6), Y(c0 - 4.5), 'stop', { c: 'g' }));
+  s += op(seg(t, 0.02, 0.1), T(X(sl.cx), Y(c0 + 2), 'díra Ø ' + sl.w, { a: 'middle', c: 'm' }));
+  return s;
+}
+
+// ---------- engine (jako kapsa-skladani) ----------
+const svg = document.getElementById('stage'), aside = document.getElementById('aside');
+const capNo = document.getElementById('capNo'), capT = document.getElementById('capT'), capS = document.getElementById('capS'), capB = document.getElementById('capB'), counter = document.getElementById('counter');
+const capAside = document.getElementById('capAside');
+const prog = document.getElementById('prog');
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const partKeys = Object.keys(PARTS); const barEls = []; const segEls = {};
+partKeys.forEach((k) => {
+  const b = document.createElement('button'); b.className = 'pseg'; b.type = 'button'; b.setAttribute('aria-label', `Část ${k}: ${PARTS[k]}`);
+  const bars = document.createElement('div'); bars.className = 'bars';
+  S.forEach((st, i) => { if (st.part === k) { const sp = document.createElement('span'); const bb = document.createElement('b'); sp.appendChild(bb); bars.appendChild(sp); barEls[i] = bb; } });
+  const pl = document.createElement('div'); pl.className = 'pl'; pl.innerHTML = `<b>${k}</b><span> · ${PARTS[k]}</span>`; b.append(bars, pl); prog.appendChild(b); segEls[k] = b;
+  b.addEventListener('click', () => { auto = true; setPlay(false); go(S.findIndex((s) => s.part === k), 1); history.replaceState(null, '', '#' + k); });
+});
+let idx = 0, tt = 1, playing = false, last = 0, raf = 0, hold = 0, lastCap = -1;
+function numInPart(i) { const p = S[i].part; return S.slice(0, i + 1).filter((s) => s.part === p).length; }
+function drawInto(el, vb, fn) {
+  const w = el.clientWidth || 300;
+  U = vb[0] / w;
+  let body = '';
+  try { body = fn(tt); } catch (e) { console.error(e); }
+  el.innerHTML = body;
+}
+function render() {
+  const st = S[idx];
+  drawInto(svg, VB.main, st.main);
+  drawInto(aside, VB.aside, st.aside);
+  if (lastCap !== idx) {
+    lastCap = idx;
+    capNo.textContent = `${st.part}${numInPart(idx)}`; capT.textContent = st.title; capS.textContent = st.src; capB.innerHTML = st.body;
+    if (st.tip) { const sp = document.createElement('span'); sp.className = 'tip'; const m = st.tip.match(/^(Tip[^:]*:)\s*(.*)$/); if (m) { const b = document.createElement('b'); b.textContent = m[1]; sp.append(b, ' ' + m[2]); } else sp.textContent = st.tip; capB.appendChild(sp); }
+    if (st.alt) { const sp = document.createElement('span'); sp.className = 'alt'; sp.innerHTML = st.alt; capB.appendChild(sp); }
+    capAside.textContent = st.capA || '';
+    counter.textContent = `krok ${idx + 1} / ${S.length}`;
+    partKeys.forEach((k) => segEls[k].classList.toggle('on', k === st.part));
+    svg.setAttribute('aria-label', `Krok ${st.part}${numInPart(idx)}: ${st.title}`);
+  }
+  barEls.forEach((b, i) => { b.style.transform = `scaleX(${i < idx ? 1 : i === idx ? tt : 0})`; });
+}
+function go(i, t = 0) { idx = Math.max(0, Math.min(S.length - 1, i)); tt = reduce ? 1 : t; hold = 0; render(); }
+function setPlay(p) {
+  playing = p;
+  document.getElementById('playIcon').innerHTML = p ? '<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>' : '<path d="M8 5v14l11-7z"/>';
+  document.getElementById('bPlay').setAttribute('aria-label', p ? 'Pozastavit' : 'Přehrát');
+  if (p) { last = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); } else cancelAnimationFrame(raf);
+}
+function loop(now) {
+  if (!playing) return; const dt = Math.min(100, now - last); last = now;
+  if (reduce) { hold += dt; if (hold > S[idx].dur) { hold = 0; if (idx < S.length - 1) { go(idx + 1, 1); } else { setPlay(false); return; } } }
+  else { tt += dt / S[idx].dur; if (tt >= 1) { tt = 1; render(); hold += dt; if (hold > 900) { hold = 0; if (idx < S.length - 1) { idx++; tt = 0; } else { setPlay(false); return; } } } else render(); }
+  raf = requestAnimationFrame(loop);
+}
+let auto = false;
+document.getElementById('bPlay').onclick = () => { auto = true; if (!playing && idx === S.length - 1 && tt >= 1) { go(0, 0); } else if (!playing && tt >= 1 && !reduce) { go(idx, 0); } setPlay(!playing); };
+document.getElementById('bRestart').onclick = () => { auto = true; go(0, 0); setPlay(true); };
+document.getElementById('bPrev').onclick = () => { auto = true; setPlay(false); go(idx - 1, 1); };
+document.getElementById('bNext').onclick = () => { auto = true; setPlay(false); go(idx + 1, 1); };
+// kotvy: část (#A–#D) otevře svůj první krok, krok (#B3) přímo ten krok; zastavené v koncovém stavu
+function stepFromHash() {
+  const m = /^([A-Z])([0-9]+)?$/.exec(decodeURIComponent((location.hash || '').slice(1)).trim().toUpperCase());
+  if (!m || !Object.prototype.hasOwnProperty.call(PARTS, m[1])) return -1;
+  const ix = []; S.forEach((s, i) => { if (s.part === m[1]) ix.push(i); });
+  const n = m[2] === undefined ? 1 : +m[2];
+  return n >= 1 && n <= ix.length ? ix[n - 1] : -1;
+}
+const hs = stepFromHash();
+if (hs >= 0) { auto = true; go(hs, 1); requestAnimationFrame(() => document.getElementById('anim').scrollIntoView({ block: 'start' })); } else go(0, 1);
+window.addEventListener('hashchange', () => { const i = stepFromHash(); if (i >= 0) { auto = true; setPlay(false); go(i, 1); document.getElementById('anim').scrollIntoView({ block: 'start' }); } });
+let rz, lastW = '';
+const ro = new ResizeObserver(() => { cancelAnimationFrame(rz); rz = requestAnimationFrame(() => { const w = svg.clientWidth + ',' + aside.clientWidth; if (w !== lastW) { lastW = w; render(); } }); });
+ro.observe(svg); ro.observe(aside);
+if (!reduce && 'IntersectionObserver' in window) { const io = new IntersectionObserver((es) => { es.forEach((e) => { if (e.isIntersecting && !auto) { auto = true; io.disconnect(); go(0, 0); setPlay(true); } }); }, { threshold: 0.45 }); io.observe(svg); }
+window.__okenka = { go: (i, t) => { auto = true; setPlay(false); idx = i; tt = t; hold = 0; render(); }, steps: S.length, parts: S.map((s) => s.part), titles: S.map((s) => s.title), M, stepFromHash };
+})();
+</script>
+<script>
+// Hidepath: „Zpět do lekce“ = krok zpět v historii, když se sem přišlo z aplikace; jinak úvod aplikace.
+(function(){var a=document.querySelector('[data-back]');if(!a)return;a.addEventListener('click',function(e){var o='';try{o=document.referrer?new URL(document.referrer).origin:'';}catch(_){}if(o===location.origin&&history.length>1){e.preventDefault();history.back();}});})();
+</script>
+</body>
+</html>

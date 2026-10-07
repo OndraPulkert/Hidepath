@@ -102,6 +102,13 @@ describe('obsah – peněženka Víčko', () => {
     );
   });
 
+  it('vrtačka (lekce 5) a epoxid (lekce 11) odkazují v bezpečnosti na návod výrobce', () => {
+    const safetyOf = (order: number) =>
+      lidWalletProject.lessons.find((l) => l.order === order)!.safety.join(' ');
+    expect(safetyOf(5)).toMatch(/Akuvrtačku používejte podle návodu výrobce/);
+    expect(safetyOf(11)).toMatch(/epoxid .*podle návodu a bezpečnostních pokynů výrobce/);
+  });
+
   it('kroky s tiskem listů mají odkaz na Listy střihu, značky z listu 1 se dostanou na kůži', () => {
     const withPrint = lidWalletProject.lessons.flatMap((l) =>
       l.steps.filter((s) => s.printLink === 'pattern-sheets').map((s) => `${l.order}/${s.id}`),
@@ -112,6 +119,7 @@ describe('obsah – peněženka Víčko', () => {
       '2/glue-model',
       '2/templates',
       '4/valid-sheets',
+      '4/tape-sheet-1',
     ]);
     // Středy okénka bankovek: propíchnout přes list 1 na líc (lekce 4), sekat z líce B (lekce 6).
     expect(lessonText('04-cut-and-mark')).toContain('Ø 14 na koncích okénka bankovek');

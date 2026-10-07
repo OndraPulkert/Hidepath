@@ -18,10 +18,15 @@ function pageSource(href: string): string | undefined {
   return pages[`/public${href.split('#')[0]}`];
 }
 
-/** Kroky stránky po částech v pořadí `add('B','název',…)` – tak je stránka čísluje (B1, B2…). */
+/**
+ * Kroky stránky po částech v pořadí `add('B','název',…)` – tak je stránka čísluje (B1, B2…).
+ * Stránky Víčka mají `add(` i s mezerami, na víc řádků a s dvojitými uvozovkami.
+ */
 function pageSteps(source: string): Record<string, string[]> {
   const steps: Record<string, string[]> = {};
-  for (const [, part, title] of source.matchAll(/\badd\('([A-Z])','([^']*)'/g)) {
+  for (const [, , part, , title] of source.matchAll(
+    /\badd\(\s*(['"])([A-Z])\1\s*,\s*(['"])((?:(?!\3).)*)\3/g,
+  )) {
     (steps[part!] ??= []).push(title!);
   }
   return steps;
@@ -33,16 +38,16 @@ function pageSteps(source: string): Record<string, string[]> {
  */
 function hasAnchor(source: string, anchor: string): boolean {
   if (source.includes(`id="${anchor}"`)) return true;
-  const parts = /const PARTS=\{([^}]*)\}/.exec(source)?.[1] ?? '';
+  const parts = /const PARTS\s*=\s*\{([^}]*)\}/.exec(source)?.[1] ?? '';
   const step = /^([A-Z])([1-9][0-9]*)$/.exec(anchor);
   if (step) {
     return (
       source.includes('function stepFromHash()') &&
-      new RegExp(`(^|,)${step[1]}:`).test(parts) &&
+      new RegExp(`(^|,)\\s*${step[1]}\\s*:`).test(parts) &&
       (pageSteps(source)[step[1]!]?.length ?? 0) >= Number(step[2])
     );
   }
-  return new RegExp(`(^|,)${anchor}:`).test(parts);
+  return new RegExp(`(^|,)\\s*${anchor}\\s*:`).test(parts);
 }
 
 const allSteps = projects.flatMap((project) =>
@@ -131,7 +136,7 @@ describe('animace postupu – stránky v public/animace', () => {
       expect(source).not.toMatch(/(?:src|href)\s*=\s*["']?https?:|url\(\s*["']?https?:|@import/);
       expect(source).toContain('href="/fonts/fonts.css"');
       expect(source).toMatch(/^<!doctype html>\n<html lang="cs">/);
-      expect(source).toContain('<meta charset="utf-8">');
+      expect(source).toMatch(/<meta charset="utf-8"\s*\/?>/);
       expect(source).toContain('← Zpět do lekce');
       for (const anchor of Object.keys(page.sections)) {
         expect(hasAnchor(source!, anchor), `${page.path}#${anchor}`).toBe(true);
@@ -179,7 +184,7 @@ describe('animace postupu – stránky v public/animace', () => {
     'steps' in page ? [{ key, path: page.path, sections: page.sections, steps: page.steps }] : [],
   );
 
-  it('kroky mají čtyři stránky kapsy, dvě stránky pásu, sedlářský steh, hrany, ohyby a magnet Víčka', () => {
+  it('kroky mají čtyři stránky kapsy, dvě stránky pásu, sedlářský steh, hrany a šest stránek Víčka', () => {
     expect(steppedPages.map((p) => p.key)).toEqual([
       'kapsa',
       'pocketAttach',
@@ -191,6 +196,10 @@ describe('animace postupu – stránky v public/animace', () => {
       'edges',
       'lidBends',
       'lidMagnet',
+      'lidP1Cut',
+      'lidWindows',
+      'lidBackD2',
+      'lidBodySides',
     ]);
   });
 
@@ -408,6 +417,9 @@ describe('animace postupu – sedlářský steh a hrany ve všech projektech', (
   const steh = (anchor: string) => `/animace/sedlarsky-steh.html#${anchor}`;
   const hrany = (anchor: string) => `/animace/hrany.html#${anchor}`;
   const magnet = (anchor: string) => `/animace/vicko-magnet.html#${anchor}`;
+  const okenka = (...a: string[]) => a.map((x) => `/animace/vicko-okenka.html#${x}`);
+  const zada = (...a: string[]) => a.map((x) => `/animace/vicko-d2-zada.html#${x}`);
+  const telo = (...a: string[]) => a.map((x) => `/animace/vicko-telo-s4s5.html#${x}`);
   const thread = animationPages.threadLength.path;
 
   it.each([
@@ -429,14 +441,14 @@ describe('animace postupu – sedlářský steh a hrany ve všech projektech', (
     ['coin-card-holder', 8, 'dye-and-burnish-edges', [hrany('F3'), hrany('C1')]],
     // Projekt 03: všechny švy (konce 2 otvory zpět) a hrany.
     ['lid-wallet', 5, 'd2-edge', [hrany('G4')]],
-    ['lid-wallet', 5, 'coin-windows', [hrany('G4')]],
+    ['lid-wallet', 5, 'coin-windows', [...okenka('A2', 'A3', 'A4', 'A5'), hrany('G4')]],
     ['lid-wallet', 5, 'edges', [hrany('G1')]],
     ['lid-wallet', 5, 'd1-paint', [hrany('G2')]],
     ['lid-wallet', 5, 'tokonole', [hrany('G2')]],
-    ['lid-wallet', 6, 'bill-window', [hrany('G4')]],
-    ['lid-wallet', 6, 'stitch-s1-s3', [steh('E2'), thread]],
+    ['lid-wallet', 6, 'bill-window', [...okenka('C2', 'C3', 'C4', 'C5'), hrany('G4')]],
+    ['lid-wallet', 6, 'stitch-s1-s3', [...zada('D1', 'D2', 'D3', 'D4'), steh('E2'), thread]],
     ['lid-wallet', 8, 's6', [steh('E2'), thread]],
-    ['lid-wallet', 9, 'punch-sew', [steh('E2'), thread]],
+    ['lid-wallet', 9, 'punch-sew', [...telo('D1', 'D3', 'E2', 'E4'), steh('E2'), thread]],
     ['lid-wallet', 9, 'edges', [hrany('G3')]],
     ['lid-wallet', 11, 'trim-tip', [magnet('B8'), magnet('B9'), hrany('G4')]],
     ['lid-wallet', 11, 's7', [steh('E2'), magnet('B10'), magnet('B11'), thread, hrany('G4')]],
@@ -450,8 +462,12 @@ describe('animace postupu – sedlářský steh a hrany ve všech projektech', (
     const lid = allSteps.filter(({ where }) => where.startsWith('lid-wallet/'));
     const seams = lid.filter(({ step }) => step.body.includes('sedlovým stehem'));
     expect(seams.length).toBeGreaterThanOrEqual(3);
+    // Přesný krok švu ze stránky Víčka může být před ním, sedlářský steh ale nechybí nikde.
     for (const { where, step } of seams) {
-      expect(step.animationLinks?.[0]?.href, where).toMatch(/^\/animace\/sedlarsky-steh\.html#/);
+      expect(
+        step.animationLinks?.some((l) => l.href.startsWith('/animace/sedlarsky-steh.html#')),
+        where,
+      ).toBe(true);
     }
   });
 });
@@ -525,17 +541,17 @@ describe('animace postupu – ohyby Víčka v lekcích 5, 7 a 10', () => {
   const ohyby = (anchor: string) => `/animace/vicko-ohyby.html#${anchor}`;
 
   it.each([
-    [5, 'crease', 'A1'],
-    [7, 'wet', 'A2'],
-    [7, 'place-spacer', 'A4'],
-    [7, 'fold-clamp', 'A5'],
-    [7, 'remove-spacer', 'A10'],
-    [10, 'contents-b', 'B1'],
-    [10, 'wet-close', 'B2'],
-    [10, 'overnight', 'B4'],
-    [10, 'lid-behaviour', 'B7'],
-  ] as const)('lekce %i, krok %s otevře krok %s', (order, stepId, anchor) => {
-    expect(hrefsOf(order, stepId)).toEqual([ohyby(anchor)]);
+    [5, 'crease', ['A1']],
+    [7, 'wet', ['A2']],
+    [7, 'place-spacer', ['A4']],
+    [7, 'fold-clamp', ['A5']],
+    [7, 'remove-spacer', ['A10']],
+    [10, 'contents-b', ['B1']],
+    [10, 'wet-close', ['B2', 'B3']],
+    [10, 'overnight', ['B4', 'B5']],
+    [10, 'lid-behaviour', ['B7']],
+  ] as const)('lekce %i, krok %s otevře kroky %j', (order, stepId, anchors) => {
+    expect(hrefsOf(order, stepId)).toEqual(anchors.map(ohyby));
   });
 
   it('stránka ohybů bere staré kotvy #anim-dno a #anim-zaves jako části A a B', () => {
@@ -557,5 +573,88 @@ describe('animace postupu – ohyby Víčka v lekcích 5, 7 a 10', () => {
     expect(source).not.toMatch(
       /2–3 karty|pár bankovek|padá dozadu|nepokračovat|Záloha B \(|lidWalletLayout/,
     );
+  });
+});
+
+describe('animace postupu – přenos P1, okénka, D2 na záda a boční švy Víčka', () => {
+  const lid = projects.find((p) => p.slug === 'lid-wallet')!;
+  const hrefsOf = (order: number, stepId: string) =>
+    lid.lessons
+      .find((l) => l.order === order)!
+      .steps.find((s) => s.id === stepId)
+      ?.animationLinks?.map((l) => l.href);
+  const at = (page: string) => (anchor: string) => `/animace/${page}.html#${anchor}`;
+  const rez = at('vicko-p1-rez');
+  const okenka = at('vicko-okenka');
+  const zada = at('vicko-d2-zada');
+  const telo = at('vicko-telo-s4s5');
+  const steh = at('sedlarsky-steh');
+  const hrany = at('hrany');
+  const thread = animationPages.threadLength.path;
+
+  it.each([
+    ['vicko-p1-rez', 'lidP1Cut', ['A', 'B', 'C', 'D', 'E'], 'F'],
+    ['vicko-okenka', 'lidWindows', ['A', 'B', 'C', 'D'], 'E'],
+    ['vicko-d2-zada', 'lidBackD2', ['A', 'B', 'C', 'D'], 'E'],
+    ['vicko-telo-s4s5', 'lidBodySides', ['A', 'B', 'C', 'D', 'E'], 'F'],
+  ] as const)(
+    '%s: samostatná stránka s favicon, fonty aplikace, návratem do lekce a kotvami částí',
+    (name, key, anchors, missing) => {
+      const source = pageSource(`/animace/${name}.html`);
+      expect(source).toBeDefined();
+      expect(animationPages[key].path).toBe(`/animace/${name}.html`);
+      expect(source).not.toMatch(/googleapis|gstatic|Instrument Sans/);
+      expect(source).not.toMatch(/(?:src|href)\s*=\s*["']?https?:|url\(\s*["']?https?:|@import/);
+      expect(source).not.toMatch(/<script[^>]*\ssrc=/);
+      expect(source).toMatch(/<link rel="stylesheet" href="\/fonts\/fonts\.css"\s*\/?>/);
+      expect(source).toMatch(
+        /<link rel="icon" type="image\/svg\+xml" href="\/icons\/favicon\.svg"\s*\/?>/,
+      );
+      expect(source).toContain('<a class="backlink" href="/" data-back>← Zpět do lekce</a>');
+      expect(Object.keys(animationPages[key].sections)).toEqual(anchors);
+      for (const anchor of anchors) expect(hasAnchor(source!, anchor)).toBe(true);
+      expect(hasAnchor(source!, missing)).toBe(false);
+    },
+  );
+
+  it.each([
+    // Lekce 4: přenos listu 1, propíchnutí, řez P1, sejmutí listu a značení rubu.
+    [4, 'tape-sheet-1', [rez('A1'), rez('A2')]],
+    [4, 'prick-p1', [rez('B1'), rez('B2')]],
+    [4, 'cut-p1', [rez('C1'), rez('C2'), rez('C3'), rez('C4'), rez('C5'), rez('C6')]],
+    [4, 'peel-p1', [rez('D1'), rez('D2')]],
+    [4, 'mark-back', [rez('E1'), rez('E2'), rez('E3'), rez('E4'), rez('E5')]],
+    // Lekce 5: okénka mincí a výřez pro palec; hrany až za nimi.
+    [5, 'coin-windows', [okenka('A2'), okenka('A3'), okenka('A4'), okenka('A5'), hrany('G4')]],
+    [5, 'thumb-notch', [okenka('B2'), okenka('B3'), okenka('B4'), okenka('B5'), okenka('D2')]],
+    // Lekce 6: G3, okénko bankovek, značení a šití S1–S3.
+    [6, 'g3', [zada('A1'), zada('A2'), zada('A3'), zada('A5'), zada('A6')]],
+    [6, 'bill-window', [okenka('C2'), okenka('C3'), okenka('C4'), okenka('C5'), hrany('G4')]],
+    [6, 'mark-s1-s3', [zada('C1'), zada('C2'), zada('C3'), zada('C4')]],
+    [6, 'stitch-s1-s3', [zada('D1'), zada('D2'), zada('D3'), zada('D4'), steh('E2'), thread]],
+    // Lekce 9: nanečisto, G4, čára a otvory S4/S5, děrování a šití boků.
+    [9, 'dry-fit', [telo('A2')]],
+    [9, 'g4', [telo('B1'), telo('B2'), telo('B3'), telo('B4')]],
+    [9, 'mark-side', [telo('C1'), telo('C2')]],
+    [9, 'punch-sew', [telo('D1'), telo('D3'), telo('E2'), telo('E4'), steh('E2'), thread]],
+  ] as const)('lekce %i, krok %s otevírá přesné kroky animace', (order, stepId, expected) => {
+    expect(hrefsOf(order, stepId)).toEqual(expected);
+  });
+
+  it('popisky tlačítek nesou číslo a název kroku stránky', () => {
+    expect(animationLink('lidP1Cut', 'C1')).toEqual({
+      href: rez('C1'),
+      label: 'Krok C1 – Napojení jazýčku: nejdřív výsečník Ø 8',
+    });
+    expect(animationLink('lidWindows', 'B3').label).toBe('Krok B3 – Výsečník Ø 10 přes šablonu');
+    expect(animationLink('lidBackD2', 'D4').label).toBe(
+      'Krok D4 – Šijte sedlovým stehem, konce 2 otvory zpět',
+    );
+    expect(animationLink('lidBodySides', 'E4').label).toBe('Krok E4 – Steh 60–64 zdvojte');
+    expect(() => animationLink('lidP1Cut', 'C7')).toThrow(/nemá kotvu #C7/);
+    expect(() => animationLink('lidWindows', 'D4')).toThrow(/nemá kotvu #D4/);
+    expect(() => animationLink('lidBackD2', 'B4')).toThrow(/nemá kotvu #B4/);
+    expect(() => animationLink('lidBodySides', 'C3')).toThrow(/nemá kotvu #C3/);
+    expect(animationButtonText(okenka('A2'))).toBe('Animace postupu');
   });
 });
