@@ -104,7 +104,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 <header>
 <a class="backlink" href="/" data-back>← Zpět do lekce</a>
 <h1>Kapsa na minci krok za krokem</h1>
-<p class="lead">Projekt 02 „Pouzdro s vsazenou mincí“, mince 50 Kč. Jak pracovat s listem KAPSA: forma, 1. výtisk na líci, 2. výtisk na rubu, tvarování, řez obrysu a okno na formě. Kreslené v měřítku podle listu KAPSA (kapsa 42,5 × 42 mm, 23 otvorů švu, okno Ø 20, mince Ø 27,5, pata důlku Ø 31,5).</p>
+<p class="lead">Projekt 02, mince 50 Kč. List KAPSA: forma, značky na líc, šablona na rub, tvarování, řez a okno.</p>
 </header>
 
 <section class="card" aria-label="Animace postupu">
@@ -122,7 +122,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
   </div>
   <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
 </section>
-<p class="note">Postup podle lekce 2 (forma a tvarovací zkouška na odřezku) a lekce 6 (skutečná kapsa z kůže 1,2 mm). Na odřezku i na kapse je postup se dvěma výtisky stejný. Okno Ø 20 do skutečné kapsy sekejte, jen když vám v lekci 2 vyšla zkouška držení mince.</p>
+<p class="note">Lekce 2 (forma a zkouška na odřezku) a lekce 6 (kapsa z kůže 1,2 mm) – postup je stejný. Okno Ø 20 do kapsy sekejte, jen když vám v lekci 2 vyšla zkouška.</p>
 </div>
 
 <script>
@@ -318,7 +318,7 @@ const S=[];
 const add=(part,title,body,dur,draw,side)=>S.push({part,title,body,dur,draw,side});
 
 // A1
-add('A','Vystřihněte výkres OTVOR FORMY','Na listu KAPSA je samostatný výkres „OTVOR FORMY PRO DŮLEK“ – kružnice Ø 31,5 mm s osami. Vystřihněte ho jako čtverec asi 7 × 7 cm, s okrajem kolem kružnice, aby na papíru zůstaly celé osy. Samotnou kružnici nevystřihujte.',4200,t=>{
+add('A','Vystřihněte výkres OTVOR FORMY','List KAPSA vytiskněte na 100 % a zkontrolujte úsečku 50 mm. Výkres „OTVOR FORMY PRO DŮLEK“ (kružnice Ø 31,5 mm s osami) vystřihněte jako čtverec asi 7 × 7 cm. Kružnici nevystřihujte.',4200,t=>{
   const k=.5, ox=6, oy=8; let s='';
   const fade=1-.7*es(t,.72,.95);
   let sheet=`${paperRect(0,0,210,150)}${G(`translate(0 ${SHEET_DY})`,printKapsa())}`;
@@ -346,7 +346,7 @@ function cam(c1,c2,u){return `translate(${f(L(c1.tx,c2.tx,u))} ${f(L(c1.ty,c2.ty
 function squareOnBoard(op=1,dy=0,peel=0){return G(`translate(${HX-25.75} ${f(HY-31.25+dy)})`,formSquare(op)+`<rect x="-3" y="-2" width="10" height="5" fill="var(--tape)" opacity=".85" transform="rotate(-20)"/><rect x="62" y="64" width="10" height="5" fill="var(--tape)" opacity=".85" transform="rotate(-20 67 66)"/>`, peel?`opacity="${f(1-peel)}"`:'')}
 
 // A2
-add('A','Položte čtverec na desku','Bukové prkénko 28 × 11,8 cm s rukojetí. Čtverec položte doprostřed šířky desky, střed otvoru asi 4–5 cm od konce naproti rukojeti, osy rovnoběžně s okraji desky. Přilepte ho lepicí tyčinkou nebo páskou na okrajích.',4600,t=>{
+add('A','Položte čtverec na desku','Čtverec přilepte na desku doprostřed šířky, střed asi 4–5 cm od konce (naproti rukojeti, má-li ji), osy rovnoběžně s okraji.',4600,t=>{
   let s='';const m=es(t,.05,.6);
   let inner=board()+G(`translate(0 ${f(L(-150,0,m))})`,squareOnBoard(),m<1?SHADOW:'');
   s+=G(cam(CAM_FULL,CAM_FULL,0),inner);
@@ -357,7 +357,7 @@ add('A','Položte čtverec na desku','Bukové prkénko 28 × 11,8 cm s rukojetí
   return s;
 });
 // A3
-add('A','Protáhněte osy až k okrajům desky','Ještě před vrtáním protáhněte obě osy tužkou podle pravítka až k okrajům desky. Podle nich pak na formě zarovnáte osy narýsované na kůži.',4200,t=>{
+add('A','Protáhněte osy až k okrajům desky','Osy protáhněte tužkou podle pravítka až k okrajům desky. Podle nich budete zarovnávat kůži.',4200,t=>{
   const p=es(t,.05,.9);
   let inner=board({axes:p})+squareOnBoard();
   // ruler + pencil
@@ -368,7 +368,7 @@ add('A','Protáhněte osy až k okrajům desky','Ještě před vrtáním protáh
   return s;
 });
 // A4
-add('A','Vyvrtejte otvor Ø 32 mm','Desku upněte svěrkou ke stolu, pod ni odpadní prkno. Středicí vrták do křížku os. Vykružovací pila Ø 32 mm, 1. rychlost, bez příklepu, netlačit: provrtejte do půlky, desku otočte a dokončete z druhé strany podle dírky středicího vrtáku.',8000,t=>{
+add('A','Vyvrtejte otvor Ø 32 mm','Desku upněte svěrkou ke stolu přes odpadní prkno. Středicí vrták nasaďte do křížku os. Vrtejte vykružovací pilou Ø 32 mm (u mince 40 mm Ø 44 mm) na 1. rychlost, bez příklepu a bez tlaku: do půlky, pak desku otočte a dokončete z druhé strany podle dírky středicího vrtáku. Forstnerův vrták průběžně vytahujte kvůli pilinám.',8000,t=>{
   const z=es(t,0,.1);
   const cut1=es(t,.22,.5), flip=seg(t,.52,.66), cut2=es(t,.68,.92), done=t>.93;
   // Po otočení (podle podélné osy) je nahoře spodní strana desky: bez papíru a os, jen dírka středicího vrtáku.
@@ -398,7 +398,7 @@ add('A','Vyvrtejte otvor Ø 32 mm','Desku upněte svěrkou ke stolu, pod ni odpa
   return s;
 });
 // A5
-add('A','Sundejte papír, obruste a zaoblete hranu','Papír sundejte. Horní hranu otvoru (stranu pro kůži, označte si ji tužkou) sražte smirkem 180 kolem prstu šikmo asi pod 45° do malého oblouku kolem 1 mm. Průměr otvoru nezvětšujte, stěnu jen lehce přejeďte, plochu kolem přebruste naplocho.',6000,t=>{
+add('A','Sundejte papír, obruste a zaoblete hranu','Papír sundejte. Horní hranu otvoru (strana pro kůži, označte si ji) srazte smirkem 180 na prstu do oblouku asi 1 mm. Průměr nezvětšujte. Stěnu jen lehce začistěte, plochu kolem přebruste naplocho. Hrana nesmí řezat ani drhnout. Mince zabalená s odřezkem kůže musí jít do otvoru volně. Setřené osy obtáhněte znovu.',6000,t=>{
   const peel=es(t,0,.25), rd=es(t,.35,.8), mk=seg(t,.82,.95);
   let inner=board({axes:1,axesFull:1,hole:'through',round:rd,mark:mk});
   if(peel<1) inner+=G(`translate(0 ${f(-peel*40)})`,squareOnBoard(1-peel));
@@ -421,7 +421,7 @@ function paper1(pr=0){let s=paperRect(P1.x,P1.y,P1.w,P1.h)+printKapsa();if(pr){c
 const pan=(s)=>s; // placeholder
 function rightNote(lines){return lines.map((l,i)=>lbl(90,14+i*6,l[0],l[1]||'t')).join('')}
 
-add('B','Vystřihněte 1. výtisk nahrubo','Použijete dva výtisky listu KAPSA. 1. výtisk vystřihněte nahrubo s okrajem 1–2 cm kolem obrysu (vlevo je okraj listu).',3800,t=>{
+add('B','Vystřihněte 1. výtisk nahrubo','1. výtisk listu KAPSA vystřihněte nahrubo s okrajem 1–2 cm.',3800,t=>{
   let s=G(LVw,leather({side:'lic'}));
   const c=es(t,.1,.7), fade=1-es(t,.7,.9);
   // bigger sheet piece floating
@@ -436,7 +436,7 @@ add('B','Vystřihněte 1. výtisk nahrubo','Použijete dva výtisky listu KAPSA.
   s+=G('',rightNote([['1. výtisk','tw'],['nahrubo, okraj 1–2 cm','ts']]).replace(/x="90"/g,'x="92"'),`opacity="${f(seg(t,.8,1))}"`);
   return s;
 },'lic');
-add('B','Přilepte ho maskovací páskou na LÍC','List položte na LÍC kůže a přilepte maskovací páskou na okrajích, mimo obrys, z několika stran. Pásku nejdřív zkuste na kousku téže kůže.',3600,t=>{
+add('B','Přilepte ho maskovací páskou na LÍC','List přilepte maskovací páskou na LÍC kůže, jen na okrajích mimo obrys. Pásku nejdřív zkuste na kousku téže kůže.',3600,t=>{
   let s=G(LVw,leather({side:'lic'})+paper1());
   const n=Math.floor(es(t,.1,.85)*4.999);
   const pts=[[0,4,45],[62.5,4,-45],[0,66,-45],[62.5,66,45]];
@@ -444,7 +444,7 @@ add('B','Přilepte ho maskovací páskou na LÍC','List položte na LÍC kůže 
   s+=rightNote([['maskovací páska','tw'],['na okrajích listu,','ts'],['mimo obrys,','ts'],['z několika stran','ts']]);
   return s;
 },'lic');
-add('B','Šídlem propíchněte 23 teček a 4 konce os','Šídlem propíchněte skrz tečky švu a 4 konce os – čtyři body, kde končí čerchované osy (vlevo, vpravo, nahoře, dole).',7000,t=>{
+add('B','Šídlem propíchněte 23 teček a 4 konce os','Šídlem propíchněte všechny tečky švu a 4 konce os (vlevo, vpravo, nahoře, dole).',7000,t=>{
   const P=[...DOTS,...AXE]; const u=seg(t,.05,.92)*P.length; const n=Math.min(P.length,Math.floor(u)); const fr=u-Math.floor(u);
   let s=G(LVw,leather({side:'lic'})+paper1(n)+tapes(0));
   if(n<P.length){const [x,y]=P[n];const [a,b]=vx(x,y);s+=awl(a,b,fr<.5?fr*2:2-fr*2)}
@@ -454,7 +454,7 @@ add('B','Šídlem propíchněte 23 teček a 4 konce os','Šídlem propíchněte 
   s+=lbl(92,38,'tečky: šev 23 otvorů','ts')+lbl(92,42.5,'konce os: vlevo, vpravo,','ts')+lbl(92,47,'nahoře, dole','ts');
   return s;
 },'lic');
-add('B','Pásku strhněte pomalu','Pásku strhněte pomalu pod ostrým úhlem, list sundejte.',3600,t=>{
+add('B','Pásku strhněte pomalu','Pásku strhněte pomalu pod ostrým úhlem a list sundejte.',3600,t=>{
   const lift=es(t,0,.55), off=es(t,.55,1);
   let s=G(LVw,leather({side:'lic',pricks:27}));
   s+=G(LVw+` translate(${f(off*34)} ${f(-off*18)}) rotate(${f(off*8)} 31 35)`,paper1(27),`opacity="${f(1-off)}" ${SHADOW}`);
@@ -462,14 +462,14 @@ add('B','Pásku strhněte pomalu','Pásku strhněte pomalu pod ostrým úhlem, l
   s+=rightNote([['pomalu,','tw'],['pod ostrým úhlem','ts']]);
   return s;
 },'lic');
-add('B','Zkontrolujte, že se přenesly všechny značky','Na líci je 23 propíchnutých teček švu a 4 konce os. Zkontrolujte, že se přenesly všechny.',3200,t=>{
+add('B','Zkontrolujte, že se přenesly všechny značky','Zkontrolujte, že je na líci propíchnutých všech 23 teček švu a 4 konce os.',3200,t=>{
   const pulse=.5+.5*Math.sin(t*Math.PI*6);
   let s=G(LVw,leather({side:'lic',pricks:27})+DOTS.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="${f(1+pulse*.5)}" fill="none" stroke="var(--accent)" stroke-width=".25" opacity="${f(seg(t,0,.2))}"/>`).join('')+AXE.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="${f(1.3+pulse*.5)}" fill="none" stroke="var(--ok)" stroke-width=".35" opacity="${f(seg(t,.3,.5))}"/>`).join(''));
   s+=lbl(92,16,'23 teček švu','ta')+(t>.25?tick(127,15):'');
   s+=lbl(92,23,'4 konce os','tok')+(t>.5?tick(127,22):'');
   return s;
 },'lic');
-add('B','Na líci jen dírky – nic nekreslete','Na LÍCI zůstanou jen propíchnuté dírky: 23 teček švu a 4 konce os. Konce os leží vně obrysu a při řezu odpadnou. Žádné osy ani jiné čáry na líc nekreslete – čára přes kapsu by na hotové kapse zůstala vidět mezi oknem a obrysem. Osy narýsujete až na rubu.',5000,t=>{
+add('B','Na líci jen dírky – nic nekreslete','Na líc nic nekreslete – čára by na hotové kapse zůstala vidět. Osy narýsujete na rubu.',5000,t=>{
   const pulse=.5+.5*Math.sin(t*Math.PI*5);
   let s=G(LVw,leather({side:'lic',pricks:27})+AXE.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="${f(1.3+pulse*.4)}" fill="none" stroke="var(--ok)" stroke-width=".35" opacity="${f(seg(t,.05,.2))}"/>`).join(''));
   // Na líci se nekreslí žádná čára, ani „ukázková“ – jen přeškrtnutá tužka vedle.
@@ -478,7 +478,7 @@ add('B','Na líci jen dírky – nic nekreslete','Na LÍCI zůstanou jen propíc
   s+=`<g opacity="${f(seg(t,.35,.55))}">${lbl(92,33,'Na líci jen dírky','ta')}${lbl(92,39,'nic nekreslete','ta')}${lbl(92,46.5,'čára přes kapsu','ts')}${lbl(92,51,'zůstane vidět','ts')}${lbl(92,58.5,'osy až na rubu','tok')}</g>`;
   return s;
 },'lic');
-add('B','Prosekejte otvory švu z líce','Vidličkami s roztečí 4 mm naplocho na desce prosekejte otvory švu z líce podle propíchnutých teček. Kapsa se děruje ještě před navlhčením.',7000,t=>{
+add('B','Prosekejte otvory švu z líce','Vidličkami 4 mm naplocho na desce prosekejte otvory švu z líce podle teček. Děrujte ještě před navlhčením.',7000,t=>{
   const u=es(t,.04,.94); const n=Math.round(u*23);
   let s=G(LVw,leather({side:'lic',pricks:27,slits:n}));
   if(t<.96){const p=seamAt(Math.min(.999,u));const [a,b]=vx(p.x,p.y);s+=G('',fork(a,b,p.a+ (p.a>45&&p.a<135?0:0)),'')}
@@ -488,7 +488,7 @@ add('B','Prosekejte otvory švu z líce','Vidličkami s roztečí 4 mm naplocho 
 },'lic');
 
 // ---------- C: RUB ----------
-add('C','Otočte kůži a narýsujte osy na rubu','Kůži otočte na RUB. Propíchnuté konce os (i proseknuté otvory švu) jsou vidět i tady. Protilehlé konce os spojte podle pravítka a osy narýsujte tužkou HB nebo 2B, lehce, až k okrajům kůže. Když tužka na kůži není vidět, narýsujte je lehce šídlem.',7600,t=>{
+add('C','Otočte kůži a narýsujte osy na rubu','Kůži otočte rubem nahoru. Protilehlé konce os spojte tužkou HB nebo 2B podle pravítka a osy lehce protáhněte až k okrajům kůže. Když tužka není vidět, použijte lehce šídlo.',7600,t=>{
   const fl=es(t,0,.25), sx=Math.abs(Math.cos(Math.PI*fl)), side=fl<.5?'lic':'rub';
   const h=es(t,.36,.6), v=es(t,.7,.94);
   const o= side==='lic'?{side,pricks:27,slits:23}:{side,axPricks:1,slits:23};
@@ -518,7 +518,7 @@ function tmpl(hole=0){
 // Kruhový výsečník v řezu (spodní břit v y = 0) a palička nad ním.
 function punchSide(){return `<path d="M-10 0 L-10 -10 L-9.1 -10 L-9.1 -.8 Z M10 0 L10 -10 L9.1 -10 L9.1 -.8 Z" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-10.4" y="-12" width="20.8" height="2" rx=".4" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-3" y="-26" width="6" height="14" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-4.5" y="-28" width="9" height="2.4" rx=".6" fill="var(--steel-d)"/>`}
 function malletSide(){return `<path d="M7 -3.5 L24 -6" stroke="var(--mallet-d)" stroke-width="1.6" stroke-linecap="round"/><rect x="-8" y="-7" width="16" height="7" rx="1.6" fill="var(--mallet)" stroke="var(--mallet-d)" stroke-width=".25"/>`}
-add('C','Vysekněte okno do 2. výtisku','2. výtisk vystřihněte přesně po obrysu kapsy (plná čára se zaoblenými rohy). Ještě než ho položíte na rub, vysekněte do něj okno: papír položte na desku na sekání, výsečník Ø 20 mm (u mince 40 mm Ø 32 mm) postavte přesně na vytištěnou kružnici okna – břit má ležet na čáře dokola, k vystředění pomůžou vytištěné osy – a udeřte paličkou. Při záložním okně Ø 18 mm z lekce 2 vysekněte otvor do nového výtisku výsečníkem Ø 18 mm vystředěným uvnitř vytištěné kružnice Ø 20 mm, mezera 1 mm dokola stejná. V lekci 6 poslouží šablona z lekce 2 s otvorem toho průměru, kterým budete sekat okno kapsy – když ji máte, tenhle krok přeskočte.',7600,t=>{
+add('C','Vysekněte okno do 2. výtisku','2. výtisk vystřihněte přesně po obrysu kapsy (plná čára se zaoblenými rohy). Na desce na sekání do něj vysekněte okno výsečníkem Ø 20 mm (u mince 40 mm Ø 32 mm), břit přesně na vytištěné kružnici. Pro záložní okno Ø 18 mm vytiskněte list Kapsa – záložní okno Ø 18 mm a vysekněte Ø 18 mm. V lekci 6 použijte šablonu z lekce 2 – když ji máte, krok přeskočte.',7600,t=>{
   const m=es(t,0,.2), c=es(t,.22,.44), dn=es(t,.46,.52), hit=es(t,.52,.6), cut=t>.6, up=es(t,.66,.76), slug=es(t,.74,.92);
   let s=`<rect x="6" y="9" width="77" height="74" rx="2" fill="var(--pb)" stroke="var(--pb-d)" stroke-width=".35"/>`;
   s+=G(LVw+` translate(0 ${f(L(-70,0,m))})`,tmpl(cut?1:0),m<1?SHADOW:'');
@@ -541,7 +541,7 @@ add('C','Vysekněte okno do 2. výtisku','2. výtisk vystřihněte přesně po o
   if(cut) s+=G('',lbl(8,88,'otvor Ø 20 = velikost výsečníku','tok'),`opacity="${f(seg(t,.62,.7))}"`);
   return s;
 },null);
-add('C','Položte 2. výtisk na rub a zarovnejte na osy','Vystřižený 2. výtisk s vyseknutým oknem položte na RUB a zarovnejte jeho osy na osy narýsované na kůži. Tip (lekce to neuvádí): v otvoru okna jsou vidět i osy na kůži – mají se křížit uprostřed otvoru.',4400,t=>{
+add('C','Položte 2. výtisk na rub a zarovnejte na osy','Šablonu položte na RUB a zarovnejte její osy na osy na kůži. Tip: osy na kůži se mají křížit uprostřed otvoru okna.',4400,t=>{
   const m=es(t,.05,.7);
   let s=G(LVw,leather({side:'rub',axPricks:1,slits:23,rubAxes:1}));
   const dx=L(8,0,m), dy=L(-80,0,m), rot=L(-14,0,m);
@@ -551,7 +551,7 @@ add('C','Položte 2. výtisk na rub a zarovnejte na osy','Vystřižený 2. výti
   if(t>.8) s+=tick(93,27)+lbl(97,28.5,'zarovnáno','tok');
   return s;
 },'rub');
-add('C','Obtáhněte obrys šídlem nebo tužkou','Obrys obtáhněte kolem okraje papíru šídlem nebo tužkou. Na rub, ne na líc: škrábnutí na líci třísločiněné kůže zůstane vidět.',4800,t=>{
+add('C','Obtáhněte obrys šídlem nebo tužkou','Obrys obtáhněte šídlem nebo tužkou. Jen na rubu – škrábnutí na líci zůstane vidět.',4800,t=>{
   const p=es(t,.05,.92);
   let s=G(LVw,leather({side:'rub',axPricks:1,slits:23,rubAxes:1,outline:p})+tmpl(1));
   s+=G(LVw,`<path d="${OUT}" fill="none" stroke="var(--graphite)" stroke-width=".35" pathLength="1" stroke-dasharray="${p>=.999?'none':f(p)+' 2'}"/>`);
@@ -559,7 +559,7 @@ add('C','Obtáhněte obrys šídlem nebo tužkou','Obrys obtáhněte kolem okraj
   s+=rightNote([['obrys na RUB','tw'],['kolem okraje papíru','ts'],['ne na líc – škrábnutí','ts'],['na líci zůstane vidět','ts']]);
   return s;
 },'rub');
-add('C','Obtáhněte kružnici okna v otvoru papíru','Tužkou HB nebo 2B, lehce, objeďte vnitřní hranu otvoru v papíru. Na rubu tak vznikne celá kružnice okna přesně ve velikosti výsečníku. Podle ní pak výsečník vystředíte.',5400,t=>{
+add('C','Obtáhněte kružnici okna v otvoru papíru','Tužkou lehce objeďte vnitřní hranu okna v šabloně. Podle této kružnice pak okno vystředíte.',5400,t=>{
   const cir=es(t,.06,.68), off=es(t,.74,.94);
   let s=G(LVw,leather({side:'rub',axPricks:1,slits:23,rubAxes:1,outline:1,circle:cir}));
   s+=G(LVw+` translate(${f(off*48)} ${f(-off*10)})`,tmpl(1),`opacity="${f(1-off)}"`);
@@ -569,7 +569,7 @@ add('C','Obtáhněte kružnici okna v otvoru papíru','Tužkou HB nebo 2B, lehce
   s+=G('',lbl(90,42,'celá kružnice Ø 20','t')+lbl(90,47,'= velikost výsečníku','ts'),`opacity="${f(seg(t,.68,.78))}"`);
   return s;
 },'rub');
-add('C','Obrys se teď neřeže','Kůže je orýsovaná: osy, obrys a kružnice okna na rubu, otvory švu proseknuté. Obrys se teď neřeže – kapsa se řeže až po vytvarování. 2. výtisk s vyseknutým oknem si schovejte: když se čára při tvarování rozmaže, obtáhnete obrys i kružnici okna podle něj znovu. Přes vytvarovaný důlek ale papír neleží úplně rovně, proto orýsujte všechno teď na rovné kůži a obtažení po tvarování berte jen jako pomoc.',4200,t=>{
+add('C','Obrys se teď neřeže','Obrys teď neřežte – řeže se až po vytvarování. Orýsujte všechno teď, přes vytvarovaný důlek už šablona neleží rovně. Šablonu si schovejte: po tvarování podle ní jen obtáhnete rozmazané čáry.',4200,t=>{
   let s=G(LVw,leather({side:'rub',axPricks:1,slits:23,rubAxes:1,outline:1,circle:1}));
   const a=seg(t,.1,.35);
   s+=`<g opacity="${f(a)}">${knife(106,30,30)}<circle cx="102" cy="22" r="9" fill="none" stroke="var(--accent)" stroke-width=".9"/><path d="M95.6 28.4 L108.4 15.6" stroke="var(--accent)" stroke-width=".9"/></g>`;
@@ -578,7 +578,7 @@ add('C','Obrys se teď neřeže','Kůže je orýsovaná: osy, obrys a kružnice 
 },'rub');
 
 // ---------- D: forming ----------
-add('D','Navlhčete kůži','Kůži navlhčete houbičkou, nemáčejte ji. Počkejte, až povrch začne zase mírně světlat – to je správná chvíle na tvarování.',4200,t=>{
+add('D','Navlhčete kůži','Kůži navlhčete houbičkou, nemáčejte ji. Tvarujte, až povrch začne znovu mírně světlat.',4200,t=>{
   const w=es(t,.05,.6), dry=es(t,.7,.95);
   const wet= w*(1-.35*dry);
   let s=G(LVw,leather({side:'rub',axPricks:1,slits:23,rubAxes:1,outline:1,circle:1,wet}));
@@ -587,7 +587,7 @@ add('D','Navlhčete kůži','Kůži navlhčete houbičkou, nemáčejte ji. Počk
   if(t>.7) s+=lbl(92,30,'povrch mírně světlá','t')+lbl(92,35,'→ tvarovat','ts');
   return s;
 },'rub');
-add('D','Lícem dolů na formu, osy na osy, mince na rub','Kůži lícem dolů položte na formu; rub je nahoře. Narýsované osy na kůži zarovnejte s osami narýsovanými na desce. Minci zabalenou do potravinové fólie položte na rub nad otvor.',6200,t=>{
+add('D','Lícem dolů na formu, osy na osy, mince na rub','Kůži položte lícem dolů na formu a osy na rubu zarovnejte s osami na desce. Minci zabalenou do potravinové fólie položte na rub nad otvor.',6200,t=>{
   const m=es(t,.05,.5), c=es(t,.6,.9);
   let s=`<clipPath id="lc3"><rect x="0" y="0" width="84" height="90"/></clipPath>`;
   let top=G(FB,board({axes:1,axesFull:1,hole:'through',round:1}));
@@ -602,7 +602,7 @@ add('D','Lícem dolů na formu, osy na osy, mince na rub','Kůži lícem dolů p
 function formSec(o){ // main section view for forming/cutting
   return G('translate(62 36) scale(1.3)',sec(o));
 }
-add('D','Přiklopte víkem a stáhněte dvěma svěrkami','Přiklopte víkem a dvěma svěrkami proti sobě rovnoměrně stáhněte, aby se víko nenaklonilo. Víko tlačí minci a kůže se vtlačí do otvoru formy.',5600,t=>{
+add('D','Přiklopte víkem a stáhněte dvěma svěrkami','Přiklopte víkem a stáhněte dvěma svěrkami proti sobě rovnoměrně, aby se víko nenaklonilo.',5600,t=>{
   const down=es(t,.05,.4), press=es(t,.45,.9);
   const d=L(-.6,1.9,press);
   const coinY=d-.6; const lidY=L(-30,coinY-2.5,down);
@@ -614,7 +614,7 @@ add('D','Přiklopte víkem a stáhněte dvěma svěrkami','Přiklopte víkem a d
   s+=lbl(129,82,'2 svěrky proti sobě,','ts','end')+lbl(129,87,'rovnoměrně','ts','end');
   return s;
 },'rubTop');
-add('D','Nechte zaschnout přes noc','Nechte úplně zaschnout, jistější je přes noc.',3800,t=>{
+add('D','Nechte zaschnout přes noc','Nechte úplně zaschnout, nejlépe přes noc.',3800,t=>{
   const n=Math.sin(Math.PI*seg(t,0,1));
   let s=formSec({W:40,hole:'through',round:1,leather:{d:1.9,wet:.6*(1-seg(t,.2,.9)),side:'rubUp'},coin:{y:1.3,foil:1},lid:{y:-1.2},clamps:1});
   s+=`<rect x="0" y="0" width="135" height="90" fill="#141a33" opacity="${f(.22*n)}"/>`;
@@ -622,7 +622,7 @@ add('D','Nechte zaschnout přes noc','Nechte úplně zaschnout, jistější je p
   s+=lbl(6,86,'přes noc','tw');
   return s;
 },'rubTop');
-add('D','Rozepněte: důlek vystupuje do otvoru','Po zaschnutí rozepněte a minci vyjměte. Důlek je vytlačený lícem dolů do otvoru formy; má být dost hluboký a bez zvrásnění na okraji, mince do něj má jít zasunout i vysunout.',4600,t=>{
+add('D','Rozepněte: důlek vystupuje do otvoru','Rozepněte a minci vyjměte. Zkontrolujte: okraj důlku je bez zvrásnění a mince jde zasunout i vysunout. Vložená mince nesmí vyčnívat nad okolní rub (ověřte na odřezku). Otvory švu mají zůstat kulaté.',4600,t=>{
   const up=es(t,.05,.45), cout=es(t,.5,.8);
   let s=formSec({W:40,hole:'through',round:1,leather:{d:1.9,side:'rubUp'},coin:{y:1.3-cout*16,foil:1},lid:{y:-1.2-up*42},clamps:0});
   s+=`<g opacity="${f(seg(t,.0,.15)*(1-up))}"></g>`;
@@ -638,7 +638,7 @@ function eTop(o){
   top+=G((o.pre||'')+FV,leather({side:'rub',slits:23,rubAxes:1,outline:1,circle:1,dimple:1,cut:o.cut,window:o.window}));
   return top;
 }
-add('E','Zaschlou kůži zpátky na formu, lícem dolů','Zaschlou kůži položte lícem dolů zpátky na formu: důlek do otvoru, osy na kůži na osy desky. Důlek visí v otvoru volně, nic ho nemačká.',4400,t=>{
+add('E','Zaschlou kůži zpátky na formu, lícem dolů','Zaschlou kůži položte lícem dolů zpátky na formu: důlek do otvoru, osy na osy.',4400,t=>{
   const m=es(t,.05,.55);
   let s=`<clipPath id="lc4"><rect x="0" y="0" width="84" height="90"/></clipPath>`;
   let top=G(FB,board({axes:1,axesFull:1,hole:'through',round:1}))+G(`translate(0 ${f(L(-40,0,m))})`,G(FV,leather({side:'rub',slits:23,rubAxes:1,outline:1,circle:1,dimple:1})),m<1?SHADOW:'');
@@ -647,7 +647,7 @@ add('E','Zaschlou kůži zpátky na formu, lícem dolů','Zaschlou kůži polož
   s+=inset('ŘEZ',G(`translate(109.5 ${f(L(14,34,m))}) scale(.84)`,body)+(m>=1?lbl(109.5,58,'důlek visí volně','t','middle')+lbl(109.5,64,'osy kůže = osy desky','ts','middle'):''));
   return s;
 },'rubTop');
-add('E','Vyřízněte obrys 2–3 lehkými tahy nad dřevem','Obrys vede asi 5 mm vně důlku, nad dřevem, takže nůž řeže na desce, ne nad důlkem. Je-li čára po tvarování rozmazaná, obtáhněte obrys i kružnici okna znovu podle 2. výtisku s oknem – přes důlek papír neleží úplně rovně, je to jen pomoc. Řežte podle orýsování na rubu 2–3 lehkými tahy, kůži přidržujte na rovné části. Desku můžete chránit kouskem kartonu s otvorem Ø 32 mm.',8000,t=>{
+add('E','Vyřízněte obrys 2–3 lehkými tahy nad dřevem','Rozmazané čáry nejdřív obtáhněte podle šablony. Obrys vyřízněte 2–3 lehkými tahy, kůži přidržujte na rovné části. Desku můžete chránit kartonem s otvorem Ø 32 mm.',8000,t=>{
   const cardA=es(t,0,.1)*(1-es(t,.12,.18))*0+ (t<.14?es(t,0,.08):1);
   const passes=3, u=seg(t,.15,.8)*passes, pass=Math.min(passes,Math.floor(u)+1), pu=u-Math.floor(u);
   const off=es(t,.84,1);
@@ -672,7 +672,7 @@ add('E','Vyřízněte obrys 2–3 lehkými tahy nad dřevem','Obrys vede asi 5 m
   s+=inset('ŘEZ',G('translate(110 32) scale(.95)',body)+lbl(91,50,'~5 mm','ta')+lbl(88.5,56,'nůž nad dřevem,','t')+lbl(88.5,61.5,'ne nad důlkem','ts')+lbl(88.5,68,'čárkovaně: karton','ts')+lbl(88.5,72.5,'s otvorem Ø 32','ts')+lbl(88.5,77,'(volitelně)','ts'));
   return s;
 },'rubTop');
-add('E','Špalík pod důlek a vysekněte okno Ø 20','Na formě pod důlek podložte špalík užší než otvor formy (pod 31,5 mm) a širší než okno (přes 20 mm) – jen se dotýká dna důlku, nenadzvedává ho. Výsečník Ø 20 mm postavte na narýsovanou kružnici okna – má přesně jeho velikost, břit na čáru dokola. Rozhoduje ale prstenec kůže kolem důlku: zkontrolujte, že je po celém obvodu stejně široký, kružnice je jen vodítko. Pak okno vysekněte.',7200,t=>{
+add('E','Špalík pod důlek a vysekněte okno Ø 20','Pod důlek podložte špalík užší než otvor formy (pod 31,5 mm) a širší než okno (přes 20 mm). Dna se jen dotýká, nenadzvedává ho (ověřte na odřezku). Výsečník Ø 20 mm postavte na narýsovanou kružnici. Zkontrolujte, že prstenec kolem důlku je po celém obvodu stejně široký, a vysekněte okno.',7200,t=>{
   const b=es(t,.03,.3), pd=es(t,.38,.62), hit=t>.62, back=es(t,.7,.9);
   const win=t>.62;
   const pyy= t<.62? L(-45,2.6,pd) : L(2.6,-45,back);
@@ -684,7 +684,7 @@ add('E','Špalík pod důlek a vysekněte okno Ø 20','Na formě pod důlek podl
   s+=lbl(69,16,'výsečník Ø 20','t');
   return s;
 },'rubTop');
-add('E','Zkouška: mince nepropadne','Minci vložte z rubu do důlku, kus otočte oknem dolů a zatřeste – mince nesmí vypadnout. Okno Ø 20 nechává kolem mince 50 Kč prstenec 3,75 mm; zatlačení palcem z rubu ho nesmí vytlačit ven.',5200,t=>{
+add('E','Zkouška: mince nepropadne','Minci vložte z rubu, kus otočte oknem dolů a zatřeste – nesmí vypadnout. Zatlačte na ni z rubu palcem – oknem nesmí projít. Prstenec (3,75 mm) nesmí být natržený. Když mince projde, Ø 20 mm do kapsy nesekejte. Nejdřív zkontrolujte hloubku důlku, mělký vytvarujte znovu. Pak na druhém odřezku zkuste okno Ø 18 mm (lekce 2).',5200,t=>{
   const cin=es(t,.05,.35); const sh=t>.45? Math.sin((t-.45)*60)*1.8*(1-seg(t,.85,1)):0;
   // piece only (cut), window down, coin inside
   const tr=`translate(${f(56+sh)} 38) scale(1.6)`;

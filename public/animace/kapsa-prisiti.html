@@ -101,7 +101,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 <header>
 <a class="backlink" href="/" data-back>← Zpět do lekce</a>
 <h1>Přišití kapsy na pouzdro</h1>
-<p class="lead">Projekt 02 „Pouzdro s vsazenou mincí“, mince 50 Kč, kůže 1,2 mm. Jak se hotová kapsa s mincí dostane na přední panel: značky ze šablony PÁS (lekce 5), lepení, prosekání skrz obě vrstvy a šití (lekce 6). Kreslené v měřítku podle šablony PÁS a listu KAPSA: přední panel 72 × 104,1 mm, kapsa 42,5 × 42 mm 41,8 mm pod horní hranou a 14,75 mm od obou boků, šev 23 otvorů, okno Ø 20.</p>
+<p class="lead">Projekt 02, mince 50 Kč, kůže 1,2 mm. Značky ze šablony PÁS (lekce 5), lepení, prosekání skrz obě vrstvy a šití (lekce 6).</p>
 </header>
 
 <section class="card" aria-label="Animace postupu">
@@ -119,7 +119,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
   </div>
   <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
 </section>
-<p class="note">Postup podle lekce 5 (šablona PÁS, propíchnutí značek před řezáním) a lekce 6 (kroky „Nalepte kapsu na přední panel“ a „Prosekněte a přišijte kapsu“). Kroky označené „Tip“ lekce výslovně neuvádí. Čárkovaný obrys kapsy na kůži je jen pro představu – na pásu jsou jen 4 propíchnuté rohy.</p>
+<p class="note">„Tip“ označuje, co lekce neuvádí. Čárkovaný obrys kapsy je jen pro představu – na pásu jsou jen 4 propíchnuté rohy.</p>
 </div>
 
 <script>
@@ -278,7 +278,7 @@ const S=[];
 const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,side,tip});
 
 // A1 template taped on the LÍC
-add('A','Šablona PÁS přilepená na LÍC','Šablonu PÁS vystřihněte jen nahrubo, s okrajem 1–2 cm kolem obrysu, a položte ji na LÍC kůže – kresba je pohled zvenku, přední panel je nakreslený tak, jak bude vidět. Přilepte ji maskovací páskou na okrajích, mimo linii řezu, z několika stran, aby se nemohla posunout.',4600,t=>{
+add('A','Šablona PÁS přilepená na LÍC','Šablonu PÁS vystřihněte nahrubo s okrajem 1–2 cm a položte ji na LÍC kůže. Přilepte ji maskovací páskou z několika stran, jen na okrajích mimo čáru řezu.',4600,t=>{
   const m=es(t,.04,.45), tp=es(t,.5,.85), hl=seg(t,.85,1);
   let inner=leatherRough()+G(`translate(0 ${f(L(-200,0,m))})`,paperRough()+printStrip(),m<1?SHADOW:'')+(tp>0?tapesRough(tp):'');
   inner+=`<rect x="${FX}" y="${FY}" width="${PW}" height="${PH}" fill="none" stroke="var(--accent)" stroke-width=".9" stroke-dasharray="3 2" opacity="${f(hl)}"/>`;
@@ -288,7 +288,7 @@ add('A','Šablona PÁS přilepená na LÍC','Šablonu PÁS vystřihněte jen nah
 },'lic');
 
 // A2 prick marks
-add('A','Šídlem propíchněte rohy místa pro kapsu','Dokud je šablona přilepená a nic není vyříznuté, propíchněte šídlem skrz papír rohy místa pro kapsu – asi 1 mm dovnitř od zaobleného rohu, ne v jeho pomyslném ostrém vrcholu: jinak by značka zůstala vidět na líci mimo přišitou kapsu. Stejně propíchněte střed dříku druku, konce čar obou ohybů (asi 1 mm od hrany pásu) a všechny tečky dna.',10500,t=>{
+add('A','Šídlem propíchněte rohy místa pro kapsu','Před řezáním propíchněte šídlem skrz papír rohy místa pro kapsu – asi 1 mm dovnitř od zaobleného rohu, aby značku zakryla kapsa. Propíchněte i střed dříku, konce čar ohybů (asi 1 mm od hrany) a všechny tečky dna.',10500,t=>{
   const z=es(t,0,.1); const cam=camL(STRIPC,PANELC,z);
   const P=ALLMARKS(); let n,fr;
   if(t<.6){const u=seg(t,.12,.58)*4;n=Math.min(4,Math.floor(u));fr=u-Math.floor(u)}else{const u=4+seg(t,.6,.94)*(P.length-4);n=Math.min(P.length,Math.floor(u));fr=u-Math.floor(u)}
@@ -319,7 +319,7 @@ add('A','Šídlem propíchněte rohy místa pro kapsu','Dokud je šablona přile
 },'lic');
 
 // A3 marks on the front panel
-add('A','Po vyříznutí: 4 značky kapsy na předním panelu','Pás vyřízněte skrz papír po čáře, pásku strhávejte pomalu pod ostrým úhlem a šablonu sejměte. Zkontrolujte, že se přenesly všechny značky: rohy kapsy, střed dříku, konce čar ohybů a tečky dna. Místo kapsy je 41,8 mm pod horní hranou předního panelu a 14,75 mm od obou boků, otevřenou hranou nahoru.',8200,t=>{
+add('A','Po vyříznutí: 4 značky kapsy na předním panelu','Pás vyřízněte skrz papír, pásku strhněte pomalu pod ostrým úhlem a šablonu sejměte. Zkontrolujte, že jsou vidět všechny značky. Kapsa leží 41,8 mm pod horní hranou předního panelu a 14,75 mm od boků, otevřenou hranou nahoru.',8200,t=>{
   const off=es(t,0,.18), peel=es(t,.2,.45), hl=seg(t,.47,.6), dim=es(t,.62,.85);
   let inner=`<path d="M-12 -12 h284 v193 h-284 Z ${STRIP}" fill-rule="evenodd" fill="url(#licG)" opacity="${f(1-off)}"/>`;
   inner+=stripLeather({ghost:dim});
@@ -342,7 +342,7 @@ add('A','Po vyříznutí: 4 značky kapsy na předním panelu','Pás vyříznět
 // ---------- B: glue ----------
 const IPY=16;
 function insetPocketT(){return `translate(89.5 ${IPY}) scale(.95)`}
-add('B','Přiložte kapsu na 4 značky','Hotovou kapsu – vytvarovanou, s vyříznutým obrysem, vyseknutým oknem a zaleštěnými hranami – přiložte lícem nahoru, otevřenou hranou nahoru, rohy na 4 propíchnuté značky. Značky leží asi 1 mm uvnitř zaoblených rohů, takže je přiložená kapsa zakryje.',5600,t=>{
+add('B','Přiložte kapsu na 4 značky','Hotovou kapsu přiložte nasucho lícem nahoru, otevřenou hranou nahoru, rohy na 4 propíchnuté značky.',5600,t=>{
   const m=es(t,.06,.6), pulse=.5+.5*Math.sin(t*Math.PI*8);
   let inner=stripLeather()+rings(CORN,'var(--ok)',1.5+pulse*.4,.45,1-seg(t,.55,.7));
   const dx=L(40,0,m), dy=L(-42,0,m);
@@ -352,9 +352,9 @@ add('B','Přiložte kapsu na 4 značky','Hotovou kapsu – vytvarovanou, s vyř�
   s+=inset('PŘILOŽIT',notes([['na 4 značky','tw'],['lícem nahoru,'],['otevřenou hranou'],['nahoru'],['značky leží ~1 mm'],['uvnitř rohů –'],['kapsa je zakryje']]));
   if(t>.85) s+=tick(91,67)+lbl(95,68.5,'sedí','tok');
   return s;
-},'lic','Tip (lekce to neuvádí): přiložení nanečisto, ještě bez lepidla – uvidíte, kde přesně leží okraj kapsy a kde zdrsnit.');
+},'lic');
 
-add('B','Zdrsněte jen pruh pod okrajem kapsy','Kapsu zase sundejte. Na předním panelu smirkem lehce zdrsněte jen plochu pod okrajem kapsy, tam, kam přijde lepidlo. Zbytek líce nechte hladký.',6400,t=>{
+add('B','Zdrsněte jen pruh pod okrajem kapsy','Kapsu sundejte. Na předním panelu lehce zdrsněte smirkem jen líc pod okrajem kapsy. Zbytek nechte hladký.',6400,t=>{
   const p=es(t,.08,.88);
   let inner=stripLeather({rough:p,ghost:1});
   let s=clipMain('cb2',G(camT(POCKC),inner));
@@ -365,7 +365,7 @@ add('B','Zdrsněte jen pruh pod okrajem kapsy','Kapsu zase sundejte. Na přední
   return s;
 },'lic');
 
-add('B','Kontaktní lepidlo do úzkého pruhu','Kontaktní lepidlo naneste jen do úzkého pruhu při okraji kapsy – do šířky švového okraje, ne přes celou plochu – na rub kapsy a na odpovídající zdrsněné místo na předním panelu, ať se nerozteče na viditelný líc kolem kapsy. Horní hranu kapsy, kterou se bude zasouvat mince, nelepte.',8400,t=>{
+add('B','Kontaktní lepidlo do úzkého pruhu','Kontaktní lepidlo naneste jen do úzkého pruhu u okraje, na rub kapsy i na zdrsněné místo. Horní hranu kapsy nelepte – tudy se zasouvá mince.',8400,t=>{
   const g1=es(t,.05,.45), g2=es(t,.5,.9), nt=seg(t,.9,1);
   let inner=stripLeather({rough:1,glue:g2,ghost:.6});
   inner+=G(POCK_T,noTop(seg(t,.88,.96)));
@@ -380,7 +380,7 @@ add('B','Kontaktní lepidlo do úzkého pruhu','Kontaktní lepidlo naneste jen d
   return s;
 },{v:'LÍC',sub:'panel · vpravo rub kapsy'});
 
-add('B','Nechte lepidlo odvětrat','Nanesené lepidlo na obou dílech nechte odvětrat podle návodu na obalu – stejně jako při lepení dna v lekci 7.',4800,t=>{
+add('B','Nechte lepidlo odvětrat','Lepidlo na obou dílech nechte odvětrat podle návodu na obalu.',4800,t=>{
   const d=es(t,.1,.85);
   let inner=stripLeather({rough:1,glue:1,dry:d,ghost:.6});
   let s=clipMain('cb4',G(camT(POCKC),inner));
@@ -390,12 +390,12 @@ add('B','Nechte lepidlo odvětrat','Nanesené lepidlo na obou dílech nechte odv
   return s;
 },{v:'LÍC',sub:'panel · vpravo rub kapsy'});
 
-add('B','Přitiskněte kapsu přesně na značky','Kapsu otočte lícem nahoru a přiložte ji přesně na 4 značky, otevřenou hranou nahoru – kontaktní lepidlo po dotyku už nejde posunout (lekce 7). Přitiskněte ji po okraji, kde je lepidlo.',8000,t=>{
+add('B','Přitiskněte kapsu přesně na značky','Kapsu přitiskněte přesně na značky, otevřenou hranou nahoru. Po dotyku už nejde posunout.',8000,t=>{
   const m=es(t,.04,.5), press=seg(t,.55,.95);
   let s=clipMain('cb5',G(camT(POCKC),stripLeather({rough:1,glue:1,dry:1})+(m<.98?rings(CORN,'var(--ok)',1.5,.45):'')));
   // texty se objeví, až kapsa z výřezu odletí (jinak by ji na začátku překrývaly)
   s+=inset('PŘITISKNOUT',`<g opacity="${f(seg(t,.3,.42))}">`+notes([['přesně na značky','tw'],['po dotyku už'],['nejde posunout'],['tlačit po okraji,'],['kde je lepidlo']])+'</g>'+
-    `<g opacity="${f(seg(t,.6,.7))}">${lbl(89,52,'Tip:','ta')}${notes([['důlek nemačkat'],['(lekce to neuvádí)']],57.5,5.2)}</g>`);
+    `<g opacity="${f(seg(t,.6,.7))}">${lbl(89,52,'Tip:','ta')}${notes([['důlek nemačkat']],57.5,5.2)}</g>`);
   // pocket travels from inset (rub up) to the panel (líc up)
   const c0=[89.5+CXL*.95,IPY+21*.95], c1=tv(POCKC,PX+CXL,PY+21);
   const cx=L(c0[0],c1[0],m), cy=L(c0[1],c1[1],m)-Math.sin(Math.PI*m)*8, k=L(.95,POCKC.k,m), sx=Math.max(.04,Math.abs(Math.cos(Math.PI*m)));
@@ -408,7 +408,7 @@ add('B','Přitiskněte kapsu přesně na značky','Kapsu otočte lícem nahoru a
   if(t>.62){const [dx,dy]=tv(POCKC,PX+CXL,PY+CYL);s+=`<g opacity="${f(seg(t,.62,.7))}"><circle cx="${f(dx)}" cy="${f(dy)}" r="${f(R_FOOT*POCKC.k*.92)}" fill="none" stroke="var(--accent)" stroke-width=".6" stroke-dasharray="1.4 1"/>${cross(dx+13,dy-13,1.6,.6)}</g>`}
   if(t>.96) s+=pill(4,86,'kapsa nalepená na značkách','tok');
   return s;
-},'lic','Tip (lekce to neuvádí): důlek přitom nemačkejte, tlačte jen na lepený pruh.');
+},'lic','Tip: důlek nemačkejte, tlačte jen na lepený pruh.');
 
 // ---------- C: punch through both layers ----------
 const GROUPS=[[0,3],[3,6],[7,7],[8,11],[11,14],[15,15],[16,19],[19,22]];
@@ -416,7 +416,7 @@ function groupPose(g){const [a,b]=g;
   if(a===b){const p=DOTSL[a],q=DOTSL[a-1],r=DOTSL[a+1];return {x:p[0],y:p[1],a:Math.atan2(r[1]-q[1],r[0]-q[0])*180/Math.PI,n:1}}
   const p=DOTSL[a],q=DOTSL[b];return {x:(p[0]+q[0])/2,y:(p[1]+q[1])/2,a:Math.atan2(q[1]-p[1],q[0]-p[0])*180/Math.PI,n:b-a+1}}
 
-add('C','Kapsa už má otvory švu','Kapsa má 23 otvorů švu prosekaných už v prvním kroku lekce 6 – z líce, ještě před tvarováním. Přední panel pod ní zatím otvory nemá.',4600,t=>{
+add('C','Kapsa už má otvory švu','Kapsa má 23 otvorů švu prosekaných z líce už v lekci 6, před tvarováním. Přední panel pod ní otvory zatím nemá.',4600,t=>{
   const pulse=.5+.5*Math.sin(t*Math.PI*8), a=seg(t,.1,.3);
   let inner=stripLeather()+G(POCK_T,pocketLic()+`<g opacity="${f(a)}">${DOTSL.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="${f(1+pulse*.3)}" fill="none" stroke="var(--accent)" stroke-width=".25"/>`).join('')}</g>`);
   let s=clipMain('cc1',G(camT(POCKC),inner));
@@ -424,7 +424,7 @@ add('C','Kapsa už má otvory švu','Kapsa má 23 otvorů švu prosekaných už 
   return s;
 },'lic');
 
-add('C','Naplocho na děrovací desku','Pás s nalepenou kapsou položte naplocho na děrovací desku, kapsou nahoru. Důlek je vytlačený do líce kapsy, takže míří nahoru – deska pod ním nic nemačká.',6000,t=>{
+add('C','Naplocho na děrovací desku','Pás s nalepenou kapsou položte naplocho na děrovací desku, kapsou nahoru.',6000,t=>{
   const m=es(t,.05,.5);
   let inner=`<rect x="80" y="40" width="102" height="132" rx="3" fill="var(--board)" stroke="var(--board-d)" stroke-width=".6"/>`;
   inner+=G(`translate(0 ${f(L(-70,0,m))})`,stripLeather()+G(POCK_T,pocketLic()),m<1?SHADOW:'');
@@ -437,9 +437,9 @@ add('C','Naplocho na děrovací desku','Pás s nalepenou kapsou položte naploch
   ib+=`<g opacity="${f(seg(t,.7,.8))}">${notes([['Tip: rukou se','ta'],['o důlek neopírejte']],72,5.2)}</g>`;
   s+=inset('ŘEZ',ib);
   return s;
-},'lic','Tip (lekce to neuvádí): rukou se o důlek neopírejte, kůži přidržujte na rovné části panelu.');
+},'lic','Tip: o důlek se neopírejte, kůži držte na rovné části panelu.');
 
-add('C','Vidličkami znovu přes tytéž otvory, skrz obě vrstvy','Naplocho na děrovací desce projeďte vidličkami znovu přes tytéž otvory ze stejné strany – z líce kapsy –, tentokrát skrz obě vrstvy najednou: kapsu i přední panel pod ní. Jen tak si otvory po prosekání lícují.',10500,t=>{
+add('C','Vidličkami znovu přes tytéž otvory, skrz obě vrstvy','Vidličkami projeďte znovu tytéž otvory z líce kapsy, tentokrát skrz kapsu i přední panel.',10500,t=>{
   const u=seg(t,.04,.94)*GROUPS.length, gi=Math.min(GROUPS.length-1,Math.floor(u)), gp=u-Math.floor(u);
   const thru=DOTSL.map((_,i)=>GROUPS.some((g,j)=>(j<gi||(j===gi&&gp>.55)||t>.94)&&i>=g[0]&&i<=g[1]));
   const cnt=thru.filter(Boolean).length;
@@ -462,7 +462,7 @@ add('C','Vidličkami znovu přes tytéž otvory, skrz obě vrstvy','Naplocho na 
   return s;
 },'lic');
 
-add('C','Řez: otvory lícují skrz obě vrstvy','V řezu je vidět, že vidlička vstoupila do líce kapsy stejným otvorem jako poprvé a pokračovala lepeným pruhem do předního panelu – otvory v obou vrstvách leží přesně nad sebou. Kdyby šla z opačné strany než poprvé, šikmé otvory by si nelícovaly a jehla by jimi neprošla.',6400,t=>{
+add('C','Řez: otvory lícují skrz obě vrstvy','Vidlička jde stejným otvorem jako poprvé, takže otvory v obou vrstvách leží přesně nad sebou. Z opačné strany by se šikmé otvory zkřížily.',6400,t=>{
   const a=seg(t,.1,.3), b=seg(t,.35,.55), c=seg(t,.6,.8);
   const k=5.2, ox=6+3*k, oy=58;
   let s=G(`translate(${f(ox)} ${oy}) scale(${k})`,`<clipPath id="cs4"><rect x="-3" y="-8" width="15" height="12"/></clipPath><g clip-path="url(#cs4)">${secPocket({x0:-3,x1:12,bh:3,glue:1,holes:[3.5],thru:1})}</g>`+
@@ -483,7 +483,7 @@ add('C','Řez: otvory lícují skrz obě vrstvy','V řezu je vidět, že vidlič
 const SEAM4=4*SEAM_LEN/1000, THR_LO=SEAM4+.25, THR_HI=SEAM4+.30;   // m: 4 × šev + 25–30 cm rezervy
 const m2=(v,d=2)=>cz((+v.toFixed(d)).toString());
 const THR_RANGE=`${m2(Math.round(THR_LO*20)/20)}–${m2(Math.round(THR_HI*20)/20)}`;   // zaokrouhleno na 5 cm
-add('D','Připravte nit asi 0,8 m','Orientačně 4 × délka švu + 25–30 cm rezervy na konce (návod „Jak odměřit nit“). Šev kapsy vede 23 otvory po bocích a dnem, asi '+Math.round(SEAM_LEN)+' mm: 4 × '+cz((SEAM_LEN/10).toFixed(1))+' cm ≈ '+Math.round(SEAM4*100)+' cm, s rezervou asi '+THR_RANGE+' m. Lekce počítá s nití asi 0,8 m – vystačí s rezervou. Voskovaný polyester 0,6 mm.',6400,t=>{
+add('D','Připravte nit asi 0,8 m','Připravte nit asi 0,8 m, to stačí s rezervou. Pravidlo: 4 × délka švu (asi '+Math.round(SEAM_LEN)+' mm) + 25–30 cm, tedy asi '+THR_RANGE+' m.',6400,t=>{
   const p=es(t,.05,.6), b=es(t,.62,.95);
   const poly='M'+DOTSL.map(([x,y])=>`${x} ${y}`).join(' L');
   let inner=stripLeather()+G(POCK_T,pocketLic()+`<path d="${poly}" fill="none" stroke="var(--accent)" stroke-width=".7" pathLength="1" stroke-dasharray="${f(p)} 2" stroke-linecap="round"/>`+noTop(seg(t,.5,.6)));
@@ -500,7 +500,7 @@ add('D','Připravte nit asi 0,8 m','Orientačně 4 × délka švu + 25–30 cm r
   return s;
 },'lic');
 
-add('D','Přišijte kapsu sedlářským stehem','Sedlářský steh jako u pouzdra na karty: dvě jehly proti sobě, každým otvorem, vždy stejné pořadí a stejné utažení. Šije se po bocích a dnem, 23 otvory, na začátku i na konci dva zpětné stehy (lekce 6); horní hrana zůstává volná – tudy se zasouvá mince.',11000,t=>{
+add('D','Přišijte kapsu sedlářským stehem','Přišijte kapsu sedlářským stehem po bocích a dnem, 23 otvory. Na začátku i na konci dva zpětné stehy. Horní hrana zůstává volná.',11000,t=>{
   const u=es(t,.04,.92)*22, n=Math.floor(u), fr=u-n;
   let inner=stripLeather()+G(POCK_T,pocketLic({stitch:n})+noTop(seg(t,.9,.98)));
   let s=clipMain('cd2',G(camT(POCKC),inner));
@@ -522,7 +522,7 @@ add('D','Přišijte kapsu sedlářským stehem','Sedlářský steh jako u pouzdr
   return s;
 },'lic');
 
-add('D','Hotovo: kapsa s mincí na předním panelu','Kapsa je nalepená a přišitá na přední panel na správném místě, horní hrana zůstává otevřená. Mince se zasouvá shora a okno Ø 20 ji drží – nepropadne. Pak v lekci 6 následuje otvor pro dřík a dřík druku naplocho.',7600,t=>{
+add('D','Hotovo: kapsa s mincí na předním panelu','Kapsa je přilepená a přišitá na správném místě, horní hrana je otevřená. Dál v lekci 6: otvor pro dřík a dřík druku.',7600,t=>{
   const ci=es(t,.05,.45), z=es(t,.55,.85);
   const cam=camL(POCKC,PANELC,z);
   let inner=stripLeather()+G(POCK_T,pocketLic({stitch:22,coin:L(-30,0,ci)}));

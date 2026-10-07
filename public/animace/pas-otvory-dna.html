@@ -98,7 +98,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 <header>
 <a class="backlink" href="/" data-back>← Zpět do lekce</a>
 <h1>Otvory dna naplocho</h1>
-<p class="lead">Projekt 02 „Pouzdro s vsazenou mincí“, mince 50 Kč, kůže 1,2 mm (bez ztenčení). Jak se otvory dna prosekají vidličkami na plochém pásu, ještě než se složí: přední panel z líce, zadní a vnitřní z rubu – lekce 5, krok „Prosekejte otvory dna“. Stejně se to v malém dělá na cvičném proužku v lekci 4, krok „Prosekejte otvory naplocho“. Kreslené v měřítku podle šablony PÁS pro kůži 1,2 mm: panely 72 × 104,1 mm, ohyb A 15,69 mm, ohyb B 8,66 mm, 17 otvorů na panel, rozteč 4 mm, 3,5 mm od dolní hrany, krajní otvor 4 mm od čáry ohybu.</p>
+<p class="lead">Projekt 02, mince 50 Kč, kůže 1,2 mm. Otvory dna na plochém pásu před složením: přední panel z líce, zadní a vnitřní z rubu (lekce 5; v malém lekce 4).</p>
 </header>
 
 <section class="card" aria-label="Animace postupu">
@@ -116,7 +116,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
   </div>
   <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
 </section>
-<p class="note">Postup podle lekce 5 (krok „Prosekejte otvory dna“) a lekce 4 (kroky „Vyznačte otvory dna zrcadlené přes ohyby“ a „Prosekejte otvory naplocho“). Držení vidliček, navazování řady a konec řady dvojhrotem podle lekce 3 pouzdra na karty, bezpečnost podle lekce 4. Pás a poloha otvorů jsou v měřítku; vidličky, palička a velikost šikmých zářezů jsou schematické. Kroky a poznámky označené „Tip“ lekce výslovně neuvádí.</p>
+<p class="note">Vidličky, palička a šikmé zářezy jsou schematické. „Tip“ označuje, co lekce neuvádí.</p>
 </div>
 
 <script>
@@ -289,7 +289,7 @@ const S=[];
 const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,side,tip});
 
 // A1
-add('A','Pás naplocho na tvrdé desce, lícem nahoru','Vyříznutý pás leží naplocho, lícem nahoru, tak jak ho kreslí šablona PÁS (lekce 5, po narýsování čar ohybů na rub): zadní panel s jazykem, ohyb A (15,69 mm), přední panel, ohyb B (8,66 mm) a vnitřní panel, všechny 72 × 104,1 mm. Šídlem propíchnuté tečky dna (17 na každém panelu) jsou vidět na líci i na rubu, stejně jako konce čar ohybů, rohy místa pro kapsu a střed dříku. Kapsa a druk přijdou až v lekci 6. Děrujte jen na tvrdé desce, ne na řezací podložce ani holém stole; deska leží na ručníku (lekce 3 pouzdra na karty).',8200,t=>{
+add('A','Pás naplocho na tvrdé desce, lícem nahoru','Vyříznutý pás položte naplocho lícem nahoru na tvrdou desku na ručníku, ne na řezací podložku. Propíchnuté tečky dna (17 na panel) jsou vidět na líci i na rubu.',8200,t=>{
   const c=OV;
   let s=G(camT(c),BOARD+strip(1,S0,{dot:.75,d:1.1,w:.6}));
   const P=[['ZADNÍ',46,118],['PŘEDNÍ',133.69,118],['VNITŘNÍ',214.35,118]];
@@ -303,10 +303,10 @@ add('A','Pás naplocho na tvrdé desce, lícem nahoru','Vyříznutý pás leží
   }
   s+=pill(4,87,t<.55?'pás lícem nahoru na tvrdé desce':'tečky dna: 3 × 17, propíchnuté šídlem',t<.55?'t':'ta');
   return s;
-},'lic',"Tip (lekce to neuvádí): animace ukazuje pás u kůže 1,2 mm bez ztenčení; tečky jsou kvůli viditelnosti zvětšené.");
+},'lic');
 
 // A2
-add('A','Kde leží otvory dna','Otvory dna leží na linii 3,5 mm od dolní hrany, rozteč přesně 4 mm, 17 na každém panelu. Řada je na panelu vystředěná: 16 mezer × 4 mm = 64 mm, krajní otvor (72 − 16 × 4) / 2 = 4 mm od čáry ohybu i od hrany. Na sousedních panelech leží tečky zrcadlově kolem ohybu – jen tak budou po složení lícovat (lekce 4). Vidličky musí mít rozteč přesně 4 mm; s 3,85 mm by otvory dna po složení nelícovaly.',9000,t=>{
+add('A','Kde leží otvory dna','Otvory leží 3,5 mm od dolní hrany, rozteč přesně 4 mm, 17 na panel. Krajní otvor je 4 mm od čáry ohybu i od hrany. Na sousedních panelech leží zrcadlově – jen tak po složení lícují. Vidličky musí mít rozteč přesně 4 mm.',9000,t=>{
   const c=CA2;
   let g=BOARD+strip(1,S0,{dot:.5});
   // čáry ohybu A (na líci nejsou – jen pro orientaci)
@@ -325,10 +325,10 @@ add('A','Kde leží otvory dna','Otvory dna leží na linii 3,5 mm od dolní hra
   let ib=notes([['17 otvorů','tw'],['na každém panelu'],['rozteč přesně 4 mm'],['3,5 mm od hrany'],['16 × 4 = 64 mm','t'],['(72 − 64) / 2'],['= 4 mm od čáry','t'],['ohybu i od hrany'],['vidličky 3,85:','ta'],['nelícovaly by','ta']],17,5.6);
   s+=inset('ŘADA DNA',ib);
   return s;
-},'lic','Tip (lekce to neuvádí): čárkované čáry ohybu A jsou jen pro orientaci – na líci se nekreslí, tužkou jsou jen na rubu.');
+},'lic','Tip: čárkované čáry ohybu jsou jen pro orientaci – na líc se nekreslí.');
 
 // A3
-add('A','Vidličky kolmo, jeden pevný úder paličkou','Vidličky postavte hroty na tečky, kolmo ve všech směrech. Držte je pevně u spodku, jeden pevný úder paličkou. Zkontrolujte, že všechny hroty prošly; pokud ne, ještě jeden úder bez pohnutí (lekce 3 pouzdra na karty). Mnoho lehkých úderů místo jednoho pevného: hroty se v kůži pootočí. Bezpečnost: vidličky držte pevně u spodku, palička dopadá na horní konec, ne na prsty (lekce 4).',10000,t=>{
+add('A','Vidličky kolmo, jeden pevný úder paličkou','Vidličky postavte hroty na tečky, kolmo ve všech směrech. Držte je pevně u spodku a udeřte jednou pevně paličkou na horní konec, ne na prsty. Když neprošly všechny hroty, udeřte ještě jednou bez pohnutí.',10000,t=>{
   const lt=64, lb=67;   // kůže (schéma, tloušťka zvětšená)
   let s=`<rect x="2" y="${lb}" width="80" height="14" rx="1" fill="var(--board)" stroke="var(--board-d)" stroke-width=".4"/>`;
   s+=`<rect x="4" y="${lt}" width="76" height="${lb-lt}" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".25"/><rect x="4" y="${lt}" width="76" height=".9" fill="var(--lic)"/>`;
@@ -359,7 +359,7 @@ add('A','Vidličky kolmo, jeden pevný úder paličkou','Vidličky postavte hrot
   }
   s+=inset('VIDLIČKY',ib);
   return s;
-},null,'Tip (lekce to neuvádí): pohled zboku je schéma, vidlička, ruka a palička nejsou v měřítku. Palička z plastu, gumy nebo syrové kůže, ne kovové kladivo – tak to uvádí karta vybavení Palička.');
+},null,'Tip: palička z plastu, gumy nebo syrové kůže, ne kovové kladivo.');
 
 // B1
 function frontRow(t,strikes,before,label){
@@ -370,7 +370,7 @@ function frontRow(t,strikes,before,label){
   {const [a,b]=tv(c,BXF-2,128);s+=pill(Math.min(82,a),b,'ohyb B →','ts','end')}
   return {s,r};
 }
-add('B','Přední panel z líce: první úder','Přední panel se prosekává z líce – pás leží lícem nahoru, tak jak je. Vidličky postavte hroty na první tečky, kolmo, a udeřte. Na líci zůstanou šikmé otvory „/“. Ohyb panel zrcadlově převrátí, takže šikmé otvory prosekané ze stejné strany by se po složení zkřížily a jehla by jimi neprošla – proto přední z líce, zadní a vnitřní z rubu (lekce 5).',7600,t=>{
+add('B','Přední panel z líce: první úder','Přední panel prosekejte z líce. Vidličky postavte na první tečky, kolmo, a udeřte. Zadní a vnitřní pak z rubu – ze stejné strany by se otvory po složení zkřížily.',7600,t=>{
   const {s:sm,r}=frontRow(t,[STR17[0]],new Set());
   let s=sm+pill(4,87,`přední z líce: ${r.done.size} / 17`,r.done.size?'t':'ts');
   let ib=notes([['z líce','tw'],['pás lícem nahoru'],['hroty na tečky'],['kolmo, 1 úder'],['šikmé otvory „/“','t']],16,5.6);
@@ -378,10 +378,10 @@ add('B','Přední panel z líce: první úder','Přední panel se prosekává z 
   ib+=`<g opacity="${f(seg(t,.7,.8))}">${notes([['6 hrotů → 6','t']],72)}</g>`;
   s+=inset('PŘEDNÍ',ib);
   return s;
-},'lic','Tip (lekce to neuvádí): u kterého konce řady začít, lekce neurčuje – animace začíná u ohybu A. Sada má podle vybavení projektu 2 hroty a 4 nebo 6 hrotů; animace ukazuje 6 hrotů.');
+},'lic','Tip: začít můžete u kteréhokoli konce.');
 
 // B2
-add('B','Navazujte řadu: první hrot do posledního otvoru','Vidličky posuňte tak, aby první hrot zapadl do posledního hotového otvoru. Tím drží rozteč a řada je rovná. Znovu zkontrolujte kolmost, pak úder (lekce 3 pouzdra na karty). Nepřekrytý poslední otvor: rozteč se rozjede a steh má „skok“. Se 6 hroty přibude každým dalším úderem 5 otvorů: 6 → 11 → 16.',10000,t=>{
+add('B','Navazujte řadu: první hrot do posledního otvoru','Vidličky posuňte tak, aby první hrot zapadl do posledního hotového otvoru – rozteč drží a řada je rovná. Zkontrolujte kolmost a udeřte.',10000,t=>{
   const {s:sm,r}=frontRow(t,STR17.slice(0,3),new Set(range(6)));
   let s=sm;
   // popisek k prvnímu hrotu
@@ -392,10 +392,10 @@ add('B','Navazujte řadu: první hrot do posledního otvoru','Vidličky posuňte
   ib+=notes([['první hrot','ta'],['do posledního','ta'],['hotového otvoru','ta'],['= rozteč drží,'],['řada je rovná'],['znovu kolmo,'],['pak úder']],40,5.4);
   s+=inset('NAVAZOVÁNÍ',ib);
   return s;
-},'lic','Tip (lekce to neuvádí): rozdělení úderů je jen příklad pro 6 hrotů; se 4 hroty to vyjde 4 → 7 → 10 → 13 → 16 a pak dvojhrot.');
+},'lic','Tip: se 6 hroty 6 → 11 → 16, se 4 hroty 4 → 7 → 10 → 13 → 16, pak dvojhrot.');
 
 // B3
-add('B','Konec řady dvojhrotem: 17 otvorů','Kde se řada blíží ke konci, dokončete ji vidličkami se 2 hroty (lekce 3 pouzdra na karty): první hrot do 16. otvoru, druhý na poslední tečku. Řada má 17 otvorů a krajní leží 4 mm od čáry ohybu B. Zkontrolujte, že je v řadě všech 17 otvorů – žádný vynechaný ani zdvojený (kontrolní bod lekce 3 pouzdra na karty).',7600,t=>{
+add('B','Konec řady dvojhrotem: 17 otvorů','Konec řady dokončete vidličkami se 2 hroty: první hrot do 16. otvoru, druhý na poslední tečku. Zkontrolujte, že je v řadě všech 17 otvorů.',7600,t=>{
   const {s:sm,r}=frontRow(t,[STR17[3]],new Set(range(16)));
   let s=sm;
   if(r.gp>.12&&r.gp<.62){const [hx,hy]=tv(CF,XS_F[15],SEAM_Y);s+=lead(hx-4,hy+12,hx-1,hy+1.6)+pill(Math.max(4,hx-30),hy+16,'první hrot v 16. otvoru','ta')}
@@ -409,7 +409,7 @@ add('B','Konec řady dvojhrotem: 17 otvorů','Kde se řada blíží ke konci, do
 },'lic');
 
 // C1
-add('C','Pás otočte rubem nahoru','Zadní a vnitřní panel se prosekávají z rubu (lekce 5). Pás otočte rubem nahoru. Propíchnuté tečky jsou vidět z obou stran, takže je máte i na rubu zadního a vnitřního panelu, odkud se budou prosekávat. Na rubu jsou i čtyři čáry ohybů narýsované tužkou v kroku „Narýsujte čáry ohybů na rub“ (lekce 5). Po otočení leží panely zrcadlově: vnitřní vlevo, zadní vpravo.',8600,t=>{
+add('C','Pás otočte rubem nahoru','Pás otočte rubem nahoru. Tečky jsou vidět i tady. Vnitřní panel je teď vlevo, zadní vpravo.',8600,t=>{
   const c=OV, p=es(t,.12,.62), s0=Math.cos(Math.PI*p);
   let s=G(camT(c),BOARD+strip(s0,{B:new Set(),F:ALL,I:new Set()},{dot:.75,d:1.1,w:.6,pencil:.5}));
   if(t<.12) s+=pill(4,87,'přední hotový z líce','tok');
@@ -425,7 +425,7 @@ add('C','Pás otočte rubem nahoru','Zadní a vnitřní panel se prosekávají z
     s+=pill(4,87,'rub nahoru: tečky vidět, tužkové čáry ohybů','t');
   }
   return s;
-},t=>t<.37?'lic':'rub','Tip (lekce to neuvádí): jak pás otočit, lekce neurčuje – animace ho otáčí jako stránku, takže dolní hrana s tečkami zůstává u vás.');
+},t=>t<.37?'lic':'rub','Tip: otočte ho jako stránku – dolní hrana s tečkami zůstane u vás.');
 
 // C2, C3
 function rubRow(t,c,ord,xs,before,key,label,arrowTxt){
@@ -437,7 +437,7 @@ function rubRow(t,c,ord,xs,before,key,label,arrowTxt){
   s+=pill(4,87,`${label.split(' ')[0].toLowerCase()} z rubu: ${r.done.size} / 17`,r.done.size===17?'tok':'t');
   return {s,r};
 }
-add('C','Zadní panel z rubu: 17 otvorů','Na rubu zadního panelu prosekejte otvory dna stejně jako na předním: hroty na propíchnuté tečky, vidličky kolmo, jeden pevný úder, první hrot do posledního hotového otvoru a konec řady dvojhrotem – 17 otvorů, rozteč 4 mm. Z rubu jsou nové otvory při pohledu na rub také „/“.',11000,t=>{
+add('C','Zadní panel z rubu: 17 otvorů','Zadní panel prosekejte z rubu stejně: hroty na tečky, kolmo, jeden úder, první hrot do posledního otvoru, konec dvojhrotem. 17 otvorů.',11000,t=>{
   const {s:sm,r}=rubRow(t,CBK,ORD_B,XS_B,{B:new Set(),I:new Set()},'B','ZADNÍ · rub');
   let s=sm;
   {const [a,b]=tv(CBK,MIRX-FX+1,128);s+=pill(Math.max(4,a),b,'← ohyb A','ts','start')}
@@ -446,9 +446,9 @@ add('C','Zadní panel z rubu: 17 otvorů','Na rubu zadního panelu prosekejte ot
   ib+=lbl(91,80,`${r.done.size} / 17`,r.done.size===17?'tok':'t');
   s+=inset('ZADNÍ',ib);
   return s;
-},'rub','Tip (lekce to neuvádí): pořadí panelů a stranu, od které začít, lekce neurčuje – animace začíná u ohybu A.');
+},'rub');
 
-add('C','Vnitřní panel z rubu: 17 otvorů','Stejně prosekejte vnitřní panel z rubu: 17 otvorů, rozteč 4 mm, 3,5 mm od dolní hrany, krajní 4 mm od čáry ohybu B i od hrany. Přední panel už je hotový z líce – přes jeho otvory z rubu znovu nesekejte.',11000,t=>{
+add('C','Vnitřní panel z rubu: 17 otvorů','Stejně prosekejte vnitřní panel z rubu, 17 otvorů. Přední panel z rubu znovu nesekejte.',11000,t=>{
   const {s:sm,r}=rubRow(t,CIN,ORD_I,XS_I,{B:ALL,I:new Set()},'I','VNITŘNÍ · rub');
   let s=sm;
   {const [a,b]=tv(CIN,MIRX-BXF+2,128);s+=pill(Math.min(82,a),b,'ohyb B →','ts','end')}
@@ -456,10 +456,10 @@ add('C','Vnitřní panel z rubu: 17 otvorů','Stejně prosekejte vnitřní panel
   ib+=lbl(91,80,`${r.done.size} / 17`,r.done.size===17?'tok':'t');
   s+=inset('VNITŘNÍ',ib);
   return s;
-},'rub','Tip (lekce to neuvádí): animace začíná u ohybu B; že se přes otvory předního panelu z rubu znovu neseká, plyne z lekce 5 (přední z líce).');
+},'rub');
 
 // D1
-add('D','Kontrola sklonu a počtu','Při pohledu na kteroukoli stranu má přední panel opačný sklon šikmých otvorů než zadní a vnitřní: z rubu jsou zadní a vnitřní „/“ a přední „\\“, z líce naopak – tak to ukazuje i ilustrace k lekcím 4 a 5 (z líce „/“, z rubu „\\“). Zkontrolujte, že má každý panel 17 otvorů, žádný vynechaný ani zdvojený (kontrolní bod lekce 3 pouzdra na karty), a že je řada rovná i na straně, kudy hroty vyšly. Lekce 4 a 7 to kontrolují na rubu švu: otvory na rubu mají být stejně rovné jako na líci; když nejsou, vidličky nebyly při děrování kolmo.',11000,t=>{
+add('D','Kontrola sklonu a počtu','Zkontrolujte, že má každý panel 17 otvorů a řada je rovná i na straně, kudy hroty vyšly. Přední panel má opačný sklon otvorů než zadní a vnitřní – to je správně.',11000,t=>{
   const c=OV, p=es(t,.42,.6), s0=-Math.cos(Math.PI*p);
   const done={B:ALL,F:ALL,I:ALL};
   let s=G(camT(c),BOARD+strip(s0,done,{dot:.75,d:1.1,w:.6,pencil:.5}));
@@ -477,10 +477,10 @@ add('D','Kontrola sklonu a počtu','Při pohledu na kteroukoli stranu má předn
   else if(t<.62) s+=pill(4,87,'otočit zpátky lícem nahoru','t');
   else s+=pill(4,87,'z líce: přední „/“, zadní a vnitřní „\\“','tok');
   return s;
-},t=>t<.51?'rub':'lic','Tip (lekce to neuvádí): „rovné“ znamená v jedné řadě se stejnou roztečí, ne se stejným sklonem – opačný sklon na druhé straně je v pořádku, je to tentýž zářez viděný zezadu. Bubliny ukazují zářezy zvětšené; skutečný sklon a délka zářezu závisí na vidličkách.');
+},t=>t<.51?'rub':'lic');
 
 // D2
-add('D','Proč z obou stran: po složení mají všechny tři stejný sklon','Ohyb panel zrcadlově převrátí. Vnitřní panel se ohybem B přeloží za přední, zadní panel ohybem A přes všechno (lekce 7) – jejich „\\“ se tím otočí na „/“ a při pohledu zepředu leží otvory všech tří panelů na sobě se stejným sklonem, jehla projde. Kdyby se všechno prosekalo ze stejné strany, šikmé otvory by se po složení zkřížily a jehla by jimi neprošla (lekce 5).',11000,t=>{
+add('D','Proč z obou stran: po složení mají všechny tři stejný sklon','Ohyb panel převrátí. Po složení proto leží otvory všech tří panelů na sobě se stejným sklonem a jehla projde. Ze stejné strany by se zkřížily.',11000,t=>{
   const pB=es(t,.12,.42), pA=es(t,.48,.78);
   const k=1.05, ox=4;
   let s=lbl(4,7,'SPRÁVNĚ','tok')+lbl(4,11.6,'přední z líce, zadní a vnitřní z rubu','ts');
@@ -499,7 +499,7 @@ add('D','Proč z obou stran: po složení mají všechny tři stejný sklon','Oh
   else if(t<.8) s+=pill(4,87,'ohyb A: zadní přes všechno','t');
   else s+=pill(4,87,'P · V · Z na sobě, stejný sklon','tok');
   return s;
-},null,'Tip (lekce to neuvádí): mini-schéma má 4 otvory na panel místo 17 a ohyby kreslí jako přeložení naplocho; skutečná smyčka ohybu je v animaci „Složení pouzdra a šev dna“.');
+},null,'Tip: schéma má jen 4 otvory na panel a ohyby přeložené naplocho.');
 
 // E1 — cvičný proužek
 const PK=.68, POX=3.1, POY=22;
@@ -513,7 +513,7 @@ function practiceStrip(s0,st){
   g+=row(PR.hZ,st.Z,'\\')+row(PR.hP,st.P,'/')+row(PR.hV,st.V,'\\');
   return G(`translate(${f(PX_(c))} 0) scale(${f(Math.abs(s0)<.02?.02*Math.sign(s0||1):s0)} 1) translate(${f(-PX_(c))} 0)`,g);
 }
-add('E','Lekce 4: cvičný proužek stejně, 6 otvorů na panel','Na odřezku v lekci 4 je to stejné v malém: prostřední panel (zastupuje přední) z líce, oba krajní panely (zastupují zadní a vnitřní) z rubu – přesně jako to čeká finální pás. Z kusu asi 130 × 40 mm je proužek vyříznutý po obrysu cvičného listu pro kůži 1,2 mm (dolní čára obrysu přiložená na rovnou dolní hranu kusu, od ní se měří linie švu 3,5 mm): 114,35 × 40 mm, tři panely po 30 mm, ohyb A 15,69 mm a ohyb B 8,66 mm (lekce 4: asi 15,7 a 8,7). Rozteč 4 mm, linie švu 3,5 mm od dolní hrany, 6 otvorů na panel, krajní (30 − 5 × 4) / 2 = 5 mm od čáry ohybu i od konce proužku.',12000,t=>{
+add('E','Lekce 4: cvičný proužek stejně, 6 otvorů na panel','Na cvičném proužku v lekci 4 stejně: prostřední panel z líce, oba krajní z rubu. Panely 30 mm, rozteč 4 mm, 3,5 mm od dolní hrany, 6 otvorů na panel, krajní 5 mm od čáry ohybu i od hrany.',12000,t=>{
   const pFlip=es(t,.36,.56), s0=Math.cos(Math.PI*pFlip);
   const hitP=seg(t,.1,.3), hitZ=seg(t,.6,.75), hitV=seg(t,.78,.93);
   const st={Z:new Set(hitZ>=.5?range(6):[]),P:new Set(hitP>=.5?range(6):[]),V:new Set(hitV>=.5?range(6):[])};
@@ -542,10 +542,10 @@ add('E','Lekce 4: cvičný proužek stejně, 6 otvorů na panel','Na odřezku v 
   let ib=notes([['proužek','tw'],['114,35 × 40 mm'],['panely 30 mm'],['6 otvorů na panel','t'],['rozteč 4 mm'],['3,5 mm od hrany'],['krajní 5 mm od'],['čáry ohybu i konce'],['(30 − 5 × 4) / 2'],['střed z líce','t'],['krajní z rubu','t']],16,5.4);
   s+=inset('LEKCE 4',ib);
   return s;
-},t=>t<.46?{v:'LÍC',sub:'proužek lícem nahoru'}:{v:'RUB',sub:'proužek rubem nahoru'},'Tip (lekce to neuvádí): pořadí panelů lekce neurčuje – animace začíná prostředním z líce. Se 6 hroty stačí na panel jeden úder; se 4 hroty 4 otvory a pak dvakrát dvojhrot (první hrot vždy do posledního otvoru). Animace kreslí proužek podle cvičného listu: tečky dna a konce čar ohybů a švu propíchnuté přes list, proužek vyříznutý po obrysu, na rubu tužkou spojené konce čar ohybů; bez listu zůstane proužek asi 130 mm dlouhý a konce za krajními panely jsou rezerva (lekce 4).');
+},t=>t<.46?{v:'LÍC',sub:'proužek lícem nahoru'}:{v:'RUB',sub:'proužek rubem nahoru'},'Tip: se 6 hroty stačí na panel jeden úder; se 4 hroty 4 otvory a pak dvakrát dvojhrot.');
 
 // E2
-add('E','Lekce 4: po složení zkontrolujte, že otvory lícují','Až proužek navlhčený přeložíte kolem karet ve fólii (ohyb B) a přeloženého papíru místo bankovek (ohyb A přes všechno), zkontrolujte ještě před zaschnutím, že se naplocho prosekané otvory na sousedních panelech po složení lícují (lekce 4). Kontrolní bod: naplocho prosekané otvory na všech třech panelech se po složení lícují.',9000,t=>{
+add('E','Lekce 4: po složení zkontrolujte, že otvory lícují','Po přeložení proužku kolem obsahu zkontrolujte ještě před zaschnutím, že otvory na sousedních panelech lícují. Když ne, dokud je kůže vlhká, ohyb rozevřete a přeložte se smyčkou posunutou tak, aby seděly.',9000,t=>{
   const pB=es(t,.1,.42), pA=es(t,.48,.8);
   let s=`<rect x="0" y="12" width="84" height="56" fill="var(--board)" stroke="var(--board-d)" stroke-width=".4"/>`;
   s+=foldMini(PR,PK,POX,POY,pB,pA,{d:.6});
@@ -555,10 +555,10 @@ add('E','Lekce 4: po složení zkontrolujte, že otvory lícují','Až proužek 
   else if(t<.84) s+=pill(4,87,'ohyb A: druhý krajní přes všechno','t');
   else s+=pill(4,87,'otvory všech tří panelů lícují','tok');
   let ib=lbl(89,16,'pohled zepředu','ts')+lbl(89,21.5,'(v průhledu)','ts');
-  ib+=`<g opacity="${f(seg(t,.82,.9))}">${detailPVZ(89,26)}${notes([['lícují?','t'],['ne: dokud je kůže','ts'],['vlhká, ohyb'],['rozevřít a přeložit'],['znovu (lekce 4)']],55,5.4)}</g>`;
+  ib+=`<g opacity="${f(seg(t,.82,.9))}">${detailPVZ(89,26)}${notes([['lícují?','t'],['ne: dokud je kůže','ts'],['vlhká, ohyb'],['rozevřít, smyčku'],['posunout (lekce 4)']],55,5.4)}</g>`;
   s+=inset('KONTROLA',ib);
   return s;
-},{v:'LÍC',sub:'pohled zepředu'},'Tip (lekce to neuvádí): karty a papír nejsou nakreslené a ohyby jsou přeložené naplocho, aby byly vidět otvory; skutečné skládání kolem obsahu ukazuje animace „Složení pouzdra a šev dna“.');
+},{v:'LÍC',sub:'pohled zepředu'},'Tip: obsah není nakreslený a ohyby jsou naplocho, aby byly vidět otvory.');
 
 // ---------- engine ----------
 const svg=document.getElementById('stage');

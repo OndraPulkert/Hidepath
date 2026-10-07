@@ -47,7 +47,7 @@ const photo = (id: string, caption: string): MediaSlot => ({
 
 /** Připomínka na začátek každé stavební lekce: čísla podle listů pro změřenou kůži. */
 const NUMBERS_NOTE =
-  'Čísla v této lekci jsou pro výchozí střih (P1 1,0 mm, přepážky a L1 0,6 mm). Pokud máte listy pro změřenou kůži nebo pro zálohu, berte čísla z rámečku „Čísla pro postup“ na listu 4 těchto listů.';
+  'Čísla v lekci platí pro výchozí střih. Máte-li listy pro změřenou kůži nebo pro zálohu, berte čísla z rámečku „Čísla pro postup“ na listu 4.';
 
 const L1 = '01-measure-and-sheets';
 const L2 = '02-paper-model';
@@ -69,7 +69,7 @@ export const lessons: readonly LessonDefinition[] = [
     order: 1,
     phaseSlug: 'prepare',
     estimatedMinutes: 90,
-    goal: 'Změřit dodanou kůži, vygenerovat v aplikaci a vytisknout listy střihu pro změřenou tloušťku, zkontrolovat tisk 1:1 a slepit vložku dna ze starých karet.',
+    goal: 'Změřit kůži, vytisknout listy pro její tloušťku, zkontrolovat měřítko a slepit vložku dna ze starých karet.',
     materials: [
       'kůže z jedné objednávky: kaštan 20 × 50 cm (P1), nebarvená kozinka (D1 a L1), čokoládová kozinka (D2)',
       'papír a tužka na zápis tlouštěk',
@@ -84,39 +84,39 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'measure',
         title: 'Změřte tloušťku kůže',
-        body: 'Posuvkou změřte na několika místech P1 (kaštan), D1 (nebarvená kozinka), D2 (čokoládová kozinka) a L1 (z nebarvené kozinky) a zapište. Tloušťka v názvu produktu (0,9–1, 0,8–1 a 0,7–0,9 mm) je jen rozsah, skutečnou určí až měření. Měřte tam, odkud díl vyříznete: přířezy si na kusu předem obkreslete (u kaštanu dva přířezy P1 110 × 240 mm vedle sebe, odřezky na zkoušky z pruhu vedle nich). Do listů zadejte průměr měření v místě dílu (doporučení, ověřit na prototypu); u přepážek zadejte větší z D1 a D2. Pro mez přepážek 0,92 mm platí největší naměřená hodnota: přepážka silnější než 0,92 mm nejde použít, díl vyřízněte z tenčího místa kusu, nebo kupte tenčí kozinku.',
+        body: 'Přířezy si na kůži předem obkreslete: u kaštanu dva přířezy P1 110 × 240 mm vedle sebe, odřezky na zkoušky z pruhu vedle nich. Posuvkou změřte na několika místech tloušťku P1 (kaštan), D1 a L1 (nebarvená kozinka) a D2 (čokoládová kozinka) – vždy tam, odkud díl vyříznete – a zapište. Do listů zadejte průměr měření v místě dílu (doporučení, ověřte na zkušebním kuse), u přepážek větší z D1 a D2. Přepážka nesmí mít nikde víc než 0,92 mm: jinak ji vyřízněte z tenčího místa, nebo kupte tenčí kozinku.',
         media: [photo('lw-l1-measure', 'Posuvka měří tloušťku kozinky na okraji kusu')],
       },
       {
         id: 'sheets-for-thickness',
         title: 'Získejte listy pro změřenou tloušťku',
         printLink: 'pattern-sheets',
-        body: 'Předem vytištěné listy v aplikaci jsou pro výchozí střih: P1 1,0 mm, přepážky D1/D2 a podšívka L1 0,6 mm. Koupené kozinky mají skoro vždy víc (0,7–0,9 mm) a pak se mění skoro všechna čísla postupu – například při přepážkách 0,8 mm je peněženka vysoká 83,0 mm, P1 má 230,86 mm, osa ohybu je v 61,71, dno karet v 25,5 a okno pro lepení magnetu jen 11,50–11,63. Proto potřebujete listy pro svou kůži. Vygenerujete je přímo v aplikaci: na stránce Listy střihu v části „Listy pro vaši kůži“ zadejte změřenou P1, větší z D1 a D2 a L1 a stiskněte Vygenerovat listy. Aplikace je spočítá stejně jako generátor v repozitáři („pnpm pattern:wallet-lid --divider <větší z D1 a D2> --lining <L1>“, a když se P1 liší od 1,0 o 0,05 mm a víc, navíc „--p1 <změřená P1>“; menší rozdíl aplikace sama bere jako 1,0). Když kontroly neprojdou, listy nevzniknou a aplikace česky vypíše, co neplatí.',
+        body: 'Předem vytištěné listy platí jen pro výchozí střih (P1 1,0 mm, přepážky a L1 0,6 mm); s jinou tloušťkou se mění skoro všechna čísla. Na stránce Listy střihu v části „Listy pro vaši kůži“ zadejte změřenou P1, větší z D1 a D2 a L1 a stiskněte Vygenerovat listy. Když střih s touto kůží neplatí, aplikace listy nevytvoří a napíše proč.',
         media: [],
       },
       {
         id: 'sheets-rule',
         title: 'Kdy listy generovat znovu',
-        body: 'Listy pro změřenou kůži vytiskněte teď: podle nich slepíte i papírový model P0 (lekce 2). Znovu je generujete jen ve dvou případech: když P0 změní vstupy modelu (lekce 2, krok Zapište výsledky), nebo když zkouška ohybu V12 či zkušební kus vybere zálohu (lekce 3 a 12) – pak jedním zadáním se vším, co platí (změřené tloušťky i záloha). Pokaždé nové listy znovu zkontrolujte jako v dalším kroku.',
+        body: 'Listy vytiskněte hned, podle nich slepíte i papírový model (lekce 2). Znovu je generujte, jen když P0 změní vstupy modelu (lekce 2), nebo když zkouška ohybu V12 či zkušební kus vybere zálohu (lekce 3 a 12). Pak zadejte najednou všechno, co platí (tloušťky i zálohu), a nové listy zkontrolujte jako v dalším kroku.',
         media: [],
       },
       {
         id: 'print-check',
         title: 'Vytiskněte a zkontrolujte měřítko',
         printLink: 'pattern-sheets',
-        body: 'Tiskněte na A4 na výšku bez přizpůsobení velikosti (100 %). Změřte kontrolní úsečku 50 mm. Úsečka ale neodhalí chybu měřítka 0,5 % (na P1 asi 1,2 mm), proto změřte i kótu P1 na listu 1 a porovnejte ji s rámečkem „Čísla pro postup“ na listu 4 (výchozí střih 231,66 mm, tolerance ±0,5). Když nesedí, vytiskněte list znovu.',
+        body: 'Tiskněte na A4 na výšku v měřítku 100 % (bez přizpůsobení stránce). Změřte kontrolní úsečku 50 mm a kótu P1 na listu 1: musí sedět s rámečkem „Čísla pro postup“ na listu 4 na ±0,5 mm (výchozí 231,66 mm). Samotná úsečka malou chybu měřítka neodhalí. Když něco nesedí, vytiskněte list znovu.',
         media: [],
       },
       {
         id: 'numbers-box',
         title: 'Čísla berte z rámečku na listu 4',
-        body: 'Rámeček „Čísla pro postup“ na listu 4 obsahuje všechno, co postup potřebuje: kótu P1, osu ohybu, hranu vložky, pás závěsu, konec lepení G3, plíšek, G2 a S6, očekávanou hranu víčka, značku magnetu a okno lepení. Čísla v textu lekcí jsou jen příklad výchozího střihu. Nejcitlivější je značka magnetu: s přepážkami 0,8 je okno lepení jen 0,13 mm široké.',
+        body: 'Všechna čísla pro postup berte z rámečku „Čísla pro postup“ na listu 4: kótu P1, osu ohybu, hranu vložky, pás závěsu, konec lepení G3, plíšek, G2, S6, hranu víčka, značku magnetu a okno lepení. Čísla v textu lekcí jsou jen příklad výchozího střihu. Nejpřesněji musí sedět značka magnetu – okno lepení může mít jen 0,13 mm.',
         media: [],
       },
       {
         id: 'spacer',
         title: 'Slepte vložku dna ze starých karet',
-        body: 'Vložka dna je jediný přípravek: potřebuje aspoň 111 × 25 × 1,5 mm. Slepte ji ze 4 starých karet: 2 vrstvy na sobě (2 × 0,76 = 1,52 mm), v každé vrstvě 2 karty vedle sebe kratšími hranami k sobě. Dlouhou hranu, která půjde do ohybu, odstřihněte u všech karet rovně o 4 mm, aby u spoje nezůstaly zaoblené rohy (po střihu zkontrolujte pohledem). Výšku karet nezkracujte: vložka pak měří asi 111 × 50 mm a víc než potřebných 25 mm nevadí. Každá vrstva je o 60,2 mm delší než 111: v jedné vrstvě přebytek ustřihněte zleva, v druhé zprava, aby spoje ležely proti sobě posunuté. Vrstvy slepte lepicí páskou. Stačí i jiný rovný tuhý pás 1,5 mm (tloušťku změřte posuvkou). Jestli vložka ohyb udrží rovný, ukáže zkouška ohybu V12.',
+        body: 'Vložka dna musí mít aspoň 111 × 25 × 1,5 mm. Slepte ji lepicí páskou ze 4 starých karet: 2 vrstvy na sobě (2 × 0,76 = 1,52 mm), v každé vrstvě 2 karty vedle sebe kratšími hranami k sobě. Dlouhou hranu, která půjde do ohybu, odstřihněte u všech karet rovně o 4 mm, ať u spoje nejsou zaoblené rohy. Výšku karet nezkracujte (vložka bude asi 111 × 50 mm). Přebytek délky 60,2 mm ustřihněte v jedné vrstvě zleva a v druhé zprava, aby spoje nebyly nad sebou. Stačí i jiný rovný tuhý pás 1,5 mm (změřte posuvkou). Jestli vložka ohyb udrží rovný, ukáže zkouška V12.',
         media: [
           ill(
             'lw-l1-spacer',
@@ -128,35 +128,34 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'templates-later',
         title: 'Šablony vyřízněte až po papírovém modelu',
-        body: 'Šablonu konce jazýčku z listu 4 a šablonu výřezu pro palec z listu 1 nalepíte na tvrdý papír a vyříznete až na konci lekce 2, po papírovém modelu: model může změnit výřez i výšku. Když je změní, vyřízněte šablony z nově vytištěných listů.',
+        body: 'Šablony konce jazýčku (list 4) a výřezu pro palec (list 1) vyřízněte až na konci lekce 2: papírový model je může změnit.',
         media: [],
       },
     ],
     checkpoints: [
       {
         slug: 'thickness-recorded',
-        title:
-          'Tloušťky P1, D1, D2 a L1 jsou změřené a zapsané a žádná přepážka není silnější než 0,92 mm.',
+        title: 'Tloušťky P1, D1, D2 a L1 jsou zapsané a žádná přepážka nemá víc než 0,92 mm.',
         required: true,
       },
       {
         slug: 'sheets-checked',
         title:
-          'Máte vytištěné listy pro změřenou tloušťku (nebo platí výchozí), úsečka měří 50 mm a kóta P1 sedí s rámečkem na listu 4 na ±0,5 mm.',
+          'Listy pro změřenou tloušťku (nebo výchozí) jsou vytištěné, úsečka měří 50 mm a kóta P1 sedí s rámečkem na listu 4 na ±0,5 mm.',
         required: true,
       },
       {
         slug: 'spacer-ready',
         title:
-          'Vložka dna (aspoň 111 × 25 × 1,5 mm, z karet asi 111 × 50) je slepená a hrana, která jde do ohybu, je rovná bez zaoblených rohů.',
+          'Vložka dna (aspoň 111 × 25 × 1,5 mm) je slepená a hrana do ohybu je rovná, bez zaoblených rohů.',
         required: true,
       },
     ],
     commonMistakes: [
-      'Tisk s „přizpůsobit stránce“: list je pak menší a úsečka ani kóta P1 nesedí.',
-      'Čísla z textu lekcí místo z rámečku „Čísla pro postup“ na listech pro změřenou kůži.',
-      'Přepážka vyříznutá z tlustšího místa kozinky (nad 0,92 mm): takovou střih odmítne.',
-      'Tloušťka změřená jinde, než odkud se díl pak vyřízne.',
+      'Tisk s „přizpůsobit stránce“: úsečka ani kóta P1 pak nesedí.',
+      'Čísla z textu lekcí místo z rámečku na listu 4.',
+      'Přepážka z tlustšího místa kozinky (nad 0,92 mm): střih ji odmítne.',
+      'Tloušťka změřená jinde, než odkud se díl vyřízne.',
     ],
     safety: [],
     media: [photo('lw-l1-hero', 'Vytištěné listy 1–4 peněženky Víčko, posuvka měří kótu P1')],
@@ -168,11 +167,11 @@ export const lessons: readonly LessonDefinition[] = [
     order: 2,
     phaseSlug: 'prepare',
     estimatedMinutes: 90,
-    goal: 'Slepit papírový model 1:1 a se skutečnými kartami, bankovkami a mincemi ověřit, že se vejde 6 karet, bankovky složené napůl a 4 mince, víčko se zavře a výřez pro palec funguje.',
+    goal: 'Slepit papírový model 1:1 a se skutečným obsahem ověřit, že se vejde 6 karet, bankovky napůl a 4 mince, víčko se zavře a výřez pro palec funguje.',
     materials: [
-      'listy 1–3 pro změřenou kůži z lekce 1 (nebo výchozí, když platí), vytištěné 1:1 na tvrdší papír',
-      'list 4 a list 1 ještě jednou na šablony, tvrdý papír (čtvrtka) a lepidlo na papír',
-      'lepicí páska místo švů a lepení, nůžky, nůž a pravítko na okénka',
+      'listy 1–3 pro změřenou kůži (lekce 1) vytištěné 1:1 na tvrdší papír',
+      'list 4 a list 1 ještě jednou na šablony, čtvrtka a lepidlo na papír',
+      'lepicí páska místo švů a lepení, nůžky, nůž a pravítko',
       '6 karet, bankovky 100–5000 Kč (které máte) a 4 mince 50 Kč',
       'papír a tužka na zápis výsledků',
     ],
@@ -184,13 +183,13 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'glue-model',
         title: 'Slepte model',
         printLink: 'pattern-sheets',
-        body: 'Z tvrdšího papíru podle listů 1–3 vystřihněte pás P1, přepážku D1 a přepážku D2. Do P1 vyřízněte obě okénka mincí 12 × 48 mm, okénko bankovek 14 × 45 mm (skrz P1 i D2) a výřez pro palec – bez nich nejde vyzkoušet vysouvání. Přepážky lepte páskou jen tam, kde se v kůži lepí: D2 na záda v pásech G3 (dno, boky a střed mezi sloupci, list 2), D1 na přední stěnu v G2 a G2b. Sloupce mincí a kapsa karet musí zůstat volné. Boky slepte páskou místo švů S4 a S5. Dovnitř pak přijdou skutečné karty, bankovky a mince.',
+        body: 'Podle listů 1–3 vystřihněte z tvrdšího papíru P1, D1 a D2. Do P1 vyřízněte obě okénka mincí 12 × 48 mm, okénko bankovek 14 × 45 mm (skrz P1 i D2) a výřez pro palec. Přepážky lepte páskou jen tam, kde se lepí v kůži: D2 na záda v pásech G3 (dno, boky a střed mezi sloupci, list 2), D1 na přední stěnu v G2 a G2b. Sloupce mincí a kapsa karet musí zůstat volné. Boky slepte páskou místo švů S4 a S5.',
         media: [photo('lw-l2-model', 'Slepený papírový model peněženky Víčko s vloženými kartami')],
       },
       {
         id: 'insert-rule',
         title: 'Kam co patří',
-        body: 'Ústí jsou tři štěrbiny těsně za sebou. Karty patří do první štěrbiny u přední stěny (na straně jazýčku), před přepážku D1 s barevnou horní hranou. Kartu s magnetickým proužkem vkládejte proužkem k horní hraně (k víčku). Bankovky napůl patří mezi D1 a D2, mince za D2 do levého nebo pravého sloupce. Karta omylem v oddílu bankovek by ležela u magnetu a mohla by přijít o proužek.',
+        body: 'Ústí má tři štěrbiny za sebou. Karty patří do první štěrbiny u přední stěny (na straně jazýčku), před D1 s barevnou horní hranou; kartu s magnetickým proužkem vkládejte proužkem k horní hraně (k víčku). Bankovky napůl patří mezi D1 a D2, mince za D2 do levého nebo pravého sloupce. Karta v oddílu bankovek by ležela u magnetu a mohla by přijít o proužek.',
         media: [
           ill(
             'lw-l2-slots',
@@ -202,19 +201,19 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'bills',
         title: 'Bankovky (P0-1, P0-2)',
-        body: 'Změřte rozměry a tloušťku 10 bankovek a zapište je: délku rozložené bankovky ocelovým pravítkem (je delší než 150 mm, posuvka ji nezměří), výšku, šířku složené bankovky a tloušťku posuvkou. Vejdou se všechny bankovky 100–5000 Kč složené napůl? Pak nízkou stokorunu posuňte ukazováčkem v okénku bankovek (14 × 45 mm uprostřed zad) nahoru a zapište, kolik mm vyčnívá nad ústí. Cíl je aspoň 15 mm, model počítá s 19 mm. Když je to méně, okénko by se muselo prodloužit dolů.',
+        body: 'Změřte a zapište rozměry a tloušťku 10 bankovek: délku rozložené ocelovým pravítkem, výšku, šířku složené a tloušťku posuvkou. Vejdou se všechny bankovky 100–5000 Kč složené napůl? Pak posuňte nízkou stokorunu ukazováčkem v okénku bankovek nahoru a zapište, kolik mm vyčnívá nad ústí. Cíl je aspoň 15 mm (model počítá s 19 mm). Při menší hodnotě by se okénko muselo prodloužit dolů.',
         media: [],
       },
       {
         id: 'k',
         title: 'Poloha víčka (P0-3)',
-        body: 'Na jazýček udělejte rysku. Zapište její polohu ve stavu A (prázdná), B (2 karty, 1 bankovka, 1 mince), C (6 karet, 3 bankovky, 4 × 50 Kč) a C se 2 + 2 mincemi nahoře, zvlášť nad sloupci a nad středem. Spočítejte k = (y_C − y_A) / (P(C) − P(A)). Dělitel P(C) − P(A) je v rámečku „Čísla pro postup“ na listu 4 (výchozí 8,62). Když vyjde k větší než 1,24, musí se zvednout dno karet a výška, nebo přijmout menší plnost.',
+        body: 'Na jazýček udělejte rysku a zapište její polohu ve stavu A (prázdná), B (2 karty, 1 bankovka, 1 mince), C (6 karet, 3 bankovky, 4 × 50 Kč) a C s 2 + 2 mincemi nahoře, zvlášť nad sloupci a nad středem. Spočítejte k = (y_C − y_A) / (P(C) − P(A)); dělitel je v rámečku na listu 4 (výchozí 8,62). Vyjde-li k nad 1,24, musí se zvednout dno karet a výška, nebo přijmout menší plnost.',
         media: [],
       },
       {
         id: 'thumb-notch',
         title: 'Výřez pro palec (P0-4)',
-        body: 'S 1, 2 a 6 kartami: (a) vysuňte přední kartu palcem ve výřezu třením nahoru, (b) vytáhněte zadní kartu po vyndání předních, u obou zapište, jestli to jde a jak dlouho to trvá. Výřez slouží jen přední kartě. Zasuňte kartu s vystouplým písmem a prohnutou kartu: zachytí se o dno výřezu? Pak 20× zavřete víčko ve stavu A (bez karet), s 1 kartou, ve stavu B a C, navíc s jazýčkem posunutým o 3 mm vlevo i vpravo: zachytí se špička jazýčku o výřez, zajede pod hranu dna výřezu nebo za přední stěnu?',
+        body: 'S 1, 2 a 6 kartami vysuňte přední kartu palcem ve výřezu a vytáhněte zadní kartu po vyndání předních. Zapište, jestli to jde a jak dlouho to trvá. Zkuste i kartu s vystouplým písmem a prohnutou kartu: zachytí se o dno výřezu? Pak 20× zavřete víčko ve stavu A, s 1 kartou, ve stavu B a C a s jazýčkem posunutým o 3 mm vlevo i vpravo. Zachytí se špička jazýčku o výřez, nebo zajede pod dno výřezu či za přední stěnu?',
         media: [
           ill(
             'lw-l2-notch',
@@ -226,32 +225,32 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'coins-wedge',
         title: 'Mince a zvednutí na klínu dna (P0-5, P0-6)',
-        body: 'Vyzkoušejte vysunutí jedné mince okénkem sloupce a vložení mince do ústí; mince 50 Kč má ve sloupci volně klouzat. Pak změřte, o kolik výš nad čárou lepení G2 sedí spodní hrana svazku 6 karet a o kolik výš nad lepením G3a sedí sloupec 2 × 50 Kč. Model počítá s 2,28 mm u karet a 1,25 mm u mincí; jiné hodnoty zapište.',
+        body: 'Vyzkoušejte vysunutí mince okénkem sloupce a vložení mince do ústí; mince 50 Kč má ve sloupci volně klouzat. Změřte, o kolik výš nad lepením G2 sedí spodní hrana svazku 6 karet a o kolik výš nad lepením G3a sedí sloupec 2 × 50 Kč. Model počítá s 2,28 mm a 1,25 mm, jiné hodnoty zapište.',
         media: [],
       },
       {
         id: 'full-and-sequence',
         title: 'Plný stav a celý sled (P0-7, P0-8)',
-        body: 'Vložte plný stav: 6 karet, 3 bankovky a 4 × 50 Kč. Pak vyzkoušejte celý sled s otevřeným víčkem. Otevřené víčko samo nestojí a pruží zpátky nad ústí – tak to má být. U bankovek a mincí ho drží palec ruky, která peněženku drží, a ukazováček téže ruky posouvá bankovku v okénku bankovek (nebo prst minci v okénku sloupce), druhá ruka bere. Víčko nepřeklápějte až na záda, stačí ho držet zhruba svisle.',
+        body: 'Vložte plný stav (6 karet, 3 bankovky, 4 × 50 Kč) a vyzkoušejte celý sled s otevřeným víčkem. Otevřené víčko samo nestojí a pruží zpět – to je v pořádku. Drží ho palec ruky, která peněženku drží; ukazováček téže ruky posouvá bankovku v okénku (nebo minci v okénku sloupce) a druhá ruka bere. Víčko držte zhruba svisle, nepřeklápějte ho na záda.',
         media: [],
       },
       {
         id: 'slots-p09',
         title: 'Tři štěrbiny (P0-9)',
-        body: 'Zasuňte kartu u boku za D1 a omylem do ústí bankovek. Je ústí bankovek dost vidět (barevná hrana D1, tmavá D2)? Když ne, pomůže výraznější barva hrany D1.',
+        body: 'Zkuste zasunout kartu u boku za D1 a omylem do ústí bankovek. Je ústí bankovek dobře vidět? Když ne, dejte hraně D1 výraznější barvu.',
         media: [],
       },
       {
         id: 'record',
         title: 'Zapište výsledky a nechte přepočítat',
-        body: 'Když P0 dopadne podle modelu (bankovky se vejdou, stokoruna vyčnívá aspoň 15 mm, k vyjde do 1,24, zvednutí na klínu 2,28 a 1,25 mm, plný stav se vejde), nic se nepřepočítává a platí listy z lekce 1. Když se některá hodnota liší, formulář v aplikaci ani přepínač generátoru ji nezmění. Zapište si naměřené hodnoty (k, zvednutí na klínu, tloušťku a rozměry bankovek), formulář v aplikaci je nemá. Střih pak přepočítá ten, kdo ho udržuje (třeba v Claude Code nad repozitářem): dosadí hodnoty do výchozích hodnot modelu v src/lib/geometry/lid-wallet.ts (pole kDesign, kMax, wedgeLiftNom, wedgeLiftMax, billSheetMm a rozměry bankovek, jak je vypisuje oddíl 12.1 zadání docs/zadani/penezenka-vicko.md) a listy vygeneruje znovu. Dál pracujte až s novými listy: do té doby z kůže nic neřežte (lekce 4) a šablony nevyřezávejte (poslední krok). Zkoušku ohybu V12 (lekce 3) udělat můžete – vzdálenost hrany vložky od rýhy závisí jen na tloušťce P1 a vložky, ne na hodnotách z P0.',
+        body: 'Když P0 dopadne podle modelu (bankovky se vejdou, stokoruna vyčnívá aspoň 15 mm, k do 1,24, zvednutí 2,28 a 1,25 mm, plný stav se vejde), platí listy z lekce 1. Když se něco liší, zapište naměřené hodnoty (k, zvednutí, tloušťku a rozměry bankovek) a nechte střih přepočítat tím, kdo ho udržuje (vstupy modelu jsou v oddílu 12.1 zadání). Formulář v aplikaci tyto hodnoty nemá. Do nových listů z kůže nic neřežte a šablony nevyřezávejte. Zkoušku ohybu V12 (lekce 3) udělat můžete, na P0 nezávisí.',
         media: [],
       },
       {
         id: 'templates',
         title: 'Vyřízněte šablonu konce jazýčku a výřezu pro palec',
         printLink: 'pattern-sheets',
-        body: 'Až po P0, z platných listů (z lekce 1, nebo z nových, když P0 změnil vstupy): list 4 a list 1 nalepte na tvrdý papír a vyřízněte (1) šablonu konce jazýčku z listu 4 – obrys špičky R10, křížek středu magnetu, rysku horní hrany L1, čárkovanou hranici klínu posledních 2,5 mm a 8 otvorů S7 (propíchněte je jehlou) – a (2) šablonu výřezu pro palec z listu 1. Na variantě ze zkoušky ohybu V12 nezávisí, použijete je na zkušebním i finálním kuse: výřez v lekci 5, ořez špičky, klín a otvory S7 v lekci 11.',
+        body: 'Z platných listů (z lekce 1, nebo nových, když P0 něco změnil) nalepte list 4 a list 1 na tvrdý papír a vyřízněte: (1) šablonu konce jazýčku z listu 4 – obrys špičky R10, křížek středu magnetu, rysku horní hrany L1, čárkovanou hranici klínu 2,5 mm a 8 otvorů S7 (propíchněte je jehlou); (2) šablonu výřezu pro palec z listu 1. Na variantě z V12 nezávisí, poslouží zkušebnímu i finálnímu kusu.',
         media: [],
       },
     ],
@@ -265,13 +264,13 @@ export const lessons: readonly LessonDefinition[] = [
       {
         slug: 'p0-recorded',
         title:
-          'Výsledky P0-1 až P0-9 jsou zapsané a co změnilo vstupy, je přepočítané nebo poslané k přepočtu dřív, než se tisknou listy pro kůži.',
+          'Výsledky P0-1 až P0-9 jsou zapsané; co změnilo vstupy, je přepočítané nebo poslané k přepočtu dřív, než se tisknou listy pro kůži.',
         required: true,
       },
       {
         slug: 'templates-cut',
         title:
-          'Šablona konce jazýčku (list 4) a šablona výřezu pro palec (list 1) jsou z platných listů nalepené na tvrdém papíře a vyříznuté.',
+          'Šablony konce jazýčku (list 4) a výřezu pro palec (list 1) jsou z platných listů vyříznuté z tvrdého papíru.',
         required: true,
       },
       {
@@ -284,8 +283,8 @@ export const lessons: readonly LessonDefinition[] = [
     commonMistakes: [
       'Karta s magnetickým proužkem vložená proužkem dolů nebo do štěrbiny bankovek.',
       'Čekat, že otevřené víčko zůstane stát: samo nestojí, drží ho palec.',
-      'Pracovat dál se starými listy, když P0 změnil vstupy modelu.',
-      'Model lepený páskou po celé ploše: zalepené sloupce mincí a kapsa karet nejdou vyzkoušet.',
+      'Pracovat se starými listy, když P0 změnil vstupy modelu.',
+      'Model slepený páskou po celé ploše: sloupce mincí a kapsa karet pak nejdou vyzkoušet.',
     ],
     safety: [],
     media: [
@@ -299,14 +298,14 @@ export const lessons: readonly LessonDefinition[] = [
     order: 3,
     phaseSlug: 'prepare',
     estimatedMinutes: 10,
-    goal: 'Na odřezku kaštanu ověřit, jestli líc v mokrém ohybu přes vložku 1,5 mm nepopraská, a změřit, kam padne rýha vůči vrcholu ohybu – podle toho zvolit výchozí střih nebo zálohu.',
+    goal: 'Na odřezku ověřit, že líc v mokrém ohybu přes vložku 1,5 mm nepopraská, změřit polohu rýhy vůči vrcholu ohybu a zvolit variantu střihu.',
     materials: [
-      'odřezek kaštanu aspoň 30 × 40 mm ze stejné kůže, ze které bude P1: dva přířezy P1 110 × 240 mm si na kusu 20 × 50 cm nejdřív obkreslete vedle sebe a odřezek (i ten na podložku S7 v lekci 11) vyřízněte z volného pruhu asi 90 mm vedle nich, ne ze středu kusu',
+      'odřezek kaštanu aspoň 30 × 40 mm ze stejné kůže jako P1, z volného pruhu vedle obkreslených přířezů P1 (ne ze středu kusu)',
       'vložka dna z lekce 1',
       'houbička a voda',
       'potravinová fólie',
       '2 hladká prkénka',
-      'tupý hrot na rýhu (třeba vypsaná propiska, ověřit na odřezku), tužka',
+      'tupý hrot na rýhu (třeba vypsaná propiska, ověřte na odřezku), tužka',
       'lupa nebo mobil s makrem',
     ],
     requiredEquipment: ['veg-tan-leather-1mm', 'steel-ruler', 'digital-caliper'],
@@ -316,13 +315,13 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'crease-and-mark',
         title: 'Orýhujte odřezek a vyznačte čáry',
-        body: `${NUMBERS_NOTE} Na rubu odřezku vytlačte rýhu tupým hrotem u ocelového pravítka: nic neřežte a tlačte stejně po celé šířce. Rýhu vyznačte ryskami i na bocích. Vyznačte i čáru hrany vložky ve vzdálenosti za rýhou z rámečku na listu 4 (řádek „hrana vložky dna“, výchozí 1,96 mm), také ryskami na bocích.`,
+        body: `${NUMBERS_NOTE} Na rubu odřezku vytlačte tupým hrotem u ocelového pravítka rýhu – nic neřežte a tlačte stejně po celé šířce. Za rýhou vyznačte čáru hrany vložky (rámeček na listu 4, řádek „hrana vložky dna“, výchozí 1,96 mm). Obě čáry označte ryskami i na bocích.`,
         media: [],
       },
       {
         id: 'wet-and-fold',
         title: 'Navlhčete a přehněte přes vložku',
-        body: 'Odřezek navlhčete houbičkou a počkejte, až se barva usně skoro vrátí k suché (5–10 min). Vložku položte hranou na čáru hrany vložky (z rámečku na listu 4, výchozí 1,96 mm za rýhou) a odřezek přehněte lícem ven přes vložku 1,5 mm. Mezi vlhký líc a prkénka dejte potravinovou fólii.',
+        body: 'Odřezek navlhčete houbičkou a počkejte, až se barva usně skoro vrátí k suché (5–10 min). Vložku položte hranou na čáru hrany vložky a odřezek přes ni přehněte lícem ven. Mezi vlhký líc a prkénka dejte potravinovou fólii.',
         media: [
           ill(
             'lw-l3-fold',
@@ -334,13 +333,13 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'dry',
         title: 'Stáhněte a nechte přes noc',
-        body: 'Odřezek stáhněte mezi dvěma prkénky svěrkami a nechte přes noc (12–24 h, ne u topení) vyschnout. Bez svěrek prkénka zatižte knihami nebo je stáhněte silnými gumičkami či kancelářskými klipy – tlak ověřte na odřezku.',
+        body: 'Odřezek stáhněte mezi prkénky svěrkami a nechte přes noc vyschnout (12–24 h, ne u topení). Bez svěrek prkénka zatižte knihami nebo stáhněte silnými gumičkami či klipy (tlak ověřte na odřezku).',
         media: [],
       },
       {
         id: 'inspect',
         title: 'Prohlédněte líc a změřte polohu rýhy',
-        body: 'Vložku vyjměte a líc v ohybu prohlédněte lupou nebo fotkou mobilem makrem. Pak posuvkou na boku odřezku změřte, o kolik je ryska rýhy od vrcholu ohybu. Víc než 0,3 mm: čáru hrany vložky na P1 posuňte o tuto odchylku (když rýha leží od vrcholu blíž k přední stěně F, posuňte čáru k F). Do 0,3 mm nechte čáru z listu.',
+        body: 'Vyjměte vložku a líc v ohybu prohlédněte lupou nebo mobilem s makrem. Na boku odřezku změřte posuvkou, jak daleko je ryska rýhy od vrcholu ohybu. Do 0,3 mm nechte čáru z listu. Při větší odchylce posuňte čáru hrany vložky na P1 o tuto odchylku: leží-li rýha blíž k přední stěně F, posuňte čáru k F.',
         media: [
           photo('lw-l3-inspect', 'Detail líce v ohybu odřezku po vyschnutí, posuvka u rysky rýhy'),
         ],
@@ -348,7 +347,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'decide',
         title: 'Rozhodněte variantu střihu',
-        body: 'Líc nepopraskal: výchozí střih (ohyb dna i závěs 1,0 mm, nic se neztenčuje). Líc popraskal: přednostně záloha A – celý P1 z usně 0,8 mm (listy pro změřenou useň 0,8: v aplikaci ji zadejte jako P1, v repozitáři „--p1 0.8“), zkoušku zopakujte na odřezku 0,8. Záloha B1 – ztenčit pás ohybu dna na 0,6 mm (v aplikaci zaškrtávátko B1, v repozitáři „--skive-fold 0.6“) – jen když useň 0,8 nejde sehnat nebo popraská i ona; zkoušku zopakujte na ztenčeném odřezku (lekce 5, krok Jen záloha B1 nebo B2). Zálohu B2 (ztenčení závěsu, „--skive-hinge 0.6“) V12 nevybírá, rozhoduje o ní až zkouška Z-2 zkušebního kusu. Popraská i záloha: zkusit jinou useň do P1 (ověřit), neřezat. Když ohyb po vyschnutí jen trochu odpruží, není to důvod k záloze – ohyb udrží lepení G4 a boční švy. Varianta platí pro zkušební i finální kus; pro zálohu vygenerujte listy znovu (lekce 1, krok Kdy listy generovat znovu).',
+        body: 'Líc nepopraskal: výchozí střih (nic se neztenčuje). Líc popraskal: záloha A – celý P1 z usně 0,8 mm (v aplikaci zadejte P1 0,8) a zkoušku zopakujte na odřezku 0,8. Záloha B1 – ztenčit pás ohybu dna na 0,6 mm, v aplikaci zaškrtněte B1 („--skive-fold 0.6“) – jen když useň 0,8 nejde sehnat nebo popraská i ona; zkoušku zopakujte na ztenčeném odřezku (lekce 5). Popraská i záloha: neřežte a zkuste jinou useň do P1 (ověřte zkouškou V12). Mírné odpružení ohybu po vyschnutí není důvod k záloze. Zálohu B2 (závěs) V12 nevybírá, o té rozhodne zkouška Z-2. Varianta platí pro zkušební i finální kus; pro zálohu vygenerujte listy znovu (lekce 1).',
         media: [],
       },
     ],
@@ -356,21 +355,20 @@ export const lessons: readonly LessonDefinition[] = [
       {
         slug: 'v12-variant',
         title:
-          'Odřezek je prohlédnutý a zapsaná varianta střihu: výchozí, záloha A (P1 0,8), nebo záloha B1 (ztenčený ohyb dna).',
+          'Odřezek je prohlédnutý a varianta zapsaná: výchozí, záloha A (P1 0,8), nebo záloha B1 (ztenčený ohyb dna).',
         required: true,
       },
       {
         slug: 'v12-offset',
-        title:
-          'Odchylka rýhy od vrcholu ohybu je změřená a zapsaná, u odchylky nad 0,3 mm i posun čáry hrany vložky.',
+        title: 'Odchylka rýhy od vrcholu ohybu je zapsaná, nad 0,3 mm i posun čáry hrany vložky.',
         required: true,
       },
     ],
     commonMistakes: [
-      'Vložka položená hranou na rýhu: hrana patří o půl oblouku (1,96 mm) za rýhu směrem k zádům.',
+      'Vložka položená hranou na rýhu: hrana patří 1,96 mm za rýhu směrem k zádům.',
       'Rýha vyříznutá nožem místo vytlačená tupým hrotem.',
       'Odřezek z jiné kůže, než ze které bude P1.',
-      'Odřezek vyříznutý ze středu kusu: pak se na kus nevejdou oba přířezy P1.',
+      'Odřezek ze středu kusu: nevejdou se pak oba přířezy P1.',
     ],
     safety: [],
     media: [photo('lw-l3-hero', 'Odřezek po zkoušce ohybu V12 vedle vložky ze starých karet')],
@@ -382,13 +380,13 @@ export const lessons: readonly LessonDefinition[] = [
     order: 4,
     phaseSlug: 'build',
     estimatedMinutes: 120,
-    goal: 'Lekce 4–12 projdete nejdřív celé na zkušebním kuse: vyříznout pro něj pás P1, přepážky D1 a D2, přířez podšívky L1 a jeden plíšek K2 podle platných listů a přenést na rub P1 čáry a hranice lepení z listu 2.',
+    goal: 'Vyříznout díly zkušebního kusu (P1, D1, D2, přířez L1 a plíšek K2) a přenést na rub P1 čáry z listu 2.',
     materials: [
-      'platné listy 1–4 (po P0 a V12 případně znovu vygenerované), list 1 a list 3 navíc ještě jednou (první výtisk se při řezání rozřeže), tvrdý papír na šablony',
+      'platné listy 1–4, list 1 a list 3 navíc podruhé (první výtisk se při řezání rozřeže), tvrdý papír na šablony',
       'šablony konce jazýčku a výřezu pro palec z lekce 2',
       'bezbarvý lak na nehty (hrany plíšku)',
-      'jehla na propichování (rýsovací šídlo z projektu 02 dělá větší vpich – jestli poslouží, ověřit na odřezku), tužka',
-      'maskovací páska (na přilepení listů 1 a 3 při řezání)',
+      'jehla na propichování (rýsovací šídlo dělá větší vpich – ověřte na odřezku), tužka',
+      'maskovací páska',
     ],
     requiredEquipment: [
       'veg-tan-leather-1mm',
@@ -408,14 +406,14 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'test-piece-first',
         title: 'Nejdřív zkušební kus',
-        body: 'Lekce 4–12 projdete nejdřív celé na zkušebním kuse. Z kůže teď vyřízněte jen díly zkušebního kusu: jeden P1, jednu D1, jednu D2, jeden přířez L1 a jeden plíšek. Druhý přířez P1, zbytek obou kozinek a plech nechte celé. P1 finálního kusu řežte až po zkouškách Z-1 až Z-4 (lekce 12) a s tím, co na zkušebním kuse fungovalo – zkušební kus může změnit variantu střihu a s ní i rozměry dílů včetně plíšku.',
+        body: 'Lekce 4–12 projdete nejdřív celé na zkušebním kuse. Teď vyřízněte jen jeho díly: jeden P1, D1, D2, přířez L1 a plíšek. Druhý přířez P1, zbytek kozinek a plech nechte celé. Finální kus řežte až po zkouškách Z-1 až Z-4 (lekce 12) – zkušební kus může změnit variantu i rozměry dílů.',
         media: [],
       },
       {
         id: 'valid-sheets',
         title: 'Platné listy a šablony',
         printLink: 'pattern-sheets',
-        body: `${NUMBERS_NOTE} Když P0, V12 nebo zkušební kus něco změnily, vygenerujte listy znovu jedním příkazem se vším, co platí (záloha z V12, „--divider“, „--lining“, případně „--p1“), vytiskněte a znovu zkontrolujte úsečku 50 mm a kótu P1. Tiskněte nejlépe na matný papír pro inkoustové tiskárny 120 g, jinak na obyčejný papír. List 1 a list 3 vytiskněte dvakrát: první výtisk se při řezání rozřeže (hlavní způsob níže), druhý nalepte na tvrdý papír a vyřízněte přesně jako šablonu. Přes šablonu z listu 1 se později propichují otvory švů S1–S3 (lekce 6) a S6 (lekce 8), D2 z listu 3 poslouží v lekci 6 při značení S1–S3 způsobem (b). Šablony z listu 4 (okénka, plíšek, proužek otvorů bočních švů) nalepte na tvrdý papír a vyřízněte: šablonu okének mincí použijete v lekci 5, šablonu okénka bankovek v lekci 6, šablonu plíšku v této lekci a proužek v lekci 9. Šablony konce jazýčku a výřezu pro palec máte z lekce 2, na variantě z V12 nezávisí. Na finální kus vytiskněte listy 1 a 3 znovu, z listů, které po zkušebním kuse platí.`,
+        body: `${NUMBERS_NOTE} Pokud P0, V12 nebo zkušební kus něco změnily, vygenerujte listy znovu se vším, co platí, vytiskněte je a zkontrolujte úsečku 50 mm a kótu P1. Tiskněte nejlépe na matný papír 120 g pro inkoustové tiskárny, jinak na obyčejný. List 1 a list 3 vytiskněte dvakrát: první výtisk se při řezání rozřeže, druhý nalepte na tvrdý papír a vyřízněte jako šablonu (S1–S3 a D2 v lekci 6, S6 v lekci 8). Z listu 4 nalepte na tvrdý papír a vyřízněte šablony okének mincí (lekce 5), okénka bankovek (lekce 6), plíšku (tato lekce) a proužek otvorů bočních švů (lekce 9). Na finální kus vytiskněte listy 1 a 3 znovu z listů, které po zkušebním kuse platí.`,
         media: [],
       },
       {
@@ -423,14 +421,14 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Hlavní způsob: list 1 přilepte na líc',
         animationLinks: [animationLink('lidP1Cut', 'A1'), animationLink('lidP1Cut', 'A2')],
         printLink: 'pattern-sheets',
-        body: 'První výtisk listu 1 vystřihněte jen nahrubo, s okrajem 1–2 cm kolem obrysu P1 – přesně po čáře ho nestříhejte, řezat se bude až nožem skrz papír i kůži. List 1 je P1 z líce, proto ho položte na LÍC usně a přilepte maskovací páskou na okrajích, mimo linii řezu, z několika stran, aby se nemohl posunout. Pásku nejdřív zkuste na odřezku usně – silnější páska může na líci nechat lesklou stopu nebo vytrhnout vlákna.',
+        body: 'První výtisk listu 1 vystřihněte nahrubo s okrajem 1–2 cm kolem obrysu P1. List 1 je P1 z líce: položte ho na líc usně a přilepte maskovací páskou z několika stran, jen na okrajích mimo čáru řezu. Pásku nejdřív vyzkoušejte na odřezku – může na líci nechat lesklou stopu nebo vytrhnout vlákna.',
         media: [],
       },
       {
         id: 'prick-p1',
         title: 'Před řezáním propíchněte značky P1',
         animationLinks: [animationLink('lidP1Cut', 'B1'), animationLink('lidP1Cut', 'B2')],
-        body: 'Dokud je list přilepený a nic není vyříznuté, propíchněte skrz papír: konce osy ohybu dna, čáry hrany vložky dna (trojúhelníčky u boků) a obou přehybů závěsu těsně u hrany na obou bocích a středy výsečníků – Ø 8 na napojení jazýčku (vysekává se hned v dalším kroku), Ø 12 na koncích okének mincí a Ø 10 výřezu pro palec (ty se vysekávají až v lekci 5) a Ø 14 na koncích okénka bankovek (křížky v okénku „až po G3“; vysekává se až v lekci 6, z líce, proto se středy musí dostat na líc teď). Otvory švů S1–S3 a S6 teď nepropichujte: propichují se až v lekcích 6 a 8 přes šablonu z druhého výtisku listu 1.',
+        body: 'Dokud je list přilepený, propíchněte jehlou skrz papír: konce osy ohybu dna, čáry hrany vložky (trojúhelníčky u boků) a obou přehybů závěsu, vše na obou bocích; dále středy výsečníků – Ø 8 na napojení jazýčku, Ø 12 na koncích okének mincí, Ø 10 výřezu pro palec a Ø 14 na koncích okénka bankovek (křížky v okénku „až po G3“). Otvory švů S1–S3 a S6 teď nepropichujte (lekce 6 a 8).',
         media: [],
       },
       {
@@ -444,7 +442,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidP1Cut', 'C5'),
           animationLink('lidP1Cut', 'C6'),
         ],
-        body: 'P1 je 101 mm široký a dlouhý podle kóty z rámečku na listu 4 (výchozí 231,66 mm). Řežte skrz papír i kůži přesně po vytištěné čáře. Napojení jazýčku na pás je vyduté (R4): nejdřív výsečník Ø 8 skrz papír, pak tečné rovné řezy nožem. Rovné úseky veďte s ocelovým pravítkem položeným na čáru, na dva až tři lehké tahy, nůž kolmo; oblouky pomalu bez pravítka. Když začne řez třepit papír nebo kůži, odlomte článek čepele. Horní hranu přední stěny F řežte rovně u pravítka i přes výřez pro palec, který list 1 v obrysu má: výřez zatím vynechte a čáru horní hrany veďte rovně od jednoho rohu ústí výřezu k druhému (výřez se dělá až v lekci 5 přes šablonu). Konec jazýčku nechte rovný v plné délce kóty P1 – je v ní rezerva 5 mm na ořez (list 1: „jazýček … + 5 rezerva“). Špičku R10 teď neřežte: řežete ji až v lekci 11 spolu s podšívkou L1, 7,0 mm pod značkou magnetu nalepeného na hotové peněžence. Výřez pro palec zatím nedělejte (lekce 5).',
+        body: 'Řežte nožem skrz papír i kůži přesně po vytištěné čáře; P1 je 101 mm široký a dlouhý podle kóty z rámečku (výchozí 231,66 mm). Vyduté napojení jazýčku (R4): nejdřív výsečník Ø 8 skrz papír, pak tečné rovné řezy nožem. Rovné úseky řežte podél ocelového pravítka na dva až tři lehké tahy, nůž kolmo; oblouky pomalu bez pravítka. Když řez začne třepit, odlomte článek čepele. Horní hranu přední stěny F řežte rovně i přes výřez pro palec, od jednoho rohu výřezu k druhému – výřez se dělá až v lekci 5. Konec jazýčku nechte rovný v plné délce, je v ní rezerva 5 mm. Špičku R10 teď neřežte, řeže se v lekci 11.',
         media: [
           photo('lw-l4-p1', 'Vyříznutý pás P1 s jazýčkem, vyduté napojení jazýčku výsečníkem Ø 8'),
         ],
@@ -453,25 +451,25 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'peel-p1',
         title: 'Sejměte list a zkontrolujte značky',
         animationLinks: [animationLink('lidP1Cut', 'D1'), animationLink('lidP1Cut', 'D2')],
-        body: 'Pásku strhávejte pomalu pod ostrým úhlem, skoro rovnoběžně s kůží. Zkontrolujte, že se přenesly všechny značky: konce osy ohybu dna, hrany vložky dna a přehybů závěsu na obou bocích a středy okének mincí, okénka bankovek a výřezu pro palec. Rozřezaný list už znovu nepoužijete.',
+        body: 'Pásku strhávejte pomalu, skoro rovnoběžně s kůží. Zkontrolujte, že se přenesly všechny značky: konce osy ohybu, hrany vložky a přehybů závěsu na obou bocích a středy okének mincí, okénka bankovek a výřezu.',
         media: [],
       },
       {
         id: 'cut-parts',
         title: 'Přepážky D1, D2 a přířez L1',
-        body: 'Pro zkušební kus po jednom kusu: D1 93 × 79,5 mm s horními rohy R3 z nebarvené kozinky, D2 103 × 64 mm z čokoládové kozinky, přířez podšívky L1 24 × 22 mm z nebarvené kozinky. Rozměry berte z listu 3 dané varianty. Stejně jako u P1: z prvního výtisku listu 3 vystřihněte každý díl nahrubo s okrajem 1–2 cm a přilepte ho maskovací páskou na rub kozinky (díly jsou souměrné, takže na straně šablony tvar nezávisí, a propíchnuté značky zůstanou na rubu). U D1 a D2 propíchněte konce osy x 50,5 na horní a spodní hraně – podle osy se přepážky později přikládají. Pak řežte skrz papír po vytištěné čáře: rovné strany s ocelovým pravítkem na čáře, rohy R3 pomalu bez pravítka. Pásku strhněte pomalu pod ostrým úhlem a zkontrolujte značky.',
+        body: 'Pro zkušební kus po jednom: D1 93 × 79,5 mm s horními rohy R3 z nebarvené kozinky, D2 103 × 64 mm z čokoládové kozinky a přířez L1 24 × 22 mm z nebarvené kozinky (rozměry z listu 3 vaší varianty). Postup jako u P1: díly z prvního výtisku listu 3 vystřihněte nahrubo a přilepte páskou na rub kozinky. U D1 a D2 propíchněte konce osy x 50,5 na horní a spodní hraně, podle ní se přepážky přikládají. Řežte skrz papír po čáře, rovné strany u pravítka, rohy R3 pomalu bez pravítka. Pásku strhněte pomalu a zkontrolujte značky.',
         media: [],
       },
       {
         id: 'transfer-other',
         title: 'Jinak: šablona vyříznutá přesně',
-        body: 'Šablonu můžete také nalepit na tvrdý papír, vyříznout přesně po čáře, přilepit na okrajích a řezat podél jejího okraje. Hlavní způsob je přesnější, protože se řeže přímo po vytištěné čáře.',
+        body: 'Šablonu můžete také nalepit na tvrdý papír, vyříznout přesně po čáře a řezat podél jejího okraje. Řez po vytištěné čáře je ale přesnější.',
         media: [],
       },
       {
         id: 'plate',
         title: 'Plíšek K2',
-        body: 'Plíšek je ve výchozím střihu 14 × 20,5 mm (jinak rozměr z listu 3 a 4 varianty, např. při přepážkách 0,8 mm 14 × 20); rozměr přeneste na plech ze šablony plíšku z listu 4. Vyřízněte jeden pro zkušební kus (plíšek finálního kusu až podle listů varianty, která po zkušebním kuse platí) z pozinkovaného plechu 0,5 mm, který jste v obchodě vyzkoušeli magnetem: pilovým listem na kov, nebo plech naříznete nožem u pravítka a v rýze zlomíte ohýbáním sem a tam (ověřit na odřezku plechu). Rohy R3 a otřep zabruste brusným papírem zrnitosti 120 na desce. Hrany přelakujte bezbarvým lakem na nehty – železo s vlhkou třísločiněnou usní dělá tmavé skvrny. Přilnavost kontaktního lepidla k pozinkované oceli ověří zkušební kus (lekce 8 a zkoušky v lekci 12). Kdo to chce vědět dřív, nalepte zbylý odstřižek plechu kontaktním lepidlem stejně jako v lekci 8 (na obě strany, zavadnout 10–15 min) na odřezek usně a po 24 h zkuste, jestli drží.',
+        body: 'Plíšek má ve výchozím střihu 14 × 20,5 mm (jinak podle listu 3 a 4). Rozměr přeneste na plech ze šablony plíšku z listu 4. Vyřízněte jeden plíšek pro zkušební kus z pozinkovaného plechu 0,5 mm, který jste v obchodě vyzkoušeli magnetem: pilkou na kov, nebo plech nařízněte nožem u pravítka a v rýze zlomte ohýbáním (ověřte na odřezku plechu). Rohy R3 a otřep zabruste brusným papírem 120 na desce. Hrany přelakujte bezbarvým lakem na nehty – železo dělá na vlhké usni tmavé skvrny. Jestli na plechu drží kontaktní lepidlo, ověří zkušební kus. Chcete-li to vědět dřív, přilepte odstřižek plechu na odřezek usně jako v lekci 8 a po 24 h zkuste, jestli drží.',
         media: [
           photo('lw-l4-plate', 'Plíšek 14 × 20,5 mm se zabroušenými rohy R3 vedle tabule plechu'),
         ],
@@ -486,7 +484,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidP1Cut', 'E4'),
           animationLink('lidP1Cut', 'E5'),
         ],
-        body: 'Tužkou, nic nezařezávat, to, co kreslí list 2: osa ohybu dna a pás závěsu (nelepit, nešít; výchozí v 62,21 a 142,99–150,99), čára hrany vložky dna (z rámečku na listu 4, výchozí v 64,18; když V12 ukázala odchylku rýhy nad 0,3 mm, posunutá podle lekce 3), hranice lepení G1–G4, okénka mincí a poloha D1 a D2. Čáry švů S1–S3 a S6 ani okénko bankovek na rub nekreslete: list 2 je nemá, středy okénka bankovek jste propíchli na líc už před řezáním a švy se přenášejí z líce (viz konec kroku). Papír se na kůži obkreslit nedá, proto list 2 nalepte na tvrdý papír, vyřízněte po obrysu a přiložte na rub. Rohy lepených ploch a konce čar propíchněte jehlou do kůže a tečky spojte tužkou u pravítka. Osu ohybu dna, čáru hrany vložky dna (na ni v lekci 7 položíte vložku) a přehyby závěsu (výchozí v 145,10 a 148,88; v lekci 10 podle nich zkontrolujete, kde přehyby vyšly) vyznačte navíc ryskami na obou bocích. Všechno je souměrné podle osy x 50,5. „L“ napište zvlášť na rub přední stěny F a na rub zad B. Otvory švů S1–S3 a S6 se přenášejí později přes šablonu z druhého výtisku listu 1 přiloženou na líc: propíchnou se jehlou a děrují vidličkou – S1–S3 v lekci 6 (šablona na líci B, děruje se z líce D2), S6 v lekci 8 (šablona na líci F).',
+        body: 'List 2 nalepte na tvrdý papír, vyřízněte po obrysu a přiložte na rub P1. Tužkou (nic nezařezávejte) přeneste, co list 2 kreslí: osu ohybu dna a pás závěsu (výchozí v 62,21 a 142,99–150,99; pás se nelepí ani nešije), čáru hrany vložky (výchozí v 64,18, případně posunutou podle V12), hranice lepení G1–G4, okénka mincí a polohu D1 a D2. Rohy ploch a konce čar propíchněte jehlou a tečky spojte tužkou u pravítka. Osu ohybu, hranu vložky a přehyby závěsu (výchozí v 145,10 a 148,88; v lekci 10 podle nich zkontrolujete přehyby) označte i ryskami na obou bocích. Na rub F a na rub B napište „L“. Čáry švů S1–S3 a S6 ani okénko bankovek na rub nekreslete: otvory švů se přenesou později z líce přes šablonu z listu 1 – propíchnou se jehlou a děrují vidličkou (S1–S3 v lekci 6, S6 v lekci 8).',
         media: [],
       },
     ],
@@ -494,31 +492,31 @@ export const lessons: readonly LessonDefinition[] = [
       {
         slug: 'parts-cut',
         title:
-          'P1 zkušebního kusu odpovídá kótě z rámečku na ±0,5 mm (konec jazýčku rovný, bez špičky), D1, D2, L1 a plíšek jsou vyříznuté a hrany plíšku přelakované.',
+          'P1 sedí s kótou z rámečku na ±0,5 mm a konec jazýčku je rovný; D1, D2, L1 a plíšek jsou vyříznuté a hrany plíšku přelakované.',
         required: true,
       },
       {
         slug: 'marks-transferred',
         title:
-          'Po sejmutí listů jsou vidět všechny propíchnuté značky (konce osy ohybu, hrany vložky dna a přehybů závěsu na bocích P1, středy okének mincí, okénka bankovek a výřezu, osa D1 a D2) a druhý výtisk listu 1 a 3 je vyříznutý jako šablona.',
+          'Propíchnuté značky jsou vidět (osa ohybu, hrana vložky a přehyby závěsu na bocích P1, středy okének a výřezu, osa D1 a D2) a druhý výtisk listů 1 a 3 je vyříznutý jako šablona.',
         required: false,
       },
       {
         slug: 'back-marked',
         title:
-          'Na rubu P1 je osa ohybu dna, čára hrany vložky dna, pás závěsu, hranice G1–G4, okénka mincí, poloha D1 a D2 a značky L; osa ohybu, hrana vložky a přehyby závěsu i na bocích.',
+          'Na rubu P1 je osa ohybu, hrana vložky, pás závěsu, hranice G1–G4, okénka mincí, poloha D1 a D2 a značky L; osa, hrana vložky a přehyby závěsu i ryskami na bocích.',
         required: true,
       },
     ],
     commonMistakes: [
-      'Výřez pro palec vyříznutý hned spolu s obrysem z listu 1: horní hrana F se teď řeže rovně, výřez se dělá až v lekci 5.',
-      'List 1 jen v jednom výtisku: rozřeže se při řezání P1 a na propichování S1–S3 a S6 pak nemáte šablonu. Vytiskněte ho dvakrát.',
-      'Řez podél okraje papíru s nožem přitlačeným k papíru místo k pravítku: nůž uhne a hrana není rovná. Řežte po vytištěné čáře a rovné úseky podle pravítka.',
-      'Páska přes linii řezu: nůž jde přes pásku a řez uhne.',
-      'Špička jazýčku R10 vyříznutá hned podle obrysu: přijdete o rezervu 5 mm a poloha magnetu vůči špičce přestane platit. Konec jazýčku nechte rovný (kóta P1 včetně rezervy 5 mm), špičku R10 řežete až v lekci 11 spolu s L1, 7,0 mm pod značkou magnetu.',
+      'Výřez pro palec vyříznutý hned s obrysem: horní hrana F se teď řeže rovně, výřez až v lekci 5.',
+      'List 1 jen v jednom výtisku: na propichování S1–S3 a S6 pak chybí šablona.',
+      'Nůž přitlačený k okraji papíru místo k pravítku: řez uhne.',
+      'Páska přes čáru řezu: řez uhne.',
+      'Špička jazýčku vyříznutá hned: přijdete o rezervu 5 mm a poloha magnetu přestane sedět.',
       'Díly finálního kusu vyříznuté spolu se zkušebním: zkušební kus může změnit variantu a rozměry.',
-      'Plíšek z nerezu: austenitická nerez je prakticky nemagnetická, plech vyzkoušejte magnetem.',
-      'Nepřelakované hrany plíšku: železo s vlhkou usní dělá tmavé skvrny.',
+      'Plíšek z nerezu: ta je prakticky nemagnetická, plech vyzkoušejte magnetem.',
+      'Nepřelakované hrany plíšku: tmavé skvrny na usni.',
     ],
     safety: [
       'Nůž veďte tahem od prstů volné ruky.',
@@ -539,7 +537,7 @@ export const lessons: readonly LessonDefinition[] = [
     order: 5,
     phaseSlug: 'build',
     estimatedMinutes: 120,
-    goal: 'Vytlačit rýhu ohybu dna, vyseknout okénka mincí a výřez pro palec a předem dokončit hrany, na které po sestavení nedosáhnete.',
+    goal: 'Vytlačit rýhu ohybu dna, vyseknout okénka mincí a výřez pro palec a dokončit hrany, na které po sestavení nedosáhnete.',
     materials: [
       'odřezek z V12 na vyzkoušení rýhy',
       'tupý hrot na rýhu, maskovací páska, párátka',
@@ -564,20 +562,20 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'crease',
         title: 'Rýha ohybu dna',
         animationLinks: [animationLink('lidBends', 'A1')],
-        body: `${NUMBERS_NOTE} Na rubu vytlačte podél osy ohybu (výchozí v 62,21) rýhu tupým hrotem u ocelového pravítka. Nic neřežte, tlačte stejně po celé šířce, nejdřív na odřezku z V12. Pás závěsu se nijak neupravuje a ve výchozím střihu se nic neztenčuje (další krok je jen pro zálohu B1 nebo B2).`,
+        body: `${NUMBERS_NOTE} Na rubu vytlačte tupým hrotem u ocelového pravítka rýhu podél osy ohybu (výchozí v 62,21). Nic neřežte a tlačte stejně po celé šířce; nejdřív to zkuste na odřezku z V12. Pás závěsu se neupravuje.`,
         media: [],
       },
       {
         id: 'skive-backup',
         title: 'Jen záloha B1 nebo B2: ztenčení',
-        body: 'Ve výchozím střihu a v záloze A tento krok přeskočte. Záloha B1 ztenčuje pás ohybu dna (jen když ve V12 popraskal líc a záloha A nejde), záloha B2 pás závěsu – ta přichází v úvahu jen pro finální kus, když závěs zkušebního kusu neprojde zkouškou Z-2 ani v záloze A. Nejdřív vygenerujte listy se zálohou (B1 nebo B2), pás ztenčujte z rubu z 1,0 na 0,6 mm v poloze podle listu 1 dané varianty; souřadnice výchozího střihu v záloze neplatí. (a) Nejlépe v ševcovské nebo brašnářské dílně se zvonovým ztenčovačem: pás ohybu 8 × 101 mm včetně náběhů, pás závěsu 15,1 × 101 mm celý na plno a náběh 2 mm vně pásu na obou stranách. P1 předejte nařezaný s pásem vyznačeným na rubu a dílně to řekněte. (b) Když to nejde: brusným papírem zrnitosti 80 na rovném hranolku, pás ohraničte maskovací páskou. U pásu ohybu 8 mm bruste na plno jen střed 4 mm a 2 mm na každé straně nechte jako náběh. Pás závěsu 15,1 mm bruste na plno celý mezi čarami a náběh 2 mm udělejte vně čar na každé straně. Nožem jen hrubě ubírejte a nikdy ne blíž než na 0,8 mm. (c) Tloušťku hlídejte posuvkou: přijatelně 0,6–0,8 mm, okraje pásu jako náběh, ne schod. (d) Nejdřív na odřezku; stejně ztenčený odřezek poslouží k opakování zkoušky V12. Celý postup ověřit na prototypu.',
+        body: 'Jen pro zálohu B1 (pás ohybu dna) nebo B2 (pás závěsu; jen pro finální kus, když závěs zkušebního kusu neprojde zkouškou Z-2 ani v záloze A). Jinak krok přeskočte. Nejdřív vygenerujte listy se zálohou a pás ztenčujte z rubu z 1,0 na 0,6 mm v poloze podle listu 1 této varianty. (a) Nejlépe v ševcovské nebo brašnářské dílně zvonovým ztenčovačem: pás ohybu 8 × 101 mm včetně náběhů, pás závěsu 15,1 × 101 mm celý na plno a náběh 2 mm vně na obou stranách. P1 doneste s pásem vyznačeným na rubu. (b) Jinak brusným papírem 80 na rovném hranolku, pás ohraničte maskovací páskou: u ohybu (8 mm) bruste na plno jen střed 4 mm a 2 mm na každé straně nechte jako náběh; závěs (15,1 mm) bruste celý na plno a náběh 2 mm udělejte vně čar. Nožem jen hrubě a nikdy pod 0,8 mm. (c) Posuvkou hlídejte 0,6–0,8 mm, okraje jako náběh, ne schod. (d) Nejdřív na odřezku, ten poslouží i k opakování V12. Postup je neověřený, ověřte ho na zkušebním kuse.',
         media: [],
       },
       {
         id: 'd2-edge',
         title: 'Spodní hrana D2 do tenka',
         animationLinks: [animationLink('edges', 'G4')],
-        body: 'Spodní hranu D2 zbruste brusným papírem na hranolku do tenka (klín 3 mm), nožem ji neztenčujte. Jinak by dělala schod, o který se zachytí bankovka.',
+        body: 'Spodní hranu D2 zbruste brusným papírem na hranolku do tenka (klín 3 mm), ne nožem. Jinak by tvořila schod, o který se zachytí bankovka.',
         media: [],
       },
       {
@@ -590,7 +588,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidWindows', 'A5'),
           animationLink('edges', 'G4'),
         ],
-        body: 'Dvě okénka mincí 12 × 48 mm v zadní stěně B sekejte z líce B, kde máte z lekce 4 propíchnuté středy. Díl položte lícem B nahoru na tvrdou desku. Šablonu okénka mincí z listu 4 přiložte na líc B křížky na propíchnuté středy a zkontrolujte, že sedí. Šablona je jen na kontrolu polohy (sekáte do propíchnutých středů), před sekáním ji sejměte. Výsečníkem Ø 12 vysekněte oba konce (středy y 34 a 70), mezi nimi veďte rovné řezy nožem u ocelového pravítka od tečny k tečně. Konce vybruste brusným papírem namotaným na kolíku Ø 8 v aku vrtačce, okénka zkoste z líce a vyleštěte jako ostatní hrany (krok „Předběžné dokončení hran“).',
+        body: 'Dvě okénka mincí 12 × 48 mm v zadní stěně B sekejte z líce B, kde máte propíchnuté středy. Díl položte lícem B nahoru na tvrdou desku. Šablonu okénka mincí přiložte křížky na propíchnuté středy a zkontrolujte polohu; před sekáním ji sejměte. Výsečníkem Ø 12 vysekněte oba konce (středy y 34 a 70) a mezi nimi řízněte nožem u pravítka od tečny k tečně. Konce vybruste brusným papírem na kolíku Ø 8 v aku vrtačce, okénka zkoste z líce a vyleštěte jako ostatní hrany.',
         media: [
           ill(
             'lw-l5-back',
@@ -609,7 +607,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidWindows', 'B5'),
           animationLink('lidWindows', 'D2'),
         ],
-        body: 'Výřez U 10 × 12 mm uprostřed horní hrany přední stěny F sekejte z líce F, kde máte z lekce 4 propíchnutý střed. Díl položte lícem F nahoru na tvrdou desku a přiložte šablonu výřezu pro palec (lekce 2). Výsečník Ø 10 nasaďte přes šablonu (zůstává přiložená) na střed na ose 7,0 mm pod horní hranou F (y 55,0) a vysekněte, pak rovné řezy nožem od hrany F k tečnám díry, zastavit přesně na tečně. Rohy ústí R1 nedělejte nožem, zaoblete je brusným papírem. Jestli výřez funguje, ověří zkušební kus.',
+        body: 'Výřez U 10 × 12 mm uprostřed horní hrany F sekejte z líce F. Díl položte lícem F nahoru na tvrdou desku a přiložte šablonu výřezu pro palec. Výsečník Ø 10 nasaďte přes šablonu (zůstává přiložená) na propíchnutý střed 7,0 mm pod horní hranou F (y 55,0) a vysekněte. Pak řízněte nožem rovně od hrany F k tečnám díry a přesně na tečně zastavte. Rohy ústí R1 zaoblete brusným papírem, ne nožem. Jestli výřez funguje, ověří zkušební kus.',
         media: [
           ill(
             'lw-l5-notch',
@@ -622,21 +620,21 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'edges',
         title: 'Předběžné dokončení hran',
         animationLinks: [animationLink('edges', 'G1')],
-        body: 'Horní hranu F i s výřezem, spodní hranu a boky pásu víčka a boky jazýčku vybruste smirkem 220–400 na rovné destičce, zkoste z líce (zkosovačem hran, pokud ho máte; jinak je zaoblete brusným papírem na hranolku) a vyleštěte: hranu navlhčete vodou nebo Tokonole (jen mimo lepená místa, viz poslední krok) a třete leštítkem nebo kusem plátna, dokud se nezhutní a nezaleskne. Horní hrany D1 a D2 jen vybruste (horní hranu D2 lehce zaoblete, vede přes ni závěs) a vyleštěte stejně. Výřez pro palec zaoblete z líce i z rubu, protože o rubovou hranu dna výřezu se může zachytit karta; vnitřek vybruste brusným papírem namotaným na kolíku Ø 8 v aku vrtačce a stejným kolíkem vyleštěte.',
+        body: 'Horní hranu F i s výřezem, spodní hranu a boky pásu víčka a boky jazýčku vybruste smirkem 220–400 na rovné destičce, zkoste z líce (zkosovačem, nebo zaoblete brusným papírem na hranolku) a vyleštěte: navlhčete vodou nebo Tokonole (jen mimo lepená místa) a třete leštítkem nebo kusem plátna, až se hrana zaleskne. Horní hrany D1 a D2 jen vybruste a vyleštěte; horní hranu D2 lehce zaoblete, vede přes ni závěs. Výřez pro palec zaoblete z líce i z rubu, o rubovou hranu by se zachytila karta. Vnitřek výřezu vybruste a vyleštěte kolíkem Ø 8 v aku vrtačce.',
         media: [],
       },
       {
         id: 'd1-paint',
         title: 'Barevná horní hrana D1',
         animationLinks: [animationLink('edges', 'G2')],
-        body: 'Horní hranu D1 natřete barvou na hrany v tónu kontrastním k D1 (v tónu D2) párátkem ve 2 tenkých vrstvách, mezi vrstvami 20–30 min. Nejdřív na odřezku kozinky: přilnavost na tak tenké hraně je potřeba ověřit.',
+        body: 'Horní hranu D1 natřete párátkem barvou na hrany v tónu D2, ve 2 tenkých vrstvách, mezi nimi 20–30 min. Nejdřív na odřezku kozinky: přilnavost na tak tenké hraně je neověřená.',
         media: [],
       },
       {
         id: 'tokonole',
         title: 'Tokonole jen mimo lepená místa',
         animationLinks: [animationLink('edges', 'G2')],
-        body: 'Tokonole brání přilnutí lepidla, proto ho nanášejte jen mimo lepená místa a hranice lepení přelepte páskou.',
+        body: 'Tokonole brání přilnutí lepidla: nanášejte ho jen mimo lepená místa a hranice lepení přelepte páskou.',
         media: [],
       },
     ],
@@ -655,7 +653,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         slug: 'edges-prefinished',
         title:
-          'Horní hrany D1, D2 a F, hrany pásu víčka a jazýčku jsou vybroušené a vyleštěné (F, pás víčka a jazýček zkosené z líce) a horní hrana D1 natřená kontrastní barvou.',
+          'Hrany F, pásu víčka a jazýčku jsou vybroušené, zkosené z líce a vyleštěné, horní hrany D1 a D2 vybroušené a vyleštěné a hrana D1 natřená kontrastní barvou.',
         required: true,
       },
     ],
@@ -678,7 +676,7 @@ export const lessons: readonly LessonDefinition[] = [
     order: 6,
     phaseSlug: 'build',
     estimatedMinutes: 150,
-    goal: 'Přilepit přepážku D2 na záda jen v lepených pásech, proseknout okénko bankovek skrz obě vrstvy a ušít dno a boky sloupců mincí S1–S3.',
+    goal: 'Přilepit D2 na záda jen v pásech lepení, proseknout okénko bankovek skrz obě vrstvy a ušít švy sloupců mincí S1–S3.',
     materials: [
       'maskovací páska',
       'jehla na propichování',
@@ -709,7 +707,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidBackD2', 'A5'),
           animationLink('lidBackD2', 'A6'),
         ],
-        body: `${NUMBERS_NOTE} D2 lepte rubem na rub B jen v pásech G3: dno mincí (y 18–23), boky (x 0–4 a 97–101) a střed mezi sloupci (x 35–66), boky a střed jen do y 80,57 (čára na listu 2). Sloupce mincí mezi nimi zůstávají nelepené. Horních 1,43 mm D2 nelepte – nad nimi je pás závěsu. Hranici lepení přelepte maskovací páskou. D2 přesahuje na každé straně o 1 mm. Kontaktní lepidlo naneste na obě strany, nechte zavadnout 10–15 min, spojte a přitlačte; děrovat nejdřív za 1 h.`,
+        body: `${NUMBERS_NOTE} D2 lepte rubem na rub B jen v pásech G3: dno mincí (y 18–23), boky (x 0–4 a 97–101) a střed mezi sloupci (x 35–66); boky a střed jen do y 80,57 (čára na listu 2). Sloupce mincí a horních 1,43 mm D2 (pás závěsu) nelepte. Hranice lepení přelepte maskovací páskou. D2 přesahuje na každé straně o 1 mm. Kontaktní lepidlo naneste na obě strany, nechte zavadnout 10–15 min, spojte a přitlačte. Děrujte nejdřív za 1 h.`,
         media: [],
       },
       {
@@ -722,7 +720,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidWindows', 'C5'),
           animationLink('edges', 'G4'),
         ],
-        body: 'Až po lepení G3: okénko bankovek 14 × 45 mm uprostřed zad (x 43,5–57,5, y 25–70). Díl položte lícem B nahoru na tvrdou desku. Na líci B máte propíchnuté středy obou konců z lekce 4 (na ose x 50,5, y 32 a 63); přiložte na ně křížky šablony okénka bankovek z listu 4 (čárkovaná čára šablony na ose) a zkontrolujte, že sedí. Šablona je jen na kontrolu polohy, před sekáním ji sejměte. Výsečníkem Ø 14 vysekněte z líce B oba konce skrz B i D2, mezi nimi veďte rovné řezy nožem u ocelového pravítka od tečny k tečně skrz obě vrstvy. Zkoste a vyleštěte jako jeden svazek. Mince 1 Kč (Ø 20 mm) okénkem nepropadne.',
+        body: 'Až po lepení G3: okénko bankovek 14 × 45 mm uprostřed zad (x 43,5–57,5, y 25–70). Díl položte lícem B nahoru na tvrdou desku. Křížky šablony okénka bankovek z listu 4 přiložte na propíchnuté středy (osa x 50,5, y 32 a 63) a zkontrolujte polohu; před sekáním šablonu sejměte. Výsečníkem Ø 14 vysekněte z líce B oba konce skrz B i D2 a mezi nimi řízněte nožem u pravítka od tečny k tečně skrz obě vrstvy. Zkoste a vyleštěte jako jeden svazek.',
         media: [
           ill(
             'lw-l6-back',
@@ -740,13 +738,13 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidBackD2', 'C3'),
           animationLink('lidBackD2', 'C4'),
         ],
-        body: 'List 1 (P1 z líce) na líc D2 přiložit nejde, proto jedno ze dvou (nejdřív na odřezku D2 + B): (a) šablonu P1 z listu 1 přiložte na líc B podle obrysu a všechny otvory S1–S3 propíchněte jehlou skrz B i přilepenou D2, pak na líci D2 děrujte do vpichů; nebo (b) šablonu D2 z listu 3 (druhý výtisk na tvrdém papíře, lekce 4) přiložte na líc D2 podle hran. Přes vyříznutou šablonu se čára obkreslit nedá, proto konce čar S1 (y 22,0), S2 a S3 (x 36 a 65) propíchněte jehlou skrz šablonu, šablonu sejměte a vpichy spojte tužkou u pravítka. Otvory pak odměřte po 4 mm: S1 od osy x 50,5 na obě strany, S2 a S3 od horního otvoru y 76 dolů.',
+        body: 'Otvory S1–S3 přeneste jedním ze dvou způsobů (nejdřív na odřezku D2 + B). (a) Šablonu z listu 1 přiložte na líc B podle obrysu, otvory S1–S3 propíchněte jehlou skrz B i D2 a na líci D2 pak děrujte do vpichů. (b) Šablonu D2 z listu 3 přiložte na líc D2 podle hran, konce čar S1 (y 22,0), S2 a S3 (x 36 a 65) propíchněte jehlou skrz šablonu, šablonu sejměte a vpichy spojte tužkou u pravítka. Otvory pak odměřte po 4 mm: S1 od osy x 50,5 na obě strany, S2 a S3 od horního otvoru y 76 dolů.',
         media: [],
       },
       {
         id: 'stitch-s1-s3',
         title: 'Děrovat a šít S1, S2, S3',
-        body: 'Děrujte z líce D2 na tvrdé desce, vidlička vždy stejně natočená při pohledu na líc D2, horní hranou od sebe – tím mají šikmé otvory na zádech stejný sklon. S1 (dno mincí) má 21 otvorů od x 10,5 do 90,5, S2 a S3 (boky sloupců) po 13 otvorech od y 28 do 76. Šijte sedlovým stehem, na obou koncích 2 otvory zpět.',
+        body: 'Děrujte z líce D2 na tvrdé desce, vidličku vždy stejně natočenou (při pohledu na líc D2 horní hranou od sebe) – šikmé otvory na zádech pak mají stejný sklon. S1 (dno mincí) má 21 otvorů od x 10,5 do 90,5, S2 a S3 (boky sloupců) po 13 otvorech od y 28 do 76. Šijte sedlovým stehem, na obou koncích 2 otvory zpět.',
         animationLinks: [
           animationLink('lidBackD2', 'D1'),
           animationLink('lidBackD2', 'D2'),
@@ -775,9 +773,9 @@ export const lessons: readonly LessonDefinition[] = [
       },
     ],
     commonMistakes: [
-      'Lepidlo ve sloupcích mincí nebo nad čarou 80,57: sloupce by se zalepily, závěs vyztužil.',
+      'Lepidlo ve sloupcích mincí nebo nad čarou 80,57: sloupce se zalepí, závěs vyztuží.',
       'Okénko bankovek vyseknuté před lepením G3: vrstvy pak nelícují.',
-      'Vidlička pokaždé jinak natočená: šikmé otvory na zádech mají různý sklon.',
+      'Vidlička pokaždé jinak natočená: otvory na zádech mají různý sklon.',
     ],
     safety: [
       'Nůž veďte tahem od prstů volné ruky.',
@@ -806,7 +804,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'wet',
         title: 'Navlhčete pás ohybu',
-        body: `${NUMBERS_NOTE} Pás ohybu dna navlhčete houbičkou a počkejte, až se barva usně skoro vrátí k suché (5–10 min). Ohyb se dělá před lepením plíšku, aby plíšek nebyl u vlhké usně.`,
+        body: `${NUMBERS_NOTE} Pás ohybu dna navlhčete houbičkou a počkejte, až se barva usně skoro vrátí k suché (5–10 min).`,
         animationLinks: [animationLink('lidBends', 'A2')],
         media: [],
       },
@@ -814,7 +812,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'place-spacer',
         title: 'Vložku položte hranou na čáru hrany vložky',
         animationLinks: [animationLink('lidBends', 'A4')],
-        body: 'Vložku položte na rub zad B hranou na čáru hrany vložky (na listu 1 a 2, ve výchozím střihu v 64,18, tedy 1,96 mm za rýhou směrem k B; rysky na obou bocích; případně posunutou podle měření z V12). Hrana vložky míří k přední stěně F, na straně F vložka neleží. Tak padne střed ohybu na rýhu. Vložka je o 5 mm na každé straně širší než díl, aby měl ohyb oporu po celé šířce.',
+        body: 'Vložku položte na rub zad B hranou na čáru hrany vložky (výchozí v 64,18, tedy 1,96 mm za rýhou směrem k B, nebo posunutou podle V12). Hrana vložky míří k F, na straně F vložka neleží – tak padne střed ohybu na rýhu. Vložka přesahuje díl na každé straně o 5 mm.',
         media: [
           ill(
             'lw-l7-spacer',
@@ -827,7 +825,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'fold-clamp',
         title: 'Přehněte a stáhněte',
         animationLinks: [animationLink('lidBends', 'A5')],
-        body: 'F přehněte nahoru přes vložku lícem ven. Mezi vlhký líc a prkénka dejte potravinovou fólii (jinak zůstanou otisky a skvrny od dřeva). Spodních 20 mm stáhněte mezi dvěma prkénky svěrkami a nechte vyschnout přes noc (12–24 h, ne u topení). Bez svěrek prkénka zatižte knihami nebo je stáhněte silnými gumičkami – tlak ověřte na odřezku.',
+        body: 'F přehněte nahoru přes vložku lícem ven. Mezi vlhký líc a prkénka dejte potravinovou fólii. Spodních 20 mm stáhněte mezi prkénky svěrkami a nechte přes noc vyschnout (12–24 h, ne u topení). Bez svěrek použijte knihy nebo silné gumičky (tlak ověřte na odřezku).',
         media: [
           photo('lw-l7-clamp', 'Ohyb dna stažený mezi prkénky s fólií, vložka zasunutá v ohybu'),
         ],
@@ -836,7 +834,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'remove-spacer',
         title: 'Vysuňte vložku',
         animationLinks: [animationLink('lidBends', 'A10')],
-        body: 'Po vyschnutí vysuňte vložku bokem. Boky ještě nejsou slepené, takže F jde odklopit do asi 90° na lepení plíšku a D1 v příští lekci: F pak leží rubem nahoru na desce a B stojí nad ohybem nahoru. Když ohyb po vyschnutí trochu odpruží, udrží ho lepení G4 a boční švy.',
+        body: 'Po vyschnutí vysuňte vložku bokem. Boky ještě nejsou slepené, takže F jde odklopit asi o 90° na lepení plíšku a D1 v příští lekci. Mírné odpružení ohybu nevadí, udrží ho lepení G4 a boční švy.',
         media: [],
       },
     ],
@@ -880,28 +878,28 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'g1',
         title: 'G1: plíšek na rub přední stěny',
-        body: `${NUMBERS_NOTE} F (přední stěnu) položte naplocho rubem nahoru na PE desku, celou na desce, ohyb dna u hrany desky. B (zadní stěna s přišitou D2) stojí nad ohybem nahoru a ohyb dna zůstává asi 90°. Viset dolů přes hranu stolu jako u švu S6 B tady nemůže: s F rubem nahoru by se ohyb musel přehnout obráceně. Vyschlý ohyb chce B sklopit zpátky k F, proto ji zezadu opřete o knihu nebo krabičku a horní hranu k ní přichyťte kolíčkem nebo páskou, ať nespadne na lepidlo. Plíšek přilepte kontaktním lepidlem na rub F do plochy G1: x 43,5–57,5, y 3,5–24 (přilnavost lepidla k oceli ověří zkušební kus, dřív případně odstřižek plechu z lekce 4). Po tomto kroku už plíšek vyměnit nejde, magnet ano.`,
+        body: `${NUMBERS_NOTE} F položte rubem nahoru celou na PE desku, ohyb dna u hrany desky; B stojí nad ohybem nahoru (ohyb asi 90°). Vyschlý ohyb táhne B zpátky k F: opřete ji zezadu o knihu nebo krabičku a horní hranu přichyťte kolíčkem nebo páskou, ať nespadne na lepidlo. Plíšek přilepte kontaktním lepidlem na rub F do plochy G1: x 43,5–57,5, y 3,5–24 (přilnavost k oceli ověří zkušební kus). Pak už plíšek vyměnit nejde, magnet ano.`,
         animationLinks: [animationLink('lidMagnet', 'A1'), animationLink('lidMagnet', 'A2')],
         media: [],
       },
       {
         id: 'g2',
         title: 'G2 a G2b: přepážka D1',
-        body: 'D1 přilepte rubem na rub F: G2 v y 2–26 (x 4–97) přes plíšek a boky G2b v x 4–5 a 96–97 do y 61. D1 má šířku přesně 93 mm bez montážní vůle, proto na D1 i na rub F vyznačte osu x 50,5 a D1 přikládejte podle osy zdola od y 2 nahoru. Pásy G2b (1 mm) ohraničte maskovací páskou z obou stran a lepidlo nanášejte párátkem, ať nepřeteče do kapsy karet. Pásky strhněte hned po nanesení lepidla, ještě než zavadne a než přiložíte D1, jinak zůstanou zalepené pod D1. Přetok nad y 26 hned setřete.',
+        body: 'D1 přilepte rubem na rub F: G2 v y 2–26 (x 4–97) přes plíšek a boky G2b v x 4–5 a 96–97 do y 61. D1 má přesně 93 mm bez vůle: na D1 i na rub F vyznačte osu x 50,5 a D1 přikládejte podle osy, zdola od y 2. Pásy G2b (1 mm) ohraničte maskovací páskou z obou stran a lepidlo naneste párátkem. Pásky strhněte hned po nanesení lepidla, ještě než přiložíte D1. Přetok nad y 26 hned setřete.',
         animationLinks: [animationLink('lidMagnet', 'A3'), animationLink('lidMagnet', 'A4')],
         media: [],
       },
       {
         id: 'check-d1',
         title: 'Změřte polohu D1',
-        body: 'Po přiložení změřte: kapsa karet mezi pásy G2b musí mít aspoň 90,5 mm a D1 musí být od hrany F aspoň 3,5 mm, jinak zasáhne do bočního švu S4 na x 3. Pak přitlačte paličkou přes desku položenou na D1; F leží na PE desce, takže úder má oporu.',
+        body: 'Po přiložení změřte: kapsa karet mezi pásy G2b musí mít aspoň 90,5 mm a D1 musí být od hrany F aspoň 3,5 mm, jinak zasáhne do bočního švu S4. Pak přitlačte paličkou přes desku položenou na D1.',
         animationLinks: [animationLink('lidMagnet', 'A5')],
         media: [],
       },
       {
         id: 's6',
         title: 'Šev dna karet S6',
-        body: 'Mezi lepením a S6 nechte aspoň 1 h. Díl otočte: F teď položte naplocho lícem nahoru na tvrdou desku u hrany stolu a B nechte viset přes hranu (ohyb dna na hraně desky). Otvory S6 podle šablony z listu 1 na líci F propíchněte jehlou a děrujte vidličkou: y 25 (výchozí), x 10,5 až 38,5 a 62,5 až 90,5, dvakrát 8 otvorů. Střed kolem plíšku a jazýčku šev vynechává, drží ho jen lepení G2. Vidlička natočená při pohledu na líc F horní hranou od sebe. Šijte sedlovým stehem, konce 2 otvory zpět.',
+        body: 'Po lepení počkejte aspoň 1 h. F položte lícem nahoru na tvrdou desku u hrany stolu a B nechte viset přes hranu (ohyb dna na hraně desky). Přes šablonu z listu 1 na líci F propíchněte jehlou otvory S6 a děrujte vidličkou (při pohledu na líc F horní hranou od sebe): y 25 (výchozí), x 10,5 až 38,5 a 62,5 až 90,5, dvakrát 8 otvorů. Střed kolem plíšku šev vynechává. Šijte sedlovým stehem, konce 2 otvory zpět.',
         animationLinks: [animationLink('saddleStitch', 'E2'), animationLink('threadLength')],
         media: [
           ill(
@@ -926,11 +924,11 @@ export const lessons: readonly LessonDefinition[] = [
       },
     ],
     commonMistakes: [
-      'D1 přikládaná od kraje místo podle osy: chyba se nerozdělí na obě strany.',
+      'D1 přikládaná od kraje místo podle osy.',
       'Lepidlo přeteklé z G2b do kapsy karet.',
-      'Maskovací páska kolem G2b nechaná na místě při přikládání D1: zůstane zalepená pod D1.',
-      'Lepení na svisle odklopenou F: palička přes desku pak nemá oporu, F má ležet rubem nahoru na desce.',
-      'Děrování S6 hned po lepení, bez hodinové přestávky.',
+      'Páska kolem G2b nechaná při přikládání D1: zůstane pod ní zalepená.',
+      'Lepení na svisle odklopenou F: palička pak nemá oporu, F má ležet rubem nahoru na desce.',
+      'Děrování S6 dřív než 1 h po lepení.',
     ],
     safety: [],
     media: [photo('lw-l8-hero', 'Přední stěna s přilepenou D1 a ušitým švem dna karet S6')],
@@ -942,7 +940,7 @@ export const lessons: readonly LessonDefinition[] = [
     order: 9,
     phaseSlug: 'build',
     estimatedMinutes: 150,
-    goal: 'Slepit boky peněženky, ušít boční švy S4 a S5 skrz všechny vrstvy a zarovnat a vyleštit boky na šířku 101 mm.',
+    goal: 'Slepit boky, ušít boční švy S4 a S5 skrz všechny vrstvy a boky zarovnat na 101 mm a vyleštit.',
     materials: [
       'odřezek usně 1,0 mm na vyrovnání schodu u horní hrany F',
       'tužka, jehla na propichování, maskovací páska',
@@ -966,7 +964,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'dry-fit',
         title: 'Nanečisto',
         animationLinks: [animationLink('lidBodySides', 'A2')],
-        body: `${NUMBERS_NOTE} Díl nejdřív nanečisto složte a zkontrolujte, teprve potom naneste lepidlo. Kontaktní lepidlo chytne hned při dotyku.`,
+        body: `${NUMBERS_NOTE} Díl nejdřív složte nanečisto a zkontrolujte, teprve pak lepte – kontaktní lepidlo chytne hned při dotyku.`,
         media: [],
       },
       {
@@ -978,20 +976,20 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidBodySides', 'B3'),
           animationLink('lidBodySides', 'B4'),
         ],
-        body: 'Lepte boční pásy x 0–4 a 97–101: rub F na líc D2 (líc D2 zdrsněte) v y 18–62 a rub F na rub B v y 1,75–18. Přikládejte od ohybu dna nahoru a F přitom rovnejte podle boků B. Mezi okraji G4 zůstane kapsa 93 mm.',
+        body: 'Lepte boční pásy x 0–4 a 97–101: rub F na líc D2 (líc D2 zdrsněte) v y 18–62 a rub F na rub B v y 1,75–18. Přikládejte od ohybu dna nahoru a F rovnejte podle boků B. Mezi pásy G4 zůstane kapsa 93 mm.',
         media: [],
       },
       {
         id: 'mark-side',
         title: 'Čára švu a otvory S4, S5',
         animationLinks: [animationLink('lidBodySides', 'C1'), animationLink('lidBodySides', 'C2')],
-        body: 'Na slepeném kusu narýsujte čáru švu 3,0 mm od hrany boku F a B, ne od přečnívající D2: D2 je o 1 mm širší (lekce 6) a zarovná se až po sešití (krok „Zarovnat a vyleštit boky“). Rýsovacím kružidlem z projektu 02 nastaveným na 3,0 mm nebo rýhovačem veďte čáru po hraně F; nad horní hranou F (y 62–76), kde je navrchu D2, je čára 4,0 mm od hrany D2, nebo ji tam jen prodlužte u pravítka v přímce. Bez kružidla tužkou u pravítka podle proužku z listu 4: proužek přiložte levou hranou na hranu boku F a spodní hranou ke spodní hraně peněženky, konce čárkované čáry 3,0 propíchněte jehlou a spojte tužkou u pravítka. Otvory S4 a S5 přeneste z téhož proužku (rysky otvorů přes čáru švu), počítáno od y 76 dolů: 18 otvorů od y 8 do 76. Čárka „F 62“ na proužku má ležet na horní hraně F.',
+        body: 'Narýsujte čáru švu 3,0 mm od hrany boku F a B, ne od přečnívající D2 (je o 1 mm širší a zarovná se až po sešití). Použijte rýsovací kružidlo nastavené na 3,0 mm nebo rýhovač. Nad horní hranou F (y 62–76), kde je navrchu D2, je čára 4,0 mm od hrany D2; můžete ji tam i jen prodloužit u pravítka. Bez kružidla: proužek z listu 4 přiložte levou hranou na hranu boku F a spodní hranou ke spodní hraně peněženky, konce čárkované čáry 3,0 propíchněte jehlou a spojte tužkou u pravítka. Z téhož proužku přeneste otvory S4 a S5: 18 otvorů od y 76 dolů po y 8. Čárka „F 62“ na proužku má ležet na horní hraně F.',
         media: [],
       },
       {
         id: 'punch-sew',
         title: 'Děrovat a šít boky',
-        body: 'Mezi lepením G4 a děrováním nechte aspoň 1 h. Děrujte zepředu skrz všechny vrstvy na tvrdé desce, vidlička natočená při pohledu na líc horní hranou od sebe, ve třech úsecích: (1) y 8–52 z líce F vícezubou vidličkou na rysky z proužku. (2) y 56–68 po jednom otvoru: horní hrana F (y 62) leží přesně mezi otvory 60 a 64, proto 56 a 60 děrujte z líce F, 64 a 68 z líce D2 a každý otvor zarovnejte podle rysky. Bez vidličky s 1 zubem: dvouzubou vidličku nasaďte krajním zubem do posledního hotového otvoru, druhý zub prorazí jen jeden nový otvor, zub pokaždé na pevnou vrstvu. Schod F/D2 (1,0 mm) vyrovnejte odřezkem usně 1,0 mm: položte ho na líc D2 těsně k horní hraně F, aby vidlička stála rovně; otvory 64 a 68 pak jdou i skrz odřezek. Jak odřezek nejlépe držet, ověřte na zkušebním kuse. (3) y 72–76 z líce D2. Šijte od 76 dolů, konce 2 otvory zpět. Steh 60–64 zdvojte, zpevňuje ústí karet. Jak přesně ho zdvojit, lekce nepředepisuje – ověřte to na zkušebním kuse. Nit odměřte 5 × délka švu + 25–30 cm rezervy: v úseku y 20–60 jde šev přes tři vrstvy (F + D2 + B), a pro ty návod „Jak odměřit nit“ počítá 5 ×.',
+        body: 'Po lepení G4 počkejte aspoň 1 h. Děrujte zepředu skrz všechny vrstvy na tvrdé desce, vidlička při pohledu na líc horní hranou od sebe, ve třech úsecích: (1) y 8–52 z líce F vícezubou vidličkou na rysky z proužku. (2) y 56–68 po jednom otvoru, každý podle rysky: 56 a 60 z líce F, 64 a 68 z líce D2 (horní hrana F, y 62, leží mezi 60 a 64). Dvouzubou vidličku nasaďte krajním zubem do posledního hotového otvoru, druhý zub prorazí jeden nový; zub pokaždé na pevnou vrstvu. Schod F/D2 vyrovnejte odřezkem usně 1,0 mm položeným na líc D2 těsně k horní hraně F, otvory 64 a 68 jdou i skrz něj (jak ho držet, ověřte na zkušebním kuse). (3) y 72–76 z líce D2. Šijte sedlovým stehem od 76 dolů, konce 2 otvory zpět. Steh 60–64 zdvojte, zpevňuje ústí karet (jak přesně, ověřte na zkušebním kuse). Nit odměřte 5 × délka švu + 25–30 cm, šev jde přes tři vrstvy.',
         animationLinks: [
           animationLink('lidBodySides', 'D1'),
           animationLink('lidBodySides', 'D3'),
@@ -1006,7 +1004,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'edges',
         title: 'Zarovnat a vyleštit boky',
         animationLinks: [animationLink('edges', 'G3')],
-        body: 'Boky zarovnejte nožem na 101,0 mm (D2 přečnívá). Spodní rohy nechte hranaté – nic nevyplňujte ani nezaoblujte. Boky vybruste smirkem 220–400 na rovné destičce, zkoste z obou líců (zkosovačem hran, pokud ho máte; jinak je zaoblete brusným papírem na hranolku) a vyleštěte jako jeden svazek, i u ohybu dna: navlhčete vodou nebo Tokonole a třete leštítkem nebo kusem plátna.',
+        body: 'Boky zarovnejte nožem na 101,0 mm (D2 přečnívá). Spodní rohy nechte hranaté. Boky vybruste smirkem 220–400 na rovné destičce, zkoste z obou líců (zkosovačem, nebo zaoblete brusným papírem na hranolku) a vyleštěte jako jeden svazek, i u ohybu dna: navlhčete vodou nebo Tokonole a třete leštítkem nebo kusem plátna.',
         media: [
           photo('lw-l9-edges', 'Vyleštěný bok peněženky s bočním švem a hranatým spodním rohem'),
         ],
@@ -1025,9 +1023,9 @@ export const lessons: readonly LessonDefinition[] = [
       },
     ],
     commonMistakes: [
-      'Lepení G4 bez zkoušky nanečisto: kontaktní lepidlo nejde po dotyku posunout.',
-      'Víc nových otvorů najednou přes hranu F v úseku y 56–68: tady se děruje dvouzubou vidličkou vždy jen jeden nový otvor.',
-      'Čára švu odměřená od přečnívající D2: otvory pak leží o 1 mm blíž ke kraji a po zarovnání boku jen 2,0 mm od hrany.',
+      'Lepení G4 bez zkoušky nanečisto: kontaktní lepidlo po dotyku nejde posunout.',
+      'V úseku y 56–68 víc nových otvorů najednou: tady vždy jen jeden.',
+      'Čára švu odměřená od přečnívající D2: otvory pak po zarovnání boku leží jen 2,0 mm od hrany.',
     ],
     safety: [
       'Nůž veďte tahem od prstů volné ruky.',
@@ -1042,7 +1040,7 @@ export const lessons: readonly LessonDefinition[] = [
     order: 10,
     phaseSlug: 'build',
     estimatedMinutes: 45,
-    goal: 'Vytvarovat závěs za mokra zavřený přes obsah stavu B a po vyschnutí změřit polohu víčka k.',
+    goal: 'Vytvarovat závěs za mokra přes obsah stavu B a po vyschnutí změřit polohu víčka k.',
     materials: [
       '2 staré karty',
       'kancelářský papír asi 70 × 65 mm (místo bankovky), nebo bankovka zabalená ve fólii',
@@ -1058,7 +1056,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'contents-b',
         title: 'Vložte obsah stavu B',
-        body: `${NUMBERS_NOTE} Do kapsy karet dejte 2 staré karty a místo bankovky papír asi 70 × 65 mm, přeložený nebo v několika vrstvách, až posuvka ukáže asi 0,7 mm (nebo skutečnou bankovku zabalenou ve fólii, aby nezvlhla). Mince ne. Obsah pod závěsem je pak 3,42 mm jako ve výpočtu (výchozí střih; jinak číslo z listu 4, sloupec „Tvarování závěsu“).`,
+        body: `${NUMBERS_NOTE} Do kapsy karet dejte 2 staré karty a do oddílu bankovek papír asi 70 × 65 mm, přeložený tak, aby měl asi 0,7 mm (nebo bankovku zabalenou ve fólii). Mince ne. Obsah pod závěsem pak má 3,42 mm (výchozí střih; jinak list 4, „Tvarování závěsu“).`,
         animationLinks: [animationLink('lidBends', 'B1')],
         media: [],
       },
@@ -1066,14 +1064,14 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'wet-close',
         title: 'Navlhčete jen závěs a zavřete víčko',
         animationLinks: [animationLink('lidBends', 'B2'), animationLink('lidBends', 'B3')],
-        body: 'Houbičkou navlhčete jen pás závěsu (nenamáčejte celé). Víčko zavřete přes obsah a jazýček položte po přední stěně. Kopyto ani opěrka nejsou potřeba, formou je peněženka s obsahem. Rysky přehybů z lekce 4 (výchozí v 145,10 a 148,88) ukazují, kde model přehyby se stavem B čeká; tvar dává obsah, ne rysky. Po zavření se podívejte, jestli přehyby vyšly zhruba u nich, a jinou polohu si zapište k měření k (vnitřní poloměr přehybů 1,0 mm je předpoklad návrhu, ověřit na prototypu).',
+        body: 'Houbičkou navlhčete jen pás závěsu. Víčko zavřete přes obsah a jazýček položte na přední stěnu. Kopyto ani opěrka nejsou potřeba. Rysky přehybů z lekce 4 (výchozí v 145,10 a 148,88) ukazují, kde přehyby čeká model; tvar ale dává obsah. Podívejte se, jestli přehyby vyšly zhruba u nich, a jinou polohu si zapište (poloměr přehybů 1,0 mm je předpoklad, ověří ho zkušební kus).',
         media: [],
       },
       {
         id: 'overnight',
         title: 'Přes noc pod knihou',
         animationLinks: [animationLink('lidBends', 'B4'), animationLink('lidBends', 'B5')],
-        body: 'Mezi vlhký závěs a knihu dejte potravinovou fólii a nechte peněženku zavřenou přes noc (12–24 h, ne u topení) pod lehkou zátěží. Magnet v tu chvíli ještě není.',
+        body: 'Mezi vlhký závěs a knihu dejte potravinovou fólii a nechte peněženku zavřenou pod lehkou zátěží přes noc (12–24 h, ne u topení).',
         media: [
           ill(
             'lw-l10-hinge',
@@ -1085,20 +1083,20 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'measure-k',
         title: 'Změřte k',
-        body: 'Změřte polohu hrany pásu víčka jako výšku y od spodní hrany ve stavech A (prázdná), B a C (6 karet, 3 bankovky, 4 × 50 Kč), zvlášť nad sloupci a nad středem. Když měříte od horní hrany F, je y = 62,0 minus naměřená vzdálenost (výchozí střih; jinak výška F z listu). Spočítejte k = (y_C − y_A) / 8,62 (dělitel P(C) − P(A) je v rámečku na listu 4). Model čeká A 53,9 / B 56,6 / C 62,5 mm, při horším k 1,24 A 53,2 a C 63,9.',
+        body: 'Ve stavech A (prázdná), B a C (6 karet, 3 bankovky, 4 × 50 Kč) změřte výšku y hrany pásu víčka od spodní hrany, zvlášť nad sloupci a nad středem. Měříte-li od horní hrany F, je y = 62,0 minus naměřená vzdálenost (výchozí; jinak výška F z listu). Spočítejte k = (y_C − y_A) / 8,62 (dělitel je v rámečku na listu 4). Model čeká A 53,9 / B 56,6 / C 62,5 mm, při nejhorším k 1,24 A 53,2 a C 63,9.',
         media: [],
       },
       {
         id: 'k-too-high',
         title: 'Když vyjde k nad 1,24',
-        body: 'Na zkušebním kuse k zapište a nechte přepočítat střih pro finální kus (dno karet a výška se musí zvednout; formulář v aplikaci k nemá, přepočítá ho ten, kdo střih udržuje, jako v lekci 2). Zkušební kus mezitím dokončete (lekce 11 a 12): poloha magnetu se určuje až na hotovém kuse, takže na k nečeká. Finální kus řežte až z přepočítaných listů. Na hotovém kuse už přepočet nic nezmění, dá se jen nosit méně.',
+        body: 'Zapište k a nechte střih pro finální kus přepočítat jako v lekci 2 (zvedne se dno karet a výška). Zkušební kus mezitím dokončete, magnet se umisťuje až na hotovém kuse. Finální kus řežte až z přepočítaných listů.',
         media: [],
       },
       {
         id: 'lid-behaviour',
         title: 'Otevřené víčko samo nestojí',
         animationLinks: [animationLink('lidBends', 'B7')],
-        body: 'Po vyschnutí se víčko vrací k zavřené poloze a otevřené samo nestojí. Tak to má být: u karty to nevadí, u bankovek a mincí ho drží palec ruky, která peněženku drží. Víčko nepřeklápějte až na záda – závěs by se ohýbal opačně.',
+        body: 'Po vyschnutí se víčko vrací k zavřené poloze a otevřené samo nestojí. To je v pořádku: u bankovek a mincí ho drží palec ruky, která peněženku drží. Víčko nepřeklápějte na záda – závěs by se ohýbal opačně.',
         media: [],
       },
     ],
@@ -1130,7 +1128,7 @@ export const lessons: readonly LessonDefinition[] = [
     order: 11,
     phaseSlug: 'build',
     estimatedMinutes: 150,
-    goal: 'Najít plíšek, nalepit magnet na hotové peněžence přesně na značku, přikrýt ho podšívkou L1, oříznout špičku a obšít L1 švem S7.',
+    goal: 'Nalepit magnet na hotové peněžence přesně na značku, přikrýt ho podšívkou L1, oříznout špičku a ušít šev S7.',
     materials: [
       'zkušební (hledací) magnet',
       'maskovací páska, tužka',
@@ -1159,28 +1157,28 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'find-plate',
         title: 'Najděte plíšek a označte polohu magnetu',
-        body: `${NUMBERS_NOTE} Peněženka ve stavu B: 2 staré karty, v bankovkách 1 bankovka nebo papír 0,7 mm z lekce 10 – ne karta – a bez mincí. Zkušebním magnetem najděte po líci F hrany plíšku (mají vyjít y plíšku z rámečku, výchozí 3,5 a 24,0) a páskou označte značku magnetu z rámečku (výchozí y 11,9). Okno lepení je ve výchozím střihu 11,73–12,13; s přepážkami 0,8 jen 11,50–11,63. Značku proto měřte posuvkou od spodní hrany a po nalepení pásky přeměřte. Zavřete víčko a značku přeneste ryskami na boky jazýčku.`,
+        body: `${NUMBERS_NOTE} Vložte obsah stavu B: 2 staré karty, 1 bankovku nebo papír 0,7 mm z lekce 10 (ne kartu), bez mincí. Zkušebním magnetem najděte po líci F hrany plíšku (výchozí y 3,5 a 24,0). Značku magnetu (výchozí y 11,9) odměřte posuvkou od spodní hrany, označte páskou a po nalepení pásky přeměřte. Okno lepení je ve výchozím střihu 11,73–12,13, s přepážkami 0,8 jen 11,50–11,63. Zavřete víčko a značku přeneste ryskami na boky jazýčku.`,
         animationLinks: [animationLink('lidMagnet', 'B1')],
         media: [],
       },
       {
         id: 'magnet-dry-test',
         title: 'Nanečisto: který magnet',
-        body: 'Než magnet přilepíte napevno, můžete vyzkoušet sílu nanečisto (doporučení, ověřit na prototypu): magnet s kouskem kozinky L1 přes něj přichyťte tenkou páskou na rub jazýčku na značku, víčko zavřete, zatřeste, otočte dnem vzhůru a otevřete jedním prstem za špičku – postupně pro Ø 8 × 1, 8 × 1,5 a 8 × 2. Páska přidá mezeru a výsledek je jen orientační, rozhodne až zkouška Z-1 na hotovém kuse. Když vyberete jinou tloušťku než 1,5 mm, mění se tloušťka peněženky u magnetu: podle návrhu se dosadí do magnetThicknessMm a kontroly se přepočítají (poloha magnetu, plíšek i otvory S7 zůstávají), což formulář v aplikaci neumí. Zapište si tloušťku vybraného magnetu a nechte střih přepočítat tím, kdo ho udržuje (třeba v Claude Code nad repozitářem: pole magnetThicknessMm v modelu src/lib/geometry/lid-wallet.ts, oddíl 12.1 zadání). S magnetem 1,5 mm pokračujte rovnou; s jinou tloušťkou lepte až po přepočtu, když kontroly projdou.',
+        body: 'Sílu magnetu můžete vyzkoušet nanečisto (orientačně, rozhodne až zkouška Z-1): magnet s kouskem kozinky přes něj přichyťte tenkou páskou na rub jazýčku na značku, víčko zavřete, zatřeste, otočte dnem vzhůru a otevřete jedním prstem za špičku. Postupně zkuste Ø 8 × 1, 8 × 1,5 a 8 × 2. S magnetem 1,5 mm pokračujte. Vyberete-li jinou tloušťku, zapište si ji a nechte střih přepočítat jako v lekci 2; lepte až po přepočtu, když kontroly projdou.',
         animationLinks: [animationLink('lidMagnet', 'B2')],
         media: [],
       },
       {
         id: 'epoxy',
         title: 'Magnet epoxidem',
-        body: 'Rub konce jazýčku zdrsněte. Magnet přilepte dvousložkovým epoxidem na rub jazýčku středem na značku a na osu a nechte ztuhnout (podle návodu epoxidu, orientačně 30 min – ověřit), aby se při natírání a přikládání L1 neposunul.',
+        body: 'Rub konce jazýčku zdrsněte. Magnet přilepte dvousložkovým epoxidem středem na značku a na osu a nechte ztuhnout podle návodu (orientačně 30 min, ověřte), ať se při lepení L1 neposune.',
         animationLinks: [animationLink('lidMagnet', 'B3'), animationLink('lidMagnet', 'B4')],
         media: [],
       },
       {
         id: 'lining',
         title: 'Podšívka L1 přes magnet',
-        body: 'Teprve po ztuhnutí epoxidu natřete rub jazýčku kolem magnetu a L1 kontaktním lepidlem, nechte zavadnout a L1 přiložte horní hranou na rysku 10 mm nad středem magnetu (šablona na listu 4). Přitlačte prsty nebo převalujte hladkým kolíkem. Přes magnet paličkou netlučte – neodym se může odštípnout.',
+        body: 'Po ztuhnutí epoxidu natřete kontaktním lepidlem rub jazýčku kolem magnetu i L1, nechte zavadnout a L1 přiložte horní hranou na rysku 10 mm nad středem magnetu (šablona z listu 4). Přitlačte prsty nebo převalujte kolíkem. Přes magnet paličkou netlučte – neodym se může odštípnout.',
         animationLinks: [animationLink('lidMagnet', 'B5'), animationLink('lidMagnet', 'B6')],
         media: [
           ill(
@@ -1193,7 +1191,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'cure',
         title: 'Nechte 24 h vytvrdit',
-        body: 'Peněženku položte zády na stůl a víčko narovnejte tak, aby leželo na stole vodorovně jako prodloužení zad: ne zavřené a ne přehnuté přes záda. Pás víčka zatižte lehce knihou mimo magnet. Magnet musí být aspoň pár cm od plíšku, jinak ho plíšek přitáhne. Víčko se samo zavírá, bez zátěže ho nenechávejte. Nechte 24 h vytvrdit, teprve pak šijte S7 a zkoušejte držení víčka. Závěs při tom nenavlhčujte; jestli 24 h v rovné poloze nezmění tvar závěsu z lekce 10, ověřit na prototypu (zkouška Z-2).',
+        body: 'Peněženku položte zády na stůl a víčko narovnejte vodorovně jako prodloužení zad (ne zavřené, ne přehnuté přes záda). Pás víčka lehce zatižte knihou mimo magnet; magnet musí být aspoň pár cm od plíšku. Bez zátěže víčko nenechávejte, samo se zavře. Nechte 24 h vytvrdit, teprve pak šijte S7 a zkoušejte držení. Závěs nenavlhčujte (jestli rovná poloha nezmění jeho tvar, ukáže zkouška Z-2).',
         animationLinks: [animationLink('lidMagnet', 'B7')],
         media: [],
       },
@@ -1205,13 +1203,13 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidMagnet', 'B9'),
           animationLink('edges', 'G4'),
         ],
-        body: 'Špičku uřízněte 7,0 mm pod značkou (rysky) podle šablony nožem skrz jazýček i L1 najednou a zároveň seřízněte boky L1 načisto s boky jazýčku (přířez 24 mm je o 2 mm na každé straně širší než jazýček 20 mm). Střed oblouku R10 leží 10,0 mm nad špičkou, tedy 3,0 mm nad středem magnetu. Pak špičku zbruste do klínu, ale jen v posledních 2,5 mm: 2,5 mm od špičky si udělejte rysku a brusným papírem na hranolku bruste z líce i z rubu jen mezi ryskou a špičkou, ne nožem. Za ryskou (dál od špičky) už nebruste, aby magnet neležel na ztenčeném místě. Stačí, když je hrana na konci asi 0,5–0,7 mm a zaoblená.',
+        body: 'Podle šablony uřízněte nožem špičku 7,0 mm pod značkou (rysky), skrz jazýček i L1 najednou, a zároveň seřízněte boky L1 načisto s boky jazýčku (přířez je o 2 mm na každé straně širší). Střed oblouku R10 leží 3,0 mm nad středem magnetu. Pak udělejte rysku 2,5 mm od špičky a brusným papírem na hranolku zbruste klín z líce i z rubu jen mezi ryskou a špičkou, ne nožem. Za ryskou nebruste, magnet nesmí ležet na ztenčeném místě. Konec stačí asi 0,5–0,7 mm, zaoblený.',
         media: [],
       },
       {
         id: 's7',
         title: 'Šev S7 kolem magnetu',
-        body: 'Šablonu konce jazýčku z listu 4 přiložte na líc jazýčku podle obrysu špičky a propíchněte jehlou 8 otvorů S7: U kolem magnetu, ke špičce otevřené. Jazýček leží rubem dolů a magnet s L1 z rubu vystupuje, proto si připravte podložku s otvorem: dva slepené odřezky usně 1,0 mm (nebo odřezek desky 2 mm) proseknuté uprostřed výsečníkem Ø 10. Magnet leží v otvoru, kůže kolem naplocho. Děrujte z líce jazýčku vidličkou 4 mm: svislé boky (x 44,5 a 56,5) dvouzubou částí svisle, horní řadu (14 mm nad špičkou) vodorovně, rohové otvory jen jedním krajním zubem nasazeným do otvoru řady. Natočení zubů na bocích zvolte tak, aby šikmé otvory měly stejný sklon jako v horní řadě – vyzkoušejte na odřezku. Náhrada: otvory předpíchnout jehlou přes šablonu a vidličkou je jen dorazit. Šijte sedlovým stehem, konce 2 otvory zpět. Pak hrany jazýčku vybruste, zkoste a vyleštěte jako v lekci 5.',
+        body: 'Šablonu konce jazýčku přiložte na líc jazýčku podle obrysu špičky a propíchněte jehlou 8 otvorů S7 (U kolem magnetu, ke špičce otevřené). Magnet s L1 z rubu vystupuje, proto pod jazýček dejte podložku s otvorem: dva slepené odřezky usně 1,0 mm (nebo odřezek desky 2 mm) proseknuté výsečníkem Ø 10. Magnet leží v otvoru, kůže kolem naplocho. Děrujte z líce vidličkou 4 mm: boky (x 44,5 a 56,5) dvouzubou částí svisle, horní řadu (14 mm nad špičkou) vodorovně, rohové otvory jedním krajním zubem nasazeným do otvoru řady. Zuby na bocích natočte tak, aby otvory měly stejný sklon jako horní řada (vyzkoušejte na odřezku). Jde to i tak, že otvory předpícháte jehlou a vidličkou je jen dorazíte. Šijte sedlovým stehem, konce 2 otvory zpět. Nakonec hrany jazýčku vybruste, zkoste a vyleštěte jako v lekci 5.',
         animationLinks: [
           animationLink('saddleStitch', 'E2'),
           animationLink('lidMagnet', 'B10'),
@@ -1225,8 +1223,7 @@ export const lessons: readonly LessonDefinition[] = [
     checkpoints: [
       {
         slug: 'magnet-on-mark',
-        title:
-          'Magnet je nalepený na značce v okně lepení z rámečku a epoxid s L1 nechal 24 h vytvrdit.',
+        title: 'Magnet je nalepený na značce v okně lepení z rámečku a lepení 24 h vytvrdlo.',
         required: true,
       },
       {
@@ -1255,7 +1252,7 @@ export const lessons: readonly LessonDefinition[] = [
     order: 12,
     phaseSlug: 'build',
     estimatedMinutes: 60,
-    goal: 'Dokončit peněženku, přiložit upozornění pro uživatele a na zkušebním kuse projít povinné zkoušky Z-1 až Z-4, podle kterých se řídí finální kus.',
+    goal: 'Dokončit peněženku a na zkušebním kuse projít povinné zkoušky Z-1 až Z-4, podle kterých se řídí finální kus.',
     materials: [
       'balzám na kůži (snášenlivost ověřit na odřezku)',
       'karty, bankovky a mince na stavy A, B a C, 1 Kč na zkoušku retence',
@@ -1281,13 +1278,13 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'balm',
         title: 'Konečná úprava',
-        body: 'Balzám hlavně na závěs, snášenlivost ověřte na odřezku. Volitelně slepá značka na F vlevo dole mimo jazýček a švy.',
+        body: 'Naneste balzám, hlavně na závěs (snášenlivost ověřte na odřezku). Volitelně udělejte slepou značku na F vlevo dole, mimo jazýček a švy.',
         media: [],
       },
       {
         id: 'user-note',
         title: 'Upozornění pro uživatele',
-        body: 'Přiložte k peněžence krátce: „Karty zasouvej do první štěrbiny u přední stěny (na straně jazýčku), kartu s magnetickým proužkem proužkem k horní hraně (k víčku). Do štěrbiny za barevnou hranou patří jen bankovky: karta by tam ležela u magnetu a mohla by přijít o proužek. Při vyndávání bankovky a mince drž víčko palcem, netlač ho až na záda. Při zavírání přitlač jazýček dole u magnetu, ne uprostřed. Otevřenou peněženku neotáčej dnem vzhůru.“ Pravidlo riziko karty u magnetu jen zmenšuje, nezaručuje.',
+        body: 'Přiložte k peněžence krátké upozornění: „Karty zasouvej do první štěrbiny u přední stěny, kartu s magnetickým proužkem proužkem k horní hraně (k víčku). Za barevnou hranu patří jen bankovky – karta by tam ležela u magnetu a mohla by přijít o proužek. Při vyndávání bankovek a mincí drž víčko palcem, netlač ho až na záda. Při zavírání přitlač jazýček dole u magnetu, ne uprostřed. Otevřenou peněženku neotáčej dnem vzhůru.“ Riziko pro kartu to jen zmenšuje, nevylučuje.',
         media: [
           ill(
             'lw-l12-slots',
@@ -1299,13 +1296,13 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'z1',
         title: 'Z-1 Magnet',
-        body: 'Ve stavech A, B a C víčko zavřete, zatřeste a otočte dnem vzhůru, pak ho otevřete jedním prstem za špičku jazýčku. Projde, když víčko zůstane zavřené (i proti pružení závěsu) a otevře se jedním prstem. Drží slabě nebo moc silně: vyměňte magnet za silnější nebo slabší stejného Ø 8 (další krok) a zkuste znovu. Nepomůže ani to: do finálního kusu plíšek z ocelového plechu 0,8 mm místo 0,5 (lekce 4 a 8, rozměr plíšku z listu 3 platí beze změny, listy se znovu negenerují; peněženka je u magnetu o 0,3 mm tlustší). Plech 0,8 v nákupním plánu není: sežeňte pozinkovaný a v obchodě ho vyzkoušejte magnetem jako plech 0,5. Na zkušebním kuse ho vyzkoušet nejde (plíšek je pod D1), jestli s ním víčko drží a jde otevřít jedním prstem, je neověřené – ověřit na prototypu, nejlépe dalším zkušebním kusem (krok Finální kus).',
+        body: 'Ve stavech A, B a C víčko zavřete, zatřeste a otočte dnem vzhůru, pak ho otevřete jedním prstem za špičku. Projde, když víčko zůstane zavřené (i proti pružení závěsu) a otevře se jedním prstem. Drží slabě nebo moc silně: vyměňte magnet za silnější nebo slabší Ø 8 (další krok) a zkuste znovu. Nepomůže-li ani to, dejte do finálního kusu plíšek z pozinkovaného plechu 0,8 mm místo 0,5 (lekce 4 a 8; rozměr z listu 3 platí, listy se negenerují; peněženka je u magnetu o 0,3 mm tlustší). Plech 0,8 v nákupním plánu není, v obchodě ho vyzkoušejte magnetem. Na zkušebním kuse to vyzkoušet nejde – ověřte to nejlépe dalším zkušebním kusem.',
         media: [],
       },
       {
         id: 'magnet-swap',
         title: 'Výměna magnetu (jen když Z-1 neprojde)',
-        body: 'Neověřený postup – ověřit na prototypu, napřed na zkušebním kuse. Plíšek vyměnit nejde, magnet ano: sedí jen pod L1 a švem S7. (1) Vypárejte S7: stehy na líci jazýčku přestřihněte malými nůžkami nebo páráčkem (kůži nenařízněte) a nit vytáhněte; otvory S7 zůstanou a použijí se znovu. (2) Odlepte L1 pomalu od horní hrany ke špičce a počítejte s novou L1 – ve špičce je s jazýčkem zbroušená do společného klínu a nejspíš se roztrhne. Novou vyřízněte z nebarvené kozinky (přířez 24 × 22). (3) Sundejte magnet: netlučte do něj a nepáčte ho ostrou hranou, neodym je křehký. Zbytky lepidla opatrně obruste brusným papírem a rub znovu zdrsněte. (4) Nový magnet stejného Ø 8 – silnější (vyšší třída nebo tlustší), nebo slabší (nižší třída nebo tenčí); třídu, tloušťku a sílu ověřte u prodejce. Stejný průměr nechá beze změny polohu magnetu, plíšek i otvory S7. Jiná tloušťka magnetu ale mění tloušťku peněženky u magnetu a odhad pole: podle návrhu se dosadí do magnetThicknessMm a kontroly se přepočítají. Formulář v aplikaci to neumí: tloušťku nového magnetu si zapište a přepočet nechte na tom, kdo střih udržuje (třeba v Claude Code nad repozitářem: pole magnetThicknessMm v modelu src/lib/geometry/lid-wallet.ts, oddíl 12.1 zadání); s jinou tloušťkou lepte až po přepočtu, když kontroly projdou. (5) Magnet epoxidem na stejné místo (osa x 50,5, 7,0 mm nad špičkou, místo ohraničují otvory S7), nechte ztuhnout, pak L1 kontaktním lepidlem (přes magnet netlučte). Novou L1 přilepte s přesahem a ořízněte podle hran hotového jazýčku (jazýček se znovu neřeže). Znovu zbruste klín v posledních 2,5 mm špičky (jen mezi ryskou a špičkou) jako v lekci 11. Po 24 h vytvrzení propíchněte z líce jehlou starými otvory S7 i skrz L1 a ušijte S7 znovu; u tlustšího magnetu zesilte podložku s otvorem o rozdíl tloušťky. Nakonec hrany jazýčku znovu vybruste, zkoste a vyleštěte. Jestli staré otvory druhé šití vydrží, ukáže výměna na zkušebním kuse: po ní zopakujte zkoušku Z-1 a po několika dnech používání prohlédněte šev S7.',
+        body: 'Postup je neověřený, zkuste ho napřed na zkušebním kuse. Plíšek vyměnit nejde, magnet ano. (1) Stehy S7 na líci přestřihněte malými nůžkami nebo páráčkem (kůži nenařízněte) a nit vytáhněte; otvory použijete znovu. (2) L1 pomalu odlepte od horní hrany ke špičce a počítejte s novou L1 z nebarvené kozinky (přířez 24 × 22), stará se nejspíš roztrhne. (3) Magnet sundejte bez tlučení a bez páčení ostrou hranou, neodym je křehký. Zbytky lepidla opatrně obruste a rub znovu zdrsněte. (4) Nový magnet Ø 8: silnější (vyšší třída nebo tlustší), nebo slabší (nižší třída nebo tenčí); třídu, tloušťku a sílu ověřte u prodejce. Má-li jinou tloušťku než 1,5 mm, zapište si ji a před lepením nechte střih přepočítat jako v lekci 2. (5) Magnet přilepte epoxidem na stejné místo (osa x 50,5, 7,0 mm nad špičkou), nechte ztuhnout a přilepte novou L1 kontaktním lepidlem s přesahem (přes magnet netlučte). L1 ořízněte podle hran jazýčku (jazýček znovu neřežte) a znovu zbruste klín jen mezi ryskou a špičkou (lekce 11). (6) Po 24 h propíchněte z líce jehlou starými otvory S7 i skrz L1 a ušijte S7 znovu; u tlustšího magnetu zesilte podložku o rozdíl tloušťky. Hrany jazýčku znovu vybruste, zkoste a vyleštěte. Pak zopakujte Z-1 a po několika dnech používání prohlédněte šev S7.',
         animationLinks: [
           animationLink('lidMagnet', 'vymena'),
           animationLink('saddleStitch', 'E2'),
@@ -1317,25 +1314,25 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'z2',
         title: 'Z-2 Závěs',
-        body: 'Otevřené víčko musí jít palcem držící ruky udržet tak, že bankovka jde okénkem vysunout a minci vzít; samo stát nemusí. Po několika dnech běžného používání prohlédněte líc i rub pásu závěsu. Praskliny: finální kus v záloze A (P1 0,8), až když ani ta nestačí, záloha B2 (ztenčení závěsu na 0,6 mm: v aplikaci zaškrtávátko B2, v repozitáři „--skive-hinge 0.6“, postup v lekci 5).',
+        body: 'Otevřené víčko musí jít palcem držící ruky udržet tak, že bankovka jde okénkem vysunout a minci vzít; samo stát nemusí. Po několika dnech používání prohlédněte líc i rub pásu závěsu. Praskliny: finální kus v záloze A (P1 0,8); až když ani ta nestačí, záloha B2 – ztenčení závěsu na 0,6 mm, v aplikaci zaškrtněte B2 („--skive-hinge 0.6“), postup v lekci 5.',
         media: [],
       },
       {
         id: 'z3',
         title: 'Z-3 Výřez pro palec',
-        body: 'Zopakujte gesta z papírového modelu v kůži: vysunout přední kartu, zadní po vyndání předních, zavírání ve stavu A, s 1 kartou a s jazýčkem posunutým o 3 mm. Po dnech používání se podívejte, jestli se horní hrana F u výřezu neodklápí a jestli na víčku nevzniká důlek. Když ano: upravit (zaoblit, zkosit rub dna výřezu, zúžit), nebo výřez ve finálním kusu vynechat.',
+        body: 'Zopakujte v kůži gesta z papírového modelu: vysunout přední kartu, zadní po vyndání předních, zavírání ve stavu A, s 1 kartou a s jazýčkem posunutým o 3 mm. Po dnech používání zkontrolujte, jestli se horní hrana F u výřezu neodklápí a na víčku nevzniká důlek. Když ano, výřez upravte (zaoblit, zkosit rub dna, zúžit), nebo ho ve finálním kusu vynechte.',
         media: [],
       },
       {
         id: 'z4',
         title: 'Z-4 Retence',
-        body: 'Stav B zavřete a 30× prudce zatřeste dnem vzhůru; 1 Kč za D2 ve stavu A i B; 0 karet a 1 × 5000 Kč. Projde, když se nic nepřesune do jiného oddílu ani nevypadne.',
+        body: 'Stav B zavřete a 30× prudce zatřeste dnem vzhůru. Pak totéž s 1 Kč za D2 ve stavu A i B a s 0 kartami a 1 × 5000 Kč. Projde, když se nic nepřesune do jiného oddílu ani nevypadne.',
         media: [],
       },
       {
         id: 'final-piece',
         title: 'Finální kus',
-        body: 'Finální kus postavte stejným postupem s tím, co na zkušebním kuse fungovalo (vyměněný magnet, jiná varianta, úprava výřezu). Když se varianta změnila až po zkušebním kuse, je finální kus v nové variantě neověřený – nejlépe dalším zkušebním kusem. Na další zkušební kus nákupní plán kůži nepočítá (kaštan 20 × 50 cm stačí na dva P1): dokupte stejnou useň na další přířez P1 110 × 240 mm (v záloze A useň 0,8, lekce 3). Na finálním kuse stačí zkontrolovat, že víčko drží, otevře se jedním prstem a otevřené jde palcem udržet.',
+        body: 'Finální kus postavte stejným postupem s tím, co na zkušebním kuse fungovalo (vyměněný magnet, jiná varianta, upravený výřez). Když se varianta změnila až po zkušebním kuse, je v ní finální kus neověřený – nejlépe postavte další zkušební kus. Kůži na něj nákupní plán nepočítá: dokupte stejnou useň na další přířez P1 110 × 240 mm (v záloze A useň 0,8). Na finálním kuse stačí zkontrolovat, že víčko drží, otevře se jedním prstem a otevřené jde palcem udržet.',
         media: [],
       },
     ],
@@ -1388,7 +1385,7 @@ export const lidWalletProject: ProjectDefinition = {
   summary:
     'Peněženka do zadní kapsy 101 × 83,5 mm: karty, bankovky napůl a dva sloupce mincí pod víčkem s magnetem.',
   description:
-    'Třetí projekt cesty učení: jeden pás třísločiněné usně 1,0 mm, dole přeložený za mokra, vzadu vede nahoru, přes horní hranu přechází v plochý závěs a vpředu končí víčkem s jazýčkem. Uvnitř jsou dvě tenké přepážky – vpředu karty, pak bankovky složené napůl, vzadu dva sloupce mincí s okénky. Víčko drží magnet na konci jazýčku, který dosedá na plíšek zalepený v přední stěně. Celý návrh je k ověření: nejdřív papírový model, zkouška ohybu a zkušební kus, teprve pak finální kus. Časy lekcí jsou hrubý odhad.',
+    'Třetí projekt: peněženka z jednoho pásu třísločiněné usně 1,0 mm. Dole je přeložený za mokra, vzadu vede nahoru, přes horní hranu přechází v závěs a vpředu končí víčkem s jazýčkem. Uvnitř jsou dvě tenké přepážky: vpředu karty, uprostřed bankovky napůl, vzadu dva sloupce mincí s okénky. Víčko drží magnet v jazýčku, který dosedá na plíšek v přední stěně. Návrh je neověřený: nejdřív papírový model, zkouška ohybu a zkušební kus, až pak finální kus. Časy lekcí jsou hrubý odhad.',
   difficulty: 'advanced',
   estimatedHours: { min: 14, max: 24 },
   skills: [
@@ -1627,7 +1624,7 @@ export const lidWalletProject: ProjectDefinition = {
     defaultVariantLabel: 'Výchozí střih – P1 1,0 mm, přepážky D1/D2 a podšívka L1 0,6 mm',
     browserGenerator: 'lid-wallet-thickness',
     variantsNote:
-      'Předem připravené jsou jen listy výchozího střihu. Koupené kozinky mají skoro vždy jinou tloušťku než 0,6 mm a pak se mění skoro všechna čísla postupu, proto potřebujete listy pro změřenou kůži: vygenerujte je níže v části „Listy pro vaši kůži“. Aplikace je spočítá stejně jako generátor v repozitáři („pnpm pattern:wallet-lid --divider <větší z D1 a D2> --lining <L1>“, a když se P1 liší od 1,0 o 0,05 mm a víc, navíc „--p1 <změřená P1>“). Zálohy podle zkoušky ohybu V12 a zkušebního kusu: záloha A = P1 ze změřené usně 0,8 („--p1 0.8“), B1 = ztenčený ohyb dna („--skive-fold 0.6“), B2 = ztenčený závěs („--skive-hinge 0.6“). Přepážky nad 0,92 mm střih odmítne. Hodnoty z papírového modelu P0 a tloušťku magnetu formulář nemění – když P0 dopadne jinak, než model čeká, nebo vyberete jiný magnet, zapište si naměřené hodnoty a střih nechte přepočítat tím, kdo ho udržuje (třeba v Claude Code nad repozitářem, model src/lib/geometry/lid-wallet.ts; lekce 2).',
+      'Předem připravené jsou jen listy výchozího střihu. Koupené kozinky mají skoro vždy jinou tloušťku než 0,6 mm a pak se mění skoro všechna čísla, proto si níže v části „Listy pro vaši kůži“ vygenerujte listy pro změřenou kůži. Aplikace je spočítá stejně jako generátor v repozitáři („pnpm pattern:wallet-lid --divider <větší z D1 a D2> --lining <L1>“, při P1 odlišné od 1,0 o 0,05 mm a víc navíc „--p1 <změřená P1>“). Zálohy podle zkoušky ohybu V12 a zkušebního kusu: A = P1 z usně 0,8 („--p1 0.8“), B1 = ztenčený ohyb dna („--skive-fold 0.6“), B2 = ztenčený závěs („--skive-hinge 0.6“). Přepážky nad 0,92 mm střih odmítne. Hodnoty z papírového modelu P0 a jinou tloušťku magnetu formulář nezná: zapište si je a nechte střih přepočítat tím, kdo ho udržuje (lekce 2).',
   },
   shoppingPlan: {
     title:

@@ -41,13 +41,13 @@ ul{margin:0;padding-left:18px;display:grid;gap:4px}
 <header>
 <a class="backlink" href="/" data-back>← Zpět do lekce</a>
 <h1>Kolik nitě na šev</h1>
-<p class="lead">Pravidlo pro sedlový steh: <b>délka nitě ≈ 4× délka švu + 25–30 cm rezerva</b>. Přes 3 vrstvy nebo silnější kůži počítej 5×. Nit prochází každým otvorem dvakrát (jednou z každé strany) a ohýbá se přes tloušťku kůže.</p>
+<p class="lead"><b>Délka nitě ≈ 4 × délka švu + 25–30 cm rezerva.</b> Přes tři vrstvy nebo silnější kůži 5 ×.</p>
 </header>
 
 <section class="card">
 <div class="step"><div class="num">1</div><div>
-<h2>Změř délku švu po linii stehu</h2>
-<p class="small">Ne po okraji kůže, ale po čárkované linii stehu. Rovné úseky pravítkem. Přes oblouk polož provázek nebo nit, pak ji narovnej a změř.</p>
+<h2>Změřte délku švu</h2>
+<p class="small">Měřte po linii stehu, ne po okraji kůže. Rovné úseky pravítkem, oblouk provázkem nebo nití, kterou pak narovnáte a změříte.</p>
 </div></div>
 <svg viewBox="0 0 640 250" role="img" aria-label="Pouzdro s vyznačenou linií stehu po bocích a dole a měřením">
   <rect x="150" y="20" width="300" height="200" rx="16" fill="var(--leather)" stroke="var(--leather-d)" stroke-width="2"/>
@@ -65,15 +65,15 @@ ul{margin:0;padding-left:18px;display:grid;gap:4px}
   <text x="478" y="136" class="lbl red">bok</text>
   <text x="520" y="80" class="sm">délka švu =</text>
   <text x="520" y="98" class="sm">bok + dno + bok</text>
-  <text x="520" y="122" class="sm">čárkovaně = linie</text>
-  <text x="520" y="138" class="sm">stehu</text>
+  <text x="520" y="122" class="sm">čárkovaně =</text>
+  <text x="520" y="138" class="sm">linie stehu</text>
 </svg>
 </section>
 
 <section class="card">
 <div class="step"><div class="num">2</div><div>
-<h2>Vynásob 4× a přidej 25–30 cm</h2>
-<p class="small">Příklad: šev 18 cm → 4 × 18 = 72 cm + 25–30 cm rezerva = <b>asi 1 m nitě</b>. Kalkulačka počítá s horní hranicí 30 cm (2 × 15 cm na konce).</p>
+<h2>Vynásobte 4 × a přidejte 25–30 cm</h2>
+<p class="small">Příklad: šev 18 cm → 4 × 18 = 72 cm + 25–30 cm = <b>asi 1 m nitě</b>. Kalkulačka počítá s 30 cm.</p>
 </div></div>
 <svg viewBox="0 0 640 120" role="img" aria-label="Pruh nitě rozdělený na čtyři délky švu a rezervu">
   <g font-family="Albert Sans,sans-serif">
@@ -90,14 +90,14 @@ ul{margin:0;padding-left:18px;display:grid;gap:4px}
   <text x="548" y="56" text-anchor="middle" class="sm">+ 25–30 cm</text>
   <text x="246" y="28" text-anchor="middle" class="lbl">4 × délka švu</text>
   <text x="548" y="28" text-anchor="middle" class="lbl">rezerva</text>
-  <text x="320" y="96" text-anchor="middle" class="sm">rezerva = navléknutí do jehel + zpětné stehy na konci</text>
+  <text x="320" y="96" text-anchor="middle" class="sm">rezerva na navlečení jehel a zpětné stehy</text>
 </svg>
 </section>
 
 <section class="card">
 <div class="step"><div class="num">3</div><div>
-<h2>Navleč obě jehly a nit vyrovnej na půl</h2>
-<p class="small">Nit protáhni prvním otvorem tak, aby na obou stranách zůstala stejná délka. Pak šiješ oběma jehlami proti sobě.</p>
+<h2>Navlékněte obě jehly a nit vyrovnejte napůl</h2>
+<p class="small">Nit protáhněte prvním otvorem tak, aby na obou stranách zůstala stejná délka.</p>
 </div></div>
 <svg viewBox="0 0 640 130" role="img" aria-label="Nit se dvěma jehlami, uprostřed první otvor v kůži">
   <rect x="270" y="40" width="100" height="50" rx="6" fill="var(--leather)" stroke="var(--leather-d)"/>
@@ -119,7 +119,7 @@ ul{margin:0;padding-left:18px;display:grid;gap:4px}
 <label>Délka švu (cm)<input id="len" type="number" inputmode="decimal" min="1" step="0.5" value="18"></label>
 <label>Šev přes
 <select id="lay"><option value="4">2 vrstvy (4×)</option><option value="5">3 vrstvy nebo silnější kůže (5×)</option></select></label>
-<div><div class="small">Odměř nit</div><div class="res" id="out"></div></div>
+<div><div class="small">Odměřte nit</div><div class="res" id="out"></div></div>
 </div>
 <p class="small" id="note"></p>
 </section>
@@ -127,9 +127,9 @@ ul{margin:0;padding-left:18px;display:grid;gap:4px}
 <section class="card">
 <h2>Tipy</h2>
 <ul>
-<li>Raději o kus delší: napojovat nit uprostřed švu je nepříjemné, přebytek se ustřihne.</li>
-<li>Vychází přes 1,5 m? Nit se plete a třepí, šev raději rozděl na dvě části.</li>
-<li>Při tréninku (lekce 4) si změř, kolik nitě jsi opravdu spotřeboval, a pravidlo si dolaď.</li>
+<li>Raději delší: přebytek ustřihnete, napojovat nit uprostřed švu je horší.</li>
+<li>Přes 1,5 m se nit plete a třepí. Šev raději rozdělte na dvě části.</li>
+<li>Při tréninku (lekce 4) si změřte, kolik nitě jste spotřebovali, a pravidlo si upravte.</li>
 </ul>
 </section>
 </div>
@@ -138,7 +138,7 @@ const len=document.getElementById('len'),lay=document.getElementById('lay'),out=
 const cz=n=>n.toLocaleString('cs-CZ',{maximumFractionDigits:0});
 function upd(){const l=parseFloat(String(len.value).replace(',','.'));if(!(l>0)){out.textContent='–';note.textContent='';return;}
 const k=+lay.value,t=l*k+30;out.textContent=cz(t)+' cm';
-note.textContent=cz(l)+' × '+k+' = '+cz(l*k)+' cm + 30 cm rezerva'+(t>150?' · přes 1,5 m – zvaž rozdělení švu':'');}
+note.textContent=cz(l)+' × '+k+' = '+cz(l*k)+' cm + 30 cm rezerva'+(t>150?' · přes 1,5 m – zvažte rozdělení švu':'');}
 len.addEventListener('input',upd);lay.addEventListener('change',upd);upd();
 </script>
 <script>

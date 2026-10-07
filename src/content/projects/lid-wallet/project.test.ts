@@ -74,9 +74,11 @@ describe('obsah – peněženka Víčko', () => {
   });
 
   it('upozornění pro začátečníka: listy pro změřenou kůži, karty proužkem k víčku, víčko samo nestojí', () => {
-    expect(lessonText('01-measure-and-sheets')).toContain('--divider');
-    expect(lessonText('01-measure-and-sheets')).toContain('--lining');
-    expect(lessonText('01-measure-and-sheets')).toContain('--p1');
+    // Lekce 1 vede na generátor v aplikaci se všemi třemi vstupy (P1, přepážky, L1).
+    expect(lessonText('01-measure-and-sheets')).toContain('„Listy pro vaši kůži“');
+    expect(lessonText('01-measure-and-sheets')).toContain(
+      'zadejte změřenou P1, větší z D1 a D2 a L1',
+    );
     expect(lidWalletProject.patternSheets!.variantsNote).toContain('--divider');
     expect(lessonText('02-paper-model')).toContain('proužkem k horní hraně (k víčku)');
     expect(lessonText('12-finish-and-tests')).toContain('proužkem k horní hraně (k víčku)');
@@ -92,7 +94,10 @@ describe('obsah – peněženka Víčko', () => {
     expect(lessonText('02-paper-model')).toContain('šablonu konce jazýčku z listu 4');
     expect(lessonText('02-paper-model')).toContain('k = (y_C − y_A) / (P(C) − P(A))');
     expect(lessonText('12-finish-and-tests')).toContain('Výměna magnetu (jen když Z-1 neprojde)');
-    expect(lessonText('12-finish-and-tests')).toContain('magnetThicknessMm');
+    // Jiná tloušťka magnetu: přepočet střihu před lepením.
+    expect(lessonText('12-finish-and-tests')).toContain(
+      'zapište si ji a před lepením nechte střih přepočítat',
+    );
     expect(lessonText('03-bend-test')).toContain('--skive-fold 0.6');
     expect(lessonText('12-finish-and-tests')).toContain('--skive-hinge 0.6');
     const l5 = lidWalletProject.lessons.find((l) => l.slug === '05-crease-windows-edges')!;
@@ -141,7 +146,7 @@ describe('obsah – peněženka Víčko', () => {
     expect(side.filter((y) => y >= 56 && y <= 68)).toEqual([56, 60, 64, 68]);
     expect(side.filter((y) => y >= 72)).toEqual([72, 76]);
     expect(punch).toContain('na líc D2 těsně k horní hraně F');
-    expect(punch).toContain('ověřte to na zkušebním kuse');
+    expect(punch).toContain('jak přesně, ověřte na zkušebním kuse');
     const mark = stepOf(9, 'mark-side');
     expect(mark).toContain('ne od přečnívající D2');
     expect(L.seamSideX[0]).toBe(3);

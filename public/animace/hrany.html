@@ -87,7 +87,6 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cap .no{color:var(--lic-hi)}}
 .cap h2{display:inline;font-size:1.05rem;margin:0}
 .cap p{margin:4px 0 0;color:var(--ink)}
-.cap .src{display:block;margin-top:6px;color:var(--muted);font-size:13px}
 .cap .tip{display:block;margin-top:6px;color:var(--muted);font-size:14px}
 .cap .tip b{color:var(--accent);font-weight:700}
 .note{font-size:13px;color:var(--muted);margin:0}
@@ -114,7 +113,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 <header>
 <a class="backlink" href="/" data-back>← Zpět do lekce</a>
 <h1>Dokončení hran</h1>
-<p class="lead">Jak se řezaná hrana srovná, zkosí, u barvené kůže obarví, navlhčí a zaleští. Základ je postup pouzdra na karty (projekt 01, lekce 6, krok „Srovnejte a zalešte hrany“). V dalších částech jsou rozdíly u pouzdra s mincí (projekt 02, lekce 5, 6 a 8) a u peněženky Víčko (projekt 03, lekce 5, 6, 9, 11 a 12). Řezy hranou jsou zvětšené. Tloušťky vrstev odpovídají kůži z lekcí, tvary dílů jsou kreslené v měřítku podle šablon.</p>
+<p class="lead">Hranu srovnat, zkosit, u barvené kůže obarvit, navlhčit a zaleštit. Základ je pouzdro na karty (projekt 01, lekce 6), dál rozdíly u pouzdra s mincí (projekt 02) a peněženky Víčko (projekt 03).</p>
 </header>
 
 <section class="card" aria-label="Animace postupu">
@@ -132,7 +131,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
   </div>
   <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
 </section>
-<p class="note">Části A–E jsou postup pouzdra na karty (projekt 01, lekce 6): srovnání, navlhčení, zaleštění a kontrola. Zkosení (B) a barvu (C) tento projekt nemá, ukazují je až projekty 02 a 03. Část F je pouzdro s mincí (projekt 02), část G peněženka Víčko (projekt 03). Řezy hranou jsou zvětšené, u každého je úsečka 1 mm. Poznámky označené „Tip“ lekce výslovně neuvádí.</p>
+<p class="note">Části A–E: pouzdro na karty (zkosení a barvu nemá, ukazují je projekty 02 a 03). Část F: pouzdro s mincí, část G: Víčko. Řezy hranou jsou zvětšené, s úsečkou 1 mm; díly jsou v měřítku. „Tip“ označuje, co lekce neuvádí.</p>
 </div>
 
 <script>
@@ -273,7 +272,7 @@ const WINL="M31.25 20.75 A10 10 0 1 0 11.25 20.75 A10 10 0 1 0 31.25 20.75 Z";
 const PARTS={A:'Srovnání',B:'Zkosení',C:'Barva',D:'Zaleštění',E:'Kontrola',F:'Pouzdro s mincí',G:'Víčko'};
 const P1={v:'01',sub:'pouzdro na karty',c:'var(--chip1)'}, P2={v:'02',sub:'pouzdro s mincí',c:'var(--chip2)'}, P3={v:'03',sub:'peněženka Víčko',c:'var(--chip3)'};
 const S=[];
-const add=(part,title,body,src,dur,draw,proj,tip)=>S.push({part,title,body,src,dur,draw,proj,tip});
+const add=(part,title,body,dur,draw,proj,tip)=>S.push({part,title,body,dur,draw,proj,tip});
 
 // vrstvy projektu 01: zadní díl dole (rub ven), přední kapsa nahoře (líc ven); 1,2 mm každá
 const L01=(d0=0,d1=0)=>[{t:1.2,lic:'top',dx:d0},{t:1.2,lic:'top',dx:d1}];
@@ -281,8 +280,8 @@ const K=10.5; // hlavní řez: 10,5 jednotky scény na 1 mm
 
 // A1
 add('A','Které hrany: boky, dno, horní hrany a výřez',
- 'Hrany se dělají až na sešitém pouzdru. Boky a dno jsou sešité ze dvou vrstev, přední kapsy a zadního dílu (kůže 1,2–1,5 mm, kresleno 1,2 mm, tedy asi 2,4 mm dohromady). Udělejte také horní hrany obou dílů a oblouk výřezu – po výřezu jezdí prsty při každém vytažení karty.',
- 'Projekt 01, lekce 6, krok „Srovnejte a zalešte hrany“',8000,t=>{
+ 'Hrany dělejte až na sešitém pouzdru: boky a dno (dvě vrstvy), horní hrany obou dílů a oblouk výřezu.',
+ 8000,t=>{
   const s=.66;let sh=es(t,.08,.3),sb=es(t,.38,.55),sp=es(t,.62,.8);
   let o=holder('translate(9 14)',s,{hs:sh,hb:sb,hp:sp});
   if(sh>.5) o+=`<g opacity="${f(seg(t,.2,.3))}">${pill(9+50*s,14+70*s+7,'boky a dno: 2 vrstvy','ta','middle')}</g>`;
@@ -291,14 +290,14 @@ add('A','Které hrany: boky, dno, horní hrany a výřez',
   o+=pill(4,87,t<.9?'zadní díl 100 × 70 mm, kapsa 100 × 56 mm':'všechny řezané hrany','t');
   const ck=[['boky a dno','.12','.'],['horní hrany','.42','.'],['oblouk výřezu','.66','.']].map(([a,b])=>[a,+b]);
   let ib=checklist(ck,t,18,6.4);
-  ib+=notes([['po sešití','t'],['(lekce 6)'],[''],['2 vrstvy ≈ 2,4 mm'],['1 vrstva 1,2 mm']],42,5.2);
+  ib+=notes([['po sešití','t'],[''],['2 vrstvy','t'],['po 1,2 mm']],42,5.2);
   return o+inset('HRANY',ib);
  },P1);
 
 // A2
 add('A','Srovnejte hrany smirkem 220–400 na rovné destičce',
- 'Smirkovým papírem 220–400 na rovné destičce srovnejte sešité hrany do jedné roviny. Teprve pak má smysl leštit.',
- 'Projekt 01, lekce 6, krok „Srovnejte a zalešte hrany“; zrnitost i v seznamu vybavení (220–400 na srovnání hran)',10000,t=>{
+ 'Sešité hrany srovnejte do jedné roviny smirkem 220–400 na rovné destičce. Teprve pak leštěte.',
+ 10000,t=>{
   // hlavní pohled: pouzdro stojí dnem na brusném papíru na destičce a táhne se tam a zpět
   const s=.5, ph=es(t,.08,.9), dx=Math.sin(ph*Math.PI*6)*7;
   let o=`<rect x="4" y="66" width="76" height="6" rx="1" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".3"/><rect x="6" y="64.6" width="72" height="1.6" fill="var(--sand)" stroke="var(--sand-d)" stroke-width=".2"/>`;
@@ -315,12 +314,12 @@ add('A','Srovnejte hrany smirkem 220–400 na rovné destičce',
   if(p>.95) ib+=pill(130,24,'v rovině','tok','end');
   ib+=scaleBar(92,72,6.2)+lbl(89,80,'zvětšeno','ts');
   return o+inset('ŘEZ DNEM',ib);
- },P1,'Tip (lekce to neuvádí; karta vybavení Smirkový papír): papír přidržte na destičce a tahejte po něm hranou, volný papír v ruce hranu zaoblí nepravidelně. Bruste jen do roviny, víc ubírá materiál z dílu.');
+ },P1,'Tip: papír držte na destičce a tahejte po něm hranou – volný papír v ruce hranu zaoblí nepravidelně. Bruste jen do roviny.');
 
 // B1
 add('B','Zkosení: pouzdro na karty ne, pouzdro s mincí srazí hrany dna',
- 'Lekce pouzdra na karty hrany nezkosuje: hrany se jen srovnají a zaleští. Pouzdro s mincí v lekci 8 přebrousí dno smirkem 220–400 na rovné destičce do jedné roviny přes všechny tři vrstvy a hrany dna srazí z obou vnějších líců (přední i zadní panel): zaoblí je brusným papírem na hranolku, ořezávačem hran (velikost 0–1) jen pokud ho máte – nákupní sestava pouzdra ho nemá. Animace ukazuje dno pouzdra s mincí: tři vrstvy, kreslené po 1,2 mm (tělo je výchozí z kůže 1,5 mm, nebo 1,2 mm).',
- 'Projekt 02, lekce 8, krok „Přebruste dno do roviny“; ořezávač hran v doporučeném vybavení lekce 8, v nákupní sestavě vynechaný. Projekt 01: ořezávač hran až „na později“',11000,t=>{
+ 'Pouzdro na karty se nezkosuje. Pouzdro s mincí (lekce 8): dno přebruste smirkem 220–400 na rovné destičce do roviny přes tři vrstvy. Hrany dna zaoblete z obou vnějších stran (přední i zadní panel) brusným papírem na hranolku, nebo ořezávačem hran, máte-li ho.',
+ 11000,t=>{
   const ls=[{t:1.2,lic:'bot'},{t:1.2,lic:'bot'},{t:1.2,lic:'top'}];
   const bt=.55*es(t,.12,.45), bb=.55*es(t,.55,.88);
   const x0=58,y0=64;
@@ -331,16 +330,16 @@ add('B','Zkosení: pouzdro na karty ne, pouzdro s mincí srazí hrany dna',
   if(t>.5&&t<.92){const w=Math.sin(t*90)*3;const c=bb*K;o+=sandBlock(x0-c/2+1.5+w*.4,y0-c/2+1.5-w*.4,-45)}
   o+=pill(6,y0-H*K-5,'přední (líc)','ts')+pill(6,y0+6,'zadní (líc)','ts');
   o+=scaleBar(8,80,K)+zoomTag();
-  o+=pill(4,87,t<.5?'srazit hranu u předního líce':t<.92?'srazit hranu u zadního líce':'sraženo z obou vnějších líců','t');
-  let ib=notes([['01 pouzdro na karty','t'],['nezkosuje se'],['(ořezávač „později“)'],[''],['02 lekce 8','t'],['z obou vnějších'],['líců, brusný papír'],['na hranolku'],[''],['ořezávač vel. 0–1','ta'],['jen pokud ho máte'],['(sestava ho nemá)']],16,5.1);
+  o+=pill(4,87,t<.5?'zaoblit přední hranu':t<.92?'zaoblit zadní hranu':'zaobleno z obou stran','t');
+  let ib=notes([['01','t'],['nezkosuje se'],[''],['02 lekce 8','t'],['z obou stran,'],['brusný papír'],['na hranolku'],[''],['ořezávač hran','ta'],['jen máte-li ho']],16,5.2);
   return o+inset('KDO ZKOSUJE',ib);
- },P2,'Tip (lekce to neuvádí; karta vybavení Ořezávač hran): když ořezávač použijete, tah zkuste nejdřív na odřezku – jeden hluboký záběr hranu nevratně ztenčí a tupý ořezávač hranu trhá.');
+ },P2,'Tip: ořezávač zkuste nejdřív na odřezku – hluboký záběr hranu nevratně ztenčí.');
 
 // B2
 const L03side=(dD2=0)=>[{t:1.0,lic:'bot',kind:'kas'},{t:.8,lic:'bot',kind:'cok',dx:dD2},{t:1.0,lic:'top',kind:'kas'}];
 add('B','Víčko: zkosovačem, nebo brusným papírem na hranolku',
- 'Peněženka Víčko: hrany zkoste zkosovačem hran, pokud ho máte; jinak je zaoblete brusným papírem na hranolku. Jednotlivé hrany (horní hrana F, pás víčka, boky jazýčku, okénka mincí) se zkosují z líce, výřez pro palec z líce i z rubu, boky těla jako jeden svazek z obou líců. Na řezu je bok peněženky: přední stěna F, přepážka D2 a záda B.',
- 'Projekt 03, lekce 5, krok „Předběžné dokončení hran“ a lekce 9, krok „Zarovnat a vyleštit boky“',10000,t=>{
+ 'Víčko: hrany zkoste zkosovačem, nebo zaoblete brusným papírem na hranolku. Jednotlivé hrany z líce, výřez pro palec z líce i z rubu, boky těla jako jeden svazek z obou líců.',
+ 10000,t=>{
   const ls=L03side();const H=H_(ls);
   const rT=es(t,.1,.45), rB=es(t,.52,.88);
   const x0=58,y0=62;
@@ -352,14 +351,14 @@ add('B','Víčko: zkosovačem, nebo brusným papírem na hranolku',
   o+=sideTag(x0,y0-1.4*kk,'D2');
   o+=scaleBar(8,82,kk)+zoomTag();
   o+=pill(4,88,t<.92?'brusný papír na hranolku':'zaobleno z obou líců','t');
-  let ib=notes([['03 Víčko','t'],['zkosovač hran,'],['pokud ho máte'],['jinak brusný'],['papír na hranolku'],[''],['boky těla:','t'],['z obou líců'],['(lekce 9)'],[''],['kresleno:','ts'],['1,0 + 0,8 + 1,0 mm']],16,5.1);
+  let ib=notes([['03 Víčko','t'],['zkosovač, nebo'],['brusný papír'],['na hranolku'],[''],['boky těla:','t'],['z obou líců'],[''],['kresleno:','ts'],['1,0 + 0,8 + 1,0 mm']],16,5.2);
   return o+inset('BEZ NÁSTROJE',ib);
- },P3,'Tip (lekce to neuvádí): tloušťky vrstev Víčka si podle lekce 1 změříte sami; řez je kreslený pro 1,0 / 0,8 / 1,0 mm podle rozsahů tlouštěk kůže v lekci 1 (kaštan 0,9–1, čokoládová kozinka 0,7–0,9 mm).');
+ },P3,'Tip: skutečné tloušťky změříte v lekci 1; řez je kreslený pro 1,0 / 0,8 / 1,0 mm.');
 
 // C1
 add('C','Barva na hrany – jen u barvené kůže',
- 'U barvené kůže je řez světlý – obarvěte ho barvou na hrany; naneste ji podle návodu na obalu a před leštěním ji nechte zaschnout (ověřit na odřezku). Barví se před zaleštěním, stejně v lekcích 5, 6 i 8 pouzdra s mincí. Lekce 6 pouzdra na karty barvu na hrany nemá.',
- 'Projekt 02, lekce 8, krok „Obarvěte a zaleštěte vnější hrany“; lekce 5 a 6 „obarvěte (barva na hrany, u barvené kůže; naneste ji podle návodu na obalu…) a zaleštěte“',9000,t=>{
+ 'U barvené kůže je řez světlý. Obarvěte ho barvou na hrany podle návodu na obalu a nechte zaschnout, pak leštěte. Nejdřív to vyzkoušejte na odřezku (projekt 02, lekce 4): zkontrolujte, že barva nezatekla na líc, a zapište si počet vrstev a dobu schnutí. Pouzdro na karty barvu nemá.',
+ 9000,t=>{
   const ls=[{t:1.2,lic:'bot',kind:'dyed'},{t:1.2,lic:'bot',kind:'dyed'},{t:1.2,lic:'top',kind:'dyed'}];
   const d=es(t,.3,.85), x0=58,y0=64;
   let o=prof({x:x0,y:y0,k:K,len:5,layers:ls,bevT:.55,bevB:.55,fuzz:.45*(1-d*.5),dye:d});
@@ -367,15 +366,15 @@ add('C','Barva na hrany – jen u barvené kůže',
   if(t>.25&&t<.88){const yy=L(y0-3.6*K,y0,d);o+=`<circle cx="${f(x0+1.2)}" cy="${f(yy)}" r="1.1" fill="var(--dye)" opacity=".85"/>`}
   if(t<.3) o+=`<g opacity="${f(seg(t,.05,.12))}">${lead(40,46,52,y0-1.8*K)}${pill(26,45,'světlý řez','ta')}</g>`;
   o+=scaleBar(8,80,K)+zoomTag();
-  o+=pill(4,87,t<.88?'barvená kůže: řez barvit':'řez obarvený – pak zaleštit','t');
-  let ib=notes([['01 lekce 6','t'],['barvu nemá'],[''],['02 barvená kůže','t'],['barva na hrany'],['před zaleštěním'],['lekce 5, 6 a 8'],[''],['03 Víčko','t'],['barví jen horní'],['hranu D1, až po'],['vyleštění (G2)']],16,5.1);
+  o+=pill(4,87,t<.88?'barvená kůže: řez obarvit':'obarveno – pak zaleštit','t');
+  let ib=notes([['01','t'],['barvu nemá'],[''],['02 barvená kůže','t'],['barvit před'],['zaleštěním'],['(lekce 5, 6 a 8)'],[''],['03 Víčko','t'],['jen horní'],['hrana D1 (G2)']],16,5.2);
   return o+inset('KDY BARVIT',ib);
  },P2);
 
 // D1
 add('D','Navlhčete hranu vodou nebo pastou',
- 'Srovnanou hranu navlhčete vodou nebo pastou na hrany (v seznamu vybavení Tokonole). Na řezu je zpět pouzdro na karty: dvě vrstvy, srovnané, vlákna v řezu ještě volná.',
- 'Projekt 01, lekce 6, krok „Srovnejte a zalešte hrany“',8000,t=>{
+ 'Srovnanou hranu navlhčete vodou nebo pastou na hrany (Tokonole).',
+ 8000,t=>{
   const ls=L01();const H=H_(ls);
   const w=es(t,.3,.7), x0=56,y0=60;
   let o=prof({x:x0,y:y0,k:K+2,len:4.4,layers:ls,fuzz:.55*(1-.35*w),wet:w});
@@ -387,14 +386,14 @@ add('D','Navlhčete hranu vodou nebo pastou',
   o+=`<rect x="76" y="15" width="6" height="6" rx="1" fill="var(--paste)" stroke="var(--paste-d)" stroke-width=".25"/>`+lbl(79,27,'pasta','ts','middle');
   o+=scaleBar(8,80,kk)+zoomTag();
   o+=pill(4,87,t<.75?'navlhčit jen hranu':'hrana vlhká – hned leštit','t');
-  let ib=notes([['01 lekce 6:','t'],['voda nebo pasta'],[''],['vybavení:','t'],['pasta na hrany'],['(Tokonole)'],['+ dřevěné leštítko'],[''],['jen na hranu:','ta'],['pasta na líci'],['nechá lesklou'],['skvrnu (Tip)']],16,5.1);
+  let ib=notes([['voda nebo','t'],['pasta (Tokonole)','t'],[''],['jen na hranu:','ta'],['pasta na líci'],['nechá lesklou'],['skvrnu']],16,5.2);
   return o+inset('ČÍM',ib);
- },P1,'Tip (lekce to neuvádí; karta vybavení Pasta na hrany + leštítko): pasta na líci kůže zanechá lesklou skvrnu, pracujte jen na hraně.');
+ },P1,'Tip: pasta na líci nechá lesklou skvrnu, pracujte jen na hraně.');
 
 // D2
 add('D','Třete leštítkem, dokud se hrana nezhutní a nezaleskne',
  'Navlhčenou hranu třete leštítkem, dokud se nezhutní a nezaleskne.',
- 'Projekt 01, lekce 6, krok „Srovnejte a zalešte hrany“; leštítko v doporučeném vybavení lekce 6',10500,t=>{
+ 10500,t=>{
   const ls=L01();const H=H_(ls);
   const p=es(t,.1,.88), x0=50,y0=60,kk=K+2;
   let o=prof({x:x0,y:y0,k:kk,len:3.8,layers:ls,fuzz:.55*(1-p),wet:.8*(1-p),burn:p,round:p});
@@ -413,12 +412,12 @@ add('D','Třete leštítkem, dokud se hrana nezhutní a nezaleskne',
   ib+=p<.97?lbl(89,38,'matná','ts')+lbl(130,38,'lesklá','ts','end'):lbl(89,38,'celá hrana lesklá','tok');
   ib+=notes([['dokud se','t'],['nezhutní'],['a nezaleskne'],[''],['leštítko nebo','t'],['kus plátna (D3)']],48,5.1);
   return o+inset('LEŠTĚNÍ',ib);
- },P1,'Tip (lekce to neuvádí; karta vybavení): leštítko je dřevěné s drážkami pro různé tloušťky – použijte drážku, do které hrana sedne. Tím, jak se volná vlákna přitlačí, hrana obvykle ztmavne a lehce se zaoblí.');
+ },P1,'Tip: použijte drážku leštítka, do které hrana sedne. Hrana obvykle ztmavne a lehce se zaoblí.');
 
 // D3
 add('D','Bez leštítka: kus plátna',
- 'Místo leštítka poslouží kus plátna. Postup je stejný: navlhčit a třít, dokud se hrana nezhutní a nezaleskne. Hrana pouzdra napůl zaleštěná: vlevo matná srovnaná, vpravo hladká a lesklá.',
- 'Projekt 01, lekce 6, krok „Srovnejte a zalešte hrany“ (leštítkem či kusem plátna) a popis fotky ke kroku',8500,t=>{
+ 'Místo leštítka poslouží kus plátna. Postup je stejný: navlhčit a třít, dokud se hrana nezaleskne.',
+ 8500,t=>{
   // hlavní pohled: dno pouzdra zepředu, plátno jede podél hrany
   const s=.62,p=es(t,.08,.88)*.5;
   let o=holder('translate(11 12)',s);
@@ -431,12 +430,12 @@ add('D','Bez leštítka: kus plátna',
   ib+=scaleBar(92,64,7)+lbl(89,72,'řez, zvětšeno','ts');
   ib+=lbl(89,18,'leštítko','t')+lbl(89,23,'nebo plátno','t');
   return o+inset('PLÁTNO',ib);
- },P1,'Tip (lekce to neuvádí; karta vybavení): voda a kus plátna nebo hladké dřevo fungují, jen to trvá déle.');
+ },P1,'Tip: plátno nebo hladké dřevo fungují, jen to trvá déle.');
 
 // E1
 add('E','Chyba: leštění před srovnáním hran',
- 'Častá chyba z lekce 6: leštit dřív, než jsou hrany srovnané. Nerovnosti zůstanou.',
- 'Projekt 01, lekce 6, časté chyby a úvod lekce („Nejdřív srovnat smirkem, potom navlhčit a leštit. V tomto pořadí, nikdy naopak.“); stejně projekt 02, lekce 8 („Leštění hran před srovnáním dna: nerovnosti tří vrstev zůstanou vidět.“)',8000,t=>{
+ 'Častá chyba: leštit dřív, než jsou hrany srovnané. Nerovnosti zůstanou. Vždy nejdřív srovnat, pak leštit.',
+ 8000,t=>{
   const x0=36,y0=60,kk=K;
   const p=es(t,.1,.6);
   let o=prof({x:x0,y:y0,k:kk,len:3,layers:L01(.45,0),burn:p,fuzz:.4*(1-p)});
@@ -447,19 +446,19 @@ add('E','Chyba: leštění před srovnáním hran',
   if(t>.95) o+=tick(66,y0-2.4*kk-5,1.1);
   o+=scaleBar(6,80,kk)+zoomTag();
   o+=pill(4,87,'srovnat vždy před leštěním','t');
-  let ib=notes([['01 lekce 6','t'],['leštění před'],['srovnáním hran:'],['nerovnosti','ta'],['zůstanou','ta'],[''],['02 lekce 8','t'],['totéž u dna'],['ze tří vrstev']],18,5.4);
+  let ib=notes([['leštění před','t'],['srovnáním:','t'],['nerovnosti','ta'],['zůstanou','ta'],[''],['02 lekce 8:','t'],['totéž u dna'],['ze tří vrstev']],18,5.4);
   return o+inset('ČASTÁ CHYBA',ib);
  },P1);
 
 // E2
 add('E','Kontrolní bod: hrany srovnané a zaleštěné, včetně oblouku výřezu',
- 'Hrany včetně oblouku výřezu jsou srovnané a zaleštěné (povinný kontrolní bod lekce 6). Pak vložte čtyři karty a palcem je ve výřezu vysuňte – po výřezu jezdí prsty při každém vytažení karty.',
- 'Projekt 01, lekce 6, kontrolní body „Hrany včetně oblouku výřezu…“ a „Vejdou se čtyři karty…“',8000,t=>{
+ 'Hrany včetně oblouku výřezu jsou srovnané a zaleštěné. Pak vložte čtyři karty a palcem je výřezem vysuňte.',
+ 8000,t=>{
   const s=.66;
   let o=holder('translate(9 14)',s,{gloss:es(t,.05,.35)});
   const ck=[['boky a dno',.35],['horní hrany',.45],['oblouk výřezu',.55],['srovnané',.65],['zaleštěné',.72]];
   let ib=checklist(ck,t,17,6.6);
-  ib+=`<g opacity="${f(seg(t,.82,.9))}">${notes([['dál: vložit','t'],['4 karty, vysunout'],['palcem výřezem']],56,5.2)}</g>`;
+  ib+=`<g opacity="${f(seg(t,.82,.9))}">${notes([['pak: 4 karty','t'],['vysunout palcem'],['výřezem']],56,5.2)}</g>`;
   o+=pill(4,87,t<.8?'kontrola po celém obvodu':'pouzdro hotové','tok');
   if(t>.9) o+=`<circle cx="76" cy="70" r="5" fill="var(--panel)" stroke="var(--ok)" stroke-width=".7"/>`+tick(76,70.5,1.2);
   return o+inset('KONTROLA',ib);
@@ -467,8 +466,8 @@ add('E','Kontrolní bod: hrany srovnané a zaleštěné, včetně oblouku výře
 
 // F1
 add('F','Lekce 5: nejdřív hrany, na které se po složení nedostanete',
- 'Pouzdro s mincí dělá část hran ještě naplocho, před složením: horní hranu vnitřního panelu, jeho volnou svislou hranu (skončí uvnitř smyčky ohybu A, je vidět výřezem), oblouk výřezu na prst (celé U přes pásmo ohybu A: čtvrtkruh R34 na předním panelu i čtvrtelipsa na zadním) a jazyk. U barvené kůže je obarvěte (barvu podle návodu na obalu, před leštěním nechat zaschnout), pak zaleštěte – v hotovém pouzdru už na ně nedosáhnete. Rub vnitřního panelu zapečeťte (Tokonole nebo gum tragacanth) kromě spodního proužku 0–3,5 mm od hrany: ten se v lekci 7 lepí.',
- 'Projekt 02, lekce 5, krok „Obarvěte a zaleštěte hrany, na které se po složení špatně dostanete, a zapečeťte rub“ a kontrolní bod',11000,t=>{
+ 'Naplocho, před složením, obarvěte (u barvené kůže) a zaleštěte hrany, na které po složení nedosáhnete: horní a volnou svislou hranu vnitřního panelu, celý oblouk výřezu na prst a jazyk. Pak zapečeťte rub vnitřního panelu. Pruh 0–3,5 mm od dolní hrany se lepí: přelepte ho maskovací páskou, horní okraj pásky na čáru švu. Pastu (Tokonole nebo gum tragacanth) naneste na rub v tenké vrstvě a přetřete leštítkem (hustotu a počet vrstev ověřte na odřezku). Na líc pastu nedávejte. Po zaschnutí pásku pomalu strhněte.',
+ 11000,t=>{
   const s=.322, tr=`translate(${f(2-10*s)} ${f(26-10*s)}) scale(${s})`;
   const h1=es(t,.08,.3),h2=es(t,.32,.52),h3=es(t,.54,.74);
   const hl=(p,op)=>op>0?`<path d="${p}" fill="none" stroke="var(--ok)" stroke-width="${f(1.2/s)}" stroke-linecap="round" stroke-linejoin="round" opacity="${f(op)}"/>`:'';
@@ -491,12 +490,12 @@ add('F','Lekce 5: nejdřív hrany, na které se po složení nedostanete',
   ib+=`<rect x="${ix}" y="${f(iy+ih-band)}" width="${f(iw)}" height="${f(band)}" fill="none" stroke="var(--accent)" stroke-width=".35" stroke-dasharray=".8 .6"/>`;
   ib+=notes([['Tokonole nebo','t'],['gum tragacanth'],['ne v pruhu 0–3,5','ta'],['lepí se v lekci 7','ta']],iy+ih+6,5.3);
   return o+inset('ZAPEČETIT',ib);
- },P2,'Tip (lekce to neuvádí): pruh 0–3,5 mm je v insetu kvůli čitelnosti nakreslený širší.');
+ },P2,'Tip: pruh 0–3,5 mm je v obrázku nakreslený širší.');
 
 // F2
 add('F','Lekce 6: hrany kapsy ještě před přišitím',
- 'Hrany kapsy – oblouk okna i vnější obrys – obarvěte (u barvené kůže; barvu podle návodu na obalu, před leštěním nechat zaschnout) a zaleštěte stejně jako v lekci 5. Po přišití na přední panel už na vnější obrys nedosáhnete a na okno jen omezeně.',
- 'Projekt 02, lekce 6, krok „Obarvěte a zaleštěte hrany kapsy“ a kontrolní bod',8500,t=>{
+ 'Hrany kapsy (okno i vnější obrys) obarvěte (u barvené kůže) a zaleštěte ještě před přišitím. Pak už na ně nedosáhnete.',
+ 8500,t=>{
   const s=1.32,ox=14,oy=12;
   const p1=es(t,.1,.45),p2=es(t,.5,.85);
   let inner=`<path d="${OUTL} ${WINL}" fill-rule="evenodd" fill="url(#dyedG)" stroke="var(--lic-d)" stroke-width="${f(.4/s)}"/>`;
@@ -505,25 +504,25 @@ add('F','Lekce 6: hrany kapsy ještě před přišitím',
   let o=G(`translate(${ox} ${oy}) scale(${s})`,inner);
   if(p1>.9) o+=pill(ox+42.5*s+2,oy+30*s,'obrys','tok');
   if(p2>.9) o+=pill(ox+21.25*s,oy+20.75*s+1.5,'okno Ø 20','tok','middle');
-  o+=pill(4,87,t<.88?'kapsa 42,5 × 42 mm, naplocho':'obarvit (u barvené kůže), zaleštit, pak přišít','t');
-  let ib=notes([['lekce 6','t'],['před přišitím'],['na přední panel'],[''],['obrys a okno:','t'],['obarvit','ts'],['(u barvené kůže)'],['zaleštit'],[''],['potom už:','ta'],['obrys ne, okno','ta'],['jen omezeně','ta']],16,5.2);
+  o+=pill(4,87,t<.88?'kapsa 42,5 × 42 mm, naplocho':'obarvit, zaleštit, pak přišít','t');
+  let ib=notes([['před přišitím','t'],[''],['obrys a okno:','t'],['obarvit'],['(u barvené kůže)'],['zaleštit']],16,5.2);
   return o+inset('KAPSA',ib);
  },P2);
 
 // F3
 add('F','Lekce 8: dno do roviny, srazit, obarvit, zaleštit',
- 'Na hotovém těle přebruste dno smirkem 220–400 na rovné destičce do jedné roviny přes všechny tři vrstvy a hrany dna srazte z obou vnějších líců (brusným papírem na hranolku, ořezávačem jen pokud ho máte). U barvené kůže je řez světlý – obarvěte ho barvou na hrany; naneste ji podle návodu na obalu a před leštěním ji nechte zaschnout (ověřit na odřezku). Všechny vnější hrany – včetně nového konce jazyka po zkrácení a zaoblení rohů na R10 – pak zaleštěte jako u pouzdra na karty.',
- 'Projekt 02, lekce 8, kroky „Přebruste dno do roviny“ a „Obarvěte a zaleštěte vnější hrany“; kontrolní bod „Vnější hrany včetně zkráceného konce jazyka jsou srovnané, obarvené (u barvené kůže) a zaleštěné.“',12500,t=>{
+ 'Dno přebruste smirkem 220–400 na rovné destičce do roviny přes tři vrstvy. Hrany dna zaoblete z obou vnějších stran brusným papírem na hranolku, nebo ořezávačem, máte-li ho. U barvené kůže řez obarvěte jako v lekci 4 a nechte zaschnout. Pak zaleštěte všechny vnější hrany včetně nového konce jazyka.',
+ 12500,t=>{
   const sd=es(t,.04,.24), bv=es(t,.28,.48), dy=es(t,.52,.7), bu=es(t,.74,.94);
   const ls=[{t:1.2,lic:'bot',kind:'dyed',dx:.35*(1-sd)},{t:1.2,lic:'bot',kind:'dyed',dx:.6*(1-sd)},{t:1.2,lic:'top',kind:'dyed',dx:0}];
   const x0=56,y0=64;
   let o=prof({x:x0,y:y0,k:K,len:4.8,layers:ls,bevT:.55*bv,bevB:.55*bv,dye:dy,burn:bu,round:bu,fuzz:.5*(1-bu)});
-  const stage=t<.26?'1 · dno do roviny':t<.5?'2 · srazit hrany':t<.72?'3 · obarvit (barvená)':'4 · zaleštit';
+  const stage=t<.26?'1 · dno do roviny':t<.5?'2 · zaoblit hrany':t<.72?'3 · obarvit (barvená)':'4 · zaleštit';
   o+=pill(82,13.5,stage,'ta','end');
   o+=pill(6,y0-3.6*K-5,'přední','ts')+pill(6,y0+6,'zadní','ts')+sideTag(x0,y0-1.8*K,'vnitřní');
   o+=scaleBar(8,80,K)+zoomTag();
   o+=pill(4,87,'3 vrstvy, kresleno po 1,2 mm','t');
-  const ck=[['dno do roviny',.24],['srazit z obou líců',.48],['obarvit',.7],['(u barvené kůže)',.7,'-'],['zaleštit jako',.94],['pouzdro na karty',.94,'-']];
+  const ck=[['dno do roviny',.24],['zaoblit z obou stran',.48],['obarvit',.7],['(u barvené kůže)',.7,'-'],['zaleštit',.94]];
   let ib=checklist(ck,t,17,6.2);
   ib+=notes([['všechny vnější','t'],['hrany i nový'],['konec jazyka']],60,5);
   return o+inset('LEKCE 8',ib);
@@ -531,8 +530,8 @@ add('F','Lekce 8: dno do roviny, srazit, obarvit, zaleštit',
 
 // G1
 add('G','Víčko, lekce 5: hrany předem, před sestavením',
- 'Horní hranu přední stěny F i s výřezem, spodní hranu a boky pásu víčka a boky jazýčku vybruste smirkem 220–400 na rovné destičce, zkoste z líce (zkosovačem hran, pokud ho máte; jinak je zaoblete brusným papírem na hranolku) a vyleštěte: navlhčit vodou nebo Tokonole (jen mimo lepená místa) a třít leštítkem nebo kusem plátna. Horní hrany D1 a D2 jen vybruste (D2 lehce zaoblete) a vyleštěte. Výřez pro palec zaoblete z líce i z rubu, protože o rubovou hranu dna výřezu se může zachytit karta; vnitřek vybruste brusným papírem na kolíku Ø 8 ve vrtačce a stejným kolíkem vyleštěte.',
- 'Projekt 03, lekce 5, krok „Předběžné dokončení hran“ a kontrolní bod „Horní hrany D1, D2 a F, hrany pásu víčka a jazýčku jsou vybroušené a vyleštěné…“',11000,t=>{
+ 'Horní hranu F i s výřezem, spodní hranu a boky pásu víčka a boky jazýčku vybruste smirkem 220–400 na rovné destičce, zkoste z líce a vyleštěte (voda nebo Tokonole jen mimo lepená místa, leštítko nebo plátno). Horní hrany D1 a D2 jen vybruste a vyleštěte, D2 lehce zaoblete. Výřez pro palec zaoblete z líce i z rubu, o rubovou hranu by se zachytila karta. Vnitřek výřezu vybruste a vyleštěte kolíkem Ø 8 v aku vrtačce.',
+ 11000,t=>{
   const sd=es(t,.06,.32), bv=es(t,.36,.6), bu=es(t,.64,.92);
   const ls=[{t:1.0,lic:'top',kind:'kas'}];
   const x0=50,y0=42,kk=K+3;
@@ -546,14 +545,14 @@ add('G','Víčko, lekce 5: hrany předem, před sestavením',
   o+=prof({x:x0,y:72,k:kk,len:3,layers:ls,bevT:.35*vp,bevB:.35*vp,round:vb*.7,burn:vb});
   o+=pill(6,54,'výřez pro palec: z líce i z rubu','ts');
   o+=scaleBar(60,82,kk)+zoomTag();
-  let ib=notes([['vybrousit, zkosit','t'],['z líce, vyleštit:'],['· horní hrana F'],['>i s výřezem'],['· pás víčka: spodní'],['>hrana a boky'],['· boky jazýčku'],['D1, D2: jen brousit','t'],['>a vyleštit'],['výřez: z líce','t'],['i z rubu; vnitřek'],['kolík Ø 8 ve vrtačce']],16,5.2);
+  let ib=notes([['vybrousit, zkosit','t'],['z líce, vyleštit:'],['· horní hrana F'],['· pás víčka'],['· boky jazýčku'],[''],['D1, D2: jen brousit','t'],['a vyleštit'],[''],['výřez: z líce','t'],['i z rubu']],16,5.2);
   return o+inset('PŘED SESTAVENÍM',ib);
- },P3,'Tip (lekce to neuvádí): řez je kreslený pro kaštan 1,0 mm, skutečnou tloušťku změříte v lekci 1.');
+ },P3,'Tip: řez je kreslený pro 1,0 mm, skutečnou tloušťku změříte v lekci 1.');
 
 // G2
 add('G','Lekce 5: barevná horní hrana D1, Tokonole jen mimo lepená místa',
- 'Horní hranu D1 natřete barvou na hrany v tónu kontrastním k D1 (v tónu D2) párátkem ve 2 tenkých vrstvách, mezi vrstvami 20–30 min. Nejdřív na odřezku kozinky: přilnavost na tak tenké hraně je potřeba ověřit. Tokonole brání přilnutí lepidla, proto ho nanášejte jen mimo lepená místa a hranice lepení přelepte páskou.',
- 'Projekt 03, lekce 5, kroky „Barevná horní hrana D1“ a „Tokonole jen mimo lepená místa“',11000,t=>{
+ 'Horní hranu D1 natřete párátkem barvou na hrany v tónu D2, ve 2 tenkých vrstvách, mezi nimi 20–30 min. Nejdřív na odřezku kozinky, přilnavost je neověřená. Tokonole brání přilnutí lepidla: nanášejte ho jen mimo lepená místa a hranice lepení přelepte páskou.',
+ 11000,t=>{
   const c1=es(t,.08,.3), wait=seg(t,.32,.55), c2=es(t,.58,.82);
   const ls=[{t:.8,lic:'top',kind:'koz'}];
   const x0=44,y0=50,kk=K+8;
@@ -573,12 +572,12 @@ add('G','Lekce 5: barevná horní hrana D1, Tokonole jen mimo lepená místa',
   ib+=lbl(91,40,'Tokonole','ts')+pill(92,54,'lepí se','ta');
   ib+=notes([['hranici lepení','t'],['přelepit páskou']],64,5);
   return o+inset('TOKONOLE',ib);
- },P3,'Tip (lekce to neuvádí): pořadí hran a barvy bere animace z lekce 5 – barva přijde na už vyleštěnou hranu D1 (kontrolní bod: „vybroušené a vyleštěné (…) a horní hrana D1 natřená kontrastní barvou“). D1 je kreslená 0,8 mm podle rozsahu nebarvené kozinky v lekci 1 (0,8–1 mm).');
+ },P3,'Tip: barvu dávejte na už vyleštěnou hranu D1. D1 je kreslená 0,8 mm.');
 
 // G3
 add('G','Lekce 9: boky zarovnat na 101,0 mm a vyleštit jako jeden svazek',
- 'Po ušití bočních švů zarovnejte boky nožem na 101,0 mm (D2 přečnívá). Spodní rohy nechte hranaté – nic nevyplňujte ani nezaoblujte. Boky vybruste smirkem 220–400 na rovné destičce, zkoste z obou líců (zkosovačem hran, pokud ho máte; jinak je zaoblete brusným papírem na hranolku) a vyleštěte jako jeden svazek, i u ohybu dna: navlhčit vodou nebo Tokonole a třít leštítkem nebo kusem plátna. Stejné pořadí jako v lekci 5: vybrousit, zkosit, vyleštit.',
- 'Projekt 03, lekce 9, krok „Zarovnat a vyleštit boky“ a kontrolní bod „Boky jsou zarovnané na 101 mm, zkosené a vyleštěné, spodní rohy hranaté.“',12000,t=>{
+ 'Po ušití bočních švů zarovnejte boky nožem na 101,0 mm (D2 přečnívá). Spodní rohy nechte hranaté. Boky vybruste smirkem 220–400 na rovné destičce, zkoste z obou líců a vyleštěte jako jeden svazek, i u ohybu dna.',
+ 12000,t=>{
   const cut=es(t,.05,.24), sd=es(t,.28,.44), bv=es(t,.48,.68), bu=es(t,.72,.94);
   const x0=50,y0=60,kk=K+2;
   const ls=L03side(.9*(1-cut));
@@ -593,14 +592,13 @@ add('G','Lekce 9: boky zarovnat na 101,0 mm a vyleštit jako jeden svazek',
   ib+=`<path d="M93 22 V48 H120" fill="none" stroke="var(--kas-d)" stroke-width="2.4" stroke-linejoin="miter"/><path d="M93 22 V48 H120" fill="none" stroke="var(--burn)" stroke-width=".6"/>`;
   ib+=tick(124,46,.9)+lbl(96,30,'hranatý','tok');
   ib+=`<path d="M93 56 V68 Q93 74 99 74 H108" fill="none" stroke="var(--muted)" stroke-width="1" opacity=".6"/>`+cross(112,66,1.6,.55)+lbl(103,62,'nezaoblovat','ta');
-  ib+=lbl(89,80,'nic nevyplňovat','ts');
   return o+inset('ROHY',ib);
- },P3,'Tip (lekce to neuvádí): tloušťky vrstev jsou schematické.');
+ },P3,'Tip: tloušťky vrstev jsou schematické.');
 
 // G4
 add('G','Další hrany Víčka: okénka a jazýček',
- 'Okénka mincí 12 × 48 mm v zádech (lekce 5): konce vybruste brusným papírem namotaným na kolíku Ø 8 ve vrtačce, okénka zkoste z líce a vyleštěte. Okénko bankovek 14 × 45 mm (lekce 6) se seká až po lepení skrz obě vrstvy; zkoste ho a vyleštěte jako jeden svazek. Jazýček (lekce 11): po oříznutí špičky ji zbruste do klínu jen v posledních 2,5 mm – 2,5 mm od špičky rysku, brusným papírem na hranolku z líce i z rubu jen mezi ryskou a špičkou, ne nožem; za ryskou už nebruste, aby magnet neležel na ztenčeném místě. Stačí, když je hrana na konci asi 0,5–0,7 mm a zaoblená. Po ušití švu S7 hrany jazýčku vybruste, zkoste a vyleštěte jako v lekci 5; po výměně magnetu (lekce 12) totéž znovu. Spodní hranu D2 (lekce 5) zbruste brusným papírem na hranolku do tenka (klín 3 mm), nožem ji neztenčujte – jinak by dělala schod, o který se zachytí bankovka.',
- 'Projekt 03, lekce 5 („Okénka mincí v zádech“, „Spodní hrana D2 do tenka“), lekce 6 („okénko bankovek“), lekce 11 („Ořízněte špičku a boky L1“, „Šev S7 kolem magnetu“), lekce 12 („Výměna magnetu“)',10000,t=>{
+ 'Okénka mincí (lekce 5): konce vybruste papírem na kolíku Ø 8 v aku vrtačce, okénka zkoste z líce a vyleštěte. Okénko bankovek (lekce 6): zkoste a vyleštěte jako jeden svazek. Spodní hranu D2 (lekce 5) zbruste brusným papírem na hranolku do tenka (klín 3 mm), ne nožem. Jazýček (lekce 11): klín špičky brusným papírem z líce i z rubu jen mezi ryskou 2,5 mm a špičkou, ne nožem; konec asi 0,5–0,7 mm, zaoblený. Po ušití S7 hrany jazýčku vybruste, zkoste a vyleštěte (po výměně magnetu znovu).',
+ 10000,t=>{
   // okénko mincí 12 × 48 v měřítku 1,3
   const s=1.3,cx=42,cy=45,w=48*s,h=12*s,r=h/2;
   let o=`<rect x="${f(cx-w/2-10)}" y="${f(cy-h/2-10)}" width="${f(w+20)}" height="${f(h+20)}" rx="2" fill="url(#kasG)" stroke="var(--kas-d)" stroke-width=".35"/>`;
@@ -650,7 +648,6 @@ function render(){
   svg.innerHTML=DEFS+body; fitPills();
   setBadge(st);
   capNo.textContent=`${st.part}${numInPart(idx)}`; capT.textContent=st.title; capB.textContent=st.body;
-  if(st.src){const sp=document.createElement('span');sp.className='src';sp.textContent='Zdroj: '+st.src;capB.appendChild(sp)}
   if(st.tip){const sp=document.createElement('span');sp.className='tip';const m=st.tip.match(/^(Tip[^:]*:)\s*(.*)$/);if(m){const b=document.createElement('b');b.textContent=m[1];sp.append(b,' '+m[2])}else sp.textContent=st.tip;capB.appendChild(sp)}
   counter.textContent=`krok ${idx+1} / ${S.length}`;
   barEls.forEach((b,i)=>{b.style.transform=`scaleX(${i<idx?1:i===idx?tt:0})`});

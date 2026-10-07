@@ -107,7 +107,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 <header>
 <a class="backlink" href="/" data-back>← Zpět do lekce</a>
 <h1>Složení pouzdra a šev dna</h1>
-<p class="lead">Projekt 02 „Pouzdro s vsazenou mincí“, mince 50 Kč, kůže 1,2 mm (bez ztenčení). Jak se pás složí za mokra kolem karet a bankovek a jak se dno slepí spoj po spoji a prošije skrz tři vrstvy – lekce 7 „Skládání, lepení dna a šití“. Stejný postup v malém trénuje lekce 4 „Skládání a šev tří vrstev na odřezku“. Kreslené v měřítku podle šablony PÁS pro kůži 1,2 mm: panely 72 × 104,1 mm, ohyb A 15,69 mm, ohyb B 8,66 mm, šev dna 17 otvorů na panel, rozteč 4 mm, 3,5 mm od dolní hrany.</p>
+<p class="lead">Projekt 02, mince 50 Kč, kůže 1,2 mm. Složení pásu za mokra kolem obsahu, lepení dna spoj po spoji a šev skrz tři vrstvy (lekce 7).</p>
 </header>
 
 <section class="card" aria-label="Animace postupu">
@@ -125,7 +125,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
   </div>
   <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
 </section>
-<p class="note">Postup podle lekce 7 (kroky 1–6 a kontrolní body); otvory dna podle lekcí 4 a 5. Na odřezku v lekci 4 je to totéž v malém: panely asi 30 mm, 6 otvorů na panel, místo bankovek přeložený papír asi 2 mm. Řezy jsou schematické; kde je to napsané, jsou tloušťky zvětšené. Kroky a poznámky označené „Tip“ lekce výslovně neuvádí.</p>
+<p class="note">V lekci 4 totéž v malém: panely 30 mm, 6 otvorů na panel, místo bankovek přeložený papír asi 2 mm. Řezy jsou schematické. „Tip“ označuje, co lekce neuvádí.</p>
 </div>
 
 <script>
@@ -366,7 +366,7 @@ const S=[];
 const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,side,tip});
 
 // A1 — which panel is which
-add('A','Pás po lekci 6: tři panely, dva ohyby','Pás leží lícem nahoru, tak jak ho kreslí šablona PÁS pro kůži 1,2 mm: zadní panel s jazykem, ohyb A (15,69 mm), přední panel s přišitou kapsou s mincí a naplocho osazeným dříkem druku (na líci je vidět jeho hlavička), ohyb B (8,66 mm) a vnitřní panel. Všechny tři panely mají 72 × 104,1 mm; u kůže 1,2 mm se ohyb B neztenčuje. Po složení je přední panel vpředu (kapsa ven), vnitřní uprostřed a zadní vzadu (líc ven).',7600,t=>{
+add('A','Pás po lekci 6: tři panely, dva ohyby','Pás leží lícem nahoru: zadní panel s jazykem, ohyb A (15,69 mm), přední panel s kapsou a dříkem, ohyb B (8,66 mm) a vnitřní panel. Panely mají 72 × 104,1 mm. U kůže 1,2 mm se ohyb B neztenčuje.',7600,t=>{
   const c=STRIPC; let inner=planBack()+planMid()+planInner()+zones(.6);
   let s=G(camT(c),inner);
   const L5=[['ZADNÍ',46,108,'t'],['ohyb A',CA,128,'ta'],['PŘEDNÍ',133.69,147,'t'],['ohyb B',CB,128,'ta'],['VNITŘNÍ',214.35,108,'t']];
@@ -379,7 +379,7 @@ add('A','Pás po lekci 6: tři panely, dva ohyby','Pás leží lícem nahoru, ta
 },'lic');
 
 // A2 — mirrored holes
-add('A','Otvory dna jsou zrcadlené přes ohyby','Otvory dna jsou proseknuté naplocho už v lekci 5: 17 na každém panelu, rozteč přesně 4 mm, 3,5 mm od dolní hrany – přední panel z líce, zadní a vnitřní z rubu. Na sousedních panelech leží zrcadlově kolem ohybu (na šabloně PÁS je krajní otvor 4 mm od čáry ohybu), takže po složení padnou přesně na sebe a šikmé zářezy mají stejný sklon.',11000,t=>{
+add('A','Otvory dna jsou zrcadlené přes ohyby','Otvory dna jsou proseknuté z lekce 5: 17 na panel, rozteč 4 mm, 3,5 mm od dolní hrany; přední z líce, zadní a vnitřní z rubu. Leží zrcadlově kolem ohybů, takže po složení lícují.',11000,t=>{
   const c=STRIPC;
   const pB=es(t,.3,.55), pA=es(t,.6,.85);   // pořadí jako v lekci 7: nejdřív ohyb B, pak A
   const sxA=Math.cos(Math.PI*pA), sxB=Math.cos(Math.PI*pB);
@@ -418,7 +418,7 @@ add('A','Otvory dna jsou zrcadlené přes ohyby','Otvory dna jsou proseknuté na
 },'lic');
 
 // ---------- B: folds ----------
-add('B','Navlhčete pásma obou ohybů','Houbičkou navlhčete jen pásma obou ohybů – A (15,69 mm) a B (8,66 mm) –, ne celou plochu pásu. Nasucho nebo na ostro přeložený líc v ohybu nejspíš praská.',7000,t=>{
+add('B','Navlhčete pásma obou ohybů','Houbičkou navlhčete jen pásma obou ohybů (mezi čarami na rubu), ne celý pás.',7000,t=>{
   const c=STRIPC; const pa=es(t,.08,.45), pb=es(t,.5,.88);
   let inner=planBack()+planMid()+planInner()+zones(.35)+wetZones(pa,pb);
   let s=G(camT(c),inner);
@@ -428,9 +428,9 @@ add('B','Navlhčete pásma obou ohybů','Houbičkou navlhčete jen pásma obou o
   if(pb>.2){const [a,b]=tv(c,CB,50);s+=pill(a,b,'ohyb B','ta','middle')}
   s+=pill(4,87,t<.9?'mokřit jen pásma ohybů, ne celou plochu':'obě pásma mokrá – hned skládat','t');
   return s;
-},'lic','Tip (lekce to neuvádí): ze které strany mokřit, lekce neurčuje; animace ukazuje líc.');
+},'lic','Tip: stranu lekce neurčuje, animace ukazuje líc.');
 
-add('B','Karty ve fólii na rub předního, přes ně ohyb B','Karty, které nosíte, zabalené v potravinové fólii, položte na rub předního panelu (tam, kde po přeložení sedne vnitřní panel) a přeložte přes ně vnitřní panel ohybem B. Ohyb se ohne do smyčky kolem obsahu, ne na ostro.',10500,t=>{
+add('B','Karty ve fólii na rub předního, přes ně ohyb B','Zabalené karty položte na rub předního panelu a přeložte přes ně vnitřní panel ohybem B. Ohyb tvarujte do smyčky, ne na ostro.',10500,t=>{
   const cam=camL(CAM_FLAT,CAM_B,es(t,.4,.9));
   const thB=Math.PI*es(t,.42,.88);
   const g=secGeom(0,thB), w=wOf(cam);
@@ -442,7 +442,7 @@ add('B','Karty ve fólii na rub předního, přes ně ohyb B','Karty, které nos
   if(t>.85){const [x,y]=toS(cam,12,w/2+CARDS/2);s+=`<g opacity="${f(seg(t,.85,.92))}">${lead(x-7,y+11,x,y)}${pill(x-9,y+15,'karty','ts','middle')}</g>`+pill(4,87,'smyčka kolem karet, ne na ostro','tok')}
   s+=secTag(cam);
   return s;
-},null,'Tip (lekce to neuvádí): aby šly karty položit na rub předního panelu, leží pás v řezu rubem nahoru.');
+},null);
 
 function foldedLabels(cam,o={}){
   const w=wOf(cam);let s='';
@@ -457,7 +457,7 @@ function foldedLabels(cam,o={}){
   }
   return s;
 }
-add('B','Bankovky na líc vnitřního, zadní ohybem A přes všechno','Bankovky zabalené ve fólii položte na líc vnitřního panelu. Pak přeložte zadní panel ohybem A přes všechno – kolem skutečného obsahu, ne naprázdno. Vrstvy odpředu: přední – karty – vnitřní – bankovky – zadní. Na odřezku v lekci 4: ohyb A se neztenčuje, jen se přeloží – když je moc tuhý, zapište si to.',10500,t=>{
+add('B','Bankovky na líc vnitřního, zadní ohybem A přes všechno','Zabalené bankovky položte na líc vnitřního panelu. Přes všechno přeložte zadní panel ohybem A. Pořadí odpředu: přední – karty – vnitřní – bankovky – zadní.',10500,t=>{
   const cam=camL(CAM_B,CAM_FOLD,es(t,.36,.95));
   const thA=Math.PI*es(t,.38,.85);
   const g=secGeom(thA,Math.PI), w=wOf(cam);
@@ -473,7 +473,7 @@ add('B','Bankovky na líc vnitřního, zadní ohybem A přes všechno','Bankovky
   return s;
 },null);
 
-add('B','Rozhrnovačka, sponky vedle ohybů, zaschnout','Přejeďte rozhrnovačkou. Sponky s podložkou nasaďte na panely těsně vedle obou ohybů, přes obsah – ne na samotnou smyčku ohybu – a nechte zaschnout. Ještě před zaschnutím zkontrolujte, že se otvory dna na sousedních panelech lícují (lekce 7, stejně jako v lekci 4).',9000,t=>{
+add('B','Rozhrnovačka, sponky vedle ohybů, zaschnout','Přejeďte rozhrnovačkou. Sponky s podložkou nasaďte na panely těsně vedle ohybů, ne na smyčku. Než necháte zaschnout, zkontrolujte, že otvory dna na sousedních panelech lícují. Když ne, dokud je kůže vlhká, ohyb rozevřete a přeložte se smyčkou posunutou tak, aby seděly (stále mezi čarami). Malý zbytek srovnáte při lepení jehlami. Když se nesrovnají ani tak, nelepte a postup ověřte na odřezku z lekce 4. Nechte zaschnout.',9000,t=>{
   const cam=CAM_FOLD, g=secGeom(Math.PI,Math.PI), w=wOf(cam);
   const dry=es(t,.66,.95);
   let s=leatherSec(cam,g,{wet:1-dry});
@@ -496,7 +496,7 @@ add('B','Rozhrnovačka, sponky vedle ohybů, zaschnout','Přejeďte rozhrnovačk
 },null);
 
 // ---------- C: glue the bottom ----------
-add('C','Vyjměte obsah a rozevřete jen do pravého úhlu','Vyjměte zabalené karty i bankovky. Zaschlé ohyby rozevřete jen tolik, aby šel spodní proužek natřít – zhruba do pravého úhlu, ne úplně naplocho: suchý neztenčený ohyb A by mohl na líci prasknout.',8600,t=>{
+add('C','Vyjměte obsah a rozevřete jen do pravého úhlu','Vyjměte obsah. Zaschlé ohyby rozevřete jen zhruba do pravého úhlu, ne naplocho – suchý ohyb A by mohl prasknout.',8600,t=>{
   const cam=camL(CAM_FOLDL,CAM_OPEN,es(t,.25,.6));
   const thA=Math.PI-es(t,.3,.58)*Math.PI/2, thB=Math.PI-es(t,.6,.85)*Math.PI/2;   // nejdřív A: zadní panel leží přes vnitřní (pořadí lekce neurčuje – tip)
   const g=secGeom(thA,thB), w=wOf(cam);
@@ -512,7 +512,7 @@ add('C','Vyjměte obsah a rozevřete jen do pravého úhlu','Vyjměte zabalené 
   s+=inset('ROZEVŘÍT',notes([['jen asi do','tw'],['pravého úhlu'],['ne naplocho'],['ohyb A se'],['neztenčuje –'],['suchý líc by'],['mohl prasknout']]));
   s+=secTag(cam,84,6);
   return s;
-},null,'Tip (lekce to neuvádí): pořadí rozevření lekce neurčuje; animace rozevírá nejdřív ohyb A, protože zadní panel leží přes vnitřní.');
+},null,'Tip: nejdřív rozevřete ohyb A – zadní panel leží přes vnitřní.');
 
 // popisky pro rozevřený stav (n = 0 jen panely, 1 spoj 1, 2 spoj 2)
 function jointLabels(cam,g,n){
@@ -561,13 +561,13 @@ function joint(n,t,rough,glue){
   s+=secTag(cam,84,6);
   return s;
 }
-add('C','Spoj 1: přední ↔ vnitřní – zdrsnit a natřít','Spoje jsou dva a lepí se po jednom, ne najednou. Nejdřív přední panel s vnitřním: v pruhu 0–3,5 mm od dolní hrany (pod čárou švu) zdrsněte smirkem obě plochy spoje – rub předního i rub vnitřního panelu – a naneste kontaktní lepidlo v tenké rovnoměrné vrstvě. Výš ne: karty i bankovky stojí na švu a lepidlo výš by jim ubralo hloubku. Kontaktní lepidlo na rozpouštědlové bázi používejte ve větrané místnosti.',9000,t=>{
+add('C','Spoj 1: přední ↔ vnitřní – zdrsnit a natřít','Spoje lepte po jednom. Nejdřív přední s vnitřním: v pruhu 0–3,5 mm od hrany (ne výš než čára švu) zdrsněte rub předního i rub vnitřního panelu. Naneste kontaktní lepidlo v tenké rovnoměrné vrstvě. Lepte ve větrané místnosti.',9000,t=>{
   const r=es(t,.06,.45), g=es(t,.5,.92);
   let s=joint(1,t,r,g);
   return s;
 },null);
 
-add('C','Odvětrat, přeložit, zarovnat jehlami, přitisknout','Lepidlo nechte odvětrat podle návodu na obalu. Vnitřní panel přeložte zpátky, otvory zarovnejte jehlami prostrčenými skrz obě vrstvy a teprve pak přitiskněte – kontaktní lepidlo po dotyku už nejde posunout.',9800,t=>{
+add('C','Odvětrat, přeložit, zarovnat jehlami, přitisknout','Lepidlo nechte odvětrat podle návodu. Přeložte, zarovnejte jehlami přes otvory a přitiskněte – po dotyku už nejde posunout.',9800,t=>{
   const dry=es(t,.03,.22), app=es(t,.24,.5), nd=es(t,.52,.7), pr=es(t,.74,.88);
   const du=L(12,1.6,app)*(1-pr)+0*pr;
   let s=sideFrame();
@@ -587,13 +587,13 @@ add('C','Odvětrat, přeložit, zarovnat jehlami, přitisknout','Lepidlo nechte 
   return s;
 },null);
 
-add('C','Spoj 2: vnitřní ↔ zadní – stejně','Teprve teď stejně zopakujte druhý spoj: líc vnitřního panelu a rub zadního panelu v pruhu 0–3,5 mm od hrany zdrsněte, natřete lepidlem v tenké rovnoměrné vrstvě a nechte odvětrat. Přední a zadní panel se přímo nedotýkají – mezi nimi je pořád vnitřní panel.',8600,t=>{
+add('C','Spoj 2: vnitřní ↔ zadní – stejně','Stejně druhý spoj: líc vnitřního a rub zadního panelu v pruhu 0–3,5 mm zdrsněte, natřete a nechte odvětrat.',8600,t=>{
   const r=es(t,.06,.45), g=es(t,.5,.92);
   let s=joint(2,t,r,g);
   return s;
 },null);
 
-add('C','Přeložit zadní, zarovnat jehlami skrz tři vrstvy','Po odvětrání přeložte zadní panel zpátky, zarovnejte jehlami přes otvory – teď skrz všechny tři vrstvy – a přitiskněte. Dno je slepené a zarovnané, otvory na všech vrstvách lícují.',9400,t=>{
+add('C','Přeložit zadní, zarovnat jehlami skrz tři vrstvy','Přeložte zadní panel, zarovnejte jehlami přes otvory skrz všechny tři vrstvy a přitiskněte.',9400,t=>{
   const dry=es(t,.03,.2), app=es(t,.22,.48), nd=es(t,.5,.7), pr=es(t,.74,.88);
   const du=L(12,1.6,app)*(1-pr);
   let s=sideFrame();
@@ -618,7 +618,7 @@ add('C','Přeložit zadní, zarovnat jehlami skrz tři vrstvy','Po odvětrání 
 // ---------- D: stitch ----------
 const THR4=4*SEAM_LEN/1000, THR5=5*SEAM_LEN/1000;   // m
 const m2=v=>cz((Math.round(v*100)/100).toFixed(2));
-add('D','Nit na šev dna','Pravidlo z návodu „Jak odměřit nit“: 4 × délka švu + 25–30 cm rezervy. Šev dna má 17 otvorů s roztečí 4 mm, tedy 16 × 4 = 64 mm: 4 × 6,4 cm ≈ 26 cm, s rezervou asi '+m2(THR4+.25)+'–'+m2(THR4+.30)+' m. Pro šev přes tři vrstvy návod radí počítat 5× – asi '+m2(THR5+.25)+'–'+m2(THR5+.30)+' m. Lekce 7 počítá s nití asi 0,8 m na šev dna: pravidlo dává asi 0,6 m, 0,8 m nechává začátečníkovi rezervu (ověřit na odřezku).',7200,t=>{
+add('D','Nit na šev dna','Připravte nit asi 0,8 m. Šev dna má 64 mm; přes tři vrstvy (5 × šev + 25–30 cm) vyjde asi '+m2(THR5+.25)+'–'+m2(THR5+.30)+' m, 0,8 m nechává rezervu.',7200,t=>{
   const p=es(t,.05,.5), b=es(t,.55,.92);
   let inner=frontView();
   inner+=`<path d="M${HF[0]} ${SEAM_Y} H${f(L(HF[0],HF[16],p))}" stroke="var(--accent)" stroke-width=".8" stroke-linecap="round"/>`;
@@ -648,7 +648,7 @@ function saddle3(kk){
   s+=lbl(89,25.5,'líc předního','ts')+lbl(89,yB+5,'líc zadního','ts');
   return s;
 }
-add('D','Prošijte dno skrz tři vrstvy','Sedlářským stehem (lekce 7) jako u pouzdra na karty a v lekci 4 – dvě jehly proti sobě, každým otvorem, vždy stejné pořadí a stejné utažení – prošijte dno skrz všechny tři vrstvy: 17 otvorů, rozteč 4 mm, 3,5 mm od hrany. Na začátku ušijte dva zpětné stehy (lekce 7).',12000,t=>{
+add('D','Prošijte dno skrz tři vrstvy','Prošijte dno sedlářským stehem skrz všechny tři vrstvy: 17 otvorů, rozteč 4 mm, 3,5 mm od hrany. Na začátku ušijte dva zpětné stehy.',12000,t=>{
   const u=es(t,.04,.92)*18, n=Math.floor(u), fr=u-n;
   let inner=frontView({moves:n,backHi:1});
   let s=clipMain(G(camT(FRONTC),inner));
@@ -660,9 +660,9 @@ add('D','Prošijte dno skrz tři vrstvy','Sedlářským stehem (lekce 7) jako u 
   ib+=notes([['dvě jehly proti','t'],['sobě, každým'],['otvorem, stejné'],['pořadí i utažení']],54,5.2);
   s+=inset('3 VRSTVY',ib);
   return s;
-},{v:'LÍC',sub:'přední panel'},'Tip (lekce 7 stranu neuvádí): animace začíná u ohybu A.');
+},{v:'LÍC',sub:'přední panel'});
 
-add('D','Konec zajistěte zpětnými stehy, zkontrolujte druhou stranu','Na konci řady ušijte dva zpětné stehy (lekce 7). Pak zkontrolujte rub švu (stranu zadního panelu): je u sedlářského stehu vždy trochu méně pravidelný než líc, to je normální, stehy na něm ale musí být stejně utažené, v jedné řadě a bez smyček (lekce 7). Na líci mají všechny stehy stejný sklon (kontrolní bod lekce 4).',7600,t=>{
+add('D','Konec zajistěte zpětnými stehy, zkontrolujte druhou stranu','Na konci ušijte dva zpětné stehy. Zkontrolujte rub (zadní panel): bývá méně pravidelný než líc, to je normální. Stehy ale musí být stejně utažené, v jedné řadě a bez smyček. Křivé otvory na rubu znamenají, že vidličky nebyly kolmo.',7600,t=>{
   const u=es(t,.04,.5)*2, n=18+Math.floor(u), fr=u-Math.floor(u);
   let inner=frontView({moves:Math.min(20,n+(t>.5?1:0)),backHi:1});
   let s=clipMain(G(camT(FRONTC),inner));
@@ -672,14 +672,14 @@ add('D','Konec zajistěte zpětnými stehy, zkontrolujte druhou stranu','Na konc
   if(t>.3) s+=pill((x0+x1)/2,y0-4,'zpětné','ta','middle');
   const ck=[['zpětné stehy',.55],['na začátku i konci',.55],['rub: v řadě, utažený',.7],['stejný sklon',.82]];
   let ib='';ck.forEach(([tx,at],i)=>{const o=seg(t,at,at+.08);ib+=`<g opacity="${f(o)}">${i===1?'':tick(91.5,17.5+i*7)}${lbl(96,19+i*7,tx,'t')}</g>`});
-  ib+=notes([['lekce 7: dva','t'],['zpětné stehy'],['na začátku'],['i na konci']],52,5.2);
+  ib+=notes([['dva zpětné','t'],['stehy na začátku'],['i na konci']],52,5.2);
   s+=inset('KONEC',ib);
   if(t>.92) s+=pill(4,87,'dno prošité skrz tři vrstvy','tok');
   return s;
 },{v:'LÍC',sub:'přední panel'});
 
 // ---------- E: checkpoints ----------
-add('E','Kontrolní body lekce 7','Oba ohyby drží tvar smyčky, líc bez prasklin. Dno je slepené a zarovnané, otvory na všech vrstvách lícují. Dno je prošité skrz tři vrstvy, začátek i konec zajištěný zpětnými stehy. Dál pokračuje lekce 8: klobouček druku podle obtisku, zkrácení jazyka, dno přebrousit do roviny a hrany.',9000,t=>{
+add('E','Kontrolní body lekce 7','Oba ohyby drží tvar smyčky, líc bez prasklin. Dno je slepené a zarovnané, otvory lícují. Dno je prošité skrz tři vrstvy, začátek i konec zajištěný zpětnými stehy.',9000,t=>{
   const z=es(t,0,.3); const cam=camL(FRONTC,FULLC,z);
   let inner=frontView({moves:20});
   let s=clipMain(G(camT(cam),inner));

@@ -261,7 +261,7 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
       }
       expect(step(4, 'try-edge-paint')).toContain('Jen u barvené kůže');
       // Délku nitě pro dno krátký šev odřezku neověří.
-      expect(lesson(7).materials.join(' ')).not.toContain('ověřit na odřezku');
+      expect(lesson(7).materials.join(' ')).not.toMatch(/ověř\w* na odřezku/);
     });
 
     it('druk: díly v lekci 3 na začátku, strana dříku v lekci 6, klobouček podle obtisku v lekci 8', () => {
@@ -273,7 +273,7 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
       const l8 = JSON.stringify(lesson(8));
       expect(l8).not.toMatch(/původní (odhadovan[áé] )?značk/);
       expect(step(8, 'imprint-cap-position')).toContain('Střed obtisku je střed kloboučku');
-      expect(step(8, 'imprint-cap-position')).toContain('ověřit na odřezku');
+      expect(step(8, 'imprint-cap-position')).toContain('ověřte na odřezku');
       expect(step(8, 'shorten-tongue')).toContain('na líci jazyka 11 mm od středu kloboučku');
       expect(lesson(8).requiredEquipment).toEqual(
         expect.arrayContaining(['steel-ruler', 'scratch-awl']),

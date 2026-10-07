@@ -72,7 +72,7 @@ describe('tisk – pouzdro na karty: šablona a cvičná šablona', () => {
   it('lekce 2 odkazuje z cvičení na tisk cvičné šablony', async () => {
     renderApp(routes.lesson(cardHolderProject.slug, '02-straight-cut'));
     expect(
-      await screen.findByRole('heading', { name: 'Cvičení: řez podle přilepené šablony' }),
+      await screen.findByRole('heading', { name: 'Vyzkoušejte řez podle přilepené šablony' }),
     ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Vytisknout cvičnou šablonu 1:1/ })).toHaveAttribute(
       'href',

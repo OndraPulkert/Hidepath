@@ -119,8 +119,8 @@ footer{font-size:12.5px;color:var(--muted)}
 <header>
   <a class="backlink" href="/" data-back>← Zpět do lekce</a>
   <h1>Víčko: D2 na záda a švy S1–S3</h1>
-  <p class="lead">Lekce 6 „Lepení D2, okénko bankovek a sloupce mincí“: přepážka D2 se lepí na rub zad B jen v pásech G3, po lepení se proseká okénko bankovek skrz obě vrstvy, na líc D2 se přenesou otvory S1–S3 a švy se ušijí. Kreslené v měřítku z modelu střihu, všechny rozměry v mm, souřadnice x a y jsou souřadnice peněženky (y od dna nahoru, osa x 50,5).</p>
-  <p class="lead"><b>Čísla jsou pro výchozí střih</b> (P1 1,0, přepážky D1/D2 a L1 0,6). Pokud máte listy pro změřenou kůži nebo pro zálohu, berte čísla z rámečku „Čísla pro postup“ na listu 4 a z listů 1 a 3 těchto listů. Co mění záloha A (P1 0,8), je v tabulce pod animací.</p>
+  <p class="lead">Lekce 6: D2 na rub zad B jen v pásech G3, okénko bankovek skrz obě vrstvy, otvory S1–S3 na líc D2 a šití. Rozměry v mm, y od dna nahoru, osa x 50,5.</p>
+  <p class="lead">Čísla pro výchozí střih (P1 1,0, D2 0,6). Máte-li jiné listy, berte čísla z nich. Zálohu A (P1 0,8) ukazuje tabulka pod animací.</p>
 </header>
 
 <div class="parts" aria-label="Názvy dílů"><b>Názvy dílů</b><span><b>P1</b> hlavní pás: F – ohyb dna – B – závěs – víčko – jazýček</span><span><b>F</b> přední stěna</span><span><b>B</b> zadní stěna (záda)</span><span><b>D1</b> přepážka karty / bankovky</span><span><b>D2</b> přepážka bankovky / mince (kontrastní)</span><span><b>L1</b> podšívka přes magnet</span><span><b>rub</b> masová strana, <b>líc</b> hladká</span></div>
@@ -150,7 +150,7 @@ footer{font-size:12.5px;color:var(--muted)}
   </div>
   <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
 </section>
-<p class="note">Pohled zevnitř (rub B a líc D2) je zrcadlový k pohledu zvenku (líc B): díl je souměrný podle osy x 50,5, takže čísla platí v obou. Plochy jsou v měřítku; tloušťky v řezu, šířka zářezů a nitě jsou zvětšené. Kroky a poznámky označené „Tip (lekce to neuvádí)“ v lekcích nejsou.</p>
+<p class="note">Pohled zevnitř je zrcadlový k pohledu zvenku; díl je souměrný podle osy x 50,5, čísla platí v obou. Tloušťky, zářezy a nitě jsou zvětšené. „Tip“ označuje to, co lekce neuvádí.</p>
 
 <section class="card" aria-labelledby="h-cisla">
   <h2 id="h-cisla">Čísla z modelu</h2>
@@ -184,7 +184,7 @@ footer{font-size:12.5px;color:var(--muted)}
 </section>
 
 <footer>
-  <p>Postup podle lekce 6 projektu Víčko (kroky „G3: D2 rubem na rub zad“, „Okénko bankovek skrz D2 a záda“, „Otvory S1–S3 na líci D2“, „Děrovat a šít S1, S2, S3“); značky na rubu a šablony podle lekce 4, okénka mincí z lekce 5. Čísla a tvary jsou spočítané z modelu střihu pro výchozí střih. Celý návrh je NÁVRH k ověření na prototypu.</p>
+  <p>Podle lekce 6, čísla z modelu střihu pro výchozí střih. Celý postup je návrh – ověřte ho na zkušebním kuse.</p>
 </footer>
 </div>
 
@@ -327,7 +327,7 @@ const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,
 const SIDE={rubB:{v:'RUB B',sub:'pohled zevnitř',c:'var(--kuzeplan)'},licB:{v:'LÍC B',sub:'pohled zvenku, záda',c:'var(--kuze)'},licD2:{v:'LÍC D2',sub:'pohled zevnitř',c:'var(--d2)'}};
 
 // A1 — výchozí stav
-add('A','Rub B s čarami z lekce 4','Záda B leží rubem nahoru. Z lekce 4 jsou na rubu tužkou hranice lepení G3 a poloha D2 (čáry švů S1–S3 se na rub neznačí, přenesou se z líce v části C), z lekce 5 jsou vyseknutá okénka mincí <span class="num">12 × 48</span>. D2 (<span class="num">103 × 64</span>) má z lekce 4 propíchnuté konce osy x <span class="num">50,5</span> a z lekce 5 spodní hranu zbroušenou do tenka.',8200,t=>{
+add('A','Rub B s čarami z lekce 4','Záda B leží rubem nahoru. Na rubu jsou z lekce 4 hranice lepení G3 a poloha D2, okénka mincí <span class="num">12 × 48</span> jsou vyseknutá. D2 (<span class="num">103 × 64</span>) má propíchnuté konce osy x <span class="num">50,5</span> a spodní hranu zbroušenou do tenka.',8200,t=>{
   MIR=true;
   let s=wallB('rub')+pencilB(es(t,.05,.3));
   const o1=seg(t,.3,.42),o2=seg(t,.45,.57),o3=seg(t,.6,.72);
@@ -343,7 +343,7 @@ add('A','Rub B s čarami z lekce 4','Záda B leží rubem nahoru. Z lekce 4 jsou
 },SIDE.rubB);
 
 // A2 — páska
-add('A','Hranici lepení přelepte maskovací páskou','Hranice lepení přelepte maskovací páskou, aby lepidlo nezateklo do sloupců mincí ani nad čáru <span class="num">y 80,57</span>. Nad ní je pás závěsu: horních <span class="num">1,43</span> mm D2 se nelepí.',7600,t=>{
+add('A','Hranici lepení přelepte maskovací páskou','Hranice lepení přelepte maskovací páskou, aby lepidlo nezateklo do sloupců mincí ani nad čáru <span class="num">y 80,57</span>. Horních <span class="num">1,43</span> mm D2 (pás závěsu) se nelepí.',7600,t=>{
   MIR=true;
   let s;
   const p=es(t,.08,.75);
@@ -356,10 +356,10 @@ add('A','Hranici lepení přelepte maskovací páskou','Hranice lepení přelept
   let ib=notes([['Páska kryje','t'],['volné plochy:'],['sloupce mincí'],['a pás nad y 80,57'],['',''],['Lepené pásy','t'],['zůstanou volné'],['pro lepidlo']],17,5.4);
   s+=inset('PÁSKA',ib);
   return s;
-},SIDE.rubB,'Tip (lekce to neuvádí): páska je kreslená přes celé sloupce, šířku pásky ani způsob lekce neurčuje. Stejné hranice přelepte i na rubu D2 – lepidlo jde na obě strany a šrafa G3 je na D2 na listu 3.');
+},SIDE.rubB,'Tip: stejné hranice přelepte i na rubu D2 – pásy G3 jsou na listu 3.');
 
 // A3 — lepidlo na obě strany
-add('A','Kontaktní lepidlo na obě strany, jen v pásech','Kontaktní lepidlo naneste na obě strany – na rub B i na rub D2 – jen do pásů G3: dno <span class="num">y 18–23</span>, boky <span class="num">x 0–4</span> a <span class="num">97–101</span>, střed <span class="num">x 35–66</span>, boky a střed jen do <span class="num">y 80,57</span>.',9000,t=>{
+add('A','Kontaktní lepidlo na obě strany, jen v pásech','Kontaktní lepidlo naneste na rub B i na rub D2, jen do pásů G3: dno <span class="num">y 18–23</span>, boky <span class="num">x 0–4</span> a <span class="num">97–101</span>, střed <span class="num">x 35–66</span>. Boky a střed jen do <span class="num">y 80,57</span>.',9000,t=>{
   MIR=true;
   let s=wallB('rub')+pencilB(1)+tapes(true)+glueBands(G3,es(t,.05,.55));
   // vpravo rub D2 zmenšeně (k = 0,4), lepidlo do stejných pásů
@@ -373,10 +373,10 @@ add('A','Kontaktní lepidlo na obě strany, jen v pásech','Kontaktní lepidlo n
   ib+=notes([['rub D2: stejné','t'],['pásy, lepidlo','t'],['na obě strany','t']],50,5.4);
   s+=inset('RUB D2',ib);
   return s;
-},SIDE.rubB,'Tip (lekce to neuvádí): jak dostat hranice G3 na rub D2, lekce neříká (lekce 4 na D2 propichuje jen konce osy). Pásy jsou na D2 vyšrafované na listu 3; kreslené je to podle něj. Ověřit na odřezku.');
+},SIDE.rubB,'Tip: hranice G3 na rub D2 přeneste podle listu 3 (ověřte na odřezku).');
 
 // A4 — zavadnout
-add('A','Nechte zavadnout 10–15 min','Lepidlo na obou stranách nechte zavadnout <span class="num">10–15</span> min, teprve pak díly spojte.',5200,t=>{
+add('A','Nechte zavadnout 10–15 min','Lepidlo nechte zavadnout <span class="num">10–15</span> min, pak díly spojte.',5200,t=>{
   MIR=true;
   let s=wallB('rub')+pencilB(1)+tapes(true)+glueBands(G3,1,L(1,.8,es(t,.1,.9)));
   s+=inset('ZAVADNOUT',clock(109.5,36,es(t,.05,.9)*.25,'10–15 min')+notes([['na B i na D2','t'],['až pak spojit']],60,5.4));
@@ -384,7 +384,7 @@ add('A','Nechte zavadnout 10–15 min','Lepidlo na obou stranách nechte zavadno
 },SIDE.rubB);
 
 // A5 — spojit
-add('A','D2 rubem na rub B, přesah 1 mm na bocích','D2 položte rubem na rub B: spodní hranou na čáru <span class="num">y 18</span> a osou na osu x <span class="num">50,5</span> (konce osy z lekce 4). D2 přesahuje na každé straně o <span class="num">1</span> mm (x <span class="num">−1</span> až <span class="num">102</span>). Kontaktní lepidlo chytne hned při dotyku (lekce 9), proto D2 nejdřív nad B srovnejte a spusťte ji přesně napoprvé, po lepidle ji neposouvejte.',8600,t=>{
+add('A','D2 rubem na rub B, přesah 1 mm na bocích','D2 položte rubem na rub B: spodní hranou na čáru <span class="num">y 18</span>, osou na osu x <span class="num">50,5</span>. Na každé straně přesahuje o <span class="num">1</span> mm.',8600,t=>{
   MIR=true;
   const tp=1-es(t,0,.2);
   let s=wallB('rub')+pencilB(1)+op(tp,tapes(true))+glueBands(G3,1,.8);
@@ -400,10 +400,10 @@ add('A','D2 rubem na rub B, přesah 1 mm na bocích','D2 položte rubem na rub B
   let ib=notes([['D2 103 × 64','t'],['y 18–82'],['x −1 až 102'],['přesah 1 mm','ta'],['na každé straně'],['',''],['rubem na rub B,','t'],['líc D2 nahoře']],17,5.4);
   s+=inset('SPOJIT',ib);
   return s;
-},SIDE.licD2,'Tip (lekce to neuvádí): pásku sundejte před spojením, aby nezůstala mezi B a D2. Přiložení podle osy a čáry y 18 vychází z lekce 4 (konce osy na D2, poloha D2 na rubu B); D2 drží za okraje mimo lepené pásy. Ověřit na odřezku.');
+},SIDE.licD2,'Tip: pásku sundejte před spojením. Lepidlo chytne hned při dotyku – D2 nejdřív srovnejte nad B a pak už neposouvejte.');
 
 // A6 — přitlačit, sloupce volné
-add('A','Přitlačte, děrovat nejdřív za 1 h','Spoj přitlačte v lepených pásech. Sloupce mincí mezi nimi zůstávají nelepené, aby do nich mince zajely. Děrovat můžete nejdřív za <span class="num">1</span> h.',9400,t=>{
+add('A','Přitlačte, děrovat nejdřív za 1 h','Spoj přitlačte v lepených pásech. Sloupce mincí zůstávají nelepené. Děrujte nejdřív za <span class="num">1</span> h.',9400,t=>{
   MIR=true;
   let s=wallB('rub')+d2Part('lic',{coinHidden:true});
   // prst projíždí lepené pásy
@@ -424,7 +424,7 @@ add('A','Přitlačte, děrovat nejdřív za 1 h','Spoj přitlačte v lepených p
 },SIDE.licD2);
 
 // B1 — šablona okénka
-add('B','Lícem B nahoru, šablona na propíchnuté středy','Až po lepení G3. Díl položte <b>lícem B nahoru</b> na tvrdou desku. Na líci B jsou z lekce 4 propíchnuté středy obou konců okénka bankovek na ose x <span class="num">50,5</span>, <span class="num">y 32</span> a <span class="num">63</span>. Přiložte na ně křížky šablony okénka bankovek z listu 4 (čárkovaná čára šablony na ose) a zkontrolujte, že sedí. Šablona je jen na kontrolu polohy, před sekáním ji sejměte.',8000,t=>{
+add('B','Lícem B nahoru, šablona na propíchnuté středy','Až po lepení G3: díl položte lícem B nahoru na tvrdou desku. Křížky šablony okénka bankovek z listu 4 přiložte na propíchnuté středy (osa x <span class="num">50,5</span>, <span class="num">y 32</span> a <span class="num">63</span>) a zkontrolujte polohu. Před sekáním šablonu sejměte.',8000,t=>{
   MIR=false;
   let s=wallB('lic',{marks:false,d2behind:true});
   M.billC.forEach(y=>{s+=prick(50.5,y,'var(--slitB)',.42)});
@@ -446,7 +446,7 @@ add('B','Lícem B nahoru, šablona na propíchnuté středy','Až po lepení G3.
 },SIDE.licB);
 
 // B2 — výsečník a nůž
-add('B','Výsečník Ø 14 a rovné řezy skrz obě vrstvy','Výsečníkem <b>Ø 14</b> vysekněte z líce B oba konce skrz B i D2, mezi nimi veďte rovné řezy nožem u ocelového pravítka od tečny k tečně skrz obě vrstvy. Nůž veďte tahem od prstů volné ruky. Prsty držící výsečník mějte u spodku, palička dopadá na horní konec.',10400,t=>{
+add('B','Výsečník Ø 14 a rovné řezy skrz obě vrstvy','Výsečníkem Ø 14 vysekněte z líce B oba konce skrz B i D2. Mezi nimi řízněte nožem u ocelového pravítka od tečny k tečně, skrz obě vrstvy. Nůž veďte tahem od prstů volné ruky. Prsty mějte u spodku výsečníku, palička dopadá na horní konec.',10400,t=>{
   MIR=false;
   const p1=seg(t,.08,.3),p2=seg(t,.32,.54),k1=es(t,.6,.78),k2=es(t,.8,.97);
   let s=wallB('lic',{marks:false,d2behind:true});
@@ -467,7 +467,7 @@ add('B','Výsečník Ø 14 a rovné řezy skrz obě vrstvy','Výsečníkem <b>Ø
 },SIDE.licB);
 
 // B3 — hrany
-add('B','Zkosit a vyleštit jako jeden svazek','Okénko <span class="num">14 × 45</span> zkoste a vyleštěte jako jeden svazek B + D2. Postup hran je v animaci <a href="/animace/hrany.html#G4">Dokončení hran, část G4</a>. Mince 1 Kč (Ø 20) okénkem nepropadne.',6800,t=>{
+add('B','Zkosit a vyleštit jako jeden svazek','Okénko <span class="num">14 × 45</span> zkoste a vyleštěte jako jeden svazek B + D2 (animace <a href="/animace/hrany.html#G4">Dokončení hran, G4</a>).',6800,t=>{
   MIR=false;
   let s=wallB('lic',{marks:false,bill:true,d2behind:true});
   s+=`<path d="${slotD(M.bill)}" fill="none" stroke="var(--d2)" stroke-width=".55"/>`;
@@ -479,10 +479,10 @@ add('B','Zkosit a vyleštit jako jeden svazek','Okénko <span class="num">14 × 
   let ib=notes([['zkosit, leštit','t'],['jako svazek'],['',''],['postup hran:','t'],['animace Hrany,'],['část G4']],17,5.4);
   s+=inset('OKÉNKO',ib);
   return s;
-},SIDE.licB);
+},SIDE.licB,'Tip: mince 1 Kč (Ø 20) okénkem nepropadne.');
 
 // C1 — způsob (a): šablona P1 z listu 1 na líc B, jehla
-add('C','Způsob (a): šablona listu 1 na líc B, propíchnout jehlou','List 1 (P1 z líce) na líc D2 přiložit nejde. Proto buď (a): šablonu P1 z listu 1 (druhý výtisk nalepený na tvrdém papíře, lekce 4) přiložte na <b>líc B</b> podle obrysu a všechny otvory S1–S3 propíchněte jehlou skrz B i přilepenou D2. Oba způsoby nejdřív vyzkoušejte na odřezku D2 + B.',10000,t=>{
+add('C','Způsob (a): šablona listu 1 na líc B, propíchnout jehlou','Způsob (a): šablonu z listu 1 (druhý výtisk na tvrdém papíře) přiložte na líc B podle obrysu. Otvory S1–S3 propíchněte jehlou skrz B i D2. Oba způsoby nejdřív vyzkoušejte na odřezku D2 + B.',10000,t=>{
   MIR=false;
   let s=wallB('lic',{marks:false,bill:true,d2behind:true});
   // šablona: P1 kolem zad (papír), otvory S1–S3 vytištěné
@@ -502,7 +502,7 @@ add('C','Způsob (a): šablona listu 1 na líc B, propíchnout jehlou','List 1 (
 },SIDE.licB);
 
 // C2 — vpichy na líci D2
-add('C','Způsob (a): otočte, vpichy jsou na líci D2','Díl otočte a šablonu sejměte: vpichy jsou teď na <b>líci D2</b>. Do nich se v části D děruje vidličkou.',6800,t=>{
+add('C','Způsob (a): otočte, vpichy jsou na líci D2','Díl otočte a šablonu sejměte. Vpichy jsou teď na líci D2, do nich budete děrovat.',6800,t=>{
   MIR=true;
   const fl=es(t,.05,.45);
   const sx=Math.cos(Math.PI*fl);
@@ -523,7 +523,7 @@ add('C','Způsob (a): otočte, vpichy jsou na líci D2','Díl otočte a šablonu
 },SIDE.licD2);
 
 // C3 — způsob (b): šablona D2 z listu 3, čáry
-add('C','Způsob (b): šablona D2 z listu 3, propíchnout konce čar','Nebo (b): šablonu D2 z listu 3 (druhý výtisk na tvrdém papíře, lekce 4) přiložte na líc D2 podle hran. Přes vyříznutou šablonu se čára obkreslit nedá, proto konce čar <b>S1</b> (<span class="num">y 22,0</span>), <b>S2</b> a <b>S3</b> (<span class="num">x 36</span> a <span class="num">65</span>) propíchněte jehlou skrz šablonu, šablonu sejměte a vpichy spojte tužkou u pravítka.',9400,t=>{
+add('C','Způsob (b): šablona D2 z listu 3, propíchnout konce čar','Způsob (b): šablonu D2 z listu 3 přiložte na líc D2 podle hran. Konce čar S1 (<span class="num">y 22,0</span>), S2 a S3 (<span class="num">x 36</span> a <span class="num">65</span>) propíchněte jehlou skrz šablonu. Šablonu sejměte a vpichy spojte tužkou u pravítka.',9400,t=>{
   MIR=true;
   let s=wallB('rub',{marks:false,bill:true})+d2Part('lic',{bill:true,coinHidden:true});
   const p=es(t,.02,.25),dy=(1-p)*-20;
@@ -575,7 +575,7 @@ add('C','Způsob (b): otvory po 4 mm od osy a od y 76','Otvory odměřte po <spa
 },SIDE.licD2);
 
 // D1 — orientace
-add('D','Z líce D2 na tvrdé desce, horní hranou od sebe','Děrujte z líce D2 na tvrdé desce. Díl položte <b>horní hranou od sebe</b> a vidličku držte <b>vždy stejně natočenou</b> při pohledu na líc D2 – tím mají šikmé otvory na zádech stejný sklon. Prsty držící vidličku mějte u spodku, palička dopadá na horní konec.',8600,t=>{
+add('D','Z líce D2 na tvrdé desce, horní hranou od sebe','Děrujte z líce D2 na tvrdé desce. Díl položte horní hranou od sebe a vidličku držte vždy stejně natočenou – šikmé otvory na zádech pak mají stejný sklon. Prsty mějte u spodku vidličky, palička dopadá na horní konec.',8600,t=>{
   MIR=true;
   let s=wallB('rub',{marks:false,bill:true})+d2Part('lic',{bill:true,coinHidden:true});
   ALLH().forEach(h=>{s+=prick(h.x,h.y,'var(--slit)',.36)});
@@ -595,7 +595,7 @@ add('D','Z líce D2 na tvrdé desce, horní hranou od sebe','Děrujte z líce D2
   ib+=notes([['horní hranou','t'],['od sebe','ta'],['',''],['vidlička vždy','t'],['stejně natočená'],['při pohledu'],['na líc D2']],50,5.2);
   s+=inset('ORIENTACE',ib);
   return s;
-},SIDE.licD2,'Tip (lekce to neuvádí): u svislých švů S2 a S3 leží vidlička nutně svisle (otočená o 90° proti S1); „stejně natočená“ je tu kreslené jako stejná poloha u obou sloupců, ne zrcadlově.');
+},SIDE.licD2,'Tip: u S2 a S3 leží vidlička svisle, u obou sloupců stejně, ne zrcadlově.');
 
 // D2 — S1
 // [první otvor, počet hrotů]: první hrot v předchozím posledním otvoru; konec řady S1 dvojhrotem (jako pas-otvory-dna)
@@ -603,7 +603,7 @@ const HITS_S1=[[0,4],[3,4],[6,4],[9,4],[12,4],[15,4],[18,2],[19,2]];
 const HITS_COL=[0,3,6,9];
 function punchedS1(n){let s='';const hs=new Set();for(let k=0;k<n;k++){for(let j=0;j<HITS_S1[k][1];j++)hs.add(HITS_S1[k][0]+j)}hs.forEach(i=>{s+=slit(M.s1[i],M.s1Y,false)});return {s,c:hs.size}}
 function punchedCol(n,x){let s='';const hs=new Set();for(let k=0;k<n;k++){for(let j=0;j<4;j++)hs.add(HITS_COL[k]+j)}hs.forEach(i=>{s+=slit(x,76-4*i,true)});return {s,c:hs.size}}
-add('D','S1: 21 otvorů x 10,5–90,5','S1 (dno mincí) má <span class="num">21</span> otvorů od x <span class="num">10,5</span> do <span class="num">90,5</span>, v <span class="num">y 22,0</span>. Vidličku nasazujte hroty do vpichů nebo na odměřené značky, skrz D2 i B.',11000,t=>{
+add('D','S1: 21 otvorů x 10,5–90,5','S1 (dno mincí): <span class="num">21</span> otvorů od x <span class="num">10,5</span> do <span class="num">90,5</span>, v <span class="num">y 22,0</span>. Hroty vidličky nasazujte do vpichů nebo na značky, skrz D2 i B.',11000,t=>{
   MIR=true;
   let s=wallB('rub',{marks:false,bill:true})+d2Part('lic',{bill:true,coinHidden:true});
   ALLH().forEach(h=>{s+=prick(h.x,h.y,'var(--slit)',.3)});
@@ -615,10 +615,10 @@ add('D','S1: 21 otvorů x 10,5–90,5','S1 (dno mincí) má <span class="num">21
   let ib=notes([['S1 dno mincí','t'],['y 22,0'],['x 10,5–90,5'],['21 otvorů','ta'],['',''],['skrz D2 + B (1,6)'],['vidlička stejně','t'],['natočená']],17,5.4);
   s+=inset('S1',ib);
   return s;
-},SIDE.licD2,'Tip (lekce to neuvádí): počet hrotů vidličky lekce neurčuje. Kreslená je vidlička se 4 hroty (sada 1 + 2 + 4 + 6 hrotů, rozteč 4 mm, z vybavení); každý další úder má první hrot v posledním otvoru a poslední dva otvory S1 se dokončí dvojhrotem, jako v animaci otvorů dna projektu 02. S2 a S3 (13 otvorů) vyjdou se 4 hroty přesně.');
+},SIDE.licD2,'Tip: kreslená je vidlička se 4 hroty. Další úder začíná prvním hrotem v posledním otvoru; poslední dva otvory S1 dodělejte dvojhrotem.');
 
 // D3 — S2, S3
-add('D','S2 a S3: po 13 otvorech y 28–76','S2 a S3 (boky sloupců, x <span class="num">36</span> a <span class="num">65</span>) mají po <span class="num">13</span> otvorech od <span class="num">y 28</span> do <span class="num">76</span>. Vidlička je u obou sloupců natočená stejně.',10800,t=>{
+add('D','S2 a S3: po 13 otvorech y 28–76','S2 a S3 (boky sloupců, x <span class="num">36</span> a <span class="num">65</span>): po <span class="num">13</span> otvorech od <span class="num">y 28</span> do <span class="num">76</span>. Vidličku natočte u obou stejně.',10800,t=>{
   MIR=true;
   let s=wallB('rub',{marks:false,bill:true})+d2Part('lic',{bill:true,coinHidden:true});
   ALLH().forEach(h=>{s+=prick(h.x,h.y,'var(--slit)',.3)});
@@ -647,7 +647,7 @@ function stitchRow(xs,ys,n,back){
     if(back.start) s=hl(bs)+s; if(back.end) s=hl(be)+s;}
   return s;
 }
-add('D','Šijte sedlovým stehem, konce 2 otvory zpět','Šijte sedlovým stehem voskovanou nití <span class="num">0,6</span> mm (vybavení), na obou koncích každého švu <b>2 otvory zpět</b>. Jak se šije a jak se dělají zpětné stehy, ukazuje animace <a href="/animace/sedlarsky-steh.html#E2">Sedlářský steh, krok E2</a>; kolik nitě odměřit, <a href="/animace/delka-nite.html">Kolik nitě na šev</a>.',12000,t=>{
+add('D','Šijte sedlovým stehem, konce 2 otvory zpět','Šijte sedlovým stehem voskovanou nití <span class="num">0,6</span> mm, na obou koncích každého švu 2 otvory zpět. Jak šít: <a href="/animace/sedlarsky-steh.html#E2">Sedlářský steh, E2</a>; kolik nitě: <a href="/animace/delka-nite.html">Kolik nitě na šev</a>.',12000,t=>{
   MIR=true;
   let s=wallB('rub',{marks:false,bill:true})+d2Part('lic',{bill:true,coinHidden:true});
   s+=punchedS1(HITS_S1.length).s+punchedCol(4,36).s+punchedCol(4,65).s;
@@ -664,10 +664,10 @@ add('D','Šijte sedlovým stehem, konce 2 otvory zpět','Šijte sedlovým stehem
   let ib=notes([['sedlový steh','t'],['dvě jehly, nit 0,6'],['',''],['na obou koncích','t'],['2 otvory zpět','ta'],['',''],['S1 20 stehů'],['S2, S3 po 12']],17,5.4);
   s+=inset('ŠITÍ',ib);
   return s;
-},SIDE.licD2,'Tip (lekce to neuvádí): kde šev začít, lekce neurčuje. Animace šije S1 v pohledu zevnitř zleva (od x 90,5) a S2 a S3 od ústí sloupce (y 76) dolů. Zpětné stehy jsou zvýrazněné oranžově.');
+},SIDE.licD2,'Tip: animace šije S1 od x 90,5, S2 a S3 od y 76 dolů. Zpětné stehy jsou oranžově.');
 
 // D5 — kontrola
-add('D','Hotovo: kontrolní body lekce 6','D2 je přilepená jen v pásech G3 (dno, boky a střed do <span class="num">y 80,57</span>) a sloupce mincí zůstaly nelepené. Okénko bankovek je proseknuté skrz obě vrstvy a švy S1, S2 a S3 jsou ušité, konce 2 otvory zpět. Dál pokračuje lekce 7: mokrý ohyb dna.',8000,t=>{
+add('D','Hotovo: kontrolní body lekce 6','Kontrola: D2 je přilepená jen v pásech G3 (do <span class="num">y 80,57</span>) a sloupce mincí jsou volné. Okénko bankovek je proseknuté skrz obě vrstvy. Švy S1–S3 jsou ušité, konce 2 otvory zpět. Pokračuje lekce 7.',8000,t=>{
   MIR=true;
   let s=wallB('rub',{marks:false,bill:true})+d2Part('lic',{bill:true,coinHidden:true});
   s+=punchedS1(HITS_S1.length).s+punchedCol(4,36).s+punchedCol(4,65).s;
