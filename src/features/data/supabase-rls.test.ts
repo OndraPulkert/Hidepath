@@ -10,6 +10,7 @@ import {
   isStaleWriteError,
 } from '@/features/data/supabase-repositories';
 import { type LessonRecordEntry } from '@/features/notebook/types';
+import { type LessonNoteRecord } from '@/features/notes/types';
 import { type Database } from '@/lib/supabase/database.types';
 import { item } from '@/test/factories';
 
@@ -95,10 +96,13 @@ describeDb('Supabase – RLS a repozitáře (lokální instance)', () => {
     expect(list[0]).toMatchObject({ id: first.id, status: 'owned' });
 
     // Jiné zařízení vytvořilo tutéž položku pod jiným id → sloučí se, id zůstane původní.
+    // Novější čas: druhý zápis se stejným časem dostal čas serveru a starší zápis by
+    // trigger reject_stale_update zahodil (migrace 20261008120000).
     const fromOtherDevice = {
       ...item('waxed-thread', 'want_to_buy'),
       id: crypto.randomUUID(),
       shopName: 'jinde',
+      updatedAt: new Date(Date.now() + 60_000).toISOString(),
     };
     const merged = await repos.inventory.upsert(fromOtherDevice);
     expect(merged.id).toBe(first.id);
@@ -282,6 +286,86 @@ describeDb('Supabase – RLS a repozitáře (lokální instance)', () => {
         updatedAt: '2026-10-07T13:00:00.000Z',
       });
       expect(later.value).toBe(1.8);
+    });
+  });
+
+  describe('poznámky od ponku a inventář (lesson_notes, trigger reject_stale na inventory_items)', () => {
+    const note = (userId: string, patch: Partial<LessonNoteRecord> = {}): LessonNoteRecord => ({
+      id: crypto.randomUUID(),
+      userId,
+      projectSlug: 'lid-wallet',
+      lessonSlug: '01-measure',
+      text: 'krok 3',
+      createdAt: '2026-10-07T10:00:00.000Z',
+      updatedAt: '2026-10-07T10:00:00.000Z',
+      ...patch,
+    });
+
+    it('RLS: B nevidí poznámky A, cizí user_id odmítne, anon nemá přístup; limit 4000 znaků', async () => {
+      const a = await signedInClient(`rls-i-${run}@example.com`, password);
+      const b = await signedInClient(`rls-j-${run}@example.com`, password);
+      const reposA = createSupabaseRepositories(a.client, a.userId);
+      const reposB = createSupabaseRepositories(b.client, b.userId);
+
+      await reposA.lessonNotes!.upsert(note(a.userId));
+      expect(await reposB.lessonNotes!.list()).toEqual([]);
+      const forged = await b.client.from('lesson_notes').insert({
+        id: crypto.randomUUID(),
+        user_id: a.userId,
+        project_slug: 'lid-wallet',
+        lesson_slug: '02-cut',
+        text: 'cizí',
+      });
+      expect(forged.error).not.toBeNull();
+      const anon = createClient<Database>(url, anonKey, { auth: { persistSession: false } });
+      expect((await anon.from('lesson_notes').select('*')).error).not.toBeNull();
+
+      const insert = (lessonSlug: string, text: string) =>
+        a.client.from('lesson_notes').insert({
+          id: crypto.randomUUID(),
+          user_id: a.userId,
+          project_slug: 'lid-wallet',
+          lesson_slug: lessonSlug,
+          text,
+        });
+      // Limit je ve znacích: 4000 znaků s diakritikou projde, 4001 ne.
+      expect((await insert('03-a', 'ěščřžýáíé\n'.repeat(400))).error).toBeNull();
+      expect((await insert('03-b', 'x'.repeat(4001))).error?.code).toBe('23514');
+      expect((await insert('Neplatne_ID', 'x')).error?.code).toBe('23514');
+    });
+
+    it('starší poznámka ani starší stav inventáře nepřepíšou novější (stale)', async () => {
+      const a = await signedInClient(`rls-k-${run}@example.com`, password);
+      const repos = createSupabaseRepositories(a.client, a.userId);
+      const newer = note(a.userId, { text: 'novější', updatedAt: '2026-10-07T12:00:00.000Z' });
+      await repos.lessonNotes!.upsert(newer);
+      const older: unknown = await repos
+        .lessonNotes!.upsert(
+          note(a.userId, { text: 'starší', updatedAt: '2026-10-07T09:00:00.000Z' }),
+        )
+        .catch((e: unknown) => e);
+      expect(isStaleWriteError(older)).toBe(true);
+      expect(await repos.lessonNotes!.list()).toEqual([
+        expect.objectContaining({ id: newer.id, text: 'novější' }),
+      ]);
+
+      const owned = {
+        ...item('mallet', 'owned'),
+        id: crypto.randomUUID(),
+        updatedAt: '2026-10-07T12:00:00.000Z',
+      };
+      await repos.inventory.upsert(owned);
+      const stale: unknown = await repos.inventory
+        .upsert({
+          ...item('mallet', 'want_to_buy'),
+          id: crypto.randomUUID(),
+          updatedAt: '2026-10-07T09:00:00.000Z',
+        })
+        .catch((e: unknown) => e);
+      expect(isStaleWriteError(stale)).toBe(true);
+      expect(await repos.inventory.list()).toEqual([
+        expect.objectContaining({ id: owned.id, status: 'owned' }),
+      ]);
     });
   });
 });

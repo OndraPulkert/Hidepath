@@ -5,6 +5,7 @@ import { type CollectionRepository } from '@/features/data/local-collection';
 import { type CloudRepositories } from '@/features/data/repositories';
 import { type InventoryItem } from '@/features/inventory/types';
 import { type LessonRecordEntry } from '@/features/notebook/types';
+import { type LessonNoteRecord } from '@/features/notes/types';
 import { type PrepCheckRecord } from '@/features/prep/types';
 import {
   type CheckpointProgressRecord,
@@ -32,7 +33,12 @@ const NO_ROWS = 'PGRST116';
 const STALE_GUARDED: ReadonlySet<TableName> = new Set<TableName>([
   'lesson_records',
   'lesson_prep_checks',
+  'lesson_notes',
+  // Trigger přidává migrace 20261008120000; bez ní upsert řádek vrátí a stale nenastane.
+  'inventory_items',
 ]);
+/** PostgREST: tabulka není ve schema cache (migrace ještě neproběhla); Postgres: neexistuje. */
+const MISSING_TABLE_CODES: ReadonlySet<string> = new Set(['PGRST205', '42P01']);
 
 const base = {
   id: z.uuid(),
@@ -89,6 +95,12 @@ const rowSchemasDefinition = {
     lesson_slug: z.string(),
     item_key: z.string(),
     checked: z.boolean(),
+  }),
+  lesson_notes: z.object({
+    ...base,
+    project_slug: z.string(),
+    lesson_slug: z.string(),
+    text: z.string(),
   }),
 };
 
@@ -282,6 +294,33 @@ export const mappers = {
       item_key: r.itemKey,
     }),
   },
+  lessonNotes: {
+    fromRow(row: RowOf<'lesson_notes'>): LessonNoteRecord {
+      return {
+        id: row.id,
+        userId: row.user_id,
+        projectSlug: row.project_slug,
+        lessonSlug: row.lesson_slug,
+        text: row.text,
+        createdAt: row.created_at,
+        updatedAt: row.updated_at,
+      };
+    },
+    toRow(record: LessonNoteRecord, userId: string): Insert<'lesson_notes'> {
+      return {
+        id: record.id,
+        user_id: userId,
+        project_slug: record.projectSlug,
+        lesson_slug: record.lessonSlug,
+        text: record.text,
+        updated_at: record.updatedAt,
+      };
+    },
+    naturalKey: (r: LessonNoteRecord): Record<string, string> => ({
+      project_slug: r.projectSlug,
+      lesson_slug: r.lessonSlug,
+    }),
+  },
 };
 
 export class SupabaseRepositoryError extends Error {
@@ -306,6 +345,40 @@ export function isStaleWriteError(error: unknown): error is StaleWriteError {
   return error instanceof StaleWriteError;
 }
 
+/**
+ * Tabulka na serveru (zatím) neexistuje – klient je novější než schéma (migrace čeká na
+ * schválení). Není to porucha: data zůstávají v zařízení a synchronizace to zkusí později.
+ */
+export class RemoteTableMissingError extends SupabaseRepositoryError {
+  constructor(operation: string, table: string, cause: PostgrestError | Error) {
+    super(operation, table, cause);
+    this.name = 'RemoteTableMissingError';
+  }
+}
+
+export function isRemoteTableMissingError(error: unknown): error is RemoteTableMissingError {
+  return error instanceof RemoteTableMissingError;
+}
+
+/** PGRST205 / 42P01, nebo HTTP 404 z PostgREST (neznámá cesta = neznámá tabulka). */
+export function isMissingTableResponse(result: {
+  error: Pick<PostgrestError, 'code'> | null;
+  status?: number | undefined;
+}): boolean {
+  if (!result.error) return false;
+  return MISSING_TABLE_CODES.has(result.error.code) || result.status === 404;
+}
+
+function repositoryError(
+  operation: string,
+  table: string,
+  result: { error: PostgrestError; status?: number | undefined },
+): SupabaseRepositoryError {
+  return isMissingTableResponse(result)
+    ? new RemoteTableMissingError(operation, table, result.error)
+    : new SupabaseRepositoryError(operation, table, result.error);
+}
+
 interface TableMapper<T extends keyof RowSchemas, R extends { id: string }> {
   fromRow(row: RowOf<T>): R;
   toRow(record: R, userId: string): Insert<T>;
@@ -316,6 +389,8 @@ interface TableMapper<T extends keyof RowSchemas, R extends { id: string }> {
 interface PostgrestResult {
   data: unknown;
   error: PostgrestError | null;
+  /** HTTP status odpovědi (404 = tabulka neexistuje). */
+  status?: number;
 }
 interface Filterable {
   eq(column: string, value: string): Filterable;
@@ -353,11 +428,11 @@ function createTableRepository<T extends keyof RowSchemas, R extends { id: strin
 
   return {
     async list() {
-      const { data, error } = await tableApi(client, table).select('*').eq('user_id', userId);
-      if (error) throw new SupabaseRepositoryError('select', table, error);
+      const result = await tableApi(client, table).select('*').eq('user_id', userId);
+      if (result.error) throw repositoryError('select', table, { ...result, error: result.error });
       return z
         .array(z.unknown())
-        .parse(data ?? [])
+        .parse(result.data ?? [])
         .map(parseRow);
     },
 
@@ -371,7 +446,7 @@ function createTableRepository<T extends keyof RowSchemas, R extends { id: strin
       if (first.error.code === NO_ROWS && STALE_GUARDED.has(table))
         throw new StaleWriteError(table);
       if (first.error.code !== UNIQUE_VIOLATION)
-        throw new SupabaseRepositoryError('upsert', table, first.error);
+        throw repositoryError('upsert', table, { ...first, error: first.error });
 
       // Kolize přirozeného klíče: najdi existující řádek a aktualizuj ho pod jeho id.
       let query = tableApi(client, table).select('*').eq('user_id', userId);
@@ -379,7 +454,8 @@ function createTableRepository<T extends keyof RowSchemas, R extends { id: strin
         query = query.eq(column, value);
       }
       const existing = await query.maybeSingle();
-      if (existing.error) throw new SupabaseRepositoryError('select', table, existing.error);
+      if (existing.error)
+        throw repositoryError('select', table, { ...existing, error: existing.error });
       if (!existing.data) throw new SupabaseRepositoryError('upsert', table, first.error);
       const existingId = z.object({ id: z.uuid() }).parse(existing.data).id;
 
@@ -392,18 +468,19 @@ function createTableRepository<T extends keyof RowSchemas, R extends { id: strin
         .single();
       if (updated.error?.code === NO_ROWS && STALE_GUARDED.has(table))
         throw new StaleWriteError(table);
-      if (updated.error) throw new SupabaseRepositoryError('update', table, updated.error);
+      if (updated.error)
+        throw repositoryError('update', table, { ...updated, error: updated.error });
       return parseRow(updated.data);
     },
 
     async remove(id) {
-      const { error } = await tableApi(client, table).delete().eq('id', id).eq('user_id', userId);
-      if (error) throw new SupabaseRepositoryError('delete', table, error);
+      const result = await tableApi(client, table).delete().eq('id', id).eq('user_id', userId);
+      if (result.error) throw repositoryError('delete', table, { ...result, error: result.error });
     },
 
     async clear() {
-      const { error } = await tableApi(client, table).delete().eq('user_id', userId);
-      if (error) throw new SupabaseRepositoryError('delete', table, error);
+      const result = await tableApi(client, table).delete().eq('user_id', userId);
+      if (result.error) throw repositoryError('delete', table, { ...result, error: result.error });
     },
   };
 }
@@ -430,5 +507,7 @@ export function createSupabaseRepositories(
     // Přímý přístup k tabulkám; provider je obalí synchronizovanou kolekcí (lokál + outbox).
     lessonRecords: createTableRepository(client, 'lesson_records', userId, mappers.lessonRecords),
     prepChecks: createTableRepository(client, 'lesson_prep_checks', userId, mappers.prepChecks),
+    // Tabulka přibude migrací 20261008120000; dokud chybí, synchronizace poznámky drží v zařízení.
+    lessonNotes: createTableRepository(client, 'lesson_notes', userId, mappers.lessonNotes),
   };
 }

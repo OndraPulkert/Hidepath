@@ -34,11 +34,13 @@ export function TopNav({ hideOnMobile = false }: TopNavProps) {
   const handleSignOut = async () => {
     if (sync) {
       await sync.flush({ force: true });
-      const { pendingCount } = sync.getSnapshot();
+      // Včetně odložených změn (server zatím nemá tabulku) – odhlášení je smaže taky.
+      const unsent = sync.unsentCount();
+      const offline = sync.getSnapshot().pendingCount > 0 ? ' (bez připojení)' : '';
       if (
-        pendingCount > 0 &&
+        unsent > 0 &&
         !window.confirm(
-          `${unsentChanges(pendingCount)} do účtu (bez připojení). Po odhlášení se z tohoto zařízení smažou. Přesto odhlásit?`,
+          `${unsentChanges(unsent)} do účtu${offline}. Po odhlášení se z tohoto zařízení smažou. Přesto odhlásit?`,
         )
       )
         return;

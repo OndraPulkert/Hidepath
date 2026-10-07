@@ -106,6 +106,36 @@ export type Database = {
         };
         Relationships: [];
       };
+      lesson_notes: {
+        Row: {
+          created_at: string;
+          id: string;
+          lesson_slug: string;
+          project_slug: string;
+          text: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id: string;
+          lesson_slug: string;
+          project_slug: string;
+          text?: string;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          lesson_slug?: string;
+          project_slug?: string;
+          text?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       lesson_prep_checks: {
         Row: {
           checked: boolean;

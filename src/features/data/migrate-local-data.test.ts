@@ -2,8 +2,10 @@ import { createMemoryStorage } from '@/features/data/local-collection';
 import { hasLocalData, migrateLocalData, planMigration } from '@/features/data/migrate-local-data';
 import { createLocalRepositories } from '@/features/data/repositories';
 import { type LessonRecordEntry } from '@/features/notebook/types';
+import { type LessonNoteRecord } from '@/features/notes/types';
 import { type PrepCheckRecord } from '@/features/prep/types';
 import { createUserSync, userSyncKeys } from '@/features/sync/synced-collection';
+import { createFakeSyncServer } from '@/test/fake-sync-server';
 import { item } from '@/test/factories';
 
 const A = '11111111-1111-4111-8111-111111111111';
@@ -146,7 +148,12 @@ describe('přenos zápisníku a přípravy do synchronizované kolekce účtu', 
     const sync = createUserSync({
       storage,
       userId: USER,
-      remote: { lessonRecords: server.lessonRecords, prepChecks: server.prepChecks },
+      remote: {
+        lessonRecords: server.lessonRecords,
+        prepChecks: server.prepChecks,
+        inventory: server.inventory,
+        lessonNotes: server.lessonNotes,
+      },
       isOnline: () => online.value,
     });
     const { lessonNotes: _n, ...rest } = createLocalRepositories(createMemoryStorage());
@@ -188,5 +195,148 @@ describe('přenos zápisníku a přípravy do synchronizované kolekce účtu', 
 
     expect(await migrateLocalData(local, remote)).toEqual({ uploaded: 0, skipped: 1 });
     expect((await sync.lessonRecords.list())[0]?.value).toBe(1.6);
+  });
+});
+
+function deviceNote(
+  lessonSlug: string,
+  text: string,
+  id: string,
+  updatedAt = NOW,
+): LessonNoteRecord {
+  return {
+    id,
+    userId: null,
+    projectSlug: 'lid-wallet',
+    lessonSlug,
+    text,
+    createdAt: NOW,
+    updatedAt,
+  };
+}
+
+describe('poznámky od ponku a inventář: přenos do synchronizovaného účtu', () => {
+  const USER = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+
+  function account(options: { notesMissing?: boolean } = {}) {
+    const storage = createMemoryStorage();
+    const server = createFakeSyncServer({
+      lessonNotes: { missing: options.notesMissing ?? false },
+    });
+    const sync = createUserSync({ storage, userId: USER, remote: server.remoteFor(USER) });
+    const base = createLocalRepositories(createMemoryStorage());
+    const remote = {
+      ...base,
+      lessonRecords: sync.lessonRecords,
+      prepChecks: sync.prepChecks,
+      inventory: sync.inventory,
+      lessonNotes: sync.lessonNotes,
+    };
+    return { storage, server, sync, remote };
+  }
+
+  it('poznámky a „Mám“ z prohlížeče se přenesou do účtu a odejdou na server', async () => {
+    const { server, sync, remote } = account();
+    const local = createLocalRepositories(createMemoryStorage());
+    await local.lessonNotes.upsert(deviceNote('01-measure', 'krok 3', A));
+    await local.inventory.upsert({ ...item('knife', 'owned'), id: B });
+
+    expect(await hasLocalData(local, remote)).toBe(true);
+    expect(await migrateLocalData(local, remote)).toEqual({ uploaded: 2, skipped: 0 });
+    expect(await local.lessonNotes.list()).toEqual([]);
+    await sync.controller.sync();
+    expect(server.lessonNotes.rows()).toEqual([
+      expect.objectContaining({ text: 'krok 3', userId: USER }),
+    ]);
+    expect(server.inventory.rows()).toEqual([
+      expect.objectContaining({ equipmentSlug: 'knife', status: 'owned', userId: USER }),
+    ]);
+  });
+
+  it('už přenesený účet: přenesou se jen poznámky, ostatní data prohlížeče zůstanou', async () => {
+    const { remote } = account();
+    const local = createLocalRepositories(createMemoryStorage());
+    await local.lessonNotes.upsert(deviceNote('01-measure', 'krok 3', A));
+    await local.inventory.upsert({ ...item('knife', 'owned'), id: B });
+
+    expect(await hasLocalData(local, remote, { notesOnly: true })).toBe(true);
+    expect(await migrateLocalData(local, remote, undefined, { notesOnly: true })).toEqual({
+      uploaded: 1,
+      skipped: 0,
+    });
+    expect(await local.inventory.list()).toHaveLength(1);
+    expect(await remote.inventory.list()).toEqual([]);
+    expect(await remote.lessonNotes.list()).toEqual([expect.objectContaining({ text: 'krok 3' })]);
+
+    const empty = createLocalRepositories(createMemoryStorage());
+    await empty.inventory.upsert({ ...item('knife', 'owned'), id: B });
+    expect(await hasLocalData(empty, remote, { notesOnly: true })).toBe(false);
+  });
+
+  it('kolize s poznámkou v účtu: texty se spojí, nic se neztratí', async () => {
+    const { sync, remote, server } = account();
+    await sync.lessonNotes.upsert(
+      deviceNote('01-measure', 'z telefonu', B, '2026-10-07T12:00:00.000Z'),
+    );
+    await sync.controller.sync();
+    const local = createLocalRepositories(createMemoryStorage());
+    await local.lessonNotes.upsert(deviceNote('01-measure', 'z notebooku', A));
+
+    await migrateLocalData(local, remote, undefined, { notesOnly: true });
+    await sync.controller.sync();
+    expect(server.lessonNotes.rows()).toEqual([
+      expect.objectContaining({ id: B, text: 'z telefonu\n\nz notebooku' }),
+    ]);
+  });
+
+  it.each([
+    ['novější', '2026-10-07T23:00:00.000Z'],
+    ['starší', '2026-10-07T01:00:00.000Z'],
+  ])(
+    'nové zařízení (účet ještě nestažený), poznámka v účtu %s: texty se spojí, nic se neztratí',
+    async (_label, accountUpdatedAt) => {
+      const { sync, remote, server } = account();
+      server.lessonNotes.seed({
+        ...deviceNote('01-measure', 'z telefonu', B, accountUpdatedAt),
+        userId: USER,
+      });
+      const local = createLocalRepositories(createMemoryStorage());
+      await local.lessonNotes.upsert(deviceNote('01-measure', 'z notebooku', A));
+
+      await migrateLocalData(local, remote, undefined, { notesOnly: true });
+      await sync.controller.sync();
+      expect(server.lessonNotes.rows()).toEqual([
+        expect.objectContaining({ id: B, text: 'z telefonu\n\nz notebooku' }),
+      ]);
+      expect(await sync.lessonNotes.list()).toEqual([
+        expect.objectContaining({ id: B, text: 'z telefonu\n\nz notebooku' }),
+      ]);
+    },
+  );
+
+  it('přenos bez spojení se serverem selže a poznámky nechá v prohlížeči', async () => {
+    const { remote, server } = account();
+    server.network.online = false;
+    const local = createLocalRepositories(createMemoryStorage());
+    await local.lessonNotes.upsert(deviceNote('01-measure', 'krok 3', A));
+
+    await expect(migrateLocalData(local, remote, undefined, { notesOnly: true })).rejects.toThrow();
+    expect(await local.lessonNotes.list()).toEqual([expect.objectContaining({ text: 'krok 3' })]);
+  });
+
+  it('server tabulku poznámek nemá: přenos proběhne do lokální kopie účtu, nic se neztratí', async () => {
+    const { storage, sync, remote, server } = account({ notesMissing: true });
+    const local = createLocalRepositories(createMemoryStorage());
+    await local.lessonNotes.upsert(deviceNote('01-measure', 'krok 3', A));
+
+    expect(await migrateLocalData(local, remote, undefined, { notesOnly: true })).toEqual({
+      uploaded: 1,
+      skipped: 0,
+    });
+    await sync.controller.sync();
+    expect(server.lessonNotes.rows()).toEqual([]);
+    expect(sync.controller.getSnapshot()).toEqual({ pendingCount: 0, failedCount: 0 });
+    expect(storage.getItem(userSyncKeys(USER).lessonNotes)).toContain('krok 3');
+    expect(await remote.lessonNotes.list()).toEqual([expect.objectContaining({ text: 'krok 3' })]);
   });
 });

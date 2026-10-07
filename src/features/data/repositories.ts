@@ -14,13 +14,14 @@ import {
 } from '@/features/progress/types';
 
 export interface Repositories {
+  /** Inventář. S účtem přes synchronizovanou kolekci (lokál + outbox), funguje i offline. */
   inventory: CollectionRepository<InventoryItem>;
   enrollments: CollectionRepository<EnrollmentRecord>;
   lessonProgress: CollectionRepository<LessonProgressRecord>;
   checkpointProgress: CollectionRepository<CheckpointProgressRecord>;
   /**
-   * Poznámky od ponku. Zatím **jen v tomto zařízení** i při přihlášení – nesynchronizují
-   * se a nepřenášejí do účtu (viz `data-provider`). Zařadí se do synchronizace v Milníku 4.
+   * Poznámky od ponku. Bez účtu v prohlížeči, s účtem přes synchronizovanou kolekci. Dokud
+   * server tabulku `lesson_notes` nemá, zůstávají v lokální kopii účtu a odejdou později.
    */
   lessonNotes: CollectionRepository<LessonNoteRecord>;
   /** Zápisník (hodnoty polí z kroků). S účtem přes synchronizovanou kolekci (lokál + outbox). */
@@ -30,13 +31,13 @@ export interface Repositories {
 }
 
 /** Kolekce, které cloud může (ještě) nemít; dokud chybí, provider použije lokální. */
-export type OptionalCloudCollections = 'lessonRecords' | 'prepChecks';
+export type OptionalCloudCollections = 'lessonRecords' | 'prepChecks' | 'lessonNotes';
 
 /**
- * Kolekce, které má cloud; poznámky zůstávají v zařízení a doplní je provider. Zápisník
- * a příprava jsou v cloudu volitelné: bez nich zůstávají v zařízení a nepřenášejí se.
+ * Kolekce, které má cloud. Zápisník, příprava a poznámky jsou volitelné: bez nich zůstávají
+ * v zařízení a nepřenášejí se.
  */
-export type CloudRepositories = Omit<Repositories, 'lessonNotes' | OptionalCloudCollections> &
+export type CloudRepositories = Omit<Repositories, OptionalCloudCollections> &
   Partial<Pick<Repositories, OptionalCloudCollections>>;
 
 export const STORAGE_KEYS = {

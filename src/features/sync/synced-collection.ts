@@ -6,16 +6,23 @@ import {
   StorageWriteError,
 } from '@/features/data/local-collection';
 import { naturalKeys } from '@/features/data/repositories';
-import { isStaleWriteError } from '@/features/data/supabase-repositories';
+import {
+  isRemoteTableMissingError,
+  isStaleWriteError,
+} from '@/features/data/supabase-repositories';
+import { type InventoryItem } from '@/features/inventory/types';
 import { type LessonRecordEntry } from '@/features/notebook/types';
+import { type LessonNoteRecord } from '@/features/notes/types';
 import { type PrepCheckRecord } from '@/features/prep/types';
 import { mergeRemote, type SyncRecord } from '@/features/sync/merge';
 import {
   acknowledge,
   createOutboxStore,
+  DEFERRED_RETRY_MS,
   dueMutations,
   enqueue,
   markAttempt,
+  markDeferred,
   markFailed,
   nextRetryDelay,
   type OutboxStore,
@@ -29,6 +36,8 @@ import {
  * 1) uloží lokálně, 2) zařadí změnu do outboxu, 3) zkusí ji odeslat. Selhaná změna zůstává
  * ve frontě s chybou a zkouší se znovu (driver: start, online, návrat do záložky, backoff).
  * Odstraní se až po potvrzení serverem. Server se starší zápis odmítne (stale) → pull.
+ * Chybí-li na serveru tabulka (klient je napřed před migrací), změny se odloží (`deferred`):
+ * zůstanou v zařízení bez chybového pruhu a server se na tabulku zeptá až po odkladu.
  */
 
 export interface OwnedSyncRecord extends SyncRecord {
@@ -62,6 +71,8 @@ export interface FlushResult {
   sent: number;
   failed: number;
   stale: number;
+  /** Odloženo, protože server tabulku entity nemá. */
+  deferred: number;
 }
 
 export interface SyncedCollection<T extends OwnedSyncRecord> extends CollectionRepository<T> {
@@ -115,6 +126,13 @@ export function createSyncedCollection<T extends OwnedSyncRecord>(
   /** Klíče, které se během běžícího stažení zařadily do fronty (viz `pull`). */
   const activePulls = new Set<Set<string>>();
 
+  /** Do kdy server tabulku entity nemá (epoch ms): do té doby se na ni neptat. */
+  let missingUntil = 0;
+  const tableMissing = () => missingUntil > now();
+  const noteTableMissing = () => {
+    missingUntil = now() + DEFERRED_RETRY_MS;
+  };
+
   const enqueueChange = (operation: 'upsert' | 'delete', key: string, payload: unknown) => {
     for (const touched of activePulls) touched.add(key);
     outbox.update((queue) =>
@@ -135,10 +153,15 @@ export function createSyncedCollection<T extends OwnedSyncRecord>(
   let againForce = false;
 
   const flushOnce = async (force: boolean): Promise<FlushResult> => {
-    const result: FlushResult = { sent: 0, failed: 0, stale: 0 };
+    const result: FlushResult = { sent: 0, failed: 0, stale: 0, deferred: 0 };
     if (!isOnline()) return result;
     for (const mutation of dueMutations(outbox.list(), now(), { entity, force })) {
       if (mutation.userId !== userId) continue;
+      if (tableMissing()) {
+        outbox.update((queue) => markDeferred(queue, mutation.id, missingUntil));
+        result.deferred += 1;
+        continue;
+      }
       outbox.update((queue) => markAttempt(queue, mutation.id, now()));
       try {
         if (mutation.operation === 'upsert') {
@@ -166,6 +189,10 @@ export function createSyncedCollection<T extends OwnedSyncRecord>(
         if (isStaleWriteError(error)) {
           outbox.update((queue) => acknowledge(queue, mutation.id));
           result.stale += 1;
+        } else if (isRemoteTableMissingError(error)) {
+          noteTableMissing();
+          outbox.update((queue) => markDeferred(queue, mutation.id, missingUntil));
+          result.deferred += 1;
         } else {
           outbox.update((queue) => markFailed(queue, mutation.id, errorMessage(error), now()));
           result.failed += 1;
@@ -183,7 +210,7 @@ export function createSyncedCollection<T extends OwnedSyncRecord>(
       return flushing;
     }
     flushing = (async () => {
-      const total: FlushResult = { sent: 0, failed: 0, stale: 0 };
+      const total: FlushResult = { sent: 0, failed: 0, stale: 0, deferred: 0 };
       let force = flushOptions.force === true;
       try {
         do {
@@ -192,6 +219,7 @@ export function createSyncedCollection<T extends OwnedSyncRecord>(
           total.sent += r.sent;
           total.failed += r.failed;
           total.stale += r.stale;
+          total.deferred += r.deferred;
           force = againForce;
           againForce = false;
         } while (again);
@@ -217,6 +245,8 @@ export function createSyncedCollection<T extends OwnedSyncRecord>(
       .map((m) => m.entityId);
 
   const pull = async (): Promise<{ changed: boolean }> => {
+    // Tabulka na serveru chybí: lokální kopie je jediný stav, nic se nestahuje.
+    if (tableMissing()) return { changed: false };
     // Klíče čekající před stažením nebo zapsané během něj: jejich změna mohla odejít
     // a potvrdit se, zatímco server posílal starší snímek. Bez nich by čerstvě odeslaný
     // zápis lokálně zmizel (nebo by se vrátil právě smazaný řádek) až do dalšího stažení.
@@ -227,6 +257,10 @@ export function createSyncedCollection<T extends OwnedSyncRecord>(
       serverRecords = await remote.list();
     } catch (error) {
       activePulls.delete(touched);
+      if (isRemoteTableMissingError(error)) {
+        noteTableMissing();
+        return { changed: false };
+      }
       throw error;
     }
     const merged = await withLock(async () => {
@@ -292,6 +326,11 @@ export interface SyncController {
   subscribe(listener: () => void): () => void;
   /** Za kolik ms zkusit znovu selhané změny; `null` = nic nečeká na opakování. */
   retryDelay(): number | null;
+  /**
+   * Všechny neodeslané změny včetně odložených (chybí tabulka) – ty `getSnapshot` nepočítá,
+   * ale odhlášení je smaže, takže před ním se počítají.
+   */
+  unsentCount(): number;
   /** Volat při `storage` události: změnu z jiné záložky ohlásí odběratelům. */
   handleStorageEvent(key: string | null): void;
 }
@@ -343,6 +382,7 @@ export function createSyncController(options: {
       return outbox.subscribe(listener);
     },
     retryDelay: () => nextRetryDelay(outbox.list(), now()),
+    unsentCount: () => outbox.list().length,
     handleStorageEvent(key) {
       if (key === null) {
         outbox.notifyExternalChange();
@@ -365,13 +405,17 @@ export function userSyncKeys(userId: string) {
   return {
     lessonRecords: `${prefix}.lesson_records`,
     prepChecks: `${prefix}.lesson_prep_checks`,
+    inventory: `${prefix}.inventory_items`,
+    lessonNotes: `${prefix}.lesson_notes`,
     outbox: `${prefix}.outbox`,
   } as const;
 }
 
 /**
  * Smaže z prohlížeče lokální kopie a frontu změn uživatele (po odhlášení – sdílené zařízení).
- * Selhání úložiště nevadí: nic dalšího se s nimi dělat nedá.
+ * Včetně poznámek odložených kvůli chybějící tabulce: do anonymních poznámek prohlížeče se
+ * nevracejí, jinak by je viděl další uživatel a přenesly by se do jeho účtu. Před ztrátou
+ * varuje odhlášení (`SyncController.unsentCount`). Selhání úložiště nevadí.
  */
 export function clearUserSyncData(storage: StorageLike, userId: string): void {
   for (const key of Object.values(userSyncKeys(userId))) {
@@ -386,16 +430,22 @@ export function clearUserSyncData(storage: StorageLike, userId: string): void {
 export interface UserSync {
   lessonRecords: SyncedCollection<LessonRecordEntry>;
   prepChecks: SyncedCollection<PrepCheckRecord>;
+  inventory: SyncedCollection<InventoryItem>;
+  lessonNotes: SyncedCollection<LessonNoteRecord>;
   controller: SyncController;
+}
+
+export interface UserSyncRemote {
+  lessonRecords: CollectionRepository<LessonRecordEntry>;
+  prepChecks: CollectionRepository<PrepCheckRecord>;
+  inventory: CollectionRepository<InventoryItem>;
+  lessonNotes: CollectionRepository<LessonNoteRecord>;
 }
 
 export function createUserSync(options: {
   storage: StorageLike;
   userId: string;
-  remote: {
-    lessonRecords: CollectionRepository<LessonRecordEntry>;
-    prepChecks: CollectionRepository<PrepCheckRecord>;
-  };
+  remote: UserSyncRemote;
   onRemoteChange?: ((entity: SyncEntity | null) => void) | undefined;
   now?: (() => number) | undefined;
   isOnline?: (() => boolean) | undefined;
@@ -422,13 +472,30 @@ export function createUserSync(options: {
     onChange: () => options.onRemoteChange?.('lesson_prep_checks'),
   });
 
+  const inventory = createSyncedCollection<InventoryItem>({
+    ...common,
+    entity: 'inventory_items',
+    local: createStorageCache(storage, keys.inventory, naturalKeys.inventory),
+    remote: remote.inventory,
+    naturalKey: naturalKeys.inventory,
+    onChange: () => options.onRemoteChange?.('inventory_items'),
+  });
+  const lessonNotes = createSyncedCollection<LessonNoteRecord>({
+    ...common,
+    entity: 'lesson_notes',
+    local: createStorageCache(storage, keys.lessonNotes, naturalKeys.lessonNotes),
+    remote: remote.lessonNotes,
+    naturalKey: naturalKeys.lessonNotes,
+    onChange: () => options.onRemoteChange?.('lesson_notes'),
+  });
+
   const controller = createSyncController({
     outbox,
-    collections: [lessonRecords, prepChecks],
-    cacheKeys: [keys.lessonRecords, keys.prepChecks],
+    collections: [lessonRecords, prepChecks, inventory, lessonNotes],
+    cacheKeys: [keys.lessonRecords, keys.prepChecks, keys.inventory, keys.lessonNotes],
     onRemoteChange: options.onRemoteChange,
     now: options.now,
   });
 
-  return { lessonRecords, prepChecks, controller };
+  return { lessonRecords, prepChecks, inventory, lessonNotes, controller };
 }

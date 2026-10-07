@@ -43,6 +43,7 @@ function createController(overrides: Partial<SyncController> = {}) {
       return () => subscribers.delete(listener);
     },
     retryDelay: vi.fn(() => null),
+    unsentCount: () => 0,
     handleStorageEvent: vi.fn(),
     ...overrides,
   };

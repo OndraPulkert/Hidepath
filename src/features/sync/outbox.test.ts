@@ -6,6 +6,7 @@ import {
   dueMutations,
   enqueue,
   markAttempt,
+  markDeferred,
   markFailed,
   type NewMutation,
   nextRetryDelay,
@@ -118,6 +119,27 @@ describe('outbox – čisté funkce', () => {
     let queue = enqueue(enqueue([], mutation('a', 'm1')), mutation('b', 'm2'));
     queue = markFailed(queue, 'm2', 'x', 0);
     expect(summarizeOutbox(queue)).toEqual({ pendingCount: 2, failedCount: 1 });
+  });
+
+  it('odložená změna (chybí tabulka): nepočítá se, čeká na odklad i při force, zůstane po reloadu', () => {
+    let queue = enqueue(enqueue([], mutation('a', 'm1')), {
+      ...mutation('n', 'm2'),
+      entity: 'lesson_notes',
+    });
+    queue = markFailed(markAttempt(queue, 'm2'), 'm2', 'PGRST205', 0);
+    queue = markDeferred(queue, 'm2', 10_000);
+    expect(queue[1]).toMatchObject({ status: 'deferred', nextAttemptAt: 10_000 });
+    expect(queue[1]?.lastError).toBeUndefined();
+    expect(summarizeOutbox(queue)).toEqual({ pendingCount: 1, failedCount: 0 });
+    expect(dueMutations(queue, 9_999, { force: true }).map((m) => m.id)).toEqual(['m1']);
+    expect(dueMutations(queue, 10_000).map((m) => m.id)).toEqual(['m1', 'm2']);
+    expect(nextRetryDelay(queue, 4_000)).toBe(6_000);
+    expect(parseOutbox(JSON.stringify(queue))).toEqual(queue);
+    expect(recoverInterrupted(queue)[1]?.status).toBe('deferred');
+    // Nový zápis téhož klíče je zase obyčejná čekající změna.
+    expect(enqueue(queue, { ...mutation('n', 'm3'), entity: 'lesson_notes' })[1]).toMatchObject({
+      status: 'pending',
+    });
   });
 
   it('parseOutbox zahodí poškozený JSON i neplatné položky', () => {

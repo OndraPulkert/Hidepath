@@ -4,7 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Label, Textarea } from '@/components/ui/input';
 import { type LessonDefinition, type ProjectDefinition } from '@/content/schema';
+import { useDataContext } from '@/features/data/data-provider';
 import { countNotedLessons, formatProjectNotes } from '@/features/notes/format-notes';
+import { LESSON_NOTE_MAX_LENGTH } from '@/features/notes/types';
 import { useLessonNotes, useSaveLessonNote } from '@/features/notes/use-lesson-notes';
 
 const timeFormat = new Intl.DateTimeFormat('cs-CZ', { hour: '2-digit', minute: '2-digit' });
@@ -21,11 +23,13 @@ export function LessonNotes({
   project: ProjectDefinition;
   lesson: LessonDefinition;
 }) {
+  const { mode } = useDataContext();
   const notes = useLessonNotes(project.slug);
   const save = useSaveLessonNote(project.slug);
-  const current = notes.data?.find((n) => n.lessonSlug === lesson.slug);
+  // Vymazaná poznámka zůstává jako záznam s prázdným textem (kvůli synchronizaci).
+  const current = notes.data?.find((n) => n.lessonSlug === lesson.slug && n.text !== '');
   // Rozepsaný text drží komponenta, dokud se uložení nepotvrdí; pak zase čte uložený.
-  // Pole se při načítání nezamyká: čte se z tohoto zařízení, tedy okamžitě, a kdyby
+  // Pole se při načítání nezamyká: čte se z lokální kopie, tedy okamžitě, a kdyby
   // uživatel začal psát dřív, rozepsaný text má přednost.
   const [draft, setDraft] = useState<string | null>(null);
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'manual'>('idle');
@@ -58,9 +62,11 @@ export function LessonNotes({
       <div>
         <h2 className="text-h2">Poznámky od ponku</h2>
         <p className="mt-1 text-meta text-ink-2">
-          Kde jste se zasekli, co nebylo jasné, co příště uděláte jinak. Napište i číslo kroku.
-          Poznámky zůstávají v tomto zařízení; tlačítkem níž zkopírujete všechny k projektu, ať je
-          můžete poslat dál.
+          Kde jste se zasekli, co nebylo jasné, co příště uděláte jinak. Napište i číslo kroku.{' '}
+          {mode === 'cloud'
+            ? 'Poznámky se ukládají do vašeho účtu; bez připojení se odešlou později.'
+            : 'Poznámky zůstávají v tomto prohlížeči; po přihlášení se přenesou do účtu.'}{' '}
+          Tlačítkem níž zkopírujete všechny k projektu, ať je můžete poslat dál.
         </p>
       </div>
       <div>
@@ -68,6 +74,7 @@ export function LessonNotes({
         <Textarea
           id={fieldId}
           rows={4}
+          maxLength={LESSON_NOTE_MAX_LENGTH}
           value={value}
           placeholder="např. krok 3 – nevěděl jsem, kterou stranou díl otočit"
           onChange={(e) => setDraft(e.target.value)}

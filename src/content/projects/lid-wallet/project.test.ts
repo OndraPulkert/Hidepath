@@ -150,6 +150,9 @@ describe('obsah – peněženka Víčko', () => {
     expect(side.filter((y) => y >= 56 && y <= 68)).toEqual([56, 60, 64, 68]);
     expect(side.filter((y) => y >= 72)).toEqual([72, 76]);
     expect(punch).toContain('na líc D2 těsně k horní hraně F');
+    expect(punch).toContain(
+      'otvory 64 a 68 jdou i skrz něj. Jak ho držet, ověřte na zkušebním kuse.',
+    );
     expect(punch).toContain('jak přesně, ověřte na zkušebním kuse');
     const mark = stepOf(9, 'mark-side');
     expect(mark).toContain('ne od přečnívající D2');
@@ -521,7 +524,7 @@ describe('obsah – peněženka Víčko', () => {
   describe('nákupní plán „Co koupit“', () => {
     const plan = lidWalletProject.shoppingPlan!;
 
-    it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10. 2026, Lederversand Berlin ze 7. 10. 2026)', () => {
+    it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10. 2026, Lederversand Berlin a useň P1 ze 7. 10. 2026)', () => {
       for (const line of plan.lines) {
         const example = findPlanExample(line, equipmentCatalog);
         expect(example, `${line.equipmentSlug} ${line.url} ${line.variant ?? ''}`).toBeDefined();
@@ -529,7 +532,8 @@ describe('obsah – peněženka Víčko', () => {
         expect(example!.checkedAt, line.url).toBe(
           line.equipmentSlug === 'masking-tape'
             ? '2026-10-01'
-            : example!.shop === 'Lederversand Berlin'
+            : example!.shop === 'Lederversand Berlin' ||
+                line.equipmentSlug === 'veg-tan-leather-1mm'
               ? '2026-10-07'
               : '2026-09-29',
         );
@@ -547,17 +551,17 @@ describe('obsah – peněženka Víčko', () => {
       }
     });
 
-    it('kůže 1 207,06 Kč (oddíl 10.1, nebarvená kozinka z Lederversand Berlin) a výsečníky 150 Kč', () => {
+    it('kůže 1 233,06 Kč (oddíl 10.1, nebarvená kozinka z Lederversand Berlin) a výsečníky 150 Kč', () => {
       const resolved = resolveShoppingPlan(lidWalletProject, equipmentCatalog, {})!;
       const lines = resolved.shops.flatMap((s) => s.lines);
       const sum = (slugs: string[]) =>
         lines.filter((l) => slugs.includes(l.equipmentSlug)).reduce((s, l) => s + l.lineCents, 0);
-      expect(sum(['veg-tan-leather-1mm', 'thin-goatskin'])).toBe(120_706);
+      expect(sum(['veg-tan-leather-1mm', 'thin-goatskin'])).toBe(123_306);
       expect(sum(['round-punches-8-14'])).toBe(15_000);
       // Součty po obchodech napevno (ceny z 29. 9. a 7. 10. 2026): změna ceny nebo množství v katalogu
       // se tu musí projevit vědomě. Pořadí obchodů = pořadí první zmínky v plánu.
       expect(resolved.shops.map((g) => [g.shop, g.totalCents])).toEqual([
-        ['Šijeme z kůže', 26_650],
+        ['Šijeme z kůže', 29_250],
         ['Lederversand Berlin', 94_056],
         ['CraftPoint', 324_200],
         ['ELIDIS', 1_212],
@@ -566,7 +570,7 @@ describe('obsah – peněženka Víčko', () => {
         ['UNI HOBBY', 89_900],
         ['IKEA', 11_800],
       ]);
-      expect(resolved.totalCents).toBe(614_138);
+      expect(resolved.totalCents).toBe(616_738);
       expect(lines).toHaveLength(plan.lines.length);
       expect(resolved.notInStockCount).toBe(0);
     });

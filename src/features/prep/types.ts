@@ -3,13 +3,12 @@
  * Nástroje se tu neukládají – „Mám“ u nástroje je stav inventáře.
  *
  * `itemKey`: `print:<source>:<sheetId>` (u šablony `print:template`), `req:<id>`,
- * `mat:<slug textu>`. Zatím **jen v tomto zařízení**; synchronizaci s účtem
- * (tabulka `lesson_prep_checks`) doplní balík synchronizace.
+ * `mat:<slug textu>`. Bez účtu v prohlížeči, s účtem se synchronizuje (`lesson_prep_checks`).
  */
 export interface PrepCheckRecord {
   /** UUID generované klientem. */
   id: string;
-  /** Vlastník; dokud se příprava nesynchronizuje, `null`. */
+  /** Vlastník; bez účtu `null`. */
   userId: string | null;
   projectSlug: string;
   lessonSlug: string;

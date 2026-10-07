@@ -1434,7 +1434,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'punch-sew',
         title: 'Děrovat a šít boky',
-        body: 'Po lepení G4 počkejte aspoň 1 h. Děrujte zepředu skrz všechny vrstvy na tvrdé desce, vidlička při pohledu na líc horní hranou od sebe, ve třech úsecích: (1) y 8–52 z líce F vícezubou vidličkou na rysky z proužku. (2) y 56–68 po jednom otvoru, každý podle rysky: 56 a 60 z líce F, 64 a 68 z líce D2 (horní hrana F, y 62, leží mezi 60 a 64). Dvouzubou vidličku nasaďte krajním zubem do posledního hotového otvoru, druhý zub prorazí jeden nový; zub pokaždé na pevnou vrstvu. Schod F/D2 vyrovnejte odřezkem usně 1,0 mm položeným na líc D2 těsně k horní hraně F, otvory 64 a 68 jdou i skrz něj (jak ho držet, ověřte na zkušebním kuse). (3) y 72–76 z líce D2. Šijte sedlovým stehem od 76 dolů, konce 2 otvory zpět. Steh 60–64 zdvojte, zpevňuje ústí karet (jak přesně, ověřte na zkušebním kuse). Nit 0,6 mm odměřte 5 × délka švu + 25–30 cm, šev jde přes tři vrstvy.',
+        body: 'Po lepení G4 počkejte aspoň 1 h. Děrujte zepředu skrz všechny vrstvy na tvrdé desce, vidlička při pohledu na líc horní hranou od sebe, ve třech úsecích: (1) y 8–52 z líce F vícezubou vidličkou na rysky z proužku. (2) y 56–68 po jednom otvoru, každý podle rysky: 56 a 60 z líce F, 64 a 68 z líce D2 (horní hrana F, y 62, leží mezi 60 a 64). Dvouzubou vidličku nasaďte krajním zubem do posledního hotového otvoru, druhý zub prorazí jeden nový; zub pokaždé na pevnou vrstvu. Odřezek usně 1,0 mm položte na líc D2 těsně k horní hraně F: vyrovná schod F/D2, aby vidlička stála rovně, a otvory 64 a 68 jdou i skrz něj. Jak ho držet, ověřte na zkušebním kuse. (3) y 72–76 z líce D2. Šijte sedlovým stehem od 76 dolů, konce 2 otvory zpět. Steh 60–64 zdvojte, zpevňuje ústí karet (jak přesně, ověřte na zkušebním kuse). Nit 0,6 mm odměřte 5 × délka švu + 25–30 cm, šev jde přes tři vrstvy.',
         animationLinks: [
           animationLink('lidBodySides', 'D1'),
           animationLink('lidBodySides', 'D2'),
@@ -2206,14 +2206,14 @@ export const lidWalletProject: ProjectDefinition = {
   },
   shoppingPlan: {
     title:
-      'Sestava: kůže ze dvou obchodů (kaštan 0,9–1 mm a čokoládová kozinka 0,7–0,9 mm ze Šijeme z kůže, nebarvená kozinka 0,6–0,8 mm z Lederversand Berlin), listy vygenerované v aplikaci pro změřenou tloušťku, zkušební i finální kus, magnet Ø 8 × 1,5, plíšek 0,5 mm',
+      'Sestava: kůže ze dvou obchodů (hnědá třísločiněná useň pull-up 0,8–1,2 mm a čokoládová kozinka 0,7–0,9 mm ze Šijeme z kůže, nebarvená kozinka 0,6–0,8 mm z Lederversand Berlin), listy vygenerované v aplikaci pro změřenou tloušťku, zkušební i finální kus, magnet Ø 8 × 1,5, plíšek 0,5 mm',
     lines: [
       {
         equipmentSlug: 'veg-tan-leather-1mm',
-        url: 'https://www.sijemezkuze.cz/trislocinena-kuze-kastan-0-9-1-mm-p4698',
+        url: 'https://www.sijemezkuze.cz/pull-up-crazy-horse-trislocineny-0-8-1-2-mm-hnedy-top-kvalita-od-5-dm2-nebo-cely-kus-za-zvyhodnenou-cenu-p4777-8033',
         quantity: 10,
         purpose:
-          '10 dm² v jednom kuse 20 × 50 cm: P1 zkušebního i finálního kusu, odřezky na V12 a podložku S7',
+          '10 dm² v jednom kuse 20 × 50 cm: P1 zkušebního i finálního kusu, odřezky na V12 a podložku S7; tloušťku po dodání změřit (0,8–1,2 mm)',
       },
       {
         equipmentSlug: 'thin-goatskin',

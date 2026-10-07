@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { routes } from '@/app/routes';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
+import { equipmentCatalog } from '@/content/equipment';
 import { lidWalletProject } from '@/content/projects/lid-wallet/project';
 import {
   type CollectionRepository,
@@ -11,7 +12,8 @@ import {
   type StorageLike,
 } from '@/features/data/local-collection';
 import { createLocalRepositories, type Repositories } from '@/features/data/repositories';
-import { createUserSync } from '@/features/sync/synced-collection';
+import { createUserSync, userSyncKeys } from '@/features/sync/synced-collection';
+import { createFakeSyncServer } from '@/test/fake-sync-server';
 import { enrollment, item } from '@/test/factories';
 import { createTestRepositories, renderApp, setOnline } from '@/test/render';
 
@@ -153,13 +155,20 @@ describe('hlavní cesta: zápisník, příprava a dílenský režim', () => {
     const sync = createUserSync({
       storage,
       userId: USER_ID,
-      remote: { lessonRecords: failingRemote(), prepChecks: failingRemote() },
+      remote: {
+        lessonRecords: failingRemote(),
+        prepChecks: failingRemote(),
+        inventory: failingRemote(),
+        lessonNotes: failingRemote(),
+      },
       isOnline: online,
     });
     const repositories: Repositories = {
       ...createLocalRepositories(storage),
       lessonRecords: sync.lessonRecords,
       prepChecks: sync.prepChecks,
+      inventory: sync.inventory,
+      lessonNotes: sync.lessonNotes,
     };
     return { repositories, sync };
   }
@@ -208,6 +217,92 @@ describe('hlavní cesta: zápisník, příprava a dílenský režim', () => {
     const recalls = await screen.findAllByRole('list', { name: 'Z vašeho zápisníku' });
     expect(recalls.filter((r) => capRecall.test(r.textContent ?? ''))).toHaveLength(1);
     expect(second.sync.controller.getSnapshot().pendingCount).toBe(1);
+  });
+
+  it('s účtem offline: „Mám“ u nástroje a poznámka se uloží, přežijí reload a po připojení odejdou', async () => {
+    const user = userEvent.setup();
+    const storage = createMemoryStorage();
+    const server = createFakeSyncServer();
+    server.network.online = false;
+    setOnline(false);
+    const account = () => {
+      const sync = createUserSync({
+        storage,
+        userId: USER_ID,
+        remote: server.remoteFor(USER_ID),
+        isOnline: () => server.network.online,
+      });
+      const repositories: Repositories = {
+        ...createLocalRepositories(storage),
+        lessonRecords: sync.lessonRecords,
+        prepChecks: sync.prepChecks,
+        inventory: sync.inventory,
+        lessonNotes: sync.lessonNotes,
+      };
+      return { sync, repositories };
+    };
+    const toolSlug = coinL3.requiredEquipment[0]!;
+    const toolName = `Mám: ${equipmentCatalog[toolSlug]!.name}`;
+    const first = account();
+
+    const page = renderApp(routes.lesson(coin.slug, coinL3.slug), {
+      repositories: first.repositories,
+    });
+    const prep = (await screen.findByRole('heading', { level: 2, name: 'Připravte si' })).closest(
+      'section',
+    )!;
+    const toggle = await within(prep).findByRole('button', { name: toolName });
+    await waitFor(() => expect(toggle).toBeEnabled());
+    await user.click(toggle);
+    await waitFor(() => expect(toggle).toHaveAttribute('aria-pressed', 'true'));
+    expect(within(prep).queryByRole('alert')).toBeNull();
+
+    const note = await screen.findByLabelText('Poznámka k této lekci');
+    await user.type(note, 'krok 2 – výsečník 3 mm sedl');
+    await user.tab();
+    await screen.findByText(/^Uloženo /);
+
+    // Nic nešlo na server, obojí čeká v outboxu účtu (žádná chyba, žádná ztráta).
+    expect(server.inventory.rows()).toEqual([]);
+    expect(server.lessonNotes.rows()).toEqual([]);
+    expect(first.sync.controller.getSnapshot()).toEqual({ pendingCount: 2, failedCount: 0 });
+    expect(storage.getItem(userSyncKeys(USER_ID).inventory)).toContain(toolSlug);
+    page.unmount();
+
+    // Reload offline: stav i poznámka jsou zpět z lokální kopie účtu.
+    const second = account();
+    renderApp(routes.lesson(coin.slug, coinL3.slug), { repositories: second.repositories });
+    const again = (await screen.findByRole('heading', { level: 2, name: 'Připravte si' })).closest(
+      'section',
+    )!;
+    await waitFor(() =>
+      expect(within(again).getByRole('button', { name: toolName })).toHaveAttribute(
+        'aria-pressed',
+        'true',
+      ),
+    );
+    await waitFor(() =>
+      expect(screen.getByLabelText('Poznámka k této lekci')).toHaveValue(
+        'krok 2 – výsečník 3 mm sedl',
+      ),
+    );
+
+    // Připojení: změny odejdou do účtu a fronta se vyprázdní.
+    server.network.online = true;
+    setOnline(true);
+    await second.sync.controller.sync();
+    expect(second.sync.controller.getSnapshot()).toEqual({ pendingCount: 0, failedCount: 0 });
+    expect(server.inventory.rows()).toEqual([
+      expect.objectContaining({ equipmentSlug: toolSlug, status: 'owned', userId: USER_ID }),
+    ]);
+    expect(server.lessonNotes.rows()).toEqual([
+      expect.objectContaining({
+        projectSlug: coin.slug,
+        lessonSlug: coinL3.slug,
+        text: 'krok 2 – výsečník 3 mm sedl',
+        userId: USER_ID,
+      }),
+    ]);
   });
 
   it('zaškrtnutí přípravy v lekci 2 přežije reload a odkaz na tisk předvybere list', async () => {

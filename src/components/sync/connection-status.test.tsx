@@ -25,6 +25,7 @@ function fakeSync(initial: SyncSnapshot) {
       return () => listeners.delete(l);
     },
     retryDelay: () => null,
+    unsentCount: () => 0,
     handleStorageEvent: vi.fn(),
   };
   const set = (next: SyncSnapshot) => {

@@ -1,11 +1,14 @@
 import {
   createSupabaseRepositories,
+  isMissingTableResponse,
+  isRemoteTableMissingError,
   isStaleWriteError,
   mappers,
   StaleWriteError,
   SupabaseRepositoryError,
 } from '@/features/data/supabase-repositories';
 import { type LessonRecordEntry } from '@/features/notebook/types';
+import { type LessonNoteRecord } from '@/features/notes/types';
 import { type PrepCheckRecord } from '@/features/prep/types';
 import { type AppSupabaseClient } from '@/lib/supabase/client';
 import { item } from '@/test/factories';
@@ -18,6 +21,7 @@ const AT = '2026-10-07T10:00:00.000Z';
 interface Result {
   data: unknown;
   error: { code: string; message: string } | null;
+  status?: number;
 }
 
 /**
@@ -170,9 +174,109 @@ describe('createSupabaseRepositories – zápisník', () => {
   it('ostatní tabulky dál hlásí 0 řádků jako obyčejnou chybu, ne stale', async () => {
     const { client } = fakeClient([{ data: null, error: { code: 'PGRST116', message: '0 rows' } }]);
     const error: unknown = await createSupabaseRepositories(client, USER)
-      .inventory.upsert({ ...item('mallet', 'owned'), id: ID1 })
+      .enrollments.upsert({
+        id: ID1,
+        userId: USER,
+        projectSlug: 'card-holder',
+        contentVersion: 1,
+        status: 'active',
+        startedAt: AT,
+        completedAt: null,
+        createdAt: AT,
+        updatedAt: AT,
+      })
       .catch((e: unknown) => e);
     expect(error).toBeInstanceOf(SupabaseRepositoryError);
     expect(isStaleWriteError(error)).toBe(false);
+  });
+
+  it('inventář je chráněný před zastaralým zápisem: 0 řádků = StaleWriteError', async () => {
+    const { client } = fakeClient([{ data: null, error: { code: 'PGRST116', message: '0 rows' } }]);
+    const error: unknown = await createSupabaseRepositories(client, USER)
+      .inventory.upsert({ ...item('mallet', 'owned'), id: ID1 })
+      .catch((e: unknown) => e);
+    expect(isStaleWriteError(error)).toBe(true);
+  });
+});
+
+const noteRow = {
+  id: ID1,
+  user_id: USER,
+  project_slug: 'lid-wallet',
+  lesson_slug: '01-measure',
+  text: 'krok 3 – lepidlo teklo',
+  created_at: AT,
+  updated_at: AT,
+};
+
+const noteRecord: LessonNoteRecord = {
+  id: ID1,
+  userId: USER,
+  projectSlug: 'lid-wallet',
+  lessonSlug: '01-measure',
+  text: 'krok 3 – lepidlo teklo',
+  createdAt: AT,
+  updatedAt: AT,
+};
+
+describe('poznámky od ponku (lesson_notes)', () => {
+  it('mapper: řádek ↔ záznam beze ztrát, přirozený klíč projekt + lekce', () => {
+    expect(mappers.lessonNotes.fromRow(noteRow)).toEqual(noteRecord);
+    expect(mappers.lessonNotes.toRow(noteRecord, USER)).toEqual({
+      id: ID1,
+      user_id: USER,
+      project_slug: 'lid-wallet',
+      lesson_slug: '01-measure',
+      text: 'krok 3 – lepidlo teklo',
+      updated_at: AT,
+    });
+    expect(mappers.lessonNotes.naturalKey(noteRecord)).toEqual({
+      project_slug: 'lid-wallet',
+      lesson_slug: '01-measure',
+    });
+  });
+
+  it('list validuje řádky; upsert bez řádku = StaleWriteError', async () => {
+    const ok = fakeClient([{ data: [noteRow], error: null }]);
+    expect(await createSupabaseRepositories(ok.client, USER).lessonNotes?.list()).toEqual([
+      noteRecord,
+    ]);
+    const bad = fakeClient([{ data: [{ ...noteRow, text: null }], error: null }]);
+    await expect(createSupabaseRepositories(bad.client, USER).lessonNotes?.list()).rejects.toThrow(
+      SupabaseRepositoryError,
+    );
+    const stale = fakeClient([{ data: null, error: { code: 'PGRST116', message: '0 rows' } }]);
+    await expect(
+      createSupabaseRepositories(stale.client, USER).lessonNotes!.upsert(noteRecord),
+    ).rejects.toBeInstanceOf(StaleWriteError);
+  });
+
+  it.each([
+    [
+      'PGRST205 (tabulka není ve schema cache)',
+      { code: 'PGRST205', message: 'Could not find' },
+      404,
+    ],
+    ['42P01 (relation does not exist)', { code: '42P01', message: 'does not exist' }, 400],
+    ['HTTP 404 bez kódu', { code: '', message: 'Not Found' }, 404],
+  ])('chybějící tabulka – %s = RemoteTableMissingError', async (_label, error, status) => {
+    const list = fakeClient([{ data: null, error, status }]);
+    const listError: unknown = await createSupabaseRepositories(list.client, USER)
+      .lessonNotes!.list()
+      .catch((e: unknown) => e);
+    expect(isRemoteTableMissingError(listError)).toBe(true);
+
+    const upsert = fakeClient([{ data: null, error, status }]);
+    const upsertError: unknown = await createSupabaseRepositories(upsert.client, USER)
+      .lessonNotes!.upsert(noteRecord)
+      .catch((e: unknown) => e);
+    expect(isRemoteTableMissingError(upsertError)).toBe(true);
+    expect(upsertError).toBeInstanceOf(SupabaseRepositoryError);
+  });
+
+  it('jiné chyby nejsou chybějící tabulka', () => {
+    expect(isMissingTableResponse({ error: null, status: 404 })).toBe(false);
+    expect(isMissingTableResponse({ error: { code: '42501' }, status: 403 })).toBe(false);
+    expect(isMissingTableResponse({ error: { code: 'PGRST116' }, status: 406 })).toBe(false);
   });
 });

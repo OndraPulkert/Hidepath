@@ -6,6 +6,7 @@ import { useDataContext } from '@/features/data/data-provider';
 import { newId, nowIso } from '@/features/data/local-collection';
 import { mutationScopes, queryKeys } from '@/features/data/query-keys';
 import { type InventoryItem, type InventoryState } from '@/features/inventory/types';
+import { nextUpdatedAt } from '@/features/sync/merge';
 
 function toState(items: readonly InventoryItem[]): InventoryState {
   return Object.fromEntries(items.map((i) => [i.equipmentSlug, i]));
@@ -14,6 +15,8 @@ function toState(items: readonly InventoryItem[]): InventoryState {
 export function useInventory() {
   const { repositories: repos, scope } = useDataContext();
   return useQuery({
+    // Lokální kopie (i s účtem – outbox): číst a zapisovat i offline, nečekat na síť.
+    networkMode: 'always',
     queryKey: queryKeys.inventory(scope),
     queryFn: async () => toState(await repos.inventory.list()),
   });
@@ -50,7 +53,8 @@ export function applyInventoryPatch(
       patch.purchasedAt !== undefined ? patch.purchasedAt : (current?.purchasedAt ?? null),
     notes: patch.notes !== undefined ? patch.notes : (current?.notes ?? null),
     createdAt: current?.createdAt ?? now,
-    updatedAt: now,
+    // Vždy po známém stavu (i ze serveru), jinak by úpravu přebil zápis z hodin „napřed“.
+    updatedAt: nextUpdatedAt(current?.updatedAt, Date.parse(now)),
   };
 }
 
@@ -70,8 +74,8 @@ export function useUpdateInventoryItem() {
   const key = queryKeys.inventory(scope);
 
   const mutation = useMutation({
-    // Bez účtu se ukládá do prohlížeče i offline. S účtem zápis offline hned selže a UI to
-    // řekne – pozastavená mutace by žila jen v paměti a zavřením aplikace by se tiše ztratila.
+    // Bez účtu i s účtem se ukládá hned do lokální kopie (s účtem navíc do outboxu, který
+    // změnu odešle po připojení), takže zápis funguje offline a nečeká na síť.
     networkMode: 'always',
     scope: mutationScopes.inventory(scope),
     mutationFn: (record: InventoryItem) => repos.inventory.upsert(record),

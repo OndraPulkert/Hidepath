@@ -571,8 +571,8 @@ jen uvedené pravidlo.** Značka „L“ se dává na rub F a na rub B zvlášť
   úsecích, které se nepřekrývají: y 8–52 z líce F, y 56–68 po jednom otvoru (56 a 60 z líce F, 64 a 68
   z líce D2) a y 72–76 z líce D2. V úseku y 56–68 každý otvor zarovnat
   podle rysky: bez vidličky s 1 zubem nasadit dvouzubou vidličku krajním zubem do posledního hotového
-  otvoru, druhý zub prorazí jen jeden nový otvor, zub pokaždé na pevnou vrstvu. Schod F/D2 vyrovnat odřezkem 1,0: položit ho na líc D2 těsně k horní hraně F,
-  aby vidlička stála rovně; otvory 64 a 68 jdou i skrz něj (ověřit na zkušebním kusu).
+  otvoru, druhý zub prorazí jen jeden nový otvor, zub pokaždé na pevnou vrstvu. Schod F/D2 vyrovná odřezek 1,0: leží na líci D2 těsně u horní hrany F,
+  aby vidlička stála rovně, a otvory 64 a 68 jdou i skrz něj (rozhodnutí autora 7. 10. 2026, Kolo 15). Jak ho držet – ověřit na zkušebním kuse.
 - Spodní hrana D2 (y 18,0) leží mezi otvory 16 a 20 (2 mm od obou).
 - Poslední otvor 76 je 4,57 pod pásem závěsu (y 80,57). V závěsu nejsou stehy ani lepidlo.
 - S6 vynechá pás x 38,5–62,5 (plíšek x 43,5–57,5 s okrajem 4 a pás pod jazýčkem x 40,5–60,5). Střed
@@ -1893,6 +1893,14 @@ Rozměry ani model se nemění. Listy 1, 2 a 4 se mění jen v popiscích a zna�
 | Čára švu 3,0 u přečnívající D2                        | 3,0 od hrany F a B (x 3,0), nad F 4,0 od hrany D2 (D2 x −1); proužek na listu 4 má čárkovanou čáru 3,0.                                                                                                                    | dokument + lekce + list 4 |
 | Krok 5: strana a šablona                              | Okénka mincí z líce B, šablona jen na kontrolu; výřez z líce F, výsečník přes šablonu. Bezpečnost výsečníku jako v lekci 6; „aku vrtačka“ jako ve vybavení.                                                                | dokument + lekce          |
 | Listy 1 a 2 odkazovaly na kroky zadání                | Odkazy na lekce (lekce 5, 6, 11, pořadí lekce 6–9); křížky na středech všech výsečníků na listu 1 (i Ø 12 a Ø 8).                                                                                                          | generátor + test          |
+
+### Kolo 15 – odřezek pod vidličkou u schodu F/D2 (rozhodnutí autora 7. 10. 2026)
+
+Rozměry, model ani listy se nemění.
+
+| Nález                                            | Co se změnilo                                                                                                                                                                                                                | Stav             |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| Poloha odřezku 1,0 při děrování S4, S5 (krok 14) | Autor potvrdil (7. 10. 2026): odřezek 1,0 leží na **líci D2** těsně u horní hrany F a vyrovnává schod F/D2; otvory **64 a 68** jdou i skrz něj. Poloha už není „ověřit“; ověřit na zkušebním kuse zůstává jen, jak ho držet. | dokument + lekce |
 
 ### Co zůstává neověřené
 

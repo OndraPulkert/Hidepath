@@ -9,10 +9,20 @@ import { type StorageLike, StorageWriteError } from '@/features/data/local-colle
  * zápis starší nahradí (na serveru stejně platí jen poslední stav).
  */
 
-export const SYNC_ENTITIES = ['lesson_records', 'lesson_prep_checks'] as const;
+export const SYNC_ENTITIES = [
+  'lesson_records',
+  'lesson_prep_checks',
+  'inventory_items',
+  'lesson_notes',
+] as const;
 export type SyncEntity = (typeof SYNC_ENTITIES)[number];
 
-export type MutationStatus = 'pending' | 'syncing' | 'failed';
+/**
+ * `deferred` = server tabulku entity (zatím) nemá, např. migrace ještě není nasazená. Změna
+ * zůstává v zařízení, nepočítá se jako čekající ani selhaná (žádný pruh s chybou) a zkusí se
+ * znovu až po `nextAttemptAt`.
+ */
+export type MutationStatus = 'pending' | 'syncing' | 'failed' | 'deferred';
 
 export interface PendingMutation {
   /** Id této verze změny. Nová změna téhož klíče dostane nové id. */
@@ -43,7 +53,7 @@ const mutationSchema = z.object({
   payload: z.unknown(),
   createdAt: z.string(),
   attempts: z.number().int().min(0),
-  status: z.enum(['pending', 'syncing', 'failed']),
+  status: z.enum(['pending', 'syncing', 'failed', 'deferred']),
   lastError: z.string().optional(),
   nextAttemptAt: z.number().optional(),
 });
@@ -130,6 +140,22 @@ export function markFailed(
   );
 }
 
+/** Jak dlouho počkat, než se znovu zkusí entita, jejíž tabulka na serveru chybí. */
+export const DEFERRED_RETRY_MS = 30 * 60_000;
+
+/** Server tabulku entity nemá: změna zůstává v zařízení a zkusí se po `until`. */
+export function markDeferred(
+  queue: readonly PendingMutation[],
+  id: string,
+  until: number,
+): PendingMutation[] {
+  return queue.map((m) => {
+    if (m.id !== id) return m;
+    const { lastError: _lastError, ...rest } = m;
+    return { ...rest, status: 'deferred' as const, nextAttemptAt: until };
+  });
+}
+
 /** Server změnu potvrdil. Odstraní ji jen tehdy, když ji mezitím nenahradila novější. */
 export function acknowledge(queue: readonly PendingMutation[], id: string): PendingMutation[] {
   return queue.filter((m) => m.id !== id);
@@ -150,6 +176,8 @@ export function dueMutations(
     if (options.entity !== undefined && m.entity !== options.entity) return false;
     // Odesílání v běhu (i v jiné záložce) nepřerušovat; po vypršení je to přerušený pokus.
     if (m.status === 'syncing') return m.nextAttemptAt !== undefined && m.nextAttemptAt <= now;
+    // Chybějící tabulka: ani „Zkusit znovu“ nepomůže, čeká se na uplynutí odkladu.
+    if (m.status === 'deferred') return m.nextAttemptAt === undefined || m.nextAttemptAt <= now;
     return (
       options.force === true ||
       m.status === 'pending' ||
@@ -160,13 +188,16 @@ export function dueMutations(
 }
 
 /**
- * Kdy nejdřív zkusit znovu selhané (nebo přerušené odesílané) změny (ms od `now`);
+ * Kdy nejdřív zkusit znovu selhané, odložené (nebo přerušené odesílané) změny (ms od `now`);
  * `null` = nic nečeká na opakování.
  */
 export function nextRetryDelay(queue: readonly PendingMutation[], now: number): number | null {
   const times = queue
     .filter(
-      (m) => m.status === 'failed' || (m.status === 'syncing' && m.nextAttemptAt !== undefined),
+      (m) =>
+        m.status === 'failed' ||
+        m.status === 'deferred' ||
+        (m.status === 'syncing' && m.nextAttemptAt !== undefined),
     )
     .map((m) => Math.max(0, (m.nextAttemptAt ?? now) - now));
   return times.length === 0 ? null : Math.min(...times);
@@ -186,9 +217,10 @@ export interface OutboxSummary {
   failedCount: number;
 }
 
+/** Odložené změny (chybějící tabulka) se nepočítají: nejsou porucha ani nic, co by šlo urychlit. */
 export function summarizeOutbox(queue: readonly PendingMutation[]): OutboxSummary {
   return {
-    pendingCount: queue.length,
+    pendingCount: queue.filter((m) => m.status !== 'deferred').length,
     failedCount: queue.filter((m) => m.status === 'failed').length,
   };
 }

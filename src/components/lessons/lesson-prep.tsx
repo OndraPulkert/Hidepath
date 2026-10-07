@@ -22,7 +22,6 @@ import {
 import { usePrepChecks, useSetPrepCheck } from '@/features/prep/use-prep-checks';
 import { EMPTY_PROGRESS } from '@/features/progress/types';
 import { useProgress } from '@/features/progress/use-progress';
-import { useOnlineStatus } from '@/lib/pwa/use-online-status';
 import { cn } from '@/lib/utils/cn';
 import { formatCzk, formatOrdinalCode, pluralizeCs, typo } from '@/lib/utils/format';
 
@@ -43,8 +42,7 @@ export function LessonPrep({ project, lesson, inventory }: LessonPrepProps) {
   const checksQuery = usePrepChecks(project.slug);
   const setCheck = useSetPrepCheck(project.slug);
   const updateInventory = useUpdateInventoryItem();
-  const { migration, mode } = useDataContext();
-  const online = useOnlineStatus();
+  const { migration } = useDataContext();
   // Stav nástroje před „Mám“ (např. Objednáno), aby ho zrušení „Mám“ vrátilo – ne vždy
   // „Chci koupit“, které by zahodilo objednávku.
   const statusBeforeOwned = useRef(new Map<string, EquipmentStatus>());
@@ -154,9 +152,7 @@ export function LessonPrep({ project, lesson, inventory }: LessonPrepProps) {
 
       {setCheck.isError || updateInventory.isError ? (
         <p role="alert" className="text-body text-cognac-deep">
-          {updateInventory.isError && !online && mode === 'cloud'
-            ? 'Stav nástroje se ukládá do účtu a bez připojení se neuložil. Zkuste to po připojení.'
-            : 'Uložení se nepovedlo. Zkuste to prosím znovu.'}
+          Uložení se nepovedlo. Zkuste to prosím znovu.
         </p>
       ) : null}
     </section>

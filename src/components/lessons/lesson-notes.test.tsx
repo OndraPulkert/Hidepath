@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { isUuid } from '@/features/data/local-collection';
+import { LESSON_NOTE_MAX_LENGTH } from '@/features/notes/types';
 import { createTestRepositories, renderApp } from '@/test/render';
 
 const lesson = cardHolderProject.lessons[0]!;
@@ -43,7 +44,7 @@ describe('poznámky od ponku', () => {
     await waitFor(() => expect((again as HTMLTextAreaElement).value).toContain('lepidlo teklo'));
   });
 
-  it('vymazaný text záznam odstraní', async () => {
+  it('vymazaný text uloží prázdnou poznámku (náhrobek kvůli synchronizaci) a nepočítá ji', async () => {
     const user = userEvent.setup();
     const repositories = createTestRepositories();
     renderApp(url, { repositories });
@@ -51,9 +52,27 @@ describe('poznámky od ponku', () => {
     await user.type(field, 'x');
     await user.tab();
     await waitFor(async () => expect(await repositories.lessonNotes.list()).toHaveLength(1));
+    const [first] = await repositories.lessonNotes.list();
     await user.clear(field);
     await user.tab();
-    await waitFor(async () => expect(await repositories.lessonNotes.list()).toHaveLength(0));
+    await waitFor(async () =>
+      expect(await repositories.lessonNotes.list()).toEqual([
+        expect.objectContaining({ id: first!.id, text: '' }),
+      ]),
+    );
+    expect(await screen.findByText('Zatím žádná poznámka.')).toBeInTheDocument();
+    expect(screen.getByText('Uloží se, když z pole odejdete.')).toBeInTheDocument();
+  });
+
+  it('bez účtu říká, že poznámky jsou v prohlížeči a po přihlášení se přenesou; pole má limit', async () => {
+    renderApp(url);
+    const field = await screen.findByLabelText('Poznámka k této lekci');
+    expect(field).toHaveAttribute('maxLength', String(LESSON_NOTE_MAX_LENGTH));
+    expect(
+      screen.getByText(
+        /Poznámky zůstávají v tomto prohlížeči; po přihlášení se přenesou do účtu\./,
+      ),
+    ).toBeInTheDocument();
   });
 
   it('zkopíruje všechny poznámky k projektu do schránky', async () => {

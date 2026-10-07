@@ -2,7 +2,7 @@ import { type EquipmentDefinition } from '@/content/schema';
 
 /**
  * Položky katalogu, které přibyly s projektem 03 (peněženka Víčko, docs/zadani/penezenka-vicko.md,
- * oddíl 10 a 10.1). Každý příklad je ze stránky načtené 29. 9. 2026 (CraftPoint přes `…/products/
+ * oddíl 10 a 10.1). Každý příklad je ze stránky načtené 29. 9. 2026 (useň P1 7. 10. 2026; CraftPoint přes `…/products/
  * <handle>.js`, ostatní obchody přes HTML). Co stránka neuvádí, je v textu označené „ověřit“.
  * Texty jsou NÁVRH (reviewStatus: draft).
  */
@@ -46,21 +46,22 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
       { title: 'Štípenka', reason: 'nemá líc' },
     ],
     alternatives: [],
-    // 10 dm² × 19,90 Kč (Šijeme z kůže, ověřeno 29. 9. 2026).
-    priceRange: { minCents: 19_900, maxCents: 19_900 },
+    // 10 dm² × 22,50 Kč (Šijeme z kůže, pull-up 0,8–1,2 mm, ověřeno 7. 10. 2026; kaštan 0,9–1 mm
+    // p4698 obchod stáhl, stránka vrací 404 a hledání „kaštan“ nabízí jen usně 1,3 mm a silnější).
+    priceRange: { minCents: 22_500, maxCents: 22_500 },
     priceSource: 'verified',
-    priceNote: `${VERIFIED_NOTE} 10 dm² × 19,90 Kč/dm², bez poštovného (poštovné neověřené). Obchod může dodané množství upravit podle skutečného kusu a rozdíl promítne do ceny.`,
+    priceNote: `${VERIFIED_NOTE} 10 dm² × 22,50 Kč/dm², bez poštovného (poštovné neověřené). Obchod může dodané množství upravit podle skutečného kusu a rozdíl promítne do ceny.`,
     alsoUsedFor: [],
     examples: [
       {
-        title: 'Třísločiněná kůže kaštan 0,9–1 mm',
+        title: 'Pull Up Crazy horse třísločiněný 0,8–1,2 mm hnědý (varianta od 5 dm²)',
         shop: 'Šijeme z kůže',
-        url: 'https://www.sijemezkuze.cz/trislocinena-kuze-kastan-0-9-1-mm-p4698',
-        priceCents: 1_990,
-        priceNote: 'za dm² (16,45 Kč bez DPH), minimální odběr 5 dm²',
-        note: 'P1 zkušebního i finálního kusu. Objednat 10 dm² a do poznámky napsat „Prosím v jednom kuse jako obdélník 20 × 50 cm“. Tloušťku po dodání změřit.',
+        url: 'https://www.sijemezkuze.cz/pull-up-crazy-horse-trislocineny-0-8-1-2-mm-hnedy-top-kvalita-od-5-dm2-nebo-cely-kus-za-zvyhodnenou-cenu-p4777-8033',
+        priceCents: 2_250,
+        priceNote: 'za dm² (18,60 Kč bez DPH), minimální odběr 5 dm²',
+        note: 'Náhrada za kaštan 0,9–1 mm, který obchod stáhl; tenčí třísločiněnou hovězí useň tu teď nemá. P1 zkušebního i finálního kusu. Objednat 10 dm² a do poznámky napsat „Prosím v jednom kuse jako obdélník 20 × 50 cm, co nejblíž 1,0 mm“. Rozsah 0,8–1,2 mm je širší než 0,9–1: tloušťku po dodání změřit a listy vygenerovat pro změřenou P1. Obchod ji uvádí jako lehce změkčenou a voskovanou (pull-up, v ohybu světlá): zkouška ohybu V12 a zkušební kus ověří, jestli drží tvar; lepidlo a barvu hran nejdřív zkusit na odřezku.',
         availability: 'in_stock',
-        checkedAt: '2026-09-29',
+        checkedAt: '2026-10-07',
       },
     ],
     commonlyAtHome: false,
@@ -68,7 +69,7 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
       {
         id: 'veg-tan-leather-1mm-main',
         kind: 'photo',
-        caption: 'Obdélník třísločiněné usně kaštan 20 × 50 cm s vyznačenými přířezy P1',
+        caption: 'Obdélník třísločiněné usně 20 × 50 cm s vyznačenými přířezy P1',
         status: 'planned',
       },
     ],

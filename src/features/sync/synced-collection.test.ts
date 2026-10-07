@@ -6,7 +6,9 @@ import {
 } from '@/features/data/local-collection';
 import { naturalKeys } from '@/features/data/repositories';
 import { StaleWriteError } from '@/features/data/supabase-repositories';
+import { type InventoryItem } from '@/features/inventory/types';
 import { type LessonRecordEntry } from '@/features/notebook/types';
+import { type LessonNoteRecord } from '@/features/notes/types';
 import { type PrepCheckRecord } from '@/features/prep/types';
 import {
   createOutboxStore,
@@ -433,7 +435,7 @@ describe('hodiny zařízení a ztracené odpovědi (LWW podle klientského času
     await laptop.edit(1.6, '2026-10-07T12:05:00.000Z');
     const result = await laptop.collection.flush();
 
-    expect(result).toEqual({ sent: 1, failed: 0, stale: 0 });
+    expect(result).toEqual({ sent: 1, failed: 0, stale: 0, deferred: 0 });
     expect((await server.list())[0]?.value).toBe(1.6);
     expect((await laptop.collection.list())[0]?.value).toBe(1.6);
   });
@@ -498,11 +500,21 @@ describe('createUserSync', () => {
   function emptyRemote<T extends { id: string }>(): CollectionRepository<T> {
     return createStorageCollection<T>(createMemoryStorage(), 'r');
   }
+  function emptyRemotes() {
+    return {
+      lessonRecords: emptyRemote<LessonRecordEntry>(),
+      prepChecks: emptyRemote<PrepCheckRecord>(),
+      inventory: emptyRemote<InventoryItem>(),
+      lessonNotes: emptyRemote<LessonNoteRecord>(),
+    };
+  }
 
   it('lokální klíče jsou per uživatel a oddělené od anonymních dat', () => {
     expect(userSyncKeys(USER)).toEqual({
       lessonRecords: `hidepath.v1.u.${USER}.lesson_records`,
       prepChecks: `hidepath.v1.u.${USER}.lesson_prep_checks`,
+      inventory: `hidepath.v1.u.${USER}.inventory_items`,
+      lessonNotes: `hidepath.v1.u.${USER}.lesson_notes`,
       outbox: `hidepath.v1.u.${USER}.outbox`,
     });
     expect(userSyncKeys(OTHER).outbox).not.toBe(userSyncKeys(USER).outbox);
@@ -514,13 +526,13 @@ describe('createUserSync', () => {
     const a = createUserSync({
       storage,
       userId: USER,
-      remote: { lessonRecords: emptyRemote(), prepChecks: emptyRemote() },
+      remote: emptyRemotes(),
       isOnline: offline,
     });
     const b = createUserSync({
       storage,
       userId: OTHER,
-      remote: { lessonRecords: emptyRemote(), prepChecks: emptyRemote() },
+      remote: emptyRemotes(),
       isOnline: offline,
     });
     await a.lessonRecords.upsert(entry('p1-thickness', 1.4, '10:00'));
@@ -538,7 +550,7 @@ describe('createUserSync', () => {
     const sync = createUserSync({
       storage,
       userId: USER,
-      remote: { lessonRecords: lessonRemote, prepChecks: prepRemote },
+      remote: { ...emptyRemotes(), lessonRecords: lessonRemote, prepChecks: prepRemote },
       isOnline: () => online.value,
     });
     const listener = vi.fn();
@@ -574,7 +586,7 @@ describe('createUserSync', () => {
     const sync = createUserSync({
       storage,
       userId: USER,
-      remote: { lessonRecords: emptyRemote(), prepChecks: emptyRemote() },
+      remote: emptyRemotes(),
       onRemoteChange,
     });
     const listener = vi.fn();
@@ -596,7 +608,7 @@ describe('createUserSync', () => {
     const sync = createUserSync({
       storage,
       userId: USER,
-      remote: { lessonRecords: emptyRemote(), prepChecks: emptyRemote() },
+      remote: emptyRemotes(),
       isOnline: () => false,
     });
     await sync.lessonRecords.upsert(entry('p1-thickness', 1.4, '10:00'));

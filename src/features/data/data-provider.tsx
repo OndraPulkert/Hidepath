@@ -49,7 +49,7 @@ export interface DataContextValue {
   migration: MigrationState;
   retryMigration: () => void;
   /**
-   * Synchronizace zápisníku a přípravy (outbox) v cloud režimu; bez účtu `null`.
+   * Synchronizace zápisníku, přípravy, inventáře a poznámek (outbox) v cloud režimu; bez účtu `null`.
    * Volitelné kvůli zpětné kompatibilitě testovacích kontextů.
    */
   sync?: SyncController | null;
@@ -59,6 +59,8 @@ export interface DataContextValue {
 const queryKeySegment: Record<SyncEntity, string> = {
   lesson_records: 'lesson-records',
   lesson_prep_checks: 'prep-checks',
+  inventory_items: 'inventory',
+  lesson_notes: 'lesson-notes',
 };
 
 const DataContext = createContext<DataContextValue | null>(null);
@@ -95,13 +97,14 @@ export function DataProvider({
   const cloud = useMemo(() => {
     if (!userId || !supabase) return null;
     const remote = createSupabaseRepositories(supabase, userId);
-    if (!remote.lessonRecords || !remote.prepChecks) return { repositories: remote, sync: null };
-    // Zápisník a příprava: lokálně nejdřív (per-user klíče) + outbox, server dostává změny
-    // na pozadí. Ostatní kolekce zůstávají přímo na serveru.
+    const { lessonRecords, prepChecks, lessonNotes } = remote;
+    if (!lessonRecords || !prepChecks || !lessonNotes) return { repositories: remote, sync: null };
+    // Zápisník, příprava, inventář a poznámky: lokálně nejdřív (per-user klíče) + outbox,
+    // server dostává změny na pozadí. Ostatní kolekce zůstávají přímo na serveru.
     const userSync = createUserSync({
       storage: local.storage ?? resolveBrowserStorage().storage,
       userId,
-      remote: { lessonRecords: remote.lessonRecords, prepChecks: remote.prepChecks },
+      remote: { lessonRecords, prepChecks, lessonNotes, inventory: remote.inventory },
       onRemoteChange: (entity) => {
         void queryClient.invalidateQueries({
           queryKey: entity ? [userId, queryKeySegment[entity]] : [userId],
@@ -113,6 +116,8 @@ export function DataProvider({
         ...remote,
         lessonRecords: userSync.lessonRecords,
         prepChecks: userSync.prepChecks,
+        inventory: userSync.inventory,
+        lessonNotes: userSync.lessonNotes,
       },
       sync: userSync.controller,
     };
@@ -136,12 +141,22 @@ export function DataProvider({
     if (!cloud || !userId) return;
     const remote = cloud.repositories;
     const flagKey = `${STORAGE_KEYS.migrated}.${userId}`;
+    // Poznámky dřív zůstávaly v zařízení i s účtem, takže je má i uživatel, jehož ostatní data
+    // se přenesla dávno: přenesou se jednou dodatečně. Pak už ne – poznámky psané bez účtu
+    // po odhlášení (třeba někým jiným na sdíleném zařízení) do účtu nepatří, stejně jako
+    // ostatní data prohlížeče.
+    const notesFlagKey = `${STORAGE_KEYS.migrated}.notes.${userId}`;
+    const markDone = () => {
+      local.storage?.setItem(flagKey, '1');
+      local.storage?.setItem(notesFlagKey, '1');
+    };
     const controller = new AbortController();
 
     const run = async () => {
-      if (local.storage?.getItem(flagKey) === '1' && attempt === 0) return;
-      if (!(await hasLocalData(local.repositories, remote))) {
-        local.storage?.setItem(flagKey, '1');
+      const notesOnly = local.storage?.getItem(flagKey) === '1';
+      if (notesOnly && local.storage?.getItem(notesFlagKey) === '1') return;
+      if (!(await hasLocalData(local.repositories, remote, { notesOnly }))) {
+        markDone();
         return;
       }
       setMigration({ status: 'running' });
@@ -149,9 +164,11 @@ export function DataProvider({
       for (let i = 0; i < 3; i += 1) {
         if (controller.signal.aborted) return;
         try {
-          const summary = await migrateLocalData(local.repositories, remote, controller.signal);
+          const summary = await migrateLocalData(local.repositories, remote, controller.signal, {
+            notesOnly,
+          });
           if (controller.signal.aborted) return;
-          local.storage?.setItem(flagKey, '1');
+          markDone();
           setMigration({ status: 'done', summary });
           if (summary.uploaded > 0) void queryClient.invalidateQueries({ queryKey: [userId] });
           return;
@@ -175,19 +192,18 @@ export function DataProvider({
 
   const value = useMemo<DataContextValue>(
     () => ({
-      // Poznámky od ponku zůstávají v zařízení i s účtem: cloud pro ně tabulku nemá.
-      // Zápisník a příprava jdou přes synchronizovanou kolekci (lokální kopie per uživatel
-      // + outbox). Ostatní kolekce jdou přímo do účtu.
+      // Zápisník, příprava, inventář a poznámky jdou přes synchronizovanou kolekci (lokální
+      // kopie per uživatel + outbox). Ostatní kolekce jdou přímo do účtu.
       repositories: cloud
         ? {
             ...cloud.repositories,
-            lessonNotes: local.repositories.lessonNotes,
+            lessonNotes: cloud.repositories.lessonNotes ?? local.repositories.lessonNotes,
             lessonRecords: cloud.repositories.lessonRecords ?? local.repositories.lessonRecords,
             prepChecks: cloud.repositories.prepChecks ?? local.repositories.prepChecks,
           }
         : local.repositories,
       scope,
-      // I s účtem: poznámky, zápisník, příprava a neodeslané změny (outbox) leží v úložišti
+      // I s účtem: synchronizované kolekce a neodeslané změny (outbox) leží v úložišti
       // prohlížeče – když je jen v paměti, po zavření záložky zmizí.
       persistent: local.persistent,
       mode: cloud ? 'cloud' : 'local',
