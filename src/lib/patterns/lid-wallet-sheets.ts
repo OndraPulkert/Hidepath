@@ -1333,7 +1333,7 @@ export function buildLidJigsSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): strin
     'GUIDE',
     ox + bs.widthMm / 2,
     jy + 6,
-    `VLOŽKA DNA ${cz(bs.widthMm)} × ${cz(bs.depthMm)} × ${cz(spec.bottomSpacerMm)}`,
+    `VLOŽKA DNA aspoň ${cz(bs.widthMm)} × ${cz(bs.depthMm)} × ${cz(spec.bottomSpacerMm)}`,
     2,
     'middle',
     { bold: true },
@@ -1358,7 +1358,7 @@ export function buildLidJigsSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): strin
     'GUIDE',
     ox + bs.widthMm / 2,
     jy + 15.5,
-    'ustřihnout v jedné vrstvě zleva, v druhé zprava; slepit páskou; leží na rubu B, hranou k F',
+    `ustřihnout v jedné vrstvě zleva, v druhé zprava; výšku nezkracovat (~${cz(Math.round(fc.heightMm - fc.edgeTrimMm))} ≥ ${cz(bs.depthMm)}); slepit páskou; na rub B, hranou k F`,
     1.6,
     'middle',
   );

@@ -85,10 +85,15 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
       'Záloha A peněženky Víčko. Kupuje se až podle výsledku zkoušky ohybu V12, ne předem. Listy se pro ni generují přepínačem --p1 0.8.',
     buyingGuide: [
       { label: 'Činění', value: 'pevná třísločiněná useň' },
-      { label: 'Kus', value: 'aspoň 11 × 24 cm na P1 a odřezek na zopakování V12' },
+      {
+        label: 'Kus',
+        value:
+          'záloha A platí pro zkušební i finální kus: jako u usně 1,0 jeden kus 20 × 50 cm (2 přířezy P1 110 × 240 mm vedle sebe a z pruhu vedle nich odřezek 30 × 40 mm na zopakování V12); jeden P1 potřebuje kus aspoň 11 × 24 cm',
+      },
     ],
     cautions: [
       'Pevnou třísločiněnou useň 0,8 v potřebném kusu se v obchodech ověřit nepodařilo. Před koupí ověřit u prodejce.',
+      'Kus jen 11 × 24 cm stačí na jediný P1: na zkušební i finální kus by pak useň chyběla.',
     ],
     avoid: [],
     alternatives: [

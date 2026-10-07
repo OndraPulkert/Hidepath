@@ -580,7 +580,7 @@ export function buildVlozkaDnaSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): str
     text(
       X(v1) - 2,
       top + 9,
-      `vložka ${cz(L.bottomSpacer.widthMm)} × ${cz(L.bottomSpacer.depthMm)} × ${cz(spec.bottomSpacerMm)}`,
+      `vložka aspoň ${cz(L.bottomSpacer.widthMm)} × ${cz(L.bottomSpacer.depthMm)} × ${cz(spec.bottomSpacerMm)}`,
       2.6,
       'end',
       GUIDE,

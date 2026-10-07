@@ -534,7 +534,7 @@ silně (jedním prstem nejde otevřít, L1 se odtrhává), postupuje se takto. C
 | výřez pro palec v F (U 10 × 12, rohy ústí R1) | vydutý, viditelný               | **výsečník Ø 10** přes šablonu se středem na ose v y 55,0 (v 7,0), potom rovné řezy **nožem** od hrany F k tečnám díry, zastavit přesně na tečně; rohy ústí R1 **brusným papírem**, ne nožem (krok 5). **Zaoblit** z líce i z rubu (přes líc přejíždí špička jazýčku, o rubovou hranu dna U se může zachytit karta), vnitřek brousit a **leštit** kolíkem Ø 8 ve vrtačce spolu s horní hranou F před lepením G4 (krok 6). Ověřit P0-4 a na zkušebním kusu (P2-7) |
 | pás víčka – spodní hrana a boky, rohy R4      | viditelná, vypouklé rohy        | nožem; zkosit z líce, leštit na plocho před sestavením                                                                                                                                                                                                                                                                                                                                                                                                           |
 | napojení jazýčku na pás R4                    | **vyduté**                      | **výsečník Ø 8**, tečné rovné řezy nožem                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| boky jazýčku                                  | viditelná                       | zkosit z líce, leštit                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| boky jazýčku                                  | viditelná                       | zkosit z líce, leštit                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | špička jazýčku R10 (jazýček + L1)             | vypouklá, viditelná             | nožem podle šablony **po nalepení magnetu i L1** (krok 19, oba naráz), pak obšít S7 (krok 20). Klín **nedělat nožem**, ale zbrousit brusným papírem na hranolku z líce i z rubu jen v posledních 2,5 mm (ryska), aby látka kapsy nechytla hranu (V3) a magnet neležel na ztenčeném místě. Stačí, když je hrana na konci asi 0,5–0,7 a zaoblená.                                                                                                                  |
 | okénka mincí 12 × 48 (jen B, 1,0)             | vyduté konce R6                 | **výsečník Ø 12** na obou koncích (středy y 34 a 70), rovné řezy nožem; konce brousit papírem na kolíku Ø 8 ve vrtačce, zkosit z líce, leštit **před sestavením**                                                                                                                                                                                                                                                                                                |
 | okénko bankovek 14 × 45 (D2 + B slepené, 1,6) | vyduté konce R7                 | **výsečník Ø 14** na obou koncích (středy y 32 a 63), rovné řezy nožem skrz obě vrstvy **po lepení G3**; leštit jako svazek                                                                                                                                                                                                                                                                                                                                      |
@@ -633,7 +633,7 @@ odřezku, o kolik je ryska rýhy od vrcholu ohybu. Když je to víc než 0,3 mm,
 vložky o tuto odchylku směrem od vrcholu k rýze (leží-li rýha od vrcholu blíž k F, posuň čáru k F). Čára hrany vložky je na listu 1 i 2
 (vrstva FOLD, trojúhelníčky u boků, popisek); vyznač ji na rubu i ryskami na bocích.
 Pás ohybu navlhči houbičkou (časy v oddílu 9.1), vložku polož na rub B hranou na čáru hrany vložky
-(ve výchozím střihu 64,18; vložka leží na B, její hrana míří k F, na straně F vložka neleží) a F přehni nahoru přes **vložku 1,5** (rozměr **111 × 25**), tak bude ohyb kolmý na pás.
+(ve výchozím střihu 64,18; vložka leží na B, její hrana míří k F, na straně F vložka neleží) a F přehni nahoru přes **vložku 1,5** (rozměr **aspoň 111 × 25**; z karet vyjde asi 111 × 50, výšku karet nezkracovat), tak bude ohyb kolmý na pás.
 **Vložka (Kolo 9, nic se nekupuje):** 2 vrstvy starých karet na sobě (2 × 0,76 = **1,52**; model
 s 1,52 posune osu i hranu vložky jen o 0,01–0,02 mm, kontroly projdou), v každé vrstvě 2 karty
 vedle sebe kratšími hranami k sobě (2 × 85,6 = 171,2 ≥ 111). Dlouhou hranu, která jde do ohybu,
@@ -960,7 +960,8 @@ značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,6
    50 mm (kap. 28). Úsečka neodhalí chybu měřítka 0,5 % (na P1 asi 1,2 mm), proto změř i kótu P1 na
    listu 1 a porovnej ji s rámečkem „Čísla pro postup“ na listu 4 (výchozí střih 231,66; tolerance
    ±0,5), jinak list znovu vytiskni.
-   (b) **Přípravek:** jediný je vložka dna **111 × 25 × 1,5** (o 5 mm na každé straně širší než díl):
+   (b) **Přípravek:** jediný je vložka dna **aspoň 111 × 25 × 1,5** (o 5 mm na každé straně širší než díl; z karet
+   vyjde asi 111 × 50, výška karet se nezkracuje, oddíl 5.8):
    ze 4 starých karet, 2 vrstvy na sobě (2 × 0,76 = 1,52), v každé 2 karty vedle sebe, spoje posunuté,
    slepit páskou, zkrátit na 111 a hranu do ohybu odstřihnout rovně o 4 mm; nebo jiný rovný pás 1,5 (oddíl 5.8,
    `bottomSpacer`, list 4). Vložka je ve všech variantách stejná. Kopyto ani opěrka závěsu se od Kola 9
@@ -997,10 +998,14 @@ značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,6
    nemá: kdo s kódem nepracuje, zapíše si naměřené hodnoty (k, zvednutí na klínu, bankovky, tloušťka
    magnetu) a střih přepočítá ten, kdo ho udržuje (třeba v Claude Code nad repozitářem: model
    `src/lib/geometry/lid-wallet.ts`, pole z oddílu 12.1). Teprve pak nalep na tvrdý papír a vyřízni šablony z listu 1 (obrys pásu
-   s okénky a otvory švů; použije se v krocích 2, 5 a 13) a zbylé šablony z listu 4 (okénka, plíšek,
-   proužek otvorů S4/S5).
+   s okénky a otvory švů; použije se v krocích 2, 5 a 13) a zbylé šablony z listu 4 (okénka – kontrola
+   polohy okének mincí v kroku 5 a okénka bankovek v kroku 8, plíšek – rozměr na plech v kroku 2,
+   proužek otvorů S4/S5 v kroku 14).
 2. **Řez:** P1 101 × kóta P1 z rámečku na listu 4 (výchozí střih 231,66; rovné řezy nožem u pravítka, obrys jazýčku a pásu podle listu 1, výřez
-   pro palec až v kroku 5). **Napojení jazýčku na pás** je vyduté (R4): **výsečník Ø 8**, pak tečné
+   pro palec až v kroku 5: horní hranu F řezat rovně u pravítka i přes výřez, který list 1 v obrysu má).
+   Dokud je list 1 přilepený na líci, propíchnout skrz něj konce osy ohybu, čáry hrany vložky dna a
+   přehybů závěsu u boků a středy výsečníků: Ø 8, Ø 12 okének mincí, Ø 10 výřezu a **Ø 14 okénka
+   bankovek** (to se vysekává až v kroku 8 z líce B, kam se pak list 1 přiložit nedá). **Napojení jazýčku na pás** je vyduté (R4): **výsečník Ø 8**, pak tečné
    rovné řezy nožem (oddíl 5.5).
    D1 93 × 79,5 (nebarvená kozinka), D2 103 × 64 (čokoládová kozinka), L1 24 × 22 (z nebarvené
    kozinky jako D1, 10.1; tloušťka podle měření z kroku 0). **K2** 14 × 20,5 ve výchozím střihu
@@ -1013,7 +1018,8 @@ značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,6
    listu 2 a rámečku na listu 4 (výchozí střih v 62,21 a 142,99–150,99), hranice lepení G1–G4, čáry S1–S3 a S6, okénka, poloha D1 a D2. Papír se na kůži
    obkreslit skrz nedá, proto: list 2
    nalep na tvrdý papír a vyřízni po obrysu, přilož ho na rub, rohy lepených ploch a konce čar
-   propíchni jehlou do kůže a tečky spoj tužkou u pravítka. Osu ohybu dna a přehyby závěsu vyznač
+   propíchni jehlou do kůže a tečky spoj tužkou u pravítka. Osu ohybu dna, čáru hrany vložky dna (z rámečku na listu 4, výchozí 64,18; posunutou podle V12,
+   oddíl 5.8; použije se v kroku 11) a přehyby závěsu (kontrola v kroku 16) vyznač
    navíc ryskou na obou bocích dílu. Všechno je souměrné podle x 50,5, na stranách nezáleží. „L“
    napiš zvlášť na rub F a na rub B. Otvory švů se později propichují vidličkou rovnou přes papírovou
    šablonu z listu 1 přiloženou na líc.
@@ -1055,7 +1061,8 @@ značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,6
 7. **G3:** D2 rubem na rub B: dno y 18–23, boky a střed **jen do y 80,57** (čára na listu 2; v záloze čára na listu 2 varianty, například `--skive-hinge 0.6`: 80,25, obojí: 79,75),
    horních 1,43 mm D2 (ve výchozím střihu) nelepit (pás závěsu). Hranici lepení přelepit maskovací páskou. D2
    přesahuje 1 mm na každé straně. Přitlačit.
-8. **Okénko bankovek** skrz D2 + B: Ø 14 na koncích (středy x 50,5, y 32 a 63), rovné řezy.
+8. **Okénko bankovek** skrz D2 + B z líce B: Ø 14 na koncích (středy x 50,5, y 32 a 63, propíchnuté
+   v kroku 2; polohu zkontrolovat šablonou okénka z listu 4), rovné řezy u pravítka od tečny k tečně.
    Zkosit, leštit.
 9. **Rýsování a značení S1–S3 na líci D2:** list 1 (P1 z líce) na líc D2 přiložit nejde, proto
    jedno z dvou (nejdřív na odřezku D2 + B): (a) šablonu P1 z listu 1 přiložit na líc B podle obrysu
@@ -1065,7 +1072,7 @@ značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,6
    S2 / S3 od horního otvoru y 76 dolů (v záloze čísla z listu 1 varianty).
 10. **Děrovat S1, S2, S3** z líce D2 (na PE desce), vidlička vždy stejně natočená při pohledu na líc D2
     s horní hranou od sebe. **Šít S1–S3**, konce 2 otvory zpět.
-11. **Mokrý ohyb dna** 1,0 přes vložku 1,5 (oddíl 5.8): pás ohybu navlhčit, vložku 111 × 25 položit na
+11. **Mokrý ohyb dna** 1,0 přes vložku 1,5 (oddíl 5.8): pás ohybu navlhčit, vložku (aspoň 111 × 25) položit na
     rub B **hranou na čáru hrany vložky** (na listu 1 a 2, v z rámečku na listu 4, výchozí 64,18;
     1,96 za rýhou z kroku 4 směrem k B; rysky na obou bocích; posunutá podle měření V12, oddíl 5.8),
     aby střed ohybu padl na rýhu; F přehnout přes vložku lícem ven, fólie mezi líc a prkénka, stáhnout
@@ -1101,7 +1108,9 @@ značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,6
 16. **Tvarování závěsu** přes obsah (oddíl 5.8): do peněženky 2 staré karty a místo bankovky papír
     asi 70 × 65 přeložený nebo ve vrstvách, až posuvka ukáže asi 0,7 mm (nebo bankovku ve fólii;
     stav B), navlhčit jen pás závěsu, víčko zavřít přes obsah a nechat přes noc
-    zavřené pod knihou (fólie mezi závěs a knihu). Kopyto ani opěrka nejsou potřeba. Pak **změřit k:** poloha
+    zavřené pod knihou (fólie mezi závěs a knihu). Kopyto ani opěrka nejsou potřeba. Rysky přehybů z kroku 3 jen ukazují, kde model přehyby se
+    stavem B čeká (tvar dává obsah, ne rysky): po zavření zkontrolovat, jestli přehyby vyšly zhruba
+    u nich, jinou polohu zapsat k měření k (r_i 1,0 je předpoklad, oddíl 5.8). Pak **změřit k:** poloha
     hrany pásu víčka jako y od spodní hrany (když měříš od horní hrany F, y = y_Ft − naměřená vzdálenost)
     ve stavech A, B a C (se 4 × 50 Kč), zvlášť nad sloupci a nad
     středem, stejně jako v P0-3. Spočítej **k = (y_C − y_A) / (P(C) − P(A))**; dělitel je v rámečku na listu 4 (výchozí střih 8,62, oddíl 4.1; při přepážkách 0,8 8,39).
@@ -1216,11 +1225,14 @@ Zkušební i finální kus se stavějí stejným rozpisem, žádný večer neče
 - [ ] **kůže, jedna objednávka z 10.1:** kaštan 20 × 50 cm (P1 zkušebního i finálního kusu,
       odřezky na V12, krok 4(d) a podložku S7), nebarvená kozinka 5 dm² (D1 a L1), čokoládová
       kozinka 5 dm² (D2); po dodání změřit (krok 0(0))
-- [ ] useň 0,8 **jen v záloze A** (celý P1 a odřezek na zopakování V12), kupuje se až podle V12
+- [ ] useň 0,8 **jen v záloze A**, kupuje se až podle V12. Záloha A platí pro zkušební i finální kus,
+      proto stejně jako u usně 1,0 kus 20 × 50 cm (2 × přířez P1 110 × 240 a odřezek 30 × 40 na
+      zopakování V12); kus 11 × 24 cm stačí jen na jeden P1
 - [ ] magnet Ø 8 × 1,5 axiální: **3 ks** (zkušební kus, finální kus, hledací na krok 17) + po
       **1 silnějším a 1 slabším** stejného Ø 8 na výměnu (oddíl 5.4), pokud je prodejce nabízí;
       velikost, třídu a sílu ověřit u prodejce
-- [ ] pozinkovaný ocelový plech 0,5 na **2 plíšky** (rozměr z listu 3, výchozí 14 × 20,5; magnetem ověřit v obchodě)
+- [ ] pozinkovaný ocelový plech 0,5 na **2 plíšky** (rozměr z listu 3, výchozí 14 × 20,5; magnetem ověřit v obchodě);
+      plech 0,8 (oddíl 5.4) jen když na zkušebním kusu nepomůže ani výměna magnetu, kupuje se až pak
 - [ ] bezbarvý lak (na nehty) na hrany plíšku
 - [ ] kontaktní lepidlo na kůži
 - [ ] dvousložkový epoxid (5min) na magnet
@@ -1534,7 +1546,7 @@ s příliš nízkým vyčníváním bankovky – okénko by se muselo posunout).
   u D2 kontrastní tón (R4),
 - **penezenka-vicko-pripravky.svg/.pdf** (list 4) – šablona konce jazýčku (R10, magnet, ztenčení
   2,5, přířez L1 s ryskou horní hrany, **otvory S7** ve STITCH), šablony okének a plíšku, proužek
-  otvorů S4/S5, vložka dna 111 × 25 ze starých karet s vyznačenou hranou do ohybu, tvarování závěsu
+  otvorů S4/S5, vložka dna aspoň 111 × 25 ze starých karet s vyznačenou hranou do ohybu, tvarování závěsu
   přes obsah (Kolo 9; kopyto, Z2 a Z1 vypadly) a rámeček **„Čísla pro postup“** dané varianty
   (kóta P1, osa ohybu, hrana vložky, pás závěsu, konec G3, plíšek, G2 a S6, hrana víčka A/B/C,
   značka magnetu y_m,B a okno lepení; kroky 0–17 berou čísla odsud),
@@ -1843,6 +1855,20 @@ mění se jen okénko bankovek na listech 1, 3 a 4.
 | Nález                                              | Co se změnilo                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | Stav                          |
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | **Krok 12 lepil na svislou F** (připomínka autora) | Na svislou F se špatně lepí a palička přes desku nemá oporu. Nově leží F naplocho **rubem nahoru** na PE desce a B s D2 stojí nad ohybem nahoru (opřená a přichycená, aby se ohyb nesklopil zpátky na lepidlo), ohyb dna zůstává ~90°. Viset dolů přes hranu stolu jako v kroku 13 B nemůže: tam leží F lícem nahoru, s rubem nahoru by se ohyb musel přehnout obráceně. Pásky kolem pásů G2b se strhnou hned po nanesení lepidla, před přiložením D1. Mokrý ohyb je v kroku 12 suchý a vložka venku (krok 11), pásy G2b 1 mm se nemění. Tabulka švů (S6) a oddíl 5.8 opravené. | dokument + aplikace (lekce 8) |
+
+### Kolo 13 – kontrola lekcí v aplikaci proti zadání
+
+Rozměry ani model se nemění.
+
+| Nález                                         | Co se změnilo                                                                                                                                                                                                            | Stav             |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- |
+| Středy okénka bankovek se na líc B nedostaly  | Krok 2: přes list 1 přilepený na líci propíchnout i středy Ø 14 (a konce čáry hrany vložky); krok 8 seká z líce B do vpichů, polohu kontroluje šablona okénka z listu 4 (krok 1 říká, kde se šablony z listu 4 použijí). | dokument + lekce |
+| Čára hrany vložky se na P1 nevyznačovala      | Krok 3: čára hrany vložky dna (z rámečku, posunutá podle V12) na rubu a ryskami na bocích; krok 11 ji používá.                                                                                                           | dokument + lekce |
+| Rysky přehybů závěsu bez použití              | Krok 16: rysky jen ke kontrole, kde přehyby vyšly; tvar dává obsah.                                                                                                                                                      | dokument + lekce |
+| Výřez pro palec při řezu P1                   | Krok 2: horní hrana F se řeže rovně i přes výřez z obrysu listu 1, výřez až v kroku 5.                                                                                                                                   | dokument + lekce |
+| Vložka dna 111 × 25 proti „výšku nezkracovat“ | 25 je nejmenší výška; z karet vyjde asi 111 × 50.                                                                                                                                                                        | dokument + lekce |
+| Useň 0,8 na zálohu A                          | Záloha A platí pro zkušební i finální kus: kus 20 × 50 cm jako u usně 1,0 (oddíl 10), ne 11 × 24 cm.                                                                                                                     | dokument + lekce |
+| Plíšek 0,8 bez nákupu                         | Oddíl 10: plech 0,8 se kupuje, až když na zkušebním kusu nepomůže výměna magnetu; rozměr plíšku z listu 3 platí, listy se negenerují znovu (oddíl 5.4).                                                                  | dokument + lekce |
 
 ### Co zůstává neověřené
 

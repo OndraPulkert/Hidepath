@@ -102,6 +102,27 @@ describe('obsah – peněženka Víčko', () => {
     );
   });
 
+  it('kroky s tiskem listů mají odkaz na Listy střihu, značky z listu 1 se dostanou na kůži', () => {
+    const withPrint = lidWalletProject.lessons.flatMap((l) =>
+      l.steps.filter((s) => s.printLink === 'pattern-sheets').map((s) => `${l.order}/${s.id}`),
+    );
+    expect(withPrint).toEqual([
+      '1/sheets-for-thickness',
+      '1/print-check',
+      '2/glue-model',
+      '2/templates',
+      '4/valid-sheets',
+    ]);
+    // Středy okénka bankovek: propíchnout přes list 1 na líc (lekce 4), sekat z líce B (lekce 6).
+    expect(lessonText('04-cut-and-mark')).toContain('Ø 14 na koncích okénka bankovek');
+    expect(lessonText('06-d2-and-coin-columns')).toContain('šablony okénka bankovek z listu 4');
+    // Čára hrany vložky dna se vyznačí v lekci 4, v lekci 7 se na ni pokládá vložka.
+    expect(lessonText('04-cut-and-mark')).toContain(`výchozí v ${cz(L.v.insertEdge)}`);
+    // Rysky přehybů závěsu z lekce 4 slouží v lekci 10 ke kontrole.
+    expect(lessonText('10-hinge-forming')).toContain('Rysky přehybů z lekce 4');
+    expect(lessonText('04-cut-and-mark')).toContain('Horní hranu přední stěny F řežte rovně');
+  });
+
   it('hrany: všude pořadí vybrousit → zkosit → vyleštit, smirek 220–400, kolík Ø 8, klín jen do rysky 2,5', () => {
     const all = lidWalletProject.lessons.map((l) => JSON.stringify(l)).join(' ');
     expect(all).not.toMatch(/zkoste, vybruste/);
@@ -146,7 +167,7 @@ describe('obsah – peněženka Víčko', () => {
     );
     // Přehyb 145,105 dokument píše jako 145,10 – stačí shoda na desetiny.
     expect(lessonText('04-cut-and-mark')).toContain(`v ${cz(L.v.rearCrease, 1)}`);
-    expect(lessonText('04-cut-and-mark')).toContain(` a ${cz(L.v.frontCrease)})`);
+    expect(lessonText('04-cut-and-mark')).toContain(` a ${cz(L.v.frontCrease)};`);
     expect(lessonText('05-crease-windows-edges')).toContain(`v ${cz(L.v.foldAxis)}`);
     const cw = L.coinWindows[0];
     expect(lessonText('05-crease-windows-edges')).toContain(
