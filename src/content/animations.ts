@@ -46,9 +46,10 @@ export const animationPages = {
       ],
       C: [
         'Otočte kůži a narýsujte osy na rubu',
+        'Vysekněte okno do 2. výtisku',
         'Položte 2. výtisk na rub a zarovnejte na osy',
         'Obtáhněte obrys šídlem nebo tužkou',
-        'Přeneste kružnici okna',
+        'Obtáhněte kružnici okna v otvoru papíru',
         'Obrys se teď neřeže',
       ],
       D: [

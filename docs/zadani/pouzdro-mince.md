@@ -196,10 +196,18 @@ ohyb B 8,7, jazyk 43,1 mm). Tvarování za mokra nejdřív zkusit na A5 stejné 
    hrana vnitřního panelu, oblouk výkusu, jazyk), a zapečetit rub vnitřního panelu.
 2. **Kapsa** (list kapsy): do odřezku orýsovat obrys a prosekat otvory švu, pak navlhčit, položit
    **lícem dolů** na formu, na rub minci, přiklopit deskou, stáhnout svěrkami, nechat zaschnout.
+   Obrys i kružnice okna se orýsují na rub podle 2. výtisku vystřiženého po obrysu, do kterého je
+   předem vyseknuté okno tím výsečníkem, kterým se bude sekat okno v kůži (na desce na sekání,
+   výsečník přesně na vytištěné kružnici, vystředit pomůžou osy); kružnice se obtáhne tužkou po
+   vnitřní hraně otvoru, takže má přesně velikost výsečníku. Šablona se schová – po tvarování se
+   podle ní rozmazaná čára obtáhne znovu (přes důlek neleží rovně, jen pomoc).
    Předtím na odřezku z tvarovací zkoušky vyseknout okno Ø 20 a ověřit, že prstenec 3,75 mm
-   minci udrží (zatřesení oknem dolů, zatlačení z rubu); když ne, okno menší.
+   minci udrží (zatřesení oknem dolů, zatlačení z rubu); když ne, okno menší (Ø 18 mm na druhém
+   odřezku a k tomu nová šablona: další výtisk listu KAPSA s otvorem Ø 18 mm). List KAPSA tedy
+   3× (forma, značky na líci, šablona s oknem), při záložním okně Ø 18 mm 4×.
 3. Vyříznout obrys kapsy podle orýsování (forma vystředěná na křížek, aby důlek seděl s otvory) a vyseknout okno (kapsa lícem dolů na formě, pod dno
-   špalík).
+   špalík; výsečník na narýsovanou kružnici, rozhoduje ale prstenec kůže kolem důlku stejně široký
+   po celém obvodu).
 4. Přišít kapsu na přední panel (41,8 mm pod horní hranou, 14,75 mm od boků; u mince 40 mm
    35,55 / 8,5): kapsu s už
    proseknutými otvory přilepit na značky, vidličkami proseknout jejími otvory i přední panel
