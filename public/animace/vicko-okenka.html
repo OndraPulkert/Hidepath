@@ -361,33 +361,34 @@ add('A', 'Kde jsou okénka mincí', 'lekce 5 · Okénka mincí v zádech',
   }, { capA: 'Okénko mincí 12 × 48: dva konce výsečníkem Ø 12, středy 36 od sebe, v měřítku.' });
 
 add('A', 'Šablona z listu 4 na propíchnuté středy', 'lekce 5 · Okénka mincí v zádech',
-  'Šablonu okénka mincí z listu 4 (nalepenou na tvrdý papír a vyříznutou v lekci 4) přiložte na líc B <b>křížky na propíchnuté středy</b> a zkontrolujte, že sedí: oba křížky zároveň na obou vpiších.',
-  8000, (t) => {
-    C = camera(camL(CAM_B, CAM_A1, es(t, 0, 0.3)), ...VB.main);
+  'Okénka se sekají <b>z líce B</b>, kde máte z lekce 4 propíchnuté středy: díl položte <b>lícem B nahoru na tvrdou desku</b>. Šablonu okénka mincí z listu 4 (nalepenou na tvrdý papír a vyříznutou v lekci 4) přiložte na líc B <b>křížky na propíchnuté středy</b> a zkontrolujte, že sedí: oba křížky zároveň na obou vpiších. Šablona je jen na kontrolu polohy (sekáte do propíchnutých středů), <b>před sekáním ji sejměte</b>.',
+  9000, (t) => {
+    C = camera(camL(CAM_B, CAM_A1, es(t, 0, 0.25)), ...VB.main);
     let s = boardAndStrip(-12, 100);
     M.coin.forEach((c) => { s += windowDraw(c, coinSt({})); s += prick(c, {}); });
-    const u = es(t, 0.25, 0.65);
-    s += slotTemplate(M.coin[0], lerp(-22, 0, u), lerp(9, 0, u), seg(t, 0.22, 0.3));
-    const ok = seg(t, 0.72, 0.82);
+    const u = es(t, 0.2, 0.52), off = es(t, 0.8, 0.94);
+    s += slotTemplate(M.coin[0], lerp(-22, 0, u) + off * 24, lerp(9, 0, u) + off * 6, seg(t, 0.17, 0.25) * (1 - off));
+    const ok = seg(t, 0.58, 0.68);
     ends(M.coin[0]).forEach((y) => { s += op(ok, circ(19.5, y, 2.2, 'ring')); });
-    s += op(ok, okMark(X(28.5), Y(52), 1) + T(X(28.5) + em(0.9), Y(52), 'sedí', { c: 'g' }));
-    s += op(seg(t, 0.3, 0.4), Tm(45, 64, 'šablona z listu 4', { c: 'm' }) + lead(X(45) - em(0.2), Y(64), X(23), Y(60)));
+    s += op(ok * (1 - seg(t, 0.8, 0.86)), okMark(X(28.5), Y(52), 1) + T(X(28.5) + em(0.9), Y(52), 'sedí', { c: 'g' }));
+    s += op(seg(t, 0.25, 0.33) * (1 - seg(t, 0.76, 0.8)), Tm(45, 64, 'šablona z listu 4', { c: 'm' }) + lead(X(45) - em(0.2), Y(64), X(23), Y(60)));
+    s += op(seg(t, 0.86, 0.94), Tm(19.5, 23.5, 'šablonu sejmout, pak sekat', { a: 'middle', c: 'a' }));
     return s;
   }, (t) => {
     // detail: křížek na vpichu
     C = camera({ cx: 0, cy: 0, k: 9 }, ...VB.aside);
-    const u = es(t, 0.25, 0.65);
+    const u = es(t, 0.2, 0.52), off = es(t, 0.8, 0.94);
     let s = rect(-4, -4, 4, 4, 'kzp');
     s += dot(0, 0);
     const dx = lerp(-1.8, 0, u), dy = lerp(1.2, 0, u);
-    s += op(seg(t, 0.22, 0.3), rect(-4, -2.6 + dy, 4, 4, 'paper') + line(dx, -2.2 + dy, dx, 4, 'tplaxis') + cross(dx, dy, 1));
-    s += op(seg(t, 0.72, 0.82), circ(0, 0, 1.5, 'ring'));
-    s += T(30, 5, 'křížek šablony na vpichu', { a: 'middle' });
+    s += op(seg(t, 0.17, 0.25) * (1 - off), rect(-4, -2.6 + dy, 4, 4, 'paper') + line(dx, -2.2 + dy, dx, 4, 'tplaxis') + cross(dx, dy, 1));
+    s += op(seg(t, 0.58, 0.68), circ(0, 0, 1.5, 'ring'));
+    s += T(30, 5, off > 0.5 ? 'šablona sejmutá, vpich zůstává' : 'křížek šablony na vpichu', { a: 'middle' });
     return s;
-  }, { capA: 'Detail jednoho středu, zvětšeno. Šablona je kreslená průsvitně.', tip: 'Tip (lekce to neuvádí): šablona je tu průsvitná, aby byly vidět vpichy pod křížky. Co dělat, když nesedí, lekce neuvádí – nesekejte a nejdřív zjistěte proč (ověřit).' });
+  }, { capA: 'Detail jednoho středu, zvětšeno. Šablona je kreslená průsvitně; na konci kroku se sejme.', tip: 'Tip (lekce to neuvádí): šablona je tu průsvitná, aby byly vidět vpichy pod křížky. Co dělat, když nesedí, lekce neuvádí – nesekejte a nejdřív zjistěte proč (ověřit).' });
 
 add('A', 'Výsečník Ø 12 na oba konce', 'lekce 5 · Okénka mincí v zádech',
-  'Díl na tvrdou desku. Výsečníkem <b>Ø 12</b> vysekněte oba konce okénka, středem na propíchnutý střed (y <span class="num">34</span> a <span class="num">70</span>), úderem paličky. Prsty držící výsečník mějte u spodku, palička dopadá na horní konec (bezpečnost lekce 6, kde se seká stejně).',
+  'Díl leží <b>lícem B nahoru na tvrdé desce</b>: okénka se sekají z líce B, kde jsou propíchnuté středy. Výsečníkem <b>Ø 12</b> vysekněte oba konce okénka, středem na propíchnutý střed (y <span class="num">34</span> a <span class="num">70</span>), úderem paličky. Prsty držící výsečník mějte u spodku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',
   8000, (t) => {
     C = camera(CAM_A1, ...VB.main);
     let s = boardAndStrip(-12, 100);
@@ -395,13 +396,12 @@ add('A', 'Výsečník Ø 12 na oba konce', 'lekce 5 · Okénka mincí v zádech'
     s += windowDraw(M.coin[0], coinSt({ h: [h1, h0] }));
     s += prick(M.coin[0], { h: [h1, h0] });
     s += windowDraw(M.coin[1], coinSt({})) + prick(M.coin[1], {});
-    s += slotTemplate(M.coin[0], -22, 9, 1 - seg(t, 0, 0.1));
     const [c0, c1] = ends(M.coin[0]);
     if (t < 0.48) s += punchTop(19.5, c1, 12, seg(t, 0.08, 0.16) * (1 - seg(t, 0.44, 0.48)));
     else if (t < 0.92) s += punchTop(19.5, c0, 12, seg(t, 0.5, 0.58) * (1 - seg(t, 0.88, 0.92)));
     s += op(seg(t, 0.12, 0.2), Tm(34, c1 + 3, 'výsečník Ø 12', {}));
     return s;
-  }, (t) => punchSection(t, 12, false, 0.42), { capA: 'Řez středem díry napříč, tloušťky v měřítku. Výsečník a palička jsou schematické.', tip: 'Tip (lekce to neuvádí): jestli nechat šablonu při sekání přiloženou, lekce u okének neříká; animace ji před sekáním odkládá.' });
+  }, (t) => punchSection(t, 12, false, 0.42), { capA: 'Řez středem díry napříč, tloušťky v měřítku. Výsečník a palička jsou schematické.' });
 
 add('A', 'Rovné řezy u pravítka od tečny k tečně', 'lekce 5 · Okénka mincí v zádech',
   'Mezi dírami veďte <b>rovné řezy nožem u ocelového pravítka od tečny k tečně</b>, na obou bocích (x <span class="num">13,5</span> a <span class="num">25,5</span>, od y <span class="num">70</span> do <span class="num">34</span>). Nůž veďte tahem od prstů volné ruky (bezpečnost lekce 5). Řez začíná i končí přesně na tečně díry, kus mezi řezy pak vypadne.',
@@ -421,7 +421,7 @@ add('A', 'Rovné řezy u pravítka od tečny k tečně', 'lekce 5 · Okénka min
   }, (t) => tangentZoom(t, { s: M.coin[0], x: 13.5, cutT: [0.1, 0.42] }), { capA: 'Dolní konec levého řezu, zvětšeno: řez dojede k díře v tečně a tam končí.', tip: 'Tip (lekce to neuvádí): jak vést nůž, lekce 5 u okének nepíše. Animace přebírá pravidlo pro rovné úseky P1 z lekce 4 (pravítko na čáře, nůž kolmo, dva až tři lehké tahy) a kreslí pravítko na straně kůže, která zůstává.' });
 
 add('A', 'Druhé okénko stejně, konce dobrousit', 'lekce 5 · Okénka mincí v zádech, Předběžné dokončení hran',
-  'Druhé okénko (x <span class="num">75,5–87,5</span>) udělejte stejně, od přiložení šablony křížky na propíchnuté středy. Konce vybruste brusným papírem namotaným na <b>kolíku Ø 8 ve vrtačce</b>, okénka zkoste z líce a vyleštěte jako ostatní hrany (krok Předběžné dokončení hran). Kolík pevně upněte a prsty držte mimo točící se kolík. Tím je hotová část kontrolního bodu lekce 5: okénka mincí 12 × 48 jsou vyseknutá a hrany zkosené (výřez pro palec viz část B).',
+  'Druhé okénko (x <span class="num">75,5–87,5</span>) udělejte stejně, od přiložení šablony křížky na propíchnuté středy. Konce vybruste brusným papírem namotaným na <b>kolíku Ø 8 v aku vrtačce</b>, okénka zkoste z líce a vyleštěte jako ostatní hrany (krok Předběžné dokončení hran). Kolík pevně upněte a prsty držte mimo točící se kolík. Tím je hotová část kontrolního bodu lekce 5: okénka mincí 12 × 48 jsou vyseknutá a hrany zkosené (výřez pro palec viz část B).',
   8500, (t) => {
     C = camera(camL(CAM_A1, CAM_B, es(t, 0, 0.3)), ...VB.main);
     let s = boardAndStrip(-12, 100);
@@ -443,7 +443,7 @@ add('A', 'Druhé okénko stejně, konce dobrousit', 'lekce 5 · Okénka mincí v
     s += circ(19.5, 70 + dy - 2, 4.5, 'sand') + circ(19.5, 70 + dy - 2, 4, 'wood');
     s += Tm(19.5, 59, 'kolík Ø 8 + brusný papír', { a: 'middle' });
     return s;
-  }, { capA: 'Konec okénka zvětšeně: brusný papír na kolíku Ø 8 ve vrtačce, schematicky.' });
+  }, { capA: 'Konec okénka zvětšeně: brusný papír na kolíku Ø 8 v aku vrtačce, schematicky.' });
 
 // ===== B: výřez pro palec (lekce 5) =====
 function fStrip(o = {}) {
@@ -510,7 +510,7 @@ add('B', 'Kde je výřez pro palec', 'lekce 5 · Výřez pro palec',
   }, { capA: 'Hotový tvar výřezu, zvětšeno: dno Ø 10, rovné boky, rohy ústí R1.' });
 
 add('B', 'Šablona výřezu: střed na ose, 7,0 pod hranou', 'lekce 5 · Výřez pro palec (šablona z lekce 2)',
-  'Šablonu výřezu pro palec, kterou jste v lekci 2 vyřízli z listu 1, přiložte na líc F tak, aby střed výsečníku ležel <b>na ose x 50,5, 7,0 pod horní hranou F</b> (y 55,0).',
+  'Výřez se seká z líce F, kde je propíchnutý střed z lekce 4; díl leží lícem F nahoru na tvrdé desce. Šablonu výřezu pro palec, kterou jste v lekci 2 vyřízli z listu 1, přiložte na líc F tak, aby střed výsečníku ležel <b>na ose x 50,5, 7,0 pod horní hranou F</b> (y 55,0).',
   8000, (t) => {
     C = camera(CAM_N, ...VB.main);
     let s = fStrip();
@@ -532,7 +532,7 @@ add('B', 'Šablona výřezu: střed na ose, 7,0 pod hranou', 'lekce 5 · Výřez
   }, { capA: 'Otvor šablony zvětšeně: propíchnutý střed z lekce 4 má být uprostřed oblouku.', tip: 'Tip (lekce to neuvádí): tvar šablony je kreslený schematicky (kus horní části F s otvorem výřezu), lekce 2 jen říká, že je z listu 1. Že má vpich z lekce 4 ležet uprostřed oblouku a 7,0 se dá přeměřit pravítkem, je odvozené z čísel lekce.' });
 
 add('B', 'Výsečník Ø 10 přes šablonu', 'lekce 5 · Výřez pro palec',
-  'Na tvrdé desce vysekněte <b>výsečníkem Ø 10 přes šablonu</b> dno výřezu. Díra sahá od y <span class="num">50</span> do <span class="num">60</span>, k horní hraně F zbývají 2 mm kůže.',
+  'Na tvrdé desce vysekněte <b>výsečníkem Ø 10 přes šablonu</b> dno výřezu; šablona zůstává přiložená. Díra sahá od y <span class="num">50</span> do <span class="num">60</span>, k horní hraně F zbývají 2 mm kůže. Prsty držící výsečník mějte u spodku, palička dopadá na horní konec.',
   7500, (t) => {
     C = camera(CAM_N, ...VB.main);
     let s = fStrip();
@@ -543,7 +543,7 @@ add('B', 'Výsečník Ø 10 přes šablonu', 'lekce 5 · Výřez pro palec',
     s += op(seg(t, 0.15, 0.25) * (1 - seg(t, 0.6, 0.7)), T(X(58), Y(47), 'výsečník Ø 10', {}));
     s += op(seg(t, 0.7, 0.8), line(58, 60, 58, 62, 'dim') + T(X(58) + em(0.35), Y(61), '2', {}));
     return s;
-  }, (t) => punchSection(t, 10, false, 0.55, true), { capA: 'Řez středem díry napříč, tloušťky v měřítku; šablona navrchu. Výsečník a palička jsou schematické.' });
+  }, (t) => punchSection(t, 10, false, 0.55, true), { capA: 'Řez středem díry napříč, tloušťky v měřítku; šablona navrchu. Výsečník a palička jsou schematické.', tip: 'Tip (lekce to neuvádí): kdy šablonu sejmout, lekce neuvádí, říká jen, že při sekání zůstává přiložená. Animace ji sejme po vyseknutí, aby byly vidět rovné řezy.' });
 
 add('B', 'Rovné řezy od hrany F k tečnám', 'lekce 5 · Výřez pro palec',
   'Pak <b>rovné řezy nožem od horní hrany F k tečnám díry</b> (x <span class="num">45,5</span> a <span class="num">55,5</span>, tečny v y <span class="num">55,0</span>) a <b>zastavit přesně na tečně</b>. Kus mezi řezy vypadne.',
@@ -561,7 +561,7 @@ add('B', 'Rovné řezy od hrany F k tečnám', 'lekce 5 · Výřez pro palec',
   }, (t) => tangentZoom(t, { notch: true, x: 45.5, cutT: [0.1, 0.4] }), { capA: 'Levý řez zvětšeně: od hrany F dolů, zastavit na tečně díry.', tip: 'Tip (lekce to neuvádí): pravítko u výřezu lekce 5 neuvádí. Animace ho kreslí podle pravidla pro rovné úseky z lekce 4, na straně kůže, která zůstává.' });
 
 add('B', 'Rohy ústí R1 brusným papírem', 'lekce 5 · Výřez pro palec, Předběžné dokončení hran',
-  '<b>Rohy ústí R1 nedělejte nožem</b>, zaoblete je brusným papírem. V kroku Předběžné dokončení hran pak výřez zaoblete z líce i z rubu (o rubovou hranu dna výřezu se může zachytit karta), vnitřek vybruste brusným papírem na kolíku Ø 8 ve vrtačce a stejným kolíkem vyleštěte. Jestli výřez funguje, ověří zkušební kus.',
+  '<b>Rohy ústí R1 nedělejte nožem</b>, zaoblete je brusným papírem. V kroku Předběžné dokončení hran pak výřez zaoblete z líce i z rubu (o rubovou hranu dna výřezu se může zachytit karta), vnitřek vybruste brusným papírem na kolíku Ø 8 v aku vrtačce a stejným kolíkem vyleštěte. Jestli výřez funguje, ověří zkušební kus.',
   8500, (t) => {
     C = camera(CAM_N, ...VB.main);
     let s = fStrip();
@@ -605,28 +605,29 @@ add('C', 'Až po lepení G3', 'lekce 6 · G3, Okénko bankovek skrz D2 a záda',
   }, (t) => layersSection(t), { capA: 'Řez napříč v y 50, tloušťky v měřítku: B 1,0 nahoře lícem, D2 0,6 pod ní, lepidlo G3 ve středním pásu.', alt: '<b>Záloha A (P1 0,8):</b> pásy G3 jsou o 0,5 níž (dno mincí y 17,5–22,5, boky a střed do y 79,91), okénko bankovek zůstává v y 25–70.' });
 
 add('C', 'Šablona z listu 4: křížky na středy', 'lekce 6 · Okénko bankovek skrz D2 a záda',
-  'Na líci B máte propíchnuté středy obou konců z lekce 4 (na ose x 50,5, y <span class="num">32</span> a <span class="num">63</span>). Přiložte na ně <b>křížky šablony okénka bankovek</b> z listu 4, čárkovaná čára šablony na ose, a zkontrolujte, že sedí.',
+  'Na líci B máte propíchnuté středy obou konců z lekce 4 (na ose x 50,5, y <span class="num">32</span> a <span class="num">63</span>). Přiložte na ně <b>křížky šablony okénka bankovek</b> z listu 4, čárkovaná čára šablony na ose, a zkontrolujte, že sedí. Šablona je jen na kontrolu polohy, před sekáním ji sejměte.',
   8000, (t) => {
     C = camera(CAM_C, ...VB.main);
     let s = bWithD2();
     s += windowDraw(M.bill, billSt({})) + prick(M.bill, {});
-    const u = es(t, 0.15, 0.55);
-    s += op(seg(t, 0.55, 0.65), line(50.5, 18, 50.5, 84, 'guide') + Tm(52, 75.5, 'osa 50,5', { c: 'm' }));
-    s += slotTemplate(M.bill, lerp(-24, 0, u), lerp(-6, 0, u), seg(t, 0.12, 0.2));
-    const ok = seg(t, 0.68, 0.78);
+    const u = es(t, 0.12, 0.45), off = es(t, 0.8, 0.94);
+    s += op(seg(t, 0.45, 0.55) * (1 - seg(t, 0.78, 0.84)), line(50.5, 18, 50.5, 84, 'guide') + Tm(52, 75.5, 'osa 50,5', { c: 'm' }));
+    s += slotTemplate(M.bill, lerp(-24, 0, u) + off * 24, lerp(-6, 0, u) + off * 6, seg(t, 0.1, 0.18) * (1 - off));
+    const ok = seg(t, 0.56, 0.66);
     ends(M.bill).forEach((y) => { s += op(ok, circ(50.5, y, 2.2, 'ring')); });
-    s += op(ok, okMark(X(64), Y(47.5), 1) + T(X(64) + em(0.9), Y(47.5), 'sedí', { c: 'g' }));
+    s += op(ok * (1 - seg(t, 0.8, 0.86)), okMark(X(64), Y(47.5), 1) + T(X(64) + em(0.9), Y(47.5), 'sedí', { c: 'g' }));
+    s += op(seg(t, 0.86, 0.94), Tm(50.5, 20.5, 'šablonu sejmout, pak sekat', { a: 'middle', c: 'a' }));
     return s;
   }, (t) => {
     C = camera({ cx: 0, cy: 0, k: 9 }, ...VB.aside);
-    const u = es(t, 0.15, 0.55);
+    const u = es(t, 0.12, 0.45), off = es(t, 0.8, 0.94);
     let s = rect(-4, -4, 4, 4, 'kzp') + dot(0, 0);
     const dx = lerp(-1.6, 0, u), dy = lerp(-1, 0, u);
-    s += op(seg(t, 0.12, 0.2), rect(-4, -2.6 + dy, 4, 4, 'paper') + line(dx, -2.2 + dy, dx, 4, 'tplaxis') + cross(dx, dy, 1));
-    s += op(seg(t, 0.68, 0.78), circ(0, 0, 1.5, 'ring'));
-    s += T(30, 5, 'křížek na vpichu, čárkovaně osa', { a: 'middle' });
+    s += op(seg(t, 0.1, 0.18) * (1 - off), rect(-4, -2.6 + dy, 4, 4, 'paper') + line(dx, -2.2 + dy, dx, 4, 'tplaxis') + cross(dx, dy, 1));
+    s += op(seg(t, 0.56, 0.66), circ(0, 0, 1.5, 'ring'));
+    s += T(30, 5, off > 0.5 ? 'šablona sejmutá, vpich zůstává' : 'křížek na vpichu, čárkovaně osa', { a: 'middle' });
     return s;
-  }, { capA: 'Detail dolního středu (y 32), zvětšeno. Šablona je kreslená průsvitně. Dlouhá čárkovaná osa v hlavním obrázku je jen pomůcka animace, na líci B narýsovaná není.' });
+  }, { capA: 'Detail dolního středu (y 32), zvětšeno. Šablona je kreslená průsvitně; na konci kroku se sejme. Dlouhá čárkovaná osa v hlavním obrázku je jen pomůcka animace, na líci B narýsovaná není.' });
 
 add('C', 'Výsečník Ø 14 skrz B i D2', 'lekce 6 · Okénko bankovek skrz D2 a záda',
   'Výsečníkem <b>Ø 14</b> vysekněte <b>z líce B</b> oba konce (y <span class="num">32</span> a <span class="num">63</span>) <b>skrz B i D2</b>. Prsty držící výsečník mějte u spodku, palička dopadá na horní konec, děrujte jen na tvrdé desce (bezpečnost lekce 6).',
@@ -635,13 +636,12 @@ add('C', 'Výsečník Ø 14 skrz B i D2', 'lekce 6 · Okénko bankovek skrz D2 a
     let s = bWithD2();
     const h0 = t > 0.42 ? 1 : 0, h1 = t > 0.85 ? 1 : 0;
     s += windowDraw(M.bill, billSt({ h: [h1, h0] })) + prick(M.bill, { h: [h1, h0] });
-    s += slotTemplate(M.bill, -24, -6, 1 - seg(t, 0, 0.1));
     const [c0, c1] = ends(M.bill);
     if (t < 0.48) s += punchTop(50.5, c1, 14, seg(t, 0.08, 0.16) * (1 - seg(t, 0.44, 0.48)));
     else if (t < 0.92) s += punchTop(50.5, c0, 14, seg(t, 0.5, 0.58) * (1 - seg(t, 0.88, 0.92)));
     s += op(seg(t, 0.12, 0.2), Tm(62, c1 + 7, 'výsečník Ø 14', {}));
     return s;
-  }, (t) => punchSection(t, 14, true, 0.42), { capA: 'Řez středem díry napříč, tloušťky v měřítku: B 1,0 a D2 0,6 se proseknou najednou.', tip: 'Tip (lekce to neuvádí): jestli nechat šablonu při sekání přiloženou, lekce 6 neříká; animace ji před sekáním odkládá, stejně jako u okének mincí.' });
+  }, (t) => punchSection(t, 14, true, 0.42), { capA: 'Řez středem díry napříč, tloušťky v měřítku: B 1,0 a D2 0,6 se proseknou najednou.' });
 
 add('C', 'Rovné řezy skrz obě vrstvy', 'lekce 6 · Okénko bankovek skrz D2 a záda',
   'Mezi dírami veďte <b>rovné řezy nožem u ocelového pravítka od tečny k tečně skrz obě vrstvy</b> (x <span class="num">43,5</span> a <span class="num">57,5</span>, od y <span class="num">63</span> do <span class="num">32</span>). Nůž veďte tahem od prstů volné ruky (bezpečnost lekce 6).',

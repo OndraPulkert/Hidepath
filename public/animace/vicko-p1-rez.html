@@ -1866,7 +1866,7 @@
             return s;
           },
           "lic",
-          "Tip (lekce 4 to neuvádí): na vysekání dejte pod napojení jazýčku místo řezací podložky tvrdou desku pod děrování a tlučte paličkou (obojí je ve vybavení lekce 4), pak řežte zase na podložce. Prsty držící výsečník mějte u spodku, palička dopadá na horní konec – tak to říká bezpečnost lekce 6.",
+          "Tip (lekce 4 to neuvádí): na vysekání dejte pod napojení jazýčku místo řezací podložky tvrdou desku pod děrování a tlučte paličkou (obojí je ve vybavení lekce 4), pak řežte zase na podložce. Prsty držící výsečník mějte u spodku, palička dopadá na horní konec (bezpečnost lekce 4).",
         );
 
         // řez jednoho tahu s pravítkem; vrací vrstvu nástrojů ve scéně
@@ -2544,7 +2544,7 @@
         add(
           "E",
           "Tečky spojit tužkou u pravítka",
-          "Šablonu sejměte a tečky spojte tužkou u pravítka – nic nezařezávat: osa ohybu dna (v 62,21), čára hrany vložky dna (v 64,18; když V12 ukázala odchylku rýhy nad 0,3 mm, posunutá podle lekce 3), pás závěsu (v 142,99–150,99; nelepit, nešít), hranice lepení G1–G4, okénka mincí a poloha D1 a D2.",
+          "Šablonu sejměte a tečky spojte tužkou u pravítka – nic nezařezávat: osa ohybu dna (v 62,21), čára hrany vložky dna (v 64,18; když V12 ukázala odchylku rýhy nad 0,3 mm, posunutá podle lekce 3), pás závěsu (v 142,99–150,99; nelepit, nešít), hranice lepení G1–G4, okénka mincí a poloha D1 a D2. Čáry švů S1–S3 a S6 ani okénko bankovek na rub nekreslete: list 2 je nemá, středy okénka bankovek jsou už na líci a švy se přenášejí z líce (lekce 6 a 8).",
           13000,
           (t) => {
             const c = OV,
@@ -2610,8 +2610,8 @@
                 ["(posunutá z V12)"],
                 ["pás závěsu", "t"],
                 ["142,99–150,99"],
-                ["G1–G4, okénka,", "t"],
-                ["D1 a D2"],
+                ["G1–G4, okénka", "t"],
+                ["mincí, D1 a D2"],
                 ["záloha A:", "twa"],
                 ["61,76 · 63,56"],
                 ["141,92–149,92"],
@@ -2626,14 +2626,14 @@
             return s;
           },
           "rub",
-          "Tip (lekce to neuvádí): lekce chce na rubu i čáry švů S1–S3 a S6 a okénka. List 2 ale čáry švů ani okénko bankovek nekreslí (jsou jen na listu 1), proto je animace na rubu nekreslí; jak je na rub přenést, lekce 4 neuvádí – ověřit na zkušebním kuse. Okénka mincí kreslíme od ruky, oblouky podle pravítka nejdou. Barevné plochy D1, D2 a plíšku K2 na konci jsou jen pro orientaci, na kůži zůstávají jen čáry.",
+          "Tip (lekce to neuvádí): okénka mincí kreslíme od ruky, oblouky podle pravítka nejdou. Barevné plochy D1, D2 a plíšku K2 na konci jsou jen pro orientaci, na kůži zůstávají jen čáry.",
         );
 
         // E5 — rysky na bocích a „L“
         add(
           "E",
           "Rysky na bocích a „L“",
-          "Osu ohybu dna, čáru hrany vložky dna (na ni v lekci 7 položíte vložku) a přehyby závěsu (v 145,10 a 148,88; v lekci 10 podle nich zkontrolujete, kde přehyby vyšly) vyznačte navíc ryskami na obou bocích. „L“ napište zvlášť na rub přední stěny F a na rub zad B. Otvory švů se později propichují vidličkou přes šablonu z listu 1 přiloženou na líc.",
+          "Osu ohybu dna, čáru hrany vložky dna (na ni v lekci 7 položíte vložku) a přehyby závěsu (v 145,10 a 148,88; v lekci 10 podle nich zkontrolujete, kde přehyby vyšly) vyznačte navíc ryskami na obou bocích. „L“ napište zvlášť na rub přední stěny F a na rub zad B. Otvory švů S1–S3 a S6 se přenášejí později přes šablonu z druhého výtisku listu 1 přiloženou na líc: propíchnou se jehlou a děrují vidličkou – S1–S3 v lekci 6 (šablona na líci B, děruje se z líce D2), S6 v lekci 8 (šablona na líci F).",
           10000,
           (t) => {
             const z1 = es(t, 0.05, 0.18),
@@ -2704,9 +2704,9 @@
                 ["a 148,88"],
                 ["„L“ zvlášť", "t"],
                 ["na rub F a rub B"],
-                ["otvory švů", "twa"],
-                ["až přes list 1", "twa"],
-                ["na líci", "twa"],
+                ["S1–S3 a S6 až", "twa"],
+                ["z líce přes list 1", "twa"],
+                ["(lekce 6 a 8)", "twa"],
               ]),
             );
             if (t > 0.92) s += check(76, 76, seg(t, 0.92, 0.99));

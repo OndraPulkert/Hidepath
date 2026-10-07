@@ -105,8 +105,48 @@ describe('obsah – peněženka Víčko', () => {
   it('vrtačka (lekce 5) a epoxid (lekce 11) odkazují v bezpečnosti na návod výrobce', () => {
     const safetyOf = (order: number) =>
       lidWalletProject.lessons.find((l) => l.order === order)!.safety.join(' ');
-    expect(safetyOf(5)).toMatch(/Akuvrtačku používejte podle návodu výrobce/);
+    expect(safetyOf(5)).toMatch(/Aku vrtačku používejte podle návodu výrobce/);
     expect(safetyOf(11)).toMatch(/epoxid .*podle návodu a bezpečnostních pokynů výrobce/);
+  });
+
+  it('nejasnosti lekcí 4, 5, 6 a 9 jsou dořešené podle zadání', () => {
+    const stepOf = (order: number, id: string) =>
+      lidWalletProject.lessons.find((l) => l.order === order)!.steps.find((s) => s.id === id)!.body;
+    // Lekce 4: na rub jen to, co kreslí list 2; švy S1–S3 a S6 se přenášejí z líce (lekce 6 a 8).
+    const markBack = stepOf(4, 'mark-back');
+    expect(markBack).not.toMatch(/čáry švů S1–S3 a S6, okénka/);
+    expect(markBack).toContain('Čáry švů S1–S3 a S6 ani okénko bankovek na rub nekreslete');
+    expect(markBack).toContain('propíchnou se jehlou a děrují vidličkou');
+    expect(markBack).not.toContain('propichují vidličkou');
+    // Lekce 5: strana sekání, tvrdá deska, šablona, bezpečnost výsečníku a aku vrtačka.
+    expect(stepOf(5, 'coin-windows')).toContain('sekejte z líce B');
+    expect(stepOf(5, 'coin-windows')).toContain('na tvrdou desku');
+    expect(stepOf(5, 'coin-windows')).toContain('před sekáním ji sejměte');
+    expect(stepOf(5, 'thumb-notch')).toContain('sekejte z líce F');
+    expect(stepOf(5, 'thumb-notch')).toContain('zůstává přiložená');
+    const safety5 = lidWalletProject.lessons.find((l) => l.order === 5)!.safety.join(' ');
+    expect(safety5).toContain('palička dopadá na horní konec. Děrujte jen na tvrdé desce.');
+    expect(lessonText('05-crease-windows-edges')).not.toMatch(/akuvrtač|ve vrtačce/i);
+    // Lekce 6 (b): přes vyříznutou šablonu se neobkresluje, konce čar se propíchnou.
+    expect(stepOf(6, 'mark-s1-s3')).not.toContain('obkreslete');
+    expect(stepOf(6, 'mark-s1-s3')).toContain('propíchněte jehlou skrz šablonu');
+    // Lekce 9: úseky děrování se nepřekrývají a sedí na otvory modelu.
+    const punch = stepOf(9, 'punch-sew');
+    expect(punch).toContain('(1) y 8–52 z líce F');
+    expect(punch).toContain('(2) y 56–68 po jednom otvoru');
+    expect(punch).toContain('(3) y 72–76 z líce D2');
+    expect(punch).not.toContain('y 8–60 z líce F');
+    const side = L.seams.find((q) => q.id === 'S4')!.holes.map((h) => h.y);
+    expect(side.filter((y) => y <= 52)).toEqual([8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52]);
+    expect(side.filter((y) => y >= 56 && y <= 68)).toEqual([56, 60, 64, 68]);
+    expect(side.filter((y) => y >= 72)).toEqual([72, 76]);
+    expect(punch).toContain('na líc D2 těsně k horní hraně F');
+    expect(punch).toContain('ověřte to na zkušebním kuse');
+    const mark = stepOf(9, 'mark-side');
+    expect(mark).toContain('ne od přečnívající D2');
+    expect(L.seamSideX[0]).toBe(3);
+    expect(L.d2.x0).toBe(-1);
+    expect(mark).toContain('4,0 mm od hrany D2');
   });
 
   it('kroky s tiskem listů mají odkaz na Listy střihu, značky z listu 1 se dostanou na kůži', () => {

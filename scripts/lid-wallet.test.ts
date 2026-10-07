@@ -195,6 +195,51 @@ describe('generátor peněženky VÍČKO', () => {
     expect(jigs).toContain('PROUŽEK S4/S5');
   });
 
+  it('list 1: křížky na středech všech výsečníků (okénka mincí, okénko bankovek, výřez, napojení jazýčku)', () => {
+    const crosses = [
+      ...layer(sheet, 'GUIDE').matchAll(
+        /<path d="M([\d.]+) ([\d.]+) L([\d.]+) \2 M([\d.]+) ([\d.]+) L\4 ([\d.]+)"/g,
+      ),
+    ].map((m) => toP1(Number(m[4]), Number(m[2])));
+    const at = (x: number) => crosses.filter((c) => near(c.x, x));
+    // okénka mincí: 2 křížky na každém (Ø 12 na obou koncích)
+    for (const w of L.coinWindows) expect(at(w.cx)).toHaveLength(2);
+    // osa: okénko bankovek 2, výřez pro palec 1, magnet 1
+    expect(at(L.axisX)).toHaveLength(4);
+    // napojení jazýčku: střed Ø 8 vedle jazýčku, rj pod koncem pásu víčka
+    const rj = spec.tongueJoinRadiusMm;
+    for (const x of [L.tongueX[0] - rj, L.tongueX[1] + rj]) {
+      expect(at(x).some((c) => near(c.v, L.v.bandEnd + rj))).toBe(true);
+    }
+  });
+
+  it('listy 1 a 2 odkazují na lekce, ne na kroky zadání; švy S1–S3 a S6 se na rub neznačí', () => {
+    for (const svg of [sheet, back]) {
+      expect(svg).not.toMatch(/\bkrok(u|y)? \d/);
+      expect(svg).not.toContain('oddíl 9');
+    }
+    expect(sheet).toContain('až po ořezu (lekce 11)');
+    expect(back).toContain('pravidlo v lekci 6');
+    expect(back).toContain('Švy S1–S3 a S6 se na rub neznačí');
+    expect(layer(back, 'STITCH')).not.toContain('<circle');
+  });
+
+  it('list 4: proužek S4/S5 má čáru švu 3,0 od levé hrany', () => {
+    const line = /class="side-seam-line" d="M([\d.]+) ([\d.]+) L\1 ([\d.]+)"/.exec(
+      layer(jigs, 'STITCH'),
+    )!;
+    const strip = [
+      ...layer(jigs, 'CUT').matchAll(
+        /<path d="M([\d.]+) ([\d.]+) L([\d.]+) \2 L\3 ([\d.]+) L\1 \4 Z"/g,
+      ),
+    ].find(
+      (m) => near(Number(m[3]) - Number(m[1]), 10) && near(Number(m[4]) - Number(m[2]), L.heightMm),
+    )!;
+    expect(Number(line[1]) - Number(strip[1])).toBeCloseTo(L.seamSideX[0], 6);
+    expect(L.seamSideX[0]).toBe(3);
+    expect(jigs).toContain('čára švu 3,0 od levé hrany');
+  });
+
   it('názvy souborů', () => {
     expect(buildLidSheets().map((s) => s.name)).toEqual([
       'penezenka-vicko-sablona',

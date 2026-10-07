@@ -382,7 +382,7 @@ export const lessons: readonly LessonDefinition[] = [
     order: 4,
     phaseSlug: 'build',
     estimatedMinutes: 120,
-    goal: 'Lekce 4–12 projdete nejdřív celé na zkušebním kuse: vyříznout pro něj pás P1, přepážky D1 a D2, přířez podšívky L1 a jeden plíšek K2 podle platných listů a přenést na rub P1 všechny čáry a hranice lepení.',
+    goal: 'Lekce 4–12 projdete nejdřív celé na zkušebním kuse: vyříznout pro něj pás P1, přepážky D1 a D2, přířez podšívky L1 a jeden plíšek K2 podle platných listů a přenést na rub P1 čáry a hranice lepení z listu 2.',
     materials: [
       'platné listy 1–4 (po P0 a V12 případně znovu vygenerované), list 1 a list 3 navíc ještě jednou (první výtisk se při řezání rozřeže), tvrdý papír na šablony',
       'šablony konce jazýčku a výřezu pro palec z lekce 2',
@@ -486,7 +486,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidP1Cut', 'E4'),
           animationLink('lidP1Cut', 'E5'),
         ],
-        body: 'Tužkou, nic nezařezávat: osa ohybu dna a pás závěsu (nelepit, nešít; výchozí v 62,21 a 142,99–150,99), čára hrany vložky dna (z rámečku na listu 4, výchozí v 64,18; když V12 ukázala odchylku rýhy nad 0,3 mm, posunutá podle lekce 3), hranice lepení G1–G4, čáry švů S1–S3 a S6, okénka a poloha D1 a D2. Papír se na kůži obkreslit nedá, proto list 2 nalepte na tvrdý papír, vyřízněte po obrysu a přiložte na rub. Rohy lepených ploch a konce čar propíchněte jehlou do kůže a tečky spojte tužkou u pravítka. Osu ohybu dna, čáru hrany vložky dna (na ni v lekci 7 položíte vložku) a přehyby závěsu (výchozí v 145,10 a 148,88; v lekci 10 podle nich zkontrolujete, kde přehyby vyšly) vyznačte navíc ryskami na obou bocích. Všechno je souměrné podle osy x 50,5. „L“ napište zvlášť na rub přední stěny F a na rub zad B. Otvory švů se později propichují vidličkou přes šablonu z listu 1 přiloženou na líc.',
+        body: 'Tužkou, nic nezařezávat, to, co kreslí list 2: osa ohybu dna a pás závěsu (nelepit, nešít; výchozí v 62,21 a 142,99–150,99), čára hrany vložky dna (z rámečku na listu 4, výchozí v 64,18; když V12 ukázala odchylku rýhy nad 0,3 mm, posunutá podle lekce 3), hranice lepení G1–G4, okénka mincí a poloha D1 a D2. Čáry švů S1–S3 a S6 ani okénko bankovek na rub nekreslete: list 2 je nemá, středy okénka bankovek jste propíchli na líc už před řezáním a švy se přenášejí z líce (viz konec kroku). Papír se na kůži obkreslit nedá, proto list 2 nalepte na tvrdý papír, vyřízněte po obrysu a přiložte na rub. Rohy lepených ploch a konce čar propíchněte jehlou do kůže a tečky spojte tužkou u pravítka. Osu ohybu dna, čáru hrany vložky dna (na ni v lekci 7 položíte vložku) a přehyby závěsu (výchozí v 145,10 a 148,88; v lekci 10 podle nich zkontrolujete, kde přehyby vyšly) vyznačte navíc ryskami na obou bocích. Všechno je souměrné podle osy x 50,5. „L“ napište zvlášť na rub přední stěny F a na rub zad B. Otvory švů S1–S3 a S6 se přenášejí později přes šablonu z druhého výtisku listu 1 přiloženou na líc: propíchnou se jehlou a děrují vidličkou – S1–S3 v lekci 6 (šablona na líci B, děruje se z líce D2), S6 v lekci 8 (šablona na líci F).',
         media: [],
       },
     ],
@@ -506,7 +506,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         slug: 'back-marked',
         title:
-          'Na rubu P1 je osa ohybu dna, čára hrany vložky dna, pás závěsu, hranice G1–G4, čáry S1–S3 a S6, poloha D1 a D2 a značky L; osa ohybu, hrana vložky a přehyby závěsu i na bocích.',
+          'Na rubu P1 je osa ohybu dna, čára hrany vložky dna, pás závěsu, hranice G1–G4, okénka mincí, poloha D1 a D2 a značky L; osa ohybu, hrana vložky a přehyby závěsu i na bocích.',
         required: true,
       },
     ],
@@ -523,6 +523,7 @@ export const lessons: readonly LessonDefinition[] = [
     safety: [
       'Nůž veďte tahem od prstů volné ruky.',
       'Uříznutý plech má ostré hrany a otřep: plíšek berte za plochu, dokud otřep a rohy nezabrousíte.',
+      'Prsty držící výsečník mějte u spodku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',
     ],
     media: [
       photo(
@@ -542,9 +543,10 @@ export const lessons: readonly LessonDefinition[] = [
     materials: [
       'odřezek z V12 na vyzkoušení rýhy',
       'tupý hrot na rýhu, maskovací páska, párátka',
-      'dřevěný kolík Ø 8 do akuvrtačky (broušení a leštění vydutých hran)',
+      'dřevěný kolík Ø 8 do aku vrtačky (broušení a leštění vydutých hran)',
       'odřezek kozinky na zkoušku barvy na hrany',
       'šablona okénka mincí z listu 4 (lekce 4)',
+      'šablona výřezu pro palec z listu 1 na tvrdém papíře (lekce 2)',
     ],
     requiredEquipment: [
       'steel-ruler',
@@ -588,7 +590,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidWindows', 'A5'),
           animationLink('edges', 'G4'),
         ],
-        body: 'Dvě okénka mincí 12 × 48 mm v zadní stěně B: šablonu okénka mincí z listu 4 přiložte na líc B křížky na propíchnuté středy (lekce 4) a zkontrolujte, že sedí. Výsečníkem Ø 12 vysekněte oba konce (středy y 34 a 70), mezi nimi veďte rovné řezy nožem u ocelového pravítka od tečny k tečně. Konce vybruste brusným papírem namotaným na kolíku Ø 8 ve vrtačce, okénka zkoste z líce a vyleštěte jako ostatní hrany (krok „Předběžné dokončení hran“).',
+        body: 'Dvě okénka mincí 12 × 48 mm v zadní stěně B sekejte z líce B, kde máte z lekce 4 propíchnuté středy. Díl položte lícem B nahoru na tvrdou desku. Šablonu okénka mincí z listu 4 přiložte na líc B křížky na propíchnuté středy a zkontrolujte, že sedí. Šablona je jen na kontrolu polohy (sekáte do propíchnutých středů), před sekáním ji sejměte. Výsečníkem Ø 12 vysekněte oba konce (středy y 34 a 70), mezi nimi veďte rovné řezy nožem u ocelového pravítka od tečny k tečně. Konce vybruste brusným papírem namotaným na kolíku Ø 8 v aku vrtačce, okénka zkoste z líce a vyleštěte jako ostatní hrany (krok „Předběžné dokončení hran“).',
         media: [
           ill(
             'lw-l5-back',
@@ -607,7 +609,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidWindows', 'B5'),
           animationLink('lidWindows', 'D2'),
         ],
-        body: 'Výřez U 10 × 12 mm uprostřed horní hrany přední stěny F: výsečník Ø 10 přes šablonu se středem na ose 7,0 mm pod horní hranou F (y 55,0), pak rovné řezy nožem od hrany F k tečnám díry, zastavit přesně na tečně. Rohy ústí R1 nedělejte nožem, zaoblete je brusným papírem. Jestli výřez funguje, ověří zkušební kus.',
+        body: 'Výřez U 10 × 12 mm uprostřed horní hrany přední stěny F sekejte z líce F, kde máte z lekce 4 propíchnutý střed. Díl položte lícem F nahoru na tvrdou desku a přiložte šablonu výřezu pro palec (lekce 2). Výsečník Ø 10 nasaďte přes šablonu (zůstává přiložená) na střed na ose 7,0 mm pod horní hranou F (y 55,0) a vysekněte, pak rovné řezy nožem od hrany F k tečnám díry, zastavit přesně na tečně. Rohy ústí R1 nedělejte nožem, zaoblete je brusným papírem. Jestli výřez funguje, ověří zkušební kus.',
         media: [
           ill(
             'lw-l5-notch',
@@ -620,7 +622,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'edges',
         title: 'Předběžné dokončení hran',
         animationLinks: [animationLink('edges', 'G1')],
-        body: 'Horní hranu F i s výřezem, spodní hranu a boky pásu víčka a boky jazýčku vybruste smirkem 220–400 na rovné destičce, zkoste z líce (zkosovačem hran, pokud ho máte; jinak je zaoblete brusným papírem na hranolku) a vyleštěte: hranu navlhčete vodou nebo Tokonole (jen mimo lepená místa, viz poslední krok) a třete leštítkem nebo kusem plátna, dokud se nezhutní a nezaleskne. Horní hrany D1 a D2 jen vybruste (horní hranu D2 lehce zaoblete, vede přes ni závěs) a vyleštěte stejně. Výřez pro palec zaoblete z líce i z rubu, protože o rubovou hranu dna výřezu se může zachytit karta; vnitřek vybruste brusným papírem namotaným na kolíku Ø 8 ve vrtačce a stejným kolíkem vyleštěte.',
+        body: 'Horní hranu F i s výřezem, spodní hranu a boky pásu víčka a boky jazýčku vybruste smirkem 220–400 na rovné destičce, zkoste z líce (zkosovačem hran, pokud ho máte; jinak je zaoblete brusným papírem na hranolku) a vyleštěte: hranu navlhčete vodou nebo Tokonole (jen mimo lepená místa, viz poslední krok) a třete leštítkem nebo kusem plátna, dokud se nezhutní a nezaleskne. Horní hrany D1 a D2 jen vybruste (horní hranu D2 lehce zaoblete, vede přes ni závěs) a vyleštěte stejně. Výřez pro palec zaoblete z líce i z rubu, protože o rubovou hranu dna výřezu se může zachytit karta; vnitřek vybruste brusným papírem namotaným na kolíku Ø 8 v aku vrtačce a stejným kolíkem vyleštěte.',
         media: [],
       },
       {
@@ -664,7 +666,8 @@ export const lessons: readonly LessonDefinition[] = [
     ],
     safety: [
       'Nůž veďte tahem od prstů volné ruky.',
-      'Akuvrtačku používejte podle návodu výrobce. Kolík s brusným papírem pevně upněte a prsty držte mimo točící se kolík.',
+      'Prsty držící výsečník mějte u spodku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',
+      'Aku vrtačku používejte podle návodu výrobce. Kolík s brusným papírem pevně upněte a prsty držte mimo točící se kolík.',
     ],
     media: [photo('lw-l5-hero', 'Pás P1 s vyseknutými okénky mincí a výřezem pro palec')],
   }),
@@ -719,7 +722,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidWindows', 'C5'),
           animationLink('edges', 'G4'),
         ],
-        body: 'Až po lepení G3: okénko bankovek 14 × 45 mm uprostřed zad (x 43,5–57,5, y 25–70). Díl položte lícem B nahoru na tvrdou desku. Na líci B máte propíchnuté středy obou konců z lekce 4 (na ose x 50,5, y 32 a 63); přiložte na ně křížky šablony okénka bankovek z listu 4 (čárkovaná čára šablony na ose) a zkontrolujte, že sedí. Výsečníkem Ø 14 vysekněte z líce B oba konce skrz B i D2, mezi nimi veďte rovné řezy nožem u ocelového pravítka od tečny k tečně skrz obě vrstvy. Zkoste a vyleštěte jako jeden svazek. Mince 1 Kč (Ø 20 mm) okénkem nepropadne.',
+        body: 'Až po lepení G3: okénko bankovek 14 × 45 mm uprostřed zad (x 43,5–57,5, y 25–70). Díl položte lícem B nahoru na tvrdou desku. Na líci B máte propíchnuté středy obou konců z lekce 4 (na ose x 50,5, y 32 a 63); přiložte na ně křížky šablony okénka bankovek z listu 4 (čárkovaná čára šablony na ose) a zkontrolujte, že sedí. Šablona je jen na kontrolu polohy, před sekáním ji sejměte. Výsečníkem Ø 14 vysekněte z líce B oba konce skrz B i D2, mezi nimi veďte rovné řezy nožem u ocelového pravítka od tečny k tečně skrz obě vrstvy. Zkoste a vyleštěte jako jeden svazek. Mince 1 Kč (Ø 20 mm) okénkem nepropadne.',
         media: [
           ill(
             'lw-l6-back',
@@ -737,7 +740,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidBackD2', 'C3'),
           animationLink('lidBackD2', 'C4'),
         ],
-        body: 'List 1 (P1 z líce) na líc D2 přiložit nejde, proto jedno ze dvou (nejdřív na odřezku D2 + B): (a) šablonu P1 z listu 1 přiložte na líc B podle obrysu a všechny otvory S1–S3 propíchněte jehlou skrz B i přilepenou D2, pak na líci D2 děrujte do vpichů; nebo (b) přiložte D2 z listu 3 na líc D2 podle hran, obkreslete čáry S1 (y 22,0), S2 a S3 (x 36 a 65) a otvory odměřte po 4 mm: S1 od osy x 50,5 na obě strany, S2 a S3 od horního otvoru y 76 dolů.',
+        body: 'List 1 (P1 z líce) na líc D2 přiložit nejde, proto jedno ze dvou (nejdřív na odřezku D2 + B): (a) šablonu P1 z listu 1 přiložte na líc B podle obrysu a všechny otvory S1–S3 propíchněte jehlou skrz B i přilepenou D2, pak na líci D2 děrujte do vpichů; nebo (b) šablonu D2 z listu 3 (druhý výtisk na tvrdém papíře, lekce 4) přiložte na líc D2 podle hran. Přes vyříznutou šablonu se čára obkreslit nedá, proto konce čar S1 (y 22,0), S2 a S3 (x 36 a 65) propíchněte jehlou skrz šablonu, šablonu sejměte a vpichy spojte tužkou u pravítka. Otvory pak odměřte po 4 mm: S1 od osy x 50,5 na obě strany, S2 a S3 od horního otvoru y 76 dolů.',
         media: [],
       },
       {
@@ -940,7 +943,11 @@ export const lessons: readonly LessonDefinition[] = [
     phaseSlug: 'build',
     estimatedMinutes: 150,
     goal: 'Slepit boky peněženky, ušít boční švy S4 a S5 skrz všechny vrstvy a zarovnat a vyleštit boky na šířku 101 mm.',
-    materials: ['odřezek usně 1,0 mm jako podložka pod hranu F', 'tužka, maskovací páska'],
+    materials: [
+      'odřezek usně 1,0 mm na vyrovnání schodu u horní hrany F',
+      'tužka, jehla na propichování, maskovací páska',
+      'proužek otvorů S4/S5 z listu 4 (lekce 4)',
+    ],
     requiredEquipment: [
       'contact-cement',
       'sandpaper',
@@ -978,13 +985,13 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'mark-side',
         title: 'Čára švu a otvory S4, S5',
         animationLinks: [animationLink('lidBodySides', 'C1'), animationLink('lidBodySides', 'C2')],
-        body: 'Na slepeném kusu narýsujte čáru švu 3,0 mm od hrany (rýsovacím kružidlem z projektu 02 nastaveným na 3,0 mm nebo rýhovačem, bez nich tužkou u pravítka podle proužku z listu 4). Otvory S4 a S5 přeneste z papírového proužku otvorů (list 4), počítáno od y 76 dolů: 18 otvorů od y 8 do 76.',
+        body: 'Na slepeném kusu narýsujte čáru švu 3,0 mm od hrany boku F a B, ne od přečnívající D2: D2 je o 1 mm širší (lekce 6) a zarovná se až po sešití (krok „Zarovnat a vyleštit boky“). Rýsovacím kružidlem z projektu 02 nastaveným na 3,0 mm nebo rýhovačem veďte čáru po hraně F; nad horní hranou F (y 62–76), kde je navrchu D2, je čára 4,0 mm od hrany D2, nebo ji tam jen prodlužte u pravítka v přímce. Bez kružidla tužkou u pravítka podle proužku z listu 4: proužek přiložte levou hranou na hranu boku F a spodní hranou ke spodní hraně peněženky, konce čárkované čáry 3,0 propíchněte jehlou a spojte tužkou u pravítka. Otvory S4 a S5 přeneste z téhož proužku (rysky otvorů přes čáru švu), počítáno od y 76 dolů: 18 otvorů od y 8 do 76. Čárka „F 62“ na proužku má ležet na horní hraně F.',
         media: [],
       },
       {
         id: 'punch-sew',
         title: 'Děrovat a šít boky',
-        body: 'Mezi lepením G4 a děrováním nechte aspoň 1 h. Děrujte zepředu skrz všechny vrstvy: y 8–60 z líce F, y 64–76 z líce D2. Horní hrana F (y 62) leží přesně mezi otvory 60 a 64, proto v úseku y 56–68 děrujte po jednom otvoru a pod hranu F podložte odřezek 1,0 mm (schod F/D2). Šijte od 76 dolů, steh 60–64 zdvojte (zpevňuje ústí karet), konce 2 otvory zpět. Nit odměřte 5 × délka švu + 25–30 cm rezervy: v úseku y 20–60 jde šev přes tři vrstvy (F + D2 + B), a pro ty návod „Jak odměřit nit“ počítá 5 ×.',
+        body: 'Mezi lepením G4 a děrováním nechte aspoň 1 h. Děrujte zepředu skrz všechny vrstvy na tvrdé desce, vidlička natočená při pohledu na líc horní hranou od sebe, ve třech úsecích: (1) y 8–52 z líce F vícezubou vidličkou na rysky z proužku. (2) y 56–68 po jednom otvoru: horní hrana F (y 62) leží přesně mezi otvory 60 a 64, proto 56 a 60 děrujte z líce F, 64 a 68 z líce D2 a každý otvor zarovnejte podle rysky. Bez vidličky s 1 zubem: dvouzubou vidličku nasaďte krajním zubem do posledního hotového otvoru, druhý zub prorazí jen jeden nový otvor, zub pokaždé na pevnou vrstvu. Schod F/D2 (1,0 mm) vyrovnejte odřezkem usně 1,0 mm: položte ho na líc D2 těsně k horní hraně F, aby vidlička stála rovně; otvory 64 a 68 pak jdou i skrz odřezek. Jak odřezek nejlépe držet, ověřte na zkušebním kuse. (3) y 72–76 z líce D2. Šijte od 76 dolů, konce 2 otvory zpět. Steh 60–64 zdvojte, zpevňuje ústí karet. Jak přesně ho zdvojit, lekce nepředepisuje – ověřte to na zkušebním kuse. Nit odměřte 5 × délka švu + 25–30 cm rezervy: v úseku y 20–60 jde šev přes tři vrstvy (F + D2 + B), a pro ty návod „Jak odměřit nit“ počítá 5 ×.',
         animationLinks: [
           animationLink('lidBodySides', 'D1'),
           animationLink('lidBodySides', 'D3'),
@@ -1019,9 +1026,13 @@ export const lessons: readonly LessonDefinition[] = [
     ],
     commonMistakes: [
       'Lepení G4 bez zkoušky nanečisto: kontaktní lepidlo nejde po dotyku posunout.',
-      'Vícezubá vidlička přes hranu F v úseku y 56–68: tady se děruje po jednom otvoru.',
+      'Víc nových otvorů najednou přes hranu F v úseku y 56–68: tady se děruje dvouzubou vidličkou vždy jen jeden nový otvor.',
+      'Čára švu odměřená od přečnívající D2: otvory pak leží o 1 mm blíž ke kraji a po zarovnání boku jen 2,0 mm od hrany.',
     ],
-    safety: ['Nůž veďte tahem od prstů volné ruky.'],
+    safety: [
+      'Nůž veďte tahem od prstů volné ruky.',
+      'Prsty držící vidličku mějte u spodku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',
+    ],
     media: [photo('lw-l9-hero', 'Sešité tělo peněženky zepředu, víčko zatím otevřené')],
   }),
 
@@ -1527,7 +1538,7 @@ export const lidWalletProject: ProjectDefinition = {
       equipmentSlug: 'edge-burnisher',
       priority: 'recommended',
       reason: 'Leštění hran: horní hrany F, D1 a D2, výřez, pás víčka, jazýček a boky.',
-      specification: 'Tokonole a leštítko (nebo dřevěný kolík ve vrtačce na nízké otáčky).',
+      specification: 'Tokonole a leštítko (nebo dřevěný kolík v aku vrtačce na nízké otáčky).',
     },
     {
       equipmentSlug: 'edge-paint',
@@ -1849,7 +1860,7 @@ export const lidWalletProject: ProjectDefinition = {
       'lepicí páska (vložka dna, papírový model)',
       'bezbarvý lak na nehty na hrany plíšku (lekce 4)',
       'tvrdší papír nebo čtvrtka na papírový model a šablony (lekce 2 a 4)',
-      'dřevěný kolík Ø 8 mm a akuvrtačka na broušení a leštění vydutých hran (lekce 5)',
+      'dřevěný kolík Ø 8 mm a aku vrtačka na broušení a leštění vydutých hran (lekce 5)',
       'potravinová fólie, houbička a 2 hladká prkénka (lekce 3, 7 a 10)',
       '6 starých karet (4 na vložku dna, 2 na tvarování závěsu), párátka, jehla na propichování',
       'lupa nebo mobil s makrem na prohlídku líce (lekce 3, volitelně)',

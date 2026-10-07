@@ -491,7 +491,7 @@ export const animationPages = {
       C: [
         'Způsob (a): šablona listu 1 na líc B, propíchnout jehlou',
         'Způsob (a): otočte, vpichy jsou na líci D2',
-        'Způsob (b): šablona D2 z listu 3, obkreslete čáry',
+        'Způsob (b): šablona D2 z listu 3, propíchnout konce čar',
         'Způsob (b): otvory po 4 mm od osy a od y 76',
       ],
       D: [
@@ -525,7 +525,7 @@ export const animationPages = {
       D: [
         'Mezi lepením a děrováním aspoň 1 h',
         'y 8–52 z líce F',
-        'y 56–68 po jednom otvoru, odřezek pod hranu F',
+        'y 56–68 po jednom otvoru, odřezek k hraně F',
         'y 72–76 z líce D2, hotovo 18 otvorů',
       ],
       E: [

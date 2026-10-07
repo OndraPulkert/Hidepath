@@ -249,13 +249,12 @@ function wallB(face,o={}){
   s+=rectP(-3,Y1-7,M.W+3,Y1+.5,'fill="url(#fadeT)"')+rectP(-3,Y0-.5,M.W+3,Y0+6,'fill="url(#fadeB)"');
   return s;
 }
-// čáry tužkou na rubu B z lekce 4: hranice G3, poloha D2, čáry S1–S3
+// čáry tužkou na rubu B z lekce 4: hranice G3 a poloha D2 (švy S1–S3 se na rub neznačí)
 function pencilB(o=1){
   const st='stroke="var(--pencil)" stroke-width=".22" fill="none" stroke-dasharray="1 .6"';
   // poloha D2 (y 18 a 82): na rub B jde nakreslit jen v šířce dílu x 0–101, přesah D2 je mimo kůži
   let s=`<path d="M${f(PX(0))} ${f(PY(M.d2.y0))} H${f(PX(M.W))} M${f(PX(0))} ${f(PY(M.d2.y1))} H${f(PX(M.W))}" ${st}/>`;
   s+=`<path d="M${f(PX(0))} ${f(PY(M.coinFloor))} H${f(PX(M.W))} M${f(PX(4))} ${f(PY(M.coinFloor))} V${f(PY(M.topGlue))} M${f(PX(97))} ${f(PY(M.coinFloor))} V${f(PY(M.topGlue))} M${f(PX(35))} ${f(PY(M.coinFloor))} V${f(PY(M.topGlue))} M${f(PX(66))} ${f(PY(M.coinFloor))} V${f(PY(M.topGlue))} M${f(PX(0))} ${f(PY(M.topGlue))} H${f(PX(M.W))}" ${st}/>`;
-  s+=`<path d="M${f(PX(M.s1[0]))} ${f(PY(M.s1Y))} H${f(PX(M.s1[20]))} M${f(PX(36))} ${f(PY(28))} V${f(PY(76))} M${f(PX(65))} ${f(PY(28))} V${f(PY(76))}" stroke="var(--notch)" stroke-width=".22" stroke-dasharray=".7 .6" fill="none"/>`;
   return op(o,s);
 }
 function glueBands(list,p=1,o=1){
@@ -328,7 +327,7 @@ const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,
 const SIDE={rubB:{v:'RUB B',sub:'pohled zevnitř',c:'var(--kuzeplan)'},licB:{v:'LÍC B',sub:'pohled zvenku, záda',c:'var(--kuze)'},licD2:{v:'LÍC D2',sub:'pohled zevnitř',c:'var(--d2)'}};
 
 // A1 — výchozí stav
-add('A','Rub B s čarami z lekce 4','Záda B leží rubem nahoru. Z lekce 4 jsou na rubu tužkou hranice lepení G3, poloha D2 a čáry švů S1–S3, z lekce 5 jsou vyseknutá okénka mincí <span class="num">12 × 48</span>. D2 (<span class="num">103 × 64</span>) má z lekce 4 propíchnuté konce osy x <span class="num">50,5</span> a z lekce 5 spodní hranu zbroušenou do tenka.',8200,t=>{
+add('A','Rub B s čarami z lekce 4','Záda B leží rubem nahoru. Z lekce 4 jsou na rubu tužkou hranice lepení G3 a poloha D2 (čáry švů S1–S3 se na rub neznačí, přenesou se z líce v části C), z lekce 5 jsou vyseknutá okénka mincí <span class="num">12 × 48</span>. D2 (<span class="num">103 × 64</span>) má z lekce 4 propíchnuté konce osy x <span class="num">50,5</span> a z lekce 5 spodní hranu zbroušenou do tenka.',8200,t=>{
   MIR=true;
   let s=wallB('rub')+pencilB(es(t,.05,.3));
   const o1=seg(t,.3,.42),o2=seg(t,.45,.57),o3=seg(t,.6,.72);
@@ -425,21 +424,22 @@ add('A','Přitlačte, děrovat nejdřív za 1 h','Spoj přitlačte v lepených p
 },SIDE.licD2);
 
 // B1 — šablona okénka
-add('B','Lícem B nahoru, šablona na propíchnuté středy','Až po lepení G3. Díl položte <b>lícem B nahoru</b> na tvrdou desku. Na líci B jsou z lekce 4 propíchnuté středy obou konců okénka bankovek na ose x <span class="num">50,5</span>, <span class="num">y 32</span> a <span class="num">63</span>. Přiložte na ně křížky šablony okénka bankovek z listu 4 (čárkovaná čára šablony na ose) a zkontrolujte, že sedí.',8000,t=>{
+add('B','Lícem B nahoru, šablona na propíchnuté středy','Až po lepení G3. Díl položte <b>lícem B nahoru</b> na tvrdou desku. Na líci B jsou z lekce 4 propíchnuté středy obou konců okénka bankovek na ose x <span class="num">50,5</span>, <span class="num">y 32</span> a <span class="num">63</span>. Přiložte na ně křížky šablony okénka bankovek z listu 4 (čárkovaná čára šablony na ose) a zkontrolujte, že sedí. Šablona je jen na kontrolu polohy, před sekáním ji sejměte.',8000,t=>{
   MIR=false;
   let s=wallB('lic',{marks:false,d2behind:true});
   M.billC.forEach(y=>{s+=prick(50.5,y,'var(--slitB)',.42)});
-  // šablona okénka (tvrdý papír) přijíždí shora
-  const p=es(t,.15,.6),dy=(1-p)*-26;
-  const tw=24,th=58,[cx,cy]=pt(50.5,47.5);
-  let tpl=`<rect x="${f(cx-tw*K/2)}" y="${f(cy-th*K/2)}" width="${f(tw*K)}" height="${f(th*K)}" rx=".6" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3" opacity=".92" filter="url(#sh)"/>`;
-  tpl+=`<path d="${slotD(M.bill)}" fill="none" stroke="var(--print)" stroke-width=".3"/>`;
-  tpl+=`<path d="M${f(cx)} ${f(cy-th*K/2+1)} V${f(cy+th*K/2-1)}" stroke="var(--print)" stroke-width=".22" stroke-dasharray="1 .7"/>`;
+  // šablona okénka z listu 4: tvar okénka vyříznutý z tvrdého papíru, křížky na středech, čárkovaná osa;
+  // kreslená průsvitně, aby byly vidět vpichy pod křížky. Přijíždí shora, na konci se sejme.
+  const p=es(t,.15,.6),dy=(1-p)*-26-es(t,.84,.97)*22;
+  const [cx]=pt(50.5,47.5);
+  let tpl=`<path d="${slotD(M.bill)}" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3" opacity=".72" filter="url(#sh)"/>`;
+  tpl+=`<path d="M${f(cx)} ${f(PY(M.bill.y1)+.6)} V${f(PY(M.bill.y0)-.6)}" stroke="var(--print)" stroke-width=".22" stroke-dasharray="1 .7"/>`;
   M.billC.forEach(y=>{const [a,b]=pt(50.5,y);tpl+=`<path d="M${f(a-1.4)} ${f(b)} H${f(a+1.4)} M${f(a)} ${f(b-1.4)} V${f(b+1.4)}" stroke="var(--print)" stroke-width=".3"/>`});
-  s+=G(`translate(0 ${f(dy)})`,tpl,`opacity="${f(seg(t,.12,.25))}"`);
-  const o=seg(t,.68,.8);
+  s+=G(`translate(0 ${f(dy)})`,tpl,`opacity="${f(Math.min(seg(t,.12,.25),1-seg(t,.86,.97)))}"`);
+  const o=seg(t,.66,.74)*(1-seg(t,.82,.86));
   const [ax,ay]=pt(50.5,63);
-  s+=op(o,tick(ax+5,ay,1)+pill(ax+8,ay+1,'sedí','tok'));
+  s+=op(o,tick(ax+7,ay,1)+pill(ax+10,ay+1,'sedí','tok'));
+  s+=op(seg(t,.84,.9),pill(cx,PY(M.bill.y0)+7,'sejmout před sekáním','ta','middle'));
   let ib=notes([['okénko bankovek','t'],['14 × 45'],['x 43,5–57,5'],['y 25–70'],['',''],['středy konců','t'],['x 50,5, y 32 a 63'],['(lekce 4)']],17,5.4);
   s+=inset('LÍC B',ib);
   return s;
@@ -523,7 +523,7 @@ add('C','Způsob (a): otočte, vpichy jsou na líci D2','Díl otočte a šablonu
 },SIDE.licD2);
 
 // C3 — způsob (b): šablona D2 z listu 3, čáry
-add('C','Způsob (b): šablona D2 z listu 3, obkreslete čáry','Nebo (b): přiložte šablonu D2 z listu 3 na líc D2 podle hran a obkreslete čáry <b>S1</b> (<span class="num">y 22,0</span>), <b>S2</b> a <b>S3</b> (<span class="num">x 36</span> a <span class="num">65</span>).',9400,t=>{
+add('C','Způsob (b): šablona D2 z listu 3, propíchnout konce čar','Nebo (b): šablonu D2 z listu 3 (druhý výtisk na tvrdém papíře, lekce 4) přiložte na líc D2 podle hran. Přes vyříznutou šablonu se čára obkreslit nedá, proto konce čar <b>S1</b> (<span class="num">y 22,0</span>), <b>S2</b> a <b>S3</b> (<span class="num">x 36</span> a <span class="num">65</span>) propíchněte jehlou skrz šablonu, šablonu sejměte a vpichy spojte tužkou u pravítka.',9400,t=>{
   MIR=true;
   let s=wallB('rub',{marks:false,bill:true})+d2Part('lic',{bill:true,coinHidden:true});
   const p=es(t,.02,.25),dy=(1-p)*-20;
@@ -536,16 +536,20 @@ add('C','Způsob (b): šablona D2 z listu 3, obkreslete čáry','Nebo (b): přil
   const ends=[[M.s1[0],M.s1Y],[M.s1[20],M.s1Y],[36,28],[36,76],[65,28],[65,76]];
   const pe=seg(t,.3,.55);
   ends.forEach((e,i)=>{if(pe>i/6)s+=prick(e[0],e[1],'var(--notch)',.45)});
+  if(t>.28&&t<.6){const e=ends[Math.min(5,Math.floor(pe*6))];const [a,b]=pt(e[0],e[1]);s+=needle(a,b,-50,seg(t,.28,.32)*(1-seg(t,.56,.6)));}
   const pl=es(t,.72,.97);
+  // pravítko přiložené podél právě kreslené čáry (S1, pak S2, pak S3)
+  if(t>.7&&t<.99){const ro=seg(t,.7,.74)*(1-seg(t,.96,.99));const y1=PY(M.s1Y);
+    s+=pl<1/3?ruler(PX(92),y1+.3,PX(9),y1+.3,ro):pl<2/3?ruler(PX(36)-.3,PY(26),PX(36)-.3,PY(78),ro):ruler(PX(65)+.3,PY(78),PX(65)+.3,PY(26),ro);}
   if(pl>0){const st='stroke="var(--pencil2)" stroke-width=".3" fill="none"';const x0=PX(M.s1[0]),x1=PX(M.s1[20]);
     s+=`<path d="M${f(x0)} ${f(PY(M.s1Y))} H${f(L(x0,x1,cl(pl*3)))}" ${st}/>`;
     if(pl>.33)s+=`<path d="M${f(PX(36))} ${f(PY(76))} V${f(L(PY(76),PY(28),cl(pl*3-1)))}" ${st}/>`;
     if(pl>.66)s+=`<path d="M${f(PX(65))} ${f(PY(76))} V${f(L(PY(76),PY(28),cl(pl*3-2)))}" ${st}/>`;}
   s+=op(seg(t,.4,.5),pill(PX(-1)+.5,PY(M.s1Y)+5.5,'S1 y 22,0 (4 nad hranou D2)','ta','end'));
-  let ib=notes([['šablona D2','t'],['z listu 3, podle hran'],['',''],['S1 y 22,0','ta'],['S2 x 36','ta'],['S3 x 65','ta']],17,5.4);
+  let ib=notes([['šablona D2','t'],['z listu 3, podle hran'],['',''],['S1 y 22,0','ta'],['S2 x 36','ta'],['S3 x 65','ta'],['',''],['konce propíchnout,','t'],['spojit u pravítka']],17,5.4);
   s+=inset('ZPŮSOB (b)',ib);
   return s;
-},SIDE.licD2,'Tip (lekce to neuvádí): přes šablonu se čára přímo obkreslit nedá; kreslené je to jako na rubu v lekci 4 – konce čar propíchnout jehlou a spojit tužkou u pravítka.');
+},SIDE.licD2);
 
 // C4 — způsob (b): otvory po 4 mm
 add('C','Způsob (b): otvory po 4 mm od osy a od y 76','Otvory odměřte po <span class="num">4</span> mm: S1 od osy x <span class="num">50,5</span> na obě strany (<span class="num">21</span> otvorů, x <span class="num">10,5–90,5</span>), S2 a S3 od horního otvoru <span class="num">y 76</span> dolů (po <span class="num">13</span>, až <span class="num">y 28</span>).',9400,t=>{

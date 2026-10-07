@@ -516,6 +516,14 @@ export function buildLidSheetSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): stri
     s.text('GUIDE', X(w.cx), V(vB((w.y0 + w.y1) / 2)), 'MINCE', 1.7, 'middle', { rotate: -90 });
     for (const yc of [w.y0 + w.width / 2, w.y1 - w.width / 2]) {
       s.circle('GUIDE', X(w.cx), V(vB(yc)), w.width / 2, 0.12, '1 0.8');
+      s.cross('GUIDE', X(w.cx), V(vB(yc)), 1);
+    }
+  }
+  // Středy výsečníku Ø 8 na napojení jazýčku (leží v odpadu vedle jazýčku, propichují se v lekci 4).
+  {
+    const rj = spec.tongueJoinRadiusMm;
+    for (const xc of [L.tongueX[0] - rj, L.tongueX[1] + rj]) {
+      s.cross('GUIDE', X(xc), V(L.v.bandEnd + rj), 1);
     }
   }
   // Pás ohybu dna a pás závěsu: od Kola 6 bez ztenčení (ztenčení jen jako záloha).
@@ -596,7 +604,7 @@ export function buildLidSheetSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): stri
   const vMag = L.v.tip - spec.magnetFromTipMm;
   s.circle('GUIDE', X(L.axisX), V(vMag), spec.magnetDiameterMm / 2, 0.15, '0.5 0.5', 'magnet');
   s.cross('GUIDE', X(L.axisX), V(vMag), 1);
-  // Budoucí špička R10 (ořez až na hotovém kusu, po nalepení magnetu i L1, krok 19).
+  // Budoucí špička R10 (ořez až na hotovém kusu, po nalepení magnetu i L1, lekce 11).
   const rt = spec.tongueTipRadiusMm;
   const [t0, t1] = L.tongueX;
   s.path(
@@ -674,13 +682,13 @@ export function buildLidSheetSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): stri
         ]
       : [
           `závěs ztenčit na plno ${cz(spec.hingeSkiveMm)}, v ${cz(tb.hingeBand[0])}–${cz(tb.hingeBand[1])}`,
-          `  náběh ${cz(spec.skiveTaperMm)} mm vně pásu (krok 4)`,
+          `  náběh ${cz(spec.skiveTaperMm)} mm vně pásu (lekce 5)`,
         ]),
     ...(spec.bottomFoldSkiveMm !== null || spec.hingeSkiveMm !== null
-      ? ['  z rubu, kraje pásu náběh, ne schod (záloha, krok 4)']
+      ? ['  z rubu, kraje pásu náběh, ne schod (záloha, lekce 5)']
       : []),
     `špička jazýčku: jen posledních ${cz(spec.tipSkiveMm)} mm`,
-    '  do klínu papírem, až po ořezu (krok 19)',
+    '  do klínu papírem, až po ořezu (lekce 11)',
     '',
     '# Výřezy',
     `okénka mincí (jen B) ${cz(spec.coinWindowWidthMm)} × ${cz(L.coinWindows[0].y1 - L.coinWindows[0].y0)},`,
@@ -848,11 +856,11 @@ export function buildLidBackSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): strin
       .filter((g, i, a) => a.findIndex((q) => q.id === g.id && q.what === g.what) === i)
       .map((g) => `${g.id} ${g.what}: x ${cz(g.x0)}–${cz(g.x1)}, y ${cz(g.y0)}–${cz(g.y1)}`),
     '',
-    '# Pořadí (oddíl 9)',
+    '# Pořadí (lekce 6–9)',
     '1. G3: D2 na rub B, pak okénko bankovek,',
     '   děrovat a šít S1–S3',
     spec.bottomFoldSkiveMm === null
-      ? '2. rýha z rubu, mokrý ohyb dna, vyschnout'
+      ? '2. mokrý ohyb dna (rýha z lekce 5)'
       : '2. mokrý ohyb dna, nechat vyschnout',
     '3. G1: plíšek (hrany přelakované),',
     '   G2 + G2b: D1, F odklopená na ~90°;',
@@ -867,13 +875,13 @@ export function buildLidBackSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): strin
     '# Značky',
     '„L“ = levá strana, zvlášť na rubu F',
     'a na rubu B. Díl je souměrný, šikmé',
-    'otvory určuje jen pravidlo v kroku 10.',
+    'otvory určuje jen pravidlo v lekci 6.',
   ];
   column(s, X(0) + 11, PIECE_Y + 2, lines, 1.95, 2.9);
   footer(
     s,
     'P1 z RUBU. Obrys se řeže podle listu 1 (líc). Na rubu se jen značí lepení a poloha dílů. ' +
-      'Otvory S1–S3 a S6 jsou na listu 1 (líc P1) a S1–S3 i na listu 3 (D1, D2).',
+      'Švy S1–S3 a S6 se na rub neznačí: přenášejí se z líce (list 1, lekce 6 a 8).',
   );
   return s.render('VÍČKO – P1 pás, rub');
 }
@@ -1259,6 +1267,12 @@ export function buildLidJigsSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): strin
   s.rect('CUT', sx, wy, 10, sH, 0.3);
   const SY = (y: number): number => wy + sH - y;
   for (const h of side.holes) s.line('GUIDE', sx, SY(h.y), sx + 6, SY(h.y), 0.25);
+  // Čára švu S4/S5 3,0 od hrany boku F a B (lekce 9): proužek se přikládá levou hranou k boku.
+  const e = L.seamSideX[0];
+  s.add(
+    'STITCH',
+    `<path class="side-seam-line" d="M${f(sx + e)} ${f(wy)} L${f(sx + e)} ${f(wy + sH)}" stroke="${COLORS.STITCH}" stroke-width="0.15" stroke-dasharray="0.8 0.6" fill="none"/>`,
+  );
   s.line('GUIDE', sx, SY(L.frontTopY), sx + 10, SY(L.frontTopY), 0.2, '1 0.6');
   s.line('GUIDE', sx, SY(L.cardFloorY), sx + 10, SY(L.cardFloorY), 0.2, '1 0.6');
   s.line('GUIDE', sx, SY(L.s1Y), sx + 10, SY(L.s1Y), 0.2, '0.4 0.6');
@@ -1275,6 +1289,8 @@ export function buildLidJigsSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): strin
   s.text('GUIDE', sx + 12, SY(side.holes[0]!.y) + 0.6, `první ${cz(side.holes[0]!.y)}`, 1.6);
   s.text('GUIDE', sx + 5, wy - 2, 'PROUŽEK S4/S5', 1.8, 'middle', { bold: true, fill: COLORS.CUT });
   s.text('GUIDE', sx + 5, SY(0) + 3, 'spodní hrana', 1.6, 'middle');
+  s.text('STITCH', sx, SY(0) + 5.4, `čára švu ${czT(e)} od levé hrany`, 1.5, 'start');
+  s.text('STITCH', sx, SY(0) + 7.5, '(levou hranou k boku F a B)', 1.5, 'start');
 
   /* Čísla pro postup pro tuto variantu: lekce je berou odsud, ne z textu. Odkazy jsou na lekce, ne na kroky zadání. */
   const st = (id: string) => L.states.find((q) => q.state.id === id)!;

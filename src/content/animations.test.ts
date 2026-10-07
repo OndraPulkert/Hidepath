@@ -651,6 +651,12 @@ describe('animace postupu – přenos P1, okénka, D2 na záda a boční švy V�
       'Krok D4 – Šijte sedlovým stehem, konce 2 otvory zpět',
     );
     expect(animationLink('lidBodySides', 'E4').label).toBe('Krok E4 – Steh 60–64 zdvojte');
+    expect(animationLink('lidBackD2', 'C3').label).toBe(
+      'Krok C3 – Způsob (b): šablona D2 z listu 3, propíchnout konce čar',
+    );
+    expect(animationLink('lidBodySides', 'D3').label).toBe(
+      'Krok D3 – y 56–68 po jednom otvoru, odřezek k hraně F',
+    );
     expect(() => animationLink('lidP1Cut', 'C7')).toThrow(/nemá kotvu #C7/);
     expect(() => animationLink('lidWindows', 'D4')).toThrow(/nemá kotvu #D4/);
     expect(() => animationLink('lidBackD2', 'B4')).toThrow(/nemá kotvu #B4/);

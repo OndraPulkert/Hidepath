@@ -526,22 +526,22 @@ silně (jedním prstem nejde otevřít, L1 se odtrhává), postupuje se takto. C
 
 ### 5.5 Hrany
 
-| Hrana                                         | Typ                             | Úprava                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| --------------------------------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| boční hrany těla (F + D2 + B, 2,0–2,6)        | řezaná, viditelná               | po sešití zarovnat nožem (D2 přečnívá 1 mm), obrousit, **zkosit z obou líců**, leštit jako jeden svazek                                                                                                                                                                                                                                                                                                                                                          |
-| spodní rohy těla                              | **hranaté** (výchozí od Kola 6) | nezaoblovat, nic nevyplňovat: bok u ohybu dna jen zarovnat se zbytkem boku, **zabrousit a vyleštit** (krok 15). Očko ohybu (mezera po vložce 1,5) na boku zůstane vidět, vzhled ověřit na P2. _Volitelně_ rohy R4: mezeru ohybu v pásech x 0–6 a 95–101 nejdřív vyplnit lepidlem s odřezky (1,0 + 0,6), pak R4 nožem skrz F + B, nebo brusným papírem podle šablony; ověřit na odřezku.                                                                          |
-| horní hrana F (y 62,0), rohy R2               | viditelná, ústí karet           | zkosit (zaoblit brusným papírem na hranolku) z líce, leštit **před lepením G4**; rohy R2 nožem, dočistit papírem                                                                                                                                                                                                                                                                                                                                                 |
-| výřez pro palec v F (U 10 × 12, rohy ústí R1) | vydutý, viditelný               | **výsečník Ø 10** přes šablonu se středem na ose v y 55,0 (v 7,0), potom rovné řezy **nožem** od hrany F k tečnám díry, zastavit přesně na tečně; rohy ústí R1 **brusným papírem**, ne nožem (krok 5). **Zaoblit** z líce i z rubu (přes líc přejíždí špička jazýčku, o rubovou hranu dna U se může zachytit karta), vnitřek brousit a **leštit** kolíkem Ø 8 ve vrtačce spolu s horní hranou F před lepením G4 (krok 6). Ověřit P0-4 a na zkušebním kusu (P2-7) |
-| pás víčka – spodní hrana a boky, rohy R4      | viditelná, vypouklé rohy        | nožem; zkosit z líce, leštit na plocho před sestavením                                                                                                                                                                                                                                                                                                                                                                                                           |
-| napojení jazýčku na pás R4                    | **vyduté**                      | **výsečník Ø 8**, tečné rovné řezy nožem                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| boky jazýčku                                  | viditelná                       | zkosit z líce, leštit                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| špička jazýčku R10 (jazýček + L1)             | vypouklá, viditelná             | nožem podle šablony **po nalepení magnetu i L1** (krok 19, oba naráz), pak obšít S7 (krok 20). Klín **nedělat nožem**, ale zbrousit brusným papírem na hranolku z líce i z rubu jen v posledních 2,5 mm (ryska), aby látka kapsy nechytla hranu (V3) a magnet neležel na ztenčeném místě. Stačí, když je hrana na konci asi 0,5–0,7 a zaoblená.                                                                                                                  |
-| okénka mincí 12 × 48 (jen B, 1,0)             | vyduté konce R6                 | **výsečník Ø 12** na obou koncích (středy y 34 a 70), rovné řezy nožem; konce brousit papírem na kolíku Ø 8 ve vrtačce, zkosit z líce, leštit **před sestavením**                                                                                                                                                                                                                                                                                                |
-| okénko bankovek 14 × 45 (D2 + B slepené, 1,6) | vyduté konce R7                 | **výsečník Ø 14** na obou koncích (středy y 32 a 63), rovné řezy nožem skrz obě vrstvy **po lepení G3**; leštit jako svazek                                                                                                                                                                                                                                                                                                                                      |
-| horní hrana D1 (y 81,5), rohy R3              | vnitřní, viditelná              | obrousit, leštit a **natřít barvou na hrany v tónu kontrastním k D1** párátkem ve 2 tenkých vrstvách (R4: je vidět hranice karty / bankovky; pruh je jen 0,6 široký, víc pomůže výrazně odlišná barva D1 a D2 – rozhodne P0-9; přilnavost na 0,6 ověřit na odřezku) před lepením                                                                                                                                                                                 |
-| horní hrana D2 (y 82,0)                       | vnitřní, viditelná              | obrousit, lehce zaoblit (přes ni vede závěs), leštit před lepením                                                                                                                                                                                                                                                                                                                                                                                                |
-| spodní hrana D2 (y 18,0)                      | skrytá                          | zbrousit do tenka brusným papírem na hranolku (klín 3 mm, končí pod S1 – SF9), nožem neztenčovat; aby nedělala schod pro bankovky                                                                                                                                                                                                                                                                                                                                |
-| boky závěsu (1,0; v záloze B 0,6)             | viditelné                       | lehce leštit, nezkosovat                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| Hrana                                         | Typ                             | Úprava                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| --------------------------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| boční hrany těla (F + D2 + B, 2,0–2,6)        | řezaná, viditelná               | po sešití zarovnat nožem (D2 přečnívá 1 mm), obrousit, **zkosit z obou líců**, leštit jako jeden svazek                                                                                                                                                                                                                                                                                                                                                             |
+| spodní rohy těla                              | **hranaté** (výchozí od Kola 6) | nezaoblovat, nic nevyplňovat: bok u ohybu dna jen zarovnat se zbytkem boku, **zabrousit a vyleštit** (krok 15). Očko ohybu (mezera po vložce 1,5) na boku zůstane vidět, vzhled ověřit na P2. _Volitelně_ rohy R4: mezeru ohybu v pásech x 0–6 a 95–101 nejdřív vyplnit lepidlem s odřezky (1,0 + 0,6), pak R4 nožem skrz F + B, nebo brusným papírem podle šablony; ověřit na odřezku.                                                                             |
+| horní hrana F (y 62,0), rohy R2               | viditelná, ústí karet           | zkosit (zaoblit brusným papírem na hranolku) z líce, leštit **před lepením G4**; rohy R2 nožem, dočistit papírem                                                                                                                                                                                                                                                                                                                                                    |
+| výřez pro palec v F (U 10 × 12, rohy ústí R1) | vydutý, viditelný               | **výsečník Ø 10** přes šablonu se středem na ose v y 55,0 (v 7,0), potom rovné řezy **nožem** od hrany F k tečnám díry, zastavit přesně na tečně; rohy ústí R1 **brusným papírem**, ne nožem (krok 5). **Zaoblit** z líce i z rubu (přes líc přejíždí špička jazýčku, o rubovou hranu dna U se může zachytit karta), vnitřek brousit a **leštit** kolíkem Ø 8 v aku vrtačce spolu s horní hranou F před lepením G4 (krok 6). Ověřit P0-4 a na zkušebním kusu (P2-7) |
+| pás víčka – spodní hrana a boky, rohy R4      | viditelná, vypouklé rohy        | nožem; zkosit z líce, leštit na plocho před sestavením                                                                                                                                                                                                                                                                                                                                                                                                              |
+| napojení jazýčku na pás R4                    | **vyduté**                      | **výsečník Ø 8**, tečné rovné řezy nožem                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| boky jazýčku                                  | viditelná                       | zkosit z líce, leštit                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| špička jazýčku R10 (jazýček + L1)             | vypouklá, viditelná             | nožem podle šablony **po nalepení magnetu i L1** (krok 19, oba naráz), pak obšít S7 (krok 20). Klín **nedělat nožem**, ale zbrousit brusným papírem na hranolku z líce i z rubu jen v posledních 2,5 mm (ryska), aby látka kapsy nechytla hranu (V3) a magnet neležel na ztenčeném místě. Stačí, když je hrana na konci asi 0,5–0,7 a zaoblená.                                                                                                                     |
+| okénka mincí 12 × 48 (jen B, 1,0)             | vyduté konce R6                 | **výsečník Ø 12** na obou koncích (středy y 34 a 70), rovné řezy nožem; konce brousit papírem na kolíku Ø 8 v aku vrtačce, zkosit z líce, leštit **před sestavením**                                                                                                                                                                                                                                                                                                |
+| okénko bankovek 14 × 45 (D2 + B slepené, 1,6) | vyduté konce R7                 | **výsečník Ø 14** na obou koncích (středy y 32 a 63), rovné řezy nožem skrz obě vrstvy **po lepení G3**; leštit jako svazek                                                                                                                                                                                                                                                                                                                                         |
+| horní hrana D1 (y 81,5), rohy R3              | vnitřní, viditelná              | obrousit, leštit a **natřít barvou na hrany v tónu kontrastním k D1** párátkem ve 2 tenkých vrstvách (R4: je vidět hranice karty / bankovky; pruh je jen 0,6 široký, víc pomůže výrazně odlišná barva D1 a D2 – rozhodne P0-9; přilnavost na 0,6 ověřit na odřezku) před lepením                                                                                                                                                                                    |
+| horní hrana D2 (y 82,0)                       | vnitřní, viditelná              | obrousit, lehce zaoblit (přes ni vede závěs), leštit před lepením                                                                                                                                                                                                                                                                                                                                                                                                   |
+| spodní hrana D2 (y 18,0)                      | skrytá                          | zbrousit do tenka brusným papírem na hranolku (klín 3 mm, končí pod S1 – SF9), nožem neztenčovat; aby nedělala schod pro bankovky                                                                                                                                                                                                                                                                                                                                   |
+| boky závěsu (1,0; v záloze B 0,6)             | viditelné                       | lehce leštit, nezkosovat                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
 ### 5.6 Šití
 
@@ -567,9 +567,12 @@ jen uvedené pravidlo.** Značka „L“ se dává na rub F a na rub B zvlášť
 | **Celkem**       |                                                    | nejvýš 3 vrstvy (2,6)                                               |                                                                                                                                         | **107 otvorů**, 99 stehů |                                                                                           |
 
 - **Horní hrana F (y 62,0) leží přesně mezi otvory 60 a 64.** Steh 60 → 64 se **zdvojí**,
-  protože zpevňuje ústí karet. V úseku y 56–68 děrovat po jednom otvoru a každý otvor zarovnat
-  podle rysky: bez vidličky s 1 zubem nasadit krajní zub vícezubé vidličky do posledního otvoru, zub
-  pokaždé na pevnou vrstvu, a pod hranu F podložit odřezek 1,0 (schod F/D2).
+  protože zpevňuje ústí karet (jak přesně zdvojit, ověřit na zkušebním kusu). Děruje se ve třech
+  úsecích, které se nepřekrývají: y 8–52 z líce F, y 56–68 po jednom otvoru (56 a 60 z líce F, 64 a 68
+  z líce D2) a y 72–76 z líce D2. V úseku y 56–68 každý otvor zarovnat
+  podle rysky: bez vidličky s 1 zubem nasadit dvouzubou vidličku krajním zubem do posledního hotového
+  otvoru, druhý zub prorazí jen jeden nový otvor, zub pokaždé na pevnou vrstvu. Schod F/D2 vyrovnat odřezkem 1,0: položit ho na líc D2 těsně k horní hraně F,
+  aby vidlička stála rovně; otvory 64 a 68 jdou i skrz něj (ověřit na zkušebním kusu).
 - Spodní hrana D2 (y 18,0) leží mezi otvory 16 a 20 (2 mm od obou).
 - Poslední otvor 76 je 4,57 pod pásem závěsu (y 80,57). V závěsu nejsou stehy ani lepidlo.
 - S6 vynechá pás x 38,5–62,5 (plíšek x 43,5–57,5 s okrajem 4 a pás pod jazýčkem x 40,5–60,5). Střed
@@ -585,9 +588,11 @@ jen uvedené pravidlo.** Značka „L“ se dává na rub F a na rub B zvlášť
 - Nit: tenká voskovaná, která projde otvory vidliček 4 mm (ověřit na odřezku). Délka orientačně
   4 × délka švu + 25–30 cm rezervy, tj. 2 × 15 cm na konce (ověřit na zkušebním švu); u S4 a S5,
   které jdou v y 20–60 přes tři vrstvy (F + D2 + B), 5 × délka švu (návod „Jak odměřit nit“).
-- Čáru švu rýsuj až na slepeném kusu: kružidlem nebo rýhovačem 3,0 od hrany, bez nich tužkou
-  u pravítka (3,0 od hrany odměř na proužku z listu 4). Polohy otvorů S4/S5 přenes z papírového
-  proužku na listu 4.
+- Čáru švu rýsuj až na slepeném kusu: kružidlem nebo rýhovačem 3,0 od hrany F a B (x 3,0), ne od
+  přečnívající D2 (x −1; zarovná se až v kroku 15): nad horní hranou F je to 4,0 od hrany D2, nebo čáru
+  jen prodloužit u pravítka. Bez kružidla tužkou u pravítka podle čárkované čáry 3,0 na proužku z listu 4
+  (proužek levou hranou na hranu F, konce čáry propíchnout a spojit). Polohy otvorů S4/S5 přenes z
+  papírového proužku na listu 4.
 
 ### 5.7 Lepení
 
@@ -1012,17 +1017,20 @@ značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,6
    (jinak rozměr z listu 3 a 4 dané varianty, např. při přepážkách 0,8 14 × 20) z pozinkovaného ocelového plechu 0,5
    (magnetem vyzkoušet už v obchodě): řezat pilovým listem na kov (v rámu nebo v ruce), nebo plech
    naříznout nožem u pravítka a v rýze ho zlomit ohýbáním sem a tam. Rohy R3 a otřep brusným papírem
-   zrnitosti 120 na desce (nebo brusnou násadou ve vrtačce), hrany **přelakovat** bezbarvým lakem na
+   zrnitosti 120 na desce (nebo brusnou násadou v aku vrtačce), hrany **přelakovat** bezbarvým lakem na
    nehty.
 3. **Značení na rub** (tužka, nezařezávat): osa ohybu dna a pás závěsu (nelepit, nešít) podle
-   listu 2 a rámečku na listu 4 (výchozí střih v 62,21 a 142,99–150,99), hranice lepení G1–G4, čáry S1–S3 a S6, okénka, poloha D1 a D2. Papír se na kůži
+   listu 2 a rámečku na listu 4 (výchozí střih v 62,21 a 142,99–150,99), hranice lepení G1–G4, okénka mincí a poloha D1 a D2,
+   tedy to, co kreslí list 2. Čáry švů S1–S3 a S6 ani okénko bankovek na rub nepatří: list 2 je nekreslí,
+   středy okénka bankovek jsou na líci z kroku 2 a švy se přenášejí z líce (kroky 9 a 13). Papír se na kůži
    obkreslit skrz nedá, proto: list 2
    nalep na tvrdý papír a vyřízni po obrysu, přilož ho na rub, rohy lepených ploch a konce čar
    propíchni jehlou do kůže a tečky spoj tužkou u pravítka. Osu ohybu dna, čáru hrany vložky dna (z rámečku na listu 4, výchozí 64,18; posunutou podle V12,
    oddíl 5.8; použije se v kroku 11) a přehyby závěsu (kontrola v kroku 16) vyznač
    navíc ryskou na obou bocích dílu. Všechno je souměrné podle x 50,5, na stranách nezáleží. „L“
-   napiš zvlášť na rub F a na rub B. Otvory švů se později propichují vidličkou rovnou přes papírovou
-   šablonu z listu 1 přiloženou na líc.
+   napiš zvlášť na rub F a na rub B. Otvory švů S1–S3 a S6 se později přenášejí přes šablonu z listu 1
+   přiloženou na líc: propíchnou se jehlou a děrují vidličkou (S1–S3 v krocích 9 a 10 – šablona na líci B,
+   děruje se z líce D2; S6 v kroku 13 – šablona na líci F).
 4. **Rýha ohybu dna (výchozí, bez ztenčení):** na rubu vytlač podél osy ohybu (v z rámečku na
    listu 4, výchozí 62,21) rýhu tupým
    hrotem u ocelového pravítka (nic neřezat, stejný tlak po celé šířce; nejdřív na odřezku z V12).
@@ -1046,8 +1054,9 @@ značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,6
    (d) Nejdřív na odřezku. Stejným postupem (b) se ztenčí odřezek pro opakování V12 (krok 0(d)).
    Spodní hranu D2 (klín 3, končí pod S1 – SF9) zbrousit do tenka brusným papírem, nožem neztenčovat
    (to platí vždy, i ve výchozím střihu).
-5. **Okénka mincí** v B: Ø 12 na koncích (středy y 34 a 70), rovné řezy. Zkosit, leštit.
-   **Výřez pro palec** v horní hraně F (funkci ověří zkušební kus; volitelně předem V11 na odřezku): výsečník Ø 10 přes šablonu se
+5. **Okénka mincí** v B z líce B (středy propíchnuté v kroku 2), na tvrdé desce: šablonou okénka z listu 4
+   jen zkontrolovat polohu a před sekáním ji sejmout; Ø 12 na koncích (středy y 34 a 70), rovné řezy. Zkosit, leštit.
+   **Výřez pro palec** v horní hraně F z líce F, na tvrdé desce (funkci ověří zkušební kus; volitelně předem V11 na odřezku): výsečník Ø 10 přes šablonu (zůstává přiložená) se
    středem na ose v 7,0 od horní hrany F (y 55,0), potom rovné řezy nožem od hrany F k tečnám díry,
    zastavit přesně na tečně. Rohy ústí R1 nedělat nožem, zaoblit brusným papírem (list 1). Nejdřív na
    papírovém modelu P0 (P0-4).
@@ -1055,7 +1064,7 @@ značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,6
    a boky pásu víčka, boky jazýčku (brousit smirkem 220–400 na rovné destičce, zkosit z líce – bez
    zkosovače zaoblit brusným papírem na hranolku –, leštit; horní hrany D1 a D2 jen brousit a leštit,
    viz 5.5). Výřez pro palec zaoblit z líce **i z rubu** (o rubovou hranu dna U se může
-   zachytit karta), vnitřek brousit a leštit kolíkem Ø 8 ve vrtačce. Horní hranu D1 natřít barvou na
+   zachytit karta), vnitřek brousit a leštit kolíkem Ø 8 v aku vrtačce. Horní hranu D1 natřít barvou na
    hrany v tónu kontrastním k D1 párátkem ve 2 tenkých vrstvách (nejdřív na odřezku 0,6). Tokonole na
    plochy podle 5.7 (lepená místa přelepit páskou).
 7. **G3:** D2 rubem na rub B: dno y 18–23, boky a střed **jen do y 80,57** (čára na listu 2; v záloze čára na listu 2 varianty, například `--skive-hinge 0.6`: 80,25, obojí: 79,75),
@@ -1067,8 +1076,9 @@ značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,6
 9. **Rýsování a značení S1–S3 na líci D2:** list 1 (P1 z líce) na líc D2 přiložit nejde, proto
    jedno z dvou (nejdřív na odřezku D2 + B): (a) šablonu P1 z listu 1 přiložit na líc B podle obrysu
    a všechny otvory S1–S3 propíchnout jehlou skrz B i přilepenou D2, pak na líci D2 děrovat do vpichů;
-   nebo (b) přiložit D2 z listu 3 na líc D2 podle hran (díl je souměrný, rub / líc nevadí), obkreslit
-   čáry S1 (y 22,0) a S2 / S3 (x 36 a 65) a otvory odměřit po 4 mm: S1 od osy x 50,5 na obě strany,
+   nebo (b) přiložit D2 z listu 3 na líc D2 podle hran (díl je souměrný, rub / líc nevadí); přes vyříznutou
+   šablonu se obkreslit nedá, proto konce čar S1 (y 22,0) a S2 / S3 (x 36 a 65) propíchnout jehlou skrz
+   šablonu, šablonu sejmout a vpichy spojit tužkou u pravítka; otvory odměřit po 4 mm: S1 od osy x 50,5 na obě strany,
    S2 / S3 od horního otvoru y 76 dolů (v záloze čísla z listu 1 varianty).
 10. **Děrovat S1, S2, S3** z líce D2 (na PE desce), vidlička vždy stejně natočená při pohledu na líc D2
     s horní hranou od sebe. **Šít S1–S3**, konce 2 otvory zpět.
@@ -1100,8 +1110,9 @@ značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,6
     přitom rovnat podle boků B. Na slepeném kusu narýsuj **čáru švu 3,0 od hrany** (kružidlem nebo
     rýhovačem 3,0, bez nich tužkou u pravítka podle proužku z listu 4, oddíl 5.6) a otvory **S4, S5**
     přenes z papírového proužku otvorů (list 4), počítáno od **76** dolů. **Děrovat S4, S5** zepředu
-    skrz všechny vrstvy (y 8–60 z líce F, 64–76 z líce D2; v úseku y 56–68 po jednom otvoru
-    s podložkou 1,0 pod hranou F). Šít od 76 dolů, steh 60–64 zdvojit, konce 2 zpět.
+    skrz všechny vrstvy ve třech úsecích (y 8–52 z líce F; 56–68 po jednom otvoru, 56 a 60 z líce F,
+    64 a 68 z líce D2, s odřezkem 1,0 na líci D2 těsně u hrany F; 72–76 z líce D2; oddíl 5.6). Šít od 76
+    dolů, steh 60–64 zdvojit (jak, ověřit na zkušebním kusu), konce 2 zpět.
 15. **Boky:** zarovnat nožem na 101,0 (D2 přečnívá), **spodní rohy nechat hranaté** (nic
     nevyplňovat, nezaoblovat), brousit, zkosit z obou líců, leštit – i u ohybu dna. (Volitelně rohy R4
     s výplní mezery ohybu, oddíl 5.5; rozhodnutí kola 6.)
@@ -1251,7 +1262,7 @@ obětované LoCo karty pro V5.
 
 **Nástroje:** nůž, ocelové pravítko, podložka na řezání · tvrdá PE deska pod děrování · vidličky
 4 mm · palička · 2 sedlářské jehly · výsečníky Ø 8, 10, 12, 14 (víc střih nepotřebuje, model je vypisuje na listu 1; Ø 15 od Kola 11 ne) · brusný papír (80, 120 a jemnější)
-· rovný hranolek · dřevěný kolík Ø 8 · akuvrtačka · svěrky · pilový list na kov · jehla na
+· rovný hranolek · dřevěný kolík Ø 8 · aku vrtačka · svěrky · pilový list na kov · jehla na
 propichování · tupý hrot na rýhu ohybu dna (krok 4; třeba vypsaná propiska, ověřit na odřezku) ·
 tužka, maskovací páska, párátka · nůžky (karty vložky dna) ·
 **2 hladká prkénka** (mokrý ohyb dna, krok 11; i náhrada šicího svěráku, tabulka náhrad níže).
@@ -1265,8 +1276,8 @@ tužka, maskovací páska, párátka · nůžky (karty vložky dna) ·
 | Nástroj z původního seznamu         | Náhrada                                                                                                                                   |
 | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | zkosovač hran                       | hrany zaoblit (ne srazit) brusným papírem na hranolku                                                                                     |
-| leštítko                            | dřevěný kolík Ø 8 upnutý do akuvrtačky na nízké otáčky, s vodou nebo Tokonole                                                             |
-| (vyduté hrany: výřez, konce okének) | brusný papír namotaný na kolíku Ø 8 ve vrtačce                                                                                            |
+| leštítko                            | dřevěný kolík Ø 8 upnutý do aku vrtačky na nízké otáčky, s vodou nebo Tokonole                                                            |
+| (vyduté hrany: výřez, konce okének) | brusný papír namotaný na kolíku Ø 8 v aku vrtačce                                                                                         |
 | kružidlo nebo rýhovač 3,0           | čáru švu rýsovat tužkou u pravítka podle proužku z listu 4                                                                                |
 | nůžky na plech a pilník (K2)        | pilový list na kov, nebo naříznout nožem a zlomit ohýbáním; rohy a otřep brusným papírem (krok 2)                                         |
 | ztenčovač (pásy 8 mm, jen záloha B) | dílna se zvonovým ztenčovačem, jinak brusný papír 80 na hranolku (krok 4)                                                                 |
@@ -1538,15 +1549,15 @@ s příliš nízkým vyčníváním bankovky – okénko by se muselo posunout).
   horní hraně F (CUT i na listu 2), okénka mincí, S1–S3 a S6
   (STITCH), ohyb dna a přehyby závěsu (FOLD), **hrana vložky dna** (FOLD, trojúhelníčky u boků a popisek, i na listu 2), pás ohybu dna
   s rýhou a pás závěsu (ztenčení jen v záloze B),
-  okénko bankovek (řeže se po G3), značky S4/S5 (GUIDE; oblouky rohů těla jen při volitelném
-  zaoblení), odkaz na S7 u jazýčku,
+  okénko bankovek (řeže se po G3), křížky na středech všech výsečníků (Ø 8, 10, 12, 14), značky S4/S5
+  (GUIDE; oblouky rohů těla jen při volitelném zaoblení), odkaz na S7 u jazýčku,
 - **penezenka-vicko-rub.svg/.pdf** (list 2) – P1 z rubu: lepené plochy G1–G4 (GLUE, oříznuté do
   obrysu), poloha D1, D2 a plíšku, pořadí lepení, značky „L“,
 - **penezenka-vicko-dily.svg/.pdf** (list 3) – D1, D2 (s lepením), L1, K2; u D1 barevná horní hrana,
   u D2 kontrastní tón (R4),
 - **penezenka-vicko-pripravky.svg/.pdf** (list 4) – šablona konce jazýčku (R10, magnet, ztenčení
   2,5, přířez L1 s ryskou horní hrany, **otvory S7** ve STITCH), šablony okének a plíšku, proužek
-  otvorů S4/S5, vložka dna aspoň 111 × 25 ze starých karet s vyznačenou hranou do ohybu, tvarování závěsu
+  otvorů S4/S5 s čárkovanou čárou švu 3,0 od levé hrany, vložka dna aspoň 111 × 25 ze starých karet s vyznačenou hranou do ohybu, tvarování závěsu
   přes obsah (Kolo 9; kopyto, Z2 a Z1 vypadly) a rámeček **„Čísla pro postup“** dané varianty
   (kóta P1, osa ohybu, hrana vložky, pás závěsu, konec G3, plíšek, G2 a S6, hrana víčka A/B/C,
   značka magnetu y_m,B a okno lepení; kroky 0–17 berou čísla odsud),
@@ -1869,6 +1880,19 @@ Rozměry ani model se nemění.
 | Vložka dna 111 × 25 proti „výšku nezkracovat“ | 25 je nejmenší výška; z karet vyjde asi 111 × 50.                                                                                                                                                                        | dokument + lekce |
 | Useň 0,8 na zálohu A                          | Záloha A platí pro zkušební i finální kus: kus 20 × 50 cm jako u usně 1,0 (oddíl 10), ne 11 × 24 cm.                                                                                                                     | dokument + lekce |
 | Plíšek 0,8 bez nákupu                         | Oddíl 10: plech 0,8 se kupuje, až když na zkušebním kusu nepomůže výměna magnetu; rozměr plíšku z listu 3 platí, listy se negenerují znovu (oddíl 5.4).                                                                  | dokument + lekce |
+
+### Kolo 14 – nejasnosti v lekcích 4, 5, 6 a 9
+
+Rozměry ani model se nemění. Listy 1, 2 a 4 se mění jen v popiscích a značkách.
+
+| Nález                                                 | Co se změnilo                                                                                                                                                                                                              | Stav                      |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| Krok 3 chtěl na rubu čáry S1–S3, S6 a okénko bankovek | List 2 je nekreslí (12.4) a švy se přenášejí z líce (kroky 9, 10 a 13), středy okénka bankovek z kroku 2. Na rub jen to, co kreslí list 2. „Propichují se vidličkou přes šablonu“ → propíchnout jehlou, děrovat vidličkou. | dokument + lekce + list 2 |
+| Krok 9 (b) „obkreslit čáry“                           | Přes vyříznutou šablonu to nejde: konce čar propíchnout jehlou a spojit tužkou u pravítka (jako v kroku 3).                                                                                                                | dokument + lekce          |
+| Krok 14: úseky děrování se překrývaly                 | Tři úseky podle otvorů modelu: 8–52 z líce F, 56–68 po jednom (56, 60 z líce F; 64, 68 z líce D2), 72–76 z líce D2. Odřezek 1,0 na líc D2 k hraně F (vyrovná schod), zdvojení 60–64 ověřit na zkušebním kusu.              | dokument + lekce          |
+| Čára švu 3,0 u přečnívající D2                        | 3,0 od hrany F a B (x 3,0), nad F 4,0 od hrany D2 (D2 x −1); proužek na listu 4 má čárkovanou čáru 3,0.                                                                                                                    | dokument + lekce + list 4 |
+| Krok 5: strana a šablona                              | Okénka mincí z líce B, šablona jen na kontrolu; výřez z líce F, výsečník přes šablonu. Bezpečnost výsečníku jako v lekci 6; „aku vrtačka“ jako ve vybavení.                                                                | dokument + lekce          |
+| Listy 1 a 2 odkazovaly na kroky zadání                | Odkazy na lekce (lekce 5, 6, 11, pořadí lekce 6–9); křížky na středech všech výsečníků na listu 1 (i Ø 12 a Ø 8).                                                                                                          | generátor + test          |
 
 ### Co zůstává neověřené
 
