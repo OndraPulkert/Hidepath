@@ -9,6 +9,7 @@ import { type AnimationLink } from '@/content/schema';
  * - kapsa-postup: `#A`–`#E` skočí na první krok dané části a přehrává od ní,
  * - kapsa-prisiti: `#A`–`#D` otevře první krok dané části (zastavený, přehrání tlačítkem),
  * - kapsa-skladani (`#A`–`#E`) a kapsa-druk (`#A`–`#D`): stejně jako kapsa-prisiti,
+ * - sedlarsky-steh a hrany (`#A`–`#G`): stejně jako kapsa-prisiti, společné pro všechny projekty,
  * - Víčko: `#anim-…` posune stránku na danou animaci (spustí se, když je vidět).
  *
  * `steps` = názvy kroků každé části ve stejném pořadí jako na stránce (`add('B', 'název', …)`).
@@ -168,9 +169,97 @@ export const animationPages = {
       D: ['Kontrola: druk drží', 'Kontrola: jazyk končí asi 21 mm nad kapsou'],
     },
   },
+  saddleStitch: {
+    path: '/animace/sedlarsky-steh.html',
+    title: 'Sedlářský steh',
+    buttonText: 'Jak šít sedlářský steh',
+    sections: {
+      A: 'Část A – nit a jehly',
+      B: 'Část B – uchycení dílu',
+      C: 'Část C – začátek',
+      D: 'Část D – rytmus stehu',
+      E: 'Část E – zpětné stehy',
+      F: 'Část F – konce nitě',
+      G: 'Část G – kontrola',
+    },
+    steps: {
+      A: [
+        'Odměřte nit',
+        'Konec zploštěte a protáhněte očkem',
+        'Propíchněte nit 3 cm od konce a přetáhněte smyčku',
+        'Totéž na druhém konci a zkouška tahem',
+      ],
+      B: ['Mezi koleny, linie otvorů nahoru', 'Nebo destičky a svěrka ke stolu'],
+      C: ['První otvor: stejná délka nitě na obou stranách'],
+      D: [
+        '1. Přední jehla dalším otvorem dozadu',
+        '2. Zadní jehla stejným otvorem dopředu – nad nití',
+        '3. Obě nitě utáhněte stejnou silou',
+        'Opakujte: vždy stejné pořadí a stejná strana',
+        'Řez: dvě nitě se v každém otvoru kříží',
+      ],
+      E: ['Na konci prošijte zpět dva otvory', 'Zpětné stehy na začátku i na konci švu'],
+      F: [
+        'Oba konce vyveďte na rub',
+        'Odstřihněte těsně u kůže a přimáčkněte',
+        'Polyester navíc zatavit – jen na rubu',
+      ],
+      G: [
+        'Líc: všechny stehy stejně skloněné a stejně utažené',
+        'Rub: rovná řada',
+        'Kontrolní body lekce 4',
+      ],
+    },
+  },
+  edges: {
+    path: '/animace/hrany.html',
+    title: 'Dokončení hran',
+    buttonText: 'Jak na hrany',
+    sections: {
+      A: 'Část A – srovnání',
+      B: 'Část B – zkosení',
+      C: 'Část C – barva',
+      D: 'Část D – zaleštění',
+      E: 'Část E – kontrola',
+      F: 'Část F – pouzdro s mincí',
+      G: 'Část G – Víčko',
+    },
+    steps: {
+      A: [
+        'Které hrany: boky, dno, horní hrany a výřez',
+        'Srovnejte hrany smirkem 220–400 na rovné destičce',
+      ],
+      B: [
+        'Zkosení: pouzdro na karty ne, pouzdro s mincí „srazte hrany“',
+        'Víčko: zkosovačem, nebo brusným papírem na hranolku',
+      ],
+      C: ['Barva na hrany – jen u barvené kůže'],
+      D: [
+        'Navlhčete hranu vodou nebo pastou',
+        'Třete leštítkem, dokud se hrana nezhutní a nezaleskne',
+        'Bez leštítka: kus plátna',
+      ],
+      E: [
+        'Chyba: leštění před srovnáním hran',
+        'Kontrolní bod: hrany srovnané a zaleštěné, včetně oblouku výřezu',
+      ],
+      F: [
+        'Lekce 5: nejdřív hrany, na které se po složení nedostanete',
+        'Lekce 6: hrany kapsy ještě před přišitím',
+        'Lekce 8: dno do roviny, srazit, obarvit, zaleštit',
+      ],
+      G: [
+        'Víčko, lekce 5: hrany předem, před sestavením',
+        'Lekce 5: barevná horní hrana D1, Tokonole jen mimo lepená místa',
+        'Lekce 9: boky zarovnat na 101,0 mm a vyleštit jako jeden svazek',
+        'Další hrany Víčka: okénka a jazýček',
+      ],
+    },
+  },
   threadLength: {
     path: '/animace/delka-nite.html',
     title: 'Kolik nitě na šev',
+    buttonText: 'Jak odměřit nit',
     sections: {},
   },
   lidBends: {
@@ -194,6 +283,8 @@ export const animationPages = {
   {
     path: `/animace/${string}.html`;
     title: string;
+    /** Text tlačítka v kroku; bez něj „Animace postupu“. */
+    buttonText?: string;
     sections: Record<string, string>;
     steps?: Record<string, readonly string[]>;
   }
@@ -218,9 +309,14 @@ export function animationStepTitle(page: AnimationPageKey, anchor: string): stri
   return steps[match[1]!]?.[Number(match[2]) - 1];
 }
 
-/** Text tlačítka v kroku: návod s kalkulačkou délky nitě není animace. */
+/**
+ * Text tlačítka v kroku podle stránky, na kterou odkaz míří: stránka může mít vlastní
+ * `buttonText` (návod na délku nitě, sedlářský steh, hrany), jinak „Animace postupu“.
+ */
 export function animationButtonText(href: string): string {
-  return href.startsWith(animationPages.threadLength.path) ? 'Jak odměřit nit' : 'Animace postupu';
+  const path = href.split('#')[0];
+  const page = Object.values(animationPages).find((p) => p.path === path);
+  return page && 'buttonText' in page ? page.buttonText : 'Animace postupu';
 }
 
 /**

@@ -88,6 +88,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'thread-needles',
         title: 'Navlékněte nit do obou jehel',
+        animationLinks: [animationLink('saddleStitch', 'A1')],
         body: 'Ustřihněte asi 60 cm nitě. Konec zploštěte mezi prsty a protáhněte očkem, pak jehlou propíchněte nit asi 3 cm od konce a přetáhněte smyčku přes jehlu. Nit tak drží a nevyklouzne. Totéž na druhém konci.',
         media: [
           {
@@ -438,6 +439,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'hold-work',
         title: 'Uchyťte si díl',
+        animationLinks: [animationLink('saddleStitch', 'B1')],
         body: 'Sedlářský steh se šije dvěma jehlami současně, takže na držení dílu nezbývá ruka. Nejjednodušší je sevřít odřezek mezi kolena tak, aby linie otvorů koukala nahoru; u tak malých dílů to stačí a takhle šije většina začátečníků. Pohodlnější je sevřít díl mezi dvě dřevěné destičky a celé to upnout truhlářskou svěrkou ke stolu. Hotová pomůcka na tuhle práci se jmenuje sedlářský koník a najdete ji v seznamu vybavení v části „Kup později“; na pouzdro ji nepotřebujete, na dlouhé švy pásku nebo peněženky se vyplatí. Ať zvolíte cokoli, díl musí držet pevně a nesmí se mezi stehy posouvat, jinak nebudou stehy stejně utažené.',
         media: [
           {
@@ -453,7 +455,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'start-stitch',
         title: 'Začněte steh',
         body: 'Jehlu protáhněte prvním otvorem tak, aby na obou stranách zůstala stejná délka nitě. Teď máte jednu jehlu vpředu, jednu vzadu.',
-        animationLinks: [animationLink('threadLength')],
+        animationLinks: [animationLink('saddleStitch', 'C1'), animationLink('threadLength')],
         media: [
           {
             id: 'l4-saddle-stitch',
@@ -468,6 +470,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'stitch-rhythm',
         title: 'Rytmus stehu',
+        animationLinks: [animationLink('saddleStitch', 'D1')],
         body: 'Přední jehlu prostrčte dalším otvorem dozadu a nit protáhněte. Zadní jehlu prostrčte stejným otvorem dopředu, ale nad nití, která už v otvoru je, ne pod ní. Obě nitě utáhněte stejnou silou. Vždy stejné pořadí a stejná strana: jen tak jsou stehy na obou stranách stejně skloněné.',
         media: [
           {
@@ -483,6 +486,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'finish-stitch',
         title: 'Ukončení',
+        animationLinks: [animationLink('saddleStitch', 'E1'), animationLink('saddleStitch', 'F1')],
         body: 'Na konci řady prošijte zpět dva otvory, oba konce vyveďte na rub, těsně u kůže odstřihněte a zbytek přimáčkněte. Voskovaná nit drží bez uzlu. Polyesterové nitě se dají navíc zajistit: konec dlouhý asi 2 mm krátce přiblížit k plamenu zapalovače a hned přimáčknout; roztaví se do kuličky, která z otvoru nevyklouzne. Jen na rubu a opatrně, plamen nikdy k líci kůže.',
         media: [
           {
@@ -496,6 +500,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'compare',
         title: 'Porovnejte líc a rub',
+        animationLinks: [animationLink('saddleStitch', 'G1')],
         body: 'Steh na líci má mít všechny stehy stejně skloněné a stejně utažené. Rub je u sedlářského stehu vždy trochu méně pravidelný, to je normální.',
         media: [
           {
@@ -799,6 +804,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'stitch',
         title: 'Sešijte tři strany',
+        animationLinks: [animationLink('saddleStitch', 'E2'), animationLink('saddleStitch', 'F2')],
         body: 'Začněte dvěma zpětnými stehy v horním rohu, aby byl začátek zpevněný, a šijte souvisle bok, spodek, bok. Rohový otvor prošijte jako každý jiný. Na konci dva zpětné stehy, odstřihněte na rubu a případně konce zatavte jako v lekci 4.',
         media: [
           {
@@ -814,6 +820,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'edges',
         title: 'Srovnejte a zalešte hrany',
+        animationLinks: [animationLink('edges', 'A2'), animationLink('edges', 'D1')],
         body: 'Smirkovým papírem 220–400 na rovné destičce srovnejte sešité hrany do jedné roviny. Navlhčete hranu vodou nebo pastou a třete leštítkem či kusem plátna, dokud se nezhutní a nezaleskne. Horní hrany obou dílů a oblouk výřezu udělejte také – po výřezu jezdí prsty při každém vytažení karty.',
         media: [
           {

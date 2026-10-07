@@ -2,6 +2,7 @@ import { screen, within } from '@testing-library/react';
 
 import { StepList } from '@/components/lessons/step-list';
 import { animationLink } from '@/content/animations';
+import { projects } from '@/content/projects';
 import { type LessonStep } from '@/content/schema';
 import { renderWithProviders } from '@/test/render';
 
@@ -52,5 +53,23 @@ describe('StepList – odkazy na animace postupu', () => {
     expect(thread).toHaveAccessibleName(/Jak odměřit nit/);
     expect(thread).toHaveAttribute('href', '/animace/delka-nite.html');
     expect(thread).toHaveTextContent('Kolik nitě na šev');
+  });
+
+  it('Víčko: šev a hrana vykreslí tlačítka sedlářského stehu a hran s vlastním textem', () => {
+    const lid = projects.find((p) => p.slug === 'lid-wallet')!;
+    const lidSteps = lid.lessons
+      .flatMap((l) => l.steps)
+      .filter((s) => s.id === 's7' || s.id === 'd1-paint');
+    renderWithProviders(<StepList steps={lidSteps} template={undefined} projectSlug={lid.slug} />);
+
+    const [steh, thread] = within(stepItem('Šev S7 kolem magnetu')).getAllByRole('link');
+    expect(steh).toHaveAccessibleName(/Jak šít sedlářský steh/);
+    expect(steh).toHaveAttribute('href', '/animace/sedlarsky-steh.html#E2');
+    expect(steh).toHaveTextContent('Krok E2 – Zpětné stehy na začátku i na konci švu');
+    expect(thread).toHaveAccessibleName(/Jak odměřit nit/);
+
+    const [hrany] = within(stepItem('Barevná horní hrana D1')).getAllByRole('link');
+    expect(hrany).toHaveAccessibleName(/Jak na hrany/);
+    expect(hrany).toHaveAttribute('href', '/animace/hrany.html#G2');
   });
 });

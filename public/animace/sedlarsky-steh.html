@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sedlářský steh</title>
+<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+<!-- Self-hostované fonty aplikace (public/fonts), aby stránka fungovala i offline v PWA. -->
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f3efe9;--panel:#fffdf9;--stage:#f7f2ea;--ink:#2a211b;--muted:#6c6158;--line:#ddd5cc;
+  --accent:#b3261e;--ok:#2f6b3a;--btn:#2a211b;--btn-ink:#fffdf9;
+  --lic:#b8773f;--lic-d:#8a5228;--lic-hi:#d39a63;
+  --rub:#dcc4a2;--rub-d:#b99a72;--rub-fib:#c7a87f;
+  --hole:#2b2018;--chip-lic:#b8773f;--chip-rub:#dcc4a2;
+  --steel:#a3abb3;--steel-d:#5c656e;--glue:#e0ad35;
+  --thread:#f6efdc;--thread-d:#8f8166;--thread2:#7aa6cf;--thread2-d:#3f6a93;
+  --skin:#e9b996;--skin-d:#b98563;--wood:#d8b583;--wood-d:#9a7444;--table:#a07850;--table-d:#6d4f31;
+  --clip:#3d4247;--cloth:#6f7f94;--cloth-d:#4c5a6c;--flame:#f39a2b;--flame-i:#ffe08a;--lighter:#c0392b;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
+  --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
+  --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
+  --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;
+  --hole:#0e0a08;--steel:#9099a2;--steel-d:#4d555d;--glue:#c8962a;
+  --thread:#efe6cf;--thread-d:#7d705a;--thread2:#86b0d6;--thread2-d:#4b779f;
+  --skin:#d6a684;--skin-d:#a57454;--wood:#c2a06f;--wood-d:#86643a;--table:#8a6743;--table-d:#5b4129;
+  --clip:#8a9097;--cloth:#5d6b7d;--cloth-d:#3f4b5a;--flame:#e88a1c;--flame-i:#f6d36e;--lighter:#b03a2e;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
+  --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
+  --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
+  --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;
+  --hole:#0e0a08;--steel:#9099a2;--steel-d:#4d555d;--glue:#c8962a;
+  --thread:#efe6cf;--thread-d:#7d705a;--thread2:#86b0d6;--thread2-d:#4b779f;
+  --skin:#d6a684;--skin-d:#a57454;--wood:#c2a06f;--wood-d:#86643a;--table:#8a6743;--table-d:#5b4129;
+  --clip:#8a9097;--cloth:#5d6b7d;--cloth-d:#3f4b5a;--flame:#e88a1c;--flame-i:#f6d36e;--lighter:#b03a2e;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 "Albert Sans",system-ui,sans-serif;padding:22px 16px 44px;overflow-x:hidden}
+.wrap{max-width:860px;margin:0 auto;display:grid;gap:16px}
+h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
+.lead{color:var(--muted);margin:6px 0 0;max-width:70ch}
+.lead a,.note a,.diff a{color:var(--ink)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:10px;min-width:0}
+.stagewrap{position:relative;background:var(--stage);border-radius:8px;overflow:hidden}
+#stage{display:block;width:100%;height:auto;aspect-ratio:3/2}
+.badge{position:absolute;top:8px;left:8px;display:flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-weight:700;font-size:13px;letter-spacing:.06em;transition:opacity .2s}
+.badge i{width:16px;height:16px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.2)}
+.badge small{font-weight:500;letter-spacing:0;color:var(--muted);font-size:12px}
+.badge[hidden]{display:none}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.controls button{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);width:40px;height:40px;border-radius:10px;display:grid;place-items:center;cursor:pointer;padding:0}
+.controls button.play{background:var(--btn);color:var(--btn-ink);border-color:var(--btn)}
+.controls button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.controls svg{width:18px;height:18px;fill:currentColor}
+.counter{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+.prog{display:flex;gap:6px;align-items:stretch}
+.pseg{flex:1;display:grid;gap:4px;min-width:0;cursor:pointer;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left}
+.pseg .bars{display:flex;gap:2px;height:6px}
+.pseg .bars span{flex:1;background:var(--line);border-radius:2px;position:relative;overflow:hidden}
+.pseg .bars span b{position:absolute;inset:0;background:var(--lic);transform-origin:left;transform:scaleX(0)}
+.pseg .pl{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:700px){.pl span{display:none}}
+.pseg.on .pl{color:var(--ink);font-weight:600}
+.cap{min-height:6.6em}
+.cap .no{display:inline-block;font-weight:700;color:var(--lic-d);margin-right:6px;font-variant-numeric:tabular-nums}
+:root[data-theme="dark"] .cap .no{color:var(--lic-hi)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cap .no{color:var(--lic-hi)}}
+.cap h2{display:inline;font-size:1.05rem;margin:0}
+.cap p{margin:4px 0 0;color:var(--ink)}
+.cap .tip{display:block;margin-top:6px;color:var(--muted);font-size:14px}
+.cap .tip b{color:var(--accent);font-weight:700}
+.cap .src{display:block;margin-top:6px;color:var(--muted);font-size:13px}
+.note{font-size:13px;color:var(--muted);margin:0}
+.diff h2{font-size:1.05rem;margin:0}
+.diff ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:14px}
+.diff li b{font-weight:700}
+/* svg text */
+.t{font:600 4.1px "Albert Sans",sans-serif;fill:var(--ink)}
+.ts{font:500 3.7px "Albert Sans",sans-serif;fill:var(--muted)}
+.tw{font:700 4.6px "Albert Sans",sans-serif;fill:var(--ink)}
+.ta{font:700 4.1px "Albert Sans",sans-serif;fill:var(--accent)}
+.tok{font:700 4.1px "Albert Sans",sans-serif;fill:var(--ok)}
+.lead-l{stroke:var(--muted);stroke-width:.25;fill:none}
+@media (min-width:700px){.t,.ta,.tok{font-size:2.8px}.ts{font-size:2.5px}.tw{font-size:3.2px}}
+.panelbox{fill:var(--panel);stroke:var(--line);stroke-width:.35}
+.pillbg{fill:var(--panel);stroke:var(--line);stroke-width:.3;opacity:.95}
+@media (max-width:520px){.badge small{display:none}.cap{min-height:9.5em}.counter{width:100%;margin-left:0;order:9}}
+/* Hidepath: návrat do lekce */
+.backlink{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--ink);font-weight:600;font-size:15px;text-decoration:none;justify-self:start}
+.backlink:hover{text-decoration:underline}
+.backlink:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+<a class="backlink" href="/" data-back>← Zpět do lekce</a>
+<h1>Sedlářský steh</h1>
+<p class="lead">Dvě jehly, jedna nit, každým otvorem proti sobě. Postup podle projektu 01 „Pouzdro na karty“, lekce 4 „Lepení, děrování dvou vrstev a sedlářský steh“ (nit a jehly z lekce 1, začátek a konec švu na pouzdru z lekce 6). Kde se steh šije: <b>projekt 01</b> lekce 4 (odřezky) a 6 (tři strany pouzdra); <b>projekt 02</b> lekce 4 (odřezek přes tři vrstvy), 6 (přišití kapsy) a 7 (šev dna); <b>projekt 03</b> – lekce mu říkají „sedlový steh“ – lekce 6 (S1–S3), 8 (S6), 9 (S4, S5) a 11 (S7). Kolik nitě odměřit, počítá návod <a href="/animace/delka-nite.html">Kolik nitě na šev</a>.</p>
+</header>
+
+<section class="card" aria-label="Animace postupu">
+  <div class="stagewrap">
+    <svg id="stage" viewBox="0 0 135 90" role="img" aria-label="Animovaný postup sedlářského stehu"></svg>
+    <div class="badge" id="badge" hidden><i id="chip"></i><span id="side">LÍC</span><small id="sidesub"></small></div>
+  </div>
+  <div class="prog" id="prog"></div>
+  <div class="controls">
+    <button id="bRestart" aria-label="Od začátku" title="Od začátku"><svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/></svg></button>
+    <button id="bPrev" aria-label="Předchozí krok" title="Předchozí krok"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg></button>
+    <button id="bPlay" class="play" aria-label="Přehrát" title="Přehrát / pozastavit"><svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg></button>
+    <button id="bNext" aria-label="Další krok" title="Další krok"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
+    <span class="counter" id="counter">krok 1 / 20</span>
+  </div>
+  <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
+</section>
+<p class="note">V měřítku: rozteč otvorů 4 mm, linie stehu 3,5 mm od hrany, kůže 1,2 mm (projekt 01 počítá s 1,2–1,5 mm), nit 0,6 mm, jehla 48 mm (John James 004 ze seznamu vybavení). Řez podél švu (pohled shora na hranu dílu: nahoře rub, dole líc), detail otvoru a tloušťky kůže v řezu jsou zvětšené a tak i označené. Uchycení dílu je schéma, ne v měřítku. Obě poloviny nitě jsou ve skutečnosti stejná nit, barvy jen rozlišují, která polovina je která. Kroky a poznámky označené „Tip (lekce to neuvádí)“ v lekcích nejsou.</p>
+
+<section class="card diff" aria-label="Rozdíly mezi projekty">
+<h2>Co se mezi projekty liší</h2>
+<ul>
+<li><b>Nit:</b> projekt 01 lekce 1 a 4 asi 60 cm (odřezek), lekce 6 asi 1 m (pouzdro); projekt 02 asi 0,8 m na odřezek v lekci 4, šev kapsy i šev dna; projekt 03 orientačně 4 × délka švu + 25–30 cm. Pravidlo z návodu <a href="/animace/delka-nite.html">Kolik nitě na šev</a>: 4 × šev + 25–30 cm, přes tři vrstvy 5 ×.</li>
+<li><b>Zpětné stehy:</b> projekt 01 lekce 4 jen na konci, „zpět dva otvory“; lekce 6 dva na začátku i dva na konci. Projekt 02 lekce 7 „začátek i konec zpětnými stehy“ bez počtu (lekce 4 a 6 je nezmiňují). Projekt 03 u každého švu „konce 2 otvory zpět“, u boků S4 a S5 navíc zdvojený steh 60–64.</li>
+<li><b>Rub:</b> projekt 01 lekce 4 – rub je vždy trochu méně pravidelný, to je normální; projekt 02 lekce 4 a 7 – steh na rubu má být stejně rovný jako na líci.</li>
+<li><b>Konce nitě:</b> odstřižení a zatavení popisují jen lekce 4 a 6 projektu 01; projekty 02 a 03 konce neřeší.</li>
+<li><b>Vrstvy a rozteč:</b> projekt 01 dvě vrstvy, vidličky 3,85–4 mm; projekt 02 odřezek v lekci 4 a dno přes tři vrstvy, kapsa dvě, rozteč 4 mm; projekt 03 rozteč přesně 4 mm, části švů přes tři vrstvy.</li>
+<li><b>Jehly:</b> projekty 01 a 02 4 tupé sedlářské jehly (šije se dvěma, dvě do zálohy); projekt 03 2 jehly.</li>
+</ul>
+</section>
+</div>
+
+<script>
+(()=>{
+// ---------- měřítko (mm) ----------
+const PITCH=4, OFF=3.5, TL=1.2, TH=.6;              // rozteč, linie stehu od hrany, kůže, nit (lekce 3, 4; vybavení)
+const K=2.3, X0=9.5, Y0=15;                          // pohled na díl: 1 mm = 2,3 j.
+const EX=x=>X0+x*K, EY=y=>Y0+y*K, HX=i=>EX(i*PITCH), SEAM=EY(OFF);
+const NV=8, PIECE_H=7;                               // viditelné otvory 0–7, výřez dílu 8 mm od hrany
+const KY=5;                                          // řez: tloušťka 1 mm = 5 j. (zvětšeno ~2×)
+const RB=56, MID=RB+TL*KY, LF=RB+2*TL*KY;            // rub 56 · spoj 62 · líc 68
+const HW=1.3;                                        // poloviční šířka otvoru v řezu (zvětšeno)
+const TW=TH*K;                                       // nit 0,6 mm = 1,38 j.
+
+// ---------- pomocníci ----------
+const cl=t=>Math.max(0,Math.min(1,t));
+const seg=(t,a,b)=>cl((t-a)/(b-a));
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const es=(t,a,b)=>ease(seg(t,a,b));
+const L=(a,b,t)=>a+(b-a)*t;
+const f=n=>(+n).toFixed(2);
+const G=(tr,s,extra='')=>`<g transform="${tr}" ${extra}>${s}</g>`;
+let UID=0;const uid=p=>`${p}${++UID}`;
+function lbl(x,y,t,cls='t',anchor='start'){return `<text x="${f(x)}" y="${f(y)}" class="${cls}" text-anchor="${anchor}">${t}</text>`}
+function pill(x,y,t,cls='t',anchor='start'){return `<g class="pill"><rect class="pillbg" rx="1.2" x="${f(x)}" y="${f(y-4)}" width="1" height="1"/>${lbl(x,y,t,cls,anchor)}</g>`}
+function lead(x1,y1,x2,y2){return `<path d="M${f(x1)} ${f(y1)} L${f(x2)} ${f(y2)}" class="lead-l"/><circle cx="${f(x2)}" cy="${f(y2)}" r=".5" fill="var(--muted)"/>`}
+function tick(x,y,s=1){return `<path d="M${x-1.6*s} ${y} l${1.2*s} ${1.2*s} l${2.4*s} -2.6" stroke="var(--ok)" stroke-width="${.7*s}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`}
+function cross(x,y,r=1,w=.5){return `<path d="M${f(x-r)} ${f(y-r)} L${f(x+r)} ${f(y+r)} M${f(x-r)} ${f(y+r)} L${f(x+r)} ${f(y-r)}" stroke="var(--accent)" stroke-width="${w}" stroke-linecap="round"/>`}
+function inset(title,body,{x=86,y=6,w=47,h=78}={}){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" class="panelbox"/><text x="${x+3}" y="${y+5.5}" class="ts" style="font-weight:700;letter-spacing:.06em">${title}</text>${body}`}
+function notes(lines,y0=18,step=5.2,x=89){return lines.map((l,i)=>lbl(x,y0+i*step,l[0],l[1]||'ts')).join('')}
+function clipMain(body,w=84){const id=uid('cm');return `<clipPath id="${id}"><rect x="0" y="0" width="${f(w)}" height="90"/></clipPath><g clip-path="url(#${id})">${body}</g>`}
+function arrow(x1,y1,x2,y2,col='var(--accent)',w=.5,mk='ar'){return `<path d="M${f(x1)} ${f(y1)} L${f(x2)} ${f(y2)}" stroke="${col}" stroke-width="${w}" marker-end="url(#${mk})"/>`}
+function finger(x,y,a=0,op=1){return G(`translate(${f(x)} ${f(y)}) rotate(${f(a)})`,`<ellipse cx="0" cy="0" rx="2.8" ry="4.2" fill="var(--skin)" stroke="var(--skin-d)" stroke-width=".3"/><ellipse cx="0" cy="-1.8" rx="1.6" ry="1.4" fill="#fff" opacity=".35"/>`,`opacity="${f(op)}"`)}
+// šikmý zářez vidličky: z líce „/“; z rubu (otočený díl) „\“ – zrcadlí se celou skupinou
+function slit(x,y,d=1.3,w=.5,col='var(--hole)'){return `<path d="M${f(x-d)} ${f(y+d)} L${f(x+d)} ${f(y-d)}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`}
+const TC=[{c:'var(--thread)',d:'var(--thread-d)'},{c:'var(--thread2)',d:'var(--thread2-d)'}];
+function tpath(d,ti,w=TW,op=1){return `<g opacity="${f(op)}"><path d="${d}" fill="none" stroke="${TC[ti].d}" stroke-width="${f(w+.42)}" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="${TC[ti].c}" stroke-width="${f(w)}" stroke-linecap="round" stroke-linejoin="round"/></g>`}
+const P=(...pts)=>'M'+pts.map(p=>`${f(p[0])} ${f(p[1])}`).join(' L');
+const Q=(a,c,b)=>`M${f(a[0])} ${f(a[1])} Q${f(c[0])} ${f(c[1])} ${f(b[0])} ${f(b[1])}`;
+// jehla: hrot v (x,y), směr úhlem a (stupně), délka len, očko u tupého konce
+function needle(x,y,a,len=11,op=1){return G(`translate(${f(x)} ${f(y)}) rotate(${f(a)})`,`<path d="M0 0 L${len} 0" stroke="var(--steel-d)" stroke-width=".6" stroke-linecap="round"/><ellipse cx="${f(len-1.4)}" cy="0" rx="1" ry=".3" fill="none" stroke="var(--steel)" stroke-width=".22"/>`,`opacity="${f(op)}"`)}
+// jehla kolem středu: a=90 hrot nahoru, a=-90 hrot dolů; očko na druhém konci
+const NL=10;
+function needleC(cx,cy,a,op=1){return G(`translate(${f(cx)} ${f(cy)}) rotate(${f(a)})`,`<path d="M${-NL/2} 0 L${NL/2} 0" stroke="var(--steel-d)" stroke-width=".6" stroke-linecap="round"/><path d="M${-NL/2} 0 l1.2 -.32 M${-NL/2} 0 l1.2 .32" stroke="var(--steel-d)" stroke-width=".3"/><ellipse cx="${f(NL/2-1.4)}" cy="0" rx="1" ry=".3" fill="none" stroke="var(--steel)" stroke-width=".22"/>`,`opacity="${f(op)}"`)}
+const eyeC=(cx,cy,a)=>{const r=a*Math.PI/180;return [cx+Math.cos(r)*(NL/2-1.4),cy+Math.sin(r)*(NL/2-1.4)]};
+
+// ---------- pohled na díl (stojí hranou nahoru, linie otvorů nahoře) ----------
+// view: 'lic' = líc předního odřezku k vám; 'rub' = díl otočený, rub zadního odřezku k vám (zrcadleně)
+const MIRC=EX(14);
+const mir=s=>G(`translate(${f(2*MIRC)} 0) scale(-1 1)`,s);
+function piece(view,o={}){
+  const x0=o.leftEnd===false?-4:EX(-3.5), x1=o.rightEnd?EX((NV-1)*PITCH+3.5):95;
+  const y1=EY(PIECE_H);
+  let s=`<rect x="${f(x0)}" y="${f(Y0)}" width="${f(x1-x0)}" height="${f(y1-Y0)}" fill="${view==='rub'?'url(#rubP)':'url(#licG)'}" stroke="${view==='rub'?'var(--rub-d)':'var(--lic-d)'}" stroke-width=".35"/>`;
+  // spodek je jen výřez dílu: lomená čára
+  let zz=`M${f(x0-1)} ${f(y1)}`;for(let x=x0;x<=x1+3;x+=3)zz+=` L${f(x+1.5)} ${f(y1+(((x-x0)/3)%2?1:-.6))}`;
+  s+=`<path d="${zz} L${f(x1+3)} ${f(y1+6)} L${f(x0-1)} ${f(y1+6)} Z" fill="var(--stage)"/>`;
+  if(view!=='rub'&&o.line!==false) s+=`<path d="M${f(x0+1)} ${f(SEAM)} H${f(x1-1)}" stroke="var(--lic-d)" stroke-width=".25" stroke-dasharray="1 .8" opacity=".55"/>`;
+  for(let i=0;i<NV;i++) s+=slit(HX(i),SEAM,.55*K,.5);
+  return s;
+}
+// steh na líci: všechny stejně skloněné („/“); bad = obráceně; sag = smyčka (mm)
+function stitchLic(a,b,ti,o={}){
+  const xl=Math.min(a,b)*PITCH, xr=Math.max(a,b)*PITCH, s=o.bad?-1:1, dy=.38*s;
+  const p1=[EX(xl+.45),EY(OFF+dy)], p2=[EX(xr-.45),EY(OFF-dy)];
+  let d=o.sag?Q(p1,[(p1[0]+p2[0])/2,(p1[1]+p2[1])/2+o.sag*K*2],p2):P(p1,p2);
+  let r=tpath(d,ti,TW,o.op??1);
+  if(o.hi) r+=`<path d="${d}" fill="none" stroke="var(--accent)" stroke-width=".35" stroke-dasharray=".9 .6" transform="translate(0 ${f(-1.9)})"/>`;
+  return r;
+}
+// steh na rubu (kreslí se uvnitř zrcadlené skupiny): rovná řada
+function stitchRub(a,b,ti,o={}){
+  const xl=Math.min(a,b)*PITCH, xr=Math.max(a,b)*PITCH, dy=(o.wob||0);
+  return tpath(P([EX(xl+.45),EY(OFF+dy)],[EX(xr-.45),EY(OFF-dy*.4)]),ti,TW,o.op??1);
+}
+
+// ---------- řez podél švu, pohled shora na hranu (zvětšeno) ----------
+function secBase(o={}){
+  const x0=o.leftEnd===false?-4:EX(-3.5), x1=o.rightEnd?EX((NV-1)*PITCH+3.5):95;
+  let s=`<rect x="${f(x0)}" y="${RB}" width="${f(x1-x0)}" height="${f(MID-RB)}" fill="url(#rubP)" stroke="var(--rub-d)" stroke-width=".25"/>`;
+  s+=`<rect x="${f(x0)}" y="${f(MID-.7)}" width="${f(x1-x0)}" height=".7" fill="var(--lic)"/>`;
+  s+=`<rect x="${f(x0)}" y="${MID}" width="${f(x1-x0)}" height="${f(LF-MID)}" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".25"/>`;
+  s+=`<rect x="${f(x0)}" y="${f(LF-.8)}" width="${f(x1-x0)}" height=".8" fill="var(--lic)"/>`;
+  s+=`<rect x="${f(x0)}" y="${f(MID-.25)}" width="${f(x1-x0)}" height=".5" fill="var(--glue)" opacity=".85"/>`;
+  for(let i=0;i<NV;i++) s+=`<rect x="${f(HX(i)-HW)}" y="${RB}" width="${f(2*HW)}" height="${f(LF-RB)}" fill="var(--hole)"/>`;
+  return s;
+}
+function secTag(){return pill(1.5,40.6,'ŘEZ PODÉL ŠVU · zvětšeno','ts')+pill(1.5,RB-1.3,'rub','ts')+pill(1.5,LF+4.9,'líc','ts')}
+const viewTag=t=>pill(83,6,t,'ts','end');
+const yF=c=>LF+.75+c*1.25, yB=c=>RB-.75-c*1.25;
+// dokončené tahy: moves[j]=[a,b]; nit, která je při tahu j vpředu = j%2
+function secThreads(moves,n){
+  let s='';const cnt={};const dirs=moves.map(([a,b])=>Math.sign(b-a));
+  if(n<=0) return s;
+  const [a0]=moves[0], d0=dirs[0];
+  s+=tpath(P([HX(a0),RB],[HX(a0),MID]),1)+tpath(P([HX(a0),MID],[HX(a0),LF]),0);
+  for(let j=0;j<n;j++){
+    const [a,b]=moves[j], d=dirs[j], cf=j%2, cb=1-cf, k=Math.min(a,b), c=cnt[k]||0; cnt[k]=c+1;
+    const d2=j+1<moves.length?dirs[j+1]:d;
+    const xa=HX(a)+d*HW, xb=HX(b)-d*HW;
+    s+=tpath(P([xa,LF],[xa+d*.6,yF(c)],[xb-d*.6,yF(c)],[xb,LF]),cf);
+    s+=tpath(P([xa,RB],[xa+d*.6,yB(c)],[xb-d*.6,yB(c)],[xb,RB]),cb);
+    if(j+1<n){ // nit prochází otvorem b na druhou stranu: obě nitě se v otvoru kříží
+      s+=tpath(P([xb,LF],[HX(b)+d2*HW,RB]),cf)+tpath(P([xb,RB],[HX(b)+d2*HW,LF]),cb);
+    }
+  }
+  return s;
+}
+// jehly v klidu po tahu do otvoru b (dn = směr dalšího tahu): přední pod lícem, zadní nad rubem
+function secRest(b,dn,cFront,o={}){
+  const x=HX(b)+dn*4.2;
+  let s='';
+  if(o.front!==false){const e=eyeC(x,LF+8,90);s+=tpath(Q([HX(b)+dn*HW,LF],[HX(b)+dn*HW,LF+5],e),cFront)+needleC(x,LF+8,90);}
+  if(o.back!==false){const e=eyeC(x,RB-8,-90);s+=tpath(Q([HX(b)+dn*HW,RB],[HX(b)+dn*HW,RB-5],e),1-cFront)+needleC(x,RB-8,-90);}
+  return s;
+}
+// jeden tah j (a→b) s průběhem u: 1. přední jehla dozadu, 2. zadní stejným otvorem dopředu, 3. utáhnout
+function secMove(moves,j,u){
+  const [a,b]=moves[j], d=Math.sign(b-a), cf=j%2, cb=1-cf;
+  const p1=seg(u,0,.4), p2=seg(u,.45,.8), p3=es(u,.82,1);
+  const sag=(1-p3)*3;
+  const xa=HX(a)+d*HW, xb=HX(b)-d*HW, xr0=HX(a)+d*4.2, xr1=HX(b)+d*4.2;
+  let s='';
+  // 1. přední jehla (nit cf) dalším otvorem dozadu
+  let fx,fy,fa=90;
+  if(p1<.35){fx=L(xr0,HX(b),ease(p1/.35));fy=LF+8}else{fx=HX(b);fy=L(LF+8,RB-8,ease((p1-.35)/.65))}
+  if(p3>0){fx=L(HX(b),xr1,p3);fa=L(90,-90,p3)}
+  const fe=eyeC(fx,fy,fa);
+  if(fe[1]>LF+.3) s+=tpath(Q([xa,LF],[L(xa,fe[0],.5),LF+4],fe),cf);
+  else{
+    s+=tpath(Q([xa,LF],[(xa+xb)/2,yF(0)+sag],[xb,LF]),cf);
+    s+=tpath(P([xb,LF],[HX(b)+d*HW,Math.max(RB,fe[1])])+(fe[1]<RB?` Q${f(HX(b)+d*HW)} ${f(RB-3)} ${f(fe[0])} ${f(fe[1])}`:''),cf);
+  }
+  // 2. zadní jehla (nit cb) stejným otvorem dopředu
+  let bx,by,ba=-90;
+  if(p2<.3){bx=L(xr0,HX(b),ease(p2/.3));by=RB-8}else{bx=HX(b);by=L(RB-8,LF+8,ease((p2-.3)/.7))}
+  if(p3>0){bx=L(HX(b),xr1,p3);ba=L(-90,90,p3)}
+  const be=eyeC(bx,by,ba);
+  if(be[1]<RB-.3) s+=tpath(Q([xa,RB],[L(xa,be[0],.5),RB-4],be),cb);
+  else{
+    s+=tpath(Q([xa,RB],[(xa+xb)/2,yB(0)-sag],[xb,RB]),cb);
+    s+=tpath(P([xb,RB],[HX(b)+d*HW,Math.min(LF,be[1])])+(be[1]>LF?` Q${f(HX(b)+d*HW)} ${f(LF+3)} ${f(be[0])} ${f(be[1])}`:''),cb);
+  }
+  s+=needleC(fx,fy,fa)+needleC(bx,by,ba);
+  return s;
+}
+// pohled na díl během tahu: nový steh na líci se objeví po průchodu přední jehly, smyčka zmizí po utažení
+function elevMove(moves,j,u,o={}){
+  const [a,b]=moves[j], d=Math.sign(b-a), cf=j%2;
+  const p1=seg(u,0,.4), p2=seg(u,.45,.8), p3=es(u,.82,1);
+  let s='';
+  if(p1>.55) s+=stitchLic(a,b,cf,{sag:(1-p3)*1.6});
+  // přední jehla a nit k ní (vpředu), dokud neprojde
+  if(p1<.6){const tx=L(HX(a)+d*3,HX(b),ease(seg(p1,0,.45))), ty=SEAM+L(6,0,ease(seg(p1,0,.45)));
+    s+=tpath(Q([HX(a),SEAM],[L(HX(a),tx,.5),SEAM+6],eyeOf9(tx,ty)),cf);
+    s+=needle(tx,ty,58,9,1-seg(p1,.45,.6));}
+  // zadní jehla vyjde stejným otvorem dopředu – nad nití
+  if(p2>.3){const e=ease(seg(p2,.3,1)); const tx=HX(b)+.5*K*.3, ty=SEAM-.55*K*.6;
+    const nx=L(tx,HX(b)+d*3.2,p3), ny=L(ty,SEAM+6,p3);
+    s+=needle(nx,ny,L(-40,58,p3)+0,L(2,9,e));
+    if(p3>0) s+=tpath(Q([HX(b),SEAM],[HX(b),SEAM+3],eyeOf9(nx,ny)),1-cf);
+  }
+  return s;
+}
+function elevRest(b,dn,cFront){const x=HX(b)+dn*3.2,y=SEAM+6;const e=eyeOf9(x,y);return tpath(Q([HX(b),SEAM],[HX(b)+dn*.5,SEAM+3],e),cFront)+needle(x,y,58,9)}
+const eyeOf9=(x,y)=>[x+Math.cos(58*Math.PI/180)*7.6,y+Math.sin(58*Math.PI/180)*7.6];
+
+// ---------- rám pro kroky šití ----------
+// moves: celá řada tahů; n: hotové tahy; cur: průběh tahu n (0 = ještě nezačal)
+function seamScene(moves,n,cur,o={}){
+  let el=piece('lic',o);
+  for(let j=0;j<n;j++){const [a,b]=moves[j];el+=stitchLic(a,b,j%2,{hi:o.hiBack&&o.hiBack.includes(j)})}
+  let sc=secBase(o)+secThreads(moves,n);
+  if(cur>0&&n<moves.length){el+=elevMove(moves,n,cur);sc+=secMove(moves,n,cur)}
+  else if(n>0&&o.rest!==false){const [a,b]=moves[n-1];const dn=n<moves.length?Math.sign(moves[n][1]-moves[n][0]):Math.sign(b-a);el+=elevRest(b,dn,n%2);sc+=secRest(b,dn,n%2,o.restO||{})}
+  return clipMain(el+sc)+secTag();
+}
+
+// ---------- kroky ----------
+const PARTS={A:'Nit a jehly',B:'Uchycení dílu',C:'Začátek',D:'Rytmus stehu',E:'Zpětné stehy',F:'Konce nitě',G:'Kontrola'};
+const S=[];
+const add=(part,title,body,dur,draw,side,tip,src)=>S.push({part,title,body,dur,draw,side,tip,src});
+const FWD=Array.from({length:NV-1},(_,i)=>[i,i+1]);   // tahy 0→1 … 6→7
+
+// ---------- A: nit a jehly ----------
+add('A','Odměřte nit','Na trénink v lekci 4 ustřihněte asi 60 cm nitě (lekce 1 i 4). Na pouzdro v lekci 6 asi 1 m. Obojí sedí s pravidlem z návodu „Kolik nitě na šev“: 4 × délka švu + 25–30 cm rezervy, přes tři vrstvy 5 ×. Nit je voskovaný polyester 0,6 mm.',7600,t=>{
+  const k=.075, x0=6;   // 1 cm = 0,75 j. (obě řady ve stejném měřítku)
+  let s='';
+  const row=(y,seamCm,lessonCm,title,lessonTxt,p)=>{
+    let r=pill(x0,y-12,title,'t');
+    const a=x0+4*seamCm*10*k, b1=a+250*k, b2=a+300*k;
+    const w=e=>x0+(e-x0)*p;
+    for(let i=0;i<4;i++){const xs=x0+i*seamCm*10*k, xe=x0+(i+1)*seamCm*10*k;if(p>0)r+=`<rect x="${f(Math.min(w(xs),w(xe)))}" y="${y-1.6}" width="${f(Math.max(0,w(xe)-w(xs)-.4))}" height="3.2" rx=".8" fill="var(--thread)" stroke="var(--thread-d)" stroke-width=".3"/>`}
+    if(p>.99) r+=`<rect x="${f(a)}" y="${y-1.6}" width="${f(b2-a)}" height="3.2" rx=".8" fill="none" stroke="var(--thread-d)" stroke-width=".3" stroke-dasharray="1 .7"/><path d="M${f(b1)} ${y-2.6} v5.2" stroke="var(--thread-d)" stroke-width=".3"/>`;
+    r+=lbl(x0,y+6,`4 × ${String(seamCm).replace('.',',')} cm`,'ts')+(p>.99?lbl(b2,y+6,'+ 25–30 cm','ts','end'):'');
+    const lx=x0+lessonCm*10*k;
+    if(p>.99) r+=`<path d="M${f(lx)} ${y-4} v8" stroke="var(--ok)" stroke-width=".55"/>`+lbl(lx,y-5,lessonTxt,'tok','end');
+    return r;
+  };
+  s+=row(24,8,60,'trénink: šev podél odřezku 8 cm','60 cm',es(t,.05,.35));
+  s+=row(56,18,100,'pouzdro: tři strany ≈ 18 cm','1 m',es(t,.4,.7));
+  s+=`<g opacity="${f(seg(t,.78,.9))}">${pill(4,82,'raději o kus delší než kratší','t')}</g>`;
+  let ib=notes([['projekt 01','t'],['lekce 1 a 4:'],['asi 60 cm'],['lekce 6:'],['asi 1 m'],['','ts'],['projekt 02:','t'],['asi 0,8 m'],['projekt 03:','t'],['4 × šev + 25–30'],['','ts'],['návod: přes','t'],['3 vrstvy 5 ×']],16,5.2);
+  return s+inset('NIT 0,6 MM',ib);
+},null,'Tip (lekce to neuvádí): délku švu odřezku lekce neuvádí, 8 cm je odhad podle delší hrany odřezku 40 × 80 mm, podél které se lepí. Pouzdro: tři šité strany měří dohromady asi 18 cm (seznam vybavení i návod).','projekt 01 · lekce 1 krok 4, lekce 4 a 6 materiál · návod Kolik nitě na šev');
+
+// jehla 48 mm vodorovně, hrot vlevo; 1 mm = 1,15 j.
+const NK=1.15, NTIP=6, NBUTT=NTIP+48*NK, NY=40, EYEX=NBUTT-3.2, TAIL=40*NK;
+function bigNeedle(){return `<path d="M${NTIP} ${NY} L${NTIP+4} ${NY-.5} L${f(NBUTT)} ${NY-.5} Q${f(NBUTT+.6)} ${NY} ${f(NBUTT)} ${NY+.5} L${NTIP+4} ${NY+.5} Z" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".25"/><rect x="${f(EYEX-2.2)}" y="${NY-.28}" width="4.4" height=".56" rx=".28" fill="var(--stage)" stroke="var(--steel-d)" stroke-width=".15"/>`}
+function needleLabels(){return pill(NTIP-1,NY+8,'tupý hrot','ts')+pill(EYEX,NY+8,'očko','ts','middle')+`<path d="M${NTIP} ${NY+11} H${f(NBUTT)}" stroke="var(--muted)" stroke-width=".25"/><path d="M${NTIP} ${NY+10} v2 M${f(NBUTT)} ${NY+10} v2" stroke="var(--muted)" stroke-width=".25"/>`+lbl((NTIP+NBUTT)/2,NY+15,'jehla 48 mm (v měřítku)','ts','middle')}
+add('A','Konec zploštěte a protáhněte očkem','Konec nitě zploštěte mezi prsty a protáhněte očkem sedlářské jehly. Jehly jsou tupé sedlářské, k niti 0,6 mm (např. John James 004, 48 mm): tupá špička projde otvorem a nezachytí kůži ani nit druhé jehly.',7600,t=>{
+  let s=bigNeedle();
+  const fl=es(t,.05,.3), thr=es(t,.4,.85);
+  // dlouhá nit přichází zprava zdola, konec jde skrz očko a pokračuje doleva
+  const endX=L(EYEX+10,EYEX-TAIL,thr), endY=L(NY+6,NY-2.2,thr);
+  const through=endX<EYEX;
+  let d=`M${f(96)} ${f(NY+12)} Q${f(EYEX+6)} ${f(NY+9)} ${f(through?EYEX:endX)} ${f(through?NY:endY)}`;
+  if(through) d+=` Q${f(EYEX-4)} ${f(NY-2.2)} ${f(endX)} ${f(NY-2.2)}`;
+  s+=tpath(d,0,TH*NK);
+  if(through) s+=`<rect x="${f(EYEX-2.2)}" y="${NY-.28}" width="4.4" height=".56" rx=".28" fill="none" stroke="var(--steel-d)" stroke-width=".15"/>`;
+  // zploštěný konec
+  if(fl>0) s+=`<ellipse cx="${f(endX)}" cy="${f(through?NY-2.2:endY)}" rx="${f(L(.4,1.1,fl))}" ry="${f(L(.4,.22,fl))}" fill="var(--thread)" stroke="var(--thread-d)" stroke-width=".2"/>`;
+  if(t<.42){s+=finger(endX-.5,(through?NY-2.2:endY)-4.4,0,1-seg(t,.36,.42))+finger(endX+.5,(through?NY-2.2:endY)+4.4,180,1-seg(t,.36,.42))}
+  s+=needleLabels();
+  if(t>.2&&t<.42) s+=pill(4,20,'zploštit mezi prsty','t');
+  if(t>=.42) s+=pill(4,20,'konec protáhnout očkem','t');
+  if(t>.9) s+=pill(4,82,'nit je v očku – zatím volně','tok');
+  let ib=notes([['tupé sedlářské','t'],['k niti 0,6 mm'],['John James 004:'],['48 mm, Ø 0,86'],['','ts'],['kupte 4 –','t'],['šijete dvěma,'],['dvě do zálohy'],['','ts'],['ostré jehly z','ta'],['galanterie','ta'],['propíchnou nit','ta']],16,5.2);
+  return clipMain(s)+inset('JEHLY',ib);
+},null,'Tip (lekce to neuvádí): jak dlouhý konec očkem protáhnout, lekce neuvádí – musí být delší než 3 cm, aby šel v dalším kroku propíchnout.','projekt 01 · lekce 1 krok 4 · vybavení: sedlářské jehly');
+
+add('A','Propíchněte nit 3 cm od konce a přetáhněte smyčku','Jehlou propíchněte nit asi 3 cm od konce a přetáhněte smyčku přes jehlu. Nit tak drží a nevyklouzne.',9000,t=>{
+  let s=bigNeedle();
+  const pierce=es(t,.08,.4), slide=es(t,.5,.92);
+  // značka 3 cm od konce na krátkém konci; hrot jehly jí projde, pak smyčka sjede k očku
+  const tailY=NY-2.2, endX0=EYEX-TAIL, mark0=endX0+30*NK;   // značka 3 cm od konce
+  const mx=L(L(mark0,NTIP+2,pierce),EYEX-2.8,slide);       // poloha propíchnutého místa na jehle
+  const my=L(tailY,NY,pierce);
+  // dlouhá nit + očko
+  let d=`M96 ${NY+12} Q${f(EYEX+6)} ${f(NY+9)} ${f(EYEX)} ${NY}`;
+  // krátký konec: z očka smyčkou k propíchnutému místu
+  d+=` Q${f(L(EYEX-4,(EYEX+mx)/2,pierce))} ${f(L(tailY,NY-6*(1-slide)-1.2,pierce))} ${f(mx)} ${f(my)}`;
+  s+=tpath(d,0,TH*NK);
+  // zbylé 3 cm za propíchnutím
+  const ex=mx+L(-30*NK,15,pierce), ey=my+L(0,30,pierce);
+  s+=tpath(Q([mx,my],[L((mx+ex)/2,mx+3,pierce),L(tailY,my+8,pierce)],[ex,ey]),0,TH*NK);
+  s+=`<circle cx="${f(mx)}" cy="${f(my)}" r="1.05" fill="none" stroke="var(--accent)" stroke-width=".35" opacity="${f(1-slide*.6)}"/>`;
+  if(pierce<.05) s+=`<path d="M${f(mark0)} ${f(tailY-2)} v-3" stroke="var(--accent)" stroke-width=".35"/>`+pill(mark0,tailY-6,'3 cm od konce','ta','middle');
+  if(pierce>.05&&slide<.05) s+=pill(4,20,'hrotem propíchnout nit','t');
+  if(slide>=.05) s+=pill(4,20,'smyčku přetáhnout přes jehlu k očku','t');
+  if(slide>.95) s+=pill(4,82,'nit drží a nevyklouzne','tok')+pill(EYEX,NY-7,'zámek u očka','ta','middle');
+  s+=needleLabels();
+  let ib=notes([['1. propíchnout','t'],['nit asi 3 cm','t'],['od konce','t'],['','ts'],['2. smyčku přes','t'],['jehlu k očku','t'],['','ts'],['nit pak drží','tok'],['bez uzlu','tok']],16,5.2);
+  return clipMain(s)+inset('ZÁMEK',ib);
+},null,'Tip (lekce to neuvádí): lekce říká jen „asi 3 cm od konce“; animace propichuje krátký konec, který prošel očkem.','projekt 01 · lekce 1 krok 4 (video „Zblízka: navlečení voskované nitě do sedlářské jehly a zajištění propíchnutím nitě“ se připravuje)');
+
+add('A','Totéž na druhém konci a zkouška tahem','Stejně navlékněte a zajistěte druhou jehlu na druhém konci nitě. Kontrolní bod lekce 1: nit je navlečená v obou jehlách a drží, když za ni lehce zatáhnete.',6800,t=>{
+  let s='';
+  const y=40, p=es(t,.08,.45), pull=es(t,.6,.8)*(1-es(t,.85,.95));
+  const xl=L(30,14,p)-pull*1.5, xr=L(54,70,p)+pull*1.5;
+  s+=tpath(Q([xl+12,y],[42,y+10-pull*8],[xr-12,y]),0,TH*NK);
+  const nd=(x,a)=>needle(x,y,a,12);
+  s+=nd(xl,0)+nd(xr,180);
+  s+=`<circle cx="${f(xl+10.6)}" cy="${y}" r="1.2" fill="none" stroke="var(--accent)" stroke-width=".3"/><circle cx="${f(xr-10.6)}" cy="${y}" r="1.2" fill="none" stroke="var(--accent)" stroke-width=".3"/>`;
+  if(pull>.05) s+=arrow(xl-1,y,xl-6,y)+arrow(xr+1,y,xr+6,y);
+  s+=pill(42,22,'jedna nit, jehla na každém konci','t','middle');
+  if(t>.6) s+=pill(42,64,'lehce zatáhnout: drží','tok','middle');
+  let ib=notes([['kontrolní bod','t'],['lekce 1:','t'],['nit v obou'],['jehlách drží,'],['když za ni'],['lehce zatáhnete']],16,5.2);
+  ib+=`<g opacity="${f(seg(t,.9,1))}">${tick(92,56)}${lbl(96,57.5,'hotovo','tok')}</g>`;
+  return clipMain(s)+inset('KONTROLA',ib);
+},null,null,'projekt 01 · lekce 1 krok 4 a kontrolní bod „Mám nit navlečenou v obou jehlách…“');
+
+// ---------- B: uchycení dílu ----------
+add('B','Mezi koleny, linie otvorů nahoru','Šije se dvěma jehlami současně, takže na držení dílu nezbývá ruka. Nejjednodušší je sevřít odřezek mezi kolena tak, aby linie otvorů koukala nahoru; u tak malých dílů to stačí a takhle šije většina začátečníků.',7200,t=>{
+  let s='';
+  const sq=es(t,.15,.45);
+  // kolena zepředu (schéma)
+  const kx=L(10,13.5,sq);
+  s+=`<path d="M${f(42-kx-16)} 88 L${f(42-kx-14)} 50 Q${f(42-kx-14)} 38 ${f(42-kx-4)} 38 Q${f(42-kx+3)} 38 ${f(42-kx+3)} 50 L${f(42-kx+4)} 88 Z" fill="var(--cloth)" stroke="var(--cloth-d)" stroke-width=".4"/>`;
+  s+=`<path d="M${f(42+kx+16)} 88 L${f(42+kx+14)} 50 Q${f(42+kx+14)} 38 ${f(42+kx+4)} 38 Q${f(42+kx-3)} 38 ${f(42+kx-3)} 50 L${f(42+kx-4)} 88 Z" fill="var(--cloth)" stroke="var(--cloth-d)" stroke-width=".4"/>`;
+  // odřezek 80 × 40 mm z boku hranou nahoru, mezi koleny (1 mm = 0,5 j.)
+  const top=L(30,24,sq);
+  s+=`<rect x="${f(42-kx+3)}" y="${f(top)}" width="${f(2*kx-6)}" height="22" fill="url(#licG)" stroke="var(--lic-d)" stroke-width=".35"/>`;
+  for(let x=42-kx+5;x<42+kx-4;x+=2) s+=slit(x,top+1.75,.5,.3);
+  s+=`<path d="M${f(42-kx+3)} ${f(top+1.75)} H${f(42+kx-3)}" stroke="var(--accent)" stroke-width=".3" stroke-dasharray="1 .8" opacity="${f(seg(t,.5,.6))}"/>`;
+  if(t>.5) s+=pill(42,top-4,'linie otvorů nahoru','ta','middle');
+  if(t>.62) s+=arrow(42-kx-18,52,42-kx-15,52,'var(--ink)',.45,'arI')+arrow(42+kx+18,52,42+kx+15,52,'var(--ink)',.45,'arI')+pill(42,70,'sevřít koleny','t','middle');
+  s+=pill(4,87,'schéma, ne v měřítku','ts');
+  let ib=notes([['šijí se dvěma','t'],['jehlami najednou','t'],['– na držení','t'],['nezbývá ruka','t'],['','ts'],['díl musí držet','ta'],['pevně, nesmí se','ta'],['mezi stehy','ta'],['posouvat','ta']],16,5.2);
+  return clipMain(s)+inset('UCHYCENÍ',ib);
+},null,null,'projekt 01 · lekce 4 krok „Uchyťte si díl“');
+
+add('B','Nebo destičky a svěrka ke stolu','Pohodlnější je sevřít díl mezi dvě dřevěné destičky a celé to upnout truhlářskou svěrkou ke stolu. Hotová pomůcka se jmenuje sedlářský koník (seznam vybavení, „Kup později“); na pouzdro ho nepotřebujete, na dlouhé švy pásku nebo peněženky se vyplatí. Ať zvolíte cokoli, díl musí držet pevně a nesmí se mezi stehy posouvat, jinak nebudou stehy stejně utažené.',8400,t=>{
+  let s='';
+  const c=es(t,.15,.5);
+  // bok: deska stolu, na ní spodní destička, díl, horní destička; svěrka shora i zespodu
+  s+=`<rect x="2" y="56" width="58" height="5" fill="var(--table)" stroke="var(--table-d)" stroke-width=".35"/>`;
+  s+=`<rect x="22" y="51.6" width="42" height="4.4" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".3"/>`;
+  s+=`<rect x="22" y="${f(50.4)}" width="56" height="1.2" fill="var(--lic)" stroke="var(--lic-d)" stroke-width=".2"/>`;
+  const tb=L(42,46,c);
+  s+=`<rect x="22" y="${f(tb)}" width="42" height="4.4" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".3"/>`;
+  // svěrka (F)
+  const jy=tb-1.6;
+  s+=`<rect x="30" y="${f(jy-1.4)}" width="10" height="1.6" rx=".4" fill="var(--clip)"/><rect x="30" y="61" width="10" height="1.6" rx=".4" fill="var(--clip)"/><rect x="28" y="${f(jy-1.4)}" width="2" height="${f(64.2-jy)}" fill="var(--clip)"/>`;
+  s+=`<path d="M36 ${f(jy-1.4)} v-6" stroke="var(--clip)" stroke-width=".9"/><rect x="33" y="${f(jy-10)}" width="6" height="2.4" rx=".6" fill="var(--clip)"/>`;
+  for(let x=66;x<77;x+=2) s+=slit(x,51,.45,.3);
+  if(t>.55) s+=pill(83,42,'díl přečnívá, otvory volné','ts','end')+lead(72,43,72,50.5);
+  if(t>.35) s+=pill(4,30,'truhlářská svěrka','t')+pill(4,72,'stůl','ts')+pill(66,66,'dvě dřevěné destičky','ts','middle');
+  s+=pill(4,87,'schéma – jedno z možných uspořádání','ts');
+  let ib=notes([['sedlářský koník','t'],['= hotová svěrka','ts'],['na šití;'],['seznam vybavení'],['„Kup později“'],['','ts'],['na pouzdro ho','t'],['nepotřebujete','t'],['(nejdelší šev'],['100 mm)'],['na pásek nebo'],['peněženku se'],['vyplatí']],16,4.9);
+  return clipMain(s)+inset('POMŮCKY',ib);
+},null,'Tip (lekce to neuvádí): jak destičky a svěrku ke stolu postavit, lekce neuvádí; obrázek ukazuje jedno z možných uspořádání.','projekt 01 · lekce 4 krok „Uchyťte si díl“ · vybavení: sedlářský koník');
+
+// ---------- C: začátek ----------
+add('C','První otvor: stejná délka nitě na obou stranách','Jehlu protáhněte prvním otvorem tak, aby na obou stranách zůstala stejná délka nitě. Teď máte jednu jehlu vpředu, jednu vzadu. Díl je slepený rub jednoho odřezku na líc druhého, linie stehu 3,5 mm od hrany na dílu, který bude vidět, otvory proděrované skrz obě vrstvy najednou.',9000,t=>{
+  const p=es(t,.05,.55), eq=es(t,.6,.9);
+  let el=piece('lic',{line:true});
+  let sc=secBase();
+  // jehla prochází otvorem 0 zepředu dozadu, nit za ní; pak se vyrovná
+  if(p<1){const cy=L(LF+10,RB-8,p), ey=cy+NL/2-1.4;sc+=tpath(P([HX(0),Math.min(LF+16,ey)],[HX(0),LF+16]),0)+needleC(HX(0),cy,90);
+    if(ey<LF) sc+=tpath(P([HX(0),ey],[HX(0),LF]),1);
+    el+=tpath(Q([HX(0),SEAM],[HX(0)-2,SEAM+6],[HX(0)-4,SEAM+14]),0,TW,1-p);}
+  else{sc+=tpath(P([HX(0),RB],[HX(0),MID]),1)+tpath(P([HX(0),MID],[HX(0),LF]),0)+secRest(0,1,0);el+=elevRest(0,1,0);}
+  let s=clipMain(el+sc)+secTag();
+  // poloviny nitě
+  const ib0=`<path d="M92 ${f(46)} H${f(L(126,110,eq))}" stroke="var(--thread2-d)" stroke-width="1.8" stroke-linecap="round"/><path d="M92 ${f(46)} H${f(L(126,110,eq))}" stroke="var(--thread2)" stroke-width="1.2" stroke-linecap="round"/>`+
+    `<path d="M92 ${f(56)} H${f(L(100,110,eq))}" stroke="var(--thread-d)" stroke-width="1.8" stroke-linecap="round"/><path d="M92 ${f(56)} H${f(L(100,110,eq))}" stroke="var(--thread)" stroke-width="1.2" stroke-linecap="round"/>`;
+  let ib=notes([['linie stehu','t'],['3,5 mm od hrany'],['rozteč 3,85–4 mm']],16,5.2)+lbl(89,42,'vzadu (rub)','ts')+lbl(89,52.5,'vpředu (líc)','ts')+ib0;
+  ib+=`<g opacity="${f(seg(t,.88,.96))}">${tick(92,66)}${lbl(96,67.5,'½ a ½','tok')}${lbl(89,74,'jedna jehla vpředu,','ts')}${lbl(89,78.5,'jedna vzadu','ts')}</g>`;
+  s+=inset('PRVNÍ OTVOR',ib);
+  s+=viewTag('POHLED NA LÍC · v měřítku');
+  return s;
+},{v:'LÍC',sub:'odřezek stojí hranou nahoru'},'Na pouzdře v lekci 6 začnete dvěma zpětnými stehy v horním rohu – viz část E.','projekt 01 · lekce 4 kroky „Proděrujte obě vrstvy najednou“ a „Začněte steh“');
+
+// ---------- D: rytmus ----------
+add('D','1. Přední jehla dalším otvorem dozadu','Přední jehlu prostrčte dalším otvorem dozadu a nit protáhněte.',8000,t=>{
+  const u=L(0,.42,es(t,.05,.95));
+  let s=seamScene(FWD,0,0,{rest:false});
+  // přepiš: jen první tah do fáze 1
+  s=clipMain(piece('lic')+elevMove(FWD,0,u)+secBase()+tpath(P([HX(0),RB],[HX(0),MID]),1)+tpath(P([HX(0),MID],[HX(0),LF]),0)+secMove(FWD,0,u))+secTag();
+  s+=viewTag('POHLED NA LÍC · v měřítku');
+  if(t>.85) s+=pill(4,87,'přední nit je teď vzadu','t');
+  let ib=notes([['pořadí v každém','t'],['otvoru:','t'],['','ts'],['1. přední jehla','ta'],['   dozadu','ta'],['2. zadní jehla'],['   dopředu'],['3. utáhnout'],['','ts'],['vždy stejně','t']],16,5.2);
+  return s+inset('POŘADÍ',ib);
+},{v:'LÍC',sub:'přední jehla'},'Tip (lekce to neuvádí): animace se dívá na líc, takže „přední“ jehla je ta, která je právě na straně líce (u vás).','projekt 01 · lekce 4 krok „Rytmus stehu“');
+
+add('D','2. Zadní jehla stejným otvorem dopředu – nad nití','Zadní jehlu prostrčte stejným otvorem dopředu, ale nad nití, která už v otvoru je, ne pod ní. Nit nepropíchněte: zasekne se a roztřepí. Zadní jehla jde vždy nad přední nití.',10000,t=>{
+  const u=L(.42,.8,es(t,.05,.85));
+  let s=clipMain(piece('lic')+elevMove(FWD,0,u)+secBase()+tpath(P([HX(0),RB],[HX(0),MID]),1)+tpath(P([HX(0),MID],[HX(0),LF]),0)+secMove(FWD,0,u))+secTag();
+  s+=viewTag('POHLED NA LÍC · v měřítku');
+  // detail otvoru z rubu (zvětšeno)
+  const cx=110, cy=40, e=es(t,.2,.7);
+  let ib=`<rect x="89" y="13" width="41" height="44" rx="1.5" fill="url(#rubP)" stroke="var(--rub-d)" stroke-width=".3"/>`;
+  // z rubu je šikmý otvor zrcadlově „\“ (z líce „/“): otvor, nit i jehla se kreslí zrcadleně kolem cx
+  let mh=`<path d="M${cx-3.2} ${cy+3.2} L${cx+3.2} ${cy-3.2}" stroke="var(--hole)" stroke-width="2.6" stroke-linecap="round"/>`;
+  // nit vychází spodní částí otvoru a vede dolů
+  mh+=tpath(Q([cx-1.3,cy+1.3],[cx-1,cy+8],[cx-6,cy+15]),0,1.5);
+  // zadní jehla míří nad nit
+  const tipx=L(cx+12,cx+1.2,e), tipy=L(cy-10,cy-1.2,e);
+  mh+=G(`translate(${f(tipx)} ${f(tipy)}) rotate(-40)`,`<path d="M0 0 L16 0" stroke="var(--steel-d)" stroke-width="1.1" stroke-linecap="round"/><ellipse cx="14" cy="0" rx="1.6" ry=".5" fill="none" stroke="var(--steel)" stroke-width=".3"/>`);
+  mh+=tpath(Q([tipx+11,tipy-9],[tipx+15,tipy-6],[128,cy-20]),1,1.5);
+  ib+=G(`translate(${2*cx} 0) scale(-1 1)`,mh);
+  ib+=pill(128,18.5,'k hraně ↑','ts','end');
+  ib+=`<g opacity="${f(seg(t,.65,.75))}">${pill(128,cy+11,'nit v otvoru','ts','end')}${pill(108,cy-14,'nad nití','ta','middle')}</g>`;
+  ib+=`<g opacity="${f(seg(t,.78,.88))}">${cross(95,64,1.4,.6)}${lbl(98.5,65.5,'ne pod nití','ta')}${cross(95,71,1.4,.6)}${lbl(98.5,72.5,'nepropíchnout','ta')}${lbl(98.5,77,'nit','ta')}</g>`;
+  ib+=pill(91,55,'zvětšeno','ts');
+  s+=inset('OTVOR Z RUBU',ib);
+  return s;
+},{v:'LÍC',sub:'zadní jehla'},'Tip (lekce to neuvádí): „nad“ animace kreslí na straně hrany, když díl drží linii otvorů nahoru. Lekce to víc neupřesňuje.','projekt 01 · lekce 4 krok „Rytmus stehu“ a časté chyby');
+
+add('D','3. Obě nitě utáhněte stejnou silou','Obě nitě utáhněte stejnou silou. Nestejné utažení je častá chyba: jedna strana pak má smyčky. Kontrolní bod: stehy jsou stejně utažené, žádný netvoří smyčku.',7600,t=>{
+  const u=L(.8,1,es(t,.1,.7));
+  let s=clipMain(piece('lic')+elevMove(FWD,0,u)+secBase()+tpath(P([HX(0),RB],[HX(0),MID]),1)+tpath(P([HX(0),MID],[HX(0),LF]),0)+secMove(FWD,0,u))+secTag();
+  s+=viewTag('POHLED NA LÍC · v měřítku');
+  const pa=seg(t,.15,.7);
+  if(pa>0&&pa<1){s+=arrow(HX(1)+5,LF+12,HX(1)+10,LF+16,'var(--accent)',.5)+arrow(HX(1)+5,RB-12,HX(1)+10,RB-16,'var(--accent)',.5)}
+  if(t>.75) s+=pill(4,87,'oba stehy dotažené, bez smyčky','tok');
+  // malá ukázka smyčky
+  let ib=notes([['stejnou silou','t'],['na obě nitě','t']],16,5.2);
+  const row=(y,loop)=>{let r=`<rect x="90" y="${y-3}" width="40" height="7" fill="url(#licG)" stroke="var(--lic-d)" stroke-width=".25"/>`;for(let i=0;i<6;i++)r+=slit(93+i*6.8,y,.8,.35);for(let i=0;i<5;i++){const x1=93+i*6.8+.6,x2=93+(i+1)*6.8-.6;const sg=loop&&i===2?3.2:0;r+=tpath(sg?Q([x1,y+.6],[(x1+x2)/2,y+sg*1.6],[x2,y-.6]):P([x1,y+.6],[x2,y-.6]),i%2,1.1)}return r};
+  ib+=row(36,false)+tick(92,46)+lbl(96,47.5,'dobře','tok');
+  ib+=row(58,true)+cross(93,69,1.2,.5)+lbl(96,70.5,'smyčka =','ta')+lbl(96,75,'nestejně utažené','ta');
+  return s+inset('UTAŽENÍ',ib);
+},{v:'LÍC',sub:'utáhnout'},null,'projekt 01 · lekce 4 krok „Rytmus stehu“, kontrolní bod a časté chyby');
+
+add('D','Opakujte: vždy stejné pořadí a stejná strana','Další otvor stejně: přední jehla dozadu, zadní stejným otvorem dopředu nad nití, obě utáhnout. Vždy stejné pořadí a stejná strana: jen tak jsou stehy na obou stranách stejně skloněné.',14000,t=>{
+  const v=es(t,.02,.94)*(FWD.length-1)+1, n=Math.floor(v), fr=v-n;
+  let s=seamScene(FWD,Math.min(n,FWD.length),n<FWD.length?Math.max(fr,.001):0);
+  s+=viewTag('POHLED NA LÍC · v měřítku');
+  s+=pill(4,87,`stehy: ${Math.min(n,FWD.length)} · všechny stejně skloněné`,'t');
+  let ib=notes([['v každém otvoru','t'],['1. přední dozadu'],['2. zadní dopředu,'],['   nad nití'],['3. utáhnout'],['','ts'],['jehly se po','t'],['každém stehu','t'],['vymění stranou','t'],['','ts'],['prohodit pořadí','ta'],['= steh leží','ta'],['obráceně','ta']],16,5);
+  return s+inset('RYTMUS',ib);
+},{v:'LÍC',sub:'řada stehů'},'Tip (lekce to neuvádí): po každém stehu si jehly vymění strany (přední jde dozadu, zadní dopředu), takže „přední“ je pokaždé ta, která je zrovna vpředu.','projekt 01 · lekce 4 krok „Rytmus stehu“ a časté chyby');
+
+add('D','Řez: dvě nitě se v každém otvoru kříží','Každým otvorem projdou obě poloviny nitě proti sobě a uvnitř se zkříží. Proto ručně šitá kůže drží: když se jedna nit přetrhne, druhá drží dál. Na líci i rubu leží mezi otvory vždy jedna polovina nitě.',9000,t=>{
+  // zvětšený řez 3 otvorů
+  const k=7.5, ky=11, x0=8, yr=30, ym=yr+TL*ky, yl=yr+2*TL*ky, hw=1.4, tw=TH*k*.55;
+  const X=i=>x0+6+i*PITCH*k;
+  const on=es(t,.05,.6);
+  let s=`<rect x="${x0-4}" y="${yr}" width="80" height="${f(ym-yr)}" fill="url(#rubP)" stroke="var(--rub-d)" stroke-width=".3"/><rect x="${x0-4}" y="${f(ym-.9)}" width="80" height=".9" fill="var(--lic)"/>`;
+  s+=`<rect x="${x0-4}" y="${f(ym)}" width="80" height="${f(yl-ym)}" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".3"/><rect x="${x0-4}" y="${f(yl-1)}" width="80" height="1" fill="var(--lic)"/><rect x="${x0-4}" y="${f(ym-.35)}" width="80" height=".7" fill="var(--glue)"/>`;
+  for(let i=0;i<3;i++) s+=`<rect x="${f(X(i)-hw)}" y="${yr}" width="${f(2*hw)}" height="${f(yl-yr)}" fill="var(--hole)"/>`;
+  const yf=yl+tw/2+.2, yb=yr-tw/2-.2, n=Math.round(on*4);
+  // úseky -1→0, 0→1, 1→2, 2→3 (kraje zasahují mimo výřez)
+  const Xs=i=>i<0?x0-6:i>2?x0+90:X(i);
+  for(let j=0;j<4;j++){const a=j-1,b=j,ti=j%2;const op=j<n+1?1:.0;
+    if(op>0){s+=tpath(P([Xs(a)+hw,yf],[Xs(b)-hw,yf]),ti,tw)+tpath(P([Xs(a)+hw,yb],[Xs(b)-hw,yb]),1-ti,tw);
+      if(b<=2) s+=tpath(P([X(b)-hw,yf],[X(b)+hw,yb]),ti,tw)+tpath(P([X(b)-hw,yb],[X(b)+hw,yf]),1-ti,tw);}}
+  if(t>.6){s+=pill(X(1),yr-7,'obě nitě se kříží v otvoru','ta','middle')+lead(X(1),yr-6,X(1),(yr+yl)/2)}
+  s+=viewTag('ŘEZ PODÉL ŠVU · zvětšeno')+pill(1.5,yr-2.5,'rub','ts')+pill(1.5,yl+8,'líc','ts');
+  s+=pill(4,87,'2 vrstvy po 1,2 mm, nit 0,6 mm, rozteč 4 mm','ts');
+  let ib=notes([['dvě nitě','t'],['každým otvorem','t'],['proti sobě','t'],['','ts'],['když se jedna'],['přetrhne,'],['druhá drží dál'],['','ts'],['barvy = dvě','ts'],['poloviny jedné','ts'],['nitě','ts']],16,5.2);
+  return clipMain(s)+inset('PROČ DRŽÍ',ib);
+},{v:'ŘEZ',sub:'zvětšeno'},null,'projekt 01 · úvod lekce 4 · ilustrace „Schéma sedlářského stehu“');
+
+// ---------- E: zpětné stehy ----------
+const ENDM=[...FWD,[7,6],[6,5]];
+add('E','Na konci prošijte zpět dva otvory','Na konci řady prošijte zpět dva otvory. Kontrolní bod: konec je ukončený zpětnými stehy.',11000,t=>{
+  const v=7+es(t,.05,.9)*2, n=Math.floor(v), fr=v-n;
+  let s=seamScene(ENDM,Math.min(n,9),n<9?Math.max(fr,.001):0,{leftEnd:false,rightEnd:true,hiBack:[7,8]});
+  s+=viewTag('POHLED NA LÍC · konec řady');
+  if(n>=8||fr>.6) s+=pill((HX(5)+HX(7))/2,SEAM-4.5,'zpět 2 otvory','ta','middle');
+  s+=pill(4,87,n>=9?'konec zpevněný dvěma zpětnými stehy':'konec řady → zpět','t');
+  let ib=notes([['projekt 01','t'],['lekce 4: zpět','ts'],['dva otvory','ts'],['na konci','ts'],['','ts'],['lekce 6: dva','ts'],['zpětné na','ts'],['začátku i konci','ts'],['','ts'],['projekt 03:','t'],['konce 2 otvory','ts'],['zpět','ts']],16,5);
+  return s+inset('ZPĚTNÉ STEHY',ib);
+},{v:'LÍC',sub:'konec řady'},'Tip (lekce to neuvádí): zpět se šije stejným rytmem, jen opačným směrem, a zpětné stehy leží přes stehy, které už tam jsou.','projekt 01 · lekce 4 krok „Ukončení“ a kontrolní bod');
+
+const STARTM=[[2,1],[1,0],...FWD];
+add('E','Zpětné stehy na začátku i na konci švu','Projekt 01, lekce 6: začněte dvěma zpětnými stehy v horním rohu, aby byl začátek zpevněný, a šijte souvisle bok, spodek, bok; rohový otvor prošijte jako každý jiný. Na konci zase dva zpětné stehy. Projekt 02 (šev dna): začátek i konec zajistit zpětnými stehy, počet lekce neuvádí. Projekt 03: u každého švu „konce 2 otvory zpět“, u boků S4 a S5 navíc zdvojit steh 60–64.',13000,t=>{
+  const v=es(t,.04,.92)*5, n=Math.floor(v), fr=v-n;
+  let s=seamScene(STARTM,Math.min(n,5),n<5?Math.max(fr,.001):0,{hiBack:[0,1]});
+  s+=viewTag('POHLED NA LÍC · začátek švu');
+  if(n>=2) s+=pill((HX(0)+HX(2))/2,SEAM+7,'2 zpětné','ta','middle');
+  s+=pill(4,87,n<2?'začátek: 2 stehy zpět k rohu':'pak dál dopředu přes ně','t');
+  let ib=notes([['01 lekce 6:','t'],['2 zpět na začátku','ts'],['i na konci','ts'],['02 lekce 7:','t'],['zpětné stehy,','ts'],['počet neuvádí','ts'],['03 všechny švy:','t'],['konce 2 otvory','ts'],['zpět; S4, S5:','ts'],['zdvojit 60–64','ts']],16,5.2);
+  return s+inset('PODLE PROJEKTU',ib);
+},{v:'LÍC',sub:'začátek švu'},'Tip (lekce to neuvádí): jak začít zpětnými stehy – nit vyrovnejte ve třetím otvoru od rohu, ušijte dva stehy zpět k rohovému otvoru a pak pokračujte dopředu přes ně. Stejně začínají animace šití v projektu 02.','projekt 01 · lekce 6 krok „Sešijte tři strany“ · projekt 02 lekce 7 · projekt 03 lekce 6, 8, 9, 11');
+
+// ---------- F: konce nitě ----------
+function rubPiece(o={}){return mir(piece('rub',{leftEnd:false,rightEnd:true}))}
+function rubStitches(n,o={}){let s='';for(let j=0;j<n;j++){const [a,b]=ENDM[j];s+=stitchRub(a,b,1-j%2,{wob:(j%3-1)*.12})}return mir(s)}
+const RX=i=>2*MIRC-HX(i);  // poloha otvoru i v zrcadleném pohledu z rubu
+add('F','Oba konce vyveďte na rub','Po zpětných stezích vyveďte oba konce nitě na rub (díl otočte rubem k sobě).',8000,t=>{
+  const p=es(t,.1,.7);
+  let s=rubPiece()+rubStitches(9);
+  // zadní konec už je na rubu; přední projde otvorem 5 dozadu
+  const x=RX(5);
+  s+=tpath(Q([x,SEAM],[x+1,SEAM+5],[x+4,SEAM+15]),1-9%2);
+  if(p>.4) s+=tpath(Q([x,SEAM],[x-1,SEAM+5],[x-4,SEAM+15]),9%2,TW,seg(p,.4,.6))+needle(x-4,SEAM+15,105,11,seg(p,.4,.6));
+  else s+=G(`translate(${f(x)} ${f(SEAM)})`,`<circle r="${f(2.2*(1-p/.4)+.6)}" fill="none" stroke="var(--accent)" stroke-width=".35"/>`);
+  s+=needle(x+4,SEAM+15,75,11);
+  s+=viewTag('POHLED NA RUB · díl otočený');
+  if(t>.75) s+=pill(4,87,'oba konce na rubu','tok');
+  let ib=notes([['líc zůstane','t'],['čistý – konce','t'],['se ukončí jen','t'],['na rubu','t']],16,5.2);
+  return clipMain(s)+inset('KONCE',ib);
+},{v:'RUB',sub:'díl otočený'},'Tip (lekce to neuvádí): přední jehlu protáhněte posledním otvorem dozadu, aby byly oba konce na rubu.','projekt 01 · lekce 4 krok „Ukončení“');
+
+add('F','Odstřihněte těsně u kůže a přimáčkněte','Oba konce na rubu těsně u kůže odstřihněte a zbytek přimáčkněte. Voskovaná nit drží bez uzlu. Kontrolní bod: nit je odstřižená na rubu.',8000,t=>{
+  const cut=es(t,.15,.45), press=es(t,.55,.85);
+  let s=rubPiece()+rubStitches(9);
+  const x=RX(5);
+  const len=L(15,.9,cut);
+  s+=tpath(Q([x,SEAM],[x+1,SEAM+len/3],[x+len*.27,SEAM+len]),0)+tpath(Q([x,SEAM],[x-1,SEAM+len/3],[x-len*.27,SEAM+len]),1);
+  // nůžky
+  if(cut<1){const o=1-seg(t,.4,.5);s+=G(`translate(${f(x+3)} ${f(SEAM+3)}) rotate(${f(L(30,10,cut))})`,`<path d="M0 0 L12 -1.2 M0 0 L12 1.2" stroke="var(--steel-d)" stroke-width=".7" stroke-linecap="round"/><circle cx="15" cy="-2.6" r="2" fill="none" stroke="var(--clip)" stroke-width=".7"/><circle cx="15" cy="2.6" r="2" fill="none" stroke="var(--clip)" stroke-width=".7"/>`,`opacity="${f(o)}"`)}
+  if(press>0&&press<1) s+=finger(x,SEAM+3+L(-6,0,press),0,1-seg(t,.85,.95));
+  s+=viewTag('POHLED NA RUB · díl otočený');
+  if(t>.88) s+=pill(4,87,'odstřiženo těsně u kůže, přimáčknuto','tok');
+  let ib=notes([['voskovaná nit','t'],['drží bez uzlu','t']],16,5.2);
+  return clipMain(s)+inset('ODSTŘIHNOUT',ib);
+},{v:'RUB',sub:'díl otočený'},null,'projekt 01 · lekce 4 krok „Ukončení“ a kontrolní bod');
+
+add('F','Polyester navíc zatavit – jen na rubu','Polyesterové nitě se dají navíc zajistit: konec dlouhý asi 2 mm krátce přiblížit k plamenu zapalovače a hned přimáčknout; roztaví se do kuličky, která z otvoru nevyklouzne. Jen na rubu a opatrně, plamen nikdy k líci kůže. Zapalovač držte dál od kůže i od zbytku nitě; stačí zlomek sekundy. Na pouzdře v lekci 6 „případně konce zatavte jako v lekci 4“.',9000,t=>{
+  const fl=seg(t,.25,.5), melt=es(t,.4,.55);
+  let s=rubPiece()+rubStitches(9);
+  const x=RX(5), le=2*K;   // konec asi 2 mm
+  if(melt<1){s+=tpath(P([x,SEAM],[x+.6*le,SEAM+le]),0,TW,1-melt)+tpath(P([x,SEAM],[x-.6*le,SEAM+le]),1,TW,1-melt)}
+  if(melt>0){s+=`<circle cx="${f(x+.9)}" cy="${f(SEAM+1.1)}" r="${f(.95*melt)}" fill="var(--thread)" stroke="var(--thread-d)" stroke-width=".25"/><circle cx="${f(x-.9)}" cy="${f(SEAM+1.1)}" r="${f(.95*melt)}" fill="var(--thread2)" stroke="var(--thread2-d)" stroke-width=".25"/>`}
+  // zapalovač a plamen
+  if(t>.15&&t<.62){const o=seg(t,.15,.22)*(1-seg(t,.55,.62));
+    s+=`<g opacity="${f(o)}"><rect x="${f(x-3)}" y="${f(SEAM+11)}" width="6" height="12" rx="1" fill="var(--lighter)"/><rect x="${f(x-2.4)}" y="${f(SEAM+9)}" width="4.8" height="2.2" fill="var(--steel)"/>`+
+      (fl>0&&fl<1?`<path d="M${f(x)} ${f(SEAM+3.6)} q-1.6 3 0 5.4 q1.6 -2.4 0 -5.4 z" fill="var(--flame)"/><path d="M${f(x)} ${f(SEAM+5.6)} q-.6 1.4 0 2.6 q.6 -1.2 0 -2.6 z" fill="var(--flame-i)"/>`:'')+`</g>`;}
+  if(t>.66&&t<.86) s+=finger(x,SEAM+3,0,1-seg(t,.8,.86));
+  s+=viewTag('POHLED NA RUB · díl otočený');
+  if(melt>.5) s+=pill(x,SEAM+8,'kulička nevyklouzne','tok','middle');
+  s+=pill(4,87,'konec asi 2 mm · zlomek sekundy','ta');
+  let ib=notes([['jen polyester','t'],['a jen na rubu','t'],['','ts'],['plamen nikdy','ta'],['k líci kůže','ta'],['','ts'],['zapalovač dál','ts'],['od kůže i od','ts'],['zbytku nitě','ts']],16,5.2);
+  return clipMain(s)+inset('ZATAVENÍ',ib);
+},{v:'RUB',sub:'díl otočený'},'Tip (lekce to neuvádí): lekce říká „těsně u kůže odstřihněte“ a zároveň „konec dlouhý asi 2 mm“ k zatavení – když budete zatavovat, nechte konce asi 2 mm.','projekt 01 · lekce 4 krok „Ukončení“ a bezpečnost · lekce 6 krok „Sešijte tři strany“');
+
+// ---------- G: kontrola ----------
+function miniRow(x,y,w,n,o={}){
+  const step=w/(n-1);let r=`<rect x="${f(x-3)}" y="${f(y-4)}" width="${f(w+6)}" height="8" fill="${o.rub?'url(#rubP)':'url(#licG)'}" stroke="${o.rub?'var(--rub-d)':'var(--lic-d)'}" stroke-width=".3"/>`;
+  for(let i=0;i<n;i++) r+=o.rub?`<path d="M${f(x+i*step-.9)} ${f(y-.9)} L${f(x+i*step+.9)} ${f(y+.9)}" stroke="var(--hole)" stroke-width=".4" stroke-linecap="round"/>`:slit(x+i*step,y,.9,.4);
+  for(let i=0;i<n-1;i++){const x1=x+i*step+.7,x2=x+(i+1)*step-.7;const bad=o.bad===i, loop=o.loop===i;
+    const dy=o.rub?(((i*7)%3)-1)*.18:.55*(bad?-1:1);
+    const d=loop?Q([x1,y+dy],[(x1+x2)/2,y+5],[x2,y-dy]):P([x1,y+dy],[x2,y-dy]);
+    r+=tpath(d,i%2,1.25);
+    if(bad) r+=`<circle cx="${f((x1+x2)/2)}" cy="${y}" r="3" fill="none" stroke="var(--accent)" stroke-width=".4"/>`;
+    if(loop) r+=`<circle cx="${f((x1+x2)/2)}" cy="${f(y+2.5)}" r="3.2" fill="none" stroke="var(--accent)" stroke-width=".4"/>`;}
+  return r;
+}
+add('G','Líc: všechny stehy stejně skloněné a stejně utažené','Steh na líci má mít všechny stehy stejně skloněné a stejně utažené (kontrolní body lekce 4). Prohození pořadí jehel v jednom otvoru: steh tam leží obráceně a je to vidět. Nestejné utažení: jedna strana má smyčky.',8400,t=>{
+  let s='';
+  const a=seg(t,.05,.2), b=seg(t,.35,.5);
+  s+=`<g opacity="${f(a)}">${pill(6,20,'dobře','tok')}${miniRow(8,29,70,10)}${tick(80,21)}</g>`;
+  s+=`<g opacity="${f(b)}">${pill(6,44,'chyba: prohozené pořadí a smyčka','ta')}${miniRow(8,54,70,10,{bad:3,loop:6})}</g>`;
+  if(t>.55) s+=pill(30,68,'obráceně','ta','middle')+lead(30,65,32.9,57)+pill(60,74,'smyčka','ta','middle')+lead(60,71,56.2,59.5);
+  s+=viewTag('LÍC · schéma řady');
+  const ck=[['stejně skloněné',.6],['stejně utažené',.7],['žádná smyčka',.8]];
+  let ib='';ck.forEach(([tx,at],i)=>{const o=seg(t,at,at+.08);ib+=`<g opacity="${f(o)}">${tick(91.5,17.5+i*7)}${lbl(96,19+i*7,tx,'t')}</g>`});
+  ib+=notes([['projekt 02 lekce 4:','ts'],['„na líci mají','ts'],['všechny stehy','ts'],['stejný sklon“','ts']],48,5.2);
+  return clipMain(s)+inset('LÍC',ib);
+},{v:'LÍC',sub:'kontrola'},null,'projekt 01 · lekce 4 krok „Porovnejte líc a rub“, kontrolní body a časté chyby');
+
+add('G','Rub: rovná řada','Otočte díl. Projekt 01: rub je u sedlářského stehu vždy trochu méně pravidelný, to je normální. Projekt 02 (lekce 4 a 7) chce víc: steh na rubu má být stejně rovný jako na líci. Rovnou řadu na rubu připravuje už děrování – vidličky kolmo, otvory na rubu stejně rovné jako na líci (lekce 3).',8400,t=>{
+  let s='';
+  const a=seg(t,.05,.2), b=seg(t,.4,.55);
+  s+=`<g opacity="${f(a)}">${pill(6,20,'rub: rovná řada','t')}${miniRow(8,29,70,10,{rub:true})}${tick(80,21)}</g>`;
+  // šikmé otvory na rubu = vidličky nebyly kolmo
+  s+=`<g opacity="${f(b)}">${pill(6,44,'chyba z děrování: otvory na rubu utíkají','ta')}`;
+  let r=`<rect x="5" y="50" width="76" height="8" fill="url(#rubP)" stroke="var(--rub-d)" stroke-width=".3"/>`;
+  for(let i=0;i<10;i++){const x=8+i*70/9, y=54+Math.sin(i*.9)*1.6;r+=`<path d="M${f(x-.9)} ${f(y-.9)} L${f(x+.9)} ${f(y+.9)}" stroke="var(--hole)" stroke-width=".4" stroke-linecap="round"/>`;
+    if(i<9){const x2=8+(i+1)*70/9,y2=54+Math.sin((i+1)*.9)*1.6;r+=tpath(P([x+.7,y],[x2-.7,y2]),i%2,1.25)}}
+  s+=r+`</g>`;
+  s+=viewTag('RUB · schéma řady');
+  let ib=notes([['projekt 01:','t'],['trochu méně'],['pravidelný rub'],['je normální'],['','ts'],['projekt 02:','t'],['rub stejně'],['rovný jako líc'],['','ts'],['šikmé otvory','ta'],['na rubu =','ta'],['vidličky nebyly','ta'],['kolmo','ta']],16,5);
+  return clipMain(s)+inset('RUB',ib);
+},{v:'RUB',sub:'kontrola'},null,'projekt 01 · lekce 4 krok „Porovnejte líc a rub“, lekce 3 krok „Prohlédněte rub“ · projekt 02 lekce 4 a 7');
+
+add('G','Kontrolní body lekce 4','Díly jsou slepené a hrany lícují bez posunu. Steh na líci má všechny stehy stejně skloněné. Stehy jsou stejně utažené, žádný netvoří smyčku. Konec je ukončený zpětnými stehy a nit odstřižená na rubu. Až to jde na odřezku, čeká vás totéž na pouzdře v lekci 6.',9000,t=>{
+  let s=clipMain(piece('lic',{leftEnd:true})+(()=>{let r='';for(let j=0;j<7;j++){const [a,b]=FWD[j];r+=stitchLic(a,b,j%2)}return r})())+viewTag('LÍC · hotový šev');
+  s+=`<g opacity="${f(seg(t,.1,.2))}">${pill(42,SEAM+14,'stejný sklon · stejné utažení','tok','middle')}</g>`;
+  const ck=[['slepené, hrany',.25,1],['lícují',.25,0],['stejný sklon',.4,1],['stejné utažení,',.55,1],['bez smyčky',.55,0],['konec: zpětné',.7,1],['stehy, nit',.7,0],['odstřižená na rubu',.7,0]];
+  let ib='';ck.forEach(([tx,at,tk],i)=>{const o=seg(t,at,at+.08);ib+=`<g opacity="${f(o)}">${tk?tick(91.5,16+i*5.6):''}${lbl(96,17.5+i*5.6,tx,'t')}</g>`});
+  ib+=`<g opacity="${f(seg(t,.86,.96))}">${notes([['dál: lekce 6','t'],['pouzdro']],66,5.2)}</g>`;
+  s+=inset('KONTROLA',ib);
+  if(t>.95) s+=`<circle cx="42" cy="66" r="5.5" fill="var(--panel)" stroke="var(--ok)" stroke-width=".7"/>`+tick(42,66.5,1.3);
+  return s;
+},{v:'LÍC',sub:'kontrola'},null,'projekt 01 · lekce 4 kontrolní body');
+
+// ---------- engine ----------
+const svg=document.getElementById('stage');
+const DEFS=`<defs>
+<linearGradient id="licG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--lic-hi)"/><stop offset=".55" stop-color="var(--lic)"/><stop offset="1" stop-color="var(--lic-d)"/></linearGradient>
+<pattern id="rubP" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="var(--rub)"/><path d="M.5 1.2 l1.6 .5 M3.2 .6 l1.4 -.4 M1.4 3.8 l1.2 .8 M4 3.1 l1.5 .3 M2.6 5.2 l1.3 -.5 M.2 4.9 l.9 .3" stroke="var(--rub-fib)" stroke-width=".35" stroke-linecap="round"/></pattern>
+<marker id="ar" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--accent)"/></marker>
+<marker id="arI" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--ink)"/></marker>
+</defs>`;
+const badge=document.getElementById('badge'),sideEl=document.getElementById('side'),chip=document.getElementById('chip'),sub=document.getElementById('sidesub');
+const capNo=document.getElementById('capNo'),capT=document.getElementById('capT'),capB=document.getElementById('capB'),counter=document.getElementById('counter');
+const prog=document.getElementById('prog');
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const partKeys=Object.keys(PARTS);const barEls=[];const segEls={};
+partKeys.forEach(k=>{const b=document.createElement('button');b.className='pseg';b.type='button';b.setAttribute('aria-label',`Část ${k}: ${PARTS[k]}`);
+  const bars=document.createElement('div');bars.className='bars';S.forEach((st,i)=>{if(st.part===k){const sp=document.createElement('span');const bb=document.createElement('b');sp.appendChild(bb);bars.appendChild(sp);barEls[i]=bb;}});
+  const pl=document.createElement('div');pl.className='pl';pl.innerHTML=`<b>${k}</b><span> · ${PARTS[k]}</span>`;b.append(bars,pl);prog.appendChild(b);segEls[k]=b;
+  b.addEventListener('click',()=>{setPlay(false);go(S.findIndex(s=>s.part===k),1)});});
+let idx=0,tt=1,playing=false,last=0,raf=0;
+function numInPart(i){const p=S[i].part;return S.slice(0,i+1).filter(s=>s.part===p).length}
+function setSide(st){
+  const side=st.side; if(!side){badge.hidden=true;return}
+  badge.hidden=false; const v=side.v, sb=side.sub||'';
+  sideEl.textContent=v; chip.style.background=v==='LÍC'?'var(--chip-lic)':v==='RUB'?'var(--chip-rub)':'var(--thread2)'; sub.textContent=sb;
+}
+function fitPills(){svg.querySelectorAll('g.pill').forEach(g=>{const tx=g.querySelector('text'),r=g.querySelector('rect');try{const b=tx.getBBox();if(!b.width)return;r.setAttribute('x',f(b.x-1.2));r.setAttribute('y',f(b.y-.5));r.setAttribute('width',f(b.width+2.4));r.setAttribute('height',f(b.height+1))}catch(e){}})}
+function render(){
+  const st=S[idx]; UID=0;
+  let body='';
+  try{ body=st.draw(tt);}catch(e){console.error(e)}
+  svg.innerHTML=DEFS+body; fitPills();
+  setSide(st);
+  capNo.textContent=`${st.part}${numInPart(idx)}`; capT.textContent=st.title; capB.textContent=st.body;
+  if(st.tip){const sp=document.createElement('span');sp.className='tip';const m=st.tip.match(/^(Tip[^:]*:)\s*(.*)$/);if(m){const b=document.createElement('b');b.textContent=m[1];sp.append(b,' '+m[2])}else{const b=document.createElement('b');b.textContent='Pozn.:';sp.append(b,' '+st.tip)}capB.appendChild(sp)}
+  if(st.src){const sp=document.createElement('span');sp.className='src';sp.textContent='Zdroj: '+st.src;capB.appendChild(sp)}
+  counter.textContent=`krok ${idx+1} / ${S.length}`;
+  barEls.forEach((b,i)=>{b.style.transform=`scaleX(${i<idx?1:i===idx?tt:0})`});
+  partKeys.forEach(k=>segEls[k].classList.toggle('on',k===st.part));
+}
+function go(i,t=0){idx=Math.max(0,Math.min(S.length-1,i));tt=reduce?1:t;hold=0;render();}
+function setPlay(p){playing=p;document.getElementById('playIcon').innerHTML=p?'<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';document.getElementById('bPlay').setAttribute('aria-label',p?'Pozastavit':'Přehrát');if(p){last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}}
+let hold=0;
+function loop(now){if(!playing)return;const dt=now-last;last=now;
+  if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
+  else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
+  raf=requestAnimationFrame(loop)}
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} else if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
+document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
+document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
+document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};
+// deep links: část (#A–#G) otevře svůj první krok, krok (#D2) přímo ten krok; zastavené
+function stepFromHash(){const m=/^([A-Z])([0-9]+)?$/.exec(decodeURIComponent((location.hash||'').slice(1)).trim().toUpperCase());if(!m||!Object.prototype.hasOwnProperty.call(PARTS,m[1]))return -1;const ix=[];S.forEach((s,i)=>{if(s.part===m[1])ix.push(i)});const n=m[2]===undefined?1:+m[2];return n>=1&&n<=ix.length?ix[n-1]:-1}
+let auto=false;
+const hs=stepFromHash();
+if(hs>=0){auto=true;go(hs,1)} else go(0,1);
+window.addEventListener('hashchange',()=>{const i=stepFromHash();if(i>=0){auto=true;setPlay(false);go(i,1)}});
+window.__steh={go:(i,t)=>{auto=true;setPlay(false);idx=i;tt=t;render()},steps:S.length,parts:S.map(s=>s.part),
+  geo:{pitch:PITCH,offset:OFF,leather:TL,thread:TH,needle:48}};
+if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!auto){auto=true;io.disconnect();go(0,0);setPlay(true)}})},{threshold:.45});io.observe(svg)}
+})();
+</script>
+<script>
+// Hidepath: „Zpět do lekce“ = krok zpět v historii, když se sem přišlo z aplikace; jinak úvod aplikace.
+(function(){var a=document.querySelector('[data-back]');if(!a)return;a.addEventListener('click',function(e){var o='';try{o=document.referrer?new URL(document.referrer).origin:'';}catch(_){}if(o===location.origin&&history.length>1){e.preventDefault();history.back();}});})();
+</script>
+</body>
+</html>

@@ -545,12 +545,14 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'd2-edge',
         title: 'Spodní hrana D2 do tenka',
+        animationLinks: [animationLink('edges', 'G4')],
         body: 'Spodní hranu D2 zbruste brusným papírem na hranolku do tenka (klín 3 mm), nožem ji neztenčujte. Jinak by dělala schod, o který se zachytí bankovka.',
         media: [],
       },
       {
         id: 'coin-windows',
         title: 'Okénka mincí v zádech',
+        animationLinks: [animationLink('edges', 'G4')],
         body: 'Dvě okénka mincí 12 × 48 mm v zadní stěně B: výsečníkem Ø 12 vysekněte oba konce (středy y 34 a 70), mezi nimi veďte rovné řezy nožem. Okénka zkoste z líce, konce vybruste papírem namotaným na kolíku Ø 8–10 a vyleštěte.',
         media: [
           ill(
@@ -575,18 +577,21 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'edges',
         title: 'Předběžné dokončení hran',
+        animationLinks: [animationLink('edges', 'G1')],
         body: 'Horní hrany D1 a D2, horní hranu F i s výřezem, spodní hranu a boky pásu víčka a boky jazýčku zkoste (zkosovačem hran, když ho máte z projektu 01 nebo 02; bez něj je zaoblete brusným papírem na hranolku), vybruste a vyleštěte. Výřez pro palec zaoblete z líce i z rubu, protože o rubovou hranu dna výřezu se může zachytit karta; vnitřek vybruste a vyleštěte kolíkem Ø 8 ve vrtačce.',
         media: [],
       },
       {
         id: 'd1-paint',
         title: 'Barevná horní hrana D1',
+        animationLinks: [animationLink('edges', 'G2')],
         body: 'Horní hranu D1 natřete barvou na hrany v tónu kontrastním k D1 (v tónu D2) párátkem ve 2 tenkých vrstvách, mezi vrstvami 20–30 min. Nejdřív na odřezku kozinky: přilnavost na tak tenké hraně je potřeba ověřit.',
         media: [],
       },
       {
         id: 'tokonole',
         title: 'Tokonole jen mimo lepená místa',
+        animationLinks: [animationLink('edges', 'G2')],
         body: 'Tokonole brání přilnutí lepidla, proto ho nanášejte jen mimo lepená místa a hranice lepení přelepte páskou.',
         media: [],
       },
@@ -650,6 +655,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'bill-window',
         title: 'Okénko bankovek skrz D2 a záda',
+        animationLinks: [animationLink('edges', 'G4')],
         body: 'Až po lepení G3: okénko bankovek 14 × 45 mm uprostřed zad (x 43,5–57,5, y 25–70). Výsečníkem Ø 14 vysekněte oba konce (středy na ose x 50,5, y 32 a 63), mezi nimi rovné řezy nožem skrz obě vrstvy. Zkoste a vyleštěte jako jeden svazek. Mince 1 Kč (Ø 20 mm) okénkem nepropadne.',
         media: [
           ill(
@@ -669,7 +675,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'stitch-s1-s3',
         title: 'Děrovat a šít S1, S2, S3',
         body: 'Děrujte z líce D2 na tvrdé desce, vidlička vždy stejně natočená při pohledu na líc D2, horní hranou od sebe – tím mají šikmé otvory na zádech stejný sklon. S1 (dno mincí) má 21 otvorů od x 10,5 do 90,5, S2 a S3 (boky sloupců) po 13 otvorech od y 28 do 76. Šijte sedlovým stehem, na obou koncích 2 otvory zpět.',
-        animationLinks: [animationLink('threadLength')],
+        animationLinks: [animationLink('saddleStitch', 'E2'), animationLink('threadLength')],
         media: [
           photo('lw-l6-seams', 'Ušité švy S1–S3 na líci D2, sloupce mincí a okénko bankovek'),
         ],
@@ -809,7 +815,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 's6',
         title: 'Šev dna karet S6',
         body: 'Mezi lepením a S6 nechte aspoň 1 h. Díl otočte: F teď položte naplocho lícem nahoru na tvrdou desku u hrany stolu a B nechte viset přes hranu (ohyb dna na hraně desky). Otvory S6 podle šablony z listu 1 na líci F propíchněte jehlou a děrujte vidličkou: y 25 (výchozí), x 10,5 až 38,5 a 62,5 až 90,5, dvakrát 8 otvorů. Střed kolem plíšku a jazýčku šev vynechává, drží ho jen lepení G2. Vidlička natočená při pohledu na líc F horní hranou od sebe. Šijte sedlovým stehem, konce 2 otvory zpět.',
-        animationLinks: [animationLink('threadLength')],
+        animationLinks: [animationLink('saddleStitch', 'E2'), animationLink('threadLength')],
         media: [
           ill(
             'lw-l8-section',
@@ -887,12 +893,13 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'punch-sew',
         title: 'Děrovat a šít boky',
         body: 'Mezi lepením G4 a děrováním nechte aspoň 1 h. Děrujte zepředu skrz všechny vrstvy: y 8–60 z líce F, y 64–76 z líce D2. Horní hrana F (y 62) leží přesně mezi otvory 60 a 64, proto v úseku y 56–68 děrujte po jednom otvoru a pod hranu F podložte odřezek 1,0 mm (schod F/D2). Šijte od 76 dolů, steh 60–64 zdvojte (zpevňuje ústí karet), konce 2 otvory zpět.',
-        animationLinks: [animationLink('threadLength')],
+        animationLinks: [animationLink('saddleStitch', 'E2'), animationLink('threadLength')],
         media: [],
       },
       {
         id: 'edges',
         title: 'Zarovnat a vyleštit boky',
+        animationLinks: [animationLink('edges', 'G3')],
         body: 'Boky zarovnejte nožem na 101,0 mm (D2 přečnívá). Spodní rohy nechte hranaté – nic nevyplňujte ani nezaoblujte. Boky vybruste, zkoste z obou líců (zkosovačem, když ho máte, jinak zaoblete brusným papírem na hranolku) a vyleštěte jako jeden svazek, i u ohybu dna.',
         media: [
           photo('lw-l9-edges', 'Vyleštěný bok peněženky s bočním švem a hranatým spodním rohem'),
@@ -1076,6 +1083,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'trim-tip',
         title: 'Ořízněte špičku a boky L1',
+        animationLinks: [animationLink('edges', 'G4')],
         body: 'Špičku uřízněte 7,0 mm pod značkou (rysky) podle šablony nožem skrz jazýček i L1 najednou a zároveň seřízněte boky L1 načisto s boky jazýčku (přířez 24 mm je o 2 mm na každé straně širší než jazýček 20 mm). Střed oblouku R10 leží 10,0 mm nad špičkou, tedy 3,0 mm nad středem magnetu. Pak jen posledních 2,5 mm špičky zbruste do klínu brusným papírem na hranolku z líce i z rubu, ne nožem, a ne blíž než 2,5 mm od špičky (ryska). Stačí, když je hrana na konci asi 0,5–0,7 mm a zaoblená.',
         media: [],
       },
@@ -1083,7 +1091,11 @@ export const lessons: readonly LessonDefinition[] = [
         id: 's7',
         title: 'Šev S7 kolem magnetu',
         body: 'Šablonu konce jazýčku z listu 4 přiložte na líc jazýčku podle obrysu špičky a propíchněte jehlou 8 otvorů S7: U kolem magnetu, ke špičce otevřené. Jazýček leží rubem dolů a magnet s L1 z rubu vystupuje, proto si připravte podložku s otvorem: dva slepené odřezky usně 1,0 mm (nebo odřezek desky 2 mm) proseknuté uprostřed výsečníkem Ø 10. Magnet leží v otvoru, kůže kolem naplocho. Děrujte z líce jazýčku vidličkou 4 mm: svislé boky (x 44,5 a 56,5) dvouzubou částí svisle, horní řadu (14 mm nad špičkou) vodorovně, rohové otvory jen jedním krajním zubem nasazeným do otvoru řady. Natočení zubů na bocích zvolte tak, aby šikmé otvory měly stejný sklon jako v horní řadě – vyzkoušejte na odřezku. Náhrada: otvory předpíchnout jehlou přes šablonu a vidličkou je jen dorazit. Šijte sedlovým stehem, konce 2 otvory zpět. Pak hrany jazýčku zkoste, vybruste a vyleštěte.',
-        animationLinks: [animationLink('threadLength')],
+        animationLinks: [
+          animationLink('saddleStitch', 'E2'),
+          animationLink('threadLength'),
+          animationLink('edges', 'G4'),
+        ],
         media: [photo('lw-l11-s7', 'Šev S7 do U kolem magnetu na líci jazýčku')],
       },
     ],

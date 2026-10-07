@@ -519,6 +519,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'saddle-stitch-reminder',
         title: 'Připomeňte si sedlářský steh',
+        animationLinks: [animationLink('saddleStitch', 'D1')],
         body: 'Steh je stejný jako u pouzdra na karty: dvě jehly proti sobě, vždy stejné pořadí a stejné utažení. Pokud si nejste jistí rytmem, vraťte se ke cvičení v lekci 4 prvního projektu.',
         media: [
           {
@@ -541,7 +542,11 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'stitch-through-layers',
         title: 'Přitiskněte a sešijte tři vrstvy',
         body: 'Přitiskněte slepené vrstvy k sobě a sešijte sedlářským stehem skrz všechny tři vrstvy předem prosekanými otvory a zkontrolujte rub – steh má být stejně rovný jako na líci.',
-        animationLinks: [animationLink('pouchFold', 'D2'), animationLink('threadLength')],
+        animationLinks: [
+          animationLink('pouchFold', 'D2'),
+          animationLink('saddleStitch', 'G2'),
+          animationLink('threadLength'),
+        ],
         media: [
           {
             id: 'cch-l4-stitch',
@@ -719,6 +724,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'dye-burnish-and-seal',
         title:
           'Obarvěte a zaleštěte hrany, na které se po složení špatně dostanete, a zapečeťte rub',
+        animationLinks: [animationLink('edges', 'F1')],
         body: 'Hrany, na které se po složení špatně dostanete (horní hrana vnitřního panelu, jeho volná svislá hrana – skončí uvnitř smyčky ohybu A, je vidět výřezem, ale nedosáhnete na ni –, oblouk výřezu a jazyk), teď obarvěte (barva na hrany, u barvené kůže) a zaleštěte – v hotovém pouzdru už na ně nedosáhnete. Rub vnitřního panelu zapečeťte (Tokonole nebo gum tragacanth) kromě spodního proužku 0–3,5 mm od hrany (pod čárou švu) – ten se v lekci 7 lepí, na zapečetěném povrchu by lepidlo nedrželo. Zapečetěný rub je po složení vidět výřezem nad kartami.',
         media: [
           {
@@ -858,6 +864,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'dye-burnish-pocket-edges',
         title: 'Obarvěte a zaleštěte hrany kapsy',
+        animationLinks: [animationLink('edges', 'F2')],
         body: 'Hrany kapsy (oblouk okna i vnější obrys) teď obarvěte (barva na hrany, u barvené kůže) a zaleštěte, stejně jako v lekci 5 – po přišití na přední panel už na vnější obrys nedosáhnete a na okno jen omezeně.',
         media: [],
       },
@@ -872,7 +879,11 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'stitch-pocket',
         title: 'Prosekněte a přišijte kapsu',
         body: 'Kapsa má otvory švu prosekané už v prvním kroku z líce, ještě před tvarováním. Naplocho na děrovací desce teď vidličkami projeďte znovu přes tytéž otvory ze stejné strany (z líce kapsy), tentokrát skrz obě vrstvy najednou – kapsu i přední panel pod ní; jen tak si otvory po prosekání lícují. Pak kapsu sedlářským stehem přišijte, horní hrana zůstává volná.',
-        animationLinks: [animationLink('pocketAttach', 'C1'), animationLink('threadLength')],
+        animationLinks: [
+          animationLink('pocketAttach', 'C1'),
+          animationLink('saddleStitch', 'D1'),
+          animationLink('threadLength'),
+        ],
         media: [
           {
             id: 'postup-4',
@@ -1058,7 +1069,11 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'stitch-bottom',
         title: 'Prošijte dno',
         body: 'Prošijte dno sedlářským stehem skrz všechny tři vrstvy (17 otvorů na panel, rozteč 4 mm, 3,5 mm od hrany). Začátek i konec zajistěte zpětnými stehy. Pak zkontrolujte rub švu (stranu zadního panelu) – steh na rubu má být stejně rovný jako na líci.',
-        animationLinks: [animationLink('pouchFold', 'D2'), animationLink('threadLength')],
+        animationLinks: [
+          animationLink('pouchFold', 'D2'),
+          animationLink('saddleStitch', 'E2'),
+          animationLink('threadLength'),
+        ],
         media: [
           {
             id: 'postup-6',
@@ -1200,12 +1215,14 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'sand-flat-bottom',
         title: 'Přebruste dno do roviny',
+        animationLinks: [animationLink('edges', 'F3'), animationLink('edges', 'B1')],
         body: 'Dno přebruste smirkem do jedné roviny přes všechny tři vrstvy a srazte hrany.',
         media: [],
       },
       {
         id: 'dye-and-burnish-edges',
         title: 'Obarvěte a zaleštěte vnější hrany',
+        animationLinks: [animationLink('edges', 'F3'), animationLink('edges', 'C1')],
         body: 'U barvené kůže je řez světlý – obarvěte ho barvou na hrany. Všechny vnější hrany pak zaleštěte jako u pouzdra na karty.',
         media: [
           {

@@ -152,6 +152,8 @@ describe('animace postupu – stránky v public/animace', () => {
   it.each([
     ['kapsa-skladani', 'pouchFold', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['kapsa-druk', 'snap', ['A', 'B', 'C', 'D'], 'E'],
+    ['sedlarsky-steh', 'saddleStitch', ['A', 'B', 'C', 'D', 'E', 'F', 'G'], 'H'],
+    ['hrany', 'edges', ['A', 'B', 'C', 'D', 'E', 'F', 'G'], 'H'],
   ] as const)(
     '%s: samostatná stránka s favicon, návratem do lekce a kotvami svých částí',
     (name, key, anchors, missing) => {
@@ -173,8 +175,15 @@ describe('animace postupu – stránky v public/animace', () => {
     'steps' in page ? [{ key, path: page.path, sections: page.sections, steps: page.steps }] : [],
   );
 
-  it('kroky mají právě čtyři stránky kapsy', () => {
-    expect(steppedPages.map((p) => p.key)).toEqual(['kapsa', 'pocketAttach', 'pouchFold', 'snap']);
+  it('kroky mají čtyři stránky kapsy, sedlářský steh a hrany', () => {
+    expect(steppedPages.map((p) => p.key)).toEqual([
+      'kapsa',
+      'pocketAttach',
+      'pouchFold',
+      'snap',
+      'saddleStitch',
+      'edges',
+    ]);
   });
 
   it.each(steppedPages)('$key: seznam kroků odpovídá stránce a umí otevřít každý krok', (page) => {
@@ -259,7 +268,11 @@ describe('animace postupu – odkazy z lekcí', () => {
     expect(hrefOf(5, 'transfer-marks-awl')).toEqual([prisiti('A2')]);
     expect(hrefOf(6, 'glue-pocket')).toEqual([prisiti('B2')]);
     // Přišití kapsy: animace prosekání a šití a hned vedle návod, kolik nitě odměřit.
-    expect(hrefOf(6, 'stitch-pocket')).toEqual([prisiti('C1'), animationPages.threadLength.path]);
+    expect(hrefOf(6, 'stitch-pocket')).toEqual([
+      prisiti('C1'),
+      '/animace/sedlarsky-steh.html#D1',
+      animationPages.threadLength.path,
+    ]);
   });
 });
 
@@ -279,7 +292,11 @@ describe('animace postupu – složení pouzdra a druk v lekcích', () => {
     expect(hrefOf(4, 'fold-around-content')).toEqual([skladani('B2')]);
     expect(hrefOf(4, 'unfold-roughen-glue')).toEqual([skladani('C1')]);
     // Odřezek má krátký šev: krok šití, ne výpočet nitě pro šev dna 64 mm.
-    expect(hrefOf(4, 'stitch-through-layers')).toEqual([skladani('D2'), thread]);
+    expect(hrefOf(4, 'stitch-through-layers')).toEqual([
+      skladani('D2'),
+      '/animace/sedlarsky-steh.html#G2',
+      thread,
+    ]);
     // A2 popisuje už proseknutý finální pás (lekce 5, 17 otvorů), ne značení na odřezku.
     expect(hrefOf(4, 'mark-mirrored-dots')).toBeUndefined();
     expect(hrefOf(7, 'wet-fold-zones')).toEqual([skladani('B1')]);
@@ -288,7 +305,11 @@ describe('animace postupu – složení pouzdra a druk v lekcích', () => {
     expect(hrefOf(7, 'press-and-clamp')).toEqual([skladani('B4')]);
     expect(hrefOf(7, 'roughen-and-glue-bottom')).toEqual([skladani('C1')]);
     // Krok lekce je šití dna (D2); nit k němu ukazuje návod „Kolik nitě na šev“, D1 je hned před ním.
-    expect(hrefOf(7, 'stitch-bottom')).toEqual([skladani('D2'), thread]);
+    expect(hrefOf(7, 'stitch-bottom')).toEqual([
+      skladani('D2'),
+      '/animace/sedlarsky-steh.html#E2',
+      thread,
+    ]);
   });
 
   it('lekce 3, 6 a 8: každý krok druku otevírá svůj krok animace', () => {
@@ -310,15 +331,74 @@ describe('animace postupu – složení pouzdra a druk v lekcích', () => {
     const coin = allSteps.filter(({ where }) => where.startsWith('coin-card-holder/'));
     for (const { where, step } of coin) {
       for (const { href } of step.animationLinks ?? []) {
-        if (href.includes('#')) expect(href, where).toMatch(/#[A-E][1-9][0-9]*$/);
+        if (href.includes('#')) expect(href, where).toMatch(/#[A-G][1-9][0-9]*$/);
       }
     }
   });
 });
 
+describe('animace postupu – sedlářský steh a hrany ve všech projektech', () => {
+  const hrefsOf = (projectSlug: string, order: number, stepId: string) =>
+    projects
+      .find((p) => p.slug === projectSlug)!
+      .lessons.find((l) => l.order === order)!
+      .steps.find((s) => s.id === stepId)
+      ?.animationLinks?.map((l) => l.href);
+  const steh = (anchor: string) => `/animace/sedlarsky-steh.html#${anchor}`;
+  const hrany = (anchor: string) => `/animace/hrany.html#${anchor}`;
+  const thread = animationPages.threadLength.path;
+
+  it.each([
+    // Projekt 01: navlékání, uchycení, steh, ukončení, kontrola, šití pouzdra a hrany.
+    ['card-holder', 1, 'thread-needles', [steh('A1')]],
+    ['card-holder', 4, 'hold-work', [steh('B1')]],
+    ['card-holder', 4, 'start-stitch', [steh('C1'), thread]],
+    ['card-holder', 4, 'stitch-rhythm', [steh('D1')]],
+    ['card-holder', 4, 'finish-stitch', [steh('E1'), steh('F1')]],
+    ['card-holder', 4, 'compare', [steh('G1')]],
+    ['card-holder', 6, 'stitch', [steh('E2'), steh('F2')]],
+    ['card-holder', 6, 'edges', [hrany('A2'), hrany('D1')]],
+    // Projekt 02: steh a hrany lekcí 4–8 (šev dna a kapsa ověřují testy výše).
+    ['coin-card-holder', 4, 'saddle-stitch-reminder', [steh('D1')]],
+    ['coin-card-holder', 5, 'dye-burnish-and-seal', [hrany('F1')]],
+    ['coin-card-holder', 6, 'dye-burnish-pocket-edges', [hrany('F2')]],
+    ['coin-card-holder', 8, 'sand-flat-bottom', [hrany('F3'), hrany('B1')]],
+    ['coin-card-holder', 8, 'dye-and-burnish-edges', [hrany('F3'), hrany('C1')]],
+    // Projekt 03: všechny švy (konce 2 otvory zpět) a hrany.
+    ['lid-wallet', 5, 'd2-edge', [hrany('G4')]],
+    ['lid-wallet', 5, 'coin-windows', [hrany('G4')]],
+    ['lid-wallet', 5, 'edges', [hrany('G1')]],
+    ['lid-wallet', 5, 'd1-paint', [hrany('G2')]],
+    ['lid-wallet', 5, 'tokonole', [hrany('G2')]],
+    ['lid-wallet', 6, 'bill-window', [hrany('G4')]],
+    ['lid-wallet', 6, 'stitch-s1-s3', [steh('E2'), thread]],
+    ['lid-wallet', 8, 's6', [steh('E2'), thread]],
+    ['lid-wallet', 9, 'punch-sew', [steh('E2'), thread]],
+    ['lid-wallet', 9, 'edges', [hrany('G3')]],
+    ['lid-wallet', 11, 'trim-tip', [hrany('G4')]],
+    ['lid-wallet', 11, 's7', [steh('E2'), thread, hrany('G4')]],
+  ] as const)('%s lekce %i, krok %s', (projectSlug, order, stepId, expected) => {
+    expect(hrefsOf(projectSlug, order, stepId)).toEqual(expected);
+  });
+
+  it('každý šev Víčka (S1–S7) odkazuje na sedlářský steh', () => {
+    const lid = allSteps.filter(({ where }) => where.startsWith('lid-wallet/'));
+    const seams = lid.filter(({ step }) => step.body.includes('sedlovým stehem'));
+    expect(seams.length).toBeGreaterThanOrEqual(3);
+    for (const { where, step } of seams) {
+      expect(step.animationLinks?.[0]?.href, where).toMatch(/^\/animace\/sedlarsky-steh\.html#/);
+    }
+  });
+});
+
 describe('animationButtonText', () => {
-  it('pojmenuje návod na délku nitě jinak než animace', () => {
+  it('pojmenuje návod na délku nitě, steh a hrany jinak než animace', () => {
     expect(animationButtonText(animationPages.threadLength.path)).toBe('Jak odměřit nit');
     expect(animationButtonText(`${animationPages.kapsa.path}#B`)).toBe('Animace postupu');
+    expect(animationButtonText(`${animationPages.saddleStitch.path}#D1`)).toBe(
+      'Jak šít sedlářský steh',
+    );
+    expect(animationButtonText(`${animationPages.edges.path}#G4`)).toBe('Jak na hrany');
+    expect(animationButtonText(animationPages.edges.path)).toBe('Jak na hrany');
   });
 });

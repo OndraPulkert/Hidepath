@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dokončení hran</title>
+<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+<!-- Self-hostované fonty aplikace (public/fonts), aby stránka fungovala i offline v PWA. -->
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f3efe9;--panel:#fffdf9;--stage:#f7f2ea;--ink:#2a211b;--muted:#6c6158;--line:#ddd5cc;
+  --accent:#b3261e;--ok:#2f6b3a;--btn:#2a211b;--btn-ink:#fffdf9;
+  --lic:#b8773f;--lic-d:#8a5228;--lic-hi:#d39a63;
+  --rub:#dcc4a2;--rub-d:#b99a72;--rub-fib:#c7a87f;--fib:#a88a62;
+  --steel:#a3abb3;--steel-d:#5c656e;--tape:#eedc95;--tape-d:#b9a75c;
+  --sand:#c9a26b;--sand-d:#8a6a3c;--skin:#e9b996;--skin-d:#b98563;
+  --wood:#c99a66;--wood-d:#8c6640;--wood-hi:#e0bb8c;--cloth:#e9e4d6;--cloth-d:#b3ab96;
+  --wet:#3a2414;--water:#4f93c9;--paste:#efe9d8;--paste-d:#b8ad8e;
+  --burn:#6e3f1d;--shine:#fff6e6;
+  --dyed:#5b3521;--dye:#3d2316;--paint:#3a2318;
+  --kas:#8c4a27;--kas-d:#5e2f16;--cok:#4d2d1e;--cok-core:#c9ad8c;--koz:#ead8bb;--koz-core:#f1e5d0;
+  --thread:#f6efdc;--thread-d:#8f8166;--glue:#e0ad35;--chip1:#b8773f;--chip2:#5b3521;--chip3:#8c4a27;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
+  --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
+  --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
+  --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;--fib:#d8c19f;
+  --steel:#9099a2;--steel-d:#4d555d;--tape:#d9c67d;--tape-d:#a3914a;
+  --sand:#b8935f;--sand-d:#7a5d33;--skin:#d6a684;--skin-d:#a57454;
+  --wood:#b68756;--wood-d:#7a5634;--wood-hi:#cfa677;--cloth:#d8d2c2;--cloth-d:#9c9480;
+  --wet:#140b05;--water:#6fb0e0;--paste:#e2dbc8;--paste-d:#9d9276;
+  --burn:#5a3116;--shine:#fff1d8;
+  --dyed:#6a4029;--dye:#2a170e;--paint:#2c1910;
+  --kas:#99542f;--kas-d:#6a3519;--cok:#5a3626;--cok-core:#b99c7c;--koz:#dccaa9;--koz-core:#e6d8bf;
+  --thread:#efe6cf;--thread-d:#7d705a;--glue:#c8962a;--chip1:#a96c38;--chip2:#6a4029;--chip3:#99542f;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
+  --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
+  --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
+  --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;--fib:#d8c19f;
+  --steel:#9099a2;--steel-d:#4d555d;--tape:#d9c67d;--tape-d:#a3914a;
+  --sand:#b8935f;--sand-d:#7a5d33;--skin:#d6a684;--skin-d:#a57454;
+  --wood:#b68756;--wood-d:#7a5634;--wood-hi:#cfa677;--cloth:#d8d2c2;--cloth-d:#9c9480;
+  --wet:#140b05;--water:#6fb0e0;--paste:#e2dbc8;--paste-d:#9d9276;
+  --burn:#5a3116;--shine:#fff1d8;
+  --dyed:#6a4029;--dye:#2a170e;--paint:#2c1910;
+  --kas:#99542f;--kas-d:#6a3519;--cok:#5a3626;--cok-core:#b99c7c;--koz:#dccaa9;--koz-core:#e6d8bf;
+  --thread:#efe6cf;--thread-d:#7d705a;--glue:#c8962a;--chip1:#a96c38;--chip2:#6a4029;--chip3:#99542f;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 "Albert Sans",system-ui,sans-serif;padding:22px 16px 44px;overflow-x:hidden}
+.wrap{max-width:860px;margin:0 auto;display:grid;gap:16px}
+h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
+.lead{color:var(--muted);margin:6px 0 0;max-width:70ch}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:10px;min-width:0}
+.stagewrap{position:relative;background:var(--stage);border-radius:8px;overflow:hidden}
+#stage{display:block;width:100%;height:auto;aspect-ratio:3/2}
+.badge{position:absolute;top:8px;left:8px;display:flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-weight:700;font-size:13px;letter-spacing:.06em;transition:opacity .2s}
+.badge i{width:16px;height:16px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.2)}
+.badge small{font-weight:500;letter-spacing:0;color:var(--muted);font-size:12px}
+.badge[hidden]{display:none}
+@media (max-width:520px){.badge .pw{display:none}}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.controls button{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);width:40px;height:40px;border-radius:10px;display:grid;place-items:center;cursor:pointer;padding:0}
+.controls button.play{background:var(--btn);color:var(--btn-ink);border-color:var(--btn)}
+.controls button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.controls svg{width:18px;height:18px;fill:currentColor}
+.counter{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+.prog{display:flex;gap:6px;align-items:stretch}
+.pseg{flex:1;display:grid;gap:4px;min-width:0;cursor:pointer;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left}
+.pseg .bars{display:flex;gap:2px;height:6px}
+.pseg .bars span{flex:1;background:var(--line);border-radius:2px;position:relative;overflow:hidden}
+.pseg .bars span b{position:absolute;inset:0;background:var(--lic);transform-origin:left;transform:scaleX(0)}
+.pseg .pl{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:640px){.pl span{display:none}}
+.pseg.on .pl{color:var(--ink);font-weight:600}
+.cap{min-height:6.6em}
+.cap .no{display:inline-block;font-weight:700;color:var(--lic-d);margin-right:6px;font-variant-numeric:tabular-nums}
+:root[data-theme="dark"] .cap .no{color:var(--lic-hi)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cap .no{color:var(--lic-hi)}}
+.cap h2{display:inline;font-size:1.05rem;margin:0}
+.cap p{margin:4px 0 0;color:var(--ink)}
+.cap .src{display:block;margin-top:6px;color:var(--muted);font-size:13px}
+.cap .tip{display:block;margin-top:6px;color:var(--muted);font-size:14px}
+.cap .tip b{color:var(--accent);font-weight:700}
+.note{font-size:13px;color:var(--muted);margin:0}
+/* svg text */
+.t{font:600 4.1px "Albert Sans",sans-serif;fill:var(--ink)}
+.ts{font:500 3.7px "Albert Sans",sans-serif;fill:var(--muted)}
+.tw{font:700 4.6px "Albert Sans",sans-serif;fill:var(--ink)}
+.ta{font:700 4.1px "Albert Sans",sans-serif;fill:var(--accent)}
+.tok{font:700 4.1px "Albert Sans",sans-serif;fill:var(--ok)}
+.lead-l{stroke:var(--muted);stroke-width:.25;fill:none}
+@media (min-width:700px){.t,.ta,.tok{font-size:2.8px}.ts{font-size:2.5px}.tw{font-size:3.2px}}
+.panelbox{fill:var(--panel);stroke:var(--line);stroke-width:.35}
+.pillbg{fill:var(--panel);stroke:var(--line);stroke-width:.3;opacity:.95}
+@media (max-width:520px){.badge small{display:none}.cap{min-height:9.5em}.counter{width:100%;margin-left:0;order:9}}
+/* Hidepath: návrat do lekce */
+.backlink{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--ink);font-weight:600;font-size:15px;text-decoration:none;justify-self:start}
+.backlink:hover{text-decoration:underline}
+.backlink:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+<a class="backlink" href="/" data-back>← Zpět do lekce</a>
+<h1>Dokončení hran</h1>
+<p class="lead">Jak se řezaná hrana srovná, zkosí, u barvené kůže obarví, navlhčí a zaleští. Základ je postup pouzdra na karty (projekt 01, lekce 6, krok „Srovnejte a zalešte hrany“). V dalších částech jsou rozdíly u pouzdra s mincí (projekt 02, lekce 5, 6 a 8) a u peněženky Víčko (projekt 03, lekce 5, 6, 9 a 11). Řezy hranou jsou zvětšené. Tloušťky vrstev odpovídají kůži z lekcí, tvary dílů jsou kreslené v měřítku podle šablon.</p>
+</header>
+
+<section class="card" aria-label="Animace postupu">
+  <div class="stagewrap">
+    <svg id="stage" viewBox="0 0 135 90" role="img" aria-label="Animovaný postup dokončení hran"></svg>
+    <div class="badge" id="badge" hidden><i id="chip"></i><span id="side">01</span><small id="sidesub"></small></div>
+  </div>
+  <div class="prog" id="prog"></div>
+  <div class="controls">
+    <button id="bRestart" aria-label="Od začátku" title="Od začátku"><svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/></svg></button>
+    <button id="bPrev" aria-label="Předchozí krok" title="Předchozí krok"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg></button>
+    <button id="bPlay" class="play" aria-label="Přehrát" title="Přehrát / pozastavit"><svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg></button>
+    <button id="bNext" aria-label="Další krok" title="Další krok"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
+    <span class="counter" id="counter">krok 1 / 17</span>
+  </div>
+  <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
+</section>
+<p class="note">Části A–E jsou postup pouzdra na karty (projekt 01, lekce 6): srovnání, navlhčení, zaleštění a kontrola. Zkosení (B) a barvu (C) tento projekt nemá, ukazují je až projekty 02 a 03. Část F je pouzdro s mincí (projekt 02), část G peněženka Víčko (projekt 03). Řezy hranou jsou zvětšené, u každého je úsečka 1 mm. Poznámky označené „Tip“ lekce výslovně neuvádí.</p>
+</div>
+
+<script>
+(()=>{
+// ---------- helpers ----------
+const cl=t=>Math.max(0,Math.min(1,t));
+const seg=(t,a,b)=>cl((t-a)/(b-a));
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const es=(t,a,b)=>ease(seg(t,a,b));
+const L=(a,b,t)=>a+(b-a)*t;
+const f=n=>(+n).toFixed(2);
+const G=(tr,s,extra='')=>`<g transform="${tr}" ${extra}>${s}</g>`;
+let UID=0;const uid=p=>`${p}${++UID}`;
+function lbl(x,y,t,cls='t',anchor='start'){return `<text x="${f(x)}" y="${f(y)}" class="${cls}" text-anchor="${anchor}">${t}</text>`}
+function pill(x,y,t,cls='t',anchor='start'){return `<g class="pill"><rect class="pillbg" rx="1.2" x="${f(x)}" y="${f(y-4)}" width="1" height="1"/>${lbl(x,y,t,cls,anchor)}</g>`}
+function lead(x1,y1,x2,y2){return `<path d="M${f(x1)} ${f(y1)} L${f(x2)} ${f(y2)}" class="lead-l"/><circle cx="${f(x2)}" cy="${f(y2)}" r=".5" fill="var(--muted)"/>`}
+function tick(x,y,s=1){return `<path d="M${x-1.6*s} ${y} l${1.2*s} ${1.2*s} l${2.4*s} -2.6" stroke="var(--ok)" stroke-width="${.7*s}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`}
+function cross(x,y,r=1,w=.5){return `<path d="M${f(x-r)} ${f(y-r)} L${f(x+r)} ${f(y+r)} M${f(x-r)} ${f(y+r)} L${f(x+r)} ${f(y-r)}" stroke="var(--accent)" stroke-width="${w}" stroke-linecap="round"/>`}
+function inset(title,body,{x=86,y=6,w=47,h=78}={}){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" class="panelbox"/><text x="${x+3}" y="${y+5.5}" class="ts" style="font-weight:700;letter-spacing:.06em">${title}</text>${body}`}
+function notes(lines,y0=18,step=5.6,x=89){return lines.map((l,i)=>l[0].startsWith('>')?lbl(x+3,y0+i*step,l[0].slice(1),l[1]||'ts'):lbl(x,y0+i*step,l[0],l[1]||'ts')).join('')}
+function checklist(items,t,y0=17,step=6.4,x=89){return items.map(([tx,at,cls],i)=>{const o=seg(t,at,at+.08);return `<g opacity="${f(o)}">${cls==='x'?cross(x+1.6,y0+i*step-1.2,1,.5):cls==='-'?'':tick(x+2.2,y0+i*step-.2,.8)}${lbl(x+5.5,y0+i*step,tx,cls==='x'?'ta':'t')}</g>`}).join('')}
+function clock(x,y,p){const a=-Math.PI/2+p*2*Math.PI;return `<circle cx="${x}" cy="${y}" r="4.2" fill="var(--panel)" stroke="var(--ink)" stroke-width=".45"/><path d="M${x} ${y} L${f(x+3*Math.cos(a))} ${f(y+3*Math.sin(a))} M${x} ${y} L${x} ${y-2}" stroke="var(--ink)" stroke-width=".45" stroke-linecap="round"/><circle cx="${x}" cy="${y}" r=".5" fill="var(--ink)"/>`}
+function arrow(x1,y1,x2,y2,col='var(--accent)',w=.5,mk='ar'){return `<path d="M${f(x1)} ${f(y1)} L${f(x2)} ${f(y2)}" stroke="${col}" stroke-width="${w}" marker-end="url(#${mk})"/>`}
+function rnd(i){const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)}
+function clipMain(body,w=84){const id=uid('cm');return `<clipPath id="${id}"><rect x="0" y="0" width="${f(w)}" height="90"/></clipPath><g clip-path="url(#${id})">${body}</g>`}
+
+// ---------- edge profile (řez hranou, zvětšeno) ----------
+// local mm: u → ven z hrany (hrana v u = 0), v ↑ (0 = spodní plocha svazku). Vrstvy odspodu.
+const KIND={
+  nat:{core:'var(--rub)',lic:'var(--lic)'},          // přírodní třísločiněná (projekt 01)
+  dyed:{core:'var(--rub)',lic:'var(--dyed)'},        // barvená kůže, řez světlý (projekt 02)
+  kas:{core:'var(--rub)',lic:'var(--kas)'},          // P1 kaštan (projekt 03)
+  cok:{core:'var(--cok-core)',lic:'var(--cok)'},     // D2 čokoládová kozinka
+  koz:{core:'var(--koz-core)',lic:'var(--koz)'},     // D1 nebarvená kozinka
+};
+function prof(o){
+  const {x,y,k}=o, len=o.len??4, Ls=o.layers;
+  const H=Ls.reduce((a,l)=>a+l.t,0);
+  const pt=(u,v)=>`${f(x+u*k)} ${f(y-v*k)}`;
+  const bt=o.bevT||0, bb=o.bevB||0, r=o.round||0;
+  const rr=.18*r, cT=Math.max(bt,rr), cB=Math.max(bb,rr);
+  const active=bt>0||bb>0||r>0;
+  const mT=bt>0?.5*r:1, mB=bb>0?.5*r:1, bul=.1*r;
+  let edge;
+  if(active){
+    edge=`M${pt(-cB,0)} Q${pt(L(-cB/2,0,mB),L(cB/2,0,mB))} ${pt(0,cB)} Q${pt(bul,H/2)} ${pt(0,H-cT)} Q${pt(L(-cT/2,0,mT),L(H-cT/2,H,mT))} ${pt(-cT,H)}`;
+  }else{
+    let d='',v=0;Ls.forEach((l,i)=>{const dx=l.dx||0;d+=(i?' L':'M')+pt(dx,v)+' L'+pt(dx,v+l.t);v+=l.t});edge=d;
+  }
+  const cid=uid('pc');
+  const clipD=`M${pt(-len-1,0)} L${edge.slice(1)} L${pt(-len-1,H)} Z`;
+  let body='',v=0;
+  Ls.forEach((l,i)=>{
+    const c=KIND[l.kind||'nat'], right=active?1:(l.dx||0), lb=Math.min(.24,l.t*.3);
+    body+=`<path d="M${pt(-len,v)} L${pt(right,v)} L${pt(right,v+l.t)} L${pt(-len,v+l.t)} Z" fill="${c.core}"/>`;
+    if(l.lic==='top') body+=`<path d="M${pt(-len,v+l.t-lb)} L${pt(right,v+l.t-lb)} L${pt(right,v+l.t)} L${pt(-len,v+l.t)} Z" fill="${c.lic}"/>`;
+    if(l.lic==='bot') body+=`<path d="M${pt(-len,v)} L${pt(right,v)} L${pt(right,v+lb)} L${pt(-len,v+lb)} Z" fill="${c.lic}"/>`;
+    if(i>0) body+=`<path d="M${pt(-len,v)} L${pt(right,v)}" stroke="var(--rub-d)" stroke-width=".3"/>`;
+    // vlákna v řezu (textura)
+    for(let j=0;j<Math.round(len*1.6);j++){const uu=-len+(j+.5)*len/Math.round(len*1.6),vv=v+l.t*(.25+.5*rnd(j+i*31));body+=`<path d="M${pt(uu,vv)} l${f(.5*k*.12)} ${f(-.3*k*.06)}" stroke="var(--rub-fib)" stroke-width=".3" stroke-linecap="round"/>`}
+    v+=l.t;
+  });
+  if(o.wet) body+=`<path d="M${pt(-.7,-.1)} L${pt(1,-.1)} L${pt(1,H+.1)} L${pt(-.7,H+.1)} Z" fill="var(--wet)" opacity="${f(.28*o.wet)}"/>`;
+  if(o.dye) body+=`<path d="${edge}" stroke="var(--dye)" stroke-width="${f(.36*k)}" fill="none" opacity="${f(cl(o.dye*1.3))}"/>`;
+  if(o.burn) body+=`<path d="${edge}" stroke="var(--burn)" stroke-width="${f(.3*k*o.burn)}" fill="none" opacity="${f(.85*o.burn)}" stroke-linejoin="round"/>`;
+  let s=`<clipPath id="${cid}"><path d="${clipD}"/></clipPath><g clip-path="url(#${cid})">${body}</g>`;
+  s+=`<path d="M${pt(-len,0)} L${edge.slice(1)} L${pt(-len,H)}" fill="none" stroke="var(--rub-d)" stroke-width=".3" stroke-linejoin="round"/>`;
+  s+=`<path d="M${pt(-len,-.15)} L${pt(-len,H+.15)}" stroke="var(--muted)" stroke-width=".3" stroke-dasharray=".9 .7"/>`;
+  if(o.paint){const w=.07*k*o.paint;s+=`<path d="${edge}" stroke="var(--paint)" stroke-width="${f(w)}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`}
+  if(o.burn) s+=`<path d="${edge}" stroke="var(--shine)" stroke-width=".35" fill="none" opacity="${f(.85*o.burn)}" transform="translate(${f(.05*k)} 0)" stroke-linecap="round"/>`;
+  if(o.fuzz){
+    const ex=vv=>{if(!active){let a=0;for(const l of Ls){if(vv<=a+l.t)return l.dx||0;a+=l.t}return 0}
+      if(vv<cB) return -(cB-vv)*.75; if(vv>H-cT) return -(vv-(H-cT))*.75; return bul*2*(vv/H)*(1-vv/H)*2};
+    const N=Math.round(H*9);let d='';
+    for(let j=0;j<N;j++){const vv=(j+.5)*H/N,u0=ex(vv),a=(rnd(j+7)-.5)*1.7,ln=o.fuzz*(.1+.22*rnd(j+3));
+      d+=`M${pt(u0,vv)} L${pt(u0+ln*Math.cos(a),vv+ln*Math.sin(a))} `}
+    s+=`<path d="${d}" stroke="var(--fib)" stroke-width=".32" stroke-linecap="round" fill="none"/>`;
+  }
+  return s;
+}
+const H_=ls=>ls.reduce((a,l)=>a+l.t,0);
+function scaleBar(x,y,k){return `<path d="M${f(x)} ${f(y)} h${f(k)} M${f(x)} ${f(y-.8)} v1.6 M${f(x+k)} ${f(y-.8)} v1.6" stroke="var(--muted)" stroke-width=".3"/>${lbl(x+k+1.2,y+1.2,'1 mm','ts')}`}
+function sideTag(x0,y,t,cls='ts'){return lead(x0+9,y,x0-6,y)+pill(x0+10,y+1.3,t,cls)}
+function zoomTag(x=82,y=6){return pill(x,y,'ŘEZ HRANOU · zvětšeno','ts','end')}
+
+// ---------- tools ----------
+function sandBlock(x,y,a=0,w=12){return G(`translate(${f(x)} ${f(y)}) rotate(${f(a)})`,`<rect x="${-w/2}" y="-1.2" width="${w}" height="3.6" rx=".5" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".25"/><rect x="${-w/2-.3}" y="-2" width="${w+.6}" height=".9" rx=".2" fill="var(--sand)" stroke="var(--sand-d)" stroke-width=".2"/>`)}
+function beveler(x,y,a){ // hrot v (x,y), rukojeť pod úhlem a
+  return G(`translate(${f(x)} ${f(y)}) rotate(${f(a)})`,`<path d="M0 -.7 L6 -.9 L6 .9 L0 .7 Z" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".25"/><path d="M0 -.7 L-1 -.35 L-1 .35 L0 .7 Z" fill="var(--steel-d)"/><rect x="6" y="-1.8" width="14" height="3.6" rx="1.6" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".25"/><path d="M8 -1.8 v3.6" stroke="var(--wood-d)" stroke-width=".3"/>`)}
+function knife(x,y,a=0){return G(`translate(${f(x)} ${f(y)}) rotate(${f(a)})`,`<path d="M0 0 L-1.6 -9 L1.4 -9 L1.4 -1 Z" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".25"/><rect x="-1.9" y="-22" width="3.6" height="13" rx="1" fill="var(--steel-d)"/><path d="M-1.2 -20 h2.2 M-1.2 -17 h2.2 M-1.2 -14 h2.2" stroke="var(--steel)" stroke-width=".3"/>`)}
+function toothpick(x,y,a=-35){return G(`translate(${f(x)} ${f(y)}) rotate(${f(a)})`,`<path d="M0 0 L2.2 -.45 L20 -.45 L20 .45 L2.2 .45 Z" fill="var(--wood-hi)" stroke="var(--wood-d)" stroke-width=".2"/><path d="M0 0 L1.4 -.32 L1.4 .32 Z" fill="var(--paint)"/>`)}
+function drop(x,y,col='var(--water)',s=1){return `<path d="M${f(x)} ${f(y-2.2*s)} C${f(x+1.4*s)} ${f(y-.4*s)} ${f(x+1.4*s)} ${f(y+1*s)} ${f(x)} ${f(y+1*s)} C${f(x-1.4*s)} ${f(y+1*s)} ${f(x-1.4*s)} ${f(y-.4*s)} ${f(x)} ${f(y-2.2*s)} Z" fill="${col}" stroke="var(--muted)" stroke-width=".2"/>`}
+function bottle(x,y,label,col){return `<rect x="${f(x-3)}" y="${f(y-7)}" width="6" height="8" rx="1" fill="${col}" stroke="var(--muted)" stroke-width=".25"/><rect x="${f(x-1.2)}" y="${f(y-9.5)}" width="2.4" height="2.6" rx=".4" fill="var(--steel-d)"/><rect x="${f(x-2.4)}" y="${f(y-5)}" width="4.8" height="3" fill="var(--panel)" opacity=".85"/>${lbl(x,y+4.2,label,'ts','middle')}`}
+// leštítko: řez dřevěným leštítkem s drážkou (drážka šířky w mm, k = měřítko)
+function slickerSec(x,y,k,w){ // (x,y) = nejhlubší místo drážky; drážka široká w mm
+  const R=w/2*k, Rg=R*1.25, dep=Rg-Math.sqrt(Rg*Rg-R*R), xb=x-dep, W=17, E=7;
+  return `<path d="M${f(xb)} ${f(y-R-E)} L${f(xb)} ${f(y-R)} A${f(Rg)} ${f(Rg)} 0 0 1 ${f(xb)} ${f(y+R)} L${f(xb)} ${f(y+R+E)} L${f(xb+W)} ${f(y+R+E)} L${f(xb+W)} ${f(y-R-E)} Z" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".3"/><path d="M${f(xb+W-4)} ${f(y-R-E+1)} v${f(2*R+2*E-2)}" stroke="var(--wood-hi)" stroke-width=".7" opacity=".7"/>`}
+function cloth(x,y){return `<path d="M${f(x-1)} ${f(y-6)} Q${f(x+3)} ${f(y-7)} ${f(x+7)} ${f(y-5)} L${f(x+8)} ${f(y+5)} Q${f(x+3)} ${f(y+7)} ${f(x-1)} ${f(y+6)} Q${f(x+.6)} ${f(y)} ${f(x-1)} ${f(y-6)} Z" fill="var(--cloth)" stroke="var(--cloth-d)" stroke-width=".3"/><path d="M${f(x+1.5)} ${f(y-4)} q2 1 4 .5 M${f(x+1.8)} ${f(y+3)} q2 -1 4 -.4" stroke="var(--cloth-d)" stroke-width=".25" fill="none"/>`}
+function motion(x,y,ph){ // tam a zpět podél hrany (do obrazovky)
+  const a=Math.sin(ph*Math.PI*2);
+  return `<circle cx="${f(x)}" cy="${f(y)}" r="2" fill="var(--panel)" stroke="var(--ink)" stroke-width=".35"/>`+(a>0?`<circle cx="${f(x)}" cy="${f(y)}" r=".6" fill="var(--ink)"/>`:cross(x,y,.9,.35).replace(/var\(--accent\)/g,'var(--ink)'));
+}
+
+// ---------- card holder (projekt 01): zadní díl 100 × 70 R6, kapsa 100 × 56 R6 s výřezem 40 × 12 ----------
+function piece(x,y,w,h,r,notch){
+  let top=`M${x+r} ${y}`;
+  if(notch){const s0=x+(w-notch[0])/2,e0=s0+notch[0];top+=` L${s0} ${y} Q${x+w/2} ${y+notch[1]*2} ${e0} ${y}`}
+  return `${top} L${x+w-r} ${y} A${r} ${r} 0 0 1 ${x+w} ${y+r} L${x+w} ${y+h-r} A${r} ${r} 0 0 1 ${x+w-r} ${y+h} L${x+r} ${y+h} A${r} ${r} 0 0 1 ${x} ${y+h-r} L${x} ${y+r} A${r} ${r} 0 0 1 ${x+r} ${y} Z`;
+}
+const BACKP=piece(0,0,100,70,6), POCKP=piece(0,14,100,56,6,[40,12]);
+const HL_STITCHED='M0 14 L0 64 A6 6 0 0 0 6 70 L94 70 A6 6 0 0 0 100 64 L100 14';
+const HL_BACKTOP='M0 14 L0 6 A6 6 0 0 1 6 0 L94 0 A6 6 0 0 1 100 6 L100 14';
+const HL_POCKTOP='M0 20 A6 6 0 0 1 6 14 L30 14 Q50 38 70 14 L94 14 A6 6 0 0 1 100 20';
+function holder(tr,s,o={}){
+  let d=`<path d="${BACKP}" fill="url(#licG)" stroke="var(--lic-d)" stroke-width="${f(.45/s)}"/>`;
+  d+=`<path d="${POCKP}" fill="url(#licG2)" stroke="var(--lic-d)" stroke-width="${f(.45/s)}" filter="url(#sh)"/>`;
+  // steh 3,5 mm od hrany: boky a dno přední kapsy
+  let st='';const sp=3.875;
+  for(let x=3.5;x<96.5-1;x+=sp) st+=`M${f(x+.6)} 66.5 L${f(x+sp-.6)} 66.5 `;
+  for(let yy=66.5;yy>19;yy-=sp){st+=`M3.5 ${f(yy-.6)} L3.5 ${f(yy-sp+.6)} M96.5 ${f(yy-.6)} L96.5 ${f(yy-sp+.6)} `}
+  d+=`<path d="${st}" stroke="var(--thread-d)" stroke-width="${f(1.1/s)}" stroke-linecap="round"/><path d="${st}" stroke="var(--thread)" stroke-width="${f(.7/s)}" stroke-linecap="round"/>`;
+  const hl=(p,op,col='var(--accent)',w=1.1)=>op>0?`<path d="${p}" fill="none" stroke="${col}" stroke-width="${f(w/s)}" stroke-linecap="round" stroke-linejoin="round" opacity="${f(op)}"/>`:'';
+  if(o.gloss){d+=hl(HL_STITCHED,o.gloss,'var(--burn)',.9)+hl(HL_BACKTOP,o.gloss,'var(--burn)',.9)+hl(HL_POCKTOP,o.gloss,'var(--burn)',.9)}
+  d+=hl(HL_STITCHED,o.hs||0)+hl(HL_BACKTOP,o.hb||0,'var(--ok)')+hl(HL_POCKTOP,o.hp||0,'var(--ok)');
+  return G(`${tr} scale(${s})`,d);
+}
+
+// ---------- pouzdro s mincí (projekt 02): šablona PÁS pro kůži 1,2 mm ----------
+const STRIP="M10 20 A10 10 0 0 1 20 10 L33 10 A10 10 0 0 1 43 20 L43 53.07 A39 34 0 0 0 82 87.07 L97.69 87.07 A34 34 0 0 0 131.606 55.399 A2.5 2.5 0 0 1 134.1 53.07 L244.35 53.07 A6 6 0 0 1 250.35 59.07 L250.35 151.17 A6 6 0 0 1 244.35 157.17 L16 157.17 A6 6 0 0 1 10 151.17 Z";
+const AX0=82,FX=97.69,BXF=169.69,IX0=178.35,FY=53.07,FB=157.17;
+const HL_TONGUE='M10 53.07 L10 20 A10 10 0 0 1 20 10 L33 10 A10 10 0 0 1 43 20 L43 53.07';
+const HL_NOTCH='M43 53.07 A39 34 0 0 0 82 87.07 L97.69 87.07 A34 34 0 0 0 131.606 55.399 A2.5 2.5 0 0 1 134.1 53.07';
+const HL_INNER='M178.35 53.07 L244.35 53.07 A6 6 0 0 1 250.35 59.07 L250.35 151.17';
+const OUTL="M10 0 L32.5 0 A10 10 0 0 1 42.5 10 L42.5 36 A6 6 0 0 1 36.5 42 L6 42 A6 6 0 0 1 0 36 L0 10 A10 10 0 0 1 10 0 Z";
+const WINL="M31.25 20.75 A10 10 0 1 0 11.25 20.75 A10 10 0 1 0 31.25 20.75 Z";
+
+// ---------- steps ----------
+const PARTS={A:'Srovnání',B:'Zkosení',C:'Barva',D:'Zaleštění',E:'Kontrola',F:'Pouzdro s mincí',G:'Víčko'};
+const P1={v:'01',sub:'pouzdro na karty',c:'var(--chip1)'}, P2={v:'02',sub:'pouzdro s mincí',c:'var(--chip2)'}, P3={v:'03',sub:'peněženka Víčko',c:'var(--chip3)'};
+const S=[];
+const add=(part,title,body,src,dur,draw,proj,tip)=>S.push({part,title,body,src,dur,draw,proj,tip});
+
+// vrstvy projektu 01: zadní díl dole (rub ven), přední kapsa nahoře (líc ven); 1,2 mm každá
+const L01=(d0=0,d1=0)=>[{t:1.2,lic:'top',dx:d0},{t:1.2,lic:'top',dx:d1}];
+const K=10.5; // hlavní řez: 10,5 jednotky scény na 1 mm
+
+// A1
+add('A','Které hrany: boky, dno, horní hrany a výřez',
+ 'Hrany se dělají až na sešitém pouzdru. Boky a dno jsou sešité ze dvou vrstev, přední kapsy a zadního dílu (kůže 1,2–1,5 mm, kresleno 1,2 mm, tedy asi 2,4 mm dohromady). Udělejte také horní hrany obou dílů a oblouk výřezu – po výřezu jezdí prsty při každém vytažení karty.',
+ 'Projekt 01, lekce 6, krok „Srovnejte a zalešte hrany“',8000,t=>{
+  const s=.66;let sh=es(t,.08,.3),sb=es(t,.38,.55),sp=es(t,.62,.8);
+  let o=holder('translate(9 14)',s,{hs:sh,hb:sb,hp:sp});
+  if(sh>.5) o+=`<g opacity="${f(seg(t,.2,.3))}">${pill(9+50*s,14+70*s+7,'boky a dno: 2 vrstvy','ta','middle')}</g>`;
+  if(sb>.5) o+=`<g opacity="${f(seg(t,.48,.55))}">${pill(9+50*s,14+10*s,'horní hrana zadního dílu','tok','middle')}</g>`;
+  if(sp>.5) o+=`<g opacity="${f(seg(t,.74,.8))}">${lead(9+50*s,14+30*s,9+50*s,14+21.6*s)}${pill(9+50*s,14+35*s,'oblouk výřezu','tok','middle')}</g>`;
+  o+=pill(4,87,t<.9?'zadní díl 100 × 70 mm, kapsa 100 × 56 mm':'všechny řezané hrany','t');
+  const ck=[['boky a dno','.12','.'],['horní hrany','.42','.'],['oblouk výřezu','.66','.']].map(([a,b])=>[a,+b]);
+  let ib=checklist(ck,t,18,6.4);
+  ib+=notes([['po sešití','t'],['(lekce 6)'],[''],['2 vrstvy ≈ 2,4 mm'],['1 vrstva 1,2 mm']],42,5.2);
+  return o+inset('HRANY',ib);
+ },P1);
+
+// A2
+add('A','Srovnejte hrany smirkem 220–400 na rovné destičce',
+ 'Smirkovým papírem 220–400 na rovné destičce srovnejte sešité hrany do jedné roviny. Teprve pak má smysl leštit.',
+ 'Projekt 01, lekce 6, krok „Srovnejte a zalešte hrany“; zrnitost i v seznamu vybavení (220–400 na srovnání hran)',10000,t=>{
+  // hlavní pohled: pouzdro stojí dnem na brusném papíru na destičce a táhne se tam a zpět
+  const s=.5, ph=es(t,.08,.9), dx=Math.sin(ph*Math.PI*6)*7;
+  let o=`<rect x="4" y="66" width="76" height="6" rx="1" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".3"/><rect x="6" y="64.6" width="72" height="1.6" fill="var(--sand)" stroke="var(--sand-d)" stroke-width=".2"/>`;
+  for(let i=0;i<40;i++) o+=`<circle cx="${f(6.6+i*1.8)}" cy="${f(65.2+rnd(i)*.8)}" r=".18" fill="var(--sand-d)"/>`;
+  o+=holder(`translate(${f(17+dx)} ${f(64.6-70*s)})`,s);
+  if(ph>0&&ph<1) o+=arrow(42+dx-8,58,42+dx-15,58,'var(--ink)',.5,'arI')+arrow(42+dx+8,58,42+dx+15,58,'var(--ink)',.5,'arI');
+  o+=pill(6,80,'destička + papír 220–400','t');
+  o+=pill(4,87,t<.9?'hranou tahat po papíru':'vrstvy v jedné rovině','t');
+  // inset: řez hranou dna, vrstvy se srovnají
+  const p=es(t,.1,.85);
+  let ib=prof({x:122,y:56,k:6.2,len:4.2,layers:L01(.45*(1-p),0),fuzz:.35+.45*p});
+  ib+=lbl(96,38.5,'kapsa','ts')+lbl(96,61.5,'zadní díl','ts');
+  if(p<.3) ib+=pill(130,24,'schod','ta','end');
+  if(p>.95) ib+=pill(130,24,'v rovině','tok','end');
+  ib+=scaleBar(92,72,6.2)+lbl(89,80,'zvětšeno','ts');
+  return o+inset('ŘEZ DNEM',ib);
+ },P1,'Tip (lekce to neuvádí; karta vybavení Smirkový papír): papír přidržte na destičce a tahejte po něm hranou, volný papír v ruce hranu zaoblí nepravidelně. Bruste jen do roviny, víc ubírá materiál z dílu.');
+
+// B1
+add('B','Zkosení: pouzdro na karty ne, pouzdro s mincí „srazte hrany“',
+ 'Lekce pouzdra na karty hrany nezkosuje: hrany se jen srovnají a zaleští. Pouzdro s mincí v lekci 8 přebrousí dno smirkem do jedné roviny přes všechny tři vrstvy a „srazí hrany“, doporučený nástroj je ořezávač hran velikosti 0–1. Animace ukazuje dno pouzdra s mincí: tři vrstvy, kreslené po 1,2 mm (tělo je výchozí z kůže 1,5 mm, nebo 1,2 mm).',
+ 'Projekt 02, lekce 8, krok „Přebruste dno do roviny“; ořezávač hran v doporučeném vybavení lekce 8. Projekt 01: ořezávač hran až „na později“',11000,t=>{
+  const ls=[{t:1.2,lic:'bot'},{t:1.2,lic:'bot'},{t:1.2,lic:'top'}];
+  const bt=.55*es(t,.12,.45), bb=.55*es(t,.55,.88);
+  const x0=58,y0=64;
+  let o=prof({x:x0,y:y0,k:K,len:5,layers:ls,bevT:bt,bevB:bb,fuzz:.45});
+  const H=H_(ls);
+  // ořezávač hran na horní, pak spodní hraně
+  if(t>.06&&t<.5){const p=seg(t,.12,.45);o+=beveler(x0-bt*K*.5+1,y0-H*K+bt*K*.5-1,-45);
+    if(p>.05&&p<1) o+=`<path d="M${f(x0+2+p*5)} ${f(y0-H*K-2-p*6)} q2 -2 1 -4 q-1 -1.5 -2.2 .2" stroke="var(--rub-d)" stroke-width=".6" fill="none" stroke-linecap="round"/>`}
+  if(t>.5&&t<.92){const p=seg(t,.55,.88);o+=beveler(x0-bb*K*.5+1,y0+bb*K*-.5+1,45);
+    if(p>.05&&p<1) o+=`<path d="M${f(x0+2+p*5)} ${f(y0+2+p*6)} q2 2 1 4 q-1 1.5 -2.2 -.2" stroke="var(--rub-d)" stroke-width=".6" fill="none" stroke-linecap="round"/>`}
+  o+=pill(6,y0-H*K-5,'přední (líc)','ts')+pill(6,y0+6,'zadní (líc)','ts');
+  o+=scaleBar(8,80,K)+zoomTag();
+  o+=pill(4,87,t<.5?'srazit horní hranu':t<.92?'srazit spodní hranu':'obě vnější hrany sražené','t');
+  let ib=notes([['01 pouzdro na karty','t'],['nezkosuje se'],['(ořezávač „později“)'],[''],['02 lekce 8','t'],['„srazte hrany“'],['ořezávač vel. 0–1'],['(doporučený)'],[''],['sestava 1,2 mm:','ta'],['ořezávač vynechán,'],['jen brus a leštění']],16,5.1);
+  return o+inset('KDO ZKOSUJE',ib);
+ },P2,'Tip (lekce to neuvádí): ze kterých stran srážet, lekce 8 neříká; animace srazí obě vnější lícové hrany jako peněženka Víčko. Karta vybavení Ořezávač hran: tah nejdřív na odřezku, jeden hluboký záběr hranu nevratně ztenčí a tupý ořezávač hranu trhá.');
+
+// B2
+const L03side=(dD2=0)=>[{t:1.0,lic:'bot',kind:'kas'},{t:.8,lic:'bot',kind:'cok',dx:dD2},{t:1.0,lic:'top',kind:'kas'}];
+add('B','Víčko: zkosovačem, nebo brusným papírem na hranolku',
+ 'Peněženka Víčko: hrany zkoste zkosovačem, když ho máte z projektu 01 nebo 02; bez něj je zaoblete brusným papírem na hranolku. Boky těla se zkosují z obou líců. Na řezu je bok peněženky: přední stěna F, přepážka D2 a záda B.',
+ 'Projekt 03, lekce 5, krok „Předběžné dokončení hran“ a lekce 9, krok „Zarovnat a vyleštit boky“',10000,t=>{
+  const ls=L03side();const H=H_(ls);
+  const rT=es(t,.1,.45), rB=es(t,.52,.88);
+  const x0=58,y0=62;
+  let o=prof({x:x0,y:y0,k:K+2,len:4.4,layers:ls,bevT:.4*rT,bevB:.4*rB,round:Math.min(rT,rB)*.6,fuzz:.4});
+  const kk=K+2;
+  if(t>.06&&t<.5){const w=Math.sin(t*90)*3;const c=.4*rT*kk;o+=sandBlock(x0-c/2+1.5+w*.4,y0-H*kk+c/2-1.5+w*.4,225)}
+  if(t>.5&&t<.92){const w=Math.sin(t*90)*3;const c=.4*rB*kk;o+=sandBlock(x0-c/2+1.5+w*.4,y0-c/2+1.5-w*.4,-45)}
+  o+=pill(6,y0-H*kk-5,'záda B (líc)','ts')+pill(6,y0+6,'přední stěna F (líc)','ts');
+  o+=sideTag(x0,y0-1.4*kk,'D2');
+  o+=scaleBar(8,82,kk)+zoomTag();
+  o+=pill(4,88,t<.92?'brusný papír na hranolku':'zaobleno z obou líců','t');
+  let ib=notes([['03 Víčko','t'],['zkosovač hran,'],['když ho máte'],['jinak brusný'],['papír na hranolku'],[''],['boky těla:','t'],['z obou líců'],['(lekce 9)'],[''],['kresleno:','ts'],['1,0 + 0,8 + 1,0 mm']],16,5.1);
+  return o+inset('BEZ NÁSTROJE',ib);
+ },P3,'Tip (lekce to neuvádí): tloušťky vrstev Víčka si podle lekce 1 změříte sami; řez je kreslený pro 1,0 / 0,8 / 1,0 mm podle rozsahů tlouštěk kůže v lekci 1 (kaštan 0,9–1, čokoládová kozinka 0,7–0,9 mm).');
+
+// C1
+add('C','Barva na hrany – jen u barvené kůže',
+ 'U barvené kůže je řez světlý – obarvěte ho barvou na hrany. Barví se před zaleštěním, stejně v lekcích 5, 6 i 8 pouzdra s mincí. Lekce 6 pouzdra na karty barvu na hrany nemá.',
+ 'Projekt 02, lekce 8, krok „Obarvěte a zaleštěte vnější hrany“; lekce 5 a 6 „obarvěte (barva na hrany, u barvené kůže) a zaleštěte“',9000,t=>{
+  const ls=[{t:1.2,lic:'bot',kind:'dyed'},{t:1.2,lic:'bot',kind:'dyed'},{t:1.2,lic:'top',kind:'dyed'}];
+  const d=es(t,.3,.85), x0=58,y0=64;
+  let o=prof({x:x0,y:y0,k:K,len:5,layers:ls,bevT:.55,bevB:.55,fuzz:.45*(1-d*.5),dye:d});
+  o+=bottle(74,30,'barva na hrany','var(--dye)');
+  if(t>.25&&t<.88){const yy=L(y0-3.6*K,y0,d);o+=`<circle cx="${f(x0+1.2)}" cy="${f(yy)}" r="1.1" fill="var(--dye)" opacity=".85"/>`}
+  if(t<.3) o+=`<g opacity="${f(seg(t,.05,.12))}">${lead(40,46,52,y0-1.8*K)}${pill(26,45,'světlý řez','ta')}</g>`;
+  o+=scaleBar(8,80,K)+zoomTag();
+  o+=pill(4,87,t<.88?'barvená kůže: řez barvit':'řez obarvený – pak zaleštit','t');
+  let ib=notes([['01 lekce 6','t'],['barvu nemá'],[''],['02 barvená kůže','t'],['barva na hrany'],['před zaleštěním'],['lekce 5, 6 a 8'],[''],['03 Víčko','t'],['barví jen horní'],['hranu D1, až po'],['vyleštění (G2)']],16,5.1);
+  return o+inset('KDY BARVIT',ib);
+ },P2,'Tip (lekce to neuvádí): čím barvu nanést a jak dlouho schne, lekce pouzdra s mincí neříká – řiďte se návodem na obalu barvy.');
+
+// D1
+add('D','Navlhčete hranu vodou nebo pastou',
+ 'Srovnanou hranu navlhčete vodou nebo pastou na hrany (v seznamu vybavení Tokonole). Na řezu je zpět pouzdro na karty: dvě vrstvy, srovnané, vlákna v řezu ještě volná.',
+ 'Projekt 01, lekce 6, krok „Srovnejte a zalešte hrany“',8000,t=>{
+  const ls=L01();const H=H_(ls);
+  const w=es(t,.3,.7), x0=56,y0=60;
+  let o=prof({x:x0,y:y0,k:K+2,len:4.4,layers:ls,fuzz:.55*(1-.35*w),wet:w});
+  const kk=K+2;
+  const dp=seg(t,.08,.32);
+  if(dp>0&&dp<1) o+=drop(x0+3,L(y0-H*kk-14,y0-H*kk*.5,dp),'var(--water)',1.3);
+  if(t>.32&&t<.75) o+=`<path d="M${f(x0+1)} ${f(y0-H*kk)} v${f(H*kk)}" stroke="var(--water)" stroke-width="1" opacity="${f(.6*(1-seg(t,.6,.75)))}"/>`;
+  o+=drop(62,20,'var(--water)',1.5)+lbl(62,27,'voda','ts','middle')+lbl(70.5,21,'nebo','ts','middle');
+  o+=`<rect x="76" y="15" width="6" height="6" rx="1" fill="var(--paste)" stroke="var(--paste-d)" stroke-width=".25"/>`+lbl(79,27,'pasta','ts','middle');
+  o+=scaleBar(8,80,kk)+zoomTag();
+  o+=pill(4,87,t<.75?'navlhčit jen hranu':'hrana vlhká – hned leštit','t');
+  let ib=notes([['01 lekce 6:','t'],['voda nebo pasta'],[''],['vybavení:','t'],['pasta na hrany'],['(Tokonole)'],['+ dřevěné leštítko'],[''],['jen na hranu:','ta'],['pasta na líci'],['nechá lesklou'],['skvrnu (Tip)']],16,5.1);
+  return o+inset('ČÍM',ib);
+ },P1,'Tip (lekce to neuvádí; karta vybavení Pasta na hrany + leštítko): pasta na líci kůže zanechá lesklou skvrnu, pracujte jen na hraně.');
+
+// D2
+add('D','Třete leštítkem, dokud se hrana nezhutní a nezaleskne',
+ 'Navlhčenou hranu třete leštítkem, dokud se nezhutní a nezaleskne.',
+ 'Projekt 01, lekce 6, krok „Srovnejte a zalešte hrany“; leštítko v doporučeném vybavení lekce 6',10500,t=>{
+  const ls=L01();const H=H_(ls);
+  const p=es(t,.1,.88), x0=50,y0=60,kk=K+2;
+  let o=prof({x:x0,y:y0,k:kk,len:3.8,layers:ls,fuzz:.55*(1-p),wet:.8*(1-p),burn:p,round:p});
+  const jig=Math.sin(t*70)*.4;
+  o+=slickerSec(x0+.2*kk*p+.4+jig,y0-H*kk/2,kk,H+.5);
+  o+=motion(12,20,t*6)+lbl(15.5,21.2,'třít podél hrany','ts');
+  o+=pill(x0+8,y0+13,'leštítko, drážka','ts');
+  o+=scaleBar(8,80,kk)+zoomTag();
+  o+=pill(4,87,p<.98?'třít, až se zhutní a zaleskne':'zhutněná, lesklá hrana','t');
+  // inset: po délce hrany – matná vlevo, lesklá vpravo
+  let ib=lbl(89,18,'pohled na hranu','ts');
+  const gx0=89,gw=41,gy=24,gh=8;
+  ib+=`<rect x="${gx0}" y="${gy}" width="${gw}" height="${gh}" rx=".6" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".25"/><rect x="${gx0}" y="${gy+gh/2-.15}" width="${gw}" height=".3" fill="var(--rub-d)"/>`;
+  const bw=gw*p;ib+=`<rect x="${f(gx0+gw-bw)}" y="${gy}" width="${f(bw)}" height="${gh}" rx=".6" fill="var(--burn)" opacity=".9"/><rect x="${f(gx0+gw-bw)}" y="${gy+1.5}" width="${f(bw)}" height=".8" fill="var(--shine)" opacity=".6"/>`;
+  for(let i=0;i<14;i++){const xx=gx0+1+i*2.8;if(xx<gx0+gw-bw-1) ib+=`<path d="M${f(xx)} ${gy} l.4 -.9 M${f(xx+1)} ${gy+gh} l.3 .9" stroke="var(--fib)" stroke-width=".3"/>`}
+  ib+=p<.97?lbl(89,38,'matná','ts')+lbl(130,38,'lesklá','ts','end'):lbl(89,38,'celá hrana lesklá','tok');
+  ib+=notes([['dokud se','t'],['nezhutní'],['a nezaleskne'],[''],['leštítko nebo','t'],['kus plátna (D3)']],48,5.1);
+  return o+inset('LEŠTĚNÍ',ib);
+ },P1,'Tip (lekce to neuvádí; karta vybavení): leštítko je dřevěné s drážkami pro různé tloušťky – použijte drážku, do které hrana sedne. Tím, jak se volná vlákna přitlačí, hrana obvykle ztmavne a lehce se zaoblí.');
+
+// D3
+add('D','Bez leštítka: kus plátna',
+ 'Místo leštítka poslouží kus plátna. Postup je stejný: navlhčit a třít, dokud se hrana nezhutní a nezaleskne. Hrana pouzdra napůl zaleštěná: vlevo matná srovnaná, vpravo hladká a lesklá.',
+ 'Projekt 01, lekce 6, krok „Srovnejte a zalešte hrany“ (leštítkem či kusem plátna) a popis fotky ke kroku',8500,t=>{
+  // hlavní pohled: dno pouzdra zepředu, plátno jede podél hrany
+  const s=.62,p=es(t,.08,.88)*.5;
+  let o=holder('translate(11 12)',s);
+  const yb=12+70*s, x0=11, x1=11+100*s, xm=L(x1,x0+31*s,p);
+  o+=`<path d="M${f(xm)} ${f(yb)} L${f(x1-6*s)} ${f(yb)} A${f(6*s)} ${f(6*s)} 0 0 0 ${f(x1)} ${f(yb-6*s)}" stroke="var(--burn)" stroke-width="2.2" fill="none"/><path d="M${f(xm)} ${f(yb-.2)} L${f(x1-6*s)} ${f(yb-.2)}" stroke="var(--shine)" stroke-width=".45" opacity=".9"/>`;
+  if(p>0&&p<.5) o+=cloth(xm-3,yb+2.5);
+  o+=pill(x0+2,yb+9,'matná','ts')+pill(x1-2,yb+9,'lesklá','ts','end');
+  o+=pill(4,87,'navlhčit a třít plátnem','t');
+  let ib=prof({x:124,y:52,k:7,len:4.6,layers:L01(),fuzz:.55*(1-2*p),burn:2*p*.9,round:2*p*.8,wet:.6*(1-2*p)});
+  ib+=scaleBar(92,64,7)+lbl(89,72,'řez, zvětšeno','ts');
+  ib+=lbl(89,18,'leštítko','t')+lbl(89,23,'nebo plátno','t');
+  return o+inset('PLÁTNO',ib);
+ },P1,'Tip (lekce to neuvádí; karta vybavení): voda a kus plátna nebo hladké dřevo fungují, jen to trvá déle.');
+
+// E1
+add('E','Chyba: leštění před srovnáním hran',
+ 'Častá chyba z lekce 6: leštit dřív, než jsou hrany srovnané. Nerovnosti zůstanou.',
+ 'Projekt 01, lekce 6, časté chyby a úvod lekce („Nejdřív srovnat smirkem, potom navlhčit a leštit. V tomto pořadí, nikdy naopak.“); stejně projekt 02, lekce 8 („Leštění hran před srovnáním dna: nerovnosti tří vrstev zůstanou vidět.“)',8000,t=>{
+  const x0=36,y0=60,kk=K;
+  const p=es(t,.1,.6);
+  let o=prof({x:x0,y:y0,k:kk,len:3,layers:L01(.45,0),burn:p,fuzz:.4*(1-p)});
+  o+=pill(4,24,'nejdřív leštit','ta');
+  if(t>.6){o+=`<g opacity="${f(seg(t,.6,.7))}">${cross(x0+9,y0-2*kk,2,.7)}${pill(x0+13,y0-2*kk+1.5,'schod zůstal','ta')}</g>`}
+  o+=prof({x:76,y:y0,k:kk,len:2.6,layers:L01(),burn:es(t,.7,.95),round:es(t,.7,.95)});
+  o+=pill(50,24,'srovnat → leštit','tok');
+  if(t>.95) o+=tick(66,y0-2.4*kk-5,1.1);
+  o+=scaleBar(6,80,kk)+zoomTag();
+  o+=pill(4,87,'srovnat vždy před leštěním','t');
+  let ib=notes([['01 lekce 6','t'],['leštění před'],['srovnáním hran:'],['nerovnosti','ta'],['zůstanou','ta'],[''],['02 lekce 8','t'],['totéž u dna'],['ze tří vrstev']],18,5.4);
+  return o+inset('ČASTÁ CHYBA',ib);
+ },P1);
+
+// E2
+add('E','Kontrolní bod: hrany srovnané a zaleštěné, včetně oblouku výřezu',
+ 'Hrany včetně oblouku výřezu jsou srovnané a zaleštěné (povinný kontrolní bod lekce 6). Pak vložte čtyři karty a palcem je ve výřezu vysuňte – po výřezu jezdí prsty při každém vytažení karty.',
+ 'Projekt 01, lekce 6, kontrolní body „Hrany včetně oblouku výřezu…“ a „Vejdou se čtyři karty…“',8000,t=>{
+  const s=.66;
+  let o=holder('translate(9 14)',s,{gloss:es(t,.05,.35)});
+  const ck=[['boky a dno',.35],['horní hrany',.45],['oblouk výřezu',.55],['srovnané',.65],['zaleštěné',.72]];
+  let ib=checklist(ck,t,17,6.6);
+  ib+=`<g opacity="${f(seg(t,.82,.9))}">${notes([['dál: vložit','t'],['4 karty, vysunout'],['palcem výřezem']],56,5.2)}</g>`;
+  o+=pill(4,87,t<.8?'kontrola po celém obvodu':'pouzdro hotové','tok');
+  if(t>.9) o+=`<circle cx="76" cy="70" r="5" fill="var(--panel)" stroke="var(--ok)" stroke-width=".7"/>`+tick(76,70.5,1.2);
+  return o+inset('KONTROLA',ib);
+ },P1);
+
+// F1
+add('F','Lekce 5: nejdřív hrany, na které se po složení nedostanete',
+ 'Pouzdro s mincí dělá část hran ještě naplocho, před složením: horní hranu vnitřního panelu, jeho volnou svislou hranu (skončí uvnitř smyčky ohybu A, je vidět výřezem), oblouk výřezu a jazyk. U barvené kůže je obarvěte, pak zaleštěte – v hotovém pouzdru už na ně nedosáhnete. Rub vnitřního panelu zapečeťte (Tokonole nebo gum tragacanth) kromě spodního proužku 0–3,5 mm od hrany: ten se v lekci 7 lepí.',
+ 'Projekt 02, lekce 5, krok „Obarvěte a zaleštěte hrany, na které se po složení špatně dostanete, a zapečeťte rub“ a kontrolní bod',11000,t=>{
+  const s=.322, tr=`translate(${f(2-10*s)} ${f(26-10*s)}) scale(${s})`;
+  const h1=es(t,.08,.3),h2=es(t,.32,.52),h3=es(t,.54,.74);
+  const hl=(p,op)=>op>0?`<path d="${p}" fill="none" stroke="var(--ok)" stroke-width="${f(1.2/s)}" stroke-linecap="round" stroke-linejoin="round" opacity="${f(op)}"/>`:'';
+  let inner=`<path d="${STRIP}" fill="url(#dyedG)" stroke="var(--lic-d)" stroke-width="${f(.4/s)}"/>`;
+  inner+=`<path d="M${AX0} ${87.07} V${FB} M${FX} ${87.07} V${FB} M${BXF} ${FY} V${FB} M${IX0} ${FY} V${FB}" stroke="var(--muted)" stroke-width="${f(.3/s)}" stroke-dasharray="${f(1.2/s)} ${f(1/s)}"/>`;
+  inner+=hl(HL_TONGUE,h1)+hl(HL_NOTCH,h2)+hl(HL_INNER,h3);
+  let o=`<g transform="${tr}">${inner}</g>`;
+  const P=(x,y)=>[2+(x-10)*s,26+(y-10)*s];
+  if(h1>.5){const [a,b]=P(26.5,10);o+=pill(a,b-2,'jazyk','tok','middle')}
+  if(h2>.5){const [a,b]=P(88,87);o+=pill(a,b+6,'oblouk výřezu','tok','middle')}
+  if(h3>.5){const [,b]=P(214,53);o+=pill(82,b-2,'vnitřní: horní + volná hrana','tok','end')}
+  o+=lbl(P(46,130)[0],P(46,130)[1],'ZADNÍ','ts','middle')+lbl(P(134,140)[0],P(134,140)[1],'PŘEDNÍ','ts','middle')+lbl(P(214,140)[0],P(214,140)[1],'VNITŘNÍ','ts','middle');
+  o+=pill(4,87,t<.76?'pás naplocho, líc nahoru':'obarvit (u barvené kůže) a zaleštit','t');
+  // inset: rub vnitřního panelu zapečetit, mimo pruh 0–3,5 mm
+  const sp=es(t,.78,.96);
+  let ib=lbl(89,17,'rub vnitřního panelu','ts');
+  const ix=97,iy=21,iw=72*.32,ih=104.1*.32,band=3.5*.32*2.4;
+  ib+=`<rect x="${ix}" y="${iy}" width="${f(iw)}" height="${f(ih)}" fill="url(#rubP)" stroke="var(--rub-d)" stroke-width=".3"/>`;
+  ib+=`<rect x="${ix}" y="${iy}" width="${f(iw)}" height="${f((ih-band)*sp)}" fill="var(--paste)" opacity=".75"/>`;
+  ib+=`<rect x="${ix}" y="${f(iy+ih-band)}" width="${f(iw)}" height="${f(band)}" fill="none" stroke="var(--accent)" stroke-width=".35" stroke-dasharray=".8 .6"/>`;
+  ib+=notes([['Tokonole nebo','t'],['gum tragacanth'],['ne v pruhu 0–3,5','ta'],['lepí se v lekci 7','ta']],iy+ih+6,5.3);
+  return o+inset('ZAPEČETIT',ib);
+ },P2,'Tip (lekce to neuvádí): pruh 0–3,5 mm je v insetu kvůli čitelnosti nakreslený širší; které části výkusu patří k „oblouku výřezu“, lekce nerozepisuje – animace zvýrazní celý výkus.');
+
+// F2
+add('F','Lekce 6: hrany kapsy ještě před přišitím',
+ 'Hrany kapsy – oblouk okna i vnější obrys – obarvěte (u barvené kůže) a zaleštěte stejně jako v lekci 5. Po přišití na přední panel už na vnější obrys nedosáhnete a na okno jen omezeně.',
+ 'Projekt 02, lekce 6, krok „Obarvěte a zaleštěte hrany kapsy“ a kontrolní bod',8500,t=>{
+  const s=1.32,ox=14,oy=12;
+  const p1=es(t,.1,.45),p2=es(t,.5,.85);
+  let inner=`<path d="${OUTL} ${WINL}" fill-rule="evenodd" fill="url(#dyedG)" stroke="var(--lic-d)" stroke-width="${f(.4/s)}"/>`;
+  inner+=`<path d="${OUTL}" fill="none" stroke="var(--ok)" stroke-width="${f(1.1/s)}" pathLength="1" stroke-dasharray="${f(p1)} 1"/>`;
+  inner+=`<path d="${WINL}" fill="none" stroke="var(--ok)" stroke-width="${f(1.1/s)}" pathLength="1" stroke-dasharray="${f(p2)} 1"/>`;
+  let o=G(`translate(${ox} ${oy}) scale(${s})`,inner);
+  if(p1>.9) o+=pill(ox+42.5*s+2,oy+30*s,'obrys','tok');
+  if(p2>.9) o+=pill(ox+21.25*s,oy+20.75*s+1.5,'okno Ø 20','tok','middle');
+  o+=pill(4,87,t<.88?'kapsa 42,5 × 42 mm, naplocho':'obarvit (u barvené kůže), zaleštit, pak přišít','t');
+  let ib=notes([['lekce 6','t'],['před přišitím'],['na přední panel'],[''],['obrys a okno:','t'],['obarvit','ts'],['(u barvené kůže)'],['zaleštit'],[''],['potom už:','ta'],['obrys ne, okno','ta'],['jen omezeně','ta']],16,5.2);
+  return o+inset('KAPSA',ib);
+ },P2);
+
+// F3
+add('F','Lekce 8: dno do roviny, srazit, obarvit, zaleštit',
+ 'Na hotovém těle přebruste dno smirkem do jedné roviny přes všechny tři vrstvy a srazte hrany. U barvené kůže je řez světlý – obarvěte ho barvou na hrany. Všechny vnější hrany pak zaleštěte jako u pouzdra na karty.',
+ 'Projekt 02, lekce 8, kroky „Přebruste dno do roviny“ a „Obarvěte a zaleštěte vnější hrany“; kontrolní bod „Vnější hrany jsou srovnané, obarvené (u barvené kůže) a zaleštěné.“',12500,t=>{
+  const sd=es(t,.04,.24), bv=es(t,.28,.48), dy=es(t,.52,.7), bu=es(t,.74,.94);
+  const ls=[{t:1.2,lic:'bot',kind:'dyed',dx:.35*(1-sd)},{t:1.2,lic:'bot',kind:'dyed',dx:.6*(1-sd)},{t:1.2,lic:'top',kind:'dyed',dx:0}];
+  const x0=56,y0=64;
+  let o=prof({x:x0,y:y0,k:K,len:4.8,layers:ls,bevT:.55*bv,bevB:.55*bv,dye:dy,burn:bu,round:bu,fuzz:.5*(1-bu)});
+  const stage=t<.26?'1 · dno do roviny':t<.5?'2 · srazit hrany':t<.72?'3 · obarvit (barvená)':'4 · zaleštit';
+  o+=pill(82,13.5,stage,'ta','end');
+  o+=pill(6,y0-3.6*K-5,'přední','ts')+pill(6,y0+6,'zadní','ts')+sideTag(x0,y0-1.8*K,'vnitřní');
+  o+=scaleBar(8,80,K)+zoomTag();
+  o+=pill(4,87,'3 vrstvy, kresleno po 1,2 mm','t');
+  const ck=[['dno do roviny',.24],['srazit hrany',.48],['obarvit',.7],['(u barvené kůže)',.7,'-'],['zaleštit jako',.94],['pouzdro na karty',.94,'-']];
+  let ib=checklist(ck,t,17,6.2);
+  ib+=notes([['„všechny vnější','t'],['hrany“']],60,5);
+  return o+inset('LEKCE 8',ib);
+ },P2,'Tip (lekce to neuvádí): výslovně to lekce nepíše, ale k vnějším hranám patří i nový konec jazyka po zkrácení a zaoblení rohů na R10 v lekci 8 – jazyk z lekce 5 se tím zkrátí.');
+
+// G1
+add('G','Víčko, lekce 5: hrany předem, před sestavením',
+ 'Horní hrany D1 a D2, horní hranu přední stěny F i s výřezem, spodní hranu a boky pásu víčka a boky jazýčku zkoste (zkosovačem hran, když ho máte z projektu 01 nebo 02; bez něj je zaoblete brusným papírem na hranolku), vybruste a vyleštěte. Výřez pro palec zaoblete z líce i z rubu, protože o rubovou hranu dna výřezu se může zachytit karta; vnitřek vybruste a vyleštěte kolíkem Ø 8 ve vrtačce.',
+ 'Projekt 03, lekce 5, krok „Předběžné dokončení hran“ a kontrolní bod „Horní hrany D1, D2 a F, hrany pásu víčka a jazýčku jsou vyleštěné…“',11000,t=>{
+  const bv=es(t,.06,.32), sd=es(t,.36,.6), bu=es(t,.64,.92);
+  const ls=[{t:1.0,lic:'top',kind:'kas'}];
+  const x0=50,y0=42,kk=K+3;
+  let o=prof({x:x0,y:y0,k:kk,len:3,layers:ls,bevT:.35*bv,round:bu*.7,burn:bu,fuzz:.5*(1-bu)*(sd>0?1:.8)});
+  if(t>.35&&t<.62){const w=Math.sin(t*120)*1.6;o+=sandBlock(x0+2.1,y0-.5*kk+w,-90,18)}
+  if(t>.04&&t<.34) o+=beveler(x0-.35*bv*kk*.5+1,y0-kk+.35*bv*kk*.5-1,-45);
+  o+=pill(82,13.5,t<.34?'1 · zkosit (z líce)':t<.62?'2 · vybrousit':'3 · vyleštit','ta','end');
+  o+=lbl(6,y0-kk-2,'líc','ts')+lbl(6,y0+4,'rub','ts');
+  // druhý řez: výřez pro palec – z líce i z rubu
+  const vp=es(t,.06,.32), vb=es(t,.64,.92);
+  o+=prof({x:x0,y:72,k:kk,len:3,layers:ls,bevT:.35*vp,bevB:.35*vp,round:vb*.7,burn:vb});
+  o+=pill(6,54,'výřez pro palec: z líce i z rubu','ts');
+  o+=scaleBar(60,82,kk)+zoomTag();
+  let ib=notes([['zkosit, vybrousit,','t'],['vyleštit:'],['· horní hrany D1, D2'],['· horní hrana F'],['>i s výřezem'],['· pás víčka: spodní'],['>hrana a boky'],['· boky jazýčku'],[''],['výřez: z líce','t'],['i z rubu; vnitřek'],['kolík Ø 8 ve vrtačce']],16,5.2);
+  return o+inset('PŘED SESTAVENÍM',ib);
+ },P3,'Tip (lekce to neuvádí): u ostatních hran lekce 5 stranu nepíše; animace zkosí jen líc, z obou stran jen výřez pro palec. Řez je kreslený pro kaštan 1,0 mm, skutečnou tloušťku změříte v lekci 1.');
+
+// G2
+add('G','Lekce 5: barevná horní hrana D1, Tokonole jen mimo lepená místa',
+ 'Horní hranu D1 natřete barvou na hrany v tónu kontrastním k D1 (v tónu D2) párátkem ve 2 tenkých vrstvách, mezi vrstvami 20–30 min. Nejdřív na odřezku kozinky: přilnavost na tak tenké hraně je potřeba ověřit. Tokonole brání přilnutí lepidla, proto ho nanášejte jen mimo lepená místa a hranice lepení přelepte páskou.',
+ 'Projekt 03, lekce 5, kroky „Barevná horní hrana D1“ a „Tokonole jen mimo lepená místa“',11000,t=>{
+  const c1=es(t,.08,.3), wait=seg(t,.32,.55), c2=es(t,.58,.82);
+  const ls=[{t:.8,lic:'top',kind:'koz'}];
+  const x0=44,y0=50,kk=K+8;
+  let o=prof({x:x0,y:y0,k:kk,len:2.2,layers:ls,burn:.6,round:.6,paint:c1+c2});
+  if((c1>0&&c1<1)||(c2>0&&c2<1)){const p=c1<1?c1:c2;o+=toothpick(x0+1.2,y0-.8*kk*(1-p),-40)}
+  if(wait>0&&wait<1) o+=clock(70,34,wait)+pill(70,44,'20–30 min','t','middle');
+  o+=pill(82,13.5,c1<1?'1. vrstva párátkem':c2<.01?'mezi vrstvami 20–30 min':c2<1?'2. vrstva':'2 tenké vrstvy','ta','end');
+  o+=lbl(8,y0-.8*kk-2,'D1, nebarvená kozinka','ts');
+  o+=scaleBar(8,70,kk)+zoomTag();
+  o+=pill(4,87,'nejdřív na odřezku kozinky','t');
+  // inset: Tokonole a páska na hranici lepení
+  let ib=lbl(89,17,'Tokonole','t')+lbl(89,22,'jen mimo lepená','ts')+lbl(89,26.5,'místa','ts');
+  ib+=`<rect x="90" y="31" width="39" height="26" fill="var(--koz)" stroke="var(--rub-d)" stroke-width=".3"/>`;
+  ib+=`<rect x="90" y="47" width="39" height="10" fill="url(#hatchG)"/>`;
+  ib+=`<rect x="90" y="44.6" width="39" height="2.8" fill="var(--tape)" stroke="var(--tape-d)" stroke-width=".2" opacity=".95"/>`;
+  const tk=es(t,.3,.9);ib+=`<rect x="90" y="31" width="${f(39*tk)}" height="13.6" fill="var(--paste)" opacity=".7"/>`;
+  ib+=lbl(91,40,'Tokonole','ts')+pill(92,54,'lepí se','ta');
+  ib+=notes([['hranici lepení','t'],['přelepit páskou']],64,5);
+  return o+inset('TOKONOLE',ib);
+ },P3,'Tip (lekce to neuvádí): pořadí hran a barvy bere animace z lekce 5 – barva přijde na už vyleštěnou hranu D1 (kontrolní bod: „vyleštěné a horní hrana D1 natřená kontrastní barvou“). D1 je kreslená 0,8 mm podle rozsahu nebarvené kozinky v lekci 1 (0,8–1 mm).');
+
+// G3
+add('G','Lekce 9: boky zarovnat na 101,0 mm a vyleštit jako jeden svazek',
+ 'Po ušití bočních švů zarovnejte boky nožem na 101,0 mm (D2 přečnívá). Spodní rohy nechte hranaté – nic nevyplňujte ani nezaoblujte. Boky vybruste, zkoste z obou líců (zkosovačem, když ho máte, jinak zaoblete brusným papírem na hranolku) a vyleštěte jako jeden svazek, i u ohybu dna.',
+ 'Projekt 03, lekce 9, krok „Zarovnat a vyleštit boky“ a kontrolní bod „Boky jsou zarovnané na 101 mm, zkosené a vyleštěné, spodní rohy hranaté.“',12000,t=>{
+  const cut=es(t,.05,.24), sd=es(t,.28,.44), bv=es(t,.48,.68), bu=es(t,.72,.94);
+  const x0=50,y0=60,kk=K+2;
+  const ls=L03side(.9*(1-cut));
+  let o=prof({x:x0,y:y0,k:kk,len:3.6,layers:ls,bevT:.4*bv,bevB:.4*bv,round:bu*.8,burn:bu,fuzz:.45*(1-bu)*(cut>.99?1:.6)});
+  if(t>.03&&t<.27){const yy=L(y0-2.6*kk-6,y0+4,cut);o+=knife(x0+.2,yy,0)}
+  if(t>.27&&t<.46){const w=Math.sin(t*120)*1.6;o+=sandBlock(x0+2.1,y0-1.4*kk+w,-90,40)}
+  o+=pill(82,13.5,t<.26?'1 · nožem na 101,0 mm':t<.46?'2 · vybrousit':t<.7?'3 · zkosit z obou líců':'4 · vyleštit jako svazek','ta','end');
+  o+=pill(6,y0-2.6*kk-5,'záda B','ts')+pill(6,y0+6,'přední stěna F','ts')+sideTag(x0+(cut<.98?.9*(1-cut)*kk:0),y0-1.4*kk,cut<.98?'D2 přečnívá':'D2',cut<.98?'ta':'ts');
+  o+=scaleBar(8,80,kk)+zoomTag();
+  // inset: spodní roh hranatý
+  let ib=lbl(89,17,'spodní roh','t');
+  ib+=`<path d="M93 22 V48 H120" fill="none" stroke="var(--kas-d)" stroke-width="2.4" stroke-linejoin="miter"/><path d="M93 22 V48 H120" fill="none" stroke="var(--burn)" stroke-width=".6"/>`;
+  ib+=tick(124,46,.9)+lbl(96,30,'hranatý','tok');
+  ib+=`<path d="M93 56 V68 Q93 74 99 74 H108" fill="none" stroke="var(--muted)" stroke-width="1" opacity=".6"/>`+cross(112,66,1.6,.55)+lbl(103,62,'nezaoblovat','ta');
+  ib+=lbl(89,80,'nic nevyplňovat','ts');
+  return o+inset('ROHY',ib);
+ },P3,'Tip (lekce to neuvádí): lekce 5 píše „zkoste, vybruste“, lekce 9 „vybruste, zkoste“ – animace drží pořadí každé lekce. Tloušťky vrstev jsou schematické.');
+
+// G4
+add('G','Další hrany Víčka: okénka a jazýček',
+ 'Okénka mincí 12 × 48 mm v zádech (lekce 5): zkoste z líce, konce vybruste papírem namotaným na kolíku Ø 8–10 a vyleštěte. Okénko bankovek 14 × 45 mm (lekce 6) se seká až po lepení skrz obě vrstvy; zkoste ho a vyleštěte jako jeden svazek. Jazýček (lekce 11): po oříznutí špičky zbruste jen posledních 2,5 mm špičky brusným papírem na hranolku do klínu z líce i z rubu, ne nožem; stačí, když je hrana na konci asi 0,5–0,7 mm a zaoblená. Po ušití švu S7 hrany jazýčku zkoste, vybruste a vyleštěte. Spodní hranu D2 (lekce 5) zbruste brusným papírem na hranolku do tenka (klín 3 mm), nožem ji neztenčujte – jinak by dělala schod, o který se zachytí bankovka.',
+ 'Projekt 03, lekce 5 („Okénka mincí v zádech“, „Spodní hrana D2 do tenka“), lekce 6 („okénko bankovek“), lekce 11 („Ořízněte špičku a boky L1“, „Šev S7 kolem magnetu“)',10000,t=>{
+  // okénko mincí 12 × 48 v měřítku 1,3
+  const s=1.3,cx=42,cy=45,w=48*s,h=12*s,r=h/2;
+  let o=`<rect x="${f(cx-w/2-10)}" y="${f(cy-h/2-10)}" width="${f(w+20)}" height="${f(h+20)}" rx="2" fill="url(#kasG)" stroke="var(--kas-d)" stroke-width=".35"/>`;
+  o+=`<rect x="${f(cx-w/2)}" y="${f(cy-h/2)}" width="${f(w)}" height="${f(h)}" rx="${f(r)}" fill="var(--stage)" stroke="var(--burn)" stroke-width="${f(.4+1.1*es(t,.15,.9))}"/>`;
+  // kolík Ø 8 v konci okénka
+  const side=t<.5?-1:1, ph=t*40, kx=cx+side*(w/2-r), kr=4*s;
+  if(t>.08&&t<.92){o+=`<circle cx="${f(kx)}" cy="${f(cy)}" r="${f(kr)}" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".3"/><circle cx="${f(kx)}" cy="${f(cy)}" r="${f(kr+.5)}" fill="none" stroke="var(--sand)" stroke-width="1"/>`;
+    o+=`<path d="M${f(kx)} ${f(cy)} L${f(kx+kr*Math.cos(ph))} ${f(cy+kr*Math.sin(ph))}" stroke="var(--wood-d)" stroke-width=".4"/>`;}
+  o+=pill(cx,cy-h/2-13,'okénko mincí 12 × 48 mm','t','middle');
+  o+=pill(cx,cy+h/2+15,'konce: papír na kolíku Ø 8–10','ts','middle');
+  o+=pill(4,87,'zkosit z líce, konce vybrousit, vyleštit','t');
+  const ck=[['okénka mincí',.2,'.'],['(lekce 5)',.2,'-'],['okénko bankovek',.4,'.'],['jako svazek (L6)',.4,'-'],['jazýček po S7',.6,'.'],['(lekce 11)',.6,'-'],['spodní hrana D2',.8,'.'],['jen klín 3 mm',.8,'-']];
+  let ib=checklist(ck,t,17,6.4);
+  return o+inset('DALŠÍ HRANY',ib);
+ },P3,'Tip (lekce to neuvádí): kolík s brusným papírem animace kreslí točený ve vrtačce – krok „Okénka mincí v zádech“ vrtačku nezmiňuje, jen materiál lekce 5 uvádí „dřevěný kolík Ø 8–12 do akuvrtačky (leštění vydutých hran)“.');
+
+// ---------- engine ----------
+const svg=document.getElementById('stage');
+const DEFS=`<defs>
+<filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx=".6" dy="1" stdDeviation=".8" flood-opacity=".25"/></filter>
+<linearGradient id="licG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--lic-hi)"/><stop offset=".55" stop-color="var(--lic)"/><stop offset="1" stop-color="var(--lic-d)"/></linearGradient>
+<linearGradient id="licG2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--lic)"/><stop offset="1" stop-color="var(--lic-d)"/></linearGradient>
+<linearGradient id="dyedG" x1="0" y1="0" x2="1" y2=".5"><stop offset="0" stop-color="var(--dyed)"/><stop offset="1" stop-color="var(--dye)"/></linearGradient>
+<linearGradient id="kasG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--kas)"/><stop offset="1" stop-color="var(--kas-d)"/></linearGradient>
+<pattern id="rubP" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="var(--rub)"/><path d="M.5 1.2 l1.6 .5 M3.2 .6 l1.4 -.4 M1.4 3.8 l1.2 .8 M4 3.1 l1.5 .3 M2.6 5.2 l1.3 -.5 M.2 4.9 l.9 .3" stroke="var(--rub-fib)" stroke-width=".35" stroke-linecap="round"/></pattern>
+<pattern id="hatchG" width="2" height="2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="2" height="2" fill="none"/><path d="M0 0 V2" stroke="var(--glue)" stroke-width=".8"/></pattern>
+<marker id="ar" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--accent)"/></marker>
+<marker id="arI" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--ink)"/></marker>
+</defs>`;
+const badge=document.getElementById('badge'),sideEl=document.getElementById('side'),chip=document.getElementById('chip'),sub=document.getElementById('sidesub');
+const capNo=document.getElementById('capNo'),capT=document.getElementById('capT'),capB=document.getElementById('capB'),counter=document.getElementById('counter');
+const prog=document.getElementById('prog');
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const partKeys=Object.keys(PARTS);const barEls=[];const segEls={};
+partKeys.forEach(k=>{const b=document.createElement('button');b.className='pseg';b.type='button';b.setAttribute('aria-label',`Část ${k}: ${PARTS[k]}`);
+  const bars=document.createElement('div');bars.className='bars';S.forEach((st,i)=>{if(st.part===k){const sp=document.createElement('span');const bb=document.createElement('b');sp.appendChild(bb);bars.appendChild(sp);barEls[i]=bb;}});
+  const pl=document.createElement('div');pl.className='pl';pl.innerHTML=`<b>${k}</b><span> · ${PARTS[k]}</span>`;b.append(bars,pl);prog.appendChild(b);segEls[k]=b;
+  b.addEventListener('click',()=>{auto=true;setPlay(false);go(S.findIndex(s=>s.part===k),1)});});
+let idx=0,tt=1,playing=false,last=0,raf=0;
+function numInPart(i){const p=S[i].part;return S.slice(0,i+1).filter(s=>s.part===p).length}
+function setBadge(st){const p=st.proj;if(!p){badge.hidden=true;return}badge.hidden=false;sideEl.innerHTML=`<span class="pw">PROJEKT </span>${p.v}`;chip.style.background=p.c;sub.textContent=p.sub}
+function fitPills(){svg.querySelectorAll('g.pill').forEach(g=>{const tx=g.querySelector('text'),r=g.querySelector('rect');try{const b=tx.getBBox();if(!b.width)return;r.setAttribute('x',f(b.x-1.2));r.setAttribute('y',f(b.y-.5));r.setAttribute('width',f(b.width+2.4));r.setAttribute('height',f(b.height+1))}catch(e){}})}
+function render(){
+  const st=S[idx]; UID=0;
+  let body='';
+  try{ body=st.draw(tt);}catch(e){console.error(e)}
+  svg.innerHTML=DEFS+body; fitPills();
+  setBadge(st);
+  capNo.textContent=`${st.part}${numInPart(idx)}`; capT.textContent=st.title; capB.textContent=st.body;
+  if(st.src){const sp=document.createElement('span');sp.className='src';sp.textContent='Zdroj: '+st.src;capB.appendChild(sp)}
+  if(st.tip){const sp=document.createElement('span');sp.className='tip';const m=st.tip.match(/^(Tip[^:]*:)\s*(.*)$/);if(m){const b=document.createElement('b');b.textContent=m[1];sp.append(b,' '+m[2])}else sp.textContent=st.tip;capB.appendChild(sp)}
+  counter.textContent=`krok ${idx+1} / ${S.length}`;
+  barEls.forEach((b,i)=>{b.style.transform=`scaleX(${i<idx?1:i===idx?tt:0})`});
+  partKeys.forEach(k=>segEls[k].classList.toggle('on',k===st.part));
+}
+let hold=0;
+function go(i,t=0){idx=Math.max(0,Math.min(S.length-1,i));tt=reduce?1:t;hold=0;render();}
+function setPlay(p){playing=p;document.getElementById('playIcon').innerHTML=p?'<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';document.getElementById('bPlay').setAttribute('aria-label',p?'Pozastavit':'Přehrát');if(p){last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}}
+function loop(now){if(!playing)return;const dt=now-last;last=now;
+  if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
+  else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
+  raf=requestAnimationFrame(loop)}
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} else if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
+document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
+document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
+document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};
+// deep links: část (#A–#G) otevře svůj první krok, krok (#D2) přímo ten krok; zastavené
+function stepFromHash(){const m=/^([A-Z])([0-9]+)?$/.exec(decodeURIComponent((location.hash||'').slice(1)).trim().toUpperCase());if(!m||!Object.prototype.hasOwnProperty.call(PARTS,m[1]))return -1;const ix=[];S.forEach((s,i)=>{if(s.part===m[1])ix.push(i)});const n=m[2]===undefined?1:+m[2];return n>=1&&n<=ix.length?ix[n-1]:-1}
+let auto=false;
+const hs=stepFromHash();
+if(hs>=0){auto=true;go(hs,1)} else go(0,1);
+window.addEventListener('hashchange',()=>{const i=stepFromHash();if(i>=0){auto=true;setPlay(false);go(i,1)}});
+window.__hrany={go:(i,t)=>{auto=true;setPlay(false);idx=i;tt=t;render()},steps:S.length,parts:S.map(s=>s.part),labels:S.map((s,i)=>s.part+numInPart(i))};
+if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!auto){auto=true;io.disconnect();go(0,0);setPlay(true)}})},{threshold:.45});io.observe(svg)}
+})();
+</script>
+<script>
+// Hidepath: „Zpět do lekce“ = krok zpět v historii, když se sem přišlo z aplikace; jinak úvod aplikace.
+(function(){var a=document.querySelector('[data-back]');if(!a)return;a.addEventListener('click',function(e){var o='';try{o=document.referrer?new URL(document.referrer).origin:'';}catch(_){}if(o===location.origin&&history.length>1){e.preventDefault();history.back();}});})();
+</script>
+</body>
+</html>
