@@ -297,7 +297,7 @@ add('A','Šablonu PÁS vystřihněte nahrubo','Zkontrolujte, že úsečka na ša
 },null,'Tip: kde je obrys blízko okraje listu, okraj prostě zůstane.');
 
 // A2 — na líc, páskou
-add('A','Přilepte ji na LÍC, páskou mimo čáru řezu','Šablonu položte na LÍC kůže (u pouzdra na karty ležela na rubu). Přilepte ji maskovací páskou z několika stran, jen na okrajích mimo čáru řezu. Pásku nejdřív zkuste na odřezku – na líci může nechat stopu.',9000,t=>{
+add('A','Přilepte šablonu na LÍC','Šablonu položte na LÍC kůže (u pouzdra na karty ležela na rubu). Přilepte ji maskovací páskou z několika stran, jen na okrajích mimo čáru řezu. Pásku nejdřív zkuste na odřezku – na líci může nechat stopu.',9000,t=>{
   const c=LEFTC, m=es(t,.04,.36), tp=es(t,.4,.78), bad=seg(t,.8,.86)*(1-seg(t,.96,1));
   let inner=mat()+leatherSheet()+G(`translate(0 ${f(L(-230,0,m))})`,paperRough()+printStrip(),m<1?SHADOW:'')+(tp>0?tapes(tp):'');
   if(bad>0) inner+=G('',tape(205,157.17,90,.85),`opacity="${f(bad)}"`);
@@ -353,7 +353,7 @@ function cutSection(passes,p){
   s+=`<path d="M${cx+4} ${y0-9} V${y0-4}" stroke="var(--ok)" stroke-width=".35"/>`+lbl(cx+5.5,y0-6,'kolmo','tok');
   return s;
 }
-add('B','Rovné strany podle ocelového pravítka','Řežte skrz papír i kůži přesně po čáře. Rovné strany podle ocelového pravítka 2–3 lehkými tahy, nůž kolmo. Pravítko leží na pásu, ne na odpadu.',11000,t=>{
+add('B','Řežte rovně podle pravítka','Řežte skrz papír i kůži přesně po čáře. Rovné strany podle ocelového pravítka 2–3 lehkými tahy, nůž kolmo. Pravítko leží na pásu, ne na odpadu.',11000,t=>{
   const c=BOTC, rin=es(t,.02,.14);
   const passes=t<.22?0:t<.46?0:t<.7?1:2;
   const pp=t<.22?0:t<.46?seg(t,.22,.44):t<.7?seg(t,.46,.68):seg(t,.7,.92);
@@ -377,7 +377,7 @@ add('B','Rovné strany podle ocelového pravítka','Řežte skrz papír i kůži
 },{v:'LÍC',sub:'šablona na líci'},'Tip: jako u pouzdra na karty – nůž sklopte asi na 45° ve směru tahu, do strany ho nenaklánějte. První tah lehce, další dořízne. Řežte od volné ruky, nikdy k prstům na pravítku.');
 
 // B2 — všechny rovné strany
-add('B','Všechny rovné strany pásu','Stejně projeďte všechny rovné úseky obrysu. Řez končete tam, kde začíná oblouk – oblouky a rohy přijdou bez pravítka.',12000,t=>{
+add('B','Prořízněte všechny rovné strany','Stejně projeďte všechny rovné úseky obrysu. Řez končete tam, kde začíná oblouk – oblouky a rohy přijdou bez pravítka.',12000,t=>{
   const c=FULLC; const u=es(t,.04,.94)*6, n=Math.min(6,Math.floor(u)), fr=u-Math.floor(u);
   let inner=mat()+leatherSheet()+paperRough()+printStrip()+tapes(1)+pricks(MARKS,.4/c.k);
   for(let i=0;i<n;i++) inner+=groove(partial(STRAIGHT[i].P,1),c.k,1,.45);
@@ -420,7 +420,7 @@ add('B','Třepí se řez? Odlomte článek čepele','Když řez začne třepit, 
 },{v:'LÍC',sub:'horní hrana'});
 
 // ---------- C: výkus a rohy ----------
-add('C','Vypouklé zaoblení R2,5','Malé vypouklé zaoblení R2,5, kde výřez R34 potkává horní hranu, vyřízněte po čáře. Nebo nechte pravý úhel a zaoblete ho smirkem.',9000,t=>{
+add('C','Vyřízněte zaoblení R2,5','Malé vypouklé zaoblení R2,5, kde výřez R34 potkává horní hranu, vyřízněte po čáře. Nebo nechte pravý úhel a zaoblete ho smirkem.',9000,t=>{
   const c=FILC, cu=es(t,.12,.5), alt=es(t,.62,.78);
   let inner=leatherSheet()+paperRough()+printStrip();
   inner+=groove(`M150 ${FY} H134.1`,c.k,1,.9);
@@ -440,7 +440,7 @@ add('C','Vypouklé zaoblení R2,5','Malé vypouklé zaoblení R2,5, kde výřez 
 },{v:'LÍC',sub:'přední panel, horní roh'});
 
 // C2 — výkus na prst
-add('C','Výřez na prst pomalu a plynule bez pravítka','Oblouk výřezu (R34 vepředu, čtvrtelipsa vzadu) řežte pomalu bez pravítka, krátkými tahy. Volná ruka drží kůži za okraj dílu, daleko od čepele. Výřez má být plynulý oblouk bez zubu.',13000,t=>{
+add('C','Řežte výřez na prst bez pravítka','Oblouk výřezu (R34 vepředu, čtvrtelipsa vzadu) řežte pomalu bez pravítka, krátkými tahy. Volná ruka drží kůži za okraj dílu, daleko od čepele. Výřez má být plynulý oblouk bez zubu.',13000,t=>{
   const c=UC, cu=es(t,.08,.86);
   let inner=mat()+leatherSheet()+paperRough()+printStrip()+tapes(1);
   inner+=cutsDone(7,c.k)+groove(partial(UCUT,cu),c.k,1,.55);
@@ -462,7 +462,7 @@ add('C','Výřez na prst pomalu a plynule bez pravítka','Oblouk výřezu (R34 v
 },{v:'LÍC',sub:'šablona na líci'},'Tip: přes ohyb A vede rovný úsek, oba oblouky na něj plynule navazují.');
 
 // C3 — rohy
-add('C','Rohy jazyka R10 a rohy panelů R6','Zaoblené rohy (2× R10 na konci jazyka, 3× R6) řežte po čáře pomalu bez pravítka, krátkými tahy. Konec jazyka je zatím orientační, zkrátí se v lekci 8.',12000,t=>{
+add('C','Vyřízněte rohy R10 a R6','Zaoblené rohy (2× R10 na konci jazyka, 3× R6) řežte po čáře pomalu bez pravítka, krátkými tahy. Konec jazyka je zatím orientační, zkrátí se v lekci 8.',12000,t=>{
   const c=LEFTC; const u=es(t,.04,.86)*5, n=Math.min(5,Math.floor(u)), fr=u-Math.floor(u);
   let inner=mat()+leatherSheet()+paperRough()+printStrip()+tapes(1)+pricks(MARKS,.4/c.k);
   inner+=cutsDone(8,c.k);
@@ -542,7 +542,7 @@ add('D','Spojte konce čar tužkou podle pravítka','Propíchnuté konce čar oh
 },'rub');
 
 // D4 — výsledek
-add('D','Výsledek: pás se značkami a čarami ohybů','Pás je vyříznutý, výřez je plynulý oblouk bez zubu. Značky jsou propíchnuté a na rubu jsou 4 čáry ohybů. U kůže 1,5 mm teď ještě vyznačte a ztenčete pásmo ohybu B. Dál: otvory dna.',9000,t=>{
+add('D','Kontrola: značky a čáry ohybů','Pás je vyříznutý, výřez je plynulý oblouk bez zubu. Značky jsou propíchnuté a na rubu jsou 4 čáry ohybů. U kůže 1,5 mm teď ještě vyznačte a ztenčete pásmo ohybu B. Dál: otvory dna.',9000,t=>{
   const c=LEFTC;
   const ln=l=>`<path d="M${f(l.x)} ${l.y1} V${l.y0}" stroke="var(--graphite)" stroke-width="${f(.45/c.k)}" stroke-linecap="round" opacity=".85"/>`;
   let inner=mat()+G(`translate(${MIRX} 0) scale(-1 1)`,stripLeather('rub',{pr:.42/c.k}))+FL.map(ln).join('');

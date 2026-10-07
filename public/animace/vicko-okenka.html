@@ -332,7 +332,7 @@ function sideDims(s, side = 1, lbl = true) {
 }
 
 // ===== A: okénka mincí (lekce 5) =====
-add('A', 'Kde jsou okénka mincí', 'lekce 5',
+add('A', 'Poloha okének mincí', 'lekce 5',
   'Dvě okénka mincí <span class="num">12 × 48</span> v zádech B, nad sloupci mincí: x <span class="num">13,5–25,5</span> a <span class="num">75,5–87,5</span>, y <span class="num">28–76</span>. Středy konců (y <span class="num">34</span> a <span class="num">70</span>) máte propíchnuté z lekce 4.',
   7000, (t) => {
     C = camera(CAM_B, ...VB.main);
@@ -360,7 +360,7 @@ add('A', 'Kde jsou okénka mincí', 'lekce 5',
     return s;
   }, { capA: 'Okénko mincí 12 × 48: konce výsečníkem Ø 12, středy 36 od sebe.' });
 
-add('A', 'Šablona z listu 4 na propíchnuté středy', 'lekce 5',
+add('A', 'Přiložte šablonu na propíchnuté středy', 'lekce 5',
   'Díl položte lícem B nahoru na tvrdou desku. Šablonu okénka mincí z listu 4 přiložte křížky na propíchnuté středy a zkontrolujte polohu. Před sekáním šablonu sejměte.',
   9000, (t) => {
     C = camera(camL(CAM_B, CAM_A1, es(t, 0, 0.25)), ...VB.main);
@@ -387,7 +387,7 @@ add('A', 'Šablona z listu 4 na propíchnuté středy', 'lekce 5',
     return s;
   }, { capA: 'Detail středu, zvětšeno. Šablona je kreslená průsvitně.', tip: 'Tip: když křížky nesedí, nesekejte a nejdřív zjistěte proč.' });
 
-add('A', 'Výsečník Ø 12 na oba konce', 'lekce 5',
+add('A', 'Vysekněte oba konce Ø 12', 'lekce 5',
   'Výsečníkem Ø 12 vysekněte oba konce, středem na propíchnutý střed (y <span class="num">34</span> a <span class="num">70</span>). Prsty mějte u spodku výsečníku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',
   8000, (t) => {
     C = camera(CAM_A1, ...VB.main);
@@ -403,7 +403,7 @@ add('A', 'Výsečník Ø 12 na oba konce', 'lekce 5',
     return s;
   }, (t) => punchSection(t, 12, false, 0.42), { capA: 'Řez středem díry, tloušťky v měřítku.' });
 
-add('A', 'Rovné řezy u pravítka od tečny k tečně', 'lekce 5',
+add('A', 'Řízněte od tečny k tečně', 'lekce 5',
   'Mezi dírami řízněte nožem u ocelového pravítka od tečny k tečně, na obou bocích (x <span class="num">13,5</span> a <span class="num">25,5</span>). Řez začněte i skončete přesně na tečně. Nůž veďte tahem od prstů volné ruky.',
   10000, (t) => {
     C = camera(CAM_A1, ...VB.main);
@@ -420,7 +420,7 @@ add('A', 'Rovné řezy u pravítka od tečny k tečně', 'lekce 5',
     return s;
   }, (t) => tangentZoom(t, { s: M.coin[0], x: 13.5, cutT: [0.1, 0.42] }), { capA: 'Dolní konec řezu, zvětšeno: řez končí na tečně.', tip: 'Tip: pravítko položte na díl, ne na odpad.' });
 
-add('A', 'Druhé okénko stejně, konce dobrousit', 'lekce 5',
+add('A', 'Druhé okénko stejně, dobruste konce', 'lekce 5',
   'Druhé okénko (x <span class="num">75,5–87,5</span>) udělejte stejně. Konce vybruste brusným papírem na kolíku Ø 8 v aku vrtačce. Okénka zkoste z líce a vyleštěte jako ostatní hrany. Kolík pevně upněte a prsty držte mimo točící se kolík.',
   8500, (t) => {
     C = camera(camL(CAM_A1, CAM_B, es(t, 0, 0.3)), ...VB.main);
@@ -483,7 +483,7 @@ function notchTemplate(dx = 0, dy = 0, o = 1) {
   const pts = [[x0, top], [hole[1][0], top]].concat(hole.slice(1, -1)).concat([[hole[hole.length - 2][0], top], [x1, top], [x1, top - 20], [x0, top - 20]]);
   return op(o, poly(pts, 'paper'));
 }
-add('B', 'Kde je výřez pro palec', 'lekce 5',
+add('B', 'Poloha výřezu pro palec', 'lekce 5',
   'Výřez U 10 × 12 uprostřed horní hrany F: x <span class="num">45,5–55,5</span>, střed výsečníku 7,0 pod horní hranou F (y <span class="num">55,0</span>). Střed máte propíchnutý z lekce 4. Záloha A: hrana F v y <span class="num">61,5</span>, střed v y <span class="num">54,5</span>.',
   7000, (t) => {
     C = camera(camL(CAM_F, CAM_N, es(t, 0.35, 0.75)), ...VB.main);
@@ -509,7 +509,7 @@ add('B', 'Kde je výřez pro palec', 'lekce 5',
     return s;
   }, { capA: 'Hotový výřez: dno Ø 10, rovné boky, rohy ústí R1.' });
 
-add('B', 'Šablona výřezu: střed na ose, 7,0 pod hranou', 'lekce 5',
+add('B', 'Přiložte šablonu výřezu na osu', 'lekce 5',
   'Díl položte lícem F nahoru na tvrdou desku. Přiložte šablonu výřezu pro palec (lekce 2): střed na ose x 50,5, 7,0 pod horní hranou F (y 55,0).',
   8000, (t) => {
     C = camera(CAM_N, ...VB.main);
@@ -531,7 +531,7 @@ add('B', 'Šablona výřezu: střed na ose, 7,0 pod hranou', 'lekce 5',
     return s;
   }, { capA: 'Otvor šablony zvětšeně.', tip: 'Tip: propíchnutý střed má být uprostřed oblouku šablony; 7,0 přeměřte pravítkem.' });
 
-add('B', 'Výsečník Ø 10 přes šablonu', 'lekce 5',
+add('B', 'Vysekněte Ø 10 přes šablonu', 'lekce 5',
   'Výsečníkem Ø 10 vysekněte přes šablonu dno výřezu; šablona zůstává přiložená. Prsty mějte u spodku výsečníku, palička dopadá na horní konec.',
   7500, (t) => {
     C = camera(CAM_N, ...VB.main);
@@ -545,7 +545,7 @@ add('B', 'Výsečník Ø 10 přes šablonu', 'lekce 5',
     return s;
   }, (t) => punchSection(t, 10, false, 0.55, true), { capA: 'Řez středem díry, tloušťky v měřítku; šablona navrchu.', tip: 'Tip: šablonu sejměte až po vyseknutí.' });
 
-add('B', 'Rovné řezy od hrany F k tečnám', 'lekce 5',
+add('B', 'Řízněte od hrany F k tečnám', 'lekce 5',
   'Řízněte nožem rovně od horní hrany F k tečnám díry (x <span class="num">45,5</span> a <span class="num">55,5</span>). Přesně na tečně zastavte.',
   9500, (t) => {
     C = camera(CAM_N, ...VB.main);
@@ -560,7 +560,7 @@ add('B', 'Rovné řezy od hrany F k tečnám', 'lekce 5',
     return s;
   }, (t) => tangentZoom(t, { notch: true, x: 45.5, cutT: [0.1, 0.4] }), { capA: 'Levý řez zvětšeně: od hrany F dolů, stop na tečně.', tip: 'Tip: řežte u pravítka položeného na díl.' });
 
-add('B', 'Rohy ústí R1 brusným papírem', 'lekce 5',
+add('B', 'Zaoblete rohy a hrany výřezu', 'lekce 5',
   'Rohy ústí R1 zaoblete brusným papírem, ne nožem. Pak výřez zaoblete z líce i z rubu – o rubovou hranu by se zachytila karta. Vnitřek vybruste a vyleštěte kolíkem Ø 8 v aku vrtačce, prsty mimo točící se kolík. Jestli výřez funguje, ověří zkušební kus.',
   8500, (t) => {
     C = camera(CAM_N, ...VB.main);
@@ -592,7 +592,7 @@ function bWithD2(o = {}) {
   if (o.g3) s += op(o.g3, M.g3.map(([x0, x1, y0, y1]) => rect(x0, y0, x1, y1, 'glueh')).join(''));
   return s;
 }
-add('C', 'Až po lepení G3', 'lekce 6',
+add('C', 'Okénko dělejte až po lepení G3', 'lekce 6',
   'Okénko bankovek dělejte až po lepení G3, jinak vrstvy nelícují. Děrujte nejdřív 1 h po lepení. Okénko <span class="num">14 × 45</span> je uprostřed zad (x <span class="num">43,5–57,5</span>, y <span class="num">25–70</span>). Díl položte lícem B nahoru na tvrdou desku.',
   8000, (t) => {
     C = camera(camL(CAM_B, CAM_C, es(t, 0.6, 0.95)), ...VB.main);
@@ -604,7 +604,7 @@ add('C', 'Až po lepení G3', 'lekce 6',
     return s;
   }, (t) => layersSection(t), { capA: 'Řez napříč v y 50: B 1,0 nahoře, pod ní D2 0,6, lepidlo G3 ve středním pásu.', alt: '<b>Záloha A:</b> pásy G3 jsou o 0,5 níž, okénko bankovek zůstává v y 25–70.' });
 
-add('C', 'Šablona z listu 4: křížky na středy', 'lekce 6',
+add('C', 'Přiložte šablonu křížky na středy', 'lekce 6',
   'Křížky šablony okénka bankovek z listu 4 přiložte na propíchnuté středy (osa x 50,5, y <span class="num">32</span> a <span class="num">63</span>) a zkontrolujte polohu. Před sekáním šablonu sejměte.',
   8000, (t) => {
     C = camera(CAM_C, ...VB.main);
@@ -629,7 +629,7 @@ add('C', 'Šablona z listu 4: křížky na středy', 'lekce 6',
     return s;
   }, { capA: 'Detail dolního středu, zvětšeno. Čárkovaná osa je jen pomůcka animace, na kůži není.' });
 
-add('C', 'Výsečník Ø 14 skrz B i D2', 'lekce 6',
+add('C', 'Vysekněte Ø 14 skrz B i D2', 'lekce 6',
   'Výsečníkem Ø 14 vysekněte z líce B oba konce (y <span class="num">32</span> a <span class="num">63</span>) skrz B i D2. Prsty mějte u spodku výsečníku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',
   8000, (t) => {
     C = camera(CAM_C, ...VB.main);
@@ -643,7 +643,7 @@ add('C', 'Výsečník Ø 14 skrz B i D2', 'lekce 6',
     return s;
   }, (t) => punchSection(t, 14, true, 0.42), { capA: 'Řez středem díry: B 1,0 a D2 0,6 se proseknou najednou.' });
 
-add('C', 'Rovné řezy skrz obě vrstvy', 'lekce 6',
+add('C', 'Řízněte rovně skrz obě vrstvy', 'lekce 6',
   'Mezi dírami řízněte nožem u ocelového pravítka od tečny k tečně, skrz obě vrstvy (x <span class="num">43,5</span> a <span class="num">57,5</span>). Nůž veďte tahem od prstů volné ruky.',
   10000, (t) => {
     C = camera(CAM_C, ...VB.main);
@@ -658,7 +658,7 @@ add('C', 'Rovné řezy skrz obě vrstvy', 'lekce 6',
     return s;
   }, (t) => tangentZoom(t, { s: M.bill, x: 43.5, cutT: [0.1, 0.42], two: true }), { capA: 'Dolní konec řezu, zvětšeno: skrz B i D2, stop na tečně.', tip: 'Tip: pravítko položte na díl, ne na odpad.' });
 
-add('C', 'Jeden svazek, mince nepropadne', 'lekce 6',
+add('C', 'Zkoste a vyleštěte jako svazek', 'lekce 6',
   'Okénko zkoste a vyleštěte jako jeden svazek.',
   7500, (t) => {
     C = camera(CAM_C, ...VB.main);

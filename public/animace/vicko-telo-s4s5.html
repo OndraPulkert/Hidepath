@@ -427,7 +427,7 @@ add('B','Zdrsněte líc D2','Lepte jen boční pásy x 0–4 a 97–101 (hranice
 });
 
 // B2
-add('B','Lepidlo na obě plochy, nechat zavadnout','Kontaktní lepidlo naneste jen v bočních pásech: na rub F v y 1,75–62, na líc D2 v y 18–62 a na rub B v y 1,75–18. Nechte zavadnout 10–15 min (jako u G3 v lekci 6).',9000,t=>{
+add('B','Naneste lepidlo a nechte zavadnout','Kontaktní lepidlo naneste jen v bočních pásech: na rub F v y 1,75–62, na líc D2 v y 18–62 a na rub B v y 1,75–18. Nechte zavadnout 10–15 min (jako u G3 v lekci 6).',9000,t=>{
   const gd=es(t,.05,.35),gb=es(t,.3,.45),gf=es(t,.45,.75),dry=es(t,.78,.98);
   const fr=mkF(1.75,OPEN);
   let s=section({c:1.75,open:OPEN,rough:1,glue:{d2:gd,b:gb,f:gf,op:L(1,.7,dry)}});
@@ -456,7 +456,7 @@ add('B','Přikládejte od ohybu dna nahoru','F přikládejte od ohybu dna nahoru
 });
 
 // B4
-add('B','G4 hotové: kapsa 93 mm','Mezi pásy G4 zůstane kapsa 93 mm. Na boku jsou tři pásma: y 1,75–18 F + B, y 18–62 F + D2 + B, nad F jen D2 + B.',7600,t=>{
+add('B','Kontrola: kapsa 93 mm','Mezi pásy G4 zůstane kapsa 93 mm. Na boku jsou tři pásma: y 1,75–18 F + B, y 18–62 F + D2 + B, nad F jen D2 + B.',7600,t=>{
   const fr=mkF(62,0);
   let s=section({c:62,open:0,rough:1,glue:{d2:1,b:1,f:1,op:.7}});
   s+=secLabelsL(fr);
@@ -468,7 +468,7 @@ add('B','G4 hotové: kapsa 93 mm','Mezi pásy G4 zůstane kapsa 93 mm. Na boku j
 });
 
 // C1
-add('C','Čára švu 3,0 mm od hrany','Narýsujte čáru švu 3,0 mm od hrany boku F a B, ne od přečnívající D2 (je o 1 mm širší). Použijte rýsovací kružidlo na 3,0 mm nebo rýhovač. Nad horní hranou F (y 62–76) je čára 4,0 mm od hrany D2, nebo ji tam jen prodlužte u pravítka. Bez kružidla podle proužku (krok C2).',9000,t=>{
+add('C','Narýsujte čáru švu 3,0 mm','Narýsujte čáru švu 3,0 mm od hrany boku F a B, ne od přečnívající D2 (je o 1 mm širší). Použijte rýsovací kružidlo na 3,0 mm nebo rýhovač. Nad horní hranou F (y 62–76) je čára 4,0 mm od hrany D2, nebo ji tam jen prodlužte u pravítka. Bez kružidla podle proužku (krok C2).',9000,t=>{
   const p=es(t,.1,.85),yl=L(80,4,p);
   let s=frontBase();
   s+=`<path d="M${f(fx(3))} ${f(fy(80))} V${f(fy(yl))}" class="seamln"/>`;
@@ -481,7 +481,7 @@ add('C','Čára švu 3,0 mm od hrany','Narýsujte čáru švu 3,0 mm od hrany bo
 },'Tip: kde čára začíná a končí, lekce neurčuje; animace ji kreslí od y 4 do 80.');
 
 // C2
-add('C','Otvory z proužku, od 76 dolů','Proužek z listu 4 přiložte levou hranou na hranu boku F a spodní hranou ke spodní hraně peněženky. Čárka „F 62“ má ležet na horní hraně F. Bez kružidla propíchněte jehlou konce čárkované čáry 3,0 a spojte je tužkou u pravítka. Přeneste otvory S4 a S5: 18 otvorů od y 76 dolů po y 8.',11000,t=>{
+add('C','Přeneste otvory z proužku','Proužek z listu 4 přiložte levou hranou na hranu boku F a spodní hranou ke spodní hraně peněženky. Čárka „F 62“ má ležet na horní hraně F. Bez kružidla propíchněte jehlou konce čárkované čáry 3,0 a spojte je tužkou u pravítka. Přeneste otvory S4 a S5: 18 otvorů od y 76 dolů po y 8.',11000,t=>{
   const sIn=es(t,.02,.2),sOut=es(t,.86,.98),m=Math.floor(es(t,.22,.8)*18+1e-9);
   let s=frontBase();
   s+=`<path d="M${f(fx(3))} ${f(fy(80))} V${f(fy(4))}" class="seamln"/>`;
@@ -500,7 +500,7 @@ add('C','Otvory z proužku, od 76 dolů','Proužek z listu 4 přiložte levou hr
 });
 
 // D1
-add('D','Mezi lepením a děrováním aspoň 1 h','Po lepení G4 počkejte aspoň 1 h, teprve pak děrujte.',5600,t=>{
+add('D','Před děrováním počkejte aspoň 1 h','Po lepení G4 počkejte aspoň 1 h, teprve pak děrujte.',5600,t=>{
   let s=section({c:62,open:0});
   s+=secLabelsL(mkF(62,0),{marks:false});
   s=clipMain(s)+tag('počkat aspoň 1 h');
@@ -522,7 +522,7 @@ function punchAnim(t,groups,done0,o={}){
   return {holes,chisel:{ys:prev!=null?[prev].concat(g):g,tz,mallet:1,hit:q<.6?hit:1-es(q,.6,.7)},i,q,prev};
 }
 // D2
-add('D','y 8–52 z líce F','Děrujte zepředu skrz všechny vrstvy na tvrdé desce, ve třech úsecích. Vidličku držte při pohledu na líc horní hranou od sebe. První úsek: y 8–52 z líce F vícezubou vidličkou na rysky z proužku. Prsty mějte u spodku vidličky, palička dopadá na horní konec.',11000,t=>{
+add('D','Děrujte y 8–52 z líce F','Děrujte zepředu skrz všechny vrstvy na tvrdé desce, ve třech úsecích. Vidličku držte při pohledu na líc horní hranou od sebe. První úsek: y 8–52 z líce F vícezubou vidličkou na rysky z proužku. Prsty mějte u spodku vidličky, palička dopadá na horní konec.',11000,t=>{
   const P=punchAnim(t,[[8,12,16,20],[24,28,32,36],[40,44,48,52]],[]);
   let s=section({c:62,open:0,board:1,holes:P.holes,chisel:P.chisel});
   s=clipMain(s)+tag('z líce F: y 8–52');
@@ -532,7 +532,7 @@ add('D','y 8–52 z líce F','Děrujte zepředu skrz všechny vrstvy na tvrdé d
 },'Tip: animace kreslí čtyřzubou vidličku a řez nastojato; ve skutečnosti leží peněženka zády na desce a vidlička jde shora.');
 
 // D3
-add('D','y 56–68 po jednom otvoru, odřezek k hraně F','Druhý úsek y 56–68 děrujte po jednom otvoru, každý podle rysky: 56 a 60 z líce F, 64 a 68 z líce D2 (hrana F, y 62, leží mezi 60 a 64). Dvouzubou vidličku nasaďte krajním zubem do posledního hotového otvoru, druhý zub prorazí jeden nový; zub pokaždé na pevnou vrstvu. Schod F/D2 vyrovnejte odřezkem usně 1,0 mm na líci D2 těsně u hrany F; otvory 64 a 68 jdou i skrz něj. Jak odřezek držet, ověřte na zkušebním kuse.',15000,t=>{
+add('D','Děrujte y 56–68 po jednom','Druhý úsek y 56–68 děrujte po jednom otvoru, každý podle rysky: 56 a 60 z líce F, 64 a 68 z líce D2 (hrana F, y 62, leží mezi 60 a 64). Dvouzubou vidličku nasaďte krajním zubem do posledního hotového otvoru, druhý zub prorazí jeden nový; zub pokaždé na pevnou vrstvu. Schod F/D2 vyrovnejte odřezkem usně 1,0 mm na líci D2 těsně u hrany F; otvory 64 a 68 jdou i skrz něj. Jak odřezek držet, ověřte na zkušebním kuse.',15000,t=>{
   const off=es(t,.02,.1);
   const P=punchAnim(seg(t,.1,1),[[56],[60],[64],[68]],[8,12,16,20,24,28,32,36,40,44,48,52],{guide:true});
   const cur=P.chisel.ys[P.chisel.ys.length-1];
@@ -545,7 +545,7 @@ add('D','y 56–68 po jednom otvoru, odřezek k hraně F','Druhý úsek y 56–6
 });
 
 // D4
-add('D','y 72–76 z líce D2, hotovo 18 otvorů','Třetí úsek y 72–76 děrujte z líce D2. Bok S4 má 18 otvorů od y 8 do 76, pravý bok S5 (x 98) stejně.',8600,t=>{
+add('D','Děrujte y 72–76 z líce D2','Třetí úsek y 72–76 děrujte z líce D2. Bok S4 má 18 otvorů od y 8 do 76, pravý bok S5 (x 98) stejně.',8600,t=>{
   const P=punchAnim(seg(t,0,.7),[[72,76]],[8,12,16,20,24,28,32,36,40,44,48,52,56,60,64,68]);
   const fin=t>.72;
   let s=section({c:62,open:0,board:fin?1-es(t,.72,.85):1,holes:fin?M.holes:P.holes,chisel:fin?null:P.chisel});
@@ -556,7 +556,7 @@ add('D','y 72–76 z líce D2, hotovo 18 otvorů','Třetí úsek y 72–76 děru
 },'Tip: animace kreslí dvouzubou vidličku. Nad y 76 nesmí být žádný otvor.');
 
 // E1
-add('E','Nit: 5 × délka švu + 25–30 cm','Šev S4 je od y 8 do 76: 17 stehů po 4 mm, tedy 68 mm. Jde přes tři vrstvy, proto nit odměřte 5 × délka švu + 25–30 cm: 5 × 6,8 = 34 cm a 25–30 cm navíc, asi 59–64 cm na jeden bok. Nit 0,6 mm.',8600,t=>{
+add('E','Odměřte nit: 5 × šev + 25–30 cm','Šev S4 je od y 8 do 76: 17 stehů po 4 mm, tedy 68 mm. Jde přes tři vrstvy, proto nit odměřte 5 × délka švu + 25–30 cm: 5 × 6,8 = 34 cm a 25–30 cm navíc, asi 59–64 cm na jeden bok. Nit 0,6 mm.',8600,t=>{
   let s=section({c:62,open:0,holes:M.holes});
   const p=es(t,.05,.45);
   s+=`<path d="M${f(sx(2.6)+3)} ${f(sy(8))} V${f(sy(L(8,76,p)))}" stroke="var(--accent)" stroke-width=".8" stroke-linecap="round"/>`;
@@ -579,7 +579,7 @@ function sewStep(t,m0,m1,label){
   return {s,n,cur};
 }
 // E2
-add('E','Začátek u 76: konce 2 otvory zpět','Šijte sedlovým stehem od y 76 dolů. Konce švu udělejte 2 otvory zpět (animace Sedlářský steh, krok E2).',9000,t=>{
+add('E','Začněte u y 76, 2 otvory zpět','Šijte sedlovým stehem od y 76 dolů. Konce švu udělejte 2 otvory zpět (animace Sedlářský steh, krok E2).',9000,t=>{
   const r=sewStep(t,0,4);
   let s=clipMain(r.s)+tag(r.n<2?'začátek: 2 stehy zpět k 76':'od 76 dolů přes zpětné stehy');
   s+=pill(sx(2.6)+5,sy(76)+1.4,'76','ts')+pill(sx(2.6)+5,sy(68)+1.4,'68','ts');
@@ -604,7 +604,7 @@ add('E','Steh 60–64 zdvojte','Steh 60–64 zdvojte, zpevňuje ústí karet. Ja
   return s;
 },'Tip: animace ukazuje jednu možnost – otvory 60 a 64 prošije ještě jednou tam a zpět a pokračuje dolů.');
 // E5
-add('E','Dolů k 8, konec 2 otvory zpět','Šijte dolů až k otvoru 8, konec 2 otvory zpět (8 → 12 → 16).',12000,t=>{
+add('E','Došijte k y 8, 2 otvory zpět','Šijte dolů až k otvoru 8, konec 2 otvory zpět (8 → 12 → 16).',12000,t=>{
   const r=sewStep(t,8,23);
   let s=clipMain(r.s)+tag(r.n<21?`dolů: stehy ${Math.min(17,r.n-4)} / 17`:'konec: 2 otvory zpět');
   s+=pill(sx(2.6)+5,sy(8)+1.4,'8','ts')+pill(sx(2.6)+5,sy(16)+1.4,'16','ts');
@@ -612,7 +612,7 @@ add('E','Dolů k 8, konec 2 otvory zpět','Šijte dolů až k otvoru 8, konec 2 
   return s;
 });
 // E6
-add('E','Kontrolní bod a druhý bok','Zkontrolujte: S4 je ušitý od y 76 dolů, steh 60–64 je zdvojený. Pravý bok S5 v x 98 ušijte stejně. Pak boky zarovnejte nožem na 101,0 mm (animace Hrany, krok G3). Nůž veďte tahem od prstů volné ruky.',8600,t=>{
+add('E','Zkontrolujte a ušijte druhý bok','Zkontrolujte: S4 je ušitý od y 76 dolů, steh 60–64 je zdvojený. Pravý bok S5 v x 98 ušijte stejně. Pak boky zarovnejte nožem na 101,0 mm (animace Hrany, krok G3). Nůž veďte tahem od prstů volné ruky.',8600,t=>{
   let s=section({c:62,open:0,holes:M.holes,thread:{moves:MOVES.length,part:0}});
   s+=secLabelsL(mkF(62,0),{marks:false});
   s=clipMain(s)+tag('S4 hotový');

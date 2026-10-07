@@ -66,7 +66,7 @@ describe('StepList – odkazy na animace postupu', () => {
     const [steh, magnet] = s7Links;
     expect(steh).toHaveAccessibleName(/Jak šít sedlářský steh/);
     expect(steh).toHaveAttribute('href', '/animace/sedlarsky-steh.html#E2');
-    expect(steh).toHaveTextContent('Krok E2 – Zpětné stehy na začátku i na konci švu');
+    expect(steh).toHaveTextContent('Krok E2 – Zajistěte začátek i konec švu');
     expect(magnet).toHaveAccessibleName(/Animace postupu/);
     expect(magnet).toHaveAttribute('href', '/animace/vicko-magnet.html#B10');
     const thread = s7Links.find((l) => l.getAttribute('href') === '/animace/delka-nite.html');

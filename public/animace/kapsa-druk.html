@@ -394,7 +394,7 @@ const S=[];
 const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,side,tip});
 
 // ===== A =====
-add('A','Druk má čtyři díly','Druk nejdřív celý vyzkoušejte na odřezku stejné kůže jako tělo – obchod ho uvádí pro jemnou kůži, třísločiněná je tužší (ověřte na odřezku). Mějte po ruce návod z obalu. Dřík a hlavička jdou na přední panel, zdířka a klobouček na jazyk (skladbu ověřte podle obalu). Každá polovina svírá jen jednu vrstvu kůže.',8200,t=>{
+add('A','Připravte si druk a návod','Druk nejdřív celý vyzkoušejte na odřezku stejné kůže jako tělo – obchod ho uvádí pro jemnou kůži, třísločiněná je tužší (ověřte na odřezku). Mějte po ruce návod z obalu. Dřík a hlavička jdou na přední panel, zdířka a klobouček na jazyk (skladbu ověřte podle obalu). Každá polovina svírá jen jednu vrstvu kůže.',8200,t=>{
   const e=es(t,.05,.4), c=es(t,.6,.85);
   const k=2.3, ox=50, yF=62, yT=L(27,yF-5*k,c), sp=3.4*(1-c);
   const tongue=leatherSec(-13,13,0,{gap:1})+G(`translate(0 ${f(-sp)})`,capSec(1))+G(`translate(0 ${f(sp)})`,socketSec());
@@ -412,7 +412,7 @@ add('A','Druk má čtyři díly','Druk nejdřív celý vyzkoušejte na odřezku 
   return s;
 },null);
 
-add('A','Značka pro dřík 9,5 mm od okraje','Šídlem označte na odřezku bod 9,5 mm od okraje – stejně daleko bude dřík od horní hrany předního panelu.',6400,t=>{
+add('A','Označte dřík 9,5 mm od okraje','Šídlem označte na odřezku bod 9,5 mm od okraje – stejně daleko bude dřík od horní hrany předního panelu.',6400,t=>{
   const pr=seg(t,.25,.6), d=seg(t,.62,.75);
   let inner=offcut();
   if(pr>.5) inner+=pricks([MK],.45);
@@ -427,7 +427,7 @@ add('A','Značka pro dřík 9,5 mm od okraje','Šídlem označte na odřezku bod
   return s;
 },{v:'LÍC',sub:'odřezek'});
 
-add('A','Otvor jen podle návodu: od 2 mm','Když návod vyžaduje otvor, řiďte se jím. Když velikost neuvádí, vysekněte otvor výsečníkem 2 mm a přiložte dřík: má projít těsně. Když neprojde, zkuste 3 mm. V moc velkém otvoru se dřík viklá.',9000,t=>{
+add('A','Vysekněte otvor, pokud ho návod vyžaduje','Když návod vyžaduje otvor, řiďte se jím. Když velikost neuvádí, vysekněte otvor výsečníkem 2 mm a přiložte dřík: má projít těsně. Když neprojde, zkuste 3 mm. V moc velkém otvoru se dřík viklá.',9000,t=>{
   const z=es(t,0,.15), cam=camL(OFFC,MKC,z), pu=seg(t,.18,.42), hole=t>.32?1:0, post=es(t,.5,.7);
   let inner=offcut()+pricks([MK],.45);
   if(hole) inner+=`<circle cx="${MK[0]}" cy="${MK[1]}" r="1" fill="var(--hole)"/>`;
@@ -462,7 +462,7 @@ add('A','Osaďte dřík s hlavičkou','Dřík s hlavičkou osaďte na značku ap
   return s;
 },null);
 
-add('A','Klobouček se zdířkou na druhém odřezku','Na druhém odřezku osaďte klobouček se zdířkou do propíchnutého středu obtisku, aplikátorem a paličkou jako dřík. Když návod vyžaduje otvor a neuvádí velikost, začněte výsečníkem 2 mm; 3 mm jen když trn neprojde.',10000,t=>{
+add('A','Osaďte klobouček na druhém odřezku','Na druhém odřezku osaďte klobouček se zdířkou do propíchnutého středu obtisku, aplikátorem a paličkou jako dřík. Když návod vyžaduje otvor a neuvádí velikost, začněte výsečníkem 2 mm; 3 mm jen když trn neprojde.',10000,t=>{
   const {g}=setSection(t,'cap');
   let s=clipMain('a5',g)+secTag();
   s+=setLabels(t,'cap','klobouček','zdířka','2. odřezek');
@@ -517,7 +517,7 @@ add('A','Změřte přírubu patice: nejvýš Ø 11 mm','Na rubu odřezku změřt
 },{v:'RUB',sub:'odřezek'});
 
 // ===== B =====
-add('B','Značka středu dříku na předním panelu','Dřík se osazuje před složením pásu. Jeho střed je značka propíchnutá v lekci 5: 9,5 mm pod horní hranou předního panelu, na ose jazyka.',7000,t=>{
+add('B','Najděte značku středu dříku','Dřík se osazuje před složením pásu. Jeho střed je značka propíchnutá v lekci 5: 9,5 mm pod horní hranou předního panelu, na ose jazyka.',7000,t=>{
   const pulse=.5+.5*Math.sin(t*Math.PI*8), d=seg(t,.35,.55), z=es(t,.62,.92);
   const cam=camL(PANELC,{cx:150,cy:70,sx:38,sy:44,k:1.6},z);
   let inner=stripLeather()+rings([SNAP],'var(--accent)',1.6+pulse*.5,.4,seg(t,.08,.2));
@@ -533,7 +533,7 @@ add('B','Značka středu dříku na předním panelu','Dřík se osazuje před s
   return s;
 },'lic');
 
-add('B','Otvor pro dřík (pokud ho návod vyžaduje)','Když návod vyžaduje otvor, vysekněte ho do předního panelu na značku dříku výsečníkem, který vám sedl v lekci 3.',6800,t=>{
+add('B','Vysekněte otvor pro dřík, pokud ho návod vyžaduje','Když návod vyžaduje otvor, vysekněte ho do předního panelu na značku dříku výsečníkem, který vám sedl v lekci 3.',6800,t=>{
   const pu=seg(t,.2,.55), hole=t>.38?1:0;
   const cam={cx:SNAP[0]-6,cy:SNAP[1]+14,sx:42,sy:45,k:1.9};
   let inner=`<rect x="95" y="44" width="95" height="80" rx="2" fill="var(--board)" stroke="var(--board-d)" stroke-width=".3"/>`+stripLeather({hole});
@@ -546,7 +546,7 @@ add('B','Otvor pro dřík (pokud ho návod vyžaduje)','Když návod vyžaduje o
   return s;
 },'lic','Bezpečnost: výsečník tlučte kolmo, ruka mimo dráhu paličky.');
 
-add('B','Dřík z rubu, hlavička na líci – naplocho','Dřík s hlavičkou osaďte na značku aplikátorem a paličkou na tvrdé podložce, jako v lekci 3. Dřík jde z rubu předního panelu, hlavička zůstane na líci. Udělejte to teď – po složení pásu už na něj nedosáhnete.',10500,t=>{
+add('B','Osaďte dřík naplocho, hlavičkou na líc','Dřík s hlavičkou osaďte na značku aplikátorem a paličkou na tvrdé podložce, jako v lekci 3. Dřík jde z rubu předního panelu, hlavička zůstane na líci. Udělejte to teď – po složení pásu už na něj nedosáhnete.',10500,t=>{
   const {g}=setSection(t,'post');
   let s=clipMain('b3',g)+secTag();
   s+=setLabels(t,'post','hlavička','dřík','přední panel');
@@ -623,7 +623,7 @@ add('C','Obtiskněte polohu kloboučku','Jazyk přitiskněte přes hlavičku, ab
   return s;
 },{v:'LÍC',sub:'vpravo rub jazyka'},'Tip: čárkovaně je kružnice ze šablony, posun obtisku je jen příklad.');
 
-add('C','Otvor pro klobouček (pokud ho návod vyžaduje)','Když návod vyžaduje otvor, proražte ho přesně v obtisknutém místě výsečníkem, který vám sedl v lekci 3.',7200,t=>{
+add('C','Vysekněte otvor pro klobouček, pokud ho návod vyžaduje','Když návod vyžaduje otvor, proražte ho přesně v obtisknutém místě výsečníkem, který vám sedl v lekci 3.',7200,t=>{
   const pu=seg(t,.25,.6), hole=t>.42?1:0;
   let inner=holderBody()+`<rect x="30" y="-50" width="52" height="49" rx="1" fill="var(--board)" stroke="var(--board-d)" stroke-width=".3"/>`+tongueUp(TAB_CUT,{imp:1});
   if(hole) inner+=`<circle cx="${HSX}" cy="${f(-IMP)}" r="1" fill="var(--hole)"/>`;

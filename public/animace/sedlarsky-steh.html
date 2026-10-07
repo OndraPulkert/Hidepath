@@ -391,7 +391,7 @@ add('A','Propíchněte nit 3 cm od konce a přetáhněte smyčku','Jehlou propí
   return clipMain(s)+inset('ZÁMEK',ib);
 },null,'Tip: propíchněte krátký konec, který prošel očkem.');
 
-add('A','Totéž na druhém konci a zkouška tahem','Stejně navlékněte druhou jehlu na druhý konec nitě. Lehce zatáhněte: nit musí v obou jehlách držet.',6800,t=>{
+add('A','Navlékněte druhou jehlu a zatáhněte','Stejně navlékněte druhou jehlu na druhý konec nitě. Lehce zatáhněte: nit musí v obou jehlách držet.',6800,t=>{
   let s='';
   const y=40, p=es(t,.08,.45), pull=es(t,.6,.8)*(1-es(t,.85,.95));
   const xl=L(30,14,p)-pull*1.5, xr=L(54,70,p)+pull*1.5;
@@ -408,7 +408,7 @@ add('A','Totéž na druhém konci a zkouška tahem','Stejně navlékněte druhou
 },null,null);
 
 // ---------- B: uchycení dílu ----------
-add('B','Mezi koleny, linie otvorů nahoru','Šijete dvěma jehlami, takže díl musí držet sám. Nejjednodušší je sevřít ho mezi kolena, linií otvorů nahoru.',7200,t=>{
+add('B','Sevřete díl mezi koleny','Šijete dvěma jehlami, takže díl musí držet sám. Nejjednodušší je sevřít ho mezi kolena, linií otvorů nahoru.',7200,t=>{
   let s='';
   const sq=es(t,.15,.45);
   // kolena zepředu (schéma)
@@ -427,7 +427,7 @@ add('B','Mezi koleny, linie otvorů nahoru','Šijete dvěma jehlami, takže díl
   return clipMain(s)+inset('UCHYCENÍ',ib);
 },null,null);
 
-add('B','Nebo destičky a svěrka ke stolu','Pohodlnější je sevřít díl mezi dvě dřevěné destičky a upnout truhlářskou svěrkou ke stolu. Sedlářský koník (vybavení, „Kup později“) na pouzdro nepotřebujete. Díl se mezi stehy nesmí posouvat, jinak nebudou stehy stejně utažené.',8400,t=>{
+add('B','Nebo ho upněte svěrkou','Pohodlnější je sevřít díl mezi dvě dřevěné destičky a upnout truhlářskou svěrkou ke stolu. Sedlářský koník (vybavení, „Kup později“) na pouzdro nepotřebujete. Díl se mezi stehy nesmí posouvat, jinak nebudou stehy stejně utažené.',8400,t=>{
   let s='';
   const c=es(t,.15,.5);
   // bok: deska stolu, na ní spodní destička, díl, horní destička; svěrka shora i zespodu
@@ -449,7 +449,7 @@ add('B','Nebo destičky a svěrka ke stolu','Pohodlnější je sevřít díl mez
 },null,'Tip: obrázek ukazuje jedno z možných uspořádání.');
 
 // ---------- C: začátek ----------
-add('C','První otvor: stejná délka nitě na obou stranách','Jehlu protáhněte prvním otvorem tak, aby na obou stranách zůstala stejná délka nitě. Máte jednu jehlu vpředu a jednu vzadu. Na odřezku začněte bez zpětných stehů; na pouzdře v lekci 6 je přidáte i na začátek (krok E2).',9000,t=>{
+add('C','Vyrovnejte nit v prvním otvoru','Jehlu protáhněte prvním otvorem tak, aby na obou stranách zůstala stejná délka nitě. Máte jednu jehlu vpředu a jednu vzadu. Na odřezku začněte bez zpětných stehů; na pouzdře v lekci 6 je přidáte i na začátek (krok E2).',9000,t=>{
   const p=es(t,.05,.55), eq=es(t,.6,.9);
   let el=piece('lic',{line:true});
   let sc=secBase();
@@ -470,7 +470,7 @@ add('C','První otvor: stejná délka nitě na obou stranách','Jehlu protáhně
 },{v:'LÍC',sub:'odřezek stojí hranou nahoru'},null);
 
 // ---------- D: rytmus ----------
-add('D','1. Přední jehla dalším otvorem dozadu','Přední jehlu prostrčte dalším otvorem dozadu a nit protáhněte.',8000,t=>{
+add('D','1. Přední jehlu prostrčte dozadu','Přední jehlu prostrčte dalším otvorem dozadu a nit protáhněte.',8000,t=>{
   const u=L(0,.42,es(t,.05,.95));
   let s=seamScene(FWD,0,0,{rest:false});
   // přepiš: jen první tah do fáze 1
@@ -481,7 +481,7 @@ add('D','1. Přední jehla dalším otvorem dozadu','Přední jehlu prostrčte d
   return s+inset('POŘADÍ',ib);
 },{v:'LÍC',sub:'přední jehla'},'Tip: přední je jehla, která je právě na straně líce (u vás).');
 
-add('D','2. Zadní jehla stejným otvorem dopředu – nad nití','Zadní jehlu prostrčte stejným otvorem dopředu, nad nití, která už v otvoru je, ne pod ní. Nit nepropíchněte – zasekne se a roztřepí.',10000,t=>{
+add('D','2. Zadní jehlu prostrčte dopředu nad nití','Zadní jehlu prostrčte stejným otvorem dopředu, nad nití, která už v otvoru je, ne pod ní. Nit nepropíchněte – zasekne se a roztřepí.',10000,t=>{
   const u=L(.42,.8,es(t,.05,.85));
   let s=clipMain(piece('lic')+elevMove(FWD,0,u)+secBase()+tpath(P([HX(0),RB],[HX(0),MID]),1)+tpath(P([HX(0),MID],[HX(0),LF]),0)+secMove(FWD,0,u))+secTag();
   s+=viewTag('POHLED NA LÍC · v měřítku');
@@ -520,7 +520,7 @@ add('D','3. Obě nitě utáhněte stejnou silou','Obě nitě utáhněte stejnou 
   return s+inset('UTAŽENÍ',ib);
 },{v:'LÍC',sub:'utáhnout'},null);
 
-add('D','Opakujte: vždy stejné pořadí a stejná strana','Každý další otvor stejně: přední jehla dozadu, zadní stejným otvorem dopředu nad nití, obě utáhnout. Dodržujte vždy stejné pořadí, jinak nebudou stehy stejně skloněné.',14000,t=>{
+add('D','Opakujte vždy ve stejném pořadí','Každý další otvor stejně: přední jehla dozadu, zadní stejným otvorem dopředu nad nití, obě utáhnout. Dodržujte vždy stejné pořadí, jinak nebudou stehy stejně skloněné.',14000,t=>{
   const v=es(t,.02,.94)*(FWD.length-1)+1, n=Math.floor(v), fr=v-n;
   let s=seamScene(FWD,Math.min(n,FWD.length),n<FWD.length?Math.max(fr,.001):0);
   s+=viewTag('POHLED NA LÍC · v měřítku');
@@ -563,7 +563,7 @@ add('E','Na konci prošijte zpět dva otvory','Na konci řady prošijte zpět dv
 },{v:'LÍC',sub:'konec řady'},'Tip: zpět šijte stejným rytmem, jen opačným směrem. Zpětné stehy leží přes hotové.');
 
 const STARTM=[[2,1],[1,0],...FWD];
-add('E','Zpětné stehy na začátku i na konci švu','Pouzdro (lekce 6): začněte dvěma zpětnými stehy v horním rohu a šijte souvisle bok, spodek, bok. Rohový otvor prošijte jako každý jiný. Na konci udělejte dva zpětné stehy. Projekty 02 a 03: dva zpětné stehy na začátku i na konci každého švu. Projekt 03, boky S4 a S5: steh 60–64 navíc zdvojte (jak, ověřte na zkušebním kuse).',13000,t=>{
+add('E','Zajistěte začátek i konec švu','Pouzdro (lekce 6): začněte dvěma zpětnými stehy v horním rohu a šijte souvisle bok, spodek, bok. Rohový otvor prošijte jako každý jiný. Na konci udělejte dva zpětné stehy. Projekty 02 a 03: dva zpětné stehy na začátku i na konci každého švu. Projekt 03, boky S4 a S5: steh 60–64 navíc zdvojte (jak, ověřte na zkušebním kuse).',13000,t=>{
   const v=es(t,.04,.92)*5, n=Math.floor(v), fr=v-n;
   let s=seamScene(STARTM,Math.min(n,5),n<5?Math.max(fr,.001):0,{hiBack:[0,1]});
   s+=viewTag('POHLED NA LÍC · začátek švu');
@@ -607,7 +607,7 @@ add('F','Odstřihněte těsně u kůže a přimáčkněte','Když konce nezatavu
   return clipMain(s)+inset('ODSTŘIHNOUT',ib);
 },{v:'RUB',sub:'díl otočený'},null);
 
-add('F','Polyester navíc zatavit – jen na rubu','Polyesterovou nit můžete zatavit: konce odstřihněte tak, aby vyčnívaly asi 2 mm, krátce je přibližte k plameni zapalovače a hned přimáčkněte. Jen na rubu, plamen nikdy k líci. Zapalovač držte dál od kůže i od zbytku nitě, stačí zlomek sekundy.',9000,t=>{
+add('F','Polyester zatavte jen na rubu','Polyesterovou nit můžete zatavit: konce odstřihněte tak, aby vyčnívaly asi 2 mm, krátce je přibližte k plameni zapalovače a hned přimáčkněte. Jen na rubu, plamen nikdy k líci. Zapalovač držte dál od kůže i od zbytku nitě, stačí zlomek sekundy.',9000,t=>{
   const fl=seg(t,.25,.5), melt=es(t,.4,.55);
   let s=rubPiece()+rubStitches(9);
   const x=RX(5), le=2*K;   // konec asi 2 mm
@@ -637,7 +637,7 @@ function miniRow(x,y,w,n,o={}){
     if(loop) r+=`<circle cx="${f((x1+x2)/2)}" cy="${f(y+2.5)}" r="3.2" fill="none" stroke="var(--accent)" stroke-width=".4"/>`;}
   return r;
 }
-add('G','Líc: všechny stehy stejně skloněné a stejně utažené','Na líci mají být všechny stehy stejně skloněné a stejně utažené. Prohozené pořadí jehel: steh leží obráceně. Nestejné utažení: jedna strana má smyčky.',8400,t=>{
+add('G','Kontrola: stehy na líci','Na líci mají být všechny stehy stejně skloněné a stejně utažené. Prohozené pořadí jehel: steh leží obráceně. Nestejné utažení: jedna strana má smyčky.',8400,t=>{
   let s='';
   const a=seg(t,.05,.2), b=seg(t,.35,.5);
   s+=`<g opacity="${f(a)}">${pill(6,20,'dobře','tok')}${miniRow(8,29,70,10)}${tick(80,21)}</g>`;
@@ -649,7 +649,7 @@ add('G','Líc: všechny stehy stejně skloněné a stejně utažené','Na líci 
   return clipMain(s)+inset('LÍC',ib);
 },{v:'LÍC',sub:'kontrola'},null);
 
-add('G','Rub: rovná řada','Otočte díl. Rub bývá méně pravidelný než líc, to je normální. Stehy na rubu ale musí být stejně utažené, v jedné řadě a bez smyček. Když otvory na rubu nejsou rovné, vidličky nebyly při děrování kolmo (lekce 3).',8400,t=>{
+add('G','Kontrola: rovná řada na rubu','Otočte díl. Rub bývá méně pravidelný než líc, to je normální. Stehy na rubu ale musí být stejně utažené, v jedné řadě a bez smyček. Když otvory na rubu nejsou rovné, vidličky nebyly při děrování kolmo (lekce 3).',8400,t=>{
   let s='';
   const a=seg(t,.05,.2), b=seg(t,.4,.55);
   s+=`<g opacity="${f(a)}">${pill(6,20,'rub: rovná řada','t')}${miniRow(8,29,70,10,{rub:true})}${tick(80,21)}</g>`;
@@ -664,7 +664,7 @@ add('G','Rub: rovná řada','Otočte díl. Rub bývá méně pravidelný než l�
   return clipMain(s)+inset('RUB',ib);
 },{v:'RUB',sub:'kontrola'},null);
 
-add('G','Kontrolní body lekce 4','Díly jsou slepené a hrany lícují bez posunu. Stehy na líci jsou stejně skloněné a stejně utažené, žádný netvoří smyčku. Konec je ukončený zpětnými stehy a nit odstřižená na rubu. Pak totéž na pouzdře v lekci 6.',9000,t=>{
+add('G','Kontrola: slepené díly a šev','Díly jsou slepené a hrany lícují bez posunu. Stehy na líci jsou stejně skloněné a stejně utažené, žádný netvoří smyčku. Konec je ukončený zpětnými stehy a nit odstřižená na rubu. Pak totéž na pouzdře v lekci 6.',9000,t=>{
   let s=clipMain(piece('lic',{leftEnd:true})+(()=>{let r='';for(let j=0;j<7;j++){const [a,b]=FWD[j];r+=stitchLic(a,b,j%2)}return r})())+viewTag('LÍC · hotový šev');
   s+=`<g opacity="${f(seg(t,.1,.2))}">${pill(42,SEAM+14,'stejný sklon · stejné utažení','tok','middle')}</g>`;
   const ck=[['slepené, hrany',.25,1],['lícují',.25,0],['stejný sklon',.4,1],['stejné utažení,',.55,1],['bez smyčky',.55,0],['konec: zpětné',.7,1],['stehy, nit',.7,0],['odstřižená na rubu',.7,0]];

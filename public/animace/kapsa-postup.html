@@ -469,7 +469,7 @@ add('B','Zkontrolujte, že se přenesly všechny značky','Zkontrolujte, že je 
   s+=lbl(92,23,'4 konce os','tok')+(t>.5?tick(127,22):'');
   return s;
 },'lic');
-add('B','Na líci jen dírky – nic nekreslete','Na líc nic nekreslete – čára by na hotové kapse zůstala vidět. Osy narýsujete na rubu.',5000,t=>{
+add('B','Na líc nic nekreslete','Na líc nic nekreslete – čára by na hotové kapse zůstala vidět. Osy narýsujete na rubu.',5000,t=>{
   const pulse=.5+.5*Math.sin(t*Math.PI*5);
   let s=G(LVw,leather({side:'lic',pricks:27})+AXE.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="${f(1.3+pulse*.4)}" fill="none" stroke="var(--ok)" stroke-width=".35" opacity="${f(seg(t,.05,.2))}"/>`).join(''));
   // Na líci se nekreslí žádná čára, ani „ukázková“ – jen přeškrtnutá tužka vedle.
@@ -569,7 +569,7 @@ add('C','Obtáhněte kružnici okna v otvoru papíru','Tužkou lehce objeďte vn
   s+=G('',lbl(90,42,'celá kružnice Ø 20','t')+lbl(90,47,'= velikost výsečníku','ts'),`opacity="${f(seg(t,.68,.78))}"`);
   return s;
 },'rub');
-add('C','Obrys se teď neřeže','Obrys teď neřežte – řeže se až po vytvarování. Orýsujte všechno teď, přes vytvarovaný důlek už šablona neleží rovně. Šablonu si schovejte: po tvarování podle ní jen obtáhnete rozmazané čáry.',4200,t=>{
+add('C','Obrys teď neřežte','Obrys teď neřežte – řeže se až po vytvarování. Orýsujte všechno teď, přes vytvarovaný důlek už šablona neleží rovně. Šablonu si schovejte: po tvarování podle ní jen obtáhnete rozmazané čáry.',4200,t=>{
   let s=G(LVw,leather({side:'rub',axPricks:1,slits:23,rubAxes:1,outline:1,circle:1}));
   const a=seg(t,.1,.35);
   s+=`<g opacity="${f(a)}">${knife(106,30,30)}<circle cx="102" cy="22" r="9" fill="none" stroke="var(--accent)" stroke-width=".9"/><path d="M95.6 28.4 L108.4 15.6" stroke="var(--accent)" stroke-width=".9"/></g>`;
@@ -587,7 +587,7 @@ add('D','Navlhčete kůži','Kůži navlhčete houbičkou, nemáčejte ji. Tvaru
   if(t>.7) s+=lbl(92,30,'povrch mírně světlá','t')+lbl(92,35,'→ tvarovat','ts');
   return s;
 },'rub');
-add('D','Lícem dolů na formu, osy na osy, mince na rub','Kůži položte lícem dolů na formu a osy na rubu zarovnejte s osami na desce. Minci zabalenou do potravinové fólie položte na rub nad otvor.',6200,t=>{
+add('D','Položte kůži lícem dolů na formu','Kůži položte lícem dolů na formu a osy na rubu zarovnejte s osami na desce. Minci zabalenou do potravinové fólie položte na rub nad otvor.',6200,t=>{
   const m=es(t,.05,.5), c=es(t,.6,.9);
   let s=`<clipPath id="lc3"><rect x="0" y="0" width="84" height="90"/></clipPath>`;
   let top=G(FB,board({axes:1,axesFull:1,hole:'through',round:1}));
@@ -622,7 +622,7 @@ add('D','Nechte zaschnout přes noc','Nechte úplně zaschnout, nejlépe přes n
   s+=lbl(6,86,'přes noc','tw');
   return s;
 },'rubTop');
-add('D','Rozepněte: důlek vystupuje do otvoru','Rozepněte a minci vyjměte. Zkontrolujte: okraj důlku je bez zvrásnění a mince jde zasunout i vysunout. Vložená mince nesmí vyčnívat nad okolní rub (ověřte na odřezku). Otvory švu mají zůstat kulaté.',4600,t=>{
+add('D','Rozepněte a zkontrolujte důlek','Rozepněte a minci vyjměte. Zkontrolujte: okraj důlku je bez zvrásnění a mince jde zasunout i vysunout. Vložená mince nesmí vyčnívat nad okolní rub (ověřte na odřezku). Otvory švu mají zůstat kulaté.',4600,t=>{
   const up=es(t,.05,.45), cout=es(t,.5,.8);
   let s=formSec({W:40,hole:'through',round:1,leather:{d:1.9,side:'rubUp'},coin:{y:1.3-cout*16,foil:1},lid:{y:-1.2-up*42},clamps:0});
   s+=`<g opacity="${f(seg(t,.0,.15)*(1-up))}"></g>`;
@@ -638,7 +638,7 @@ function eTop(o){
   top+=G((o.pre||'')+FV,leather({side:'rub',slits:23,rubAxes:1,outline:1,circle:1,dimple:1,cut:o.cut,window:o.window}));
   return top;
 }
-add('E','Zaschlou kůži zpátky na formu, lícem dolů','Zaschlou kůži položte lícem dolů zpátky na formu: důlek do otvoru, osy na osy.',4400,t=>{
+add('E','Vraťte kůži lícem dolů na formu','Zaschlou kůži položte lícem dolů zpátky na formu: důlek do otvoru, osy na osy.',4400,t=>{
   const m=es(t,.05,.55);
   let s=`<clipPath id="lc4"><rect x="0" y="0" width="84" height="90"/></clipPath>`;
   let top=G(FB,board({axes:1,axesFull:1,hole:'through',round:1}))+G(`translate(0 ${f(L(-40,0,m))})`,G(FV,leather({side:'rub',slits:23,rubAxes:1,outline:1,circle:1,dimple:1})),m<1?SHADOW:'');
@@ -647,7 +647,7 @@ add('E','Zaschlou kůži zpátky na formu, lícem dolů','Zaschlou kůži polož
   s+=inset('ŘEZ',G(`translate(109.5 ${f(L(14,34,m))}) scale(.84)`,body)+(m>=1?lbl(109.5,58,'důlek visí volně','t','middle')+lbl(109.5,64,'osy kůže = osy desky','ts','middle'):''));
   return s;
 },'rubTop');
-add('E','Vyřízněte obrys 2–3 lehkými tahy nad dřevem','Rozmazané čáry nejdřív obtáhněte podle šablony. Obrys vyřízněte 2–3 lehkými tahy, kůži přidržujte na rovné části. Desku můžete chránit kartonem s otvorem Ø 32 mm.',8000,t=>{
+add('E','Vyřízněte obrys 2–3 lehkými tahy','Rozmazané čáry nejdřív obtáhněte podle šablony. Obrys vyřízněte 2–3 lehkými tahy, kůži přidržujte na rovné části. Desku můžete chránit kartonem s otvorem Ø 32 mm.',8000,t=>{
   const cardA=es(t,0,.1)*(1-es(t,.12,.18))*0+ (t<.14?es(t,0,.08):1);
   const passes=3, u=seg(t,.15,.8)*passes, pass=Math.min(passes,Math.floor(u)+1), pu=u-Math.floor(u);
   const off=es(t,.84,1);
@@ -672,7 +672,7 @@ add('E','Vyřízněte obrys 2–3 lehkými tahy nad dřevem','Rozmazané čáry 
   s+=inset('ŘEZ',G('translate(110 32) scale(.95)',body)+lbl(91,50,'~5 mm','ta')+lbl(88.5,56,'nůž nad dřevem,','t')+lbl(88.5,61.5,'ne nad důlkem','ts')+lbl(88.5,68,'čárkovaně: karton','ts')+lbl(88.5,72.5,'s otvorem Ø 32','ts')+lbl(88.5,77,'(volitelně)','ts'));
   return s;
 },'rubTop');
-add('E','Špalík pod důlek a vysekněte okno Ø 20','Pod důlek podložte špalík užší než otvor formy (pod 31,5 mm) a širší než okno (přes 20 mm). Dna se jen dotýká, nenadzvedává ho (ověřte na odřezku). Výsečník Ø 20 mm postavte na narýsovanou kružnici. Zkontrolujte, že prstenec kolem důlku je po celém obvodu stejně široký, a vysekněte okno.',7200,t=>{
+add('E','Podložte důlek, vysekněte okno Ø 20','Pod důlek podložte špalík užší než otvor formy (pod 31,5 mm) a širší než okno (přes 20 mm). Dna se jen dotýká, nenadzvedává ho (ověřte na odřezku). Výsečník Ø 20 mm postavte na narýsovanou kružnici. Zkontrolujte, že prstenec kolem důlku je po celém obvodu stejně široký, a vysekněte okno.',7200,t=>{
   const b=es(t,.03,.3), pd=es(t,.38,.62), hit=t>.62, back=es(t,.7,.9);
   const win=t>.62;
   const pyy= t<.62? L(-45,2.6,pd) : L(2.6,-45,back);
@@ -684,7 +684,7 @@ add('E','Špalík pod důlek a vysekněte okno Ø 20','Pod důlek podložte špa
   s+=lbl(69,16,'výsečník Ø 20','t');
   return s;
 },'rubTop');
-add('E','Zkouška: mince nepropadne','Minci vložte z rubu, kus otočte oknem dolů a zatřeste – nesmí vypadnout. Zatlačte na ni z rubu palcem – oknem nesmí projít. Prstenec (3,75 mm) nesmí být natržený. Když mince projde, Ø 20 mm do kapsy nesekejte. Nejdřív zkontrolujte hloubku důlku, mělký vytvarujte znovu. Pak na druhém odřezku zkuste okno Ø 18 mm (lekce 2).',5200,t=>{
+add('E','Vyzkoušejte, že mince nepropadne','Minci vložte z rubu, kus otočte oknem dolů a zatřeste – nesmí vypadnout. Zatlačte na ni z rubu palcem – oknem nesmí projít. Prstenec (3,75 mm) nesmí být natržený. Když mince projde, Ø 20 mm do kapsy nesekejte. Nejdřív zkontrolujte hloubku důlku, mělký vytvarujte znovu. Pak na druhém odřezku zkuste okno Ø 18 mm (lekce 2).',5200,t=>{
   const cin=es(t,.05,.35); const sh=t>.45? Math.sin((t-.45)*60)*1.8*(1-seg(t,.85,1)):0;
   // piece only (cut), window down, coin inside
   const tr=`translate(${f(56+sh)} 38) scale(1.6)`;

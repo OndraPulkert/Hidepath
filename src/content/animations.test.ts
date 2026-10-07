@@ -102,14 +102,14 @@ describe('animace postupu – schéma odkazu', () => {
   it('animationLink skládá odkaz na krok s číslem a názvem kroku', () => {
     expect(animationLink('pouchFold', 'B3')).toEqual({
       href: '/animace/kapsa-skladani.html#B3',
-      label: 'Krok B3 – Bankovky na líc vnitřního, zadní ohybem A přes všechno',
+      label: 'Krok B3 – Přeložte zadní panel ohybem A',
     });
     expect(animationLinkSchema.safeParse(animationLink('snap', 'A7')).success).toBe(true);
     expect(() => animationLink('snap', 'A8')).toThrow(/nemá kotvu #A8/);
     expect(() => animationLink('pouchFold', 'F1' as 'E1')).toThrow(/nemá kotvu #F1/);
     expect(animationStepTitle('snap', 'C5')).toBe('Zkraťte jazyk 11 mm za střed kloboučku');
     expect(animationStepTitle('snap', 'C0')).toBeUndefined();
-    expect(animationStepTitle('lidBends', 'A1')).toBe('Lekce 5: rýha na rubu');
+    expect(animationStepTitle('lidBends', 'A1')).toBe('Výchozí stav: rýha na rubu');
     expect(animationStepTitle('lidBends', 'B8')).toBeUndefined();
     expect(animationStepTitle('threadLength', 'A1')).toBeUndefined();
   });
@@ -399,7 +399,7 @@ describe('animace postupu – přenos, řez a otvory dna pásu v lekcích 4 a 5'
       label: 'Krok D3 – Spojte konce čar tužkou podle pravítka',
     });
     expect(animationLink('bottomHoles', 'E1').label).toBe(
-      'Krok E1 – Lekce 4: cvičný proužek stejně, 6 otvorů na panel',
+      'Krok E1 – Prosekejte cvičný proužek stejně',
     );
     expect(() => animationLink('stripTransfer', 'D5')).toThrow(/nemá kotvu #D5/);
     expect(() => animationLink('bottomHoles', 'D3')).toThrow(/nemá kotvu #D3/);
@@ -644,19 +644,17 @@ describe('animace postupu – přenos P1, okénka, D2 na záda a boční švy V�
   it('popisky tlačítek nesou číslo a název kroku stránky', () => {
     expect(animationLink('lidP1Cut', 'C1')).toEqual({
       href: rez('C1'),
-      label: 'Krok C1 – Napojení jazýčku: nejdřív výsečník Ø 8',
+      label: 'Krok C1 – Vysekněte napojení jazýčku Ø 8',
     });
-    expect(animationLink('lidWindows', 'B3').label).toBe('Krok B3 – Výsečník Ø 10 přes šablonu');
+    expect(animationLink('lidWindows', 'B3').label).toBe('Krok B3 – Vysekněte Ø 10 přes šablonu');
     expect(animationLink('lidBackD2', 'D4').label).toBe(
       'Krok D4 – Šijte sedlovým stehem, konce 2 otvory zpět',
     );
     expect(animationLink('lidBodySides', 'E4').label).toBe('Krok E4 – Steh 60–64 zdvojte');
     expect(animationLink('lidBackD2', 'C3').label).toBe(
-      'Krok C3 – Způsob (b): šablona D2 z listu 3, propíchnout konce čar',
+      'Krok C3 – Způsob (b): propíchněte konce čar',
     );
-    expect(animationLink('lidBodySides', 'D3').label).toBe(
-      'Krok D3 – y 56–68 po jednom otvoru, odřezek k hraně F',
-    );
+    expect(animationLink('lidBodySides', 'D3').label).toBe('Krok D3 – Děrujte y 56–68 po jednom');
     expect(() => animationLink('lidP1Cut', 'C7')).toThrow(/nemá kotvu #C7/);
     expect(() => animationLink('lidWindows', 'D4')).toThrow(/nemá kotvu #D4/);
     expect(() => animationLink('lidBackD2', 'B4')).toThrow(/nemá kotvu #B4/);

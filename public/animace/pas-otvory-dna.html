@@ -289,7 +289,7 @@ const S=[];
 const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,side,tip});
 
 // A1
-add('A','Pás naplocho na tvrdé desce, lícem nahoru','Vyříznutý pás položte naplocho lícem nahoru na tvrdou desku na ručníku, ne na řezací podložku. Propíchnuté tečky dna (17 na panel) jsou vidět na líci i na rubu.',8200,t=>{
+add('A','Položte pás lícem nahoru na desku','Vyříznutý pás položte naplocho lícem nahoru na tvrdou desku na ručníku, ne na řezací podložku. Propíchnuté tečky dna (17 na panel) jsou vidět na líci i na rubu.',8200,t=>{
   const c=OV;
   let s=G(camT(c),BOARD+strip(1,S0,{dot:.75,d:1.1,w:.6}));
   const P=[['ZADNÍ',46,118],['PŘEDNÍ',133.69,118],['VNITŘNÍ',214.35,118]];
@@ -306,7 +306,7 @@ add('A','Pás naplocho na tvrdé desce, lícem nahoru','Vyříznutý pás polož
 },'lic');
 
 // A2
-add('A','Kde leží otvory dna','Otvory leží 3,5 mm od dolní hrany, rozteč přesně 4 mm, 17 na panel. Krajní otvor je 4 mm od čáry ohybu i od hrany. Na sousedních panelech leží zrcadlově – jen tak po složení lícují. Vidličky musí mít rozteč přesně 4 mm.',9000,t=>{
+add('A','Poloha otvorů dna','Otvory leží 3,5 mm od dolní hrany, rozteč přesně 4 mm, 17 na panel. Krajní otvor je 4 mm od čáry ohybu i od hrany. Na sousedních panelech leží zrcadlově – jen tak po složení lícují. Vidličky musí mít rozteč přesně 4 mm.',9000,t=>{
   const c=CA2;
   let g=BOARD+strip(1,S0,{dot:.5});
   // čáry ohybu A (na líci nejsou – jen pro orientaci)
@@ -328,7 +328,7 @@ add('A','Kde leží otvory dna','Otvory leží 3,5 mm od dolní hrany, rozteč p
 },'lic','Tip: čárkované čáry ohybu jsou jen pro orientaci – na líc se nekreslí.');
 
 // A3
-add('A','Vidličky kolmo, jeden pevný úder paličkou','Vidličky postavte hroty na tečky, kolmo ve všech směrech. Držte je pevně u spodku a udeřte jednou pevně paličkou na horní konec, ne na prsty. Když neprošly všechny hroty, udeřte ještě jednou bez pohnutí.',10000,t=>{
+add('A','Postavte vidličky kolmo a udeřte','Vidličky postavte hroty na tečky, kolmo ve všech směrech. Držte je pevně u spodku a udeřte jednou pevně paličkou na horní konec, ne na prsty. Když neprošly všechny hroty, udeřte ještě jednou bez pohnutí.',10000,t=>{
   const lt=64, lb=67;   // kůže (schéma, tloušťka zvětšená)
   let s=`<rect x="2" y="${lb}" width="80" height="14" rx="1" fill="var(--board)" stroke="var(--board-d)" stroke-width=".4"/>`;
   s+=`<rect x="4" y="${lt}" width="76" height="${lb-lt}" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".25"/><rect x="4" y="${lt}" width="76" height=".9" fill="var(--lic)"/>`;
@@ -370,7 +370,7 @@ function frontRow(t,strikes,before,label){
   {const [a,b]=tv(c,BXF-2,128);s+=pill(Math.min(82,a),b,'ohyb B →','ts','end')}
   return {s,r};
 }
-add('B','Přední panel z líce: první úder','Přední panel prosekejte z líce. Vidličky postavte na první tečky, kolmo, a udeřte. Zadní a vnitřní pak z rubu – ze stejné strany by se otvory po složení zkřížily.',7600,t=>{
+add('B','Prosekejte přední panel z líce','Přední panel prosekejte z líce. Vidličky postavte na první tečky, kolmo, a udeřte. Zadní a vnitřní pak z rubu – ze stejné strany by se otvory po složení zkřížily.',7600,t=>{
   const {s:sm,r}=frontRow(t,[STR17[0]],new Set());
   let s=sm+pill(4,87,`přední z líce: ${r.done.size} / 17`,r.done.size?'t':'ts');
   let ib=notes([['z líce','tw'],['pás lícem nahoru'],['hroty na tečky'],['kolmo, 1 úder'],['šikmé otvory „/“','t']],16,5.6);
@@ -381,7 +381,7 @@ add('B','Přední panel z líce: první úder','Přední panel prosekejte z líc
 },'lic','Tip: začít můžete u kteréhokoli konce.');
 
 // B2
-add('B','Navazujte řadu: první hrot do posledního otvoru','Vidličky posuňte tak, aby první hrot zapadl do posledního hotového otvoru – rozteč drží a řada je rovná. Zkontrolujte kolmost a udeřte.',10000,t=>{
+add('B','Navazujte řadu do posledního otvoru','Vidličky posuňte tak, aby první hrot zapadl do posledního hotového otvoru – rozteč drží a řada je rovná. Zkontrolujte kolmost a udeřte.',10000,t=>{
   const {s:sm,r}=frontRow(t,STR17.slice(0,3),new Set(range(6)));
   let s=sm;
   // popisek k prvnímu hrotu
@@ -395,7 +395,7 @@ add('B','Navazujte řadu: první hrot do posledního otvoru','Vidličky posuňte
 },'lic','Tip: se 6 hroty 6 → 11 → 16, se 4 hroty 4 → 7 → 10 → 13 → 16, pak dvojhrot.');
 
 // B3
-add('B','Konec řady dvojhrotem: 17 otvorů','Konec řady dokončete vidličkami se 2 hroty: první hrot do 16. otvoru, druhý na poslední tečku. Zkontrolujte, že je v řadě všech 17 otvorů.',7600,t=>{
+add('B','Dokončete řadu dvojhrotem','Konec řady dokončete vidličkami se 2 hroty: první hrot do 16. otvoru, druhý na poslední tečku. Zkontrolujte, že je v řadě všech 17 otvorů.',7600,t=>{
   const {s:sm,r}=frontRow(t,[STR17[3]],new Set(range(16)));
   let s=sm;
   if(r.gp>.12&&r.gp<.62){const [hx,hy]=tv(CF,XS_F[15],SEAM_Y);s+=lead(hx-4,hy+12,hx-1,hy+1.6)+pill(Math.max(4,hx-30),hy+16,'první hrot v 16. otvoru','ta')}
@@ -437,7 +437,7 @@ function rubRow(t,c,ord,xs,before,key,label,arrowTxt){
   s+=pill(4,87,`${label.split(' ')[0].toLowerCase()} z rubu: ${r.done.size} / 17`,r.done.size===17?'tok':'t');
   return {s,r};
 }
-add('C','Zadní panel z rubu: 17 otvorů','Zadní panel prosekejte z rubu stejně: hroty na tečky, kolmo, jeden úder, první hrot do posledního otvoru, konec dvojhrotem. 17 otvorů.',11000,t=>{
+add('C','Prosekejte zadní panel z rubu','Zadní panel prosekejte z rubu stejně: hroty na tečky, kolmo, jeden úder, první hrot do posledního otvoru, konec dvojhrotem. 17 otvorů.',11000,t=>{
   const {s:sm,r}=rubRow(t,CBK,ORD_B,XS_B,{B:new Set(),I:new Set()},'B','ZADNÍ · rub');
   let s=sm;
   {const [a,b]=tv(CBK,MIRX-FX+1,128);s+=pill(Math.max(4,a),b,'← ohyb A','ts','start')}
@@ -448,7 +448,7 @@ add('C','Zadní panel z rubu: 17 otvorů','Zadní panel prosekejte z rubu stejn�
   return s;
 },'rub');
 
-add('C','Vnitřní panel z rubu: 17 otvorů','Stejně prosekejte vnitřní panel z rubu, 17 otvorů. Přední panel z rubu znovu nesekejte.',11000,t=>{
+add('C','Prosekejte vnitřní panel z rubu','Stejně prosekejte vnitřní panel z rubu, 17 otvorů. Přední panel z rubu znovu nesekejte.',11000,t=>{
   const {s:sm,r}=rubRow(t,CIN,ORD_I,XS_I,{B:ALL,I:new Set()},'I','VNITŘNÍ · rub');
   let s=sm;
   {const [a,b]=tv(CIN,MIRX-BXF+2,128);s+=pill(Math.min(82,a),b,'ohyb B →','ts','end')}
@@ -459,7 +459,7 @@ add('C','Vnitřní panel z rubu: 17 otvorů','Stejně prosekejte vnitřní panel
 },'rub');
 
 // D1
-add('D','Kontrola sklonu a počtu','Zkontrolujte, že má každý panel 17 otvorů a řada je rovná i na straně, kudy hroty vyšly. Přední panel má opačný sklon otvorů než zadní a vnitřní – to je správně.',11000,t=>{
+add('D','Kontrola: sklon a počet otvorů','Zkontrolujte, že má každý panel 17 otvorů a řada je rovná i na straně, kudy hroty vyšly. Přední panel má opačný sklon otvorů než zadní a vnitřní – to je správně.',11000,t=>{
   const c=OV, p=es(t,.42,.6), s0=-Math.cos(Math.PI*p);
   const done={B:ALL,F:ALL,I:ALL};
   let s=G(camT(c),BOARD+strip(s0,done,{dot:.75,d:1.1,w:.6,pencil:.5}));
@@ -480,7 +480,7 @@ add('D','Kontrola sklonu a počtu','Zkontrolujte, že má každý panel 17 otvor
 },t=>t<.51?'rub':'lic');
 
 // D2
-add('D','Proč z obou stran: po složení mají všechny tři stejný sklon','Ohyb panel převrátí. Po složení proto leží otvory všech tří panelů na sobě se stejným sklonem a jehla projde. Ze stejné strany by se zkřížily.',11000,t=>{
+add('D','Proč sekat z obou stran','Ohyb panel převrátí. Po složení proto leží otvory všech tří panelů na sobě se stejným sklonem a jehla projde. Ze stejné strany by se zkřížily.',11000,t=>{
   const pB=es(t,.12,.42), pA=es(t,.48,.78);
   const k=1.05, ox=4;
   let s=lbl(4,7,'SPRÁVNĚ','tok')+lbl(4,11.6,'přední z líce, zadní a vnitřní z rubu','ts');
@@ -513,7 +513,7 @@ function practiceStrip(s0,st){
   g+=row(PR.hZ,st.Z,'\\')+row(PR.hP,st.P,'/')+row(PR.hV,st.V,'\\');
   return G(`translate(${f(PX_(c))} 0) scale(${f(Math.abs(s0)<.02?.02*Math.sign(s0||1):s0)} 1) translate(${f(-PX_(c))} 0)`,g);
 }
-add('E','Lekce 4: cvičný proužek stejně, 6 otvorů na panel','Na cvičném proužku v lekci 4 stejně: prostřední panel z líce, oba krajní z rubu. Panely 30 mm, rozteč 4 mm, 3,5 mm od dolní hrany, 6 otvorů na panel, krajní 5 mm od čáry ohybu i od hrany.',12000,t=>{
+add('E','Prosekejte cvičný proužek stejně','Na cvičném proužku v lekci 4 stejně: prostřední panel z líce, oba krajní z rubu. Panely 30 mm, rozteč 4 mm, 3,5 mm od dolní hrany, 6 otvorů na panel, krajní 5 mm od čáry ohybu i od hrany.',12000,t=>{
   const pFlip=es(t,.36,.56), s0=Math.cos(Math.PI*pFlip);
   const hitP=seg(t,.1,.3), hitZ=seg(t,.6,.75), hitV=seg(t,.78,.93);
   const st={Z:new Set(hitZ>=.5?range(6):[]),P:new Set(hitP>=.5?range(6):[]),V:new Set(hitV>=.5?range(6):[])};
@@ -545,7 +545,7 @@ add('E','Lekce 4: cvičný proužek stejně, 6 otvorů na panel','Na cvičném p
 },t=>t<.46?{v:'LÍC',sub:'proužek lícem nahoru'}:{v:'RUB',sub:'proužek rubem nahoru'},'Tip: se 6 hroty stačí na panel jeden úder; se 4 hroty 4 otvory a pak dvakrát dvojhrot.');
 
 // E2
-add('E','Lekce 4: po složení zkontrolujte, že otvory lícují','Po přeložení proužku kolem obsahu zkontrolujte ještě před zaschnutím, že otvory na sousedních panelech lícují. Když ne, dokud je kůže vlhká, ohyb rozevřete a přeložte se smyčkou posunutou tak, aby seděly.',9000,t=>{
+add('E','Po složení zkontrolujte otvory','Po přeložení proužku kolem obsahu zkontrolujte ještě před zaschnutím, že otvory na sousedních panelech lícují. Když ne, dokud je kůže vlhká, ohyb rozevřete a přeložte se smyčkou posunutou tak, aby seděly.',9000,t=>{
   const pB=es(t,.1,.42), pA=es(t,.48,.8);
   let s=`<rect x="0" y="12" width="84" height="56" fill="var(--board)" stroke="var(--board-d)" stroke-width=".4"/>`;
   s+=foldMini(PR,PK,POX,POY,pB,pA,{d:.6});
