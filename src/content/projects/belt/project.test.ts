@@ -122,7 +122,6 @@ describe('obsah – pásek: zápisník, „Připravte si“ a destička', () => 
     for (const id of Object.values(LEGACY_BELT_RECORD_IDS)) expect(ids, id).not.toContain(id);
     expect(ids).toEqual([
       'plate-check',
-      'belt-marking',
       'scrap-punch',
       'edge-paint-coats',
       'edge-paint-dry-minutes',
@@ -149,7 +148,7 @@ describe('obsah – pásek: zápisník, „Připravte si“ a destička', () => 
     expect(step(4, 'screws').beltRecalls).toEqual(['thickness', 'rivet']);
     expect(step(5, 'measure').beltRecalls).toEqual(['waist']);
     expect(step(5, 'length-check').beltRecalls).toEqual(['middleHole']);
-    expect(step(6, 'row').beltRecalls).toEqual(['tip']);
+    expect(step(6, 'row').beltRecalls).toEqual(['tip', 'marking']);
     expect(step(6, 'punch-holes').beltRecalls).toEqual(['holeDiameter']);
   });
 
@@ -222,15 +221,18 @@ describe('obsah – pásek: zápisník, „Připravte si“ a destička', () => 
     }
   });
 
-  it('kroky s volbou destička/list připomínají, čím značíte, a odkazují na listy', () => {
+  it('kroky s volbou destička/list ukazují, čím značíte (odvozené, nic se nezapisuje), a odkazují na listy', () => {
     for (const [order, id] of [
       [4, 'plate-or-sheet'],
       [6, 'row'],
     ] as const) {
       const s = step(order, id);
       expect(s.printLink).toBe('pattern-sheets');
-      expect(s.recalls?.map((r) => r.fieldId)).toContain('belt-marking');
+      expect(s.beltRecalls).toContain('marking');
     }
+    expect(step(1, 'plate-or-sheets').records).toBeUndefined();
+    expect(step(1, 'plate-or-sheets').beltRecalls).toEqual(['marking']);
+    expect(step(2, 'mark').beltRecalls).toEqual(['marking']);
   });
 
   it('lepení poutka má časovač podle návodu lepidla', () => {

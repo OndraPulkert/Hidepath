@@ -5,10 +5,19 @@ import { lidWalletProject } from '@/content/projects/lid-wallet/project';
 import { type ProjectDefinition } from '@/content/schema';
 
 /**
- * Id polí zápisníku Víčka pro předvyplnění formuláře listů (`browserGenerator`
- * `lid-wallet-thickness`). Přes registr, aby aplikace neimportovala obsah projektu přímo.
+ * Zápisy Víčka: stav formuláře „Listy pro vaši kůži“ (jediný zdroj tlouštěk, P0, k, magnetu
+ * a záloh), výsledky zkoušek, ze kterých formulář upozorní na zálohu, a starší pole lekcí (jen
+ * pro převod). Přes registr, aby aplikace neimportovala obsah projektu přímo.
  */
-export { LID_RECORD_IDS, LID_V12_VARIANTS } from '@/content/projects/lid-wallet/record-ids';
+export {
+  LEGACY_LID_RECORD_IDS,
+  LEGACY_LID_SHEETS_LIMITS,
+  LID_RECORD_IDS,
+  LID_SHEETS_FIELD_ID,
+  LID_SHEETS_LESSON_SLUG,
+  LID_V12_RESULTS,
+  LID_Z2_RESULTS,
+} from '@/content/projects/lid-wallet/record-ids';
 
 /**
  * Zápisy pásku: „Moje pásky“, aktivní pásek a starší pole lekce 1 (jen pro převod na uložený
@@ -18,7 +27,11 @@ export {
   BELT_ACTIVE_FIELD_ID,
   BELT_CONFIG_FIELD_PREFIX,
   BELT_CONFIG_LESSON_SLUG,
+  BELT_PLATE_CHECK,
+  BELT_PLATE_CHECK_ID,
   BELT_TIP_CHOICES,
+  LEGACY_BELT_MARKING,
+  LEGACY_BELT_MARKING_ID,
   LEGACY_BELT_RECORD_IDS,
 } from '@/content/projects/belt/record-ids';
 

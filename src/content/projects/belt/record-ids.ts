@@ -42,3 +42,15 @@ export const BELT_ACTIVE_FIELD_ID = 'belt-active';
 
 /** Lekce, ke které se uložené pásky v zápisníku vážou (jen metadata zápisu). */
 export const BELT_CONFIG_LESSON_SLUG = 'vas-pasek';
+
+/** Lekce 1, krok `plate-check`: výsledek kontroly destičky (výsledek zkoušky, zůstává v zápisníku). */
+export const BELT_PLATE_CHECK_ID = 'plate-check';
+export const BELT_PLATE_CHECK = { ok: 'ok', deviation: 'deviation' } as const;
+
+/**
+ * Stará volba lekce 1 „Čím budete značit“: zachycovala totéž co kontrola destičky a tabulka
+ * „Váš pásek“. Teď se odvozuje (`beltMarking`); `sheets` bez zapsané kontroly destičky se čte
+ * jako odchylka destičky.
+ */
+export const LEGACY_BELT_MARKING_ID = 'belt-marking';
+export const LEGACY_BELT_MARKING = { plate: 'plate', sheets: 'sheets' } as const;

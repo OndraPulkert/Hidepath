@@ -1,6 +1,11 @@
 import { lidWalletProject } from '@/content/projects/lid-wallet/project';
-import { LID_RECORD_IDS, LID_V12_VARIANTS } from '@/content/projects/lid-wallet/record-ids';
-import { lidGeneratorPrefill } from '@/features/notebook/lid-wallet-prefill';
+import {
+  LEGACY_LID_RECORD_IDS,
+  LID_RECORD_IDS,
+  LID_V12_RESULTS,
+  LID_Z2_RESULTS,
+} from '@/content/projects/lid-wallet/record-ids';
+import { legacyLidOffer } from '@/features/lid-wallet/lid-sheets-state';
 import { type LessonRecordEntry } from '@/features/notebook/types';
 import { DEFAULT_LID_WALLET, lidWalletLayout, lidWalletVariant } from '@/lib/geometry/lid-wallet';
 import { buildLidBackSvg } from '@/lib/patterns/lid-wallet-sheets';
@@ -40,46 +45,42 @@ describe('Víčko – opravy z kontroly p03', () => {
     );
   });
 
-  it('záloha A: useň 0,8 se změří a zapíše a předvyplnění vezme změřenou hodnotu', () => {
+  it('záloha A: useň 0,8 se změří a zadá ve formuláři listů, převod vezme změřenou hodnotu', () => {
     const decide = stepOf(3, 'decide');
     expect(decide.body).not.toContain('zadejte P1 0,8)');
-    expect(decide.body).toContain('změřenou tloušťku usně 0,8');
-    expect(decide.records!.map((r) => r.id)).toContain(LID_RECORD_IDS.p1BackupAThickness);
+    expect(decide.body).toContain('zadejte změřenou tloušťku usně 0,8');
+    expect(decide.records!.map((r) => r.id)).toEqual([LID_RECORD_IDS.v12Result]);
+    expect(decide.lidSheetRecalls).toEqual(['variant']);
 
-    const variantA = entry(LID_RECORD_IDS.v12Variant, LID_V12_VARIANTS.backupA);
-    const measured = lidGeneratorPrefill(
+    const resultA = entry(LID_RECORD_IDS.v12Result, LID_V12_RESULTS.cracked);
+    const measured = legacyLidOffer(
       [
-        entry(LID_RECORD_IDS.p1Thickness, 1.02),
-        variantA,
-        entry(LID_RECORD_IDS.p1BackupAThickness, 0.86),
+        entry(LEGACY_LID_RECORD_IDS.p1Thickness, 1.02),
+        resultA,
+        entry(LEGACY_LID_RECORD_IDS.p1BackupAThickness, 0.86),
       ],
       'lid-wallet',
     )!;
-    expect(measured.form.p1).toBe('0,86');
-    expect(measured.filled[0]).toBe('P1 0,86 (záloha A, změřená useň 0,8)');
-    // Nezměřená useň: výchozí 0,8 s poznámkou.
-    const unmeasured = lidGeneratorPrefill([variantA], 'lid-wallet')!;
-    expect(unmeasured.form.p1).toBe('0,8');
-    expect(unmeasured.filled[0]).toContain('nezměřená');
+    expect(measured.form).toMatchObject({ p1: '1,02', backupA: true, p1BackupA: '0,86' });
+    // Nezměřená useň: výchozí 0,8.
+    expect(legacyLidOffer([resultA], 'lid-wallet')!.form.p1BackupA).toBe('0,8');
     // Z-2 → finální kus v záloze A: stejně jako V12 záloha A.
-    const z2 = lidGeneratorPrefill(
+    const z2 = legacyLidOffer(
       [
-        entry(LID_RECORD_IDS.v12Variant, LID_V12_VARIANTS.default),
-        entry(LID_RECORD_IDS.p1Thickness, 1.0),
-        entry(LID_RECORD_IDS.z2Result, 'cracks-backup-a'),
-        entry(LID_RECORD_IDS.p1BackupAThickness, 0.82),
+        entry(LID_RECORD_IDS.v12Result, LID_V12_RESULTS.ok),
+        entry(LEGACY_LID_RECORD_IDS.p1Thickness, 1.0),
+        entry(LID_RECORD_IDS.z2Result, LID_Z2_RESULTS.cracks),
+        entry(LEGACY_LID_RECORD_IDS.p1BackupAThickness, 0.82),
       ],
       'lid-wallet',
     )!;
-    expect(z2.form.p1).toBe('0,82');
-    // L12: po Z-2 useň změřit a listy vygenerovat znovu.
+    expect(z2.form).toMatchObject({ backupA: true, p1BackupA: '0,82' });
+    // L12: po Z-2 useň změřit a listy vygenerovat znovu; finální kus ukáže zálohu z formuláře.
     for (const id of ['z2', 'final-piece']) {
       expect(stepOf(12, id).body).toMatch(/změřte/);
       expect(stepOf(12, id).body).toContain('vygenerujte znovu');
     }
-    expect(stepOf(12, 'final-piece').recalls!.map((r) => r.fieldId)).toContain(
-      LID_RECORD_IDS.p1BackupAThickness,
-    );
+    expect(stepOf(12, 'final-piece').lidSheetRecalls).toContain('variant');
   });
 
   it('záloha B1: rýha jen ve výchozím střihu a v záloze A, V12 na ztenčeném odřezku před listy', () => {
@@ -140,15 +141,20 @@ describe('Víčko – rozhodnutí autora 8. 10. 2026', () => {
   it('B2 po záloze A: zpět na P1 1,0, useň 0,8 se neztenčuje (V6(c))', () => {
     expect(stepOf(12, 'z2').body).toContain('vraťte se k P1 z usně 1,0');
     expect(stepOf(5, 'skive-backup').body).toContain('useň 0,8 se neztenčuje');
-    const b2 = lidGeneratorPrefill(
+    const b2 = legacyLidOffer(
       [
-        entry(LID_RECORD_IDS.p1Thickness, 1.0),
-        entry(LID_RECORD_IDS.v12Variant, LID_V12_VARIANTS.backupA),
-        entry(LID_RECORD_IDS.z2Result, 'cracks-backup-b2'),
+        entry(LEGACY_LID_RECORD_IDS.p1Thickness, 1.0),
+        entry(LID_RECORD_IDS.v12Result, LID_V12_RESULTS.cracked),
+        entry(LID_RECORD_IDS.z2Result, LID_Z2_RESULTS.cracksAgain),
       ],
       'lid-wallet',
     )!;
-    expect(b2.form).toMatchObject({ p1: '1,0', skiveFold: true, skiveHinge: true });
+    expect(b2.form).toMatchObject({
+      p1: '1,0',
+      backupA: false,
+      skiveFold: true,
+      skiveHinge: true,
+    });
   });
 
   it('L1: listy znovu i po k z lekce 10 a magnetu z lekce 11', () => {

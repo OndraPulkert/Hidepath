@@ -14,9 +14,10 @@ describe('tisk listů – peněženka Víčko pro změřenou kůži', () => {
     const user = userEvent.setup();
     renderApp(routes.template(lidWalletProject.slug));
 
-    await user.type(await screen.findByLabelText('Přepážky D1/D2, mm'), '0,8');
+    await user.type(await screen.findByLabelText('Přepážka D1, mm'), '0,7');
+    await user.type(screen.getByLabelText('Přepážka D2, mm'), '0,8');
     await user.type(screen.getByLabelText('Podšívka L1, mm'), '0,9');
-    await user.click(screen.getByRole('button', { name: 'Vygenerovat listy' }));
+    await user.click(screen.getByRole('button', { name: 'Uložit a vygenerovat listy' }));
 
     expect(await screen.findByText(/jsou připravené níže a zaškrtnuté k tisku/)).toHaveTextContent(
       /P1 1,0 · přepážky 0,8 · L1 0,9/,
@@ -39,12 +40,13 @@ describe('tisk listů – peněženka Víčko pro změřenou kůži', () => {
     const user = userEvent.setup();
     renderApp(routes.template(lidWalletProject.slug));
 
-    await user.type(await screen.findByLabelText('Přepážky D1/D2, mm'), '0,8');
+    await user.type(await screen.findByLabelText('Přepážka D1, mm'), '0,7');
+    await user.type(screen.getByLabelText('Přepážka D2, mm'), '0,8');
     await user.type(screen.getByLabelText('Podšívka L1, mm'), '0,9');
     await user.click(screen.getByText('Výsledky P0 a jiný magnet (lekce 2, 10 a 11)'));
-    await user.type(screen.getByLabelText('k (P0-3, lekce 10)'), '1,3');
+    await user.type(screen.getByLabelText('k (P0-3, lekce 2 a 10)'), '1,3');
     await user.type(screen.getByLabelText('Tloušťka magnetu Ø 8, mm (lekce 11)'), '2');
-    await user.click(screen.getByRole('button', { name: 'Vygenerovat listy' }));
+    await user.click(screen.getByRole('button', { name: 'Uložit a vygenerovat listy' }));
 
     expect(await screen.findByText(/jsou připravené níže a zaškrtnuté k tisku/)).toHaveTextContent(
       /P1 1,0 · přepážky 0,8 · L1 0,9 · k 1,3 · magnet Ø 8 × 2/,
@@ -55,11 +57,12 @@ describe('tisk listů – peněženka Víčko pro změřenou kůži', () => {
     const user = userEvent.setup();
     renderApp(routes.template(lidWalletProject.slug));
 
-    await user.type(await screen.findByLabelText('Přepážky D1/D2, mm'), '0,8');
+    await user.type(await screen.findByLabelText('Přepážka D1, mm'), '0,7');
+    await user.type(screen.getByLabelText('Přepážka D2, mm'), '0,8');
     await user.type(screen.getByLabelText('Podšívka L1, mm'), '0,9');
     await user.click(screen.getByText('Výsledky P0 a jiný magnet (lekce 2, 10 a 11)'));
     await user.type(screen.getByLabelText('Tloušťka magnetu Ø 8, mm (lekce 11)'), '0');
-    await user.click(screen.getByRole('button', { name: 'Vygenerovat listy' }));
+    await user.click(screen.getByRole('button', { name: 'Uložit a vygenerovat listy' }));
 
     expect(await screen.findByText(/Listy nevznikly/)).toBeInTheDocument();
     expect(screen.getByText('Tloušťka magnetu: zadejte kladné číslo.')).toBeInTheDocument();
@@ -70,11 +73,17 @@ describe('tisk listů – peněženka Víčko pro změřenou kůži', () => {
     const user = userEvent.setup();
     renderApp(routes.template(lidWalletProject.slug));
 
-    const dividerInput = await screen.findByLabelText('Přepážky D1/D2, mm');
-    expect(screen.getByText(/Při P1 1 mm projdou nejvýš 0,92 mm\./)).toBeInTheDocument();
-    await user.type(dividerInput, '1,0');
+    const d1 = await screen.findByLabelText('Přepážka D1, mm');
+    expect(
+      screen.getByText('přepážky max 0,92 mm (při P1 1,0), D1 a D2 zatím nezadané'),
+    ).toBeInTheDocument();
+    await user.type(d1, '1,0');
+    await user.type(screen.getByLabelText('Přepážka D2, mm'), '0,6');
+    expect(
+      screen.getByText('přepážky max 0,92 mm (při P1 1,0): D1 1 nad hranicí'),
+    ).toBeInTheDocument();
     await user.type(screen.getByLabelText('Podšívka L1, mm'), '0,9');
-    await user.click(screen.getByRole('button', { name: 'Vygenerovat listy' }));
+    await user.click(screen.getByRole('button', { name: 'Uložit a vygenerovat listy' }));
 
     expect(await screen.findByText(/Listy nevznikly/)).toBeInTheDocument();
     expect(screen.getByText(/Přepážky 1 mm jsou při P1 1 mm moc tlusté/)).toBeInTheDocument();
@@ -85,12 +94,13 @@ describe('tisk listů – peněženka Víčko pro změřenou kůži', () => {
 /** P1 1,1 a kozinky 0,9: meze tloušťky jdou pro zkušební kus obejít po potvrzení na stránce. */
 describe('tisk listů Víčka – přesto pro zkušební kus', () => {
   const fill = async (user: ReturnType<typeof userEvent.setup>) => {
-    const p1 = await screen.findByLabelText('P1 (kaštan), mm');
+    const p1 = await screen.findByLabelText('P1 (kaštan, useň 1,0), mm');
     await user.clear(p1);
     await user.type(p1, '1,1');
-    await user.type(screen.getByLabelText('Přepážky D1/D2, mm'), '0,9');
+    await user.type(screen.getByLabelText('Přepážka D1, mm'), '0,9');
+    await user.type(screen.getByLabelText('Přepážka D2, mm'), '0,8');
     await user.type(screen.getByLabelText('Podšívka L1, mm'), '0,9');
-    await user.click(screen.getByRole('button', { name: 'Vygenerovat listy' }));
+    await user.click(screen.getByRole('button', { name: 'Uložit a vygenerovat listy' }));
   };
 
   it('nabídne tlačítko, potvrzení s mezemi a vygeneruje listy s varovným pruhem', async () => {
@@ -154,12 +164,13 @@ describe('tisk listů Víčka – přesto pro zkušební kus', () => {
   it('neplatné zadání (mimo rozsah) obejít nejde', async () => {
     const user = userEvent.setup();
     renderApp(routes.template(lidWalletProject.slug));
-    const p1 = await screen.findByLabelText('P1 (kaštan), mm');
+    const p1 = await screen.findByLabelText('P1 (kaštan, useň 1,0), mm');
     await user.clear(p1);
     await user.type(p1, '2');
-    await user.type(screen.getByLabelText('Přepážky D1/D2, mm'), '0,9');
+    await user.type(screen.getByLabelText('Přepážka D1, mm'), '0,9');
+    await user.type(screen.getByLabelText('Přepážka D2, mm'), '0,9');
     await user.type(screen.getByLabelText('Podšívka L1, mm'), '0,9');
-    await user.click(screen.getByRole('button', { name: 'Vygenerovat listy' }));
+    await user.click(screen.getByRole('button', { name: 'Uložit a vygenerovat listy' }));
 
     expect(await screen.findByText('Tloušťka P1 musí být mezi 0,6 a 1,4 mm.')).toBeInTheDocument();
     expect(

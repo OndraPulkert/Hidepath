@@ -127,12 +127,14 @@ const mm = (v: number) => `${formatDecimal(v)} mm`;
 
 /**
  * Hodnota aktivního pásku pro klíč `key`. Zadání (šířka, obvod…) je vždy; spočítaná čísla
- * (délka pásu, poutko…) jen s platným výpočtem `result`.
+ * (délka pásu, poutko…) jen s platným výpočtem `result`. `marking` = čím se značí, odvozené
+ * z kontroly destičky a tabulky (`beltMarking`).
  */
 export function beltFact(
   key: BeltRecallKey,
   active: ActiveBelt,
   result: BeltConfigResult | null,
+  marking: string | null = null,
 ): BeltFact {
   const { input } = active;
   switch (key) {
@@ -195,6 +197,8 @@ export function beltFact(
         label: 'Prostřední dírka od konce',
         value: result ? mm(result.holes.middleFromApexMm) : null,
       };
+    case 'marking':
+      return { key, label: 'Čím značíte', value: marking };
   }
 }
 

@@ -6,6 +6,9 @@
 export const LESSON_FOCUS_STEP_PARAM = 'krok';
 /** Parametr dotazu na stránce tisku: id listu, který se má předvybrat (lze opakovat). */
 export const PRINT_SHEET_PARAM = 'list';
+
+/** Kotva formuláře „Listy pro vaši kůži“ na tiskové stránce Víčka. */
+export const LID_SHEETS_ANCHOR = 'listy-pro-vasi-kuzi';
 /** Kotvy na stránce lekce (`routes.lesson(…, kotva)`). */
 export const LESSON_ANCHORS = {
   checkpoints: 'kontrolni-body',
@@ -44,6 +47,12 @@ export const routes = {
   /** Šablona / listy střihu k tisku; `sheetId` předvybere list (`?list=<id>`). */
   template: (projectSlug: string, sheetId?: string) =>
     `/projects/${encodeURIComponent(projectSlug)}/template${printSheetQuery(sheetId)}`,
+  /**
+   * Formulář „Listy pro vaši kůži“ (Víčko) na tiskové stránce: jediné místo pro tloušťky, P0,
+   * k, magnet a zálohy. Kotva posune stránku k formuláři.
+   */
+  lidSheets: (projectSlug: string) =>
+    `/projects/${encodeURIComponent(projectSlug)}/template#${LID_SHEETS_ANCHOR}`,
   /** Cvičné listy 1:1 (trénink na odřezku), vlastní tisková stránka vedle šablony. */
   practiceSheets: (projectSlug: string, sheetId?: string) =>
     `/projects/${encodeURIComponent(projectSlug)}/practice-sheets${printSheetQuery(sheetId)}`,

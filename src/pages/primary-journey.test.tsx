@@ -379,50 +379,67 @@ describe('hlavní cesta: zápisník, příprava a dílenský režim', () => {
     }
   });
 
-  it('tisk listů Víčka předvyplní hodnoty zapsané v lekcích 1, 2 a 11', async () => {
+  it('Víčko: lekce ukazuje souhrn z formuláře listů, tlačítko vede na formulář, uložené hodnoty se vrátí do lekcí', async () => {
     const user = userEvent.setup();
     const repositories = createTestRepositories();
     const lid = lidWalletProject;
     const lessonOf = (order: number) => lid.lessons.find((l) => l.order === order)!;
 
-    const type = async (label: RegExp, value: string) => {
+    // Lekce 1: tloušťky se v lekci nezapisují, je tu souhrn a tlačítko na formulář.
+    const l1 = renderApp(routes.lesson(lid.slug, lessonOf(1).slug), { repositories });
+    const measure = (await screen.findByRole('heading', { name: 'Změřte tloušťku kůže' })).closest(
+      'li',
+    )!;
+    expect(within(measure).queryByRole('textbox')).not.toBeInTheDocument();
+    expect(
+      await within(measure).findByRole('list', { name: 'Z formuláře Listy pro vaši kůži' }),
+    ).toHaveTextContent('Vaše tloušťky: zatím nezadané ve formuláři listů');
+    const link = within(measure).getByRole('link', { name: /Zadat tloušťky ve formuláři listů/ });
+    expect(link).toHaveAttribute('href', routes.lidSheets(lid.slug));
+    await user.click(link);
+
+    // Formulář listů: jediné místo pro tloušťky, P0 a magnet.
+    const type = async (label: string, value: string) => {
       const input = await screen.findByLabelText(label);
       await user.clear(input);
-      await user.type(input, `${value}{Enter}`);
-      await waitFor(() =>
-        expect(
-          screen.getAllByRole('status').some((s) => /Uloženo|cíl/.test(s.textContent ?? '')),
-        ).toBe(true),
-      );
+      await user.type(input, value);
     };
-
-    const l1 = renderApp(routes.lesson(lid.slug, lessonOf(1).slug), { repositories });
-    await type(/^P1 \(kaštan\)/, '1,1');
-    await type(/^D1 \(nebarvená kozinka\)/, '0,7');
-    await type(/^D2 \(čokoládová kozinka\)/, '0,85');
-    await type(/^L1 \(nebarvená kozinka\)/, '0,6');
+    await type('P1 (kaštan, useň 1,0), mm', '1,1');
+    await type('Přepážka D1, mm', '0,9');
+    await type('Přepážka D2, mm', '0,8');
+    await type('Podšívka L1, mm', '0,9');
+    expect(
+      screen.getByText('přepážky max 0,80 mm (při P1 1,1): D1 0,9 nad hranicí'),
+    ).toBeInTheDocument();
+    await user.click(screen.getByText('Výsledky P0 a jiný magnet (lekce 2, 10 a 11)'));
+    await type('Zvednutí karet nad G2 (P0-6), mm', '2,4');
+    await type('Tloušťka magnetu Ø 8, mm (lekce 11)', '2');
+    await user.click(screen.getByRole('button', { name: 'Uložit a vygenerovat listy' }));
+    expect(await screen.findByText('Uloženo. Lekce teď ukazují tyto hodnoty.')).toBeInTheDocument();
     l1.unmount();
+    // Jediný zápis: stav formuláře, žádná pole lekcí.
+    const records = await repositories.lessonRecords.list();
+    expect(records.map((r) => r.fieldId)).toEqual(['lid-sheets-input']);
 
-    const l2 = renderApp(routes.lesson(lid.slug, lessonOf(2).slug), { repositories });
-    await type(/^Zvednutí svazku 6 karet nad G2/, '2,4');
-    l2.unmount();
+    // Zpět v lekcích: souhrn z uložených hodnot i s hranicí přepážek podle P1.
+    const again = renderApp(routes.lesson(lid.slug, lessonOf(1).slug), { repositories });
+    const summary = (
+      await screen.findAllByRole('list', { name: 'Z formuláře Listy pro vaši kůži' })
+    )[0]!;
+    expect(summary).toHaveTextContent('Vaše tloušťky: P1 1,1 · D1 0,9 · D2 0,8 · L1 0,9 mm');
+    expect(summary).toHaveTextContent('přepážky max 0,80 mm (při P1 1,1): D1 0,9 nad hranicí');
+    again.unmount();
 
-    const l11 = renderApp(routes.lesson(lid.slug, lessonOf(11).slug), { repositories });
-    await type(/^Tloušťka vybraného magnetu Ø 8/, '2');
-    l11.unmount();
-
-    await waitFor(async () => expect(await repositories.lessonRecords.list()).toHaveLength(6));
-
-    renderApp(routes.template(lid.slug), { repositories });
-    const note = await screen.findByText(/Předvyplněno ze zápisníku:/);
-    expect(note.parentElement).toHaveTextContent(
-      'P1, přepážky (větší z D1 a D2), podšívka L1, zvednutí karet, tloušťka magnetu',
-    );
-    expect(screen.getByLabelText('P1 (kaštan), mm')).toHaveValue('1,1');
-    expect(screen.getByLabelText('Přepážky D1/D2, mm')).toHaveValue('0,85');
-    expect(screen.getByLabelText('Podšívka L1, mm')).toHaveValue('0,6');
-    expect(screen.getByLabelText('Zvednutí karet nad G2 (P0-6), mm')).toHaveValue('2,4');
-    expect(screen.getByLabelText('Tloušťka magnetu Ø 8, mm (lekce 11)')).toHaveValue('2');
+    renderApp(routes.lesson(lid.slug, lessonOf(11).slug), { repositories });
+    const magnet = (
+      await screen.findByRole('heading', { name: 'Nanečisto: který magnet' })
+    ).closest('li')!;
+    expect(
+      await within(magnet).findByRole('list', { name: 'Z formuláře Listy pro vaši kůži' }),
+    ).toHaveTextContent('Magnet Ø 8: × 2 mm');
+    expect(
+      within(magnet).getByRole('link', { name: /Upravit ve formuláři listů/ }),
+    ).toHaveAttribute('href', routes.lidSheets(lid.slug));
   });
 });
 

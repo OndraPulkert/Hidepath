@@ -23,7 +23,8 @@ import {
 import { typo } from '@/lib/utils/format';
 import { resolveActiveBelt } from '@/features/belt/active-belt';
 import { beltFormInitial } from '@/features/belt/belt-prefill';
-import { lidGeneratorPrefill } from '@/features/notebook/lid-wallet-prefill';
+import { lidFormInitial, resolveLidSheets } from '@/features/lid-wallet/lid-sheets-state';
+import { useLidSheets } from '@/features/lid-wallet/use-lid-sheets';
 import { type LessonRecordEntry } from '@/features/notebook/types';
 import { useLessonRecords } from '@/features/notebook/use-lesson-records';
 import { NotFoundPage } from '@/pages/not-found-page';
@@ -147,15 +148,11 @@ const sheetGenerators: Readonly<
     }
   >
 > = {
+  // Víčko: formulář je jediný zdroj tlouštěk, P0, k, magnetu a záloh; předvyplní se z uloženého
+  // stavu, jinak ze starých zápisů lekcí (převod).
   'lid-wallet-thickness': {
-    hasPrefill: (records, slug) => lidGeneratorPrefill(records, slug) !== null,
-    render: ({ project, baseSheets, onGenerated, records }) => (
-      <LidWalletSheetGenerator
-        baseSheets={baseSheets}
-        onGenerated={onGenerated}
-        initial={lidGeneratorPrefill(records, project.slug)}
-      />
-    ),
+    hasPrefill: (records, slug) => resolveLidSheets(records, slug).form !== null,
+    render: (props) => <LidSheetsSlot {...props} />,
   },
   // Pásek: formulář je na vlastní stránce „Váš pásek“ (routes.beltConfig) a předvyplní se
   // z aktivního pásku – jediného zdroje parametrů.
@@ -171,6 +168,20 @@ const sheetGenerators: Readonly<
     ),
   },
 };
+
+/** Formulář listů Víčka s uložením do zápisníku (jediný zdroj hodnot pro lekce). */
+function LidSheetsSlot({ project, baseSheets, onGenerated }: GeneratorSlotProps) {
+  const state = useLidSheets(project);
+  return (
+    <LidWalletSheetGenerator
+      baseSheets={baseSheets}
+      onGenerated={onGenerated}
+      initial={lidFormInitial(state)}
+      suggestion={state.suggestion}
+      onSave={state.saveForm}
+    />
+  );
+}
 
 /**
  * Formulář generátoru se vykreslí, až je zápisník načtený, aby předvyplnění nepřepsalo,
@@ -332,7 +343,7 @@ export function PatternSheetsPrint({
             {typo(
               mode === 'belt-config'
                 ? 'Máte uložený pásek, výchozí list pro něj nemusí platit. Nejdřív nahoře stiskněte „Vygenerovat listy A4“ – list z odkazu se pak vybere k tisku sám.'
-                : 'V zápisníku máte změřenou kůži, výchozí list pro ni nemusí platit. Nejdřív vygenerujte listy pro svou kůži (formulář níže) – list z odkazu se pak vybere k tisku sám.',
+                : 'Máte zadanou změřenou kůži, výchozí list pro ni nemusí platit. Nejdřív vygenerujte listy pro svou kůži (formulář níže) – list z odkazu se pak vybere k tisku sám.',
             )}
           </p>
         ) : printable.length === 0 ? (

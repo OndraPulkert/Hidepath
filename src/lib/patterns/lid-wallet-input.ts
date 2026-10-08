@@ -5,6 +5,7 @@ import {
   type LidWalletSpec,
   checkLidWallet,
   fmt,
+  lidWalletLayout,
   lidWalletThicknessExceeded,
   lidWalletVariant,
 } from '../geometry/lid-wallet';
@@ -425,66 +426,185 @@ export function lidMaxDividerMm(spec: LidWalletSpec): number | null {
   return best;
 }
 
-/** Stav formuláře „Listy pro vaši kůži“: textová pole tak, jak je uživatel napsal. */
+/**
+ * Stav formuláře „Listy pro vaši kůži“: textová pole tak, jak je uživatel napsal. Je to jediný
+ * zdroj tlouštěk, výsledků P0, k, magnetu a záloh peněženky Víčko (ukládá se do zápisníku jako
+ * JSON, lekce ho jen zobrazují).
+ */
 export interface LidGeneratorForm {
+  /** Změřená P1 z usně 1,0 (kaštan). */
   p1: string;
-  divider: string;
+  /** Záloha A: celý P1 z usně 0,8 (do listů jde `p1BackupA`). */
+  backupA: boolean;
+  /** Změřená useň 0,8 na P1 (jen záloha A). */
+  p1BackupA: string;
+  /** Změřená přepážka D1 (nebarvená kozinka). */
+  d1: string;
+  /** Změřená přepážka D2 (čokoládová kozinka). */
+  d2: string;
   lining: string;
   skiveFold: boolean;
   skiveHinge: boolean;
   p0: LidP0Fields;
 }
 
-/** Prázdný formulář: P1 předvyplněná výchozí 1,0, ostatní tloušťky prázdné, bez záloh. */
+/** Tloušťka usně 0,8 v záloze A, dokud není změřená. */
+export const LID_BACKUP_A_NOMINAL = '0,8';
+
+/** Prázdný formulář: P1 předvyplněná výchozí 1,0 (useň 0,8 v záloze A 0,8), bez záloh. */
 export const DEFAULT_LID_GENERATOR_FORM: LidGeneratorForm = {
   p1: '1,0',
-  divider: '',
+  backupA: false,
+  p1BackupA: LID_BACKUP_A_NOMINAL,
+  d1: '',
+  d2: '',
   lining: '',
   skiveFold: false,
   skiveHinge: false,
   p0: EMPTY_LID_P0_FIELDS,
 };
 
+/** Tloušťka P1, se kterou se počítá: v záloze A změřená useň 0,8, jinak useň 1,0. */
+export const lidP1Text = (form: Pick<LidGeneratorForm, 'p1' | 'backupA' | 'p1BackupA'>): string =>
+  form.backupA ? form.p1BackupA : form.p1;
+
 /**
- * Přečte celý formulář na vstup generátoru. Chybějící tloušťka nebo nesmyslná hodnota P0
- * vrátí česky, co opravit; meze střihu a kontroly modelu hlídá až `lidSheetsForMeasured`.
- * Formulář i předvyplnění ze zápisníku jdou přes tuto funkci, takže dávají stejné listy.
+ * Povolené kombinace záloh: useň 0,8 (záloha A) se neztenčuje, B1 i B2 jsou na usni 1,0
+ * (lekce 3 a 5, zkouška V6(c)). `null` = v pořádku.
+ */
+export function lidBackupProblem(
+  form: Pick<LidGeneratorForm, 'backupA' | 'skiveFold' | 'skiveHinge'>,
+): string | null {
+  if (form.backupA && (form.skiveFold || form.skiveHinge)) {
+    return 'Záloha A (useň 0,8) se neztenčuje: B1 ani B2 s ní nejdou. V záloze B2 je P1 zase z usně 1,0 – zálohu A zrušte.';
+  }
+  return null;
+}
+
+/**
+ * Nejdelší text pole formuláře listů (bez mezer na krajích). Uložený stav je JSON v jednom
+ * zápisu zápisníku, který se musí vejít do 2000 znaků (`lesson_records_value_size`).
+ */
+export const LID_FORM_FIELD_MAX_LENGTH = 16;
+
+/**
+ * Textová pole, která jsou vyplněná, ale nejsou číslo (česky), nebo jsou delší než
+ * `LID_FORM_FIELD_MAX_LENGTH`. Takový formulář se neuloží; prázdné pole uložit jde (doplní se
+ * později).
+ */
+export function lidFormInvalidFields(form: LidGeneratorForm): string[] {
+  const out: string[] = [];
+  const check = (raw: string, name: string) => {
+    if (raw.trim().length > LID_FORM_FIELD_MAX_LENGTH) {
+      out.push(`${name}: zadejte kratší číslo (nejvýš ${LID_FORM_FIELD_MAX_LENGTH} znaků).`);
+    } else if (raw.trim() !== '' && parseMm(raw) === undefined) {
+      out.push(`${name}: zadejte číslo v mm.`);
+    }
+  };
+  check(form.p1, 'P1');
+  check(form.p1BackupA, 'P1 z usně 0,8');
+  check(form.d1, 'D1');
+  check(form.d2, 'D2');
+  check(form.lining, 'Podšívka L1');
+  for (const key of Object.keys(form.p0) as (keyof LidP0Fields)[]) {
+    const raw = form.p0[key];
+    if (raw.trim().length > LID_FORM_FIELD_MAX_LENGTH) check(raw, key);
+  }
+  if (out.length > 0) return out;
+  const p0 = parseLidP0Fields(form.p0);
+  if ('problems' in p0) out.push(...p0.problems);
+  return out;
+}
+
+/**
+ * Přečte celý formulář na vstup generátoru. Chybějící tloušťka, nesmyslná hodnota P0 nebo
+ * nepovolená kombinace záloh vrátí česky, co opravit; meze střihu a kontroly modelu hlídá až
+ * `lidSheetsForMeasured`. Přepážky = větší z D1 a D2 (vybírá aplikace, ne uživatel).
  */
 export function parseLidGeneratorForm(
   form: LidGeneratorForm,
 ): { input: LidMeasuredInput } | { problems: string[] } {
-  const values = {
-    p1: parseMm(form.p1),
-    divider: parseMm(form.divider),
-    lining: parseMm(form.lining),
-  };
+  const p1 = parseMm(lidP1Text(form));
+  const d1 = parseMm(form.d1);
+  const d2 = parseMm(form.d2);
+  const lining = parseMm(form.lining);
   const problems = [
-    values.p1 === undefined ? 'Zadejte tloušťku P1 v mm (např. 0,95).' : null,
-    values.divider === undefined
-      ? 'Zadejte tloušťku přepážek v mm – větší z D1 a D2 (např. 0,8).'
+    p1 === undefined
+      ? form.backupA
+        ? 'Zadejte změřenou tloušťku usně 0,8 v mm (záloha A, např. 0,82).'
+        : 'Zadejte tloušťku P1 v mm (např. 0,95).'
       : null,
-    values.lining === undefined ? 'Zadejte tloušťku podšívky L1 v mm (např. 0,9).' : null,
+    d1 === undefined ? 'Zadejte tloušťku přepážky D1 v mm (např. 0,7).' : null,
+    d2 === undefined ? 'Zadejte tloušťku přepážky D2 v mm (např. 0,8).' : null,
+    lining === undefined ? 'Zadejte tloušťku podšívky L1 v mm (např. 0,9).' : null,
+    lidBackupProblem(form),
   ].filter((m): m is string => m !== null);
   const p0 = parseLidP0Fields(form.p0);
   if ('problems' in p0) problems.push(...p0.problems);
   if (
     problems.length > 0 ||
     'problems' in p0 ||
-    values.p1 === undefined ||
-    values.divider === undefined ||
-    values.lining === undefined
+    p1 === undefined ||
+    d1 === undefined ||
+    d2 === undefined ||
+    lining === undefined
   ) {
     return { problems };
   }
   return {
     input: {
-      p1Mm: values.p1,
-      dividerMm: values.divider,
-      liningMm: values.lining,
+      p1Mm: p1,
+      dividerMm: Math.max(d1, d2),
+      liningMm: lining,
       skiveFold: form.skiveFold,
       skiveHinge: form.skiveHinge,
       p0: p0.p0,
       ...(p0.magnetThicknessMm !== undefined ? { magnetThicknessMm: p0.magnetThicknessMm } : {}),
     },
   };
+}
+
+const inRange = (v: number | undefined, [min, max]: readonly [number, number]) =>
+  v !== undefined && v >= min - 1e-9 && v <= max + 1e-9;
+
+/**
+ * Hranice přepážek pro zadanou sestavu (P1 podle zálohy, L1, zálohy B, P0 a magnet): nejtlustší
+ * D1/D2, se kterými střih projde (`lidMaxDividerMm`). Při P1 1,0 je to 0,92, při 1,1 jen 0,80.
+ * Chybějící L1 nebo P0 = hodnota modelu. `null`, když P1 není zadaná nebo je mimo rozsah.
+ */
+export function lidDividerLimit(
+  form: LidGeneratorForm,
+): { p1Mm: number; maxMm: number | null } | null {
+  const p1Mm = parseMm(lidP1Text(form));
+  if (p1Mm === undefined || !inRange(p1Mm, LID_P1_RANGE_MM)) return null;
+  const lining = parseMm(form.lining);
+  const p0 = parseLidP0Fields(form.p0);
+  const base = 'problems' in p0 ? DEFAULT_LID_WALLET : lidBaseWithP0(p0.p0, p0.magnetThicknessMm);
+  const spec = lidWalletVariant(
+    {
+      p1Mm,
+      ...(lining !== undefined && inRange(lining, LID_THIN_LEATHER_RANGE_MM)
+        ? { liningMm: lining }
+        : {}),
+      ...(form.skiveFold ? { bottomFoldSkiveMm: LID_SKIVE_BACKUP_MM } : {}),
+      ...(form.skiveHinge ? { hingeSkiveMm: LID_SKIVE_BACKUP_MM } : {}),
+    },
+    base,
+  );
+  return { p1Mm, maxMm: lidMaxDividerMm(spec) };
+}
+
+/**
+ * Okno lepení magnetu a jeho značka (výška od spodní hrany ve stavu B) pro listy z formuláře,
+ * stejně jako v rámečku na listu 4. `null`, když z formuláře listy spočítat nejdou.
+ */
+export function lidMagnetWindow(
+  form: LidGeneratorForm,
+): { minMm: number; maxMm: number; markMm: number } | null {
+  const parsed = parseLidGeneratorForm(form);
+  if ('problems' in parsed) return null;
+  const spec = lidSpecFromMeasured(parsed.input);
+  if ('problems' in spec) return null;
+  const layout = lidWalletLayout(spec.spec);
+  return { minMm: layout.magnetYBMin, maxMm: layout.magnetYBMax, markMm: layout.magnetYB };
 }

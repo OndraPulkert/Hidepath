@@ -14,6 +14,8 @@ export function appLinkHref(
   switch (to) {
     case 'belt-config':
       return routes.beltConfig(slug);
+    case 'lid-sheets':
+      return routes.lidSheets(slug);
     case 'pattern-sheets':
       return project.patternSheets?.browserGenerator === 'belt-config'
         ? routes.beltConfig(slug)

@@ -263,10 +263,13 @@ export type StepRecall = z.infer<typeof stepRecallSchema>;
  * adresu sestaví aplikace (`src/app/app-links.ts`), obsah tak nezávisí na tvaru tras.
  * `belt-config` = „Váš pásek“ (jen projekt s `browserGenerator: 'belt-config'`),
  * `pattern-sheets` / `template` = tisková stránka listů / šablony projektu,
- * `practice-sheets` = cvičné listy projektu, ostatní jsou stránky celé aplikace.
+ * `practice-sheets` = cvičné listy projektu, `lid-sheets` = formulář „Listy pro vaši kůži“ na
+ * tiskové stránce (jen projekt s `browserGenerator: 'lid-wallet-thickness'`), ostatní jsou
+ * stránky celé aplikace.
  */
 export const APP_LINK_TARGETS = [
   'belt-config',
+  'lid-sheets',
   'pattern-sheets',
   'practice-sheets',
   'template',
@@ -298,8 +301,26 @@ export const BELT_RECALL_KEYS = [
   'rivet',
   'holes',
   'middleHole',
+  'marking',
 ] as const;
 export type BeltRecallKey = (typeof BELT_RECALL_KEYS)[number];
+
+/**
+ * Hodnoty z formuláře „Listy pro vaši kůži“ (jediný zdroj), které krok ukáže
+ * (`lidSheetRecalls`), i s mezemi spočítanými z nich. Jen projekt
+ * s `browserGenerator: 'lid-wallet-thickness'`.
+ */
+export const LID_SHEET_RECALL_KEYS = [
+  'thicknesses',
+  'bills',
+  'lifts',
+  'k',
+  'magnet',
+  'magnetWindow',
+  'variant',
+  'sheets',
+] as const;
+export type LidSheetRecallKey = (typeof LID_SHEET_RECALL_KEYS)[number];
 
 export const lessonStepSchema = z.object({
   id: slug,
@@ -331,6 +352,11 @@ export const lessonStepSchema = z.object({
   appLinks: z.array(appLinkSchema).min(1).optional(),
   /** Hodnoty aktivního pásku z „Váš pásek“, které se v kroku hodí (pásek, projekt 04). */
   beltRecalls: z.array(z.enum(BELT_RECALL_KEYS)).min(1).optional(),
+  /**
+   * Hodnoty z formuláře „Listy pro vaši kůži“ (Víčko), které se v kroku hodí. Krok musí mít
+   * i odkaz `lid-sheets`, kde se hodnoty mění.
+   */
+  lidSheetRecalls: z.array(z.enum(LID_SHEET_RECALL_KEYS)).min(1).optional(),
 });
 export type LessonStep = z.infer<typeof lessonStepSchema>;
 
@@ -879,8 +905,10 @@ function checkStepAppLinks(
   const issue = (what: string) =>
     ctx.addIssue({ code: 'custom', message: `Lekce ${lessonSlug}: krok ${step.id}: ${what}` });
   const isBelt = project.patternSheets?.browserGenerator === 'belt-config';
+  const isLid = project.patternSheets?.browserGenerator === 'lid-wallet-thickness';
   const has: Readonly<Record<AppLink['to'], boolean>> = {
     'belt-config': isBelt,
+    'lid-sheets': isLid,
     'pattern-sheets': project.patternSheets !== undefined,
     'practice-sheets': project.practiceSheets !== undefined,
     template: project.template !== undefined,
@@ -898,4 +926,8 @@ function checkStepAppLinks(
     issue(`odkaz ${step.printLink} je už v printLink`);
   }
   if (step.beltRecalls && !isBelt) issue('beltRecalls má jen projekt s „Váš pásek“');
+  if (step.lidSheetRecalls) {
+    if (!isLid) issue('lidSheetRecalls má jen projekt s formulářem „Listy pro vaši kůži“');
+    if (!targets.includes('lid-sheets')) issue('lidSheetRecalls potřebuje odkaz lid-sheets');
+  }
 }

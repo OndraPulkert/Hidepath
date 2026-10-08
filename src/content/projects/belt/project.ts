@@ -1,5 +1,6 @@
 import { animationLink } from '@/content/animations';
 import { illustration, illustrationCaption } from '@/content/projects/belt/illustrations';
+import { BELT_PLATE_CHECK, BELT_PLATE_CHECK_ID } from '@/content/projects/belt/record-ids';
 import {
   type LessonDefinition,
   type LessonPrint,
@@ -47,10 +48,6 @@ const TABLE = 'tabulka „Váš pásek“';
 /** Tvar pro „v …“. */
 const IN_TABLE = 'v tabulce „Váš pásek“';
 
-/** Volba v lekci 1: čím se značí (podle štítku „Destička“ v tabulce). */
-export const BELT_MARKING_ID = 'belt-marking';
-export const BELT_MARKING = { plate: 'plate', sheets: 'sheets' } as const;
-
 /** Příklad délky poutka pro 40 × 3,5 mm (tabulka „Váš pásek“; `project.test.ts` hlídá model). */
 const KEEPER_EXAMPLE_MM = 120;
 
@@ -80,11 +77,7 @@ const edgePaintRecalls: StepRecall[] = [
 
 /** Podmínka tisku listů: destička pro tuto sestavu nejde. */
 const SHEETS_CONDITION =
-  'tabulka „Váš pásek“ ukazuje u této řady destičky „ne“, nebo jste v lekci 1 zvolili jen listy';
-
-const recall = {
-  marking: { fieldId: BELT_MARKING_ID, label: 'Čím značíte (lekce 1)' },
-} satisfies Record<string, StepRecall>;
+  'tabulka „Váš pásek“ ukazuje u této řady destičky „ne“, nebo destička v lekci 1 neprošla kontrolou';
 
 /** Odkaz pod krokem na stránku „Váš pásek“. */
 const YOUR_BELT = { to: 'belt-config', label: 'Váš pásek' } as const;
@@ -209,11 +202,11 @@ export const lessons: readonly LessonDefinition[] = [
         records: [
           {
             kind: 'choice',
-            id: 'plate-check',
+            id: BELT_PLATE_CHECK_ID,
             label: 'Kontrola destičky',
             options: [
-              { value: 'ok', label: 'Sedí' },
-              { value: 'deviation', label: 'Odchylka – nepoužívat' },
+              { value: BELT_PLATE_CHECK.ok, label: 'Sedí' },
+              { value: BELT_PLATE_CHECK.deviation, label: 'Odchylka – nepoužívat' },
             ],
           },
         ],
@@ -221,20 +214,10 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'plate-or-sheets',
         title: 'Rozhodněte: destička, nebo listy',
-        body: `Pod štítkem „Destička“ ${IN_TABLE} (odkaz pod krokem) je u každé řady „ano“, nebo „ne“. Řada s „ano“: značíte destičkou. Řada s „ne“: stiskněte „Vygenerovat listy A4“; za řadu 3 použijete list 1 (lekce 2 a 4), za řadu 1 nebo 2 list 2 (lekce 6). Destička neprošla kontrolou: značíte jen listy.`,
+        body: `Pod štítkem „Destička“ ${IN_TABLE} (odkaz pod krokem) je u každé řady „ano“, nebo „ne“. Řada s „ano“: značíte destičkou. Řada s „ne“: stiskněte „Vygenerovat listy A4“; za řadu 3 použijete list 1 (lekce 2 a 4), za řadu 1 nebo 2 list 2 (lekce 6). Destička neprošla kontrolou: značíte jen listy. Čím značíte kterou řadu, ukazuje souhrn pod krokem: aplikace to bere z kontroly destičky a z tabulky, nic dalšího nezapisujete.`,
         appLinks: [YOUR_BELT],
         media: [],
-        records: [
-          {
-            kind: 'choice',
-            id: BELT_MARKING_ID,
-            label: 'Čím budete značit',
-            options: [
-              { value: BELT_MARKING.plate, label: 'Destičkou, kde tabulka ukazuje „ano“' },
-              { value: BELT_MARKING.sheets, label: 'Jen listy 1 a 2 (destička neprošla)' },
-            ],
-          },
-        ],
+        beltRecalls: ['marking'],
       },
     ],
     checkpoints: [
@@ -257,7 +240,8 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         slug: 'marking-decided',
-        title: 'Destička je zkontrolovaná a je rozhodnuto, jestli značíte destičkou, nebo listy.',
+        title:
+          'Destička je zkontrolovaná a výsledek zapsaný; souhrn ukazuje, kterou řadu značíte destičkou a kterou listem.',
         required: true,
       },
     ],
@@ -332,7 +316,7 @@ export const lessons: readonly LessonDefinition[] = [
             'Destička řadou 3 na odřezku, podložky po stranách, šídlo v otvoru',
           ),
         ],
-        recalls: [recall.marking],
+        beltRecalls: ['marking'],
       },
       {
         id: 'punch',
@@ -662,14 +646,13 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'plate-or-sheet',
         title: 'Řada 3, nebo list 1',
         printLink: 'pattern-sheets',
-        body: `Řada 3 destičky platí pro šířky 28–45 mm. Když ${TABLE} ukazuje u řady 3 „ne“, nebo jste zvolili jen listy, vytiskněte list 1 pro váš pásek na 100 % (odkaz pod krokem). Kalibrační čtverec musí měřit 50 × 50 mm.`,
+        body: `Řada 3 destičky platí pro šířky 28–45 mm. Když ${TABLE} ukazuje u řady 3 „ne“, nebo destička neprošla kontrolou, vytiskněte list 1 pro váš pásek na 100 % (odkaz pod krokem). Kalibrační čtverec musí měřit 50 × 50 mm.`,
         animationLinks: [
           animationLink('beltBuckleEnd', 'A1'),
           animationLink('beltBuckleEnd', 'A2'),
         ],
         media: [],
-        recalls: [recall.marking],
-        beltRecalls: ['width'],
+        beltRecalls: ['width', 'marking'],
       },
       {
         id: 'secure',
@@ -941,11 +924,10 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'row',
         title: 'Řada 1 nebo 2, nebo list 2',
         printLink: 'pattern-sheets',
-        body: `Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když ${TABLE} ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo jste zvolili jen listy, vytiskněte list 2 pro váš pásek na 100 % (odkaz pod krokem) a zkontrolujte kalibrační čtverec 50 × 50 mm. Když ${TABLE} píše, že se list 2 na A4 nevejde, značte dírky a konec podle čísel v ní.`,
+        body: `Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když ${TABLE} ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo destička neprošla kontrolou, vytiskněte list 2 pro váš pásek na 100 % (odkaz pod krokem) a zkontrolujte kalibrační čtverec 50 × 50 mm. Když ${TABLE} píše, že se list 2 na A4 nevejde, značte dírky a konec podle čísel v ní.`,
         animationLinks: [animationLink('beltHolesTip', 'B1'), animationLink('beltHolesTip', 'D1')],
         media: [],
-        recalls: [recall.marking],
-        beltRecalls: ['tip'],
+        beltRecalls: ['tip', 'marking'],
       },
       {
         id: 'place',
