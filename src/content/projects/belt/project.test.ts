@@ -217,18 +217,32 @@ describe('obsah – pásek: nákup', () => {
     expect(strap.variant).toBe('40 mm');
   });
 
-  it('ceny pásu ve výpočtu „Váš pásek“ sedí s katalogem', () => {
-    const strap = equipmentCatalog['belt-strap']!;
-    const craftpoint = strap.examples.filter((e) => e.shop === 'CraftPoint');
-    expect(craftpoint.length).toBeGreaterThan(0);
-    for (const e of craftpoint) {
-      const widthMm = Number(e.variant!.replace(' mm', ''));
-      const r = deriveBeltConfig({ widthMm, thicknessMm: 3.5, tip: 'hrot', waistMm: 900 });
-      expect(r.ok, e.variant).toBe(true);
-      if (!r.ok) continue;
-      const offer = r.result.shopping[0]!.offers!.find((o) => o.url === e.url);
-      expect(offer?.priceCzk, e.variant).toBe(e.priceCents / 100);
+  it('nabídky pásu ve výpočtu „Váš pásek“ sedí s katalogem a naopak', () => {
+    const examples = equipmentCatalog['belt-strap']!.examples;
+    const key = (url: string, variant: string | undefined) => `${url} ${variant ?? ''}`;
+    const byKey = new Map(examples.map((e) => [key(e.url, e.variant), e]));
+    const reached = new Set<string>();
+    for (let widthMm = 28; widthMm <= 45; widthMm++) {
+      for (const thicknessMm of [3, 3.1, 3.4, 3.5, 3.6, 3.75, 3.8, 3.9, 4]) {
+        for (const waistMm of [900, 1000, 1070, 1150, 1250, 1450]) {
+          const r = deriveBeltConfig({ widthMm, thicknessMm, tip: 'hrot', waistMm });
+          expect(r.ok).toBe(true);
+          if (!r.ok) continue;
+          for (const o of r.result.shopping[0]!.offers!) {
+            const k = key(o.url, o.variant);
+            const e = byKey.get(k);
+            expect(e, k).toBeDefined();
+            expect(e!.shop, k).toBe(o.shop);
+            expect(e!.priceCents, k).toBe(o.priceCents);
+            expect(e!.availability, k).toBe(o.availability);
+            expect(e!.checkedAt, k).toBe(o.checkedAt);
+            reached.add(k);
+          }
+        }
+      }
     }
+    // Každý pás v katalogu nabídne i výpočet (žádný mrtvý příklad).
+    expect([...byKey.keys()].filter((k) => !reached.has(k))).toEqual([]);
   });
 
   it('přezka „ověřená“ ve výpočtu = katalog má mosaznou jednotrnovou z CraftPointu', () => {

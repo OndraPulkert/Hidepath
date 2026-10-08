@@ -24,7 +24,6 @@ import {
   DEFAULT_BELT_FORM,
   DEFAULT_HOLE_DIAMETER_MM,
   DEFAULT_HOLE_SPACING_MM,
-  STRAP_SOURCES_CHECKED,
   type WaistSource,
   beltConfigLabel,
   beltConfigToForm,
@@ -32,7 +31,8 @@ import {
   deriveBeltConfig,
   parseBeltConfigForm,
 } from '@/lib/patterns/belt-config';
-import { typo } from '@/lib/utils/format';
+import { STRAP_AVAILABILITY_LABELS, type StrapOffer } from '@/lib/patterns/belt-strap-offers';
+import { formatCzk, formatDateCs, typo } from '@/lib/utils/format';
 
 const mm = (v: number): string => `${formatDecimal(v)} mm`;
 
@@ -423,17 +423,7 @@ function BeltResults({ result }: { result: BeltConfigResult }) {
               </Tag>
               <span className="block text-meta text-ink-2">{typo(line.detail)}</span>
               {line.offers && line.offers.length > 0 ? (
-                <ul className="mt-1 text-meta text-ink-2">
-                  {line.offers.map((o) => (
-                    <li key={o.url}>
-                      <a href={o.url} target="_blank" rel="noreferrer" className="underline">
-                        {typo(o.shop)}
-                      </a>
-                      {typo(`: ${o.lengthCm} cm, ${o.priceCzk} Kč`)}
-                    </li>
-                  ))}
-                  <li>{typo(`Ceny z ${STRAP_SOURCES_CHECKED}, před nákupem ověřte.`)}</li>
-                </ul>
+                <StrapOfferList offers={line.offers} defaultOffer={line.defaultOffer ?? null} />
               ) : null}
             </li>
           ))}
@@ -449,6 +439,56 @@ function BeltResults({ result }: { result: BeltConfigResult }) {
           </ul>
         </div>
       ) : null}
+    </div>
+  );
+}
+
+/** Pás: výchozí nabídka a „Kde jinde koupit“ od nejlevnější, se skladem a datem ověření. */
+function StrapOfferList({
+  offers,
+  defaultOffer,
+}: {
+  offers: readonly StrapOffer[];
+  defaultOffer: StrapOffer | null;
+}) {
+  const others = offers.filter((o) => o !== defaultOffer);
+  const link = (o: StrapOffer) => (
+    <a href={o.url} target="_blank" rel="noreferrer noopener" className="underline">
+      {typo(o.shop)}
+    </a>
+  );
+  return (
+    <div className="mt-1 flex flex-col gap-2 text-meta text-ink-2">
+      {defaultOffer ? (
+        <p>
+          Výchozí: {link(defaultOffer)}
+          {typo(
+            ` – ${defaultOffer.lengthCm} cm, ${formatCzk(defaultOffer.priceCents)}, ${STRAP_AVAILABILITY_LABELS[defaultOffer.availability]}`,
+          )}
+        </p>
+      ) : null}
+      {others.length > 0 ? (
+        <div>
+          <p className="font-medium text-ink">
+            {defaultOffer ? 'Kde jinde koupit' : 'Kde koupit (ověřte u prodejce)'}
+          </p>
+          <ul className="flex flex-col gap-1.5">
+            {others.map((o) => (
+              <li key={`${o.url} ${o.variant}`}>
+                {link(o)}
+                {typo(
+                  ` – ${o.lengthCm} cm, ${formatCzk(o.priceCents)}, ${STRAP_AVAILABILITY_LABELS[o.availability]}`,
+                )}
+                {o.tanningVerified ? null : (
+                  <span className="text-cognac-deep">{typo(', činění neuvedeno')}</span>
+                )}
+                <span className="block">{typo(`${o.note}. Doprava: ${o.shipping}.`)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      <p>{typo(`Ceny ověřeny ${formatDateCs(offers[0]!.checkedAt)}, před nákupem ověřte.`)}</p>
     </div>
   );
 }

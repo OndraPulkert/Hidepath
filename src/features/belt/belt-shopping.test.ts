@@ -94,18 +94,41 @@ describe('nákup podle pásku', () => {
     expect(out.plan.title).toMatch(/^Podle pásku „Hnědý“/);
   });
 
-  it('45 mm × 4 mm: pás jen s ověřením, přezka bez ověřeného trnu, nýt 6,5 mm jen podle názvu', () => {
+  it('45 mm × 4 mm: pás z Leatory, přezka bez ověřeného trnu, nýt 6,5 mm jen podle názvu', () => {
     const out = prepPlan([saved('Pracovní', { widthMm: 45, thicknessMm: 4, tip: 'hrot' })]);
-    expect(lineOf(out.plan, 'belt-strap')).toEqual([]);
-    expect(out.plan.skipped.find((s) => s.equipmentSlug === 'belt-strap')!.reason).toMatch(
-      /Pás 45 mm, 4 mm .* Ověřte u prodejce/,
-    );
+    expect(lineOf(out.plan, 'belt-strap')).toEqual([
+      expect.objectContaining({ variant: '45 mm, 130 cm', quantity: 1 }),
+    ]);
     const buckle = lineOf(out.plan, 'belt-buckle');
     expect(buckle).toHaveLength(1);
     expect(buckle[0]!.purpose).toMatch(/typ trnu .* ověřte na fotce/);
     const screws = lineOf(out.plan, 'chicago-screws');
     expect(screws).toEqual([expect.objectContaining({ variant: '9,5 × 6,5 mm', quantity: 1 })]);
     expect(screws[0]!.purpose).toMatch(/dřík jen podle názvu, ověřte u prodejce/);
+  });
+
+  it('pás bez výchozí nabídky (jen bez uvedeného činění) jde do „neplánováno“, nic se nevybere', () => {
+    const out = prepPlan([
+      saved('Dlouhý', { widthMm: 40, thicknessMm: 3.5, tip: 'hrot', waistMm: 1070 }),
+    ]);
+    expect(lineOf(out.plan, 'belt-strap')).toEqual([]);
+    expect(out.plan.skipped.find((s) => s.equipmentSlug === 'belt-strap')!.reason).toMatch(
+      /Kde jinde koupit/,
+    );
+  });
+
+  it('44 mm: pás jen na objednávku se do plánu sám nedostane', () => {
+    const out = prepPlan([saved('Široký', { widthMm: 44, thicknessMm: 3.5, tip: 'hrot' })]);
+    expect(lineOf(out.plan, 'belt-strap')).toEqual([]);
+  });
+
+  it('4 mm, 40 mm, obvod 110 cm: Leatory v délce 140 cm', () => {
+    const out = prepPlan([
+      saved('Silný', { widthMm: 40, thicknessMm: 4, tip: 'hrot', waistMm: 1100 }),
+    ]);
+    expect(lineOf(out.plan, 'belt-strap')).toEqual([
+      expect.objectContaining({ variant: '40 mm, 140 cm' }),
+    ]);
   });
 
   it('3,4 mm: dřík 5,3–5,8 mm v ověřených nabídkách není – žádný nýt se nedomýšlí', () => {

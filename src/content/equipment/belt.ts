@@ -3,7 +3,8 @@ import { type EquipmentDefinition, type ProductExample } from '@/content/schema'
 /**
  * Položky katalogu, které přibyly s projektem 04 (pásek, docs/zadani/opasek-postup.md
  * a opasek-parametry.md). Každý příklad je ze stránky načtené 8. 10. 2026 (CraftPoint přes
- * `…/products/<handle>.js`, Andexnite přes Store API, ostatní z HTML). Co stránka neuvádí, je
+ * `…/products/<handle>.js`, Andexnite přes Store API, Shoptet obchody z dat variant, ostatní
+ * z HTML). Pásy jsou zrcadlem `src/lib/patterns/belt-strap-offers.ts` (shodu hlídá test). Co stránka neuvádí, je
  * v textu označené „ověřte“. Šířka pásku se volí, proto pás a přezka mají příklady pro každou
  * šířku 28–45 mm, kterou obchod má. Texty jsou NÁVRH (reviewStatus: draft).
  */
@@ -42,7 +43,123 @@ const krupsonStrap = (lengthCm: number, priceCzk: number): ProductExample => ({
   url: KRUPSON_STRAP_URL,
   variant: `${lengthCm} cm`,
   priceCents: priceCzk * 100,
-  note: 'Jen šířka 40 mm, tloušťka 3,5–4 mm. Delší délky pro obvod nad 106,5 cm. Činění stránka neuvádí, ověřte u prodejce.',
+  note: 'Jen šířka 40 mm, tloušťka 3,5–4 mm. Totéž zboží jako Imago. Činění stránka neuvádí, ověřte u prodejce. Doprava Balíkovna 79 Kč, GLS výdejní místo 75 Kč.',
+  availability: 'in_stock',
+  checkedAt: CHECKED,
+});
+
+/**
+ * Leatory řeže pás 3,9 mm na míru po 1 mm šířky a 10 cm délky (Shoptet varianty). V katalogu
+ * jsou délky 130, 140 a 150 cm pro šířky 28–45 mm; haléře za 130 / 140 / 150 cm.
+ */
+const LEATORY_STRAP_CENTS: Readonly<Record<number, readonly [number, number, number]>> = {
+  28: [17_840, 19_210, 20_580],
+  29: [18_480, 19_900, 21_320],
+  30: [19_110, 20_580, 22_050],
+  31: [19_750, 21_270, 22_790],
+  32: [20_390, 21_960, 23_520],
+  33: [21_030, 22_640, 24_260],
+  34: [21_660, 23_330, 24_990],
+  35: [22_300, 24_010, 25_730],
+  36: [22_940, 24_700, 26_460],
+  37: [23_570, 25_390, 27_200],
+  38: [24_210, 26_070, 27_930],
+  39: [24_850, 26_760, 28_670],
+  40: [25_480, 27_440, 29_400],
+  41: [26_120, 28_130, 30_140],
+  42: [26_760, 28_820, 30_870],
+  43: [27_400, 29_500, 31_610],
+  44: [28_030, 30_190, 32_340],
+  45: [28_670, 30_870, 33_080],
+};
+
+const leatoryStraps = (): ProductExample[] =>
+  Object.entries(LEATORY_STRAP_CENTS).flatMap(([width, cents]) =>
+    [130, 140, 150].map((lengthCm, i) => ({
+      title: `Řemen na opasek 3,9 mm, přírodní, ${width} mm × ${lengthCm} cm`,
+      shop: 'Leatory',
+      url:
+        Number(width) < 30
+          ? 'https://www.leatory.cz/kozene-remeny/remen-na-opasek-tloustka-3-9mm--sirka-5-29-mm/'
+          : 'https://www.leatory.cz/kozene-remeny/remen-na-opasek-tloustka-3-9mm--sirka-30-50-mm/',
+      variant: `${width} mm, ${lengthCm} cm`,
+      priceCents: cents[i]!,
+      note: 'Třísločiněná hlazenice z ČR, 3,9 ± 0,1 mm. Řežou na míru, vyřízení 2–3 dny. Doprava Zásilkovna nebo PPL 79 Kč.',
+      availability: 'in_stock' as const,
+      checkedAt: CHECKED,
+    })),
+  );
+
+const DVAPASOVCI_URL = 'https://www.dvapasovci.cz/prirezy-kuze-na-opasky/';
+
+const dvapasovciStrap = (
+  widthMm: number,
+  priceCzk: number,
+  availability: ProductExample['availability'],
+): ProductExample => ({
+  title: `Přířez kůže na opasek, přírodní hovězina, ${widthMm} mm`,
+  shop: 'Dva pásovci',
+  url: DVAPASOVCI_URL,
+  variant: `${widthMm} mm`,
+  priceCents: priceCzk * 100,
+  note:
+    availability === 'in_stock'
+      ? 'Třísločiněná, 3,5 mm, délka 125–140 cm. Skladem víc než 5 ks. Doprava PPL, cenu stránka neuvádí.'
+      : 'Třísločiněná, 3,5 mm, délka 125–140 cm. Stránka píše „skladem“, ale sklad je záporný: řežou na objednávku. Doprava PPL, cenu stránka neuvádí.',
+  availability,
+  checkedAt: CHECKED,
+});
+
+const ecocaseStrap = (widthMm: number, priceCzk: number): ProductExample => ({
+  title: `Kožený řemen na opasky, světle hnědý (A), ${widthMm} mm`,
+  shop: 'Ecocase',
+  url: 'https://www.ecocase.cz/kuze/kozeny-remen-na-opasky-svetle-hnedy-a/',
+  variant: `${widthMm} mm`,
+  priceCents: priceCzk * 100,
+  note: 'Třísločiněný krupon, barvený, 3,6 mm, délka 130–140 cm. Skladem víc než 5 ks. Se seříznutými hranami o 20 Kč dráž. Doprava jen po ČR, cenu stránka neuvádí.',
+  availability: 'in_stock',
+  checkedAt: CHECKED,
+});
+
+const imagoStrap = (widthMm: 30 | 40, lengthCm: number, priceCzk: number): ProductExample => ({
+  title: `Hovězí kůže na opasek, přírodní, ${widthMm / 10} cm, ${lengthCm} cm`,
+  shop: 'Imago',
+  url:
+    widthMm === 30
+      ? 'https://www.imago.cz/hovezi-kuze-na-opasek'
+      : 'https://www.imago.cz/kuze-na-opasek-prirodni-4cm',
+  variant: `${widthMm} mm, ${lengthCm} cm`,
+  priceCents: priceCzk * 100,
+  note: `Tloušťka 3,5–4 mm. Činění stránka neuvádí, ověřte u prodejce.${lengthCm > 130 ? ' Přepínač délek na stránce ukazuje nižší cenu než košík, počítejte s touto.' : ''} Doprava GLS výdejní místo 59 Kč, Balíkovna 69 Kč.`,
+  availability: 'in_stock',
+  checkedAt: CHECKED,
+});
+
+const andexniteStrap = (
+  product: '130-cm-3-9-4-1-mm' | '140-cm-3-1-3-4-mm',
+  widthMm: number,
+  priceCzk: number,
+): ProductExample => {
+  const long = product === '140-cm-3-1-3-4-mm';
+  return {
+    title: `Hovězí kůže na opasek, přírodní, ${long ? '140 cm, 3,1–3,4 mm' : '130 cm, 3,9–4,1 mm'}, ${String(widthMm / 10).replace('.', ',')} cm`,
+    shop: 'Andexnite',
+    url: `https://andexnite.cz/produkt/hovezi-kuze-na-opasek-prirodni-${product}/`,
+    variant: `${widthMm} mm`,
+    priceCents: priceCzk * 100,
+    note: 'Skladem, počet kusů neuveden. Činění stránka neuvádí, ověřte u prodejce. Doprava u objednávky do 500 Kč 120 Kč.',
+    availability: 'in_stock',
+    checkedAt: CHECKED,
+  };
+};
+
+const sedlarskeStrap = (widthMm: number, priceCzk: number): ProductExample => ({
+  title: `Kožený řemen 130, síla 3,8–4 mm, ${widthMm} mm`,
+  shop: 'Sedlářské nářadí',
+  url: 'https://sedlarskenaradi.cz/kozeny-remen-130-sila-3-8-4mm/',
+  variant: `${widthMm} mm`,
+  priceCents: priceCzk * 100,
+  note: 'Krupon, délka 130 cm, 40 mm nemá. Činění u výrobku neuvedeno, ověřte. Stránka píše „skladem“ i „na objednávku 2–3 týdny“. Zásilkovna 89 Kč, pás 130 cm možná jako nadrozměr.',
   availability: 'in_stock',
   checkedAt: CHECKED,
 });
@@ -71,6 +188,7 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
     cautions: [
       'Pás 130 cm stačí do obvodu 106,5 cm (5 dírek po 25 mm). Na větší obvod kupte delší.',
       'CraftPoint slibuje 130–140 cm; s 140 cm nepočítejte.',
+      'Činění uvádí jen CraftPoint, Leatory, Dva pásovci a Ecocase. U Imaga, Křupsonu, Andexnite a Sedlářského nářadí ho ověřte u prodejce.',
       'Tloušťka v názvu je rozpětí. Skutečnou změřte až na dodaném pásu.',
     ],
     avoid: [
@@ -81,9 +199,9 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
       },
     ],
     alternatives: [],
-    priceRange: { minCents: 22_800, maxCents: 37_900 },
+    priceRange: { minCents: 17_840, maxCents: 39_400 },
     priceSource: 'verified',
-    priceNote: `${VERIFIED_NOTE} Cena závisí na šířce (CraftPoint 28/30 mm 228 Kč až 45 mm 313 Kč) a u Křupsonu na délce.`,
+    priceNote: `${VERIFIED_NOTE} Cena závisí na šířce a délce: Leatory 28 mm × 130 cm 178,40 Kč, CraftPoint 228–313 Kč, Dva pásovci 44 mm 394 Kč.`,
     alsoUsedFor: [],
     examples: [
       craftpointStrap(28, 228),
@@ -96,6 +214,28 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
       krupsonStrap(130, 299),
       krupsonStrap(150, 329),
       krupsonStrap(180, 379),
+      ...leatoryStraps(),
+      dvapasovciStrap(32, 286, 'in_stock'),
+      dvapasovciStrap(38, 338, 'preorder'),
+      dvapasovciStrap(44, 394, 'preorder'),
+      ecocaseStrap(30, 259),
+      ecocaseStrap(35, 269),
+      ecocaseStrap(40, 279),
+      imagoStrap(30, 130, 249),
+      imagoStrap(30, 150, 279),
+      imagoStrap(30, 180, 329),
+      imagoStrap(40, 130, 299),
+      imagoStrap(40, 150, 329),
+      imagoStrap(40, 180, 379),
+      andexniteStrap('130-cm-3-9-4-1-mm', 30, 255),
+      andexniteStrap('130-cm-3-9-4-1-mm', 35, 285),
+      andexniteStrap('130-cm-3-9-4-1-mm', 40, 320),
+      andexniteStrap('140-cm-3-1-3-4-mm', 30, 255),
+      andexniteStrap('140-cm-3-1-3-4-mm', 35, 285),
+      andexniteStrap('140-cm-3-1-3-4-mm', 40, 320),
+      sedlarskeStrap(30, 183),
+      sedlarskeStrap(35, 214),
+      sedlarskeStrap(45, 275),
     ],
     commonlyAtHome: false,
     media: [

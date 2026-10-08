@@ -539,3 +539,27 @@ CraftPoint přes `https://craft-point.cz/products/<handle>.js` (`variants[].pric
   12 mm nikl i zlatá 189 Kč, skladem.
 - Přeověřeny i vynechané doporučené položky: hranořízek (Sedlářské nářadí) 420 Kč skladem,
   akrylová šablona rohy a kruhy (Leatory) 360 Kč skladem (3 ks).
+
+## Pás na opasek mimo CraftPoint (ověřeno 2026-10-08)
+
+V aplikaci (katalog `belt-strap` a „Váš pásek“ → „Kde jinde koupit“): Leatory (řez na míru
+3,9 mm, 28–45 mm × 130/140/150 cm), Dva pásovci (32/38/44 mm, 38 a 44 jen na objednávku),
+Ecocase (světle hnědý A, 3,6 mm, 30/35/40 mm), Imago (30 a 40 mm), Křupson, Andexnite
+(130 cm 3,9–4,1 mm a 140 cm 3,1–3,4 mm) a Sedlářské nářadí (30/35/45 mm). Činění uvádějí jen
+CraftPoint, Leatory, Dva pásovci a Ecocase; samo se vybere jen to, co je skladem a má ověřené
+činění, a CraftPoint má přednost.
+
+Mimo aplikaci:
+
+- Ceny jen v eurech (katalog počítá v Kč, kurz si nevymýšlíme): BuyLeatherOnline (IT, veg-tan
+  3,8 mm, jen 35 mm, natural 16,82 € s DPH, doprava až v košíku – neověřeno), Tandy Leather
+  Europe (veg-tan 3,2–3,6 mm, 72″ = 183 cm, doprava do ČR 40 €), Replik-Shop.de (buvolí,
+  barvená, 13,99 € doprava), kozeny-remen.sk (činění neuvedeno, 4 cm × 130 cm 20 €, jen http,
+  doprava do ČR neuvedena).
+- opasok.sk: hotová sada řezaná na míru i s dírkami, na náš postup se nehodí.
+- Dva pásovci, černá / tabák / london / modrá: činění neuvedeno, proto v katalogu jen přírodní.
+- Ecocase černý (3,7 mm, ale délka může být pod 130 cm) a ostatní barvy 2,6–3,0 mm vynechány.
+- **Neověřeno:** PetHardware (403, podle vyhledávání veg-tan 38 mm, 1,4 m),
+  leathercraftolivi.cz (503, podle vyhledávání 200 Kč, 3,5–3,8 mm), UK obchody (Le Prevo, Abbey
+  England, Lyon Leathers – 403/404; po Brexitu DPH 21 % a poplatek za proclení), lederriemen.com
+  (jen ~120 cm, nestačí). Doprava u Dva pásovců, Ecocase a CraftPointu: cenu stránka neuvádí.

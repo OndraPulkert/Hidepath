@@ -121,30 +121,49 @@ describe('parametrický pásek – výpočet', () => {
   });
 
   it('nákup: přezka ověřená pro 30, 35 a 40 mm, pás podle šířky a tloušťky', () => {
+    const shopsOf = (r: ReturnType<typeof derive>) =>
+      r.shopping[0]!.offers!.map((o) => [o.shop, o.lengthCm, o.priceCents]);
     const r40 = derive({ ...base, waistMm: 950 });
-    const strap = r40.shopping[0]!;
-    expect(strap.offers!.map((o) => [o.lengthCm, o.priceCzk])).toEqual([
-      [130, 285],
-      [130, 299],
+    // Od nejlevnější; výchozí zůstává CraftPoint (jedna zásilka s přezkou a nýty).
+    expect(shopsOf(r40)).toEqual([
+      ['Ecocase', 130, 27_900],
+      ['CraftPoint', 130, 28_500],
+      ['Imago', 130, 29_900],
+      ['Křupson', 130, 29_900],
     ]);
+    expect(r40.shopping[0]!.defaultOffer!.shop).toBe('CraftPoint');
     const r30 = derive({ ...base, widthMm: 30, waistMm: 950 });
-    expect(r30.shopping[0]!.offers!.map((o) => o.priceCzk)).toEqual([228]);
+    expect(shopsOf(r30).map(([, , c]) => c)).toEqual([22_800, 24_900, 25_900]);
     expect(r30.buckle.verified).toBe(true);
     const r45 = derive({ ...base, widthMm: 45, waistMm: 950 });
     expect(r45.buckle.verified).toBe(false);
     expect(r45.shopping[1]!.status).toBe('overte');
-    // CraftPoint slibuje 130–140 cm: nad 106,5 cm obvodu už jeho pás nestačí.
-    expect(derive({ ...base, waistMm: 1070 }).shopping[0]!.offers!.map((o) => o.shop)).toEqual([
-      expect.stringMatching(/^Křupson/),
-    ]);
-    // 32 mm CraftPoint v nabídce neměl; 4 mm je mimo jeho 3,0–3,5.
-    expect(derive({ ...base, widthMm: 32 }).shopping[0]!.status).toBe('overte');
-    expect(
-      derive({ ...base, thicknessMm: 4, waistMm: 950 }).shopping[0]!.offers!.map((o) => o.shop),
-    ).toEqual([expect.stringMatching(/^Křupson/)]);
+    // CraftPoint slibuje 130–140 cm: nad 106,5 cm obvodu už jeho pás nestačí. Imago a Křupson
+    // činění neuvádějí, takže se samy nevyberou a pás je „ověřte“.
+    const long = derive({ ...base, waistMm: 1070 }).shopping[0]!;
+    expect(long.offers!.map((o) => o.shop)).toEqual(['Imago', 'Křupson']);
+    expect(long.defaultOffer).toBeNull();
+    expect(long.status).toBe('overte');
+    // 32 mm CraftPoint nemá; Dva pásovci ano (skladem, třísločiněná).
+    const r32 = derive({ ...base, widthMm: 32 }).shopping[0]!;
+    expect(r32.status).toBe('overeno');
+    expect(r32.defaultOffer!.shop).toBe('Dva pásovci');
+    // 4 mm je mimo CraftPoint 3,0–3,5: výchozí Leatory 3,9 mm.
+    const thick = derive({ ...base, thicknessMm: 4, waistMm: 950 }).shopping[0]!;
+    expect(thick.defaultOffer!.shop).toBe('Leatory');
+    expect(thick.offers!.map((o) => o.shop)).toEqual(['Leatory', 'Imago', 'Křupson', 'Andexnite']);
     expect(derive({ ...base, waistMm: 1200 }).shopping[0]!.offers!.map((o) => o.lengthCm)).toEqual([
-      150,
+      150, 150,
     ]);
+  });
+
+  it('nákup: na objednávku se pás sám nevybere, zůstane v nabídkách', () => {
+    const r38 = derive({ ...base, widthMm: 38, waistMm: 950 }).shopping[0]!;
+    expect(r38.defaultOffer!.shop).toBe('CraftPoint');
+    const r44 = derive({ ...base, widthMm: 44, waistMm: 950 }).shopping[0]!;
+    expect(r44.offers!.map((o) => [o.shop, o.availability])).toEqual([['Dva pásovci', 'preorder']]);
+    expect(r44.defaultOffer).toBeNull();
+    expect(r44.status).toBe('overte');
   });
 
   it('výsečník 6 mm jen jednou, když jsou dírky taky 6 mm', () => {
@@ -375,15 +394,16 @@ describe('parametrický pásek – nálezy kontroly pásku (2026-10-08, kolo 2)'
     ] as const) {
       const strap = derive({ ...base, widthMm: w, thicknessMm: t, waistMm: 1000 }).shopping[0]!;
       expect(strap.status, `${w}/${t}`).toBe('overeno');
-      expect(strap.offers!.map((o) => o.shop)).toEqual([expect.stringMatching(/^CraftPoint/)]);
-      expect(strap.offers![0]!.note).toMatch(/po doručení přeměřte/);
+      expect(strap.defaultOffer!.shop).toBe('CraftPoint');
+      expect(strap.defaultOffer!.note).toMatch(/po doručení přeměřte/);
     }
     const r40 = derive({ ...base, thicknessMm: 3.6, waistMm: 1000 }).shopping[0]!;
-    expect(r40.offers!.map((o) => o.shop)).toEqual([
-      expect.stringMatching(/^CraftPoint/),
-      expect.stringMatching(/^Křupson/),
-    ]);
-    // Nad toleranci (3,76 mm a víc) CraftPoint už ne.
-    expect(derive({ ...base, widthMm: 35, thicknessMm: 3.8 }).shopping[0]!.status).toBe('overte');
+    expect(r40.offers!.map((o) => o.shop)).toEqual(
+      expect.arrayContaining(['CraftPoint', 'Křupson']),
+    );
+    // Nad toleranci (3,76 mm a víc) CraftPoint už ne; 3,8 mm má Leatory.
+    const r35 = derive({ ...base, widthMm: 35, thicknessMm: 3.8 }).shopping[0]!;
+    expect(r35.offers!.map((o) => o.shop)).not.toContain('CraftPoint');
+    expect(r35.defaultOffer!.shop).toBe('Leatory');
   });
 });

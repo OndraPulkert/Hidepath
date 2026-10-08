@@ -81,17 +81,25 @@ function strapPick(r: BeltConfigResult, catalog: EquipmentCatalog): PlanPick {
     r.strap.minLengthCm === null
       ? `délka = obvod + ${cz(r.strap.allowanceMm)} mm`
       : `aspoň ${r.strap.minLengthCm} cm`;
-  const offers = r.shopping.find((l) => l.offers !== undefined)?.offers ?? [];
-  for (const offer of offers) {
-    const example = examplesOf(catalog, 'belt-strap').find(
-      (e) =>
-        e.url === offer.url && (e.variant === `${w} mm` || e.variant === `${offer.lengthCm} cm`),
-    );
-    if (example) {
-      return {
-        line: lineFor('belt-strap', example, 1, `šířka ${w} mm, změřte ${cz(t)} mm; ${length}`),
-      };
-    }
+  const strapLine = r.shopping.find((l) => l.offers !== undefined);
+  // Výchozí nabídku vybírá výpočet (CraftPoint, jinak nejlevnější skladem s ověřeným činěním);
+  // na objednávku, vyprodané a bez uvedeného činění se nikdy nevybere samo.
+  const pick = strapLine?.defaultOffer;
+  const example = pick
+    ? examplesOf(catalog, 'belt-strap').find(
+        (e) => e.url === pick.url && e.variant === pick.variant,
+      )
+    : undefined;
+  if (pick && example) {
+    return {
+      line: lineFor('belt-strap', example, 1, `šířka ${w} mm, změřte ${cz(t)} mm; ${length}`),
+    };
+  }
+  const others = strapLine?.offers?.length ?? 0;
+  if (others > 0) {
+    return {
+      skipped: `Pás ${w} mm, ${cz(t)} mm (${length}): skladem s ověřeným činěním žádný. Nabídky k ověření jsou ve „Váš pásek“ pod „Kde jinde koupit“.`,
+    };
   }
   return {
     skipped: `Pás ${w} mm, ${cz(t)} mm (${length}): v ověřených nabídkách není. Ověřte u prodejce.`,

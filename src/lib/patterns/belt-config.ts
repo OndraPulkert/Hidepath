@@ -35,6 +35,9 @@ import {
   cz,
   tipSheetOrientation,
 } from './belt-sheets';
+import { type StrapOffer, defaultStrapOffer, strapOffers } from './belt-strap-offers';
+
+export { type StrapOffer } from './belt-strap-offers';
 
 /** Tvar konce s dírkami tak, jak ho volí uživatel. */
 export type BeltTip = 'hrot' | 'zaobleny';
@@ -223,77 +226,7 @@ function modelMessage(problem: string): string {
 /* Nákup                                                                      */
 /* ------------------------------------------------------------------------- */
 
-/**
- * Hotové pásy ověřené 2026-10-08 (CraftPoint přes `<url>.js`, Křupson z HTML; dřív
- * docs/content/sablony-zdroje.md, 2026-09-10). Ceny a dostupnost se mění, aplikace je ukazuje
- * s datem. Katalog vybavení (`src/content/equipment/belt.ts`) má tytéž nabídky.
- */
-export const STRAP_SOURCES_CHECKED = '8. 10. 2026';
-
-interface StrapSource {
-  shop: string;
-  url: string;
-  /** Tloušťka, kterou obchod uvádí (nominál). */
-  thicknessMm: readonly [number, number];
-  /**
-   * Nejsilnější pás, který po doručení ještě naměříte u tohoto nominálu. Tloušťka se měří až
-   * po dodání, takže filtruje s tolerancí: CraftPoint 3–3,5 mm přijde 3,5–3,75 mm
-   * (docs/zadani/opasek-postup.md, krok 3).
-   */
-  measuredMaxMm: number;
-  /** Délky, které obchod zaručuje (u rozpětí „130–140 cm“ ta kratší). */
-  lengthsCm: readonly number[];
-  /** Cena podle šířky (mm) a délky; šířka, která chybí, se neprodává. */
-  priceCzk: (widthMm: number, lengthCm: number) => number | undefined;
-  note?: string;
-}
-
-const CRAFTPOINT_STRAP_PRICES: Readonly<Record<number, number>> = {
-  15: 182,
-  19: 182,
-  20: 182,
-  24: 205,
-  25: 205,
-  28: 228,
-  30: 228,
-  33: 256,
-  35: 256,
-  38: 285,
-  40: 285,
-  45: 313,
-  50: 336,
-};
-
-const KRUPSON_40MM_PRICES: Readonly<Record<number, number>> = { 130: 299, 150: 329, 180: 379 };
-
-const STRAP_SOURCES: readonly StrapSource[] = [
-  {
-    shop: 'CraftPoint – Řemen z přírodní kůže 3–3,5 mm, 130–140 cm',
-    url: 'https://craft-point.cz/products/remen-z-prirodni-kuze-3-35mm-140cm-15-80mm',
-    thicknessMm: [3, 3.5],
-    measuredMaxMm: 3.75,
-    // Obchod slibuje 130–140 cm; počítá se s kratší.
-    lengthsCm: [130],
-    priceCzk: (w) => CRAFTPOINT_STRAP_PRICES[w],
-    note: 'třísločiněná; délka podle obchodu 130–140 cm',
-  },
-  {
-    shop: 'Křupson – Hovězí kůže na opasek, přírodní 4 cm',
-    url: 'https://www.krupson.cz/hovezi-kuze-na-opasek-prirodni--4-cm-delka--130-cm/',
-    thicknessMm: [3.5, 4],
-    measuredMaxMm: 4,
-    lengthsCm: [130, 150, 180],
-    priceCzk: (w, len) => (w === 40 ? KRUPSON_40MM_PRICES[len] : undefined),
-  },
-];
-
-export interface StrapOffer {
-  shop: string;
-  url: string;
-  lengthCm: number;
-  priceCzk: number;
-  note?: string | undefined;
-}
+// Hotové pásy (ověřené 2026-10-08) a výběr výchozí nabídky jsou v `./belt-strap-offers`.
 
 export type ShoppingStatus = 'overeno' | 'overte';
 
@@ -305,8 +238,10 @@ export interface BeltShoppingLine {
   detail: string;
   /** `overeno` = zdroj v podkladech; `overte` = podklady nemají, ověřte u prodejce. */
   status: ShoppingStatus;
-  /** Ověřené nabídky (jen pás). */
+  /** Ověřené nabídky (jen pás), od nejlevnější. */
   offers?: StrapOffer[];
+  /** Výchozí nabídka pro nákup (jen pás); `null` = žádná skladem s ověřeným činěním. */
+  defaultOffer?: StrapOffer | null;
 }
 
 /**
@@ -406,21 +341,6 @@ export function rivetPostMm(thicknessMm: number): {
     verified: confirmed?.product ?? null,
     options,
   };
-}
-
-function strapOffers(widthMm: number, thicknessMm: number, neededCm: number | null): StrapOffer[] {
-  const offers: StrapOffer[] = [];
-  for (const s of STRAP_SOURCES) {
-    if (thicknessMm < s.thicknessMm[0] - EPS || thicknessMm > s.measuredMaxMm + EPS) continue;
-    const length = s.lengthsCm.find((len) => neededCm === null || len >= neededCm);
-    if (length === undefined) continue;
-    const price = s.priceCzk(widthMm, length);
-    if (price === undefined) continue;
-    const nominal = `nominál ${cz(s.thicknessMm[0])}–${cz(s.thicknessMm[1])} mm, po doručení přeměřte`;
-    const note = s.note ? `${s.note}; ${nominal}` : nominal;
-    offers.push({ shop: s.shop, url: s.url, lengthCm: length, priceCzk: price, note });
-  }
-  return offers;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -639,6 +559,7 @@ export function deriveBeltConfig(input: BeltConfigInput): BeltConfigOutcome {
 
   const shopping: BeltShoppingLine[] = [];
   const offers = strapOffers(input.widthMm, input.thicknessMm, minLengthCm);
+  const defaultOffer = defaultStrapOffer(offers);
   shopping.push({
     item: `Pás z třísločiněné kůže ${cz(input.widthMm)} mm, ${cz(input.thicknessMm)} mm`,
     quantity: 1,
@@ -646,8 +567,9 @@ export function deriveBeltConfig(input: BeltConfigInput): BeltConfigOutcome {
       minLengthCm === null
         ? `délka = obvod + ${cz(allowanceMm)} mm (zadejte obvod)`
         : `aspoň ${minLengthCm} cm (obvod + ${cz(allowanceMm)} mm)`,
-    status: offers.length > 0 ? 'overeno' : 'overte',
+    status: defaultOffer ? 'overeno' : 'overte',
     offers,
+    defaultOffer,
   });
   shopping.push({
     item: `Přezka ${cz(input.widthMm)} mm, jednotrnová`,
