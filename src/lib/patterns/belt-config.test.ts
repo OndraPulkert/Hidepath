@@ -48,6 +48,7 @@ describe('parametrický pásek – výpočet', () => {
     expect(r.buckle).toEqual({ widthMm: 40, verified: true });
     expect(r.plate.usable).toBe(true);
     expect(r.tipSheetOrientation).toBe('portrait');
+    expect(r.sheets).toEqual({ printable: true });
   });
 
   it('130 cm stačí do obvodu 106,5 cm, 140 cm do 116,5 cm', () => {
@@ -76,14 +77,29 @@ describe('parametrický pásek – výpočet', () => {
     expect(at(40, 3.5)).toBe(keeperStripLengthMm(DEFAULT_BELT_END));
   });
 
-  it('dřík nýtu podle tloušťky: ověřený jen 10/6 pro 3,5–3,75 mm', () => {
-    expect([3, 3.25, 3.5, 3.75, 4].map((t) => rivetPostMm(t).postMm)).toEqual([5, 5, 6, 6, 7]);
+  it('dřík nýtu podle tloušťky: potvrzený dřík jen u 6 mm (10/6) pro 3,5–3,75 mm', () => {
+    expect([3, 3.25, 3.5, 3.75, 4].map((t) => rivetPostMm(t).postMm)).toEqual([5, 5, 6, 6, 6.5]);
     expect(rivetPostMm(3).verified).toBeNull();
     expect(rivetPostMm(3.75).verified).not.toBeNull();
     expect(rivetPostMm(4).verified).toBeNull();
     const r = derive({ ...base, thicknessMm: 4 });
-    expect(r.warnings.join(' ')).toMatch(/dříkem 7 mm nemáme ověřený/);
+    expect(r.warnings.join(' ')).toMatch(/dříkem 6,5 mm má délku dříku jen v názvu/);
     expect(r.shopping.find((l) => l.item.startsWith('Šroubovací'))!.status).toBe('overte');
+  });
+
+  it('dřík z přesné změřené tloušťky (2 × t − 1,5 až 2 × t − 1)', () => {
+    // 3,6 mm: 5,7–6,2 mm, 10/6 sedí.
+    expect(rivetPostMm(3.6)).toMatchObject({ minMm: 5.7, maxMm: 6.2, postMm: 6 });
+    expect(rivetPostMm(3.6).verified).toMatch(/10\/6/);
+    // 3,4 mm: 5,3–5,8 mm – žádný nýt z ověřených nabídek, nic se nedomýšlí.
+    const r = rivetPostMm(3.4);
+    expect(r).toMatchObject({ minMm: 5.3, maxMm: 5.8, postMm: null, verified: null, options: [] });
+    const d = derive({ ...base, thicknessMm: 3.4 });
+    const line = d.shopping.find((l) => l.item.startsWith('Šroubovací'))!;
+    expect(line.item).toBe('Šroubovací nýt (chicago), dřík 5,3–5,8 mm');
+    expect(line.status).toBe('overte');
+    expect(line.detail).toMatch(/ověřený nýt s takovým dříkem nemáme/);
+    expect(d.warnings.join(' ')).toMatch(/Dřík 5,3–5,8 mm: takový nýt v ověřených nabídkách není/);
   });
 
   it('zaoblený konec: poloměr = šířka/2, varování k ověření', () => {
@@ -136,9 +152,9 @@ describe('parametrický pásek – výpočet', () => {
 });
 
 describe('parametrický pásek – meze', () => {
-  it('pustí celý rozsah šířek 28–45 a tlouštěk 3,0–4,0 po 0,25', () => {
+  it('pustí celý rozsah šířek 28–45 a libovolnou tloušťku 3,0–4,0', () => {
     for (let w = 28; w <= 45; w++) {
-      for (const t of [3, 3.25, 3.5, 3.75, 4]) {
+      for (const t of [3, 3.1, 3.25, 3.4, 3.5, 3.6, 3.75, 3.85, 4]) {
         for (const tip of ['hrot', 'zaobleny'] as const) {
           expect(checkBeltConfig({ widthMm: w, thicknessMm: t, tip }), `${w}/${t}/${tip}`).toEqual(
             [],
@@ -151,8 +167,9 @@ describe('parametrický pásek – meze', () => {
   it('odmítne šířku, tloušťku a obvod mimo meze česky', () => {
     expect(checkBeltConfig({ ...base, widthMm: 27 })[0]).toMatch(/Šířka musí být/);
     expect(checkBeltConfig({ ...base, widthMm: 40.5 })[0]).toMatch(/celé číslo/);
-    expect(checkBeltConfig({ ...base, thicknessMm: 3.6 })[0]).toMatch(/po 0,25/);
+    expect(checkBeltConfig({ ...base, thicknessMm: 3.6 })).toEqual([]);
     expect(checkBeltConfig({ ...base, thicknessMm: 4.25 })[0]).toMatch(/3,0–4,0/);
+    expect(checkBeltConfig({ ...base, thicknessMm: 2.9 })[0]).toMatch(/3,0–4,0/);
     expect(checkBeltConfig({ ...base, waistMm: 500 })[0]).toMatch(/60–150 cm/);
     expect(checkBeltConfig({ ...base, holeCount: 4 })[0]).toMatch(/3, 5 nebo 7/);
     expect(checkBeltConfig({ ...base, holeDiameterMm: 5.2 })[0]).toMatch(/Ø dírky/);
@@ -184,9 +201,20 @@ describe('parametrický pásek – meze', () => {
     );
   });
 
-  it('když se dírky nevejdou na A4 ani na šířku, řekne to', () => {
-    const p = checkBeltConfig({ ...base, holeCount: 7, holeSpacingMm: 30, apexToFirstHoleMm: 100 });
-    expect(p[0]).toMatch(/list A4 pojme nejvýš 258 mm/);
+  it('když se dírky nevejdou na A4 ani na šířku, čísla spočítá a jen listy netiskne', () => {
+    const input = { ...base, holeCount: 7, holeSpacingMm: 30, apexToFirstHoleMm: 100 };
+    expect(checkBeltConfig(input)).toEqual([]);
+    const r = derive({ ...input, waistMm: 950 });
+    expect(r.holes.fromApexMm).toEqual([100, 130, 160, 190, 220, 250, 280]);
+    expect(r.strap.lengthMm).toBe(950 + 90 + 190);
+    expect(r.tipSheetOrientation).toBeNull();
+    expect(r.sheets.printable).toBe(false);
+    if (r.sheets.printable) return;
+    expect(r.sheets.message).toMatch(/^Listy se na A4 nevejdou/);
+    expect(r.sheets.message).toMatch(/list A4 pojme nejvýš 258 mm/);
+    expect(r.sheets.message).toMatch(/podle čísel v tabulce, konec u přezky řadou 3 destičky/);
+    const sheets = beltSheetsFor(input);
+    expect(sheets).toMatchObject({ ok: false, problems: [r.sheets.message] });
   });
 
   it('délka hrotu z modelu sedí s `tipLengthMm`', () => {

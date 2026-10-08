@@ -168,7 +168,7 @@ Postup na straně 1 (čtyři kroky, v tomto pořadí — pořadí je věcné, ne
 
 1. Přenes značky na rub pásu: ohyb, drážku i všechny čtyři otvory.
 2. Vysekni 6mm otvory pro nýty i konce drážky (stejný průbojník), drážku mezi nimi vyřízni nožem.
-3. **Navlékni poutko na přehnutý konec. Teprve pak ohni konec kolem přezky.**
+3. **Navlékni poutko na pás. Teprve pak ohni konec kolem přezky** a poutko posuň přes přehnutý konec.
 4. Sešroubuj oba nýty. Poutko zůstane uvězněné v kapse mezi nimi.
 
 Plus poznámka: `Nýty: 2 kusy, každý prochází oběma vrstvami — proto jsou otvory čtyři.`

@@ -60,12 +60,51 @@ describe('Váš pásek', () => {
     );
   });
 
-  it('neplatná tloušťka: hlášení a listy nejdou vygenerovat', async () => {
+  it('změřená tloušťka 3,6 s čárkou: dřík z přesné hodnoty, 10/6 sedí', async () => {
     const { user } = setup();
     await user.clear(field(/Tloušťka/));
     await user.type(field(/Tloušťka/), '3,6');
-    expect(screen.getByRole('alert')).toHaveTextContent(/po 0,25/);
+    const row = screen.getByRole('rowheader', { name: 'Nýty' }).closest('tr')!;
+    expect(row).toHaveTextContent(/dřík\s6\smm/);
+    expect(row).toHaveTextContent(/5,7–6,2\smm/);
+    expect(row).toHaveTextContent(/CraftPoint 10\/6/);
+    expect(screen.getByRole('button', { name: 'Vygenerovat listy A4' })).toBeEnabled();
+  });
+
+  it('tloušťka 3,4: rozsah dříku bez ověřeného nýtu, poctivě řečeno', async () => {
+    const { user } = setup();
+    await user.clear(field(/Tloušťka/));
+    await user.type(field(/Tloušťka/), '3,4');
+    const row = screen.getByRole('rowheader', { name: 'Nýty' }).closest('tr')!;
+    expect(row).toHaveTextContent(/5,3–5,8\smm; ověřený nýt s takovým dříkem nemáme/);
+  });
+
+  it('neplatná tloušťka: hlášení a listy nejdou vygenerovat', async () => {
+    const { user } = setup();
+    await user.clear(field(/Tloušťka/));
+    await user.type(field(/Tloušťka/), '4,2');
+    expect(screen.getByRole('alert')).toHaveTextContent(/3,0–4,0\smm/);
     expect(screen.getByRole('button', { name: 'Vygenerovat listy A4' })).toBeDisabled();
+  });
+
+  it('7 dírek po 30 mm se na A4 nevejde: čísla zůstanou, tisk listů ne', async () => {
+    const { user } = setup();
+    await user.click(screen.getByText('Dírky (pokročilé)'));
+    await user.click(screen.getByRole('button', { name: '7' }));
+    await user.type(field(/Rozteč/), '30');
+    await user.type(field(/Konec → první dírka/), '100');
+    const table = screen.getByRole('table', { name: /Vaše čísla/ });
+    expect(table).toHaveTextContent(/100 \/ 130 \/ 160 \/ 190 \/ 220 \/ 250 \/ 280\smm/);
+    expect(table).toHaveTextContent(/nevejde se na A4/);
+    expect(screen.getByText(/^Listy se na A4 nevejdou/)).toHaveTextContent(
+      /Dírky a konec značte podle čísel v tabulce, konec u přezky řadou 3 destičky/,
+    );
+    expect(screen.queryByText(/vytiskněte list 2/)).toBeNull();
+    expect(
+      screen.getByText(/^Za řadu 1 značte dírky a konec podle čísel v tabulce/),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Vygenerovat listy A4' })).toBeNull();
+    expect(screen.queryByRole('alert')).toBeNull();
   });
 
   it('vygeneruje oba listy; 7 dírek dá list 2 na šířku', async () => {

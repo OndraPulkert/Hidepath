@@ -9,6 +9,7 @@ import {
   type LessonDefinition,
   type ProjectDefinition,
 } from '@/content/schema';
+import { beltPrepPlan } from '@/features/belt/belt-shopping';
 import { useDataContext } from '@/features/data/data-provider';
 import { type InventoryState } from '@/features/inventory/types';
 import { useUpdateInventoryItem } from '@/features/inventory/use-inventory';
@@ -19,6 +20,7 @@ import {
   type PrepPrintItem,
   type PrepRequirementItem,
 } from '@/features/prep/lesson-prep';
+import { useLessonRecords } from '@/features/notebook/use-lesson-records';
 import { usePrepChecks, useSetPrepCheck } from '@/features/prep/use-prep-checks';
 import { EMPTY_PROGRESS } from '@/features/progress/types';
 import { useProgress } from '@/features/progress/use-progress';
@@ -40,6 +42,7 @@ export function LessonPrep({ project, lesson, inventory }: LessonPrepProps) {
   const headingId = useId();
   const progressQuery = useProgress(project.slug);
   const checksQuery = usePrepChecks(project.slug);
+  const recordsQuery = useLessonRecords(project.slug);
   const setCheck = useSetPrepCheck(project.slug);
   const updateInventory = useUpdateInventoryItem();
   const { migration } = useDataContext();
@@ -49,6 +52,15 @@ export function LessonPrep({ project, lesson, inventory }: LessonPrepProps) {
 
   const progress = progressQuery.data ?? EMPTY_PROGRESS;
   const checks = checksQuery.data;
+  const records = recordsQuery.data;
+  // Pásek: nákup u nástrojů podle uloženého pásku (šířka, přezka, dřík nýtu), jinak 40 mm.
+  const planOverride = useMemo(
+    () =>
+      project.patternSheets?.browserGenerator === 'belt-config' && project.shoppingPlan
+        ? beltPrepPlan(project.shoppingPlan, records ?? [], project.slug, equipmentCatalog)
+        : null,
+    [project, records],
+  );
   const view = useMemo(
     () =>
       buildLessonPrep({
@@ -58,8 +70,9 @@ export function LessonPrep({ project, lesson, inventory }: LessonPrepProps) {
         inventory,
         progress,
         checks: checks ?? [],
+        planOverride,
       }),
-    [project, lesson, inventory, progress, checks],
+    [project, lesson, inventory, progress, checks, planOverride],
   );
   const checksLoading = checksQuery.isLoading || migration.status === 'running';
   const { done, total } = view.summary;
@@ -99,7 +112,7 @@ export function LessonPrep({ project, lesson, inventory }: LessonPrepProps) {
       ) : null}
 
       {view.equipment.length > 0 ? (
-        <PrepGroup title="Nástroje">
+        <PrepGroup title="Nástroje" note={view.planBasis ? `Nákup ${view.planBasis}` : undefined}>
           {view.equipment.map((item) => (
             <EquipmentRow
               key={item.slug}
@@ -159,13 +172,23 @@ export function LessonPrep({ project, lesson, inventory }: LessonPrepProps) {
   );
 }
 
-function PrepGroup({ title, children }: { title: string; children: ReactNode }) {
+function PrepGroup({
+  title,
+  note,
+  children,
+}: {
+  title: string;
+  /** Poznámka pod nadpisem (např. podle jakého pásku je nákup). */
+  note?: string | undefined;
+  children: ReactNode;
+}) {
   const id = useId();
   return (
     <div>
       <h3 id={id} className="text-step font-semibold">
         {title}
       </h3>
+      {note ? <p className="text-meta text-ink-2">{typo(note)}</p> : null}
       <ul aria-labelledby={id} className="divide-y divide-dashed divide-line">
         {children}
       </ul>

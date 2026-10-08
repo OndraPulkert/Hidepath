@@ -6,6 +6,7 @@ import {
   type LessonPrint,
   type LessonStep,
   type ProjectDefinition,
+  type ShoppingPlan,
 } from '@/content/schema';
 import { getEquipmentStatus, type InventoryState } from '@/features/inventory/types';
 import { type PrepCheckRecord } from '@/features/prep/types';
@@ -102,6 +103,8 @@ export interface LessonPrepView {
   equipment: readonly PrepEquipmentItem[];
   materials: readonly PrepMaterialItem[];
   requires: readonly PrepRequirementItem[];
+  /** Podle jaké sestavy je nákupní plán u nástrojů (např. „podle pásku: …“); bez ní plán projektu. */
+  planBasis?: string;
   /** Povinné položky (bez volitelných): kolik je připraveno z kolika. */
   summary: { done: number; total: number };
 }
@@ -114,6 +117,11 @@ export interface BuildLessonPrepInput {
   progress: ProgressState;
   /** Zaškrtnutí přípravy (stačí záznamy projektu; cizí lekce se ignorují). */
   checks: readonly PrepCheckRecord[];
+  /**
+   * Nákupní plán pro sestavu uživatele (u pásku podle uloženého pásku) místo plánu projektu.
+   * `basis` se ukáže u nástrojů, ať je jasné, z čeho plán je.
+   */
+  planOverride?: { plan: ShoppingPlan; basis: string } | null;
 }
 
 /** Klíč zaškrtnutí výtisku. */
@@ -221,8 +229,12 @@ function buildPrints(
 }
 
 function buildEquipment(input: BuildLessonPrepInput): PrepEquipmentItem[] {
-  const { project, lesson, catalog, inventory } = input;
-  const plan = resolveShoppingPlan(project, catalog, inventory);
+  const { project, lesson, catalog, inventory, planOverride } = input;
+  const plan = resolveShoppingPlan(
+    planOverride ? { shoppingPlan: planOverride.plan } : project,
+    catalog,
+    inventory,
+  );
   const planLines = (slug: string): PrepPlanLine[] =>
     (plan?.shops ?? []).flatMap((group) =>
       group.lines
@@ -334,6 +346,7 @@ export function buildLessonPrep(input: BuildLessonPrepInput): LessonPrepView {
     equipment,
     materials,
     requires,
+    ...(input.planOverride ? { planBasis: input.planOverride.basis } : {}),
     summary: { done: counted.filter((i) => i.checked).length, total: counted.length },
   };
 }

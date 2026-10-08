@@ -243,3 +243,21 @@ describe('obsah – pásek: nákup', () => {
     }
   });
 });
+
+describe('pásek – pořadí poutka a ohybu (opasek-postup.md krok 7)', () => {
+  it('lekce 4: poutko se vyrobí a navlékne na pás před ohnutím, posune se před značením druhé dvojice', () => {
+    const ids = lesson(4).steps.map((s) => s.id);
+    expect(ids.indexOf('keeper')).toBeLessThan(ids.indexOf('bend'));
+    expect(ids.indexOf('bend')).toBeLessThan(ids.indexOf('second-pair'));
+    const bend = step(4, 'bend').body;
+    expect(bend.indexOf('Poutko navlékněte na pás')).toBeLessThan(bend.indexOf('ohněte'));
+    expect(step(4, 'second-pair').body).toMatch(/^Poutko posuňte přes přehnutý konec/);
+  });
+
+  it('lekce 2: nevymyšlená rezerva na odřezek, ohyb popraskaný nasucho zopakovat navlhčený', () => {
+    expect(lessonText(2)).not.toMatch(/20 cm/);
+    expect(step(2, 'get-scrap').body).toMatch(/podklady neuvádějí: ověřte/);
+    const bend = step(2, 'bend').records!.find((r) => r.id === 'scrap-bend')!;
+    expect(bend.hint).toMatch(/^Popraskal-li nasucho, zopakujte ohyb navlhčený\./);
+  });
+});

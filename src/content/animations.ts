@@ -532,8 +532,8 @@ export const animationPages = {
       A: 'Část A – destička, nebo list',
       B: 'Část B – značení na rubu',
       C: 'Část C – výsek',
-      D: 'Část D – ohyb a poutko',
-      E: 'Část E – nýty',
+      D: 'Část D – poutko',
+      E: 'Část E – ohyb a nýty',
     },
     steps: {
       A: ['Řada 3, nebo list 1', 'List 1: přeměřte čtverec'],
@@ -546,9 +546,10 @@ export const animationPages = {
         'S listem 1',
       ],
       C: ['Vysekněte první dvojici', 'Konce oválu Ø 6', 'Boky oválu nožem'],
-      D: ['Ohněte konec kolem příčky', 'Změřte poutko proužkem', 'Vyřízněte a slepte poutko'],
+      D: ['Změřte poutko proužkem', 'Vyřízněte a slepte poutko', 'Navlékněte poutko na pás'],
       E: [
-        'Navlékněte poutko',
+        'Ohněte konec kolem příčky',
+        'Posuňte poutko na přehnutý konec',
         'Označte druhou dvojici skrz otvory',
         'Vysekněte druhou dvojici',
         'Sešroubujte nýty',

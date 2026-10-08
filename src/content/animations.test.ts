@@ -693,8 +693,8 @@ describe('animace postupu – pásek: konec s přezkou, dírky a špička', () =
     [2, 'mark', [prezka('B1'), prezka('B2')]],
     [2, 'punch', [prezka('C2'), prezka('C3')]],
     [2, 'edges-balm', [hrany('B2'), hrany('D2')]],
-    [2, 'bend', [prezka('D1')]],
-    [2, 'screw', [prezka('E2'), prezka('E3'), prezka('E4')]],
+    [2, 'bend', [prezka('E1')]],
+    [2, 'screw', [prezka('E3'), prezka('E4'), prezka('E5')]],
     // Lekce 3: dlouhé hrany.
     [3, 'bevel', [hrany('B2')]],
     [3, 'burnish', [hrany('D1'), hrany('D2'), hrany('D3')]],
@@ -704,10 +704,11 @@ describe('animace postupu – pásek: konec s přezkou, dírky a špička', () =
     [4, 'mark', [prezka('B2'), prezka('B3'), prezka('B4'), prezka('B5'), prezka('B6')]],
     [4, 'first-pair', [prezka('C1')]],
     [4, 'oval', [prezka('C2'), prezka('C3')]],
-    [4, 'bend', [prezka('D1')]],
-    [4, 'keeper', [prezka('D2'), prezka('D3')]],
-    [4, 'second-pair', [prezka('E1'), prezka('E2')]],
-    [4, 'screws', [prezka('E3'), prezka('E4'), prezka('E5')]],
+    // Poutko se navléká před ohnutím (smyčka kolem obou vrstev, opasek-postup.md krok 7).
+    [4, 'keeper', [prezka('D1'), prezka('D2')]],
+    [4, 'bend', [prezka('D3'), prezka('E1')]],
+    [4, 'second-pair', [prezka('E2'), prezka('E3')]],
+    [4, 'screws', [prezka('E4'), prezka('E5'), prezka('E6')]],
     // Lekce 5: zkouška na těle.
     [5, 'try-on', [spicka('A1')]],
     [5, 'measure', [spicka('A2')]],
@@ -733,12 +734,13 @@ describe('animace postupu – pásek: konec s přezkou, dírky a špička', () =
   });
 
   it('popisky tlačítek nesou číslo a název kroku stránky', () => {
-    expect(animationLink('beltBuckleEnd', 'E2')).toEqual({
-      href: prezka('E2'),
-      label: 'Krok E2 – Označte druhou dvojici skrz otvory',
+    expect(animationLink('beltBuckleEnd', 'E3')).toEqual({
+      href: prezka('E3'),
+      label: 'Krok E3 – Označte druhou dvojici skrz otvory',
     });
     expect(animationLink('beltHolesTip', 'E3').label).toBe('Krok E3 – Uřízněte vrchol R4');
     expect(() => animationLink('beltBuckleEnd', 'A3')).toThrow(/nemá kotvu #A3/);
+    expect(() => animationLink('beltBuckleEnd', 'E7')).toThrow(/nemá kotvu #E7/);
     expect(() => animationLink('beltHolesTip', 'C3')).toThrow(/nemá kotvu #C3/);
     expect(animationButtonText(spicka('F1'))).toBe('Animace postupu');
   });

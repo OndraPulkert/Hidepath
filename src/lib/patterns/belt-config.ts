@@ -48,7 +48,7 @@ export const BELT_TIP_LABELS: Readonly<Record<BeltTip, string>> = {
 export interface BeltConfigInput {
   /** Šířka pásu = vnitřní světlost přezky, mm. */
   widthMm: number;
-  /** Tloušťka pásu změřená na řezu, mm. */
+  /** Tloušťka pásu změřená na řezu, mm (libovolná hodnota v mezích, např. 3,6). */
   thicknessMm: number;
   /** Obvod (ohyb u přezky → nošená dírka), mm. Chybí = délka pásu se nespočítá. */
   waistMm?: number | undefined;
@@ -72,7 +72,8 @@ export interface BeltConfigInput {
  */
 export const BELT_LIMITS = {
   widthMm: { min: 28, max: 45 },
-  thicknessMm: { min: 3, max: 4, step: 0.25 },
+  /** Pás z postupu (krok 3); změřená hodnota se nezaokrouhluje, dřík se počítá z ní. */
+  thicknessMm: { min: 3, max: 4 },
   waistMm: { min: 600, max: 1500 },
   holeCounts: [3, 5, 7] as const,
   /** Dolní mez rozteče počítá model (Ø + můstek), tady jen pojistka proti překlepu. */
@@ -154,11 +155,10 @@ export function checkBeltConfig(input: BeltConfigInput): string[] {
   if (
     !Number.isFinite(thicknessMm) ||
     thicknessMm < L.thicknessMm.min - EPS ||
-    thicknessMm > L.thicknessMm.max + EPS ||
-    !onStep(thicknessMm, L.thicknessMm.step)
+    thicknessMm > L.thicknessMm.max + EPS
   ) {
     problems.push(
-      'Tloušťka musí být 3,0–4,0 mm po 0,25 mm (změřenou hodnotu zaokrouhlete, např. 3,6 → 3,5). Mimo nemáme ověřený nýt.',
+      'Tloušťka musí být 3,0–4,0 mm (zadejte změřenou hodnotu, např. 3,6). S tenčím nebo silnějším pásem postup nepočítá.',
     );
   }
   if (
@@ -202,12 +202,6 @@ export function checkBeltConfig(input: BeltConfigInput): string[] {
   if (tip.apexToFirstHoleMm < minApex - EPS) {
     // Model řekne jen můstek; uživatel potřebuje číslo, které zadat (nahoru na 0,1 mm).
     problems.push(`Odstup první dírky aspoň ${cz(Math.ceil(minApex * 10 - 1e-6) / 10)} mm.`);
-  }
-  if (problems.length === 0 && tipSheetOrientation(tip) === null) {
-    const reach = holeOffsetsFromApexMm(tip).at(-1) ?? 0;
-    problems.push(
-      `Poslední dírka je ${cz(reach)} mm od konce, list A4 pojme nejvýš ${cz(TIP_LANDSCAPE_MAX_REACH_MM)} mm. Zmenšete počet dírek, rozteč nebo odstup.`,
-    );
   }
   return problems;
 }
@@ -321,19 +315,87 @@ const VERIFIED_PUNCH_MM: readonly number[] = [4.5, 5, 6];
 const punchStatus = (d: number): ShoppingStatus =>
   VERIFIED_PUNCH_MM.some((v) => Math.abs(v - d) < EPS) ? 'overeno' : 'overte';
 
-/** Dřík šroubovacího nýtu v celých mm, který spadá do rozsahu (postup, krok 3). */
+/**
+ * Šroubovací nýty z katalogu (`src/content/equipment/belt.ts`, `chicago-screws`, ověřeno
+ * 8. 10. 2026) podle délky dříku. `confirmed` = dřík uvádí stránka výrobku; u Andexnite je
+ * jen v názvu a katalog píše „délku dříku si potvrďte u prodejce“.
+ */
+export interface ChicagoScrewOption {
+  postMm: number;
+  /** Krátký popis pro tabulku a nákup. */
+  product: string;
+  /** Příklad v katalogu: URL a varianta (shodné s `ProductExample`). */
+  url: string;
+  variant?: string;
+  /** Kolik kusů (nebo balení) koupit na 2 nýty: CraftPoint a Leatory po kusech, Andexnite po 10 ks. */
+  quantity: number;
+  confirmed: boolean;
+}
+
+export const CHICAGO_SCREW_OPTIONS: readonly ChicagoScrewOption[] = [
+  {
+    postMm: 6,
+    product: 'CraftPoint 10/6, 8 Kč/ks',
+    url: 'https://craft-point.cz/products/sroubovaci-nyty-10-6-mm-stribrne',
+    quantity: 2,
+    confirmed: true,
+  },
+  {
+    postMm: 6,
+    product: 'Leatory opaskový šroubek, dřík 6 mm, 19 Kč/ks',
+    url: 'https://www.leatory.cz/nyty--ozdoby-a-ostatni/opaskovy-sroubek-nikl-pres-mosaz-hladky-profi/',
+    variant: 'dřík 6 mm',
+    quantity: 2,
+    confirmed: true,
+  },
+  {
+    postMm: 5,
+    product: 'Andexnite Ø 9 × 5 mm (dřík jen podle názvu)',
+    url: 'https://andexnite.cz/produkt/sroubovaci-nyt-o-9-x-5-mm-o-95-x-6-mm-cerny-nikl-10-ks/',
+    variant: '9 × 5 mm',
+    quantity: 1,
+    confirmed: false,
+  },
+  {
+    postMm: 6.5,
+    product: 'Andexnite Ø 9,5 × 6,5 mm (dřík jen podle názvu)',
+    url: 'https://andexnite.cz/produkt/sroubovaci-nyt-o-9-x-5-mm-o-95-x-6-mm-cerny-nikl-10-ks/',
+    variant: '9,5 × 6,5 mm',
+    quantity: 1,
+    confirmed: false,
+  },
+];
+
+const r2 = (v: number): number => Math.round(v * 100) / 100;
+
+/**
+ * Dřík šroubovacího nýtu pro změřenou tloušťku (postup, krok 3): spoj = 2 × tloušťka, dřík
+ * o 1–1,5 mm kratší. Počítá se z přesné hodnoty, nic se nezaokrouhluje na „běžné“ délky.
+ */
 export function rivetPostMm(thicknessMm: number): {
   minMm: number;
   maxMm: number;
-  postMm: number;
-  /** Ověřený zdroj, nebo `null`. */
+  /** Dřík nýtu z katalogu, který do rozsahu padne; `null`, když žádný. */
+  postMm: number | null;
+  /** Nýt s dříkem potvrzeným na stránce výrobku, nebo `null`. */
   verified: string | null;
+  /** Nýty z katalogu, jejichž dřík do rozsahu padne (potvrzené první). */
+  options: ChicagoScrewOption[];
 } {
-  const { minMm, maxMm } = rivetPostRangeMm({ ...DEFAULT_BELT_END, beltThicknessMm: thicknessMm });
-  const postMm = Math.ceil(minMm - EPS);
-  // CraftPoint má jen 10/6 (8 Kč/ks), docs/zadani/opasek-postup.md krok 3.
-  const verified = postMm === 6 ? 'CraftPoint 10/6, 8 Kč/ks' : null;
-  return { minMm, maxMm, postMm, verified };
+  const range = rivetPostRangeMm({ ...DEFAULT_BELT_END, beltThicknessMm: thicknessMm });
+  const minMm = r2(range.minMm);
+  const maxMm = r2(range.maxMm);
+  const options = CHICAGO_SCREW_OPTIONS.filter(
+    (o) => o.postMm >= minMm - EPS && o.postMm <= maxMm + EPS,
+  ).sort((a, b) => Number(b.confirmed) - Number(a.confirmed));
+  const confirmed = options.find((o) => o.confirmed);
+  return {
+    minMm,
+    maxMm,
+    postMm: options[0]?.postMm ?? null,
+    verified: confirmed?.product ?? null,
+    options,
+  };
 }
 
 function strapOffers(widthMm: number, thicknessMm: number, neededCm: number | null): StrapOffer[] {
@@ -471,11 +533,40 @@ export interface BeltConfigResult {
   };
   buckle: { widthMm: number; verified: boolean };
   plate: PlateCompatibility;
-  /** List 2 na výšku, nebo na šířku (7 dírek a delší rozvržení). */
-  tipSheetOrientation: 'portrait' | 'landscape';
+  /**
+   * List 2 na výšku, na šířku (7 dírek a delší rozvržení), nebo `null`, když se na A4 nevejde
+   * ani na šířku. Čísla platí i tak, jen listy se netisknou (`sheets`).
+   */
+  tipSheetOrientation: 'portrait' | 'landscape' | null;
+  /** Jdou vytisknout listy A4? Když ne, `message` říká proč a čím značit. */
+  sheets: BeltSheetsAvailability;
   shopping: BeltShoppingLine[];
   /** Co podklady neověřují. Výpočet platí, jen to vyzkoušejte. */
   warnings: string[];
+}
+
+export type BeltSheetsAvailability = { printable: true } | { printable: false; message: string };
+
+/**
+ * Vejde se list 2 na A4? Když ne, pásek se dál spočítá, jen se netisknou listy: dírky a konec
+ * se značí podle čísel v tabulce, konec u přezky řadou 3 destičky (pokud ji šířka pustí).
+ */
+export function beltSheetsAvailability(
+  input: BeltConfigInput,
+  plate: BeltPlateSpec = DEFAULT_BELT_PLATE,
+): BeltSheetsAvailability {
+  const { tip } = beltSpecsFor(input);
+  if (tipSheetOrientation(tip) !== null) return { printable: true };
+  const reach = holeOffsetsFromApexMm(tip).at(-1) ?? 0;
+  const row3 = plateCompatibility(input, plate).rows[0].ok;
+  return {
+    printable: false,
+    message:
+      `Listy se na A4 nevejdou: poslední dírka je ${cz(r1(reach))} mm od konce, list A4 pojme nejvýš ${cz(TIP_LANDSCAPE_MAX_REACH_MM)} mm. ` +
+      (row3
+        ? 'Dírky a konec značte podle čísel v tabulce, konec u přezky řadou 3 destičky.'
+        : 'Značte podle čísel v tabulce.'),
+  };
 }
 
 export type BeltConfigOutcome =
@@ -514,9 +605,14 @@ export function deriveBeltConfig(input: BeltConfigInput): BeltConfigOutcome {
   if (Math.abs(tip.holeSpacingMm - DEFAULT_BELT_TIP.holeSpacingMm) > EPS) {
     warnings.push('Podklady mají rozteč 25 mm. Jinou rozteč ověřte na odřezku.');
   }
-  if (rivet.verified === null) {
+  const postRange = `${cz(rivet.minMm)}–${cz(rivet.maxMm)} mm`;
+  if (rivet.postMm === null) {
     warnings.push(
-      `Nýt s dříkem ${rivet.postMm} mm nemáme ověřený. Ověřte u prodejce a utažení na odřezku.`,
+      `Dřík ${postRange}: takový nýt v ověřených nabídkách není. Ověřte u prodejce a utažení na odřezku.`,
+    );
+  } else if (rivet.verified === null) {
+    warnings.push(
+      `Nýt s dříkem ${cz(rivet.postMm)} mm má délku dříku jen v názvu (${rivet.options[0]!.product}). Ověřte u prodejce a utažení na odřezku.`,
     );
   }
   if (input.tip === 'zaobleny') {
@@ -545,9 +641,14 @@ export function deriveBeltConfig(input: BeltConfigInput): BeltConfigOutcome {
     status: buckleVerified ? 'overeno' : 'overte',
   });
   shopping.push({
-    item: `Šroubovací nýt (chicago), dřík ${rivet.postMm} mm`,
+    item: `Šroubovací nýt (chicago), dřík ${rivet.postMm === null ? postRange : `${cz(rivet.postMm)} mm`}`,
     quantity: 2,
-    detail: `dřík ${cz(rivet.minMm)}–${cz(rivet.maxMm)} mm na spoj 2 × ${cz(input.thicknessMm)} mm${rivet.verified ? `; ${rivet.verified}` : '; ověřte u prodejce'}`,
+    detail: `dřík ${postRange} na spoj 2 × ${cz(input.thicknessMm)} mm; ${
+      rivet.verified ??
+      (rivet.options[0]
+        ? `${rivet.options[0].product}, ověřte u prodejce`
+        : 'ověřený nýt s takovým dříkem nemáme, ověřte u prodejce')
+    }`,
     status: rivet.verified ? 'overeno' : 'overte',
   });
   shopping.push({
@@ -600,8 +701,8 @@ export function deriveBeltConfig(input: BeltConfigInput): BeltConfigOutcome {
       },
       buckle: { widthMm: input.widthMm, verified: buckleVerified },
       plate: plateCompatibility(input),
-      // `checkBeltConfig` zaručuje, že se list vejde.
-      tipSheetOrientation: orientation ?? 'landscape',
+      tipSheetOrientation: orientation,
+      sheets: beltSheetsAvailability(input),
       shopping,
       warnings,
     },
@@ -614,6 +715,8 @@ export function beltSheetsFor(
 ): { ok: true; label: string; sheets: [BeltSheet, BeltSheet] } | { ok: false; problems: string[] } {
   const problems = checkBeltConfig(input);
   if (problems.length > 0) return { ok: false, problems };
+  const availability = beltSheetsAvailability(input);
+  if (!availability.printable) return { ok: false, problems: [availability.message] };
   const { end, tip } = beltSpecsFor(input);
   return {
     ok: true,

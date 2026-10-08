@@ -71,7 +71,12 @@ describe('předvyplnění „Váš pásek“ ze zápisníku', () => {
       SLUG,
     );
     expect(out).toMatchObject({ ok: true, result: { strap: { minLengthCm: 119 } } });
+    // Změřená tloušťka se nezaokrouhluje: 3,6 mm projde a dřík se počítá z ní.
     expect(beltNumbersFromNotebook([entry(BELT_RECORD_IDS.thickness, 3.6)], SLUG)).toMatchObject({
+      ok: true,
+      result: { rivet: { minMm: 5.7, maxMm: 6.2, postMm: 6 } },
+    });
+    expect(beltNumbersFromNotebook([entry(BELT_RECORD_IDS.thickness, 4.2)], SLUG)).toMatchObject({
       ok: false,
     });
   });

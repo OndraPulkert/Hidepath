@@ -148,7 +148,7 @@ export function BeltConfigGenerator({
             label="Tloušťka (změřená), mm"
             value={form.thickness}
             onChange={set('thickness')}
-            hint="Posuvkou na řezu. 3,0–4,0 mm po 0,25."
+            hint="Posuvkou na řezu, 3,0–4,0 mm. Zadejte, co naměříte, např. 3,6."
           />
           <NumberField
             id={`${id}-waist`}
@@ -255,11 +255,17 @@ export function BeltConfigGenerator({
             </ul>
           </div>
         )}
-        <div>
-          <Button type="submit" variant="secondary" disabled={!evaluated.ok}>
-            Vygenerovat listy A4
-          </Button>
-        </div>
+        {evaluated.ok && !evaluated.result.sheets.printable ? (
+          <p role="note" className="text-body text-cognac-deep">
+            {typo(evaluated.result.sheets.message)}
+          </p>
+        ) : (
+          <div>
+            <Button type="submit" variant="secondary" disabled={!evaluated.ok}>
+              Vygenerovat listy A4
+            </Button>
+          </div>
+        )}
       </form>
       {done ? (
         <p role="status" className="text-body font-medium text-forest">
@@ -319,6 +325,15 @@ function ChoiceRow({ label, children }: { label: string; children: ReactNode }) 
   );
 }
 
+/** Řádek „Nýty“: rozsah dříku z přesné tloušťky a nýt, který do něj padne, nebo že žádný. */
+function rivetText(r: BeltConfigResult): string {
+  const { rivet } = r;
+  const range = `spoj 2 × ${mm(r.input.thicknessMm)} → dřík ${formatDecimal(rivet.minMm)}–${mm(rivet.maxMm)}`;
+  if (rivet.postMm === null) return `2 ks, ${range}; ověřený nýt s takovým dříkem nemáme`;
+  const product = rivet.verified ?? `${rivet.options[0]!.product}, ověřte u prodejce`;
+  return `2 ks, dřík ${mm(rivet.postMm)} (${range}) · ${product}`;
+}
+
 /** Tabulka výsledků, destička, nákup a co ověřit. */
 function BeltResults({ result }: { result: BeltConfigResult }) {
   const r = result;
@@ -344,10 +359,7 @@ function BeltResults({ result }: { result: BeltConfigResult }) {
       `${mm(r.holes.middleFromApexMm)} od konce · nastavení ± ${mm(r.holes.adjustmentMm)}`,
     ],
     ['Poutko', `${mm(r.keeper.lengthMm)} × ${mm(r.keeper.widthMm)}`],
-    [
-      'Nýty',
-      `2 ks, dřík ${mm(r.rivet.postMm)} (spoj 2 × ${mm(r.input.thicknessMm)} → ${formatDecimal(r.rivet.minMm)}–${mm(r.rivet.maxMm)})`,
-    ],
+    ['Nýty', rivetText(r)],
     [
       'Ovál pro trn',
       `${formatDecimal(r.buckleEnd.slotLengthMm)} × ${mm(r.buckleEnd.slotWidthMm)}, ${formatDecimal(r.buckleEnd.slotFromEndMm[0])}–${mm(r.buckleEnd.slotFromEndMm[1])} od konce pásu; ohyb ${mm(r.buckleEnd.foldFromEndMm)}`,
@@ -360,7 +372,14 @@ function BeltResults({ result }: { result: BeltConfigResult }) {
       'Přezka',
       `${mm(r.buckle.widthMm)} jednotrnová${r.buckle.verified ? '' : ' (ověřte u prodejce)'}`,
     ],
-    ['List 2', r.tipSheetOrientation === 'portrait' ? 'A4 na výšku' : 'A4 na šířku'],
+    [
+      'List 2',
+      r.tipSheetOrientation === 'portrait'
+        ? 'A4 na výšku'
+        : r.tipSheetOrientation === 'landscape'
+          ? 'A4 na šířku'
+          : 'nevejde se na A4',
+    ],
   ];
   return (
     <div className="flex flex-col gap-4">
@@ -423,13 +442,15 @@ function BeltResults({ result }: { result: BeltConfigResult }) {
 }
 
 function PlateBadge({ result }: { result: BeltConfigResult }) {
-  const { plate, input } = result;
+  const { plate, input, sheets } = result;
   const [buckleRow, endRow] = plate.rows;
   const badge = plate.usable
     ? 'Destička: ano'
     : buckleRow.ok
       ? 'Destička: jen řada 3'
-      : 'Destička: ne – vytiskněte listy';
+      : sheets.printable
+        ? 'Destička: ne – vytiskněte listy'
+        : 'Destička: ne';
   return (
     <div className="flex flex-col gap-1.5">
       <div>
@@ -442,7 +463,13 @@ function PlateBadge({ result }: { result: BeltConfigResult }) {
           </li>
         ))}
         {!plate.usable && buckleRow.ok ? (
-          <li>{typo(`Za řadu ${endRow.row} vytiskněte list 2.`)}</li>
+          <li>
+            {typo(
+              sheets.printable
+                ? `Za řadu ${endRow.row} vytiskněte list 2.`
+                : `Za řadu ${endRow.row} značte dírky a konec podle čísel v tabulce: list 2 se na A4 nevejde.`,
+            )}
+          </li>
         ) : null}
         {plate.usable && !plate.guideLine ? (
           <li>

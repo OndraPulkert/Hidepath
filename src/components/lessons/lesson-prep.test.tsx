@@ -5,9 +5,11 @@ import { createMemoryRouter, RouterProvider } from 'react-router';
 import { AppProviders } from '@/app/providers';
 import { LessonPrep } from '@/components/lessons/lesson-prep';
 import { equipmentCatalog } from '@/content/equipment';
+import { beltProject } from '@/content/projects/belt/project';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
 import { type LessonDefinition, type ProjectDefinition } from '@/content/schema';
+import { newSavedBeltFieldId, serializeSavedBelt } from '@/features/belt/saved-belts';
 import { type Repositories } from '@/features/data/repositories';
 import { useInventory } from '@/features/inventory/use-inventory';
 import { item } from '@/test/factories';
@@ -210,5 +212,55 @@ describe('Připravte si na stránce lekce', () => {
     );
     expect(within(section).getByText(/^1 výtisk · /)).toBeInTheDocument();
     expect(within(section).getByText(/^Připraveno 0\/\d+$/)).toBeInTheDocument();
+  });
+});
+
+describe('Připravte si u pásku', () => {
+  const beltLesson = beltProject.lessons.find((l) => l.requiredEquipment.includes('belt-buckle'))!;
+  const renderBelt = (repositories: Repositories) => {
+    function BeltHarness() {
+      const { data } = useInventory();
+      return <LessonPrep project={beltProject} lesson={beltLesson} inventory={data ?? {}} />;
+    }
+    const router = createMemoryRouter([{ path: '*', element: <BeltHarness /> }], {
+      initialEntries: ['/'],
+    });
+    render(
+      <AppProviders repositories={repositories}>
+        <RouterProvider router={router} />
+      </AppProviders>,
+    );
+  };
+
+  it('bez uloženého pásku nákup pro 40 mm', async () => {
+    renderBelt(createTestRepositories());
+    expect(await screen.findByText(/Mosazná opasková přezka 40 mm/)).toBeInTheDocument();
+    expect(screen.queryByText(/podle pásku:/)).toBeNull();
+  });
+
+  it('s uloženým páskem nákup podle něj a řekne podle kterého', async () => {
+    const repositories = createTestRepositories();
+    const now = '2026-10-08T10:00:00.000Z';
+    await repositories.lessonRecords.upsert({
+      id: crypto.randomUUID(),
+      userId: null,
+      projectSlug: beltProject.slug,
+      lessonSlug: 'vas-pasek',
+      fieldId: newSavedBeltFieldId(),
+      value: serializeSavedBelt(
+        'Do obleku',
+        { widthMm: 30, thicknessMm: 3.5, tip: 'hrot' },
+        'pasek',
+      ),
+      contentVersion: beltProject.contentVersion,
+      createdAt: now,
+      updatedAt: now,
+    });
+    renderBelt(repositories);
+    expect(
+      await screen.findByText('Nákup podle pásku: Do obleku (30 mm · 3,5 mm · hrot · 5 dírek)'),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Mosazná opasková přezka 30 mm/)).toBeInTheDocument();
+    expect(screen.queryByText(/Mosazná opasková přezka 40 mm/)).toBeNull();
   });
 });

@@ -124,3 +124,37 @@ describe('tiskové listy opasku – nálezy kontroly (2026-10-08)', () => {
     expect(label - 3 - (cy + 22.5)).toBeGreaterThanOrEqual(3);
   });
 });
+
+describe('texty listů opasku', () => {
+  const texts = (svg: string): string[] =>
+    [...svg.matchAll(/<text[^>]*>([^<]*)<\/text>/g)].map((m) => m[1]!);
+  const all = (): string[] => {
+    const { end, tip } = at(40);
+    const out: string[] = [];
+    for (const shape of ['point', 'round'] as const) {
+      for (const holeCount of [3, 5, 7]) {
+        for (const s of buildBeltSheets(end, { ...tip, holeCount }, shape))
+          out.push(...texts(s.svg));
+      }
+    }
+    return out;
+  };
+
+  it('vykají: žádné tykání (tvoje, ohni, označ, změř…)', () => {
+    const tykani =
+      /(?<!\p{L})(tvoj\p{L}*|tvá|tvé|tvůj|tvou|ohni|označ|změř|přeměř|vysekni|obtáhni|uřízni|navlékni|přilož|sešroubuj|vytiskni|měř|provleč|utáhni|zkontroluj|máš|použij)(?!\p{L})/iu;
+    for (const t of all()) expect(t, t).not.toMatch(tykani);
+  });
+
+  it('list 1: poutko se navléká před ohnutím, pak druhá dvojice a nýty', () => {
+    const { end, tip } = at(40);
+    const [p1] = buildPages(end, tip);
+    const t = texts(p1);
+    const keeper = t.findIndex((s) =>
+      /Navlékněte poutko na pás, ohněte konec .*a poutko posuňte přes přehnutý konec/.test(s),
+    );
+    const screws = t.findIndex((s) => s.includes('sešroubujte nýty'));
+    expect(keeper).toBeGreaterThan(-1);
+    expect(screws).toBeGreaterThan(keeper);
+  });
+});

@@ -185,8 +185,8 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
     ...notes(strapX, 258, [
       '1. Na rub pásu přeneste ohyb, drážku a všechny čtyři otvory.',
       `2. Vysekněte Ø ${cz(spec.rivetHoleMm)} mm jen 2 otvory blíž ke konci a konce drážky, boky drážky řízněte nožem.`,
-      '3. Ohněte konec kolem příčky přezky a navlékněte poutko.',
-      '4. Druhé 2 otvory označte skrz vyseknuté, vysekněte a sešroubujte nýty.',
+      '3. Navlékněte poutko na pás, ohněte konec kolem příčky přezky a poutko posuňte přes přehnutý konec.',
+      '4. Druhé 2 otvory označte skrz vyseknuté, vysekněte a sešroubujte nýty. Poutko zůstane mezi nimi.',
       'Nýty: 2 kusy, každý prochází oběma vrstvami — proto jsou otvory čtyři.',
       'Rozměry z šablony Black Flag Leather Goods (jeden zdroj, ať se nemíchají rozteče).',
       'Délka poutka a zaoblení konce jsou spočítané, ne ověřené — ověřte na odřezku.',

@@ -166,20 +166,20 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'order',
         title: 'Objednejte podle tabulky',
-        body: `Plán „Co koupit“ je pro pásek 40 mm. Pro jinou šířku vyberte u pásu i přezky variantu vaší šířky, nýt podle řádku Nýt ${IN_TABLE}. Pás musí mít aspoň nejkratší délku z tabulky: pás 130 cm stačí do obvodu 106,5 cm (5 dírek po 25 mm). K pásu napište do poznámky „prosím blíž k 3,5 mm“. Nýt 10/6 sedí jen na pás 3,5–3,75 mm: když pás přijde jiný, nýt podle změřené tloušťky dokoupíte.`,
+        body: `Plán „Co koupit“ je pro pásek 40 mm; „Připravte si“ u lekcí ukazuje pás, přezku a nýt podle naposledy uloženého pásku. Pro jinou šířku vyberte u pásu i přezky variantu vaší šířky, nýt podle řádku Nýt ${IN_TABLE}. Pás musí mít aspoň nejkratší délku z tabulky: pás 130 cm stačí do obvodu 106,5 cm (5 dírek po 25 mm). K pásu napište do poznámky „prosím blíž k 3,5 mm“. Nýt 10/6 sedí jen na pás 3,5–3,75 mm: když pás přijde jiný, nýt podle změřené tloušťky dokoupíte.`,
         media: [],
       },
       {
         id: 'measure-strap',
         title: 'Po dodání změřte pás a trn',
-        body: 'Posuvkou změřte tloušťku pásu na řezu na několika místech. Zapište průměr zaokrouhlený na 0,25 mm. Pak změřte trn přezky u kořene. Dírky pro trn = trn + 0,5 mm; u přezky 40 mm vychází 4,5 nebo 5 mm.',
+        body: 'Posuvkou změřte tloušťku pásu na řezu na několika místech. Zapište průměr měření tak, jak vyšel (např. 3,6 mm): dřík nýtu se počítá z přesné hodnoty. Pak změřte trn přezky u kořene. Dírky pro trn = trn + 0,5 mm; u přezky 40 mm vychází 4,5 nebo 5 mm.',
         media: [photo('belt-l1-thickness', 'Posuvka měří tloušťku pásu na řezu')],
         records: [
           {
             kind: 'number',
             id: BELT_RECORD_IDS.thickness,
             label: 'Tloušťka pásu',
-            hint: 'Průměr měření, zaokrouhlený na 0,25 mm (3,0 / 3,25 / 3,5 / 3,75 / 4,0).',
+            hint: 'Průměr měření, např. 3,6. Nezaokrouhlujte.',
             unit: 'mm',
             decimals: 2,
             target: { min: 3, max: 4, label: '3,0–4,0 mm' },
@@ -305,7 +305,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'get-scrap',
         title: 'Odřízněte odřezek',
-        body: `Odřezek odřízněte z konce, kde bude špička, a jen když je pás o víc než 20 cm delší než nejkratší délka ${FROM_TABLE} (15 cm odřezek a 5 cm rezerva na zkoušku na těle). Jinak trénujte na jiném odřezku 3–4 mm; nýt pak vyzkoušejte až na pásku.`,
+        body: `Trénujte na odřezku téhož pásu. Odřízněte ho z konce, kde bude špička, jen když pás bude i bez něj aspoň tak dlouhý jako nejkratší délka ${FROM_TABLE}. Kolik rezervy nad nejkratší délku nechat, podklady neuvádějí: ověřte. Když pás na odřezek nestačí, trénujte na samostatném odřezku třísločiněné kůže co nejbližší tloušťky (např. zbytky třísločiněné hlazenice, tloušťku ověřte u prodejce); nýt pak vyzkoušejte až na pásku.`,
         media: [],
         recalls: [recall.waist],
       },
@@ -374,14 +374,14 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'bend',
         title: 'Ohyb kolem příčky',
         body: 'Ohyb je uprostřed oválu, 90 mm od konce. Navlhčete zónu ohybu a ohněte ji kolem příčky přezky, ne přes hranu. Nasucho do malého rádiusu může silná kůže popraskat. Prohlédněte líc v ohybu.',
-        animationLinks: [animationLink('beltBuckleEnd', 'D1')],
+        animationLinks: [animationLink('beltBuckleEnd', 'E1')],
         media: [photo('belt-l2-bend', 'Navlhčený odřezek ohnutý kolem příčky přezky, líc v ohybu')],
         records: [
           {
             kind: 'choice',
             id: 'scrap-bend',
             label: 'Líc v ohybu',
-            hint: 'Popraská-li i navlhčený, nezačínejte pásek: tento případ podklady neřeší.',
+            hint: 'Popraskal-li nasucho, zopakujte ohyb navlhčený. Popraská-li i navlhčený, nezačínejte pásek: tento případ podklady neřeší.',
             options: [
               { value: 'ok', label: 'Bez prasklin' },
               { value: 'cracked', label: 'Popraskal' },
@@ -394,9 +394,9 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Zkouška nýtu',
         body: 'Ohnutý odřezek stáhněte k sobě a otvor druhé vrstvy označte šídlem skrz už vyseknutý otvor. Vysekněte ho Ø 6 mm, prostrčte nýt a utáhněte. Hlavička musí přitlačit kůži a nýt se nesmí viklat.',
         animationLinks: [
-          animationLink('beltBuckleEnd', 'E2'),
           animationLink('beltBuckleEnd', 'E3'),
           animationLink('beltBuckleEnd', 'E4'),
+          animationLink('beltBuckleEnd', 'E5'),
         ],
         media: [],
         records: [
@@ -614,21 +614,12 @@ export const lessons: readonly LessonDefinition[] = [
         media: [],
       },
       {
-        id: 'bend',
-        title: 'Ohněte konec kolem příčky',
-        body: 'Trn přezky prostrčte oválem. Zónu ohybu navlhčete a ohněte ji kolem příčky přezky, ne přes hranu, tak jako na odřezku v lekci 2.',
-        animationLinks: [animationLink('beltBuckleEnd', 'D1')],
-        media: [
-          photo('belt-l4-bend', 'Konec pásu ohnutý kolem příčky přezky, trn prochází oválem'),
-        ],
-      },
-      {
         id: 'keeper',
         title: 'Vyrobte poutko',
-        body: `Papírový proužek obtočte kolem přehnutého konce, označte přeplátování a odečtěte délku na pravítku destičky (nula vlevo) nebo na ocelovém pravítku. Porovnejte s délkou poutka ${IN_TABLE} (např. 109 mm pro 40 × 3,5 mm). Z odřezku vyřízněte proužek 12 mm × změřená délka. Přeplátování 15 mm natřete kontaktním lepidlem na obě strany, nechte zavadnout podle návodu na obalu a slepte. Délka poutka je spočítaná, ne vyzkoušená: ověřte ji proužkem.`,
+        body: `Konec pásu přeložte volně na dvojo, zatím bez ohybu kolem příčky. Papírový proužek obtočte kolem obou vrstev, označte přeplátování a odečtěte délku na pravítku destičky (nula vlevo) nebo na ocelovém pravítku. Porovnejte s délkou poutka ${IN_TABLE} (např. 109 mm pro 40 × 3,5 mm). Z odřezku vyřízněte proužek 12 mm × změřená délka. Přeplátování 15 mm natřete kontaktním lepidlem na obě strany, nechte zavadnout podle návodu na obalu a slepte. Délka poutka je spočítaná, ne vyzkoušená: ověřte ji proužkem.`,
         animationLinks: [
+          animationLink('beltBuckleEnd', 'D1'),
           animationLink('beltBuckleEnd', 'D2'),
-          animationLink('beltBuckleEnd', 'D3'),
         ],
         media: [],
         records: [
@@ -652,12 +643,24 @@ export const lessons: readonly LessonDefinition[] = [
         ],
       },
       {
-        id: 'second-pair',
-        title: 'Navlékněte poutko a označte druhou dvojici',
-        body: 'Poutko navlékněte na přehnutý konec, spojem k pásu. Přehnutý konec zatáhněte a druhou dvojici otvorů označte šídlem skrz už vyseknuté otvory. Tohle je nejdůležitější krok: chyba 1 mm na značce dá po přehnutí 2 mm rozdíl a dřík Ø 6 mm do otvoru Ø 6 mm neprojde. Značení skrz hotový otvor tuhle chybu ruší.',
+        id: 'bend',
+        title: 'Navlékněte poutko a ohněte konec',
+        body: 'Poutko navlékněte na pás od konce u přezky a posuňte ho dál, než po ohnutí dosáhne konec pásu (180 mm od konce). Teď, dokud je konec rovný: po ohnutí by šlo poutko navléknout jen z druhého konce pásu. Trn přezky prostrčte oválem. Zónu ohybu navlhčete a ohněte ji kolem příčky přezky, ne přes hranu, tak jako na odřezku v lekci 2.',
         animationLinks: [
+          animationLink('beltBuckleEnd', 'D3'),
           animationLink('beltBuckleEnd', 'E1'),
+        ],
+        media: [
+          photo('belt-l4-bend', 'Konec pásu ohnutý kolem příčky přezky, trn prochází oválem'),
+        ],
+      },
+      {
+        id: 'second-pair',
+        title: 'Posuňte poutko a označte druhou dvojici',
+        body: 'Poutko posuňte přes přehnutý konec do kapsy mezi vyseknuté otvory, spojem k pásu. Přehnutý konec zatáhněte a druhou dvojici otvorů označte šídlem skrz už vyseknuté otvory. Tohle je nejdůležitější krok: chyba 1 mm na značce dá po přehnutí 2 mm rozdíl a dřík Ø 6 mm do otvoru Ø 6 mm neprojde. Značení skrz hotový otvor tuhle chybu ruší.',
+        animationLinks: [
           animationLink('beltBuckleEnd', 'E2'),
+          animationLink('beltBuckleEnd', 'E3'),
         ],
         media: [
           photo(
@@ -671,9 +674,9 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Vysekněte a sešroubujte',
         body: 'Rozložte konec, vysekněte druhou dvojici Ø 6 mm a sešroubujte oba nýty. Na závit dejte kapku zajišťovače závitů nebo laku: nýty v nejzatíženějším místě se povolují. Poutko zůstane v kapse mezi nýty.',
         animationLinks: [
-          animationLink('beltBuckleEnd', 'E3'),
           animationLink('beltBuckleEnd', 'E4'),
           animationLink('beltBuckleEnd', 'E5'),
+          animationLink('beltBuckleEnd', 'E6'),
         ],
         media: [],
         recalls: [recall.thickness],
@@ -704,7 +707,7 @@ export const lessons: readonly LessonDefinition[] = [
     commonMistakes: [
       'Proseknutá značka ohybu: otvor Ø 6 mm uprostřed pásu nejde opravit.',
       'Všechny čtyři otvory vyseknuté najednou: druhá dvojice nesedí.',
-      'Poutko navlečené až po sešroubování.',
+      'Poutko nenavlečené před ohnutím.',
       'Destička přiložená na šikmo uříznutý konec pásu.',
     ],
     safety: [
@@ -821,7 +824,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'row',
         title: 'Řada 1 nebo 2, nebo list 2',
         printLink: 'pattern-sheets',
-        body: `Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když ${TABLE} ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo jste zvolili jen listy, vytiskněte list 2 pro váš pásek na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm.`,
+        body: `Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když ${TABLE} ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo jste zvolili jen listy, vytiskněte list 2 pro váš pásek na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm. Když ${TABLE} píše, že se list 2 na A4 nevejde, značte dírky a konec podle čísel v ní.`,
         animationLinks: [animationLink('beltHolesTip', 'B1'), animationLink('beltHolesTip', 'D1')],
         media: [],
         recalls: [recall.tip, recall.marking],

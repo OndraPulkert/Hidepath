@@ -172,9 +172,13 @@ otvor uprostřed pásu je zkažený pásek bez nápravy.
 6. **Ovál:** oba konce vysekni průbojníkem Ø 6 mm zarovnaným **na obtažené oblouky**, ne
    doprostřed rýhy. Boky pak veď nožem **tečně k oběma vyseknutým dírám** — obtažený ovál je
    o 0,3 mm z každé strany menší (24,4 × 5,4 místo 25 × 6) a trn by se dřel.
-7. **Zónu ohybu navlhči** a ohni ji **kolem příčky přezky**, ne přes hranu — 3,5 mm
-   třísločiněné kůže nasucho do malého rádiusu popraská. **Navlékni poutko.**
-8. **Zatáhni přehnutý konec a označ druhou dvojici otvorů skrz ty už vyseknuté.** Tohle je
+7. **Navlékni poutko** (oddíl 8) na pás od konce u přezky a posuň ho dál, než po ohnutí dosáhne
+   konec pásu (180 mm od konce). Musí to být **před ohnutím**: poutko je smyčka kolem obou vrstev
+   a po ohnutí by šlo navléknout jen z druhého konce pásu. Pak **zónu ohybu navlhči** a ohni ji
+   **kolem příčky přezky**, ne přes hranu — 3,5 mm třísločiněné kůže nasucho do malého rádiusu
+   popraská.
+8. **Posuň poutko přes přehnutý konec do kapsy mezi otvory, zatáhni přehnutý konec a označ druhou
+   dvojici otvorů skrz ty už vyseknuté.** Tohle je
    nejdůležitější krok celého projektu: registrace levé hrany má chybu, a chyba 1 mm dá po
    přehnutí **2 mm rozdíl** mezi párem otvorů. Do otvoru Ø 6 mm jde dřík Ø 6 mm, tedy nulová
    vůle — 2 mm mimo a nýt neprojde. Značení skrz hotový otvor tuhle chybu ruší.
@@ -201,9 +205,11 @@ otvor uprostřed pásu je zkažený pásek bez nápravy.
 ## 8. Poutko
 
 Poutko **nepotřebuje vlastní otvory**. Je to smyčka navlečená na zdvojenou část konce
-a uvězněná v kapse mezi dvěma nýty — právě k tomu ten druhý nýt je.
+a uvězněná v kapse mezi dvěma nýty — právě k tomu ten druhý nýt je. Vyrob ho **před krokem 7**:
+navléká se na pás před ohnutím (viz `sablony-zdroje.md`, „Navléknout před ohnutím konce“).
 
-- **Délku** neodhaduj, změř: obtoč papírový pásek okolo složeného konce, označ přeplátování
+- **Délku** neodhaduj, změř: konec pásu přelož volně na dvojo (ještě bez ohybu kolem příčky),
+  obtoč papírový pásek okolo obou vrstev, označ přeplátování
   a odečti na **pravítku u horní hrany destičky** (nula je levá hrana). Pro 40 × 3,5 mm to
   vychází **109 mm** (pro 4 mm 111 mm, pro 3 mm 107 mm).
 - **Šířka** 12 mm (rozhodnutí 2026-10-08), **přeplátování** 15 mm, slepit a spoj schovat pod pás. Poutko se dělá
