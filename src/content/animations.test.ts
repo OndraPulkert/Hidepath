@@ -114,6 +114,14 @@ describe('animace postupu – schéma odkazu', () => {
     expect(animationStepTitle('threadLength', 'A1')).toBeUndefined();
   });
 
+  it('animationLink s vlastním popiskem ověří kotvu a popisek nahradí', () => {
+    expect(animationLink('drillForm', 'C1', 'Do vrtačky')).toEqual({
+      href: '/animace/vrtani-formy.html#C1',
+      label: 'Do vrtačky',
+    });
+    expect(() => animationLink('drillForm', 'C3', 'Do vrtačky')).toThrow(/nemá kotvu #C3/);
+  });
+
   it('animationLink skládá href s kotvou a popisek části', () => {
     expect(animationLink('kapsa', 'C')).toEqual({
       href: '/animace/kapsa-postup.html#C',
@@ -165,6 +173,7 @@ describe('animace postupu – stránky v public/animace', () => {
     ['hrany', 'edges', ['A', 'B', 'C', 'D', 'E', 'F', 'G'], 'H'],
     ['pasek-prezka', 'beltBuckleEnd', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['pasek-spicka', 'beltHolesTip', ['A', 'B', 'C', 'D', 'E', 'F'], 'G'],
+    ['vrtani-formy', 'drillForm', ['A', 'B', 'C', 'D', 'E'], 'F'],
   ] as const)(
     '%s: samostatná stránka s favicon, návratem do lekce a kotvami svých částí',
     (name, key, anchors, missing) => {
@@ -186,7 +195,7 @@ describe('animace postupu – stránky v public/animace', () => {
     'steps' in page ? [{ key, path: page.path, sections: page.sections, steps: page.steps }] : [],
   );
 
-  it('kroky mají čtyři stránky kapsy, dvě stránky pásu, sedlářský steh, hrany, šest stránek Víčka a dvě stránky pásku', () => {
+  it('kroky mají čtyři stránky kapsy, dvě stránky pásu, sedlářský steh, hrany, šest stránek Víčka, dvě stránky pásku a vrtání formy', () => {
     expect(steppedPages.map((p) => p.key)).toEqual([
       'kapsa',
       'pocketAttach',
@@ -204,6 +213,7 @@ describe('animace postupu – stránky v public/animace', () => {
       'lidBodySides',
       'beltBuckleEnd',
       'beltHolesTip',
+      'drillForm',
     ]);
   });
 
@@ -269,7 +279,13 @@ describe('animace postupu – odkazy z lekcí', () => {
     const lessonOf = (n: number) =>
       projects.find((p) => p.slug === 'coin-card-holder')!.lessons.find((l) => l.order === n)!.slug;
     expect(hrefs).toMatchObject({
-      [`${lessonOf(2)}/drill-form`]: kapsa('A1'),
+      [`${lessonOf(2)}/drill-form`]: [
+        ...kapsa('A1'),
+        '/animace/vrtani-formy.html#B1',
+        '/animace/vrtani-formy.html#C1',
+        '/animace/vrtani-formy.html#D1',
+        '/animace/vrtani-formy.html#E1',
+      ],
       [`${lessonOf(2)}/mark-outline`]: kapsa('B1'),
       [`${lessonOf(2)}/wet`]: kapsa('D1'),
       [`${lessonOf(2)}/press-and-clamp`]: kapsa('D2'),

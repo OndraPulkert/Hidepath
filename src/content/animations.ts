@@ -18,7 +18,9 @@ import { type AnimationLink } from '@/content/schema';
  * - vicko-p1-rez (`#A`–`#E`), vicko-okenka (`#A`–`#D`), vicko-d2-zada (`#A`–`#D`)
  *   a vicko-telo-s4s5 (`#A`–`#E`): stejně jako kapsa-prisiti,
  * - pasek-prezka (`#A`–`#E`) a pasek-spicka (`#A`–`#F`): stejně jako kapsa-prisiti; kresba je
- *   příklad 40 × 3,5 mm, čísla pro vlastní pásek jsou v tabulce „Váš pásek“.
+ *   příklad 40 × 3,5 mm, čísla pro vlastní pásek jsou v tabulce „Váš pásek“,
+ * - vrtani-formy (`#A`–`#E`): stejně jako kapsa-prisiti; korunka Ø 32 na unášeči, vrtačka,
+ *   upnutí desky a vrtání formy z lekce 2 pouzdra s mincí.
  *
  * `steps` = názvy kroků každé části ve stejném pořadí jako na stránce (`add('B', 'název', …)`).
  * Stránky kapsy umí otevřít i jednotlivý krok: `#B3` = třetí krok části B, stejně jako ho
@@ -586,6 +588,42 @@ export const animationPages = {
       F: ['Dokončete hrany', 'Natřete balzámem', 'Vyzkoušejte všechny dírky'],
     },
   },
+  drillForm: {
+    path: '/animace/vrtani-formy.html',
+    title: 'Vykružovací korunka na vrtačku',
+    sections: {
+      A: 'Část A – díly sady',
+      B: 'Část B – korunka na unášeč',
+      C: 'Část C – do vrtačky',
+      D: 'Část D – upnutí desky',
+      E: 'Část E – vrtání',
+    },
+    steps: {
+      A: ['Poznejte díly unášeče', 'Korunka Ø 32 a červený kroužek', 'Než začnete: bezpečnost'],
+      B: [
+        'Nastavte středicí vrták',
+        'Sundejte matici',
+        'Nasuňte korunku ze strany stopky',
+        'Našroubujte a dotáhněte matici',
+        'Zkontrolujte upnutí',
+      ],
+      C: ['Upněte stopku do sklíčidla', 'Nastavte vrtačku'],
+      D: [
+        'Připravte stůl, odpadní prkno a 2 svěrky',
+        'Položte odpadní prkno a na něj desku',
+        'Upněte desku dvěma svěrkami',
+        'Zkontrolujte upnutí',
+        'Druhá strana: otočte a znovu upněte',
+      ],
+      E: [
+        'Nasaďte středicí vrták do křížku',
+        'Vrtejte do půlky tloušťky desky',
+        'Otočte desku a dokončete z druhé strany',
+        'Vypáčte špunt z korunky',
+        'Zaoblete hranu otvoru',
+      ],
+    },
+  },
 } as const satisfies Record<
   string,
   {
@@ -630,8 +668,19 @@ export function animationButtonText(href: string): string {
 /**
  * Odkaz z kroku lekce na animaci; bez `section` se stránka otevře od začátku. `section` je
  * buď část (`B`, `anim-dno`), nebo krok (`B3`) – popisek pak nese číslo a název kroku.
+ * `label` popisek nahradí (kotvu stránka dál ověří), např. když krok lekce otevírá několik
+ * částí jedné stránky a každé tlačítko má říct, co ukazuje.
  */
 export function animationLink<P extends AnimationPageKey>(
+  page: P,
+  section?: AnimationAnchor<P>,
+  label?: string,
+): AnimationLink {
+  const link = defaultAnimationLink(page, section);
+  return label === undefined ? link : { ...link, label };
+}
+
+function defaultAnimationLink<P extends AnimationPageKey>(
   page: P,
   section?: AnimationAnchor<P>,
 ): AnimationLink {

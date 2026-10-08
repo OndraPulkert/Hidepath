@@ -282,7 +282,13 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Vyvrtejte formu',
         body: 'Vytiskněte list KAPSA (odkaz pod krokem) 3× na 100 % a zkontrolujte úsečku 50 mm: výtisk na formu, výtisk na značky a výtisk na šablonu. Z výtisku na formu: výkres „OTVOR FORMY PRO DŮLEK“ (kružnice Ø 31,5 mm s osami) vystřihněte jako čtverec asi 7 × 7 cm, kružnici nevystřihujte. Čtverec přilepte na desku doprostřed šířky, střed asi 4–5 cm od konce (naproti rukojeti, má-li ji), osy rovnoběžně s okraji. Osy protáhněte tužkou podle pravítka až k okrajům desky – podle nich budete zarovnávat kůži. Desku upněte svěrkou ke stolu přes odpadní prkno a středicí vrták nasaďte do křížku os. Vrtejte vykružovací pilou Ø 32 mm (u mince 40 mm Ø 44 mm) na 1. rychlost, bez příklepu a bez tlaku: do půlky, pak desku otočte, znovu upněte a dokončete z druhé strany podle dírky středicího vrtáku. Forstnerův vrták průběžně vytahujte kvůli pilinám. Papír sundejte. Horní hranu otvoru (stranu pro kůži, označte si ji tužkou) srazte smirkem 180 namotaným na prstu do oblouku asi 1 mm; průměr nezvětšujte. Stěnu otvoru jen lehce začistěte a plochu kolem přebruste naplocho. Hrana nesmí řezat ani drhnout a mince zabalená s odřezkem kůže musí jít do otvoru volně. Setřené osy obtáhněte znovu.',
         printLink: 'pattern-sheets',
-        animationLinks: [animationLink('kapsa', 'A1')],
+        animationLinks: [
+          animationLink('kapsa', 'A1'),
+          animationLink('drillForm', 'B1', 'Korunka na unášeč'),
+          animationLink('drillForm', 'C1', 'Do vrtačky'),
+          animationLink('drillForm', 'D1', 'Upnutí desky'),
+          animationLink('drillForm', 'E1', 'Vrtání'),
+        ],
         media: [],
       },
       {
