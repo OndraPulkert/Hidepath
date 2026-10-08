@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import { equipmentCatalog } from '@/content/equipment';
 import { type ProjectDefinition } from '@/content/schema';
+import { isBeltConfigProject as hasBeltConfig } from '@/features/belt/active-belt';
 import { type BeltPlanView, beltPlanView } from '@/features/belt/belt-shopping';
 import { useDataContext } from '@/features/data/data-provider';
 import { computeEquipmentReadiness, type EquipmentReadiness } from '@/features/inventory/readiness';
@@ -44,7 +45,7 @@ export interface ProjectState {
 
 /** Projekt, jehož nákup se řídí sestavou pásku z „Váš pásek“. */
 const isBeltConfigProject = (project: ProjectDefinition): boolean =>
-  project.patternSheets?.browserGenerator === 'belt-config' && project.shoppingPlan !== undefined;
+  hasBeltConfig(project) && project.shoppingPlan !== undefined;
 
 /**
  * Jediný view model projektu: načte data a spočítá vše přes sdílené doménové funkce.

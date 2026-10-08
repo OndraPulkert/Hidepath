@@ -4,16 +4,15 @@ import {
   type ShoppingPlan,
   type ShoppingPlanLine,
 } from '@/content/schema';
-import { beltConfigPrefill } from '@/features/belt/belt-prefill';
+import { resolveActiveBelt } from '@/features/belt/active-belt';
+import { beltPurchase } from '@/features/belt/belt-purchase';
 import { type BudgetPriceOverride } from '@/features/shopping/budget';
 import { findPlanExample } from '@/features/shopping/plan';
-import { savedBeltsFromRecords } from '@/features/belt/saved-belts';
 import { type LessonRecordEntry } from '@/features/notebook/types';
 import {
   type BeltConfigInput,
   type BeltConfigResult,
   deriveBeltConfig,
-  parseBeltConfigForm,
 } from '@/lib/patterns/belt-config';
 import { cz } from '@/lib/patterns/belt-sheets';
 import {
@@ -24,7 +23,7 @@ import {
 } from '@/lib/patterns/belt-strap-offers';
 
 /**
- * Nákupní plán pásku podle sestavy uživatele: pás ve variantě jeho šířky a barvy, přezka jeho
+ * Nákupní plán pásku podle aktivního pásku (`resolveActiveBelt`): pás ve variantě jeho šířky a barvy, přezka jeho
  * šířky, nýt s dříkem pro jeho změřenou tloušťku a u barevného pásu barva na hrany. Bere jen ověřené příklady z katalogu
  * (`src/content/equipment/belt.ts`); co katalog nemá, jde do `skipped` s „ověřte u prodejce“.
  * Bez sestavy platí plán projektu (pásek 40 mm). Čisté funkce bez Reactu.
@@ -40,28 +39,27 @@ export const BELT_CONFIG_PLAN_SLUGS = [
 ] as const;
 type ConfigSlug = (typeof BELT_CONFIG_PLAN_SLUGS)[number];
 
-/** Z jaké sestavy plán je: nejnovější z „Mých pásků“, jinak čísla ze zápisníku. */
+/** Z jaké sestavy plán je: aktivní pásek, nebo staré zápisy lekce 1, dokud nejsou uložené. */
 export interface BeltPlanBasis {
   name: string;
   input: BeltConfigInput;
   source: 'saved' | 'notebook';
+  /** Pás o 15 cm delší na odřezek k tréninku (lekce 2). */
+  scrapFromStrap: boolean;
 }
-
-/** Název sestavy, když pochází jen ze zápisů v lekcích (šířka, tloušťka, obvod…). */
-export const NOTEBOOK_BASIS_NAME = 'čísla ze zápisníku';
 
 export function beltPlanBasis(
   entries: readonly LessonRecordEntry[],
   projectSlug: string,
 ): BeltPlanBasis | null {
-  const saved = savedBeltsFromRecords(entries, projectSlug);
-  const newest = [...saved].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0];
-  if (newest) return { name: newest.name, input: newest.input, source: 'saved' };
-  const prefill = beltConfigPrefill(entries, projectSlug);
-  if (!prefill) return null;
-  const parsed = parseBeltConfigForm(prefill.form);
-  if ('problems' in parsed) return null;
-  return { name: NOTEBOOK_BASIS_NAME, input: parsed.input, source: 'notebook' };
+  const { active } = resolveActiveBelt(entries, projectSlug);
+  if (!active) return null;
+  return {
+    name: active.name,
+    input: active.input,
+    source: active.source,
+    scrapFromStrap: active.scrapFromStrap === true,
+  };
 }
 
 const examplesOf = (catalog: EquipmentCatalog, slug: string): readonly ProductExample[] =>
@@ -91,18 +89,25 @@ const strapName = (r: BeltConfigResult): string =>
     ? `Barevný pás (${STRAP_COLOR_LABELS[colorOf(r)]}) ${r.input.widthMm} mm`
     : `Pás ${r.input.widthMm} mm`;
 
-function strapPick(r: BeltConfigResult, catalog: EquipmentCatalog): PlanPick {
+function strapPick(
+  r: BeltConfigResult,
+  catalog: EquipmentCatalog,
+  scrapFromStrap: boolean,
+): PlanPick {
   const w = r.input.widthMm;
   const t = r.input.thicknessMm;
   const dyed = isDyedStrap(colorOf(r));
+  // Stejná nabídka a délka jako souhrn „Koupit“ na stránce Váš pásek (i s odřezkem + 15 cm).
+  const purchase = beltPurchase(r, { scrapFromStrap });
   const length =
-    r.strap.minLengthCm === null
+    purchase.neededCm === null
       ? `délka = obvod + ${cz(r.strap.allowanceMm)} mm`
-      : `aspoň ${r.strap.minLengthCm} cm`;
-  const strapLine = r.shopping.find((l) => l.offers !== undefined);
+      : scrapFromStrap
+        ? `aspoň ${purchase.neededCm} cm (s odřezkem na trénink)`
+        : `aspoň ${purchase.neededCm} cm`;
   // Výchozí nabídku vybírá výpočet (CraftPoint, jinak nejlevnější skladem s ověřeným činěním);
   // na objednávku, vyprodané a bez uvedeného činění se nikdy nevybere samo.
-  const pick = strapLine?.defaultOffer;
+  const pick = purchase.offer;
   const example = pick
     ? examplesOf(catalog, 'belt-strap').find(
         (e) => e.url === pick.url && e.variant === pick.variant,
@@ -119,8 +124,7 @@ function strapPick(r: BeltConfigResult, catalog: EquipmentCatalog): PlanPick {
       ),
     };
   }
-  const others = strapLine?.offers?.length ?? 0;
-  if (others > 0) {
+  if (purchase.offers.length > 0) {
     return {
       skipped: `${strapName(r)}, ${cz(t)} mm (${length}): skladem s ověřeným činěním žádný. Nabídky k ověření jsou ve „Váš pásek“ pod „Kde jinde koupit“.`,
     };
@@ -252,9 +256,10 @@ export function beltShoppingPlan(
   result: BeltConfigResult,
   name: string,
   catalog: EquipmentCatalog,
+  { scrapFromStrap = false }: { scrapFromStrap?: boolean } = {},
 ): ShoppingPlan {
   const picks: Record<ConfigSlug, PlanPick> = {
-    'belt-strap': strapPick(result, catalog),
+    'belt-strap': strapPick(result, catalog, scrapFromStrap),
     'belt-buckle': bucklePick(result, catalog),
     'chicago-screws': screwPick(result, catalog),
     'hole-punch-5mm': punchPick(result, catalog),
@@ -316,9 +321,9 @@ export function beltShoppingPlan(
 }
 
 /**
- * Plán pro „Připravte si“: podle nejnovějšího uloženého pásku (nebo zápisníku). `null` = sestava
- * není, platí plán projektu (40 mm). Když sestava je, ale nejde spočítat, platí plán projektu
- * a `basis` řekne proč – ne potichu 40 mm.
+ * Plán pro „Připravte si“: podle aktivního pásku. `null` = pásek není, platí plán projektu
+ * (40 mm). Když pásek je, ale nejde spočítat, platí plán projektu a `basis` řekne proč – ne
+ * potichu 40 mm.
  */
 export function beltPrepPlan(
   plan: ShoppingPlan,
@@ -326,22 +331,29 @@ export function beltPrepPlan(
   projectSlug: string,
   catalog: EquipmentCatalog,
 ): { plan: ShoppingPlan; basis: string; equipmentNames?: Record<string, string> } | null {
-  const basis = beltPlanBasis(entries, projectSlug);
-  if (!basis) return null;
-  const outcome = deriveBeltConfig(basis.input);
+  const { active, legacy } = resolveActiveBelt(entries, projectSlug);
+  if (!active) {
+    // Staré zápisy, které nejdou spočítat (např. trn moc silný): říct proč.
+    if (legacy && legacy.problems.length > 0) {
+      return {
+        plan,
+        basis: `podle plánu projektu (pásek 40 mm): zápisy z lekce 1 nejdou spočítat. ${legacy.problems.join(' ')}`,
+      };
+    }
+    return null;
+  }
+  const outcome = deriveBeltConfig(active.input);
   if (!outcome.ok) {
-    const prefillProblems =
-      basis.source === 'notebook' ? (beltConfigPrefill(entries, projectSlug)?.problems ?? []) : [];
-    const problems = prefillProblems.length > 0 ? prefillProblems : outcome.problems;
-    const what =
-      basis.source === 'notebook'
-        ? `${basis.name} nejdou spočítat`
-        : `pásek „${basis.name}“ nejde spočítat`;
-    return { plan, basis: `podle plánu projektu (pásek 40 mm): ${what}. ${problems.join(' ')}` };
+    return {
+      plan,
+      basis: `podle plánu projektu (pásek 40 mm): pásek „${active.name}“ nejde spočítat. ${outcome.problems.join(' ')}`,
+    };
   }
   return {
-    plan: beltShoppingPlan(plan, outcome.result, basis.name, catalog),
-    basis: `podle pásku: ${basis.name} (${outcome.result.label})`,
+    plan: beltShoppingPlan(plan, outcome.result, active.name, catalog, {
+      scrapFromStrap: active.scrapFromStrap === true,
+    }),
+    basis: `podle pásku: ${active.name} (${outcome.result.label})`,
     equipmentNames: beltEquipmentNames(outcome.result),
   };
 }
@@ -392,8 +404,8 @@ export function beltBudgetPrices(
 }
 
 /**
- * „Co koupit“ a rozpočet pásku: jako „Připravte si“ (`beltPrepPlan`) podle nejnovějšího
- * uloženého pásku, jinak plán projektu (40 mm) s poznámkou, proč.
+ * „Co koupit“ a rozpočet pásku: jako „Připravte si“ (`beltPrepPlan`) podle aktivního pásku,
+ * jinak plán projektu (40 mm) s poznámkou, proč.
  */
 export function beltPlanView(
   plan: ShoppingPlan,

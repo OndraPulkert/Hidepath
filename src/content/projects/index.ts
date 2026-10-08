@@ -11,14 +11,15 @@ import { type ProjectDefinition } from '@/content/schema';
 export { LID_RECORD_IDS, LID_V12_VARIANTS } from '@/content/projects/lid-wallet/record-ids';
 
 /**
- * Id polí zápisníku pásku pro formulář „Váš pásek“ (`browserGenerator` `belt-config`)
- * a pro „Moje pásky“.
+ * Zápisy pásku: „Moje pásky“, aktivní pásek a starší pole lekce 1 (jen pro převod na uložený
+ * pásek).
  */
 export {
+  BELT_ACTIVE_FIELD_ID,
   BELT_CONFIG_FIELD_PREFIX,
   BELT_CONFIG_LESSON_SLUG,
-  BELT_RECORD_IDS,
   BELT_TIP_CHOICES,
+  LEGACY_BELT_RECORD_IDS,
 } from '@/content/projects/belt/record-ids';
 
 /** Ilustrace měření obvodu pro formulář „Váš pásek“ (tytéž jako v lekci 1 pásku). */

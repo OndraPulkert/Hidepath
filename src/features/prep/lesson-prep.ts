@@ -168,11 +168,20 @@ export function materialItemKeys(materials: readonly string[]): string[] {
   });
 }
 
-/** Tisková stránka zdroje, s předvýběrem listu (`?list=<sheetId>`), je-li znám. */
-export function printHref(projectSlug: string, source: PrintSource, sheetId?: string): string {
-  return source === 'practice-sheets'
-    ? routes.practiceSheets(projectSlug, sheetId)
-    : routes.template(projectSlug, sheetId);
+/**
+ * Tisková stránka zdroje, s předvýběrem listu (`?list=<sheetId>`), je-li znám. Listy střihu
+ * pásku se tisknou ze stránky „Váš pásek“ (listy pro uložený pásek).
+ */
+export function printHref(
+  project: Pick<ProjectDefinition, 'slug' | 'patternSheets'>,
+  source: PrintSource,
+  sheetId?: string,
+): string {
+  if (source === 'practice-sheets') return routes.practiceSheets(project.slug, sheetId);
+  if (source === 'pattern-sheets' && project.patternSheets?.browserGenerator === 'belt-config') {
+    return routes.beltConfig(project.slug, sheetId);
+  }
+  return routes.template(project.slug, sheetId);
 }
 
 function sheetTitle(project: ProjectDefinition, source: PrintSource, sheetId?: string) {
@@ -206,7 +215,7 @@ function buildPrints(
         purpose: p.purpose,
         ...(p.paper ? { paper: p.paper } : {}),
         ...(p.condition ? { condition: p.condition } : {}),
-        href: printHref(project.slug, p.source, sheetId),
+        href: printHref(project, p.source, sheetId),
         checked: isChecked(key),
         optional: p.condition !== undefined,
       };
@@ -226,7 +235,7 @@ function buildPrints(
       source,
       title: fallbackPrintTitles[source],
       fromSteps: steps,
-      href: printHref(project.slug, source),
+      href: printHref(project, source),
       checked: isChecked(key),
       optional: false,
     };

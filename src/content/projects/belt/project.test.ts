@@ -1,9 +1,9 @@
 import { equipmentCatalog, equipmentList } from '@/content/equipment';
 import { beltProject } from '@/content/projects/belt/project';
-import { BELT_RECORD_IDS, BELT_TIP_CHOICES } from '@/content/projects/belt/record-ids';
+import { BELT_TIP_CHOICES, LEGACY_BELT_RECORD_IDS } from '@/content/projects/belt/record-ids';
 import { patternSheetUrlsFor } from '@/content/projects/pattern-sheets';
-import { type LessonDefinition, projectDefinitionSchema, type RecordField } from '@/content/schema';
-import { beltNumbersFromNotebook } from '@/features/belt/belt-prefill';
+import { type LessonDefinition, projectDefinitionSchema } from '@/content/schema';
+import { activeBeltOutcome, resolveActiveBelt } from '@/features/belt/active-belt';
 import { type LessonRecordEntry } from '@/features/notebook/types';
 import { findPlanExample } from '@/features/shopping/plan';
 import { deriveBeltConfig } from '@/lib/patterns/belt-config';
@@ -116,23 +116,58 @@ describe('obsah – pásek: zápisník, „Připravte si“ a destička', () => 
   const fields = beltProject.lessons.flatMap((l) =>
     l.steps.flatMap((s) => (s.records ?? []).map((f) => ({ lesson: l, field: f }))),
   );
-  const field = (id: string): RecordField => fields.find((f) => f.field.id === id)!.field;
 
-  it('lekce 1 zapisuje všechna pole formuláře „Váš pásek“', () => {
-    for (const id of Object.values(BELT_RECORD_IDS)) {
-      const found = fields.find((f) => f.field.id === id);
-      expect(found, id).toBeDefined();
-      expect(found!.lesson.order, id).toBe(1);
-    }
-    const tip = field(BELT_RECORD_IDS.tip);
-    expect(tip.kind === 'choice' && tip.options.map((o) => o.value)).toEqual(
-      Object.values(BELT_TIP_CHOICES),
+  it('jediný zdroj: lekce parametry pásku nezapisují, zápisník má jen výsledky zkoušek', () => {
+    const ids = fields.map((f) => f.field.id);
+    for (const id of Object.values(LEGACY_BELT_RECORD_IDS)) expect(ids, id).not.toContain(id);
+    expect(ids).toEqual([
+      'plate-check',
+      'belt-marking',
+      'scrap-punch',
+      'scrap-balm',
+      'edge-paint-coats',
+      'edge-paint-dry-minutes',
+      'scrap-bend',
+      'scrap-screw',
+      'belt-keeper-length',
+      'belt-fit-waist',
+      'belt-fit-result',
+    ]);
+    // Připomínky parametrů jsou z aktivního pásku, ne ze zápisníku.
+    const recalled = beltProject.lessons.flatMap((l) =>
+      l.steps.flatMap((s) => (s.recalls ?? []).map((r) => r.fieldId)),
     );
-    const waist = field(BELT_RECORD_IDS.waist);
-    expect(waist.kind === 'number' && waist.unit).toBe('cm');
+    for (const id of Object.values(LEGACY_BELT_RECORD_IDS)) expect(recalled, id).not.toContain(id);
   });
 
-  it('zápisy z lekce 1 předvyplní formulář a dají čísla pásku', () => {
+  it('kroky, které potřebují čísla pásku, je berou z aktivního pásku', () => {
+    expect(step(1, 'your-belt').beltRecalls).toEqual(['waist', 'width', 'tip', 'color']);
+    expect(step(1, 'check-numbers').beltRecalls).toEqual(['thickness', 'holeDiameter', 'rivet']);
+    expect(step(2, 'get-scrap').beltRecalls).toEqual(['strapLength']);
+    expect(step(2, 'try-edge-paint').beltRecalls).toEqual(['color']);
+    expect(step(4, 'keeper').beltRecalls).toEqual(['keeper']);
+    expect(step(4, 'screws').beltRecalls).toEqual(['thickness', 'rivet']);
+    expect(step(5, 'measure').beltRecalls).toEqual(['waist']);
+    expect(step(5, 'length-check').beltRecalls).toEqual(['middleHole']);
+    expect(step(6, 'row').beltRecalls).toEqual(['tip']);
+    expect(step(6, 'punch-holes').beltRecalls).toEqual(['holeDiameter']);
+  });
+
+  it('lekce 1 začíná odkazem na „Váš pásek“ a kroky se zadáním na něj odkazují', () => {
+    const first = lesson(1).steps[0]!;
+    expect(first.appLinks?.[0]).toEqual({ to: 'belt-config', label: 'Začněte tady: Váš pásek' });
+    for (const id of ['width-and-tip', 'your-belt', 'order', 'measure-strap', 'check-numbers']) {
+      const s = step(1, id);
+      expect(
+        s.appLinks?.map((l) => l.to),
+        id,
+      ).toContain('belt-config');
+      expect(s.body, id).toContain('(odkaz pod krokem)');
+    }
+    expect(step(1, 'order').appLinks?.map((l) => l.to)).toEqual(['belt-config', 'shopping']);
+  });
+
+  it('staré zápisy lekce 1 se převedou na pásek a dají čísla', () => {
     const entry = (fieldId: string, value: number | string): LessonRecordEntry => ({
       id: crypto.randomUUID(),
       userId: null,
@@ -144,16 +179,20 @@ describe('obsah – pásek: zápisník, „Připravte si“ a destička', () => 
       createdAt: '2026-10-08T10:00:00.000Z',
       updatedAt: '2026-10-08T10:00:00.000Z',
     });
-    const outcome = beltNumbersFromNotebook(
+    const ids = LEGACY_BELT_RECORD_IDS;
+    const { active, legacy } = resolveActiveBelt(
       [
-        entry(BELT_RECORD_IDS.waist, 95),
-        entry(BELT_RECORD_IDS.width, 35),
-        entry(BELT_RECORD_IDS.tip, BELT_TIP_CHOICES.zaobleny),
-        entry(BELT_RECORD_IDS.thickness, 3.75),
-        entry(BELT_RECORD_IDS.prong, 4.5),
+        entry(ids.waist, 95),
+        entry(ids.width, 35),
+        entry(ids.tip, BELT_TIP_CHOICES.zaobleny),
+        entry(ids.thickness, 3.75),
+        entry(ids.prong, 4.5),
       ],
       beltProject.slug,
     );
+    expect(legacy).not.toBeNull();
+    expect(active?.source).toBe('notebook');
+    const outcome = activeBeltOutcome(active);
     expect(outcome?.ok).toBe(true);
     if (!outcome?.ok) return;
     expect(outcome.result.input).toMatchObject({ widthMm: 35, tip: 'zaobleny', waistMm: 950 });
@@ -390,15 +429,10 @@ describe('pásek – nálezy kontroly lekcí (2026-10-08, kolo 2)', () => {
 });
 
 describe('pásek – barevný pásek (hrany a balzám)', () => {
-  it('lekce 1: barva je v zápisníku se stejnými hodnotami jako výpočet', () => {
-    const field = step(1, 'width-and-tip').records!.find((r) => r.id === BELT_RECORD_IDS.color)!;
-    expect(field.kind).toBe('choice');
-    if (field.kind !== 'choice') return;
-    expect(field.options.map((o) => o.value)).toEqual([...STRAP_COLORS]);
-    expect(field.options.map((o) => o.label.toLocaleLowerCase('cs'))).toEqual(
-      STRAP_COLORS.map((c) => STRAP_COLOR_LABELS[c]),
-    );
-    expect(step(1, 'your-belt').recalls!.map((r) => r.fieldId)).toContain(BELT_RECORD_IDS.color);
+  it('lekce 1: barva se volí ve „Váš pásek“ a krok ji připomíná z aktivního pásku', () => {
+    expect(step(1, 'width-and-tip').records).toBeUndefined();
+    expect(step(1, 'width-and-tip').body).toContain('Šířku, konec a barvu zvolte ve „Váš pásek“');
+    expect(step(1, 'your-belt').beltRecalls).toContain('color');
   });
 
   it('barva na hrany: zkouška v lekci 2, v lekcích 3 a 6 podmíněně „u barevného pásku“ před leštěním', () => {

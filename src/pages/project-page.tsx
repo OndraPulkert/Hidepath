@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router';
 
 import { routes } from '@/app/routes';
+import { BeltStartCard } from '@/components/belt/belt-start-card';
 import { MediaSlot } from '@/components/lessons/media-slot';
 import { ProjectFindings } from '@/components/notebook/project-findings';
 import { AssembledIllustration } from '@/components/illustrations/assembled';
@@ -15,6 +16,7 @@ import { equipmentCatalog } from '@/content/equipment';
 import { difficultyLabels, findProject } from '@/content/projects';
 import { patternSheetUrlsFor } from '@/content/projects/pattern-sheets';
 import { type ProjectDefinition } from '@/content/schema';
+import { isBeltConfigProject } from '@/features/belt/active-belt';
 import { getEquipmentStatus } from '@/features/inventory/types';
 import { findCurrentLesson } from '@/features/progress/lesson-availability';
 import { useActiveProject } from '@/features/projects/use-active-project';
@@ -42,6 +44,7 @@ function ProjectView({ project }: { project: ProjectDefinition }) {
 
   return (
     <>
+      {isBeltConfigProject(project) ? <BeltStartCard project={project} className="mb-8" /> : null}
       <div className="grid [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] gap-8">
         {project.media[0] ? (
           <MediaSlot media={project.media[0]} template={project.template} aspect="auto" />
@@ -136,8 +139,19 @@ function ProjectView({ project }: { project: ProjectDefinition }) {
               </Button>
             )}
             <Button variant="secondary" asChild>
-              <Link to={routes.template(project.slug)} className="no-underline">
-                {project.template ? 'Vytisknout šablonu 1:1' : 'Vytisknout listy střihu 1:1'}
+              <Link
+                to={
+                  isBeltConfigProject(project)
+                    ? routes.beltConfig(project.slug)
+                    : routes.template(project.slug)
+                }
+                className="no-underline"
+              >
+                {project.template
+                  ? 'Vytisknout šablonu 1:1'
+                  : isBeltConfigProject(project)
+                    ? 'Váš pásek a listy A4'
+                    : 'Vytisknout listy střihu 1:1'}
               </Link>
             </Button>
             <Button variant="secondary" asChild>

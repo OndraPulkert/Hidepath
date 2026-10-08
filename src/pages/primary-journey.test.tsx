@@ -12,6 +12,7 @@ import {
   type StorageLike,
 } from '@/features/data/local-collection';
 import { createLocalRepositories, type Repositories } from '@/features/data/repositories';
+import { setActiveProjectPreference } from '@/features/projects/active-project-preference';
 import { createUserSync, userSyncKeys } from '@/features/sync/synced-collection';
 import { createFakeSyncServer } from '@/test/fake-sync-server';
 import { enrollment, item } from '@/test/factories';
@@ -428,3 +429,50 @@ describe('hlavní cesta: zápisník, příprava a dílenský režim', () => {
 function escapeRegExp(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
+
+/**
+ * Pásek (projekt 04): „Váš pásek“ je začátek projektu a jediné místo pro parametry. Cesta:
+ * stránka projektu → Začněte tady → zadání → uložit → lekce 1 → souhrn v lekci 4 → Co koupit.
+ */
+describe('hlavní cesta – pásek přes „Váš pásek“', () => {
+  afterEach(() => setActiveProjectPreference(null));
+
+  it('zadaný a uložený pásek řídí lekce i nákup', async () => {
+    const repositories = createTestRepositories();
+    await repositories.enrollments.upsert({ ...enrollment('belt'), id: crypto.randomUUID() });
+    setActiveProjectPreference('belt');
+    const user = userEvent.setup();
+    const { router } = renderApp(routes.project('belt'), { repositories });
+
+    const start = await screen.findByRole('region', { name: 'Začněte tady: Váš pásek' });
+    await user.click(within(start).getByRole('link', { name: /Otevřít Váš pásek/ }));
+    await waitFor(() => expect(router.state.location.pathname).toBe(routes.beltConfig('belt')));
+
+    const width = await screen.findByRole('textbox', { name: /Šířka = přezka/ });
+    await user.clear(width);
+    await user.type(width, '35');
+    await user.type(screen.getByRole('textbox', { name: /Obvod, cm/ }), '95');
+    expect(screen.getByRole('region', { name: 'Koupit' })).toHaveTextContent(
+      /Řemen: 35\smm široký.*délka aspoň 119\scm → objednejte 130\scm/,
+    );
+    await user.type(screen.getByRole('textbox', { name: 'Název pásku' }), 'Hnědý 35');
+    await user.click(screen.getByRole('button', { name: 'Uložit do Mých pásků' }));
+    expect(await screen.findByText(/Pásek „Hnědý 35“ uložen/)).toBeInTheDocument();
+
+    await act(() => router.navigate(routes.lesson('belt', '01-design-and-measure')));
+    const recalls = await screen.findAllByRole('list', { name: 'Z aktivního pásku: Hnědý 35' });
+    expect(recalls[0]).toHaveTextContent(/Šířka = přezka \(Váš pásek\):\s*35\smm/);
+
+    await act(() => router.navigate(routes.lesson('belt', '04-buckle-end')));
+    const card = await screen.findByRole('region', { name: 'Aktivní pásek' });
+    expect(await within(card).findByText('Hnědý 35')).toBeInTheDocument();
+    expect(card).toHaveTextContent(/35\smm · 3,5\smm · hrot · 5 dírek/);
+    expect(card).toHaveTextContent(/Obvod\s*95\scm/);
+
+    await act(() => router.navigate(routes.shopping));
+    expect(
+      await screen.findByText('Nákup podle pásku: Hnědý 35 (35 mm · 3,5 mm · hrot · 5 dírek)'),
+    ).toBeInTheDocument();
+    expect(screen.getAllByText(/Mosazná opasková přezka 35 mm/).length).toBeGreaterThan(0);
+  });
+});

@@ -1,9 +1,9 @@
 /**
- * Id polí zápisníku pásku (projekt 04), ze kterých se předvyplňuje formulář „Váš pásek“
- * (`beltConfigPrefill`). Lekce je použijí v `records` a `recalls`, aby se id nerozešla.
- * Id musí být unikátní v projektu (kontroluje schéma).
+ * Starší id polí zápisníku pásku (projekt 04). Parametry pásku se dřív zapisovaly v lekci 1;
+ * teď je jediným místem pro ně stránka „Váš pásek“ (uložené pásky níže). Id tu zůstávají jen
+ * kvůli převodu starých zápisů na uložený pásek (`legacyBeltOffer`), lekce je už nepoužívají.
  */
-export const BELT_RECORD_IDS = {
+export const LEGACY_BELT_RECORD_IDS = {
   /** Šířka pásu = vnitřní světlost přezky, mm (celé číslo). */
   width: 'belt-width',
   /** Tloušťka pásu změřená posuvkou na řezu, mm. */
@@ -18,9 +18,7 @@ export const BELT_RECORD_IDS = {
   color: 'belt-color',
 } as const;
 
-export type BeltRecordId = (typeof BELT_RECORD_IDS)[keyof typeof BELT_RECORD_IDS];
-
-/** Hodnoty volby `tip` (stejné jako `BeltTip` v src/lib/patterns/belt-config.ts). */
+/** Hodnoty volby konce (stejné jako `BeltTip` v src/lib/patterns/belt-config.ts). */
 export const BELT_TIP_CHOICES = {
   hrot: 'hrot',
   zaobleny: 'zaobleny',
@@ -33,6 +31,14 @@ export const BELT_TIP_CHOICES = {
  * jen pole, která obsah lekcí zná.
  */
 export const BELT_CONFIG_FIELD_PREFIX = 'belt-config-';
+
+/**
+ * Aktivní pásek: zápis zápisníku, jehož hodnota je id pole zvoleného pásku
+ * (`belt-config-<uuid>`). Synchronizuje se s účtem jako ostatní zápisy, takže volba platí
+ * i v dílně na telefonu. Bez zápisu (nebo když pásek mezitím zmizel) je aktivní naposledy
+ * uložený pásek.
+ */
+export const BELT_ACTIVE_FIELD_ID = 'belt-active';
 
 /** Lekce, ke které se uložené pásky v zápisníku vážou (jen metadata zápisu). */
 export const BELT_CONFIG_LESSON_SLUG = 'vas-pasek';

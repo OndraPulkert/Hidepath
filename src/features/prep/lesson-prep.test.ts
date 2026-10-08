@@ -1,3 +1,4 @@
+import { beltProject } from '@/content/projects/belt/project';
 import { equipmentCatalog } from '@/content/equipment';
 import { projects } from '@/content/projects';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
@@ -333,8 +334,13 @@ describe('klíče položek', () => {
     expect(printItemKey('template', 'x')).toBe('print:template');
     expect(printItemKey('pattern-sheets', 'kapsa')).toBe('print:pattern-sheets:kapsa');
     expect(printItemKey('practice-sheets')).toBe('print:practice-sheets');
-    expect(printHref('p', 'template', 'x')).toBe('/projects/p/template?list=x');
-    expect(printHref('p', 'practice-sheets')).toBe('/projects/p/practice-sheets');
+    expect(printHref({ slug: 'p' }, 'template', 'x')).toBe('/projects/p/template?list=x');
+    expect(printHref({ slug: 'p' }, 'practice-sheets')).toBe('/projects/p/practice-sheets');
+    expect(printHref({ slug: 'p' }, 'pattern-sheets', 'x')).toBe('/projects/p/template?list=x');
+    // Pásek: listy pro uložený pásek se tisknou ze stránky „Váš pásek“.
+    expect(printHref(beltProject, 'pattern-sheets', 'prezka')).toBe(
+      '/projects/belt/vas-pasek?list=prezka',
+    );
   });
 
   it('stejný list dvakrát v lekci dostane různé klíče a zaškrtnutí se nepletou', () => {

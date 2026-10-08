@@ -178,7 +178,8 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'decide',
         title: 'Rozhodněte, jestli pokračovat',
-        body: 'Když se obsah nevejde, karta nejde palcem vysunout nebo jazyk nedosáhne přes značku patice, kůži neřežte a zapište, co nesedí a o kolik mm. Nejdřív vylučte chybu tisku: znovu změřte úsečku (50 mm) a zkontrolujte, že máte list pro svou kůži a minci; případně vytiskněte list znovu a model složte znovu. Když model nesedí ani tak, střih pro svůj obsah nepoužívejte – jiný počet karet ani tloušťku bankovek aplikace zatím přepočítat neumí. Pokračujte, až model se vším, co nosíte, sedí.',
+        body: 'Když se obsah nevejde, karta nejde palcem vysunout nebo jazyk nedosáhne přes značku patice, kůži neřežte a zapište, co nesedí a o kolik mm. Nejdřív vylučte chybu tisku: znovu změřte úsečku (50 mm) a zkontrolujte, že máte list pro svou kůži a minci; případně vytiskněte list znovu (odkaz pod krokem) a model složte znovu. Když model nesedí ani tak, střih pro svůj obsah nepoužívejte – jiný počet karet ani tloušťku bankovek aplikace zatím přepočítat neumí. Pokračujte, až model se vším, co nosíte, sedí.',
+        printLink: 'pattern-sheets',
         media: [],
         records: [
           {
@@ -687,7 +688,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('stripTransfer', 'D3'),
         ],
         printLink: 'practice-sheets',
-        body: 'Na stránce Cvičné listy vytiskněte list „Cvičný proužek pro lekci 4“ pro svou tloušťku kůže na 100 % a zkontrolujte úsečku 50 mm. Vystřihněte ho nahrubo s okrajem 1–2 cm, jen dole přesně po plné čáře. Dolní hranu listu přiložte na líc přesně na rovnou dolní hranu kůže a obrys vystřeďte po délce. List přilepte páskou jen na okrajích, mimo čáru řezu. Pravítkem zkontrolujte, že kroužky na koncích linie švu leží 3,5 mm od dolní hrany. Šídlem propíchněte kroužky na koncích čar ohybů A i B a linie švu a všechny tečky dna, pak na řezací podložce řežte nožem podle ocelového pravítka skrz papír po obrysu. Na rubu spojte konce čar ohybů tužkou podle pravítka. Bez listu: na rub narýsujte uprostřed panel 30 mm, vedle něj ohyb A (u kůže 1,2 mm 15,7 mm, u 1,5 mm 16,6 mm), z druhé strany ohyb B (u kůže 1,2 mm 8,7 mm, u 1,5 mm 9,9 mm) a za nimi panely po 30 mm.',
+        body: 'Na stránce Cvičné listy (odkaz pod krokem) vytiskněte list „Cvičný proužek pro lekci 4“ pro svou tloušťku kůže na 100 % a zkontrolujte úsečku 50 mm. Vystřihněte ho nahrubo s okrajem 1–2 cm, jen dole přesně po plné čáře. Dolní hranu listu přiložte na líc přesně na rovnou dolní hranu kůže a obrys vystřeďte po délce. List přilepte páskou jen na okrajích, mimo čáru řezu. Pravítkem zkontrolujte, že kroužky na koncích linie švu leží 3,5 mm od dolní hrany. Šídlem propíchněte kroužky na koncích čar ohybů A i B a linie švu a všechny tečky dna, pak na řezací podložce řežte nožem podle ocelového pravítka skrz papír po obrysu. Na rubu spojte konce čar ohybů tužkou podle pravítka. Bez listu: na rub narýsujte uprostřed panel 30 mm, vedle něj ohyb A (u kůže 1,2 mm 15,7 mm, u 1,5 mm 16,6 mm), z druhé strany ohyb B (u kůže 1,2 mm 8,7 mm, u 1,5 mm 9,9 mm) a za nimi panely po 30 mm.',
         media: [],
       },
       {
@@ -964,7 +965,8 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('stripTransfer', 'A2'),
           animationLink('stripTransfer', 'A1'),
         ],
-        body: 'Šablonu vystřihněte nahrubo s okrajem 1–2 cm. Položte ji na LÍC kůže – jinak než u pouzdra na karty, kde ležela na rubu. Přilepte ji maskovací páskou z několika stran, jen na okrajích mimo čáru řezu. Pásku nejdřív zkuste na odřezku – na líci může nechat stopu. Šablona se rozřeže, na každý pás vytiskněte novou.',
+        body: 'Šablonu vystřihněte nahrubo s okrajem 1–2 cm. Položte ji na LÍC kůže – jinak než u pouzdra na karty, kde ležela na rubu. Přilepte ji maskovací páskou z několika stran, jen na okrajích mimo čáru řezu. Pásku nejdřív zkuste na odřezku – na líci může nechat stopu. Šablona se rozřeže, na každý pás vytiskněte novou (odkaz pod krokem).',
+        printLink: 'pattern-sheets',
         media: [],
       },
       {

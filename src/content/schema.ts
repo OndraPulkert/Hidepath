@@ -253,6 +253,49 @@ export const stepRecallSchema = z.object({
 });
 export type StepRecall = z.infer<typeof stepRecallSchema>;
 
+/**
+ * Stránky aplikace, na které může krok odkázat tlačítkem pod sebou (`appLinks`). Klíč, ne URL:
+ * adresu sestaví aplikace (`src/app/app-links.ts`), obsah tak nezávisí na tvaru tras.
+ * `belt-config` = „Váš pásek“ (jen projekt s `browserGenerator: 'belt-config'`),
+ * `pattern-sheets` / `template` = tisková stránka listů / šablony projektu,
+ * `practice-sheets` = cvičné listy projektu, ostatní jsou stránky celé aplikace.
+ */
+export const APP_LINK_TARGETS = [
+  'belt-config',
+  'pattern-sheets',
+  'practice-sheets',
+  'template',
+  'shopping',
+  'workshop',
+  'account',
+  'dashboard',
+] as const;
+export const appLinkSchema = z.object({
+  to: z.enum(APP_LINK_TARGETS),
+  /** Text tlačítka, např. „Váš pásek: zadat obvod“. */
+  label: z.string().min(1),
+});
+export type AppLink = z.infer<typeof appLinkSchema>;
+
+/**
+ * Hodnoty aktivního pásku, které krok připomene (`beltRecalls`): zadání z „Váš pásek“
+ * a čísla z výpočtu. Jen projekt s `browserGenerator: 'belt-config'`.
+ */
+export const BELT_RECALL_KEYS = [
+  'waist',
+  'width',
+  'thickness',
+  'tip',
+  'color',
+  'holeDiameter',
+  'strapLength',
+  'keeper',
+  'rivet',
+  'holes',
+  'middleHole',
+] as const;
+export type BeltRecallKey = (typeof BELT_RECALL_KEYS)[number];
+
 export const lessonStepSchema = z.object({
   id: slug,
   title: z.string().min(1),
@@ -276,6 +319,13 @@ export const lessonStepSchema = z.object({
   records: z.array(recordFieldSchema).min(1).optional(),
   /** Hodnoty zapsané dříve, které se v tomto kroku hodí připomenout. */
   recalls: z.array(stepRecallSchema).min(1).optional(),
+  /**
+   * Tlačítka pod krokem na jiné stránky aplikace (kroky, které posílají „na stránku …“;
+   * text kroku pak říká „(odkaz pod krokem)“). Tisk listů střihu dál umí i `printLink`.
+   */
+  appLinks: z.array(appLinkSchema).min(1).optional(),
+  /** Hodnoty aktivního pásku z „Váš pásek“, které se v kroku hodí (pásek, projekt 04). */
+  beltRecalls: z.array(z.enum(BELT_RECALL_KEYS)).min(1).optional(),
 });
 export type LessonStep = z.infer<typeof lessonStepSchema>;
 
@@ -605,6 +655,7 @@ export const projectDefinitionSchema = z
             message: `Lekce ${lesson.slug}: krok ${step.id} odkazuje na listy střihu, projekt žádné nemá`,
           });
         }
+        checkStepAppLinks(project, lesson.slug, step, ctx);
       }
       checkLessonPrints(project, lesson, ctx);
       checkLessonRequires(project.lessons, lesson, ctx);
@@ -801,4 +852,35 @@ function checkRecordField(lessonSlug: string, field: RecordField, ctx: Ctx) {
     const values = field.options.map((o) => o.value);
     if (new Set(values).size !== values.length) issue('duplicitní hodnota volby');
   }
+}
+
+/** Odkazy pod krokem musí vést na stránku, kterou projekt má, a nesmí se opakovat. */
+function checkStepAppLinks(
+  project: Pick<ProjectDefinition, 'patternSheets' | 'practiceSheets' | 'template'>,
+  lessonSlug: string,
+  step: LessonStep,
+  ctx: Ctx,
+) {
+  const issue = (what: string) =>
+    ctx.addIssue({ code: 'custom', message: `Lekce ${lessonSlug}: krok ${step.id}: ${what}` });
+  const isBelt = project.patternSheets?.browserGenerator === 'belt-config';
+  const has: Readonly<Record<AppLink['to'], boolean>> = {
+    'belt-config': isBelt,
+    'pattern-sheets': project.patternSheets !== undefined,
+    'practice-sheets': project.practiceSheets !== undefined,
+    template: project.template !== undefined,
+    shopping: true,
+    workshop: true,
+    account: true,
+    dashboard: true,
+  };
+  const targets = (step.appLinks ?? []).map((l) => l.to);
+  for (const to of targets) {
+    if (!has[to]) issue(`odkaz ${to} vede na stránku, kterou projekt nemá`);
+  }
+  if (new Set(targets).size !== targets.length) issue('odkaz pod krokem se opakuje');
+  if (step.printLink && targets.includes(step.printLink)) {
+    issue(`odkaz ${step.printLink} je už v printLink`);
+  }
+  if (step.beltRecalls && !isBelt) issue('beltRecalls má jen projekt s „Váš pásek“');
 }

@@ -125,10 +125,17 @@ describe('Váš pásek', () => {
         holeDiameter: '6,5',
         color: 'prirodni',
       },
-      filled: ['šířka', 'Ø dírky (trn + 0,5 mm)'],
-      problems: ['Trn 5,8 mm je na výsečníky 4,5–6 mm moc silný (potřeba Ø 6,5 mm).'],
+      prong: '5,8',
+      scrapFromStrap: false,
+      loadedFieldId: null,
+      name: 'Pásek ze zápisníku',
+      legacy: {
+        filled: ['šířka', 'Ø dírky (trn + 0,5 mm)'],
+        problems: ['Trn 5,8 mm je na výsečníky 4,5–6 mm moc silný (potřeba Ø 6,5 mm).'],
+      },
     });
-    expect(await screen.findByText(/Trn 5,8\smm je na výsečníky/)).toBeInTheDocument();
+    // Hlásí to předvyplnění i pole trnu pod „Dírky (pokročilé)“.
+    expect(await screen.findAllByText(/Trn 5,8\smm je na výsečníky/)).toHaveLength(2);
     expect(screen.getByText('Dírky (pokročilé)').closest('details')).toHaveAttribute('open');
     expect(field(/Ø dírky/)).toHaveValue('6,5');
   });
@@ -318,8 +325,8 @@ describe('Váš pásek', () => {
     confirm.mockRestore();
   });
 
-  it('předvyplnění ze zápisníku ukáže, co se vzalo', async () => {
-    setup({
+  it('staré zápisy lekce 1: ukáže, co se vzalo, a nabídne je uložit jako pásek', async () => {
+    const { user } = setup({
       form: {
         width: '35',
         thickness: '3,75',
@@ -332,10 +339,58 @@ describe('Váš pásek', () => {
         holeDiameter: '',
         color: 'prirodni',
       },
-      filled: ['šířka', 'tloušťka'],
-      problems: [],
+      prong: '',
+      scrapFromStrap: false,
+      loadedFieldId: null,
+      name: 'Pásek ze zápisníku',
+      legacy: { filled: ['šířka', 'tloušťka'], problems: [] },
     });
-    expect(await screen.findByText(/Předvyplněno ze zápisníku:/)).toBeInTheDocument();
+    expect((await screen.findByText(/Předvyplněno ze zápisníku:/)).closest('p')).toHaveTextContent(
+      /uložte do „Mých pásků“/,
+    );
     expect(field(/Šířka = přezka/)).toHaveValue('35');
+    expect(field('Název pásku')).toHaveValue('Pásek ze zápisníku');
+    await user.click(screen.getByRole('button', { name: 'Uložit do Mých pásků' }));
+    const section = screen.getByRole('region', { name: 'Moje pásky' });
+    expect(await within(section).findByText('Pásek ze zápisníku')).toBeInTheDocument();
+    expect(within(section).getByText('aktivní')).toBeInTheDocument();
+  });
+
+  it('souhrn „Koupit“ nahoře: délka, kterou objednat, přezka, šrouby, výsečníky a obchod', async () => {
+    const { user } = setup();
+    const summary = screen.getByRole('region', { name: 'Koupit' });
+    expect(summary).toHaveTextContent(/délka: zadejte obvod/);
+    await user.type(field(/Obvod, cm/), '95');
+    expect(summary).toHaveTextContent(
+      /Řemen: 40\smm široký, tloušťka 3,5\smm \(postup: 3–4\smm\), délka aspoň 119\scm → objednejte 130\scm/,
+    );
+    expect(summary).toHaveTextContent(/Přezka: 40\smm, jednotrnová/);
+    expect(summary).toHaveTextContent(/Šrouby chicago: 2 ks, dřík 6\smm/);
+    expect(summary).toHaveTextContent(/Výsečník: Ø 5 a Ø 6\smm/);
+    expect(summary).toHaveTextContent(/Doporučeno: CraftPoint, 130\scm, 285\sKč/);
+    expect(within(summary).getByRole('link', { name: 'další obchody níže' })).toBeInTheDocument();
+
+    // Trénink na odřezku téhož řemene: + 15 cm. CraftPoint (130 cm) nestačí a skladem
+    // s ověřeným činěním nic delšího pro 3,5 mm není: poctivě bez „objednejte“.
+    await user.click(screen.getByRole('checkbox', { name: /Trénink na odřezku téhož řemene/ }));
+    expect(summary).toHaveTextContent(/aspoň 119\scm \+ 15\scm na odřezek = 134\scm/);
+    expect(summary).not.toHaveTextContent(/objednejte/);
+    expect(summary).toHaveTextContent(/Doporučený obchod není/);
+
+    // Pás 3,9 mm (Leatory řeže 130 / 140 / 150 cm): objedná se nejbližší delší, 140 cm.
+    await user.clear(field(/Tloušťka/));
+    await user.type(field(/Tloušťka/), '3,9');
+    expect(summary).toHaveTextContent(/= 134\scm → objednejte 140\scm/);
+    expect(summary).toHaveTextContent(/Doporučeno: Leatory, 140\scm/);
+  });
+
+  it('trn přezky vyplní Ø dírky (trn + 0,5 mm nahoru na výsečník)', async () => {
+    const { user } = setup();
+    await user.click(screen.getByText('Dírky (pokročilé)'));
+    await user.type(field(/Trn přezky/), '4,2');
+    expect(field(/Ø dírky/)).toHaveValue('5');
+    expect(
+      screen.getByText(/Ø dírky 5\smm \(trn \+ 0,5\smm, nahoru na výsečník/),
+    ).toBeInTheDocument();
   });
 });

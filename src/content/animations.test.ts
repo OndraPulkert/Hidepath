@@ -173,6 +173,7 @@ describe('animace postupu – stránky v public/animace', () => {
     ['hrany', 'edges', ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'], 'I'],
     ['pasek-prezka', 'beltBuckleEnd', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['pasek-spicka', 'beltHolesTip', ['A', 'B', 'C', 'D', 'E', 'F'], 'G'],
+    ['pasek-sirka-konec', 'beltWidthTip', ['A', 'B', 'C', 'D'], 'E'],
     ['vrtani-formy', 'drillForm', ['A', 'B', 'C', 'D', 'E'], 'F'],
   ] as const)(
     '%s: samostatná stránka s favicon, návratem do lekce a kotvami svých částí',
@@ -195,7 +196,7 @@ describe('animace postupu – stránky v public/animace', () => {
     'steps' in page ? [{ key, path: page.path, sections: page.sections, steps: page.steps }] : [],
   );
 
-  it('kroky mají čtyři stránky kapsy, dvě stránky pásu, sedlářský steh, hrany, šest stránek Víčka, dvě stránky pásku a vrtání formy', () => {
+  it('kroky mají čtyři stránky kapsy, dvě stránky pásu, sedlářský steh, hrany, šest stránek Víčka, tři stránky pásku a vrtání formy', () => {
     expect(steppedPages.map((p) => p.key)).toEqual([
       'kapsa',
       'pocketAttach',
@@ -213,6 +214,7 @@ describe('animace postupu – stránky v public/animace', () => {
       'lidBodySides',
       'beltBuckleEnd',
       'beltHolesTip',
+      'beltWidthTip',
       'drillForm',
     ]);
   });
@@ -703,8 +705,11 @@ describe('animace postupu – pásek: konec s přezkou, dírky a špička', () =
   const prezka = at('pasek-prezka');
   const spicka = at('pasek-spicka');
   const hrany = at('hrany');
+  const sirka = at('pasek-sirka-konec');
 
   it.each([
+    // Lekce 1: šířka a konec – přezka, konec, destička a zadání ve „Váš pásek“.
+    [1, 'width-and-tip', [sirka('A1'), sirka('B1'), sirka('C1'), sirka('D1')]],
     // Lekce 2: odřezek – značení, výsek, hrana, ohyb a zkouška nýtu.
     [2, 'mark', [prezka('B1'), prezka('B2')]],
     [2, 'punch', [prezka('C2'), prezka('C3')]],
@@ -792,8 +797,32 @@ describe('animace postupu – pásek: konec s přezkou, dírky a špička', () =
     expect(animationButtonText(spicka('F1'))).toBe('Animace postupu');
   });
 
+  it('lekce 1: odkazy na šířku a konec nesou číslo a název kroku animace', () => {
+    const links = belt.lessons
+      .find((l) => l.order === 1)!
+      .steps.find((s) => s.id === 'width-and-tip')!.animationLinks!;
+    expect(links.map((l) => l.label)).toEqual([
+      'Krok A1 – Velikost přezky = vnitřní světlost',
+      'Krok B1 – Hrot, nebo zaoblený',
+      'Krok C1 – Co umí destička',
+      'Krok D1 – Zadejte šířku a konec ve „Váš pásek“',
+    ]);
+  });
+
+  it('šířka a konec: část D ukazuje stránku „Váš pásek“, ne zápisník', () => {
+    const source = pageSource(animationPages.beltWidthTip.path)!;
+    expect(source).not.toMatch(/zápisník|Zapište/);
+    for (const text of ['Šířka = přezka, mm', 'Destička: ano', 'Destička: jen řada 3', 'Koupit']) {
+      expect(source).toContain(text);
+    }
+  });
+
   it('stránky odkazují na čísla v tabulce „Váš pásek“, kresba je jen příklad', () => {
-    for (const path of [animationPages.beltBuckleEnd.path, animationPages.beltHolesTip.path]) {
+    for (const path of [
+      animationPages.beltBuckleEnd.path,
+      animationPages.beltHolesTip.path,
+      animationPages.beltWidthTip.path,
+    ]) {
       const source = pageSource(path)!;
       expect(source).toContain('„Váš pásek“');
       expect(source).toMatch(/Příklad pro 40 mm|příklad 40 × 3,5 mm/);

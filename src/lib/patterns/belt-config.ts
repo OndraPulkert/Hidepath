@@ -267,8 +267,10 @@ const VERIFIED_BUCKLE_WIDTHS_MM: readonly number[] = [30, 35, 40];
  * (sady jdou po celých mm).
  */
 const VERIFIED_PUNCH_MM: readonly number[] = [4.5, 5, 6];
-const punchStatus = (d: number): ShoppingStatus =>
-  VERIFIED_PUNCH_MM.some((v) => Math.abs(v - d) < EPS) ? 'overeno' : 'overte';
+/** Má výsečník tohoto Ø zdroj v podkladech? */
+export const isVerifiedPunchMm = (d: number): boolean =>
+  VERIFIED_PUNCH_MM.some((v) => Math.abs(v - d) < EPS);
+const punchStatus = (d: number): ShoppingStatus => (isVerifiedPunchMm(d) ? 'overeno' : 'overte');
 
 /**
  * Šroubovací nýty z katalogu (`src/content/equipment/belt.ts`, `chicago-screws`, ověřeno

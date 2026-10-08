@@ -92,3 +92,47 @@ describe('StepList – doplňky pod krokem', () => {
     expect(within(stepItem('Přišijte kapsu')).getByText('doplněk 2: stitch-pocket')).toBeVisible();
   });
 });
+
+describe('StepList – odkazy na stránky aplikace', () => {
+  it('pod krokem vykreslí tisk i další stránky v pořadí printLink → appLinks', () => {
+    const linked: LessonStep[] = [
+      {
+        id: 'order',
+        title: 'Objednejte',
+        body: 'Text kroku (odkaz pod krokem).',
+        media: [],
+        printLink: 'pattern-sheets',
+        appLinks: [
+          { to: 'shopping', label: 'Co koupit' },
+          { to: 'account', label: 'Účet' },
+        ],
+      },
+    ];
+    renderWithProviders(<StepList steps={linked} template={undefined} projectSlug="p" />);
+    const links = within(stepItem('Objednejte')).getAllByRole('link');
+    expect(links.map((l) => [l.textContent?.replace(/\s*→$/, ''), l.getAttribute('href')])).toEqual(
+      [
+        ['Listy střihu 1:1 k tisku', '/projects/p/template'],
+        ['Co koupit', '/shopping'],
+        ['Účet', '/account'],
+      ],
+    );
+  });
+
+  it('u pásku vede tisk listů na „Váš pásek“', () => {
+    const belt = projects.find((p) => p.slug === 'belt')!;
+    const step = belt.lessons[3]!.steps.find((s) => s.id === 'plate-or-sheet')!;
+    renderWithProviders(
+      <StepList
+        steps={[step]}
+        template={undefined}
+        projectSlug={belt.slug}
+        patternSheets={belt.patternSheets}
+      />,
+    );
+    expect(screen.getByRole('link', { name: 'Váš pásek: listy A4 k tisku' })).toHaveAttribute(
+      'href',
+      '/projects/belt/vas-pasek',
+    );
+  });
+});

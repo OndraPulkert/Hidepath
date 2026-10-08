@@ -234,7 +234,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'sheets-for-thickness',
         title: 'Získejte listy pro změřenou tloušťku',
         printLink: 'pattern-sheets',
-        body: 'Předem vytištěné listy platí jen pro výchozí střih (P1 1,0 mm, přepážky a L1 0,6 mm); s jinou tloušťkou se mění skoro všechna čísla. Na stránce Listy střihu v části „Listy pro vaši kůži“ zadejte změřenou P1, větší z D1 a D2 a L1 a stiskněte Vygenerovat listy. Když střih s touto kůží neplatí, aplikace listy nevytvoří a napíše proč.',
+        body: 'Předem vytištěné listy platí jen pro výchozí střih (P1 1,0 mm, přepážky a L1 0,6 mm); s jinou tloušťkou se mění skoro všechna čísla. Na stránce Listy střihu (odkaz pod krokem) v části „Listy pro vaši kůži“ zadejte změřenou P1, větší z D1 a D2 a L1 a stiskněte Vygenerovat listy. Když střih s touto kůží neplatí, aplikace listy nevytvoří a napíše proč.',
         media: [],
         recalls: [
           { fieldId: LID_RECORD_IDS.p1Thickness, label: 'P1' },
@@ -246,14 +246,15 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'sheets-rule',
         title: 'Kdy listy generovat znovu',
-        body: 'Listy vytiskněte hned, podle nich slepíte i papírový model (lekce 2). Znovu je generujte, jen když P0 změní vstupy modelu (lekce 2), nebo když zkouška ohybu V12 či zkušební kus vybere zálohu (lekce 3 a 12). Pak zadejte najednou všechno, co platí (tloušťky i zálohu), a nové listy zkontrolujte jako v dalším kroku.',
+        printLink: 'pattern-sheets',
+        body: 'Listy vytiskněte hned (odkaz pod krokem), podle nich slepíte i papírový model (lekce 2). Znovu je generujte, jen když P0 změní vstupy modelu (lekce 2), nebo když zkouška ohybu V12 či zkušební kus vybere zálohu (lekce 3 a 12). Pak zadejte najednou všechno, co platí (tloušťky i zálohu), a nové listy zkontrolujte jako v dalším kroku.',
         media: [],
       },
       {
         id: 'print-check',
         title: 'Vytiskněte a zkontrolujte měřítko',
         printLink: 'pattern-sheets',
-        body: 'Tiskněte na A4 na výšku v měřítku 100 % (bez přizpůsobení stránce). Kontrolní úsečka musí měřit 50 mm. Kóta P1 na listu 1 musí sedět s rámečkem „Čísla pro postup“ na listu 4 na ±0,5 mm (výchozí 231,66 mm). Samotná úsečka malou chybu měřítka neodhalí. Když něco nesedí, vytiskněte list znovu.',
+        body: 'Tiskněte na A4 na výšku v měřítku 100 % (bez přizpůsobení stránce). Kontrolní úsečka musí měřit 50 mm. Kóta P1 na listu 1 musí sedět s rámečkem „Čísla pro postup“ na listu 4 na ±0,5 mm (výchozí 231,66 mm). Samotná úsečka malou chybu měřítka neodhalí. Když něco nesedí, vytiskněte list znovu (odkaz pod krokem).',
         media: [],
       },
       {
@@ -517,7 +518,8 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'record',
         title: 'Zapište výsledky a nechte přepočítat',
-        body: 'Když P0 dopadne podle modelu (bankovky se vejdou, stokoruna vyčnívá aspoň 15 mm, k do 1,24, zvednutí 2,28 a 1,25 mm, plný stav se vejde), platí listy z lekce 1. Když se něco liší, zapište naměřené hodnoty do polí u kroků výše. Formulář „Listy pro vaši kůži“ na stránce Listy střihu je pod „Výsledky P0 a jiný magnet“ předvyplní: k, zvednutí karet a mincí, výšku, šířku napůl a tloušťku bankovek; zkontrolujte je. Zároveň zadejte tloušťky kůže (a zálohu, je-li) a vygenerujte listy znovu. Když střih s těmito hodnotami neplatí, aplikace listy nevytvoří a napíše proč. Do nových listů nic z kůže neřežte a šablony nevyřezávejte. Zkoušku ohybu V12 (lekce 3) udělat můžete, na P0 nezávisí.',
+        printLink: 'pattern-sheets',
+        body: 'Když P0 dopadne podle modelu (bankovky se vejdou, stokoruna vyčnívá aspoň 15 mm, k do 1,24, zvednutí 2,28 a 1,25 mm, plný stav se vejde), platí listy z lekce 1. Když se něco liší, zapište naměřené hodnoty do polí u kroků výše. Formulář „Listy pro vaši kůži“ na stránce Listy střihu (odkaz pod krokem) je pod „Výsledky P0 a jiný magnet“ předvyplní: k, zvednutí karet a mincí, výšku, šířku napůl a tloušťku bankovek; zkontrolujte je. Zároveň zadejte tloušťky kůže (a zálohu, je-li) a vygenerujte listy znovu. Když střih s těmito hodnotami neplatí, aplikace listy nevytvoří a napíše proč. Do nových listů nic z kůže neřežte a šablony nevyřezávejte. Zkoušku ohybu V12 (lekce 3) udělat můžete, na P0 nezávisí.',
         media: [],
         recalls: [
           { fieldId: 'p0-bills-fit', label: 'Bankovky se vejdou' },
@@ -737,7 +739,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'valid-sheets',
         title: 'Platné listy a šablony',
         printLink: 'pattern-sheets',
-        body: `${NUMBERS_NOTE} Pokud P0, V12 nebo zkušební kus něco změnily, vygenerujte listy znovu se vším, co platí, vytiskněte je a zkontrolujte úsečku 50 mm a kótu P1. Tiskněte nejlépe na matný papír 120 g pro inkoustové tiskárny, jinak na obyčejný. List 1 a list 3 vytiskněte dvakrát: první výtisk se při řezání rozřeže, druhý nalepte na tvrdý papír a vyřízněte jako šablonu (S1–S3 a D2 v lekci 6, S6 v lekci 8). Z listu 4 nalepte na tvrdý papír a vyřízněte šablony okének mincí (lekce 5), okénka bankovek (lekce 6), plíšku (tato lekce) a proužek otvorů bočních švů (lekce 9). Na finální kus vytiskněte listy 1 a 3 znovu z listů, které po zkušebním kuse platí.`,
+        body: `${NUMBERS_NOTE} Pokud P0, V12 nebo zkušební kus něco změnily, vygenerujte listy znovu se vším, co platí, vytiskněte je (odkaz pod krokem) a zkontrolujte úsečku 50 mm a kótu P1. Tiskněte nejlépe na matný papír 120 g pro inkoustové tiskárny, jinak na obyčejný. List 1 a list 3 vytiskněte dvakrát: první výtisk se při řezání rozřeže, druhý nalepte na tvrdý papír a vyřízněte jako šablonu (S1–S3 a D2 v lekci 6, S6 v lekci 8). Z listu 4 nalepte na tvrdý papír a vyřízněte šablony okének mincí (lekce 5), okénka bankovek (lekce 6), plíšku (tato lekce) a proužek otvorů bočních švů (lekce 9). Na finální kus vytiskněte listy 1 a 3 znovu z listů, které po zkušebním kuse platí.`,
         media: [],
         recalls: [variantRecall],
       },
@@ -1559,7 +1561,8 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'k-too-high',
         title: 'Když vyjde k nad 1,24',
-        body: 'Zapište k. Pro finální kus ho zadejte ve formuláři „Listy pro vaši kůži“ na stránce Listy střihu (pole k, spolu se vším, co platí, jako v lekci 2) a vygenerujte listy znovu: zvedne se dno karet a výška. Zkušební kus mezitím dokončete, magnet se umisťuje až na hotovém kuse. Finální kus řežte až z nových listů.',
+        printLink: 'pattern-sheets',
+        body: 'Zapište k. Pro finální kus ho zadejte ve formuláři „Listy pro vaši kůži“ na stránce Listy střihu (odkaz pod krokem; pole k, spolu se vším, co platí, jako v lekci 2) a vygenerujte listy znovu: zvedne se dno karet a výška. Zkušební kus mezitím dokončete, magnet se umisťuje až na hotovém kuse. Finální kus řežte až z nových listů.',
         media: [],
         recalls: [{ fieldId: LID_RECORD_IDS.kMeasured, label: 'Vaše k' }],
       },
@@ -1645,7 +1648,8 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'magnet-dry-test',
         title: 'Nanečisto: který magnet',
-        body: 'Sílu magnetu můžete vyzkoušet nanečisto (orientačně, rozhodne až zkouška Z-1): magnet s kouskem kozinky přes něj přichyťte tenkou páskou na rub jazýčku na značku, víčko zavřete, zatřeste, otočte dnem vzhůru a otevřete jedním prstem za špičku. Postupně zkuste Ø 8 × 1, 8 × 1,5 a 8 × 2. Výchozí je magnet 1,5 mm. Vyberete-li jinou tloušťku, zadejte ji ve formuláři „Listy pro vaši kůži“ na stránce Listy střihu (pole tloušťka magnetu, spolu se vším, co platí, jako v lekci 2). Lepte, až když aplikace listy vytvoří – pak s tímto magnetem kontroly prošly.',
+        printLink: 'pattern-sheets',
+        body: 'Sílu magnetu můžete vyzkoušet nanečisto (orientačně, rozhodne až zkouška Z-1): magnet s kouskem kozinky přes něj přichyťte tenkou páskou na rub jazýčku na značku, víčko zavřete, zatřeste, otočte dnem vzhůru a otevřete jedním prstem za špičku. Postupně zkuste Ø 8 × 1, 8 × 1,5 a 8 × 2. Výchozí je magnet 1,5 mm. Vyberete-li jinou tloušťku, zadejte ji ve formuláři „Listy pro vaši kůži“ na stránce Listy střihu (odkaz pod krokem; pole tloušťka magnetu, spolu se vším, co platí, jako v lekci 2). Lepte, až když aplikace listy vytvoří – pak s tímto magnetem kontroly prošly.',
         records: [
           {
             kind: 'number',

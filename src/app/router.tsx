@@ -6,6 +6,7 @@ import { RootLayout } from '@/components/layout/root-layout';
 import { RequireAuth } from '@/features/auth/require-auth';
 import { AccountPage } from '@/pages/account-page';
 import { AuthCallbackPage } from '@/pages/auth-callback-page';
+import { BeltConfigPage } from '@/pages/belt-config-page';
 import { DashboardPage } from '@/pages/dashboard-page';
 import { HomeRoute } from '@/pages/home-route';
 import { LessonFocusPage } from '@/pages/lesson-focus-page';
@@ -53,6 +54,7 @@ export const appRoutes: RouteObject[] = [
               { path: routePatterns.lesson, element: <LessonPage /> },
               { path: routePatterns.template, element: <TemplatePrintPage /> },
               { path: routePatterns.practiceSheets, element: <PracticeSheetsPrintPage /> },
+              { path: routePatterns.beltConfig, element: <BeltConfigPage /> },
               { path: '*', element: <NotFoundPage /> },
             ],
           },

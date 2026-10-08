@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Šířka a konec pásku</title>
+<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+<!-- Self-hostované fonty aplikace (public/fonts), aby stránka fungovala i offline v PWA. -->
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f3efe9;--panel:#fffdf9;--stage:#f7f2ea;--ink:#2a211b;--muted:#6c6158;--line:#ddd5cc;
+  --accent:#b3261e;--ok:#2f6b3a;--btn:#2a211b;--btn-ink:#fffdf9;
+  --lic:#b8773f;--lic-d:#8a5228;--lic-hi:#d39a63;
+  --rub:#dcc4a2;--rub-d:#b99a72;--rub-fib:#c7a87f;--chip-lic:#b8773f;--chip-rub:#dcc4a2;
+  --hole:#2b2018;--paper:#fcfbf7;--paper-edge:#cfc8bb;--print:#2b2b2b;--print-m:#7a7a7a;
+  --steel:#a3abb3;--steel-d:#5c656e;--tape:#eedc95;--tape-d:#b9a24a;
+  --board:#e4ddd2;--board-d:#bdb3a4;--mat:#5f8f73;--mat-d:#3f6b55;--pad:#e9e4da;--pad-d:#b8ae9c;
+  --wood:#c79a63;--wood-d:#8a6436;--skin:#e9b996;--skin-d:#b98563;
+  --acryl:#cfe7ef;--acryl-d:#6f9aab;--engr:#2f5f73;
+  --cloth:#7f93ad;--cloth-d:#56677e;--balm:#7a4a22;--burn:#5a3416;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
+  --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
+  --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
+  --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;--chip-lic:#a96c38;--chip-rub:#c9b190;
+  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--print:#2b2b2b;--print-m:#6a6a6a;
+  --steel:#9099a2;--steel-d:#4d555d;--tape:#d9c67d;--tape-d:#9c8a3c;
+  --board:#3a332c;--board-d:#544a40;--mat:#4d7a61;--mat-d:#335a46;--pad:#cfc8b8;--pad-d:#8f8573;
+  --wood:#b38955;--wood-d:#7a582e;--skin:#d6a684;--skin-d:#a57454;
+  --acryl:#a9d0de;--acryl-d:#86b4c5;--engr:#d8f1fa;
+  --cloth:#5d7090;--cloth-d:#3e4c63;--balm:#5e3818;--burn:#3f230c;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
+  --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
+  --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
+  --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;--chip-lic:#a96c38;--chip-rub:#c9b190;
+  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--print:#2b2b2b;--print-m:#6a6a6a;
+  --steel:#9099a2;--steel-d:#4d555d;--tape:#d9c67d;--tape-d:#9c8a3c;
+  --board:#3a332c;--board-d:#544a40;--mat:#4d7a61;--mat-d:#335a46;--pad:#cfc8b8;--pad-d:#8f8573;
+  --wood:#b38955;--wood-d:#7a582e;--skin:#d6a684;--skin-d:#a57454;
+  --acryl:#a9d0de;--acryl-d:#86b4c5;--engr:#d8f1fa;
+  --cloth:#5d7090;--cloth-d:#3e4c63;--balm:#5e3818;--burn:#3f230c;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 "Albert Sans",system-ui,sans-serif;padding:22px 16px 44px;overflow-x:hidden}
+.wrap{max-width:860px;margin:0 auto;display:grid;gap:16px}
+h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
+.lead{color:var(--muted);margin:6px 0 0;max-width:70ch}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:10px;min-width:0}
+.stagewrap{position:relative;background:var(--stage);border-radius:8px;overflow:hidden}
+#stage{display:block;width:100%;height:auto;aspect-ratio:3/2}
+.badge{position:absolute;top:8px;left:8px;display:flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-weight:700;font-size:13px;letter-spacing:.06em;transition:opacity .2s}
+.badge i{width:16px;height:16px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.2)}
+.badge small{font-weight:500;letter-spacing:0;color:var(--muted);font-size:12px}
+.badge[hidden]{display:none}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.controls button{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);width:40px;height:40px;border-radius:10px;display:grid;place-items:center;cursor:pointer;padding:0}
+.controls button.play{background:var(--btn);color:var(--btn-ink);border-color:var(--btn)}
+.controls button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.controls svg{width:18px;height:18px;fill:currentColor}
+.counter{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+.prog{display:flex;gap:6px;align-items:stretch}
+.pseg{flex:1;display:grid;gap:4px;min-width:0;cursor:pointer;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left}
+.pseg .bars{display:flex;gap:2px;height:6px}
+.pseg .bars span{flex:1;background:var(--line);border-radius:2px;position:relative;overflow:hidden}
+.pseg .bars span b{position:absolute;inset:0;background:var(--lic);transform-origin:left;transform:scaleX(0)}
+.pseg .pl{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:520px){.pl span{display:none}}
+.pseg.on .pl{color:var(--ink);font-weight:600}
+.cap{min-height:6.6em}
+.cap .no{display:inline-block;font-weight:700;color:var(--lic-d);margin-right:6px;font-variant-numeric:tabular-nums}
+:root[data-theme="dark"] .cap .no{color:var(--lic-hi)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cap .no{color:var(--lic-hi)}}
+.cap h2{display:inline;font-size:1.05rem;margin:0}
+.cap p{margin:4px 0 0;color:var(--ink)}
+.cap .tip{display:block;margin-top:6px;color:var(--muted);font-size:14px}
+.cap .tip b{color:var(--accent);font-weight:700}
+.note{font-size:13px;color:var(--muted);margin:0}
+.note a{color:inherit}
+/* svg text */
+.t{font:600 4.1px "Albert Sans",sans-serif;fill:var(--ink)}
+.ts{font:500 3.7px "Albert Sans",sans-serif;fill:var(--muted)}
+.tw{font:700 4.6px "Albert Sans",sans-serif;fill:var(--ink)}
+.ta{font:700 4.1px "Albert Sans",sans-serif;fill:var(--accent)}
+.tok{font:700 4.1px "Albert Sans",sans-serif;fill:var(--ok)}
+.tp{font:600 3.2px "Albert Sans",sans-serif;fill:var(--print)}
+.tpm{font:500 2.6px "Albert Sans",sans-serif;fill:var(--print-m)}
+.lead-l{stroke:var(--muted);stroke-width:.25;fill:none}
+@media (min-width:700px){.t,.ta,.tok{font-size:2.8px}.ts{font-size:2.5px}.tw{font-size:3.2px}.tp{font-size:2.6px}.tpm{font-size:2.1px}}
+.panelbox{fill:var(--panel);stroke:var(--line);stroke-width:.35}
+.pillbg{fill:var(--panel);stroke:var(--line);stroke-width:.3;opacity:.95}
+@media (max-width:520px){.badge small{display:none}.cap{min-height:12em}.counter{width:100%;margin-left:0;order:9}}
+/* Hidepath: návrat do lekce */
+.backlink{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--ink);font-weight:600;font-size:15px;text-decoration:none;justify-self:start}
+.backlink:hover{text-decoration:underline}
+.backlink:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+</style>
+<style>
+:root{--brass:#d2ad55;--brass-d:#8d6a1f;--brass-hi:#efd58f;--okbg:rgba(47,107,58,.16);--badbg:rgba(179,38,30,.13)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--brass:#bf9b48;--brass-d:#7d5e1c;--brass-hi:#dcc07a;--okbg:rgba(124,194,138,.2);--badbg:rgba(255,138,128,.18)}}
+:root[data-theme="dark"]{--brass:#bf9b48;--brass-d:#7d5e1c;--brass-hi:#dcc07a;--okbg:rgba(124,194,138,.2);--badbg:rgba(255,138,128,.18)}
+.tb{font:700 4.1px "Albert Sans",sans-serif;fill:var(--btn-ink)}
+@media (min-width:700px){.tb{font-size:2.8px}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+<a class="backlink" href="/" data-back>← Zpět do lekce</a>
+<h1>Šířka a konec pásku</h1>
+<p class="lead">Projekt 04, lekce 1, krok „Vyberte šířku, konec a barvu“. Šířka pásu podle přezky, hrot, nebo zaoblený konec, co z toho zvládne destička a kde to zadat na stránce „Váš pásek“. Příklad pro 40 mm – vaše čísla ukáže „Váš pásek“.</p>
+</header>
+
+<section class="card" aria-label="Animace postupu">
+  <div class="stagewrap">
+    <svg id="stage" viewBox="0 0 135 90" role="img" aria-label="Animace: velikost přezky a šířka pásu, hrot a zaoblený konec, řady destičky a zadání na stránce Váš pásek"></svg>
+    <div class="badge" id="badge" hidden><i id="chip"></i><span id="side">LÍC</span><small id="sidesub"></small></div>
+  </div>
+  <div class="prog" id="prog"></div>
+  <div class="controls">
+    <button id="bRestart" aria-label="Od začátku" title="Od začátku"><svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/></svg></button>
+    <button id="bPrev" aria-label="Předchozí krok" title="Předchozí krok"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg></button>
+    <button id="bPlay" class="play" aria-label="Přehrát" title="Přehrát / pozastavit"><svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg></button>
+    <button id="bNext" aria-label="Další krok" title="Další krok"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
+    <span class="counter" id="counter">krok 1 / 1</span>
+  </div>
+  <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
+</section>
+<p class="note">Hrot (sklon boku 0,453, vrchol R4) a zaoblený konec (půlkruh r = šířka/2) jsou kreslené v měřítku podle výpočtu aplikace. Destička je převzatá z výrobního souboru. Přezka a stránka „Váš pásek“ jsou schéma. „Tip“ označuje, co lekce neuvádí.</p>
+</div>
+
+<script>
+(()=>{
+// Destička MK Plexi: obrysy (REZ) a gravírování převzaté z docs/generated/opasek-desticka.svg, 1 jednotka = 1 mm.
+const PLATE_CUT="M152.113 11.28L201.951 33.856A4 4 0 0 1 201.951 41.144L152.113 63.72A2 2 0 0 1 149.287 61.898L149.287 13.102A2 2 0 0 1 152.113 11.28ZM111 37.5A1 1 0 1 0 109 37.5A1 1 0 1 0 111 37.5ZM86 37.5A1 1 0 1 0 84 37.5A1 1 0 1 0 86 37.5ZM61 37.5A1 1 0 1 0 59 37.5A1 1 0 1 0 61 37.5ZM36 37.5A1 1 0 1 0 34 37.5A1 1 0 1 0 36 37.5ZM11 37.5A1 1 0 1 0 9 37.5A1 1 0 1 0 11 37.5ZM184.3 73.5A21 21 0 0 1 184.3 115.5A1 1 0 0 1 184.3 113.5A19 19 0 0 0 184.3 75.5A1 1 0 0 1 184.3 73.5ZM184.3 78.5A16 16 0 0 1 184.3 110.5A1 1 0 0 1 184.3 108.5A14 14 0 0 0 184.3 80.5A1 1 0 0 1 184.3 78.5ZM111 94.5A1 1 0 1 0 109 94.5A1 1 0 1 0 111 94.5ZM86 94.5A1 1 0 1 0 84 94.5A1 1 0 1 0 86 94.5ZM61 94.5A1 1 0 1 0 59 94.5A1 1 0 1 0 61 94.5ZM36 94.5A1 1 0 1 0 34 94.5A1 1 0 1 0 36 94.5ZM11 94.5A1 1 0 1 0 9 94.5A1 1 0 1 0 11 94.5ZM80.5 148.5L99.5 148.5A3 3 0 0 1 99.5 154.5L80.5 154.5A3 3 0 0 1 80.5 148.5ZM17.8 151.5A1 1 0 1 0 15.8 151.5A1 1 0 1 0 17.8 151.5ZM65.5 151.5A1 1 0 1 0 63.5 151.5A1 1 0 1 0 65.5 151.5ZM116.5 151.5A1 1 0 1 0 114.5 151.5A1 1 0 1 0 116.5 151.5ZM164.2 151.5A1 1 0 1 0 162.2 151.5A1 1 0 1 0 164.2 151.5ZM91 139.5A1 1 0 1 0 89 139.5A1 1 0 1 0 91 139.5ZM91 163.5A1 1 0 1 0 89 163.5A1 1 0 1 0 91 163.5ZM207 178A2 2 0 1 0 203 178A2 2 0 1 0 207 178ZM0 5L5 0L212 0A3 3 0 0 1 215 3L215 181A3 3 0 0 1 212 184L3 184A3 3 0 0 1 0 181Z";
+const PLATE_ENG="M24 37.5L31 37.5M24 36.5L26 36.5M24 38.5L26 38.5M24 35.5L26 35.5M24 39.5L26 39.5M24 34.5L26 34.5M24 40.5L26 40.5M24 33.5L26 33.5M24 41.5L26 41.5M24 32.5L28 32.5M24 42.5L28 42.5M24 31.5L26 31.5M24 43.5L26 43.5M24 30.5L26 30.5M24 44.5L26 44.5M24 29.5L26 29.5M24 45.5L26 45.5M24 28.5L26 28.5M24 46.5L26 46.5M24 27.5L31 27.5M19.14 26.2L19.14 27.5M19.14 27.5L19.14 28.8M19.79 26.2L21.35 26.2M19.79 26.2L19.79 27.5M21.35 26.2L21.35 27.5M19.79 27.5L19.79 28.8M21.35 27.5L21.35 28.8M19.79 28.8L21.35 28.8M24 47.5L31 47.5M19.14 46.2L19.14 47.5M19.14 47.5L19.14 48.8M19.79 46.2L21.35 46.2M19.79 46.2L19.79 47.5M21.35 46.2L21.35 47.5M19.79 47.5L19.79 48.8M21.35 47.5L21.35 48.8M19.79 48.8L21.35 48.8M24 26.5L26 26.5M24 48.5L26 48.5M24 25.5L26 25.5M24 49.5L26 49.5M24 24.5L26 24.5M24 50.5L26 50.5M24 23.5L26 23.5M24 51.5L26 51.5M24 22.5L28 22.5M24 52.5L28 52.5M24 21.5L26 21.5M24 53.5L26 53.5M24 20.5L26 20.5M24 54.5L26 54.5M24 19.5L26 19.5M24 55.5L26 55.5M24 18.5L26 18.5M24 56.5L26 56.5M24 17.5L31 17.5M17.58 16.2L19.14 16.2M19.14 16.2L19.14 17.5M17.58 17.5L19.14 17.5M17.58 17.5L17.58 18.8M17.58 18.8L19.14 18.8M19.79 16.2L21.35 16.2M19.79 16.2L19.79 17.5M21.35 16.2L21.35 17.5M19.79 17.5L19.79 18.8M21.35 17.5L21.35 18.8M19.79 18.8L21.35 18.8M24 57.5L31 57.5M17.58 56.2L19.14 56.2M19.14 56.2L19.14 57.5M17.58 57.5L19.14 57.5M17.58 57.5L17.58 58.8M17.58 58.8L19.14 58.8M19.79 56.2L21.35 56.2M19.79 56.2L19.79 57.5M21.35 56.2L21.35 57.5M19.79 57.5L19.79 58.8M21.35 57.5L21.35 58.8M19.79 58.8L21.35 58.8M24 16.5L26 16.5M24 58.5L26 58.5M24 15.5L26 15.5M24 59.5L26 59.5M24 14.5L26 14.5M24 60.5L26 60.5M24 13.5L26 13.5M24 61.5L26 61.5M24 94.5L31 94.5M24 93.5L26 93.5M24 95.5L26 95.5M24 92.5L26 92.5M24 96.5L26 96.5M24 91.5L26 91.5M24 97.5L26 97.5M24 90.5L26 90.5M24 98.5L26 98.5M24 89.5L28 89.5M24 99.5L28 99.5M24 88.5L26 88.5M24 100.5L26 100.5M24 87.5L26 87.5M24 101.5L26 101.5M24 86.5L26 86.5M24 102.5L26 102.5M24 85.5L26 85.5M24 103.5L26 103.5M24 84.5L31 84.5M19.14 83.2L19.14 84.5M19.14 84.5L19.14 85.8M19.79 83.2L21.35 83.2M19.79 83.2L19.79 84.5M21.35 83.2L21.35 84.5M19.79 84.5L19.79 85.8M21.35 84.5L21.35 85.8M19.79 85.8L21.35 85.8M24 104.5L31 104.5M19.14 103.2L19.14 104.5M19.14 104.5L19.14 105.8M19.79 103.2L21.35 103.2M19.79 103.2L19.79 104.5M21.35 103.2L21.35 104.5M19.79 104.5L19.79 105.8M21.35 104.5L21.35 105.8M19.79 105.8L21.35 105.8M24 83.5L26 83.5M24 105.5L26 105.5M24 82.5L26 82.5M24 106.5L26 106.5M24 81.5L26 81.5M24 107.5L26 107.5M24 80.5L26 80.5M24 108.5L26 108.5M24 79.5L28 79.5M24 109.5L28 109.5M24 78.5L26 78.5M24 110.5L26 110.5M24 77.5L26 77.5M24 111.5L26 111.5M24 76.5L26 76.5M24 112.5L26 112.5M24 75.5L26 75.5M24 113.5L26 113.5M24 74.5L31 74.5M17.58 73.2L19.14 73.2M19.14 73.2L19.14 74.5M17.58 74.5L19.14 74.5M17.58 74.5L17.58 75.8M17.58 75.8L19.14 75.8M19.79 73.2L21.35 73.2M19.79 73.2L19.79 74.5M21.35 73.2L21.35 74.5M19.79 74.5L19.79 75.8M21.35 74.5L21.35 75.8M19.79 75.8L21.35 75.8M24 114.5L31 114.5M17.58 113.2L19.14 113.2M19.14 113.2L19.14 114.5M17.58 114.5L19.14 114.5M17.58 114.5L17.58 115.8M17.58 115.8L19.14 115.8M19.79 113.2L21.35 113.2M19.79 113.2L19.79 114.5M21.35 113.2L21.35 114.5M19.79 114.5L19.79 115.8M21.35 114.5L21.35 115.8M19.79 115.8L21.35 115.8M24 73.5L26 73.5M24 115.5L26 115.5M24 72.5L26 72.5M24 116.5L26 116.5M24 71.5L26 71.5M24 117.5L26 117.5M24 70.5L26 70.5M24 118.5L26 118.5M24 151.5L31 151.5M24 150.5L26 150.5M24 152.5L26 152.5M24 149.5L26 149.5M24 153.5L26 153.5M24 148.5L26 148.5M24 154.5L26 154.5M24 147.5L26 147.5M24 155.5L26 155.5M24 146.5L28 146.5M24 156.5L28 156.5M24 145.5L26 145.5M24 157.5L26 157.5M24 144.5L26 144.5M24 158.5L26 158.5M24 143.5L26 143.5M24 159.5L26 159.5M24 142.5L26 142.5M24 160.5L26 160.5M24 141.5L31 141.5M19.14 140.2L19.14 141.5M19.14 141.5L19.14 142.8M19.79 140.2L21.35 140.2M19.79 140.2L19.79 141.5M21.35 140.2L21.35 141.5M19.79 141.5L19.79 142.8M21.35 141.5L21.35 142.8M19.79 142.8L21.35 142.8M24 161.5L31 161.5M19.14 160.2L19.14 161.5M19.14 161.5L19.14 162.8M19.79 160.2L21.35 160.2M19.79 160.2L19.79 161.5M21.35 160.2L21.35 161.5M19.79 161.5L19.79 162.8M21.35 161.5L21.35 162.8M19.79 162.8L21.35 162.8M24 140.5L26 140.5M24 162.5L26 162.5M24 139.5L26 139.5M24 163.5L26 163.5M24 138.5L26 138.5M24 164.5L26 164.5M24 137.5L26 137.5M24 165.5L26 165.5M24 136.5L28 136.5M24 166.5L28 166.5M24 135.5L26 135.5M24 167.5L26 167.5M24 134.5L26 134.5M24 168.5L26 168.5M24 133.5L26 133.5M24 169.5L26 169.5M24 132.5L26 132.5M24 170.5L26 170.5M24 131.5L31 131.5M17.58 130.2L19.14 130.2M19.14 130.2L19.14 131.5M17.58 131.5L19.14 131.5M17.58 131.5L17.58 132.8M17.58 132.8L19.14 132.8M19.79 130.2L21.35 130.2M19.79 130.2L19.79 131.5M21.35 130.2L21.35 131.5M19.79 131.5L19.79 132.8M21.35 131.5L21.35 132.8M19.79 132.8L21.35 132.8M24 171.5L31 171.5M17.58 170.2L19.14 170.2M19.14 170.2L19.14 171.5M17.58 171.5L19.14 171.5M17.58 171.5L17.58 172.8M17.58 172.8L19.14 172.8M19.79 170.2L21.35 170.2M19.79 170.2L19.79 171.5M21.35 170.2L21.35 171.5M19.79 171.5L19.79 172.8M21.35 171.5L21.35 172.8M19.79 172.8L21.35 172.8M24 130.5L26 130.5M24 172.5L26 172.5M24 129.5L26 129.5M24 173.5L26 173.5M24 128.5L26 128.5M24 174.5L26 174.5M24 127.5L26 127.5M24 175.5L26 175.5M1 6L1 7.2M2 6L2 7.2M3 6L3 7.2M4 6L4 8M5 6L5 9.5M6 6L6 8M7 6L7 8M8 6L8 8M9 6L9 8M10 6L10 11M11 6L11 8M12 6L12 8M13 6L13 8M14 6L14 8M15 6L15 9.5M16 6L16 8M17 6L17 8M18 6L18 8M19 6L19 8M20 6L20 11M21 6L21 8M22 6L22 8M23 6L23 8M24 6L24 8M25 6L25 9.5M26 6L26 8M27 6L27 8M28 6L28 8M29 6L29 8M30 6L30 11M31 6L31 8M32 6L32 8M33 6L33 8M34 6L34 8M35 6L35 9.5M36 6L36 8M37 6L37 8M38 6L38 8M39 6L39 8M40 6L40 11M41 6L41 8M42 6L42 8M43 6L43 8M44 6L44 8M45 6L45 9.5M46 6L46 8M47 6L47 8M48 6L48 8M49 6L49 8M50 6L50 13M51 6L51 7.2M52 6L52 7.2M53 6L53 7.2M54 6L54 7.2M55 6L55 7.2M56 6L56 7.2M57 6L57 8M58 6L58 8M59 6L59 8M60 6L60 11M61 6L61 8M62 6L62 8M63 6L63 8M64 6L64 8M65 6L65 9.5M66 6L66 8M67 6L67 8M68 6L68 8M69 6L69 8M70 6L70 11M71 6L71 8M72 6L72 8M73 6L73 8M74 6L74 8M75 6L75 9.5M76 6L76 8M77 6L77 8M78 6L78 8M79 6L79 8M80 6L80 11M81 6L81 8M82 6L82 8M83 6L83 8M84 6L84 8M85 6L85 9.5M86 6L86 8M87 6L87 8M88 6L88 8M89 6L89 8M90 6L90 11M91 6L91 8M92 6L92 8M93 6L93 8M94 6L94 8M95 6L95 9.5M96 6L96 8M97 6L97 8M98 6L98 8M99 6L99 8M100 6L100 13M101 6L101 7.2M102 6L102 7.2M103 6L103 7.2M104 6L104 7.2M105 6L105 7.2M106 6L106 7.2M107 6L107 7.2M108 6L108 7.2M109 6L109 8M110 6L110 11M111 6L111 8M112 6L112 8M113 6L113 8M114 6L114 8M115 6L115 9.5M116 6L116 8M117 6L117 8M118 6L118 8M119 6L119 8M120 6L120 11M121 6L121 8M122 6L122 8M123 6L123 8M124 6L124 8M125 6L125 9.5M126 6L126 8M127 6L127 8M128 6L128 8M129 6L129 8M130 6L130 11M131 6L131 8M132 6L132 8M133 6L133 8M134 6L134 8M135 6L135 9.5M136 6L136 8M137 6L137 8M138 6L138 8M139 6L139 8M140 6L140 11M141 6L141 8M142 6L142 8M143 6L143 8M144 6L144 8M145 6L145 9.5M1.2 7.6L2.76 7.6M1.2 7.6L1.2 8.9M2.76 7.6L2.76 8.9M1.2 8.9L1.2 10.2M2.76 8.9L2.76 10.2M1.2 10.2L2.76 10.2M51.2 7.6L52.76 7.6M51.2 7.6L51.2 8.9M51.2 8.9L52.76 8.9M52.76 8.9L52.76 10.2M51.2 10.2L52.76 10.2M53.41 7.6L54.97 7.6M53.41 7.6L53.41 8.9M54.97 7.6L54.97 8.9M53.41 8.9L53.41 10.2M54.97 8.9L54.97 10.2M53.41 10.2L54.97 10.2M102.76 7.6L102.76 8.9M102.76 8.9L102.76 10.2M103.41 7.6L104.97 7.6M103.41 7.6L103.41 8.9M104.97 7.6L104.97 8.9M103.41 8.9L103.41 10.2M104.97 8.9L104.97 10.2M103.41 10.2L104.97 10.2M105.62 7.6L107.18 7.6M105.62 7.6L105.62 8.9M107.18 7.6L107.18 8.9M105.62 8.9L105.62 10.2M107.18 8.9L107.18 10.2M105.62 10.2L107.18 10.2M39 15L134.687 15M139.287 15L145.287 15M135.287 14L135.287 15M136.487 14L136.487 15M135.287 15L136.487 15M136.487 15L136.487 16M136.987 14L138.187 14M136.987 14L136.987 15M136.987 15L138.187 15M138.187 15L138.187 16M136.987 16L138.187 16M39 60L134.687 60M139.287 60L145.287 60M135.287 59L135.287 60M136.487 59L136.487 60M135.287 60L136.487 60M136.487 60L136.487 61M136.987 59L138.187 59M136.987 59L136.987 60M136.987 60L138.187 60M138.187 60L138.187 61M136.987 61L138.187 61M39 72L172.7 72M177.3 72L183.3 72M173.3 71L173.3 72M174.5 71L174.5 72M173.3 72L174.5 72M174.5 72L174.5 73M175 71L176.2 71M175 71L175 72M175 72L176.2 72M176.2 72L176.2 73M175 73L176.2 73M39 117L172.7 117M177.3 117L183.3 117M173.3 116L173.3 117M174.5 116L174.5 117M173.3 117L174.5 117M174.5 117L174.5 118M175 116L176.2 116M175 116L175 117M175 117L176.2 117M176.2 117L176.2 118M175 118L176.2 118M39 129L189.4 129M194 129L200 129M190 128L190 129M191.2 128L191.2 129M190 129L191.2 129M191.2 129L191.2 130M191.7 128L192.9 128M191.7 128L191.7 129M191.7 129L192.9 129M192.9 129L192.9 130M191.7 130L192.9 130M39 174L189.4 174M194 174L200 174M190 173L190 174M191.2 173L191.2 174M190 174L191.2 174M191.2 174L191.2 175M191.7 173L192.9 173M191.7 173L191.7 174M191.7 174L192.9 174M192.9 174L192.9 175M191.7 175L192.9 175M39 17.5L129.887 17.5M134.487 17.5L145.287 17.5M130.487 16.5L130.487 17.5M131.687 16.5L131.687 17.5M130.487 17.5L131.687 17.5M131.687 17.5L131.687 18.5M132.187 16.5L133.387 16.5M132.187 16.5L132.187 17.5M133.387 16.5L133.387 17.5M132.187 17.5L132.187 18.5M133.387 17.5L133.387 18.5M132.187 18.5L133.387 18.5M39 57.5L129.887 57.5M134.487 57.5L145.287 57.5M130.487 56.5L130.487 57.5M131.687 56.5L131.687 57.5M130.487 57.5L131.687 57.5M131.687 57.5L131.687 58.5M132.187 56.5L133.387 56.5M132.187 56.5L132.187 57.5M133.387 56.5L133.387 57.5M132.187 57.5L132.187 58.5M133.387 57.5L133.387 58.5M132.187 58.5L133.387 58.5M39 74.5L167.9 74.5M172.5 74.5L183.3 74.5M168.5 73.5L168.5 74.5M169.7 73.5L169.7 74.5M168.5 74.5L169.7 74.5M169.7 74.5L169.7 75.5M170.2 73.5L171.4 73.5M170.2 73.5L170.2 74.5M171.4 73.5L171.4 74.5M170.2 74.5L170.2 75.5M171.4 74.5L171.4 75.5M170.2 75.5L171.4 75.5M39 114.5L167.9 114.5M172.5 114.5L183.3 114.5M168.5 113.5L168.5 114.5M169.7 113.5L169.7 114.5M168.5 114.5L169.7 114.5M169.7 114.5L169.7 115.5M170.2 113.5L171.4 113.5M170.2 113.5L170.2 114.5M171.4 113.5L171.4 114.5M170.2 114.5L170.2 115.5M171.4 114.5L171.4 115.5M170.2 115.5L171.4 115.5M39 131.5L184.6 131.5M189.2 131.5L200 131.5M185.2 130.5L185.2 131.5M186.4 130.5L186.4 131.5M185.2 131.5L186.4 131.5M186.4 131.5L186.4 132.5M186.9 130.5L188.1 130.5M186.9 130.5L186.9 131.5M188.1 130.5L188.1 131.5M186.9 131.5L186.9 132.5M188.1 131.5L188.1 132.5M186.9 132.5L188.1 132.5M39 171.5L184.6 171.5M189.2 171.5L200 171.5M185.2 170.5L185.2 171.5M186.4 170.5L186.4 171.5M185.2 171.5L186.4 171.5M186.4 171.5L186.4 172.5M186.9 170.5L188.1 170.5M186.9 170.5L186.9 171.5M188.1 170.5L188.1 171.5M186.9 171.5L186.9 172.5M188.1 171.5L188.1 172.5M186.9 172.5L188.1 172.5M39 20L125.087 20M129.687 20L145.287 20M125.687 19L126.887 19M126.887 19L126.887 20M125.687 20L126.887 20M126.887 20L126.887 21M125.687 21L126.887 21M127.387 19L128.587 19M127.387 19L127.387 20M127.387 20L128.587 20M128.587 20L128.587 21M127.387 21L128.587 21M39 55L125.087 55M129.687 55L145.287 55M125.687 54L126.887 54M126.887 54L126.887 55M125.687 55L126.887 55M126.887 55L126.887 56M125.687 56L126.887 56M127.387 54L128.587 54M127.387 54L127.387 55M127.387 55L128.587 55M128.587 55L128.587 56M127.387 56L128.587 56M39 77L163.1 77M167.7 77L183.3 77M163.7 76L164.9 76M164.9 76L164.9 77M163.7 77L164.9 77M164.9 77L164.9 78M163.7 78L164.9 78M165.4 76L166.6 76M165.4 76L165.4 77M165.4 77L166.6 77M166.6 77L166.6 78M165.4 78L166.6 78M39 112L163.1 112M167.7 112L183.3 112M163.7 111L164.9 111M164.9 111L164.9 112M163.7 112L164.9 112M164.9 112L164.9 113M163.7 113L164.9 113M165.4 111L166.6 111M165.4 111L165.4 112M165.4 112L166.6 112M166.6 112L166.6 113M165.4 113L166.6 113M39 134L179.8 134M184.4 134L200 134M180.4 133L181.6 133M181.6 133L181.6 134M180.4 134L181.6 134M181.6 134L181.6 135M180.4 135L181.6 135M182.1 133L183.3 133M182.1 133L182.1 134M182.1 134L183.3 134M183.3 134L183.3 135M182.1 135L183.3 135M39 169L179.8 169M184.4 169L200 169M180.4 168L181.6 168M181.6 168L181.6 169M180.4 169L181.6 169M181.6 169L181.6 170M180.4 170L181.6 170M182.1 168L183.3 168M182.1 168L182.1 169M182.1 169L183.3 169M183.3 169L183.3 170M182.1 170L183.3 170M39 22.5L120.287 22.5M124.887 22.5L145.287 22.5M120.887 21.5L122.087 21.5M122.087 21.5L122.087 22.5M120.887 22.5L122.087 22.5M122.087 22.5L122.087 23.5M120.887 23.5L122.087 23.5M122.587 21.5L123.787 21.5M122.587 21.5L122.587 22.5M123.787 21.5L123.787 22.5M122.587 22.5L122.587 23.5M123.787 22.5L123.787 23.5M122.587 23.5L123.787 23.5M39 52.5L120.287 52.5M124.887 52.5L145.287 52.5M120.887 51.5L122.087 51.5M122.087 51.5L122.087 52.5M120.887 52.5L122.087 52.5M122.087 52.5L122.087 53.5M120.887 53.5L122.087 53.5M122.587 51.5L123.787 51.5M122.587 51.5L122.587 52.5M123.787 51.5L123.787 52.5M122.587 52.5L122.587 53.5M123.787 52.5L123.787 53.5M122.587 53.5L123.787 53.5M39 79.5L158.3 79.5M162.9 79.5L183.3 79.5M158.9 78.5L160.1 78.5M160.1 78.5L160.1 79.5M158.9 79.5L160.1 79.5M160.1 79.5L160.1 80.5M158.9 80.5L160.1 80.5M160.6 78.5L161.8 78.5M160.6 78.5L160.6 79.5M161.8 78.5L161.8 79.5M160.6 79.5L160.6 80.5M161.8 79.5L161.8 80.5M160.6 80.5L161.8 80.5M39 109.5L158.3 109.5M162.9 109.5L183.3 109.5M158.9 108.5L160.1 108.5M160.1 108.5L160.1 109.5M158.9 109.5L160.1 109.5M160.1 109.5L160.1 110.5M158.9 110.5L160.1 110.5M160.6 108.5L161.8 108.5M160.6 108.5L160.6 109.5M161.8 108.5L161.8 109.5M160.6 109.5L160.6 110.5M161.8 109.5L161.8 110.5M160.6 110.5L161.8 110.5M39 136.5L175 136.5M179.6 136.5L200 136.5M175.6 135.5L176.8 135.5M176.8 135.5L176.8 136.5M175.6 136.5L176.8 136.5M176.8 136.5L176.8 137.5M175.6 137.5L176.8 137.5M177.3 135.5L178.5 135.5M177.3 135.5L177.3 136.5M178.5 135.5L178.5 136.5M177.3 136.5L177.3 137.5M178.5 136.5L178.5 137.5M177.3 137.5L178.5 137.5M39 166.5L175 166.5M179.6 166.5L200 166.5M175.6 165.5L176.8 165.5M176.8 165.5L176.8 166.5M175.6 166.5L176.8 166.5M176.8 166.5L176.8 167.5M175.6 167.5L176.8 167.5M177.3 165.5L178.5 165.5M177.3 165.5L177.3 166.5M178.5 165.5L178.5 166.5M177.3 166.5L177.3 167.5M178.5 166.5L178.5 167.5M177.3 167.5L178.5 167.5M57 25.5L63 25.5M60 23.5L60 27.5M57 49.5L63 49.5M60 47.5L60 51.5M57 82.5L63 82.5M60 80.5L60 84.5M57 106.5L63 106.5M60 104.5L60 108.5M5.8 36L5.8 37.5M5.8 37.5L5.8 39M4 93L5.8 93M5.8 93L5.8 94.5M4 94.5L5.8 94.5M4 94.5L4 96M4 96L5.8 96M4 150L5.8 150M5.8 150L5.8 151.5M4 151.5L5.8 151.5M5.8 151.5L5.8 153M4 153L5.8 153M90 129L90 130.8M90 132L90 133.8M90 135L90 136.8M90 141L90 142.8M90 144L90 145.8M90 147L90 148M90 155L90 156.8M90 158L90 159.8M90 167L90 168.8M90 170L90 171.8M90 173L90 174M145 178L145 182M145 180L195 180M195 178L195 182M167 175.4L168.56 175.4M167 175.4L167 176.7M167 176.7L168.56 176.7M168.56 176.7L168.56 178M167 178L168.56 178M169.21 175.4L170.77 175.4M169.21 175.4L169.21 176.7M170.77 175.4L170.77 176.7M169.21 176.7L169.21 178M170.77 176.7L170.77 178M169.21 178L170.77 178";
+// výřez hrotu (řada 1), ovál a otvory nýtů (řada 3) – stejné obrysy jako v PLATE_CUT
+const ROW1_CUT="M152.113 11.28L201.951 33.856A4 4 0 0 1 201.951 41.144L152.113 63.72A2 2 0 0 1 149.287 61.898L149.287 13.102A2 2 0 0 1 152.113 11.28Z";
+const ROW3_CUT="M80.5 148.5L99.5 148.5A3 3 0 0 1 99.5 154.5L80.5 154.5A3 3 0 0 1 80.5 148.5ZM17.8 151.5A1 1 0 1 0 15.8 151.5A1 1 0 1 0 17.8 151.5ZM65.5 151.5A1 1 0 1 0 63.5 151.5A1 1 0 1 0 65.5 151.5ZM116.5 151.5A1 1 0 1 0 114.5 151.5A1 1 0 1 0 116.5 151.5ZM164.2 151.5A1 1 0 1 0 162.2 151.5A1 1 0 1 0 164.2 151.5Z";
+
+// ---------- geometrie (mm) ----------
+// src/lib/geometry/belt-end.ts: DEFAULT_BELT_TIP (sklon 0,453, vrchol R4), tipLengthMm, tipShapeLengthMm (zaoblený = šířka/2).
+const SLOPE=.453, NOSE=4;
+const TW=NOSE/Math.sqrt(1+SLOPE*SLOPE), TF=NOSE-SLOPE*TW;   // bod dotyku boku a oblouku R4
+const tipLen=w=>TF+(w/2-TW)/SLOPE;                          // 40 → 38,46 mm
+const WMIN=28, WMAX=45;                                       // BELT_LIMITS.widthMm
+const ROUND_W=[30,40];                                        // oblouky řady 2
+const CAT_W=[30,35,40];                                       // jednotrnová s ověřeným trnem (CraftPoint)
+
+// ---------- pomocné ----------
+const cl=t=>Math.max(0,Math.min(1,t));
+const seg=(t,a,b)=>cl((t-a)/(b-a));
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const es=(t,a,b)=>ease(seg(t,a,b));
+const L=(a,b,t)=>a+(b-a)*t;
+const f=n=>(+n).toFixed(2);
+const cz=n=>String(n).replace('.',',');
+const c1=n=>cz((+n).toFixed(1));
+let UID=0;const uid=p=>`${p}${++UID}`;
+function lbl(x,y,t,cls='t',anchor='start'){return `<text x="${f(x)}" y="${f(y)}" class="${cls}" text-anchor="${anchor}">${t}</text>`}
+function pill(x,y,t,cls='t',anchor='start'){return `<g class="pill"><rect class="pillbg" rx="1.2" x="${f(x)}" y="${f(y-4)}" width="1" height="1"/>${lbl(x,y,t,cls,anchor)}</g>`}
+function fade(o,s){return o<=0?'':`<g opacity="${f(o)}">${s}</g>`}
+function tick(x,y,s=1){return `<path d="M${f(x-1.6*s)} ${f(y)} l${f(1.2*s)} ${f(1.2*s)} l${f(2.4*s)} -${f(2.6*s)}" stroke="var(--ok)" stroke-width="${f(.7*s)}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`}
+function xmark(x,y,s=1){return `<path d="M${f(x-1.2*s)} ${f(y-1.2*s)} l${f(2.4*s)} ${f(2.4*s)} M${f(x-1.2*s)} ${f(y+1.2*s)} l${f(2.4*s)} -${f(2.4*s)}" stroke="var(--accent)" stroke-width="${f(.7*s)}" stroke-linecap="round"/>`}
+function arrow(x1,y1,x2,y2,col='var(--accent)',w=.5,mk='ar'){return `<path d="M${f(x1)} ${f(y1)} L${f(x2)} ${f(y2)}" stroke="${col}" stroke-width="${w}" marker-end="url(#${mk})"/>`}
+function inset(title,body,{x=94,y=6,w=39,h=78}={}){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" class="panelbox"/><text x="${x+3}" y="${y+5.5}" class="ts" style="font-weight:700;letter-spacing:.06em">${title}</text>${body}`}
+function notes(lines,y0=18,step=5.4,x=97){return lines.map((l,i)=>lbl(x,y0+i*step,l[0],l[1]||'ts')).join('')}
+// kóty ve scéně
+function dimH(x1,x2,y,txt,cls='t',col='var(--ink)',mk='arI'){return `<path d="M${f(x1)} ${f(y)} H${f(x2)}" stroke="${col}" stroke-width=".3" marker-start="url(#${mk})" marker-end="url(#${mk})"/><path d="M${f(x1)} ${f(y-2)} v4 M${f(x2)} ${f(y-2)} v4" stroke="${col}" stroke-width=".25"/>`+(txt?pill((x1+x2)/2,y-1.6,txt,cls,'middle'):'')}
+function dimV(x,y1,y2,txt,cls='t',col='var(--ink)',mk='arI',lx=null,ly=null){return `<path d="M${f(x)} ${f(y1)} V${f(y2)}" stroke="${col}" stroke-width=".3" marker-start="url(#${mk})" marker-end="url(#${mk})"/><path d="M${f(x-2)} ${f(y1)} h4 M${f(x-2)} ${f(y2)} h4" stroke="${col}" stroke-width=".25"/>`+(txt?pill(lx??x,ly??((y1+y2)/2+1.4),txt,cls,'middle'):'')}
+function plen(P){let s=0;for(let i=1;i<P.length;i++)s+=Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1]);return s}
+function ppart(P,u){if(u<=0)return [P[0]];const tot=plen(P)*Math.min(1,u);let s=0;const out=[P[0]];
+  for(let i=1;i<P.length;i++){const d=Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1]);if(s+d>=tot){const k=(tot-s)/d;out.push([L(P[i-1][0],P[i][0],k),L(P[i-1][1],P[i][1],k)]);return out}s+=d;out.push(P[i])}return out}
+const pd=P=>'M'+P.map(p=>`${f(p[0])} ${f(p[1])}`).join(' L');
+function arcPts(cx,cy,r,a0,a1,n=32){return Array.from({length:n+1},(_,i)=>{const a=a0+(a1-a0)*i/n;return [cx+r*Math.cos(a),cy+r*Math.sin(a)]})}
+function tap(x,y,u){if(u<=0||u>=1)return '';return `<circle cx="${f(x)}" cy="${f(y)}" r="${f(1.5+5*u)}" fill="none" stroke="var(--accent)" stroke-width=".5" opacity="${f(1-u)}"/><circle cx="${f(x)}" cy="${f(y)}" r="1.4" fill="var(--accent)" opacity="${f(1-u)}"/>`}
+
+// ---------- konce pásku (mm; vrchol nahoře v [0,0], pás pokračuje dolů do y = end) ----------
+function hrotPts(w,end){const a0=Math.atan2(TF-NOSE,-TW),a1=Math.atan2(TF-NOSE,TW),TL=tipLen(w);
+  return [[-w/2,end],[-w/2,TL],[-TW,TF],...arcPts(0,NOSE,NOSE,a0,a1,16).slice(1,-1),[TW,TF],[w/2,TL],[w/2,end]]}
+function roundPts(w,end){const r=w/2;return [[-r,end],[-r,r],...arcPts(0,r,r,Math.PI,2*Math.PI,40).slice(1,-1),[r,r],[r,end]]}
+// konec pásku v měřítku k, vrchol v (x,y); trace = obtažení obrysu 0–1
+function strapEnd(shape,w,end,x,y,k,{fill=1,trace=1,hl=0}={}){
+  const P=shape==='hrot'?hrotPts(w,end):roundPts(w,end);
+  let s=`<g transform="translate(${f(x)} ${f(y)}) scale(${k})">`;
+  if(fill>0) s+=`<path d="${pd(P)} Z" fill="url(#licV)" stroke="var(--lic-d)" stroke-width="${f(.35/k)}" opacity="${f(fill)}"/>`;
+  if(trace>0&&trace<1) s+=`<path d="${pd(ppart(P,trace))}" fill="none" stroke="var(--accent)" stroke-width="${f(.6/k)}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  if(hl>0) s+=`<path d="${pd(P.slice(1,-1))}" fill="none" stroke="var(--accent)" stroke-width="${f(.55/k)}" opacity="${f(hl)}" stroke-linejoin="round"/>`;
+  return s+'</g>';
+}
+
+// ---------- přezka (schéma, pohled zepředu; pás jde vodorovně, světlost je svisle) ----------
+const BAR=4, OPEN_L=22;
+function buckleGeo(cx,cy,inner,k){const h=inner*k,lx=OPEN_L*k,b=BAR*k;return {h,lx,b,ix0:cx-lx/2,ix1:cx+lx/2,iy0:cy-h/2,iy1:cy+h/2,ox0:cx-lx/2-b,ox1:cx+lx/2+b,oy0:cy-h/2-b,oy1:cy+h/2+b}}
+function rr(x0,y0,x1,y1,r){r=+(+r).toFixed(2);return `M${f(x0+r)} ${f(y0)} H${f(x1-r)} A${r} ${r} 0 0 1 ${f(x1)} ${f(y0+r)} V${f(y1-r)} A${r} ${r} 0 0 1 ${f(x1-r)} ${f(y1)} H${f(x0+r)} A${r} ${r} 0 0 1 ${f(x0)} ${f(y1-r)} V${f(y0+r)} A${r} ${r} 0 0 1 ${f(x0+r)} ${f(y0)} Z`}
+function buckleFrame(cx,cy,inner,k,{op=1,prongs=1,roller=false}={}){if(op<=0)return '';
+  const g=buckleGeo(cx,cy,inner,k);
+  let s=`<path d="${rr(g.ox0,g.oy0,g.ox1,g.oy1,f(2.6*k))} ${rr(g.ix0,g.iy0,g.ix1,g.iy1,f(1.2*k))}" fill="url(#brassG)" fill-rule="evenodd" stroke="var(--brass-d)" stroke-width=".35" ${'filter="url(#sh)"'}/>`;
+  if(roller) s+=`<rect x="${f(g.ix1-1.2*k)}" y="${f(g.iy0-.6*k)}" width="${f(g.b+2.4*k)}" height="${f(g.h+1.2*k)}" rx="${f(1.8*k)}" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".3"/>`;
+  const ys=prongs===2?[cy-inner*k/5,cy+inner*k/5]:[cy];
+  for(const y of ys) s+=`<rect x="${f(g.ox0+g.b*.3)}" y="${f(y-1.1*k)}" width="${f(g.ix1+g.b*.6-g.ox0-g.b*.3)}" height="${f(2.2*k)}" rx="${f(1.1*k)}" fill="var(--brass-hi)" stroke="var(--brass-d)" stroke-width=".3"/>`;
+  return `<g opacity="${f(op)}">${s}</g>`;
+}
+// pás procházející přezkou: od levé příčky doprava
+function strapThrough(cx,cy,w,k,xEnd){const g=buckleGeo(cx,cy,w,k);const x0=Math.max(g.ox0+g.b*.5,Math.min(xEnd,200));
+  return `<rect x="${f(x0)}" y="${f(cy-w*k/2)}" width="${f(160-x0)}" height="${f(w*k)}" fill="url(#licH)" stroke="var(--lic-d)" stroke-width=".3"/>`}
+
+// ---------- destička ----------
+function plate(x,y,k,{op=1,hl=0}={}){if(op<=0)return '';
+  const bands=[[9,57],[68,52],[126,52]];
+  let s=`<g transform="translate(${f(x)} ${f(y)}) scale(${k})" opacity="${f(op)}"><path d="${PLATE_CUT}" fill="var(--acryl)" fill-opacity=".3" fill-rule="evenodd" stroke="var(--acryl-d)" stroke-width="${f(.35/k)}" filter="url(#sh)"/>`+
+    `<path d="${PLATE_ENG}" fill="none" stroke="var(--engr)" stroke-width="${f(.17/k)}" stroke-linecap="round" opacity=".9"/>`;
+  bands.forEach((b,i)=>{const o=hl[i]||0;if(o<=0)return;
+    s+=`<g opacity="${f(o)}"><rect x="1.5" y="${b[0]}" width="212" height="${b[1]}" rx="3" fill="var(--accent)" fill-opacity=".06" stroke="var(--accent)" stroke-width="${f(.45/k)}" stroke-dasharray="${f(1.6/k)} ${f(1/k)}"/>`;
+    if(i===0) s+=`<path d="${ROW1_CUT}" fill="none" stroke="var(--accent)" stroke-width="${f(.6/k)}"/>`;
+    if(i===1) s+=`<path d="M184.3 74.5 A20 20 0 0 1 184.3 114.5 M184.3 79.5 A15 15 0 0 1 184.3 109.5" fill="none" stroke="var(--accent)" stroke-width="${f(.7/k)}"/>`;
+    if(i===2) s+=`<path d="${ROW3_CUT}" fill="none" stroke="var(--accent)" stroke-width="${f(.6/k)}"/>`;
+    s+='</g>';});
+  return s+'</g>';
+}
+
+// ---------- formulář (schéma) ----------
+function field(x,y,w,val,unit,{caret=false,focus=false}={}){return `<rect x="${f(x)}" y="${f(y)}" width="${f(w)}" height="8" rx="1.4" fill="var(--bg)" stroke="${focus?'var(--accent)':'var(--line)'}" stroke-width="${focus?.5:.35}"/>`+lbl(x+2.4,y+5.6,val,'t')+(caret?`<path d="M${f(x+2.6+val.length*2.2)} ${f(y+1.8)} v4.4" stroke="var(--ink)" stroke-width=".3"/>`:'')+(unit?lbl(x+w-2.4,y+5.6,unit,'ts','end'):'')}
+function segBtns(x,y,opts,active,bw=24){return opts.map((o,i)=>{const on=i===active,bx=x+i*(bw+1.5);return `<rect x="${f(bx)}" y="${f(y)}" width="${bw}" height="8" rx="1.4" fill="${on?'var(--btn)':'var(--panel)'}" stroke="${on?'var(--btn)':'var(--line)'}" stroke-width=".35"/>`+lbl(bx+bw/2,y+5.6,o,on?'tb':'t','middle')}).join('')}
+function tag(x,y,txt,ok){return `<g class="pill"><rect rx="3" x="${f(x)}" y="${f(y-4)}" width="1" height="1" fill="${ok?'var(--okbg)':'var(--badbg)'}" stroke="${ok?'var(--ok)':'var(--accent)'}" stroke-width=".3"/>${lbl(x,y,txt,ok?'tok':'ta')}</g>`}
+
+const EX='příklad 40 mm';
+const exPill=()=>pill(131,86,EX,'ts','end');
+
+// ---------- kroky ----------
+const PARTS={A:'Přezka = šířka',B:'Hrot, nebo zaoblený',C:'Co umí destička',D:'Kde to zadat'};
+const S=[];
+const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,side,tip});
+
+// A1 — velikost přezky
+add('A','Velikost přezky = vnitřní světlost','Údaj u přezky, např. „40 mm“, je vnitřní světlost: šířka otvoru v rámu, kudy prochází pás. Měří se uvnitř rámu, napříč pásem.',7500,t=>{
+  const k=1.1,cx=38,cy=47,g=buckleGeo(cx,cy,40,k);
+  let s=buckleFrame(cx,cy,40,k,{op:es(t,0,.18)});
+  const p=es(t,.22,.5);
+  if(p>0){const m=cy,h=g.h/2*p;s+=dimV(cx+6,m-h,m+h,p>=1?'40 mm':'','ta','var(--accent)','ar',cx+6,cy-5)}
+  const o=seg(t,.56,.7);
+  if(o>0) s+=fade(o,dimV(g.ox1+4,g.oy0,g.oy1,'','t','var(--muted)','arI')+pill(g.ox1+7,cy+1.4,'vnější: ne','ts')+xmark(g.ox1+4,g.oy0-3,.7));
+  const o2=seg(t,.72,.86);
+  if(o2>0) s+=fade(o2,inset('PŘEZKA',notes([['„40 mm“','tw'],['= vnitřní světlost','t'],['= šířka otvoru,'],['kudy jde pás']],19.5,6.2,85),{x:82,y:8,w:51,h:38}));
+  s+=pill(131,86,'schéma','ts','end');
+  return s;
+},null,'Tip: Vnější rozměr rámu je větší o tloušťku příček; podle něj přezku nevybírejte.');
+
+// A2 — pás stejně široký
+const A2W=[30,35,45,40];
+add('A','Pás je stejně široký jako přezka','Šířka pásu = vnitřní světlost přezky: přezka 40 mm, pás 40 mm. Stejně tak 30, 35 nebo 45 mm.',12000,t=>{
+  const n=A2W.length,ph=t>=1?n-1:Math.floor(t*n),lt=t>=1?1:t*n-ph;
+  const prev=ph>0?A2W[ph-1]:A2W[0],w=L(prev,A2W[ph],es(lt,0,.22));
+  const k=1,cx=34,cy=48,g=buckleGeo(cx,cy,w,k);
+  const p=es(lt,.28,.68);
+  const xEnd=L(150,g.ox0+g.b*.5,p);
+  let s='';
+  if(p>0) s+=strapThrough(cx,cy,w,k,xEnd);
+  s+=buckleFrame(cx,cy,w,k);
+  const wr=Math.round(w);
+  s+=dimV(cx+6,g.iy0,g.iy1,`${wr} mm`,'ta','var(--accent)','ar',cx+6,cy-4.5);
+  if(p>=1) s+=dimV(104,cy-w/2,cy+w/2,`${wr} mm`,'tok','var(--ok)','arO',104,cy-4.5)+tick(g.ix1+9,cy-w/2-3,.8);
+  s+=pill(67.5,8,`přezka ${wr} mm → pás ${wr} mm`,'t','middle');
+  return s;
+},null);
+
+// A3 — šířky a přezky v katalogu
+add('A','Aplikace počítá 28–45 mm','Aplikace počítá šířky 28–45 mm. Jednotrnovou přezku s ověřeným typem trnu má katalog pro 30, 35 a 40 mm; 45 mm má jen Andexnite.',9000,t=>{
+  const X=w=>10+(w-WMIN)*(115/(WMAX-WMIN)),y=22;
+  let s='';
+  const p=es(t,0,.3);
+  s+=`<path d="M${f(X(WMIN))} ${y} H${f(L(X(WMIN),X(WMAX),p))}" stroke="var(--lic)" stroke-width="3" stroke-linecap="round"/>`;
+  let tk='';for(let w=WMIN;w<=WMAX;w++){if(X(w)>L(X(WMIN),X(WMAX),p)+.01)break;tk+=`M${f(X(w))} ${y+2.2} v${w%5===0?2.4:1.2} `}
+  s+=`<path d="${tk}" stroke="var(--muted)" stroke-width=".3"/>`;
+  [28,30,35,40,45].forEach(w=>{if(X(w)<=L(X(WMIN),X(WMAX),p)+.01)s+=lbl(X(w),y+9,String(w),'ts','middle')});
+  s+=fade(seg(t,.05,.2),lbl(10,y-5,'šířka v aplikaci, mm','ts'));
+  const o=seg(t,.36,.52);
+  if(o>0){let d='';CAT_W.forEach(w=>{d+=`<circle cx="${f(X(w))}" cy="${y}" r="2.4" fill="var(--panel)" stroke="var(--ok)" stroke-width=".6"/>`+tick(X(w),y+.3,.6)});
+    s+=fade(o,d+pill(10,y+17,'jednotrnová, ověřený trn: 30 · 35 · 40','tok'))}
+  const o2=seg(t,.56,.7);
+  if(o2>0) s+=fade(o2,`<circle cx="${f(X(45))}" cy="${y}" r="2.4" fill="var(--panel)" stroke="var(--accent)" stroke-width=".6"/>`+pill(125,y+24.5,'45: jen Andexnite','ta','end'));
+  const o3=seg(t,.74,.9);
+  if(o3>0){const yy=70,types=[[24,'jednotrnová',{},true],[67.5,'rolnová',{roller:true},true],[111,'dvoutrnová',{prongs:2},false]];let d='';
+    types.forEach(([x,n,opt,ok])=>{d+=buckleFrame(x-3,yy-3,20,.55,opt)+lbl(x,yy+12,n,'ts','middle')+(ok?tick(x+11,yy-6,.7):xmark(x+11,yy-6,.8))});
+    s+=fade(o3,`<path d="M4 54 H131" stroke="var(--line)" stroke-width=".3"/>`+pill(4,60,'Tip','ta')+d)}
+  return s;
+},null,'Tip: Rolnová přezka (trn a otočná rolna) se používá stejně. Dvoutrnovou neberte: potřebuje dvě dírky vedle sebe, děrování se zdvojnásobí.');
+
+// B1 — hrot vs zaoblený, 40 mm v měřítku
+add('B','Hrot, nebo zaoblený','Konec vyberte: hrot, nebo zaoblený. V měřítku pro 40 mm: hrot se zužuje sklonem 0,453 do vrcholu zaobleného R4 a je dlouhý 38,5 mm. Zaoblený konec je půlkruh o poloměru 20 mm, polovině šířky.',10000,t=>{
+  const k=.9,W=40,ay=9,end=74,hx=22,rx=70;
+  const tr=es(t,.04,.42),fi=es(t,.36,.52);
+  let s=strapEnd('hrot',W,end,hx,ay,k,{fill:fi,trace:tr})+strapEnd('zaobleny',W,end,rx,ay,k,{fill:fi,trace:tr});
+  s+=fade(fi,pill(hx,ay+end*k-6,'hrot','t','middle')+pill(rx,ay+end*k-6,'zaoblený','t','middle'));
+  const o=seg(t,.52,.66);
+  if(o>0){const TL=tipLen(W);
+    s+=fade(o,`<path d="M${f(hx+W/2*k)} ${f(ay+TL*k)} H${f(hx+W/2*k+5)}" stroke="var(--accent)" stroke-width=".25" stroke-dasharray=".8 .6"/>`+
+      dimV(hx+W/2*k+3,ay,ay+TL*k,'38,5','ta','var(--accent)','ar',hx+W/2*k+3.5,ay+TL*k/2+1.4));
+    const R=W/2,ccx=rx,ccy=ay+R*k,a=-Math.PI/4;
+    s+=fade(o,`<circle cx="${f(ccx)}" cy="${f(ccy)}" r=".7" fill="var(--accent)"/>`+arrow(ccx,ccy,ccx+R*k*Math.cos(a)-.4,ccy+R*k*Math.sin(a)+.4)+pill(ccx-1,ccy+6,'r 20','ta','middle'));
+    s+=fade(o,dimH(hx-W/2*k,hx+W/2*k,ay+end*k+5,'40 mm','t')+dimH(rx-W/2*k,rx+W/2*k,ay+end*k+5,'40 mm','t'));
+    s+=fade(o,lbl(hx-1,ay-1.6,'R4','ta','end'));
+  }
+  const o2=seg(t,.7,.86);
+  if(o2>0) s+=fade(o2,inset('40 MM',notes([['Hrot','tw'],['délka 38,5 mm','t'],['sklon 0,453'],['vrchol R4'],['Zaoblený','tw'],['půlkruh','t'],['r = 20 mm','t']],17,6.4,96),{x:93,y:6,w:40,h:66}));
+  s+=exPill();
+  return s;
+},null);
+
+// B2 — délka podle šířky
+const B2W=[28,30,35,40,45];
+add('B','Délka konce podle šířky','Sklon hrotu i vrchol R4 zůstávají, se šířkou se mění délka hrotu: 28 → 25,2 · 30 → 27,4 · 35 → 32,9 · 40 → 38,5 · 45 → 44,0 mm. Zaoblený konec má vždy poloměr šířka/2.',12500,t=>{
+  const n=B2W.length,u=Math.min(n-1,t*(n-1)*1.15),i0=Math.floor(u),lt=u-i0;
+  const w=i0>=n-1?B2W[n-1]:L(B2W[i0],B2W[i0+1],es(lt,.55,1));
+  const cur=B2W.reduce((a,b)=>Math.abs(b-w)<Math.abs(a-w)?b:a);
+  const k=.8,ay=14,end=72,hx=22,rx=66;
+  let s=strapEnd('hrot',w,end,hx,ay,k,{hl:.9})+strapEnd('zaobleny',w,end,rx,ay,k,{hl:.9});
+  const TL=tipLen(w),wr=Math.round(w);
+  s+=`<path d="M${f(hx-w/2*k-1)} ${f(ay+TL*k)} H${f(hx+w/2*k+1)}" stroke="var(--accent)" stroke-width=".3" stroke-dasharray="1 .7"/>`;
+  s+=`<path d="M${f(rx-w/2*k-1)} ${f(ay+w/2*k)} H${f(rx+w/2*k+1)}" stroke="var(--accent)" stroke-width=".3" stroke-dasharray="1 .7"/>`;
+  s+=pill(hx,ay+end*k+1,`hrot ${c1(tipLen(wr))}`,'ta','middle')+pill(rx,ay+end*k+1,`r ${c1(wr/2)}`,'ta','middle');
+  s+=pill(44,7,`šířka ${wr} mm`,'t','middle');
+  const rows=B2W.map((x,i)=>{const on=x===cur;return (on?`<rect x="90.5" y="${f(19.5+i*6.6)}" width="41" height="6" rx="1" fill="var(--accent)" fill-opacity=".14"/>`:'')+lbl(93,24.2+i*6.6,`${x} → ${c1(tipLen(x))}`,on?'ta':'t')}).join('');
+  s+=inset('HROT, MM',rows,{x:89,y:6,w:44,h:56});
+  s+=lbl(93,70,'zaoblený: r = šířka/2','ts');
+  return s;
+},null);
+
+// C1 — řady destičky
+add('C','Co umí destička','Řada 1: hrot pro šířky 28–45 mm. Řada 2: zaoblený konec jen pro 40 a 30 mm (dva oblouky, r 20 a 15). Řada 3: konec u přezky pro 28–45 mm.',10500,t=>{
+  const k=.38,px=2,py=8;
+  const h1=seg(t,.08,.16)*(1-seg(t,.36,.42)*.75),h2=seg(t,.38,.46)*(1-seg(t,.66,.72)*.75),h3=seg(t,.68,.76);
+  const all=seg(t,.9,1);
+  let s=plate(px,py,k,{hl:[Math.max(h1,all),Math.max(h2,all),Math.max(h3,all)]});
+  const L1=[['Řada 1','tw'],['hrot · 28–45','t']],L2=[['Řada 2','tw'],['zaoblený','t'],['jen 40 a 30','ta']],L3=[['Řada 3','tw'],['u přezky','t'],['28–45','t']];
+  let b='';
+  if(h1>0)b+=fade(seg(t,.08,.16),notes(L1,17,5.6,92));
+  if(h2>0)b+=fade(seg(t,.38,.46),notes(L2,32,5.6,92));
+  if(h3>0)b+=fade(seg(t,.68,.76),notes(L3,53,5.6,92));
+  s+=inset('DESTIČKA',b,{x:89,y:6,w:44,h:68});
+  s+=pill(131,86,'destička 215 × 184 mm','ts','end');
+  return s;
+},null);
+
+// C2 — přehled podle šířky
+add('C','Zaoblený jinak než 30 a 40 mm: list 2','Destička má zaoblený konec jen pro 30 a 40 mm, pro jiné šířky se konec tiskne na list 2. Hrot (řada 1) a konec u přezky (řada 3) zvládne destička v celém rozsahu 28–45 mm.',11000,t=>{
+  const X=w=>32+(w-WMIN)*5.6,CW=5.2,rowsY=[22,35,48];
+  const p=es(t,.04,.84),cur=WMIN+(WMAX-WMIN)*p;
+  const rows=[['1 hrot',()=>true],['2 zaoblený',w=>ROUND_W.includes(w)],['3 u přezky',()=>true]];
+  let s='';
+  [28,30,35,40,45].forEach(w=>s+=lbl(X(w)+CW/2,13,String(w),'ts','middle'));
+  rows.forEach(([n,ok],r)=>{const y=rowsY[r];s+=lbl(2,y+1.4,n,'t');
+    for(let w=WMIN;w<=WMAX;w++){if(w>cur+.5)break;const g=ok(w);
+      s+=`<rect x="${f(X(w))}" y="${f(y-4.5)}" width="${CW}" height="9" rx=".8" fill="${g?'var(--okbg)':'var(--badbg)'}" stroke="${g?'var(--ok)':'var(--accent)'}" stroke-width=".3"/>`;
+      if(r===1&&g)s+=tick(X(w)+CW/2,y+.4,.55);}
+  });
+  if(t<.9){const cx=X(Math.round(cur))+CW/2;s+=`<path d="M${f(cx)} 15.5 V54.5" stroke="var(--ink)" stroke-width=".35"/>`+pill(cx,61,`${Math.round(cur)} mm`,'t','middle')}
+  const o=seg(t,.86,.98);
+  if(o>0) s+=fade(o,`<rect x="32" y="68" width="5" height="5" rx=".8" fill="var(--okbg)" stroke="var(--ok)" stroke-width=".3"/>`+lbl(39,72.2,'destička','t')+
+    `<rect x="78" y="68" width="5" height="5" rx=".8" fill="var(--badbg)" stroke="var(--accent)" stroke-width=".3"/>`+lbl(85,72.2,'list 2 (tisk)','t'));
+  return s;
+},null,'Tip: Destička platí jen pro 5 dírek po 25 mm s výchozím odstupem; jinak značíte podle listů.');
+
+// C3 — rychlé rozhodnutí
+add('C','Rychlé rozhodnutí','Hrot: konec značíte řadou 1 destičky. Zaoblený: při šířce 30 nebo 40 mm řadou 2, jinak se konec tiskne na list 2. Konec u přezky (řada 3) je pro 28–45 mm vždy z destičky.',11000,t=>{
+  const box=(x,y,w,txt,cls='t',fill='var(--panel)',st='var(--line)')=>`<rect x="${x}" y="${y}" width="${w}" height="11" rx="2" fill="${fill}" stroke="${st}" stroke-width=".4"/>`+lbl(x+w/2,y+7.2,txt,cls,'middle');
+  let s='';
+  s+=box(4,6,34,'Konec?','tw');
+  s+=box(60,6,71,'destička, řada 1','tok','var(--okbg)','var(--ok)');
+  s+=box(4,36,44,'šířka 30 / 40?','tw');
+  s+=box(66,36,65,'destička, řada 2','tok','var(--okbg)','var(--ok)');
+  s+=box(4,66,44,'list 2 (tisk)','ta','var(--badbg)','var(--accent)');
+  s+=box(66,66,65,'u přezky: řada 3','tok','var(--okbg)','var(--ok)');
+  s+=arrow(38,11.5,58.5,11.5,'var(--ink)',.35,'arI')+lbl(48,9.4,'hrot','ts','middle');
+  s+=arrow(21,17,21,34.5,'var(--ink)',.35,'arI')+lbl(23,27.4,'zaoblený','ts');
+  s+=arrow(48,41.5,64.5,41.5,'var(--ink)',.35,'arI')+lbl(56,39.4,'ano','ts','middle');
+  s+=arrow(21,47,21,64.5,'var(--ink)',.35,'arI')+lbl(19,57.4,'ne','ts','end');
+  s+=lbl(98.5,62.5,'28–45, vždy','ts','middle');
+  // ukázky: 40 hrot → řada 1; 35 zaoblený → list 2
+  const P1=[[21,11.5],[56,11.5]],P2=[[21,11.5],[21,41.5],[21,62]];
+  const u1=es(t,.06,.36),u2=es(t,.5,.84);
+  const dot=(P,u,txt,dy)=>{const q=ppart(P,u),e=q[q.length-1];return `<circle cx="${f(e[0])}" cy="${f(e[1])}" r="2" fill="var(--accent)" stroke="var(--panel)" stroke-width=".5"/>`+pill(e[0]+3,e[1]+dy,txt,'ta')};
+  if(t<.46) s+=fade(seg(t,0,.05),dot(P1,u1,'40 mm, hrot',10));
+  else s+=fade(seg(t,.46,.5),dot(P2,u2,'35 mm, zaoblený',u2>=.99?-2.6:1.4));
+  return s;
+},null);
+
+// D1 — Váš pásek: šířka a konec v zadání
+add('D','Zadejte šířku a konec ve „Váš pásek“','Šířku a konec zadáte na stránce „Váš pásek“ (odkaz je pod krokem lekce), v části „Zadání pásku“. Do pole „Šířka = přezka, mm“ napište celé mm, 28–45, např. 40. U „Konec“ zvolte Hrot, nebo Zaoblený.',10000,t=>{
+  let s=`<rect x="4" y="4" width="127" height="82" rx="2.5" class="panelbox"/>`+lbl(8,11.5,'Váš pásek','tw');
+  s+=`<rect x="8" y="14.5" width="119" height="11" rx="1.4" fill="var(--okbg)" stroke="var(--ok)" stroke-width=".3"/>`+lbl(10.5,19.6,'Koupit','t')+lbl(10.5,23.6,'řemen, přezka, šrouby, výsečník','ts');
+  s+=lbl(8,33.5,'Zadání pásku','tw');
+  const typed=t<.18?'':(t<.28?'4':'40');
+  s+=lbl(8,41,'Šířka = přezka, mm','t');
+  s+=field(8,43,32,typed,'',{caret:t>.08&&t<.42,focus:t>.06&&t<.42});
+  s+=lbl(44,48.6,'28–45, celé mm','ts');
+  s+=lbl(8,60,'Konec','t');
+  const act=t>.6?0:-1;
+  s+=segBtns(8,62,['Hrot','Zaoblený'],act,24);
+  s+=tap(20,66,seg(t,.54,.74));
+  if(t>.8) s+=fade(seg(t,.8,.9),tick(64,66.4,.8)+lbl(68,67.4,'40 mm, hrot','tok'));
+  s+=pill(131,88,'schéma','ts','end');
+  return s;
+},null);
+
+// D2 — štítek Destička pod zadáním
+add('D','Štítek „Destička“ pod zadáním','Pod zadáním, pod tabulkou „Vaše čísla“, ukáže štítek „Destička“, co destička pokryje: 40 mm s hrotem „Destička: ano“; zaoblený 35 mm „Destička: jen řada 3“, konec pak z listu 2.',13000,t=>{
+  const B=t>.52;
+  let s=`<rect x="4" y="4" width="127" height="82" rx="2.5" class="panelbox"/>`+lbl(8,11.5,'Váš pásek','tw');
+  s+=`<rect x="8" y="14.5" width="119" height="7" rx="1.4" fill="var(--okbg)" stroke="var(--ok)" stroke-width=".3"/>`+lbl(10.5,19.4,'Koupit','ts');
+  s+=lbl(8,28,'Šířka = přezka, mm','t');
+  const wv=!B?'40':(t<.58?'':(t<.62?'3':'35'));
+  s+=field(8,30,32,wv,'',{caret:B&&t<.66,focus:B&&t<.66});
+  s+=lbl(48,28,'Konec','t');
+  s+=segBtns(48,30,['Hrot','Zaoblený'],B&&t>.72?1:0,24);
+  s+=tap(73.5+12,34,seg(t,.68,.8));
+  s+=lbl(8,45,'Vaše čísla · tabulka','ts')+`<path d="M8 46.6 H127" stroke="var(--line)" stroke-width=".3"/>`;
+  const o=!B?seg(t,.12,.24):seg(t,.8,.9);
+  const rows=!B?[['Řada 3 – konec u přezky: ano','tok'],['Řada 1 – hrot: ano','tok']]
+               :[['Řada 3 – konec u přezky: ano','tok'],['Řada 2 – zaoblený konec: ne','ta'],['(oblouk je jen pro 30 a 40 mm)','ts'],['Za řadu 2 vytiskněte list 2.','t']];
+  if(o>0) s+=fade(o*(B?1:(1-seg(t,.46,.52))),tag(8,53,!B?'Destička: ano':'Destička: jen řada 3',!B)+notes(rows,61.5,6.2,8));
+  return s;
+},null);
+
+// D3 — souhrn Koupit nahoře
+add('D','Nahoře souhrn „Koupit“','Nahoře na stránce je souhrn „Koupit“ a přepočítá se podle zadání. Např. 40 mm a obvod 95 cm: řemen 40 mm, objednejte 130 cm, přezka 40 mm, šrouby chicago 2 ks s dříkem 6 mm, výsečník Ø 5 a Ø 6 mm.',13000,t=>{
+  const row=(y,w,d)=>`<text x="11" y="${f(y)}" class="t"><tspan style="font-weight:700">${w}</tspan>${d}</text>`;
+  const cont=(y,d)=>`<text x="11" y="${f(y)}" class="t">${d}</text>`;
+  let s=`<rect x="4" y="4" width="127" height="82" rx="2.5" class="panelbox"/>`+lbl(8,11.5,'Váš pásek','tw');
+  s+=`<rect x="8" y="14.5" width="119" height="54" rx="1.6" fill="var(--okbg)" stroke="var(--ok)" stroke-width=".35"/>`+lbl(11,21,'Koupit','tw');
+  const L=[
+    [row(28,'Řemen: ','40 mm široký, tloušťka 3,5 mm')+cont(33,'(postup: 3–4 mm), délka aspoň 119 cm')+`<text x="11" y="38" class="ta">→ objednejte 130 cm</text>`,.08],
+    [row(44,'Přezka: ','40 mm, jednotrnová'),.26],
+    [row(50,'Šrouby chicago: ','2 ks, dřík 6 mm'),.4],
+    [row(56,'Výsečník: ','Ø 5 a Ø 6 mm'),.54],
+    [row(63,'Doporučeno: ','CraftPoint, 130 cm, … Kč'),.68],
+  ];
+  L.forEach(([g,a])=>s+=fade(seg(t,a,a+.1),g));
+  s+=`<rect x="8" y="72" width="119" height="9" rx="1.4" fill="var(--bg)" stroke="var(--line)" stroke-width=".3"/>`+lbl(11,77.8,'Zadání: 40 mm · hrot · obvod 95 cm','ts');
+  s+=fade(seg(t,.02,.08)*(1-seg(t,.84,.92)),arrow(118,71.5,118,66,'var(--accent)',.5));
+  s+=pill(131,88,'schéma, příklad 40 mm','ts','end');
+  return s;
+},null);
+
+// ---------- engine ----------
+const svg=document.getElementById('stage');
+const DEFS=`<defs>
+<filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx=".6" dy="1" stdDeviation=".8" flood-opacity=".28"/></filter>
+<linearGradient id="licV" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="var(--lic-d)"/><stop offset=".3" stop-color="var(--lic)"/><stop offset=".55" stop-color="var(--lic-hi)"/><stop offset="1" stop-color="var(--lic-d)"/></linearGradient>
+<linearGradient id="licH" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--lic-hi)"/><stop offset=".55" stop-color="var(--lic)"/><stop offset="1" stop-color="var(--lic-d)"/></linearGradient>
+<linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--brass-hi)"/><stop offset=".5" stop-color="var(--brass)"/><stop offset="1" stop-color="var(--brass-d)"/></linearGradient>
+<marker id="ar" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--accent)"/></marker>
+<marker id="arI" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--ink)"/></marker>
+<marker id="arO" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--ok)"/></marker>
+</defs>`;
+const badge=document.getElementById('badge'),sideEl=document.getElementById('side'),chip=document.getElementById('chip'),sub=document.getElementById('sidesub');
+const capNo=document.getElementById('capNo'),capT=document.getElementById('capT'),capB=document.getElementById('capB'),counter=document.getElementById('counter');
+const prog=document.getElementById('prog');
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const partKeys=Object.keys(PARTS);const barEls=[];const segEls={};
+partKeys.forEach(k=>{const b=document.createElement('button');b.className='pseg';b.type='button';b.setAttribute('aria-label',`Část ${k}: ${PARTS[k]}`);
+  const bars=document.createElement('div');bars.className='bars';S.forEach((st,i)=>{if(st.part===k){const sp=document.createElement('span');const bb=document.createElement('b');sp.appendChild(bb);bars.appendChild(sp);barEls[i]=bb;}});
+  const pl=document.createElement('div');pl.className='pl';pl.innerHTML=`<b>${k}</b><span> · ${PARTS[k]}</span>`;b.append(bars,pl);prog.appendChild(b);segEls[k]=b;
+  b.addEventListener('click',()=>{setPlay(false);go(S.findIndex(s=>s.part===k),1)});});
+let idx=0,tt=1,playing=false,last=0,raf=0;
+function numInPart(i){const p=S[i].part;return S.slice(0,i+1).filter(s=>s.part===p).length}
+function setSide(st){
+  const side=st.side; if(!side){badge.hidden=true;return}
+  badge.hidden=false; let v,sb='';
+  if(typeof side==='object'){v=side.v;sb=side.sub||''} else {v=side==='rub'?'RUB':'LÍC'}
+  sideEl.textContent=v; chip.style.background=v==='LÍC'?'var(--chip-lic)':'var(--chip-rub)'; sub.textContent=sb;
+}
+function fitPills(){svg.querySelectorAll('g.pill').forEach(g=>{const tx=g.querySelector('text'),r=g.querySelector('rect');try{const b=tx.getBBox();if(!b.width)return;r.setAttribute('x',f(b.x-1.2));r.setAttribute('y',f(b.y-.5));r.setAttribute('width',f(b.width+2.4));r.setAttribute('height',f(b.height+1))}catch(e){}})}
+function render(){
+  const st=S[idx]; UID=0;
+  let body='';
+  try{ body=st.draw(tt);}catch(e){console.error(e)}
+  svg.innerHTML=DEFS+body; fitPills();
+  setSide(st);
+  capNo.textContent=`${st.part}${numInPart(idx)}`; capT.textContent=st.title; capB.textContent=st.body;
+  if(st.tip){const sp=document.createElement('span');sp.className='tip';const m=st.tip.match(/^(Tip[^:]*:)\s*(.*)$/);if(m){const b=document.createElement('b');b.textContent=m[1];sp.append(b,' '+m[2])}else sp.textContent=st.tip;capB.appendChild(sp)}
+  counter.textContent=`krok ${idx+1} / ${S.length}`;
+  barEls.forEach((b,i)=>{b.style.transform=`scaleX(${i<idx?1:i===idx?tt:0})`});
+  partKeys.forEach(k=>segEls[k].classList.toggle('on',k===st.part));
+}
+function go(i,t=0){idx=Math.max(0,Math.min(S.length-1,i));tt=reduce?1:t;hold=0;render();}
+function setPlay(p){playing=p;document.getElementById('playIcon').innerHTML=p?'<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';document.getElementById('bPlay').setAttribute('aria-label',p?'Pozastavit':'Přehrát');if(p){last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}}
+let hold=0;
+function loop(now){if(!playing)return;const dt=now-last;last=now;
+  if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
+  else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
+  raf=requestAnimationFrame(loop)}
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} else if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
+document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
+document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
+document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};
+// deep links: část (#A–#D) otevře svůj první krok, krok (#B2) přímo ten krok; zastavené
+function stepFromHash(){const m=/^([A-Z])([0-9]+)?$/.exec(decodeURIComponent((location.hash||'').slice(1)).trim().toUpperCase());if(!m||!Object.prototype.hasOwnProperty.call(PARTS,m[1]))return -1;const ix=[];S.forEach((s,i)=>{if(s.part===m[1])ix.push(i)});const n=m[2]===undefined?1:+m[2];return n>=1&&n<=ix.length?ix[n-1]:-1}
+let auto=false;
+const hs=stepFromHash();
+if(hs>=0){auto=true;go(hs,1)} else go(0,1); // meaningful still
+window.addEventListener('hashchange',()=>{const i=stepFromHash();if(i>=0){auto=true;setPlay(false);go(i,1)}});
+window.__pasek={go:(i,t)=>{auto=true;setPlay(false);idx=i;tt=t;render()},steps:S.length,parts:S.map(s=>s.part),titles:S.map(s=>s.title),
+  geo:{tipLen:Object.fromEntries([28,30,32,35,38,40,45].map(w=>[w,+tipLen(w).toFixed(2)])),slope:SLOPE,nose:NOSE}};
+if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!auto){auto=true;io.disconnect();go(0,0);setPlay(true)}})},{threshold:.45});io.observe(svg)}
+})();
+</script>
+<script>
+// Hidepath: „Zpět do lekce“ = krok zpět v historii, když se sem přišlo z aplikace; jinak úvod aplikace.
+(function(){var a=document.querySelector('[data-back]');if(!a)return;a.addEventListener('click',function(e){var o='';try{o=document.referrer?new URL(document.referrer).origin:'';}catch(_){}if(o===location.origin&&history.length>1){e.preventDefault();history.back();}});})();
+</script>
+</body>
+</html>

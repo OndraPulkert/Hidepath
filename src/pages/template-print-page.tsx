@@ -21,7 +21,8 @@ import {
   type TemplateDefinition,
 } from '@/content/schema';
 import { typo } from '@/lib/utils/format';
-import { beltConfigPrefill } from '@/features/belt/belt-prefill';
+import { resolveActiveBelt } from '@/features/belt/active-belt';
+import { beltFormInitial } from '@/features/belt/belt-prefill';
 import { lidGeneratorPrefill } from '@/features/notebook/lid-wallet-prefill';
 import { type LessonRecordEntry } from '@/features/notebook/types';
 import { useLessonRecords } from '@/features/notebook/use-lesson-records';
@@ -156,14 +157,16 @@ const sheetGenerators: Readonly<
       />
     ),
   },
+  // Pásek: formulář je na vlastní stránce „Váš pásek“ (routes.beltConfig) a předvyplní se
+  // z aktivního pásku – jediného zdroje parametrů.
   'belt-config': {
-    hasPrefill: (records, slug) => beltConfigPrefill(records, slug) !== null,
+    hasPrefill: (records, slug) => resolveActiveBelt(records, slug).active !== null,
     render: ({ project, baseSheets, onGenerated, records }) => (
       <BeltConfigGenerator
         project={project}
         baseSheets={baseSheets}
         onGenerated={onGenerated}
-        initial={beltConfigPrefill(records, project.slug)}
+        initial={beltFormInitial(resolveActiveBelt(records, project.slug))}
       />
     ),
   },
@@ -213,18 +216,27 @@ function useNotebookPrefill(
  * úsečkou, proto se tiskne bez okrajů stránky (`margin: 0`) a s pojmenovanou stránkou podle
  * orientace. Vytiskne se jen to, co je zaškrtnuté.
  */
-function PatternSheetsPrint({
+export function PatternSheetsPrint({
   project,
   definition,
   heading = 'Listy střihu 1:1',
+  mode = 'print',
 }: {
   project: ProjectDefinition;
   definition: PatternSheetsDefinition;
   heading?: string;
+  /**
+   * `print` = tisková stránka; formulář „Váš pásek“ tu není, jen odkaz na jeho stránku.
+   * `belt-config` = stránka „Váš pásek“: nahoře nákup a formulář, pod ním listy k tisku.
+   */
+  mode?: 'print' | 'belt-config';
 }) {
   const [searchParams] = useSearchParams();
   const [generated, setGenerated] = useState<GeneratedPatternSheet[]>([]);
-  const notebook = useNotebookPrefill(definition.browserGenerator, project.slug);
+  // Formulář pásku je jen na stránce „Váš pásek“; tisková stránka na něj odkáže.
+  const beltPointer = mode === 'print' && definition.browserGenerator === 'belt-config';
+  const generator = beltPointer ? undefined : definition.browserGenerator;
+  const notebook = useNotebookPrefill(generator, project.slug);
   const urls: Readonly<Record<string, string>> = {
     ...patternSheetUrlsFor(project.slug),
     ...Object.fromEntries(generated.map((g) => [g.id, g.url])),
@@ -279,9 +291,30 @@ function PatternSheetsPrint({
       }`}</style>
       <BackAndPrint project={project} canPrint={printable.length > 0} />
       <div className="print:hidden">
-        <h1 className="mb-2 text-[clamp(24px,3vw,32px)]">
-          {heading} · {project.title}
-        </h1>
+        {mode === 'belt-config' ? (
+          <>
+            <h1 className="mb-2 text-[clamp(28px,4vw,40px)]">{heading}</h1>
+            <p className="mb-6 max-w-prose text-body-lg text-ink-2">
+              {typo(
+                'Tady zadáte pásek – jediné místo pro šířku, tloušťku, obvod, konec a barvu. Podle uloženého pásku počítají lekce, „Připravte si“ i nákup. Listy A4 pro váš pásek vytisknete dole.',
+              )}
+            </p>
+            {generator ? (
+              <SheetGeneratorSlot
+                generator={generator}
+                notebook={notebook}
+                project={project}
+                baseSheets={definition.sheets}
+                onGenerated={onGenerated}
+              />
+            ) : null}
+            <h2 className="mb-2 text-h2">Listy A4 k tisku</h2>
+          </>
+        ) : (
+          <h1 className="mb-2 text-[clamp(24px,3vw,32px)]">
+            {heading} · {project.title}
+          </h1>
+        )}
         <p className="mb-2 max-w-prose text-body text-ink-2">{typo(definition.printNote)}</p>
         <p className="mb-3 max-w-prose text-body text-ink-2">
           V dialogu tisku nechte měřítko na 100 % („Výchozí“) a papír A4. Každý list se vytiskne na
@@ -297,18 +330,21 @@ function PatternSheetsPrint({
         {awaitingGenerated && chosen === null ? (
           <p role="note" className="mb-6 max-w-prose text-body font-medium text-leather">
             {typo(
-              'V zápisníku máte změřenou kůži, výchozí list pro ni nemusí platit. Nejdřív vygenerujte listy pro svou kůži (formulář níže) – list z odkazu se pak vybere k tisku sám.',
+              mode === 'belt-config'
+                ? 'Máte uložený pásek, výchozí list pro něj nemusí platit. Nejdřív nahoře stiskněte „Vygenerovat listy A4“ – list z odkazu se pak vybere k tisku sám.'
+                : 'V zápisníku máte změřenou kůži, výchozí list pro ni nemusí platit. Nejdřív vygenerujte listy pro svou kůži (formulář níže) – list z odkazu se pak vybere k tisku sám.',
             )}
           </p>
         ) : printable.length === 0 ? (
           <p className="mb-6 text-meta text-ink-2">Vyberte alespoň jeden list.</p>
         ) : null}
-        {definition.variantsNote ? (
+        {beltPointer ? <BeltConfigPointer project={project} /> : null}
+        {definition.variantsNote && !beltPointer ? (
           <p className="mb-6 max-w-prose text-meta text-ink-2">{typo(definition.variantsNote)}</p>
         ) : null}
-        {definition.browserGenerator ? (
+        {generator && mode === 'print' ? (
           <SheetGeneratorSlot
-            generator={definition.browserGenerator}
+            generator={generator}
             notebook={notebook}
             project={project}
             baseSheets={definition.sheets}
@@ -363,6 +399,31 @@ function PatternSheetsPrint({
           </section>
         ))}
       </div>
+    </div>
+  );
+}
+
+/**
+ * Listy střihu pásku: výchozí listy jsou jen pro 40 × 3,5 mm a hrot. Listy pro váš pásek se
+ * zadávají a tisknou na stránce „Váš pásek“.
+ */
+function BeltConfigPointer({ project }: { project: ProjectDefinition }) {
+  return (
+    <div className="mb-8 flex flex-col gap-3 rounded-card border border-cognac bg-cognac-tint p-5">
+      <h2 className="text-h2">Listy pro váš pásek</h2>
+      <p className="max-w-prose text-body">
+        {typo(
+          'Tady jsou jen výchozí listy (40 mm, 3,5 mm, hrot, 5 dírek). Pro jinou šířku, tloušťku, konec nebo dírky zadejte pásek na stránce „Váš pásek“ a listy vytiskněte tam.',
+        )}
+      </p>
+      <Button asChild className="self-start">
+        <Link
+          to={routes.beltConfig(project.slug)}
+          className="text-white no-underline hover:text-white"
+        >
+          Otevřít Váš pásek <span aria-hidden>→</span>
+        </Link>
+      </Button>
     </div>
   );
 }

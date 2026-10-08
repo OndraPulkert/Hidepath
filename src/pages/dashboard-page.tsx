@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 
 import { routes } from '@/app/routes';
+import { BeltStartCard } from '@/components/belt/belt-start-card';
 import { MediaSlot } from '@/components/lessons/media-slot';
 import { PhaseRail } from '@/components/projects/phase-rail';
 import { ProjectSwitcher } from '@/components/projects/project-switcher';
@@ -11,6 +12,7 @@ import { LoadingNotice } from '@/components/ui/loading-notice';
 import { ProgressBar } from '@/components/ui/progress-bar';
 import { equipmentCatalog } from '@/content/equipment';
 import { difficultyLabels, projects } from '@/content/projects';
+import { isBeltConfigProject } from '@/features/belt/active-belt';
 import { type NextAction } from '@/features/progress/next-action';
 import { isEnrolled } from '@/features/progress/types';
 import { useCompleteProject, useEnrollments } from '@/features/progress/use-progress';
@@ -80,6 +82,8 @@ export function DashboardPage() {
             onCompleteProject={() => state.enrollment && completeProject.mutate(state.enrollment)}
           />
         </Card>
+
+        {isBeltConfigProject(project) ? <BeltStartCard project={project} /> : null}
 
         <Link to={routes.shopping} className="no-underline hover:text-leather">
           <Card className="flex h-full flex-col gap-2.5 transition-colors hover:border-cognac">

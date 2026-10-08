@@ -2,6 +2,7 @@ import { useEffect, useEffectEvent, useRef } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router';
 
 import { LESSON_ANCHORS, LESSON_FOCUS_STEP_PARAM, routes } from '@/app/routes';
+import { ActiveBeltCard } from '@/components/belt/active-belt-card';
 import { LessonPrep } from '@/components/lessons/lesson-prep';
 import { Button } from '@/components/ui/button';
 import { ProgressBar } from '@/components/ui/progress-bar';
@@ -9,6 +10,7 @@ import { ActiveTimersBar } from '@/components/workshop/active-timers-bar';
 import { FocusStep } from '@/components/workshop/focus-step';
 import { findProject } from '@/content/projects';
 import { type LessonDefinition, type ProjectDefinition } from '@/content/schema';
+import { isBeltConfigProject } from '@/features/belt/active-belt';
 import { useProjectState } from '@/features/projects/use-project-state';
 import { formatRemaining } from '@/features/timers/timers';
 import { hasUnfired, useNow, useTimers } from '@/features/timers/use-timers';
@@ -195,6 +197,7 @@ function FocusView({ project, lesson }: { project: ProjectDefinition; lesson: Le
             <p className="text-lead text-ink-2">
               Připravte si všechno na stůl. Pak šipkou nebo tlačítkem Další přejděte na první krok.
             </p>
+            {isBeltConfigProject(project) ? <ActiveBeltCard project={project} /> : null}
             <LessonPrep project={project} lesson={lesson} inventory={inventory} />
           </div>
         )}

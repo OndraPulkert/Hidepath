@@ -1,6 +1,7 @@
 import { act, screen, waitFor, within } from '@testing-library/react';
 
 import { equipmentCatalog } from '@/content/equipment';
+import { BELT_ACTIVE_FIELD_ID } from '@/content/projects';
 import { beltProject } from '@/content/projects/belt/project';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
@@ -193,6 +194,43 @@ describe('nákupní seznam a přehled – pásek (projekt 04)', () => {
         /Pás, přezka, nýty a výsečník na dírky podle pásku: Do obleku .*, ceny z Co koupit\./,
       ),
     ).toBeInTheDocument();
+  });
+
+  it('zvolený aktivní pásek řídí „Co koupit“, i když není nejnovější', async () => {
+    const repositories = await setup('Do obleku');
+    const older = newSavedBeltFieldId();
+    const at = '2026-10-01T10:00:00.000Z';
+    await repositories.lessonRecords.upsert({
+      id: crypto.randomUUID(),
+      userId: null,
+      projectSlug: beltProject.slug,
+      lessonSlug: 'vas-pasek',
+      fieldId: older,
+      value: serializeSavedBelt(
+        'Pracovní',
+        { widthMm: 35, thicknessMm: 3.5, tip: 'hrot' },
+        'pasek',
+      ),
+      contentVersion: beltProject.contentVersion,
+      createdAt: at,
+      updatedAt: at,
+    });
+    await repositories.lessonRecords.upsert({
+      id: crypto.randomUUID(),
+      userId: null,
+      projectSlug: beltProject.slug,
+      lessonSlug: 'vas-pasek',
+      fieldId: BELT_ACTIVE_FIELD_ID,
+      value: older,
+      contentVersion: beltProject.contentVersion,
+      createdAt: at,
+      updatedAt: at,
+    });
+    renderApp('/shopping', { repositories });
+    expect(
+      await screen.findByText('Nákup podle pásku: Pracovní (35 mm · 3,5 mm · hrot · 5 dírek)'),
+    ).toBeInTheDocument();
+    expect(within(coKoupit()).getByText(/Mosazná opasková přezka 35 mm/)).toBeInTheDocument();
   });
 
   it('bez uloženého pásku: plán projektu 40 mm a řekne to', async () => {

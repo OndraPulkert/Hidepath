@@ -47,6 +47,12 @@ export const routes = {
   /** Cvičné listy 1:1 (trénink na odřezku), vlastní tisková stránka vedle šablony. */
   practiceSheets: (projectSlug: string, sheetId?: string) =>
     `/projects/${encodeURIComponent(projectSlug)}/practice-sheets${printSheetQuery(sheetId)}`,
+  /**
+   * „Váš pásek“ (projekt s `browserGenerator: 'belt-config'`): zadání pásku, Moje pásky,
+   * nákup a listy A4 k tisku; `sheetId` předvybere list k tisku.
+   */
+  beltConfig: (projectSlug: string, sheetId?: string) =>
+    `/projects/${encodeURIComponent(projectSlug)}/vas-pasek${printSheetQuery(sheetId)}`,
 } as const;
 
 function printSheetQuery(sheetId: string | undefined): string {
@@ -61,6 +67,7 @@ export const routePatterns = {
   lessonFocus: '/projects/:projectSlug/lessons/:lessonSlug/focus',
   template: '/projects/:projectSlug/template',
   practiceSheets: '/projects/:projectSlug/practice-sheets',
+  beltConfig: '/projects/:projectSlug/vas-pasek',
 } as const;
 
 /**

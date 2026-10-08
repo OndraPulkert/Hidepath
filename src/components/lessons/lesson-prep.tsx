@@ -53,7 +53,7 @@ export function LessonPrep({ project, lesson, inventory }: LessonPrepProps) {
   const progress = progressQuery.data ?? EMPTY_PROGRESS;
   const checks = checksQuery.data;
   const records = recordsQuery.data;
-  // Pásek: nákup u nástrojů podle uloženého pásku (šířka, přezka, dřík nýtu), jinak 40 mm.
+  // Pásek: nákup u nástrojů podle aktivního pásku (šířka, přezka, dřík nýtu), jinak 40 mm.
   const planOverride = useMemo(
     () =>
       project.patternSheets?.browserGenerator === 'belt-config' && project.shoppingPlan

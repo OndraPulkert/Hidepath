@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router';
 
 import { LESSON_ANCHORS, routes } from '@/app/routes';
+import { ActiveBeltCard } from '@/components/belt/active-belt-card';
 import { StickyActionBar } from '@/components/layout/sticky-action-bar';
 import { CheckpointList } from '@/components/lessons/checkpoint-list';
 import { LessonLockNotice } from '@/components/lessons/lesson-lock-notice';
@@ -17,6 +18,7 @@ import { Tag } from '@/components/ui/tag';
 import { findProject } from '@/content/projects';
 import { lessonBodiesFor } from '@/content/projects/lesson-bodies';
 import { type ProjectDefinition } from '@/content/schema';
+import { isBeltConfigProject } from '@/features/belt/active-belt';
 import { isCheckpointCompleted } from '@/features/progress/types';
 import { useCompleteLesson, useToggleCheckpoint } from '@/features/progress/use-progress';
 import { useProjectState } from '@/features/projects/use-project-state';
@@ -119,6 +121,8 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
 
       {lesson.media[0] ? <MediaSlot media={lesson.media[0]} aspect="photo" /> : null}
 
+      {isBeltConfigProject(project) ? <ActiveBeltCard project={project} /> : null}
+
       <LessonPrep project={project} lesson={lesson} inventory={inventory} />
 
       {Body ? (
@@ -135,6 +139,7 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
           steps={lesson.steps}
           template={project.template}
           projectSlug={project.slug}
+          patternSheets={project.patternSheets}
           renderStepExtras={(step) => (
             <StepExtras project={project} lesson={lesson} step={step} timerOrigin="lesson" />
           )}

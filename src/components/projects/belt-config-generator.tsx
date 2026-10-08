@@ -12,9 +12,17 @@ import { Segment, SegmentButton } from '@/components/ui/segment';
 import { Tag } from '@/components/ui/tag';
 import { BELT_ILLUSTRATION, BELT_ILLUSTRATION_CAPTION } from '@/content/projects';
 import { type PatternSheet, type ProjectDefinition } from '@/content/schema';
-import { type BeltConfigPrefill } from '@/features/belt/belt-prefill';
+import { type BeltFormInitial, punchForProngMm } from '@/features/belt/belt-prefill';
+import {
+  type BeltPurchase,
+  SCRAP_ALLOWANCE_CM,
+  beltPurchase,
+  purchaseLines,
+  recommendedOfferText,
+} from '@/features/belt/belt-purchase';
 import {
   type SavedBelt,
+  type SavedBeltExtras,
   type SavedBeltWrite,
   decideSavedBeltSave,
   newSavedBeltFieldId,
@@ -36,6 +44,7 @@ import {
   beltSheetsFor,
   deriveBeltConfig,
   parseBeltConfigForm,
+  parseNumber,
 } from '@/lib/patterns/belt-config';
 import {
   OFFERED_STRAP_COLORS,
@@ -68,9 +77,10 @@ function evaluate(form: BeltConfigForm) {
 }
 
 /**
- * „Váš pásek“: šířka podle přezky, změřená tloušťka, obvod, konec a dírky. Z nich spočítá délku
- * pásu, dírky, poutko, nýty a nákup, řekne, jestli jde použít destička, a nakreslí listy A4
- * (stejný kód jako `pnpm pattern:belt-end`). Sestavy jde uložit do „Mých pásků“.
+ * „Váš pásek“: šířka podle přezky, změřená tloušťka, obvod, konec, barva a dírky. Nahoře souhrn
+ * „Koupit“, pod formulářem čísla, destička a nákup; listy A4 nakreslí stejný kód jako
+ * `pnpm pattern:belt-end`. Sestavy se ukládají do „Mých pásků“; uložený pásek je aktivní a řídí
+ * se jím lekce i nákup. Jediné místo, kde se parametry pásku zadávají.
  */
 export function BeltConfigGenerator({
   project,
@@ -82,14 +92,20 @@ export function BeltConfigGenerator({
   /** Listy z obsahu – z nich se převezme název listu se stejným id. */
   baseSheets: readonly PatternSheet[];
   onGenerated: (sheets: GeneratedPatternSheet[]) => void;
-  /** Předvyplnění ze zápisníku; čte se jen při prvním vykreslení. */
-  initial?: BeltConfigPrefill | null | undefined;
+  /** Aktivní pásek (nebo staré zápisy lekce 1); čte se jen při prvním vykreslení. */
+  initial?: BeltFormInitial | null | undefined;
 }) {
   const id = useId();
   const [prefilled] = useState(initial);
   const [form, setForm] = useState<BeltConfigForm>(prefilled?.form ?? DEFAULT_BELT_FORM);
+  const [prong, setProng] = useState(prefilled?.prong ?? '');
+  const [scrapFromStrap, setScrapFromStrap] = useState(prefilled?.scrapFromStrap ?? false);
   const [done, setDone] = useState<string | null>(null);
   const evaluated = useMemo(() => evaluate(form), [form]);
+  const prongPunch = useMemo(() => {
+    const v = parseNumber(prong);
+    return v === undefined ? null : punchForProngMm(v);
+  }, [prong]);
   // Předvyplněný Ø dírky mimo meze (trn ze zápisníku): pole je v „Dírky (pokročilé)“, které
   // je jinak sbalené – uživatel by neviděl, co opravit. Jen při prvním vykreslení.
   const [holesOpenInitially] = useState(() => {
@@ -102,6 +118,17 @@ export function BeltConfigGenerator({
       setForm((prev) => ({ ...prev, [key]: value }));
       setDone(null);
     };
+  const changeProng = (raw: string) => {
+    setProng(raw);
+    const v = parseNumber(raw);
+    // Ø dírky = trn + 0,5 mm nahoru na výsečník; pole Ø se vyplní samo (jde přepsat).
+    if (v !== undefined) set('holeDiameter')(formatDecimal(punchForProngMm(v).punchMm));
+  };
+  const extras: SavedBeltExtras = {
+    ...(prongPunch ? { prongMm: parseNumber(prong) } : {}),
+    ...(scrapFromStrap ? { scrapFromStrap: true } : {}),
+  };
+  const purchase = evaluated.ok ? beltPurchase(evaluated.result, { scrapFromStrap }) : null;
 
   const generate = (e: FormEvent) => {
     e.preventDefault();
@@ -131,210 +158,311 @@ export function BeltConfigGenerator({
   };
 
   return (
-    <Card className="mb-8 flex flex-col gap-4" aria-labelledby={`${id}-title`}>
-      <div>
-        <h2 id={`${id}-title`} className="text-h2">
-          Váš pásek
-        </h2>
-        <p className="mt-1 max-w-prose text-body text-ink-2">
-          {typo(
-            'Zvolte šířku podle přezky, zadejte změřenou tloušťku, obvod a barvu. Aplikace spočítá délku pásu, dírky, poutko, nýty a nákup a nakreslí listy A4.',
-          )}
-        </p>
-      </div>
-      {prefilled && prefilled.filled.length > 0 ? (
-        <p
-          role="note"
-          className="rounded-control border border-forest bg-forest-tint px-4 py-3 text-body"
-        >
-          <span className="font-medium">Předvyplněno ze zápisníku:</span>{' '}
-          {typo(prefilled.filled.join(', '))}. Hodnoty zkontrolujte.
-          {prefilled.problems.map((p) => (
-            <span key={p} className="mt-1 block text-cognac-deep">
-              {typo(p)}
-            </span>
-          ))}
-        </p>
-      ) : null}
-      <SavedBeltsSection
-        project={project}
-        current={evaluated.ok ? evaluated : null}
-        waistSource={form.waistSource}
-        onLoad={(belt) => {
-          setForm(beltConfigToForm(belt.input, belt.waistSource));
-          setDone(null);
-        }}
-      />
-      <form onSubmit={generate} noValidate className="flex flex-col gap-4">
-        <div className="grid gap-4 sm:grid-cols-3">
-          <NumberField
-            id={`${id}-width`}
-            label="Šířka = přezka, mm"
-            value={form.width}
-            onChange={set('width')}
-            hint={`Vnitřní světlost přezky, ${BELT_LIMITS.widthMm.min}–${BELT_LIMITS.widthMm.max} mm.`}
-          />
-          <NumberField
-            id={`${id}-thickness`}
-            label="Tloušťka (změřená), mm"
-            value={form.thickness}
-            onChange={set('thickness')}
-            hint="Posuvkou na řezu, 3,0–4,0 mm. Zadejte, co naměříte, např. 3,6."
-          />
-          <NumberField
-            id={`${id}-waist`}
-            label="Obvod, cm"
-            value={form.waist}
-            onChange={set('waist')}
-            hint={WAIST_HINTS[form.waistSource]}
-          />
-        </div>
-        <ChoiceRow label="Obvod jste měřili">
-          {(
-            [
-              ['pasek', 'Na pásku, který nosíte'],
-              ['metr', 'Metrem přes poutka'],
-            ] as const
-          ).map(([value, text]) => (
-            <SegmentButton
-              key={value}
-              active={form.waistSource === value}
-              onClick={() => set('waistSource')(value)}
-            >
-              {text}
-            </SegmentButton>
-          ))}
-        </ChoiceRow>
-        <WaistFigure source={form.waistSource} />
-        <ChoiceRow label="Konec">
-          {(
-            [
-              ['hrot', 'Hrot'],
-              ['zaobleny', 'Zaoblený'],
-            ] as const satisfies readonly (readonly [BeltTip, string])[]
-          ).map(([value, text]) => (
-            <SegmentButton
-              key={value}
-              active={form.tip === value}
-              onClick={() => set('tip')(value)}
-            >
-              {text}
-            </SegmentButton>
-          ))}
-        </ChoiceRow>
-        <ChoiceRow label="Barva">
-          <SegmentButton
-            active={form.color === 'prirodni'}
-            onClick={() => set('color')('prirodni')}
-          >
-            Přírodní
-          </SegmentButton>
-          <SegmentButton
-            active={form.color !== 'prirodni'}
-            onClick={() => {
-              if (form.color === 'prirodni') set('color')('');
-            }}
-          >
-            Barevný
-          </SegmentButton>
-        </ChoiceRow>
-        {form.color !== 'prirodni' ? (
-          <div className="flex flex-col gap-1.5">
-            <ChoiceRow label="Barva pásu (vyberte)">
-              {DYED_CHOICES.map((c) => (
-                <SegmentButton key={c} active={form.color === c} onClick={() => set('color')(c)}>
-                  {capitalize(STRAP_COLOR_LABELS[c])}
-                </SegmentButton>
-              ))}
-            </ChoiceRow>
-            <p className="max-w-prose text-meta text-ink-2">
-              {typo(
-                'Řezaná hrana pásu barveného jen na povrchu je světlá: před leštěním ji obarvíte barvou na hrany. Odstín vybírejte podle fotky v obchodě a barvu i balzám ověřte na odřezku.',
-              )}
-            </p>
-          </div>
-        ) : null}
-        <details className="rounded-control border border-line px-4 py-2" open={holesOpenInitially}>
-          <summary className="min-h-touch cursor-pointer text-body font-medium">
-            Dírky (pokročilé)
-          </summary>
-          <p className="mt-2 max-w-prose text-meta text-ink-2">
+    <div className="mb-8 flex flex-col gap-6">
+      <PurchaseSummary purchase={purchase} offersAnchor={`${id}-offers`} />
+      <Card className="flex flex-col gap-4" aria-labelledby={`${id}-title`}>
+        <div>
+          <h2 id={`${id}-title`} className="text-h2">
+            Zadání pásku
+          </h2>
+          <p className="mt-1 max-w-prose text-body text-ink-2">
             {typo(
-              'Prázdné pole = výchozí hodnota. Destička platí jen pro 5 dírek po 25 mm s výchozím odstupem.',
+              'Zvolte šířku podle přezky, zadejte změřenou tloušťku, obvod a barvu. Aplikace spočítá délku pásu, dírky, poutko, šrouby a nákup a nakreslí listy A4. Pásek uložte: lekce a nákup se řídí aktivním páskem.',
             )}
           </p>
-          <div className="mt-3 flex flex-col gap-4">
-            <ChoiceRow label="Počet dírek">
-              {BELT_LIMITS.holeCounts.map((n) => (
-                <SegmentButton
-                  key={n}
-                  active={form.holeCount === String(n)}
-                  onClick={() => set('holeCount')(String(n))}
-                >
-                  {n}
-                </SegmentButton>
-              ))}
-            </ChoiceRow>
-            <div className="grid gap-4 sm:grid-cols-3">
-              <NumberField
-                id={`${id}-spacing`}
-                label="Rozteč, mm"
-                value={form.holeSpacing}
-                onChange={set('holeSpacing')}
-                placeholder={formatDecimal(DEFAULT_HOLE_SPACING_MM)}
-                hint="Podklady mají 25 mm."
-              />
-              <NumberField
-                id={`${id}-apex`}
-                label="Konec → první dírka, mm"
-                value={form.apexToFirst}
-                onChange={set('apexToFirst')}
-                placeholder={
-                  evaluated.ok
-                    ? formatDecimal(evaluated.result.holes.fromApexMm[0] ?? 0)
-                    : undefined
-                }
-                hint={`Prázdné = jako destička. Nejvýš ${BELT_LIMITS.apexToFirstHoleMaxMm} mm.`}
-              />
-              <NumberField
-                id={`${id}-diameter`}
-                label="Ø dírky, mm"
-                value={form.holeDiameter}
-                onChange={set('holeDiameter')}
-                placeholder={formatDecimal(DEFAULT_HOLE_DIAMETER_MM)}
-                hint="Trn přezky u kořene + 0,5 mm. 4,5–6,0."
-              />
-            </div>
-          </div>
-        </details>
-        {evaluated.ok ? (
-          <BeltResults result={evaluated.result} />
-        ) : (
-          <div role="alert" className="text-body text-cognac-deep">
-            <p className="font-medium">S těmito hodnotami pásek nespočítám:</p>
-            <ul className="mt-1 list-disc pl-5">
-              {evaluated.problems.map((p) => (
-                <li key={p}>{typo(p)}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-        {evaluated.ok && !evaluated.result.sheets.printable ? (
-          <p role="note" className="text-body text-cognac-deep">
-            {typo(evaluated.result.sheets.message)}
+        </div>
+        {prefilled?.legacy ? (
+          <p
+            role="note"
+            className="rounded-control border border-forest bg-forest-tint px-4 py-3 text-body"
+          >
+            <span className="font-medium">Předvyplněno ze zápisníku:</span>{' '}
+            {typo(prefilled.legacy.filled.join(', '))}.{' '}
+            {typo(
+              'Tyto hodnoty jste zapsali v lekci 1. Zkontrolujte je a uložte do „Mých pásků“, ať se neztratí.',
+            )}
+            {prefilled.legacy.problems.map((p) => (
+              <span key={p} className="mt-1 block text-cognac-deep">
+                {typo(p)}
+              </span>
+            ))}
           </p>
         ) : null}
-        <div>
-          <Button type="submit" variant="secondary" disabled={!evaluated.ok}>
-            Vygenerovat listy A4
-          </Button>
-        </div>
-      </form>
-      {done ? (
-        <p role="status" className="text-body font-medium text-forest">
-          {typo(done)}
+        <SavedBeltsSection
+          project={project}
+          current={evaluated.ok ? evaluated : null}
+          waistSource={form.waistSource}
+          extras={extras}
+          initialName={prefilled?.name ?? ''}
+          initialLoadedFieldId={prefilled?.loadedFieldId ?? null}
+          onLoad={(belt) => {
+            setForm(beltConfigToForm(belt.input, belt.waistSource));
+            setProng(belt.prongMm === undefined ? '' : formatDecimal(belt.prongMm));
+            setScrapFromStrap(belt.scrapFromStrap === true);
+            setDone(null);
+          }}
+        />
+        <form onSubmit={generate} noValidate className="flex flex-col gap-4">
+          <div className="grid gap-4 sm:grid-cols-3">
+            <NumberField
+              id={`${id}-width`}
+              label="Šířka = přezka, mm"
+              value={form.width}
+              onChange={set('width')}
+              hint={`Vnitřní světlost přezky, ${BELT_LIMITS.widthMm.min}–${BELT_LIMITS.widthMm.max} mm.`}
+            />
+            <NumberField
+              id={`${id}-thickness`}
+              label="Tloušťka (změřená), mm"
+              value={form.thickness}
+              onChange={set('thickness')}
+              hint="Před nákupem nechte 3,5. Po dodání změřte posuvkou na řezu (3,0–4,0), např. 3,6."
+            />
+            <NumberField
+              id={`${id}-waist`}
+              label="Obvod, cm"
+              value={form.waist}
+              onChange={set('waist')}
+              hint={WAIST_HINTS[form.waistSource]}
+            />
+          </div>
+          <ChoiceRow label="Obvod jste měřili">
+            {(
+              [
+                ['pasek', 'Na pásku, který nosíte'],
+                ['metr', 'Metrem přes poutka'],
+              ] as const
+            ).map(([value, text]) => (
+              <SegmentButton
+                key={value}
+                active={form.waistSource === value}
+                onClick={() => set('waistSource')(value)}
+              >
+                {text}
+              </SegmentButton>
+            ))}
+          </ChoiceRow>
+          <WaistFigure source={form.waistSource} />
+          <label className="flex min-h-touch items-start gap-3 text-body">
+            <input
+              type="checkbox"
+              className="mt-1.5 size-4"
+              checked={scrapFromStrap}
+              onChange={(e) => {
+                setScrapFromStrap(e.target.checked);
+                setDone(null);
+              }}
+            />
+            <span>
+              {typo(
+                `Trénink na odřezku téhož řemene (lekce 2): pás o ${SCRAP_ALLOWANCE_CM} cm delší`,
+              )}
+              <span className="block text-meta text-ink-2">
+                {typo(
+                  'Bez zaškrtnutí si na trénink připravte samostatný odřezek třísločiněné kůže podobné tloušťky.',
+                )}
+              </span>
+            </span>
+          </label>
+          <ChoiceRow label="Konec">
+            {(
+              [
+                ['hrot', 'Hrot'],
+                ['zaobleny', 'Zaoblený'],
+              ] as const satisfies readonly (readonly [BeltTip, string])[]
+            ).map(([value, text]) => (
+              <SegmentButton
+                key={value}
+                active={form.tip === value}
+                onClick={() => set('tip')(value)}
+              >
+                {text}
+              </SegmentButton>
+            ))}
+          </ChoiceRow>
+          <ChoiceRow label="Barva">
+            <SegmentButton
+              active={form.color === 'prirodni'}
+              onClick={() => set('color')('prirodni')}
+            >
+              Přírodní
+            </SegmentButton>
+            <SegmentButton
+              active={form.color !== 'prirodni'}
+              onClick={() => {
+                if (form.color === 'prirodni') set('color')('');
+              }}
+            >
+              Barevný
+            </SegmentButton>
+          </ChoiceRow>
+          {form.color !== 'prirodni' ? (
+            <div className="flex flex-col gap-1.5">
+              <ChoiceRow label="Barva pásu (vyberte)">
+                {DYED_CHOICES.map((c) => (
+                  <SegmentButton key={c} active={form.color === c} onClick={() => set('color')(c)}>
+                    {capitalize(STRAP_COLOR_LABELS[c])}
+                  </SegmentButton>
+                ))}
+              </ChoiceRow>
+              <p className="max-w-prose text-meta text-ink-2">
+                {typo(
+                  'Řezaná hrana pásu barveného jen na povrchu je světlá: před leštěním ji obarvíte barvou na hrany. Odstín vybírejte podle fotky v obchodě a barvu i balzám ověřte na odřezku.',
+                )}
+              </p>
+            </div>
+          ) : null}
+          <details
+            className="rounded-control border border-line px-4 py-2"
+            open={holesOpenInitially}
+          >
+            <summary className="min-h-touch cursor-pointer text-body font-medium">
+              Dírky (pokročilé)
+            </summary>
+            <p className="mt-2 max-w-prose text-meta text-ink-2">
+              {typo(
+                'Prázdné pole = výchozí hodnota. Destička platí jen pro 5 dírek po 25 mm s výchozím odstupem.',
+              )}
+            </p>
+            <div className="mt-3 flex flex-col gap-4">
+              <ChoiceRow label="Počet dírek">
+                {BELT_LIMITS.holeCounts.map((n) => (
+                  <SegmentButton
+                    key={n}
+                    active={form.holeCount === String(n)}
+                    onClick={() => set('holeCount')(String(n))}
+                  >
+                    {n}
+                  </SegmentButton>
+                ))}
+              </ChoiceRow>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <NumberField
+                  id={`${id}-prong`}
+                  label="Trn přezky u kořene, mm"
+                  value={prong}
+                  onChange={changeProng}
+                  hint={
+                    prongPunch
+                      ? `Ø dírky ${formatDecimal(prongPunch.punchMm)} mm (${prongPunch.how}).`
+                      : 'Po dodání změřte posuvkou. Ø dírky se vyplní samo: trn + 0,5 mm.'
+                  }
+                />
+                <NumberField
+                  id={`${id}-diameter`}
+                  label="Ø dírky, mm"
+                  value={form.holeDiameter}
+                  onChange={set('holeDiameter')}
+                  placeholder={formatDecimal(DEFAULT_HOLE_DIAMETER_MM)}
+                  hint="Trn přezky u kořene + 0,5 mm. 4,5–6,0."
+                />
+                <NumberField
+                  id={`${id}-spacing`}
+                  label="Rozteč, mm"
+                  value={form.holeSpacing}
+                  onChange={set('holeSpacing')}
+                  placeholder={formatDecimal(DEFAULT_HOLE_SPACING_MM)}
+                  hint="Podklady mají 25 mm."
+                />
+                <NumberField
+                  id={`${id}-apex`}
+                  label="Konec → první dírka, mm"
+                  value={form.apexToFirst}
+                  onChange={set('apexToFirst')}
+                  placeholder={
+                    evaluated.ok
+                      ? formatDecimal(evaluated.result.holes.fromApexMm[0] ?? 0)
+                      : undefined
+                  }
+                  hint={`Prázdné = jako destička. Nejvýš ${BELT_LIMITS.apexToFirstHoleMaxMm} mm.`}
+                />
+              </div>
+              {prongPunch?.problem ? (
+                <p className="text-meta text-cognac-deep">{typo(prongPunch.problem)}</p>
+              ) : null}
+            </div>
+          </details>
+          {evaluated.ok ? (
+            <BeltResults result={evaluated.result} purchase={purchase!} offersId={`${id}-offers`} />
+          ) : (
+            <div role="alert" className="text-body text-cognac-deep">
+              <p className="font-medium">S těmito hodnotami pásek nespočítám:</p>
+              <ul className="mt-1 list-disc pl-5">
+                {evaluated.problems.map((p) => (
+                  <li key={p}>{typo(p)}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {evaluated.ok && !evaluated.result.sheets.printable ? (
+            <p role="note" className="text-body text-cognac-deep">
+              {typo(evaluated.result.sheets.message)}
+            </p>
+          ) : null}
+          <div>
+            <Button type="submit" variant="secondary" disabled={!evaluated.ok}>
+              Vygenerovat listy A4
+            </Button>
+          </div>
+        </form>
+        {done ? (
+          <p role="status" className="text-body font-medium text-forest">
+            {typo(done)}
+          </p>
+        ) : null}
+      </Card>
+    </div>
+  );
+}
+
+/**
+ * „Koupit“ nahoře na stránce: pás (i délka, kterou objednat), přezka, šrouby, výsečníky
+ * a doporučený obchod. Čísla počítá `beltPurchase`.
+ */
+function PurchaseSummary({
+  purchase,
+  offersAnchor,
+}: {
+  purchase: BeltPurchase | null;
+  offersAnchor: string;
+}) {
+  const id = useId();
+  return (
+    <Card tone="forest" className="flex flex-col gap-2" role="region" aria-labelledby={id}>
+      <h2 id={id} className="text-h2">
+        Koupit
+      </h2>
+      {purchase ? (
+        <>
+          <ul className="flex flex-col gap-1.5 text-body">
+            {purchaseLines(purchase).map((line) => (
+              <li key={line.what}>
+                <span className="font-semibold">{typo(line.what)}:</span> {typo(line.detail)}
+              </li>
+            ))}
+          </ul>
+          <p className="text-body">
+            <span className="font-semibold">{typo(recommendedOfferText(purchase))}</span>
+            {purchase.offers.length > 0 ? (
+              <>
+                {' · '}
+                <a href={`#${offersAnchor}`} className="text-leather underline hover:text-cognac">
+                  další obchody níže
+                </a>
+              </>
+            ) : null}
+          </p>
+          {purchase.minLengthCm === null ? (
+            <p className="text-meta text-ink-2">
+              {typo('Zadejte obvod: bez něj délku pásu nespočítám.')}
+            </p>
+          ) : null}
+        </>
+      ) : (
+        <p className="text-body text-cognac-deep">
+          {typo('Opravte hodnoty v zadání níže, pak souhrn ukáže, co koupit.')}
         </p>
-      ) : null}
+      )}
     </Card>
   );
 }
@@ -414,7 +542,16 @@ function rivetText(r: BeltConfigResult): string {
 }
 
 /** Tabulka výsledků, destička, nákup a co ověřit. */
-function BeltResults({ result }: { result: BeltConfigResult }) {
+function BeltResults({
+  result,
+  purchase,
+  offersId,
+}: {
+  result: BeltConfigResult;
+  /** Souhrn nákupu: nabídky pásu pro délku i s odřezkem na trénink. */
+  purchase: BeltPurchase;
+  offersId: string;
+}) {
   const r = result;
   const rows: [string, string][] = [
     [
@@ -479,21 +616,33 @@ function BeltResults({ result }: { result: BeltConfigResult }) {
       <div>
         <p className="mb-1 font-medium">Nákup</p>
         <ul className="flex flex-col gap-2">
-          {r.shopping.map((line) => (
-            <li key={line.item} className="text-body">
-              <span className="font-medium">
-                {line.quantity > 1 ? `${line.quantity}× ` : ''}
-                {typo(line.item)}
-              </span>{' '}
-              <Tag tone={line.status === 'overeno' ? 'ready' : 'missing'}>
-                {line.status === 'overeno' ? 'v podkladech' : 'ověřte u prodejce'}
-              </Tag>
-              <span className="block text-meta text-ink-2">{typo(line.detail)}</span>
-              {line.offers && line.offers.length > 0 ? (
-                <StrapOfferList offers={line.offers} defaultOffer={line.defaultOffer ?? null} />
-              ) : null}
-            </li>
-          ))}
+          {r.shopping.map((line) => {
+            // Pás: stav podle doporučené nabídky pro potřebnou délku (i s odřezkem), jako „Koupit“.
+            const verified = line.offers ? purchase.offer !== null : line.status === 'overeno';
+            return (
+              <li key={line.item} className="text-body">
+                <span className="font-medium">
+                  {line.quantity > 1 ? `${line.quantity}× ` : ''}
+                  {typo(line.item)}
+                </span>{' '}
+                <Tag tone={verified ? 'ready' : 'missing'}>
+                  {verified ? 'v podkladech' : 'ověřte u prodejce'}
+                </Tag>
+                <span className="block text-meta text-ink-2">
+                  {typo(
+                    line.offers && purchase.scrapFromStrap && purchase.neededCm !== null
+                      ? `${line.detail}; s odřezkem na trénink aspoň ${purchase.neededCm} cm`
+                      : line.detail,
+                  )}
+                </span>
+                {line.offers && purchase.offers.length > 0 ? (
+                  <div id={offersId} className="scroll-mt-24">
+                    <StrapOfferList offers={purchase.offers} defaultOffer={purchase.offer} />
+                  </div>
+                ) : null}
+              </li>
+            );
+          })}
         </ul>
       </div>
       {r.warnings.length > 0 ? (
@@ -605,25 +754,33 @@ function PlateBadge({ result }: { result: BeltConfigResult }) {
 /**
  * „Moje pásky“: uložené sestavy, načtení, smazání a uložení té aktuální. Po načtení „Uložit“
  * přepíše načtený pásek (i s novým názvem), „Uložit jako nový“ založí další. Rozhoduje
- * `decideSavedBeltSave`; stejný název jiného pásku se potvrzuje tady na stránce.
+ * `decideSavedBeltSave`; stejný název jiného pásku se potvrzuje tady na stránce. Načtený
+ * i uložený pásek je aktivní: podle něj počítají lekce a nákup.
  */
 function SavedBeltsSection({
   project,
   current,
   waistSource,
+  extras,
+  initialName,
+  initialLoadedFieldId,
   onLoad,
 }: {
   project: Pick<ProjectDefinition, 'slug' | 'contentVersion'>;
   current: { input: BeltConfigInput } | null;
   waistSource: WaistSource;
+  extras: SavedBeltExtras;
+  initialName: string;
+  initialLoadedFieldId: string | null;
   onLoad: (belt: SavedBelt) => void;
 }) {
   const id = useId();
-  const { belts, saveBelt, removeBelt, isSaving } = useSavedBelts(project);
-  const [name, setName] = useState('');
+  const { belts, active, saveBelt, removeBelt, setActive, isSaving } = useSavedBelts(project);
+  const [name, setName] = useState(initialName);
   /** Id načteného pásku; „Uložit“ ho přepíše. */
-  const [loadedFieldId, setLoadedFieldId] = useState<string | null>(null);
+  const [loadedFieldId, setLoadedFieldId] = useState<string | null>(initialLoadedFieldId);
   const loaded = belts.find((b) => b.fieldId === loadedFieldId) ?? null;
+  const activeFieldId = active?.source === 'saved' ? active.fieldId : null;
   /** Čeká na „Přepsat / Zrušit“: pásek se stejným názvem a co se při „Přepsat“ zapíše. */
   const [pending, setPending] = useState<{ conflict: SavedBelt; write: SavedBeltWrite } | null>(
     null,
@@ -634,6 +791,22 @@ function SavedBeltsSection({
     text: string;
     undo?: SavedBelt;
   } | null>(null);
+
+  const load = async (belt: SavedBelt) => {
+    setName(belt.name);
+    setLoadedFieldId(belt.fieldId);
+    setPending(null);
+    onLoad(belt);
+    try {
+      await setActive(belt.fieldId);
+      setMessage({
+        ok: true,
+        text: `Pásek „${belt.name}“ je aktivní: lekce a nákup počítají s ním.`,
+      });
+    } catch {
+      setMessage({ ok: false, text: 'Aktivní pásek se nezměnil. Zkuste to znovu.' });
+    }
+  };
 
   const remove = async (belt: SavedBelt) => {
     setPending(null);
@@ -648,7 +821,13 @@ function SavedBeltsSection({
 
   const restore = async (belt: SavedBelt) => {
     try {
-      await saveBelt(belt.name, belt.input, belt.waistSource, belt.fieldId);
+      await saveBelt(
+        belt.name,
+        belt.input,
+        belt.waistSource,
+        { prongMm: belt.prongMm, scrapFromStrap: belt.scrapFromStrap },
+        belt.fieldId,
+      );
       setMessage({ ok: true, text: `Pásek „${belt.name}“ vrácen.` });
     } catch {
       setMessage({ ok: false, text: 'Vrácení se nepovedlo. Zkuste to znovu.' });
@@ -660,7 +839,7 @@ function SavedBeltsSection({
     setPending(null);
     const trimmed = name.trim();
     try {
-      await saveBelt(trimmed, current.input, waistSource, w.fieldId);
+      await saveBelt(trimmed, current.input, waistSource, extras, w.fieldId);
       setLoadedFieldId(w.fieldId);
       if (w.removeFieldId) {
         try {
@@ -675,12 +854,13 @@ function SavedBeltsSection({
       }
       setMessage({
         ok: true,
-        text:
+        text: `${
           w.outcome === 'created'
             ? `Pásek „${trimmed}“ uložen.`
             : w.outcome === 'updated'
               ? `Změny pásku „${trimmed}“ uloženy.`
-              : `Pásek „${trimmed}“ přepsán.`,
+              : `Pásek „${trimmed}“ přepsán.`
+        } Je aktivní: lekce a nákup počítají s ním.`,
       });
     } catch {
       setMessage({ ok: false, text: 'Uložení se nepovedlo. Zkuste to znovu.' });
@@ -718,6 +898,7 @@ function SavedBeltsSection({
             <li key={belt.fieldId} className="flex flex-wrap items-center gap-2 text-body">
               <span className="mr-auto">
                 <span className="font-medium">{belt.name}</span>{' '}
+                {belt.fieldId === activeFieldId ? <Tag tone="ready">aktivní</Tag> : null}{' '}
                 <span className="text-meta text-ink-2">
                   {typo(beltConfigLabel(belt.input))}
                   {belt.input.waistMm !== undefined
@@ -728,13 +909,8 @@ function SavedBeltsSection({
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => {
-                  setName(belt.name);
-                  setLoadedFieldId(belt.fieldId);
-                  setPending(null);
-                  setMessage(null);
-                  onLoad(belt);
-                }}
+                disabled={isSaving}
+                onClick={() => void load(belt)}
                 aria-label={`Načíst pásek ${belt.name}`}
               >
                 Načíst

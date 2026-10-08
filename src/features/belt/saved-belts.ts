@@ -16,7 +16,15 @@ import { STRAP_COLORS } from '@/lib/patterns/belt-strap-offers';
 /** Nejdelší název; JSON se musí vejít do 2000 znaků (`lesson_records_value_size`). */
 export const SAVED_BELT_NAME_MAX = 60;
 
-export interface SavedBelt {
+/** Co se ukládá k pásku navíc mimo výpočet (`BeltConfigInput`). */
+export interface SavedBeltExtras {
+  /** Trn přezky u kořene, mm (pomůcka pro Ø dírek; uložený jen pro přehled). */
+  prongMm?: number | undefined;
+  /** Odřezek na trénink (lekce 2) se uřízne z téhož pásu: pás o 15 cm delší. */
+  scrapFromStrap?: boolean | undefined;
+}
+
+export interface SavedBelt extends SavedBeltExtras {
   /** Id pole zápisníku (`belt-config-<uuid>`). */
   fieldId: string;
   name: string;
@@ -44,6 +52,9 @@ const savedBeltValueSchema = z.object({
    * verze) se čte jako přírodní, aby se pásek neztratil.
    */
   color: z.enum(STRAP_COLORS).optional().catch(undefined),
+  /** Pomůcky bez vlivu na výpočet; poškozená hodnota se zahodí, pásek zůstane. */
+  prongMm: z.number().optional().catch(undefined),
+  scrapFromStrap: z.boolean().optional().catch(undefined),
 });
 
 /** Je to id pole uloženého pásku? */
@@ -61,6 +72,7 @@ export function serializeSavedBelt(
   name: string,
   input: BeltConfigInput,
   waistSource: WaistSource,
+  extras: SavedBeltExtras = {},
 ): string {
   const value: z.input<typeof savedBeltValueSchema> = {
     v: 1,
@@ -78,6 +90,8 @@ export function serializeSavedBelt(
     ...(input.holeDiameterMm !== undefined ? { holeDiameterMm: input.holeDiameterMm } : {}),
     // Přírodní se neukládá: JSON zůstane krátký a starší pásky bez barvy čtou totéž.
     ...(input.color !== undefined && input.color !== 'prirodni' ? { color: input.color } : {}),
+    ...(extras.prongMm !== undefined ? { prongMm: extras.prongMm } : {}),
+    ...(extras.scrapFromStrap ? { scrapFromStrap: true } : {}),
   };
   return JSON.stringify(value);
 }
@@ -93,10 +107,16 @@ export function parseSavedBeltValue(raw: unknown): Omit<SavedBelt, 'fieldId' | '
   }
   const parsed = savedBeltValueSchema.safeParse(json);
   if (!parsed.success) return null;
-  const { name, waistSource, v: _v, color, ...rest } = parsed.data;
+  const { name, waistSource, v: _v, color, prongMm, scrapFromStrap, ...rest } = parsed.data;
   const input: BeltConfigInput =
     color === undefined || color === 'prirodni' ? rest : { ...rest, color };
-  return { name, waistSource, input };
+  return {
+    name,
+    waistSource,
+    input,
+    ...(prongMm !== undefined ? { prongMm } : {}),
+    ...(scrapFromStrap ? { scrapFromStrap: true } : {}),
+  };
 }
 
 /** Uložené pásky projektu (bez smazaných), seřazené podle názvu. */

@@ -21,6 +21,8 @@ import { type AnimationLink } from '@/content/schema';
  *   příklad 40 × 3,5 mm, čísla pro vlastní pásek jsou v tabulce „Váš pásek“,
  * - vrtani-formy (`#A`–`#E`): stejně jako kapsa-prisiti; korunka Ø 32 na unášeči, vrtačka,
  *   upnutí desky a vrtání formy z lekce 2 pouzdra s mincí.
+ * - pasek-sirka-konec (`#A`–`#D`): stejně jako kapsa-prisiti; šířka podle přezky, hrot, nebo
+ *   zaoblený konec, co zvládne destička a zadání na stránce „Váš pásek“ (lekce 1 pásku).
  *
  * `steps` = názvy kroků každé části ve stejném pořadí jako na stránce (`add('B', 'název', …)`).
  * Stránky kapsy umí otevřít i jednotlivý krok: `#B3` = třetí krok části B, stejně jako ho
@@ -599,6 +601,30 @@ export const animationPages = {
         'Uřízněte zaoblený konec',
       ],
       F: ['Dokončete hrany', 'Natřete balzámem', 'Vyzkoušejte všechny dírky'],
+    },
+  },
+  beltWidthTip: {
+    path: '/animace/pasek-sirka-konec.html',
+    title: 'Pásek: šířka a konec',
+    sections: {
+      A: 'Část A – přezka = šířka',
+      B: 'Část B – hrot, nebo zaoblený',
+      C: 'Část C – co umí destička',
+      D: 'Část D – kde to zadat',
+    },
+    steps: {
+      A: [
+        'Velikost přezky = vnitřní světlost',
+        'Pás je stejně široký jako přezka',
+        'Aplikace počítá 28–45 mm',
+      ],
+      B: ['Hrot, nebo zaoblený', 'Délka konce podle šířky'],
+      C: ['Co umí destička', 'Zaoblený jinak než 30 a 40 mm: list 2', 'Rychlé rozhodnutí'],
+      D: [
+        'Zadejte šířku a konec ve „Váš pásek“',
+        'Štítek „Destička“ pod zadáním',
+        'Nahoře souhrn „Koupit“',
+      ],
     },
   },
   drillForm: {

@@ -196,9 +196,11 @@ describe('tisk – pouzdro s vsazenou mincí', () => {
     expect(
       await screen.findByRole('heading', { name: /^Vytiskněte\sa\szkontrolujte list$/ }),
     ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Listy střihu 1:1 k tisku/ })).toHaveAttribute(
-      'href',
-      routes.template(coinCardHolderProject.slug),
-    );
+    // Odkaz má krok s tiskem i krok „Rozhodněte“ (vytisknout list znovu).
+    const links = screen.getAllByRole('link', { name: /Listy střihu 1:1 k tisku/ });
+    expect(links.length).toBeGreaterThanOrEqual(1);
+    for (const link of links) {
+      expect(link).toHaveAttribute('href', routes.template(coinCardHolderProject.slug));
+    }
   });
 });

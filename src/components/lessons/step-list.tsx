@@ -1,36 +1,25 @@
 import { type ReactNode } from 'react';
-import { Link } from 'react-router';
 
-import { LESSON_ANCHORS, routes } from '@/app/routes';
+import { LESSON_ANCHORS } from '@/app/routes';
 import { MediaSlot } from '@/components/lessons/media-slot';
+import { StepLinks } from '@/components/lessons/step-links';
 import { Button } from '@/components/ui/button';
 import { animationButtonText, animationPages } from '@/content/animations';
-import { type LessonStep, type TemplateDefinition } from '@/content/schema';
+import { type LessonStep, type ProjectDefinition, type TemplateDefinition } from '@/content/schema';
 import { typo } from '@/lib/utils/format';
-
-/** Text odkazu pod krokem podle `printLink`. */
-const printLinkLabels: Record<NonNullable<LessonStep['printLink']>, string> = {
-  'practice-sheets': 'Vytisknout cvičnou šablonu 1:1',
-  'pattern-sheets': 'Listy střihu 1:1 k tisku',
-  template: 'Vytisknout šablonu 1:1',
-};
-
-/** Kam vede odkaz pod krokem podle `printLink`. */
-const printLinkRoutes: Record<NonNullable<LessonStep['printLink']>, (slug: string) => string> = {
-  'practice-sheets': routes.practiceSheets,
-  'pattern-sheets': routes.template,
-  template: routes.template,
-};
 
 export function StepList({
   steps,
   template,
   projectSlug,
+  patternSheets,
   renderStepExtras,
 }: {
   steps: readonly LessonStep[];
   template: TemplateDefinition | undefined;
   projectSlug: string;
+  /** Listy střihu projektu: u pásku vedou odkazy na tisk na „Váš pásek“. */
+  patternSheets?: ProjectDefinition['patternSheets'];
   /** Doplňky pod textem kroku (časovače, zápisník, připomínky); `index` od 0. */
   renderStepExtras?: (step: LessonStep, index: number) => ReactNode;
 }) {
@@ -47,14 +36,7 @@ export function StepList({
           <div className="flex min-w-0 flex-1 flex-col gap-3">
             <h3 className="text-step font-semibold">{typo(step.title)}</h3>
             <p className="text-body text-ink-2">{typo(step.body)}</p>
-            {step.printLink ? (
-              <Link
-                to={printLinkRoutes[step.printLink](projectSlug)}
-                className="inline-flex min-h-touch items-center self-start text-body text-leather hover:text-cognac"
-              >
-                {printLinkLabels[step.printLink]} →
-              </Link>
-            ) : null}
+            <StepLinks step={step} project={{ slug: projectSlug, patternSheets }} />
             {step.animationLinks ? (
               // Obyčejné odkazy, ne router <Link>: animace jsou statické stránky mimo SPA
               // (public/animace, offline z precache service workeru).

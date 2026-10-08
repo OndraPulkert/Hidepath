@@ -1,17 +1,20 @@
 import { describe, expect, it } from 'vitest';
 
 import { equipmentCatalog } from '@/content/equipment';
-import { BELT_RECORD_IDS } from '@/content/projects';
+import {
+  BELT_ACTIVE_FIELD_ID,
+  LEGACY_BELT_RECORD_IDS as BELT_RECORD_IDS,
+} from '@/content/projects';
 import { beltProject } from '@/content/projects/belt/project';
 import {
   BELT_CONFIG_PLAN_SLUGS,
   BELT_FALLBACK_BASIS,
-  NOTEBOOK_BASIS_NAME,
   beltBudgetPrices,
   beltPlanBasis,
   beltPlanView,
   beltPrepPlan,
 } from '@/features/belt/belt-shopping';
+import { LEGACY_BELT_NAME } from '@/features/belt/belt-prefill';
 import { newSavedBeltFieldId, serializeSavedBelt } from '@/features/belt/saved-belts';
 import { type LessonRecordEntry } from '@/features/notebook/types';
 import { buildLessonPrep } from '@/features/prep/lesson-prep';
@@ -57,7 +60,7 @@ describe('nákup podle pásku', () => {
     expect(beltPrepPlan(plan, [], SLUG, equipmentCatalog)).toBeNull();
   });
 
-  it('nejnovější uložený pásek má přednost před zápisníkem', () => {
+  it('nejnovější uložený pásek má přednost před starými zápisy lekce 1', () => {
     const basis = beltPlanBasis(
       [
         entry(BELT_RECORD_IDS.width, 30),
@@ -69,9 +72,46 @@ describe('nákup podle pásku', () => {
     expect(basis).toMatchObject({ name: 'Nový', source: 'saved', input: { widthMm: 30 } });
   });
 
-  it('bez uloženého pásku čísla ze zápisníku', () => {
+  it('zvolený aktivní pásek má přednost před nejnovějším', () => {
+    const old = saved(
+      'Starý',
+      { widthMm: 35, thicknessMm: 3.5, tip: 'hrot' },
+      '2026-10-01T10:00:00.000Z',
+    );
+    const entries = [
+      old,
+      saved('Nový', { widthMm: 30, thicknessMm: 3.6, tip: 'hrot' }, '2026-10-07T10:00:00.000Z'),
+      entry(BELT_ACTIVE_FIELD_ID, old.fieldId),
+    ];
+    expect(beltPlanBasis(entries, SLUG)).toMatchObject({ name: 'Starý', input: { widthMm: 35 } });
+    expect(prepPlan(entries).basis).toMatch(/^podle pásku: Starý \(35 mm/);
+    // Zvolený pásek mezitím smazaný (náhrobek): platí zase nejnovější.
+    const deleted = [...entries, entry(old.fieldId, null, '2026-10-08T11:00:00.000Z')];
+    expect(beltPlanBasis(deleted, SLUG)).toMatchObject({ name: 'Nový' });
+  });
+
+  it('odřezek z téhož pásu: pás o 15 cm delší, nejbližší délka, kterou obchod prodává', () => {
+    const input = { widthMm: 40, thicknessMm: 3.5, tip: 'hrot', waistMm: 950 } as const;
+    const plain = prepPlan([saved('Bez', input)]);
+    expect(lineOf(plain.plan, 'belt-strap')[0]!.purpose).toMatch(/aspoň 119 cm$/);
+    const withScrap = prepPlan([
+      entry(
+        newSavedBeltFieldId(),
+        serializeSavedBelt('S', input, 'pasek', { scrapFromStrap: true }),
+      ),
+    ]);
+    // 119 + 15 = 134 cm: CraftPoint (130 cm) nestačí.
+    const strap = lineOf(withScrap.plan, 'belt-strap');
+    expect(strap.every((l) => !l.url.includes('craft-point'))).toBe(true);
+    expect(
+      strap[0]?.purpose ??
+        withScrap.plan.skipped.find((x) => x.equipmentSlug === 'belt-strap')!.reason,
+    ).toMatch(/134 cm/);
+  });
+
+  it('bez uloženého pásku čísla ze starých zápisů lekce 1 (převod)', () => {
     const basis = beltPlanBasis([entry(BELT_RECORD_IDS.width, 35)], SLUG);
-    expect(basis).toMatchObject({ name: NOTEBOOK_BASIS_NAME, source: 'notebook' });
+    expect(basis).toMatchObject({ name: LEGACY_BELT_NAME, source: 'notebook' });
     expect(basis!.input.widthMm).toBe(35);
   });
 
@@ -275,7 +315,7 @@ describe('nákup podle pásku', () => {
     expect(out).not.toBeNull();
     expect(out!.plan).toBe(plan);
     expect(out!.basis).toMatch(
-      /^podle plánu projektu \(pásek 40 mm\): čísla ze zápisníku nejdou spočítat/,
+      /^podle plánu projektu \(pásek 40 mm\): zápisy z lekce 1 nejdou spočítat/,
     );
     expect(out!.basis).toMatch(/Trn 5,8 mm je na výsečníky 4,5–6 mm moc silný/);
   });
@@ -454,6 +494,6 @@ describe('Co koupit a rozpočet podle pásku', () => {
       equipmentCatalog,
     );
     expect(view.plan).toBe(plan);
-    expect(view.basis).toMatch(/^podle plánu projektu \(pásek 40 mm\): čísla ze zápisníku/);
+    expect(view.basis).toMatch(/^podle plánu projektu \(pásek 40 mm\): zápisy z lekce 1/);
   });
 });

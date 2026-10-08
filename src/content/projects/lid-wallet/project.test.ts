@@ -167,13 +167,17 @@ describe('obsah – peněženka Víčko', () => {
     );
     expect(withPrint).toEqual([
       '1/sheets-for-thickness',
+      '1/sheets-rule',
       '1/print-check',
       '2/glue-model',
+      '2/record',
       '2/templates',
       '4/valid-sheets',
       '4/tape-sheet-1',
       '4/cut-parts',
       '4/mark-back',
+      '10/k-too-high',
+      '11/magnet-dry-test',
     ]);
     // Středy okénka bankovek: propíchnout přes list 1 na líc (lekce 4), sekat z líce B (lekce 6).
     expect(lessonText('04-cut-and-mark')).toContain('Ø 14 na koncích okénka bankovek');

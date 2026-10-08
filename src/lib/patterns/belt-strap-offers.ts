@@ -727,6 +727,18 @@ export const OFFERED_STRAP_COLORS: readonly StrapColor[] = STRAP_COLORS.filter((
   ALL_STRAP_SOURCES.some((s) => s.color === c),
 );
 
+/**
+ * Nejkratší prodávaná délka, která stačí (≥ `neededCm`); `null`, když žádná. Bez potřebné
+ * délky (`null`, obvod nezadaný) nejkratší prodávaná.
+ */
+export function nearestSoldLengthCm(
+  lengthsCm: readonly number[],
+  neededCm: number | null,
+): number | null {
+  const enough = lengthsCm.filter((len) => neededCm === null || len >= neededCm - EPS);
+  return enough.length > 0 ? Math.min(...enough) : null;
+}
+
 /** Nabídky pro šířku, změřenou tloušťku, nejkratší délku a barvu, od nejlevnější. */
 export function strapOffers(
   widthMm: number,
@@ -738,10 +750,11 @@ export function strapOffers(
   for (const s of ALL_STRAP_SOURCES) {
     if (s.color !== color) continue;
     if (thicknessMm < s.measuredMm[0] - EPS || thicknessMm > s.measuredMm[1] + EPS) continue;
-    const lengthCm = s.lengthsCm.find(
-      (len) => (neededCm === null || len >= neededCm) && s.priceCents(widthMm, len) !== undefined,
+    const lengthCm = nearestSoldLengthCm(
+      s.lengthsCm.filter((len) => s.priceCents(widthMm, len) !== undefined),
+      neededCm,
     );
-    if (lengthCm === undefined) continue;
+    if (lengthCm === null) continue;
     offers.push({
       shop: s.shop,
       product: s.product,

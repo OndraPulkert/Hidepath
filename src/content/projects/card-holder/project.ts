@@ -247,7 +247,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'practice-template',
         title: 'Vyzkoušejte řez podle přilepené šablony',
-        body: 'Takhle budete v lekci 5 řezat díly pouzdra. Cvičnou šablonu vytiskněte na A4 bez přizpůsobení velikosti (100 %) a změřte kontrolní úsečku: musí mít přesně 50 mm. Tři tvary vystřihněte nůžkami po čárkované čáře (okraj asi 1,5 cm). Tvary dělejte jeden po druhém na pásu 80 mm, vedle sebe podél delší strany, 5 mm od kraje a 10 mm od sebe. Tvar položte na rub pásu a přilepte maskovací páskou z několika stran, jen na okrajích mimo plnou čáru. U tvaru 3 propíchněte šídlem obě tečky skrz papír do kůže; po sejmutí šablony musí být na rubu vidět. Pak řežte skrz papír i kůži po plné čáře na dva až tři lehké tahy: rovné strany podle ocelového pravítka položeného na čáru, roh a výřez pomalu bez pravítka. Pásku strhávejte pomalu, skoro rovnoběžně s kůží. Nakonec nalepte kousek pásky na líc odřezku, strhněte ho a zkontrolujte, že nenechal lesklou stopu.',
+        body: 'Takhle budete v lekci 5 řezat díly pouzdra. Cvičnou šablonu vytiskněte (odkaz pod krokem) na A4 bez přizpůsobení velikosti (100 %) a změřte kontrolní úsečku: musí mít přesně 50 mm. Tři tvary vystřihněte nůžkami po čárkované čáře (okraj asi 1,5 cm). Tvary dělejte jeden po druhém na pásu 80 mm, vedle sebe podél delší strany, 5 mm od kraje a 10 mm od sebe. Tvar položte na rub pásu a přilepte maskovací páskou z několika stran, jen na okrajích mimo plnou čáru. U tvaru 3 propíchněte šídlem obě tečky skrz papír do kůže; po sejmutí šablony musí být na rubu vidět. Pak řežte skrz papír i kůži po plné čáře na dva až tři lehké tahy: rovné strany podle ocelového pravítka položeného na čáru, roh a výřez pomalu bez pravítka. Pásku strhávejte pomalu, skoro rovnoběžně s kůží. Nakonec nalepte kousek pásky na líc odřezku, strhněte ho a zkontrolujte, že nenechal lesklou stopu.',
         records: [
           {
             kind: 'number',
@@ -684,7 +684,8 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'transfer',
         title: 'Přilepte šablonu na rub',
-        body: 'Každý díl šablony vystřihněte zvlášť a jen nahrubo, s okrajem 1–2 cm (mezi díly střihněte středem mezery). Po plné čáře budete řezat až nožem. Čárkovaná čára je linie stehu, tu nestříhejte ani neřežte. Díl položte na rub kůže a přilepte maskovací páskou z několika stran, jen na okrajích mimo plnou čáru. Použijte pásku, která v lekci 2 nenechala na líci stopu. Šablona se řezáním zničí, na každý další díl nebo pouzdro vytiskněte novou.',
+        body: 'Každý díl šablony vystřihněte zvlášť a jen nahrubo, s okrajem 1–2 cm (mezi díly střihněte středem mezery). Po plné čáře budete řezat až nožem. Čárkovaná čára je linie stehu, tu nestříhejte ani neřežte. Díl položte na rub kůže a přilepte maskovací páskou z několika stran, jen na okrajích mimo plnou čáru. Použijte pásku, která v lekci 2 nenechala na líci stopu. Šablona se řezáním zničí, na každý další díl nebo pouzdro vytiskněte novou (odkaz pod krokem).',
+        printLink: 'template',
         recalls: [{ fieldId: 'tape-mark', label: 'Páska v lekci 2' }],
         media: [
           {
@@ -849,7 +850,8 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'mark-glue-area',
         title: 'Vyznačte lepenou plochu na zadním dílu',
-        body: 'Na líci zadního dílu se lepí jen pás asi 8 mm podél spodku a obou boků (tvar U, vrch volný), aby lepidlo drželo po obou stranách linie stehu. Papírový zadní díl z lekce 5 (nebo novou šablonu vystřiženou po plné čáře) přiložte na líc zadního dílu, hrany na hrany. Na obou bocích udělejte šídlem drobný vpich těsně pod vnitřním koncem čárky 56 mm (horní hrana kapsy); kapsa ho zakryje. Nad vpichy nezdrsňujte, škrábance by zůstaly vidět. U samého boku končete asi o 6 mm níž, roh kapsy je zaoblený. Šířku 8 mm stačí odměřit nahrubo kružítkem nebo tužkou. Pro jistotu nalepte těsně nad vpichy maskovací pásku a zdrsňujte jen k ní.',
+        body: 'Na líci zadního dílu se lepí jen pás asi 8 mm podél spodku a obou boků (tvar U, vrch volný), aby lepidlo drželo po obou stranách linie stehu. Papírový zadní díl z lekce 5 (nebo novou šablonu vystřiženou po plné čáře, odkaz pod krokem) přiložte na líc zadního dílu, hrany na hrany. Na obou bocích udělejte šídlem drobný vpich těsně pod vnitřním koncem čárky 56 mm (horní hrana kapsy); kapsa ho zakryje. Nad vpichy nezdrsňujte, škrábance by zůstaly vidět. U samého boku končete asi o 6 mm níž, roh kapsy je zaoblený. Šířku 8 mm stačí odměřit nahrubo kružítkem nebo tužkou. Pro jistotu nalepte těsně nad vpichy maskovací pásku a zdrsňujte jen k ní.',
+        printLink: 'template',
         media: [
           {
             id: 'l6-glue-area',

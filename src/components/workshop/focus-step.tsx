@@ -2,6 +2,7 @@ import { type Ref } from 'react';
 
 import { MediaSlot } from '@/components/lessons/media-slot';
 import { StepExtras } from '@/components/lessons/step-extras';
+import { StepLinks } from '@/components/lessons/step-links';
 import { Button } from '@/components/ui/button';
 import { animationButtonText } from '@/content/animations';
 import { type LessonDefinition, type LessonStep, type ProjectDefinition } from '@/content/schema';
@@ -44,6 +45,7 @@ export function FocusStep({
         </h2>
       </header>
       <p className="max-w-prose text-[clamp(18px,4.6vw,21px)] leading-relaxed">{typo(step.body)}</p>
+      <StepLinks step={step} project={project} />
       {step.animationLinks ? (
         <div className="flex flex-wrap gap-2">
           {step.animationLinks.map((link) => (

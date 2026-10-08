@@ -1,21 +1,20 @@
 import { animationLink } from '@/content/animations';
 import { illustration, illustrationCaption } from '@/content/projects/belt/illustrations';
-import { BELT_RECORD_IDS, BELT_TIP_CHOICES } from '@/content/projects/belt/record-ids';
 import {
   type LessonDefinition,
   type LessonPrint,
   type MediaSlot,
   type PhaseDefinition,
   type ProjectDefinition,
-  type RecordField,
   type StepRecall,
 } from '@/content/schema';
 
 /**
- * Projekt 04 – Pásek. Pásek je parametrický: šířku (= přezka), tloušťku, obvod a konec volí
- * uživatel ve formuláři „Váš pásek“ (`browserGenerator: 'belt-config'`, výpočet
- * `src/lib/patterns/belt-config.ts`). Lekce proto čísla neopisují: odkazují na tabulku
- * „Vaše čísla“ a čísla pro 40 × 3,5 mm, hrot a 5 dírek dávají jen jako příklad („např.“);
+ * Projekt 04 – Pásek. Pásek je parametrický: šířku (= přezka), tloušťku, obvod, konec a barvu
+ * zadává uživatel jen na stránce „Váš pásek“ (`browserGenerator: 'belt-config'`, výpočet
+ * `src/lib/patterns/belt-config.ts`) a uloží je jako pásek. Lekce parametry nezapisují: hodnoty
+ * aktivního pásku ukazují přes `beltRecalls`, do zápisníku jdou jen výsledky zkoušek. Čísla
+ * pro 40 × 3,5 mm, hrot a 5 dírek dávají jen jako příklad („např.“);
  * `project.test.ts` hlídá, že příklady odpovídají modelu. Postup je z docs/zadani/opasek-postup.md,
  * meze z docs/zadani/opasek-parametry.md. Nikdo pásek podle postupu zatím nepostavil: obsah je
  * NÁVRH (draft) a co podklady neověřují, je v textu „ověřte na odřezku“.
@@ -43,11 +42,10 @@ const photo = (id: string, caption: string): MediaSlot => ({
   status: 'planned',
 });
 
-/** Kde uživatel najde svá čísla (formulář na stránce listů střihu). */
+/** Kde uživatel najde svá čísla (stránka „Váš pásek“, `routes.beltConfig`). */
 const TABLE = 'tabulka „Váš pásek“';
-/** Tvary pro „v …“ a „z …“. */
+/** Tvar pro „v …“. */
 const IN_TABLE = 'v tabulce „Váš pásek“';
-const FROM_TABLE = 'z tabulky „Váš pásek“';
 
 /** Volba v lekci 1: čím se značí (podle štítku „Destička“ v tabulce). */
 export const BELT_MARKING_ID = 'belt-marking';
@@ -85,44 +83,11 @@ const SHEETS_CONDITION =
   'tabulka „Váš pásek“ ukazuje u této řady destičky „ne“, nebo jste v lekci 1 zvolili jen listy';
 
 const recall = {
-  waist: { fieldId: BELT_RECORD_IDS.waist, label: 'Obvod (lekce 1)' },
-  width: { fieldId: BELT_RECORD_IDS.width, label: 'Šířka = přezka (lekce 1)' },
-  tip: { fieldId: BELT_RECORD_IDS.tip, label: 'Konec (lekce 1)' },
-  thickness: { fieldId: BELT_RECORD_IDS.thickness, label: 'Tloušťka pásu (lekce 1)' },
-  prong: { fieldId: BELT_RECORD_IDS.prong, label: 'Trn přezky u kořene (lekce 1)' },
   marking: { fieldId: BELT_MARKING_ID, label: 'Čím značíte (lekce 1)' },
-  color: { fieldId: BELT_RECORD_IDS.color, label: 'Barva pásu (lekce 1)' },
 } satisfies Record<string, StepRecall>;
 
-const tipField: RecordField = {
-  kind: 'choice',
-  id: BELT_RECORD_IDS.tip,
-  label: 'Konec pásku',
-  options: [
-    { value: BELT_TIP_CHOICES.hrot, label: 'Hrot' },
-    { value: BELT_TIP_CHOICES.zaobleny, label: 'Zaoblený' },
-  ],
-};
-
-/** Barva pásu: hodnoty jako `StrapColor` (src/lib/patterns/belt-strap-offers.ts). */
-const colorField: RecordField = {
-  kind: 'choice',
-  id: BELT_RECORD_IDS.color,
-  label: 'Barva pásu',
-  hint: 'Přírodní natřete balzámem. Barevný bývá na řezu světlý: hranu obarvíte barvou na hrany.',
-  options: [
-    { value: 'prirodni', label: 'Přírodní' },
-    { value: 'svetle-hneda', label: 'Světle hnědá' },
-    { value: 'hneda', label: 'Hnědá' },
-    { value: 'tmave-hneda', label: 'Tmavě hnědá' },
-    { value: 'konak', label: 'Koňak' },
-    { value: 'tabak', label: 'Tabák' },
-    { value: 'cerna', label: 'Černá' },
-    { value: 'modra', label: 'Modrá' },
-    { value: 'bordo', label: 'Bordó' },
-    { value: 'zelena', label: 'Tmavě zelená' },
-  ],
-};
+/** Odkaz pod krokem na stránku „Váš pásek“. */
+const YOUR_BELT = { to: 'belt-config', label: 'Váš pásek' } as const;
 
 /** List střihu pásku (id podle `BELT_SHEET_IDS`; vygenerované listy mají stejný základ). */
 const sheet = (sheetId: 'prezka' | 'spicka', purpose: string): LessonPrint => ({
@@ -152,7 +117,7 @@ export const lessons: readonly LessonDefinition[] = [
     order: 1,
     phaseSlug: 'prepare',
     estimatedMinutes: 60,
-    goal: 'Změřit obvod, vybrat šířku a konec, vyplnit „Váš pásek“, po dodání změřit pás a trn a zkontrolovat destičku.',
+    goal: 'Změřit obvod, vybrat šířku, konec a barvu a uložit je ve „Váš pásek“, objednat podle souhrnu „Koupit“, po dodání změřit pás a trn a zkontrolovat destičku.',
     materials: [
       'pásek, který nosíte, nebo krejčovský metr a kalhoty, ve kterých budete pásek nosit',
       'destička MK Plexi',
@@ -164,7 +129,8 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'waist',
         title: 'Změřte obvod',
-        body: 'Obvod tu není obvod pasu z krejčovské tabulky. Je to délka od ohybu u přezky k dírce, kterou nosíte. Máte pásek, který sedí: změřte ho od ohybu u přezky (ne od konce trnu) k používané dírce. Nemáte: provlékněte krejčovský metr poutky kalhot, ve kterých pásek nosíte, utáhněte na pohodlí a odečtěte. Je to tatáž míra.',
+        body: 'Obvod tu není obvod pasu z krejčovské tabulky. Je to délka od ohybu u přezky k dírce, kterou nosíte. Máte pásek, který sedí: změřte ho od ohybu u přezky (ne od konce trnu) k používané dírce. Nemáte: provlékněte krejčovský metr poutky kalhot, ve kterých pásek nosíte, utáhněte na pohodlí a odečtěte. Je to tatáž míra. Obvod zadejte ve „Váš pásek“ (odkaz pod krokem) a zvolte, jak jste měřili.',
+        appLinks: [{ to: 'belt-config', label: 'Začněte tady: Váš pásek' }],
         media: [
           {
             id: 'ilustrace-obvod-na-pasku-l1',
@@ -182,85 +148,53 @@ export const lessons: readonly LessonDefinition[] = [
           },
           photo('belt-l1-waist', 'Metr na pásku od ohybu u přezky k používané dírce'),
         ],
-        records: [
-          {
-            kind: 'number',
-            id: BELT_RECORD_IDS.waist,
-            label: 'Obvod',
-            hint: 'Od ohybu u přezky k používané dírce. Aplikace počítá 60–150 cm.',
-            unit: 'cm',
-            decimals: 1,
-            min: 60,
-            max: 150,
-          },
-        ],
       },
       {
         id: 'width-and-tip',
         title: 'Vyberte šířku, konec a barvu',
-        body: 'Šířka pásu = vnitřní světlost přezky: přezka 40 mm, pás 40 mm. Aplikace počítá 28–45 mm. Jednotrnovou přezku s ověřeným typem trnu má katalog pro 30, 35 a 40 mm; 45 mm má jen Andexnite. Konec vyberte: hrot, nebo zaoblený. Destička má zaoblený konec jen pro 30 a 40 mm, pro jiné šířky se konec tiskne na list 2. Barvu vyberte: přírodní pás natřete balzámem, barevný pás bývá na řezu světlý a hranu obarvíte barvou na hrany (lekce 2, 3, 4 a 6).',
-        media: [],
-        records: [
-          {
-            kind: 'number',
-            id: BELT_RECORD_IDS.width,
-            label: 'Šířka = vnitřní světlost přezky',
-            hint: 'Celé mm, 28–45. Např. 40.',
-            unit: 'mm',
-            decimals: 0,
-            min: 28,
-            max: 45,
-          },
-          tipField,
-          colorField,
+        body: 'Šířka pásu = vnitřní světlost přezky: přezka 40 mm, pás 40 mm. Aplikace počítá 28–45 mm. Jednotrnovou přezku s ověřeným typem trnu má katalog pro 30, 35 a 40 mm; 45 mm má jen Andexnite. Konec vyberte: hrot, nebo zaoblený. Destička má zaoblený konec jen pro 30 a 40 mm, pro jiné šířky se konec tiskne na list 2. Barvu vyberte: přírodní pás natřete balzámem, barevný pás bývá na řezu světlý a hranu obarvíte barvou na hrany (lekce 2, 3, 4 a 6). Šířku, konec a barvu zvolte ve „Váš pásek“ (odkaz pod krokem).',
+        appLinks: [YOUR_BELT],
+        animationLinks: [
+          animationLink('beltWidthTip', 'A1'),
+          animationLink('beltWidthTip', 'B1'),
+          animationLink('beltWidthTip', 'C1'),
+          animationLink('beltWidthTip', 'D1'),
         ],
+        media: [],
       },
       {
         id: 'your-belt',
-        title: 'Vyplňte „Váš pásek“',
-        printLink: 'pattern-sheets',
-        body: `Na stránce Listy střihu otevřete formulář „Váš pásek“. Obvod, šířku, konec a barvu předvyplní zápisník. Tloušťku zatím nechte 3,5 mm, změříte ji po dodání. Z tabulky pod formulářem si přečtěte nejkratší délku pásu, přezku, nýt a štítek „Destička“. Sestavu uložte do „Moje pásky“. Čísla v dalších lekcích berte z této tabulky; hodnoty pro 40 × 3,5 mm jsou jen příklad.`,
+        title: 'Uložte „Váš pásek“',
+        body: `Ve „Váš pásek“ (odkaz pod krokem) zkontrolujte obvod, šířku, konec a barvu. Tloušťku zatím nechte 3,5 mm, změříte ji po dodání. Pásek pojmenujte a uložte do „Moje pásky“. Uložený pásek je aktivní: podle něj počítají všechny lekce, „Připravte si“ i nákup. Hodnoty pro 40 × 3,5 mm v lekcích jsou jen příklad.`,
+        appLinks: [YOUR_BELT],
         media: [],
-        recalls: [recall.waist, recall.width, recall.tip, recall.color],
+        beltRecalls: ['waist', 'width', 'tip', 'color'],
       },
       {
         id: 'order',
-        title: 'Objednejte podle tabulky',
-        body: `Plán „Co koupit“ je pro pásek 40 mm; „Připravte si“ u lekcí ukazuje pás, přezku a nýt podle naposledy uloženého pásku. Pro jinou šířku vyberte u pásu i přezky variantu vaší šířky, nýt podle řádku Nýt ${IN_TABLE}. Pás musí mít aspoň nejkratší délku z tabulky: pás 130 cm stačí do obvodu 106,5 cm (5 dírek po 25 mm). Chcete-li v lekci 2 trénovat na odřezku téhož pásu, potřebujete aspoň nejkratší délku + 15 cm; jinak si připravte samostatný odřezek třísločiněné kůže podobné tloušťky. K pásu napište do poznámky „prosím blíž k 3,5 mm“. Nýt 10/6 sedí jen na pás 3,5–3,75 mm: když pás přijde jiný, nýt podle změřené tloušťky dokoupíte.`,
+        title: 'Objednejte podle souhrnu „Koupit“',
+        body: `Nahoře ve „Váš pásek“ (odkaz pod krokem) je souhrn „Koupit“: řemen, délka, kterou objednat, přezka, šrouby, výsečníky a doporučený obchod. „Co koupit“ v Nákupech (odkaz pod krokem) počítá s týmž páskem. Pás musí mít aspoň nejkratší délku: pás 130 cm stačí do obvodu 106,5 cm (5 dírek po 25 mm). Chcete-li v lekci 2 trénovat na odřezku téhož pásu, zaškrtněte „Trénink na odřezku téhož řemene“: pás pak musí mít aspoň nejkratší délku + 15 cm. Jinak si připravte samostatný odřezek třísločiněné kůže podobné tloušťky. K pásu napište do poznámky „prosím blíž k 3,5 mm“. Nýt 10/6 sedí jen na pás 3,5–3,75 mm: když pás přijde jiný, nýt podle změřené tloušťky dokoupíte.`,
+        appLinks: [
+          { to: 'belt-config', label: 'Váš pásek: Koupit' },
+          { to: 'shopping', label: 'Co koupit' },
+        ],
         media: [],
+        beltRecalls: ['strapLength'],
       },
       {
         id: 'measure-strap',
         title: 'Po dodání změřte pás a trn',
-        body: 'Posuvkou změřte tloušťku pásu na řezu na několika místech. Zapište průměr měření tak, jak vyšel (např. 3,6 mm): dřík nýtu se počítá z přesné hodnoty. Pak změřte trn přezky u kořene. Dírky pro trn = trn + 0,5 mm; u přezky 40 mm vychází 4,5 nebo 5 mm.',
+        body: 'Posuvkou změřte tloušťku pásu na řezu na několika místech. Průměr měření zadejte ve „Váš pásek“ (odkaz pod krokem) tak, jak vyšel (např. 3,6 mm): dřík nýtu se počítá z přesné hodnoty. Pak změřte trn přezky u kořene a zadejte ho pod „Dírky (pokročilé)“. Ø dírek se vyplní samo: trn + 0,5 mm, nejméně 4,5 mm; u přezky 40 mm vychází 4,5 nebo 5 mm. Výsečníky jsou 4,5–6 mm, trn tedy nejvýš 5,5 mm. Pásek uložte.',
+        appLinks: [YOUR_BELT],
         media: [photo('belt-l1-thickness', 'Posuvka měří tloušťku pásu na řezu')],
-        records: [
-          {
-            kind: 'number',
-            id: BELT_RECORD_IDS.thickness,
-            label: 'Tloušťka pásu',
-            hint: 'Průměr měření, např. 3,6. Nezaokrouhlujte.',
-            unit: 'mm',
-            decimals: 2,
-            target: { min: 3, max: 4, label: '3,0–4,0 mm' },
-          },
-          {
-            kind: 'number',
-            id: BELT_RECORD_IDS.prong,
-            label: 'Trn přezky u kořene',
-            hint: 'Ø dírek = trn + 0,5 mm, nejméně 4,5 mm. Výsečníky jsou 4,5–6 mm, trn tedy nejvýš 5,5 mm.',
-            unit: 'mm',
-            decimals: 1,
-          },
-        ],
       },
       {
         id: 'check-numbers',
         title: 'Zkontrolujte nýt a výsečník',
-        printLink: 'pattern-sheets',
-        body: `Otevřete znovu „Váš pásek“: tloušťka a Ø dírek se předvyplní. Řádek Nýt ukáže potřebný dřík (např. pro 3,5 mm dřík 5,5–6,0 mm, tedy 10/6). Když objednaný nýt nesedí, objednejte jiný. Výsečník na dírky vyberte podle Ø dírek z tabulky.`,
+        body: `Pod krokem je, co ukazuje aktivní pásek. Šrouby ukážou potřebný dřík (např. pro 3,5 mm dřík 5,5–6,0 mm, tedy 10/6). Když objednaný nýt nesedí, objednejte jiný. Výsečník na dírky vyberte podle Ø dírek. Podrobnosti jsou ve „Váš pásek“ (odkaz pod krokem).`,
+        appLinks: [YOUR_BELT],
         media: [],
-        recalls: [recall.thickness, recall.prong],
+        beltRecalls: ['thickness', 'holeDiameter', 'rivet'],
       },
       {
         id: 'plate-check',
@@ -282,7 +216,8 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'plate-or-sheets',
         title: 'Rozhodněte: destička, nebo listy',
-        body: `Pod štítkem „Destička“ ${IN_TABLE} je u každé řady „ano“, nebo „ne“. Řada s „ano“: značíte destičkou. Řada s „ne“: stiskněte „Vygenerovat listy A4“; za řadu 3 použijete list 1 (lekce 2 a 4), za řadu 1 nebo 2 list 2 (lekce 6). Destička neprošla kontrolou: značíte jen listy.`,
+        body: `Pod štítkem „Destička“ ${IN_TABLE} (odkaz pod krokem) je u každé řady „ano“, nebo „ne“. Řada s „ano“: značíte destičkou. Řada s „ne“: stiskněte „Vygenerovat listy A4“; za řadu 3 použijete list 1 (lekce 2 a 4), za řadu 1 nebo 2 list 2 (lekce 6). Destička neprošla kontrolou: značíte jen listy.`,
+        appLinks: [YOUR_BELT],
         media: [],
         records: [
           {
@@ -300,18 +235,19 @@ export const lessons: readonly LessonDefinition[] = [
     checkpoints: [
       {
         slug: 'waist-recorded',
-        title: 'Obvod je změřený od ohybu u přezky k používané dírce a zapsaný.',
+        title: 'Obvod je změřený od ohybu u přezky k používané dírce a zadaný ve „Váš pásek“.',
         required: true,
       },
       {
         slug: 'belt-chosen',
         title:
-          'Šířka a konec jsou zapsané a sestava je uložená v „Moje pásky“; pás je aspoň tak dlouhý jako nejkratší délka z tabulky.',
+          'Šířka, konec a barva jsou zadané a pásek je uložený v „Moje pásky“; pás je aspoň tak dlouhý jako nejkratší délka z „Váš pásek“.',
         required: true,
       },
       {
         slug: 'strap-measured',
-        title: 'Tloušťka pásu a trn jsou zapsané; nýt i výsečník sedí na čísla z tabulky.',
+        title:
+          'Změřená tloušťka a trn jsou uložené ve „Váš pásek“; nýt i výsečník sedí na čísla z tabulky.',
         required: true,
       },
       {
@@ -366,9 +302,9 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'get-scrap',
         title: 'Odřízněte odřezek',
-        body: `Trénujte na odřezku téhož pásu. Odřízněte asi 15 cm z konce, kde bude špička, jen když pás bude i bez nich aspoň tak dlouhý jako nejkratší délka ${FROM_TABLE}. 15 cm stačí na ohyb 90 mm a jeden nýt: otvor 64,5 mm se po přehnutí dostane na 115,5 mm. Když pás na odřezek nestačí, trénujte na samostatném odřezku třísločiněné kůže co nejbližší tloušťky (např. zbytky třísločiněné hlazenice, tloušťku ověřte u prodejce); nýt pak vyzkoušejte až na pásku.`,
+        body: `Trénujte na odřezku téhož pásu. Odřízněte asi 15 cm z konce, kde bude špička, jen když pás bude i bez nich aspoň tak dlouhý jako nejkratší délka (pod krokem). 15 cm stačí na ohyb 90 mm a jeden nýt: otvor 64,5 mm se po přehnutí dostane na 115,5 mm. Když pás na odřezek nestačí, trénujte na samostatném odřezku třísločiněné kůže co nejbližší tloušťky (např. zbytky třísločiněné hlazenice, tloušťku ověřte u prodejce); nýt pak vyzkoušejte až na pásku.`,
         media: [],
-        recalls: [recall.waist],
+        beltRecalls: ['strapLength'],
       },
       {
         id: 'cut',
@@ -379,7 +315,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'mark',
         title: 'Značení destičkou',
-        body: 'Odřezek a dvě podložky stejně silné jako pás přilepte k desce oboustrannou páskou, rubem nahoru. Destičku přiložte řadou 3 levou hranou na konec odřezku a hrany odřezku na linky vaší šířky (šířka bez linky: podle příčné stupnice). Šídlem označte dva otvory pro nýty blíž ke konci a obtáhněte ovál. V otvoru kružte šídlem po stěně, tlačte svisle a dívejte se svisle dolů. Destičku nikdy neobracejte. Bez destičky použijte list 1: propíchněte středy otvorů a oba křížky oválu.',
+        body: 'Odřezek a dvě podložky stejně silné jako pás přilepte k desce oboustrannou páskou, rubem nahoru. Destičku přiložte řadou 3 levou hranou na konec odřezku a hrany odřezku na linky vaší šířky (šířka bez linky: podle příčné stupnice). Šídlem označte dva otvory pro nýty blíž ke konci a obtáhněte ovál. V otvoru kružte šídlem po stěně, tlačte svisle a dívejte se svisle dolů. Destičku nikdy neobracejte. Bez destičky použijte list 1 (odkaz pod krokem): propíchněte středy otvorů a oba křížky oválu.',
         printLink: 'pattern-sheets',
         animationLinks: [
           animationLink('beltBuckleEnd', 'B1'),
@@ -441,6 +377,7 @@ export const lessons: readonly LessonDefinition[] = [
         animationLinks: [animationLink('edges', 'C1')],
         media: [],
         waits: [edgePaintWait(false)],
+        beltRecalls: ['color'],
         records: [
           {
             kind: 'number',
@@ -459,7 +396,6 @@ export const lessons: readonly LessonDefinition[] = [
             decimals: 0,
           },
         ],
-        recalls: [recall.color],
       },
       {
         id: 'bend',
@@ -521,7 +457,7 @@ export const lessons: readonly LessonDefinition[] = [
             ],
           },
         ],
-        recalls: [recall.thickness],
+        beltRecalls: ['thickness', 'rivet'],
       },
     ],
     checkpoints: [
@@ -707,13 +643,14 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'plate-or-sheet',
         title: 'Řada 3, nebo list 1',
         printLink: 'pattern-sheets',
-        body: `Řada 3 destičky platí pro šířky 28–45 mm. Když ${TABLE} ukazuje u řady 3 „ne“, nebo jste zvolili jen listy, vytiskněte list 1 pro váš pásek na 100 %. Kalibrační čtverec musí měřit 50 × 50 mm.`,
+        body: `Řada 3 destičky platí pro šířky 28–45 mm. Když ${TABLE} ukazuje u řady 3 „ne“, nebo jste zvolili jen listy, vytiskněte list 1 pro váš pásek na 100 % (odkaz pod krokem). Kalibrační čtverec musí měřit 50 × 50 mm.`,
         animationLinks: [
           animationLink('beltBuckleEnd', 'A1'),
           animationLink('beltBuckleEnd', 'A2'),
         ],
         media: [],
-        recalls: [recall.marking, recall.width],
+        recalls: [recall.marking],
+        beltRecalls: ['width'],
       },
       {
         id: 'secure',
@@ -758,7 +695,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'keeper',
         title: 'Vyrobte poutko',
-        body: `Poutkem bude procházet i volný konec pásku, takže obepíná 3 vrstvy. Konec pásu přeložte volně na dvojo, zatím bez ohybu kolem příčky, a přiložte k němu třetí vrstvu: druhý konec pásu nebo odřezek z lekce 2. Papírový proužek obtočte kolem všech 3 vrstev, označte, kde se potká se svým začátkem, a obvod odečtěte na pravítku destičky (nula vlevo) nebo na ocelovém pravítku. Délka poutka = obvod + tloušťka poutka v ohybech (asi 4 mm u odřezku 1,2 mm) + 15 mm přeplátování. Porovnejte s délkou poutka ${IN_TABLE} (např. ${KEEPER_EXAMPLE_MM} mm pro 40 × 3,5 mm). Z odřezku vyřízněte proužek 12 mm × tato délka. Přeplátování 15 mm natřete kontaktním lepidlem na obě strany, nechte zavadnout podle návodu na obalu a slepte. Délka poutka je spočítaná, ne vyzkoušená: ověřte ji proužkem.`,
+        body: `Poutkem bude procházet i volný konec pásku, takže obepíná 3 vrstvy. Konec pásu přeložte volně na dvojo, zatím bez ohybu kolem příčky, a přiložte k němu třetí vrstvu: druhý konec pásu nebo odřezek z lekce 2. Papírový proužek obtočte kolem všech 3 vrstev, označte, kde se potká se svým začátkem, a obvod odečtěte na pravítku destičky (nula vlevo) nebo na ocelovém pravítku. Délka poutka = obvod + tloušťka poutka v ohybech (asi 4 mm u odřezku 1,2 mm) + 15 mm přeplátování. Porovnejte s délkou poutka aktivního pásku pod krokem (např. ${KEEPER_EXAMPLE_MM} mm pro 40 × 3,5 mm). Z odřezku vyřízněte proužek 12 mm × tato délka. Přeplátování 15 mm natřete kontaktním lepidlem na obě strany, nechte zavadnout podle návodu na obalu a slepte. Délka poutka je spočítaná, ne vyzkoušená: ověřte ji proužkem.`,
         animationLinks: [
           animationLink('beltBuckleEnd', 'D1'),
           animationLink('beltBuckleEnd', 'D2'),
@@ -769,11 +706,12 @@ export const lessons: readonly LessonDefinition[] = [
             kind: 'number',
             id: KEEPER_LENGTH_ID,
             label: 'Délka poutka změřená proužkem',
-            hint: 'Obvod 3 vrstev + tloušťka poutka + 15 mm. Porovnejte s tabulkou Váš pásek.',
+            hint: 'Obvod 3 vrstev + tloušťka poutka + 15 mm. Porovnejte s poutkem aktivního pásku.',
             unit: 'mm',
             decimals: 0,
           },
         ],
+        beltRecalls: ['keeper'],
         waits: [
           {
             id: 'keeper-glue',
@@ -822,7 +760,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('beltBuckleEnd', 'E7'),
         ],
         media: [],
-        recalls: [recall.thickness],
+        beltRecalls: ['thickness', 'rivet'],
       },
     ],
     checkpoints: [
@@ -895,7 +833,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'measure',
         title: 'Změřte a porovnejte',
-        body: 'Změřte od ohybu u přezky ke značce a zapište. Porovnejte s obvodem z lekce 1. Platí značka, ne obvod.',
+        body: 'Změřte od ohybu u přezky ke značce a zapište. Porovnejte s obvodem aktivního pásku pod krokem. Platí značka, ne obvod.',
         animationLinks: [animationLink('beltHolesTip', 'A2')],
         media: [],
         records: [
@@ -907,7 +845,7 @@ export const lessons: readonly LessonDefinition[] = [
             decimals: 1,
           },
         ],
-        recalls: [recall.waist],
+        beltRecalls: ['waist'],
       },
       {
         id: 'transfer',
@@ -920,10 +858,11 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'length-check',
         title: 'Stačí pás?',
-        printLink: 'pattern-sheets',
-        body: `Od značky ke konci pásu musí zbýt aspoň vzdálenost prostřední dírky od konce ${FROM_TABLE} (např. 144,3 mm). Když nezbývá, ve formuláři „Váš pásek“ pod „Dírky (pokročilé)“ zkuste menší počet dírek nebo kratší odstup první dírky; aplikace hlídá meze. Pak ale značíte listem 2, ne destičkou.`,
+        body: `Od značky ke konci pásu musí zbýt aspoň vzdálenost prostřední dírky od konce (např. 144,3 mm; vaše číslo je pod krokem). Když nezbývá, ve „Váš pásek“ (odkaz pod krokem) pod „Dírky (pokročilé)“ zkuste menší počet dírek nebo kratší odstup první dírky; aplikace hlídá meze. Pak ale značíte listem 2, ne destičkou.`,
+        appLinks: [YOUR_BELT],
         animationLinks: [animationLink('beltHolesTip', 'A4')],
         media: [],
+        beltRecalls: ['middleHole'],
       },
     ],
     checkpoints: [
@@ -981,10 +920,11 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'row',
         title: 'Řada 1 nebo 2, nebo list 2',
         printLink: 'pattern-sheets',
-        body: `Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když ${TABLE} ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo jste zvolili jen listy, vytiskněte list 2 pro váš pásek na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm. Když ${TABLE} píše, že se list 2 na A4 nevejde, značte dírky a konec podle čísel v ní.`,
+        body: `Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když ${TABLE} ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo jste zvolili jen listy, vytiskněte list 2 pro váš pásek na 100 % (odkaz pod krokem) a zkontrolujte kalibrační čtverec 50 × 50 mm. Když ${TABLE} píše, že se list 2 na A4 nevejde, značte dírky a konec podle čísel v ní.`,
         animationLinks: [animationLink('beltHolesTip', 'B1'), animationLink('beltHolesTip', 'D1')],
         media: [],
-        recalls: [recall.tip, recall.marking],
+        recalls: [recall.marking],
+        beltRecalls: ['tip'],
       },
       {
         id: 'place',
@@ -1011,10 +951,10 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'punch-holes',
         title: 'Vysekněte dírky',
-        body: `Dírky vysekněte výsečníkem s Ø ${FROM_TABLE} (např. 5 mm).`,
+        body: 'Dírky vysekněte výsečníkem s Ø dírek z aktivního pásku (např. 5 mm, vaše číslo je pod krokem).',
         animationLinks: [animationLink('beltHolesTip', 'E1')],
         media: [],
-        recalls: [recall.prong],
+        beltRecalls: ['holeDiameter'],
       },
       {
         id: 'cut-tip',
@@ -1270,7 +1210,7 @@ export const beltProject: ProjectDefinition = {
   },
   shoppingPlan: {
     title:
-      'Výchozí sestava: pásek 40 mm z pásu 3–3,5 mm. Na šířce závisí pás (varianta šířky) a přezka, na změřené tloušťce dřík nýtu, na trnu přezky výsečník dírek. Pro jinou šířku nebo tloušťku berte položky z tabulky „Váš pásek“ na stránce Listy střihu.',
+      'Výchozí sestava: pásek 40 mm z pásu 3–3,5 mm. Na šířce závisí pás (varianta šířky) a přezka, na změřené tloušťce dřík nýtu, na trnu přezky výsečník dírek. Uložte pásek na stránce „Váš pásek“ a plán se přepočítá podle něj.',
     lines: [
       {
         equipmentSlug: 'belt-strap',
