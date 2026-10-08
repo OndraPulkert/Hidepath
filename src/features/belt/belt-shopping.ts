@@ -5,6 +5,8 @@ import {
   type ShoppingPlanLine,
 } from '@/content/schema';
 import { beltConfigPrefill } from '@/features/belt/belt-prefill';
+import { type BudgetPriceOverride } from '@/features/shopping/budget';
+import { findPlanExample } from '@/features/shopping/plan';
 import { savedBeltsFromRecords } from '@/features/belt/saved-belts';
 import { type LessonRecordEntry } from '@/features/notebook/types';
 import {
@@ -274,5 +276,69 @@ export function beltPrepPlan(
     plan: beltShoppingPlan(plan, outcome.result, basis.name, catalog),
     basis: `podle pásku: ${basis.name} (${outcome.result.label})`,
     equipmentNames: beltEquipmentNames(outcome.result),
+  };
+}
+
+/** Poznámka, když sestava není: platí plán projektu. */
+export const BELT_FALLBACK_BASIS = 'podle plánu projektu (pásek 40 mm)';
+
+/** Nákup pásku pro „Co koupit“ a rozpočet: plán, podle čeho je, názvy položek a ceny. */
+export interface BeltPlanView {
+  plan: ShoppingPlan;
+  /** „podle pásku: …“, nebo „podle plánu projektu (pásek 40 mm)“ (případně s důvodem). */
+  basis: string;
+  equipmentNames: Record<string, string>;
+  /** Ceny pásu, přezky, nýtů a výsečníku na dírky podle plánu – pro rozpočet. */
+  budgetPrices: Record<string, BudgetPriceOverride>;
+}
+
+/**
+ * Ceny položek, které závisí na sestavě, podle řádků plánu (cena příkladu × počet). Co plán
+ * vynechal, je bez ověřené ceny; výsečník Ø 5 mm se při dírkách Ø 6 mm nekupuje.
+ */
+export function beltBudgetPrices(
+  plan: ShoppingPlan,
+  catalog: EquipmentCatalog,
+  holeDiameterMm: number | null,
+): Record<string, BudgetPriceOverride> {
+  const out: Record<string, BudgetPriceOverride> = {};
+  for (const slug of BELT_CONFIG_PLAN_SLUGS) {
+    const lines = plan.lines.filter((l) => l.equipmentSlug === slug);
+    if (lines.length === 0) {
+      const sixMm = holeDiameterMm !== null && Math.abs(holeDiameterMm - 6) < 1e-9;
+      out[slug] = slug === 'hole-punch-5mm' && sixMm ? 'not-needed' : 'unpriced';
+      continue;
+    }
+    const prices = lines.map((l) => {
+      const example = findPlanExample(l, catalog);
+      return example ? example.priceCents * l.quantity : null;
+    });
+    out[slug] = prices.every((c) => c !== null)
+      ? { cents: prices.reduce<number>((a, c) => a + (c ?? 0), 0) }
+      : 'unpriced';
+  }
+  return out;
+}
+
+/**
+ * „Co koupit“ a rozpočet pásku: jako „Připravte si“ (`beltPrepPlan`) podle nejnovějšího
+ * uloženého pásku, jinak plán projektu (40 mm) s poznámkou, proč.
+ */
+export function beltPlanView(
+  plan: ShoppingPlan,
+  entries: readonly LessonRecordEntry[],
+  projectSlug: string,
+  catalog: EquipmentCatalog,
+): BeltPlanView {
+  const prep = beltPrepPlan(plan, entries, projectSlug, catalog);
+  const basis = beltPlanBasis(entries, projectSlug);
+  const outcome = basis ? deriveBeltConfig(basis.input) : null;
+  const holeDiameterMm = outcome?.ok ? outcome.result.holes.diameterMm : null;
+  const effective = prep?.plan ?? plan;
+  return {
+    plan: effective,
+    basis: prep?.basis ?? BELT_FALLBACK_BASIS,
+    equipmentNames: prep?.equipmentNames ?? {},
+    budgetPrices: beltBudgetPrices(effective, catalog, holeDiameterMm),
   };
 }

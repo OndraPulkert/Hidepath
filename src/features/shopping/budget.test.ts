@@ -136,3 +136,37 @@ describe('neověřená cena', () => {
     expect(budget.lines).toHaveLength(0);
   });
 });
+
+describe('computeRemainingBudget – ceny podle nákupního plánu', () => {
+  it('cena z plánu nahradí střed rozsahu; vynechaná je bez ceny, nepotřebná mimo součet', () => {
+    const b = computeRemainingBudget(
+      project,
+      catalog,
+      {},
+      {
+        knife: { cents: 9_900 },
+        chisels: 'unpriced',
+        glue: 'not-needed',
+      },
+    );
+    expect(b.lines.map((l) => [l.equipmentSlug, l.estimatedCents, l.source])).toEqual([
+      ['knife', 9_900, 'plan'],
+      ['beveler', 50_000, 'estimate'],
+    ]);
+    expect(b.unpricedCount).toBe(1);
+    expect(b.totalCents).toBe(59_900);
+  });
+
+  it('zadaná skutečná cena objednané položky má přednost i před plánem', () => {
+    const b = computeRemainingBudget(
+      project,
+      catalog,
+      inventoryOf({ ...item('glue', 'ordered'), purchasePriceCents: 12_300 }),
+      { glue: 'not-needed' },
+    );
+    expect(b.lines.find((l) => l.equipmentSlug === 'glue')).toMatchObject({
+      estimatedCents: 12_300,
+      source: 'recorded',
+    });
+  });
+});

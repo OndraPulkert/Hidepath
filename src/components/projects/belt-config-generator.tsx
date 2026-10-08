@@ -10,9 +10,15 @@ import { Card } from '@/components/ui/card';
 import { Input, Label } from '@/components/ui/input';
 import { Segment, SegmentButton } from '@/components/ui/segment';
 import { Tag } from '@/components/ui/tag';
+import { BELT_ILLUSTRATION, BELT_ILLUSTRATION_CAPTION } from '@/content/projects';
 import { type PatternSheet, type ProjectDefinition } from '@/content/schema';
 import { type BeltConfigPrefill } from '@/features/belt/belt-prefill';
-import { savedBeltNameProblem, type SavedBelt } from '@/features/belt/saved-belts';
+import {
+  type SavedBelt,
+  type SavedBeltWrite,
+  decideSavedBeltSave,
+  newSavedBeltFieldId,
+} from '@/features/belt/saved-belts';
 import { useSavedBelts } from '@/features/belt/use-saved-belts';
 import { formatDecimal } from '@/features/notebook/values';
 import {
@@ -189,6 +195,7 @@ export function BeltConfigGenerator({
             </SegmentButton>
           ))}
         </ChoiceRow>
+        <WaistFigure source={form.waistSource} />
         <ChoiceRow label="Konec">
           {(
             [
@@ -320,6 +327,24 @@ function NumberField({
         {typo(hint)}
       </p>
     </div>
+  );
+}
+
+const WAIST_FIGURES = {
+  pasek: { src: BELT_ILLUSTRATION.obvodNaPasku, caption: BELT_ILLUSTRATION_CAPTION.obvodNaPasku },
+  metr: { src: BELT_ILLUSTRATION.obvodMetrem, caption: BELT_ILLUSTRATION_CAPTION.obvodMetrem },
+} as const satisfies Readonly<Record<WaistSource, { src: string; caption: string }>>;
+
+/** Jak se obvod měří: obrázek ke zvolenému způsobu (stejný jako v lekci 1). */
+function WaistFigure({ source }: { source: WaistSource }) {
+  const { src, caption } = WAIST_FIGURES[source];
+  return (
+    <figure className="max-w-md overflow-hidden rounded-md border border-line bg-paper">
+      <img src={src} alt={caption} className="w-full bg-white" />
+      <figcaption className="border-t border-line px-3 py-2 text-meta text-ink-2">
+        {typo(caption)}
+      </figcaption>
+    </figure>
   );
 }
 
@@ -535,7 +560,11 @@ function PlateBadge({ result }: { result: BeltConfigResult }) {
   );
 }
 
-/** „Moje pásky“: uložené sestavy, načtení, smazání a uložení té aktuální. */
+/**
+ * „Moje pásky“: uložené sestavy, načtení, smazání a uložení té aktuální. Po načtení „Uložit“
+ * přepíše načtený pásek (i s novým názvem), „Uložit jako nový“ založí další. Rozhoduje
+ * `decideSavedBeltSave`; stejný název jiného pásku se potvrzuje tady na stránce.
+ */
 function SavedBeltsSection({
   project,
   current,
@@ -550,6 +579,13 @@ function SavedBeltsSection({
   const id = useId();
   const { belts, saveBelt, removeBelt, isSaving } = useSavedBelts(project);
   const [name, setName] = useState('');
+  /** Id načteného pásku; „Uložit“ ho přepíše. */
+  const [loadedFieldId, setLoadedFieldId] = useState<string | null>(null);
+  const loaded = belts.find((b) => b.fieldId === loadedFieldId) ?? null;
+  /** Čeká na „Přepsat / Zrušit“: pásek se stejným názvem a co se při „Přepsat“ zapíše. */
+  const [pending, setPending] = useState<{ conflict: SavedBelt; write: SavedBeltWrite } | null>(
+    null,
+  );
   /** `undo` = právě smazaný pásek: smazání se synchronizuje na všechna zařízení, ať jde vrátit. */
   const [message, setMessage] = useState<{
     ok: boolean;
@@ -558,8 +594,10 @@ function SavedBeltsSection({
   } | null>(null);
 
   const remove = async (belt: SavedBelt) => {
+    setPending(null);
     try {
       await removeBelt(belt.fieldId);
+      if (belt.fieldId === loadedFieldId) setLoadedFieldId(null);
       setMessage({ ok: true, text: `Pásek „${belt.name}“ smazán.`, undo: belt });
     } catch {
       setMessage({ ok: false, text: 'Smazání se nepovedlo. Zkuste to znovu.' });
@@ -575,24 +613,55 @@ function SavedBeltsSection({
     }
   };
 
-  const save = async () => {
+  const write = async (w: SavedBeltWrite) => {
     if (!current) return;
-    const problem = savedBeltNameProblem(name);
-    if (problem) {
-      setMessage({ ok: false, text: problem });
-      return;
-    }
-    const sameName = belts.find(
-      (b) => b.name.toLocaleLowerCase('cs') === name.trim().toLocaleLowerCase('cs'),
-    );
+    setPending(null);
+    const trimmed = name.trim();
     try {
-      await saveBelt(name, current.input, waistSource, sameName?.fieldId);
+      await saveBelt(trimmed, current.input, waistSource, w.fieldId);
+      setLoadedFieldId(w.fieldId);
+      if (w.removeFieldId) {
+        try {
+          await removeBelt(w.removeFieldId);
+        } catch {
+          setMessage({
+            ok: false,
+            text: `Pásek „${trimmed}“ uložen, ale druhý se stejným názvem se nesmazal. Smažte ho ručně.`,
+          });
+          return;
+        }
+      }
       setMessage({
         ok: true,
-        text: sameName ? `Pásek „${name.trim()}“ přepsán.` : `Pásek „${name.trim()}“ uložen.`,
+        text:
+          w.outcome === 'created'
+            ? `Pásek „${trimmed}“ uložen.`
+            : w.outcome === 'updated'
+              ? `Změny pásku „${trimmed}“ uloženy.`
+              : `Pásek „${trimmed}“ přepsán.`,
       });
     } catch {
       setMessage({ ok: false, text: 'Uložení se nepovedlo. Zkuste to znovu.' });
+    }
+  };
+
+  const save = (mode: 'update' | 'new') => {
+    if (!current) return;
+    const decision = decideSavedBeltSave({
+      name,
+      belts,
+      mode,
+      loadedFieldId,
+      newFieldId: newSavedBeltFieldId(),
+    });
+    if (decision.kind === 'invalid') {
+      setPending(null);
+      setMessage({ ok: false, text: decision.problem });
+    } else if (decision.kind === 'confirm-overwrite') {
+      setMessage(null);
+      setPending({ conflict: decision.conflict, write: decision.write });
+    } else {
+      void write(decision.write);
     }
   };
 
@@ -619,6 +688,8 @@ function SavedBeltsSection({
                 variant="secondary"
                 onClick={() => {
                   setName(belt.name);
+                  setLoadedFieldId(belt.fieldId);
+                  setPending(null);
                   setMessage(null);
                   onLoad(belt);
                 }}
@@ -649,18 +720,70 @@ function SavedBeltsSection({
             id={`${id}-name`}
             value={name}
             placeholder="např. Hnědý 40 mm do džínů"
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              setName(e.target.value);
+              setPending(null);
+            }}
           />
         </div>
-        <Button
-          type="button"
-          variant="secondary"
-          disabled={!current || isSaving}
-          onClick={() => void save()}
-        >
-          Uložit do Mých pásků
-        </Button>
+        {loaded ? (
+          <>
+            <Button
+              type="button"
+              variant="secondary"
+              disabled={!current || isSaving}
+              onClick={() => save('update')}
+              aria-describedby={`${id}-loaded`}
+            >
+              Uložit
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              disabled={!current || isSaving}
+              onClick={() => save('new')}
+            >
+              Uložit jako nový
+            </Button>
+          </>
+        ) : (
+          <Button
+            type="button"
+            variant="secondary"
+            disabled={!current || isSaving}
+            onClick={() => save('new')}
+          >
+            Uložit do Mých pásků
+          </Button>
+        )}
       </div>
+      {loaded ? (
+        <p id={`${id}-loaded`} className="text-meta text-ink-2">
+          {typo(`Upravujete pásek „${loaded.name}“. „Uložit“ ho přepíše, i s novým názvem.`)}
+        </p>
+      ) : null}
+      {pending ? (
+        <div
+          role="alertdialog"
+          aria-labelledby={`${id}-confirm`}
+          className="flex flex-wrap items-center gap-2 rounded-control border border-cognac px-4 py-3"
+        >
+          <p id={`${id}-confirm`} className="mr-auto text-body">
+            {typo(`Pásek „${pending.conflict.name}“ už máte. Přepsat ho?`)}
+          </p>
+          <Button
+            type="button"
+            variant="secondary"
+            disabled={isSaving}
+            onClick={() => void write(pending.write)}
+          >
+            Přepsat
+          </Button>
+          <Button type="button" variant="ghost" onClick={() => setPending(null)}>
+            Zrušit
+          </Button>
+        </div>
+      ) : null}
       {message ? (
         <p
           role={message.ok ? 'status' : 'alert'}

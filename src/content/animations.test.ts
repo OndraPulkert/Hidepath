@@ -743,6 +743,35 @@ describe('animace postupu – pásek: konec s přezkou, dírky a špička', () =
     expect(hrefsOf(order, stepId)).toEqual(expected);
   });
 
+  it('lekce 2: kroky, které kreslí poutko a celý konec pásku, říkají, že jde o pásek', () => {
+    const labelsOf = (stepId: string) =>
+      belt.lessons
+        .find((l) => l.order === 2)!
+        .steps.find((s) => s.id === stepId)
+        ?.animationLinks?.map((l) => l.label);
+    expect(labelsOf('mark')).toEqual([
+      'Krok B1 – Upevněte pás a destičku',
+      'Krok B2 – Přiložte řadu 3',
+    ]);
+    expect(labelsOf('punch')).toEqual(['Krok C2 – Konce oválu Ø 6', 'Krok C3 – Boky oválu nožem']);
+    expect(labelsOf('bend')).toEqual([
+      'Krok E1 – Ohněte konec kolem příčky (na pásku, poutko až v lekci 4)',
+    ]);
+    expect(labelsOf('screw')).toEqual([
+      'Krok E3 – Označte druhou dvojici skrz otvory (na pásku, poutko až v lekci 4)',
+      'Krok E4 – Vysekněte druhou dvojici (na pásku, poutko až v lekci 4)',
+      'Krok E6 – Sešroubujte nýty (na pásku, poutko až v lekci 4)',
+    ]);
+    // Popisek začíná názvem kroku v animaci, ať odkaz říká, kam vede.
+    for (const step of belt.lessons.find((l) => l.order === 2)!.steps) {
+      for (const link of step.animationLinks ?? []) {
+        if (!link.href.startsWith('/animace/pasek-prezka.html#')) continue;
+        const anchor = link.href.split('#')[1] as 'E1';
+        expect(link.label.startsWith(animationLink('beltBuckleEnd', anchor).label)).toBe(true);
+      }
+    }
+  });
+
   it('každý krok lekcí 4–6 má odkaz na animaci', () => {
     for (const lesson of belt.lessons.filter((l) => l.order >= 4)) {
       for (const step of lesson.steps) {

@@ -281,6 +281,22 @@ describe('pásek – pořadí poutka a ohybu (opasek-postup.md krok 7)', () => {
   });
 });
 
+describe('pásek – lekce 2: co dělat, když zkouška nevyjde', () => {
+  it('každý zápis s volbou má nápovědu a povinné body bez zápisu mají popis', () => {
+    for (const s of lesson(2).steps) {
+      for (const r of s.records ?? []) {
+        if (r.kind === 'choice') expect(r.hint, r.id).toBeTruthy();
+      }
+    }
+    const cp = (slug: string) => lesson(2).checkpoints.find((c) => c.slug === slug)!;
+    expect(cp('scrap-cut-and-punched').description).toMatch(/odlomte článek čepele/);
+    expect(cp('scrap-cut-and-punched').description).toMatch(/nezačínejte pásek/);
+    expect(cp('scrap-edge-balm').description).toMatch(/Tokonole/);
+    const punch = step(2, 'punch').records!.find((r) => r.id === 'scrap-punch')!;
+    expect(punch.hint).toMatch(/^Roztřepené: vysekněte na odřezku další otvor/);
+  });
+});
+
 describe('pásek – nálezy kontroly lekcí (2026-10-08, kolo 2)', () => {
   it('poutko se měří kolem 3 vrstev: zdvojený konec a volný konec, který jím prochází', () => {
     const body = step(4, 'keeper').body;

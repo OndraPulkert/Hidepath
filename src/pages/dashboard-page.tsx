@@ -22,7 +22,7 @@ export function DashboardPage() {
   const project = useActiveProject();
   const state = useProjectState(project);
   const completeProject = useCompleteProject();
-  const { journey, readiness, budget, nextAction } = state;
+  const { journey, readiness, budget, nextAction, beltPlan } = state;
   const phase = journey.currentPhase;
 
   if (state.isLoading) return <LoadingNotice />;
@@ -112,6 +112,11 @@ export function DashboardPage() {
               ? ` · bez ${pluralizeCs(budget.unpricedCount, ['položky', 'položek', 'položek'])} s neověřenou cenou`
               : ''}
           </p>
+          {beltPlan ? (
+            <p className="text-meta text-ink-2">
+              {typo(`Pás, přezka, nýty a výsečník na dírky ${beltPlan.basis}.`)}
+            </p>
+          ) : null}
         </Card>
 
         <Link to={routes.project(project.slug)} className="no-underline hover:text-leather">

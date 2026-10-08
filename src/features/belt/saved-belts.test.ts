@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import {
   SAVED_BELT_NAME_MAX,
+  type SavedBelt,
+  decideSavedBeltSave,
   isSavedBeltFieldId,
   newSavedBeltFieldId,
   parseSavedBeltValue,
@@ -92,5 +94,73 @@ describe('Moje pásky', () => {
     expect(savedBeltNameProblem('  ')).toMatch(/Zadejte název/);
     expect(savedBeltNameProblem('x'.repeat(61))).toMatch(/60 znaků/);
     expect(savedBeltNameProblem('Pracovní 45')).toBeNull();
+  });
+
+  describe('uložení: přepsat načtený, nový, nebo zeptat se', () => {
+    const belt = (fieldId: string, name: string): SavedBelt => ({
+      fieldId,
+      name,
+      input,
+      waistSource: 'pasek',
+      updatedAt: '2026-10-08T10:00:00.000Z',
+    });
+    const belts = [belt('belt-config-a', 'Hnědý'), belt('belt-config-b', 'Černý')];
+    const decide = (
+      name: string,
+      mode: 'update' | 'new',
+      loadedFieldId: string | null = 'belt-config-a',
+    ) => decideSavedBeltSave({ name, belts, mode, loadedFieldId, newFieldId: 'belt-config-new' });
+
+    it('načtený pásek se přepíše na místě, i s novým názvem', () => {
+      expect(decide('Hnědý', 'update')).toEqual({
+        kind: 'write',
+        write: { fieldId: 'belt-config-a', outcome: 'updated' },
+      });
+      expect(decide('Hnědý do džínů', 'update')).toEqual({
+        kind: 'write',
+        write: { fieldId: 'belt-config-a', outcome: 'updated' },
+      });
+    });
+
+    it('„Uložit jako nový“ založí nový záznam', () => {
+      expect(decide('Hnědý 2', 'new')).toEqual({
+        kind: 'write',
+        write: { fieldId: 'belt-config-new', outcome: 'created' },
+      });
+    });
+
+    it('název jiného pásku: zeptat se; „Přepsat“ ho nahradí', () => {
+      // Přejmenování načteného na název jiného: zapíše se do načteného, druhý se smaže.
+      expect(decide(' černý ', 'update')).toEqual({
+        kind: 'confirm-overwrite',
+        conflict: belts[1],
+        write: {
+          fieldId: 'belt-config-a',
+          removeFieldId: 'belt-config-b',
+          outcome: 'overwritten',
+        },
+      });
+      // Nový se stejným názvem: přepíše ten existující.
+      expect(decide('Hnědý', 'new')).toEqual({
+        kind: 'confirm-overwrite',
+        conflict: belts[0],
+        write: { fieldId: 'belt-config-a', outcome: 'overwritten' },
+      });
+      expect(decide('Černý', 'new', null)).toMatchObject({
+        kind: 'confirm-overwrite',
+        write: { fieldId: 'belt-config-b' },
+      });
+    });
+
+    it('načtený pásek mezitím smazaný: uloží se jako nový', () => {
+      expect(decide('Zelený', 'update', 'belt-config-gone')).toEqual({
+        kind: 'write',
+        write: { fieldId: 'belt-config-new', outcome: 'created' },
+      });
+    });
+
+    it('neplatný název nic nezapíše', () => {
+      expect(decide('  ', 'update')).toMatchObject({ kind: 'invalid' });
+    });
   });
 });

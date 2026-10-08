@@ -111,3 +111,67 @@ export function savedBeltNameProblem(name: string): string | null {
   if (t.length > SAVED_BELT_NAME_MAX) return `Název nejvýš ${SAVED_BELT_NAME_MAX} znaků.`;
   return null;
 }
+
+/** Stejný název bez ohledu na velikost písmen a mezery okolo. */
+export function sameSavedBeltName(a: string, b: string): boolean {
+  return a.trim().toLocaleLowerCase('cs') === b.trim().toLocaleLowerCase('cs');
+}
+
+/** Co se zapíše: id pole a případně jiný pásek, který se tím nahradí (smaže). */
+export interface SavedBeltWrite {
+  fieldId: string;
+  /** Pásek se stejným názvem, který „Přepsat“ nahradí jiným záznamem – smaže se. */
+  removeFieldId?: string;
+  outcome: 'created' | 'updated' | 'overwritten';
+}
+
+export type SavedBeltSaveDecision =
+  | { kind: 'invalid'; problem: string }
+  | { kind: 'write'; write: SavedBeltWrite }
+  /** Název už má jiný pásek: zeptat se „Přepsat / Zrušit“, při „Přepsat“ zapsat `write`. */
+  | { kind: 'confirm-overwrite'; conflict: SavedBelt; write: SavedBeltWrite };
+
+/**
+ * Uložení v „Mých páscích“. `update` = načtený pásek (`loadedFieldId`) se přepíše na místě,
+ * i když se změnil název. `new` = nový záznam (`newFieldId`). Má-li stejný název jiný pásek,
+ * rozhodne uživatel: „Přepsat“ ho nahradí, „Zrušit“ nic nezmění. Načtený pásek, který mezitím
+ * zmizel (smazaný v jiném zařízení), se uloží jako nový.
+ */
+export function decideSavedBeltSave({
+  name,
+  belts,
+  mode,
+  loadedFieldId,
+  newFieldId,
+}: {
+  name: string;
+  belts: readonly SavedBelt[];
+  mode: 'update' | 'new';
+  loadedFieldId: string | null;
+  newFieldId: string;
+}): SavedBeltSaveDecision {
+  const problem = savedBeltNameProblem(name);
+  if (problem) return { kind: 'invalid', problem };
+  const loaded = mode === 'update' ? belts.find((b) => b.fieldId === loadedFieldId) : undefined;
+  const conflict = belts.find(
+    (b) => b.fieldId !== loaded?.fieldId && sameSavedBeltName(b.name, name),
+  );
+  if (loaded) {
+    const write: SavedBeltWrite = { fieldId: loaded.fieldId, outcome: 'updated' };
+    return conflict
+      ? {
+          kind: 'confirm-overwrite',
+          conflict,
+          write: { ...write, removeFieldId: conflict.fieldId, outcome: 'overwritten' },
+        }
+      : { kind: 'write', write };
+  }
+  if (conflict) {
+    return {
+      kind: 'confirm-overwrite',
+      conflict,
+      write: { fieldId: conflict.fieldId, outcome: 'overwritten' },
+    };
+  }
+  return { kind: 'write', write: { fieldId: newFieldId, outcome: 'created' } };
+}

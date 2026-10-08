@@ -22,7 +22,7 @@ const priorities: readonly EquipmentPriority[] = ['required', 'recommended', 'la
 
 export function ShoppingPage() {
   const project = useActiveProject();
-  const { inventory, readiness, budget, isLoading } = useProjectState(project);
+  const { inventory, readiness, budget, beltPlan, isLoading } = useProjectState(project);
   const update = useUpdateInventoryItem();
   const [filter, setFilter] = useState<Filter>('all');
 
@@ -31,7 +31,13 @@ export function ShoppingPage() {
     ordered: readiness.ordered,
     owned: readiness.owned,
   };
-  const plan = resolveShoppingPlan(project, equipmentCatalog, inventory);
+  // Pásek: plán podle uloženého pásku (jako „Připravte si“), jinak plán projektu 40 mm.
+  const plan = resolveShoppingPlan(
+    beltPlan ? { shoppingPlan: beltPlan.plan } : project,
+    equipmentCatalog,
+    inventory,
+    beltPlan?.equipmentNames,
+  );
   const visible = project.equipment.filter(
     (req) => filter === 'all' || getEquipmentStatus(inventory, req.equipmentSlug) === filter,
   );
@@ -52,12 +58,19 @@ export function ShoppingPage() {
         </Segment>
       </header>
 
-      {plan ? <ShoppingPlanSummary plan={plan} projectSlug={project.slug} /> : null}
+      {plan ? (
+        <ShoppingPlanSummary plan={plan} projectSlug={project.slug} basis={beltPlan?.basis} />
+      ) : null}
 
       {isLoading ? (
         <LoadingNotice />
       ) : (
-        <ReadinessSummary readiness={readiness} budget={budget} hasShoppingPlan={plan !== null} />
+        <ReadinessSummary
+          readiness={readiness}
+          budget={budget}
+          hasShoppingPlan={plan !== null}
+          planBasis={beltPlan?.basis}
+        />
       )}
 
       {priorities.map((priority) => {

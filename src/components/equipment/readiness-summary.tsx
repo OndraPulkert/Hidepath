@@ -3,7 +3,7 @@ import { Kicker } from '@/components/ui/kicker';
 import { ProgressBar } from '@/components/ui/progress-bar';
 import { type EquipmentReadiness } from '@/features/inventory/readiness';
 import { type RemainingBudget } from '@/features/shopping/budget';
-import { formatCzk, formatPercent, pluralizeCs } from '@/lib/utils/format';
+import { formatCzk, formatPercent, pluralizeCs, typo } from '@/lib/utils/format';
 
 /**
  * Souhrn nad nákupním seznamem: připravenost nezbytného, počet, očekávané náklady, vysvětlení.
@@ -15,10 +15,13 @@ export function ReadinessSummary({
   readiness,
   budget,
   hasShoppingPlan = false,
+  planBasis,
 }: {
   readiness: EquipmentReadiness;
   budget: RemainingBudget;
   hasShoppingPlan?: boolean;
+  /** Pásek: rozpočet pásu, přezky, nýtů a výsečníku je podle tohoto plánu (ceny z Co koupit). */
+  planBasis?: string | undefined;
 }) {
   const req = readiness.byPriority.required;
   const explanation = readiness.requiredReady
@@ -60,7 +63,12 @@ export function ReadinessSummary({
             ? ` · bez ${pluralizeCs(budget.unpricedCount, ['položky', 'položek', 'položek'])} s neověřenou cenou`
             : ''}
         </p>
-        {hasShoppingPlan ? (
+        {planBasis ? (
+          <p className="mt-1.5 text-meta text-ink-2">
+            {typo(`Pás, přezka, nýty a výsečník na dírky ${planBasis}, ceny z Co koupit.`)} Ostatní
+            položky odhadem ze středů cenových rozsahů.
+          </p>
+        ) : hasShoppingPlan ? (
           <p className="mt-1.5 text-meta text-ink-2">
             Odhad ze středů cenových rozsahů všech položek seznamu, včetně těch, které plán
             tentokrát vynechává. Kolik zaplatíte za doporučenou sestavu, ukazuje Co koupit výše.

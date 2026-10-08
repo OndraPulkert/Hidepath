@@ -20,9 +20,12 @@ const availabilityLabel = {
 export function ShoppingPlanSummary({
   plan,
   projectSlug,
+  basis,
 }: {
   plan: ResolvedShoppingPlan;
   projectSlug: string;
+  /** Podle čeho je plán (pásek: „podle pásku: …“ nebo „podle plánu projektu (pásek 40 mm)“). */
+  basis?: string | undefined;
 }) {
   const hasOwned = plan.remainingCents !== plan.totalCents;
   return (
@@ -33,6 +36,7 @@ export function ShoppingPlanSummary({
           <h2 id="co-koupit" className="mt-1 text-h2">
             {typo(plan.title)}
           </h2>
+          {basis ? <p className="mt-1 text-meta text-ink-2">{typo(`Nákup ${basis}`)}</p> : null}
         </div>
         <p className="text-right">
           <span className="font-serif text-stat font-medium">{formatCzk(plan.totalCents)}</span>

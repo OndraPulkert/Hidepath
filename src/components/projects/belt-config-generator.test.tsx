@@ -173,6 +173,67 @@ describe('Váš pásek', () => {
     expect(within(section).getByText(/Pásek „Společenský“ vrácen/)).toBeInTheDocument();
   });
 
+  it('načtený pásek: „Uložit“ ho přepíše i s novým názvem, „Uložit jako nový“ založí další', async () => {
+    const { user } = setup();
+    await user.type(field('Název pásku'), 'Hnědý');
+    await user.click(screen.getByRole('button', { name: 'Uložit do Mých pásků' }));
+    const section = screen.getByRole('region', { name: 'Moje pásky' });
+    expect(await within(section).findByText('Hnědý')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Načíst pásek Hnědý' }));
+    expect(within(section).getByText(/Upravujete pásek „Hnědý“/)).toBeInTheDocument();
+    await user.clear(field(/Šířka = přezka/));
+    await user.type(field(/Šířka = přezka/), '35');
+    await user.clear(field('Název pásku'));
+    await user.type(field('Název pásku'), 'Hnědý 35');
+    await user.click(within(section).getByRole('button', { name: 'Uložit' }));
+    expect(await within(section).findByText(/Změny pásku „Hnědý 35“ uloženy/)).toBeInTheDocument();
+    // Přejmenovaný na místě: starý název zmizel, nový záznam nevznikl.
+    expect(within(section).queryByText('Hnědý')).toBeNull();
+    expect(within(section).getAllByRole('button', { name: /^Načíst pásek/ })).toHaveLength(1);
+    expect(within(section).getByText(/35 mm/)).toBeInTheDocument();
+
+    await user.clear(field('Název pásku'));
+    await user.type(field('Název pásku'), 'Černý');
+    await user.click(within(section).getByRole('button', { name: 'Uložit jako nový' }));
+    expect(await within(section).findByText(/Pásek „Černý“ uložen/)).toBeInTheDocument();
+    expect(within(section).getAllByRole('button', { name: /^Načíst pásek/ })).toHaveLength(2);
+  });
+
+  it('název jiného pásku: zeptá se na stránce, „Zrušit“ nic nezmění, „Přepsat“ ho nahradí', async () => {
+    const confirm = vi.spyOn(window, 'confirm');
+    const { user } = setup();
+    const section = screen.getByRole('region', { name: 'Moje pásky' });
+    await user.type(field('Název pásku'), 'Hnědý');
+    await user.click(screen.getByRole('button', { name: 'Uložit do Mých pásků' }));
+    await within(section).findByText('Hnědý');
+    await user.clear(field('Název pásku'));
+    await user.type(field('Název pásku'), 'Černý');
+    await user.click(within(section).getByRole('button', { name: 'Uložit jako nový' }));
+    await within(section).findByText('Černý');
+
+    // Načtený „Černý“ přejmenovat na „hnědý“ = název, který už má jiný pásek.
+    await user.click(screen.getByRole('button', { name: 'Načíst pásek Černý' }));
+    await user.clear(field('Název pásku'));
+    await user.type(field('Název pásku'), 'hnědý');
+    await user.click(within(section).getByRole('button', { name: 'Uložit' }));
+    const ask = within(section).getByRole('alertdialog');
+    expect(ask).toHaveTextContent('Pásek „Hnědý“ už máte. Přepsat ho?');
+    await user.click(within(ask).getByRole('button', { name: 'Zrušit' }));
+    expect(within(section).queryByRole('alertdialog')).toBeNull();
+    expect(within(section).getAllByRole('button', { name: /^Načíst pásek/ })).toHaveLength(2);
+
+    await user.click(within(section).getByRole('button', { name: 'Uložit' }));
+    await user.click(
+      within(within(section).getByRole('alertdialog')).getByRole('button', { name: 'Přepsat' }),
+    );
+    expect(await within(section).findByText(/Pásek „hnědý“ přepsán/)).toBeInTheDocument();
+    expect(within(section).getAllByRole('button', { name: /^Načíst pásek/ })).toHaveLength(1);
+    expect(within(section).getByRole('button', { name: 'Načíst pásek hnědý' })).toBeInTheDocument();
+    expect(confirm).not.toHaveBeenCalled();
+    confirm.mockRestore();
+  });
+
   it('předvyplnění ze zápisníku ukáže, co se vzalo', async () => {
     setup({
       form: {

@@ -60,7 +60,10 @@ export function resolveShoppingPlan(
   project: Pick<ProjectDefinition, 'shoppingPlan'>,
   catalog: EquipmentCatalog,
   inventory: InventoryState,
+  /** Název položky, když se pro sestavu liší od katalogu (pásek: výsečník podle Ø dírek). */
+  equipmentNames: Readonly<Record<string, string>> = {},
 ): ResolvedShoppingPlan | null {
+  const nameOf = (slug: string) => equipmentNames[slug] ?? catalog[slug]?.name ?? slug;
   const plan = project.shoppingPlan;
   if (!plan) return null;
   const byShop = new Map<string, ResolvedPlanLine[]>();
@@ -73,7 +76,7 @@ export function resolveShoppingPlan(
     }
     const resolved: ResolvedPlanLine = {
       equipmentSlug: line.equipmentSlug,
-      equipmentName: catalog[line.equipmentSlug]?.name ?? line.equipmentSlug,
+      equipmentName: nameOf(line.equipmentSlug),
       example,
       quantity: line.quantity,
       ...(line.purpose ? { purpose: line.purpose } : {}),
@@ -100,7 +103,7 @@ export function resolveShoppingPlan(
     checkedTo: dates.at(-1) ?? '',
     skipped: plan.skipped.map((s) => ({
       ...s,
-      equipmentName: catalog[s.equipmentSlug]?.name ?? s.equipmentSlug,
+      equipmentName: nameOf(s.equipmentSlug),
     })),
     alsoNeeded: plan.alsoNeeded ?? [],
   };

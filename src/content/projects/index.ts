@@ -21,6 +21,12 @@ export {
   BELT_TIP_CHOICES,
 } from '@/content/projects/belt/record-ids';
 
+/** Ilustrace měření obvodu pro formulář „Váš pásek“ (tytéž jako v lekci 1 pásku). */
+export {
+  illustration as BELT_ILLUSTRATION,
+  illustrationCaption as BELT_ILLUSTRATION_CAPTION,
+} from '@/content/projects/belt/illustrations';
+
 export const projects: readonly ProjectDefinition[] = [
   cardHolderProject,
   coinCardHolderProject,

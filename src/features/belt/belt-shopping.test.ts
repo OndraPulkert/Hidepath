@@ -5,15 +5,19 @@ import { BELT_RECORD_IDS } from '@/content/projects';
 import { beltProject } from '@/content/projects/belt/project';
 import {
   BELT_CONFIG_PLAN_SLUGS,
+  BELT_FALLBACK_BASIS,
   NOTEBOOK_BASIS_NAME,
+  beltBudgetPrices,
   beltPlanBasis,
+  beltPlanView,
   beltPrepPlan,
 } from '@/features/belt/belt-shopping';
 import { newSavedBeltFieldId, serializeSavedBelt } from '@/features/belt/saved-belts';
 import { type LessonRecordEntry } from '@/features/notebook/types';
 import { buildLessonPrep } from '@/features/prep/lesson-prep';
 import { EMPTY_PROGRESS } from '@/features/progress/types';
-import { resolveShoppingPlan } from '@/features/shopping/plan';
+import { computeRemainingBudget } from '@/features/shopping/budget';
+import { findPlanExample, resolveShoppingPlan } from '@/features/shopping/plan';
 import { type BeltConfigInput } from '@/lib/patterns/belt-config';
 
 const SLUG = beltProject.slug;
@@ -274,5 +278,68 @@ describe('nákup podle pásku', () => {
       /^podle plánu projektu \(pásek 40 mm\): čísla ze zápisníku nejdou spočítat/,
     );
     expect(out!.basis).toMatch(/Trn 5,8 mm je na výsečníky 4,5–6 mm moc silný/);
+  });
+});
+
+describe('Co koupit a rozpočet podle pásku', () => {
+  const priceOf = (p: typeof plan, slug: string) =>
+    p.lines
+      .filter((l) => l.equipmentSlug === slug)
+      .reduce((sum, l) => sum + findPlanExample(l, equipmentCatalog)!.priceCents * l.quantity, 0);
+
+  it('bez sestavy plán projektu (40 mm) s poznámkou a cenami jeho řádků', () => {
+    const view = beltPlanView(plan, [], SLUG, equipmentCatalog);
+    expect(view.plan).toBe(plan);
+    expect(view.basis).toBe(BELT_FALLBACK_BASIS);
+    expect(view.basis).toBe('podle plánu projektu (pásek 40 mm)');
+    expect(view.budgetPrices['belt-buckle']).toEqual({ cents: priceOf(plan, 'belt-buckle') });
+    expect(view.budgetPrices['hole-punch-5mm']).toEqual({
+      cents: priceOf(plan, 'hole-punch-5mm'),
+    });
+  });
+
+  it('s uloženým páskem stejný plán i poznámka jako „Připravte si“', () => {
+    const entries = [saved('Do obleku', { widthMm: 30, thicknessMm: 3.5, tip: 'hrot' })];
+    const view = beltPlanView(plan, entries, SLUG, equipmentCatalog);
+    const prep = beltPrepPlan(plan, entries, SLUG, equipmentCatalog)!;
+    expect(view.plan).toEqual(prep.plan);
+    expect(view.basis).toBe('podle pásku: Do obleku (30 mm · 3,5 mm · hrot · 5 dírek)');
+    expect(view.budgetPrices['belt-buckle']).toEqual({
+      cents: priceOf(view.plan, 'belt-buckle'),
+    });
+    const resolved = resolveShoppingPlan({ shoppingPlan: view.plan }, equipmentCatalog, {})!;
+    const buckle = resolved.shops
+      .flatMap((s) => s.lines)
+      .find((l) => l.equipmentSlug === 'belt-buckle')!;
+    expect(buckle.example.title).toBe('Mosazná opasková přezka 30 mm');
+  });
+
+  it('rozpočet: dírky Ø 6 mm = výsečník Ø 5 mm se nekupuje, nic bez ověřené nabídky je bez ceny', () => {
+    const view = beltPlanView(
+      plan,
+      [saved('Široké dírky', { widthMm: 40, thicknessMm: 3.5, tip: 'hrot', holeDiameterMm: 6 })],
+      SLUG,
+      equipmentCatalog,
+    );
+    expect(view.budgetPrices['hole-punch-5mm']).toBe('not-needed');
+    const withSix = computeRemainingBudget(beltProject, equipmentCatalog, {}, view.budgetPrices);
+    expect(withSix.lines.map((l) => l.equipmentSlug)).not.toContain('hole-punch-5mm');
+
+    const withoutBuckle = {
+      ...plan,
+      lines: plan.lines.filter((l) => l.equipmentSlug !== 'belt-buckle'),
+    };
+    expect(beltBudgetPrices(withoutBuckle, equipmentCatalog, 5)['belt-buckle']).toBe('unpriced');
+  });
+
+  it('pásek, který nejde spočítat: plán projektu, poznámka řekne proč', () => {
+    const view = beltPlanView(
+      plan,
+      [entry(BELT_RECORD_IDS.width, 30), entry(BELT_RECORD_IDS.prong, 5.8)],
+      SLUG,
+      equipmentCatalog,
+    );
+    expect(view.plan).toBe(plan);
+    expect(view.basis).toMatch(/^podle plánu projektu \(pásek 40 mm\): čísla ze zápisníku/);
   });
 });

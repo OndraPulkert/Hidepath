@@ -18,8 +18,15 @@ export interface BudgetLine {
   status: 'want_to_buy' | 'ordered';
   /** Orientační cena, nebo skutečná cena, pokud ji uživatel u objednané položky zadal. */
   estimatedCents: number;
-  source: 'estimate' | 'recorded';
+  /** `plan` = cena řádků nákupního plánu (např. podle uloženého pásku), ne střed rozsahu. */
+  source: 'estimate' | 'recorded' | 'plan';
 }
+
+/**
+ * Cena položky z nákupního plánu místo středu cenového rozsahu: `cents` = součet řádků plánu,
+ * `unpriced` = plán ji vynechal bez ověřené ceny, `not-needed` = pro tuto sestavu se nekupuje.
+ */
+export type BudgetPriceOverride = { cents: number } | 'unpriced' | 'not-needed';
 
 export interface RemainingBudget {
   /** Součet za položky, které nejsou `owned` (včetně objednaných). */
@@ -43,6 +50,8 @@ export function computeRemainingBudget(
   project: Pick<ProjectDefinition, 'equipment'>,
   catalog: EquipmentCatalog,
   inventory: InventoryState,
+  /** Ceny podle nákupního plánu (pásek: pás, přezka, nýty, výsečník podle sestavy). */
+  overrides: Readonly<Record<string, BudgetPriceOverride>> = {},
 ): RemainingBudget {
   const lines: BudgetLine[] = [];
   let unpricedCount = 0;
@@ -57,16 +66,22 @@ export function computeRemainingBudget(
       continue;
     }
     const recorded = status === 'ordered' ? item?.purchasePriceCents : null;
-    if (recorded == null && def.priceSource === 'unknown') {
+    const override = overrides[req.equipmentSlug];
+    if (recorded == null && override === 'not-needed') continue;
+    if (
+      recorded == null &&
+      (override === 'unpriced' || (override === undefined && def.priceSource === 'unknown'))
+    ) {
       unpricedCount += 1;
       continue;
     }
+    const planCents = typeof override === 'object' ? override.cents : undefined;
     lines.push({
       equipmentSlug: req.equipmentSlug,
       priority: req.priority,
       status,
-      estimatedCents: recorded ?? estimatedPriceCents(def),
-      source: recorded != null ? 'recorded' : 'estimate',
+      estimatedCents: recorded ?? planCents ?? estimatedPriceCents(def),
+      source: recorded != null ? 'recorded' : planCents !== undefined ? 'plan' : 'estimate',
     });
   }
   const sum = (pred: (l: BudgetLine) => boolean) =>

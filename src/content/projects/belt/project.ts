@@ -1,4 +1,5 @@
 import { animationLink } from '@/content/animations';
+import { illustration, illustrationCaption } from '@/content/projects/belt/illustrations';
 import { BELT_RECORD_IDS, BELT_TIP_CHOICES } from '@/content/projects/belt/record-ids';
 import {
   type LessonDefinition,
@@ -125,7 +126,23 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'waist',
         title: 'Změřte obvod',
         body: 'Obvod tu není obvod pasu z krejčovské tabulky. Je to délka od ohybu u přezky k dírce, kterou nosíte. Máte pásek, který sedí: změřte ho od ohybu u přezky (ne od konce trnu) k používané dírce. Nemáte: provlékněte krejčovský metr poutky kalhot, ve kterých pásek nosíte, utáhněte na pohodlí a odečtěte. Je to tatáž míra.',
-        media: [photo('belt-l1-waist', 'Metr na pásku od ohybu u přezky k používané dírce')],
+        media: [
+          {
+            id: 'ilustrace-obvod-na-pasku-l1',
+            kind: 'illustration',
+            caption: illustrationCaption.obvodNaPasku,
+            status: 'available',
+            src: illustration.obvodNaPasku,
+          },
+          {
+            id: 'ilustrace-obvod-metrem-l1',
+            kind: 'illustration',
+            caption: illustrationCaption.obvodMetrem,
+            status: 'available',
+            src: illustration.obvodMetrem,
+          },
+          photo('belt-l1-waist', 'Metr na pásku od ohybu u přezky k používané dírce'),
+        ],
         records: [
           {
             kind: 'number',
@@ -350,6 +367,7 @@ export const lessons: readonly LessonDefinition[] = [
             kind: 'choice',
             id: 'scrap-punch',
             label: 'Okraje otvorů',
+            hint: 'Roztřepené: vysekněte na odřezku další otvor, na tvrdé desce a výsečník kolmo. Když to nepomůže, nezačínejte pásek: tento případ podklady neřeší.',
             options: [
               { value: 'clean', label: 'Čisté' },
               { value: 'frayed', label: 'Roztřepené' },
@@ -368,6 +386,7 @@ export const lessons: readonly LessonDefinition[] = [
             kind: 'choice',
             id: 'scrap-balm',
             label: 'Balzám na odřezku',
+            hint: 'Nevyhovuje: na pásek ho nedávejte. Jiný přípravek (např. sedlářský tuk) nejdřív vyzkoušejte na odřezku.',
             options: [
               { value: 'ok', label: 'Vzhled vyhovuje' },
               { value: 'no', label: 'Nevyhovuje' },
@@ -379,7 +398,13 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'bend',
         title: 'Ohyb kolem příčky',
         body: 'Ohyb je uprostřed oválu, 90 mm od konce. Navlhčete zónu ohybu a ohněte ji kolem příčky přezky, ne přes hranu. Nasucho do malého rádiusu může silná kůže popraskat. Prohlédněte líc v ohybu.',
-        animationLinks: [animationLink('beltBuckleEnd', 'E1')],
+        animationLinks: [
+          animationLink(
+            'beltBuckleEnd',
+            'E1',
+            'Krok E1 – Ohněte konec kolem příčky (na pásku, poutko až v lekci 4)',
+          ),
+        ],
         media: [photo('belt-l2-bend', 'Navlhčený odřezek ohnutý kolem příčky přezky, líc v ohybu')],
         records: [
           {
@@ -399,9 +424,21 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Zkouška nýtu',
         body: 'Ohnutý odřezek stáhněte k sobě a druhou vrstvu označte šídlem skrz otvor 64,5 mm (ten blíž k ohybu). Otvor 16,8 mm na 15cm odřezku protějšek nemá. Odřezek rozložte, otvor vysekněte Ø 6 mm, ohněte zpět a prostrčte nýt: hlavičku s dutým dříkem z líce, šroubek z rubu, utáhněte plochým šroubovákem. Hlavička musí přitlačit kůži a nýt se nesmí viklat.',
         animationLinks: [
-          animationLink('beltBuckleEnd', 'E3'),
-          animationLink('beltBuckleEnd', 'E4'),
-          animationLink('beltBuckleEnd', 'E6'),
+          animationLink(
+            'beltBuckleEnd',
+            'E3',
+            'Krok E3 – Označte druhou dvojici skrz otvory (na pásku, poutko až v lekci 4)',
+          ),
+          animationLink(
+            'beltBuckleEnd',
+            'E4',
+            'Krok E4 – Vysekněte druhou dvojici (na pásku, poutko až v lekci 4)',
+          ),
+          animationLink(
+            'beltBuckleEnd',
+            'E6',
+            'Krok E6 – Sešroubujte nýty (na pásku, poutko až v lekci 4)',
+          ),
         ],
         media: [],
         records: [
@@ -424,6 +461,8 @@ export const lessons: readonly LessonDefinition[] = [
       {
         slug: 'scrap-cut-and-punched',
         title: 'Řez je kolmý, otvory Ø 6 mm a dírka pro trn mají čisté okraje, ovál má rovné boky.',
+        description:
+          'Šikmý nebo trhaný řez: odlomte článek čepele a řízněte znovu, nůž svisle. Křivé boky oválu: zkuste znovu na odřezku; když to nejde, nezačínejte pásek a ověřte proč.',
         required: true,
       },
       {
@@ -439,6 +478,8 @@ export const lessons: readonly LessonDefinition[] = [
       {
         slug: 'scrap-edge-balm',
         title: 'Hrana je zaleštěná a vzhled balzámu vyhovuje.',
+        description:
+          'Hrana se neleskne: navlhčete ji znovu Tokonole a třete dál. Balzám nevyhovuje: na pásek ho nedávejte, jiný přípravek nejdřív na odřezku.',
         required: true,
       },
     ],
