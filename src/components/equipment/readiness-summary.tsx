@@ -46,7 +46,7 @@ export function ReadinessSummary({
         <p className="mt-1 font-serif text-stat font-medium">
           {req.owned} z {req.total}
         </p>
-        <p className="mt-1.5 text-meta text-ink-2">bez nich nelze začít šít</p>
+        <p className="mt-1.5 text-meta text-ink-2">bez nich nelze začít</p>
       </div>
       <div>
         <Kicker>{hasShoppingPlan ? 'Orientační rozpočet' : 'Očekávané náklady'}</Kicker>

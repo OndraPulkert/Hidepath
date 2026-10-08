@@ -55,15 +55,16 @@ describe('rozměry konce opasku', () => {
     expect(keeperPocketClearMm(DEFAULT_BELT_END)).toBeCloseTo(37.7, 6);
   });
 
-  it('spočítá délku dříku nýtu a odhalí, že 6 mm na 4mm pás nestačí', () => {
+  it('spočítá délku dříku nýtu: 10/6 sedí na výchozí 3,5 mm, na 4mm pás ne', () => {
     // Pravidlo z praxe: dřík o 1–1,5 mm kratší než tloušťka spoje (2× pás).
     const r = rivetPostRangeMm(DEFAULT_BELT_END);
-    expect(r.minMm).toBeCloseTo(6.5, 6);
-    expect(r.maxMm).toBeCloseTo(7, 6);
-    expect(6, 'nýt 10/6 má dřík 6 mm').toBeLessThan(r.minMm);
-    const thin = rivetPostRangeMm({ ...DEFAULT_BELT_END, beltThicknessMm: 3.5 });
-    expect(6).toBeGreaterThanOrEqual(thin.minMm);
-    expect(6).toBeLessThanOrEqual(thin.maxMm);
+    expect(r.minMm).toBeCloseTo(5.5, 6);
+    expect(r.maxMm).toBeCloseTo(6, 6);
+    expect(6, 'nýt 10/6 má dřík 6 mm').toBeGreaterThanOrEqual(r.minMm);
+    expect(6).toBeLessThanOrEqual(r.maxMm);
+    const thick = rivetPostRangeMm({ ...DEFAULT_BELT_END, beltThicknessMm: 4 });
+    expect(thick.minMm).toBeCloseTo(6.5, 6);
+    expect(6, 'na 4mm pás je dřík 6 mm krátký').toBeLessThan(thick.minMm);
   });
 
   it('odmítne drážku širší než dlouhou a nekladné rozměry', () => {
@@ -105,9 +106,9 @@ describe('rozměry konce opasku', () => {
   });
 
   it('délka poutka je obvod zdvojené části plus přeplátování', () => {
-    // 2 × (40 + 2 × 4) = 96; 96 + 15 = 111
-    expect(doubledPerimeterMm(DEFAULT_BELT_END)).toBeCloseTo(96, 6);
-    expect(keeperStripLengthMm(DEFAULT_BELT_END)).toBe(111);
+    // 2 × (40 + 2 × 3,5) = 94; 94 + 15 = 109
+    expect(doubledPerimeterMm(DEFAULT_BELT_END)).toBeCloseTo(94, 6);
+    expect(keeperStripLengthMm(DEFAULT_BELT_END)).toBe(109);
   });
 
   it('tloušťka pásu mění jen délku poutka', () => {

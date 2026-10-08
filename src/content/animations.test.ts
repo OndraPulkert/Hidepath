@@ -163,6 +163,8 @@ describe('animace postupu – stránky v public/animace', () => {
     ['pas-otvory-dna', 'bottomHoles', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['sedlarsky-steh', 'saddleStitch', ['A', 'B', 'C', 'D', 'E', 'F', 'G'], 'H'],
     ['hrany', 'edges', ['A', 'B', 'C', 'D', 'E', 'F', 'G'], 'H'],
+    ['pasek-prezka', 'beltBuckleEnd', ['A', 'B', 'C', 'D', 'E'], 'F'],
+    ['pasek-spicka', 'beltHolesTip', ['A', 'B', 'C', 'D', 'E', 'F'], 'G'],
   ] as const)(
     '%s: samostatná stránka s favicon, návratem do lekce a kotvami svých částí',
     (name, key, anchors, missing) => {
@@ -184,7 +186,7 @@ describe('animace postupu – stránky v public/animace', () => {
     'steps' in page ? [{ key, path: page.path, sections: page.sections, steps: page.steps }] : [],
   );
 
-  it('kroky mají čtyři stránky kapsy, dvě stránky pásu, sedlářský steh, hrany a šest stránek Víčka', () => {
+  it('kroky mají čtyři stránky kapsy, dvě stránky pásu, sedlářský steh, hrany, šest stránek Víčka a dvě stránky pásku', () => {
     expect(steppedPages.map((p) => p.key)).toEqual([
       'kapsa',
       'pocketAttach',
@@ -200,6 +202,8 @@ describe('animace postupu – stránky v public/animace', () => {
       'lidWindows',
       'lidBackD2',
       'lidBodySides',
+      'beltBuckleEnd',
+      'beltHolesTip',
     ]);
   });
 
@@ -669,5 +673,81 @@ describe('animace postupu – přenos P1, okénka, D2 na záda a boční švy V�
     expect(() => animationLink('lidBackD2', 'B4')).toThrow(/nemá kotvu #B4/);
     expect(() => animationLink('lidBodySides', 'C3')).toThrow(/nemá kotvu #C3/);
     expect(animationButtonText(okenka('A2'))).toBe('Animace postupu');
+  });
+});
+
+describe('animace postupu – pásek: konec s přezkou, dírky a špička', () => {
+  const belt = projects.find((p) => p.slug === 'belt')!;
+  const hrefsOf = (order: number, stepId: string) =>
+    belt.lessons
+      .find((l) => l.order === order)!
+      .steps.find((s) => s.id === stepId)
+      ?.animationLinks?.map((l) => l.href);
+  const at = (page: string) => (anchor: string) => `/animace/${page}.html#${anchor}`;
+  const prezka = at('pasek-prezka');
+  const spicka = at('pasek-spicka');
+  const hrany = at('hrany');
+
+  it.each([
+    // Lekce 2: odřezek – značení, výsek, hrana, ohyb a zkouška nýtu.
+    [2, 'mark', [prezka('B1'), prezka('B2')]],
+    [2, 'punch', [prezka('C2'), prezka('C3')]],
+    [2, 'edges-balm', [hrany('B2'), hrany('D2')]],
+    [2, 'bend', [prezka('D1')]],
+    [2, 'screw', [prezka('E2'), prezka('E3'), prezka('E4')]],
+    // Lekce 3: dlouhé hrany.
+    [3, 'bevel', [hrany('B2')]],
+    [3, 'burnish', [hrany('D1'), hrany('D2'), hrany('D3')]],
+    // Lekce 4: konec s přezkou.
+    [4, 'plate-or-sheet', [prezka('A1'), prezka('A2')]],
+    [4, 'secure', [prezka('B1')]],
+    [4, 'mark', [prezka('B2'), prezka('B3'), prezka('B4'), prezka('B5'), prezka('B6')]],
+    [4, 'first-pair', [prezka('C1')]],
+    [4, 'oval', [prezka('C2'), prezka('C3')]],
+    [4, 'bend', [prezka('D1')]],
+    [4, 'keeper', [prezka('D2'), prezka('D3')]],
+    [4, 'second-pair', [prezka('E1'), prezka('E2')]],
+    [4, 'screws', [prezka('E3'), prezka('E4'), prezka('E5')]],
+    // Lekce 5: zkouška na těle.
+    [5, 'try-on', [spicka('A1')]],
+    [5, 'measure', [spicka('A2')]],
+    [5, 'length-check', [spicka('A3')]],
+    // Lekce 6: dírky a konec.
+    [6, 'row', [spicka('B1'), spicka('D1')]],
+    [6, 'place', [spicka('B2'), spicka('C1'), spicka('D2')]],
+    [6, 'mark', [spicka('B3'), spicka('C2'), spicka('D2')]],
+    [6, 'punch-holes', [spicka('E1')]],
+    [6, 'cut-tip', [spicka('E2'), spicka('E3'), spicka('E4')]],
+    [6, 'finish', [spicka('F1'), spicka('F2'), hrany('B2'), hrany('D2')]],
+    [6, 'try', [spicka('F3')]],
+  ] as const)('lekce %i, krok %s otevírá přesné kroky animace', (order, stepId, expected) => {
+    expect(hrefsOf(order, stepId)).toEqual(expected);
+  });
+
+  it('každý krok lekcí 4–6 má odkaz na animaci', () => {
+    for (const lesson of belt.lessons.filter((l) => l.order >= 4)) {
+      for (const step of lesson.steps) {
+        expect(step.animationLinks?.length ?? 0, `${lesson.order}/${step.id}`).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it('popisky tlačítek nesou číslo a název kroku stránky', () => {
+    expect(animationLink('beltBuckleEnd', 'E2')).toEqual({
+      href: prezka('E2'),
+      label: 'Krok E2 – Označte druhou dvojici skrz otvory',
+    });
+    expect(animationLink('beltHolesTip', 'E3').label).toBe('Krok E3 – Uřízněte vrchol R4');
+    expect(() => animationLink('beltBuckleEnd', 'A3')).toThrow(/nemá kotvu #A3/);
+    expect(() => animationLink('beltHolesTip', 'C3')).toThrow(/nemá kotvu #C3/);
+    expect(animationButtonText(spicka('F1'))).toBe('Animace postupu');
+  });
+
+  it('stránky odkazují na čísla v tabulce „Váš pásek“, kresba je jen příklad', () => {
+    for (const path of [animationPages.beltBuckleEnd.path, animationPages.beltHolesTip.path]) {
+      const source = pageSource(path)!;
+      expect(source).toContain('„Váš pásek“');
+      expect(source).toMatch(/Příklad pro 40 mm|příklad 40 × 3,5 mm/);
+    }
   });
 });

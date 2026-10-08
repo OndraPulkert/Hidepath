@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pásek: dírky a špička</title>
+<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+<!-- Self-hostované fonty aplikace (public/fonts), aby stránka fungovala i offline v PWA. -->
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f3efe9;--panel:#fffdf9;--stage:#f7f2ea;--ink:#2a211b;--muted:#6c6158;--line:#ddd5cc;
+  --accent:#b3261e;--ok:#2f6b3a;--btn:#2a211b;--btn-ink:#fffdf9;
+  --lic:#b8773f;--lic-d:#8a5228;--lic-hi:#d39a63;
+  --rub:#dcc4a2;--rub-d:#b99a72;--rub-fib:#c7a87f;--chip-lic:#b8773f;--chip-rub:#dcc4a2;
+  --hole:#2b2018;--paper:#fcfbf7;--paper-edge:#cfc8bb;--print:#2b2b2b;--print-m:#7a7a7a;
+  --steel:#a3abb3;--steel-d:#5c656e;--tape:#eedc95;--tape-d:#b9a24a;
+  --board:#e4ddd2;--board-d:#bdb3a4;--mat:#5f8f73;--mat-d:#3f6b55;--pad:#e9e4da;--pad-d:#b8ae9c;
+  --wood:#c79a63;--wood-d:#8a6436;--skin:#e9b996;--skin-d:#b98563;
+  --acryl:#cfe7ef;--acryl-d:#6f9aab;--engr:#2f5f73;
+  --cloth:#7f93ad;--cloth-d:#56677e;--balm:#7a4a22;--burn:#5a3416;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
+  --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
+  --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
+  --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;--chip-lic:#a96c38;--chip-rub:#c9b190;
+  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--print:#2b2b2b;--print-m:#6a6a6a;
+  --steel:#9099a2;--steel-d:#4d555d;--tape:#d9c67d;--tape-d:#9c8a3c;
+  --board:#3a332c;--board-d:#544a40;--mat:#4d7a61;--mat-d:#335a46;--pad:#cfc8b8;--pad-d:#8f8573;
+  --wood:#b38955;--wood-d:#7a582e;--skin:#d6a684;--skin-d:#a57454;
+  --acryl:#a9d0de;--acryl-d:#86b4c5;--engr:#d8f1fa;
+  --cloth:#5d7090;--cloth-d:#3e4c63;--balm:#5e3818;--burn:#3f230c;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
+  --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
+  --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
+  --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;--chip-lic:#a96c38;--chip-rub:#c9b190;
+  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--print:#2b2b2b;--print-m:#6a6a6a;
+  --steel:#9099a2;--steel-d:#4d555d;--tape:#d9c67d;--tape-d:#9c8a3c;
+  --board:#3a332c;--board-d:#544a40;--mat:#4d7a61;--mat-d:#335a46;--pad:#cfc8b8;--pad-d:#8f8573;
+  --wood:#b38955;--wood-d:#7a582e;--skin:#d6a684;--skin-d:#a57454;
+  --acryl:#a9d0de;--acryl-d:#86b4c5;--engr:#d8f1fa;
+  --cloth:#5d7090;--cloth-d:#3e4c63;--balm:#5e3818;--burn:#3f230c;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 "Albert Sans",system-ui,sans-serif;padding:22px 16px 44px;overflow-x:hidden}
+.wrap{max-width:860px;margin:0 auto;display:grid;gap:16px}
+h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
+.lead{color:var(--muted);margin:6px 0 0;max-width:70ch}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:10px;min-width:0}
+.stagewrap{position:relative;background:var(--stage);border-radius:8px;overflow:hidden}
+#stage{display:block;width:100%;height:auto;aspect-ratio:3/2}
+.badge{position:absolute;top:8px;left:8px;display:flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-weight:700;font-size:13px;letter-spacing:.06em;transition:opacity .2s}
+.badge i{width:16px;height:16px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.2)}
+.badge small{font-weight:500;letter-spacing:0;color:var(--muted);font-size:12px}
+.badge[hidden]{display:none}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.controls button{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);width:40px;height:40px;border-radius:10px;display:grid;place-items:center;cursor:pointer;padding:0}
+.controls button.play{background:var(--btn);color:var(--btn-ink);border-color:var(--btn)}
+.controls button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.controls svg{width:18px;height:18px;fill:currentColor}
+.counter{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+.prog{display:flex;gap:6px;align-items:stretch}
+.pseg{flex:1;display:grid;gap:4px;min-width:0;cursor:pointer;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left}
+.pseg .bars{display:flex;gap:2px;height:6px}
+.pseg .bars span{flex:1;background:var(--line);border-radius:2px;position:relative;overflow:hidden}
+.pseg .bars span b{position:absolute;inset:0;background:var(--lic);transform-origin:left;transform:scaleX(0)}
+.pseg .pl{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:520px){.pl span{display:none}}
+.pseg.on .pl{color:var(--ink);font-weight:600}
+.cap{min-height:6.6em}
+.cap .no{display:inline-block;font-weight:700;color:var(--lic-d);margin-right:6px;font-variant-numeric:tabular-nums}
+:root[data-theme="dark"] .cap .no{color:var(--lic-hi)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cap .no{color:var(--lic-hi)}}
+.cap h2{display:inline;font-size:1.05rem;margin:0}
+.cap p{margin:4px 0 0;color:var(--ink)}
+.cap .tip{display:block;margin-top:6px;color:var(--muted);font-size:14px}
+.cap .tip b{color:var(--accent);font-weight:700}
+.note{font-size:13px;color:var(--muted);margin:0}
+.note a{color:inherit}
+/* svg text */
+.t{font:600 4.1px "Albert Sans",sans-serif;fill:var(--ink)}
+.ts{font:500 3.7px "Albert Sans",sans-serif;fill:var(--muted)}
+.tw{font:700 4.6px "Albert Sans",sans-serif;fill:var(--ink)}
+.ta{font:700 4.1px "Albert Sans",sans-serif;fill:var(--accent)}
+.tok{font:700 4.1px "Albert Sans",sans-serif;fill:var(--ok)}
+.tp{font:600 3.2px "Albert Sans",sans-serif;fill:var(--print)}
+.tpm{font:500 2.6px "Albert Sans",sans-serif;fill:var(--print-m)}
+.lead-l{stroke:var(--muted);stroke-width:.25;fill:none}
+@media (min-width:700px){.t,.ta,.tok{font-size:2.8px}.ts{font-size:2.5px}.tw{font-size:3.2px}.tp{font-size:2.6px}.tpm{font-size:2.1px}}
+.panelbox{fill:var(--panel);stroke:var(--line);stroke-width:.35}
+.pillbg{fill:var(--panel);stroke:var(--line);stroke-width:.3;opacity:.95}
+@media (max-width:520px){.badge small{display:none}.cap{min-height:12em}.counter{width:100%;margin-left:0;order:9}}
+/* Hidepath: návrat do lekce */
+.backlink{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--ink);font-weight:600;font-size:15px;text-decoration:none;justify-self:start}
+.backlink:hover{text-decoration:underline}
+.backlink:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+<a class="backlink" href="/" data-back>← Zpět do lekce</a>
+<h1>Pásek: dírky a špička</h1>
+<p class="lead">Projekt 04, lekce 5 a 6. Zkouška na těle a prostřední dírka, pak dírky a konec v jednom přiložení: hrot (řada 1), zaoblený konec (řada 2), nebo list 2. Příklad pro 40 mm – vaše čísla v tabulce „Váš pásek“.</p>
+</header>
+
+<section class="card" aria-label="Animace postupu">
+  <div class="stagewrap">
+    <svg id="stage" viewBox="0 0 135 90" role="img" aria-label="Animovaný postup: prostřední dírka, přiložení destičky nebo listu 2, značení, dírky, řez konce a dokončení"></svg>
+    <div class="badge" id="badge" hidden><i id="chip"></i><span id="side">RUB</span><small id="sidesub"></small></div>
+  </div>
+  <div class="prog" id="prog"></div>
+  <div class="controls">
+    <button id="bRestart" aria-label="Od začátku" title="Od začátku"><svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/></svg></button>
+    <button id="bPrev" aria-label="Předchozí krok" title="Předchozí krok"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg></button>
+    <button id="bPlay" class="play" aria-label="Přehrát" title="Přehrát / pozastavit"><svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg></button>
+    <button id="bNext" aria-label="Další krok" title="Další krok"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
+    <span class="counter" id="counter">krok 1 / 1</span>
+  </div>
+  <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
+</section>
+<p class="note">Kresba v měřítku pro pás 40 × 3,5 mm, hrot a 5 dírek po 25 mm (prostřední 144,3 mm od vrcholu). Vaše šířka, Ø dírky, počet a rozteč dírek jsou v tabulce „Váš pásek“. Destička je čirý akrylát s gravírovanými linkami, kreslená podle výrobního souboru. Zkouška na těle a list 2 jsou schéma. „Tip“ označuje, co lekce neuvádí.</p>
+</div>
+
+<script>
+(()=>{
+// Destička MK Plexi: obrysy (REZ) a gravírování převzaté z docs/generated/opasek-desticka.svg, 1 jednotka = 1 mm.
+const PLATE_CUT="M152.113 11.28L201.951 33.856A4 4 0 0 1 201.951 41.144L152.113 63.72A2 2 0 0 1 149.287 61.898L149.287 13.102A2 2 0 0 1 152.113 11.28ZM111 37.5A1 1 0 1 0 109 37.5A1 1 0 1 0 111 37.5ZM86 37.5A1 1 0 1 0 84 37.5A1 1 0 1 0 86 37.5ZM61 37.5A1 1 0 1 0 59 37.5A1 1 0 1 0 61 37.5ZM36 37.5A1 1 0 1 0 34 37.5A1 1 0 1 0 36 37.5ZM11 37.5A1 1 0 1 0 9 37.5A1 1 0 1 0 11 37.5ZM184.3 73.5A21 21 0 0 1 184.3 115.5A1 1 0 0 1 184.3 113.5A19 19 0 0 0 184.3 75.5A1 1 0 0 1 184.3 73.5ZM184.3 78.5A16 16 0 0 1 184.3 110.5A1 1 0 0 1 184.3 108.5A14 14 0 0 0 184.3 80.5A1 1 0 0 1 184.3 78.5ZM111 94.5A1 1 0 1 0 109 94.5A1 1 0 1 0 111 94.5ZM86 94.5A1 1 0 1 0 84 94.5A1 1 0 1 0 86 94.5ZM61 94.5A1 1 0 1 0 59 94.5A1 1 0 1 0 61 94.5ZM36 94.5A1 1 0 1 0 34 94.5A1 1 0 1 0 36 94.5ZM11 94.5A1 1 0 1 0 9 94.5A1 1 0 1 0 11 94.5ZM80.5 148.5L99.5 148.5A3 3 0 0 1 99.5 154.5L80.5 154.5A3 3 0 0 1 80.5 148.5ZM17.8 151.5A1 1 0 1 0 15.8 151.5A1 1 0 1 0 17.8 151.5ZM65.5 151.5A1 1 0 1 0 63.5 151.5A1 1 0 1 0 65.5 151.5ZM116.5 151.5A1 1 0 1 0 114.5 151.5A1 1 0 1 0 116.5 151.5ZM164.2 151.5A1 1 0 1 0 162.2 151.5A1 1 0 1 0 164.2 151.5ZM91 139.5A1 1 0 1 0 89 139.5A1 1 0 1 0 91 139.5ZM91 163.5A1 1 0 1 0 89 163.5A1 1 0 1 0 91 163.5ZM207 178A2 2 0 1 0 203 178A2 2 0 1 0 207 178ZM0 5L5 0L212 0A3 3 0 0 1 215 3L215 181A3 3 0 0 1 212 184L3 184A3 3 0 0 1 0 181Z";
+const PLATE_ENG="M24 37.5L31 37.5M24 36.5L26 36.5M24 38.5L26 38.5M24 35.5L26 35.5M24 39.5L26 39.5M24 34.5L26 34.5M24 40.5L26 40.5M24 33.5L26 33.5M24 41.5L26 41.5M24 32.5L28 32.5M24 42.5L28 42.5M24 31.5L26 31.5M24 43.5L26 43.5M24 30.5L26 30.5M24 44.5L26 44.5M24 29.5L26 29.5M24 45.5L26 45.5M24 28.5L26 28.5M24 46.5L26 46.5M24 27.5L31 27.5M19.14 26.2L19.14 27.5M19.14 27.5L19.14 28.8M19.79 26.2L21.35 26.2M19.79 26.2L19.79 27.5M21.35 26.2L21.35 27.5M19.79 27.5L19.79 28.8M21.35 27.5L21.35 28.8M19.79 28.8L21.35 28.8M24 47.5L31 47.5M19.14 46.2L19.14 47.5M19.14 47.5L19.14 48.8M19.79 46.2L21.35 46.2M19.79 46.2L19.79 47.5M21.35 46.2L21.35 47.5M19.79 47.5L19.79 48.8M21.35 47.5L21.35 48.8M19.79 48.8L21.35 48.8M24 26.5L26 26.5M24 48.5L26 48.5M24 25.5L26 25.5M24 49.5L26 49.5M24 24.5L26 24.5M24 50.5L26 50.5M24 23.5L26 23.5M24 51.5L26 51.5M24 22.5L28 22.5M24 52.5L28 52.5M24 21.5L26 21.5M24 53.5L26 53.5M24 20.5L26 20.5M24 54.5L26 54.5M24 19.5L26 19.5M24 55.5L26 55.5M24 18.5L26 18.5M24 56.5L26 56.5M24 17.5L31 17.5M17.58 16.2L19.14 16.2M19.14 16.2L19.14 17.5M17.58 17.5L19.14 17.5M17.58 17.5L17.58 18.8M17.58 18.8L19.14 18.8M19.79 16.2L21.35 16.2M19.79 16.2L19.79 17.5M21.35 16.2L21.35 17.5M19.79 17.5L19.79 18.8M21.35 17.5L21.35 18.8M19.79 18.8L21.35 18.8M24 57.5L31 57.5M17.58 56.2L19.14 56.2M19.14 56.2L19.14 57.5M17.58 57.5L19.14 57.5M17.58 57.5L17.58 58.8M17.58 58.8L19.14 58.8M19.79 56.2L21.35 56.2M19.79 56.2L19.79 57.5M21.35 56.2L21.35 57.5M19.79 57.5L19.79 58.8M21.35 57.5L21.35 58.8M19.79 58.8L21.35 58.8M24 16.5L26 16.5M24 58.5L26 58.5M24 15.5L26 15.5M24 59.5L26 59.5M24 14.5L26 14.5M24 60.5L26 60.5M24 13.5L26 13.5M24 61.5L26 61.5M24 94.5L31 94.5M24 93.5L26 93.5M24 95.5L26 95.5M24 92.5L26 92.5M24 96.5L26 96.5M24 91.5L26 91.5M24 97.5L26 97.5M24 90.5L26 90.5M24 98.5L26 98.5M24 89.5L28 89.5M24 99.5L28 99.5M24 88.5L26 88.5M24 100.5L26 100.5M24 87.5L26 87.5M24 101.5L26 101.5M24 86.5L26 86.5M24 102.5L26 102.5M24 85.5L26 85.5M24 103.5L26 103.5M24 84.5L31 84.5M19.14 83.2L19.14 84.5M19.14 84.5L19.14 85.8M19.79 83.2L21.35 83.2M19.79 83.2L19.79 84.5M21.35 83.2L21.35 84.5M19.79 84.5L19.79 85.8M21.35 84.5L21.35 85.8M19.79 85.8L21.35 85.8M24 104.5L31 104.5M19.14 103.2L19.14 104.5M19.14 104.5L19.14 105.8M19.79 103.2L21.35 103.2M19.79 103.2L19.79 104.5M21.35 103.2L21.35 104.5M19.79 104.5L19.79 105.8M21.35 104.5L21.35 105.8M19.79 105.8L21.35 105.8M24 83.5L26 83.5M24 105.5L26 105.5M24 82.5L26 82.5M24 106.5L26 106.5M24 81.5L26 81.5M24 107.5L26 107.5M24 80.5L26 80.5M24 108.5L26 108.5M24 79.5L28 79.5M24 109.5L28 109.5M24 78.5L26 78.5M24 110.5L26 110.5M24 77.5L26 77.5M24 111.5L26 111.5M24 76.5L26 76.5M24 112.5L26 112.5M24 75.5L26 75.5M24 113.5L26 113.5M24 74.5L31 74.5M17.58 73.2L19.14 73.2M19.14 73.2L19.14 74.5M17.58 74.5L19.14 74.5M17.58 74.5L17.58 75.8M17.58 75.8L19.14 75.8M19.79 73.2L21.35 73.2M19.79 73.2L19.79 74.5M21.35 73.2L21.35 74.5M19.79 74.5L19.79 75.8M21.35 74.5L21.35 75.8M19.79 75.8L21.35 75.8M24 114.5L31 114.5M17.58 113.2L19.14 113.2M19.14 113.2L19.14 114.5M17.58 114.5L19.14 114.5M17.58 114.5L17.58 115.8M17.58 115.8L19.14 115.8M19.79 113.2L21.35 113.2M19.79 113.2L19.79 114.5M21.35 113.2L21.35 114.5M19.79 114.5L19.79 115.8M21.35 114.5L21.35 115.8M19.79 115.8L21.35 115.8M24 73.5L26 73.5M24 115.5L26 115.5M24 72.5L26 72.5M24 116.5L26 116.5M24 71.5L26 71.5M24 117.5L26 117.5M24 70.5L26 70.5M24 118.5L26 118.5M24 151.5L31 151.5M24 150.5L26 150.5M24 152.5L26 152.5M24 149.5L26 149.5M24 153.5L26 153.5M24 148.5L26 148.5M24 154.5L26 154.5M24 147.5L26 147.5M24 155.5L26 155.5M24 146.5L28 146.5M24 156.5L28 156.5M24 145.5L26 145.5M24 157.5L26 157.5M24 144.5L26 144.5M24 158.5L26 158.5M24 143.5L26 143.5M24 159.5L26 159.5M24 142.5L26 142.5M24 160.5L26 160.5M24 141.5L31 141.5M19.14 140.2L19.14 141.5M19.14 141.5L19.14 142.8M19.79 140.2L21.35 140.2M19.79 140.2L19.79 141.5M21.35 140.2L21.35 141.5M19.79 141.5L19.79 142.8M21.35 141.5L21.35 142.8M19.79 142.8L21.35 142.8M24 161.5L31 161.5M19.14 160.2L19.14 161.5M19.14 161.5L19.14 162.8M19.79 160.2L21.35 160.2M19.79 160.2L19.79 161.5M21.35 160.2L21.35 161.5M19.79 161.5L19.79 162.8M21.35 161.5L21.35 162.8M19.79 162.8L21.35 162.8M24 140.5L26 140.5M24 162.5L26 162.5M24 139.5L26 139.5M24 163.5L26 163.5M24 138.5L26 138.5M24 164.5L26 164.5M24 137.5L26 137.5M24 165.5L26 165.5M24 136.5L28 136.5M24 166.5L28 166.5M24 135.5L26 135.5M24 167.5L26 167.5M24 134.5L26 134.5M24 168.5L26 168.5M24 133.5L26 133.5M24 169.5L26 169.5M24 132.5L26 132.5M24 170.5L26 170.5M24 131.5L31 131.5M17.58 130.2L19.14 130.2M19.14 130.2L19.14 131.5M17.58 131.5L19.14 131.5M17.58 131.5L17.58 132.8M17.58 132.8L19.14 132.8M19.79 130.2L21.35 130.2M19.79 130.2L19.79 131.5M21.35 130.2L21.35 131.5M19.79 131.5L19.79 132.8M21.35 131.5L21.35 132.8M19.79 132.8L21.35 132.8M24 171.5L31 171.5M17.58 170.2L19.14 170.2M19.14 170.2L19.14 171.5M17.58 171.5L19.14 171.5M17.58 171.5L17.58 172.8M17.58 172.8L19.14 172.8M19.79 170.2L21.35 170.2M19.79 170.2L19.79 171.5M21.35 170.2L21.35 171.5M19.79 171.5L19.79 172.8M21.35 171.5L21.35 172.8M19.79 172.8L21.35 172.8M24 130.5L26 130.5M24 172.5L26 172.5M24 129.5L26 129.5M24 173.5L26 173.5M24 128.5L26 128.5M24 174.5L26 174.5M24 127.5L26 127.5M24 175.5L26 175.5M1 6L1 7.2M2 6L2 7.2M3 6L3 7.2M4 6L4 8M5 6L5 9.5M6 6L6 8M7 6L7 8M8 6L8 8M9 6L9 8M10 6L10 11M11 6L11 8M12 6L12 8M13 6L13 8M14 6L14 8M15 6L15 9.5M16 6L16 8M17 6L17 8M18 6L18 8M19 6L19 8M20 6L20 11M21 6L21 8M22 6L22 8M23 6L23 8M24 6L24 8M25 6L25 9.5M26 6L26 8M27 6L27 8M28 6L28 8M29 6L29 8M30 6L30 11M31 6L31 8M32 6L32 8M33 6L33 8M34 6L34 8M35 6L35 9.5M36 6L36 8M37 6L37 8M38 6L38 8M39 6L39 8M40 6L40 11M41 6L41 8M42 6L42 8M43 6L43 8M44 6L44 8M45 6L45 9.5M46 6L46 8M47 6L47 8M48 6L48 8M49 6L49 8M50 6L50 13M51 6L51 7.2M52 6L52 7.2M53 6L53 7.2M54 6L54 7.2M55 6L55 7.2M56 6L56 7.2M57 6L57 8M58 6L58 8M59 6L59 8M60 6L60 11M61 6L61 8M62 6L62 8M63 6L63 8M64 6L64 8M65 6L65 9.5M66 6L66 8M67 6L67 8M68 6L68 8M69 6L69 8M70 6L70 11M71 6L71 8M72 6L72 8M73 6L73 8M74 6L74 8M75 6L75 9.5M76 6L76 8M77 6L77 8M78 6L78 8M79 6L79 8M80 6L80 11M81 6L81 8M82 6L82 8M83 6L83 8M84 6L84 8M85 6L85 9.5M86 6L86 8M87 6L87 8M88 6L88 8M89 6L89 8M90 6L90 11M91 6L91 8M92 6L92 8M93 6L93 8M94 6L94 8M95 6L95 9.5M96 6L96 8M97 6L97 8M98 6L98 8M99 6L99 8M100 6L100 13M101 6L101 7.2M102 6L102 7.2M103 6L103 7.2M104 6L104 7.2M105 6L105 7.2M106 6L106 7.2M107 6L107 7.2M108 6L108 7.2M109 6L109 8M110 6L110 11M111 6L111 8M112 6L112 8M113 6L113 8M114 6L114 8M115 6L115 9.5M116 6L116 8M117 6L117 8M118 6L118 8M119 6L119 8M120 6L120 11M121 6L121 8M122 6L122 8M123 6L123 8M124 6L124 8M125 6L125 9.5M126 6L126 8M127 6L127 8M128 6L128 8M129 6L129 8M130 6L130 11M131 6L131 8M132 6L132 8M133 6L133 8M134 6L134 8M135 6L135 9.5M136 6L136 8M137 6L137 8M138 6L138 8M139 6L139 8M140 6L140 11M141 6L141 8M142 6L142 8M143 6L143 8M144 6L144 8M145 6L145 9.5M1.2 7.6L2.76 7.6M1.2 7.6L1.2 8.9M2.76 7.6L2.76 8.9M1.2 8.9L1.2 10.2M2.76 8.9L2.76 10.2M1.2 10.2L2.76 10.2M51.2 7.6L52.76 7.6M51.2 7.6L51.2 8.9M51.2 8.9L52.76 8.9M52.76 8.9L52.76 10.2M51.2 10.2L52.76 10.2M53.41 7.6L54.97 7.6M53.41 7.6L53.41 8.9M54.97 7.6L54.97 8.9M53.41 8.9L53.41 10.2M54.97 8.9L54.97 10.2M53.41 10.2L54.97 10.2M102.76 7.6L102.76 8.9M102.76 8.9L102.76 10.2M103.41 7.6L104.97 7.6M103.41 7.6L103.41 8.9M104.97 7.6L104.97 8.9M103.41 8.9L103.41 10.2M104.97 8.9L104.97 10.2M103.41 10.2L104.97 10.2M105.62 7.6L107.18 7.6M105.62 7.6L105.62 8.9M107.18 7.6L107.18 8.9M105.62 8.9L105.62 10.2M107.18 8.9L107.18 10.2M105.62 10.2L107.18 10.2M39 15L134.687 15M139.287 15L145.287 15M135.287 14L135.287 15M136.487 14L136.487 15M135.287 15L136.487 15M136.487 15L136.487 16M136.987 14L138.187 14M136.987 14L136.987 15M136.987 15L138.187 15M138.187 15L138.187 16M136.987 16L138.187 16M39 60L134.687 60M139.287 60L145.287 60M135.287 59L135.287 60M136.487 59L136.487 60M135.287 60L136.487 60M136.487 60L136.487 61M136.987 59L138.187 59M136.987 59L136.987 60M136.987 60L138.187 60M138.187 60L138.187 61M136.987 61L138.187 61M39 72L172.7 72M177.3 72L183.3 72M173.3 71L173.3 72M174.5 71L174.5 72M173.3 72L174.5 72M174.5 72L174.5 73M175 71L176.2 71M175 71L175 72M175 72L176.2 72M176.2 72L176.2 73M175 73L176.2 73M39 117L172.7 117M177.3 117L183.3 117M173.3 116L173.3 117M174.5 116L174.5 117M173.3 117L174.5 117M174.5 117L174.5 118M175 116L176.2 116M175 116L175 117M175 117L176.2 117M176.2 117L176.2 118M175 118L176.2 118M39 129L189.4 129M194 129L200 129M190 128L190 129M191.2 128L191.2 129M190 129L191.2 129M191.2 129L191.2 130M191.7 128L192.9 128M191.7 128L191.7 129M191.7 129L192.9 129M192.9 129L192.9 130M191.7 130L192.9 130M39 174L189.4 174M194 174L200 174M190 173L190 174M191.2 173L191.2 174M190 174L191.2 174M191.2 174L191.2 175M191.7 173L192.9 173M191.7 173L191.7 174M191.7 174L192.9 174M192.9 174L192.9 175M191.7 175L192.9 175M39 17.5L129.887 17.5M134.487 17.5L145.287 17.5M130.487 16.5L130.487 17.5M131.687 16.5L131.687 17.5M130.487 17.5L131.687 17.5M131.687 17.5L131.687 18.5M132.187 16.5L133.387 16.5M132.187 16.5L132.187 17.5M133.387 16.5L133.387 17.5M132.187 17.5L132.187 18.5M133.387 17.5L133.387 18.5M132.187 18.5L133.387 18.5M39 57.5L129.887 57.5M134.487 57.5L145.287 57.5M130.487 56.5L130.487 57.5M131.687 56.5L131.687 57.5M130.487 57.5L131.687 57.5M131.687 57.5L131.687 58.5M132.187 56.5L133.387 56.5M132.187 56.5L132.187 57.5M133.387 56.5L133.387 57.5M132.187 57.5L132.187 58.5M133.387 57.5L133.387 58.5M132.187 58.5L133.387 58.5M39 74.5L167.9 74.5M172.5 74.5L183.3 74.5M168.5 73.5L168.5 74.5M169.7 73.5L169.7 74.5M168.5 74.5L169.7 74.5M169.7 74.5L169.7 75.5M170.2 73.5L171.4 73.5M170.2 73.5L170.2 74.5M171.4 73.5L171.4 74.5M170.2 74.5L170.2 75.5M171.4 74.5L171.4 75.5M170.2 75.5L171.4 75.5M39 114.5L167.9 114.5M172.5 114.5L183.3 114.5M168.5 113.5L168.5 114.5M169.7 113.5L169.7 114.5M168.5 114.5L169.7 114.5M169.7 114.5L169.7 115.5M170.2 113.5L171.4 113.5M170.2 113.5L170.2 114.5M171.4 113.5L171.4 114.5M170.2 114.5L170.2 115.5M171.4 114.5L171.4 115.5M170.2 115.5L171.4 115.5M39 131.5L184.6 131.5M189.2 131.5L200 131.5M185.2 130.5L185.2 131.5M186.4 130.5L186.4 131.5M185.2 131.5L186.4 131.5M186.4 131.5L186.4 132.5M186.9 130.5L188.1 130.5M186.9 130.5L186.9 131.5M188.1 130.5L188.1 131.5M186.9 131.5L186.9 132.5M188.1 131.5L188.1 132.5M186.9 132.5L188.1 132.5M39 171.5L184.6 171.5M189.2 171.5L200 171.5M185.2 170.5L185.2 171.5M186.4 170.5L186.4 171.5M185.2 171.5L186.4 171.5M186.4 171.5L186.4 172.5M186.9 170.5L188.1 170.5M186.9 170.5L186.9 171.5M188.1 170.5L188.1 171.5M186.9 171.5L186.9 172.5M188.1 171.5L188.1 172.5M186.9 172.5L188.1 172.5M39 20L125.087 20M129.687 20L145.287 20M125.687 19L126.887 19M126.887 19L126.887 20M125.687 20L126.887 20M126.887 20L126.887 21M125.687 21L126.887 21M127.387 19L128.587 19M127.387 19L127.387 20M127.387 20L128.587 20M128.587 20L128.587 21M127.387 21L128.587 21M39 55L125.087 55M129.687 55L145.287 55M125.687 54L126.887 54M126.887 54L126.887 55M125.687 55L126.887 55M126.887 55L126.887 56M125.687 56L126.887 56M127.387 54L128.587 54M127.387 54L127.387 55M127.387 55L128.587 55M128.587 55L128.587 56M127.387 56L128.587 56M39 77L163.1 77M167.7 77L183.3 77M163.7 76L164.9 76M164.9 76L164.9 77M163.7 77L164.9 77M164.9 77L164.9 78M163.7 78L164.9 78M165.4 76L166.6 76M165.4 76L165.4 77M165.4 77L166.6 77M166.6 77L166.6 78M165.4 78L166.6 78M39 112L163.1 112M167.7 112L183.3 112M163.7 111L164.9 111M164.9 111L164.9 112M163.7 112L164.9 112M164.9 112L164.9 113M163.7 113L164.9 113M165.4 111L166.6 111M165.4 111L165.4 112M165.4 112L166.6 112M166.6 112L166.6 113M165.4 113L166.6 113M39 134L179.8 134M184.4 134L200 134M180.4 133L181.6 133M181.6 133L181.6 134M180.4 134L181.6 134M181.6 134L181.6 135M180.4 135L181.6 135M182.1 133L183.3 133M182.1 133L182.1 134M182.1 134L183.3 134M183.3 134L183.3 135M182.1 135L183.3 135M39 169L179.8 169M184.4 169L200 169M180.4 168L181.6 168M181.6 168L181.6 169M180.4 169L181.6 169M181.6 169L181.6 170M180.4 170L181.6 170M182.1 168L183.3 168M182.1 168L182.1 169M182.1 169L183.3 169M183.3 169L183.3 170M182.1 170L183.3 170M39 22.5L120.287 22.5M124.887 22.5L145.287 22.5M120.887 21.5L122.087 21.5M122.087 21.5L122.087 22.5M120.887 22.5L122.087 22.5M122.087 22.5L122.087 23.5M120.887 23.5L122.087 23.5M122.587 21.5L123.787 21.5M122.587 21.5L122.587 22.5M123.787 21.5L123.787 22.5M122.587 22.5L122.587 23.5M123.787 22.5L123.787 23.5M122.587 23.5L123.787 23.5M39 52.5L120.287 52.5M124.887 52.5L145.287 52.5M120.887 51.5L122.087 51.5M122.087 51.5L122.087 52.5M120.887 52.5L122.087 52.5M122.087 52.5L122.087 53.5M120.887 53.5L122.087 53.5M122.587 51.5L123.787 51.5M122.587 51.5L122.587 52.5M123.787 51.5L123.787 52.5M122.587 52.5L122.587 53.5M123.787 52.5L123.787 53.5M122.587 53.5L123.787 53.5M39 79.5L158.3 79.5M162.9 79.5L183.3 79.5M158.9 78.5L160.1 78.5M160.1 78.5L160.1 79.5M158.9 79.5L160.1 79.5M160.1 79.5L160.1 80.5M158.9 80.5L160.1 80.5M160.6 78.5L161.8 78.5M160.6 78.5L160.6 79.5M161.8 78.5L161.8 79.5M160.6 79.5L160.6 80.5M161.8 79.5L161.8 80.5M160.6 80.5L161.8 80.5M39 109.5L158.3 109.5M162.9 109.5L183.3 109.5M158.9 108.5L160.1 108.5M160.1 108.5L160.1 109.5M158.9 109.5L160.1 109.5M160.1 109.5L160.1 110.5M158.9 110.5L160.1 110.5M160.6 108.5L161.8 108.5M160.6 108.5L160.6 109.5M161.8 108.5L161.8 109.5M160.6 109.5L160.6 110.5M161.8 109.5L161.8 110.5M160.6 110.5L161.8 110.5M39 136.5L175 136.5M179.6 136.5L200 136.5M175.6 135.5L176.8 135.5M176.8 135.5L176.8 136.5M175.6 136.5L176.8 136.5M176.8 136.5L176.8 137.5M175.6 137.5L176.8 137.5M177.3 135.5L178.5 135.5M177.3 135.5L177.3 136.5M178.5 135.5L178.5 136.5M177.3 136.5L177.3 137.5M178.5 136.5L178.5 137.5M177.3 137.5L178.5 137.5M39 166.5L175 166.5M179.6 166.5L200 166.5M175.6 165.5L176.8 165.5M176.8 165.5L176.8 166.5M175.6 166.5L176.8 166.5M176.8 166.5L176.8 167.5M175.6 167.5L176.8 167.5M177.3 165.5L178.5 165.5M177.3 165.5L177.3 166.5M178.5 165.5L178.5 166.5M177.3 166.5L177.3 167.5M178.5 166.5L178.5 167.5M177.3 167.5L178.5 167.5M57 25.5L63 25.5M60 23.5L60 27.5M57 49.5L63 49.5M60 47.5L60 51.5M57 82.5L63 82.5M60 80.5L60 84.5M57 106.5L63 106.5M60 104.5L60 108.5M5.8 36L5.8 37.5M5.8 37.5L5.8 39M4 93L5.8 93M5.8 93L5.8 94.5M4 94.5L5.8 94.5M4 94.5L4 96M4 96L5.8 96M4 150L5.8 150M5.8 150L5.8 151.5M4 151.5L5.8 151.5M5.8 151.5L5.8 153M4 153L5.8 153M90 129L90 130.8M90 132L90 133.8M90 135L90 136.8M90 141L90 142.8M90 144L90 145.8M90 147L90 148M90 155L90 156.8M90 158L90 159.8M90 167L90 168.8M90 170L90 171.8M90 173L90 174M145 178L145 182M145 180L195 180M195 178L195 182M167 175.4L168.56 175.4M167 175.4L167 176.7M167 176.7L168.56 176.7M168.56 176.7L168.56 178M167 178L168.56 178M169.21 175.4L170.77 175.4M169.21 175.4L169.21 176.7M170.77 175.4L170.77 176.7M169.21 176.7L169.21 178M170.77 176.7L170.77 178M169.21 178L170.77 178";
+// ---------- geometrie (mm) ----------
+// Příklad 40 × 3,5 mm, hrot, 5 dírek: výchozí hodnoty src/lib/geometry/belt-end.ts (DEFAULT_BELT_TIP)
+// a rozmístění řad destičky (beltPlateLayout). Destička = výrobní soubor docs/generated/opasek-desticka.svg
+// (jen převzaté obrysy a gravírování, nic se nepřepočítává).
+const W=40, H=W/2, SLOPE=.453, NOSE=4, HD=5, NH=5, PITCH=25, APEX_TO_FIRST=94.3;
+const TW=NOSE/Math.sqrt(1+SLOPE*SLOPE), TF=NOSE-SLOPE*TW;          // bod dotyku boku a oblouku R4
+const TIPLEN=TF+(H-TW)/SLOPE;                                       // délka hrotu 38,46 mm
+const APEX=204.3;                                                   // vrchol v souřadnicích destičky (okraj 10 + 194,3)
+const HOLES=Array.from({length:NH},(_,i)=>+(APEX-APEX_TO_FIRST-i*PITCH).toFixed(2)); // 110, 85, 60, 35, 10
+const MID=HOLES[(NH-1)/2], APEX_TO_MID=+(APEX-MID).toFixed(2);     // 60 · 144,3
+const FAR=APEX-TIPLEN;                                              // kde hrot dosáhne plné šířky
+const RC=APEX-H;                                                    // střed oblouku zaobleného konce (řada 2, oblouk 40)
+const ROW1=37.5, ROW2=94.5;                                         // osy řad 1 a 2 na destičce
+const END0=230;                                                     // konec neuříznutého pásu (ilustrace: zbývá víc než 144,3)
+const X0=-700;                                                      // pás pokračuje k přezce
+const LAST30=END0-300;                                              // „posledních 30 cm“ od konce pásu
+
+// ---------- pomocné ----------
+const cl=t=>Math.max(0,Math.min(1,t));
+const seg=(t,a,b)=>cl((t-a)/(b-a));
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const es=(t,a,b)=>ease(seg(t,a,b));
+const L=(a,b,t)=>a+(b-a)*t;
+const f=n=>(+n).toFixed(2);
+const G=(tr,s,extra='')=>`<g transform="${tr}" ${extra}>${s}</g>`;
+const SHADOW='filter="url(#sh)"';
+const cz=n=>String(n).replace('.',',');
+const camL=(a,b,u)=>{const o={};for(const k in a)o[k]=L(a[k],b[k],u);return o};
+const camT=c=>`translate(${f(c.sx)} ${f(c.sy)}) scale(${(+c.k).toFixed(4)}) translate(${f(-c.cx)} ${f(-c.cy)})`;
+const tv=(c,x,y)=>[c.sx+(x-c.cx)*c.k,c.sy+(y-c.cy)*c.k];
+let CK=1;const sw=u=>(u/CK).toFixed(3);
+function withCam(c,fn){const k0=CK;CK=c.k;const s=G(camT(c),fn());CK=k0;return s}
+let UID=0;const uid=p=>`${p}${++UID}`;
+function lbl(x,y,t,cls='t',anchor='start'){return `<text x="${f(x)}" y="${f(y)}" class="${cls}" text-anchor="${anchor}">${t}</text>`}
+function pill(x,y,t,cls='t',anchor='start'){return `<g class="pill"><rect class="pillbg" rx="1.2" x="${f(x)}" y="${f(y-4)}" width="1" height="1"/>${lbl(x,y,t,cls,anchor)}</g>`}
+function fade(o,s){return o<=0?'':`<g opacity="${f(o)}">${s}</g>`}
+function lead(x1,y1,x2,y2){return `<path d="M${f(x1)} ${f(y1)} L${f(x2)} ${f(y2)}" class="lead-l"/><circle cx="${f(x2)}" cy="${f(y2)}" r=".5" fill="var(--muted)"/>`}
+function tick(x,y,s=1){return `<path d="M${f(x-1.6*s)} ${f(y)} l${f(1.2*s)} ${f(1.2*s)} l${f(2.4*s)} -${f(2.6*s)}" stroke="var(--ok)" stroke-width="${f(.7*s)}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`}
+function xmark(x,y,s=1){return `<path d="M${f(x-1.2*s)} ${f(y-1.2*s)} l${f(2.4*s)} ${f(2.4*s)} M${f(x-1.2*s)} ${f(y+1.2*s)} l${f(2.4*s)} -${f(2.4*s)}" stroke="var(--accent)" stroke-width="${f(.7*s)}" stroke-linecap="round"/>`}
+function okRing(x,y,r=2.4){return `<circle cx="${f(x)}" cy="${f(y)}" r="${r}" fill="none" stroke="var(--ok)" stroke-width=".5"/>`}
+function arrow(x1,y1,x2,y2,col='var(--accent)',w=.5,mk='ar'){return `<path d="M${f(x1)} ${f(y1)} L${f(x2)} ${f(y2)}" stroke="${col}" stroke-width="${w}" marker-end="url(#${mk})"/>`}
+function inset(title,body,{x=94,y=6,w=39,h=78}={}){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" class="panelbox"/><text x="${x+3}" y="${y+5.5}" class="ts" style="font-weight:700;letter-spacing:.06em">${title}</text>${body}`}
+function notes(lines,y0=18,step=5.4,x=97){return lines.map((l,i)=>lbl(x,y0+i*step,l[0],l[1]||'ts')).join('')}
+// kóta v souřadnicích scény
+function dimH(x1,x2,y,txt,cls='t'){return `<path d="M${f(x1)} ${f(y)} H${f(x2)}" stroke="var(--ink)" stroke-width=".3" marker-start="url(#arI)" marker-end="url(#arI)"/><path d="M${f(x1)} ${f(y-2)} v4 M${f(x2)} ${f(y-2)} v4" stroke="var(--ink)" stroke-width=".25"/>`+pill((x1+x2)/2,y-1.6,txt,cls,'middle')}
+// polyline: délka a částečný průběh
+function plen(P){let s=0;for(let i=1;i<P.length;i++)s+=Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1]);return s}
+function ppart(P,u){if(u<=0)return [P[0]];const tot=plen(P)*Math.min(1,u);let s=0;const out=[P[0]];
+  for(let i=1;i<P.length;i++){const d=Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1]);if(s+d>=tot){const k=(tot-s)/d;out.push([L(P[i-1][0],P[i][0],k),L(P[i-1][1],P[i][1],k)]);return out}s+=d;out.push(P[i])}return out}
+const pd=P=>'M'+P.map(p=>`${f(p[0])} ${f(p[1])}`).join(' L');
+const ptAt=(P,u)=>{const q=ppart(P,u);return q[q.length-1]};
+function arcPts(cx,cy,r,a0,a1,n=32){return Array.from({length:n+1},(_,i)=>{const a=a0+(a1-a0)*i/n;return [cx+r*Math.cos(a),cy+r*Math.sin(a)]})}
+
+// obrys hrotu po hranách pásu (to, co se obtahuje) a oblouk zaobleného konce
+const aT=Math.atan2(TW,NOSE-TF);
+const HROT_TR=[[FAR,-H],[APEX-TF,-TW],...arcPts(APEX-NOSE,0,NOSE,-aT,aT,16).slice(1,-1),[APEX-TF,TW],[FAR,H]];
+const ROUND_TR=arcPts(RC,0,H,-Math.PI/2,Math.PI/2,40);
+const SIDE1=[[FAR,-H],[APEX-TF,-TW]], SIDE2=[[FAR,H],[APEX-TF,TW]];
+const NOSE_TR=arcPts(APEX-NOSE,0,NOSE,-aT,aT,16);
+
+// tvar pásu
+function beltD(shape,x0=X0){
+  if(shape==='hrot') return `M${x0} ${-H} L${f(FAR)} ${-H} L${f(APEX-TF)} ${f(-TW)} A${NOSE} ${NOSE} 0 0 1 ${f(APEX-TF)} ${f(TW)} L${f(FAR)} ${H} L${x0} ${H} Z`;
+  if(shape==='round') return `M${x0} ${-H} L${f(RC)} ${-H} A${H} ${H} 0 0 1 ${f(RC)} ${H} L${x0} ${H} Z`;
+  return `M${x0} ${-H} H${END0} V${H} H${x0} Z`;
+}
+function wasteD(shape){
+  if(shape==='hrot') return `M${f(FAR)} ${-H} L${END0} ${-H} L${END0} ${H} L${f(FAR)} ${H} L${f(APEX-TF)} ${f(TW)} A${NOSE} ${NOSE} 0 0 0 ${f(APEX-TF)} ${f(-TW)} Z`;
+  return `M${f(RC)} ${-H} L${END0} ${-H} L${END0} ${H} L${f(RC)} ${H} A${H} ${H} 0 0 0 ${f(RC)} ${-H} Z`;
+}
+
+// ---------- kresba v souřadnicích pásu (mm; osa pásu y = 0, vrchol hrotu vpravo, přezka vlevo) ----------
+function boardBg(){return `<rect x="-900" y="-400" width="1500" height="800" fill="var(--board)"/>`}
+function matBg(x0=-60,x1=260,y0=-60,y1=60){let d='';for(let x=Math.ceil(x0/10)*10;x<=x1;x+=10)d+=`M${x} ${y0} V${y1} `;for(let y=Math.ceil(y0/10)*10;y<=y1;y+=10)d+=`M${x0} ${y} H${x1} `;
+  return `<rect x="${x0}" y="${y0}" width="${x1-x0}" height="${y1-y0}" rx="3" fill="var(--mat)"/><path d="${d}" stroke="var(--mat-d)" stroke-width="${sw(.15)}" opacity=".7"/>`}
+function padBg(x0,x1,y0,y1){return `<rect x="${x0}" y="${y0}" width="${x1-x0}" height="${y1-y0}" rx="3" fill="var(--pad)" stroke="var(--pad-d)" stroke-width="${sw(.3)}"/>`}
+function shims(op=1){if(op<=0)return '';const a=-H-1-26,b=H+1;
+  return `<g opacity="${f(op)}"><rect x="-60" y="${a}" width="310" height="26" fill="var(--wood)" stroke="var(--wood-d)" stroke-width="${sw(.3)}"/><rect x="-60" y="${b}" width="310" height="26" fill="var(--wood)" stroke="var(--wood-d)" stroke-width="${sw(.3)}"/></g>`}
+function tapes(op=1){if(op<=0)return '';let s='';for(const x of [-30,130,212])s+=`<rect x="${x}" y="${-H-14}" width="14" height="${2*H+28}" fill="var(--tape)" stroke="var(--tape-d)" stroke-width="${sw(.2)}" opacity=".95"/>`;return `<g opacity="${f(op)}">${s}</g>`}
+function belt(o={}){
+  const shape=o.shape||'raw', face=o.face||'rub';
+  const fill=face==='rub'?'url(#rubP)':'url(#licS)', st=face==='rub'?'var(--rub-d)':'var(--lic-d)';
+  const id=uid('bc');
+  let s=`<clipPath id="${id}"><path d="${beltD(shape)}"/></clipPath><path d="${beltD(shape)}" fill="${fill}" stroke="${st}" stroke-width="${sw(.3)}"/>`;
+  let inn='';
+  // zkosené a zaleštěné dlouhé hrany (lekce 3) kromě posledních 30 cm
+  inn+=`<path d="M${X0} ${-H+.9} H${LAST30} M${X0} ${H-.9} H${LAST30}" stroke="${face==='rub'?'var(--rub-fib)':'var(--lic-hi)'}" stroke-width="${sw(.35)}"/>`;
+  if(o.balm>0) inn+=`<rect x="${LAST30}" y="${-H}" width="${END0-LAST30}" height="${W}" fill="var(--balm)" opacity="${f(.22*o.balm)}"/>`;
+  if(o.balmDone) inn+=`<rect x="${X0}" y="${-H}" width="${LAST30-X0}" height="${W}" fill="var(--balm)" opacity=".22"/>`;
+  s+=`<g clip-path="url(#${id})">${inn}</g>`;
+  if(o.finish>0){const P=shape==='round'?[[LAST30,-H],[RC,-H],...ROUND_TR,[LAST30,H]]:[[LAST30,-H],...HROT_TR,[LAST30,H]];
+    s+=`<path d="${pd(ppart(P,o.finish))}" fill="none" stroke="var(--burn)" stroke-width="${sw(.7)}" stroke-linejoin="round" opacity=".85"/>`;}
+  if(o.mid) s+=`<circle cx="${MID}" cy="0" r=".7" fill="var(--hole)"/>`;
+  s+=marks(o);
+  for(const x of (o.holes||[])) s+=`<circle cx="${x}" cy="0" r="${HD/2}" fill="var(--hole)"/>`;
+  return s;
+}
+// stopy šídla: vykroužené kroužky a obtažený tvar (kreslí se i nad destičku, aby byly vidět)
+function marks(o={}){let s='';
+  for(const [x,p] of (o.rings||[])) if(p>0) s+=`<path d="${pd(arcPts(x,0,.95,-Math.PI/2,-Math.PI/2+2*Math.PI*p,24))}" fill="none" stroke="var(--hole)" stroke-width="${sw(.35)}"/>`;
+  if(o.trace&&o.trace.u>0) s+=`<path d="${pd(ppart(o.trace.P,o.trace.u))}" fill="none" stroke="var(--hole)" stroke-width="${sw(.4)}" stroke-linejoin="round" stroke-linecap="round"/>`;
+  return s}
+function waste(shape,dx=0,dy=0,op=1,face='rub'){if(op<=0)return '';
+  return `<g transform="translate(${f(dx)} ${f(dy)})" opacity="${f(op)}"><path d="${wasteD(shape)}" fill="${face==='rub'?'url(#rubP)':'url(#licS)'}" stroke="var(--rub-d)" stroke-width="${sw(.3)}"/></g>`}
+function cutLine(P,u,col='var(--hole)'){return u>0?`<path d="${pd(ppart(P,u))}" fill="none" stroke="${col}" stroke-width="${sw(.45)}" stroke-linecap="round"/>`:''}
+
+// destička: obrys a otvory (vrstva REZ) + gravírování, souřadnice výrobního souboru
+function plate(rowY,dx=0,dy=0,op=1){if(op<=0)return '';
+  return `<g transform="translate(${f(dx)} ${f(dy-rowY)})" opacity="${f(op)}"><path d="${PLATE_CUT}" fill="var(--acryl)" fill-opacity=".3" fill-rule="evenodd" stroke="var(--acryl-d)" stroke-width="${sw(.35)}" ${SHADOW}/>`+
+    `<path d="${PLATE_ENG}" fill="none" stroke="var(--engr)" stroke-width="${sw(.17)}" stroke-linecap="round" opacity=".9"/></g>`}
+function hiMid(op=1){return fade(op,`<circle cx="${MID}" cy="0" r="2.4" fill="none" stroke="var(--accent)" stroke-width="${sw(.45)}"/><path d="M${MID-4} -12 h8 M${MID-4} 12 h8" stroke="var(--accent)" stroke-width="${sw(.5)}" stroke-dasharray="${sw(1)} ${sw(.8)}"/>`)}
+function hiLines(x1,op=1){return fade(op,`<path d="M39 ${-H} H${x1} M39 ${H} H${x1}" stroke="var(--accent)" stroke-width="${sw(.5)}" stroke-dasharray="${sw(1.6)} ${sw(1)}"/>`)}
+
+// ocelové pravítko podél úsečky a→b, na straně normály n (souřadnice pásu)
+function steelRuler(a,b,n,op=1,ext=14,Wr=16){if(op<=0)return '';
+  const dx=b[0]-a[0],dy=b[1]-a[1],l=Math.hypot(dx,dy),ux=dx/l,uy=dy/l,g=.25;
+  const p0=[a[0]-ux*ext+n[0]*g,a[1]-uy*ext+n[1]*g],p1=[b[0]+ux*ext+n[0]*g,b[1]+uy*ext+n[1]*g];
+  const q=[p0,p1,[p1[0]+n[0]*Wr,p1[1]+n[1]*Wr],[p0[0]+n[0]*Wr,p0[1]+n[1]*Wr]];
+  let tk='';const N=Math.floor((l+2*ext)/2);for(let i=1;i<N;i++){const h=i%5?1.2:2.4;const x=p0[0]+ux*i*2,y=p0[1]+uy*i*2;tk+=`M${f(x)} ${f(y)} l${f(n[0]*h)} ${f(n[1]*h)} `}
+  return `<g opacity="${f(op)}"><path d="M${q.map(p=>`${f(p[0])} ${f(p[1])}`).join(' L')} Z" fill="var(--steel)" fill-opacity=".92" stroke="var(--steel-d)" stroke-width="${sw(.3)}" ${SHADOW}/><path d="${tk}" stroke="var(--steel-d)" stroke-width="${sw(.18)}"/></g>`}
+// ocelová rohová šablona: lob Ø 8 mm přiložený na vrchol
+function cornerTpl(op=1,dx=0){if(op<=0)return '';const c=APEX-NOSE,b=c-16;
+  return `<g transform="translate(${f(dx)} 0)" opacity="${f(op)}"><path d="M${b-30} -16 H${b} L${c-5} -4 H${c} A4 4 0 0 1 ${c} 4 H${c-5} L${b} 16 H${b-30} Z" fill="var(--steel)" fill-opacity=".92" stroke="var(--steel-d)" stroke-width="${sw(.3)}" ${SHADOW}/><circle cx="${b-20}" cy="0" r="3" fill="none" stroke="var(--steel-d)" stroke-width="${sw(.3)}"/></g>`}
+
+// ---------- nástroje (souřadnice scény) ----------
+function awl(x,y,press=1,a=26){const lift=(1-press)*3;
+  return G(`translate(${f(x)} ${f(y-lift)}) rotate(${a})`,`<path d="M0 0 L-.5 -8 L.5 -8 Z" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-.9" y="-9.4" width="1.8" height="1.6" rx=".3" fill="var(--steel-d)"/><ellipse cx="0" cy="-14" rx="2.1" ry="4.8" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".25"/>`)}
+// nůž s rukojetí ve směru (hx, hy): za řezem a na straně odpadu
+const kAng=(hx,hy)=>Math.atan2(hx,-hy)*180/Math.PI;
+function knife(x,y,a=0){return G(`translate(${f(x)} ${f(y)}) rotate(${f(a)})`,`<path d="M0 0 L-1.6 -9 L1.4 -9 L1.4 -1 Z" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".25"/><path d="M-1.1 -3 L1.4 -4.2 M-1.4 -6 L1.4 -7.2" stroke="var(--steel-d)" stroke-width=".18"/><rect x="-1.9" y="-22" width="3.6" height="13" rx="1" fill="var(--steel-d)"/><path d="M-1.2 -20 h2.2 M-1.2 -17 h2.2 M-1.2 -14 h2.2" stroke="var(--steel)" stroke-width=".3"/>`)}
+function punchTop(x,y,r,press=1){const R=r+1.4,s=1+.06*(1-press);
+  return G(`translate(${f(x)} ${f(y)}) scale(${f(s)})`,`<circle r="${f(R+1)}" fill="var(--steel)" opacity=".55" ${SHADOW}/><circle r="${f(R)}" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".35"/><circle r="${f(r)}" fill="none" stroke="var(--steel-d)" stroke-width=".5"/><circle r="${f(r*.55)}" fill="var(--steel-d)" opacity=".35"/>`)}
+function bang(x,y,o,r0=6){if(o<=0||o>=1)return '';let s='';for(let i=0;i<8;i++){const a=i*Math.PI/4+.3,a0=r0+o*2,a1=a0+2.2;s+=`M${f(x+a0*Math.cos(a))} ${f(y+a0*Math.sin(a))} L${f(x+a1*Math.cos(a))} ${f(y+a1*Math.sin(a))} `}
+  return `<path d="${s}" stroke="var(--accent)" stroke-width=".5" stroke-linecap="round" opacity="${f(1-o)}"/>`}
+function finger(x,y,op=1){return `<g opacity="${f(op)}"><ellipse cx="${f(x)}" cy="${f(y)}" rx="2.8" ry="4" fill="var(--skin)" stroke="var(--skin-d)" stroke-width=".3"/><ellipse cx="${f(x)}" cy="${f(y-1.8)}" rx="1.6" ry="1.4" fill="#fff" opacity=".35"/></g>`}
+function cloth(x,y){return G(`translate(${f(x)} ${f(y)}) rotate(-12)`,`<path d="M-6 -4 Q-2 -6 3 -4.4 Q7 -3 6 1 Q5 4.6 0 4.2 Q-5 4 -6.4 1 Q-7.2 -2 -6 -4 Z" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3"/><path d="M-3 -1 q2 -1 4 0 M-2 1.6 q2 -.8 4 .2" stroke="var(--paper-edge)" stroke-width=".25" fill="none"/>`)}
+function slicker(x,y,a=-20){return G(`translate(${f(x)} ${f(y)}) rotate(${a})`,`<rect x="-1.6" y="-14" width="3.2" height="14" rx="1.2" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".25"/><path d="M-1.6 -3 h3.2 M-1.6 -4.2 h3.2" stroke="var(--wood-d)" stroke-width=".3"/>`)}
+function beveler(x,y,a=-30){return G(`translate(${f(x)} ${f(y)}) rotate(${a})`,`<path d="M-.8 0 L.8 0 L.6 -4 L-.6 -4 Z" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-1.2" y="-13" width="2.4" height="9" rx=".8" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".25"/>`)}
+
+// ---------- pohled zepředu na nošený pásek (schéma, mm) ----------
+// x vpravo; trn má hrot na x = PRONG; ocas pásku je posunutý tak, že vrchol leží na tx0.
+const PRONG=-5, FOLDX=39, KEEP=FOLDX+(25.5+73.2)/2;          // ohyb kolem příčky přezky; střed poutka mezi nýty
+function worn(o={}){
+  const tx0=o.tx0, shape=o.shape||'raw';
+  let s=`<rect x="-300" y="-36" width="640" height="76" fill="var(--cloth)"/><path d="M-300 -33 H340 M-300 37 H340" stroke="var(--cloth-d)" stroke-width="${sw(.4)}" stroke-dasharray="${sw(1.4)} ${sw(1)}"/>`;
+  // konec u přezky (líc), přehnutý kolem příčky
+  s+=`<rect x="34" y="${-H}" width="320" height="${W}" fill="url(#licS)" stroke="var(--lic-d)" stroke-width="${sw(.3)}"/>`;
+  // přezka: rám a trn (pod páskem)
+  s+=`<path d="M-9 -27 H39 A3 3 0 0 1 42 -24 V24 A3 3 0 0 1 39 27 H-9 A3 3 0 0 1 -12 24 V-24 A3 3 0 0 1 -9 -27 Z M-7 -23 V23 H36 V-23 Z" fill="var(--steel)" fill-rule="evenodd" stroke="var(--steel-d)" stroke-width="${sw(.3)}"/>`;
+  s+=`<path d="M37 0 L${PRONG} 0" stroke="var(--steel-d)" stroke-width="2.4" stroke-linecap="round"/>`;
+  // hlavy nýtů na konci u přezky (pod ocasem pásku, vidět jen mimo něj)
+  for(const d of [25.5,73.2]) s+=`<circle cx="${f(FOLDX+d)}" cy="0" r="5" fill="var(--steel)" stroke="var(--steel-d)" stroke-width="${sw(.3)}"/>`;
+  // ocas pásku (líc ven), od přezky vlevo k vrcholu vpravo
+  const tail=G(`translate(${f(tx0-APEX)} 0)`,`<path d="${beltD(shape,-500)}" fill="url(#licS)" stroke="var(--lic-d)" stroke-width="${sw(.3)}" ${SHADOW}/>`+
+    (o.holes?HOLES.map(x=>`<circle cx="${x}" cy="0" r="${HD/2}" fill="var(--hole)"/>`).join(''):'')+
+    (o.mark?`<circle cx="${MID}" cy="0" r=".9" fill="var(--hole)"/>`:''));
+  s+=tail;
+  // trn prostrčený dírkou: vidět je jen v dírce
+  if(o.prongIn) s+=`<ellipse cx="${PRONG+1}" cy="0" rx="1.7" ry="1.1" fill="var(--steel)" stroke="var(--steel-d)" stroke-width="${sw(.25)}"/>`;
+  else s+=`<path d="M30 0 L${PRONG} 0" stroke="var(--steel-d)" stroke-width="${sw(.35)}" stroke-dasharray="${sw(1.2)} ${sw(.9)}" opacity=".9"/>`;
+  // poutko pásku (12 mm) v kapse mezi nýty: nýty 25,5 a 73,2 mm od ohybu kolem příčky (x = FOLDX)
+  s+=`<rect x="${f(KEEP-6)}" y="-23" width="12" height="46" rx="2" fill="url(#licS)" stroke="var(--lic-d)" stroke-width="${sw(.3)}"/>`;
+  // poutka kalhot
+  for(const x of [-62,118]) s+=`<rect x="${x}" y="-30" width="12" height="64" rx="2" fill="var(--cloth)" stroke="var(--cloth-d)" stroke-width="${sw(.35)}"/>`;
+  return s;
+}
+
+// ---------- kamery ----------
+const CAM_ALL={cx:115,cy:10,sx:67.5,sy:45,k:.54};
+const CAM_MID={cx:62,cy:0,sx:67.5,sy:47,k:1.8};
+const CAM_TIP={cx:186,cy:0,sx:67.5,sy:46,k:1.55};
+const CAM_HOLES={cx:60,cy:0,sx:67.5,sy:47,k:1.02};
+const CAM_F={cx:40,cy:0,sx:67.5,sy:44,k:.3};
+const CAM_FRONT={cx:58,cy:2,sx:67.5,sy:46,k:.52};
+const CAM_PL={cx:107.5,cy:92,sx:47,sy:47,k:.42};
+const EX='příklad 40 × 3,5 mm';
+const exPill=()=>pill(131,86,EX,'ts','end');
+
+// ---------- kroky ----------
+const PARTS={A:'Prostřední dírka',B:'Hrot · řada 1',C:'Zaoblený · řada 2',D:'List 2',E:'Dírky a konec',F:'Hrany a zkouška'};
+const S=[];
+const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,side,tip});
+
+// A1 — zkouška na těle
+add('A','Vyzkoušejte pásek na sobě','Pásek provlékněte poutky kalhot a utáhněte na pohodlí. Přidržte prstem a šídlem označte místo, kam tlačí hrot trnu. To je prostřední dírka; stopa po šídle v dírce zmizí.',9000,t=>{
+  const c=CAM_FRONT, p=es(t,.06,.36), tx0=APEX+(PRONG-MID)-22*(1-p);
+  let s=withCam(c,()=>worn({tx0,mark:t>.72}));
+  const [ex,ey]=tv(c,tx0-APEX+END0,0);
+  if(t<.42) s+=fade(seg(t,.02,.08)*(1-seg(t,.36,.42)),arrow(ex+2,ey,ex+12,ey,'var(--accent)',.6)+pill(ex+12,ey-5,'utáhněte','ta','end'));
+  const [px,py]=tv(c,PRONG,0);
+  const fo=seg(t,.36,.44);
+  if(fo>0) s+=finger(px+7,py+3.5,fo);
+  if(t>.44){const pr=es(t,.48,.68);s+=awl(px,py,pr)}
+  s+=fade(seg(t,.12,.2),lead(px+16,py-17,px+9,py-.2)+pill(px+16.5,py-17,'trn pod páskem','ts'));
+  const [kx2,ky2]=tv(c,KEEP,23);s+=fade(seg(t,.2,.28),lead(kx2+6,ky2+7,kx2,ky2)+pill(kx2+6.5,ky2+9,'poutko pásku','ts'));
+  const [lx,ly]=tv(c,-56,-30);
+  s+=fade(seg(t,.24,.32),lead(lx+4,ly-5,lx,ly)+pill(lx+4.5,ly-5.5,'poutko kalhot','ts'));
+  if(t>.74) s+=fade(seg(t,.74,.82),pill(px-3,py+17,'značka = prostřední dírka','ta','middle'));
+  s+=pill(131,86,'schéma','ts','end');
+  return s;
+},{v:'LÍC',sub:'na sobě'});
+
+// A2 — změřit od ohybu ke značce (zkrácený pohled)
+add('A','Změřte a porovnejte','Změřte od ohybu u přezky ke značce a zapište. Porovnejte s obvodem z lekce 1. Platí značka, ne obvod.',8000,t=>{
+  let s='';const y0=34,y1=46,xf=16,xm=112,xb=64;
+  // přezka a přehnutý konec
+  s+=`<rect x="5" y="${y0-3}" width="9" height="${y1-y0+6}" rx="1.4" fill="none" stroke="var(--steel-d)" stroke-width="1.6"/>`;
+  s+=`<path d="M${xf} ${y0} H${xb-1} l1.5 3 l-3 3 l3 3 l-1.5 3 H${xf} Z" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".3"/>`;
+  s+=`<path d="M${xb+3} ${y0} H128 V${y1} H${xb+3} l-1.5 -3 l3 -3 l-3 -3 Z" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".3"/>`;
+  s+=`<path d="M${xf} ${y0-1} V${y1+1}" stroke="var(--accent)" stroke-width=".4" stroke-dasharray="1 .7"/>`;
+  s+=`<circle cx="${xm}" cy="${(y0+y1)/2}" r=".7" fill="var(--hole)"/>`;
+  s+=pill(xf,y1+6,'ohyb u přezky','ta','middle')+pill(xm,y1+6,'značka','ta','middle')+pill((xb+1),y1+6,'zkráceno','ts','middle');
+  // metr
+  const u=es(t,.08,.5), xe=L(xf,xm,u);
+  if(u>0){s+=`<rect x="${xf}" y="${y0-8}" width="${f(xe-xf)}" height="5" fill="var(--tape)" stroke="var(--tape-d)" stroke-width=".25"/>`;
+    let d='';for(let x=xf+2;x<xe;x+=2)d+=`M${f(x)} ${y0-8} v${(x-xf)%10<.1?2.4:1.3} `;s+=`<path d="${d}" stroke="var(--print)" stroke-width=".2"/>`;}
+  if(t>.5) s+=fade(seg(t,.5,.58),pill((xf+xm)/2,y0-11,'ohyb u přezky → značka (cm)','t','middle'));
+  // porovnání
+  const o=seg(t,.62,.72);
+  if(o>0){s+=fade(o,`<rect x="18" y="62" width="99" height="20" rx="2" class="panelbox"/>`+lbl(22,69,'obvod z lekce 1','ts')+lbl(22,77,'značka na sobě','t')+
+    lbl(112,69,'pro porovnání','ts','end')+lbl(112,77,'platí','tok','end'));
+    if(t>.8) s+=fade(seg(t,.8,.88),tick(104,75.6,.9));}
+  return s;
+},{v:'LÍC',sub:'zkrácený pohled'});
+
+// A3 — stačí pás?
+add('A','Stačí pás?','Od značky ke konci pásu musí zbýt aspoň vzdálenost prostřední dírky od konce z tabulky „Váš pásek“ (např. 144,3 mm). Když nezbývá, ve formuláři „Váš pásek“ pod „Dírky (pokročilé)“ zkuste menší počet dírek nebo kratší odstup první dírky; aplikace hlídá meze. Pak ale značíte listem 2, ne destičkou.',8000,t=>{
+  const c=CAM_ALL;
+  let s=withCam(c,()=>boardBg()+belt({face:'lic',mid:true})+
+    fade(seg(t,.45,.55),`<path d="${pd(HROT_TR)}" fill="none" stroke="var(--accent)" stroke-width="${sw(.35)}" stroke-dasharray="${sw(1.4)} ${sw(1)}"/>`));
+  const [mx,my]=tv(c,MID,0),[ax]=tv(c,APEX,0),[ex]=tv(c,END0,0);
+  s+=pill(mx,my-14,'značka','ta','middle')+lead(mx,my-13,mx,my-.8);
+  const d=es(t,.12,.4);
+  if(d>0) s+=fade(seg(t,.12,.16),dimH(mx,L(mx,ax,d),my+19,`např. ${cz(APEX_TO_MID)} mm`));
+  if(t>.45) s+=fade(seg(t,.45,.55),pill(ax,my-14,'vrchol','ta','middle')+lead(ax,my-13,ax-.5,my-.5));
+  if(t>.6) s+=fade(seg(t,.6,.68),`<path d="M${f(ax)} ${f(my+27)} H${f(ex)}" stroke="var(--ok)" stroke-width=".5"/>`+tick(ex+3,my+27.5,.8)+pill(ex,my+33,'zbývá → pás stačí','tok','end'));
+  s+=fade(seg(t,.72,.8),pill(131,8,'nezbývá: méně dírek nebo kratší odstup → list 2','ts','end'));
+  s+=exPill();
+  return s;
+},{v:'LÍC'});
+
+// B1 — volba řady
+add('B','Řada 1 nebo 2, nebo list 2','Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když tabulka „Váš pásek“ ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo jste zvolili jen listy, vytiskněte list 2 pro váš pásek na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm.',9000,t=>{
+  const c=CAM_PL;
+  let s=withCam(c,()=>`<rect x="-120" y="-120" width="500" height="430" fill="var(--board)"/>`+plate(0)+
+    fade(seg(t,.08,.16)*(1-seg(t,.4,.46)),`<rect x="2" y="${ROW1-29}" width="211" height="58" rx="3" fill="none" stroke="var(--accent)" stroke-width="${sw(.6)}"/>`)+
+    fade(seg(t,.42,.5)*(1-seg(t,.74,.8)),`<rect x="2" y="${ROW2-26}" width="211" height="52" rx="3" fill="none" stroke="var(--accent)" stroke-width="${sw(.6)}"/>`+
+      `<path d="M${RC} ${ROW2-20} A20 20 0 0 1 ${RC} ${ROW2+20}" fill="none" stroke="var(--accent)" stroke-width="${sw(.9)}"/>`)+
+    `<rect x="0" y="125" width="215" height="59" fill="var(--stage)" opacity=".55"/>`);
+  const [x1,y1]=tv(c,212,ROW1+29.5),[x2,y2]=tv(c,212,ROW2+30),[x3,y3]=tv(c,212,151.5);
+  s+=pill(x1,y1,'řada 1 · hrot','t','end')+pill(x2,y2,'řada 2 · zaoblený','t','end')+pill(x3,y3+13,'řada 3 = lekce 4','ts','end');
+  let ib='';
+  ib+=fade(seg(t,.1,.18),lbl(97,17,'Hrot','t')+lbl(97,22,'→ řada 1','ts'));
+  ib+=fade(seg(t,.44,.52),lbl(97,31,'Zaoblený','t')+lbl(97,36,'→ řada 2,','ts')+lbl(97,41,'oblouk 40 a 30','ts'));
+  ib+=fade(seg(t,.76,.84),lbl(97,51,'„ne“ v tabulce','ta')+lbl(97,56,'nebo jen listy','ts')+lbl(97,61,'→ list 2, tisk 100 %','ts')+
+    `<rect x="98" y="66" width="8" height="8" fill="var(--paper)" stroke="var(--print)" stroke-width=".3"/>`+lbl(108,72,'50 × 50','ts'));
+  s+=inset('VOLBA',ib);
+  return s;
+},null);
+
+// B2 — přiložení řady 1
+add('B','Přiložte na prostřední dírku','Pás a podložky přilepte jako v lekci 4, rubem nahoru. Prostřední otvor destičky (mezi dvěma křížky) položte na značku z lekce 5, hrany pásu na linky vaší šířky (šířka bez linky: podle příčné stupnice). Zkontrolujte, že obtahovaný tvar končí přesně na obou hranách pásu. Když přesahuje nebo nedosahuje, máte špatný oblouk nebo linku.',13000,t=>{
+  const z1=es(t,.44,.54)*(1-es(t,.66,.76)), z2=es(t,.76,.86);
+  let c=camL(CAM_ALL,CAM_MID,z1); if(z2>0) c=camL(CAM_ALL,CAM_TIP,z2);
+  const sl=1-es(t,.18,.4);
+  let s=withCam(c,()=>boardBg()+tapes(seg(t,.02,.08))+shims(seg(t,.06,.14))+belt({mid:true})+plate(ROW1,30*sl,70*sl,seg(t,.18,.24))+
+    hiMid(seg(t,.46,.52)*(1-seg(t,.68,.72)))+hiLines(146,seg(t,.56,.6)*(1-seg(t,.68,.72))));
+  if(t<.42){s+=fade(seg(t,.02,.08)*(1-seg(t,.18,.24)),pill(131,8,'oboustranná páska pod pásem i podložkami','ts','end'));
+    const [sx,sy]=tv(c,-20,-H-14);s+=fade(seg(t,.08,.14)*(1-seg(t,.18,.24)),pill(sx,sy,'podložky stejně silné jako pás','ts'));}
+  if(z1>.95){const [mx,my]=tv(c,MID,0),[cx1,cy1]=tv(c,MID,-12),[lx,ly]=tv(c,96,-H);
+    s+=fade(seg(t,.5,.54),pill(mx+6,my+4.5,'otvor na značce','ta')+pill(cx1+5,cy1-.5,'křížky','ts'));
+    s+=fade(seg(t,.58,.62),pill(lx,ly-2,'hrana pásu na lince 40','ta','middle'));}
+  if(z2>.95){const P=[[FAR,-H],[FAR,H]].map(p=>tv(c,...p));
+    s+=fade(seg(t,.86,.9),P.map(([x,y])=>okRing(x,y)+tick(x+4.5,y+(y<45?-3:4),.7)).join('')+pill(131,8,'tvar končí přesně na obou hranách','tok','end'));
+    const [ox,oy]=tv(c,157,24.5);s+=fade(seg(t,.9,.94),pill(ox,oy+1.5,'výřez dál širší','ts','middle'));}
+  if(z1<.05&&z2<.05&&t>.4) s+=exPill();
+  return s;
+},{v:'RUB',sub:'řada 1'});
+
+// B3 — značení hrotu
+const RING_ORDER=HOLES.filter(x=>x!==MID);
+function ringProg(t,a,b){const n=RING_ORDER.length;return RING_ORDER.map((x,i)=>[x,seg(t,a+(b-a)*i/n,a+(b-a)*(i+.85)/n)])}
+add('B','Označte v jednom přiložení','Označte zbylé dírky a obtáhněte tvar konce, aniž byste destičku nebo list zvedli. Přiložit je znovu na už vyseknutou dírku je nepřesné. U řady 1 obtahujte jen k hraně pásu, dál je výřez širší.',13000,t=>{
+  const z=es(t,.44,.54);const c=camL(CAM_HOLES,CAM_TIP,z);
+  const rings=ringProg(t,.04,.42), tu=es(t,.56,.92);
+  let s=withCam(c,()=>boardBg()+shims()+belt({mid:true})+plate(ROW1)+marks({rings,trace:{P:HROT_TR,u:tu}}));
+  if(t<.44){const n=RING_ORDER.length,i=Math.min(n-1,Math.floor(seg(t,.04,.42)*n)),p=seg(t,.04,.42)*n-i;const a=-Math.PI/2+2*Math.PI*cl(p/.85);
+    const [x,y]=tv(c,RING_ORDER[i]+Math.cos(a),Math.sin(a));if(t>.04)s+=awl(x,y,1);
+    s+=pill(131,8,'kružte šídlem po stěně otvoru','t','end');}
+  if(t>.54&&t<.95){const q=ptAt(HROT_TR,tu),[x,y]=tv(c,q[0],q[1]);s+=awl(x,y,1)}
+  if(t>.54){s+=fade(seg(t,.54,.6),pill(131,8,'obtahujte jen k hraně pásu','ta','end'));const [ox,oy]=tv(c,157,24.5);s+=fade(seg(t,.6,.64),pill(ox,oy+1.5,'výřez dál širší','ts','middle'))}
+  if(t>.93) s+=fade(seg(t,.93,.98),pill(131,86,'4 dírky + tvar: jedno přiložení','tok','end'));
+  return s;
+},{v:'RUB',sub:'řada 1'});
+
+// C1 — přiložení řady 2
+add('C','Přiložte řadu 2 na prostřední dírku','Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Prostřední otvor destičky (mezi dvěma křížky) položte na značku z lekce 5, hrany pásu na linky vaší šířky. Zkontrolujte, že obtahovaný tvar končí přesně na obou hranách pásu. Když přesahuje nebo nedosahuje, máte špatný oblouk nebo linku.',11000,t=>{
+  const z1=es(t,.3,.4)*(1-es(t,.52,.62)), z2=es(t,.62,.72);
+  let c=camL(CAM_ALL,CAM_MID,z1); if(z2>0) c=camL(CAM_ALL,CAM_TIP,z2);
+  const sl=1-es(t,.04,.26);
+  let s=withCam(c,()=>boardBg()+shims()+belt({mid:true})+plate(ROW2,30*sl,70*sl,seg(t,.04,.1))+
+    hiMid(seg(t,.32,.38)*(1-seg(t,.54,.58)))+hiLines(183,seg(t,.42,.46)*(1-seg(t,.54,.58)))+
+    fade(seg(t,.72,.78),`<path d="M${RC} ${-H} A${H} ${H} 0 0 1 ${RC} ${H}" fill="none" stroke="var(--ok)" stroke-width="${sw(.6)}"/>`)+
+    fade(seg(t,.82,.88),`<path d="M${RC} -15 A15 15 0 0 1 ${RC} 15" fill="none" stroke="var(--accent)" stroke-width="${sw(.5)}" stroke-dasharray="${sw(1.2)} ${sw(.9)}"/>`));
+  if(z1>.95){const [mx,my]=tv(c,MID,0),[lx,ly]=tv(c,96,-H);
+    s+=fade(seg(t,.36,.4),pill(mx+6,my+4.5,'otvor na značce','ta'))+fade(seg(t,.44,.48),pill(lx,ly-2,'hrana pásu na lince 40','ta','middle'));}
+  if(z2>.95){const P=[[RC,-H],[RC,H]].map(p=>tv(c,...p));
+    s+=fade(seg(t,.72,.78),P.map(([x,y])=>okRing(x,y)+tick(x+4.5,y+(y<45?-3:4),.7)).join('')+pill(131,8,'oblouk 40 končí na obou hranách','tok','end'));
+    const [ax,ay]=tv(c,RC+10,3);s+=fade(seg(t,.82,.88),pill(ax,ay,'oblouk 30: ne','ta','middle'));}
+  if(z1<.05&&z2<.05) s+=exPill();
+  return s;
+},{v:'RUB',sub:'řada 2'});
+
+// C2 — značení zaobleného konce
+add('C','Označte v jednom přiložení','Označte zbylé dírky a obtáhněte tvar konce, aniž byste destičku zvedli. Přiložit ji znovu na už vyseknutou dírku je nepřesné.',11000,t=>{
+  const z=es(t,.44,.54);const c=camL(CAM_HOLES,CAM_TIP,z);
+  const rings=ringProg(t,.04,.42), tu=es(t,.56,.92);
+  let s=withCam(c,()=>boardBg()+shims()+belt({mid:true})+plate(ROW2)+marks({rings,trace:{P:ROUND_TR,u:tu}}));
+  if(t<.44){const n=RING_ORDER.length,i=Math.min(n-1,Math.floor(seg(t,.04,.42)*n)),p=seg(t,.04,.42)*n-i;const a=-Math.PI/2+2*Math.PI*cl(p/.85);
+    const [x,y]=tv(c,RING_ORDER[i]+Math.cos(a),Math.sin(a));if(t>.04)s+=awl(x,y,1);
+    s+=pill(131,8,'kružte šídlem po stěně otvoru','t','end');}
+  if(t>.54&&t<.95){const q=ptAt(ROUND_TR,tu),[x,y]=tv(c,q[0],q[1]);s+=awl(x,y,1)}
+  if(t>.54) s+=fade(seg(t,.54,.6),pill(131,8,'oblouk 40: od hrany k hraně','ta','end'));
+  if(t>.93) s+=fade(seg(t,.93,.98),pill(131,86,'4 dírky + tvar: jedno přiložení','tok','end'));
+  return s;
+},{v:'RUB',sub:'řada 2'});
+
+// D1 — list 2: tisk a vystřižení (schéma listu)
+const SHEET_END=HOLES[NH-1]-12;                                    // list 2 končí 12 mm za poslední dírkou (belt-sheets.ts)
+function sheetShape(){return `M${X0} ${-H} L${f(FAR)} ${-H} L${f(APEX-TF)} ${f(-TW)} A${NOSE} ${NOSE} 0 0 1 ${f(APEX-TF)} ${f(TW)} L${f(FAR)} ${H} L${X0} ${H} Z`}
+function sheetPrint(){let s=`<path d="${pd(HROT_TR)}" fill="none" stroke="var(--print)" stroke-width="${sw(.3)}"/><path d="M${SHEET_END} ${-H} H${f(FAR)} M${SHEET_END} ${H} H${f(FAR)}" stroke="var(--print)" stroke-width="${sw(.3)}"/>`;
+  for(const x of HOLES){const col=x===MID?'var(--accent)':'var(--print)';s+=`<circle cx="${x}" cy="0" r="${HD/2}" fill="none" stroke="${col}" stroke-width="${sw(x===MID?.4:.25)}"/><path d="M${x-1.6} 0 h3.2 M${x} -1.6 v3.2" stroke="${col}" stroke-width="${sw(.2)}"/>`;}
+  return s}
+add('D','Vytiskněte list 2','Když tabulka „Váš pásek“ ukazuje u této řady „ne“, nebo jste zvolili jen listy, vytiskněte list 2 pro váš pásek na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm. List vystřihněte po obrysu konce.',10000,t=>{
+  // A4 na výšku jako vygenerovaný list 2: pás vlevo (x 22–62 mm), vrchol 45 mm od horní hrany, čtverec vpravo nahoře; měřítko 0,27
+  const k=.27, ox=14, oy=4;
+  let s=`<rect x="${ox}" y="${oy}" width="${f(210*k)}" height="${f(297*k)}" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3" ${SHADOW}/>`;
+  const page=`translate(${f(ox+(22+H)*k)} ${f(oy+(APEX+45)*k)}) scale(${k}) rotate(-90)`;
+  CK=k; const pr=sheetPrint(); CK=1;
+  const cut=es(t,.5,.9);
+  s+=G(page,pr+(cut>0?`<path d="${pd(ppart([[SHEET_END,-H],[FAR,-H],...HROT_TR.slice(1,-1),[FAR,H],[SHEET_END,H]],cut))}" fill="none" stroke="var(--accent)" stroke-width="${(.5/k).toFixed(2)}"/>`:''));
+  // kalibrační čtverec
+  const qx=ox+150*k, qy=oy+30*k, q=50*k;
+  s+=`<rect x="${f(qx)}" y="${f(qy)}" width="${f(q)}" height="${f(q)}" fill="none" stroke="var(--print)" stroke-width=".3"/>`+lbl(qx+q/2,qy+q/2+1,'50 × 50','tpm','middle');
+  s+=lbl(ox+3,oy+6,'List 2','tp');
+  const mo=seg(t,.12,.4);
+  if(mo>0){s+=fade(mo,`<rect x="${f(qx-1)}" y="${f(qy+q+1)}" width="${f(q+2)}" height="3.4" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".25"/>`)+fade(seg(t,.3,.38),tick(qx+q+4,qy+q+2.6,.7))}
+  if(t>.5&&t<.92){const P=[[SHEET_END,-H],[FAR,-H],...HROT_TR.slice(1,-1),[FAR,H],[SHEET_END,H]];const p=ptAt(P,cut);const x=ox+(22+H)*k+p[1]*k, y=oy+(APEX+45)*k-p[0]*k;
+    s+=`<g transform="translate(${f(x)} ${f(y)}) rotate(-90)"><path d="M0 0 L-6 -1.2 M0 0 L-6 1.2" stroke="var(--steel-d)" stroke-width=".7" stroke-linecap="round"/><circle cx="-8" cy="-2.4" r="1.6" fill="none" stroke="var(--accent)" stroke-width=".6"/><circle cx="-8" cy="2.4" r="1.6" fill="none" stroke="var(--accent)" stroke-width=".6"/></g>`;}
+  let ib='';
+  ib+=fade(seg(t,.02,.1),lbl(97,17,'tisk 100 %','t')+lbl(97,22,'bez přizpůsobení','ts'));
+  ib+=fade(seg(t,.3,.38),lbl(97,32,'čtverec','t')+lbl(97,37,'50 × 50 mm','ts'));
+  ib+=fade(seg(t,.5,.58),lbl(97,47,'vystřihněte','t')+lbl(97,52,'po obrysu konce','ts'));
+  ib+=lbl(97,80,'schéma listu','ts');
+  s+=inset('LIST 2',ib);
+  return s;
+},null);
+
+// D2 — list 2 na pásu
+add('D','Přiložte list a propíchněte','S listem 2: list vystřihněte po obrysu konce, prostřední dírku položte na značku, boky na hrany pásu a list přilepte páskou. Středy dírek propíchněte a obrys obtáhněte šídlem po okraji listu.',12000,t=>{
+  const z=es(t,.48,.58);const c=camL(CAM_HOLES,CAM_TIP,z);
+  const sl=1-es(t,.02,.2);
+  const pricks=RING_ORDER.map((x,i)=>[x,seg(t,.26+i*.05,.29+i*.05)]);
+  const tu=es(t,.6,.92);
+  let s=withCam(c,()=>{const id=uid('sc');
+    let w=boardBg()+belt({mid:true});
+    w+=`<g transform="translate(0 ${f(-60*sl)})" opacity="${f(seg(t,0,.06))}"><clipPath id="${id}"><rect x="${SHEET_END}" y="-40" width="260" height="80"/></clipPath><g clip-path="url(#${id})"><path d="${sheetShape()}" fill="var(--paper)" fill-opacity=".93" stroke="var(--paper-edge)" stroke-width="${sw(.3)}" ${SHADOW}/>${sheetPrint()}</g></g>`;
+    if(t>.2) w+=fade(seg(t,.2,.24),[-4,100,150].map(x=>`<rect x="${x}" y="${-H-4}" width="7" height="${W+8}" fill="var(--tape)" opacity=".75" stroke="var(--tape-d)" stroke-width="${sw(.2)}"/>`).join(''));
+    for(const [x,p] of pricks) if(p>=1) w+=`<circle cx="${x}" cy="0" r=".6" fill="var(--hole)"/>`;
+    w+=marks({trace:{P:HROT_TR,u:tu}});
+    return w});
+  if(t>.24&&t<.5){const i=Math.max(0,Math.min(3,Math.floor((t-.26)/.05)));const p=seg(t,.26+i*.05,.29+i*.05);const [x,y]=tv(c,RING_ORDER[i],0);s+=awl(x,y,p<.6?p/.6:1-(p-.6)/.4*.6);
+    s+=pill(131,8,'propíchněte středy dírek','t','end');}
+  if(t>.58&&t<.94){const q=ptAt(HROT_TR,tu),[x,y]=tv(c,q[0],q[1]);s+=awl(x,y,1)}
+  if(t>.58) s+=fade(seg(t,.58,.64),pill(131,8,'obtáhněte šídlem po okraji listu','ta','end'));
+  if(t<.24) s+=fade(seg(t,.06,.12),pill(131,8,'prostřední dírka na značku, boky na hrany','t','end'));
+  s+=pill(131,86,'list 2: hrot (zaoblený stejně)','ts','end');
+  return s;
+},{v:'RUB',sub:'list 2'});
+
+// E1 — vysekání dírek
+add('E','Vysekněte dírky','Dírky vysekněte výsečníkem s Ø z tabulky „Váš pásek“ (např. 5 mm). Prsty držící výsečník mějte u spodku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',10000,t=>{
+  const c=CAM_HOLES;const order=[...HOLES].reverse();
+  const n=order.length,u=seg(t,.08,.92)*n,i=Math.min(n-1,Math.floor(u)),p=u-i;
+  const done=order.filter((x,j)=>j<i||(j===i&&p>.62));
+  let s=withCam(c,()=>boardBg()+padBg(-40,150,-38,38)+belt({mid:true,rings:RING_ORDER.map(x=>[x,1]),trace:{P:HROT_TR,u:1},holes:done}));
+  if(t>.08&&t<.92){const [x,y]=tv(c,order[i],0);const press=p<.5?es(p,0,.5):1;s+=punchTop(x,y,HD/2*c.k,press)+bang(x,y,seg(p,.55,.9),HD*c.k*.6)}
+  const [bx,by]=tv(c,-2,33);s+=pill(bx,by,'tvrdá deska','ts');
+  s+=pill(131,8,`Ø ${HD} mm, ${done.length} / ${n}`,'t','end');
+  s+=exPill();
+  return s;
+},{v:'RUB'});
+
+// E2 — boky hrotu podél ocelového pravítka
+const SN=(P,sgn)=>{const dx=P[1][0]-P[0][0],dy=P[1][1]-P[0][1],l=Math.hypot(dx,dy);return [-dy/l*sgn,dx/l*sgn]};
+add('E','Uřízněte boky hrotu','Rovné boky hrotu řežte podél ocelového pravítka, nikdy podél destičky: čepel by akrylát poškodila. Nůž veďte tak, aby rýhu odebral. Nůž veďte tahem od prstů volné ruky.',12000,t=>{
+  const c=CAM_TIP;
+  const n1=SN(SIDE1,1), n2=SN(SIDE2,-1);           // pravítko na straně pásu (ne na odpadu)
+  const u1=es(t,.12,.42), u2=es(t,.58,.88);
+  const r1=seg(t,.02,.08)*(1-seg(t,.44,.5)), r2=seg(t,.5,.56)*(1-seg(t,.92,.98));
+  let s=withCam(c,()=>{let w=matBg(140,240,-40,40)+belt({shape:'hrot',holes:HOLES,trace:{P:HROT_TR,u:1}})+waste('hrot');
+    w+=cutLine(SIDE1,u1)+cutLine(SIDE2,u2);
+    w+=steelRuler(SIDE1[0],SIDE1[1],n1,r1)+steelRuler(SIDE2[0],SIDE2[1],n2,r2);
+    return w});
+  const kn=(P,u,a)=>{const q=ptAt(P,u),[x,y]=tv(c,q[0],q[1]);return knife(x,y,a)};
+  if(t>.1&&t<.44) s+=kn(SIDE1,u1,-25);                 // horní bok: rukojeť vlevo nahoru (odpad nahoře)
+  if(t>.56&&t<.9) s+=kn(SIDE2,u2,205);                 // dolní bok: rukojeť vlevo dolů (odpad dole)
+  s+=pill(131,8,'ocelové pravítko, ne destička','ta','end');
+  s+=fade(seg(t,.3,.36),pill(131,86,'nůž tahem od prstů volné ruky','ts','end'));
+  return s;
+},{v:'RUB',sub:'hrot'});
+
+// E3 — vrchol R4
+add('E','Uřízněte vrchol R4','Vrchol R4 řízněte od ruky; s ocelovou rohovou šablonou přiložte lob Ø 8 mm na značku a veďte nůž po oceli, ve 2–3 tazích.',11000,t=>{
+  const c=camL(CAM_TIP,{cx:198,cy:0,sx:67.5,sy:46,k:3.2},es(t,.02,.14)*(1-es(t,.8,.9)));
+  const tpl=seg(t,.12,.2)*(1-seg(t,.72,.78));
+  const passes=3,u=seg(t,.22,.7)*passes,pi=Math.min(passes-1,Math.floor(u)),pu=es(u-pi,0,1);
+  const wo=es(t,.78,.92);
+  let s=withCam(c,()=>{let w=matBg(140,240,-40,40)+belt({shape:'hrot',holes:HOLES,trace:{P:HROT_TR,u:1}});
+    w+=waste('hrot',18*wo,26*wo,1-seg(t,.86,.96));
+    w+=cutLine(SIDE1,1)+cutLine(SIDE2,1)+cutLine(NOSE_TR,t>.7?1:(pi>0?1:pu),'var(--hole)');
+    w+=cornerTpl(tpl,10*(1-seg(t,.12,.2)));
+    return w});
+  if(t>.22&&t<.7){const q=ptAt(NOSE_TR,pu),[x,y]=tv(c,q[0],q[1]);const ox=q[0]-(APEX-NOSE),oy=q[1],l=Math.hypot(ox,oy);s+=knife(x,y,kAng(ox/l+oy/l*.8,oy/l-ox/l*.8))}
+  s+=fade(tpl,pill(131,8,'rohová šablona: lob Ø 8 mm na značce','t','end'));
+  if(t>.22&&t<.72) s+=pill(131,86,`tah ${pi+1} / ${passes}`,'ta','end');
+  s+=fade(seg(t,.2,.26)*(1-seg(t,.7,.74)),pill(131,14.5,'bez šablony: od ruky po rýze','ts','end'));
+  if(t>.92) s+=fade(seg(t,.92,.97),pill(131,86,'hrot uříznutý','tok','end'));
+  return s;
+},{v:'RUB',sub:'hrot'});
+
+// E4 — zaoblený konec
+add('E','Uřízněte zaoblený konec','Zaoblený konec řežte od ruky po rýze v několika tazích (ověřte na odřezku), nebo výsečníkem na konec opasku.',10000,t=>{
+  const c=CAM_TIP;const passes=3,u=seg(t,.08,.74)*passes,pi=Math.min(passes-1,Math.floor(u)),pu=es(u-pi,0,1);
+  const wo=es(t,.78,.92);
+  let s=withCam(c,()=>{let w=matBg(140,240,-40,40)+belt({shape:'round',holes:HOLES,trace:{P:ROUND_TR,u:1}});
+    w+=waste('round',22*wo,0,1-seg(t,.86,.96));
+    w+=`<path d="${pd(ppart(ROUND_TR,pi>0||t>.74?1:pu))}" fill="none" stroke="var(--hole)" stroke-width="${sw(.25+.15*Math.min(pi,2))}" stroke-linecap="round"/>`;
+    return w});
+  if(t>.08&&t<.74){const q=ptAt(ROUND_TR,pu),[x,y]=tv(c,q[0],q[1]);const ox=q[0]-RC,oy=q[1],l=Math.hypot(ox,oy);s+=knife(x,y,kAng(ox/l+oy/l*.8,oy/l-ox/l*.8))}
+  if(t>.08&&t<.76) s+=pill(131,8,`od ruky po rýze · tah ${pi+1}`,'ta','end');
+  s+=pill(131,86,'ověřte na odřezku','ts','end');
+  // druhá možnost: výsečník na konec opasku (obrys ostří)
+  const o=seg(t,.8,.88);
+  if(o>0){const [x,y]=tv(c,RC,0);s+=fade(o,pill(131,14.5,'nebo výsečník na konec opasku','t','end')+`<path d="M${f(x)} ${f(y-H*c.k-1.2)} A${f(H*c.k+1.2)} ${f(H*c.k+1.2)} 0 0 1 ${f(x)} ${f(y+H*c.k+1.2)}" fill="none" stroke="var(--steel-d)" stroke-width="1" stroke-dasharray="2 1.2" opacity=".8"/>`)}
+  return s;
+},{v:'RUB',sub:'zaoblený'});
+
+// F1 — hrany
+add('F','Dokončete hrany','Srazte a zaleštěte hrany posledních 30 cm, hranu nového konce a vnitřní hranu oválu (přes ni jezdí trn).',11000,t=>{
+  const c=camL(CAM_F,CAM_TIP,es(t,.4,.5)*(1-es(t,.84,.92)));
+  const fin=es(t,.1,.82);
+  let s=withCam(c,()=>matBg(-200,280,-60,60)+belt({shape:'hrot',holes:HOLES,finish:fin}));
+  const [ax,ay]=tv(c,LAST30,H),[bx]=tv(c,APEX,H);
+  if(c.k<.5){s+=fade(1-seg(t,.84,.9),`<path d="M${f(ax)} ${f(ay+4)} V${f(ay+6)} H${f(bx)} V${f(ay+4)}" fill="none" stroke="var(--accent)" stroke-width=".4"/>`+pill((ax+bx)/2,ay+11,'posledních 30 cm','ta','middle'));
+    const [lx,ly]=tv(c,-150,-H);s+=pill(lx,ly-3,'hotové z lekce 3','ts');}
+  if(t>.05&&t<.84){const P=[[LAST30,-H],...HROT_TR,[LAST30,H]];const q=ptAt(P,fin),[x,y]=tv(c,q[0],q[1]);s+=t<.45?beveler(x,y):slicker(x,y)}
+  if(t<.86) s+=pill(131,8,t<.45?'srazte hrany':'zaleštěte hrany','t','end');
+  // vnitřní hrana oválu u přezky (25 × 6 mm), zvětšeno
+  const o=seg(t,.84,.9);
+  if(o>0){let ib=`<rect x="60" y="69" width="28" height="13" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".3"/><path d="M66 73.5 H82 A2 2 0 0 1 82 77.5 H66 A2 2 0 0 1 66 73.5 Z" fill="var(--hole)" stroke="var(--burn)" stroke-width=".7"/>`;
+    ib+=notes([['vnitřní hrana','t'],['oválu u přezky'],['(přes ni jezdí trn)']],71.5,4.8,91);
+    s+=fade(o,inset('OVÁL (zvětšeno)',ib,{x:56,y:59,w:77,h:27}));}
+  return s;
+},{v:'RUB'},'Tip: podrobný postup je v animaci Dokončení hran, část D.');
+
+// F2 — balzám
+add('F','Natřete balzámem','Pak natřete balzámem zbytek pásu.',8000,t=>{
+  const c=CAM_F;const p=es(t,.1,.85);
+  let s=withCam(c,()=>matBg(-200,280,-60,60)+
+    belt({shape:'hrot',face:'lic',holes:HOLES,finish:1,balm:p,balmDone:true}));
+  if(t>.08&&t<.88){const x=L(LAST30+20,APEX-10,(Math.sin(t*28)+1)/2*.25+p*.75);const [cx,cy]=tv(c,x,Math.sin(t*40)*8);s+=cloth(cx,cy)}
+  const [ax,ay]=tv(c,LAST30,H),[bx]=tv(c,APEX,H);
+  s+=`<path d="M${f(ax)} ${f(ay+4)} V${f(ay+6)} H${f(bx)} V${f(ay+4)}" fill="none" stroke="var(--accent)" stroke-width=".4"/>`+pill((ax+bx)/2,ay+11,'zbytek: posledních 30 cm','ta','middle');
+  const [lx,ly]=tv(c,-150,-H);s+=pill(lx,ly-3,'balzám z lekce 4','ts');
+  return s;
+},{v:'LÍC'});
+
+// F3 — zkouška všech dírek
+add('F','Vyzkoušejte všechny dírky','Zapněte pásek na prostřední dírku, pak na krajní. Zapište, jestli prostřední dírka sedí.',10000,t=>{
+  const c=CAM_FRONT;
+  const h1=es(t,.36,.5), h2=es(t,.62,.76);
+  const hx=t<.36?MID:(t<.5?L(MID,HOLES[0],h1):(t<.62?HOLES[0]:L(HOLES[0],HOLES[NH-1],h2)));
+  const settled=(t<.36)||(t>.5&&t<.62)||t>.76;
+  let s=withCam(c,()=>worn({tx0:APEX+PRONG-hx,shape:'hrot',holes:true,prongIn:settled}));
+  const [px,py]=tv(c,PRONG,0);
+  const lab=t<.36?'prostřední':(t>.5&&t<.62?'krajní':(t>.76?'krajní':''));
+  if(lab) s+=pill(px,py+17,lab,'ta','middle');
+  const o=seg(t,.82,.9);
+  if(o>0) s+=fade(o,`<rect x="80" y="68" width="51" height="15" rx="2" class="panelbox"/>`+lbl(83,74,'Prostřední dírka','ts')+lbl(83,80,'Sedí / Nesedí','t')+tick(126,77.5,.8));
+  s+=pill(131,8,'schéma','ts','end');
+  return s;
+},{v:'LÍC',sub:'na sobě'});
+
+// ---------- engine ----------
+const svg=document.getElementById('stage');
+const DEFS=`<defs>
+<filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx=".6" dy="1" stdDeviation=".8" flood-opacity=".28"/></filter>
+<linearGradient id="licS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--lic-hi)"/><stop offset=".55" stop-color="var(--lic)"/><stop offset="1" stop-color="var(--lic-d)"/></linearGradient>
+<pattern id="rubP" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="var(--rub)"/><path d="M.5 1.2 l1.6 .5 M3.2 .6 l1.4 -.4 M1.4 3.8 l1.2 .8 M4 3.1 l1.5 .3 M2.6 5.2 l1.3 -.5 M.2 4.9 l.9 .3" stroke="var(--rub-fib)" stroke-width=".35" stroke-linecap="round"/></pattern>
+<marker id="ar" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--accent)"/></marker>
+<marker id="arI" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--ink)"/></marker>
+</defs>`;
+const badge=document.getElementById('badge'),sideEl=document.getElementById('side'),chip=document.getElementById('chip'),sub=document.getElementById('sidesub');
+const capNo=document.getElementById('capNo'),capT=document.getElementById('capT'),capB=document.getElementById('capB'),counter=document.getElementById('counter');
+const prog=document.getElementById('prog');
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const partKeys=Object.keys(PARTS);const barEls=[];const segEls={};
+partKeys.forEach(k=>{const b=document.createElement('button');b.className='pseg';b.type='button';b.setAttribute('aria-label',`Část ${k}: ${PARTS[k]}`);
+  const bars=document.createElement('div');bars.className='bars';S.forEach((st,i)=>{if(st.part===k){const sp=document.createElement('span');const bb=document.createElement('b');sp.appendChild(bb);bars.appendChild(sp);barEls[i]=bb;}});
+  const pl=document.createElement('div');pl.className='pl';pl.innerHTML=`<b>${k}</b><span> · ${PARTS[k]}</span>`;b.append(bars,pl);prog.appendChild(b);segEls[k]=b;
+  b.addEventListener('click',()=>{setPlay(false);go(S.findIndex(s=>s.part===k),1)});});
+let idx=0,tt=1,playing=false,last=0,raf=0;
+function numInPart(i){const p=S[i].part;return S.slice(0,i+1).filter(s=>s.part===p).length}
+function setSide(st){
+  const side=st.side; if(!side){badge.hidden=true;return}
+  badge.hidden=false; let v,sb='';
+  if(typeof side==='object'){v=side.v;sb=side.sub||''} else {v=side==='rub'?'RUB':'LÍC'}
+  sideEl.textContent=v; chip.style.background=v==='LÍC'?'var(--chip-lic)':'var(--chip-rub)'; sub.textContent=sb;
+}
+function fitPills(){svg.querySelectorAll('g.pill').forEach(g=>{const tx=g.querySelector('text'),r=g.querySelector('rect');try{const b=tx.getBBox();if(!b.width)return;r.setAttribute('x',f(b.x-1.2));r.setAttribute('y',f(b.y-.5));r.setAttribute('width',f(b.width+2.4));r.setAttribute('height',f(b.height+1))}catch(e){}})}
+function render(){
+  const st=S[idx]; UID=0;
+  let body='';
+  try{ body=st.draw(tt);}catch(e){console.error(e)}
+  CK=1; svg.innerHTML=DEFS+body; fitPills();
+  setSide(st);
+  capNo.textContent=`${st.part}${numInPart(idx)}`; capT.textContent=st.title; capB.textContent=st.body;
+  if(st.tip){const sp=document.createElement('span');sp.className='tip';const m=st.tip.match(/^(Tip[^:]*:)\s*(.*)$/);if(m){const b=document.createElement('b');b.textContent=m[1];sp.append(b,' '+m[2])}else sp.textContent=st.tip;capB.appendChild(sp)}
+  counter.textContent=`krok ${idx+1} / ${S.length}`;
+  barEls.forEach((b,i)=>{b.style.transform=`scaleX(${i<idx?1:i===idx?tt:0})`});
+  partKeys.forEach(k=>segEls[k].classList.toggle('on',k===st.part));
+}
+function go(i,t=0){idx=Math.max(0,Math.min(S.length-1,i));tt=reduce?1:t;hold=0;render();}
+function setPlay(p){playing=p;document.getElementById('playIcon').innerHTML=p?'<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';document.getElementById('bPlay').setAttribute('aria-label',p?'Pozastavit':'Přehrát');if(p){last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}}
+let hold=0;
+function loop(now){if(!playing)return;const dt=now-last;last=now;
+  if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
+  else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
+  raf=requestAnimationFrame(loop)}
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} else if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
+document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
+document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
+document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};
+// deep links: část (#A–#F) otevře svůj první krok, krok (#B3) přímo ten krok; zastavené
+function stepFromHash(){const m=/^([A-Z])([0-9]+)?$/.exec(decodeURIComponent((location.hash||'').slice(1)).trim().toUpperCase());if(!m||!Object.prototype.hasOwnProperty.call(PARTS,m[1]))return -1;const ix=[];S.forEach((s,i)=>{if(s.part===m[1])ix.push(i)});const n=m[2]===undefined?1:+m[2];return n>=1&&n<=ix.length?ix[n-1]:-1}
+let auto=false;
+const hs=stepFromHash();
+if(hs>=0){auto=true;go(hs,1)} else go(0,1); // meaningful still
+window.addEventListener('hashchange',()=>{const i=stepFromHash();if(i>=0){auto=true;setPlay(false);go(i,1)}});
+window.__pasek={go:(i,t)=>{auto=true;setPlay(false);idx=i;tt=t;render()},steps:S.length,parts:S.map(s=>s.part),titles:S.map(s=>s.title),
+  geo:{width:W,tipLen:+TIPLEN.toFixed(2),holes:HOLES,apexToMid:APEX_TO_MID,apexToFirst:APEX_TO_FIRST,far:+FAR.toFixed(2),roundCentre:RC,holeD:HD}};
+if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!auto){auto=true;io.disconnect();go(0,0);setPlay(true)}})},{threshold:.45});io.observe(svg)}
+})();
+</script>
+<script>
+// Hidepath: „Zpět do lekce“ = krok zpět v historii, když se sem přišlo z aplikace; jinak úvod aplikace.
+(function(){var a=document.querySelector('[data-back]');if(!a)return;a.addEventListener('click',function(e){var o='';try{o=document.referrer?new URL(document.referrer).origin:'';}catch(_){}if(o===location.origin&&history.length>1){e.preventDefault();history.back();}});})();
+</script>
+</body>
+</html>

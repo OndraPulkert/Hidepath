@@ -5,9 +5,21 @@ Jedna stránka k ponku. Proč je co tak, jak je, stojí v
 Text poptávky pro řezárnu je v [`opasek-sablona-poptavka.md`](opasek-sablona-poptavka.md).
 
 > **Nic z toho není odzkoušené v praxi.** Geometrie je ověřená proti třem komerčním šablonám
-> a křížově proti naší tiskové verzi, ale destičku jsem nikdy nedržel v ruce ani já, ani ty.
-> První pásek je zkouška. Před objednáním akrylátu si vytiskni kontrolní PDF a projdi si celý
-> postup na papíru a na odřezku — je to zdarma.
+> a křížově proti naší tiskové verzi. Destička je dodaná (MK Plexi); než ji použiješ, projdi
+> **Kontrolu destičky po dodání** v [`opasek-parametry.md`](opasek-parametry.md). První pásek je
+> zkouška: postup si nejdřív projdi na odřezku.
+
+## Rozhodnutí (2026-10-08)
+
+- **Pásek je parametrický**: šířka, tloušťka, obvod a konec se volí, zbytek se spočítá. Meze
+  a co destička pokryje: [`opasek-parametry.md`](opasek-parametry.md). Čísla níže platí pro
+  výchozí pásek **40 mm, 3,5 mm, 5 dírek po 25 mm**.
+- **Konec obě varianty na výběr**: hrot (řada 1) i zaoblený (řada 2).
+- **Přírodní pás bez barvení**, po zaleštění hran balzám nebo sedlářský tuk.
+- **Poutko 12 mm** široké.
+- **Dírky pro trn Ø 5 mm**, nýty a konce oválu Ø 6 mm.
+- **Nic není koupené** → nákupní seznam níže platí celý.
+- **Destička je dodaná.**
 
 ## 1. Než něco koupíš: změř si obvod
 
@@ -39,9 +51,9 @@ kterou používáš**, měřená na pásku, který ti sedí. Dvě metody:
 | **Pás z třísločiněné kůže, šířka podle přezky, tloušťka 3,0–4,0 mm** | Nýt vyber podle změřené tloušťky — viz krok 3.                                                                                                                                                                                 |
 | **Přezka** ve shodné šířce                                           | Světlost přezky musí odpovídat šířce pásu.                                                                                                                                                                                     |
 | **2× šroubovací nýt (chicago screw) 10/6**                           | 10 = Ø hlavičky, 6 = délka dříku. Sedí na pás 3,5–3,75 mm; jiná tloušťka = jiný dřík, viz krok 3.                                                                                                                              |
-| **Výsečník Ø 4,5–5 mm** (lidově průbojník)                           | Na dírky pro trn. Průměr = trn u kořene + 0,5 mm; u přezky 40 mm 4,5 nebo 5 mm. **5 mm je běžná velikost, 4,5 mm se prodává zřídka** (WUTA jednotlivě, CraftPoint sada 2–5). Destička dává jen středy, průměr určuje výsečník. |
+| **Výsečník Ø 5 mm** (lidově průbojník)                               | Na dírky pro trn. Průměr = trn u kořene + 0,5 mm; u přezky 40 mm 4,5 nebo 5 mm. **5 mm je běžná velikost, 4,5 mm se prodává zřídka** (WUTA jednotlivě, CraftPoint sada 2–5). Destička dává jen středy, průměr určuje výsečník. |
 | **Průbojník Ø 6 mm**                                                 | Na nýty a oba konce oválu. **Revolverový děrovač 2–4,5 mm šestku nepokryje** — to je nejčastější nákupní chyba.                                                                                                                |
-| **Kulaté rýsovací šídlo**                                            | Tupé projde otvory, ale ne 1mm sloty zaobleného konce.                                                                                                                                                                         |
+| **Kulaté rýsovací šídlo**                                            | Musí projít otvory Ø 2 mm a 2mm sloty zaobleného konce.                                                                                                                                                                        |
 | **Odřezek kůže na poutko**                                           | Délku změříš pravítkem na destičce.                                                                                                                                                                                            |
 | **Ořezávač hran + leštítko** (Tokonole, plátno)                      | Hran je 2,4 m, je to většina práce.                                                                                                                                                                                            |
 | **Dvě lišty nebo odřezky stejně silné jako pás**                     | Pod destičku, viz krok 4.                                                                                                                                                                                                      |
@@ -132,8 +144,10 @@ Vlevo u každé řady je vygravírované **číslo řady**. Zkosený roh je **vl
 tedy přikládá **dvakrát**: raz na řadu 3, raz na řadu 1 nebo 2.
 
 Prostřední dírku poznáš podle **dvou gravírovaných křížků nad ní a pod ní** (jsou to rysky,
-ne otvory). Který ze čtyř oblouků je tvůj: **konec oblouku leží přesně na lince tvé šířky** —
+ne otvory). Který ze dvou oblouků je tvůj: **konec oblouku leží přesně na lince tvé šířky** —
 srovnáš pás na linku „40" a tvůj oblouk je ten, který se té linky dotýká.
+Oblouky jsou jen pro **40 a 30 mm**. Pás 35 nebo 45 mm: zaoblený konec z tiskového listu nebo
+kružítkem r = polovina šířky.
 
 Na řadě 3 jsou **šest stejně velkých otvorů Ø 2 mm** a je nutné je nepoplést:
 **otvory pro nýty jsou ty čtyři v jedné přímce.** Dva otvory mimo tuhle přímku, spojené
@@ -174,9 +188,9 @@ otvor uprostřed pásu je zkažený pásek bez nápravy.
     linku. Označ zbylé 4 dírky a obtáhni tvar konce, u řady 1 jen dokud nedojdeš k hraně pásu
     (dál je výřez záměrně širší).
 12. **Označit dírky i tvar konce musíš v jednom přiložení.** Registrovat destičku na už
-    vyseknutou dírku Ø 4,5 mm je nepřesné — právě „jedno přiložení, žádná kumulace chyby" je
+    vyseknutou dírku Ø 5 mm je nepřesné — právě „jedno přiložení, žádná kumulace chyby" je
     důvod, proč jsou v jedné řadě.
-13. **Vysekni 4,5mm dírky a uřízni konec pásu.** Rovné boky špičky řež podle kovového pravítka,
+13. **Vysekni 5mm dírky a uřízni konec pásu.** Rovné boky špičky řež podle kovového pravítka,
     ne podle destičky – akrylátová hrana není vodítko pro nůž, čepel by ji poškodila a příště by
     značila jinde. Vrchol R4 je krátký oblouk od ruky; kdo má ocelovou rohovou šablonu (viz
     `notes-vybaveni.md`), přiloží lob Ø 8 mm na obtaženou značku a vede nůž po oceli, na 3,5 mm
@@ -192,7 +206,7 @@ a uvězněná v kapse mezi dvěma nýty — právě k tomu ten druhý nýt je.
 - **Délku** neodhaduj, změř: obtoč papírový pásek okolo složeného konce, označ přeplátování
   a odečti na **pravítku u horní hrany destičky** (nula je levá hrana). Pro 40 × 3,5 mm to
   vychází **109 mm** (pro 4 mm 111 mm, pro 3 mm 107 mm).
-- **Šířka** 15–20 mm, **přeplátování** 15 mm, slepit a spoj schovat pod pás. Poutko se dělá
+- **Šířka** 12 mm (rozhodnutí 2026-10-08), **přeplátování** 15 mm, slepit a spoj schovat pod pás. Poutko se dělá
   z odřezku, klidně tenčího než pás.
 - Poutko se opírá o **hlavičky nýtů Ø 10 mm**, takže světlá kapsa je 47,7 − 10 = **37,7 mm**
   a poutko 12 mm v ní má 25,7 mm vůle. V praxi to nevadí, protože poutkem prochází volný konec

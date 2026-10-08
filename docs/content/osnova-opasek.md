@@ -5,9 +5,21 @@ společné a co patří jen opasku. Všechna čísla jsou z ověřených podklad
 [`sablony-zdroje.md`](sablony-zdroje.md) a postupu k destičce
 [`../zadani/opasek-postup.md`](../zadani/opasek-postup.md); co ověřené není, je označené.
 
+## Rozhodnutí uživatele (2026-10-08)
+
+- **Parametrický pásek**: uživatel volí šířku, tloušťku, obvod a konec; délka pásu, poutko,
+  dřík nýtu, dírky, hrot, listy k tisku a nákup se spočítají. Meze a pokrytí destičkou:
+  [`../zadani/opasek-parametry.md`](../zadani/opasek-parametry.md).
+- **Konec obě varianty na výběr**: hrot i zaoblený.
+- **Přírodní pás bez barvení** + balzám nebo sedlářský tuk.
+- **Poutko 12 mm** široké; dírky pro trn **Ø 5 mm**; ovál 25 × 6 mm s konci **Ø 6 mm**.
+- **Nic není koupené** → projekt potřebuje nákupní plán.
+- **Destička je dodaná** (MK Plexi); papírové listy jsou záloha a cesta pro šířky a varianty,
+  které destička nepokryje.
+
 ## Co je to za výrobek
 
-Pásek z hotového pásu třísločiněné kůže, přezka na dvou šroubovacích nýtech, poutko, pět dírek,
+Výchozí pásek (40 mm, 3,5 mm): z hotového pásu třísločiněné kůže, přezka na dvou šroubovacích nýtech, poutko, pět dírek,
 konec buď anglická špička, nebo zaoblený. **Nešije se.** Délka: obvod + 234,3 mm (90 mm přehnutí
 u přezky, 144,3 mm od prostřední dírky ke konci).
 
@@ -23,7 +35,7 @@ u přezky, 144,3 mm od prostřední dírky ke konci).
 | Technika                     | U pouzdra                        | U opasku                                             |
 | ---------------------------- | -------------------------------- | ---------------------------------------------------- |
 | Srážení a leštění hran       | krátké hrany, tenká kůže         | **2,4 m** hran, silná kůže – většina práce projektu  |
-| Děrování průbojníkem         | dírky na steh nejsou průbojníkem | 5 × Ø 4,5 mm + 4 × Ø 6 mm + konce oválu              |
+| Děrování průbojníkem         | dírky na steh nejsou průbojníkem | 5 × Ø 5 mm + 4 × Ø 6 mm + konce oválu                |
 | Značení šídlem podle šablony | papírová šablona 1:1             | akrylátová destička, obtahování hrany výřezu         |
 | Rovný řez nožem              | ano                              | jen konec pásu a ovál                                |
 | Měření a kontrola měřítka    | kalibrační čtverec 50 mm         | kalibrační kóta 50 mm na destičce, kontrolní tisk A4 |
@@ -53,13 +65,13 @@ u přezky, 144,3 mm od prostřední dírky ke konci).
 
 ## Vybavení navíc oproti pouzdru
 
-| Položka                            | Stav v katalogu                      | Poznámka                                                          |
-| ---------------------------------- | ------------------------------------ | ----------------------------------------------------------------- |
-| Průbojník Ø 4,5 mm                 | doplnit                              | dírky pro trn                                                     |
-| Průbojník Ø 6 mm                   | doplnit                              | nýty a konce oválu; **revolverový děrovač 2–4,5 mm ho nepokryje** |
-| Značkovací destička (akrylát 3 mm) | zakázková výroba, poptáno 2026-09-11 | nebo papírová šablona 1:1                                         |
-| Ruční lis na nýty                  | volitelné („Kup později")            | šroubovací nýty lis nepotřebují                                   |
-| Ořezávač hran většího čísla        | **neověřeno**                        | pro 3,5 mm možná jiné číslo než na 1,2 mm                         |
+| Položka                            | Stav v katalogu           | Poznámka                                                          |
+| ---------------------------------- | ------------------------- | ----------------------------------------------------------------- |
+| Výsečník Ø 5 mm                    | `hole-punch-5mm`          | dírky pro trn                                                     |
+| Průbojník Ø 6 mm                   | doplnit                   | nýty a konce oválu; **revolverový děrovač 2–4,5 mm ho nepokryje** |
+| Značkovací destička (akrylát 3 mm) | **dodaná** (MK Plexi)     | jinak tiskové listy 1:1                                           |
+| Ruční lis na nýty                  | volitelné („Kup později") | šroubovací nýty lis nepotřebují                                   |
+| Ořezávač hran většího čísla        | **neověřeno**             | pro 3,5 mm možná jiné číslo než na 1,2 mm                         |
 
 ## Návrh lekcí (skica, není obsah)
 

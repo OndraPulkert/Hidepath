@@ -49,7 +49,9 @@ export interface BeltEndSpec {
 
 export const DEFAULT_BELT_END: BeltEndSpec = {
   beltWidthMm: 40,
-  beltThicknessMm: 4,
+  // Cílová tloušťka projektu (rozhodnutí 2026-10-08): na ni sedí nýt 10/6, viz
+  // `rivetPostRangeMm` a docs/zadani/opasek-postup.md krok 3. Destička na ní nezávisí.
+  beltThicknessMm: 3.5,
   slotLengthMm: 25,
   slotWidthMm: 6,
   rivetHoleMm: 6,
@@ -230,7 +232,9 @@ export const DEFAULT_BELT_TIP: BeltTipSpec = {
   beltWidthMm: 40,
   taperSlope: 0.453,
   noseRadiusMm: 4,
-  holeDiameterMm: 4.5,
+  // CraftPoint uvádí 4,5 mm, ale výsečník 5 mm je běžná velikost a postup ho kupuje
+  // (rozhodnutí 2026-10-08). Destička značí jen středy, průměr na ni nemá vliv.
+  holeDiameterMm: 5,
   holeCount: 5,
   holeSpacingMm: 25,
   apexToFirstHoleMm: 94.3,
@@ -301,7 +305,26 @@ export function apexToLastHoleMm(spec: BeltTipSpec): number {
   return spec.apexToFirstHoleMm + (spec.holeCount - 1) * spec.holeSpacingMm;
 }
 
-export function checkBeltTipSpec(spec: BeltTipSpec): string[] {
+/**
+ * Tvar konce se dírkami: `point` = anglický hrot (`tipLengthMm`), `round` = půlkruh
+ * o poloměru šířka/2, na boky tečný (řada 2 destičky, `buildBeltTipPreviewSvg(…, 'round')`).
+ */
+export type BeltTipShape = 'point' | 'round';
+
+/**
+ * Délka tvarovaného konce od vrcholu k plné šířce pásu: u hrotu `tipLengthMm`, u zaobleného
+ * konce poloměr půlkruhu (šířka/2).
+ */
+export function tipShapeLengthMm(spec: BeltTipSpec, shape: BeltTipShape = 'point'): number {
+  return shape === 'round' ? spec.beltWidthMm / 2 : tipLengthMm(spec);
+}
+
+/**
+ * Kontroly konce s dírkami. `shape` určuje, odkud se měří můstek před první dírkou: od konce
+ * hrotu, nebo od konce půlkruhu (r + Ø/2 + můstek; doplněno 2026-10-08 podle
+ * docs/zadani/opasek-parametry.md, dřív zaoblený konec tuhle kontrolu neměl).
+ */
+export function checkBeltTipSpec(spec: BeltTipSpec, shape: BeltTipShape = 'point'): string[] {
   const problems: string[] = [];
   // Validace vstupu musí být první: z neplatného sklonu nebo zaoblení vyjdou
   // odvozené hodnoty Infinity/NaN a chybová hlášení pak míří úplně jinam.
@@ -337,10 +360,10 @@ export function checkBeltTipSpec(spec: BeltTipSpec): string[] {
       `Můstek mezi dírkami je ${between.toFixed(2)} mm, minimum ${spec.minLigamentMm} mm.`,
     );
   }
-  const afterTip = spec.apexToFirstHoleMm - tipLengthMm(spec) - spec.holeDiameterMm / 2;
+  const afterTip = spec.apexToFirstHoleMm - tipShapeLengthMm(spec, shape) - spec.holeDiameterMm / 2;
   if (afterTip < spec.minLigamentMm) {
     problems.push(
-      `Mezi koncem hrotu a první dírkou je ${afterTip.toFixed(2)} mm, minimum ${spec.minLigamentMm} mm.`,
+      `Mezi koncem ${shape === 'round' ? 'oblouku' : 'hrotu'} a první dírkou je ${afterTip.toFixed(2)} mm, minimum ${spec.minLigamentMm} mm.`,
     );
   }
   const side = spec.beltWidthMm / 2 - spec.holeDiameterMm / 2;

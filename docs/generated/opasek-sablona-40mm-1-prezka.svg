@@ -4,7 +4,7 @@
 <text x="22" y="16" font-family="Helvetica, Arial, sans-serif" font-size="4.6" fill="#2b2b2b" text-anchor="start">Opasek 40 mm — strana 1: konec u přezky</text>
 <text x="22" y="22" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#6a6a6a" text-anchor="start">Měřítko 1:1 · tisk na A4 na 100 %, bez „přizpůsobit stránce“ · 4 otvory = 2 nýty</text>
 <text x="150" y="24" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#c0392b" text-anchor="start">KALIBRAČNÍ ČTVEREC</text>
-<text x="150" y="28" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#c0392b" text-anchor="start">po vytištění přeměř 50 × 50 mm</text>
+<text x="150" y="28" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#c0392b" text-anchor="start">po vytištění přeměřte 50 × 50 mm</text>
 <rect x="150" y="30" width="50" height="50" fill="none" stroke="#c0392b" stroke-width="0.4"/>
 <path d="M22 42 L22 222 L62 222 L62 42" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
 <line x1="42" y1="42" x2="42" y2="222" stroke="#b8b8b8" stroke-width="0.1" stroke-dasharray="3 3"/>
@@ -25,8 +25,8 @@
 <text x="76" y="182.35" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#1f6f43" text-anchor="start">kapsa pro poutko 47,7 mm (světlá 37,7 mm)</text>
 <text x="76" y="223" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#2b2b2b" text-anchor="start">konec pásu 90 mm od ohybu</text>
 <text x="22" y="39" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#6a6a6a" text-anchor="start">sem pokračuje hlavní pás (nahoře neřezat)</text>
-<text x="22" y="228" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Poutko — pásek 111 × 12 mm (obvod zdvojené části 96 mm + 15 mm přeplátování)</text>
-<rect x="22" y="232" width="111" height="12" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
+<text x="22" y="228" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Poutko — pásek 109 × 12 mm (obvod zdvojené části 94 mm + 15 mm přeplátování)</text>
+<rect x="22" y="232" width="109" height="12" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
 <line x1="22" y1="244" x2="22" y2="246" stroke="#7a7a7a" stroke-width="0.2"/>
 <text x="22" y="249.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">0</text>
 <line x1="32" y1="244" x2="32" y2="246" stroke="#7a7a7a" stroke-width="0.2"/>
@@ -49,13 +49,11 @@
 <text x="112" y="249.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">90</text>
 <line x1="122" y1="244" x2="122" y2="246" stroke="#7a7a7a" stroke-width="0.2"/>
 <text x="122" y="249.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">100</text>
-<line x1="132" y1="244" x2="132" y2="246" stroke="#7a7a7a" stroke-width="0.2"/>
-<text x="132" y="249.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">110</text>
-<text x="22" y="258" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">1. Přenes značky na rub pásu: ohyb, drážku i všechny čtyři otvory.</text>
-<text x="22" y="262.2" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">2. Vysekni 6mm otvory pro nýty i konce drážky (stejný průbojník), drážku mezi nimi vyřízni nožem.</text>
-<text x="22" y="266.4" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">3. Navlékni poutko na přehnutý konec. Teprve pak ohni konec kolem přezky.</text>
-<text x="22" y="270.6" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">4. Sešroubuj oba nýty. Poutko zůstane uvězněné v kapse mezi nimi.</text>
+<text x="22" y="258" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">1. Na rub pásu přeneste ohyb, drážku a všechny čtyři otvory.</text>
+<text x="22" y="262.2" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">2. Vysekněte Ø 6 mm jen 2 otvory blíž ke konci a konce drážky, boky drážky řízněte nožem.</text>
+<text x="22" y="266.4" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">3. Ohněte konec kolem příčky přezky a navlékněte poutko.</text>
+<text x="22" y="270.6" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">4. Druhé 2 otvory označte skrz vyseknuté, vysekněte a sešroubujte nýty.</text>
 <text x="22" y="274.8" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Nýty: 2 kusy, každý prochází oběma vrstvami — proto jsou otvory čtyři.</text>
 <text x="22" y="279" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Rozměry z šablony Black Flag Leather Goods (jeden zdroj, ať se nemíchají rozteče).</text>
-<text x="22" y="283.2" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Délka poutka a zaoblení konce jsou spočítané, ne ověřené — vyzkoušej na odřezku.</text>
+<text x="22" y="283.2" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Délka poutka a zaoblení konce jsou spočítané, ne ověřené — ověřte na odřezku.</text>
 </svg>

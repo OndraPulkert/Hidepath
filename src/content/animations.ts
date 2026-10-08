@@ -16,7 +16,9 @@ import { type AnimationLink } from '@/content/schema';
  * - vicko-magnet (`#A`–`#B`): stejně jako kapsa-prisiti; `#vymena` posune na rámeček výměny
  *   magnetu, staré `#anim-plisek` a `#anim-magnet` stránka dál bere jako `#A` a `#B`,
  * - vicko-p1-rez (`#A`–`#E`), vicko-okenka (`#A`–`#D`), vicko-d2-zada (`#A`–`#D`)
- *   a vicko-telo-s4s5 (`#A`–`#E`): stejně jako kapsa-prisiti.
+ *   a vicko-telo-s4s5 (`#A`–`#E`): stejně jako kapsa-prisiti,
+ * - pasek-prezka (`#A`–`#E`) a pasek-spicka (`#A`–`#F`): stejně jako kapsa-prisiti; kresba je
+ *   příklad 40 × 3,5 mm, čísla pro vlastní pásek jsou v tabulce „Váš pásek“.
  *
  * `steps` = názvy kroků každé části ve stejném pořadí jako na stránce (`add('B', 'název', …)`).
  * Stránky kapsy umí otevřít i jednotlivý krok: `#B3` = třetí krok části B, stejně jako ho
@@ -521,6 +523,66 @@ export const animationPages = {
         'Došijte k y 8, 2 otvory zpět',
         'Zkontrolujte a ušijte druhý bok',
       ],
+    },
+  },
+  beltBuckleEnd: {
+    path: '/animace/pasek-prezka.html',
+    title: 'Pásek: konec s přezkou',
+    sections: {
+      A: 'Část A – destička, nebo list',
+      B: 'Část B – značení na rubu',
+      C: 'Část C – výsek',
+      D: 'Část D – ohyb a poutko',
+      E: 'Část E – nýty',
+    },
+    steps: {
+      A: ['Řada 3, nebo list 1', 'List 1: přeměřte čtverec'],
+      B: [
+        'Upevněte pás a destičku',
+        'Přiložte řadu 3',
+        'Označte 4 otvory pro nýty',
+        'Značky ohybu a ovál',
+        'Zkontrolujte značky',
+        'S listem 1',
+      ],
+      C: ['Vysekněte první dvojici', 'Konce oválu Ø 6', 'Boky oválu nožem'],
+      D: ['Ohněte konec kolem příčky', 'Změřte poutko proužkem', 'Vyřízněte a slepte poutko'],
+      E: [
+        'Navlékněte poutko',
+        'Označte druhou dvojici skrz otvory',
+        'Vysekněte druhou dvojici',
+        'Sešroubujte nýty',
+        'Hotový konec v řezu',
+      ],
+    },
+  },
+  beltHolesTip: {
+    path: '/animace/pasek-spicka.html',
+    title: 'Pásek: dírky a špička',
+    sections: {
+      A: 'Část A – prostřední dírka',
+      B: 'Část B – hrot, řada 1',
+      C: 'Část C – zaoblený, řada 2',
+      D: 'Část D – list 2',
+      E: 'Část E – dírky a konec',
+      F: 'Část F – hrany a zkouška',
+    },
+    steps: {
+      A: ['Vyzkoušejte pásek na sobě', 'Změřte a porovnejte', 'Stačí pás?'],
+      B: [
+        'Řada 1 nebo 2, nebo list 2',
+        'Přiložte na prostřední dírku',
+        'Označte v jednom přiložení',
+      ],
+      C: ['Přiložte řadu 2 na prostřední dírku', 'Označte v jednom přiložení'],
+      D: ['Vytiskněte list 2', 'Přiložte list a propíchněte'],
+      E: [
+        'Vysekněte dírky',
+        'Uřízněte boky hrotu',
+        'Uřízněte vrchol R4',
+        'Uřízněte zaoblený konec',
+      ],
+      F: ['Dokončete hrany', 'Natřete balzámem', 'Vyzkoušejte všechny dírky'],
     },
   },
 } as const satisfies Record<

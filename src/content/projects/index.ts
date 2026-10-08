@@ -1,3 +1,4 @@
+import { beltProject } from '@/content/projects/belt/project';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
 import { lidWalletProject } from '@/content/projects/lid-wallet/project';
@@ -9,10 +10,22 @@ import { type ProjectDefinition } from '@/content/schema';
  */
 export { LID_RECORD_IDS, LID_V12_VARIANTS } from '@/content/projects/lid-wallet/record-ids';
 
+/**
+ * Id polí zápisníku pásku pro formulář „Váš pásek“ (`browserGenerator` `belt-config`)
+ * a pro „Moje pásky“.
+ */
+export {
+  BELT_CONFIG_FIELD_PREFIX,
+  BELT_CONFIG_LESSON_SLUG,
+  BELT_RECORD_IDS,
+  BELT_TIP_CHOICES,
+} from '@/content/projects/belt/record-ids';
+
 export const projects: readonly ProjectDefinition[] = [
   cardHolderProject,
   coinCardHolderProject,
   lidWalletProject,
+  beltProject,
 ];
 
 /**

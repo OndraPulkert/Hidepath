@@ -407,9 +407,11 @@ export const patternSheetsDefinitionSchema = z.object({
   defaultVariantLabel: z.string().min(1).optional(),
   /**
    * Listy umí aplikace vygenerovat i v prohlížeči pro změřené hodnoty (formulář na stránce tisku).
-   * Klíč vybere formulář; výpočet a kreslení jsou v `src/lib/patterns`.
+   * Klíč vybere formulář; výpočet a kreslení jsou v `src/lib/patterns`. `belt-config` =
+   * „Váš pásek“ (šířka, tloušťka, obvod, konec, dírky); listy mají id `prezka` a `spicka`
+   * (`BELT_SHEET_IDS`).
    */
-  browserGenerator: z.enum(['lid-wallet-thickness']).optional(),
+  browserGenerator: z.enum(['lid-wallet-thickness', 'belt-config']).optional(),
 });
 export type PatternSheetsDefinition = z.infer<typeof patternSheetsDefinitionSchema>;
 

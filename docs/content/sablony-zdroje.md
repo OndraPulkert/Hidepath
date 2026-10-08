@@ -316,8 +316,9 @@ místo dvou. Čepel držet kolmo, netlačit. Obrys kreslit na rub, aby na líci 
 z lekce 5).
 
 **Konec u přezky se netvaruje.** Zůstává rovný, jen se v něm vyseknou 6mm otvory pro nýty, vyřízne
-drážka pro trn a konec se ohne v označeném místě. Drážku nejjednodušeji tak, že se vyseknou 4,5mm
-otvory na obou koncích drážky a spojí se nožem.
+drážka pro trn a konec se ohne v označeném místě. Drážku nejjednodušeji tak, že se vyseknou 6mm
+otvory na obou koncích drážky a spojí se nožem. (Oprava 2026-10-08: dřív tu stálo 4,5 mm; drážka
+je 6 mm široká, viz BFLG níže a `slotWidthMm` v `belt-end.ts`.)
 
 **Co k tomu není potřeba nový nástroj.** Generátor v seznamu nářadí uvádí jen odlamovací nůž 18 mm,
 řezací podložku a řezací pravítko; hranořízek, Tokonole, hladítko a špachtli označuje jako volitelné.

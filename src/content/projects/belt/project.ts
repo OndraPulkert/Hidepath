@@ -1,0 +1,1239 @@
+import { animationLink } from '@/content/animations';
+import { BELT_RECORD_IDS, BELT_TIP_CHOICES } from '@/content/projects/belt/record-ids';
+import {
+  type LessonDefinition,
+  type LessonPrint,
+  type MediaSlot,
+  type PhaseDefinition,
+  type ProjectDefinition,
+  type RecordField,
+  type StepRecall,
+} from '@/content/schema';
+
+/**
+ * Projekt 04 – Pásek. Pásek je parametrický: šířku (= přezka), tloušťku, obvod a konec volí
+ * uživatel ve formuláři „Váš pásek“ (`browserGenerator: 'belt-config'`, výpočet
+ * `src/lib/patterns/belt-config.ts`). Lekce proto čísla neopisují: odkazují na tabulku
+ * „Vaše čísla“ a čísla pro 40 × 3,5 mm, hrot a 5 dírek dávají jen jako příklad („např.“);
+ * `project.test.ts` hlídá, že příklady odpovídají modelu. Postup je z docs/zadani/opasek-postup.md,
+ * meze z docs/zadani/opasek-parametry.md. Nikdo pásek podle postupu zatím nepostavil: obsah je
+ * NÁVRH (draft) a co podklady neověřují, je v textu „ověřte na odřezku“.
+ */
+
+export const PROJECT_SLUG = 'belt';
+
+export const phases: readonly PhaseDefinition[] = [
+  { slug: 'enroll', code: '01', name: 'Výběr projektu', kind: 'enrollment' },
+  { slug: 'equipment', code: '02', name: 'Vybavení', kind: 'equipment' },
+  { slug: 'prepare', code: '03', name: 'Míry a trénink', kind: 'lessons' },
+  { slug: 'build', code: '04', name: 'Stavba pásku', kind: 'lessons' },
+  { slug: 'review', code: '05', name: 'Hodnocení', kind: 'completion' },
+];
+
+const draft = <T extends Omit<LessonDefinition, 'reviewStatus'>>(l: T): LessonDefinition => ({
+  ...l,
+  reviewStatus: 'draft',
+});
+
+const photo = (id: string, caption: string): MediaSlot => ({
+  id,
+  kind: 'photo',
+  caption,
+  status: 'planned',
+});
+
+/** Kde uživatel najde svá čísla (formulář na stránce listů střihu). */
+const TABLE = 'tabulka „Váš pásek“';
+/** Tvary pro „v …“ a „z …“. */
+const IN_TABLE = 'v tabulce „Váš pásek“';
+const FROM_TABLE = 'z tabulky „Váš pásek“';
+
+/** Volba v lekci 1: čím se značí (podle štítku „Destička“ v tabulce). */
+export const BELT_MARKING_ID = 'belt-marking';
+export const BELT_MARKING = { plate: 'plate', sheets: 'sheets' } as const;
+
+/** Délka poutka změřená papírovým proužkem (lekce 4). */
+const KEEPER_LENGTH_ID = 'belt-keeper-length';
+
+/** Obvod změřený na pásku při zkoušce na těle (lekce 5). */
+const FIT_WAIST_ID = 'belt-fit-waist';
+
+/** Podmínka tisku listů: destička pro tuto sestavu nejde. */
+const SHEETS_CONDITION =
+  'tabulka „Váš pásek“ ukazuje u této řady destičky „ne“, nebo jste v lekci 1 zvolili jen listy';
+
+const recall = {
+  waist: { fieldId: BELT_RECORD_IDS.waist, label: 'Obvod (lekce 1)' },
+  width: { fieldId: BELT_RECORD_IDS.width, label: 'Šířka = přezka (lekce 1)' },
+  tip: { fieldId: BELT_RECORD_IDS.tip, label: 'Konec (lekce 1)' },
+  thickness: { fieldId: BELT_RECORD_IDS.thickness, label: 'Tloušťka pásu (lekce 1)' },
+  prong: { fieldId: BELT_RECORD_IDS.prong, label: 'Trn přezky u kořene (lekce 1)' },
+  marking: { fieldId: BELT_MARKING_ID, label: 'Čím značíte (lekce 1)' },
+} satisfies Record<string, StepRecall>;
+
+const tipField: RecordField = {
+  kind: 'choice',
+  id: BELT_RECORD_IDS.tip,
+  label: 'Konec pásku',
+  options: [
+    { value: BELT_TIP_CHOICES.hrot, label: 'Hrot' },
+    { value: BELT_TIP_CHOICES.zaobleny, label: 'Zaoblený' },
+  ],
+};
+
+/** List střihu pásku (id podle `BELT_SHEET_IDS`; vygenerované listy mají stejný základ). */
+const sheet = (sheetId: 'prezka' | 'spicka', purpose: string): LessonPrint => ({
+  source: 'pattern-sheets',
+  sheetId,
+  copies: 1,
+  purpose,
+  paper: 'obyčejný papír A4',
+  condition: SHEETS_CONDITION,
+});
+
+const KNIFE = 'Nůž veďte tahem od prstů volné ruky.';
+const PUNCH =
+  'Prsty držící výsečník mějte u spodku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.';
+
+const L1 = '01-design-and-measure';
+const L2 = '02-scrap-training';
+const L3 = '03-long-edges';
+const L4 = '04-buckle-end';
+const L5 = '05-fit-and-middle-hole';
+const L6 = '06-holes-and-tip';
+
+export const lessons: readonly LessonDefinition[] = [
+  draft({
+    slug: L1,
+    title: 'Návrh pásku a míry',
+    order: 1,
+    phaseSlug: 'prepare',
+    estimatedMinutes: 60,
+    goal: 'Změřit obvod, vybrat šířku a konec, vyplnit „Váš pásek“, po dodání změřit pás a trn a zkontrolovat destičku.',
+    materials: [
+      'pásek, který nosíte, nebo krejčovský metr a kalhoty, ve kterých budete pásek nosit',
+      'destička MK Plexi',
+    ],
+    requiredEquipment: [],
+    recommendedEquipment: ['digital-caliper', 'steel-ruler'],
+    prerequisiteLessons: [],
+    steps: [
+      {
+        id: 'waist',
+        title: 'Změřte obvod',
+        body: 'Obvod tu není obvod pasu z krejčovské tabulky. Je to délka od ohybu u přezky k dírce, kterou nosíte. Máte pásek, který sedí: změřte ho od ohybu u přezky (ne od konce trnu) k používané dírce. Nemáte: provlékněte krejčovský metr poutky kalhot, ve kterých pásek nosíte, utáhněte na pohodlí a odečtěte. Je to tatáž míra.',
+        media: [photo('belt-l1-waist', 'Metr na pásku od ohybu u přezky k používané dírce')],
+        records: [
+          {
+            kind: 'number',
+            id: BELT_RECORD_IDS.waist,
+            label: 'Obvod',
+            hint: 'Od ohybu u přezky k používané dírce. Aplikace počítá 60–150 cm.',
+            unit: 'cm',
+            decimals: 1,
+            min: 60,
+            max: 150,
+          },
+        ],
+      },
+      {
+        id: 'width-and-tip',
+        title: 'Vyberte šířku a konec',
+        body: 'Šířka pásu = vnitřní světlost přezky: přezka 40 mm, pás 40 mm. Aplikace počítá 28–45 mm. Jednotrnovou přezku s ověřeným typem trnu má katalog pro 30, 35 a 40 mm; 45 mm má jen Andexnite. Konec vyberte: hrot, nebo zaoblený. Destička má zaoblený konec jen pro 30 a 40 mm, pro jiné šířky se konec tiskne na list 2.',
+        media: [],
+        records: [
+          {
+            kind: 'number',
+            id: BELT_RECORD_IDS.width,
+            label: 'Šířka = vnitřní světlost přezky',
+            hint: 'Celé mm, 28–45. Např. 40.',
+            unit: 'mm',
+            decimals: 0,
+            min: 28,
+            max: 45,
+          },
+          tipField,
+        ],
+      },
+      {
+        id: 'your-belt',
+        title: 'Vyplňte „Váš pásek“',
+        printLink: 'pattern-sheets',
+        body: `Na stránce Listy střihu otevřete formulář „Váš pásek“. Obvod, šířku a konec předvyplní zápisník. Tloušťku zatím nechte 3,5 mm, změříte ji po dodání. Z tabulky pod formulářem si přečtěte nejkratší délku pásu, přezku, nýt a štítek „Destička“. Sestavu uložte do „Moje pásky“. Čísla v dalších lekcích berte z této tabulky; hodnoty pro 40 × 3,5 mm jsou jen příklad.`,
+        media: [],
+        recalls: [recall.waist, recall.width, recall.tip],
+      },
+      {
+        id: 'order',
+        title: 'Objednejte podle tabulky',
+        body: `Plán „Co koupit“ je pro pásek 40 mm. Pro jinou šířku vyberte u pásu i přezky variantu vaší šířky, nýt podle řádku Nýt ${IN_TABLE}. Pás musí mít aspoň nejkratší délku z tabulky: pás 130 cm stačí do obvodu 106,5 cm (5 dírek po 25 mm). K pásu napište do poznámky „prosím blíž k 3,5 mm“. Nýt 10/6 sedí jen na pás 3,5–3,75 mm: když pás přijde jiný, nýt podle změřené tloušťky dokoupíte.`,
+        media: [],
+      },
+      {
+        id: 'measure-strap',
+        title: 'Po dodání změřte pás a trn',
+        body: 'Posuvkou změřte tloušťku pásu na řezu na několika místech. Zapište průměr zaokrouhlený na 0,25 mm. Pak změřte trn přezky u kořene. Dírky pro trn = trn + 0,5 mm; u přezky 40 mm vychází 4,5 nebo 5 mm.',
+        media: [photo('belt-l1-thickness', 'Posuvka měří tloušťku pásu na řezu')],
+        records: [
+          {
+            kind: 'number',
+            id: BELT_RECORD_IDS.thickness,
+            label: 'Tloušťka pásu',
+            hint: 'Průměr měření, zaokrouhlený na 0,25 mm (3,0 / 3,25 / 3,5 / 3,75 / 4,0).',
+            unit: 'mm',
+            decimals: 2,
+            target: { min: 3, max: 4, label: '3,0–4,0 mm' },
+          },
+          {
+            kind: 'number',
+            id: BELT_RECORD_IDS.prong,
+            label: 'Trn přezky u kořene',
+            hint: 'Ø dírek = trn + 0,5 mm.',
+            unit: 'mm',
+            decimals: 1,
+          },
+        ],
+      },
+      {
+        id: 'check-numbers',
+        title: 'Zkontrolujte nýt a výsečník',
+        printLink: 'pattern-sheets',
+        body: `Otevřete znovu „Váš pásek“: tloušťka a Ø dírek se předvyplní. Řádek Nýt ukáže potřebný dřík (např. pro 3,5 mm dřík 5,5–6,0 mm, tedy 10/6). Když objednaný nýt nesedí, objednejte jiný. Výsečník na dírky vyberte podle Ø dírek z tabulky.`,
+        media: [],
+        recalls: [recall.thickness, recall.prong],
+      },
+      {
+        id: 'plate-check',
+        title: 'Zkontrolujte destičku',
+        body: 'Měřte ocelovým pravítkem nebo posuvkou od levé krátké hrany. Obrys 215 × 184 mm (± 0,5 mm), zkosený roh vlevo nahoře. Kóta 50 mm měří 50 mm. Čísla řad a linek nejsou zrcadlená. Řada 3: 4 otvory v jedné přímce na 16,8 / 64,5 / 115,5 / 163,2 mm, ovál 77,5–102,5 mm, 2 značky ohybu na 90 mm. Řady 1 a 2: otvory na 10 / 35 / 60 / 85 / 110 mm. Šídlo projde všemi otvory Ø 2 mm. Odchylku vyfoťte s měřidlem, napište řezárně a destičku zatím nepoužívejte.',
+        media: [photo('belt-l1-plate', 'Destička na stole, ocelové pravítko u řady 3')],
+        records: [
+          {
+            kind: 'choice',
+            id: 'plate-check',
+            label: 'Kontrola destičky',
+            options: [
+              { value: 'ok', label: 'Sedí' },
+              { value: 'deviation', label: 'Odchylka – nepoužívat' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'plate-or-sheets',
+        title: 'Rozhodněte: destička, nebo listy',
+        body: `Pod štítkem „Destička“ ${IN_TABLE} je u každé řady „ano“, nebo „ne“. Řada s „ano“: značíte destičkou. Řada s „ne“: stiskněte „Vygenerovat listy A4“; za řadu 3 použijete list 1 (lekce 4), za řadu 1 nebo 2 list 2 (lekce 6). Destička neprošla kontrolou: značíte jen listy.`,
+        media: [],
+        records: [
+          {
+            kind: 'choice',
+            id: BELT_MARKING_ID,
+            label: 'Čím budete značit',
+            options: [
+              { value: BELT_MARKING.plate, label: 'Destičkou, kde tabulka ukazuje „ano“' },
+              { value: BELT_MARKING.sheets, label: 'Jen listy 1 a 2 (destička neprošla)' },
+            ],
+          },
+        ],
+      },
+    ],
+    checkpoints: [
+      {
+        slug: 'waist-recorded',
+        title: 'Obvod je změřený od ohybu u přezky k používané dírce a zapsaný.',
+        required: true,
+      },
+      {
+        slug: 'belt-chosen',
+        title:
+          'Šířka a konec jsou zapsané a sestava je uložená v „Moje pásky“; pás je aspoň tak dlouhý jako nejkratší délka z tabulky.',
+        required: true,
+      },
+      {
+        slug: 'strap-measured',
+        title: 'Tloušťka pásu a trn jsou zapsané; nýt i výsečník sedí na čísla z tabulky.',
+        required: true,
+      },
+      {
+        slug: 'marking-decided',
+        title: 'Destička je zkontrolovaná a je rozhodnuto, jestli značíte destičkou, nebo listy.',
+        required: true,
+      },
+    ],
+    commonMistakes: [
+      'Obvod pasu z krejčovské tabulky místo délky od ohybu u přezky k dírce.',
+      'Obvod měřený od konce trnu, ne od ohybu.',
+      'Pás objednaný kratší, než je nejkratší délka z tabulky.',
+      'Nýt 10/6 k pásu, který nemá 3,5–3,75 mm.',
+    ],
+    safety: [],
+    media: [photo('belt-l1-hero', 'Přezka, pás a tabulka Váš pásek v telefonu vedle destičky')],
+  }),
+
+  draft({
+    slug: L2,
+    title: 'Trénink na odřezku řemene',
+    order: 2,
+    phaseSlug: 'prepare',
+    estimatedMinutes: 90,
+    goal: 'Na odřezku stejného pásu vyzkoušet řez, značení, výsečníky, ovál, ohyb, nýt, hrany a balzám dřív, než se pustíte do pásku.',
+    materials: [
+      'odřezek pásu aspoň 15 cm (viz první krok)',
+      'oboustranná lepicí páska a dvě lišty nebo odřezky stejně silné jako pás',
+      'voda a houbička',
+      'plátno na leštění',
+    ],
+    requiredEquipment: [
+      'belt-strap',
+      'belt-buckle',
+      'chicago-screws',
+      'hole-punch-5mm',
+      'hole-punch-6mm',
+      'scratch-awl',
+      'steel-ruler',
+      'utility-knife',
+      'cutting-mat',
+      'mallet',
+      'punching-board',
+      'edge-burnisher',
+      'sandpaper',
+      'leather-balm',
+    ],
+    recommendedEquipment: ['edge-beveler'],
+    prerequisiteLessons: [L1],
+    steps: [
+      {
+        id: 'get-scrap',
+        title: 'Odřízněte odřezek',
+        body: `Odřezek odřízněte z konce, kde bude špička, a jen když je pás o víc než 20 cm delší než nejkratší délka ${FROM_TABLE} (15 cm odřezek a 5 cm rezerva na zkoušku na těle). Jinak trénujte na jiném odřezku 3–4 mm; nýt pak vyzkoušejte až na pásku.`,
+        media: [],
+        recalls: [recall.waist],
+      },
+      {
+        id: 'cut',
+        title: 'Řez podél pravítka',
+        body: 'Konec odřezku uřízněte kolmo podél ocelového pravítka ve 2–3 tazích. Nůž držte svisle.',
+        media: [],
+      },
+      {
+        id: 'mark',
+        title: 'Značení destičkou',
+        body: 'Odřezek a dvě podložky stejně silné jako pás přilepte k desce oboustrannou páskou, rubem nahoru. Destičku přiložte řadou 3 levou hranou na konec odřezku a hrany odřezku na linky vaší šířky (šířka bez linky: podle příčné stupnice). Šídlem označte dva otvory pro nýty blíž ke konci a obtáhněte ovál. V otvoru kružte šídlem po stěně, tlačte svisle a dívejte se svisle dolů. Destičku nikdy neobracejte. Bez destičky použijte list 1: propíchněte středy otvorů a oba křížky oválu.',
+        animationLinks: [
+          animationLink('beltBuckleEnd', 'B1'),
+          animationLink('beltBuckleEnd', 'B2'),
+        ],
+        media: [
+          photo(
+            'belt-l2-mark',
+            'Destička řadou 3 na odřezku, podložky po stranách, šídlo v otvoru',
+          ),
+        ],
+        recalls: [recall.marking],
+      },
+      {
+        id: 'punch',
+        title: 'Výsečníky a ovál',
+        body: 'Na tvrdé desce vysekněte Ø 6 mm oba otvory pro nýty a oba konce oválu: výsečník zarovnejte na obtažené oblouky, ne doprostřed rýhy (s listem 1 středem na propíchnutý křížek). Boky oválu řízněte nožem tečně k oběma otvorům. Obtažený ovál je o 0,3 mm z každé strany menší než 25 × 6 mm. Vedle vysekněte zkušební dírku pro trn výsečníkem z tabulky (např. Ø 5 mm). Prohlédněte okraje otvorů.',
+        animationLinks: [
+          animationLink('beltBuckleEnd', 'C2'),
+          animationLink('beltBuckleEnd', 'C3'),
+        ],
+        media: [],
+        records: [
+          {
+            kind: 'choice',
+            id: 'scrap-punch',
+            label: 'Okraje otvorů',
+            options: [
+              { value: 'clean', label: 'Čisté' },
+              { value: 'frayed', label: 'Roztřepené' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'edges-balm',
+        title: 'Hrana a balzám',
+        body: 'Na kousku hrany vyzkoušejte zkosení ořezávačem (velikost pro váš pás ověřte na odřezku), nebo zaoblení brusným papírem na hranolku. Hranu navlhčete Tokonole a třete leštítkem nebo plátnem, dokud se nezaleskne. Na líc odřezku naneste balzám podle návodu na obalu a nechte ho vsáknout. Prohlédněte, jak změnil barvu.',
+        animationLinks: [animationLink('edges', 'B2'), animationLink('edges', 'D2')],
+        media: [],
+        records: [
+          {
+            kind: 'choice',
+            id: 'scrap-balm',
+            label: 'Balzám na odřezku',
+            options: [
+              { value: 'ok', label: 'Vzhled vyhovuje' },
+              { value: 'no', label: 'Nevyhovuje' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'bend',
+        title: 'Ohyb kolem příčky',
+        body: 'Ohyb je uprostřed oválu, 90 mm od konce. Navlhčete zónu ohybu a ohněte ji kolem příčky přezky, ne přes hranu. Nasucho do malého rádiusu může silná kůže popraskat. Prohlédněte líc v ohybu.',
+        animationLinks: [animationLink('beltBuckleEnd', 'D1')],
+        media: [photo('belt-l2-bend', 'Navlhčený odřezek ohnutý kolem příčky přezky, líc v ohybu')],
+        records: [
+          {
+            kind: 'choice',
+            id: 'scrap-bend',
+            label: 'Líc v ohybu',
+            hint: 'Popraská-li i navlhčený, nezačínejte pásek: tento případ podklady neřeší.',
+            options: [
+              { value: 'ok', label: 'Bez prasklin' },
+              { value: 'cracked', label: 'Popraskal' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'screw',
+        title: 'Zkouška nýtu',
+        body: 'Ohnutý odřezek stáhněte k sobě a otvor druhé vrstvy označte šídlem skrz už vyseknutý otvor. Vysekněte ho Ø 6 mm, prostrčte nýt a utáhněte. Hlavička musí přitlačit kůži a nýt se nesmí viklat.',
+        animationLinks: [
+          animationLink('beltBuckleEnd', 'E2'),
+          animationLink('beltBuckleEnd', 'E3'),
+          animationLink('beltBuckleEnd', 'E4'),
+        ],
+        media: [],
+        records: [
+          {
+            kind: 'choice',
+            id: 'scrap-screw',
+            label: 'Nýt ve dvou vrstvách',
+            hint: 'Viklá se nebo nedosáhne: objednejte nýt s dříkem podle tabulky Váš pásek.',
+            options: [
+              { value: 'tight', label: 'Drží pevně' },
+              { value: 'wobbles', label: 'Viklá se (dřík dlouhý)' },
+              { value: 'short', label: 'Nedosáhne do závitu (dřík krátký)' },
+            ],
+          },
+        ],
+        recalls: [recall.thickness],
+      },
+    ],
+    checkpoints: [
+      {
+        slug: 'scrap-cut-and-punched',
+        title: 'Řez je kolmý, otvory Ø 6 mm a dírka pro trn mají čisté okraje, ovál má rovné boky.',
+        required: true,
+      },
+      {
+        slug: 'scrap-bend-ok',
+        title: 'Navlhčený ohyb kolem příčky nepopraskal.',
+        required: true,
+      },
+      {
+        slug: 'scrap-screw-ok',
+        title: 'Nýt ve dvou vrstvách drží pevně a neviklá se (jen s odřezkem téhož pásu).',
+        required: false,
+      },
+      {
+        slug: 'scrap-edge-balm',
+        title: 'Hrana je zaleštěná a vzhled balzámu vyhovuje.',
+        required: true,
+      },
+    ],
+    commonMistakes: [
+      'Odřezek z pásu, který pak na délku nestačí.',
+      'Výsečník na konci oválu doprostřed rýhy: ovál vyjde menší a trn se dře.',
+      'Ohyb nasucho nebo přes hranu příčky.',
+    ],
+    safety: [KNIFE, PUNCH],
+    media: [photo('belt-l2-hero', 'Odřezek pásu s oválem, otvory a nýtem vedle přezky')],
+  }),
+
+  draft({
+    slug: L3,
+    title: 'Hrany dlouhého řemene',
+    order: 3,
+    phaseSlug: 'build',
+    estimatedMinutes: 120,
+    goal: 'Srovnat konec u přezky, zkosit a zaleštit dlouhé hrany kromě posledních 30 cm a pás natřít balzámem.',
+    materials: ['plátno na leštění', 'kousek papírové pásky na značku 30 cm'],
+    requiredEquipment: [
+      'belt-strap',
+      'steel-ruler',
+      'utility-knife',
+      'cutting-mat',
+      'edge-burnisher',
+      'sandpaper',
+      'leather-balm',
+    ],
+    recommendedEquipment: ['edge-beveler'],
+    prerequisiteLessons: [L2],
+    steps: [
+      {
+        id: 'square-end',
+        title: 'Srovnejte konec u přezky',
+        body: 'Vyberte konec, kde bude přezka. Uřízněte ho kolmo podél ocelového pravítka: o tuto hranu se opírá řada 3 destičky i list 1. Druhý konec bude špička.',
+        media: [],
+      },
+      {
+        id: 'mark-30',
+        title: 'Označte posledních 30 cm',
+        body: 'Na konci se špičkou odměřte 30 cm a označte je kouskem pásky. Tyto hrany zatím neopracovávejte: konec odříznete v lekci 6.',
+        media: [],
+      },
+      {
+        id: 'bevel',
+        title: 'Srazte hrany',
+        body: 'Pás rozložte naplocho. Hrany na líci i rubu srazte ořezávačem (velikost ověřená na odřezku v lekci 2), nebo zaoblete brusným papírem na hranolku. Volitelně hranu přebruste postupně 320 → 400 → 600 → 800: lesk bude hladší.',
+        animationLinks: [animationLink('edges', 'B2')],
+        media: [],
+      },
+      {
+        id: 'burnish',
+        title: 'Zaleštěte hrany',
+        body: 'Hranu navlhčete Tokonole a třete leštítkem nebo plátnem, dokud se nezhutní a nezaleskne. Hran je dvakrát délka pásu: pracujte po úsecích.',
+        animationLinks: [
+          animationLink('edges', 'D1'),
+          animationLink('edges', 'D2'),
+          animationLink('edges', 'D3'),
+        ],
+        media: [
+          photo('belt-l3-burnish', 'Leštítko na hraně pásu, vlevo matná, vpravo lesklá část'),
+        ],
+      },
+      {
+        id: 'balm',
+        title: 'Natřete pás balzámem',
+        body: 'Teď, ne později: po ohnutí a sešroubování se pod ohyb nedostanete. Balzám naneste podle návodu na obalu, stejně jako na odřezku v lekci 2. Posledních 30 cm zatím vynechte.',
+        media: [],
+      },
+    ],
+    checkpoints: [
+      {
+        slug: 'end-square',
+        title: 'Konec u přezky je kolmý.',
+        required: true,
+      },
+      {
+        slug: 'edges-done',
+        title:
+          'Dlouhé hrany jsou sražené a zaleštěné; posledních 30 cm u špičky zůstalo neopracované.',
+        required: true,
+      },
+      {
+        slug: 'balm-done',
+        title: 'Pás je natřený balzámem kromě posledních 30 cm.',
+        required: true,
+      },
+    ],
+    commonMistakes: [
+      'Opracované hrany v posledních 30 cm, které se pak odříznou.',
+      'Leštění dřív, než jsou hrany sražené nebo zaoblené.',
+      'Balzám až po sešroubování konce.',
+    ],
+    safety: [KNIFE],
+    media: [photo('belt-l3-hero', 'Pás rozložený na stole se zaleštěnými hranami a značkou 30 cm')],
+  }),
+
+  draft({
+    slug: L4,
+    title: 'Konec s přezkou',
+    order: 4,
+    phaseSlug: 'build',
+    estimatedMinutes: 120,
+    goal: 'Označit a vyseknout konec u přezky, vyrobit poutko a přezku přišroubovat dvěma nýty.',
+    materials: [
+      'oboustranná lepicí páska a dvě lišty nebo odřezky stejně silné jako pás',
+      'odřezek kůže na poutko, klidně tenčí než pás',
+      'papírový proužek na změření poutka',
+      'voda a houbička',
+      'zajišťovač závitů nebo lak',
+    ],
+    requiredEquipment: [
+      'belt-strap',
+      'belt-buckle',
+      'chicago-screws',
+      'hole-punch-6mm',
+      'scratch-awl',
+      'steel-ruler',
+      'utility-knife',
+      'cutting-mat',
+      'mallet',
+      'punching-board',
+      'contact-cement',
+    ],
+    recommendedEquipment: [],
+    prerequisiteLessons: [L3],
+    steps: [
+      {
+        id: 'plate-or-sheet',
+        title: 'Řada 3, nebo list 1',
+        printLink: 'pattern-sheets',
+        body: `Řada 3 destičky platí pro šířky 28–45 mm. Když ${TABLE} ukazuje u řady 3 „ne“, nebo jste zvolili jen listy, vytiskněte list 1 pro váš pásek na 100 %. Kalibrační čtverec musí měřit 50 × 50 mm.`,
+        animationLinks: [
+          animationLink('beltBuckleEnd', 'A1'),
+          animationLink('beltBuckleEnd', 'A2'),
+        ],
+        media: [],
+        recalls: [recall.marking, recall.width],
+      },
+      {
+        id: 'secure',
+        title: 'Upevněte pás a destičku',
+        body: 'Pás položte rubem nahoru. Po obou stranách pásu dejte lišty nebo odřezky stejně silné jako pás, aby se destička nepřeklopila. Pás i podložky přilepte k desce oboustrannou páskou.',
+        animationLinks: [animationLink('beltBuckleEnd', 'B1')],
+        media: [
+          photo('belt-l4-secure', 'Pás a dvě podložky přilepené k desce, destička leží rovně'),
+        ],
+      },
+      {
+        id: 'mark',
+        title: 'Označte konec u přezky',
+        body: 'Destičku přiložte levou hranou přesně na konec pásu, hrany pásu na pár linek vaší šířky (šířka bez linky: podle příčné stupnice). Šídlem označte 4 otvory pro nýty (ty v jedné přímce), 2 značky ohybu a obtáhněte ovál. V otvorech kružte po stěně, u obou značek ohybu nakloňte šídlo stejným směrem. Dívejte se svisle. Dva otvory mimo přímku jsou značky ohybu: do nich nic nesekejte. S listem 1: list vystřihněte po obrysu pásu, spodní hranu přiložte přesně na konec pásu, boky na hrany pásu a přilepte páskou. Šídlem propíchněte středy 4 otvorů, oba křížky oválu a čáru ohybu u obou hran pásu.',
+        animationLinks: [
+          animationLink('beltBuckleEnd', 'B2'),
+          animationLink('beltBuckleEnd', 'B3'),
+          animationLink('beltBuckleEnd', 'B4'),
+          animationLink('beltBuckleEnd', 'B5'),
+          animationLink('beltBuckleEnd', 'B6'),
+        ],
+        media: [photo('belt-l4-mark', 'Řada 3 destičky na konci pásu, šídlo v otvoru pro nýt')],
+      },
+      {
+        id: 'first-pair',
+        title: 'Vysekněte první dvojici',
+        body: 'Výsečníkem Ø 6 mm vysekněte jen dva otvory blíž ke konci (16,8 a 64,5 mm od konce). Druhou dvojici zatím ne. Značky ohybu spojte na rubu pravítkem.',
+        animationLinks: [animationLink('beltBuckleEnd', 'C1')],
+        media: [],
+      },
+      {
+        id: 'oval',
+        title: 'Vyřízněte ovál',
+        body: 'Oba konce oválu vysekněte Ø 6 mm zarovnané na obtažené oblouky, ne doprostřed rýhy. S listem 1 postavte výsečník středem na propíchnutý křížek. Boky řízněte nožem tečně k oběma otvorům: obtažený ovál je o 0,3 mm z každé strany menší (24,4 × 5,4 místo 25 × 6 mm) a trn by se dřel.',
+        animationLinks: [
+          animationLink('beltBuckleEnd', 'C2'),
+          animationLink('beltBuckleEnd', 'C3'),
+        ],
+        media: [],
+      },
+      {
+        id: 'bend',
+        title: 'Ohněte konec kolem příčky',
+        body: 'Trn přezky prostrčte oválem. Zónu ohybu navlhčete a ohněte ji kolem příčky přezky, ne přes hranu, tak jako na odřezku v lekci 2.',
+        animationLinks: [animationLink('beltBuckleEnd', 'D1')],
+        media: [
+          photo('belt-l4-bend', 'Konec pásu ohnutý kolem příčky přezky, trn prochází oválem'),
+        ],
+      },
+      {
+        id: 'keeper',
+        title: 'Vyrobte poutko',
+        body: `Papírový proužek obtočte kolem přehnutého konce, označte přeplátování a odečtěte délku na pravítku destičky (nula vlevo) nebo na ocelovém pravítku. Porovnejte s délkou poutka ${IN_TABLE} (např. 109 mm pro 40 × 3,5 mm). Z odřezku vyřízněte proužek 12 mm × změřená délka. Přeplátování 15 mm natřete kontaktním lepidlem na obě strany, nechte zavadnout podle návodu na obalu a slepte. Délka poutka je spočítaná, ne vyzkoušená: ověřte ji proužkem.`,
+        animationLinks: [
+          animationLink('beltBuckleEnd', 'D2'),
+          animationLink('beltBuckleEnd', 'D3'),
+        ],
+        media: [],
+        records: [
+          {
+            kind: 'number',
+            id: KEEPER_LENGTH_ID,
+            label: 'Délka poutka změřená proužkem',
+            hint: 'Porovnejte s tabulkou Váš pásek.',
+            unit: 'mm',
+            decimals: 0,
+          },
+        ],
+        waits: [
+          {
+            id: 'keeper-glue',
+            label: 'Zavadnutí lepidla na poutku',
+            minutes: 10,
+            maxMinutes: 15,
+            basis: 'manufacturer',
+          },
+        ],
+      },
+      {
+        id: 'second-pair',
+        title: 'Navlékněte poutko a označte druhou dvojici',
+        body: 'Poutko navlékněte na přehnutý konec, spojem k pásu. Přehnutý konec zatáhněte a druhou dvojici otvorů označte šídlem skrz už vyseknuté otvory. Tohle je nejdůležitější krok: chyba 1 mm na značce dá po přehnutí 2 mm rozdíl a dřík Ø 6 mm do otvoru Ø 6 mm neprojde. Značení skrz hotový otvor tuhle chybu ruší.',
+        animationLinks: [
+          animationLink('beltBuckleEnd', 'E1'),
+          animationLink('beltBuckleEnd', 'E2'),
+        ],
+        media: [
+          photo(
+            'belt-l4-second',
+            'Šídlo značí druhou vrstvu skrz vyseknutý otvor, poutko mezi otvory',
+          ),
+        ],
+      },
+      {
+        id: 'screws',
+        title: 'Vysekněte a sešroubujte',
+        body: 'Rozložte konec, vysekněte druhou dvojici Ø 6 mm a sešroubujte oba nýty. Na závit dejte kapku zajišťovače závitů nebo laku: nýty v nejzatíženějším místě se povolují. Poutko zůstane v kapse mezi nýty.',
+        animationLinks: [
+          animationLink('beltBuckleEnd', 'E3'),
+          animationLink('beltBuckleEnd', 'E4'),
+          animationLink('beltBuckleEnd', 'E5'),
+        ],
+        media: [],
+        recalls: [recall.thickness],
+      },
+    ],
+    checkpoints: [
+      {
+        slug: 'marked-row3',
+        title: 'Otvory, značky ohybu a ovál jsou označené na rubu; značky ohybu nejsou proseknuté.',
+        required: true,
+      },
+      {
+        slug: 'oval-clean',
+        title: 'Ovál má rovné boky tečné k oběma otvorům a trn jím projde bez dření.',
+        required: true,
+      },
+      {
+        slug: 'pairs-aligned',
+        title: 'Druhá dvojice je označená skrz první a oba nýty prošly bez násilí.',
+        required: true,
+      },
+      {
+        slug: 'buckle-fixed',
+        title: 'Oba nýty jsou utažené, neviklají se a poutko je uvězněné mezi nimi.',
+        required: true,
+      },
+    ],
+    commonMistakes: [
+      'Proseknutá značka ohybu: otvor Ø 6 mm uprostřed pásu nejde opravit.',
+      'Všechny čtyři otvory vyseknuté najednou: druhá dvojice nesedí.',
+      'Poutko navlečené až po sešroubování.',
+      'Destička přiložená na šikmo uříznutý konec pásu.',
+    ],
+    safety: [
+      KNIFE,
+      PUNCH,
+      'Kontaktní lepidlo používejte ve větrané místnosti a podle návodu na obalu.',
+    ],
+    prints: [sheet('prezka', 'List 1: konec u přezky místo řady 3 destičky')],
+    requires: [
+      {
+        id: 'strap-edged',
+        fromLesson: L3,
+        label: 'Pás se zaleštěnými hranami a balzámem (bez posledních 30 cm)',
+      },
+    ],
+    media: [photo('belt-l4-hero', 'Přezka přišroubovaná dvěma nýty, poutko mezi nimi')],
+  }),
+
+  draft({
+    slug: L5,
+    title: 'Zkouška na těle a střední dírka',
+    order: 5,
+    phaseSlug: 'build',
+    estimatedMinutes: 20,
+    goal: 'Na sobě označit prostřední dírku a ověřit, že pás na dírky a špičku stačí.',
+    materials: ['kalhoty, ve kterých budete pásek nosit', 'krejčovský metr'],
+    requiredEquipment: ['scratch-awl', 'steel-ruler'],
+    recommendedEquipment: [],
+    prerequisiteLessons: [L4],
+    steps: [
+      {
+        id: 'try-on',
+        title: 'Vyzkoušejte pásek na sobě',
+        body: 'Pásek provlékněte poutky kalhot a utáhněte na pohodlí. Přidržte prstem a šídlem označte místo, kam tlačí hrot trnu. To je prostřední dírka; stopa po šídle v dírce zmizí.',
+        animationLinks: [animationLink('beltHolesTip', 'A1')],
+        media: [photo('belt-l5-fit', 'Pásek v poutkách kalhot, prst drží místo pod hrotem trnu')],
+      },
+      {
+        id: 'measure',
+        title: 'Změřte a porovnejte',
+        body: 'Změřte od ohybu u přezky ke značce a zapište. Porovnejte s obvodem z lekce 1. Platí značka, ne obvod.',
+        animationLinks: [animationLink('beltHolesTip', 'A2')],
+        media: [],
+        records: [
+          {
+            kind: 'number',
+            id: FIT_WAIST_ID,
+            label: 'Ohyb u přezky → značka',
+            unit: 'cm',
+            decimals: 1,
+          },
+        ],
+        recalls: [recall.waist],
+      },
+      {
+        id: 'length-check',
+        title: 'Stačí pás?',
+        printLink: 'pattern-sheets',
+        body: `Od značky ke konci pásu musí zbýt aspoň vzdálenost prostřední dírky od konce ${FROM_TABLE} (např. 144,3 mm). Když nezbývá, ve formuláři „Váš pásek“ pod „Dírky (pokročilé)“ zkuste menší počet dírek nebo kratší odstup první dírky; aplikace hlídá meze. Pak ale značíte listem 2, ne destičkou.`,
+        animationLinks: [animationLink('beltHolesTip', 'A3')],
+        media: [],
+      },
+    ],
+    checkpoints: [
+      {
+        slug: 'middle-marked',
+        title: 'Prostřední dírka je označená na sobě, ne podle obvodu.',
+        required: true,
+      },
+      {
+        slug: 'length-enough',
+        title: 'Od značky ke konci zbývá aspoň vzdálenost prostřední dírky od konce z tabulky.',
+        required: true,
+      },
+    ],
+    commonMistakes: [
+      'Prostřední dírka podle obvodu z lekce 1 místo zkoušky na sobě.',
+      'Zkouška v jiných kalhotách, než ve kterých budete pásek nosit.',
+    ],
+    safety: [],
+    requires: [
+      { id: 'buckle-end', fromLesson: L4, label: 'Pás s přišroubovanou přezkou a poutkem' },
+    ],
+    media: [photo('belt-l5-hero', 'Značka prostřední dírky na pásku, metr od ohybu u přezky')],
+  }),
+
+  draft({
+    slug: L6,
+    title: 'Dírky a špička',
+    order: 6,
+    phaseSlug: 'build',
+    estimatedMinutes: 90,
+    goal: 'V jednom přiložení označit dírky a konec, vyseknout je, uříznout konec a dokončit hrany.',
+    materials: [
+      'oboustranná lepicí páska a dvě lišty nebo odřezky stejně silné jako pás',
+      'plátno na leštění',
+    ],
+    requiredEquipment: [
+      'hole-punch-5mm',
+      'scratch-awl',
+      'steel-ruler',
+      'utility-knife',
+      'cutting-mat',
+      'mallet',
+      'punching-board',
+      'edge-burnisher',
+      'sandpaper',
+      'leather-balm',
+    ],
+    recommendedEquipment: ['corner-template', 'edge-beveler', 'belt-end-punch'],
+    prerequisiteLessons: [L5],
+    steps: [
+      {
+        id: 'row',
+        title: 'Řada 1 nebo 2, nebo list 2',
+        printLink: 'pattern-sheets',
+        body: `Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když ${TABLE} ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo jste zvolili jen listy, vytiskněte list 2 pro váš pásek na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm.`,
+        animationLinks: [animationLink('beltHolesTip', 'B1'), animationLink('beltHolesTip', 'D1')],
+        media: [],
+        recalls: [recall.tip, recall.marking],
+      },
+      {
+        id: 'place',
+        title: 'Přiložte na prostřední dírku',
+        body: 'Pás a podložky přilepte jako v lekci 4, rubem nahoru. Prostřední otvor destičky (mezi dvěma křížky) položte na značku z lekce 5, hrany pásu na linky vaší šířky (šířka bez linky: podle příčné stupnice). Zkontrolujte, že obtahovaný tvar končí přesně na obou hranách pásu. Když přesahuje nebo nedosahuje, máte špatný oblouk nebo linku. S listem 2: list vystřihněte po obrysu konce, prostřední dírku položte na značku, boky na hrany pásu a list přilepte páskou.',
+        animationLinks: [
+          animationLink('beltHolesTip', 'B2'),
+          animationLink('beltHolesTip', 'C1'),
+          animationLink('beltHolesTip', 'D2'),
+        ],
+        media: [photo('belt-l6-place', 'Řada 1 destičky, prostřední otvor mezi křížky na značce')],
+      },
+      {
+        id: 'mark',
+        title: 'Označte v jednom přiložení',
+        body: 'Označte zbylé dírky a obtáhněte tvar konce, aniž byste destičku nebo list zvedli. Přiložit je znovu na už vyseknutou dírku je nepřesné. U řady 1 obtahujte jen k hraně pásu, dál je výřez širší. S listem 2 středy dírek propíchněte a obrys obtáhněte šídlem po okraji listu.',
+        animationLinks: [
+          animationLink('beltHolesTip', 'B3'),
+          animationLink('beltHolesTip', 'C2'),
+          animationLink('beltHolesTip', 'D2'),
+        ],
+        media: [],
+      },
+      {
+        id: 'punch-holes',
+        title: 'Vysekněte dírky',
+        body: `Dírky vysekněte výsečníkem s Ø ${FROM_TABLE} (např. 5 mm).`,
+        animationLinks: [animationLink('beltHolesTip', 'E1')],
+        media: [],
+        recalls: [recall.prong],
+      },
+      {
+        id: 'cut-tip',
+        title: 'Uřízněte konec',
+        body: 'Rovné boky hrotu řežte podél ocelového pravítka, nikdy podél destičky: čepel by akrylát poškodila. Nůž veďte tak, aby rýhu odebral. Vrchol R4 řízněte od ruky; s ocelovou rohovou šablonou přiložte lob Ø 8 mm na značku a veďte nůž po oceli, ve 2–3 tazích. Zaoblený konec řežte od ruky po rýze v několika tazích (ověřte na odřezku), nebo výsečníkem na konec opasku.',
+        animationLinks: [
+          animationLink('beltHolesTip', 'E2'),
+          animationLink('beltHolesTip', 'E3'),
+          animationLink('beltHolesTip', 'E4'),
+        ],
+        media: [photo('belt-l6-cut', 'Nůž u ocelového pravítka řeže bok hrotu, destička odložená')],
+      },
+      {
+        id: 'finish',
+        title: 'Dokončete hrany',
+        body: 'Srazte a zaleštěte hrany posledních 30 cm, hranu nového konce a vnitřní hranu oválu (přes ni jezdí trn). Pak natřete balzámem zbytek pásu.',
+        animationLinks: [
+          animationLink('beltHolesTip', 'F1'),
+          animationLink('beltHolesTip', 'F2'),
+          animationLink('edges', 'B2'),
+          animationLink('edges', 'D2'),
+        ],
+        media: [],
+      },
+      {
+        id: 'try',
+        title: 'Vyzkoušejte všechny dírky',
+        body: 'Zapněte pásek na prostřední dírku, pak na krajní.',
+        animationLinks: [animationLink('beltHolesTip', 'F3')],
+        media: [],
+        records: [
+          {
+            kind: 'choice',
+            id: 'belt-fit-result',
+            label: 'Prostřední dírka',
+            options: [
+              { value: 'ok', label: 'Sedí' },
+              { value: 'off', label: 'Nesedí' },
+            ],
+          },
+        ],
+      },
+    ],
+    checkpoints: [
+      {
+        slug: 'one-placement',
+        title: 'Dírky a tvar konce jsou označené v jednom přiložení a tvar končí na obou hranách.',
+        required: true,
+      },
+      {
+        slug: 'tip-cut',
+        title: 'Konec je uříznutý podél ocelového pravítka a hrany jsou zaleštěné.',
+        required: true,
+      },
+      {
+        slug: 'oval-edge',
+        title: 'Vnitřní hrana oválu je zaleštěná.',
+        required: false,
+      },
+      {
+        slug: 'fits',
+        title: 'Pásek sedí na prostřední dírce.',
+        required: true,
+      },
+    ],
+    commonMistakes: [
+      'Řez podél destičky místo ocelového pravítka.',
+      'Dírky a tvar konce ve dvou přiloženích.',
+      'Zapomenutá hrana oválu a nového konce.',
+    ],
+    safety: [KNIFE, PUNCH],
+    prints: [sheet('spicka', 'List 2: dírky a konec místo řady 1 nebo 2 destičky')],
+    requires: [{ id: 'middle-mark', fromLesson: L5, label: 'Značka prostřední dírky' }],
+    media: [photo('belt-l6-hero', 'Hotový pásek: hrot, pět dírek, přezka na dvou nýtech')],
+  }),
+];
+
+export const beltProject: ProjectDefinition = {
+  slug: PROJECT_SLUG,
+  code: '04',
+  title: 'Pásek',
+  summary:
+    'Pásek z hotového pásu třísločiněné kůže: šířku, tloušťku, délku a konec si volíte, čísla a listy spočítá aplikace.',
+  description:
+    'Čtvrtý projekt: pásek bez šití z hotového pásu 3–4 mm. Přezka drží na dvou šroubovacích nýtech, poutko je z odřezku, konec je hrot nebo zaoblený. Pásek není jeden výrobek: ve formuláři „Váš pásek“ zadáte šířku podle přezky, změřenou tloušťku, obvod a konec a aplikace spočítá délku pásu, dírky, poutko, nýt, nákup a řekne, jestli stačí destička, nebo si vytisknete listy. Nikdo pásek podle tohoto postupu zatím nepostavil: co podklady neověřují, vyzkoušejte na odřezku. Časy lekcí jsou hrubý odhad.',
+  difficulty: 'intermediate',
+  estimatedHours: { min: 6, max: 10 },
+  skills: [
+    'Míry pásku z obvodu a volba šířky, tloušťky a konce',
+    'Značení destičkou nebo listy 1:1',
+    'Výsečníky a ovál pro trn v silné kůži',
+    'Ohyb silné kůže a registrace otvorů skrz přehnutí',
+    'Šroubovací nýty podle tloušťky',
+    'Hrany dlouhého pásu',
+  ],
+  phases: [...phases],
+  equipment: [
+    {
+      equipmentSlug: 'belt-strap',
+      priority: 'required',
+      reason: 'Celý pásek a odřezek na trénink.',
+      specification:
+        'Třísločiněný přírodní pás 3,0–4,0 mm v šířce přezky, aspoň nejkratší délka z tabulky „Váš pásek“. Po dodání změřit.',
+    },
+    {
+      equipmentSlug: 'belt-buckle',
+      priority: 'required',
+      reason: 'Zapínání pásku.',
+      specification: 'Jednotrnová, vnitřní světlost = šířka pásu.',
+    },
+    {
+      equipmentSlug: 'chicago-screws',
+      priority: 'required',
+      reason: 'Dva nýty drží přezku na přehnutém konci.',
+      specification:
+        '2 ks, hlavička Ø 10 mm, dřík podle tabulky „Váš pásek“ (10/6 na pás 3,5–3,75 mm).',
+    },
+    {
+      equipmentSlug: 'hole-punch-5mm',
+      priority: 'required',
+      reason: 'Dírky pro trn.',
+      specification: 'Ø = trn u kořene + 0,5 mm; u přezky 40 mm 4,5 nebo 5 mm.',
+    },
+    {
+      equipmentSlug: 'hole-punch-6mm',
+      priority: 'required',
+      reason: 'Čtyři otvory pro nýty a oba konce oválu.',
+      specification: 'Dutý výsečník Ø 6 mm.',
+    },
+    {
+      equipmentSlug: 'scratch-awl',
+      priority: 'required',
+      reason: 'Značení na rubu skrz otvory destičky nebo list.',
+      specification: 'Kulaté šídlo, které projde otvorem Ø 2 mm destičky (ověřit).',
+    },
+    {
+      equipmentSlug: 'steel-ruler',
+      priority: 'required',
+      reason: 'Vedení nože u konce pásu a hrotu, spojení značek ohybu.',
+      specification: 'Ocelové 30 cm.',
+    },
+    {
+      equipmentSlug: 'utility-knife',
+      priority: 'required',
+      reason: 'Konec pásu, boky oválu, hrot, poutko.',
+      specification: 'Odlamovací nůž 18 mm s novými čepelemi.',
+    },
+    {
+      equipmentSlug: 'cutting-mat',
+      priority: 'required',
+      reason: 'Podklad pro řezání.',
+      specification: 'Samohojivá A3.',
+    },
+    {
+      equipmentSlug: 'mallet',
+      priority: 'required',
+      reason: 'Úder do výsečníků.',
+      specification: 'Gumová nebo plastová.',
+    },
+    {
+      equipmentSlug: 'punching-board',
+      priority: 'required',
+      reason: 'Tvrdá deska pod vysekávání.',
+      specification: 'HDPE deska nebo plastové prkénko.',
+    },
+    {
+      equipmentSlug: 'digital-caliper',
+      priority: 'required',
+      reason: 'Tloušťka pásu (podle ní dřík nýtu) a trn přezky (podle něj Ø dírek).',
+      specification: 'Levná digitální posuvka 150 mm.',
+    },
+    {
+      equipmentSlug: 'edge-burnisher',
+      priority: 'required',
+      reason: 'Leštění dlouhých hran, konce a oválu.',
+      specification: 'Tokonole a leštítko, nebo plátno.',
+    },
+    {
+      equipmentSlug: 'sandpaper',
+      priority: 'required',
+      reason: 'Zaoblení hran bez ořezávače.',
+      specification: 'Zrnitost 180–240 na hranolku; volitelně jemnější 320–800.',
+    },
+    {
+      equipmentSlug: 'contact-cement',
+      priority: 'required',
+      reason: 'Přeplátování poutka.',
+      specification: 'Kontaktní lepidlo na kůži, na obě strany, zavadnout podle návodu.',
+    },
+    {
+      equipmentSlug: 'leather-balm',
+      priority: 'required',
+      reason: 'Přírodní pás se bez úpravy hned ušpiní.',
+      specification: 'Balzám na třísločiněnou kůži; vzhled ověřit na odřezku.',
+    },
+    {
+      equipmentSlug: 'edge-beveler',
+      priority: 'recommended',
+      reason: 'Sražení hran 3,5 mm kůže, máte-li ho.',
+      specification: 'Velikost pro 3,5 mm není ověřená; vyzkoušet na odřezku.',
+      alternatives: ['hrany zaoblit brusným papírem na hranolku'],
+    },
+    {
+      equipmentSlug: 'corner-template',
+      priority: 'recommended',
+      reason: 'Vrchol hrotu R4 podle ocelového lobu Ø 8 mm.',
+      specification: 'Ocelová „květina“; akrylová se jako vodítko nože nehodí.',
+      alternatives: ['vrchol R4 říznout od ruky'],
+    },
+    {
+      equipmentSlug: 'belt-end-punch',
+      priority: 'later',
+      reason: 'Konec jedním úderem, až budete dělat víc pásků.',
+      specification: 'V šířce pásu; tvar hrotu ověřit proti destičce.',
+    },
+  ],
+  lessons: [...lessons],
+  patternSheets: {
+    sheets: [
+      {
+        id: 'prezka',
+        title: 'List 1 – konec u přezky',
+        note: 'Ovál pro trn 25 × 6 mm, 4 otvory pro 2 nýty, ohyb 90 mm od konce a pásek na poutko. Místo řady 3 destičky (lekce 4).',
+        orientation: 'portrait',
+        widthMm: 210,
+        heightMm: 297,
+      },
+      {
+        id: 'spicka',
+        title: 'List 2 – dírky a konec',
+        note: 'Dírky s prostřední dírkou a tvar konce. Místo řady 1 nebo 2 destičky (lekce 6).',
+        orientation: 'portrait',
+        widthMm: 210,
+        heightMm: 297,
+      },
+    ],
+    calibrationMm: 50,
+    printNote:
+      'Tisk na A4 na 100 % (bez přizpůsobení stránce). Kalibrační čtverec musí měřit 50 × 50 mm. Listy jsou záloha za destičku: tiskněte jen list za řadu, u které tabulka „Váš pásek“ ukáže „ne“.',
+    defaultVariantLabel: 'Výchozí: 40 mm, 3,5 mm, hrot, 5 dírek po 25 mm',
+    browserGenerator: 'belt-config',
+    variantsNote:
+      'Předem připravené jsou jen listy pro 40 mm, 3,5 mm a hrot. Pro jinou šířku, tloušťku, zaoblený konec nebo jiné dírky vyplňte „Váš pásek“ a stiskněte „Vygenerovat listy A4“. Stejné listy kreslí generátor v repozitáři („pnpm pattern:belt-end“).',
+  },
+  shoppingPlan: {
+    title:
+      'Výchozí sestava: pásek 40 mm z pásu 3–3,5 mm. Na šířce závisí pás (varianta šířky) a přezka, na změřené tloušťce dřík nýtu, na trnu přezky výsečník dírek. Pro jinou šířku nebo tloušťku berte položky z tabulky „Váš pásek“ na stránce Listy střihu.',
+    lines: [
+      {
+        equipmentSlug: 'belt-strap',
+        url: 'https://craft-point.cz/products/remen-z-prirodni-kuze-3-35mm-140cm-15-80mm',
+        variant: '40 mm',
+        quantity: 1,
+        purpose:
+          'šířka 40 mm; jiná šířka = jiná varianta (Váš pásek). 130 cm stačí do obvodu 106,5 cm, delší má Křupson (jen 40 mm)',
+      },
+      {
+        equipmentSlug: 'belt-buckle',
+        url: 'https://craft-point.cz/products/mosazna-opaskova-prezka-40mm',
+        quantity: 1,
+        purpose: 'přezka = šířka pásu; 30 a 35 mm má CraftPoint také, 45 mm jen Andexnite',
+      },
+      {
+        equipmentSlug: 'chicago-screws',
+        url: 'https://craft-point.cz/products/sroubovaci-nyty-10-6-mm-stribrne',
+        quantity: 2,
+        purpose:
+          '10/6 jen na pás 3,5–3,75 mm; jinak dřík podle tabulky Váš pásek; barvu vyberte k přezce',
+      },
+      {
+        equipmentSlug: 'hole-punch-6mm',
+        url: 'https://craft-point.cz/products/vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu',
+        variant: 'Ø 6 mm',
+        quantity: 1,
+        purpose: 'otvory pro nýty a konce oválu',
+      },
+      {
+        equipmentSlug: 'hole-punch-5mm',
+        url: 'https://www.enaradinastroje.cz/kruhovy-vysecnik-format-5mm/',
+        quantity: 1,
+        purpose:
+          'dírky pro trn; Ø = trn + 0,5 mm. U CraftPointu je 5 mm vyprodaný; sada 2–5 mm za 393 Kč ušetří druhou zásilku',
+      },
+      {
+        equipmentSlug: 'leather-balm',
+        url: 'https://craft-point.cz/products/fiebings-leather-balm-with-atom-wax-balzam-s-voskem-118-ml',
+        quantity: 1,
+        purpose: 'přírodní pás bez barvení; nejdřív na odřezku',
+      },
+      {
+        equipmentSlug: 'edge-burnisher',
+        url: 'https://craft-point.cz/products/tokonole-120-ml-2',
+        quantity: 1,
+        purpose: 'z projektu 02',
+      },
+      {
+        equipmentSlug: 'edge-burnisher',
+        url: 'https://craft-point.cz/products/drevene-hladitko-na-hrany',
+        quantity: 1,
+        purpose: 'z projektu 02',
+      },
+      {
+        equipmentSlug: 'sandpaper',
+        url: 'https://craft-point.cz/products/brusny-arch-na-platne-230x280-mm-ruzne-zrnitosti',
+        variant: 'zrnitost 180',
+        quantity: 1,
+        purpose: 'z projektu 02; zaoblení hran',
+      },
+      {
+        equipmentSlug: 'contact-cement',
+        url: 'https://craft-point.cz/products/fiebings-leather-craft-cement-lepidlo-na-kuzi-118-ml',
+        quantity: 1,
+        purpose: 'z projektu 02; přeplátování poutka',
+      },
+      {
+        equipmentSlug: 'scratch-awl',
+        url: 'https://craft-point.cz/products/sedlarske-sidlo-hruska',
+        quantity: 1,
+        purpose: 'z projektu 02; že projde otvorem Ø 2 mm destičky, ověřte',
+      },
+      {
+        equipmentSlug: 'utility-knife',
+        url: 'https://craft-point.cz/products/nuz-na-kuzi-s-odlamovaci-cepeli-18mm',
+        quantity: 1,
+        purpose: 'z projektu 02',
+      },
+      {
+        equipmentSlug: 'steel-ruler',
+        url: 'https://craft-point.cz/products/rezaci-pravitko-s-protiskluzovou-vlozkou-20cm-30cm',
+        variant: '30 cm',
+        quantity: 1,
+        purpose: 'z projektu 02',
+      },
+      {
+        equipmentSlug: 'cutting-mat',
+        url: 'https://craft-point.cz/products/oboustranna-samoobnovovaci-rezaci-podlozka-a3-craftpoint',
+        quantity: 1,
+        purpose: 'z projektu 02',
+      },
+      {
+        equipmentSlug: 'mallet',
+        url: 'https://craft-point.cz/products/horizontalni-palicka-na-kuzi',
+        quantity: 1,
+        purpose: 'z projektu 02',
+      },
+      {
+        equipmentSlug: 'punching-board',
+        url: 'https://www.ikea.com/cz/cs/p/legitim-kuchynske-prkenko-bila-90202268/',
+        quantity: 2,
+        purpose: 'z projektu 02; online jen po 2 ks, v obchodním domě stačí 1',
+      },
+      {
+        equipmentSlug: 'digital-caliper',
+        url: 'https://unihobby.cz/meritko-digitalni-posuvne-150-mm',
+        quantity: 1,
+        purpose: 'z projektu 03',
+      },
+    ],
+    skipped: [
+      {
+        equipmentSlug: 'edge-beveler',
+        reason:
+          'Jen pokud ho máte; velikost pro 3,5 mm není ověřená. Hrany zaoblíte i brusným papírem na hranolku.',
+      },
+      {
+        equipmentSlug: 'corner-template',
+        reason: 'Jen pokud ji máte; vrchol hrotu R4 jde říznout od ruky.',
+      },
+    ],
+    alsoNeeded: [
+      'destička MK Plexi (máte ji), nebo tiskárna A4 na listy 1 a 2',
+      'krejčovský metr, když nemáte pásek na změření obvodu',
+      'oboustranná lepicí páska a dvě lišty nebo odřezky stejně silné jako pás (lekce 2, 4 a 6)',
+      'odřezek kůže na poutko a papírový proužek na jeho změření (lekce 4)',
+      'zajišťovač závitů nebo lak na nýty (lekce 4)',
+      'voda a houbička na ohyb, plátno na leštění',
+    ],
+  },
+  media: [photo('belt-hero', 'Hotový pásek s přezkou na dvou nýtech, poutkem a hrotem')],
+  contentVersion: 1,
+  reviewStatus: 'draft',
+};

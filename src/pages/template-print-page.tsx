@@ -1,13 +1,15 @@
-import { type ComponentType, type CSSProperties, useMemo, useState } from 'react';
+import { type CSSProperties, type ReactNode, useMemo, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router';
 
 import { PRINT_SHEET_PARAM, routes } from '@/app/routes';
 import { AssembledIllustration } from '@/components/illustrations/assembled';
 import { TemplateIllustration } from '@/components/illustrations/template';
+import { BeltConfigGenerator } from '@/components/projects/belt-config-generator';
 import {
   type GeneratedPatternSheet,
-  LidWalletSheetGenerator,
-} from '@/components/projects/lid-wallet-sheet-generator';
+  generatedSheetId,
+} from '@/components/projects/generated-sheet';
+import { LidWalletSheetGenerator } from '@/components/projects/lid-wallet-sheet-generator';
 import { groupPatternSheets } from '@/components/projects/pattern-sheet-list';
 import { Button } from '@/components/ui/button';
 import { findProject } from '@/content/projects';
@@ -19,10 +21,8 @@ import {
   type TemplateDefinition,
 } from '@/content/schema';
 import { typo } from '@/lib/utils/format';
-import {
-  type LidGeneratorPrefill,
-  lidGeneratorPrefill,
-} from '@/features/notebook/lid-wallet-prefill';
+import { beltConfigPrefill } from '@/features/belt/belt-prefill';
+import { lidGeneratorPrefill } from '@/features/notebook/lid-wallet-prefill';
 import { type LessonRecordEntry } from '@/features/notebook/types';
 import { useLessonRecords } from '@/features/notebook/use-lesson-records';
 import { NotFoundPage } from '@/pages/not-found-page';
@@ -124,28 +124,49 @@ function PiecesTemplate({
 
 type GeneratorKey = NonNullable<PatternSheetsDefinition['browserGenerator']>;
 
+interface GeneratorSlotProps {
+  project: ProjectDefinition;
+  baseSheets: readonly PatternSheet[];
+  onGenerated: (sheets: GeneratedPatternSheet[]) => void;
+  /** Zápisy zápisníku projektu (načtené). */
+  records: readonly LessonRecordEntry[];
+}
+
 /**
- * Projekty, jejichž listy umí aplikace vygenerovat v prohlížeči pro změřenou kůži. Formulář
- * předá hotové listy stránce jako další skupinu k zaškrtnutí; `initial` je předvyplnění
- * ze zápisníku (`prefill`).
+ * Formuláře, které listy vygenerují v prohlížeči. `hasPrefill` = zápisník má hodnoty, pro které
+ * výchozí list nemusí platit; `render` vykreslí formulář s předvyplněním ze zápisníku. Hotové
+ * listy formulář předá stránce jako další skupinu k zaškrtnutí.
  */
 const sheetGenerators: Readonly<
   Record<
     GeneratorKey,
     {
-      Component: ComponentType<{
-        baseSheets: readonly PatternSheet[];
-        onGenerated: (sheets: GeneratedPatternSheet[]) => void;
-        initial?: LidGeneratorPrefill | null | undefined;
-      }>;
-      prefill: (
-        entries: readonly LessonRecordEntry[],
-        projectSlug: string,
-      ) => LidGeneratorPrefill | null;
+      hasPrefill: (records: readonly LessonRecordEntry[], projectSlug: string) => boolean;
+      render: (props: GeneratorSlotProps) => ReactNode;
     }
   >
 > = {
-  'lid-wallet-thickness': { Component: LidWalletSheetGenerator, prefill: lidGeneratorPrefill },
+  'lid-wallet-thickness': {
+    hasPrefill: (records, slug) => lidGeneratorPrefill(records, slug) !== null,
+    render: ({ project, baseSheets, onGenerated, records }) => (
+      <LidWalletSheetGenerator
+        baseSheets={baseSheets}
+        onGenerated={onGenerated}
+        initial={lidGeneratorPrefill(records, project.slug)}
+      />
+    ),
+  },
+  'belt-config': {
+    hasPrefill: (records, slug) => beltConfigPrefill(records, slug) !== null,
+    render: ({ project, baseSheets, onGenerated, records }) => (
+      <BeltConfigGenerator
+        project={project}
+        baseSheets={baseSheets}
+        onGenerated={onGenerated}
+        initial={beltConfigPrefill(records, project.slug)}
+      />
+    ),
+  },
 };
 
 /**
@@ -155,36 +176,36 @@ const sheetGenerators: Readonly<
 function SheetGeneratorSlot({
   generator,
   notebook,
-  baseSheets,
-  onGenerated,
-}: {
+  ...props
+}: Omit<GeneratorSlotProps, 'records'> & {
   generator: GeneratorKey;
   notebook: NotebookPrefill;
-  baseSheets: readonly PatternSheet[];
-  onGenerated: (sheets: GeneratedPatternSheet[]) => void;
 }) {
-  const { Component } = sheetGenerators[generator];
   if (notebook.pending) return null;
-  return <Component baseSheets={baseSheets} onGenerated={onGenerated} initial={notebook.initial} />;
+  return sheetGenerators[generator].render({ ...props, records: notebook.records });
 }
 
 interface NotebookPrefill {
   pending: boolean;
-  initial: LidGeneratorPrefill | null;
+  records: readonly LessonRecordEntry[];
+  /** Zápisník má hodnoty pro formulář generátoru. */
+  hasPrefill: boolean;
 }
 
-/** Předvyplnění generátoru ze zápisníku (projekt bez generátoru: nic). */
+const NO_RECORDS: readonly LessonRecordEntry[] = [];
+
+/** Zápisník pro generátor (projekt bez generátoru: nic). */
 function useNotebookPrefill(
   generator: GeneratorKey | undefined,
   projectSlug: string,
 ): NotebookPrefill {
   const records = useLessonRecords(projectSlug);
-  const prefill = generator ? sheetGenerators[generator].prefill : undefined;
-  const initial = useMemo(
-    () => (prefill && records.data ? prefill(records.data, projectSlug) : null),
-    [prefill, records.data, projectSlug],
+  const data = records.data ?? NO_RECORDS;
+  const hasPrefill = useMemo(
+    () => (generator ? sheetGenerators[generator].hasPrefill(data, projectSlug) : false),
+    [generator, data, projectSlug],
   );
-  return { pending: Boolean(generator) && records.isPending, initial };
+  return { pending: Boolean(generator) && records.isPending, records: data, hasPrefill };
 }
 
 /**
@@ -215,13 +236,12 @@ function PatternSheetsPrint({
     .getAll(PRINT_SHEET_PARAM)
     .filter((id) => definition.sheets.some((s) => s.id === id));
   // Se změřenou kůží v zápisníku se výchozí list z odkazu nepředvybere – platí list
-  // vygenerovaný pro změřené tloušťky (`zmerena-<id>`).
-  const awaitingGenerated =
-    wanted.length > 0 && generated.length === 0 && notebook.initial !== null;
+  // vygenerovaný pro změřené hodnoty (`generatedSheetId`).
+  const awaitingGenerated = wanted.length > 0 && generated.length === 0 && notebook.hasPrefill;
   const defaultSelection = (): ReadonlySet<string> => {
     if (generated.length > 0) {
       const fromLink = wanted
-        .map((id) => `zmerena-${id}`)
+        .map((id) => generatedSheetId(id))
         .filter((id) => generated.some((g) => g.id === id));
       return new Set(fromLink.length > 0 ? fromLink : generated.map((g) => g.id));
     }
@@ -290,6 +310,7 @@ function PatternSheetsPrint({
           <SheetGeneratorSlot
             generator={definition.browserGenerator}
             notebook={notebook}
+            project={project}
             baseSheets={definition.sheets}
             onGenerated={onGenerated}
           />

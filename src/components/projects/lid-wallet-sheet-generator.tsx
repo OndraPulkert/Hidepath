@@ -1,5 +1,10 @@
 import { type FormEvent, useId, useState } from 'react';
 
+import {
+  type GeneratedPatternSheet,
+  generatedSheetId,
+  svgDataUrl,
+} from '@/components/projects/generated-sheet';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input, Label } from '@/components/ui/input';
@@ -15,14 +20,6 @@ import {
 } from '@/lib/patterns/lid-wallet-input';
 import { LID_FILE_STEM } from '@/lib/patterns/lid-wallet-sheets';
 import { typo } from '@/lib/utils/format';
-
-/** List vygenerovaný v prohlížeči: stejná metadata jako list z obsahu a k tomu data URL SVG. */
-export interface GeneratedPatternSheet extends PatternSheet {
-  url: string;
-}
-
-const svgDataUrl = (svg: string): string =>
-  `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 
 const MODEL = lidP0ModelValues();
 
@@ -136,7 +133,7 @@ export function LidWalletSheetGenerator({
       if (!base) return [];
       return [
         {
-          id: `zmerena-${base.id}`,
+          id: generatedSheetId(base.id),
           title: base.title,
           note: 'Vygenerováno v aplikaci pro zadané tloušťky. Čísla pro postup jsou v rámečku na listu 4.',
           orientation: base.orientation,

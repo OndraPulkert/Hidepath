@@ -1,6 +1,9 @@
+import { beltProject } from '@/content/projects/belt/project';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
 import { lidWalletProject } from '@/content/projects/lid-wallet/project';
+import opasekPrezka from '../../../docs/generated/opasek-sablona-40mm-1-prezka.svg?url';
+import opasekSpicka from '../../../docs/generated/opasek-sablona-40mm-2-spicka.svg?url';
 import vickoDily from '../../../docs/generated/penezenka-vicko-dily.svg?url';
 import vickoPripravky from '../../../docs/generated/penezenka-vicko-pripravky.svg?url';
 import vickoRub from '../../../docs/generated/penezenka-vicko-rub.svg?url';
@@ -53,6 +56,11 @@ const registry: Readonly<Record<string, Readonly<Record<string, string>>>> = {
     rub: vickoRub,
     dily: vickoDily,
     pripravky: vickoPripravky,
+  },
+  // Výchozí listy pásku (40 mm, 3,5 mm, hrot); jiné sestavy kreslí formulář „Váš pásek“.
+  [beltProject.slug]: {
+    prezka: opasekPrezka,
+    spicka: opasekSpicka,
   },
 };
 

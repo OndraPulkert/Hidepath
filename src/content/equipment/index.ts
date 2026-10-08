@@ -1,3 +1,4 @@
+import { beltEquipment } from '@/content/equipment/belt';
 import { lidWalletEquipment } from '@/content/equipment/lid-wallet';
 import { type EquipmentCatalog, type EquipmentDefinition } from '@/content/schema';
 
@@ -1868,9 +1869,9 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     englishName: 'Round hollow punch 5 mm',
     category: 'cutting',
     shortDescription:
-      'Otvor pro volitelnou průchodku. Malý dutý výsečník, běžná velikost v nabídce obchodů.',
+      'Otvor pro volitelnou průchodku a dírky pro trn pásku. Malý dutý výsečník, běžná velikost v nabídce obchodů.',
     purpose:
-      'Kulatý dutý výsečník Ø 5 mm proseká otvor pro dvoudílnou průchodku. V pouzdru s mincí je od v4.11 potřeba jen k volitelné průchodce.',
+      'Kulatý dutý výsečník Ø 5 mm proseká otvor pro dvoudílnou průchodku. V pouzdru s mincí je od v4.11 potřeba jen k volitelné průchodce. U pásku seká dírky pro trn přezky (Ø = trn u kořene + 0,5 mm; u přezky 40 mm 4,5 nebo 5 mm).',
     buyingGuide: [
       { label: 'Typ', value: 'dutý kruhový výsečník, ne plný průbojník na kov' },
       { label: 'Průměr', value: '5 mm (běžná velikost)' },
@@ -1883,19 +1884,19 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       },
     ],
     alternatives: [],
-    priceRange: { minCents: 12_500, maxCents: 39_400 },
+    priceRange: { minCents: 13_100, maxCents: 39_300 },
     priceSource: 'verified',
-    priceNote: `${VERIFIED_NOTE} Jednotlivě Ø 5 mm bylo u CraftPointu k datu ověření (29. 9. 2026) vyprodané (29 Kč); dostupné jsou Format 5 mm (125 Kč) a sada 2–5 mm (394 Kč), která velikost 5 mm také obsahuje.`,
-    alsoUsedFor: [],
+    priceNote: `${VERIFIED_NOTE} Jednotlivě Ø 5 mm bylo u CraftPointu 29. 9. i 8. 10. 2026 vyprodané (29 Kč); dostupné jsou Format 5 mm (131 Kč) a sada 2–5 mm (393 Kč), která velikost 5 mm také obsahuje.`,
+    alsoUsedFor: ['Pásek – dírky pro trn'],
     examples: [
       {
         title: 'Kruhový výsečník Format 5 mm',
         shop: 'Enaradinastroje',
         url: 'https://www.enaradinastroje.cz/kruhovy-vysecnik-format-5mm/',
-        priceCents: 12_500,
+        priceCents: 13_100,
         note: 'Podle prodejce na kůži, pryž, plsť a pěnové materiály; skladem do 48 hodin. Jestli čistě prosekne kůži, ověřte na odřezku.',
         availability: 'in_stock',
-        checkedAt: '2026-09-29',
+        checkedAt: '2026-10-08',
       },
       {
         title: 'Výsečníky na kůži 2–20 mm, průměr dle výběru',
@@ -1903,18 +1904,18 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         url: 'https://craft-point.cz/products/vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu',
         priceCents: 2_900,
         priceNote: 'za kus',
-        note: 'Jednotlivé průměry 2–20 mm se objednávají podle výběru; 5 mm bylo v době ověření (i 29. 9. 2026) vyprodané, 6 mm skladem.',
+        note: 'Jednotlivé průměry 2–20 mm se objednávají podle výběru; 5 mm bylo v době ověření (29. 9. i 8. 10. 2026) vyprodané, 6 mm skladem.',
         availability: 'unavailable',
-        checkedAt: '2026-09-29',
+        checkedAt: '2026-10-08',
       },
       {
         title: 'Sada výsečníků na kůži 7 velikostí (2–5 mm)',
         shop: 'CraftPoint',
         url: 'https://craft-point.cz/products/sada-vysecniku-na-kuzi-7-velikosti-2-5mm',
-        priceCents: 39_400,
-        note: 'Rukojeť + 7 vyměnitelných hrotů 2 / 2,5 / 3 / 3,5 / 4 / 4,5 / 5 mm. Řeší otvor pro průchodku, i když je jednotlivý hrot Ø 5 mm zrovna vyprodaný.',
+        priceCents: 39_300,
+        note: 'Rukojeť + 7 vyměnitelných hrotů 2 / 2,5 / 3 / 3,5 / 4 / 4,5 / 5 mm. Řeší otvor pro průchodku i dírky pásku, i když je jednotlivý hrot Ø 5 mm zrovna vyprodaný.',
         availability: 'in_stock',
-        checkedAt: '2026-09-29',
+        checkedAt: '2026-10-08',
       },
     ],
     commonlyAtHome: false,
@@ -2155,6 +2156,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     ],
   }),
   ...lidWalletEquipment,
+  ...beltEquipment,
 ];
 
 export const equipmentCatalog: EquipmentCatalog = Object.fromEntries(

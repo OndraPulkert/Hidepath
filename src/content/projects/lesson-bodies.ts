@@ -1,5 +1,7 @@
 import { type ComponentType } from 'react';
 
+import { lessonBodies as beltLessonBodies } from '@/content/projects/belt/lesson-bodies';
+import { beltProject } from '@/content/projects/belt/project';
 import { lessonBodies as cardHolderLessonBodies } from '@/content/projects/card-holder/lesson-bodies';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { lessonBodies as coinCardHolderLessonBodies } from '@/content/projects/coin-card-holder/lesson-bodies';
@@ -16,6 +18,7 @@ const registry: Readonly<Record<string, Readonly<Record<string, ComponentType>>>
   [cardHolderProject.slug]: cardHolderLessonBodies,
   [coinCardHolderProject.slug]: coinCardHolderLessonBodies,
   [lidWalletProject.slug]: lidWalletLessonBodies,
+  [beltProject.slug]: beltLessonBodies,
 };
 
 export function lessonBodiesFor(projectSlug: string): Readonly<Record<string, ComponentType>> {
