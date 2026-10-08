@@ -677,6 +677,9 @@
         // P1 po řezu: horní hrana F rovně přes výřez pro palec (výřez až v lekci 5), konec jazýčku rovný
         const OUTC =
           "M8 24 A2 2 0 0 1 10 22 L107 22 A2 2 0 0 1 109 24 L109 192.999 A4 4 0 0 1 105 196.999 L72.5 196.999 A4 4 0 0 0 68.5 200.999 L68.5 253.659 L48.5 253.659 L48.5 200.999 A4 4 0 0 0 44.5 196.999 L12 196.999 A4 4 0 0 1 8 192.999 Z";
+        // výřez pro palec: na listech čárkovaně (řez později, lekce 5)
+        const NOTCH =
+          "M52.5 22 A1 1 0 0 1 53.5 23 L53.5 29 A5 5 0 0 0 63.5 29 L63.5 23 A1 1 0 0 1 64.5 22";
         const WINL =
           "M21.5 118.427 A6 6 0 0 1 33.5 118.427 L33.5 154.427 A6 6 0 0 1 21.5 154.427 Z";
         const WINR =
@@ -1188,13 +1191,18 @@
             0.15,
             ".5 .8",
           );
+          s += EDGEP.map(
+            ([x, y]) =>
+              `<circle cx="${x}" cy="${y}" r=".7" fill="none" stroke="var(--print)" stroke-width="${f(Math.max(0.12, 0.12 / CK))}"/>`,
+          ).join("");
           return s;
         }
         // list 1 (P1 z líce); full = celý list s rámečkem a textem
         function printL1(o = {}) {
           let s =
-            ln(OUT, "var(--print)", 0.3) +
-            ln(WINL + " " + WINR, "var(--print)", 0.3) +
+            ln(OUTC, "var(--print)", 0.3) +
+            ln(NOTCH + " " + WINL + " " + WINR, "var(--print)", 0.3, "1.2 .8") +
+            ln("M43.5 22 V42 H73.5 V22", "var(--printm)", 0.2, ".3 .7") +
             printFolds();
           s +=
             ln(
@@ -1205,7 +1213,7 @@
             ) + dots([...S1, ...S6, ...S23]);
           s += ln(BILLW, "var(--printm)", 0.25, "1.2 .8");
           s += ln(
-            "M57.5 116.427 H59.5 M58.5 115.427 V117.427 M57.5 147.427 H59.5 M58.5 146.427 V148.427 M57.5 29 H59.5 M58.5 28 V30 M57.5 241.659 H59.5 M58.5 240.659 V242.659",
+            "M57.5 116.427 H59.5 M58.5 115.427 V117.427 M57.5 147.427 H59.5 M58.5 146.427 V148.427 M57.5 29 H59.5 M58.5 28 V30",
             "var(--printm)",
             0.2,
           );
@@ -1233,7 +1241,7 @@
               0.2,
               "1.2 .8",
             );
-          s += `<circle cx="58.5" cy="241.659" r="4" fill="none" stroke="var(--printm)" stroke-width="${f(Math.max(0.15, 0.15 / CK))}" stroke-dasharray=".5 .5"/>`;
+          s += ln("M58.5 202 V253.659", "var(--printm)", 0.15, ".3 .7");
           s +=
             txt(58.5, 41.5, "F · PŘEDNÍ STĚNA (karty)", 2.4, "var(--printm)", {
               b: 1,
@@ -1311,8 +1319,8 @@
         // list 2 (P1 z rubu): lepené plochy, D1, D2, plíšek, „L“
         function printL2(o = {}) {
           let s =
-            ln(OUT, "var(--print)", 0.3) +
-            ln(WINL + " " + WINR, "var(--print)", 0.3) +
+            ln(OUTC, "var(--print)", 0.3) +
+            ln(NOTCH + " " + WINL + " " + WINR, "var(--print)", 0.3, "1.2 .8") +
             printFolds();
           RECTS2.forEach(([x, y, w, h, g]) => {
             if (g[0] !== "G") return;
@@ -1443,7 +1451,7 @@
         add(
           "A",
           "List 1 vystřihněte nahrubo",
-          "List 1 a list 3 vytiskněte dvakrát. První výtisk se rozřeže, druhý bude šablona na otvory švů (lekce 6 a 8). Zkontrolujte úsečku 50 mm a kótu P1 (výchozí 231,66 mm). List 1 vystřihněte nahrubo s okrajem 1–2 cm kolem obrysu P1, ne po čáře.",
+          "List 1 a list 3 vytiskněte dvakrát: první výtisk při řezání rozřežete, druhý bude šablona (otvory švů a D2 v lekci 6, S6 v lekci 8). Zkontrolujte úsečku 50 mm a kótu P1. První výtisk listu 1 vystřihněte nahrubo s okrajem 1–2 cm kolem obrysu P1, ne po čáře.",
           8200,
           (t) => {
             const c = PAPER,
@@ -1516,7 +1524,7 @@
         add(
           "A",
           "Přilepte list 1 na LÍC",
-          "List 1 položte na líc usně. Přilepte ho maskovací páskou z několika stran, jen na okrajích mimo čáru řezu. Pásku nejdřív vyzkoušejte na odřezku – může na líci nechat lesklou stopu nebo vytrhnout vlákna.",
+          "List 1 je P1 z líce: položte ho na líc usně a přilepte maskovací páskou z několika stran, jen mimo čáru řezu. Pásku nejdřív vyzkoušejte na odřezku – může na líci nechat lesklou stopu nebo vytrhnout vlákna.",
           9000,
           (t) => {
             const c = OV,
@@ -1573,7 +1581,7 @@
         add(
           "B",
           "Propíchněte značky na bocích",
-          "Dokud je list přilepený, propíchněte jehlou skrz papír, vše na obou bocích: konce osy ohybu dna (v 62,21), čáry hrany vložky – trojúhelníčky (v 64,18) – a obou přehybů závěsu (v 145,10 a 148,88).",
+          "Dokud je list přilepený, propíchněte jehlou skrz papír kroužky na obou bocích: osa ohybu dna, hrana vložky a oba přehyby závěsu.",
           13000,
           (t) => {
             const z1 = es(t, 0.26, 0.38),
@@ -1671,14 +1679,14 @@
             return s;
           },
           "lic",
-          "Tip: vpich dělejte asi 1 mm od hrany, aby po řezu zůstal na P1. Šídlo dělá větší vpich než jehla (ověřte na odřezku).",
+          "Tip: kroužky leží 1,5 mm od hrany, aby vpich po řezu zůstal na P1. Šídlo dělá větší vpich než jehla (ověřte na odřezku).",
         );
 
         // B2 — středy výsečníků
         add(
           "B",
           "Propíchněte středy výsečníků",
-          "Propíchněte středy výsečníků: Ø 8 na obou napojeních jazýčku, Ø 12 na koncích okének mincí, Ø 10 výřezu pro palec a Ø 14 na koncích okénka bankovek (křížky v okénku „až po G3“). Otvory švů S1–S3 a S6 teď nepropichujte (lekce 6 a 8).",
+          "Propíchněte všechny křížky v kroužku, středy výsečníků: Ø 8 na napojení jazýčku, Ø 12 okének mincí, Ø 10 výřezu pro palec a Ø 14 na koncích okénka bankovek. Červené tečky švů S1–S3 a S6 teď nepropichujte (lekce 6 a 8).",
           12000,
           (t) => {
             const c = OV,
@@ -1757,7 +1765,7 @@
         add(
           "C",
           "Vysekněte napojení jazýčku Ø 8",
-          "Řežte skrz papír i kůži přesně po čáře. P1 je 101 mm široký, dlouhý podle kóty (výchozí 231,66 mm). Na obou stranách jazýčku nejdřív vysekněte výsečníkem Ø 8 na propíchnutém středu (napojení R4). Vysekávejte na tvrdé desce; prsty mějte u spodku výsečníku, palička dopadá na horní konec.",
+          "Řežte nožem skrz papír i kůži přesně po plné čáře; čárkované tvary (řez později) teď neřežte. Vyduté napojení jazýčku: na obou stranách jazýčku nejdřív výsečník Ø 8 skrz papír na propíchnutém středu. Vysekávejte na tvrdé desce; prsty mějte u spodku výsečníku, palička dopadá na horní konec.",
           10000,
           (t) => {
             const c = JUNC;
@@ -2000,7 +2008,7 @@
         add(
           "C",
           "Řízněte horní hranu F rovně",
-          "Horní hranu F řežte rovně u pravítka i přes výřez pro palec, od jednoho rohu výřezu k druhému. Výřez se dělá až v lekci 5; propíchnutý střed Ø 10 zůstane na kůži.",
+          "Horní hranu přední stěny F řežte rovně u pravítka i přes výřez pro palec – výřez se dělá až v lekci 5; propíchnutý střed Ø 10 zůstane na kůži.",
           11000,
           (t) => {
             const z = es(t, 0.62, 0.76);
@@ -2074,7 +2082,7 @@
         add(
           "C",
           "Konec jazýčku nechte rovný",
-          "Konec jazýčku nechte rovný v plné délce (výchozí 231,66 mm), je v ní rezerva 5 mm. Špičku R10 teď neřežte, řeže se v lekci 11.",
+          "Konec jazýčku nechte rovný v plné délce, je v ní rezerva 5 mm. Špičku R10 teď neřežte, řeže se v lekci 11.",
           10000,
           (t) => {
             const c = TIPZ;
@@ -2205,7 +2213,7 @@
         add(
           "D",
           "Zkontrolujte značky a kótu P1",
-          "Zkontrolujte značky: konce osy ohybu, hrany vložky a přehybů závěsu na obou bocích a středy okének mincí, okénka bankovek a výřezu. P1 musí sedět s kótou na ±0,5 mm (výchozí 231,66) a konec jazýčku je rovný.",
+          "Zkontrolujte, že na kůži je vpich u každého kroužku a křížku z listu 1. P1 musí sedět s kótou z rámečku na ±0,5 mm a konec jazýčku je rovný.",
           10000,
           (t) => {
             const c = OV;
@@ -2432,7 +2440,7 @@
         add(
           "E",
           "Propíchněte rohy ploch a konce čar",
-          "Jehlou skrz šablonu propíchněte rohy ploch a konce čar: osa ohybu dna, hrana vložky, pás závěsu, hranice lepení G1–G4, okénka mincí a poloha D1 a D2.",
+          "Propíchněte jehlou všechny kroužky na listu 2: rohy šrafovaných ploch a konce čar.",
           12000,
           (t) => {
             const c = OV;
@@ -2500,7 +2508,7 @@
         add(
           "E",
           "Spojte tečky tužkou u pravítka",
-          "Šablonu sejměte a tečky spojte tužkou u pravítka, nic nezařezávejte: osa ohybu dna (v 62,21), hrana vložky (v 64,18, případně posunutá podle V12), pás závěsu (v 142,99–150,99; nelepí se ani nešije), hranice G1–G4, okénka mincí a poloha D1 a D2. Švy S1–S3 a S6 ani okénko bankovek na rub nekreslete.",
+          "Šablonu sejměte a vpichy spojte tužkou u pravítka, nic nezařezávejte. Tak přenesete osu ohybu dna, čáru hrany vložky (případně posunutou podle V12), pás závěsu, plochy lepení G1–G4, okénka mincí, polohu D1 a D2 a osu na rubu F i B. Čáry švů S1–S3 a S6 ani okénko bankovek na rub nekreslete.",
           13000,
           (t) => {
             const c = OV,
@@ -2589,7 +2597,7 @@
         add(
           "E",
           "Narýsujte rysky a napište „L“",
-          "Osu ohybu, hranu vložky a přehyby závěsu (v 145,10 a 148,88) označte i ryskami na obou bocích. Na rub F a na rub B napište „L“ tam, kde je na listu 2 (levá strana). Otvory švů se přenesou později z líce přes šablonu z listu 1 (S1–S3 v lekci 6, S6 v lekci 8).",
+          "Osu ohybu, hranu vložky a oba přehyby závěsu označte i ryskami na obou bocích (v lekci 10 podle nich zkontrolujete přehyby). Na rub F a na rub B napište „L“ tam, kde je na listu 2. Otvory švů se přenesou později z líce přes šablonu z listu 1 (S1–S3 v lekci 6, S6 v lekci 8).",
           10000,
           (t) => {
             const z1 = es(t, 0.05, 0.18),

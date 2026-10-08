@@ -820,24 +820,24 @@ const cut = (pts, frac) => {
 const PARTS={A:'anim-dno',B:'anim-zaves'};
 const STEPS = { A: [], B: [] };
 function add(part, title, d, c) { STEPS[part].push({ t: title, d, c }); }
-add('A','Výchozí stav: rýha na rubu',3.6,'Hotové z lekce 5: rýha na rubu v ose ohybu <span class="num">v 62,21</span>, vytlačená tupým hrotem u ocelového pravítka stejně po celé šířce <span class="num">101</span>. V záloze B1 rýha není: pás ohybu je z rubu ztenčený (lekce 5), osu ukazují rysky na bocích.');
-add('A','Navlhčete pás ohybu',3.2,'Houbičkou navlhčete pás ohybu dna <span class="num">v 58,21–66,21</span> (rýha uprostřed).');
+add('A','Výchozí stav: rýha na rubu',3.6,'Hotové z lekce 5: rýha na rubu podél osy ohybu, vytlačená tupým hrotem u ocelového pravítka stejně po celé šířce. V záloze B1 rýha není: pás ohybu je z rubu ztenčený (lekce 5), osu ukazují rysky na bocích.');
+add('A','Navlhčete pás ohybu',3.2,'Pás ohybu dna navlhčete houbičkou (rýha je uprostřed pásu).');
 add('A','Počkejte, až se barva skoro vrátí k suché',3,'Počkejte, až se barva usně skoro vrátí k suché (<span class="num">5–10</span> min). Teprve pak ohýbejte.');
-add('A','Položte vložku hranou na čáru',3.8,'Vložku položte na rub B hranou na <b>čáru hrany vložky</b>: výchozí v <span class="num">64,18</span>, tedy <span class="num">1,96</span> za rýhou směrem k B (nebo posunutou podle V12). Hrana vložky míří k F, na straně F vložka neleží. Na každé straně přesahuje díl o <span class="num">5</span>.');
+add('A','Položte vložku hranou na čáru',3.8,'Vložku položte na rub B hranou na <b>čáru hrany vložky</b> z lekce 4 (případně posunutou podle V12). Hrana vložky míří k F, na straně F vložka neleží – tak padne střed ohybu na rýhu. Vložka přesahuje díl na každé straně o <span class="num">5</span> mm.');
 add('A','Přehněte F lícem ven přes vložku',4,'F přehněte nahoru přes vložku <b>lícem ven</b>. Rýha skončí uprostřed ohybu.');
 add('A','Vložte fólii na vlhký líc',2.6,'Mezi vlhký líc a prkénka dejte potravinovou fólii.');
 add('A','Vložte spodních 20 mm mezi prkénka',3,'Spodních <span class="num">20</span> dejte mezi dvě hladká prkénka.');
-add('A','Stáhněte svěrkami',3,'Stáhněte svěrkami. Bez svěrek použijte knihy nebo silné gumičky (tlak ověřte na odřezku).');
+add('A','Stáhněte svěrkami',3,'Stáhněte svěrkami. Bez svěrek jako v lekci 3: knihy nebo silné gumičky (tlak ověřte na odřezku).');
 add('A','Nechte vyschnout přes noc',3.6,'Nechte vyschnout <b>přes noc</b>, <span class="num">12–24 h</span>, ne u topení.');
 add('A','Vysuňte vložku bokem',4,'Po vyschnutí sundejte svěrky, prkénka a fólii a vložku <b>vysuňte bokem</b>.');
-add('A','Kontrola: F jde odklopit',4.5,'Tvar U, líc venku, rýha uprostřed ohybu. F jde odklopit asi o 90° na lepení plíšku a D1 (lekce 8). Mírné odpružení nevadí.');
-add('B','Vložte obsah stavu B',4,'Do kapsy karet dejte <b>2 staré karty</b> a do oddílu bankovek <b>papír asi 70 × 65</b>, přeložený na asi <span class="num">0,7</span> (nebo bankovku ve fólii). Mince ne.');
-add('B','Navlhčete jen pás závěsu',3.4,'Houbičkou navlhčete <b>jen pás závěsu</b> <span class="num">v 142,99–150,99</span>, nenamáčejte celé.');
-add('B','Zavřete víčko přes obsah',3.4,'Víčko zavřete přes obsah a jazýček položte na přední stěnu. Kopyto ani opěrka nejsou potřeba. Podívejte se, jestli přehyby vyšly zhruba u rysek v <span class="num">145,10</span> a <span class="num">148,88</span>; jinou polohu si zapište.');
+add('A','Kontrola: F jde odklopit',4.5,'Tvar U, líc venku, rýha uprostřed ohybu. Boky ještě nejsou slepené, takže F jde odklopit na lepení plíšku a D1 (lekce 8). Mírné odpružení nevadí, udrží ho lepení G4 a boční švy.');
+add('B','Vložte obsah stavu B',4,'Do kapsy karet dejte <b>2 staré karty</b> a do oddílu bankovek <b>papír asi 70 × 65</b>, přeložený tak, aby měl asi <span class="num">0,7</span> mm (nebo bankovku ve fólii). Mince ne. Obsah pod závěsem pak má <span class="num">3,42</span> mm (výchozí střih; jinak list 4, „Tvarování závěsu“).');
+add('B','Navlhčete jen pás závěsu',3.4,'Houbičkou navlhčete <b>jen pás závěsu</b>, nenamáčejte celou peněženku.');
+add('B','Zavřete víčko přes obsah',3.4,'Víčko zavřete přes obsah a jazýček položte na přední stěnu. Kopyto ani opěrka nejsou potřeba. Rysky přehybů z lekce 4 ukazují, kde přehyby čeká model, tvar ale dává obsah. Vyšly-li přehyby jinde, zapište kde.');
 add('B','Vložte fólii mezi závěs a knihu',3,'Mezi vlhký závěs a knihu dejte potravinovou fólii.');
 add('B','Nechte přes noc pod knihou',4.2,'Navrch dejte knihu (lehká zátěž) a nechte peněženku zavřenou <b>přes noc</b>, <span class="num">12–24 h</span>, ne u topení. Obsah zůstává uvnitř.');
 add('B','Kontrola: víčko se samo zavírá',4.2,'Knihu a fólii sundejte. Víčko se po vyschnutí vrací k zavřené poloze: otevřete ho a pusťte, samo se vrátí.');
-add('B','Otevřené víčko samo nestojí',4.4,'Otevřené víčko <b>samo nestojí</b>, tak to má být – u bankovek a mincí ho drží palec. Víčko nepřeklápějte až na záda, závěs by se ohýbal opačně.');
+add('B','Otevřené víčko samo nestojí',4.4,'Otevřené víčko <b>samo nestojí</b>, tak to má být – drží ho palec ruky, která peněženku drží. Víčko nepřeklápějte až na záda, závěs by se ohýbal opačně.');
 const FXC = M.v.foldAxis - M.v.backStart;            // rýha vůči hraně vložky (−1,96)
 const FBAND = [M.v.backStart - M.v.foldBand[1], M.v.backStart - M.v.foldBand[0]]; // s pásu
 function foldState(i, u) {

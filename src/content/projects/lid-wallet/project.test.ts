@@ -17,12 +17,21 @@ import {
   lidWalletVariant,
 } from '@/lib/geometry/lid-wallet';
 import { lidMaxDividerMm } from '@/lib/patterns/lid-wallet-input';
+import {
+  buildLidBackSvg,
+  buildLidJigsSvg,
+  buildLidSheetSvg,
+} from '@/lib/patterns/lid-wallet-sheets';
 
 /** Číslo tak, jak ho píše obsah (desetinná čárka, zaokrouhlené na `d` míst). */
 const cz = (n: number, d = 2): string =>
   String(Math.round(n * 10 ** d) / 10 ** d).replace('.', ',');
 
 const L = lidWalletLayout(DEFAULT_LID_WALLET);
+/** Výchozí listy 1, 2 a 4: lekce na jejich značky a rámeček „Čísla pro postup“ odkazují. */
+const SHEET1 = buildLidSheetSvg(DEFAULT_LID_WALLET);
+const SHEET2 = buildLidBackSvg(DEFAULT_LID_WALLET);
+const SHEET4 = buildLidJigsSvg(DEFAULT_LID_WALLET);
 const state = (id: string) => L.states.find((s) => s.state.id === id)!;
 const lessonText = (slug: string): string => {
   const lesson = lidWalletProject.lessons.find((l) => l.slug === slug)!;
@@ -182,8 +191,12 @@ describe('obsah – peněženka Víčko', () => {
     // Středy okénka bankovek: propíchnout přes list 1 na líc (lekce 4), sekat z líce B (lekce 6).
     expect(lessonText('04-cut-and-mark')).toContain('Ø 14 na koncích okénka bankovek');
     expect(lessonText('06-d2-and-coin-columns')).toContain('šablony okénka bankovek z listu 4');
-    // Čára hrany vložky dna se vyznačí v lekci 4, v lekci 7 se na ni pokládá vložka.
-    expect(lessonText('04-cut-and-mark')).toContain(`výchozí v ${cz(L.v.insertEdge)}`);
+    // Čára hrany vložky dna se vyznačí v lekci 4 (kroužky listu 2), v lekci 7 se na ni pokládá vložka.
+    expect(lessonText('04-cut-and-mark')).toContain(
+      'Propíchněte jehlou všechny kroužky na listu 2',
+    );
+    expect(lessonText('07-bottom-fold')).toContain('na čáru hrany vložky z lekce 4');
+    expect(SHEET4).toContain(`hrana vložky dna (lekce 3, 4, 7): v ${cz(L.v.insertEdge)}`);
     // Rysky přehybů závěsu z lekce 4 slouží v lekci 10 ke kontrole.
     expect(lessonText('10-hinge-forming')).toContain('Rysky přehybů z lekce 4');
     expect(lessonText('04-cut-and-mark')).toContain('Horní hranu přední stěny F řežte rovně');
@@ -228,39 +241,50 @@ describe('obsah – peněženka Víčko', () => {
     expect(lessonText('01-measure-and-sheets')).toContain(
       `${L.bottomSpacer.widthMm} × ${L.bottomSpacer.depthMm} × ${cz(DEFAULT_LID_WALLET.bottomSpacerMm)} mm`,
     );
-    expect(lessonText('04-cut-and-mark')).toContain(
-      `v ${cz(L.v.foldAxis)} a ${cz(L.v.hingeBand[0])}–${cz(L.v.hingeBand[1])}`,
+    // Souřadnice čar, ploch a otvorů lekce už nevypisují: odkazují na značky listů a rámeček na
+    // listu 4. Ty musí nést čísla modelu.
+    expect(SHEET4).toContain(`osa ohybu, rýha (lekce 4, 5): v ${cz(L.v.foldAxis)}`);
+    expect(SHEET4).toContain(
+      `pás závěsu (lekce 4): v ${cz(L.v.hingeBand[0])}–${cz(L.v.hingeBand[1])}`,
     );
-    // Přehyb 145,105 dokument píše jako 145,10 – stačí shoda na desetiny.
-    expect(lessonText('04-cut-and-mark')).toContain(`v ${cz(L.v.rearCrease, 1)}`);
-    expect(lessonText('04-cut-and-mark')).toContain(` a ${cz(L.v.frontCrease)};`);
-    expect(lessonText('05-crease-windows-edges')).toContain(`v ${cz(L.v.foldAxis)}`);
+    // Přehyb 145,105 list píše jako 145,1 – stačí shoda na desetiny.
+    expect(SHEET1).toContain(`přehyby v ${cz(L.v.rearCrease, 1)} a ${cz(L.v.frontCrease)}`);
+    expect(lessonText('04-cut-and-mark')).toContain('oba přehyby závěsu');
     const cw = L.coinWindows[0];
-    expect(lessonText('05-crease-windows-edges')).toContain(
-      `středy y ${cz(cw.y0 + cw.width / 2)} a ${cz(cw.y1 - cw.width / 2)}`,
+    expect(SHEET4).toContain(
+      `okénka mincí, středy konců (lekce 5): y ${cz(cw.y0 + cw.width / 2)} a ${cz(cw.y1 - cw.width / 2)}`,
     );
-    expect(lessonText('06-d2-and-coin-columns')).toContain(`do y ${cz(L.topGlueY)}`);
+    expect(lessonText('05-crease-windows-edges')).toContain('křížky na vpichy');
+    expect(SHEET4).toContain(`G3 jen do y ${cz(L.topGlueY)} (lekce 6)`);
+    expect(lessonText('06-d2-and-coin-columns')).toContain('jen na šrafovaných pásech G3');
     const bw = L.billWindow;
-    expect(lessonText('06-d2-and-coin-columns')).toContain(
-      `${cz(bw.width)} × ${cz(bw.y1 - bw.y0)} mm uprostřed zad (x ${cz(bw.cx - bw.width / 2)}–${cz(bw.cx + bw.width / 2)}, y ${cz(bw.y0)}–${cz(bw.y1)})`,
+    expect(SHEET1).toContain(`okénko bankovek ${cz(bw.width)} × ${cz(bw.y1 - bw.y0)} (lekce 6)`);
+    expect(SHEET1).toContain(
+      `x ${cz(bw.cx - bw.width / 2)}–${cz(bw.cx + bw.width / 2)}, y ${cz(bw.y0)}–${cz(bw.y1)}`,
     );
-    expect(lessonText('07-bottom-fold')).toContain(
-      `v ${cz(L.v.insertEdge)}, tedy ${cz(L.v.insertEdge - L.v.foldAxis)} mm za rýhou`,
+    expect(lessonText('06-d2-and-coin-columns')).toContain('na vpichy Ø 14 z lekce 4');
+    expect(SHEET4).toContain(
+      `v ${cz(L.v.insertEdge)} (${cz(L.v.insertEdge - L.v.foldAxis)} za rýhou)`,
     );
-    expect(lessonText('08-plate-d1-card-floor')).toContain(
+    expect(lessonText('07-bottom-fold')).toContain(`${cz(L.v.insertEdge - L.v.foldAxis)} mm vedle`);
+    expect(SHEET2).toContain(
       `x ${cz(L.plate.x0)}–${cz(L.plate.x1)}, y ${cz(L.plate.y0)}–${cz(L.plate.y1)}`,
     );
-    expect(lessonText('08-plate-d1-card-floor')).toContain(`y ${cz(L.s6Y)} (výchozí)`);
+    expect(lessonText('08-plate-d1-card-floor')).toContain('do šrafované plochy G1 (list 2)');
+    expect(SHEET4).toContain(`S6 y ${cz(L.s6Y)} (lekce 8)`);
+    expect(lessonText('08-plate-d1-card-floor')).toContain('červené tečky S6');
     expect(lessonText('10-hinge-forming')).toContain(`${cz(L.hingeContentBMm)} mm`);
     const pA = hingePath(DEFAULT_LID_WALLET, L.hingeContentAMm);
     const pC = hingePath(DEFAULT_LID_WALLET, L.hingeContentCMm);
-    expect(lessonText('10-hinge-forming')).toContain(`/ ${cz(pC - pA)}`);
-    expect(lessonText('10-hinge-forming')).toContain(
-      `A ${cz(state('A').bandEdgeY, 1)} / B ${cz(state('B').bandEdgeY, 1)} / C ${cz(state('C').bandEdgeY, 1)} mm`,
+    expect(SHEET4).toContain(`k = (y_C − y_A) / ${cz(pC - pA)}`);
+    expect(lessonText('10-hinge-forming')).toContain('dělitel z rámečku na listu 4');
+    expect(SHEET4).toContain(
+      `hrana víčka A / B / C (lekce 10): ${cz(state('A').bandEdgeY)} / ${cz(state('B').bandEdgeY)} / ${cz(state('C').bandEdgeY)}`,
     );
-    expect(lessonText('10-hinge-forming')).toContain(
-      `A ${cz(state('A').bandEdgeYkMax, 1)} a C ${cz(state('C').bandEdgeYkMax, 1)}`,
+    expect(SHEET4).toContain(
+      `A ${cz(state('A').bandEdgeYkMax)} / C ${cz(state('C').bandEdgeYkMax)}`,
     );
+    expect(lessonText('10-hinge-forming')).toContain('„hrana víčka A / B / C“');
     expect(lessonText('11-magnet-lining-s7')).toContain(`y ${cz(L.magnetYB, 1)}`);
     expect(lessonText('11-magnet-lining-s7')).toContain(
       `${cz(L.magnetYBMin)}–${cz(L.magnetYBMax)}`,
@@ -406,8 +430,11 @@ describe('obsah – peněženka Víčko', () => {
       const maxAt = (p1Mm: number) => fmt(lidMaxDividerMm(lidWalletVariant({ p1Mm }))!);
       expect(maxAt(1.0)).toBe('0,92');
       expect(stepAt(1, 'measure').body).toContain(
-        `při 1,05 na ${maxAt(1.05)} a při 1,1 na ${maxAt(1.1).padEnd(4, '0')} mm`,
+        'tlustší P1 hranici snižuje, hranici pro vaši P1 ukazuje souhrn pod krokem',
       );
+      for (const p1 of [1.05, 1.1]) {
+        expect(Number(maxAt(p1).replace(',', '.'))).toBeLessThan(0.92);
+      }
       expect(stepAt(2, 'k').body).toContain('nad 1,24');
       expect(stepAt(3, 'inspect').body).toContain('Do 0,3 mm nechte čáru z listu');
       expect(stepAt(2, 'bills').body).toContain('Cíl je aspoň 15 mm');

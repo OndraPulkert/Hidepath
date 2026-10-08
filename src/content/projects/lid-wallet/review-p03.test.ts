@@ -8,7 +8,7 @@ import {
 import { legacyLidOffer } from '@/features/lid-wallet/lid-sheets-state';
 import { type LessonRecordEntry } from '@/features/notebook/types';
 import { DEFAULT_LID_WALLET, lidWalletLayout, lidWalletVariant } from '@/lib/geometry/lid-wallet';
-import { buildLidBackSvg } from '@/lib/patterns/lid-wallet-sheets';
+import { buildLidBackSvg, buildLidJigsSvg } from '@/lib/patterns/lid-wallet-sheets';
 
 /** Regrese z kontroly p03: lekce Víčka musí vést ke stavbě bez rozporů s listy a zadáním. */
 const lesson = (n: number) => lidWalletProject.lessons.find((l) => l.order === n)!;
@@ -40,9 +40,11 @@ describe('Víčko – opravy z kontroly p03', () => {
     expect(a.magnetYBMax - a.magnetYBMin).toBeLessThan(0.13);
     expect(stepOf(1, 'numbers-box').body).not.toContain('0,13');
     expect(stepOf(1, 'numbers-box').body).toContain('asi 0,1 mm');
-    expect(stepOf(11, 'find-plate').body).toContain(
-      `v záloze A jen ${cz(a.magnetYBMin)}–${cz(a.magnetYBMax)}`,
+    // Okno pro zálohu A je na listu 4 té varianty; lekce 11 ukazuje okno pro vaše listy pod krokem.
+    expect(buildLidJigsSvg(lidWalletVariant({ p1Mm: 0.8 }))).toContain(
+      `okno lepení ${cz(a.magnetYBMin)}–${cz(a.magnetYBMax)}`,
     );
+    expect(stepOf(11, 'find-plate').body).toContain('pro vaše listy ho ukazuje souhrn pod krokem');
   });
 
   it('záloha A: useň 0,8 se změří a zadá ve formuláři listů, převod vezme změřenou hodnotu', () => {

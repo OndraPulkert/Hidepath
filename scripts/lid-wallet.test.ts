@@ -78,10 +78,15 @@ describe('generátor peněženky VÍČKO', () => {
     expect(tongue.map((p) => p.x).sort((a, b) => a - b)).toEqual(L.tongueX);
   });
 
-  it('výřez pro palec je v obrysu P1 (CUT) na listu 1 i 2: dno R5 na ose, hloubka 12', () => {
+  it('výřez pro palec je čárkovaně v CUT (řez až v lekci 5), obrys P1 jde horem rovně: dno R5 na ose, hloubka 12', () => {
     const n = L.thumbNotch;
     for (const svg of [sheet, back]) {
-      const d = /<path d="([^"]+)"[^>]*class="outline"/.exec(layer(svg, 'CUT'))![1];
+      const outline = /<path d="([^"]+)"[^>]*class="outline"/.exec(layer(svg, 'CUT'))![1];
+      // horní hrana F rovně přes výřez (lekce 4): obrys nemá oblouk výsečníku
+      expect(outline).not.toMatch(new RegExp(`A${n.radius} ${n.radius} `));
+      const m = /<path class="thumb-notch" d="([^"]+)"([^>]*)\/>/.exec(layer(svg, 'CUT'))!;
+      expect(m[2]).toContain('stroke-dasharray');
+      const d = m[1];
       const arc = new RegExp(
         `L([\\d.]+) ([\\d.]+) A${n.radius} ${n.radius} 0 0 [01] ([\\d.]+) \\2 `,
       ).exec(d)!;
@@ -95,6 +100,9 @@ describe('generátor peněženky VÍČKO', () => {
       expect(svg).toContain(`výřez pro palec Ø ${2 * n.radius} + nůž`);
     }
     expect(sheet).toContain('ověřit na papírovém modelu P0');
+    // šablona výřezu pro palec (lekce 2) jen na listu 1
+    expect(layer(sheet, 'CUT')).toContain('class="thumb-template"');
+    expect(layer(back, 'CUT')).not.toContain('class="thumb-template"');
   });
 
   it('otvory na P1: S1 + S2 + S3 + S6 = 63, sedí na švech (S4/S5 až po složení)', () => {
@@ -115,9 +123,11 @@ describe('generátor peněženky VÍČKO', () => {
     }
   });
 
-  it('okénka mincí jsou v CUT (12 × 48 na B), okénko bankovek jen v GUIDE (řeže se po G3)', () => {
+  it('okénka mincí (12 × 48 na B) i okénko bankovek jsou v CUT čárkovaně – řez později (lekce 5 a 6)', () => {
     const coin = [
-      ...layer(sheet, 'CUT').matchAll(/<path d="([^"]+)"[^>]*class="coin-window"/g),
+      ...layer(sheet, 'CUT').matchAll(
+        /<path class="coin-window" d="([^"]+)" [^>]*stroke-dasharray/g,
+      ),
     ].map((m) => nums(m[1]));
     expect(coin).toHaveLength(2);
     for (const d of coin) {
@@ -127,11 +137,12 @@ describe('generátor peněženky VÍČKO', () => {
       expect(w).toBeCloseTo(12, 6);
       expect(len).toBeCloseTo(48, 6);
     }
-    expect(layer(sheet, 'CUT')).not.toContain('bill-window');
-    expect(layer(sheet, 'GUIDE')).toContain('class="bill-window"');
+    expect(layer(sheet, 'GUIDE')).not.toContain('bill-window');
     // Kolo 11: okénko bankovek 14 × 45, konce R7 výsečníkem Ø 14 (Ø 15 CraftPoint nemá)
     const bill = [
-      ...layer(sheet, 'GUIDE').matchAll(/<path d="([^"]+)"[^>]*class="bill-window"/g),
+      ...layer(sheet, 'CUT').matchAll(
+        /<path class="bill-window" d="([^"]+)" [^>]*stroke-dasharray/g,
+      ),
     ].map((m) => nums(m[1]));
     expect(bill).toHaveLength(1);
     expect(bill[0][7] - bill[0][0]).toBeCloseTo(14, 6);
@@ -204,8 +215,9 @@ describe('generátor peněženky VÍČKO', () => {
     const at = (x: number) => crosses.filter((c) => near(c.x, x));
     // okénka mincí: 2 křížky na každém (Ø 12 na obou koncích)
     for (const w of L.coinWindows) expect(at(w.cx)).toHaveLength(2);
-    // osa: okénko bankovek 2, výřez pro palec 1, magnet 1
-    expect(at(L.axisX)).toHaveLength(4);
+    // osa: okénko bankovek 2, výřez pro palec 1 (magnet se na listu 1 nekreslí, lekce 11)
+    expect(at(L.axisX)).toHaveLength(3);
+    expect(layer(sheet, 'GUIDE')).not.toContain('class="magnet"');
     // napojení jazýčku: střed Ø 8 vedle jazýčku, rj pod koncem pásu víčka
     const rj = spec.tongueJoinRadiusMm;
     for (const x of [L.tongueX[0] - rj, L.tongueX[1] + rj]) {
@@ -399,6 +411,74 @@ describe('generátor peněženky VÍČKO', () => {
     ];
     expect(marks).toHaveLength(4);
     for (const m of marks) expect(Math.abs(Number(m[2]) - Number(m[1]))).toBeCloseTo(3, 5);
+  });
+
+  it('každý list má legendu značek se stejnými popisy', () => {
+    for (const svg of all) {
+      expect(svg).toContain('ZNAČKY NA TOMTO LISTU');
+      expect(svg).not.toContain('GUIDE značky, osy');
+      for (const label of ['řez nožem po čáře', 'propíchnout jehlou skrz papír']) {
+        expect(svg, label).toContain(label);
+      }
+    }
+    expect(back).toContain('lepit kontaktním lepidlem (tato strana)');
+    expect(parts).toContain('lepí se druhá strana (líc D2): zdrsnit');
+    expect(sheet).toContain('řez později – lekce je u popisku');
+  });
+
+  it('značky k propíchnutí: konce os a přehybů (list 1, 2), rohy lepení (list 2), osa D1/D2 (list 3), ryska L1 (list 4)', () => {
+    const pricks = (svg: string) =>
+      [...layer(svg, 'GUIDE').matchAll(/<circle class="prick"/g)].length;
+    // osa ohybu, hrana vložky, 2 přehyby × 2 boky (+ 2 kroužky v legendě: 1 vzorek)
+    expect(pricks(sheet)).toBe(8 + 1);
+    expect(pricks(back)).toBeGreaterThan(8 + 1);
+    expect(pricks(parts)).toBe(4 + 1);
+    // ryska L1 (2) + konce čáry švu na proužku (2) + vzorek v legendě
+    expect(pricks(jigs)).toBe(4 + 1);
+  });
+
+  it('list 2: osa x 50,5 má kroužky na rubu F (2) i rubu B (2), lekce 6 a 8 na ni přikládají D2 a D1', () => {
+    // List 2 je zrcadlený, osa leží uprostřed šířky – x je stejné jako na listu 1.
+    const axisPricks = [
+      ...layer(back, 'GUIDE').matchAll(/<circle class="prick" cx="([\d.]+)" cy="([\d.]+)"/g),
+    ].filter((m) => Math.abs(Number(m[1]) - (ox + L.axisX)) < 0.01);
+    expect(axisPricks.length).toBe(4);
+  });
+
+  it('list 3: šablona D2 má otvory S1–S3 (způsob (b) v lekci 6); list 4: proužek má 18 otvorů a úseky děrování', () => {
+    const holes = [
+      ...layer(parts, 'STITCH').matchAll(
+        new RegExp(`<circle cx="[\\d.]+" cy="[\\d.]+" r="${HOLE_R}"`, 'g'),
+      ),
+    ];
+    expect(holes).toHaveLength(21 + 13 + 13);
+    expect(parts).toContain('brousit z LÍCE D2');
+    const strip = [...layer(jigs, 'STITCH').matchAll(/<circle class="strip-hole"/g)];
+    expect(strip).toHaveLength(L.seams.find((q) => q.id === 'S4')!.holes.length);
+    for (const t of [
+      'šít od 76 ↓',
+      'konec 8',
+      '① z líce F,',
+      '56, 60 z líce F',
+      '64, 68 z líce D2',
+      'zdvojit 60–64',
+      '③ z líce D2',
+      'nad F 4,0 od D2',
+      'S5 rub nahoru',
+    ]) {
+      expect(jigs, t).toContain(t);
+    }
+    expect(jigs).not.toContain('první 8');
+  });
+
+  it('list 2: hranice Tokonole (pás víčka ano, jazýček ne) a pořadí podle lekce 8', () => {
+    expect(back).toContain('Tokonole jen nad touto čarou');
+    expect(back).toContain('jazýček: BEZ');
+    expect(back).not.toContain('odklopená');
+    expect(back).toContain('F rubem nahoru na desce');
+    // G4 rub F ↔ rub B je jeden řádek pro obě stěny
+    expect(back).not.toContain('rub B ↔ rub F');
+    expect(back).toContain('(F i B)');
   });
 
   it('neplatný střih generátor odmítne', () => {

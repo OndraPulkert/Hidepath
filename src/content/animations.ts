@@ -491,8 +491,8 @@ export const animationPages = {
       C: [
         'Způsob (a): propíchněte přes list 1',
         'Způsob (a): otočte na líc D2',
-        'Způsob (b): propíchněte konce čar',
-        'Způsob (b): odměřte otvory po 4 mm',
+        'Způsob (b): propíchněte tečky šablony D2',
+        'Způsob (b): vpichy jsou na líci D2',
       ],
       D: [
         'Děrujte z líce D2',
@@ -642,7 +642,7 @@ export const animationPages = {
       A: 'Část A – posuvka',
       B: 'Část B – měření kůže',
       C: 'Část C – čtení',
-      D: 'Část D – průměr a zápis',
+      D: 'Část D – průměr a zadání',
     },
     steps: {
       A: ['Poznejte svou posuvku', 'Zkontrolujte nulu', 'Ověřte si nonius: spočítejte čárky'],

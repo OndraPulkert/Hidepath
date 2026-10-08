@@ -1012,7 +1012,7 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
    polohy okének mincí v kroku 5 a okénka bankovek v kroku 8, plíšek – rozměr na plech v kroku 2,
    proužek otvorů S4/S5 v kroku 14).
 2. **Řez:** P1 101 × kóta P1 z rámečku na listu 4 (výchozí střih 231,66; rovné řezy nožem u pravítka, obrys jazýčku a pásu podle listu 1, výřez
-   pro palec až v kroku 5: horní hranu F řezat rovně u pravítka i přes výřez, který list 1 v obrysu má).
+   pro palec až v kroku 5: horní hranu F řezat rovně u pravítka i přes výřez; list 1 vede obrys rovně a výřez kreslí čárkovaně jako řez později).
    Dokud je list 1 přilepený na líci, propíchnout skrz něj konce osy ohybu, čáry hrany vložky dna a
    přehybů závěsu u boků a středy výsečníků: Ø 8, Ø 12 okének mincí, Ø 10 výřezu a **Ø 14 okénka
    bankovek** (to se vysekává až v kroku 8 z líce B, kam se pak list 1 přiložit nedá). **Napojení jazýčku na pás** je vyduté (R4): **výsečník Ø 8**, pak tečné
@@ -1087,10 +1087,8 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
 9. **Rýsování a značení S1–S3 na líci D2:** list 1 (P1 z líce) na líc D2 přiložit nejde, proto
    jedno z dvou (nejdřív na odřezku D2 + B): (a) šablonu P1 z listu 1 přiložit na líc B podle obrysu
    a všechny otvory S1–S3 propíchnout jehlou skrz B i přilepenou D2, pak na líci D2 děrovat do vpichů;
-   nebo (b) přiložit D2 z listu 3 na líc D2 podle hran (díl je souměrný, rub / líc nevadí); přes vyříznutou
-   šablonu se obkreslit nedá, proto konce čar S1 (y 22,0) a S2 / S3 (x 36 a 65) propíchnout jehlou skrz
-   šablonu, šablonu sejmout a vpichy spojit tužkou u pravítka; otvory odměřit po 4 mm: S1 od osy x 50,5 na obě strany,
-   S2 / S3 od horního otvoru y 76 dolů (v záloze čísla z listu 1 varianty).
+   nebo (b) přiložit D2 z listu 3 na líc D2 podle hran (díl je souměrný, rub / líc nevadí) a otvory
+   S1–S3, které šablona D2 kreslí jako červené tečky, propíchnout jehlou skrz šablonu.
 10. **Děrovat S1, S2, S3** z líce D2 (na PE desce), vidlička vždy stejně natočená při pohledu na líc D2
     s horní hranou od sebe. **Šít S1–S3**, konce 2 otvory zpět.
 11. **Mokrý ohyb dna** 1,0 přes vložku 1,5 (oddíl 5.8): pás ohybu navlhčit, vložku (aspoň 111 × 25) položit na
@@ -1562,19 +1560,26 @@ s příliš nízkým vyčníváním bankovky – okénko by se muselo posunout).
 
 `pnpm pattern:wallet-lid` zapíše do `docs/generated/`:
 
-- **penezenka-vicko-sablona.svg/.pdf** (list 1) – P1 z líce: obrys (CUT) s výřezem pro palec v
-  horní hraně F (CUT i na listu 2), okénka mincí, S1–S3 a S6
-  (STITCH), ohyb dna a přehyby závěsu (FOLD), **hrana vložky dna** (FOLD, trojúhelníčky u boků a popisek, i na listu 2), pás ohybu dna
-  s rýhou a pás závěsu (ztenčení jen v záloze B),
-  okénko bankovek (řeže se po G3), křížky na středech všech výsečníků (Ø 8, 10, 12, 14), značky S4/S5
-  (GUIDE; oblouky rohů těla jen při volitelném zaoblení), odkaz na S7 u jazýčku,
-- **penezenka-vicko-rub.svg/.pdf** (list 2) – P1 z rubu: lepené plochy G1–G4 (GLUE, oříznuté do
-  obrysu), poloha D1, D2 a plíšku, pořadí lepení, značky „L“,
+- **penezenka-vicko-sablona.svg/.pdf** (list 1) – P1 z líce: obrys (CUT) rovně přes výřez pro palec;
+  výřez, okénka mincí, okénko bankovek (po G3) a špička R10 čárkovaně jako řez později s číslem
+  lekce, tečkovaná šablona výřezu pro palec 30 × 20, S1–S3 a S6 (STITCH), ohyb dna a přehyby
+  závěsu (FOLD), **hrana vložky dna** (FOLD, trojúhelníčky u boků a popisek, i na listu 2), kroužky
+  k propíchnutí na koncích osy ohybu, hrany vložky a přehybů u obou boků, pás ohybu dna s rýhou a pás
+  závěsu (ztenčení jen v záloze B, oranžově), křížky v kroužku na středech všech výsečníků (Ø 8, 10,
+  12, 14), osa jazýčku, popisky „S4/S5 až po složení“ a odkaz na S7 u jazýčku (magnet se nekreslí,
+  poloha se určí na kusu),
+- **penezenka-vicko-rub.svg/.pdf** (list 2) – P1 z rubu: lepené plochy G1–G4 (GLUE šrafovaně,
+  oříznuté do obrysu) s kroužky k propíchnutí v rozích a na koncích čar, poloha D1, D2 (103 mm,
+  přesah 1 mm) a plíšku, osa x 50,5 na rubu F i B s kroužky k propíchnutí (pro D1 a D2), hranice Tokonole u kořene jazýčku, pořadí lepení,
+  značky „L“,
 - **penezenka-vicko-dily.svg/.pdf** (list 3) – D1, D2 (s lepením), L1, K2; u D1 barevná horní hrana,
-  u D2 kontrastní tón (R4),
+  u D2 kontrastní tón (R4); na šabloně D2 otvory S1–S3 (způsob (b) v kroku 9) a klín spodní hrany
+  „brousit z líce D2“, kroužky na koncích os D1 a D2,
 - **penezenka-vicko-pripravky.svg/.pdf** (list 4) – šablona konce jazýčku (R10, magnet, ztenčení
   2,5, přířez L1 s ryskou horní hrany, **otvory S7** ve STITCH), šablony okének a plíšku, proužek
-  otvorů S4/S5 s čárkovanou čárou švu 3,0 od levé hrany, vložka dna aspoň 111 × 25 ze starých karet s vyznačenou hranou do ohybu, tvarování závěsu
+  otvorů S4/S5 (červené tečky, čárkovaná čára švu 3,0 od levé hrany s kroužky na koncích, rysky
+  F 62, dno karet a S1, závorky úseků děrování ①–③ se stranou, zdvojený steh 60–64, „šít od 76 ↓“,
+  „S4 líc nahoru · S5 rub nahoru“), legenda značek na každém listu, vložka dna aspoň 111 × 25 ze starých karet s vyznačenou hranou do ohybu, tvarování závěsu
   přes obsah (Kolo 9; kopyto, Z2 a Z1 vypadly) a rámeček **„Čísla pro postup“** dané varianty
   (kóta P1, osa ohybu, hrana vložky, pás závěsu, konec G3, plíšek, G2 a S6, hrana víčka A/B/C,
   značka magnetu y_m,B a okno lepení; kroky 0–17 berou čísla odsud),
