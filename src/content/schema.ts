@@ -543,6 +543,44 @@ export const glossarySchema = z.object({
 export type Glossary = z.infer<typeof glossarySchema>;
 
 /**
+ * Bod přehledu „Postup v kostce“: co udělat (jedna dvě krátké věty) a kde je to v lekcích.
+ * Číslo lekce a odkaz na krok skládá aplikace z `lessonSlug` a `stepId`, v textu nejsou.
+ */
+export const overviewPointSchema = z.object({
+  id: slug,
+  /** Co udělat teď. */
+  text: z.string().min(1),
+  /** Co se v tomto místě ještě nedělá a kdy přijde na řadu („Až později: …“). */
+  later: z.string().min(1).optional(),
+  lessonSlug: slug,
+  /** Krok lekce, na který bod odkáže (kotva kroku); bez něj odkaz na začátek lekce. */
+  stepId: slug.optional(),
+  /**
+   * Lekce, jejichž „Vytisknout“ (`prints`) bod vypíše: kolik výtisků kterého listu a k čemu.
+   * Počty se tu nezadávají, bere je aplikace z lekcí (jediný zdroj).
+   */
+  printsFrom: z.array(slug).min(1).optional(),
+});
+export type OverviewPoint = z.infer<typeof overviewPointSchema>;
+
+/** Oddíl přehledu (např. „Příprava“, „Zkušební kus“); body se číslují napříč oddíly. */
+export const overviewSectionSchema = z.object({
+  title: z.string().min(1),
+  /** Jedna věta pod nadpisem oddílu. */
+  note: z.string().min(1).optional(),
+  points: z.array(overviewPointSchema).min(1),
+});
+export type OverviewSection = z.infer<typeof overviewSectionSchema>;
+
+/** „Postup v kostce“: krátký číslovaný přehled celé výroby s odkazy do lekcí. */
+export const projectOverviewSchema = z.object({
+  /** Jedna věta nad seznamem. */
+  intro: z.string().min(1).optional(),
+  sections: z.array(overviewSectionSchema).min(1),
+});
+export type ProjectOverview = z.infer<typeof projectOverviewSchema>;
+
+/**
  * Řádek nákupního plánu: kolik kusů kterého ověřeného příkladu z katalogu koupit. Cenu, obchod
  * a dostupnost plán neopisuje – bere je z příkladu (`url` + případně `variant`), aby se ceny
  * nevedly na dvou místech.
@@ -607,6 +645,8 @@ export const projectDefinitionSchema = z
     shoppingPlan: shoppingPlanSchema.optional(),
     /** Díly a zkratky (volitelné): karta na stránce projektu a vysvětlivky v krocích lekcí. */
     glossary: glossarySchema.optional(),
+    /** „Postup v kostce“ (volitelný): karta na stránce projektu a „Kde jste v postupu“ v lekcích. */
+    overview: projectOverviewSchema.optional(),
     media: z.array(mediaSlotSchema),
     contentVersion: z.number().int().positive(),
     reviewStatus: reviewStatusSchema,
@@ -747,6 +787,7 @@ export const projectDefinitionSchema = z
       }
     }
     checkRecords(project.lessons, ctx);
+    if (project.overview) checkOverview(project.overview, project.lessons, ctx);
   });
 export type ProjectDefinition = z.infer<typeof projectDefinitionSchema>;
 
@@ -787,6 +828,27 @@ function checkLessonPrints(project: ProjectShape, lesson: LessonDefinition, ctx:
         code: 'custom',
         message: `Lekce ${lesson.slug}: list ${print.sheetId} v ${print.source} neexistuje`,
       });
+    }
+  }
+}
+
+/** Body přehledu míří na existující lekci a krok; výtisky jen z lekcí, které nějaké mají. */
+function checkOverview(overview: ProjectOverview, lessons: readonly LessonDefinition[], ctx: Ctx) {
+  const issue = (message: string) => ctx.addIssue({ code: 'custom', message });
+  const ids = new Set<string>();
+  for (const point of overview.sections.flatMap((s) => s.points)) {
+    if (ids.has(point.id)) issue(`Postup v kostce: duplicitní id bodu ${point.id}`);
+    ids.add(point.id);
+    const lesson = lessons.find((l) => l.slug === point.lessonSlug);
+    if (!lesson) {
+      issue(`Postup v kostce: bod ${point.id} míří na neznámou lekci ${point.lessonSlug}`);
+    } else if (point.stepId !== undefined && !lesson.steps.some((s) => s.id === point.stepId)) {
+      issue(`Postup v kostce: bod ${point.id} míří na neznámý krok ${point.stepId}`);
+    }
+    for (const from of point.printsFrom ?? []) {
+      if (!lessons.find((l) => l.slug === from)?.prints) {
+        issue(`Postup v kostce: bod ${point.id} vypisuje tisk lekce ${from}, ta žádný nemá`);
+      }
     }
   }
 }

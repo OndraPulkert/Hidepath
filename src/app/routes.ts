@@ -11,6 +11,8 @@ export const PRINT_SHEET_PARAM = 'list';
 export const LID_SHEETS_ANCHOR = 'listy-pro-vasi-kuzi';
 /** Kotva karty „Díly a zkratky“ na stránce projektu (`routes.projectGlossary`). */
 export const PROJECT_GLOSSARY_ANCHOR = 'dily-a-zkratky';
+/** Kotva karty „Postup v kostce“ na stránce projektu (`routes.projectOverview`). */
+export const PROJECT_OVERVIEW_ANCHOR = 'postup-v-kostce';
 /** Kotvy na stránce lekce (`routes.lesson(…, kotva)`). */
 export const LESSON_ANCHORS = {
   checkpoints: 'kontrolni-body',
@@ -36,6 +38,9 @@ export const routes = {
   /** Karta „Díly a zkratky“ na stránce projektu. */
   projectGlossary: (projectSlug: string) =>
     `/projects/${encodeURIComponent(projectSlug)}#${PROJECT_GLOSSARY_ANCHOR}`,
+  /** Karta „Postup v kostce“ na stránce projektu. */
+  projectOverview: (projectSlug: string) =>
+    `/projects/${encodeURIComponent(projectSlug)}#${PROJECT_OVERVIEW_ANCHOR}`,
   /** `anchor` = kotva na stránce (`LESSON_ANCHORS`), stránka se na ni posune. */
   lesson: (projectSlug: string, lessonSlug: string, anchor?: string) =>
     `/projects/${encodeURIComponent(projectSlug)}/lessons/${encodeURIComponent(lessonSlug)}${

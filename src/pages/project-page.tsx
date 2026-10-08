@@ -10,6 +10,7 @@ import { AssembledIllustration } from '@/components/illustrations/assembled';
 import { TemplateIllustration } from '@/components/illustrations/template';
 import { LessonList } from '@/components/projects/lesson-list';
 import { PatternSheetList } from '@/components/projects/pattern-sheet-list';
+import { ProjectOverviewCard } from '@/components/projects/project-overview';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Kicker } from '@/components/ui/kicker';
@@ -20,6 +21,7 @@ import { patternSheetUrlsFor } from '@/content/projects/pattern-sheets';
 import { type ProjectDefinition } from '@/content/schema';
 import { isBeltConfigProject } from '@/features/belt/active-belt';
 import { getEquipmentStatus } from '@/features/inventory/types';
+import { hasOverview } from '@/features/overview/project-overview';
 import { findCurrentLesson } from '@/features/progress/lesson-availability';
 import { useActiveProject } from '@/features/projects/use-active-project';
 import { useProjectState } from '@/features/projects/use-project-state';
@@ -40,7 +42,7 @@ function ProjectView({ project }: { project: ProjectDefinition }) {
   const activeProject = useActiveProject();
   const { start, switchTo, isPending, isError } = useSwitchProject();
   const { hash } = useLocation();
-  // Kotva v adrese (#dily-a-zkratky z lekce): posunout na ni až po načtení dat.
+  // Kotva v adrese (#dily-a-zkratky, #postup-v-kostce z lekce): posunout na ni až po načtení dat.
   useEffect(() => {
     if (!hash || isLoading) return;
     document
@@ -172,6 +174,8 @@ function ProjectView({ project }: { project: ProjectDefinition }) {
           </div>
         </div>
       </div>
+
+      {hasOverview(project) ? <ProjectOverviewCard project={project} className="mt-10" /> : null}
 
       <div className="mt-10 grid [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))] gap-8">
         <section aria-labelledby="faze">

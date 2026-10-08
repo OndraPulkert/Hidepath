@@ -11,6 +11,7 @@ import { LessonPrep } from '@/components/lessons/lesson-prep';
 import { MediaSlot } from '@/components/lessons/media-slot';
 import { StepExtras } from '@/components/lessons/step-extras';
 import { StepList } from '@/components/lessons/step-list';
+import { LessonOverviewBox } from '@/components/projects/project-overview';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { NoticeBox } from '@/components/ui/notice-box';
@@ -19,6 +20,7 @@ import { findProject } from '@/content/projects';
 import { lessonBodiesFor } from '@/content/projects/lesson-bodies';
 import { type ProjectDefinition } from '@/content/schema';
 import { isBeltConfigProject } from '@/features/belt/active-belt';
+import { hasOverview } from '@/features/overview/project-overview';
 import { isCheckpointCompleted } from '@/features/progress/types';
 import { useCompleteLesson, useToggleCheckpoint } from '@/features/progress/use-progress';
 import { useProjectState } from '@/features/projects/use-project-state';
@@ -126,6 +128,10 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
           ) : null}
         </div>
       </header>
+
+      {hasOverview(project) ? (
+        <LessonOverviewBox project={project} lessonSlug={lesson.slug} />
+      ) : null}
 
       {locked ? <LessonLockNotice project={project} blockers={view.blockers} /> : null}
 

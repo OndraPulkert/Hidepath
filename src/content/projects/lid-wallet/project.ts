@@ -12,6 +12,7 @@ import {
   type MediaSlot,
   type PhaseDefinition,
   type ProjectDefinition,
+  type ProjectOverview,
   type AppLink,
   type RecordField,
   type StepRecall,
@@ -1855,6 +1856,184 @@ export const lessons: readonly LessonDefinition[] = [
   }),
 ];
 
+/**
+ * „Postup v kostce“: celá stavba v krátkých bodech, každý s odkazem na krok lekce. Jen výtah
+ * z lekcí výše, nic nového; počty výtisků bod 1 bere z `prints` lekcí 1, 2 a 4.
+ */
+const overview: ProjectOverview = {
+  intro:
+    'Celá stavba v krátkých bodech. Podrobnosti, čísla a značky jsou v lekci, na kterou bod odkazuje.',
+  sections: [
+    {
+      title: 'Příprava',
+      note: 'Papírový model a zkouška ohybu na odřezku. Díly z kůže zatím neřežte.',
+      points: [
+        {
+          id: 'prints',
+          lessonSlug: L1,
+          stepId: 'sheets-rule',
+          printsFrom: [L1, L2, L4],
+          text: 'Listy 1–4 tiskněte až v lekci, která je chce: P0 a V12 je mohou změnit. A4 na výšku, 100 %, úsečka musí měřit 50 mm. Výpis platí pro model a zkušební kus, na finální kus vytiskněte listy 1 a 3 znovu.',
+        },
+        {
+          id: 'measure',
+          lessonSlug: L1,
+          stepId: 'measure',
+          text: 'Na kaštanu obkreslete dva přířezy P1 110 × 240 mm. Posuvkou změřte P1 (kaštan), D1 a L1 (nebarvená kozinka) a D2 (čokoládová kozinka) tam, odkud díly vyříznete, a zadejte je ve formuláři „Listy pro vaši kůži“.',
+        },
+        {
+          id: 'sheets',
+          lessonSlug: L1,
+          stepId: 'print-check',
+          text: 'Vygenerujte listy a vytiskněte listy 1–4 (1–3 na čtvrtku). Kóta P1 na listu 1 musí sedět s rámečkem na listu 4.',
+        },
+        {
+          id: 'spacer',
+          lessonSlug: L1,
+          stepId: 'spacer',
+          text: 'Ze 4 starých karet slepte páskou vložku dna (aspoň 111 × 25 × 1,5 mm).',
+        },
+        {
+          id: 'paper-model',
+          lessonSlug: L2,
+          stepId: 'glue-model',
+          text: 'Ze čtvrtky vystřihněte podle listů 1–3 P1, D1 a D2 a slepte papírový model P0 páskou.',
+        },
+        {
+          id: 'p0-test',
+          lessonSlug: L2,
+          stepId: 'record',
+          text: 'Vyzkoušejte model s 6 kartami, bankovkami napůl a 4 mincemi. Co se liší, zadejte do formuláře a listy vygenerujte znovu.',
+        },
+        {
+          id: 'templates',
+          lessonSlug: L2,
+          stepId: 'templates',
+          text: 'List 4 a list 1 nalepte na tvrdý papír. Vyřízněte šablonu konce jazýčku a šablonu výřezu pro palec.',
+        },
+        {
+          id: 'v12',
+          lessonSlug: L3,
+          stepId: 'crease-and-mark',
+          text: 'Zkouška ohybu V12: odřezek kaštanu orýhujte, navlhčete, přehněte přes vložku a nechte přes noc. Prohlédněte líc, změřte polohu rýhy a zvolte variantu střihu.',
+        },
+      ],
+    },
+    {
+      title: 'Zkušební kus',
+      note: 'Lekce 4–12 nejdřív celé na zkušebním kuse. Druhý přířez P1, zbytek kozinek a plech nechte celé.',
+      points: [
+        {
+          id: 'cut-prints',
+          lessonSlug: L4,
+          stepId: 'valid-sheets',
+          text: 'Vytiskněte listy pro řez (bod 1, lekce 4). Druhý výtisk listů 1 a 3 a list 4 nalepte na tvrdý papír a vyřízněte jako šablony.',
+        },
+        {
+          id: 'tape-sheet-1',
+          lessonSlug: L4,
+          stepId: 'tape-sheet-1',
+          text: 'První výtisk listu 1 vystřihněte s okrajem 1–2 cm. Položte ho na líc kaštanu a přilepte maskovací páskou mimo čáru řezu.',
+        },
+        {
+          id: 'prick-p1',
+          lessonSlug: L4,
+          stepId: 'prick-p1',
+          text: 'Jehlou propíchněte skrz papír všechny kroužky a křížky v kroužku.',
+          later: 'červené tečky švů S1–S3 a S6 (lekce 6 a 8).',
+        },
+        {
+          id: 'cut-p1',
+          lessonSlug: L4,
+          stepId: 'cut-p1',
+          text: 'Vyřízněte P1 nožem skrz papír po plné čáře. List sejměte a zkontrolujte vpichy.',
+          later:
+            'čárkované tvary: okénka mincí a výřez pro palec (lekce 5), okénko bankovek (lekce 6), špička jazýčku (lekce 11).',
+        },
+        {
+          id: 'cut-parts',
+          lessonSlug: L4,
+          stepId: 'cut-parts',
+          text: 'Díly z prvního výtisku listu 3 přilepte páskou na rub kozinky: D1 a přířez L1 z nebarvené kozinky a D2 z čokoládové. Propíchněte kroužky na koncích osy D1 a D2 a řežte skrz papír.',
+          later: 'okénko na D2 (lekce 6).',
+        },
+        {
+          id: 'plate',
+          lessonSlug: L4,
+          stepId: 'plate',
+          text: 'Plíšek K2 vyřízněte z plechu 0,5 mm podle šablony z listu 4. Rohy zabruste, hrany přelakujte.',
+        },
+        {
+          id: 'mark-back',
+          lessonSlug: L4,
+          stepId: 'mark-back',
+          text: 'List 2 nalepte na tvrdý papír, vyřízněte a přiložte na rub P1. Propíchněte kroužky a vpichy spojte tužkou: ohyb dna, hrana vložky, závěs, plochy lepení G1–G4, poloha D1 a D2.',
+          later: 'otvory švů – z líce přes šablonu z listu 1 (lekce 6 a 8).',
+        },
+        {
+          id: 'crease-windows',
+          lessonSlug: L5,
+          stepId: 'crease',
+          text: 'Vytlačte rýhu ohybu dna. Vysekněte okénka mincí a výřez pro palec a dokončete hrany.',
+        },
+        {
+          id: 'd2-seams',
+          lessonSlug: L6,
+          stepId: 'g3',
+          text: 'D2 přilepte na rub zad jen v pásech G3. Prosekněte okénko bankovek skrz obě vrstvy a ušijte S1–S3.',
+        },
+        {
+          id: 'bottom-fold',
+          lessonSlug: L7,
+          stepId: 'wet',
+          text: 'Dno ohněte za mokra přes vložku a nechte přes noc stažené mezi prkénky.',
+        },
+        {
+          id: 'plate-d1',
+          lessonSlug: L8,
+          stepId: 'g1',
+          text: 'Na rub F přilepte plíšek (G1) a přes něj D1 (G2, G2b). Podle šablony z listu 1 ušijte S6.',
+        },
+        {
+          id: 'side-seams',
+          lessonSlug: L9,
+          stepId: 'dry-fit',
+          text: 'Slepte boky (G4). Podle proužku z listu 4 děrujte a ušijte S4 a S5, boky zarovnejte na 101 mm.',
+        },
+        {
+          id: 'hinge',
+          lessonSlug: L10,
+          stepId: 'contents-b',
+          text: 'Navlhčete závěs, zavřete víčko přes obsah stavu B a nechte přes noc pod knihou. Pak změřte k a zadejte ho do formuláře.',
+        },
+        {
+          id: 'magnet',
+          lessonSlug: L11,
+          stepId: 'find-plate',
+          text: 'Najděte plíšek a vyznačte značku magnetu. Na rub jazýčku přilepte magnet a přes něj L1. Po 24 h ořízněte špičku a ušijte S7.',
+        },
+        {
+          id: 'tests',
+          lessonSlug: L12,
+          stepId: 'balm',
+          text: 'Naneste balzám. Projděte zkoušky Z-1 až Z-4 (Z-2 a Z-3 i po dnech používání) a výsledky zapište.',
+        },
+      ],
+    },
+    {
+      title: 'Finální kus',
+      points: [
+        {
+          id: 'final-piece',
+          lessonSlug: L12,
+          stepId: 'final-piece',
+          text: 'Lekce 4–12 zopakujte na druhém přířezu P1 s tím, co na zkušebním kuse fungovalo. Řežte jen z listů, které platí po zkušebním kuse. Změnila-li se varianta, postavte raději další zkušební kus.',
+        },
+      ],
+    },
+  ],
+};
+
 export const lidWalletProject: ProjectDefinition = {
   slug: PROJECT_SLUG,
   code: '03',
@@ -2345,6 +2524,7 @@ export const lidWalletProject: ProjectDefinition = {
     ],
   },
   glossary: lidWalletGlossary,
+  overview,
   media: [
     photo('lid-wallet-hero', 'Hotová peněženka Víčko zavřená, jazýček s magnetem na přední stěně'),
   ],

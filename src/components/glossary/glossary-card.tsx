@@ -5,23 +5,15 @@ import { LidPartsDiagram } from '@/components/lid-wallet/lid-parts-diagram';
 import { Card } from '@/components/ui/card';
 import { type Glossary } from '@/content/schema';
 import { groupGlossary } from '@/features/glossary/glossary-text';
+import { initiallyOpenOnWide } from '@/lib/utils/disclosure';
 import { typo } from '@/lib/utils/format';
-
-/** Od této šířky je karta rozbalená hned (na telefonu sbalená, aby nezabrala celou stránku). */
-const OPEN_MEDIA = '(min-width: 768px)';
-
-function initiallyOpen(): boolean {
-  if (typeof window === 'undefined') return true;
-  if (window.location.hash === `#${PROJECT_GLOSSARY_ANCHOR}`) return true;
-  return window.matchMedia?.(OPEN_MEDIA).matches ?? true;
-}
 
 /**
  * Karta „Díly a zkratky“ na stránce projektu: schéma (má-li ho projekt) a seznam hesel po
  * skupinách (Díly · Lepení · Švy · Zkoušky a zálohy). Na telefonu sbalená.
  */
 export function GlossaryCard({ glossary }: { glossary: Glossary }) {
-  const [open, setOpen] = useState(initiallyOpen);
+  const [open, setOpen] = useState(() => initiallyOpenOnWide(PROJECT_GLOSSARY_ANCHOR));
   const groups = groupGlossary(glossary.entries);
   return (
     <Card id={PROJECT_GLOSSARY_ANCHOR} className="scroll-mt-24">
