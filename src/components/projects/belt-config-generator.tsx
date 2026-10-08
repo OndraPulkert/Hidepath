@@ -37,10 +37,20 @@ import {
   deriveBeltConfig,
   parseBeltConfigForm,
 } from '@/lib/patterns/belt-config';
-import { STRAP_AVAILABILITY_LABELS, type StrapOffer } from '@/lib/patterns/belt-strap-offers';
+import {
+  OFFERED_STRAP_COLORS,
+  STRAP_AVAILABILITY_LABELS,
+  STRAP_COLOR_LABELS,
+  type StrapOffer,
+} from '@/lib/patterns/belt-strap-offers';
 import { formatCzk, formatDateCs, typo } from '@/lib/utils/format';
 
 const mm = (v: number): string => `${formatDecimal(v)} mm`;
+
+/** Barvy barevného pásu s ověřenou nabídkou, v pořadí výběru. */
+const DYED_CHOICES = OFFERED_STRAP_COLORS.filter((c) => c !== 'prirodni');
+
+const capitalize = (s: string): string => s.charAt(0).toLocaleUpperCase('cs') + s.slice(1);
 
 const WAIST_HINTS: Readonly<Record<WaistSource, string>> = {
   pasek: 'Na pásku, který nosíte: od ohybu u přezky (ne od konce trnu) k používané dírce.',
@@ -128,7 +138,7 @@ export function BeltConfigGenerator({
         </h2>
         <p className="mt-1 max-w-prose text-body text-ink-2">
           {typo(
-            'Zvolte šířku podle přezky, zadejte změřenou tloušťku a obvod. Aplikace spočítá délku pásu, dírky, poutko, nýty a nákup a nakreslí listy A4.',
+            'Zvolte šířku podle přezky, zadejte změřenou tloušťku, obvod a barvu. Aplikace spočítá délku pásu, dírky, poutko, nýty a nákup a nakreslí listy A4.',
           )}
         </p>
       </div>
@@ -212,6 +222,38 @@ export function BeltConfigGenerator({
             </SegmentButton>
           ))}
         </ChoiceRow>
+        <ChoiceRow label="Barva">
+          <SegmentButton
+            active={form.color === 'prirodni'}
+            onClick={() => set('color')('prirodni')}
+          >
+            Přírodní
+          </SegmentButton>
+          <SegmentButton
+            active={form.color !== 'prirodni'}
+            onClick={() => {
+              if (form.color === 'prirodni') set('color')('');
+            }}
+          >
+            Barevný
+          </SegmentButton>
+        </ChoiceRow>
+        {form.color !== 'prirodni' ? (
+          <div className="flex flex-col gap-1.5">
+            <ChoiceRow label="Barva pásu (vyberte)">
+              {DYED_CHOICES.map((c) => (
+                <SegmentButton key={c} active={form.color === c} onClick={() => set('color')(c)}>
+                  {capitalize(STRAP_COLOR_LABELS[c])}
+                </SegmentButton>
+              ))}
+            </ChoiceRow>
+            <p className="max-w-prose text-meta text-ink-2">
+              {typo(
+                'Řezaná hrana pásu barveného jen na povrchu je světlá: před leštěním ji obarvíte barvou na hrany. Odstín vybírejte podle fotky v obchodě a barvu i balzám ověřte na odřezku.',
+              )}
+            </p>
+          </div>
+        ) : null}
         <details className="rounded-control border border-line px-4 py-2" open={holesOpenInitially}>
           <summary className="min-h-touch cursor-pointer text-body font-medium">
             Dírky (pokročilé)

@@ -3,6 +3,7 @@ import { type ProductExample } from '@/content/schema';
 import {
   commonBaseTitle,
   groupProductExamples,
+  groupProductExamplesByColor,
   titleContainsVariant,
   variantMeasures,
 } from '@/features/equipment/group-examples';
@@ -170,14 +171,65 @@ describe('groupProductExamples nad katalogem', () => {
   it('řemen na pásek: karta na výrobek, bez zdvojené šířky v názvu', () => {
     const examples = getEquipment('belt-strap').examples;
     const groups = groupProductExamples(examples);
-    expect(groups.length).toBeLessThan(15);
     expect(groups.flatMap((g) => g.rows)).toHaveLength(examples.length);
+    // Leatory: jedna karta na barvu, i když má každá barva dvě stránky (5–29 a 30–50 mm).
     const leatory = groups.filter((g) => g.shop === 'Leatory');
-    expect(leatory).toHaveLength(1);
-    expect(leatory[0]?.title).toBe('Řemen na opasek 3,9 mm, přírodní');
+    expect(leatory.map((g) => [g.title, g.color])).toEqual([
+      ['Řemen na opasek 3,9 mm, přírodní', 'přírodní'],
+      ['Řemen na opasek 3,9 mm, hnědý', 'hnědá'],
+      ['Řemen na opasek 3,9 mm, černý', 'černá'],
+    ]);
+    // Karta nikdy nemíchá barvy.
+    for (const g of groups) expect(g.color, g.title).not.toBeNull();
     const craft = groups.find((g) => g.shop === 'CraftPoint');
     expect(craft?.title).toBe('Řemen z přírodní kůže 3–3,5 mm, 130–140 cm');
     expect(craft?.rows[0]?.label).toBe('28 mm');
     for (const g of groups) expect(new Set(g.rows.map((r) => r.label)).size).toBe(g.rows.length);
+  });
+
+  it('řemen na pásek po barvách: přírodní první, každá karta v sekci své barvy', () => {
+    const examples = getEquipment('belt-strap').examples;
+    const sections = groupProductExamplesByColor(examples);
+    expect(sections.map((s) => s.color)).toEqual([
+      'přírodní',
+      'světle hnědá',
+      'hnědá',
+      'tmavě hnědá',
+      'koňak',
+      'tabák',
+      'černá',
+      'modrá',
+      'bordó',
+      'tmavě zelená',
+    ]);
+    expect(sections.flatMap((s) => s.groups.flatMap((g) => g.rows))).toHaveLength(examples.length);
+    for (const s of sections) {
+      for (const g of s.groups) expect(g.color, g.title).toBe(s.color);
+    }
+    const natural = sections[0]!.groups;
+    expect(natural.length).toBeLessThan(15);
+  });
+});
+
+describe('groupProductExamplesByColor', () => {
+  it('bez barev jedna sekce s color null', () => {
+    const sections = groupProductExamplesByColor([
+      ex({ title: 'Kladivo', url: 'https://a.cz/kladivo' }),
+      ex({ title: 'Nůž', url: 'https://a.cz/nuz' }),
+    ]);
+    expect(sections).toHaveLength(1);
+    expect(sections[0]!.color).toBeNull();
+    expect(sections[0]!.groups).toHaveLength(2);
+  });
+
+  it('stejný název ve dvou barvách nesloučí', () => {
+    const sections = groupProductExamplesByColor([
+      ex({ title: 'Řemen, 30 mm', variant: '30 mm', color: 'černá', url: 'https://a.cz/c' }),
+      ex({ title: 'Řemen, 30 mm', variant: '30 mm', color: 'hnědá', url: 'https://a.cz/h' }),
+    ]);
+    expect(sections.map((s) => [s.color, s.groups.length])).toEqual([
+      ['černá', 1],
+      ['hnědá', 1],
+    ]);
   });
 });

@@ -35,9 +35,17 @@ import {
   cz,
   tipSheetOrientation,
 } from './belt-sheets';
-import { type StrapOffer, defaultStrapOffer, strapOffers } from './belt-strap-offers';
+import {
+  EDGE_PAINT_URLS,
+  STRAP_COLOR_LABELS,
+  type StrapColor,
+  type StrapOffer,
+  defaultStrapOffer,
+  isDyedStrap,
+  strapOffers,
+} from './belt-strap-offers';
 
-export { type StrapOffer } from './belt-strap-offers';
+export { type StrapColor, type StrapOffer } from './belt-strap-offers';
 
 /** Tvar konce s dírkami tak, jak ho volí uživatel. */
 export type BeltTip = 'hrot' | 'zaobleny';
@@ -68,6 +76,8 @@ export interface BeltConfigInput {
   apexToFirstHoleMm?: number | undefined;
   /** Ø dírky pro trn, mm; chybí = 5. Pravidlo: trn u kořene + 0,5 mm. */
   holeDiameterMm?: number | undefined;
+  /** Barva pásu; chybí = přírodní (starší uložené pásky barvu nemají). */
+  color?: StrapColor | undefined;
 }
 
 /**
@@ -511,10 +521,12 @@ export type BeltConfigOutcome =
 
 const r1 = (v: number): number => Math.round(v * 10) / 10;
 
-/** Popis sestavy pro nadpis skupiny listů a „Moje pásky“. */
+/** Popis sestavy pro nadpis skupiny listů a „Moje pásky“. Barvu jen u barevného pásu. */
 export function beltConfigLabel(input: BeltConfigInput): string {
   const count = input.holeCount ?? DEFAULT_HOLE_COUNT;
-  return `${cz(input.widthMm)} mm · ${cz(input.thicknessMm)} mm · ${BELT_TIP_LABELS[input.tip]} · ${count} dírek`;
+  const color =
+    input.color && isDyedStrap(input.color) ? ` · ${STRAP_COLOR_LABELS[input.color]}` : '';
+  return `${cz(input.widthMm)} mm · ${cz(input.thicknessMm)} mm · ${BELT_TIP_LABELS[input.tip]} · ${count} dírek${color}`;
 }
 
 /** Spočítá všechno, co ze zadání plyne, nebo vrátí, co v zadání neplatí. */
@@ -556,12 +568,22 @@ export function deriveBeltConfig(input: BeltConfigInput): BeltConfigOutcome {
     warnings.push('Zaoblený konec je spočítaný, ne vyzkoušený. Ověřte na odřezku.');
   }
   warnings.push('Délka poutka je spočítaná, ne vyzkoušená. Ověřte na odřezku.');
+  const color: StrapColor = input.color ?? 'prirodni';
+  const dyed = isDyedStrap(color);
+  const colorLabel = STRAP_COLOR_LABELS[color];
+  if (dyed) {
+    warnings.push(
+      'Barevný pás: barvu na hrany (odstín, přilnavost, počet vrstev) a balzám ověřte na odřezku.',
+    );
+  }
 
   const shopping: BeltShoppingLine[] = [];
-  const offers = strapOffers(input.widthMm, input.thicknessMm, minLengthCm);
+  const offers = strapOffers(input.widthMm, input.thicknessMm, minLengthCm, color);
   const defaultOffer = defaultStrapOffer(offers);
   shopping.push({
-    item: `Pás z třísločiněné kůže ${cz(input.widthMm)} mm, ${cz(input.thicknessMm)} mm`,
+    item: dyed
+      ? `Barevný pás (${colorLabel}) ${cz(input.widthMm)} mm, ${cz(input.thicknessMm)} mm`
+      : `Pás z třísločiněné kůže ${cz(input.widthMm)} mm, ${cz(input.thicknessMm)} mm`,
     quantity: 1,
     detail:
       minLengthCm === null
@@ -605,6 +627,17 @@ export function deriveBeltConfig(input: BeltConfigInput): BeltConfigOutcome {
       quantity: 1,
       detail: 'otvory pro nýty a konce oválu',
       status: punchStatus(end.rivetHoleMm),
+    });
+  }
+  if (dyed) {
+    const paintVerified = EDGE_PAINT_URLS[color] !== undefined;
+    shopping.push({
+      item: `Barva na hrany, ${colorLabel}`,
+      quantity: 1,
+      detail: paintVerified
+        ? 'hranu obarvěte před leštěním (u pásu barveného jen na povrchu je řez světlý); odstín ověřte na odřezku'
+        : 'hranu obarvěte před leštěním (u pásu barveného jen na povrchu je řez světlý); tento odstín v ověřených příkladech nemáme',
+      status: paintVerified ? 'overeno' : 'overte',
     });
   }
 
@@ -688,6 +721,8 @@ export interface BeltConfigForm {
   apexToFirst: string;
   /** mm; prázdné = 5 */
   holeDiameter: string;
+  /** Barva pásu; `''` = barevný, ale barva ještě nevybraná. */
+  color: StrapColor | '';
 }
 
 export const DEFAULT_BELT_FORM: BeltConfigForm = {
@@ -700,6 +735,7 @@ export const DEFAULT_BELT_FORM: BeltConfigForm = {
   holeSpacing: '',
   apexToFirst: '',
   holeDiameter: '',
+  color: 'prirodni',
 };
 
 /** Číslo z pole formuláře (čárka i tečka); `undefined`, když to číslo není. */
@@ -736,6 +772,7 @@ export function parseBeltConfigForm(
   const holeSpacingMm = optional(form.holeSpacing, 'Rozteč zadejte v mm (např. 25).');
   const apexToFirstHoleMm = optional(form.apexToFirst, 'Odstup zadejte v mm (např. 94,3).');
   const holeDiameterMm = optional(form.holeDiameter, 'Ø dírky zadejte v mm (např. 5).');
+  if (form.color === '') problems.push('Vyberte barvu pásu.');
   if (problems.length > 0 || widthMm === undefined || thicknessMm === undefined) {
     return { problems };
   }
@@ -749,6 +786,7 @@ export function parseBeltConfigForm(
       holeSpacingMm,
       apexToFirstHoleMm,
       holeDiameterMm,
+      color: form.color === '' || form.color === 'prirodni' ? undefined : form.color,
     },
   };
 }
@@ -766,5 +804,6 @@ export function beltConfigToForm(input: BeltConfigInput, waistSource: WaistSourc
     holeSpacing: num(input.holeSpacingMm),
     apexToFirst: num(input.apexToFirstHoleMm),
     holeDiameter: num(input.holeDiameterMm),
+    color: input.color ?? 'prirodni',
   };
 }

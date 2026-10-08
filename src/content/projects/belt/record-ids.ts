@@ -14,6 +14,8 @@ export const BELT_RECORD_IDS = {
   tip: 'belt-tip',
   /** Trn přezky u kořene, mm. Dírka = trn + 0,5 mm. */
   prong: 'belt-prong',
+  /** Barva pásu: hodnoty `StrapColor` (src/lib/patterns/belt-strap-offers.ts). */
+  color: 'belt-color',
 } as const;
 
 export type BeltRecordId = (typeof BELT_RECORD_IDS)[keyof typeof BELT_RECORD_IDS];

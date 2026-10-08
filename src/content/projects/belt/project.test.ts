@@ -7,6 +7,11 @@ import { beltNumbersFromNotebook } from '@/features/belt/belt-prefill';
 import { type LessonRecordEntry } from '@/features/notebook/types';
 import { findPlanExample } from '@/features/shopping/plan';
 import { deriveBeltConfig } from '@/lib/patterns/belt-config';
+import {
+  EDGE_PAINT_URLS,
+  STRAP_COLOR_LABELS,
+  STRAP_COLORS,
+} from '@/lib/patterns/belt-strap-offers';
 import { BELT_SHEET_IDS } from '@/lib/patterns/belt-sheets';
 
 /** Číslo tak, jak ho píše obsah (desetinná čárka). */
@@ -222,21 +227,24 @@ describe('obsah – pásek: nákup', () => {
     const key = (url: string, variant: string | undefined) => `${url} ${variant ?? ''}`;
     const byKey = new Map(examples.map((e) => [key(e.url, e.variant), e]));
     const reached = new Set<string>();
-    for (let widthMm = 28; widthMm <= 45; widthMm++) {
-      for (const thicknessMm of [3, 3.1, 3.4, 3.5, 3.6, 3.75, 3.8, 3.9, 4]) {
-        for (const waistMm of [900, 1000, 1070, 1150, 1250, 1450]) {
-          const r = deriveBeltConfig({ widthMm, thicknessMm, tip: 'hrot', waistMm });
-          expect(r.ok).toBe(true);
-          if (!r.ok) continue;
-          for (const o of r.result.shopping[0]!.offers!) {
-            const k = key(o.url, o.variant);
-            const e = byKey.get(k);
-            expect(e, k).toBeDefined();
-            expect(e!.shop, k).toBe(o.shop);
-            expect(e!.priceCents, k).toBe(o.priceCents);
-            expect(e!.availability, k).toBe(o.availability);
-            expect(e!.checkedAt, k).toBe(o.checkedAt);
-            reached.add(k);
+    for (const color of STRAP_COLORS) {
+      for (let widthMm = 28; widthMm <= 45; widthMm++) {
+        for (const thicknessMm of [3, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.75, 3.8, 3.9, 4]) {
+          for (const waistMm of [900, 1000, 1070, 1150, 1250, 1450]) {
+            const r = deriveBeltConfig({ widthMm, thicknessMm, tip: 'hrot', waistMm, color });
+            expect(r.ok).toBe(true);
+            if (!r.ok) continue;
+            for (const o of r.result.shopping[0]!.offers!) {
+              const k = key(o.url, o.variant);
+              const e = byKey.get(k);
+              expect(e, k).toBeDefined();
+              expect(e!.shop, k).toBe(o.shop);
+              expect(e!.priceCents, k).toBe(o.priceCents);
+              expect(e!.availability, k).toBe(o.availability);
+              expect(e!.checkedAt, k).toBe(o.checkedAt);
+              expect(e!.color, k).toBe(STRAP_COLOR_LABELS[o.color]);
+              reached.add(k);
+            }
           }
         }
       }
@@ -378,5 +386,57 @@ describe('pásek – nálezy kontroly lekcí (2026-10-08, kolo 2)', () => {
   it('lekce 2 odkazuje na list 1 a má ho v „Vytisknout“', () => {
     expect(step(2, 'mark').printLink).toBe('pattern-sheets');
     expect(lesson(2).prints?.map((p) => p.sheetId)).toEqual([BELT_SHEET_IDS.buckle]);
+  });
+});
+
+describe('pásek – barevný pásek (hrany a balzám)', () => {
+  it('lekce 1: barva je v zápisníku se stejnými hodnotami jako výpočet', () => {
+    const field = step(1, 'width-and-tip').records!.find((r) => r.id === BELT_RECORD_IDS.color)!;
+    expect(field.kind).toBe('choice');
+    if (field.kind !== 'choice') return;
+    expect(field.options.map((o) => o.value)).toEqual([...STRAP_COLORS]);
+    expect(field.options.map((o) => o.label.toLocaleLowerCase('cs'))).toEqual(
+      STRAP_COLORS.map((c) => STRAP_COLOR_LABELS[c]),
+    );
+    expect(step(1, 'your-belt').recalls!.map((r) => r.fieldId)).toContain(BELT_RECORD_IDS.color);
+  });
+
+  it('barva na hrany: zkouška v lekci 2, v lekcích 3 a 6 podmíněně „u barevného pásku“ před leštěním', () => {
+    const tryStep = step(2, 'try-edge-paint');
+    expect(tryStep.body).toMatch(/^Jen u barevného pásku; u přírodního krok přeskočte\./);
+    expect(tryStep.body).toContain('Pak hranu zaleštěte');
+    expect(tryStep.body).not.toContain('mastnoty');
+    expect(tryStep.records!.map((r) => r.id)).toEqual([
+      'edge-paint-coats',
+      'edge-paint-dry-minutes',
+    ]);
+    const ids3 = lesson(3).steps.map((s) => s.id);
+    expect(ids3.indexOf('bevel')).toBeLessThan(ids3.indexOf('edge-paint'));
+    expect(ids3.indexOf('edge-paint')).toBeLessThan(ids3.indexOf('burnish'));
+    expect(step(3, 'edge-paint').body).toMatch(/^Jen u barevného pásku/);
+    expect(step(3, 'edge-paint').waits![0]!.initialFromField).toBe('edge-paint-dry-minutes');
+    expect(step(3, 'balm').body).toContain('U barevného pásku jen, když balzám na odřezku vyhověl');
+    const finish = step(6, 'finish').body;
+    expect(finish.indexOf('U barevného pásku je obarvěte')).toBeLessThan(
+      finish.indexOf('zaleštěte'),
+    );
+    expect(finish).toContain('u barevného pásku jen, když balzám na odřezku vyhověl');
+    expect(step(4, 'oval').body).toContain('u barevného pásku obarvěte jako v lekci 3');
+    for (const order of [2, 3, 4, 6]) {
+      expect(lesson(order).recommendedEquipment, `lekce ${order}`).toContain('edge-paint');
+      expect(lesson(order).requiredEquipment, `lekce ${order}`).not.toContain('edge-paint');
+    }
+  });
+
+  it('plán projektu (přírodní) barvu na hrany vynechává s důvodem; ověřené odstíny jsou v katalogu', () => {
+    const plan = beltProject.shoppingPlan!;
+    expect(plan.lines.some((l) => l.equipmentSlug === 'edge-paint')).toBe(false);
+    expect(plan.skipped.find((s) => s.equipmentSlug === 'edge-paint')!.reason).toMatch(
+      /^Jen u barevného pásku/,
+    );
+    const req = beltProject.equipment.find((e) => e.equipmentSlug === 'edge-paint')!;
+    expect(req.priority).toBe('recommended');
+    const urls = equipmentCatalog['edge-paint']!.examples.map((e) => e.url);
+    for (const url of Object.values(EDGE_PAINT_URLS)) expect(urls).toContain(url);
   });
 });

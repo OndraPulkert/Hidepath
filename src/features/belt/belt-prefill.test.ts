@@ -53,6 +53,26 @@ describe('předvyplnění „Váš pásek“ ze zápisníku', () => {
     });
   });
 
+  it('vezme barvu pásu; neznámá barva se ignoruje', () => {
+    const prefill = beltConfigPrefill(
+      [entry(BELT_RECORD_IDS.width, 40), entry(BELT_RECORD_IDS.color, 'cerna')],
+      SLUG,
+    );
+    expect(prefill!.form.color).toBe('cerna');
+    expect(prefill!.filled).toEqual(['šířka', 'barva']);
+    const unknown = beltConfigPrefill(
+      [entry(BELT_RECORD_IDS.width, 40), entry(BELT_RECORD_IDS.color, 'fialova')],
+      SLUG,
+    );
+    expect(unknown!.form.color).toBe('prirodni');
+    expect(unknown!.filled).toEqual(['šířka']);
+    const outcome = beltNumbersFromNotebook(
+      [entry(BELT_RECORD_IDS.width, 32), entry(BELT_RECORD_IDS.color, 'hneda')],
+      SLUG,
+    );
+    expect(outcome!.ok && outcome!.result.input.color).toBe('hneda');
+  });
+
   it('ignoruje jiný projekt, vymazané pole a neznámý konec', () => {
     expect(
       beltConfigPrefill(

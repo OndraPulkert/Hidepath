@@ -1,7 +1,10 @@
 import { Card } from '@/components/ui/card';
 import { Tag } from '@/components/ui/tag';
 import { type ProductExample } from '@/content/schema';
-import { type ExampleGroup, groupProductExamples } from '@/features/equipment/group-examples';
+import {
+  type ExampleGroup,
+  groupProductExamplesByColor,
+} from '@/features/equipment/group-examples';
 import { formatCzk, formatCzkRange, formatDateCs, pluralizeCs, typo } from '@/lib/utils/format';
 
 const availabilityLabel: Record<ProductExample['availability'], string | null> = {
@@ -210,6 +213,10 @@ function VariantGroup({ group }: { group: ExampleGroup }) {
   );
 }
 
+/** Nadpis sekce barvy: „Přírodní“, „Tmavě hnědá“; bez barvy „Ostatní“. */
+const colorTitle = (color: string | null): string =>
+  color === null ? 'Ostatní' : color.charAt(0).toLocaleUpperCase('cs') + color.slice(1);
+
 /**
  * „Doporučené výrobky“ z prototypu – jen ověřené odkazy s datem kontroly.
  * Varianty téhož výrobku (šířka, délka, zrnitost…) se slijí do jedné karty s tabulkou;
@@ -219,21 +226,49 @@ function VariantGroup({ group }: { group: ExampleGroup }) {
 export function ProductExamples({ examples }: { examples: readonly ProductExample[] }) {
   if (examples.length === 0) return null;
   const checked = [...new Set(examples.map((e) => e.checkedAt))].sort().at(-1);
-  // Skupiny s dostupnou variantou první, aby začátečník neklikal do vyprodaného.
-  const groups = groupProductExamples(examples);
+  // Skupiny s dostupnou variantou první, aby začátečník neklikal do vyprodaného. Výrobky ve více
+  // barvách (pás na opasek) jsou po barvách: první barva rozbalená, další sbalené.
+  const sections = groupProductExamplesByColor(examples);
+  const list = (groups: readonly ExampleGroup[]) => (
+    <ul className="flex flex-col gap-3">
+      {groups.map((g) => (
+        <li key={g.key}>
+          {g.rows.length === 1 ? <SingleExample group={g} /> : <VariantGroup group={g} />}
+        </li>
+      ))}
+    </ul>
+  );
 
   return (
     <section aria-labelledby="priklady">
       <h2 id="priklady" className="mb-2 text-h2">
         Ověřené příklady výrobků
       </h2>
-      <ul className="flex flex-col gap-3">
-        {groups.map((g) => (
-          <li key={g.key}>
-            {g.rows.length === 1 ? <SingleExample group={g} /> : <VariantGroup group={g} />}
-          </li>
-        ))}
-      </ul>
+      {sections.length === 1 ? (
+        list(sections[0]?.groups ?? [])
+      ) : (
+        <div className="flex flex-col gap-3">
+          {sections.map((section, i) => {
+            const title = colorTitle(section.color);
+            const count = pluralizeCs(section.groups.length, ['výrobek', 'výrobky', 'výrobků']);
+            return i === 0 ? (
+              <div key={title}>
+                <h3 className="mb-2 text-step font-semibold">
+                  {title} <span className="text-meta font-normal text-ink-2">· {count}</span>
+                </h3>
+                {list(section.groups)}
+              </div>
+            ) : (
+              <details key={title} className="rounded-control border border-line px-3 py-2 sm:px-4">
+                <summary className="min-h-touch cursor-pointer content-center text-step font-semibold">
+                  {title} <span className="text-meta font-normal text-ink-2">· {count}</span>
+                </summary>
+                <div className="pt-2 pb-1">{list(section.groups)}</div>
+              </details>
+            );
+          })}
+        </div>
+      )}
       <p className="mt-3 text-meta text-ink-2">
         Odkazy vedou do obchodů třetích stran, Hidepath z nákupu nic nemá. Ceny ověřeny{' '}
         {checked ? formatDateCs(checked) : ''} a mohou se změnit.

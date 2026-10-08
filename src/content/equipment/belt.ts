@@ -31,6 +31,7 @@ const craftpointStrap = (widthMm: number, priceCzk: number): ProductExample => (
   priceCents: priceCzk * 100,
   note: 'Třísločiněná italská kůže. Obchod uvádí délku 130–140 cm a že stačí na obvod pasu 95–115 cm; počítejte se 130 cm.',
   availability: 'in_stock',
+  color: 'přírodní',
   checkedAt: CHECKED,
 });
 
@@ -45,6 +46,7 @@ const krupsonStrap = (lengthCm: number, priceCzk: number): ProductExample => ({
   priceCents: priceCzk * 100,
   note: 'Jen šířka 40 mm, tloušťka 3,5–4 mm. Totéž zboží jako Imago. Činění stránka neuvádí, ověřte u prodejce. Doprava Balíkovna 79 Kč, GLS výdejní místo 75 Kč.',
   availability: 'in_stock',
+  color: 'přírodní',
   checkedAt: CHECKED,
 });
 
@@ -86,6 +88,7 @@ const leatoryStraps = (): ProductExample[] =>
       priceCents: cents[i]!,
       note: 'Třísločiněná hlazenice z ČR, 3,9 ± 0,1 mm. Řežou na míru, vyřízení 2–3 dny. Doprava Zásilkovna nebo PPL 79 Kč.',
       availability: 'in_stock' as const,
+      color: 'přírodní',
       checkedAt: CHECKED,
     })),
   );
@@ -107,6 +110,7 @@ const dvapasovciStrap = (
       ? 'Třísločiněná, 3,5 mm, délka 125–140 cm. Skladem víc než 5 ks. Doprava PPL, cenu stránka neuvádí.'
       : 'Třísločiněná, 3,5 mm, délka 125–140 cm. Stránka píše „skladem“, ale sklad je záporný: řežou na objednávku. Doprava PPL, cenu stránka neuvádí.',
   availability,
+  color: 'přírodní',
   checkedAt: CHECKED,
 });
 
@@ -118,6 +122,7 @@ const ecocaseStrap = (widthMm: number, priceCzk: number): ProductExample => ({
   priceCents: priceCzk * 100,
   note: 'Třísločiněný krupon, barvený, 3,6 mm, délka 130–140 cm. Skladem víc než 5 ks. Se seříznutými hranami o 20 Kč dráž. Doprava jen po ČR, cenu stránka neuvádí.',
   availability: 'in_stock',
+  color: 'světle hnědá',
   checkedAt: CHECKED,
 });
 
@@ -132,6 +137,7 @@ const imagoStrap = (widthMm: 30 | 40, lengthCm: number, priceCzk: number): Produ
   priceCents: priceCzk * 100,
   note: `Tloušťka 3,5–4 mm. Činění stránka neuvádí, ověřte u prodejce.${lengthCm > 130 ? ' Přepínač délek na stránce ukazuje nižší cenu než košík, počítejte s touto.' : ''} Doprava GLS výdejní místo 59 Kč, Balíkovna 69 Kč.`,
   availability: 'in_stock',
+  color: 'přírodní',
   checkedAt: CHECKED,
 });
 
@@ -149,6 +155,7 @@ const andexniteStrap = (
     priceCents: priceCzk * 100,
     note: 'Skladem, počet kusů neuveden. Činění stránka neuvádí, ověřte u prodejce. Doprava u objednávky do 500 Kč 120 Kč.',
     availability: 'in_stock',
+    color: 'přírodní',
     checkedAt: CHECKED,
   };
 };
@@ -161,8 +168,358 @@ const sedlarskeStrap = (widthMm: number, priceCzk: number): ProductExample => ({
   priceCents: priceCzk * 100,
   note: 'Krupon, délka 130 cm, 40 mm nemá. Činění u výrobku neuvedeno, ověřte. Stránka píše „skladem“ i „na objednávku 2–3 týdny“. Zásilkovna 89 Kč, pás 130 cm možná jako nadrozměr.',
   availability: 'in_stock',
+  color: 'přírodní',
   checkedAt: CHECKED,
 });
+
+/* Barvené pásy (projekt 04 – barevný pásek), ověřeno 8. 10. 2026. Zrcadlo `DYED_STRAP_SOURCES`. */
+
+const CRAFTPOINT_SHIPPING_NOTE = 'Doprava kurýrem 150 Kč, zdarma od 2 000 Kč.';
+
+const craftpointDyedStraps = (
+  color: string,
+  handle: string,
+  title: string,
+  note: string,
+  prices: Readonly<Record<number, number>>,
+): ProductExample[] =>
+  Object.entries(prices).map(([width, czk]) => ({
+    title: `${title}, šířka ${width} mm`,
+    shop: 'CraftPoint',
+    url: `https://craft-point.cz/products/${handle}`,
+    variant: `${width} mm`,
+    priceCents: czk * 100,
+    note: `${note} ${CRAFTPOINT_SHIPPING_NOTE}`,
+    availability: 'in_stock' as const,
+    color,
+    checkedAt: CHECKED,
+  }));
+
+const CRAFTPOINT_DYED_CZK = { 28: 234, 30: 234, 33: 262, 35: 262, 38: 291, 40: 291, 45: 313 };
+const CRAFTPOINT_33_38_CZK = { 33: 313, 38: 336 };
+
+const leatoryDyedStraps = (color: 'hnědý' | 'černý'): ProductExample[] => {
+  const suffix = color === 'hnědý' ? 'hnedy' : 'cerny';
+  return Object.entries(LEATORY_STRAP_CENTS).flatMap(([width, cents]) =>
+    [130, 140, 150].map((lengthCm, i) => ({
+      title: `Řemen na opasek 3,9 mm, ${color}, ${width} mm × ${lengthCm} cm`,
+      shop: 'Leatory',
+      url: `https://www.leatory.cz/kozene-remeny/remen-na-opasek-tloustka-3-9mm--sirka-${Number(width) < 30 ? '5-29' : '30-50'}-mm-${suffix}/`,
+      variant: `${width} mm, ${lengthCm} cm`,
+      priceCents: cents[i]!,
+      note: 'Probarvená třísločiněná hlazenice z ČR, 3,9 ± 0,1 mm. Řežou na míru, vyřízení 2–3 dny. Doprava Zásilkovna nebo PPL 79 Kč.',
+      availability: 'in_stock' as const,
+      color: color === 'hnědý' ? 'hnědá' : 'černá',
+      checkedAt: CHECKED,
+    })),
+  );
+};
+
+/** Dva pásovci, barvené: 32 mm skladem víc než 5 ks, 38 a 44 mm záporný sklad (řežou se). */
+const dvapasovciDyedStraps = (
+  color: string,
+  slug: string,
+  title: string,
+  note: string,
+  stockKnown = true,
+): ProductExample[] =>
+  (
+    [
+      [32, 286],
+      [38, 338],
+      [44, 394],
+    ] as const
+  ).map(([widthMm, czk]) => {
+    const inStock = !stockKnown || widthMm === 32;
+    return {
+      title: `${title}, ${widthMm} mm`,
+      shop: 'Dva pásovci',
+      url: `https://www.dvapasovci.cz/prirezy-kuze-na-opasky-${slug}/`,
+      variant: `${widthMm} mm`,
+      priceCents: czk * 100,
+      note: `${note} ${
+        !stockKnown
+          ? 'Stránka píše „skladem“, počet kusů neuvádí.'
+          : inStock
+            ? 'Skladem víc než 5 ks.'
+            : 'Stránka píše „skladem“, ale sklad je záporný: řežou na objednávku.'
+      } Doprava PPL, cenu stránka neuvádí.`,
+      availability: inStock ? ('in_stock' as const) : ('preorder' as const),
+      color,
+      checkedAt: CHECKED,
+    };
+  });
+
+const ecocaseDyedStraps = (
+  color: string,
+  slug: string,
+  title: string,
+  note: string,
+  variantPrefix = '',
+): ProductExample[] =>
+  (
+    [
+      [30, 259],
+      [35, 269],
+      [40, 279],
+    ] as const
+  ).map(([widthMm, czk]) => ({
+    title: `${title}, ${widthMm} mm`,
+    shop: 'Ecocase',
+    url: `https://www.ecocase.cz/kuze/${slug}/`,
+    variant: `${variantPrefix}${widthMm} mm`,
+    priceCents: czk * 100,
+    note: `${note} Skladem víc než 5 ks. Se seříznutými hranami o 20 Kč dráž. Doprava jen po ČR, cenu stránka neuvádí.`,
+    availability: 'in_stock' as const,
+    color,
+    checkedAt: CHECKED,
+  }));
+
+const imagoDyedStraps = (color: 'hnědá' | 'černá'): ProductExample[] => {
+  const slug = color === 'hnědá' ? 'hneda' : 'cerna';
+  return ([30, 40] as const).flatMap((widthMm) =>
+    (
+      [
+        [130, widthMm === 30 ? 249 : 299],
+        [150, widthMm === 30 ? 279 : 329],
+        [180, widthMm === 30 ? 329 : 379],
+      ] as const
+    ).map(([lengthCm, czk]) => ({
+      title: `Hovězí kůže na opasek, ${color}, ${widthMm / 10} cm, ${lengthCm} cm`,
+      shop: 'Imago',
+      url:
+        widthMm === 30
+          ? `https://www.imago.cz/hovezi-kuze-na-opasek-${slug}`
+          : `https://www.imago.cz/kuze-na-opasek-${slug}-4cm`,
+      variant: `${widthMm} mm, ${lengthCm} cm`,
+      priceCents: czk * 100,
+      note: `Probarvená hovězí kůže, 3,5–4 mm. Činění stránka neuvádí, ověřte u prodejce.${lengthCm > 130 ? ' Přepínač délek na stránce ukazuje nižší cenu než košík, počítejte s touto.' : ''} Doprava GLS výdejní místo 59 Kč, Balíkovna 69 Kč.`,
+      availability: 'in_stock' as const,
+      color,
+      checkedAt: CHECKED,
+    })),
+  );
+};
+
+/** Andexnite, barvené: jen šířky skladem (vyprodané vynechány). Tloušťka a délka z názvu. */
+const andexniteDyedStraps = (
+  color: string,
+  slug: string,
+  title: string,
+  prices: Readonly<Record<number, number>>,
+): ProductExample[] =>
+  Object.entries(prices).map(([width, czk]) => ({
+    title: `${title}, ${String(Number(width) / 10).replace('.', ',')} cm`,
+    shop: 'Andexnite',
+    url: `https://andexnite.cz/produkt/${slug}/`,
+    variant: `${width} mm`,
+    priceCents: czk * 100,
+    note: 'Činění ani probarvení stránka neuvádí, ověřte u prodejce. Doprava u objednávky do 500 Kč 120 Kč.',
+    availability: 'in_stock' as const,
+    color,
+    checkedAt: CHECKED,
+  }));
+
+const ANDEXNITE_STD_CZK = { 30: 255, 35: 285, 40: 320 };
+
+/** Pořadí barev v katalogu (jako výběr ve „Váš pásek“): od světlé k tmavé, pak ostatní. */
+const DYED_COLOR_ORDER = [
+  'světle hnědá',
+  'hnědá',
+  'tmavě hnědá',
+  'koňak',
+  'tabák',
+  'černá',
+  'modrá',
+  'bordó',
+  'tmavě zelená',
+];
+
+/** Barvené pásy seřazené podle barvy (stabilně: uvnitř barvy v pořadí obchodů níže). */
+const dyedStraps = (): ProductExample[] =>
+  unsortedDyedStraps().sort(
+    (a, b) => DYED_COLOR_ORDER.indexOf(a.color ?? '') - DYED_COLOR_ORDER.indexOf(b.color ?? ''),
+  );
+
+const unsortedDyedStraps = (): ProductExample[] => [
+  ...craftpointDyedStraps(
+    'tmavě hnědá',
+    'sedlarsky-remen-z-prave-kuze-30-35mm-140cm-15-80mm-tmave-hneda',
+    'Sedlářský řemen z pravé kůže 3,0–3,5 mm, 130–140 cm, tmavě hnědý',
+    'Třísločiněná, z vazu, tovární povrchová úprava (probarvení obchod neuvádí).',
+    CRAFTPOINT_DYED_CZK,
+  ),
+  ...craftpointDyedStraps(
+    'černá',
+    'remen-z-prave-kuze-3-0-3-5mm-140cm-15-80mm-cerny',
+    'Řemen z pravé kůže 3,0–3,5 mm, 130–140 cm, černý',
+    'Třísločiněná, z vazu, tovární povrchová úprava (probarvení obchod neuvádí).',
+    CRAFTPOINT_DYED_CZK,
+  ),
+  ...craftpointDyedStraps(
+    'koňak',
+    'kozeny-remen-3-0-3-5mm-140cm-15-80mm-konak',
+    'Kožený řemen 3,0–3,5 mm, 130–140 cm, koňak',
+    'Třísločiněná, z vazu, z výroby nabarvená (probarvení obchod neuvádí).',
+    CRAFTPOINT_DYED_CZK,
+  ),
+  ...craftpointDyedStraps(
+    'bordó',
+    'kozeny-remen-maya-35-4mm-130-140cm-33-38mm-bordeaux',
+    'Kožený řemen Maya 3,5–4 mm, 130–140 cm, bordeaux',
+    'Třísločiněná kůže Maya (Il Ponte), povrchově upravená. Obchod píše k 33 mm přezku 35 mm, k 38 mm přezku 40 mm.',
+    CRAFTPOINT_33_38_CZK,
+  ),
+  ...craftpointDyedStraps(
+    'tmavě zelená',
+    'remen-z-kuze-maya-3-5-4mm-130-140cm-33-38mm-foresta',
+    'Řemen z kůže Maya 3,5–4 mm, 130–140 cm, foresta (tmavě zelená)',
+    'Třísločiněná kůže Maya (Il Ponte). Obchod píše k 33 mm přezku 35 mm, k 38 mm přezku 40 mm.',
+    CRAFTPOINT_33_38_CZK,
+  ),
+  ...craftpointDyedStraps(
+    'koňak',
+    'remen-z-buvoli-kuze-buffalo-handwax-35-4mm-140cm-33-38mm-konak',
+    'Řemen z buvolí kůže Buffalo Handwax 3,5–4 mm, 140 cm, koňak',
+    'Latigo (kombinované činění, ne třísločiněná), pull-up, délka 140–150 cm.',
+    CRAFTPOINT_33_38_CZK,
+  ),
+  ...leatoryDyedStraps('hnědý'),
+  ...leatoryDyedStraps('černý'),
+  ...dvapasovciDyedStraps(
+    'hnědá',
+    'hneda--razba-bark',
+    'Přířez kůže na opasek, hnědá, ražba bark',
+    'Třísločiněná, plně probarvená, 3,5 mm, délka 120–140 cm.',
+  ),
+  ...dvapasovciDyedStraps(
+    'černá',
+    'cerna',
+    'Přířez kůže na opasek, černá hovězina',
+    'Plnolícová, matná, 3,5 mm, délka 130–140 cm. Činění stránka neuvádí, ověřte u prodejce.',
+  ),
+  ...dvapasovciDyedStraps(
+    'tabák',
+    'tabak',
+    'Přířez kůže na opasek, tabák',
+    'Barvená na tabákový odstín, 3,5 mm, délka 130–140 cm. Činění stránka neuvádí, ověřte u prodejce.',
+    false,
+  ),
+  ...dvapasovciDyedStraps(
+    'koňak',
+    'london',
+    'Přířez kůže na opasek, london (koňak)',
+    'Barvená na koňakový odstín, 3,5 mm, délka 130–140 cm. Činění stránka neuvádí, ověřte u prodejce.',
+  ),
+  ...dvapasovciDyedStraps(
+    'modrá',
+    'modra-hovezina',
+    'Přířez kůže na opasek, modrá hovězina',
+    'Matná, 3,5 mm, délka 130–140 cm. Činění stránka neuvádí, ověřte u prodejce.',
+  ),
+  ecocaseStrap(30, 259),
+  ecocaseStrap(35, 269),
+  ecocaseStrap(40, 279),
+  ...ecocaseDyedStraps(
+    'černá',
+    'kozeny-remen-na-opasky',
+    'Kožený řemen na opasky, černý matný',
+    'Třísločiněný krupon, 3,7 mm, délka 120–140 cm; vedle je černá lesklá 2,7 mm, ta je na pásek tenká.',
+    'matná, ',
+  ),
+  ...ecocaseDyedStraps(
+    'tmavě hnědá',
+    'kozeny-remen-na-opasky-hnedy-a',
+    'Kožený řemen na opasky, tmavě hnědý (A)',
+    'Třísločiněný krupon, 3 mm, délka 130–140 cm.',
+  ),
+  ...ecocaseDyedStraps(
+    'světle hnědá',
+    'kozeny-remen-na-opasky-svetle-hnedy-b-',
+    'Kožený řemen na opasky, světle hnědý (B)',
+    'Třísločiněný krupon, 3,6 mm, délka 130–140 cm.',
+  ),
+  ...imagoDyedStraps('hnědá'),
+  ...imagoDyedStraps('černá'),
+  ...andexniteDyedStraps(
+    'tmavě hnědá',
+    'hovezi-kuze-na-opasek-tmave-hneda-140-155cm-3-4-3-6-mm',
+    'Hovězí kůže na opasek, tmavě hnědá, 140–155 cm, 3,4–3,6 mm',
+    ANDEXNITE_STD_CZK,
+  ),
+  ...andexniteDyedStraps(
+    'tmavě hnědá',
+    'hovezi-kuze-na-opasek-tmave-hneda-130cm-3-4-3-7-mm',
+    'Hovězí kůže na opasek, tmavě hnědá, 130 cm, 3,4–3,7 mm',
+    { 30: 255, 35: 280, 40: 320 },
+  ),
+  ...andexniteDyedStraps(
+    'tmavě hnědá',
+    'hovezi-kuze-na-opasek-tmave-hneda-130cm-3-2-3-3-mm',
+    'Hovězí kůže na opasek, tmavě hnědá, 130 cm, 3,2–3,3 mm',
+    { 30: 245, 35: 280, 40: 320 },
+  ),
+  ...andexniteDyedStraps(
+    'tmavě hnědá',
+    'hovezi-kuze-na-opasek-tmave-hneda-130-cm-3-1-3-2-mm',
+    'Hovězí kůže na opasek, tmavě hnědá, 130 cm, 3,1–3,2 mm',
+    { 40: 320 },
+  ),
+  ...andexniteDyedStraps(
+    'tmavě hnědá',
+    'hovezi-kuze-na-opasek-tmave-hneda-125-cm-3-0-3-2-mm',
+    'Hovězí kůže na opasek, tmavě hnědá, 125 cm, 3,0–3,2 mm',
+    { 30: 255, 35: 280 },
+  ),
+  ...andexniteDyedStraps(
+    'hnědá',
+    'hovezi-kuze-na-opasek-hneda-140-145cm-3-6-3-9-mm',
+    'Hovězí kůže na opasek, hnědá, 140–145 cm, 3,6–3,9 mm',
+    ANDEXNITE_STD_CZK,
+  ),
+  ...andexniteDyedStraps(
+    'hnědá',
+    'hovezi-kuze-na-opasek-hneda-145-cm-3-4-3-6mm',
+    'Hovězí kůže na opasek, hnědá, 145 cm, 3,4–3,6 mm',
+    ANDEXNITE_STD_CZK,
+  ),
+  ...andexniteDyedStraps(
+    'hnědá',
+    'hovezi-kuze-na-opasek-hneda-145-cm-3-4-3-6mm-2',
+    'Hovězí kůže na opasek, hnědá, 125 cm, 3,4–3,6 mm',
+    ANDEXNITE_STD_CZK,
+  ),
+  ...andexniteDyedStraps(
+    'hnědá',
+    'hovezi-kuze-na-opasek-hneda-145-cm-3-4mm',
+    'Hovězí kůže na opasek, hnědá, 145 cm, 3,4 mm',
+    ANDEXNITE_STD_CZK,
+  ),
+  ...andexniteDyedStraps(
+    'hnědá',
+    'hovezi-kuze-na-opasek-hneda-130-cm-3-8-3-9-mm',
+    'Hovězí kůže na opasek, hnědá, 125–130 cm, 3,8–3,9 mm',
+    { 30: 255, 40: 320 },
+  ),
+  ...andexniteDyedStraps(
+    'hnědá',
+    'hovezi-kuze-na-opasek-hneda-130cm-3-0-3-2-mm',
+    'Hovězí kůže na opasek, hnědá, 130 cm, 3,0–3,2 mm',
+    { 35: 280 },
+  ),
+  ...andexniteDyedStraps(
+    'černá',
+    'hovezi-kuze-na-opasek-cerna-125-cm-3-5-3-8-mm-kopirovat',
+    'Hovězí kůže na opasek, černá, 125 cm, 3,5–3,8 mm',
+    { 35: 280 },
+  ),
+  ...andexniteDyedStraps(
+    'černá',
+    'hovezi-kuze-na-opasek-cerna-125cm-39-41-mm',
+    'Hovězí kůže na opasek, černá, 125 cm, 3,9–4,1 mm',
+    { 30: 225, 35: 260, 40: 290 },
+  ),
+];
 
 const PRONG_UNVERIFIED = 'Typ trnu stránka neuvádí: na fotce ověřte, že má jeden trn.';
 
@@ -177,7 +534,12 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
     purpose:
       'Hotový pás (řemen) s rovnými hranami ušetří řezání dlouhého pruhu. Šířka pásu = vnitřní světlost přezky. Délku spočítá tabulka „Váš pásek“ z obvodu: obvod + přehnutí u přezky + vzdálenost od prostřední dírky ke konci (pro 5 dírek po 25 mm obvod + 234,3 mm).',
     buyingGuide: [
-      { label: 'Činění', value: 'třísločiněná („veg-tan“), přírodní' },
+      { label: 'Činění', value: 'třísločiněná („veg-tan“)' },
+      {
+        label: 'Barva',
+        value:
+          'přírodní (výchozí, natře se balzámem), nebo barevný; u barevného řezané hrany obarvíte barvou na hrany',
+      },
       { label: 'Šířka', value: 'stejná jako vnitřní světlost přezky; aplikace počítá 28–45 mm' },
       {
         label: 'Tloušťka',
@@ -188,7 +550,8 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
     cautions: [
       'Pás 130 cm stačí do obvodu 106,5 cm (5 dírek po 25 mm). Na větší obvod kupte delší.',
       'CraftPoint slibuje 130–140 cm; s 140 cm nepočítejte.',
-      'Činění uvádí jen CraftPoint, Leatory, Dva pásovci a Ecocase. U Imaga, Křupsonu, Andexnite a Sedlářského nářadí ho ověřte u prodejce.',
+      'Činění uvádí CraftPoint (kromě latiga Buffalo), Leatory, Ecocase a u Dvou pásovců přírodní a hnědý bark. U ostatních barev Dvou pásovců, Imaga, Křupsonu, Andexnite a Sedlářského nářadí ho ověřte u prodejce.',
+      'Barevný pás bývá barvený jen na povrchu: řezaná hrana je světlá. Probarvení uvádí jen Leatory, Dva pásovci (bark) a Imago.',
       'Tloušťka v názvu je rozpětí. Skutečnou změřte až na dodaném pásu.',
     ],
     avoid: [
@@ -218,9 +581,6 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
       dvapasovciStrap(32, 286, 'in_stock'),
       dvapasovciStrap(38, 338, 'preorder'),
       dvapasovciStrap(44, 394, 'preorder'),
-      ecocaseStrap(30, 259),
-      ecocaseStrap(35, 269),
-      ecocaseStrap(40, 279),
       imagoStrap(30, 130, 249),
       imagoStrap(30, 150, 279),
       imagoStrap(30, 180, 329),
@@ -236,6 +596,7 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
       sedlarskeStrap(30, 183),
       sedlarskeStrap(35, 214),
       sedlarskeStrap(45, 275),
+      ...dyedStraps(),
     ],
     commonlyAtHome: false,
     media: [

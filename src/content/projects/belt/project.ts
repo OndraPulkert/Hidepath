@@ -62,6 +62,24 @@ const KEEPER_LENGTH_ID = 'belt-keeper-length';
 /** Obvod změřený na pásku při zkoušce na těle (lekce 5). */
 const FIT_WAIST_ID = 'belt-fit-waist';
 
+/** Barva na hrany vyzkoušená na odřezku (lekce 2, jen barevný pásek). */
+const EDGE_PAINT_COATS_ID = 'edge-paint-coats';
+const EDGE_PAINT_DRY_ID = 'edge-paint-dry-minutes';
+
+/** Schnutí vrstvy barvy na hrany: CraftPoint u Fiebing's Edge Kote uvádí druhou vrstvu asi po 15 min. */
+const edgePaintWait = (fromNotebook: boolean) => ({
+  id: 'edge-paint-dry',
+  label: 'Schnutí barvy na hrany',
+  minutes: 15,
+  basis: 'manufacturer' as const,
+  ...(fromNotebook ? { initialFromField: EDGE_PAINT_DRY_ID } : {}),
+});
+
+const edgePaintRecalls: StepRecall[] = [
+  { fieldId: EDGE_PAINT_COATS_ID, label: 'Vrstvy barvy na hrany (lekce 2)' },
+  { fieldId: EDGE_PAINT_DRY_ID, label: 'Schnutí barvy na hrany (lekce 2)' },
+];
+
 /** Podmínka tisku listů: destička pro tuto sestavu nejde. */
 const SHEETS_CONDITION =
   'tabulka „Váš pásek“ ukazuje u této řady destičky „ne“, nebo jste v lekci 1 zvolili jen listy';
@@ -73,6 +91,7 @@ const recall = {
   thickness: { fieldId: BELT_RECORD_IDS.thickness, label: 'Tloušťka pásu (lekce 1)' },
   prong: { fieldId: BELT_RECORD_IDS.prong, label: 'Trn přezky u kořene (lekce 1)' },
   marking: { fieldId: BELT_MARKING_ID, label: 'Čím značíte (lekce 1)' },
+  color: { fieldId: BELT_RECORD_IDS.color, label: 'Barva pásu (lekce 1)' },
 } satisfies Record<string, StepRecall>;
 
 const tipField: RecordField = {
@@ -82,6 +101,26 @@ const tipField: RecordField = {
   options: [
     { value: BELT_TIP_CHOICES.hrot, label: 'Hrot' },
     { value: BELT_TIP_CHOICES.zaobleny, label: 'Zaoblený' },
+  ],
+};
+
+/** Barva pásu: hodnoty jako `StrapColor` (src/lib/patterns/belt-strap-offers.ts). */
+const colorField: RecordField = {
+  kind: 'choice',
+  id: BELT_RECORD_IDS.color,
+  label: 'Barva pásu',
+  hint: 'Přírodní natřete balzámem. Barevný bývá na řezu světlý: hranu obarvíte barvou na hrany.',
+  options: [
+    { value: 'prirodni', label: 'Přírodní' },
+    { value: 'svetle-hneda', label: 'Světle hnědá' },
+    { value: 'hneda', label: 'Hnědá' },
+    { value: 'tmave-hneda', label: 'Tmavě hnědá' },
+    { value: 'konak', label: 'Koňak' },
+    { value: 'tabak', label: 'Tabák' },
+    { value: 'cerna', label: 'Černá' },
+    { value: 'modra', label: 'Modrá' },
+    { value: 'bordo', label: 'Bordó' },
+    { value: 'zelena', label: 'Tmavě zelená' },
   ],
 };
 
@@ -158,8 +197,8 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         id: 'width-and-tip',
-        title: 'Vyberte šířku a konec',
-        body: 'Šířka pásu = vnitřní světlost přezky: přezka 40 mm, pás 40 mm. Aplikace počítá 28–45 mm. Jednotrnovou přezku s ověřeným typem trnu má katalog pro 30, 35 a 40 mm; 45 mm má jen Andexnite. Konec vyberte: hrot, nebo zaoblený. Destička má zaoblený konec jen pro 30 a 40 mm, pro jiné šířky se konec tiskne na list 2.',
+        title: 'Vyberte šířku, konec a barvu',
+        body: 'Šířka pásu = vnitřní světlost přezky: přezka 40 mm, pás 40 mm. Aplikace počítá 28–45 mm. Jednotrnovou přezku s ověřeným typem trnu má katalog pro 30, 35 a 40 mm; 45 mm má jen Andexnite. Konec vyberte: hrot, nebo zaoblený. Destička má zaoblený konec jen pro 30 a 40 mm, pro jiné šířky se konec tiskne na list 2. Barvu vyberte: přírodní pás natřete balzámem, barevný pás bývá na řezu světlý a hranu obarvíte barvou na hrany (lekce 2, 3, 4 a 6).',
         media: [],
         records: [
           {
@@ -173,15 +212,16 @@ export const lessons: readonly LessonDefinition[] = [
             max: 45,
           },
           tipField,
+          colorField,
         ],
       },
       {
         id: 'your-belt',
         title: 'Vyplňte „Váš pásek“',
         printLink: 'pattern-sheets',
-        body: `Na stránce Listy střihu otevřete formulář „Váš pásek“. Obvod, šířku a konec předvyplní zápisník. Tloušťku zatím nechte 3,5 mm, změříte ji po dodání. Z tabulky pod formulářem si přečtěte nejkratší délku pásu, přezku, nýt a štítek „Destička“. Sestavu uložte do „Moje pásky“. Čísla v dalších lekcích berte z této tabulky; hodnoty pro 40 × 3,5 mm jsou jen příklad.`,
+        body: `Na stránce Listy střihu otevřete formulář „Váš pásek“. Obvod, šířku, konec a barvu předvyplní zápisník. Tloušťku zatím nechte 3,5 mm, změříte ji po dodání. Z tabulky pod formulářem si přečtěte nejkratší délku pásu, přezku, nýt a štítek „Destička“. Sestavu uložte do „Moje pásky“. Čísla v dalších lekcích berte z této tabulky; hodnoty pro 40 × 3,5 mm jsou jen příklad.`,
         media: [],
-        recalls: [recall.waist, recall.width, recall.tip],
+        recalls: [recall.waist, recall.width, recall.tip, recall.color],
       },
       {
         id: 'order',
@@ -296,7 +336,7 @@ export const lessons: readonly LessonDefinition[] = [
     order: 2,
     phaseSlug: 'prepare',
     estimatedMinutes: 90,
-    goal: 'Na odřezku stejného pásu vyzkoušet řez, značení, výsečníky, ovál, ohyb, nýt, hrany a balzám dřív, než se pustíte do pásku.',
+    goal: 'Na odřezku stejného pásu vyzkoušet řez, značení, výsečníky, ovál, ohyb, nýt, hrany, u barevného pásku barvu na hrany a balzám dřív, než se pustíte do pásku.',
     materials: [
       'odřezek pásu asi 15 cm (viz první krok)',
       'oboustranná lepicí páska a dvě lišty nebo odřezky stejně silné jako pás',
@@ -320,7 +360,7 @@ export const lessons: readonly LessonDefinition[] = [
       'sandpaper',
       'leather-balm',
     ],
-    recommendedEquipment: ['edge-beveler'],
+    recommendedEquipment: ['edge-beveler', 'edge-paint'],
     prerequisiteLessons: [L1],
     steps: [
       {
@@ -378,7 +418,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'edges-balm',
         title: 'Hrana a balzám',
-        body: 'Na kousku hrany vyzkoušejte zkosení ořezávačem (velikost pro váš pás ověřte na odřezku), nebo zaoblení brusným papírem na hranolku. Hranu navlhčete Tokonole a třete leštítkem nebo plátnem, dokud se nezaleskne. Na líc odřezku naneste balzám podle návodu na obalu a nechte ho vsáknout. Prohlédněte, jak změnil barvu.',
+        body: 'Na kousku hrany vyzkoušejte zkosení ořezávačem (velikost pro váš pás ověřte na odřezku), nebo zaoblení brusným papírem na hranolku. U barevného pásku teď hranu nejdřív obarvěte (další krok). Hranu navlhčete Tokonole a třete leštítkem nebo plátnem, dokud se nezaleskne. Na líc odřezku naneste balzám podle návodu na obalu a nechte ho vsáknout. Prohlédněte, jak změnil barvu.',
         animationLinks: [animationLink('edges', 'H1'), animationLink('edges', 'H2')],
         media: [],
         records: [
@@ -393,6 +433,33 @@ export const lessons: readonly LessonDefinition[] = [
             ],
           },
         ],
+      },
+      {
+        id: 'try-edge-paint',
+        title: 'Barva na hrany (jen barevný pásek)',
+        body: 'Jen u barevného pásku; u přírodního krok přeskočte. Řezaná hrana barevného pásu bývá světlá. Na sražené hraně odřezku vyzkoušejte barvu na hrany: hranu přebruste dohladka, barvu naneste podle návodu na obalu v tenkých vrstvách a mezi nimi nechte zaschnout. Pak hranu zaleštěte jako v předchozím kroku. Zkontrolujte, že barva nezatekla na líc a že odstín k pásu sedí. Zapište si počet vrstev a dobu schnutí: podle nich postupujte v lekcích 3, 4 a 6.',
+        animationLinks: [animationLink('edges', 'C1')],
+        media: [],
+        waits: [edgePaintWait(false)],
+        records: [
+          {
+            kind: 'number',
+            id: EDGE_PAINT_COATS_ID,
+            label: 'Počet vrstev barvy na hrany',
+            unit: '×',
+            min: 1,
+            decimals: 0,
+          },
+          {
+            kind: 'number',
+            id: EDGE_PAINT_DRY_ID,
+            label: 'Doba schnutí barvy na hrany',
+            unit: 'min',
+            min: 1,
+            decimals: 0,
+          },
+        ],
+        recalls: [recall.color],
       },
       {
         id: 'bend',
@@ -482,6 +549,13 @@ export const lessons: readonly LessonDefinition[] = [
           'Hrana se neleskne: navlhčete ji znovu Tokonole a třete dál. Balzám nevyhovuje: na pásek ho nedávejte, jiný přípravek nejdřív na odřezku.',
         required: true,
       },
+      {
+        slug: 'scrap-edge-paint',
+        title: 'U barevného pásku je barva na hrany vyzkoušená a zapsaná (vrstvy, doba schnutí).',
+        description:
+          'Barva zatekla na líc: příště nanášejte méně a jen na hranu. Odstín nesedí: zkuste jiný odstín na odřezku.',
+        required: false,
+      },
     ],
     commonMistakes: [
       'Odřezek z pásu, který pak na délku nestačí.',
@@ -499,7 +573,7 @@ export const lessons: readonly LessonDefinition[] = [
     order: 3,
     phaseSlug: 'build',
     estimatedMinutes: 120,
-    goal: 'Srovnat konec u přezky, zkosit a zaleštit dlouhé hrany kromě posledních 30 cm a pás natřít balzámem.',
+    goal: 'Srovnat konec u přezky, zkosit, u barevného pásku obarvit a zaleštit dlouhé hrany kromě posledních 30 cm a pás natřít balzámem.',
     materials: ['plátno na leštění', 'kousek papírové pásky na značku 30 cm'],
     requiredEquipment: [
       'belt-strap',
@@ -510,7 +584,7 @@ export const lessons: readonly LessonDefinition[] = [
       'sandpaper',
       'leather-balm',
     ],
-    recommendedEquipment: ['edge-beveler'],
+    recommendedEquipment: ['edge-beveler', 'edge-paint'],
     prerequisiteLessons: [L2],
     steps: [
       {
@@ -533,9 +607,18 @@ export const lessons: readonly LessonDefinition[] = [
         media: [],
       },
       {
+        id: 'edge-paint',
+        title: 'Obarvěte hrany (jen barevný pásek)',
+        body: 'Jen u barevného pásku; u přírodního krok přeskočte. Hrany přebruste dohladka a naneste barvu na hrany, jak jste ji vyzkoušeli na odřezku v lekci 2: stejný počet vrstev a mezi nimi nechte zaschnout. Hlídejte, ať barva nezateče na líc. Posledních 30 cm zatím vynechte. Vyzkoušenou barvu nemáte: nejdřív ji ověřte na odřezku.',
+        animationLinks: [animationLink('edges', 'C1')],
+        media: [],
+        waits: [edgePaintWait(true)],
+        recalls: edgePaintRecalls,
+      },
+      {
         id: 'burnish',
         title: 'Zaleštěte hrany',
-        body: 'Hranu navlhčete Tokonole a třete leštítkem nebo plátnem, dokud se nezhutní a nezaleskne. Hran je dvakrát délka pásu: pracujte po úsecích.',
+        body: 'Hranu navlhčete Tokonole a třete leštítkem nebo plátnem, dokud se nezhutní a nezaleskne. U barevného pásku leštěte až zaschlou barvu. Hran je dvakrát délka pásu: pracujte po úsecích.',
         animationLinks: [
           animationLink('edges', 'H2'),
           animationLink('edges', 'D1'),
@@ -548,7 +631,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'balm',
         title: 'Natřete pás balzámem',
-        body: 'Teď, ne později: po ohnutí a sešroubování se pod ohyb nedostanete. Balzám naneste podle návodu na obalu, stejně jako na odřezku v lekci 2. Posledních 30 cm zatím vynechte.',
+        body: 'Teď, ne později: po ohnutí a sešroubování se pod ohyb nedostanete. Balzám naneste podle návodu na obalu, stejně jako na odřezku v lekci 2. Posledních 30 cm zatím vynechte. U barevného pásku jen, když balzám na odřezku vyhověl; jinak krok přeskočte.',
         media: [],
       },
     ],
@@ -565,8 +648,14 @@ export const lessons: readonly LessonDefinition[] = [
         required: true,
       },
       {
+        slug: 'edges-painted',
+        title: 'U barevného pásku jsou hrany obarvené před leštěním a barva nezatekla na líc.',
+        required: false,
+      },
+      {
         slug: 'balm-done',
-        title: 'Pás je natřený balzámem kromě posledních 30 cm.',
+        title:
+          'Pás je natřený balzámem kromě posledních 30 cm (u barevného pásku jen, když balzám na odřezku vyhověl).',
         required: true,
       },
     ],
@@ -574,6 +663,7 @@ export const lessons: readonly LessonDefinition[] = [
       'Opracované hrany v posledních 30 cm, které se pak odříznou.',
       'Leštění dřív, než jsou hrany sražené nebo zaoblené.',
       'Balzám až po sešroubování konce.',
+      'U barevného pásku leštit hranu dřív, než barva zcela zaschne.',
     ],
     safety: [KNIFE],
     media: [photo('belt-l3-hero', 'Pás rozložený na stole se zaleštěnými hranami a značkou 30 cm')],
@@ -610,7 +700,7 @@ export const lessons: readonly LessonDefinition[] = [
       'edge-burnisher',
       'sandpaper',
     ],
-    recommendedEquipment: ['edge-beveler'],
+    recommendedEquipment: ['edge-beveler', 'edge-paint'],
     prerequisiteLessons: [L3],
     steps: [
       {
@@ -657,7 +747,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'oval',
         title: 'Vyřízněte ovál',
-        body: 'Oba konce oválu vysekněte Ø 6 mm zarovnané na obtažené oblouky, ne doprostřed rýhy. S listem 1 postavte výsečník středem na propíchnutý křížek. Boky řízněte nožem tečně k oběma otvorům: obtažený ovál je o 0,3 mm z každé strany menší (24,4 × 5,4 místo 25 × 6 mm) a trn by se dřel. Vnitřní hranu oválu (přes ni jezdí trn) srazte brusným papírem a zaleštěte Tokonole kulatým leštítkem nebo kolíčkem teď, dokud je konec rovný: po ohnutí kolem příčky se k ní nedostanete.',
+        body: 'Oba konce oválu vysekněte Ø 6 mm zarovnané na obtažené oblouky, ne doprostřed rýhy. S listem 1 postavte výsečník středem na propíchnutý křížek. Boky řízněte nožem tečně k oběma otvorům: obtažený ovál je o 0,3 mm z každé strany menší (24,4 × 5,4 místo 25 × 6 mm) a trn by se dřel. Vnitřní hranu oválu (přes ni jezdí trn) srazte brusným papírem, u barevného pásku obarvěte jako v lekci 3, a zaleštěte Tokonole kulatým leštítkem nebo kolíčkem teď, dokud je konec rovný: po ohnutí kolem příčky se k ní nedostanete.',
         animationLinks: [
           animationLink('beltBuckleEnd', 'C2'),
           animationLink('beltBuckleEnd', 'C3'),
@@ -776,7 +866,8 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'strap-edged',
         fromLesson: L3,
-        label: 'Pás se zaleštěnými hranami a balzámem (bez posledních 30 cm)',
+        label:
+          'Pás se zaleštěnými (u barevného obarvenými) hranami a balzámem (bez posledních 30 cm)',
       },
     ],
     media: [photo('belt-l4-hero', 'Přezka přišroubovaná dvěma nýty, poutko mezi nimi')],
@@ -883,7 +974,7 @@ export const lessons: readonly LessonDefinition[] = [
       'sandpaper',
       'leather-balm',
     ],
-    recommendedEquipment: ['corner-template', 'edge-beveler', 'belt-end-punch'],
+    recommendedEquipment: ['corner-template', 'edge-beveler', 'belt-end-punch', 'edge-paint'],
     prerequisiteLessons: [L5],
     steps: [
       {
@@ -939,7 +1030,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'finish',
         title: 'Dokončete hrany',
-        body: 'Srazte a zaleštěte hrany posledních 30 cm a hranu nového konce. Pak natřete balzámem zbytek pásu.',
+        body: 'Srazte hrany posledních 30 cm a hranu nového konce. U barevného pásku je obarvěte jako v lekci 3 a nechte zaschnout. Pak je zaleštěte a natřete balzámem zbytek pásu; u barevného pásku jen, když balzám na odřezku vyhověl.',
         animationLinks: [
           animationLink('beltHolesTip', 'F1'),
           animationLink('beltHolesTip', 'F2'),
@@ -947,6 +1038,8 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('edges', 'H2'),
         ],
         media: [],
+        waits: [edgePaintWait(true)],
+        recalls: edgePaintRecalls,
       },
       {
         id: 'try',
@@ -1025,7 +1118,7 @@ export const beltProject: ProjectDefinition = {
       priority: 'required',
       reason: 'Celý pásek; odřezek na trénink, jen když je pás o 15 cm delší než nejkratší délka.',
       specification:
-        'Třísločiněný přírodní pás 3,0–4,0 mm v šířce přezky, aspoň nejkratší délka z tabulky „Váš pásek“ (+ 15 cm na odřezek k tréninku). Po dodání změřit.',
+        'Třísločiněný pás 3,0–4,0 mm, přírodní nebo barevný, v šířce přezky, aspoň nejkratší délka z tabulky „Váš pásek“ (+ 15 cm na odřezek k tréninku). Po dodání změřit.',
     },
     {
       equipmentSlug: 'belt-buckle',
@@ -1115,8 +1208,16 @@ export const beltProject: ProjectDefinition = {
     {
       equipmentSlug: 'leather-balm',
       priority: 'required',
-      reason: 'Přírodní pás se bez úpravy hned ušpiní.',
+      reason: 'Přírodní pás se bez úpravy hned ušpiní. U barevného jen, když na odřezku vyhoví.',
       specification: 'Balzám na třísločiněnou kůži; vzhled ověřit na odřezku.',
+    },
+    {
+      equipmentSlug: 'edge-paint',
+      priority: 'recommended',
+      reason:
+        'Jen u barevného pásku: řezaná hrana bývá světlá a před leštěním se obarví (zkouška v lekci 2, hrany v lekcích 3, 4 a 6).',
+      specification:
+        "Barva na hrany v odstínu pásu; odstín a přilnavost ověřit na odřezku. Ověřené příklady v katalogu jsou Fiebing's Edge Kote hnědá, tmavě hnědá a černá.",
     },
     {
       equipmentSlug: 'edge-beveler',
@@ -1290,6 +1391,11 @@ export const beltProject: ProjectDefinition = {
       {
         equipmentSlug: 'corner-template',
         reason: 'Jen pokud ji máte; vrchol hrotu R4 jde říznout od ruky.',
+      },
+      {
+        equipmentSlug: 'edge-paint',
+        reason:
+          'Jen u barevného pásku: výchozí pás je přírodní. U barevného ji „Připravte si“ a „Co koupit“ přidají podle barvy z „Váš pásek“.',
       },
     ],
     alsoNeeded: [

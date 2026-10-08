@@ -34,6 +34,8 @@ export interface ExampleGroup {
   maxPriceCents: number;
   /** Nejlepší dostupnost ve skupině – podle ní se karty řadí. */
   availability: ProductExample['availability'];
+  /** Společná barva variant (pás na opasek); `null`, když ji příklady nemají nebo se liší. */
+  color: string | null;
 }
 
 const availabilityRank = { in_stock: 0, preorder: 1, unavailable: 2 } as const;
@@ -185,6 +187,7 @@ function buildGroup(key: string, examples: readonly ProductExample[]): ExampleGr
     minPriceCents: Math.min(...prices),
     maxPriceCents: Math.max(...prices),
     availability,
+    color: shared(examples.map((e) => e.color ?? null)),
   };
   const rowExtras = (e: ProductExample, i: number) => ({
     note: noteRest.get(i) ?? null,
@@ -252,4 +255,32 @@ export function groupProductExamples(examples: readonly ProductExample[]): Examp
   return [...byBase.entries()]
     .map(([key, list]) => buildGroup(key, list))
     .sort((a, b) => availabilityRank[a.availability] - availabilityRank[b.availability]);
+}
+
+export interface ExampleColorSection {
+  /** Barva malými písmeny; `null` = příklady barvu neuvádějí. */
+  color: string | null;
+  groups: ExampleGroup[];
+}
+
+/**
+ * Karty výrobků podle barvy (pás na opasek: přírodní, hnědá, černá…). Barvy jdou v pořadí,
+ * v jakém je obsah poprvé uvádí; uvnitř barvy platí pořadí `groupProductExamples`. Bez barev
+ * je jedna sekce s `color: null`.
+ */
+export function groupProductExamplesByColor(
+  examples: readonly ProductExample[],
+): ExampleColorSection[] {
+  const order: (string | null)[] = [];
+  const byColor = new Map<string | null, ProductExample[]>();
+  for (const e of examples) {
+    const color = e.color ?? null;
+    const list = byColor.get(color);
+    if (list) list.push(e);
+    else {
+      order.push(color);
+      byColor.set(color, [e]);
+    }
+  }
+  return order.map((color) => ({ color, groups: groupProductExamples(byColor.get(color) ?? []) }));
 }

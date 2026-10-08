@@ -123,6 +123,7 @@ describe('Váš pásek', () => {
         holeSpacing: '',
         apexToFirst: '',
         holeDiameter: '6,5',
+        color: 'prirodni',
       },
       filled: ['šířka', 'Ø dírky (trn + 0,5 mm)'],
       problems: ['Trn 5,8 mm je na výsečníky 4,5–6 mm moc silný (potřeba Ø 6,5 mm).'],
@@ -145,6 +146,89 @@ describe('Váš pásek', () => {
     expect(sheets[0]!.variant).toBe('Váš pásek: 40 mm · 3,5 mm · hrot · 7 dírek');
     expect(sheets[0]!.url).toMatch(/^data:image\/svg\+xml/);
     expect(await screen.findByRole('status')).toHaveTextContent(/jsou připravené níže/);
+  });
+
+  it('barva: výchozí přírodní; barevný chce vybrat barvu, černý ukáže černé nabídky a barvu na hrany', async () => {
+    const { user } = setup();
+    expect(screen.getByRole('button', { name: 'Přírodní' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    expect(screen.queryByRole('group', { name: 'Barva pásu (vyberte)' })).toBeNull();
+    expect(screen.queryByText(/Barva na hrany/)).toBeNull();
+
+    await user.click(screen.getByRole('button', { name: 'Barevný' }));
+    expect(screen.getByRole('alert')).toHaveTextContent('Vyberte barvu pásu.');
+    expect(screen.getByRole('button', { name: 'Vygenerovat listy A4' })).toBeDisabled();
+    const colors = screen.getByRole('group', { name: 'Barva pásu (vyberte)' });
+    expect(
+      within(colors)
+        .getAllByRole('button')
+        .map((b) => b.textContent),
+    ).toEqual([
+      'Světle hnědá',
+      'Hnědá',
+      'Tmavě hnědá',
+      'Koňak',
+      'Tabák',
+      'Černá',
+      'Modrá',
+      'Bordó',
+      'Tmavě zelená',
+    ]);
+
+    await user.click(within(colors).getByRole('button', { name: 'Černá' }));
+    await user.type(field(/Obvod, cm/), '95');
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(screen.getByRole('table', { name: /Vaše čísla/ })).toHaveTextContent(/· černá/);
+    expect(screen.getByText(/Barevný pás \(černá\) 40\smm/)).toBeInTheDocument();
+    expect(screen.getByText(/Výchozí:/).querySelector('a')).toHaveAttribute(
+      'href',
+      'https://craft-point.cz/products/remen-z-prave-kuze-3-0-3-5mm-140cm-15-80mm-cerny',
+    );
+    // Přírodní pás mezi nabídkami černého není.
+    expect(screen.getAllByRole('link').map((l) => l.getAttribute('href'))).not.toContain(
+      'https://craft-point.cz/products/remen-z-prirodni-kuze-3-35mm-140cm-15-80mm',
+    );
+    expect(screen.getByText(/Barva na hrany, černá/)).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Přírodní' }));
+    expect(screen.queryByRole('group', { name: 'Barva pásu (vyberte)' })).toBeNull();
+    expect(screen.queryByText(/Barva na hrany/)).toBeNull();
+  });
+
+  it('tabák: pás bez uvedeného činění se nevybere, nabídka je jen „ověřte u prodejce“', async () => {
+    const { user } = setup();
+    await user.clear(field(/Šířka = přezka/));
+    await user.type(field(/Šířka = přezka/), '32');
+    await user.click(screen.getByRole('button', { name: 'Barevný' }));
+    await user.click(screen.getByRole('button', { name: 'Tabák' }));
+    expect(screen.queryByText(/Výchozí:/)).toBeNull();
+    expect(screen.getByText('Kde koupit (ověřte u prodejce)')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Dva pásovci' })).toHaveAttribute(
+      'href',
+      'https://www.dvapasovci.cz/prirezy-kuze-na-opasky-tabak/',
+    );
+    expect(screen.getByText(/činění neuvedeno/)).toBeInTheDocument();
+  });
+
+  it('barva se uloží do Mých pásků a načte zpátky', async () => {
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: 'Barevný' }));
+    await user.click(screen.getByRole('button', { name: 'Tmavě hnědá' }));
+    await user.type(field('Název pásku'), 'Do kanceláře');
+    await user.click(screen.getByRole('button', { name: 'Uložit do Mých pásků' }));
+    const section = screen.getByRole('region', { name: 'Moje pásky' });
+    expect(await within(section).findByText('Do kanceláře')).toBeInTheDocument();
+    expect(within(section).getByText(/· tmavě hnědá/)).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Přírodní' }));
+    await user.click(screen.getByRole('button', { name: 'Načíst pásek Do kanceláře' }));
+    expect(screen.getByRole('button', { name: 'Barevný' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('button', { name: 'Tmavě hnědá' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
   });
 
   it('uloží pásek do Mých pásků a načte ho zpátky', async () => {
@@ -246,6 +330,7 @@ describe('Váš pásek', () => {
         holeSpacing: '',
         apexToFirst: '',
         holeDiameter: '',
+        color: 'prirodni',
       },
       filled: ['šířka', 'tloušťka'],
       problems: [],

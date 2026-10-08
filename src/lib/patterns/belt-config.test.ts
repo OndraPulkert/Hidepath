@@ -124,16 +124,16 @@ describe('parametrický pásek – výpočet', () => {
     const shopsOf = (r: ReturnType<typeof derive>) =>
       r.shopping[0]!.offers!.map((o) => [o.shop, o.lengthCm, o.priceCents]);
     const r40 = derive({ ...base, waistMm: 950 });
-    // Od nejlevnější; výchozí zůstává CraftPoint (jedna zásilka s přezkou a nýty).
+    // Od nejlevnější; výchozí zůstává CraftPoint (jedna zásilka s přezkou a nýty). Světle hnědý
+    // Ecocase je barvený: mezi přírodními není.
     expect(shopsOf(r40)).toEqual([
-      ['Ecocase', 130, 27_900],
       ['CraftPoint', 130, 28_500],
       ['Imago', 130, 29_900],
       ['Křupson', 130, 29_900],
     ]);
     expect(r40.shopping[0]!.defaultOffer!.shop).toBe('CraftPoint');
     const r30 = derive({ ...base, widthMm: 30, waistMm: 950 });
-    expect(shopsOf(r30).map(([, , c]) => c)).toEqual([22_800, 24_900, 25_900]);
+    expect(shopsOf(r30).map(([, , c]) => c)).toEqual([22_800, 24_900]);
     expect(r30.buckle.verified).toBe(true);
     const r45 = derive({ ...base, widthMm: 45, waistMm: 950 });
     expect(r45.buckle.verified).toBe(false);
@@ -169,6 +169,87 @@ describe('parametrický pásek – výpočet', () => {
   it('výsečník 6 mm jen jednou, když jsou dírky taky 6 mm', () => {
     const items = derive({ ...base, holeDiameterMm: 6 }).shopping.map((l) => l.item);
     expect(items.filter((i) => i.startsWith('Výsečník'))).toEqual(['Výsečník Ø 6 mm']);
+  });
+});
+
+describe('parametrický pásek – barva', () => {
+  const strap = (input: BeltConfigInput) => derive(input).shopping[0]!;
+  const offersOf = (input: BeltConfigInput) =>
+    strap(input).offers!.map((o) => [o.shop, o.color, o.priceCents, o.availability]);
+
+  it('bez barvy = přírodní: jen přírodní nabídky, bez barvy na hrany', () => {
+    const r = derive({ ...base, waistMm: 950 });
+    expect(r.shopping[0]!.offers!.every((o) => o.color === 'prirodni')).toBe(true);
+    expect(r.shopping.some((l) => l.item.startsWith('Barva na hrany'))).toBe(false);
+    expect(r.label).toBe('40 mm · 3,5 mm · hrot · 5 dírek');
+    expect(r.warnings.some((w) => w.startsWith('Barevný pás'))).toBe(false);
+  });
+
+  it('černý 40 × 3,5 mm: jen černé nabídky, výchozí CraftPoint, barva na hrany ověřená', () => {
+    const input: BeltConfigInput = { ...base, waistMm: 950, color: 'cerna' };
+    expect(offersOf(input)).toEqual([
+      ['CraftPoint', 'cerna', 29_100, 'in_stock'],
+      ['Imago', 'cerna', 29_900, 'in_stock'],
+    ]);
+    const r = derive(input);
+    expect(r.shopping[0]!.defaultOffer!.url).toBe(
+      'https://craft-point.cz/products/remen-z-prave-kuze-3-0-3-5mm-140cm-15-80mm-cerny',
+    );
+    expect(r.shopping[0]!.item).toBe('Barevný pás (černá) 40 mm, 3,5 mm');
+    expect(r.label).toBe('40 mm · 3,5 mm · hrot · 5 dírek · černá');
+    const paint = r.shopping.find((l) => l.item === 'Barva na hrany, černá')!;
+    expect(paint.status).toBe('overeno');
+    expect(paint.detail).toMatch(/před leštěním/);
+    expect(r.warnings).toContain(
+      'Barevný pás: barvu na hrany (odstín, přilnavost, počet vrstev) a balzám ověřte na odřezku.',
+    );
+  });
+
+  it('hnědý 32 mm: CraftPoint hnědý nemá, výchozí nejlevnější skladem s činěním (Dva pásovci bark)', () => {
+    const s32 = strap({ ...base, widthMm: 32, color: 'hneda' });
+    expect(s32.defaultOffer!.shop).toBe('Dva pásovci');
+    expect(s32.defaultOffer!.url).toBe(
+      'https://www.dvapasovci.cz/prirezy-kuze-na-opasky-hneda--razba-bark/',
+    );
+    // 38 mm bark řežou na objednávku: sám se nevybere.
+    const s38 = strap({ ...base, widthMm: 38, waistMm: 950, color: 'hneda' });
+    expect(s38.offers!.map((o) => [o.shop, o.availability])).toEqual([['Dva pásovci', 'preorder']]);
+    expect(s38.defaultOffer).toBeNull();
+    expect(s38.status).toBe('overte');
+  });
+
+  it('bez uvedeného činění se barevný pás nikdy nevybere sám, jen se ukáže', () => {
+    // Tabák a modrá od Dvou pásovců: činění neuvádějí.
+    for (const color of ['tabak', 'modra'] as const) {
+      const s32 = strap({ ...base, widthMm: 32, color });
+      expect(s32.offers!.map((o) => [o.shop, o.tanningVerified])).toEqual([['Dva pásovci', false]]);
+      expect(s32.defaultOffer, color).toBeNull();
+      expect(s32.status, color).toBe('overte');
+    }
+    // Hnědý 35 × 3,4 mm: jen Andexnite (činění neuvádí).
+    const s35 = strap({ ...base, widthMm: 35, thicknessMm: 3.4, color: 'hneda' });
+    expect(s35.offers!.length).toBeGreaterThan(0);
+    expect(s35.offers!.every((o) => o.shop === 'Andexnite' && !o.tanningVerified)).toBe(true);
+    expect(s35.defaultOffer).toBeNull();
+  });
+
+  it('barva na hrany bez ověřeného odstínu: „ověřte u prodejce“', () => {
+    const r = derive({ ...base, widthMm: 32, color: 'tabak' });
+    const paint = r.shopping.find((l) => l.item === 'Barva na hrany, tabák')!;
+    expect(paint.status).toBe('overte');
+    expect(paint.detail).toMatch(/v ověřených příkladech nemáme/);
+  });
+
+  it('formulář: barevný bez vybrané barvy se nespočítá, přírodní se do zadání nepíše', () => {
+    expect(parseBeltConfigForm({ ...DEFAULT_BELT_FORM, color: '' })).toEqual({
+      problems: ['Vyberte barvu pásu.'],
+    });
+    const natural = parseBeltConfigForm(DEFAULT_BELT_FORM);
+    expect('input' in natural && natural.input.color).toBeUndefined();
+    const black = parseBeltConfigForm({ ...DEFAULT_BELT_FORM, color: 'cerna' });
+    expect('input' in black && black.input.color).toBe('cerna');
+    expect(beltConfigToForm({ ...base, color: 'cerna' }, 'pasek').color).toBe('cerna');
+    expect(beltConfigToForm(base, 'pasek').color).toBe('prirodni');
   });
 });
 

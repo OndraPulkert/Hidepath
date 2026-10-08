@@ -622,6 +622,7 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
     priceNote: VERIFIED_NOTE,
     alsoUsedFor: [
       'Obarvení řezaných hran barvené kůže před leštěním (pouzdro s vsazenou mincí, lekce 4, 5, 6 a 8)',
+      'Hrany barevného pásku před leštěním (pásek, lekce 2, 3 a 6)',
     ],
     examples: [
       {

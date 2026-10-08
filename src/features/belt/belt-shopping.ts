@@ -16,10 +16,16 @@ import {
   parseBeltConfigForm,
 } from '@/lib/patterns/belt-config';
 import { cz } from '@/lib/patterns/belt-sheets';
+import {
+  EDGE_PAINT_URLS,
+  STRAP_COLOR_LABELS,
+  type StrapColor,
+  isDyedStrap,
+} from '@/lib/patterns/belt-strap-offers';
 
 /**
- * Nákupní plán pásku podle sestavy uživatele: pás ve variantě jeho šířky, přezka jeho šířky
- * a nýt s dříkem pro jeho změřenou tloušťku. Bere jen ověřené příklady z katalogu
+ * Nákupní plán pásku podle sestavy uživatele: pás ve variantě jeho šířky a barvy, přezka jeho
+ * šířky, nýt s dříkem pro jeho změřenou tloušťku a u barevného pásu barva na hrany. Bere jen ověřené příklady z katalogu
  * (`src/content/equipment/belt.ts`); co katalog nemá, jde do `skipped` s „ověřte u prodejce“.
  * Bez sestavy platí plán projektu (pásek 40 mm). Čisté funkce bez Reactu.
  */
@@ -30,6 +36,7 @@ export const BELT_CONFIG_PLAN_SLUGS = [
   'belt-buckle',
   'chicago-screws',
   'hole-punch-5mm',
+  'edge-paint',
 ] as const;
 type ConfigSlug = (typeof BELT_CONFIG_PLAN_SLUGS)[number];
 
@@ -76,9 +83,18 @@ const lineFor = (
 /** `keep` = řádek plánu projektu platí beze změny. */
 type PlanPick = { line: ShoppingPlanLine } | { skipped: string } | { keep: true };
 
+const colorOf = (r: BeltConfigResult): StrapColor => r.input.color ?? 'prirodni';
+
+/** „Pás 40 mm“, u barevného „Barevný pás (černá) 40 mm“. */
+const strapName = (r: BeltConfigResult): string =>
+  isDyedStrap(colorOf(r))
+    ? `Barevný pás (${STRAP_COLOR_LABELS[colorOf(r)]}) ${r.input.widthMm} mm`
+    : `Pás ${r.input.widthMm} mm`;
+
 function strapPick(r: BeltConfigResult, catalog: EquipmentCatalog): PlanPick {
   const w = r.input.widthMm;
   const t = r.input.thicknessMm;
+  const dyed = isDyedStrap(colorOf(r));
   const length =
     r.strap.minLengthCm === null
       ? `délka = obvod + ${cz(r.strap.allowanceMm)} mm`
@@ -93,18 +109,24 @@ function strapPick(r: BeltConfigResult, catalog: EquipmentCatalog): PlanPick {
       )
     : undefined;
   if (pick && example) {
+    const colorPart = dyed ? `${STRAP_COLOR_LABELS[colorOf(r)]}, ` : '';
     return {
-      line: lineFor('belt-strap', example, 1, `šířka ${w} mm, změřte ${cz(t)} mm; ${length}`),
+      line: lineFor(
+        'belt-strap',
+        example,
+        1,
+        `${colorPart}šířka ${w} mm, změřte ${cz(t)} mm; ${length}`,
+      ),
     };
   }
   const others = strapLine?.offers?.length ?? 0;
   if (others > 0) {
     return {
-      skipped: `Pás ${w} mm, ${cz(t)} mm (${length}): skladem s ověřeným činěním žádný. Nabídky k ověření jsou ve „Váš pásek“ pod „Kde jinde koupit“.`,
+      skipped: `${strapName(r)}, ${cz(t)} mm (${length}): skladem s ověřeným činěním žádný. Nabídky k ověření jsou ve „Váš pásek“ pod „Kde jinde koupit“.`,
     };
   }
   return {
-    skipped: `Pás ${w} mm, ${cz(t)} mm (${length}): v ověřených nabídkách není. Ověřte u prodejce.`,
+    skipped: `${strapName(r)}, ${cz(t)} mm (${length}): v ověřených nabídkách není. Ověřte u prodejce.`,
   };
 }
 
@@ -189,6 +211,31 @@ function punchPick(r: BeltConfigResult, catalog: EquipmentCatalog): PlanPick {
   };
 }
 
+/**
+ * Barva na hrany: jen u barevného pásu. Přírodní pás ji nekupuje (`keep` = plán projektu ji
+ * vynechává). Barevný: ověřený odstín z katalogu, jinak vynechat s důvodem.
+ */
+function edgePaintPick(r: BeltConfigResult, catalog: EquipmentCatalog): PlanPick {
+  const color = colorOf(r);
+  if (!isDyedStrap(color)) return { keep: true };
+  const label = STRAP_COLOR_LABELS[color];
+  const url = EDGE_PAINT_URLS[color];
+  const example = url ? examplesOf(catalog, 'edge-paint').find((e) => e.url === url) : undefined;
+  if (example) {
+    return {
+      line: lineFor(
+        'edge-paint',
+        example,
+        1,
+        `barevný pás (${label}): hrany obarvit před leštěním; odstín a přilnavost ověřte na odřezku (lekce 2)`,
+      ),
+    };
+  }
+  return {
+    skipped: `Barevný pás (${label}): barvu na hrany v tomto odstínu v ověřených příkladech nemáme (ověřená je hnědá, tmavě hnědá a černá). Vyberte ji v obchodě podle pásu a ověřte na odřezku.`,
+  };
+}
+
 /** Název položky v „Připravte si“, když se liší od katalogu (výsečník podle Ø dírek). */
 export function beltEquipmentNames(r: BeltConfigResult): Record<string, string> {
   const d = r.holes.diameterMm;
@@ -211,19 +258,34 @@ export function beltShoppingPlan(
     'belt-buckle': bucklePick(result, catalog),
     'chicago-screws': screwPick(result, catalog),
     'hole-punch-5mm': punchPick(result, catalog),
+    'edge-paint': edgePaintPick(result, catalog),
   };
+  const dyed = isDyedStrap(colorOf(result));
   const sixMmHoles = Math.abs(result.holes.diameterMm - 6) < 1e-9;
   const isConfigSlug = (slug: string): slug is ConfigSlug =>
     (BELT_CONFIG_PLAN_SLUGS as readonly string[]).includes(slug);
   const placed = new Set<ConfigSlug>();
   const lines: ShoppingPlanLine[] = [];
+  const placeEdgePaint = () => {
+    if (placed.has('edge-paint')) return;
+    placed.add('edge-paint');
+    const pick = picks['edge-paint'];
+    if ('line' in pick) lines.push(pick.line);
+  };
   for (const line of plan.lines) {
     if (!isConfigSlug(line.equipmentSlug)) {
       lines.push(
         sixMmHoles && line.equipmentSlug === 'hole-punch-6mm'
           ? { ...line, purpose: 'dírky pro trn, otvory pro nýty a konce oválu' }
-          : line,
+          : dyed && line.equipmentSlug === 'leather-balm'
+            ? {
+                ...line,
+                purpose: 'barevný pás: jen když na odřezku vyhoví vzhled (lekce 2)',
+              }
+            : line,
       );
+      // Barva na hrany (jen barevný pás) hned za balzám: obojí je konečná úprava.
+      if (line.equipmentSlug === 'leather-balm') placeEdgePaint();
       continue;
     }
     const slug = line.equipmentSlug;
@@ -233,8 +295,13 @@ export function beltShoppingPlan(
     if ('line' in pick) lines.push(pick.line);
     else if ('keep' in pick) lines.push(line);
   }
+  placeEdgePaint();
+  // `keep` u položky, kterou plán projektu vynechává (barva na hrany u přírodního), nechá důvod.
+  const keptSkips = plan.skipped.filter(
+    (s) => !isConfigSlug(s.equipmentSlug) || 'keep' in picks[s.equipmentSlug],
+  );
   const skipped = [
-    ...plan.skipped.filter((s) => !isConfigSlug(s.equipmentSlug)),
+    ...keptSkips,
     ...BELT_CONFIG_PLAN_SLUGS.flatMap((slug) => {
       const pick = picks[slug];
       return 'skipped' in pick ? [{ equipmentSlug: slug, reason: pick.skipped }] : [];
@@ -242,7 +309,7 @@ export function beltShoppingPlan(
   ];
   return {
     ...plan,
-    title: `Podle pásku „${name}“: ${result.label}. Pás, přezka, nýty a výsečník na dírky jsou pro tuto sestavu, ostatní položky jsou pro všechny pásky stejné.`,
+    title: `Podle pásku „${name}“: ${result.label}. Pás, přezka, nýty a výsečník na dírky${dyed ? ', balzám a barva na hrany' : ''} jsou pro tuto sestavu, ostatní položky jsou pro všechny pásky stejné.`,
     lines,
     skipped,
   };
@@ -294,19 +361,23 @@ export interface BeltPlanView {
 
 /**
  * Ceny položek, které závisí na sestavě, podle řádků plánu (cena příkladu × počet). Co plán
- * vynechal, je bez ověřené ceny; výsečník Ø 5 mm se při dírkách Ø 6 mm nekupuje.
+ * vynechal, je bez ověřené ceny; výsečník Ø 5 mm se při dírkách Ø 6 mm nekupuje a barva na
+ * hrany u přírodního pásu také ne.
  */
 export function beltBudgetPrices(
   plan: ShoppingPlan,
   catalog: EquipmentCatalog,
   holeDiameterMm: number | null,
+  color: StrapColor = 'prirodni',
 ): Record<string, BudgetPriceOverride> {
   const out: Record<string, BudgetPriceOverride> = {};
   for (const slug of BELT_CONFIG_PLAN_SLUGS) {
     const lines = plan.lines.filter((l) => l.equipmentSlug === slug);
     if (lines.length === 0) {
       const sixMm = holeDiameterMm !== null && Math.abs(holeDiameterMm - 6) < 1e-9;
-      out[slug] = slug === 'hole-punch-5mm' && sixMm ? 'not-needed' : 'unpriced';
+      const notNeeded =
+        (slug === 'hole-punch-5mm' && sixMm) || (slug === 'edge-paint' && !isDyedStrap(color));
+      out[slug] = notNeeded ? 'not-needed' : 'unpriced';
       continue;
     }
     const prices = lines.map((l) => {
@@ -334,11 +405,12 @@ export function beltPlanView(
   const basis = beltPlanBasis(entries, projectSlug);
   const outcome = basis ? deriveBeltConfig(basis.input) : null;
   const holeDiameterMm = outcome?.ok ? outcome.result.holes.diameterMm : null;
+  const color = outcome?.ok ? (outcome.result.input.color ?? 'prirodni') : 'prirodni';
   const effective = prep?.plan ?? plan;
   return {
     plan: effective,
     basis: prep?.basis ?? BELT_FALLBACK_BASIS,
     equipmentNames: prep?.equipmentNames ?? {},
-    budgetPrices: beltBudgetPrices(effective, catalog, holeDiameterMm),
+    budgetPrices: beltBudgetPrices(effective, catalog, holeDiameterMm, color),
   };
 }

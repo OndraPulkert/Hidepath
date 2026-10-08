@@ -281,6 +281,120 @@ describe('nákup podle pásku', () => {
   });
 });
 
+describe('nákup podle barvy pásku', () => {
+  const paintLines = (p: typeof plan) => p.lines.filter((l) => l.equipmentSlug === 'edge-paint');
+  const paintSkip = (p: typeof plan) => p.skipped.find((s) => s.equipmentSlug === 'edge-paint');
+
+  it('přírodní (i starý pásek bez barvy): barva na hrany se nekupuje, důvod zůstane', () => {
+    const out = prepPlan([saved('Přírodní', { widthMm: 40, thicknessMm: 3.5, tip: 'hrot' })]);
+    expect(paintLines(out.plan)).toEqual([]);
+    expect(paintSkip(out.plan)!.reason).toMatch(/^Jen u barevného pásku/);
+    expect(lineOf(out.plan, 'leather-balm')[0]!.purpose).toBe(
+      'přírodní pás bez barvení; nejdřív na odřezku',
+    );
+    expect(out.plan.title).not.toMatch(/barva na hrany/);
+  });
+
+  it('černý: černý pás, Edge Kote černá hned za balzámem, balzám jen když na odřezku vyhoví', () => {
+    const out = prepPlan([
+      saved('Černý', { widthMm: 40, thicknessMm: 3.5, tip: 'hrot', waistMm: 950, color: 'cerna' }),
+    ]);
+    expect(out.basis).toBe('podle pásku: Černý (40 mm · 3,5 mm · hrot · 5 dírek · černá)');
+    expect(lineOf(out.plan, 'belt-strap')).toEqual([
+      expect.objectContaining({
+        url: 'https://craft-point.cz/products/remen-z-prave-kuze-3-0-3-5mm-140cm-15-80mm-cerny',
+        variant: '40 mm',
+      }),
+    ]);
+    expect(lineOf(out.plan, 'belt-strap')[0]!.purpose).toMatch(/^černá, šířka 40 mm/);
+    expect(paintLines(out.plan)).toEqual([
+      expect.objectContaining({
+        url: 'https://craft-point.cz/products/fiebings-edge-kote-118-ml-cerna',
+        quantity: 1,
+      }),
+    ]);
+    expect(paintLines(out.plan)[0]!.purpose).toMatch(/ověřte na odřezku/);
+    expect(paintSkip(out.plan)).toBeUndefined();
+    const slugs = out.plan.lines.map((l) => l.equipmentSlug);
+    expect(slugs.indexOf('edge-paint')).toBe(slugs.indexOf('leather-balm') + 1);
+    expect(lineOf(out.plan, 'leather-balm')[0]!.purpose).toMatch(/jen když na odřezku vyhoví/);
+    expect(out.plan.title).toMatch(/balzám a barva na hrany jsou pro tuto sestavu/);
+    const resolved = resolveShoppingPlan({ shoppingPlan: out.plan }, equipmentCatalog, {})!;
+    expect(resolved.shops.reduce((n, s) => n + s.lines.length, 0)).toBe(out.plan.lines.length);
+  });
+
+  it('tabák: pás bez uvedeného činění se nevybere, barvu na hrany v tomto odstínu nemáme', () => {
+    const out = prepPlan([
+      saved('Tabák', { widthMm: 32, thicknessMm: 3.5, tip: 'hrot', color: 'tabak' }),
+    ]);
+    expect(lineOf(out.plan, 'belt-strap')).toEqual([]);
+    expect(out.plan.skipped.find((s) => s.equipmentSlug === 'belt-strap')!.reason).toMatch(
+      /^Barevný pás \(tabák\) 32 mm, 3,5 mm .*Kde jinde koupit/,
+    );
+    expect(paintLines(out.plan)).toEqual([]);
+    expect(paintSkip(out.plan)!.reason).toMatch(/^Barevný pás \(tabák\): barvu na hrany/);
+  });
+
+  it('každá barva: plán dohledá všechny řádky a každá položka sestavy je buď v plánu, nebo vynechaná', () => {
+    for (const color of ['hneda', 'tmave-hneda', 'cerna', 'konak', 'modra', 'bordo'] as const) {
+      for (const widthMm of [30, 32, 33, 38, 40]) {
+        const out = prepPlan([saved('X', { widthMm, thicknessMm: 3.5, tip: 'hrot', color })]);
+        const resolved = resolveShoppingPlan({ shoppingPlan: out.plan }, equipmentCatalog, {});
+        expect(resolved!.shops.reduce((n, s) => n + s.lines.length, 0)).toBe(out.plan.lines.length);
+        for (const slug of BELT_CONFIG_PLAN_SLUGS) {
+          const inLines = out.plan.lines.some((l) => l.equipmentSlug === slug);
+          const inSkipped = out.plan.skipped.some((s) => s.equipmentSlug === slug);
+          expect(inLines !== inSkipped, `${color} ${widthMm} ${slug}`).toBe(true);
+        }
+      }
+    }
+  });
+
+  it('„Připravte si“ lekce 3: barva na hrany u barevného podle pásku, u přírodního s důvodem', () => {
+    const lesson = beltProject.lessons.find((l) => l.slug === '03-long-edges')!;
+    const view = (entries: LessonRecordEntry[]) =>
+      buildLessonPrep({
+        project: beltProject,
+        lesson,
+        catalog: equipmentCatalog,
+        inventory: {},
+        progress: EMPTY_PROGRESS,
+        checks: [],
+        planOverride: beltPrepPlan(plan, entries, SLUG, equipmentCatalog),
+      }).equipment.find((e) => e.slug === 'edge-paint')!;
+    const dyed = view([
+      saved('Hnědý', { widthMm: 40, thicknessMm: 3.5, tip: 'hrot', color: 'tmave-hneda' }),
+    ]);
+    expect(dyed.planLines.map((l) => l.title)).toEqual([
+      "Fiebing's Edge Kote 118 ml – tmavě hnědá",
+    ]);
+    expect(dyed.optional).toBe(true);
+    const natural = view([saved('Přírodní', { widthMm: 40, thicknessMm: 3.5, tip: 'hrot' })]);
+    expect(natural.planLines).toEqual([]);
+    expect(natural.skippedReason).toMatch(/^Jen u barevného pásku/);
+  });
+
+  it('rozpočet: barva na hrany jen u barevného pásku, s cenou ověřeného odstínu', () => {
+    const budget = (entries: LessonRecordEntry[]) =>
+      beltPlanView(plan, entries, SLUG, equipmentCatalog).budgetPrices['edge-paint'];
+    expect(budget([])).toBe('not-needed');
+    expect(budget([saved('P', { widthMm: 40, thicknessMm: 3.5, tip: 'hrot' })])).toBe('not-needed');
+    expect(
+      budget([saved('Č', { widthMm: 40, thicknessMm: 3.5, tip: 'hrot', color: 'cerna' })]),
+    ).toEqual({ cents: 26_900 });
+    expect(
+      budget([saved('T', { widthMm: 32, thicknessMm: 3.5, tip: 'hrot', color: 'tabak' })]),
+    ).toBe('unpriced');
+    const natural = computeRemainingBudget(
+      beltProject,
+      equipmentCatalog,
+      {},
+      beltPlanView(plan, [], SLUG, equipmentCatalog).budgetPrices,
+    );
+    expect(natural.lines.map((l) => l.equipmentSlug)).not.toContain('edge-paint');
+  });
+});
+
 describe('Co koupit a rozpočet podle pásku', () => {
   const priceOf = (p: typeof plan, slug: string) =>
     p.lines

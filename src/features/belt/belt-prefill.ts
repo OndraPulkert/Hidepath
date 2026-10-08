@@ -11,6 +11,7 @@ import {
   deriveBeltConfig,
   parseBeltConfigForm,
 } from '@/lib/patterns/belt-config';
+import { isStrapColor } from '@/lib/patterns/belt-strap-offers';
 
 export interface BeltConfigPrefill {
   /** Formulář s hodnotami ze zápisníku; co v zápisníku není, zůstává výchozí. */
@@ -29,7 +30,7 @@ const isTip = (v: unknown): v is BeltTip =>
 
 /**
  * Předvyplní formulář „Váš pásek“ ze zápisníku projektu `projectSlug`: šířka, tloušťka,
- * obvod, konec a Ø dírky z trnu přezky (trn + 0,5 mm). Vrací `null`, když v zápisníku nic
+ * obvod, konec, barva a Ø dírky z trnu přezky (trn + 0,5 mm). Vrací `null`, když v zápisníku nic
  * z toho není.
  */
 export function beltConfigPrefill(
@@ -63,6 +64,11 @@ export function beltConfigPrefill(
   if (isTip(tip)) {
     form.tip = tip;
     filled.push('konec');
+  }
+  const color = latest.get(BELT_RECORD_IDS.color)?.value;
+  if (isStrapColor(color)) {
+    form.color = color;
+    filled.push('barva');
   }
   const problems: string[] = [];
   const prong = num(BELT_RECORD_IDS.prong);

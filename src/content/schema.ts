@@ -83,6 +83,11 @@ export const productExampleSchema = z.object({
   priceNote: z.string().min(1).optional(),
   /** Co o výrobku říct začátečníkovi (proč právě tento). */
   note: z.string().min(1).optional(),
+  /**
+   * Barva výrobku malými písmeny (např. „přírodní“, „černá“), když se výrobek prodává ve více
+   * barvách – podle ní se příklady v katalogu seskupí (pás na opasek).
+   */
+  color: z.string().min(1).optional(),
   availability: z.enum(['in_stock', 'unavailable', 'preorder']),
   /** ISO datum ověření (YYYY-MM-DD). */
   checkedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),

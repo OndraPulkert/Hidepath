@@ -62,10 +62,37 @@ describe('Moje pásky', () => {
         holeSpacingMm: 22.5,
         apexToFirstHoleMm: 94.3,
         holeDiameterMm: 4.5,
+        color: 'tmave-hneda',
       },
       'pasek',
     );
     expect(longest.length).toBeLessThan(2000);
+  });
+
+  it('barva: uloží se jen barevná, starý pásek bez barvy a neznámá barva = přírodní', () => {
+    const black = serializeSavedBelt('Černý', { ...input, color: 'cerna' }, 'pasek');
+    expect(JSON.parse(black)).toMatchObject({ color: 'cerna' });
+    expect(parseSavedBeltValue(black)!.input.color).toBe('cerna');
+    // Přírodní se do JSON nepíše: stejný zápis jako před volbou barvy.
+    const natural = serializeSavedBelt('Přírodní', { ...input, color: 'prirodni' }, 'pasek');
+    expect(natural).toBe(serializeSavedBelt('Přírodní', input, 'pasek'));
+    expect(JSON.parse(natural)).not.toHaveProperty('color');
+    // Pásek uložený před volbou barvy.
+    const old = JSON.stringify({
+      v: 1,
+      name: 'Starý',
+      widthMm: 40,
+      thicknessMm: 3.5,
+      tip: 'hrot',
+      waistSource: 'pasek',
+    });
+    const parsed = parseSavedBeltValue(old)!;
+    expect(parsed.input).toEqual({ widthMm: 40, thicknessMm: 3.5, tip: 'hrot' });
+    expect(parsed.input.color).toBeUndefined();
+    // Barva z novější verze aplikace: pásek se neztratí, čte se jako přírodní.
+    const future = parseSavedBeltValue(JSON.stringify({ ...JSON.parse(old), color: 'fialova' }));
+    expect(future).not.toBeNull();
+    expect(future!.input.color).toBeUndefined();
   });
 
   it('poškozená hodnota se přeskočí', () => {

@@ -4,6 +4,7 @@ import { BELT_CONFIG_FIELD_PREFIX } from '@/content/projects';
 import { latestEntriesByField } from '@/features/notebook/findings';
 import { type LessonRecordEntry } from '@/features/notebook/types';
 import { type BeltConfigInput, type WaistSource } from '@/lib/patterns/belt-config';
+import { STRAP_COLORS } from '@/lib/patterns/belt-strap-offers';
 
 /**
  * „Moje pásky“: pojmenované sestavy pásku. Každá je jeden zápis zápisníku s id
@@ -38,6 +39,11 @@ const savedBeltValueSchema = z.object({
   apexToFirstHoleMm: optionalNumber,
   holeDiameterMm: optionalNumber,
   waistSource: z.enum(['pasek', 'metr']),
+  /**
+   * Barva pásu; chybí = přírodní (pásky uložené před volbou barvy). Neznámá barva (z novější
+   * verze) se čte jako přírodní, aby se pásek neztratil.
+   */
+  color: z.enum(STRAP_COLORS).optional().catch(undefined),
 });
 
 /** Je to id pole uloženého pásku? */
@@ -70,6 +76,8 @@ export function serializeSavedBelt(
       ? { apexToFirstHoleMm: input.apexToFirstHoleMm }
       : {}),
     ...(input.holeDiameterMm !== undefined ? { holeDiameterMm: input.holeDiameterMm } : {}),
+    // Přírodní se neukládá: JSON zůstane krátký a starší pásky bez barvy čtou totéž.
+    ...(input.color !== undefined && input.color !== 'prirodni' ? { color: input.color } : {}),
   };
   return JSON.stringify(value);
 }
@@ -85,7 +93,9 @@ export function parseSavedBeltValue(raw: unknown): Omit<SavedBelt, 'fieldId' | '
   }
   const parsed = savedBeltValueSchema.safeParse(json);
   if (!parsed.success) return null;
-  const { name, waistSource, v: _v, ...input } = parsed.data;
+  const { name, waistSource, v: _v, color, ...rest } = parsed.data;
+  const input: BeltConfigInput =
+    color === undefined || color === 'prirodni' ? rest : { ...rest, color };
   return { name, waistSource, input };
 }
 
