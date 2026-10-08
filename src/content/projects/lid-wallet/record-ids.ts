@@ -32,9 +32,14 @@ export const LID_RECORD_IDS = {
   v12Offset: 'v12-offset',
   /** Lekce 3, krok `decide`: varianta střihu (výchozí / záloha A / záloha B1). */
   v12Variant: 'v12-variant',
+  /** Lekce 3, krok `decide`: změřená tloušťka usně 0,8 na P1 v záloze A, mm. */
+  p1BackupAThickness: 'p1-backup-a-thickness',
 
   /** Lekce 10, krok `measure-k`: k naměřené na hotovém ohybu. */
   kMeasured: 'k-measured',
+
+  /** Lekce 12, krok `z2`: výsledek zkoušky závěsu (`cracks-backup-a` = finální kus v záloze A). */
+  z2Result: 'z2-result',
 
   /** Lekce 11, krok `magnet-dry-test`: zvolená tloušťka magnetu Ø 8, mm. */
   magnetThickness: 'magnet-thickness',
@@ -43,7 +48,7 @@ export const LID_RECORD_IDS = {
 export type LidRecordId = (typeof LID_RECORD_IDS)[keyof typeof LID_RECORD_IDS];
 
 /**
- * Hodnoty volby `v12Variant`. `backup-a` = celý P1 z usně 0,8 (do listů P1 0,8);
+ * Hodnoty volby `v12Variant`. `backup-a` = celý P1 z usně 0,8 (do listů její změřená tloušťka);
  * `backup-b1` = ztenčit pás ohybu dna na 0,6 (`--skive-fold 0.6`).
  */
 export const LID_V12_VARIANTS = {

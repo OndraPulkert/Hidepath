@@ -81,6 +81,11 @@ export const productExampleSchema = z.object({
   variant: z.string().min(1).optional(),
   /** Např. „za kus, potřebujete 4“, „cena za 100 g“. */
   priceNote: z.string().min(1).optional(),
+  /**
+   * Cena v cizí měně, ze které je `priceCents` jen orientační přepočet (např. „38,50 €“). UI pak
+   * u ceny řekne, že jde o přepočet, ne o ověřenou cenu v Kč.
+   */
+  foreignPrice: z.string().min(1).optional(),
   /** Co o výrobku říct začátečníkovi (proč právě tento). */
   note: z.string().min(1).optional(),
   /**
@@ -428,6 +433,11 @@ export const templateDefinitionSchema = z.object({
   pieces: z.array(templatePieceSchema).min(1),
   stitchSpacingLabel: z.string().min(1),
   threadLabel: z.string().min(1),
+  /**
+   * Šířka lepeného pásu podél spodku a boků (lekce 4 a 6 projektu 01). Karta leží na pásu u spodku,
+   * takže schéma sestavení podle něj kreslí výšku karty v kapse.
+   */
+  glueBandMm: z.number().positive().optional(),
   /** Kontrolní úsečka pro ověření tisku 1:1. */
   calibrationMm: z.number().positive(),
   printNote: z.string().min(1),

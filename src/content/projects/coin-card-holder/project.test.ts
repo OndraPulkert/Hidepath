@@ -417,7 +417,8 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
         '2:kapsa-okno-18×1?',
         '4:cvicny-prouzek-kuze-1-2×1',
         '5:sablona-kuze-1-2×1',
-        '6:kapsa×1',
+        // Výtisk na značky jen, když nezůstal z lekce 2 (list KAPSA celkem 3×).
+        '6:kapsa×1?',
         // Jen šablona s oknem (forma je hotová z lekce 2): 1 výtisk, když chybí.
         '6:kapsa×1?',
         '6:kapsa-okno-18×1?',
@@ -469,13 +470,25 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
     });
   });
 
+  /** Příklady CraftPointu, jejichž ceny a sklad jsme znovu ověřili 8. 10. 2026. */
+  const RECHECKED_2026_10_08 = [
+    'hovezi-kuze-licova-juchtova-trislocinena-1-2-mm',
+    'trislocinena-hovezi-kuze-licova-usen-1-2-mm-blu',
+    'hovezi-licova-kuze-trislocinena-1-2-mm-whisky',
+    'horizontalni-palicka-na-kuzi',
+    'vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu',
+  ];
+  const rechecked = (url: string) =>
+    url.startsWith('https://craft-point.cz/') && RECHECKED_2026_10_08.some((h) => url.endsWith(h));
+
   describe('nákupní plán „Co koupit“', () => {
     const plan = coinCardHolderProject.shoppingPlan!;
 
-    it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10., vykružovák Wolfcraft z 2. 10. 2026)', () => {
+    it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10., vykružovák Wolfcraft z 2. 10. 2026, ceny CraftPointu znovu 8. 10. 2026)', () => {
       const checkedAtFor = (line: (typeof plan.lines)[number]) => {
         if (line.equipmentSlug === 'masking-tape') return '2026-10-01';
         if (line.url.includes('Wolfcraft')) return '2026-10-02';
+        if (rechecked(line.url)) return '2026-10-08';
         return '2026-09-29';
       };
       for (const line of plan.lines) {

@@ -839,7 +839,7 @@ export function buildLidBackSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): strin
     'GUIDE',
     X(L.axisX),
     V((L.v.hingeEnd + L.v.bandEnd) / 2),
-    'rub víčka: Tokonole, nelepit',
+    'rub pásu víčka: Tokonole, nelepit',
     1.8,
     'middle',
   );
@@ -1031,11 +1031,14 @@ export function buildLidPartsSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): stri
   s.text('GUIDE', X2(d2.x1) - 2, Y2(L.frontTopY) + 4, 'G4 (líc, na F) – zdrsnit', 1.5, 'end', {
     rotate: -90,
   });
-  // Osa x 50,5 (souměrnost) – značky na D1 i D2.
+  // Osa x 50,5 (souměrnost) – značky u horní i spodní hrany D1 a D2: lekce 4 propichuje oba konce,
+  // podle osy se D1 přikládá zdola (lekce 8) a D2 na spodní hranu (lekce 6).
   s.line('GUIDE', X1(L.axisX), Y1(d1.y1), X1(L.axisX), Y1(d1.y1) + 3, 0.15);
   s.text('GUIDE', X1(L.axisX) + 1, Y1(d1.y1) + 4.6, `osa ${cz(L.axisX)}`, 1.5);
+  s.line('GUIDE', X1(L.axisX), Y1(d1.y0) - 3, X1(L.axisX), Y1(d1.y0), 0.15);
   s.line('GUIDE', X2(L.axisX), Y2(d2.y1), X2(L.axisX), Y2(d2.y1) + 3, 0.15);
   s.text('GUIDE', X2(L.axisX) + 1, Y2(d2.y1) + 4.6, `osa ${cz(L.axisX)}`, 1.5);
+  s.line('GUIDE', X2(L.axisX), Y2(d2.y0) - 3, X2(L.axisX), Y2(d2.y0), 0.15);
 
   /* L1 a K2 */
   const oy3 = oy2 + d2h + 10;
@@ -1299,6 +1302,16 @@ export function buildLidJigsSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): strin
   // Šířka okna z hodnot, jak jsou vytištěné (na 0,01), ať sedí s rozdílem čísel na listu.
   const r2 = (v: number): number => Math.round(v * 100) / 100;
   const winMm = r2(r2(L.magnetYBMax) - r2(L.magnetYBMin));
+  // Výšky, které se ve variantách posouvají (přepážky nad 0,6, záloha A/B1: o 0,5 níž) a lekce 5, 6
+  // a 9 je uvádějí jen pro výchozí střih: okénka mincí, S1–S3, G3, G4, horní hrana F a S4/S5.
+  const coinR = L.coinWindows[0].width / 2;
+  const s2 = L.seams.find((q) => q.id === 'S2')!.holes.map((h) => h.y);
+  const sideY = side.holes.map((h) => h.y);
+  const below = sideY.filter((y) => y < L.frontTopY);
+  const above = sideY.filter((y) => y > L.frontTopY);
+  const g4D2 = L.glue.find((g) => g.id === 'G4' && g.what.includes('líc D2'))!;
+  const g4B = L.glue.find((g) => g.id === 'G4' && g.what.includes('rub F ↔ rub B'))!;
+  const range = (ys: number[]): string => `${cz(ys[0]!)}–${cz(ys[ys.length - 1]!)}`;
   column(
     s,
     sx + 32,
@@ -1316,6 +1329,13 @@ export function buildLidJigsSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): strin
       `plíšek y ${cz(L.plate.y0)}–${cz(L.plate.y1)} (lekce 8, 11)`,
       `G2 y ${cz(L.d1BottomY)}–${cz(L.cardFloorY)}, boky G2b do y ${cz(g2b.y1)} (lekce 8)`,
       `S6 y ${cz(L.s6Y)} (lekce 8)`,
+      `okénka mincí, středy konců (lekce 5): y ${cz(L.coinWindows[0].y0 + coinR)} a ${cz(L.coinWindows[0].y1 - coinR)}`,
+      `G3 dno mincí y ${cz(L.d2BottomY)}–${cz(L.coinFloorY)}, spodní hrana D2 y ${cz(L.d2BottomY)} (lekce 6)`,
+      `S1 y ${cz(L.s1Y)} · S2/S3 y ${range(s2)} (lekce 6)`,
+      `horní hrana F (lekce 9, 10): y ${cz(L.frontTopY)}`,
+      `G4 (lekce 9): F–D2 y ${cz(g4D2.y0)}–${cz(g4D2.y1)}, F–B y ${cz(g4B.y0)}–${cz(g4B.y1)}`,
+      `S4/S5 (lekce 9): y ${cz(sideY[sideY.length - 1]!)} až ${cz(sideY[0]!)}, úseky ${range(below.slice(0, -2))} /`,
+      `  ${range([...below.slice(-2), ...above.slice(0, 2)])} / ${range(above.slice(2))}, zdvojit ${range([below[below.length - 1]!, above[0]!])}`,
       `hrana víčka A / B / C (lekce 10): ${cz(sA.bandEdgeY)} / ${cz(sB.bandEdgeY)} / ${cz(sC.bandEdgeY)}`,
       `  při k ${cz(spec.kMax)}: A ${cz(sA.bandEdgeYkMax)} / C ${cz(sC.bandEdgeYkMax)}`,
       `  k = (y_C − y_A) / ${cz(sC.hingePathMm - sA.hingePathMm)}`,

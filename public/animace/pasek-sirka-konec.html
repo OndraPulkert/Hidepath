@@ -394,7 +394,7 @@ add('C','Rychlé rozhodnutí','Hrot: konec značíte řadou 1 destičky. Zaoblen
 },null);
 
 // D1 — Váš pásek: šířka a konec v zadání
-add('D','Zadejte šířku a konec ve „Váš pásek“','Šířku a konec zadáte na stránce „Váš pásek“ (odkaz je pod krokem lekce), v části „Zadání pásku“. Do pole „Šířka = přezka, mm“ napište celé mm, 28–45, např. 40. U „Konec“ zvolte Hrot, nebo Zaoblený.',10000,t=>{
+add('D','Zadejte šířku, konec a barvu ve „Váš pásek“','Šířku, konec a barvu zadáte na stránce „Váš pásek“ (odkaz je pod krokem lekce), v části „Zadání pásku“. Do pole „Šířka = přezka, mm“ napište celé mm, 28–45, např. 40. U „Konec“ zvolte Hrot, nebo Zaoblený. U „Barva“ zvolte Přírodní (pás natřete balzámem), nebo Barevný a pod ním barvu pásu (řez bývá světlý, hranu obarvíte barvou na hrany).',11000,t=>{
   let s=`<rect x="4" y="4" width="127" height="82" rx="2.5" class="panelbox"/>`+lbl(8,11.5,'Váš pásek','tw');
   s+=`<rect x="8" y="14.5" width="119" height="11" rx="1.4" fill="var(--okbg)" stroke="var(--ok)" stroke-width=".3"/>`+lbl(10.5,19.6,'Koupit','t')+lbl(10.5,23.6,'řemen, přezka, šrouby, výsečník','ts');
   s+=lbl(8,33.5,'Zadání pásku','tw');
@@ -402,11 +402,13 @@ add('D','Zadejte šířku a konec ve „Váš pásek“','Šířku a konec zadá
   s+=lbl(8,41,'Šířka = přezka, mm','t');
   s+=field(8,43,32,typed,'',{caret:t>.08&&t<.42,focus:t>.06&&t<.42});
   s+=lbl(44,48.6,'28–45, celé mm','ts');
-  s+=lbl(8,60,'Konec','t');
-  const act=t>.6?0:-1;
-  s+=segBtns(8,62,['Hrot','Zaoblený'],act,24);
-  s+=tap(20,66,seg(t,.54,.74));
-  if(t>.8) s+=fade(seg(t,.8,.9),tick(64,66.4,.8)+lbl(68,67.4,'40 mm, hrot','tok'));
+  s+=lbl(8,56,'Konec','t');
+  s+=segBtns(8,57.5,['Hrot','Zaoblený'],t>.52?0:-1,24);
+  s+=tap(20,61.5,seg(t,.46,.62));
+  s+=lbl(8,71,'Barva','t');
+  s+=segBtns(8,72.5,['Přírodní','Barevný'],t>.72?0:-1,24);
+  s+=tap(20,76.5,seg(t,.66,.82));
+  if(t>.84) s+=fade(seg(t,.84,.94),tick(64,76.9,.8)+lbl(68,77.9,'40 mm, hrot, přírodní','tok'));
   s+=pill(131,88,'schéma','ts','end');
   return s;
 },null);

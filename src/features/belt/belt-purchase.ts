@@ -151,7 +151,7 @@ export function purchaseLines(p: BeltPurchase): PurchaseLine[] {
   return lines;
 }
 
-/** „Doporučeno: CraftPoint 285 Kč“, nebo proč doporučení není. */
+/** „Doporučeno: CraftPoint 284 Kč“, nebo proč doporučení není. */
 export function recommendedOfferText(p: BeltPurchase): string {
   if (p.offer) {
     return `Doporučeno: ${p.offer.shop}, ${p.offer.lengthCm} cm, ${formatCzk(p.offer.priceCents)}`;

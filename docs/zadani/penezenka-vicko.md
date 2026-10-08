@@ -598,7 +598,7 @@ jen uvedené pravidlo.** Značka „L“ se dává na rub F a na rub B zvlášť
 
 Kontaktní lepidlo na kůži. Lepená místa na lícové straně se nejdřív zdrsní brusným papírem.
 **Tokonole** se nanáší jen mimo lepená místa (brání přilnutí lepidla), hranice lepení je třeba
-přelepit páskou. Souřadnice y jsou v peněžence (list 2 je kreslí na rubu P1).
+přelepit páskou. Na plochu se dává na rub pásu víčka (list 2), ne na rub konce jazýčku (G5, G6). Souřadnice y jsou v peněžence (list 2 je kreslí na rubu P1).
 
 | ID      | Co na co                                 | Oblast (x, y)                                                                                                          | Poznámka                                                                                                                                                                              |
 | ------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -948,9 +948,12 @@ není). Odstup od proužku 13,7 (k 1,24: 12,27).
 **Čísla v krocích jsou jen pro výchozí střih** (P1 1,0, D1/D2 a L1 0,6). S koupenými kozinkami
 (0,7–0,9, oddíl 10.1) a v zálohách se skoro vždy liší. Proto v kroku 0(a) vygeneruješ listy pro
 změřenou kůži a **všechna čísla bereš z rámečku „Čísla pro postup“ na listu 4 těchto listů**: kóta
-P1, osa ohybu, hrana vložky, pás závěsu, konec G3, plíšek, G2 a S6, očekávaná hrana víčka, značka
-magnetu y_m,B a okno lepení. Číslo v textu kroku je jen příklad výchozího střihu. Nejcitlivější je
-značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,63 (0,13 mm), ne 11,73–12,13.
+P1, osa ohybu, hrana vložky, pás závěsu, konec G3, plíšek, G2 a S6, středy okének mincí, G3 dno
+mincí a spodní hrana D2, S1 a rozsah S2/S3, horní hrana F, G4, rozsah S4/S5 s úseky děrování a
+zdvojeným stehem, očekávaná hrana víčka, značka magnetu y_m,B a okno lepení. Výšky švů, okének a
+lepení se v zálohách a s přepážkami nad 0,6 posouvají (např. o 0,5 níž). Číslo v textu kroku je jen
+příklad výchozího střihu. Nejcitlivější je značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení
+jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,73–12,13.
 
 0. **Před stavbou: nákup, listy, přípravky a tři povinné kroky** (rozhodnutí kola 8; rozpis večerů
    v 9.1). Dlouhé zkoušky z dřívějších verzí (V4 na odřezcích, V5, V6, V11) jsou jen volitelné
@@ -960,7 +963,7 @@ značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,6
    (z nebarvené kozinky) a zapsat.
    (a) **Listy pro změřenou kůži:** `pnpm pattern:wallet-lid --divider <větší z D1 a D2> --lining <L1>`,
    a když se P1 liší od 1,0 o 0,05 a víc, přidej `--p1 <změřená P1>` (oddíl 12.4). Kontroly ohlásí
-   česky, co neplatí (přepážky nad 0,92 střih odmítne, 10.1). Vytiskni 1:1 soubor `…-vse.pdf` s příponou
+   česky, co neplatí (přepážky nad 0,92 při P1 1,0 střih odmítne, u tlustší P1 už méně, 10.1). Vytiskni 1:1 soubor `…-vse.pdf` s příponou
    (když vše vyjde 0,6 a 1,0, jsou to výchozí listy `penezenka-vicko-vse.pdf`) a zkontroluj úsečku
    50 mm (kap. 28). Úsečka neodhalí chybu měřítka 0,5 % (na P1 asi 1,2 mm), proto změř i kótu P1 na
    listu 1 a porovnej ji s rámečkem „Čísla pro postup“ na listu 4 (výchozí střih 231,66; tolerance
@@ -971,7 +974,9 @@ značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,6
    slepit páskou, zkrátit na 111 a hranu do ohybu odstřihnout rovně o 4 mm; nebo jiný rovný pás 1,5 (oddíl 5.8,
    `bottomSpacer`, list 4). Vložka je ve všech variantách stejná. Kopyto ani opěrka závěsu se od Kola 9
    nedělají (závěs se tvaruje přes obsah, krok 16). Šablonu konce jazýčku z listu 4 (R10 s magnetem, ztenčením špičky, ryskou horní
-   hrany L1 a otvory S7) a šablonu výřezu pro palec z listu 1 nalep na tvrdý papír a vyřízni **až po
+   hrany L1 a otvory S7) a šablonu výřezu pro palec z listu 1 (obdélník asi 30 mm široký uprostřed horní hrany F a 20 mm
+   vysoký, horní hranou je horní hrana F, s vyříznutým výřezem U 10 × 12 a propíchnutým křížkem
+   středu) nalep na tvrdý papír a vyřízni **až po
    P0** (krok 0(c)): na variantě z V12 nezávisí, ale P0-4 může změnit výřez a P0-6 výšku. Když P0
    změnil vstupy, vyřízni je z nově vytištěných listů. Použiješ je na zkušebním i finálním kusu.
    (c) **Povinný krok 1 – papírový model P0** z vytištěných listů (oddíl 11, P0): vejde se 6 karet,
@@ -1034,7 +1039,8 @@ značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,6
 4. **Rýha ohybu dna (výchozí, bez ztenčení):** na rubu vytlač podél osy ohybu (v z rámečku na
    listu 4, výchozí 62,21) rýhu tupým
    hrotem u ocelového pravítka (nic neřezat, stejný tlak po celé šířce; nejdřív na odřezku z V12).
-   Pás závěsu se nijak neupravuje.
+   Pás závěsu se nijak neupravuje. Se ztenčeným ohybem dna (záloha B) se rýha nedělá: pás ohybu se
+   ztenčuje z rubu a osu ukazují rysky na bocích z kroku 3.
    **Záloha B (ohyb dna: jen když ve V12 popraská líc a záloha A nejde; závěs: poslední možnost, když závěs zkušebního kusu neprojde ani v záloze A):** nejdřív vygenerovat střih s
    `--skive-fold 0.6` / `--skive-hinge 0.6` (jiné délky P1, oddíl 5.8) a pak ztenčit z rubu pás ohybu
    nebo pás závěsu z 1,0 na 0,6 **v poloze podle listu 1 dané varianty** (např. `--skive-fold 0.6`:
@@ -1056,8 +1062,9 @@ značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,6
    (to platí vždy, i ve výchozím střihu).
 5. **Okénka mincí** v B z líce B (středy propíchnuté v kroku 2), na tvrdé desce: šablonou okénka z listu 4
    jen zkontrolovat polohu a před sekáním ji sejmout; Ø 12 na koncích (středy y 34 a 70), rovné řezy. Zkosit, leštit.
-   **Výřez pro palec** v horní hraně F z líce F, na tvrdé desce (funkci ověří zkušební kus; volitelně předem V11 na odřezku): výsečník Ø 10 přes šablonu (zůstává přiložená) se
-   středem na ose v 7,0 od horní hrany F (y 55,0), potom rovné řezy nožem od hrany F k tečnám díry,
+   **Výřez pro palec** v horní hraně F z líce F, na tvrdé desce (funkci ověří zkušební kus; volitelně předem V11 na odřezku): šablonu přiložit horní hranou na
+   horní hranu F a výřezem na osu x 50,5 (křížek šablony na propíchnutý střed), výsečník Ø 10 přes
+   šablonu (zůstává přiložená) se středem na ose v 7,0 od horní hrany F (y 55,0), potom rovné řezy nožem od hrany F k tečnám díry,
    zastavit přesně na tečně. Rohy ústí R1 nedělat nožem, zaoblit brusným papírem (list 1). Nejdřív na
    papírovém modelu P0 (P0-4).
 6. **Předběžné dokončení:** horní hrany D1 a D2, horní hrana F i s výřezem pro palec, spodní hrana
@@ -1066,7 +1073,8 @@ značka magnetu v kroku 17: s přepážkami 0,8 je okno lepení jen 11,50–11,6
    viz 5.5). Výřez pro palec zaoblit z líce **i z rubu** (o rubovou hranu dna U se může
    zachytit karta), vnitřek brousit a leštit kolíkem Ø 8 v aku vrtačce. Horní hranu D1 natřít barvou na
    hrany v tónu kontrastním k D1 párátkem ve 2 tenkých vrstvách (nejdřív na odřezku 0,6). Tokonole na
-   plochy podle 5.7 (lepená místa přelepit páskou).
+   plochy podle 5.7: rub pásu víčka (list 2), rub konce jazýčku ne (lepí se G5 a G6); lepená místa
+   přelepit páskou.
 7. **G3:** D2 rubem na rub B: dno y 18–23, boky a střed **jen do y 80,57** (čára na listu 2; v záloze čára na listu 2 varianty, například `--skive-hinge 0.6`: 80,25, obojí: 79,75),
    horních 1,43 mm D2 (ve výchozím střihu) nelepit (pás závěsu). Hranici lepení přelepit maskovací páskou. D2
    přesahuje 1 mm na každé straně. Přitlačit.
@@ -1317,10 +1325,16 @@ D2. Useň 0,8 na zálohu A se kupuje až po neúspěšné V12 (příloha níže)
 je rozsah z názvu produktu, skutečnou tloušťku určí až měření). Pak vygenerovat listy pro naměřenou
 tloušťku: `pnpm pattern:wallet-lid --divider <větší z D1 a D2> --lining <L1>` (krok 0(a), oddíl 12.4).
 **P1 změř taky:** když se liší od 1,0 o 0,05 a víc, přidej `--p1 <změřená>` (oblouk ohybu a závěs
-se počítají z tloušťky P1). Podle modelu projdou přepážky jen do **0,92** (při 0,9 je plná tloušťka
-**11,96**, při 0,93 **12,02** a při 1,0 **12,16**, to je nad hranicí ≈ 12 a skript střih odmítne).
-Model má pro D1 i D2 jednu tloušťku (zadává se větší z obou), takže **kus D1 nebo D2 silnější než
-0,92 nejde použít**: vyřízni díl z tenčího místa kusu, nebo kup tenčí kozinku. Horní část rozsahu
+se počítají z tloušťky P1). Podle modelu projdou s P1 1,0 přepážky jen do **0,92** (při 0,9 je plná
+tloušťka **11,96**, při 0,93 **12,02** a při 1,0 **12,16**, to je nad hranicí ≈ 12 a skript střih
+odmítne). **Hranice závisí na P1:** plná tloušťka i švy S4/S5 (2 × P1 + přepážka, max 3,0) rostou
+s P1, takže P1 0,8 / 0,9 / 1,0 / 1,05 / 1,1 / 1,15 / 1,2 pustí přepážky nejvýš **1,12 / 1,02 / 0,92 /
+0,87 / 0,80 / 0,70 / 0,60** (`lidMaxDividerMm`, test v `lid-wallet-input.test.ts`). Formulář listů
+v aplikaci ukáže hranici pro zadanou P1 a při odmítnutí poradí tenčí přepážky; kontroluje přitom
+i se skutečnou P1, když se v toleranci 0,05 zaokrouhlí na 1,0 (P1 1,04 s přepážkami 0,92 by dala plnou
+tloušťku 12,08, proto tam projde nejvýš 0,88). Generátor v repozitáři bere P1 v toleranci jako 1,0
+(přibližně, mez ≈ 12 je měkká). Model má pro D1 i D2 jednu tloušťku (zadává se větší z obou), takže
+**kus D1 nebo D2 silnější než hranice pro změřenou P1 (0,92 při P1 1,0) nejde použít**: vyřízni díl z tenčího místa kusu, nebo kup tenčí kozinku. Horní část rozsahu
 nebarvené kozinky (0,8–1) tak střih odmítne. Podšívka L1 do 1,0 plnou tloušťku v pásu mincí nemění,
 ale mezera magnet–plíšek vzroste z 1,6 na 1,6 + (t_L − 0,6), při L1 0,9 na 1,9: magnet drží slaběji
 (Z-1, případně silnější magnet podle 5.4). Mez L1 1,0 je jen doporučení: model sílu magnetu
@@ -1574,7 +1588,7 @@ jednu tloušťku, zadej větší z naměřených) a `--lining <mm>` (podšívka 
 `pnpm pattern:wallet-lid --divider 0.8 --lining 0.9` → `penezenka-vicko-d-0-8-l1-0-9-sablona.svg`),
 lze kombinovat se zálohami (`--p1 0.8 --divider 0.9` → `-p1-0-8-d-0-9`). Když kontroly neprojdou,
 skript nic nezapíše a vypíše česky, co neplatí, např. „Plná tloušťka 12,16 mm je nad přijatou
-hranicí ≈ 12.“ (přepážky 1,0). Podle modelu projdou přepážky 0,3–0,92 (0,9: plná tloušťka 11,96,
+hranicí ≈ 12.“ (přepážky 1,0). Podle modelu projdou s P1 1,0 přepážky 0,3–0,92 (s tlustší P1 méně, 10.1; 0,9: plná tloušťka 11,96,
 dno karet 25,5, H 83,0, y_m,B 11,5; 0,93 dá 12,02). Okno lepení magnetu má vždy aspoň 0,1 mm
 (Kolo 11): dno karet je pro přepážky 0,6 / 0,7 / 0,72 / 0,8 / 0,9 **26,0 / 26,0 / 26,0 / 25,5 / 25,5**
 (okno 0,41 / 0,52 / 0,54 / 0,14 / 0,25 mm); u 0,72–0,76 by dno 25,5 dalo jen 0,04–0,09 mm, proto se

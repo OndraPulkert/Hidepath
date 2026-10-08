@@ -1035,6 +1035,8 @@ tedy **± 0,70 mm** do strany. (Otvor by šídlo vedl až v hloubce, kde má ku�
   +0,7 mm a druhá o −0,7 mm, spojnice se pootočí o 3,3° a přezka bude nakřivo (základnou je
   **rozteč obou značek, 24 mm**, ne šířka pásu – dřív tu stálo 2° počítané ze 40 mm). Se
   stejným náklonem se obě značky posunou stejně a **linie zůstane rovnoběžná** se skutečnou.
+  (Čísla ± 0,70 a 3,3° jsou nominální; s kerfem je vůle ± 0,77–0,85 mm a pootočení 3,7–4,05°,
+  viz revize níže u „značicí otvor vyjde 2,15–2,30 mm“.)
 
 #### Obtahování tvarů: tři různé mechanismy (2026-09-10)
 

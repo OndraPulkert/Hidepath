@@ -41,7 +41,8 @@ prvního), až bude první pouzdro fyzicky hotové.
   úsečka 50 mm) – tři panely po 30 mm × 40 mm, ohyby A a B z modelu pásu pro danou tloušťku
   (nezkracují se, závisí na kůži a obsahu, ne na délce panelu), čára švu 3,5 mm od dolní hrany,
   6 otvorů na panel (rozteč 4, krajní 5 mm od čáry ohybu i od konce) zrcadlených přes střed ohybu,
-  kroužky k propíchnutí na koncích čar ohybů a švu asi 1 mm od hrany (jako konce čar ohybů na pásu
+  kroužky k propíchnutí (šídlem skrz papír i kůži, stejně jako tečky dna, aby byly vidět i na
+  rubu) na koncích čar ohybů a švu asi 1 mm od hrany (jako konce čar ohybů na pásu
   v lekci 5), u 1,5 mm šrafa ztenčení ohybu B (± 3 mm).
   Kůže 1,2 mm: 114,35 × 40, ohyb A 15,69, ohyb B 8,66 (`pouzdro-mince-cvicny-prouzek-kuze-1-2mm.svg`,
   v aplikaci předem zaškrtnutý); kůže 1,5 mm: 116,55 × 40, ohyb A 16,63, ohyb B 9,92
@@ -121,7 +122,7 @@ shora je vidět jen schodek ≈ 2,6 mm na horní hraně.
   82 a 85 mm, takže se vejdou také (kapsa je ≈ 100 mm hluboká) – ověřit na papírovém modelu.
 - **Vytahování:** karty předním výřezem (palcem), bankovky bokem u jazyka (zadní kapsa je tam
   otevřená i do boku, stejně jako u předlohy). Při zapnutém jazyku karty nevyndáš.
-- **Mince:** zasouvá se shora, vyjímá se palcem oknem posunutím nahoru. Nad mincí 5 mm kůže.
+- **Mince:** zasouvá se shora, vyjímá se palcem oknem posunutím nahoru. Nad důlkem 5 mm kůže (nad samotnou mincí ≈ 7 mm, mince posunutá v důlku nahoru aspoň 6,2 mm).
 - **Kapsa vs. výřez a jazyk (mince 50 Kč):** horní roh kapsy 13,4 mm od oblouku výřezu, zkrácený
   jazyk končí 20,5 mm pod hranou, kapsa začíná v 41,8 mm (mezera 21,3 mm); dno kapsy 16,8 mm nad
   švem dna. U mince 40 mm: 5,2 mm, kapsa v 35,55 mm (mezera 15 mm), dno 10,6 mm nad švem.

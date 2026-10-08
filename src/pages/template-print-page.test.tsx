@@ -66,15 +66,18 @@ describe('tisk listů – peněženka Víčko pro změřenou kůži', () => {
     expect(screen.queryByText(/^Pro změřenou kůži:/)).not.toBeInTheDocument();
   });
 
-  it('přepážky nad 0,92 mm odmítne a nic nevygeneruje', async () => {
+  it('přepážky nad hranicí pro P1 (0,92 při P1 1,0) odmítne s radou a nic nevygeneruje', async () => {
     const user = userEvent.setup();
     renderApp(routes.template(lidWalletProject.slug));
 
-    await user.type(await screen.findByLabelText('Přepážky D1/D2, mm'), '1,0');
+    const dividerInput = await screen.findByLabelText('Přepážky D1/D2, mm');
+    expect(screen.getByText(/Při P1 1 mm projdou nejvýš 0,92 mm\./)).toBeInTheDocument();
+    await user.type(dividerInput, '1,0');
     await user.type(screen.getByLabelText('Podšívka L1, mm'), '0,9');
     await user.click(screen.getByRole('button', { name: 'Vygenerovat listy' }));
 
     expect(await screen.findByText(/Listy nevznikly/)).toBeInTheDocument();
+    expect(screen.getByText(/Přepážky 1 mm jsou při P1 1 mm moc tlusté/)).toBeInTheDocument();
     expect(screen.queryByText(/^Pro změřenou kůži:/)).not.toBeInTheDocument();
   });
 });

@@ -360,7 +360,7 @@ add('B','Zkoste nebo zaoblete hrany',
 
 // C1
 add('C','Obarvěte hrany barvené kůže',
- 'U barvené kůže je řez světlý. Obarvěte ho barvou na hrany podle návodu na obalu a nechte zaschnout, pak leštěte. Nejdřív to vyzkoušejte na odřezku (projekt 02, lekce 4): zkontrolujte, že barva nezatekla na líc, a zapište si počet vrstev a dobu schnutí. Pouzdro na karty barvu nemá.',
+ 'U barvené kůže je řez světlý. Obarvěte ho barvou na hrany podle návodu na obalu a nechte zaschnout, pak leštěte. Nejdřív to vyzkoušejte na odřezku (pouzdro s mincí lekce 4, pásek lekce 2): zkontrolujte, že barva nezatekla na líc, a zapište si počet vrstev a dobu schnutí.',
  9000,t=>{
   const ls=[{t:1.2,lic:'bot',kind:'dyed'},{t:1.2,lic:'bot',kind:'dyed'},{t:1.2,lic:'top',kind:'dyed'}];
   const d=es(t,.3,.85), x0=58,y0=64;
@@ -370,7 +370,7 @@ add('C','Obarvěte hrany barvené kůže',
   if(t<.3) o+=`<g opacity="${f(seg(t,.05,.12))}">${lead(40,46,52,y0-1.8*K)}${pill(26,45,'světlý řez','ta')}</g>`;
   o+=scaleBar(8,80,K)+zoomTag();
   o+=pill(4,87,t<.88?'barvená kůže: řez obarvit':'obarveno – pak zaleštit','t');
-  let ib=notes([['01','t'],['barvu nemá'],[''],['02 barvená kůže','t'],['barvit před'],['zaleštěním'],['(lekce 5, 6 a 8)'],[''],['03 Víčko','t'],['jen horní'],['hrana D1 (G2)']],16,5.2);
+  let ib=notes([['01','t'],['barvu nemá'],[''],['02 barvená kůže','t'],['barvit před'],['zaleštěním'],['(lekce 5, 6 a 8)'],[''],['03 Víčko','t'],['jen horní'],['hrana D1 (G2)'],[''],['04 barevný pásek','t'],['zkouška lekce 2,'],['hrany 3, 4 a 6']],15,4.4);
   return o+inset('KDY BARVIT',ib);
  },P2);
 
@@ -554,7 +554,7 @@ add('G','Dokončete hrany před sestavením',
 
 // G2
 add('G','Obarvěte horní hranu D1',
- 'Horní hranu D1 natřete párátkem barvou na hrany v tónu D2, ve 2 tenkých vrstvách, mezi nimi 20–30 min. Nejdřív na odřezku kozinky, přilnavost je neověřená. Tokonole brání přilnutí lepidla: nanášejte ho jen mimo lepená místa a hranice lepení přelepte páskou.',
+ 'Horní hranu D1 natřete párátkem barvou na hrany v tónu D2, ve 2 tenkých vrstvách, mezi nimi 20–30 min. Nejdřív na odřezku kozinky, přilnavost je neověřená. Tokonole brání přilnutí lepidla. Natřete jím rub pásu víčka (list 2), rub konce jazýčku nechte bez něj (lepí se na něj magnet a L1). Jinde ho nanášejte jen mimo lepená místa a hranice lepení přelepte páskou.',
  11000,t=>{
   const c1=es(t,.08,.3), wait=seg(t,.32,.55), c2=es(t,.58,.82);
   const ls=[{t:.8,lic:'top',kind:'koz'}];
@@ -635,9 +635,26 @@ add('H','Zkoste nebo zaoblete hrany pásu',
   return o+inset('PÁSEK',ib);
  },P4,'Tip: velikost ořezávače pro váš pás vyzkoušejte na odřezku (lekce 2); kresleno pro 3,5 mm.');
 
-// H2 — pásek: zaleštit po úsecích
+// H2 — pásek: barva na hrany, jen barevný pásek (lekce 2 zkouška, lekce 3, 4 a 6)
+add('H','Obarvěte hrany pásu (jen barevný pásek)',
+ 'Jen u barevného pásku; u přírodního krok přeskočte. Řezaná hrana barevného pásu bývá světlá. Hrany přebruste dohladka a naneste barvu na hrany podle návodu na obalu v tenkých vrstvách, mezi nimi nechte zaschnout. Počet vrstev a dobu schnutí si vyzkoušíte na odřezku v lekci 2, pak postupujte podle nich. Hlídejte, ať barva nezateče na líc. V lekci 3 posledních 30 cm vynechte.',
+ 10000,t=>{
+  const kk=8.5, x0=58, y0=70, L04D=[{t:3.5,lic:'top',kind:'dyed'}], H=H_(L04D);
+  const d=es(t,.25,.8);
+  let o=prof({x:x0,y:y0,k:kk,len:5.6,layers:L04D,bevT:.8,bevB:.8,round:.7,fuzz:.3,dye:d});
+  o+=bottle(70,24,'barva na hrany','var(--dye)');
+  if(t>.2&&t<.84){const yy=L(y0-H*kk,y0,d);o+=`<circle cx="${f(x0+1.6)}" cy="${f(yy)}" r="1.3" fill="var(--dye)" opacity=".85"/>`}
+  if(t<.25) o+=`<g opacity="${f(seg(t,.04,.1))}">${lead(36,46,x0-1,y0-H*kk/2)}${pill(22,45,'světlý řez','ta')}</g>`;
+  o+=pill(6,y0-H*kk-5,'líc','ts')+pill(6,y0+6,'rub','ts');
+  o+=scaleBar(8,82,kk)+zoomTag();
+  o+=pill(4,88,t<.84?'tenké vrstvy, mezi nimi zaschnout':'obarveno – pak zaleštit','t');
+  let ib=notes([['04 Pásek','t'],['jen barevný'],[''],['zkouška','t'],['lekce 2: počet'],['vrstev a schnutí'],[''],['pásek','t'],['lekce 3, 4 a 6'],['lekce 3: bez'],['posledních 30 cm']],16,5.2);
+  return o+inset('KDY BARVIT',ib);
+ },P4,'Tip: řez je kreslený pro 3,5 mm.');
+
+// H3 — pásek: zaleštit po úsecích
 add('H','Zaleštěte hrany pásu',
- 'Hranu navlhčete Tokonole a třete leštítkem nebo plátnem, dokud se nezhutní a nezaleskne. Hran je dvakrát délka pásu: pracujte po úsecích.',
+ 'Hranu navlhčete Tokonole a třete leštítkem nebo plátnem, dokud se nezhutní a nezaleskne. U barevného pásku leštěte až zaschlou barvu. Hran je dvakrát délka pásu: pracujte po úsecích.',
  10500,t=>{
   const kk=8.5, x0=50, y0=66, H=H_(L04);
   const p=es(t,.1,.88);

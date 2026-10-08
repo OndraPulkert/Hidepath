@@ -3,6 +3,7 @@ import {
   EMPTY_LID_P0_FIELDS,
   type LidMeasuredInput,
   lidBaseWithP0,
+  lidMaxDividerMm,
   lidP0ModelValues,
   lidSheetsForMeasured,
   lidSpecFromMeasured,
@@ -65,6 +66,32 @@ describe('listy peněženky Víčko pro změřenou kůži v prohlížeči', () =
     expect('spec' in near && near.spec.leatherMm).toBe(1.0);
     const far = lidSpecFromMeasured({ ...base, p1Mm: 0.95 });
     expect('spec' in far && far.spec.leatherMm).toBe(0.95);
+  });
+
+  it('hranice přepážek 0,92 platí pro P1 1,0, tlustší P1 ji snižuje (lekce 1, oddíl 10.1)', () => {
+    const at = (p1Mm: number) => lidMaxDividerMm(lidWalletVariant({ p1Mm }));
+    expect(at(0.8)).toBe(1.12);
+    expect(at(0.9)).toBe(1.02);
+    expect(at(1.0)).toBe(0.92);
+    expect(at(1.05)).toBe(0.87);
+    expect(at(1.1)).toBe(0.8);
+    expect(at(1.2)).toBe(0.6);
+  });
+
+  it('přepážky nad hranicí pro změřenou P1 odmítne s radou, i když se P1 zaokrouhlí na 1,0', () => {
+    const r = lidSheetsForMeasured({ ...base, p1Mm: 1.05, dividerMm: 0.9 });
+    expect(r.ok).toBe(false);
+    if (!r.ok) {
+      expect(r.problems[0]).toBe(
+        'Přepážky 0,9 mm jsou při P1 1,05 mm moc tlusté: projdou nejvýš 0,87 mm. Vyřízněte je z tenčího místa kozinky, nebo kupte tenčí.',
+      );
+    }
+    // P1 1,04 je v toleranci (výchozí střih 1,0), ale plná tloušťka s přepážkami 0,92 by byla 12,08.
+    const snapped = lidSheetsForMeasured({ ...base, p1Mm: 1.04, dividerMm: 0.92 });
+    expect(snapped.ok).toBe(false);
+    if (!snapped.ok) expect(snapped.problems[0]).toContain('projdou nejvýš 0,88 mm');
+    expect(lidSheetsForMeasured({ ...base, p1Mm: 1.04, dividerMm: 0.88 }).ok).toBe(true);
+    expect(lidSheetsForMeasured({ ...base, dividerMm: 0.92 }).ok).toBe(true);
   });
 
   it('přepážky nad 0,92 mm a hodnoty mimo meze odmítne česky, listy nevzniknou', () => {

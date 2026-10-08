@@ -195,7 +195,7 @@ const craftpointDyedStraps = (
     checkedAt: CHECKED,
   }));
 
-const CRAFTPOINT_DYED_CZK = { 28: 234, 30: 234, 33: 262, 35: 262, 38: 291, 40: 291, 45: 313 };
+const CRAFTPOINT_DYED_CZK = { 28: 233, 30: 233, 33: 262, 35: 262, 38: 290, 40: 290, 45: 313 };
 const CRAFTPOINT_33_38_CZK = { 33: 313, 38: 336 };
 
 const leatoryDyedStraps = (color: 'hnědý' | 'černý'): ProductExample[] => {
@@ -571,8 +571,8 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
       craftpointStrap(30, 228),
       craftpointStrap(33, 256),
       craftpointStrap(35, 256),
-      craftpointStrap(38, 285),
-      craftpointStrap(40, 285),
+      craftpointStrap(38, 284),
+      craftpointStrap(40, 284),
       craftpointStrap(45, 313),
       krupsonStrap(130, 299),
       krupsonStrap(150, 329),
@@ -619,7 +619,7 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
       'Přezka určuje šířku pásku: „přezka 40 mm“ znamená vnitřní světlost 40 mm a pás 40 mm. Konec u přezky (ovál pro trn, dva nýty, přehnutí) je spočítaný pro přezku s jedním trnem.',
     buyingGuide: [
       { label: 'Velikost', value: 'vnitřní světlost = šířka pásu' },
-      { label: 'Typ', value: 'jednotrnová; ne dvoutrnová ani rolnová' },
+      { label: 'Typ', value: 'jednotrnová (i s rolnou na příčce); ne dvoutrnová' },
       { label: 'Trn', value: 'po dodání změřte u kořene: Ø dírek = trn + 0,5 mm' },
     ],
     cautions: [
@@ -635,7 +635,7 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
     alternatives: [],
     priceRange: { minCents: 7_500, maxCents: 27_900 },
     priceSource: 'verified',
-    priceNote: `${VERIFIED_NOTE} Nejlevnější jsou Andexnite (75–95 Kč), mosazné z CraftPointu stojí 251–279 Kč.`,
+    priceNote: `${VERIFIED_NOTE} Nejlevnější jsou Andexnite (75–95 Kč), mosazné z CraftPointu stojí 250–279 Kč.`,
     alsoUsedFor: [],
     examples: [
       {
@@ -651,7 +651,7 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
         title: 'Mosazná opasková přezka 35 mm',
         shop: 'CraftPoint',
         url: 'https://craft-point.cz/products/mosazna-opaskova-prezka-35mm',
-        priceCents: 25_100,
+        priceCents: 25_000,
         note: 'Stránka uvádí jeden trn.',
         availability: 'in_stock',
         checkedAt: CHECKED,
@@ -660,7 +660,7 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
         title: 'Mosazná opasková přezka 30 mm',
         shop: 'CraftPoint',
         url: 'https://craft-point.cz/products/mosazna-opaskova-prezka-30mm',
-        priceCents: 25_100,
+        priceCents: 25_000,
         note: 'Stránka uvádí „s jedním trnem“.',
         availability: 'in_stock',
         checkedAt: CHECKED,
@@ -932,7 +932,7 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
         reason: 'rovné boky špičky; vrchol a oblouk od ruky v několika tazích.',
       },
     ],
-    priceRange: { minCents: 39_300, maxCents: 56_300 },
+    priceRange: { minCents: 39_200, maxCents: 56_300 },
     priceSource: 'verified',
     priceNote: VERIFIED_NOTE,
     alsoUsedFor: [],
@@ -941,7 +941,7 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
         title: 'Výsečník na zakulacení konců opasku 15–45 mm',
         shop: 'CraftPoint',
         url: 'https://craft-point.cz/products/vysecnik-na-zakulaceni-koncu-opasku-15-45mm',
-        priceCents: 39_300,
+        priceCents: 39_200,
         note: 'Velikost podle šířky pásu; v době ověření všechny skladem.',
         availability: 'in_stock',
         checkedAt: CHECKED,

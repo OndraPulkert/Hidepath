@@ -164,7 +164,7 @@ export function buildCoinHolderPracticeSvg(bodyThicknessMm = 1.2): string {
     `3. Dolní hranu listu přiložte přesně na rovnou dolní hranu kusu kůže (kus i proužek jsou ${cz(SH)} mm vysoké), po délce obrys vystřeďte.`,
     '4. Přilepte ho maskovací páskou na LÍC kůže – páska jen na okrajích papíru, mimo plnou čáru.',
     `5. Pravítkem ověřte, že kroužky na koncích čáry švu leží ${cz(P.stitchOffsetMm)} mm od dolní hrany kůže; když ne, list přiložte znovu.`,
-    '6. Šídlem propíchněte skrz papír všechny kroužky (konce čar ohybů a čáry švu) a všechny tečky dna.',
+    '6. Šídlem propíchněte skrz papír i kůži všechny kroužky (konce čar ohybů a čáry švu) a všechny tečky dna – musí být vidět i na rubu.',
     '7. Řežte nožem skrz papír i kůži po plné čáře, s ocelovým pravítkem. Pásku strhávejte pomalu.',
     `8. Na RUBU spojte propíchnuté konce čar ohybů tužkou podle pravítka${skived ? ', u ohybu B odsaďte pásmo ztenčení.' : '.'}`,
   ]);

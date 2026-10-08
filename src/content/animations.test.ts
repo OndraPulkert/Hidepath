@@ -368,7 +368,7 @@ describe('animace postupu – složení pouzdra a druk v lekcích', () => {
 
   it('lekce 3, 6 a 8: každý krok druku otevírá svůj krok animace', () => {
     expect(hrefOf(3, 'why-scrap-first')).toEqual([druk('A1')]);
-    expect(hrefOf(3, 'punch-post-hole')).toEqual([druk('A2')]);
+    expect(hrefOf(3, 'punch-post-hole')).toEqual([druk('A2'), druk('A3')]);
     expect(hrefOf(3, 'set-snap-post')).toEqual([druk('A4')]);
     expect(hrefOf(3, 'practice-snap-cap')).toEqual([druk('A5')]);
     expect(hrefOf(3, 'measure-flange')).toEqual([druk('A7')]);
@@ -714,12 +714,15 @@ describe('animace postupu – pásek: konec s přezkou, dírky a špička', () =
     [2, 'mark', [prezka('B1'), prezka('B2')]],
     [2, 'punch', [prezka('C2'), prezka('C3')]],
     // Hrany pásku: vlastní část H (jedna vrstva 3–4 mm z líce i rubu), ne B2 Víčka.
-    [2, 'edges-balm', [hrany('H1'), hrany('H2')]],
+    [2, 'edge-bevel', [hrany('H1')]],
+    [2, 'try-edge-paint', [hrany('H2')]],
+    [2, 'edges-balm', [hrany('H3')]],
     [2, 'bend', [prezka('E1')]],
     [2, 'screw', [prezka('E3'), prezka('E4'), prezka('E6')]],
     // Lekce 3: dlouhé hrany.
     [3, 'bevel', [hrany('H1')]],
-    [3, 'burnish', [hrany('H2'), hrany('D1'), hrany('D3')]],
+    [3, 'edge-paint', [hrany('H2')]],
+    [3, 'burnish', [hrany('H3'), hrany('D1'), hrany('D3')]],
     // Lekce 4: konec s přezkou.
     [4, 'plate-or-sheet', [prezka('A1'), prezka('A2')]],
     [4, 'secure', [prezka('B1')]],
@@ -742,7 +745,7 @@ describe('animace postupu – pásek: konec s přezkou, dírky a špička', () =
     [6, 'mark', [spicka('B3'), spicka('C2'), spicka('D2')]],
     [6, 'punch-holes', [spicka('E1')]],
     [6, 'cut-tip', [spicka('E2'), spicka('E3'), spicka('E4')]],
-    [6, 'finish', [spicka('F1'), spicka('F2'), hrany('H1'), hrany('H2')]],
+    [6, 'finish', [spicka('F1'), spicka('F2'), hrany('H1'), hrany('H2'), hrany('H3')]],
     [6, 'try', [spicka('F3')]],
   ] as const)('lekce %i, krok %s otevírá přesné kroky animace', (order, stepId, expected) => {
     expect(hrefsOf(order, stepId)).toEqual(expected);
@@ -805,7 +808,7 @@ describe('animace postupu – pásek: konec s přezkou, dírky a špička', () =
       'Krok A1 – Velikost přezky = vnitřní světlost',
       'Krok B1 – Hrot, nebo zaoblený',
       'Krok C1 – Co umí destička',
-      'Krok D1 – Zadejte šířku a konec ve „Váš pásek“',
+      'Krok D1 – Zadejte šířku, konec a barvu ve „Váš pásek“',
     ]);
   });
 

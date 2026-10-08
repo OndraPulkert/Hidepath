@@ -124,9 +124,9 @@ describe('obsah – pásek: zápisník, „Připravte si“ a destička', () => 
       'plate-check',
       'belt-marking',
       'scrap-punch',
-      'scrap-balm',
       'edge-paint-coats',
       'edge-paint-dry-minutes',
+      'scrap-balm',
       'scrap-bend',
       'scrap-screw',
       'belt-keeper-length',
@@ -249,6 +249,19 @@ describe('obsah – pásek: nákup', () => {
           (e) => e.url === line.url && e.variant === line.variant,
         ),
       );
+    }
+  });
+
+  it('každá položka z „Připravte si“ má v plánu řádek, nebo důvod, proč se nekupuje', () => {
+    const plan = beltProject.shoppingPlan!;
+    const covered = new Set([
+      ...plan.lines.map((l) => l.equipmentSlug),
+      ...plan.skipped.map((s) => s.equipmentSlug),
+    ]);
+    for (const l of beltProject.lessons) {
+      for (const slug of [...l.requiredEquipment, ...l.recommendedEquipment]) {
+        expect(covered.has(slug), `lekce ${l.order}: ${slug}`).toBe(true);
+      }
     }
   });
 
@@ -438,7 +451,7 @@ describe('pásek – barevný pásek (hrany a balzám)', () => {
   it('barva na hrany: zkouška v lekci 2, v lekcích 3 a 6 podmíněně „u barevného pásku“ před leštěním', () => {
     const tryStep = step(2, 'try-edge-paint');
     expect(tryStep.body).toMatch(/^Jen u barevného pásku; u přírodního krok přeskočte\./);
-    expect(tryStep.body).toContain('Pak hranu zaleštěte');
+    expect(tryStep.body).toContain('Po zaschnutí pokračujte dalším krokem');
     expect(tryStep.body).not.toContain('mastnoty');
     expect(tryStep.records!.map((r) => r.id)).toEqual([
       'edge-paint-coats',

@@ -113,8 +113,8 @@ Dvě svěrky dát proti sobě (z každé strany jednu), aby se víko nenaklonilo
    PRO DŮLEK“ a nalepit na desku 8 × 8 cm.
 2. Desku upnout svěrkou ke stolu, pod ni odpadní prkno.
 3. Vrtat na **1. rychlost, bez příklepu**, netlačit silou, s nabitou baterií (vykružovák 45 mm pro
-   minci 40 mm je pro 14,4 V nejnáročnější, 32 mm je snazší). Vykružovákem provrtat do půlky, desku otočit a dokončit z druhé
-   strany podle dírky středicího vrtáku. Sukovník občas vytáhnout kvůli pilinám.
+   minci 40 mm je pro 14,4 V nejnáročnější, 32 mm je snazší). Vykružovákem vrtat, dokud špička středicího vrtáku nevyjde zespodu z desky
+   (korunka je pak zhruba v půlce), desku otočit a dokončit z druhé strany podle dírky středicího vrtáku. Vykružovák občas vytáhnout kvůli pilinám.
 4. Horní hranu otvoru zaoblit smirkem (ostrá hrana by v kůži udělala rýhu).
 5. Bez vykružováku: navrtat dokola díry 5–6 mm těsně uvnitř čáry, střed vylomit, dopilovat na
    čáru (pilník nebo smirk kolem lahve).

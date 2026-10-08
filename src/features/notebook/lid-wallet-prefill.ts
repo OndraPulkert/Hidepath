@@ -9,10 +9,13 @@ import {
 } from '@/lib/patterns/lid-wallet-input';
 
 /**
- * Tloušťka P1 v záloze A: lekce 3, krok `decide` – „záloha A – celý P1 z usně 0,8 mm
- * (v aplikaci zadejte P1 0,8)“.
+ * Tloušťka P1 v záloze A, dokud useň 0,8 není změřená (lekce 3, krok `decide`: do aplikace patří
+ * změřená tloušťka usně 0,8, pole `p1BackupAThickness`).
  */
 const BACKUP_A_P1 = '0,8';
+
+/** Výsledek Z-2 (lekce 12): finální kus v záloze A. */
+const Z2_BACKUP_A = 'cracks-backup-a';
 
 export interface LidGeneratorPrefill {
   /** Formulář s hodnotami ze zápisníku; co v zápisníku není, zůstává výchozí. */
@@ -23,7 +26,8 @@ export interface LidGeneratorPrefill {
 
 /**
  * Předvyplní formulář „Listy pro vaši kůži“ ze zápisníku peněženky VÍČKO:
- * - P1 z lekce 1; při záloze A z lekce 3 P1 0,8 (podle textu lekce),
+ * - P1 z lekce 1; v záloze A (V12 v lekci 3 nebo Z-2 v lekci 12) změřená useň 0,8 z lekce 3,
+ *   dokud není změřená, 0,8,
  * - přepážky = větší z D1 a D2 (jen když jsou zapsané obě, jinak by mohla chybět ta větší),
  * - podšívka L1, záloha B1 z rozhodnutí V12 (B2 rozhoduje až zkouška Z-2, nepředvyplňuje se),
  * - k: z lekce 10 (hotový ohyb) přednostně před P0-3 z lekce 2,
@@ -51,9 +55,17 @@ export function lidGeneratorPrefill(
   };
   const filled: string[] = [];
 
-  if (variant === LID_V12_VARIANTS.backupA) {
-    form.p1 = BACKUP_A_P1;
-    filled.push('P1 0,8 (záloha A)');
+  const backupA =
+    variant === LID_V12_VARIANTS.backupA ||
+    latest.get(LID_RECORD_IDS.z2Result)?.value === Z2_BACKUP_A;
+  if (backupA) {
+    const measured = text(num(LID_RECORD_IDS.p1BackupAThickness));
+    form.p1 = measured ?? BACKUP_A_P1;
+    filled.push(
+      measured === undefined
+        ? 'P1 0,8 (záloha A, useň 0,8 zatím nezměřená)'
+        : `P1 ${measured} (záloha A, změřená useň 0,8)`,
+    );
   } else {
     const p1 = text(num(LID_RECORD_IDS.p1Thickness));
     if (p1 !== undefined) {

@@ -148,7 +148,10 @@ export interface CoinCardHolderSpec {
   formPlateThicknessMm: number;
   /** Rovná plocha kůže mezi patou důlku (= otvor formy) a stehem kapsy – volba. */
   pocketFlatMm: number;
-  /** Kolik kůže zůstane nad mincí k horní (otevřené) hraně kapsy – volba (předloha ≈ 8–10). */
+  /**
+   * Kolik kůže zůstane nad důlkem (od kraje otvoru formy) k horní (otevřené) hraně kapsy – volba
+   * (předloha ≈ 8–10). Nad samotnou mincí je o (otvor formy − mince) / 2 víc: výchozí 5 + 2 = 7 mm.
+   */
   coinTopOverlapMm: number;
   /** Poloměr horních rohů kapsy s mincí – volba. */
   pocketTopRadiusMm: number;

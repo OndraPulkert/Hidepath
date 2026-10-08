@@ -581,7 +581,7 @@
         ><span><b>rub</b> masová strana, <b>líc</b> hladká</span>
       </div>
 
-      <section class="card" aria-label="Animace postupu">
+      <section class="card" id="anim" aria-label="Animace postupu">
         <div class="stagewrap">
           <svg
             id="stage"
@@ -2895,10 +2895,24 @@
           const n = m[2] === undefined ? 1 : +m[2];
           return n >= 1 && n <= ix.length ? ix[n - 1] : -1;
         }
+        // odkaz na krok: posunout stránku na přehrávač, aby byl vidět popisek kroku
+        let moved = false;
+        ["wheel", "touchstart", "keydown"].forEach((t) =>
+          addEventListener(t, () => (moved = true), { once: true, passive: true }),
+        );
+        const toAnim = () =>
+          requestAnimationFrame(() =>
+            document.getElementById("anim").scrollIntoView({ block: "start" }),
+          );
         const hs = stepFromHash();
         if (hs >= 0) {
           auto = true;
           go(hs, 1);
+          toAnim();
+          if (document.fonts && document.fonts.ready)
+            document.fonts.ready.then(() => {
+              if (!moved && stepFromHash() >= 0) toAnim();
+            });
         } else go(0, 1);
         window.addEventListener("hashchange", () => {
           const i = stepFromHash();
@@ -2906,6 +2920,7 @@
             auto = true;
             setPlay(false);
             go(i, 1);
+            toAnim();
           }
         });
         window.__p1rez = {

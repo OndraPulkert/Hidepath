@@ -25,7 +25,9 @@ export function AssembledIllustration({
   const cardW = 85.6 * s;
   const cardH = 54 * s;
   const cardX = ox + (w - cardW) / 2;
-  const cardY = oy + h - o - cardH;
+  // Karta leží na lepeném pásu u spodku (širší než linie stehu), jinak na stehu.
+  const cardRestMm = Math.max(back.stitchOffsetMm, template.glueBandMm ?? 0);
+  const cardY = oy + h - cardRestMm * s - cardH;
   // Steh vede po bocích a dole stále `o` od hrany, v rozích po zaoblení (poloměr r − o),
   // a začíná pod zaoblením horního rohu kapsy, kde je bok už rovný.
   const fr = front.cornerRadiusMm * s;
@@ -170,9 +172,9 @@ export function AssembledIllustration({
         karta 85,6 × 54 mm ·{' '}
         {front.thumbCutout
           ? `výřez ${front.thumbCutout.widthMm} × ${front.thumbCutout.depthMm} mm odkryje ≈ ${Math.round(
-              exposedCardHeightMm(front.heightMm, 54 + back.stitchOffsetMm, front.thumbCutout),
+              exposedCardHeightMm(front.heightMm, 54 + cardRestMm, front.thumbCutout),
             )} mm karty`
-          : `karta vyčnívá ≈ ${Math.round(exposedCardHeightMm(front.heightMm, 54 + back.stitchOffsetMm))} mm`}
+          : `karta vyčnívá ≈ ${Math.round(exposedCardHeightMm(front.heightMm, 54 + cardRestMm))} mm`}
       </text>
       {/* řez z boku */}
       <g transform={`translate(${ox + w + 95} ${oy})`}>

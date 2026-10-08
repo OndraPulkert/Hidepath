@@ -25,7 +25,7 @@
 <text x="76" y="182.35" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#1f6f43" text-anchor="start">kapsa pro poutko 47,7 mm (světlá 37,7 mm)</text>
 <text x="76" y="223" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#2b2b2b" text-anchor="start">konec pásu 90 mm od ohybu</text>
 <text x="22" y="39" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#6a6a6a" text-anchor="start">sem pokračuje hlavní pás (nahoře neřezat)</text>
-<text x="22" y="228" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Poutko — pásek 120 × 12 mm, obepíná 3 vrstvy: přehnutý konec a volný konec pásku</text>
+<text x="22" y="228" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Poutko — pásek 120 × 12 mm, obepíná 3 vrstvy: přehnutý konec, pás pod ním a volný konec pásku</text>
 <text x="22" y="254" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">obvod 3 vrstev 101 mm + 3,8 mm na tloušťku poutka 1,2 mm + 15 mm přeplátování</text>
 <rect x="22" y="232" width="120" height="12" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
 <line x1="22" y1="244" x2="22" y2="246" stroke="#7a7a7a" stroke-width="0.2"/>
@@ -60,5 +60,5 @@
 <text x="22" y="270.6" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">4. Druhé 2 otvory označte skrz vyseknuté, vysekněte je, poutko vraťte mezi ně a sešroubujte nýty.</text>
 <text x="22" y="274.8" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Nýty: 2 kusy, každý prochází oběma vrstvami — proto jsou otvory čtyři.</text>
 <text x="22" y="279" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Rozměry z šablony Black Flag Leather Goods (jeden zdroj, ať se nemíchají rozteče).</text>
-<text x="22" y="283.2" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Délka poutka a zaoblení konce jsou spočítané, ne ověřené — ověřte na odřezku.</text>
+<text x="22" y="283.2" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Délka poutka je spočítaná, ne ověřená — ověřte na odřezku.</text>
 </svg>

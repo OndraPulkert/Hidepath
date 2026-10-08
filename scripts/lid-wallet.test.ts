@@ -356,6 +356,51 @@ describe('generátor peněženky VÍČKO', () => {
     expect(jigs).not.toMatch(/\bkrok(u|y)? \d/);
   });
 
+  it('list 4: rámeček má i výšky, které se ve variantách posouvají (lekce 5, 6, 9)', () => {
+    for (const [args, rows] of [
+      [
+        [],
+        [
+          'okénka mincí, středy konců (lekce 5): y 34 a 70',
+          'G3 dno mincí y 18–23, spodní hrana D2 y 18 (lekce 6)',
+          'S1 y 22 · S2/S3 y 28–76 (lekce 6)',
+          'horní hrana F (lekce 9, 10): y 62',
+          'G4 (lekce 9): F–D2 y 18–62, F–B y 1,75–18',
+          'S4/S5 (lekce 9): y 76 až 8, úseky 8–52 /',
+          '56–68 / 72–76, zdvojit 60–64',
+        ],
+      ],
+      [
+        ['--divider', '0.8'],
+        [
+          'okénka mincí, středy konců (lekce 5): y 33,5 a 69,5',
+          'G3 dno mincí y 17,5–22,5, spodní hrana D2 y 17,5 (lekce 6)',
+          'S1 y 21,5 · S2/S3 y 27,5–75,5 (lekce 6)',
+          'horní hrana F (lekce 9, 10): y 61,5',
+          'G4 (lekce 9): F–D2 y 17,5–61,5, F–B y 1,75–17,5',
+          'S4/S5 (lekce 9): y 75,5 až 7,5, úseky 7,5–51,5 /',
+          '55,5–67,5 / 71,5–75,5, zdvojit 59,5–63,5',
+        ],
+      ],
+    ] as const) {
+      const j = buildLidJigsSvg(lidSpecFromArgs([...args]).spec);
+      for (const row of rows) expect(j, row).toContain(row);
+    }
+    // Rámeček se vejde nad vložku dna (nepřekryje ji).
+    const ys = [...jigs.matchAll(/<text[^>]*y="([\d.]+)"[^>]*>([^<]*)<\/text>/g)];
+    const yOf = (t: string) => Number(ys.find((m) => m[2].startsWith(t))![1]);
+    expect(yOf('značku přeměřit')).toBeLessThan(yOf('VLOŽKA DNA') - 10);
+  });
+
+  it('list 3: osa x 50,5 má značku u horní i spodní hrany D1 a D2 (lekce 4 propichuje oba konce)', () => {
+    const X = ox + L.axisX;
+    const marks = [
+      ...layer(parts, 'GUIDE').matchAll(new RegExp(`M${X} (-?[\\d.]+) L${X} (-?[\\d.]+)`, 'g')),
+    ];
+    expect(marks).toHaveLength(4);
+    for (const m of marks) expect(Math.abs(Number(m[2]) - Number(m[1]))).toBeCloseTo(3, 5);
+  });
+
   it('neplatný střih generátor odmítne', () => {
     expect(() => buildLidSheetSvg({ ...spec, billWindowWidthMm: 20 })).toThrow(
       /Neplatný střih peněženky VÍČKO/,

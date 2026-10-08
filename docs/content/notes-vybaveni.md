@@ -160,6 +160,10 @@ Závěr: rozměry i doporučení materiálu nezávisle potvrzeny (rozdíl 2 mm j
 výřez 40 × 12 mm uprostřed horní hrany, boky zadního dílu šité do 56 mm. Karta (54 mm) sedí celá
 uvnitř a ve výřezu se odkryje ~13 mm na palec. Důvod: karta v kapse kalhot nevyklouzne a pouzdro
 vypadá jako běžné; mělký oblouk se řeže snáz než ostrý roh, který v šabloně už je.
+**Upřesnění 2026-10-08:** karta neleží na dně, ale na lepeném pásu asi 5 mm u spodku (lekce 6,
+stejně jako lekce 4; pás 8 mm by kapsu 100 mm zúžil na 84 mm a karta 85,6 mm by se nevešla).
+Horní hrana karty je tak asi 59 mm, nad kapsu 56 mm vyčnívá asi 3 mm a výřez odkryje asi 15 mm,
+ne celá uvnitř / ~13 mm. Schéma sestavení to kreslí z `template.glueBandMm`.
 Geometrie je čistá funkce `src/lib/geometry/piece-path.ts` (s testy), takže šablona, tisk
 i schéma sestavení kreslí stejný tvar. Lekce 5 má nový krok „Vyřízněte výřez na palec“
 (krátké řezy po tětivách + dobroušení smirkem na tužce) a kontrolní bod na plynulost oblouku.

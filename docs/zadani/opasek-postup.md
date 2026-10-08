@@ -118,7 +118,8 @@ a překlopí se nesymetricky, takže si toho nevšimneš.
   (vůle ± 0,8 mm), ale vykroužený prstenec má střed přesně tam, kde má být, a celý zmizí ve
   vyseknuté dírce.
 - **U dvou značek linie ohybu naklápěj šídlo stejným směrem.** Značky jsou od sebe 24 mm, takže
-  opačné náklony pootočí spojnici až o 3,3° a přezka bude nakřivo.
+  opačné náklony pootočí spojnici až o 3,7–4° (vůle ± 0,77–0,85 mm na rozteči 24 mm) a přezka
+  bude nakřivo.
 - **Obtažené tvary vyjdou o 0,3 mm menší**, protože se šídlo opře o hranu výřezu v horním líci
   destičky. U špičky to stačí odříznout („veď nůž tak, aby rýhu odebral"), u oválu se to řeší
   jinak — viz krok 8.
@@ -162,7 +163,10 @@ otvor uprostřed pásu je zkažený pásek bez nápravy.
 
 ## 7. Postup
 
-1. **Srovnej konec pásu na kolmo.** O něj se opírá celá řada 3.
+1. **Srovnej konec pásu na kolmo.** O něj se opírá celá řada 3. Kolmost dá destička: přilož ji
+   kousek od konce, hrany pásu na linky své šířky, a šídlem narýsuj čáru podél levé hrany destičky
+   přes celou šířku. Řízni podél ocelového pravítka přiloženého na čáru (ne podél destičky).
+   Kontrola: znovu přiložená destička (hrany pásu na linkách) se konce dotýká po celé šířce.
 2. **Sraz a zalešti dlouhé hrany** na plocho rozloženém pásu — ale **posledních 30 cm nech
    neopracovaných**, dokud neuřízneš konec. Jinak tu práci odřežeš.
    Volitelně před leštěním hranu přebrousit postupně 320 → 400 → 600 → 800 (tip z amerického
@@ -196,8 +200,8 @@ otvor uprostřed pásu je zkažený pásek bez nápravy.
 9. **Vysekni druhou dvojici a sešroubuj oba nýty.** Poutko nejdřív odsuň ke špičce dál než
    180 mm od konce, pak konec rozlož. Druhou dvojici vysekni Ø 6 mm **podle značek skrz otvory**;
    původní značky z destičky ignoruj. Konec ohni zpět kolem příčky s trnem v oválu a poutko vrať
-   přes přehnutý konec do kapsy. Hlavičku s dutým dříkem dej z líce pásu, šroubek z rubu
-   přehnutého konce, utáhni plochým šroubovákem. Kapka zajišťovače závitů nebo lak; nýty
+   přes přehnutý konec do kapsy. Hlavičku s dutým dříkem dej z líce pásu, šroubek z druhé
+   strany, na přehnutém konci (strana k tělu), utáhni plochým šroubovákem. Kapka zajišťovače závitů nebo lak; nýty
    v nejzatíženějším místě se povolují.
 10. **Vyzkoušej pásek na sobě.** Utáhni na pohodlí, přidrž prstem a šídlem lehce zatlač do líce,
     kam tlačí hrot trnu (důlek, ne díra). To je prostřední dírka. Pak pásek sundej, polož lícem

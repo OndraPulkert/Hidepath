@@ -49,7 +49,7 @@ describe('souhrn „Koupit“', () => {
     expect(purchaseLines(p)[0]!.detail).toBe(
       '40 mm široký, tloušťka 3,5 mm (postup: 3–4 mm), délka aspoň 119 cm → objednejte 130 cm',
     );
-    expect(recommendedOfferText(p)).toMatch(/^Doporučeno: CraftPoint, 130 cm, 285\sKč$/);
+    expect(recommendedOfferText(p)).toMatch(/^Doporučeno: CraftPoint, 130 cm, 284\sKč$/);
   });
 
   it('odřezek na trénink: + 15 cm; objedná se nejbližší delší délka doporučené nabídky', () => {

@@ -289,8 +289,45 @@ export function lidSheetsForMeasured(input: LidMeasuredInput): LidSheetsResult {
   if ('problems' in parsed) return { ok: false, problems: parsed.problems };
   const { spec } = parsed;
   const problems = checkLidWallet(spec);
-  if (problems.length > 0) return { ok: false, problems };
-  return { ok: true, spec, label: lidVariantLabel(spec), sheets: buildLidSheets(spec) };
+  // Se skutečnou P1 se kontroluje i tehdy, když se P1 v toleranci zaokrouhlila na výchozí 1,0
+  // (P1 1,04 s přepážkami 0,92 dá plnou tloušťku 12,08 a šev S4 3,0).
+  const measured = { ...spec, leatherMm: input.p1Mm };
+  const measuredProblems =
+    measured.leatherMm === spec.leatherMm ? problems : checkLidWallet(measured);
+  if (problems.length === 0 && measuredProblems.length === 0) {
+    return { ok: true, spec, label: lidVariantLabel(spec), sheets: buildLidSheets(spec) };
+  }
+  // Přepážky nad hranicí: řekněte rovnou, jak tlusté projdou (hlášky modelu mluví o plné
+  // tloušťce a švech S4/S5, ne o přepážkách).
+  const max = lidMaxDividerMm(measured);
+  const shown = problems.length > 0 ? problems : measuredProblems;
+  if (max !== null && input.dividerMm > max + 1e-9) {
+    return {
+      ok: false,
+      problems: [
+        `Přepážky ${fmt(input.dividerMm)} mm jsou při P1 ${fmt(input.p1Mm)} mm moc tlusté: projdou nejvýš ${fmt(max)} mm. Vyřízněte je z tenčího místa kozinky, nebo kupte tenčí.`,
+        ...shown,
+      ],
+    };
+  }
+  return { ok: false, problems: shown };
+}
+
+/**
+ * Nejtlustší přepážky D1/D2 (po 0,01 mm), se kterými střih pro danou sestavu (P1, L1, zálohy,
+ * P0) ještě projde kontrolami; `null`, když neprojdou ani nejtenčí. Hranici dává plná tloušťka
+ * (≈ 12) a švy S4/S5 (2 × P1 + přepážka): při P1 1,0 je to 0,92, tlustší P1 ji snižuje
+ * (1,05 → 0,87, 1,1 → 0,80, 1,2 → 0,60), tenčí zvyšuje (0,9 → 1,02).
+ */
+export function lidMaxDividerMm(spec: LidWalletSpec): number | null {
+  const [min, maxRange] = LID_THIN_LEATHER_RANGE_MM;
+  let best: number | null = null;
+  for (let i = Math.round(min * 100); i <= Math.round(maxRange * 100); i++) {
+    const d = i / 100;
+    if (checkLidWallet({ ...spec, dividerMm: d }).length > 0) break;
+    best = d;
+  }
+  return best;
 }
 
 /** Stav formuláře „Listy pro vaši kůži“: textová pole tak, jak je uživatel napsal. */

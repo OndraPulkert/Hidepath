@@ -1,0 +1,118 @@
+import { lidWalletProject } from '@/content/projects/lid-wallet/project';
+import { LID_RECORD_IDS, LID_V12_VARIANTS } from '@/content/projects/lid-wallet/record-ids';
+import { lidGeneratorPrefill } from '@/features/notebook/lid-wallet-prefill';
+import { type LessonRecordEntry } from '@/features/notebook/types';
+import { DEFAULT_LID_WALLET, lidWalletLayout, lidWalletVariant } from '@/lib/geometry/lid-wallet';
+import { buildLidBackSvg } from '@/lib/patterns/lid-wallet-sheets';
+
+/** Regrese z kontroly p03: lekce Víčka musí vést ke stavbě bez rozporů s listy a zadáním. */
+const lesson = (n: number) => lidWalletProject.lessons.find((l) => l.order === n)!;
+const stepOf = (n: number, id: string) => lesson(n).steps.find((s) => s.id === id)!;
+const cz = (n: number): string => String(Math.round(n * 100) / 100).replace('.', ',');
+
+const entry = (fieldId: string, value: number | string): LessonRecordEntry => ({
+  id: crypto.randomUUID(),
+  userId: null,
+  projectSlug: 'lid-wallet',
+  lessonSlug: 'x',
+  fieldId,
+  value,
+  contentVersion: 1,
+  createdAt: '2026-10-07T10:00:00.000Z',
+  updatedAt: '2026-10-07T10:00:00.000Z',
+});
+
+describe('Víčko – opravy z kontroly p03', () => {
+  it('L1: rámeček na listu 4 je pro všechna čísla, i výšky švů, okének a horní hrany F', () => {
+    const body = stepOf(1, 'numbers-box').body;
+    for (const what of ['švy S1–S6', 'okénka mincí', 'horní hranu F', 'G4']) {
+      expect(body).toContain(what);
+    }
+  });
+
+  it('L1 a L11: nejužší okno lepení magnetu je záloha A (~0,1 mm), ne 0,13', () => {
+    const a = lidWalletLayout(lidWalletVariant({ p1Mm: 0.8 }));
+    expect(a.magnetYBMax - a.magnetYBMin).toBeLessThan(0.13);
+    expect(stepOf(1, 'numbers-box').body).not.toContain('0,13');
+    expect(stepOf(1, 'numbers-box').body).toContain('asi 0,1 mm');
+    expect(stepOf(11, 'find-plate').body).toContain(
+      `v záloze A jen ${cz(a.magnetYBMin)}–${cz(a.magnetYBMax)}`,
+    );
+  });
+
+  it('záloha A: useň 0,8 se změří a zapíše a předvyplnění vezme změřenou hodnotu', () => {
+    const decide = stepOf(3, 'decide');
+    expect(decide.body).not.toContain('zadejte P1 0,8)');
+    expect(decide.body).toContain('změřenou tloušťku usně 0,8');
+    expect(decide.records!.map((r) => r.id)).toContain(LID_RECORD_IDS.p1BackupAThickness);
+
+    const variantA = entry(LID_RECORD_IDS.v12Variant, LID_V12_VARIANTS.backupA);
+    const measured = lidGeneratorPrefill(
+      [
+        entry(LID_RECORD_IDS.p1Thickness, 1.02),
+        variantA,
+        entry(LID_RECORD_IDS.p1BackupAThickness, 0.86),
+      ],
+      'lid-wallet',
+    )!;
+    expect(measured.form.p1).toBe('0,86');
+    expect(measured.filled[0]).toBe('P1 0,86 (záloha A, změřená useň 0,8)');
+    // Nezměřená useň: výchozí 0,8 s poznámkou.
+    const unmeasured = lidGeneratorPrefill([variantA], 'lid-wallet')!;
+    expect(unmeasured.form.p1).toBe('0,8');
+    expect(unmeasured.filled[0]).toContain('nezměřená');
+    // Z-2 → finální kus v záloze A: stejně jako V12 záloha A.
+    const z2 = lidGeneratorPrefill(
+      [
+        entry(LID_RECORD_IDS.v12Variant, LID_V12_VARIANTS.default),
+        entry(LID_RECORD_IDS.p1Thickness, 1.0),
+        entry(LID_RECORD_IDS.z2Result, 'cracks-backup-a'),
+        entry(LID_RECORD_IDS.p1BackupAThickness, 0.82),
+      ],
+      'lid-wallet',
+    )!;
+    expect(z2.form.p1).toBe('0,82');
+    // L12: po Z-2 useň změřit a listy vygenerovat znovu.
+    for (const id of ['z2', 'final-piece']) {
+      expect(stepOf(12, id).body).toMatch(/změřte/);
+      expect(stepOf(12, id).body).toContain('vygenerujte znovu');
+    }
+    expect(stepOf(12, 'final-piece').recalls!.map((r) => r.fieldId)).toContain(
+      LID_RECORD_IDS.p1BackupAThickness,
+    );
+  });
+
+  it('záloha B1: rýha jen ve výchozím střihu a v záloze A, V12 na ztenčeném odřezku před listy', () => {
+    const crease = stepOf(5, 'crease').body;
+    expect(crease).toContain('V záloze B1 rýhu nedělejte');
+    const done = lesson(5).checkpoints.find((c) => c.slug === 'crease-done')!;
+    expect(done.title).toContain('B1');
+    expect(stepOf(3, 'decide').body).toContain('teprve pak vygenerujte listy B1');
+    expect(stepOf(5, 'skive-backup').body).not.toContain('poslouží i k opakování V12');
+    expect(stepOf(7, 'place-spacer').body).toContain('v záloze B1');
+  });
+
+  it('šablona výřezu pro palec: co z listu 1 vyříznout a jak ji přiložit', () => {
+    expect(stepOf(2, 'templates').body).toContain('20 mm');
+    expect(stepOf(5, 'thumb-notch').body).toContain('horní hranu šablony na horní hranu F');
+  });
+
+  it('Tokonole: rub pásu víčka podle listu 2, rub konce jazýčku bez něj', () => {
+    const body = stepOf(5, 'tokonole').body;
+    expect(body).toContain('rub pásu víčka');
+    expect(body).toMatch(/jazýčku.*bez Tokonole/);
+    expect(buildLidBackSvg(DEFAULT_LID_WALLET)).toContain('rub pásu víčka: Tokonole, nelepit');
+  });
+
+  it('L4: nemagnetická je jen austenitická nerez', () => {
+    const mistakes = lesson(4).commonMistakes.join(' ');
+    expect(mistakes).not.toContain('nerezu: ta je prakticky nemagnetická');
+    expect(mistakes).toContain('austenitick');
+  });
+
+  it('L2: jednoznačné „dokud nemáte nové listy“ a co dělat při vyčnívání pod 15 mm', () => {
+    expect(stepOf(2, 'record').body).not.toContain('Do nových listů');
+    expect(stepOf(2, 'record').body).toContain('Dokud nemáte nové listy');
+    expect(stepOf(2, 'bills').body).toContain('neřežte');
+  });
+});

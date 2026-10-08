@@ -1,6 +1,7 @@
 import { equipmentCatalog } from '@/content/equipment';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
+import { exposedCardHeightMm } from '@/lib/geometry/piece-path';
 import { findPlanExample, resolveShoppingPlan } from '@/features/shopping/plan';
 
 describe('obsah – pouzdro na karty: steh', () => {
@@ -26,6 +27,39 @@ describe('obsah – pouzdro na karty: steh', () => {
     expect(step(6, 'mark-glue-area')).toContain('těsně pod vnitřním koncem čárky 56 mm');
     const back = cardHolderProject.template!.pieces.find((p) => p.id === 'back')!;
     expect(back.heightMark).toEqual({ fromBottomMm: 56, lengthMm: 8 });
+  });
+
+  it('lepený pás 5 mm jako v lekci 4: kapsa 100 mm nechá kartě 85,6 mm volnou šířku', () => {
+    const front = cardHolderProject.template!.pieces.find((p) => p.id === 'front')!;
+    const band = cardHolderProject.template!.glueBandMm!;
+    expect(step(6, 'mark-glue-area')).toContain(`pás asi ${band} mm`);
+    expect(step(4, 'glue')).toContain(`pás lepidla asi ${band} mm`);
+    expect(front.widthMm - 2 * band).toBeGreaterThan(85.6);
+    expect(step(6, 'mark-glue-area')).not.toMatch(/\b8 mm/);
+    // Schéma: karta leží na pásu 5 mm → horní hrana 59 mm, ve výřezu (56 − 12) odkryje 15 mm.
+    expect(exposedCardHeightMm(front.heightMm, 54 + band, front.thumbCutout)).toBe(15);
+    // Páska nesmí vést k zdrsnění rohu nad kapsou (R6): u boků končí asi 6 mm pod vpichy.
+    expect(step(6, 'mark-glue-area')).toContain('asi 6 mm pod vpichy');
+    expect(step(6, 'mark-glue-area')).not.toContain('těsně nad vpichy maskovací pásku');
+  });
+
+  it('linie stehu v rohu jde narýsovat i bez kružítka', () => {
+    expect(step(6, 'mark-stitch-lines')).toContain('Bez kružítka');
+  });
+
+  it('výřez na palec: řezy začínají a končí na čáře, brousí se k rohům mezi nimi, hloubka 12 mm', () => {
+    expect(step(5, 'thumb-cutout')).toContain('každý začněte i skončete přesně na čáře');
+    expect(step(5, 'thumb-cutout')).not.toContain('kousek vedle čáry');
+    expect(step(5, 'peel-template')).toContain('uprostřed 12 mm hluboko');
+    const media = cardHolderProject.lessons
+      .find((l) => l.order === 5)!
+      .steps.find((s) => s.id === 'thumb-cutout')!.media;
+    expect(media[0]!.caption).not.toContain('narýsovaným');
+  });
+
+  it('cvičení v lekci 2 řeže výřez stejně jako lekce 5 (krátké rovné řezy od čáry k čáře)', () => {
+    expect(step(2, 'practice-template')).toContain('každý začněte i skončete přesně na čáře');
+    expect(step(2, 'practice-template')).not.toContain('roh a výřez pomalu bez pravítka');
   });
 
   it('šití pouzdra odkazuje na zakončení i zatavení konců (E2, F2, F3)', () => {
@@ -84,8 +118,11 @@ describe('obsah – pouzdro na karty: časovače, zápisník a „Připravte si�
       '5:print-check:template-calibration',
     ]);
     const spacing = step(1, 'check-chisels').records![0]!;
-    expect(spacing).toMatchObject({ unit: 'mm', target: { min: 3.85, max: 4 } });
+    // Cíl 3,85–4 mm plus tolerance měření pravítkem (±0,5 mm / 5 mezer ≈ ±0,1 mm): vidlička 4 mm
+    // naměřená jako 20,5 / 5 = 4,1 mm nesmí vyjít „mimo cíl“.
+    expect(spacing).toMatchObject({ unit: 'mm', target: { min: 3.75, max: 4.1 } });
     expect(step(1, 'check-chisels').body).toContain('musí vyjít 3,85–4 mm');
+    expect(step(1, 'check-chisels').body).toContain('nejdelší vidličky');
     for (const [order, id] of [
       [2, 'practice-template'],
       [5, 'print-check'],
@@ -95,7 +132,13 @@ describe('obsah – pouzdro na karty: časovače, zápisník a „Připravte si�
     }
   });
 
-  it('páska z lekce 2 se připomene tam, kde ji lekce 5 používá', () => {
+  it('páska z lekce 2 se připomene tam, kde jde na líc (lekce 6) i kde drží šablonu (lekce 5)', () => {
+    expect(step(6, 'mark-glue-area').recalls).toEqual([
+      { fieldId: 'tape-mark', label: 'Páska v lekci 2' },
+    ]);
+    expect(step(6, 'mark-glue-area').body).toContain(
+      'Použijte pásku, která v lekci 2 nenechala na líci stopu',
+    );
     expect(step(5, 'transfer').body).toContain(
       'Použijte pásku, která v lekci 2 nenechala na líci stopu',
     );
@@ -132,20 +175,37 @@ describe('obsah – pouzdro na karty: časovače, zápisník a „Připravte si�
       ['paper-back', '05-transfer-and-cut'],
     ]);
     expect(step(5, 'peel-template').body).toContain('si schovejte na lekci 6');
+    expect(step(5, 'transfer').body).not.toContain('zničí');
+    expect(step(5, 'transfer').body).toContain('budete ho potřebovat v lekci 6');
     expect(lesson(6).materials).not.toContain('díly z lekce 5');
   });
 });
 
+/** Příklady CraftPointu, jejichž ceny a sklad jsme znovu ověřili 8. 10. 2026. */
+const RECHECKED_2026_10_08 = [
+  'hovezi-kuze-licova-juchtova-trislocinena-1-2-mm',
+  'trislocinena-hovezi-kuze-licova-usen-1-2-mm-blu',
+  'hovezi-licova-kuze-trislocinena-1-2-mm-whisky',
+  'horizontalni-palicka-na-kuzi',
+  'vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu',
+];
+const rechecked = (url: string) =>
+  url.startsWith('https://craft-point.cz/') && RECHECKED_2026_10_08.some((h) => url.endsWith(h));
+
 describe('obsah – pouzdro na karty: nákupní plán „Co koupit“', () => {
   const plan = cardHolderProject.shoppingPlan!;
 
-  it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10. 2026)', () => {
+  it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10. 2026, ceny CraftPointu znovu 8. 10. 2026)', () => {
     for (const line of plan.lines) {
       const example = findPlanExample(line, equipmentCatalog);
       expect(example, `${line.equipmentSlug} ${line.url} ${line.variant ?? ''}`).toBeDefined();
       expect(example!.availability, line.url).toBe('in_stock');
       expect(example!.checkedAt, line.url).toBe(
-        line.equipmentSlug === 'masking-tape' ? '2026-10-01' : '2026-09-29',
+        line.equipmentSlug === 'masking-tape'
+          ? '2026-10-01'
+          : rechecked(line.url)
+            ? '2026-10-08'
+            : '2026-09-29',
       );
     }
   });
@@ -173,6 +233,16 @@ describe('obsah – pouzdro na karty: nákupní plán „Co koupit“', () => {
     expect(pieces.map((p) => `${p.widthMm} × ${p.heightMm}`)).toEqual(['100 × 70', '100 × 56']);
   });
 
+  it('údaje v popisech sedí s lekcemi: šev kolem tří stran asi 18 cm, pás 210 × 70 mm z lekce 2', () => {
+    const pony = cardHolderProject.equipment.find((e) => e.equipmentSlug === 'stitching-pony')!;
+    expect(pony.reason).toContain('asi 18 cm');
+    expect(pony.reason).not.toContain('100 mm');
+    const ponyItem = equipmentCatalog['stitching-pony']!;
+    expect(ponyItem.purpose).not.toContain('nejdelší šev 100 mm');
+    const a5 = plan.lines.find((l) => l.variant === 'A5 (21 × 15 cm)')!;
+    expect(a5.purpose).toContain('pás asi 210 × 70 mm na rovný řez');
+  });
+
   it('nářadí bere ze stejných příkladů jako projekt 02 (jeden košík)', () => {
     const coinLines = coinCardHolderProject.shoppingPlan!.lines;
     for (const line of plan.lines) {
@@ -187,18 +257,18 @@ describe('obsah – pouzdro na karty: nákupní plán „Co koupit“', () => {
     }
   });
 
-  it('součet po obchodech: CraftPoint 2 881 Kč + IKEA 118 Kč + OBI 139 Kč = 3 138 Kč', () => {
+  it('součet po obchodech: CraftPoint 2 878 Kč + IKEA 118 Kč + OBI 139 Kč = 3 135 Kč', () => {
     const resolved = resolveShoppingPlan(cardHolderProject, equipmentCatalog, {})!;
     const lines = resolved.shops.flatMap((s) => s.lines);
     expect(lines).toHaveLength(plan.lines.length);
     expect(resolved.shops.map((s) => [s.shop, s.totalCents])).toEqual([
-      ['CraftPoint', 288_100],
+      ['CraftPoint', 287_800],
       ['IKEA', 11_800],
       ['OBI', 13_900],
     ]);
-    expect(resolved.totalCents).toBe(313_800);
+    expect(resolved.totalCents).toBe(313_500);
     expect(resolved.notInStockCount).toBe(0);
     expect(resolved.checkedFrom).toBe('2026-09-29');
-    expect(resolved.checkedTo).toBe('2026-10-01');
+    expect(resolved.checkedTo).toBe('2026-10-08');
   });
 });

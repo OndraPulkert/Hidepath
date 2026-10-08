@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 
 import { routes } from '@/app/routes';
 import { BeltStartCard } from '@/components/belt/belt-start-card';
+import { BudgetBasisNote, budgetBreakdownText } from '@/components/equipment/budget-note';
 import { MediaSlot } from '@/components/lessons/media-slot';
 import { PhaseRail } from '@/components/projects/phase-rail';
 import { ProjectSwitcher } from '@/components/projects/project-switcher';
@@ -108,18 +109,9 @@ export function DashboardPage() {
         <Card className="flex flex-col gap-2.5">
           <Kicker>Orientační zbývající rozpočet</Kicker>
           <p className="font-serif text-stat font-medium">{formatCzk(budget.totalCents)}</p>
-          <p className="text-meta text-ink-2">
-            Nezbytné {formatCzk(budget.requiredCents)} · doporučené{' '}
-            {formatCzk(budget.recommendedCents)}
-            {budget.orderedCents > 0 ? ` · z toho objednáno ${formatCzk(budget.orderedCents)}` : ''}
-            {budget.unpricedCount > 0
-              ? ` · bez ${pluralizeCs(budget.unpricedCount, ['položky', 'položek', 'položek'])} s neověřenou cenou`
-              : ''}
-          </p>
-          {beltPlan ? (
-            <p className="text-meta text-ink-2">
-              {typo(`Pás, přezka, nýty a výsečník na dírky ${beltPlan.basis}.`)}
-            </p>
+          <p className="text-meta text-ink-2">{budgetBreakdownText(budget, 'Nezbytné')}</p>
+          {project.shoppingPlan || beltPlan ? (
+            <BudgetBasisNote beltPlan={beltPlan} link className="text-meta text-ink-2" />
           ) : null}
         </Card>
 

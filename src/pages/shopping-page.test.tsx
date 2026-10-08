@@ -94,6 +94,34 @@ describe('nákupní seznam – přepínání projektů 01 a 02', () => {
   });
 });
 
+/** Přehled: rozpočet se rozpadne beze zbytku a odkáže na Co koupit (projekt s plánem). */
+describe('přehled – orientační rozpočet pouzdra na karty', () => {
+  afterEach(() => setActiveProjectPreference(null));
+
+  it('ukáže i „později“ a vysvětlí rozdíl proti Co koupit s odkazem', async () => {
+    const repositories = createTestRepositories();
+    await repositories.enrollments.upsert({
+      ...enrollment(cardHolderProject.slug),
+      id: crypto.randomUUID(),
+    });
+    const budget = computeRemainingBudget(cardHolderProject, equipmentCatalog, {});
+    expect(budget.laterCents).toBeGreaterThan(0);
+    setActiveProjectPreference(cardHolderProject.slug);
+    renderApp('/dashboard', { repositories });
+    const note = await screen.findByText(/^Odhad ze středů cenových rozsahů všech položek/);
+    const card = note.parentElement!;
+    const text = norm(card.textContent);
+    expect(text).toContain(norm(formatCzk(budget.totalCents)));
+    expect(text).toContain(`Nezbytné ${norm(formatCzk(budget.requiredCents))}`);
+    expect(text).toContain(`doporučené ${norm(formatCzk(budget.recommendedCents))}`);
+    expect(text).toContain(`později ${norm(formatCzk(budget.laterCents))}`);
+    expect(within(note).getByRole('link', { name: 'Co koupit' })).toHaveAttribute(
+      'href',
+      '/shopping',
+    );
+  });
+});
+
 /** Projekt 03: nejvíc obchodů a jako jediný ceny v haléřích. */
 describe('nákupní seznam – peněženka Víčko (projekt 03)', () => {
   afterEach(() => setActiveProjectPreference(null));

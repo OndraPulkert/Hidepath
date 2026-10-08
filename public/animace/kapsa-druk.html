@@ -493,7 +493,7 @@ add('A','Zacvakněte, zavřete a znovu otevřete','Zacvakněte druk na dřík a 
   return s;
 },null);
 
-add('A','Změřte přírubu patice: nejvýš Ø 11 mm','Na rubu prvního odřezku změřte průměr příruby dříku (měřítkem nebo pravítkem). Smí mít nejvýš 11 mm, jinak by na rubu tlačila na karty. Když má víc, střih s tímto drukem nepoužívejte.',9000,t=>{
+add('A','Změřte přírubu patice: nejvýš Ø 11 mm','Na rubu prvního odřezku změřte průměr příruby dříku (měřítkem nebo pravítkem). Smí mít nejvýš 11 mm, jinak by na rubu tlačila na karty. Když má víc, tento druk na pás neosazujte a vyzkoušejte alternativu z vybavení (Stoklasa Ø 13,5 mm): osaďte ji na odřezek a změřte i její přírubu (ověřte na odřezku).',11000,t=>{
   const cam={cx:22,cy:11,sx:42,sy:44,k:3.3}, jaw=es(t,.15,.5), lim=seg(t,.55,.65);
   const mx=OFFW-MK[0];            // rub = zrcadlo
   let inner=offcut(true)+flangeTop(mx,MK[1],5);

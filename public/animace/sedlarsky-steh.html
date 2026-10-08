@@ -559,7 +559,7 @@ add('E','Na konci prošijte zpět dva otvory','Na konci řady prošijte zpět dv
   s+=viewTag('POHLED NA LÍC · konec řady');
   if(n>=8||fr>.6) s+=pill((HX(5)+HX(7))/2,SEAM-4.5,'zpět 2 otvory','ta','middle');
   s+=pill(4,87,n>=9?'konec zpevněný 2 zpětnými stehy':'konec řady → zpět','t');
-  let ib=notes([['odřezek','t'],['(lekce 4):','t'],['2 zpět na konci','ts'],['','ts'],['ostatní švy:','t'],['2 zpět na začátku','ts'],['i na konci','ts']],16,5.2);
+  let ib=notes([['projekt 01,','t'],['odřezek (L4):','t'],['2 zpět na konci','ts'],['','ts'],['ostatní švy:','t'],['2 zpět na začátku','ts'],['i na konci','ts']],16,5.2);
   return s+inset('ZPĚTNÉ STEHY',ib);
 },{v:'LÍC',sub:'konec řady'},'Tip: zpět šijte stejným rytmem, jen opačným směrem. Zpětné stehy leží přes hotové.');
 
@@ -650,7 +650,7 @@ add('G','Kontrola: stehy na líci','Na líci mají být všechny stehy stejně s
   return clipMain(s)+inset('LÍC',ib);
 },{v:'LÍC',sub:'kontrola'},null);
 
-add('G','Kontrola: rovná řada na rubu','Otočte díl. Rub bývá méně pravidelný než líc, to je normální. Stehy na rubu ale musí být stejně utažené, v jedné řadě a bez smyček. Když otvory na rubu nejsou rovné, vidličky nebyly při děrování kolmo (lekce 3).',8400,t=>{
+add('G','Kontrola: rovná řada na rubu','Otočte díl. Rub bývá méně pravidelný než líc, to je normální. Stehy na rubu ale musí být stejně utažené, v jedné řadě a bez smyček. Když otvory na rubu nejsou rovné, vidličky nebyly při děrování kolmo.',8400,t=>{
   let s='';
   const a=seg(t,.05,.2), b=seg(t,.4,.55);
   s+=`<g opacity="${f(a)}">${pill(6,20,'rub: rovná řada','t')}${miniRow(8,29,70,10,{rub:true})}${tick(80,21)}</g>`;
@@ -665,12 +665,12 @@ add('G','Kontrola: rovná řada na rubu','Otočte díl. Rub bývá méně pravid
   return clipMain(s)+inset('RUB',ib);
 },{v:'RUB',sub:'kontrola'},null);
 
-add('G','Kontrola: slepené díly a šev','Díly jsou slepené a hrany lícují bez posunu. Stehy na líci jsou stejně skloněné a stejně utažené, žádný netvoří smyčku. Konec je ukončený zpětnými stehy a nit odstřižená na rubu. Pak totéž na pouzdře v lekci 6.',9000,t=>{
+add('G','Kontrola: slepené díly a šev','Díly jsou slepené a hrany lícují bez posunu. Stehy na líci jsou stejně skloněné a stejně utažené, žádný netvoří smyčku. Konec je ukončený zpětnými stehy a nit odstřižená na rubu. V projektu 01 pak totéž na pouzdře v lekci 6.',9000,t=>{
   let s=clipMain(piece('lic',{leftEnd:true})+(()=>{let r='';for(let j=0;j<7;j++){const [a,b]=FWD[j];r+=stitchLic(a,b,j%2)}return r})())+viewTag('LÍC · hotový šev');
   s+=`<g opacity="${f(seg(t,.1,.2))}">${pill(42,SEAM+14,'stejný sklon · stejné utažení','tok','middle')}</g>`;
   const ck=[['slepené, hrany',.25,1],['lícují',.25,0],['stejný sklon',.4,1],['stejné utažení,',.55,1],['bez smyčky',.55,0],['konec: zpětné',.7,1],['stehy, nit',.7,0],['odstřižená na rubu',.7,0]];
   let ib='';ck.forEach(([tx,at,tk],i)=>{const o=seg(t,at,at+.08);ib+=`<g opacity="${f(o)}">${tk?tick(91.5,16+i*5.6):''}${lbl(96,17.5+i*5.6,tx,'t')}</g>`});
-  ib+=`<g opacity="${f(seg(t,.86,.96))}">${notes([['dál: lekce 6','t'],['pouzdro']],66,5.2)}</g>`;
+  ib+=`<g opacity="${f(seg(t,.86,.96))}">${notes([['projekt 01, dál:','t'],['lekce 6 pouzdro']],66,5.2)}</g>`;
   s+=inset('KONTROLA',ib);
   if(t>.95) s+=`<circle cx="42" cy="66" r="5.5" fill="var(--panel)" stroke="var(--ok)" stroke-width=".7"/>`+tick(42,66.5,1.3);
   return s;

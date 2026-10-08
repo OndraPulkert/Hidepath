@@ -69,7 +69,7 @@ export function ShoppingPage() {
           readiness={readiness}
           budget={budget}
           hasShoppingPlan={plan !== null}
-          planBasis={beltPlan?.basis}
+          beltPlan={beltPlan}
         />
       )}
 

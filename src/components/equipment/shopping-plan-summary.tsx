@@ -28,6 +28,7 @@ export function ShoppingPlanSummary({
   basis?: string | undefined;
 }) {
   const hasOwned = plan.remainingCents !== plan.totalCents;
+  const hasForeignPrice = plan.shops.some((g) => g.lines.some((l) => l.example.foreignPrice));
   return (
     <Card className="mb-6 flex flex-col gap-4" aria-labelledby="co-koupit">
       <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
@@ -98,7 +99,13 @@ export function ShoppingPlanSummary({
                         <Tag tone="optional">{availabilityLabel[line.example.availability]}</Tag>
                       ) : null}
                       <span className="whitespace-nowrap">
-                        {line.quantity} × {formatCzk(line.example.priceCents)}
+                        {line.quantity} × {line.example.foreignPrice ? '≈ ' : ''}
+                        {formatCzk(line.example.priceCents)}
+                        {line.example.foreignPrice ? (
+                          <span className="block text-meta text-ink-2">
+                            {line.example.foreignPrice}, přepočet orientačně
+                          </span>
+                        ) : null}
                       </span>
                       <span className="w-20 text-right font-medium whitespace-nowrap">
                         {formatCzk(line.lineCents)}
@@ -150,7 +157,8 @@ export function ShoppingPlanSummary({
         {plan.notInStockCount > 0
           ? ` · ${pluralizeCs(plan.notInStockCount, ['položka nebyla', 'položky nebyly', 'položek nebylo'])} skladem`
           : ' · vše bylo skladem'}
-        . Odkazy vedou do obchodů třetích stran, Hidepath z nákupu nic nemá.
+        {hasForeignPrice ? ' · ceny v cizí měně jsou v Kč jen orientačním přepočtem' : ''}. Odkazy
+        vedou do obchodů třetích stran, Hidepath z nákupu nic nemá.
       </p>
     </Card>
   );

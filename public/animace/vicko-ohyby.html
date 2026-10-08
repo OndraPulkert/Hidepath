@@ -240,7 +240,7 @@ svg .book{fill:var(--wood);stroke:var(--woodedge);stroke-width:1.2;vector-effect
   <div class="steps">
     <article class="step">
       <header><span class="n">1</span><h3>Výchozí stav: rýha na rubu</h3></header>
-      <p>Hotové z lekce 5: na rubu tupým hrotem u ocelového pravítka vytlačená rýha v ose ohybu <b class="num">v 62,21</b>. Nic neřezat, tlačit stejně po celé šířce <span class="num">101</span>.</p>
+      <p>Hotové z lekce 5: na rubu tupým hrotem u ocelového pravítka vytlačená rýha v ose ohybu <b class="num">v 62,21</b>. Nic neřezat, tlačit stejně po celé šířce <span class="num">101</span>. V záloze B1 rýha není: pás ohybu je z rubu ztenčený (lekce 5), osu ukazují rysky na bocích.</p>
       <div class="fig"><div data-fig="crease"></div></div>
       <p class="cap">Řez napříč rýhou, 1:1. Hloubku rýhy lekce neuvádí.</p>
     </article>
@@ -300,15 +300,15 @@ svg .book{fill:var(--wood);stroke:var(--woodedge);stroke-width:1.2;vector-effect
         <li>houbička a voda</li>
         <li>potravinová fólie</li>
         <li>2 hladká prkénka a svěrky (bez svěrek knihy nebo silné gumičky)</li>
-        <li>rýha z lekce 5</li>
+        <li>rýha z lekce 5 (v záloze B1 ztenčený pás ohybu)</li>
       </ul>
     </div>
     <div class="card alert amber">
       <h3>Když se nepovede</h3>
       <ul>
         <li><b>Líc v ohybu popraská</b> – pozná se už ve zkoušce <b>V12</b> (lekce 3) na odřezku ze stejné kůže.</li>
-        <li>Pak <b>přednostně záloha A</b>: celý P1 z usně 0,8, nic se neztenčuje (v aplikaci Listy střihu → „Listy pro vaši kůži“, P1 0,8). Zkoušku zopakujte na odřezku 0,8. Čísla A: P1 <span class="num">230,23</span>, rýha v <span class="num">61,76</span>, pás ohybu <span class="num">57,76–65,76</span>, H <span class="num">82,8</span>. Vložka zůstává stejná.</li>
-        <li><b>Záloha B1</b> (pás ohybu dna ztenčit na 0,6, v aplikaci zaškrtávátko B1) jen když useň 0,8 nejde sehnat nebo popraská i ona. Zkoušku zopakujte na ztenčeném odřezku (lekce 5). Popraská i tak: zkuste jinou useň do P1 (ověřte), neřežte.</li>
+        <li>Pak <b>přednostně záloha A</b>: celý P1 z usně 0,8, nic se neztenčuje (v aplikaci Listy střihu → „Listy pro vaši kůži“ zadejte P1 změřenou tloušťku usně 0,8, lekce 3). Zkoušku zopakujte na odřezku 0,8. Čísla A: P1 <span class="num">230,23</span>, rýha v <span class="num">61,76</span>, pás ohybu <span class="num">57,76–65,76</span>, H <span class="num">82,8</span>. Vložka zůstává stejná.</li>
+        <li><b>Záloha B1</b> (pás ohybu dna ztenčit na 0,6, v aplikaci zaškrtávátko B1) jen když useň 0,8 nejde sehnat nebo popraská i ona. Odřezek ztenčete podle lekce 5 a zkoušku na něm zopakujte dřív, než vygenerujete listy B1 a budete řezat P1. Popraská i tak: zkuste jinou useň do P1 (ověřte), neřežte.</li>
         <li><b>Mírné odpružení ohybu</b> není důvod k záloze.</li>
       </ul>
     </div>
@@ -336,7 +336,7 @@ svg .book{fill:var(--wood);stroke:var(--woodedge);stroke-width:1.2;vector-effect
 
   <div class="card">
     <h3>Řez horní částí: zavřené ↔ otevřené víčko</h3>
-    <p>Vrstvy zepředu dozadu: víčko, F (do y 62), obsah, D1, D2, B. Obsah stavu B dává pod závěsem <span class="num">3,42</span>: 2 karty <span class="num">1,52</span> + papír <span class="num">0,7</span> + D1 a D2 <span class="num">1,2</span>.</p>
+    <p>Vrstvy zepředu dozadu: víčko, F (do y 62), karty, D1, papír, D2, B. Obsah stavu B dává pod závěsem <span class="num">3,42</span>: 2 karty <span class="num">1,52</span> + papír <span class="num">0,7</span> + D1 a D2 <span class="num">1,2</span>.</p>
     <div class="inter">
       <figure style="margin:0"><div class="fig"><div data-fig="hinge"></div></div><figcaption>Řez ve středu šířky, 1:1. Víčko nad y 122 a pod y 57 je oříznuté.</figcaption></figure>
       <div class="ctrl">
@@ -677,10 +677,11 @@ const kOf = () => 1 - st.rot / 100;
 function roundTop(w0, w1, yb, yt, r) {
   return [[w1, yb], [w1, yt - r]].concat(arcPts(w1 - r, yt - r, r, 0, PI / 2, 12)).concat(arcPts(w0 + r, yt - r, r, PI / 2, PI, 12)).concat([[w0, yb]]);
 }
-/* obsah stavu B: 2 karty před D1 (2 × 0,76), papír 0,7 místo bankovky (ve skutečnosti mezi D1 a D2,
-   tady zjednodušeně těsně před D1); 1,52 + 0,7 + D1 + D2 = 3,42 */
+/* obsah stavu B: 2 karty před D1 (2 × 0,76), papír 0,7 místo bankovky mezi D1 a D2
+   (D1 je proto o PAP posunutá dopředu); 1,52 + D1 + 0,7 + D2 = 3,42 */
 const CARD_TOP = M.cardFloorY + 54, BILL_BOT = 2, BILL_TOP = BILL_BOT + 65, BILL_W = 70;
-const CX = [-M.TB, -M.TB + 1.52], BX = [-M.TB + 1.52, -2 * M.tD - 0.02];
+const PAP = 0.7, D1X = [-2 * M.tD - PAP, -M.tD - PAP];
+const CX = [-M.TB, -M.TB + 1.52], BX = [-M.tD - PAP + 0.02, -M.tD - 0.02];
 function contents(yb, cDy = 0, bDy = 0, cOp = 1, bOp = 1) {
   let s = '';
   const b0 = Math.max(yb, BILL_BOT + bDy), b1 = BILL_TOP + bDy;
@@ -693,7 +694,7 @@ function hingeLayers(yb, withContents = true) {
   const tD = M.tD;
   let s = '';
   s += Poly(roundTop(-tD, 0, yb, M.d2TopY, 0.25), 'd2');
-  s += Poly(roundTop(-2 * tD, -tD, yb, M.d1TopY, 0.25), 'd1') + Ln(-2 * tD + 0.1, M.d1TopY, -tD - 0.1, M.d1TopY, 'd1e');
+  s += Poly(roundTop(D1X[0], D1X[1], yb, M.d1TopY, 0.25), 'd1') + Ln(D1X[0] + 0.1, M.d1TopY, D1X[1] - 0.1, M.d1TopY, 'd1e');
   if (withContents) s += contents(yb);
   s += Rect(-M.TB - M.t, yb, -M.TB, M.frontTopY, 'kz') + Ln(-M.TB - M.t, yb, -M.TB - M.t, M.frontTopY, 'lic') + Ln(-M.TB, yb, -M.TB, M.frontTopY, 'rub');
   return s;
@@ -713,7 +714,7 @@ function figHinge() {
   s += leather(pts, M.t, { wet: hingeWet() });
   s += markAt(pts, M.v.rearCrease - M.v.hingeStart, M.t) + markAt(pts, M.v.frontCrease - M.v.hingeStart, M.t);
   s += T(-16.5, 59, 'F', {}) + Ln(-14.5, 59.4, -M.TB - M.t / 2 - (k > 0.9 ? 1.2 : 0), 59.4);
-  s += T(-16.5, 62.6, 'D1', {}) + Ln(-13.8, 63, -0.9, 63);
+  s += T(-16.5, 62.6, 'D1', {}) + Ln(-13.8, 63, (D1X[0] + D1X[1]) / 2, 63);
   s += T(-16.5, 70, 'karty', {}) + Ln(-11.4, 70.4, (CX[0] + CX[1]) / 2, 70.4);
   s += T(-16.5, 66.2, 'papír', {}) + Ln(-12.2, 66.6, (BX[0] + BX[1]) / 2, 66.6);
   s += T(5, 66, 'D2', {}) + Ln(4.6, 66.4, -0.3, 66.4);
@@ -735,7 +736,7 @@ function figHingeZoom(forceClosed) {
   s += leather(pts, M.t, { wet: hingeWet() });
   s += markAt(pts, M.v.rearCrease - M.v.hingeStart, M.t) + markAt(pts, M.v.frontCrease - M.v.hingeStart, M.t);
   const y0 = 78.35;
-  s += T(0.5, y0, 'B', { a: 'middle', bl: 'middle', k: 0.8 }) + T(-0.3, y0, 'D2', { a: 'middle', bl: 'middle', c: 'on', k: 0.62 }) + T(-0.9, y0, 'D1', { a: 'middle', bl: 'middle', k: 0.62 }) + T((CX[0] + CX[1]) / 2, y0, 'karty', { a: 'middle', bl: 'middle', k: 0.7 });
+  s += T(0.5, y0, 'B', { a: 'middle', bl: 'middle', k: 0.8 }) + T(-0.3, y0, 'D2', { a: 'middle', bl: 'middle', c: 'on', k: 0.62 }) + T((D1X[0] + D1X[1]) / 2, y0, 'D1', { a: 'middle', bl: 'middle', k: 0.62 }) + T((CX[0] + CX[1]) / 2, y0, 'karty', { a: 'middle', bl: 'middle', k: 0.7 });
   if (k > 0.9) {
     s += T(-3.92, 79.4, 'víčko', { a: 'middle', bl: 'middle', k: 0.62 });
     s += T(-5.45, 86.0, 'plochý vrch 1,42', { k: 0.85 }) + Ln(-2.6, 85.7, -1.7, 83.6);
@@ -819,7 +820,7 @@ const cut = (pts, frac) => {
 const PARTS={A:'anim-dno',B:'anim-zaves'};
 const STEPS = { A: [], B: [] };
 function add(part, title, d, c) { STEPS[part].push({ t: title, d, c }); }
-add('A','Výchozí stav: rýha na rubu',3.6,'Hotové z lekce 5: rýha na rubu v ose ohybu <span class="num">v 62,21</span>, vytlačená tupým hrotem u ocelového pravítka stejně po celé šířce <span class="num">101</span>.');
+add('A','Výchozí stav: rýha na rubu',3.6,'Hotové z lekce 5: rýha na rubu v ose ohybu <span class="num">v 62,21</span>, vytlačená tupým hrotem u ocelového pravítka stejně po celé šířce <span class="num">101</span>. V záloze B1 rýha není: pás ohybu je z rubu ztenčený (lekce 5), osu ukazují rysky na bocích.');
 add('A','Navlhčete pás ohybu',3.2,'Houbičkou navlhčete pás ohybu dna <span class="num">v 58,21–66,21</span> (rýha uprostřed).');
 add('A','Počkejte, až se barva skoro vrátí k suché',3,'Počkejte, až se barva usně skoro vrátí k suché (<span class="num">5–10</span> min). Teprve pak ohýbejte.');
 add('A','Položte vložku hranou na čáru',3.8,'Vložku položte na rub B hranou na <b>čáru hrany vložky</b>: výchozí v <span class="num">64,18</span>, tedy <span class="num">1,96</span> za rýhou směrem k B (nebo posunutou podle V12). Hrana vložky míří k F, na straně F vložka neleží. Na každé straně přesahuje díl o <span class="num">5</span>.');
@@ -830,7 +831,7 @@ add('A','Stáhněte svěrkami',3,'Stáhněte svěrkami. Bez svěrek použijte kn
 add('A','Nechte vyschnout přes noc',3.6,'Nechte vyschnout <b>přes noc</b>, <span class="num">12–24 h</span>, ne u topení.');
 add('A','Vysuňte vložku bokem',4,'Po vyschnutí sundejte svěrky, prkénka a fólii a vložku <b>vysuňte bokem</b>.');
 add('A','Kontrola: F jde odklopit',4.5,'Tvar U, líc venku, rýha uprostřed ohybu. F jde odklopit asi o 90° na lepení plíšku a D1 (lekce 8). Mírné odpružení nevadí.');
-add('B','Vložte obsah stavu B',4,'Do kapsy karet dejte <b>2 staré karty</b> a do oddílu bankovek <b>papír asi 70 × 65</b>, přeložený na asi <span class="num">0,7</span> (nebo bankovku ve fólii). Mince ne. Papír patří mezi D1 a D2, animace ho kreslí před D1.');
+add('B','Vložte obsah stavu B',4,'Do kapsy karet dejte <b>2 staré karty</b> a do oddílu bankovek <b>papír asi 70 × 65</b>, přeložený na asi <span class="num">0,7</span> (nebo bankovku ve fólii). Mince ne.');
 add('B','Navlhčete jen pás závěsu',3.4,'Houbičkou navlhčete <b>jen pás závěsu</b> <span class="num">v 142,99–150,99</span>, nenamáčejte celé.');
 add('B','Zavřete víčko přes obsah',3.4,'Víčko zavřete přes obsah a jazýček položte na přední stěnu. Kopyto ani opěrka nejsou potřeba. Podívejte se, jestli přehyby vyšly zhruba u rysek v <span class="num">145,10</span> a <span class="num">148,88</span>; jinou polohu si zapište.');
 add('B','Vložte fólii mezi závěs a knihu',3,'Mezi vlhký závěs a knihu dejte potravinovou fólii.');
@@ -1003,7 +1004,7 @@ function figAHinge() {
   let s = '';
   if (S.table > 0.01) s += `<g opacity="${r3(S.table)}">${hatch(M.t + 0.02, 57, 4.4, 97, 1.4)}${Ln(M.t + 0.02, 57, M.t + 0.02, 97, 'tline')}</g>`;
   s += Poly(roundTop(-tD, 0, 57, M.d2TopY, 0.25), 'd2');
-  s += Poly(roundTop(-2 * tD, -tD, 57, M.d1TopY, 0.25), 'd1') + Ln(-2 * tD + 0.1, M.d1TopY, -tD - 0.1, M.d1TopY, 'd1e');
+  s += Poly(roundTop(D1X[0], D1X[1], 57, M.d1TopY, 0.25), 'd1') + Ln(D1X[0] + 0.1, M.d1TopY, D1X[1] - 0.1, M.d1TopY, 'd1e');
   s += contents(57, 62 * (1 - S.cIn), 84 * (1 - S.bIn));
   s += Rect(-M.TB - M.t, 57, -M.TB, M.frontTopY, 'kz', 'id="aF"') + Ln(-M.TB - M.t, 57, -M.TB - M.t, M.frontTopY, 'lic') + Ln(-M.TB, 57, -M.TB, M.frontTopY, 'rub');
   s += leatherW(pts, M.t, hingeWet(), S.w, 'aHLeather');
@@ -1042,7 +1043,7 @@ function figAHinge() {
   const lo = 1 - Math.min(1, S.book * 3);
   if (lo > 0.01) {
     let L = T(-16.5, 59, 'F', {}) + Ln(-14.5, 59.4, -M.TB - M.t / 2 - (S.k > 0.9 ? 1.2 : 0), 59.4);
-    L += T(-16.5, 62.6, 'D1', {}) + Ln(-13.8, 63, -0.9, 63);
+    L += T(-16.5, 62.6, 'D1', {}) + Ln(-13.8, 63, (D1X[0] + D1X[1]) / 2, 63);
     if (S.cIn > 0.98) L += T(-16.5, 70, 'karty', {}) + Ln(-11.4, 70.4, (CX[0] + CX[1]) / 2, 70.4);
     if (S.bIn > 0.98) L += T(-16.5, 66.2, 'papír', {}) + Ln(-12.2, 66.6, (BX[0] + BX[1]) / 2, 66.6);
     if (S.k > 0.5) L += T(-16.5, 75, 'víčko', {}) + Ln(-11.4, 75.4, -M.TB - M.t / 2, 75.4);
@@ -1211,12 +1212,18 @@ function stepFromHash() {
     const h = stepFromHash(), id = decodeURIComponent(location.hash.slice(1));
     if (h) ANIM[h.part].open(h.i);
     const el = h ? document.getElementById(PARTS[h.part]) : id && document.getElementById(id);
-    if (el) requestAnimationFrame(() => el.scrollIntoView({ block: 'start' }));
+    if (el) requestAnimationFrame(() => reveal(el, !!h && /[0-9]/.test(id)));
+  }
+  // Odkaz na krok (#B3): když je karta vyšší než okno, dorovnat tak, aby byl vidět popisek kroku a tlačítka.
+  function reveal(el, step) {
+    el.scrollIntoView({ block: 'start' });
+    const b = step && el.querySelector('.abtn');
+    if (b) { const d = b.getBoundingClientRect().bottom - innerHeight + 12; if (d > 0) scrollBy(0, d); }
   }
   go();
   addEventListener('hashchange', go);
   // po načtení fontů se výšky změní: znovu posunout na kotvu, pokud čtenář mezitím nescrolloval
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (!moved && location.hash) { const el = stepFromHash(); const t = el ? document.getElementById(PARTS[el.part]) : document.getElementById(decodeURIComponent(location.hash.slice(1))); if (t) t.scrollIntoView({ block: 'start' }); } });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (!moved && location.hash) { const el = stepFromHash(); const t = el ? document.getElementById(PARTS[el.part]) : document.getElementById(decodeURIComponent(location.hash.slice(1))); if (t) reveal(t, !!el && /[0-9]/.test(location.hash)); } });
 })();
 window.__ohyby = { st, M, render, renderAll, AF, AH, STEPS, stepFromHash };
 </script>

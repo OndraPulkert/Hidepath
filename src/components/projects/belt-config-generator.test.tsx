@@ -367,7 +367,7 @@ describe('Váš pásek', () => {
     expect(summary).toHaveTextContent(/Přezka: 40\smm, jednotrnová/);
     expect(summary).toHaveTextContent(/Šrouby chicago: 2 ks, dřík 6\smm/);
     expect(summary).toHaveTextContent(/Výsečník: Ø 5 a Ø 6\smm/);
-    expect(summary).toHaveTextContent(/Doporučeno: CraftPoint, 130\scm, 285\sKč/);
+    expect(summary).toHaveTextContent(/Doporučeno: CraftPoint, 130\scm, 284\sKč/);
     expect(within(summary).getByRole('link', { name: 'další obchody níže' })).toBeInTheDocument();
 
     // Trénink na odřezku téhož řemene: + 15 cm. CraftPoint (130 cm) nestačí a skladem

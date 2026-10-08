@@ -87,6 +87,12 @@ describe('cvičná šablona k lekci 2 (pouzdro na karty)', () => {
     ]);
   });
 
+  it('výřez se řeže jako v lekci 5: krátkými rovnými řezy od čáry k čáře, ne obloukem', () => {
+    const text = svg.replace(/<[^>]+>/g, ' ');
+    expect(text).toContain('krátké rovné řezy, každý od čáry k čáře');
+    expect(text).not.toContain('výřez pomalu');
+  });
+
   it('bloky se nepřekrývají a nezasahují do patičky ani mimo list', () => {
     for (let i = 0; i < 3; i++) {
       const o = blockOrigin(i);

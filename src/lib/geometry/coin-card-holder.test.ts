@@ -156,6 +156,9 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
       spec.stitchOffsetMm + spec.pocketFlatMm + formHole + spec.coinTopOverlapMm,
       6,
     );
+    // coinTopOverlapMm se měří od kraje důlku; nad samotnou mincí je kůže víc (výchozí 7 mm, spec).
+    expect(L.coinCentreYMm - spec.coinDiameterMm / 2).toBeCloseTo(7, 6);
+    expect(L.coinCentreYMm - formHole / 2).toBeCloseTo(spec.coinTopOverlapMm, 6);
     expect(Number.isInteger(L.windowDiameterMm)).toBe(true);
     expect(L.coinRingMm).toBeGreaterThanOrEqual(spec.minCoinRingMm);
     expect(L.pocketXMm).toBeCloseTo((L.panelWidthMm - L.pocketWidthMm) / 2, 9);

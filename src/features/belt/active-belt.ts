@@ -178,7 +178,7 @@ export function beltFact(
         value:
           rivet.postMm === null
             ? `2 ks, dřík ${range} (ověřte u prodejce)`
-            : `2 ks, dřík ${mm(rivet.postMm)} (rozsah ${range})`,
+            : `2 ks, dřík ${mm(rivet.postMm)} (rozsah ${range}${rivet.verified === null ? ', ověřte u prodejce' : ''})`,
       };
     }
     case 'holes':

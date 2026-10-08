@@ -160,6 +160,7 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
         url: 'https://www.lederversand-berlin.de/Ziegennappa-z125',
         variant: 'list 0,55 m²',
         priceCents: 94_056,
+        foreignPrice: '38,50 €',
         priceNote:
           'za celý list 38,50 € (s německou DPH 19 %), přepočet kurzem ČNB ze 7. 10. 2026 orientačně; poštovné do Česka 16,99 € (Economy) nebo 19,99 € (DHL). Větší listy 0,60–0,75 m² za 42,00–52,50 €.',
         note: 'Světlá přepážka D1 a podšívka L1. Podle obchodu třísločiněná a nebarvená. Prodává se jen po celých listech. Po dodání změřit; kusy nad 0,92 mm na přepážku nepoužít.',
@@ -172,6 +173,7 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
         url: 'https://www.lederversand-berlin.de/z125b',
         variant: 'list 0,45 m²',
         priceCents: 65_961,
+        foreignPrice: '27,00 €',
         priceNote:
           'za celý list 27,00 € (s německou DPH 19 %), přepočet kurzem ČNB ze 7. 10. 2026 orientačně; poštovné jako u #z125',
         note: 'Levnější varianta: stejná kůže ve 2. jakosti, s viditelnými přírodními vadami (jizvy, štípance od hmyzu). Na malé díly D1 a L1 stačí, vady obejděte.',
@@ -220,7 +222,7 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
     ],
     avoid: [{ title: 'Plný průbojník na kov', reason: 'kůži jen promáčkne, díru neudělá.' }],
     alternatives: [],
-    // Ø 8 29 Kč + Ø 10 35 Kč + Ø 12 40 Kč + Ø 14 46 Kč (CraftPoint `.js`, 29. 9. 2026).
+    // Ø 8 29 Kč + Ø 10 35 Kč + Ø 12 40 Kč + Ø 14 46 Kč (CraftPoint `.js`, ceny potvrzené 8. 10. 2026).
     priceRange: { minCents: 15_000, maxCents: 15_000 },
     priceSource: 'verified',
     priceNote: `${VERIFIED_NOTE} Součet čtyř výsečníků Ø 8, 10, 12 a 14 mm, bez poštovného.`,
@@ -235,7 +237,7 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
         priceNote: 'za kus',
         note: 'Vyduté napojení jazýčku na pás víčka (R4).',
         availability: 'in_stock',
-        checkedAt: '2026-09-29',
+        checkedAt: '2026-10-08',
       },
       {
         title: 'Výsečníky na kůži 2–20 mm, průměr dle výběru (varianta Ø 10 mm)',
@@ -244,9 +246,9 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
         variant: 'Ø 10 mm',
         priceCents: 3_500,
         priceNote: 'za kus',
-        note: 'Dno výřezu pro palec v horní hraně přední stěny (R5) a otvor podložky pro šev S7.',
-        availability: 'in_stock',
-        checkedAt: '2026-09-29',
+        note: 'Dno výřezu pro palec v horní hraně přední stěny (R5) a otvor podložky pro šev S7. V době ověření (8. 10. 2026) vyprodaný.',
+        availability: 'unavailable',
+        checkedAt: '2026-10-08',
       },
       {
         title: 'Výsečníky na kůži 2–20 mm, průměr dle výběru (varianta Ø 12 mm)',
@@ -257,7 +259,7 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
         priceNote: 'za kus',
         note: 'Konce dvou okének mincí 12 × 48 mm (R6).',
         availability: 'in_stock',
-        checkedAt: '2026-09-29',
+        checkedAt: '2026-10-08',
       },
       {
         title: 'Výsečníky na kůži 2–20 mm, průměr dle výběru (varianta Ø 14 mm)',
@@ -268,7 +270,7 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
         priceNote: 'za kus',
         note: 'Konce okénka bankovek 14 × 45 mm (R7).',
         availability: 'in_stock',
-        checkedAt: '2026-09-29',
+        checkedAt: '2026-10-08',
       },
     ],
     commonlyAtHome: false,

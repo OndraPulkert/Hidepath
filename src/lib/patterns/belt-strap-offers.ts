@@ -108,14 +108,17 @@ const czk = (table: Readonly<Record<number, number>>) => (w: number) =>
 /** Doprava CraftPointu (kurýr z Polska, ověřeno 8. 10. 2026). */
 const CRAFTPOINT_SHIPPING = 'kurýr 150 Kč, zdarma od 2 000 Kč; pás, přezka i nýty v jedné zásilce';
 
-/** CraftPoint: šířka → Kč (ceny 130–140 cm, `.js`). Aplikace pouští 28–45 mm. */
+/**
+ * CraftPoint: šířka → Kč (ceny 130–140 cm, `.js`). Aplikace pouští 28–45 mm. CraftPoint
+ * přepočítává ze zlotých denním kurzem, takže se Kč mezi dny liší o 1–2 Kč.
+ */
 const CRAFTPOINT_CZK: Readonly<Record<number, number>> = {
   28: 228,
   30: 228,
   33: 256,
   35: 256,
-  38: 285,
-  40: 285,
+  38: 284,
+  40: 284,
   45: 313,
 };
 
@@ -314,12 +317,12 @@ type DyedColor = Exclude<StrapColor, 'prirodni'>;
 
 /** CraftPoint barvené řemeny 3,0–3,5 mm: šířka → Kč (`.js`, všechny barvy stejně). */
 const CRAFTPOINT_DYED_CZK: Readonly<Record<number, number>> = {
-  28: 234,
-  30: 234,
+  28: 233,
+  30: 233,
   33: 262,
   35: 262,
-  38: 291,
-  40: 291,
+  38: 290,
+  40: 290,
   45: 313,
 };
 

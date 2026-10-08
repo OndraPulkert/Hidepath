@@ -8,11 +8,17 @@ import { type LessonRecordEntry } from '@/features/notebook/types';
 import { findPlanExample, resolveShoppingPlan } from '@/features/shopping/plan';
 import {
   DEFAULT_LID_WALLET,
+  fmt,
   hingePath,
   lidWalletLayout,
   lidWalletPunches,
+  lidWalletVariant,
 } from '@/lib/geometry/lid-wallet';
-import { lidSheetsForMeasured, parseLidGeneratorForm } from '@/lib/patterns/lid-wallet-input';
+import {
+  lidMaxDividerMm,
+  lidSheetsForMeasured,
+  parseLidGeneratorForm,
+} from '@/lib/patterns/lid-wallet-input';
 
 /** Číslo tak, jak ho píše obsah (desetinná čárka, zaokrouhlené na `d` míst). */
 const cz = (n: number, d = 2): string =>
@@ -353,6 +359,8 @@ describe('obsah – peněženka Víčko', () => {
         coinLift: '2/coins-wedge',
         v12Offset: '3/inspect',
         v12Variant: '3/decide',
+        p1BackupAThickness: '3/decide',
+        z2Result: '12/z2',
         kMeasured: '10/measure-k',
         magnetThickness: '11/magnet-dry-test',
       };
@@ -360,7 +368,9 @@ describe('obsah – peněženka Víčko', () => {
         const id = LID_RECORD_IDS[key as keyof typeof LID_RECORD_IDS];
         const found = where.get(id);
         expect(found?.at, id).toBe(at);
-        expect(found?.f.kind, id).toBe(key === 'v12Variant' ? 'choice' : 'number');
+        expect(found?.f.kind, id).toBe(
+          key === 'v12Variant' || key === 'z2Result' ? 'choice' : 'number',
+        );
       }
       const variant = where.get(LID_RECORD_IDS.v12Variant)!.f;
       expect(variant.kind === 'choice' && variant.options.map((o) => o.value)).toEqual(
@@ -375,7 +385,7 @@ describe('obsah – peněženka Víčko', () => {
       expect(target(LID_RECORD_IDS.d2Thickness)?.max).toBe(0.92);
       // Pole drží průměr, pravidlo lekce platí pro každé místo: „V cíli“ nesmí tvrdit víc.
       for (const id of [LID_RECORD_IDS.d1Thickness, LID_RECORD_IDS.d2Thickness]) {
-        expect(target(id)?.label, id).toBe('průměr nejvýš 0,92 mm');
+        expect(target(id)?.label, id).toBe('průměr nejvýš 0,92 mm (při P1 1,0)');
         expect(where.get(id)!.f.hint, id).toMatch(/ani jedno měření nemá víc než 0,92 mm/);
       }
       expect(target(LID_RECORD_IDS.p0K)?.max).toBe(DEFAULT_LID_WALLET.kMax);
@@ -385,6 +395,12 @@ describe('obsah – peněženka Víčko', () => {
       expect(target('card-pocket-width')?.min).toBe(90.5);
       expect(target('d1-from-f-edge')?.min).toBe(3.5);
       expect(stepAt(1, 'measure').body).toContain('víc než 0,92 mm');
+      // 0,92 platí jen pro P1 1,0, tlustší P1 hranici snižuje (čísla z modelu).
+      const maxAt = (p1Mm: number) => fmt(lidMaxDividerMm(lidWalletVariant({ p1Mm }))!);
+      expect(maxAt(1.0)).toBe('0,92');
+      expect(stepAt(1, 'measure').body).toContain(
+        `při 1,05 na ${maxAt(1.05)} a při 1,1 na ${maxAt(1.1).padEnd(4, '0')} mm`,
+      );
       expect(stepAt(2, 'k').body).toContain('nad 1,24');
       expect(stepAt(3, 'inspect').body).toContain('Do 0,3 mm nechte čáru z listu');
       expect(stepAt(2, 'bills').body).toContain('Cíl je aspoň 15 mm');
@@ -525,21 +541,36 @@ describe('obsah – peněženka Víčko', () => {
     });
   });
 
+  /** Příklady CraftPointu, jejichž ceny a sklad jsme znovu ověřili 8. 10. 2026. */
+  const RECHECKED_2026_10_08 = [
+    'hovezi-kuze-licova-juchtova-trislocinena-1-2-mm',
+    'trislocinena-hovezi-kuze-licova-usen-1-2-mm-blu',
+    'hovezi-licova-kuze-trislocinena-1-2-mm-whisky',
+    'horizontalni-palicka-na-kuzi',
+    'vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu',
+  ];
+  const rechecked = (url: string) =>
+    url.startsWith('https://craft-point.cz/') && RECHECKED_2026_10_08.some((h) => url.endsWith(h));
+
   describe('nákupní plán „Co koupit“', () => {
     const plan = lidWalletProject.shoppingPlan!;
 
-    it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10. 2026, Lederversand Berlin a useň P1 ze 7. 10. 2026)', () => {
+    it('každý řádek míří na právě jeden ověřený příklad z 29. 9. 2026 (maskovací páska z 1. 10. 2026, Lederversand Berlin a useň P1 ze 7. 10., ceny CraftPointu znovu 8. 10. 2026); skladem vše kromě výsečníku Ø 10', () => {
       for (const line of plan.lines) {
         const example = findPlanExample(line, equipmentCatalog);
         expect(example, `${line.equipmentSlug} ${line.url} ${line.variant ?? ''}`).toBeDefined();
-        expect(example!.availability, line.url).toBe('in_stock');
+        expect(example!.availability, line.url).toBe(
+          line.variant === 'Ø 10 mm' ? 'unavailable' : 'in_stock',
+        );
         expect(example!.checkedAt, line.url).toBe(
           line.equipmentSlug === 'masking-tape'
             ? '2026-10-01'
             : example!.shop === 'Lederversand Berlin' ||
                 line.equipmentSlug === 'veg-tan-leather-1mm'
               ? '2026-10-07'
-              : '2026-09-29',
+              : rechecked(line.url)
+                ? '2026-10-08'
+                : '2026-09-29',
         );
       }
     });
@@ -562,21 +593,21 @@ describe('obsah – peněženka Víčko', () => {
         lines.filter((l) => slugs.includes(l.equipmentSlug)).reduce((s, l) => s + l.lineCents, 0);
       expect(sum(['veg-tan-leather-1mm', 'thin-goatskin'])).toBe(123_306);
       expect(sum(['round-punches-8-14'])).toBe(15_000);
-      // Součty po obchodech napevno (ceny z 29. 9. a 7. 10. 2026): změna ceny nebo množství v katalogu
+      // Součty po obchodech napevno (ceny z 29. 9., 7. 10. a 8. 10. 2026): změna ceny nebo množství v katalogu
       // se tu musí projevit vědomě. Pořadí obchodů = pořadí první zmínky v plánu.
       expect(resolved.shops.map((g) => [g.shop, g.totalCents])).toEqual([
         ['Šijeme z kůže', 29_250],
         ['Lederversand Berlin', 94_056],
-        ['CraftPoint', 324_200],
+        ['CraftPoint', 324_000],
         ['ELIDIS', 1_212],
         ['Orodian', 820],
         ['OBI', 65_500],
         ['UNI HOBBY', 89_900],
         ['IKEA', 11_800],
       ]);
-      expect(resolved.totalCents).toBe(616_738);
+      expect(resolved.totalCents).toBe(616_538);
       expect(lines).toHaveLength(plan.lines.length);
-      expect(resolved.notInStockCount).toBe(0);
+      expect(resolved.notInStockCount).toBe(1);
     });
 
     it('drobnosti mimo katalog jsou v seznamu „mějte doma nebo dokupte“', () => {

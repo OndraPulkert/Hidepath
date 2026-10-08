@@ -319,7 +319,11 @@ export const animationPages = {
         'Zarovnejte a vyleštěte boky',
         'Dokončete hrany okének, D2 a jazýčku',
       ],
-      H: ['Zkoste nebo zaoblete hrany pásu', 'Zaleštěte hrany pásu'],
+      H: [
+        'Zkoste nebo zaoblete hrany pásu',
+        'Obarvěte hrany pásu (jen barevný pásek)',
+        'Zaleštěte hrany pásu',
+      ],
     },
   },
   threadLength: {
@@ -621,7 +625,7 @@ export const animationPages = {
       B: ['Hrot, nebo zaoblený', 'Délka konce podle šířky'],
       C: ['Co umí destička', 'Zaoblený jinak než 30 a 40 mm: list 2', 'Rychlé rozhodnutí'],
       D: [
-        'Zadejte šířku a konec ve „Váš pásek“',
+        'Zadejte šířku, konec a barvu ve „Váš pásek“',
         'Štítek „Destička“ pod zadáním',
         'Nahoře souhrn „Koupit“',
       ],
@@ -656,7 +660,7 @@ export const animationPages = {
       ],
       E: [
         'Nasaďte středicí vrták do křížku',
-        'Vrtejte do půlky tloušťky desky',
+        'Vrtejte, dokud středicí vrták neprojde',
         'Otočte desku a dokončete z druhé strany',
         'Vypáčte špunt z korunky',
         'Zaoblete hranu otvoru',

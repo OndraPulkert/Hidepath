@@ -166,7 +166,7 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
     text(
       strapX,
       keeperY - 4,
-      `Poutko — pásek ${len} × ${spec.keeperWidthMm} mm, obepíná 3 vrstvy: přehnutý konec a volný konec pásku`,
+      `Poutko — pásek ${len} × ${spec.keeperWidthMm} mm, obepíná 3 vrstvy: přehnutý konec, pás pod ním a volný konec pásku`,
       3,
     ),
   );
@@ -198,7 +198,7 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
       '4. Druhé 2 otvory označte skrz vyseknuté, vysekněte je, poutko vraťte mezi ně a sešroubujte nýty.',
       'Nýty: 2 kusy, každý prochází oběma vrstvami — proto jsou otvory čtyři.',
       'Rozměry z šablony Black Flag Leather Goods (jeden zdroj, ať se nemíchají rozteče).',
-      'Délka poutka a zaoblení konce jsou spočítané, ne ověřené — ověřte na odřezku.',
+      'Délka poutka je spočítaná, ne ověřená — ověřte na odřezku.',
     ]),
   );
   return out;

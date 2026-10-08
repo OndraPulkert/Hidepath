@@ -648,7 +648,7 @@ function saddle3(kk){
   s+=lbl(89,25.5,'líc předního','ts')+lbl(89,yB+5,'líc zadního','ts');
   return s;
 }
-add('D','Prošijte dno skrz tři vrstvy','Prošijte dno sedlářským stehem skrz všechny tři vrstvy: 17 otvorů, rozteč 4 mm, 3,5 mm od hrany. Na začátku ušijte dva zpětné stehy.',12000,t=>{
+add('D','Prošijte dno skrz tři vrstvy','Prošijte dno sedlářským stehem skrz všechny tři vrstvy hotovými otvory (rozteč 4 mm, 3,5 mm od hrany; na pouzdře 17 otvorů jako na obrázku, na cvičném proužku 6). Na začátku ušijte dva zpětné stehy.',12000,t=>{
   const u=es(t,.04,.92)*18, n=Math.floor(u), fr=u-n;
   let inner=frontView({moves:n,backHi:1});
   let s=clipMain(G(camT(FRONTC),inner));

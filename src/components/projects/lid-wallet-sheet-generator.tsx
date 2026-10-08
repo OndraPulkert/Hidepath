@@ -1,4 +1,4 @@
-import { type FormEvent, useId, useState } from 'react';
+import { type FormEvent, useId, useMemo, useState } from 'react';
 
 import {
   type GeneratedPatternSheet,
@@ -9,16 +9,18 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input, Label } from '@/components/ui/input';
 import { type PatternSheet } from '@/content/schema';
-import { fmt } from '@/lib/geometry/lid-wallet';
+import { fmt, lidWalletVariant } from '@/lib/geometry/lid-wallet';
 import {
   DEFAULT_LID_GENERATOR_FORM,
   type LidGeneratorForm,
   type LidP0Fields,
+  lidMaxDividerMm,
   lidP0ModelValues,
   lidSheetsForMeasured,
   parseLidGeneratorForm,
+  parseMm,
 } from '@/lib/patterns/lid-wallet-input';
-import { LID_FILE_STEM } from '@/lib/patterns/lid-wallet-sheets';
+import { LID_FILE_STEM, LID_P1_RANGE_MM } from '@/lib/patterns/lid-wallet-sheets';
 import { typo } from '@/lib/utils/format';
 
 const MODEL = lidP0ModelValues();
@@ -105,6 +107,19 @@ export function LidWalletSheetGenerator({
   const [problems, setProblems] = useState<string[]>([]);
   const [done, setDone] = useState<string | null>(null);
   const p0Prefilled = Object.values(start.p0).some((v) => v !== '');
+  // Hranice přepážek závisí na P1 (0,92 platí pro P1 1,0, tlustší P1 ji snižuje).
+  const dividerHint = useMemo(() => {
+    const p1Mm = parseMm(p1);
+    const max =
+      p1Mm !== undefined && p1Mm >= LID_P1_RANGE_MM[0] && p1Mm <= LID_P1_RANGE_MM[1]
+        ? lidMaxDividerMm(lidWalletVariant({ p1Mm }))
+        : undefined;
+    if (p1Mm === undefined || max === undefined) {
+      return 'Větší z D1 a D2. Při P1 1,0 projdou nejvýš 0,92 mm, tlustší P1 hranici snižuje.';
+    }
+    if (max === null) return `Větší z D1 a D2. S P1 ${fmt(p1Mm)} mm střih nevyjde.`;
+    return `Větší z D1 a D2. Při P1 ${fmt(p1Mm)} mm projdou nejvýš ${fmt(max)} mm.`;
+  }, [p1]);
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -196,7 +211,7 @@ export function LidWalletSheetGenerator({
               aria-describedby={`${id}-divider-hint`}
             />
             <p id={`${id}-divider-hint`} className="mt-1 text-meta text-ink-2">
-              {typo('Větší z D1 a D2. Nad 0,92 mm střih nejde.')}
+              {typo(dividerHint)}
             </p>
           </div>
           <div>

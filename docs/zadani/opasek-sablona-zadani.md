@@ -150,7 +150,7 @@ Všechny texty česky, čísla **s desetinnou čárkou**. Popisky, které závis
 
 - titulek `Opasek <šířka> mm — strana 1: konec u přezky` (resp. `strana 2: konec se špičkou`)
 - `hrot <délkaHrotu> mm`
-- `Poutko — pásek <délkaPoutka> × 12 mm, obepíná 3 vrstvy: přehnutý konec a volný konec pásku`
+- `Poutko — pásek <délkaPoutka> × 12 mm, obepíná 3 vrstvy: přehnutý konec, pás pod ním a volný konec pásku`
   a pod páskem `obvod 3 vrstev <obvod> mm + <π × 1,2> mm na tloušťku poutka 1,2 mm + 15 mm přeplátování`
 
 Popisky nezávislé na šířce (u všech šířek stejné):

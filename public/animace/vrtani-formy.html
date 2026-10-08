@@ -260,7 +260,9 @@ function drill(o={}){
 }
 
 // ---------- board section (mm, board top y=0, x=0 hole axis) ----------
-const BT=16, HB=BT/2;            // deska formy 16 mm (buk Orion 28 × 11,8 × 1,6 cm), půlka 8 mm
+const BT=16, HB=BT/2;            // deska formy 16 mm (bukové prkénko 28 × 11,8 × 1,6 cm), půlka 8 mm
+// 1. strana: zuby jdou tak hluboko, aby špička středicího vrtáku (P_OK-XT před zuby) vyšla zespodu o 2 mm
+const CUT1=BT-(P_OK-XT)+2, CUT2=BT-CUT1;
 function boardSec(o={}){
   const W=o.W||38; let s='';
   const R1=SAW_R-SAW_W-.2, R2=SAW_R+.2;
@@ -545,7 +547,7 @@ const SCHEM_D=lbl(132,87.5,'stůl a svěrky schematicky','ts','end');
 const tipLines=(x,y,arr,cls='ts',dy=5.2)=>arr.map((tx,i)=>lbl(x,y+i*dy,tx,cls)).join('');
 
 // D1
-add('D','Připravte stůl, odpadní prkno a 2 svěrky','Desku upnete svěrkou ke stolu přes odpadní prkno. Potřebujete stůl s pevnou deskou a rovnou hranou, odpadní prkno a svěrky (truhlářské rychlosvěrky nebo šroubové; Tip: dvě, viz D3). Deska formy s nalepeným papírem doprostřed šířky a s osami protaženými k okrajům, střed otvoru 4–5 cm od konce (na obrázku bukové prkénko 28 × 11,8 × 1,6 cm). Tip: odpadní prkno aspoň tak velké jako deska a silné aspoň 15 mm – středicí vrták vyčnívá 5–10 mm před zuby a do stolu dojet nesmí. Tip: desku stolu chraňte, vrtá se jen do odpadu.',8000,t=>{
+add('D','Připravte stůl, odpadní prkno a 2 svěrky','Desku upnete svěrkou ke stolu přes odpadní prkno. Potřebujete stůl s pevnou deskou a rovnou hranou, odpadní prkno a svěrky (truhlářské rychlosvěrky nebo šroubové; Tip: dvě, viz D3). Deska formy s nalepeným papírem doprostřed šířky a s osami protaženými k okrajům, střed otvoru 4–5 cm od konce (na obrázku bukové prkénko 28 × 11,8 × 1,6 cm). Na vrtání stačí, při lisování ale musí nad minci dosáhnout dvě svěrky proti sobě z dlouhých stran: svěrky z nákupu (vyložení 50 mm) dosáhnou jen u desky nejvýš asi 8 cm široké, na tohle prkénko potřebujete svěrky s větším vyložením (ověřte, že dosáhnou za střed otvoru). Tip: odpadní prkno aspoň tak velké jako deska a silné aspoň 15 mm – středicí vrták vyčnívá 5–10 mm před zuby a do stolu dojet nesmí. Tip: desku stolu chraňte, vrtá se jen do odpadu.',11000,t=>{
   const k=.26, x0=8, y0=17, X=mm=>x0+mm*k, Y=mm=>y0+mm*k, hx=X(45), hy=Y(59);
   const a=(i)=>`opacity="${f(seg(t,.08+i*.1,.2+i*.1))}"`;
   let s=HDR(2,6.5,'DESKA FORMY SHORA');
@@ -646,7 +648,7 @@ add('D','Zkontrolujte upnutí','Zatlačte do desky ze strany – nesmí se pohno
   return s;
 });
 // D5
-add('D','Druhá strana: otočte a znovu upněte','Až vyvrtáte první stranu do půlky (krok E2), svěrky povolte a desku otočte podél dlouhé hrany, aby otvor zůstal na konci dál od svěrek – dírka po středicím vrtáku je teď nahoře. Položte ji zpátky na odpadní prkno, upněte stejně jako předtím a středicí vrták nasaďte do dírky. Tip: při přeupínání vyndejte z vrtačky baterii. Tip: korunka teď na konci vyjde do odpadu – stačí, když pod otvorem zase leží odpadní prkno.',10000,t=>{
+add('D','Druhá strana: otočte a znovu upněte','Až z první strany projde středicí vrták (krok E2), svěrky povolte a desku otočte podél dlouhé hrany, aby otvor zůstal na konci dál od svěrek – dírka po středicím vrtáku je teď nahoře. Položte ji zpátky na odpadní prkno, upněte stejně jako předtím a středicí vrták nasaďte do dírky. Tip: při přeupínání vyndejte z vrtačky baterii. Tip: korunka teď na konci vyjde do odpadu – stačí, když pod otvorem zase leží odpadní prkno.',10000,t=>{
   const loose=es(t,.04,.16), out=es(t,.18,.3), lift=es(t,.32,.42)*(1-es(t,.6,.7)), flip=seg(t,.42,.6), back=es(t,.72,.82), tight=es(t,.84,.95);
   const gap=t<.7?L(0,14,loose):L(14,0,tight);
   const cdx=t<.7?L(0,70,out):L(70,0,back), cop=t<.7?1-seg(t,.24,.3):seg(t,.72,.76);
@@ -700,25 +702,25 @@ add('E','Nasaďte středicí vrták do křížku','Deska je upnutá ke stolu př
   return s;
 });
 // E2
-add('E','Vrtejte do půlky tloušťky desky','Vrtejte korunkou Ø 32 mm (u mince 40 mm Ø 44 mm) na 1. rychlost, bez příklepu a bez tlaku – jen do půlky tloušťky desky, pak přestaňte. Tip: v půlce už středicí vrták projde deskou a jeho dírka bude vidět zespodu. Tip: korunku občas vytáhněte a piliny odstraňte.',9000,t=>{
+add('E','Vrtejte, dokud středicí vrták neprojde','Vrtejte korunkou Ø 32 mm (u mince 40 mm Ø 44 mm) na 1. rychlost, bez příklepu a bez tlaku, dokud špička středicího vrtáku nevyjde zespodu z desky (korunka je pak zhruba v půlce tloušťky), pak přestaňte. Dírka po středicím vrtáku je vidět zespodu a podle ní dokončíte z druhé strany. Tip: korunku občas vytáhněte a piliny odstraňte.',9000,t=>{
   const c1=es(t,.08,.45), lift=es(t,.5,.6)*(1-es(t,.62,.7)), c2=es(t,.72,.92);
-  const cut=Math.min(HB, c1*5.5 + c2*2.5);
+  const cut=Math.min(CUT1, (c1*5.5 + c2*2.5)*CUT1/8);
   const toolCut = cut - lift*14;
   let s=`<clipPath id="dc2"><rect x="0" y="0" width="85" height="90"/></clipPath>`;
-  let inner=closeBoard({kerfTop:cut,pilotTop:cut+8,paper:'top'});
+  let inner=closeBoard({kerfTop:cut,pilotTop:cut+(P_OK-XT),paper:'top'});
   if(t>.6&&t<.7) inner+=G(`translate(${BX} ${BY}) scale(${BK})`,`<g opacity="${f(1-seg(t,.62,.7))}"><rect x="-16.3" y="-1.6" width="4" height="1.6" fill="var(--wood-d)"/><rect x="12.3" y="-1.6" width="4" height="1.6" fill="var(--wood-d)"/></g>`);
   inner+=closeTool(toolCut);
   const spinning=(t>.08&&t<.45)||(t>.72&&t<.92);
   if(spinning) inner+=G(`translate(${BX} ${BY}) scale(${BK})`,chips(0,-1,t))+spin(BX,BY-38,9,2.5);
   s+=G('',inner,'clip-path="url(#dc2)"');
   if(t>.5&&t<.7) s+=lbl(4,86,'vytáhnout, piliny pryč','ta');
-  const through=cut+8>BT;
+  const through=cut+(P_OK-XT)>BT;
   s+=WASTE_L;
   // inset: settings + pilot through
   let ins=lbl(89,16,'1. rychlost','t')+lbl(89,22,'bez příklepu','t')+lbl(89,28,'bez tlaku, pomalu','t');
   ins+=`<rect x="89" y="36" width="41" height="26" rx="1.5" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".3"/>`+lbl(109.5,40.5,'deska zespodu','ts','middle').replace('class="ts"','class="ts" style="fill:#4a3826"');
   if(through) ins+=`<circle cx="109.5" cy="51" r="2.4" fill="var(--hole)"/>`;
-  ins+=lbl(109.5,70,through?'vrták prošel:':'vrtejte…','t','middle')+(through?lbl(109.5,76,'v půlce přestaňte','ta','middle'):'');
+  ins+=lbl(109.5,70,through?'vrták prošel:':'vrtejte…','t','middle')+(through?lbl(109.5,76,'teď přestaňte','ta','middle'):'');
   if(through) ins+=tick(128,69);
   s+=inset('',ins);
   return s;
@@ -728,14 +730,14 @@ add('E','Otočte desku a dokončete z druhé strany','Desku otočte, znovu upně
   const up=es(t,0,.12), flip=seg(t,.14,.38), down=es(t,.42,.55), c=es(t,.58,.9), done=t>.92, out=es(t,.92,1);
   const fy=Math.cos(Math.PI*flip);
   let body;
-  if(flip<.5) body=boardSec({W:38,kerfTop:HB,pilotHole:1,paper:'top'});
-  else body=boardSec({W:38,kerfTop:HB,kerfBot:c*HB,pilotHole:1,paper:'top'}); // kreslí se před převrácením: scale(1,-1) dá starý řez a papír dolů
+  if(flip<.5) body=boardSec({W:38,kerfTop:CUT1,pilotHole:1,paper:'top'});
+  else body=boardSec({W:38,kerfTop:CUT1,kerfBot:c*CUT2,pilotHole:1,paper:'top'}); // kreslí se před převrácením: scale(1,-1) dá starý řez a papír dolů
   if(done) body=boardSec({W:38,through:1,paper:'top'});
   let s=`<clipPath id="dc3"><rect x="0" y="0" width="85" height="90"/></clipPath>`;
   let inner=G(`translate(${BX} ${BY}) scale(${BK})`,waste(40)+G(`translate(0 ${HB}) scale(1 ${f(Math.abs(fy)<.05?.05:fy)}) translate(0 ${-HB})`,body));
-  const toolCut = t<.42 ? -up*22 : (t<.58? L(-22,0,down) : (done? HB-out*25 : c*HB));
+  const toolCut = t<.42 ? -up*22 : (t<.58? L(-22,0,down) : (done? CUT2-out*25 : c*CUT2));
   if(done) inner+=G(`translate(${BX} ${BY}) scale(${BK})`,plug(-out*25));
-  inner+=closeTool(t<.12?L(HB,-22,up):toolCut,{});
+  inner+=closeTool(t<.12?L(CUT1,-22,up):toolCut,{});
   if(t>.58&&t<.9) inner+=G(`translate(${BX} ${BY}) scale(${BK})`,chips(0,-1,t))+spin(BX,BY-38,9,2.5);
   s+=G('',inner,'clip-path="url(#dc3)"');
   if(t>.14&&t<.4) s+=lbl(4,86,'otočit a znovu upnout','ta');
@@ -743,8 +745,8 @@ add('E','Otočte desku a dokončete z druhé strany','Desku otočte, znovu upně
   if(done) s+=lbl(4,86,'průchozí otvor Ø 32','tok');
   s+=WASTE_L;
   // inset
-  let ins=lbl(89,16,'1. strana: do půlky','t')+lbl(89,22,'2. strana: dokončit','t');
-  ins+=G('translate(109.5 44) scale(.55)',boardSec({W:30,kerfTop:flip>=.5?c*HB:HB,kerfBot:flip>=.5?HB:0,pilotHole:1}));
+  let ins=lbl(89,16,'1. strana: než projde vrták','t')+lbl(89,22,'2. strana: dokončit','t');
+  ins+=G('translate(109.5 44) scale(.55)',boardSec({W:30,kerfTop:flip>=.5?c*CUT2:CUT1,kerfBot:flip>=.5?CUT1:0,pilotHole:1}));
   ins+=lbl(109.5,62,'řezy se potkají','ta','middle');
   ins+=G('',lbl(109.5,70,'papír je teď dole','ts','middle'),`opacity="${f(seg(t,.26,.38))}"`);
   s+=inset('',ins);
@@ -766,7 +768,7 @@ add('E','Vypáčte špunt z korunky','Tip: vrtačku odložte a vyndejte baterii,
   return s;
 });
 // E5
-add('E','Zaoblete hranu otvoru','Papír sundejte. Horní hranu otvoru (stranu pro kůži, označte si ji tužkou) srazte smirkem 180 namotaným na prstu do oblouku asi 1 mm. Průměr nezvětšujte. Stěnu otvoru jen lehce začistěte a plochu kolem přebruste naplocho. Hrana nesmí řezat ani drhnout a mince zabalená s odřezkem kůže musí jít do otvoru volně. Setřené osy obtáhněte znovu.',7000,t=>{
+add('E','Zaoblete hranu otvoru','Papír sundejte. Horní hranu otvoru (stranu pro kůži, označte si ji tužkou) srazte smirkem 180 namotaným na prstu do mírného oblouku (velikost ověřte na odřezku). Průměr nezvětšujte. Stěnu otvoru jen lehce začistěte a plochu kolem přebruste naplocho. Hrana nesmí řezat ani drhnout a mince zabalená s odřezkem kůže musí jít do otvoru volně. Setřené osy obtáhněte znovu.',7000,t=>{
   const rd=es(t,.15,.85);
   let s=G(`translate(${BX} ${BY}) scale(${BK})`,waste(40)+boardSec({W:38,through:1,round:rd}));
   if(t>.12&&t<.88){const a=(t-.12)*12;const side=Math.sin(a)>0?1:-1;const x=BX+side*(SAW_R+.8)*BK, y=BY-1.4;s+=`<g transform="translate(${f(x)} ${f(y)}) rotate(${side*-45})"><ellipse rx="4.5" ry="2.6" fill="var(--sand)" stroke="var(--sand-d)" stroke-width=".35"/><ellipse rx="2.6" ry="1.5" fill="#e8c9a8" opacity=".8"/></g>`}
@@ -775,7 +777,7 @@ add('E','Zaoblete hranu otvoru','Papír sundejte. Horní hranu otvoru (stranu pr
   // corner detail
   const k=6, r=1*rd;
   const ch=`<g transform="translate(92 16) scale(${k})"><path d="M0 0 H${f(4-r)} Q4 0 4 ${f(r)} V7 H0 Z" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".06"/>${rd<1?`<path d="M3 0 Q4 0 4 1" fill="none" stroke="var(--accent)" stroke-width=".07" stroke-dasharray=".2 .15"/>`:''}</g>`;
-  s+=inset('DETAIL HRANY',ch+`<rect x="116" y="16" width="14" height="42" fill="var(--hole)" opacity=".85"/>`+lbl(123,38,'otvor','ts','middle').replace('class="ts"','class="ts" style="fill:#e8dccd"')+lbl(89,65,'oblouk asi 1 mm','t')+lbl(89,71,'smirek 180','ts')+lbl(89,76,'průměr nezvětšovat','ts'));
+  s+=inset('DETAIL HRANY',ch+`<rect x="116" y="16" width="14" height="42" fill="var(--hole)" opacity=".85"/>`+lbl(123,38,'otvor','ts','middle').replace('class="ts"','class="ts" style="fill:#e8dccd"')+lbl(89,65,'mírný oblouk','t')+lbl(89,71,'smirek 180','ts')+lbl(89,76,'průměr nezvětšovat','ts'));
   return s;
 });
 

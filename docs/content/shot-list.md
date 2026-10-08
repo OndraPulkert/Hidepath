@@ -30,9 +30,9 @@ Celkem 55 slotů · k natočení 49 · hotovo 6.
 | Lekce 5 · hlavní záběr | foto | Dva vyříznuté díly pouzdra ležící na papírové šabloně |  |
 | Lekce 5 · krok 3: Přeneste obrys | foto | Papírová šablona přilepená páskou na rubu kůže, ruka obtahuje obrys tupou jehlou |  |
 | Lekce 5 · krok 4: Vyřízněte díly | video | Řezání zaobleného rohu krátkými tahy, nůž kolmo k podložce, druhá ruka otáčí kůží | ~40 s |
-| Lekce 5 · krok 5: Vyřízněte výřez na palec | foto | Přední kapsa s narýsovaným obloukem výřezu, vedle ní hotový výřez dobroušený smirkem na tužce |  |
+| Lekce 5 · krok 5: Vyřízněte výřez na palec | foto | Přední kapsa s výřezem nasekaným krátkými rovnými řezy, vedle ní hotový výřez dobroušený smirkem na tužce |  |
 | Lekce 6 · hlavní záběr | foto | Hotové pouzdro na karty z přírodní třísločiněné kůže, sedlářský steh, detail |  |
-| Lekce 6 · krok 2: Vyznačte lepenou plochu na zadním dílu | foto | Zadní díl z líce s vyznačeným pásem 8 mm podél spodku a boků, končícím u vpichů pod výškou kapsy 56 mm; nad nimi čistá kůže |  |
+| Lekce 6 · krok 2: Vyznačte lepenou plochu na zadním dílu | foto | Zadní díl z líce s vyznačeným pásem 5 mm podél spodku a boků, na bocích končícím pod maskovací páskou asi 6 mm pod vpichy (výška kapsy 56 mm); nad páskou čistá kůže |  |
 | Lekce 6 · krok 3: Slepte díly | foto | Slepené díly pouzdra z líce: přední kapsa lícuje s boky a spodkem zadního dílu, nahoře přesah |  |
 | Lekce 6 · krok 4: Děrujte boky a spodek | foto | Detail spodního rohu: řada otvorů zatáčí po zaoblení, všude 3,5 mm od hrany |  |
 | Lekce 6 · krok 5: Sešijte tři strany | video | Šití rohu pouzdra: průchod otvory v zatáčce a pokračování po spodní hraně, obě jehly | ~60 s |

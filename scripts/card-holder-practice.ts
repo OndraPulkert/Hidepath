@@ -213,8 +213,8 @@ const BLOCKS: Block[] = [
       `Výřez na delší straně, dno R${N.bottomRadiusMm} (vydutý oblouk).`,
       'Nejdřív šídlem propíchněte obě tečky skrz papír',
       'do kůže – dokud je šablona přilepená.',
-      'Pak rovné strany s pravítkem, výřez pomalu',
-      'bez pravítka, 2–3 lehké tahy.',
+      'Pak rovné strany s pravítkem, výřez až nakonec:',
+      'krátké rovné řezy, každý od čáry k čáře (lekce 5).',
       'Po sejmutí šablony musí být tečky vidět na rubu.',
     ],
     notch: true,
@@ -225,8 +225,8 @@ const STEPS = [
   '# Postup – stejně jako u šablony pouzdra v lekci 5',
   '1. Tiskněte na 100 % a změřte kontrolní úsečku dole: přesně 50 mm.  2. Každý tvar vystřihněte nůžkami',
   'nahrubo po čárkované čáře.  3. Položte ho na rub odřezku a přilepte maskovací páskou na okraji, mimo plnou čáru,',
-  'z několika stran.  4. Šídlem propíchněte tečky.  5. Řežte nožem skrz papír i kůži po plné čáře: rovné strany',
-  's pravítkem, oblouky bez pravítka, 2–3 lehké tahy.  6. Pásku strhávejte pomalu, pod ostrým úhlem.',
+  'z několika stran.  4. Šídlem propíchněte tečky.  5. Řežte nožem skrz papír i kůži po plné čáře, 2–3 lehké tahy:',
+  'rovné strany s pravítkem, roh bez pravítka, výřez nakonec krátkými rovnými řezy od čáry k čáře.  6. Pásku strhávejte pomalu.',
 ];
 
 export function buildPracticeSheetSvg(): string {

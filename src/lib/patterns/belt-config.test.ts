@@ -127,7 +127,7 @@ describe('parametrický pásek – výpočet', () => {
     // Od nejlevnější; výchozí zůstává CraftPoint (jedna zásilka s přezkou a nýty). Světle hnědý
     // Ecocase je barvený: mezi přírodními není.
     expect(shopsOf(r40)).toEqual([
-      ['CraftPoint', 130, 28_500],
+      ['CraftPoint', 130, 28_400],
       ['Imago', 130, 29_900],
       ['Křupson', 130, 29_900],
     ]);
@@ -188,7 +188,7 @@ describe('parametrický pásek – barva', () => {
   it('černý 40 × 3,5 mm: jen černé nabídky, výchozí CraftPoint, barva na hrany ověřená', () => {
     const input: BeltConfigInput = { ...base, waistMm: 950, color: 'cerna' };
     expect(offersOf(input)).toEqual([
-      ['CraftPoint', 'cerna', 29_100, 'in_stock'],
+      ['CraftPoint', 'cerna', 29_000, 'in_stock'],
       ['Imago', 'cerna', 29_900, 'in_stock'],
     ]);
     const r = derive(input);

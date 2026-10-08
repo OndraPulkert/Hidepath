@@ -110,7 +110,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 <a class="backlink" href="/" data-back>← Zpět do lekce</a>
 <h1>Pásek: konec s přezkou</h1>
 <p class="lead">Projekt 04, lekce 4. Řada 3 destičky (nebo list 1) na rubu pásu, první dvojice otvorů a ovál, poutko navlečené na pás, ohyb kolem příčky a druhá dvojice skrz už vyseknuté otvory.</p>
-<p class="lead"><b>Příklad pro 40 mm – vaše čísla v tabulce Váš pásek.</b> Pás 40 × 3,5 mm: ovál 25 × 6 mm, ohyb 90 mm od konce, otvory pro nýty 16,8 / 64,5 / 115,5 / 163,2 mm od konce, poutko 12 × 120 mm (obepíná 3 vrstvy: přehnutý konec a volný konec), nýt 10/6. Ovál, ohyb a otvory jsou stejné pro všechny šířky 28–45 mm.</p>
+<p class="lead"><b>Příklad pro 40 mm – vaše čísla jsou pod kroky lekcí a v tabulce „Váš pásek“.</b> Pás 40 × 3,5 mm: ovál 25 × 6 mm, ohyb 90 mm od konce, otvory pro nýty 16,8 / 64,5 / 115,5 / 163,2 mm od konce, poutko 12 × 120 mm (obepíná 3 vrstvy: přehnutý konec, pás pod ním a volný konec), nýt 10/6. Ovál, ohyb a otvory jsou stejné pro všechny šířky 28–45 mm.</p>
 </header>
 
 <section class="card" aria-label="Animace postupu">
@@ -576,7 +576,7 @@ add('C','Boky oválu nožem','Boky řízněte nožem tečně k oběma otvorům: 
 },RUB);
 
 // C4 — hrana oválu, dokud je konec rovný
-add('C','Zaleštěte hranu oválu','Vnitřní hranu oválu (přes ni jezdí trn) srazte brusným papírem a zaleštěte Tokonole kulatým leštítkem nebo kolíčkem teď, dokud je konec rovný: po ohnutí kolem příčky se k ní nedostanete.',8400,t=>{
+add('C','Zaleštěte hranu oválu','Vnitřní hranu oválu (přes ni jezdí trn) srazte brusným papírem, u barevného pásku obarvěte jako v lekci 3 a leštěte až zaschlou barvu. Pak ji zaleštěte Tokonole kulatým leštítkem nebo kolíčkem teď, dokud je konec rovný: po ohnutí kolem příčky se k ní nedostanete.',8400,t=>{
   const c=CAM_OV;const p=es(t,.12,.86);
   let s=cam(c,()=>{
     let q=board()+strapRub()+marks({foldLine:1,fold:1,oval:1});
@@ -591,7 +591,7 @@ add('C','Zaleštěte hranu oválu','Vnitřní hranu oválu (přes ni jezdí trn)
 },RUB,'Tip: leštítko je kreslené schematicky.');
 
 // D1 — změřte poutko (konec volně na dvojo, ještě bez ohybu, + třetí vrstva)
-add('D','Změřte poutko proužkem','Poutkem bude procházet i volný konec pásku, takže obepíná 3 vrstvy. Konec pásu přeložte volně na dvojo, zatím bez ohybu kolem příčky, a přiložte k němu třetí vrstvu: druhý konec pásu nebo odřezek z lekce 2. Papírový proužek obtočte kolem všech 3 vrstev, označte, kde se potká se svým začátkem, a obvod odečtěte na pravítku. Délka poutka = obvod + asi 4 mm na tloušťku poutka + 15 mm přeplátování. Porovnejte s tabulkou „Váš pásek“ (např. '+KEEP_LEN+' mm pro 40 × 3,5 mm).',9800,t=>{
+add('D','Změřte poutko proužkem','Poutkem bude procházet i volný konec pásku, takže obepíná 3 vrstvy. Konec pásu přeložte volně na dvojo, zatím bez ohybu kolem příčky, a přiložte k němu třetí vrstvu: druhý konec pásu nebo odřezek z lekce 2. Papírový proužek obtočte kolem všech 3 vrstev, označte, kde se potká se svým začátkem, a obvod odečtěte na pravítku destičky (nula vlevo) nebo na ocelovém pravítku. Délka poutka = obvod + π × tloušťka poutka (asi 4 mm u odřezku 1,2 mm, asi 9 mm u 3 mm, asi 11 mm u 3,5 mm) + 15 mm přeplátování. Porovnejte s délkou poutka aktivního pásku pod krokem (např. '+KEEP_LEN+' mm pro 40 × 3,5 mm): ta počítá s odřezkem 1,2 mm, se silnějším odřezkem vyjde delší.',9800,t=>{
   const k=1.6,ox=67.5,oy=28;const X=u=>ox+u*k,Y=v=>oy-v*k;
   let s='';
   // řez napříč: přehnutý konec a pás (líc ven) + třetí vrstva = volný konec (rubem k líci pásu)
@@ -622,7 +622,7 @@ add('D','Změřte poutko proužkem','Poutkem bude procházet i volný konec pás
 },null,'Tip: 4 mm je tloušťka poutka v ohybech (π × 1,2 mm u odřezku 1,2 mm); tloušťky jsou kreslené v měřítku příkladu.');
 
 // D2 — vyřízněte a slepte poutko
-add('D','Vyřízněte a slepte poutko','Z odřezku vyřízněte proužek 12 mm × změřená délka. Přeplátování 15 mm natřete kontaktním lepidlem na obě strany, nechte zavadnout podle návodu na obalu a slepte.',9400,t=>{
+add('D','Vyřízněte a slepte poutko','Z odřezku vyřízněte proužek 12 mm × změřená délka. V přeplátování leží rub na líci: líc pod ním zdrsněte smirkem 180, z hladkého líce lepidlo pouští. Přeplátování 15 mm natřete kontaktním lepidlem na obě strany, nechte zavadnout podle návodu na obalu a slepte. Délka poutka je spočítaná, ne vyzkoušená: ověřte ji proužkem.',9400,t=>{
   const k=.9,x0=13,x1=x0+KEEP_LEN*k,y0=12,y1=12+KEEP_W,mv=es(t,.3,.4)*14;
   // řezy podél ocelového pravítka: pravítko leží na proužku, nůž na straně odpadu
   const c1=es(t,.04,.12),c2=es(t,.12,.2),c3=es(t,.2,.25),c4=es(t,.25,.3);
@@ -754,7 +754,7 @@ add('E','Ohněte zpět a vraťte poutko','Konec ohněte zpět kolem příčky s 
 },{v:'LÍC',sub:'přehnutý konec'});
 
 // E6 — sešroubovat
-add('E','Sešroubujte nýty','Nýty sešroubujte: hlavičku s dutým dříkem z líce pásu, šroubek z rubu přehnutého konce, utáhněte plochým šroubovákem. Na závit dejte kapku zajišťovače závitů nebo laku: nýty v nejzatíženějším místě se povolují.',8600,t=>{
+add('E','Sešroubujte nýty','Nýty sešroubujte: hlavičku s dutým dříkem z líce pásu, šroubek z druhé strany, na přehnutém konci (strana k tělu), utáhněte plochým šroubovákem. Na závit dejte kapku zajišťovače závitů nebo laku: nýty v nejzatíženějším místě se povolují.',8600,t=>{
   const c=CAM_FT;const s1=es(t,.38,.62),s2=es(t,.64,.88);
   let s=cam(c,()=>foldedTop({keeper:KEEP_C,screws:[s1,s2]}));
   // kapka na závit (bokem)
@@ -766,7 +766,7 @@ add('E','Sešroubujte nýty','Nýty sešroubujte: hlavičku s dutým dříkem z 
     if(dp>=1) q+=`<rect x="${f(sx-1.6*k)}" y="${f(oy-5*k)}" width="${f(3.2*k)}" height="${f(2*k)}" fill="var(--lock)" opacity=".55"/>`;
     q+=pill(ox,85,'dřík','ts','middle')+pill(sx,85,'šroub','ts','middle');
     return q})()});
-  s+=zbox(69,52,62,35,'NÝT 10/6',null,null,{raw:notes([['spoj 2 × 3,5 = 7 mm','t'],['dřík 5,5–6,0 mm','t'],['dřík z líce pásu','t'],['šroubek z rubu','t']],66,5.4,72.5)});
+  s+=zbox(69,52,62,35,'NÝT 10/6',null,null,{raw:notes([['spoj 2 × 3,5 = 7 mm','t'],['dřík 5,5–6,0 mm','t'],['dřík z líce pásu','t'],['šroubek k tělu','t']],66,5.4,72.5)});
   s+=`<g opacity="${f(seg(t,.9,.98))}">${(()=>{const [a,b]=at(c,KEEP_C,BW/2+KT);return pill(a,b+6,'poutko mezi nýty','tok','middle')})()}</g>`;
   return s;
 },{v:'LÍC',sub:'přehnutý konec'});
