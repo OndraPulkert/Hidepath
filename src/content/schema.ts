@@ -506,6 +506,42 @@ export const patternSheetsDefinitionSchema = z.object({
 });
 export type PatternSheetsDefinition = z.infer<typeof patternSheetsDefinitionSchema>;
 
+/** Skupiny slovníčku projektu (pořadí = pořadí na stránce projektu). */
+export const GLOSSARY_GROUPS = ['parts', 'glue', 'seams', 'tests'] as const;
+export const glossaryGroupSchema = z.enum(GLOSSARY_GROUPS);
+export type GlossaryGroup = z.infer<typeof glossaryGroupSchema>;
+
+/**
+ * Heslo slovníčku: zkratka nebo název části výrobku, krátké jméno, jedna věta popisu a kde
+ * díl / místo je. Zkratky se v textu kroků lekcí vykreslí jako vysvětlivka; heslo s `inline:
+ * false` (např. úsek pásu bez zkratky) je jen v seznamu na stránce projektu.
+ */
+export const glossaryEntrySchema = z.object({
+  /** Jak se píše v lekcích: „P1“, „G2b“, „Z-1“, „k“, „záloha A“. */
+  term: z.string().min(1),
+  name: z.string().min(1),
+  description: z.string().min(1),
+  where: z.string().min(1),
+  group: glossaryGroupSchema,
+  /**
+   * Regulární výraz (zdroj, příznaky `u`) pro výskyt v textu, když nestačí celé slovo `term`
+   * (jednopísmenné zkratky, „záloze A“, „ve stavu B“). Hranice slov hlídá kód.
+   */
+  pattern: z.string().min(1).optional(),
+  /** `false` = jen v seznamu, v textu lekcí se nehledá. */
+  inline: z.literal(false).optional(),
+});
+export type GlossaryEntry = z.infer<typeof glossaryEntrySchema>;
+
+export const glossarySchema = z.object({
+  /** Nadpis karty na stránce projektu, např. „Díly Víčka“. */
+  title: z.string().min(1),
+  /** Schéma nad seznamem (kreslí aplikace z modelu v `src/lib`). */
+  diagram: z.enum(['lid-wallet-strip']).optional(),
+  entries: z.array(glossaryEntrySchema).min(1),
+});
+export type Glossary = z.infer<typeof glossarySchema>;
+
 /**
  * Řádek nákupního plánu: kolik kusů kterého ověřeného příkladu z katalogu koupit. Cenu, obchod
  * a dostupnost plán neopisuje – bere je z příkladu (`url` + případně `variant`), aby se ceny
@@ -569,6 +605,8 @@ export const projectDefinitionSchema = z
     practiceSheets: patternSheetsDefinitionSchema.optional(),
     /** Nákupní plán „Co koupit“ (volitelný); ceny a odkazy bere z příkladů v katalogu. */
     shoppingPlan: shoppingPlanSchema.optional(),
+    /** Díly a zkratky (volitelné): karta na stránce projektu a vysvětlivky v krocích lekcí. */
+    glossary: glossarySchema.optional(),
     media: z.array(mediaSlotSchema),
     contentVersion: z.number().int().positive(),
     reviewStatus: reviewStatusSchema,

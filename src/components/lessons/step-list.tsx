@@ -1,11 +1,17 @@
 import { type ReactNode } from 'react';
 
 import { LESSON_ANCHORS } from '@/app/routes';
+import { GlossaryText } from '@/components/glossary/glossary-term';
 import { MediaSlot } from '@/components/lessons/media-slot';
 import { StepLinks } from '@/components/lessons/step-links';
 import { Button } from '@/components/ui/button';
 import { animationButtonText, animationPages } from '@/content/animations';
-import { type LessonStep, type ProjectDefinition, type TemplateDefinition } from '@/content/schema';
+import {
+  type Glossary,
+  type LessonStep,
+  type ProjectDefinition,
+  type TemplateDefinition,
+} from '@/content/schema';
 import { typo } from '@/lib/utils/format';
 
 export function StepList({
@@ -14,6 +20,7 @@ export function StepList({
   projectSlug,
   patternSheets,
   renderStepExtras,
+  glossary,
 }: {
   steps: readonly LessonStep[];
   template: TemplateDefinition | undefined;
@@ -22,6 +29,8 @@ export function StepList({
   patternSheets?: ProjectDefinition['patternSheets'];
   /** Doplňky pod textem kroku (časovače, zápisník, připomínky); `index` od 0. */
   renderStepExtras?: (step: LessonStep, index: number) => ReactNode;
+  /** Slovníček projektu: zkratky v textu kroku dostanou vysvětlivku (první výskyt v kroku). */
+  glossary?: Glossary | undefined;
 }) {
   return (
     <ol className="flex flex-col gap-6">
@@ -35,7 +44,9 @@ export function StepList({
           </span>
           <div className="flex min-w-0 flex-1 flex-col gap-3">
             <h3 className="text-step font-semibold">{typo(step.title)}</h3>
-            <p className="text-body text-ink-2">{typo(step.body)}</p>
+            <p className="text-body text-ink-2">
+              <GlossaryText text={typo(step.body)} entries={glossary?.entries} />
+            </p>
             <StepLinks step={step} project={{ slug: projectSlug, patternSheets }} />
             {step.animationLinks ? (
               // Obyčejné odkazy, ne router <Link>: animace jsou statické stránky mimo SPA

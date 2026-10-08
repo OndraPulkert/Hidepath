@@ -1,4 +1,5 @@
 import { screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { StepList } from '@/components/lessons/step-list';
 import { animationLink } from '@/content/animations';
@@ -134,5 +135,58 @@ describe('StepList – odkazy na stránky aplikace', () => {
       'href',
       '/projects/belt/vas-pasek',
     );
+  });
+});
+
+describe('StepList – vysvětlivky zkratek ze slovníčku', () => {
+  const lid = projects.find((p) => p.slug === 'lid-wallet')!;
+  const step: LessonStep = {
+    id: 'glue-d2',
+    title: 'Lepení D2',
+    body: 'D2 lepte rubem na rub B ve stavu B; D2 pak sešijte.',
+    media: [],
+  };
+
+  it('první výskyt zkratky je tlačítko s jménem dílu, klepnutí ukáže vysvětlivku', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(
+      <StepList
+        steps={[step]}
+        template={undefined}
+        projectSlug={lid.slug}
+        glossary={lid.glossary}
+      />,
+    );
+    const item = stepItem('Lepení D2');
+    const d2 = within(item).getByRole('button', { name: 'D2 – přepážka bankovky / mince' });
+    // Druhé „D2“ už tlačítko není; „ve stavu B“ není záda.
+    expect(within(item).getAllByRole('button', { name: /^D2/ })).toHaveLength(1);
+    expect(within(item).getByRole('button', { name: 'B – záda' })).toBeInTheDocument();
+    expect(within(item).getByRole('button', { name: /^stavu B – plnost/ })).toBeInTheDocument();
+    expect(item).toHaveTextContent('D2 lepte rubem na rub B ve stavu B; D2 pak sešijte.');
+
+    expect(d2).toHaveAttribute('aria-expanded', 'false');
+    await user.click(d2);
+    expect(d2).toHaveAttribute('aria-expanded', 'true');
+    const note = within(item).getByRole('note');
+    expect(note).toHaveTextContent('D2 – přepážka bankovky / mince');
+    expect(note).toHaveTextContent('Čokoládová kozinka');
+
+    await user.keyboard('{Escape}');
+    expect(within(item).queryByRole('note')).not.toBeInTheDocument();
+
+    // Klávesnice: Enter otevře, klik do bubliny ji nechá, Tab na další zkratku ji zavře.
+    d2.focus();
+    await user.keyboard('{Enter}');
+    await user.click(within(item).getByRole('note'));
+    expect(within(item).getByRole('note')).toBeInTheDocument();
+    d2.focus();
+    await user.tab();
+    expect(within(item).queryByRole('note')).not.toBeInTheDocument();
+  });
+
+  it('bez slovníčku zůstane text kroku obyčejný', () => {
+    renderWithProviders(<StepList steps={[step]} template={undefined} projectSlug="p" />);
+    expect(within(stepItem('Lepení D2')).queryAllByRole('button')).toHaveLength(0);
   });
 });

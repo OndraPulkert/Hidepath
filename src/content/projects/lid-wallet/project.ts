@@ -1,5 +1,6 @@
 import { animationLink } from '@/content/animations';
 import { illustration } from '@/content/projects/lid-wallet/illustrations';
+import { lidWalletGlossary } from '@/content/projects/lid-wallet/parts';
 import {
   LID_RECORD_IDS,
   LID_V12_RESULTS,
@@ -2343,6 +2344,7 @@ export const lidWalletProject: ProjectDefinition = {
       'lupa nebo mobil s makrem na prohlídku líce (lekce 3, volitelně)',
     ],
   },
+  glossary: lidWalletGlossary,
   media: [
     photo('lid-wallet-hero', 'Hotová peněženka Víčko zavřená, jazýček s magnetem na přední stěně'),
   ],

@@ -1,5 +1,6 @@
 import { type Ref } from 'react';
 
+import { GlossaryText } from '@/components/glossary/glossary-term';
 import { MediaSlot } from '@/components/lessons/media-slot';
 import { StepExtras } from '@/components/lessons/step-extras';
 import { StepLinks } from '@/components/lessons/step-links';
@@ -44,7 +45,10 @@ export function FocusStep({
           {typo(step.title)}
         </h2>
       </header>
-      <p className="max-w-prose text-[clamp(18px,4.6vw,21px)] leading-relaxed">{typo(step.body)}</p>
+      <p className="max-w-prose text-[clamp(18px,4.6vw,21px)] leading-relaxed">
+        {/* key: při přechodu na další krok se otevřená vysvětlivka zavře. */}
+        <GlossaryText key={step.id} text={typo(step.body)} entries={project.glossary?.entries} />
+      </p>
       <StepLinks step={step} project={project} />
       {step.animationLinks ? (
         <div className="flex flex-wrap gap-2">

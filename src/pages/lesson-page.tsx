@@ -110,11 +110,21 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
         <p className="text-lead">
           <strong>Cíl:</strong> <span className="text-ink-2">{typo(lesson.goal)}</span>
         </p>
-        <Button asChild variant="secondary" className="self-start">
-          <Link to={routes.lessonFocus(project.slug, lesson.slug)} className="no-underline">
-            Dílenský režim <span aria-hidden>→</span>
-          </Link>
-        </Button>
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+          <Button asChild variant="secondary">
+            <Link to={routes.lessonFocus(project.slug, lesson.slug)} className="no-underline">
+              Dílenský režim <span aria-hidden>→</span>
+            </Link>
+          </Button>
+          {project.glossary ? (
+            <Link
+              to={routes.projectGlossary(project.slug)}
+              className="inline-flex min-h-touch items-center text-body"
+            >
+              Díly a zkratky
+            </Link>
+          ) : null}
+        </div>
       </header>
 
       {locked ? <LessonLockNotice project={project} blockers={view.blockers} /> : null}
@@ -140,6 +150,7 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
           template={project.template}
           projectSlug={project.slug}
           patternSheets={project.patternSheets}
+          glossary={project.glossary}
           renderStepExtras={(step) => (
             <StepExtras project={project} lesson={lesson} step={step} timerOrigin="lesson" />
           )}

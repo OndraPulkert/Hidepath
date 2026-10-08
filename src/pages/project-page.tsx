@@ -1,7 +1,9 @@
-import { Link, useParams } from 'react-router';
+import { useEffect } from 'react';
+import { Link, useLocation, useParams } from 'react-router';
 
 import { routes } from '@/app/routes';
 import { BeltStartCard } from '@/components/belt/belt-start-card';
+import { GlossaryCard } from '@/components/glossary/glossary-card';
 import { MediaSlot } from '@/components/lessons/media-slot';
 import { ProjectFindings } from '@/components/notebook/project-findings';
 import { AssembledIllustration } from '@/components/illustrations/assembled';
@@ -37,6 +39,14 @@ function ProjectView({ project }: { project: ProjectDefinition }) {
   const { journey, readiness, inventory, isLoading, enrollment } = useProjectState(project);
   const activeProject = useActiveProject();
   const { start, switchTo, isPending, isError } = useSwitchProject();
+  const { hash } = useLocation();
+  // Kotva v adrese (#dily-a-zkratky z lekce): posunout na ni až po načtení dat.
+  useEffect(() => {
+    if (!hash || isLoading) return;
+    document
+      .getElementById(decodeURIComponent(hash.slice(1)))
+      ?.scrollIntoView?.({ block: 'start' });
+  }, [hash, isLoading]);
   if (isLoading) return <LoadingNotice />;
   const isActive = activeProject.slug === project.slug;
   const current = findCurrentLesson(journey.lessonViews);
@@ -178,6 +188,7 @@ function ProjectView({ project }: { project: ProjectDefinition }) {
 
         <div className="flex flex-col gap-4">
           <ProjectFindings project={project} />
+          {project.glossary ? <GlossaryCard glossary={project.glossary} /> : null}
           {project.template ? (
             <Card className="flex flex-col gap-3">
               <Kicker>Šablona 1:1</Kicker>

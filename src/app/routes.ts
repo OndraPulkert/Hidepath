@@ -9,6 +9,8 @@ export const PRINT_SHEET_PARAM = 'list';
 
 /** Kotva formuláře „Listy pro vaši kůži“ na tiskové stránce Víčka. */
 export const LID_SHEETS_ANCHOR = 'listy-pro-vasi-kuzi';
+/** Kotva karty „Díly a zkratky“ na stránce projektu (`routes.projectGlossary`). */
+export const PROJECT_GLOSSARY_ANCHOR = 'dily-a-zkratky';
 /** Kotvy na stránce lekce (`routes.lesson(…, kotva)`). */
 export const LESSON_ANCHORS = {
   checkpoints: 'kontrolni-body',
@@ -31,6 +33,9 @@ export const routes = {
   shoppingItem: (toolSlug: string, projectSlug?: string) =>
     `/shopping/${encodeURIComponent(toolSlug)}${projectSlug ? `?projekt=${encodeURIComponent(projectSlug)}` : ''}`,
   project: (projectSlug: string) => `/projects/${encodeURIComponent(projectSlug)}`,
+  /** Karta „Díly a zkratky“ na stránce projektu. */
+  projectGlossary: (projectSlug: string) =>
+    `/projects/${encodeURIComponent(projectSlug)}#${PROJECT_GLOSSARY_ANCHOR}`,
   /** `anchor` = kotva na stránce (`LESSON_ANCHORS`), stránka se na ni posune. */
   lesson: (projectSlug: string, lessonSlug: string, anchor?: string) =>
     `/projects/${encodeURIComponent(projectSlug)}/lessons/${encodeURIComponent(lessonSlug)}${

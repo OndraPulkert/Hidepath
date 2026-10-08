@@ -290,12 +290,72 @@ const LEGEND = {
 } as const;
 type LegendKey = keyof typeof LEGEND;
 
-/** Legenda značek: řádek na značku (vzorek 7 mm + text). Vrací y pod posledním řádkem. */
-function legend(s: Sheet, x: number, y: number, keys: readonly LegendKey[]): number {
+/**
+ * Krátká jména dílů Víčka (oddíl 5.2 zadání). Sdílí je legenda listů (řádek „Díly“) a slovníček
+ * projektu v aplikaci (`src/content/projects/lid-wallet/parts.ts`), aby se jména nerozešla.
+ */
+export const LID_PART_NAMES = {
+  P1: 'tělo z kaštanu',
+  F: 'přední stěna',
+  B: 'záda',
+  D1: 'přepážka karty / bankovky',
+  D2: 'přepážka bankovky / mince',
+  L1: 'podšívka jazýčku',
+  K1: 'magnet',
+  K2: 'plíšek',
+} as const;
+export type LidPartId = keyof typeof LID_PART_NAMES;
+
+/**
+ * Díly v řádku legendy jednotlivých listů: každá zkratka dílu, kterou list píše, a magnet K1 na
+ * listech, které kreslí jeho polohu (test hlídá, že žádná zkratka na listu nechybí).
+ */
+export const LID_SHEET_PARTS: Readonly<Record<1 | 2 | 3 | 4, readonly LidPartId[]>> = {
+  1: ['P1', 'F', 'B', 'D1', 'D2', 'L1', 'K1', 'K2'],
+  2: ['P1', 'F', 'B', 'D1', 'D2', 'L1', 'K2'],
+  3: ['F', 'B', 'D1', 'D2', 'L1', 'K2'],
+  4: ['P1', 'F', 'B', 'D1', 'D2', 'L1', 'K1', 'K2'],
+};
+
+/** Začátek řádku dílů v legendě (testy podle něj řádek najdou). */
+export const LID_PARTS_LINE_PREFIX = 'Díly:';
+
+/** Řádek „Díly: P1 = tělo z kaštanu, F = přední stěna, …“ zalomený po nejvýš `max` znacích. */
+export function lidPartsLines(parts: readonly LidPartId[], max = 46): string[] {
+  const items = parts.map(
+    (id, i) => `${id} = ${LID_PART_NAMES[id]}${i < parts.length - 1 ? ',' : ''}`,
+  );
+  const lines: string[] = [];
+  for (const item of items) {
+    const last = lines[lines.length - 1];
+    if (last !== undefined && last.length + 1 + item.length <= max) {
+      lines[lines.length - 1] = `${last} ${item}`;
+    } else {
+      lines.push(last === undefined ? `${LID_PARTS_LINE_PREFIX} ${item}` : item);
+    }
+  }
+  return lines;
+}
+
+/**
+ * Legenda značek: nahoře řádek dílů na listu, pak řádek na značku (vzorek 7 mm + text). Vrací y
+ * pod posledním řádkem.
+ */
+function legend(
+  s: Sheet,
+  x: number,
+  y: number,
+  parts: readonly LidPartId[],
+  keys: readonly LegendKey[],
+): number {
   s.text('GUIDE', x, y, 'ZNAČKY NA TOMTO LISTU', 2.2, 'start', { bold: true, fill: COLORS.CUT });
   const gap = 2.85;
   const order = Object.keys(LEGEND) as LegendKey[];
   let yy = y + 3.4;
+  for (const ln of lidPartsLines(parts)) {
+    s.text('GUIDE', x, yy, ln, 1.9, 'start', { fill: COLORS.CUT });
+    yy += gap;
+  }
   for (const key of order.filter((k) => keys.includes(k))) {
     const cy = yy - 0.65;
     const x1 = x + 7;
@@ -1043,7 +1103,7 @@ export function buildLidSheetSvg(
     `horní hrana F y ${cz(L.frontTopY)}, dno karet ${cz(L.cardFloorY)}`,
     `strop ${cz(L.ceilingY)}, závěs od y ${cz(L.hingeStartY)}`,
   ]);
-  legend(s, x, colEnd + 3, [
+  legend(s, x, colEnd + 3, LID_SHEET_PARTS[1], [
     'cut',
     'cutLater',
     'templateCut',
@@ -1282,7 +1342,7 @@ export function buildLidBackSvg(
     'otvory určuje jen pravidlo v lekci 6.',
   ];
   const colEnd = column(s, X(0) + 11, PIECE_Y + 2, lines, 1.95, 2.9);
-  legend(s, X(0) + 11, colEnd + 3, [
+  legend(s, X(0) + 11, colEnd + 3, LID_SHEET_PARTS[2], [
     'cut',
     'cutLater',
     'prick',
@@ -1558,7 +1618,7 @@ export function buildLidPartsSvg(
     'ověřit magnetem; hrany zabrousit',
     'a přelakovat; NE austenitická nerez',
   ]);
-  legend(s, ox + d1w + 8, oy1 + 2, [
+  legend(s, ox + d1w + 8, oy1 + 2, LID_SHEET_PARTS[3], [
     'cut',
     'cutLater',
     'prick',
@@ -1997,7 +2057,7 @@ export function buildLidJigsSvg(
     1.75,
     2.55,
   );
-  legend(s, ox, jy + bs.depthMm + 6, [
+  legend(s, ox, jy + bs.depthMm + 6, LID_SHEET_PARTS[4], [
     'cut',
     'prick',
     'center',
