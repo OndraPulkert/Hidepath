@@ -272,3 +272,22 @@ describe('obsah – pouzdro na karty: nákupní plán „Co koupit“', () => {
     expect(resolved.checkedTo).toBe('2026-10-08');
   });
 });
+
+describe('obsah – pouzdro na karty: konec řady dvojhrotem', () => {
+  const step = (order: number, id: string) =>
+    cardHolderProject.lessons.find((l) => l.order === order)!.steps.find((s) => s.id === id)!.body;
+
+  it('neslibuje otvor přesně na značce, řada končí nejbližším otvorem bez posouvání', () => {
+    for (const [order, id] of [
+      [3, 'corners'],
+      [6, 'punch-sides'],
+    ] as const) {
+      const body = step(order, id);
+      expect(body).not.toContain('přesně na značku');
+      expect(body).not.toContain('ve stejné výšce');
+      expect(body).toContain('nejblíž');
+      expect(body).toContain('neposouvejte');
+      expect(body).toContain('ověřte na odřezku');
+    }
+  });
+});

@@ -368,7 +368,7 @@ add('A','Protáhněte osy až k okrajům desky','Osy protáhněte tužkou podle 
   return s;
 });
 // A4
-add('A','Vyvrtejte otvor Ø 32 mm','Desku upněte svěrkou ke stolu přes odpadní prkno. Středicí vrták nasaďte do křížku os. Vrtejte vykružovací pilou Ø 32 mm (u mince 40 mm Ø 44 mm) na 1. rychlost, bez příklepu a bez tlaku, dokud špička středicího vrtáku nevyjde zespodu z desky (korunka je pak zhruba v půlce tloušťky), pak desku otočte, znovu upněte a dokončete z druhé strany podle dírky středicího vrtáku. Korunku průběžně vytahujte a piliny odstraňte.',8000,t=>{
+add('A','Vyvrtejte otvor Ø 32 mm','Korunku Ø 32 mm nasaďte na unášeč a upněte do vrtačky (animace Vykružovací korunka na vrtačku; samostatný Wolfcraft upněte rovnou za stopku). Desku upněte svěrkou ke stolu přes odpadní prkno. Středicí vrták nasaďte do křížku os. Vrtejte korunkou Ø 32 mm na unášeči (u mince 40 mm Ø 44 mm) na 1. rychlost, bez příklepu a bez tlaku, dokud špička středicího vrtáku nevyjde zespodu z desky (korunka je pak zhruba v půlce tloušťky), pak desku otočte, znovu upněte a dokončete z druhé strany podle dírky středicího vrtáku. Korunku průběžně vytahujte a piliny odstraňte.',8000,t=>{
   const z=es(t,0,.1);
   const cut1=es(t,.22,.5), flip=seg(t,.52,.66), cut2=es(t,.68,.92), done=t>.93;
   // Po otočení (podle podélné osy) je nahoře spodní strana desky: bez papíru a os, jen dírka středicího vrtáku.

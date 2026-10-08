@@ -16,6 +16,8 @@ const BACKUP_A_P1 = '0,8';
 
 /** Výsledek Z-2 (lekce 12): finální kus v záloze A. */
 const Z2_BACKUP_A = 'cracks-backup-a';
+/** Výsledek Z-2 (lekce 12): praskliny i v záloze A → záloha B2, P1 zase z usně 1,0 (V6(c)). */
+const Z2_BACKUP_B2 = 'cracks-backup-b2';
 
 export interface LidGeneratorPrefill {
   /** Formulář s hodnotami ze zápisníku; co v zápisníku není, zůstává výchozí. */
@@ -27,9 +29,9 @@ export interface LidGeneratorPrefill {
 /**
  * Předvyplní formulář „Listy pro vaši kůži“ ze zápisníku peněženky VÍČKO:
  * - P1 z lekce 1; v záloze A (V12 v lekci 3 nebo Z-2 v lekci 12) změřená useň 0,8 z lekce 3,
- *   dokud není změřená, 0,8,
+ *   dokud není změřená, 0,8; v záloze B2 (Z-2) zase P1 z lekce 1 (useň 0,8 se neztenčuje),
  * - přepážky = větší z D1 a D2 (jen když jsou zapsané obě, jinak by mohla chybět ta větší),
- * - podšívka L1, záloha B1 z rozhodnutí V12 (B2 rozhoduje až zkouška Z-2, nepředvyplňuje se),
+ * - podšívka L1, záloha B1 z rozhodnutí V12; B2 ze Z-2 (byla-li záloha A kvůli V12, i B1),
  * - k: z lekce 10 (hotový ohyb) přednostně před P0-3 z lekce 2,
  * - zvednutí karet a mincí, bankovky (P0) a tloušťka magnetu (lekce 11).
  * Bere jen zápisy projektu `projectSlug` (projekt s generátorem `lid-wallet-thickness`).
@@ -55,9 +57,9 @@ export function lidGeneratorPrefill(
   };
   const filled: string[] = [];
 
-  const backupA =
-    variant === LID_V12_VARIANTS.backupA ||
-    latest.get(LID_RECORD_IDS.z2Result)?.value === Z2_BACKUP_A;
+  const z2 = latest.get(LID_RECORD_IDS.z2Result)?.value;
+  const backupB2 = z2 === Z2_BACKUP_B2;
+  const backupA = !backupB2 && (variant === LID_V12_VARIANTS.backupA || z2 === Z2_BACKUP_A);
   if (backupA) {
     const measured = text(num(LID_RECORD_IDS.p1BackupAThickness));
     form.p1 = measured ?? BACKUP_A_P1;
@@ -84,9 +86,13 @@ export function lidGeneratorPrefill(
     form.lining = lining;
     filled.push('podšívka L1');
   }
-  if (variant === LID_V12_VARIANTS.backupB1) {
+  if (variant === LID_V12_VARIANTS.backupB1 || (backupB2 && variant === LID_V12_VARIANTS.backupA)) {
     form.skiveFold = true;
     filled.push('záloha B1');
+  }
+  if (backupB2) {
+    form.skiveHinge = true;
+    filled.push('záloha B2 (P1 z usně 1,0)');
   }
 
   const p0: [keyof LidP0Fields, number | undefined, string][] = [

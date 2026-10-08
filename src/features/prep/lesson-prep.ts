@@ -52,6 +52,8 @@ export interface PrepPlanLine {
   quantity: number;
   lineCents: number;
   purpose?: string;
+  /** Řádek plánu jen za podmínky (mimo součet). */
+  optional?: true;
 }
 
 export interface PrepEquipmentItem {
@@ -260,6 +262,7 @@ function buildEquipment(input: BuildLessonPrepInput): PrepEquipmentItem[] {
           quantity: l.quantity,
           lineCents: l.lineCents,
           ...(l.purpose ? { purpose: l.purpose } : {}),
+          ...(l.optional ? { optional: true as const } : {}),
         })),
     );
   const item = (slug: string, priority: 'required' | 'recommended'): PrepEquipmentItem => {

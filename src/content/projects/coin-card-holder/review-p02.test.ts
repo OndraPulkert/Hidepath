@@ -79,3 +79,26 @@ describe('pouzdro s mincí – opravy z kontroly p02', () => {
     }
   });
 });
+
+describe('pouzdro s mincí – rozhodnutí autora 8. 10. 2026', () => {
+  it('L2: korunka Ø 32 mm na unášeči, Extol jako příklad', () => {
+    expect(stepOf(2, 'drill-form').body).toContain('korunkou Ø 32 mm na unášeči');
+    expect(lesson(2).materials.join(' ')).toContain('Extol Premium');
+  });
+
+  it('L2: když neudrží ani Ø 18 mm, do kapsy nesekat a zkusit hlubší důlek', () => {
+    const body = stepOf(2, 'test-window-retention').body;
+    expect(body).toContain('volitelný řádek');
+    expect(body).toContain('hlubší důlek');
+    const plan = coinCardHolderProject.shoppingPlan!;
+    const backup = plan.lines.find((l) => l.variant === 'Ø 18 mm')!;
+    expect(backup.optional).toBe(true);
+    expect(backup.equipmentSlug).toBe('round-punch-32mm');
+  });
+
+  it('L7: neslibuje odřezek z lekce 4, posun změřit a zkusit na novém proužku', () => {
+    const body = stepOf(7, 'press-and-clamp').body;
+    expect(body).not.toContain('odřezku z lekce 4');
+    expect(body).toContain('novém cvičném proužku');
+  });
+});

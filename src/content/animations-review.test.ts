@@ -107,3 +107,15 @@ describe('kontrola animací proti lekcím', () => {
     expect(page('vicko-ohyby')).toContain("querySelector('.abtn')");
   });
 });
+
+describe('animace – rozhodnutí autora 8. 10. 2026', () => {
+  it('hrany G4: klín D2 z líce, bez „ověřte stranu“; skládání B4 bez odřezku z lekce 4', () => {
+    const g4 = stepSource(page('hrany'), 'G', 4);
+    expect(g4).toContain('z líce D2');
+    expect(g4).not.toContain('stranu klínu ověřte');
+    const b4 = stepSource(page('kapsa-skladani'), 'B', 4);
+    expect(b4).not.toContain('odřezku z lekce 4');
+    expect(b4).toContain('novém cvičném proužku');
+    expect(stepSource(page('kapsa-postup'), 'A', 4)).toContain('korunkou Ø 32 mm na unášeči');
+  });
+});

@@ -473,7 +473,7 @@ add('B','Přeložte zadní panel ohybem A','Zabalené bankovky položte na líc 
   return s;
 },null);
 
-add('B','Přitiskněte a nechte zaschnout','Přejeďte rozhrnovačkou. Sponky s podložkou nasaďte na panely těsně vedle ohybů, ne na smyčku. Než necháte zaschnout, zkontrolujte, že otvory dna na sousedních panelech lícují. Když ne, dokud je kůže vlhká, ohyb rozevřete a přeložte se smyčkou posunutou tak, aby seděly (stále mezi čarami). Malý zbytek srovnáte při lepení jehlami. Když se nesrovnají ani tak, nelepte a postup ověřte na odřezku z lekce 4. Nechte zaschnout.',9000,t=>{
+add('B','Přitiskněte a nechte zaschnout','Přejeďte rozhrnovačkou. Sponky s podložkou nasaďte na panely těsně vedle ohybů, ne na smyčku. Než necháte zaschnout, zkontrolujte, že otvory dna na sousedních panelech lícují. Když ne, dokud je kůže vlhká, ohyb rozevřete a přeložte se smyčkou posunutou tak, aby seděly (stále mezi čarami). Malý zbytek srovnáte při lepení jehlami. Nechte zaschnout. Když se nesrovnaly ani tak, nelepte: po zaschnutí změřte posun otvorů a ohyb s ním vyzkoušejte na novém cvičném proužku postupem z lekce 4.',9000,t=>{
   const cam=CAM_FOLD, g=secGeom(Math.PI,Math.PI), w=wOf(cam);
   const dry=es(t,.66,.95);
   let s=leatherSec(cam,g,{wet:1-dry});

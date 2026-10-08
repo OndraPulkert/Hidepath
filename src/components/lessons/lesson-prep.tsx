@@ -315,6 +315,7 @@ function EquipmentRow({ item, disabled, onToggle }: RowProps<PrepEquipmentItem>)
         <Meta key={`${line.shop} ${line.title} ${line.variant ?? ''}`}>
           V plánu: {line.quantity} × {typo(line.title)}
           {line.variant ? ` – ${line.variant}` : ''} · {line.shop} · {formatCzk(line.lineCents)}
+          {line.optional && line.purpose ? ` · ${typo(line.purpose)}` : ''}
         </Meta>
       ))}
       {item.skippedReason ? <Meta>{typo(item.skippedReason)}</Meta> : null}

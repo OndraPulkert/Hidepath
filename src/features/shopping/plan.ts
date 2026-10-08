@@ -15,11 +15,14 @@ export interface ResolvedPlanLine {
   lineCents: number;
   /** Položku už uživatel má – v součtu „zbývá koupit“ není. */
   owned: boolean;
+  /** Jen za podmínky (`purpose` říká kdy) – do součtů se nepočítá. */
+  optional: boolean;
 }
 
 export interface ShopGroup {
   shop: string;
   lines: readonly ResolvedPlanLine[];
+  /** Součet bez volitelných řádků. */
   totalCents: number;
   remainingCents: number;
 }
@@ -82,15 +85,19 @@ export function resolveShoppingPlan(
       ...(line.purpose ? { purpose: line.purpose } : {}),
       lineCents: example.priceCents * line.quantity,
       owned: getEquipmentStatus(inventory, line.equipmentSlug) === 'owned',
+      optional: line.optional === true,
     };
     byShop.set(example.shop, [...(byShop.get(example.shop) ?? []), resolved]);
   }
-  const shops: ShopGroup[] = [...byShop].map(([shop, lines]) => ({
-    shop,
-    lines,
-    totalCents: lines.reduce((s, l) => s + l.lineCents, 0),
-    remainingCents: lines.filter((l) => !l.owned).reduce((s, l) => s + l.lineCents, 0),
-  }));
+  const shops: ShopGroup[] = [...byShop].map(([shop, lines]) => {
+    const counted = lines.filter((l) => !l.optional);
+    return {
+      shop,
+      lines,
+      totalCents: counted.reduce((s, l) => s + l.lineCents, 0),
+      remainingCents: counted.filter((l) => !l.owned).reduce((s, l) => s + l.lineCents, 0),
+    };
+  });
   const all = shops.flatMap((s) => s.lines);
   const dates = all.map((l) => l.example.checkedAt).sort();
   return {

@@ -197,7 +197,7 @@ export function LidWalletSheetGenerator({
             />
             <p id={`${id}-p1-hint`} className="mt-1 text-meta text-ink-2">
               {typo(
-                'Liší-li se od 1,0 o méně než 0,05 mm, platí výchozí 1,0. V záloze A zadejte změřenou useň 0,8.',
+                'Liší-li se od 1,0 o méně než 0,05 mm, platí výchozí 1,0. V záloze A zadejte změřenou useň 0,8, v záloze B2 zase useň 1,0 (0,8 se neztenčuje).',
               )}
             </p>
           </div>
@@ -244,7 +244,7 @@ export function LidWalletSheetGenerator({
               checked={skiveHinge}
               onChange={(e) => setSkiveHinge(e.target.checked)}
             />
-            <span>{typo('B2 – ztenčit pás závěsu na 0,6 mm (--skive-hinge 0.6)')}</span>
+            <span>{typo('B2 – ztenčit pás závěsu usně 1,0 na 0,6 mm (--skive-hinge 0.6)')}</span>
           </label>
         </fieldset>
         <details className="rounded-control border border-line px-4 py-2" open={p0Prefilled}>

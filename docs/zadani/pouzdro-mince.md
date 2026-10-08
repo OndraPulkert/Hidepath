@@ -146,7 +146,7 @@ shora je vidět jen schodek ≈ 2,6 mm na horní hraně.
   vnitřního panelu (ten je vidět zepředu výřezem). Ve výchozím vybavení není.
 - Kruhový výsečník **20 mm** na okno výchozí mince 50 Kč (CraftPoint, 69 Kč; 32 mm jen pro minci
   40 mm; nebo `--window` podle toho, co seženeš).
-- Forma: překližka/HDPE ≥ 8 mm s otvorem Ø 31,5 (vykružovák 32 mm; u mince 40 mm Ø 44), rovná
+- Forma: překližka/HDPE ≥ 8 mm s otvorem Ø 31,5 (korunka 32 mm na unášeči ze sady Extol; u mince 40 mm Ø 44), rovná
   přítlačná deska, 2–4 svěrky.
   Co koupit, jak formu vyvrtat aku vrtačkou a otvory pro další mince:
   [pouzdro-mince-forma.md](pouzdro-mince-forma.md).
@@ -245,7 +245,9 @@ kůže jako tělo. Juchtová A5 1,2 mm jen na dva odřezky 57,5 × 57,5 pro tvar
    minci udrží (zatřesení oknem dolů, zatlačení z rubu); když ne, okno menší (Ø 18 mm na druhém
    odřezku a k tomu nová šablona: list „Kapsa – záložní okno Ø 18 mm“, `--window 18`). List KAPSA
    tedy 3× (forma, značky na líci, šablona s oknem), při záložním okně Ø 18 mm navíc 1× záložní
-   list. Dost hluboký důlek: číslo model nemá (tloušťku mince nepočítá); mince vložená z rubu nemá
+   list. Když minci neudrží ani Ø 18 mm, do kapsy se okno nesekne a na dalším odřezku se zkusí
+   hlubší důlek (ověřit). Výsečník Ø 18 mm je v nákupním plánu jako volitelný řádek mimo součet
+   (CraftPoint, varianta 18 mm, 57 Kč, skladem 8. 10. 2026). Dost hluboký důlek: číslo model nemá (tloušťku mince nepočítá); mince vložená z rubu nemá
    nad okolní rub vyčnívat – ověřit na odřezku. Špalík pod důlek (tip, ověřit): kus kulaté
    dřevěné tyčky Ø 21–31 mm s rovným koncem.
 3. Vyříznout obrys kapsy podle orýsování (forma vystředěná na křížek, aby důlek seděl s otvory) a vyseknout okno (kapsa lícem dolů na formě, pod dno
@@ -261,7 +263,7 @@ kůže jako tělo. Juchtová A5 1,2 mm jen na dva odřezky 57,5 × 57,5 pro tvar
    přes všechno. Ohnout kolem skutečného obsahu (karty a bankovky zabalené v potravinové fólii),
    přejet rozhrnovačkou, sepnout sponkami přes podložku, před zaschnutím zkontrolovat, že otvory
    dna na sousedních panelech lícují (když ne: dokud je kůže vlhká, ohyb rozevřít a přeložit znovu;
-   malý zbytek srovnají jehly při lepení; větší posun – ověřit na odřezku), a nechat zaschnout. Tady líc nejspíš praskne, když se ohne
+   malý zbytek srovnají jehly při lepení; větší posun: nelepit, po zaschnutí posun změřit a ohyb s ním vyzkoušet na novém cvičném proužku postupem z lekce 4), a nechat zaschnout. Tady líc nejspíš praskne, když se ohne
    nasucho nebo na ostro.
 6. **Dno:** kontaktní lepidlo jen na pruh pod čáru švu (0–3,5 mm od hrany; karty stojí na švu,
    lepidlo výš by ubralo hloubku). Spoje jsou dva: přední↔vnitřní (rub předního + rub

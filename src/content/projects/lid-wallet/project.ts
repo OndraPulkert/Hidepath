@@ -249,7 +249,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'sheets-rule',
         title: 'Kdy listy generovat znovu',
         printLink: 'pattern-sheets',
-        body: 'Listy vytiskněte hned (odkaz pod krokem), podle nich slepíte i papírový model (lekce 2). Znovu je generujte, jen když P0 změní vstupy modelu (lekce 2), nebo když zkouška ohybu V12 či zkušební kus vybere zálohu (lekce 3 a 12). Pak zadejte najednou všechno, co platí (tloušťky i zálohu), a nové listy zkontrolujte jako v dalším kroku.',
+        body: 'Listy vytiskněte hned (odkaz pod krokem), podle nich slepíte i papírový model (lekce 2). Znovu je generujte, když P0 změní vstupy modelu (lekce 2), když zkouška ohybu V12 či zkušební kus vybere zálohu (lekce 3 a 12), když vyjde k nad 1,24 (lekce 10) a když vyberete magnet jiné tloušťky než 1,5 mm (lekce 11). Pak zadejte najednou všechno, co platí (tloušťky i zálohu), a nové listy zkontrolujte jako v dalším kroku.',
         media: [],
       },
       {
@@ -935,7 +935,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'skive-backup',
         title: 'Jen záloha B1 nebo B2: ztenčení',
-        body: 'Jen pro zálohu B1 (pás ohybu dna) nebo B2 (pás závěsu; jen pro finální kus, když závěs zkušebního kusu neprojde zkouškou Z-2 ani v záloze A). Jinak krok přeskočte. Nejdřív vygenerujte listy se zálohou a pás ztenčujte z rubu z 1,0 na 0,6 mm v poloze podle listu 1 této varianty. (a) Nejlépe v ševcovské nebo brašnářské dílně zvonovým ztenčovačem: pás ohybu 8 × 101 mm včetně náběhů, pás závěsu 15,1 × 101 mm celý na plno a náběh 2 mm vně na obou stranách. P1 doneste s pásem vyznačeným na rubu. (b) Jinak brusným papírem 80 na rovném hranolku, pás ohraničte maskovací páskou: u ohybu (8 mm) bruste na plno jen střed 4 mm a 2 mm na každé straně nechte jako náběh; závěs (15,1 mm) bruste celý na plno a náběh 2 mm udělejte vně čar. Nožem jen hrubě a nikdy pod 0,8 mm. (c) Posuvkou hlídejte 0,6–0,8 mm, okraje jako náběh, ne schod. (d) Ztenčení nejdřív vyzkoušejte na odřezku (v záloze B1 ho máte ztenčený už z lekce 3, kde jste na něm opakovali V12). Postup je neověřený, ověřte ho na zkušebním kuse.',
+        body: 'Jen pro zálohu B1 (pás ohybu dna) nebo B2 (pás závěsu; jen pro finální kus, když závěs zkušebního kusu neprojde zkouškou Z-2 ani v záloze A). Jinak krok přeskočte. V záloze B2 je P1 zase z usně 1,0, useň 0,8 se neztenčuje (zkouška V6(c) počítá se ztenčenou usní 1,0); byla-li záloha A kvůli V12, ztenčete pás ohybu i závěsu (B1 i B2). Nejdřív vygenerujte listy se zálohou a pás ztenčujte z rubu z 1,0 na 0,6 mm v poloze podle listu 1 této varianty. (a) Nejlépe v ševcovské nebo brašnářské dílně zvonovým ztenčovačem: pás ohybu 8 × 101 mm včetně náběhů, pás závěsu 15,1 × 101 mm celý na plno a náběh 2 mm vně na obou stranách. P1 doneste s pásem vyznačeným na rubu. (b) Jinak brusným papírem 80 na rovném hranolku, pás ohraničte maskovací páskou: u ohybu (8 mm) bruste na plno jen střed 4 mm a 2 mm na každé straně nechte jako náběh; závěs (15,1 mm) bruste celý na plno a náběh 2 mm udělejte vně čar. Nožem jen hrubě a nikdy pod 0,8 mm. (c) Posuvkou hlídejte 0,6–0,8 mm, okraje jako náběh, ne schod. (d) Ztenčení nejdřív vyzkoušejte na odřezku (v záloze B1 ho máte ztenčený už z lekce 3, kde jste na něm opakovali V12). Postup je neověřený, ověřte ho na zkušebním kuse.',
         media: [],
         recalls: [variantRecall],
       },
@@ -943,7 +943,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'd2-edge',
         title: 'Spodní hrana D2 do tenka',
         animationLinks: [animationLink('edges', 'G4')],
-        body: 'Spodní hranu D2 zbruste brusným papírem na hranolku do tenka (klín 3 mm), ne nožem; stranu klínu ověřte na zkušebním kuse. Jinak by tvořila schod, o který se zachytí bankovka.',
+        body: 'Spodní hranu D2 zbruste brusným papírem na hranolku do tenka (klín 3 mm) z líce D2 – ze strany k bankovkám; rub D2 se lepí na B. Ne nožem. Jinak by tvořila schod, o který se zachytí bankovka.',
         media: [],
       },
       {
@@ -1877,12 +1877,13 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'z2',
         title: 'Z-2 Závěs',
-        body: 'Otevřené víčko musí jít palcem držící ruky udržet tak, že bankovka jde okénkem vysunout a minci vzít; samo stát nemusí. Po několika dnech používání prohlédněte líc i rub pásu závěsu. Praskliny: finální kus v záloze A (P1 z usně 0,8): useň po dodání změřte a zapište v lekci 3 (krok „Rozhodněte variantu střihu“) a listy vygenerujte znovu (lekce 1). Až když ani ta nestačí, záloha B2 – ztenčení závěsu na 0,6 mm, v aplikaci zaškrtněte B2 („--skive-hinge 0.6“), postup v lekci 5.',
+        body: 'Otevřené víčko musí jít palcem držící ruky udržet tak, že bankovka jde okénkem vysunout a minci vzít; samo stát nemusí. Po několika dnech používání prohlédněte líc i rub pásu závěsu. Praskliny: finální kus v záloze A (P1 z usně 0,8): useň po dodání změřte a zapište v lekci 3 (krok „Rozhodněte variantu střihu“) a listy vygenerujte znovu (lekce 1). Až když ani ta nestačí, záloha B2: vraťte se k P1 z usně 1,0 a ztenčete jen pás závěsu na 0,6 mm (useň 0,8 neztenčujte). Ve formuláři zadejte P1 1,0 a zaškrtněte B2 („--skive-hinge 0.6“); když jste zálohu A zvolili už kvůli V12 (popraskal ohyb dna), zaškrtněte i B1. Postup v lekci 5. Palec víčko pohodlně neudrží: ve finálním kuse můžete posunout okénko bankovek mimo stopu jazýčku (např. x 27–42, stále v pásu x 27–74) a okénka mincí zkrátit shora, aby šlo víčko otevřít víc dozadu – ověřte na papírovém modelu (P0-8).',
         media: [],
         records: [
           testResult(LID_RECORD_IDS.z2Result, 'Výsledek Z-2', [
             { value: 'cracks-backup-a', label: 'Praskliny: finální kus v záloze A' },
-            { value: 'cracks-backup-b2', label: 'Praskliny i v záloze A: záloha B2' },
+            { value: 'cracks-backup-b2', label: 'Praskliny i v záloze A: záloha B2 (P1 1,0)' },
+            { value: 'thumb', label: 'Palec víčko neudrží: posunout okénko bankovek' },
           ]),
         ],
       },
@@ -1901,18 +1902,21 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'z4',
         title: 'Z-4 Retence',
-        body: 'Stav B zavřete a 30× prudce zatřeste dnem vzhůru. Pak totéž s 1 Kč za D2 ve stavu A i B a s 0 kartami a 1 × 5000 Kč. Projde, když se nic nepřesune do jiného oddílu ani nevypadne.',
+        body: 'Stav B zavřete a 30× prudce zatřeste dnem vzhůru. Pak totéž s 1 Kč za D2 ve stavu A i B a s 0 kartami a 1 × 5000 Kč. Projde, když se nic nepřesune do jiného oddílu ani nevypadne. Bankovka přeleze D1: ve finálním kuse zvyšte D1 o 0,5 mm (až na strop, D1 dosedne na závěs). Mince přeleze D2: ve finálním kuse prodlužte D2 o 0,5 mm nahoru, aby dosedala na závěs. Listy to samy nespočítají – ověřte na finálním kuse. Jiný přesun nebo vypadnutí: ověřte.',
         media: [],
         records: [
           testResult('z4-result', 'Výsledek Z-4', [
-            { value: 'fail', label: 'Něco se přesunulo nebo vypadlo' },
+            { value: 'bill-over-d1', label: 'Bankovka přelezla D1: D1 o 0,5 mm výš' },
+            { value: 'coin-over-d2', label: 'Mince přelezla D2: D2 o 0,5 mm výš' },
+            { value: 'both', label: 'Obojí: D1 i D2 o 0,5 mm výš' },
+            { value: 'fail', label: 'Jiný přesun nebo vypadnutí (ověřte)' },
           ]),
         ],
       },
       {
         id: 'final-piece',
         title: 'Finální kus',
-        body: 'Finální kus postavte stejným postupem s tím, co na zkušebním kuse fungovalo (vyměněný magnet, jiná varianta, upravený výřez). Když se varianta změnila až po zkušebním kuse, je v ní finální kus neověřený – nejlépe postavte další zkušební kus. Kůži na něj nákupní plán nepočítá: dokupte stejnou useň na další přířez P1 110 × 240 mm (v záloze A useň 0,8: změřte ji, zapište v lekci 3 a listy vygenerujte znovu, lekce 1). Na finálním kuse stačí zkontrolovat, že víčko drží, otevře se jedním prstem a otevřené jde palcem udržet.',
+        body: 'Finální kus postavte stejným postupem s tím, co na zkušebním kuse fungovalo (vyměněný magnet, jiná varianta, upravený výřez, D1 nebo D2 o 0,5 mm výš, posunuté okénko bankovek). Když se varianta změnila až po zkušebním kuse, je v ní finální kus neověřený – nejlépe postavte další zkušební kus. Kůži na něj nákupní plán nepočítá: dokupte stejnou useň na další přířez P1 110 × 240 mm (v záloze A useň 0,8: změřte ji, zapište v lekci 3 a listy vygenerujte znovu, lekce 1). Na finálním kuse stačí zkontrolovat, že víčko drží, otevře se jedním prstem a otevřené jde palcem udržet.',
         media: [],
         recalls: [
           variantRecall,

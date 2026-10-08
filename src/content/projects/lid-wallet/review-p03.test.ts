@@ -116,3 +116,51 @@ describe('Víčko – opravy z kontroly p03', () => {
     expect(stepOf(2, 'bills').body).toContain('neřežte');
   });
 });
+
+describe('Víčko – rozhodnutí autora 8. 10. 2026', () => {
+  it('L12: Z-4 a Z-2 mají postup, když neprojdou (oddíl 7 a konec 5.8 zadání)', () => {
+    const z4 = stepOf(12, 'z4');
+    expect(z4.body).toContain('zvyšte D1 o 0,5 mm');
+    expect(z4.body).toContain('prodlužte D2 o 0,5 mm nahoru');
+    const z4Options = z4.records![0]!;
+    expect(z4Options.kind === 'choice' && z4Options.options.map((o) => o.value)).toEqual([
+      'pass',
+      'bill-over-d1',
+      'coin-over-d2',
+      'both',
+      'fail',
+    ]);
+    const z2 = stepOf(12, 'z2');
+    expect(z2.body).toContain('Palec víčko pohodlně neudrží');
+    expect(z2.body).toContain('x 27–42');
+    const z2Options = z2.records![0]!;
+    expect(z2Options.kind === 'choice' && z2Options.options.map((o) => o.value)).toContain('thumb');
+  });
+
+  it('B2 po záloze A: zpět na P1 1,0, useň 0,8 se neztenčuje (V6(c))', () => {
+    expect(stepOf(12, 'z2').body).toContain('vraťte se k P1 z usně 1,0');
+    expect(stepOf(5, 'skive-backup').body).toContain('useň 0,8 se neztenčuje');
+    const b2 = lidGeneratorPrefill(
+      [
+        entry(LID_RECORD_IDS.p1Thickness, 1.0),
+        entry(LID_RECORD_IDS.v12Variant, LID_V12_VARIANTS.backupA),
+        entry(LID_RECORD_IDS.z2Result, 'cracks-backup-b2'),
+      ],
+      'lid-wallet',
+    )!;
+    expect(b2.form).toMatchObject({ p1: '1,0', skiveFold: true, skiveHinge: true });
+  });
+
+  it('L1: listy znovu i po k z lekce 10 a magnetu z lekce 11', () => {
+    const body = stepOf(1, 'sheets-rule').body;
+    expect(body).not.toContain('jen když');
+    expect(body).toContain('lekce 10');
+    expect(body).toContain('lekce 11');
+  });
+
+  it('L5: klín spodní hrany D2 z líce D2, strana se už neověřuje', () => {
+    const body = stepOf(5, 'd2-edge').body;
+    expect(body).toContain('z líce D2');
+    expect(body).not.toContain('stranu klínu ověřte');
+  });
+});

@@ -484,10 +484,10 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
   describe('nákupní plán „Co koupit“', () => {
     const plan = coinCardHolderProject.shoppingPlan!;
 
-    it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10., vykružovák Wolfcraft z 2. 10. 2026, ceny CraftPointu znovu 8. 10. 2026)', () => {
+    it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10., sada korunek Extol na Alze a ceny CraftPointu znovu 8. 10. 2026)', () => {
       const checkedAtFor = (line: (typeof plan.lines)[number]) => {
         if (line.equipmentSlug === 'masking-tape') return '2026-10-01';
-        if (line.url.includes('Wolfcraft')) return '2026-10-02';
+        if (line.url.startsWith('https://www.alza.cz/')) return '2026-10-08';
         if (rechecked(line.url)) return '2026-10-08';
         return '2026-09-29';
       };
@@ -540,8 +540,10 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
       const lines = resolved.shops.flatMap((s) => s.lines);
       expect(lines).toHaveLength(plan.lines.length);
       expect(resolved.totalCents).toBe(
-        lines.reduce((s, l) => s + l.example.priceCents * l.quantity, 0),
+        lines.filter((l) => !l.optional).reduce((s, l) => s + l.example.priceCents * l.quantity, 0),
       );
+      // Záložní výsečník Ø 18 mm je jen volitelný řádek mimo součet.
+      expect(lines.filter((l) => l.optional).map((l) => l.example.variant)).toEqual(['Ø 18 mm']);
       expect(resolved.notInStockCount).toBe(0);
     });
   });

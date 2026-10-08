@@ -119,6 +119,23 @@ describe('Víčko – předvyplnění listů ze zápisníku', () => {
     expect(result.ok && result.label).toContain('ohyb dna ztenčený na 0,6');
   });
 
+  it('Z-2 záloha B2 vrátí P1 z lekce 1 (useň 0,8 se neztenčuje) a zaškrtne B2, po A z V12 i B1', () => {
+    const afterZ2 = prefillOf([
+      entry(LID_RECORD_IDS.p1Thickness, 1.0),
+      entry(LID_RECORD_IDS.z2Result, 'cracks-backup-b2'),
+    ]);
+    expect(afterZ2?.form).toMatchObject({ p1: '1,0', skiveHinge: true, skiveFold: false });
+    expect(afterZ2?.filled).toContain('záloha B2 (P1 z usně 1,0)');
+
+    const afterV12A = prefillOf([
+      entry(LID_RECORD_IDS.p1Thickness, 1.0),
+      entry(LID_RECORD_IDS.v12Variant, LID_V12_VARIANTS.backupA),
+      entry(LID_RECORD_IDS.p1BackupAThickness, 0.82),
+      entry(LID_RECORD_IDS.z2Result, 'cracks-backup-b2'),
+    ]);
+    expect(afterV12A?.form).toMatchObject({ p1: '1,0', skiveHinge: true, skiveFold: true });
+  });
+
   it('výchozí varianta nic nemění', () => {
     const prefill = prefillOf([entry(LID_RECORD_IDS.v12Variant, LID_V12_VARIANTS.default)]);
     expect(prefill).toBeNull();

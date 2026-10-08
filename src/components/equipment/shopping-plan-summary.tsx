@@ -94,6 +94,7 @@ export function ShoppingPlanSummary({
                       </span>
                     </span>
                     <span className="flex items-center gap-2 text-body">
+                      {line.optional ? <Tag tone="optional">jen když, mimo součet</Tag> : null}
                       {line.owned ? <Tag tone="ready">máte</Tag> : null}
                       {line.example.availability !== 'in_stock' ? (
                         <Tag tone="optional">{availabilityLabel[line.example.availability]}</Tag>

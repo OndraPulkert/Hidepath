@@ -600,7 +600,7 @@ add('G','Zarovnejte a vyleštěte boky',
 
 // G4
 add('G','Dokončete hrany okének, D2 a jazýčku',
- 'Okénka mincí (lekce 5): konce vybruste papírem na kolíku Ø 8 v aku vrtačce, okénka zkoste z líce a vyleštěte. Okénko bankovek (lekce 6): zkoste a vyleštěte jako jeden svazek. Spodní hranu D2 (lekce 5) zbruste brusným papírem na hranolku do tenka (klín 3 mm), ne nožem; stranu klínu ověřte na zkušebním kuse. Jazýček (lekce 11): klín špičky brusným papírem z líce i z rubu jen mezi ryskou 2,5 mm a špičkou, ne nožem; konec asi 0,5–0,7 mm, zaoblený. Po ušití S7 hrany jazýčku vybruste, zkoste a vyleštěte (po výměně magnetu znovu).',
+ 'Okénka mincí (lekce 5): konce vybruste papírem na kolíku Ø 8 v aku vrtačce, okénka zkoste z líce a vyleštěte. Okénko bankovek (lekce 6): zkoste a vyleštěte jako jeden svazek. Spodní hranu D2 (lekce 5) zbruste brusným papírem na hranolku do tenka (klín 3 mm) z líce D2 – ze strany k bankovkám, rub D2 se lepí na B. Ne nožem. Jazýček (lekce 11): klín špičky brusným papírem z líce i z rubu jen mezi ryskou 2,5 mm a špičkou, ne nožem; konec asi 0,5–0,7 mm, zaoblený. Po ušití S7 hrany jazýčku vybruste, zkoste a vyleštěte (po výměně magnetu znovu).',
  10000,t=>{
   // okénko mincí 12 × 48 v měřítku 1,3
   const s=1.3,cx=42,cy=45,w=48*s,h=12*s,r=h/2;
@@ -613,7 +613,7 @@ add('G','Dokončete hrany okének, D2 a jazýčku',
   o+=pill(cx,cy-h/2-13,'okénko mincí 12 × 48 mm','t','middle');
   o+=pill(cx,cy+h/2+15,'konce: papír na kolíku Ø 8','ts','middle');
   o+=pill(4,87,'konce vybrousit, zkosit z líce, vyleštit','t');
-  const ck=[['okénka mincí',.15,'.'],['(lekce 5)',.15,'-'],['okénko bankovek',.3,'.'],['jako svazek (L6)',.3,'-'],['klín špičky jazýčku',.45,'.'],['do rysky 2,5 mm',.45,'-'],['jazýček po S7',.6,'.'],['(L11, znovu v L12)',.6,'-'],['spodní hrana D2',.8,'.'],['jen klín 3 mm',.8,'-']];
+  const ck=[['okénka mincí',.15,'.'],['(lekce 5)',.15,'-'],['okénko bankovek',.3,'.'],['jako svazek (L6)',.3,'-'],['klín špičky jazýčku',.45,'.'],['do rysky 2,5 mm',.45,'-'],['jazýček po S7',.6,'.'],['(L11, znovu v L12)',.6,'-'],['spodní hrana D2',.8,'.'],['klín 3 mm z líce',.8,'-']];
   let ib=checklist(ck,t,17,6.4);
   return o+inset('DALŠÍ HRANY',ib);
  },P3);

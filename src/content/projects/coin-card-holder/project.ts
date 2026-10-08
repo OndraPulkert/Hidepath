@@ -256,7 +256,7 @@ export const lessons: readonly LessonDefinition[] = [
     goal: 'Vyvrtat formu, vytvarovat na odřezku důlek na minci a vyzkoušet, že prstenec 3,75 mm kolem okna Ø 20 mm minci udrží.',
     materials: [
       'dvě desky na formu a víko, aspoň 61,5 × 61,5 mm (ideálně 8 × 8 cm; u mince 40 mm aspoň 74 × 74 mm) a aspoň 8 mm silné (překližka, tvrdý plast nebo bukové prkénko; jak široké smí být, viz první krok), a odpadní prkno pod vrtání',
-      'aku vrtačka s vykružovací pilou Ø 32 mm (např. Wolfcraft bimetal), u mince 40 mm Ø 44 nebo 45 mm; Forstnerův vrták jen Ø 32 mm (30 ani 35 mm ze sady nesedí)',
+      'aku vrtačka a korunka Ø 32 mm se středicím vrtákem (např. ze sady Extol Premium 19–76 mm na unášeči, nebo samostatný Wolfcraft Ø 32 mm se stopkou rovnou do sklíčidla), u mince 40 mm Ø 44 nebo 45 mm; Forstnerův vrták jen Ø 32 mm (30 ani 35 mm ze sady nesedí)',
       '2 odřezky třísločiněné kůže 1,2 mm, každý aspoň 57,5 × 57,5 mm (u mince 40 mm 70 × 70 mm); druhý na případné opakování zkoušky okna. Třetí stejný odřezek jen tehdy, když mince projde oknem Ø 20 mm i podruhé (u sestavy z nákupního plánu z kusu Blu A5, viz poslední krok)',
       'mince, na kterou stavíte (výchozí 50 Kč)',
       'potravinová fólie',
@@ -284,7 +284,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'drill-form',
         title: 'Vyvrtejte formu',
-        body: 'Vytiskněte list KAPSA (odkaz pod krokem) 3× na 100 % a zkontrolujte úsečku 50 mm: výtisk na formu, výtisk na značky a výtisk na šablonu. Z výtisku na formu: výkres „OTVOR FORMY PRO DŮLEK“ (kružnice Ø 31,5 mm s osami) vystřihněte jako čtverec asi 7 × 7 cm (na menší desku menší, osy nechte celé), kružnici nevystřihujte. Desku vyberte tak, aby při lisování dosáhly nad minci dvě svěrky proti sobě: u svěrek z nákupu (vyložení 50 mm) smí být střed otvoru nejvýš asi 4 cm od hran, kudy svěrky půjdou – deska 8 × 8 cm, nebo nejvýš asi 8 cm široká. Na širší prkénko potřebujete svěrky s větším vyložením (ověřte, že dosáhnou za střed otvoru). Čtverec přilepte na desku doprostřed šířky, střed asi 4–5 cm od konce (naproti rukojeti, má-li ji; u desky 8 × 8 cm doprostřed), osy rovnoběžně s okraji. Osy protáhněte tužkou podle pravítka až k okrajům desky – podle nich budete zarovnávat kůži. Desku upněte svěrkou ke stolu přes odpadní prkno a středicí vrták nasaďte do křížku os. Vrtejte vykružovací pilou Ø 32 mm (u mince 40 mm Ø 44 mm) na 1. rychlost, bez příklepu a bez tlaku, dokud špička středicího vrtáku nevyjde zespodu z desky (korunka je pak zhruba v půlce tloušťky), pak desku otočte, znovu upněte a dokončete z druhé strany podle dírky středicího vrtáku. Korunku průběžně vytahujte a piliny odstraňte. Papír sundejte. Horní hranu otvoru (stranu pro kůži, označte si ji tužkou) srazte smirkem 180 namotaným na prstu do mírného oblouku (velikost ověřte na odřezku); průměr nezvětšujte. Stěnu otvoru jen lehce začistěte a plochu kolem přebruste naplocho. Hrana nesmí řezat ani drhnout a mince zabalená s odřezkem kůže musí jít do otvoru volně. Setřené osy obtáhněte znovu.',
+        body: 'Vytiskněte list KAPSA (odkaz pod krokem) 3× na 100 % a zkontrolujte úsečku 50 mm: výtisk na formu, výtisk na značky a výtisk na šablonu. Z výtisku na formu: výkres „OTVOR FORMY PRO DŮLEK“ (kružnice Ø 31,5 mm s osami) vystřihněte jako čtverec asi 7 × 7 cm (na menší desku menší, osy nechte celé), kružnici nevystřihujte. Desku vyberte tak, aby při lisování dosáhly nad minci dvě svěrky proti sobě: u svěrek z nákupu (vyložení 50 mm) smí být střed otvoru nejvýš asi 4 cm od hran, kudy svěrky půjdou – deska 8 × 8 cm, nebo nejvýš asi 8 cm široká. Na širší prkénko potřebujete svěrky s větším vyložením (ověřte, že dosáhnou za střed otvoru). Čtverec přilepte na desku doprostřed šířky, střed asi 4–5 cm od konce (naproti rukojeti, má-li ji; u desky 8 × 8 cm doprostřed), osy rovnoběžně s okraji. Osy protáhněte tužkou podle pravítka až k okrajům desky – podle nich budete zarovnávat kůži. Korunku Ø 32 mm nasaďte na unášeč a upněte do vrtačky (viz animace pod krokem; samostatný Wolfcraft upněte rovnou za stopku). Desku upněte svěrkou ke stolu přes odpadní prkno a středicí vrták nasaďte do křížku os. Vrtejte korunkou Ø 32 mm na unášeči (u mince 40 mm Ø 44 mm) na 1. rychlost, bez příklepu a bez tlaku, dokud špička středicího vrtáku nevyjde zespodu z desky (korunka je pak zhruba v půlce tloušťky), pak desku otočte, znovu upněte a dokončete z druhé strany podle dírky středicího vrtáku. Korunku průběžně vytahujte a piliny odstraňte. Papír sundejte. Horní hranu otvoru (stranu pro kůži, označte si ji tužkou) srazte smirkem 180 namotaným na prstu do mírného oblouku (velikost ověřte na odřezku); průměr nezvětšujte. Stěnu otvoru jen lehce začistěte a plochu kolem přebruste naplocho. Hrana nesmí řezat ani drhnout a mince zabalená s odřezkem kůže musí jít do otvoru volně. Setřené osy obtáhněte znovu.',
         printLink: 'pattern-sheets',
         animationLinks: [
           animationLink('kapsa', 'A1'),
@@ -372,7 +372,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'test-window-retention',
         title: 'Vysekněte zkušební okno a vyzkoušejte, že mince drží',
-        body: 'Zaschlý odřezek položte lícem dolů zpátky na formu: důlek do otvoru, osy na osy. Rozmazané čáry nejdřív obtáhněte podle šablony. Obrys vyřízněte nožem 2–3 lehkými tahy, kůži přidržujte na rovné části (desku můžete chránit kartonem s otvorem Ø 32 mm, u mince 40 mm Ø 44 mm). Formu položte na děrovací desku a do otvoru pod důlek postavte špalík (užší než otvor, širší než okno), zkrácený tak, aby se dna důlku jen dotýkal a nenadzvedával ho (ověřte na odřezku). Výsečník Ø 20 mm (u mince 40 mm Ø 32 mm) postavte na narýsovanou kružnici, zkontrolujte, že prstenec kolem důlku je po celém obvodu stejně široký, a vysekněte okno. Vyzkoušejte: (1) minci vložte z rubu, odřezek otočte oknem dolů a zatřeste – nesmí vypadnout; (2) zatlačte na ni z rubu palcem – nesmí oknem projít; (3) prstenec nesmí být natržený. Když mince projde, Ø 20 mm do kapsy zatím nesekejte. Když byl důlek mělký (mince vyčnívala nad rub), na druhém odřezku zopakujte orýsování, tvarování a schnutí s hlubším důlkem (kůže vlhčí, svěrky utažené pevněji, ale rovnoměrně – ověřte na odřezku) a vyzkoušejte znovu okno Ø 20 mm. Teprve když mince projde i tentokrát, nebo když byl důlek dost hluboký už napoprvé, vyzkoušejte na dalším odřezku okno Ø 18 mm (prstenec 4,75 mm). Když potřebujete třetí odřezek, u sestavy z nákupního plánu ho vyřízněte z kusu Blu A5: nejdřív si na něm podél jedné hrany obkreslete kapsu 57,5 × 57,5 mm a cvičný proužek 130 × 40 mm (stejně jako potom v lekci 3) a odřezek vezměte ze zbytku. Jako šablonu na rub vytiskněte list Kapsa – záložní okno Ø 18 mm (odkaz pod krokem), vystřihněte ho přesně po obrysu a vysekněte do něj okno Ø 18 mm; výtisk na značky (s dírkami) použijte znovu. Do kapsy pak sekejte průměrem, se kterým zkouška vyšla.',
+        body: 'Zaschlý odřezek položte lícem dolů zpátky na formu: důlek do otvoru, osy na osy. Rozmazané čáry nejdřív obtáhněte podle šablony. Obrys vyřízněte nožem 2–3 lehkými tahy, kůži přidržujte na rovné části (desku můžete chránit kartonem s otvorem Ø 32 mm, u mince 40 mm Ø 44 mm). Formu položte na děrovací desku a do otvoru pod důlek postavte špalík (užší než otvor, širší než okno), zkrácený tak, aby se dna důlku jen dotýkal a nenadzvedával ho (ověřte na odřezku). Výsečník Ø 20 mm (u mince 40 mm Ø 32 mm) postavte na narýsovanou kružnici, zkontrolujte, že prstenec kolem důlku je po celém obvodu stejně široký, a vysekněte okno. Vyzkoušejte: (1) minci vložte z rubu, odřezek otočte oknem dolů a zatřeste – nesmí vypadnout; (2) zatlačte na ni z rubu palcem – nesmí oknem projít; (3) prstenec nesmí být natržený. Když mince projde, Ø 20 mm do kapsy zatím nesekejte. Když byl důlek mělký (mince vyčnívala nad rub), na druhém odřezku zopakujte orýsování, tvarování a schnutí s hlubším důlkem (kůže vlhčí, svěrky utažené pevněji, ale rovnoměrně – ověřte na odřezku) a vyzkoušejte znovu okno Ø 20 mm. Teprve když mince projde i tentokrát, nebo když byl důlek dost hluboký už napoprvé, vyzkoušejte na dalším odřezku okno Ø 18 mm (prstenec 4,75 mm). Když potřebujete třetí odřezek, u sestavy z nákupního plánu ho vyřízněte z kusu Blu A5: nejdřív si na něm podél jedné hrany obkreslete kapsu 57,5 × 57,5 mm a cvičný proužek 130 × 40 mm (stejně jako potom v lekci 3) a odřezek vezměte ze zbytku. Jako šablonu na rub vytiskněte list Kapsa – záložní okno Ø 18 mm (odkaz pod krokem), vystřihněte ho přesně po obrysu a vysekněte do něj okno Ø 18 mm; výtisk na značky (s dírkami) použijte znovu. Výsečník Ø 18 mm je v nákupním plánu jako volitelný řádek mimo součet – je levný, můžete ho přihodit do první objednávky. Do kapsy pak sekejte průměrem, se kterým zkouška vyšla. Když mince projde i oknem Ø 18 mm, do kapsy žádné okno nesekejte a na dalším odřezku zkuste ještě hlubší důlek (ověřte na odřezku).',
         printLink: 'pattern-sheets',
         animationLinks: [animationLink('kapsa', 'E1')],
         media: [],
@@ -385,6 +385,7 @@ export const lessons: readonly LessonDefinition[] = [
               { value: 'okno-20', label: 'Ø 20 mm' },
               { value: 'okno-18', label: 'Ø 18 mm' },
               { value: 'okno-32', label: 'Ø 32 mm (mince 40 mm)' },
+              { value: 'zadne', label: 'Zatím žádné – neudrží ani Ø 18 mm, zkouším hlubší důlek' },
             ],
           },
         ],
@@ -1516,7 +1517,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'press-and-clamp',
         title: 'Přitiskněte a nechte zaschnout',
-        body: 'Přejeďte rozhrnovačkou. Sponky s podložkou nasaďte na panely těsně vedle obou ohybů, ne na smyčku. Než necháte zaschnout, zkontrolujte, že se otvory dna na sousedních panelech po složení lícují. Když ne, dokud je kůže vlhká, ohyb rozevřete a přeložte se smyčkou posunutou tak, aby seděly (stále mezi čarami z lekce 5). Malý zbytek srovnáte při lepení jehlami. Když se otvory nesrovnají ani tak, nelepte naslepo – postup ověřte na odřezku z lekce 4. Nechte zaschnout.',
+        body: 'Přejeďte rozhrnovačkou. Sponky s podložkou nasaďte na panely těsně vedle obou ohybů, ne na smyčku. Než necháte zaschnout, zkontrolujte, že se otvory dna na sousedních panelech po složení lícují. Když ne, dokud je kůže vlhká, ohyb rozevřete a přeložte se smyčkou posunutou tak, aby seděly (stále mezi čarami z lekce 5). Malý zbytek srovnáte při lepení jehlami. Nechte zaschnout. Když se otvory nesrovnaly ani tak, nelepte: po zaschnutí změřte, o kolik jsou posunuté, a ohyb s tímto posunem vyzkoušejte na novém cvičném proužku postupem z lekce 4.',
         animationLinks: [animationLink('pouchFold', 'B4')],
         recalls: [{ fieldId: 'practice-holes-offset', label: 'Posun otvorů na odřezku v lekci 4' }],
         media: [
@@ -1840,7 +1841,7 @@ export const coinCardHolderProject: ProjectDefinition = {
       priority: 'required',
       reason: 'Tvarování důlku na minci za mokra (lekce 2 a 6).',
       specification:
-        'Dvoudílná forma z překližky (jako forma poslouží i bukové kuchyňské prkénko asi 1,5 cm silné; svěrky z nákupu s vyložením 50 mm na něm dosáhnou nad minci jen u desky nejvýš asi 8 cm široké), otvor Ø 31,5 mm pro výchozí minci 50 Kč (vykružovací pila 32 mm – ověřit na odřezku; Forstnerův vrták jen 32 mm); Ø 44 mm pro minci 40 mm.',
+        'Dvoudílná forma z překližky (jako forma poslouží i bukové kuchyňské prkénko asi 1,5 cm silné; svěrky z nákupu s vyložením 50 mm na něm dosáhnou nad minci jen u desky nejvýš asi 8 cm široké), otvor Ø 31,5 mm pro výchozí minci 50 Kč (korunka Ø 32 mm na unášeči, např. ze sady Extol – ověřit na odřezku; Forstnerův vrták jen 32 mm); Ø 44 mm pro minci 40 mm.',
     },
     {
       equipmentSlug: 'clamps',
@@ -2227,6 +2228,15 @@ export const coinCardHolderProject: ProjectDefinition = {
         purpose: 'varianta 20 mm – okno kapsy',
       },
       {
+        equipmentSlug: 'round-punch-32mm',
+        url: 'https://craft-point.cz/products/vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu',
+        variant: 'Ø 18 mm',
+        quantity: 1,
+        optional: true,
+        purpose:
+          'jen když okno Ø 20 mm na odřezku minci neudrží ani s hlubším důlkem (lekce 2); levné, můžete přihodit do stejné objednávky',
+      },
+      {
         equipmentSlug: 'small-hole-punch',
         url: 'https://craft-point.cz/products/vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu',
         quantity: 1,
@@ -2293,10 +2303,10 @@ export const coinCardHolderProject: ProjectDefinition = {
       },
       {
         equipmentSlug: 'coin-forming-block',
-        url: 'https://www.hornbach.cz/shop/Bimetalovy-vykruzovak-Wolfcraft-32-mm/7416284/artikl.html',
+        url: 'https://www.alza.cz/hobby/extol-premium-8801606-d5787899.htm',
         quantity: 1,
         purpose:
-          'bimetal Ø 32 mm na otvor formy Ø 31,5 mm, středicí vrták v balení, šestihranná stopka 9,5 mm rovnou do sklíčidla (bez unášecího talíře); vyřízne otvor aspoň o 0,5 mm větší než model (vůle kolem zabalené mince asi 2,1 mm místo 1,6 mm) – tvarování to nezkazí, jen okraj důlku bude o něco měkčí; ověříte na zkoušce v lekci 2',
+          'korunka Ø 32 mm na unášeči na otvor formy Ø 31,5 mm (sada má i Ø 44 mm pro minci 40 mm); vyřízne otvor aspoň o 0,5 mm větší než model (vůle kolem zabalené mince asi 2,1 mm místo 1,6 mm) – tvarování to nezkazí, jen okraj důlku bude o něco měkčí; ověříte na zkoušce v lekci 2. Místo sady stačí samostatný Wolfcraft Ø 32 mm (HORNBACH, viz vybavení)',
       },
       {
         equipmentSlug: 'clamps',

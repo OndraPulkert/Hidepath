@@ -103,6 +103,34 @@ describe('resolveShoppingPlan', () => {
     expect(plan.remainingCents).toBe(47_400);
   });
 
+  it('volitelný řádek ukáže s cenou, ale do součtů ho nepočítá', () => {
+    const plan = resolveShoppingPlan(
+      {
+        shoppingPlan: {
+          ...project.shoppingPlan,
+          lines: [
+            ...project.shoppingPlan.lines,
+            {
+              equipmentSlug: 'leather',
+              url: LEATHER,
+              variant: 'A5',
+              quantity: 1,
+              optional: true as const,
+              purpose: 'jen když',
+            },
+          ].filter((_, i) => i !== 2),
+        },
+      },
+      catalog,
+      {},
+    )!;
+    const optional = plan.shops[0]!.lines.find((l) => l.optional)!;
+    expect(optional.lineCents).toBe(5_700);
+    expect(plan.shops[0]!.totalCents).toBe(25_100 + 6_000);
+    expect(plan.totalCents).toBe(25_100 + 6_000 + 10_900);
+    expect(plan.remainingCents).toBe(plan.totalCents);
+  });
+
   it('řádek bez příkladu v katalogu vynechá', () => {
     const plan = resolveShoppingPlan(
       {

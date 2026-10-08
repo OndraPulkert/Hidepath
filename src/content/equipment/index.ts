@@ -1412,7 +1412,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       {
         label: 'Vrtání',
         value:
-          'vykružovací pila (hole saw) 32 mm pro výchozí minci 50 Kč, na aku vrtačku; Forstnerův vrták jen s průměrem, který na otvor sedí (32 mm) – v ověřené sadě 15–35 mm pro 50 Kč není',
+          'korunka (vykružovací pila, hole saw) Ø 32 mm pro výchozí minci 50 Kč na unášeči se středicím vrtákem, na aku vrtačku – např. ze sady Extol Premium 19–76 mm (má i 44 mm pro minci 40 mm), nebo samostatný Wolfcraft Ø 32 mm, jehož stopka jde rovnou do sklíčidla; Forstnerův vrták jen s průměrem, který na otvor sedí (32 mm) – v ověřené sadě 15–35 mm pro 50 Kč není',
       },
     ],
     cautions: [
@@ -1449,17 +1449,26 @@ export const equipmentList: readonly EquipmentDefinition[] = [
           'levná sada – podle recenzí se v aku vrtačce protáčí a rychle tupí (i po jednom otvoru); obsahuje 32 i 45 mm, ale počítejte s tím, že vydrží sotva na formu.',
       },
     ],
-    priceRange: { minCents: 23_900, maxCents: 23_900 },
+    priceRange: { minCents: 30_500, maxCents: 30_500 },
     priceSource: 'verified',
-    priceNote: `${VERIFIED_NOTE} Cena je za bimetalový vykružovák Wolfcraft Ø 32 mm pro výchozí minci 50 Kč (239 Kč, HORNBACH, ověřeno 2. 10. 2026). Nabídky jen pro minci 40 mm (BAUHAUS 299 Kč, HiKOKI 195 Kč) a sada Forstnerových vrtáků (179 Kč, pro mince 20 a 10 Kč) jsou níže jako varianty a do ceny se nepočítají, stejně jako překližka.`,
+    priceNote: `${VERIFIED_NOTE} Cena je za sadu korunek Extol Premium 19–76 mm s korunkou Ø 32 mm pro výchozí minci 50 Kč (305 Kč, Alza, ověřeno 8. 10. 2026). Samostatný vykružovák Wolfcraft Ø 32 mm (239 Kč, HORNBACH) je níže jako alternativa, nabídky jen pro minci 40 mm (BAUHAUS 299 Kč, HiKOKI 195 Kč) a sada Forstnerových vrtáků (179 Kč, pro mince 20 a 10 Kč) jako varianty; do ceny se nepočítají, stejně jako překližka.`,
     alsoUsedFor: [],
     examples: [
+      {
+        title: 'Sada korunek Extol Premium Ø 19–76 mm, 12 průměrů (8801606)',
+        shop: 'Alza',
+        url: 'https://www.alza.cz/hobby/extol-premium-8801606-d5787899.htm',
+        priceCents: 30_500,
+        note: 'Doporučená: 12 korunek Ø 19–76 mm do dřeva, plastu a sádrokartonu, hloubka korunky 25 mm; je v ní Ø 32 mm pro výchozí minci 50 Kč (o 0,5 mm víc než potřebných 31,5 mm – vyzkoušet na odřezku) i Ø 44 mm pro minci 40 mm. Korunka se nasazuje na unášeč se středicím vrtákem (viz animace Vykružovací korunka na vrtačku). Skladem více než 10 ks, hodnocení 4,7/5 (251 hodnocení); 8. 10. 2026 s kódem ALZADNY20 za 244 Kč – akce se mění, cenu ověřte v košíku.',
+        availability: 'in_stock',
+        checkedAt: '2026-10-08',
+      },
       {
         title: 'Bimetalový vykružovák Wolfcraft Ø 32 mm',
         shop: 'HORNBACH',
         url: 'https://www.hornbach.cz/shop/Bimetalovy-vykruzovak-Wolfcraft-32-mm/7416284/artikl.html',
         priceCents: 23_900,
-        note: 'Doporučený pro výchozí minci 50 Kč: bimetal Ø 32 mm (o 0,5 mm víc než potřebných 31,5 mm – vyzkoušet na odřezku), max. hloubka řezu 40 mm. Středicí vrták Ø 6 mm je v balení a unášecí talíř není potřeba – šestihranná stopka 9,5 mm se upne přímo do sklíčidla 13 mm. Online dodání 1–2 pracovní dny, na prodejně Praha Černý Most 24 ks; hodnocení 4,9/5 (10 recenzí).',
+        note: 'Alternativa k sadě Extol, jen pro výchozí minci 50 Kč: bimetal Ø 32 mm (o 0,5 mm víc než potřebných 31,5 mm – vyzkoušet na odřezku), max. hloubka řezu 40 mm. Středicí vrták Ø 6 mm je v balení a unášecí talíř není potřeba – šestihranná stopka 9,5 mm se upne přímo do sklíčidla 13 mm. Online dodání 1–2 pracovní dny, na prodejně Praha Černý Most 24 ks; hodnocení 4,9/5 (10 recenzí).',
         availability: 'in_stock',
         checkedAt: '2026-10-02',
       },
@@ -1801,7 +1810,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       {
         label: 'Záloha',
         value:
-          'volitelně Ø 18 mm (CraftPoint, 58 Kč) pro případ, že zkouška Ø 20 mm na odřezku nevyjde – stojí za to přihodit do stejné objednávky',
+          'volitelně Ø 18 mm (CraftPoint, 57 Kč) pro případ, že zkouška Ø 20 mm na odřezku nevyjde – stojí za to přihodit do stejné objednávky',
       },
       {
         label: 'Podložka',
@@ -1809,7 +1818,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       },
     ],
     cautions: [
-      'Prstenec 3,75 mm je užší, než s jakým střih počítal dřív (4 mm). Na odřezku z tvarovací zkoušky (lekce 2) vyseknutým oknem ověřte, že mince v důlku drží: zatřesení oknem dolů a zatlačení na minci směrem k oknu. Když oknem projde, zapište to a Ø 20 mm do skutečné kapsy nesekejte: na dalším odřezku zkuste menší průměr (stejná nabídka CraftPointu má i Ø 18 mm, 29. 9. 2026 za 58 Kč skladem; prstenec pak 4,75 mm) – ověřit na odřezku.',
+      'Prstenec 3,75 mm je užší, než s jakým střih počítal dřív (4 mm). Na odřezku z tvarovací zkoušky (lekce 2) vyseknutým oknem ověřte, že mince v důlku drží: zatřesení oknem dolů a zatlačení na minci směrem k oknu. Když oknem projde, zapište to a Ø 20 mm do skutečné kapsy nesekejte: na dalším odřezku zkuste menší průměr (stejná nabídka CraftPointu má i Ø 18 mm, 8. 10. 2026 za 57 Kč skladem; prstenec pak 4,75 mm) – ověřit na odřezku. Když neudrží ani Ø 18 mm, do kapsy nesekejte a na dalším odřezku zkuste hlubší důlek (ověřte).',
       'Sekejte kolmo, vystředěné podle kružnice okna narýsované na rubu kapsy před tvarováním (nebo podle stejně širokého prstence kůže kolem důlku).',
       'Kapsu při vysekávání okna položte lícem dolů zpátky na formu (nad otvorem) a pod důlek podložte špalík užší než otvor formy (pod 31,5 mm, u mince 40 mm pod 44 mm) a zároveň širší než okno (přes 20 mm, u mince 40 mm přes 32 mm) – má se dotýkat jen dna důlku zespodu, ne ho nadzvedávat.',
       'Jestli výsečník čistě prosekne kůži 1,2 mm jedním úderem, ověřte na odřezku.',
@@ -1829,6 +1838,17 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         priceCents: 6_900,
         priceNote: 'za kus (varianta 20 mm)',
         note: 'Ø 20 mm pro okno výchozí mince 50 Kč. Výsečník na kůži; v nabídce vyberte průměr 20 mm.',
+        availability: 'in_stock',
+        checkedAt: '2026-10-08',
+      },
+      {
+        title: 'Výsečníky na kůži 2–20 mm, průměr dle výběru',
+        shop: 'CraftPoint',
+        url: 'https://craft-point.cz/products/vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu',
+        variant: 'Ø 18 mm',
+        priceCents: 5_700,
+        priceNote: 'za kus (varianta 18 mm)',
+        note: 'Záloha pro výchozí minci 50 Kč: jen když okno Ø 20 mm na odřezku minci neudrží (lekce 2); prstenec 4,75 mm. V nabídce vyberte průměr 18 mm.',
         availability: 'in_stock',
         checkedAt: '2026-10-08',
       },

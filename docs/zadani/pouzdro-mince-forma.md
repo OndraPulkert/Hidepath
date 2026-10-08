@@ -13,19 +13,27 @@ Otvor = mince + 2 × kůže kapsy 1,2 mm + vůle 1,6 mm (viz model `formHoleDiam
 KAPSA pro danou minci je otvor formy nakreslený 1:1. **Výchozí list je od v4.10 pro minci
 50 Kč** (`pnpm pattern:coin-holder`); mince 40 mm z předlohy `--coin 40`, obdobně `20kc`, `10kc`.
 
-| Mince         | Průměr mince | Potřebný otvor | Čím ho vyvrtat                                                  |
-| ------------- | ------------ | -------------- | --------------------------------------------------------------- |
-| výchozí 50 Kč | 27,5 mm      | **31,5 mm**    | vykružovák 32 mm (sada OBI; o 0,5 mm víc – vyzkoušet)           |
-| 40 mm         | 40 mm        | **44 mm**      | vykružovák 44 (BAUHAUS), nebo 45 z OBI (o 1 mm víc – vyzkoušet) |
-| 20 Kč         | 26 mm        | **30 mm**      | sukovník 30 mm (sada OBI) ✓ přesně                              |
-| 10 Kč         | 24,5 mm      | **28,5 mm**    | sukovník 30 mm (o 1,5 mm víc – vyzkoušet na odřezku)            |
+| Mince         | Průměr mince | Potřebný otvor | Čím ho vyvrtat                                                                           |
+| ------------- | ------------ | -------------- | ---------------------------------------------------------------------------------------- |
+| výchozí 50 Kč | 27,5 mm      | **31,5 mm**    | korunka 32 mm (sada Extol; o 0,5 mm víc – vyzkoušet)                                     |
+| 40 mm         | 40 mm        | **44 mm**      | korunka 44 (sada Extol), vykružovák 44 (BAUHAUS), nebo 45 z OBI (o 1 mm víc – vyzkoušet) |
+| 20 Kč         | 26 mm        | **30 mm**      | sukovník 30 mm (sada OBI) ✓ přesně                                                       |
+| 10 Kč         | 24,5 mm      | **28,5 mm**    | sukovník 30 mm (o 1,5 mm víc – vyzkoušet na odřezku)                                     |
 
 Větší otvor než potřebný (32 místo 31,5, 45 místo 44, 30 místo 28,5) nejspíš půjde, jen okraj důlku bude měkčí.
 Neověřeno – vždycky nejdřív zkusit na odřezku kůže.
 
 ## Co koupit
 
-### Vrtáky (stačí dvě sady z OBI, nic dalšího k nim dokupovat netřeba)
+### Vrtáky
+
+**Doplněno 8. 10. 2026 – výchozí volba (autor sadu má):**
+[EXTOL PREMIUM vrtáky vykružovací korunkové, 12 průměrů Ø 19–76 mm, 8801606 – Alza](https://www.alza.cz/hobby/extol-premium-8801606-d5787899.htm),
+**305 Kč** (8. 10. 2026 s kódem ALZADNY20 244 Kč), skladem, 4,7/5 z 251 hodnocení. Do dřeva, plastu
+a sádrokartonu, hloubka korunky 25 mm. Korunka **Ø 32 mm** (výchozí 50 Kč) i **Ø 44 mm** (mince
+40 mm) na unášeči se středicím vrtákem; nasazení ukazuje animace `vrtani-formy`. Alternativa jen na
+32 mm: [Bimetalový vykružovák Wolfcraft Ø 32 mm – HORNBACH](https://www.hornbach.cz/shop/Bimetalovy-vykruzovak-Wolfcraft-32-mm/7416284/artikl.html),
+239 Kč (ověřeno 2. 10. 2026). Sady z OBI níže jsou původní varianta z 27. 9. 2026.
 
 - [LUX-TOOLS Sada vykružovacích pil, 7 ks – OBI](https://www.obi.cz/vykruzovaci-pily/lux-sada-vykruzovacich-pil-7-ks/p/1698885),
   **99 Kč**. Průměry 25, 32, 38, 45, 50, 56, 62 mm, univerzální unášecí talíř a středicí vrták
@@ -111,7 +119,8 @@ Dvě svěrky dát proti sobě (z každé strany jednu), aby se víko nenaklonilo
 
 1. Vytisknout list KAPSA na 100 % (zkontrolovat úsečku 50 mm), vystřihnout kružnici „OTVOR FORMY
    PRO DŮLEK“ a nalepit na desku 8 × 8 cm.
-2. Desku upnout svěrkou ke stolu, pod ni odpadní prkno.
+2. Korunku 32 mm nasadit na unášeč a upnout do vrtačky (animace `vrtani-formy`; samostatný Wolfcraft se
+   upne rovnou za stopku). Desku upnout svěrkou ke stolu, pod ni odpadní prkno.
 3. Vrtat na **1. rychlost, bez příklepu**, netlačit silou, s nabitou baterií (vykružovák 45 mm pro
    minci 40 mm je pro 14,4 V nejnáročnější, 32 mm je snazší). Vykružovákem vrtat, dokud špička středicího vrtáku nevyjde zespodu z desky
    (korunka je pak zhruba v půlce), desku otočit a dokončit z druhé strany podle dírky středicího vrtáku. Vykružovák občas vytáhnout kvůli pilinám.

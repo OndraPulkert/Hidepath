@@ -492,6 +492,11 @@ export const shoppingPlanLineSchema = z.object({
   quantity: z.number().int().positive(),
   /** Na co se kupuje, např. „pás těla 240,35 × 104,1 mm“. */
   purpose: z.string().min(1).optional(),
+  /**
+   * Jen za podmínky (např. záložní výsečník, když zkouška nevyjde): řádek se ukáže s cenou,
+   * ale do součtu plánu se nepočítá. Podmínku říká `purpose`.
+   */
+  optional: z.literal(true).optional(),
 });
 export type ShoppingPlanLine = z.infer<typeof shoppingPlanLineSchema>;
 

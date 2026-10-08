@@ -377,7 +377,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'corners',
         title: 'Dokončete řadu dvojhrotem',
-        body: 'U konce proužku dokončete řadu vidličkami se 2 hroty, aby poslední otvor vyšel přesně na značku konce. Dvojhrot použijete i v lekci 6 na koncích řady a v zaoblených rozích.',
+        body: 'U konce proužku dokončete řadu vidličkami se 2 hroty, první hrot vždy v posledním otvoru. Řadu ukončete otvorem, který vyjde nejblíž značce konce; otvory neposouvejte, rozteč musí zůstat stejná (ověřte na odřezku). Dvojhrot použijete i v lekci 6 na koncích řady a v zaoblených rozích.',
         media: [],
       },
       {
@@ -898,7 +898,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'punch-sides',
         title: 'Děrujte boky a spodek',
-        body: 'Děrujte z líce kapsy na tvrdé desce, jen tam, kde kapsa leží na zadním dílu; horní část zadního dílu zůstane bez otvorů. První otvor dejte na linii stehu asi 6 mm pod horní hranou kapsy, kde je bok pod zaoblením už rovný. Pokračujte dolů. Spodní roh je zaoblený: veďte řadu po zaoblené linii, i tam 3,5 mm od hrany, ne do průsečíku rovných linií (ten je jen asi 2,5 mm od hrany). Zatáčku děrujte dvojhrotem po jednom otvoru, první hrot vždy v posledním otvoru (ověřte na odřezku). Stejně pokračujte po spodku a druhým rohem. Druhý bok děrujte nahoru a u horního konce řadu dorovnejte dvojhrotem, aby poslední otvor ležel ve stejné výšce jako první otvor na prvním boku.',
+        body: 'Děrujte z líce kapsy na tvrdé desce, jen tam, kde kapsa leží na zadním dílu; horní část zadního dílu zůstane bez otvorů. První otvor dejte na linii stehu asi 6 mm pod horní hranou kapsy, kde je bok pod zaoblením už rovný. Pokračujte dolů. Spodní roh je zaoblený: veďte řadu po zaoblené linii, i tam 3,5 mm od hrany, ne do průsečíku rovných linií (ten je jen asi 2,5 mm od hrany). Zatáčku děrujte dvojhrotem po jednom otvoru, první hrot vždy v posledním otvoru (ověřte na odřezku). Stejně pokračujte po spodku a druhým rohem. Druhý bok děrujte nahoru a u horního konce řadu dokončete dvojhrotem: skončete otvorem, který vyjde nejblíž výšce prvního otvoru na prvním boku. Otvory neposouvejte, rozteč musí zůstat stejná (ověřte na odřezku).',
         media: [
           {
             id: 'l6-corner-punch',
