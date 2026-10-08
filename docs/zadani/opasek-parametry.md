@@ -13,12 +13,12 @@ Můstek (`minLigamentMm`) je ve všech kontrolách **6 mm**.
 | Parametr                                  | Výchozí                                         | Rozsah v aplikaci                           | Proč tahle mez                                                                                                                                                                                                                                                                                                                                      | Co mění                                                                                                     |
 | ----------------------------------------- | ----------------------------------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | **Šířka** = vnitřní světlost přezky       | 40 mm                                           | **28–45 mm**, celé mm                       | Model sám pustí 18–82,5 mm (dolní: můstek k boční hraně u otvoru Ø 6; horní: mezera hrot–první dírka). Užší mez dává destička (28–45, `minBeltWidthMm`/`maxBeltWidthMm`) a zdroje: běžné šířky 30/32, 38/40, 45, u dodavatelů 35. Rozvržení konce u přezky je odměřené z BFLG pro 25–38 mm a na 40 mm použité přes střednici; mimo 28–45 neověřené. | délka hrotu, oblouk zaobleného konce, délka poutka, přezka a pás v nákupu, cena pásu, použitelnost destičky |
-| **Tloušťka** (změřená na řezu)            | **3,5 mm**                                      | **3,0–4,0 mm**, změřená hodnota (např. 3,6) | Postup krok 3 a nákupní seznam: pás 3,0–4,0 mm, nýt podle tloušťky. Model hlídá jen > 0. Dřík se počítá z přesné hodnoty; nýt z ověřených nabídek, který do rozsahu padne, nebo „žádný, ověřte u prodejce“.                                                                                                                                         | délka dříku nýtu (`rivetPostRangeMm`), délka poutka, výška podložek pod destičku                            |
+| **Tloušťka** (změřená na řezu)            | **3,5 mm**                                      | **3,0–4,0 mm**, změřená hodnota (např. 3,6) | Postup krok 3 a nákupní seznam: pás 3,0–4,0 mm, nýt podle tloušťky. Model hlídá jen > 0. Dřík se počítá z přesné hodnoty; nýt z ověřených nabídek, který do rozsahu padne, nebo „žádný, ověřte u prodejce“. Nabídky pásu filtruje s tolerancí dodávky: CraftPoint (nominál 3–3,5) do naměřených 3,75 mm.                                            | délka dříku nýtu (`rivetPostRangeMm`), délka poutka, výška podložek pod destičku                            |
 | **Obvod** (ohyb u přezky → nošená dírka)  | žádný, uživatel změří                           | 60–150 cm                                   | Jen pojistka proti překlepu, ne řemeslná mez. Model nemá omezení.                                                                                                                                                                                                                                                                                   | délka pásu k nákupu, výběr délky pásu (130/140/150 cm)                                                      |
 | **Konec**                                 | uživatel volí (obě varianty)                    | `hrot` / `zaoblený`                         | Hrot: sklon 0,453 a vrchol R4 (CraftPoint, odměřeno pro 35 i 40 mm). Zaoblený: polokruh r = šířka/2.                                                                                                                                                                                                                                                | tvar listu 2, řada destičky (1 nebo 2), délka hrotu                                                         |
 | **Počet dírek**                           | 5                                               | 3 / 5 / 7                                   | Model: lichý počet ≥ 1 (jinak není prostřední dírka). Zdroje znají jen 5 (CraftPoint generátor i slovník). 3 a 7: **ověřte na odřezku**.                                                                                                                                                                                                            | délka pásu, rozsah nastavení (±(n−1)/2 × rozteč), délka listu 2                                             |
 | **Rozteč dírek**                          | 25 mm                                           | 25 mm; jiná jen s varováním, min. Ø + 6 mm  | Zdroje: 25 mm (CraftPoint, slovník, video). Model: rozteč − Ø dírky ≥ 6 mm, tedy pro Ø 5 aspoň 11 mm.                                                                                                                                                                                                                                               | polohy dírek, délka pásu, rozsah nastavení                                                                  |
-| **Vrchol → první dírka**                  | 94,3 mm                                         | od meze modelu do 100 mm                    | CraftPoint 94,3 mm; Realeather „1″–4″“, tedy 25–100 mm. Model u hrotu: délka hrotu + Ø/2 + 6 mm, tedy 47,0 mm u 40 mm a 52,5 mm u 45 mm (Ø 5). U zaobleného konce model kontrolu nemá: **doplnit** (r + Ø/2 + 6 mm).                                                                                                                                | polohy dírek, délka pásu                                                                                    |
+| **Vrchol → první dírka**                  | 94,3 mm                                         | od meze modelu do 100 mm                    | CraftPoint 94,3 mm; Realeather „1″–4″“, tedy 25–100 mm. Model u hrotu: délka hrotu + Ø/2 + 6 mm, tedy 47,0 mm u 40 mm a 52,5 mm u 45 mm (Ø 5). U zaobleného konce: r (= šířka/2) + Ø/2 + 6 mm, tedy 28,5 mm u 40 mm a 31,0 mm u 45 mm (Ø 5) – `checkBeltTipSpec` s tvarem `round`.                                                                  | polohy dírek, délka pásu                                                                                    |
 | **Ø dírky pro trn**                       | **5 mm**                                        | trn u kořene + 0,5 mm                       | Postup: u přezky 40 mm 4,5 nebo 5 mm, 5 mm je běžná velikost. U jiné přezky změřte trn. Model: rozteč a boční můstek.                                                                                                                                                                                                                               | výsečník v nákupu                                                                                           |
 | **Konec u přezky** (ovál, nýty, přehnutí) | ovál 25 × 6, nýty ±25,5 / ±73,2, přehnutí 90 mm | **pevné**                                   | Jediný zdroj s dvěma nýty (BFLG), stejné pro 1″–1½″. Kontroly: můstek ovál–nýt 10 mm, za nýtem 13,8 mm, kapsa 37,7 mm. CraftPoint má jiný konec (ovál 40 × 8, jeden nýt, 80 mm) – nemíchat.                                                                                                                                                         | délka pásu (+90 mm), řada 3                                                                                 |
 | **Ø otvoru pro nýt a konce oválu**        | 6 mm                                            | pevné                                       | CraftPoint (6mm otvory pro nýty) i BFLG (5,7 mm). Ovál 6 mm = výsečník na jeho konce.                                                                                                                                                                                                                                                               | výsečník 6 mm v nákupu                                                                                      |
@@ -32,7 +32,7 @@ Můstek (`minLigamentMm`) je ve všech kontrolách **6 mm**.
 | Délka pásu k nákupu | obvod + 90 + vrchol→první dírka + (n − 1)/2 × rozteč (`totalStrapLengthMm`) | obvod + 234,3 mm                     |
 | Dírky od vrcholu    | vrchol→první + i × rozteč (`holeOffsetsFromApexMm`)                         | 94,3 / 119,3 / 144,3 / 169,3 / 194,3 |
 | Délka hrotu         | `tipLengthMm` (šířka, sklon 0,453, R4)                                      | 38,5 mm                              |
-| Poutko              | 2 × (šířka + 2 × tloušťka) + 15 (`keeperStripLengthMm`), zaokrouhleno       | 109 × 12 mm                          |
+| Poutko              | 2 × (šířka + 3 × tloušťka) + π × 1,2 + 15 (`keeperStripLengthMm`), zaokr.   | 120 × 12 mm                          |
 | Dřík nýtu           | 2 × tloušťka − 1,5 až − 1 (`rivetPostRangeMm`)                              | 5,5–6,0 mm → 10/6                    |
 | Ovál                | 25 × 6 mm, ohyb ho půlí → otvor 12,5 mm (`foldedSlotOpeningMm`)             | nemění se                            |
 | Nýty od ohybu       | ±25,5 a ±73,2 mm                                                            | nemění se                            |
@@ -40,17 +40,22 @@ Můstek (`minLigamentMm`) je ve všech kontrolách **6 mm**.
 Délka hrotu podle šířky: 28 → 25,2 · 30 → 27,4 · 32 → 29,6 · 35 → 32,9 · 38 → 36,2 · 40 → 38,5 ·
 45 → 44,0 mm.
 
-Poutko (mm) podle šířky a tloušťky:
+Poutko (mm) podle šířky a tloušťky. Obepíná **3 vrstvy**: přehnutý konec, pás a volný konec pásku,
+který jím po zapnutí prochází; π × 1,2 mm je tloušťka poutka (odřezek 1,2 mm) v ohybech.
+(Revize 2026-10-08: dřív 2 vrstvy, poutko vycházelo asi o 11 mm kratší a volný konec by se do něj
+nevešel.)
 
 | Šířka | 3,0 | 3,5 | 4,0 |
 | ----- | --- | --- | --- |
-| 30    | 87  | 89  | 91  |
-| 35    | 97  | 99  | 101 |
-| 40    | 107 | 109 | 111 |
-| 45    | 117 | 119 | 121 |
+| 30    | 97  | 100 | 103 |
+| 35    | 107 | 110 | 113 |
+| 40    | 117 | 120 | 123 |
+| 45    | 127 | 130 | 133 |
 
-Délka pásu: s výchozím rozvržením stačí pás 130 cm do obvodu **106,5 cm**, 140 cm do **116,5 cm**.
-Delší: Křupson 150 / 180 cm (jen 4 cm). Každá dírka navíc na každou stranu přidá 25 mm.
+Délka pásu: s výchozím rozvržením stačí pás 130 cm do obvodu **106,5 cm**. Nad to je potřeba pás
+se zaručenou větší délkou: Křupson 150 / 180 cm (jen šířka 40 mm). CraftPoint slibuje „130–140 cm“,
+s 140 cm proto nepočítejte; pro jiné šířky ověřte u prodejce. Každá dírka navíc na každou stranu
+přidá 25 mm.
 
 ## 3. Nýt podle tloušťky (postup krok 3)
 
@@ -91,7 +96,7 @@ typ trnu ale stránka neuvádí.
 | **Řada 1** – hrot           | **28–45** (výřez 55 mm, sklon stálý) | 5 dírek po 25 mm, první 94,3 mm od vrcholu, R4            | jiný počet / rozteč / odstup: tiskový list                |
 | **Řada 2** – zaoblený       | **jen 40 a 30**                      | oblouky r 20 a 15 (soustředné), 5 dírek po 25 mm          | 35 a 45: kružítko r = šířka/2 nebo tiskový list           |
 | Řada 2 – odstup první dírky | 40: 94,3 mm · 30: **89,3 mm**        | oblouky mají společný střed, konec 30 mm leží o 5 mm blíž | –                                                         |
-| Pravítko 0–145 mm           | poutko do 125 mm (45 × 5 mm)         | –                                                         | –                                                         |
+| Pravítko 0–145 mm           | poutko do 139 mm (45 × 5 mm)         | –                                                         | –                                                         |
 | Tloušťka                    | destička na ní nezávisí              | –                                                         | podložky pod destičku stejně silné jako pás               |
 
 **Pravidlo pro aplikaci:** destičku nabídněte, když šířka ∈ 28–45, počet dírek = 5, rozteč = 25 mm,
@@ -104,14 +109,14 @@ skript `scripts/belt-buckle-end.ts` je jen zapisuje. Aplikace je kreslí v prohl
 (formulář „Váš pásek“, `browserGenerator: 'belt-config'`, výpočet v
 [`src/lib/patterns/belt-config.ts`](../../src/lib/patterns/belt-config.ts)).
 
-| Věc                     | Stav                                                                                                                                    |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Šířka                   | aplikace 28–45 mm (celé mm); skript dál `--width` 15–80 mm                                                                              |
-| Tloušťka                | vstup 3,0–4,0 mm, libovolná změřená hodnota; mění délku poutka na listu 1, dřík nýtu je ve výsledcích                                   |
-| Konec                   | list 2 kreslí hrot i zaoblený konec (půlkruh r = šířka/2)                                                                               |
-| Počet dírek             | do 195,6 mm od konce list na výšku; do 258 mm na šířku (7 dírek); dál aplikace čísla spočítá, jen listy netiskne („značte podle čísel“) |
-| Výchozí listy 35/40 mm  | přegenerované `pnpm pattern:belt-end --multi` (hlídá `scripts/generator-golden.test.ts`); texty ve vykání                               |
-| Generování v prohlížeči | hotové                                                                                                                                  |
+| Věc                     | Stav                                                                                                                                                    |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Šířka                   | aplikace 28–45 mm (celé mm); skript dál `--width` 15–80 mm                                                                                              |
+| Tloušťka                | vstup 3,0–4,0 mm, libovolná změřená hodnota; mění délku poutka na listu 1, dřík nýtu je ve výsledcích                                                   |
+| Konec                   | list 2 kreslí hrot i zaoblený konec (půlkruh r = šířka/2)                                                                                               |
+| Počet dírek             | do 195,6 mm od konce list na výšku; do 258 mm na šířku (7 dírek); dál aplikace čísla spočítá a vytiskne jen list 1 (dírky a konec „značte podle čísel“) |
+| Výchozí listy 35/40 mm  | přegenerované `pnpm pattern:belt-end --multi` (hlídá `scripts/generator-golden.test.ts`); texty ve vykání                                               |
+| Generování v prohlížeči | hotové                                                                                                                                                  |
 
 ## 7. Kontrola destičky po dodání
 

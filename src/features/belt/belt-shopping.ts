@@ -23,7 +23,12 @@ import { cz } from '@/lib/patterns/belt-sheets';
  */
 
 /** Položky plánu, které závisí na sestavě. Ostatní (nástroje) jsou pro všechny pásky stejné. */
-export const BELT_CONFIG_PLAN_SLUGS = ['belt-strap', 'belt-buckle', 'chicago-screws'] as const;
+export const BELT_CONFIG_PLAN_SLUGS = [
+  'belt-strap',
+  'belt-buckle',
+  'chicago-screws',
+  'hole-punch-5mm',
+] as const;
 type ConfigSlug = (typeof BELT_CONFIG_PLAN_SLUGS)[number];
 
 /** Z jaké sestavy plán je: nejnovější z „Mých pásků“, jinak čísla ze zápisníku. */
@@ -66,7 +71,8 @@ const lineFor = (
   purpose,
 });
 
-type PlanPick = { line: ShoppingPlanLine } | { skipped: string };
+/** `keep` = řádek plánu projektu platí beze změny. */
+type PlanPick = { line: ShoppingPlanLine } | { skipped: string } | { keep: true };
 
 function strapPick(r: BeltConfigResult, catalog: EquipmentCatalog): PlanPick {
   const w = r.input.widthMm;
@@ -144,6 +150,42 @@ function screwPick(r: BeltConfigResult, catalog: EquipmentCatalog): PlanPick {
   };
 }
 
+/** Sada CraftPoint 2–5 mm má hrot 4,5 mm (katalog `hole-punch-5mm`). */
+const PUNCH_SET_URL = 'https://craft-point.cz/products/sada-vysecniku-na-kuzi-7-velikosti-2-5mm';
+
+/**
+ * Výsečník na dírky pro trn podle Ø dírek pásku. Plán projektu kupuje 5 mm; 4,5 mm je v sadě
+ * CraftPoint 2–5 mm, 6 mm je tentýž výsečník jako na nýty a 5,5 mm podklady nemají.
+ */
+function punchPick(r: BeltConfigResult, catalog: EquipmentCatalog): PlanPick {
+  const d = r.holes.diameterMm;
+  const near = (v: number) => Math.abs(d - v) < 1e-9;
+  if (near(5)) return { keep: true };
+  if (near(4.5)) {
+    const set = examplesOf(catalog, 'hole-punch-5mm').find((e) => e.url === PUNCH_SET_URL);
+    if (set) {
+      return {
+        line: lineFor('hole-punch-5mm', set, 1, 'dírky pro trn Ø 4,5 mm (hrot 4,5 mm ze sady)'),
+      };
+    }
+  }
+  if (near(6)) {
+    return {
+      skipped: 'Dírky Ø 6 mm sekáte výsečníkem Ø 6 mm (stejný jako na nýty), Ø 5 mm nepotřebujete.',
+    };
+  }
+  return {
+    skipped: `Výsečník Ø ${cz(d)} mm v ověřených nabídkách nemáme (sady jdou po celých mm), ověřte u prodejce.`,
+  };
+}
+
+/** Název položky v „Připravte si“, když se liší od katalogu (výsečník podle Ø dírek). */
+export function beltEquipmentNames(r: BeltConfigResult): Record<string, string> {
+  const d = r.holes.diameterMm;
+  if (Math.abs(d - 5) < 1e-9) return {};
+  return { 'hole-punch-5mm': `Výsečník Ø ${cz(d)} mm (dírky pro trn)` };
+}
+
 /**
  * Plán projektu upravený pro sestavu: řádky pásu, přezky a nýtů nahradí ty, které odpovídají
  * sestavě (na místě původních), nebo je přesune do `skipped` s důvodem.
@@ -158,14 +200,20 @@ export function beltShoppingPlan(
     'belt-strap': strapPick(result, catalog),
     'belt-buckle': bucklePick(result, catalog),
     'chicago-screws': screwPick(result, catalog),
+    'hole-punch-5mm': punchPick(result, catalog),
   };
+  const sixMmHoles = Math.abs(result.holes.diameterMm - 6) < 1e-9;
   const isConfigSlug = (slug: string): slug is ConfigSlug =>
     (BELT_CONFIG_PLAN_SLUGS as readonly string[]).includes(slug);
   const placed = new Set<ConfigSlug>();
   const lines: ShoppingPlanLine[] = [];
   for (const line of plan.lines) {
     if (!isConfigSlug(line.equipmentSlug)) {
-      lines.push(line);
+      lines.push(
+        sixMmHoles && line.equipmentSlug === 'hole-punch-6mm'
+          ? { ...line, purpose: 'dírky pro trn, otvory pro nýty a konce oválu' }
+          : line,
+      );
       continue;
     }
     const slug = line.equipmentSlug;
@@ -173,6 +221,7 @@ export function beltShoppingPlan(
     placed.add(slug);
     const pick = picks[slug];
     if ('line' in pick) lines.push(pick.line);
+    else if ('keep' in pick) lines.push(line);
   }
   const skipped = [
     ...plan.skipped.filter((s) => !isConfigSlug(s.equipmentSlug)),
@@ -183,7 +232,7 @@ export function beltShoppingPlan(
   ];
   return {
     ...plan,
-    title: `Podle pásku „${name}“: ${result.label}. Pás, přezka a nýty jsou pro tuto sestavu, ostatní položky jsou pro všechny pásky stejné.`,
+    title: `Podle pásku „${name}“: ${result.label}. Pás, přezka, nýty a výsečník na dírky jsou pro tuto sestavu, ostatní položky jsou pro všechny pásky stejné.`,
     lines,
     skipped,
   };
@@ -191,20 +240,31 @@ export function beltShoppingPlan(
 
 /**
  * Plán pro „Připravte si“: podle nejnovějšího uloženého pásku (nebo zápisníku). `null` = sestava
- * není nebo neplatí, platí plán projektu (40 mm).
+ * není, platí plán projektu (40 mm). Když sestava je, ale nejde spočítat, platí plán projektu
+ * a `basis` řekne proč – ne potichu 40 mm.
  */
 export function beltPrepPlan(
   plan: ShoppingPlan,
   entries: readonly LessonRecordEntry[],
   projectSlug: string,
   catalog: EquipmentCatalog,
-): { plan: ShoppingPlan; basis: string } | null {
+): { plan: ShoppingPlan; basis: string; equipmentNames?: Record<string, string> } | null {
   const basis = beltPlanBasis(entries, projectSlug);
   if (!basis) return null;
   const outcome = deriveBeltConfig(basis.input);
-  if (!outcome.ok) return null;
+  if (!outcome.ok) {
+    const prefillProblems =
+      basis.source === 'notebook' ? (beltConfigPrefill(entries, projectSlug)?.problems ?? []) : [];
+    const problems = prefillProblems.length > 0 ? prefillProblems : outcome.problems;
+    const what =
+      basis.source === 'notebook'
+        ? `${basis.name} nejdou spočítat`
+        : `pásek „${basis.name}“ nejde spočítat`;
+    return { plan, basis: `podle plánu projektu (pásek 40 mm): ${what}. ${problems.join(' ')}` };
+  }
   return {
     plan: beltShoppingPlan(plan, outcome.result, basis.name, catalog),
     basis: `podle pásku: ${basis.name} (${outcome.result.label})`,
+    equipmentNames: beltEquipmentNames(outcome.result),
   };
 }

@@ -43,14 +43,17 @@ u přezky, 144,3 mm od prostřední dírky ke konci).
 ## Co je nové
 
 - **Měření obvodu a volba délky pásu** (metoda přes stávající pásek nebo krejčovský metr
-  poutky kalhot; tabulka obvod → délka; 130cm pás stačí jen do ~106 cm obvodu).
+  poutky kalhot; tabulka obvod → délka; 130cm pás stačí jen do 106,5 cm obvodu).
+- **Prostřední dírka z líce na rub**: na sobě šídlem jen důlek do líce, pak ho propíchnout
+  skrz na rub, kde se značí.
 - **Volba tloušťky podle kování**: dřík šroubovacího nýtu musí být o 1–1,5 mm kratší než spoj,
   proto s nýtem 10/6 pás **3,5–3,75 mm**; jiná tloušťka pásu = nýt s jiným dříkem (dřík = 2 × tloušťka − 1 až 1,5 mm), viz postup krok 3.
 - **Ohýbání silné kůže**: zónu ohybu navlhčit, ohnout kolem příčky přezky.
 - **Registrace dvojice otvorů po přehnutí**: vyseknout první dvojici, přehnout, druhou označit
   skrz hotové otvory (chyba 1 mm v registraci = 2 mm rozdíl mezi párem).
-- **Poutko**: délka se měří na složeném konci pravítkem na destičce (109 mm pro 40 × 3,5 mm),
-  navléká se **před** sešroubováním.
+- **Poutko**: obepíná 3 vrstvy (přehnutý konec a volný konec pásku); obvod se měří proužkem
+  kolem všech tří, + tloušťka poutka + 15 mm přeplátování (120 mm pro 40 × 3,5 mm), navléká se
+  **před** ohnutím, spoj na straně přehnutého konce (k tělu).
 - **Pořadí povrchových úprav**: barvení a leštění hran před montáží, posledních 30 cm až po
   uříznutí konce.
 

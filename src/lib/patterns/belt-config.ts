@@ -31,6 +31,7 @@ import {
   type BeltSheet,
   TIP_LANDSCAPE_MAX_REACH_MM,
   buildBeltSheets,
+  buildBuckleSheet,
   cz,
   tipSheetOrientation,
 } from './belt-sheets';
@@ -232,7 +233,14 @@ export const STRAP_SOURCES_CHECKED = '8. 10. 2026';
 interface StrapSource {
   shop: string;
   url: string;
+  /** Tloušťka, kterou obchod uvádí (nominál). */
   thicknessMm: readonly [number, number];
+  /**
+   * Nejsilnější pás, který po doručení ještě naměříte u tohoto nominálu. Tloušťka se měří až
+   * po dodání, takže filtruje s tolerancí: CraftPoint 3–3,5 mm přijde 3,5–3,75 mm
+   * (docs/zadani/opasek-postup.md, krok 3).
+   */
+  measuredMaxMm: number;
   /** Délky, které obchod zaručuje (u rozpětí „130–140 cm“ ta kratší). */
   lengthsCm: readonly number[];
   /** Cena podle šířky (mm) a délky; šířka, která chybí, se neprodává. */
@@ -263,6 +271,7 @@ const STRAP_SOURCES: readonly StrapSource[] = [
     shop: 'CraftPoint – Řemen z přírodní kůže 3–3,5 mm, 130–140 cm',
     url: 'https://craft-point.cz/products/remen-z-prirodni-kuze-3-35mm-140cm-15-80mm',
     thicknessMm: [3, 3.5],
+    measuredMaxMm: 3.75,
     // Obchod slibuje 130–140 cm; počítá se s kratší.
     lengthsCm: [130],
     priceCzk: (w) => CRAFTPOINT_STRAP_PRICES[w],
@@ -272,6 +281,7 @@ const STRAP_SOURCES: readonly StrapSource[] = [
     shop: 'Křupson – Hovězí kůže na opasek, přírodní 4 cm',
     url: 'https://www.krupson.cz/hovezi-kuze-na-opasek-prirodni--4-cm-delka--130-cm/',
     thicknessMm: [3.5, 4],
+    measuredMaxMm: 4,
     lengthsCm: [130, 150, 180],
     priceCzk: (w, len) => (w === 40 ? KRUPSON_40MM_PRICES[len] : undefined),
   },
@@ -401,12 +411,14 @@ export function rivetPostMm(thicknessMm: number): {
 function strapOffers(widthMm: number, thicknessMm: number, neededCm: number | null): StrapOffer[] {
   const offers: StrapOffer[] = [];
   for (const s of STRAP_SOURCES) {
-    if (thicknessMm < s.thicknessMm[0] - EPS || thicknessMm > s.thicknessMm[1] + EPS) continue;
+    if (thicknessMm < s.thicknessMm[0] - EPS || thicknessMm > s.measuredMaxMm + EPS) continue;
     const length = s.lengthsCm.find((len) => neededCm === null || len >= neededCm);
     if (length === undefined) continue;
     const price = s.priceCzk(widthMm, length);
     if (price === undefined) continue;
-    offers.push({ shop: s.shop, url: s.url, lengthCm: length, priceCzk: price, note: s.note });
+    const nominal = `nominál ${cz(s.thicknessMm[0])}–${cz(s.thicknessMm[1])} mm, po doručení přeměřte`;
+    const note = s.note ? `${s.note}; ${nominal}` : nominal;
+    offers.push({ shop: s.shop, url: s.url, lengthCm: length, priceCzk: price, note });
   }
   return offers;
 }
@@ -545,11 +557,15 @@ export interface BeltConfigResult {
   warnings: string[];
 }
 
+/**
+ * Jde vytisknout list 2 (dírky a konec)? List 1 (konec u přezky a poutko) na dírkách nezávisí
+ * a tiskne se vždy; `printable: false` znamená, že se nevejde jen list 2.
+ */
 export type BeltSheetsAvailability = { printable: true } | { printable: false; message: string };
 
 /**
- * Vejde se list 2 na A4? Když ne, pásek se dál spočítá, jen se netisknou listy: dírky a konec
- * se značí podle čísel v tabulce, konec u přezky řadou 3 destičky (pokud ji šířka pustí).
+ * Vejde se list 2 na A4? Když ne, pásek se dál spočítá a list 1 se vytiskne, jen dírky a konec
+ * se značí podle čísel v tabulce.
  */
 export function beltSheetsAvailability(
   input: BeltConfigInput,
@@ -562,10 +578,11 @@ export function beltSheetsAvailability(
   return {
     printable: false,
     message:
-      `Listy se na A4 nevejdou: poslední dírka je ${cz(r1(reach))} mm od konce, list A4 pojme nejvýš ${cz(TIP_LANDSCAPE_MAX_REACH_MM)} mm. ` +
+      `List 2 se na A4 nevejde: poslední dírka je ${cz(r1(reach))} mm od konce, list A4 pojme nejvýš ${cz(TIP_LANDSCAPE_MAX_REACH_MM)} mm. ` +
+      'Dírky a konec značte podle čísel v tabulce. ' +
       (row3
-        ? 'Dírky a konec značte podle čísel v tabulce, konec u přezky řadou 3 destičky.'
-        : 'Značte podle čísel v tabulce.'),
+        ? 'List 1 (konec u přezky a poutko) se vytiskne, nebo konec u přezky značte řadou 3 destičky.'
+        : 'List 1 (konec u přezky a poutko) se vytiskne.'),
   };
 }
 
@@ -709,20 +726,20 @@ export function deriveBeltConfig(input: BeltConfigInput): BeltConfigOutcome {
   };
 }
 
-/** Tiskové listy (SVG 1:1) pro platné zadání. */
+/**
+ * Tiskové listy (SVG 1:1) pro platné zadání: list 1 vždy, list 2, když se vejde na A4
+ * (`beltSheetsAvailability`).
+ */
 export function beltSheetsFor(
   input: BeltConfigInput,
-): { ok: true; label: string; sheets: [BeltSheet, BeltSheet] } | { ok: false; problems: string[] } {
+): { ok: true; label: string; sheets: BeltSheet[] } | { ok: false; problems: string[] } {
   const problems = checkBeltConfig(input);
   if (problems.length > 0) return { ok: false, problems };
-  const availability = beltSheetsAvailability(input);
-  if (!availability.printable) return { ok: false, problems: [availability.message] };
   const { end, tip } = beltSpecsFor(input);
-  return {
-    ok: true,
-    label: beltConfigLabel(input),
-    sheets: buildBeltSheets(end, tip, SHAPE[input.tip]),
-  };
+  const sheets: BeltSheet[] = beltSheetsAvailability(input).printable
+    ? buildBeltSheets(end, tip, SHAPE[input.tip])
+    : [buildBuckleSheet(end)];
+  return { ok: true, label: beltConfigLabel(input), sheets };
 }
 
 /* ------------------------------------------------------------------------- */

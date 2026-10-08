@@ -17,6 +17,8 @@ export interface BeltConfigPrefill {
   form: BeltConfigForm;
   /** Co se předvyplnilo, česky a v pořadí formuláře. */
   filled: string[];
+  /** Co v zápisech nejde použít (např. trn moc silný na výsečníky), česky. */
+  problems: string[];
 }
 
 /** Přídavek k trnu na Ø dírky (docs/zadani/opasek-postup.md: „trn u kořene + 0,5 mm“). */
@@ -62,21 +64,31 @@ export function beltConfigPrefill(
     form.tip = tip;
     filled.push('konec');
   }
+  const problems: string[] = [];
   const prong = num(BELT_RECORD_IDS.prong);
   if (prong !== undefined) {
     // Výsečníky jsou po 0,5 mm (meze formuláře): trn + 0,5 mm zaokrouhlit nahoru, ať dírka
-    // není těsnější, než pravidlo chce (trn 4,2 → 4,7 → výsečník 5 mm).
-    const step = BELT_LIMITS.holeDiameterMm.step;
+    // není těsnější, než pravidlo chce (trn 4,2 → 4,7 → výsečník 5 mm). Pravidlo dává
+    // nejmenší dírku, takže u tenkého trnu (≤ 3,5 mm) poslouží nejmenší výsečník 4,5 mm.
+    const { min, max, step } = BELT_LIMITS.holeDiameterMm;
     const wanted = prong + PRONG_CLEARANCE_MM;
-    const punch = Math.ceil(wanted / step - 1e-9) * step;
+    const rounded = Math.ceil(wanted / step - 1e-9) * step;
+    const punch = Math.max(min, rounded);
     form.holeDiameter = formatDecimal(punch);
     filled.push(
-      Math.abs(punch - wanted) < 1e-9
-        ? 'Ø dírky (trn + 0,5 mm)'
-        : 'Ø dírky (trn + 0,5 mm, nahoru na výsečník po 0,5 mm)',
+      punch > rounded + 1e-9
+        ? `Ø dírky (trn + 0,5 mm, nejmenší výsečník ${formatDecimal(min)} mm)`
+        : Math.abs(punch - wanted) < 1e-9
+          ? 'Ø dírky (trn + 0,5 mm)'
+          : 'Ø dírky (trn + 0,5 mm, nahoru na výsečník po 0,5 mm)',
     );
+    if (punch > max + 1e-9) {
+      problems.push(
+        `Trn ${formatDecimal(prong)} mm je na výsečníky ${formatDecimal(min)}–${formatDecimal(max)} mm moc silný (potřeba Ø ${formatDecimal(punch)} mm). Zkontrolujte měření trnu, nebo zvolte jinou přezku.`,
+      );
+    }
   }
-  return filled.length > 0 ? { form, filled } : null;
+  return filled.length > 0 ? { form, filled, problems } : null;
 }
 
 /**
@@ -89,6 +101,7 @@ export function beltNumbersFromNotebook(
 ): BeltConfigOutcome | null {
   const prefill = beltConfigPrefill(entries, projectSlug);
   if (!prefill) return null;
+  if (prefill.problems.length > 0) return { ok: false, problems: prefill.problems };
   const parsed = parseBeltConfigForm(prefill.form);
   if ('problems' in parsed) return { ok: false, problems: parsed.problems };
   return deriveBeltConfig(parsed.input);

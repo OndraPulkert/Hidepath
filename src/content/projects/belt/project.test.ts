@@ -63,7 +63,7 @@ describe('obsah – pásek', () => {
 
 describe('obsah – pásek: čísla jsou příklad z modelu', () => {
   it('příklad 40 × 3,5 mm odpovídá výpočtu „Váš pásek“', () => {
-    expect(example.keeper).toEqual({ lengthMm: 109, widthMm: 12 });
+    expect(example.keeper).toEqual({ lengthMm: 120, widthMm: 12 });
     expect(lessonText(4)).toContain(`např. ${example.keeper.lengthMm} mm pro 40 × 3,5 mm`);
     expect(lessonText(4)).toContain(`proužek ${example.keeper.widthMm} mm`);
     expect(lessonText(5)).toContain(`např. ${cz(example.holes.middleFromApexMm)} mm`);
@@ -162,6 +162,7 @@ describe('obsah – pásek: zápisník, „Připravte si“ a destička', () => 
       (l.prints ?? []).map((p) => ({ order: l.order, ...p })),
     );
     expect(prints.map((p) => [p.order, p.sheetId])).toEqual([
+      [2, BELT_SHEET_IDS.buckle],
       [4, BELT_SHEET_IDS.buckle],
       [6, BELT_SHEET_IDS.tip],
     ]);
@@ -170,9 +171,9 @@ describe('obsah – pásek: zápisník, „Připravte si“ a destička', () => 
 
   it('destička a listy se volí po řadách: za řadu s „ne“ jen její list', () => {
     const body = step(1, 'plate-or-sheets').body;
-    expect(body).toContain('za řadu 3 použijete list 1 (lekce 4)');
+    expect(body).toContain('za řadu 3 použijete list 1 (lekce 2 a 4)');
     expect(body).toContain('za řadu 1 nebo 2 list 2 (lekce 6)');
-    for (const order of [4, 6]) {
+    for (const order of [2, 4, 6]) {
       for (const p of lesson(order).prints ?? []) expect(p.condition).toContain('u této řady');
     }
   });
@@ -254,10 +255,98 @@ describe('pásek – pořadí poutka a ohybu (opasek-postup.md krok 7)', () => {
     expect(step(4, 'second-pair').body).toMatch(/^Poutko posuňte přes přehnutý konec/);
   });
 
-  it('lekce 2: nevymyšlená rezerva na odřezek, ohyb popraskaný nasucho zopakovat navlhčený', () => {
+  it('lekce 2: odřezek 15 cm s důvodem z geometrie, ohyb popraskaný nasucho zopakovat navlhčený', () => {
     expect(lessonText(2)).not.toMatch(/20 cm/);
-    expect(step(2, 'get-scrap').body).toMatch(/podklady neuvádějí: ověřte/);
+    // Regrese: materiál odkazoval na „15 cm (viz první krok)“, ale krok délku neuváděl.
+    expect(step(2, 'get-scrap').body).toMatch(/Odřízněte asi 15 cm/);
+    expect(step(2, 'get-scrap').body).toContain('otvor 64,5 mm se po přehnutí dostane na 115,5 mm');
+    expect(step(2, 'screw').body).toContain('skrz otvor 64,5 mm');
+    expect(step(1, 'order').body).toContain('aspoň nejkratší délku + 15 cm');
     const bend = step(2, 'bend').records!.find((r) => r.id === 'scrap-bend')!;
     expect(bend.hint).toMatch(/^Popraskal-li nasucho, zopakujte ohyb navlhčený\./);
+  });
+});
+
+describe('pásek – nálezy kontroly lekcí (2026-10-08, kolo 2)', () => {
+  it('poutko se měří kolem 3 vrstev: zdvojený konec a volný konec, který jím prochází', () => {
+    const body = step(4, 'keeper').body;
+    expect(body).toContain('obepíná 3 vrstvy');
+    expect(body).toContain('Papírový proužek obtočte kolem všech 3 vrstev');
+    expect(body).not.toContain('kolem obou vrstev');
+    expect(body).toContain(`např. ${example.keeper.lengthMm} mm pro 40 × 3,5 mm`);
+  });
+
+  it('značka prostřední dírky se z líce propíchne na rub dřív, než se na ni přikládá', () => {
+    const ids = lesson(5).steps.map((s) => s.id);
+    expect(ids).toEqual(['try-on', 'measure', 'transfer', 'length-check']);
+    expect(step(5, 'try-on').body).toContain('jen důlek, ne díru');
+    expect(step(5, 'transfer').body).toMatch(/protlačte svisle skrz až na rub/);
+    expect(step(6, 'place').body).toContain('na propíchnutou značku z lekce 5');
+    expect(lesson(6).requires![0]!.label).toMatch(/propíchnutá na rub/);
+  });
+
+  it('list 2 se na značku registruje přes propíchnutou prostřední dírku', () => {
+    const body = step(6, 'place').body;
+    expect(body).toMatch(
+      /střed prostřední dírky propíchněte šídlem\. Hrot šídla dejte do značky, list po šídle sesuňte/,
+    );
+  });
+
+  it('lekce 6: svislý pohled, kroužení, nikdy neobracet, řada 2 středem slotu', () => {
+    expect(step(6, 'place').body).toMatch(/dívejte svisle dolů/);
+    expect(step(6, 'place').body).toContain('Destičku nikdy neobracejte.');
+    expect(step(6, 'mark').body).toContain('v otvorech kružte po stěně');
+    expect(step(6, 'mark').body).toContain('U řady 2 veďte šídlo středem slotu, ne po stěně');
+    expect(step(4, 'mark').body).toContain('Destičku nikdy neobracejte.');
+  });
+
+  it('hrana oválu se leští v lekci 4 před ohnutím, ne v lekci 6', () => {
+    const ids = lesson(4).steps.map((s) => s.id);
+    expect(ids.indexOf('oval')).toBeLessThan(ids.indexOf('bend'));
+    expect(step(4, 'oval').body).toMatch(
+      /Vnitřní hranu oválu .* zaleštěte .* dokud je konec rovný/,
+    );
+    const ovalClean = lesson(4).checkpoints.find((c) => c.slug === 'oval-clean')!;
+    expect(ovalClean.required).toBe(true);
+    expect(ovalClean.title).toMatch(/vnitřní hrana je sražená a zaleštěná/);
+    expect(lessonText(6)).not.toMatch(/oválu/);
+    expect(lesson(6).checkpoints.map((c) => c.slug)).not.toContain('oval-edge');
+  });
+
+  it('ohyb rubem k rubu a spoj poutka na straně přehnutého konce, ne na líci', () => {
+    expect(step(4, 'bend').body).toContain('rubem k rubu');
+    expect(step(4, 'bend').body).toContain('přehnutý konec leží na rubu pásu');
+    expect(step(4, 'second-pair').body).toContain('spojem na přehnutý konec');
+    expect(lessonText(4)).not.toContain('spojem k pásu');
+  });
+
+  it('druhá dvojice: poutko odsunout, sekat podle značek skrz otvory, ohnout zpět, poutko vrátit', () => {
+    const body = step(4, 'screws').body;
+    const order = [
+      'Poutko odsuňte ke špičce',
+      'podle značek skrz otvory; původní značky z destičky nebo listu ignorujte',
+      'Konec ohněte zpět kolem příčky',
+      'poutko posuňte zpět přes přehnutý konec do kapsy',
+      'Nýty sešroubujte',
+    ].map((t) => body.indexOf(t));
+    for (const i of order) expect(i).toBeGreaterThan(-1);
+    expect([...order].sort((a, b) => a - b)).toEqual(order);
+    expect(body).not.toContain('Poutko zůstane v kapse');
+  });
+
+  it('šroubovák je v materiálu lekcí 2 a 4 a hlavička s dříkem jde na líc', () => {
+    for (const order of [2, 4]) {
+      expect(lesson(order).materials).toContain('plochý šroubovák podle drážky šroubku nýtu');
+    }
+    expect(beltProject.shoppingPlan!.alsoNeeded).toContain(
+      'plochý šroubovák podle drážky šroubku nýtu (lekce 2 a 4)',
+    );
+    expect(step(4, 'screws').body).toContain('hlavičku s dutým dříkem z líce pásu');
+    expect(step(2, 'screw').body).toContain('hlavičku s dutým dříkem z líce');
+  });
+
+  it('lekce 2 odkazuje na list 1 a má ho v „Vytisknout“', () => {
+    expect(step(2, 'mark').printLink).toBe('pattern-sheets');
+    expect(lesson(2).prints?.map((p) => p.sheetId)).toEqual([BELT_SHEET_IDS.buckle]);
   });
 });

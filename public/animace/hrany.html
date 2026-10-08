@@ -21,7 +21,7 @@
   --burn:#6e3f1d;--shine:#fff6e6;
   --dyed:#5b3521;--dye:#3d2316;--paint:#3a2318;
   --kas:#8c4a27;--kas-d:#5e2f16;--cok:#4d2d1e;--cok-core:#c9ad8c;--koz:#ead8bb;--koz-core:#f1e5d0;
-  --thread:#f6efdc;--thread-d:#8f8166;--glue:#e0ad35;--chip1:#b8773f;--chip2:#5b3521;--chip3:#8c4a27;
+  --thread:#f6efdc;--thread-d:#8f8166;--glue:#e0ad35;--chip1:#b8773f;--chip2:#5b3521;--chip3:#8c4a27;--chip4:#c9a46a;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   color-scheme:dark;
@@ -36,7 +36,7 @@
   --burn:#5a3116;--shine:#fff1d8;
   --dyed:#6a4029;--dye:#2a170e;--paint:#2c1910;
   --kas:#99542f;--kas-d:#6a3519;--cok:#5a3626;--cok-core:#b99c7c;--koz:#dccaa9;--koz-core:#e6d8bf;
-  --thread:#efe6cf;--thread-d:#7d705a;--glue:#c8962a;--chip1:#a96c38;--chip2:#6a4029;--chip3:#99542f;
+  --thread:#efe6cf;--thread-d:#7d705a;--glue:#c8962a;--chip1:#a96c38;--chip2:#6a4029;--chip3:#99542f;--chip4:#b8935f;
 }}
 :root[data-theme="dark"]{
   color-scheme:dark;
@@ -51,7 +51,7 @@
   --burn:#5a3116;--shine:#fff1d8;
   --dyed:#6a4029;--dye:#2a170e;--paint:#2c1910;
   --kas:#99542f;--kas-d:#6a3519;--cok:#5a3626;--cok-core:#b99c7c;--koz:#dccaa9;--koz-core:#e6d8bf;
-  --thread:#efe6cf;--thread-d:#7d705a;--glue:#c8962a;--chip1:#a96c38;--chip2:#6a4029;--chip3:#99542f;
+  --thread:#efe6cf;--thread-d:#7d705a;--glue:#c8962a;--chip1:#a96c38;--chip2:#6a4029;--chip3:#99542f;--chip4:#b8935f;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
@@ -113,7 +113,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 <header>
 <a class="backlink" href="/" data-back>← Zpět do lekce</a>
 <h1>Dokončení hran</h1>
-<p class="lead">Hranu srovnat, zkosit, u barvené kůže obarvit, navlhčit a zaleštit. Základ je pouzdro na karty (projekt 01, lekce 6), dál rozdíly u pouzdra s mincí (projekt 02) a peněženky Víčko (projekt 03).</p>
+<p class="lead">Hranu srovnat, zkosit, u barvené kůže obarvit, navlhčit a zaleštit. Základ je pouzdro na karty (projekt 01, lekce 6), dál rozdíly u pouzdra s mincí (projekt 02), peněženky Víčko (projekt 03) a pásku (projekt 04).</p>
 </header>
 
 <section class="card" aria-label="Animace postupu">
@@ -131,7 +131,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
   </div>
   <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
 </section>
-<p class="note">Části A–E: pouzdro na karty (zkosení a barvu nemá, ukazují je projekty 02 a 03). Část F: pouzdro s mincí, část G: Víčko. Řezy hranou jsou zvětšené, s úsečkou 1 mm; díly jsou v měřítku. „Tip“ označuje, co lekce neuvádí.</p>
+<p class="note">Části A–E: pouzdro na karty (zkosení a barvu nemá, ukazují je projekty 02 a 03). Část F: pouzdro s mincí, část G: Víčko, část H: pásek. Řezy hranou jsou zvětšené, s úsečkou 1 mm; díly jsou v měřítku. „Tip“ označuje, co lekce neuvádí.</p>
 </div>
 
 <script>
@@ -272,8 +272,8 @@ const OUTL="M10 0 L32.5 0 A10 10 0 0 1 42.5 10 L42.5 36 A6 6 0 0 1 36.5 42 L6 42
 const WINL="M31.25 20.75 A10 10 0 1 0 11.25 20.75 A10 10 0 1 0 31.25 20.75 Z";
 
 // ---------- steps ----------
-const PARTS={A:'Srovnání',B:'Zkosení',C:'Barva',D:'Zaleštění',E:'Kontrola',F:'Pouzdro s mincí',G:'Víčko'};
-const P1={v:'01',sub:'pouzdro na karty',c:'var(--chip1)'}, P2={v:'02',sub:'pouzdro s mincí',c:'var(--chip2)'}, P3={v:'03',sub:'peněženka Víčko',c:'var(--chip3)'};
+const PARTS={A:'Srovnání',B:'Zkosení',C:'Barva',D:'Zaleštění',E:'Kontrola',F:'Pouzdro s mincí',G:'Víčko',H:'Pásek'};
+const P1={v:'01',sub:'pouzdro na karty',c:'var(--chip1)'}, P2={v:'02',sub:'pouzdro s mincí',c:'var(--chip2)'}, P3={v:'03',sub:'peněženka Víčko',c:'var(--chip3)'}, P4={v:'04',sub:'pásek',c:'var(--chip4)'};
 const S=[];
 const add=(part,title,body,dur,draw,proj,tip)=>S.push({part,title,body,dur,draw,proj,tip});
 
@@ -618,6 +618,46 @@ add('G','Dokončete hrany okének, D2 a jazýčku',
   return o+inset('DALŠÍ HRANY',ib);
  },P3);
 
+// H1 — pásek: jedna silná vrstva, zkosit nebo zaoblit z líce i z rubu
+const L04=[{t:3.5,lic:'top'}];
+add('H','Zkoste nebo zaoblete hrany pásu',
+ 'Pásek je jedna vrstva pásu 3–4 mm (tloušťka z lekce 1). Pás rozložte naplocho a hranu na líci i rubu srazte ořezávačem hran, nebo zaoblete brusným papírem na hranolku. Volitelně hranu přebruste postupně 320 → 400 → 600 → 800.',
+ 10000,t=>{
+  const kk=8.5, x0=58, y0=70, H=H_(L04);
+  const rT=es(t,.1,.45), rB=es(t,.52,.88);
+  let o=prof({x:x0,y:y0,k:kk,len:5.6,layers:L04,bevT:.8*rT,bevB:.8*rB,round:Math.min(rT,rB)*.7,fuzz:.45});
+  if(t>.06&&t<.5){const w=Math.sin(t*90)*3;const c=.8*rT*kk;o+=sandBlock(x0-c/2+1.5+w*.4,y0-H*kk+c/2-1.5+w*.4,225)}
+  if(t>.5&&t<.92){const w=Math.sin(t*90)*3;const c=.8*rB*kk;o+=sandBlock(x0-c/2+1.5+w*.4,y0-c/2+1.5-w*.4,-45)}
+  o+=pill(6,y0-H*kk-5,'líc','ts')+pill(6,y0+6,'rub','ts');
+  o+=scaleBar(8,82,kk)+zoomTag();
+  o+=pill(4,88,t<.5?'srazit hranu na líci':t<.92?'srazit hranu na rubu':'z líce i z rubu','t');
+  let ib=notes([['04 Pásek','t'],['1 vrstva 3–4 mm'],['z líce i z rubu'],[''],['ořezávač hran,'],['nebo brusný papír'],['na hranolku'],[''],['volitelně','t'],['320 → 400 → 600'],['→ 800']],16,5.2);
+  return o+inset('PÁSEK',ib);
+ },P4,'Tip: velikost ořezávače pro váš pás vyzkoušejte na odřezku (lekce 2); kresleno pro 3,5 mm.');
+
+// H2 — pásek: zaleštit po úsecích
+add('H','Zaleštěte hrany pásu',
+ 'Hranu navlhčete Tokonole a třete leštítkem nebo plátnem, dokud se nezhutní a nezaleskne. Hran je dvakrát délka pásu: pracujte po úsecích.',
+ 10500,t=>{
+  const kk=8.5, x0=50, y0=66, H=H_(L04);
+  const p=es(t,.1,.88);
+  let o=prof({x:x0,y:y0,k:kk,len:4.6,layers:L04,bevT:.8,bevB:.8,round:.7+.3*p,fuzz:.5*(1-p),wet:.8*(1-p),burn:p});
+  const jig=Math.sin(t*70)*.4;
+  o+=slickerSec(x0+.2*kk*p+.4+jig,y0-H*kk/2,kk,H+.5);
+  o+=motion(12,18,t*6)+lbl(15.5,19.2,'třít podél hrany','ts');
+  o+=scaleBar(8,82,kk)+zoomTag();
+  o+=pill(4,88,p<.98?'Tokonole, leštítko nebo plátno':'zhutněná, lesklá hrana','t');
+  // inset: pás shora, úseky po 20 cm
+  let ib=lbl(89,18,'pás shora','ts');
+  const gx0=89,gw=41,gy=22,gh=6,n=Math.min(4,Math.floor(p*4.2));
+  ib+=`<rect x="${gx0}" y="${gy}" width="${gw}" height="${gh}" fill="var(--lic)" stroke="var(--lic-d)" stroke-width=".25"/>`;
+  for(let i=0;i<n;i++) ib+=`<rect x="${f(gx0+i*gw/4)}" y="${gy-.5}" width="${f(gw/4)}" height=".9" fill="var(--burn)"/><rect x="${f(gx0+i*gw/4)}" y="${gy+gh-.4}" width="${f(gw/4)}" height=".9" fill="var(--burn)"/>`;
+  for(let i=1;i<4;i++) ib+=`<path d="M${f(gx0+i*gw/4)} ${gy-2} v${gh+4}" stroke="var(--muted)" stroke-width=".25" stroke-dasharray=".8 .6"/>`;
+  ib+=lbl(89,35,'po úsecích','ts');
+  ib+=notes([['hran je','t'],['2 × délka pásu'],[''],['posledních 30 cm','ta'],['až v lekci 6']],46,5.1);
+  return o+inset('PO ÚSECÍCH',ib);
+ },P4,'Tip: úsek volte tak krátký, aby hrana před leštěním nezaschla.');
+
 // ---------- engine ----------
 const svg=document.getElementById('stage');
 const DEFS=`<defs>
@@ -667,7 +707,7 @@ document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.len
 document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
 document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
 document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};
-// deep links: část (#A–#G) otevře svůj první krok, krok (#D2) přímo ten krok; zastavené
+// deep links: část (#A–#H) otevře svůj první krok, krok (#D2) přímo ten krok; zastavené
 function stepFromHash(){const m=/^([A-Z])([0-9]+)?$/.exec(decodeURIComponent((location.hash||'').slice(1)).trim().toUpperCase());if(!m||!Object.prototype.hasOwnProperty.call(PARTS,m[1]))return -1;const ix=[];S.forEach((s,i)=>{if(s.part===m[1])ix.push(i)});const n=m[2]===undefined?1:+m[2];return n>=1&&n<=ix.length?ix[n-1]:-1}
 let auto=false;
 const hs=stepFromHash();

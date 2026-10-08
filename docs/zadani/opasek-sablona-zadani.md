@@ -38,6 +38,7 @@ Všechno ostatní jsou konstanty z odstavce 3 a 4.
 | Zobrazená část hlavního pásu nad ohybem | 90 mm                     |
 | Šířka pásku poutka                      | 12 mm                     |
 | Přídavek na přeplátování poutka         | 15 mm                     |
+| Tloušťka kůže poutka                    | 1,2 mm                    |
 | Nejmenší přijatelný můstek kůže         | **6 mm**                  |
 
 Odvozené hodnoty:
@@ -47,11 +48,12 @@ mustek            = 25,5 − 6/2 − 25/2                     = 10,0 mm
 konceDrazkyOdOhybu= ±(25/2 − 6/2)                          = ±9,5 mm
 kapsaProPoutko    = 73,2 − 25,5                            = 47,7 mm   (rozteč středů)
 kapsaSvetla       = 47,7 − rivetHead(10)                   = 37,7 mm
-obvodZdvojene     = 2 × (beltWidth + 2 × beltThickness)
-delkaPoutka       = round(obvodZdvojene + 15)
+obvodPoutka       = 2 × (beltWidth + 3 × beltThickness)   (přehnutý konec + volný konec)
+delkaPoutka       = round(obvodPoutka + π × 1,2 + 15)
 ```
 
-Pro 40 × 4 mm: obvod 96 mm, poutko **111 mm**. Pro 35 × 4 mm: obvod 86 mm, poutko **101 mm**.
+Pro 40 × 4 mm: obvod 104 mm, poutko **123 mm**. Pro 35 × 4 mm: obvod 94 mm, poutko **113 mm**.
+(Revize 2026-10-08: poutkem po zapnutí prochází i volný konec pásku, takže obepíná 3 vrstvy, ne 2.)
 
 **Linie ohybu půlí drážku pro trn.** Oba páry otvorů leží k ohybu symetricky, aby po přehnutí
 sedly na sebe a prošel jimi jeden nýt.
@@ -148,7 +150,8 @@ Všechny texty česky, čísla **s desetinnou čárkou**. Popisky, které závis
 
 - titulek `Opasek <šířka> mm — strana 1: konec u přezky` (resp. `strana 2: konec se špičkou`)
 - `hrot <délkaHrotu> mm`
-- `Poutko — pásek <délkaPoutka> × 12 mm (obvod zdvojené části <obvod> mm + 15 mm přeplátování)`
+- `Poutko — pásek <délkaPoutka> × 12 mm, obepíná 3 vrstvy: přehnutý konec a volný konec pásku`
+  a pod páskem `obvod 3 vrstev <obvod> mm + <π × 1,2> mm na tloušťku poutka 1,2 mm + 15 mm přeplátování`
 
 Popisky nezávislé na šířce (u všech šířek stejné):
 

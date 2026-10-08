@@ -121,7 +121,12 @@ export interface BuildLessonPrepInput {
    * Nákupní plán pro sestavu uživatele (u pásku podle uloženého pásku) místo plánu projektu.
    * `basis` se ukáže u nástrojů, ať je jasné, z čeho plán je.
    */
-  planOverride?: { plan: ShoppingPlan; basis: string } | null;
+  planOverride?: {
+    plan: ShoppingPlan;
+    basis: string;
+    /** Název položky podle sestavy (např. výsečník Ø 4,5 mm místo katalogového 5 mm). */
+    equipmentNames?: Readonly<Record<string, string>>;
+  } | null;
 }
 
 /** Klíč zaškrtnutí výtisku. */
@@ -254,7 +259,7 @@ function buildEquipment(input: BuildLessonPrepInput): PrepEquipmentItem[] {
     return {
       kind: 'equipment',
       slug,
-      name: catalog[slug]?.name ?? slug,
+      name: planOverride?.equipmentNames?.[slug] ?? catalog[slug]?.name ?? slug,
       priority,
       status,
       checked: status === 'owned',

@@ -170,7 +170,7 @@ describe('animace postupu – stránky v public/animace', () => {
     ['pas-prenos-rez', 'stripTransfer', ['A', 'B', 'C', 'D'], 'E'],
     ['pas-otvory-dna', 'bottomHoles', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['sedlarsky-steh', 'saddleStitch', ['A', 'B', 'C', 'D', 'E', 'F', 'G'], 'H'],
-    ['hrany', 'edges', ['A', 'B', 'C', 'D', 'E', 'F', 'G'], 'H'],
+    ['hrany', 'edges', ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'], 'I'],
     ['pasek-prezka', 'beltBuckleEnd', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['pasek-spicka', 'beltHolesTip', ['A', 'B', 'C', 'D', 'E', 'F'], 'G'],
     ['vrtani-formy', 'drillForm', ['A', 'B', 'C', 'D', 'E'], 'F'],
@@ -708,34 +708,36 @@ describe('animace postupu – pásek: konec s přezkou, dírky a špička', () =
     // Lekce 2: odřezek – značení, výsek, hrana, ohyb a zkouška nýtu.
     [2, 'mark', [prezka('B1'), prezka('B2')]],
     [2, 'punch', [prezka('C2'), prezka('C3')]],
-    [2, 'edges-balm', [hrany('B2'), hrany('D2')]],
+    // Hrany pásku: vlastní část H (jedna vrstva 3–4 mm z líce i rubu), ne B2 Víčka.
+    [2, 'edges-balm', [hrany('H1'), hrany('H2')]],
     [2, 'bend', [prezka('E1')]],
-    [2, 'screw', [prezka('E3'), prezka('E4'), prezka('E5')]],
+    [2, 'screw', [prezka('E3'), prezka('E4'), prezka('E6')]],
     // Lekce 3: dlouhé hrany.
-    [3, 'bevel', [hrany('B2')]],
-    [3, 'burnish', [hrany('D1'), hrany('D2'), hrany('D3')]],
+    [3, 'bevel', [hrany('H1')]],
+    [3, 'burnish', [hrany('H2'), hrany('D1'), hrany('D3')]],
     // Lekce 4: konec s přezkou.
     [4, 'plate-or-sheet', [prezka('A1'), prezka('A2')]],
     [4, 'secure', [prezka('B1')]],
     [4, 'mark', [prezka('B2'), prezka('B3'), prezka('B4'), prezka('B5'), prezka('B6')]],
     [4, 'first-pair', [prezka('C1')]],
-    [4, 'oval', [prezka('C2'), prezka('C3')]],
+    [4, 'oval', [prezka('C2'), prezka('C3'), prezka('C4')]],
     // Poutko se navléká před ohnutím (smyčka kolem obou vrstev, opasek-postup.md krok 7).
     [4, 'keeper', [prezka('D1'), prezka('D2')]],
     [4, 'bend', [prezka('D3'), prezka('E1')]],
     [4, 'second-pair', [prezka('E2'), prezka('E3')]],
-    [4, 'screws', [prezka('E4'), prezka('E5'), prezka('E6')]],
+    [4, 'screws', [prezka('E4'), prezka('E5'), prezka('E6'), prezka('E7')]],
     // Lekce 5: zkouška na těle.
     [5, 'try-on', [spicka('A1')]],
     [5, 'measure', [spicka('A2')]],
-    [5, 'length-check', [spicka('A3')]],
+    [5, 'transfer', [spicka('A3')]],
+    [5, 'length-check', [spicka('A4')]],
     // Lekce 6: dírky a konec.
     [6, 'row', [spicka('B1'), spicka('D1')]],
     [6, 'place', [spicka('B2'), spicka('C1'), spicka('D2')]],
     [6, 'mark', [spicka('B3'), spicka('C2'), spicka('D2')]],
     [6, 'punch-holes', [spicka('E1')]],
     [6, 'cut-tip', [spicka('E2'), spicka('E3'), spicka('E4')]],
-    [6, 'finish', [spicka('F1'), spicka('F2'), hrany('B2'), hrany('D2')]],
+    [6, 'finish', [spicka('F1'), spicka('F2'), hrany('H1'), hrany('H2')]],
     [6, 'try', [spicka('F3')]],
   ] as const)('lekce %i, krok %s otevírá přesné kroky animace', (order, stepId, expected) => {
     expect(hrefsOf(order, stepId)).toEqual(expected);
@@ -756,7 +758,7 @@ describe('animace postupu – pásek: konec s přezkou, dírky a špička', () =
     });
     expect(animationLink('beltHolesTip', 'E3').label).toBe('Krok E3 – Uřízněte vrchol R4');
     expect(() => animationLink('beltBuckleEnd', 'A3')).toThrow(/nemá kotvu #A3/);
-    expect(() => animationLink('beltBuckleEnd', 'E7')).toThrow(/nemá kotvu #E7/);
+    expect(() => animationLink('beltBuckleEnd', 'E8')).toThrow(/nemá kotvu #E8/);
     expect(() => animationLink('beltHolesTip', 'C3')).toThrow(/nemá kotvu #C3/);
     expect(animationButtonText(spicka('F1'))).toBe('Animace postupu');
   });

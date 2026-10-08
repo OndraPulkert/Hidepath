@@ -24,6 +24,7 @@ import {
   keeperGapMm,
   keeperPocketClearMm,
   keeperStripLengthMm,
+  keeperWrapPerimeterMm,
   rivetPostRangeMm,
   ligamentMm,
   sideMarginMm,
@@ -105,15 +106,27 @@ describe('rozměry konce opasku', () => {
     expect(foldedSlotOpeningMm(DEFAULT_BELT_END)).toBeCloseTo(12.5, 6);
   });
 
-  it('délka poutka je obvod zdvojené části plus přeplátování', () => {
-    // 2 × (40 + 2 × 3,5) = 94; 94 + 15 = 109
+  it('poutko obepíná 3 vrstvy: zdvojený konec a volný konec, který jím prochází', () => {
+    // Regrese: dřív 2 × (40 + 2 × 3,5) + 15 = 109 mm obepnulo jen zdvojený konec a volný
+    // konec pásku se do poutka nevešel.
+    // 2 × (40 + 3 × 3,5) = 101; + π × 1,2 (tloušťka poutka v ohybech) ≈ 3,77; + 15 → 120
     expect(doubledPerimeterMm(DEFAULT_BELT_END)).toBeCloseTo(94, 6);
-    expect(keeperStripLengthMm(DEFAULT_BELT_END)).toBe(109);
+    expect(keeperWrapPerimeterMm(DEFAULT_BELT_END)).toBeCloseTo(101, 6);
+    expect(DEFAULT_BELT_END.keeperThicknessMm).toBeCloseTo(1.2, 6);
+    expect(keeperStripLengthMm(DEFAULT_BELT_END)).toBe(120);
+    // Vnitřní obvod hotového poutka (bez přeplátování a tloušťky) pojme všechny 3 vrstvy.
+    expect(
+      keeperStripLengthMm(DEFAULT_BELT_END) -
+        DEFAULT_BELT_END.keeperOverlapMm -
+        Math.PI * DEFAULT_BELT_END.keeperThicknessMm,
+    ).toBeGreaterThanOrEqual(2 * (40 + 3 * 3.5) - 0.5);
   });
 
-  it('tloušťka pásu mění jen délku poutka', () => {
-    expect(keeperStripLengthMm(spec({ beltThicknessMm: 3 }))).toBe(107);
-    expect(keeperStripLengthMm(spec({ beltThicknessMm: 5 }))).toBe(115);
+  it('tloušťka pásu i poutka mění délku poutka', () => {
+    expect(keeperStripLengthMm(spec({ beltWidthMm: 35, beltThicknessMm: 3 }))).toBe(107);
+    expect(keeperStripLengthMm(spec({ beltThicknessMm: 3 }))).toBe(117);
+    expect(keeperStripLengthMm(spec({ beltThicknessMm: 4 }))).toBe(123);
+    expect(keeperStripLengthMm(spec({ keeperThicknessMm: 3.5 }))).toBe(127);
   });
 });
 
@@ -429,6 +442,9 @@ describe('plochá destička pro všechny šířky', () => {
 
   it('podélné pravítko pokryje i nejdelší pásek na poutko', () => {
     expect(L.rulerLengthMm).toBeGreaterThanOrEqual(L.maxKeeperStripMm);
+    // 45 × 5 mm, 3 vrstvy: 2 × (45 + 15) + π × 1,2 + 15 ≈ 139 mm; pravítko má 145 mm.
+    expect(L.maxKeeperStripMm).toBe(139);
+    expect(L.rulerLengthMm).toBe(145);
     // Přehnaně velký výřez špičky posune jeho široký konec doleva a pravítko zkrátí.
     const huge = { ...DEFAULT_BELT_PLATE, tipCutoutOversizeMm: 40 };
     expect(checkBeltPlate(DEFAULT_BELT_END, DEFAULT_BELT_TIP, huge).join(' ')).toContain(

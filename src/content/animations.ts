@@ -294,6 +294,7 @@ export const animationPages = {
       E: 'Část E – kontrola',
       F: 'Část F – pouzdro s mincí',
       G: 'Část G – Víčko',
+      H: 'Část H – pásek',
     },
     steps: {
       A: ['Přehled hran', 'Srovnejte hrany smirkem'],
@@ -316,6 +317,7 @@ export const animationPages = {
         'Zarovnejte a vyleštěte boky',
         'Dokončete hrany okének, D2 a jazýčku',
       ],
+      H: ['Zkoste nebo zaoblete hrany pásu', 'Zaleštěte hrany pásu'],
     },
   },
   threadLength: {
@@ -547,13 +549,19 @@ export const animationPages = {
         'Zkontrolujte značky',
         'S listem 1',
       ],
-      C: ['Vysekněte první dvojici', 'Konce oválu Ø 6', 'Boky oválu nožem'],
+      C: [
+        'Vysekněte první dvojici',
+        'Konce oválu Ø 6',
+        'Boky oválu nožem',
+        'Zaleštěte hranu oválu',
+      ],
       D: ['Změřte poutko proužkem', 'Vyřízněte a slepte poutko', 'Navlékněte poutko na pás'],
       E: [
         'Ohněte konec kolem příčky',
         'Posuňte poutko na přehnutý konec',
         'Označte druhou dvojici skrz otvory',
         'Vysekněte druhou dvojici',
+        'Ohněte zpět a vraťte poutko',
         'Sešroubujte nýty',
         'Hotový konec v řezu',
       ],
@@ -571,7 +579,12 @@ export const animationPages = {
       F: 'Část F – hrany a zkouška',
     },
     steps: {
-      A: ['Vyzkoušejte pásek na sobě', 'Změřte a porovnejte', 'Stačí pás?'],
+      A: [
+        'Vyzkoušejte pásek na sobě',
+        'Změřte a porovnejte',
+        'Propíchněte značku na rub',
+        'Stačí pás?',
+      ],
       B: [
         'Řada 1 nebo 2, nebo list 2',
         'Přiložte na prostřední dírku',

@@ -39,7 +39,7 @@ describe('parametrický pásek – výpočet', () => {
     expect(r.holes.middleFromApexMm).toBe(144.3);
     expect(r.holes.adjustmentMm).toBe(50);
     expect(r.tipLengthMm).toBe(38.5);
-    expect(r.keeper).toEqual({ lengthMm: 109, widthMm: 12 });
+    expect(r.keeper).toEqual({ lengthMm: 120, widthMm: 12 });
     expect(r.rivet).toMatchObject({ minMm: 5.5, maxMm: 6, postMm: 6 });
     expect(r.rivet.verified).toMatch(/10\/6/);
     expect(r.buckleEnd.rivetHolesFromEndMm).toEqual([16.8, 64.5, 115.5, 163.2]);
@@ -72,8 +72,10 @@ describe('parametrický pásek – výpočet', () => {
   it('poutko podle šířky a tloušťky (tabulka v podkladech)', () => {
     const at = (w: number, t: number) =>
       derive({ ...base, widthMm: w, thicknessMm: t }).keeper.lengthMm;
-    expect([at(30, 3), at(30, 3.5), at(30, 4)]).toEqual([87, 89, 91]);
-    expect([at(45, 3), at(45, 3.5), at(45, 4)]).toEqual([117, 119, 121]);
+    // 3 vrstvy (zdvojený konec + volný konec) + π × 1,2 mm poutka + 15 mm přeplátování.
+    expect([at(30, 3), at(30, 3.5), at(30, 4)]).toEqual([97, 100, 103]);
+    expect([at(35, 3), at(40, 3.5)]).toEqual([107, 120]);
+    expect([at(45, 3), at(45, 3.5), at(45, 4)]).toEqual([127, 130, 133]);
     expect(at(40, 3.5)).toBe(keeperStripLengthMm(DEFAULT_BELT_END));
   });
 
@@ -210,11 +212,14 @@ describe('parametrický pásek – meze', () => {
     expect(r.tipSheetOrientation).toBeNull();
     expect(r.sheets.printable).toBe(false);
     if (r.sheets.printable) return;
-    expect(r.sheets.message).toMatch(/^Listy se na A4 nevejdou/);
+    expect(r.sheets.message).toMatch(/^List 2 se na A4 nevejde/);
     expect(r.sheets.message).toMatch(/list A4 pojme nejvýš 258 mm/);
-    expect(r.sheets.message).toMatch(/podle čísel v tabulce, konec u přezky řadou 3 destičky/);
+    expect(r.sheets.message).toMatch(/Dírky a konec značte podle čísel v tabulce/);
+    expect(r.sheets.message).toMatch(/List 1 \(konec u přezky a poutko\) se vytiskne/);
+    // Regrese: list 1 na dírkách nezávisí, takže se vytiskne i bez listu 2.
     const sheets = beltSheetsFor(input);
-    expect(sheets).toMatchObject({ ok: false, problems: [r.sheets.message] });
+    if (!sheets.ok) throw new Error(sheets.problems.join());
+    expect(sheets.sheets.map((s) => s.id)).toEqual(['prezka']);
   });
 
   it('délka hrotu z modelu sedí s `tipLengthMm`', () => {
@@ -322,8 +327,8 @@ describe('listy v prohlížeči', () => {
     ]);
     const round7 = beltSheetsFor({ ...base, tip: 'zaobleny', holeCount: 7 });
     if (!round7.ok) throw new Error(round7.problems.join());
-    expect(round7.sheets[1].orientation).toBe('landscape');
-    expect(round7.sheets[1].title).toMatch(/zaoblený/);
+    expect(round7.sheets[1]!.orientation).toBe('landscape');
+    expect(round7.sheets[1]!.title).toMatch(/zaoblený/);
   });
 
   it('neplatné zadání listy nekreslí', () => {
@@ -356,5 +361,29 @@ describe('parametrický pásek – nálezy kontroly (2026-10-08)', () => {
     expect(checkBeltConfig({ ...base, widthMm: 45, apexToFirstHoleMm: 50 })).toContain(
       'Odstup první dírky aspoň 52,5 mm.',
     );
+  });
+});
+
+describe('parametrický pásek – nálezy kontroly pásku (2026-10-08, kolo 2)', () => {
+  it('naměřený pás 3,51–3,75 mm z CraftPointu zůstane v nabídce (tolerance dodávky)', () => {
+    // Regrese: CraftPoint prodává 3–3,5 mm a pás přijde 3,5–3,75 mm (postup, krok 3);
+    // naměřená hodnota nesmí vyřadit právě ten pás, který uživatel koupil.
+    for (const [w, t] of [
+      [35, 3.6],
+      [30, 3.55],
+      [35, 3.75],
+    ] as const) {
+      const strap = derive({ ...base, widthMm: w, thicknessMm: t, waistMm: 1000 }).shopping[0]!;
+      expect(strap.status, `${w}/${t}`).toBe('overeno');
+      expect(strap.offers!.map((o) => o.shop)).toEqual([expect.stringMatching(/^CraftPoint/)]);
+      expect(strap.offers![0]!.note).toMatch(/po doručení přeměřte/);
+    }
+    const r40 = derive({ ...base, thicknessMm: 3.6, waistMm: 1000 }).shopping[0]!;
+    expect(r40.offers!.map((o) => o.shop)).toEqual([
+      expect.stringMatching(/^CraftPoint/),
+      expect.stringMatching(/^Křupson/),
+    ]);
+    // Nad toleranci (3,76 mm a víc) CraftPoint už ne.
+    expect(derive({ ...base, widthMm: 35, thicknessMm: 3.8 }).shopping[0]!.status).toBe('overte');
   });
 });

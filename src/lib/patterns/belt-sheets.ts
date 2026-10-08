@@ -14,11 +14,12 @@ import {
   type BeltTipSpec,
   adjustmentRangeMm,
   apexToMiddleHoleMm,
-  doubledPerimeterMm,
   holeOffsetsFromApexMm,
+  keeperBendAllowanceMm,
   keeperGapMm,
   keeperPocketClearMm,
   keeperStripLengthMm,
+  keeperWrapPerimeterMm,
   ligamentMm,
   middleHoleIndex,
   tipLengthMm,
@@ -165,7 +166,15 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
     text(
       strapX,
       keeperY - 4,
-      `Poutko — pásek ${len} × ${spec.keeperWidthMm} mm (obvod zdvojené části ${cz(doubledPerimeterMm(spec))} mm + ${spec.keeperOverlapMm} mm přeplátování)`,
+      `Poutko — pásek ${len} × ${spec.keeperWidthMm} mm, obepíná 3 vrstvy: přehnutý konec a volný konec pásku`,
+      3,
+    ),
+  );
+  out.push(
+    text(
+      strapX,
+      keeperY + spec.keeperWidthMm + 10,
+      `obvod 3 vrstev ${cz(Math.round(keeperWrapPerimeterMm(spec) * 10) / 10)} mm + ${cz(Math.round(keeperBendAllowanceMm(spec) * 10) / 10)} mm na tloušťku poutka ${cz(spec.keeperThicknessMm)} mm + ${spec.keeperOverlapMm} mm přeplátování`,
       3,
     ),
   );
@@ -186,7 +195,7 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
       '1. Na rub pásu přeneste ohyb, drážku a všechny čtyři otvory.',
       `2. Vysekněte Ø ${cz(spec.rivetHoleMm)} mm jen 2 otvory blíž ke konci a konce drážky, boky drážky řízněte nožem.`,
       '3. Navlékněte poutko na pás, ohněte konec kolem příčky přezky a poutko posuňte přes přehnutý konec.',
-      '4. Druhé 2 otvory označte skrz vyseknuté, vysekněte a sešroubujte nýty. Poutko zůstane mezi nimi.',
+      '4. Druhé 2 otvory označte skrz vyseknuté, vysekněte je, poutko vraťte mezi ně a sešroubujte nýty.',
       'Nýty: 2 kusy, každý prochází oběma vrstvami — proto jsou otvory čtyři.',
       'Rozměry z šablony Black Flag Leather Goods (jeden zdroj, ať se nemíchají rozteče).',
       'Délka poutka a zaoblení konce jsou spočítané, ne ověřené — ověřte na odřezku.',
@@ -351,9 +360,16 @@ function tipPage(tip: BeltTipSpec, end: BeltEndSpec, shape: BeltTipShape = 'poin
 
   // Kóty.
   out.push(dimension(strapX - 6, apexY, apexY + offsets[0]!, GREEN));
-  out.push(
-    text(strapX - 9, (2 * apexY + offsets[0]!) / 2, `${cz(offsets[0]!)} mm`, 3, GREEN, 'end'),
-  );
+  // Popis kóty svisle podél ní: zarovnaný doprava na x = 13 začínal na 1,4 mm a tiskárna
+  // (nepotisknutelný okraj 3–6 mm) ho ořízla. Otočený zabere jen x ≈ 10–13,6 mm.
+  {
+    const lx = strapX - 9;
+    const ly = (2 * apexY + offsets[0]!) / 2;
+    out.push(
+      `<text x="${f(lx)}" y="${f(ly)}" transform="rotate(-90 ${f(lx)} ${f(ly)})" ` +
+        `font-family="Helvetica, Arial, sans-serif" font-size="3" fill="${GREEN}" text-anchor="middle">${cz(offsets[0]!)} mm</text>`,
+    );
+  }
   if (offsets.length > 1) {
     out.push(dimension(strapX + w + 4, apexY + offsets[0]!, apexY + offsets[1]!, GREEN));
   }
@@ -561,6 +577,23 @@ export interface BeltSheet {
  * je na výšku, když se vejde, jinak na šířku; když se nevejde ani tak, vyhodí chybu (meze
  * hlídá `checkBeltConfig`). Rozměry musí projít kontrolami modelu – to hlídá volající.
  */
+const a4 = (o: 'portrait' | 'landscape') =>
+  o === 'portrait' ? { widthMm: 210, heightMm: 297 } : { widthMm: 297, heightMm: 210 };
+
+/**
+ * List 1 (konec u přezky a poutko). Na tvaru konce ani dírkách nezávisí, takže se tiskne
+ * i tehdy, když se list 2 na A4 nevejde.
+ */
+export function buildBuckleSheet(end: BeltEndSpec): BeltSheet {
+  return {
+    id: BELT_SHEET_IDS.buckle,
+    title: 'List 1 – konec u přezky a poutko',
+    orientation: 'portrait',
+    ...a4('portrait'),
+    svg: page(buckleEndPage(end)),
+  };
+}
+
 export function buildBeltSheets(
   end: BeltEndSpec,
   tip: BeltTipSpec,
@@ -572,16 +605,8 @@ export function buildBeltSheets(
   }
   const tipBody =
     orientation === 'portrait' ? tipPage(tip, end, shape) : tipPageLandscape(tip, end, shape);
-  const a4 = (o: 'portrait' | 'landscape') =>
-    o === 'portrait' ? { widthMm: 210, heightMm: 297 } : { widthMm: 297, heightMm: 210 };
   return [
-    {
-      id: BELT_SHEET_IDS.buckle,
-      title: 'List 1 – konec u přezky a poutko',
-      orientation: 'portrait',
-      ...a4('portrait'),
-      svg: page(buckleEndPage(end)),
-    },
+    buildBuckleSheet(end),
     {
       id: BELT_SHEET_IDS.tip,
       title: shape === 'round' ? 'List 2 – zaoblený konec a dírky' : 'List 2 – špička a dírky',

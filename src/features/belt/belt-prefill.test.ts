@@ -49,6 +49,7 @@ describe('předvyplnění „Váš pásek“ ze zápisníku', () => {
         holeDiameter: '5',
       },
       filled: ['šířka', 'tloušťka', 'obvod', 'konec', 'Ø dírky (trn + 0,5 mm)'],
+      problems: [],
     });
   });
 
@@ -91,6 +92,38 @@ describe('předvyplnění „Váš pásek“ ze zápisníku', () => {
     expect(beltNumbersFromNotebook([entry(BELT_RECORD_IDS.prong, 4.2)], SLUG)).toMatchObject({
       ok: true,
       result: { holes: { diameterMm: 5 } },
+    });
+  });
+
+  it('tenký trn (≤ 3,5 mm) dá nejmenší výsečník 4,5 mm, ne Ø 4 mimo meze', () => {
+    // Regrese: trn 3,5 → Ø 4,0 a celé „Vaše čísla“ skončila chybou „Ø dírky musí být …“.
+    const prefill = beltConfigPrefill(
+      [entry(BELT_RECORD_IDS.width, 30), entry(BELT_RECORD_IDS.prong, 3.5)],
+      SLUG,
+    )!;
+    expect(prefill.form.holeDiameter).toBe('4,5');
+    expect(prefill.filled).toContain('Ø dírky (trn + 0,5 mm, nejmenší výsečník 4,5 mm)');
+    expect(prefill.problems).toEqual([]);
+    expect(
+      beltNumbersFromNotebook(
+        [entry(BELT_RECORD_IDS.width, 30), entry(BELT_RECORD_IDS.prong, 3.5)],
+        SLUG,
+      ),
+    ).toMatchObject({ ok: true, result: { holes: { diameterMm: 4.5 } } });
+    expect(beltConfigPrefill([entry(BELT_RECORD_IDS.prong, 2.8)], SLUG)!.form.holeDiameter).toBe(
+      '4,5',
+    );
+  });
+
+  it('silný trn (nad 5,5 mm) hlásí srozumitelně, že je na výsečníky moc silný', () => {
+    const entries = [entry(BELT_RECORD_IDS.width, 40), entry(BELT_RECORD_IDS.prong, 5.8)];
+    const prefill = beltConfigPrefill(entries, SLUG)!;
+    expect(prefill.problems).toEqual([
+      'Trn 5,8 mm je na výsečníky 4,5–6 mm moc silný (potřeba Ø 6,5 mm). Zkontrolujte měření trnu, nebo zvolte jinou přezku.',
+    ]);
+    expect(beltNumbersFromNotebook(entries, SLUG)).toEqual({
+      ok: false,
+      problems: prefill.problems,
     });
   });
 });

@@ -15,7 +15,10 @@
 export interface BeltEndSpec {
   /** Šířka pásu. */
   beltWidthMm: number;
-  /** Tloušťka pásu – vstupuje do délky poutka (zdvojená část má 2×). */
+  /**
+   * Tloušťka pásu – vstupuje do délky poutka: poutko obepíná zdvojenou část (2×) a k ní
+   * volný konec pásku, který jím po zapnutí prochází (3. vrstva).
+   */
   beltThicknessMm: number;
   /** Délka drážky pro trn; ohyb ji půlí, takže složený otvor je poloviční. */
   slotLengthMm: number;
@@ -40,6 +43,12 @@ export interface BeltEndSpec {
   /** Přídavek na přeplátování poutka. */
   keeperOverlapMm: number;
   /**
+   * Tloušťka kůže poutka. Smyčka z kůže tloušťky k má střednici o π·k delší než vnitřní
+   * obvod, proto se o tolik prodlouží pásek na poutko (odřezek 1,2 mm z pouzdra na karty,
+   * docs/content/sablony-zdroje.md).
+   */
+  keeperThicknessMm: number;
+  /**
    * Nejmenší přijatelný můstek kůže mezi otvory a mezi otvorem a hranou.
    * Volba této šablony: jeden průměr otvoru. Ohyb je nejzatíženější místo pásku,
    * takže tenký můstek je právě tam, kde by se pásek utrhl.
@@ -61,6 +70,7 @@ export const DEFAULT_BELT_END: BeltEndSpec = {
   bodyShownMm: 90,
   keeperWidthMm: 12,
   keeperOverlapMm: 15,
+  keeperThicknessMm: 1.2,
   minLigamentMm: 6,
 };
 
@@ -108,14 +118,33 @@ export function foldedSlotOpeningMm(spec: BeltEndSpec): number {
   return spec.slotLengthMm / 2;
 }
 
-/** Obvod zdvojené části, kolem které se ovíjí poutko. */
+/** Obvod zdvojené části (přehnutý konec na pásu). */
 export function doubledPerimeterMm(spec: BeltEndSpec): number {
   return 2 * (spec.beltWidthMm + 2 * spec.beltThicknessMm);
 }
 
-/** Délka pásku na poutko včetně přeplátování. */
+/**
+ * Vnitřní obvod poutka: zdvojená část a k ní volný konec pásku, který poutkem po zapnutí
+ * prochází – tedy 3 vrstvy pásu. (Revize 2026-10-08: dřív jen 2 vrstvy a poutko vyšlo
+ * o ~11 mm kratší, volný konec by se do něj nevešel.)
+ */
+export function keeperWrapPerimeterMm(spec: BeltEndSpec): number {
+  return 2 * (spec.beltWidthMm + 3 * spec.beltThicknessMm);
+}
+
+/**
+ * Přídavek na tloušťku poutka v ohybech: střednice smyčky z kůže tloušťky k je o π·k delší
+ * než její vnitřní obvod.
+ */
+export function keeperBendAllowanceMm(spec: BeltEndSpec): number {
+  return Math.PI * spec.keeperThicknessMm;
+}
+
+/** Délka pásku na poutko: 3 vrstvy + tloušťka poutka + přeplátování, celé mm. */
 export function keeperStripLengthMm(spec: BeltEndSpec): number {
-  return Math.round(doubledPerimeterMm(spec) + spec.keeperOverlapMm);
+  return Math.round(
+    keeperWrapPerimeterMm(spec) + keeperBendAllowanceMm(spec) + spec.keeperOverlapMm,
+  );
 }
 
 /**
@@ -151,6 +180,7 @@ export function checkBeltEndSpec(spec: BeltEndSpec): string[] {
     ['tailLengthMm', spec.tailLengthMm],
     ['keeperWidthMm', spec.keeperWidthMm],
     ['keeperOverlapMm', spec.keeperOverlapMm],
+    ['keeperThicknessMm', spec.keeperThicknessMm],
     ['bodyShownMm', spec.bodyShownMm],
     ['minLigamentMm', spec.minLigamentMm],
     // Dvě nejhlasitější kóty tiskové šablony; bez tohohle projde NaN až do SVG.
@@ -462,8 +492,9 @@ export interface BeltPlateSpec {
    */
   roundedWidthsMm: number[];
   /**
-   * Šířka slotu pro zaoblený konec. Značí se zevnitř slotu, přesnost je tedy
-   * ± polovina šířky — u oblouku, který se stejně řeže a brousí, to nevadí.
+   * Šířka slotu pro zaoblený konec. Šídlo se vede **středem slotu** (lekce 6, krok „mark“):
+   * jen střed končí na hranách pásu a navazuje na ně. Po stěně by tvar uhnul o ± polovinu
+   * šířky (u 40 mm r ≈ 18,9 nebo 21,1 mm).
    * 2 mm je dolní hranice, kterou řezárna považuje za spolehlivě vyřezatelnou
    * ve 3mm akrylátu (užší pásek odpadu se speče, viz `roundedWidthsMm`).
    */

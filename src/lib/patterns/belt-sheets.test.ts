@@ -81,8 +81,11 @@ describe('tiskové listy opasku', () => {
     const { end, tip } = at(40);
     const [thin] = buildBeltSheets({ ...end, beltThicknessMm: 3 }, tip, 'point');
     const [thick] = buildBeltSheets({ ...end, beltThicknessMm: 4 }, tip, 'point');
-    expect(thin.svg).toContain('pásek 107 × 12 mm');
-    expect(thick.svg).toContain('pásek 111 × 12 mm');
+    // 3 vrstvy (zdvojený konec + volný konec) + π × 1,2 mm + 15 mm přeplátování.
+    expect(thin.svg).toContain('pásek 117 × 12 mm');
+    expect(thick.svg).toContain('pásek 123 × 12 mm');
+    expect(thin.svg).toContain('obepíná 3 vrstvy');
+    expect(thin.svg).toContain('obvod 3 vrstev 98 mm');
   });
 });
 
@@ -113,6 +116,40 @@ describe('tiskové listy opasku – nálezy kontroly (2026-10-08)', () => {
     const spacing = textY(s.svg, 'rozteč 11 mm');
     const middle = textY(s.svg, 'PROSTŘEDNÍ DÍRKA');
     expect(Math.abs(middle - spacing)).toBeGreaterThanOrEqual(6);
+  });
+
+  it('list 2 na výšku: žádný text nezačíná v nepotisknutelném okraji (< 8 mm)', () => {
+    // Regrese: kóta „94,3 mm“ byla zarovnaná doprava na x = 13 a začínala na 1,4 mm, tiskárna
+    // ji ořízla (např. na „4,3 mm“). Šířka textu odhadem 0,6 × velikost písma na znak.
+    const MIN_X = 8;
+    for (const [w, shape] of [
+      [40, 'point'],
+      [35, 'round'],
+      [30, 'round'],
+      [28, 'point'],
+    ] as const) {
+      const { end, tip } = at(w);
+      const apex = w === 30 ? 89.3 : 94.3;
+      const [, s] = buildBeltSheets(end, { ...tip, apexToFirstHoleMm: apex }, shape);
+      for (const m of s.svg.matchAll(/<text ([^>]*)>([^<]*)<\/text>/g)) {
+        const attrs = m[1]!;
+        const x = Number(/\bx="([-\d.]+)"/.exec(attrs)![1]);
+        const size = Number(/font-size="([\d.]+)"/.exec(attrs)![1]);
+        const width = 0.6 * size * m[2]!.length;
+        const rotated = attrs.includes('transform="rotate(-90 ');
+        const anchor = /text-anchor="(\w+)"/.exec(attrs)?.[1] ?? 'start';
+        const left = rotated
+          ? x - size
+          : anchor === 'end'
+            ? x - width
+            : anchor === 'middle'
+              ? x - width / 2
+              : x;
+        expect(left, `${w}/${shape}: ${m[2]}`).toBeGreaterThanOrEqual(MIN_X);
+      }
+      // Kóta vrchol → první dírka je na listu pořád (svisle podél kóty).
+      expect(s.svg).toMatch(new RegExp(`rotate\\(-90 [^>]*>${String(apex).replace('.', ',')} mm<`));
+    }
   });
 
   it('list na šířku: popis kalibračního čtverce není nalepený na hraně pásu 45 mm', () => {

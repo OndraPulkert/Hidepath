@@ -345,10 +345,11 @@ uvádí, že umožňuje „dlouhé, rovné řezy, složité křivky a také **zk
 za přezkou: netiskne se k tělu, pásek v poutkách kalhot nesedí rovně a je to nejvíc vidět. Ztenčená
 kůže se navíc ochotněji ohne – vnější vlákna v ohybu jsou v tahu.
 
-**Souvislost s poutkem, kterou autor správně vytušil.** Poutko se navléká přes **zdvojenou** část,
-ale volný konec pásku, který jím pak prochází, má jen jednu vrstvu. Bez zkosení musí být poutko
-dimenzované na 8 mm a volný konec v něm potom chrastí. Se zkosením vyjde jedna velikost poutka
-těsná na obojí. **Tím se upřesňuje dřívější poznámka v tomto dokumentu, že bez poutka zkosení
+**Souvislost s poutkem, kterou autor správně vytušil.** Poutko se navléká přes **zdvojenou** část
+a po zapnutí jím prochází **ještě** volný konec pásku – obojí současně, ne jedno nebo druhé.
+Poutko proto obepíná **3 vrstvy** (u 3,5 mm pásu 10,5 mm). Zkosení u přezky zdvojenou část
+ztenčí, takže i poutko vyjde menší. (Revize 2026-10-08: dřív tu stálo, že volný konec poutkem
+prochází sám a poutko stačí na zdvojenou část; poutko pak vycházelo asi o 11 mm kratší.) **Tím se upřesňuje dřívější poznámka v tomto dokumentu, že bez poutka zkosení
 nevadí: s poutkem vadí.** (Tohle je úvaha z geometrie, ne citace návodu – vyzkoušet na odřezku.)
 
 **Poutko v šabloně CraftPoint není.** Ověřeno v seznamu kování generátoru: „40mm opasková přezka
@@ -358,7 +359,8 @@ nevadí: s poutkem vadí.** (Tohle je úvaha z geometrie, ne citace návodu – 
 - Slepit nebo prošít do kroužku, spoj na spodní straně.
 - Navléknout **před** ohnutím konce, aby zůstalo mezi přezkou a nýty a nesklouzlo. Schéma z videa ho
   označuje jako „removable loop“, tedy varianta, kdy se dá vyjmout.
-- Obvod měřit kolem **zdvojené** části, ne kolem volného konce.
+- Obvod měřit kolem **3 vrstev**: zdvojené části a k ní přiloženého kusu pásu (volný konec),
+  k obvodu přičíst tloušťku poutka v ohybech (π × 1,2 ≈ 4 mm) a přeplátování.
 
 **Nástroje na zkosení (ověřeno přes `.js` 2026-09-10):**
 
@@ -611,7 +613,8 @@ Obvod mění jen hladkou část mezi konci.
 
 Odchylky do 0,15 mm jsou tahem linky a rasterizací na 300 dpi (1 px = 0,085 mm).
 
-**Co zůstává neověřené:** délka poutka (111 mm je obvod 96 mm + 15 mm přeplátování), zaoblení konce
+**Co zůstává neověřené:** délka poutka (pro 40 × 4 mm 123 mm: obvod 3 vrstev 104 mm + 4 mm
+tloušťka poutka + 15 mm přeplátování; revize 2026-10-08, dřív 111 mm jen kolem 2 vrstev), zaoblení konce
 u přezky a hloubka případného zkosení. Vyzkoušet na odřezku pásu. Poutko 12 mm má v kapse 37,7 mm
 světlé délky vůli – pro těsné poutko posunout `rivetOffsetsMm` blíž k sobě a přegenerovat.
 
@@ -634,7 +637,8 @@ Vygeneroval jsem PDF CraftPointu ještě pro **šířku 35 mm** a porovnal s 40 
 - Obrys, samozřejmě.
 - **Délka hrotu**: 38,46 mm u 40 mm pásu, 32,94 mm u 35 mm (odměřeno 38,4 a 32,7). Není to vstup – vychází ze šířky, sklonu
   a zaoblení. V modelu je proto `tipLengthMm()` odvozená funkce, ne parametr.
-- **Délka pásku na poutko**: 111 mm pro 40 × 4 mm, 101 mm pro 35 × 4 mm.
+- **Délka pásku na poutko**: 123 mm pro 40 × 4 mm, 113 mm pro 35 × 4 mm (3 vrstvy, revize
+  2026-10-08; dřív 111 a 101 mm kolem 2 vrstev).
 - Průměry otvorů závisí na trnu přezky a nýtu, ne na šířce.
 
 Důsledek: **generátor je univerzální, fyzická šablona ne.** Šířka se volí přepínačem:

@@ -4,10 +4,10 @@ import {
   DEFAULT_BELT_END,
   DEFAULT_BELT_TIP,
   apexToMiddleHoleMm,
-  doubledPerimeterMm,
   keeperGapMm,
   keeperPocketClearMm,
   keeperStripLengthMm,
+  keeperWrapPerimeterMm,
   holeOffsetsFromApexMm,
   ligamentMm,
   beltPlateLayout,
@@ -114,8 +114,10 @@ describe('vygenerované šablony opasku', () => {
       expect(svg, path).toContain(`konec pásu ${cz(end.tailLengthMm)} mm od ohybu`);
       // Poutko závisí na šířce i tloušťce pásu – právě tady by se zadrátovaná hodnota poznala.
       expect(svg, path).toContain(
-        `pásek ${keeperStripLengthMm(end)} × ${end.keeperWidthMm} mm (obvod zdvojené části ${cz(doubledPerimeterMm(end))} mm`,
+        `pásek ${keeperStripLengthMm(end)} × ${end.keeperWidthMm} mm, obepíná 3 vrstvy`,
       );
+      // Poutko obepíná 3 vrstvy (zdvojený konec + volný konec), ne jen zdvojenou část.
+      expect(svg, path).toContain(`obvod 3 vrstev ${cz(keeperWrapPerimeterMm(end))} mm`);
     }
   });
 

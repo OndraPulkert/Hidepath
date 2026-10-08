@@ -450,7 +450,7 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
         shop: 'CraftPoint',
         url: 'https://craft-point.cz/products/vysecnik-na-konce-opasku-do-sipky-35-40mm',
         variant: '35 mm',
-        priceCents: 50_700,
+        priceCents: 50_600,
         availability: 'in_stock',
         checkedAt: CHECKED,
       },

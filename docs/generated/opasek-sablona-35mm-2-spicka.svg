@@ -14,7 +14,7 @@
 <circle cx="39.5" cy="214.3" r="2.5" fill="none" stroke="#2b2b2b" stroke-width="0.3"/><path d="M36.25 214.3 H42.75 M39.5 211.05 V217.55" stroke="#2b2b2b" stroke-width="0.2" fill="none"/>
 <circle cx="39.5" cy="239.3" r="2.5" fill="none" stroke="#2b2b2b" stroke-width="0.3"/><path d="M36.25 239.3 H42.75 M39.5 236.05 V242.55" stroke="#2b2b2b" stroke-width="0.2" fill="none"/>
 <line x1="16" y1="45" x2="16" y2="139.3" stroke="#1f6f43" stroke-width="0.3"/><line x1="14" y1="45" x2="18" y2="45" stroke="#1f6f43" stroke-width="0.3"/><line x1="14" y1="139.3" x2="18" y2="139.3" stroke="#1f6f43" stroke-width="0.3"/>
-<text x="13" y="92.15" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#1f6f43" text-anchor="end">94,3 mm</text>
+<text x="13" y="92.15" transform="rotate(-90 13 92.15)" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#1f6f43" text-anchor="middle">94,3 mm</text>
 <line x1="61" y1="139.3" x2="61" y2="164.3" stroke="#1f6f43" stroke-width="0.3"/><line x1="59" y1="139.3" x2="63" y2="139.3" stroke="#1f6f43" stroke-width="0.3"/><line x1="59" y1="164.3" x2="63" y2="164.3" stroke="#1f6f43" stroke-width="0.3"/>
 <text x="71" y="61.469" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#2b2b2b" text-anchor="start">hrot 32,9 mm</text>
 <text x="71" y="49" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#c0392b" text-anchor="start">vrchol zaoblený r = 4 mm (není ostrý hrot)</text>

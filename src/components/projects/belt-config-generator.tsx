@@ -74,6 +74,12 @@ export function BeltConfigGenerator({
   const [form, setForm] = useState<BeltConfigForm>(prefilled?.form ?? DEFAULT_BELT_FORM);
   const [done, setDone] = useState<string | null>(null);
   const evaluated = useMemo(() => evaluate(form), [form]);
+  // Předvyplněný Ø dírky mimo meze (trn ze zápisníku): pole je v „Dírky (pokročilé)“, které
+  // je jinak sbalené – uživatel by neviděl, co opravit. Jen při prvním vykreslení.
+  const [holesOpenInitially] = useState(() => {
+    const first = evaluate(prefilled?.form ?? DEFAULT_BELT_FORM);
+    return !first.ok && first.problems.some((p) => p.startsWith('Ø dírky'));
+  });
   const set =
     <K extends keyof BeltConfigForm>(key: K) =>
     (value: BeltConfigForm[K]) => {
@@ -101,7 +107,11 @@ export function BeltConfigGenerator({
         url: svgDataUrl(s.svg),
       })),
     );
-    setDone(built.label);
+    setDone(
+      built.sheets.length === 1
+        ? `List 1 pro ${built.label} je připravený níže a zaškrtnutý k tisku. List 2 se na A4 nevejde: dírky a konec značte podle čísel v tabulce. Po tisku přeměřte kalibrační čtverec 50 × 50 mm.`
+        : `Listy pro ${built.label} jsou připravené níže a zaškrtnuté k tisku. Po tisku přeměřte kalibrační čtverec 50 × 50 mm.`,
+    );
   };
 
   return (
@@ -123,6 +133,11 @@ export function BeltConfigGenerator({
         >
           <span className="font-medium">Předvyplněno ze zápisníku:</span>{' '}
           {typo(prefilled.filled.join(', '))}. Hodnoty zkontrolujte.
+          {prefilled.problems.map((p) => (
+            <span key={p} className="mt-1 block text-cognac-deep">
+              {typo(p)}
+            </span>
+          ))}
         </p>
       ) : null}
       <SavedBeltsSection
@@ -190,7 +205,7 @@ export function BeltConfigGenerator({
             </SegmentButton>
           ))}
         </ChoiceRow>
-        <details className="rounded-control border border-line px-4 py-2">
+        <details className="rounded-control border border-line px-4 py-2" open={holesOpenInitially}>
           <summary className="min-h-touch cursor-pointer text-body font-medium">
             Dírky (pokročilé)
           </summary>
@@ -259,19 +274,16 @@ export function BeltConfigGenerator({
           <p role="note" className="text-body text-cognac-deep">
             {typo(evaluated.result.sheets.message)}
           </p>
-        ) : (
-          <div>
-            <Button type="submit" variant="secondary" disabled={!evaluated.ok}>
-              Vygenerovat listy A4
-            </Button>
-          </div>
-        )}
+        ) : null}
+        <div>
+          <Button type="submit" variant="secondary" disabled={!evaluated.ok}>
+            Vygenerovat listy A4
+          </Button>
+        </div>
       </form>
       {done ? (
         <p role="status" className="text-body font-medium text-forest">
-          {typo(
-            `Listy pro ${done} jsou připravené níže a zaškrtnuté k tisku. Po tisku přeměřte kalibrační čtverec 50 × 50 mm.`,
-          )}
+          {typo(done)}
         </p>
       ) : null}
     </Card>
@@ -498,7 +510,30 @@ function SavedBeltsSection({
   const id = useId();
   const { belts, saveBelt, removeBelt, isSaving } = useSavedBelts(project);
   const [name, setName] = useState('');
-  const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
+  /** `undo` = právě smazaný pásek: smazání se synchronizuje na všechna zařízení, ať jde vrátit. */
+  const [message, setMessage] = useState<{
+    ok: boolean;
+    text: string;
+    undo?: SavedBelt;
+  } | null>(null);
+
+  const remove = async (belt: SavedBelt) => {
+    try {
+      await removeBelt(belt.fieldId);
+      setMessage({ ok: true, text: `Pásek „${belt.name}“ smazán.`, undo: belt });
+    } catch {
+      setMessage({ ok: false, text: 'Smazání se nepovedlo. Zkuste to znovu.' });
+    }
+  };
+
+  const restore = async (belt: SavedBelt) => {
+    try {
+      await saveBelt(belt.name, belt.input, belt.waistSource, belt.fieldId);
+      setMessage({ ok: true, text: `Pásek „${belt.name}“ vrácen.` });
+    } catch {
+      setMessage({ ok: false, text: 'Vrácení se nepovedlo. Zkuste to znovu.' });
+    }
+  };
 
   const save = async () => {
     if (!current) return;
@@ -554,10 +589,7 @@ function SavedBeltsSection({
               <Button
                 type="button"
                 variant="ghost"
-                onClick={() => {
-                  void removeBelt(belt.fieldId);
-                  setMessage(null);
-                }}
+                onClick={() => void remove(belt)}
                 aria-label={`Smazat pásek ${belt.name}`}
               >
                 Smazat
@@ -595,6 +627,20 @@ function SavedBeltsSection({
           className={message.ok ? 'text-meta text-forest' : 'text-meta text-cognac-deep'}
         >
           {typo(message.text)}
+          {message.undo ? (
+            <>
+              {' '}
+              <Button
+                type="button"
+                variant="ghost"
+                disabled={isSaving}
+                onClick={() => void restore(message.undo!)}
+                aria-label={`Vrátit pásek ${message.undo.name}`}
+              >
+                Vrátit
+              </Button>
+            </>
+          ) : null}
         </p>
       ) : null}
     </section>

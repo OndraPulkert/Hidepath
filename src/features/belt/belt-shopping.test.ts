@@ -181,4 +181,75 @@ describe('nákup podle pásku', () => {
       fallback.equipment.find((e) => e.slug === 'belt-buckle')!.planLines.map((l) => l.title),
     ).toEqual(['Mosazná opasková přezka 40 mm']);
   });
+
+  it('výsečník na dírky podle Ø pásku, ne vždy 5 mm', () => {
+    // Regrese: plán vždy kupoval Format 5 mm, i když pásek měl dírky Ø 4,5, 5,5 nebo 6 mm.
+    const at = (holeDiameterMm: number) =>
+      prepPlan([saved('X', { widthMm: 35, thicknessMm: 3.5, tip: 'hrot', holeDiameterMm })]);
+    const d5 = at(5);
+    expect(lineOf(d5.plan, 'hole-punch-5mm')).toEqual([
+      expect.objectContaining({
+        url: 'https://www.enaradinastroje.cz/kruhovy-vysecnik-format-5mm/',
+      }),
+    ]);
+    expect(d5.equipmentNames?.['hole-punch-5mm']).toBeUndefined();
+    const d45 = at(4.5);
+    expect(lineOf(d45.plan, 'hole-punch-5mm')).toEqual([
+      expect.objectContaining({
+        url: 'https://craft-point.cz/products/sada-vysecniku-na-kuzi-7-velikosti-2-5mm',
+      }),
+    ]);
+    expect(lineOf(d45.plan, 'hole-punch-5mm')[0]!.purpose).toMatch(/Ø 4,5 mm/);
+    expect(d45.equipmentNames?.['hole-punch-5mm']).toBe('Výsečník Ø 4,5 mm (dírky pro trn)');
+    const d55 = at(5.5);
+    expect(lineOf(d55.plan, 'hole-punch-5mm')).toEqual([]);
+    expect(d55.plan.skipped.find((s) => s.equipmentSlug === 'hole-punch-5mm')!.reason).toMatch(
+      /Ø 5,5 mm .* ověřte u prodejce/,
+    );
+    const d6 = at(6);
+    expect(lineOf(d6.plan, 'hole-punch-5mm')).toEqual([]);
+    expect(d6.plan.skipped.find((s) => s.equipmentSlug === 'hole-punch-5mm')!.reason).toMatch(
+      /výsečníkem Ø 6 mm/,
+    );
+    expect(lineOf(d6.plan, 'hole-punch-6mm')[0]!.purpose).toMatch(/dírky pro trn/);
+  });
+
+  it('„Připravte si“ u lekce 6 neukazuje 5 mm u pásku s Ø 4,5', () => {
+    const lesson = beltProject.lessons.find((l) => l.slug === '06-holes-and-tip')!;
+    const planOverride = beltPrepPlan(
+      plan,
+      [saved('Úzké dírky', { widthMm: 30, thicknessMm: 3.5, tip: 'hrot', holeDiameterMm: 4.5 })],
+      SLUG,
+      equipmentCatalog,
+    );
+    const view = buildLessonPrep({
+      project: beltProject,
+      lesson,
+      catalog: equipmentCatalog,
+      inventory: {},
+      progress: EMPTY_PROGRESS,
+      checks: [],
+      planOverride,
+    });
+    const punch = view.equipment.find((e) => e.slug === 'hole-punch-5mm')!;
+    expect(punch.name).toBe('Výsečník Ø 4,5 mm (dírky pro trn)');
+    expect(punch.planLines.map((l) => l.title)).toEqual([
+      'Sada výsečníků na kůži 7 velikostí (2–5 mm)',
+    ]);
+  });
+
+  it('zápisník s trnem, který nejde spočítat: „Připravte si“ to řekne, neukáže potichu 40 mm', () => {
+    const out = beltPrepPlan(
+      plan,
+      [entry(BELT_RECORD_IDS.width, 30), entry(BELT_RECORD_IDS.prong, 5.8)],
+      SLUG,
+      equipmentCatalog,
+    );
+    expect(out).not.toBeNull();
+    expect(out!.plan).toBe(plan);
+    expect(out!.basis).toMatch(
+      /^podle plánu projektu \(pásek 40 mm\): čísla ze zápisníku nejdou spočítat/,
+    );
+    expect(out!.basis).toMatch(/Trn 5,8 mm je na výsečníky 4,5–6 mm moc silný/);
+  });
 });
