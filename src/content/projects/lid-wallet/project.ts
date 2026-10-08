@@ -1197,7 +1197,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'g2',
         title: 'G2 a G2b: přepážka D1',
-        body: 'D1 přilepte rubem na rub F do šrafovaných ploch G2 (přes plíšek) a G2b (boky 1 mm). D1 nemá žádnou vůli: přikládejte ji vpichy osy na osu rubu F z lekce 4, zdola od spodní čáry obdélníku D1. Pásy G2b ohraničte maskovací páskou z obou stran a lepidlo naneste párátkem. Pásky strhněte hned po nanesení lepidla, ještě než přiložíte D1. Přetok nad G2 hned setřete.',
+        body: 'D1 přilepte rubem na rub F do šrafovaných ploch G2 (přes plíšek) a G2b (boky 1 mm). D1 nemá žádnou vůli: přikládejte ji vpichy osy na osu rubu F z lekce 4, zdola od spodní čáry obdélníku D1. Kontaktní lepidlo jde na obě strany, hranice proto vyznačte i na rubu D1: tužkou spodní pás G2 a boční proužky G2b podle šrafy na listu 3 (v rozměrech pro vaši kůži; ve výchozím střihu G2 24 mm od spodní hrany, G2b 1 mm od boků). Plochy, které se nelepí, zakryjte maskovací páskou hranou přesně na čáru (na rubu F pásy G2b z obou stran, na D1 zevnitř), hranu pásky přejeďte nehtem. Pásku nejdřív zkuste na odřezku rubu kozinky. Lepidlo nanášejte tahy z pásky do šrafy, na proužky G2b párátkem. Pásky strhněte hned po nanesení lepidla, pomalu a směrem od lepené plochy, ještě než lepidlo zavadne a než přiložíte D1. Přetok nad G2 hned setřete.',
         waits: [
           tack('tack', 'Zavadnutí lepidla G2 (D1)', 'manufacturer'),
           beforePunching('cure', 'Lepení G1 a G2 před děrováním S6', 's6'),

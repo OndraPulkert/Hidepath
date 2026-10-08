@@ -384,7 +384,7 @@ const TIPTAG = '<span class="tag ver">Tip:</span>';
 /* ========== A. plíšek (lekce 8) ========== */
 add('A','Položte F rubem nahoru na desku',7,'<b>F</b> položte rubem nahoru celou na tvrdou desku, ohyb dna u hrany desky. <b>B</b> stojí nad ohybem nahoru. Vyschlý ohyb táhne B zpátky k F: opřete ji zezadu o knihu nebo krabičku a horní hranu přichyťte kolíčkem nebo páskou, ať nespadne na lepidlo.');
 add('A','G1: přilepte plíšek na rub F',6.5,'Plíšek přilepte <b>kontaktním lepidlem</b> na rub F do šrafované plochy <b>G1</b> (list 2). Přilnavost k oceli ověří zkušební kus. ' + TIPTAG + ' lepidlo na obě plochy a nechte zavadnout (orientačně 10–15 min, platí návod lepidla).');
-add('A','G2 a G2b: naneste lepidlo',7.5,'D1 se lepí do šrafovaných ploch <b>G2</b> (přes plíšek) a <b>G2b</b> (boky <span class="num">1 mm</span>). Pásy G2b ohraničte <b>maskovací páskou z obou stran</b> a lepidlo naneste <b>párátkem</b>. <b>Pásky strhněte hned po nanesení lepidla</b>, ještě než přiložíte D1. Přetok nad G2 hned setřete.');
+add('A','G2 a G2b: naneste lepidlo',7.5,'D1 se lepí do šrafovaných ploch <b>G2</b> (přes plíšek) a <b>G2b</b> (boky <span class="num">1 mm</span>). Lepidlo jde na obě strany: hranice G2 a G2b vyznačte tužkou i na <b>rubu D1</b> podle šrafy na listu 3. Plochy, které se nelepí, zakryjte <b>maskovací páskou hranou na čáru</b> (na rubu F pásy G2b z obou stran, na D1 zevnitř). Lepidlo tahy z pásky do šrafy, na G2b <b>párátkem</b>. <b>Pásky strhněte hned po nanesení lepidla</b>, ještě než přiložíte D1. Přetok nad G2 hned setřete.');
 add('A','Přilepte D1 rubem na rub F',6,'<b>D1 přilepte rubem na rub F</b> přes plíšek. D1 nemá žádnou vůli: přikládejte ji vpichy osy na osu rubu F z lekce 4, <b>zdola od spodní čáry obdélníku D1</b>.');
 add('A','Změřte polohu D1 a přitlačte paličkou',7,'Změřte: kapsa karet mezi pásy G2b <b>aspoň 90,5</b>, D1 od hrany F <b>aspoň 3,5</b>, jinak zasáhne do bočního švu S4. Pak přitlačte <b>paličkou přes desku</b> položenou na D1.');
 add('A','Pozor: plíšek už nevyměníte',5,'<b>Plíšek je teď zavřený mezi F a D1, vyměnit už nejde.</b> Magnet vyměnit jde (rámeček níže). Před šitím S6 počkejte aspoň 1 h.');
@@ -426,6 +426,7 @@ function figATop() {
     s += G(SM(0.1, 0.25, u), TL(8, 18, ['G2 x 4–97', 'y 2–26,', 'přes plíšek'], { c2: 'm' }));
     s += G(SM(0.35, 0.5, u), TL(9, 48, ['G2b 1 mm', 'páska z obou', 'stran, párátko'], { c2: 'm' }) + Ln(8.5, 49, 5, 49));
     s += G(SM(0.35, 0.5, u), T(92, 48, 'G2b', { a: 'end' }) + Ln(92.5, 49, 96, 49));
+    s += G(SM(0.55, 0.7, u), TL(55, 41, ['Totéž na rubu D1', '(list 3): G2 24 mm', 'zdola, G2b 1 mm'], { c2: 'm' }));
   }
   // D1
   if (dP > 0.01) {
