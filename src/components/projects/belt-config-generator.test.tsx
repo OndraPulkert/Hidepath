@@ -33,6 +33,15 @@ describe('Váš pásek', () => {
     expect(screen.getByText('Destička: ano')).toBeInTheDocument();
   });
 
+  it('u tloušťky pásu odkazuje na animaci měření posuvkou', async () => {
+    setup();
+    await screen.findByRole('table', { name: /Vaše čísla/ });
+    expect(screen.getByRole('link', { name: 'Jak měřit posuvkou' })).toHaveAttribute(
+      'href',
+      '/animace/posuvka.html',
+    );
+  });
+
   it('obvod spočítá délku pásu a nabídky z podkladů', async () => {
     const { user } = setup();
     await user.type(field(/Obvod, cm/), '95');

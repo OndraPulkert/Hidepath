@@ -118,4 +118,23 @@ describe('animace – rozhodnutí autora 8. 10. 2026', () => {
     expect(b4).toContain('novém cvičném proužku');
     expect(stepSource(page('kapsa-postup'), 'A', 4)).toContain('korunkou Ø 32 mm na unášeči');
   });
+
+  it('posuvka: krok D1 platí pro všechny projekty, Víčko je jen příklad shodný s lekcí 1', () => {
+    const d1 = stepSource(page('posuvka'), 'D', 1);
+    expect(d1).toContain('Průměr zadejte tam, kam vás poslal krok lekce.');
+    expect(d1).toContain('Příklad z Víčka');
+    expect(d1).toContain('0,92 mm');
+    expect(stepOf('lid-wallet', 1, 'measure').body).toContain('0,92 mm');
+    expect(d1).not.toContain("'P1 (kaštan), mm'");
+  });
+
+  it('posuvka: odkazují na ni kroky, kde se posuvkou měří tloušťka kůže', () => {
+    const hrefs = (slug: string, order: number, id: string) =>
+      (stepOf(slug, order, id).animationLinks ?? []).map((a) => a.href);
+    const p = animationPages.caliper.path;
+    expect(hrefs('lid-wallet', 1, 'measure')).toEqual([`${p}#A1`, `${p}#B1`, `${p}#D1`]);
+    expect(hrefs('lid-wallet', 3, 'decide')).toEqual([`${p}#B1`, `${p}#D1`]);
+    expect(hrefs('belt', 1, 'measure-strap')).toEqual([`${p}#A1`, `${p}#B1`, `${p}#D1`]);
+    expect(hrefs('coin-card-holder', 3, 'skive')).toEqual([`${p}#B1`]);
+  });
 });

@@ -490,6 +490,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'skive',
         title: 'Ztenčete z rubu na 1 mm',
         body: 'Jen u kůže 1,5 mm. Bezpečnostním ztenčovačem odebírejte z rubu tenké hobliny, čepel veďte skoro naplocho. Průběžně kontrolujte tloušťku – cíl je asi 1 mm, ne proříznutí.',
+        animationLinks: [animationLink('caliper', 'B1')],
         media: [
           {
             id: 'cch-l3-skive',

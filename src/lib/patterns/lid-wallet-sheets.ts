@@ -216,13 +216,70 @@ function footer(s: Sheet, note: string): void {
   });
 }
 
-function header(s: Sheet, title: string, sub: string): void {
+/**
+ * Listy zkušebního kusu mimo ověřené meze: `outsideLimits` = krátké popisy překročených mezí
+ * (např. „šev S4/S5 3,1 mm (max 3,0)“). Kontroly tloušťky se vynechají, ostatní platí dál
+ * a geometrie se počítá normálně; v hlavičce každého listu je výrazný varovný pruh.
+ */
+export interface LidSheetOptions {
+  outsideLimits?: readonly string[];
+}
+
+/** Začátek textu varovného pruhu (testy a aplikace podle něj listy mimo meze poznají). */
+export const LID_OUTSIDE_LIMITS_BAND = 'MIMO OVĚŘENÉ MEZE – jen zkušební kus:';
+
+const outside = (o: LidSheetOptions): readonly string[] => o.outsideLimits ?? [];
+
+/** Kontrola před kreslením; s listy mimo meze bez kontrol tloušťky. */
+function assertFor(spec: LidWalletSpec, o: LidSheetOptions): void {
+  assertLidWallet(spec, { allowThickness: outside(o).length > 0 });
+}
+
+/** Rozdělí položky do řádků po nejvýš `max` znacích (oddělovač „ · “). */
+function wrapItems(items: readonly string[], max: number): string[] {
+  const lines: string[] = [];
+  for (const item of items) {
+    const last = lines[lines.length - 1];
+    if (last !== undefined && last.length + 3 + item.length <= max) {
+      lines[lines.length - 1] = `${last} · ${item}`;
+    } else {
+      lines.push(item);
+    }
+  }
+  return lines;
+}
+
+function header(s: Sheet, title: string, sub: string, o: LidSheetOptions = {}): void {
   const m = PRINT_SHEET.marginMm;
   s.text('GUIDE', m, m + 5, title, 4.6, 'start', { bold: true, fill: COLORS.CUT });
   s.text('GUIDE', m, m + 10, sub, 2.5, 'start', { fill: COLORS.CUT });
-  s.text('GUIDE', PRINT_SHEET.widthMm - m, m + 5, 'NÁVRH – ověřit na prototypu', 2.6, 'end', {
+  const limits = outside(o);
+  if (limits.length === 0) {
+    s.text('GUIDE', PRINT_SHEET.widthMm - m, m + 5, 'NÁVRH – ověřit na prototypu', 2.6, 'end', {
+      bold: true,
+      fill: COLORS.STITCH,
+    });
+    return;
+  }
+  // Varovný pruh vpravo v hlavičce (nad díly, které začínají v PIECE_Y): nadpis a překročené
+  // hodnoty nejvýš na 3 řádcích.
+  const x1 = PRINT_SHEET.widthMm - m;
+  const x0 = x1 - 92;
+  const lines = wrapItems(limits, 80);
+  const shown = lines.length > 3 ? [...lines.slice(0, 2), `${lines[2]} …`] : lines;
+  const y0 = m - 0.5;
+  // Spodní okraj s rezervou pod posledním řádkem; při 3 řádcích končí pruh nad PIECE_Y.
+  const h = 5.6 + shown.length * 2.9;
+  s.add(
+    'GUIDE',
+    `<rect class="outside-limits" x="${f(x0)}" y="${f(y0)}" width="${f(x1 - x0)}" height="${f(h)}" fill="#fde8e6" stroke="${COLORS.STITCH}" stroke-width="0.5"/>`,
+  );
+  s.text('GUIDE', x0 + 2, y0 + 3.9, LID_OUTSIDE_LIMITS_BAND, 2.6, 'start', {
     bold: true,
     fill: COLORS.STITCH,
+  });
+  shown.forEach((ln, i) => {
+    s.text('GUIDE', x0 + 2, y0 + 7.1 + i * 2.9, ln, 1.9, 'start', { fill: COLORS.CUT });
   });
 }
 
@@ -424,8 +481,11 @@ function thumbNotchMarks(s: Sheet, L: LidWalletLayout, fr: Frame): void {
 }
 
 /** List 1: pás P1 z líce. */
-export function buildLidSheetSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): string {
-  assertLidWallet(spec);
+export function buildLidSheetSvg(
+  spec: LidWalletSpec = DEFAULT_LID_WALLET,
+  options: LidSheetOptions = {},
+): string {
+  assertFor(spec, options);
   const L = lidWalletLayout(spec);
   const s = new Sheet();
   const fr = p1Frame(L, PIECE_X, PIECE_Y, false);
@@ -435,6 +495,7 @@ export function buildLidSheetSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): stri
     s,
     'VÍČKO · P1 PÁS · LÍC',
     `1 ks · useň ${czT(spec.leatherMm)} mm · přířez ${cz(W)} × ${cz(L.p1LengthMm)} mm · list 1/4`,
+    options,
   );
   drawP1Base(s, L, spec, fr, 'clip-p1-lic', false);
 
@@ -734,8 +795,11 @@ export function buildLidSheetSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): stri
 }
 
 /** List 2: pás P1 z rubu s lepenými plochami a polohou D1, D2 a plíšku. */
-export function buildLidBackSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): string {
-  assertLidWallet(spec);
+export function buildLidBackSvg(
+  spec: LidWalletSpec = DEFAULT_LID_WALLET,
+  options: LidSheetOptions = {},
+): string {
+  assertFor(spec, options);
   const L = lidWalletLayout(spec);
   const s = new Sheet();
   const fr = p1Frame(L, PIECE_X, PIECE_Y, true);
@@ -745,6 +809,7 @@ export function buildLidBackSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): strin
     s,
     'VÍČKO · P1 PÁS · RUB (lepení)',
     `pohled na rub, díl je souměrný podle osy x ${cz(W / 2)} · list 2/4`,
+    options,
   );
   drawP1Base(s, L, spec, fr, 'clip-p1-rub', true);
 
@@ -887,14 +952,18 @@ export function buildLidBackSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): strin
 }
 
 /** List 3: přepážky D1, D2, podšívka L1 a plíšek K2. */
-export function buildLidPartsSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): string {
-  assertLidWallet(spec);
+export function buildLidPartsSvg(
+  spec: LidWalletSpec = DEFAULT_LID_WALLET,
+  options: LidSheetOptions = {},
+): string {
+  assertFor(spec, options);
   const L = lidWalletLayout(spec);
   const s = new Sheet();
   header(
     s,
     'VÍČKO · D1, D2, L1, K2',
     `D1 ${cz(L.d1.x1 - L.d1.x0)} × ${cz(L.d1.y1 - L.d1.y0)} · D2 ${cz(L.d2.x1 - L.d2.x0)} × ${cz(L.d2.y1 - L.d2.y0)} · useň ${cz(spec.dividerMm)} · list 3/4`,
+    options,
   );
   const ox = PIECE_X + 4;
   /* D1 – pohled na RUB (lepí se rubem na rub F). y dolů = shora dolů. */
@@ -1106,14 +1175,18 @@ export function buildLidPartsSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): stri
 }
 
 /** List 4: šablony a přípravky. */
-export function buildLidJigsSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET): string {
-  assertLidWallet(spec);
+export function buildLidJigsSvg(
+  spec: LidWalletSpec = DEFAULT_LID_WALLET,
+  options: LidSheetOptions = {},
+): string {
+  assertFor(spec, options);
   const L = lidWalletLayout(spec);
   const s = new Sheet();
   header(
     s,
     'VÍČKO · ŠABLONY A PŘÍPRAVKY',
     'konec jazýčku, okénka, plíšek, proužek otvorů, vložka dna, tvarování závěsu · list 4/4',
+    options,
   );
   const ox = PIECE_X + 4;
   const oy = PIECE_Y + 6;
@@ -1449,12 +1522,13 @@ export const LID_FILE_STEM = 'penezenka-vicko';
 /** Všechny listy s názvy souborů (bez přípony). */
 export function buildLidSheets(
   spec: LidWalletSpec = DEFAULT_LID_WALLET,
+  options: LidSheetOptions = {},
 ): { name: string; svg: string }[] {
   return [
-    { name: `${LID_FILE_STEM}-sablona`, svg: buildLidSheetSvg(spec) },
-    { name: `${LID_FILE_STEM}-rub`, svg: buildLidBackSvg(spec) },
-    { name: `${LID_FILE_STEM}-dily`, svg: buildLidPartsSvg(spec) },
-    { name: `${LID_FILE_STEM}-pripravky`, svg: buildLidJigsSvg(spec) },
+    { name: `${LID_FILE_STEM}-sablona`, svg: buildLidSheetSvg(spec, options) },
+    { name: `${LID_FILE_STEM}-rub`, svg: buildLidBackSvg(spec, options) },
+    { name: `${LID_FILE_STEM}-dily`, svg: buildLidPartsSvg(spec, options) },
+    { name: `${LID_FILE_STEM}-pripravky`, svg: buildLidJigsSvg(spec, options) },
   ];
 }
 

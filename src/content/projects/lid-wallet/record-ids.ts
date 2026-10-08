@@ -35,6 +35,12 @@ export const LID_RECORD_IDS = {
   /** Lekce 3, krok `decide`: změřená tloušťka usně 0,8 na P1 v záloze A, mm. */
   p1BackupAThickness: 'p1-backup-a-thickness',
 
+  /**
+   * Lekce 1, krok `sheets-for-thickness`: listy zkušebního kusu v ověřených mezích, nebo přesto
+   * vygenerované mimo ně (`LID_SHEETS_LIMITS`); lekce 12 to připomene u finálního kusu.
+   */
+  sheetsOutsideLimits: 'sheets-outside-limits',
+
   /** Lekce 10, krok `measure-k`: k naměřené na hotovém ohybu. */
   kMeasured: 'k-measured',
 
@@ -55,4 +61,10 @@ export const LID_V12_VARIANTS = {
   default: 'default',
   backupA: 'backup-a',
   backupB1: 'backup-b1',
+} as const;
+
+/** Hodnoty volby `sheetsOutsideLimits` (lekce 1). */
+export const LID_SHEETS_LIMITS = {
+  within: 'within-limits',
+  outside: 'outside-limits',
 } as const;

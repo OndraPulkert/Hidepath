@@ -361,6 +361,7 @@ describe('obsah – peněženka Víčko', () => {
         v12Variant: '3/decide',
         p1BackupAThickness: '3/decide',
         z2Result: '12/z2',
+        sheetsOutsideLimits: '1/sheets-for-thickness',
         kMeasured: '10/measure-k',
         magnetThickness: '11/magnet-dry-test',
       };
@@ -369,7 +370,9 @@ describe('obsah – peněženka Víčko', () => {
         const found = where.get(id);
         expect(found?.at, id).toBe(at);
         expect(found?.f.kind, id).toBe(
-          key === 'v12Variant' || key === 'z2Result' ? 'choice' : 'number',
+          key === 'v12Variant' || key === 'z2Result' || key === 'sheetsOutsideLimits'
+            ? 'choice'
+            : 'number',
         );
       }
       const variant = where.get(LID_RECORD_IDS.v12Variant)!.f;

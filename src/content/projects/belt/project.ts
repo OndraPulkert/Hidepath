@@ -186,6 +186,11 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Po dodání změřte pás a trn',
         body: 'Posuvkou změřte tloušťku pásu na řezu na několika místech. Průměr měření zadejte ve „Váš pásek“ (odkaz pod krokem) tak, jak vyšel (např. 3,6 mm): dřík nýtu se počítá z přesné hodnoty. Pak změřte trn přezky u kořene a zadejte ho pod „Dírky (pokročilé)“. Ø dírek se vyplní samo: trn + 0,5 mm, nejméně 4,5 mm; u přezky 40 mm vychází 4,5 nebo 5 mm. Výsečníky jsou 4,5–6 mm, trn tedy nejvýš 5,5 mm. Pásek uložte.',
         appLinks: [YOUR_BELT],
+        animationLinks: [
+          animationLink('caliper', 'A1'),
+          animationLink('caliper', 'B1'),
+          animationLink('caliper', 'D1'),
+        ],
         media: [photo('belt-l1-thickness', 'Posuvka měří tloušťku pásu na řezu')],
       },
       {

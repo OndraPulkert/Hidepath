@@ -1,6 +1,10 @@
 import { animationLink } from '@/content/animations';
 import { illustration } from '@/content/projects/lid-wallet/illustrations';
-import { LID_RECORD_IDS, LID_V12_VARIANTS } from '@/content/projects/lid-wallet/record-ids';
+import {
+  LID_RECORD_IDS,
+  LID_SHEETS_LIMITS,
+  LID_V12_VARIANTS,
+} from '@/content/projects/lid-wallet/record-ids';
 import {
   type LessonDefinition,
   type LessonPrint,
@@ -202,6 +206,11 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'measure',
         title: 'Změřte tloušťku kůže',
         body: 'Přířezy si na kůži předem obkreslete: u kaštanu dva přířezy P1 110 × 240 mm za sebou podél delší strany kusu, odřezky na zkoušky z pruhu vedle nich. Posuvkou změřte na několika místech tloušťku P1 (kaštan), D1 a L1 (nebarvená kozinka) a D2 (čokoládová kozinka) – vždy tam, odkud díl vyříznete – a zapište. Do listů zadejte průměr měření v místě dílu (doporučení, ověřte na zkušebním kuse), u přepážek větší z D1 a D2. Přepážka nesmí mít nikde víc než 0,92 mm (při P1 1,0 mm; tlustší P1 hranici snižuje, při 1,05 na 0,87 a při 1,1 na 0,80 mm – přesnou hranici pro vaši P1 ukáže formulář listů): jinak ji vyřízněte z tenčího místa, nebo kupte tenčí kozinku.',
+        animationLinks: [
+          animationLink('caliper', 'A1'),
+          animationLink('caliper', 'B1'),
+          animationLink('caliper', 'D1'),
+        ],
         media: [photo('lw-l1-measure', 'Posuvka měří tloušťku kozinky na okraji kusu')],
         records: [
           thickness(
@@ -236,8 +245,22 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'sheets-for-thickness',
         title: 'Získejte listy pro změřenou tloušťku',
         printLink: 'pattern-sheets',
-        body: 'Předem vytištěné listy platí jen pro výchozí střih (P1 1,0 mm, přepážky a L1 0,6 mm); s jinou tloušťkou se mění skoro všechna čísla. Na stránce Listy střihu (odkaz pod krokem) v části „Listy pro vaši kůži“ zadejte změřenou P1, větší z D1 a D2 a L1 a stiskněte Vygenerovat listy. Když střih s touto kůží neplatí, aplikace listy nevytvoří a napíše proč.',
+        body: 'Předem vytištěné listy platí jen pro výchozí střih (P1 1,0 mm, přepážky a L1 0,6 mm); s jinou tloušťkou se mění skoro všechna čísla. Na stránce Listy střihu (odkaz pod krokem) v části „Listy pro vaši kůži“ zadejte změřenou P1, větší z D1 a D2 a L1 a stiskněte Vygenerovat listy. Když střih s touto kůží neplatí, aplikace listy nevytvoří a napíše proč. Když formulář hlásí překročené meze, můžete listy přesto vygenerovat pro zkušební kus – výsledek ukáže zkušební kus; finální kus jen z listů v mezích.',
         media: [],
+        records: [
+          {
+            kind: 'choice',
+            id: LID_RECORD_IDS.sheetsOutsideLimits,
+            label: 'Listy zkušebního kusu',
+            options: [
+              { value: LID_SHEETS_LIMITS.within, label: 'V ověřených mezích' },
+              {
+                value: LID_SHEETS_LIMITS.outside,
+                label: 'Přesto vygenerované mimo ověřené meze',
+              },
+            ],
+          },
+        ],
         recalls: [
           { fieldId: LID_RECORD_IDS.p1Thickness, label: 'P1' },
           { fieldId: LID_RECORD_IDS.d1Thickness, label: 'D1' },
@@ -288,7 +311,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         slug: 'thickness-recorded',
         title:
-          'Tloušťky P1, D1, D2 a L1 jsou zapsané a žádná přepážka není nad hranicí pro vaši P1 (při P1 1,0 je to 0,92 mm).',
+          'Tloušťky P1, D1, D2 a L1 jsou zapsané a žádná přepážka není nad hranicí pro vaši P1 (při P1 1,0 je to 0,92 mm), nebo jsou listy zkušebního kusu zapsané jako mimo ověřené meze.',
         required: true,
       },
       {
@@ -676,6 +699,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'decide',
         title: 'Rozhodněte variantu střihu',
         body: 'Líc nepopraskal: výchozí střih (nic se neztenčuje). Líc popraskal: záloha A – celý P1 z usně 0,8 mm a zkoušku zopakujte na odřezku 0,8. Useň 0,8 po dodání změřte posuvkou na několika místech, odkud P1 vyříznete, průměr zapište níže a v aplikaci zadejte P1 změřenou tloušťku usně 0,8. Záloha B1 – ztenčit pás ohybu dna na 0,6 mm, v aplikaci zaškrtněte B1 („--skive-fold 0.6“) – jen když useň 0,8 nejde sehnat nebo popraská i ona. Odřezek nejdřív ztenčete podle lekce 5 (krok „Jen záloha B1 nebo B2: ztenčení“), zkoušku na něm zopakujte a teprve pak vygenerujte listy B1 a pokračujte lekcí 4. Popraská i záloha: neřežte a zkuste jinou useň do P1 (ověřte zkouškou V12). Mírné odpružení ohybu po vyschnutí není důvod k záloze. Zálohu B2 (závěs) V12 nevybírá, o té rozhodne zkouška Z-2. Varianta platí pro zkušební i finální kus; pro zálohu vygenerujte listy znovu (lekce 1).',
+        animationLinks: [animationLink('caliper', 'B1'), animationLink('caliper', 'D1')],
         media: [],
         records: [
           variantField,
@@ -749,7 +773,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'valid-sheets',
         title: 'Platné listy a šablony',
         printLink: 'pattern-sheets',
-        body: `${NUMBERS_NOTE} Pokud P0, V12 nebo zkušební kus něco změnily, vygenerujte listy znovu se vším, co platí, vytiskněte je (odkaz pod krokem) a zkontrolujte úsečku 50 mm a kótu P1. Tiskněte nejlépe na matný papír 120 g pro inkoustové tiskárny, jinak na obyčejný. List 1 a list 3 vytiskněte dvakrát: první výtisk se při řezání rozřeže, druhý nalepte na tvrdý papír a vyřízněte jako šablonu (S1–S3 a D2 v lekci 6, S6 v lekci 8). Z listu 4 nalepte na tvrdý papír a vyřízněte šablony okének mincí (lekce 5), okénka bankovek (lekce 6), plíšku (tato lekce) a proužek otvorů bočních švů (lekce 9). Na finální kus vytiskněte listy 1 a 3 znovu z listů, které po zkušebním kuse platí.`,
+        body: `${NUMBERS_NOTE} Pokud P0, V12 nebo zkušební kus něco změnily, vygenerujte listy znovu se vším, co platí, vytiskněte je (odkaz pod krokem) a zkontrolujte úsečku 50 mm a kótu P1. Tiskněte nejlépe na matný papír 120 g pro inkoustové tiskárny, jinak na obyčejný. List 1 a list 3 vytiskněte dvakrát: první výtisk se při řezání rozřeže, druhý nalepte na tvrdý papír a vyřízněte jako šablonu (S1–S3 a D2 v lekci 6, S6 v lekci 8). Z listu 4 nalepte na tvrdý papír a vyřízněte šablony okének mincí (lekce 5), okénka bankovek (lekce 6), plíšku (tato lekce) a proužek otvorů bočních švů (lekce 9). Na finální kus vytiskněte listy 1 a 3 znovu z listů, které po zkušebním kuse platí. Listy s pruhem „MIMO OVĚŘENÉ MEZE“ platí jen pro zkušební kus.`,
         media: [],
         recalls: [variantRecall],
       },
@@ -1916,10 +1940,14 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'final-piece',
         title: 'Finální kus',
-        body: 'Finální kus postavte stejným postupem s tím, co na zkušebním kuse fungovalo (vyměněný magnet, jiná varianta, upravený výřez, D1 nebo D2 o 0,5 mm výš, posunuté okénko bankovek). Když se varianta změnila až po zkušebním kuse, je v ní finální kus neověřený – nejlépe postavte další zkušební kus. Kůži na něj nákupní plán nepočítá: dokupte stejnou useň na další přířez P1 110 × 240 mm (v záloze A useň 0,8: změřte ji, zapište v lekci 3 a listy vygenerujte znovu, lekce 1). Na finálním kuse stačí zkontrolovat, že víčko drží, otevře se jedním prstem a otevřené jde palcem udržet.',
+        body: 'Finální kus postavte stejným postupem s tím, co na zkušebním kuse fungovalo (vyměněný magnet, jiná varianta, upravený výřez, D1 nebo D2 o 0,5 mm výš, posunuté okénko bankovek). Když se varianta změnila až po zkušebním kuse, je v ní finální kus neověřený – nejlépe postavte další zkušební kus. Kůži na něj nákupní plán nepočítá: dokupte stejnou useň na další přířez P1 110 × 240 mm (v záloze A useň 0,8: změřte ji, zapište v lekci 3 a listy vygenerujte znovu, lekce 1). Na finálním kuse stačí zkontrolovat, že víčko drží, otevře se jedním prstem a otevřené jde palcem udržet. Pokud byly listy zkušebního kusu mimo ověřené meze (lekce 1), finální kus řežte jen z listů v mezích, např. s přepážkami z tenčího místa kozinky nebo z tenčí kozinky (listy znovu v lekci 1).',
         media: [],
         recalls: [
           variantRecall,
+          {
+            fieldId: LID_RECORD_IDS.sheetsOutsideLimits,
+            label: 'Listy zkušebního kusu (lekce 1)',
+          },
           { fieldId: LID_RECORD_IDS.magnetThickness, label: 'Magnet (lekce 11)' },
           { fieldId: 'z1-result', label: 'Z-1 magnet' },
           { fieldId: LID_RECORD_IDS.z2Result, label: 'Z-2 závěs' },

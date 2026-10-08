@@ -23,6 +23,9 @@ import { type AnimationLink } from '@/content/schema';
  *   upnutí desky a vrtání formy z lekce 2 pouzdra s mincí.
  * - pasek-sirka-konec (`#A`–`#D`): stejně jako kapsa-prisiti; šířka podle přezky, hrot, nebo
  *   zaoblený konec, co zvládne destička a zadání na stránce „Váš pásek“ (lekce 1 pásku).
+ * - posuvka (`#A`–`#D`): stejně jako kapsa-prisiti; analogová posuvka s noniem 0,1 mm, měření
+ *   tloušťky kůže a průměr z více míst (příklad z Víčka). Odkazují na ni kroky, kde se posuvkou
+ *   měří tloušťka kůže, a pole tloušťky ve „Váš pásek“.
  *
  * `steps` = názvy kroků každé části ve stejném pořadí jako na stránce (`add('B', 'název', …)`).
  * Stránky kapsy umí otevřít i jednotlivý krok: `#B3` = třetí krok části B, stejně jako ho
@@ -629,6 +632,29 @@ export const animationPages = {
         'Štítek „Destička“ pod zadáním',
         'Nahoře souhrn „Koupit“',
       ],
+    },
+  },
+  caliper: {
+    path: '/animace/posuvka.html',
+    title: 'Jak měřit posuvkou',
+    buttonText: 'Jak měřit posuvkou',
+    sections: {
+      A: 'Část A – posuvka',
+      B: 'Část B – měření kůže',
+      C: 'Část C – čtení',
+      D: 'Část D – průměr a zápis',
+    },
+    steps: {
+      A: ['Poznejte svou posuvku', 'Zkontrolujte nulu', 'Ověřte si nonius: spočítejte čárky'],
+      B: ['Vložte kůži mezi velké čelisti', 'Zajistěte a dívejte se zpříma'],
+      C: [
+        'Celé milimetry',
+        'Desetiny milimetru',
+        'Příklad: kozinka 0,9 mm',
+        'Příklad: kaštan 1,1 mm',
+        'Příklad: přesně 1,0 mm',
+      ],
+      D: ['Změřte víc míst a spočítejte průměr'],
     },
   },
   drillForm: {

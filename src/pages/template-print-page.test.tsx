@@ -82,6 +82,92 @@ describe('tisk listů – peněženka Víčko pro změřenou kůži', () => {
   });
 });
 
+/** P1 1,1 a kozinky 0,9: meze tloušťky jdou pro zkušební kus obejít po potvrzení na stránce. */
+describe('tisk listů Víčka – přesto pro zkušební kus', () => {
+  const fill = async (user: ReturnType<typeof userEvent.setup>) => {
+    const p1 = await screen.findByLabelText('P1 (kaštan), mm');
+    await user.clear(p1);
+    await user.type(p1, '1,1');
+    await user.type(screen.getByLabelText('Přepážky D1/D2, mm'), '0,9');
+    await user.type(screen.getByLabelText('Podšívka L1, mm'), '0,9');
+    await user.click(screen.getByRole('button', { name: 'Vygenerovat listy' }));
+  };
+
+  it('nabídne tlačítko, potvrzení s mezemi a vygeneruje listy s varovným pruhem', async () => {
+    const user = userEvent.setup();
+    const confirm = vi.spyOn(window, 'confirm');
+    renderApp(routes.template(lidWalletProject.slug));
+    await fill(user);
+
+    expect(await screen.findByText(/překračuje ověřené meze/)).toBeInTheDocument();
+    expect(screen.queryByText(/^Zkušební kus mimo ověřené meze:/)).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Přesto vygenerovat pro zkušební kus' }));
+
+    const dialog = screen.getByRole('region', { name: 'Vygenerovat listy mimo ověřené meze?' });
+    expect(dialog).toHaveTextContent('šev S4/S5 3,1 mm (max 3,0)');
+    expect(dialog).toHaveTextContent('plná tloušťka 12,16 mm (hranice ≈ 12)');
+    expect(dialog).toHaveTextContent('přepážky 0,9 mm (při P1 1,1 max 0,8)');
+    expect(dialog).toHaveTextContent(/ověřte na zkušebním kuse/);
+    expect(dialog).toHaveTextContent('Finální kus jen z listů v mezích.');
+    await user.click(
+      within(dialog).getByRole('button', { name: 'Ano, vygenerovat pro zkušební kus' }),
+    );
+    expect(confirm).not.toHaveBeenCalled();
+
+    expect(await screen.findByText(/Listy pro zkušební kus/)).toHaveTextContent(
+      /P1 1,1 · přepážky 0,9 · L1 0,9.*mimo ověřené meze/,
+    );
+    const group = screen.getByText(
+      'Zkušební kus mimo ověřené meze: P1 1,1 · přepážky 0,9 · L1 0,9',
+    ).parentElement!;
+    expect(within(group).getAllByRole('checkbox')).toHaveLength(4);
+    const images = screen.getAllByRole('img', { name: /^List střihu:/ });
+    expect(images).toHaveLength(4);
+    for (const img of images) {
+      const svg = decodeURIComponent(img.getAttribute('src')!);
+      expect(svg).toContain('MIMO OVĚŘENÉ MEZE – jen zkušební kus:');
+      expect(svg).toContain('šev S4/S5 3,1 mm (max 3,0)');
+    }
+    confirm.mockRestore();
+  });
+
+  it('Zpět potvrzení zavře a nic nevygeneruje; změna hodnot nabídku zruší', async () => {
+    const user = userEvent.setup();
+    renderApp(routes.template(lidWalletProject.slug));
+    await fill(user);
+
+    await user.click(
+      await screen.findByRole('button', { name: 'Přesto vygenerovat pro zkušební kus' }),
+    );
+    await user.click(screen.getByRole('button', { name: 'Zpět' }));
+    expect(
+      screen.queryByRole('region', { name: 'Vygenerovat listy mimo ověřené meze?' }),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/^Zkušební kus mimo ověřené meze:/)).not.toBeInTheDocument();
+
+    await user.type(screen.getByLabelText('Podšívka L1, mm'), '5');
+    expect(
+      screen.queryByRole('button', { name: 'Přesto vygenerovat pro zkušební kus' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('neplatné zadání (mimo rozsah) obejít nejde', async () => {
+    const user = userEvent.setup();
+    renderApp(routes.template(lidWalletProject.slug));
+    const p1 = await screen.findByLabelText('P1 (kaštan), mm');
+    await user.clear(p1);
+    await user.type(p1, '2');
+    await user.type(screen.getByLabelText('Přepážky D1/D2, mm'), '0,9');
+    await user.type(screen.getByLabelText('Podšívka L1, mm'), '0,9');
+    await user.click(screen.getByRole('button', { name: 'Vygenerovat listy' }));
+
+    expect(await screen.findByText('Tloušťka P1 musí být mezi 0,6 a 1,4 mm.')).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Přesto vygenerovat pro zkušební kus' }),
+    ).not.toBeInTheDocument();
+  });
+});
+
 /** Projekt 01 má obdélníkovou šablonu a vedle ní cvičnou šablonu k lekci 2 na vlastní stránce. */
 describe('tisk – pouzdro na karty: šablona a cvičná šablona', () => {
   it('stránka šablony zůstává obdélníková šablona 1:1', async () => {

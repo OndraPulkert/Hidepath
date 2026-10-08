@@ -10,6 +10,7 @@ import { Card } from '@/components/ui/card';
 import { Input, Label } from '@/components/ui/input';
 import { Segment, SegmentButton } from '@/components/ui/segment';
 import { Tag } from '@/components/ui/tag';
+import { animationLink } from '@/content/animations';
 import { BELT_ILLUSTRATION, BELT_ILLUSTRATION_CAPTION } from '@/content/projects';
 import { type PatternSheet, type ProjectDefinition } from '@/content/schema';
 import { type BeltFormInitial, punchForProngMm } from '@/features/belt/belt-prefill';
@@ -217,6 +218,15 @@ export function BeltConfigGenerator({
               value={form.thickness}
               onChange={set('thickness')}
               hint="Před nákupem nechte 3,5. Po dodání změřte posuvkou na řezu (3,0–4,0), např. 3,6."
+              extra={
+                // Obyčejný odkaz: animace je statická stránka mimo SPA (public/animace).
+                <a
+                  href={CALIPER_LINK.href}
+                  className="mt-1 inline-flex min-h-touch items-center text-meta font-medium text-cognac underline underline-offset-2"
+                >
+                  <span aria-hidden>▶&nbsp;</span>Jak měřit posuvkou
+                </a>
+              }
             />
             <NumberField
               id={`${id}-waist`}
@@ -474,6 +484,7 @@ function NumberField({
   onChange,
   hint,
   placeholder,
+  extra,
 }: {
   id: string;
   label: string;
@@ -481,6 +492,8 @@ function NumberField({
   onChange: (value: string) => void;
   hint: string;
   placeholder?: string | undefined;
+  /** Pod nápovědou, např. odkaz na animaci měření. */
+  extra?: ReactNode;
 }) {
   return (
     <div>
@@ -496,9 +509,13 @@ function NumberField({
       <p id={`${id}-hint`} className="mt-1 text-meta text-ink-2">
         {typo(hint)}
       </p>
+      {extra}
     </div>
   );
 }
+
+/** Animace měření tloušťky posuvkou (u pole tloušťky pásu). */
+const CALIPER_LINK = animationLink('caliper');
 
 const WAIST_FIGURES = {
   pasek: { src: BELT_ILLUSTRATION.obvodNaPasku, caption: BELT_ILLUSTRATION_CAPTION.obvodNaPasku },

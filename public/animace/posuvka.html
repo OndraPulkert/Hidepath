@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jak měřit posuvkou</title>
+<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+<!-- Self-hostované fonty aplikace (public/fonts), aby stránka fungovala i offline v PWA. -->
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f3efe9;--panel:#fffdf9;--stage:#f7f2ea;--ink:#2a211b;--muted:#6c6158;--line:#ddd5cc;
+  --accent:#b3261e;--ok:#2f6b3a;--btn:#2a211b;--btn-ink:#fffdf9;--amber:#a85f00;
+  --lic:#9a6338;--lic-d:#6e4220;--goat:#c39367;
+  /* kov posuvky: stejný ve světlém i tmavém režimu (je to předmět) */
+  --m-beam:#dfe3e6;--m-sl:#b7bec5;--m-sl-d:#8f979f;--m-edge:#5f676f;--m-eng:#1d1f22;
+  --m-red:#d0201a;--m-ok:#0f8a36;--m-amb:#e08600;--m-okt:#0b6b29;
+  --pb:var(--panel);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
+  --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;--amber:#f2b84b;
+  --lic:#9a6338;--lic-d:#c79466;--goat:#b98a5e;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
+  --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;--amber:#f2b84b;
+  --lic:#9a6338;--lic-d:#c79466;--goat:#b98a5e;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 "Albert Sans",system-ui,sans-serif;padding:22px 16px 44px;overflow-x:hidden}
+.wrap{max-width:860px;margin:0 auto;display:grid;gap:16px}
+h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
+.lead{color:var(--muted);margin:6px 0 0;max-width:70ch}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:10px;min-width:0}
+.stagewrap{position:relative;background:var(--stage);border-radius:8px;overflow:hidden}
+#stage{display:block;width:100%;height:auto;aspect-ratio:3/2}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.controls button{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);width:40px;height:40px;border-radius:10px;display:grid;place-items:center;cursor:pointer;padding:0}
+.controls button.play{background:var(--btn);color:var(--btn-ink);border-color:var(--btn)}
+.controls button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.controls svg{width:18px;height:18px;fill:currentColor}
+.counter{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+.prog{display:flex;gap:6px;align-items:stretch}
+.pseg{flex:1;display:grid;gap:4px;min-width:0;cursor:pointer;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left}
+.pseg .bars{display:flex;gap:2px;height:6px}
+.pseg .bars span{flex:1;background:var(--line);border-radius:2px;position:relative;overflow:hidden}
+.pseg .bars span b{position:absolute;inset:0;background:var(--accent);transform-origin:left;transform:scaleX(0)}
+.pseg .pl{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:520px){.pl span{display:none}}
+.pseg.on .pl{color:var(--ink);font-weight:600}
+.cap{min-height:6.6em}
+.cap .no{display:inline-block;font-weight:700;color:var(--accent);margin-right:6px;font-variant-numeric:tabular-nums}
+.cap h2{display:inline;font-size:1.05rem;margin:0}
+.cap p{margin:4px 0 0;color:var(--ink)}
+.note{font-size:13px;color:var(--muted);margin:0}
+/* svg text */
+.t{font:600 4.1px "Albert Sans",sans-serif;fill:var(--ink)}
+.ts{font:500 3.7px "Albert Sans",sans-serif;fill:var(--muted)}
+.tw{font:700 5.6px "Albert Sans",sans-serif;fill:var(--ink)}
+.ta{font:700 4.1px "Albert Sans",sans-serif;fill:var(--accent)}
+.tok{font:700 4.1px "Albert Sans",sans-serif;fill:var(--ok)}
+.tam{font:700 4.1px "Albert Sans",sans-serif;fill:var(--amber)}
+.tbig{font:800 7px "Albert Sans",sans-serif;fill:var(--ok)}
+.tm{font:700 4.1px "Albert Sans",sans-serif;fill:var(--m-eng)}
+.tmr{font:700 4.1px "Albert Sans",sans-serif;fill:var(--m-red)}
+.tmo{font:700 4.1px "Albert Sans",sans-serif;fill:var(--m-okt)}
+.tsa{font:700 3.6px "Albert Sans",sans-serif;fill:var(--accent)}
+.tn{font:700 3.6px "Albert Sans",sans-serif;fill:var(--m-red)}
+.lead-l{stroke:var(--muted);stroke-width:.25;fill:none}
+@media (min-width:700px){.t,.ta,.tok,.tam,.tm,.tmr,.tmo{font-size:2.9px}.ts{font-size:2.6px}.tw{font-size:4.2px}.tbig{font-size:5.6px}.tn,.tsa{font-size:2.8px}}
+.panelbox{fill:var(--panel);stroke:var(--line);stroke-width:.35}
+@media (max-width:520px){.cap{min-height:11em}.counter{width:100%;margin-left:0;order:9}}
+/* Hidepath: návrat do lekce */
+.backlink{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--ink);font-weight:600;font-size:15px;text-decoration:none;justify-self:start}
+.backlink:hover{text-decoration:underline}
+.backlink:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+<a class="backlink" href="/" data-back>← Zpět do lekce</a>
+<h1>Jak měřit posuvkou</h1>
+<p class="lead">Analogové posuvné měřítko 150 mm s noniem 0,1 mm: díly, kontrola nuly, měření tloušťky kůže, čtení celých milimetrů a desetin a tři příklady (0,9 – 1,1 – 1,0 mm).</p>
+</header>
+
+<section class="card" aria-label="Animace postupu">
+  <div class="stagewrap">
+    <svg id="stage" viewBox="0 0 135 90" role="img" aria-label="Animovaný postup: díly posuvky, kontrola nuly, vložení kůže, čtení milimetrů a desetin na noniu, příklady a průměr z více měření"></svg>
+  </div>
+  <div class="prog" id="prog"></div>
+  <div class="controls">
+    <button id="bRestart" aria-label="Od začátku" title="Od začátku"><svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/></svg></button>
+    <button id="bPrev" aria-label="Předchozí krok" title="Předchozí krok"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg></button>
+    <button id="bPlay" class="play" aria-label="Přehrát" title="Přehrát / pozastavit"><svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg></button>
+    <button id="bNext" aria-label="Další krok" title="Další krok"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
+    <span class="counter" id="counter">krok 1 / 11</span>
+  </div>
+  <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
+</section>
+<p class="note">Posuvka je nakreslená podle fotek: levná kovová 150 mm, svisle nulou nahoru. Nonius je kreslený přesně (10 čárek na 9 mm = 0,1 mm), tvar čelistí, kolečka a šroubku je schematický. Barevné zvýraznění čárek na skutečné posuvce není – je jen pro výklad. Aplikace u lekce uvádí digitální posuvku; ta ukazuje setiny milimetru, analogová s noniem 0,1 mm jen desetiny.</p>
+</div>
+
+<script>
+(()=>{
+// ---------- helpers ----------
+const cl=t=>Math.max(0,Math.min(1,t));
+const seg=(t,a,b)=>cl((t-a)/(b-a));
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const es=(t,a,b)=>ease(seg(t,a,b));
+const L=(a,b,t)=>a+(b-a)*t;
+const f=n=>(+n).toFixed(3).replace(/\.?0+$/,'')||'0';
+const G=(tr,s,extra='')=>`<g transform="${tr}" ${extra}>${s}</g>`;
+const O=(op,s)=>op<=0.001?'':`<g opacity="${f(op)}">${s}</g>`;
+let uid=0; const nid=p=>p+(++uid);
+function inset(title,body,{x=86,y=6,w=47,h=78}={}){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" class="panelbox"/>${title?`<text x="${x+2.5}" y="${y+5}" class="ts" style="font-weight:700;letter-spacing:.06em">${title}</text>`:''}${body}`}
+function lbl(x,y,t,cls='t',anchor='start'){return `<text x="${f(x)}" y="${f(y)}" class="${cls}" text-anchor="${anchor}">${t}</text>`}
+function lead(x1,y1,x2,y2){return `<path d="M${f(x1)} ${f(y1)} L${f(x2)} ${f(y2)}" class="lead-l"/><circle cx="${f(x2)}" cy="${f(y2)}" r=".55" fill="var(--muted)"/>`}
+function tick(x,y,s=1,c='var(--ok)'){return `<path d="M${f(x-1.6*s)} ${f(y)} l${f(1.2*s)} ${f(1.2*s)} l${f(2.4*s)} -${f(2.6*s)}" stroke="${c}" stroke-width="${f(.7*s)}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`}
+function cross(x,y,s=1,c='var(--accent)'){return `<path d="M${f(x-1.3*s)} ${f(y-1.3*s)} l${f(2.6*s)} ${f(2.6*s)} M${f(x+1.3*s)} ${f(y-1.3*s)} l${f(-2.6*s)} ${f(2.6*s)}" stroke="${c}" stroke-width="${f(.6*s)}" stroke-linecap="round"/>`}
+function arrow(x1,y1,x2,y2,c='var(--accent)',w=.5){return `<path d="M${f(x1)} ${f(y1)} L${f(x2)} ${f(y2)}" stroke="${c}" stroke-width="${w}" fill="none" marker-end="url(#${c.includes('m-red')?'arm':'ar'})"/>`}
+function turnArrow(cx,cy,r,a0,a1,op=1){const p=a=>[cx+r*Math.cos(a*Math.PI/180),cy+r*Math.sin(a*Math.PI/180)];const [x0,y0]=p(a0),[x1,y1]=p(a1);
+  return `<path d="M${f(x0)} ${f(y0)} A${r} ${r} 0 ${Math.abs(a1-a0)>180?1:0} ${a1>a0?1:0} ${f(x1)} ${f(y1)}" fill="none" stroke="var(--accent)" stroke-width=".5" marker-end="url(#ar)" opacity="${f(op)}"/>`}
+function eye(x,y,rot=0,s=1){return G(`translate(${f(x)} ${f(y)}) rotate(${f(rot)}) scale(${s})`,`<path d="M-4 0 Q0 -3.2 4 0 Q0 3.2 -4 0 Z" fill="var(--panel)" stroke="var(--ink)" stroke-width=".45"/><circle r="1.45" fill="var(--ink)"/><circle cx=".45" cy="-.45" r=".4" fill="var(--panel)"/>`)}
+
+// ---------- posuvka (mm) ----------
+// Souřadnice: x vodorovně (lišta x 0–16), y dolů podél stupnice. Počátek = měřicí plocha pevné velké čelisti u levé hrany lišty.
+// Čelisti zavřené: r = 0. Pevná část nahoře, jezdec s pohyblivou čelistí se posouvá dolů o r.
+// Hlavní stupnice: čárka n mm na liště v y = Z0 + n. Nonius na jezdci: čárka k (0–10) v y = Z0 + r + 0,9·k.
+// Pro odečet r = n + k/10 se čárka k kryje s čárkou n + k (Z0 + r + 0,9k = Z0 + n + k).
+const Z0=18, SL=52, BEAM_END=205, EDGE=4;   // EDGE: hranice okénka, kde se potkají čárky nonia a stupnice
+const mlen=n=>n%10===0?3.6:n%5===0?2.9:2.2;
+const vlen=k=>k%10===0?3.6:k===5?2.9:2.2;
+const vY=(r,k)=>Z0+r+.9*k, mY=n=>Z0+n;
+const INCH=25.4/16, IV=INCH*7/8;
+const WIN={x0:4,x1:15,top:11,bot:37,rr:5.5};
+function winPath(r){const {x0,x1,top,bot,rr}=WIN,cx=(x0+x1)/2;return `M${x0} ${f(r+top+rr)} A${rr} ${rr} 0 0 1 ${x1} ${f(r+top+rr)} V${f(r+bot-rr)} A${rr} ${rr} 0 0 1 ${x0} ${f(r+bot-rr)} Z`}
+function caliper(r,o={}){
+  const k=o.k||1;
+  const tws=Math.max(.12,Math.min(.6,.09*k)), tw=tws/k, ow=(o.ow||.3)/k;
+  let s='';
+  // lišta
+  s+=`<rect x="0" y="-18" width="16" height="${BEAM_END+18}" fill="var(--m-beam)" stroke="var(--m-edge)" stroke-width="${f(ow)}"/>`;
+  // milimetrová stupnice (vlevo) a palcová (vpravo)
+  let d='';for(let n=0;n<=150;n++){d+=`M${EDGE} ${mY(n)}h${mlen(n)}`}
+  let di='';for(let i=0;i<=95;i++){const y=Z0+i*INCH;const l=i%16===0?3.5:i%8===0?2.8:i%4===0?2.3:1.6;di+=`M15 ${f(y)}h-${l}`}
+  s+=`<path d="${d}${di}" stroke="var(--m-eng)" stroke-width="${f(tw)}"/>`;
+  let dg='';for(let c=0;c<=15;c++)dg+=`<text x="${EDGE+3.6+.45}" y="${f(mY(c*10)+.8)}" style="font:600 2.2px 'Albert Sans',sans-serif;fill:var(--m-eng)">${c}</text>`;
+  for(let i=1;i<=5;i++)dg+=`<text x="${15-3.5-.45}" y="${f(Z0+i*25.4+.7)}" text-anchor="end" style="font:600 1.9px 'Albert Sans',sans-serif;fill:var(--m-eng)">${i}</text>`;
+  s+=dg;
+  // hloubkoměr (vyjíždí dole z lišty)
+  if(r>0) s+=`<rect x="7.2" y="${BEAM_END}" width="1.6" height="${f(r)}" fill="var(--m-sl)" stroke="var(--m-edge)" stroke-width="${f(ow)}"/>`;
+  // pevná hlava: velká čelist vlevo, malá vpravo
+  s+=`<path d="M-42 0 L-40 -4 L-12 -18 H19 V-10 L28 -4 L33 0 Z" fill="var(--m-sl)" stroke="var(--m-edge)" stroke-width="${f(ow)}" stroke-linejoin="round"/>`;
+  // jezdec s okénkem
+  s+=`<path d="M-42 ${f(r)} H33 L28 ${f(r+4)} L19 ${f(r+10)} V${f(r+SL)} H-3 V${f(r+18)} H-12 L-40 ${f(r+4)} Z ${winPath(r)}" fill="var(--m-sl)" fill-rule="evenodd" stroke="var(--m-edge)" stroke-width="${f(ow)}" stroke-linejoin="round"/>`;
+  // nonius pro mm: na jezdci vlevo od okénka, čárky vedou doleva od hrany
+  let dv='';for(let j=0;j<=10;j++)dv+=`M${EDGE} ${f(vY(r,j))}h-${vlen(j)}`;
+  // nonius pro palce: vpravo od okénka
+  for(let j=0;j<=8;j++){const l=j%8===0?3.2:j===4?2.4:1.8;dv+=`M15 ${f(Z0+r+j*IV)}h${l}`}
+  s+=`<path d="${dv}" stroke="var(--m-eng)" stroke-width="${f(tw)}"/>`;
+  // zajišťovací šroubek (vpravo nahoře) a kolečko (vlevo dole)
+  s+=`<rect x="19" y="${f(r+5)}" width="${o.lockIn?2.6:3.6}" height="6" rx=".8" fill="${o.lockHl?'var(--m-red)':'var(--m-sl-d)'}" stroke="var(--m-edge)" stroke-width="${f(ow)}"/>`;
+  const wy=r+44, ph=(o.wheel||0);
+  let kn='';for(let i=0;i<12;i++){const a=ph+i*Math.PI/6;if(Math.cos(a)<-.1){const y=wy+4.2*Math.sin(a);kn+=`M-9.4 ${f(y)} h1.6 `}}
+  s+=`<circle cx="-5" cy="${f(wy)}" r="4.3" fill="${o.wheelHl?'#e3a69f':'var(--m-sl-d)'}" stroke="${o.wheelHl?'var(--m-red)':'var(--m-edge)'}" stroke-width="${f(o.wheelHl?ow*2:ow)}"/><circle cx="-5" cy="${f(wy)}" r="1.1" fill="var(--m-edge)"/>`;
+  return s;
+}
+// zvýraznění v souřadnicích posuvky
+function hlV(r,j,c,k,w=2.2){return `<path d="M${EDGE} ${f(vY(r,j))}h-${vlen(j)}" stroke="${c}" stroke-width="${f(w*Math.max(.12,Math.min(.6,.09*k))/k)}" stroke-linecap="round"/>`}
+function hlM(n,c,k,w=2.2){return `<path d="M${EDGE} ${mY(n)}h${mlen(n)}" stroke="${c}" stroke-width="${f(w*Math.max(.12,Math.min(.6,.09*k))/k)}" stroke-linecap="round"/>`}
+// výřez (lupa): bod posuvky (fx,fy) se zobrazí v (ax,ay) se zvětšením s, oříznutý na obdélník
+function view(v){return {...v,X:x=>v.ax+(x-v.fx)*v.s,Y:y=>v.ay+(y-v.fy)*v.s}}
+function zoom(v,inner,o={}){const id=nid('cz');const tr=`translate(${f(v.ax-v.fx*v.s)} ${f(v.ay-v.fy*v.s)}) scale(${v.s})`;
+  return `<clipPath id="${id}"><rect x="${v.x}" y="${v.y}" width="${v.w}" height="${v.h}" rx="2"/></clipPath><rect x="${v.x}" y="${v.y}" width="${v.w}" height="${v.h}" rx="2" fill="var(--stage)"/><g clip-path="url(#${id})"><g transform="${tr}">${inner}</g>${o.over||''}</g><rect x="${v.x}" y="${v.y}" width="${v.w}" height="${v.h}" rx="2" fill="none" stroke="${o.stroke||'var(--muted)'}" stroke-width=".4"/>`}
+
+// ---------- kroky ----------
+const PARTS={A:'Posuvka',B:'Měření kůže',C:'Čtení',D:'Průměr a zápis'};
+const S=[];
+const add=(part,title,body,dur,draw)=>S.push({part,title,body,dur,draw});
+
+// A1 – celá posuvka svisle, nulou nahoru
+add('A','Poznejte svou posuvku','Držte posuvku jako na fotce: nulou nahoru, čísla přibývají dolů. Tloušťku kůže měříte velkými čelistmi vlevo nahoře. Jezdec posouváte palcem za kolečko, šroubek vpravo ho zajistí. V okénku jsou dvě stupnice: vlevo milimetry s noniem vyrytým na jezdci hned vlevo od okénka – ty používejte. Vpravo jsou palce s vlastním noniem – těch si nevšímejte.',13000,t=>{
+  const r=L(0,6,es(t,.03,.15)), K=.36, X0=44, Y0=10;
+  const X=x=>X0+x*K, Y=y=>Y0+y*K;
+  let s=G(`translate(${X0} ${Y0}) scale(${K})`,caliper(r,{k:K}));
+  const a=i=>seg(t,.16+i*.055,.22+i*.055);
+  s+=O(a(0),lead(19,12,X(-30),Y(-1.5))+lbl(2,9,'velké','t')+lbl(2,13.5,'čelisti','t'));
+  s+=O(a(1),lead(17,23,X(-3),Y(r+30))+lbl(2,24,'jezdec','t'));
+  s+=O(a(2),lead(19,32.5,X(-8.5),Y(r+44))+lbl(2,33.5,'kolečko','t'));
+  s+=O(a(3),lead(58,8,X(28),Y(-2))+lbl(59,9,'malé','t')+lbl(59,13.5,'čelisti','t'));
+  s+=O(a(4),lead(58,19.5,X(22),Y(r+8))+lbl(59,20.5,'šroubek','t'));
+  s+=O(a(5),lead(58,28,X(15),Y(r+24))+lbl(59,29,'okénko','t'));
+  s+=O(a(6),lead(58,52,X(16),Y(70))+lbl(59,53,'lišta','t'));
+  s+=O(a(7),lead(58,82,X(8.8),Y(BEAM_END+r*.6))+lbl(59,83,'hloubkoměr','t'));
+  s+=O(a(0),lbl(2,48,'0 nahoře,','ts')+lbl(2,52.5,'čísla','ts')+lbl(2,57,'přibývají','ts')+lbl(2,61.5,'dolů','ts')+arrow(8,64,8,74,'var(--muted)',.4));
+  // výřez okénka
+  const io=seg(t,.62,.72);
+  if(io>0){
+    const v=view({x:88,y:16,w:43,h:66,s:2,fx:9.5,fy:r+24,ax:109.5,ay:49});
+    const box=(x0,x1,c)=>`<rect x="${f(v.X(x0))}" y="${f(v.Y(r+12))}" width="${f((x1-x0)*v.s)}" height="${f(24*v.s)}" rx="1.5" fill="none" stroke="${c}" stroke-width=".7"/>`;
+    const ov=O(seg(t,.74,.8),box(-1.2,11,'var(--m-ok)'))+O(seg(t,.82,.88),box(11.2,19,'var(--m-red)')+`<rect x="${f(v.X(11.2))}" y="${f(v.Y(r+12))}" width="${f(7.8*v.s)}" height="${f(24*v.s)}" fill="#fff" opacity=".45"/>`);
+    let ins=zoom(v,caliper(r,{k:2}),{over:ov});
+    ins+=O(seg(t,.74,.8),lbl(88.5,12,'mm','tok')+tick(100,10.6)+lbl(88.5,87,'vlevo: mm + nonius','ts'));
+    ins+=O(seg(t,.82,.88),lbl(124,12,'palce','ta','end')+cross(128,10.6));
+    s+=O(io,inset('',ins,{x:86,y:6,w:47,h:78}));
+  }
+  return s;
+});
+
+// společný pohled na horní část posuvky (čelisti + jezdec)
+const BK=.85, BX=52, BY=26;
+const bX=x=>BX+x*BK, bY=y=>BY+y*BK;
+const BV=`translate(${BX} ${BY}) scale(${BK})`;
+
+// A2 – kontrola nuly
+add('A','Zkontrolujte nulu','Bez kůže čelisti kolečkem úplně zavřete, jemně. Horní dlouhá čárka nonia (jeho nula) musí stát přesně na čárce 0 stupnice a spodní dlouhá čárka nonia na čárce 9 mm. Proti světlu nesmí být mezi čelistmi škvíra. Když nula nesedí, otřete čelisti a zkuste znovu; když pořád nesedí, zapište si, kolik ukazuje zavřená (třeba 0,1 mm), a odečtěte to od každého měření.',11000,t=>{
+  const c=es(t,.05,.4), r=L(6,0,c);
+  let s=G(BV,caliper(r,{k:BK,wheel:c*5,wheelHl:t<.42&&t>.03}));
+  if(t<.42&&t>.03) s+=turnArrow(bX(-5),bY(r+44),6.5,200,120);
+  s+=O(seg(t,.4,.5),lbl(4,44,'zavřeno,','tok')+lbl(4,49,'bez škvíry','tok')+tick(24,42.5));
+  const v=view({x:88,y:14,w:43,h:70,s:4,fx:EDGE,fy:Z0+5,ax:109.5,ay:49});
+  const g=seg(t,.5,.6);
+  let hl=O(g,hlV(r,0,'var(--m-ok)',4)+hlM(0,'var(--m-ok)',4)+hlV(r,10,'var(--m-ok)',4)+hlM(9,'var(--m-ok)',4));
+  const ov=O(seg(t,.6,.68),lbl(89.5,v.Y(Z0-2.2),'nula na 0','tmo'))+O(seg(t,.7,.78),lbl(89.5,v.Y(Z0+11.2),'10. na 9','tmo'));
+  s+=inset('OKÉNKO ZBLÍZKA',zoom(v,caliper(r,{k:4})+hl,{over:ov}));
+  return s;
+});
+
+// A3 – ověřte nonius
+add('A','Ověřte si nonius: spočítejte čárky','Spočítejte čárky nonia mezi horní a spodní dlouhou čárkou: horní (nulu) nepočítejte, spodní ano. 10 čárek = nonius 0,1 mm – s tím počítá tato animace. Jeho 10 dílků zabírá 9 mm stupnice, každý je o 0,1 mm kratší než milimetr. Napočítáte-li 20 čárek, je to nonius 0,05 mm: čte se stejně, jen každá čárka znamená 0,05 mm.',12000,t=>{
+  const r=0;
+  const v=view({x:4,y:10,w:70,h:76,s:5.7,fx:EDGE,fy:Z0+5.3,ax:32,ay:48});
+  const cnt=Math.floor(seg(t,.08,.62)*10.999);
+  let hl=hlV(r,0,'var(--m-red)',5.7);
+  for(let j=1;j<=cnt;j++) hl+=hlV(r,j,j===10?'var(--m-red)':'var(--m-amb)',5.7,1.6);
+  let ov='';
+  for(let j=1;j<=cnt;j++) ov+=lbl(v.X(EDGE-vlen(j))-1.2,v.Y(vY(r,j))+1.3,j,'tn','end');
+  ov+=lbl(6,v.Y(vY(r,0))-2.8,'nula – nepočítat','tmr');
+  const dm=seg(t,.66,.74);
+  ov+=O(dm,`<path d="M${f(v.X(7.1))} ${f(v.Y(mY(0)))} V${f(v.Y(mY(9)))}" stroke="var(--m-red)" stroke-width=".45" marker-start="url(#arm)" marker-end="url(#arm)"/>`+lbl(v.X(7.1)+1.6,v.Y(mY(4.5))+1.4,'9 mm','tmr'));
+  let s=lbl(5,7.5,'nonius','ts')+lbl(73,7.5,'mm stupnice','ts','end');
+  s+=zoom(v,caliper(r,{k:5.7})+hl,{over:ov});
+  let p=lbl(81,17,'čárek:','t')+lbl(81,28,String(cnt),'tbig');
+  p+=O(seg(t,.64,.72),lbl(81,40,'10 čárek','t')+lbl(81,45.5,'= 0,1 mm','tok')+tick(127,42));
+  p+=O(seg(t,.76,.84),lbl(81,57,'20 čárek','t')+lbl(81,62.5,'= 0,05 mm','t'));
+  p+=O(seg(t,.86,.94),lbl(81,74,'10 dílků','ts')+lbl(81,78.5,'na 9 mm','ts'));
+  s+=inset('',p,{x:78,y:10,w:55,h:76});
+  return s;
+});
+
+// B – kůže mezi čelistmi
+const TH=1.1; // kaštan v ukázce
+function leather(x,t){return `<rect x="-90" y="0" width="${f(90+x)}" height="${f(t)}" fill="var(--lic)" stroke="var(--lic-d)" stroke-width=".12"/>`}
+add('B','Vložte kůži mezi velké čelisti','Kolečkem jezdec odsuňte. Kůži zasuňte mezi velké čelisti aspoň 2 cm hluboko, naplocho a kolmo k čelistem (ne šikmo). Kolečkem jezdec jemně dojeďte, až se čelisti kůže dotknou. Nemačkejte: kůže je měkká a ukázala by méně.',13000,t=>{
+  const o=es(t,.03,.16), ins=es(t,.2,.45), cz=es(t,.52,.8);
+  const r=t<.5?L(0,6,o):L(6,TH,cz);
+  const lx=L(-62,-20,ins);
+  const wh=(t>.03&&t<.16)||(t>.52&&t<.8);
+  let s=G(BV,leather(lx,TH)+caliper(r,{k:BK,wheel:t<.5?-o*4:cz*6,wheelHl:wh}));
+  if(t>.03&&t<.16) s+=turnArrow(bX(-5),bY(r+44),6.5,120,200);
+  if(t>.52&&t<.8) s+=turnArrow(bX(-5),bY(r+44),6.5,200,120);
+  if(wh) s+=lbl(bX(-14),bY(r+44)+11,'kolečko palcem','ta','middle');
+  s+=O(seg(t,.2,.3)*(1-seg(t,.44,.5)),arrow(bX(lx-14),bY(-9),bX(lx-4),bY(-9)));
+  const dm=seg(t,.46,.54);
+  s+=O(dm,`<path d="M${f(bX(-42))} ${f(bY(-22))} H${f(bX(-20))}" stroke="var(--accent)" stroke-width=".35" marker-start="url(#ar)" marker-end="url(#ar)"/><path d="M${f(bX(-20))} ${f(bY(-21))} V${f(bY(0))}" stroke="var(--accent)" stroke-width=".25" stroke-dasharray=".8 .6"/>`+lbl(bX(-31),bY(-22)-1.4,'aspoň 2 cm','ta','middle'));
+  s+=O(seg(t,.3,.4),lead(8,bY(TH)+9,bX(-50),bY(TH/2))+lbl(3,bY(TH)+13,'kůže','t'));
+  s+=O(seg(t,.82,.9),lbl(4,46,'jemně –','tok')+lbl(4,51,'nemačkat','tok'));
+  // výřez čelistí
+  const v=view({x:88,y:13,w:43,h:40,s:3,fx:-26.5,fy:3,ax:109.5,ay:33});
+  let p=zoom(v,leather(lx,TH)+caliper(r,{k:3}));
+  p+=O(seg(t,.46,.54),lbl(89,58,'naplocho','t')+tick(126,57)+lbl(89,64,'kolmo k čelisti','t')+tick(126,63));
+  p+=O(seg(t,.82,.9),lbl(89,70,'čelisti se jen','t')+lbl(89,75,'dotknou','t')+tick(126,74));
+  s+=inset('ČELISTI ZBLÍZKA',p);
+  return s;
+});
+
+add('B','Zajistěte a dívejte se zpříma','Šroubek můžete lehce utáhnout – jezdec se pak nepohne a posuvku můžete z kůže vytáhnout. Na okénko se dívejte zpříma, okem přímo proti čárkám. Při pohledu šikmo se čárky nonia a stupnice zdánlivě posunou (paralaxa) a odečtete chybně.',12000,t=>{
+  const r=TH, lk=es(t,.06,.3);
+  let s=G(BV,leather(-20,TH)+caliper(r,{k:BK,lockHl:t>.04&&t<.4,lockIn:lk>.5}));
+  if(t>.04&&t<.34) s+=turnArrow(bX(21),bY(r+8),5,-60,40);
+  s+=lbl(69.5,42.5,'šroubek','ts')+lbl(69.5,47,'utáhnout','tsa')+O(seg(t,.3,.38),lbl(69.5,51.5,'nemusíte','ts'));
+  const wx=bX(9.5), wy=bY(r+24);
+  s+=O(seg(t,.42,.5),lbl(69.5,wy+20,'okem','tok')+lbl(69.5,wy+25,'zpříma','tok'));
+  // paralaxa: řez okénkem
+  const po=seg(t,.5,.6);
+  let p='';
+  const yb=66, yv=58, xm=103;
+  p+=`<rect x="88" y="${yb}" width="43" height="5" fill="var(--m-beam)" stroke="var(--m-edge)" stroke-width=".25"/><rect x="88" y="${yv-3}" width="${xm-88+.0}" height="3" fill="var(--m-sl)" stroke="var(--m-edge)" stroke-width=".25"/>`;
+  p+=`<path d="M${xm} ${yb} v-1.4" stroke="var(--m-eng)" stroke-width=".6"/><path d="M${xm-.01} ${yv} v-1.6" stroke="var(--m-eng)" stroke-width=".6"/>`;
+  p+=lbl(89,yv-4.2,'nonius','ts')+lbl(130,yb+9,'stupnice','ts','end');
+  // zpříma
+  p+=O(po,eye(xm,20,90,.9)+`<path d="M${xm} 24 V${yb}" stroke="var(--ok)" stroke-width=".4" stroke-dasharray="1 .7"/>`+lbl(xm-2,30,'zpříma','tok','end')+tick(xm-5,35));
+  // šikmo
+  const so=seg(t,.66,.76), ex=126, ey=24, hx=xm-(ex-xm)*(yb-yv)/(yv-ey);
+  p+=O(so,eye(ex,ey,125,.9)+`<path d="M${ex-2} ${ey+3} L${f(hx)} ${yb}" stroke="var(--accent)" stroke-width=".4" stroke-dasharray="1 .7"/><circle cx="${f(hx)}" cy="${yb}" r=".9" fill="var(--accent)"/>`+lbl(130,40,'šikmo','ta','end')+cross(127,44.5));
+  p+=O(seg(t,.78,.86),lbl(89,80,'šikmo = chybné čtení','ta'));
+  s+=O(seg(t,.48,.56),inset('PROČ ZPŘÍMA',p));
+  return s;
+});
+
+// C – čtení
+const ZV=view({x:4,y:10,w:70,h:76,s:5.7,fx:EDGE,fy:Z0+5.3,ax:32,ay:48});
+function nk(r){const n=Math.floor(r+1e-9);return [n,Math.round((r-n)*10)]}
+// scéna čtení: r, a stavy (0–1) jednotlivých zvýraznění
+function readScene(r,st){
+  const [n,k]=nk(r), v=ZV, K=v.s;
+  let hl='', ov='';
+  if(st.whole) hl+=O(st.whole,hlM(n,'var(--m-amb)',K,2.6));
+  if(st.zero) hl+=O(st.zero,hlV(r,0,'var(--m-red)',K,2.6));
+  const cnt=st.count||0;
+  for(let j=1;j<=cnt&&j<=10;j++) ov+=lbl(v.X(EDGE-vlen(j))-1.2,v.Y(vY(r,j))+1.3,j,'tn','end');
+  if(st.align){const al=[[k,n+k]];if(k===0)al.push([10,n+9]);al.forEach(([j,m])=>{hl+=O(st.align,hlV(r,j,'var(--m-ok)',K,2.6)+hlM(m,'var(--m-ok)',K,2.6))})}
+  if(st.zero) ov+=O(st.zero,lbl(6,v.Y(vY(r,0))-2.8,'nula nonia','tmr'));
+  if(st.whole&&n%10!==0) ov+=O(st.whole,lbl(v.X(EDGE+mlen(n))+1,v.Y(mY(n))+1.4,`${n} mm`,'tm'));
+  let s=lbl(5,7.5,'nonius','ts')+lbl(73,7.5,'mm stupnice','ts','end');
+  s+=zoom(v,caliper(r,{k:K})+hl,{over:ov});
+  return s;
+}
+// lupa: 3 sousední čárky kolem zákrytu
+function lupa(r,op){
+  if(op<=0) return '';
+  const [n,k]=nk(r);
+  const v=view({x:79,y:13,w:34,h:46,s:15,fx:EDGE,fy:mY(n+k),ax:96,ay:36});
+  let hl=hlV(r,k,'var(--m-ok)',15,1.3)+hlM(n+k,'var(--m-ok)',15,1.3);
+  let lb='';
+  for(const j of [k-1,k,k+1]){if(j<0||j>10)continue;const y=v.Y(vY(r,j))+1.3;lb+=j===k?lbl(115,y,k===0?'nula: přesně':`${k}.: přesně`,'tok'):lbl(115,y,'nesedí','ts')}
+  return O(op,lbl(79,11,'lupa','ts')+zoom(v,caliper(r,{k:15})+hl,{stroke:'var(--ok)'})+lb);
+}
+function result(l1,l2,op){return O(op,`<rect x="78" y="63" width="55" height="23" rx="2" class="panelbox"/>`+lbl(81,71,l1,'t')+lbl(81,81.5,l2,'tbig'))}
+
+add('C','Celé milimetry','Čísla 0, 1, 2… na stupnici jsou centimetry (1 = 10 mm). Každá malá čárka je 1 mm, delší čárka mezi nimi je 5 mm. Najděte nulu nonia (horní dlouhou čárku) a podívejte se, kolik milimetrových čárek za nulou stupnice už minula: poslední čárka nad ní udává celé milimetry. Tady je nula nonia pod 2. čárkou za nulou: celé milimetry jsou 2.',14000,t=>{
+  const r=L(0,2.6,es(t,.4,.66));
+  const v=ZV;
+  let s=readScene(r,{zero:seg(t,.36,.42),whole:seg(t,.72,.8)});
+  const c=i=>seg(t,.05+i*.1,.12+i*.1);
+  s+=O(c(0),lead(80,15,v.X(9.6),v.Y(mY(0))-.6)+lead(80,15,v.X(9.6),v.Y(mY(10))-.6)+lbl(81,14,'0 a 1 = cm','t')+lbl(81,18.5,'(1 cm = 10 mm)','ts'));
+  s+=O(c(1),lead(80,29,v.X(6.4),v.Y(mY(3)))+lbl(81,30,'malá = 1 mm','t'));
+  s+=O(c(2),lead(80,40,v.X(7.1),v.Y(mY(5)))+lbl(81,41,'delší = 5 mm','t'));
+  // počítadlo minulých čárek
+  if(t>.4){const n=Math.floor(r+1e-9);s+=lbl(81,54,'minula čárek za 0:','ts')+lbl(81,59.5,String(n),'t')}
+  s+=result('celé milimetry:','2 mm',seg(t,.8,.88)).replace('class="tbig"','class="tbig" style="fill:var(--amber)"');
+  return s;
+});
+
+add('C','Desetiny milimetru','Teď jeďte očima po čárkách nonia shora dolů. Hledejte jedinou, která leží přesně v zákrytu s některou čárkou stupnice – ostatní jsou kousek vedle. Spočítejte, kolikátá je od nuly nonia: tady 6. čárka → 0,6 mm. Výsledek: 2 mm + 0,6 mm = 2,6 mm.',14000,t=>{
+  const r=2.6;
+  const cnt=Math.floor(seg(t,.05,.55)*10.999);
+  let s=readScene(r,{zero:1,whole:1,count:cnt,align:seg(t,.58,.66)});
+  // ukazatel hledání
+  if(t>.05&&t<.58){const j=Math.min(10,cnt);s+=G('',arrow(5,ZV.Y(vY(r,j)),9,ZV.Y(vY(r,j))),'')}
+  s+=lupa(r,seg(t,.64,.74));
+  s+=result('2 mm + 0,6 mm','= 2,6 mm',seg(t,.8,.88));
+  return s;
+});
+
+function example(r,l1,l2,h1,h2){return t=>{
+  const [n,k]=nk(r);
+  const cnt=Math.floor(seg(t,.3,.56)*(k===0?10.999:k+.999));
+  let s=readScene(r,{zero:seg(t,.04,.12),whole:seg(t,.16,.24),count:cnt,align:seg(t,.58,.66)});
+  s+=O(seg(t,.16,.24)*(1-seg(t,.62,.66)),lbl(81,30,'celé:','t')+lbl(81,38,`${n} mm`,'tbig').replace('class="tbig"','class="tbig" style="fill:var(--amber)"')+lbl(81,46,h1,'ts')+lbl(81,50.5,h2,'ts'));
+  s+=lupa(r,seg(t,.64,.74));
+  s+=result(l1,l2,seg(t,.8,.88));
+  return s;
+}}
+add('C','Příklad: kozinka 0,9 mm','Nula nonia je mezi čárkou 0 a první milimetrovou čárkou: celých 0 mm. V zákrytu je 9. čárka nonia (kryje se s čárkou 9 mm). Tloušťka = 0 + 0,9 = 0,9 mm.',12000,example(.9,'0 mm + 0,9 mm','= 0,9 mm','nula nonia ještě nad','1. čárkou → 0 mm'));
+add('C','Příklad: kaštan 1,1 mm','Nula nonia je kousek pod první milimetrovou čárkou: celý 1 mm. V zákrytu je 1. čárka nonia (kryje se s čárkou 2 mm). Tloušťka = 1 + 0,1 = 1,1 mm.',12000,example(1.1,'1 mm + 0,1 mm','= 1,1 mm','nula nonia už pod','1. čárkou → 1 mm'));
+add('C','Příklad: přesně 1,0 mm','Nula nonia stojí přesně na první milimetrové čárce a v zákrytu je i spodní, 10. čárka nonia (na čárce 1 cm). Tloušťka = 1 + 0 = 1,0 mm. Když se kryje nula i spodní čárka, desetiny jsou 0.',12000,example(1.0,'1 mm + 0 mm','= 1,0 mm','nula nonia přesně na','1. čárce → 1 mm'));
+
+// D – víc míst a průměr
+add('D','Změřte víc míst a spočítejte průměr','Změřte 5–6 míst tam, odkud díl vyříznete (na velkém kusu kůže aspoň 2 cm od okraje). Každé měření zapište a spočítejte průměr: sečtěte a vydělte počtem. Průměr zadejte tam, kam vás poslal krok lekce. Příklad z Víčka: průměry P1, D1, D2 a L1 zapište v lekci 1 (krok „Změřte tloušťku kůže“) a zadejte ve formuláři „Listy pro vaši kůži“ na stránce Listy střihu, u přepážek větší z D1 a D2. U přepážek si zapište i nejtlustší místo – při P1 1,0 mm nesmí mít víc než 0,92 mm (tlustší P1 hranici snižuje, přesnou ukáže formulář listů).',15000,t=>{
+  let s='';
+  s+=`<path d="M8 14 Q20 9 38 11 Q58 8 72 13 Q76 30 73 50 Q76 70 70 84 Q46 88 26 85 Q9 86 6 72 Q3 50 7 30 Z" fill="var(--lic)" stroke="var(--lic-d)" stroke-width=".4"/>`;
+  s+=O(seg(t,.03,.1),`<path d="M16 21 Q22 18 38 19.5 Q56 17 64 21 Q67 34 65 50 Q67 66 62 76 Q44 79 28 77 Q16 78 14 66 Q12 50 15 32 Z" fill="none" stroke="#fff" stroke-width=".45" stroke-dasharray="1.4 1"/>`+lbl(40,16.5,'2 cm od okraje','tm','middle').replace('class="tm"','class="tm" style="fill:#fff"'));
+  s+=O(seg(t,.08,.14),`<rect x="22" y="26" width="36" height="44" fill="none" stroke="#fff" stroke-width=".5"/>`+lbl(54,67,'P1','tm','middle').replace('class="tm"','class="tm" style="fill:#fff"'));
+  const pts=[[27,31,'1,0'],[46,31,'1,1'],[27,48,'1,0'],[46,44,'0,9'],[27,65,'1,0'],[46,58,'1,0']];
+  pts.forEach(([x,y,v],i)=>{const o=seg(t,.16+i*.07,.2+i*.07);s+=O(o,`<circle cx="${x}" cy="${y}" r="1.3" fill="#fff" stroke="var(--m-eng)" stroke-width=".3"/><text x="${x}" y="${y+.9}" text-anchor="middle" style="font:800 2.2px 'Albert Sans',sans-serif;fill:#222">${i+1}</text>`+lbl(x+2.3,y+1.3,v,'tm').replace('class="tm"','class="tm" style="fill:#fff"'))});
+  let p=lbl(81,17,'Příklad Víčko: P1, mm','ts');
+  pts.forEach(([,,v],i)=>{const o=seg(t,.16+i*.07,.2+i*.07);p+=O(o,lbl(i<3?82:104,25+(i%3)*6,`${i+1}.  ${v}`,'t'))});
+  p+=O(seg(t,.6,.66),lbl(81,45,'součet 6,0','t')+lbl(81,51,'6,0 : 6 = 1,0 mm','tok'));
+  p+=O(seg(t,.7,.76),lbl(81,61,'přepážky D1, D2: nejtlustší','ts')+lbl(81,65.5,'max 0,92 (při P1 1,0)','ts'));
+  p+=O(seg(t,.8,.86),lbl(81,74,'→ zápis v lekci','t')+lbl(81,79.5,'→ Víčko: Listy střihu','t'));
+  s+=inset('',p,{x:78,y:10,w:55,h:76});
+  return s;
+});
+
+// ---------- engine ----------
+const svg=document.getElementById('stage');
+const DEFS=`<defs>
+<marker id="ar" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--accent)"/></marker>
+<marker id="arm" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--m-red)"/></marker>
+</defs>`;
+const capNo=document.getElementById('capNo'),capT=document.getElementById('capT'),capB=document.getElementById('capB'),counter=document.getElementById('counter');
+const prog=document.getElementById('prog');
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const partKeys=Object.keys(PARTS);const barEls=[];const segEls={};
+partKeys.forEach(k=>{const b=document.createElement('button');b.className='pseg';b.type='button';b.setAttribute('aria-label',`Část ${k}: ${PARTS[k]}`);
+  const bars=document.createElement('div');bars.className='bars';S.forEach((st,i)=>{if(st.part===k){const sp=document.createElement('span');const bb=document.createElement('b');sp.appendChild(bb);bars.appendChild(sp);barEls[i]=bb;}});
+  const pl=document.createElement('div');pl.className='pl';pl.innerHTML=`<b>${k}</b><span> · ${PARTS[k]}</span>`;b.append(bars,pl);prog.appendChild(b);segEls[k]=b;
+  b.addEventListener('click',()=>{go(S.findIndex(s=>s.part===k),0,true)});});
+let idx=0,tt=1,playing=false,last=0,raf=0;
+function numInPart(i){const p=S[i].part;return S.slice(0,i+1).filter(s=>s.part===p).length}
+function render(){
+  const st=S[idx]; uid=0;
+  let body='';
+  try{ body=st.draw(tt);}catch(e){console.error(e)}
+  svg.innerHTML=DEFS+body;
+  capNo.textContent=`${st.part}${numInPart(idx)}`; capT.textContent=st.title; capB.textContent=st.body;
+  counter.textContent=`krok ${idx+1} / ${S.length}`;
+  barEls.forEach((b,i)=>{b.style.transform=`scaleX(${i<idx?1:i===idx?tt:0})`});
+  partKeys.forEach(k=>segEls[k].classList.toggle('on',k===st.part));
+}
+function go(i,t=0,user=false){idx=Math.max(0,Math.min(S.length-1,i));tt=reduce?1:t;render();}
+function setPlay(p){playing=p;document.getElementById('playIcon').innerHTML=p?'<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';document.getElementById('bPlay').setAttribute('aria-label',p?'Pozastavit':'Přehrát');if(p){last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}}
+let hold=0;
+function loop(now){if(!playing)return;const dt=now-last;last=now;
+  if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
+  else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
+  raf=requestAnimationFrame(loop)}
+document.getElementById('bPlay').onclick=()=>{if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} setPlay(!playing)};
+document.getElementById('bRestart').onclick=()=>{go(0,0);setPlay(true)};
+document.getElementById('bPrev').onclick=()=>{setPlay(false);go(idx-1,1)};
+document.getElementById('bNext').onclick=()=>{setPlay(false);go(idx+1,1)};
+// Hidepath: deep link na část (#A–#D) skočí na její první krok, na krok (#C3) přímo na ten krok.
+function stepFromHash(){const m=/^([A-Z])([0-9]+)?$/.exec(decodeURIComponent((location.hash||'').slice(1)).trim().toUpperCase());if(!m||!Object.prototype.hasOwnProperty.call(PARTS,m[1]))return -1;const ix=[];S.forEach((s,i)=>{if(s.part===m[1])ix.push(i)});const n=m[2]===undefined?1:+m[2];return n>=1&&n<=ix.length?ix[n-1]:-1}
+{const i=stepFromHash();go(i>=0?i:0,1);}
+addEventListener('hashchange',()=>{const i=stepFromHash();if(i<0)return;setPlay(false);go(i,0);if(!reduce)setPlay(true);});
+window.__posuvka={go:(i,t)=>{setPlay(false);idx=i;tt=t;render()},steps:S.length};
+let auto=false;
+if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!auto){auto=true;io.disconnect();const i=stepFromHash();go(i>=0?i:0,0);setPlay(true)}})},{threshold:.45});io.observe(svg)}
+})();
+</script>
+<script>
+// Hidepath: „Zpět do lekce“ = krok zpět v historii, když se sem přišlo z aplikace; jinak úvod aplikace.
+(function(){var a=document.querySelector('[data-back]');if(!a)return;a.addEventListener('click',function(e){var o='';try{o=document.referrer?new URL(document.referrer).origin:'';}catch(_){}if(o===location.origin&&history.length>1){e.preventDefault();history.back();}});})();
+</script>
+</body>
+</html>

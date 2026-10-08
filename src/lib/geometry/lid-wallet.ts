@@ -1551,7 +1551,62 @@ function thicknessFor(
 /**
  * Kontroly střihu. Vrací seznam problémů česky (prázdný = v pořádku).
  */
-export function checkLidWallet(spec: LidWalletSpec = DEFAULT_LID_WALLET): string[] {
+/** Švy model pouští nejvýš do této tloušťky (mm). */
+export const LID_SEAM_MAX_MM = 3.0;
+/** Přijatá hranice plné tloušťky peněženky (mm); mez je měkká (oddíl 10.1). */
+export const LID_FULL_THICKNESS_MAX_MM = 12;
+
+/** Překročená mez tloušťky: šev skrz víc než 3,0 mm, nebo plná tloušťka nad ≈ 12. */
+export interface LidThicknessExceeded {
+  kind: 'seam' | 'full';
+  /** Šev (`S4`), u plné tloušťky `null`. */
+  seamId: string | null;
+  valueMm: number;
+  maxMm: number;
+  /** Hláška stejná jako v `checkLidWallet`. */
+  message: string;
+}
+
+/**
+ * Meze tloušťky, které sestava překročí (švy nad 3,0 mm a plná tloušťka nad ≈ 12). Jen tyto
+ * kontroly jde v aplikaci obejít pro zkušební kus; geometrie se pro ně počítá dál normálně.
+ */
+export function lidWalletThicknessExceeded(
+  spec: LidWalletSpec,
+  L: LidWalletLayout = lidWalletLayout(spec),
+): LidThicknessExceeded[] {
+  const out: LidThicknessExceeded[] = [];
+  for (const s of L.seams) {
+    if (s.thicknessMm > LID_SEAM_MAX_MM + 1e-9) {
+      out.push({
+        kind: 'seam',
+        seamId: s.id,
+        valueMm: s.thicknessMm,
+        maxMm: LID_SEAM_MAX_MM,
+        message: `Šev ${s.id} jde skrz ${fmt(s.thicknessMm)} mm (max 3,0).`,
+      });
+    }
+  }
+  if (L.thicknessMaxMm > LID_FULL_THICKNESS_MAX_MM + 1e-9) {
+    out.push({
+      kind: 'full',
+      seamId: null,
+      valueMm: L.thicknessMaxMm,
+      maxMm: LID_FULL_THICKNESS_MAX_MM,
+      message: `Plná tloušťka ${fmt(L.thicknessMaxMm)} mm je nad přijatou hranicí ≈ 12.`,
+    });
+  }
+  return out;
+}
+
+/**
+ * Kontroly střihu; vrací česky, co neplatí. `allowThickness` vynechá meze tloušťky
+ * (`lidWalletThicknessExceeded`) – jen pro listy zkušebního kusu mimo ověřené meze.
+ */
+export function checkLidWallet(
+  spec: LidWalletSpec = DEFAULT_LID_WALLET,
+  options: { allowThickness?: boolean } = {},
+): string[] {
   const p: string[] = [];
   const positive: (keyof LidWalletSpec)[] = [
     'cardWidthMm',
@@ -1857,17 +1912,13 @@ export function checkLidWallet(spec: LidWalletSpec = DEFAULT_LID_WALLET): string
   }
 
   // Švy a tloušťky.
-  for (const s of L.seams) {
-    if (s.thicknessMm > 3.0 + 1e-9)
-      p.push(`Šev ${s.id} jde skrz ${fmt(s.thicknessMm)} mm (max 3,0).`);
-  }
+  const thick = options.allowThickness ? [] : lidWalletThicknessExceeded(spec, L);
+  for (const t of thick) if (t.kind === 'seam') p.push(t.message);
   if (spec.stitchPitchMm !== 4) p.push('Vidličky jsou přesně 4 mm (poučení z minulých projektů).');
   if (spec.seamOffsetMm < 3 || spec.seamOffsetMm > 4) {
     p.push(`Šev ${fmt(spec.seamOffsetMm)} mm od hrany je mimo 3–4 mm (brief kap. 13).`);
   }
-  if (L.thicknessMaxMm > 12 + 1e-9) {
-    p.push(`Plná tloušťka ${fmt(L.thicknessMaxMm)} mm je nad přijatou hranicí ≈ 12.`);
-  }
+  for (const t of thick) if (t.kind === 'full') p.push(t.message);
 
   // Tisk.
   const printable =
@@ -1883,8 +1934,11 @@ export function checkLidWallet(spec: LidWalletSpec = DEFAULT_LID_WALLET): string
   return p;
 }
 
-export function assertLidWallet(spec: LidWalletSpec): void {
-  const problems = checkLidWallet(spec);
+export function assertLidWallet(
+  spec: LidWalletSpec,
+  options: { allowThickness?: boolean } = {},
+): void {
+  const problems = checkLidWallet(spec, options);
   if (problems.length > 0) {
     throw new Error(`Neplatný střih peněženky VÍČKO:\n- ${problems.join('\n- ')}`);
   }

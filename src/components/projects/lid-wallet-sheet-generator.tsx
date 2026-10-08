@@ -12,7 +12,10 @@ import { type PatternSheet } from '@/content/schema';
 import { fmt, lidWalletVariant } from '@/lib/geometry/lid-wallet';
 import {
   DEFAULT_LID_GENERATOR_FORM,
+  type LidGeneratedSheet,
   type LidGeneratorForm,
+  type LidLimitExceeded,
+  type LidMeasuredInput,
   type LidP0Fields,
   lidMaxDividerMm,
   lidP0ModelValues,
@@ -105,7 +108,18 @@ export function LidWalletSheetGenerator({
   const [skiveHinge, setSkiveHinge] = useState(start.skiveHinge);
   const [p0Fields, setP0Fields] = useState<LidP0Fields>(start.p0);
   const [problems, setProblems] = useState<string[]>([]);
-  const [done, setDone] = useState<string | null>(null);
+  const [done, setDone] = useState<{ label: string; trial: boolean } | null>(null);
+  // Neprošly jen meze tloušťky: listy jde přesto vygenerovat pro zkušební kus (po potvrzení).
+  // Platí jen pro hodnoty, se kterými se generovalo (`key`); po změně formuláře zmizí.
+  const [limits, setLimits] = useState<{
+    key: string;
+    input: LidMeasuredInput;
+    exceeded: LidLimitExceeded[];
+  } | null>(null);
+  const [confirming, setConfirming] = useState(false);
+  const form: LidGeneratorForm = { p1, divider, lining, skiveFold, skiveHinge, p0: p0Fields };
+  const formKey = JSON.stringify(form);
+  const override = limits?.key === formKey ? limits : null;
   const p0Prefilled = Object.values(start.p0).some((v) => v !== '');
   // Hranice přepážek závisí na P1 (0,92 platí pro P1 1,0, tlustší P1 ji snižuje).
   const dividerHint = useMemo(() => {
@@ -121,17 +135,40 @@ export function LidWalletSheetGenerator({
     return `Větší z D1 a D2. Při P1 ${fmt(p1Mm)} mm projdou nejvýš ${fmt(max)} mm.`;
   }, [p1]);
 
+  const publish = (label: string, sheets: LidGeneratedSheet[], trial: boolean) => {
+    const variant = trial
+      ? `Zkušební kus mimo ověřené meze: ${label}`
+      : `Pro změřenou kůži: ${label}`;
+    const note = trial
+      ? 'Jen zkušební kus: listy jsou mimo ověřené meze (pruh v hlavičce listu). Finální kus jen z listů v mezích. Čísla pro postup jsou v rámečku na listu 4.'
+      : 'Vygenerováno v aplikaci pro zadané tloušťky. Čísla pro postup jsou v rámečku na listu 4.';
+    onGenerated(
+      sheets.flatMap((s): GeneratedPatternSheet[] => {
+        const base = baseSheets.find((b) => `${LID_FILE_STEM}-${b.id}` === s.name);
+        if (!base) return [];
+        return [
+          {
+            id: generatedSheetId(base.id),
+            title: base.title,
+            note,
+            orientation: base.orientation,
+            widthMm: base.widthMm,
+            heightMm: base.heightMm,
+            variant,
+            url: svgDataUrl(s.svg),
+          },
+        ];
+      }),
+    );
+    setDone({ label, trial });
+  };
+
   const submit = (e: FormEvent) => {
     e.preventDefault();
     setDone(null);
-    const parsed = parseLidGeneratorForm({
-      p1,
-      divider,
-      lining,
-      skiveFold,
-      skiveHinge,
-      p0: p0Fields,
-    });
+    setLimits(null);
+    setConfirming(false);
+    const parsed = parseLidGeneratorForm(form);
     if ('problems' in parsed) {
       setProblems(parsed.problems);
       return;
@@ -139,28 +176,26 @@ export function LidWalletSheetGenerator({
     const result = lidSheetsForMeasured(parsed.input);
     if (!result.ok) {
       setProblems(result.problems);
+      if (result.kind === 'limits') {
+        setLimits({ key: formKey, input: parsed.input, exceeded: result.exceeded });
+      }
       return;
     }
     setProblems([]);
-    const variant = `Pro změřenou kůži: ${result.label}`;
-    const sheets = result.sheets.flatMap((s): GeneratedPatternSheet[] => {
-      const base = baseSheets.find((b) => `${LID_FILE_STEM}-${b.id}` === s.name);
-      if (!base) return [];
-      return [
-        {
-          id: generatedSheetId(base.id),
-          title: base.title,
-          note: 'Vygenerováno v aplikaci pro zadané tloušťky. Čísla pro postup jsou v rámečku na listu 4.',
-          orientation: base.orientation,
-          widthMm: base.widthMm,
-          heightMm: base.heightMm,
-          variant,
-          url: svgDataUrl(s.svg),
-        },
-      ];
-    });
-    onGenerated(sheets);
-    setDone(result.label);
+    publish(result.label, result.sheets, false);
+  };
+
+  const generateTrial = () => {
+    if (!override) return;
+    const result = lidSheetsForMeasured(override.input, { trial: true });
+    setConfirming(false);
+    if (!result.ok) {
+      setProblems(result.problems);
+      return;
+    }
+    setProblems([]);
+    setLimits(null);
+    publish(result.label, result.sheets, true);
   };
 
   return (
@@ -285,7 +320,11 @@ export function LidWalletSheetGenerator({
       </form>
       {problems.length > 0 ? (
         <div role="alert" className="text-body text-cognac-deep">
-          <p className="font-medium">Listy nevznikly – s těmito hodnotami střih neplatí:</p>
+          <p className="font-medium">
+            {override
+              ? 'Listy nevznikly – s těmito hodnotami střih překračuje ověřené meze:'
+              : 'Listy nevznikly – s těmito hodnotami střih neplatí:'}
+          </p>
           <ul className="mt-1 list-disc pl-5">
             {problems.map((p) => (
               <li key={p}>{typo(p)}</li>
@@ -293,10 +332,68 @@ export function LidWalletSheetGenerator({
           </ul>
         </div>
       ) : null}
+      {override && !confirming ? (
+        <div className="flex flex-col gap-2">
+          <p className="max-w-prose text-meta text-ink-2">
+            {typo(
+              'Neprošly jen meze tloušťky. Listy můžete přesto vygenerovat pro zkušební kus – výsledek ukáže zkušební kus; finální kus jen z listů v mezích.',
+            )}
+          </p>
+          <div>
+            <Button type="button" variant="secondary" onClick={() => setConfirming(true)}>
+              Přesto vygenerovat pro zkušební kus
+            </Button>
+          </div>
+        </div>
+      ) : null}
+      {override && confirming ? (
+        <section
+          aria-labelledby={`${id}-confirm-title`}
+          className="flex flex-col gap-3 rounded-control border border-cognac bg-cognac/5 px-4 py-3"
+        >
+          <h3 id={`${id}-confirm-title`} className="text-body font-semibold">
+            Vygenerovat listy mimo ověřené meze?
+          </h3>
+          <p className="max-w-prose text-body">
+            {typo(
+              'Geometrie se spočítá pro zadané tloušťky, jen kontroly těchto mezí se vynechají. Každý list dostane pruh „MIMO OVĚŘENÉ MEZE – jen zkušební kus“.',
+            )}
+          </p>
+          <ul className="list-disc pl-5 text-body">
+            {override.exceeded.map((e) => (
+              <li key={e.label}>
+                <span className="font-medium">{typo(e.label)}</span>
+                {' – '}
+                {typo(e.consequence)}
+              </li>
+            ))}
+          </ul>
+          <p className="max-w-prose text-body font-medium">
+            {typo('Finální kus jen z listů v mezích.')}
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Button type="button" onClick={generateTrial}>
+              Ano, vygenerovat pro zkušební kus
+            </Button>
+            <Button type="button" variant="secondary" onClick={() => setConfirming(false)}>
+              Zpět
+            </Button>
+          </div>
+        </section>
+      ) : null}
       {done ? (
-        <p role="status" className="text-body font-medium text-forest">
+        <p
+          role="status"
+          className={
+            done.trial
+              ? 'text-body font-medium text-cognac-deep'
+              : 'text-body font-medium text-forest'
+          }
+        >
           {typo(
-            `Listy pro ${done} jsou připravené níže a zaškrtnuté k tisku. Po tisku zkontrolujte úsečku 50 mm a kótu P1 podle rámečku na listu 4.`,
+            done.trial
+              ? `Listy pro zkušební kus (${done.label}) jsou připravené níže a zaškrtnuté k tisku. Jsou mimo ověřené meze – finální kus z nich nestříhejte. V lekci 1 zapište do zápisníku, že listy zkušebního kusu jsou mimo meze. Po tisku zkontrolujte úsečku 50 mm a kótu P1 podle rámečku na listu 4.`
+              : `Listy pro ${done.label} jsou připravené níže a zaškrtnuté k tisku. Po tisku zkontrolujte úsečku 50 mm a kótu P1 podle rámečku na listu 4.`,
           )}
         </p>
       ) : null}

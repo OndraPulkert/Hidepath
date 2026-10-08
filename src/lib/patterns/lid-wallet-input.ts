@@ -1,8 +1,11 @@
 import {
   DEFAULT_LID_WALLET,
+  LID_FULL_THICKNESS_MAX_MM,
+  LID_SEAM_MAX_MM,
   type LidWalletSpec,
   checkLidWallet,
   fmt,
+  lidWalletThicknessExceeded,
   lidWalletVariant,
 } from '../geometry/lid-wallet';
 import { LID_P1_RANGE_MM, LID_THIN_LEATHER_RANGE_MM, buildLidSheets } from './lid-wallet-sheets';
@@ -200,9 +203,34 @@ export interface LidGeneratedSheet {
   svg: string;
 }
 
+/**
+ * Překročená mez modelu, kterou lze pro zkušební kus obejít: `label` je krátký popis do pruhu
+ * na listu, `consequence` co z toho podle návrhu plyne (jen to, co návrh uvádí).
+ */
+export interface LidLimitExceeded {
+  id: 'seam' | 'full' | 'divider';
+  /** Např. „šev S4/S5 3,1 mm (max 3,0)“. */
+  label: string;
+  consequence: string;
+}
+
+/**
+ * - `ok: true` – listy jsou hotové; s `outsideLimits` jsou mimo ověřené meze (jen zkušební kus).
+ * - `kind: 'invalid'` – zadání mimo rozsah generátoru nebo nesmyslné; blokuje vždy.
+ * - `kind: 'limits'` – neprošly jen meze tloušťky (švy, plná tloušťka, z nich hranice přepážek);
+ *   listy jde přesto vygenerovat pro zkušební kus (`lidSheetsForMeasured(…, { trial: true })`).
+ * - `kind: 'model'` – neprošly i jiné kontroly modelu; blokuje vždy.
+ */
 export type LidSheetsResult =
-  | { ok: true; spec: LidWalletSpec; label: string; sheets: LidGeneratedSheet[] }
-  | { ok: false; problems: string[] };
+  | {
+      ok: true;
+      spec: LidWalletSpec;
+      label: string;
+      sheets: LidGeneratedSheet[];
+      outsideLimits?: LidLimitExceeded[];
+    }
+  | { ok: false; kind: 'invalid' | 'model'; problems: string[] }
+  | { ok: false; kind: 'limits'; problems: string[]; exceeded: LidLimitExceeded[] };
 
 /** Číslo v mm z pole formuláře: desetinná čárka i tečka; `undefined`, když to číslo není. */
 export function parseMm(raw: string): number | undefined {
@@ -280,20 +308,77 @@ export function lidVariantLabel(spec: LidWalletSpec): string {
   return parts.join(' · ');
 }
 
+/** Co se stane mimo mez – jen podle návrhu (docs/zadani/penezenka-vicko.md, 5.6 a 10.1). */
+const CONSEQUENCE = {
+  seam: 'Model pouští švy nejvýš 3,0 mm. Co tlustší šev udělá s děrováním a šitím, návrh neuvádí – ověřte na zkušebním kuse.',
+  full: 'Hranice ≈ 12 mm je podle návrhu přijatá a měkká. Jak se tlustší peněženka zavírá a nosí, návrh neuvádí – ověřte na zkušebním kuse.',
+  divider:
+    'Hranice přepážek plyne z obou mezí tloušťky; návrh tlustší přepážku nepouští. Ověřte na zkušebním kuse.',
+} as const;
+
+/**
+ * Překročené meze tloušťky pro listy zkušebního kusu: švy se stejnou tloušťkou spojí
+ * (S4/S5), z obou sestav (zaokrouhlená P1 a skutečná P1) vezme větší hodnotu.
+ */
+export function lidLimitsExceeded(
+  specs: readonly LidWalletSpec[],
+  divider: { mm: number; maxMm: number | null; p1Mm: number },
+): LidLimitExceeded[] {
+  const seams = new Map<string, number>();
+  let full: number | null = null;
+  for (const spec of specs) {
+    for (const t of lidWalletThicknessExceeded(spec)) {
+      if (t.kind === 'full') full = Math.max(full ?? 0, t.valueMm);
+      else if (t.seamId !== null)
+        seams.set(t.seamId, Math.max(seams.get(t.seamId) ?? 0, t.valueMm));
+    }
+  }
+  const out: LidLimitExceeded[] = [];
+  const byValue = new Map<string, string[]>();
+  for (const [id, v] of seams) byValue.set(fmt(v), [...(byValue.get(fmt(v)) ?? []), id]);
+  for (const [v, ids] of byValue) {
+    out.push({
+      id: 'seam',
+      label: `šev ${ids.join('/')} ${v} mm (max ${LID_SEAM_MAX_MM.toFixed(1).replace('.', ',')})`,
+      consequence: CONSEQUENCE.seam,
+    });
+  }
+  if (full !== null) {
+    out.push({
+      id: 'full',
+      label: `plná tloušťka ${fmt(full)} mm (hranice ≈ ${fmt(LID_FULL_THICKNESS_MAX_MM)})`,
+      consequence: CONSEQUENCE.full,
+    });
+  }
+  if (divider.maxMm !== null && divider.mm > divider.maxMm + 1e-9) {
+    out.push({
+      id: 'divider',
+      label: `přepážky ${fmt(divider.mm)} mm (při P1 ${fmt(divider.p1Mm)} max ${fmt(divider.maxMm)})`,
+      consequence: CONSEQUENCE.divider,
+    });
+  }
+  return out;
+}
+
 /**
  * Vygeneruje 4 listy (SVG 1:1) pro změřenou kůži. Když zadání nebo kontroly modelu neprojdou,
- * vrátí česky, co neplatí – stejně jako generátor, který v tom případě nic nezapíše.
+ * vrátí česky, co neplatí – stejně jako generátor, který v tom případě nic nezapíše. Když
+ * neprojdou jen meze tloušťky (`kind: 'limits'`), `trial: true` listy přesto vygeneruje pro
+ * zkušební kus: geometrie se počítá normálně, listy nesou varovný pruh s překročenými mezemi.
  */
-export function lidSheetsForMeasured(input: LidMeasuredInput): LidSheetsResult {
+export function lidSheetsForMeasured(
+  input: LidMeasuredInput,
+  options: { trial?: boolean } = {},
+): LidSheetsResult {
   const parsed = lidSpecFromMeasured(input);
-  if ('problems' in parsed) return { ok: false, problems: parsed.problems };
+  if ('problems' in parsed) return { ok: false, kind: 'invalid', problems: parsed.problems };
   const { spec } = parsed;
   const problems = checkLidWallet(spec);
   // Se skutečnou P1 se kontroluje i tehdy, když se P1 v toleranci zaokrouhlila na výchozí 1,0
   // (P1 1,04 s přepážkami 0,92 dá plnou tloušťku 12,08 a šev S4 3,0).
   const measured = { ...spec, leatherMm: input.p1Mm };
-  const measuredProblems =
-    measured.leatherMm === spec.leatherMm ? problems : checkLidWallet(measured);
+  const sameP1 = measured.leatherMm === spec.leatherMm;
+  const measuredProblems = sameP1 ? problems : checkLidWallet(measured);
   if (problems.length === 0 && measuredProblems.length === 0) {
     return { ok: true, spec, label: lidVariantLabel(spec), sheets: buildLidSheets(spec) };
   }
@@ -301,16 +386,26 @@ export function lidSheetsForMeasured(input: LidMeasuredInput): LidSheetsResult {
   // tloušťce a švech S4/S5, ne o přepážkách).
   const max = lidMaxDividerMm(measured);
   const shown = problems.length > 0 ? problems : measuredProblems;
-  if (max !== null && input.dividerMm > max + 1e-9) {
-    return {
-      ok: false,
-      problems: [
+  const tooThick = max !== null && input.dividerMm > max + 1e-9;
+  const messages = tooThick
+    ? [
         `Přepážky ${fmt(input.dividerMm)} mm jsou při P1 ${fmt(input.p1Mm)} mm moc tlusté: projdou nejvýš ${fmt(max)} mm. Vyřízněte je z tenčího místa kozinky, nebo kupte tenčí.`,
         ...shown,
-      ],
-    };
-  }
-  return { ok: false, problems: shown };
+      ]
+    : shown;
+  // Obejít jde jen meze tloušťky: ostatní kontroly musí projít i bez nich.
+  const onlyThickness =
+    checkLidWallet(spec, { allowThickness: true }).length === 0 &&
+    (sameP1 || checkLidWallet(measured, { allowThickness: true }).length === 0);
+  if (!onlyThickness) return { ok: false, kind: 'model', problems: messages };
+  const exceeded = lidLimitsExceeded(sameP1 ? [spec] : [spec, measured], {
+    mm: input.dividerMm,
+    maxMm: max,
+    p1Mm: input.p1Mm,
+  });
+  if (!options.trial) return { ok: false, kind: 'limits', problems: messages, exceeded };
+  const sheets = buildLidSheets(spec, { outsideLimits: exceeded.map((e) => e.label) });
+  return { ok: true, spec, label: lidVariantLabel(spec), sheets, outsideLimits: exceeded };
 }
 
 /**
