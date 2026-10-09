@@ -291,11 +291,12 @@ export function PatternSheetsPrint({
   return (
     <div className="mx-auto max-w-[760px] print:max-w-none">
       <style>{`@media print {
+        @page { margin: 0; }
         @page sheet-landscape { size: A4 landscape; margin: 0; }
         @page sheet-portrait { size: A4 portrait; margin: 0; }
         .pattern-sheet {
           break-after: page; page-break-after: always;
-          width: var(--sheet-w); height: calc(var(--sheet-h) - 1mm); overflow: hidden;
+          width: var(--sheet-w); height: calc(var(--sheet-h) - 2mm); overflow: hidden;
         }
         .pattern-sheet img { width: var(--sheet-w); max-width: none; height: auto; }
         .pattern-sheet:last-child { break-after: auto; page-break-after: auto; }

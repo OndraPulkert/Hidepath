@@ -129,6 +129,12 @@
   }
 
   @media print {
+    /* Výška podle okna (100dvh) by v tisku přidala za poslední list prázdnou stránku. */
+    html,
+    body {
+      height: auto !important;
+      min-height: 0 !important;
+    }
     body {
       background: #fff;
     }

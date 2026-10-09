@@ -16,14 +16,14 @@ export function AppShell() {
   const isLesson = useMatch(routePatterns.lesson) !== null;
 
   return (
-    <div className="flex min-h-dvh flex-col">
+    <div className="flex min-h-dvh flex-col print:block print:min-h-0">
       <TopNav hideOnMobile={isLesson} />
       <ConnectionStatus />
       <ActiveTimersBar />
       <main
         id="obsah"
         key={pathname}
-        className="mx-auto w-full max-w-app flex-1 animate-hp-in px-page pt-[clamp(16px,3vw,40px)] pb-24 print:max-w-none print:animate-none print:p-0"
+        className="mx-auto w-full max-w-app flex-1 animate-hp-in px-page pt-[clamp(16px,3vw,40px)] pb-24 print:max-w-none print:flex-none print:animate-none print:p-0"
       >
         <Outlet />
       </main>
