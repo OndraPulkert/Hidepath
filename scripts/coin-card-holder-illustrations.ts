@@ -19,6 +19,8 @@ import {
   coinCardHolderLayout,
 } from '../src/lib/geometry/coin-card-holder.ts';
 
+import { bandPrickPoints } from './coin-card-holder.ts';
+
 /* --- drobné pomocníky (zkopírované z coin-card-holder.ts, tam nejsou exportované) --- */
 const f = (n: number): string => (Math.round(n * 1000) / 1000).toString();
 const cz = (n: number): string => f(n).replace('.', ',');
@@ -595,8 +597,8 @@ export function buildLepeniDnaSvg(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD_H
 }
 
 /**
- * 5/5 – Přenos značek šídlem z listu na kůži: konce čar ohybů, rohy kapsy, střed patice
- * (u varianty s průchodkou i její střed), tečky dna.
+ * 5/5 – Přenos značek šídlem z listu na kůži: kroužky ohybů za čarou řezu (v odpadu), střed
+ * patice (u varianty s průchodkou i její střed), tečky dna. Místo pro kapsu se nepropichuje.
  */
 export function buildPrenosZnacekSvg(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD_HOLDER): string {
   assertCoinCardHolder(spec);
@@ -614,14 +616,15 @@ export function buildPrenosZnacekSvg(spec: CoinCardHolderSpec = DEFAULT_COIN_CAR
   out.push(
     `<rect x="${f(X(0))}" y="${f(Y(0))}" width="${f(L.stripLengthMm * k)}" height="${f(L.panelHeightMm * k)}" fill="${LEATHER}" fill-opacity="0.55" stroke="${LEATHER_DARK}" stroke-width="0.5"/>`,
   );
-  // Náznak výřezu (jen orientační oblouk, ne přesný tvar).
+  // Výřez na prst (odpad): čtvrtelipsa vzadu, dno přes ohyb A, oblouk R vepředu.
+  const S = L.scoopRadiusMm;
   out.push(
-    `<path d="M${f(X(L.backX1Mm))} ${f(Y(0))} Q${f(X((L.backX1Mm + L.frontX0Mm) / 2))} ${f(Y(L.scoopRadiusMm))} ${f(X(L.frontX0Mm))} ${f(Y(0))}" fill="#fbfaf7" stroke="${LEATHER_DARK}" stroke-width="0.3" stroke-dasharray="1 1"/>`,
+    `<path d="M${f(X(L.scoopStartXMm))} ${f(Y(0))} A${f(L.backScoopRxMm * k)} ${f(S * k)} 0 0 0 ${f(X(L.backX1Mm))} ${f(Y(S))} L${f(X(L.frontX0Mm))} ${f(Y(S))} A${f(S * k)} ${f(S * k)} 0 0 0 ${f(X(L.frontX0Mm + S))} ${f(Y(0))} Z" fill="#fbfaf7" stroke="${LEATHER_DARK}" stroke-width="0.3"/>`,
   );
   // Ohyby A a B.
   [L.backX1Mm, L.frontX0Mm].forEach((x) => {
     out.push(
-      `<path d="M${f(X(x))} ${f(Y(0))} L${f(X(x))} ${f(Y(L.panelHeightMm))}" stroke="${GUIDE}" stroke-width="0.3" stroke-dasharray="1.4 1"/>`,
+      `<path d="M${f(X(x))} ${f(Y(S))} L${f(X(x))} ${f(Y(L.panelHeightMm))}" stroke="${GUIDE}" stroke-width="0.3" stroke-dasharray="1.4 1"/>`,
     );
   });
   [L.frontX1Mm, L.innerX0Mm ?? L.frontX1Mm].forEach((x) => {
@@ -632,19 +635,13 @@ export function buildPrenosZnacekSvg(spec: CoinCardHolderSpec = DEFAULT_COIN_CAR
 
   const mark = (x: number, y: number): string => cross(X(x), Y(y), 1.4);
 
-  // Konce čar ohybů A a B (nahoře a dole).
-  [L.backX1Mm, L.frontX0Mm, L.frontX1Mm, L.innerX0Mm ?? L.frontX1Mm].forEach((x) => {
-    out.push(mark(x, 0), mark(x, L.panelHeightMm));
-  });
-  // Rohy kapsy na předním panelu.
-  const pxs = L.frontX0Mm + L.pocketXMm;
-  const pys = L.pocketYMm;
-  [
-    [pxs, pys],
-    [pxs + L.pocketWidthMm, pys],
-    [pxs, pys + L.pocketHeightMm],
-    [pxs + L.pocketWidthMm, pys + L.pocketHeightMm],
-  ].forEach(([x, y]) => out.push(mark(x, y)));
+  // Kroužky ohybů A a B: za čarou řezu v odpadu (stejné body jako na listu PÁS).
+  const foldPts = bandPrickPoints(L, spec).filter((p) => p.kind === 'fold');
+  for (const p of foldPts) {
+    out.push(
+      `<circle cx="${f(X(p.x))}" cy="${f(Y(p.y))}" r="1.1" fill="none" stroke="${INK}" stroke-width="0.35"/>`,
+    );
+  }
   // Střed patice (a volitelné průchodky).
   out.push(mark(L.snapXFrontMm, L.snapYFrontMm));
   if (L.grommetXMm !== null && L.grommetYMm !== null) out.push(mark(L.grommetXMm, L.grommetYMm));
@@ -673,8 +670,8 @@ export function buildPrenosZnacekSvg(spec: CoinCardHolderSpec = DEFAULT_COIN_CAR
     out.push(leader(X(x), Y(y), lx, ly));
     out.push(text(lx + (anchor === 'end' ? -1.5 : 1.5), ly + 1, s, 3, anchor, INK));
   };
-  callout(L.frontX0Mm, 0, X(L.frontX0Mm) - 2, 12, 'konce čar ohybů', 'end');
-  callout(pxs, pys, X(pxs) - 2, Y(pys) - 3, 'rohy kapsy', 'end');
+  const bTop = foldPts.find((p) => p.x === L.frontX1Mm && p.y < 0) ?? foldPts[0];
+  callout(bTop.x, bTop.y, X(bTop.x) + 6, 10, 'kroužky ohybů za čarou řezu', 'start');
   callout(
     L.snapXFrontMm,
     L.snapYFrontMm,
@@ -696,7 +693,7 @@ export function buildPrenosZnacekSvg(spec: CoinCardHolderSpec = DEFAULT_COIN_CAR
   }
   out.push(text(80, 88, 'tečky dna (propíchnout skrz)', 3.2, 'middle', INK));
   out.push(
-    text(80, 93, 'u zadního a vnitřního panelu se otvory prosekávají z rubu', 3, 'middle', GUIDE),
+    text(80, 93, 'kroužky spojit na rubu před řezem, vpichy odejdou s odpadem', 3, 'middle', GUIDE),
   );
   out.push(text(80, 98, 'ZADNÍ · OHYB A · PŘEDNÍ · OHYB B · VNITŘNÍ', 3, 'middle', GUIDE));
 

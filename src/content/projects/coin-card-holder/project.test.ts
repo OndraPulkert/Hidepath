@@ -416,12 +416,13 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
         '2:kapsa×3',
         '2:kapsa-okno-18×1?',
         '4:cvicny-prouzek-kuze-1-2×1',
-        '5:sablona-kuze-1-2×1',
+        '5:sablona-kuze-1-2×2',
         // Výtisk na značky jen, když nezůstal z lekce 2 (list KAPSA celkem 3×).
         '6:kapsa×1?',
         // Jen šablona s oknem (forma je hotová z lekce 2): 1 výtisk, když chybí.
         '6:kapsa×1?',
         '6:kapsa-okno-18×1?',
+        '6:sablona-kuze-1-2×1?',
       ]);
       const l6 = coinCardHolderProject.lessons.find((l) => l.order === 6)!;
       expect(l6.prints?.map((p) => p.purpose).join(' | ')).not.toMatch(/form/);
@@ -457,6 +458,7 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
       );
       expect(requires).toEqual([
         '6:strip<-05',
+        '6:window-print<-05',
         '6:form<-02',
         '6:block<-02',
         '6:marks-print<-02',

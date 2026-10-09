@@ -11,6 +11,7 @@ import {
   buildCoinHolderPocketSvg,
   buildCoinHolderProcessSvg,
   bandPrickPoints,
+  stripTopEdgeYMm,
   buildCoinHolderSheetSvg,
   coinHolderFileStem,
   coinHolderProcessFileStem,
@@ -245,43 +246,46 @@ describe('generátor pouzdra s mincí – varianty', () => {
     );
   });
 
-  it('list PÁS: kroužky k propíchnutí na koncích ohybů, okrajích šrafy a v rozích kapsy', () => {
+  it('list PÁS: kroužky ohybů a okrajů šrafy 2 mm za čarou řezu v odpadu, bez kroužků kapsy', () => {
     const L = coinCardHolderLayout(spec);
     const pts = bandPrickPoints(L, spec);
     const of = (k: string) => pts.filter((p) => p.kind === k);
-    // 4 čáry ohybů × 2 konce, 1 mm od hrany (ohyb A nahoře od dna výřezu).
+    // 4 čáry ohybů × 2 kroužky na prodloužení čáry: nahoře nad hranou (ohyb A nad dnem výřezu
+    // na prst, tedy ve výřezu), dole pod dolní hranou.
     expect(of('fold')).toHaveLength(8);
+    const S = L.scoopRadiusMm;
     expect(of('fold').map((p) => r3(p.y))).toEqual(
-      [L.scoopRadiusMm + 1, 103.1, L.scoopRadiusMm + 1, 103.1, 1, 103.1, 1, 103.1].map(r3),
+      [S - 2, 106.1, S - 2, 106.1, -2, 106.1, -2, 106.1].map(r3),
     );
-    // Okraje šrafy ohybu B (± 3 mm), také 1 mm od hran.
+    expect(stripTopEdgeYMm(L, L.backX1Mm)).toBe(S);
+    expect(stripTopEdgeYMm(L, L.frontX0Mm)).toBe(S);
+    expect(stripTopEdgeYMm(L, L.frontX1Mm)).toBe(0);
+    // Okraje šrafy ohybu B (± 3 mm), také za čarou.
     expect(of('skive').map((p) => [r3(p.x), r3(p.y)])).toEqual([
-      [r3(L.frontX1Mm - 3), '1'],
-      [r3(L.frontX1Mm - 3), '103.1'],
-      [r3(L.innerX0Mm! + 3), '1'],
-      [r3(L.innerX0Mm! + 3), '103.1'],
+      [r3(L.frontX1Mm - 3), '-2'],
+      [r3(L.frontX1Mm - 3), '106.1'],
+      [r3(L.innerX0Mm! + 3), '-2'],
+      [r3(L.innerX0Mm! + 3), '106.1'],
     ]);
-    // Rohy kapsy: 1 mm dovnitř od zaobleného obrysu na úhlopříčce rohu (R10 nahoře, R6 dole).
-    const px = L.frontX0Mm + L.pocketXMm;
-    const [tl, tr, bl, br] = of('pocket');
-    const rTop = spec.pocketTopRadiusMm;
-    const rBot = spec.cornerRadiusMm;
-    expect(Math.hypot(tl.x - (px + rTop), tl.y - (L.pocketYMm + rTop))).toBeCloseTo(rTop - 1, 9);
-    expect(
-      Math.hypot(
-        br.x - (px + L.pocketWidthMm - rBot),
-        br.y - (L.pocketYMm + L.pocketHeightMm - rBot),
-      ),
-    ).toBeCloseTo(rBot - 1, 9);
-    expect(tl.x - px).toBeCloseTo(tl.y - L.pocketYMm, 9);
-    expect(tr.x).toBeCloseTo(2 * px + L.pocketWidthMm - tl.x, 9);
-    expect(bl.y).toBe(br.y);
-    // Kroužky jsou na listu (16 u 1,5 mm), u 1,2 mm bez šrafy jen 12; legenda je vysvětluje.
+    // Místo pro kapsu se nepropichuje (okénko z 2. výtisku, lekce 6).
+    expect(pts.every((p) => p.kind === 'fold' || p.kind === 'skive')).toBe(true);
+    // U ztenčení obou ohybů leží i kroužky okrajů šrafy A nahoře ve výřezu (nad obrysem).
+    const ab = { ...spec, foldSkiveBands: 'AB' as const };
+    const LAB = coinCardHolderLayout(ab);
+    for (const p of bandPrickPoints(LAB, ab).filter((q) => q.y < LAB.panelHeightMm)) {
+      expect(stripTopEdgeYMm(LAB, p.x) - p.y).toBeCloseTo(2, 9);
+    }
+    // Kroužky jsou na listu (12 u 1,5 mm), u 1,2 mm bez šrafy jen 8; legenda je vysvětluje.
     const svg = buildCoinHolderSheetSvg(spec);
-    expect(svg.match(/<circle class="prick"/g)).toHaveLength(16);
-    expect(svg).toContain('kroužky = propíchnout šídlem');
+    expect(svg.match(/<circle class="prick"/g)).toHaveLength(12);
+    expect(svg).toContain(
+      'Kroužky za čarou řezu = propíchnout do odpadu, na rubu spojit před řezem',
+    );
+    expect(svg).toContain('okénko: vystřihnout z 2. výtisku (lekce 6)');
+    expect(svg).toContain('Tisk 2× na A4');
+    expect(svg).not.toContain('kapsa je zakryje');
     const thin = { ...spec, bodyThicknessMm: 1.2, foldSkiveThicknessMm: null };
-    expect(buildCoinHolderSheetSvg(thin).match(/<circle class="prick"/g)).toHaveLength(12);
+    expect(buildCoinHolderSheetSvg(thin).match(/<circle class="prick"/g)).toHaveLength(8);
   });
 
   it('papírový model: patice i klobouček mají křížek ve středu', () => {

@@ -188,13 +188,13 @@ describe('Postup v kostce – pouzdro s mincí', () => {
     }
   });
 
-  it('výtisky: KAPSA 3×, ostatní listy 1×; lekce 6 tiskne jen podmíněně', () => {
+  it('výtisky: KAPSA 3×, PÁS 2× (na kůži a okénko), ostatní listy 1×; lekce 6 tiskne jen podmíněně', () => {
     const groups = overviewPrints(project, points[0]!.point.printsFrom!);
     expect(printTotals(groups).map((t) => `${t.sheetLabel} ${t.copies}×`)).toEqual([
       'Cvičný proužek pro lekci 4 1×',
       'Kapsa s mincí a otvor formy 3×',
       'Papírový model 1×',
-      'Pás (šablona) 1×',
+      'Pás (šablona) 2×',
     ]);
     const l6 = groups.find((g) => g.lessonOrder === 6)!;
     expect(l6.rows.every((r) => r.condition)).toBe(true);
@@ -221,7 +221,7 @@ describe('Postup v kostce – pouzdro s mincí', () => {
     expect(stepBody('pocket-glue')).toContain('pruh G1');
     expect(stepBody('pocket-glue')).toContain('Horní hranu kapsy nelepte');
     // Vnitřní hranici G1 na líci předního panelu dávají vpichy skrz otvory švu kapsy.
-    expect(text('pocket-glue').text).toContain('od pásky po vpichy');
+    expect(text('pocket-glue').text).toContain('od okénka po vpichy');
     expect(stepBody('pocket-glue')).toContain('propíchněte všemi jejími otvory švu');
 
     const bottom = text('bottom-glue-stitch').text;

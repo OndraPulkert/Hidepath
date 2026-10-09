@@ -101,7 +101,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 <header>
 <a class="backlink" href="/" data-back>← Zpět do lekce</a>
 <h1>Přišití kapsy na pouzdro</h1>
-<p class="lead">Projekt 02, mince 50 Kč, kůže 1,2 mm. Značky ze šablony PÁS (lekce 5), lepení, prosekání skrz obě vrstvy a šití (lekce 6).</p>
+<p class="lead">Projekt 02, mince 50 Kč, kůže 1,2 mm. Šablona s okénkem z 2. výtisku listu PÁS, lepení, prosekání skrz obě vrstvy a šití (lekce 6).</p>
 </header>
 
 <section class="card" aria-label="Animace postupu">
@@ -115,11 +115,11 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
     <button id="bPrev" aria-label="Předchozí krok" title="Předchozí krok"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg></button>
     <button id="bPlay" class="play" aria-label="Přehrát" title="Přehrát / pozastavit"><svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg></button>
     <button id="bNext" aria-label="Další krok" title="Další krok"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
-    <span class="counter" id="counter">krok 1 / 16</span>
+    <span class="counter" id="counter">krok 1 / 15</span>
   </div>
   <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
 </section>
-<p class="note">„Tip“ označuje, co lekce neuvádí. Čárkovaný obrys kapsy je jen pro představu – z šablony jsou na pásu jen 4 propíchnuté rohy.</p>
+<p class="note">„Tip“ označuje, co lekce neuvádí. Místo pro kapsu se nepropichuje: určuje ho okénko v 2. výtisku listu PÁS.</p>
 </div>
 
 <script>
@@ -140,12 +140,7 @@ const DOTS_K=[[13.5,29.177],[13.5,33.177],[13.5,37.177],[13.5,41.177],[13.5,45.1
 const DOTSL=DOTS_K.map(([x,y])=>[+(x-10).toFixed(3),+(y-18).toFixed(3)]);
 // glue / roughening band: seam allowance 3.5 mm along sides and bottom, top edge free
 const BANDL="M1.75 10 L1.75 36 A4.25 4.25 0 0 0 6 40.25 L36.5 40.25 A4.25 4.25 0 0 0 40.75 36 L40.75 10";
-// corner marks: ~1 mm inside the rounded corner (on the 45° diagonal), not the sharp vertex
-const CORNL=[[10-10/Math.SQRT2+1/Math.SQRT2,10-10/Math.SQRT2+1/Math.SQRT2],[PKW-(10-10/Math.SQRT2+1/Math.SQRT2),10-10/Math.SQRT2+1/Math.SQRT2],
-  [6-6/Math.SQRT2+1/Math.SQRT2,36+6/Math.SQRT2-1/Math.SQRT2],[PKW-(6-6/Math.SQRT2+1/Math.SQRT2),36+6/Math.SQRT2-1/Math.SQRT2]];
-const CORN=CORNL.map(([x,y])=>[PX+x,PY+y]);
 const SNAP=[153.19,62.57];
-const FOLDE=[[82,88.07],[82,156.17],[97.69,88.07],[97.69,156.17],[169.69,54.07],[169.69,156.17],[178.35,54.07],[178.35,156.17]];
 const BDOTS=[];for(const x0 of [14,101.69,182.35])for(let i=0;i<17;i++)BDOTS.push([+(x0+4*i).toFixed(2),153.67]);
 const SEAM_LEN=DOTSL.reduce((a,p,i)=>i?a+Math.hypot(p[0]-DOTSL[i-1][0],p[1]-DOTSL[i-1][1]):0,0);
 
@@ -196,10 +191,7 @@ function tape(x,y,a,op=.85){return `<rect x="${f(x-13)}" y="${f(y-4.5)}" width="
 
 // ---------- strip template, leather ----------
 const PAPER={x:-2,y:-2,w:264.35,h:171.2};
-function leatherRough(){return `<rect x="-12" y="-12" width="284" height="193" rx="4" fill="url(#licG)" stroke="var(--lic-d)" stroke-width=".5"/>`}
 function paperRough(){return `<rect x="${PAPER.x}" y="${PAPER.y}" width="${PAPER.w}" height="${PAPER.h}" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3"/>`}
-function tapesRough(p=1){const T=[[PAPER.x,PAPER.y,45],[PAPER.x+PAPER.w,PAPER.y,-45],[PAPER.x,PAPER.y+PAPER.h,-45],[PAPER.x+PAPER.w,PAPER.y+PAPER.h,45],[130,PAPER.y,90],[130,PAPER.y+PAPER.h,90]];
-  return T.map(([x,y,a],i)=>tape(x,y,a,.85*cl(p*T.length-i))).join('')}
 function printStrip(){
   const ink='var(--print)',m='var(--print-m)',sn='#a2471f';
   const tx=(x,y,t,sz,c=ink)=>`<text x="${x}" y="${y}" text-anchor="middle" style="font:600 ${sz}px 'Albert Sans',sans-serif;fill:${c}">${t}</text>`;
@@ -217,7 +209,8 @@ function printStrip(){
 }
 function pricks(pts,r=.5){return pts.map(([x,y])=>`<circle cx="${f(x)}" cy="${f(y)}" r="${r}" fill="var(--hole)"/>`).join('')}
 function rings(pts,col,r,w,op=1){return pts.map(([x,y])=>`<circle cx="${f(x)}" cy="${f(y)}" r="${f(r)}" fill="none" stroke="${col}" stroke-width="${w}" opacity="${f(op)}"/>`).join('')}
-const ALLMARKS=()=>[...CORN,SNAP,...FOLDE,...BDOTS];
+// na vyříznutém pásu z lekce 5 zbyl na líci jen střed dříku a tečky dna (kroužky ohybů odešly s odpadem)
+const ALLMARKS=()=>[SNAP,...BDOTS];
 function stripLeather(o={}){
   let s=`<path d="${STRIP}" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".4"/>`;
   if(o.marks!==false) s+=pricks(ALLMARKS());
@@ -228,13 +221,18 @@ function stripLeather(o={}){
   if(o.ghost) b+=`<path d="${OUTL}" fill="none" stroke="var(--ink)" stroke-width=".25" stroke-dasharray="1.2 1" opacity="${f(o.ghost*.55)}"/>`;
   // vpichy šídlem skrz otvory švu kapsy = čára švu na předním panelu (vnitřní hranice G1)
   if(o.seam) b+=pricks(DOTSL.slice(0,Math.round(o.seam*DOTSL.length)),.32);
-  if(o.tape) b+=tapeFrame(o.tape,o.peel||0);
   if(b) s+=G(POCK_T,b);
+  if(o.tape) s+=winTemplate(o.tape,o.peel||0);
   return s;
 }
-// maskovací páska dokola těsně podél okraje kapsy (místní mm kapsy): vlevo, dole, vpravo, nahoře
-function tapeFrame(p,peel=0){const T=[[-8,-8,8,58,-1,0],[-8,PKH,PKW+16,8,0,1],[PKW,-8,8,58,1,0],[-8,-8,PKW+16,8,0,-1]];
-  return T.map(([x,y,w,h,dx,dy],i)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="var(--tape)" stroke="var(--tape-d)" stroke-width=".15" opacity="${f(.85*cl(p*T.length-i)*(1-peel))}" transform="translate(${f(dx*peel*6)} ${f(dy*peel*6)})"/>`).join('')}
+// šablona s okénkem: 2. výtisk listu PÁS vystřižený po obrysu pásu, okénko po vnějším obrysu kapsy (T)
+const TT=[[60,157.17,0],[200,157.17,0],[250.35,110,90],[10,110,90],[215,53.07,0],[26.5,10,0]];
+function tapesTmpl(p=1){return TT.map(([x,y,a],i)=>tape(x,y,a,.85*cl(p*TT.length-i))).join('')}
+function winTemplate(op=1,peel=0,o={}){if(op<=0)return '';
+  const body=`<mask id="wm"><path d="${STRIP}" fill="#fff"/><path d="${OUTL}" transform="${POCK_T}" fill="#000"/></mask>`+
+    `<g mask="url(#wm)"><path d="${STRIP}" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3"/>${printStrip()}</g>`+
+    `<path d="${OUTL}" transform="${POCK_T}" fill="none" stroke="var(--paper-edge)" stroke-width=".35"/>`+(o.tapes===false?'':tapesTmpl(o.tapes??1));
+  return G(`translate(${f(peel*40)} ${f(-peel*70)})`,body,`opacity="${f(op*(1-peel))}" ${peel>0?SHADOW:''}`)}
 function glueBand(p,dry){return `<path d="${BANDL}" fill="none" stroke="var(--glue)" stroke-width="3.5" opacity="${f(L(.92,.6,dry))}" pathLength="1" stroke-dasharray="${f(p)} 2"/><path d="${BANDL}" fill="none" stroke="#fff" stroke-width=".55" opacity="${f(.55*(1-dry))}" pathLength="1" stroke-dasharray="${f(p)} 2"/>`}
 
 // ---------- pocket (local mm, líc up) ----------
@@ -279,122 +277,83 @@ function secPocket(o={}){
 function prong(x,tip,len=7){return `<rect x="${f(x-.3)}" y="${f(tip-len)}" width=".6" height="${len}" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".1"/><path d="M${f(x-.3)} ${f(tip)} L${f(x+.3)} ${f(tip)} L${x} ${f(tip+.4)} Z" fill="var(--steel)"/>`}
 
 // ---------- steps ----------
-const PARTS={A:'Značky ze šablony',B:'Lepení',C:'Prosekání skrz obě vrstvy',D:'Šití'};
+const PARTS={A:'Šablona s okénkem',B:'Lepení',C:'Prosekání skrz obě vrstvy',D:'Šití'};
 const S=[];
 const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,side,tip});
 
-// A1 template taped on the LÍC
-add('A','Přilepte šablonu PÁS na LÍC','Šablonu PÁS vystřihněte nahrubo s okrajem 1–2 cm a položte ji na LÍC kůže. Přilepte ji maskovací páskou z několika stran, jen na okrajích mimo čáru řezu.',4600,t=>{
-  const m=es(t,.04,.45), tp=es(t,.5,.85), hl=seg(t,.85,1);
-  let inner=leatherRough()+G(`translate(0 ${f(L(-200,0,m))})`,paperRough()+printStrip(),m<1?SHADOW:'')+(tp>0?tapesRough(tp):'');
-  inner+=`<rect x="${FX}" y="${FY}" width="${PW}" height="${PH}" fill="none" stroke="var(--accent)" stroke-width=".9" stroke-dasharray="3 2" opacity="${f(hl)}"/>`;
-  let s=G(camT(STRIPC),inner);
-  if(hl>0) s+=`<g opacity="${f(hl)}">${pill(4,86,'přední panel – sem přijde kapsa','t')}</g>`;
+// A1 okénko z 2. výtisku listu PÁS
+add('A','Vystřihněte okénko z 2. výtisku PÁS','Vezměte 2. výtisk listu PÁS z lekce 5. Vystřihněte ho přesně po obrysu pásu. Pak v něm nožem vyřízněte okénko po vnějším obrysu kapsy na předním panelu: nahoře po čárkované čáře, po bocích a dole po vnějším okraji zelené šrafy G1.',8600,t=>{
+  const o1=es(t,.05,.28), w1=es(t,.32,.5), o2=es(t,.55,.72), w2=es(t,.76,.92);
+  let inner=`<rect x="-30" y="-40" width="320" height="250" fill="var(--board)"/>`;
+  const waste=`<path d="M${PAPER.x} ${PAPER.y} h${PAPER.w} v${PAPER.h} h${-PAPER.w} Z ${STRIP}" fill-rule="evenodd" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3"/>`;
+  if(w1<1) inner+=G(`translate(0 ${f(w1*20)})`,waste,`opacity="${f(1-w1)}"`);
+  if(w2<1) inner+=G('',`<path d="${STRIP}" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3"/>`+printStrip(),`opacity="${f(1-w2)}"`);
+  if(w2>0) inner+=winTemplate(w2,0,{tapes:false});
+  if(o1>0&&w1<1) inner+=`<path d="${STRIP}" fill="none" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 2" opacity="${f(o1*(1-w1))}"/>`;
+  if(o2>0&&w2<1) inner+=`<path d="${OUTL}" transform="${POCK_T}" fill="none" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 2" opacity="${f(o2*(1-w2))}"/>`;
+  let s=clipMain('ca1',G(camT(STRIPC),inner));
+  s+=inset('OKÉNKO',notes([['2. výtisk PÁS','tw'],['z lekce 5'],['obrys pásu:','t'],['přesně po čáře'],['okénko:','t'],['po vnějším'],['obrysu kapsy'],['místo bez vpichů','tok']]));
+  s+=pill(4,86,t<.32?'vystřihnout po obrysu pásu':t<.55?'odpad pryč':t<.92?'okénko po obrysu kapsy':'šablona s okénkem hotová',t>=.92?'tok':'t');
   return s;
-},'lic');
+},null);
 
-// A2 prick marks
-add('A','Šídlem propíchněte rohy místa pro kapsu','Před řezáním propíchněte šídlem skrz papír i kůži kroužky v rozích místa pro kapsu na listu PÁS – leží asi 1 mm dovnitř od zaobleného rohu, kapsa je zakryje. Propíchněte i křížek patice (střed dříku), kroužky na koncích čar ohybů a všechny tečky dna.',10500,t=>{
-  const z=es(t,0,.1); const cam=camL(STRIPC,PANELC,z);
-  const P=ALLMARKS(); let n,fr;
-  if(t<.6){const u=seg(t,.12,.58)*4;n=Math.min(4,Math.floor(u));fr=u-Math.floor(u)}else{const u=4+seg(t,.6,.94)*(P.length-4);n=Math.min(P.length,Math.floor(u));fr=u-Math.floor(u)}
-  let inner=leatherRough()+paperRough()+printStrip()+tapesRough(1);
-  inner+=rings(P.slice(0,n),'var(--accent)',.9,.3)+pricks(P.slice(0,n),.4);
-  if(n>=4) inner+=rings(CORN,'var(--ok)',1.6,.45);
-  let s=clipMain('ca2',G(camT(cam),inner),L(135,84,z));
-  if(n<P.length&&t>.1){const [a,b]=tv(cam,...P[n]);if(a<84)s+=awl(a,b,fr<.5?fr*2:2-fr*2)}
-  // corner detail inset
-  const ia=seg(t,.08,.14);
-  if(ia>0){
-    const k=3.2, ox=89, oy=13, x0=110.94, y0=93.37, W=13.4, rev=es(t,.5,.6);
-    let c=`<rect x="${x0}" y="${y0}" width="${W}" height="${W}" fill="var(--paper)"/>`;
-    c+=`<path d="${OUTL}" transform="${POCK_T}" fill="none" stroke="var(--print-m)" stroke-width=".12" stroke-dasharray=".6 .6"/>`;
-    c+=`<path d="M${PX} ${PY+10} V${PY} H${PX+10}" fill="none" stroke="var(--accent)" stroke-width=".1" stroke-dasharray=".35 .3"/>`;
-    if(n>=1) c+=`<circle cx="${f(CORN[0][0])}" cy="${f(CORN[0][1])}" r=".22" fill="var(--hole)"/><circle cx="${f(CORN[0][0])}" cy="${f(CORN[0][1])}" r=".75" fill="none" stroke="var(--ok)" stroke-width=".14"/>`;
-    if(rev>0) c+=`<path d="${OUTL}" transform="${POCK_T}" fill="url(#licG)" stroke="var(--lic-d)" stroke-width=".15" opacity="${f(rev*.95)}"/>`;
-    c+=`<path d="M${PX-.55} ${PY-.55} L${PX+.55} ${PY+.55} M${PX-.55} ${PY+.55} L${PX+.55} ${PY-.55}" stroke="var(--accent)" stroke-width=".16" stroke-linecap="round"/>`;
-    let b=`<clipPath id="ci"><rect x="${ox}" y="${oy}" width="${W*k}" height="${W*k}"/></clipPath><g clip-path="url(#ci)"><g transform="translate(${ox} ${oy}) scale(${k}) translate(${-x0} ${-y0})">${c}</g></g><rect x="${ox}" y="${oy}" width="${W*k}" height="${W*k}" fill="none" stroke="var(--line)" stroke-width=".3"/>`;
-    const mk=[ox+(CORN[0][0]-x0)*k, oy+(CORN[0][1]-y0)*k];
-    if(rev>0) b+=`<g opacity="${f(rev)}">${pill(mk[0]-4,mk[1]+11,'kapsa ji zakryje','ts')}</g>`;
-    b+=lbl(89,61.5,'sem: ~1 mm dovnitř','tok')+lbl(89,67.5,'ne do vrcholu','ta')+lbl(89,73,'tam by značka zůstala','ts')+lbl(89,77.5,'vidět mimo kapsu','ts');
-    s+=`<g opacity="${f(ia)}">${inset('DETAIL ROHU',b)}</g>`;
-  }
-  const st= n<4?`rohy kapsy: ${n} / 4`: n<5?'střed dříku druku': n<13?'konce čar ohybů A a B':`tečky dna: ${Math.min(51,n-13)} / 51`;
-  if(t>.1) s+=pill(4,86,st,n>=4&&t>.95?'tok':'t');
-  return s;
-},'lic');
-
-// A3 marks on the front panel
-add('A','Vyřízněte pás a zkontrolujte značky','Pás vyřízněte skrz papír, pásku strhněte pomalu pod ostrým úhlem a šablonu sejměte. Zkontrolujte, že jsou vidět všechny značky. Kapsa leží 41,8 mm pod horní hranou předního panelu a 14,75 mm od boků, otevřenou hranou nahoru.',8200,t=>{
-  const off=es(t,0,.18), peel=es(t,.2,.45), hl=seg(t,.47,.6), dim=es(t,.62,.85);
-  let inner=`<path d="M-12 -12 h284 v193 h-284 Z ${STRIP}" fill-rule="evenodd" fill="url(#licG)" opacity="${f(1-off)}"/>`;
-  inner+=stripLeather({ghost:dim});
-  inner+=`<path d="M${FX} 88.07 V156.17 M${FX+PW} 54.07 V156.17" stroke="var(--ink)" stroke-width=".3" stroke-dasharray="1.6 1.2" opacity="${f(dim*.45)}"/>`;
-  if(peel<1) inner+=G(`translate(${f(peel*60)} ${f(-peel*90)}) rotate(${f(peel*-6)} 133 105)`,`<path d="${STRIP}" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3"/>`+printStrip(),`opacity="${f(1-peel)}" ${SHADOW}`);
-  const pulse=.5+.5*Math.sin(t*Math.PI*10);
-  if(hl>0) inner+=rings(CORN,'var(--ok)',1.6+pulse*.5,.5,hl)+rings([SNAP],'var(--ok)',1.4,.35,hl*.7);
-  let s=clipMain('ca3',G(camT(PANELC),inner));
-  if(dim>0){
-    const [vx,vy0]=tv(PANELC,162,FY),[,vy1]=tv(PANELC,162,PY);
-    const [lx0,hy]=tv(PANELC,FX,115),[lx1]=tv(PANELC,PX,115),[rx0]=tv(PANELC,PX+PKW,115),[rx1]=tv(PANELC,FX+PW,115);
-    s+=`<g opacity="${f(dim)}"><path d="M${f(vx)} ${f(vy0)} V${f(vy1)} M${f(lx0)} ${f(hy)} H${f(lx1)} M${f(rx0)} ${f(hy)} H${f(rx1)}" stroke="var(--accent)" stroke-width=".35" marker-start="url(#ar)" marker-end="url(#ar)"/>`;
-    s+=pill(vx-1.5,L(vy0,vy1,.55),'41,8','ta','end')+pill((lx0+lx1)/2,hy-2,'14,75','ta','middle')+pill((rx0+rx1)/2,hy-2,'14,75','ta','middle')+`</g>`;
-  }
-  s+=inset('ZNAČKY NA LÍCI',notes([['4 rohy kapsy','tok'],['střed dříku druku'],['konce čar ohybů'],['tečky dna']])+
-    `<g opacity="${f(dim)}">${notes([['kapsa:','t'],['41,8 mm pod horní'],['hranou, 14,75 mm'],['od obou boků,'],['otevřenou hranou'],['nahoru']],45.5,5.4)}</g>`);
+// A2 šablona na vyříznutý pás
+add('A','Přilepte šablonu na pás, hrany na hrany','Šablonu položte na vyříznutý pás lícem nahoru, hrany na hrany, a přilepte ji maskovací páskou jen na okrajích. Okénko teď leží přesně na místě kapsy.',8200,t=>{
+  const m=es(t,.05,.45), tp=es(t,.5,.8), hl=seg(t,.82,.95);
+  let inner=`<rect x="-30" y="-40" width="320" height="250" fill="var(--board)"/>`+stripLeather();
+  inner+=G(`translate(0 ${f(L(-190,0,m))})`,winTemplate(1,0,{tapes:false}),m<1?SHADOW:'');
+  if(tp>0) inner+=tapesTmpl(tp);
+  if(hl>0) inner+=`<path d="${STRIP}" fill="none" stroke="var(--ok)" stroke-width="1" opacity="${f(hl*.8)}"/>`;
+  let s=clipMain('ca2',G(camT(STRIPC),inner));
+  s+=inset('NA PÁS',notes([['hrany na hrany','tw'],['lícem nahoru'],['páska jen','t'],['na okrajích'],['okénko = místo','tok'],['pro kapsu']]));
+  s+=pill(4,86,hl>0?'hrany papíru na hranách pásu':m<1?'šablonu na pás':'přilepit páskou',hl>0?'tok':'t');
   return s;
 },'lic');
 
 // ---------- B: glue ----------
 const IPY=16;
 function insetPocketT(){return `translate(89.5 ${IPY}) scale(.95)`}
-add('B','Přiložte kapsu na 4 značky','Hotovou kapsu přiložte nasucho lícem nahoru, otevřenou hranou nahoru, tak aby zakryla 4 propíchnuté kroužky v rozích. Pravítkem zkontrolujte polohu: 41,8 mm pod horní hranou a 14,75 mm od boků.',5600,t=>{
-  const m=es(t,.06,.6), pulse=.5+.5*Math.sin(t*Math.PI*8);
-  let inner=stripLeather()+rings(CORN,'var(--ok)',1.5+pulse*.4,.45,1-seg(t,.55,.7));
+add('B','Vložte kapsu do okénka','Hotovou kapsu vložte nasucho lícem nahoru, otevřenou hranou nahoru, do okénka šablony – to je její přesná poloha. Pravítkem ji ještě zkontrolujte: 41,8 mm pod horní hranou a 14,75 mm od boků.',7600,t=>{
+  const m=es(t,.06,.5), dim=es(t,.58,.8);
+  let inner=stripLeather({tape:1});
   const dx=L(40,0,m), dy=L(-42,0,m);
   inner+=G(`translate(${f(PX+dx)} ${f(PY+dy)})`,pocketLic(),`opacity="${f(m<1?.82:1)}" ${m<1?SHADOW:''}`);
-  if(t>.72) inner+=G('',rings(CORN,'var(--ok)',1.5,.35,seg(t,.72,.85)*.9).replace(/fill="none"/g,'fill="none" stroke-dasharray=".6 .5"'));
-  let s=clipMain('cb1',G(camT(POCKC),inner));
-  s+=inset('PŘILOŽIT',notes([['na 4 značky','tw'],['lícem nahoru,'],['otevřenou hranou'],['nahoru'],['značky leží ~1 mm'],['uvnitř rohů –'],['kapsa je zakryje']]));
-  if(t>.85) s+=tick(91,67)+lbl(95,68.5,'sedí','tok');
+  let s=clipMain('cb1',G(camT(PANELC),inner));
+  if(dim>0){
+    const [vx,vy0]=tv(PANELC,162,FY),[,vy1]=tv(PANELC,162,PY);
+    const [lx0,hy]=tv(PANELC,FX,140),[lx1]=tv(PANELC,PX,140),[rx0]=tv(PANELC,PX+PKW,140),[rx1]=tv(PANELC,FX+PW,140);
+    s+=`<g opacity="${f(dim)}"><path d="M${f(vx)} ${f(vy0)} V${f(vy1)} M${f(lx0)} ${f(hy)} H${f(lx1)} M${f(rx0)} ${f(hy)} H${f(rx1)}" stroke="var(--accent)" stroke-width=".35" marker-start="url(#ar)" marker-end="url(#ar)"/>`;
+    s+=pill(vx-1.5,L(vy0,vy1,.55),'41,8','ta','end')+pill((lx0+lx1)/2,hy-2,'14,75','ta','middle')+pill((rx0+rx1)/2,hy-2,'14,75','ta','middle')+`</g>`;
+  }
+  s+=inset('DO OKÉNKA',notes([['lícem nahoru,','tw'],['otevřenou hranou'],['nahoru'],['okénko = poloha','t'],['pravítkem ještě','t'],['41,8 mm pod horní'],['hranou, 14,75 mm'],['od obou boků']]));
+  if(t>.85) s+=tick(91,72)+lbl(95,73.5,'sedí','tok');
   return s;
 },'lic');
 
-add('B','Olepte kapsu dokola páskou','Kolem kapsy nalepte na přední panel maskovací pásku těsně podél jejího okraje. Kapsu zatím nechte ležet – páska ohraničí místo pro kapsu a chrání líc kolem.',7600,t=>{
-  const tp=es(t,.05,.75);
-  let inner=stripLeather({tape:tp});
-  inner+=G(POCK_T,pocketLic());
-  let s=clipMain('cb2a',G(camT(POCKC),inner));
-  s+=inset('PÁSKA DOKOLA',notes([['maskovací páska','tw'],['těsně podél'],['okraje kapsy'],['kapsu nechte ležet']])+
-    `<g opacity="${f(seg(t,.85,1))}">${notes([['páska = rámeček','tok'],['pro kapsu a chrání'],['líc kolem']],46,5.4)}</g>`);
-  if(t>.9) s+=pill(4,86,'místo pro kapsu orámované páskou','tok');
-  return s;
-},'lic');
-
-add('B','Propíchněte čáru švu do panelu','Kapsu nechte ležet v rámečku z pásky. Šídlem lehce propíchněte všemi jejími otvory švu do líce předního panelu a kapsu sundejte. Vpichy vyznačí čáru švu: pruh G1 vede od pásky po vpichy. Při přišití je schovají otvory proseknuté skrz obě vrstvy.',10500,t=>{
+add('B','Propíchněte čáru švu do panelu','Kapsu nechte ležet v okénku. Šídlem lehce propíchněte všemi jejími otvory švu do líce předního panelu a kapsu sundejte. Vpichy vyznačí čáru švu: pruh G1 vede od okraje okénka po vpichy. Při přišití je schovají otvory proseknuté skrz obě vrstvy.',10500,t=>{
   const u=seg(t,.05,.72)*DOTSL.length, n=Math.min(DOTSL.length,Math.floor(u)), fr=u-Math.floor(u), off=es(t,.76,.92);
   let inner=stripLeather({tape:1,seam:n/DOTSL.length});
   if(off<1) inner+=G(`translate(${f(PX+off*30)} ${f(PY-off*45)})`,pocketLic({thru:DOTSL.map((_,i)=>i<n)}),`opacity="${f(1-off)}" ${off>0?SHADOW:''}`);
   let s=clipMain('cb2b',G(camT(POCKC),inner));
   if(n<DOTSL.length&&t>.05){const [a,b]=tv(POCKC,PX+DOTSL[n][0],PY+DOTSL[n][1]);s+=awl(a,b,fr<.5?fr*2:2-fr*2)}
   s+=inset('VPICHY',notes([['šídlem lehce','tw'],['všemi otvory švu'],['kapsy do líce'],['předního panelu'],['pak kapsu sundat']])+
-    `<g opacity="${f(seg(t,.9,1))}">${notes([['vpichy = čára švu','tok'],['G1: od pásky'],['po vpichy'],['zmizí v otvorech'],['při přišití']],50,5.4)}</g>`);
+    `<g opacity="${f(seg(t,.9,1))}">${notes([['vpichy = čára švu','tok'],['G1: od okénka'],['po vpichy'],['zmizí v otvorech'],['při přišití']],50,5.4)}</g>`);
   s+=pill(4,86,n<DOTSL.length?`otvory švu: ${n} / ${DOTSL.length}`:'čára švu vyznačená vpichy',n<DOTSL.length?'t':'tok');
   return s;
 },'lic');
 
-add('B','Zdrsněte pruh po čáru švu','Lepí se jen pruh G1: od pásky po vpichy (čára švu, 3,5 mm), po bocích od nejvyššího vpichu dolů a přes dno. Na předním panelu ho lehce zdrsněte smirkem. Zbytek nechte hladký.',6400,t=>{
+add('B','Zdrsněte pruh po čáru švu','Lepí se jen pruh G1: od okraje okénka po vpichy (čára švu, 3,5 mm), po bocích od nejvyššího vpichu dolů a přes dno. Na předním panelu ho lehce zdrsněte smirkem. Zbytek nechte hladký.',6400,t=>{
   const p=es(t,.08,.88);
   let inner=stripLeather({rough:p,ghost:1,tape:1,seam:1});
   let s=clipMain('cb2',G(camT(POCKC),inner));
   if(p>0&&p<1){const el=document.createElementNS('http://www.w3.org/2000/svg','path');el.setAttribute('d',BANDL);const pt=el.getPointAtLength(p*el.getTotalLength());
     const [x,y]=tv(POCKC,PX+pt.x,PY+pt.y);s+=sandpaper(x+Math.sin(t*90)*.8,y,15)}
-  s+=inset('ZDRSNIT',notes([['smirkem lehce','tw'],['jen pruh od pásky'],['po vpichy'],['(3,5 mm)'],['zbytek líce hladký']])+
+  s+=inset('ZDRSNIT',notes([['smirkem lehce','tw'],['jen pruh od okénka'],['po vpichy'],['(3,5 mm)'],['zbytek líce hladký']])+
     notes([['čárkovaně: obrys','ts'],['jen pro představu,'],['na kůži nekreslený']],52,5.2));
   return s;
 },'lic');
 
-add('B','Naneste lepidlo do pruhu po čáru švu','Kontaktní lepidlo naneste jen do pruhu G1 (na listech PÁS a KAPSA zelená šrafa): na líci předního panelu od pásky po vpichy a na rubu kapsy od okraje po otvory švu, po bocích od nejvyššího otvoru dolů a přes dno (šířku pruhu ověřte na odřezku). Horní hranu kapsy ani horní zaoblené rohy nelepte – tudy se zasouvá mince.',8400,t=>{
+add('B','Naneste lepidlo do pruhu po čáru švu','Kontaktní lepidlo naneste jen do pruhu G1 (na listech PÁS a KAPSA zelená šrafa): na líci předního panelu od okraje okénka po vpichy a na rubu kapsy od okraje po otvory švu, po bocích od nejvyššího otvoru dolů a přes dno (šířku pruhu ověřte na odřezku). Horní hranu kapsy ani horní zaoblené rohy nelepte – tudy se zasouvá mince.',8400,t=>{
   const g1=es(t,.05,.45), g2=es(t,.5,.9), nt=seg(t,.9,1);
   let inner=stripLeather({rough:1,glue:g2,ghost:.6,tape:1,seam:1});
   inner+=G(POCK_T,noTop(seg(t,.88,.96)));
@@ -419,11 +378,11 @@ add('B','Nechte lepidlo odvětrat','Lepidlo na obou dílech nechte odvětrat pod
   return s;
 },{v:'LÍC',sub:'panel · vpravo rub kapsy'});
 
-add('B','Přitiskněte kapsu a strhněte pásku','Kapsu přitiskněte přesně na značky do rámečku z pásky, otevřenou hranou nahoru. Po dotyku už nejde posunout. Pásku pomalu strhněte.',9400,t=>{
+add('B','Přitiskněte kapsu a sejměte šablonu','Kapsu přitiskněte přesně do okénka, otevřenou hranou nahoru. Po dotyku už nejde posunout. Šablonu pomalu sejměte, pásku strhávejte pod ostrým úhlem.',9400,t=>{
   const m=es(t,.04,.45), press=seg(t,.48,.8), peel=es(t,.82,.96);
-  let s=clipMain('cb5',G(camT(POCKC),stripLeather({rough:1,glue:1,dry:1,tape:1,peel,seam:1})+(m<.98?rings(CORN,'var(--ok)',1.5,.45):'')));
+  let s=clipMain('cb5',G(camT(POCKC),stripLeather({rough:1,glue:1,dry:1,tape:1,peel,seam:1})));
   // texty se objeví, až kapsa z výřezu odletí (jinak by ji na začátku překrývaly)
-  s+=inset('PŘITISKNOUT',`<g opacity="${f(seg(t,.3,.42))}">`+notes([['přesně na značky','tw'],['po dotyku už'],['nejde posunout'],['tlačit po okraji,'],['kde je lepidlo']])+'</g>'+
+  s+=inset('PŘITISKNOUT',`<g opacity="${f(seg(t,.3,.42))}">`+notes([['přesně do okénka','tw'],['po dotyku už'],['nejde posunout'],['tlačit po okraji,'],['kde je lepidlo']])+'</g>'+
     `<g opacity="${f(seg(t,.6,.7))}">${lbl(89,52,'Tip:','ta')}${notes([['důlek nemačkat']],57.5,5.2)}</g>`);
   // pocket travels from inset (rub up) to the panel (líc up)
   const c0=[89.5+CXL*.95,IPY+21*.95], c1=tv(POCKC,PX+CXL,PY+21);
@@ -435,8 +394,8 @@ add('B','Přitiskněte kapsu a strhněte pásku','Kapsu přitiskněte přesně n
     s+=finger(...tv(POCKC,PX+pt.x,PY+pt.y));
   }
   if(t>.62){const [dx,dy]=tv(POCKC,PX+CXL,PY+CYL);s+=`<g opacity="${f(seg(t,.62,.7))}"><circle cx="${f(dx)}" cy="${f(dy)}" r="${f(R_FOOT*POCKC.k*.92)}" fill="none" stroke="var(--accent)" stroke-width=".6" stroke-dasharray="1.4 1"/>${cross(dx+13,dy-13,1.6,.6)}</g>`}
-  if(peel>0&&peel<1) s+=pill(4,86,'pásku pomalu strhnout','t');
-  if(t>.96) s+=pill(4,86,'kapsa nalepená, páska stržená','tok');
+  if(peel>0&&peel<1) s+=pill(4,86,'šablonu pomalu sejmout','t');
+  if(t>.96) s+=pill(4,86,'kapsa nalepená, šablona sejmutá','tok');
   return s;
 },'lic','Tip: důlek nemačkejte, tlačte jen na lepený pruh.');
 
@@ -632,7 +591,7 @@ const hs=stepFromHash();
 if(hs>=0){auto=true;go(hs,1)} else go(0,1); // meaningful still
 window.addEventListener('hashchange',()=>{const i=stepFromHash();if(i>=0){auto=true;setPlay(false);go(i,1)}});
 window.__prisiti={go:(i,t)=>{auto=true;setPlay(false);idx=i;tt=t;render()},steps:S.length,parts:S.map(s=>s.part),
-  geo:{pocketFromTop:+(PY-FY).toFixed(2),pocketFromLeft:+(PX-FX).toFixed(2),pocketFromRight:+(FX+PW-(PX+PKW)).toFixed(2),pocketW:PKW,pocketH:PKH,holes:DOTSL.length,panelW:PW,panelH:PH,seamLen:+SEAM_LEN.toFixed(2),corners:CORN.map(([x,y])=>[+(x-FX).toFixed(2),+(y-FY).toFixed(2)]),snap:[+(SNAP[0]-FX).toFixed(2),+(SNAP[1]-FY).toFixed(2)]}};
+  geo:{pocketFromTop:+(PY-FY).toFixed(2),pocketFromLeft:+(PX-FX).toFixed(2),pocketFromRight:+(FX+PW-(PX+PKW)).toFixed(2),pocketW:PKW,pocketH:PKH,holes:DOTSL.length,panelW:PW,panelH:PH,seamLen:+SEAM_LEN.toFixed(2),snap:[+(SNAP[0]-FX).toFixed(2),+(SNAP[1]-FY).toFixed(2)]}};
 if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!auto){auto=true;io.disconnect();go(0,0);setPlay(true)}})},{threshold:.45});io.observe(svg)}
 })();
 </script>

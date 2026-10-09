@@ -8,6 +8,7 @@ import {
   STRIP_ORIGIN,
   buildCoinHolderPracticeSvg,
   practiceFileStem,
+  prickPoints,
   skivePrickPoints,
 } from './coin-card-holder-practice.ts';
 import { coinCardHolderLayout } from '../src/lib/geometry/coin-card-holder.ts';
@@ -117,18 +118,27 @@ describe.each([1.2, 1.5])('cvičný list pro kůži %s mm', (t) => {
     }
   });
 
-  it('kroužky: konce čar ohybů a švu, u 1,5 mm i okraje šrafy 1 mm od hran', () => {
+  it('kroužky: 2 mm za čarou řezu na prodloužení čar ohybů, u 1,5 mm i okrajů šrafy', () => {
     const pricks = nums(/class="prick" cx="([\d.]+)" cy="([\d.]+)"/g, svg);
     const skive = skivePrickPoints(P);
-    expect(pricks).toHaveLength(10 + skive.length);
+    expect(pricks).toHaveLength(8 + skive.length);
+    // Žádný kroužek uvnitř obrysu proužku: vpichy odejdou s odpadem.
+    for (const [, cy] of pricks) {
+      const y = cy - STRIP_ORIGIN.y;
+      expect(y < 0 || y > P.heightMm).toBe(true);
+    }
+    expect(prickPoints(P).map(({ y }) => y)).toEqual([-2, 42, -2, 42, -2, 42, -2, 42]);
+    expect(svg).toContain(
+      'kroužky za čarou řezu = propíchnout do odpadu, na rubu spojit před řezem',
+    );
     if (t === 1.2) {
       expect(skive).toHaveLength(0);
     } else {
       expect(skive.map(({ x, y }) => [x, y])).toEqual([
-        [P.frontX1Mm - 3, 1],
-        [P.frontX1Mm - 3, 39],
-        [P.innerX0Mm + 3, 1],
-        [P.innerX0Mm + 3, 39],
+        [P.frontX1Mm - 3, -2],
+        [P.frontX1Mm - 3, 42],
+        [P.innerX0Mm + 3, -2],
+        [P.innerX0Mm + 3, 42],
       ]);
       expect(svg).toContain('okraje šrafy (pásmo ztenčení)');
     }

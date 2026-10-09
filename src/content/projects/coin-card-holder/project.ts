@@ -376,7 +376,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'test-window-retention',
         title: 'Vysekněte zkušební okno a vyzkoušejte, že mince drží',
-        body: 'Zaschlý odřezek položte lícem dolů zpátky na formu: důlek do otvoru, osy na osy. Rozmazané čáry nejdřív obtáhněte podle šablony. Obrys vyřízněte nožem 2–3 lehkými tahy, kůži přidržujte na rovné části (desku můžete chránit kartonem s otvorem Ø 32 mm, u mince 40 mm Ø 44 mm). Formu položte na děrovací desku a do otvoru pod důlek postavte špalík (užší než otvor, širší než okno), zkrácený tak, aby se dna důlku jen dotýkal a nenadzvedával ho (ověřte na odřezku). Výsečník Ø 20 mm (u mince 40 mm Ø 32 mm) postavte na narýsovanou kružnici, zkontrolujte, že prstenec kolem důlku je po celém obvodu stejně široký, a vysekněte okno. Vyzkoušejte: (1) minci vložte z rubu, odřezek otočte oknem dolů a zatřeste – nesmí vypadnout; (2) zatlačte na ni z rubu palcem – nesmí oknem projít; (3) prstenec nesmí být natržený. Když mince projde, Ø 20 mm do kapsy zatím nesekejte. Když byl důlek mělký (mince vyčnívala nad rub), na druhém odřezku zopakujte orýsování, tvarování a schnutí s hlubším důlkem (kůže vlhčí, svěrky utažené pevněji, ale rovnoměrně – ověřte na odřezku) a vyzkoušejte znovu okno Ø 20 mm. Teprve když mince projde i tentokrát, nebo když byl důlek dost hluboký už napoprvé, vyzkoušejte na dalším odřezku okno Ø 18 mm (prstenec 4,75 mm). Záložní okno Ø 18 mm je jen pro minci 50 Kč; u mince 40 mm v tom případě do kapsy okno nesekejte a na dalším odřezku zkuste ještě hlubší důlek (ověřte na odřezku). Když potřebujete třetí odřezek, u sestavy z nákupního plánu ho vyřízněte z kusu Blu A5: nejdřív si na něm podél jedné hrany obkreslete kapsu 57,5 × 57,5 mm a cvičný proužek 130 × 40 mm (stejně jako potom v lekci 3) a odřezek vezměte ze zbytku. Jako šablonu na rub vytiskněte list Kapsa – záložní okno Ø 18 mm na 100 % (odkaz pod krokem), vystřihněte ho přesně po obrysu a vysekněte do něj okno Ø 18 mm; výtisk na značky (s dírkami) použijte znovu. Výsečník Ø 18 mm je v nákupním plánu jako volitelný řádek mimo součet – je levný, můžete ho přihodit do první objednávky. Do kapsy pak sekejte průměrem, se kterým zkouška vyšla. Když mince projde i oknem Ø 18 mm, do kapsy žádné okno nesekejte a na dalším odřezku zkuste ještě hlubší důlek (ověřte na odřezku).',
+        body: 'Zaschlý odřezek položte lícem dolů zpátky na formu: důlek do otvoru, osy na osy. Rozmazané čáry nejdřív obtáhněte podle šablony. Obrys vyřízněte nožem 2–3 lehkými tahy, kůži přidržujte na rovné části (desku můžete chránit kartonem s otvorem Ø 32 mm, u mince 40 mm Ø 44 mm). Formu položte na děrovací desku a do otvoru pod důlek postavte špalík (užší než otvor, širší než okno), zkrácený tak, aby se dna důlku jen dotýkal a nenadzvedával ho (ověřte na odřezku). Výsečník Ø 20 mm (u mince 40 mm Ø 32 mm) postavte na narýsovanou kružnici, zkontrolujte, že prstenec kolem důlku je po celém obvodu stejně široký, a vysekněte okno. Vyzkoušejte: (1) minci vložte z rubu, odřezek otočte oknem dolů a zatřeste – nesmí vypadnout; (2) zatlačte na ni z rubu palcem – nesmí oknem projít; (3) prstenec nesmí být natržený. Když mince projde, Ø 20 mm do kapsy zatím nesekejte. Když byl důlek mělký (mince vyčnívala nad rub), na druhém odřezku zopakujte orýsování, tvarování a schnutí s hlubším důlkem (kůže vlhčí, svěrky utažené pevněji, ale rovnoměrně – ověřte na odřezku) a vyzkoušejte znovu okno Ø 20 mm. Teprve když mince projde i tentokrát, nebo když byl důlek dost hluboký už napoprvé, vyzkoušejte na dalším odřezku okno Ø 18 mm (prstenec 4,75 mm). Záložní okno Ø 18 mm je jen pro minci 50 Kč; u mince 40 mm v tom případě do kapsy okno nesekejte a na dalším odřezku zkuste ještě hlubší důlek (ověřte na odřezku). Když potřebujete třetí odřezek, u sestavy z nákupního plánu ho vyřízněte z kusu Blu A5: nejdřív si na něm podél jedné hrany obkreslete kapsu 57,5 × 57,5 mm a cvičný proužek 130 × 50 mm (stejně jako potom v lekci 3) a odřezek vezměte ze zbytku. Jako šablonu na rub vytiskněte list Kapsa – záložní okno Ø 18 mm na 100 % (odkaz pod krokem), vystřihněte ho přesně po obrysu a vysekněte do něj okno Ø 18 mm; výtisk na značky (s dírkami) použijte znovu. Výsečník Ø 18 mm je v nákupním plánu jako volitelný řádek mimo součet – je levný, můžete ho přihodit do první objednávky. Do kapsy pak sekejte průměrem, se kterým zkouška vyšla. Když mince projde i oknem Ø 18 mm, do kapsy žádné okno nesekejte a na dalším odřezku zkuste ještě hlubší důlek (ověřte na odřezku).',
         printLink: 'pattern-sheets',
         printSheetId: 'kapsa-okno-18',
         animationLinks: [animationLink('kapsa', 'E1')],
@@ -476,7 +476,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 35,
     goal: 'Vyzkoušet osazení druku na odřezku stejné kůže jako tělo; u kůže 1,5 mm navíc ztenčit ohyb na 1 mm.',
     materials: [
-      '2–3 odřezky stejné kůže jako tělo, u kůže 1,5 mm ještě jeden na ztenčení; u sestavy z nákupního plánu si na kusu Blu A5 nejdřív obkreslete vedle sebe podél jedné hrany kapsu 57,5 × 57,5 mm a cvičný proužek 130 × 40 mm a odřezky berte ze zbytku (případný třetí odřezek z lekce 2 je už z něj vyříznutý)',
+      '2–3 odřezky stejné kůže jako tělo, u kůže 1,5 mm ještě jeden na ztenčení; u sestavy z nákupního plánu si na kusu Blu A5 nejdřív obkreslete vedle sebe podél jedné hrany kapsu 57,5 × 57,5 mm a cvičný proužek 130 × 50 mm a odřezky berte ze zbytku (případný třetí odřezek z lekce 2 je už z něj vyříznutý)',
       'návod z obalu druku (u Prym Anorak 12 mm je aplikátor v balení)',
       'výsečník 2 mm, případně 3 mm – jen když návod druku vyžaduje otvor',
       'kus dřeva nebo tvrdé desky pod kování',
@@ -659,7 +659,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 45,
     goal: 'Na odřezku prosekat zrcadlené otvory, složit proužek do dvou ohybů kolem obsahu a sešít tři vrstvy.',
     materials: [
-      'kus stejné kůže jako pás, asi 130 × 40 mm: tři panely po 30 mm plus ohyby (u kůže 1,2 mm A 15,7 mm a B 8,7 mm, u kůže 1,5 mm A 16,6 mm a B 9,9 mm), tedy u kůže 1,2 mm asi 114 mm a u kůže 1,5 mm asi 117 mm; zbytek je rezerva',
+      'kus stejné kůže jako pás, asi 130 × 50 mm: proužek 40 mm vysoký, tři panely po 30 mm plus ohyby (u kůže 1,2 mm A 15,7 mm a B 8,7 mm, u kůže 1,5 mm A 16,6 mm a B 9,9 mm), tedy u kůže 1,2 mm asi 114 mm a u kůže 1,5 mm asi 117 mm; nahoře a dole 5 mm odpadu na kroužky, zbytek je rezerva',
       'pár karet zabalených v potravinové fólii a přeložený papír asi 2 mm silný místo bankovek',
       'houbička a voda',
       'kostěná rozhrnovačka nebo hrana pravítka',
@@ -696,12 +696,12 @@ export const lessons: readonly LessonDefinition[] = [
         animationLinks: [
           animationLink('stripTransfer', 'A2'),
           animationLink('stripTransfer', 'A3'),
-          animationLink('stripTransfer', 'B1'),
-          animationLink('stripTransfer', 'D3'),
+          animationLink('stripTransfer', 'B2'),
+          animationLink('stripTransfer', 'C1'),
         ],
         printLink: 'practice-sheets',
         printSheetId: 'cvicny-prouzek-kuze-1-2',
-        body: 'Na stránce Cvičné listy (odkaz pod krokem) vytiskněte list „Cvičný proužek pro lekci 4“ pro svou tloušťku kůže na 100 % a zkontrolujte úsečku 50 mm. Vystřihněte ho nahrubo s okrajem 1–2 cm, jen dole přesně po plné čáře. Dolní hranu listu přiložte na líc přesně na rovnou dolní hranu kůže a obrys vystřeďte po délce. List přilepte páskou jen na okrajích, mimo čáru řezu. Pravítkem zkontrolujte, že kroužky na koncích linie švu leží 3,5 mm od dolní hrany. Šídlem propíchněte skrz papír i kůži, aby byly značky vidět i na rubu: kroužky na koncích čar ohybů A i B a linie švu (u kůže 1,5 mm i kroužky na okrajích šrafy) a všechny tečky dna. Pak na řezací podložce řežte nožem podle ocelového pravítka skrz papír po obrysu. Na rubu spojte propíchnuté kroužky tužkou podle pravítka. Bez listu: na rub narýsujte uprostřed panel 30 mm, vedle něj ohyb A (u kůže 1,2 mm 15,7 mm, u 1,5 mm 16,6 mm), z druhé strany ohyb B (u kůže 1,2 mm 8,7 mm, u 1,5 mm 9,9 mm) a za nimi panely po 30 mm.',
+        body: 'Na stránce Cvičné listy (odkaz pod krokem) vytiskněte list „Cvičný proužek pro lekci 4“ pro svou tloušťku kůže na 100 % a zkontrolujte úsečku 50 mm. Vystřihněte ho nahrubo s okrajem 1–2 cm. Obrys vystřeďte na líci kůže – kroužky nad i pod obrysem musí ležet na kůži – a list přilepte páskou jen na okrajích, mimo čáru řezu i kroužky. Šídlem propíchněte skrz papír i kůži, aby byly značky vidět i na rubu: kroužky za čarou řezu na prodloužení čar ohybů A i B (u kůže 1,5 mm i okrajů šrafy) a všechny tečky dna. Kůži i s listem otočte a na rubu spojte kroužky tužkou podle pravítka – čáry vedou přes celý proužek. Otočte zpět a na řezací podložce řežte nožem podle ocelového pravítka skrz papír po obrysu. Vpichy kroužků odejdou s odpadem. Bez listu: na rub narýsujte uprostřed panel 30 mm, vedle něj ohyb A (u kůže 1,2 mm 15,7 mm, u 1,5 mm 16,6 mm), z druhé strany ohyb B (u kůže 1,2 mm 8,7 mm, u 1,5 mm 9,9 mm) a za nimi panely po 30 mm.',
         media: [],
       },
       {
@@ -714,7 +714,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'mark-skive-band',
         title: 'Vyznačte pásmo ztenčení ohybu B',
-        body: 'Jen u kůže 1,5 mm (u 1,2 mm přeskočte). S cvičným listem spojte na rubu propíchnuté kroužky na okrajích šrafy – pásmo má asi 16 mm. Bez listu vyznačte pásmo ohybu B, asi 9,9 mm, a od obou čar odsaďte 3 mm ven, jako v lekci 3.',
+        body: 'Jen u kůže 1,5 mm (u 1,2 mm přeskočte). S cvičným listem máte okraje šrafy spojené na rubu z prvního kroku – pásmo má asi 16 mm. Bez listu vyznačte pásmo ohybu B, asi 9,9 mm, a od obou čar odsaďte 3 mm ven, jako v lekci 3.',
         media: [],
       },
       {
@@ -967,7 +967,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'print-check',
         title: 'Vytiskněte a zkontrolujte šablonu',
-        body: 'Na stránce Listy střihu (odkaz pod krokem) vytiskněte list „Pás (šablona)“ (na výtisku „LIST PÁS“) na A4 na 100 %, nejlépe na matný papír 120 g. Úsečka musí měřit přesně 50 mm. Předem zaškrtnutý list je pro minci 50 Kč a kůži 1,2 mm; u kůže 1,5 mm vytiskněte Pás (šablona) – kůže 1,5 mm, u mince 40 mm Pás – mince 40 mm, u kůže 1,5 mm s mincí 40 mm Pás (šablona) – mince 40 mm, kůže 1,5 mm. Popis dole na listu uvádí minci a tloušťku kůže – zkontrolujte, že odpovídají vašim.',
+        body: 'Na stránce Listy střihu (odkaz pod krokem) vytiskněte list „Pás (šablona)“ (na výtisku „LIST PÁS“) 2× na A4 na 100 %, nejlépe na matný papír 120 g: první přilepíte na kůži, druhý schovejte na okénko pro kapsu v lekci 6. Úsečka musí měřit přesně 50 mm. Předem zaškrtnutý list je pro minci 50 Kč a kůži 1,2 mm; u kůže 1,5 mm vytiskněte Pás (šablona) – kůže 1,5 mm, u mince 40 mm Pás – mince 40 mm, u kůže 1,5 mm s mincí 40 mm Pás (šablona) – mince 40 mm, kůže 1,5 mm. Popis dole na listu uvádí minci a tloušťku kůže – zkontrolujte, že odpovídají vašim.',
         printLink: 'pattern-sheets',
         printSheetId: 'sablona-kuze-1-2',
         media: [],
@@ -987,30 +987,46 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'transfer-marks-awl',
         title: 'Před řezáním propíchněte značky',
-        animationLinks: [animationLink('stripTransfer', 'A3'), animationLink('pocketAttach', 'A2')],
-        body: 'Než začnete řezat, propíchněte šídlem skrz papír i kůži všechny kroužky, křížek a tečky na listu PÁS, aby byly značky vidět i na rubu (jako u pouzdra na karty): kroužky na koncích čar ohybů A i B, kroužky v rozích místa pro kapsu (kapsa je zakryje), u kůže 1,5 mm i kroužky na okrajích šrafy, křížek „druk – patice“ (střed dříku druku) a všechny tečky dna.',
+        animationLinks: [animationLink('stripTransfer', 'A3')],
+        body: 'Než začnete řezat, propíchněte šídlem skrz papír i kůži všechny kroužky, křížek a tečky na listu PÁS, aby byly značky vidět i na rubu: kroužky za čarou řezu na prodloužení čar ohybů A i B (u ohybu A nahoře ve výřezu na prst), u kůže 1,5 mm i kroužky na prodloužení okrajů šrafy, křížek „druk – patice“ (střed dříku druku) a všechny tečky dna. Kroužky leží v odpadu: vpichy odejdou při řezu a na líci pouzdra nezůstanou. Místo pro kapsu se nepropichuje.',
         media: [
           {
             id: 'ilustrace-prenos-znacek',
             kind: 'illustration',
             caption:
-              'Kam šídlem propíchnout list: konce čar ohybů, rohy kapsy, střed patice, tečky dna',
+              'Kam šídlem propíchnout list: kroužky ohybů za čarou řezu, střed patice, tečky dna',
             status: 'available',
             src: illustration.prenosZnacek,
           },
         ],
       },
       {
+        id: 'draw-fold-lines',
+        title: 'Před řezem narýsujte čáry ohybů na rub',
+        animationLinks: [
+          animationLink('stripTransfer', 'B1'),
+          animationLink('stripTransfer', 'B2'),
+        ],
+        body: 'Ještě před řezem otočte kůži i s přilepenou šablonou rubem nahoru. Propíchnuté kroužky spojte tužkou HB nebo 2B lehce podle pravítka – vzniknou 4 čáry přes celý pás, dvě u ohybu A a dvě u ohybu B. Po řezu by vpichy s odpadem chyběly. Na líc nic nekreslete.',
+        media: [],
+      },
+      {
+        id: 'mark-skive-band',
+        title: 'Vyznačte pásmo ztenčení ohybu B',
+        body: 'Jen u kůže 1,5 mm (u 1,2 mm přeskočte). Hned potom, ještě před řezem, spojte na rubu tužkou podle pravítka propíchnuté kroužky na prodloužení okrajů šrafy – pásmo ztenčení má asi 16 mm. Ohyb A se neztenčuje.',
+        media: [],
+      },
+      {
         id: 'cut-strip',
         title: 'Vyřízněte pás skrz papír',
         animationLinks: [
-          animationLink('stripTransfer', 'B1'),
           animationLink('stripTransfer', 'C1'),
-          animationLink('stripTransfer', 'C2'),
+          animationLink('stripTransfer', 'D1'),
+          animationLink('stripTransfer', 'D2'),
+          animationLink('stripTransfer', 'D3'),
           animationLink('stripTransfer', 'C3'),
-          animationLink('stripTransfer', 'B3'),
         ],
-        body: 'Na řezací podložce řežte skrz papír i kůži přesně po čáře. Rovné strany podle ocelového pravítka 2–3 lehkými tahy, nůž do strany nenaklánějte; pravítko leží na pásu, ne na odpadu. Malé vypouklé zaoblení R2,5, kde výřez R34 potkává horní hranu, vyřízněte po čáře, nebo nechte pravý úhel a zaoblete ho smirkem. Oblouk výřezu (R34 vepředu, čtvrtelipsa vzadu) a zaoblené rohy (2× R10 na konci jazyka, 3× R6) řežte pomalu bez pravítka, krátkými tahy. Konec jazyka je zatím orientační, zkrátí se v lekci 8. Když řez začne třepit, odlomte článek čepele.',
+        body: 'Kůži otočte lícem nahoru. Na řezací podložce řežte skrz papír i kůži přesně po čáře. Rovné strany podle ocelového pravítka 2–3 lehkými tahy, nůž do strany nenaklánějte; pravítko leží na pásu, ne na odpadu. Malé vypouklé zaoblení R2,5, kde výřez R34 potkává horní hranu, vyřízněte po čáře, nebo nechte pravý úhel a zaoblete ho smirkem. Oblouk výřezu (R34 vepředu, čtvrtelipsa vzadu) a zaoblené rohy (2× R10 na konci jazyka, 3× R6) řežte pomalu bez pravítka, krátkými tahy. Konec jazyka je zatím orientační, zkrátí se v lekci 8. Když řez začne třepit, odlomte článek čepele. Vpichy kroužků odejdou s odpadem.',
         media: [
           {
             id: 'postup-1',
@@ -1032,30 +1048,14 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'peel-template',
         title: 'Sejměte šablonu a zkontrolujte značky',
-        animationLinks: [animationLink('stripTransfer', 'D1')],
-        body: 'Pásku strhávejte pomalu pod ostrým úhlem. Zkontrolujte, že jsou vidět všechny značky: konce čar ohybů, rohy kapsy, střed dříku a tečky dna.',
+        animationLinks: [animationLink('stripTransfer', 'E1')],
+        body: 'Pásku strhávejte pomalu pod ostrým úhlem. Zkontrolujte, že jsou vidět všechny značky: na líci střed dříku a tečky dna, na rubu 4 čáry ohybů přes celý pás. Jiný vpich na líci pásu není.',
         media: [],
       },
       {
         id: 'transfer-other',
         title: 'Jinak: obkreslení',
-        body: 'Šablonu můžete také vystřihnout přesně po čáře, obkreslit na líc a značky propíchnout přes znovu přiloženou šablonu. Řez skrz papír je ale přesnější.',
-        media: [],
-      },
-      {
-        id: 'draw-fold-lines',
-        title: 'Narýsujte čáry ohybů na rub',
-        animationLinks: [
-          animationLink('stripTransfer', 'D3'),
-          animationLink('stripTransfer', 'D2'),
-        ],
-        body: 'Pás otočte rubem nahoru. Propíchnuté konce čar ohybů spojte tužkou HB nebo 2B lehce podle pravítka – vzniknou 4 čáry, dvě u ohybu A a dvě u ohybu B. Na líc nic nekreslete.',
-        media: [],
-      },
-      {
-        id: 'mark-skive-band',
-        title: 'Vyznačte pásmo ztenčení ohybu B',
-        body: 'Jen u kůže 1,5 mm (u 1,2 mm přeskočte). Na rubu spojte tužkou podle pravítka propíchnuté kroužky na okrajích šrafy – pásmo ztenčení má asi 16 mm. Ohyb A se neztenčuje.',
+        body: 'Šablonu můžete také vystřihnout po čáře řezu a obkreslit na líc; kolem kroužků za čarou přitom nechte papír. Značky a kroužky propíchněte přes znovu přiloženou šablonu a kroužky spojte na rubu před řezem. Řez skrz papír je ale přesnější.',
         media: [],
       },
       {
@@ -1125,12 +1125,12 @@ export const lessons: readonly LessonDefinition[] = [
       {
         slug: 'marks-transferred',
         title:
-          'Jsou vidět všechny propíchnuté značky: konce čar ohybů, rohy kapsy, střed dříku a tečky dna.',
+          'Jsou vidět propíchnuté značky (střed dříku, tečky dna), na líci pásu není jiný vpich.',
         required: false,
       },
       {
         slug: 'fold-lines-drawn',
-        title: 'Na rubu jsou narýsované 4 čáry ohybů.',
+        title: 'Na rubu jsou narýsované 4 čáry ohybů přes celý pás.',
         required: false,
       },
       {
@@ -1151,6 +1151,7 @@ export const lessons: readonly LessonDefinition[] = [
       'Nůž vedený po okraji papíru místo po pravítku: uhne a hrana není rovná.',
       'Páska přes čáru řezu: řez uhne.',
       'Značky propíchnuté až po vyříznutí: rozřezaná šablona už přesně nedosedne.',
+      'Kroužky spojené až po řezu: vpichy odešly s odpadem a čáry ohybů nejde narýsovat.',
       'Ztenčený ohyb A: u kůže 1,5 mm se ztenčuje jen ohyb B (šrafa).',
       'Sousední panely prosekané ze stejné strany: otvory se po složení zkříží.',
       'Nezapečetěný rub vnitřního panelu: je vidět výřezem.',
@@ -1165,9 +1166,9 @@ export const lessons: readonly LessonDefinition[] = [
       {
         source: 'pattern-sheets',
         sheetId: 'sablona-kuze-1-2',
-        copies: 1,
+        copies: 2,
         purpose:
-          'šablona PÁS na líc kůže, rozřeže se; výchozí je pro minci 50 Kč a kůži 1,2 mm, jiné varianty viz první krok',
+          '1. šablona PÁS na líc kůže, rozřeže se; 2. okénko pro kapsu v lekci 6, schovejte; výchozí je pro minci 50 Kč a kůži 1,2 mm, jiné varianty viz první krok',
         paper: 'nejlépe matný papír 120 g, A4, 100 %',
       },
     ],
@@ -1311,14 +1312,24 @@ export const lessons: readonly LessonDefinition[] = [
         ],
       },
       {
+        id: 'window-template',
+        title: 'Vystřihněte šablonu s okénkem',
+        animationLinks: [animationLink('pocketAttach', 'A1'), animationLink('pocketAttach', 'A2')],
+        printLink: 'pattern-sheets',
+        printSheetId: 'sablona-kuze-1-2',
+        body: 'Vezměte 2. výtisk listu PÁS z lekce 5 (když ho nemáte, vytiskněte stejnou variantu znovu na 100 %, odkaz pod krokem). Vystřihněte ho přesně po obrysu pásu. Pak v něm nožem vyřízněte okénko po vnějším obrysu kapsy na předním panelu: nahoře po čárkované čáře, po bocích a dole po vnějším okraji zelené šrafy G1. Šablonu položte na vyříznutý pás lícem nahoru, hrany na hrany, a přilepte ji maskovací páskou jen na okrajích. Okénko teď leží přesně na místě kapsy – místo se nepropichuje.',
+        media: [],
+      },
+      {
         id: 'glue-pocket',
         title: 'Nalepte kapsu na přední panel',
         animationLinks: [
           animationLink('pocketAttach', 'B1'),
           animationLink('pocketAttach', 'B2'),
           animationLink('pocketAttach', 'B3'),
+          animationLink('pocketAttach', 'B6'),
         ],
-        body: 'Kapsu nasucho přiložte otevřenou hranou nahoru tak, aby zakryla 4 propíchnuté kroužky v rozích místa pro kapsu, a pravítkem zkontrolujte polohu: 41,8 mm pod horní hranou a 14,75 mm od boků (u mince 40 mm 35,55 mm a 8,5 mm). Kolem kapsy nalepte na přední panel maskovací pásku těsně podél jejího okraje – páska ohraničí místo pro kapsu a chrání líc kolem. Kapsu nechte ležet a šídlem lehce propíchněte všemi jejími otvory švu do líce předního panelu, pak ji sundejte. Vpichy vyznačí na panelu čáru švu; při přišití je schovají otvory proseknuté skrz obě vrstvy (vyzkoušejte nejdřív na odřezku: vpich, pak otvor vidličkou – vpich nesmí být vidět). Lepí se jen pruh G1 (na listech PÁS a KAPSA zeleně šrafovaný), asi 3,5 mm: na panelu od pásky po vpichy, na kapse od okraje po otvory švu, po bocích od nejvyššího otvoru dolů a přes dno. Na předním panelu ho lehce zdrsněte smirkem; zbytek nechte hladký. Kontaktní lepidlo naneste do tohoto pruhu na líci předního panelu a na rubu kapsy (šířku pruhu ověřte na odřezku). Horní hranu kapsy nelepte, ani horní zaoblené rohy – tudy se zasouvá mince. Po odvětrání kapsu přitiskněte přesně na značky do rámečku z pásky; pak už nejde posunout. Pásku pomalu strhněte.',
+        body: 'Kapsu nasucho vložte do okénka šablony otevřenou hranou nahoru – to je její přesná poloha. Pravítkem ji ještě zkontrolujte: 41,8 mm pod horní hranou a 14,75 mm od boků (u mince 40 mm 35,55 mm a 8,5 mm). Okraj okénka ohraničí místo pro kapsu a papír chrání líc kolem. Kapsu nechte ležet a šídlem lehce propíchněte všemi jejími otvory švu do líce předního panelu, pak ji sundejte. Vpichy vyznačí na panelu čáru švu; při přišití je schovají otvory proseknuté skrz obě vrstvy (vyzkoušejte nejdřív na odřezku: vpich, pak otvor vidličkou – vpich nesmí být vidět). Lepí se jen pruh G1 (na listech PÁS a KAPSA zeleně šrafovaný), asi 3,5 mm: na panelu od okraje okénka po vpichy, na kapse od okraje po otvory švu, po bocích od nejvyššího otvoru dolů a přes dno. Na předním panelu ho lehce zdrsněte smirkem; zbytek nechte hladký. Kontaktní lepidlo naneste do tohoto pruhu na líci předního panelu a na rubu kapsy (šířku pruhu ověřte na odřezku). Horní hranu kapsy nelepte, ani horní zaoblené rohy – tudy se zasouvá mince. Po odvětrání kapsu přitiskněte přesně do okénka; pak už nejde posunout. Šablonu pomalu sejměte, pásku strhávejte pod ostrým úhlem.',
         media: [],
         waits: [
           {
@@ -1417,6 +1428,7 @@ export const lessons: readonly LessonDefinition[] = [
       'Čáry nebo škrábnutí na líci kapsy: zůstanou vidět. Osy i obrys patří na rub.',
       'Šev při přišití prosekaný z opačné strany než poprvé: otvory nelícují.',
       'Lepidlo přes celou plochu kapsy: rozteče se na viditelný líc.',
+      'Šablona s okénkem přiložená nepřesně: hrany papíru musí ležet na hranách pásu.',
       'Špalík širší než otvor formy: nadzvedne důlek.',
       'Dřík osazený až po složení: už na něj nedosáhnete.',
       'Okno Ø 20 mm bez zkoušky na odřezku: úzký prstenec nemusí minci udržet.',
@@ -1451,13 +1463,27 @@ export const lessons: readonly LessonDefinition[] = [
         paper: 'A4, 100 %',
         condition: 'sekáte okno Ø 18 mm a šablonu nemáte z lekce 2',
       },
+      {
+        source: 'pattern-sheets',
+        sheetId: 'sablona-kuze-1-2',
+        copies: 1,
+        purpose: 'šablona s okénkem pro kapsu (stejná varianta jako pás v lekci 5)',
+        paper: 'A4, 100 %',
+        condition: '2. výtisk listu PÁS z lekce 5 nemáte',
+      },
     ],
     requires: [
       {
         id: 'strip',
         fromLesson: L5,
         label: 'Vyříznutý pás s prosekanými otvory dna',
-        note: 'Se značkami rohů kapsy a středu dříku.',
+        note: 'Se značkou středu dříku.',
+      },
+      {
+        id: 'window-print',
+        fromLesson: L5,
+        label: '2. výtisk listu PÁS na šablonu s okénkem',
+        note: 'Když ho nemáte, vytiskněte list PÁS znovu (viz Vytisknout).',
       },
       { id: 'form', fromLesson: L2, label: 'Vyvrtaná forma s víkem' },
       { id: 'block', fromLesson: L2, label: 'Špalík pod důlek' },
@@ -1852,7 +1878,7 @@ const overview: ProjectOverview = {
           lessonSlug: L1,
           stepId: 'print-check',
           printsFrom: [L1, L2, L4, L5, L6],
-          text: 'Listy tiskněte až v lekci, která je chce, A4 na 100 %; úsečka musí měřit 50 mm. Výpis platí pro minci 50 Kč a kůži 1,2 mm, jinou variantu uvádí první krok lekce. Výtisk listu KAPSA na značky a šablonu s oknem si schovejte na kapsu v lekci 6.',
+          text: 'Listy tiskněte až v lekci, která je chce, A4 na 100 %; úsečka musí měřit 50 mm. Výpis platí pro minci 50 Kč a kůži 1,2 mm, jinou variantu uvádí první krok lekce. Výtisk listu KAPSA na značky, šablonu s oknem a druhý výtisk listu PÁS (okénko) si schovejte na kapsu v lekci 6.',
         },
         {
           id: 'paper-model',
@@ -1907,7 +1933,7 @@ const overview: ProjectOverview = {
           id: 'practice-strip',
           lessonSlug: L4,
           stepId: 'cut-practice-strip',
-          text: 'Cvičný proužek přilepte páskou na líc odřezku, propíchněte kroužky a tečky dna a vyřízněte ho skrz papír. Na rubu spojte kroužky tužkou, u kůže 1,5 mm ztenčete ohyb B. Otvory prosekejte naplocho: přední (prostřední) panel z líce, zadní a vnitřní z rubu.',
+          text: 'Cvičný proužek přilepte páskou na líc odřezku, propíchněte kroužky za čarou řezu a tečky dna. Na rubu spojte kroužky tužkou a proužek vyřízněte skrz papír (vpichy odejdou s odpadem), u kůže 1,5 mm ztenčete ohyb B. Otvory prosekejte naplocho: přední (prostřední) panel z líce, zadní a vnitřní z rubu.',
         },
         {
           id: 'practice-fold',
@@ -1931,7 +1957,7 @@ const overview: ProjectOverview = {
           id: 'strip-cut',
           lessonSlug: L5,
           stepId: 'transfer-face',
-          text: 'Šablonu PÁS přilepte páskou na líc kůže těla, propíchněte kroužky, křížek patice a tečky dna a pás vyřízněte skrz papír. Na rubu spojte kroužky tužkou, u kůže 1,5 mm ztenčete ohyb B. Otvory dna prosekejte: přední panel z líce, zadní a vnitřní z rubu.',
+          text: 'Šablonu PÁS přilepte páskou na líc kůže těla, propíchněte kroužky za čarou řezu, křížek patice a tečky dna. Na rubu spojte kroužky tužkou a pás vyřízněte skrz papír (vpichy odejdou s odpadem), u kůže 1,5 mm ztenčete ohyb B. Otvory dna prosekejte: přední panel z líce, zadní a vnitřní z rubu.',
           later: 'zkrácení jazyka (lekce 8).',
         },
         {
@@ -1958,7 +1984,7 @@ const overview: ProjectOverview = {
           id: 'pocket-glue',
           lessonSlug: L6,
           stepId: 'glue-pocket',
-          text: 'Kapsu přiložte na propíchnuté rohy, kolem ní nalepte na přední panel maskovací pásku a šídlem propíchněte všemi otvory švu kapsy do panelu (nejdřív na odřezku); vpichy vyznačí čáru švu. Kapsu sundejte, pruh G1 od pásky po vpichy (asi 3,5 mm, po bocích od nejvyššího vpichu dolů a přes dno) zdrsněte a lepidlo naneste na líc předního panelu a na rub kapsy. Horní hranu nelepte, ani horní rohy; po odvětrání kapsu přitiskněte přesně do rámečku (pak už nejde posunout) a pásku strhněte.',
+          text: 'Ve druhém výtisku listu PÁS vystřihněte obrys pásu a okénko kapsy a přilepte ho na pás hrany na hrany, kapsu vložte do okénka, polohu ověřte pravítkem a šídlem propíchněte všemi otvory švu kapsy do panelu (nejdřív na odřezku); vpichy vyznačí čáru švu. Kapsu sundejte, pruh G1 od okénka po vpichy (asi 3,5 mm, po bocích od nejvyššího vpichu dolů a přes dno) zdrsněte a lepidlo naneste na líc předního panelu a na rub kapsy. Horní hranu nelepte, ani horní rohy; po odvětrání kapsu přitiskněte přesně do okénka (pak už nejde posunout) a šablonu sejměte.',
         },
         {
           id: 'pocket-stitch',
@@ -2207,7 +2233,7 @@ export const coinCardHolderProject: ProjectDefinition = {
       {
         id: 'sablona-kuze-1-2',
         title: 'Pás (šablona)',
-        note: 'Tři panely a dva ohyby v jednom kuse, 240,35 × 104,1 mm plus jazyk 43,07 mm (ohyb A 15,69 mm, ohyb B 8,66 mm); mince 50 Kč (27,5 mm), kůže 1,2 mm bez ztenčení ohybu B, bez otvoru pro průchodku. Přilepte páskou na líc kůže, ne na rub, propíchněte značky a řežte skrz papír (lekce 5).',
+        note: 'Tři panely a dva ohyby v jednom kuse, 240,35 × 104,1 mm plus jazyk 43,07 mm (ohyb A 15,69 mm, ohyb B 8,66 mm); mince 50 Kč (27,5 mm), kůže 1,2 mm bez ztenčení ohybu B, bez otvoru pro průchodku. Přilepte páskou na líc kůže, ne na rub, propíchněte značky, kroužky za čarou spojte na rubu a řežte skrz papír (lekce 5).',
         orientation: 'landscape',
         widthMm: 297,
         heightMm: 210,
@@ -2312,7 +2338,7 @@ export const coinCardHolderProject: ProjectDefinition = {
     ],
     calibrationMm: 50,
     printNote:
-      'Tisk na A4 bez přizpůsobení velikosti (100 %). Kontrolní úsečka na okraji musí měřit 50 mm. Předem zaškrtnutý výchozí střih je pro minci 50 Kč a kůži těla 1,2 mm (bez ztenčení ohybu B); listy pro kůži 1,5 mm jsou varianta níže. Jak přenést šablonu PÁS na kůži: vystřihnout nahrubo s okrajem 1–2 cm, přilepit páskou na líc, propíchnout značky a řezat skrz papír po čáře (lekce 5). Šablona je na jedno použití, na každý pás vytiskněte novou. List KAPSA vytiskněte 3×: 1 na vrtání formy, 1 na orýsování značek na líci (lekce 2 a 6), 1 na šablonu na rub – vystřihne se přesně po obrysu kapsy a vysekne se do ní okno (lekce 2 a 6). Když v lekci 2 přejdete na menší okno Ø 18 mm, vytiskněte ještě list Kapsa – záložní okno Ø 18 mm na šablonu s oknem Ø 18 mm.',
+      'Tisk na A4 bez přizpůsobení velikosti (100 %). Kontrolní úsečka na okraji musí měřit 50 mm. Předem zaškrtnutý výchozí střih je pro minci 50 Kč a kůži těla 1,2 mm (bez ztenčení ohybu B); listy pro kůži 1,5 mm jsou varianta níže. Jak přenést šablonu PÁS na kůži: vystřihnout nahrubo s okrajem 1–2 cm, přilepit páskou na líc, propíchnout značky, kroužky za čarou řezu spojit na rubu a řezat skrz papír po čáře (lekce 5). List PÁS vytiskněte 2×: 1 na kůži (rozřeže se, na každý pás novou), 1 na šablonu s okénkem pro kapsu (lekce 6). List KAPSA vytiskněte 3×: 1 na vrtání formy, 1 na orýsování značek na líci (lekce 2 a 6), 1 na šablonu na rub – vystřihne se přesně po obrysu kapsy a vysekne se do ní okno (lekce 2 a 6). Když v lekci 2 přejdete na menší okno Ø 18 mm, vytiskněte ještě list Kapsa – záložní okno Ø 18 mm na šablonu s oknem Ø 18 mm.',
     defaultVariantLabel: 'Výchozí střih – mince 50 Kč, kůže 1,2 mm (bez ztenčení)',
     variantsNote:
       'V aplikaci jsou listy pro výchozí minci 50 Kč s kůží 1,2 mm (např. Blu nebo Verde; platí pro třísločiněnou kůži 1,2 mm z jakékoli nabídky), záložní list kapsy s oknem Ø 18 mm, listy pro kůži 1,5 mm se ztenčením ohybu B a pro minci 40 mm z předlohy s oběma tloušťkami. Jiná mince mění jen místo kapsy, okno a otvor formy, ne ohyby ani jazyk; tloušťka kůže naopak mění ohyby i jazyk. Jiný počet karet ani jiná tloušťka kůže než 1,2 a 1,5 mm v aplikaci zatím nejsou.',
@@ -2341,7 +2367,7 @@ export const coinCardHolderProject: ProjectDefinition = {
     ],
     calibrationMm: 50,
     printNote:
-      'Tisk na A4 bez přizpůsobení velikosti (100 %), kontrolní úsečka musí měřit 50 mm. Vytiskněte list pro tloušťku své kůže (předem zaškrtnutý je pro kůži 1,2 mm). Proužek se vejde na kus asi 130 × 40 mm z lekce 4, na koncích zbude rezerva. Přenos jako u listu Pás v lekci 5: vystřihnout nahrubo s okrajem 1–2 cm, přilepit páskou na líc, propíchnout značky a řezat skrz papír po čáře.',
+      'Tisk na A4 bez přizpůsobení velikosti (100 %), kontrolní úsečka musí měřit 50 mm. Vytiskněte list pro tloušťku své kůže (předem zaškrtnutý je pro kůži 1,2 mm). Proužek se vejde na kus asi 130 × 50 mm z lekce 4, nahoře a dole zbude 5 mm na kroužky, na koncích rezerva. Přenos jako u listu Pás v lekci 5: vystřihnout nahrubo s okrajem 1–2 cm, přilepit páskou na líc, propíchnout značky, kroužky spojit na rubu a řezat skrz papír po čáře.',
     defaultVariantLabel: 'Kůže 1,2 mm (bez ztenčení)',
   },
   shoppingPlan: {
@@ -2361,7 +2387,7 @@ export const coinCardHolderProject: ProjectDefinition = {
         variant: 'A5 (21 × 15 cm)',
         quantity: 1,
         purpose:
-          'ze stejné kůže jako pás: kapsa 57,5 × 57,5 mm (lekce 6) a cvičný proužek na ohyby asi 130 × 40 mm (lekce 4) vedle sebe podél jedné hrany (zaberou 187,5 × 57,5 mm), ze zbylého pruhu asi 210 × 92 mm odřezky na zkoušku druku a obtisku patice (lekce 3) a barvy na hrany (lekce 4) a případně třetí odřezek 57,5 × 57,5 mm na zkoušku okna Ø 18 mm (lekce 2)',
+          'ze stejné kůže jako pás: kapsa 57,5 × 57,5 mm (lekce 6) a cvičný proužek na ohyby asi 130 × 50 mm (lekce 4) vedle sebe podél jedné hrany (zaberou 187,5 × 57,5 mm), ze zbylého pruhu asi 210 × 92 mm odřezky na zkoušku druku a obtisku patice (lekce 3) a barvy na hrany (lekce 4) a případně třetí odřezek 57,5 × 57,5 mm na zkoušku okna Ø 18 mm (lekce 2)',
       },
       {
         equipmentSlug: 'veg-tan-leather',
@@ -2513,7 +2539,7 @@ export const coinCardHolderProject: ProjectDefinition = {
         url: 'https://www.obi.cz/lepici-pasky/tesa-maskovaci-paska-professional-sensitive-pro-citlive-povrchy-25-m-x-25-mm/p/4754180',
         quantity: 1,
         purpose:
-          'šablona PÁS na líci (lekce 5) a rámeček kolem kapsy (lekce 6); jedna role na všechny projekty – máte-li ji z projektu 01, nekupujte',
+          'šablona PÁS na líci (lekce 5) a šablona s okénkem pro kapsu (lekce 6); jedna role na všechny projekty – máte-li ji z projektu 01, nekupujte',
       },
     ],
     skipped: [

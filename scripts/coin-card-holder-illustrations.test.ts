@@ -43,10 +43,11 @@ describe('ilustrace pouzdra s mincí – klíčová fakta', () => {
     expect(svg).toContain('SPOJ 2');
   });
 
-  it('přenos značek: popisuje konce čar ohybů, rohy kapsy, patici a tečky dna; průchodku jen u varianty', () => {
+  it('přenos značek: kroužky ohybů za čarou řezu, patice a tečky dna, bez rohů kapsy; průchodku jen u varianty', () => {
     const svg = buildPrenosZnacekSvg();
-    expect(svg).toContain('konce čar ohybů');
-    expect(svg).toContain('rohy kapsy');
+    expect(svg).toContain('kroužky ohybů za čarou řezu');
+    expect(svg).toContain('kroužky spojit na rubu před řezem');
+    expect(svg).not.toContain('rohy kapsy');
     expect(svg).toContain('střed patice');
     expect(svg).toContain('tečky dna');
     // Od v4.11 je průchodka volitelná: výchozí ilustrace ji nemá, varianta ano.

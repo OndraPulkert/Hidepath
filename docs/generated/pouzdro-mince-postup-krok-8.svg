@@ -49,7 +49,7 @@
 <path d="M243.242 69.786 L244.978 69.786 M245.722 69.786 L247.458 69.786 M248.202 69.786 L249.938 69.786 M250.682 69.786 L252.418 69.786 M253.162 69.786 L254.898 69.786 M255.642 69.786 L257.378 69.786 M258.122 69.786 L259.858 69.786 M260.602 69.786 L262.338 69.786" stroke="#efe3c2" stroke-width="0.682" stroke-linecap="round" fill="none"/>
 <path d="M264.88 69.414 L264.88 67.678 M264.88 66.934 L264.88 65.198 M264.88 64.454 L264.88 62.718 M264.88 61.974 L264.88 60.238 M264.88 59.494 L264.88 57.758 M264.88 57.014 L264.88 55.278 M264.88 54.534 L264.88 52.798" stroke="#efe3c2" stroke-width="0.682" stroke-linecap="round" fill="none"/>
 <circle cx="265.965" cy="25.89" r="3.72" fill="#9a9a9a" stroke="#666" stroke-width="0.3"/>
-<text x="253.875" y="89.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">kapsu přilepit na značky, vidličkami projet její otvory</text>
+<text x="253.875" y="89.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">kapsu přilepit do okénka šablony, vidličkami projet její otvory</text>
 <text x="253.875" y="92.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">i předním panelem a přišít (horní hrana zůstane otevřená)</text>
 <text x="253.875" y="96" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">patice 9,5 mm pod hranou na ose jazyka – naplocho</text>
 <rect x="9" y="101" width="68.25" height="90" rx="2" fill="#fbfaf7" stroke="#ddd" stroke-width="0.3"/>

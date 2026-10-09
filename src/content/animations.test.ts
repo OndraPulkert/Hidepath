@@ -167,7 +167,7 @@ describe('animace postupu – stránky v public/animace', () => {
   it.each([
     ['kapsa-skladani', 'pouchFold', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['kapsa-druk', 'snap', ['A', 'B', 'C', 'D'], 'E'],
-    ['pas-prenos-rez', 'stripTransfer', ['A', 'B', 'C', 'D'], 'E'],
+    ['pas-prenos-rez', 'stripTransfer', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['pas-otvory-dna', 'bottomHoles', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['sedlarsky-steh', 'saddleStitch', ['A', 'B', 'C', 'D', 'E', 'F', 'G'], 'H'],
     ['hrany', 'edges', ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'], 'I'],
@@ -309,12 +309,15 @@ describe('animace postupu – odkazy z lekcí', () => {
         .steps.find((s) => s.id === stepId)
         ?.animationLinks?.map((l) => l.href);
     const prisiti = (anchor: string) => `/animace/kapsa-prisiti.html#${anchor}`;
-    // Všechny značky pásu ukazuje přenos pásu; rohy kapsy podrobně přišití kapsy.
-    expect(hrefOf(5, 'transfer-marks-awl')).toEqual([
-      '/animace/pas-prenos-rez.html#A3',
-      prisiti('A2'),
+    // Značky pásu ukazuje přenos pásu; místo pro kapsu se nepropichuje, určuje ho okénko (lekce 6).
+    expect(hrefOf(5, 'transfer-marks-awl')).toEqual(['/animace/pas-prenos-rez.html#A3']);
+    expect(hrefOf(6, 'window-template')).toEqual([prisiti('A1'), prisiti('A2')]);
+    expect(hrefOf(6, 'glue-pocket')).toEqual([
+      prisiti('B1'),
+      prisiti('B2'),
+      prisiti('B3'),
+      prisiti('B6'),
     ]);
-    expect(hrefOf(6, 'glue-pocket')).toEqual([prisiti('B1'), prisiti('B2'), prisiti('B3')]);
     // Přišití kapsy: animace prosekání a šití a hned vedle návod, kolik nitě odměřit.
     expect(hrefOf(6, 'stitch-pocket')).toEqual([
       prisiti('C1'),
@@ -404,28 +407,29 @@ describe('animace postupu – přenos, řez a otvory dna pásu v lekcích 4 a 5'
   const otvory = (anchor: string) => `/animace/pas-otvory-dna.html#${anchor}`;
 
   it.each([
-    // Lekce 4: proužek se přenáší a řeže stejně jako pás, otvory proužku ukazuje část E.
-    [4, 'cut-practice-strip', [prenos('A2'), prenos('A3'), prenos('B1'), prenos('D3')]],
+    // Lekce 4: proužek se přenáší a řeže stejně jako pás (čáry na rub před řezem), otvory proužku
+    // ukazuje část E stránky otvorů.
+    [4, 'cut-practice-strip', [prenos('A2'), prenos('A3'), prenos('B2'), prenos('C1')]],
     [4, 'punch-flat', [otvory('E1'), otvory('A3'), otvory('D2')]],
     // Lekce 5: každý krok přenosu, řezu, čar ohybů a otvorů dna.
     [5, 'transfer-face', [prenos('A2'), prenos('A1')]],
-    [5, 'cut-strip', [prenos('B1'), prenos('C1'), prenos('C2'), prenos('C3'), prenos('B3')]],
-    [5, 'peel-template', [prenos('D1')]],
-    [5, 'draw-fold-lines', [prenos('D3'), prenos('D2')]],
+    [5, 'draw-fold-lines', [prenos('B1'), prenos('B2')]],
+    [5, 'cut-strip', [prenos('C1'), prenos('D1'), prenos('D2'), prenos('D3'), prenos('C3')]],
+    [5, 'peel-template', [prenos('E1')]],
     [5, 'punch-bottom-holes', [otvory('B1'), otvory('C1'), otvory('D1'), otvory('D2')]],
   ] as const)('lekce %i, krok %s', (order, stepId, expected) => {
     expect(hrefOf(order, stepId)).toEqual(expected);
   });
 
   it('popisky tlačítek nesou číslo a název kroku stránky', () => {
-    expect(animationLink('stripTransfer', 'D3')).toEqual({
-      href: prenos('D3'),
-      label: 'Krok D3 – Spojte konce čar tužkou podle pravítka',
+    expect(animationLink('stripTransfer', 'B2')).toEqual({
+      href: prenos('B2'),
+      label: 'Krok B2 – Spojte kroužky tužkou podle pravítka',
     });
     expect(animationLink('bottomHoles', 'E1').label).toBe(
       'Krok E1 – Prosekejte cvičný proužek stejně',
     );
-    expect(() => animationLink('stripTransfer', 'D5')).toThrow(/nemá kotvu #D5/);
+    expect(() => animationLink('stripTransfer', 'E3')).toThrow(/nemá kotvu #E3/);
     expect(() => animationLink('bottomHoles', 'D3')).toThrow(/nemá kotvu #D3/);
     expect(animationButtonText(prenos('B1'))).toBe('Animace postupu');
   });

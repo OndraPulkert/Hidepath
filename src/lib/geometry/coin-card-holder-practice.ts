@@ -14,12 +14,18 @@ import {
   type CoinCardHolderSpec,
 } from './coin-card-holder.ts';
 
-/** Rozměry cvičného proužku z lekce 4: tři panely po 30 mm, výška 40 mm, kus kůže asi 130 × 40. */
+/** Rozměry cvičného proužku z lekce 4: tři panely po 30 mm, výška 40 mm, kus kůže asi 130 × 50. */
 export const PRACTICE_STRIP = {
   panelWidthMm: 30,
   heightMm: 40,
   /** Kus kůže z materiálů lekce 4 (s rezervou na konce). */
   pieceLengthMm: 130,
+  /**
+   * Výška kusu: proužek a nahoře i dole 5 mm odpadu, kam padnou kroužky konců čar ohybů
+   * (2 mm za čarou řezu, jako na listu PÁS). Vejde se do pruhu 57,5 mm podél hrany přířezu
+   * (kapsa 57,5 × 57,5 vedle proužku, nákupní plán).
+   */
+  pieceHeightMm: 50,
 } as const;
 
 /** Tloušťky těla, pro které má lekce 4 čísla (1,2 mm výchozí sestava, 1,5 mm se ztenčením B). */
@@ -50,6 +56,8 @@ export interface PracticeStripLayout {
   holeXsMm: [number[], number[], number[]];
   /** Kolik zbude na každém konci kusu `pieceLengthMm`, když se obrys vystředí. */
   pieceReserveEachEndMm: number;
+  /** Kolik zbude nahoře i dole na kusu `pieceHeightMm`, když se obrys vystředí. */
+  pieceReserveTopBottomMm: number;
 }
 
 /** Spec pásu pro tloušťku těla, stejně jako přepínač `--thickness` generátoru pásu. */
@@ -107,6 +115,7 @@ export function practiceStripLayout(bodyThicknessMm: number): PracticeStripLayou
     endHoleOffsetMm: endOffset,
     holeXsMm: [back, front, inner],
     pieceReserveEachEndMm: round((PRACTICE_STRIP.pieceLengthMm - stripLength) / 2),
+    pieceReserveTopBottomMm: round((PRACTICE_STRIP.pieceHeightMm - PRACTICE_STRIP.heightMm) / 2),
   };
 }
 

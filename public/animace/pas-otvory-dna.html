@@ -136,11 +136,11 @@ const MIRX=BX0+IX1;                                                          // 
 const SEAM_Y=153.67, NH=17, PITCH=4;
 const holes=x0=>Array.from({length:NH},(_,i)=>+(x0+4+PITCH*i).toFixed(2));
 const HB=holes(BX0), HF=holes(FX), HI=holes(IX0);                             // 14…78 | 101,69…165,69 | 182,35…246,35
-const SNAP=[153.19,62.57], PX=112.44, PY=94.87;
-// propíchnuté značky z lekce 5 (kromě teček dna): konce čar ohybů asi 1 mm od hrany, rohy kapsy asi 1 mm dovnitř, střed dříku
+const SNAP=[153.19,62.57];
+// z lekce 5 zbyl na pásu (kromě teček dna) jen vpich středu dříku; kroužky ohybů ležely za čarou
+// řezu a odešly s odpadem, čáry ohybů jsou tužkou na rubu přes celý pás
 const FOLD_LINES=[[AX0,87.07,FB],[FX,87.07,FB],[BXF,FY,FB],[IX0,FY,FB]];
-const MARKS=[...FOLD_LINES.flatMap(([x,y0,y1])=>[[x,y0+1],[x,y1-1]]),
-  [PX+10-6.36,PY+10-6.36],[PX+42.5-10+6.36,PY+10-6.36],[PX+6-3.54,PY+36+3.54],[PX+42.5-6+3.54,PY+36+3.54],SNAP];
+const MARKS=[SNAP];
 
 // ---------- helpers ----------
 const cl=t=>Math.max(0,Math.min(1,t));
@@ -173,7 +173,7 @@ const flipT=s=>`translate(${f(MIRX/2)} 0) scale(${f(Math.abs(s)<.02?.02*Math.sig
 function strip(s,st,o={}){
   const rub=s<0, d=o.d??.75, w=o.w??.42, dot=o.dot??.42;
   let g=`<path d="${STRIP}" fill="${rub?'url(#rubP)':'url(#licS)'}" stroke="${rub?'var(--rub-d)':'var(--lic-d)'}" stroke-width=".4"/>`;
-  if(rub) g+=FOLD_LINES.map(([x,y0,y1])=>`<path d="M${x} ${f(y0+1)} V${f(y1-1)}" stroke="var(--graphite)" stroke-width="${f(o.pencil??.3)}" opacity=".75"/>`).join('');
+  if(rub) g+=FOLD_LINES.map(([x,y0,y1])=>`<path d="M${x} ${f(y0)} V${f(y1)}" stroke="var(--graphite)" stroke-width="${f(o.pencil??.3)}" opacity=".75"/>`).join('');
   g+=MARKS.map(([x,y])=>`<circle cx="${f(x)}" cy="${f(y)}" r="${f(dot*.8)}" fill="var(--hole)" opacity=".75"/>`).join('');
   const row=(hs,set,dir)=>hs.map((x,i)=>set&&set.has(i)?slit(x,SEAM_Y,dir,d,w):`<circle cx="${x}" cy="${SEAM_Y}" r="${f(dot)}" fill="var(--hole)" opacity=".85"/>`).join('');
   g+=row(HB,st.B,'\\')+row(HF,st.F,'/')+row(HI,st.I,'\\');   // v T (pohled na líc): přední „/“, zadní a vnitřní „\“
@@ -266,8 +266,8 @@ MINI.hP=[31,36,41,46].map(x=>x+.5);MINI.hZ=MINI.hP.map(x=>2*25-x);MINI.hV=MINI.h
 // panely 30, ohyb A 15,69, ohyb B 8,66, 6 otvorů na panel, krajní 5 mm od čar ohybů i od konců
 const PRL=114.35;
 const PR={x0:0,H:40,seam:36.5,Z:[0,30],A:[30,45.69],P:[45.69,75.69],B:[75.69,84.35],V:[84.35,114.35]};
-// kroužky propíchnuté šídlem přes list: konce čar ohybů a konce čáry švu, asi 1 mm od hrany (jako u pásu v lekci 5)
-PR.marks=[...[PR.A[0],PR.A[1],PR.B[0],PR.B[1]].flatMap(x=>[[x,1],[x,39]]),[1,PR.seam],[PRL-1,PR.seam]];
+// kroužky ohybů ležely za čarou řezu (v odpadu): na vyříznutém proužku nezůstal žádný vpich kromě teček dna
+PR.marks=[];
 PR.hP=range(6).map(i=>+(PR.P[0]+5+4*i).toFixed(2));PR.hZ=range(6).map(i=>+(PR.Z[0]+5+4*i).toFixed(2));PR.hV=range(6).map(i=>+(PR.V[0]+5+4*i).toFixed(2));
 function detailPVZ(x,y,bad=false){
   let d=`<rect x="${x}" y="${y}" width="40" height="22" rx="2" class="panelbox"/>`;
@@ -512,7 +512,7 @@ const PX_=x=>POX+x*PK, PY_=y=>POY+y*PK;
 function practiceStrip(s0,st){
   const c=PRL/2; // střed proužku
   let g=`<rect x="${f(PX_(0))}" y="${f(PY_(0))}" width="${f(PRL*PK)}" height="${f(40*PK)}" rx=".5" fill="${s0<0?'url(#rubP)':'url(#licS)'}" stroke="${s0<0?'var(--rub-d)':'var(--lic-d)'}" stroke-width=".35"/>`;
-  if(s0<0) g+=[PR.A[0],PR.A[1],PR.B[0],PR.B[1]].map(x=>`<path d="M${f(PX_(x))} ${f(PY_(1))} V${f(PY_(39))}" stroke="var(--graphite)" stroke-width=".3" opacity=".75"/>`).join('');
+  if(s0<0) g+=[PR.A[0],PR.A[1],PR.B[0],PR.B[1]].map(x=>`<path d="M${f(PX_(x))} ${f(PY_(0))} V${f(PY_(40))}" stroke="var(--graphite)" stroke-width=".3" opacity=".75"/>`).join('');
   g+=PR.marks.map(([x,y])=>`<circle cx="${f(PX_(x))}" cy="${f(PY_(y))}" r=".3" fill="var(--hole)" opacity=".75"/>`).join('');
   const row=(hs,set,dir)=>hs.map((x,i)=>set.has(i)?slit(PX_(x),PY_(PR.seam),dir,.55,.38):`<circle cx="${f(PX_(x))}" cy="${f(PY_(PR.seam))}" r=".32" fill="var(--hole)"/>`).join('');
   g+=row(PR.hZ,st.Z,'\\')+row(PR.hP,st.P,'/')+row(PR.hV,st.V,'\\');

@@ -42,14 +42,13 @@ prvního), až bude první pouzdro fyzicky hotové.
   (nezkracují se, závisí na kůži a obsahu, ne na délce panelu), čára švu 3,5 mm od dolní hrany,
   6 otvorů na panel (rozteč 4, krajní 5 mm od čáry ohybu i od konce) zrcadlených přes střed ohybu,
   kroužky k propíchnutí (šídlem skrz papír i kůži, stejně jako tečky dna, aby byly vidět i na
-  rubu) na koncích čar ohybů a švu asi 1 mm od hrany (jako konce čar ohybů na pásu
-  v lekci 5), u 1,5 mm šrafa ztenčení ohybu B (± 3 mm) s kroužky i na jejích okrajích.
+  rubu) 2 mm za čarou řezu v odpadu na prodloužení čar ohybů, nahoře i dole (jako na pásu
+  v lekci 5), u 1,5 mm šrafa ztenčení ohybu B (± 3 mm) s kroužky i na prodloužení jejích okrajů.
   Kůže 1,2 mm: 114,35 × 40, ohyb A 15,69, ohyb B 8,66 (`pouzdro-mince-cvicny-prouzek-kuze-1-2mm.svg`,
   v aplikaci předem zaškrtnutý); kůže 1,5 mm: 116,55 × 40, ohyb A 16,63, ohyb B 9,92
-  (`pouzdro-mince-cvicny-prouzek.svg`). Na kusu 130 × 40 zbude na každém konci 7,8 / 6,7 mm
-  rezervy. Kus i proužek jsou vysoké 40 mm: list se dole ustřihne přesně po obrysu a jeho dolní
-  hrana se přiloží na rovnou dolní hranu kusu kůže (šev 3,5 mm se měří od ní), po délce vystředit;
-  pravítkem ověřit, že kroužky švu leží 3,5 mm od hrany. V aplikaci na stránce Cvičné listy, odkaz
+  (`pouzdro-mince-cvicny-prouzek.svg`). Kus kůže 130 × 50: obrys se vystředí, nahoře i dole zbude
+  5 mm odpadu na kroužky, na každém konci 7,8 / 6,7 mm rezervy. Přenos jako pás v lekci 5:
+  propíchnout, kroužky spojit na rubu, pak řezat skrz papír po celém obrysu. V aplikaci na stránce Cvičné listy, odkaz
   z kroku „Vyřízněte cvičný proužek“ v lekci 4.
 
 ## Konstrukce (podle záběrů skládání, papírové šablony a fotek hotového kusu)
@@ -203,7 +202,7 @@ ztenčování odpadá. Listy pak vygenerovat `pnpm pattern:coin-holder --thickne
 ohyb B 8,7, jazyk 43,1 mm). Tvarování za mokra nejdřív zkusit na A5 stejné barvy.
 
 Sestava nákupního plánu v aplikaci: **Blu 1,2 mm** – A4 na pás; A5 na kapsu 57,5 × 57,5 a cvičný
-proužek 130 × 40 (lekce 4) vedle sebe podél jedné hrany (zaberou 187,5 × 57,5), ze zbylého pruhu
+proužek 130 × 50 (lekce 4) vedle sebe podél jedné hrany (zaberou 187,5 × 57,5), ze zbylého pruhu
 ≈ 210 × 92 odřezky na zkoušku druku a obtisku patice (lekce 3) a barvy na hrany (lekce 4) – stejná
 kůže jako tělo. Juchtová A5 1,2 mm jen na dva odřezky 57,5 × 57,5 pro tvarovací zkoušku (lekce 2).
 
@@ -213,21 +212,24 @@ kůže jako tělo. Juchtová A5 1,2 mm jen na dva odřezky 57,5 × 57,5 pro tvar
    cereálií), vystřihnout, ohyby jen přehnout do smyčky (nepřekládat na ostro), vložit karty a
    bankovky, projít kontrolní seznam a zapsat výsledky. Papír prokáže polohu jazyka a kloboučku,
    výřez, vytahování karty a místo pro kapsu; přídavky ohybů neprokáže (je tenčí).
-1. **Pás:** šablonu přilepit páskou na líc, šídlem přes list přenést na kůži konce čar ohybů A i B,
-   rohy místa pro kapsu, střed patice (u varianty i průchodky) a všechny tečky dna, pak vyříznout
-   skrz papír (výřez plynule; rovné strany podle ocelového pravítka položeného na pás, ne na odpad –
+1. **Pás:** list PÁS vytisknout 2× (1. na kůži, 2. šablona s okénkem pro kapsu v kroku 4).
+   Šablonu přilepit páskou na líc, šídlem přes list přenést na kůži kroužky ohybů A i B za čarou
+   řezu, střed patice (u varianty i průchodky) a všechny tečky dna, kroužky před řezem spojit na
+   rubu (viz níže), pak vyříznout skrz papír (výřez plynule; rovné strany podle ocelového pravítka položeného na pás, ne na odpad –
    když nůž ujede, poškodí odpad; rohy přesně podle šablony, ne do ostra: 2× R10 na konci jazyka,
    vypouklé R2,5 u výřezu na předku a 3× R6 – dole na zadním panelu, nahoře i dole na volném konci
    vnitřního; po čáře pomalu bez pravítka, krátkými tahy, jako rohy pouzdra na karty). Kapsa se
    dělá ze samostatného kusu kůže 1,2 mm ≥ 57,5 × 57,5 (forma Ø 31,5 počítá s 1,2 mm; i když je
    pás z 1,5 mm).
-   **Čáry ohybů na rub:** propíchnuté konce všech 4 čar ohybů (A i B, u obou hran) spojit na rubu
-   tužkou podle pravítka; podle nich se v kroku 5 navlhčí pásma ohybů.
-   **Ztenčení ohybu B (jen u kůže 1,5 mm):** propíchnuté kroužky na okrajích šrafy (ohyb B ± 3 mm)
-   spojit na rubu a v tomto pásu ztenčit z rubu na 1 mm.
-   Na listu PÁS jsou všechny body k propíchnutí kroužky (1 mm od hrany na koncích čar ohybů
-   a okrajů šrafy; v rozích místa pro kapsu 1 mm dovnitř na úhlopříčce zaobleného rohu, kapsa je
-   zakryje), střed patice křížkem; na papírovém modelu má křížek patice i klobouček.
+   **Čáry ohybů na rub (před řezem):** kůži i se šablonou otočit a propíchnuté kroužky všech 4 čar
+   ohybů spojit na rubu tužkou podle pravítka přes celý pás; podle nich se v kroku 5 navlhčí pásma
+   ohybů. Po řezu by vpichy chyběly – odejdou s odpadem.
+   **Ztenčení ohybu B (jen u kůže 1,5 mm):** propíchnuté kroužky na prodloužení okrajů šrafy
+   (ohyb B ± 3 mm) spojit na rubu taky před řezem; po řezu v tomto pásu ztenčit z rubu na 1 mm.
+   Na listu PÁS jsou kroužky ohybů a okrajů šrafy 2 mm za čarou řezu v odpadu, nahoře i dole na
+   prodloužení čar (ohyb A nahoře ve výřezu na prst, nad jeho dnem): na líci pouzdra tak žádný vpich
+   nezůstane. Místo pro kapsu se nepropichuje (okénko z 2. výtisku, krok 4). Střed patice je křížek
+   (zakryje ho druk); na papírovém modelu má křížek patice i klobouček.
    Pak prosekat otvory dna na všech třech panelech (naplocho): **přední panel z líce, zadní
    a vnitřní z rubu** (podle propíchnutých teček). Ohyb panel zrcadlově převrátí; šikmé otvory
    proseknuté ze stejné strany by se po složení zkřížily a jehla by jimi neprošla. Rub ve spodním
@@ -258,7 +260,9 @@ kůže jako tělo. Juchtová A5 1,2 mm jen na dva odřezky 57,5 × 57,5 pro tvar
    po celém obvodu).
 4. Přišít kapsu na přední panel (41,8 mm pod horní hranou, 14,75 mm od boků; u mince 40 mm
    35,55 / 8,5): kapsu s už
-   proseknutými otvory přilepit na značky, vidličkami proseknout jejími otvory i přední panel
+   proseknutými otvory přilepit do okénka šablony z 2. výtisku listu PÁS (vystřižený obrys pásu
+   a okénko po vnějším obrysu kapsy (nahoře čárkovaně, jinde vnější okraj šrafy G1), přilepený na pás hrany na hrany; polohu ještě ověřit
+   pravítkem; okraj okénka je zároveň hranice lepidla), vidličkami proseknout jejími otvory i přední panel
    (naplocho na desce) a přišít. Osadit patici druku **naplocho, před složením** – dřík z rubu,
    hlavička na líci předního panelu (druk předtím vyzkoušený na odřezku); volitelnou průchodku
    do vnitřního panelu stejně.
@@ -400,3 +404,12 @@ doplnit ručně, do generátoru to nepatří.
   ceny odstínu). Lekce 5: zaoblení rohů pásu podle šablony (R10, R2,5, R6) a pravítko na pásu,
   ne na odpadu; lekce 4 a cvičný list: dolní hrana listu na dolní hranu kusu kůže, kontrola švu
   3,5 mm pravítkem; krok lekce 5 „Vyřízněte pás skrz papír“ odkazuje i na krok animace C3 (rohy).
+- v4.13 (2026-10-09, bez vpichů na líci hotového pouzdra): kroužky ohybů A a B (a u 1,5 mm okrajů
+  šrafy) leží **2 mm za čarou řezu v odpadu** na prodloužení čar, nahoře i dole (ohyb A nahoře ve
+  výřezu na prst) – na listu PÁS i na cvičném proužku. Propíchnou se přes šablonu na líci, kůže se
+  i se šablonou otočí a kroužky se **spojí na rubu ještě před řezem**; vpichy odejdou s odpadem.
+  **Místo pro kapsu bez vpichů:** 4 kroužky v rozích zrušeny, kapsa se vkládá do **okénka
+  v 2. výtisku listu PÁS** (vystřižený obrys pásu a vnější obrys kapsy, přilepený na pás hrany
+  na hrany; okraj okénka je i hranice lepidla G1), poloha se ještě ověří pravítkem. List PÁS se
+  tiskne 2×. Cvičný proužek: kus kůže 130 × 50 (5 mm odpadu nahoře i dole na kroužky), řeže se
+  po celém obrysu, kroužky konců švu a přiložení na dolní hranu kůže odpadly.

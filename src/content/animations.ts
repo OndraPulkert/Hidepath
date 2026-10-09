@@ -9,7 +9,7 @@ import { type AnimationLink } from '@/content/schema';
  * - kapsa-postup: `#A`–`#E` skočí na první krok dané části a přehrává od ní,
  * - kapsa-prisiti: `#A`–`#D` otevře první krok dané části (zastavený, přehrání tlačítkem),
  * - kapsa-skladani (`#A`–`#E`) a kapsa-druk (`#A`–`#D`): stejně jako kapsa-prisiti,
- * - pas-prenos-rez (`#A`–`#D`) a pas-otvory-dna (`#A`–`#E`): stejně jako kapsa-prisiti,
+ * - pas-prenos-rez a pas-otvory-dna (obě `#A`–`#E`): stejně jako kapsa-prisiti,
  * - sedlarsky-steh a hrany (`#A`–`#G`): stejně jako kapsa-prisiti, společné pro všechny projekty,
  * - vicko-ohyby (`#A` ohyb dna, `#B` závěs): stejně jako kapsa-prisiti; staré `#anim-dno`
  *   a `#anim-zaves` stránka dál bere jako `#A` a `#B`,
@@ -86,25 +86,20 @@ export const animationPages = {
     path: '/animace/kapsa-prisiti.html',
     title: 'Přišití kapsy na pouzdro',
     sections: {
-      A: 'Část A – značky ze šablony',
+      A: 'Část A – šablona s okénkem',
       B: 'Část B – lepení',
       C: 'Část C – prosekání skrz obě vrstvy',
       D: 'Část D – šití',
     },
     steps: {
-      A: [
-        'Přilepte šablonu PÁS na LÍC',
-        'Šídlem propíchněte rohy místa pro kapsu',
-        'Vyřízněte pás a zkontrolujte značky',
-      ],
+      A: ['Vystřihněte okénko z 2. výtisku PÁS', 'Přilepte šablonu na pás, hrany na hrany'],
       B: [
-        'Přiložte kapsu na 4 značky',
-        'Olepte kapsu dokola páskou',
+        'Vložte kapsu do okénka',
         'Propíchněte čáru švu do panelu',
         'Zdrsněte pruh po čáru švu',
         'Naneste lepidlo do pruhu po čáru švu',
         'Nechte lepidlo odvětrat',
-        'Přitiskněte kapsu a strhněte pásku',
+        'Přitiskněte kapsu a sejměte šablonu',
       ],
       C: [
         'Výchozí stav: otvory jen v kapse',
@@ -192,9 +187,10 @@ export const animationPages = {
     title: 'Přenos a řez pásu',
     sections: {
       A: 'Část A – šablona a značky',
-      B: 'Část B – rovné řezy',
-      C: 'Část C – výkus a rohy',
-      D: 'Část D – čáry ohybů na rubu',
+      B: 'Část B – čáry ohybů na rubu',
+      C: 'Část C – rovné řezy',
+      D: 'Část D – výkus a rohy',
+      E: 'Část E – sejmutí a kontrola',
     },
     steps: {
       A: [
@@ -202,18 +198,14 @@ export const animationPages = {
         'Přilepte šablonu na LÍC',
         'Propíchněte šídlem všechny značky',
       ],
-      B: [
+      B: ['Otočte kůži i se šablonou rubem nahoru', 'Spojte kroužky tužkou podle pravítka'],
+      C: [
         'Řežte rovně podle pravítka',
         'Prořízněte všechny rovné strany',
         'Třepí se řez? Odlomte článek čepele',
       ],
-      C: ['Vyřízněte zaoblení R2,5', 'Řežte výřez na prst bez pravítka', 'Vyřízněte rohy R10 a R6'],
-      D: [
-        'Sejměte šablonu a zkontrolujte značky',
-        'Otočte pás rubem nahoru',
-        'Spojte konce čar tužkou podle pravítka',
-        'Kontrola: značky a čáry ohybů',
-      ],
+      D: ['Vyřízněte zaoblení R2,5', 'Řežte výřez na prst bez pravítka', 'Vyřízněte rohy R10 a R6'],
+      E: ['Sejměte šablonu a zkontrolujte značky', 'Kontrola: pás a čáry ohybů na rubu'],
     },
   },
   bottomHoles: {

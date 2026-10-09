@@ -106,7 +106,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         url: 'https://craft-point.cz/products/trislocinena-hovezi-kuze-licova-usen-1-2-mm-blu',
         priceCents: 5_700,
         variant: 'A5 (21 × 15 cm)',
-        note: 'Stejná kůže jako pás: do A5 se vejde kapsa 57,5 × 57,5 mm i zkušební proužek na ohyby asi 130 × 40 mm z lekce 5.',
+        note: 'Stejná kůže jako pás: do A5 se vejde kapsa 57,5 × 57,5 mm i cvičný proužek na ohyby asi 130 × 50 mm z lekce 4.',
         availability: 'in_stock',
         checkedAt: '2026-10-08',
       },
