@@ -4,6 +4,7 @@ import {
   type ProjectDefinition,
   type ProjectOverview,
 } from '@/content/schema';
+import { printHref } from '@/features/prep/lesson-prep';
 
 /**
  * „Postup v kostce“: číslování bodů, cíl odkazu do lekce a výtisky převzaté z `prints` lekcí.
@@ -118,7 +119,10 @@ export interface OverviewPrintRow {
   sheetLabel: string;
   sheetId: string;
   copies: number;
+  /** K čemu výtisk je, bez opakovaného názvu listu na začátku („List 1: …“). */
   purpose: string;
+  /** Kde se list tiskne (u pásku „Váš pásek“ s listy pro uložený pásek). */
+  href: string;
   paper?: string;
   condition?: string;
 }
@@ -129,7 +133,16 @@ export interface OverviewPrintGroup {
   rows: OverviewPrintRow[];
 }
 
-type ProjectPrints = Pick<ProjectDefinition, 'lessons' | 'patternSheets' | 'practiceSheets'>;
+type ProjectPrints = Pick<
+  ProjectDefinition,
+  'slug' | 'lessons' | 'patternSheets' | 'practiceSheets'
+>;
+
+/** „List 1: značení odřezku“ u listu „List 1“ → „značení odřezku“. */
+function purposeWithoutLabel(purpose: string, label: string): string {
+  const prefix = `${label}: `;
+  return purpose.startsWith(prefix) ? purpose.slice(prefix.length) : purpose;
+}
 
 function sheetLabel(project: ProjectPrints, print: LessonPrint): string {
   if (print.source === 'template') return 'Šablona';
@@ -153,24 +166,46 @@ export function overviewPrints(
     .map((lesson) => ({
       lessonSlug: lesson.slug,
       lessonOrder: lesson.order,
-      rows: (lesson.prints ?? []).map((print) => ({
-        sheetLabel: sheetLabel(project, print),
-        sheetId: print.sheetId ?? 'template',
-        copies: print.copies,
-        purpose: print.purpose,
-        ...(print.paper ? { paper: print.paper } : {}),
-        ...(print.condition ? { condition: print.condition } : {}),
-      })),
+      rows: (lesson.prints ?? []).map((print) => {
+        const label = sheetLabel(project, print);
+        return {
+          sheetLabel: label,
+          sheetId: print.sheetId ?? 'template',
+          copies: print.copies,
+          purpose: purposeWithoutLabel(print.purpose, label),
+          href: printHref(
+            project,
+            print.source,
+            print.source === 'template' ? undefined : print.sheetId,
+          ),
+          ...(print.paper ? { paper: print.paper } : {}),
+          ...(print.condition ? { condition: print.condition } : {}),
+        };
+      }),
     }));
 }
 
-/** Součet výtisků po listech (bez podmíněných), v pořadí prvního výskytu. */
+/**
+ * Podmínka, kterou mají všechny výtisky (u pásku: listy jen za řadu destičky s „ne“). Výpis ji
+ * pak napíše jednou pod seznam, ne u každého řádku. Jinak `undefined`.
+ */
+export function sharedPrintCondition(groups: readonly OverviewPrintGroup[]): string | undefined {
+  const conditions = new Set(groups.flatMap((g) => g.rows).map((r) => r.condition));
+  const [only] = [...conditions];
+  return conditions.size === 1 ? only : undefined;
+}
+
+/**
+ * Součet výtisků po listech, seřazený podle názvu listu. Bez podmíněných výtisků; s
+ * `includeConditional` i s nimi (nejvyšší možný počet, když jsou všechny výtisky podmíněné).
+ */
 export function printTotals(
   groups: readonly OverviewPrintGroup[],
+  { includeConditional = false }: { includeConditional?: boolean } = {},
 ): { sheetLabel: string; sheetId: string; copies: number }[] {
   const totals: { sheetLabel: string; sheetId: string; copies: number }[] = [];
   for (const row of groups.flatMap((g) => g.rows)) {
-    if (row.condition) continue;
+    if (row.condition && !includeConditional) continue;
     const total = totals.find((t) => t.sheetId === row.sheetId);
     if (total) total.copies += row.copies;
     else totals.push({ sheetLabel: row.sheetLabel, sheetId: row.sheetId, copies: row.copies });

@@ -1,4 +1,6 @@
+import { routes } from '@/app/routes';
 import { projects } from '@/content/projects';
+import { beltProject } from '@/content/projects/belt/project';
 import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
 import { lidWalletProject } from '@/content/projects/lid-wallet/project';
 import { projectDefinitionSchema } from '@/content/schema';
@@ -11,6 +13,7 @@ import {
   overviewPrints,
   pointNumbersForLesson,
   printTotals,
+  sharedPrintCondition,
 } from '@/features/overview/project-overview';
 
 describe('Postup v kostce – pomocné funkce', () => {
@@ -239,5 +242,128 @@ describe('Postup v kostce – pouzdro s mincí', () => {
     expect(text('pocket-form').later).toContain('po zaschnutí');
     expect(text('strip-cut').later).toContain('lekce 8');
     expect(text('pocket-stitch').later).toContain('klobouček');
+  });
+});
+
+describe('Postup v kostce – pásek', () => {
+  const project = beltProject;
+  if (!hasOverview(project)) throw new Error('Pásek nemá přehled');
+  const sections = numberOverview(project.overview, project);
+  const points = flatOverview(sections);
+  const point = (id: string) => points.find((p) => p.point.id === id)!.point;
+
+  it('15–28 krátkých bodů ve třech oddílech, nejvýš 3 věty na bod', () => {
+    expect(points.length).toBeGreaterThanOrEqual(15);
+    expect(points.length).toBeLessThanOrEqual(28);
+    expect(sections.map((s) => s.title)).toEqual([
+      'Příprava',
+      'Trénink na odřezku',
+      'Stavba pásku',
+    ]);
+    for (const p of points) {
+      const sentences = p.point.text.split(/[.!?](?:\s|$)/).filter((s) => s.trim()).length;
+      expect(sentences, p.point.id).toBeLessThanOrEqual(3);
+    }
+  });
+
+  it('začíná obvodem, uložením pásku, nákupem podle „Koupit“ a tiskem listů', () => {
+    expect(points.slice(0, 6).map((p) => p.point.stepId)).toEqual([
+      'waist',
+      'your-belt',
+      'order',
+      'measure-strap',
+      'plate-check',
+      'plate-or-sheets',
+    ]);
+    expect(point('order').text).toContain('souhrnu „Koupit“');
+    expect(point('order').appLinks?.map((l) => l.to)).toEqual(['belt-config', 'shopping']);
+    expect(point('sheets').printsFrom).toEqual([
+      '02-scrap-training',
+      '04-buckle-end',
+      '06-holes-and-tip',
+    ]);
+    expect(point('sheets').text).toContain('Vygenerovat listy A4');
+  });
+
+  it('čísla podle pásku neopisuje: žádné cm ani délky, jen odkaz na „Váš pásek“', () => {
+    for (const p of points) {
+      // Pevné míry postupu (Ø 6 mm, 30 cm, 15 cm, 12 mm, 3,5 mm, 50 × 50 mm) smí; délka pásu,
+      // dírky, poutko a dřík nýtu ne.
+      expect(p.point.text, p.point.id).not.toMatch(/10\/6|130 cm|144,3|\b120 mm|Ø 5 mm|106,5/);
+      if (p.point.text.includes('ve „Váš pásek“') || p.point.text.includes('z „Váš pásek“')) {
+        expect(
+          p.point.appLinks?.some((l) => l.to === 'belt-config'),
+          p.point.id,
+        ).toBe(true);
+      }
+    }
+  });
+
+  it('výtisky: listy z „Váš pásek“, jen za podmínky, nejvýš list 1 2× a list 2 1×', () => {
+    const groups = overviewPrints(project, point('sheets').printsFrom!);
+    expect(groups.map((g) => g.lessonOrder)).toEqual([2, 4, 6]);
+    const rows = groups.flatMap((g) => g.rows);
+    expect(rows.map((r) => r.sheetLabel)).toEqual(['List 1', 'List 1', 'List 2']);
+    // Název listu se v účelu neopakuje („List 1: …“ → „…“).
+    expect(rows[0]!.purpose).toBe('značení odřezku místo řady 3 destičky');
+    expect(rows[2]!.href).toBe(routes.beltConfig(project.slug, 'spicka'));
+    expect(sharedPrintCondition(groups)).toContain('neprošla kontrolou');
+    expect(printTotals(groups)).toEqual([]);
+    expect(
+      printTotals(groups, { includeConditional: true }).map((t) => `${t.sheetLabel} ${t.copies}×`),
+    ).toEqual(['List 1 2×', 'List 2 1×']);
+  });
+
+  it('teď × později: obvod teď, tloušťka po dodání; konec, 30 cm a druhá dvojice později', () => {
+    expect(point('waist').later).toContain('až pás přijde');
+    expect(point('square-end').later).toContain('lekci 6');
+    expect(point('long-edges').later).toContain('posledních 30 cm');
+    expect(point('first-pair').later).toContain('skrz vyseknuté otvory');
+  });
+
+  it('„Kde jste v postupu“ najde body v každé lekci pásku', () => {
+    for (const lesson of project.lessons) {
+      expect(overviewAroundLesson(sections, lesson.slug).length, lesson.slug).toBeGreaterThan(0);
+    }
+    expect(formatNumberRanges(pointNumbersForLesson(sections, '01-design-and-measure'))).toBe(
+      '1–6',
+    );
+  });
+});
+
+describe('Postup v kostce – výtisky a odkazy', () => {
+  it('společná podmínka jen tehdy, když ji mají všechny výtisky', () => {
+    // Lekce 6 pouzdra: tři výtisky, každý s jinou podmínkou; lekce 1: bez podmínky.
+    expect(
+      sharedPrintCondition(overviewPrints(coinCardHolderProject, ['06-coin-pocket-and-hardware'])),
+    ).toBeUndefined();
+    expect(
+      sharedPrintCondition(overviewPrints(coinCardHolderProject, ['01-paper-model'])),
+    ).toBeUndefined();
+  });
+
+  it('schéma odmítne odkaz bodu na stránku, kterou projekt nemá', () => {
+    const base = beltProject;
+    const withLink = {
+      ...base,
+      overview: {
+        sections: [
+          {
+            title: 'X',
+            points: [
+              {
+                id: 'x',
+                text: 'Něco.',
+                lessonSlug: base.lessons[0]!.slug,
+                appLinks: [{ to: 'lid-sheets', label: 'Listy' }],
+              },
+            ],
+          },
+        ],
+      },
+    };
+    const messages =
+      projectDefinitionSchema.safeParse(withLink).error?.issues.map((i) => i.message) ?? [];
+    expect(messages.join()).toContain('kterou projekt nemá');
   });
 });

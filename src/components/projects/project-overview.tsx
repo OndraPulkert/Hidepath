@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
 
+import { appLinkHref } from '@/app/app-links';
 import { LESSON_ANCHORS, PROJECT_OVERVIEW_ANCHOR, routes } from '@/app/routes';
 import { GlossaryText } from '@/components/glossary/glossary-term';
 import { Card } from '@/components/ui/card';
@@ -15,6 +16,7 @@ import {
   overviewPrints,
   pointNumbersForLesson,
   printTotals,
+  sharedPrintCondition,
 } from '@/features/overview/project-overview';
 import { cn } from '@/lib/utils/cn';
 import { initiallyOpenOnWide } from '@/lib/utils/disclosure';
@@ -45,10 +47,16 @@ function Summary({ kicker, title }: { kicker: string; title: string }) {
   );
 }
 
-/** Výtisky z „Vytisknout“ lekcí a součet po listech. */
+/**
+ * Výtisky z „Vytisknout“ lekcí a součet po listech. Podmínku společnou všem výtiskům napíše
+ * jednou; když je každý výtisk podmíněný, součet je „nejvýš“.
+ */
 function OverviewPrints({ project, lessons }: { project: ProjectDefinition; lessons: string[] }) {
   const groups = overviewPrints(project, lessons);
+  const shared = sharedPrintCondition(groups);
   const totals = printTotals(groups);
+  const allConditional = totals.length === 0;
+  const shown = allConditional ? printTotals(groups, { includeConditional: true }) : totals;
   return (
     <div className="mt-2 flex flex-col gap-2 rounded-md border border-line bg-canvas px-3 py-2">
       {groups.map((g) => (
@@ -57,20 +65,26 @@ function OverviewPrints({ project, lessons }: { project: ProjectDefinition; less
           <ul className="flex flex-col gap-1 text-meta text-ink-2">
             {g.rows.map((r, i) => (
               <li key={`${r.sheetId}-${i}`}>
-                <span className="font-semibold whitespace-nowrap text-leather">
+                <Link to={r.href} className="font-semibold whitespace-nowrap text-leather">
                   {r.sheetLabel} · {r.copies}×
-                </span>{' '}
+                </Link>{' '}
                 {typo(r.purpose)}
                 {r.paper ? ` (${typo(r.paper)})` : ''}
-                {r.condition ? ` – ${typo(r.condition)}` : ''}
+                {r.condition && !shared ? ` – ${typo(r.condition)}` : ''}
               </li>
             ))}
           </ul>
         </div>
       ))}
+      {shared ? (
+        <p className="text-meta text-ink-2">
+          <span className="font-semibold">Tiskněte jen, když </span>
+          {typo(shared)}.
+        </p>
+      ) : null}
       <p className="border-t border-dashed border-line pt-2 text-meta">
-        <span className="font-semibold">Celkem: </span>
-        {totals.map((t) => `${t.sheetLabel} ${t.copies}×`).join(', ')}
+        <span className="font-semibold">{allConditional ? 'Celkem nejvýš: ' : 'Celkem: '}</span>
+        {shown.map((t) => `${t.sheetLabel} ${t.copies}×`).join(', ')}
       </p>
     </div>
   );
@@ -123,12 +137,23 @@ function PointItem({
         {!compact && point.printsFrom ? (
           <OverviewPrints project={project} lessons={point.printsFrom} />
         ) : null}
-        <Link
-          to={pointHref(project, item)}
-          className="inline-flex min-h-touch items-center self-start text-meta"
-        >
-          Lekce {item.lessonOrder} <span aria-hidden>&nbsp;→</span>
-        </Link>
+        <div className="flex flex-wrap gap-x-4">
+          <Link
+            to={pointHref(project, item)}
+            className="inline-flex min-h-touch items-center text-meta"
+          >
+            Lekce {item.lessonOrder} <span aria-hidden>&nbsp;→</span>
+          </Link>
+          {point.appLinks?.map((l) => (
+            <Link
+              key={l.to}
+              to={appLinkHref(l.to, project)}
+              className="inline-flex min-h-touch items-center text-meta"
+            >
+              {typo(l.label)} <span aria-hidden>&nbsp;→</span>
+            </Link>
+          ))}
+        </div>
       </div>
     </li>
   );

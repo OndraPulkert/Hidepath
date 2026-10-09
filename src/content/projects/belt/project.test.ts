@@ -217,7 +217,8 @@ describe('obsah – pásek: zápisník, „Připravte si“ a destička', () => 
     expect(body).toContain('za řadu 3 použijete list 1 (lekce 2 a 4)');
     expect(body).toContain('za řadu 1 nebo 2 list 2 (lekce 6)');
     for (const order of [2, 4, 6]) {
-      for (const p of lesson(order).prints ?? []) expect(p.condition).toContain('u této řady');
+      for (const p of lesson(order).prints ?? [])
+        expect(p.condition).toContain('kterou list nahrazuje');
     }
   });
 
@@ -464,12 +465,12 @@ describe('pásek – barevný pásek (hrany a balzám)', () => {
     expect(ids3.indexOf('edge-paint')).toBeLessThan(ids3.indexOf('burnish'));
     expect(step(3, 'edge-paint').body).toMatch(/^Jen u barevného pásku/);
     expect(step(3, 'edge-paint').waits![0]!.initialFromField).toBe('edge-paint-dry-minutes');
-    expect(step(3, 'balm').body).toContain('U barevného pásku jen, když balzám na odřezku vyhověl');
+    expect(step(3, 'balm').body).toContain('Balzám dávejte jen, když na odřezku vyhověl');
     const finish = step(6, 'finish').body;
     expect(finish.indexOf('U barevného pásku je obarvěte')).toBeLessThan(
       finish.indexOf('zaleštěte'),
     );
-    expect(finish).toContain('u barevného pásku jen, když balzám na odřezku vyhověl');
+    expect(finish).toContain('jen když balzám na odřezku vyhověl');
     expect(step(4, 'oval').body).toContain('u barevného pásku obarvěte jako v lekci 3');
     for (const order of [2, 3, 4, 6]) {
       expect(lesson(order).recommendedEquipment, `lekce ${order}`).toContain('edge-paint');

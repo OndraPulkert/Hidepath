@@ -614,7 +614,7 @@ add('F','Dokončete hrany','Srazte hrany posledních 30 cm a hranu nového konce
 },{v:'RUB'},'Tip: podrobný postup je v animaci Dokončení hran, část H. Hranu oválu jste zaleštili už v lekci 4.');
 
 // F2 — balzám
-add('F','Natřete balzámem','Pak natřete balzámem zbytek pásu; u barevného pásku jen, když balzám na odřezku vyhověl.',8000,t=>{
+add('F','Natřete balzámem','Pak natřete balzámem zbytek pásu, jen když balzám na odřezku vyhověl (jako v lekci 3).',8000,t=>{
   const c=CAM_F;const p=es(t,.1,.85);
   let s=withCam(c,()=>matBg(-200,280,-60,60)+
     belt({shape:'hrot',face:'lic',holes:HOLES,finish:1,balm:p,balmDone:true}));

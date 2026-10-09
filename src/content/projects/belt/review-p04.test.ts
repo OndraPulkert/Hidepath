@@ -173,7 +173,7 @@ describe('pásek – opravy z kontroly p04', () => {
       'U barevného pásku je obarvěte jako v lekci 3',
     );
     expect(caption(spicka, 'Natřete balzámem')).toContain(
-      'u barevného pásku jen, když balzám na odřezku vyhověl',
+      'jen když balzám na odřezku vyhověl (jako v lekci 3)',
     );
   });
 

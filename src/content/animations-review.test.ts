@@ -86,7 +86,7 @@ describe('kontrola animací proti lekcím', () => {
     expect(stepSource(spicka, 'B', 1)).toContain('nevejde');
     expect(stepSource(spicka, 'D', 1)).toContain('nevejde');
     expect(stepSource(spicka, 'F', 1)).toContain('U barevného pásku je obarvěte');
-    expect(stepSource(spicka, 'F', 2)).toContain('jen, když balzám na odřezku vyhověl');
+    expect(stepSource(spicka, 'F', 2)).toContain('jen když balzám na odřezku vyhověl');
     const prezka = page('pasek-prezka');
     expect(stepSource(prezka, 'C', 4)).toContain('u barevného pásku obarvěte');
     expect(stepSource(prezka, 'D', 1)).toContain('délkou poutka aktivního pásku pod krokem');

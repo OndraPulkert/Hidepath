@@ -560,6 +560,11 @@ export const overviewPointSchema = z.object({
    * Počty se tu nezadávají, bere je aplikace z lekcí (jediný zdroj).
    */
   printsFrom: z.array(slug).min(1).optional(),
+  /**
+   * Odkazy pod bodem na stránky aplikace (např. „Váš pásek“), kde jsou čísla, která přehled
+   * neopisuje. Stejné klíče jako odkazy pod krokem lekce.
+   */
+  appLinks: z.array(appLinkSchema).min(1).optional(),
 });
 export type OverviewPoint = z.infer<typeof overviewPointSchema>;
 
@@ -787,7 +792,7 @@ export const projectDefinitionSchema = z
       }
     }
     checkRecords(project.lessons, ctx);
-    if (project.overview) checkOverview(project.overview, project.lessons, ctx);
+    if (project.overview) checkOverview(project, project.overview, ctx);
   });
 export type ProjectDefinition = z.infer<typeof projectDefinitionSchema>;
 
@@ -832,8 +837,17 @@ function checkLessonPrints(project: ProjectShape, lesson: LessonDefinition, ctx:
   }
 }
 
-/** Body přehledu míří na existující lekci a krok; výtisky jen z lekcí, které nějaké mají. */
-function checkOverview(overview: ProjectOverview, lessons: readonly LessonDefinition[], ctx: Ctx) {
+/**
+ * Body přehledu míří na existující lekci a krok; výtisky jen z lekcí, které nějaké mají;
+ * odkazy jen na stránky, které projekt má.
+ */
+function checkOverview(
+  project: ProjectShape & Pick<ProjectDefinition, 'lessons'>,
+  overview: ProjectOverview,
+  ctx: Ctx,
+) {
+  const { lessons } = project;
+  const has = appLinkTargetsOf(project);
   const issue = (message: string) => ctx.addIssue({ code: 'custom', message });
   const ids = new Set<string>();
   for (const point of overview.sections.flatMap((s) => s.points)) {
@@ -849,6 +863,14 @@ function checkOverview(overview: ProjectOverview, lessons: readonly LessonDefini
       if (!lessons.find((l) => l.slug === from)?.prints) {
         issue(`Postup v kostce: bod ${point.id} vypisuje tisk lekce ${from}, ta žádný nemá`);
       }
+    }
+    const targets = (point.appLinks ?? []).map((l) => l.to);
+    for (const to of targets) {
+      if (!has[to])
+        issue(`Postup v kostce: bod ${point.id}: odkaz ${to} vede na stránku, kterou projekt nemá`);
+    }
+    if (new Set(targets).size !== targets.length) {
+      issue(`Postup v kostce: bod ${point.id}: odkaz se opakuje`);
     }
   }
 }
@@ -996,6 +1018,21 @@ function checkRecordField(lessonSlug: string, field: RecordField, ctx: Ctx) {
 }
 
 /** Odkazy pod krokem musí vést na stránku, kterou projekt má, a nesmí se opakovat. */
+/** Které stránky (`AppLink['to']`) projekt má. */
+function appLinkTargetsOf(project: ProjectShape): Readonly<Record<AppLink['to'], boolean>> {
+  return {
+    'belt-config': project.patternSheets?.browserGenerator === 'belt-config',
+    'lid-sheets': project.patternSheets?.browserGenerator === 'lid-wallet-thickness',
+    'pattern-sheets': project.patternSheets !== undefined,
+    'practice-sheets': project.practiceSheets !== undefined,
+    template: project.template !== undefined,
+    shopping: true,
+    workshop: true,
+    account: true,
+    dashboard: true,
+  };
+}
+
 function checkStepAppLinks(
   project: Pick<ProjectDefinition, 'patternSheets' | 'practiceSheets' | 'template'>,
   lessonSlug: string,
@@ -1006,17 +1043,7 @@ function checkStepAppLinks(
     ctx.addIssue({ code: 'custom', message: `Lekce ${lessonSlug}: krok ${step.id}: ${what}` });
   const isBelt = project.patternSheets?.browserGenerator === 'belt-config';
   const isLid = project.patternSheets?.browserGenerator === 'lid-wallet-thickness';
-  const has: Readonly<Record<AppLink['to'], boolean>> = {
-    'belt-config': isBelt,
-    'lid-sheets': isLid,
-    'pattern-sheets': project.patternSheets !== undefined,
-    'practice-sheets': project.practiceSheets !== undefined,
-    template: project.template !== undefined,
-    shopping: true,
-    workshop: true,
-    account: true,
-    dashboard: true,
-  };
+  const has = appLinkTargetsOf(project);
   const targets = (step.appLinks ?? []).map((l) => l.to);
   for (const to of targets) {
     if (!has[to]) issue(`odkaz ${to} vede na stránku, kterou projekt nemá`);

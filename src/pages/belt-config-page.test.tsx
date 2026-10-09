@@ -210,10 +210,10 @@ describe('vstupy do „Váš pásek“', () => {
       'href',
       routes.beltConfig(SLUG),
     );
-    expect(screen.getByRole('link', { name: 'Co koupit' })).toHaveAttribute(
-      'href',
-      routes.shopping,
-    );
+    // Pod krokem a v „Kde jste v postupu“ (bod nákupu).
+    const shopping = screen.getAllByRole('link', { name: /^Co koupit/ });
+    expect(shopping.length).toBeGreaterThan(0);
+    for (const link of shopping) expect(link).toHaveAttribute('href', routes.shopping);
   });
 
   it('lekce: bez pásku vyzve k zadání', async () => {
