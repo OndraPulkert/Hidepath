@@ -42,6 +42,8 @@ import {
   coinCardHolderLayout,
 } from '../src/lib/geometry/coin-card-holder.ts';
 
+import { PRICK_INSET_MM, PRICK_R } from './coin-card-holder-practice.ts';
+
 const f = (n: number): string => (Math.round(n * 1000) / 1000).toString();
 const cz = (n: number): string => f(n).replace('.', ',');
 
@@ -103,6 +105,9 @@ const cross = (cx: number, cy: number, s = 1.5): string =>
   `<path d="M${f(cx - s)} ${f(cy)} L${f(cx + s)} ${f(cy)} M${f(cx)} ${f(cy - s)} L${f(cx)} ${f(cy + s)}" stroke="${INK}" stroke-width="0.25"/>`;
 const dot = (x: number, y: number): string =>
   `<circle cx="${f(x)}" cy="${f(y)}" r="${DOT_R}" fill="${INK}"/>`;
+/** Kroužek k propíchnutí šídlem – stejný symbol jako na cvičném proužku (lekce 4). */
+const prick = (x: number, y: number, kind: string): string =>
+  `<circle class="prick" data-mark="${kind}" cx="${f(x)}" cy="${f(y)}" r="${PRICK_R}" fill="none" stroke="${INK}" stroke-width="0.25"/>`;
 
 /** Tečky stehu podél úsečky od (x0,y0) k (x1,y1) s roztečí `pitch`, první tečka v bodě 0. */
 function stitchDots(x0: number, y0: number, x1: number, y1: number, pitch: number): string {
@@ -413,8 +418,8 @@ export function buildCoinHolderSheetSvg(
       const cB = X((L.frontX1Mm + L.innerX0Mm) / 2);
       [
         `ztenčení z rubu na ${cz(spec.foldSkiveThicknessMm)} mm:`,
-        `konce čar ohybu${spec.foldSkiveBands === 'AB' ? 'ů A i' : ''} B propíchnout šídlem,`,
-        `na rubu spojit a odsadit ${cz(spec.foldSkiveMarginMm)} mm na obě strany`,
+        'kroužky na okrajích šrafy propíchnout šídlem,',
+        `na rubu spojit (ohyb + ${cz(spec.foldSkiveMarginMm)} mm na obě strany)`,
       ].forEach((t, i) => out.push(text(cB, Y(-16 + i * 3), t, 2.1, 'middle', GUIDE)));
     }
   }
@@ -587,6 +592,19 @@ export function buildCoinHolderSheetSvg(
     out.push(haloText(x0 + w / 2, y0 + h / 2 + 0.6, t, 1.8));
   });
 
+  /* --- kroužky k propíchnutí (nad šrafami, aby byly vidět) --- */
+  for (const p of bandPrickPoints(L, spec)) out.push(prick(X(p.x), Y(p.y), p.kind));
+  out.push(
+    text(
+      pcx,
+      Y(pys + L.pocketHeightMm) + 3.4,
+      'kroužky v rozích = propíchnout, kapsa je zakryje',
+      1.9,
+      'middle',
+      GUIDE,
+    ),
+  );
+
   /* --- průchodka --- */
   if (L.grommetXMm !== null && L.grommetYMm !== null) {
     out.push(circle(X(L.grommetXMm), Y(L.grommetYMm), spec.grommetHoleMm / 2));
@@ -633,7 +651,7 @@ export function buildCoinHolderSheetSvg(
     `Karty ${cz(spec.cardWidthMm)} × ${cz(spec.cardHeightMm)} (${spec.cardsCount} ks) vepředu, bankovky složené napůl vzadu, mince Ø ${cz(spec.coinDiameterMm)}, kůže tělo ${cz(spec.bodyThicknessMm)} mm.`,
     `Jeden pás: ZADNÍ + ohyb A + PŘEDNÍ + ohyb B + VNITŘNÍ panel. Po složení jsou obě boční hrany OHYBY, šije se jen dno (skrz všechny vrstvy), horní hrana zůstává otevřená.`,
     `PÁS PŘILEPIT PÁSKOU NA LÍC, propíchnout značky a řezat skrz papír po čáře (lekce 5) – přední panel je nakreslený tak, jak bude vidět. Jazyk vyjde zepředu ${front} (zezadu ${back}), výřez na prst naproti němu.`,
-    `Plná čára = řez, čárkovaně = ohyb, tečky = otvory dna (vidličky přesně ${cz(spec.stitchPitchMm)} mm; naplocho: přední panel z líce, zadní a vnitřní z rubu)${spec.foldSkiveThicknessMm !== null ? `, šrafa = ztenčit na ${cz(spec.foldSkiveThicknessMm)} mm z rubu` : '; ohyby se neztenčují'}.`,
+    `Plná čára = řez, čárkovaně = ohyb, kroužky = propíchnout šídlem (na rubu spojit), tečky = otvory dna (vidličky přesně ${cz(spec.stitchPitchMm)} mm; naplocho: přední panel z líce, zadní a vnitřní z rubu)${spec.foldSkiveThicknessMm !== null ? `, šrafa = ztenčit na ${cz(spec.foldSkiveThicknessMm)} mm z rubu` : '; ohyby se neztenčují'}.`,
     `Pořadí: 1 pás · 2–3 kapsa (list KAPSA) · 4 přišít kapsu, osadit patici druku${L.grommetXMm !== null ? ' a průchodku' : ''} NAPLOCHO · 5 složit (vnitřní za přední, zadní přes vše) · 6 slepit a prošít dno`,
     `· 7 klobouček podle obtisku patice se vším obsahem, pak jazyk zkrátit ${cz(spec.tabBeyondSnapMm)} mm za klobouček a zaoblit · 8 srazit a zaleštit hrany (vnitřní předem).`,
   ];
@@ -676,6 +694,59 @@ export function skiveZones(
     zones.push({ x0: L.frontX1Mm - m, x1: L.innerX0Mm + m, y0: 0, y1: L.panelHeightMm });
   }
   return zones;
+}
+
+/** Bod k propíchnutí v soustavě pásu a co označuje. */
+export interface BandPrickPoint {
+  x: number;
+  y: number;
+  kind: 'fold' | 'skive' | 'pocket';
+}
+
+/**
+ * Kroužky k propíchnutí šídlem na listu PÁS (lekce 5), v soustavě pásu:
+ * - konce čar ohybů A a B `PRICK_INSET_MM` od hrany (u ohybu A horní konec od dna výřezu),
+ * - okraje pásma ztenčení (šrafy) stejně daleko od hran, aby se na rubu jen spojily,
+ * - rohy místa pro kapsu na úhlopříčce zaobleného rohu `PRICK_INSET_MM` dovnitř od obrysu,
+ *   takže je přiložená kapsa zakryje.
+ */
+export function bandPrickPoints(
+  L: CoinCardHolderLayout,
+  spec: CoinCardHolderSpec,
+): BandPrickPoint[] {
+  const i = PRICK_INSET_MM;
+  const H = L.panelHeightMm;
+  const S = L.scoopRadiusMm;
+  const pts: BandPrickPoint[] = [];
+  const ends = (x: number, y0: number, y1: number, kind: BandPrickPoint['kind']): void => {
+    pts.push({ x, y: y0 + i, kind }, { x, y: y1 - i, kind });
+  };
+  ends(L.backX1Mm, S, H, 'fold');
+  ends(L.frontX0Mm, S, H, 'fold');
+  if (L.innerX0Mm !== null) {
+    ends(L.frontX1Mm, 0, H, 'fold');
+    ends(L.innerX0Mm, 0, H, 'fold');
+  }
+  for (const z of skiveZones(L, spec)) {
+    ends(z.x0, z.y0, z.y1, 'skive');
+    ends(z.x1, z.y0, z.y1, 'skive');
+  }
+  // Roh o poloměru r: bod oblouku na úhlopříčce je r·(1 − 1/√2) od obou hran, pak i dovnitř.
+  const w = L.pocketWidthMm;
+  const h = L.pocketHeightMm;
+  const d = (r: number): number =>
+    Math.min(r, w / 2, h / 2) * (1 - Math.SQRT1_2) + i * Math.SQRT1_2;
+  const x0 = L.frontX0Mm + L.pocketXMm;
+  const y0 = L.pocketYMm;
+  const dt = d(spec.pocketTopRadiusMm);
+  const db = d(spec.cornerRadiusMm);
+  pts.push(
+    { x: x0 + dt, y: y0 + dt, kind: 'pocket' },
+    { x: x0 + w - dt, y: y0 + dt, kind: 'pocket' },
+    { x: x0 + db, y: y0 + h - db, kind: 'pocket' },
+    { x: x0 + w - db, y: y0 + h - db, kind: 'pocket' },
+  );
+  return pts;
 }
 
 /**
@@ -769,11 +840,27 @@ export function buildCoinHolderPaperModelSvg(
   );
   // druk (a volitelná průchodka níže)
   const sr = spec.snapDiameterMm / 2;
+  // Křížek = střed k propíchnutí (jako na listu PÁS), popisek vedle kružnice.
+  const side = mirror ? -1 : 1;
+  const sideAnchor: Anchor = mirror ? 'end' : 'start';
   out.push(circle(X(L.snapXTabMm), Y(L.snapYTabMm), sr, ACCENT, '1.5 1'));
-  out.push(text(X(L.snapXTabMm), Y(L.snapYTabMm) + 1, 'klobouček', 2.1, 'middle', ACCENT));
+  out.push(cross(X(L.snapXTabMm), Y(L.snapYTabMm)));
+  out.push(
+    text(X(L.tabX1Mm) + side * 2, Y(L.snapYTabMm) + 0.8, 'klobouček', 2.1, sideAnchor, ACCENT),
+  );
   // Patice: model počítá s přírubou ≈ Ø 10, smí mít nejvýš Ø snapFlangeMax (klobouček je na jazyku venku).
   out.push(circle(X(L.snapXFrontMm), Y(L.snapYFrontMm), SNAP_POST_RADIUS_MM, ACCENT, '1.5 1'));
-  out.push(text(X(L.snapXFrontMm), Y(L.snapYFrontMm) + 1, 'patice', 2.1, 'middle', ACCENT));
+  out.push(cross(X(L.snapXFrontMm), Y(L.snapYFrontMm)));
+  out.push(
+    text(
+      X(L.snapXFrontMm) + side * (SNAP_POST_RADIUS_MM + 1.5),
+      Y(L.snapYFrontMm) + 0.8,
+      'patice',
+      2.1,
+      sideAnchor,
+      ACCENT,
+    ),
+  );
   // Kde bude kapsa s mincí a šev dna (páskou slepit podél něj).
   out.push(
     guide(

@@ -13,9 +13,11 @@
 <text x="134.63" y="115.69" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#7a7a7a">54 × 85,6 mm,</text>
 <text x="134.63" y="118.49" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#7a7a7a">horní hrana 15 mm pod okrajem</text>
 <circle cx="26.5" cy="26" r="6" fill="none" stroke="#a2471f" stroke-width="0.2" stroke-dasharray="1.5 1"/>
-<text x="26.5" y="27" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#a2471f">klobouček</text>
+<path d="M25 26 L28 26 M26.5 24.5 L26.5 27.5" stroke="#2b2b2b" stroke-width="0.25"/>
+<text x="45" y="26.8" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#a2471f">klobouček</text>
 <circle cx="154.13" cy="63.99" r="5" fill="none" stroke="#a2471f" stroke-width="0.2" stroke-dasharray="1.5 1"/>
-<text x="154.13" y="64.99" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#a2471f">patice</text>
+<path d="M152.63 63.99 L155.63 63.99 M154.13 62.49 L154.13 65.49" stroke="#2b2b2b" stroke-width="0.25"/>
+<text x="160.63" y="64.79" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#a2471f">patice</text>
 <path d="M123.38 96.29 L145.88 96.29 A10 10 0 0 1 155.88 106.29 L155.88 132.29 A6 6 0 0 1 149.88 138.29 L119.38 138.29 A6 6 0 0 1 113.38 132.29 L113.38 106.29 A10 10 0 0 1 123.38 96.29 Z" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1 1"/>
 <text x="134.63" y="101.29" font-family="Helvetica, Arial, sans-serif" font-size="2" text-anchor="middle" fill="#7a7a7a">místo pro kapsu s mincí</text>
 <path d="M10.546 155.09 L252.004 155.09" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="0.8 1.2"/>

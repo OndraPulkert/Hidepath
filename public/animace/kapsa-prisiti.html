@@ -294,7 +294,7 @@ add('A','Přilepte šablonu PÁS na LÍC','Šablonu PÁS vystřihněte nahrubo s
 },'lic');
 
 // A2 prick marks
-add('A','Šídlem propíchněte rohy místa pro kapsu','Před řezáním propíchněte šídlem skrz papír i kůži rohy místa pro kapsu – asi 1 mm dovnitř od zaobleného rohu, aby značku zakryla kapsa. Propíchněte i střed dříku, konce čar ohybů (asi 1 mm od hrany) a všechny tečky dna.',10500,t=>{
+add('A','Šídlem propíchněte rohy místa pro kapsu','Před řezáním propíchněte šídlem skrz papír i kůži kroužky v rozích místa pro kapsu na listu PÁS – leží asi 1 mm dovnitř od zaobleného rohu, kapsa je zakryje. Propíchněte i křížek patice (střed dříku), kroužky na koncích čar ohybů a všechny tečky dna.',10500,t=>{
   const z=es(t,0,.1); const cam=camL(STRIPC,PANELC,z);
   const P=ALLMARKS(); let n,fr;
   if(t<.6){const u=seg(t,.12,.58)*4;n=Math.min(4,Math.floor(u));fr=u-Math.floor(u)}else{const u=4+seg(t,.6,.94)*(P.length-4);n=Math.min(P.length,Math.floor(u));fr=u-Math.floor(u)}
@@ -348,7 +348,7 @@ add('A','Vyřízněte pás a zkontrolujte značky','Pás vyřízněte skrz papí
 // ---------- B: glue ----------
 const IPY=16;
 function insetPocketT(){return `translate(89.5 ${IPY}) scale(.95)`}
-add('B','Přiložte kapsu na 4 značky','Hotovou kapsu přiložte nasucho lícem nahoru, otevřenou hranou nahoru, rohy na 4 propíchnuté značky. Pravítkem zkontrolujte polohu: 41,8 mm pod horní hranou a 14,75 mm od boků.',5600,t=>{
+add('B','Přiložte kapsu na 4 značky','Hotovou kapsu přiložte nasucho lícem nahoru, otevřenou hranou nahoru, tak aby zakryla 4 propíchnuté kroužky v rozích. Pravítkem zkontrolujte polohu: 41,8 mm pod horní hranou a 14,75 mm od boků.',5600,t=>{
   const m=es(t,.06,.6), pulse=.5+.5*Math.sin(t*Math.PI*8);
   let inner=stripLeather()+rings(CORN,'var(--ok)',1.5+pulse*.4,.45,1-seg(t,.55,.7));
   const dx=L(40,0,m), dy=L(-42,0,m);

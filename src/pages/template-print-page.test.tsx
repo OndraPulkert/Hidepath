@@ -2,6 +2,7 @@ import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { routes } from '@/app/routes';
+import { TEMPLATE_LEGEND } from '@/components/illustrations/template';
 import { StepList } from '@/components/lessons/step-list';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
@@ -193,18 +194,39 @@ describe('tisk – pouzdro na karty: šablona a cvičná šablona', () => {
     expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
   });
 
-  it('tištěná šablona má čárky na koncích výřezu a výšky kapsy 56 mm a linii stehu po zaoblení', async () => {
+  it('tištěná šablona má čárky výřezu, výšku kapsy 56 mm, lepený pás, kroužky a linii stehu po zaoblení', async () => {
     renderApp(routes.template(cardHolderProject.slug));
     const svg = await screen.findByRole('img', { name: /^Šablona 1:1: Pouzdro na karty/ });
-    const marks = [...svg.querySelectorAll('[data-mark]')];
+    const ticks = [...svg.querySelectorAll('path[data-mark]')];
     // Rozložení: okraj 12 mm, zadní díl 100 × 70 nahoře, přední kapsa o 10 mm níž (y 92).
-    expect(marks.map((m) => [m.getAttribute('data-mark'), m.getAttribute('d')])).toEqual([
+    expect(ticks.map((m) => [m.getAttribute('data-mark'), m.getAttribute('d')])).toEqual([
+      ['glue-band', 'M17 32 L17 76 A1 1 0 0 0 18 77 L106 77 A1 1 0 0 0 107 76 L107 32'],
       ['height', 'M12 26 L20 26'],
       ['height', 'M112 26 L104 26'],
       ['thumb-cutout-end', 'M42 92 L42 89'],
       ['thumb-cutout-end', 'M82 92 L82 89'],
+      ['thumb-cutout-bottom', 'M62 104 L62 101'],
     ]);
-    expect(svg).toHaveTextContent('krátká čárka = značka k propíchnutí šídlem (lekce 5 a 6)');
+    const circles = [...svg.querySelectorAll('circle[data-mark]')].map((c) => [
+      c.getAttribute('data-mark'),
+      Number(c.getAttribute('cx')),
+      Number(c.getAttribute('cy')),
+    ]);
+    // Zadní díl: konce pásu 50 mm od spodku (y 32) a rohy; kapsa: první a poslední otvor 6 mm
+    // pod vrchem (y 98) a tři body oblouku linie stehu v každém rohu.
+    expect(circles.filter(([k]) => k === 'glue-end')).toEqual([
+      ['glue-end', 17, 32],
+      ['glue-end', 107, 32],
+    ]);
+    expect(circles.filter(([k]) => k === 'glue-corner')).toHaveLength(2);
+    expect(circles.filter(([k]) => k === 'stitch-end')).toEqual([
+      ['stitch-end', 15.5, 98],
+      ['stitch-end', 108.5, 98],
+    ]);
+    expect(circles.filter(([k]) => k === 'stitch-corner')).toHaveLength(6);
+    expect(svg).toHaveTextContent(TEMPLATE_LEGEND.tick);
+    expect(svg).toHaveTextContent(TEMPLATE_LEGEND.prick);
+    expect(svg).toHaveTextContent(TEMPLATE_LEGEND.glue);
     const stitch = [...svg.querySelectorAll('path[stroke-dasharray]')].map((p) =>
       p.getAttribute('d'),
     );

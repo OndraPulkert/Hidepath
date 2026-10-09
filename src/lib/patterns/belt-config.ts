@@ -554,10 +554,11 @@ export interface BeltConfigResult {
   buckle: { widthMm: number; verified: boolean };
   plate: PlateCompatibility;
   /**
-   * List 2 na výšku, na šířku (7 dírek a delší rozvržení), nebo `null`, když se na A4 nevejde
-   * ani na šířku. Čísla platí i tak, jen listy se netisknou (`sheets`).
+   * List 2 na výšku, na šířku (7 dírek a delší rozvržení), na dva listy na šířku (`split`:
+   * 2a a 2b), nebo `null`, když se nevejde ani tak (v mezích formuláře nenastane). Čísla
+   * platí i tak, jen listy se netisknou (`sheets`).
    */
-  tipSheetOrientation: 'portrait' | 'landscape' | null;
+  tipSheetOrientation: 'portrait' | 'landscape' | 'split' | null;
   /** Jdou vytisknout listy A4? Když ne, `message` říká proč a čím značit. */
   sheets: BeltSheetsAvailability;
   shopping: BeltShoppingLine[];
@@ -586,7 +587,7 @@ export function beltSheetsAvailability(
   return {
     printable: false,
     message:
-      `List 2 se na A4 nevejde: poslední dírka je ${cz(r1(reach))} mm od konce, list A4 pojme nejvýš ${cz(TIP_LANDSCAPE_MAX_REACH_MM)} mm. ` +
+      `List 2 se na A4 nevejde ani na dva listy: poslední dírka je ${cz(r1(reach))} mm od konce, list A4 pojme nejvýš ${cz(TIP_LANDSCAPE_MAX_REACH_MM)} mm. ` +
       'Dírky a konec značte podle čísel v tabulce. ' +
       (row3
         ? 'List 1 (konec u přezky a poutko) se vytiskne, nebo konec u přezky značte řadou 3 destičky.'
@@ -761,8 +762,8 @@ export function deriveBeltConfig(input: BeltConfigInput): BeltConfigOutcome {
 }
 
 /**
- * Tiskové listy (SVG 1:1) pro platné zadání: list 1 vždy, list 2, když se vejde na A4
- * (`beltSheetsAvailability`).
+ * Tiskové listy (SVG 1:1) pro platné zadání: list 1 vždy, list 2 (nebo 2a a 2b), když se
+ * vejde na A4 (`beltSheetsAvailability`).
  */
 export function beltSheetsFor(
   input: BeltConfigInput,

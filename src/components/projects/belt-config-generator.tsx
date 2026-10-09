@@ -155,7 +155,7 @@ export function BeltConfigGenerator({
     setDone(
       built.sheets.length === 1
         ? `List 1 pro ${built.label} je vygenerovaný níže; tiskne se jen to, co je v seznamu listů zaškrtnuté. List 2 se na A4 nevejde: dírky a konec značte podle čísel v tabulce. Po tisku přeměřte kalibrační čtverec 50 × 50 mm.`
-        : `Listy pro ${built.label} jsou vygenerované níže; tiskne se jen to, co je v seznamu listů zaškrtnuté. Po tisku přeměřte kalibrační čtverec 50 × 50 mm.`,
+        : `Listy pro ${built.label} jsou vygenerované níže; tiskne se jen to, co je v seznamu listů zaškrtnuté.${built.sheets.length > 2 ? ' List 2 je na dvou listech (2a a 2b): každý přiložte prostřední dírkou na značku.' : ''} Po tisku přeměřte kalibrační čtverec 50 × 50 mm.`,
     );
   };
 
@@ -612,7 +612,9 @@ function BeltResults({
         ? 'A4 na výšku'
         : r.tipSheetOrientation === 'landscape'
           ? 'A4 na šířku'
-          : 'nevejde se na A4',
+          : r.tipSheetOrientation === 'split'
+            ? '2 listy A4 na šířku (2a a 2b)'
+            : 'nevejde se na A4',
     ],
   ];
   return (
@@ -764,7 +766,7 @@ function PlateBadge({ result }: { result: BeltConfigResult }) {
           <li>
             {typo(
               sheets.printable
-                ? `Za řadu ${endRow.row} vytiskněte list 2.`
+                ? `Za řadu ${endRow.row} vytiskněte list 2${result.tipSheetOrientation === 'split' ? ' (2 listy: 2a a 2b)' : ''}.`
                 : `Za řadu ${endRow.row} značte dírky a konec podle čísel v tabulce: list 2 se na A4 nevejde.`,
             )}
           </li>

@@ -263,9 +263,15 @@ export function PatternSheetsPrint({
   const awaitingGenerated = wanted.length > 0 && generated.length === 0 && notebook.hasPrefill;
   const defaultSelection = (): ReadonlySet<string> => {
     if (generated.length > 0) {
-      const fromLink = wanted
-        .map((id) => generatedSheetId(id))
-        .filter((id) => generated.some((g) => g.id === id));
+      // Vygenerovaný list může mít pokračování `<id>-…` (pásek: list 2b `spicka-zbytek`);
+      // odkaz na list předvybere i je.
+      const fromLink = generated
+        .map((g) => g.id)
+        .filter((gid) =>
+          wanted.some(
+            (id) => gid === generatedSheetId(id) || gid.startsWith(`${generatedSheetId(id)}-`),
+          ),
+        );
       return new Set(fromLink.length > 0 ? fromLink : generated.map((g) => g.id));
     }
     if (wanted.length > 0) return new Set(awaitingGenerated ? [] : wanted);

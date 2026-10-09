@@ -84,11 +84,11 @@ export interface MarkInput {
 }
 
 /**
- * Úsečka značky, `x1 y1` leží na obrysu. Konec výřezu se propichuje na obrysu, výška kapsy
- * těsně pod vnitřním koncem `x2 y2` (lekce 6), kde ji kapsa zakryje i u zaobleného rohu.
+ * Úsečka značky, `x1 y1` leží na obrysu. Konce a dno výřezu se propichují na obrysu (lekce 5),
+ * výška kapsy je jen orientační čárka horní hrany kapsy.
  */
 export interface TemplateMark {
-  kind: 'thumb-cutout-end' | 'height';
+  kind: 'thumb-cutout-end' | 'thumb-cutout-bottom' | 'height';
   x1: number;
   y1: number;
   x2: number;
@@ -100,7 +100,7 @@ export const CUTOUT_TICK_MM = 3;
 
 /**
  * Značky k propíchnutí šídlem: konce oblouku výřezu na palec (svislá čárka nad horní hranou,
- * stejné místo jako v `piecePath`) a výška kapsy na obou bocích (vodorovná čárka dovnitř).
+ * stejné místo jako v `piecePath`), dno oblouku (čárka nahoru do výřezu) a výška kapsy na obou bocích (vodorovná čárka dovnitř).
  */
 export function templateMarks({
   x,
@@ -125,6 +125,15 @@ export function templateMarks({
         y2: round(y - CUTOUT_TICK_MM),
       });
     }
+    // Dno oblouku (vrchol křivky v `piecePath`): čárka vede nahoru do odpadu výřezu.
+    const bottom = y + thumbCutout.depthMm;
+    marks.push({
+      kind: 'thumb-cutout-bottom',
+      x1: round(x + w / 2),
+      y1: round(bottom),
+      x2: round(x + w / 2),
+      y2: round(bottom - CUTOUT_TICK_MM),
+    });
   }
   if (heightMark) {
     const my = round(y + h - heightMark.fromBottomMm);
@@ -144,4 +153,104 @@ export function templateMarks({
 
 function round(value: number): number {
   return Math.round(value * 100) / 100;
+}
+
+/**
+ * Bod k propíchnutí šídlem na líc (lekce 6): `stitch-*` na linii stehu přední kapsy,
+ * `glue-*` na hranici lepeného pásu zadního dílu. `*-end` = horní konec boku, `*-corner` = bod
+ * v zaobleném spodním rohu.
+ */
+export interface PrickPoint {
+  kind: 'stitch-end' | 'stitch-corner' | 'glue-end' | 'glue-corner';
+  x: number;
+  y: number;
+}
+
+/**
+ * Body na otevřené linii odsazené o `offsetMm` (stejná geometrie jako `stitchLinePath`): horní
+ * konce obou boků a v každém spodním rohu začátek, střed a konec oblouku. Je-li oblouk kratší
+ * než 2 mm poloměru, jen jeho střed (body by splynuly). Ostrý roh = jeden bod v rohu linie.
+ */
+export function openLinePoints({
+  x,
+  y,
+  widthMm: w,
+  heightMm: h,
+  cornerRadiusMm,
+  offsetMm: o,
+  upToMm,
+}: Omit<StitchLineInput, 'openTop'>): { ends: [number, number][]; corners: [number, number][] } {
+  const r = Math.min(cornerRadiusMm, w / 2, h / 2);
+  const ri = Math.max(r - o, 0);
+  const left = x + o;
+  const right = x + w - o;
+  const bottom = y + h - o;
+  const sideTop = (upToMm ? y + h - upToMm : y) + Math.max(r, o);
+  const ends: [number, number][] = [
+    [left, sideTop],
+    [right, sideTop],
+  ];
+  const d = ri * Math.SQRT1_2;
+  const corners: [number, number][] = [];
+  if (ri === 0) {
+    corners.push([left, bottom], [right, bottom]);
+  } else {
+    const cy = bottom - ri;
+    const lcx = left + ri;
+    const rcx = right - ri;
+    const full = ri >= 2;
+    if (full) corners.push([left, cy]);
+    corners.push([lcx - d, cy + d]);
+    if (full) corners.push([lcx, bottom], [rcx, bottom]);
+    corners.push([rcx + d, cy + d]);
+    if (full) corners.push([right, cy]);
+  }
+  const rp = ([px, py]: [number, number]): [number, number] => [round(px), round(py)];
+  return { ends: ends.map(rp), corners: corners.map(rp) };
+}
+
+export interface PrickInput {
+  x: number;
+  y: number;
+  widthMm: number;
+  heightMm: number;
+  cornerRadiusMm: number;
+  stitchOffsetMm: number;
+  openEdge: 'top' | 'none';
+  stitchUpToMm?: number | undefined;
+}
+
+/**
+ * Kroužky k propíchnutí na líc v lekci 6, jen u dílů s otevřeným vrchem. Díl, na kterém leží
+ * kapsa (`stitchUpToMm`), nese hranici lepeného pásu `glueBandMm`: konce na bocích (konec
+ * zdrsnění pod zaoblením rohu kapsy) a rohy. Kapsa sama nese body linie stehu: horní konce
+ * (první a poslední otvor) a v rozích tři body oblouku.
+ */
+export function prickPoints(p: PrickInput, glueBandMm?: number): PrickPoint[] {
+  if (p.openEdge !== 'top') return [];
+  const base = {
+    x: p.x,
+    y: p.y,
+    widthMm: p.widthMm,
+    heightMm: p.heightMm,
+    cornerRadiusMm: p.cornerRadiusMm,
+    upToMm: p.stitchUpToMm,
+  };
+  const toPoints = (
+    { ends, corners }: ReturnType<typeof openLinePoints>,
+    end: PrickPoint['kind'],
+    corner: PrickPoint['kind'],
+  ): PrickPoint[] => [
+    ...ends.map(([px, py]) => ({ kind: end, x: px, y: py })),
+    ...corners.map(([px, py]) => ({ kind: corner, x: px, y: py })),
+  ];
+  if (p.stitchUpToMm) {
+    if (!glueBandMm) return [];
+    return toPoints(openLinePoints({ ...base, offsetMm: glueBandMm }), 'glue-end', 'glue-corner');
+  }
+  return toPoints(
+    openLinePoints({ ...base, offsetMm: p.stitchOffsetMm }),
+    'stitch-end',
+    'stitch-corner',
+  );
 }

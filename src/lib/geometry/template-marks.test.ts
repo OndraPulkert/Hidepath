@@ -1,4 +1,4 @@
-import { stitchLinePath, templateMarks } from '@/lib/geometry/template-marks';
+import { prickPoints, stitchLinePath, templateMarks } from '@/lib/geometry/template-marks';
 
 const front = { x: 0, y: 0, widthMm: 100, heightMm: 56, cornerRadiusMm: 6 };
 const back = { x: 0, y: 0, widthMm: 100, heightMm: 70, cornerRadiusMm: 6 };
@@ -35,10 +35,11 @@ describe('stitchLinePath – linie stehu 3,5 mm od hrany', () => {
 });
 
 describe('templateMarks – značky k propíchnutí', () => {
-  it('konce výřezu 40 mm: svislé čárky 3 mm nad horní hranou na x 30 a 70', () => {
+  it('výřez 40 × 12 mm: konce čárkou 3 mm nad horní hranou na x 30 a 70, dno čárkou do výřezu', () => {
     expect(templateMarks({ ...front, thumbCutout: { widthMm: 40, depthMm: 12 } })).toEqual([
       { kind: 'thumb-cutout-end', x1: 30, y1: 0, x2: 30, y2: -3 },
       { kind: 'thumb-cutout-end', x1: 70, y1: 0, x2: 70, y2: -3 },
+      { kind: 'thumb-cutout-bottom', x1: 50, y1: 12, x2: 50, y2: 9 },
     ]);
   });
 
@@ -53,5 +54,43 @@ describe('templateMarks – značky k propíchnutí', () => {
 
   it('díl bez výřezu a bez značky výšky nemá žádné značky', () => {
     expect(templateMarks(back)).toEqual([]);
+  });
+});
+
+describe('prickPoints – kroužky k propíchnutí na líc (lekce 6)', () => {
+  const piece = { stitchOffsetMm: 3.5, openEdge: 'top' as const };
+
+  it('přední kapsa: horní konce linie stehu 6 mm pod vrchem a tři body oblouku R 2,5 v rozích', () => {
+    const pts = prickPoints({ ...front, ...piece });
+    expect(pts.filter((p) => p.kind === 'stitch-end')).toEqual([
+      { kind: 'stitch-end', x: 3.5, y: 6 },
+      { kind: 'stitch-end', x: 96.5, y: 6 },
+    ]);
+    expect(pts.filter((p) => p.kind === 'stitch-corner').map((p) => [p.x, p.y])).toEqual([
+      [3.5, 50],
+      [4.23, 51.77],
+      [6, 52.5],
+      [94, 52.5],
+      [95.77, 51.77],
+      [96.5, 50],
+    ]);
+    // Každý bod rohu leží 3,5 mm od zaoblené hrany (střed rohu R6 je 6, 50).
+    for (const p of pts.filter((q) => q.kind === 'stitch-corner' && q.x < 50)) {
+      expect(6 - Math.hypot(p.x - 6, p.y - 50)).toBeCloseTo(3.5, 1);
+    }
+  });
+
+  it('zadní díl: lepený pás 5 mm končí na bocích 50 mm od spodku, v rohu jen střed oblouku R 1', () => {
+    expect(prickPoints({ ...back, ...piece, stitchUpToMm: 56 }, 5)).toEqual([
+      { kind: 'glue-end', x: 5, y: 20 },
+      { kind: 'glue-end', x: 95, y: 20 },
+      { kind: 'glue-corner', x: 5.29, y: 64.71 },
+      { kind: 'glue-corner', x: 94.71, y: 64.71 },
+    ]);
+  });
+
+  it('bez lepeného pásu nebo s uzavřenou linií žádné kroužky', () => {
+    expect(prickPoints({ ...back, ...piece, stitchUpToMm: 56 })).toEqual([]);
+    expect(prickPoints({ ...front, ...piece, openEdge: 'none' })).toEqual([]);
   });
 });

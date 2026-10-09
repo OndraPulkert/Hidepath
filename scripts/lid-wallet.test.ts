@@ -432,9 +432,88 @@ describe('generátor peněženky VÍČKO', () => {
     // osa ohybu, hrana vložky, 2 přehyby × 2 boky (+ 2 kroužky v legendě: 1 vzorek)
     expect(pricks(sheet)).toBe(8 + 1);
     expect(pricks(back)).toBeGreaterThan(8 + 1);
-    expect(pricks(parts)).toBe(4 + 1);
-    // ryska L1 (2) + konce čáry švu na proužku (2) + vzorek v legendě
-    expect(pricks(jigs)).toBe(4 + 1);
+    // osa D1/D2 (4) + G2/G2b na D1 (4) + rohy G3 na D2 (10) + klín D2 (2) + horní hrana G4 (4)
+    expect(pricks(parts)).toBe(4 + 4 + 10 + 2 + 4 + 1);
+    // ryska L1 (2) + střed magnetu (1) + klín špičky (2) + konce čáry švu na proužku (2)
+    // + proužek V12 (4) + vzorek v legendě
+    expect(pricks(jigs)).toBe(2 + 1 + 2 + 2 + 4 + 1);
+  });
+
+  /** Kroužky „propíchnout“ na listu jako body (x, y) v mm listu. */
+  const prickPts = (svg: string) =>
+    [...layer(svg, 'GUIDE').matchAll(/<circle class="prick" cx="([\d.]+)" cy="([\d.]+)"/g)].map(
+      (m) => ({ x: Number(m[1]), y: Number(m[2]) }),
+    );
+  const hasPrick = (svg: string, x: number, y: number): boolean =>
+    prickPts(svg).some((q) => near(q.x, x) && near(q.y, y));
+
+  it('list 3: kroužky hranic lepení G2/G2b (D1), G3 (D2), klínu D2 a horní hrany G4 z modelu', () => {
+    // Stejné mapování jako buildLidPartsSvg: D1 a D2 z rubu, y nahoru.
+    const px = ox + 4;
+    const oy1 = oy + 6;
+    const X1 = (x: number) => px + (x - L.d1.x0);
+    const Y1 = (y: number) => oy1 + (L.d1.y1 - y);
+    const oy2 = oy1 + (L.d1.y1 - L.d1.y0) + 12;
+    const X2 = (x: number) => px - 5 + (x - L.d2.x0);
+    const Y2 = (y: number) => oy2 + (L.d2.y1 - y);
+    const [g2bL, g2bR] = L.glue.filter((g) => g.id === 'G2b');
+    for (const x of [g2bL.x1, g2bR.x0]) {
+      for (const y of [g2bL.y0, g2bL.y1])
+        expect(hasPrick(parts, X1(x), Y1(y)), `D1 ${x} ${y}`).toBe(true);
+    }
+    const g3 = L.glue.filter((g) => g.id === 'G3b' || g.id === 'G3c');
+    for (const g of g3) {
+      for (const x of [g.x0, g.x1].filter((v) => v > 0 && v < L.widthMm)) {
+        for (const y of [g.y0, g.y1])
+          expect(hasPrick(parts, X2(x), Y2(y)), `G3 ${x} ${y}`).toBe(true);
+      }
+    }
+    // horní hrana G3b na boku: kroužek 1,5 mm od hrany D2
+    expect(hasPrick(parts, X2(L.d2.x0 + 1.5), Y2(L.topGlueY))).toBe(true);
+    const yw = Y2(L.d2.y0 + spec.d2SkiveWedgeMm);
+    expect(hasPrick(parts, X2(L.d2.x0 + 1.5), yw)).toBe(true);
+    expect(hasPrick(parts, X2(L.d2.x1 - 1.5), yw)).toBe(true);
+    // G4 na líci D2: horní hrana ve výšce horní hrany F, vnitřní hranice = hranice G3b (x 4)
+    const g4 = L.glue.find((g) => g.id === 'G4' && g.what.includes('líc D2'))!;
+    expect(g4.x1).toBe(g3[0].x1);
+    expect(hasPrick(parts, X2(g4.x1), Y2(g4.y1))).toBe(true);
+    expect(hasPrick(parts, X2(L.d2.x0 + 1.5), Y2(g4.y1))).toBe(true);
+    expect(parts).toContain('kroužky přes šablonu na líci');
+  });
+
+  it('list 2: konce hranice Tokonole mají kroužky (1,5 mm od boků jazýčku)', () => {
+    const y = oy + L.v.bandEnd;
+    const [t0, t1] = L.tongueX;
+    // List 2 je zrcadlený: x_rub = W − x.
+    for (const x of [t0 + 1.5, t1 - 1.5]) {
+      expect(hasPrick(back, ox + L.widthMm - x, y), `${x}`).toBe(true);
+    }
+  });
+
+  it('list 4: šablona konce jazýčku má kroužek středu magnetu a kroužky klínu, proužek V12 rýhu a hranu vložky', () => {
+    const tx = ox + 4;
+    const tipY = oy + 6 + 24;
+    const cx = tx + spec.tongueWidthMm / 2;
+    expect(hasPrick(jigs, cx, tipY - spec.magnetFromTipMm)).toBe(true);
+    const wedge = prickPts(jigs).filter((q) => near(q.y, tipY - spec.tipSkiveMm));
+    expect(wedge).toHaveLength(2);
+    expect(near(wedge[0].x + wedge[1].x, 2 * cx)).toBe(true);
+    expect(jigs).toContain('(kroužek)');
+    expect(jigs).not.toContain('křížek');
+    // proužek V12: kroužky na dvou čarách vzdálených o hranu vložky za rýhou
+    const strip = /<path d="M([\d.]+) ([\d.]+)[^"]*"[^>]*class="v12-strip"/.exec(
+      layer(jigs, 'CUT'),
+    )!;
+    const sy = Number(strip[2]);
+    const sx = Number(strip[1]);
+    const inStrip = prickPts(jigs).filter(
+      (q) => q.y > sy && q.y < sy + 14 && q.x > sx && q.x < sx + 30,
+    );
+    const ys = [...new Set(inStrip.map((q) => q.y))].sort((a, b) => a - b);
+    expect(inStrip).toHaveLength(4);
+    expect(ys).toHaveLength(2);
+    expect(ys[1] - ys[0]).toBeCloseTo(L.v.insertEdge - L.v.foldAxis, 3);
+    expect(jigs).toContain(`za ní hrana vložky (${cz(L.v.insertEdge - L.v.foldAxis)} mm)`);
   });
 
   it('list 2: osa x 50,5 má kroužky na rubu F (2) i rubu B (2), lekce 6 a 8 na ni přikládají D2 a D1', () => {

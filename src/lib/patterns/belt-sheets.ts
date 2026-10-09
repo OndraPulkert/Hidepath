@@ -83,6 +83,13 @@ function notes(x: number, y0: number, lines: string[]): string[] {
 
 /* -------------------------- strana 1: konec u přezky -------------------------- */
 
+/**
+ * Kroužky ohybu na listu 1: Ø jako značky ohybu na destičce (2 mm), střed 2 mm od hrany pásu,
+ * aby kroužek celý zůstal na vystřiženém listu. Leží na čáře ohybu (`foldY`), ta je z modelu.
+ */
+const BEND_PRICK_MM = 2;
+const BEND_PRICK_INSET_MM = 2;
+
 function buckleEndPage(spec: BeltEndSpec): string[] {
   const strapX = 22;
   const w = spec.beltWidthMm;
@@ -121,6 +128,11 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
     `<line x1="${f(strapX - 6)}" y1="${f(foldY)}" x2="${f(strapX + w + 6)}" y2="${f(foldY)}" ` +
       `stroke="${RED}" stroke-width="0.4" stroke-dasharray="4 2.5"/>`,
   );
+  // Značky ohybu k propíchnutí: na čáře ohybu u obou hran pásu. List se stříhá po obrysu,
+  // značka přímo na hraně by se odstřihla (a čárkovaná čára tam může mít mezeru).
+  for (const x of [strapX + BEND_PRICK_INSET_MM, strapX + w - BEND_PRICK_INSET_MM]) {
+    out.push(hole(x, foldY, BEND_PRICK_MM, RED));
+  }
 
   // Drážka pro trn: stadion půlený ohybem.
   const half = spec.slotLengthMm / 2;
@@ -147,7 +159,7 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
       `drážka ${cz(spec.slotLengthMm)} × ${cz(spec.slotWidthMm)} mm, ohyb ji půlí`,
       INK,
     ],
-    [foldY, 'OHYB (příčka přezky)', RED],
+    [foldY, 'OHYB (příčka přezky) · propíchněte oba kroužky', RED],
     [foldY + near - 9.5, `můstek u drážky ${cz(Math.round(ligamentMm(spec) * 10) / 10)} mm`, GREEN],
     [
       foldY + (near + far) / 2,
@@ -192,8 +204,9 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
 
   out.push(
     ...notes(strapX, 258, [
-      '1. Na rub pásu přeneste ohyb, drážku a všechny čtyři otvory.',
+      '1. Na rub pásu propíchněte 4 otvory, oba křížky drážky a 2 červené kroužky ohybu.',
       `2. Vysekněte Ø ${cz(spec.rivetHoleMm)} mm jen 2 otvory blíž ke konci a konce drážky, boky drážky řízněte nožem.`,
+      '   Kroužky ohybu nesekejte: spojte je na rubu pravítkem, to je čára ohybu.',
       '3. Navlékněte poutko na pás, ohněte konec kolem příčky přezky a poutko posuňte přes přehnutý konec.',
       '4. Druhé 2 otvory označte skrz vyseknuté, vysekněte je, poutko vraťte mezi ně a sešroubujte nýty.',
       'Nýty: 2 kusy, každý prochází oběma vrstvami — proto jsou otvory čtyři.',
@@ -244,12 +257,24 @@ export const TIP_PORTRAIT_MAX_REACH_MM =
 export const TIP_LANDSCAPE_MAX_REACH_MM =
   LANDSCAPE_APEX_MAX_MM - LANDSCAPE_LEFT_MM - STRAP_PAST_LAST_HOLE_MM;
 
-/** Jak se list 2 vejde na A4: na výšku, na šířku, nebo vůbec. */
-export function tipSheetOrientation(tip: BeltTipSpec): 'portrait' | 'landscape' | null {
+/**
+ * Jak se list 2 vejde na A4: na výšku, na šířku, na dva listy na šířku (`split`: 2a konec
+ * a dírky k prostřední, 2b prostřední a zbylé dírky), nebo vůbec. V mezích formuláře
+ * (nejvýš 7 dírek po 50 mm, odstup nejvýš 100 mm) vyjde vždy aspoň `split`.
+ */
+export function tipSheetOrientation(tip: BeltTipSpec): 'portrait' | 'landscape' | 'split' | null {
   const offsets = holeOffsetsFromApexMm(tip);
   const reach = offsets[offsets.length - 1] ?? 0;
   if (reach <= TIP_PORTRAIT_MAX_REACH_MM + 1e-9) return 'portrait';
   if (reach <= TIP_LANDSCAPE_MAX_REACH_MM + 1e-9) return 'landscape';
+  const mid = offsets[middleHoleIndex(tip)] ?? 0;
+  const restLen = reach - mid + 2 * STRAP_PAST_LAST_HOLE_MM;
+  if (
+    mid <= TIP_LANDSCAPE_MAX_REACH_MM + 1e-9 &&
+    restLen <= LANDSCAPE_APEX_MAX_MM - LANDSCAPE_LEFT_MM + 1e-9
+  ) {
+    return 'split';
+  }
   return null;
 }
 
@@ -542,6 +567,152 @@ function tipPageLandscape(tip: BeltTipSpec, end: BeltEndSpec, shape: BeltTipShap
   return out;
 }
 
+/**
+ * List 2 na dvou listech A4 na šířku, když se dírky nevejdou ani na jeden list na šířku.
+ * 2a: konec a dírky k prostřední; 2b: prostřední a zbylé dírky. Prostřední dírka je na obou
+ * listech, takže se každý přikládá zvlášť propíchnutou prostřední dírkou na značku; listy se
+ * neslepují. Geometrie a poloha pásu jsou jako u listu na šířku (`tipPageLandscape`).
+ */
+function tipPageSplit(
+  tip: BeltTipSpec,
+  end: BeltEndSpec,
+  shape: BeltTipShape,
+  part: 'a' | 'b',
+): string[] {
+  const w = tip.beltWidthMm;
+  const half = w / 2;
+  const offsets = holeOffsetsFromApexMm(tip);
+  const mid = middleHoleIndex(tip);
+  const midOff = offsets[mid]!;
+  const lastOff = offsets[offsets.length - 1]!;
+  // Úsek pásu na listu (od vrcholu): 2a od vrcholu, 2b od 12 mm před prostřední dírkou.
+  const from = part === 'a' ? 0 : midOff - STRAP_PAST_LAST_HOLE_MM;
+  const to = (part === 'a' ? midOff : lastOff) + STRAP_PAST_LAST_HOLE_MM;
+  // Pás začíná vlevo na LANDSCAPE_LEFT_MM; vrchol (u 2b mimo list) je vpravo.
+  const apexX = LANDSCAPE_LEFT_MM + to;
+  const cy = LANDSCAPE_AXIS_Y_MM;
+  const top = cy - half;
+  const bottom = cy + half;
+  const xOf = (fromApex: number): number => apexX - fromApex;
+  const shown = offsets
+    .map((off, i) => ({ off, i }))
+    .filter(({ i }) => (part === 'a' ? i <= mid : i >= mid));
+  const out: string[] = [];
+
+  const endName = shape === 'round' ? 'zaoblený konec' : 'konec se špičkou';
+  out.push(
+    text(
+      LANDSCAPE_LEFT_MM,
+      16,
+      part === 'a'
+        ? `Opasek ${cz(w)} mm — strana 2a: ${endName} a dírky k prostřední`
+        : `Opasek ${cz(w)} mm — strana 2b: prostřední a zbylé dírky`,
+      4.6,
+    ),
+  );
+  out.push(
+    text(
+      LANDSCAPE_LEFT_MM,
+      22,
+      'Měřítko 1:1 · tisk na A4 na šířku na 100 % · list 2 je na dvou listech, 2a a 2b',
+      3,
+      GREY,
+    ),
+  );
+  out.push(...calibration(232, 150));
+
+  const local: string[] = [];
+  if (part === 'a') {
+    local.push(tipOutlinePath(tip, shape, -half, 0, to));
+  } else {
+    local.push(
+      `<path d="M${f(-half)} ${f(from)} L${f(-half)} ${f(to)} M${f(half)} ${f(from)} L${f(half)} ${f(to)}" ` +
+        `fill="none" stroke="${INK}" stroke-width="0.3"/>`,
+    );
+  }
+  local.push(centreLine(0, from, to));
+  for (const { off, i } of shown) {
+    const isMid = i === mid;
+    local.push(hole(0, off, tip.holeDiameterMm, isMid ? RED : INK, isMid ? 0.5 : 0.3));
+  }
+  out.push(`<g transform="translate(${f(apexX)} ${f(cy)}) rotate(90)">`, ...local, '</g>');
+
+  // Kóty nad pásem: 2a vrchol → první dírka a rozteč u prostřední, 2b rozteč za prostřední.
+  const dimY = top - 6;
+  if (part === 'a') {
+    out.push(dimensionH(dimY, xOf(offsets[0]!), apexX));
+    out.push(
+      text((xOf(offsets[0]!) + apexX) / 2, dimY - 2, `${cz(offsets[0]!)} mm`, 3, GREEN, 'middle'),
+    );
+  }
+  const [a, b] = part === 'a' ? [midOff, offsets[mid - 1]] : [offsets[mid + 1], midOff];
+  if (a !== undefined && b !== undefined && mid > 0) {
+    out.push(dimensionH(dimY, xOf(a), xOf(b)));
+    out.push(
+      text(
+        (xOf(a) + xOf(b)) / 2,
+        dimY - 2,
+        `rozteč ${cz(tip.holeSpacingMm)} mm`,
+        3,
+        GREEN,
+        'middle',
+      ),
+    );
+  }
+  if (part === 'a') {
+    const shapeLabel =
+      shape === 'round'
+        ? `konec zaoblený r = ${cz(half)} mm`
+        : `hrot ${cz(Math.round(tipLengthMm(tip) * 10) / 10)} mm · vrchol r = ${cz(tip.noseRadiusMm)} mm`;
+    out.push(text(apexX, top - 14, shapeLabel, 3.2, RED, 'end'));
+    out.push(text(LANDSCAPE_LEFT_MM, top - 14, 'sem pokračuje list 2b (vlevo neřezat)', 3, GREY));
+  } else {
+    out.push(
+      text(xOf(from), top - 14, 'sem pokračuje list 2a s koncem (vpravo neřezat)', 3, GREY, 'end'),
+    );
+    out.push(
+      text(LANDSCAPE_LEFT_MM, bottom + 20, 'sem pokračuje hlavní pás (vlevo neřezat)', 3, GREY),
+    );
+  }
+
+  // Prostřední dírka je u 2a vlevo, u 2b vpravo (12 mm od konce úseku): popis zarovnaný
+  // ke konci úseku, aby nevyjel z listu.
+  const [labelX, anchor] =
+    part === 'a' ? [LANDSCAPE_LEFT_MM, 'start' as const] : [xOf(from), 'end' as const];
+  out.push(text(labelX, bottom + 7, 'PROSTŘEDNÍ DÍRKA = vaše míra', 3.4, RED, anchor));
+  out.push(
+    text(
+      labelX,
+      bottom + 11.5,
+      `${cz(apexToMiddleHoleMm(tip))} mm ${fromEnd(shape)} · tímto kroužkem přiložte list na značku`,
+      3,
+      RED,
+      anchor,
+    ),
+  );
+
+  const all = tipNotes(tip, end, shape);
+  const twoSheets =
+    'List 2 je na dvou listech: 2a (konec a dírky k prostřední) a 2b (prostřední a zbylé dírky).';
+  const howTo = 'Každý list přiložte zvlášť: prostřední dírkou na značku, boky na hrany pásu.';
+  out.push(
+    ...notes(
+      LANDSCAPE_LEFT_MM,
+      160,
+      part === 'a'
+        ? [all[0]!, all[1]!, all[2]!, all[3]!, all[6]!, twoSheets, howTo]
+        : [
+            all[0]!,
+            `Poslední dírka ${cz(lastOff)} mm ${fromEnd(shape)}, nastavení ± ${cz(adjustmentRangeMm(tip))} mm (${holesWord(mid)} sem i tam).`,
+            twoSheets,
+            howTo,
+            all[6]!,
+          ],
+    ),
+  );
+  return out;
+}
+
 function page(body: string[], orientation: 'portrait' | 'landscape' = 'portrait'): string {
   const [w, h] = orientation === 'portrait' ? [210, 297] : [297, 210];
   return [
@@ -561,7 +732,12 @@ export function buildPages(end: BeltEndSpec, tip: BeltTipSpec): [string, string]
 }
 
 /** Id listů opasku v obsahu projektu (`patternSheets`) i ve vygenerované skupině. */
-export const BELT_SHEET_IDS = { buckle: 'prezka', tip: 'spicka' } as const;
+export const BELT_SHEET_IDS = {
+  buckle: 'prezka',
+  tip: 'spicka',
+  /** List 2b, jen když se list 2 nevejde na jeden list A4 (`tipSheetOrientation` = `split`). */
+  tipRest: 'spicka-zbytek',
+} as const;
 
 export interface BeltSheet {
   id: (typeof BELT_SHEET_IDS)[keyof typeof BELT_SHEET_IDS];
@@ -598,10 +774,30 @@ export function buildBeltSheets(
   end: BeltEndSpec,
   tip: BeltTipSpec,
   shape: BeltTipShape,
-): [BeltSheet, BeltSheet] {
+): [BeltSheet, BeltSheet, ...BeltSheet[]] {
   const orientation = tipSheetOrientation(tip);
   if (orientation === null) {
-    throw new Error('Dírky se nevejdou na A4 ani na šířku.');
+    throw new Error('Dírky se nevejdou ani na dva listy A4 na šířku.');
+  }
+  if (orientation === 'split') {
+    const endName = shape === 'round' ? 'zaoblený konec' : 'špička';
+    return [
+      buildBuckleSheet(end),
+      {
+        id: BELT_SHEET_IDS.tip,
+        title: `List 2a – ${endName} a dírky k prostřední`,
+        orientation: 'landscape',
+        ...a4('landscape'),
+        svg: page(tipPageSplit(tip, end, shape, 'a'), 'landscape'),
+      },
+      {
+        id: BELT_SHEET_IDS.tipRest,
+        title: 'List 2b – prostřední a zbylé dírky',
+        orientation: 'landscape',
+        ...a4('landscape'),
+        svg: page(tipPageSplit(tip, end, shape, 'b'), 'landscape'),
+      },
+    ];
   }
   const tipBody =
     orientation === 'portrait' ? tipPage(tip, end, shape) : tipPageLandscape(tip, end, shape);

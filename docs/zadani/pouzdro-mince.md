@@ -43,7 +43,7 @@ prvního), až bude první pouzdro fyzicky hotové.
   6 otvorů na panel (rozteč 4, krajní 5 mm od čáry ohybu i od konce) zrcadlených přes střed ohybu,
   kroužky k propíchnutí (šídlem skrz papír i kůži, stejně jako tečky dna, aby byly vidět i na
   rubu) na koncích čar ohybů a švu asi 1 mm od hrany (jako konce čar ohybů na pásu
-  v lekci 5), u 1,5 mm šrafa ztenčení ohybu B (± 3 mm).
+  v lekci 5), u 1,5 mm šrafa ztenčení ohybu B (± 3 mm) s kroužky i na jejích okrajích.
   Kůže 1,2 mm: 114,35 × 40, ohyb A 15,69, ohyb B 8,66 (`pouzdro-mince-cvicny-prouzek-kuze-1-2mm.svg`,
   v aplikaci předem zaškrtnutý); kůže 1,5 mm: 116,55 × 40, ohyb A 16,63, ohyb B 9,92
   (`pouzdro-mince-cvicny-prouzek.svg`). Na kusu 130 × 40 zbude na každém konci 7,8 / 6,7 mm
@@ -223,8 +223,11 @@ kůže jako tělo. Juchtová A5 1,2 mm jen na dva odřezky 57,5 × 57,5 pro tvar
    pás z 1,5 mm).
    **Čáry ohybů na rub:** propíchnuté konce všech 4 čar ohybů (A i B, u obou hran) spojit na rubu
    tužkou podle pravítka; podle nich se v kroku 5 navlhčí pásma ohybů.
-   **Ztenčení ohybu B (jen u kůže 1,5 mm):** od narýsovaných čar ohybu B odsadit 3 mm na obě strany
-   a v tomto pásu ztenčit z rubu na 1 mm.
+   **Ztenčení ohybu B (jen u kůže 1,5 mm):** propíchnuté kroužky na okrajích šrafy (ohyb B ± 3 mm)
+   spojit na rubu a v tomto pásu ztenčit z rubu na 1 mm.
+   Na listu PÁS jsou všechny body k propíchnutí kroužky (1 mm od hrany na koncích čar ohybů
+   a okrajů šrafy; v rozích místa pro kapsu 1 mm dovnitř na úhlopříčce zaobleného rohu, kapsa je
+   zakryje), střed patice křížkem; na papírovém modelu má křížek patice i klobouček.
    Pak prosekat otvory dna na všech třech panelech (naplocho): **přední panel z líce, zadní
    a vnitřní z rubu** (podle propíchnutých teček). Ohyb panel zrcadlově převrátí; šikmé otvory
    proseknuté ze stejné strany by se po složení zkřížily a jehla by jimi neprošla. Rub ve spodním

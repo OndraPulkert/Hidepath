@@ -37,7 +37,61 @@ describe('tiskové listy opasku', () => {
         holeSpacingMm: 30,
         apexToFirstHoleMm: 100,
       }),
+    ).toBe('split');
+    // Mimo meze formuláře (9 dírek): prostřední je dál, než pojme list 2a.
+    expect(
+      tipSheetOrientation({
+        ...DEFAULT_BELT_TIP,
+        holeCount: 9,
+        holeSpacingMm: 50,
+        apexToFirstHoleMm: 100,
+      }),
     ).toBeNull();
+  });
+
+  it('list 1: dva červené kroužky ohybu na čáře ohybu, 2 mm od hran pásu', () => {
+    for (const w of [28, 40, 45]) {
+      const { end, tip } = at(w);
+      const [p1] = buildPages(end, tip);
+      const foldY = 132;
+      for (const x of [22 + 2, 22 + w - 2]) {
+        expect(p1).toContain(`<circle cx="${x}" cy="${foldY}" r="1" fill="none" stroke="#c0392b"`);
+      }
+      expect(p1).toContain('propíchněte oba kroužky');
+    }
+  });
+
+  it('nevejde se na jeden list: 2a (konec) a 2b (zbytek), prostřední dírka na obou', () => {
+    const { end, tip } = at(45);
+    const long = { ...tip, holeCount: 7, holeSpacingMm: 30, apexToFirstHoleMm: 100 };
+    const sheets = buildBeltSheets(end, long, 'point');
+    expect(sheets.map((s) => [s.id, s.orientation])).toEqual([
+      ['prezka', 'portrait'],
+      ['spicka', 'landscape'],
+      ['spicka-zbytek', 'landscape'],
+    ]);
+    const [, a, b] = sheets;
+    const holes = (svg: string) => {
+      const g = /<g transform="translate\(([\d.]+) ([\d.]+)\) rotate\(90\)">/.exec(svg)!;
+      const apexX = Number(g[1]);
+      return [
+        ...svg.matchAll(/<circle cx="0" cy="([\d.]+)" r="2\.5" fill="none" stroke="([^"]+)"/g),
+      ].map((m) => ({ off: Number(m[1]), x: apexX - Number(m[1]), red: m[2] === '#c0392b' }));
+    };
+    const ha = holes(a.svg);
+    const hb = holes(b!.svg);
+    expect(ha.map((h) => h.off)).toEqual([100, 130, 160, 190]);
+    expect(hb.map((h) => h.off)).toEqual([190, 220, 250, 280]);
+    // Prostřední (190 mm) je červená na obou listech.
+    expect(ha.filter((h) => h.red).map((h) => h.off)).toEqual([190]);
+    expect(hb.filter((h) => h.red).map((h) => h.off)).toEqual([190]);
+    for (const h of [...ha, ...hb]) {
+      expect(h.x).toBeGreaterThan(10);
+      expect(h.x).toBeLessThanOrEqual(285);
+    }
+    expect(a.svg).toContain('strana 2a');
+    expect(b!.svg).toContain('strana 2b');
+    expect(b!.svg).toContain('Poslední dírka 280 mm od hrotu');
   });
 
   it('zaoblený konec kreslí půlkruh r = šířka/2 a jinak stejné dírky', () => {

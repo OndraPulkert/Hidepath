@@ -492,8 +492,9 @@ add('B','Zkontrolujte značky','Dva otvory mimo přímku jsou značky ohybu: do 
 },RUB);
 
 // B6 — s listem 1
-const SHEET_PTS=[...HOLES.map(x=>[x,0]),[OV_END[0],0],[OV_END[1],0],[FOLD,-BW/2+1],[FOLD,BW/2-1]];
-add('B','S listem 1','List vystřihněte po obrysu pásu, spodní hranu přiložte přesně na konec pásu, boky na hrany pásu a přilepte páskou. Šídlem propíchněte středy 4 otvorů, oba křížky oválu a čáru ohybu u obou hran pásu.',9400,t=>{
+const BEND_IN=2;                                                    // kroužky ohybu 2 mm od hran pásu (belt-sheets.ts)
+const SHEET_PTS=[...HOLES.map(x=>[x,0]),[OV_END[0],0],[OV_END[1],0],[FOLD,-BW/2+BEND_IN],[FOLD,BW/2-BEND_IN]];
+add('B','S listem 1','List vystřihněte po obrysu pásu, spodní hranu přiložte přesně na konec pásu, boky na hrany pásu a přilepte páskou. Šídlem propíchněte středy 4 otvorů, oba křížky oválu a oba červené kroužky na čáře ohybu.',9400,t=>{
   const c=CAM_MID;const so=1-.75*seg(t,.86,.96);const n=SHEET_PTS.length;const span=.72/n;
   const done=SHEET_PTS.filter((_,i)=>t>.08+span*(i+1)-.02);
   let s=cam(c,()=>{
@@ -505,6 +506,7 @@ add('B','S listem 1','List vystřihněte po obrysu pásu, spodní hranu přilož
     sh+=`<path d="${stad(SL0,SL1,0,SLOT_W)}" fill="none" stroke="${P}" stroke-width="${f(sw(.3))}"/>`;
     for(const x of OV_END) sh+=`<path d="M${x-3.9} 0 H${x+3.9} M${x} -3.9 V3.9" stroke="${P}" stroke-width="${f(sw(.2))}"/>`;
     for(const x of HOLES) sh+=`<circle cx="${x}" cy="0" r="3" fill="none" stroke="${P}" stroke-width="${f(sw(.3))}"/><path d="M${x-3.9} 0 H${x+3.9} M${x} -3.9 V3.9" stroke="${P}" stroke-width="${f(sw(.2))}"/>`;
+    for(const y of [-BW/2+BEND_IN,BW/2-BEND_IN]) sh+=`<circle cx="${FOLD}" cy="${y}" r="1" fill="none" stroke="${R}" stroke-width="${f(sw(.3))}"/><path d="M${FOLD-1.3} ${y} H${FOLD+1.3} M${FOLD} ${y-1.3} V${y+1.3}" stroke="${R}" stroke-width="${f(sw(.2))}"/>`;
     sh+=done.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r=".5" fill="var(--hole)"/>`).join('');
     sh+=`<rect x="4" y="-24" width="14" height="8" fill="var(--tape)" opacity=".75"/><rect x="4" y="16" width="14" height="8" fill="var(--tape)" opacity=".75"/><rect x="160" y="-24" width="14" height="8" fill="var(--tape)" opacity=".75"/><rect x="160" y="16" width="14" height="8" fill="var(--tape)" opacity=".75"/>`;
     q+=`<g opacity="${f(so)}">${sh}</g>`;
@@ -513,7 +515,7 @@ add('B','S listem 1','List vystřihněte po obrysu pásu, spodní hranu přilož
   const i=Math.min(n-1,Math.floor((t-.08)/span));
   if(t>.08&&t<.08+span*n){const lt=seg(t,.08+span*i,.08+span*(i+1));const [x,y]=at(c,...SHEET_PTS[i]);s+=awl(x,y,18,lt<.3?lt/.3:lt>.8?1-(lt-.8)/.2:1)}
   s+=`<g opacity="${f(seg(t,.02,.1))}">${pill(4,14,'list 1 vystřižený po obrysu','ts')}</g>`;
-  s+=`<g opacity="${f(seg(t,.8,.9))}">${pill(67.5,79,'4 otvory · 2 křížky oválu · ohyb u obou hran','t','middle')}</g>`;
+  s+=`<g opacity="${f(seg(t,.8,.9))}">${pill(67.5,79,'4 otvory · 2 křížky oválu · 2 kroužky ohybu','t','middle')}</g>`;
   return s;
 },RUB);
 

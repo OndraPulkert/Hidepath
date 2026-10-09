@@ -7,7 +7,7 @@ import { GlossaryCard } from '@/components/glossary/glossary-card';
 import { MediaSlot } from '@/components/lessons/media-slot';
 import { ProjectFindings } from '@/components/notebook/project-findings';
 import { AssembledIllustration } from '@/components/illustrations/assembled';
-import { TemplateIllustration } from '@/components/illustrations/template';
+import { TEMPLATE_LEGEND, TemplateIllustration } from '@/components/illustrations/template';
 import { LessonList } from '@/components/projects/lesson-list';
 import { PatternSheetList } from '@/components/projects/pattern-sheet-list';
 import { ProjectOverviewCard } from '@/components/projects/project-overview';
@@ -206,21 +206,36 @@ function ProjectView({ project }: { project: ProjectDefinition }) {
                     aria-hidden
                     className="mr-2 inline-block w-6 border-t border-leather align-middle"
                   />
-                  plná čára = obrys dílu, řežte podle ní
+                  {TEMPLATE_LEGEND.outline}
                 </li>
                 <li>
                   <span
                     aria-hidden
                     className="mr-2 inline-block w-6 border-t border-dashed border-cognac align-middle"
                   />
-                  čárkovaná = linie stehu, neřezat (rýsuje se na kůži)
+                  {TEMPLATE_LEGEND.stitch}
                 </li>
+                {project.template.glueBandMm ? (
+                  <li>
+                    <span
+                      aria-hidden
+                      className="mr-2 inline-block w-6 border-t-2 border-dotted border-ink-2 align-middle"
+                    />
+                    {TEMPLATE_LEGEND.glue}
+                  </li>
+                ) : null}
                 <li>
                   <span
                     aria-hidden
                     className="mr-2 inline-block h-3 w-6 border-l border-leather align-middle"
                   />
-                  krátká čárka = značka k propíchnutí šídlem (lekce 5 a 6)
+                  {TEMPLATE_LEGEND.tick}
+                </li>
+                <li>
+                  <span aria-hidden className="mr-2 inline-flex w-6 justify-center align-middle">
+                    <span className="inline-block size-2 rounded-full border border-leather" />
+                  </span>
+                  {TEMPLATE_LEGEND.prick}
                 </li>
               </ul>
               <p className="text-meta text-ink-2">{typo(project.template.printNote)}</p>

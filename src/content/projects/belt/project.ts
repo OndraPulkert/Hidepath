@@ -307,7 +307,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'mark',
         title: 'Značení destičkou',
-        body: 'Odřezek a dvě podložky stejně silné jako pás přilepte k desce oboustrannou páskou, rubem nahoru. Destičku přiložte řadou 3 levou hranou na konec odřezku a hrany odřezku na linky vaší šířky (šířka bez linky: podle příčné stupnice). Šídlem označte dva otvory pro nýty blíž ke konci a obtáhněte ovál. V otvoru kružte šídlem po stěně, tlačte svisle a dívejte se svisle dolů. Destičku nikdy neobracejte. Bez destičky použijte list 1 (odkaz pod krokem): propíchněte středy otvorů a oba křížky oválu.',
+        body: 'Odřezek a dvě podložky stejně silné jako pás přilepte k desce oboustrannou páskou, rubem nahoru. Destičku přiložte řadou 3 levou hranou na konec odřezku a hrany odřezku na linky vaší šířky (šířka bez linky: podle příčné stupnice). Šídlem označte dva otvory pro nýty blíž ke konci, 2 značky ohybu (šídlo v obou nakloněné stejným směrem) a obtáhněte ovál. V otvoru kružte šídlem po stěně, tlačte svisle a dívejte se svisle dolů. Destičku nikdy neobracejte. Bez destičky použijte list 1 (odkaz pod krokem): propíchněte středy otvorů, oba křížky oválu a oba červené kroužky na čáře ohybu.',
         printLink: 'pattern-sheets',
         printSheetId: 'prezka',
         animationLinks: [
@@ -400,7 +400,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'bend',
         title: 'Ohyb kolem příčky',
-        body: 'Ohyb je uprostřed oválu, 90 mm od konce. Navlhčete zónu ohybu a ohněte ji přes rub, rubem k rubu (líc zůstane venku, jako později na pásku), kolem příčky přezky, ne přes hranu. Nasucho do malého rádiusu může silná kůže popraskat. Prohlédněte líc v ohybu.',
+        body: 'Značky ohybu spojte na rubu pravítkem: na této čáře ohýbejte (uprostřed oválu, 90 mm od konce). Navlhčete zónu ohybu a ohněte ji přes rub, rubem k rubu (líc zůstane venku, jako později na pásku), kolem příčky přezky, ne přes hranu. Nasucho do malého rádiusu může silná kůže popraskat. Prohlédněte líc v ohybu.',
         animationLinks: [
           animationLink(
             'beltBuckleEnd',
@@ -679,7 +679,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'mark',
         title: 'Označte konec u přezky',
-        body: 'Destičku přiložte levou hranou přesně na konec pásu, hrany pásu na pár linek vaší šířky (šířka bez linky: podle příčné stupnice). Šídlem označte 4 otvory pro nýty (ty v jedné přímce), 2 značky ohybu a obtáhněte ovál. V otvorech kružte po stěně, u obou značek ohybu nakloňte šídlo stejným směrem. Dívejte se svisle. Destičku nikdy neobracejte. Dva otvory mimo přímku jsou značky ohybu: do nich nic nesekejte. S listem 1: list vystřihněte po obrysu pásu, spodní hranu přiložte přesně na konec pásu, boky na hrany pásu a přilepte páskou. Šídlem propíchněte středy 4 otvorů, oba křížky oválu a čáru ohybu u obou hran pásu.',
+        body: 'Destičku přiložte levou hranou přesně na konec pásu, hrany pásu na pár linek vaší šířky (šířka bez linky: podle příčné stupnice). Šídlem označte 4 otvory pro nýty (ty v jedné přímce), 2 značky ohybu a obtáhněte ovál. V otvorech kružte po stěně, u obou značek ohybu nakloňte šídlo stejným směrem. Dívejte se svisle. Destičku nikdy neobracejte. Dva otvory mimo přímku jsou značky ohybu: do nich nic nesekejte. S listem 1: list vystřihněte po obrysu pásu, spodní hranu přiložte přesně na konec pásu, boky na hrany pásu a přilepte páskou. Šídlem propíchněte středy 4 otvorů, oba křížky oválu a oba červené kroužky na čáře ohybu.',
         animationLinks: [
           animationLink('beltBuckleEnd', 'B2'),
           animationLink('beltBuckleEnd', 'B3'),
@@ -938,7 +938,7 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Řada 1 nebo 2, nebo list 2',
         printLink: 'pattern-sheets',
         printSheetId: 'spicka',
-        body: `Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když ${TABLE} ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo destička neprošla kontrolou, vytiskněte list 2 pro váš pásek na 100 % (odkaz pod krokem) a zkontrolujte kalibrační čtverec 50 × 50 mm. Řádek „List 2“ ${IN_TABLE} ukazuje, jestli list vyjde na výšku, nebo na šířku; když se na A4 nevejde, značte dírky a konec podle čísel v tabulce.`,
+        body: `Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když ${TABLE} ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo destička neprošla kontrolou, vytiskněte list 2 pro váš pásek na 100 % (odkaz pod krokem) a zkontrolujte kalibrační čtverec 50 × 50 mm. Řádek „List 2“ ${IN_TABLE} ukazuje, jestli list vyjde na výšku, na šířku, nebo když se na jeden list nevejde, na 2 listy na šířku (2a a 2b).`,
         animationLinks: [animationLink('beltHolesTip', 'B1'), animationLink('beltHolesTip', 'D1')],
         media: [],
         beltRecalls: ['tip', 'marking'],
@@ -946,7 +946,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'place',
         title: 'Přiložte na prostřední dírku',
-        body: 'Pás a podložky přilepte jako v lekci 4, rubem nahoru. Prostřední otvor destičky (mezi dvěma křížky) položte na propíchnutou značku z lekce 5, hrany pásu na linky vaší šířky (šířka bez linky: podle příčné stupnice). Na linky se dívejte svisle dolů: linky jsou pod 3 mm akrylátu a při pohledu šikmo se zdají posunuté. Destičku nikdy neobracejte. Zkontrolujte, že obtahovaný tvar končí přesně na obou hranách pásu. Když přesahuje nebo nedosahuje, máte špatný oblouk nebo linku. S listem 2: list vystřihněte po obrysu konce a střed prostřední dírky propíchněte šídlem. Hrot šídla dejte do značky, list po šídle sesuňte na pás, boky srovnejte na hrany pásu a list přilepte páskou.',
+        body: 'Pás a podložky přilepte jako v lekci 4, rubem nahoru. Prostřední otvor destičky (mezi dvěma křížky) položte na propíchnutou značku z lekce 5, hrany pásu na linky vaší šířky (šířka bez linky: podle příčné stupnice). Na linky se dívejte svisle dolů: linky jsou pod 3 mm akrylátu a při pohledu šikmo se zdají posunuté. Destičku nikdy neobracejte. Zkontrolujte, že obtahovaný tvar končí přesně na obou hranách pásu. Když přesahuje nebo nedosahuje, máte špatný oblouk nebo linku. S listem 2: list vystřihněte po obrysu konce a střed prostřední dírky propíchněte šídlem. Hrot šídla dejte do značky, list po šídle sesuňte na pás, boky srovnejte na hrany pásu a list přilepte páskou. Listy 2a a 2b mají prostřední dírku oba: přiložte je tak každý zvlášť.',
         animationLinks: [
           animationLink('beltHolesTip', 'B2'),
           animationLink('beltHolesTip', 'C1'),
@@ -976,7 +976,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'cut-tip',
         title: 'Uřízněte konec',
-        body: 'Rovné boky hrotu řežte podél ocelového pravítka, nikdy podél destičky: čepel by akrylát poškodila. Nůž veďte tak, aby rýhu odebral. Vrchol R4 řízněte od ruky; s ocelovou rohovou šablonou přiložte lob Ø 8 mm na značku a veďte nůž po oceli, ve 2–3 tazích. Zaoblený konec řežte od ruky po rýze v několika tazích (ověřte na odřezku), nebo výsečníkem na konec opasku.',
+        body: 'Rovné boky hrotu řežte podél ocelového pravítka, nikdy podél destičky: čepel by akrylát poškodila. Nůž veďte tak, aby rýhu odebral. Vrchol R4 řízněte od ruky; s ocelovou rohovou šablonou přiložte lob Ø 8 mm na obtažený oblouk vrcholu a veďte nůž po oceli, ve 2–3 tazích. Zaoblený konec řežte od ruky po rýze v několika tazích (ověřte na odřezku), nebo výsečníkem na konec opasku.',
         animationLinks: [
           animationLink('beltHolesTip', 'E2'),
           animationLink('beltHolesTip', 'E3'),
@@ -1045,7 +1045,10 @@ export const lessons: readonly LessonDefinition[] = [
     ],
     safety: [KNIFE, PUNCH],
     prints: [
-      sheet('spicka', 'List 2: dírky a konec místo řady 1 nebo 2 destičky, když se na A4 vejde'),
+      sheet(
+        'spicka',
+        'List 2: dírky a konec místo řady 1 nebo 2 destičky (případně 2 listy, 2a a 2b)',
+      ),
     ],
     requires: [
       { id: 'middle-mark', fromLesson: L5, label: 'Značka prostřední dírky propíchnutá na rub' },
@@ -1111,7 +1114,7 @@ const overview: ProjectOverview = {
           stepId: 'plate-or-sheets',
           printsFrom: [L2, L4, L6],
           appLinks: [YOUR_BELT],
-          text: 'U každé řady destičky ukazuje „Váš pásek“ „ano“, nebo „ne“; za řadu s „ne“ tisknete list: list 1 za řadu 3, list 2 za řadu 1 nebo 2. Vygenerované listy se neukládají: v lekci, která list chce, stiskněte ve „Váš pásek“ „Vygenerovat listy A4“ a tiskněte A4 na 100 %, kalibrační čtverec musí měřit 50 × 50 mm. Když se list 2 na A4 nevejde, značte dírky a konec podle čísel v tabulce.',
+          text: 'U každé řady destičky ukazuje „Váš pásek“ „ano“, nebo „ne“; za řadu s „ne“ tisknete list: list 1 za řadu 3, list 2 za řadu 1 nebo 2. Vygenerované listy se neukládají: v lekci, která list chce, stiskněte ve „Váš pásek“ „Vygenerovat listy A4“ a tiskněte A4 na 100 %, kalibrační čtverec musí měřit 50 × 50 mm. Když se list 2 nevejde na jeden list A4, vyjde na 2 listy (2a a 2b), každý se přikládá prostřední dírkou na značku.',
         },
       ],
     },
@@ -1136,7 +1139,7 @@ const overview: ProjectOverview = {
           id: 'scrap-mark',
           lessonSlug: L2,
           stepId: 'mark',
-          text: 'Odřezek a podložky stejně silné jako pás přilepte k desce rubem nahoru. Řadu 3 destičky přiložte levou hranou na konec, hrany odřezku na linky vaší šířky (bez linky podle příčné stupnice), nebo použijte list 1. Šídlem označte dva otvory pro nýty blíž ke konci a obtáhněte ovál (s listem 1 propíchněte středy otvorů a oba křížky oválu).',
+          text: 'Odřezek a podložky stejně silné jako pás přilepte k desce rubem nahoru. Řadu 3 destičky přiložte levou hranou na konec, hrany odřezku na linky vaší šířky (bez linky podle příčné stupnice), nebo použijte list 1. Šídlem označte dva otvory pro nýty blíž ke konci, 2 značky ohybu a obtáhněte ovál (s listem 1 propíchněte středy otvorů, oba křížky oválu a oba červené kroužky ohybu).',
         },
         {
           id: 'scrap-punch',
@@ -1154,7 +1157,7 @@ const overview: ProjectOverview = {
           id: 'scrap-bend',
           lessonSlug: L2,
           stepId: 'bend',
-          text: 'Navlhčený odřezek ohněte kolem příčky přezky, rubem k rubu; líc nesmí popraskat. Popraská-li i navlhčený, pásek nezačínejte.',
+          text: 'Značky ohybu spojte pravítkem a navlhčený odřezek na té čáře ohněte kolem příčky přezky, rubem k rubu; líc nesmí popraskat. Popraská-li i navlhčený, pásek nezačínejte.',
         },
         {
           id: 'scrap-screw',

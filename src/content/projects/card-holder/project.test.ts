@@ -17,14 +17,19 @@ describe('obsah – pouzdro na karty: steh', () => {
   });
 
   it('spodní roh: řada po zaoblení 3,5 mm od hrany, ne v průsečíku rovných linií', () => {
-    expect(step(6, 'punch-sides')).toContain('asi 6 mm pod horní hranou kapsy');
+    expect(step(6, 'punch-sides')).toContain(
+      'do horního kroužku na linii stehu, 6 mm pod horní hranou kapsy',
+    );
+    expect(step(6, 'punch-sides')).toContain('nejblíž hornímu kroužku na tomto boku');
     expect(step(6, 'punch-sides')).toContain('i tam 3,5 mm od hrany, ne do průsečíku');
     expect(step(6, 'punch-sides')).toContain('(ověřte na odřezku)');
   });
 
-  it('značky ze šablony: konce výřezu v lekci 5, vpich pod čárkou 56 mm v lekci 6', () => {
+  it('značky ze šablony: konce a dno výřezu v lekci 5, kroužky linie stehu a pásu v lekci 6', () => {
     expect(step(5, 'prick-marks')).toContain('krátká čárka nad horní hranou přední kapsy');
-    expect(step(6, 'mark-glue-area')).toContain('těsně pod vnitřním koncem čárky 56 mm');
+    expect(step(5, 'prick-marks')).toContain('jeho dno (čárka uvnitř výřezu)');
+    expect(step(6, 'mark-stitch-lines')).toContain('propíchněte kroužky na linii stehu');
+    expect(step(6, 'mark-glue-area')).toContain('propíchněte čtyři kroužky na tečkované čáře pásu');
     const back = cardHolderProject.template!.pieces.find((p) => p.id === 'back')!;
     expect(back.heightMark).toEqual({ fromBottomMm: 56, lengthMm: 8 });
   });
@@ -38,8 +43,10 @@ describe('obsah – pouzdro na karty: steh', () => {
     expect(step(6, 'mark-glue-area')).not.toMatch(/\b8 mm/);
     // Schéma: karta leží na pásu 5 mm → horní hrana 59 mm, ve výřezu (56 − 12) odkryje 15 mm.
     expect(exposedCardHeightMm(front.heightMm, 54 + band, front.thumbCutout)).toBe(15);
-    // Páska nesmí vést k zdrsnění rohu nad kapsou (R6): u boků končí asi 6 mm pod vpichy.
-    expect(step(6, 'mark-glue-area')).toContain('asi 6 mm pod vpichy');
+    // Páska nesmí vést k zdrsnění rohu nad kapsou (R6): u boků končí na horních kroužcích 56 − 6 = 50 mm.
+    expect(front.heightMm - front.cornerRadiusMm).toBe(50);
+    expect(step(6, 'mark-glue-area')).toContain('nahoře na bocích, 50 mm od spodku');
+    expect(step(6, 'mark-glue-area')).toContain('těsně nad horní kroužky');
     expect(step(6, 'mark-glue-area')).not.toContain('těsně nad vpichy maskovací pásku');
   });
 
@@ -50,7 +57,7 @@ describe('obsah – pouzdro na karty: steh', () => {
   it('výřez na palec: řezy začínají a končí na čáře, brousí se k rohům mezi nimi, hloubka 12 mm', () => {
     expect(step(5, 'thumb-cutout')).toContain('každý začněte i skončete přesně na čáře');
     expect(step(5, 'thumb-cutout')).not.toContain('kousek vedle čáry');
-    expect(step(5, 'peel-template')).toContain('uprostřed 12 mm hluboko');
+    expect(step(5, 'peel-template')).toContain('uprostřed přes značku dna 12 mm hluboko');
     const media = cardHolderProject.lessons
       .find((l) => l.order === 5)!
       .steps.find((s) => s.id === 'thumb-cutout')!.media;
@@ -154,9 +161,13 @@ describe('obsah – pouzdro na karty: časovače, zápisník a „Připravte si�
     expect(lesson(5).prints).toMatchObject([{ source: 'template', copies: 1 }]);
     expect(lesson(5).prints![0]!.paper).toContain('matný papír 120 g');
     expect(lesson(6).prints).toMatchObject([
-      { source: 'template', copies: 1, condition: 'nemáte papírový zadní díl z lekce 5' },
+      { source: 'template', copies: 1, condition: 'nemáte papírové díly z lekce 5' },
     ]);
     expect(step(6, 'mark-glue-area').body).toContain('nebo novou šablonu vystřiženou po plné čáře');
+    expect(step(6, 'mark-stitch-lines').body).toContain(
+      'nebo novou šablonu vystřiženou po plné čáře',
+    );
+    expect(step(6, 'mark-stitch-lines').printLink).toBe('template');
     for (const l of cardHolderProject.lessons) {
       expect(
         l.materials.some((m) => m.includes('vytištěn')),
@@ -176,7 +187,7 @@ describe('obsah – pouzdro na karty: časovače, zápisník a „Připravte si�
     ]);
     expect(step(5, 'peel-template').body).toContain('si schovejte na lekci 6');
     expect(step(5, 'transfer').body).not.toContain('zničí');
-    expect(step(5, 'transfer').body).toContain('budete ho potřebovat v lekci 6');
+    expect(step(5, 'transfer').body).toContain('budete je potřebovat v lekci 6');
     expect(lesson(6).materials).not.toContain('díly z lekce 5');
   });
 });

@@ -1146,7 +1146,8 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
     Okno lepení je tamtéž (výchozí 11,73–12,13). S přepážkami 0,8 je jen 11,50–11,63, tedy asi
     0,13 mm: značku proto **měř posuvkou** od spodní hrany a po nalepení pásky přeměř. Zavři víčko a ryskami na
     bocích jazýčku přenes značku na jazýček.
-18. **G5 + G6:** rub konce jazýčku zdrsnit. Magnet na rub jazýčku (střed na značce a ose) přilepit
+18. **G5 + G6:** rub konce jazýčku zdrsnit. Magnet na rub jazýčku (střed na vpich kroužku ze šablony konce jazýčku, přiložené boky na boky
+    jazýčku a čárou na rysky) přilepit
     **dvousložkovým epoxidem** (doba zpracování podle obalu) a nechat ztuhnout (podle návodu epoxidu, orientačně 30 min –
     ověřit), aby se magnet při natírání a přikládání L1 neposunul z osy. Teprve pak natřít rub jazýčku
     kolem magnetu a L1 (nebarvená kozinka) kontaktním lepidlem, nechat zavadnout a L1 přiložit horní hranou
@@ -1574,13 +1575,14 @@ s příliš nízkým vyčníváním bankovky – okénko by se muselo posunout).
   poloha se určí na kusu),
 - **penezenka-vicko-rub.svg/.pdf** (list 2) – P1 z rubu: lepené plochy G1–G4 (GLUE šrafovaně,
   oříznuté do obrysu) s kroužky k propíchnutí v rozích a na koncích čar, poloha D1, D2 (103 mm,
-  přesah 1 mm) a plíšku, osa x 50,5 na rubu F i B s kroužky k propíchnutí (pro D1 a D2), hranice Tokonole u kořene jazýčku, pořadí lepení,
+  přesah 1 mm) a plíšku, osa x 50,5 na rubu F i B s kroužky k propíchnutí (pro D1 a D2), hranice Tokonole u kořene jazýčku s kroužky, pořadí lepení,
   značky „L“,
 - **penezenka-vicko-dily.svg/.pdf** (list 3) – D1, D2 (s lepením), L1, K2; u D1 barevná horní hrana,
   u D2 kontrastní tón (R4); na šabloně D2 otvory S1–S3 (způsob (b) v kroku 9) a klín spodní hrany
-  „brousit z líce D2“, kroužky na koncích os D1 a D2,
-- **penezenka-vicko-pripravky.svg/.pdf** (list 4) – šablona konce jazýčku (R10, magnet, ztenčení
-  2,5, přířez L1 s ryskou horní hrany, **otvory S7** ve STITCH), šablony okének a plíšku, proužek
+  „brousit z líce D2“ s kroužky na koncích, kroužky na koncích os D1 a D2, v rozích G2/G2b na D1 a G3 na D2
+  a na horní hraně G4 (líc D2),
+- **penezenka-vicko-pripravky.svg/.pdf** (list 4) – šablona konce jazýčku (R10, kroužek středu magnetu, ztenčení
+  2,5 s kroužky, přířez L1 s ryskou horní hrany, **otvory S7** ve STITCH), proužek V12 (rýha a hrana vložky s kroužky), šablony okének a plíšku, proužek
   otvorů S4/S5 (červené tečky, čárkovaná čára švu 3,0 od levé hrany s kroužky na koncích, rysky
   F 62, dno karet a S1, závorky úseků děrování ①–③ se stranou, zdvojený steh 60–64, „šít od 76 ↓“,
   „S4 líc nahoru · S5 rub nahoru“), legenda značek na každém listu, vložka dna aspoň 111 × 25 ze starých karet s vyznačenou hranou do ohybu, tvarování závěsu

@@ -447,7 +447,7 @@ export const templatePieceSchema = z.object({
   stitchUpToMm: z.number().positive().optional(),
   /**
    * Značka výšky na obou bocích (od spodní hrany), krátká čárka `lengthMm` dovnitř dílu, např.
-   * horní hrana přední kapsy na zadním dílu. Propichuje se šídlem (lekce 6 projektu 01).
+   * horní hrana přední kapsy na zadním dílu. Jen orientační, nepropichuje se.
    */
   heightMark: z
     .object({ fromBottomMm: z.number().positive(), lengthMm: z.number().positive() })

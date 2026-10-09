@@ -303,23 +303,22 @@ describe('parametrický pásek – meze', () => {
     );
   });
 
-  it('když se dírky nevejdou na A4 ani na šířku, čísla spočítá a jen listy netiskne', () => {
+  it('když se dírky nevejdou na jeden list A4, list 2 vyjde na 2 listy (2a a 2b)', () => {
     const input = { ...base, holeCount: 7, holeSpacingMm: 30, apexToFirstHoleMm: 100 };
     expect(checkBeltConfig(input)).toEqual([]);
     const r = derive({ ...input, waistMm: 950 });
     expect(r.holes.fromApexMm).toEqual([100, 130, 160, 190, 220, 250, 280]);
     expect(r.strap.lengthMm).toBe(950 + 90 + 190);
-    expect(r.tipSheetOrientation).toBeNull();
-    expect(r.sheets.printable).toBe(false);
-    if (r.sheets.printable) return;
-    expect(r.sheets.message).toMatch(/^List 2 se na A4 nevejde/);
-    expect(r.sheets.message).toMatch(/list A4 pojme nejvýš 258 mm/);
-    expect(r.sheets.message).toMatch(/Dírky a konec značte podle čísel v tabulce/);
-    expect(r.sheets.message).toMatch(/List 1 \(konec u přezky a poutko\) se vytiskne/);
-    // Regrese: list 1 na dírkách nezávisí, takže se vytiskne i bez listu 2.
+    expect(r.tipSheetOrientation).toBe('split');
+    expect(r.sheets).toEqual({ printable: true });
     const sheets = beltSheetsFor(input);
     if (!sheets.ok) throw new Error(sheets.problems.join());
-    expect(sheets.sheets.map((s) => s.id)).toEqual(['prezka']);
+    expect(sheets.sheets.map((s) => s.id)).toEqual(['prezka', 'spicka', 'spicka-zbytek']);
+  });
+
+  it('v mezích formuláře se list 2 vejde vždy aspoň na 2 listy', () => {
+    const r = derive({ ...base, holeCount: 7, holeSpacingMm: 50, apexToFirstHoleMm: 100 });
+    expect(r.tipSheetOrientation).toBe('split');
   });
 
   it('délka hrotu z modelu sedí s `tipLengthMm`', () => {

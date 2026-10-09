@@ -969,22 +969,13 @@
             });
           });
         }
+        // Hranice Tokonole u kořene jazýčku (v 175,0): kroužky 1,5 mm od boků jazýčku.
+        RUBSEG.push([
+          [50, 196.999],
+          [67, 196.999],
+        ]);
         const RUBP = RUBSEG.map(([a, b]) => lineP(a, b));
-        const WINP = [
-          [27.5, 21.5],
-          [89.5, 83.5],
-        ].map(([c, x0]) =>
-          samp(
-            [
-              arcF(c, 118.427, 6, Math.PI, 2 * Math.PI),
-              lineF([x0 + 12, 118.427], [x0 + 12, 154.427]),
-              arcF(c, 154.427, 6, 0, Math.PI),
-              lineF([x0, 154.427], [x0, 118.427]),
-            ],
-            20,
-          ),
-        );
-        const PENCIL = [...RUBP, ...WINP];
+        const PENCIL = [...RUBP];
         const PENL = PENCIL.reduce((s, P) => s + P.L, 0);
         const RUBPTS = [];
         {
@@ -995,15 +986,6 @@
           RUBSEG.forEach(([a, b]) => {
             add(a);
             add(b);
-          });
-          [
-            [21.5, 33.5],
-            [83.5, 95.5],
-          ].forEach(([a, b]) => {
-            add([a, 118.427]);
-            add([b, 118.427]);
-            add([b, 154.427]);
-            add([a, 154.427]);
           });
         }
         RUBPTS.sort((p, q) => p[1] - q[1] || p[0] - q[0]);
@@ -2468,7 +2450,7 @@
                 ["osa, hrana vložky,"],
                 ["pás závěsu"],
                 ["rohy D1 a D2,", "t"],
-                ["konce okének"],
+                ["hranice Tokonole"],
                 ["jehlou skrz", "t"],
                 ["šablonu do kůže"],
               ]),
@@ -2508,7 +2490,7 @@
         add(
           "E",
           "Spojte tečky tužkou u pravítka",
-          "Šablonu sejměte a vpichy spojte tužkou u pravítka, nic nezařezávejte. Tak přenesete osu ohybu dna, čáru hrany vložky (případně posunutou podle V12), pás závěsu, plochy lepení G1–G4, okénka mincí, polohu D1 a D2 a osu na rubu F i B. Čáry švů S1–S3 a S6 ani okénko bankovek na rub nekreslete.",
+          "Šablonu sejměte a vpichy spojte tužkou u pravítka, nic nezařezávejte. Tak přenesete osu ohybu dna, čáru hrany vložky (případně posunutou podle V12), pás závěsu, plochy lepení G1–G4, hranici Tokonole u kořene jazýčku, polohu D1 a D2 a osu na rubu F i B. Čáry švů S1–S3 a S6 ani okénko bankovek na rub nekreslete.",
           13000,
           (t) => {
             const c = OV,
@@ -2517,7 +2499,7 @@
             CK = c.k;
             const pl = pencilLines(p);
             if (p >= 0.999) pl.cur = null;
-            // pravítko u rovné čáry, kterou se právě táhne tužka (okénka mincí od ruky)
+            // pravítko u rovné čáry, kterou se právě táhne tužka
             let rul = "";
             if (pl.cur && pl.ci < RUBSEG.length) {
               const [a, b] = RUBSEG[pl.ci];
@@ -2574,8 +2556,8 @@
                 ["(posunutá z V12)"],
                 ["pás závěsu", "t"],
                 ["142,99–150,99"],
-                ["G1–G4, okénka", "t"],
-                ["mincí, D1 a D2"],
+                ["G1–G4, Tokonole,", "t"],
+                ["D1 a D2"],
                 ["záloha A:", "twa"],
                 ["61,76 · 63,56"],
                 ["141,92–149,92"],
@@ -2590,7 +2572,7 @@
             return s;
           },
           "rub",
-          "Tip: oblouky okének mincí kreslete od ruky. Barevné plochy D1, D2 a K2 jsou jen pro orientaci.",
+          "Tip: Barevné plochy D1, D2 a K2 jsou jen pro orientaci.",
         );
 
         // E5 — rysky na bocích a „L“

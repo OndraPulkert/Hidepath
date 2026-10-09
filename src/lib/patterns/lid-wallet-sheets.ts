@@ -1281,7 +1281,10 @@ export function buildLidBackSvg(
   {
     const [t0, t1] = L.tongueX;
     const vb = V(L.v.bandEnd);
-    s.styled('GUIDE', `M${f(X(t0))} ${f(vb)} L${f(X(t1))} ${f(vb)}`, STYLE.pencil);
+    s.styled('GUIDE', `M${f(X(t0))} ${f(vb)} L${f(X(t1))} ${f(vb)}`, STYLE.pencil, 'tokonole-edge');
+    // Konce čáry propíchnout (lekce 4), 1,5 mm od boků jazýčku, ať jehla nejde do napojení R4.
+    s.prick(X(t0 + 1.5), vb);
+    s.prick(X(t1 - 1.5), vb);
     s.text('GUIDE', X(L.axisX), vb - 1, 'Tokonole jen nad touto čarou', 1.5, 'middle');
     s.text('GUIDE', X(L.axisX), vb + 3, 'jazýček: BEZ', 1.6, 'middle', { bold: true });
     s.text('GUIDE', X(L.axisX), vb + 5.3, 'Tokonole', 1.6, 'middle', { bold: true });
@@ -1365,6 +1368,37 @@ export function buildLidBackSvg(
   return s.render('VÍČKO – P1 pás, rub');
 }
 
+/** Kroužek u hrany dílu leží o tolik dovnitř, aby jehla nešla do hrany. */
+const EDGE_INSET_MM = 1.5;
+
+/**
+ * Kroužky hranic lepení na přepážce (D1, D2): rohy ploch uvnitř dílu. Roh na boku dílu se posune
+ * o 1,5 mm dovnitř (čára pak jde k hraně); vynechá se roh na spodní nebo horní hraně dílu a roh na
+ * boku, který sdílejí dvě plochy nad sebou (hranice mezi dvěma lepenými plochami nic nedělí).
+ */
+function dividerGluePricks(
+  areas: readonly { x0: number; x1: number; y0: number; y1: number }[],
+  part: { x0: number; x1: number; y0: number; y1: number },
+): { x: number; y: number }[] {
+  const near = (a: number, b: number): boolean => Math.abs(a - b) < 0.01;
+  const corners = areas.flatMap((g) =>
+    [g.x0, g.x1].flatMap((x) => [g.y0, g.y1].map((y) => ({ x, y }))),
+  );
+  const onSide = (c: { x: number }): boolean => near(c.x, part.x0) || near(c.x, part.x1);
+  const pts: { x: number; y: number }[] = [];
+  // Nejdřív rohy uvnitř dílu, pak rohy na boku: posunutý roh blíž než 1,2 mm k jinému kroužku
+  // (úzký pás G2b) se vynechá.
+  for (const c of [...corners.filter((q) => !onSide(q)), ...corners.filter(onSide)]) {
+    if (near(c.y, part.y0) || near(c.y, part.y1)) continue;
+    const side = onSide(c);
+    if (side && corners.filter((o) => near(o.x, c.x) && near(o.y, c.y)).length > 1) continue;
+    const x = !side ? c.x : near(c.x, part.x0) ? part.x0 + EDGE_INSET_MM : part.x1 - EDGE_INSET_MM;
+    if (pts.some((q) => Math.hypot(q.x - x, q.y - c.y) < 1.2)) continue;
+    pts.push({ x, y: c.y });
+  }
+  return pts;
+}
+
 /** List 3: přepážky D1, D2, podšívka L1 a plíšek K2. */
 export function buildLidPartsSvg(
   spec: LidWalletSpec = DEFAULT_LID_WALLET,
@@ -1399,6 +1433,14 @@ export function buildLidPartsSvg(
     s.hatch('GLUE', X1(g.x0), Y1(g.y1), g.x1 - g.x0, g.y1 - g.y0, `glue glue-${g.id}`);
   }
   s.add('GLUE', '</g>');
+  // Hranice G2 a G2b na rubu D1 (lekce 4 propíchnout, lekce 8 spojit): rohy uvnitř D1. Rohy na
+  // obrysu D1 kroužek nemají, čára tam končí na hraně.
+  for (const q of dividerGluePricks(
+    L.glue.filter((g) => g.id === 'G2' || g.id === 'G2b'),
+    d1,
+  )) {
+    s.prick(X1(q.x), Y1(q.y));
+  }
   s.styled(
     'GUIDE',
     `M${f(X1(d1.x0))} ${f(Y1(L.frontTopY))} L${f(X1(d1.x1))} ${f(Y1(L.frontTopY))}`,
@@ -1444,6 +1486,19 @@ export function buildLidPartsSvg(
     s.hatch('GLUE', X2(x0), Y2(g.y1), x1 - x0, g.y1 - g.y0, `glue glue-${g.id}`);
   }
   s.add('GLUE', '</g>');
+  // Rohy šrafy G3 na rubu D2 (lekce 6, šablona D2): stejné body jako na listu 2.
+  for (const q of dividerGluePricks(
+    L.glue
+      .filter((g) => g.id.startsWith('G3'))
+      .map((g) => ({
+        ...g,
+        x0: g.x0 === 0 ? d2.x0 : g.x0,
+        x1: g.x1 === L.widthMm ? d2.x1 : g.x1,
+      })),
+    d2,
+  )) {
+    s.prick(X2(q.x), Y2(q.y));
+  }
   // Švy S1–S3 i s otvory (způsob (b) v lekci 6: šablona D2 přiložená na D2).
   for (const q of L.seams.filter((z) => z.id === 'S1' || z.id === 'S2' || z.id === 'S3')) {
     const a = q.holes[0]!;
@@ -1490,12 +1545,15 @@ export function buildLidPartsSvg(
     const xb = X2(d2.x1);
     const ya = Y2(d2.y0 + spec.d2SkiveWedgeMm);
     s.styled('GUIDE', `M${f(xa)} ${f(ya)} L${f(xb)} ${f(ya)}`, STYLE.skive, 'd2-wedge');
+    // Konce čáry klínu propíchnout přes šablonu D2 přiloženou na líc D2 (lekce 5).
+    s.prick(xa + EDGE_INSET_MM, ya);
+    s.prick(xb - EDGE_INSET_MM, ya);
   }
   s.text(
     'GUIDE',
     X2(d2.x0),
     Y2(d2.y0) + 3.5,
-    `oranžově: klín ${cz(spec.d2SkiveWedgeMm)} mm na spodní hraně D2 – brousit z LÍCE D2 (strana k bankovkám), končí pod S1`,
+    `oranžově: klín ${cz(spec.d2SkiveWedgeMm)} mm na spodní hraně D2, končí pod S1 – brousit z LÍCE D2 (k bankovkám); kroužky přes šablonu na líci`,
     1.6,
     'start',
     { fill: COLORS.CUT },
@@ -1513,6 +1571,11 @@ export function buildLidPartsSvg(
     const x0 = Math.max(g.x0, d2.x0);
     const x1 = Math.min(g.x1, d2.x1);
     s.hatch('GUIDE', X2(x0), Y2(g.y1), x1 - x0, g.y1 - g.y0, 'g4-area');
+    // Horní hrana G4 na líci D2 (lekce 9, šablona D2 na líci). Svislá hranice pásu je stejná jako
+    // u G3b, dole ji dá kroužek rohu G3 na téže svislici.
+    const left = g.x0 === 0;
+    s.prick(X2(left ? x1 : x0), Y2(g.y1));
+    s.prick(X2(left ? d2.x0 + EDGE_INSET_MM : d2.x1 - EDGE_INSET_MM), Y2(g.y1));
   }
   s.text('GUIDE', X2(d2.x0) + 2, Y2(L.frontTopY) + 4, 'G4 (líc, na F) – zdrsnit', 1.5, 'start', {
     rotate: -90,
@@ -1669,10 +1732,11 @@ export function buildLidJigsSvg(
   const my = tipY - spec.magnetFromTipMm;
   const cx = ox + tw / 2;
   s.circle('GUIDE', cx, my, spec.magnetDiameterMm / 2, 0.15, '0.3 0.7', 'magnet');
-  s.cross('GUIDE', cx, my, 1.2);
+  // Střed magnetu: kroužek se propíchne do rubu jazýčku a magnet se na vpich klade (lekce 11).
+  s.prick(cx, my);
   s.cross('GUIDE', cx, tipY - rt, 0.8);
-  // Osa jazýčku a čára značky magnetu přes celou šířku šablony: na líci se šablona klade na osu
-  // a čárou na rysky značky na bocích jazýčku (lekce 11).
+  // Osa jazýčku (jen orientačně) a čára značky magnetu přes celou šířku šablony: šablona se klade
+  // boky na boky jazýčku (stejná šířka) a čárou na rysky značky na bocích jazýčku (lekce 11).
   s.styled('GUIDE', `M${f(cx)} ${f(oy - 2)} L${f(cx)} ${f(tipY + 2)}`, STYLE.info, 'tongue-axis');
   s.styled(
     'GUIDE',
@@ -1687,6 +1751,9 @@ export function buildLidJigsSvg(
     STYLE.skive,
     'tip-skive',
   );
+  // Konce rysky klínu propíchnout (lekce 11, po ořezu špičky) a spojit tužkou.
+  s.prick(cx - skHalf + 2, tipY - spec.tipSkiveMm);
+  s.prick(cx + skHalf - 2, tipY - spec.tipSkiveMm);
   // Přířez L1: horní hrana nad středem magnetu podle modelu, dole přesahuje špičku (ořez s jazýčkem).
   const ln = L.lining;
   const lTop = tipY - ln.topAboveTipMm;
@@ -1721,10 +1788,11 @@ export function buildLidJigsSvg(
     [
       `šířka ${cz(tw)}, špička R${cz(rt)}: střed oblouku ${cz(rt)} nad špičkou,`,
       `  tj. ${cz(rt - spec.magnetFromTipMm)} nad středem magnetu`,
-      `střed magnetu Ø ${cz(spec.magnetDiameterMm)} ${cz(spec.magnetFromTipMm)} nad špičkou (křížek)`,
-      'čára přes křížek: na rysky značky na bocích jazýčku,',
-      '  svislá osa: na osu jazýčku',
-      `oranžově: klín jen posledních ${cz(spec.tipSkiveMm)} mm (magnet začíná ${cz(spec.magnetFromTipMm - spec.magnetDiameterMm / 2)} mm od špičky)`,
+      `střed magnetu Ø ${cz(spec.magnetDiameterMm)} ${cz(spec.magnetFromTipMm)} nad špičkou (kroužek)`,
+      'přikládá se boky na boky jazýčku a čárou přes',
+      '  kroužek magnetu na rysky značky na bocích jazýčku',
+      `oranžově: klín jen posledních ${cz(spec.tipSkiveMm)} mm (magnet začíná ${cz(spec.magnetFromTipMm - spec.magnetDiameterMm / 2)} mm od špičky);`,
+      '  kroužky na koncích propíchnout po ořezu špičky',
       `tečkovaně: přířez L1 ${cz(spec.liningBlankWidthMm)} × ${cz(spec.liningBlankHeightMm)} (useň ${cz(spec.liningMm)}); ryska L1`,
       `  ${cz(spec.liningTopAboveMagnetMm)} nad středem magnetu: kroužky propíchnout`,
       'lekce 11: podle obrysu R10 seříznout jazýček',
@@ -2057,6 +2125,51 @@ export function buildLidJigsSvg(
     1.75,
     2.55,
   );
+  /* Proužek V12 (lekce 3): rýha a hrana vložky na rub odřezku propíchnutím, ne měřením. */
+  {
+    const vx = ox + 78;
+    const vy = jy + bs.depthMm + 24;
+    const vw = 30;
+    const vh = 14;
+    const gap = L.v.insertEdge - L.v.foldAxis;
+    const yr = vy + 5;
+    const yi = yr + gap;
+    s.path(
+      'CUT',
+      `M${f(vx)} ${f(vy)} h${vw} v${vh} h${-vw} Z`,
+      0.3,
+      undefined,
+      ' class="v12-strip"',
+    );
+    s.styled('FOLD', `M${f(vx)} ${f(yr)} L${f(vx + vw)} ${f(yr)}`, STYLE.foldAxis, 'v12-crease');
+    s.styled('FOLD', `M${f(vx)} ${f(yi)} L${f(vx + vw)} ${f(yi)}`, STYLE.info, 'v12-insert');
+    s.add(
+      'FOLD',
+      `<path d="M${f(vx - 3.5)} ${f(yi - 1)} L${f(vx - 0.5)} ${f(yi)} L${f(vx - 3.5)} ${f(yi + 1)} Z ` +
+        `M${f(vx + vw + 3.5)} ${f(yi - 1)} L${f(vx + vw + 0.5)} ${f(yi)} L${f(vx + vw + 3.5)} ${f(yi + 1)} Z" fill="${COLORS.FOLD}" stroke="none"/>`,
+    );
+    // Kroužky rýhy u boků, kroužky hrany vložky o kus dál od boků, ať se neslijí.
+    s.prick(vx + EDGE_INSET_MM, yr);
+    s.prick(vx + vw - EDGE_INSET_MM, yr);
+    s.prick(vx + 4.5, yi);
+    s.prick(vx + vw - 4.5, yi);
+    s.text('GUIDE', vx + vw / 2, yr - 1.6, 'rýha', 1.5, 'middle');
+    s.text('GUIDE', vx + vw / 2, yi + 3.4, 'hrana vložky', 1.5, 'middle');
+    s.text('GUIDE', vx + vw / 2, yi + 5.6, 'vložka leží tady', 1.5, 'middle');
+    column(
+      s,
+      vx + vw + 6,
+      vy + 1,
+      [
+        '# Proužek V12 (lekce 3)',
+        'vystřihnout, přiložit na rub odřezku,',
+        'kroužky propíchnout, vpichy spojit tužkou:',
+        `čerchovaně rýha, za ní hrana vložky (${cz(gap)} mm)`,
+      ],
+      1.75,
+      2.55,
+    );
+  }
   legend(s, ox, jy + bs.depthMm + 6, LID_SHEET_PARTS[4], [
     'cut',
     'prick',
@@ -2064,6 +2177,8 @@ export function buildLidJigsSvg(
     'mark',
     'hole',
     'seam',
+    'foldAxis',
+    'insert',
     'skive',
     'info',
   ]);

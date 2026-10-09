@@ -310,7 +310,7 @@ add('A','Přilepte šablonu na LÍC','Šablonu položte na LÍC kůže (u pouzdr
 },{v:'LÍC',sub:'kůže Blu 1,2 mm'});
 
 // A3 — propíchnout značky
-add('A','Propíchněte šídlem všechny značky','Před řezáním propíchněte šídlem skrz papír i kůži, aby byly značky vidět i na rubu: konce obou čar ohybů A i B (asi 1 mm od hrany pásu), rohy místa pro kapsu (asi 1 mm dovnitř od zaobleného rohu), střed dříku druku a všechny tečky dna.',13000,t=>{
+add('A','Propíchněte šídlem všechny značky','Před řezáním propíchněte šídlem skrz papír i kůži všechny kroužky, křížek a tečky na listu PÁS, aby byly značky vidět i na rubu: kroužky na koncích čar ohybů A i B, kroužky v rozích místa pro kapsu (kapsa je zakryje), křížek „druk – patice“ (střed dříku druku) a všechny tečky dna.',13000,t=>{
   const c=LEFTC, P=MARKS;
   let n,fr;
   if(t<.62){const u=seg(t,.05,.6)*13;n=Math.min(13,Math.floor(u));fr=u-Math.floor(u)}else{const u=13+seg(t,.62,.94)*51;n=Math.min(P.length,Math.floor(u));fr=u-Math.floor(u)}

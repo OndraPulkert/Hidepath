@@ -8,6 +8,7 @@ import {
   STRIP_ORIGIN,
   buildCoinHolderPracticeSvg,
   practiceFileStem,
+  skivePrickPoints,
 } from './coin-card-holder-practice.ts';
 import { coinCardHolderLayout } from '../src/lib/geometry/coin-card-holder.ts';
 import {
@@ -113,6 +114,23 @@ describe.each([1.2, 1.5])('cvičný list pro kůži %s mm', (t) => {
       expect(zone).toHaveLength(1);
       expect(zone[0][1]).toBeCloseTo(P.foldBMm + 6, 6);
       expect(zone[0][0] - STRIP_ORIGIN.x).toBeCloseTo(P.frontX1Mm - 3, 6);
+    }
+  });
+
+  it('kroužky: konce čar ohybů a švu, u 1,5 mm i okraje šrafy 1 mm od hran', () => {
+    const pricks = nums(/class="prick" cx="([\d.]+)" cy="([\d.]+)"/g, svg);
+    const skive = skivePrickPoints(P);
+    expect(pricks).toHaveLength(10 + skive.length);
+    if (t === 1.2) {
+      expect(skive).toHaveLength(0);
+    } else {
+      expect(skive.map(({ x, y }) => [x, y])).toEqual([
+        [P.frontX1Mm - 3, 1],
+        [P.frontX1Mm - 3, 39],
+        [P.innerX0Mm + 3, 1],
+        [P.innerX0Mm + 3, 39],
+      ]);
+      expect(svg).toContain('okraje šrafy (pásmo ztenčení)');
     }
   });
 });

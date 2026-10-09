@@ -6,7 +6,8 @@
  *
  * List A4 na výšku, 1:1: obrys cvičného proužku (tři panely po 30 mm, ohyby A a B z modelu pásu
  * pro danou tloušťku), čáry ohybů, u 1,5 mm šrafa ztenčení ohybu B, čára švu dna 3,5 mm od hrany,
- * zrcadlené tečky otvorů (6 na panel), kroužky k propíchnutí šídlem, kontrolní úsečka 50 mm.
+ * zrcadlené tečky otvorů (6 na panel), kroužky k propíchnutí šídlem (konce čar ohybů a švu, u 1,5 mm
+ * i okraje šrafy), kontrolní úsečka 50 mm.
  * Přenos stejně jako list PÁS v lekci 5: vystřihnout nahrubo, přilepit páskou na líc, propíchnout,
  * řezat skrz papír po čáře. Navíc (kus kůže je stejně vysoký jako proužek): dole list ustřihnout
  * přesně po obrysu, přiložit na rovnou dolní hranu kůže (šev 3,5 mm se měří od ní) a pravítkem
@@ -118,6 +119,20 @@ export function prickPoints(P: PracticeStripLayout): { x: number; y: number }[] 
   ];
 }
 
+/**
+ * Kroužky na okrajích pásma ztenčení (jen kůže 1,5 mm), stejně daleko od hran jako konce čar
+ * ohybů: na rubu se jen spojí, 3 mm se neodměřují.
+ */
+export function skivePrickPoints(P: PracticeStripLayout): { x: number; y: number }[] {
+  const zone = practiceSkiveZone(P);
+  if (!zone) return [];
+  const i = PRICK_INSET_MM;
+  return [zone.x0, zone.x1].flatMap((x) => [
+    { x, y: zone.y0 + i },
+    { x, y: zone.y1 - i },
+  ]);
+}
+
 /** Pásmo ztenčení ohybu B (pásmo ± okraj) v soustavě proužku, nebo null. */
 export function practiceSkiveZone(
   P: PracticeStripLayout,
@@ -164,9 +179,9 @@ export function buildCoinHolderPracticeSvg(bodyThicknessMm = 1.2): string {
     `3. Dolní hranu listu přiložte přesně na rovnou dolní hranu kusu kůže (kus i proužek jsou ${cz(SH)} mm vysoké), po délce obrys vystřeďte.`,
     '4. Přilepte ho maskovací páskou na LÍC kůže – páska jen na okrajích papíru, mimo plnou čáru.',
     `5. Pravítkem ověřte, že kroužky na koncích čáry švu leží ${cz(P.stitchOffsetMm)} mm od dolní hrany kůže; když ne, list přiložte znovu.`,
-    '6. Šídlem propíchněte skrz papír i kůži všechny kroužky (konce čar ohybů a čáry švu) a všechny tečky dna – musí být vidět i na rubu.',
+    `6. Šídlem propíchněte skrz papír i kůži všechny kroužky (konce čar ohybů a čáry švu${skived ? ', okraje šrafy' : ''}) a všechny tečky dna – musí být vidět i na rubu.`,
     '7. Řežte nožem skrz papír i kůži po plné čáře, s ocelovým pravítkem. Pásku strhávejte pomalu.',
-    `8. Na RUBU spojte propíchnuté konce čar ohybů tužkou podle pravítka${skived ? ', u ohybu B odsaďte pásmo ztenčení.' : '.'}`,
+    `8. Na RUBU spojte propíchnuté kroužky tužkou podle pravítka: konce čar ohybů${skived ? ' a okraje šrafy (pásmo ztenčení)' : ''}.`,
   ]);
 
   /* --- okraj na vystřižení --- */
@@ -233,7 +248,7 @@ export function buildCoinHolderPracticeSvg(bodyThicknessMm = 1.2): string {
       );
     }
   }
-  for (const p of prickPoints(P)) {
+  for (const p of [...prickPoints(P), ...skivePrickPoints(P)]) {
     out.push(
       `<circle class="prick" cx="${f(X(p.x))}" cy="${f(Y(p.y))}" r="${PRICK_R}" fill="none" stroke="${INK}" stroke-width="0.25"/>`,
     );

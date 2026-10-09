@@ -68,7 +68,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'glue-and-cut',
         title: 'Nalepte na lepenku a vystřihněte',
-        body: 'Výtisk nalepte lepidlem v tyčince na tenkou lepenku a nůžkami vystřihněte podle obrysu. Ještě před skládáním propíchněte šídlem vytištěnou značku patice na předním panelu skrz lepenku – po přehnutí jazyka by byla zakrytá (patice = dřík s hlavičkou, spodní polovina druku na předním panelu). Propichujte na podložce, ne v ruce.',
+        body: 'Výtisk nalepte lepidlem v tyčince na tenkou lepenku a nůžkami vystřihněte podle obrysu. Ještě před skládáním propíchněte šídlem křížek patice na předním panelu skrz lepenku – po přehnutí jazyka by byla zakrytá (patice = dřík s hlavičkou, spodní polovina druku na předním panelu). Propichujte na podložce, ne v ruce.',
         media: [
           {
             id: 'cch-l1-cut',
@@ -701,7 +701,7 @@ export const lessons: readonly LessonDefinition[] = [
         ],
         printLink: 'practice-sheets',
         printSheetId: 'cvicny-prouzek-kuze-1-2',
-        body: 'Na stránce Cvičné listy (odkaz pod krokem) vytiskněte list „Cvičný proužek pro lekci 4“ pro svou tloušťku kůže na 100 % a zkontrolujte úsečku 50 mm. Vystřihněte ho nahrubo s okrajem 1–2 cm, jen dole přesně po plné čáře. Dolní hranu listu přiložte na líc přesně na rovnou dolní hranu kůže a obrys vystřeďte po délce. List přilepte páskou jen na okrajích, mimo čáru řezu. Pravítkem zkontrolujte, že kroužky na koncích linie švu leží 3,5 mm od dolní hrany. Šídlem propíchněte skrz papír i kůži, aby byly značky vidět i na rubu: kroužky na koncích čar ohybů A i B a linie švu a všechny tečky dna. Pak na řezací podložce řežte nožem podle ocelového pravítka skrz papír po obrysu. Na rubu spojte konce čar ohybů tužkou podle pravítka. Bez listu: na rub narýsujte uprostřed panel 30 mm, vedle něj ohyb A (u kůže 1,2 mm 15,7 mm, u 1,5 mm 16,6 mm), z druhé strany ohyb B (u kůže 1,2 mm 8,7 mm, u 1,5 mm 9,9 mm) a za nimi panely po 30 mm.',
+        body: 'Na stránce Cvičné listy (odkaz pod krokem) vytiskněte list „Cvičný proužek pro lekci 4“ pro svou tloušťku kůže na 100 % a zkontrolujte úsečku 50 mm. Vystřihněte ho nahrubo s okrajem 1–2 cm, jen dole přesně po plné čáře. Dolní hranu listu přiložte na líc přesně na rovnou dolní hranu kůže a obrys vystřeďte po délce. List přilepte páskou jen na okrajích, mimo čáru řezu. Pravítkem zkontrolujte, že kroužky na koncích linie švu leží 3,5 mm od dolní hrany. Šídlem propíchněte skrz papír i kůži, aby byly značky vidět i na rubu: kroužky na koncích čar ohybů A i B a linie švu (u kůže 1,5 mm i kroužky na okrajích šrafy) a všechny tečky dna. Pak na řezací podložce řežte nožem podle ocelového pravítka skrz papír po obrysu. Na rubu spojte propíchnuté kroužky tužkou podle pravítka. Bez listu: na rub narýsujte uprostřed panel 30 mm, vedle něj ohyb A (u kůže 1,2 mm 15,7 mm, u 1,5 mm 16,6 mm), z druhé strany ohyb B (u kůže 1,2 mm 8,7 mm, u 1,5 mm 9,9 mm) a za nimi panely po 30 mm.',
         media: [],
       },
       {
@@ -714,7 +714,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'mark-skive-band',
         title: 'Vyznačte pásmo ztenčení ohybu B',
-        body: 'Jen u kůže 1,5 mm (u 1,2 mm přeskočte). Na rubu vyznačte pásmo ohybu B, asi 9,9 mm (s cvičným listem spojte propíchnuté konce), a od obou čar odsaďte 3 mm ven – celkem asi 16 mm, jako v lekci 3.',
+        body: 'Jen u kůže 1,5 mm (u 1,2 mm přeskočte). S cvičným listem spojte na rubu propíchnuté kroužky na okrajích šrafy – pásmo má asi 16 mm. Bez listu vyznačte pásmo ohybu B, asi 9,9 mm, a od obou čar odsaďte 3 mm ven, jako v lekci 3.',
         media: [],
       },
       {
@@ -988,7 +988,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'transfer-marks-awl',
         title: 'Před řezáním propíchněte značky',
         animationLinks: [animationLink('stripTransfer', 'A3'), animationLink('pocketAttach', 'A2')],
-        body: 'Než začnete řezat, propíchněte šídlem skrz papír i kůži, aby byly značky vidět i na rubu (jako u pouzdra na karty): konce obou čar ohybů A i B (asi 1 mm od hrany pásu), rohy místa pro kapsu (asi 1 mm dovnitř od zaobleného rohu, aby značku zakryla kapsa), střed dříku druku (na listu značka „druk – patice“) a všechny tečky dna.',
+        body: 'Než začnete řezat, propíchněte šídlem skrz papír i kůži všechny kroužky, křížek a tečky na listu PÁS, aby byly značky vidět i na rubu (jako u pouzdra na karty): kroužky na koncích čar ohybů A i B, kroužky v rozích místa pro kapsu (kapsa je zakryje), u kůže 1,5 mm i kroužky na okrajích šrafy, křížek „druk – patice“ (střed dříku druku) a všechny tečky dna.',
         media: [
           {
             id: 'ilustrace-prenos-znacek',
@@ -1055,7 +1055,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'mark-skive-band',
         title: 'Vyznačte pásmo ztenčení ohybu B',
-        body: 'Jen u kůže 1,5 mm (u 1,2 mm přeskočte). Od obou čar ohybu B odsaďte na rubu 3 mm ven – pásmo ztenčení má asi 16 mm. Ohyb A se neztenčuje.',
+        body: 'Jen u kůže 1,5 mm (u 1,2 mm přeskočte). Na rubu spojte tužkou podle pravítka propíchnuté kroužky na okrajích šrafy – pásmo ztenčení má asi 16 mm. Ohyb A se neztenčuje.',
         media: [],
       },
       {
@@ -1318,7 +1318,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('pocketAttach', 'B2'),
           animationLink('pocketAttach', 'B3'),
         ],
-        body: 'Kapsu nasucho přiložte otevřenou hranou nahoru na 4 propíchnuté značky rohů na předním panelu a pravítkem zkontrolujte polohu: 41,8 mm pod horní hranou a 14,75 mm od boků (u mince 40 mm 35,55 mm a 8,5 mm). Kolem kapsy nalepte na přední panel maskovací pásku těsně podél jejího okraje – páska ohraničí místo pro kapsu a chrání líc kolem. Kapsu nechte ležet a šídlem lehce propíchněte všemi jejími otvory švu do líce předního panelu, pak ji sundejte. Vpichy vyznačí na panelu čáru švu; při přišití je schovají otvory proseknuté skrz obě vrstvy (vyzkoušejte nejdřív na odřezku: vpich, pak otvor vidličkou – vpich nesmí být vidět). Lepí se jen pruh G1 (na listech PÁS a KAPSA zeleně šrafovaný), asi 3,5 mm: na panelu od pásky po vpichy, na kapse od okraje po otvory švu, po bocích od nejvyššího otvoru dolů a přes dno. Na předním panelu ho lehce zdrsněte smirkem; zbytek nechte hladký. Kontaktní lepidlo naneste do tohoto pruhu na líci předního panelu a na rubu kapsy (šířku pruhu ověřte na odřezku). Horní hranu kapsy nelepte, ani horní zaoblené rohy – tudy se zasouvá mince. Po odvětrání kapsu přitiskněte přesně na značky do rámečku z pásky; pak už nejde posunout. Pásku pomalu strhněte.',
+        body: 'Kapsu nasucho přiložte otevřenou hranou nahoru tak, aby zakryla 4 propíchnuté kroužky v rozích místa pro kapsu, a pravítkem zkontrolujte polohu: 41,8 mm pod horní hranou a 14,75 mm od boků (u mince 40 mm 35,55 mm a 8,5 mm). Kolem kapsy nalepte na přední panel maskovací pásku těsně podél jejího okraje – páska ohraničí místo pro kapsu a chrání líc kolem. Kapsu nechte ležet a šídlem lehce propíchněte všemi jejími otvory švu do líce předního panelu, pak ji sundejte. Vpichy vyznačí na panelu čáru švu; při přišití je schovají otvory proseknuté skrz obě vrstvy (vyzkoušejte nejdřív na odřezku: vpich, pak otvor vidličkou – vpich nesmí být vidět). Lepí se jen pruh G1 (na listech PÁS a KAPSA zeleně šrafovaný), asi 3,5 mm: na panelu od pásky po vpichy, na kapse od okraje po otvory švu, po bocích od nejvyššího otvoru dolů a přes dno. Na předním panelu ho lehce zdrsněte smirkem; zbytek nechte hladký. Kontaktní lepidlo naneste do tohoto pruhu na líci předního panelu a na rubu kapsy (šířku pruhu ověřte na odřezku). Horní hranu kapsy nelepte, ani horní zaoblené rohy – tudy se zasouvá mince. Po odvětrání kapsu přitiskněte přesně na značky do rámečku z pásky; pak už nejde posunout. Pásku pomalu strhněte.',
         media: [],
         waits: [
           {
@@ -1858,7 +1858,7 @@ const overview: ProjectOverview = {
           id: 'paper-model',
           lessonSlug: L1,
           stepId: 'glue-and-cut',
-          text: 'Papírový model nalepte na tenkou lepenku, vystřihněte a propíchněte značku patice na předním panelu. Přehněte ohyb B, pak A do měkké smyčky a dno slepte páskou. Vložte karty a bankovky, které nosíte, přehněte jazyk a šídlem zevnitř si na něm označte místo patice.',
+          text: 'Papírový model nalepte na tenkou lepenku, vystřihněte a propíchněte křížek patice na předním panelu. Přehněte ohyb B, pak A do měkké smyčky a dno slepte páskou. Vložte karty a bankovky, které nosíte, přehněte jazyk a šídlem zevnitř si na něm označte místo patice.',
         },
         {
           id: 'model-record',
@@ -1907,7 +1907,7 @@ const overview: ProjectOverview = {
           id: 'practice-strip',
           lessonSlug: L4,
           stepId: 'cut-practice-strip',
-          text: 'Cvičný proužek přilepte páskou na líc odřezku, propíchněte konce čar ohybů a tečky dna a vyřízněte ho skrz papír. Na rubu spojte konce čar ohybů tužkou, u kůže 1,5 mm ztenčete ohyb B. Otvory prosekejte naplocho: přední (prostřední) panel z líce, zadní a vnitřní z rubu.',
+          text: 'Cvičný proužek přilepte páskou na líc odřezku, propíchněte kroužky a tečky dna a vyřízněte ho skrz papír. Na rubu spojte kroužky tužkou, u kůže 1,5 mm ztenčete ohyb B. Otvory prosekejte naplocho: přední (prostřední) panel z líce, zadní a vnitřní z rubu.',
         },
         {
           id: 'practice-fold',
@@ -1931,7 +1931,7 @@ const overview: ProjectOverview = {
           id: 'strip-cut',
           lessonSlug: L5,
           stepId: 'transfer-face',
-          text: 'Šablonu PÁS přilepte páskou na líc kůže těla, propíchněte značky (konce ohybů, rohy kapsy, patice, tečky dna) a pás vyřízněte skrz papír. Na rubu spojte konce čar ohybů tužkou, u kůže 1,5 mm ztenčete ohyb B. Otvory dna prosekejte: přední panel z líce, zadní a vnitřní z rubu.',
+          text: 'Šablonu PÁS přilepte páskou na líc kůže těla, propíchněte kroužky, křížek patice a tečky dna a pás vyřízněte skrz papír. Na rubu spojte kroužky tužkou, u kůže 1,5 mm ztenčete ohyb B. Otvory dna prosekejte: přední panel z líce, zadní a vnitřní z rubu.',
           later: 'zkrácení jazyka (lekce 8).',
         },
         {

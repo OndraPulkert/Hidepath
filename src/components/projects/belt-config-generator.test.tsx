@@ -96,7 +96,7 @@ describe('Váš pásek', () => {
     expect(screen.getByRole('button', { name: 'Vygenerovat listy A4' })).toBeDisabled();
   });
 
-  it('7 dírek po 30 mm: list 2 se na A4 nevejde, list 1 se pořád vytiskne', async () => {
+  it('7 dírek po 30 mm: list 2 vyjde na 2 listy na šířku (2a a 2b)', async () => {
     const { user, onGenerated } = setup();
     await user.click(screen.getByText('Dírky (pokročilé)'));
     await user.click(screen.getByRole('button', { name: '7' }));
@@ -104,21 +104,21 @@ describe('Váš pásek', () => {
     await user.type(field(/Konec → první dírka/), '100');
     const table = screen.getByRole('table', { name: /Vaše čísla/ });
     expect(table).toHaveTextContent(/100 \/ 130 \/ 160 \/ 190 \/ 220 \/ 250 \/ 280\smm/);
-    expect(table).toHaveTextContent(/nevejde se na A4/);
-    expect(screen.getByText(/^List 2 se na A4 nevejde/)).toHaveTextContent(
-      /Dírky a konec značte podle čísel v tabulce. List 1 \(konec u přezky a poutko\) se vytiskne/,
-    );
-    expect(screen.queryByText(/vytiskněte list 2/)).toBeNull();
+    expect(table).toHaveTextContent(/2 listy A4 na šířku \(2a a 2b\)/);
+    expect(screen.queryByText(/se na A4 nevejde/)).toBeNull();
     expect(
-      screen.getByText(/^Za řadu 1 značte dírky a konec podle čísel v tabulce/),
+      screen.getByText(/^Za řadu 1 vytiskněte list 2 \(2 listy: 2a a 2b\)/),
     ).toBeInTheDocument();
     expect(screen.queryByRole('alert')).toBeNull();
-    // Regrese: dřív se tlačítko schovalo a nešel ani list 1.
     await user.click(screen.getByRole('button', { name: 'Vygenerovat listy A4' }));
     const sheets = onGenerated.mock.calls[0]![0];
-    expect(sheets.map((s) => s.id)).toEqual(['zmerena-prezka']);
+    expect(sheets.map((s) => s.id)).toEqual([
+      'zmerena-prezka',
+      'zmerena-spicka',
+      'zmerena-spicka-zbytek',
+    ]);
     expect(await screen.findByRole('status')).toHaveTextContent(
-      /List 1 pro .* je vygenerovaný níže; tiskne se jen to, co je v seznamu listů zaškrtnuté/,
+      /List 2 je na dvou listech \(2a a 2b\): každý přiložte prostřední dírkou na značku/,
     );
   });
 

@@ -10,6 +10,7 @@ import {
   buildCoinHolderPaperModelSvg,
   buildCoinHolderPocketSvg,
   buildCoinHolderProcessSvg,
+  bandPrickPoints,
   buildCoinHolderSheetSvg,
   coinHolderFileStem,
   coinHolderProcessFileStem,
@@ -242,6 +243,65 @@ describe('generátor pouzdra s mincí – varianty', () => {
     expect(buildCoinHolderPaperModelSvg(thin)).toContain(
       'Model pro: mince Ø 27,5, kůže tělo 1,2 mm (bez ztenčení).',
     );
+  });
+
+  it('list PÁS: kroužky k propíchnutí na koncích ohybů, okrajích šrafy a v rozích kapsy', () => {
+    const L = coinCardHolderLayout(spec);
+    const pts = bandPrickPoints(L, spec);
+    const of = (k: string) => pts.filter((p) => p.kind === k);
+    // 4 čáry ohybů × 2 konce, 1 mm od hrany (ohyb A nahoře od dna výřezu).
+    expect(of('fold')).toHaveLength(8);
+    expect(of('fold').map((p) => r3(p.y))).toEqual(
+      [L.scoopRadiusMm + 1, 103.1, L.scoopRadiusMm + 1, 103.1, 1, 103.1, 1, 103.1].map(r3),
+    );
+    // Okraje šrafy ohybu B (± 3 mm), také 1 mm od hran.
+    expect(of('skive').map((p) => [r3(p.x), r3(p.y)])).toEqual([
+      [r3(L.frontX1Mm - 3), '1'],
+      [r3(L.frontX1Mm - 3), '103.1'],
+      [r3(L.innerX0Mm! + 3), '1'],
+      [r3(L.innerX0Mm! + 3), '103.1'],
+    ]);
+    // Rohy kapsy: 1 mm dovnitř od zaobleného obrysu na úhlopříčce rohu (R10 nahoře, R6 dole).
+    const px = L.frontX0Mm + L.pocketXMm;
+    const [tl, tr, bl, br] = of('pocket');
+    const rTop = spec.pocketTopRadiusMm;
+    const rBot = spec.cornerRadiusMm;
+    expect(Math.hypot(tl.x - (px + rTop), tl.y - (L.pocketYMm + rTop))).toBeCloseTo(rTop - 1, 9);
+    expect(
+      Math.hypot(
+        br.x - (px + L.pocketWidthMm - rBot),
+        br.y - (L.pocketYMm + L.pocketHeightMm - rBot),
+      ),
+    ).toBeCloseTo(rBot - 1, 9);
+    expect(tl.x - px).toBeCloseTo(tl.y - L.pocketYMm, 9);
+    expect(tr.x).toBeCloseTo(2 * px + L.pocketWidthMm - tl.x, 9);
+    expect(bl.y).toBe(br.y);
+    // Kroužky jsou na listu (16 u 1,5 mm), u 1,2 mm bez šrafy jen 12; legenda je vysvětluje.
+    const svg = buildCoinHolderSheetSvg(spec);
+    expect(svg.match(/<circle class="prick"/g)).toHaveLength(16);
+    expect(svg).toContain('kroužky = propíchnout šídlem');
+    const thin = { ...spec, bodyThicknessMm: 1.2, foldSkiveThicknessMm: null };
+    expect(buildCoinHolderSheetSvg(thin).match(/<circle class="prick"/g)).toHaveLength(12);
+  });
+
+  it('papírový model: patice i klobouček mají křížek ve středu', () => {
+    const L = coinCardHolderLayout(spec);
+    const svg = buildCoinHolderPaperModelSvg(spec);
+    const crosses = [...svg.matchAll(/<path d="M([\d.]+) ([\d.]+) L[\d.]+ [\d.]+ M/g)].map(
+      ([, x, y]) => [Number(x) + 1.5, Number(y)],
+    );
+    const sx = 10;
+    const sy = 10 + L.tabLengthMm;
+    for (const [x, y] of [
+      [L.snapXTabMm, L.snapYTabMm],
+      [L.snapXFrontMm, L.snapYFrontMm],
+    ]) {
+      expect(
+        crosses.some(
+          ([cx, cy]) => Math.abs(cx - (sx + x)) < 1e-3 && Math.abs(cy - (sy + y)) < 1e-3,
+        ),
+      ).toBe(true);
+    }
   });
 
   it('ztenčení v ohybech: šrafovaná pásma = pásmo ohybu ± okraj, ohyb A pod výkusem', () => {
