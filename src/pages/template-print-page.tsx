@@ -281,6 +281,8 @@ export function PatternSheetsPrint({
     setChosen(null);
   };
   const orientations = new Set(printable.map((s) => s.orientation));
+  const mixedOrientation = orientations.size > 1;
+  const lastOrientation = printable.at(-1)?.orientation ?? 'portrait';
   const toggle = (id: string) => {
     const next = new Set(selected);
     if (next.has(id)) next.delete(id);
@@ -291,7 +293,7 @@ export function PatternSheetsPrint({
   return (
     <div className="mx-auto max-w-[760px] print:max-w-none">
       <style>{`@media print {
-        @page { margin: 0; }
+        @page { size: A4 ${lastOrientation}; margin: 0; }
         @page sheet-landscape { size: A4 landscape; margin: 0; }
         @page sheet-portrait { size: A4 portrait; margin: 0; }
         .pattern-sheet {
@@ -396,7 +398,9 @@ export function PatternSheetsPrint({
             className="pattern-sheet overflow-hidden rounded-md border border-line bg-white print:rounded-none print:border-0"
             style={
               {
-                page: `sheet-${sheet.orientation}`,
+                // Jedna orientace: stačí výchozí @page. Pojmenované stránky jen při mixu, jinak
+                // Chrome v dialogu tisku přidá za poslední list prázdnou stránku.
+                ...(mixedOrientation ? { page: `sheet-${sheet.orientation}` } : {}),
                 '--sheet-w': `${sheet.widthMm}mm`,
                 '--sheet-h': `${sheet.heightMm}mm`,
               } as CSSProperties
