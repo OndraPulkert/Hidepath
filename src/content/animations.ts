@@ -100,6 +100,7 @@ export const animationPages = {
       B: [
         'Přiložte kapsu na 4 značky',
         'Olepte kapsu dokola páskou',
+        'Propíchněte čáru švu do panelu',
         'Zdrsněte pruh po čáru švu',
         'Naneste lepidlo do pruhu po čáru švu',
         'Nechte lepidlo odvětrat',

@@ -135,7 +135,11 @@ function sheetLabel(project: ProjectPrints, print: LessonPrint): string {
   if (print.source === 'template') return 'Šablona';
   const sheets = print.source === 'pattern-sheets' ? project.patternSheets : project.practiceSheets;
   const title = sheets?.sheets.find((s) => s.id === print.sheetId)?.title ?? print.sheetId ?? '';
-  return title.split(' – ')[0] ?? title;
+  const short = (t: string) => t.split(' – ')[0] ?? t;
+  // Zkrácený název jen tehdy, když ho nemá i jiný list (jinak by „Kapsa – záložní okno Ø 18 mm“
+  // a „Kapsa – mince 40 mm“ splynuly do „Kapsa“).
+  const clash = (sheets?.sheets ?? []).filter((s) => short(s.title) === short(title)).length > 1;
+  return clash ? title : short(title);
 }
 
 /** Výtisky lekcí z `printsFrom` bodu, v pořadí lekcí, převzaté z jejich „Vytisknout“. */

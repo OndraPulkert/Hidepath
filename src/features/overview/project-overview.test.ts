@@ -193,6 +193,10 @@ describe('Postup v kostce – pouzdro s mincí', () => {
     ]);
     const l6 = groups.find((g) => g.lessonOrder === 6)!;
     expect(l6.rows.every((r) => r.condition)).toBe(true);
+    // Záložní list nesmí splynout s hlavním listem KAPSA pod zkráceným názvem „Kapsa“.
+    const backup = groups.flatMap((g) => g.rows).filter((r) => r.sheetId === 'kapsa-okno-18');
+    expect(backup.length).toBeGreaterThan(0);
+    for (const r of backup) expect(r.sheetLabel).toBe('Kapsa – záložní okno Ø 18 mm');
     expect(text('prints').text).toContain('schovejte na kapsu v lekci 6');
   });
 
@@ -211,6 +215,9 @@ describe('Postup v kostce – pouzdro s mincí', () => {
     expect(text('pocket-glue').text).toContain('Horní hranu nelepte');
     expect(stepBody('pocket-glue')).toContain('pruh G1');
     expect(stepBody('pocket-glue')).toContain('Horní hranu kapsy nelepte');
+    // Vnitřní hranici G1 na líci předního panelu dávají vpichy skrz otvory švu kapsy.
+    expect(text('pocket-glue').text).toContain('od pásky po vpichy');
+    expect(stepBody('pocket-glue')).toContain('propíchněte všemi jejími otvory švu');
 
     const bottom = text('bottom-glue-stitch').text;
     expect(bottom).toContain('0–3,5 mm od dolní hrany');

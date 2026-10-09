@@ -314,7 +314,7 @@ describe('animace postupu – odkazy z lekcí', () => {
       '/animace/pas-prenos-rez.html#A3',
       prisiti('A2'),
     ]);
-    expect(hrefOf(6, 'glue-pocket')).toEqual([prisiti('B1'), prisiti('B2')]);
+    expect(hrefOf(6, 'glue-pocket')).toEqual([prisiti('B1'), prisiti('B2'), prisiti('B3')]);
     // Přišití kapsy: animace prosekání a šití a hned vedle návod, kolik nitě odměřit.
     expect(hrefOf(6, 'stitch-pocket')).toEqual([
       prisiti('C1'),

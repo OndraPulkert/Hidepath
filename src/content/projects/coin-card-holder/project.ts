@@ -285,7 +285,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'drill-form',
         title: 'Vyvrtejte formu',
-        body: 'Vytiskněte list KAPSA (odkaz pod krokem) 3× na 100 % a zkontrolujte úsečku 50 mm: výtisk na formu, výtisk na značky a výtisk na šablonu. Z výtisku na formu: výkres „OTVOR FORMY PRO DŮLEK“ (kružnice Ø 31,5 mm s osami) vystřihněte jako čtverec asi 7 × 7 cm (na menší desku menší, osy nechte celé), kružnici nevystřihujte. Desku vyberte tak, aby při lisování dosáhly nad minci dvě svěrky proti sobě: u svěrek z nákupu (vyložení 50 mm) smí být střed otvoru nejvýš asi 4 cm od hran, kudy svěrky půjdou – deska 8 × 8 cm, nebo nejvýš asi 8 cm široká. Na širší prkénko potřebujete svěrky s větším vyložením (ověřte, že dosáhnou za střed otvoru). Čtverec přilepte na desku doprostřed šířky, střed asi 4–5 cm od konce (naproti rukojeti, má-li ji; u desky 8 × 8 cm doprostřed), osy rovnoběžně s okraji. Osy protáhněte tužkou podle pravítka až k okrajům desky – podle nich budete zarovnávat kůži. Korunku Ø 32 mm nasaďte na unášeč a upněte do vrtačky (viz animace pod krokem; samostatný Wolfcraft upněte rovnou za stopku). Desku upněte svěrkou ke stolu přes odpadní prkno a středicí vrták nasaďte do křížku os. Vrtejte korunkou Ø 32 mm na unášeči (u mince 40 mm Ø 44 mm) na 1. rychlost, bez příklepu a bez tlaku, dokud špička středicího vrtáku nevyjde zespodu z desky (korunka je pak zhruba v půlce tloušťky), pak desku otočte, znovu upněte a dokončete z druhé strany podle dírky středicího vrtáku. Korunku průběžně vytahujte a piliny odstraňte. Papír sundejte. Horní hranu otvoru (stranu pro kůži, označte si ji tužkou) srazte smirkem 180 namotaným na prstu do mírného oblouku (velikost ověřte na odřezku); průměr nezvětšujte. Stěnu otvoru jen lehce začistěte a plochu kolem přebruste naplocho. Hrana nesmí řezat ani drhnout a mince zabalená s odřezkem kůže musí jít do otvoru volně. Setřené osy obtáhněte znovu.',
+        body: 'Vytiskněte list KAPSA (odkaz pod krokem) 3× na 100 % a zkontrolujte úsečku 50 mm: výtisk na formu, výtisk na značky a výtisk na šablonu. U mince 40 mm tiskněte místo něj list Kapsa – mince 40 mm (otvor formy Ø 44 mm, okno Ø 32 mm). Z výtisku na formu: výkres „OTVOR FORMY PRO DŮLEK“ (kružnice Ø 31,5 mm s osami, u mince 40 mm Ø 44 mm) vystřihněte jako čtverec asi 7 × 7 cm (na menší desku menší, osy nechte celé), kružnici nevystřihujte. Desku vyberte tak, aby při lisování dosáhly nad minci dvě svěrky proti sobě: u svěrek z nákupu (vyložení 50 mm) smí být střed otvoru nejvýš asi 4 cm od hran, kudy svěrky půjdou – deska 8 × 8 cm, nebo nejvýš asi 8 cm široká. Na širší prkénko potřebujete svěrky s větším vyložením (ověřte, že dosáhnou za střed otvoru). Čtverec přilepte na desku doprostřed šířky, střed asi 4–5 cm od konce (naproti rukojeti, má-li ji; u desky 8 × 8 cm doprostřed), osy rovnoběžně s okraji. Osy protáhněte tužkou podle pravítka až k okrajům desky – podle nich budete zarovnávat kůži. Korunku Ø 32 mm nasaďte na unášeč a upněte do vrtačky (viz animace pod krokem; samostatný Wolfcraft upněte rovnou za stopku). Desku upněte svěrkou ke stolu přes odpadní prkno a středicí vrták nasaďte do křížku os. Vrtejte korunkou Ø 32 mm na unášeči (u mince 40 mm Ø 44 mm) na 1. rychlost, bez příklepu a bez tlaku, dokud špička středicího vrtáku nevyjde zespodu z desky (korunka je pak zhruba v půlce tloušťky), pak desku otočte, znovu upněte a dokončete z druhé strany podle dírky středicího vrtáku. Korunku průběžně vytahujte a piliny odstraňte. Papír sundejte. Horní hranu otvoru (stranu pro kůži, označte si ji tužkou) srazte smirkem 180 namotaným na prstu do mírného oblouku (velikost ověřte na odřezku); průměr nezvětšujte. Stěnu otvoru jen lehce začistěte a plochu kolem přebruste naplocho. Hrana nesmí řezat ani drhnout a mince zabalená s odřezkem kůže musí jít do otvoru volně. Setřené osy obtáhněte znovu.',
         printLink: 'pattern-sheets',
         animationLinks: [
           animationLink('kapsa', 'A1'),
@@ -373,7 +373,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'test-window-retention',
         title: 'Vysekněte zkušební okno a vyzkoušejte, že mince drží',
-        body: 'Zaschlý odřezek položte lícem dolů zpátky na formu: důlek do otvoru, osy na osy. Rozmazané čáry nejdřív obtáhněte podle šablony. Obrys vyřízněte nožem 2–3 lehkými tahy, kůži přidržujte na rovné části (desku můžete chránit kartonem s otvorem Ø 32 mm, u mince 40 mm Ø 44 mm). Formu položte na děrovací desku a do otvoru pod důlek postavte špalík (užší než otvor, širší než okno), zkrácený tak, aby se dna důlku jen dotýkal a nenadzvedával ho (ověřte na odřezku). Výsečník Ø 20 mm (u mince 40 mm Ø 32 mm) postavte na narýsovanou kružnici, zkontrolujte, že prstenec kolem důlku je po celém obvodu stejně široký, a vysekněte okno. Vyzkoušejte: (1) minci vložte z rubu, odřezek otočte oknem dolů a zatřeste – nesmí vypadnout; (2) zatlačte na ni z rubu palcem – nesmí oknem projít; (3) prstenec nesmí být natržený. Když mince projde, Ø 20 mm do kapsy zatím nesekejte. Když byl důlek mělký (mince vyčnívala nad rub), na druhém odřezku zopakujte orýsování, tvarování a schnutí s hlubším důlkem (kůže vlhčí, svěrky utažené pevněji, ale rovnoměrně – ověřte na odřezku) a vyzkoušejte znovu okno Ø 20 mm. Teprve když mince projde i tentokrát, nebo když byl důlek dost hluboký už napoprvé, vyzkoušejte na dalším odřezku okno Ø 18 mm (prstenec 4,75 mm). Když potřebujete třetí odřezek, u sestavy z nákupního plánu ho vyřízněte z kusu Blu A5: nejdřív si na něm podél jedné hrany obkreslete kapsu 57,5 × 57,5 mm a cvičný proužek 130 × 40 mm (stejně jako potom v lekci 3) a odřezek vezměte ze zbytku. Jako šablonu na rub vytiskněte list Kapsa – záložní okno Ø 18 mm (odkaz pod krokem), vystřihněte ho přesně po obrysu a vysekněte do něj okno Ø 18 mm; výtisk na značky (s dírkami) použijte znovu. Výsečník Ø 18 mm je v nákupním plánu jako volitelný řádek mimo součet – je levný, můžete ho přihodit do první objednávky. Do kapsy pak sekejte průměrem, se kterým zkouška vyšla. Když mince projde i oknem Ø 18 mm, do kapsy žádné okno nesekejte a na dalším odřezku zkuste ještě hlubší důlek (ověřte na odřezku).',
+        body: 'Zaschlý odřezek položte lícem dolů zpátky na formu: důlek do otvoru, osy na osy. Rozmazané čáry nejdřív obtáhněte podle šablony. Obrys vyřízněte nožem 2–3 lehkými tahy, kůži přidržujte na rovné části (desku můžete chránit kartonem s otvorem Ø 32 mm, u mince 40 mm Ø 44 mm). Formu položte na děrovací desku a do otvoru pod důlek postavte špalík (užší než otvor, širší než okno), zkrácený tak, aby se dna důlku jen dotýkal a nenadzvedával ho (ověřte na odřezku). Výsečník Ø 20 mm (u mince 40 mm Ø 32 mm) postavte na narýsovanou kružnici, zkontrolujte, že prstenec kolem důlku je po celém obvodu stejně široký, a vysekněte okno. Vyzkoušejte: (1) minci vložte z rubu, odřezek otočte oknem dolů a zatřeste – nesmí vypadnout; (2) zatlačte na ni z rubu palcem – nesmí oknem projít; (3) prstenec nesmí být natržený. Když mince projde, Ø 20 mm do kapsy zatím nesekejte. Když byl důlek mělký (mince vyčnívala nad rub), na druhém odřezku zopakujte orýsování, tvarování a schnutí s hlubším důlkem (kůže vlhčí, svěrky utažené pevněji, ale rovnoměrně – ověřte na odřezku) a vyzkoušejte znovu okno Ø 20 mm. Teprve když mince projde i tentokrát, nebo když byl důlek dost hluboký už napoprvé, vyzkoušejte na dalším odřezku okno Ø 18 mm (prstenec 4,75 mm). Záložní okno Ø 18 mm je jen pro minci 50 Kč; u mince 40 mm v tom případě do kapsy okno nesekejte a na dalším odřezku zkuste ještě hlubší důlek (ověřte na odřezku). Když potřebujete třetí odřezek, u sestavy z nákupního plánu ho vyřízněte z kusu Blu A5: nejdřív si na něm podél jedné hrany obkreslete kapsu 57,5 × 57,5 mm a cvičný proužek 130 × 40 mm (stejně jako potom v lekci 3) a odřezek vezměte ze zbytku. Jako šablonu na rub vytiskněte list Kapsa – záložní okno Ø 18 mm (odkaz pod krokem), vystřihněte ho přesně po obrysu a vysekněte do něj okno Ø 18 mm; výtisk na značky (s dírkami) použijte znovu. Výsečník Ø 18 mm je v nákupním plánu jako volitelný řádek mimo součet – je levný, můžete ho přihodit do první objednávky. Do kapsy pak sekejte průměrem, se kterým zkouška vyšla. Když mince projde i oknem Ø 18 mm, do kapsy žádné okno nesekejte a na dalším odřezku zkuste ještě hlubší důlek (ověřte na odřezku).',
         printLink: 'pattern-sheets',
         animationLinks: [animationLink('kapsa', 'E1')],
         media: [],
@@ -776,7 +776,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'unfold-roughen-glue',
         title: 'Zdrsněte a slepte, spoj po spoji',
-        body: 'Vyjměte obsah. Zaschlé ohyby rozevřete jen zhruba do pravého úhlu, ne úplně naplocho – suchý ohyb A by mohl prasknout. Dva spoje lepte po jednom. Nejdřív přední s vnitřním: zdrsněte smirkem rub předního a rub vnitřního panelu v pruhu 0–3,5 mm od hrany (ne výš než čára švu), naneste lepidlo v tenké rovnoměrné vrstvě a nechte odvětrat podle návodu. Přeložte zpátky, zarovnejte jehlami přes otvory a přitiskněte. Pak stejně vnitřní se zadním: líc vnitřního a rub zadního panelu.',
+        body: 'Vyjměte obsah. Zaschlé ohyby rozevřete jen zhruba do pravého úhlu, ne úplně naplocho – suchý ohyb A by mohl prasknout. Dva spoje lepte po jednom. Nejdřív přední s vnitřním: zdrsněte smirkem rub předního a rub vnitřního panelu v pruhu 0–3,5 mm od hrany (ne výš než řada otvorů), naneste lepidlo v tenké rovnoměrné vrstvě a nechte odvětrat podle návodu. Přeložte zpátky, zarovnejte jehlami přes otvory a přitiskněte. Pak stejně vnitřní se zadním: líc vnitřního a rub zadního panelu.',
         animationLinks: [animationLink('pouchFold', 'C1')],
         media: [],
         waits: [
@@ -1211,7 +1211,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'trace-and-punch-pocket',
         title: 'Přeneste značky na líc a prosekejte šev',
-        body: 'Postup je stejný jako v lekci 2. Výtisk listu KAPSA na značky z lekce 2 (když ho nemáte, odkaz pod krokem) vystřihněte nahrubo a přilepte maskovací páskou na LÍC kůže 1,2 mm, jen na okrajích mimo obrys. Šídlem propíchněte tečky švu a 4 konce os. Pásku pomalu strhněte a zkontrolujte, že jsou vidět všechny značky. Na líc nic nekreslete. Vidličkami 4 mm prosekejte naplocho na děrovací desce otvory švu z líce – při přišívání budete sekat ze stejné strany.',
+        body: 'Postup je stejný jako v lekci 2. Výtisk listu KAPSA na značky z lekce 2 (když ho nemáte, odkaz pod krokem; u mince 40 mm list Kapsa – mince 40 mm) vystřihněte nahrubo a přilepte maskovací páskou na LÍC kůže 1,2 mm, jen na okrajích mimo obrys. Šídlem propíchněte tečky švu a 4 konce os. Pásku pomalu strhněte a zkontrolujte, že jsou vidět všechny značky. Na líc nic nekreslete. Vidličkami 4 mm prosekejte naplocho na děrovací desce otvory švu z líce – při přišívání budete sekat ze stejné strany.',
         printLink: 'pattern-sheets',
         animationLinks: [animationLink('kapsa', 'B1')],
         media: [],
@@ -1302,8 +1302,12 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'glue-pocket',
         title: 'Nalepte kapsu na přední panel',
-        animationLinks: [animationLink('pocketAttach', 'B1'), animationLink('pocketAttach', 'B2')],
-        body: 'Kapsu nasucho přiložte otevřenou hranou nahoru na 4 propíchnuté značky rohů na předním panelu a pravítkem zkontrolujte polohu: 41,8 mm pod horní hranou a 14,75 mm od boků (u mince 40 mm 35,55 mm a 8,5 mm). Kolem kapsy nalepte na přední panel maskovací pásku těsně podél jejího okraje a kapsu sundejte – páska ohraničí místo pro kapsu a chrání líc kolem. Lepí se jen pruh G1 – na listech PÁS a KAPSA je zeleně šrafovaný: od okraje kapsy po čáru švu kapsy (3,5 mm), po bocích a dole. Na předním panelu ho lehce zdrsněte smirkem od pásky dovnitř; zbytek nechte hladký. Kontaktní lepidlo naneste do tohoto pruhu na líci předního panelu a do stejného pruhu na rubu kapsy (šířku pruhu ověřte na odřezku). Horní hranu kapsy nelepte – tudy se zasouvá mince. Po odvětrání kapsu přitiskněte přesně na značky do rámečku z pásky; pak už nejde posunout. Pásku pomalu strhněte.',
+        animationLinks: [
+          animationLink('pocketAttach', 'B1'),
+          animationLink('pocketAttach', 'B2'),
+          animationLink('pocketAttach', 'B3'),
+        ],
+        body: 'Kapsu nasucho přiložte otevřenou hranou nahoru na 4 propíchnuté značky rohů na předním panelu a pravítkem zkontrolujte polohu: 41,8 mm pod horní hranou a 14,75 mm od boků (u mince 40 mm 35,55 mm a 8,5 mm). Kolem kapsy nalepte na přední panel maskovací pásku těsně podél jejího okraje – páska ohraničí místo pro kapsu a chrání líc kolem. Kapsu nechte ležet a šídlem lehce propíchněte všemi jejími otvory švu do líce předního panelu, pak ji sundejte. Vpichy vyznačí na panelu čáru švu; při přišití je schovají otvory proseknuté skrz obě vrstvy (vyzkoušejte nejdřív na odřezku: vpich, pak otvor vidličkou – vpich nesmí být vidět). Lepí se jen pruh G1 (na listech PÁS a KAPSA zeleně šrafovaný), asi 3,5 mm: na panelu od pásky po vpichy, na kapse od okraje po otvory švu, po bocích od nejvyššího otvoru dolů a přes dno. Na předním panelu ho lehce zdrsněte smirkem; zbytek nechte hladký. Kontaktní lepidlo naneste do tohoto pruhu na líci předního panelu a na rubu kapsy (šířku pruhu ověřte na odřezku). Horní hranu kapsy nelepte, ani horní zaoblené rohy – tudy se zasouvá mince. Po odvětrání kapsu přitiskněte přesně na značky do rámečku z pásky; pak už nejde posunout. Pásku pomalu strhněte.',
         media: [],
         waits: [
           {
@@ -1536,7 +1540,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'roughen-and-glue-bottom',
         title: 'Zdrsněte a slepte dno, spoj po spoji',
-        body: 'Vyjměte obsah. Zaschlé ohyby rozevřete jen zhruba do pravého úhlu, ne úplně naplocho – suchý ohyb A by mohl prasknout. Dva spoje lepte po jednom. Lepí se jen pruh 0–3,5 mm od dolní hrany, ne výš než čára švu – na listu PÁS je zeleně šrafovaný (G2, G3) a u každého panelu je napsaná strana. Nejdřív spoj G2, přední s vnitřním: v pruhu zdrsněte rub předního a rub vnitřního panelu, naneste lepidlo v tenké rovnoměrné vrstvě a nechte odvětrat podle návodu. Přeložte, zarovnejte jehlami přes otvory a přitiskněte – po dotyku už nejde posunout. Pak stejně spoj G3, vnitřní se zadním: líc vnitřního a rub zadního panelu.',
+        body: 'Vyjměte obsah. Zaschlé ohyby rozevřete jen zhruba do pravého úhlu, ne úplně naplocho – suchý ohyb A by mohl prasknout. Dva spoje lepte po jednom. Lepí se jen pruh 0–3,5 mm od dolní hrany, ne výš než řada otvorů dna (čára švu) – na listu PÁS je zeleně šrafovaný (G2, G3) a u každého panelu je napsaná strana. Nejdřív spoj G2, přední s vnitřním: v pruhu zdrsněte rub předního a rub vnitřního panelu, naneste lepidlo v tenké rovnoměrné vrstvě a nechte odvětrat podle návodu. Přeložte, zarovnejte jehlami přes otvory a přitiskněte – po dotyku už nejde posunout. Pak stejně spoj G3, vnitřní se zadním: líc vnitřního a rub zadního panelu.',
         animationLinks: [animationLink('pouchFold', 'C1')],
         waits: [
           {
@@ -1865,37 +1869,37 @@ const overview: ProjectOverview = {
           id: 'scrap-form',
           lessonSlug: L2,
           stepId: 'press-and-clamp',
-          text: 'Minci zabalte do fólie, odřezek navlhčete a položte lícem dolů na formu, osy na osy. Minci dejte na rub nad otvor, přiklopte víkem, stáhněte dvěma svěrkami a nechte zaschnout přes noc.',
+          text: 'Minci zabalte do fólie, odřezek navlhčete a položte lícem dolů na formu zaoblenou hranou otvoru nahoru, osy na osy. Minci dejte na rub nad otvor, přiklopte víkem, stáhněte dvěma svěrkami a nechte zaschnout přes noc.',
         },
         {
           id: 'window-test',
           lessonSlug: L2,
           stepId: 'test-window-retention',
-          text: 'Vyřízněte obrys a se špalíkem pod důlkem vysekněte okno Ø 20 mm (u mince 40 mm Ø 32 mm). Mince nesmí vypadnout ani projít oknem; když projde, postupujte podle lekce (u mělkého důlku hlubší důlek, pak okno Ø 18 mm). Do kapsy pak sekáte průměrem, se kterým zkouška vyšla.',
+          text: 'Vyřízněte obrys a se špalíkem pod důlkem vysekněte okno Ø 20 mm (u mince 40 mm Ø 32 mm). Mince nesmí vypadnout ani projít oknem; když projde, u mělkého důlku zkuste nejdřív hlubší důlek a když projde i pak nebo byl důlek hluboký hned, u mince 50 Kč okno Ø 18 mm na dalším odřezku (podrobně v lekci). Do kapsy pak sekáte průměrem, se kterým zkouška vyšla.',
         },
         {
           id: 'snap-scrap',
           lessonSlug: L3,
           stepId: 'set-snap-post',
-          text: 'Na odřezek kůže těla osaďte dřík s hlavičkou, na druhý podle obtisku klobouček se zdířkou; druk musí jít zavřít i otevřít. Příruba dříku smí mít nejvýš Ø 11 mm, zapište i výsečníky, které sedly. U kůže 1,5 mm nejdřív na odřezku ztenčete pásmo ohybu B na 1 mm.',
+          text: 'U kůže 1,5 mm nejdřív na odřezku ztenčete pásmo ohybu B na 1 mm. Na odřezek kůže těla osaďte dřík s hlavičkou, na druhý podle obtisku klobouček se zdířkou a zapište výsečníky, které sedly. Druk musí jít zavřít i otevřít a příruba dříku smí mít nejvýš Ø 11 mm; když ne, tento druk na pás nedávejte a zkuste alternativu z lekce.',
         },
         {
           id: 'practice-strip',
           lessonSlug: L4,
           stepId: 'cut-practice-strip',
-          text: 'Cvičný proužek přilepte páskou na líc odřezku, propíchněte konce čar ohybů a tečky dna a vyřízněte ho skrz papír. U kůže 1,5 mm ztenčete ohyb B. Otvory prosekejte naplocho: přední (prostřední) panel z líce, zadní a vnitřní z rubu.',
+          text: 'Cvičný proužek přilepte páskou na líc odřezku, propíchněte konce čar ohybů a tečky dna a vyřízněte ho skrz papír. Na rubu spojte konce čar ohybů tužkou, u kůže 1,5 mm ztenčete ohyb B. Otvory prosekejte naplocho: přední (prostřední) panel z líce, zadní a vnitřní z rubu.',
         },
         {
           id: 'practice-fold',
           lessonSlug: L4,
           stepId: 'fold-around-content',
-          text: 'Navlhčete jen pásma ohybů a proužek přeložte do smyčky kolem zabalených karet a papíru místo bankovek. Zkontrolujte, že otvory lícují, sepněte sponkami a nechte zaschnout.',
+          text: 'Navlhčete jen pásma ohybů. Zabalené karty položte na rub předního panelu a přeložte přes ně vnitřní panel (ohyb B), na něj papír místo bankovek a přes vše zadní panel (ohyb A), do smyčky, ne na ostro. Sepněte sponkami, zkontrolujte, že otvory lícují (když ne, za vlhka ohyb přeložte), a nechte zaschnout.',
         },
         {
           id: 'practice-glue-stitch',
           lessonSlug: L4,
           stepId: 'unfold-roughen-glue',
-          text: 'Slepte spoj po spoji jen v pruhu 0–3,5 mm od hrany, zarovnejte jehlami a sešijte tři vrstvy. U barvené kůže vyzkoušejte na hraně barvu a zapište vrstvy a dobu schnutí.',
+          text: 'Vyjměte obsah a ohyby rozevřete jen do pravého úhlu, suchý ohyb A by mohl prasknout. Spoj po spoji (rub předního s rubem vnitřního, pak líc vnitřního s rubem zadního) zdrsněte a slepte jen pruh 0–3,5 mm od hrany, nechte odvětrat, zarovnejte jehlami, přitiskněte a sešijte tři vrstvy. U barvené kůže vyzkoušejte na hraně barvu a zapište vrstvy a dobu schnutí.',
         },
       ],
     },
@@ -1914,7 +1918,7 @@ const overview: ProjectOverview = {
           id: 'strip-seal',
           lessonSlug: L5,
           stepId: 'dye-burnish-and-seal',
-          text: 'Obarvěte a zaleštěte hrany, na které po složení nedosáhnete: horní a volnou hranu vnitřního panelu, oblouk výřezu a jazyk. Rub vnitřního panelu zapečeťte Tokonole nebo gum tragacanth; pruh G2 0–3,5 mm od dolní hrany přelepte páskou, bude se lepit.',
+          text: 'Hrany, na které po složení nedosáhnete, obarvěte (u barvené kůže) a zaleštěte: horní a volnou hranu vnitřního panelu, oblouk výřezu a jazyk. Na rubu vnitřního panelu nejdřív přelepte páskou pruh G2 0–3,5 mm od dolní hrany (bude se lepit), pak rub zapečeťte Tokonole nebo gum tragacanth a po zaschnutí pásku strhněte.',
           later: 'ostatní vnější hrany a nový konec jazyka (lekce 8).',
         },
         {
@@ -1928,13 +1932,13 @@ const overview: ProjectOverview = {
           id: 'pocket-window',
           lessonSlug: L6,
           stepId: 'cut-outline-and-window',
-          text: 'Vyřízněte obrys a vysekněte okno průměrem, se kterým vyšla zkouška v lekci 2. Hrany kapsy obarvěte a zaleštěte, po přišití na ně nedosáhnete.',
+          text: 'Vyřízněte obrys a vysekněte okno průměrem, se kterým vyšla zkouška v lekci 2. Hrany kapsy obarvěte (u barvené kůže) a zaleštěte, po přišití na ně nedosáhnete.',
         },
         {
           id: 'pocket-glue',
           lessonSlug: L6,
           stepId: 'glue-pocket',
-          text: 'Kapsu přiložte na propíchnuté rohy a kolem ní nalepte na přední panel maskovací pásku. Lepidlo jen do zeleně šrafovaného pruhu G1 (3,5 mm po bocích a dole): na líc předního panelu a na rub kapsy. Horní hranu nelepte, tudy se zasouvá mince.',
+          text: 'Kapsu přiložte na propíchnuté rohy, kolem ní nalepte na přední panel maskovací pásku a šídlem propíchněte všemi otvory švu kapsy do panelu (nejdřív na odřezku); vpichy vyznačí čáru švu. Kapsu sundejte, pruh G1 od pásky po vpichy (asi 3,5 mm, po bocích od nejvyššího vpichu dolů a přes dno) zdrsněte a lepidlo naneste na líc předního panelu a na rub kapsy. Horní hranu nelepte, ani horní rohy; po odvětrání kapsu přitiskněte přesně do rámečku (pak už nejde posunout) a pásku strhněte.',
         },
         {
           id: 'pocket-stitch',
@@ -1947,25 +1951,25 @@ const overview: ProjectOverview = {
           id: 'fold',
           lessonSlug: L7,
           stepId: 'wet-fold-zones',
-          text: 'Navlhčete pásma obou ohybů. Vnitřní panel přeložte přes zabalené karty (ohyb B), zadní přes bankovky (ohyb A), sepněte sponkami vedle ohybů a zkontrolujte, že otvory dna lícují. Nechte zaschnout.',
+          text: 'Navlhčete pásma obou ohybů. Vnitřní panel přeložte přes zabalené karty (ohyb B), zadní přes bankovky (ohyb A), sepněte sponkami vedle ohybů a zkontrolujte, že otvory dna lícují. Když ne, za vlhka ohyb přeložte, nechte zaschnout, a když nelícují ani pak, nelepte a postupujte podle lekce.',
         },
         {
           id: 'bottom-glue-stitch',
           lessonSlug: L7,
           stepId: 'roughen-and-glue-bottom',
-          text: 'Slepte dno spoj po spoji jen v zelené šrafě 0–3,5 mm od dolní hrany: G2 rub předního s rubem vnitřního, pak G3 líc vnitřního s rubem zadního. Zarovnejte jehlami a přitiskněte. Dno prošijte sedlářským stehem skrz tři vrstvy.',
+          text: 'Vyjměte obsah a ohyby rozevřete jen do pravého úhlu, suchý ohyb A by mohl prasknout. Spoj po spoji zdrsněte a slepte jen pruh 0–3,5 mm od dolní hrany po řadu otvorů (na listu PÁS šrafa): G2 rub předního s rubem vnitřního, pak G3 líc vnitřního s rubem zadního; nechte odvětrat, zarovnejte jehlami a přitiskněte. Dno prošijte sedlářským stehem skrz tři vrstvy.',
         },
         {
           id: 'cap-tongue',
           lessonSlug: L8,
           stepId: 'imprint-cap-position',
-          text: 'Vložte obsah, jazyk přitiskněte přes hlavičku a střed obtisku propíchněte. Klobouček se zdířkou osaďte podle obtisku, ne podle kružnice na šabloně. Jazyk zkraťte 11 mm za středem kloboučku a rohy zaoblete na R10.',
+          text: 'Vložte obsah, jazyk přitiskněte přes hlavičku a střed obtisku propíchněte. Jazyk narovnejte nahoru, pouzdro položte zadním panelem na desku (pod jazykem nesmí být přední panel) a klobouček se zdířkou osaďte podle obtisku, ne podle kružnice na šabloně: klobouček na líc, zdířku na rub. Jazyk zkraťte 11 mm za středem kloboučku a rohy zaoblete na R10.',
         },
         {
           id: 'edges',
           lessonSlug: L8,
           stepId: 'sand-flat-bottom',
-          text: 'Dno přebruste do roviny přes všechny tři vrstvy. U barvené kůže obarvěte řez a zaleštěte všechny vnější hrany včetně nového konce jazyka.',
+          text: 'Dno přebruste do roviny přes všechny tři vrstvy a jeho hrany zaoblete z přední i zadní strany. U barvené kůže obarvěte řez a zaleštěte všechny vnější hrany včetně nového konce jazyka.',
         },
       ],
     },
