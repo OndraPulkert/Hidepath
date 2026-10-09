@@ -156,25 +156,29 @@ Všechny texty česky, čísla **s desetinnou čárkou**. Popisky, které závis
 Popisky nezávislé na šířce (u všech šířek stejné):
 
 - `nýt ± 73,2 mm od ohybu`, `nýt ± 25,5 mm od ohybu`
-- `drážka 25 × 6 mm, ohyb ji půlí`
-- `můstek u drážky 10 mm`
+- `ovál 25 × 6 mm, ohyb ho půlí`
+- `můstek u oválu 10 mm`
 - `kapsa pro poutko 47,7 mm (světlá 37,7 mm)`
 - `konec pásu 90 mm od ohybu`
 - `OHYB (příčka přezky)`
 - `vrchol zaoblený r = 4 mm (není ostrý hrot)`
-- `rozteč 25 mm`, `PROSTŘEDNÍ DÍRKA = tvoje míra`, `144,3 mm od hrotu`
+- `rozteč 25 mm`, `PROSTŘEDNÍ DÍRKA = vaše míra`, `144,3 mm od hrotu` (u zaobleného konce `od konce`, na listu na výšku i na šířku stejně)
 - `nastavení ± 50 mm (2 dírky sem i tam)`
-- `Dírky Ø 4,5 mm, 5 kusů, rozteč 25 mm.`
+- `Dírky Ø <Ø dírek> mm, 5 kusů, rozteč 25 mm.` (Ø = trn + 0,5 mm, výchozí 5 mm)
 - `CELKOVÁ DÉLKA PÁSU = naměřený obvod + 234,3 mm`
 
-Postup na straně 1 (čtyři kroky, v tomto pořadí — pořadí je věcné, ne kosmetické):
+Postup na straně 1 (čtyři kroky, v tomto pořadí — pořadí je věcné, ne kosmetické; texty jsou
+ve vykání, zdroj je `buckleEndPage` v `src/lib/patterns/belt-sheets.ts`):
 
-1. Přenes značky na rub pásu: ohyb, drážku i všechny čtyři otvory.
-2. Vysekni 6mm otvory pro nýty i konce drážky (stejný průbojník), drážku mezi nimi vyřízni nožem.
-3. **Navlékni poutko na pás. Teprve pak ohni konec kolem přezky** a poutko posuň přes přehnutý konec.
-4. Sešroubuj oba nýty. Poutko zůstane uvězněné v kapse mezi nimi.
+1. Na rub pásu propíchněte 2 černé otvory u konce, oba křížky oválu a 2 červené kroužky ohybu.
+2. Vysekněte Ø 6 mm oba otvory a konce oválu, boky oválu řízněte nožem. Kroužky ohybu
+   nesekejte: spojte je na rubu pravítkem, to je čára ohybu.
+3. **Navlékněte poutko na pás, ohněte konec kolem příčky přezky** a poutko posuňte přes
+   přehnutý konec.
+4. Šedé otvory (druhá dvojice) nepropichujte: vykružte je šídlem skrz vyseknuté, vysekněte,
+   poutko vraťte mezi ně a sešroubujte nýty.
 
-Plus poznámka: `Nýty: 2 kusy, každý prochází oběma vrstvami — proto jsou otvory čtyři.`
+Druhá dvojice je na listu šedá, čárkovaná a bez křížku. Plus poznámka: `Nýty: 2, proto 4 otvory.`
 
 Na straně 2 uvést, že se obvod měří na stávajícím opasku od ohybu u přezky k používané dírce,
 a že se dírky děrují až po zkoušce na těle a špička se odřezává jako poslední krok.

@@ -52,7 +52,7 @@ export const LID_SHEETS_LESSON_SLUG = 'listy-pro-vasi-kuzi';
  * už nepoužívají (hlídá test obsahu).
  */
 export const LEGACY_LID_RECORD_IDS = {
-  /** Lekce 1: tloušťka P1 (kaštan), mm. */
+  /** Lekce 1: tloušťka P1, mm. */
   p1Thickness: 'p1-thickness',
   /** Lekce 1: tloušťka přepážky D1, mm. */
   d1Thickness: 'd1-thickness',

@@ -10,7 +10,8 @@ import { type AnimationLink } from '@/content/schema';
  * - kapsa-prisiti: `#A`–`#D` otevře první krok dané části (zastavený, přehrání tlačítkem),
  * - kapsa-skladani (`#A`–`#E`) a kapsa-druk (`#A`–`#D`): stejně jako kapsa-prisiti,
  * - pas-prenos-rez a pas-otvory-dna (obě `#A`–`#E`): stejně jako kapsa-prisiti,
- * - sedlarsky-steh a hrany (`#A`–`#G`): stejně jako kapsa-prisiti, společné pro všechny projekty,
+ * - sedlarsky-steh (`#A`–`#G`) a hrany (`#A`–`#H`, `#H` pásek): stejně jako kapsa-prisiti,
+ *   společné pro všechny projekty,
  * - vicko-ohyby (`#A` ohyb dna, `#B` závěs): stejně jako kapsa-prisiti; staré `#anim-dno`
  *   a `#anim-zaves` stránka dál bere jako `#A` a `#B`,
  * - vicko-magnet (`#A`–`#B`): stejně jako kapsa-prisiti; `#vymena` posune na rámeček výměny
@@ -51,7 +52,7 @@ export const animationPages = {
         'Sundejte papír, obruste a zaoblete hranu',
       ],
       B: [
-        'Vystřihněte výtisk na značky nahrubo',
+        'Vystřihněte výtisk na značky po čtverci',
         'Přilepte ho maskovací páskou na LÍC',
         'Šídlem propíchněte 23 teček a 4 konce os',
         'Pásku strhněte pomalu',
@@ -444,7 +445,7 @@ export const animationPages = {
       B: [
         'Poloha výřezu pro palec',
         'Přiložte šablonu výřezu na osu',
-        'Vysekněte Ø 10 přes šablonu',
+        'Vysekněte Ø 10',
         'Řízněte od hrany F k tečnám',
         'Zaoblete rohy a hrany výřezu',
       ],

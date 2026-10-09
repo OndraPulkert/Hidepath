@@ -41,7 +41,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     ],
     cautions: [
       'Přířezy A5–A2 v této tloušťce prodává CraftPoint; jinde je často potřeba přířez poptat, celá kůže stojí tisíce korun.',
-      'Na trénink řezu a děrování (lekce 1–3) stačí levné odřezky, i štípenka (spodní vrstva kůže bez líce). Na lepení a steh v lekci 4 je lepší tenká třísločiněná – nejjednodušší jsou dvě A5 téže kůže. Finální díly řežte z lícové kůže, štípenka se chová jinak.',
+      'Na trénink děrování a zkušební údery (lekce 1 a 3) a rovné proužky v lekci 2 stačí levné odřezky, i štípenka (spodní vrstva kůže bez líce). Zkoušku pásky na líci a cvičnou šablonu v lekci 2 a lepení a steh v lekci 4 dělejte na lícové kůži téže kůže jako pouzdro – nejjednodušší jsou dvě A5. Finální díly řežte z lícové kůže, štípenka se chová jinak.',
       'Kůže má lícovou (hladkou) a rubovou (vláknitou) stranu. U pouzdra na karty se šablona kreslí na rub; u pouzdra s vsazenou mincí se pás kreslí na líc – kresba je tam pohled zvenku.',
     ],
     avoid: [
@@ -126,7 +126,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         url: 'https://sedlarskenaradi.cz/kozene-odrezky-stipenka/',
         priceCents: 3_500,
         priceNote: 'za 100 g',
-        note: 'Jen na trénink řezu a děrování (lekce 1–3). Na lepení a steh v lekci 4 radši dvě A5 třísločiněné; na finální díly ne, štípenka se chová jinak než lícová kůže.',
+        note: 'Jen na zkušební údery, rovné proužky a děrování (lekce 1–3). Zkouška pásky na líci a cvičná šablona v lekci 2 a lepení a steh v lekci 4 chtějí lícovou kůži téže kůže jako pouzdro; na finální díly ne, štípenka se chová jinak než lícová kůže.',
         availability: 'in_stock',
         checkedAt: '2026-09-07',
       },

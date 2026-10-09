@@ -34,8 +34,15 @@ const esc = (s: string): string => s.replace(/&/g, '&amp;').replace(/</g, '&lt;'
 
 export const PRACTICE_SHEET = { widthMm: 210, heightMm: 297, marginMm: 10 } as const;
 export const CALIBRATION_MM = 50;
-/** Okraj papíru kolem obrysu na vystřižení nahrubo (lekce 4: 1–2 cm). */
-export const ROUGH_MARGIN_MM = 15;
+/**
+ * Papír na vystřižení = kus kůže z lekce 4 (`PRACTICE_STRIP.pieceLengthMm × pieceHeightMm`), proužek
+ * v něm vystředěný. Papír větší než kůže by páska ke kůži nepřidržela: list se položí na líc
+ * hranami na hrany a páska se na koncích přehne přes hranu na rub.
+ */
+export const PIECE_MM = {
+  w: PRACTICE_STRIP.pieceLengthMm,
+  h: PRACTICE_STRIP.pieceHeightMm,
+} as const;
 /**
  * Kroužky k propíchnutí: kolik mm za čarou řezu (v odpadu) leží na prodloužení čar ohybů a okrajů
  * šrafy. Stejně na listu PÁS (lekce 5) i tady: vpichy odejdou s odpadem, na líci dílu nezůstanou.
@@ -51,12 +58,16 @@ const SKIVE = '#b9c3bc';
 
 type Anchor = 'start' | 'middle' | 'end';
 
-/** Levý horní roh čárkovaného okraje na vystřižení a levý horní roh obrysu proužku. */
-export const BLOCK_ORIGIN = { x: PRACTICE_SHEET.marginMm, y: 62 } as const;
-export const STRIP_ORIGIN = {
-  x: BLOCK_ORIGIN.x + ROUGH_MARGIN_MM,
-  y: BLOCK_ORIGIN.y + ROUGH_MARGIN_MM,
-} as const;
+/** Levý horní roh čárkovaného obdélníku (= kus kůže) na vystřižení. */
+export const BLOCK_ORIGIN = { x: (PRACTICE_SHEET.widthMm - PIECE_MM.w) / 2, y: 70 } as const;
+
+/** Levý horní roh obrysu proužku: vystředěný v kusu kůže. */
+export function stripOrigin(P: PracticeStripLayout): { x: number; y: number } {
+  return {
+    x: BLOCK_ORIGIN.x + (PIECE_MM.w - P.stripLengthMm) / 2,
+    y: BLOCK_ORIGIN.y + (PIECE_MM.h - P.heightMm) / 2,
+  };
+}
 /** y kontrolní úsečky (patička). */
 export const CALIBRATION_Y = PRACTICE_SHEET.heightMm - PRACTICE_SHEET.marginMm - 22;
 
@@ -141,8 +152,7 @@ export function practiceSkiveZone(
 export function buildCoinHolderPracticeSvg(bodyThicknessMm = 1.2): string {
   const P = practiceStripLayout(bodyThicknessMm);
   const { widthMm: W, heightMm: H, marginMm: m } = PRACTICE_SHEET;
-  const ox = STRIP_ORIGIN.x;
-  const oy = STRIP_ORIGIN.y;
+  const { x: ox, y: oy } = stripOrigin(P);
   const X = (x: number): number => ox + x;
   const Y = (y: number): number => oy + y;
   const SL = P.stripLengthMm;
@@ -167,9 +177,9 @@ export function buildCoinHolderPracticeSvg(bodyThicknessMm = 1.2): string {
   column(out, m, m + 17, [
     '# Postup (lekce 4) – stejně jako u pásu v lekci 5',
     '1. Tiskněte na 100 % a změřte kontrolní úsečku dole: přesně 50 mm. Tloušťka kůže v nadpisu musí sedět na vaši kůži.',
-    '2. Proužek vystřihněte nůžkami nahrubo po čárkované čáře (okraj asi 1,5 cm).',
-    `3. Obrys vystřeďte na kusu kůže (asi ${cz(PRACTICE_STRIP.pieceLengthMm)} × ${cz(PRACTICE_STRIP.pieceHeightMm)} mm), kroužky nad i pod obrysem musí ležet na kůži.`,
-    '4. Přilepte ho maskovací páskou na LÍC kůže – páska jen na okrajích papíru, mimo plnou čáru a kroužky.',
+    `2. List vystřihněte nůžkami po čárkované čáře – je velký jako kus kůže (${cz(PIECE_MM.w)} × ${cz(PIECE_MM.h)} mm).`,
+    '3. Položte ho na LÍC kůže hranami na hrany (u většího kusu obrys vystřeďte – kroužky musí ležet na kůži).',
+    '4. Na obou koncích přelepte maskovací páskou hranu papíru i kůže a pásku přehněte na rub – mimo plnou čáru a kroužky.',
     `5. Šídlem propíchněte skrz papír i kůži všechny kroužky (za čarou řezu, v odpadu) a všechny tečky dna – musí být vidět i na rubu.`,
     `6. Kůži i s listem otočte. Na RUBU spojte kroužky tužkou podle pravítka: čáry ohybů${skived ? ' a okraje šrafy (pásmo ztenčení)' : ''} vedou přes celý proužek.`,
     '7. Otočte zpět a řežte nožem skrz papír i kůži po plné čáře, s ocelovým pravítkem. Vpichy odejdou s odpadem.',
@@ -177,15 +187,20 @@ export function buildCoinHolderPracticeSvg(bodyThicknessMm = 1.2): string {
   ]);
 
   /* --- okraj na vystřižení --- */
-  const bw = SL + 2 * ROUGH_MARGIN_MM;
-  const bh = SH + 2 * ROUGH_MARGIN_MM;
+  const bw = PIECE_MM.w;
+  const bh = PIECE_MM.h;
   out.push(
     `<path class="rough-margin" d="M${f(BLOCK_ORIGIN.x)} ${f(BLOCK_ORIGIN.y)} H${f(BLOCK_ORIGIN.x + bw)} V${f(BLOCK_ORIGIN.y + bh)} H${f(BLOCK_ORIGIN.x)} Z" fill="none" stroke="${GUIDE}" stroke-width="0.25" stroke-dasharray="3 2"/>`,
   );
   out.push(
-    text(BLOCK_ORIGIN.x + 2, BLOCK_ORIGIN.y + 4, 'okraj na vystřižení ~1,5 cm · LÍC', 2, 'start', {
-      fill: GUIDE,
-    }),
+    text(
+      BLOCK_ORIGIN.x,
+      BLOCK_ORIGIN.y - 1.5,
+      `vystřihnout po čárkované čáře = kus kůže ${cz(PIECE_MM.w)} × ${cz(PIECE_MM.h)} mm · LÍC`,
+      2,
+      'start',
+      { fill: GUIDE },
+    ),
   );
 
   /* --- šrafa ztenčení ohybu B (jen 1,5 mm) --- */
@@ -219,12 +234,12 @@ export function buildCoinHolderPracticeSvg(bodyThicknessMm = 1.2): string {
     );
   }
   out.push(
-    text(X((P.backX1Mm + P.frontX0Mm) / 2), Y(-4.5), `OHYB A ${cz(P.foldAMm)}`, 2.2, 'middle', {
+    text(X((P.backX1Mm + P.frontX0Mm) / 2), Y(-9), `OHYB A ${cz(P.foldAMm)}`, 2.2, 'middle', {
       fill: GUIDE,
     }),
   );
   out.push(
-    text(X((P.frontX1Mm + P.innerX0Mm) / 2), Y(-4.5), `OHYB B ${cz(P.foldBMm)}`, 2.2, 'middle', {
+    text(X((P.frontX1Mm + P.innerX0Mm) / 2), Y(-9), `OHYB B ${cz(P.foldBMm)}`, 2.2, 'middle', {
       fill: GUIDE,
     }),
   );
@@ -261,7 +276,7 @@ export function buildCoinHolderPracticeSvg(bodyThicknessMm = 1.2): string {
   out.push(
     text(
       X(SL / 2),
-      Y(SH + 6),
+      Y(SH + 9),
       `PROUŽEK ${cz(SL)} × ${cz(SH)} mm · šev ${cz(P.stitchOffsetMm)} mm od dolní hrany · ${P.holesPerPanel} otvorů na panel`,
       2.2,
       'middle',
@@ -271,7 +286,7 @@ export function buildCoinHolderPracticeSvg(bodyThicknessMm = 1.2): string {
   out.push(
     text(
       X(SL / 2),
-      Y(SH + 9.5),
+      Y(SH + 12.5),
       `rozteč ${cz(P.stitchPitchMm)} mm, krajní otvor ${cz(P.endHoleOffsetMm)} mm od čáry ohybu i od konce`,
       2.2,
       'middle',
@@ -292,10 +307,10 @@ export function buildCoinHolderPracticeSvg(bodyThicknessMm = 1.2): string {
     skived
       ? `Šrafa = ohyb B ${cz(P.foldBMm)} mm a ${cz(P.foldSkiveMarginMm)} mm na obě strany (asi ${Math.round(P.foldBMm + 2 * P.foldSkiveMarginMm)} mm): ztenčit z rubu na ${cz(P.foldSkiveThicknessMm ?? 0)} mm jako v lekci 3.`
       : 'Kůže 1,2 mm: ohyby se neztenčují, kroky ztenčení v lekci 4 přeskočte.',
-    `Kus kůže asi ${cz(PRACTICE_STRIP.pieceLengthMm)} × ${cz(PRACTICE_STRIP.pieceHeightMm)} mm (lekce 4): obrys vystředit, nahoře i dole zbude ${cz1(P.pieceReserveTopBottomMm)} mm na kroužky, na každém konci asi`,
-    `${cz1(P.pieceReserveEachEndMm)} mm rezervy – hodí se na zkoušku barvy na hrany (lekce 4).`,
+    `Kus kůže asi ${cz(PRACTICE_STRIP.pieceLengthMm)} × ${cz(PRACTICE_STRIP.pieceHeightMm)} mm (lekce 4) = čárkovaný obdélník: nahoře i dole zbude ${cz1(P.pieceReserveTopBottomMm)} mm na kroužky, na každém konci asi`,
+    `${cz1(P.pieceReserveEachEndMm)} mm na pásku přehnutou na rub; odřezky z konců se hodí na zkoušku barvy na hrany (lekce 4).`,
   ];
-  column(out, m, BLOCK_ORIGIN.y + bh + 8, lines, 2.3, 3.5);
+  column(out, m, BLOCK_ORIGIN.y + bh + 14, lines, 2.3, 3.5);
 
   /* --- patička: kontrolní úsečka, legenda --- */
   const y = CALIBRATION_Y;

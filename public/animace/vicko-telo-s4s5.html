@@ -434,7 +434,7 @@ add('B','Zdrsněte líc D2','Lepte jen šrafované boční pásy G4 (list 2; hra
 });
 
 // B2
-add('B','Naneste lepidlo a nechte zavadnout','Kontaktní lepidlo naneste jen do bočních pásů G4: na rub F, na líc D2 a pod D2 na rub B. Nechte zavadnout 10–15 min (jako u G3 v lekci 6).',9000,t=>{
+add('B','Naneste lepidlo a nechte zavadnout','Vnitřní hranici pásu přelepte na líci D2 svislou maskovací páskou hranou 5 mm od hrany D2 (odměřte pravítkem dole i nahoře), od spodní hrany D2 k pásce z nanečisto. Kontaktní lepidlo naneste jen do bočních pásů G4: na rub F, na líc D2 mezi pásky a pod D2 na rub B. Svislou pásku strhněte hned po nanesení lepidla, pomalu směrem od lepené plochy (zůstala by pod D1). Nechte zavadnout 10–15 min (jako u G3 v lekci 6).',9000,t=>{
   const gd=es(t,.05,.35),gb=es(t,.3,.45),gf=es(t,.45,.75),dry=es(t,.78,.98);
   const fr=mkF(1.75,OPEN);
   let s=section({c:1.75,open:OPEN,rough:1,glue:{d2:gd,b:gb,f:gf,op:L(1,.7,dry)}})+tapeD2();
@@ -450,7 +450,7 @@ add('B','Naneste lepidlo a nechte zavadnout','Kontaktní lepidlo naneste jen do 
 });
 
 // B3
-add('B','Přikládejte od ohybu dna nahoru','F přikládejte od ohybu dna nahoru a rovnejte ji podle boků B – po dotyku už nejde posunout. Rub F padne dole na rub B, výš na líc D2. Pásku strhněte až po přiložení F.',9600,t=>{
+add('B','Přikládejte od ohybu dna nahoru','F přikládejte od ohybu dna nahoru a rovnejte ji podle boků B – po dotyku už nejde posunout. Rub F padne dole na rub B, výš na líc D2. Horní pásku strhněte až po přiložení F.',9600,t=>{
   const c=L(1.75,62,es(t,.06,.82));
   const fr=mkF(c,OPEN);
   let s=section({c,open:OPEN,rough:1,glue:{d2:1,b:1,f:1,op:.7}})+tapeD2(1-seg(t,.86,.96));

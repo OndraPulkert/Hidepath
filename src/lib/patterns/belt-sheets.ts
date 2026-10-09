@@ -134,7 +134,7 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
     out.push(hole(x, foldY, BEND_PRICK_MM, RED));
   }
 
-  // Drážka pro trn: stadion půlený ohybem.
+  // Ovál pro trn: stadion půlený ohybem.
   const half = spec.slotLengthMm / 2;
   const sr = spec.slotWidthMm / 2;
   out.push(
@@ -161,11 +161,11 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
     [foldY - near, `nýt ± ${cz(near)} mm od ohybu`, INK],
     [
       foldY - near + 9.5,
-      `drážka ${cz(spec.slotLengthMm)} × ${cz(spec.slotWidthMm)} mm, ohyb ji půlí`,
+      `ovál ${cz(spec.slotLengthMm)} × ${cz(spec.slotWidthMm)} mm, ohyb ho půlí`,
       INK,
     ],
     [foldY, 'OHYB (příčka přezky) · propíchněte oba kroužky', RED],
-    [foldY + near - 9.5, `můstek u drážky ${cz(Math.round(ligamentMm(spec) * 10) / 10)} mm`, GREEN],
+    [foldY + near - 9.5, `můstek u oválu ${cz(Math.round(ligamentMm(spec) * 10) / 10)} mm`, GREEN],
     [
       foldY + (near + far) / 2,
       `kapsa pro poutko ${cz(keeperGapMm(spec))} mm (světlá ${cz(keeperPocketClearMm(spec))} mm)`,
@@ -234,11 +234,11 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
 
   out.push(
     ...notes(strapX, 258, [
-      '1. Na rub pásu propíchněte 2 černé otvory u konce, oba křížky drážky a 2 červené kroužky ohybu.',
-      `2. Vysekněte Ø ${cz(spec.rivetHoleMm)} mm oba otvory a konce drážky, boky drážky řízněte nožem.`,
+      '1. Na rub pásu propíchněte 2 černé otvory u konce, oba křížky oválu a 2 červené kroužky ohybu.',
+      `2. Vysekněte Ø ${cz(spec.rivetHoleMm)} mm oba otvory a konce oválu, boky oválu řízněte nožem.`,
       '   Kroužky ohybu nesekejte: spojte je na rubu pravítkem, to je čára ohybu.',
       '3. Navlékněte poutko na pás, ohněte konec kolem příčky přezky a poutko posuňte přes přehnutý konec.',
-      '4. Šedé otvory nepropichujte: označte je skrz vyseknuté, vysekněte, poutko vraťte mezi ně a sešroubujte nýty.',
+      '4. Šedé otvory nepropichujte: vykružte je šídlem skrz vyseknuté, vysekněte, poutko vraťte mezi ně a sešroubujte nýty.',
       'Poutko: mimo šrafy přelepte páskou, šrafy zdrsněte (vlevo líc, vpravo rub), lepidlo jen do šraf. Nýty: 2, proto 4 otvory.',
       'Rozměry z šablony Black Flag Leather Goods (jeden zdroj, ať se nemíchají rozteče).',
       'Délka poutka je spočítaná, ne ověřená — ověřte na odřezku.',
@@ -581,7 +581,7 @@ function tipPageLandscape(tip: BeltTipSpec, end: BeltEndSpec, shape: BeltTipShap
     text(
       midX,
       bottom + 11.5,
-      `${cz(apexToMiddleHoleMm(tip))} mm od konce · nastavení ± ${cz(adjustmentRangeMm(tip))} mm (${holesWord(mid)} sem i tam)`,
+      `${cz(apexToMiddleHoleMm(tip))} mm ${fromEnd(shape)} · nastavení ± ${cz(adjustmentRangeMm(tip))} mm (${holesWord(mid)} sem i tam)`,
       3,
       RED,
       'middle',
@@ -591,7 +591,7 @@ function tipPageLandscape(tip: BeltTipSpec, end: BeltEndSpec, shape: BeltTipShap
   out.push(
     ...notes(LANDSCAPE_LEFT_MM, 160, [
       ...tipNotes(tip, end, shape).slice(0, 7),
-      `Poslední dírka ${cz(reach)} mm od konce. List je na šířku, protože se dírky na výšku nevejdou.`,
+      `Poslední dírka ${cz(reach)} mm ${fromEnd(shape)}. List je na šířku, protože se dírky na výšku nevejdou.`,
     ]),
   );
   return out;

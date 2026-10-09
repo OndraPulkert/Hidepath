@@ -752,9 +752,11 @@ zkušební kus Z-2). Model na tom nezávisí: poloha magnetu, plíšek a kontrol
 návrh, 1,24 kontrola) a stavy obsahu, tvar otevřeného víčka v nich není. Měření k v kroku 16 platí
 beze změny. Dřívější mezipoloha Z2 (kopyto, opěrka 30°) je jen v historii (oddíl 13, Kolo 9).
 
-Když P0 nebo zkušební kus ukáže, že palec víčko pohodlně neudrží, dá se okénko bankovek posunout
-mimo stopu jazýčku (např. x 27–42, stále v pásu x 27–74) a okénka mincí zkrátit shora, aby šlo víčko
-otevřít víc dozadu (ověřit P0-8).
+Když P0 nebo zkušební kus ukáže, že palec víčko pohodlně neudrží, dají se okénka mincí zkrátit
+shora, aby šlo víčko otevřít víc dozadu (ověřit P0-8). Okénko bankovek mimo stopu jazýčku
+(x 40,5–60,5) v tomto střihu posunout nejde: leží v pásu G3c mezi švy sloupců S2 a S3 (x 36 / 65),
+vlevo a vpravo jsou sloupce mincí (x 4–35 a 66–97). Posun by prořízl šev a otevřel sloupec mincí do
+oddílu bankovek; chtěl by nový střih (dřívější příklad „x 27–42“ byl chybný, oprava 9. 10. 2026).
 
 ---
 
@@ -959,7 +961,7 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
    v 9.1). Dlouhé zkoušky z dřívějších verzí (V4 na odřezcích, V5, V6, V11) jsou jen volitelné
    **důkladné ověření** na konci oddílu 11. Žádný krok postupu na ně nečeká. V tomto pořadí:
    (0) **Nákup a měření:** objednat kůži podle 10.1 a ostatní podle seznamu v oddílu 10. Po dodání
-   změřit posuvkou na několika místech P1 (kaštan), D1 (nebarvená kozinka), D2 (čokoládová) a L1
+   změřit posuvkou na několika místech P1 (hnědá useň), D1 (nebarvená kozinka), D2 (čokoládová) a L1
    (z nebarvené kozinky) a zapsat.
    (a) **Listy pro změřenou kůži:** `pnpm pattern:wallet-lid --divider <větší z D1 a D2> --lining <L1>`,
    a když se P1 liší od 1,0 o 0,05 a víc, přidej `--p1 <změřená P1>` (oddíl 12.4). Kontroly ohlásí
@@ -975,22 +977,22 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
    `bottomSpacer`, list 4). Vložka je ve všech variantách stejná. Kopyto ani opěrka závěsu se od Kola 9
    nedělají (závěs se tvaruje přes obsah, krok 16). Šablonu konce jazýčku z listu 4 (R10 s magnetem, ztenčením špičky, ryskou horní
    hrany L1 a otvory S7) a šablonu výřezu pro palec z listu 1 (obdélník asi 30 mm široký uprostřed horní hrany F a 20 mm
-   vysoký, horní hranou je horní hrana F, s vyříznutým výřezem U 10 × 12 a propíchnutým křížkem
-   středu) nalep na tvrdý papír a vyřízni **až po
+   vysoký, horní hranou je horní hrana F, s vyříznutým výřezem U 10 × 12; křížek středu odpadne s ním,
+   střed výřezu se propíchne na kůži v kroku 2) nalep na tvrdý papír a vyřízni **až po
    P0** (krok 0(c)): na variantě z V12 nezávisí, ale P0-4 může změnit výřez a P0-6 výšku. Když P0
    změnil vstupy, vyřízni je z nově vytištěných listů. Použiješ je na zkušebním i finálním kusu.
    (c) **Povinný krok 1 – papírový model P0** z vytištěných listů (oddíl 11, P0): vejde se 6 karet,
    bankovky složené napůl a 4 mince, víčko se zavře a výřez pro palec funguje. Co P0 změní ve
    vstupech, se přepočítá dřív, než se tisknou listy pro kůži.
    (d) **Povinný krok 2 – zkouška ohybu V12** (oddíl 11; asi 10 min práce, pak přes noc schnutí) na
-   jednom odřezku kaštanu (P1 obou kusů je ze stejné kůže, 10.1; dva odřezky jen když zkušební kus
+   jednom odřezku usně P1 (P1 obou kusů je ze stejné kůže, 10.1; dva odřezky jen když zkušební kus
    děláš z jiné kůže, pak variantu určí horší výsledek). Namočit a přehnout lícem ven přes vložku 1,5
    a změřit polohu rýhy vůči vrcholu ohybu (oddíl 5.8). Varianta platí pro zkušební i finální kus
    (9.1). Projde, když líc nepopraská;
    platí pro ohyb dna i pro neztenčený závěs. Neprojde → **přednostně záloha A** (celý P1 z usně 0,8, nic se neztenčuje); záloha B
    (ztenčení, krok 4) jen když A nejde (useň 0,8 nesehnaná, nebo ve V12 popraská i ona) a V12 zopakovat na odřezku zvolené varianty. Odpružení samo důvodem k záloze
    není. Useň 0,8 na P1 kupuj až podle V12.
-   (e) **Povinný krok 3 – zkušební kus** ze stejného kaštanu (oddíl 11): celý postup kroků 1–21 ve
+   (e) **Povinný krok 3 – zkušební kus** ze stejné usně P1 (oddíl 11): celý postup kroků 1–21 ve
    variantě z V12. Ověří magnet (zavřené víčko vydrží zatřesení a otočení dnem vzhůru a otevře se jedním
    prstem), závěs (otevřené víčko jde palcem udržet, po běžném používání bez prasklin), výřez pro palec a
    retenci obsahu; mimochodem i lepidlo na plíšek (G1), barvu na hrany a šití S7 u magnetu.
@@ -1008,13 +1010,13 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
    magnet“): k, zvednutí karet Δ_k a mincí Δ_c, bankovky a tloušťku magnetu (`magnetThicknessMm`) dosadí
    do stejných polí (`src/lib/patterns/lid-wallet-input.ts`: k nad k max → `kDesign` = `kMax` = k;
    δ = větší z Δ_k / (n_k · t_k) a Δ_c / t_c). Teprve pak nalep na tvrdý papír a vyřízni šablony z listu 1 (obrys pásu
-   s okénky a otvory švů; použije se v krocích 2, 5 a 13) a zbylé šablony z listu 4 (okénka – kontrola
+   s okénky a otvory švů; použije se v krocích 9 a 13) a zbylé šablony z listu 4 (okénka – kontrola
    polohy okének mincí v kroku 5 a okénka bankovek v kroku 8, plíšek – rozměr na plech v kroku 2,
    proužek otvorů S4/S5 v kroku 14).
 2. **Řez:** P1 101 × kóta P1 z rámečku na listu 4 (výchozí střih 231,66; rovné řezy nožem u pravítka, obrys jazýčku a pásu podle listu 1, výřez
    pro palec až v kroku 5: horní hranu F řezat rovně u pravítka i přes výřez; list 1 vede obrys rovně a výřez kreslí čárkovaně jako řez později).
-   Dokud je list 1 přilepený na líci, propíchnout skrz něj konce osy ohybu, čáry hrany vložky dna a
-   přehybů závěsu u boků a středy výsečníků: Ø 8, Ø 12 okének mincí, Ø 10 výřezu a **Ø 14 okénka
+   Dokud je list 1 přilepený na líci, propíchnout skrz něj jen středy výsečníků (na bocích líce nic,
+   osa ohybu a hrana vložky se značí z rubu v kroku 3): Ø 8, Ø 12 okének mincí, Ø 10 výřezu a **Ø 14 okénka
    bankovek** (to se vysekává až v kroku 8 z líce B, kam se pak list 1 přiložit nedá). **Napojení jazýčku na pás** je vyduté (R4): **výsečník Ø 8**, pak tečné
    rovné řezy nožem (oddíl 5.5).
    D1 93 × 79,5 (nebarvená kozinka), D2 103 × 64 (čokoládová kozinka), L1 24 × 22 (z nebarvené
@@ -1024,15 +1026,16 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
    naříznout nožem u pravítka a v rýze ho zlomit ohýbáním sem a tam. Rohy R3 a otřep brusným papírem
    zrnitosti 120 na desce (nebo brusnou násadou v aku vrtačce), hrany **přelakovat** bezbarvým lakem na
    nehty.
-3. **Značení na rub** (tužka, nezařezávat): osa ohybu dna a pás závěsu (nelepit, nešít) podle
-   listu 2 a rámečku na listu 4 (výchozí střih v 62,21 a 142,99–150,99), hranice lepení G1–G4, okénka mincí a poloha D1 a D2,
+3. **Značení na rub** (tužka, nezařezávat): osa ohybu dna podle
+   listu 2 a rámečku na listu 4 (výchozí střih v 62,21), hranice lepení G1–G4, okénka mincí a poloha D1 a D2,
    tedy to, co kreslí list 2. Čáry švů S1–S3 a S6 ani okénko bankovek na rub nepatří: list 2 je nekreslí,
    středy okénka bankovek jsou na líci z kroku 2 a švy se přenášejí z líce (kroky 9 a 13). Papír se na kůži
    obkreslit skrz nedá, proto: list 2
    nalep na tvrdý papír a vyřízni po obrysu, přilož ho na rub, rohy lepených ploch a konce čar
-   propíchni jehlou do kůže a tečky spoj tužkou u pravítka. Osu ohybu dna, čáru hrany vložky dna (z rámečku na listu 4, výchozí 64,18; posunutou podle V12,
-   oddíl 5.8; použije se v kroku 11) a přehyby závěsu (kontrola v kroku 16) vyznač
-   navíc ryskou na obou bocích dílu. Všechno je souměrné podle x 50,5, na stranách nezáleží. „L“
+   propíchni jehlou **jen do rubu** (hrot nesmí projít na líc, vpich by zůstal vidět; sílu zkusit na
+   odřezku) a tečky spoj tužkou u pravítka. Osu ohybu dna, čáru hrany vložky dna (z rámečku na listu 4, výchozí 64,18; posunutou podle V12,
+   oddíl 5.8; použije se v kroku 11) vyznač navíc ryskou na obou bocích dílu. Závěs a rub víčka se
+   neznačí (zůstávají vidět). Všechno je souměrné podle x 50,5, na stranách nezáleží. „L“
    napiš zvlášť na rub F a na rub B. Otvory švů S1–S3 a S6 se později přenášejí přes šablonu z listu 1
    přiloženou na líc: propíchnou se jehlou a děrují vidličkou (S1–S3 v krocích 9 a 10 – šablona na líci B,
    děruje se z líce D2; S6 v kroku 13 – šablona na líci F).
@@ -1066,12 +1069,12 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
 5. **Okénka mincí** v B z líce B (středy propíchnuté v kroku 2), na tvrdé desce: šablonou okénka z listu 4
    jen zkontrolovat polohu a před sekáním ji sejmout; Ø 12 na koncích (středy y 34 a 70), rovné řezy. Zkosit, leštit.
    **Výřez pro palec** v horní hraně F z líce F, na tvrdé desce (funkci ověří zkušební kus; volitelně předem V11 na odřezku): šablonu přiložit horní hranou na
-   horní hranu F a výřezem na osu x 50,5 (křížek šablony na propíchnutý střed), výsečník Ø 10 přes
-   šablonu (zůstává přiložená) se středem na ose v 7,0 od horní hrany F (y 55,0), potom rovné řezy nožem od hrany F k tečnám díry,
+   horní hranu F a obloukem U kolem propíchnutého středu (vpich uprostřed oblouku), šablonu sejmout,
+   výsečník Ø 10 nasadit na vpich (střed na ose v 7,0 od horní hrany F, y 55,0), potom rovné řezy nožem od hrany F k tečnám díry,
    zastavit přesně na tečně. Rohy ústí R1 nedělat nožem, zaoblit brusným papírem (list 1). Nejdřív na
    papírovém modelu P0 (P0-4).
 6. **Předběžné dokončení:** horní hrany D1 a D2, horní hrana F i s výřezem pro palec, spodní hrana
-   a boky pásu víčka, boky jazýčku (brousit smirkem 220–400 na rovné destičce, zkosit z líce – bez
+   a boky pásu víčka, boky závěsu, boky jazýčku (brousit smirkem 220–400 na rovné destičce, zkosit z líce – bez
    zkosovače zaoblit brusným papírem na hranolku –, leštit; horní hrany D1 a D2 jen brousit a leštit,
    viz 5.5). Výřez pro palec zaoblit z líce **i z rubu** (o rubovou hranu dna U se může
    zachytit karta), vnitřek brousit a leštit kolíkem Ø 8 v aku vrtačce. Horní hranu D1 natřít barvou na
@@ -1081,7 +1084,7 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
 7. **G3:** D2 rubem na rub B: dno y 18–23, boky a střed **jen do y 80,57** (čára na listu 2; v záloze čára na listu 2 varianty, například `--skive-hinge 0.6`: 80,25, obojí: 79,75),
    horních 1,43 mm D2 (ve výchozím střihu) nelepit (pás závěsu). Hranici lepení přelepit maskovací páskou. D2
    přesahuje 1 mm na každé straně. Přitlačit.
-8. **Okénko bankovek** skrz D2 + B z líce B: Ø 14 na koncích (středy x 50,5, y 32 a 63, propíchnuté
+8. **Okénko bankovek** nejdřív 1 h po lepení G3, skrz D2 + B z líce B: Ø 14 na koncích (středy x 50,5, y 32 a 63, propíchnuté
    v kroku 2; polohu zkontrolovat šablonou okénka z listu 4), rovné řezy u pravítka od tečny k tečně.
    Zkosit, leštit.
 9. **Rýsování a značení S1–S3 na líci D2:** list 1 (P1 z líce) na líc D2 přiložit nejde, proto
@@ -1115,7 +1118,8 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
     na listu 4 (výchozí 25; x 10,5…38,5 a 62,5…90,5), vidlička natočená jako v kroku 10 při pohledu na
     líc F s horní hranou od sebe. Šít, konce 2 zpět.
 14. **G4** (boční pásy F–D2 a F–B): díl nejdřív nanečisto složit a zkontrolovat, teprve pak nanést
-    lepidlo. Kontaktní lepidlo chytne hned při dotyku, proto přikládat **od ohybu dna nahoru** a F
+    lepidlo. Vnitřní hranici pásu na líci D2 (5 mm od hrany D2) přelepit svislou maskovací páskou a
+    strhnout ji hned po nanesení lepidla (pod D1 by zůstala). Kontaktní lepidlo chytne hned při dotyku, proto přikládat **od ohybu dna nahoru** a F
     přitom rovnat podle boků B. Na slepeném kusu narýsuj **čáru švu 3,0 od hrany** (kružidlem nebo
     rýhovačem 3,0, bez nich tužkou u pravítka podle proužku z listu 4, oddíl 5.6) a otvory **S4, S5**
     přenes z papírového proužku otvorů (list 4), počítáno od **76** dolů. **Děrovat S4, S5** zepředu
@@ -1128,9 +1132,9 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
 16. **Tvarování závěsu** přes obsah (oddíl 5.8): do peněženky 2 staré karty a místo bankovky papír
     asi 70 × 65 přeložený nebo ve vrstvách, až posuvka ukáže asi 0,7 mm (nebo bankovku ve fólii;
     stav B), navlhčit jen pás závěsu, víčko zavřít přes obsah a nechat přes noc
-    zavřené pod knihou (fólie mezi závěs a knihu). Kopyto ani opěrka nejsou potřeba. Rysky přehybů z kroku 3 jen ukazují, kde model přehyby se
-    stavem B čeká (tvar dává obsah, ne rysky): po zavření zkontrolovat, jestli přehyby vyšly zhruba
-    u nich, jinou polohu zapsat k měření k (r_i 1,0 je předpoklad, oddíl 5.8). Pak **změřit k:** poloha
+    zavřené pod knihou (fólie mezi závěs a knihu). Kopyto ani opěrka nejsou potřeba. Přehyby se
+    neznačí (závěs zůstává vidět), tvar dává obsah: model čeká dva přehyby a mezi nimi plochý vrch
+    přes obsah. Vyšel-li závěs jinak, zapsat to k měření k (r_i 1,0 je předpoklad, oddíl 5.8). Pak **změřit k:** poloha
     hrany pásu víčka jako y od spodní hrany (když měříš od horní hrany F, y = y_Ft − naměřená vzdálenost)
     ve stavech A, B a C (se 4 × 50 Kč), zvlášť nad sloupci a nad
     středem, stejně jako v P0-3. Spočítej **k = (y_C − y_A) / (P(C) − P(A))**; dělitel je v rámečku na listu 4 (výchozí střih 8,62, oddíl 4.1; při přepážkách 0,8 8,39).
@@ -1149,9 +1153,12 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
 18. **G5 + G6:** rub konce jazýčku zdrsnit. Magnet na rub jazýčku (střed na vpich kroužku ze šablony konce jazýčku, přiložené boky na boky
     jazýčku a čárou na rysky) přilepit
     **dvousložkovým epoxidem** (doba zpracování podle obalu) a nechat ztuhnout (podle návodu epoxidu, orientačně 30 min –
-    ověřit), aby se magnet při natírání a přikládání L1 neposunul z osy. Teprve pak natřít rub jazýčku
-    kolem magnetu a L1 (nebarvená kozinka) kontaktním lepidlem, nechat zavadnout a L1 přiložit horní hranou
-    na rysku 10 mm nad středem magnetu (šablona, list 4). Přitlačit prsty nebo převalovat hladkým
+    ověřit), aby se magnet při natírání a přikládání L1 neposunul z osy. Horní hrana L1 leží 10 mm nad
+    středem magnetu a na rubu se neznačí (nad L1 je rub vidět): druhou šablonu konce jazýčku (list 4)
+    zkrátit po horní hraně L1, soustředně s kroužkem magnetu v ní vyseknout otvor Ø 10, přiložit ji boky
+    na boky jazýčku otvorem přes magnet, nad její horní hranu nalepit maskovací pásku a šablonu sejmout.
+    Teprve pak natřít rub jazýčku pod páskou kolem magnetu a L1 (nebarvená kozinka) kontaktním lepidlem,
+    nechat zavadnout a L1 přiložit horní hranou k pásce. Přitlačit prsty nebo převalovat hladkým
     kolíkem, **přes magnet paličkou netlouct** (neodym se může odštípnout). Peněženku polož
     na záda, víčko narovnej nahoru (v přímce se zády, ne přehnuté na záda) a pás víčka zatiž knihou
     mimo magnet. Magnet musí být aspoň pár cm od plíšku, jinak ho plíšek přitáhne. Víčko se samo
@@ -1212,7 +1219,7 @@ Zkušební i finální kus se stavějí stejným rozpisem, žádný večer neče
   změřenou tloušťku, kontrola úsečky i kóty P1, přípravek (vložka dna ze starých karet).
 - **2. večer přípravy:** **P0** papírový model (krok 0(c)); když P0 změní vstupy, přepočítat
   a vytisknout nové listy (krok 1). Pak šablony konce jazýčku a výřezu (krok 0(b)) z platných listů.
-  Na konci **V12** (krok 0(d)) na jednom odřezku kaštanu: orýhovat, namočit, přehnout přes vložku,
+  Na konci **V12** (krok 0(d)) na jednom odřezku usně P1: orýhovat, namočit, přehnout přes vložku,
   na noc stáhnout mezi prkénky.
 - **Další den:** odřezek V12 prohlédnout a změřit rýhu vůči vrcholu ohybu → výchozí střih, nebo
   záloha; varianta platí pro zkušební i finální kus. V záloze A koupit useň 0,8 a V12 zopakovat na ní
@@ -1234,7 +1241,7 @@ Zkušební i finální kus se stavějí stejným rozpisem, žádný večer neče
 - **Několik dní běžného používání zkušebního kusu** (délku zvol sám): závěs bez prasklin, víčko pořád
   drží zavřené. Když magnet drží slabě nebo moc silně, vyměnit ho (oddíl 5.4) a zkusit znovu.
 - **Finální kus** stejným rozpisem (1.–6. večer), s tím, co na zkušebním kusu fungovalo; na konci
-  krok 22 a kontrola z kroku 23. P1 je ze stejného kaštanu, V12 už proběhla; když se useň P1
+  krok 22 a kontrola z kroku 23. P1 je ze stejné usně, V12 už proběhla; když se useň P1
   mezitím změní, udělat před 1. večerem finálního kusu V12 na odřezku nové usně (noc schnutí).
 
 ---
@@ -1243,15 +1250,15 @@ Zkušební i finální kus se stavějí stejným rozpisem, žádný večer neče
 
 **Materiál** (zkušební i finální kus; odškrtni, co máš):
 
-- [ ] **kůže, jedna objednávka z 10.1:** kaštan 20 × 50 cm (P1 zkušebního i finálního kusu,
-      odřezky na V12, krok 4(d) a podložku S7), nebarvená kozinka 5 dm² (D1 a L1), čokoládová
-      kozinka 5 dm² (D2); po dodání změřit (krok 0(0))
+- [ ] **kůže, dvě objednávky z 10.1:** hnědá třísločiněná useň 20 × 50 cm (P1 zkušebního i finálního
+      kusu, odřezky na V12, krok 4(d) a podložku S7) a čokoládová kozinka 5 dm² (D2) ze Šijeme z kůže,
+      nebarvená kozinka 0,6–0,8 celý list (D1 a L1) z Lederversand Berlin; po dodání změřit (krok 0(0))
 - [ ] useň 0,8 **jen v záloze A**, kupuje se až podle V12. Záloha A platí pro zkušební i finální kus,
       proto stejně jako u usně 1,0 kus 20 × 50 cm (2 × přířez P1 110 × 240 a odřezek 30 × 40 na
       zopakování V12); kus 11 × 24 cm stačí jen na jeden P1
 - [ ] magnet Ø 8 × 1,5 axiální: **3 ks** (zkušební kus, finální kus, hledací na krok 17) + po
-      **1 silnějším a 1 slabším** stejného Ø 8 na výměnu (oddíl 5.4), pokud je prodejce nabízí;
-      velikost, třídu a sílu ověřit u prodejce
+      **2 silnějších a 2 slabších** stejného Ø 8 na výměnu (oddíl 5.4): vyměněný zůstane zalepený na
+      zkušebním kusu, druhý stejný je na finální; velikost, třídu a sílu ověřit u prodejce
 - [ ] pozinkovaný ocelový plech 0,5 na **2 plíšky** (rozměr z listu 3, výchozí 14 × 20,5; magnetem ověřit v obchodě);
       plech 0,8 (oddíl 5.4) jen když na zkušebním kusu nepomůže ani výměna magnetu, kupuje se až pak
 - [ ] bezbarvý lak (na nehty) na hrany plíšku
@@ -1299,24 +1306,24 @@ tužka, maskovací páska, párátka · nůžky (karty vložky dna) ·
 
 ### 10.1 Nákup kůže (zkušební a finální kus)
 
-Jediné místo dokumentu s obchody, odkazy a cenami. **Od Kola 9 jedna objednávka v jednom českém
-obchodě** (Šijeme z kůže), která pokryje zkušební i finální kus. Odkazy a ceny **ověřeno 29. 9. 2026**
-na stránkách produktů, s DPH, **bez poštovného (poštovné ověřené není)**. Ceny i sklad se mění, před
-objednávkou je znovu zkontrolujte. Kůže na dm² obchod nařeže na míru; podle stránky obchodu se
-kůže nařezaná na míru nedá vrátit.
+Jediné místo dokumentu s obchody, odkazy a cenami kůže; odpovídá nákupnímu plánu aplikace
+(`shoppingPlan` v `src/content/projects/lid-wallet/project.ts`). **Od 9. 10. 2026 dvě objednávky ve
+dvou obchodech**, které pokryjí zkušební i finální kus: kaštan 0,9–1 mm Šijeme z kůže stáhl z nabídky
+(stránka p4698 vrací 404, ověřeno 9. 10. 2026) a nebarvenou kozinku nejvýš 0,9 mm česká nabídka nemá
+(nebarvená kozinka ze Šijeme z kůže je k 7. 10. 2026 jen 0,8–1,3 mm). Ceny s DPH, bez poštovného (u
+Šijeme z kůže neověřené). Ceny i sklad se mění, před objednávkou je znovu zkontrolujte. Kůži na dm²
+Šijeme z kůže nařeže na míru; nařezaná na míru se podle obchodu nedá vrátit.
 
-**Objednávka (Šijeme z kůže):**
+| Co                 | Obchod a produkt                                                                                                                                                                           | Cena                                                                   | Množství                                                                                                                 | Na co                                                                                                     |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| P1, useň kolem 1,0 | Šijeme z kůže: [Třísločiněná kůže hnědá – 3 různé síly](https://www.sijemezkuze.cz/trislocinena-kuze-hneda-3-ruzne-sily-p4704-8013), varianta 1–1,2 mm                                     | 19,50 Kč/dm² (ověřeno 9. 10. 2026)                                     | 10 dm² = **195 Kč**; do poznámky: „Prosím v jednom kuse jako obdélník 20 × 50 cm, z pevné části kůže, co nejblíž 1,0 mm“ | P1 zkušebního i finálního kusu (2 × přířez 110 × 240) a odřezky na V12 (30 × 40), krok 4(d) a podložku S7 |
+| D2                 | Šijeme z kůže: [Kozinka třísločiněná čokoládová 0,7–0,9 mm](https://www.sijemezkuze.cz/kozinka-trislocinena-cokoladova-0-7-0-9-mm-p4851)                                                   | 13,50 Kč/dm² (ověřeno 29. 9. 2026)                                     | 5 dm² = **67,50 Kč**; do poznámky: „kusy nejvýš 0,9 mm, nejlépe 0,7–0,8 mm“                                              | 2 × D2 103 × 64 a odřezek                                                                                 |
+| D1 + L1            | Lederversand Berlin: [Ziegenleder pflanzlich gegerbt natur-braun 0,6–0,8 mm #z125](https://www.lederversand-berlin.de/Ziegennappa-z125), list 0,55 m² (levnější 2. jakost #z125b, 0,45 m²) | 38,50 € (2. jakost 27,00 €), s německou DPH 19 % (ověřeno 7. 10. 2026) | celý list (jinak se neprodává); poštovné do Česka 16,99 € (Economy, objednávka do 99,99 €) nebo 19,99 € (DHL)            | 2 × D1 93 × 79,5, 3 × L1 24 × 22 (i náhradní), zkouška barvy                                              |
 
-| Co           | Produkt                                                                                                                                   | Cena         | Množství                                                                          | Na co                                                                                                     |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| P1, useň 1,0 | [Třísločiněná kůže kaštan 0,9–1 mm](https://www.sijemezkuze.cz/trislocinena-kuze-kastan-0-9-1-mm-p4698)                                   | 19,90 Kč/dm² | 10 dm² = **199 Kč**; do poznámky: „Prosím v jednom kuse jako obdélník 20 × 50 cm“ | P1 zkušebního i finálního kusu (2 × přířez 110 × 240) a odřezky na V12 (30 × 40), krok 4(d) a podložku S7 |
-| D1 + L1      | [Kozinka třísločiněná nebarvená valchovaná 0,8–1 mm](https://www.sijemezkuze.cz/kozinka-trislocinena-nebarvena-valchovana-0-8-1-mm-p4906) | 13,90 Kč/dm² | 5 dm² = **69,50 Kč**                                                              | 2 × D1 93 × 79,5 (zkušební a finální), 3 × L1 24 × 22 (i náhradní), zkouška barvy                         |
-| D2           | [Kozinka třísločiněná čokoládová 0,7–0,9 mm](https://www.sijemezkuze.cz/kozinka-trislocinena-cokoladova-0-7-0-9-mm-p4851)                 | 13,50 Kč/dm² | 5 dm² = **67,50 Kč**                                                              | 2 × D2 103 × 64 a odřezek                                                                                 |
-| **Celkem**   |                                                                                                                                           |              | **336 Kč** + poštovné (neověřené)                                                 |                                                                                                           |
-
-**Kaštan 0,9–1 mm je staženo z nabídky** (stránka p4698 vrací 404, ověřeno 9. 10. 2026). Náhrada pro P1
-je v nákupním plánu aplikace: Šijeme z kůže, [třísločiněná hnědá, varianta 1–1,2 mm](https://www.sijemezkuze.cz/trislocinena-kuze-hneda-3-ruzne-sily-p4704-8013)
-(19,50 Kč/dm², pevná, tvarování za mokra; tloušťku po dodání změřit a zadat ve formuláři listů).
+**Tloušťka P1 rozhoduje o kozinkách:** obchod prodává useň jako 1–1,2 mm, ale tlustší P1 snižuje
+hranici přepážek (P1 1,1 → nejvýš 0,80, 1,2 → 0,60; tabulka níže). Při P1 nad 1,05 tak čokoládová
+kozinka 0,7–0,9 nemusí projít, proto do poznámky „co nejblíž 1,0 mm“ a P1 obkreslit na místě kusu
+nejblíž 1,0 (krok 0(0)).
 
 **Výsečníky (Kolo 11, jen kdo je nemá):** [CraftPoint – Výsečníky na kůži 2-20mm](https://craft-point.cz/products/vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu),
 průměr dle výběru. Ověřeno **29. 9. 2026** přes `…/products/vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu.js`
@@ -1327,8 +1334,8 @@ poštovného (neověřené). Kvalitu a ostrost ověřit na odřezku.
 Kontrast D1 / D2 dává přírodní světlá proti čokoládové (R4). Barvu na horní hranu D1 zvolit v tónu
 D2. Useň 0,8 na zálohu A se kupuje až po neúspěšné V12 (příloha níže).
 
-**Po dodání změřit posuvkou** P1 a obě kozinky na několika místech kusu (tloušťka 0,8–1 a 0,7–0,9
-je rozsah z názvu produktu, skutečnou tloušťku určí až měření). Pak vygenerovat listy pro naměřenou
+**Po dodání změřit posuvkou** P1 a obě kozinky na několika místech kusu (1–1,2, 0,6–0,8 a 0,7–0,9
+jsou rozsahy z názvů produktů, skutečnou tloušťku určí až měření). Pak vygenerovat listy pro naměřenou
 tloušťku: `pnpm pattern:wallet-lid --divider <větší z D1 a D2> --lining <L1>` (krok 0(a), oddíl 12.4).
 **P1 změř taky:** když se liší od 1,0 o 0,05 a víc, přidej `--p1 <změřená>` (oblouk ohybu a závěs
 se počítají z tloušťky P1). Podle modelu projdou s P1 1,0 přepážky jen do **0,92** (při 0,9 je plná
@@ -1340,8 +1347,8 @@ v aplikaci ukáže hranici pro zadanou P1 a při odmítnutí poradí tenčí př
 i se skutečnou P1, když se v toleranci 0,05 zaokrouhlí na 1,0 (P1 1,04 s přepážkami 0,92 by dala plnou
 tloušťku 12,08, proto tam projde nejvýš 0,88). Generátor v repozitáři bere P1 v toleranci jako 1,0
 (přibližně, mez ≈ 12 je měkká). Model má pro D1 i D2 jednu tloušťku (zadává se větší z obou), takže
-**kus D1 nebo D2 silnější než hranice pro změřenou P1 (0,92 při P1 1,0) nejde použít**: vyřízni díl z tenčího místa kusu, nebo kup tenčí kozinku. Horní část rozsahu
-nebarvené kozinky (0,8–1) tak střih odmítne. Podšívka L1 do 1,0 plnou tloušťku v pásu mincí nemění,
+**kus D1 nebo D2 silnější než hranice pro změřenou P1 (0,92 při P1 1,0) nejde použít**: vyřízni díl z tenčího místa kusu, nebo kup tenčí kozinku. Při P1 nad 1,05 tak střih
+může odmítnout horní část rozsahu čokoládové kozinky (0,7–0,9). Podšívka L1 do 1,0 plnou tloušťku v pásu mincí nemění,
 ale mezera magnet–plíšek vzroste z 1,6 na 1,6 + (t_L − 0,6), při L1 0,9 na 1,9: magnet drží slaběji
 (Z-1, případně silnější magnet podle 5.4). Mez L1 1,0 je jen doporučení: model sílu magnetu
 nepočítá a přepínač `--lining` přijme i silnější L1 (až 1,2) bez varování. Měkkost kozinek
@@ -1353,14 +1360,14 @@ a závěsu (krok 16), závěs bez prasklin (Z-2) a magnet přes mezeru L1 + F (Z
 ze stejné kůže (jedna V12 stačí, zkušební kus ověří přesně finální materiál) a tloušťku změřit
 posuvkou (oblouk v oddílu 5.3 je počítaný pro 1,0; jinou tloušťku zadej `--p1`, viz výše).
 
-**Na co se zeptat prodejce (do poznámky k objednávce):** „Dobrý den, prosím kaštan 0,9–1 mm v jednom
-kuse jako obdélník 20 × 50 cm, pokud možno z pevné části kůže bez vad a co nejblíž 1,0 mm. U kozinek
-prosím kusy nejvýš 0,9 mm, nejlépe 0,7–0,8 mm (silnější nepoužiji). Jsou obě kozinky čistě
-třísločiněné?“
+**Na co se zeptat prodejce (Šijeme z kůže, do poznámky k objednávce):** „Dobrý den, prosím
+třísločiněnou hnědou useň v jednom kuse jako obdélník 20 × 50 cm, pokud možno z pevné části kůže bez
+vad a co nejblíž 1,0 mm. U čokoládové kozinky prosím kusy nejvýš 0,9 mm, nejlépe 0,7–0,8 mm (silnější
+nepoužiji). Je kozinka čistě třísločiněná?“
 
-**Příloha – dřívější průzkum (29. 9. 2026, jen pro případ, že objednávka nevyjde):** náhradní P1:
-Šijeme z kůže, třísločiněná hnědá, varianta 1–1,2 mm (19,50 Kč/dm²; při 1,2 změřit a zadat t_P),
-nebo Kůže Vlček, hovězí světle hnědá 1–1,2 lícová (A4 112 Kč; může být měkčí, ověřit u prodejce).
+**Příloha – dřívější průzkum (29. 9. 2026, jen pro případ, že objednávka nevyjde):** náhradní P1,
+kdyby hnědá 1–1,2 došla: Šijeme z kůže, Pull Up Crazy horse 0,8–1,2 (22,50 Kč/dm², od 5 dm²; lehce
+změkčená, tvar ověří V12 a zkušební kus), nebo Kůže Vlček, hovězí světle hnědá 1–1,2 lícová (A4 112 Kč; může být měkčí, ověřit u prodejce).
 Záloha A (useň 0,8): pevnou třísločiněnou 0,8 v kusu aspoň 11 × 24 cm se ověřit nepodařilo; kandidát
 je Pull Up Crazy Horse 0,8–1,2 ze Šijeme z kůže (22,50 Kč/dm², ověřit u prodejce), jinak záloha B
 (oddíl 5.8). Useň přesně 0,6 žádný prověřený obchod nenabízí. Zahraniční obchod (Decocuir, useň
@@ -1391,12 +1398,12 @@ bankovky a mince. **Minimum:** vejde se 6 karet (P0-7), bankovky složené napů
 | P0-5 | mince: vysunutí jedné, vložení do ústí; 50 Kč ve sloupci volně klouže                                                                                                                                                                                                                                                                                                                                                                                                                                | jde / nejde                 | délka okénka, šířka sloupce                                                                                                                |
 | P0-6 | **zvednutí na klínu dna:** výška spodní hrany svazku 6 karet nad čarou G2 a sloupce 2 × 50 Kč nad G3a                                                                                                                                                                                                                                                                                                                                                                                                | Δ_k, Δ_c                    | Δ_k ≠ 2,28 nebo Δ_c ≠ 1,25 → dosadit (oddíl 12.1), přepočítat strop a výšku, případně posunout čáry lepení dolů                            |
 | P0-7 | plný stav: 6 karet + 3 bankovky + 4 × 50 Kč v kapse 93                                                                                                                                                                                                                                                                                                                                                                                                                                               | těsné / volné               | těsné → kapacita 5 karet nebo menší t_bn                                                                                                   |
-| P0-8 | celý sled s otevřeným víčkem: palec držící ruky drží víčko (samo nestojí, Kolo 9), ukazováček v okénku bankovek nebo prst v okénku sloupce, druhá ruka bere                                                                                                                                                                                                                                                                                                                                          | jde / nejde                 | nejde → okénko bankovek mimo stopu jazýčku (oddíl 5.8)                                                                                     |
+| P0-8 | celý sled s otevřeným víčkem: palec držící ruky drží víčko (samo nestojí, Kolo 9), ukazováček v okénku bankovek nebo prst v okénku sloupce, druhá ruka bere                                                                                                                                                                                                                                                                                                                                          | jde / nejde                 | nejde → kratší okénka mincí (oddíl 5.8)                                                                                                    |
 | P0-9 | zasunout kartu u boku za D1 a omylem do ústí bankovek; je ústí bankovek vidět (barevná hrana D1, kontrastní D2)?                                                                                                                                                                                                                                                                                                                                                                                     | jde / nejde                 | výraznější barva hrany D1, rysky                                                                                                           |
 
 ### V12 – zkouška ohybu (povinná, asi 10 min práce a přes noc schnutí)
 
-Jeden odřezek kaštanu (aspoň 30 × 40) **ze stejné kůže, ze které bude P1** obou kusů (10.1); druhý
+Jeden odřezek usně P1 (aspoň 30 × 40) **ze stejné kůže, ze které bude P1** obou kusů (10.1); druhý
 odřezek jen když zkušební kus děláš z jiné kůže (variantu pak určí horší výsledek). Odřezek z rubu
 orýhuj (krok 4), rýhu vyznač ryskami i na bocích, namoč a přehni lícem ven přes vložku 1,5 (vložka ze
 starých karet z kroku 0(b), hranou na čáru 1,96 za rýhou), stáhni mezi prkénky a nech přes noc
@@ -1415,7 +1422,7 @@ z listu. Podle rozhodnutí kola 8 zkouška pokrývá
 
 ### Zkušební kus (povinný)
 
-Celá peněženka podle kroků 1–21 ve variantě z V12, ze stejného kaštanu jako finální kus (10.1;
+Celá peněženka podle kroků 1–21 ve variantě z V12, ze stejné usně P1 jako finální kus (10.1;
 tloušťku ověřit posuvkou), s plíškem 0,5. Nejdřív čtyři povinné zkoušky, pak podle chuti další testy P2 níže.
 **Finální kus se řídí tím, co tady fungovalo.**
 

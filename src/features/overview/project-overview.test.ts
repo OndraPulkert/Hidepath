@@ -149,9 +149,9 @@ describe('Postup v kostce – Víčko', () => {
     );
   });
 
-  it('kůže u dílů: kaštan P1, nebarvená kozinka D1 a L1, čokoládová D2', () => {
+  it('kůže u dílů: useň P1, nebarvená kozinka D1 a L1, čokoládová D2', () => {
     expect(text('measure').text).toContain(
-      'P1 (kaštan), D1 a L1 (nebarvená kozinka) a D2 (čokoládová kozinka)',
+      'P1 (useň), D1 a L1 (nebarvená kozinka) a D2 (čokoládová kozinka)',
     );
     expect(text('cut-parts').text).toContain(
       'D1 a přířez L1 z nebarvené kozinky a D2 z čokoládové',

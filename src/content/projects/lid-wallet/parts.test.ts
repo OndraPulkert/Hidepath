@@ -110,7 +110,7 @@ describe('listy Víčka – řádek dílů v legendě', () => {
         expect(svg, `list ${i + 1}: ${id}`).toContain(`${id} = ${LID_PART_NAMES[id]}`);
       }
     });
-    expect(sheets[0]!.svg).toContain('P1 = tělo z kaštanu, F = přední stěna');
+    expect(sheets[0]!.svg).toContain('P1 = hlavní pás z usně,');
   });
 
   it('řádek dílů vysvětlí každou zkratku dílu, kterou list píše', () => {

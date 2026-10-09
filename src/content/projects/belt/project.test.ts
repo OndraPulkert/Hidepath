@@ -132,6 +132,7 @@ describe('obsah – pásek: zápisník, „Připravte si“ a destička', () => 
       'edge-paint-dry-minutes',
       'scrap-balm',
       'scrap-bend',
+      'scrap-bend-stain',
       'scrap-screw',
       'belt-keeper-length',
       'belt-fit-waist',
@@ -243,6 +244,8 @@ describe('obsah – pásek: zápisník, „Připravte si“ a destička', () => 
 
   it('lepení poutka má časovač podle návodu lepidla', () => {
     expect(step(4, 'keeper').waits).toEqual([
+      // Hrany poutka u barevného pásku: barva podle zápisu z lekce 2.
+      expect.objectContaining({ id: 'edge-paint-dry', initialFromField: 'edge-paint-dry-minutes' }),
       expect.objectContaining({ minutes: 10, maxMinutes: 15, basis: 'manufacturer' }),
     ]);
     expect(step(4, 'keeper').body).toContain('podle návodu na obalu');
@@ -453,7 +456,7 @@ describe('pásek – nálezy kontroly lekcí (2026-10-08, kolo 2)', () => {
     const body = step(4, 'screws').body;
     const order = [
       'Poutko odsuňte ke špičce',
-      'podle značek skrz otvory.',
+      'výsečník postavte přesně na vykroužený kroužek.',
       'Konec ohněte zpět kolem příčky',
       'poutko posuňte zpět přes přehnutý konec do kapsy',
       'Nýty sešroubujte',

@@ -29,9 +29,11 @@ describe('obsah – pouzdro na karty: steh', () => {
     const l5 = cardHolderProject.lessons.find((l) => l.order === 5)!;
     expect(l5.steps.map((s) => s.id)).not.toContain('prick-marks');
     expect(l5.checkpoints.map((c) => c.slug)).not.toContain('marks-transferred');
-    expect(step(5, 'cut-parts')).toContain('jen ke krátké čárce nad hranou');
+    expect(step(5, 'cut-parts')).toContain('z každé strany jen ke krátké čárce nad koncem výřezu');
     expect(step(5, 'cut-parts')).toContain('Nic nepropichujte');
-    expect(step(5, 'thumb-cutout')).toContain('na konec čárky uvnitř výřezu');
+    expect(step(5, 'thumb-cutout')).toContain(
+      'kde prostřední čárka sahá na oblouk, 12 mm pod horní hranou',
+    );
     for (const s of l5.steps) expect(s.body, s.id).not.toMatch(/propíchn/);
     expect(step(6, 'mark-stitch-lines')).toContain('nic nerýsujte ani nepropichujte');
     expect(step(6, 'punch-sides')).toContain('skrz přilepený papír');
@@ -287,6 +289,39 @@ describe('obsah – pouzdro na karty: nákupní plán „Co koupit“', () => {
     expect(resolved.notInStockCount).toBe(0);
     expect(resolved.checkedFrom).toBe('2026-09-29');
     expect(resolved.checkedTo).toBe('2026-10-08');
+  });
+});
+
+describe('obsah – pouzdro na karty: vyrobitelnost', () => {
+  const lesson = (order: number) => cardHolderProject.lessons.find((l) => l.order === order)!;
+  const step = (order: number, id: string) => lesson(order).steps.find((s) => s.id === id)!.body;
+
+  it('horní hrana kapsy a výřez se dokončí před lepením, po sešití se jich nikdo nedotkne', () => {
+    const l5 = lesson(5).steps.map((s) => s.id);
+    expect(l5.indexOf('pocket-top-edge')).toBeGreaterThan(l5.indexOf('peel-template'));
+    expect(step(6, 'edges')).toContain('Horní hranu kapsy a výřez máte hotové z lekce 5');
+    expect(step(6, 'edges')).not.toContain('oblouk výřezu');
+  });
+
+  it('kontaktní lepidlo: pás vyznačený i na rubu kapsy, přikládá se od spodní hrany', () => {
+    expect(step(6, 'glue-parts')).toContain('Stejný pás vyznačte na rubu kapsy');
+    expect(step(6, 'glue-parts')).toContain('nejdřív přiložte spodní hranu');
+  });
+
+  it('maskovací páska je nutná tam, kde drží papír na líci a ohraničí zdrsnění', () => {
+    for (const order of [2, 5, 6])
+      expect(lesson(order).requiredEquipment).toContain('masking-tape');
+    const tape = cardHolderProject.equipment.find((e) => e.equipmentSlug === 'masking-tape')!;
+    expect(tape.priority).toBe('required');
+  });
+
+  it('nesliboval víc karet, než lekce zkouší', () => {
+    expect(cardHolderProject.summary).not.toMatch(/šest|4–6/);
+    expect(step(6, 'test-cards')).toContain('čtyři karty');
+  });
+
+  it('nit na pouzdro je v kroku šití, ne jen v Postupu v kostce', () => {
+    expect(step(6, 'stitch')).toContain('Ustřihněte asi 1 m nitě');
   });
 });
 

@@ -1419,7 +1419,7 @@
         add(
           "A",
           "List 1 vystřihněte nahrubo",
-          "List 1 a list 3 vytiskněte dvakrát: první výtisk při řezání rozřežete, druhý bude šablona (otvory švů a D2 v lekci 6, S6 v lekci 8). Zkontrolujte úsečku 50 mm a kótu P1. První výtisk listu 1 vystřihněte nahrubo s okrajem 1–2 cm kolem obrysu P1, ne po čáře.",
+          "List 1 a list 3 vytiskněte dvakrát: první výtisk při řezání rozřežete, druhý bude šablona (D2 v lekcích 5 a 6, otvory S1–S3 v lekci 6, S6 v lekci 8). Zkontrolujte úsečku 50 mm a kótu P1. První výtisk listu 1 vystřihněte nahrubo s okrajem 1–2 cm kolem obrysu P1, ne po čáře.",
           8200,
           (t) => {
             const c = PAPER,
@@ -2300,7 +2300,7 @@
         add(
           "E",
           "Propíchněte rohy ploch a konce čar",
-          "Propíchněte jehlou všechny kroužky na listu 2: rohy šrafovaných ploch a konce čar.",
+          "Propíchněte jehlou všechny kroužky na listu 2: rohy šrafovaných ploch a konce čar. Jen do rubu: hrot nesmí projít na líc, vpich by na hotové peněžence zůstal vidět (sílu zkuste na odřezku P1).",
           12000,
           (t) => {
             const c = OV;
@@ -2328,8 +2328,9 @@
                 ["osa, hrana vložky"],
                 ["rohy D1 a D2", "t"],
                 ["závěs a víčko ne", "twa"],
-                ["jehlou skrz", "t"],
-                ["šablonu do kůže"],
+                ["jehlou přes šablonu", "t"],
+                ["jen do rubu,"],
+                ["na líc ne", "twa"],
               ]),
             );
             s += pill(

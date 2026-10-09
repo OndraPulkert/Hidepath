@@ -47,9 +47,16 @@ export const lessons: readonly LessonDefinition[] = [
       'odřezek kůže: roh druhé tréninkové A5 (první A5 nechte celou na lekci 2)',
       'složený ručník pod desku',
       'dobré světlo',
+      'nůžky na nit',
     ],
     requiredEquipment: ['cutting-mat', 'punching-board'],
-    recommendedEquipment: ['stitching-chisels', 'harness-needles', 'waxed-thread', 'mallet'],
+    recommendedEquipment: [
+      'stitching-chisels',
+      'harness-needles',
+      'waxed-thread',
+      'mallet',
+      'steel-ruler',
+    ],
     prerequisiteLessons: [],
     steps: [
       {
@@ -185,8 +192,8 @@ export const lessons: readonly LessonDefinition[] = [
         paper: 'A4',
       },
     ],
-    requiredEquipment: ['utility-knife', 'steel-ruler', 'cutting-mat'],
-    recommendedEquipment: ['scratch-awl', 'masking-tape'],
+    requiredEquipment: ['utility-knife', 'steel-ruler', 'cutting-mat', 'masking-tape'],
+    recommendedEquipment: ['scratch-awl'],
     prerequisiteLessons: [L1],
     steps: [
       {
@@ -438,6 +445,8 @@ export const lessons: readonly LessonDefinition[] = [
       'ze druhé tréninkové A5: 3 odřezky asi 40 × 80 mm (jeden na zkoušku zdrsnění)',
       'nit asi 60 cm',
       'lepidlo nebo oboustranná páska',
+      'nůžky na nit',
+      'zapalovač, jen když konce zatavujete',
     ],
     requiredEquipment: [
       'stitching-chisels',
@@ -461,7 +470,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'glue',
         title: 'Slepte díly podél hrany',
-        body: 'Slepte odřezky jako na pouzdru: rub horního na líc spodního, jen podél jedné delší hrany. Na líci spodního odřezku tento pás nejdřív zdrsněte smirkem 180, z hladkého líce lepidlo pouští. Stěrkou naneste na obě plochy tenký pás lepidla asi 5 mm široký. Nechte ho odvětrat podle návodu a hrany přitiskněte přesně na sebe. S oboustrannou páskou: nalepte pás na rub horního odřezku, sejměte krycí fólii a přitiskněte; zdrsňovat pak nemusíte. Lepidlo drží díly jen pomocně. Rozdíl vyzkoušejte na třetím odřezku: zdrsněte jen polovinu pásu, přilepte na něj proužek z lekce 2 a po zaschnutí ho zkuste na obou polovinách odtrhnout.',
+        body: 'Slepte odřezky jako na pouzdru: rub horního na líc spodního, jen podél jedné delší hrany. Na líci spodního odřezku tento pás nejdřív zdrsněte smirkem 180, z hladkého líce lepidlo pouští. Stěrkou naneste na obě plochy tenký pás lepidla asi 5 mm široký. Nechte ho odvětrat podle návodu a hrany přitiskněte přesně na sebe. S oboustrannou páskou: nalepte pás na rub horního odřezku, sejměte krycí fólii a přitiskněte; zdrsňovat pak nemusíte. Lepidlo drží díly jen pomocně. Rozdíl vyzkoušejte na třetím odřezku: zdrsněte jen polovinu pásu, přilepte na něj proužek z lekce 2 a druhý den, nejpozději před lekcí 5, ho zkuste na obou polovinách odtrhnout.',
         waits: [
           {
             id: 'glue-open',
@@ -476,7 +485,7 @@ export const lessons: readonly LessonDefinition[] = [
             kind: 'choice',
             id: 'roughened-grip',
             label: 'Zdrsněná polovina pásu drží',
-            hint: 'Zkouška na třetím odřezku po zaschnutí. S oboustrannou páskou vynechte.',
+            hint: 'Zkouška na třetím odřezku druhý den po slepení. S oboustrannou páskou vynechte.',
             options: [
               { value: 'better', label: 'Lépe' },
               { value: 'same', label: 'Stejně' },
@@ -624,11 +633,13 @@ export const lessons: readonly LessonDefinition[] = [
     title: 'Přenesení šablony a řezání dílů',
     order: 5,
     phaseSlug: 'build',
-    estimatedMinutes: 40,
-    goal: 'Mít dva přesné díly pouzdra vyříznuté podle šablony 1:1.',
+    estimatedMinutes: 55,
+    goal: 'Mít dva přesné díly pouzdra vyříznuté podle šablony 1:1 a hotovou horní hranu kapsy.',
     materials: [
       'nůžky na vystřižení šablony nahrubo (s okrajem 1–2 cm)',
       'kůže A4 na pouzdro (1,2–1,5 mm)',
+      'tužka nebo tenké dřívko a rovná destička na smirek',
+      'trochu vody a čistý hadřík',
     ],
     requiredEquipment: [
       'veg-tan-leather',
@@ -636,8 +647,9 @@ export const lessons: readonly LessonDefinition[] = [
       'steel-ruler',
       'cutting-mat',
       'sandpaper',
+      'masking-tape',
     ],
-    recommendedEquipment: ['scratch-awl', 'masking-tape'],
+    recommendedEquipment: ['scratch-awl', 'edge-burnisher'],
     prerequisiteLessons: [L2, L3, L4],
     prints: [
       {
@@ -706,7 +718,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'cut-parts',
         title: 'Řežte skrz papír po čáře',
-        body: 'Řežte skrz papír i kůži přesně po plné čáře, nůž do strany nenaklánějte, vždy na dva až tři lehké tahy. Výřez na palec zatím vynechte: rovný řez horní hrany přední kapsy veďte jen ke krátké čárce nad hranou. Nic nepropichujte, vpich na čáře by v hraně nechal zoubek. Rovné strany řežte podle ocelového pravítka položeného na čáru (jako v lekci 2), zaoblené rohy pomalu bez pravítka, krátkými tahy. Když řez začne třepit papír nebo kůži, odlomte článek čepele.',
+        body: 'Řežte skrz papír i kůži přesně po plné čáře, nůž do strany nenaklánějte, vždy na dva až tři lehké tahy. Výřez na palec zatím vynechte: rovný řez horní hrany přední kapsy veďte z každé strany jen ke krátké čárce nad koncem výřezu. Nic nepropichujte, vpich na čáře by v hraně nechal zoubek. Rovné strany řežte podle ocelového pravítka položeného na čáru (jako v lekci 2), zaoblené rohy pomalu bez pravítka, krátkými tahy. Když řez začne třepit papír nebo kůži, odlomte článek čepele.',
         media: [
           {
             id: 'l5-corner-cut',
@@ -721,7 +733,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'thumb-cutout',
         title: 'Vyřízněte výřez na palec',
-        body: 'Výřez je jen na přední kapse, uprostřed horní hrany: 40 mm široký a 12 mm hluboký. Řežte ho s přilepenou šablonou. Oblouk nasekejte pěti až šesti krátkými rovnými řezy, každý začněte i skončete přesně na čáře, nůž kolmo, volnou rukou otáčejte kůží. Jeden roh mezi řezy dejte do dna, na konec čárky uvnitř výřezu. Rovný řez mezi dvěma body oblouku vede sám v odpadu, takže kůže na dobroušení zbude. Rohy mezi řezy zůstanou na čáře a po sejmutí šablony ukážou, kam brousit.',
+        body: 'Výřez je jen na přední kapse, uprostřed horní hrany: 40 mm široký a 12 mm hluboký. Řežte ho s přilepenou šablonou. Oblouk nasekejte pěti až šesti krátkými rovnými řezy, každý začněte i skončete přesně na čáře, nůž kolmo, volnou rukou otáčejte kůží. Jeden roh mezi řezy dejte do dna: tam, kde prostřední čárka sahá na oblouk, 12 mm pod horní hranou. Rovný řez mezi dvěma body oblouku vede sám v odpadu, takže kůže na dobroušení zbude. Rohy mezi řezy zůstanou na čáře a po sejmutí šablony ukážou, kam brousit.',
         media: [
           {
             id: 'l5-thumb-cutout',
@@ -744,6 +756,19 @@ export const lessons: readonly LessonDefinition[] = [
         body: 'Přiložte přední díl lícem nahoru na líc zadního a srovnejte spodek a boky. Rozdíl větší než asi půl milimetru zbruste smirkem na rovné destičce nebo lehce seřízněte.',
         media: [],
       },
+      {
+        id: 'pocket-top-edge',
+        title: 'Dokončete horní hranu kapsy',
+        animationLinks: [animationLink('edges', 'D1'), animationLink('edges', 'D2')],
+        body: 'Horní hranu kapsy i s výřezem dokončete teď. Po přišití pod ní leží líc zadního dílu a smirek, voda i leštítko by ho odřely nebo zašpinily. Rovné části srovnejte smirkem 220–400 na rovné destičce, výřez smirkem kolem tužky. Hranu navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezaleskne.',
+        media: [],
+      },
+      {
+        id: 'back-flesh',
+        title: 'Uhlaďte rub zadního dílu (nepovinné)',
+        body: 'Rub zadního dílu bude zadní stranou pouzdra, líc zadního dílu je uvnitř a nad kapsou. Chcete-li rub hladší, potřete ho tence pastou na hrany a uhlaďte leštítkem nebo plátnem. Nejdřív to vyzkoušejte na rubu odřezku (ověřte na odřezku). Na líc pastu nenanášejte, lepí se na něj kapsa.',
+        media: [],
+      },
     ],
     checkpoints: [
       {
@@ -763,6 +788,12 @@ export const lessons: readonly LessonDefinition[] = [
         description: 'Přejeďte po něm prstem – nesmí drhnout.',
         required: true,
       },
+      // Nepovinný: povinný bod by změnil stav už dokončených lekcí.
+      {
+        slug: 'pocket-edge-finished',
+        title: 'Horní hrana kapsy i výřez jsou srovnané a zaleštěné.',
+        required: false,
+      },
     ],
     commonMistakes: [
       'Tisk s přizpůsobením na stránku: šablona je o pár procent menší a karty se nevejdou.',
@@ -771,6 +802,7 @@ export const lessons: readonly LessonDefinition[] = [
       'Páska přes čáru řezu: nůž jde přes pásku a řez uhne.',
       'Rohy řezané podle pravítka: zůstanou hranaté.',
       'Výřez řezaný jedním obloukem: nůž uhne a hrana má schody.',
+      'Horní hrana kapsy leštěná až po přišití: smirek a leštítko odřou líc zadního dílu.',
     ],
     safety: [
       'Prsty, které drží pravítko, mějte mimo dráhu čepele a řežte směrem od nich.',
@@ -792,8 +824,17 @@ export const lessons: readonly LessonDefinition[] = [
     order: 6,
     phaseSlug: 'build',
     estimatedMinutes: 90,
-    goal: 'Sešít oba díly po třech stranách sedlářským stehem a zaleštit hrany: pouzdro na 4–6 karet.',
-    materials: ['nit asi 1 m', 'lepidlo nebo páska', 'čistý hadřík', 'trochu vody'],
+    goal: 'Sešít oba díly po třech stranách sedlářským stehem a zaleštit hrany: pouzdro na čtyři karty.',
+    materials: [
+      'nit asi 1 m',
+      'lepidlo nebo páska',
+      'čistý hadřík',
+      'trochu vody',
+      'nůžky na nit',
+      'tužka',
+      'hranolek asi 1–2 cm a rovná destička na smirek',
+      'zapalovač, jen když konce zatavujete',
+    ],
     requiredEquipment: [
       'veg-tan-leather',
       'stitching-chisels',
@@ -803,15 +844,16 @@ export const lessons: readonly LessonDefinition[] = [
       'waxed-thread',
       'steel-ruler',
       'sandpaper',
+      'masking-tape',
     ],
-    recommendedEquipment: ['contact-cement', 'edge-burnisher', 'scratch-awl', 'masking-tape'],
+    recommendedEquipment: ['contact-cement', 'edge-burnisher', 'scratch-awl'],
     prerequisiteLessons: [L5],
     prints: [
       {
         source: 'template',
         copies: 1,
         purpose:
-          'Oba díly vystřižené po plné čáře: zadní na kroužky lepeného pásu (krok 1), přední kapsa na děrování skrz papír (krok 3). Tiskněte bez přizpůsobení velikosti (100 %), kontrolní úsečka musí měřit 50 mm.',
+          'Oba díly vystřižené po plné čáře: zadní na kroužky lepeného pásu (kroky 1 a 2), přední kapsa na děrování skrz papír (krok 3). Tiskněte bez přizpůsobení velikosti (100 %), kontrolní úsečka musí měřit 50 mm.',
         paper: 'A4',
         condition: 'nemáte papírové díly z lekce 5',
       },
@@ -822,7 +864,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'paper-back',
         fromLesson: L5,
         label: 'Papírové díly šablony (přední kapsa a zadní díl)',
-        note: 'Na kroužky lepeného pásu a děrování skrz papír (kroky 1 a 3). Když je nemáte, vytiskněte novou šablonu.',
+        note: 'Na kroužky lepeného pásu a děrování skrz papír (kroky 1 až 3). Když je nemáte, vytiskněte novou šablonu.',
       },
     ],
     steps: [
@@ -845,7 +887,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'glue-parts',
         title: 'Slepte díly',
-        body: 'Vyznačený pás na zadním dílu zdrsněte smirkem 180, z hladkého líce lepidlo pouští. Smirek omotejte kolem hranolku asi 1–2 cm širokého, pás tak udržíte v mezích lépe než prsty. Stěrkou naneste tenký pás lepidla na zdrsněný pás i na stejný pás na rubu kapsy a nechte odvětrat podle návodu. Kapsu přiložte lícem nahoru, spodek a boky přesně na hrany zadního dílu, a přitiskněte přes hadřík. Střed nechte suchý, jinak se kapsa slepí a karta do ní nevejde. Oboustrannou pásku nalepte jen na rub kapsy, zdrsňovat pak nemusíte.',
+        body: 'Vyznačený pás na zadním dílu zdrsněte smirkem 180, z hladkého líce lepidlo pouští. Smirek omotejte kolem hranolku asi 1–2 cm širokého, pás tak udržíte v mezích lépe než prsty. Stejný pás vyznačte na rubu kapsy: papírový zadní díl přiložte na rub kapsy, spodek a boky na hrany, propíchněte čtyři kroužky a spojte je tužkou podle pravítka. Rub kapsy je uvnitř, vpichy tam nevadí. Stěrkou naneste tenký pás lepidla na oba pásy a nechte odvětrat podle návodu. Lepidlo chytí hned při dotyku, kapsu pak už neposunete. Kapsu držte lícem nahoru mírně prohnutou, nejdřív přiložte spodní hranu na spodní hranu zadního dílu, srovnejte rohy a teprve pak spusťte boky. Přitiskněte přes hadřík. Střed nechte suchý, jinak se kapsa slepí a karta do ní nevejde. Oboustrannou pásku nalepte jen na vyznačený pás na rubu kapsy, zdrsňovat pak nemusíte.',
         waits: [
           {
             id: 'glue-open',
@@ -903,7 +945,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('saddleStitch', 'F2'),
           animationLink('saddleStitch', 'F3'),
         ],
-        body: 'Díl uchyťte jako v lekci 4. Začněte dvěma zpětnými stehy u horní hrany kapsy: nit vyrovnejte ve třetím otvoru od horního konce, ušijte dva stehy zpět k prvnímu otvoru a pak šijte dopředu přes ně, souvisle bok, spodek, bok. Otvory v rozích prošijte jako všechny ostatní. Na konci udělejte dva zpětné stehy. Konce vyveďte na rub a odstřihněte těsně u kůže, nebo je jako v lekci 4 nechte asi 2 mm dlouhé a zatavte.',
+        body: 'Ustřihněte asi 1 m nitě a navlékněte obě jehly jako v lekci 1. Díl uchyťte jako v lekci 4. Začněte dvěma zpětnými stehy u horní hrany kapsy: nit vyrovnejte ve třetím otvoru od horního konce, ušijte dva stehy zpět k prvnímu otvoru a pak šijte dopředu přes ně, souvisle bok, spodek, bok. Otvory v rozích prošijte jako všechny ostatní. Na konci udělejte dva zpětné stehy. Konce vyveďte na rub a odstřihněte těsně u kůže, nebo je jako v lekci 4 nechte asi 2 mm dlouhé a zatavte.',
         media: [
           {
             id: 'l6-stitch-video',
@@ -919,7 +961,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'edges',
         title: 'Srovnejte a zalešte hrany',
         animationLinks: [animationLink('edges', 'A2'), animationLink('edges', 'D1')],
-        body: 'Sešité hrany srovnejte do jedné roviny smirkem 220–400 na rovné destičce. Hranu navlhčete vodou nebo pastou a třete leštítkem nebo plátnem, dokud se nezaleskne. Stejně upravte horní hrany obou dílů, boky zadního dílu nad kapsou a oblouk výřezu.',
+        body: 'Sešité hrany srovnejte do jedné roviny smirkem 220–400 na rovné destičce. Hranu navlhčete vodou nebo pastou a třete leštítkem nebo plátnem, dokud se nezaleskne. Stejně upravte horní hranu a boky zadního dílu nad kapsou. Horní hranu kapsy a výřez máte hotové z lekce 5, smirkem ani leštítkem na ně nesahejte: pod nimi je líc zadního dílu.',
         media: [
           {
             id: 'l6-edges',
@@ -958,7 +1000,8 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         slug: 'edges-finished',
-        title: 'Hrany včetně oblouku výřezu jsou srovnané a zaleštěné.',
+        title:
+          'Sešité hrany, horní hrana zadního dílu a jeho boky nad kapsou jsou srovnané a zaleštěné.',
         required: true,
       },
       {
@@ -1049,7 +1092,7 @@ const overview: ProjectOverview = {
           id: 'glue',
           lessonSlug: L4,
           stepId: 'glue',
-          text: 'Slepte dva odřezky podél jedné delší hrany, rub horního na líc spodního, pás asi 5 mm. Tento pás na líci spodního nejdřív zdrsněte smirkem 180 (s oboustrannou páskou ne), lepidlo naneste na obě plochy, nechte odvětrat a hrany přitiskněte přesně na sebe. Na třetím odřezku zdrsněte jen polovinu pásu, přilepte na něj proužek z lekce 2 a po zaschnutí ho na obou polovinách zkuste odtrhnout.',
+          text: 'Slepte dva odřezky podél jedné delší hrany, rub horního na líc spodního, pás asi 5 mm. Tento pás na líci spodního nejdřív zdrsněte smirkem 180 (s oboustrannou páskou ne), lepidlo naneste na obě plochy, nechte odvětrat a hrany přitiskněte přesně na sebe. Na třetím odřezku zdrsněte jen polovinu pásu, přilepte na něj proužek z lekce 2 a druhý den ho na obou polovinách zkuste odtrhnout.',
         },
         {
           id: 'punch-two-layers',
@@ -1092,14 +1135,14 @@ const overview: ProjectOverview = {
           id: 'cut-parts',
           lessonSlug: L5,
           stepId: 'cut-parts',
-          text: 'Řežte skrz papír i kůži po plné čáře na dva až tři lehké tahy: rovné strany podle pravítka, horní hranu kapsy jen ke krátkým čárkám, zaoblené rohy pomalu bez pravítka.',
+          text: 'Řežte skrz papír i kůži po plné čáře na dva až tři lehké tahy: rovné strany podle pravítka, horní hranu kapsy z každé strany jen ke krátké čárce, zaoblené rohy pomalu bez pravítka.',
           later: 'výřez na palec, až budou obvody vyříznuté.',
         },
         {
           id: 'thumb-cutout',
           lessonSlug: L5,
           stepId: 'thumb-cutout',
-          text: 'Výřez na palec, 40 mm široký a 12 mm hluboký, nasekejte s přilepenou šablonou pěti až šesti krátkými rovnými řezy. Každý řez začněte i skončete na čáře, jeden roh dejte do dna (konec čárky uvnitř výřezu).',
+          text: 'Výřez na palec, 40 mm široký a 12 mm hluboký, nasekejte s přilepenou šablonou pěti až šesti krátkými rovnými řezy. Každý řez začněte i skončete na čáře, jeden roh dejte do dna, kde prostřední čárka sahá na oblouk.',
         },
         {
           id: 'peel-template',
@@ -1114,6 +1157,12 @@ const overview: ProjectOverview = {
           text: 'Přední díl přiložte na zadní. Rozdíl na bocích a dole větší než asi půl milimetru zbruste nebo seřízněte.',
         },
         {
+          id: 'pocket-top-edge',
+          lessonSlug: L5,
+          stepId: 'pocket-top-edge',
+          text: 'Horní hranu kapsy i s výřezem srovnejte smirkem a zaleštěte teď, po přišití by pod ní byl líc zadního dílu. Rub zadního dílu (zadní strana pouzdra) můžete uhladit pastou, nejdřív na odřezku.',
+        },
+        {
           id: 'glue-area',
           lessonSlug: L6,
           stepId: 'mark-glue-area',
@@ -1123,7 +1172,7 @@ const overview: ProjectOverview = {
           id: 'glue-parts',
           lessonSlug: L6,
           stepId: 'glue-parts',
-          text: 'Pás zdrsněte smirkem 180 jen k pásce a lepidlo naneste na něj i na stejný pás na rubu kapsy. Po odvětrání (10–15 min) kapsu přitiskněte hranami na hrany, střed nechte suchý. S oboustrannou páskou na rubu kapsy nezdrsňujte ani nečekejte.',
+          text: 'Pás zdrsněte smirkem 180 jen k pásce a stejný pás vyznačte podle papírového zadního dílu i na rubu kapsy. Lepidlo naneste na oba pásy, střed nechte suchý, a po odvětrání (10–15 min) přiložte nejdřív spodní hranu kapsy, srovnejte rohy, pak boky; lepidlo chytí hned. S oboustrannou páskou na rubu kapsy nezdrsňujte ani nečekejte.',
         },
         {
           id: 'stitch-lines',
@@ -1147,7 +1196,7 @@ const overview: ProjectOverview = {
           id: 'edges',
           lessonSlug: L6,
           stepId: 'edges',
-          text: 'Sešité hrany srovnejte smirkem 220–400 na destičce, pak navlhčete a leštěte do lesku. Stejně upravte horní hrany obou dílů, boky zadního dílu nad kapsou a oblouk výřezu.',
+          text: 'Sešité hrany srovnejte smirkem 220–400 na destičce, pak navlhčete a leštěte do lesku. Stejně upravte horní hranu a boky zadního dílu nad kapsou, horní hrany kapsy a výřezu se už nedotýkejte.',
         },
         {
           id: 'test-cards',
@@ -1164,9 +1213,9 @@ export const cardHolderProject: ProjectDefinition = {
   slug: PROJECT_SLUG,
   code: '01',
   title: 'Pouzdro na karty',
-  summary: 'Kapsa na čtyři až šest karet, ručně šitá sedlářským stehem.',
+  summary: 'Kapsa na čtyři karty, ručně šitá sedlářským stehem.',
   description:
-    'Kapsa na čtyři až šest karet, ručně šitá sedlářským stehem. Naučíte se na ní rovný řez, děrování, sedlářský steh a úpravu hran, tedy základ pro peněženku nebo pásek.',
+    'Kapsa na čtyři karty, ručně šitá sedlářským stehem. Zadní strana pouzdra je rub kůže. Naučíte se na ní rovný řez, děrování, sedlářský steh a úpravu hran, tedy základ pro peněženku nebo pásek.',
   difficulty: 'beginner',
   estimatedHours: { min: 4, max: 6 },
   skills: [
@@ -1233,7 +1282,8 @@ export const cardHolderProject: ProjectDefinition = {
     {
       equipmentSlug: 'veg-tan-leather',
       priority: 'required',
-      reason: 'Finální díly pouzdra (lekce 5 a 6). Na trénink v lekcích 1–4 stačí levné odřezky.',
+      reason:
+        'Finální díly pouzdra (lekce 5 a 6). Na trénink v lekcích 1 a 3 stačí levné odřezky; zkoušku pásky a cvičnou šablonu v lekci 2 a lepení v lekci 4 dělejte na lícové kůži téže kůže jako pouzdro.',
       specification:
         'Třísločiněná lícová kůže 1,2–1,5 mm, přířez A4; na trénink 2× A5 téže kůže nebo levné odřezky.',
     },
@@ -1256,12 +1306,12 @@ export const cardHolderProject: ProjectDefinition = {
     },
     {
       equipmentSlug: 'masking-tape',
-      priority: 'recommended',
+      priority: 'required',
       reason:
-        'Drží šablonu na rubu kůže při řezání (lekce 2 a 5) a na líci kapsy při děrování (lekce 6). Jedna role vystačí i na projekty 02 a 03.',
+        'Drží šablonu na rubu kůže při řezání (lekce 2 a 5), ohraničí zdrsnění a drží papírovou kapsu na líci při děrování (lekce 6). Jedna role vystačí i na projekty 02 a 03.',
       specification:
         'Papírová maskovací páska kolem 25 mm, nejlépe s nízkou lepivostí (na citlivé povrchy).',
-      alternatives: ['Svorky nebo závaží na šablonu'],
+      alternatives: ['Jen při řezu (lekce 2 a 5): svorky nebo závaží na šablonu'],
     },
     {
       equipmentSlug: 'contact-cement',
@@ -1313,7 +1363,8 @@ export const cardHolderProject: ProjectDefinition = {
   template: {
     // Zadní díl 100 × 70; boky šité jen po výšku přední kapsy. Karta (54 mm) leží na lepeném pásu
     // u spodku (asi 5 mm), takže nad kapsu 56 mm vyčnívá asi 3 mm a mělký výřez na palec
-    // (40 × 12 mm) jí odkryje asi 15 mm. NÁVRH – ověřit na papírovém modelu a odřezku.
+    // (40 × 12 mm) jí odkryje asi 15 mm. NÁVRH – ověřit na papírovém modelu a odřezku, i kolik karet
+    // se vejde: mezi lepenými pásy zbývá 90 mm na kartu 85,6 mm, kapsa se musí přes karty vyklenout.
     pieces: [
       {
         id: 'back',
@@ -1478,7 +1529,7 @@ export const cardHolderProject: ProjectDefinition = {
         url: 'https://www.obi.cz/lepici-pasky/tesa-maskovaci-paska-professional-sensitive-pro-citlive-povrchy-25-m-x-25-mm/p/4754180',
         quantity: 1,
         purpose:
-          'šablona na kůži (cvičení v lekci 2, lekce 5); jedna role na všechny projekty – stačí i podobná páska z papírnictví nebo hobby marketu',
+          'šablona na kůži (cvičení v lekci 2, lekce 5), hranice zdrsnění a papírová kapsa při děrování (lekce 6); jedna role na všechny projekty – stačí i podobná páska z papírnictví nebo hobby marketu',
       },
     ],
     skipped: [],

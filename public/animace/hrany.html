@@ -283,19 +283,21 @@ const K=10.5; // hlavní řez: 10,5 jednotky scény na 1 mm
 
 // A1
 add('A','Přehled hran',
- 'Hrany dělejte až na sešitém pouzdru: boky a dno (dvě vrstvy), horní hrany obou dílů, boky zadního dílu nad kapsou a oblouk výřezu.',
+ 'Horní hranu kapsy i s výřezem dokončete před lepením (lekce 5): po přišití pod ní leží líc zadního dílu. Po sešití: boky a dno (dvě vrstvy), horní hrana zadního dílu a jeho boky nad kapsou.',
  8000,t=>{
-  const s=.66;let sh=es(t,.08,.3),sb=es(t,.38,.55),sp=es(t,.62,.8);
+  const s=.66;let sp=es(t,.08,.3),sh=es(t,.38,.55),sb=es(t,.62,.8);
   let o=holder('translate(9 14)',s,{hs:sh,hb:sb,hp:sp});
-  if(sh>.5) o+=`<g opacity="${f(seg(t,.2,.3))}">${pill(9+50*s,14+70*s+7,'boky a dno: 2 vrstvy','ta','middle')}</g>`;
-  if(sb>.5) o+=`<g opacity="${f(seg(t,.48,.55))}">${pill(9+50*s,14+10*s,'zadní díl nad kapsou','tok','middle')}</g>`;
-  if(sp>.5) o+=`<g opacity="${f(seg(t,.74,.8))}">${lead(9+50*s,14+30*s,9+50*s,14+21.6*s)}${pill(9+50*s,14+35*s,'oblouk výřezu','tok','middle')}</g>`;
+  if(sp>.5) o+=`<g opacity="${f(seg(t,.2,.3))}">${lead(9+50*s,14+30*s,9+50*s,14+21.6*s)}${pill(9+50*s,14+35*s,'kapsa a výřez: před lepením','tok','middle')}</g>`;
+  if(sh>.5) o+=`<g opacity="${f(seg(t,.48,.55))}">${pill(9+50*s,14+70*s+7,'boky a dno: 2 vrstvy','ta','middle')}</g>`;
+  if(sb>.5) o+=`<g opacity="${f(seg(t,.74,.8))}">${pill(9+50*s,14+10*s,'zadní díl nad kapsou','tok','middle')}</g>`;
   o+=pill(4,87,t<.9?'zadní díl 100 × 70 mm, kapsa 100 × 56 mm':'všechny řezané hrany','t');
-  const ck=[['boky a dno','.12','.'],['horní hrany','.42','.'],['oblouk výřezu','.66','.']].map(([a,b])=>[a,+b]);
-  let ib=checklist(ck,t,18,6.4);
-  ib+=notes([['po sešití','t'],[''],['2 vrstvy','t'],['po 1,2 mm']],42,5.2);
+  let ib=notes([['před lepením','t']],17);
+  ib+=checklist([['kapsa a výřez',.12]],t,23.4);
+  ib+=notes([['po sešití','t']],35);
+  ib+=checklist([['boky a dno',.42],['zadní díl',.66]],t,41.4,6.4);
+  ib+=notes([['nahoře a nad'],['kapsou'],[''],['2 vrstvy','t'],['po 1,2 mm']],54,5.2);
   return o+inset('HRANY',ib);
- },P1);
+ },P1,'Tip: smirek a leštítko u horní hrany kapsy by po přišití odřely líc zadního dílu pod ní.');
 
 // A2
 add('A','Srovnejte hrany smirkem',
@@ -455,11 +457,11 @@ add('E','Chyba: leštění před srovnáním hran',
 
 // E2
 add('E','Kontrola: zaleštěné hrany i výřez',
- 'Hrany včetně oblouku výřezu jsou srovnané a zaleštěné. Pak vložte čtyři karty a palcem je výřezem vysuňte.',
+ 'Sešité hrany, horní hrana zadního dílu a jeho boky nad kapsou jsou srovnané a zaleštěné, horní hrana kapsy i výřez z lekce 5 bez oděrek na líci pod nimi. Pak vložte čtyři karty a palcem je výřezem vysuňte.',
  8000,t=>{
   const s=.66;
   let o=holder('translate(9 14)',s,{gloss:es(t,.05,.35)});
-  const ck=[['boky a dno',.35],['horní hrany',.45],['oblouk výřezu',.55],['srovnané',.65],['zaleštěné',.72]];
+  const ck=[['boky a dno',.35],['zadní díl',.45],['kapsa, výřez',.55],['srovnané',.65],['zaleštěné',.72]];
   let ib=checklist(ck,t,17,6.6);
   ib+=`<g opacity="${f(seg(t,.82,.9))}">${notes([['pak: 4 karty','t'],['vysunout palcem'],['výřezem']],56,5.2)}</g>`;
   o+=pill(4,87,t<.8?'kontrola po celém obvodu':'pouzdro hotové','tok');

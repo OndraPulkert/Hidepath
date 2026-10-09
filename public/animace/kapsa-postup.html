@@ -140,8 +140,8 @@ const SHEET_DY=4;
 const DOTS=[[13.5,25.177],[13.5,29.177],[13.5,33.177],[13.5,37.177],[13.5,41.177],[13.5,45.177],[13.5,49.177],[15.261,52.388],
  [19.25,52.5],[23.25,52.5],[27.25,52.5],[31.25,52.5],[35.25,52.5],[39.25,52.5],[43.25,52.5],[47.239,52.388],
  [49,49.177],[49,45.177],[49,41.177],[49,37.177],[49,33.177],[49,29.177],[49,25.177]];
-const LEA={x:-6.75,y:-3.25,w:76,h:76};     // rough leather piece (sheet coords)
-const P1={x:0,y:4,w:62.5,h:62};             // 1st copy, rough cut (left edge = sheet edge)
+const LEA={x:2.5,y:6.25,w:57.5,h:57.5};    // kus kůže 57,5 × 57,5 vystředěný na kapse (sheet coords)
+const P1={x:2.5,y:6.25,w:57.5,h:57.5};     // výtisk na značky vystřižený po čárkovaném čtverci = kus kůže
 // board (mm): body 230 x 118, handle to 280; hole centre 45 mm from the end opposite the handle
 const HX=45, HY=59, BW=118, HOLE_R=16;
 
@@ -170,6 +170,7 @@ function printKapsa(o={}){
   s+=`<circle cx="${CX}" cy="${CY}" r="${R_COIN}" fill="none" stroke="${m}" stroke-width=".2" stroke-dasharray="2 1.5"/>`;
   s+=`<circle cx="${CX}" cy="${CY}" r="${R_FOOT}" fill="none" stroke="${m}" stroke-width=".2" stroke-dasharray=".8 1.2"/>`;
   s+=`<path d="M29.75 34.75 L32.75 34.75 M31.25 33.25 L31.25 36.25" stroke="${ink}" stroke-width=".25"/>`;
+  if(o.square!==false) s+=`<rect x="${P1.x}" y="${P1.y}" width="${P1.w}" height="${P1.h}" fill="none" stroke="${m}" stroke-width=".25" stroke-dasharray="3 2"/>`;
   const ax = o.axClip ? `M10 34.75 H52.5 M31.25 14 V56` : `M6 34.75 H56.5 M31.25 10 V60`;
   s+=`<path d="${ax}" fill="none" stroke="${m}" stroke-width=".2" stroke-dasharray="3 1 .6 1"/>`;
   return s;
@@ -229,8 +230,8 @@ function ruler(x1,y1,x2,y2,op=1){const a=Math.atan2(y2-y1,x2-x1)*180/Math.PI,len
   let ticks='';for(let i=2;i<len-1;i+=2.5)ticks+=`<path d="M${f(i)} -3.2 V${i%10<2.5?-1.6:-2.4}" stroke="#5c6670" stroke-width=".15"/>`;
   return G(`translate(${f(x1)} ${f(y1)}) rotate(${f(a)})`,`<rect x="0" y="-3.6" width="${f(len)}" height="3.4" rx=".4" fill="#dfe6ec" fill-opacity=".88" stroke="#7f8a94" stroke-width=".2"/>${ticks}`,`opacity="${f(op)}"`)}
 function scissors(x,y,a=0){return G(`translate(${f(x)} ${f(y)}) rotate(${a})`,`<path d="M0 0 L-6 -1.2 M0 0 L-6 1.2" stroke="var(--steel-d)" stroke-width=".7" stroke-linecap="round"/><circle cx="-8" cy="-2.4" r="1.6" fill="none" stroke="#c0392b" stroke-width=".6"/><circle cx="-8" cy="2.4" r="1.6" fill="none" stroke="#c0392b" stroke-width=".6"/>`)}
-function fork(x,y,a){ // pricking iron, 4 prongs 4 mm pitch, centred on x,y along angle a
-  let pr='';for(let i=0;i<4;i++)pr+=`<rect x="${-6.6+i*4}" y="-1.2" width=".8" height="1.2" fill="var(--steel-d)"/>`;
+function fork(x,y,a,n=4){ // pricking iron, n prongs 4 mm pitch, centred on x,y along angle a
+  let pr='';for(let i=0;i<n;i++)pr+=`<rect x="${f((i-(n-1)/2)*4-.4)}" y="-1.2" width=".8" height="1.2" fill="var(--steel-d)"/>`;
   return G(`translate(${f(x)} ${f(y)}) rotate(${f(a)})`,`${pr}<rect x="-7.4" y="-4.2" width="14.8" height="3" rx=".5" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-1.6" y="-14" width="3.2" height="9.8" rx="1" fill="#6b4c32"/>`)}
 function sponge(x,y){return `<rect x="${f(x-6)}" y="${f(y-4)}" width="12" height="8" rx="2" fill="#f2d24b" stroke="#b8961d" stroke-width=".3"/><rect x="${f(x-6)}" y="${f(y+1.6)}" width="12" height="2.4" rx="1" fill="#3f8f5a"/>`}
 // 50 Kč (ČNB): bimetal, mezikruží poměděná ocel (měď), střed Ø 17 plátovaný slitinou Cu-Zn 75:25 (mosaz)
@@ -249,16 +250,16 @@ function board(o={}){
     s+=`<circle cx="${HX}" cy="${HY}" r="${HOLE_R}" fill="var(--hole)"/>`;
     if(o.round) s+=`<circle cx="${HX}" cy="${HY}" r="${f(HOLE_R-.6)}" fill="none" stroke="var(--wood-side)" stroke-width="${f(1.4*o.round)}" opacity=".9"/>`;
   }
-  if(o.axes){const p=o.axes; const hx1=L(19.25,0,cl(p*2)), hx2=L(89.25,280,cl(p*2)), vy1=L(27.75,0,cl(p*2-1)), vy2=L(97.75,118,cl(p*2-1));
-    s+=`<path d="M${f(hx1)} ${HY} H19.25 M89.25 ${HY} H${f(hx2)}" stroke="var(--graphite)" stroke-width=".7"/>`;
-    if(p>.5) s+=`<path d="M${HX} ${f(vy1)} V27.75 M${HX} 97.75 V${f(vy2)}" stroke="var(--graphite)" stroke-width=".7"/>`;
+  if(o.axes){const p=o.axes; const hx1=L(HX-25,0,cl(p*2)), hx2=L(HX+25,280,cl(p*2)), vy1=L(HY-25,0,cl(p*2-1)), vy2=L(HY+25,118,cl(p*2-1));
+    s+=`<path d="M${f(hx1)} ${HY} H${HX-25} M${HX+25} ${HY} H${f(hx2)}" stroke="var(--graphite)" stroke-width=".7"/>`;
+    if(p>.5) s+=`<path d="M${HX} ${f(vy1)} V${HY-25} M${HX} ${HY+25} V${f(vy2)}" stroke="var(--graphite)" stroke-width=".7"/>`;
     if(o.axesFull) s+=`<path d="M0 ${HY} H280 M${HX} 0 V118" stroke="var(--graphite)" stroke-width=".7"/>`;
   }
   if(o.mark) s+=`<text x="${HX+22}" y="${HY-24}" style="font:600 7px 'Albert Sans',sans-serif;fill:var(--graphite)" opacity="${f(o.mark)}">NAHORU</text>`;
   return s;
 }
-function formSquare(op=1){ // the cut paper square, local coords: circle centre at (25.75, 31.25); square 70x70
-  return G('',`${paperRect(0,0,70,70)}<circle cx="25.75" cy="31.25" r="15.75" fill="none" stroke="var(--print)" stroke-width=".35"/><path d="M24.25 31.25 H27.25 M25.75 29.75 V32.75" stroke="var(--print)" stroke-width=".3"/><path d="M6 31.25 H45.5 M25.75 15 V51" stroke="var(--print-m)" stroke-width=".3" stroke-dasharray="3 1 .6 1"/>`,`opacity="${f(op)}"`);
+function formSquare(op=1){ // vystřižený čárkovaný čtverec 50 × 50, křížek os uprostřed (25, 25)
+  return G('',`${paperRect(0,0,50,50)}<circle cx="25" cy="25" r="15.75" fill="none" stroke="var(--print)" stroke-width=".35"/><path d="M23.5 25 H26.5 M25 23.5 V26.5" stroke="var(--print)" stroke-width=".3"/><path d="M5.25 25 H44.75 M25 5.25 V44.75" stroke="var(--print-m)" stroke-width=".3" stroke-dasharray="3 1 .6 1"/>`,`opacity="${f(op)}"`);
 }
 
 // ---------- section views (mm, origin = hole centre at board top, y down) ----------
@@ -318,35 +319,36 @@ const S=[];
 const add=(part,title,body,dur,draw,side)=>S.push({part,title,body,dur,draw,side});
 
 // A1
-add('A','Vystřihněte výkres OTVOR FORMY','List KAPSA vytiskněte 3× na 100 % a zkontrolujte úsečku 50 mm: výtisk na formu, na značky a na šablonu. Z výtisku na formu vystřihněte výkres „OTVOR FORMY PRO DŮLEK“ (kružnice Ø 31,5 mm s osami) jako čtverec asi 7 × 7 cm (na menší desku menší, osy nechte celé). Kružnici nevystřihujte.',4200,t=>{
+add('A','Vystřihněte výkres OTVOR FORMY','List KAPSA vytiskněte 3× na 100 % a zkontrolujte úsečku 50 mm: výtisk na formu, na značky a na šablonu. Z výtisku na formu vystřihněte výkres „OTVOR FORMY PRO DŮLEK“ (kružnice Ø 31,5 mm s osami) po čárkovaném čtverci 5 × 5 cm (u mince 40 mm 6 × 6 cm). Křížek os je v jeho středu. Kružnici nevystřihujte.',4200,t=>{
   const k=.5, ox=6, oy=8; let s='';
   const fade=1-.7*es(t,.72,.95);
   let sheet=`${paperRect(0,0,210,150)}${G(`translate(0 ${SHEET_DY})`,printKapsa())}`;
-  sheet+=`<text x="10" y="12.5" style="font:600 2.8px Albert Sans,sans-serif;fill:var(--print)">KAPSA S MINCÍ</text><text x="10" y="78.5" style="font:600 2.8px Albert Sans,sans-serif;fill:var(--print)">OTVOR FORMY PRO DŮLEK</text>`;
-  for(let i=0;i<12;i++)sheet+=`<rect x="58.5" y="${20+i*3.6}" width="${60+((i*37)%40)}" height="1.1" fill="#cfcac0"/>`;
-  sheet+=`<circle cx="25.75" cy="95.75" r="15.75" fill="none" stroke="var(--print)" stroke-width=".3"/><path d="M24.25 95.75 H27.25 M25.75 94.25 V97.25" stroke="var(--print)" stroke-width=".25"/><path d="M6 95.75 H45.5 M25.75 79.5 V115.5" stroke="var(--print-m)" stroke-width=".2" stroke-dasharray="3 1 .6 1"/>`;
-  for(let i=0;i<6;i++)sheet+=`<rect x="47.5" y="${84.5+i*3.6}" width="${55+((i*29)%35)}" height="1.1" fill="#cfcac0"/>`;
-  s+=G(`translate(${ox} ${oy}) scale(${k})`,G('',sheet,`opacity="${f(fade)}"`)+(t<.72?`<rect x="0" y="64.5" width="70" height="70" fill="none" stroke="var(--accent)" stroke-width=".7" stroke-dasharray="2 1.2" opacity=".55"/>`:''));
-  // cut line progress: top -> right -> bottom (left edge = sheet edge)
+  sheet+=`<text x="10" y="8.5" style="font:600 2.8px Albert Sans,sans-serif;fill:var(--print)">KAPSA S MINCÍ</text><text x="10" y="78.5" style="font:600 2.8px Albert Sans,sans-serif;fill:var(--print)">OTVOR FORMY PRO DŮLEK</text>`;
+  for(let i=0;i<12;i++)sheet+=`<rect x="66" y="${20+i*3.6}" width="${60+((i*37)%40)}" height="1.1" fill="#cfcac0"/>`;
+  // výkres formy jako na listu: čárkovaný čtverec 50 × 50 (x 10–60, y 82–132), křížek os uprostřed
+  sheet+=`<circle cx="35" cy="107" r="15.75" fill="none" stroke="var(--print)" stroke-width=".3"/><path d="M33.5 107 H36.5 M35 105.5 V108.5" stroke="var(--print)" stroke-width=".25"/><path d="M15.25 107 H54.75 M35 87.25 V126.75" stroke="var(--print-m)" stroke-width=".2" stroke-dasharray="3 1 .6 1"/><rect x="10" y="82" width="50" height="50" fill="none" stroke="var(--print-m)" stroke-width=".25" stroke-dasharray="3 2"/>`;
+  for(let i=0;i<8;i++)sheet+=`<rect x="65" y="${86+i*3.6}" width="${55+((i*29)%35)}" height="1.1" fill="#cfcac0"/>`;
+  s+=G(`translate(${ox} ${oy}) scale(${k})`,G('',sheet,`opacity="${f(fade)}"`)+(t<.72?`<rect x="10" y="82" width="50" height="50" fill="none" stroke="var(--accent)" stroke-width=".7" stroke-dasharray="2 1.2" opacity=".55"/>`:''));
+  // stříhání po čárkovaném čtverci dokola
   const c=es(t,.12,.66);
-  const pts=[[0,64.5],[70,64.5],[70,134.5],[0,134.5]]; const segL=[70,70,70]; let rem=c*210, d=`M0 64.5`, cur=[0,64.5];
-  for(let i=0;i<3&&rem>0;i++){const a=pts[i],b=pts[i+1],u=Math.min(1,rem/segL[i]);cur=[L(a[0],b[0],u),L(a[1],b[1],u)];d+=` L${f(cur[0])} ${f(cur[1])}`;rem-=segL[i];}
+  const pts=[[10,82],[60,82],[60,132],[10,132],[10,82]]; const segL=[50,50,50,50]; let rem=c*200, d=`M10 82`, cur=[10,82];
+  for(let i=0;i<4&&rem>0;i++){const a=pts[i],b=pts[i+1],u=Math.min(1,rem/segL[i]);cur=[L(a[0],b[0],u),L(a[1],b[1],u)];d+=` L${f(cur[0])} ${f(cur[1])}`;rem-=segL[i];}
   if(t<.72){s+=G(`translate(${ox} ${oy}) scale(${k})`,`<path d="${d}" stroke="var(--accent)" stroke-width=".8" fill="none"/>`);
-    if(c>0&&c<1) s+=scissors(ox+cur[0]*k,oy+cur[1]*k, c<1/3?0:c<2/3?90:180);}
+    if(c>0&&c<1) s+=scissors(ox+cur[0]*k,oy+cur[1]*k, c<.25?0:c<.5?90:c<.75?180:270);}
   // square moves out
-  const m=es(t,.72,1); const sx=L(ox,62,m), sy=L(oy+64.5*k,14,m), sk=L(k,.85,m);
+  const m=es(t,.72,1); const sx=L(ox+10*k,62,m), sy=L(oy+82*k,14,m), sk=L(k,1.1,m);
   s+=G(`translate(${f(sx)} ${f(sy)}) scale(${f(sk)})`,formSquare(),m>0?SHADOW:'');
-  if(m>.6){const a=seg(t,.85,1);s+=`<g opacity="${f(a)}">${lbl(62,77,'čtverec asi 7 × 7 cm','t')}${lbl(62,82.5,'Ø 31,5 – kružnici nevystřihujte','ts')}${lead(98,30,84.5,40.5)}${lbl(99,29.5,'křížek os','ts')}</g>`}
+  if(m>.6){const a=seg(t,.85,1);s+=`<g opacity="${f(a)}">${lbl(62,77,'čtverec 5 × 5 cm','t')}${lbl(62,82.5,'Ø 31,5 – kružnici nevystřihujte','ts')}${lead(98,30,89.5,41.5)}${lbl(99,29.5,'křížek uprostřed','ts')}</g>`}
   return s;
 },null);
 
 // shared board renders
 const CAM_FULL={tx:6,ty:24,k:.44}, CAM_ZOOM={tx:6,ty:8,k:.62};
 function cam(c1,c2,u){return `translate(${f(L(c1.tx,c2.tx,u))} ${f(L(c1.ty,c2.ty,u))}) scale(${f(L(c1.k,c2.k,u))})`}
-function squareOnBoard(op=1,dy=0,peel=0){return G(`translate(${HX-25.75} ${f(HY-31.25+dy)})`,formSquare(op)+`<rect x="-3" y="-2" width="10" height="5" fill="var(--tape)" opacity=".85" transform="rotate(-20)"/><rect x="62" y="64" width="10" height="5" fill="var(--tape)" opacity=".85" transform="rotate(-20 67 66)"/>`, peel?`opacity="${f(1-peel)}"`:'')}
+function squareOnBoard(op=1,dy=0,peel=0){return G(`translate(${HX-25} ${f(HY-25+dy)})`,formSquare(op)+`<rect x="-3" y="-2" width="10" height="5" fill="var(--tape)" opacity=".85" transform="rotate(-20)"/><rect x="42" y="44" width="10" height="5" fill="var(--tape)" opacity=".85" transform="rotate(-20 47 46)"/>`, peel?`opacity="${f(1-peel)}"`:'')}
 
 // A2
-add('A','Položte čtverec na desku','Čtverec přilepte na desku doprostřed šířky, střed asi 4–5 cm od konce (naproti rukojeti, má-li ji; u desky 8 × 8 cm doprostřed), osy rovnoběžně s okraji.',4600,t=>{
+add('A','Položte čtverec na desku','Čtverec přilepte na desku tak, aby křížek os byl uprostřed šířky desky a asi 4–5 cm od konce (naproti rukojeti, má-li ji; u desky 8 × 8 cm uprostřed desky), osy rovnoběžně s okraji.',4600,t=>{
   let s='';const m=es(t,.05,.6);
   let inner=board()+G(`translate(0 ${f(L(-150,0,m))})`,squareOnBoard(),m<1?SHADOW:'');
   s+=G(cam(CAM_FULL,CAM_FULL,0),inner);
@@ -361,8 +363,8 @@ add('A','Protáhněte osy až k okrajům desky','Osy protáhněte tužkou podle 
   const p=es(t,.05,.9);
   let inner=board({axes:p})+squareOnBoard();
   // ruler + pencil
-  if(p<.5){const u=cl(p*2);const xl=L(19.25,0,u), xr=L(89.25,280,u);inner+=ruler(-4,HY+1,284,HY+1,.9)+pencil(u<.5?xl:xr,HY)}
-  else if(p<1){const u=cl(p*2-1);inner+=ruler(HX-1,-4,HX-1,122,.9)+pencil(HX,L(27.75,0,u)<0?0:(u<.5?L(27.75,0,u*2):L(97.75,118,u*2-1)))}
+  if(p<.5){const u=cl(p*2);const xl=L(HX-25,0,u), xr=L(HX+25,280,u);inner+=ruler(-4,HY+1,284,HY+1,.9)+pencil(u<.5?xl:xr,HY)}
+  else if(p<1){const u=cl(p*2-1);inner+=ruler(HX-1,-4,HX-1,122,.9)+pencil(HX,u<.5?L(HY-25,0,u*2):L(HY+25,118,u*2-1))}
   let s=G(cam(CAM_FULL,CAM_FULL,0),inner);
   s+=lbl(6,84,'tužkou podle pravítka – ještě před vrtáním','t');
   return s;
@@ -416,32 +418,34 @@ add('A','Sundejte papír, obruste a zaoblete hranu','Papír sundejte. Horní hra
 
 // ---------- B: copy 1 on LÍC ----------
 const LVw=LV(); // standard leather view transform
-function tapes(lift=0){const pts=[[0,4,45],[62.5,4,-45],[0,66,-45],[62.5,66,45]];return pts.map(([x,y,a],i)=>{const l=cl(lift*1.4-i*.12);return `<rect x="${x-6}" y="${y-2.4}" width="12" height="4.8" fill="var(--tape)" opacity="${f(.85*(1-l))}" transform="rotate(${a} ${x} ${y}) translate(0 ${f(-l*6)})"/>`}).join('')}
+// páska v rozích přes hranu papíru i kůže (přehnutá na rub), mimo konce os uprostřed stran
+const TAPE_PTS=[[P1.x+1,P1.y+1,-45],[P1.x+P1.w-1,P1.y+1,45],[P1.x+1,P1.y+P1.h-1,45],[P1.x+P1.w-1,P1.y+P1.h-1,-45]];
+function tapes(lift=0){const pts=TAPE_PTS;return pts.map(([x,y,a],i)=>{const l=cl(lift*1.4-i*.12);return `<rect x="${x-6}" y="${y-2.4}" width="12" height="4.8" fill="var(--tape)" opacity="${f(.85*(1-l))}" transform="rotate(${a} ${x} ${y}) translate(0 ${f(-l*6)})"/>`}).join('')}
 function paper1(pr=0){let s=paperRect(P1.x,P1.y,P1.w,P1.h)+printKapsa();if(pr){const n=pr;s+=DOTS.slice(0,Math.min(n,23)).map(([x,y])=>`<circle cx="${x}" cy="${y}" r=".75" fill="none" stroke="var(--accent)" stroke-width=".3"/>`).join('')+AXE.slice(0,Math.max(0,n-23)).map(([x,y])=>`<circle cx="${x}" cy="${y}" r=".9" fill="none" stroke="var(--accent)" stroke-width=".35"/>`).join('')}return s}
 const pan=(s)=>s; // placeholder
 function rightNote(lines){return lines.map((l,i)=>lbl(90,14+i*6,l[0],l[1]||'t')).join('')}
 
-add('B','Vystřihněte výtisk na značky nahrubo','Výtisk listu KAPSA na značky vystřihněte nahrubo s okrajem 1–2 cm.',3800,t=>{
+add('B','Vystřihněte výtisk na značky po čtverci','Výtisk listu KAPSA na značky vystřihněte po čárkovaném čtverci kolem kapsy: 57,5 × 57,5 mm (u mince 40 mm 70 × 70 mm), stejně jako kus kůže.',3800,t=>{
   let s=G(LVw,leather({side:'lic'}));
   const c=es(t,.1,.7), fade=1-es(t,.7,.9);
   // bigger sheet piece floating
   let sheet=`<g opacity="${f(fade)}">${paperRect(0,-6,110,90)}</g>`+G('',paperRect(P1.x,P1.y,P1.w,P1.h)+printKapsa());
   sheet+=`<g opacity="${f(fade)}">`;for(let i=0;i<12;i++)sheet+=`<rect x="66" y="${10+i*3.6}" width="${30+((i*37)%14)}" height="1.1" fill="#cfcac0"/>`;sheet+=`</g>`;
-  const pts=[[0,4],[62.5,4],[62.5,66],[0,66]];let rem=c*186.5,d='M0 4',cur=[0,4];const sl=[62.5,62,62.5];
-  for(let i=0;i<3&&rem>0;i++){const a=pts[i],b=pts[i+1],u=Math.min(1,rem/sl[i]);cur=[L(a[0],b[0],u),L(a[1],b[1],u)];d+=` L${f(cur[0])} ${f(cur[1])}`;rem-=sl[i];}
+  const pts=[[P1.x,P1.y],[P1.x+P1.w,P1.y],[P1.x+P1.w,P1.y+P1.h],[P1.x,P1.y+P1.h],[P1.x,P1.y]];let rem=c*4*P1.w,d=`M${P1.x} ${P1.y}`,cur=[P1.x,P1.y];const sl=[P1.w,P1.h,P1.w,P1.h];
+  for(let i=0;i<4&&rem>0;i++){const a=pts[i],b=pts[i+1],u=Math.min(1,rem/sl[i]);cur=[L(a[0],b[0],u),L(a[1],b[1],u)];d+=` L${f(cur[0])} ${f(cur[1])}`;rem-=sl[i];}
   if(t<.75) sheet+=`<path d="${d}" stroke="var(--accent)" stroke-width=".55" fill="none"/>`;
   const lift=1-es(t,.75,1);
   s+=G(LVw+` translate(${f(lift*4)} ${f(-lift*3)})`,sheet,SHADOW);
-  if(c>0&&c<1){const [vxx,vyy]=vx(cur[0]+lift*4,cur[1]-lift*3);s+=scissors(vxx,vyy,c<1/3?0:c<2/3?90:180)}
-  s+=G('',rightNote([['výtisk na značky','tw'],['nahrubo, okraj 1–2 cm','ts']]).replace(/x="90"/g,'x="92"'),`opacity="${f(seg(t,.8,1))}"`);
+  if(c>0&&c<1){const [vxx,vyy]=vx(cur[0]+lift*4,cur[1]-lift*3);s+=scissors(vxx,vyy,c<.25?0:c<.5?90:c<.75?180:270)}
+  s+=G('',rightNote([['výtisk na značky','tw'],['po čárkovaném čtverci','ts'],['= kus kůže 57,5 mm','ts']]).replace(/x="90"/g,'x="92"'),`opacity="${f(seg(t,.8,1))}"`);
   return s;
 },'lic');
-add('B','Přilepte ho maskovací páskou na LÍC','List přilepte maskovací páskou na LÍC kůže, jen na okrajích mimo obrys. Pásku nejdřív zkuste na kousku téže kůže.',3600,t=>{
+add('B','Přilepte ho maskovací páskou na LÍC','List položte na LÍC kůže hranami na hrany. V rozích ho přelepte maskovací páskou přes hranu papíru i kůže a pásku přehněte na rub; konce os nechte volné. Pásku nejdřív zkuste na kousku téže kůže.',3600,t=>{
   let s=G(LVw,leather({side:'lic'})+paper1());
   const n=Math.floor(es(t,.1,.85)*4.999);
-  const pts=[[0,4,45],[62.5,4,-45],[0,66,-45],[62.5,66,45]];
+  const pts=TAPE_PTS;
   s+=G(LVw,pts.slice(0,n).map(([x,y,a])=>`<rect x="${x-6}" y="${y-2.4}" width="12" height="4.8" fill="var(--tape)" opacity=".85" transform="rotate(${a} ${x} ${y})"/>`).join(''));
-  s+=rightNote([['maskovací páska','tw'],['na okrajích listu,','ts'],['mimo obrys,','ts'],['z několika stran','ts']]);
+  s+=rightNote([['hranami na hrany','tw'],['páska v rozích','ts'],['přes hranu na rub','ts'],['konce os volné','ts']]);
   return s;
 },'lic');
 add('B','Šídlem propíchněte 23 teček a 4 konce os','Šídlem propíchněte všechny tečky švu a 4 konce os (vlevo, vpravo, nahoře, dole).',7000,t=>{
@@ -478,11 +482,11 @@ add('B','Na líc nic nekreslete','Na líc nic nekreslete – čára by na hotov�
   s+=`<g opacity="${f(seg(t,.35,.55))}">${lbl(92,33,'Na líci jen dírky','ta')}${lbl(92,39,'nic nekreslete','ta')}${lbl(92,46.5,'čára přes kapsu','ts')}${lbl(92,51,'zůstane vidět','ts')}${lbl(92,58.5,'osy až na rubu','tok')}</g>`;
   return s;
 },'lic');
-add('B','Prosekejte otvory švu z líce','Vidličkami 4 mm prosekejte naplocho na děrovací desce otvory švu z líce podle teček. Děrujte ještě před navlhčením.',7000,t=>{
+add('B','Prosekejte otvory švu z líce','Vidličkami 4 mm prosekejte naplocho na děrovací desce otvory švu z líce podle teček: rovné úseky vidličkou se 4 hroty, oba dolní rohy dvojhrotem po jednom otvoru, první hrot vždy v posledním otvoru. Děrujte ještě před navlhčením.',7000,t=>{
   const u=es(t,.04,.94); const n=Math.round(u*23);
   let s=G(LVw,leather({side:'lic',pricks:27,slits:n}));
-  if(t<.96){const p=seamAt(Math.min(.999,u));const [a,b]=vx(p.x,p.y);s+=G('',fork(a,b,p.a+ (p.a>45&&p.a<135?0:0)),'')}
-  s+=rightNote([['vidličky 4 mm','tw'],['z líce, naplocho','ts'],['na děrovací desce','ts'],['před navlhčením','ts']]);
+  if(t<.96){const p=seamAt(Math.min(.999,u));const [a,b]=vx(p.x,p.y);const corner=Math.abs(Math.sin(p.a*Math.PI/90))>.2;s+=G('',fork(a,b,p.a,corner?2:4),'')}
+  s+=rightNote([['vidličky 4 mm','tw'],['z líce, naplocho','ts'],['rohy dvojhrotem','ts'],['před navlhčením','ts']]);
   s+=lbl(92,40,`otvory: ${n} / 23`,n>=23?'tok':'t');
   return s;
 },'lic');
@@ -582,7 +586,7 @@ add('D','Navlhčete kůži','Kůži navlhčete houbičkou, nemáčejte ji. Tvaru
   const w=es(t,.05,.6), dry=es(t,.7,.95);
   const wet= w*(1-.35*dry);
   let s=G(LVw,leather({side:'rub',axPricks:1,slits:23,rubAxes:1,outline:1,circle:1,wet}));
-  if(t<.65){const p=seg(t,.05,.6);const yy=L(LEA.y+8,LEA.y+LEA.h-8,p),xx=LEA.x+10+((p*5)%1)*56;s+=sponge(...vx(xx,yy))}
+  if(t<.65){const p=seg(t,.05,.6);const yy=L(LEA.y+8,LEA.y+LEA.h-8,p),xx=LEA.x+10+((p*5)%1)*(LEA.w-20);s+=sponge(...vx(xx,yy))}
   s+=rightNote([['houbičkou,','tw'],['nemáčet','ts']]);
   if(t>.7) s+=lbl(92,30,'povrch mírně světlá','t')+lbl(92,35,'→ tvarovat','ts');
   return s;

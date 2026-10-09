@@ -404,7 +404,7 @@ describe('hlavní cesta: zápisník, příprava a dílenský režim', () => {
       await user.clear(input);
       await user.type(input, value);
     };
-    await type('P1 (kaštan, useň 1,0), mm', '1,1');
+    await type('P1 (useň 1,0), mm', '1,1');
     await type('Přepážka D1, mm', '0,9');
     await type('Přepážka D2, mm', '0,8');
     await type('Podšívka L1, mm', '0,9');

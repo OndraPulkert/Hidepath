@@ -151,7 +151,7 @@ describe('nákupní seznam – peněženka Víčko (projekt 03)', () => {
     // Haléřové ceny se nezaokrouhlují: 10 × 19,50 Kč = 195 Kč, 5 × 13,50 Kč = 67,50 Kč.
     expect(planText()).toContain('10 × 19,50 Kč195 Kč');
     expect(planText()).toContain('5 × 13,50 Kč67,50 Kč');
-    expect(planText()).toContain('1 × 4,80 Kč4,80 Kč');
+    expect(planText()).toContain('2 × 4,80 Kč9,60 Kč');
     expect(within(planCard()).getByText(/Mějte doma nebo dokupte/)).toBeInTheDocument();
 
     // Zobrazené řádky každého obchodu se sečtou na zobrazený součet obchodu.

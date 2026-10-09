@@ -135,7 +135,10 @@ describe('Víčko – rozhodnutí autora 8. 10. 2026', () => {
     ]);
     const z2 = stepOf(12, 'z2');
     expect(z2.body).toContain('Palec víčko pohodlně neudrží');
-    expect(z2.body).toContain('x 27–42');
+    // Okénko bankovek leží mezi švy S2/S3: mimo stopu jazýčku ho posunout nejde (nález 9. 10. 2026).
+    expect(z2.body).not.toContain('x 27–42');
+    expect(z2.body).toContain('okénka mincí zkrátit shora');
+    expect(z2.body).toContain('Okénko bankovek mimo stopu jazýčku posunout nejde');
     const z2Options = z2.records![0]!;
     expect(z2Options.kind === 'choice' && z2Options.options.map((o) => o.value)).toContain('thumb');
   });

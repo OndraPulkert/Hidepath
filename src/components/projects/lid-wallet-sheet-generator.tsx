@@ -386,7 +386,7 @@ export function LidWalletSheetGenerator({
           <div className="grid gap-4 sm:grid-cols-2">
             <ThicknessField
               id={`${id}-p1`}
-              label="P1 (kaštan, useň 1,0), mm"
+              label="P1 (useň 1,0), mm"
               value={p1}
               onChange={setP1}
               hint="Liší-li se od 1,0 o méně než 0,05 mm, platí výchozí 1,0."

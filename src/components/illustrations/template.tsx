@@ -16,9 +16,9 @@ export const TEMPLATE_LEGEND = {
   outline: 'plná čára = obrys dílu, řežte podle ní',
   stitch: 'čárkovaná = linie stehu, neřezat ani nerýsovat',
   glue: 'tečkovaná = okraj lepeného pásu na zadním dílu (lekce 6)',
-  tick: 'čárka u výřezu = konec rovného řezu a dno, nepropichovat',
+  tick: 'čárka u výřezu = konec řezu, dno na oblouku, nepropichovat',
   prick: 'kroužek na tečkované = propíchněte šídlem na líc (lekce 6)',
-  punch: 'kroužek na čárkované = děrujte skrz papír, nepropichovat',
+  punch: 'kroužek na čárkované = začátek a konec řady (lekce 6)',
 } as const;
 
 const PRICK_R = 0.7;
@@ -56,7 +56,8 @@ export function TemplateIllustration({
     // Lepený pás leží na dílu pod kapsou; popisky začínají až za jeho tečkovanou čarou.
     glueBand: p.openEdge === 'top' && p.stitchUpToMm ? template.glueBandMm : undefined,
   }));
-  const textX = (p: (typeof placed)[number]) => p.x + (p.glueBand ? p.glueBand + 2.5 : 4);
+  // Popisky začínají 2,5 mm za vnitřní čárou (lepený pás nebo linie stehu), ne na ní.
+  const textX = (p: (typeof placed)[number]) => p.x + (p.glueBand ?? p.stitchOffsetMm) + 2.5;
 
   const sizeProps =
     mode === 'print'

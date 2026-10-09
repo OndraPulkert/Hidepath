@@ -327,7 +327,7 @@ const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,
 const SIDE={rubB:{v:'RUB B',sub:'pohled zevnitř',c:'var(--kuzeplan)'},licB:{v:'LÍC B',sub:'pohled zvenku, záda',c:'var(--kuze)'},licD2:{v:'LÍC D2',sub:'pohled zevnitř',c:'var(--d2)'}};
 
 // A1 — výchozí stav
-add('A','Výchozí stav: rub B s čarami','Záda B leží rubem nahoru. Na rubu jsou z lekce 4 hranice lepení G3 a čárkovaný obdélník D2, okénka mincí <span class="num">12 × 48</span> jsou vyseknutá. D2 (<span class="num">103 × 64</span>) má propíchnuté konce osy a spodní hranu zbroušenou do tenka.',8200,t=>{
+add('A','Výchozí stav: rub B s čarami','Záda B leží rubem nahoru. Na rubu jsou z lekce 4 hranice lepení G3 a čárkovaný obdélník D2, okénka mincí <span class="num">12 × 48</span> jsou vyseknutá. D2 (<span class="num">103 × 64</span>) má propíchnutou osu (dva vpichy v místě okénka bankovek, které se vysekne) a spodní hranu zbroušenou do tenka.',8200,t=>{
   MIR=true;
   let s=wallB('rub')+pencilB(es(t,.05,.3));
   const o1=seg(t,.3,.42),o2=seg(t,.45,.57),o3=seg(t,.6,.72);
@@ -343,7 +343,7 @@ add('A','Výchozí stav: rub B s čarami','Záda B leží rubem nahoru. Na rubu 
 },SIDE.rubB);
 
 // A2 — páska
-add('A','Hranici lepení přelepte maskovací páskou','Na rub D2 přeneste hranice šrafovaných pásů G3 ze šablony D2 (2. výtisk listu 3): přiložte ji na rub D2 podle hran, kroužky v rozích zelené šrafy G3 propíchněte jehlou a spojte tužkou u pravítka. Hranice lepení na rubu B i D2 přelepte maskovací páskou, aby lepidlo nezateklo do sloupců mincí ani nad konec šrafy. Horní okraj D2 nad koncem šrafy (začíná tam závěs) se nelepí.',7600,t=>{
+add('A','Hranici lepení přelepte maskovací páskou','Na rub D2 přeneste hranice šrafovaných pásů G3 ze šablony D2 (2. výtisk listu 3): přiložte ji na rub D2 podle hran, kroužky v rozích zelené šrafy G3 propíchněte jehlou jen do rubu (hrot nesmí projít na líc, sílu zkuste na odřezku kozinky) a spojte tužkou u pravítka. Hranice lepení na rubu B i D2 přelepte maskovací páskou, aby lepidlo nezateklo do sloupců mincí ani nad konec šrafy. Horní okraj D2 nad koncem šrafy (začíná tam závěs) se nelepí.',7600,t=>{
   MIR=true;
   let s;
   const p=es(t,.08,.75);
@@ -388,13 +388,13 @@ add('A','Nechte zavadnout 10–15 min','Lepidlo nechte zavadnout <span class="nu
 },SIDE.rubB);
 
 // A5 — spojit
-add('A','Přiložte D2 rubem na rub B','D2 přiložte rubem na rub B do jejího čárkovaného obdélníku: osa na osu, spodní hrana na spodní čáru, na každém boku přesah <span class="num">1</span> mm.',8600,t=>{
+add('A','Přiložte D2 rubem na rub B','D2 přiložte rubem na rub B do jejího čárkovaného obdélníku: osa na osu (vpichy osy D2 jsou v okénku bankovek), spodní hrana na spodní čáru, na každém boku přesah <span class="num">1</span> mm.',8600,t=>{
   MIR=true;
   let s=wallB('rub')+pencilB(1)+glueBands(G3,1,.8);
   // D2 se spouští shora kolmo na B (zvětšená = výš nad stolem); po lepidle se neposouvá
   const p=es(t,.25,.75), sc=1+(1-p)*.12;
   const [mx,my]=pt(M.axis,50);
-  s+=G(`translate(${f(mx)} ${f(my)}) scale(${f(sc)}) translate(${f(-mx)} ${f(-my)})`,d2Part('lic',{coinHidden:p>.98,shadow:p<.98}),`opacity="${f(seg(t,.2,.32))}"`);
+  s+=G(`translate(${f(mx)} ${f(my)}) scale(${f(sc)}) translate(${f(-mx)} ${f(-my)})`,d2Part('lic',{coinHidden:p>.98,shadow:p<.98})+M.billC.map(y=>prick(M.axis,y,'var(--ink)',.42)).join(''),`opacity="${f(seg(t,.2,.32))}"`);
   const o=seg(t,.78,.88);
   const [ax,ay]=pt(50.5,82),[bx,by]=pt(50.5,18);
   s+=op(o,`<path d="M${f(ax)} ${f(ay-2.5)} V${f(ay+1.2)} M${f(bx)} ${f(by-1.2)} V${f(by+2.5)}" stroke="var(--notch)" stroke-width=".45"/>`+pill(bx+2,by+5.4,'osa 50,5 · hrana y 18','ta','middle'));
@@ -427,7 +427,7 @@ add('A','Přitlačte, děrujte nejdřív za 1 h','Spoj přitlačte v lepených p
 },SIDE.licD2);
 
 // B1 — šablona okénka
-add('B','Přiložte šablonu na propíchnuté středy','Až po lepení G3: díl položte lícem B nahoru na tvrdou desku. Křížky šablony okénka bankovek z listu 4 přiložte na vpichy Ø 14 z lekce 4 a zkontrolujte polohu. Před sekáním šablonu sejměte.',8000,t=>{
+add('B','Přiložte šablonu na propíchnuté středy','Nejdřív 1 h po lepení G3: díl položte lícem B nahoru na tvrdou desku. Křížky šablony okénka bankovek z listu 4 přiložte na vpichy Ø 14 z lekce 4 a zkontrolujte polohu. Před sekáním šablonu sejměte.',8000,t=>{
   MIR=false;
   let s=wallB('lic',{marks:false,d2behind:true});
   M.billC.forEach(y=>{s+=prick(50.5,y,'var(--slitB)',.42)});

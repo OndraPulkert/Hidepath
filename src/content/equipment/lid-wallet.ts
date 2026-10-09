@@ -18,7 +18,7 @@ const draft = <T extends Omit<EquipmentDefinition, 'reviewStatus'>>(e: T): Equip
 export const lidWalletEquipment: readonly EquipmentDefinition[] = [
   draft({
     slug: 'veg-tan-leather-1mm',
-    name: 'Kůže – třísločiněná useň 0,9–1 mm na míru',
+    name: 'Kůže – třísločiněná useň kolem 1,0 mm na míru',
     englishName: 'Veg-tan leather 1 mm',
     category: 'material',
     shortDescription:
@@ -27,7 +27,11 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
       'Peněženka Víčko je z jednoho pásu třísločiněné usně kolem 1,0 mm. Useň musí být pevná (ne měkká nappa), protože pás drží tvar ohybu dna i závěsu. Zkušební i finální kus se řežou ze stejné kůže, aby zkouška ohybu V12 a zkušební kus ověřily přesně ten materiál, ze kterého bude finální kus.',
     buyingGuide: [
       { label: 'Činění', value: 'třísločiněná lícová useň, pevná' },
-      { label: 'Tloušťka', value: '0,9–1 mm; po dodání změřit posuvkou na několika místech' },
+      {
+        label: 'Tloušťka',
+        value:
+          'co nejblíž 1,0 mm (obchod ji prodává jako 1–1,2 mm); tlustší P1 snižuje hranici přepážek; po dodání změřit posuvkou na několika místech',
+      },
       {
         label: 'Množství',
         value:
@@ -61,7 +65,7 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
         variant: '1–1,2 mm',
         priceCents: 1_950,
         priceNote: 'za dm² (16,12 Kč bez DPH)',
-        note: 'Náhrada za kaštan 0,9–1 mm (staženo z nabídky). Obchod ji uvádí jako pevnou, tuhou a tvarově stálou, vhodnou na peněženky a tvarování za mokra. P1 zkušebního i finálního kusu. Objednat 10 dm² a do poznámky napsat „Prosím v jednom kuse jako obdélník 20 × 50 cm, z pevné části kůže, co nejblíž 1,0 mm“. Tloušťku po dodání změřit a listy vygenerovat pro změřenou P1. Tlustší P1 snižuje hranici přepážek (P1 1,1 → nejvýš 0,80 mm, 1,2 → 0,60 mm): formulář listů ji ukáže.',
+        note: 'Náhrada za kaštan 0,9–1 mm (staženo z nabídky). Obchod ji uvádí jako pevnou, tuhou a tvarově stálou, vhodnou na peněženky a tvarování za mokra. P1 zkušebního i finálního kusu. Objednat 10 dm² a do poznámky napsat „Prosím v jednom kuse jako obdélník 20 × 50 cm, z pevné části kůže, co nejblíž 1,0 mm“. Tloušťku po dodání změřit a listy vygenerovat pro změřenou P1. Tlustší P1 snižuje hranici přepážek (P1 1,1 → nejvýš 0,80 mm, 1,2 → 0,60 mm): formulář listů ji ukáže. U P1 1,1 a víc pak čokoládová kozinka 0,7–0,9 mm na D2 nemusí projít.',
         availability: 'in_stock',
         checkedAt: '2026-10-09',
       },
@@ -198,7 +202,7 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
         url: 'https://www.sijemezkuze.cz/kozinka-trislocinena-cokoladova-0-7-0-9-mm-p4851',
         priceCents: 1_350,
         priceNote: 'za dm² (11,16 Kč bez DPH), minimální odběr 5 dm²',
-        note: 'Tmavá přepážka D2 v kontrastu k D1.',
+        note: 'Tmavá přepážka D2 v kontrastu k D1. Hranice přepážek klesá s tloušťkou P1 (P1 1,1 → nejvýš 0,80 mm): D2 vyřízněte až po změření P1, z tenčího místa kusu.',
         availability: 'in_stock',
         checkedAt: '2026-09-29',
       },
@@ -304,12 +308,12 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
     shortDescription:
       'Zámek víčka: magnet na konci jazýčku dosedá na plíšek zalepený v přední stěně.',
     purpose:
-      'Magnet Ø 8 × 1,5 mm se lepí epoxidem na rub jazýčku, přikryje ho podšívka L1 a obšije šev S7. Protikusem je ocelový plíšek, takže na polaritě nezáleží. Kupují se 3 ks (zkušební kus, finální kus a hledací magnet na nalezení plíšku) a po jednom silnějším a slabším magnetu stejného Ø 8 na výměnu, kdyby víčko na zkušebním kusu drželo slabě nebo moc silně.',
+      'Magnet Ø 8 × 1,5 mm se lepí epoxidem na rub jazýčku, přikryje ho podšívka L1 a obšije šev S7. Protikusem je ocelový plíšek, takže na polaritě nezáleží. Kupují se 3 ks (zkušební kus, finální kus a hledací magnet na nalezení plíšku) a po dvou silnějších a slabších magnetech stejného Ø 8 na výměnu, kdyby víčko na zkušebním kusu drželo slabě nebo moc silně: vyměněný magnet zůstane zalepený na zkušebním kuse, druhý stejný je na finální.',
     buyingGuide: [
       { label: 'Rozměr', value: 'Ø 8 × 1,5 mm (výměna: Ø 8 × 2 silnější, Ø 8 × 1 slabší)' },
       { label: 'Magnetizace', value: 'axiální (póly na plochých stranách)' },
       { label: 'Povrch', value: 'niklovaný' },
-      { label: 'Počet', value: '3 ks výchozích + 1 silnější + 1 slabší' },
+      { label: 'Počet', value: '3 ks výchozích + 2 silnější + 2 slabší' },
     ],
     cautions: [
       'Třídu a přídržnou sílu ověřit u prodejce. Odhad pole v návrhu počítá s třídou kolem N42–N52; Ø 8 × 1,5 v této třídě se v prověřených českých obchodech nenašel. Jestli magnet N35 udrží víčko přes mezeru 1,6 mm, ukáže až zkouška Z-1 na zkušebním kusu (ověřit na prototypu).',
@@ -325,12 +329,12 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
       },
     ],
     alternatives: [],
-    // 3 × 4,04 Kč (ELIDIS) až navíc 4,80 + 3,40 Kč (Orodian), ověřeno 29. 9. 2026.
+    // 3 × 4,04 Kč (ELIDIS) až navíc 2 × 4,80 + 2 × 3,40 Kč (Orodian), ověřeno 29. 9. 2026.
     // Jeden obchod na všechny tři rozměry se nenašel (29. 9. 2026): Ø 8 × 1,5 má z prověřených
     // obchodů jen ELIDIS a ten nemá Ø 8 × 1; Orodian, MAGSY ani Unimagnet nemají Ø 8 × 1,5.
-    priceRange: { minCents: 1_212, maxCents: 2_032 },
+    priceRange: { minCents: 1_212, maxCents: 2_852 },
     priceSource: 'verified',
-    priceNote: `${VERIFIED_NOTE} 3 výchozí magnety, případně s jedním silnějším a jedním slabším na výměnu; bez poštovného. Všechny tři rozměry v jednom obchodě nejsou (29. 9. 2026): Ø 8 × 1,5 má z prověřených obchodů jen ELIDIS, který nemá Ø 8 × 1, a Orodian, MAGSY ani Unimagnet nemají Ø 8 × 1,5. Proto dva obchody a dvoje poštovné: ELIDIS podle stránky DPD 130 Kč bez DPH při platbě převodem nebo online (160 Kč bez DPH na dobírku), osobní odběr v Odoleně Vodě zdarma; Orodian podle stránky Zásilkovna na odběrné místo 69 Kč, na adresu od 99 Kč.`,
+    priceNote: `${VERIFIED_NOTE} 3 výchozí magnety, případně se dvěma silnějšími a dvěma slabšími na výměnu; bez poštovného. Všechny tři rozměry v jednom obchodě nejsou (29. 9. 2026): Ø 8 × 1,5 má z prověřených obchodů jen ELIDIS, který nemá Ø 8 × 1, a Orodian, MAGSY ani Unimagnet nemají Ø 8 × 1,5. Proto dva obchody a dvoje poštovné: ELIDIS podle stránky DPD 130 Kč bez DPH při platbě převodem nebo online (160 Kč bez DPH na dobírku), osobní odběr v Odoleně Vodě zdarma; Orodian podle stránky Zásilkovna na odběrné místo 69 Kč, na adresu od 99 Kč.`,
     alsoUsedFor: [],
     examples: [
       {

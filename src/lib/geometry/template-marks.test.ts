@@ -60,24 +60,13 @@ describe('templateMarks – značky k propíchnutí', () => {
 describe('prickPoints – kroužky k propíchnutí na líc (lekce 6)', () => {
   const piece = { stitchOffsetMm: 3.5, openEdge: 'top' as const };
 
-  it('přední kapsa: horní konce linie stehu 6 mm pod vrchem a tři body oblouku R 2,5 v rozích', () => {
-    const pts = prickPoints({ ...front, ...piece });
-    expect(pts.filter((p) => p.kind === 'stitch-end')).toEqual([
+  it('přední kapsa: jen horní konce linie stehu 6 mm pod vrchem, v rozích žádné kroužky', () => {
+    // Oblouk linie stehu R 2,5 měří asi 3,9 mm, tedy jednu rozteč: tři kroužky v rohu by nešly
+    // všechny proděrovat. Rohem vede vytištěný oblouk.
+    expect(prickPoints({ ...front, ...piece })).toEqual([
       { kind: 'stitch-end', x: 3.5, y: 6 },
       { kind: 'stitch-end', x: 96.5, y: 6 },
     ]);
-    expect(pts.filter((p) => p.kind === 'stitch-corner').map((p) => [p.x, p.y])).toEqual([
-      [3.5, 50],
-      [4.23, 51.77],
-      [6, 52.5],
-      [94, 52.5],
-      [95.77, 51.77],
-      [96.5, 50],
-    ]);
-    // Každý bod rohu leží 3,5 mm od zaoblené hrany (střed rohu R6 je 6, 50).
-    for (const p of pts.filter((q) => q.kind === 'stitch-corner' && q.x < 50)) {
-      expect(6 - Math.hypot(p.x - 6, p.y - 50)).toBeCloseTo(3.5, 1);
-    }
   });
 
   it('zadní díl: lepený pás 5 mm končí na bocích 50 mm od spodku, v rohu jen střed oblouku R 1', () => {

@@ -145,7 +145,12 @@ describe('obsah – peněženka Víčko', () => {
     expect(stepOf(5, 'coin-windows')).toContain('na tvrdou desku');
     expect(stepOf(5, 'coin-windows')).toContain('před sekáním ji sejměte');
     expect(stepOf(5, 'thumb-notch')).toContain('sekejte z líce F');
-    expect(stepOf(5, 'thumb-notch')).toContain('zůstává přiložená');
+    // Šablona výřezu má U vyříznuté (křížek odpadne): kontrola polohy, pak sejmout a sekat na vpich.
+    expect(stepOf(5, 'thumb-notch')).toContain('vpich musí být v otvoru U uprostřed oblouku');
+    expect(stepOf(5, 'thumb-notch')).toContain(
+      'Šablonu sejměte, výsečník Ø 10 nasaďte hrotem na vpich',
+    );
+    expect(stepOf(5, 'thumb-notch')).not.toContain('křížek šablony');
     const safety5 = lidWalletProject.lessons.find((l) => l.order === 5)!.safety.join(' ');
     expect(safety5).toContain('palička dopadá na horní konec. Děrujte jen na tvrdé desce.');
     expect(lessonText('05-crease-windows-edges')).not.toMatch(/akuvrtač|ve vrtačce/i);
@@ -318,7 +323,7 @@ describe('obsah – peněženka Víčko', () => {
         '4/plate/plate-glue-test 1440 text',
         '5/d1-paint/coat 20–30 text',
         '6/g3/tack 10–15 text',
-        '6/g3/cure 60 text → stitch-s1-s3',
+        '6/g3/cure 60 text → bill-window',
         '7/wet/dampen 5–10 text',
         '7/fold-clamp/overnight 720–1440 text → remove-spacer',
         '8/g1/tack 10–15 manufacturer',
@@ -347,7 +352,7 @@ describe('obsah – peněženka Víčko', () => {
       expect(stepAt(4, 'plate').body).toContain('po 24 h');
       expect(stepAt(5, 'd1-paint').body).toContain('mezi nimi 20–30 min');
       expect(stepAt(6, 'g3').body).toContain('zavadnout 10–15 min');
-      expect(stepAt(6, 'g3').body).toContain('Děrujte nejdřív za 1 h');
+      expect(stepAt(6, 'g3').body).toContain('Okénko sekejte a děrujte nejdřív za 1 h');
       expect(stepAt(8, 's6').body).toContain('Po lepení počkejte aspoň 1 h');
       expect(stepAt(9, 'punch-sew').body).toContain('Po lepení G4 počkejte aspoň 1 h');
       expect(stepAt(11, 'epoxy').body).toContain('podle návodu (orientačně 30 min, ověřte)');
@@ -490,7 +495,10 @@ describe('obsah – peněženka Víčko', () => {
         '4/pripravky×1',
         '12/sablona×1',
         '12/dily×1',
+        '12/sablona×1',
+        '12/dily×1',
         '12/rub×1',
+        '12/pripravky×1',
       ]);
       expect(stepAt(4, 'valid-sheets').body).toContain('List 1 a list 3 vytiskněte dvakrát');
       expect(stepAt(4, 'valid-sheets').body).toContain('matný papír 120 g');
@@ -590,12 +598,12 @@ describe('obsah – peněženka Víčko', () => {
         ['Lederversand Berlin', 94_056],
         ['CraftPoint', 324_000],
         ['ELIDIS', 1_212],
-        ['Orodian', 820],
+        ['Orodian', 1_640],
         ['OBI', 65_500],
         ['UNI HOBBY', 89_900],
         ['IKEA', 11_800],
       ]);
-      expect(resolved.totalCents).toBe(613_538);
+      expect(resolved.totalCents).toBe(614_358);
       expect(lines).toHaveLength(plan.lines.length);
       expect(resolved.notInStockCount).toBe(1);
     });

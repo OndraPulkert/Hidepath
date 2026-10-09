@@ -106,8 +106,8 @@ describe('vygenerované šablony opasku', () => {
       const [near, far] = end.rivetOffsetsMm;
       expect(svg, path).toContain(`nýt ± ${cz(far)} mm od ohybu`);
       expect(svg, path).toContain(`nýt ± ${cz(near)} mm od ohybu`);
-      expect(svg, path).toContain(`drážka ${cz(end.slotLengthMm)} × ${cz(end.slotWidthMm)} mm`);
-      expect(svg, path).toContain(`můstek u drážky ${cz1(ligamentMm(end))} mm`);
+      expect(svg, path).toContain(`ovál ${cz(end.slotLengthMm)} × ${cz(end.slotWidthMm)} mm`);
+      expect(svg, path).toContain(`můstek u oválu ${cz1(ligamentMm(end))} mm`);
       expect(svg, path).toContain(
         `kapsa pro poutko ${cz(keeperGapMm(end))} mm (světlá ${cz(keeperPocketClearMm(end))} mm)`,
       );

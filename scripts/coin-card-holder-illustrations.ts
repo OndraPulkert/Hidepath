@@ -306,7 +306,7 @@ export function buildPoradiOhybuSvg(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
 }
 
 /**
- * 3/5 – Druk je čtyřdílný: klobouček + zdířka na jazyku, patice (dřík) + hlavička na předním
+ * 3/5 – Druk je čtyřdílný: klobouček + zdířka na jazyku, dřík + hlavička (patice) na předním
  * panelu. Rozstřelený boční pohled, každá polovina svírá jednu vrstvu kůže.
  */
 export function buildDrukSvg(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD_HOLDER): string {
@@ -361,18 +361,14 @@ export function buildDrukSvg(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD_HOLDER
     leader(x, y, x + 18, y),
     text(x + 19, y + 1, s, 3.2, 'start', INK),
   ];
-  out.push(...labelR(cx + 4, tabY - 3.5, 'klobouček – na líci jazyku'));
-  out.push(...labelR(cx + 2.4, tabY + stripH + 3.5, 'zdířka – na rubu jazyku'));
+  out.push(...labelR(cx + 4, tabY - 3.5, 'klobouček – na líci jazyka'));
+  out.push(...labelR(cx + 2.4, tabY + stripH + 3.5, 'zdířka – na rubu jazyka'));
   out.push(...labelR(cx + 2.4, panelY - 3.5, 'hlavička – na líci předku'));
-  out.push(...labelR(cx + 3.4, panelY + stripH + 3.5, 'patice (dřík) – na rubu předku'));
+  out.push(...labelR(cx + 3.4, panelY + stripH + 3.5, 'dřík – na rubu předku'));
 
-  // Vyznačit, že každá polovina svírá jednu vrstvu 1,5 mm.
-  out.push(
-    text(cx - stripW / 2 - 2, tabY - stripH, `${cz(spec.bodyThicknessMm)} mm`, 3, 'end', GUIDE),
-  );
-  out.push(
-    text(cx - stripW / 2 - 2, panelY - stripH, `${cz(spec.bodyThicknessMm)} mm`, 3, 'end', GUIDE),
-  );
+  // Dřík s hlavičkou = patice (tak se jmenuje i značka na listech). Tloušťku kůže nepsat:
+  // ilustrace je stejná pro kůži těla 1,2 i 1,5 mm.
+  out.push(text(cx - stripW / 2 - 2, panelY - stripH, 'patice = dřík + hlavička', 3, 'end', GUIDE));
   out.push(
     text(
       80,
@@ -383,7 +379,7 @@ export function buildDrukSvg(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD_HOLDER
       GUIDE,
     ),
   );
-  out.push(text(80, 94, 'osazovat na kovadlince ze sady', 3.2, 'middle', ACCENT));
+  out.push(text(80, 94, 'osazovat aplikátorem z balení, podle návodu', 3.2, 'middle', ACCENT));
 
   return svgWrap(out);
 }

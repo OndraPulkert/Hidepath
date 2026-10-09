@@ -300,6 +300,7 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
       );
       expect(waits.map((x) => x.at)).toEqual([
         '2/dry-and-inspect/dry-overnight',
+        '4/fold-around-content/fold-dry',
         '4/unfold-roughen-glue/glue-front-inner',
         '4/unfold-roughen-glue/glue-inner-back',
         '4/try-edge-paint/edge-paint-dry',
@@ -307,12 +308,13 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
         '6/form-dimple/dry-overnight',
         '6/dye-burnish-pocket-edges/edge-paint-dry',
         '6/glue-pocket/glue-pocket',
+        '7/press-and-clamp/fold-dry',
         '7/roughen-and-glue-bottom/glue-front-inner',
         '7/roughen-and-glue-bottom/glue-inner-back',
         '8/dye-and-burnish-edges/edge-paint-dry',
       ]);
       for (const { at, body, w } of waits) {
-        if (w.id === 'dry-overnight') {
+        if (w.id === 'dry-overnight' || w.id === 'fold-dry') {
           // Lekce ani zadání hodiny neuvádí („nejlépe přes noc“) – jen odhad k úpravě, ne „Podle lekce“.
           expect(body, at).toContain('přes noc');
           expect([w.minutes, w.maxMinutes, w.basis], at).toEqual([720, undefined, 'estimate']);

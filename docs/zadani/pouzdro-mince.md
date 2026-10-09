@@ -1,4 +1,4 @@
-# Pouzdro na karty s vsazenou mincí – střih (NÁVRH v4.12)
+# Pouzdro na karty s vsazenou mincí – střih (NÁVRH v4.14)
 
 Stav: **návrh k ověření na papíru a odřezku**, ne lekce. Vznikl 2026-09-18 na přání autora podle
 produktu, videa a fotek Red Forest Leather (rozbor v `docs/content/notes-vybaveni.md`, „Námět:
@@ -156,8 +156,9 @@ shora je vidět jen schodek ≈ 2,6 mm na horní hraně.
 - Barva na hrany (barvená useň má světlý řez; nejdřív zkouška na odřezku v lekci 4), smirkový
   papír, leštidlo na hrany. Odstín k Blu v katalogu ověřený není (ověřená jen Fiebing's Edge Kote
   hnědá, tmavě hnědá a černá) – v nákupním plánu mimo součet, cena neověřena.
-- Maskovací páska je v projektu povinná: šablona PÁS (hlavní způsob), list KAPSA, ohraničení
-  nezapečetěného proužku.
+- Maskovací páska je v projektu povinná: šablona PÁS (hlavní způsob), list KAPSA (lekce 2 a 6),
+  cvičný list (lekce 4), šablona s okénkem z 2. výtisku PÁS (krok 4 / lekce 6), ohraničení
+  nezapečetěného proužku a čáry zkrácení jazyka na pásce (krok 7 / lekce 8).
 
 ### Druk 12 mm (Prym Anorak) – kontrola modelem (v4.11)
 
@@ -228,7 +229,7 @@ kůže jako tělo. Juchtová A5 1,2 mm jen na dva odřezky 57,5 × 57,5 pro tvar
    (ohyb B ± 3 mm) spojit na rubu taky před řezem; po řezu v tomto pásu ztenčit z rubu na 1 mm.
    Na listu PÁS jsou kroužky ohybů a okrajů šrafy 2 mm za čarou řezu v odpadu, nahoře i dole na
    prodloužení čar (ohyb A nahoře ve výřezu na prst, nad jeho dnem): na líci pouzdra tak žádný vpich
-   nezůstane. Místo pro kapsu se nepropichuje (okénko z 2. výtisku, krok 4). Střed patice je křížek
+   nezůstane. Rohy kapsy se nepropichují (místo určí okénko z 2. výtisku, krok 4). Střed patice je křížek
    (zakryje ho druk); na papírovém modelu má křížek patice i klobouček.
    Pak prosekat otvory dna na všech třech panelech (naplocho): **přední panel z líce, zadní
    a vnitřní z rubu** (podle propíchnutých teček). Ohyb panel zrcadlově převrátí; šikmé otvory
@@ -262,8 +263,12 @@ kůže jako tělo. Juchtová A5 1,2 mm jen na dva odřezky 57,5 × 57,5 pro tvar
    35,55 / 8,5): kapsu s už
    proseknutými otvory přilepit do okénka šablony z 2. výtisku listu PÁS (vystřižený obrys pásu
    a okénko po vnějším obrysu kapsy (nahoře čárkovaně, jinde vnější okraj šrafy G1), přilepený na pás hrany na hrany; polohu ještě ověřit
-   pravítkem; okraj okénka je zároveň hranice lepidla), vidličkami proseknout jejími otvory i přední panel
-   (naplocho na desce) a přišít. Osadit patici druku **naplocho, před složením** – dřík z rubu,
+   pravítkem podle toho, co je na líci vidět: 41,8 mm od rovné horní hrany u ohybu B, boky
+   10,75 mm od krajních otvorů dna, u mince 40 mm 35,55 / 4,5; okraj okénka je zároveň hranice
+   lepidla). Kapsu v okénku nechat ležet, šídlem lehce propíchnout jejími otvory švu do líce panelu
+   (vpichy = vnitřní hranice pruhu G1; leží pod kapsou a zmizí v otvorech – ověřit na odřezku),
+   kapsu sundat, slepit, vidličkami proseknout jejími otvory i přední panel (naplocho na desce,
+   rohy dvojhrotem) a přišít. Pak zkusit minci zasunout shora do důlku a zase vysunout. Osadit patici druku **naplocho, před složením** – dřík z rubu,
    hlavička na líci předního panelu (druk předtím vyzkoušený na odřezku); volitelnou průchodku
    do vnitřního panelu stejně.
 5. **Ohyby:** pásma ohybů navlhčit, nejdřív vnitřní panel ohybem B za přední, pak zadní ohybem A
@@ -285,7 +290,8 @@ kůže jako tělo. Juchtová A5 1,2 mm jen na dva odřezky 57,5 × 57,5 pro tvar
 7. Vložit karty i bankovky, které nosíš, přehnout jazyk, obtisknout patici (obtisk na rubu jazyka
    určuje střed kloboučku, kružnice na šabloně je jen orientační; střed doporučeně propíchnout
    šídlem na líc – vyzkoušeno předem na odřezku v lekci 3), osadit klobouček, ověřit, že druk drží a jde znovu
-   rozepnout, jazyk zkrátit 11 mm za střed kloboučku (měřit na líci) a zaoblit R10.
+   rozepnout, jazyk zkrátit 11 mm za střed kloboučku (měřit na líci, čáru i rohy R10 kreslit
+   na maskovací pásku přes konec jazyka, ne na líc) a zaoblit R10.
 8. Dno přebrousit do roviny (tři vrstvy), srazit z obou vnějších líců (brusným papírem, ořezávač hran jen
    pokud ho máš), obarvit (podle návodu na obalu, před leštěním nechat zaschnout – ověřit na
    odřezku) a zaleštit vnější hrany včetně zkráceného konce jazyka. U volitelné
@@ -413,3 +419,12 @@ doplnit ručně, do generátoru to nepatří.
   na hrany; okraj okénka je i hranice lepidla G1), poloha se ještě ověří pravítkem. List PÁS se
   tiskne 2×. Cvičný proužek: kus kůže 130 × 50 (5 mm odpadu nahoře i dole na kroužky), řeže se
   po celém obrysu, kroužky konců švu a přiložení na dolní hranu kůže odpadly.
+- v4.14 (2026-10-09, kontrola vyrobitelnosti): výtisk na značky KAPSA i cvičný list mají
+  **čárkovaný obrys = velikost kusu kůže** (57,5 × 57,5, u mince 40 mm 70 × 70; proužek
+  130 × 50) – vystřihnout po něm, položit na líc hranami na hrany a pásku přehnout přes hranu na
+  rub (papír větší než kůže páska ke kůži nepřidrží). Výkres otvoru formy má čárkovaný čtverec
+  5 × 5 cm (u 44 mm 6 × 6 cm) se středem v křížku os; na desku se lepí křížkem doprostřed šířky.
+  Šev kapsy: rohy dvojhrotem po jednom otvoru. Poloha kapsy se kontroluje od toho, co je na líci
+  vidět (rovná horní hrana u ohybu B, krajní otvory dna), krok 4 doplněn o vpichy čáry švu pod
+  kapsou a zkoušku zasunutí mince. Schnutí ohybů přes noc (lekce 4 a 7). Obtisk kloboučku se
+  propichuje z rubu narovnaného jazyka; zkrácení jazyka a rohy R10 se kreslí na pásku.

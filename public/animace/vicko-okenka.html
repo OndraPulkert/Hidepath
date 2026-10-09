@@ -510,7 +510,7 @@ add('B', 'Poloha výřezu pro palec', 'lekce 5',
   }, { capA: 'Hotový výřez: dno Ø 10, rovné boky, rohy ústí R1.' });
 
 add('B', 'Přiložte šablonu výřezu na osu', 'lekce 5',
-  'Díl položte lícem F nahoru na tvrdou desku. Přiložte šablonu výřezu pro palec (lekce 2): horní hranu šablony na horní hranu F, křížek šablony na propíchnutý střed.',
+  'Díl položte lícem F nahoru na tvrdou desku. Přiložte šablonu výřezu pro palec (lekce 2): horní hranu šablony na horní hranu F, oblouk U kolem propíchnutého středu – vpich musí být v otvoru U uprostřed oblouku.',
   8000, (t) => {
     C = camera(CAM_N, ...VB.main);
     let s = fStrip();
@@ -529,21 +529,21 @@ add('B', 'Přiložte šablonu výřezu na osu', 'lekce 5',
     s += op(seg(t, 0.62, 0.74), circ(50.5, 55, 1.2, 'ring') + line(57.5, 55, 57.5, 62, 'dim') + Tm(58.3, 58.5, '7,0', {}));
     s += Tm(50.5, 48.3, 'vpich uprostřed oblouku', { a: 'middle' });
     return s;
-  }, { capA: 'Otvor šablony zvětšeně.', tip: 'Tip: propíchnutý střed má být uprostřed oblouku šablony; 7,0 přeměřte pravítkem.' });
+  }, { capA: 'Otvor šablony zvětšeně.', tip: 'Tip: 7,0 od horní hrany F přeměřte pravítkem.' });
 
-add('B', 'Vysekněte Ø 10 přes šablonu', 'lekce 5',
-  'Výsečníkem Ø 10 vysekněte přes šablonu dno výřezu; šablona zůstává přiložená. Prsty mějte u spodku výsečníku, palička dopadá na horní konec.',
+add('B', 'Vysekněte Ø 10', 'lekce 5',
+  'Šablonu sejměte, výsečník Ø 10 nasaďte hrotem na vpich a vysekněte dno výřezu. Prsty mějte u spodku výsečníku, palička dopadá na horní konec.',
   7500, (t) => {
     C = camera(CAM_N, ...VB.main);
     let s = fStrip();
     const h = t > 0.55;
     s += notchDraw({ hole: h });
-    s += notchTemplate(0, 0, 1 - seg(t, 0.85, 0.95));
+    s += notchTemplate(0, 0, 1 - seg(t, 0.0, 0.08));
     s += punchTop(50.5, 55, 10, seg(t, 0.1, 0.2) * (1 - seg(t, 0.6, 0.7)));
     s += op(seg(t, 0.15, 0.25) * (1 - seg(t, 0.6, 0.7)), T(X(58), Y(47), 'výsečník Ø 10', {}));
     s += op(seg(t, 0.7, 0.8), line(58, 60, 58, 62, 'dim') + T(X(58) + em(0.35), Y(61), '2', {}));
     return s;
-  }, (t) => punchSection(t, 10, false, 0.55, true), { capA: 'Řez středem díry, tloušťky v měřítku; šablona navrchu.', tip: 'Tip: šablonu sejměte až po vyseknutí.' });
+  }, (t) => punchSection(t, 10, false, 0.55), { capA: 'Řez středem díry, tloušťky v měřítku.' });
 
 add('B', 'Řízněte od hrany F k tečnám', 'lekce 5',
   'Řízněte nožem rovně od horní hrany F k tečnám díry. Přesně na tečně zastavte. Nůž veďte tahem od prstů volné ruky.',
@@ -761,7 +761,7 @@ function fStripMini() {
   return poly([[30, 40], [71, 40], [71, top], [30, top]], 'kzp');
 }
 // řez napříč při sekání: deska, useň (a D2), výsečník (trubka), palička
-function punchSection(t, d, withD2, hitAt, tpl = false) {
+function punchSection(t, d, withD2, hitAt) {
   C = camera({ cx: 0, cy: 7.5, k: 2.25 }, ...VB.aside);
   const th = withD2 ? M.t + M.tD : M.t, r = d / 2, w = 1.1;
   const hit = seg(t, hitAt - 0.12, hitAt), lift = seg(t, hitAt + 0.08, hitAt + 0.3);
@@ -777,7 +777,6 @@ function punchSection(t, d, withD2, hitAt, tpl = false) {
   };
   if (!cut) s += lay(-13, 13);
   else { s += lay(-13, -r) + lay(r, 13); }
-  if (tpl) s += op(1, rect(-13, th, -r - 0.05, th + 0.35, 'paper') + rect(r + 0.05, th, 13, th + 0.35, 'paper'));
   // trubka výsečníku
   const top = zb + 15;
   s += poly([[-r - w, zb + 1.4], [-r, zb], [-r, top], [-r - w, top]], 'steel') + poly([[r + w, zb + 1.4], [r, zb], [r, top], [r + w, top]], 'steel');

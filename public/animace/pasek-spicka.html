@@ -213,7 +213,10 @@ function matBg(x0=-60,x1=260,y0=-60,y1=60){let d='';for(let x=Math.ceil(x0/10)*1
 function padBg(x0,x1,y0,y1){return `<rect x="${x0}" y="${y0}" width="${x1-x0}" height="${y1-y0}" rx="3" fill="var(--pad)" stroke="var(--pad-d)" stroke-width="${sw(.3)}"/>`}
 function shims(op=1){if(op<=0)return '';const a=-H-1-26,b=H+1;
   return `<g opacity="${f(op)}"><rect x="-60" y="${a}" width="310" height="26" fill="var(--wood)" stroke="var(--wood-d)" stroke-width="${sw(.3)}"/><rect x="-60" y="${b}" width="310" height="26" fill="var(--wood)" stroke="var(--wood-d)" stroke-width="${sw(.3)}"/></g>`}
-function tapes(op=1){if(op<=0)return '';let s='';for(const x of [-30,130,212])s+=`<rect x="${x}" y="${-H-14}" width="14" height="${2*H+28}" fill="var(--tape)" stroke="var(--tape-d)" stroke-width="${sw(.2)}" opacity=".95"/>`;return `<g opacity="${f(op)}">${s}</g>`}
+// oboustranná páska jen pod podložkami (vykukuje za jejich vnější hranou), ne pod pásem
+function tapes(op=1){if(op<=0)return '';let s='';for(const x of [-30,130,212])for(const y of [-H-30,H+4])s+=`<rect x="${x}" y="${y}" width="14" height="26" fill="var(--tape)" stroke="var(--tape-d)" stroke-width="${sw(.2)}" opacity=".95"/>`;return `<g opacity="${f(op)}">${s}</g>`}
+// papírová páska přes rub pásu až na podložky, vedle destičky na straně přezky
+function paperTape(op=1){if(op<=0)return '';return `<rect x="-17" y="${-H-14}" width="12" height="${2*H+28}" fill="var(--paper)" fill-opacity=".92" stroke="var(--paper-edge)" stroke-width="${sw(.25)}" opacity="${f(op)}"/>`}
 function belt(o={}){
   const shape=o.shape||'raw', face=o.face||'rub';
   const fill=face==='rub'?'url(#rubP)':'url(#licS)', st=face==='rub'?'var(--rub-d)':'var(--lic-d)';
@@ -407,7 +410,7 @@ add('A','Stačí pás?','Od značky ke konci pásu musí zbýt aspoň vzdálenos
 },{v:'LÍC'});
 
 // B1 — volba řady
-add('B','Řada 1 nebo 2, nebo list 2','Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když tabulka „Váš pásek“ ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo jste zvolili jen listy, vytiskněte list 2 pro váš pásek na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm. Řádek „List 2“ v tabulce „Váš pásek“ ukazuje, jestli list vyjde na výšku, na šířku, nebo když se na jeden list nevejde, na 2 listy na šířku (2a a 2b).',9000,t=>{
+add('B','Řada 1 nebo 2, nebo list 2','Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když tabulka „Váš pásek“ ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo destička neprošla kontrolou, vytiskněte list 2 pro váš pásek na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm. Řádek „List 2“ v tabulce „Váš pásek“ ukazuje, jestli list vyjde na výšku, na šířku, nebo když se na jeden list nevejde, na 2 listy na šířku (2a a 2b).',9000,t=>{
   const c=CAM_PL;
   let s=withCam(c,()=>`<rect x="-120" y="-120" width="500" height="430" fill="var(--board)"/>`+plate(0)+
     fade(seg(t,.08,.16)*(1-seg(t,.4,.46)),`<rect x="2" y="${ROW1-29}" width="211" height="58" rx="3" fill="none" stroke="var(--accent)" stroke-width="${sw(.6)}"/>`)+
@@ -426,13 +429,13 @@ add('B','Řada 1 nebo 2, nebo list 2','Hrot: řada 1. Zaoblený konec: řada 2, 
 },null);
 
 // B2 — přiložení řady 1
-add('B','Přiložte na prostřední dírku','Pás a podložky přilepte jako v lekci 4, rubem nahoru. Prostřední otvor destičky (mezi dvěma křížky) položte na propíchnutou značku z lekce 5, hrany pásu na linky vaší šířky (šířka bez linky: podle příčné stupnice). Na linky se dívejte svisle dolů. Destičku nikdy neobracejte. Zkontrolujte, že obtahovaný tvar končí přesně na obou hranách pásu. Když přesahuje nebo nedosahuje, máte špatný oblouk nebo linku.',13000,t=>{
+add('B','Přiložte na prostřední dírku','Pás a podložky upevněte jako v lekci 4, rubem nahoru: oboustranná páska jen pod podložky, pás přidržte papírovou páskou přes rub vedle destičky na straně přezky. Prostřední otvor destičky (mezi dvěma křížky) položte na propíchnutou značku z lekce 5, hrany pásu na linky vaší šířky (šířka bez linky: podle příčné stupnice). Na linky se dívejte svisle dolů. Destičku nikdy neobracejte. Zkontrolujte, že obtahovaný tvar končí přesně na obou hranách pásu. Když přesahuje nebo nedosahuje, máte špatný oblouk nebo linku.',13000,t=>{
   const z1=es(t,.44,.54)*(1-es(t,.66,.76)), z2=es(t,.76,.86);
   let c=camL(CAM_ALL,CAM_MID,z1); if(z2>0) c=camL(CAM_ALL,CAM_TIP,z2);
   const sl=1-es(t,.18,.4);
-  let s=withCam(c,()=>boardBg()+tapes(seg(t,.02,.08))+shims(seg(t,.06,.14))+belt({mid:true})+plate(ROW1,30*sl,70*sl,seg(t,.18,.24))+
+  let s=withCam(c,()=>boardBg()+tapes(seg(t,.02,.08))+shims(seg(t,.06,.14))+belt({mid:true})+paperTape(seg(t,.1,.16))+plate(ROW1,30*sl,70*sl,seg(t,.18,.24))+
     hiMid(seg(t,.46,.52)*(1-seg(t,.68,.72)))+hiLines(146,seg(t,.56,.6)*(1-seg(t,.68,.72))));
-  if(t<.42){s+=fade(seg(t,.02,.08)*(1-seg(t,.18,.24)),pill(131,8,'oboustranná páska pod pásem i podložkami','ts','end'));
+  if(t<.42){s+=fade(seg(t,.02,.08)*(1-seg(t,.18,.24)),pill(131,8,'oboustranná páska jen pod podložkami, přes rub papírová','ts','end'));
     const [sx,sy]=tv(c,-20,-H-14);s+=fade(seg(t,.08,.14)*(1-seg(t,.18,.24)),pill(Math.max(sx,2),sy,'podložky stejně silné jako pás','ts'));}
   if(z1>.95){const [mx,my]=tv(c,MID,0),[cx1,cy1]=tv(c,MID,-12),[lx,ly]=tv(c,96,-H);
     s+=fade(seg(t,.5,.54),pill(mx+6,my+4.5,'otvor na značce','ta')+pill(cx1+5,cy1-.5,'křížky','ts'));
@@ -498,7 +501,7 @@ function sheetShape(){return `M${X0} ${-H} L${f(FAR)} ${-H} L${f(APEX-TF)} ${f(-
 function sheetPrint(){let s=`<path d="${pd(HROT_TR)}" fill="none" stroke="var(--print)" stroke-width="${sw(.3)}"/><path d="M${SHEET_END} ${-H} H${f(FAR)} M${SHEET_END} ${H} H${f(FAR)}" stroke="var(--print)" stroke-width="${sw(.3)}"/>`;
   for(const x of HOLES){const col=x===MID?'var(--accent)':'var(--print)';s+=`<circle cx="${x}" cy="0" r="${HD/2}" fill="none" stroke="${col}" stroke-width="${sw(x===MID?.4:.25)}"/><path d="M${x-1.6} 0 h3.2 M${x} -1.6 v3.2" stroke="${col}" stroke-width="${sw(.2)}"/>`;}
   return s}
-add('D','Vytiskněte list 2','Když tabulka „Váš pásek“ ukazuje u této řady „ne“, nebo jste zvolili jen listy, vytiskněte list 2 pro váš pásek na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm. List vystřihněte po obrysu konce. Řádek „List 2“ v tabulce „Váš pásek“ ukazuje, jestli list vyjde na výšku, na šířku, nebo když se na jeden list nevejde, na 2 listy na šířku (2a a 2b).',10000,t=>{
+add('D','Vytiskněte list 2','Když tabulka „Váš pásek“ ukazuje u této řady „ne“, nebo destička neprošla kontrolou, vytiskněte list 2 pro váš pásek na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm. List vystřihněte po obrysu konce. Řádek „List 2“ v tabulce „Váš pásek“ ukazuje, jestli list vyjde na výšku, na šířku, nebo když se na jeden list nevejde, na 2 listy na šířku (2a a 2b).',10000,t=>{
   // A4 na výšku jako vygenerovaný list 2: pás vlevo (x 22–62 mm), vrchol 45 mm od horní hrany, čtverec vpravo nahoře; měřítko 0,27
   const k=.27, ox=14, oy=4;
   let s=`<rect x="${ox}" y="${oy}" width="${f(210*k)}" height="${f(297*k)}" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3" ${SHADOW}/>`;
@@ -524,7 +527,7 @@ add('D','Vytiskněte list 2','Když tabulka „Váš pásek“ ukazuje u této �
 },null);
 
 // D2 — list 2 na pásu
-add('D','Přiložte list a propíchněte','S listem 2: list vystřihněte po obrysu konce a střed prostřední dírky propíchněte šídlem. Hrot šídla dejte do značky, list po šídle sesuňte na pás, boky srovnejte na hrany pásu a list přilepte páskou. Listy 2a a 2b mají prostřední dírku oba: přiložte je tak každý zvlášť. Středy dírek propíchněte a obrys obtáhněte šídlem po okraji listu.',12000,t=>{
+add('D','Přiložte list a propíchněte','S listem 2: list vystřihněte po obrysu konce a střed prostřední dírky propíchněte šídlem. Hrot šídla dejte do značky, list po šídle sesuňte na pás, boky srovnejte na hrany pásu a list přilepte papírovou páskou. Listy 2a a 2b mají prostřední dírku oba: přiložte je tak každý zvlášť. Středy dírek propíchněte a obrys obtáhněte šídlem po okraji listu.',12000,t=>{
   const z=es(t,.48,.58);const c=camL(CAM_HOLES,CAM_TIP,z);
   const sl=1-es(t,.02,.2);
   const pricks=RING_ORDER.map((x,i)=>[x,seg(t,.26+i*.05,.29+i*.05)]);

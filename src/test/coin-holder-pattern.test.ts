@@ -202,11 +202,15 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
     expect(window).not.toBeNull();
     expect(Number(window![1]) - coin[0]!.cx).toBeCloseTo(rw, 2);
     expect(Number(window![2])).toBeCloseTo(coin[0]!.cy, 2);
-    // Střed mince v kapse podle modelu (kapsa začíná na okraji listu pod nadpisem, o přesah
-    // os níž, aby horní konec svislé osy nepřeškrtl nadpis).
+    // Střed mince v kapse podle modelu: kapsa je vystředěná v čárkovaném čtverci velikosti kusu
+    // kůže (forma − 4 mm), který začíná na okraji listu 1,5 mm pod mezerou pro nadpis.
     const m2 = 10;
-    expect(coin[0]!.cx).toBeCloseTo(m2 + L.coinCentreXMm, 2);
-    expect(coin[0]!.cy).toBeCloseTo(m2 + 4 + 4 + L.coinCentreYMm, 2);
+    const piece = L.formPlateMm - 4;
+    expect(coin[0]!.cx).toBeCloseTo(m2 + (piece - L.pocketWidthMm) / 2 + L.coinCentreXMm, 2);
+    expect(coin[0]!.cy).toBeCloseTo(
+      m2 + 4 + 1.5 + (piece - L.pocketHeightMm) / 2 + L.coinCentreYMm,
+      2,
+    );
     const seamHoles = Number(/šev (\d+) otvorů od středu dna/.exec(pocketSheet ?? '')?.[1]);
     expect(seamHoles % 2).toBe(1);
     expect(cs.filter((c) => near(c.r, 0.45)).length).toBe(seamHoles);
@@ -217,8 +221,9 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
   it('list kapsy: 4 konce os leží ≥ 3 mm vně obrysu kapsy a uvnitř odřezku i listu', () => {
     // Konce os se propichují na LÍC; musí odpadnout s odřezkem, jinak by v (otevřené horní)
     // hraně kapsy zůstal zářez.
-    const kx = 10;
-    const ky = 10 + 4 + 4;
+    const piece = L.formPlateMm - 4;
+    const kx = 10 + (piece - L.pocketWidthMm) / 2;
+    const ky = 10 + 4 + 1.5 + (piece - L.pocketHeightMm) / 2;
     const ax =
       /<path d="M([\d.]+) ([\d.]+) H([\d.]+) M([\d.]+) ([\d.]+) V([\d.]+)"[^>]*stroke-dasharray="3 1 0.6 1"/.exec(
         pocketSheet ?? '',
@@ -243,10 +248,21 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
       bottom - (ky + L.pocketHeightMm),
     ];
     for (const d of outside) expect(d).toBeGreaterThanOrEqual(3);
-    // Kapsa vystředěná na odřezku ≥ (forma − 4) mm: konce os se na něj musí vejít.
-    const blank = L.formPlateMm - 4;
+    // Kapsa vystředěná na odřezku ≥ (forma − 4) mm: konce os se na něj musí vejít – i do
+    // čárkovaného čtverce, po kterém se výtisk na značky vystřihne.
+    const blank = piece;
     expect(right - left).toBeLessThanOrEqual(blank - 2);
     expect(bottom - top).toBeLessThanOrEqual(blank - 2);
+    const sq = /class="paper-cut-kapsa" d="M([\d.]+) ([\d.]+) H([\d.]+) V([\d.]+) /.exec(
+      pocketSheet ?? '',
+    );
+    expect(sq).not.toBeNull();
+    const [sx0, sy0, sx1, sy1] = sq!.slice(1).map(Number) as [number, number, number, number];
+    expect([sx1 - sx0, sy1 - sy0]).toEqual([piece, piece]);
+    expect(left).toBeGreaterThan(sx0 + 1);
+    expect(right).toBeLessThan(sx1 - 1);
+    expect(top).toBeGreaterThan(sy0 + 1);
+    expect(bottom).toBeLessThan(sy1 - 1);
     // Uvnitř listu a pod nadpisem (účaří 12,5 mm).
     expect(left).toBeGreaterThanOrEqual(0);
     expect(right).toBeLessThanOrEqual(210);

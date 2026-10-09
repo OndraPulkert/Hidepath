@@ -3,13 +3,13 @@ import { describe, expect, it } from 'vitest';
 import {
   BLOCK_ORIGIN,
   CALIBRATION_Y,
+  PIECE_MM,
   PRACTICE_SHEET,
-  ROUGH_MARGIN_MM,
-  STRIP_ORIGIN,
   buildCoinHolderPracticeSvg,
   practiceFileStem,
   prickPoints,
   skivePrickPoints,
+  stripOrigin,
 } from './coin-card-holder-practice.ts';
 import { coinCardHolderLayout } from '../src/lib/geometry/coin-card-holder.ts';
 import {
@@ -70,23 +70,37 @@ describe.each([1.2, 1.5])('cvičný list pro kůži %s mm', (t) => {
     expect(svg).toContain('musí měřit přesně 50 mm');
   });
 
-  it('obrys proužku má rozměry z modelu a leží uvnitř okraje 1,5 cm', () => {
+  it('papír na vystřižení = kus kůže 130 × 50 mm, obrys proužku v něm vystředěný', () => {
+    const STRIP_ORIGIN = stripOrigin(P);
     const [[x, y, h1, v, h2]] = nums(
       /class="outline" d="M([\d.]+) ([\d.]+) H([\d.]+) V([\d.]+) H([\d.]+) Z"/g,
       svg,
     );
-    expect(x).toBe(STRIP_ORIGIN.x);
+    expect(x).toBeCloseTo(STRIP_ORIGIN.x, 6);
     expect(h1 - x).toBeCloseTo(P.stripLengthMm, 6);
     expect(v - y).toBeCloseTo(40, 6);
     expect(h2).toBe(x);
-    expect(x - BLOCK_ORIGIN.x).toBe(ROUGH_MARGIN_MM);
-    expect(BLOCK_ORIGIN.x + P.stripLengthMm + 2 * ROUGH_MARGIN_MM).toBeLessThanOrEqual(
-      PRACTICE_SHEET.widthMm - PRACTICE_SHEET.marginMm,
+    const [[bx, by, bh1, bv]] = nums(
+      /class="rough-margin" d="M([\d.]+) ([\d.]+) H([\d.]+) V([\d.]+) /g,
+      svg,
     );
-    expect(BLOCK_ORIGIN.y + 40 + 2 * ROUGH_MARGIN_MM).toBeLessThan(CALIBRATION_Y);
+    expect([bx, by]).toEqual([BLOCK_ORIGIN.x, BLOCK_ORIGIN.y]);
+    expect([bh1 - bx, bv - by]).toEqual([
+      PRACTICE_STRIP.pieceLengthMm,
+      PRACTICE_STRIP.pieceHeightMm,
+    ]);
+    expect(PIECE_MM).toEqual({ w: 130, h: 50 });
+    // Papír není větší než kůže: páska jde přes hranu papíru i kůže na rub.
+    expect(x - bx).toBeCloseTo(P.pieceReserveEachEndMm, 2);
+    expect(y - by).toBeCloseTo(P.pieceReserveTopBottomMm, 2);
+    expect(svg).toContain('pásku přehněte na rub');
+    expect(bx).toBeGreaterThanOrEqual(PRACTICE_SHEET.marginMm);
+    expect(bx + PIECE_MM.w).toBeLessThanOrEqual(PRACTICE_SHEET.widthMm - PRACTICE_SHEET.marginMm);
+    expect(by + PIECE_MM.h).toBeLessThan(CALIBRATION_Y);
   });
 
   it('čáry ohybů ohraničují pásma A a B, 18 teček otvorů na čáře švu 3,5 mm od dolní hrany', () => {
+    const STRIP_ORIGIN = stripOrigin(P);
     const folds = nums(/class="fold" d="M([\d.]+) /g, svg).map(([x]) => x - STRIP_ORIGIN.x);
     expect(folds[1] - folds[0]).toBeCloseTo(P.foldAMm, 6);
     expect(folds[3] - folds[2]).toBeCloseTo(P.foldBMm, 6);
@@ -103,10 +117,11 @@ describe.each([1.2, 1.5])('cvičný list pro kůži %s mm', (t) => {
   it('přední panel z líce, zadní a vnitřní z rubu; list jde na líc', () => {
     expect(svg.match(/>otvory z LÍCE</g)?.length).toBe(1);
     expect(svg.match(/>otvory z RUBU</g)?.length).toBe(2);
-    expect(svg).toContain('páskou na LÍC kůže');
+    expect(svg).toContain('Položte ho na LÍC kůže');
   });
 
   it('šrafa ztenčení jen u kůže 1,5 mm: ohyb B a 3 mm na obě strany', () => {
+    const STRIP_ORIGIN = stripOrigin(P);
     const zone = nums(/class="skive-zone" x="([\d.]+)" y="[\d.]+" width="([\d.]+)"/g, svg);
     if (t === 1.2) {
       expect(zone).toHaveLength(0);
@@ -119,6 +134,7 @@ describe.each([1.2, 1.5])('cvičný list pro kůži %s mm', (t) => {
   });
 
   it('kroužky: 2 mm za čarou řezu na prodloužení čar ohybů, u 1,5 mm i okrajů šrafy', () => {
+    const STRIP_ORIGIN = stripOrigin(P);
     const pricks = nums(/class="prick" cx="([\d.]+)" cy="([\d.]+)"/g, svg);
     const skive = skivePrickPoints(P);
     expect(pricks).toHaveLength(8 + skive.length);

@@ -109,14 +109,14 @@ skript `scripts/belt-buckle-end.ts` je jen zapisuje. Aplikace je kreslí v prohl
 (formulář „Váš pásek“, `browserGenerator: 'belt-config'`, výpočet v
 [`src/lib/patterns/belt-config.ts`](../../src/lib/patterns/belt-config.ts)).
 
-| Věc                     | Stav                                                                                                                                                    |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Šířka                   | aplikace 28–45 mm (celé mm); skript dál `--width` 15–80 mm                                                                                              |
-| Tloušťka                | vstup 3,0–4,0 mm, libovolná změřená hodnota; mění délku poutka na listu 1, dřík nýtu je ve výsledcích                                                   |
-| Konec                   | list 2 kreslí hrot i zaoblený konec (půlkruh r = šířka/2)                                                                                               |
-| Počet dírek             | do 195,6 mm od konce list na výšku; do 258 mm na šířku (7 dírek); dál aplikace čísla spočítá a vytiskne jen list 1 (dírky a konec „značte podle čísel“) |
-| Výchozí listy 35/40 mm  | přegenerované `pnpm pattern:belt-end --multi` (hlídá `scripts/generator-golden.test.ts`); texty ve vykání                                               |
-| Generování v prohlížeči | hotové                                                                                                                                                  |
+| Věc                     | Stav                                                                                                                                                                                                                 |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Šířka                   | aplikace 28–45 mm (celé mm); skript dál `--width` 15–80 mm                                                                                                                                                           |
+| Tloušťka                | vstup 3,0–4,0 mm, libovolná změřená hodnota; mění délku poutka na listu 1, dřík nýtu je ve výsledcích                                                                                                                |
+| Konec                   | list 2 kreslí hrot i zaoblený konec (půlkruh r = šířka/2)                                                                                                                                                            |
+| Počet dírek             | do 195,6 mm od konce list na výšku; do 258 mm na šířku (7 dírek); dál dva listy na šířku 2a a 2b (`split`, každý s prostřední dírkou). V mezích formuláře vyjde vždy aspoň `split`; „značte podle čísel“ jen mimo ně |
+| Výchozí listy 35/40 mm  | přegenerované `pnpm pattern:belt-end --multi` (hlídá `scripts/generator-golden.test.ts`); texty ve vykání                                                                                                            |
+| Generování v prohlížeči | hotové                                                                                                                                                                                                               |
 
 ## 7. Kontrola destičky po dodání
 

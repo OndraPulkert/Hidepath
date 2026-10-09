@@ -58,7 +58,7 @@ describe('tisk listů Víčka – formulář je jediný zdroj, staré zápisy se
     expect(note.parentElement).toHaveTextContent(
       'P1 1,0, D1 0,75, D2 0,8, L1 0,9, záloha B1 (ztenčený ohyb dna), k 1,3 (lekce 10)',
     );
-    expect(screen.getByLabelText('P1 (kaštan, useň 1,0), mm')).toHaveValue('1,0');
+    expect(screen.getByLabelText('P1 (useň 1,0), mm')).toHaveValue('1,0');
     expect(screen.getByLabelText('Přepážka D1, mm')).toHaveValue('0,75');
     expect(screen.getByLabelText('Přepážka D2, mm')).toHaveValue('0,8');
     expect(screen.getByLabelText('Podšívka L1, mm')).toHaveValue('0,9');
@@ -129,7 +129,7 @@ describe('tisk listů Víčka – formulář je jediný zdroj, staré zápisy se
 
   it('bez zápisů formulář nepředvyplní a poznámku neukáže', async () => {
     renderApp(routes.template(lidWalletProject.slug));
-    expect(await screen.findByLabelText('P1 (kaštan, useň 1,0), mm')).toHaveValue('1,0');
+    expect(await screen.findByLabelText('P1 (useň 1,0), mm')).toHaveValue('1,0');
     expect(screen.getByLabelText('Přepážka D1, mm')).toHaveValue('');
     expect(screen.queryByText(/Převzato ze zápisníku/)).not.toBeInTheDocument();
   });
@@ -177,7 +177,7 @@ describe('tisk listů Víčka – příznak listů netvrdí „v mezích“ po z
       entry(LID_SHEETS_FIELD_ID, serializeLidSheets(form, false)),
     ]);
     renderApp(routes.template(lidWalletProject.slug), { repositories });
-    const p1 = await screen.findByLabelText('P1 (kaštan, useň 1,0), mm');
+    const p1 = await screen.findByLabelText('P1 (useň 1,0), mm');
     await user.clear(p1);
     await user.type(p1, '1,1');
     const d1 = screen.getByLabelText('Přepážka D1, mm');

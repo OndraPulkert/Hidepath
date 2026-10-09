@@ -432,7 +432,7 @@ export function lidMaxDividerMm(spec: LidWalletSpec): number | null {
  * JSON, lekce ho jen zobrazují).
  */
 export interface LidGeneratorForm {
-  /** Změřená P1 z usně 1,0 (kaštan). */
+  /** Změřená P1 z usně 1,0. */
   p1: string;
   /** Záloha A: celý P1 z usně 0,8 (do listů jde `p1BackupA`). */
   backupA: boolean;

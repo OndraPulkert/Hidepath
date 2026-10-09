@@ -271,7 +271,7 @@ const LEGEND = {
   prick: 'propíchnout jehlou skrz papír',
   punch: 'střed výsečníku: propíchnout, pak vyseknout',
   punchDia: 'průměr výsečníku',
-  center: 'střed: na něj přiložit šablonu',
+  center: 'střed: propíchnout, šablonu přiložit na vpich',
   mark: 'ryska: tužkou na bok, přiložit na rysku',
   hole: 'otvor švu: propíchnout, děrovat vidličkou',
   seam: 'čára švu',
@@ -295,7 +295,7 @@ type LegendKey = keyof typeof LEGEND;
  * projektu v aplikaci (`src/content/projects/lid-wallet/parts.ts`), aby se jména nerozešla.
  */
 export const LID_PART_NAMES = {
-  P1: 'tělo z kaštanu',
+  P1: 'hlavní pás z usně',
   F: 'přední stěna',
   B: 'záda',
   D1: 'přepážka karty / bankovky',
@@ -320,7 +320,7 @@ export const LID_SHEET_PARTS: Readonly<Record<1 | 2 | 3 | 4, readonly LidPartId[
 /** Začátek řádku dílů v legendě (testy podle něj řádek najdou). */
 export const LID_PARTS_LINE_PREFIX = 'Díly:';
 
-/** Řádek „Díly: P1 = tělo z kaštanu, F = přední stěna, …“ zalomený po nejvýš `max` znacích. */
+/** Řádek „Díly: P1 = hlavní pás z usně, F = přední stěna, …“ zalomený po nejvýš `max` znacích. */
 export function lidPartsLines(parts: readonly LidPartId[], max = 46): string[] {
   const items = parts.map(
     (id, i) => `${id} = ${LID_PART_NAMES[id]}${i < parts.length - 1 ? ',' : ''}`,
@@ -1636,16 +1636,19 @@ export function buildLidPartsSvg(
     `M${f(X2(L.axisX))} ${f(Y2(d2.y0) - 3)} L${f(X2(L.axisX))} ${f(Y2(d2.y0))}`,
     STYLE.mark,
   );
-  // Osu propíchnout (lekce 4), oba kroužky v lepené ploše (rub D1 nad horní hranou F je vidět):
-  // D1 1,5 mm nad spodní hranou a 1,5 mm pod horní hranou G2 (dno karet), D2 1,5 mm od spodní
-  // a horní hrany (oba na rubu D2 v ploše G3a a G3c, skryté na rubu B).
+  // Osu propíchnout skrz (lekce 4): vpich musí být vidět z líce, přepážky se přikládají lícem
+  // nahoru. Proto jen tam, kde líc na hotovém kusu vidět není: D1 1,5 mm nad spodní hranou a
+  // v ploše G2 pod spodní hranou D2 (+2 mm; přes ni ji zakryjí D2 a záda, okénko bankovek začíná
+  // výš), D2 ve středech výsečníků okénka bankovek (vysekne se v lekci 6).
+  const d1AxisY = Math.min(L.cardFloorY - EDGE_INSET_MM, d2.y0 + 2);
   s.prick(X1(L.axisX), Y1(d1.y0) - EDGE_INSET_MM);
-  s.prick(X1(L.axisX), Y1(L.cardFloorY) + EDGE_INSET_MM);
-  s.text('GUIDE', X1(L.axisX) + 1.6, Y1(L.cardFloorY) + 2.1, `osa ${cz(L.axisX)}`, 1.5, 'start', {
+  s.prick(X1(L.axisX), Y1(d1AxisY));
+  s.text('GUIDE', X1(L.axisX) + 1.6, Y1(d1AxisY) + 0.6, `osa ${cz(L.axisX)}`, 1.5, 'start', {
     halo: true,
   });
-  s.prick(X2(L.axisX), Y2(d2.y1) + EDGE_INSET_MM);
-  s.prick(X2(L.axisX), Y2(d2.y0) - EDGE_INSET_MM);
+  const bw = L.billWindow;
+  s.prick(X2(L.axisX), Y2(bw.y0 + bw.width / 2));
+  s.prick(X2(L.axisX), Y2(bw.y1 - bw.width / 2));
 
   /* L1 a K2 */
   const oy3 = oy2 + d2h + 10;
@@ -1825,7 +1828,7 @@ export function buildLidJigsSvg(
       `tečkovaně šedě: přířez L1 ${cz(spec.liningBlankWidthMm)} × ${cz(spec.liningBlankHeightMm)} (useň ${cz(spec.liningMm)})`,
       `tečkovaně černě: horní hrana L1 ${cz(spec.liningTopAboveMagnetMm)} nad středem magnetu –`,
       '  2. šablonu (výtisk z lekce 4) tu zkrátit, kruh magnetu',
-      `  vyseknout Ø ${cz(spec.magnetDiameterMm)}: doraz pro pásku (lekce 11)`,
+      `  vyseknout Ø ${cz(spec.magnetDiameterMm + 2)}: doraz pro pásku (lekce 11)`,
       'lekce 11: podle obrysu R10 seříznout jazýček',
       '  i s L1 najednou',
       `lekce 11: S7 – ${ln.seamHoles.length} červených otvorů (U kolem magnetu),`,

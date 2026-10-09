@@ -15,15 +15,14 @@
 <defs><marker id="arrowD" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#a2471f"/></marker></defs>
 <text x="83" y="50" font-family="Helvetica, Arial, sans-serif" font-size="3.2" text-anchor="start" fill="#a2471f">cvakne</text>
 <path d="M84 22.5 L102 22.5" stroke="#7a7a7a" stroke-width="0.3" fill="none"/>
-<text x="103" y="23.5" font-family="Helvetica, Arial, sans-serif" font-size="3.2" text-anchor="start" fill="#2b2b2b">klobouček – na líci jazyku</text>
+<text x="103" y="23.5" font-family="Helvetica, Arial, sans-serif" font-size="3.2" text-anchor="start" fill="#2b2b2b">klobouček – na líci jazyka</text>
 <path d="M82.4 35.5 L100.4 35.5" stroke="#7a7a7a" stroke-width="0.3" fill="none"/>
-<text x="101.4" y="36.5" font-family="Helvetica, Arial, sans-serif" font-size="3.2" text-anchor="start" fill="#2b2b2b">zdířka – na rubu jazyku</text>
+<text x="101.4" y="36.5" font-family="Helvetica, Arial, sans-serif" font-size="3.2" text-anchor="start" fill="#2b2b2b">zdířka – na rubu jazyka</text>
 <path d="M82.4 62.5 L100.4 62.5" stroke="#7a7a7a" stroke-width="0.3" fill="none"/>
 <text x="101.4" y="63.5" font-family="Helvetica, Arial, sans-serif" font-size="3.2" text-anchor="start" fill="#2b2b2b">hlavička – na líci předku</text>
 <path d="M83.4 75.5 L101.4 75.5" stroke="#7a7a7a" stroke-width="0.3" fill="none"/>
-<text x="102.4" y="76.5" font-family="Helvetica, Arial, sans-serif" font-size="3.2" text-anchor="start" fill="#2b2b2b">patice (dřík) – na rubu předku</text>
-<text x="43" y="20" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="end" fill="#7a7a7a">1,5 mm</text>
-<text x="43" y="60" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="end" fill="#7a7a7a">1,5 mm</text>
+<text x="102.4" y="76.5" font-family="Helvetica, Arial, sans-serif" font-size="3.2" text-anchor="start" fill="#2b2b2b">dřík – na rubu předku</text>
+<text x="43" y="60" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="end" fill="#7a7a7a">patice = dřík + hlavička</text>
 <text x="80" y="86" font-family="Helvetica, Arial, sans-serif" font-size="3" text-anchor="middle" fill="#7a7a7a">každá polovina svírá jen jednu vrstvu kůže (ne dvě)</text>
-<text x="80" y="94" font-family="Helvetica, Arial, sans-serif" font-size="3.2" text-anchor="middle" fill="#a2471f">osazovat na kovadlince ze sady</text>
+<text x="80" y="94" font-family="Helvetica, Arial, sans-serif" font-size="3.2" text-anchor="middle" fill="#a2471f">osazovat aplikátorem z balení, podle návodu</text>
 </svg>

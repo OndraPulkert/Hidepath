@@ -247,7 +247,7 @@ const entries: GlossaryEntry[] = [
   {
     term: 'V12',
     name: 'zkouška ohybu',
-    description: 'Odřezek kaštanu za mokra přehnout přes vložku; popraská-li líc, platí záloha.',
+    description: 'Odřezek usně P1 za mokra přehnout přes vložku; popraská-li líc, platí záloha.',
     where: 'Lekce 3, před řezem P1.',
     group: 'tests',
   },

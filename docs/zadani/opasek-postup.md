@@ -15,7 +15,8 @@ Text poptávky pro řezárnu je v [`opasek-sablona-poptavka.md`](opasek-sablona-
   a co destička pokryje: [`opasek-parametry.md`](opasek-parametry.md). Čísla níže platí pro
   výchozí pásek **40 mm, 3,5 mm, 5 dírek po 25 mm**.
 - **Konec obě varianty na výběr**: hrot (řada 1) i zaoblený (řada 2).
-- **Přírodní pás bez barvení**, po zaleštění hran balzám nebo sedlářský tuk.
+- **Přírodní, nebo barevný pás.** Barevný má na řezu světlou hranu: obarví se barvou na hrany
+  (lekce 2, 3, 4 a 6). Balzám jen tehdy, když na odřezku vyhoví (u barevného jinak vynechat).
 - **Poutko 12 mm** široké.
 - **Dírky pro trn Ø 5 mm**, nýty a konce oválu Ø 6 mm.
 - **Nic není koupené** → nákupní seznam níže platí celý.
@@ -175,38 +176,45 @@ otvor uprostřed pásu je zkažený pásek bez nápravy.
 3. **Nabarvi a napusť pás, pokud chceš.** Musí to být **teď**: po ohnutí a sešroubování se pod
    ohybem nabarvit nedá a nýty se zamažou. Kdo nebarví, ať pás aspoň po zaleštění přetře
    sedlářským tukem — surová třísločiněná kůže se ušpiní hned.
-4. **Řada 3:** přilož destičku **levou hranou přesně na konec pásu**, obě hrany pásu srovnej na
-   pár linek své šířky. Označ 4 otvory pro nýty, 2 značky linie ohybu a obtáhni ovál.
+4. **Řada 3:** podložky stejně silné jako pás přilep k desce oboustrannou páskou (pod pás ne,
+   na líci by mohla nechat stopu), pás přidrž papírovou páskou přes rub za destičkou. Přilož
+   destičku **levou hranou přesně na konec pásu**, obě hrany pásu srovnej na dvojici linek své
+   šířky. Označ **jen 2 otvory pro nýty blíž ke konci**, 2 značky linie ohybu a obtáhni ovál.
+   Druhou dvojici neznač: označí se po ohnutí skrz první (krok 8).
 5. **Vysekni jen dvojici nýtových otvorů blíž ke konci pásu** (16,8 a 64,5 mm od hrany).
    Spoj obě značky ohybu pravítkem.
-6. **Ovál:** oba konce vysekni průbojníkem Ø 6 mm zarovnaným **na obtažené oblouky**, ne
-   doprostřed rýhy. Boky pak veď nožem **tečně k oběma vyseknutým dírám** — obtažený ovál je
+6. **Ovál:** oba konce vysekni průbojníkem Ø 6 mm postaveným **soustředně s obtaženým
+   obloukem** (rýha leží všude těsně uvnitř břitu), ne břitem doprostřed rýhy. Boky pak veď nožem **tečně k oběma vyseknutým dírám** — obtažený ovál je
    o 0,3 mm z každé strany menší (24,4 × 5,4 místo 25 × 6) a trn by se dřel. **Vnitřní hranu
    oválu** (přes ni jezdí trn) hned srazi a zalešti (Tokonole, kulaté leštítko nebo kolíček),
    dokud je konec rovný: po ohnutí kolem příčky se k ní nedostaneš.
 7. **Navlékni poutko** (oddíl 8) na pás od konce u přezky a posuň ho dál, než po ohnutí dosáhne
    konec pásu (180 mm od konce). Musí to být **před ohnutím**: poutko je smyčka kolem obou vrstev
    a po ohnutí by šlo navléknout jen z druhého konce pásu. Přezku nasaď ozdobnou stranou na stranu
-   líce pásu, trn prostrč oválem. Pak **zónu ohybu navlhči** a ohni ji nahoru přes rub, **rubem
+   líce pásu, trn prostrč oválem. Pak **zónu ohybu navlhči z rubu** vlhkou houbičkou, jen pruh mezi konci oválu (líc
+   nepromáčet: vodní skvrnu ověř v lekci 2 na odřezku), a ohni ji nahoru přes rub, **rubem
    k rubu** (líc zůstane venku, přehnutý konec leží na rubu, při nošení u těla), **kolem příčky
    přezky**, ne přes hranu — 3,5 mm třísločiněné kůže nasucho do malého rádiusu
    popraská.
 8. **Posuň poutko přes přehnutý konec do kapsy mezi otvory** (spojem na přehnutý konec, k tělu),
-   **zatáhni přehnutý konec směrem od přezky a označ druhou dvojici otvorů skrz ty už
-   vyseknuté.** Tohle je
+   **zatáhni přehnutý konec směrem od přezky, ať ohyb těsně obepne příčku, a označ druhou
+   dvojici otvorů skrz ty už vyseknuté:** šídlem kruž po stěně otvoru, na druhé vrstvě vznikne
+   kroužek Ø 6 mm. Tohle je
    nejdůležitější krok celého projektu: registrace levé hrany má chybu, a chyba 1 mm dá po
    přehnutí **2 mm rozdíl** mezi párem otvorů. Do otvoru Ø 6 mm jde dřík Ø 6 mm, tedy nulová
    vůle — 2 mm mimo a nýt neprojde. Značení skrz hotový otvor tuhle chybu ruší.
 9. **Vysekni druhou dvojici a sešroubuj oba nýty.** Poutko nejdřív odsuň ke špičce dál než
-   180 mm od konce, pak konec rozlož. Druhou dvojici vysekni Ø 6 mm **podle značek skrz otvory**;
-   původní značky z destičky ignoruj. Konec ohni zpět kolem příčky s trnem v oválu a poutko vrať
+   180 mm od konce, pak konec rozlož. Druhou dvojici vysekni Ø 6 mm **výsečníkem přesně na
+   vykroužené kroužky**. Konec ohni zpět kolem příčky s trnem v oválu a poutko vrať
    přes přehnutý konec do kapsy. Hlavičku s dutým dříkem dej z líce pásu, šroubek z druhé
    strany, na přehnutém konci (strana k tělu), utáhni plochým šroubovákem. Kapka zajišťovače závitů nebo lak; nýty
-   v nejzatíženějším místě se povolují.
-10. **Vyzkoušej pásek na sobě.** Utáhni na pohodlí, přidrž prstem a šídlem lehce zatlač do líce,
-    kam tlačí hrot trnu (důlek, ne díra). To je prostřední dírka. Pak pásek sundej, polož lícem
-    nahoru na tvrdou desku a šídlo v důlku **protlač svisle skrz na rub**: značí se na rubu.
-    Kontrola: na rubu odměř od ohybu u přezky stejnou míru.
+   v nejzatíženějším místě se povolují. Před zkouškou na těle nech ohyb úplně proschnout.
+10. **Vyzkoušej pásek na sobě.** Na líc, kam zhruba dosáhne trn, nalep kousek papírové pásky.
+    Utáhni na pohodlí, přidrž prstem a **tužkou udělej na pásce tečku**, kam tlačí hrot trnu. To
+    je prostřední dírka. Šídlem do kůže zatím nic: důlek, který by nevyšel, by na líci zůstal.
+    Změř od ohybu u přezky k tečce. Pásek sundej, polož lícem nahoru na tvrdou desku a zkontroluj
+    míru; nesedí → zkus znovu a tečku oprav na pásce. Sedí → šídlo dej do tečky a **protlač
+    svisle skrz na rub** (jediný vpich do líce, zmizí ve vyseknuté dírce), pásku sundej.
 11. **Řada 1 nebo 2:** přilož tak, aby **prostřední otvor** (ten mezi dvěma křížky) ležel na
     propíchnuté značce na rubu, a hrany pásu opět na linky své šířky (dívej se svisle dolů,
     destičku nikdy neobracej). **Zkontroluj, že obtahovaný tvar končí přesně na obou hranách
@@ -241,7 +249,8 @@ navléká se na pás před ohnutím (viz `sablony-zdroje.md`, „Navléknout př
   117 mm). (Revize 2026-10-08: dřív se měřilo jen kolem 2 vrstev a vycházelo 109 mm, volný konec
   by se do poutka nevešel.)
 - **Šířka** 12 mm (rozhodnutí 2026-10-08), **přeplátování** 15 mm, slepit a spoj dát na stranu
-  přehnutého konce (na rub, při nošení k tělu). Poutko se dělá z odřezku, klidně tenčího než pás.
+  přehnutého konce (na rub, při nošení k tělu). Poutko se dělá z odřezku v barvě pásu, klidně tenčího než pás. Dlouhé hrany proužku
+  před slepením zaoblit, u barevného pásku obarvit a zaleštit: poutko je na líci vidět.
 - Poutko se opírá o **hlavičky nýtů Ø 10 mm**, takže světlá kapsa je 47,7 − 10 = **37,7 mm**
   a poutko 12 mm v ní má 25,7 mm vůle. V praxi to nevadí, protože poutkem prochází volný konec
   pásku a drží ho.

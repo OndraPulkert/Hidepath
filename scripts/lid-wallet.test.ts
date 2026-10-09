@@ -497,10 +497,20 @@ describe('generátor peněženky VÍČKO', () => {
     expect(hasPrick(parts, X2(L.d2.x0 + 1.5), Y2(g4.y1))).toBe(false);
     expect(parts).toContain('zdrsnit pod páskou');
     expect(parts).toContain('kroužky přes šablonu na líci');
-    // osa D1: oba kroužky v ploše G2 (rub D1 nad horní hranou F je vidět)
+    // osa D1 a D2 se propichuje skrz (přepážky se přikládají lícem nahoru): jen tam, kde líc na
+    // hotovém kusu vidět není. D1 dole v G2 pod spodní hranou D2 (+2), ne u horní hrany G2 těsně
+    // pod okénkem bankovek; D2 ve středech výsečníků okénka bankovek, ne u horní hrany (ústí).
+    const d1AxisY = Math.min(L.cardFloorY - 1.5, L.d2.y0 + 2);
+    expect(d1AxisY).toBeLessThan(L.billWindow.y0 - 3);
     expect(hasPrick(parts, X1(L.axisX), Y1(L.d1.y0 + 1.5))).toBe(true);
-    expect(hasPrick(parts, X1(L.axisX), Y1(L.cardFloorY - 1.5))).toBe(true);
+    expect(hasPrick(parts, X1(L.axisX), Y1(d1AxisY))).toBe(true);
+    expect(hasPrick(parts, X1(L.axisX), Y1(L.cardFloorY - 1.5))).toBe(false);
     expect(hasPrick(parts, X1(L.axisX), Y1(L.d1.y1 - 1.5))).toBe(false);
+    const bw = L.billWindow;
+    expect(hasPrick(parts, X2(L.axisX), Y2(bw.y0 + bw.width / 2))).toBe(true);
+    expect(hasPrick(parts, X2(L.axisX), Y2(bw.y1 - bw.width / 2))).toBe(true);
+    expect(hasPrick(parts, X2(L.axisX), Y2(L.d2.y1 - 1.5))).toBe(false);
+    expect(hasPrick(parts, X2(L.axisX), Y2(L.d2.y0 + 1.5))).toBe(false);
   });
 
   it('list 2: hranice Tokonole bez kroužků (rub víčka je vidět), dá ji pravítko na hrany pásu', () => {

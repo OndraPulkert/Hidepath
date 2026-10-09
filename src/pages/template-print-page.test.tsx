@@ -99,7 +99,7 @@ describe('tisk listů – peněženka Víčko pro změřenou kůži', () => {
 /** P1 1,1 a kozinky 0,9: meze tloušťky jdou pro zkušební kus obejít po potvrzení na stránce. */
 describe('tisk listů Víčka – přesto pro zkušební kus', () => {
   const fill = async (user: ReturnType<typeof userEvent.setup>) => {
-    const p1 = await screen.findByLabelText('P1 (kaštan, useň 1,0), mm');
+    const p1 = await screen.findByLabelText('P1 (useň 1,0), mm');
     await user.clear(p1);
     await user.type(p1, '1,1');
     await user.type(screen.getByLabelText('Přepážka D1, mm'), '0,9');
@@ -169,7 +169,7 @@ describe('tisk listů Víčka – přesto pro zkušební kus', () => {
   it('neplatné zadání (mimo rozsah) obejít nejde', async () => {
     const user = userEvent.setup();
     renderApp(routes.template(lidWalletProject.slug));
-    const p1 = await screen.findByLabelText('P1 (kaštan, useň 1,0), mm');
+    const p1 = await screen.findByLabelText('P1 (useň 1,0), mm');
     await user.clear(p1);
     await user.type(p1, '2');
     await user.type(screen.getByLabelText('Přepážka D1, mm'), '0,9');
@@ -212,8 +212,8 @@ describe('tisk – pouzdro na karty: šablona a cvičná šablona', () => {
       Number(c.getAttribute('cx')),
       Number(c.getAttribute('cy')),
     ]);
-    // Zadní díl: konce pásu 50 mm od spodku (y 32) a rohy; kapsa: první a poslední otvor 6 mm
-    // pod vrchem (y 98) a tři body oblouku linie stehu v každém rohu.
+    // Zadní díl: konce pásu 50 mm od spodku (y 32) a rohy; kapsa: začátek a konec řady 6 mm
+    // pod vrchem (y 98); v rozích kapsy kroužky nejsou, vede tam vytištěný oblouk.
     expect(circles.filter(([k]) => k === 'glue-end')).toEqual([
       ['glue-end', 17, 32],
       ['glue-end', 107, 32],
@@ -223,7 +223,7 @@ describe('tisk – pouzdro na karty: šablona a cvičná šablona', () => {
       ['stitch-end', 15.5, 98],
       ['stitch-end', 108.5, 98],
     ]);
-    expect(circles.filter(([k]) => k === 'stitch-corner')).toHaveLength(6);
+    expect(circles.filter(([k]) => k === 'stitch-corner')).toHaveLength(0);
     expect(svg).toHaveTextContent(TEMPLATE_LEGEND.tick);
     expect(svg).toHaveTextContent(TEMPLATE_LEGEND.prick);
     expect(svg).toHaveTextContent(TEMPLATE_LEGEND.punch);

@@ -161,10 +161,12 @@ function round(value: number): number {
  * Kroužek na šabloně (lekce 6). `glue-*` na hranici lepeného pásu zadního dílu se propichuje šídlem
  * na líc, kapsa ho zakryje. `stitch-*` na linii stehu přední kapsy se nepropichuje: je to cíl pro
  * vidličky při děrování skrz papír přilepený na líci (vpich mimo otvor by zůstal vidět).
- * `*-end` = horní konec boku, `*-corner` = bod v zaobleném spodním rohu.
+ * `*-end` = horní konec boku, `glue-corner` = bod v zaobleném spodním rohu pásu. Linie stehu
+ * v rozích kroužky nemá: oblouk R2,5 je kratší než dvě rozteče, kroužky by nesplnily slib „otvor
+ * sem“ (vede ho vytištěný oblouk).
  */
 export interface PrickPoint {
-  kind: 'stitch-end' | 'stitch-corner' | 'glue-end' | 'glue-corner';
+  kind: 'stitch-end' | 'glue-end' | 'glue-corner';
   x: number;
   y: number;
 }
@@ -226,8 +228,8 @@ export interface PrickInput {
 /**
  * Kroužky pro lekci 6, jen u dílů s otevřeným vrchem. Díl, na kterém leží kapsa (`stitchUpToMm`),
  * nese hranici lepeného pásu `glueBandMm` k propíchnutí: konce na bocích (konec zdrsnění pod
- * zaoblením rohu kapsy) a rohy. Kapsa sama nese body linie stehu pro děrování skrz papír: horní
- * konce (první a poslední otvor) a v rozích tři body oblouku.
+ * zaoblením rohu kapsy) a rohy. Kapsa sama nese jen horní konce linie stehu (začátek a konec
+ * řady) pro děrování skrz papír.
  */
 export function prickPoints(p: PrickInput, glueBandMm?: number): PrickPoint[] {
   if (p.openEdge !== 'top') return [];
@@ -239,21 +241,15 @@ export function prickPoints(p: PrickInput, glueBandMm?: number): PrickPoint[] {
     cornerRadiusMm: p.cornerRadiusMm,
     upToMm: p.stitchUpToMm,
   };
-  const toPoints = (
-    { ends, corners }: ReturnType<typeof openLinePoints>,
-    end: PrickPoint['kind'],
-    corner: PrickPoint['kind'],
-  ): PrickPoint[] => [
-    ...ends.map(([px, py]) => ({ kind: end, x: px, y: py })),
-    ...corners.map(([px, py]) => ({ kind: corner, x: px, y: py })),
-  ];
   if (p.stitchUpToMm) {
     if (!glueBandMm) return [];
-    return toPoints(openLinePoints({ ...base, offsetMm: glueBandMm }), 'glue-end', 'glue-corner');
+    const { ends, corners } = openLinePoints({ ...base, offsetMm: glueBandMm });
+    return [
+      ...ends.map(([px, py]): PrickPoint => ({ kind: 'glue-end', x: px, y: py })),
+      ...corners.map(([px, py]): PrickPoint => ({ kind: 'glue-corner', x: px, y: py })),
+    ];
   }
-  return toPoints(
-    openLinePoints({ ...base, offsetMm: p.stitchOffsetMm }),
-    'stitch-end',
-    'stitch-corner',
+  return openLinePoints({ ...base, offsetMm: p.stitchOffsetMm }).ends.map(
+    ([px, py]): PrickPoint => ({ kind: 'stitch-end', x: px, y: py }),
   );
 }

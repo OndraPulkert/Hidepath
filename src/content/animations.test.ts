@@ -409,7 +409,8 @@ describe('animace postupu – přenos, řez a otvory dna pásu v lekcích 4 a 5'
   it.each([
     // Lekce 4: proužek se přenáší a řeže stejně jako pás (čáry na rub před řezem), otvory proužku
     // ukazuje část E stránky otvorů.
-    [4, 'cut-practice-strip', [prenos('A2'), prenos('A3'), prenos('B2'), prenos('C1')]],
+    // A2 (šablona nahrubo, páska na okrajích) neplatí: cvičný list je velký jako kus kůže.
+    [4, 'cut-practice-strip', [prenos('A3'), prenos('B2'), prenos('C1')]],
     [4, 'punch-flat', [otvory('E1'), otvory('A3'), otvory('D2')]],
     // Lekce 5: každý krok přenosu, řezu, čar ohybů a otvorů dna.
     [5, 'transfer-face', [prenos('A2'), prenos('A1')]],
@@ -683,7 +684,7 @@ describe('animace postupu – přenos P1, okénka, D2 na záda a boční švy V�
       href: rez('C1'),
       label: 'Krok C1 – Vysekněte napojení jazýčku Ø 8',
     });
-    expect(animationLink('lidWindows', 'B3').label).toBe('Krok B3 – Vysekněte Ø 10 přes šablonu');
+    expect(animationLink('lidWindows', 'B3').label).toBe('Krok B3 – Vysekněte Ø 10');
     expect(animationLink('lidBackD2', 'D4').label).toBe(
       'Krok D4 – Šijte sedlovým stehem, konce 2 otvory zpět',
     );
