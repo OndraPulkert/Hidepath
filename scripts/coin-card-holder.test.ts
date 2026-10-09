@@ -13,6 +13,7 @@ import {
   buildCoinHolderSheetSvg,
   coinHolderFileStem,
   coinHolderProcessFileStem,
+  pocketGlueBand,
   skiveZones,
 } from './coin-card-holder.ts';
 
@@ -350,5 +351,87 @@ describe('generátor pouzdra s mincí – varianty', () => {
     expect(buildCoinHolderPocketSvg(spec)).toContain('okno Ø 20');
     expect(buildCoinHolderPocketSvg(spec)).toContain('prstenec');
     expect(buildCoinHolderPocketSvg({ ...spec, coinDiameterMm: 40 })).toContain('okno Ø 32');
+  });
+});
+
+/** Lepené plochy (zelená šrafa jako u Víčka): G1 kapsa, G2 a G3 pruh dna. */
+describe('generátor pouzdra s mincí – lepené plochy', () => {
+  const variants = [
+    DEFAULT_COIN_CARD_HOLDER,
+    { ...DEFAULT_COIN_CARD_HOLDER, coinDiameterMm: NAMED_COINS.decision },
+    { ...DEFAULT_COIN_CARD_HOLDER, bodyThicknessMm: 1.2, foldSkiveThicknessMm: null },
+    {
+      ...DEFAULT_COIN_CARD_HOLDER,
+      coinDiameterMm: NAMED_COINS.decision,
+      bodyThicknessMm: 1.2,
+      foldSkiveThicknessMm: null,
+    },
+  ];
+
+  it('pruh G1 kapsy je mezi obrysem a čárou švu, od začátku švu dolů (nahoře nic)', () => {
+    for (const spec of variants) {
+      const L = coinCardHolderLayout(spec);
+      const so = spec.stitchOffsetMm;
+      const d = pocketGlueBand(0, 0, L.pocketWidthMm, L.pocketHeightMm, spec, L.pocketSeamTopMm);
+      const nums = [...d.matchAll(/[ML](-?[\d.]+) (-?[\d.]+)/g)].map((m) => [
+        Number(m[1]),
+        Number(m[2]),
+      ]);
+      const xs = nums.map(([x]) => x);
+      const ys = nums.map(([, y]) => y);
+      // Vnější hrana = obrys kapsy, vnitřní = čára švu (o odsazení švu dovnitř).
+      expect(Math.min(...xs)).toBeCloseTo(0, 6);
+      expect(Math.max(...xs)).toBeCloseTo(L.pocketWidthMm, 6);
+      expect(xs).toContain(so);
+      expect(xs).toContain(L.pocketWidthMm - so);
+      expect(ys).toContain(L.pocketHeightMm - so);
+      // Nic nad začátkem švu (horní hrana se nelepí).
+      expect(Math.min(...ys)).toBeCloseTo(L.pocketSeamTopMm, 6);
+    }
+  });
+
+  it('list PÁS: G1 na líci předního panelu, G2 a G3 na pruhu dna s napsanou stranou, legenda', () => {
+    for (const spec of variants) {
+      const svg = buildCoinHolderSheetSvg(spec);
+      expect(svg).toContain('clipPath id="glue-g1"');
+      expect(svg).toContain('G1 · lepit na LÍC');
+      expect(svg).toContain('NElepit – sem se zasouvá mince');
+      expect(svg).toContain('G3 · lepit na RUBU zadního');
+      expect(svg).toContain('G2 · lepit na RUBU předního');
+      expect(svg).toContain('G2 na RUBU · G3 na LÍCI vnitřního');
+      expect(svg).toContain('šrafa = kontaktní lepidlo jen sem');
+      expect(svg.match(/clipPath id="glue-dno-\d"/g)).toHaveLength(3);
+    }
+  });
+
+  it('pruh dna sahá od čáry švu k dolní hraně pásu (výška = odsazení švu)', () => {
+    const spec = DEFAULT_COIN_CARD_HOLDER;
+    const L = coinCardHolderLayout(spec);
+    const svg = buildCoinHolderSheetSvg(spec);
+    const borders = [
+      ...svg.matchAll(
+        /<path d="M([\d.]+) ([\d.]+) H([\d.]+) V([\d.]+) H[\d.]+ Z" fill="none" stroke="#2e7d32"/g,
+      ),
+    ]
+      .map((m) => [Number(m[3]) - Number(m[1]), Number(m[4]) - Number(m[2])] as const)
+      // Bez vzorku šrafy v legendě (7 mm).
+      .filter(([w]) => w > 10);
+    expect(borders).toHaveLength(3);
+    for (const [w, h] of borders) {
+      expect(w).toBeCloseTo(L.panelWidthMm, 3);
+      expect(h).toBeCloseTo(L.panelHeightMm - L.bottomSeamYMm, 6);
+      expect(h).toBeCloseTo(spec.stitchOffsetMm, 6);
+    }
+  });
+
+  it('list KAPSA: G1 na RUBU kapsy, horní hrana nelepit, legenda', () => {
+    for (const spec of variants) {
+      const svg = buildCoinHolderPocketSvg(spec);
+      expect(svg).toContain('clipPath id="glue-g1-kapsa"');
+      expect(svg).toContain('G1 · lepit na RUBU');
+      expect(svg).toContain('NElepit – sem se zasouvá mince');
+      expect(svg).toContain(`pruh ${String(spec.stitchOffsetMm).replace('.', ',')} mm`);
+      expect(svg).toContain('šrafa = kontaktní lepidlo jen sem');
+    }
   });
 });

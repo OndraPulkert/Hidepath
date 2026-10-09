@@ -561,7 +561,7 @@ function joint(n,t,rough,glue){
   s+=secTag(cam,84,6);
   return s;
 }
-add('C','Zdrsněte a natřete spoj 1','Spoje lepte po jednom. Nejdřív přední s vnitřním: v pruhu 0–3,5 mm od hrany (ne výš než čára švu) zdrsněte rub předního i rub vnitřního panelu. Naneste kontaktní lepidlo v tenké rovnoměrné vrstvě. Lepte ve větrané místnosti.',9000,t=>{
+add('C','Zdrsněte a natřete spoj 1','Spoje lepte po jednom. Nejdřív spoj G2, přední s vnitřním: v pruhu 0–3,5 mm od hrany (ne výš než čára švu; na listu PÁS zelená šrafa) zdrsněte rub předního i rub vnitřního panelu. Naneste kontaktní lepidlo v tenké rovnoměrné vrstvě. Lepte ve větrané místnosti.',9000,t=>{
   const r=es(t,.06,.45), g=es(t,.5,.92);
   let s=joint(1,t,r,g);
   return s;
@@ -587,7 +587,7 @@ add('C','Přeložte, zarovnejte a přitiskněte','Lepidlo nechte odvětrat podle
   return s;
 },null);
 
-add('C','Stejně připravte spoj 2','Stejně druhý spoj: líc vnitřního a rub zadního panelu v pruhu 0–3,5 mm zdrsněte, natřete a nechte odvětrat.',8600,t=>{
+add('C','Stejně připravte spoj 2','Stejně druhý spoj G3: líc vnitřního a rub zadního panelu v pruhu 0–3,5 mm zdrsněte, natřete a nechte odvětrat.',8600,t=>{
   const r=es(t,.06,.45), g=es(t,.5,.92);
   let s=joint(2,t,r,g);
   return s;

@@ -1,4 +1,5 @@
 import { projects } from '@/content/projects';
+import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
 import { lidWalletProject } from '@/content/projects/lid-wallet/project';
 import { projectDefinitionSchema } from '@/content/schema';
 import {
@@ -150,5 +151,86 @@ describe('Postup v kostce – Víčko', () => {
     expect(text('cut-parts').text).toContain(
       'D1 a přířez L1 z nebarvené kozinky a D2 z čokoládové',
     );
+  });
+});
+
+describe('Postup v kostce – pouzdro s mincí', () => {
+  const project = coinCardHolderProject;
+  if (!hasOverview(project)) throw new Error('Pouzdro s mincí nemá přehled');
+  const sections = numberOverview(project.overview, project);
+  const points = flatOverview(sections);
+  const text = (id: string) => points.find((p) => p.point.id === id)!.point;
+  const stepBody = (id: string) => {
+    const p = text(id);
+    return project.lessons
+      .find((l) => l.slug === p.lessonSlug)!
+      .steps.find((s) => s.id === p.stepId)!.body;
+  };
+
+  it('15–22 krátkých bodů, bod 1 je tisk ze všech lekcí s „Vytisknout“', () => {
+    expect(points.length).toBeGreaterThanOrEqual(15);
+    expect(points.length).toBeLessThanOrEqual(22);
+    expect(points[0]!.point.printsFrom).toEqual([
+      '01-paper-model',
+      '02-wet-forming-coin',
+      '04-fold-and-stitch-scrap',
+      '05-strip-and-skive-marks',
+      '06-coin-pocket-and-hardware',
+    ]);
+    for (const p of points) {
+      const sentences = p.point.text.split(/[.!?](?:\s|$)/).filter((s) => s.trim()).length;
+      expect(sentences, p.point.id).toBeLessThanOrEqual(3);
+    }
+  });
+
+  it('výtisky: KAPSA 3×, ostatní listy 1×; lekce 6 tiskne jen podmíněně', () => {
+    const groups = overviewPrints(project, points[0]!.point.printsFrom!);
+    expect(printTotals(groups).map((t) => `${t.sheetLabel} ${t.copies}×`)).toEqual([
+      'Cvičný proužek pro lekci 4 1×',
+      'Kapsa s mincí a otvor formy 3×',
+      'Papírový model 1×',
+      'Pás (šablona) 1×',
+    ]);
+    const l6 = groups.find((g) => g.lessonOrder === 6)!;
+    expect(l6.rows.every((r) => r.condition)).toBe(true);
+    expect(text('prints').text).toContain('schovejte na kapsu v lekci 6');
+  });
+
+  it('oddíly: příprava, trénink na odřezcích, výroba', () => {
+    expect(sections.map((s) => s.title)).toEqual([
+      'Příprava',
+      'Trénink na odřezcích',
+      'Výroba pouzdra',
+    ]);
+    expect(sections[2]!.note).toContain('kapsa vždy z kůže 1,2 mm');
+  });
+
+  it('lepení sedí s lekcemi: G1 líc předního a rub kapsy, G2 a G3 dno, strany podle listu PÁS', () => {
+    expect(text('pocket-glue').text).toContain('G1');
+    expect(text('pocket-glue').text).toContain('na líc předního panelu a na rub kapsy');
+    expect(text('pocket-glue').text).toContain('Horní hranu nelepte');
+    expect(stepBody('pocket-glue')).toContain('pruh G1');
+    expect(stepBody('pocket-glue')).toContain('Horní hranu kapsy nelepte');
+
+    const bottom = text('bottom-glue-stitch').text;
+    expect(bottom).toContain('0–3,5 mm od dolní hrany');
+    expect(bottom).toContain('G2 rub předního s rubem vnitřního');
+    expect(bottom).toContain('G3 líc vnitřního s rubem zadního');
+    expect(stepBody('bottom-glue-stitch')).toMatch(
+      /spoj G2, přední s vnitřním: .*rub předního a rub vnitřního/,
+    );
+    expect(stepBody('bottom-glue-stitch')).toMatch(
+      /spoj G3, vnitřní se zadním: líc vnitřního a rub zadního/,
+    );
+
+    expect(text('strip-seal').text).toContain('pruh G2');
+    expect(stepBody('strip-seal')).toContain('šrafa G2');
+  });
+
+  it('teď × později: obrys a okno po zaschnutí, jazyk a klobouček v lekci 8', () => {
+    expect(text('scrap-marks').later).toContain('po zaschnutí důlku');
+    expect(text('pocket-form').later).toContain('po zaschnutí');
+    expect(text('strip-cut').later).toContain('lekce 8');
+    expect(text('pocket-stitch').later).toContain('klobouček');
   });
 });

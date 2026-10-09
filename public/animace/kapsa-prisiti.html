@@ -369,7 +369,7 @@ add('B','Olepte kapsu dokola páskou','Kolem kapsy nalepte na přední panel mas
   return s;
 },'lic');
 
-add('B','Zdrsněte pruh po čáru švu','Na předním panelu lehce zdrsněte smirkem jen pruh od pásky dovnitř po čáru švu kapsy (3,5 mm), po bocích a dole. Zbytek nechte hladký.',6400,t=>{
+add('B','Zdrsněte pruh po čáru švu','Lepí se jen pruh G1: od okraje kapsy po čáru švu kapsy (3,5 mm), po bocích a dole. Na předním panelu ho lehce zdrsněte smirkem od pásky dovnitř. Zbytek nechte hladký.',6400,t=>{
   const p=es(t,.08,.88);
   let inner=stripLeather({rough:p,ghost:1,tape:1});
   let s=clipMain('cb2',G(camT(POCKC),inner));
@@ -380,7 +380,7 @@ add('B','Zdrsněte pruh po čáru švu','Na předním panelu lehce zdrsněte smi
   return s;
 },'lic');
 
-add('B','Naneste lepidlo do pruhu po čáru švu','Kontaktní lepidlo naneste jen do tohoto pruhu a do stejného pruhu na rubu kapsy, po bocích a dole (šířku pruhu ověřte na odřezku). Horní hranu kapsy nelepte – tudy se zasouvá mince.',8400,t=>{
+add('B','Naneste lepidlo do pruhu po čáru švu','Kontaktní lepidlo naneste jen do pruhu G1 (na listech PÁS a KAPSA zelená šrafa): na líci předního panelu a do stejného pruhu na rubu kapsy, po bocích a dole (šířku pruhu ověřte na odřezku). Horní hranu kapsy nelepte – tudy se zasouvá mince.',8400,t=>{
   const g1=es(t,.05,.45), g2=es(t,.5,.9), nt=seg(t,.9,1);
   let inner=stripLeather({rough:1,glue:g2,ghost:.6,tape:1});
   inner+=G(POCK_T,noTop(seg(t,.88,.96)));

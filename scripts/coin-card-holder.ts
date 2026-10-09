@@ -48,6 +48,8 @@ const cz = (n: number): string => f(n).replace('.', ',');
 const INK = '#2b2b2b';
 const GUIDE = '#7a7a7a';
 const ACCENT = '#a2471f';
+/** Lepené plochy: zelená šrafa jako na listech Víčka. */
+const GLUE = '#2e7d32';
 /** Značka otvoru stehu: poloměr tečky v mm. Testy podle něj tečky rozeznávají. */
 const DOT_R = 0.45;
 
@@ -157,6 +159,79 @@ function pocketSeam(
     dots.push(dot(ax, ay), dot(bx, by));
   }
   return { path, dots: dots.join(''), holes: 2 * n + 1 };
+}
+
+/**
+ * Zelená šrafa lepené plochy (vektorové čáry pod 45°, ne <pattern>, který Chromium v PDF rastruje),
+ * oříznutá cestou `clipD`. Obrys plochy: `borderD` (výchozí = ořezová cesta).
+ */
+function glueHatch(
+  id: string,
+  clipD: string,
+  box: { x: number; y: number; w: number; h: number },
+  borderD: string = clipD,
+): string {
+  const { x: x0, y: y0, w, h } = box;
+  const segs: string[] = [];
+  for (let c = x0 - (y0 + h); c <= x0 + w - y0; c += 1.2) {
+    const ya = Math.max(y0, x0 - c);
+    const yb = Math.min(y0 + h, x0 + w - c);
+    if (yb - ya > 0.05) segs.push(`M${f(ya + c)} ${f(ya)} L${f(yb + c)} ${f(yb)}`);
+  }
+  return (
+    `<defs><clipPath id="${id}"><path d="${clipD}"/></clipPath></defs>` +
+    `<g class="glue" clip-path="url(#${id})">` +
+    `<path d="${segs.join(' ')}" stroke="${GLUE}" stroke-width="0.15" stroke-opacity="0.7" fill="none"/>` +
+    `<path d="${borderD}" fill="none" stroke="${GLUE}" stroke-width="0.25"/>` +
+    '</g>'
+  );
+}
+
+/**
+ * Lepený pruh kapsy G1 (tvar U): mezi obrysem kapsy a čárou švu, po bocích od začátku švu dolů
+ * a přes dno. Nahoře (otevřená hrana, kudy se zasouvá mince) se nelepí. Stejná geometrie jako
+ * `pocketSeam` (vnitřní poloměr max(0,5; R − odsazení švu)).
+ */
+export function pocketGlueBand(
+  x0: number,
+  y0: number,
+  w: number,
+  h: number,
+  spec: CoinCardHolderSpec,
+  seamTopMm: number,
+): string {
+  const so = spec.stitchOffsetMm;
+  const rc = spec.cornerRadiusMm;
+  const ri = Math.max(0.5, rc - so);
+  const ro = ri + so;
+  const top = y0 + seamTopMm;
+  const x1 = x0 + w;
+  const yb = y0 + h;
+  return (
+    `M${f(x0)} ${f(top)} L${f(x0)} ${f(yb - ro)} A${f(ro)} ${f(ro)} 0 0 0 ${f(x0 + ro)} ${f(yb)} ` +
+    `L${f(x1 - ro)} ${f(yb)} A${f(ro)} ${f(ro)} 0 0 0 ${f(x1)} ${f(yb - ro)} L${f(x1)} ${f(top)} ` +
+    `L${f(x1 - so)} ${f(top)} L${f(x1 - so)} ${f(yb - so - ri)} ` +
+    `A${f(ri)} ${f(ri)} 0 0 1 ${f(x1 - so - ri)} ${f(yb - so)} L${f(x0 + so + ri)} ${f(yb - so)} ` +
+    `A${f(ri)} ${f(ri)} 0 0 1 ${f(x0 + so)} ${f(yb - so - ri)} L${f(x0 + so)} ${f(top)} Z`
+  );
+}
+
+/** Text s bílým lemem, aby byl čitelný přes šrafu. */
+const haloText = (x: number, y: number, s: string, size: number, fill = GLUE): string =>
+  `<text x="${f(x)}" y="${f(y)}" font-family="Helvetica, Arial, sans-serif" font-size="${size}" ` +
+  `text-anchor="middle" fill="${fill}" stroke="#ffffff" stroke-width="0.5" paint-order="stroke">${s}</text>`;
+
+/** Vzorek šrafy do legendy (7 × 2,2 mm) s popiskem vpravo. */
+function glueLegend(x: number, cy: number, label: string, size = 2.2): string {
+  const d = `M${f(x)} ${f(cy - 1.1)} H${f(x + 7)} V${f(cy + 1.1)} H${f(x)} Z`;
+  return (
+    glueHatch(`glue-legend-${f(x).replace('.', '-')}-${f(cy).replace('.', '-')}`, d, {
+      x,
+      y: cy - 1.1,
+      w: 7,
+      h: 2.2,
+    }) + text(x + 8.5, cy + 0.8, label, size, 'start', GLUE)
+  );
 }
 
 /**
@@ -467,6 +542,51 @@ export function buildCoinHolderSheetSvg(
   out.push(text(pcx, pcy + 1.2, `${cz(L.pocketXMm)} mm od boků`, 2.2, 'middle', GUIDE));
   out.push(text(pcx, pcy + 4.6, 'otevřená hrana kapsy nahoru', 2.2, 'middle', GUIDE));
 
+  /* --- lepení: G1 kapsa na líc předního panelu, G2 a G3 pruh dna (strana u pruhu) --- */
+  const pocketLeft = Math.min(X(pxs), X(pxs + L.pocketWidthMm));
+  const band = pocketGlueBand(
+    pocketLeft,
+    Y(pys),
+    L.pocketWidthMm,
+    L.pocketHeightMm,
+    spec,
+    L.pocketSeamTopMm,
+  );
+  out.push(
+    glueHatch('glue-g1', band, {
+      x: pocketLeft,
+      y: Y(pys),
+      w: L.pocketWidthMm,
+      h: L.pocketHeightMm,
+    }),
+  );
+  out.push(haloText(pcx, Y(pys + L.pocketHeightMm - so / 2) + 0.6, 'G1 · lepit na LÍC', 1.8));
+  out.push(haloText(pcx, Y(pys) + 4, 'NElepit – sem se zasouvá mince', 1.8, GUIDE));
+  // Pruh dna 0 až čára švu na každém panelu, oříznutý obrysem pásu (zaoblené rohy).
+  const outline = stripOutline(L, rc, X, Y, 1, mirror);
+  const bottomStrips: [number, number, string][] = [
+    [0, L.backX1Mm, 'G3 · lepit na RUBU zadního'],
+    [L.frontX0Mm, L.frontX1Mm, 'G2 · lepit na RUBU předního'],
+  ];
+  if (L.innerX0Mm !== null) {
+    bottomStrips.push([L.innerX0Mm, L.stripLengthMm, 'G2 na RUBU · G3 na LÍCI vnitřního']);
+  }
+  bottomStrips.forEach(([a, b, t], i) => {
+    const x0 = Math.min(X(a), X(b));
+    const w = b - a;
+    const y0 = Y(seamY);
+    const h = L.panelHeightMm - seamY;
+    out.push(
+      glueHatch(
+        `glue-dno-${i + 1}`,
+        outline,
+        { x: x0, y: y0, w, h },
+        `M${f(x0)} ${f(y0)} H${f(x0 + w)} V${f(y0 + h)} H${f(x0)} Z`,
+      ),
+    );
+    out.push(haloText(x0 + w / 2, y0 + h / 2 + 0.6, t, 1.8));
+  });
+
   /* --- průchodka --- */
   if (L.grommetXMm !== null && L.grommetYMm !== null) {
     out.push(circle(X(L.grommetXMm), Y(L.grommetYMm), spec.grommetHoleMm / 2));
@@ -496,6 +616,14 @@ export function buildCoinHolderSheetSvg(
       'KONTROLA MĚŘÍTKA: tato úsečka musí měřit přesně 50 mm',
       2.4,
       'start',
+    ),
+  );
+  out.push(
+    glueLegend(
+      calX + 140,
+      calY,
+      `šrafa = kontaktní lepidlo jen sem: G1 kapsa (líc), G2 a G3 dno 0–${cz(so)} mm (strana je u pruhu)`,
+      2.1,
     ),
   );
   const front = spec.tabSide === 'right' ? 'vpravo' : 'vlevo';
@@ -786,6 +914,14 @@ export function buildCoinHolderPocketSvg(
     Math.max(0.5, rc - so),
     spec.stitchPitchMm,
   );
+  // G1: lepený pruh na RUBU kapsy (boky a dno po čáru švu); nahoře se nelepí.
+  out.push(
+    glueHatch(
+      'glue-g1-kapsa',
+      pocketGlueBand(kx, ky, L.pocketWidthMm, L.pocketHeightMm, spec, L.pocketSeamTopMm),
+      { x: kx, y: ky, w: L.pocketWidthMm, h: L.pocketHeightMm },
+    ),
+  );
   out.push(guide(seam.path, '0.8 1.2'));
   out.push(seam.dots);
   const ccx = kx + L.coinCentreXMm;
@@ -823,6 +959,22 @@ export function buildCoinHolderPocketSvg(
     `${cz(L.pocketXMm)} mm od boků, otevřenou hranou nahoru`,
   ];
   lines.forEach((t, i) => out.push(text(tx, ky + 4 + i * 3.6, t, 2.4, 'start', GUIDE)));
+  [
+    `šrafa G1 = lepit na RUBU kapsy: pruh ${cz(so)} mm`,
+    'od okraje po čáru švu, boky a dno;',
+    'stejný pruh na líci předního panelu (list PÁS)',
+  ].forEach((t, i) => out.push(text(tx, ky + 4 + (lines.length + i) * 3.6, t, 2.4, 'start', GLUE)));
+  out.push(
+    haloText(
+      kx + L.pocketWidthMm / 2,
+      ky + L.pocketHeightMm - so / 2 + 0.6,
+      'G1 · lepit na RUBU',
+      1.8,
+    ),
+  );
+  out.push(
+    haloText(kx + L.pocketWidthMm / 2, ky - 1.2, 'NElepit – sem se zasouvá mince', 1.8, GUIDE),
+  );
 
   cy = ky + L.pocketHeightMm + SHEET_CAPTION_MM + A4_SHEET.gapMm;
   out.push(text(m, cy + 2.5, 'OTVOR FORMY PRO DŮLEK', 2.8, 'start'));
@@ -865,6 +1017,13 @@ export function buildCoinHolderPocketSvg(
   ];
   legend.forEach((t, i) =>
     out.push(text(m, H - m - LEGEND_HEIGHT_MM + 4 + i * 3.2, t, 2.2, 'start', GUIDE)),
+  );
+  out.push(
+    glueLegend(
+      m,
+      H - m - LEGEND_HEIGHT_MM + 4 + legend.length * 3.2 - 0.8,
+      'šrafa = kontaktní lepidlo jen sem (G1, rub kapsy), horní hranu nelepit',
+    ),
   );
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
