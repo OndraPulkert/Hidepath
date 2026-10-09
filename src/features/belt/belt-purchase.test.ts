@@ -99,10 +99,88 @@ describe('souhrn „Koupit“', () => {
     );
     const detail = (what: string) => purchaseLines(p).find((l) => l.what === what)?.detail;
     expect(detail('Přezka')).toBe('45 mm, jednotrnová (ověřte u prodejce)');
-    expect(detail('Šrouby chicago')).toBe('2 ks, dřík 6,5 mm (ověřte u prodejce)');
+    expect(detail('Šrouby chicago')).toBe(
+      '2 ks, dřík 6,5 mm (rozsah 6,5–7 mm): Andexnite Ø 9,5 × 6,5 mm černý nikl (dřík jen podle názvu), ověřte u prodejce; jiný obchod než pás (Leatory), další poštovné',
+    );
     expect(detail('Výsečník')).toBe('Ø 5,5 a Ø 6 mm (Ø 5,5 mm ověřte u prodejce)');
     // 40 × 3,5 mm má vše v podkladech: bez poznámky.
     const ok = purchaseLines(beltPurchase(result(base)));
     expect(ok.map((l) => l.detail).join(' ')).not.toContain('ověřte');
+  });
+});
+
+describe('modrý pásek 40 mm (výběr uživatele 9. 10. 2026)', () => {
+  const blue = {
+    widthMm: 40,
+    thicknessMm: 3.5,
+    tip: 'hrot',
+    waistMm: 950,
+    color: 'modra',
+  } as const;
+
+  it('výchozí je modrý pás Andexnite 130 cm za 260 Kč, i když činění stránka neuvádí', () => {
+    const p = beltPurchase(result(blue));
+    expect(p.offer).toMatchObject({
+      shop: 'Andexnite',
+      url: 'https://andexnite.cz/produkt/hovezi-kuze-na-opasek-modra-130-cm-3-5-3-7-mm/',
+      variant: '40 mm',
+      lengthCm: 130,
+      priceCents: 26_000,
+      tanningVerified: false,
+      preferred: true,
+      checkedAt: '2026-10-09',
+    });
+    expect(p.orderCm).toBe(130);
+    expect(recommendedOfferText(p)).toMatch(
+      /^Doporučeno: Andexnite, 130 cm, 260\sKč \(činění neuvedeno, ověřte u prodejce\)$/,
+    );
+    // Ostatní modré zůstanou jako další obchody, tmavě modrá 3,7–3,8 mm při 3,7 mm.
+    expect(p.offers.map((o) => o.shop)).toEqual(['Andexnite']);
+    const at37 = beltPurchase(result({ ...blue, thicknessMm: 3.7 }));
+    expect(at37.offer?.product).toMatch(/modrá, 130 cm, 3,5–3,7 mm/);
+    expect(at37.offers.map((o) => o.product)).toContain(
+      'Hovězí kůže na opasek, tmavě modrá, 130 cm, 3,7–3,8 mm',
+    );
+  });
+
+  it('jen 40 mm: modrý pás 35 mm sám výchozí není (činění neuvedeno)', () => {
+    const p = beltPurchase(result({ ...blue, widthMm: 35 }));
+    expect(p.offers.some((o) => o.priceCents === 22_500)).toBe(true);
+    expect(p.offer).toBeNull();
+  });
+
+  it('přezka Andexnite černý nikl, nýty CraftPoint černý nikl z jiného obchodu, barva na hrany „odstín ověřte“', () => {
+    const p = beltPurchase(result(blue));
+    const detail = (what: string) => purchaseLines(p).find((l) => l.what === what)?.detail;
+    expect(detail('Přezka')).toBe(
+      '40 mm, jednotrnová: Andexnite 40 mm, černý nikl (jeden trn podle fotky)',
+    );
+    expect(detail('Šrouby chicago')).toBe(
+      '2 ks, dřík 6 mm (rozsah 5,5–6 mm): CraftPoint 10/6 černý nikl, 8 Kč/ks; jiný obchod než pás (Andexnite), další poštovné',
+    );
+    expect(detail('Barva na hrany')).toBe(
+      'modrá: ověřenou v tomto odstínu nemáme, odstín ověřte u prodejce a na odřezku',
+    );
+  });
+
+  it('naměřeno 3,7 mm: CraftPoint 10/6 a sedí i Leatory 1/4" = 6,35 mm', () => {
+    const p = beltPurchase(result({ ...blue, thicknessMm: 3.7 }));
+    expect(p.screws.pick?.url).toBe(
+      'https://craft-point.cz/products/sroubovaci-nyty-10-6mm-cerny-nikl',
+    );
+    expect(purchaseLines(p).find((l) => l.what === 'Šrouby chicago')!.detail).toBe(
+      '2 ks, dřík 6 mm (rozsah 5,9–6,4 mm): CraftPoint 10/6 černý nikl, 8 Kč/ks; jiný obchod než pás (Andexnite), další poštovné; sedí i Leatory 1/4" = 6,35 mm',
+    );
+  });
+
+  it('nikdy nýt mimo pravidlo 2t − 1,5 … 2t − 1 mm', () => {
+    for (let t = 3; t <= 4.0001; t += 0.01) {
+      const p = beltPurchase(result({ ...blue, thicknessMm: Math.round(t * 100) / 100 }));
+      for (const o of [p.screws.pick, ...p.screws.alsoFit]) {
+        if (o === null) continue;
+        expect(o.postMm, `${t}`).toBeGreaterThanOrEqual(p.screws.minMm - 1e-9);
+        expect(o.postMm, `${t}`).toBeLessThanOrEqual(p.screws.maxMm + 1e-9);
+      }
+    }
   });
 });

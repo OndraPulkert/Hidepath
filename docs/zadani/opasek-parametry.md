@@ -68,7 +68,7 @@ přidá 25 mm.
 | 4,0 mm     | 6,5–7,0 mm | dřík 7 mm | **žádný** ověřený (Andexnite řada 6,8 mm jen z výkresu)                           |
 
 Aplikace počítá dřík z přesné změřené tloušťky (2 × t − 1,5 až 2 × t − 1) a nabídne nýt z ověřených
-nabídek, jehož dřík do rozsahu padne (CraftPoint/Leatory 6 mm s dříkem na stránce; Andexnite 5 a
+nabídek, jehož dřík do rozsahu padne (CraftPoint 6 mm a Leatory 1/4" = 6,35 mm s dříkem na stránce; Andexnite 5 a
 6,5 mm jen podle názvu, „ověřte u prodejce“). Když nepadne žádný (např. 3,4 mm → 5,3–5,8 mm),
 napíše „ověřený nýt s takovým dříkem nemáme, ověřte u prodejce“.
 

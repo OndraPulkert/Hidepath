@@ -1426,28 +1426,29 @@ export const beltProject: ProjectDefinition = {
   },
   shoppingPlan: {
     title:
-      'Výchozí sestava: pásek 40 mm z pásu 3–3,5 mm. Na šířce závisí pás (varianta šířky) a přezka, na změřené tloušťce dřík nýtu, na trnu přezky výsečník dírek. Uložte pásek na stránce „Váš pásek“ a plán se přepočítá podle něj.',
+      'Výchozí sestava (váš výběr): modrý pásek 40 mm z pásu Andexnite 3,5–3,7 mm, černá přezka Andexnite a černé nýty z CraftPointu. Na šířce závisí pás (varianta šířky) a přezka, na změřené tloušťce dřík nýtu, na trnu přezky výsečník dírek. Uložte pásek na stránce „Váš pásek“ a plán se přepočítá podle něj.',
     lines: [
       {
         equipmentSlug: 'belt-strap',
-        url: 'https://craft-point.cz/products/remen-z-prirodni-kuze-3-35mm-140cm-15-80mm',
+        url: 'https://andexnite.cz/produkt/hovezi-kuze-na-opasek-modra-130-cm-3-5-3-7-mm/',
         variant: '40 mm',
         quantity: 1,
         purpose:
-          'šířka 40 mm; jiná šířka = jiná varianta (Váš pásek). 130 cm stačí do obvodu 106,5 cm, delší má Křupson (jen 40 mm)',
+          'modrý pás 40 mm, 130 cm (poslední kus 9. 10. 2026); činění neuvedeno, ověřte u prodejce. 130 cm stačí do obvodu 106,5 cm. Andexnite: doprava do 500 Kč 120 Kč, od 501 Kč 80 Kč, od 1 500 Kč zdarma',
       },
       {
         equipmentSlug: 'belt-buckle',
-        url: 'https://craft-point.cz/products/mosazna-opaskova-prezka-40mm',
+        url: 'https://andexnite.cz/produkt/opaskova-prezka-40-mm-cerny-nikl-2/',
         quantity: 1,
-        purpose: 'přezka = šířka pásu; 30 a 35 mm má CraftPoint také, 45 mm jen Andexnite',
+        purpose:
+          'přezka = šířka pásu, černý nikl, jeden trn podle fotky; stejný obchod a zásilka jako pás',
       },
       {
         equipmentSlug: 'chicago-screws',
-        url: 'https://craft-point.cz/products/sroubovaci-nyty-10-6-mm-stribrne',
+        url: 'https://craft-point.cz/products/sroubovaci-nyty-10-6mm-cerny-nikl',
         quantity: 2,
         purpose:
-          '10/6 jen na pás 3,5–3,75 mm; jinak dřík podle tabulky Váš pásek; barvu vyberte k přezce',
+          '10/6 černý nikl k černé přezce, jen na pás 3,5–3,75 mm; při 3,7 mm sedí i Leatory 1/4" (6,35 mm). Jiný obchod než pás (CraftPoint, doprava 150 Kč), zásilka spolu s výsečníkem a balzámem',
       },
       {
         equipmentSlug: 'hole-punch-6mm',
@@ -1467,7 +1468,7 @@ export const beltProject: ProjectDefinition = {
         equipmentSlug: 'leather-balm',
         url: 'https://craft-point.cz/products/fiebings-leather-balm-with-atom-wax-balzam-s-voskem-118-ml',
         quantity: 1,
-        purpose: 'přírodní pás bez barvení; nejdřív na odřezku',
+        purpose: 'barevný pás: jen když na odřezku vyhoví vzhled (lekce 2)',
       },
       {
         equipmentSlug: 'edge-burnisher',
@@ -1556,7 +1557,7 @@ export const beltProject: ProjectDefinition = {
       {
         equipmentSlug: 'edge-paint',
         reason:
-          'Jen u barevného pásku: výchozí pás je přírodní. U barevného ji „Připravte si“ a „Co koupit“ přidají podle barvy z „Váš pásek“.',
+          'Jen u barevného pásku. Ověřenou modrou barvu na hrany nemáme: odstín ověřte u prodejce a na odřezku. U hnědé, tmavě hnědé a černé ji „Připravte si“ a „Co koupit“ přidají podle barvy z „Váš pásek“.',
       },
     ],
     alsoNeeded: [

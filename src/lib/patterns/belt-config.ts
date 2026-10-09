@@ -255,11 +255,77 @@ export interface BeltShoppingLine {
 }
 
 /**
- * Šířky, pro které má katalog jednotrnovou přezku s typem trnu ověřeným na stránce obchodu
- * (CraftPoint, mosazné 30, 35 a 40 mm, „s jedním trnem“, 2026-10-08). 45 mm má jen Andexnite
- * (2 ks, typ trnu neuvádí).
+ * Jednotrnové přezky z katalogu (`src/content/equipment/belt.ts`, `belt-buckle`) s jedním trnem
+ * ověřeným na stránce obchodu: CraftPoint mosazné to píše („s jedním trnem“, 8. 10. 2026),
+ * u ostatních je jeden trn vidět na fotce výrobku (9. 10. 2026). Pořadí = pořadí doporučení:
+ * pro 40 mm je první černý nikl z Andexnite (výběr k modrému pásku ze stejného obchodu).
+ * 45 mm má jen Andexnite (2 ks, typ trnu neuvádí), proto tu není.
  */
-const VERIFIED_BUCKLE_WIDTHS_MM: readonly number[] = [30, 35, 40];
+export interface VerifiedBuckle {
+  widthMm: number;
+  /** Krátký název pro souhrn nákupu. */
+  product: string;
+  shop: string;
+  /** Příklad v katalogu (shodné s `ProductExample.url`). */
+  url: string;
+  /** Kde je jeden trn ověřený: text stránky, nebo fotka výrobku. */
+  prong: 'stranka' | 'fotka';
+}
+
+export const VERIFIED_BUCKLES: readonly VerifiedBuckle[] = [
+  {
+    widthMm: 40,
+    product: 'Andexnite 40 mm, černý nikl',
+    shop: 'Andexnite',
+    url: 'https://andexnite.cz/produkt/opaskova-prezka-40-mm-cerny-nikl-2/',
+    prong: 'fotka',
+  },
+  {
+    widthMm: 40,
+    product: 'CraftPoint mosazná 40 mm',
+    shop: 'CraftPoint',
+    url: 'https://craft-point.cz/products/mosazna-opaskova-prezka-40mm',
+    prong: 'stranka',
+  },
+  {
+    widthMm: 40,
+    product: 'Andexnite 40 mm, nikl',
+    shop: 'Andexnite',
+    url: 'https://andexnite.cz/produkt/kovova-prezka-40-mm-nikl-2/',
+    prong: 'fotka',
+  },
+  {
+    widthMm: 40,
+    product: 'Leatory #6988 40 mm, nikl přes mosaz',
+    shop: 'Leatory',
+    url: 'https://www.leatory.cz/opaskove-prezky/-6988-opaskova-prezka-nikl-pres-mosaz-40mm/',
+    prong: 'fotka',
+  },
+  {
+    widthMm: 35,
+    product: 'CraftPoint mosazná 35 mm',
+    shop: 'CraftPoint',
+    url: 'https://craft-point.cz/products/mosazna-opaskova-prezka-35mm',
+    prong: 'stranka',
+  },
+  {
+    widthMm: 30,
+    product: 'CraftPoint mosazná 30 mm',
+    shop: 'CraftPoint',
+    url: 'https://craft-point.cz/products/mosazna-opaskova-prezka-30mm',
+    prong: 'stranka',
+  },
+];
+
+/** Přezky této šířky s ověřeným jedním trnem, v pořadí doporučení. */
+export const verifiedBuckles = (widthMm: number): VerifiedBuckle[] =>
+  VERIFIED_BUCKLES.filter((b) => Math.abs(b.widthMm - widthMm) < EPS);
+
+/** „jeden trn podle fotky“ / „stránka uvádí jeden trn“. */
+export const PRONG_SOURCE_LABELS: Readonly<Record<VerifiedBuckle['prong'], string>> = {
+  stranka: 'stránka uvádí jeden trn',
+  fotka: 'jeden trn podle fotky',
+};
 
 /**
  * Výsečníky se zdrojem v podkladech (docs/content/notes-vybaveni.md, docs/zadani/opasek-postup.md):
@@ -274,11 +340,16 @@ const punchStatus = (d: number): ShoppingStatus => (isVerifiedPunchMm(d) ? 'over
 
 /**
  * Šroubovací nýty z katalogu (`src/content/equipment/belt.ts`, `chicago-screws`, ověřeno
- * 8. 10. 2026) podle délky dříku. `confirmed` = dřík uvádí stránka výrobku; u Andexnite je
- * jen v názvu a katalog píše „délku dříku si potvrďte u prodejce“.
+ * 9. 10. 2026) podle délky dříku. `confirmed` = dřík uvádí stránka výrobku; u Andexnite je
+ * jen v názvu a katalog píše „délku dříku si potvrďte u prodejce“. Leatory prodává palcové
+ * Weaver D5038: varianta „1/4" (6 mm)“ má dřík 1/4" = 6,35 mm, počítá se s ním.
+ * Pořadí = pořadí doporučení mezi potvrzenými: CraftPoint černý nikl k černé přezce.
  */
 export interface ChicagoScrewOption {
   postMm: number;
+  /** Palcová velikost, když ji obchod prodává v palcích („1/4"“). */
+  inch?: string;
+  shop: string;
   /** Krátký popis pro tabulku a nákup. */
   product: string;
   /** Příklad v katalogu: URL a varianta (shodné s `ProductExample`). */
@@ -292,22 +363,26 @@ export interface ChicagoScrewOption {
 export const CHICAGO_SCREW_OPTIONS: readonly ChicagoScrewOption[] = [
   {
     postMm: 6,
-    product: 'CraftPoint 10/6, 8 Kč/ks',
-    url: 'https://craft-point.cz/products/sroubovaci-nyty-10-6-mm-stribrne',
+    shop: 'CraftPoint',
+    product: 'CraftPoint 10/6 černý nikl, 8 Kč/ks',
+    url: 'https://craft-point.cz/products/sroubovaci-nyty-10-6mm-cerny-nikl',
     quantity: 2,
     confirmed: true,
   },
   {
-    postMm: 6,
-    product: 'Leatory opaskový šroubek, dřík 6 mm, 19 Kč/ks',
+    postMm: 6.35,
+    inch: '1/4"',
+    shop: 'Leatory',
+    product: 'Leatory opaskový šroubek 1/4" = 6,35 mm (obchod píše 6 mm), nikl, 19 Kč/ks',
     url: 'https://www.leatory.cz/nyty--ozdoby-a-ostatni/opaskovy-sroubek-nikl-pres-mosaz-hladky-profi/',
-    variant: 'dřík 6 mm',
+    variant: '1/4" (6 mm)',
     quantity: 2,
     confirmed: true,
   },
   {
     postMm: 5,
-    product: 'Andexnite Ø 9 × 5 mm (dřík jen podle názvu)',
+    shop: 'Andexnite',
+    product: 'Andexnite Ø 9 × 5 mm černý nikl (dřík jen podle názvu)',
     url: 'https://andexnite.cz/produkt/sroubovaci-nyt-o-9-x-5-mm-o-95-x-6-mm-cerny-nikl-10-ks/',
     variant: '9 × 5 mm',
     quantity: 1,
@@ -315,7 +390,8 @@ export const CHICAGO_SCREW_OPTIONS: readonly ChicagoScrewOption[] = [
   },
   {
     postMm: 6.5,
-    product: 'Andexnite Ø 9,5 × 6,5 mm (dřík jen podle názvu)',
+    shop: 'Andexnite',
+    product: 'Andexnite Ø 9,5 × 6,5 mm černý nikl (dřík jen podle názvu)',
     url: 'https://andexnite.cz/produkt/sroubovaci-nyt-o-9-x-5-mm-o-95-x-6-mm-cerny-nikl-10-ks/',
     variant: '9,5 × 6,5 mm',
     quantity: 1,
@@ -545,7 +621,8 @@ export function deriveBeltConfig(input: BeltConfigInput): BeltConfigOutcome {
   const fold = end.tailLengthMm;
   const [near, far] = end.rivetOffsetsMm;
   const rivet = rivetPostMm(input.thicknessMm);
-  const buckleVerified = VERIFIED_BUCKLE_WIDTHS_MM.includes(input.widthMm);
+  const buckles = verifiedBuckles(input.widthMm);
+  const buckleVerified = buckles.length > 0;
   const orientation = tipSheetOrientation(tip);
   const keeper = { lengthMm: keeperStripLengthMm(end), widthMm: end.keeperWidthMm };
 
@@ -598,8 +675,8 @@ export function deriveBeltConfig(input: BeltConfigInput): BeltConfigOutcome {
   shopping.push({
     item: `Přezka ${cz(input.widthMm)} mm, jednotrnová`,
     quantity: 1,
-    detail: buckleVerified
-      ? 'vnitřní světlost = šířka pásu; jednotrnovou ověřeno u CraftPointu (mosazná), u jiných přezek typ trnu ověřte na fotce'
+    detail: buckles[0]
+      ? `vnitřní světlost = šířka pásu; ${buckles[0].product} (${PRONG_SOURCE_LABELS[buckles[0].prong]}), u jiných přezek typ trnu ověřte na fotce`
       : 'vnitřní světlost = šířka pásu; v podkladech neověřená, ověřte u prodejce',
     status: buckleVerified ? 'overeno' : 'overte',
   });

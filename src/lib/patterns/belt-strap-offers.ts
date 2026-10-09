@@ -83,6 +83,13 @@ export interface StrapSource {
   /** Doprava v ČR, jak ji uvádí obchod (nebo „neověřeno“). */
   shipping: string;
   note: string;
+  /**
+   * Výběr uživatele (9. 10. 2026): v těchto šířkách je nabídka výchozí, i když činění stránka
+   * neuvádí (UI pak píše „činění neuvedeno, ověřte u prodejce“). Jen když je skladem.
+   */
+  preferredWidthsMm?: readonly number[];
+  /** Datum ověření, když je jiné než `STRAP_OFFERS_CHECKED_AT`. */
+  checkedAt?: string;
 }
 
 export interface StrapOffer {
@@ -99,11 +106,16 @@ export interface StrapOffer {
   /** Tloušťka, činění, sklad – krátce. */
   note: string;
   checkedAt: string;
+  /** Výběr uživatele pro tuto šířku (viz `StrapSource.preferredWidthsMm`). */
+  preferred: boolean;
 }
 
 const EPS = 1e-9;
 const czk = (table: Readonly<Record<number, number>>) => (w: number) =>
   table[w] === undefined ? undefined : table[w] * 100;
+
+/** Doprava Andexnite v ČR (stránka Doprava a platba, ověřeno 9. 10. 2026). */
+export const ANDEXNITE_SHIPPING = 'do 500 Kč 120 Kč, od 501 Kč 80 Kč, od 1 500 Kč zdarma';
 
 /** Doprava CraftPointu (kurýr z Polska, ověřeno 8. 10. 2026). */
 const CRAFTPOINT_SHIPPING = 'kurýr 150 Kč, zdarma od 2 000 Kč; pás, přezka i nýty v jedné zásilce';
@@ -274,7 +286,7 @@ export const STRAP_SOURCES: readonly StrapSource[] = [
     variant: (w) => `${w} mm`,
     tanningVerified: false,
     color: 'prirodni',
-    shipping: 'objednávka do 500 Kč 120 Kč (obchodní podmínky)',
+    shipping: ANDEXNITE_SHIPPING,
     note: '3,9–4,1 mm',
   },
   {
@@ -289,7 +301,7 @@ export const STRAP_SOURCES: readonly StrapSource[] = [
     variant: (w) => `${w} mm`,
     tanningVerified: false,
     color: 'prirodni',
-    shipping: 'objednávka do 500 Kč 120 Kč (obchodní podmínky)',
+    shipping: ANDEXNITE_SHIPPING,
     note: '3,1–3,4 mm, délka 140 cm',
   },
   {
@@ -479,6 +491,7 @@ const andexniteDyed = (
   thicknessMm: readonly [number, number],
   lengthCm: number,
   prices: Readonly<Record<number, number>>,
+  extra: Pick<StrapSource, 'preferredWidthsMm' | 'checkedAt'> & { stock?: string } = {},
 ): StrapSource => ({
   shop: 'Andexnite',
   product,
@@ -491,8 +504,10 @@ const andexniteDyed = (
   variant: (w) => `${w} mm`,
   tanningVerified: false,
   color,
-  shipping: 'objednávka do 500 Kč 120 Kč (obchodní podmínky)',
-  note: `${czRange(thicknessMm)} mm, délka ${lengthCm} cm; činění ani probarvení stránka neuvádí`,
+  shipping: ANDEXNITE_SHIPPING,
+  note: `${czRange(thicknessMm)} mm, délka ${lengthCm} cm; činění ani probarvení stránka neuvádí${extra.stock ? `; ${extra.stock}` : ''}`,
+  ...(extra.preferredWidthsMm ? { preferredWidthsMm: extra.preferredWidthsMm } : {}),
+  ...(extra.checkedAt ? { checkedAt: extra.checkedAt } : {}),
 });
 
 const czRange = ([a, b]: readonly [number, number]): string =>
@@ -502,7 +517,10 @@ const czRange = ([a, b]: readonly [number, number]): string =>
 
 const ANDEXNITE_STD_CZK: Readonly<Record<number, number>> = { 30: 255, 35: 285, 40: 320 };
 
-/** Barvené pásy. Bez uvedeného činění (`tanningVerified: false`) se nikdy nevyberou samy. */
+/**
+ * Barvené pásy. Bez uvedeného činění (`tanningVerified: false`) se samy nevyberou, kromě výběru
+ * uživatele (`preferredWidthsMm`).
+ */
 export const DYED_STRAP_SOURCES: readonly StrapSource[] = [
   craftpointDyed(
     'tmave-hneda',
@@ -580,6 +598,29 @@ export const DYED_STRAP_SOURCES: readonly StrapSource[] = [
     130,
     false,
     'barvená na koňakový odstín, 3,5 mm, délka 130–140 cm; 38 a 44 mm řežou na objednávku',
+  ),
+  // Modrý pásek uživatele (9. 10. 2026): 40 mm je výchozí; 40 mm poslední kus, 35 mm 3 ks.
+  andexniteDyed(
+    'modra',
+    'hovezi-kuze-na-opasek-modra-130-cm-3-5-3-7-mm',
+    'Hovězí kůže na opasek, modrá, 130 cm, 3,5–3,7 mm',
+    [3.5, 3.7],
+    130,
+    { 35: 225, 40: 260 },
+    {
+      preferredWidthsMm: [40],
+      checkedAt: '2026-10-09',
+      stock: '40 mm poslední kus, 35 mm 3 ks (9. 10. 2026)',
+    },
+  ),
+  andexniteDyed(
+    'modra',
+    'hovezi-kuze-na-opasek-tmave-modra-130-cm-3-7-3-8-mm',
+    'Hovězí kůže na opasek, tmavě modrá, 130 cm, 3,7–3,8 mm',
+    [3.7, 3.8],
+    130,
+    ANDEXNITE_STD_CZK,
+    { checkedAt: '2026-10-09' },
   ),
   dvapasovciDyed(
     'modra',
@@ -770,19 +811,23 @@ export function strapOffers(
       color: s.color,
       shipping: s.shipping,
       note: `${s.note}; po doručení přeměřte`,
-      checkedAt: STRAP_OFFERS_CHECKED_AT,
+      checkedAt: s.checkedAt ?? STRAP_OFFERS_CHECKED_AT,
+      preferred: s.preferredWidthsMm?.includes(widthMm) === true,
     });
   }
   return offers.sort((a, b) => a.priceCents - b.priceCents);
 }
 
 /**
- * Výchozí nabídka (nabídky jsou už jen jedné barvy): CraftPoint, když ho šířka, tloušťka
- * a délka pustí (pás, přezka i nýty v jedné zásilce). Jinak nejlevnější skladem s ověřeným
- * činěním. Nikdy nabídka na objednávku, vyprodaná nebo bez uvedeného činění – ta zůstane jen
- * v „Kde jinde koupit“. Platí stejně pro přírodní i barevný pás.
+ * Výchozí nabídka (nabídky jsou už jen jedné barvy): výběr uživatele (`preferred`, modrý pás
+ * Andexnite 40 mm), když je skladem – i bez uvedeného činění. Jinak CraftPoint, když ho šířka,
+ * tloušťka a délka pustí (pás, přezka i nýty v jedné zásilce), jinak nejlevnější skladem
+ * s ověřeným činěním. Nikdy nabídka na objednávku nebo vyprodaná; bez uvedeného činění jen
+ * výběr uživatele, ostatní zůstanou v „Kde jinde koupit“.
  */
 export function defaultStrapOffer(offers: readonly StrapOffer[]): StrapOffer | null {
+  const preferred = offers.find((o) => o.preferred && o.availability === 'in_stock');
+  if (preferred) return preferred;
   const eligible = offers.filter((o) => o.availability === 'in_stock' && o.tanningVerified);
   return (
     eligible.find((o) => o.shop === 'CraftPoint') ??
@@ -790,6 +835,10 @@ export function defaultStrapOffer(offers: readonly StrapOffer[]): StrapOffer | n
     null
   );
 }
+
+/** Výhrada k nabídce pro UI: činění, které stránka neuvádí; `null`, když výhrada není. */
+export const strapOfferCaveat = (o: StrapOffer): string | null =>
+  o.tanningVerified ? null : 'činění neuvedeno, ověřte u prodejce';
 
 /** Krátký popis skladu pro UI. */
 export const STRAP_AVAILABILITY_LABELS: Readonly<Record<StrapAvailability, string>> = {
@@ -801,7 +850,8 @@ export const STRAP_AVAILABILITY_LABELS: Readonly<Record<StrapAvailability, strin
 /**
  * Barva na hrany pro barevný pás: Fiebing's Edge Kote 118 ml z katalogu (`edge-paint`), jen
  * odstíny, které katalog má ověřené (CraftPoint, skladem 8. 10. 2026). Odstín ke kůži se podle
- * názvu jen odhaduje: ověřte na odřezku. Jiné barvy pásu ověřenou barvu na hrany nemají.
+ * názvu jen odhaduje: ověřte na odřezku. Jiné barvy pásu (i modrá) ověřenou barvu na hrany
+ * nemají: souhrn a nákup píšou „odstín ověřte“, nic se nedomýšlí.
  */
 export const EDGE_PAINT_URLS: Readonly<Partial<Record<StrapColor, string>>> = {
   hneda: 'https://craft-point.cz/products/fiebings-edge-kote-118-ml-hneda',

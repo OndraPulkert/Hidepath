@@ -5,8 +5,13 @@ import { patternSheetUrlsFor } from '@/content/projects/pattern-sheets';
 import { type LessonDefinition, projectDefinitionSchema } from '@/content/schema';
 import { activeBeltOutcome, resolveActiveBelt } from '@/features/belt/active-belt';
 import { type LessonRecordEntry } from '@/features/notebook/types';
+import { beltShoppingPlan } from '@/features/belt/belt-shopping';
 import { findPlanExample } from '@/features/shopping/plan';
-import { deriveBeltConfig } from '@/lib/patterns/belt-config';
+import {
+  CHICAGO_SCREW_OPTIONS,
+  VERIFIED_BUCKLES,
+  deriveBeltConfig,
+} from '@/lib/patterns/belt-config';
 import {
   EDGE_PAINT_URLS,
   STRAP_COLOR_LABELS,
@@ -308,17 +313,45 @@ describe('obsah – pásek: nákup', () => {
     expect([...byKey.keys()].filter((k) => !reached.has(k))).toEqual([]);
   });
 
-  it('přezka „ověřená“ ve výpočtu = katalog má mosaznou jednotrnovou z CraftPointu', () => {
+  it('přezky s ověřeným jedním trnem jsou v katalogu ve své šířce; „ověřená“ ve výpočtu = některá z nich', () => {
     const buckles = equipmentCatalog['belt-buckle']!.examples;
+    for (const b of VERIFIED_BUCKLES) {
+      const e = buckles.find((x) => x.url === b.url);
+      expect(e, b.url).toBeDefined();
+      expect(e!.shop).toBe(b.shop);
+      expect(e!.title).toContain(`${b.widthMm} mm`);
+      if (b.prong === 'fotka') expect(e!.note).toMatch(/jeden trn podle fotky/i);
+    }
+    // Pro 40 mm je první černý nikl z Andexnite (výběr uživatele), i první příklad v katalogu.
+    expect(VERIFIED_BUCKLES[0]!.url).toBe(buckles[0]!.url);
+    expect(buckles[0]!.title).toBe('Opasková přezka 40 mm, černý nikl');
     for (const widthMm of [28, 30, 35, 40, 45]) {
       const r = deriveBeltConfig({ widthMm, thicknessMm: 3.5, tip: 'hrot' });
       expect(r.ok).toBe(true);
       if (!r.ok) continue;
-      const verified = buckles.some(
-        (b) => b.shop === 'CraftPoint' && b.title === `Mosazná opasková přezka ${widthMm} mm`,
+      expect(r.result.buckle.verified, `${widthMm} mm`).toBe(
+        VERIFIED_BUCKLES.some((b) => b.widthMm === widthMm),
       );
-      expect(r.result.buckle.verified, `${widthMm} mm`).toBe(verified);
     }
+  });
+
+  it('nýty z výpočtu jsou v katalogu; dřík v poznámce sedí s pravidlem 2t − 1,5 … 2t − 1', () => {
+    const screws = equipmentCatalog['chicago-screws']!.examples;
+    for (const o of CHICAGO_SCREW_OPTIONS) {
+      const e = screws.find((x) => x.url === o.url && x.variant === o.variant);
+      expect(e, `${o.url} ${o.variant ?? ''}`).toBeDefined();
+      expect(e!.shop).toBe(o.shop);
+      // Rozsah tloušťky pásu, na který nýt sedí: (dřík + 1) / 2 … (dřík + 1,5) / 2.
+      const lo = Math.ceil(((o.postMm + 1) / 2) * 100 - 1e-6) / 100;
+      const hi = Math.floor(((o.postMm + 1.5) / 2) * 100 + 1e-6) / 100;
+      const m = /na pás (\d+(?:,\d+)?)–(\d+(?:,\d+)?) mm/.exec(e!.note ?? '');
+      expect(m, o.product).not.toBeNull();
+      const num = (v: string) => Number(v.replace(',', '.'));
+      expect([num(m![1]!), num(m![2]!)], o.product).toEqual([lo, hi]);
+    }
+    // Leatory „1/4" (6 mm)“ je 6,35 mm, ne 6 mm.
+    const leatory = CHICAGO_SCREW_OPTIONS.find((o) => o.shop === 'Leatory')!;
+    expect(leatory).toMatchObject({ postMm: 6.35, inch: '1/4"', variant: '1/4" (6 mm)' });
   });
 });
 
@@ -478,7 +511,7 @@ describe('pásek – barevný pásek (hrany a balzám)', () => {
     }
   });
 
-  it('plán projektu (přírodní) barvu na hrany vynechává s důvodem; ověřené odstíny jsou v katalogu', () => {
+  it('plán projektu (modrý pás) barvu na hrany vynechává s důvodem: ověřenou modrou nemáme', () => {
     const plan = beltProject.shoppingPlan!;
     expect(plan.lines.some((l) => l.equipmentSlug === 'edge-paint')).toBe(false);
     expect(plan.skipped.find((s) => s.equipmentSlug === 'edge-paint')!.reason).toMatch(
@@ -488,5 +521,27 @@ describe('pásek – barevný pásek (hrany a balzám)', () => {
     expect(req.priority).toBe('recommended');
     const urls = equipmentCatalog['edge-paint']!.examples.map((e) => e.url);
     for (const url of Object.values(EDGE_PAINT_URLS)) expect(urls).toContain(url);
+    expect(EDGE_PAINT_URLS.modra).toBeUndefined();
+    expect(plan.skipped.find((s) => s.equipmentSlug === 'edge-paint')!.reason).toContain(
+      'odstín ověřte',
+    );
+  });
+
+  it('plán projektu = výběr uživatele: modrý pás Andexnite, černá přezka Andexnite, černé nýty CraftPoint', () => {
+    const plan = beltProject.shoppingPlan!;
+    const blue = deriveBeltConfig({ widthMm: 40, thicknessMm: 3.5, tip: 'hrot', color: 'modra' });
+    if (!blue.ok) throw new Error(blue.problems.join(' '));
+    const computed = beltShoppingPlan(plan, blue.result, 'Modrý', equipmentCatalog);
+    for (const slug of ['belt-strap', 'belt-buckle', 'chicago-screws'] as const) {
+      const own = plan.lines.filter((l) => l.equipmentSlug === slug);
+      const calc = computed.lines.filter((l) => l.equipmentSlug === slug);
+      expect(
+        own.map((l) => [l.url, l.variant, l.quantity]),
+        slug,
+      ).toEqual(calc.map((l) => [l.url, l.variant, l.quantity]));
+    }
+    expect(plan.lines.find((l) => l.equipmentSlug === 'belt-strap')!.purpose).toContain(
+      'činění neuvedeno, ověřte u prodejce',
+    );
   });
 });

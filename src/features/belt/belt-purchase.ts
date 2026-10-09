@@ -1,5 +1,13 @@
 import { formatDecimal } from '@/features/notebook/values';
-import { BELT_LIMITS, type BeltConfigResult, isVerifiedPunchMm } from '@/lib/patterns/belt-config';
+import {
+  BELT_LIMITS,
+  type BeltConfigResult,
+  type ChicagoScrewOption,
+  PRONG_SOURCE_LABELS,
+  type VerifiedBuckle,
+  isVerifiedPunchMm,
+  verifiedBuckles,
+} from '@/lib/patterns/belt-config';
 import {
   EDGE_PAINT_URLS,
   STRAP_COLOR_LABELS,
@@ -7,6 +15,7 @@ import {
   defaultStrapOffer,
   isDyedStrap,
   strapOffers,
+  strapOfferCaveat,
 } from '@/lib/patterns/belt-strap-offers';
 import { formatCzk } from '@/lib/utils/format';
 
@@ -30,7 +39,10 @@ export interface BeltPurchase {
   /** Kolik pás musí mít: nejkratší délka, případně + 15 cm na odřezek. */
   neededCm: number | null;
   scrapFromStrap: boolean;
-  /** Doporučená nabídka (CraftPoint, jinak nejlevnější skladem s ověřeným činěním). */
+  /**
+   * Doporučená nabídka (výběr uživatele, jinak CraftPoint, jinak nejlevnější skladem s ověřeným
+   * činěním; `defaultStrapOffer`).
+   */
   offer: StrapOffer | null;
   /** Délka, kterou objednat: nejkratší, kterou doporučená nabídka prodává a která stačí. */
   orderCm: number | null;
@@ -39,6 +51,8 @@ export interface BeltPurchase {
   buckleWidthMm: number;
   /** Přezka této šířky je v podkladech (jinak „ověřte u prodejce“). */
   buckleVerified: boolean;
+  /** Doporučená přezka (první s ověřeným jedním trnem); `null`, když žádná. */
+  buckle: VerifiedBuckle | null;
   screws: {
     count: number;
     postMm: number | null;
@@ -46,6 +60,12 @@ export interface BeltPurchase {
     maxMm: number;
     /** Dřík uvádí stránka výrobku (jinak jen v názvu, „ověřte u prodejce“). */
     verified: boolean;
+    /** Doporučený nýt (dřík v rozsahu, potvrzené první); `null`, když žádný. */
+    pick: ChicagoScrewOption | null;
+    /** Další nýty, jejichž dřík do rozsahu také padne. */
+    alsoFit: ChicagoScrewOption[];
+    /** Nýt je z jiného obchodu než doporučený pás: další zásilka a poštovné. */
+    otherShop: boolean;
   };
   /** Výsečníky: Ø dírek pro trn a Ø otvorů pro nýty, vzestupně a bez opakování. */
   punchesMm: number[];
@@ -68,6 +88,7 @@ export function beltPurchase(
     minLengthCm === null ? null : minLengthCm + (scrapFromStrap ? SCRAP_ALLOWANCE_CM : 0);
   const offers = strapOffers(input.widthMm, input.thicknessMm, neededCm, color);
   const offer = defaultStrapOffer(offers);
+  const [screw, ...alsoFit] = result.rivet.options;
   const punches = [result.holes.diameterMm, result.buckleEnd.rivetHoleMm].sort((a, b) => a - b);
   const punchesMm = punches.filter((d, i) => i === 0 || Math.abs(d - punches[i - 1]!) > 1e-9);
   return {
@@ -81,12 +102,16 @@ export function beltPurchase(
     offers,
     buckleWidthMm: result.buckle.widthMm,
     buckleVerified: result.buckle.verified,
+    buckle: verifiedBuckles(result.buckle.widthMm)[0] ?? null,
     screws: {
       count: 2,
       postMm: result.rivet.postMm,
       minMm: result.rivet.minMm,
       maxMm: result.rivet.maxMm,
       verified: result.rivet.verified !== null,
+      pick: screw ?? null,
+      alsoFit,
+      otherShop: screw !== undefined && offer !== null && screw.shop !== offer.shop,
     },
     punchesMm,
     unverifiedPunchesMm: punchesMm.filter((d) => !isVerifiedPunchMm(d)),
@@ -106,6 +131,26 @@ export interface PurchaseLine {
   detail: string;
 }
 
+/** „Leatory 1/4" = 6,35 mm“ / „Andexnite 6,5 mm“: obchod a dřík, palce přepočtené. */
+const screwSize = (o: ChicagoScrewOption): string =>
+  `${o.shop} ${o.inch ? `${o.inch} = ` : ''}${mm(o.postMm)}`;
+
+/**
+ * Nýty podle změřené tloušťky: počet a dřík, doporučený výrobek (jen s dříkem v rozsahu
+ * 2t − 1,5 … 2t − 1 mm), jiný obchod než pás, a co dalšího do rozsahu padne.
+ */
+export function screwDetail(p: BeltPurchase): string {
+  const s = p.screws;
+  const range = `${formatDecimal(s.minMm)}–${mm(s.maxMm)}`;
+  if (s.pick === null) return `${s.count} ks, dřík ${range}${VERIFY}`;
+  const parts = [
+    `${s.count} ks, dřík ${mm(s.pick.postMm)} (rozsah ${range}): ${s.pick.product}${s.pick.confirmed ? '' : ', ověřte u prodejce'}`,
+  ];
+  if (s.otherShop) parts.push(`jiný obchod než pás (${p.offer!.shop}), další poštovné`);
+  if (s.alsoFit.length > 0) parts.push(`sedí i ${s.alsoFit.map(screwSize).join(', ')}`);
+  return parts.join('; ');
+}
+
 /** Souhrn k zobrazení, česky a krátce. */
 export function purchaseLines(p: BeltPurchase): PurchaseLine[] {
   const { min, max } = BELT_LIMITS.thicknessMm;
@@ -123,14 +168,13 @@ export function purchaseLines(p: BeltPurchase): PurchaseLine[] {
     },
     {
       what: 'Přezka',
-      detail: `${mm(p.buckleWidthMm)}, jednotrnová${p.buckleVerified ? '' : VERIFY}`,
+      detail: p.buckle
+        ? `${mm(p.buckleWidthMm)}, jednotrnová: ${p.buckle.product} (${PRONG_SOURCE_LABELS[p.buckle.prong]})`
+        : `${mm(p.buckleWidthMm)}, jednotrnová${VERIFY}`,
     },
     {
       what: 'Šrouby chicago',
-      detail:
-        p.screws.postMm === null
-          ? `${p.screws.count} ks, dřík ${formatDecimal(p.screws.minMm)}–${mm(p.screws.maxMm)}${VERIFY}`
-          : `${p.screws.count} ks, dřík ${mm(p.screws.postMm)}${p.screws.verified ? '' : VERIFY}`,
+      detail: screwDetail(p),
     },
     {
       what: 'Výsečník',
@@ -145,7 +189,9 @@ export function purchaseLines(p: BeltPurchase): PurchaseLine[] {
   if (p.dyedColor) {
     lines.push({
       what: 'Barva na hrany',
-      detail: `${p.dyedColor}${p.edgePaintVerified ? '' : VERIFY}`,
+      detail: p.edgePaintVerified
+        ? p.dyedColor
+        : `${p.dyedColor}: ověřenou v tomto odstínu nemáme, odstín ověřte u prodejce a na odřezku`,
     });
   }
   return lines;
@@ -154,7 +200,8 @@ export function purchaseLines(p: BeltPurchase): PurchaseLine[] {
 /** „Doporučeno: CraftPoint 284 Kč“, nebo proč doporučení není. */
 export function recommendedOfferText(p: BeltPurchase): string {
   if (p.offer) {
-    return `Doporučeno: ${p.offer.shop}, ${p.offer.lengthCm} cm, ${formatCzk(p.offer.priceCents)}`;
+    const caveat = strapOfferCaveat(p.offer);
+    return `Doporučeno: ${p.offer.shop}, ${p.offer.lengthCm} cm, ${formatCzk(p.offer.priceCents)}${caveat ? ` (${caveat})` : ''}`;
   }
   return p.offers.length > 0
     ? 'Doporučený obchod není: skladem s ověřeným činěním nic, nabídky k ověření jsou níže'

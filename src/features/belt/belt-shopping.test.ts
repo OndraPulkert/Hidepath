@@ -115,7 +115,7 @@ describe('nákup podle pásku', () => {
     expect(basis!.input.widthMm).toBe(35);
   });
 
-  it('35 mm × 3,5 mm: pás ve variantě 35 mm, mosazná přezka 35 mm, nýt 10/6', () => {
+  it('35 mm × 3,5 mm: pás ve variantě 35 mm, mosazná přezka 35 mm, nýt 10/6 černý nikl', () => {
     const out = prepPlan([
       saved('Hnědý', { widthMm: 35, thicknessMm: 3.5, tip: 'hrot', waistMm: 950 }),
     ]);
@@ -131,7 +131,7 @@ describe('nákup podle pásku', () => {
     ]);
     expect(lineOf(out.plan, 'chicago-screws')).toEqual([
       expect.objectContaining({
-        url: 'https://craft-point.cz/products/sroubovaci-nyty-10-6-mm-stribrne',
+        url: 'https://craft-point.cz/products/sroubovaci-nyty-10-6mm-cerny-nikl',
         quantity: 2,
       }),
     ]);
@@ -148,7 +148,7 @@ describe('nákup podle pásku', () => {
     expect(buckle[0]!.purpose).toMatch(/typ trnu .* ověřte na fotce/);
     const screws = lineOf(out.plan, 'chicago-screws');
     expect(screws).toEqual([expect.objectContaining({ variant: '9,5 × 6,5 mm', quantity: 1 })]);
-    expect(screws[0]!.purpose).toMatch(/dřík jen podle názvu, ověřte u prodejce/);
+    expect(screws[0]!.purpose).toMatch(/dřík jen podle názvu\), ověřte u prodejce/);
   });
 
   it('pás bez výchozí nabídky (jen bez uvedeného činění) jde do „neplánováno“, nic se nevybere', () => {
@@ -199,10 +199,16 @@ describe('nákup podle pásku', () => {
         const resolved = resolveShoppingPlan({ shoppingPlan: out.plan }, equipmentCatalog, {});
         const resolvedCount = resolved!.shops.reduce((n, s) => n + s.lines.length, 0);
         expect(resolvedCount, `${widthMm}/${thicknessMm}`).toBe(out.plan.lines.length);
+        // Balzám má účel podle barvy pásu (plán projektu je pro modrý pás), ostatní beze změny.
         const others = plan.lines.filter(
-          (l) => !(BELT_CONFIG_PLAN_SLUGS as readonly string[]).includes(l.equipmentSlug),
+          (l) =>
+            !(BELT_CONFIG_PLAN_SLUGS as readonly string[]).includes(l.equipmentSlug) &&
+            l.equipmentSlug !== 'leather-balm',
         );
         expect(out.plan.lines.filter((l) => others.includes(l))).toEqual(others);
+        expect(lineOf(out.plan, 'leather-balm')[0]!.purpose).toBe(
+          'přírodní pás bez barvení; nejdřív na odřezku',
+        );
         for (const slug of BELT_CONFIG_PLAN_SLUGS) {
           const inLines = out.plan.lines.some((l) => l.equipmentSlug === slug);
           const inSkipped = out.plan.skipped.some((s) => s.equipmentSlug === slug);
@@ -246,7 +252,7 @@ describe('nákup podle pásku', () => {
     expect(fallback.planBasis).toBeUndefined();
     expect(
       fallback.equipment.find((e) => e.slug === 'belt-buckle')!.planLines.map((l) => l.title),
-    ).toEqual(['Mosazná opasková přezka 40 mm']);
+    ).toEqual(['Opasková přezka 40 mm, černý nikl']);
   });
 
   it('výsečník na dírky podle Ø pásku, ne vždy 5 mm', () => {
@@ -315,7 +321,7 @@ describe('nákup podle pásku', () => {
     expect(out).not.toBeNull();
     expect(out!.plan).toBe(plan);
     expect(out!.basis).toMatch(
-      /^podle plánu projektu \(pásek 40 mm\): zápisy z lekce 1 nejdou spočítat/,
+      /^podle plánu projektu \(modrý pásek 40 mm\): zápisy z lekce 1 nejdou spočítat/,
     );
     expect(out!.basis).toMatch(/Trn 5,8 mm je na výsečníky 4,5–6 mm moc silný/);
   });
@@ -417,7 +423,8 @@ describe('nákup podle barvy pásku', () => {
   it('rozpočet: barva na hrany jen u barevného pásku, s cenou ověřeného odstínu', () => {
     const budget = (entries: LessonRecordEntry[]) =>
       beltPlanView(plan, entries, SLUG, equipmentCatalog).budgetPrices['edge-paint'];
-    expect(budget([])).toBe('not-needed');
+    // Plán projektu je pro modrý pás: barva na hrany je potřeba, ale ověřený odstín nemáme.
+    expect(budget([])).toBe('unpriced');
     expect(budget([saved('P', { widthMm: 40, thicknessMm: 3.5, tip: 'hrot' })])).toBe('not-needed');
     expect(
       budget([saved('Č', { widthMm: 40, thicknessMm: 3.5, tip: 'hrot', color: 'cerna' })]),
@@ -429,7 +436,12 @@ describe('nákup podle barvy pásku', () => {
       beltProject,
       equipmentCatalog,
       {},
-      beltPlanView(plan, [], SLUG, equipmentCatalog).budgetPrices,
+      beltPlanView(
+        plan,
+        [saved('P', { widthMm: 40, thicknessMm: 3.5, tip: 'hrot' })],
+        SLUG,
+        equipmentCatalog,
+      ).budgetPrices,
     );
     expect(natural.lines.map((l) => l.equipmentSlug)).not.toContain('edge-paint');
   });
@@ -445,7 +457,7 @@ describe('Co koupit a rozpočet podle pásku', () => {
     const view = beltPlanView(plan, [], SLUG, equipmentCatalog);
     expect(view.plan).toBe(plan);
     expect(view.basis).toBe(BELT_FALLBACK_BASIS);
-    expect(view.basis).toBe('podle plánu projektu (pásek 40 mm)');
+    expect(view.basis).toBe('podle plánu projektu (modrý pásek 40 mm)');
     expect(view.budgetPrices['belt-buckle']).toEqual({ cents: priceOf(plan, 'belt-buckle') });
     expect(view.budgetPrices['hole-punch-5mm']).toEqual({
       cents: priceOf(plan, 'hole-punch-5mm'),
@@ -494,6 +506,6 @@ describe('Co koupit a rozpočet podle pásku', () => {
       equipmentCatalog,
     );
     expect(view.plan).toBe(plan);
-    expect(view.basis).toMatch(/^podle plánu projektu \(pásek 40 mm\): zápisy z lekce 1/);
+    expect(view.basis).toMatch(/^podle plánu projektu \(modrý pásek 40 mm\): zápisy z lekce 1/);
   });
 });

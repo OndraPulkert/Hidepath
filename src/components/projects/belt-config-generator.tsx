@@ -52,6 +52,7 @@ import {
   STRAP_AVAILABILITY_LABELS,
   STRAP_COLOR_LABELS,
   type StrapOffer,
+  strapOfferCaveat,
 } from '@/lib/patterns/belt-strap-offers';
 import { formatCzk, formatDateCs, typo } from '@/lib/utils/format';
 
@@ -698,6 +699,10 @@ function StrapOfferList({
           {typo(
             ` – ${defaultOffer.lengthCm} cm, ${formatCzk(defaultOffer.priceCents)}, ${STRAP_AVAILABILITY_LABELS[defaultOffer.availability]}`,
           )}
+          <OfferCaveat offer={defaultOffer} />
+          <span className="block">
+            {typo(`${defaultOffer.note}. Doprava: ${defaultOffer.shipping}.`)}
+          </span>
         </p>
       ) : null}
       {others.length > 0 ? (
@@ -712,18 +717,26 @@ function StrapOfferList({
                 {typo(
                   ` – ${o.lengthCm} cm, ${formatCzk(o.priceCents)}, ${STRAP_AVAILABILITY_LABELS[o.availability]}`,
                 )}
-                {o.tanningVerified ? null : (
-                  <span className="text-cognac-deep">{typo(', činění neuvedeno')}</span>
-                )}
+                <OfferCaveat offer={o} />
                 <span className="block">{typo(`${o.note}. Doprava: ${o.shipping}.`)}</span>
               </li>
             ))}
           </ul>
         </div>
       ) : null}
-      <p>{typo(`Ceny ověřeny ${formatDateCs(offers[0]!.checkedAt)}, před nákupem ověřte.`)}</p>
+      <p>
+        {typo(
+          `Ceny ověřeny ${formatDateCs(offers.map((o) => o.checkedAt).sort()[0]!)}, před nákupem ověřte.`,
+        )}
+      </p>
     </div>
   );
+}
+
+/** „, činění neuvedeno, ověřte u prodejce“ u nabídky bez uvedeného činění. */
+function OfferCaveat({ offer }: { offer: StrapOffer }) {
+  const caveat = strapOfferCaveat(offer);
+  return caveat ? <span className="text-cognac-deep">{typo(`, ${caveat}`)}</span> : null;
 }
 
 function PlateBadge({ result }: { result: BeltConfigResult }) {

@@ -234,7 +234,7 @@ describe('Připravte si u pásku', () => {
 
   it('bez uloženého pásku nákup pro 40 mm', async () => {
     renderBelt(createTestRepositories());
-    expect(await screen.findByText(/Mosazná opasková přezka 40 mm/)).toBeInTheDocument();
+    expect(await screen.findByText(/Opasková přezka 40 mm, černý nikl/)).toBeInTheDocument();
     expect(screen.queryByText(/podle pásku:/)).toBeNull();
   });
 
@@ -261,6 +261,6 @@ describe('Připravte si u pásku', () => {
       await screen.findByText('Nákup podle pásku: Do obleku (30 mm · 3,5 mm · hrot · 5 dírek)'),
     ).toBeInTheDocument();
     expect(screen.getByText(/Mosazná opasková přezka 30 mm/)).toBeInTheDocument();
-    expect(screen.queryByText(/Mosazná opasková přezka 40 mm/)).toBeNull();
+    expect(screen.queryByText(/Opasková přezka 40 mm, černý nikl/)).toBeNull();
   });
 });

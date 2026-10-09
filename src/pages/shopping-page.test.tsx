@@ -261,11 +261,13 @@ describe('nákupní seznam a přehled – pásek (projekt 04)', () => {
     expect(within(coKoupit()).getByText(/Mosazná opasková přezka 35 mm/)).toBeInTheDocument();
   });
 
-  it('bez uloženého pásku: plán projektu 40 mm a řekne to', async () => {
+  it('bez uloženého pásku: plán projektu (modrý pásek 40 mm) a řekne to', async () => {
     const repositories = await setup();
     renderApp('/shopping', { repositories });
-    expect(await screen.findByText('Nákup podle plánu projektu (pásek 40 mm)')).toBeInTheDocument();
-    expect(within(coKoupit()).getByText(/Mosazná opasková přezka 40 mm/)).toBeInTheDocument();
+    expect(
+      await screen.findByText('Nákup podle plánu projektu (modrý pásek 40 mm)'),
+    ).toBeInTheDocument();
+    expect(within(coKoupit()).getByText(/Opasková přezka 40 mm, černý nikl/)).toBeInTheDocument();
   });
 
   it('přehled: zbývající rozpočet podle uloženého pásku s poznámkou', async () => {

@@ -7,12 +7,16 @@ import { type EquipmentDefinition, type ProductExample } from '@/content/schema'
  * z HTML). Pásy jsou zrcadlem `src/lib/patterns/belt-strap-offers.ts` (shodu hlídá test). Co stránka neuvádí, je
  * v textu označené „ověřte“. Šířka pásku se volí, proto pás a přezka mají příklady pro každou
  * šířku 28–45 mm, kterou obchod má. Texty jsou NÁVRH (reviewStatus: draft).
+ *
+ * 9. 10. 2026 přibyl výběr uživatele (modrý pás Andexnite 40 mm, černá přezka Andexnite, nýty
+ * CraftPoint černý nikl), stříbrné přezky 40 mm a oprava Leatory šroubku (1/4" = 6,35 mm).
  */
 
 const VERIFIED_NOTE =
   'Rozsah odpovídá ověřeným nabídkám českých e-shopů (viz příklady níže). Před nákupem ověřte.';
 
 const CHECKED = '2026-10-08';
+const CHECKED_0910 = '2026-10-09';
 
 const draft = <T extends Omit<EquipmentDefinition, 'reviewStatus'>>(e: T): EquipmentDefinition => ({
   ...e,
@@ -411,6 +415,34 @@ const unsortedDyedStraps = (): ProductExample[] => [
     'Přířez kůže na opasek, london (koňak)',
     'Barvená na koňakový odstín, 3,5 mm, délka 130–140 cm. Činění stránka neuvádí, ověřte u prodejce.',
   ),
+  // Modrý pás uživatele první (zrcadlo `DYED_STRAP_SOURCES`, ověřeno 9. 10. 2026).
+  ...(
+    [
+      [35, 225, '3 ks skladem.'],
+      [40, 260, 'Poslední kus skladem. Výběr uživatele: výchozí pás pro modrý pásek 40 mm.'],
+    ] as const
+  ).map(([widthMm, czk, stock]) => ({
+    title: `Hovězí kůže na opasek, modrá, 130 cm, 3,5–3,7 mm, ${String(widthMm / 10).replace('.', ',')} cm`,
+    shop: 'Andexnite',
+    url: 'https://andexnite.cz/produkt/hovezi-kuze-na-opasek-modra-130-cm-3-5-3-7-mm/',
+    variant: `${widthMm} mm`,
+    priceCents: czk * 100,
+    note: `${stock} Činění ani probarvení stránka neuvádí, ověřte u prodejce. Doprava do 500 Kč 120 Kč, od 501 Kč 80 Kč, od 1 500 Kč zdarma.`,
+    availability: 'in_stock' as const,
+    color: 'modrá',
+    checkedAt: CHECKED_0910,
+  })),
+  ...Object.entries(ANDEXNITE_STD_CZK).map(([width, czk]) => ({
+    title: `Hovězí kůže na opasek, tmavě modrá, 130 cm, 3,7–3,8 mm, ${String(Number(width) / 10).replace('.', ',')} cm`,
+    shop: 'Andexnite',
+    url: 'https://andexnite.cz/produkt/hovezi-kuze-na-opasek-tmave-modra-130-cm-3-7-3-8-mm/',
+    variant: `${width} mm`,
+    priceCents: czk * 100,
+    note: 'Činění ani probarvení stránka neuvádí, ověřte u prodejce. Doprava do 500 Kč 120 Kč, od 501 Kč 80 Kč, od 1 500 Kč zdarma.',
+    availability: 'in_stock' as const,
+    color: 'modrá',
+    checkedAt: CHECKED_0910,
+  })),
   ...dvapasovciDyedStraps(
     'modrá',
     'modra-hovezina',
@@ -623,7 +655,7 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
       { label: 'Trn', value: 'po dodání změřte u kořene: Ø dírek = trn + 0,5 mm' },
     ],
     cautions: [
-      'Typ trnu má na stránce ověřený jen CraftPoint u mosazných přezek („s jedním trnem“). U ostatních ověřte na fotce.',
+      'Typ trnu má na stránce ověřený jen CraftPoint u mosazných přezek („s jedním trnem“). Andexnite černý nikl a nikl 40 mm a Leatory #6988 nikl mají jeden trn na fotce. U ostatních ověřte na fotce.',
       'Přezku 45 mm má jen Andexnite (2 ks, typ trnu neuvádí); CraftPoint ani Leatory 45 mm nemají.',
     ],
     avoid: [
@@ -638,6 +670,33 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
     priceNote: `${VERIFIED_NOTE} Nejlevnější jsou Andexnite (75–95 Kč), mosazné z CraftPointu stojí 250–279 Kč.`,
     alsoUsedFor: [],
     examples: [
+      {
+        title: 'Opasková přezka 40 mm, černý nikl',
+        shop: 'Andexnite',
+        url: 'https://andexnite.cz/produkt/opaskova-prezka-40-mm-cerny-nikl-2/',
+        priceCents: 9_500,
+        note: 'Výběr uživatele k modrému pásu ze stejného obchodu. Vnitřní průvlek 40 mm, jeden trn podle fotky, skladem 44 ks.',
+        availability: 'in_stock',
+        checkedAt: CHECKED_0910,
+      },
+      {
+        title: 'Kovová přezka 40 mm, nikl',
+        shop: 'Andexnite',
+        url: 'https://andexnite.cz/produkt/kovova-prezka-40-mm-nikl-2/',
+        priceCents: 11_000,
+        note: 'Stříbrná varianta. Šířka 40 mm, jeden trn podle fotky, skladem 7 ks.',
+        availability: 'in_stock',
+        checkedAt: CHECKED_0910,
+      },
+      {
+        title: 'Opasková přezka nikl přes mosaz 40 mm (#6988)',
+        shop: 'Leatory',
+        url: 'https://www.leatory.cz/opaskove-prezky/-6988-opaskova-prezka-nikl-pres-mosaz-40mm/',
+        priceCents: 14_290,
+        note: 'Stříbrná varianta: litá mosaz, povrch nikl, vyrobeno ve Francii. Jeden trn podle fotky.',
+        availability: 'in_stock',
+        checkedAt: CHECKED_0910,
+      },
       {
         title: 'Mosazná opasková přezka 40 mm',
         shop: 'CraftPoint',
@@ -688,7 +747,7 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
         shop: 'Andexnite',
         url: 'https://andexnite.cz/produkt/opaskova-prezka-40-mm-staromosaz/',
         priceCents: 9_500,
-        note: `Nejlevnější 40 mm; skladem 52 ks. ${PRONG_UNVERIFIED} Další obchod = další poštovné.`,
+        note: `Skladem 52 ks. ${PRONG_UNVERIFIED} Další obchod = další poštovné.`,
         availability: 'in_stock',
         checkedAt: CHECKED,
       },
@@ -761,7 +820,7 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
       {
         label: 'Dřík',
         value:
-          '2 × tloušťka pásu − 1,5 až − 1 mm; 10/6 sedí na pás 3,5–3,75 mm (tabulka Váš pásek)',
+          '2 × tloušťka pásu − 1,5 až − 1 mm; 10/6 sedí na pás 3,5–3,75 mm, 1/4" (6,35 mm) na 3,68–3,92 mm (tabulka Váš pásek)',
       },
       { label: 'Hlavička', value: 'Ø 10 mm (s ní počítá kapsa pro poutko)' },
       { label: 'Kusů', value: '2' },
@@ -770,6 +829,7 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
       'Delší dřík než spoj: hlavička dosedne na dřík dřív, než přitlačí kůži, a nýt se viklá.',
       'Dřík kratší o víc než 1,5 mm nedosáhne do závitu.',
       'Sedlářský knoflík (sam browne stud) není šroubovací nýt.',
+      'Palcové šroubky přepočtěte: 1/4" = 6,35 mm, ne 6 mm.',
     ],
     avoid: [],
     alternatives: [],
@@ -778,6 +838,16 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
     priceNote: `${VERIFIED_NOTE} Spodní mez jsou 2 kusy 10/6 z CraftPointu (8 Kč/ks), horní balení 10 ks z Andexnite.`,
     alsoUsedFor: [],
     examples: [
+      {
+        title: 'Šroubovací nýty 10/6 mm, černý nikl',
+        shop: 'CraftPoint',
+        url: 'https://craft-point.cz/products/sroubovaci-nyty-10-6mm-cerny-nikl',
+        priceCents: 800,
+        priceNote: 'za kus; 10 ks za 69 Kč',
+        note: 'Hlavička 10, dřík 6 mm: na pás 3,5–3,75 mm. K černé přezce.',
+        availability: 'in_stock',
+        checkedAt: CHECKED_0910,
+      },
       {
         title: 'Šroubovací nýty 10/6 mm, stříbrné',
         shop: 'CraftPoint',
@@ -799,25 +869,15 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
         checkedAt: CHECKED,
       },
       {
-        title: 'Šroubovací nýty 10/6 mm, černý nikl',
-        shop: 'CraftPoint',
-        url: 'https://craft-point.cz/products/sroubovaci-nyty-10-6mm-cerny-nikl',
-        priceCents: 800,
-        priceNote: 'za kus; 10 ks za 69 Kč',
-        note: 'Na pás 3,5–3,75 mm.',
-        availability: 'in_stock',
-        checkedAt: CHECKED,
-      },
-      {
         title: 'Opaskový šroubek nikl přes mosaz, hladký, profi',
         shop: 'Leatory',
         url: 'https://www.leatory.cz/nyty--ozdoby-a-ostatni/opaskovy-sroubek-nikl-pres-mosaz-hladky-profi/',
-        variant: 'dřík 6 mm',
+        variant: '1/4" (6 mm)',
         priceCents: 1_900,
         priceNote: 'za kus',
-        note: 'Hlavička 10, tělo Ø 5, dřík 6 mm: na pás 3,5–3,75 mm. Obchod má i 10 a 13 mm, na tento pásek moc dlouhé.',
+        note: 'Weaver D5038, kód 1/4": dřík 1/4" = 6,35 mm (obchod píše 6 mm), hlavička 10, tělo Ø 5: na pás 3,68–3,92 mm. Obchod má i 3/8" a 1/2", na tento pásek moc dlouhé.',
         availability: 'in_stock',
-        checkedAt: CHECKED,
+        checkedAt: CHECKED_0910,
       },
       {
         title: 'Šroubovací nýt Ø 9 × 5 mm, černý nikl, 10 ks',
@@ -837,9 +897,9 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
         variant: '9,5 × 6,5 mm',
         priceCents: 14_000,
         priceNote: 'za 10 ks',
-        note: 'Podle názvu dřík 6,5 mm: na pás 3,75–4,0 mm. Délku dříku si před objednávkou potvrďte u prodejce.',
+        note: 'Podle názvu dřík 6,5 mm: na pás 3,75–4,0 mm. Délku dříku si před objednávkou potvrďte u prodejce. Stejný obchod jako modrý pás a černá přezka.',
         availability: 'in_stock',
-        checkedAt: CHECKED,
+        checkedAt: CHECKED_0910,
       },
     ],
     commonlyAtHome: false,
