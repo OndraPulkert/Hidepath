@@ -865,6 +865,11 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         value:
           '180–240 na zdrsnění lepené plochy, 220–400 na srovnání hran, 600–800 volitelně na dohlazení',
       },
+      {
+        label: 'Které archy koupit',
+        value:
+          'pouzdro na karty a pouzdro s mincí: 180 (zdrsnění) a 240 (hrany); Víčko navíc 120 na plíšek a 80 jen pro zálohu B; pásek vystačí s 180',
+      },
       { label: 'Množství', value: 'jeden arch stačí na několik projektů' },
     ],
     cautions: [
@@ -873,7 +878,13 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       'Bruste jen do momentu, kdy jsou vrstvy v rovině. Víc ubírá materiál z dílu.',
       'Líc zdrsňujte výhradně v místě, které druhý díl zakryje. Matné škrábance na viditelné ploše už nezmizí.',
     ],
-    avoid: [{ title: 'Hrubší než 150', reason: 'trhá vlákna kůže a hranu roztřepí' }],
+    avoid: [
+      {
+        title: 'Hrubší než 150 na hrany a líc',
+        reason:
+          'trhá vlákna kůže a hranu roztřepí (80 a 120 jen na kov a ztenčení v záloze B Víčka)',
+      },
+    ],
     alternatives: [
       { title: 'Pilník na nehty (jemná strana)', reason: 'na malé pouzdro postačí' },
       {
