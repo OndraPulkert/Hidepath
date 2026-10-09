@@ -1313,6 +1313,10 @@ kůže nařezaná na míru nedá vrátit.
 | D2           | [Kozinka třísločiněná čokoládová 0,7–0,9 mm](https://www.sijemezkuze.cz/kozinka-trislocinena-cokoladova-0-7-0-9-mm-p4851)                 | 13,50 Kč/dm² | 5 dm² = **67,50 Kč**                                                              | 2 × D2 103 × 64 a odřezek                                                                                 |
 | **Celkem**   |                                                                                                                                           |              | **336 Kč** + poštovné (neověřené)                                                 |                                                                                                           |
 
+**Kaštan 0,9–1 mm je staženo z nabídky** (stránka p4698 vrací 404, ověřeno 9. 10. 2026). Náhrada pro P1
+je v nákupním plánu aplikace: Šijeme z kůže, [třísločiněná hnědá, varianta 1–1,2 mm](https://www.sijemezkuze.cz/trislocinena-kuze-hneda-3-ruzne-sily-p4704-8013)
+(19,50 Kč/dm², pevná, tvarování za mokra; tloušťku po dodání změřit a zadat ve formuláři listů).
+
 **Výsečníky (Kolo 11, jen kdo je nemá):** [CraftPoint – Výsečníky na kůži 2-20mm](https://craft-point.cz/products/vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu),
 průměr dle výběru. Ověřeno **29. 9. 2026** přes `…/products/vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu.js`
 (ne z HTML stránky): nabídka 2, 3, 4, 5, 6, 8, 10, 12, 14, 16, 18, 20 mm, **Ø 15 v ní není**. Potřebné

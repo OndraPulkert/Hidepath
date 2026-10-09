@@ -1341,7 +1341,7 @@ export const beltProject: ProjectDefinition = {
       equipmentSlug: 'digital-caliper',
       priority: 'required',
       reason: 'Tloušťka pásu (podle ní dřík nýtu) a trn přezky (podle něj Ø dírek).',
-      specification: 'Levná digitální posuvka 150 mm.',
+      specification: 'Posuvka 150 mm, digitální nebo analogová (s noniem).',
     },
     {
       equipmentSlug: 'edge-burnisher',

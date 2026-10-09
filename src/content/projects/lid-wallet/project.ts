@@ -2081,7 +2081,7 @@ export const lidWalletProject: ProjectDefinition = {
       priority: 'required',
       reason:
         'Tloušťka kůže pro listy, rozměry bankovek u papírového modelu, poloha rýhy u V12, značka magnetu.',
-      specification: 'Levná digitální posuvka 150 mm.',
+      specification: 'Posuvka 150 mm, digitální nebo analogová (s noniem).',
     },
     {
       equipmentSlug: 'utility-knife',
@@ -2284,14 +2284,15 @@ export const lidWalletProject: ProjectDefinition = {
   },
   shoppingPlan: {
     title:
-      'Sestava: kůže ze dvou obchodů (hnědá třísločiněná useň pull-up 0,8–1,2 mm a čokoládová kozinka 0,7–0,9 mm ze Šijeme z kůže, nebarvená kozinka 0,6–0,8 mm z Lederversand Berlin), listy vygenerované v aplikaci pro změřenou tloušťku, zkušební i finální kus, magnet Ø 8 × 1,5, plíšek 0,5 mm',
+      'Sestava: kůže ze dvou obchodů (pevná hnědá třísločiněná useň 1–1,2 mm a čokoládová kozinka 0,7–0,9 mm ze Šijeme z kůže, nebarvená kozinka 0,6–0,8 mm z Lederversand Berlin), listy vygenerované v aplikaci pro změřenou tloušťku, zkušební i finální kus, magnet Ø 8 × 1,5, plíšek 0,5 mm',
     lines: [
       {
         equipmentSlug: 'veg-tan-leather-1mm',
-        url: 'https://www.sijemezkuze.cz/pull-up-crazy-horse-trislocineny-0-8-1-2-mm-hnedy-top-kvalita-od-5-dm2-nebo-cely-kus-za-zvyhodnenou-cenu-p4777-8033',
+        url: 'https://www.sijemezkuze.cz/trislocinena-kuze-hneda-3-ruzne-sily-p4704-8013',
+        variant: '1–1,2 mm',
         quantity: 10,
         purpose:
-          '10 dm² v jednom kuse 20 × 50 cm: P1 zkušebního i finálního kusu, odřezky na V12 a podložku S7; tloušťku po dodání změřit (0,8–1,2 mm)',
+          '10 dm² v jednom kuse 20 × 50 cm: P1 zkušebního i finálního kusu, odřezky na V12 a podložku S7; náhrada za kaštan (staženo z nabídky); tloušťku po dodání změřit',
       },
       {
         equipmentSlug: 'thin-goatskin',
@@ -2384,7 +2385,8 @@ export const lidWalletProject: ProjectDefinition = {
         url: 'https://craft-point.cz/products/nite-slam-bezova-beige-20m',
         variant: '0,6 mm',
         quantity: 1,
-        purpose: 'z projektu 02; i na šev S7',
+        purpose:
+          'stejná jako u pouzder 01 a 02; zkušební a finální kus vč. S7 asi 8 m, cívka 20 m pokryje projekty 01–03',
       },
       {
         equipmentSlug: 'contact-cement',

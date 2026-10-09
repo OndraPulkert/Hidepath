@@ -1,6 +1,7 @@
 import { routes } from '@/app/routes';
 import { projects } from '@/content/projects';
 import { beltProject } from '@/content/projects/belt/project';
+import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
 import { lidWalletProject } from '@/content/projects/lid-wallet/project';
 import { projectDefinitionSchema } from '@/content/schema';
@@ -328,6 +329,92 @@ describe('Postup v kostce – pásek', () => {
     expect(formatNumberRanges(pointNumbersForLesson(sections, '01-design-and-measure'))).toBe(
       '1–6',
     );
+  });
+});
+
+describe('Postup v kostce – pouzdro na karty', () => {
+  const project = cardHolderProject;
+  if (!hasOverview(project)) throw new Error('Pouzdro na karty nemá přehled');
+  const sections = numberOverview(project.overview, project);
+  const points = flatOverview(sections);
+  const point = (id: string) => points.find((p) => p.point.id === id)!.point;
+
+  it('12–24 krátkých bodů ve třech oddílech podle fází, nejvýš 3 věty na bod', () => {
+    expect(points.length).toBeGreaterThanOrEqual(12);
+    expect(points.length).toBeLessThanOrEqual(24);
+    expect(sections.map((s) => s.title)).toEqual([
+      'Příprava',
+      'Trénink na odřezku',
+      'Výroba pouzdra',
+    ]);
+    for (const p of points) {
+      const sentences = p.point.text.split(/[.!?](?:\s|$)/).filter((s) => s.trim()).length;
+      expect(sentences, p.point.id).toBeLessThanOrEqual(3);
+    }
+  });
+
+  it('bod 1 je tisk z lekcí 2, 5 a 6: cvičná šablona 1×, šablona 1×, v lekci 6 jen podmíněně', () => {
+    expect(points[0]!.point.id).toBe('prints');
+    expect(points[0]!.point.printsFrom).toEqual([
+      '02-straight-cut',
+      '05-transfer-and-cut',
+      '06-assemble-card-holder',
+    ]);
+    const groups = overviewPrints(project, points[0]!.point.printsFrom!);
+    expect(printTotals(groups).map((t) => `${t.sheetLabel} ${t.copies}×`)).toEqual([
+      'Cvičná šablona: řez podle přilepené šablony 1×',
+      'Šablona 1×',
+    ]);
+    const l6 = groups.find((g) => g.lessonOrder === 6)!;
+    expect(l6.rows.every((r) => r.condition)).toBe(true);
+    expect(point('prints').text).toContain('Papírový zadní díl z lekce 5 si schovejte');
+    expect(point('peel-template').text).toContain('Papírový zadní díl si schovejte na lekci 6');
+  });
+
+  it('teď × později: nástroje až doma, dobroušení v lekci 5, výřez po obvodu, zpětné stehy v lekci 6', () => {
+    expect(point('tools').text).toMatch(/^Až budete mít vidličky, jehly a nit doma/);
+    expect(point('tools').text).toContain('roh');
+    expect(point('tools').text).toContain('druhé tréninkové A5');
+    expect(point('tools').text).toContain('pokračujte lekcí 2');
+    expect(point('practice-template').later).toContain('lekce 5');
+    expect(point('cut-parts').later).toContain('výřez na palec');
+    expect(point('stitch-practice').later).toContain('lekci 6');
+  });
+
+  it('míry sedí s lekcemi a šablonou', () => {
+    const stepBody = (id: string) => {
+      const p = point(id);
+      return project.lessons
+        .find((l) => l.slug === p.lessonSlug)!
+        .steps.find((s) => s.id === p.stepId)!.body;
+    };
+    expect(point('tools').text).toContain('3,85–4 mm');
+    expect(stepBody('tools')).toContain('3,85–4 mm');
+    expect(point('glue-area').text).toContain('asi 5 mm');
+    expect(project.template?.glueBandMm).toBe(5);
+    expect(point('glue-area').text).toContain('čárky 56 mm');
+    expect(stepBody('glue-area')).toContain('čárky 56 mm');
+    expect(point('glue-area').text).toContain('asi 6 mm pod vpichy');
+    expect(stepBody('glue-area')).toContain('asi 6 mm pod vpichy');
+    const l6 = project.lessons.find((l) => l.slug === point('glue-parts').lessonSlug)!;
+    const wait = l6.steps.find((s) => s.id === 'glue-parts')!.waits![0]!;
+    expect(point('glue-parts').text).toContain(`(${wait.minutes}–${wait.maxMinutes} min)`);
+    expect(point('stitch').text).toContain('asi 1 m nitě');
+    expect(l6.materials).toContain('nit asi 1 m');
+    expect(point('stitch').text).toContain('ve třetím otvoru od horního konce');
+    expect(stepBody('stitch')).toContain('ve třetím otvoru od horního konce');
+    expect(point('edges').text).toContain('boky zadního dílu nad kapsou');
+    expect(stepBody('edges')).toContain('boky zadního dílu nad kapsou');
+    expect(point('thumb-cutout').text).toContain('12 mm');
+    expect(point('peel-template').text).toContain('12 mm');
+    expect(project.template?.pieces.find((p) => p.id === 'front')?.thumbCutout?.depthMm).toBe(12);
+  });
+
+  it('„Kde jste v postupu“ najde body v každé lekci pouzdra', () => {
+    for (const lesson of project.lessons) {
+      expect(overviewAroundLesson(sections, lesson.slug).length, lesson.slug).toBeGreaterThan(0);
+    }
+    expect(formatNumberRanges(pointNumbersForLesson(sections, '01-prepare-workspace'))).toBe('1–3');
   });
 });
 

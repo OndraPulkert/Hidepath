@@ -2,7 +2,7 @@ import { type EquipmentDefinition } from '@/content/schema';
 
 /**
  * Položky katalogu, které přibyly s projektem 03 (peněženka Víčko, docs/zadani/penezenka-vicko.md,
- * oddíl 10 a 10.1). Každý příklad je ze stránky načtené 29. 9. 2026 (useň P1 7. 10. 2026; CraftPoint přes `…/products/
+ * oddíl 10 a 10.1). Každý příklad je ze stránky načtené 29. 9. 2026 (useň P1 9. 10. 2026; CraftPoint přes `…/products/
  * <handle>.js`, ostatní obchody přes HTML). Co stránka neuvádí, je v textu označené „ověřit“.
  * Texty jsou NÁVRH (reviewStatus: draft).
  */
@@ -46,22 +46,34 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
       { title: 'Štípenka', reason: 'nemá líc' },
     ],
     alternatives: [],
-    // 10 dm² × 22,50 Kč (Šijeme z kůže, pull-up 0,8–1,2 mm, ověřeno 7. 10. 2026; kaštan 0,9–1 mm
-    // p4698 obchod stáhl, stránka vrací 404 a hledání „kaštan“ nabízí jen usně 1,3 mm a silnější).
-    priceRange: { minCents: 22_500, maxCents: 22_500 },
+    // 10 dm² × 19,50 Kč (Šijeme z kůže, třísločiněná hnědá 1–1,2 mm, ověřeno 9. 10. 2026) až 10 dm² ×
+    // 22,50 Kč (pull-up 0,8–1,2 mm, ověřeno 9. 10. 2026). Kaštan 0,9–1 mm p4698 obchod stáhl (stránka
+    // vrací 404, hledání „kaštan“ nabízí jen usně 1,3 mm a silnější).
+    priceRange: { minCents: 19_500, maxCents: 22_500 },
     priceSource: 'verified',
-    priceNote: `${VERIFIED_NOTE} 10 dm² × 22,50 Kč/dm², bez poštovného (poštovné neověřené). Obchod může dodané množství upravit podle skutečného kusu a rozdíl promítne do ceny.`,
+    priceNote: `${VERIFIED_NOTE} 10 dm² × 19,50–22,50 Kč/dm², bez poštovného (poštovné neověřené). Obchod může dodané množství upravit podle skutečného kusu a rozdíl promítne do ceny.`,
     alsoUsedFor: [],
     examples: [
+      {
+        title: 'Třísločiněná kůže hnědá – 3 různé síly',
+        shop: 'Šijeme z kůže',
+        url: 'https://www.sijemezkuze.cz/trislocinena-kuze-hneda-3-ruzne-sily-p4704-8013',
+        variant: '1–1,2 mm',
+        priceCents: 1_950,
+        priceNote: 'za dm² (16,12 Kč bez DPH)',
+        note: 'Náhrada za kaštan 0,9–1 mm (staženo z nabídky). Obchod ji uvádí jako pevnou, tuhou a tvarově stálou, vhodnou na peněženky a tvarování za mokra. P1 zkušebního i finálního kusu. Objednat 10 dm² a do poznámky napsat „Prosím v jednom kuse jako obdélník 20 × 50 cm, z pevné části kůže, co nejblíž 1,0 mm“. Tloušťku po dodání změřit a listy vygenerovat pro změřenou P1. Tlustší P1 snižuje hranici přepážek (P1 1,1 → nejvýš 0,80 mm, 1,2 → 0,60 mm): formulář listů ji ukáže.',
+        availability: 'in_stock',
+        checkedAt: '2026-10-09',
+      },
       {
         title: 'Pull Up Crazy horse třísločiněný 0,8–1,2 mm hnědý (varianta od 5 dm²)',
         shop: 'Šijeme z kůže',
         url: 'https://www.sijemezkuze.cz/pull-up-crazy-horse-trislocineny-0-8-1-2-mm-hnedy-top-kvalita-od-5-dm2-nebo-cely-kus-za-zvyhodnenou-cenu-p4777-8033',
         priceCents: 2_250,
         priceNote: 'za dm² (18,60 Kč bez DPH), minimální odběr 5 dm²',
-        note: 'Náhrada za kaštan 0,9–1 mm, který obchod stáhl; tenčí třísločiněnou hovězí useň tu teď nemá. P1 zkušebního i finálního kusu. Objednat 10 dm² a do poznámky napsat „Prosím v jednom kuse jako obdélník 20 × 50 cm, co nejblíž 1,0 mm“. Rozsah 0,8–1,2 mm je širší než 0,9–1: tloušťku po dodání změřit a listy vygenerovat pro změřenou P1. Obchod ji uvádí jako lehce změkčenou a voskovanou (pull-up, v ohybu světlá): zkouška ohybu V12 a zkušební kus ověří, jestli drží tvar; lepidlo a barvu hran nejdřív zkusit na odřezku.',
+        note: 'Záloha, když 1–1,2 mm dojde. Obchod ji uvádí jako lehce změkčenou a voskovanou (pull-up, v ohybu světlá): pás ohybu a závěsu nemusí držet tvar, ověří to zkouška ohybu V12 a zkušební kus. Lepidlo a barvu hran nejdřív zkusit na odřezku. Tloušťku po dodání změřit.',
         availability: 'in_stock',
-        checkedAt: '2026-10-07',
+        checkedAt: '2026-10-09',
       },
     ],
     commonlyAtHome: false,
@@ -552,23 +564,28 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
 
   draft({
     slug: 'digital-caliper',
-    name: 'Digitální posuvné měřítko',
-    englishName: 'Digital caliper',
+    name: 'Posuvné měřítko – digitální nebo analogové (s noniem)',
+    englishName: 'Caliper',
     category: 'cutting',
     shortDescription:
       'Změří tloušťku dodané kůže, bankovek a vložky dna. Bez něj se listy nedají vygenerovat pro skutečnou kůži.',
     purpose:
       'Peněženka Víčko se počítá z tloušťek: listy se generují pro změřenou tloušťku P1, přepážek a podšívky, vložka dna má mít 1,5 mm a značka magnetu se měří od spodní hrany. Posuvkou se měří i poloha rysky u zkoušky ohybu V12 a rozměry bankovek u papírového modelu.',
     buyingGuide: [
-      { label: 'Typ', value: 'levná digitální posuvka, rozsah 150 mm (návrh střihu víc nežádá)' },
+      {
+        label: 'Typ',
+        value:
+          'posuvka digitální nebo analogová (s noniem), rozsah 150 mm (návrh střihu víc nežádá)',
+      },
       {
         label: 'Rozlišení',
         value:
-          'displej s 0,01 mm se hodí u značky magnetu (okno lepení může mít jen 0,13 mm) a u meze přepážek 0,92 mm – doporučení autora obsahu, ne požadavek návrhu',
+          'digitální ukáže 0,01 mm, analogová 0,1 mm (s 20 čárkami nonia 0,05 mm). Setiny se hodí u značky magnetu (okno lepení může mít jen 0,13 mm) a u meze přepážek 0,92 mm – doporučení autora obsahu, ne požadavek návrhu',
       },
     ],
     cautions: [
       'Kůži měřte na několika místech kusu (krok 0 postupu).',
+      'Analogová: celé milimetry čtěte na stupnici vlevo od nuly nonia, desetiny u čárky nonia, která se kryje s čárkou stupnice. Ukazuje to animace „Jak měřit posuvkou“ u lekce 1.',
       'Rozložené bankovky jsou delší než 150 mm: délku měřte ocelovým pravítkem, posuvkou jen tloušťku a rozměry složené bankovky.',
     ],
     avoid: [],
@@ -593,7 +610,7 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
       {
         id: 'digital-caliper-main',
         kind: 'photo',
-        caption: 'Digitální posuvka měří tloušťku kozinky na okraji kusu',
+        caption: 'Posuvka měří tloušťku kozinky na okraji kusu',
         status: 'planned',
       },
     ],

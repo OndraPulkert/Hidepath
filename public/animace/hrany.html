@@ -283,12 +283,12 @@ const K=10.5; // hlavní řez: 10,5 jednotky scény na 1 mm
 
 // A1
 add('A','Přehled hran',
- 'Hrany dělejte až na sešitém pouzdru: boky a dno (dvě vrstvy), horní hrany obou dílů a oblouk výřezu.',
+ 'Hrany dělejte až na sešitém pouzdru: boky a dno (dvě vrstvy), horní hrany obou dílů, boky zadního dílu nad kapsou a oblouk výřezu.',
  8000,t=>{
   const s=.66;let sh=es(t,.08,.3),sb=es(t,.38,.55),sp=es(t,.62,.8);
   let o=holder('translate(9 14)',s,{hs:sh,hb:sb,hp:sp});
   if(sh>.5) o+=`<g opacity="${f(seg(t,.2,.3))}">${pill(9+50*s,14+70*s+7,'boky a dno: 2 vrstvy','ta','middle')}</g>`;
-  if(sb>.5) o+=`<g opacity="${f(seg(t,.48,.55))}">${pill(9+50*s,14+10*s,'horní hrana zadního dílu','tok','middle')}</g>`;
+  if(sb>.5) o+=`<g opacity="${f(seg(t,.48,.55))}">${pill(9+50*s,14+10*s,'zadní díl nad kapsou','tok','middle')}</g>`;
   if(sp>.5) o+=`<g opacity="${f(seg(t,.74,.8))}">${lead(9+50*s,14+30*s,9+50*s,14+21.6*s)}${pill(9+50*s,14+35*s,'oblouk výřezu','tok','middle')}</g>`;
   o+=pill(4,87,t<.9?'zadní díl 100 × 70 mm, kapsa 100 × 56 mm':'všechny řezané hrany','t');
   const ck=[['boky a dno','.12','.'],['horní hrany','.42','.'],['oblouk výřezu','.66','.']].map(([a,b])=>[a,+b]);
