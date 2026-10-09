@@ -555,17 +555,14 @@
           čáry na rub podle listu 2. Výchozí střih (useň P1
           <span class="num">1,0</span>): P1 <span class="num">101 × 231,66</span>,
           osa ohybu dna v <span class="num">62,21</span>, hrana vložky v
-          <span class="num">64,18</span>, přehyby závěsu v
-          <span class="num">145,10</span> a <span class="num">148,88</span>.
-          v se měří od horní hrany F, rozměry v mm.
+          <span class="num">64,18</span>. v se měří od horní hrany F, rozměry
+          v mm.
         </p>
         <p class="lead">
           <b>Záloha A</b> (P1 z usně <span class="num">0,8</span>): stejný
           postup s listy pro 0,8. P1 <span class="num">230,23</span>, osa v
           <span class="num">61,76</span>, hrana vložky v
-          <span class="num">63,56</span>, přehyby v
-          <span class="num">144,11</span> a <span class="num">147,73</span>, pás
-          závěsu <span class="num">141,92–149,92</span>.
+          <span class="num">63,56</span>.
         </p>
       </header>
       <div class="parts" aria-label="Názvy dílů">
@@ -688,15 +685,12 @@
           "M51.5 116.427 A7 7 0 0 1 65.5 116.427 L65.5 147.427 A7 7 0 0 1 51.5 147.427 Z";
         const Y_AXIS = 84.213,
           Y_EDGE = 86.177,
-          Y_REAR = 167.105,
-          Y_FRONT = 170.881,
-          Y_HB0 = 164.993,
-          Y_HB1 = 172.993,
           Y_TIP = 248.659,
           Y_END = 253.659;
         const P1L = 231.659;
-        // značky na bocích: těsně u hrany (kresleno 1 mm od hrany), obě strany
-        const EDGEM = [Y_AXIS, Y_EDGE, Y_REAR, Y_FRONT];
+        // značky na bocích jen na rubu (list 2): osa ohybu a hrana vložky, těsně u hrany
+        // (kresleno 1 mm od hrany). Líc ani závěs se na bocích nepropichují.
+        const EDGEM = [Y_AXIS, Y_EDGE];
         const EDGEP = [];
         EDGEM.forEach((y) => {
           EDGEP.push([9, y], [108, y]);
@@ -714,7 +708,7 @@
           { x: 58.5, y: 147.427, d: 14 },
         ];
         const KEEPC = CENT.filter((c) => c.d !== 8); // Ø 8 se vysekne hned, středy zmizí s odpadem
-        const LICP = [...EDGEP, ...KEEPC.map((c) => [c.x, c.y])];
+        const LICP = KEEPC.map((c) => [c.x, c.y]);
         // list nahrubo: okraj 1–2 cm, vlevo jen okraj listu (obrys je 8 mm od okraje)
         const ROUGHPTS = [
           [0, 10],
@@ -925,7 +919,7 @@
           [8, 102.427, 101, 63.5, "D2"],
         ];
         const RUBSEG = [];
-        [Y_AXIS, Y_EDGE, Y_HB0, Y_HB1].forEach((y) =>
+        [Y_AXIS, Y_EDGE].forEach((y) =>
           RUBSEG.push([
             [8.8, y],
             [108.2, y],
@@ -969,11 +963,6 @@
             });
           });
         }
-        // Hranice Tokonole u kořene jazýčku (v 175,0): kroužky 1,5 mm od boků jazýčku.
-        RUBSEG.push([
-          [50, 196.999],
-          [67, 196.999],
-        ]);
         const RUBP = RUBSEG.map(([a, b]) => lineP(a, b));
         const PENCIL = [...RUBP];
         const PENL = PENCIL.reduce((s, P) => s + P.L, 0);
@@ -1149,7 +1138,7 @@
             s += `<rect x="${x}" y="${f(y0 + i * step - 1.4)}" width="${ws[i % ws.length]}" height="1.5" fill="var(--printm)" opacity=".45"/>`;
           return s;
         }
-        function printFolds() {
+        function printFolds(rub = false) {
           let s =
             ln("M8 82.25 H109 M8 86.177 H109", "var(--pfold)", 0.2, "3 1.5") +
             ln("M8 84.213 H109", "var(--pfold)", 0.15, "6 1.5 1 1.5");
@@ -1162,21 +1151,19 @@
             ) +
             ln("M8 165.927 H109 M8 172.059 H109", "var(--pfold)", 0.12, "1 1");
           s += `<path d="M4.5 85.177 L7.5 86.177 L4.5 87.177 Z M112.5 85.177 L109.5 86.177 L112.5 87.177 Z" fill="var(--pfold)"/>`;
-          s += ln(
-            "M4.5 84.213 H7.5 M109.5 84.213 H112.5 M4.5 167.105 H7.5 M109.5 167.105 H112.5 M4.5 170.881 H7.5 M109.5 170.881 H112.5",
-            "var(--printm)",
-            0.3,
-          );
+          s += ln("M4.5 84.213 H7.5 M109.5 84.213 H112.5", "var(--printm)", 0.3);
           s += ln(
             "M8 80.213 H109 V88.213 H8 Z M8 164.993 H109 V172.993 H8 Z",
             "var(--printm)",
             0.15,
             ".5 .8",
           );
-          s += EDGEP.map(
-            ([x, y]) =>
-              `<circle cx="${x}" cy="${y}" r=".7" fill="none" stroke="var(--print)" stroke-width="${f(Math.max(0.12, 0.12 / CK))}"/>`,
-          ).join("");
+          // kroužky na bocích jen na listu 2 (rub)
+          if (rub)
+            s += EDGEP.map(
+              ([x, y]) =>
+                `<circle cx="${x}" cy="${y}" r=".7" fill="none" stroke="var(--print)" stroke-width="${f(Math.max(0.12, 0.12 / CK))}"/>`,
+            ).join("");
           return s;
         }
         // list 1 (P1 z líce); full = celý list s rámečkem a textem
@@ -1303,7 +1290,7 @@
           let s =
             ln(OUTC, "var(--print)", 0.3) +
             ln(NOTCH + " " + WINL + " " + WINR, "var(--print)", 0.3, "1.2 .8") +
-            printFolds();
+            printFolds(true);
           RECTS2.forEach(([x, y, w, h, g]) => {
             if (g[0] !== "G") return;
             s += `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="var(--pglue)" fill-opacity=".16" stroke="var(--pglue)" stroke-width="${f(Math.max(0.25, 0.16 / CK))}"/>`;
@@ -1401,7 +1388,6 @@
         const OV = { cx: 58.5, cy: 137.83, sx: 42, sy: 43, k: 0.33 };
         const PAPER = { cx: 105, cy: 148.5, sx: 42, sy: 44.5, k: 0.27 };
         const EDGEL = { cx: 9, cy: 85.5, sx: 40, sy: 44, k: 4.2 };
-        const EDGEH = { cx: 9, cy: 169, sx: 40, sy: 44, k: 4.2 };
         const JUNC = { cx: 58.5, cy: 206, sx: 42, sy: 42, k: 1.5 };
         const MIDJ = { cx: 58.5, cy: 214, sx: 42, sy: 40, k: 0.7 };
         const TOPC = { cx: 58.5, cy: 62, sx: 42, sy: 42, k: 0.7 };
@@ -1559,116 +1545,11 @@
           "Tip: přířez P1 leží u hrany kusu usně (lekce 1). Vlevo list přečnívá přes hranu, tam páska není.",
         );
 
-        // B1 — značky na bocích
-        add(
-          "B",
-          "Propíchněte značky na bocích",
-          "Dokud je list přilepený, propíchněte jehlou skrz papír kroužky na obou bocích: osa ohybu dna, hrana vložky a oba přehyby závěsu.",
-          13000,
-          (t) => {
-            const z1 = es(t, 0.26, 0.38),
-              z2 = es(t, 0.56, 0.66),
-              z3 = es(t, 0.86, 0.97);
-            let c =
-              z3 > 0
-                ? camL(EDGEH, OV, z3)
-                : z2 > 0
-                  ? camL(EDGEL, EDGEH, z2)
-                  : camL(OV, EDGEL, z1);
-            const n = Math.floor(seg(t, 0.04, 0.24) * 8.999); // počet hotových vpichů
-            const pts = EDGEP.slice(0, n);
-            let inner = withCam(
-              c,
-              () =>
-                matBg() +
-                leatherBig() +
-                sheetOnLeather() +
-                tapes(1) +
-                pricks(pts, 0.42) +
-                rings(pts, (1.4 / CK) * 1.6, 1 - seg(t, 0.24, 0.3)),
-            );
-            let s = clipMain(inner);
-            if (t > 0.04 && t < 0.25) {
-              const i = Math.min(7, n);
-              const [x, y] = tv(c, EDGEP[i][0], EDGEP[i][1]);
-              s += needle(x, y, Math.abs(Math.sin(t * 120)));
-            }
-            if (t < 0.24) {
-              const [ax, ay] = tv(c, 108, Y_EDGE),
-                [hx, hy] = tv(c, 108, Y_FRONT);
-              s += fade(
-                seg(t, 0.05, 0.1),
-                lead(70, ay - 6, ax + 1, ay) +
-                  pill(66, ay - 7, "ohyb dna", "t") +
-                  lead(70, hy + 8, hx + 1, hy) +
-                  pill(66, hy + 11, "závěs", "t"),
-              );
-            }
-            const d1 = seg(t, 0.38, 0.44) * (1 - seg(t, 0.54, 0.57));
-            if (d1 > 0) {
-              const [px, py] = tv(c, 9, Y_AXIS),
-                [qx, qy] = tv(c, 9, Y_EDGE),
-                [tx, ty] = tv(c, 6, Y_AXIS),
-                [gx, gy] = tv(c, 6, Y_EDGE);
-              s += fade(
-                d1,
-                pill(46, py - 1.5, "osa v 62,21", "t") +
-                  pill(46, qy + 5.5, "vložka v 64,18", "t") +
-                  lead(14, py - 10, tx, ty) +
-                  pill(3, py - 11, "rysky listu", "ts") +
-                  lead(14, qy + 12, gx - 0.5, gy) +
-                  pill(3, qy + 15.5, "▲ trojúhelníček", "ts") +
-                  `<circle cx="${f(px)}" cy="${f(py)}" r="2.2" fill="none" stroke="var(--accent)" stroke-width=".5"/><circle cx="${f(qx)}" cy="${f(qy)}" r="2.2" fill="none" stroke="var(--accent)" stroke-width=".5"/>`,
-              );
-            }
-            const d2 = seg(t, 0.66, 0.72) * (1 - seg(t, 0.84, 0.87));
-            if (d2 > 0) {
-              const [px, py] = tv(c, 9, Y_REAR),
-                [qx, qy] = tv(c, 9, Y_FRONT);
-              s += fade(
-                d2,
-                pill(46, py - 1.5, "přehyb v 145,10", "t") +
-                  pill(46, qy + 5.5, "přehyb v 148,88", "t") +
-                  `<circle cx="${f(px)}" cy="${f(py)}" r="2.2" fill="none" stroke="var(--accent)" stroke-width=".5"/><circle cx="${f(qx)}" cy="${f(qy)}" r="2.2" fill="none" stroke="var(--accent)" stroke-width=".5"/>`,
-              );
-            }
-            s += inset(
-              "BOKY · 2 × 4 VPICHY",
-              notes([
-                ["osa ohybu dna", "t"],
-                ["v 62,21"],
-                ["hrana vložky ▲", "t"],
-                ["v 64,18"],
-                ["přehyby závěsu", "t"],
-                ["v 145,10 · 148,88"],
-                ["těsně u hrany,", "t"],
-                ["na obou bocích"],
-                ["záloha A (0,8):", "twa"],
-                ["61,76 · 63,56"],
-                ["144,11 · 147,73"],
-              ]),
-            );
-            s += pill(
-              4,
-              87,
-              t < 0.25
-                ? "propíchnout dřív, než se cokoli řeže"
-                : t < 0.86
-                  ? "vpich těsně u hrany, ne na ní"
-                  : "8 vpichů na bocích",
-              "t",
-            );
-            return s;
-          },
-          "lic",
-          "Tip: kroužky leží 1,5 mm od hrany, aby vpich po řezu zůstal na P1. Šídlo dělá větší vpich než jehla (ověřte na odřezku).",
-        );
-
-        // B2 — středy výsečníků
+        // B1 — středy výsečníků
         add(
           "B",
           "Propíchněte středy výsečníků",
-          "Propíchněte všechny křížky v kroužku, středy výsečníků: Ø 8 na napojení jazýčku, Ø 12 okének mincí, Ø 10 výřezu pro palec a Ø 14 na koncích okénka bankovek. Červené tečky švů S1–S3 a S6 teď nepropichujte (lekce 6 a 8).",
+          "Dokud je list přilepený, propíchněte jehlou skrz papír všechny křížky v kroužku, středy výsečníků: Ø 8 na napojení jazýčku, Ø 12 okének mincí, Ø 10 výřezu pro palec a Ø 14 na koncích okénka bankovek. Červené tečky švů S1–S3 a S6 teď nepropichujte (lekce 6 a 8). Na bocích líce nic nepropichujte, osa ohybu a hrana vložky se značí z rubu (list 2).",
           12000,
           (t) => {
             const c = OV,
@@ -1681,7 +1562,6 @@
                 leatherBig() +
                 sheetOnLeather() +
                 tapes(1) +
-                pricks(EDGEP, 0.42) +
                 pricks(pts, 0.42) +
                 CENT.slice(0, n)
                   .map(
@@ -2195,7 +2075,7 @@
         add(
           "D",
           "Zkontrolujte značky a kótu P1",
-          "Zkontrolujte, že na kůži je vpich u každého kroužku a křížku z listu 1. P1 musí sedět s kótou z rámečku na ±0,5 mm a konec jazýčku je rovný.",
+          "Zkontrolujte, že na kůži je vpich u každého křížku v kroužku z listu 1. P1 musí sedět s kótou z rámečku na ±0,5 mm a konec jazýčku je rovný.",
           10000,
           (t) => {
             const c = OV;
@@ -2207,7 +2087,6 @@
               () =>
                 matBg() +
                 p1Piece("lic", { pricks: LICP, shadow: 1 }) +
-                rings(EDGEP, (1.6 / CK) * 1.5, g1) +
                 rings(
                   KEEPC.map((o) => [o.x, o.y]),
                   (1.6 / CK) * 1.5,
@@ -2226,9 +2105,8 @@
               );
             }
             const ck = [
-              ["boky: 2 × 4", g1],
-              ["osa, vložka,", -1],
-              ["přehyby", -1],
+              ["boky líce: nic", g1],
+              ["(značí se z rubu)", -1],
               ["středy: 4 × Ø 12", g2],
               ["Ø 10, 2 × Ø 14", -1],
               ["P1 231,66 ± 0,5", g3],
@@ -2247,7 +2125,7 @@
             });
             s += inset("KONTROLA", ib);
             if (t > 0.85) s += check(76, 76, seg(t, 0.85, 0.95));
-            s += pill(4, 87, "8 + 7 vpichů, kóta sedí", "t");
+            s += pill(4, 87, "7 vpichů, kóta sedí", "t");
             return s;
           },
           "lic",
@@ -2447,10 +2325,9 @@
                 ["rohy lepených", "t"],
                 ["ploch G1–G4"],
                 ["konce čar:", "t"],
-                ["osa, hrana vložky,"],
-                ["pás závěsu"],
-                ["rohy D1 a D2,", "t"],
-                ["hranice Tokonole"],
+                ["osa, hrana vložky"],
+                ["rohy D1 a D2", "t"],
+                ["závěs a víčko ne", "twa"],
                 ["jehlou skrz", "t"],
                 ["šablonu do kůže"],
               ]),
@@ -2490,7 +2367,7 @@
         add(
           "E",
           "Spojte tečky tužkou u pravítka",
-          "Šablonu sejměte a vpichy spojte tužkou u pravítka, nic nezařezávejte. Tak přenesete osu ohybu dna, čáru hrany vložky (případně posunutou podle V12), pás závěsu, plochy lepení G1–G4, hranici Tokonole u kořene jazýčku, polohu D1 a D2 a osu na rubu F i B. Čáry švů S1–S3 a S6 ani okénko bankovek na rub nekreslete.",
+          "Šablonu sejměte a vpichy spojte tužkou u pravítka, nic nezařezávejte. Tak přenesete osu ohybu dna, čáru hrany vložky (případně posunutou podle V12), plochy lepení G1–G4, polohu D1 a D2 a osu na rubu F i B. Závěs a rub víčka neznačte: zůstávají vidět. Čáry švů S1–S3 a S6 ani okénko bankovek na rub nekreslete.",
           13000,
           (t) => {
             const c = OV,
@@ -2537,9 +2414,7 @@
               const [px, py] = tv(c, x, y);
               return lead(61, ly, px + 0.6, py) + pill(61, ly + 1.4, tx, cls);
             };
-            s +=
-              fade(seg(t, 0.2, 0.3), lab(108, Y_AXIS, "osa, vložka", 24)) +
-              fade(seg(t, 0.3, 0.4), lab(108, Y_HB1, "pás závěsu", 57));
+            s += fade(seg(t, 0.2, 0.3), lab(108, Y_AXIS, "osa, vložka", 24));
             if (p >= 1)
               s += fade(
                 seg(t, 0.94, 1),
@@ -2554,13 +2429,10 @@
                 ["osa v 62,21", "t"],
                 ["vložka v 64,18", "t"],
                 ["(posunutá z V12)"],
-                ["pás závěsu", "t"],
-                ["142,99–150,99"],
-                ["G1–G4, Tokonole,", "t"],
-                ["D1 a D2"],
+                ["G1–G4, D1 a D2", "t"],
+                ["závěs, víčko: nic", "twa"],
                 ["záloha A:", "twa"],
                 ["61,76 · 63,56"],
-                ["141,92–149,92"],
               ]),
             );
             s += pill(
@@ -2579,7 +2451,7 @@
         add(
           "E",
           "Narýsujte rysky a napište „L“",
-          "Osu ohybu, hranu vložky a oba přehyby závěsu označte i ryskami na obou bocích (v lekci 10 podle nich zkontrolujete přehyby). Na rub F a na rub B napište „L“ tam, kde je na listu 2. Otvory švů se přenesou později z líce přes šablonu z listu 1 (S1–S3 v lekci 6, S6 v lekci 8).",
+          "Osu ohybu a hranu vložky označte i ryskami na obou bocích. Na rub F a na rub B napište „L“ tam, kde je na listu 2. Otvory švů se přenesou později z líce přes šablonu z listu 1 (S1–S3 v lekci 6, S6 v lekci 8).",
           10000,
           (t) => {
             const z1 = es(t, 0.05, 0.18),
@@ -2608,9 +2480,9 @@
                 p1Piece("rub", { shadow: 1 }) +
                 pricks(RUBPTS, 0.42) +
                 pl.s;
-              const nt = Math.floor(r * 8.999);
+              const nt = Math.floor(r * 4.999);
               ticks
-                .slice(0, Math.max(nt, t > 0.6 ? 8 : 0))
+                .slice(0, Math.max(nt, t > 0.6 ? 4 : 0))
                 .forEach(([a, q]) => {
                   b += `<path d="M${a[0]} ${a[1]} L${q[0]} ${q[1]}" stroke="var(--graphite)" stroke-width="${sw(0.7)}" stroke-linecap="round"/>`;
                 });
@@ -2646,8 +2518,7 @@
                 ["rysky na obou", "t"],
                 ["bocích:"],
                 ["osa, hrana vložky"],
-                ["přehyby 145,10"],
-                ["a 148,88"],
+                ["závěs bez rysek", "twa"],
                 ["„L“ na rub F", "t"],
                 ["a na rub B"],
                 ["švy až z líce", "twa"],

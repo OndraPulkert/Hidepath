@@ -356,13 +356,13 @@ svg .book{fill:var(--wood);stroke:var(--woodedge);stroke-width:1.2;vector-effect
     </article>
     <article class="step">
       <header><span class="n">2</span><h3>Navlhčete jen pás závěsu</h3></header>
-      <p>Houbičkou navlhčete jen pás závěsu <b class="num">v 142,99–150,99</b> (vyznačený v lekci 4), nenamáčejte celé.</p>
+      <p>Houbičkou navlhčete jen pás závěsu (ohyb nad zády, model <b class="num">v 142,99–150,99</b>; na kůži se neznačí), nenamáčejte celé.</p>
       <div class="fig"><div data-fig="hingeDamp"></div></div>
-      <p class="cap">Detail zavřeného závěsu, 1:1. Modře vlhčený pás, čárky jsou rysky přehybů v 145,10 a 148,88.</p>
+      <p class="cap">Detail zavřeného závěsu, 1:1. Modře vlhčený pás; přehyby v 145,10 a 148,88 čeká model, na kůži se neznačí.</p>
     </article>
     <article class="step">
       <header><span class="n">3</span><h3>Zavřete víčko přes obsah</h3></header>
-      <p>Víčko zavřete přes obsah a jazýček položte na přední stěnu. Kopyto ani opěrka nejsou potřeba. Rysky přehybů z lekce 4 (výchozí <span class="num">145,10</span> a <span class="num">148,88</span>) ukazují, kde přehyby čeká model; tvar ale dává obsah. Jinou polohu přehybů si zapište (poloměr 1,0 je předpoklad, ověří ho zkušební kus).</p>
+      <p>Víčko zavřete přes obsah a jazýček položte na přední stěnu. Kopyto ani opěrka nejsou potřeba. Přehyby se neznačí, tvar dává obsah: model čeká dva přehyby a mezi nimi plochý vrch přes obsah. Vyšel-li závěs jinak, zapište jak (poloměr 1,0 je předpoklad, ověří ho zkušební kus).</p>
     </article>
     <article class="step">
       <header><span class="n">4</span><h3>Nechte přes noc pod knihou</h3></header>
@@ -388,7 +388,6 @@ svg .book{fill:var(--wood);stroke:var(--woodedge);stroke-width:1.2;vector-effect
         <li>houbička a voda</li>
         <li>potravinová fólie</li>
         <li>kniha (lehká zátěž)</li>
-        <li>rysky přehybů máte z lekce 4</li>
       </ul>
     </div>
     <div class="card alert amber">
@@ -468,7 +467,6 @@ function notchAt(pts, s, t, size = 0.22) {
   const fx = p.x - p.nx * t / 2, fy = p.y - p.ny * t / 2;
   return Poly([[fx - tx * size, fy - ty * size], [fx + tx * size, fy + ty * size], [fx + p.nx * size * 1.1, fy + p.ny * size * 1.1]], 'notch');
 }
-function markAt(pts, s, t) { const p = pts[nearest(pts, s)]; return Ln(p.x + p.nx * t / 2, p.y + p.ny * t / 2, p.x - p.nx * t / 2, p.y - p.ny * t / 2, 'mark'); }
 
 /* ---------- ohyb dna: B leží na stole (líc dole), vložka na rubu B s hranou v x = 0, F se přehýbá ---------- */
 const RF = M.spacer / 2 + M.t / 2;          // poloměr střednice 1,25
@@ -621,13 +619,13 @@ function figStrip() {
   s += Poly(tong, 'kzp');
   s += Rect(v.foldBand[0], 0, v.foldBand[1], W, 'wetp') + Rect(v.hingeBand[0], 0, v.hingeBand[1], W, 'wetp');
   [v.frontEnd, v.backStart, v.hingeStart, v.hingeEnd].forEach((x) => { s += Ln(x, 0, x, W, 'sec'); });
-  s += Ln(v.foldAxis, -2, v.foldAxis, W + 2, 'creaseL') + Ln(v.rearCrease, -2, v.rearCrease, W + 2, 'creaseL') + Ln(v.frontCrease, -2, v.frontCrease, W + 2, 'creaseL');
+  s += Ln(v.foldAxis, -2, v.foldAxis, W + 2, 'creaseL');
   s += T(30, 50.5, 'F', { a: 'middle', bl: 'middle' }) + T(104, 50.5, 'B', { a: 'middle', bl: 'middle' });
   s += T(162.5, 50.5, 'víčko', { a: 'middle', bl: 'middle' }) + T(203, 50.5, 'jazýček', { a: 'middle', bl: 'middle' });
   s += T(v.foldAxis, W + 5, 'ohyb dna', { a: 'middle' }) + T((v.hingeBand[0] + v.hingeBand[1]) / 2, W + 5, 'závěs', { a: 'middle' });
   s += Ln(v.foldAxis, -2, v.foldAxis, -5.5) + T(40, -10, `pás ohybu v ${f(v.foldBand[0], 2)}–${f(v.foldBand[1], 2)} · rýha v ${f(v.foldAxis, 2)}`, {});
   const hm = (v.hingeBand[0] + v.hingeBand[1]) / 2;
-  s += Ln(hm, -2, hm, -15.5) + T(100, -20, `pás závěsu v ${f(v.hingeBand[0], 2)}–${f(v.hingeBand[1], 2)} · přehyby v ${f(v.rearCrease, 2)} a ${f(v.frontCrease, 2)}`, {});
+  s += Ln(hm, -2, hm, -15.5) + T(100, -20, `pás závěsu v ${f(v.hingeBand[0], 2)}–${f(v.hingeBand[1], 2)} · přehyby (model) v ${f(v.rearCrease, 2)} a ${f(v.frontCrease, 2)}, neznačí se`, {});
   s += T(0, -20, 'v 0 = horní hrana F', { c: 'm' }) + T(238, -10, `celkem ${f(M.P1, 2)}`, { a: 'end', c: 'm' });
   return svgWrap(vb, s, 'Rozvinutý pás P1 s pásy ohybů');
 }
@@ -712,7 +710,6 @@ function figHinge() {
   const k = kOf(), pts = hingePts(k, -(M.hingeStartY - 57));
   let s = hingeLayers(57);
   s += leather(pts, M.t, { wet: hingeWet() });
-  s += markAt(pts, M.v.rearCrease - M.v.hingeStart, M.t) + markAt(pts, M.v.frontCrease - M.v.hingeStart, M.t);
   s += T(-16.5, 59, 'F', {}) + Ln(-14.5, 59.4, -M.TB - M.t / 2 - (k > 0.9 ? 1.2 : 0), 59.4);
   s += T(-16.5, 62.6, 'D1', {}) + Ln(-13.8, 63, (D1X[0] + D1X[1]) / 2, 63);
   s += T(-16.5, 70, 'karty', {}) + Ln(-11.4, 70.4, (CX[0] + CX[1]) / 2, 70.4);
@@ -734,7 +731,6 @@ function figHingeZoom(forceClosed) {
   const k = forceClosed ? 1 : kOf(), pts = hingePts(k, -5, 0.02).filter((p) => p.s < 14);
   let s = hingeLayers(77.6);
   s += leather(pts, M.t, { wet: hingeWet() });
-  s += markAt(pts, M.v.rearCrease - M.v.hingeStart, M.t) + markAt(pts, M.v.frontCrease - M.v.hingeStart, M.t);
   const y0 = 78.35;
   s += T(0.5, y0, 'B', { a: 'middle', bl: 'middle', k: 0.8 }) + T(-0.3, y0, 'D2', { a: 'middle', bl: 'middle', c: 'on', k: 0.62 }) + T((D1X[0] + D1X[1]) / 2, y0, 'D1', { a: 'middle', bl: 'middle', k: 0.62 }) + T((CX[0] + CX[1]) / 2, y0, 'karty', { a: 'middle', bl: 'middle', k: 0.7 });
   if (k > 0.9) {
@@ -833,7 +829,7 @@ add('A','Vysuňte vložku bokem',4,'Po vyschnutí sundejte svěrky, prkénka a f
 add('A','Kontrola: F jde odklopit',4.5,'Tvar U, líc venku, rýha uprostřed ohybu. Boky ještě nejsou slepené, takže F jde odklopit na lepení plíšku a D1 (lekce 8). Mírné odpružení nevadí, udrží ho lepení G4 a boční švy.');
 add('B','Vložte obsah stavu B',4,'Do kapsy karet dejte <b>2 staré karty</b> a do oddílu bankovek <b>papír asi 70 × 65</b>, přeložený tak, aby měl asi <span class="num">0,7</span> mm (nebo bankovku ve fólii). Mince ne. Obsah pod závěsem pak má <span class="num">3,42</span> mm (výchozí střih; jinak list 4, „Tvarování závěsu“).');
 add('B','Navlhčete jen pás závěsu',3.4,'Houbičkou navlhčete <b>jen pás závěsu</b>, nenamáčejte celou peněženku.');
-add('B','Zavřete víčko přes obsah',3.4,'Víčko zavřete přes obsah a jazýček položte na přední stěnu. Kopyto ani opěrka nejsou potřeba. Rysky přehybů z lekce 4 ukazují, kde přehyby čeká model, tvar ale dává obsah. Vyšly-li přehyby jinde, zapište kde.');
+add('B','Zavřete víčko přes obsah',3.4,'Víčko zavřete přes obsah a jazýček položte na přední stěnu. Kopyto ani opěrka nejsou potřeba. Přehyby se neznačí, tvar dává obsah: model čeká dva přehyby a mezi nimi plochý vrch přes obsah. Vyšel-li závěs jinak, zapište jak.');
 add('B','Vložte fólii mezi závěs a knihu',3,'Mezi vlhký závěs a knihu dejte potravinovou fólii.');
 add('B','Nechte přes noc pod knihou',4.2,'Navrch dejte knihu (lehká zátěž) a nechte peněženku zavřenou <b>přes noc</b>, <span class="num">12–24 h</span>, ne u topení. Obsah zůstává uvnitř.');
 add('B','Kontrola: víčko se samo zavírá',4.2,'Knihu a fólii sundejte. Víčko se po vyschnutí vrací k zavřené poloze: otevřete ho a pusťte, samo se vrátí.');
@@ -1008,7 +1004,6 @@ function figAHinge() {
   s += contents(57, 62 * (1 - S.cIn), 84 * (1 - S.bIn));
   s += Rect(-M.TB - M.t, 57, -M.TB, M.frontTopY, 'kz', 'id="aF"') + Ln(-M.TB - M.t, 57, -M.TB - M.t, M.frontTopY, 'lic') + Ln(-M.TB, 57, -M.TB, M.frontTopY, 'rub');
   s += leatherW(pts, M.t, hingeWet(), S.w, 'aHLeather');
-  s += markAt(pts, M.v.rearCrease - M.v.hingeStart, M.t) + markAt(pts, M.v.frontCrease - M.v.hingeStart, M.t);
   if (S.foil > 0.01 && S.foilOp > 0.01) {
     s += `<g opacity="${r3(S.foilOp)}">${PathO(cut(foilPts(pts), S.foil), 'foil')}</g>`;
     if (AH.i === 3) s += `<g opacity="${r3(SM(0.5, 0.7, AH.u))}">${T(-16.5, 96, 'fólie', {})}${Ln(-12.4, 96.4, -M.TB - M.t - 0.35, 82)}</g>`;

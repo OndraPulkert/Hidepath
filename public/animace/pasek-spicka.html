@@ -222,16 +222,25 @@ function belt(o={}){
   let inn='';
   // zkosené a zaleštěné dlouhé hrany (lekce 3) kromě posledních 30 cm
   inn+=`<path d="M${X0} ${-H+.9} H${LAST30} M${X0} ${H-.9} H${LAST30}" stroke="${face==='rub'?'var(--rub-fib)':'var(--lic-hi)'}" stroke-width="${sw(.35)}"/>`;
-  if(o.balm>0) inn+=`<rect x="${LAST30}" y="${-H}" width="${END0-LAST30}" height="${W}" fill="var(--balm)" opacity="${f(.22*o.balm)}"/>`;
-  if(o.balmDone) inn+=`<rect x="${X0}" y="${-H}" width="${LAST30-X0}" height="${W}" fill="var(--balm)" opacity=".22"/>`;
+  // balzám z lekce 3 končí u pásky do ztracena (přechod 20 mm); zbytek v F2 přes přechod
+  if(o.balm>0) inn+=`<rect x="${LAST30-20}" y="${-H}" width="${END0-LAST30+20}" height="${W}" fill="var(--balm)" opacity="${f(.22*o.balm)}"/>`;
+  if(o.balmDone) inn+=`<rect x="${X0}" y="${-H}" width="${LAST30-20-X0}" height="${W}" fill="var(--balm)" opacity=".22"/><rect x="${LAST30-20}" y="${-H}" width="20" height="${W}" fill="url(#balmFade)" opacity=".22"/>`;
   s+=`<g clip-path="url(#${id})">${inn}</g>`;
   if(o.finish>0){const P=shape==='round'?[[LAST30,-H],[RC,-H],...ROUND_TR,[LAST30,H]]:[[LAST30,-H],...HROT_TR,[LAST30,H]];
     s+=`<path d="${pd(ppart(P,o.finish))}" fill="none" stroke="var(--burn)" stroke-width="${sw(.7)}" stroke-linejoin="round" opacity=".85"/>`;}
   if(o.mid) s+=`<circle cx="${MID}" cy="0" r=".7" fill="var(--hole)"/>`;
+  s+=tape30(face,o.tape30??1);
+  if(o.tapeMid) s+=tapeMid(o.tapeMid,o.dot);
   s+=marks(o);
   for(const x of (o.holes||[])) s+=`<circle cx="${x}" cy="0" r="${HD/2}" fill="var(--hole)"/>`;
   return s;
 }
+// páska 30 cm z lekce 3: na rubu napříč, přečnívá přes obě hrany (z líce jsou vidět jen přesahy)
+function tape30(face,op){if(op<=0)return '';const x=LAST30-6,y0=-H-3,y1=H+3;
+  const r=(a,b)=>`<rect x="${x}" y="${f(a)}" width="12" height="${f(b-a)}" fill="var(--tape)" stroke="var(--tape-d)" stroke-width="${sw(.2)}"/>`;
+  return `<g opacity="${f(op)}">${face==='rub'?r(y0,y1):r(y0,-H)+r(H,y1)}</g>`}
+// páska na líci u prostřední dírky (lekce 5) a tečka tužkou na ní
+function tapeMid(op,dot){return `<g opacity="${f(op)}"><rect x="${MID-8}" y="${-H+2}" width="16" height="${W-4}" fill="var(--tape)" stroke="var(--tape-d)" stroke-width="${sw(.2)}"/>${dot?`<circle cx="${MID}" cy="0" r=".8" fill="var(--print)"/>`:''}</g>`}
 // stopy šídla: vykroužené kroužky a obtažený tvar (kreslí se i nad destičku, aby byly vidět)
 function marks(o={}){let s='';
   for(const [x,p] of (o.rings||[])) if(p>0) s+=`<path d="${pd(arcPts(x,0,.95,-Math.PI/2,-Math.PI/2+2*Math.PI*p,24))}" fill="none" stroke="var(--hole)" stroke-width="${sw(.35)}"/>`;
@@ -262,6 +271,8 @@ function cornerTpl(op=1,dx=0){if(op<=0)return '';const c=APEX-NOSE,b=c-16;
 // ---------- nástroje (souřadnice scény) ----------
 function awl(x,y,press=1,a=26){const lift=(1-press)*3;
   return G(`translate(${f(x)} ${f(y-lift)}) rotate(${a})`,`<path d="M0 0 L-.5 -8 L.5 -8 Z" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-.9" y="-9.4" width="1.8" height="1.6" rx=".3" fill="var(--steel-d)"/><ellipse cx="0" cy="-14" rx="2.1" ry="4.8" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".25"/>`)}
+function pencil(x,y,press=1,a=26){const lift=(1-press)*3;
+  return G(`translate(${f(x)} ${f(y-lift)}) rotate(${a})`,`<path d="M0 0 L-1.1 -3.4 L1.1 -3.4 Z" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".2"/><path d="M0 0 L-.4 -1.2 L.4 -1.2 Z" fill="var(--print)"/><rect x="-1.1" y="-17" width="2.2" height="13.6" fill="var(--tape)" stroke="var(--tape-d)" stroke-width=".25"/>`)}
 // nůž s rukojetí ve směru (hx, hy): za řezem a na straně odpadu
 const kAng=(hx,hy)=>Math.atan2(hx,-hy)*180/Math.PI;
 function knife(x,y,a=0){return G(`translate(${f(x)} ${f(y)}) rotate(${f(a)})`,`<path d="M0 0 L-1.6 -9 L1.4 -9 L1.4 -1 Z" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".25"/><path d="M-1.1 -3 L1.4 -4.2 M-1.4 -6 L1.4 -7.2" stroke="var(--steel-d)" stroke-width=".18"/><rect x="-1.9" y="-22" width="3.6" height="13" rx="1" fill="var(--steel-d)"/><path d="M-1.2 -20 h2.2 M-1.2 -17 h2.2 M-1.2 -14 h2.2" stroke="var(--steel)" stroke-width=".3"/>`)}
@@ -290,7 +301,7 @@ function worn(o={}){
   // ocas pásku (líc ven), od přezky vlevo k vrcholu vpravo
   const tail=G(`translate(${f(tx0-APEX)} 0)`,`<path d="${beltD(shape,-500)}" fill="url(#licS)" stroke="var(--lic-d)" stroke-width="${sw(.3)}" ${SHADOW}/>`+
     (o.holes?HOLES.map(x=>`<circle cx="${x}" cy="0" r="${HD/2}" fill="var(--hole)"/>`).join(''):'')+
-    (o.mark?`<circle cx="${MID}" cy="0" r=".9" fill="var(--hole)"/>`:''));
+    (o.tapeMid?tapeMid(o.tapeMid,o.mark):'')+tape30('lic',1));
   s+=tail;
   // trn prostrčený dírkou: vidět je jen v dírce
   if(o.prongIn) s+=`<ellipse cx="${PRONG+1}" cy="0" rx="1.7" ry="1.1" fill="var(--steel)" stroke="var(--steel-d)" stroke-width="${sw(.25)}"/>`;
@@ -319,59 +330,63 @@ const S=[];
 const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,side,tip});
 
 // A1 — zkouška na těle
-add('A','Vyzkoušejte pásek na sobě','Pásek provlékněte poutky kalhot a utáhněte na pohodlí. Přidržte prstem a šídlem lehce zatlačte do líce místo, kam tlačí hrot trnu: jen důlek, ne díru. To je prostřední dírka; stopa po šídle v dírce zmizí.',9000,t=>{
+add('A','Vyzkoušejte pásek na sobě','Na líc pásku, kam zhruba dosáhne trn, nalepte kousek papírové pásky. Pásek provlékněte poutky kalhot a utáhněte na pohodlí. Přidržte prstem a tužkou udělejte na pásce tečku, kam tlačí hrot trnu. To je prostřední dírka. Šídlem teď do kůže nic nevpichujte: důlek, který by nevyšel, by na líci zůstal.',9000,t=>{
   const c=CAM_FRONT, p=es(t,.06,.36), tx0=APEX+(PRONG-MID)-22*(1-p);
-  let s=withCam(c,()=>worn({tx0,mark:t>.72}));
+  let s=withCam(c,()=>worn({tx0,tapeMid:1,mark:t>.68}));
   const [ex,ey]=tv(c,tx0-APEX+END0,0);
   if(t<.42) s+=fade(seg(t,.02,.08)*(1-seg(t,.36,.42)),arrow(ex+2,ey,ex+12,ey,'var(--accent)',.6)+pill(ex+12,ey-5,'utáhněte','ta','end'));
   const [px,py]=tv(c,PRONG,0);
   const fo=seg(t,.36,.44);
   if(fo>0) s+=finger(px+7,py+3.5,fo);
-  if(t>.44){const pr=es(t,.48,.68);s+=awl(px,py,pr)}
+  if(t>.44){const pr=es(t,.48,.66);s+=pencil(px,py,pr)}
   s+=fade(seg(t,.12,.2),lead(px+16,py-17,px+9,py-.2)+pill(px+16.5,py-17,'trn pod páskem','ts'));
   const [kx2,ky2]=tv(c,KEEP,23);s+=fade(seg(t,.2,.28),lead(kx2+6,ky2+7,kx2,ky2)+pill(kx2+6.5,ky2+9,'poutko pásku','ts'));
   const [lx,ly]=tv(c,-56,-30);
   s+=fade(seg(t,.24,.32),lead(lx+4,ly-5,lx,ly)+pill(lx+4.5,ly-5.5,'poutko kalhot','ts'));
-  if(t>.74) s+=fade(seg(t,.74,.82),pill(px-3,py+17,'důlek = prostřední dírka','ta','middle'));
+  if(t<.36) s+=fade(seg(t,.0,.06)*(1-seg(t,.3,.36)),pill(px-3,py+17,'páska na líci','ts','middle'));
+  if(t>.74) s+=fade(seg(t,.74,.82),pill(px-3,py+17,'tečka tužkou = prostřední dírka','ta','middle')+pill(px-3,py+23,'do kůže nic','ts','middle'));
   s+=pill(131,86,'schéma','ts','end');
   return s;
 },{v:'LÍC',sub:'na sobě'});
 
 // A2 — změřit od ohybu ke značce (zkrácený pohled)
-add('A','Změřte a porovnejte','Změřte od ohybu u přezky ke značce a zapište. Porovnejte s obvodem aktivního pásku pod krokem. Platí značka, ne obvod.',8000,t=>{
+add('A','Změřte a porovnejte','Změřte od ohybu u přezky k tečce na pásce a zapište. Porovnejte s obvodem aktivního pásku pod krokem. Platí značka, ne obvod.',8000,t=>{
   let s='';const y0=34,y1=46,xf=16,xm=112,xb=64;
   // přezka a přehnutý konec
   s+=`<rect x="5" y="${y0-3}" width="9" height="${y1-y0+6}" rx="1.4" fill="none" stroke="var(--steel-d)" stroke-width="1.6"/>`;
   s+=`<path d="M${xf} ${y0} H${xb-1} l1.5 3 l-3 3 l3 3 l-1.5 3 H${xf} Z" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".3"/>`;
   s+=`<path d="M${xb+3} ${y0} H128 V${y1} H${xb+3} l-1.5 -3 l3 -3 l-3 -3 Z" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".3"/>`;
   s+=`<path d="M${xf} ${y0-1} V${y1+1}" stroke="var(--accent)" stroke-width=".4" stroke-dasharray="1 .7"/>`;
-  s+=`<circle cx="${xm}" cy="${(y0+y1)/2}" r=".7" fill="var(--hole)"/>`;
-  s+=pill(xf,y1+6,'ohyb u přezky','ta','middle')+pill(xm,y1+6,'značka','ta','middle')+pill((xb+1),y1+6,'zkráceno','ts','middle');
+  s+=`<rect x="${xm-5}" y="${y0+1}" width="10" height="${y1-y0-2}" fill="var(--tape)" stroke="var(--tape-d)" stroke-width=".2"/><circle cx="${xm}" cy="${(y0+y1)/2}" r=".7" fill="var(--print)"/>`;
+  s+=pill(xf,y1+6,'ohyb u přezky','ta','middle')+pill(xm,y1+6,'tečka na pásce','ta','middle')+pill((xb+1),y1+6,'zkráceno','ts','middle');
   // metr
   const u=es(t,.08,.5), xe=L(xf,xm,u);
   if(u>0){s+=`<rect x="${xf}" y="${y0-8}" width="${f(xe-xf)}" height="5" fill="var(--tape)" stroke="var(--tape-d)" stroke-width=".25"/>`;
     let d='';for(let x=xf+2;x<xe;x+=2)d+=`M${f(x)} ${y0-8} v${(x-xf)%10<.1?2.4:1.3} `;s+=`<path d="${d}" stroke="var(--print)" stroke-width=".2"/>`;}
-  if(t>.5) s+=fade(seg(t,.5,.58),pill((xf+xm)/2,y0-11,'ohyb u přezky → značka (cm)','t','middle'));
+  if(t>.5) s+=fade(seg(t,.5,.58),pill((xf+xm)/2,y0-11,'ohyb u přezky → tečka (cm)','t','middle'));
   // porovnání
   const o=seg(t,.62,.72);
-  if(o>0){s+=fade(o,`<rect x="18" y="62" width="99" height="20" rx="2" class="panelbox"/>`+lbl(22,69,'obvod (pod krokem)','ts')+lbl(22,77,'značka na sobě','t')+
+  if(o>0){s+=fade(o,`<rect x="18" y="62" width="99" height="20" rx="2" class="panelbox"/>`+lbl(22,69,'obvod (pod krokem)','ts')+lbl(22,77,'tečka na sobě','t')+
     lbl(112,69,'pro porovnání','ts','end')+lbl(112,77,'platí','tok','end'));
     if(t>.8) s+=fade(seg(t,.8,.88),tick(104,75.6,.9));}
   return s;
 },{v:'LÍC',sub:'zkrácený pohled'});
 
-// A3 — značku z líce propíchnout na rub
-add('A','Propíchněte značku na rub','Značí se na rubu, ale důlek je na líci. Pásek sundejte, položte lícem nahoru na tvrdou desku a šídlo v důlku protlačte svisle skrz až na rub. Propíchnutý bod na rubu je značka prostřední dírky; zmizí ve vyseknuté dírce. Kontrola: na rubu změřte od ohybu u přezky zapsanou míru (ohyb → značka). Když nesedí, vyzkoušejte pásek na sobě znovu.',10000,t=>{
-  const c=CAM_MID, flip=es(t,.5,.62);
+// A3 — kontrola míry, pak jediný vpich tečkou na rub
+add('A','Propíchněte značku na rub','Značí se na rubu, ale tečka je na pásce na líci. Pásek sundejte a položte lícem nahoru na tvrdou desku. Kontrola: od ohybu u přezky k tečce musí vyjít zapsaná míra. Nesedí: vyzkoušejte pásek na sobě znovu a tečku opravte na pásce, kůže zůstane celá. Sedí: šídlo dejte do tečky a protlačte svisle skrz až na rub. Je to jediný vpich do líce a zmizí ve vyseknuté prostřední dírce. Pásku sundejte; propíchnutý bod na rubu je značka prostřední dírky.',11000,t=>{
+  const c=CAM_MID, flip=es(t,.66,.76), pierced=t>.42, tp=1-seg(t,.52,.6);
   let s='';
-  if(flip<1) s+=fade(1-flip,withCam(c,()=>boardBg()+belt({face:'lic',mid:true})));
+  if(flip<1) s+=fade(1-flip,withCam(c,()=>boardBg()+belt({face:'lic',mid:pierced,tapeMid:tp,dot:true})));
   if(flip>0) s+=fade(flip,withCam(c,()=>boardBg()+belt({mid:true})+`<circle cx="${MID}" cy="0" r="1.1" fill="none" stroke="var(--accent)" stroke-width="${sw(.4)}"/>`));
   const [mx,my]=tv(c,MID,0);
-  if(t>.06&&t<.5){const pr=es(t,.1,.38);s+=awl(mx,my,pr,0)}
-  s+=fade(seg(t,.04,.1)*(1-seg(t,.46,.5)),pill(131,8,'líc nahoru, tvrdá deska','t','end'));
-  s+=fade(seg(t,.2,.28)*(1-seg(t,.46,.5)),pill(mx,my+16,'šídlo svisle skrz důlek','ta','middle'));
-  s+=fade(seg(t,.62,.7),pill(131,8,'rub: propíchnutý bod = značka','tok','end'));
-  s+=fade(seg(t,.76,.84),pill(mx,my+16,'kontrola: ohyb → značka = zapsaná míra','ts','middle'));
+  s+=fade(seg(t,.02,.08)*(1-seg(t,.62,.66)),pill(131,8,'líc nahoru, tvrdá deska','t','end'));
+  s+=fade(seg(t,.04,.1)*(1-seg(t,.2,.24)),pill(mx,my+16,'kontrola: ohyb → tečka = zapsaná míra','ts','middle'));
+  s+=fade(seg(t,.12,.18)*(1-seg(t,.2,.24)),pill(mx,my+22,'nesedí: znovu na sobě, opravte tečku na pásce','ts','middle'));
+  if(t>.22&&t<.5){const pr=es(t,.26,.42);s+=awl(mx,my,pr,0)}
+  s+=fade(seg(t,.26,.32)*(1-seg(t,.48,.52)),pill(mx,my+16,'sedí: šídlo svisle skrz tečku','ta','middle'));
+  s+=fade(seg(t,.52,.56)*(1-seg(t,.62,.66)),pill(mx,my+16,'pásku sundejte','t','middle'));
+  s+=fade(seg(t,.76,.84),pill(131,8,'rub: propíchnutý bod = značka','tok','end'));
+  s+=fade(seg(t,.84,.92),pill(mx,my+16,'jediný vpich, zmizí v dírce','ts','middle'));
   return s;
 },{v:'LÍC → RUB',sub:'propíchnout'});
 
@@ -601,23 +616,24 @@ add('E','Uřízněte zaoblený konec','Zaoblený konec řežte od ruky po rýze 
 },{v:'RUB',sub:'zaoblený'});
 
 // F1 — hrany
-add('F','Dokončete hrany','Srazte hrany posledních 30 cm a hranu nového konce. U barevného pásku je obarvěte jako v lekci 3 a nechte zaschnout. Pak je zaleštěte.',11000,t=>{
+add('F','Dokončete hrany','Pásku z rubu (značka 30 cm z lekce 3) sundejte. Srazte hrany posledních 30 cm a hranu nového konce. U barevného pásku je obarvěte jako v lekci 3 a nechte zaschnout. Pak je zaleštěte.',11000,t=>{
   const c=camL(CAM_F,CAM_TIP,es(t,.4,.5)*(1-es(t,.84,.92)));
   const fin=es(t,.1,.82);
-  let s=withCam(c,()=>matBg(-200,280,-60,60)+belt({shape:'hrot',holes:HOLES,finish:fin}));
+  let s=withCam(c,()=>matBg(-200,280,-60,60)+belt({shape:'hrot',holes:HOLES,finish:fin,tape30:1-seg(t,.02,.09)}));
+  if(t<.1){const [tx,ty]=tv(c,LAST30,-H-3);s+=fade(1-seg(t,.07,.1),pill(tx,ty-12,'pásku 30 cm sundejte','ta','middle')+lead(tx,ty-11,tx,ty-.5))}
   const [ax,ay]=tv(c,LAST30,H),[bx]=tv(c,APEX,H);
   if(c.k<.5){s+=fade(1-seg(t,.84,.9),`<path d="M${f(ax)} ${f(ay+4)} V${f(ay+6)} H${f(bx)} V${f(ay+4)}" fill="none" stroke="var(--accent)" stroke-width=".4"/>`+pill((ax+bx)/2,ay+11,'posledních 30 cm','ta','middle'));
-    const [lx,ly]=tv(c,-150,-H);s+=pill(Math.max(lx,2),ly-3,'hotové z lekce 3','ts');}
+    const [lx,ly]=tv(c,-150,-H);s+=fade(seg(t,.1,.14),pill(Math.max(lx,2),ly-3,'hotové z lekce 3','ts'));}
   if(t>.05&&t<.84){const P=[[LAST30,-H],...HROT_TR,[LAST30,H]];const q=ptAt(P,fin),[x,y]=tv(c,q[0],q[1]);s+=t<.45?beveler(x,y):slicker(x,y)}
   if(t<.86) s+=pill(131,8,t<.45?'srazte hrany':'zaleštěte hrany','t','end');
   return s;
 },{v:'RUB'},'Tip: podrobný postup je v animaci Dokončení hran, část H. Hranu oválu jste zaleštili už v lekci 4.');
 
 // F2 — balzám
-add('F','Natřete balzámem','Pak natřete balzámem zbytek pásu, jen když balzám na odřezku vyhověl (jako v lekci 3).',8000,t=>{
+add('F','Natřete balzámem','Pak natřete balzámem zbytek pásu, přes přechod z lekce 3 do ztracena, jen když balzám na odřezku vyhověl (jako v lekci 3).',8000,t=>{
   const c=CAM_F;const p=es(t,.1,.85);
   let s=withCam(c,()=>matBg(-200,280,-60,60)+
-    belt({shape:'hrot',face:'lic',holes:HOLES,finish:1,balm:p,balmDone:true}));
+    belt({shape:'hrot',face:'lic',holes:HOLES,finish:1,balm:p,balmDone:true,tape30:0}));
   if(t>.08&&t<.88){const x=L(LAST30+20,APEX-10,(Math.sin(t*28)+1)/2*.25+p*.75);const [cx,cy]=tv(c,x,Math.sin(t*40)*8);s+=cloth(cx,cy)}
   const [ax,ay]=tv(c,LAST30,H),[bx]=tv(c,APEX,H);
   s+=`<path d="M${f(ax)} ${f(ay+4)} V${f(ay+6)} H${f(bx)} V${f(ay+4)}" fill="none" stroke="var(--accent)" stroke-width=".4"/>`+pill((ax+bx)/2,ay+11,'zbytek: posledních 30 cm','ta','middle');
@@ -645,6 +661,7 @@ add('F','Vyzkoušejte všechny dírky','Zapněte pásek na prostřední dírku, 
 const svg=document.getElementById('stage');
 const DEFS=`<defs>
 <filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx=".6" dy="1" stdDeviation=".8" flood-opacity=".28"/></filter>
+<linearGradient id="balmFade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="var(--balm)"/><stop offset="1" stop-color="var(--balm)" stop-opacity="0"/></linearGradient>
 <linearGradient id="licS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--lic-hi)"/><stop offset=".55" stop-color="var(--lic)"/><stop offset="1" stop-color="var(--lic-d)"/></linearGradient>
 <pattern id="rubP" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="var(--rub)"/><path d="M.5 1.2 l1.6 .5 M3.2 .6 l1.4 -.4 M1.4 3.8 l1.2 .8 M4 3.1 l1.5 .3 M2.6 5.2 l1.3 -.5 M.2 4.9 l.9 .3" stroke="var(--rub-fib)" stroke-width=".35" stroke-linecap="round"/></pattern>
 <marker id="ar" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--accent)"/></marker>

@@ -113,6 +113,7 @@ footer{font-size:12.5px;color:var(--muted)}
 .board{fill:var(--board);stroke:var(--boardedge);stroke-width:.25}
 .hole{fill:var(--hole)}
 .glue{fill:var(--glue)}
+.tape{fill:var(--paper);stroke:var(--paperedge);stroke-width:.2}
 .guide{stroke:var(--muted);stroke-width:.25;stroke-dasharray:1 .8;fill:none}
 .seamln{stroke:var(--notch);stroke-width:.45;stroke-dasharray:1.2 .8;fill:none}
 .offcut{fill:var(--kuze);fill-opacity:.35;stroke:var(--warn);stroke-width:.4;stroke-dasharray:1 .7}
@@ -261,6 +262,8 @@ function d2(){
   return poly(a,'d2f');
 }
 function band(fn,y0,y1,w){const a=[],b=[];for(let y=y0;y<=y1+1e-9;y+=.25){a.push(S(fn(y),y));b.push(S(fn(y)+w,y))}return a.length>1?a.concat(b.reverse()):null}
+/* maskovací páska na líci D2 nad horní hranou F (hranice G4, lekce 9) */
+function tapeD2(o=1){const p=band(()=>.78,62,68,.2);return p?poly(p,'tape',`opacity="${f(o)}"`):''}
 function holeSlot(y,o=1,thru=false){const z0=thru?0:frontZ(y);return `<rect x="${f(sx(z0)-.25)}" y="${f(sy(y)-.3)}" width="${f(sx(2.6)-sx(z0)+.5)}" height=".6" class="hole" opacity="${f(o)}"/>`}
 /* sekce: o = {c, open, rough, glue:{f,d2,b}, holes:[], board, chisel:{ys,tz}, offcut, thread:{moves,part}} */
 function section(o={}){
@@ -383,7 +386,7 @@ function secLabelsL(fr,o={}){
   s+=lead(sx(2.6)+6,sy(72),sx(1.3),sy(72))+pill(sx(2.6)+6.6,sy(72)+1.4,'D2','t');
   s+=lead(sx(2.6)+6,sy(40),sx(2.1),sy(40))+pill(sx(2.6)+6.6,sy(40)+1.4,'B','t');
   if(o.marks!==false){
-    s+=`<path d="M${f(sx(2.6)+1)} ${f(sy(62))} H${f(sx(2.6)+5)}" class="guide"/>`+pill(sx(2.6)+6.6,sy(62)+1.4,'F do y 62','ts');
+    if(!o.noF) s+=`<path d="M${f(sx(2.6)+1)} ${f(sy(62))} H${f(sx(2.6)+5)}" class="guide"/>`+pill(sx(2.6)+6.6,sy(62)+1.4,'F do y 62','ts');
     s+=`<path d="M${f(sx(2.6)+1)} ${f(sy(18))} H${f(sx(2.6)+5)}" class="guide"/>`+pill(sx(2.6)+6.6,sy(18)+1.4,'D2 od y 18','ts');
   }
   s+=pill(sx(2.6)+6.6,sy(YTOP)+3.4,'B → víčko','ts');
@@ -402,28 +405,31 @@ add('A','Výchozí stav: řez bokem','Řez bokem v čáře švu x 3. D2 je přil
 });
 
 // A2
-add('A','Nanečisto složte a zkontrolujte','Díl nejdřív složte nanečisto a zkontrolujte, že boky F a B lícují a D2 přesahuje na každém boku 1 mm. Teprve pak lepte – kontaktní lepidlo chytne hned při dotyku.',8000,t=>{
+add('A','Nanečisto složte a zkontrolujte','Díl nejdřív složte nanečisto a zkontrolujte, že boky F a B lícují a D2 přesahuje na každém boku 1 mm. Na líc D2 u obou boků nalepte kousek maskovací pásky spodní hranou přesně na horní hranu F (pásku nejdřív zkuste na odřezku líce D2). Teprve pak lepte – kontaktní lepidlo chytne hned při dotyku.',8000,t=>{
   const cl2=es(t,.08,.4)*(1-es(t,.78,.96));
   const open=OPEN*(1-cl2);
   const fr=mkF(1.75,open);
+  const tp=seg(t,.56,.68);
   let s=section({c:1.75,open});
-  s+=secLabelsL(fr);
+  if(tp>0) s+=tapeD2(tp);
+  s+=secLabelsL(fr,{noF:tp>0});
   s=clipMain(s);
-  if(t>.4&&t<.8){s+=`<g opacity="${f(seg(t,.42,.5)*(1-seg(t,.72,.8)))}">${tick(sx(-1)-5,sy(62),1)}${pill(sx(-1)-8,sy(62)+1.4,'sedí?','tok','end')}</g>`}
-  s+=tag(t<.4?'nanečisto, bez lepidla':t<.8?'F srovnat podle boků B':'zase odklopit, teprve teď lepidlo');
-  s+=inset('NANEČISTO',notes([['bez lepidla','tw'],['F na D2 a B'],['boky F a B lícují'],['D2 přesahuje 1 mm'],['',''],['lepidlo chytne','t'],['hned při dotyku']],16,5.6));
+  if(t>.4&&t<.56){s+=`<g opacity="${f(seg(t,.42,.5)*(1-seg(t,.52,.56)))}">${tick(sx(-1)-5,sy(62),1)}${pill(sx(-1)-8,sy(62)+1.4,'sedí?','tok','end')}</g>`}
+  if(tp>0) s+=`<g opacity="${f(tp)}">${lead(sx(2.6)+6,sy(62),sx(.8),sy(64))}${pill(sx(2.6)+6.6,sy(62)+1.4,'páska na F','ta')}</g>`;
+  s+=tag(t<.4?'nanečisto, bez lepidla':t<.56?'F srovnat podle boků B':t<.8?'pásku na líc D2 nad hranu F':'zase odklopit, teprve teď lepidlo');
+  s+=inset('NANEČISTO',notes([['bez lepidla','tw'],['F na D2 a B'],['boky F a B lícují'],['D2 přesahuje 1 mm'],['',''],['páska na líc D2','t'],['spodní hranou'],['na hranu F']],16,5.6));
   return s;
 });
 
 // B1
-add('B','Zdrsněte líc D2','Lepte jen šrafované boční pásy G4 (list 2; hranice máte na rubu P1). Líc D2 v šedé šrafě G4 zdrsněte: šablonu D2 přiložte na líc podle hran, kroužky na hranici šedé šrafy propíchněte a spojte tužkou.',7600,t=>{
+add('B','Zdrsněte líc D2','Lepte jen šrafované boční pásy G4 (list 2; hranice máte na rubu P1). Líc D2 v šedé šrafě G4 (list 3) zdrsněte jen pod páskou z nanečisto, v pásu 5 mm od hrany D2 (4 mm od boku F a přesah D2 1 mm), nic nekreslete; nad hranou F je líc D2 vidět.',7600,t=>{
   const r=es(t,.1,.85);
   const fr=mkF(1.75,OPEN);
-  let s=section({c:1.75,open:OPEN,rough:r});
+  let s=section({c:1.75,open:OPEN,rough:r})+tapeD2();
   if(r>0&&r<1){const y=18+44*r;s+=sandpaper(sx(d2Lic(y))-3.4,sy(y))}
   s+=secLabelsL(fr);
-  s=clipMain(s)+tag(r<1?'zdrsnit líc D2, y 18–62':'líc D2 zdrsněný');
-  s+=inset('G4 · BOČNÍ PÁSY',miniFront({g4:.5})+notes([['pásy x 0–4','t'],['a 97–101'],['zdrsnit líc D2'],['v y 18–62']],60,5.2));
+  s=clipMain(s)+tag(r<1?'zdrsnit líc D2 pod páskou':'líc D2 zdrsněný');
+  s+=inset('G4 · BOČNÍ PÁSY',miniFront({g4:.5})+notes([['pásy x 0–4','t'],['a 97–101'],['líc D2: 5 mm'],['od hrany D2,'],['jen pod páskou']],60,5.2));
   return s;
 });
 
@@ -431,7 +437,7 @@ add('B','Zdrsněte líc D2','Lepte jen šrafované boční pásy G4 (list 2; hra
 add('B','Naneste lepidlo a nechte zavadnout','Kontaktní lepidlo naneste jen do bočních pásů G4: na rub F, na líc D2 a pod D2 na rub B. Nechte zavadnout 10–15 min (jako u G3 v lekci 6).',9000,t=>{
   const gd=es(t,.05,.35),gb=es(t,.3,.45),gf=es(t,.45,.75),dry=es(t,.78,.98);
   const fr=mkF(1.75,OPEN);
-  let s=section({c:1.75,open:OPEN,rough:1,glue:{d2:gd,b:gb,f:gf,op:L(1,.7,dry)}});
+  let s=section({c:1.75,open:OPEN,rough:1,glue:{d2:gd,b:gb,f:gf,op:L(1,.7,dry)}})+tapeD2();
   if(gd>0&&gd<1){const y=18+44*gd;s+=brush(sx(d2Lic(y))-.3,sy(y))}
   if(gb>0&&gb<1){const y=1.75+16.25*gb;s+=brush(sx(1.6)-.3,sy(y))}
   if(gf>0&&gf<1){const y=1.75+60.25*gf;s+=`<g transform="translate(${f(sx(fr(y))+.3)} ${f(sy(y))}) scale(-1 1)">${brush(0,0)}</g>`}
@@ -444,14 +450,14 @@ add('B','Naneste lepidlo a nechte zavadnout','Kontaktní lepidlo naneste jen do 
 });
 
 // B3
-add('B','Přikládejte od ohybu dna nahoru','F přikládejte od ohybu dna nahoru a rovnejte ji podle boků B – po dotyku už nejde posunout. Rub F padne dole na rub B, výš na líc D2.',9600,t=>{
-  const c=L(1.75,62,es(t,.06,.9));
+add('B','Přikládejte od ohybu dna nahoru','F přikládejte od ohybu dna nahoru a rovnejte ji podle boků B – po dotyku už nejde posunout. Rub F padne dole na rub B, výš na líc D2. Pásku strhněte až po přiložení F.',9600,t=>{
+  const c=L(1.75,62,es(t,.06,.82));
   const fr=mkF(c,OPEN);
-  let s=section({c,open:OPEN,rough:1,glue:{d2:1,b:1,f:1,op:.7}});
+  let s=section({c,open:OPEN,rough:1,glue:{d2:1,b:1,f:1,op:.7}})+tapeD2(1-seg(t,.86,.96));
   s+=secLabelsL(fr,{marks:false});
   if(c>2.5&&c<61){s+=arrow(sx(fr(c+10)-1)-5,sy(c+4),sx(fr(c+10)-1)-5,sy(c+12),'var(--accent)',.5)}
   s=clipMain(s);
-  s+=tag(c<61?`přiloženo do y ${Math.round(c)}`:'F přiložená až k horní hraně');
+  s+=tag(c<61?`přiloženo do y ${Math.round(c)}`:t<.86?'F přiložená až k horní hraně':'pásku pomalu strhnout');
   s+=inset('OD OHYBU NAHORU',notes([['přikládat od','tw'],['ohybu dna nahoru'],['',''],['F rovnat podle','t'],['boků B'],['',''],['po dotyku','twn'],['nejde posunout']],18,5.6));
   return s;
 });
@@ -469,34 +475,35 @@ add('B','Kontrola: kapsa 93 mm','Mezi pásy G4 zůstane kapsa 93 mm. Na boku jso
 });
 
 // C1
-add('C','Narýsujte čáru švu 3,0 mm','Narýsujte čáru švu 3,0 mm od hrany boku F a B, ne od přečnívající D2 (je o 1 mm širší a zarovná se až po sešití): rýsovacím kružidlem nastaveným na 3,0 mm nebo rýhovačem. Nad horní hranou F, kde je navrchu D2, je čára 4,0 mm od hrany D2; můžete ji tam i jen prodloužit u pravítka. Bez kružidla podle proužku (krok C2).',9000,t=>{
-  const p=es(t,.1,.85),yl=L(80,4,p);
-  let s=frontBase();
-  s+=`<path d="M${f(fx(3))} ${f(fy(80))} V${f(fy(yl))}" class="seamln"/>`;
-  if(p>0&&p<1){const px=fx(yl>62?1:1.5),py=fy(yl)-12;const ex=yl>62?-1:0;s+=`<path d="M${f(fx(ex))} ${f(fy(yl))} L${f(px)} ${f(py)} L${f(fx(3))} ${f(fy(yl))}" stroke="var(--jigedge)" stroke-width=".5" fill="none"/><circle cx="${f(px)}" cy="${f(py)}" r=".9" class="steel"/>`}
-  s+=frontLabels();
-  s+=`<g opacity="${f(seg(t,.2,.3))}">${pill(fx(3)+3,fy(52),p<1&&yl>62?'kružidlo 4,0 od D2':'kružidlo 3,0 od F','t')}</g>`;
-  s=clipMain(s)+pill(4,6,'ZEPŘEDU · levý bok (S4)','ts')+pill(4,87,'čára švu 3,0 od hrany','t');
-  s+=inset('ČÁRA ŠVU',notes([['3,0 od hrany F a B','tw'],['nad F: 4,0 od D2'],['',''],['kružidlo 3,0','t'],['nebo rýhovač'],['',''],['bez nich:','t'],['podle proužku (C2)']],17,5.6));
-  return s;
-},'Tip: kde čára začíná a končí, lekce neurčuje; animace ji kreslí od y 4 do 80.');
-
-// C2
-add('C','Přeneste otvory z proužku','Na proužku S4/S5 z listu 4 nejdřív propíchněte jehlou všechny červené tečky a oba kroužky, ať jsou vidět i z rubu. Proužek přiložte levou hranou na hranu boku, spodní hranou ke spodní hraně peněženky a rysku „F 62“ na horní hranu F, a tečky propíchněte jehlou do kůže. Bez kružidla propíchněte i kroužky na koncích čáry a spojte je tužkou u pravítka. Pro S4 leží proužek lícem nahoru, pro S5 (pravý bok) rubem nahoru.',11000,t=>{
+add('C','Přeneste otvory z proužku','Otvory přeneste z proužku S4/S5 (list 4): na proužku nejdřív propíchněte jehlou všechny červené tečky, ať jsou vidět i z rubu. Proužek přiložte levou hranou na hranu boku F a B (ne na přečnívající D2, je o 1 mm širší a zarovná se až po sešití), spodní hranou ke spodní hraně peněženky a rysku „F 62“ na horní hranu F, a tečky propíchněte jehlou do kůže. Pro S4 leží proužek lícem nahoru, pro S5 (pravý bok) rubem nahoru.',11000,t=>{
   const sIn=es(t,.02,.2),sOut=es(t,.86,.98),m=Math.floor(es(t,.22,.8)*18+1e-9);
   let s=frontBase();
-  s+=`<path d="M${f(fx(3))} ${f(fy(80))} V${f(fy(4))}" class="seamln"/>`;
   for(let i=0;i<m;i++){const y=M.holes[17-i];s+=`<circle cx="${f(fx(3))}" cy="${f(fy(y))}" r=".55" fill="var(--ink)"/>`}
   const dx=-30*(1-sIn)-34*sOut;
   if(sOut<1){let st=`<rect x="${f(fx(0))}" y="${f(fy(83.5))}" width="${f(10*FK)}" height="${f(83.5*FK)}" class="paper"/>`;
     for(const y of M.holes) st+=`<path d="M${f(fx(0))} ${f(fy(y))} H${f(fx(6))}" class="tickl"/>`;
     for(const y of [62,26,22]) st+=`<path d="M${f(fx(0))} ${f(fy(y))} H${f(fx(10))}" class="guide"/>`;
-    st+=`<path d="M${f(fx(3))} ${f(fy(83.5))} V${f(fy(0))}" class="seamln"/>`;
+    st+=`<path d="M${f(fx(3))} ${f(fy(76))} V${f(fy(8))}" class="seamln"/>`;
     s+=`<g transform="translate(${f(dx)} 0)">${st}</g>`;
     if(sIn>.95&&sOut<.05){s+=pill(fx(11)+1,fy(76)+1.4,'poslední 76','ts')+pill(fx(11)+1,fy(62)+1.4,'F 62','ts')+pill(fx(11)+1,fy(24)+1.4,'dno karet 26 · S1 22','ts')+pill(fx(11)+1,fy(8)+1.4,'první 8','ts')}}
   if(sOut>.5) s+=frontLabels();
   s=clipMain(s)+pill(4,6,'ZEPŘEDU · levý bok (S4)','ts')+pill(4,87,m<18?`od 76 dolů: ${m} / 18`:'18 otvorů, y 8 … 76','t');
-  s+=inset('PROUŽEK S4/S5',notes([['list 4, na tvrdém','t'],['papíru z lekce 4']],16,5)+zoneList(31)+notes([['18 otvorů po 4 mm','t'],['S5: proužek obrátit'],['bez kružidla: konce','t'],['čáry 3,0 propíchnout,'],['spojit u pravítka']],60,4.8));
+  s+=inset('PROUŽEK S4/S5',notes([['list 4, na tvrdém','t'],['papíru z lekce 4']],16,5)+zoneList(31)+notes([['18 otvorů po 4 mm','t'],['S5: proužek obrátit'],['hrana proužku','t'],['na bok F a B,'],['ne na D2']],60,4.8));
+  return s;
+});
+
+// C2
+add('C','Narýsujte čáru švu mezi otvory','Čáru švu veďte jen mezi vpichy prvního a posledního otvoru (y 8 a 76), mimo šev by zůstala vidět: rýsovacím kružidlem nastaveným na 3,0 mm od hrany boku F a B, ne od přečnívající D2, nebo tužkou u pravítka přes vpichy. Nad horní hranou F, kde je navrchu D2, je čára 4,0 mm od hrany D2.',9000,t=>{
+  const p=es(t,.1,.85),yl=L(76,8,p);
+  let s=frontBase();
+  for(const y of M.holes) s+=`<circle cx="${f(fx(3))}" cy="${f(fy(y))}" r=".55" fill="var(--ink)"/>`;
+  s+=`<path d="M${f(fx(3))} ${f(fy(76))} V${f(fy(yl))}" class="seamln"/>`;
+  if(p>0&&p<1){const px=fx(yl>62?1:1.5),py=fy(yl)-12;const ex=yl>62?-1:0;s+=`<path d="M${f(fx(ex))} ${f(fy(yl))} L${f(px)} ${f(py)} L${f(fx(3))} ${f(fy(yl))}" stroke="var(--jigedge)" stroke-width=".5" fill="none"/><circle cx="${f(px)}" cy="${f(py)}" r=".9" class="steel"/>`}
+  s+=frontLabels();
+  s+=`<g opacity="${f(seg(t,.2,.3))}">${pill(fx(3)+3,fy(52),p<1&&yl>62?'kružidlo 4,0 od D2':'kružidlo 3,0 od F','t')}</g>`;
+  s+=`<g opacity="${f(seg(t,.86,.95))}">${pill(fx(3)+3,fy(80)+1.4,'nad 76 nic','twn')}${pill(fx(3)+3,fy(4)+1.4,'pod 8 nic','twn')}</g>`;
+  s=clipMain(s)+pill(4,6,'ZEPŘEDU · levý bok (S4)','ts')+pill(4,87,'čára jen y 8–76','t');
+  s+=inset('ČÁRA ŠVU',notes([['jen y 8–76','tw'],['mimo šev zůstane'],['vidět'],['',''],['3,0 od hrany F a B','t'],['nad F: 4,0 od D2'],['',''],['kružidlo, nebo','t'],['tužka přes vpichy']],17,5.6));
   return s;
 });
 

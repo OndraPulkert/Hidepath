@@ -307,7 +307,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'mark',
         title: 'Značení destičkou',
-        body: 'Odřezek a dvě podložky stejně silné jako pás přilepte k desce oboustrannou páskou, rubem nahoru. Destičku přiložte řadou 3 levou hranou na konec odřezku a hrany odřezku na linky vaší šířky (šířka bez linky: podle příčné stupnice). Šídlem označte dva otvory pro nýty blíž ke konci, 2 značky ohybu (šídlo v obou nakloněné stejným směrem) a obtáhněte ovál. V otvoru kružte šídlem po stěně, tlačte svisle a dívejte se svisle dolů. Destičku nikdy neobracejte. Bez destičky použijte list 1 (odkaz pod krokem): propíchněte středy otvorů, oba křížky oválu a oba červené kroužky na čáře ohybu.',
+        body: 'Odřezek a dvě podložky stejně silné jako pás přilepte k desce oboustrannou páskou, rubem nahoru. Destičku přiložte řadou 3 levou hranou na konec odřezku a hrany odřezku na linky vaší šířky (šířka bez linky: podle příčné stupnice). Šídlem označte dva otvory pro nýty blíž ke konci, 2 značky ohybu (šídlo v obou nakloněné stejným směrem) a obtáhněte ovál. V otvoru kružte šídlem po stěně, tlačte svisle a dívejte se svisle dolů. Destičku nikdy neobracejte. Bez destičky použijte list 1 (odkaz pod krokem): propíchněte středy 2 černých otvorů u konce, oba křížky oválu a oba červené kroužky na čáře ohybu. Šedé otvory nepropichujte.',
         printLink: 'pattern-sheets',
         printSheetId: 'prezka',
         animationLinks: [
@@ -514,7 +514,7 @@ export const lessons: readonly LessonDefinition[] = [
     materials: [
       'destička MK Plexi, nebo vytištěný list 1',
       'plátno na leštění',
-      'kousek papírové pásky na značku 30 cm',
+      'kousek papírové pásky delší, než je šířka pásu, na značku 30 cm',
     ],
     requiredEquipment: [
       'belt-strap',
@@ -546,7 +546,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'mark-30',
         title: 'Označte posledních 30 cm',
-        body: 'Na konci se špičkou odměřte 30 cm a označte je kouskem pásky. Tyto hrany zatím neopracovávejte: konec odříznete v lekci 6.',
+        body: 'Na konci se špičkou odměřte od konce 30 cm. Tam nalepte napříč na rub kousek papírové pásky tak, aby přečníval přes obě hrany: je vidět i shora a rub tu zůstane skrytý. Do kůže nic nevpichujte. Tyto hrany zatím neopracovávejte: konec odříznete v lekci 6. Pásku nechte do lekce 6.',
         media: [],
       },
       {
@@ -581,7 +581,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'balm',
         title: 'Natřete pás balzámem',
-        body: 'Teď, ne později: po ohnutí a sešroubování se pod ohyb nedostanete. Balzám naneste podle návodu na obalu, stejně jako na odřezku v lekci 2. Posledních 30 cm zatím vynechte. Balzám dávejte jen, když na odřezku vyhověl. Nevyhověl: u přírodního pásku nejdřív vyzkoušejte jiný přípravek na odřezku, u barevného krok přeskočte.',
+        body: 'Teď, ne později: po ohnutí a sešroubování se pod ohyb nedostanete. Balzám naneste podle návodu na obalu, stejně jako na odřezku v lekci 2. Posledních 30 cm zatím vynechte: k pásce ho rozetřete do ztracena, ne do ostré hranice, ať v lekci 6 nenavazujete na viditelný přechod. Balzám dávejte jen, když na odřezku vyhověl. Nevyhověl: u přírodního pásku nejdřív vyzkoušejte jiný přípravek na odřezku, u barevného krok přeskočte.',
         media: [],
       },
     ],
@@ -631,6 +631,7 @@ export const lessons: readonly LessonDefinition[] = [
       'oboustranná lepicí páska a dvě lišty nebo odřezky stejně silné jako pás',
       'odřezek kůže na poutko, klidně tenčí než pás',
       'papírový proužek na změření poutka',
+      'papírová páska na přelepení poutka mimo přeplátování',
       'voda a houbička',
       'zajišťovač závitů nebo lak',
       'plátno na leštění',
@@ -679,7 +680,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'mark',
         title: 'Označte konec u přezky',
-        body: 'Destičku přiložte levou hranou přesně na konec pásu, hrany pásu na pár linek vaší šířky (šířka bez linky: podle příčné stupnice). Šídlem označte 4 otvory pro nýty (ty v jedné přímce), 2 značky ohybu a obtáhněte ovál. V otvorech kružte po stěně, u obou značek ohybu nakloňte šídlo stejným směrem. Dívejte se svisle. Destičku nikdy neobracejte. Dva otvory mimo přímku jsou značky ohybu: do nich nic nesekejte. S listem 1: list vystřihněte po obrysu pásu, spodní hranu přiložte přesně na konec pásu, boky na hrany pásu a přilepte páskou. Šídlem propíchněte středy 4 otvorů, oba křížky oválu a oba červené kroužky na čáře ohybu.',
+        body: 'Destičku přiložte levou hranou přesně na konec pásu, hrany pásu na pár linek vaší šířky (šířka bez linky: podle příčné stupnice). Šídlem označte jen 2 otvory pro nýty blíž ke konci, 2 značky ohybu a obtáhněte ovál. Druhé 2 otvory v přímce neznačte: druhou dvojici označíte po ohnutí skrz první. V otvorech kružte po stěně, u obou značek ohybu nakloňte šídlo stejným směrem. Dívejte se svisle. Destičku nikdy neobracejte. Dva otvory mimo přímku jsou značky ohybu: do nich nic nesekejte. S listem 1: list vystřihněte po obrysu pásu, spodní hranu přiložte přesně na konec pásu, boky na hrany pásu a přilepte páskou. Šídlem propíchněte středy 2 černých otvorů u konce, oba křížky oválu a oba červené kroužky na čáře ohybu. Šedé otvory nepropichujte.',
         animationLinks: [
           animationLink('beltBuckleEnd', 'B2'),
           animationLink('beltBuckleEnd', 'B3'),
@@ -692,7 +693,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'first-pair',
         title: 'Vysekněte první dvojici',
-        body: 'Výsečníkem Ø 6 mm vysekněte jen dva otvory blíž ke konci (16,8 a 64,5 mm od konce). Druhou dvojici zatím ne. Značky ohybu spojte na rubu pravítkem.',
+        body: 'Výsečníkem Ø 6 mm vysekněte oba označené otvory (16,8 a 64,5 mm od konce). Značky ohybu spojte na rubu pravítkem.',
         animationLinks: [animationLink('beltBuckleEnd', 'C1')],
         media: [],
       },
@@ -712,7 +713,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'keeper',
         title: 'Vyrobte poutko',
-        body: `Poutkem bude procházet i volný konec pásku, takže obepíná 3 vrstvy. Konec pásu přeložte volně na dvojo, zatím bez ohybu kolem příčky, a přiložte k němu třetí vrstvu: druhý konec pásu nebo odřezek z lekce 2. Papírový proužek obtočte kolem všech 3 vrstev, označte, kde se potká se svým začátkem, a obvod odečtěte na pravítku destičky (nula vlevo) nebo na ocelovém pravítku. Délka poutka = obvod + tloušťka poutka v ohybech (π × tloušťka poutka: asi 4 mm u odřezku 1,2 mm, asi 9 mm u odřezku 3 mm, asi 11 mm u odřezku 3,5 mm) + 15 mm přeplátování. Porovnejte s délkou poutka aktivního pásku pod krokem (např. ${KEEPER_EXAMPLE_MM} mm pro 40 × 3,5 mm): ta počítá s odřezkem 1,2 mm, se silnějším odřezkem vyjde delší. Z odřezku vyřízněte proužek 12 mm × tato délka. V přeplátování leží rub na líci: líc pod ním zdrsněte smirkem 180, z hladkého líce lepidlo pouští. Přeplátování 15 mm natřete kontaktním lepidlem na obě strany, nechte zavadnout podle návodu na obalu a slepte. Délka poutka je spočítaná, ne vyzkoušená: ověřte ji proužkem.`,
+        body: `Poutkem bude procházet i volný konec pásku, takže obepíná 3 vrstvy. Konec pásu přeložte volně na dvojo, zatím bez ohybu kolem příčky, a přiložte k němu třetí vrstvu: druhý konec pásu nebo odřezek z lekce 2. Papírový proužek obtočte kolem všech 3 vrstev, označte, kde se potká se svým začátkem, a obvod odečtěte na pravítku destičky (nula vlevo) nebo na ocelovém pravítku. Délka poutka = obvod + tloušťka poutka v ohybech (π × tloušťka poutka: asi 4 mm u odřezku 1,2 mm, asi 9 mm u odřezku 3 mm, asi 11 mm u odřezku 3,5 mm) + 15 mm přeplátování. Porovnejte s délkou poutka aktivního pásku pod krokem (např. ${KEEPER_EXAMPLE_MM} mm pro 40 × 3,5 mm): ta počítá s odřezkem 1,2 mm, se silnějším odřezkem vyjde delší. Z odřezku vyřízněte proužek 12 mm × tuto délku: na rubu ho narýsujte šídlem podél ocelového pravítka a řežte přesně po rýhách, odpadnou s řezem. V přeplátování 15 mm leží rub jednoho konce na líci druhého: líc pod ním zdrsněte smirkem 180, z hladkého líce lepidlo pouští. Hranici 15 mm na kůži neznačte: papírovou páskou přelepte líc tak, aby od konce zůstalo volných 15 mm (odměřte pravítkem; na listu 1 jsou to šrafy), a stejně rub druhého konce. Zdrsněte a kontaktním lepidlem natřete jen volná místa, pásku hned sundejte, nechte zavadnout podle návodu na obalu a slepte. Délka poutka je spočítaná, ne vyzkoušená: ověřte ji proužkem.`,
         animationLinks: [
           animationLink('beltBuckleEnd', 'D1'),
           animationLink('beltBuckleEnd', 'D2'),
@@ -769,7 +770,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'screws',
         title: 'Vysekněte a sešroubujte',
-        body: 'Poutko odsuňte ke špičce dál než 180 mm od konce, pak konec rozložte. Druhou dvojici vysekněte Ø 6 mm podle značek skrz otvory; původní značky z destičky nebo listu ignorujte. Konec ohněte zpět kolem příčky s trnem v oválu a poutko posuňte zpět přes přehnutý konec do kapsy, spojem na přehnutý konec. Nýty sešroubujte: hlavičku s dutým dříkem z líce pásu, šroubek z druhé strany, na přehnutém konci (strana k tělu), utáhněte plochým šroubovákem. Na závit dejte kapku zajišťovače závitů nebo laku: nýty v nejzatíženějším místě se povolují. Poutko je v kapse mezi nýty.',
+        body: 'Poutko odsuňte ke špičce dál než 180 mm od konce, pak konec rozložte. Druhou dvojici vysekněte Ø 6 mm podle značek skrz otvory. Konec ohněte zpět kolem příčky s trnem v oválu a poutko posuňte zpět přes přehnutý konec do kapsy, spojem na přehnutý konec. Nýty sešroubujte: hlavičku s dutým dříkem z líce pásu, šroubek z druhé strany, na přehnutém konci (strana k tělu), utáhněte plochým šroubovákem. Na závit dejte kapku zajišťovače závitů nebo laku: nýty v nejzatíženějším místě se povolují. Poutko je v kapse mezi nýty.',
         animationLinks: [
           animationLink('beltBuckleEnd', 'E4'),
           animationLink('beltBuckleEnd', 'E5'),
@@ -783,7 +784,8 @@ export const lessons: readonly LessonDefinition[] = [
     checkpoints: [
       {
         slug: 'marked-row3',
-        title: 'Otvory, značky ohybu a ovál jsou označené na rubu; značky ohybu nejsou proseknuté.',
+        title:
+          'Na rubu jsou označené 2 otvory u konce, značky ohybu a ovál; značky ohybu nejsou proseknuté.',
         required: true,
       },
       {
@@ -808,7 +810,7 @@ export const lessons: readonly LessonDefinition[] = [
       'Všechny čtyři otvory vyseknuté najednou: druhá dvojice nesedí.',
       'Poutko nenavlečené před ohnutím.',
       'Poutko změřené jen kolem 2 vrstev: volný konec pásku se do něj nevejde.',
-      'Druhá dvojice vyseknutá podle značky z destičky místo značky skrz otvor.',
+      'Druhá dvojice propíchnutá z destičky nebo listu: značí se jen skrz vyseknuté otvory.',
       'Destička přiložená na šikmo uříznutý konec pásu.',
     ],
     safety: [
@@ -835,7 +837,11 @@ export const lessons: readonly LessonDefinition[] = [
     phaseSlug: 'build',
     estimatedMinutes: 20,
     goal: 'Na sobě označit prostřední dírku a ověřit, že pás na dírky a špičku stačí.',
-    materials: ['kalhoty, ve kterých budete pásek nosit', 'krejčovský metr'],
+    materials: [
+      'kalhoty, ve kterých budete pásek nosit',
+      'krejčovský metr',
+      'kousek papírové pásky a tužka',
+    ],
     requiredEquipment: ['scratch-awl', 'steel-ruler', 'punching-board'],
     recommendedEquipment: [],
     prerequisiteLessons: [L4],
@@ -843,14 +849,14 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'try-on',
         title: 'Vyzkoušejte pásek na sobě',
-        body: 'Pásek provlékněte poutky kalhot a utáhněte na pohodlí. Přidržte prstem a šídlem lehce zatlačte do líce místo, kam tlačí hrot trnu: jen důlek, ne díru. To je prostřední dírka; stopa po šídle v dírce zmizí.',
+        body: 'Na líc pásku, kam zhruba dosáhne trn, nalepte kousek papírové pásky. Pásek provlékněte poutky kalhot a utáhněte na pohodlí. Přidržte prstem a tužkou udělejte na pásce tečku, kam tlačí hrot trnu. To je prostřední dírka. Šídlem teď do kůže nic nevpichujte: důlek, který by nevyšel, by na líci zůstal.',
         animationLinks: [animationLink('beltHolesTip', 'A1')],
         media: [photo('belt-l5-fit', 'Pásek v poutkách kalhot, prst drží místo pod hrotem trnu')],
       },
       {
         id: 'measure',
         title: 'Změřte a porovnejte',
-        body: 'Změřte od ohybu u přezky ke značce a zapište. Porovnejte s obvodem aktivního pásku pod krokem. Platí značka, ne obvod.',
+        body: 'Změřte od ohybu u přezky k tečce na pásce a zapište. Porovnejte s obvodem aktivního pásku pod krokem. Platí značka, ne obvod.',
         animationLinks: [animationLink('beltHolesTip', 'A2')],
         media: [],
         records: [
@@ -867,7 +873,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'transfer',
         title: 'Propíchněte značku na rub',
-        body: 'Značí se na rubu, ale důlek je na líci. Pásek sundejte, položte lícem nahoru na tvrdou desku a šídlo v důlku protlačte svisle skrz až na rub. Propíchnutý bod na rubu je značka prostřední dírky; zmizí ve vyseknuté dírce. Kontrola: na rubu změřte od ohybu u přezky zapsanou míru (ohyb → značka). Když nesedí, vyzkoušejte pásek na sobě znovu.',
+        body: 'Značí se na rubu, ale tečka je na pásce na líci. Pásek sundejte a položte lícem nahoru na tvrdou desku. Kontrola: od ohybu u přezky k tečce musí vyjít zapsaná míra. Nesedí: vyzkoušejte pásek na sobě znovu a tečku opravte na pásce, kůže zůstane celá. Sedí: šídlo dejte do tečky a protlačte svisle skrz až na rub. Je to jediný vpich do líce a zmizí ve vyseknuté prostřední dírce. Pásku sundejte; propíchnutý bod na rubu je značka prostřední dírky.',
         animationLinks: [animationLink('beltHolesTip', 'A3')],
         media: [photo('belt-l5-transfer', 'Šídlo propíchnuté důlkem z líce, hrot vychází na rubu')],
         recalls: [{ fieldId: FIT_WAIST_ID, label: 'Ohyb u přezky → značka (tato lekce)' }],
@@ -898,6 +904,7 @@ export const lessons: readonly LessonDefinition[] = [
     commonMistakes: [
       'Prostřední dírka podle obvodu z lekce 1 místo zkoušky na sobě.',
       'Zkouška v jiných kalhotách, než ve kterých budete pásek nosit.',
+      'Důlek nebo vpich šídlem do líce mimo konečnou značku: zůstane vidět.',
       'Značka zůstala jen na líci: na rubu pak destičku ani list není kam přiložit.',
     ],
     safety: [],
@@ -987,7 +994,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'finish',
         title: 'Dokončete hrany',
-        body: 'Srazte hrany posledních 30 cm a hranu nového konce. U barevného pásku je obarvěte jako v lekci 3 a nechte zaschnout. Pak je zaleštěte a natřete balzámem zbytek pásu, jen když balzám na odřezku vyhověl (jako v lekci 3).',
+        body: 'Pásku z rubu (značka 30 cm z lekce 3) sundejte. Srazte hrany posledních 30 cm a hranu nového konce. U barevného pásku je obarvěte jako v lekci 3 a nechte zaschnout. Pak je zaleštěte a natřete balzámem zbytek pásu, přes přechod z lekce 3 do ztracena, jen když balzám na odřezku vyhověl (jako v lekci 3).',
         animationLinks: [
           animationLink('beltHolesTip', 'F1'),
           animationLink('beltHolesTip', 'F2'),
@@ -1139,7 +1146,7 @@ const overview: ProjectOverview = {
           id: 'scrap-mark',
           lessonSlug: L2,
           stepId: 'mark',
-          text: 'Odřezek a podložky stejně silné jako pás přilepte k desce rubem nahoru. Řadu 3 destičky přiložte levou hranou na konec, hrany odřezku na linky vaší šířky (bez linky podle příčné stupnice), nebo použijte list 1. Šídlem označte dva otvory pro nýty blíž ke konci, 2 značky ohybu a obtáhněte ovál (s listem 1 propíchněte středy otvorů, oba křížky oválu a oba červené kroužky ohybu).',
+          text: 'Odřezek a podložky stejně silné jako pás přilepte k desce rubem nahoru. Řadu 3 destičky přiložte levou hranou na konec, hrany odřezku na linky vaší šířky (bez linky podle příčné stupnice), nebo použijte list 1. Šídlem označte dva otvory pro nýty blíž ke konci, 2 značky ohybu a obtáhněte ovál (s listem 1 propíchněte 2 černé otvory u konce, oba křížky oválu a oba červené kroužky ohybu).',
         },
         {
           id: 'scrap-punch',
@@ -1183,26 +1190,26 @@ const overview: ProjectOverview = {
           id: 'mark-30',
           lessonSlug: L3,
           stepId: 'mark-30',
-          text: 'Na konci se špičkou označte páskou posledních 30 cm; jejich hrany zatím neopracovávejte.',
+          text: 'Na konci se špičkou označte posledních 30 cm páskou na rubu, přečnívající přes hrany, bez vpichu do kůže; jejich hrany zatím neopracovávejte.',
         },
         {
           id: 'long-edges',
           lessonSlug: L3,
           stepId: 'bevel',
-          text: 'Dlouhé hrany srazte a zaleštěte; u barevného pásku je předtím obarvěte jako na odřezku a leštěte až zaschlou barvu. Pás natřete balzámem teď, po ohnutí se pod ohyb nedostanete, ale jen když balzám na odřezku vyhověl. Nevyhověl: u přírodního pásku nejdřív vyzkoušejte jiný přípravek na odřezku, u barevného balzám vynechte.',
+          text: 'Dlouhé hrany srazte a zaleštěte; u barevného pásku je předtím obarvěte jako na odřezku a leštěte až zaschlou barvu. Pás natřete balzámem teď, po ohnutí se pod ohyb nedostanete, ale jen když balzám na odřezku vyhověl; k pásce 30 cm ho rozetřete do ztracena. Nevyhověl: u přírodního pásku nejdřív vyzkoušejte jiný přípravek na odřezku, u barevného balzám vynechte.',
           later: 'hrany a balzám posledních 30 cm (lekce 6).',
         },
         {
           id: 'buckle-mark',
           lessonSlug: L4,
           stepId: 'mark',
-          text: 'Pás s podložkami přilepte k desce rubem nahoru. Řadu 3 přiložte levou hranou přesně na konec, hrany pásu na linky vaší šířky (bez linky podle příčné stupnice), nebo použijte list 1. Šídlem označte 4 otvory pro nýty, 2 značky ohybu a ovál.',
+          text: 'Pás s podložkami přilepte k desce rubem nahoru. Řadu 3 přiložte levou hranou přesně na konec, hrany pásu na linky vaší šířky (bez linky podle příčné stupnice), nebo použijte list 1. Šídlem označte 2 otvory pro nýty blíž ke konci, 2 značky ohybu a ovál; druhou dvojici neznačte (s listem 1 šedé otvory nepropichujte).',
         },
         {
           id: 'first-pair',
           lessonSlug: L4,
           stepId: 'first-pair',
-          text: 'Vysekněte Ø 6 mm jen dva otvory blíž ke konci. Značky ohybu nesekejte, spojte je na rubu pravítkem.',
+          text: 'Vysekněte Ø 6 mm oba označené otvory. Značky ohybu nesekejte, spojte je na rubu pravítkem.',
           later: 'druhou dvojici otvorů až po ohnutí, skrz vyseknuté otvory.',
         },
         {
@@ -1216,7 +1223,7 @@ const overview: ProjectOverview = {
           lessonSlug: L4,
           stepId: 'keeper',
           appLinks: [YOUR_BELT],
-          text: 'Papírovým proužkem změřte obvod 3 vrstev pásu; délka poutka = obvod + π × tloušťka poutka + 15 mm přeplátování, porovnejte ji s délkou ve „Váš pásek“. Z odřezku vyřízněte proužek 12 mm × tuto délku. Líc pod přeplátováním zdrsněte smirkem 180, obě strany natřete kontaktním lepidlem, nechte zavadnout a slepte.',
+          text: 'Papírovým proužkem změřte obvod 3 vrstev pásu; délka poutka = obvod + π × tloušťka poutka + 15 mm přeplátování, porovnejte ji s délkou ve „Váš pásek“. Z odřezku vyřízněte proužek 12 mm × tuto délku, rýhy na rubu po pravítku. Poutko mimo přeplátování 15 mm přelepte páskou (líc jednoho konce, rub druhého), volná místa zdrsněte a natřete kontaktním lepidlem, pásku sundejte, nechte zavadnout a slepte.',
         },
         {
           id: 'bend',
@@ -1241,7 +1248,7 @@ const overview: ProjectOverview = {
           lessonSlug: L5,
           stepId: 'try-on',
           appLinks: [YOUR_BELT],
-          text: 'Pásek provlékněte poutky kalhot, ve kterých ho budete nosit, utáhněte na pohodlí a šídlem udělejte důlek, kam tlačí hrot trnu: to je prostřední dírka. Změřte ji od ohybu, důlek propíchněte na rub a ověřte, že od značky ke konci zbývá aspoň vzdálenost prostřední dírky od konce z „Váš pásek“. Nezbývá: ve „Váš pásek“ pod „Dírky (pokročilé)“ zkuste méně dírek nebo kratší odstup první dírky a značte listem 2.',
+          text: 'Pásek provlékněte poutky kalhot, ve kterých ho budete nosit, utáhněte na pohodlí a tužkou udělejte tečku na pásce nalepené na líci, kam tlačí hrot trnu: to je prostřední dírka. Změřte ji od ohybu; když sedí, tečku jednou propíchněte šídlem na rub a ověřte, že od značky ke konci zbývá aspoň vzdálenost prostřední dírky od konce z „Váš pásek“. Nezbývá: ve „Váš pásek“ pod „Dírky (pokročilé)“ zkuste méně dírek nebo kratší odstup první dírky a značte listem 2.',
         },
         {
           id: 'holes-mark',
@@ -1260,7 +1267,7 @@ const overview: ProjectOverview = {
           id: 'finish',
           lessonSlug: L6,
           stepId: 'finish',
-          text: 'Hrany posledních 30 cm a nového konce srazte a zaleštěte; u barevného pásku je předtím obarvěte jako v lekci 3 a leštěte až zaschlou barvu. Zbytek pásu natřete balzámem, jen když na odřezku vyhověl (jako v lekci 3), a vyzkoušejte všechny dírky.',
+          text: 'Pásku 30 cm sundejte, hrany posledních 30 cm a nového konce srazte a zaleštěte; u barevného pásku je předtím obarvěte jako v lekci 3 a leštěte až zaschlou barvu. Zbytek pásu natřete balzámem do ztracena přes přechod, jen když na odřezku vyhověl (jako v lekci 3), a vyzkoušejte všechny dírky.',
         },
       ],
     },
@@ -1583,6 +1590,7 @@ export const beltProject: ProjectDefinition = {
       'krejčovský metr, když nemáte pásek na změření obvodu',
       'oboustranná lepicí páska a dvě lišty nebo odřezky stejně silné jako pás (lekce 2, 4 a 6)',
       'odřezek kůže na poutko a papírový proužek na jeho změření (lekce 4)',
+      'papírová páska a tužka na značky bez vpichu (lekce 3, 4 a 5)',
       'zajišťovač závitů nebo lak na nýty (lekce 4)',
       'plochý šroubovák podle drážky šroubku nýtu (lekce 2 a 4)',
       'voda a houbička na ohyb, plátno na leštění',

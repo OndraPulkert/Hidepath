@@ -382,8 +382,8 @@ export const animationPages = {
         'Nanečisto: který magnet',
         'Zdrsněte rub konce jazýčku',
         'Přilepte magnet epoxidem',
-        'Natřete jazýček a L1 lepidlem',
-        'Přiložte L1 na rysku 10 mm',
+        'Doraz ze šablony, páska a lepidlo',
+        'Přiložte L1 k pásce',
         'Nechte 24 h vytvrdit',
         'Ořízněte špičku R10 a boky L1',
         'Zbruste klín v posledních 2,5 mm',
@@ -405,7 +405,7 @@ export const animationPages = {
     },
     steps: {
       A: ['List 1 vystřihněte nahrubo', 'Přilepte list 1 na LÍC'],
-      B: ['Propíchněte značky na bocích', 'Propíchněte středy výsečníků'],
+      B: ['Propíchněte středy výsečníků'],
       C: [
         'Vysekněte napojení jazýčku Ø 8',
         'Řízněte tečné řezy u pravítka',
@@ -514,7 +514,7 @@ export const animationPages = {
         'Přikládejte od ohybu dna nahoru',
         'Kontrola: kapsa 93 mm',
       ],
-      C: ['Narýsujte čáru švu 3,0 mm', 'Přeneste otvory z proužku'],
+      C: ['Přeneste otvory z proužku', 'Narýsujte čáru švu mezi otvory'],
       D: [
         'Před děrováním počkejte aspoň 1 h',
         'Děrujte y 8–52 z líce F',
@@ -546,7 +546,7 @@ export const animationPages = {
       B: [
         'Upevněte pás a destičku',
         'Přiložte řadu 3',
-        'Označte 4 otvory pro nýty',
+        'Označte 2 otvory pro nýty',
         'Značky ohybu a ovál',
         'Zkontrolujte značky',
         'S listem 1',

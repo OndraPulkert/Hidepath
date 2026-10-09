@@ -1,5 +1,5 @@
 /**
- * Linie stehu a značky k propíchnutí na obdélníkové šabloně (projekt 01). Čisté funkce
+ * Linie stehu a značky na obdélníkové šabloně (projekt 01). Čisté funkce
  * v milimetrech, kreslí je `TemplateIllustration`; testy hlídají přesné souřadnice.
  */
 import { type ThumbCutout } from '@/lib/geometry/piece-path';
@@ -84,8 +84,9 @@ export interface MarkInput {
 }
 
 /**
- * Úsečka značky, `x1 y1` leží na obrysu. Konce a dno výřezu se propichují na obrysu (lekce 5),
- * výška kapsy je jen orientační čárka horní hrany kapsy.
+ * Úsečka značky, `x1 y1` leží na obrysu. Nic z toho se nepropichuje (vpich na čáře řezu by v hraně
+ * nechal zoubek): konce výřezu ukazují, kam až vede rovný řez horní hrany, dno výřezu, kam dát
+ * jeden roh mezi řezy (lekce 5), výška kapsy je orientační čárka horní hrany kapsy.
  */
 export interface TemplateMark {
   kind: 'thumb-cutout-end' | 'thumb-cutout-bottom' | 'height';
@@ -99,8 +100,9 @@ export interface TemplateMark {
 export const CUTOUT_TICK_MM = 3;
 
 /**
- * Značky k propíchnutí šídlem: konce oblouku výřezu na palec (svislá čárka nad horní hranou,
- * stejné místo jako v `piecePath`), dno oblouku (čárka nahoru do výřezu) a výška kapsy na obou bocích (vodorovná čárka dovnitř).
+ * Čárky jen na papíře: konce oblouku výřezu na palec (svislá čárka nad horní hranou do okraje
+ * papíru, stejné místo jako v `piecePath`), dno oblouku (čárka nahoru do výřezu) a výška kapsy na
+ * obou bocích (vodorovná čárka dovnitř).
  */
 export function templateMarks({
   x,
@@ -156,9 +158,10 @@ function round(value: number): number {
 }
 
 /**
- * Bod k propíchnutí šídlem na líc (lekce 6): `stitch-*` na linii stehu přední kapsy,
- * `glue-*` na hranici lepeného pásu zadního dílu. `*-end` = horní konec boku, `*-corner` = bod
- * v zaobleném spodním rohu.
+ * Kroužek na šabloně (lekce 6). `glue-*` na hranici lepeného pásu zadního dílu se propichuje šídlem
+ * na líc, kapsa ho zakryje. `stitch-*` na linii stehu přední kapsy se nepropichuje: je to cíl pro
+ * vidličky při děrování skrz papír přilepený na líci (vpich mimo otvor by zůstal vidět).
+ * `*-end` = horní konec boku, `*-corner` = bod v zaobleném spodním rohu.
  */
 export interface PrickPoint {
   kind: 'stitch-end' | 'stitch-corner' | 'glue-end' | 'glue-corner';
@@ -221,10 +224,10 @@ export interface PrickInput {
 }
 
 /**
- * Kroužky k propíchnutí na líc v lekci 6, jen u dílů s otevřeným vrchem. Díl, na kterém leží
- * kapsa (`stitchUpToMm`), nese hranici lepeného pásu `glueBandMm`: konce na bocích (konec
- * zdrsnění pod zaoblením rohu kapsy) a rohy. Kapsa sama nese body linie stehu: horní konce
- * (první a poslední otvor) a v rozích tři body oblouku.
+ * Kroužky pro lekci 6, jen u dílů s otevřeným vrchem. Díl, na kterém leží kapsa (`stitchUpToMm`),
+ * nese hranici lepeného pásu `glueBandMm` k propíchnutí: konce na bocích (konec zdrsnění pod
+ * zaoblením rohu kapsy) a rohy. Kapsa sama nese body linie stehu pro děrování skrz papír: horní
+ * konce (první a poslední otvor) a v rozích tři body oblouku.
  */
 export function prickPoints(p: PrickInput, glueBandMm?: number): PrickPoint[] {
   if (p.openEdge !== 'top') return [];

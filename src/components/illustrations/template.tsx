@@ -14,14 +14,16 @@ export interface TemplateIllustrationProps {
 /** Texty legendy, sdílené s HTML legendou náhledu na stránce projektu. */
 export const TEMPLATE_LEGEND = {
   outline: 'plná čára = obrys dílu, řežte podle ní',
-  stitch: 'čárkovaná = linie stehu, neřezat (rýsuje se na kůži)',
+  stitch: 'čárkovaná = linie stehu, neřezat ani nerýsovat',
   glue: 'tečkovaná = okraj lepeného pásu na zadním dílu (lekce 6)',
-  tick: 'krátká čárka u výřezu = propíchněte na plné čáře (lekce 5)',
-  prick: 'kroužek = propíchněte šídlem skrz papír na líc (lekce 6)',
+  tick: 'čárka u výřezu = konec rovného řezu a dno, nepropichovat',
+  prick: 'kroužek na tečkované = propíchněte šídlem na líc (lekce 6)',
+  punch: 'kroužek na čárkované = děrujte skrz papír, nepropichovat',
 } as const;
 
 const PRICK_R = 0.7;
 const GLUE_STROKE = '#6B5F57';
+const STITCH_STROKE = '#A85F32';
 
 /**
  * Šablona 1:1 vykreslená v milimetrech. V režimu print má SVG rozměr přímo v `mm`,
@@ -39,7 +41,7 @@ export function TemplateIllustration({
   const contentWidth = Math.max(...pieces.map((p) => p.widthMm));
   const contentHeight = pieces.reduce((s, p) => s + p.heightMm, 0) + gap * (pieces.length - 1);
   const width = contentWidth + margin * 2;
-  const height = contentHeight + margin * 2 + 49;
+  const height = contentHeight + margin * 2 + 54;
 
   const placed = pieces.map((p, index) => ({
     ...p,
@@ -123,7 +125,7 @@ export function TemplateIllustration({
               cy={pt.y}
               r={PRICK_R}
               fill="none"
-              stroke="#2B211C"
+              stroke={pt.kind.startsWith('stitch') ? STITCH_STROKE : '#2B211C'}
               strokeWidth={0.2}
             />
           ))}
@@ -209,14 +211,14 @@ export function TemplateIllustration({
               fontSize={2.6}
               fill="#6B5F57"
             >
-              kroužky na linii stehu propíchněte na líc (lekce 6)
+              děrujte skrz papír přilepený na líci (lekce 6)
             </text>
           ) : null}
         </g>
       ))}
       {/* legenda */}
       {legend ? (
-        <g transform={`translate(${margin} ${height - 41})`}>
+        <g transform={`translate(${margin} ${height - 46})`}>
           <path d="M0 0 L8 0" stroke="#2B211C" strokeWidth={0.4} />
           <LegendText y={1} fill="#2B211C">
             {TEMPLATE_LEGEND.outline}
@@ -242,6 +244,10 @@ export function TemplateIllustration({
           <circle cx={4} cy={20} r={PRICK_R} fill="none" stroke="#2B211C" strokeWidth={0.2} />
           <LegendText y={21} fill="#2B211C">
             {TEMPLATE_LEGEND.prick}
+          </LegendText>
+          <circle cx={4} cy={25} r={PRICK_R} fill="none" stroke={STITCH_STROKE} strokeWidth={0.2} />
+          <LegendText y={26} fill="#7E4423">
+            {TEMPLATE_LEGEND.punch}
           </LegendText>
         </g>
       ) : null}

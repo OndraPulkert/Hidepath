@@ -374,8 +374,9 @@ add('A','List 1: přeměřte čtverec','List 1 vytiskněte na 100 %. Kalibračn�
     q+=`<path d="M${cx} 42 V222" stroke="${M}" stroke-width=".6" stroke-dasharray="3 3"/>`;
     q+=`<path d="M${sx-6} ${fy} H${sx+46}" stroke="${R}" stroke-width="1.2" stroke-dasharray="4 2.5"/>`;
     q+=`<path d="M${cx-3} ${fy-9.5} A3 3 0 0 1 ${cx+3} ${fy-9.5} V${fy+9.5} A3 3 0 0 1 ${cx-3} ${fy+9.5} Z" fill="none" stroke="${P}" stroke-width=".9"/>`;
-    for(const off of RIV_OFF) for(const sg of [-1,1]) q+=`<circle cx="${cx}" cy="${fy+sg*off}" r="3" fill="none" stroke="${P}" stroke-width=".9"/>`;
+    for(const off of RIV_OFF){q+=`<circle cx="${cx}" cy="${fy+off}" r="3" fill="none" stroke="${P}" stroke-width=".9"/>`;q+=`<circle cx="${cx}" cy="${fy-off}" r="3" fill="none" stroke="${M}" stroke-width=".9" stroke-dasharray="1.6 1.2"/>`}
     q+=`<rect x="150" y="30" width="50" height="50" fill="none" stroke="${R}" stroke-width="1.2"/>`;
+    for(const x of [22,22+KEEP_LEN-KEEP_OV]) q+=`<rect x="${x}" y="232" width="${KEEP_OV}" height="${KEEP_W}" fill="${M}" opacity=".35"/>`;
     q+=`<rect x="22" y="232" width="${KEEP_LEN}" height="${KEEP_W}" fill="none" stroke="${P}" stroke-width=".9"/>`;
     for(let i=0;i<7;i++) q+=`<rect x="22" y="${258+i*4.2}" width="${120+((i*37)%50)}" height="1.8" fill="${M}" opacity=".5"/>`;
     return q;
@@ -432,12 +433,14 @@ add('B','Přiložte řadu 3','Destičku přiložte levou hranou přesně na kone
 },RUB);
 
 // B3 — 4 otvory pro nýty
-add('B','Označte 4 otvory pro nýty','Šídlem označte 4 otvory pro nýty – ty v jedné přímce. V otvorech kružte po stěně. Dívejte se svisle.',9000,t=>{
+add('B','Označte 2 otvory pro nýty','Šídlem označte jen 2 otvory pro nýty blíž ke konci. Druhé 2 otvory v přímce neznačte: druhou dvojici označíte po ohnutí skrz první. V otvorech kružte po stěně. Dívejte se svisle.',9000,t=>{
   const c=CAM_TOP;
-  const h=HOLES.map((x,i)=>t>.1+.2*i+.16?'mark':null);
+  const h=HOLES.map((x,i)=>i<2&&t>.1+.3*i+.24?'mark':null);
   let s=cam(c,()=>board()+shims()+strapRub()+marks({h})+plateOnStrap());
-  const i=Math.min(3,Math.max(0,Math.floor((t-.1)/.2))), lt=seg(t,.1+.2*i,.1+.2*i+.2);
-  if(t>.04&&t<.92){const ph=lt;const ang=ph*Math.PI*4;const [x,y]=at(c,HOLES[i]+.7*Math.cos(ang)*(ph>.15&&ph<.8?1:0),.7*Math.sin(ang)*(ph>.15&&ph<.8?1:0));const press=ph<.15?ph/.15:ph>.8?1-(ph-.8)/.2:1;s+=awl(x,y,18,press)}
+  const i=Math.min(1,Math.max(0,Math.floor((t-.1)/.3))), lt=seg(t,.1+.3*i,.1+.3*i+.3);
+  // druhá dvojice: na destičce je, ale teď se nevpichuje
+  s+=`<g opacity="${f(seg(t,.72,.8))}">${HOLES.slice(2).map(x=>{const [a,b]=at(c,x,0);return lead(a,b-12,a,b-1.4)+pill(a,b-13,'neznačit','ta','middle')}).join('')}</g>`;
+  if(t>.04&&t<.7){const ph=lt;const ang=ph*Math.PI*4;const [x,y]=at(c,HOLES[i]+.7*Math.cos(ang)*(ph>.15&&ph<.8?1:0),.7*Math.sin(ang)*(ph>.15&&ph<.8?1:0));const press=ph<.15?ph/.15:ph>.8?1-(ph-.8)/.2:1;s+=awl(x,y,18,press)}
   // kroužení po stěně Ø 2
   const cp=seg(t,.12,.28);
   s+=zbox(4,52,62,35,'KRUŽTE PO STĚNĚ',{cx:HOLES[0],cy:0,k:9},()=>{
@@ -467,7 +470,7 @@ add('B','Označte 4 otvory pro nýty','Šídlem označte 4 otvory pro nýty – 
 add('B','Značky ohybu a ovál','Šídlem označte 2 značky ohybu a obtáhněte ovál. U obou značek ohybu nakloňte šídlo stejným směrem.',9000,t=>{
   const c=CAM_TOP;
   const tr=seg(t,.42,.88);
-  let s=cam(c,()=>board()+shims()+strapRub()+marks({h:['mark','mark','mark','mark'],fold:t>.33?1:0,trace:tr,...(t>.18?{}:{})})+(t>.18&&t<=.33?dot(FOLD,-OFFM):'')+plateOnStrap());
+  let s=cam(c,()=>board()+shims()+strapRub()+marks({h:['mark','mark',null,null],fold:t>.33?1:0,trace:tr,...(t>.18?{}:{})})+(t>.18&&t<=.33?dot(FOLD,-OFFM):'')+plateOnStrap());
   if(t>.04&&t<.36){const first=t<.2;const lt=first?seg(t,.04,.2):seg(t,.2,.36);const [x,y]=at(c,FOLD,first?-OFFM:OFFM);const pr=lt<.25?lt/.25:lt>.8?1-(lt-.8)/.2:1;s+=awl(x,y,-28,pr)}
   if(t>.4&&t<.92){const [u,v]=ovalPathPt(tr);const [x,y]=at(c,u,v);s+=awl(x,y,18,t<.43?seg(t,.4,.43):t>.89?1-seg(t,.89,.92):1)}
   s+=zbox(4,52,62,35,'NAKLOŇTE STEJNĚ',{cx:FOLD,cy:0,sx:42,k:1},()=>board()+strapRub()+plateOnStrap(),{raw:(()=>{const a=42,y1=69.5-OFFM,y2=69.5+OFFM;return awl(a,y1,-100,1)+awl(a,y2,-100,1)+pill(47,y1+1.4,'oba','tok')+pill(47,y2+1.4,'stejně','tok')})()});
@@ -476,12 +479,13 @@ add('B','Značky ohybu a ovál','Šídlem označte 2 značky ohybu a obtáhněte
 },RUB);
 
 // B5 — kontrola značek
-add('B','Zkontrolujte značky','Dva otvory mimo přímku jsou značky ohybu: do nich nic nesekejte. Na rubu jsou 4 otvory, 2 značky ohybu a ovál.',7600,t=>{
+add('B','Zkontrolujte značky','Dva otvory mimo přímku jsou značky ohybu: do nich nic nesekejte. Na rubu jsou 2 otvory pro nýty, 2 značky ohybu a ovál. Druhá dvojice zatím nemá žádnou značku.',7600,t=>{
   const c=CAM_MID;const lift=es(t,0,.35);
-  let s=cam(c,()=>board()+shims()+strapRub()+marks({h:['mark','mark','mark','mark'],fold:1,trace:1})+plateOnStrap(L(0,25,lift),L(0,-60,lift),1-lift,{shadow:true}));
+  let s=cam(c,()=>board()+shims()+strapRub()+marks({h:['mark','mark',null,null],fold:1,trace:1})+plateOnStrap(L(0,25,lift),L(0,-60,lift),1-lift,{shadow:true}));
   const o=seg(t,.38,.5);
   if(o>0){
-    let q='';HOLES.forEach((x,i)=>{const [a,b]=at(c,x,0);q+=lead(a,b-8,a,b-.7)+pill(a,b-9,'nýt','t','middle')});
+    let q='';HOLES.slice(0,2).forEach(x=>{const [a,b]=at(c,x,0);q+=lead(a,b-8,a,b-.7)+pill(a,b-9,'nýt','t','middle')});
+    {const [a,b]=at(c,(HOLES[2]+HOLES[3])/2,0);q+=pill(a,b-9,'2. dvojice až po ohnutí','ts','middle')}
     const [fa,fb]=at(c,FOLD,-OFFM),[ga,gb]=at(c,FOLD,OFFM);
     q+=cross(fa,fb,1.3,.45)+cross(ga,gb,1.3,.45)+lead(fa+12,fb-12,fa+.8,fb-.8)+pill(fa+12,fb-13,'ohyb: nesekat','ta','middle');
     const [oa,ob]=at(c,FOLD+6,3);q+=lead(oa+12,ob+15,oa,ob+.3)+pill(oa+12,ob+19,'ovál obtažený','t','middle');
@@ -493,8 +497,8 @@ add('B','Zkontrolujte značky','Dva otvory mimo přímku jsou značky ohybu: do 
 
 // B6 — s listem 1
 const BEND_IN=2;                                                    // kroužky ohybu 2 mm od hran pásu (belt-sheets.ts)
-const SHEET_PTS=[...HOLES.map(x=>[x,0]),[OV_END[0],0],[OV_END[1],0],[FOLD,-BW/2+BEND_IN],[FOLD,BW/2-BEND_IN]];
-add('B','S listem 1','List vystřihněte po obrysu pásu, spodní hranu přiložte přesně na konec pásu, boky na hrany pásu a přilepte páskou. Šídlem propíchněte středy 4 otvorů, oba křížky oválu a oba červené kroužky na čáře ohybu.',9400,t=>{
+const SHEET_PTS=[...HOLES.slice(0,2).map(x=>[x,0]),[OV_END[0],0],[OV_END[1],0],[FOLD,-BW/2+BEND_IN],[FOLD,BW/2-BEND_IN]];
+add('B','S listem 1','List vystřihněte po obrysu pásu, spodní hranu přiložte přesně na konec pásu, boky na hrany pásu a přilepte páskou. Šídlem propíchněte středy 2 černých otvorů u konce, oba křížky oválu a oba červené kroužky na čáře ohybu. Šedé otvory nepropichujte.',9400,t=>{
   const c=CAM_MID;const so=1-.75*seg(t,.86,.96);const n=SHEET_PTS.length;const span=.72/n;
   const done=SHEET_PTS.filter((_,i)=>t>.08+span*(i+1)-.02);
   let s=cam(c,()=>{
@@ -505,7 +509,9 @@ add('B','S listem 1','List vystřihněte po obrysu pásu, spodní hranu přilož
     sh+=`<path d="M0 0 H180" stroke="${M}" stroke-width="${f(sw(.25))}" stroke-dasharray="3 3"/><path d="M${FOLD} ${-BW/2} V${BW/2}" stroke="${R}" stroke-width="${f(sw(.35))}" stroke-dasharray="4 2.5"/>`;
     sh+=`<path d="${stad(SL0,SL1,0,SLOT_W)}" fill="none" stroke="${P}" stroke-width="${f(sw(.3))}"/>`;
     for(const x of OV_END) sh+=`<path d="M${x-3.9} 0 H${x+3.9} M${x} -3.9 V3.9" stroke="${P}" stroke-width="${f(sw(.2))}"/>`;
-    for(const x of HOLES) sh+=`<circle cx="${x}" cy="0" r="3" fill="none" stroke="${P}" stroke-width="${f(sw(.3))}"/><path d="M${x-3.9} 0 H${x+3.9} M${x} -3.9 V3.9" stroke="${P}" stroke-width="${f(sw(.2))}"/>`;
+    for(const x of HOLES.slice(0,2)) sh+=`<circle cx="${x}" cy="0" r="3" fill="none" stroke="${P}" stroke-width="${f(sw(.3))}"/><path d="M${x-3.9} 0 H${x+3.9} M${x} -3.9 V3.9" stroke="${P}" stroke-width="${f(sw(.2))}"/>`;
+    // 2. dvojice: šedá, čárkovaná, bez křížku – nepropichuje se
+    for(const x of HOLES.slice(2)) sh+=`<circle cx="${x}" cy="0" r="3" fill="none" stroke="${M}" stroke-width="${f(sw(.3))}" stroke-dasharray="${f(sw(1))} ${f(sw(.8))}"/>`;
     for(const y of [-BW/2+BEND_IN,BW/2-BEND_IN]) sh+=`<circle cx="${FOLD}" cy="${y}" r="1" fill="none" stroke="${R}" stroke-width="${f(sw(.3))}"/><path d="M${FOLD-1.3} ${y} H${FOLD+1.3} M${FOLD} ${y-1.3} V${y+1.3}" stroke="${R}" stroke-width="${f(sw(.2))}"/>`;
     sh+=done.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r=".5" fill="var(--hole)"/>`).join('');
     sh+=`<rect x="4" y="-24" width="14" height="8" fill="var(--tape)" opacity=".75"/><rect x="4" y="16" width="14" height="8" fill="var(--tape)" opacity=".75"/><rect x="160" y="-24" width="14" height="8" fill="var(--tape)" opacity=".75"/><rect x="160" y="16" width="14" height="8" fill="var(--tape)" opacity=".75"/>`;
@@ -515,18 +521,18 @@ add('B','S listem 1','List vystřihněte po obrysu pásu, spodní hranu přilož
   const i=Math.min(n-1,Math.floor((t-.08)/span));
   if(t>.08&&t<.08+span*n){const lt=seg(t,.08+span*i,.08+span*(i+1));const [x,y]=at(c,...SHEET_PTS[i]);s+=awl(x,y,18,lt<.3?lt/.3:lt>.8?1-(lt-.8)/.2:1)}
   s+=`<g opacity="${f(seg(t,.02,.1))}">${pill(4,14,'list 1 vystřižený po obrysu','ts')}</g>`;
-  s+=`<g opacity="${f(seg(t,.8,.9))}">${pill(67.5,79,'4 otvory · 2 křížky oválu · 2 kroužky ohybu','t','middle')}</g>`;
+  s+=`<g opacity="${f(seg(t,.8,.9))}">${pill(67.5,79,'2 otvory · 2 křížky oválu · 2 kroužky ohybu','t','middle')}</g>`;
   return s;
 },RUB);
 
 // C1 — první dvojice
-add('C','Vysekněte první dvojici','Výsečníkem Ø 6 mm vysekněte jen dva otvory blíž ke konci (16,8 a 64,5 mm od konce). Druhou dvojici zatím ne. Značky ohybu spojte na rubu pravítkem.',9400,t=>{
+add('C','Vysekněte první dvojici','Výsečníkem Ø 6 mm vysekněte oba označené otvory (16,8 a 64,5 mm od konce). Značky ohybu spojte na rubu pravítkem.',9400,t=>{
   const c=CAM_MID;
   const p0=seg(t,.05,.3),p1=seg(t,.3,.55);const fl=es(t,.72,.92);
-  const h=[p0>.6?'hole':'mark',p1>.6?'hole':'mark','mark','mark'];
+  const h=[p0>.6?'hole':'mark',p1>.6?'hole':'mark',null,null];
   let s=cam(c,()=>board()+strapRub()+marks({h,fold:1,trace:1,foldLine:fl}));
   for(const [i,p] of [[0,p0],[1,p1]]){if(p>0&&p<1){const [x,y]=at(c,HOLES[i],0);const press=p<.4?p/.4:p<.7?1:1-(p-.7)/.3;s+=`<g opacity="${f(p<.85?1:1-(p-.85)/.15)}">${punchTop(x,y,RIV_D,c.k,press)}</g>`+bang(x,y,(p-.45)/.3)}}
-  s+=`<g opacity="${f(seg(t,.55,.65))}">${HOLES.slice(2).map(x=>{const [a,b]=at(c,x,0);return pill(a,b-17,'zatím ne','ta','middle')}).join('')}${HOLES.slice(0,2).map(x=>{const [a,b]=at(c,x,0);return pill(a,b-17,'Ø 6','tok','middle')}).join('')}</g>`;
+  s+=`<g opacity="${f(seg(t,.55,.65))}">${HOLES.slice(2).map(x=>{const [a,b]=at(c,x,0);return pill(a,b-17,'až po ohnutí','ts','middle')}).join('')}${HOLES.slice(0,2).map(x=>{const [a,b]=at(c,x,0);return pill(a,b-17,'Ø 6','tok','middle')}).join('')}</g>`;
   // ocelové pravítko podél spojnice značek ohybu
   const ro=seg(t,.62,.72)*(1-seg(t,.94,1));
   if(ro>0){const [x,y0]=at(c,FOLD+.4,-OFFM-6),[,y1]=at(c,FOLD,OFFM+6);s+=`<g opacity="${f(ro)}"><rect x="${f(x)}" y="${f(y0)}" width="4.5" height="${f(y1-y0)}" fill="var(--steel)" fill-opacity=".92" stroke="var(--steel-d)" stroke-width=".3" ${SHADOW}/></g>`}
@@ -623,14 +629,14 @@ add('D','Změřte poutko proužkem','Poutkem bude procházet i volný konec pás
   return s;
 },null,'Tip: 4 mm je tloušťka poutka v ohybech (π × 1,2 mm u odřezku 1,2 mm); tloušťky jsou kreslené v měřítku příkladu.');
 
-// D2 — vyřízněte a slepte poutko
-add('D','Vyřízněte a slepte poutko','Z odřezku vyřízněte proužek 12 mm × změřená délka. V přeplátování leží rub na líci: líc pod ním zdrsněte smirkem 180, z hladkého líce lepidlo pouští. Přeplátování 15 mm natřete kontaktním lepidlem na obě strany, nechte zavadnout podle návodu na obalu a slepte. Délka poutka je spočítaná, ne vyzkoušená: ověřte ji proužkem.',9400,t=>{
-  const k=.9,x0=13,x1=x0+KEEP_LEN*k,y0=12,y1=12+KEEP_W,mv=es(t,.3,.4)*14;
-  // řezy podél ocelového pravítka: pravítko leží na proužku, nůž na straně odpadu
+// D2 — vyřízněte a slepte poutko: rýhy na rubu odpadnou s řezem, hranici 15 mm drží páska, ne značka
+add('D','Vyřízněte a slepte poutko','Z odřezku vyřízněte proužek 12 mm × změřená délka: na rubu ho narýsujte šídlem podél ocelového pravítka a řežte přesně po rýhách, odpadnou s řezem. V přeplátování 15 mm leží rub jednoho konce na líci druhého: líc pod ním zdrsněte smirkem 180, z hladkého líce lepidlo pouští. Hranici 15 mm na kůži neznačte: papírovou páskou přelepte líc tak, aby od konce zůstalo volných 15 mm, a stejně rub druhého konce. Zdrsněte a kontaktním lepidlem natřete jen volná místa, pásku hned sundejte, nechte zavadnout podle návodu na obalu a slepte. Délka poutka je spočítaná, ne vyzkoušená: ověřte ji proužkem.',10400,t=>{
+  const k=.9,x0=13,x1=x0+KEEP_LEN*k,y0=12,y1=12+KEEP_W,mv=es(t,.3,.36)*14;
+  // řezy po rýhách podél ocelového pravítka, odřezek rubem nahoru; nůž na straně odpadu
   const c1=es(t,.04,.12),c2=es(t,.12,.2),c3=es(t,.2,.25),c4=es(t,.25,.3);
-  let s=`<rect x="6" y="6" width="123" height="26" rx="3" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".35"/>`;
-  s+=pill(8,5,'odřezek','ts');
-  const sy=12+mv;
+  let s=`<rect x="6" y="6" width="123" height="26" rx="3" fill="url(#rubP)" stroke="var(--rub-d)" stroke-width=".35"/>`;
+  s+=`<g opacity="${f(1-seg(t,.3,.36))}">${pill(8,5,'odřezek, rub nahoru','ts')}</g>`;
+  const sy=12+mv,ov=KEEP_OV*k;
   if(t>.04&&t<=.3){let d='';if(c1>0)d+=`M${x0} ${y0} H${f(L(x0,x1,c1))} `;if(c2>0)d+=`M${x0} ${y1} H${f(L(x0,x1,c2))} `;if(c3>0)d+=`M${x0} ${y0} V${f(L(y0,y1,c3))} `;if(c4>0)d+=`M${x1} ${y0} V${f(L(y0,y1,c4))} `;s+=`<path d="${d}" stroke="var(--hole)" stroke-width=".35"/>`}
   if(t>.3) s+=`<rect x="${x0}" y="${f(12)}" width="${f(KEEP_LEN*k)}" height="${KEEP_W}" fill="var(--hole)" opacity=".55"/>`;
   if(t>.3) s+=`<rect x="${x0}" y="${f(sy)}" width="${f(KEEP_LEN*k)}" height="${KEEP_W}" fill="url(#keepG)" stroke="var(--keeper-d)" stroke-width=".35" ${SHADOW}/>`;
@@ -641,26 +647,36 @@ add('D','Vyřízněte a slepte poutko','Z odřezku vyřízněte proužek 12 mm �
     else if(t<.25) s+=vr(x0+.15,1)+knife(x0-.2,L(y0,y1,c3),-90);
     else s+=vr(x1-7.15,1)+knife(x1+.2,L(y0,y1,c4),90);
   }
-  if(t>.32){s+=`<g opacity="${f(seg(t,.32,.4))}">${pill(x0+KEEP_LEN*k/2,sy+KEEP_W+5,'12 × '+KEEP_LEN+' mm (příklad)','t','middle')}</g>`}
-  // lepidlo na obou koncích (jeden konec na líci, druhý na rubu)
-  const g1=seg(t,.42,.5),g2=seg(t,.52,.6);
-  if(g1>0) s+=`<rect x="${x0}" y="${f(sy)}" width="${f(KEEP_OV*k*g1)}" height="${KEEP_W}" fill="var(--glue)" opacity=".85"/>`;
-  if(g2>0) s+=`<rect x="${f(x0+(KEEP_LEN-KEEP_OV)*k)}" y="${f(sy)}" width="${f(KEEP_OV*k*g2)}" height="${KEEP_W}" fill="url(#glueH)"/>`;
-  if(t>.41&&t<.61){const gx=t<.51?x0+KEEP_OV*k*g1:x0+(KEEP_LEN-KEEP_OV)*k+KEEP_OV*k*g2;s+=brush(gx,sy+KEEP_W/2)}
-  s+=`<g opacity="${f(seg(t,.5,.58))}">${pill(x0+7.5,sy-2,'15 mm','ta','middle')}${pill(x0+(KEEP_LEN-7.5)*k,sy-2,'15 mm, druhá strana','ta','middle')}</g>`;
-  const ck=seg(t,.62,.8);
-  if(t>.6){s+=`<g opacity="${f(seg(t,.6,.66))}">${clock(22,70,ck)}${pill(30,71.5,'zavadnout podle obalu','t')}</g>`}
+  s+=`<g opacity="${f(seg(t,.04,.1)*(1-seg(t,.28,.32)))}">${pill(67.5,40,'rýhy šídlem po pravítku = řez, odpadnou','t','middle')}</g>`;
+  if(t>.32) s+=`<g opacity="${f(seg(t,.32,.38))}">${pill(x0+KEEP_LEN*k/2,sy+KEEP_W+5,'12 × '+KEEP_LEN+' mm (příklad)','t','middle')}</g>`;
+  // páska přes líc mimo volných 15 mm; zdrsnit a natřít jen volné místo; páska hned pryč
+  const tp=seg(t,.38,.44)*(1-seg(t,.62,.66));
+  if(tp>0) s+=`<rect x="${f(x0+ov)}" y="${f(sy-1)}" width="${f(KEEP_LEN*k-ov+1.5)}" height="${KEEP_W+2}" fill="var(--tape)" stroke="var(--tape-d,#b9a24e)" stroke-width=".25" opacity="${f(.95*tp)}"/>`;
+  s+=`<g opacity="${f(seg(t,.4,.46)*(1-seg(t,.62,.66)))}">${pill(x0+ov+30,sy-2,'páska: volných 15 mm na líci','ta','middle')}</g>`;
+  const tp2=seg(t,.64,.67)*(1-seg(t,.76,.79));
+  if(tp2>0) s+=`<rect x="${f(x0+ov)}" y="${f(sy-1)}" width="${f(KEEP_LEN*k-2*ov)}" height="${KEEP_W+2}" fill="var(--tape)" stroke="var(--tape-d,#b9a24e)" stroke-width=".25" opacity="${f(.95*tp2)}" stroke-dasharray=".8 .5"/>`;
+  const sd=seg(t,.46,.52);
+  if(sd>0){let d='';for(let x=x0+1;x<x0+ov;x+=1.4)d+=`M${f(x)} ${f(sy+1)} l1 ${KEEP_W-2} `;s+=`<path d="${d}" stroke="var(--rub-d)" stroke-width=".25" opacity="${f(.7*sd)}"/>`}
+  const g1=seg(t,.53,.6),g2=seg(t,.68,.74);
+  if(g1>0) s+=`<rect x="${x0}" y="${f(sy)}" width="${f(ov*g1)}" height="${KEEP_W}" fill="var(--glue)" opacity=".85"/>`;
+  if(g2>0) s+=`<rect x="${f(x0+(KEEP_LEN-KEEP_OV)*k)}" y="${f(sy)}" width="${f(ov*g2)}" height="${KEEP_W}" fill="url(#glueH)"/>`;
+  if(t>.46&&t<.52) s+=`<rect x="${f(x0+ov*seg(t,.46,.52)-2)}" y="${f(sy-3)}" width="5" height="4" rx=".6" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3"/>`+pill(x0+ov+4,sy+KEEP_W+11,'smirek 180 jen na volném líci','t');
+  if((t>.52&&t<.61)||(t>.67&&t<.75)){const gx=t<.61?x0+ov*g1:x0+(KEEP_LEN-KEEP_OV)*k+ov*g2;s+=brush(gx,sy+KEEP_W/2)}
+  s+=`<g opacity="${f(seg(t,.56,.62))}">${pill(x0+7.5,sy-2,'15 mm, líc','ta','middle')}</g>`;
+  s+=`<g opacity="${f(seg(t,.7,.76))}">${pill(x0+(KEEP_LEN-7.5)*k,sy-2,'rub druhého konce: páska, 15 mm volných','ta','end')}</g>`;
+  const ck=seg(t,.76,.86);
+  if(t>.75){s+=`<g opacity="${f(seg(t,.75,.79))}">${clock(22,70,ck)}${pill(30,71.5,'zavadnout podle obalu','t')}</g>`}
   // slepené poutko (pohled z boku)
-  const lo=seg(t,.82,.92);
+  const lo=seg(t,.86,.94);
   if(lo>0){const cx=105,cy=70,w=(BW+2*BT)*.62,h=(3*BT+.5)*.62+2.4,kt=KT*.62;
     s+=`<g opacity="${f(lo)}"><rect x="${f(cx-w/2-kt)}" y="${f(cy-h/2-kt)}" width="${f(w+2*kt)}" height="${f(h+2*kt)}" rx="1.4" fill="url(#keepG)" stroke="var(--keeper-d)" stroke-width=".3"/><rect x="${f(cx-w/2)}" y="${f(cy-h/2)}" width="${f(w)}" height="${f(h)}" rx=".6" fill="var(--stage)" stroke="var(--keeper-d)" stroke-width=".2"/><rect x="${f(cx-w/2+4)}" y="${f(cy+h/2-.2)}" width="${f(KEEP_OV*.62)}" height="${f(kt+.6)}" fill="var(--glue)" opacity=".8"/>${pill(cx,cy+h/2+kt+6,'slepené poutko','t','middle')}</g>`}
   return s;
-},null,'Tip: tloušťka poutka je kreslená schematicky.');
+},null,'Tip: tloušťka poutka je kreslená schematicky; rub druhého konce je kreslený čárkovanou páskou a šrafovaným lepidlem přes proužek.');
 
 // D3 — navlékněte poutko na pás (před ohnutím)
 add('D','Navlékněte poutko na pás','Poutko navlékněte na pás od konce u přezky a posuňte ho dál, než po ohnutí dosáhne konec pásu (180 mm od konce). Teď, dokud je konec rovný: po ohnutí by šlo poutko navléknout jen z druhého konce pásu.',8400,t=>{
   const c={cx:118,cy:0,sx:67.5,sy:30,k:.5};const kx=L(-14,KEEP_PARK,es(t,.1,.7));
-  let s=cam(c,()=>board()+strapRub(0,330)+marks({h:['hole','hole','mark','mark'],fold:1,foldLine:1,oval:1})+keeperTop(kx));
+  let s=cam(c,()=>board()+strapRub(0,330)+marks({h:['hole','hole',null,null],fold:1,foldLine:1,oval:1})+keeperTop(kx));
   if(t<.72){const [x,y]=at(c,kx+KEEP_W/2+4,-BW/2-5);s+=arrow(x-6,y,x+4,y)}
   const o=seg(t,.72,.84);
   if(o>0){const [x0,y]=at(c,0,BW/2+6),[x1]=at(c,2*TAIL,0);s+=`<g opacity="${f(o)}"><path d="M${f(x0)} ${f(y)} H${f(x1)}" stroke="var(--ok)" stroke-width=".4" marker-start="url(#arG)" marker-end="url(#arG)"/>${pill((x0+x1)/2,y+6,'180 mm: sem dosáhne konec po ohnutí','tok','middle')}</g>`}
@@ -730,20 +746,17 @@ add('E','Označte druhou dvojici skrz otvory','Přehnutý konec zatáhněte smě
 },{v:'LÍC',sub:'přehnutý konec'});
 
 // E4 — poutko odsunout, rozložit a vyseknout druhou dvojici podle značek skrz otvory
-add('E','Vysekněte druhou dvojici','Poutko odsuňte ke špičce dál než 180 mm od konce, pak konec rozložte. Druhou dvojici vysekněte Ø 6 mm podle značek skrz otvory; původní značky z destičky nebo listu ignorujte.',8400,t=>{
+add('E','Vysekněte druhou dvojici','Poutko odsuňte ke špičce dál než 180 mm od konce, pak konec rozložte. Druhou dvojici vysekněte Ø 6 mm podle značek skrz otvory.',8400,t=>{
   const c=CAM_MID;const kx=L(KEEP_C,KEEP_PARK,es(t,.02,.16));const p2=seg(t,.24,.5),p3=seg(t,.54,.8);
   const h=['hole','hole',p2>.6?'hole':'mark',p3>.6?'hole':'mark'];
-  let s=cam(c,()=>{let q=board()+strapRub()+marks({h,fold:1,foldLine:1,oval:1})+keeperTop(kx);
-    // původní značky z destičky (o kus vedle) jen do vyseknutí, slabě
-    for(const [i,p] of [[2,p2],[3,p3]]) if(p<.6) q+=`<circle cx="${f(HOLES[i]+1.3)}" cy="0" r="${f(dotR()*.8)}" fill="var(--muted)" opacity=".7"/>`;
-    return q});
+  let s=cam(c,()=>board()+strapRub()+marks({h,fold:1,foldLine:1,oval:1})+keeperTop(kx));
   if(t<.18){const [x,y]=at(c,Math.min(kx,182),-BW/2-5);s+=arrow(x-4,y,x+6,y)}
   s+=`<g opacity="${f(seg(t,.04,.12)*(1-seg(t,.2,.26)))}">${pill(131,8,'poutko ke špičce, za 180 mm →','t','end')}</g>`;
   for(const [i,p] of [[2,p2],[3,p3]]){if(p>0&&p<1){const [x,y]=at(c,HOLES[i],0);const press=p<.4?p/.4:p<.7?1:1-(p-.7)/.3;s+=`<g opacity="${f(p<.85?1:1-(p-.85)/.15)}">${punchTop(x,y,RIV_D,c.k,press)}</g>`+bang(x,y,(p-.45)/.3)}}
-  s+=`<g opacity="${f(seg(t,.22,.3)*(1-seg(t,.5,.56)))}">${(()=>{const [a,b]=at(c,HOLES[2],0);return pill(a,b+19,'podle značky skrz otvor','tok','middle')+pill(a,b+25,'značku z destičky ignorujte','ts','middle')})()}</g>`;
+  s+=`<g opacity="${f(seg(t,.22,.3)*(1-seg(t,.5,.56)))}">${(()=>{const [a,b]=at(c,HOLES[2],0);return pill(a,b+19,'podle značky skrz otvor','tok','middle')})()}</g>`;
   s+=`<g opacity="${f(seg(t,.84,.94))}">${HOLES.map(x=>{const [a,b]=at(c,x,0);return pill(a,b-17,'Ø 6','tok','middle')}).join('')}</g>`;
   return s;
-},RUB,'Tip: značka z destičky je kreslená o kus vedle, aby bylo vidět, která platí.');
+},RUB);
 
 // E5 — ohnout zpět a vrátit poutko do kapsy
 add('E','Ohněte zpět a vraťte poutko','Konec ohněte zpět kolem příčky s trnem v oválu a poutko posuňte zpět přes přehnutý konec do kapsy, spojem na přehnutý konec.',7600,t=>{

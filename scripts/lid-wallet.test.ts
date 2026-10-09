@@ -249,7 +249,12 @@ describe('generátor peněženky VÍČKO', () => {
     )!;
     expect(Number(line[1]) - Number(strip[1])).toBeCloseTo(L.seamSideX[0], 6);
     expect(L.seamSideX[0]).toBe(3);
-    expect(jigs).toContain('čára švu 3,0 od levé hrany');
+    expect(jigs).toContain('čára švu 3,0 od levé hrany, jen mezi otvory');
+    // čára jen mezi prvním a posledním otvorem (mimo šev by na líci zůstala vidět)
+    const ys = L.seams.find((q) => q.id === 'S4')!.holes.map((h) => h.y);
+    const SY = (y: number) => Number(strip[2]) + L.heightMm - y;
+    expect(Number(line[2])).toBeCloseTo(SY(Math.max(...ys)), 2);
+    expect(Number(line[3])).toBeCloseTo(SY(Math.min(...ys)), 2);
   });
 
   it('názvy souborů', () => {
@@ -404,12 +409,12 @@ describe('generátor peněženky VÍČKO', () => {
     expect(yOf('značku přeměřit')).toBeLessThan(yOf('VLOŽKA DNA') - 10);
   });
 
-  it('list 3: osa x 50,5 má značku u horní i spodní hrany D1 a D2 (lekce 4 propichuje oba konce)', () => {
+  it('list 3: osa x 50,5 má rysku u spodní hrany D1 a u obou hran D2 (horní hrana D1 je vidět)', () => {
     const X = ox + L.axisX;
     const marks = [
       ...layer(parts, 'GUIDE').matchAll(new RegExp(`M${X} (-?[\\d.]+) L${X} (-?[\\d.]+)`, 'g')),
     ];
-    expect(marks).toHaveLength(4);
+    expect(marks).toHaveLength(3);
     for (const m of marks) expect(Math.abs(Number(m[2]) - Number(m[1]))).toBeCloseTo(3, 5);
   });
 
@@ -417,26 +422,38 @@ describe('generátor peněženky VÍČKO', () => {
     for (const svg of all) {
       expect(svg).toContain('ZNAČKY NA TOMTO LISTU');
       expect(svg).not.toContain('GUIDE značky, osy');
-      for (const label of ['řez nožem po čáře', 'propíchnout jehlou skrz papír']) {
-        expect(svg, label).toContain(label);
-      }
+      expect(svg).toContain('řez nožem po čáře');
     }
+    // List 1 se klade na líc: nic na něm se nepropichuje kroužkem (jen středy výsečníků).
+    for (const svg of [back, parts, jigs]) expect(svg).toContain('propíchnout jehlou skrz papír');
+    expect(sheet).not.toContain('propíchnout jehlou skrz papír');
     expect(back).toContain('lepit kontaktním lepidlem (tato strana)');
     expect(parts).toContain('lepí se druhá strana (líc D2): zdrsnit');
     expect(sheet).toContain('řez později – lekce je u popisku');
   });
 
-  it('značky k propíchnutí: konce os a přehybů (list 1, 2), rohy lepení (list 2), osa D1/D2 (list 3), ryska L1 (list 4)', () => {
+  it('značky k propíchnutí jen tam, kde vpich zmizí nebo je skrytý (líc ani závěs ne)', () => {
     const pricks = (svg: string) =>
       [...layer(svg, 'GUIDE').matchAll(/<circle class="prick"/g)].length;
-    // osa ohybu, hrana vložky, 2 přehyby × 2 boky (+ 2 kroužky v legendě: 1 vzorek)
-    expect(pricks(sheet)).toBe(8 + 1);
-    expect(pricks(back)).toBeGreaterThan(8 + 1);
-    // osa D1/D2 (4) + G2/G2b na D1 (4) + rohy G3 na D2 (10) + klín D2 (2) + horní hrana G4 (4)
-    expect(pricks(parts)).toBe(4 + 4 + 10 + 2 + 4 + 1);
-    // ryska L1 (2) + střed magnetu (1) + klín špičky (2) + konce čáry švu na proužku (2)
-    // + proužek V12 (4) + vzorek v legendě
-    expect(pricks(jigs)).toBe(2 + 1 + 2 + 2 + 4 + 1);
+    // list 1 je na líci: žádný kroužek (ani ve vzorku legendy)
+    expect(pricks(sheet)).toBe(0);
+    // list 2: osa ohybu a hrana vložky × 2 boky + rohy lepení + osa (+ vzorek v legendě)
+    expect(pricks(back)).toBeGreaterThan(4 + 1);
+    // osa D1/D2 (4) + G2/G2b na D1 (4) + rohy G3 na D2 (10) + klín D2 (2) + vzorek v legendě
+    expect(pricks(parts)).toBe(4 + 4 + 10 + 2 + 1);
+    // střed magnetu (1) + proužek V12 (4) + vzorek v legendě
+    expect(pricks(jigs)).toBe(1 + 4 + 1);
+  });
+
+  it('list 2: na bocích kroužky jen u osy ohybu a hrany vložky, přehyby závěsu bez kroužků', () => {
+    const atY = (v: number) => prickPts(back).filter((q) => near(q.y, oy + v));
+    expect(atY(L.v.foldAxis)).toHaveLength(2);
+    for (const v of [L.v.foldAxis, L.v.insertEdge]) {
+      expect(hasPrick(back, ox + 1.5, oy + v)).toBe(true);
+      expect(hasPrick(back, ox + L.widthMm - 1.5, oy + v)).toBe(true);
+    }
+    expect(atY(L.v.rearCrease)).toHaveLength(0);
+    expect(atY(L.v.frontCrease)).toHaveLength(0);
   });
 
   /** Kroužky „propíchnout“ na listu jako body (x, y) v mm listu. */
@@ -473,31 +490,43 @@ describe('generátor peněženky VÍČKO', () => {
     const yw = Y2(L.d2.y0 + spec.d2SkiveWedgeMm);
     expect(hasPrick(parts, X2(L.d2.x0 + 1.5), yw)).toBe(true);
     expect(hasPrick(parts, X2(L.d2.x1 - 1.5), yw)).toBe(true);
-    // G4 na líci D2: horní hrana ve výšce horní hrany F, vnitřní hranice = hranice G3b (x 4)
+    // G4 na líci D2: bez kroužků (horní hrana = horní hrana F, nad ní je líc D2 vidět), hranici
+    // dá páska z nanečisto (lekce 9)
     const g4 = L.glue.find((g) => g.id === 'G4' && g.what.includes('líc D2'))!;
-    expect(g4.x1).toBe(g3[0].x1);
-    expect(hasPrick(parts, X2(g4.x1), Y2(g4.y1))).toBe(true);
-    expect(hasPrick(parts, X2(L.d2.x0 + 1.5), Y2(g4.y1))).toBe(true);
+    expect(hasPrick(parts, X2(g4.x1), Y2(g4.y1))).toBe(false);
+    expect(hasPrick(parts, X2(L.d2.x0 + 1.5), Y2(g4.y1))).toBe(false);
+    expect(parts).toContain('zdrsnit pod páskou');
     expect(parts).toContain('kroužky přes šablonu na líci');
+    // osa D1: oba kroužky v ploše G2 (rub D1 nad horní hranou F je vidět)
+    expect(hasPrick(parts, X1(L.axisX), Y1(L.d1.y0 + 1.5))).toBe(true);
+    expect(hasPrick(parts, X1(L.axisX), Y1(L.cardFloorY - 1.5))).toBe(true);
+    expect(hasPrick(parts, X1(L.axisX), Y1(L.d1.y1 - 1.5))).toBe(false);
   });
 
-  it('list 2: konce hranice Tokonole mají kroužky (1,5 mm od boků jazýčku)', () => {
+  it('list 2: hranice Tokonole bez kroužků (rub víčka je vidět), dá ji pravítko na hrany pásu', () => {
     const y = oy + L.v.bandEnd;
-    const [t0, t1] = L.tongueX;
-    // List 2 je zrcadlený: x_rub = W − x.
-    for (const x of [t0 + 1.5, t1 - 1.5]) {
-      expect(hasPrick(back, ox + L.widthMm - x, y), `${x}`).toBe(true);
-    }
+    expect(prickPts(back).filter((q) => near(q.y, y))).toHaveLength(0);
+    expect(back).toContain('pravítko na spodní hrany pásu víčka');
   });
 
-  it('list 4: šablona konce jazýčku má kroužek středu magnetu a kroužky klínu, proužek V12 rýhu a hranu vložky', () => {
+  it('list 4: šablona konce jazýčku má kroužek středu magnetu, klín a L1 bez kroužků, proužek V12 rýhu a hranu vložky', () => {
     const tx = ox + 4;
     const tipY = oy + 6 + 24;
     const cx = tx + spec.tongueWidthMm / 2;
     expect(hasPrick(jigs, cx, tipY - spec.magnetFromTipMm)).toBe(true);
-    const wedge = prickPts(jigs).filter((q) => near(q.y, tipY - spec.tipSkiveMm));
-    expect(wedge).toHaveLength(2);
-    expect(near(wedge[0].x + wedge[1].x, 2 * cx)).toBe(true);
+    // klín: čára končí na obrysu R10 (rysky na hranu), žádný vpich do líce špičky
+    expect(prickPts(jigs).filter((q) => near(q.y, tipY - spec.tipSkiveMm))).toHaveLength(0);
+    const rt = spec.tongueTipRadiusMm;
+    const half = Math.sqrt(rt * rt - (rt - spec.tipSkiveMm) ** 2);
+    const sk = /class="tip-skive" d="M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)"/.exec(jigs)!;
+    expect(Number(sk[1])).toBeCloseTo(cx - half, 2);
+    expect(Number(sk[3])).toBeCloseTo(cx + half, 2);
+    expect(Number(sk[2])).toBeCloseTo(tipY - spec.tipSkiveMm, 2);
+    // horní hrana L1: řez jen v druhé šabloně (doraz), žádný vpich
+    const lTop = tipY - L.lining.topAboveTipMm;
+    expect(prickPts(jigs).filter((q) => near(q.y, lTop))).toHaveLength(0);
+    expect(layer(jigs, 'CUT')).toMatch(/class="lining-mark"/);
+    expect(jigs).toContain('doraz pro pásku (lekce 11)');
     expect(jigs).toContain('(kroužek)');
     expect(jigs).not.toContain('křížek');
     // proužek V12: kroužky na dvou čarách vzdálených o hranu vložky za rýhou

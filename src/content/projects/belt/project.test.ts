@@ -405,7 +405,10 @@ describe('pásek – nálezy kontroly lekcí (2026-10-08, kolo 2)', () => {
   it('značka prostřední dírky se z líce propíchne na rub dřív, než se na ni přikládá', () => {
     const ids = lesson(5).steps.map((s) => s.id);
     expect(ids).toEqual(['try-on', 'measure', 'transfer', 'length-check']);
-    expect(step(5, 'try-on').body).toContain('jen důlek, ne díru');
+    // Značka se dělá tužkou na pásce: opravný důlek by na líci zůstal, do kůže jde jediný vpich.
+    expect(step(5, 'try-on').body).toContain('tužkou udělejte na pásce tečku');
+    expect(step(5, 'try-on').body).not.toMatch(/šídlem lehce zatlačte/);
+    expect(step(5, 'transfer').body).toContain('Je to jediný vpich do líce');
     expect(step(5, 'transfer').body).toMatch(/protlačte svisle skrz až na rub/);
     expect(step(6, 'place').body).toContain('na propíchnutou značku z lekce 5');
     expect(lesson(6).requires![0]!.label).toMatch(/propíchnutá na rub/);
@@ -450,7 +453,7 @@ describe('pásek – nálezy kontroly lekcí (2026-10-08, kolo 2)', () => {
     const body = step(4, 'screws').body;
     const order = [
       'Poutko odsuňte ke špičce',
-      'podle značek skrz otvory; původní značky z destičky nebo listu ignorujte',
+      'podle značek skrz otvory.',
       'Konec ohněte zpět kolem příčky',
       'poutko posuňte zpět přes přehnutý konec do kapsy',
       'Nýty sešroubujte',
@@ -543,5 +546,16 @@ describe('pásek – barevný pásek (hrany a balzám)', () => {
     expect(plan.lines.find((l) => l.equipmentSlug === 'belt-strap')!.purpose).toContain(
       'činění neuvedeno, ověřte u prodejce',
     );
+  });
+});
+
+describe('pásek – vpichy jen tam, kde zmizí (2026-10-09)', () => {
+  it('L4 značí jen první dvojici, druhou až skrz ni; L3 a poutko bez vpichů', () => {
+    expect(step(4, 'mark').body).toContain('označte jen 2 otvory pro nýty blíž ke konci');
+    expect(step(4, 'mark').body).toContain('Šedé otvory nepropichujte.');
+    expect(step(4, 'screws').body).not.toContain('ignorujte');
+    expect(step(3, 'mark-30').body).toContain('na rub kousek papírové pásky');
+    expect(step(3, 'balm').body).toContain('do ztracena');
+    expect(step(4, 'keeper').body).toContain('Hranici 15 mm na kůži neznačte');
   });
 });

@@ -237,6 +237,12 @@ function ProjectView({ project }: { project: ProjectDefinition }) {
                   </span>
                   {TEMPLATE_LEGEND.prick}
                 </li>
+                <li>
+                  <span aria-hidden className="mr-2 inline-flex w-6 justify-center align-middle">
+                    <span className="inline-block size-2 rounded-full border border-cognac" />
+                  </span>
+                  {TEMPLATE_LEGEND.punch}
+                </li>
               </ul>
               <p className="text-meta text-ink-2">{typo(project.template.printNote)}</p>
               <Kicker className="mt-2">Jak vypadá sestavené</Kicker>

@@ -25,11 +25,21 @@ describe('obsah – pouzdro na karty: steh', () => {
     expect(step(6, 'punch-sides')).toContain('(ověřte na odřezku)');
   });
 
-  it('značky ze šablony: konce a dno výřezu v lekci 5, kroužky linie stehu a pásu v lekci 6', () => {
-    expect(step(5, 'prick-marks')).toContain('krátká čárka nad horní hranou přední kapsy');
-    expect(step(5, 'prick-marks')).toContain('jeho dno (čárka uvnitř výřezu)');
-    expect(step(6, 'mark-stitch-lines')).toContain('propíchněte kroužky na linii stehu');
+  it('vpichy jen tam, kde zmizí: kroužky pásu pod kapsou; výřez a linie stehu bez vpichů', () => {
+    const l5 = cardHolderProject.lessons.find((l) => l.order === 5)!;
+    expect(l5.steps.map((s) => s.id)).not.toContain('prick-marks');
+    expect(l5.checkpoints.map((c) => c.slug)).not.toContain('marks-transferred');
+    expect(step(5, 'cut-parts')).toContain('jen ke krátké čárce nad hranou');
+    expect(step(5, 'cut-parts')).toContain('Nic nepropichujte');
+    expect(step(5, 'thumb-cutout')).toContain('na konec čárky uvnitř výřezu');
+    for (const s of l5.steps) expect(s.body, s.id).not.toMatch(/propíchn/);
+    expect(step(6, 'mark-stitch-lines')).toContain('nic nerýsujte ani nepropichujte');
+    expect(step(6, 'punch-sides')).toContain('skrz přilepený papír');
     expect(step(6, 'mark-glue-area')).toContain('propíchněte čtyři kroužky na tečkované čáře pásu');
+    expect(step(6, 'mark-glue-area')).toContain('kapsa je zakryje');
+    const l6 = cardHolderProject.lessons.find((l) => l.order === 6)!.steps.map((s) => s.id);
+    expect(l6.indexOf('mark-stitch-lines')).toBe(l6.indexOf('glue-parts') + 1);
+    expect(l6.indexOf('punch-sides')).toBe(l6.indexOf('mark-stitch-lines') + 1);
     const back = cardHolderProject.template!.pieces.find((p) => p.id === 'back')!;
     expect(back.heightMark).toEqual({ fromBottomMm: 56, lengthMm: 8 });
   });
@@ -50,14 +60,10 @@ describe('obsah – pouzdro na karty: steh', () => {
     expect(step(6, 'mark-glue-area')).not.toContain('těsně nad vpichy maskovací pásku');
   });
 
-  it('linie stehu v rohu jde narýsovat i bez kružítka', () => {
-    expect(step(6, 'mark-stitch-lines')).toContain('Bez kružítka');
-  });
-
   it('výřez na palec: řezy začínají a končí na čáře, brousí se k rohům mezi nimi, hloubka 12 mm', () => {
     expect(step(5, 'thumb-cutout')).toContain('každý začněte i skončete přesně na čáře');
     expect(step(5, 'thumb-cutout')).not.toContain('kousek vedle čáry');
-    expect(step(5, 'peel-template')).toContain('uprostřed přes značku dna 12 mm hluboko');
+    expect(step(5, 'peel-template')).toContain('uprostřed přes roh ve dně 12 mm hluboko');
     const media = cardHolderProject.lessons
       .find((l) => l.order === 5)!
       .steps.find((s) => s.id === 'thumb-cutout')!.media;

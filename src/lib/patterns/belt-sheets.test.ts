@@ -249,3 +249,21 @@ describe('texty listů opasku', () => {
     expect(screws).toBeGreaterThan(keeper);
   });
 });
+
+describe('list 1: značky jen tam, kde jsou potřeba', () => {
+  it('druhá dvojice je šedá bez křížku, propichuje se jen první; poutko má šrafy přeplátování', () => {
+    const [p1] = buildPages(DEFAULT_BELT_END, DEFAULT_BELT_TIP);
+    const [near, far] = DEFAULT_BELT_END.rivetOffsetsMm;
+    for (const off of [near, far]) {
+      expect(p1).toContain(
+        `cy="${Math.round((132 - off) * 1000) / 1000}" r="3" fill="none" stroke="#6a6a6a"`,
+      );
+      expect(p1).toContain(
+        `cy="${Math.round((132 + off) * 1000) / 1000}" r="3" fill="none" stroke="#2b2b2b"`,
+      );
+    }
+    expect(p1).toContain('šedé: 2. dvojice, značí se až skrz 1. dvojici');
+    expect(p1).toContain('propíchněte 2 černé otvory u konce');
+    expect(p1).toContain(`šrafy: přeplátování ${DEFAULT_BELT_END.keeperOverlapMm} mm`);
+  });
+});

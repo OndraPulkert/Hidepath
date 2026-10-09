@@ -883,7 +883,7 @@ export function buildJazycekMagnetSvg(spec: LidWalletSpec = DEFAULT_LID_WALLET):
   // popisky vlevo
   const lx = 2;
   const labels: [number, string, string][] = [
-    [L.lining.topAboveTipMm, 'ryska horní hrany L1', INK],
+    [L.lining.topAboveTipMm, 'horní hrana L1 (doraz)', INK],
     [L.lining.seamHoles[3].h, 'S7: 8 otvorů do U', ACCENT],
     [spec.tipSkiveMm / 2, `klín jen posl. ${cz(spec.tipSkiveMm, 1)} mm`, ACCENT],
     [

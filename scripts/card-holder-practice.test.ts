@@ -68,7 +68,7 @@ describe('cvičná šablona k lekci 2 (pouzdro na karty)', () => {
     expect(margins.map((d) => d.includes('A'))).toEqual([false, false, false]);
   });
 
-  it('tvar 2 má roh R10 a tvar 3 výřez 20 × 12 mm s dnem R10 a dvěma tečkami na hraně', () => {
+  it('tvar 2 má roh R10 a tvar 3 výřez 20 × 12 mm s dnem R10 a čárkami konců nad hranou', () => {
     const outlines = [...layer('CUT').matchAll(/class="outline" d="([^"]+)"/g)].map((m) => m[1]);
     expect(outlines[0]).not.toContain('A');
     expect(outlines[1]).toMatch(/A10 10 0 0 1 /);
@@ -78,13 +78,14 @@ describe('cvičná šablona k lekci 2 (pouzdro na karty)', () => {
     const xc = x + ROUGH_MARGIN_MM + PRACTICE_SHAPE.widthMm / 2;
     // Nejhlubší bod výřezu je 12 mm pod hranou (konec rovných boků 2 mm + poloměr 10 mm).
     expect(outlines[2]).toContain(`L${xc - 10} ${top + 2} A10 10 0 0 0 ${xc + 10} ${top + 2}`);
-    const pricks = [...layer('GUIDE').matchAll(/class="prick" cx="([\d.]+)" cy="([\d.]+)"/g)].map(
-      (m) => [Number(m[1]), Number(m[2])],
-    );
-    expect(pricks).toEqual([
-      [xc - 10, top],
-      [xc + 10, top],
+    const ends = [...layer('GUIDE').matchAll(/class="notch-end" d="([^"]+)"/g)].map((m) => m[1]);
+    expect(ends).toEqual([
+      `M${xc - 10} ${top - 1} L${xc - 10} ${top - 4}`,
+      `M${xc + 10} ${top - 1} L${xc + 10} ${top - 4}`,
     ]);
+    // Nic k propíchnutí: vpich na čáře řezu by v hraně nechal zoubek.
+    expect(svg).not.toContain('<circle');
+    expect(svg.replace(/<[^>]+>/g, ' ')).not.toMatch(/propíchn/);
   });
 
   it('výřez se řeže jako v lekci 5: krátkými rovnými řezy od čáry k čáře, ne obloukem', () => {

@@ -144,9 +144,14 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
   );
   for (const sign of [-1, 1]) out.push(cross(cx, foldY + sign * (half - sr), sr));
 
-  // Čtyři otvory pro nýty.
+  // Čtyři otvory pro nýty. Propichuje se jen první dvojice (u konce pásu, pod ohybem): druhá
+  // se značí až po ohnutí skrz vyseknutou první, proto je šedá, čárkovaná a bez křížku.
   for (const off of spec.rivetOffsetsMm) {
-    for (const sign of [-1, 1]) out.push(hole(cx, foldY + sign * off, spec.rivetHoleMm));
+    out.push(hole(cx, foldY + off, spec.rivetHoleMm));
+    out.push(
+      `<circle cx="${f(cx)}" cy="${f(foldY - off)}" r="${f(spec.rivetHoleMm / 2)}" fill="none" ` +
+        `stroke="${GREY}" stroke-width="0.3" stroke-dasharray="1 0.8"/>`,
+    );
   }
 
   out.push(dimension(strapX + w + 4, foldY + near, foldY + far));
@@ -169,6 +174,15 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
     [endY, `konec pásu ${cz(spec.tailLengthMm)} mm od ohybu`, INK],
   ];
   for (const [y, s, color] of callouts) out.push(text(textX, y + 1, s, 3.2, color));
+  out.push(
+    text(
+      textX,
+      foldY - (near + far) / 2 + 1,
+      'šedé: 2. dvojice, značí se až skrz 1. dvojici',
+      3,
+      GREY,
+    ),
+  );
   out.push(text(strapX, topY - 3, 'sem pokračuje hlavní pás (nahoře neřezat)', 3, GREY));
 
   // Poutko.
@@ -190,9 +204,25 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
       3,
     ),
   );
+  // Přeplátování: šrafy na obou koncích (vlevo líc, vpravo rub). Hranice šraf se na kůži
+  // neznačí: zbytek poutka se přelepí páskou a zdrsní a natře se jen volných 15 mm.
+  const ov = spec.keeperOverlapMm;
+  for (const x0 of [strapX, strapX + len - ov]) {
+    let d = '';
+    for (let k = 0; k <= ov + spec.keeperWidthMm; k += 2.5) {
+      const xa = x0 + Math.max(0, k - spec.keeperWidthMm);
+      const xb = x0 + Math.min(k, ov);
+      const ya = keeperY + Math.min(k, spec.keeperWidthMm);
+      const yb = keeperY + Math.max(0, k - ov);
+      d += `M${f(xa)} ${f(ya)} L${f(xb)} ${f(yb)} `;
+    }
+    out.push(`<path d="${d.trim()}" stroke="${GREY}" stroke-width="0.2" fill="none"/>`);
+  }
   out.push(
     `<rect x="${f(strapX)}" y="${f(keeperY)}" width="${f(len)}" height="${f(spec.keeperWidthMm)}" fill="none" stroke="${INK}" stroke-width="0.3"/>`,
   );
+  out.push(text(strapX + len + 3, keeperY + 5, `šrafy: přeplátování ${ov} mm`, 2.8, GREY));
+  out.push(text(strapX + len + 3, keeperY + 9.5, 'vlevo na líci, vpravo na rubu', 2.8, GREY));
   for (let mm = 0; mm <= len; mm += 10) {
     out.push(
       `<line x1="${f(strapX + mm)}" y1="${f(keeperY + spec.keeperWidthMm)}" x2="${f(strapX + mm)}" y2="${f(keeperY + spec.keeperWidthMm + 2)}" stroke="#7a7a7a" stroke-width="0.2"/>`,
@@ -204,12 +234,12 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
 
   out.push(
     ...notes(strapX, 258, [
-      '1. Na rub pásu propíchněte 4 otvory, oba křížky drážky a 2 červené kroužky ohybu.',
-      `2. Vysekněte Ø ${cz(spec.rivetHoleMm)} mm jen 2 otvory blíž ke konci a konce drážky, boky drážky řízněte nožem.`,
+      '1. Na rub pásu propíchněte 2 černé otvory u konce, oba křížky drážky a 2 červené kroužky ohybu.',
+      `2. Vysekněte Ø ${cz(spec.rivetHoleMm)} mm oba otvory a konce drážky, boky drážky řízněte nožem.`,
       '   Kroužky ohybu nesekejte: spojte je na rubu pravítkem, to je čára ohybu.',
       '3. Navlékněte poutko na pás, ohněte konec kolem příčky přezky a poutko posuňte přes přehnutý konec.',
-      '4. Druhé 2 otvory označte skrz vyseknuté, vysekněte je, poutko vraťte mezi ně a sešroubujte nýty.',
-      'Nýty: 2 kusy, každý prochází oběma vrstvami — proto jsou otvory čtyři.',
+      '4. Šedé otvory nepropichujte: označte je skrz vyseknuté, vysekněte, poutko vraťte mezi ně a sešroubujte nýty.',
+      'Poutko: mimo šrafy přelepte páskou, šrafy zdrsněte (vlevo líc, vpravo rub), lepidlo jen do šraf. Nýty: 2, proto 4 otvory.',
       'Rozměry z šablony Black Flag Leather Goods (jeden zdroj, ať se nemíchají rozteče).',
       'Délka poutka je spočítaná, ne ověřená — ověřte na odřezku.',
     ]),

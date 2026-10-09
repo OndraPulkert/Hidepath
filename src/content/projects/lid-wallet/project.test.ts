@@ -198,8 +198,9 @@ describe('obsah – peněženka Víčko', () => {
     );
     expect(lessonText('07-bottom-fold')).toContain('na čáru hrany vložky z lekce 4');
     expect(SHEET4).toContain(`hrana vložky dna (lekce 3, 4, 7): v ${cz(L.v.insertEdge)}`);
-    // Rysky přehybů závěsu z lekce 4 slouží v lekci 10 ke kontrole.
-    expect(lessonText('10-hinge-forming')).toContain('Rysky přehybů z lekce 4');
+    // Přehyby závěsu se neznačí (závěs je vidět z líce i z rubu), tvar dá obsah v lekci 10.
+    expect(lessonText('10-hinge-forming')).toContain('Přehyby se neznačí');
+    expect(lessonText('10-hinge-forming')).not.toContain('Rysky přehybů');
     expect(lessonText('04-cut-and-mark')).toContain('Horní hranu přední stěny F řežte rovně');
   });
 
@@ -246,11 +247,12 @@ describe('obsah – peněženka Víčko', () => {
     // listu 4. Ty musí nést čísla modelu.
     expect(SHEET4).toContain(`osa ohybu, rýha (lekce 4, 5): v ${cz(L.v.foldAxis)}`);
     expect(SHEET4).toContain(
-      `pás závěsu (lekce 4): v ${cz(L.v.hingeBand[0])}–${cz(L.v.hingeBand[1])}`,
+      `pás závěsu (lekce 5, 6): v ${cz(L.v.hingeBand[0])}–${cz(L.v.hingeBand[1])}`,
     );
     // Přehyb 145,105 list píše jako 145,1 – stačí shoda na desetiny.
     expect(SHEET1).toContain(`přehyby v ${cz(L.v.rearCrease, 1)} a ${cz(L.v.frontCrease)}`);
-    expect(lessonText('04-cut-and-mark')).toContain('oba přehyby závěsu');
+    expect(lessonText('04-cut-and-mark')).toContain('Závěs a rub víčka neznačte');
+    expect(lessonText('04-cut-and-mark')).not.toContain('oba přehyby závěsu');
     const cw = L.coinWindows[0];
     expect(SHEET4).toContain(
       `okénka mincí, středy konců (lekce 5): y ${cz(cw.y0 + cw.width / 2)} a ${cz(cw.y1 - cw.width / 2)}`,
@@ -488,6 +490,7 @@ describe('obsah – peněženka Víčko', () => {
         '4/pripravky×1',
         '12/sablona×1',
         '12/dily×1',
+        '12/rub×1',
       ]);
       expect(stepAt(4, 'valid-sheets').body).toContain('List 1 a list 3 vytiskněte dvakrát');
       expect(stepAt(4, 'valid-sheets').body).toContain('matný papír 120 g');
@@ -513,9 +516,9 @@ describe('obsah – peněženka Víčko', () => {
         '8 ← 04 plate',
         '8 ← 04 sheet1-template',
         '9 ← 04 side-strip',
-        '9 ← 04 d2-template',
         '10 ← 01 numbers-box',
         '11 ← 02 tongue-template',
+        '11 ← 04 tongue-template-2',
         '11 ← 04 lining-blank',
         '11 ← 01 numbers-box',
       ]);

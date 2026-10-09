@@ -3,14 +3,14 @@
  *
  *   pnpm pattern:card-holder-practice
  *
- * List A4 na výšku, 1:1, vrstvy CUT (plná čára řezu) a GUIDE (okraj na vystřižení, tečky
- * k propíchnutí, popisky, kontrolní úsečka 50 mm). Tři malé tvary na vyzkoušení hlavního způsobu
- * přenosu šablony z lekce 5 (vystřihnout nahrubo, přilepit páskou na rub, propíchnout tečky,
- * řezat skrz papír po čáře) na odřezku, ne na pouzdru:
+ * List A4 na výšku, 1:1, vrstvy CUT (plná čára řezu) a GUIDE (okraj na vystřižení, čárky konců,
+ * popisky, kontrolní úsečka 50 mm). Tři malé tvary na vyzkoušení hlavního způsobu přenosu šablony
+ * z lekce 5 (vystřihnout nahrubo, přilepit páskou na rub, řezat skrz papír po čáře, nic
+ * nepropichovat) na odřezku, ne na pouzdru:
  * 1. obdélník 60 × 40 mm – rovné řezy s pravítkem po vytištěné čáře,
  * 2. obdélník 60 × 40 mm s jedním rohem R10 – přechod z rovné do vypuklého oblouku bez pravítka,
  * 3. obdélník 60 × 40 mm s výřezem tvaru U na delší straně (20 × 12 mm, dno R10, vydutý oblouk)
- *    a dvěma tečkami k propíchnutí šídlem.
+ *    a dvěma krátkými čárkami nad hranou, kam až vede rovný řez (vpich na čáře by nechal zoubek).
  *
  * Výstup: docs/generated/pouzdro-karty-cvicna-sablona.svg + .pdf.
  */
@@ -154,8 +154,8 @@ export function shapeOutline(
   return `${top}L${f(x1)} ${f(y1)} L${f(x0)} ${f(y1)} Z`;
 }
 
-/** Body k propíchnutí u tvaru 3: kde výřez začíná a končí na horní hraně. */
-export function notchPrickPoints(x0: number, y0: number): { x: number; y: number }[] {
+/** Konce výřezu u tvaru 3 na horní hraně: sem dojde rovný řez, čárka vede nahoru do okraje. */
+export function notchEndPoints(x0: number, y0: number): { x: number; y: number }[] {
   const xc = x0 + PRACTICE_SHAPE.widthMm / 2;
   const half = PRACTICE_SHAPE.notch.widthMm / 2;
   return [
@@ -211,11 +211,11 @@ const BLOCKS: Block[] = [
     label: `# 3 · Obdélník ${SW} × ${SH} mm s výřezem ${N.widthMm} × ${N.depthMm} mm`,
     lines: [
       `Výřez na delší straně, dno R${N.bottomRadiusMm} (vydutý oblouk).`,
-      'Nejdřív šídlem propíchněte obě tečky skrz papír',
-      'do kůže – dokud je šablona přilepená.',
-      'Pak rovné strany s pravítkem, výřez až nakonec:',
+      'Krátké čárky nad hranou = konce výřezu: rovný řez',
+      'horní hrany veďte s pravítkem jen k nim.',
+      'Nic nepropichujte: vpich na čáře nechá v hraně zoubek.',
+      'Výřez až nakonec, nasekejte ho na',
       'krátké rovné řezy, každý od čáry k čáře (lekce 5).',
-      'Po sejmutí šablony musí být tečky vidět na rubu.',
     ],
     notch: true,
   },
@@ -225,8 +225,8 @@ const STEPS = [
   '# Postup – stejně jako u šablony pouzdra v lekci 5',
   '1. Tiskněte na 100 % a změřte kontrolní úsečku dole: přesně 50 mm.  2. Každý tvar vystřihněte nůžkami',
   'nahrubo po čárkované čáře.  3. Položte ho na rub odřezku a přilepte maskovací páskou na okraji, mimo plnou čáru,',
-  'z několika stran.  4. Šídlem propíchněte tečky.  5. Řežte nožem skrz papír i kůži po plné čáře, 2–3 lehké tahy:',
-  'rovné strany s pravítkem, roh bez pravítka, výřez nakonec krátkými rovnými řezy od čáry k čáře.  6. Pásku strhávejte pomalu.',
+  'z několika stran.  4. Řežte nožem skrz papír i kůži po plné čáře, 2–3 lehké tahy: rovné strany s pravítkem,',
+  'roh bez pravítka, výřez nakonec krátkými rovnými řezy od čáry k čáře.  5. Pásku strhávejte pomalu. Nic nepropichujte.',
 ];
 
 export function buildPracticeSheetSvg(): string {
@@ -270,14 +270,18 @@ export function buildPracticeSheetSvg(): string {
       s.line('GUIDE', x1 + 1, y0 + b.cornerR, x1 + 4, y0 + b.cornerR, 0.25);
     }
     if (b.notch) {
-      for (const p of notchPrickPoints(x0, y0)) {
-        s.add(
+      // Krátké čárky vně obrysu nad konci výřezu, jako u oblouku tvaru 2: jen na papíře.
+      for (const p of notchEndPoints(x0, y0)) {
+        s.path(
           'GUIDE',
-          `<circle class="prick" cx="${f(p.x)}" cy="${f(p.y)}" r="0.7" fill="${COLORS.CUT}"/>`,
+          `M${f(p.x)} ${f(p.y - 1)} L${f(p.x)} ${f(p.y - 4)}`,
+          0.25,
+          undefined,
+          'notch-end',
         );
       }
-      const [pl] = notchPrickPoints(x0, y0);
-      s.text(pl.x - 2, y0 - 2, 'propíchnout', 2, 'end', { fill: COLORS.GUIDE });
+      const [pl] = notchEndPoints(x0, y0);
+      s.text(pl.x - 2, y0 - 2, 'konec rovného řezu', 2, 'end', { fill: COLORS.GUIDE });
     }
     column(s, TEXT_X, o.y + 8, [b.label, ...b.lines]);
   });
@@ -321,8 +325,10 @@ export function buildPracticeSheetSvg(): string {
   s.text(m + 53.5, ly + 0.8, 'GUIDE okraj na vystřižení nůžkami', 2.2, 'start', {
     fill: COLORS.GUIDE,
   });
-  s.add('GUIDE', `<circle cx="${f(m + 125)}" cy="${f(ly)}" r="0.7" fill="${COLORS.CUT}"/>`);
-  s.text(m + 127.5, ly + 0.8, 'tečka = propíchnout šídlem', 2.2, 'start', { fill: COLORS.GUIDE });
+  s.line('GUIDE', m + 125, ly - 1.5, m + 125, ly + 1.5, 0.25);
+  s.text(m + 127.5, ly + 0.8, 'krátká čárka = konec řezu, nepropichovat', 2.2, 'start', {
+    fill: COLORS.GUIDE,
+  });
   return s.render('Cvičná šablona – pouzdro na karty, lekce 2');
 }
 

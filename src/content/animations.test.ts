@@ -653,7 +653,7 @@ describe('animace postupu – přenos P1, okénka, D2 na záda a boční švy V�
   it.each([
     // Lekce 4: přenos listu 1, propíchnutí, řez P1, sejmutí listu a značení rubu.
     [4, 'tape-sheet-1', [rez('A1'), rez('A2')]],
-    [4, 'prick-p1', [rez('B1'), rez('B2')]],
+    [4, 'prick-p1', [rez('B1')]],
     [4, 'cut-p1', [rez('C1'), rez('C2'), rez('C3'), rez('C4'), rez('C5'), rez('C6')]],
     [4, 'peel-p1', [rez('D1'), rez('D2')]],
     [4, 'mark-back', [rez('E1'), rez('E2'), rez('E3'), rez('E4'), rez('E5')]],

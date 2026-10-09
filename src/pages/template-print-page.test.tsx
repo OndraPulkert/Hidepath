@@ -226,6 +226,7 @@ describe('tisk – pouzdro na karty: šablona a cvičná šablona', () => {
     expect(circles.filter(([k]) => k === 'stitch-corner')).toHaveLength(6);
     expect(svg).toHaveTextContent(TEMPLATE_LEGEND.tick);
     expect(svg).toHaveTextContent(TEMPLATE_LEGEND.prick);
+    expect(svg).toHaveTextContent(TEMPLATE_LEGEND.punch);
     expect(svg).toHaveTextContent(TEMPLATE_LEGEND.glue);
     const stitch = [...svg.querySelectorAll('path[stroke-dasharray]')].map((p) =>
       p.getAttribute('d'),
