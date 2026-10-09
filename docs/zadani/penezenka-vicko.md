@@ -1568,22 +1568,28 @@ s příliš nízkým vyčníváním bankovky – okénko by se muselo posunout).
 - **penezenka-vicko-sablona.svg/.pdf** (list 1) – P1 z líce: obrys (CUT) rovně přes výřez pro palec;
   výřez, okénka mincí, okénko bankovek (po G3) a špička R10 čárkovaně jako řez později s číslem
   lekce, tečkovaná šablona výřezu pro palec 30 × 20, S1–S3 a S6 (STITCH), ohyb dna a přehyby
-  závěsu (FOLD), **hrana vložky dna** (FOLD, trojúhelníčky u boků a popisek, i na listu 2), kroužky
-  k propíchnutí na koncích osy ohybu, hrany vložky a přehybů u obou boků, pás ohybu dna s rýhou a pás
+  závěsu (FOLD), **hrana vložky dna** (FOLD, trojúhelníčky u boků a popisek, i na listu 2), bez
+  kroužků k propíchnutí (list leží na líci; osa a hrana vložky se propichují z rubu, list 2), ryska osy
+  ohybu vně obrysu, pás ohybu dna s rýhou a pás
   závěsu (ztenčení jen v záloze B, oranžově), křížky v kroužku na středech všech výsečníků (Ø 8, 10,
   12, 14), osa jazýčku, popisky „S4/S5 až po složení“ a odkaz na S7 u jazýčku (magnet se nekreslí,
   poloha se určí na kusu),
 - **penezenka-vicko-rub.svg/.pdf** (list 2) – P1 z rubu: lepené plochy G1–G4 (GLUE šrafovaně,
   oříznuté do obrysu) s kroužky k propíchnutí v rozích a na koncích čar, poloha D1, D2 (103 mm,
-  přesah 1 mm) a plíšku, osa x 50,5 na rubu F i B s kroužky k propíchnutí (pro D1 a D2), hranice Tokonole u kořene jazýčku s kroužky, pořadí lepení,
+  přesah 1 mm) a plíšku, kroužky na koncích osy ohybu a hrany vložky u boků (přehyby závěsu bez
+  značek, závěs je vidět), osa x 50,5 na rubu F i B s kroužky k propíchnutí (pro D1 a D2), hranice
+  Tokonole u kořene jazýčku bez kroužků (pravítko na spodní hrany pásu víčka), v zálohách B1/B2
+  oranžové hranice ztenčení až na obrys (rysky na hranu, páska), pořadí lepení,
   značky „L“,
 - **penezenka-vicko-dily.svg/.pdf** (list 3) – D1, D2 (s lepením), L1, K2; u D1 barevná horní hrana,
   u D2 kontrastní tón (R4); na šabloně D2 otvory S1–S3 (způsob (b) v kroku 9) a klín spodní hrany
-  „brousit z líce D2“ s kroužky na koncích, kroužky na koncích os D1 a D2, v rozích G2/G2b na D1 a G3 na D2
-  a na horní hraně G4 (líc D2),
+  „brousit z líce D2“ s kroužky na koncích, kroužky osy D1 (oba v ploše G2, rub D1 nad F je vidět)
+  a D2, v rozích G2/G2b na D1 a G3 na D2; G4 na líci D2 šedě bez kroužků (zdrsnit pod páskou
+  z nanečisto),
 - **penezenka-vicko-pripravky.svg/.pdf** (list 4) – šablona konce jazýčku (R10, kroužek středu magnetu, ztenčení
-  2,5 s kroužky, přířez L1 s ryskou horní hrany, **otvory S7** ve STITCH), proužek V12 (rýha a hrana vložky s kroužky), šablony okének a plíšku, proužek
-  otvorů S4/S5 (červené tečky, čárkovaná čára švu 3,0 od levé hrany s kroužky na koncích, rysky
+  2,5 až na obrys R10 bez kroužků (rysky na hranu), přířez L1 a tečkovaně horní hrana L1 – na ní se
+  zkrátí druhá šablona jako doraz pro pásku, **otvory S7** ve STITCH), proužek V12 (rýha a hrana vložky s kroužky), šablony okének a plíšku, proužek
+  otvorů S4/S5 (červené tečky, čárkovaná čára švu 3,0 od levé hrany jen mezi prvním a posledním otvorem, rysky
   F 62, dno karet a S1, závorky úseků děrování ①–③ se stranou, zdvojený steh 60–64, „šít od 76 ↓“,
   „S4 líc nahoru · S5 rub nahoru“), legenda značek na každém listu, vložka dna aspoň 111 × 25 ze starých karet s vyznačenou hranou do ohybu, tvarování závěsu
   přes obsah (Kolo 9; kopyto, Z2 a Z1 vypadly) a rámeček **„Čísla pro postup“** dané varianty
