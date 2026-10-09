@@ -177,7 +177,7 @@ export function materialItemKeys(materials: readonly string[]): string[] {
 export function printHref(
   project: Pick<ProjectDefinition, 'slug' | 'patternSheets'>,
   source: PrintSource,
-  sheetId?: string,
+  sheetId?: string | readonly string[],
 ): string {
   if (source === 'practice-sheets') return routes.practiceSheets(project.slug, sheetId);
   if (source === 'pattern-sheets' && project.patternSheets?.browserGenerator === 'belt-config') {

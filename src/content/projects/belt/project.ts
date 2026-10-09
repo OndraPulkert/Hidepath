@@ -89,7 +89,7 @@ const sheet = (sheetId: 'prezka' | 'spicka', purpose: string): LessonPrint => ({
   sheetId,
   copies: 1,
   purpose,
-  paper: 'obyčejný papír A4',
+  paper: 'obyčejný papír A4, 100 %',
   condition: SHEETS_CONDITION,
 });
 
@@ -215,7 +215,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'plate-or-sheets',
         title: 'Rozhodněte: destička, nebo listy',
-        body: `Pod štítkem „Destička“ ${IN_TABLE} (odkaz pod krokem) je u každé řady „ano“, nebo „ne“. Řada s „ano“: značíte destičkou. Řada s „ne“: stiskněte „Vygenerovat listy A4“; za řadu 3 použijete list 1 (lekce 2 a 4), za řadu 1 nebo 2 list 2 (lekce 6). Destička neprošla kontrolou: značíte jen listy. Čím značíte kterou řadu, ukazuje souhrn pod krokem: aplikace to bere z kontroly destičky a z tabulky, nic dalšího nezapisujete.`,
+        body: `Pod štítkem „Destička“ ${IN_TABLE} (odkaz pod krokem) je u každé řady „ano“, nebo „ne“. Řada s „ano“: značíte destičkou. Řada s „ne“: značíte listem, list 1 za řadu 3 (lekce 2, 3 a 4), list 2 za řadu 1 nebo 2 (lekce 6); vygenerujete a vytisknete ho v lekci, která ho chce. Destička neprošla kontrolou: značíte jen listy. Čím značíte kterou řadu, ukazuje souhrn pod krokem: aplikace to bere z kontroly destičky a z tabulky, nic dalšího nezapisujete.`,
         appLinks: [YOUR_BELT],
         media: [],
         beltRecalls: ['marking'],
@@ -299,7 +299,9 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'cut',
         title: 'Kolmý řez',
-        body: 'Konec odřezku srovnejte kolmo. Odřezek položte rubem nahoru. Destičku přiložte kousek od konce, hrany odřezku na linky vaší šířky (šířka bez linky: podle příčné stupnice), přidržte ji rukou nad pásem a šídlem narýsujte čáru podél levé hrany destičky přes celou šířku. Destičku odložte, ocelové pravítko přiložte na čáru a řízněte ve 2–3 tazích, nůž svisle; nikdy ne podél destičky, čepel by akrylát poškodila. Kontrola: destičku přiložte znovu, hrany odřezku na linky: levá hrana destičky se konce dotýká po celé šířce, bez mezery v rohu. S listem 1: boky listu na hrany odřezku, čáru veďte podél spodní hrany listu.',
+        body: 'Konec odřezku srovnejte kolmo. Odřezek položte rubem nahoru. Destičku přiložte kousek od konce, hrany odřezku na linky vaší šířky (šířka bez linky: podle příčné stupnice), přidržte ji rukou nad pásem a šídlem narýsujte čáru podél levé hrany destičky přes celou šířku. Destičku odložte, ocelové pravítko přiložte na čáru a řízněte ve 2–3 tazích, nůž svisle; nikdy ne podél destičky, čepel by akrylát poškodila. Kontrola: destičku přiložte znovu, hrany odřezku na linky: levá hrana destičky se konce dotýká po celé šířce, bez mezery v rohu. S listem 1: vytiskněte ho na 100 % (odkaz pod krokem), zkontrolujte kalibrační čtverec 50 × 50 mm a vystřihněte ho po obrysu pásu; boky listu přiložte na hrany odřezku a čáru veďte podél spodní hrany listu.',
+        printLink: 'pattern-sheets',
+        printSheetId: 'prezka',
         media: [],
       },
       {
@@ -307,6 +309,7 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Značení destičkou',
         body: 'Odřezek a dvě podložky stejně silné jako pás přilepte k desce oboustrannou páskou, rubem nahoru. Destičku přiložte řadou 3 levou hranou na konec odřezku a hrany odřezku na linky vaší šířky (šířka bez linky: podle příčné stupnice). Šídlem označte dva otvory pro nýty blíž ke konci a obtáhněte ovál. V otvoru kružte šídlem po stěně, tlačte svisle a dívejte se svisle dolů. Destičku nikdy neobracejte. Bez destičky použijte list 1 (odkaz pod krokem): propíchněte středy otvorů a oba křížky oválu.',
         printLink: 'pattern-sheets',
+        printSheetId: 'prezka',
         animationLinks: [
           animationLink('beltBuckleEnd', 'B1'),
           animationLink('beltBuckleEnd', 'B2'),
@@ -525,11 +528,19 @@ export const lessons: readonly LessonDefinition[] = [
     ],
     recommendedEquipment: ['edge-beveler', 'edge-paint'],
     prerequisiteLessons: [L2],
+    requires: [
+      {
+        id: 'sheet-1',
+        fromLesson: L2,
+        label: 'List 1 vystřižený po obrysu pásu',
+        note: 'Jen když značíte listem místo řady 3 destičky.',
+      },
+    ],
     steps: [
       {
         id: 'square-end',
         title: 'Srovnejte konec u přezky',
-        body: 'Vyberte konec, kde bude přezka; druhý konec bude špička. Pás položte rubem nahoru. Destičku přiložte kousek od konce, hrany pásu na linky vaší šířky (šířka bez linky: podle příčné stupnice), přidržte ji rukou nad pásem a šídlem narýsujte čáru podél levé hrany destičky přes celou šířku. Destičku odložte, ocelové pravítko přiložte na čáru a řízněte ve 2–3 tazích, nůž svisle; nikdy ne podél destičky, čepel by akrylát poškodila. Kontrola: destičku přiložte znovu, hrany pásu na linky: levá hrana destičky se konce dotýká po celé šířce, bez mezery v rohu. S listem 1: boky listu na hrany pásu, čáru veďte podél spodní hrany listu. O tuto hranu se opírá řada 3 destičky i list 1.',
+        body: 'Vyberte konec, kde bude přezka; druhý konec bude špička. Pás položte rubem nahoru. Destičku přiložte kousek od konce, hrany pásu na linky vaší šířky (šířka bez linky: podle příčné stupnice), přidržte ji rukou nad pásem a šídlem narýsujte čáru podél levé hrany destičky přes celou šířku. Destičku odložte, ocelové pravítko přiložte na čáru a řízněte ve 2–3 tazích, nůž svisle; nikdy ne podél destičky, čepel by akrylát poškodila. Kontrola: destičku přiložte znovu, hrany pásu na linky: levá hrana destičky se konce dotýká po celé šířce, bez mezery v rohu. S listem 1 z lekce 2: boky listu na hrany pásu, čáru veďte podél spodní hrany listu. O tuto hranu se opírá řada 3 destičky i list 1.',
         media: [],
       },
       {
@@ -647,6 +658,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'plate-or-sheet',
         title: 'Řada 3, nebo list 1',
         printLink: 'pattern-sheets',
+        printSheetId: 'prezka',
         body: `Řada 3 destičky platí pro šířky 28–45 mm. Když ${TABLE} ukazuje u řady 3 „ne“, nebo destička neprošla kontrolou, vytiskněte list 1 pro váš pásek na 100 % (odkaz pod krokem). Kalibrační čtverec musí měřit 50 × 50 mm.`,
         animationLinks: [
           animationLink('beltBuckleEnd', 'A1'),
@@ -925,7 +937,8 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'row',
         title: 'Řada 1 nebo 2, nebo list 2',
         printLink: 'pattern-sheets',
-        body: `Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když ${TABLE} ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo destička neprošla kontrolou, vytiskněte list 2 pro váš pásek na 100 % (odkaz pod krokem) a zkontrolujte kalibrační čtverec 50 × 50 mm. Když ${TABLE} píše, že se list 2 na A4 nevejde, značte dírky a konec podle čísel v ní.`,
+        printSheetId: 'spicka',
+        body: `Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když ${TABLE} ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo destička neprošla kontrolou, vytiskněte list 2 pro váš pásek na 100 % (odkaz pod krokem) a zkontrolujte kalibrační čtverec 50 × 50 mm. Řádek „List 2“ ${IN_TABLE} ukazuje, jestli list vyjde na výšku, nebo na šířku; když se na A4 nevejde, značte dírky a konec podle čísel v tabulce.`,
         animationLinks: [animationLink('beltHolesTip', 'B1'), animationLink('beltHolesTip', 'D1')],
         media: [],
         beltRecalls: ['tip', 'marking'],
@@ -1031,7 +1044,9 @@ export const lessons: readonly LessonDefinition[] = [
       'U řady 2 obtažená stěna slotu místo jeho středu: konec nenavazuje na hrany pásu.',
     ],
     safety: [KNIFE, PUNCH],
-    prints: [sheet('spicka', 'List 2: dírky a konec místo řady 1 nebo 2 destičky')],
+    prints: [
+      sheet('spicka', 'List 2: dírky a konec místo řady 1 nebo 2 destičky, když se na A4 vejde'),
+    ],
     requires: [
       { id: 'middle-mark', fromLesson: L5, label: 'Značka prostřední dírky propíchnutá na rub' },
     ],
@@ -1401,15 +1416,15 @@ export const beltProject: ProjectDefinition = {
     sheets: [
       {
         id: 'prezka',
-        title: 'List 1 – konec u přezky',
-        note: 'Ovál pro trn 25 × 6 mm, 4 otvory pro 2 nýty, ohyb 90 mm od konce a pásek na poutko. Místo řady 3 destičky (lekce 4).',
+        title: 'List 1 – konec u přezky a poutko',
+        note: 'Ovál pro trn 25 × 6 mm, 4 otvory pro 2 nýty, ohyb 90 mm od konce a pásek na poutko. Místo řady 3 destičky (lekce 2, 3 a 4).',
         orientation: 'portrait',
         widthMm: 210,
         heightMm: 297,
       },
       {
         id: 'spicka',
-        title: 'List 2 – dírky a konec',
+        title: 'List 2 – špička a dírky',
         note: 'Dírky s prostřední dírkou a tvar konce. Místo řady 1 nebo 2 destičky (lekce 6).',
         orientation: 'portrait',
         widthMm: 210,

@@ -154,8 +154,8 @@ export function BeltConfigGenerator({
     );
     setDone(
       built.sheets.length === 1
-        ? `List 1 pro ${built.label} je připravený níže a zaškrtnutý k tisku. List 2 se na A4 nevejde: dírky a konec značte podle čísel v tabulce. Po tisku přeměřte kalibrační čtverec 50 × 50 mm.`
-        : `Listy pro ${built.label} jsou připravené níže a zaškrtnuté k tisku. Po tisku přeměřte kalibrační čtverec 50 × 50 mm.`,
+        ? `List 1 pro ${built.label} je vygenerovaný níže; tiskne se jen to, co je v seznamu listů zaškrtnuté. List 2 se na A4 nevejde: dírky a konec značte podle čísel v tabulce. Po tisku přeměřte kalibrační čtverec 50 × 50 mm.`
+        : `Listy pro ${built.label} jsou vygenerované níže; tiskne se jen to, co je v seznamu listů zaškrtnuté. Po tisku přeměřte kalibrační čtverec 50 × 50 mm.`,
     );
   };
 

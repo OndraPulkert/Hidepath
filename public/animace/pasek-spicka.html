@@ -392,7 +392,7 @@ add('A','Stačí pás?','Od značky ke konci pásu musí zbýt aspoň vzdálenos
 },{v:'LÍC'});
 
 // B1 — volba řady
-add('B','Řada 1 nebo 2, nebo list 2','Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když tabulka „Váš pásek“ ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo jste zvolili jen listy, vytiskněte list 2 pro váš pásek na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm. Když tabulka „Váš pásek“ píše, že se list 2 na A4 nevejde, značte dírky a konec podle čísel v ní.',9000,t=>{
+add('B','Řada 1 nebo 2, nebo list 2','Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když tabulka „Váš pásek“ ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo jste zvolili jen listy, vytiskněte list 2 pro váš pásek na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm. Řádek „List 2“ v tabulce „Váš pásek“ ukazuje, jestli list vyjde na výšku, nebo na šířku; když se na A4 nevejde, značte dírky a konec podle čísel v tabulce.',9000,t=>{
   const c=CAM_PL;
   let s=withCam(c,()=>`<rect x="-120" y="-120" width="500" height="430" fill="var(--board)"/>`+plate(0)+
     fade(seg(t,.08,.16)*(1-seg(t,.4,.46)),`<rect x="2" y="${ROW1-29}" width="211" height="58" rx="3" fill="none" stroke="var(--accent)" stroke-width="${sw(.6)}"/>`)+
@@ -483,7 +483,7 @@ function sheetShape(){return `M${X0} ${-H} L${f(FAR)} ${-H} L${f(APEX-TF)} ${f(-
 function sheetPrint(){let s=`<path d="${pd(HROT_TR)}" fill="none" stroke="var(--print)" stroke-width="${sw(.3)}"/><path d="M${SHEET_END} ${-H} H${f(FAR)} M${SHEET_END} ${H} H${f(FAR)}" stroke="var(--print)" stroke-width="${sw(.3)}"/>`;
   for(const x of HOLES){const col=x===MID?'var(--accent)':'var(--print)';s+=`<circle cx="${x}" cy="0" r="${HD/2}" fill="none" stroke="${col}" stroke-width="${sw(x===MID?.4:.25)}"/><path d="M${x-1.6} 0 h3.2 M${x} -1.6 v3.2" stroke="${col}" stroke-width="${sw(.2)}"/>`;}
   return s}
-add('D','Vytiskněte list 2','Když tabulka „Váš pásek“ ukazuje u této řady „ne“, nebo jste zvolili jen listy, vytiskněte list 2 pro váš pásek na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm. List vystřihněte po obrysu konce. Když tabulka „Váš pásek“ píše, že se list 2 na A4 nevejde, značte dírky a konec podle čísel v ní.',10000,t=>{
+add('D','Vytiskněte list 2','Když tabulka „Váš pásek“ ukazuje u této řady „ne“, nebo jste zvolili jen listy, vytiskněte list 2 pro váš pásek na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm. List vystřihněte po obrysu konce. Řádek „List 2“ v tabulce „Váš pásek“ ukazuje, jestli list vyjde na výšku, nebo na šířku; když se na A4 nevejde, značte dírky a konec podle čísel v tabulce.',10000,t=>{
   // A4 na výšku jako vygenerovaný list 2: pás vlevo (x 22–62 mm), vrchol 45 mm od horní hrany, čtverec vpravo nahoře; měřítko 0,27
   const k=.27, ox=14, oy=4;
   let s=`<rect x="${ox}" y="${oy}" width="${f(210*k)}" height="${f(297*k)}" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3" ${SHADOW}/>`;

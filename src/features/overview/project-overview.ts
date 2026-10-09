@@ -145,7 +145,7 @@ function purposeWithoutLabel(purpose: string, label: string): string {
 }
 
 function sheetLabel(project: ProjectPrints, print: LessonPrint): string {
-  if (print.source === 'template') return 'Šablona';
+  if (print.source === 'template') return 'Šablona 1:1';
   const sheets = print.source === 'pattern-sheets' ? project.patternSheets : project.practiceSheets;
   const title = sheets?.sheets.find((s) => s.id === print.sheetId)?.title ?? print.sheetId ?? '';
   const short = (t: string) => t.split(' – ')[0] ?? t;

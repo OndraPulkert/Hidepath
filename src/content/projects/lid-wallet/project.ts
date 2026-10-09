@@ -436,7 +436,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'templates',
         title: 'Vyřízněte šablonu konce jazýčku a výřezu pro palec',
         printLink: 'pattern-sheets',
-        body: 'Z platných listů (z lekce 1, nebo nových, když P0 něco změnil) nalepte list 4 a list 1 na tvrdý papír a vyřízněte: (1) šablonu konce jazýčku z listu 4 po plném obrysu; kroužky na rysce L1 a 8 červených otvorů S7 propíchněte jehlou; (2) šablonu výřezu pro palec z listu 1 po tečkovaném obdélníku 30 × 20 mm; výřez U v ní vyřízněte a křížek středu propíchněte jehlou. Na variantě z V12 nezávisí, poslouží zkušebnímu i finálnímu kusu.',
+        body: 'List 4 a list 1 z platných listů (když P0 něco změnil, z nových) vytiskněte znovu (odkaz pod krokem; A4 na výšku, 100 %, úsečka 50 mm), nalepte je na tvrdý papír a vyřízněte: (1) šablonu konce jazýčku z listu 4 po plném obrysu; kroužky na rysce L1 a 8 červených otvorů S7 propíchněte jehlou; (2) šablonu výřezu pro palec z listu 1 po tečkovaném obdélníku 30 × 20 mm; výřez U v ní vyřízněte a křížek středu propíchněte jehlou. Na variantě z V12 nezávisí, poslouží zkušebnímu i finálnímu kusu.',
         media: [],
       },
     ],
@@ -603,7 +603,15 @@ export const lessons: readonly LessonDefinition[] = [
       'Odřezek ze středu kusu: nevejdou se pak oba přířezy P1.',
     ],
     safety: [],
-    requires: [{ id: 'spacer', fromLesson: L1, label: 'Vložka dna ze starých karet' }],
+    requires: [
+      { id: 'spacer', fromLesson: L1, label: 'Vložka dna ze starých karet' },
+      {
+        id: 'numbers-box',
+        fromLesson: L1,
+        label: 'List 4 s rámečkem „Čísla pro postup“',
+        note: 'z posledních vygenerovaných listů',
+      },
+    ],
     media: [photo('lw-l3-hero', 'Odřezek po zkoušce ohybu V12 vedle vložky ze starých karet')],
   }),
 
@@ -616,7 +624,6 @@ export const lessons: readonly LessonDefinition[] = [
     goal: 'Vyříznout díly zkušebního kusu (P1, D1, D2, přířez L1 a plíšek K2) a přenést na rub P1 čáry z listu 2.',
     materials: [
       'tvrdý papír na šablony',
-      'šablony konce jazýčku a výřezu pro palec z lekce 2',
       'bezbarvý lak na nehty (hrany plíšku)',
       'jehla na propichování (rýsovací šídlo dělá větší vpich – ověřte na odřezku), tužka',
     ],
@@ -645,7 +652,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'valid-sheets',
         title: 'Platné listy a šablony',
         printLink: 'pattern-sheets',
-        body: 'Pokud P0, V12 nebo zkušební kus něco změnily, vygenerujte listy znovu (lekce 1) a zkontrolujte úsečku 50 mm a kótu P1. Tiskněte nejlépe na matný papír 120 g pro inkoustové tiskárny, jinak na obyčejný. List 1 a list 3 vytiskněte dvakrát: první výtisk při řezání rozřežete, druhý nalepte na tvrdý papír a vyřízněte jako šablonu (otvory S1–S3 a D2 v lekci 6, S6 v lekci 8). Z listu 4 nalepte na tvrdý papír a vyřízněte šablony okének mincí a bankovek, plíšku a proužek S4/S5. Na finální kus vytiskněte listy 1 a 3 znovu z listů, které platí po zkušebním kuse. Listy s pruhem „MIMO OVĚŘENÉ MEZE“ platí jen pro zkušební kus.',
+        body: 'Pokud P0, V12 nebo zkušební kus něco změnily, vygenerujte listy znovu (lekce 1). Tiskněte A4 na výšku, 100 %, nejlépe na matný papír 120 g pro inkoustové tiskárny, jinak na obyčejný; na každém výtisku změřte úsečku 50 mm, na listu 1 i kótu P1. List 1 a list 3 vytiskněte dvakrát: první výtisk při řezání rozřežete, druhý nalepte na tvrdý papír a vyřízněte jako šablonu (otvory S1–S3 a D2 v lekci 6, S6 v lekci 8). Z listu 4 nalepte na tvrdý papír a vyřízněte šablony okének mincí a bankovek, plíšku a proužek S4/S5. Listy 1 a 3 na finální kus vytisknete znovu v lekci 12. Listy s pruhem „MIMO OVĚŘENÉ MEZE“ platí jen pro zkušební kus.',
         media: [],
         appLinks: [EDIT_SHEETS],
         lidSheetRecalls: ['variant', 'sheets'],
@@ -1488,6 +1495,14 @@ export const lessons: readonly LessonDefinition[] = [
       'Považovat samovolně zavírající se víčko za chybu.',
     ],
     safety: [],
+    requires: [
+      {
+        id: 'numbers-box',
+        fromLesson: L1,
+        label: 'List 4 s rámečkem „Čísla pro postup“',
+        note: 'z posledních vygenerovaných listů',
+      },
+    ],
     media: [photo('lw-l10-hero', 'Peněženka pod knihou s fólií, víčko zavřené přes obsah')],
   }),
 
@@ -1656,6 +1671,12 @@ export const lessons: readonly LessonDefinition[] = [
         note: 'ryska L1, ořez špičky a otvory S7',
       },
       { id: 'lining-blank', fromLesson: L4, label: 'Přířez podšívky L1 24 × 22 mm' },
+      {
+        id: 'numbers-box',
+        fromLesson: L1,
+        label: 'List 4 s rámečkem „Čísla pro postup“',
+        note: 'z posledních vygenerovaných listů',
+      },
     ],
     media: [photo('lw-l11-hero', 'Jazýček s podšívkou L1 a švem S7, magnet pod podšívkou')],
   }),
@@ -1797,7 +1818,9 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'final-piece',
         title: 'Finální kus',
-        body: 'Finální kus postavte stejným postupem s tím, co na zkušebním kuse fungovalo (vyměněný magnet, jiná varianta, upravený výřez, D1 nebo D2 o 0,5 mm výš, posunuté okénko bankovek). Když se varianta změnila až po zkušebním kuse, je v ní finální kus neověřený – nejlépe postavte další zkušební kus; useň na další přířez P1 110 × 240 mm nákupní plán nepočítá. V záloze A useň 0,8 změřte, zadejte ve formuláři listů a listy vygenerujte znovu. Byly-li listy zkušebního kusu mimo ověřené meze (lekce 1), řežte finální kus jen z listů v mezích. Na finálním kuse stačí zkontrolovat, že víčko drží, otevře se jedním prstem a otevřené jde palcem udržet.',
+        body: 'Finální kus postavte stejným postupem s tím, co na zkušebním kuse fungovalo (vyměněný magnet, jiná varianta, upravený výřez, D1 nebo D2 o 0,5 mm výš, posunuté okénko bankovek). Když se varianta změnila až po zkušebním kuse, je v ní finální kus neověřený – nejlépe postavte další zkušební kus; useň na další přířez P1 110 × 240 mm nákupní plán nepočítá. V záloze A useň 0,8 změřte, zadejte ve formuláři listů a listy vygenerujte znovu. Byly-li listy zkušebního kusu mimo ověřené meze (lekce 1), řežte finální kus jen z listů v mezích. Listy 1 a 3 na řez finálního kusu vytiskněte znovu z listů, které platí po zkušebním kuse (odkaz pod krokem). Na finálním kuse stačí zkontrolovat, že víčko drží, otevře se jedním prstem a otevřené jde palcem udržet.',
+        printLink: 'pattern-sheets',
+        printSheetId: ['sablona', 'dily'],
         media: [],
         recalls: [
           { fieldId: 'z1-result', label: 'Z-1 magnet' },
@@ -1847,6 +1870,10 @@ export const lessons: readonly LessonDefinition[] = [
       'Kontaktní lepidlo používejte ve větrané místnosti a podle návodu na obalu.',
       'Nůž veďte tahem od prstů volné ruky.',
     ],
+    prints: [
+      sheet('sablona', 1, 'Řez P1 finálního kusu skrz papír', { paper: PLAIN_PAPER }),
+      sheet('dily', 1, 'Řez D1, D2 a L1 finálního kusu skrz papír', { paper: PLAIN_PAPER }),
+    ],
     media: [
       photo(
         'lw-l12-hero',
@@ -1872,8 +1899,8 @@ const overview: ProjectOverview = {
           id: 'prints',
           lessonSlug: L1,
           stepId: 'sheets-rule',
-          printsFrom: [L1, L2, L4],
-          text: 'Listy 1–4 tiskněte až v lekci, která je chce: P0 a V12 je mohou změnit. A4 na výšku, 100 %, úsečka musí měřit 50 mm. Výpis platí pro model a zkušební kus, na finální kus vytiskněte listy 1 a 3 znovu.',
+          printsFrom: [L1, L2, L4, L12],
+          text: 'Listy 1–4 tiskněte až v lekci, která je chce: P0 a V12 je mohou změnit. A4 na výšku, 100 %, úsečka musí měřit 50 mm.',
         },
         {
           id: 'measure',

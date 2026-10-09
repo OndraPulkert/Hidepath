@@ -55,7 +55,7 @@ export const routes = {
       step === undefined ? '' : `?${LESSON_FOCUS_STEP_PARAM}=${step}`
     }`,
   /** Šablona / listy střihu k tisku; `sheetId` předvybere list (`?list=<id>`). */
-  template: (projectSlug: string, sheetId?: string) =>
+  template: (projectSlug: string, sheetId?: string | readonly string[]) =>
     `/projects/${encodeURIComponent(projectSlug)}/template${printSheetQuery(sheetId)}`,
   /**
    * Formulář „Listy pro vaši kůži“ (Víčko) na tiskové stránce: jediné místo pro tloušťky, P0,
@@ -64,18 +64,21 @@ export const routes = {
   lidSheets: (projectSlug: string) =>
     `/projects/${encodeURIComponent(projectSlug)}/template#${LID_SHEETS_ANCHOR}`,
   /** Cvičné listy 1:1 (trénink na odřezku), vlastní tisková stránka vedle šablony. */
-  practiceSheets: (projectSlug: string, sheetId?: string) =>
+  practiceSheets: (projectSlug: string, sheetId?: string | readonly string[]) =>
     `/projects/${encodeURIComponent(projectSlug)}/practice-sheets${printSheetQuery(sheetId)}`,
   /**
    * „Váš pásek“ (projekt s `browserGenerator: 'belt-config'`): zadání pásku, Moje pásky,
    * nákup a listy A4 k tisku; `sheetId` předvybere list k tisku.
    */
-  beltConfig: (projectSlug: string, sheetId?: string) =>
+  beltConfig: (projectSlug: string, sheetId?: string | readonly string[]) =>
     `/projects/${encodeURIComponent(projectSlug)}/vas-pasek${printSheetQuery(sheetId)}`,
 } as const;
 
-function printSheetQuery(sheetId: string | undefined): string {
-  return sheetId ? `?${PRINT_SHEET_PARAM}=${encodeURIComponent(sheetId)}` : '';
+function printSheetQuery(sheetId: string | readonly string[] | undefined): string {
+  const ids = sheetId === undefined ? [] : typeof sheetId === 'string' ? [sheetId] : sheetId;
+  return ids.length > 0
+    ? `?${ids.map((id) => `${PRINT_SHEET_PARAM}=${encodeURIComponent(id)}`).join('&')}`
+    : '';
 }
 
 /** Vzory tras pro React Router (s parametry). */

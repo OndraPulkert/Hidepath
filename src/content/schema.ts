@@ -335,6 +335,11 @@ export const lessonStepSchema = z.object({
    */
   printLink: z.enum(['practice-sheets', 'pattern-sheets', 'template']).optional(),
   /**
+   * Listy, které odkaz `printLink` předem zaškrtne (`?list=<id>`), když krok chce jen některé.
+   * Bez něj stránka zaškrtne celou výchozí skupinu listů.
+   */
+  printSheetId: z.union([slug, z.array(slug).min(1)]).optional(),
+  /**
    * Odkazy pod krokem na animace postupu a návod na délku nitě, každý jako vlastní tlačítko
    * („▶ Animace postupu“, „📏 Jak odměřit nit“) v pořadí pole. Bez odkazů pole vynechte.
    */
@@ -778,6 +783,24 @@ export const projectDefinitionSchema = z
             code: 'custom',
             message: `Lekce ${lesson.slug}: krok ${step.id} odkazuje na listy střihu, projekt žádné nemá`,
           });
+        }
+        if (step.printSheetId) {
+          const sheets =
+            step.printLink === 'pattern-sheets'
+              ? project.patternSheets?.sheets
+              : step.printLink === 'practice-sheets'
+                ? project.practiceSheets?.sheets
+                : undefined;
+          const ids =
+            typeof step.printSheetId === 'string' ? [step.printSheetId] : step.printSheetId;
+          for (const id of ids) {
+            if (!sheets?.some((s) => s.id === id)) {
+              ctx.addIssue({
+                code: 'custom',
+                message: `Lekce ${lesson.slug}: krok ${step.id} předvybírá list ${id}, který v ${step.printLink ?? 'printLink'} není`,
+              });
+            }
+          }
         }
         checkStepAppLinks(project, lesson.slug, step, ctx);
       }

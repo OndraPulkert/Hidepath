@@ -45,6 +45,27 @@ describe('obsah – validace schématem', () => {
     expect(JSON.stringify(result.error?.issues)).toContain('odkazuje na listy střihu');
   });
 
+  it('předvybraný list kroku musí být v listech, na které vede odkaz', () => {
+    const [first, ...rest] = cardHolderProject.lessons;
+    const broken = {
+      ...cardHolderProject,
+      lessons: [
+        {
+          ...first!,
+          steps: first!.steps.map((s, i) =>
+            i === 0
+              ? { ...s, printLink: 'practice-sheets' as const, printSheetId: 'neni-takovy' }
+              : s,
+          ),
+        },
+        ...rest,
+      ],
+    };
+    const result = projectDefinitionSchema.safeParse(broken);
+    expect(result.success).toBe(false);
+    expect(JSON.stringify(result.error?.issues)).toContain('předvybírá list neni-takovy');
+  });
+
   it('odkaz kroku na šablonu potřebuje projekt s obdélníkovou šablonou', () => {
     const { template: _template, ...withoutTemplate } = cardHolderProject;
     const result = projectDefinitionSchema.safeParse({

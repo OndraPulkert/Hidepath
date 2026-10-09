@@ -187,6 +187,7 @@ describe('obsah – peněženka Víčko', () => {
       '4/tape-sheet-1',
       '4/cut-parts',
       '4/mark-back',
+      '12/final-piece',
     ]);
     // Středy okénka bankovek: propíchnout přes list 1 na líc (lekce 4), sekat z líce B (lekce 6).
     expect(lessonText('04-cut-and-mark')).toContain('Ø 14 na koncích okénka bankovek');
@@ -485,10 +486,13 @@ describe('obsah – peněženka Víčko', () => {
         '4/rub×1',
         '4/dily×2',
         '4/pripravky×1',
+        '12/sablona×1',
+        '12/dily×1',
       ]);
       expect(stepAt(4, 'valid-sheets').body).toContain('List 1 a list 3 vytiskněte dvakrát');
       expect(stepAt(4, 'valid-sheets').body).toContain('matný papír 120 g');
-      expect(stepAt(2, 'templates').body).toContain('nalepte list 4 a list 1 na tvrdý papír');
+      expect(stepAt(2, 'templates').body).toContain('List 4 a list 1 z platných listů');
+      expect(stepAt(2, 'templates').body).toContain('vytiskněte znovu');
       expect(stepAt(1, 'sheets-rule').body).toContain('Listy vytiskněte hned');
 
       const requires = lidWalletProject.lessons.flatMap((l) =>
@@ -497,6 +501,7 @@ describe('obsah – peněženka Víčko', () => {
       expect(requires).toEqual([
         '2 ← 01 model-sheets',
         '3 ← 01 spacer',
+        '3 ← 01 numbers-box',
         '5 ← 03 v12-scrap',
         '5 ← 02 notch-template',
         '5 ← 04 coin-window-template',
@@ -507,8 +512,10 @@ describe('obsah – peněženka Víčko', () => {
         '8 ← 04 plate',
         '8 ← 04 sheet1-template',
         '9 ← 04 side-strip',
+        '10 ← 01 numbers-box',
         '11 ← 02 tongue-template',
         '11 ← 04 lining-blank',
+        '11 ← 01 numbers-box',
       ]);
       // Co je v „Z předchozích lekcí“, není znovu mezi materiály.
       for (const l of lidWalletProject.lessons) {

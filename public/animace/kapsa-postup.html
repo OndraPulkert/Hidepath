@@ -454,7 +454,7 @@ add('B','Šídlem propíchněte 23 teček a 4 konce os','Šídlem propíchněte 
   s+=lbl(92,38,'tečky: šev 23 otvorů','ts')+lbl(92,42.5,'konce os: vlevo, vpravo,','ts')+lbl(92,47,'nahoře, dole','ts');
   return s;
 },'lic');
-add('B','Pásku strhněte pomalu','Pásku strhněte pomalu pod ostrým úhlem a list sundejte.',3600,t=>{
+add('B','Pásku strhněte pomalu','Pásku strhněte pomalu pod ostrým úhlem a list sundejte. Výtisk si schovejte na kapsu v lekci 6.',3600,t=>{
   const lift=es(t,0,.55), off=es(t,.55,1);
   let s=G(LVw,leather({side:'lic',pricks:27}));
   s+=G(LVw+` translate(${f(off*34)} ${f(-off*18)}) rotate(${f(off*8)} 31 35)`,paper1(27),`opacity="${f(1-off)}" ${SHADOW}`);

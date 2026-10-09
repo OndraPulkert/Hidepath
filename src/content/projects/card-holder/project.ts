@@ -828,8 +828,10 @@ export const lessons: readonly LessonDefinition[] = [
       {
         source: 'template',
         copies: 1,
-        purpose: 'Zadní díl vystřižený po plné čáře k vyznačení lepené plochy (krok 2).',
-        condition: 'Jen když nemáte papírový zadní díl z lekce 5.',
+        purpose:
+          'Zadní díl vystřižený po plné čáře k vyznačení lepené plochy (krok 2). Tiskněte bez přizpůsobení velikosti (100 %), kontrolní úsečka musí měřit 50 mm.',
+        paper: 'A4',
+        condition: 'nemáte papírový zadní díl z lekce 5',
       },
     ],
     requires: [

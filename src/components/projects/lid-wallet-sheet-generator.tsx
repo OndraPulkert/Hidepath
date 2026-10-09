@@ -583,8 +583,8 @@ export function LidWalletSheetGenerator({
         >
           {typo(
             done.trial
-              ? `Listy pro zkušební kus (${done.label}) jsou připravené níže a zaškrtnuté k tisku. Jsou mimo ověřené meze – finální kus z nich nestříhejte. Po tisku zkontrolujte úsečku 50 mm a kótu P1 podle rámečku na listu 4.`
-              : `Listy pro ${done.label} jsou připravené níže a zaškrtnuté k tisku. Po tisku zkontrolujte úsečku 50 mm a kótu P1 podle rámečku na listu 4.`,
+              ? `Listy pro zkušební kus (${done.label}) jsou vygenerované níže; tiskne se jen to, co je v seznamu listů zaškrtnuté. Jsou mimo ověřené meze – finální kus z nich nestříhejte. Po tisku zkontrolujte úsečku 50 mm a kótu P1 podle rámečku na listu 4.`
+              : `Listy pro ${done.label} jsou vygenerované níže; tiskne se jen to, co je v seznamu listů zaškrtnuté. Po tisku zkontrolujte úsečku 50 mm a kótu P1 podle rámečku na listu 4.`,
           )}
         </p>
       ) : null}

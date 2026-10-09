@@ -154,7 +154,7 @@ describe('obsah – pouzdro na karty: časovače, zápisník a „Připravte si�
     expect(lesson(5).prints).toMatchObject([{ source: 'template', copies: 1 }]);
     expect(lesson(5).prints![0]!.paper).toContain('matný papír 120 g');
     expect(lesson(6).prints).toMatchObject([
-      { source: 'template', copies: 1, condition: 'Jen když nemáte papírový zadní díl z lekce 5.' },
+      { source: 'template', copies: 1, condition: 'nemáte papírový zadní díl z lekce 5' },
     ]);
     expect(step(6, 'mark-glue-area').body).toContain('nebo novou šablonu vystřiženou po plné čáře');
     for (const l of cardHolderProject.lessons) {

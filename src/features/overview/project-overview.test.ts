@@ -98,13 +98,14 @@ describe('Postup v kostce – Víčko', () => {
   const points = flatOverview(sections);
   const text = (id: string) => points.find((p) => p.point.id === id)!.point;
 
-  it('15–25 krátkých bodů, bod 1 je tisk z lekcí 1, 2 a 4', () => {
+  it('15–25 krátkých bodů, bod 1 je tisk z lekcí 1, 2, 4 a 12', () => {
     expect(points.length).toBeGreaterThanOrEqual(15);
     expect(points.length).toBeLessThanOrEqual(25);
     expect(points[0]!.point.printsFrom).toEqual([
       '01-measure-and-sheets',
       '02-paper-model',
       '04-cut-and-mark',
+      '12-finish-and-tests',
     ]);
     for (const p of points) {
       const sentences = p.point.text.split(/[.!?](?:\s|$)/).filter((s) => s.trim()).length;
@@ -112,12 +113,12 @@ describe('Postup v kostce – Víčko', () => {
     }
   });
 
-  it('výtisky: list 1 4×, list 2 2×, list 3 3×, list 4 3×; řez z prvního výtisku, šablona z druhého', () => {
+  it('výtisky: list 1 5×, list 2 2×, list 3 4×, list 4 3×; řez z prvního výtisku, šablona z druhého, finální kus v lekci 12', () => {
     const groups = overviewPrints(project, points[0]!.point.printsFrom!);
     expect(printTotals(groups).map((t) => `${t.sheetLabel} ${t.copies}×`)).toEqual([
-      'List 1 4×',
+      'List 1 5×',
       'List 2 2×',
-      'List 3 3×',
+      'List 3 4×',
       'List 4 3×',
     ]);
     const cut = groups.find((g) => g.lessonOrder === 4)!;
@@ -363,7 +364,7 @@ describe('Postup v kostce – pouzdro na karty', () => {
     const groups = overviewPrints(project, points[0]!.point.printsFrom!);
     expect(printTotals(groups).map((t) => `${t.sheetLabel} ${t.copies}×`)).toEqual([
       'Cvičná šablona: řez podle přilepené šablony 1×',
-      'Šablona 1×',
+      'Šablona 1:1 1×',
     ]);
     const l6 = groups.find((g) => g.lessonOrder === 6)!;
     expect(l6.rows.every((r) => r.condition)).toBe(true);

@@ -19,9 +19,11 @@ describe('tisk listů – peněženka Víčko pro změřenou kůži', () => {
     await user.type(screen.getByLabelText('Podšívka L1, mm'), '0,9');
     await user.click(screen.getByRole('button', { name: 'Uložit a vygenerovat listy' }));
 
-    expect(await screen.findByText(/jsou připravené níže a zaškrtnuté k tisku/)).toHaveTextContent(
-      /P1 1,0 · přepážky 0,8 · L1 0,9/,
-    );
+    expect(
+      await screen.findByText(
+        /jsou vygenerované níže; tiskne se jen to, co je v seznamu listů zaškrtnuté/,
+      ),
+    ).toHaveTextContent(/P1 1,0 · přepážky 0,8 · L1 0,9/);
     const group = screen.getByText(
       'Pro změřenou kůži: P1 1,0 · přepážky 0,8 · L1 0,9',
     ).parentElement!;
@@ -48,9 +50,11 @@ describe('tisk listů – peněženka Víčko pro změřenou kůži', () => {
     await user.type(screen.getByLabelText('Tloušťka magnetu Ø 8, mm (lekce 11)'), '2');
     await user.click(screen.getByRole('button', { name: 'Uložit a vygenerovat listy' }));
 
-    expect(await screen.findByText(/jsou připravené níže a zaškrtnuté k tisku/)).toHaveTextContent(
-      /P1 1,0 · přepážky 0,8 · L1 0,9 · k 1,3 · magnet Ø 8 × 2/,
-    );
+    expect(
+      await screen.findByText(
+        /jsou vygenerované níže; tiskne se jen to, co je v seznamu listů zaškrtnuté/,
+      ),
+    ).toHaveTextContent(/P1 1,0 · přepážky 0,8 · L1 0,9 · k 1,3 · magnet Ø 8 × 2/);
   });
 
   it('nesmyslnou hodnotu P0 odmítne česky a nic nevygeneruje', async () => {
@@ -280,18 +284,18 @@ describe('tisk – pouzdro s vsazenou mincí', () => {
     ).not.toBeChecked();
   });
 
-  it('lekce 4 odkazuje z cvičného proužku na cvičné listy', async () => {
+  it('lekce 4 odkazuje z cvičného proužku na cvičné listy s předvybraným proužkem', async () => {
     renderApp(routes.lesson(coinCardHolderProject.slug, '04-fold-and-stitch-scrap'));
     expect(
       await screen.findByRole('heading', { name: /^Vyřízněte\scvičný proužek/ }),
     ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Vytisknout cvičnou šablonu 1:1/ })).toHaveAttribute(
       'href',
-      routes.practiceSheets(coinCardHolderProject.slug),
+      routes.practiceSheets(coinCardHolderProject.slug, 'cvicny-prouzek-kuze-1-2'),
     );
   });
 
-  it('lekce 1 odkazuje z tisku listu na stránku listů střihu', async () => {
+  it('lekce 1 odkazuje z tisku listu na stránku listů střihu s předvybraným modelem', async () => {
     renderApp(routes.lesson(coinCardHolderProject.slug, '01-paper-model'));
     expect(
       await screen.findByRole('heading', { name: /^Vytiskněte\sa\szkontrolujte list$/ }),
@@ -300,7 +304,10 @@ describe('tisk – pouzdro s vsazenou mincí', () => {
     const links = screen.getAllByRole('link', { name: /Listy střihu 1:1 k tisku/ });
     expect(links.length).toBeGreaterThanOrEqual(1);
     for (const link of links) {
-      expect(link).toHaveAttribute('href', routes.template(coinCardHolderProject.slug));
+      expect(link).toHaveAttribute(
+        'href',
+        routes.template(coinCardHolderProject.slug, 'papirovy-model-kuze-1-2'),
+      );
     }
   });
 });

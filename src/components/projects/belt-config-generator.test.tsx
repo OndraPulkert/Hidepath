@@ -117,7 +117,9 @@ describe('Váš pásek', () => {
     await user.click(screen.getByRole('button', { name: 'Vygenerovat listy A4' }));
     const sheets = onGenerated.mock.calls[0]![0];
     expect(sheets.map((s) => s.id)).toEqual(['zmerena-prezka']);
-    expect(await screen.findByRole('status')).toHaveTextContent(/List 1 pro .* je připravený/);
+    expect(await screen.findByRole('status')).toHaveTextContent(
+      /List 1 pro .* je vygenerovaný níže; tiskne se jen to, co je v seznamu listů zaškrtnuté/,
+    );
   });
 
   it('předvyplněný Ø dírky mimo meze: rozbalí „Dírky (pokročilé)“ a řekne proč', async () => {
@@ -161,7 +163,9 @@ describe('Váš pásek', () => {
     ]);
     expect(sheets[0]!.variant).toBe('Váš pásek: 40 mm · 3,5 mm · hrot · 7 dírek');
     expect(sheets[0]!.url).toMatch(/^data:image\/svg\+xml/);
-    expect(await screen.findByRole('status')).toHaveTextContent(/jsou připravené níže/);
+    expect(await screen.findByRole('status')).toHaveTextContent(
+      /jsou vygenerované níže; tiskne se jen to, co je v seznamu listů zaškrtnuté/,
+    );
   });
 
   it('barva: výchozí přírodní; barevný chce vybrat barvu, černý ukáže černé nabídky a barvu na hrany', async () => {

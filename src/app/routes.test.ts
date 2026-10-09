@@ -78,3 +78,15 @@ describe('isNavItemActive', () => {
     expect(isNavItemActive(dashboard!, '/workshop')).toBe(false);
   });
 });
+
+describe('předvýběr listů k tisku', () => {
+  it('jeden list i víc listů jako opakovaný ?list=', () => {
+    expect(routes.template('lid-wallet', 'sablona')).toBe(
+      '/projects/lid-wallet/template?list=sablona',
+    );
+    expect(routes.template('lid-wallet', ['sablona', 'dily'])).toBe(
+      '/projects/lid-wallet/template?list=sablona&list=dily',
+    );
+    expect(routes.template('lid-wallet')).toBe('/projects/lid-wallet/template');
+  });
+});

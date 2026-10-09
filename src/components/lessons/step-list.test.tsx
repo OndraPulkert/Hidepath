@@ -120,7 +120,7 @@ describe('StepList – odkazy na stránky aplikace', () => {
     );
   });
 
-  it('u pásku vede tisk listů na „Váš pásek“', () => {
+  it('u pásku vede tisk listů na „Váš pásek“ s předvybraným listem kroku', () => {
     const belt = projects.find((p) => p.slug === 'belt')!;
     const step = belt.lessons[3]!.steps.find((s) => s.id === 'plate-or-sheet')!;
     renderWithProviders(
@@ -133,7 +133,7 @@ describe('StepList – odkazy na stránky aplikace', () => {
     );
     expect(screen.getByRole('link', { name: 'Váš pásek: listy A4 k tisku' })).toHaveAttribute(
       'href',
-      '/projects/belt/vas-pasek',
+      '/projects/belt/vas-pasek?list=prezka',
     );
   });
 });

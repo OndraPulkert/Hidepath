@@ -60,8 +60,9 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'print-check',
         title: 'Vytiskněte a zkontrolujte list',
-        body: 'Na stránce Listy střihu (odkaz pod krokem) vytiskněte Papírový model na A4 ve skutečné velikosti (100 %). Předem zaškrtnutý list je pro minci 50 Kč a kůži těla 1,2 mm. U kůže 1,5 mm vytiskněte místo něj Papírový model – kůže 1,5 mm, u mince 40 mm Papírový model – mince 40 mm, u kůže 1,5 mm s mincí 40 mm Papírový model – mince 40 mm, kůže 1,5 mm. Změřte kalibrační úsečku: musí mít přesně 50 mm.',
+        body: 'Na stránce Listy střihu (odkaz pod krokem) vytiskněte Papírový model na papír 160 g A4 ve skutečné velikosti (100 %). Předem zaškrtnutý list je pro minci 50 Kč a kůži těla 1,2 mm. U kůže 1,5 mm vytiskněte místo něj Papírový model – kůže 1,5 mm, u mince 40 mm Papírový model – mince 40 mm, u kůže 1,5 mm s mincí 40 mm Papírový model – mince 40 mm, kůže 1,5 mm. Změřte kalibrační úsečku: musí mít přesně 50 mm.',
         printLink: 'pattern-sheets',
+        printSheetId: 'papirovy-model-kuze-1-2',
         media: [],
       },
       {
@@ -181,6 +182,7 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Rozhodněte, jestli pokračovat',
         body: 'Když se obsah nevejde, karta nejde palcem vysunout nebo jazyk nedosáhne přes značku patice, kůži neřežte a zapište, co nesedí a o kolik mm. Nejdřív vylučte chybu tisku: znovu změřte úsečku (50 mm) a zkontrolujte, že máte list pro svou kůži a minci; případně vytiskněte list znovu (odkaz pod krokem) a model složte znovu. Když model nesedí ani tak, střih pro svůj obsah nepoužívejte – jiný počet karet ani tloušťku bankovek aplikace zatím přepočítat neumí. Pokračujte, až model se vším, co nosíte, sedí.',
         printLink: 'pattern-sheets',
+        printSheetId: 'papirovy-model-kuze-1-2',
         media: [],
         records: [
           {
@@ -285,8 +287,9 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'drill-form',
         title: 'Vyvrtejte formu',
-        body: 'Vytiskněte list KAPSA (odkaz pod krokem) 3× na 100 % a zkontrolujte úsečku 50 mm: výtisk na formu, výtisk na značky a výtisk na šablonu. U mince 40 mm tiskněte místo něj list Kapsa – mince 40 mm (otvor formy Ø 44 mm, okno Ø 32 mm). Z výtisku na formu: výkres „OTVOR FORMY PRO DŮLEK“ (kružnice Ø 31,5 mm s osami, u mince 40 mm Ø 44 mm) vystřihněte jako čtverec asi 7 × 7 cm (na menší desku menší, osy nechte celé), kružnici nevystřihujte. Desku vyberte tak, aby při lisování dosáhly nad minci dvě svěrky proti sobě: u svěrek z nákupu (vyložení 50 mm) smí být střed otvoru nejvýš asi 4 cm od hran, kudy svěrky půjdou – deska 8 × 8 cm, nebo nejvýš asi 8 cm široká. Na širší prkénko potřebujete svěrky s větším vyložením (ověřte, že dosáhnou za střed otvoru). Čtverec přilepte na desku doprostřed šířky, střed asi 4–5 cm od konce (naproti rukojeti, má-li ji; u desky 8 × 8 cm doprostřed), osy rovnoběžně s okraji. Osy protáhněte tužkou podle pravítka až k okrajům desky – podle nich budete zarovnávat kůži. Korunku Ø 32 mm nasaďte na unášeč a upněte do vrtačky (viz animace pod krokem; samostatný Wolfcraft upněte rovnou za stopku). Desku upněte svěrkou ke stolu přes odpadní prkno a středicí vrták nasaďte do křížku os. Vrtejte korunkou Ø 32 mm na unášeči (u mince 40 mm Ø 44 mm) na 1. rychlost, bez příklepu a bez tlaku, dokud špička středicího vrtáku nevyjde zespodu z desky (korunka je pak zhruba v půlce tloušťky), pak desku otočte, znovu upněte a dokončete z druhé strany podle dírky středicího vrtáku. Korunku průběžně vytahujte a piliny odstraňte. Papír sundejte. Horní hranu otvoru (stranu pro kůži, označte si ji tužkou) srazte smirkem 180 namotaným na prstu do mírného oblouku (velikost ověřte na odřezku); průměr nezvětšujte. Stěnu otvoru jen lehce začistěte a plochu kolem přebruste naplocho. Hrana nesmí řezat ani drhnout a mince zabalená s odřezkem kůže musí jít do otvoru volně. Setřené osy obtáhněte znovu.',
+        body: 'Vytiskněte list „Kapsa s mincí a otvor formy“ (na výtisku „LIST KAPSA“, odkaz pod krokem) 3× na 100 % a zkontrolujte úsečku 50 mm: výtisk na formu, výtisk na značky a výtisk na šablonu. U mince 40 mm tiskněte místo něj list Kapsa – mince 40 mm (otvor formy Ø 44 mm, okno Ø 32 mm). Z výtisku na formu: výkres „OTVOR FORMY PRO DŮLEK“ (kružnice Ø 31,5 mm s osami, u mince 40 mm Ø 44 mm) vystřihněte jako čtverec asi 7 × 7 cm (na menší desku menší, osy nechte celé), kružnici nevystřihujte. Desku vyberte tak, aby při lisování dosáhly nad minci dvě svěrky proti sobě: u svěrek z nákupu (vyložení 50 mm) smí být střed otvoru nejvýš asi 4 cm od hran, kudy svěrky půjdou – deska 8 × 8 cm, nebo nejvýš asi 8 cm široká. Na širší prkénko potřebujete svěrky s větším vyložením (ověřte, že dosáhnou za střed otvoru). Čtverec přilepte na desku doprostřed šířky, střed asi 4–5 cm od konce (naproti rukojeti, má-li ji; u desky 8 × 8 cm doprostřed), osy rovnoběžně s okraji. Osy protáhněte tužkou podle pravítka až k okrajům desky – podle nich budete zarovnávat kůži. Korunku Ø 32 mm nasaďte na unášeč a upněte do vrtačky (viz animace pod krokem; samostatný Wolfcraft upněte rovnou za stopku). Desku upněte svěrkou ke stolu přes odpadní prkno a středicí vrták nasaďte do křížku os. Vrtejte korunkou Ø 32 mm na unášeči (u mince 40 mm Ø 44 mm) na 1. rychlost, bez příklepu a bez tlaku, dokud špička středicího vrtáku nevyjde zespodu z desky (korunka je pak zhruba v půlce tloušťky), pak desku otočte, znovu upněte a dokončete z druhé strany podle dírky středicího vrtáku. Korunku průběžně vytahujte a piliny odstraňte. Papír sundejte. Horní hranu otvoru (stranu pro kůži, označte si ji tužkou) srazte smirkem 180 namotaným na prstu do mírného oblouku (velikost ověřte na odřezku); průměr nezvětšujte. Stěnu otvoru jen lehce začistěte a plochu kolem přebruste naplocho. Hrana nesmí řezat ani drhnout a mince zabalená s odřezkem kůže musí jít do otvoru volně. Setřené osy obtáhněte znovu.',
         printLink: 'pattern-sheets',
+        printSheetId: 'kapsa',
         animationLinks: [
           animationLink('kapsa', 'A1'),
           animationLink('drillForm', 'B1', 'Korunka na unášeč'),
@@ -299,7 +302,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'mark-outline',
         title: 'Přeneste značky na líc a prosekejte šev',
-        body: 'Výtisk na značky vystřihněte nahrubo s okrajem 1–2 cm a přilepte ho maskovací páskou na LÍC odřezku, jen na okrajích mimo obrys (pásku nejdřív zkuste na kousku téže kůže). Šídlem propíchněte všechny tečky švu a 4 konce os. Pásku strhněte pomalu pod ostrým úhlem a zkontrolujte, že jsou propíchnuté všechny značky. Na líc nic nekreslete – čára by na hotové kapse zůstala vidět. Vidličkami 4 mm prosekejte naplocho na děrovací desce otvory švu z líce podle teček.',
+        body: 'Výtisk na značky vystřihněte nahrubo s okrajem 1–2 cm a přilepte ho maskovací páskou na LÍC odřezku, jen na okrajích mimo obrys (pásku nejdřív zkuste na kousku téže kůže). Šídlem propíchněte všechny tečky švu a 4 konce os. Pásku strhněte pomalu pod ostrým úhlem a zkontrolujte, že jsou propíchnuté všechny značky. Na líc nic nekreslete – čára by na hotové kapse zůstala vidět. Vidličkami 4 mm prosekejte naplocho na děrovací desce otvory švu z líce podle teček. Výtisk na značky si schovejte na kapsu v lekci 6.',
         animationLinks: [animationLink('kapsa', 'B1')],
         media: [],
       },
@@ -373,8 +376,9 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'test-window-retention',
         title: 'Vysekněte zkušební okno a vyzkoušejte, že mince drží',
-        body: 'Zaschlý odřezek položte lícem dolů zpátky na formu: důlek do otvoru, osy na osy. Rozmazané čáry nejdřív obtáhněte podle šablony. Obrys vyřízněte nožem 2–3 lehkými tahy, kůži přidržujte na rovné části (desku můžete chránit kartonem s otvorem Ø 32 mm, u mince 40 mm Ø 44 mm). Formu položte na děrovací desku a do otvoru pod důlek postavte špalík (užší než otvor, širší než okno), zkrácený tak, aby se dna důlku jen dotýkal a nenadzvedával ho (ověřte na odřezku). Výsečník Ø 20 mm (u mince 40 mm Ø 32 mm) postavte na narýsovanou kružnici, zkontrolujte, že prstenec kolem důlku je po celém obvodu stejně široký, a vysekněte okno. Vyzkoušejte: (1) minci vložte z rubu, odřezek otočte oknem dolů a zatřeste – nesmí vypadnout; (2) zatlačte na ni z rubu palcem – nesmí oknem projít; (3) prstenec nesmí být natržený. Když mince projde, Ø 20 mm do kapsy zatím nesekejte. Když byl důlek mělký (mince vyčnívala nad rub), na druhém odřezku zopakujte orýsování, tvarování a schnutí s hlubším důlkem (kůže vlhčí, svěrky utažené pevněji, ale rovnoměrně – ověřte na odřezku) a vyzkoušejte znovu okno Ø 20 mm. Teprve když mince projde i tentokrát, nebo když byl důlek dost hluboký už napoprvé, vyzkoušejte na dalším odřezku okno Ø 18 mm (prstenec 4,75 mm). Záložní okno Ø 18 mm je jen pro minci 50 Kč; u mince 40 mm v tom případě do kapsy okno nesekejte a na dalším odřezku zkuste ještě hlubší důlek (ověřte na odřezku). Když potřebujete třetí odřezek, u sestavy z nákupního plánu ho vyřízněte z kusu Blu A5: nejdřív si na něm podél jedné hrany obkreslete kapsu 57,5 × 57,5 mm a cvičný proužek 130 × 40 mm (stejně jako potom v lekci 3) a odřezek vezměte ze zbytku. Jako šablonu na rub vytiskněte list Kapsa – záložní okno Ø 18 mm (odkaz pod krokem), vystřihněte ho přesně po obrysu a vysekněte do něj okno Ø 18 mm; výtisk na značky (s dírkami) použijte znovu. Výsečník Ø 18 mm je v nákupním plánu jako volitelný řádek mimo součet – je levný, můžete ho přihodit do první objednávky. Do kapsy pak sekejte průměrem, se kterým zkouška vyšla. Když mince projde i oknem Ø 18 mm, do kapsy žádné okno nesekejte a na dalším odřezku zkuste ještě hlubší důlek (ověřte na odřezku).',
+        body: 'Zaschlý odřezek položte lícem dolů zpátky na formu: důlek do otvoru, osy na osy. Rozmazané čáry nejdřív obtáhněte podle šablony. Obrys vyřízněte nožem 2–3 lehkými tahy, kůži přidržujte na rovné části (desku můžete chránit kartonem s otvorem Ø 32 mm, u mince 40 mm Ø 44 mm). Formu položte na děrovací desku a do otvoru pod důlek postavte špalík (užší než otvor, širší než okno), zkrácený tak, aby se dna důlku jen dotýkal a nenadzvedával ho (ověřte na odřezku). Výsečník Ø 20 mm (u mince 40 mm Ø 32 mm) postavte na narýsovanou kružnici, zkontrolujte, že prstenec kolem důlku je po celém obvodu stejně široký, a vysekněte okno. Vyzkoušejte: (1) minci vložte z rubu, odřezek otočte oknem dolů a zatřeste – nesmí vypadnout; (2) zatlačte na ni z rubu palcem – nesmí oknem projít; (3) prstenec nesmí být natržený. Když mince projde, Ø 20 mm do kapsy zatím nesekejte. Když byl důlek mělký (mince vyčnívala nad rub), na druhém odřezku zopakujte orýsování, tvarování a schnutí s hlubším důlkem (kůže vlhčí, svěrky utažené pevněji, ale rovnoměrně – ověřte na odřezku) a vyzkoušejte znovu okno Ø 20 mm. Teprve když mince projde i tentokrát, nebo když byl důlek dost hluboký už napoprvé, vyzkoušejte na dalším odřezku okno Ø 18 mm (prstenec 4,75 mm). Záložní okno Ø 18 mm je jen pro minci 50 Kč; u mince 40 mm v tom případě do kapsy okno nesekejte a na dalším odřezku zkuste ještě hlubší důlek (ověřte na odřezku). Když potřebujete třetí odřezek, u sestavy z nákupního plánu ho vyřízněte z kusu Blu A5: nejdřív si na něm podél jedné hrany obkreslete kapsu 57,5 × 57,5 mm a cvičný proužek 130 × 40 mm (stejně jako potom v lekci 3) a odřezek vezměte ze zbytku. Jako šablonu na rub vytiskněte list Kapsa – záložní okno Ø 18 mm na 100 % (odkaz pod krokem), vystřihněte ho přesně po obrysu a vysekněte do něj okno Ø 18 mm; výtisk na značky (s dírkami) použijte znovu. Výsečník Ø 18 mm je v nákupním plánu jako volitelný řádek mimo součet – je levný, můžete ho přihodit do první objednávky. Do kapsy pak sekejte průměrem, se kterým zkouška vyšla. Když mince projde i oknem Ø 18 mm, do kapsy žádné okno nesekejte a na dalším odřezku zkuste ještě hlubší důlek (ověřte na odřezku).',
         printLink: 'pattern-sheets',
+        printSheetId: 'kapsa-okno-18',
         animationLinks: [animationLink('kapsa', 'E1')],
         media: [],
         records: [
@@ -443,13 +447,15 @@ export const lessons: readonly LessonDefinition[] = [
         copies: 3,
         purpose:
           'na vrtání formy, na značky na líci a na šablonu na rub (u mince 40 mm varianta pro 40 mm)',
+        paper: 'A4, 100 %',
       },
       {
         source: 'pattern-sheets',
         sheetId: 'kapsa-okno-18',
         copies: 1,
         purpose: 'šablona na rub s oknem Ø 18 mm',
-        condition: 'zkouška okna Ø 20 mm nevyjde (poslední krok)',
+        paper: 'A4, 100 %',
+        condition: 'mince 50 Kč projde oknem Ø 20 mm i s dost hlubokým důlkem (poslední krok)',
       },
     ],
     media: [
@@ -694,6 +700,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('stripTransfer', 'D3'),
         ],
         printLink: 'practice-sheets',
+        printSheetId: 'cvicny-prouzek-kuze-1-2',
         body: 'Na stránce Cvičné listy (odkaz pod krokem) vytiskněte list „Cvičný proužek pro lekci 4“ pro svou tloušťku kůže na 100 % a zkontrolujte úsečku 50 mm. Vystřihněte ho nahrubo s okrajem 1–2 cm, jen dole přesně po plné čáře. Dolní hranu listu přiložte na líc přesně na rovnou dolní hranu kůže a obrys vystřeďte po délce. List přilepte páskou jen na okrajích, mimo čáru řezu. Pravítkem zkontrolujte, že kroužky na koncích linie švu leží 3,5 mm od dolní hrany. Šídlem propíchněte skrz papír i kůži, aby byly značky vidět i na rubu: kroužky na koncích čar ohybů A i B a linie švu a všechny tečky dna. Pak na řezací podložce řežte nožem podle ocelového pravítka skrz papír po obrysu. Na rubu spojte konce čar ohybů tužkou podle pravítka. Bez listu: na rub narýsujte uprostřed panel 30 mm, vedle něj ohyb A (u kůže 1,2 mm 15,7 mm, u 1,5 mm 16,6 mm), z druhé strany ohyb B (u kůže 1,2 mm 8,7 mm, u 1,5 mm 9,9 mm) a za nimi panely po 30 mm.',
         media: [],
       },
@@ -960,8 +967,9 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'print-check',
         title: 'Vytiskněte a zkontrolujte šablonu',
-        body: 'Na stránce Listy střihu (odkaz pod krokem) vytiskněte šablonu PÁS na A4 na 100 %, nejlépe na matný papír 120 g. Úsečka musí měřit přesně 50 mm. Předem zaškrtnutý list je pro minci 50 Kč a kůži 1,2 mm; u kůže 1,5 mm vytiskněte Pás (šablona) – kůže 1,5 mm, u mince 40 mm Pás – mince 40 mm, u kůže 1,5 mm s mincí 40 mm Pás (šablona) – mince 40 mm, kůže 1,5 mm. Popis dole na listu uvádí minci a tloušťku kůže – zkontrolujte, že odpovídají vašim.',
+        body: 'Na stránce Listy střihu (odkaz pod krokem) vytiskněte list „Pás (šablona)“ (na výtisku „LIST PÁS“) na A4 na 100 %, nejlépe na matný papír 120 g. Úsečka musí měřit přesně 50 mm. Předem zaškrtnutý list je pro minci 50 Kč a kůži 1,2 mm; u kůže 1,5 mm vytiskněte Pás (šablona) – kůže 1,5 mm, u mince 40 mm Pás – mince 40 mm, u kůže 1,5 mm s mincí 40 mm Pás (šablona) – mince 40 mm, kůže 1,5 mm. Popis dole na listu uvádí minci a tloušťku kůže – zkontrolujte, že odpovídají vašim.',
         printLink: 'pattern-sheets',
+        printSheetId: 'sablona-kuze-1-2',
         media: [],
       },
       {
@@ -973,6 +981,7 @@ export const lessons: readonly LessonDefinition[] = [
         ],
         body: 'Šablonu vystřihněte nahrubo s okrajem 1–2 cm. Položte ji na LÍC kůže – jinak než u pouzdra na karty, kde ležela na rubu. Přilepte ji maskovací páskou z několika stran, jen na okrajích mimo čáru řezu. Pásku nejdřív zkuste na odřezku – na líci může nechat stopu. Šablona se rozřeže, na každý pás vytiskněte novou (odkaz pod krokem).',
         printLink: 'pattern-sheets',
+        printSheetId: 'sablona-kuze-1-2',
         media: [],
       },
       {
@@ -1211,16 +1220,18 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'trace-and-punch-pocket',
         title: 'Přeneste značky na líc a prosekejte šev',
-        body: 'Postup je stejný jako v lekci 2. Výtisk listu KAPSA na značky z lekce 2 (když ho nemáte, odkaz pod krokem; u mince 40 mm list Kapsa – mince 40 mm) vystřihněte nahrubo a přilepte maskovací páskou na LÍC kůže 1,2 mm, jen na okrajích mimo obrys. Šídlem propíchněte tečky švu a 4 konce os. Pásku pomalu strhněte a zkontrolujte, že jsou vidět všechny značky. Na líc nic nekreslete. Vidličkami 4 mm prosekejte naplocho na děrovací desce otvory švu z líce – při přišívání budete sekat ze stejné strany.',
+        body: 'Postup je stejný jako v lekci 2. Výtisk listu KAPSA na značky z lekce 2 (když ho nemáte, vytiskněte ho na 100 %, odkaz pod krokem; u mince 40 mm list Kapsa – mince 40 mm) vystřihněte nahrubo a přilepte maskovací páskou na LÍC kůže 1,2 mm, jen na okrajích mimo obrys. Šídlem propíchněte tečky švu a 4 konce os. Pásku pomalu strhněte a zkontrolujte, že jsou vidět všechny značky. Na líc nic nekreslete. Vidličkami 4 mm prosekejte naplocho na děrovací desce otvory švu z líce – při přišívání budete sekat ze stejné strany.',
         printLink: 'pattern-sheets',
+        printSheetId: 'kapsa',
         animationLinks: [animationLink('kapsa', 'B1')],
         media: [],
       },
       {
         id: 'trace-pocket-template',
         title: 'Narýsujte osy a obrys na rub',
-        body: 'Kůži otočte. Konce os spojte na rubu tužkou podle pravítka a osy protáhněte až k okrajům kůže. Vezměte šablonu s oknem z lekce 2 v průměru, kterým budete sekat (Ø 20 mm nebo Ø 18 mm, u mince 40 mm Ø 32 mm). Když ji nemáte, vytiskněte znovu list Kapsa s mincí a otvor formy, u okna Ø 18 mm list Kapsa – záložní okno Ø 18 mm (u mince 40 mm variantu pro 40 mm; odkaz pod krokem), vystřihněte ho přesně po obrysu kapsy a vysekněte do něj okno výsečníkem postaveným na vytištěnou kružnici. Šablonu položte na RUB a zarovnejte na osy. Obrys obtáhněte šídlem nebo tužkou, vnitřní hranu okna lehce tužkou. Obrys teď neřežte. Všechno udělejte před navlhčením.',
+        body: 'Kůži otočte. Konce os spojte na rubu tužkou podle pravítka a osy protáhněte až k okrajům kůže. Vezměte šablonu s oknem z lekce 2 v průměru, kterým budete sekat (Ø 20 mm nebo Ø 18 mm, u mince 40 mm Ø 32 mm). Když ji nemáte, vytiskněte na 100 % znovu list Kapsa s mincí a otvor formy, u okna Ø 18 mm list Kapsa – záložní okno Ø 18 mm (u mince 40 mm variantu pro 40 mm; odkaz pod krokem), vystřihněte ho přesně po obrysu kapsy a vysekněte do něj okno výsečníkem postaveným na vytištěnou kružnici. Šablonu položte na RUB a zarovnejte na osy. Obrys obtáhněte šídlem nebo tužkou, vnitřní hranu okna lehce tužkou. Obrys teď neřežte. Všechno udělejte před navlhčením.',
         printLink: 'pattern-sheets',
+        printSheetId: 'kapsa',
         animationLinks: [animationLink('kapsa', 'C1')],
         recalls: [
           { fieldId: 'window-diameter', label: 'Okno, se kterým vám vyšla zkouška v lekci 2' },
@@ -1421,6 +1432,7 @@ export const lessons: readonly LessonDefinition[] = [
         sheetId: 'kapsa',
         copies: 1,
         purpose: 'na značky na líci kapsy (u mince 40 mm varianta pro 40 mm)',
+        paper: 'A4, 100 %',
         condition: 'výtisk na značky nemáte z lekce 2',
       },
       {
@@ -1428,13 +1440,15 @@ export const lessons: readonly LessonDefinition[] = [
         sheetId: 'kapsa',
         copies: 1,
         purpose: 'na šablonu s oknem (u mince 40 mm varianta pro 40 mm)',
-        condition: 'šablonu s oknem nemáte z lekce 2',
+        paper: 'A4, 100 %',
+        condition: 'sekáte okno Ø 20 mm (u mince 40 mm Ø 32 mm) a šablonu s oknem nemáte z lekce 2',
       },
       {
         source: 'pattern-sheets',
         sheetId: 'kapsa-okno-18',
         copies: 1,
         purpose: 'šablona s oknem Ø 18 mm',
+        paper: 'A4, 100 %',
         condition: 'sekáte okno Ø 18 mm a šablonu nemáte z lekce 2',
       },
     ],
@@ -1448,10 +1462,16 @@ export const lessons: readonly LessonDefinition[] = [
       { id: 'form', fromLesson: L2, label: 'Vyvrtaná forma s víkem' },
       { id: 'block', fromLesson: L2, label: 'Špalík pod důlek' },
       {
+        id: 'marks-print',
+        fromLesson: L2,
+        label: 'Výtisk listu KAPSA na značky (s propíchnutými tečkami)',
+        note: 'Když ho nemáte, vytiskněte list znovu (viz Vytisknout).',
+      },
+      {
         id: 'window-template',
         fromLesson: L2,
         label: 'Šablona kapsy s vyseknutým oknem',
-        note: 'Když ji nemáte, vytiskněte list KAPSA znovu (viz Vytisknout).',
+        note: 'Když ji nemáte, vytiskněte list KAPSA znovu, u okna Ø 18 mm list Kapsa – záložní okno Ø 18 mm (viz Vytisknout).',
       },
     ],
     media: [

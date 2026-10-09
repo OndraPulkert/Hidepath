@@ -459,6 +459,7 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
         '6:strip<-05',
         '6:form<-02',
         '6:block<-02',
+        '6:marks-print<-02',
         '6:window-template<-02',
         '7:strip-with-pocket<-06',
         '8:body<-07',

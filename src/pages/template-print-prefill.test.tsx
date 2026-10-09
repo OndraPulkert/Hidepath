@@ -69,9 +69,11 @@ describe('tisk listů Víčka – formulář je jediný zdroj, staré zápisy se
     expect(await savedState(repositories)).toBeNull();
 
     await user.click(screen.getByRole('button', { name: 'Uložit a vygenerovat listy' }));
-    expect(await screen.findByText(/jsou připravené níže a zaškrtnuté k tisku/)).toHaveTextContent(
-      /P1 1,0 · přepážky 0,8 · L1 0,9 · ohyb dna ztenčený na 0,6 · k 1,3/,
-    );
+    expect(
+      await screen.findByText(
+        /jsou vygenerované níže; tiskne se jen to, co je v seznamu listů zaškrtnuté/,
+      ),
+    ).toHaveTextContent(/P1 1,0 · přepážky 0,8 · L1 0,9 · ohyb dna ztenčený na 0,6 · k 1,3/);
     await waitFor(async () =>
       expect(await savedState(repositories)).toEqual({
         form: {
@@ -103,9 +105,11 @@ describe('tisk listů Víčka – formulář je jediný zdroj, staré zápisy se
     ]);
     renderApp(routes.template(lidWalletProject.slug), { repositories });
 
-    expect(await screen.findByText(/jsou připravené níže a zaškrtnuté k tisku/)).toHaveTextContent(
-      /P1 1,0 · přepážky 0,8 · L1 0,9/,
-    );
+    expect(
+      await screen.findByText(
+        /jsou vygenerované níže; tiskne se jen to, co je v seznamu listů zaškrtnuté/,
+      ),
+    ).toHaveTextContent(/P1 1,0 · přepážky 0,8 · L1 0,9/);
     expect(screen.getByLabelText('Přepážka D1, mm')).toHaveValue('0,7');
     expect(screen.queryByText(/Převzato ze zápisníku/)).not.toBeInTheDocument();
     expect(screen.getAllByRole('img', { name: /^List střihu:/ })).toHaveLength(4);

@@ -219,8 +219,8 @@ describe('obsah – pásek: zápisník, „Připravte si“ a destička', () => 
 
   it('destička a listy se volí po řadách: za řadu s „ne“ jen její list', () => {
     const body = step(1, 'plate-or-sheets').body;
-    expect(body).toContain('za řadu 3 použijete list 1 (lekce 2 a 4)');
-    expect(body).toContain('za řadu 1 nebo 2 list 2 (lekce 6)');
+    expect(body).toContain('list 1 za řadu 3 (lekce 2, 3 a 4)');
+    expect(body).toContain('list 2 za řadu 1 nebo 2 (lekce 6)');
     for (const order of [2, 4, 6]) {
       for (const p of lesson(order).prints ?? [])
         expect(p.condition).toContain('kterou list nahrazuje');
