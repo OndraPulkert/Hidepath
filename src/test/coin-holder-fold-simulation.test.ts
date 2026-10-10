@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { DEFAULT_COIN_CARD_HOLDER, SNAP_POST_RADIUS_MM } from '@/lib/geometry/coin-card-holder';
+import {
+  A4_SHEET,
+  DEFAULT_COIN_CARD_HOLDER,
+  SNAP_POST_RADIUS_MM,
+} from '@/lib/geometry/coin-card-holder';
 
 /**
  * Virtuální papírový model: vezme vygenerovaný střih (docs/generated/pouzdro-mince-sablona.svg),
@@ -56,7 +60,7 @@ const W = b0 - a1;
 describe('virtuální složení nakresleného střihu (papírový model v počítači)', () => {
   it('všechny tři panely jsou stejně široké a pás má dva ohyby', () => {
     expect(foldLines.length).toBe(4);
-    expect(a0 - 10).toBeCloseTo(W, 1); // zadní panel od levého okraje listu (10 mm)
+    expect(a0 - A4_SHEET.marginMm).toBeCloseTo(W, 1); // zadní panel od levého okraje listu
     expect(W).toBeGreaterThan(60);
   });
 

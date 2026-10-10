@@ -5,8 +5,11 @@
  * (`src/lib/patterns/belt-config.ts`). Geometrie a kontroly jsou v src/lib/geometry/belt-end.ts;
  * tady se jen kreslí.
  *
- * Výchozí list 2 (hrot, 5 dírek) se kreslí přesně jako dřív – soubory pro 35 a 40 mm hlídá
- * `scripts/generator-golden.test.ts`. Zaoblený konec a list na šířku jsou doplněk.
+ * Všechno nakreslené leží aspoň `SHEET_SAFE_MARGIN_MM` od každé hrany A4: HP DeskJet 2700
+ * má na jedné kratší hraně nepotisknutelný okraj 12,7 mm a list na šířku ji má vlevo nebo
+ * vpravo. Každý prvek si proto nese obdélník, který na listu zabírá (`InkBox`), a test ho
+ * kontroluje pro všechny varianty formuláře. Soubory pro 35 a 40 mm hlídá
+ * `scripts/generator-golden.test.ts`.
  */
 import {
   type BeltEndSpec,
@@ -36,6 +39,109 @@ export const GREY = '#6a6a6a';
 export const f = (n: number): string => (Math.round(n * 1000) / 1000).toString();
 export const cz = (n: number): string => f(n).replace('.', ',');
 
+/**
+ * Nejmenší odstup čehokoli nakresleného od hrany A4 (na výšku i na šířku). HP DeskJet 2700
+ * nepotiskne 12,7 mm u spodní hrany A4 na výšku; na šířku je ta hrana vlevo nebo vpravo.
+ */
+export const SHEET_SAFE_MARGIN_MM = 13;
+
+/** Obdélník, který prvek na listu zabírá, v mm v souřadnicích listu (i s tloušťkou čáry). */
+export interface InkBox {
+  x0: number;
+  y0: number;
+  x1: number;
+  y1: number;
+  kind: 'text' | 'shape' | 'calibration';
+  /** Text, nebo popis tvaru – jen pro hlášení v testu. */
+  label: string;
+}
+
+/** Kus SVG a místo, které na listu zabírá (otevírací a zavírací značky skupiny žádné). */
+interface El {
+  svg: string;
+  box?: InkBox;
+}
+
+const shapeBox = (
+  x0: number,
+  y0: number,
+  x1: number,
+  y1: number,
+  strokeWidth: number,
+  label: string,
+): InkBox => ({
+  x0: Math.min(x0, x1) - strokeWidth / 2,
+  y0: Math.min(y0, y1) - strokeWidth / 2,
+  x1: Math.max(x0, x1) + strokeWidth / 2,
+  y1: Math.max(y0, y1) + strokeWidth / 2,
+  kind: 'shape',
+  label,
+});
+
+/**
+ * Šířky znaků Helvetiky/Arialu (stejné metriky) v tisícinách velikosti písma, z AFM. Písmena
+ * s diakritikou mají šířku základního písmene (kromě í/Í, ty jsou širší než i).
+ */
+const GLYPH_WIDTHS: Record<string, number> = {
+  ' ': 278,
+  '!': 278,
+  '"': 355,
+  '%': 889,
+  '(': 333,
+  ')': 333,
+  '+': 584,
+  ',': 278,
+  '-': 333,
+  '.': 278,
+  '/': 278,
+  ':': 278,
+  ';': 278,
+  '=': 584,
+  '±': 584,
+  '×': 584,
+  '·': 278,
+  Ø: 778,
+  '–': 556,
+  '—': 1000,
+  '„': 333,
+  '“': 333,
+  í: 278,
+  Í: 278,
+  ...Object.fromEntries([...'0123456789'].map((c) => [c, 556])),
+  ...Object.fromEntries(
+    [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].map((c, i) => [
+      c,
+      [
+        667, 667, 722, 722, 667, 611, 778, 722, 278, 500, 667, 556, 833, 722, 778, 667, 778, 722,
+        667, 611, 722, 667, 944, 667, 667, 611,
+      ][i]!,
+    ]),
+  ),
+  ...Object.fromEntries(
+    [...'abcdefghijklmnopqrstuvwxyz'].map((c, i) => [
+      c,
+      [
+        556, 556, 500, 556, 556, 278, 556, 556, 222, 222, 500, 222, 833, 556, 556, 556, 556, 333,
+        500, 278, 556, 500, 722, 500, 500, 500,
+      ][i]!,
+    ]),
+  ),
+};
+
+/** Šířka textu v mm. Neznámý znak bere jako široký; 4 % rezerva na jiné vykreslení písma. */
+export function textWidthMm(s: string, size: number): number {
+  let units = 0;
+  for (const ch of s) {
+    const base = ch.normalize('NFD').replace(/\p{M}/gu, '');
+    units += GLYPH_WIDTHS[ch] ?? GLYPH_WIDTHS[base] ?? 1000;
+  }
+  return (units / 1000) * size * 1.04;
+}
+
+/** Svislý rozsah písma s rezervou (getBBox v Chrome dává nad účařím až ~1,02, pod ním ~0,27). */
+const ASCENT = 1.05;
+const DESCENT = 0.3;
+
 const text = (
   x: number,
   y: number,
@@ -43,43 +149,108 @@ const text = (
   size = 3.2,
   color = INK,
   anchor: 'start' | 'end' | 'middle' = 'start',
-): string =>
-  `<text x="${f(x)}" y="${f(y)}" font-family="Helvetica, Arial, sans-serif" font-size="${f(size)}" ` +
-  `fill="${color}" text-anchor="${anchor}">${s}</text>`;
+): El => {
+  const w = textWidthMm(s, size);
+  const x0 = anchor === 'start' ? x : anchor === 'end' ? x - w : x - w / 2;
+  return {
+    svg:
+      `<text x="${f(x)}" y="${f(y)}" font-family="Helvetica, Arial, sans-serif" font-size="${f(size)}" ` +
+      `fill="${color}" text-anchor="${anchor}">${s}</text>`,
+    box: { x0, y0: y - ASCENT * size, x1: x0 + w, y1: y + DESCENT * size, kind: 'text', label: s },
+  };
+};
 
-const cross = (cx: number, cy: number, r: number, color = INK): string =>
-  `<path d="M${f(cx - r * 1.3)} ${f(cy)} H${f(cx + r * 1.3)} M${f(cx)} ${f(cy - r * 1.3)} V${f(cy + r * 1.3)}" stroke="${color}" stroke-width="0.2" fill="none"/>`;
+/** Text otočený o −90° kolem (x, y), na střed: čte se zdola nahoru. */
+const textUp = (x: number, y: number, s: string, size: number, color: string): El => {
+  const w = textWidthMm(s, size);
+  return {
+    svg:
+      `<text x="${f(x)}" y="${f(y)}" transform="rotate(-90 ${f(x)} ${f(y)})" ` +
+      `font-family="Helvetica, Arial, sans-serif" font-size="${f(size)}" fill="${color}" text-anchor="middle">${s}</text>`,
+    box: {
+      x0: x - ASCENT * size,
+      y0: y - w / 2,
+      x1: x + DESCENT * size,
+      y1: y + w / 2,
+      kind: 'text',
+      label: s,
+    },
+  };
+};
 
-const hole = (cx: number, cy: number, d: number, color = INK, sw = 0.3): string =>
-  `<circle cx="${f(cx)}" cy="${f(cy)}" r="${f(d / 2)}" fill="none" stroke="${color}" stroke-width="${f(sw)}"/>` +
-  cross(cx, cy, d / 2, color);
+const cross = (cx: number, cy: number, r: number, color = INK): El => ({
+  svg: `<path d="M${f(cx - r * 1.3)} ${f(cy)} H${f(cx + r * 1.3)} M${f(cx)} ${f(cy - r * 1.3)} V${f(cy + r * 1.3)}" stroke="${color}" stroke-width="0.2" fill="none"/>`,
+  box: shapeBox(cx - r * 1.3, cy - r * 1.3, cx + r * 1.3, cy + r * 1.3, 0.2, 'křížek'),
+});
 
-const centreLine = (cx: number, y1: number, y2: number): string =>
-  `<line x1="${f(cx)}" y1="${f(y1)}" x2="${f(cx)}" y2="${f(y2)}" stroke="#b8b8b8" stroke-width="0.1" stroke-dasharray="3 3"/>`;
+const hole = (cx: number, cy: number, d: number, color = INK, sw = 0.3): El => {
+  const r = d / 2;
+  const ext = Math.max(r + sw / 2, r * 1.3 + 0.1);
+  return {
+    svg:
+      `<circle cx="${f(cx)}" cy="${f(cy)}" r="${f(r)}" fill="none" stroke="${color}" stroke-width="${f(sw)}"/>` +
+      cross(cx, cy, r, color).svg,
+    box: shapeBox(cx - ext, cy - ext, cx + ext, cy + ext, 0, 'otvor'),
+  };
+};
 
-function dimension(x: number, y1: number, y2: number, color = GREEN): string {
-  return (
-    `<line x1="${f(x)}" y1="${f(y1)}" x2="${f(x)}" y2="${f(y2)}" stroke="${color}" stroke-width="0.3"/>` +
-    [y1, y2]
-      .map(
-        (y) =>
-          `<line x1="${f(x - 2)}" y1="${f(y)}" x2="${f(x + 2)}" y2="${f(y)}" stroke="${color}" stroke-width="0.3"/>`,
-      )
-      .join('')
-  );
+const centreLine = (cx: number, y1: number, y2: number): El => ({
+  svg: `<line x1="${f(cx)}" y1="${f(y1)}" x2="${f(cx)}" y2="${f(y2)}" stroke="#b8b8b8" stroke-width="0.1" stroke-dasharray="3 3"/>`,
+  box: shapeBox(cx, y1, cx, y2, 0.1, 'osa'),
+});
+
+function dimension(x: number, y1: number, y2: number, color = GREEN): El {
+  return {
+    svg:
+      `<line x1="${f(x)}" y1="${f(y1)}" x2="${f(x)}" y2="${f(y2)}" stroke="${color}" stroke-width="0.3"/>` +
+      [y1, y2]
+        .map(
+          (y) =>
+            `<line x1="${f(x - 2)}" y1="${f(y)}" x2="${f(x + 2)}" y2="${f(y)}" stroke="${color}" stroke-width="0.3"/>`,
+        )
+        .join(''),
+    box: shapeBox(x - 2, y1, x + 2, y2, 0.3, 'kóta'),
+  };
 }
 
-function calibration(x: number, y: number): string[] {
+/** Vodorovná kóta (list na šířku). */
+function dimensionH(y: number, x1: number, x2: number, color = GREEN): El {
+  return {
+    svg:
+      `<line x1="${f(x1)}" y1="${f(y)}" x2="${f(x2)}" y2="${f(y)}" stroke="${color}" stroke-width="0.3"/>` +
+      [x1, x2]
+        .map(
+          (x) =>
+            `<line x1="${f(x)}" y1="${f(y - 2)}" x2="${f(x)}" y2="${f(y + 2)}" stroke="${color}" stroke-width="0.3"/>`,
+        )
+        .join(''),
+    box: shapeBox(x1, y - 2, x2, y + 2, 0.3, 'kóta'),
+  };
+}
+
+/** Kalibrační čtverec 50 × 50 mm s levým horním rohem v (x, y); popis 2 řádky nad ním. */
+function calibration(x: number, y: number): El[] {
   return [
     text(x, y - 6, 'KALIBRAČNÍ ČTVEREC', 3, RED),
     text(x, y - 2, 'po vytištění přeměřte 50 × 50 mm', 3, RED),
-    `<rect x="${f(x)}" y="${f(y)}" width="50" height="50" fill="none" stroke="${RED}" stroke-width="0.4"/>`,
+    {
+      svg: `<rect x="${f(x)}" y="${f(y)}" width="50" height="50" fill="none" stroke="${RED}" stroke-width="0.4"/>`,
+      box: { ...shapeBox(x, y, x + 50, y + 50, 0.4, 'kalibrační čtverec'), kind: 'calibration' },
+    },
   ];
 }
 
-function notes(x: number, y0: number, lines: string[]): string[] {
-  return lines.map((l, i) => text(x, y0 + i * 4.2, l, 3));
+const LINE_MM = 4.2;
+
+function notes(x: number, y0: number, lines: string[]): El[] {
+  return lines.map((l, i) => text(x, y0 + i * LINE_MM, l, 3));
 }
+
+/** Záhlaví listu: účaří nadpisu a podtitulu (horní hrana nadpisu 13,7 mm od hrany listu). */
+const TITLE_Y_MM = 18;
+const SUBTITLE_Y_MM = 24;
+/** Kalibrační čtverec na výšku: vpravo nahoře, pravá hrana 13,8 mm od hrany listu. */
+const PORTRAIT_CALIBRATION = { x: 146, y: 24 } as const;
 
 /* -------------------------- strana 1: konec u přezky -------------------------- */
 
@@ -89,45 +260,52 @@ function notes(x: number, y0: number, lines: string[]): string[] {
  */
 const BEND_PRICK_MM = 2;
 const BEND_PRICK_INSET_MM = 2;
+/** Poloha listu 1: levá hrana pásu a čára ohybu (90 mm pásu nad ní, konec 90 mm pod ní). */
+export const BUCKLE_STRAP_X_MM = 22;
+export const BUCKLE_FOLD_Y_MM = 126;
 
-function buckleEndPage(spec: BeltEndSpec): string[] {
-  const strapX = 22;
+function buckleEndPage(spec: BeltEndSpec): El[] {
+  const strapX = BUCKLE_STRAP_X_MM;
   const w = spec.beltWidthMm;
   const r = w / 2;
   const cx = strapX + r;
-  const foldY = 132;
+  const foldY = BUCKLE_FOLD_Y_MM;
   const topY = foldY - spec.bodyShownMm;
   const endY = foldY + spec.tailLengthMm;
   const textX = strapX + w + 14;
   const [near, far] = spec.rivetOffsetsMm;
-  const out: string[] = [];
+  const out: El[] = [];
 
-  out.push(text(strapX, 16, `Opasek ${cz(w)} mm — strana 1: konec u přezky`, 4.6));
+  out.push(text(strapX, TITLE_Y_MM, `Opasek ${cz(w)} mm — strana 1: konec u přezky`, 4.6));
   out.push(
     text(
       strapX,
-      22,
+      SUBTITLE_Y_MM,
       'Měřítko 1:1 · tisk na A4 na 100 %, bez „přizpůsobit stránce“ · 4 otvory = 2 nýty',
       3,
       GREY,
     ),
   );
-  out.push(...calibration(150, 30));
+  out.push(...calibration(PORTRAIT_CALIBRATION.x, PORTRAIT_CALIBRATION.y));
 
   // Obrys: nahoře otevřený, dole rovný konec.
   // Rovný, ne zaoblený: kupovaný pás má konec už seříznutý na kolmo, zaoblovat
   // skrytý konec je práce navíc – a destička (`--multi`) používá právě tuhle rovnou
   // hranu jako referenci. CraftPoint má konec také rovný (ověřeno měřením jejich PDF).
-  out.push(
-    `<path d="M${f(strapX)} ${f(topY)} L${f(strapX)} ${f(endY)} ` +
+  out.push({
+    svg:
+      `<path d="M${f(strapX)} ${f(topY)} L${f(strapX)} ${f(endY)} ` +
       `L${f(strapX + w)} ${f(endY)} L${f(strapX + w)} ${f(topY)}" ` +
       `fill="none" stroke="${INK}" stroke-width="0.3"/>`,
-  );
+    box: shapeBox(strapX, topY, strapX + w, endY, 0.3, 'obrys pásu'),
+  });
   out.push(centreLine(cx, topY, endY));
-  out.push(
-    `<line x1="${f(strapX - 6)}" y1="${f(foldY)}" x2="${f(strapX + w + 6)}" y2="${f(foldY)}" ` +
+  out.push({
+    svg:
+      `<line x1="${f(strapX - 6)}" y1="${f(foldY)}" x2="${f(strapX + w + 6)}" y2="${f(foldY)}" ` +
       `stroke="${RED}" stroke-width="0.4" stroke-dasharray="4 2.5"/>`,
-  );
+    box: shapeBox(strapX - 6, foldY, strapX + w + 6, foldY, 0.4, 'čára ohybu'),
+  });
   // Značky ohybu k propíchnutí: na čáře ohybu u obou hran pásu. List se stříhá po obrysu,
   // značka přímo na hraně by se odstřihla (a čárkovaná čára tam může mít mezeru).
   for (const x of [strapX + BEND_PRICK_INSET_MM, strapX + w - BEND_PRICK_INSET_MM]) {
@@ -137,21 +315,26 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
   // Ovál pro trn: stadion půlený ohybem.
   const half = spec.slotLengthMm / 2;
   const sr = spec.slotWidthMm / 2;
-  out.push(
-    `<path d="M${f(cx - sr)} ${f(foldY - half + sr)} A${f(sr)} ${f(sr)} 0 0 1 ${f(cx + sr)} ${f(foldY - half + sr)} ` +
+  out.push({
+    svg:
+      `<path d="M${f(cx - sr)} ${f(foldY - half + sr)} A${f(sr)} ${f(sr)} 0 0 1 ${f(cx + sr)} ${f(foldY - half + sr)} ` +
       `L${f(cx + sr)} ${f(foldY + half - sr)} A${f(sr)} ${f(sr)} 0 0 1 ${f(cx - sr)} ${f(foldY + half - sr)} Z" ` +
       `fill="none" stroke="${INK}" stroke-width="0.3"/>`,
-  );
+    box: shapeBox(cx - sr, foldY - half, cx + sr, foldY + half, 0.3, 'ovál'),
+  });
   for (const sign of [-1, 1]) out.push(cross(cx, foldY + sign * (half - sr), sr));
 
   // Čtyři otvory pro nýty. Propichuje se jen první dvojice (u konce pásu, pod ohybem): druhá
   // se značí až po ohnutí skrz vyseknutou první, proto je šedá, čárkovaná a bez křížku.
   for (const off of spec.rivetOffsetsMm) {
     out.push(hole(cx, foldY + off, spec.rivetHoleMm));
-    out.push(
-      `<circle cx="${f(cx)}" cy="${f(foldY - off)}" r="${f(spec.rivetHoleMm / 2)}" fill="none" ` +
+    const rr = spec.rivetHoleMm / 2;
+    out.push({
+      svg:
+        `<circle cx="${f(cx)}" cy="${f(foldY - off)}" r="${f(rr)}" fill="none" ` +
         `stroke="${GREY}" stroke-width="0.3" stroke-dasharray="1 0.8"/>`,
-    );
+      box: shapeBox(cx - rr, foldY - off - rr, cx + rr, foldY - off + rr, 0.3, 'šedý otvor'),
+    });
   }
 
   out.push(dimension(strapX + w + 4, foldY + near, foldY + far));
@@ -185,8 +368,8 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
   );
   out.push(text(strapX, topY - 3, 'sem pokračuje hlavní pás (nahoře neřezat)', 3, GREY));
 
-  // Poutko.
-  const keeperY = 232;
+  // Poutko: 10 mm pod koncem pásu (popis nad páskem nesmí sáhnout na obrys).
+  const keeperY = endY + 10;
   const len = keeperStripLengthMm(spec);
   out.push(
     text(
@@ -216,24 +399,29 @@ function buckleEndPage(spec: BeltEndSpec): string[] {
       const yb = keeperY + Math.max(0, k - ov);
       d += `M${f(xa)} ${f(ya)} L${f(xb)} ${f(yb)} `;
     }
-    out.push(`<path d="${d.trim()}" stroke="${GREY}" stroke-width="0.2" fill="none"/>`);
+    out.push({
+      svg: `<path d="${d.trim()}" stroke="${GREY}" stroke-width="0.2" fill="none"/>`,
+      box: shapeBox(x0, keeperY, x0 + ov, keeperY + spec.keeperWidthMm, 0.2, 'šrafy'),
+    });
   }
-  out.push(
-    `<rect x="${f(strapX)}" y="${f(keeperY)}" width="${f(len)}" height="${f(spec.keeperWidthMm)}" fill="none" stroke="${INK}" stroke-width="0.3"/>`,
-  );
+  out.push({
+    svg: `<rect x="${f(strapX)}" y="${f(keeperY)}" width="${f(len)}" height="${f(spec.keeperWidthMm)}" fill="none" stroke="${INK}" stroke-width="0.3"/>`,
+    box: shapeBox(strapX, keeperY, strapX + len, keeperY + spec.keeperWidthMm, 0.3, 'poutko'),
+  });
   out.push(text(strapX + len + 3, keeperY + 5, `šrafy: přeplátování ${ov} mm`, 2.8, GREY));
   out.push(text(strapX + len + 3, keeperY + 9.5, 'vlevo na líci, vpravo na rubu', 2.8, GREY));
   for (let mm = 0; mm <= len; mm += 10) {
-    out.push(
-      `<line x1="${f(strapX + mm)}" y1="${f(keeperY + spec.keeperWidthMm)}" x2="${f(strapX + mm)}" y2="${f(keeperY + spec.keeperWidthMm + 2)}" stroke="#7a7a7a" stroke-width="0.2"/>`,
-    );
-    out.push(
-      `<text x="${f(strapX + mm)}" y="${f(keeperY + spec.keeperWidthMm + 5.2)}" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">${mm}</text>`,
-    );
+    const x = strapX + mm;
+    const tickY = keeperY + spec.keeperWidthMm;
+    out.push({
+      svg: `<line x1="${f(x)}" y1="${f(tickY)}" x2="${f(x)}" y2="${f(tickY + 2)}" stroke="#7a7a7a" stroke-width="0.2"/>`,
+      box: shapeBox(x, tickY, x, tickY + 2, 0.2, 'stupnice'),
+    });
+    out.push(text(x, tickY + 5.2, String(mm), 2.6, '#7a7a7a', 'middle'));
   }
 
   out.push(
-    ...notes(strapX, 258, [
+    ...notes(strapX, keeperY + spec.keeperWidthMm + 10 + LINE_MM, [
       '1. Na rub pásu propíchněte 2 černé otvory u konce, oba křížky oválu a 2 červené kroužky ohybu.',
       `2. Vysekněte Ø ${cz(spec.rivetHoleMm)} mm oba otvory a konce oválu, boky oválu řízněte nožem.`,
       '   Kroužky ohybu nesekejte: spojte je na rubu pravítkem, to je čára ohybu.',
@@ -256,19 +444,29 @@ function holesWord(n: number): string {
   return `${n} dírek`;
 }
 
-/** Poloha listu 2 na výšku: vrchol 45 mm od horní hrany, pás končí 12 mm za poslední dírkou. */
-const PORTRAIT_APEX_Y = 45;
+/**
+ * Poloha listu 2 na výšku: levá hrana pásu (vlevo od ní svislá kóta s popisem), vrchol 32 mm
+ * od horní hrany, pás končí 12 mm za poslední dírkou.
+ */
+const PORTRAIT_STRAP_X = 26;
+const PORTRAIT_APEX_Y = 32;
 const STRAP_PAST_LAST_HOLE_MM = 12;
 /** Poznámky pod pásem: 8 řádků po 4,2 mm, první 10 mm pod koncem pásu. */
 const TIP_NOTES_LINES = 8;
-const LINE_MM = 4.2;
-/** Nejnižší účaří textu na A4, které ještě vytiskne běžná tiskárna (okraj ~5 mm). */
-const PORTRAIT_LAST_BASELINE_MM = 292;
-/** List na šířku: levý okraj, kde začíná pás, a nejpravější místo pro vrchol. */
-const LANDSCAPE_LEFT_MM = 15;
-const LANDSCAPE_APEX_MAX_MM = 285;
-/** Osa pásu na listu na šířku: pás 45 mm končí 3 mm nad popisem kalibračního čtverce. */
-const LANDSCAPE_AXIS_Y_MM = 112;
+/** Nejnižší účaří textu 3 mm, jehož spodek ještě leží v bezpečné ploše listu na výšku. */
+const PORTRAIT_LAST_BASELINE_MM = 283;
+/**
+ * List na šířku: levý okraj, kde začíná pás, a nejpravější místo pro vrchol (obojí s čárou
+ * uvnitř bezpečné plochy 13 mm).
+ */
+const LANDSCAPE_LEFT_MM = 13.5;
+const LANDSCAPE_APEX_MAX_MM = 283.5;
+/** Osa pásu na listu na šířku: pás 45 mm končí 3,5 mm nad popisem kalibračního čtverce. */
+const LANDSCAPE_AXIS_Y_MM = 111.5;
+/** Kalibrační čtverec na šířku: vpravo dole, spodní hrana 13,3 mm od hrany listu. */
+const LANDSCAPE_CALIBRATION = { x: 232, y: 146.5 } as const;
+/** Poznámky na šířku: první účaří (8 řádků, poslední 189,4 mm). */
+const LANDSCAPE_NOTES_Y_MM = 160;
 /** Nejmenší svislá mezera mezi popisem rozteče a popisem prostřední dírky (list na výšku). */
 const SPACING_LABEL_CLEARANCE_MM = 6;
 
@@ -315,31 +513,61 @@ function tipOutlinePath(
   strapX: number,
   apexY: number,
   strapEndY: number,
-): string {
+): El {
   const w = tip.beltWidthMm;
   const cx = strapX + w / 2;
+  const box = shapeBox(strapX, apexY, strapX + w, strapEndY, 0.3, 'obrys konce');
   if (shape === 'round') {
     // Půlkruh r = w/2 tečný k oběma bokům: boky končí na výšce středu oblouku.
     const r = w / 2;
-    return (
-      `<path d="M${f(strapX)} ${f(strapEndY)} L${f(strapX)} ${f(apexY + r)} ` +
-      `A${f(r)} ${f(r)} 0 0 1 ${f(strapX + w)} ${f(apexY + r)} ` +
-      `L${f(strapX + w)} ${f(strapEndY)}" ` +
-      `fill="none" stroke="${INK}" stroke-width="0.3"/>`
-    );
+    return {
+      svg:
+        `<path d="M${f(strapX)} ${f(strapEndY)} L${f(strapX)} ${f(apexY + r)} ` +
+        `A${f(r)} ${f(r)} 0 0 1 ${f(strapX + w)} ${f(apexY + r)} ` +
+        `L${f(strapX + w)} ${f(strapEndY)}" ` +
+        `fill="none" stroke="${INK}" stroke-width="0.3"/>`,
+      box,
+    };
   }
   // Vrchol je zaoblený obloukem r; boky jsou na oblouk tečné (viz tipTangentPoint).
   const baseY = apexY + tipLengthMm(tip);
   const tan = tipTangentPoint(tip);
   const r = tip.noseRadiusMm;
   const tanY = apexY + tan.fromApexMm;
-  return (
-    `<path d="M${f(strapX)} ${f(strapEndY)} L${f(strapX)} ${f(baseY)} ` +
-    `L${f(cx - tan.halfWidthMm)} ${f(tanY)} ` +
-    `A${f(r)} ${f(r)} 0 0 1 ${f(cx + tan.halfWidthMm)} ${f(tanY)} ` +
-    `L${f(strapX + w)} ${f(baseY)} L${f(strapX + w)} ${f(strapEndY)}" ` +
-    `fill="none" stroke="${INK}" stroke-width="0.3"/>`
-  );
+  return {
+    svg:
+      `<path d="M${f(strapX)} ${f(strapEndY)} L${f(strapX)} ${f(baseY)} ` +
+      `L${f(cx - tan.halfWidthMm)} ${f(tanY)} ` +
+      `A${f(r)} ${f(r)} 0 0 1 ${f(cx + tan.halfWidthMm)} ${f(tanY)} ` +
+      `L${f(strapX + w)} ${f(baseY)} L${f(strapX + w)} ${f(strapEndY)}" ` +
+      `fill="none" stroke="${INK}" stroke-width="0.3"/>`,
+    box,
+  };
+}
+
+/**
+ * Prvky nakreslené v souřadnicích listu na výšku (vrchol v počátku, pás ve směru +y), otočené
+ * o 90° a posunuté tak, že vrchol je v (apexX, cy) a pás pokračuje doleva.
+ */
+function rotatedStrap(apexX: number, cy: number, local: El[]): El[] {
+  return [
+    { svg: `<g transform="translate(${f(apexX)} ${f(cy)}) rotate(90)">` },
+    ...local.map((el): El =>
+      el.box
+        ? {
+            svg: el.svg,
+            box: {
+              ...el.box,
+              x0: apexX - el.box.y1,
+              x1: apexX - el.box.y0,
+              y0: cy + el.box.x0,
+              y1: cy + el.box.x1,
+            },
+          }
+        : el,
+    ),
+    { svg: '</g>' },
+  ];
 }
 
 /** Popis tvaru konce do poznámek. */
@@ -370,8 +598,8 @@ function tipNotes(tip: BeltTipSpec, end: BeltEndSpec, shape: BeltTipShape): stri
   ];
 }
 
-function tipPage(tip: BeltTipSpec, end: BeltEndSpec, shape: BeltTipShape = 'point'): string[] {
-  const strapX = 22;
+function tipPage(tip: BeltTipSpec, end: BeltEndSpec, shape: BeltTipShape = 'point'): El[] {
+  const strapX = PORTRAIT_STRAP_X;
   const w = tip.beltWidthMm;
   const cx = strapX + w / 2;
   const apexY = PORTRAIT_APEX_Y;
@@ -379,15 +607,17 @@ function tipPage(tip: BeltTipSpec, end: BeltEndSpec, shape: BeltTipShape = 'poin
   const offsets = holeOffsetsFromApexMm(tip);
   const lastY = apexY + offsets[offsets.length - 1]!;
   const strapEndY = lastY + STRAP_PAST_LAST_HOLE_MM;
-  const textX = strapX + w + 14;
+  // Popisy 12 mm za hranou pásu (6 mm za kótou rozteče): u pásu 45 mm tak popis vrcholu
+  // nesáhne na kalibrační čtverec.
+  const textX = strapX + w + 12;
   const mid = middleHoleIndex(tip);
   const midY = apexY + offsets[mid]!;
-  const out: string[] = [];
+  const out: El[] = [];
 
   out.push(
     text(
       strapX,
-      16,
+      TITLE_Y_MM,
       `Opasek ${cz(w)} mm — strana 2: ${shape === 'round' ? 'zaoblený konec' : 'konec se špičkou'}`,
       4.6,
     ),
@@ -395,13 +625,13 @@ function tipPage(tip: BeltTipSpec, end: BeltEndSpec, shape: BeltTipShape = 'poin
   out.push(
     text(
       strapX,
-      22,
+      SUBTITLE_Y_MM,
       'Měřítko 1:1 · tisk na A4 na 100 % · rozvržení nezávisí na obvodu pasu',
       3,
       GREY,
     ),
   );
-  out.push(...calibration(150, 30));
+  out.push(...calibration(PORTRAIT_CALIBRATION.x, PORTRAIT_CALIBRATION.y));
 
   // Obrys konce, dole otevřený.
   out.push(tipOutlinePath(tip, shape, strapX, apexY, strapEndY));
@@ -413,18 +643,9 @@ function tipPage(tip: BeltTipSpec, end: BeltEndSpec, shape: BeltTipShape = 'poin
     out.push(hole(cx, y, tip.holeDiameterMm, isMid ? RED : INK, isMid ? 0.5 : 0.3));
   });
 
-  // Kóty.
+  // Kóty. Popis kóty vrchol → první dírka je svisle vlevo od ní (vodorovný by vyjel z listu).
   out.push(dimension(strapX - 6, apexY, apexY + offsets[0]!, GREEN));
-  // Popis kóty svisle podél ní: zarovnaný doprava na x = 13 začínal na 1,4 mm a tiskárna
-  // (nepotisknutelný okraj 3–6 mm) ho ořízla. Otočený zabere jen x ≈ 10–13,6 mm.
-  {
-    const lx = strapX - 9;
-    const ly = (2 * apexY + offsets[0]!) / 2;
-    out.push(
-      `<text x="${f(lx)}" y="${f(ly)}" transform="rotate(-90 ${f(lx)} ${f(ly)})" ` +
-        `font-family="Helvetica, Arial, sans-serif" font-size="3" fill="${GREEN}" text-anchor="middle">${cz(offsets[0]!)} mm</text>`,
-    );
-  }
+  out.push(textUp(strapX - 9.2, (2 * apexY + offsets[0]!) / 2, `${cz(offsets[0]!)} mm`, 3, GREEN));
   if (offsets.length > 1) {
     out.push(dimension(strapX + w + 4, apexY + offsets[0]!, apexY + offsets[1]!, GREEN));
   }
@@ -445,7 +666,7 @@ function tipPage(tip: BeltTipSpec, end: BeltEndSpec, shape: BeltTipShape = 'poin
   }
   if (offsets.length > 1) {
     // Mezi první a druhou dírkou; když by se srazil s popisem prostřední dírky (3 dírky
-    // s malou roztečí), jde nad první dírku. Výchozí listy se nemění.
+    // s malou roztečí), jde nad první dírku.
     const between = apexY + (offsets[0]! + offsets[1]!) / 2;
     const clash = midY - 3 - between < SPACING_LABEL_CLEARANCE_MM;
     out.push(
@@ -483,25 +704,12 @@ function tipPage(tip: BeltTipSpec, end: BeltEndSpec, shape: BeltTipShape = 'poin
   return out;
 }
 
-/** Vodorovná kóta (list na šířku). */
-function dimensionH(y: number, x1: number, x2: number, color = GREEN): string {
-  return (
-    `<line x1="${f(x1)}" y1="${f(y)}" x2="${f(x2)}" y2="${f(y)}" stroke="${color}" stroke-width="0.3"/>` +
-    [x1, x2]
-      .map(
-        (x) =>
-          `<line x1="${f(x)}" y1="${f(y - 2)}" x2="${f(x)}" y2="${f(y + 2)}" stroke="${color}" stroke-width="0.3"/>`,
-      )
-      .join('')
-  );
-}
-
 /**
  * List 2 na šířku, když se dírky na výšku nevejdou (např. 7 dírek: pás by končil za spodní
  * hranou A4). Geometrie je stejná jako na výšku, jen otočená o 90° kolem vrcholu: vrchol
  * vpravo, pás pokračuje doleva. Text se neotáčí.
  */
-function tipPageLandscape(tip: BeltTipSpec, end: BeltEndSpec, shape: BeltTipShape): string[] {
+function tipPageLandscape(tip: BeltTipSpec, end: BeltEndSpec, shape: BeltTipShape): El[] {
   const w = tip.beltWidthMm;
   const half = w / 2;
   const offsets = holeOffsetsFromApexMm(tip);
@@ -514,12 +722,12 @@ function tipPageLandscape(tip: BeltTipSpec, end: BeltEndSpec, shape: BeltTipShap
   const bottom = cy + half;
   const mid = middleHoleIndex(tip);
   const xOf = (fromApex: number): number => apexX - fromApex;
-  const out: string[] = [];
+  const out: El[] = [];
 
   out.push(
     text(
       LANDSCAPE_LEFT_MM,
-      16,
+      TITLE_Y_MM,
       `Opasek ${cz(w)} mm — strana 2: ${shape === 'round' ? 'zaoblený konec' : 'konec se špičkou'}`,
       4.6,
     ),
@@ -527,24 +735,23 @@ function tipPageLandscape(tip: BeltTipSpec, end: BeltEndSpec, shape: BeltTipShap
   out.push(
     text(
       LANDSCAPE_LEFT_MM,
-      22,
+      SUBTITLE_Y_MM,
       'Měřítko 1:1 · tisk na A4 na šířku na 100 % · rozvržení nezávisí na obvodu pasu',
       3,
       GREY,
     ),
   );
   // Vpravo dole: nahoře by se srazil s popisem tvaru konce nad širokým pásem.
-  out.push(...calibration(232, 150));
+  out.push(...calibration(LANDSCAPE_CALIBRATION.x, LANDSCAPE_CALIBRATION.y));
 
-  // Geometrie v souřadnicích listu na výšku (vrchol v počátku, pás ve směru +y), otočená.
-  const local: string[] = [];
+  const local: El[] = [];
   local.push(tipOutlinePath(tip, shape, -half, 0, strapLen));
   local.push(centreLine(0, 0, strapLen));
   offsets.forEach((off, i) => {
     const isMid = i === mid;
     local.push(hole(0, off, tip.holeDiameterMm, isMid ? RED : INK, isMid ? 0.5 : 0.3));
   });
-  out.push(`<g transform="translate(${f(apexX)} ${f(cy)}) rotate(90)">`, ...local, '</g>');
+  out.push(...rotatedStrap(apexX, cy, local));
 
   // Kóty nad pásem: vrchol → první dírka, a rozteč mezi dvěma posledními dírkami.
   const dimY = top - 6;
@@ -589,7 +796,7 @@ function tipPageLandscape(tip: BeltTipSpec, end: BeltEndSpec, shape: BeltTipShap
   );
 
   out.push(
-    ...notes(LANDSCAPE_LEFT_MM, 160, [
+    ...notes(LANDSCAPE_LEFT_MM, LANDSCAPE_NOTES_Y_MM, [
       ...tipNotes(tip, end, shape).slice(0, 7),
       `Poslední dírka ${cz(reach)} mm ${fromEnd(shape)}. List je na šířku, protože se dírky na výšku nevejdou.`,
     ]),
@@ -608,7 +815,7 @@ function tipPageSplit(
   end: BeltEndSpec,
   shape: BeltTipShape,
   part: 'a' | 'b',
-): string[] {
+): El[] {
   const w = tip.beltWidthMm;
   const half = w / 2;
   const offsets = holeOffsetsFromApexMm(tip);
@@ -627,13 +834,13 @@ function tipPageSplit(
   const shown = offsets
     .map((off, i) => ({ off, i }))
     .filter(({ i }) => (part === 'a' ? i <= mid : i >= mid));
-  const out: string[] = [];
+  const out: El[] = [];
 
   const endName = shape === 'round' ? 'zaoblený konec' : 'konec se špičkou';
   out.push(
     text(
       LANDSCAPE_LEFT_MM,
-      16,
+      TITLE_Y_MM,
       part === 'a'
         ? `Opasek ${cz(w)} mm — strana 2a: ${endName} a dírky k prostřední`
         : `Opasek ${cz(w)} mm — strana 2b: prostřední a zbylé dírky`,
@@ -643,29 +850,31 @@ function tipPageSplit(
   out.push(
     text(
       LANDSCAPE_LEFT_MM,
-      22,
+      SUBTITLE_Y_MM,
       'Měřítko 1:1 · tisk na A4 na šířku na 100 % · list 2 je na dvou listech, 2a a 2b',
       3,
       GREY,
     ),
   );
-  out.push(...calibration(232, 150));
+  out.push(...calibration(LANDSCAPE_CALIBRATION.x, LANDSCAPE_CALIBRATION.y));
 
-  const local: string[] = [];
+  const local: El[] = [];
   if (part === 'a') {
     local.push(tipOutlinePath(tip, shape, -half, 0, to));
   } else {
-    local.push(
-      `<path d="M${f(-half)} ${f(from)} L${f(-half)} ${f(to)} M${f(half)} ${f(from)} L${f(half)} ${f(to)}" ` +
+    local.push({
+      svg:
+        `<path d="M${f(-half)} ${f(from)} L${f(-half)} ${f(to)} M${f(half)} ${f(from)} L${f(half)} ${f(to)}" ` +
         `fill="none" stroke="${INK}" stroke-width="0.3"/>`,
-    );
+      box: shapeBox(-half, from, half, to, 0.3, 'boky pásu'),
+    });
   }
   local.push(centreLine(0, from, to));
   for (const { off, i } of shown) {
     const isMid = i === mid;
     local.push(hole(0, off, tip.holeDiameterMm, isMid ? RED : INK, isMid ? 0.5 : 0.3));
   }
-  out.push(`<g transform="translate(${f(apexX)} ${f(cy)}) rotate(90)">`, ...local, '</g>');
+  out.push(...rotatedStrap(apexX, cy, local));
 
   // Kóty nad pásem: 2a vrchol → první dírka a rozteč u prostřední, 2b rozteč za prostřední.
   const dimY = top - 6;
@@ -728,7 +937,7 @@ function tipPageSplit(
   out.push(
     ...notes(
       LANDSCAPE_LEFT_MM,
-      160,
+      LANDSCAPE_NOTES_Y_MM,
       part === 'a'
         ? [all[0]!, all[1]!, all[2]!, all[3]!, all[6]!, twoSheets, howTo]
         : [
@@ -743,22 +952,17 @@ function tipPageSplit(
   return out;
 }
 
-function page(body: string[], orientation: 'portrait' | 'landscape' = 'portrait'): string {
-  const [w, h] = orientation === 'portrait' ? [210, 297] : [297, 210];
+const a4 = (o: 'portrait' | 'landscape') =>
+  o === 'portrait' ? { widthMm: 210, heightMm: 297 } : { widthMm: 297, heightMm: 210 };
+
+function page(body: El[], orientation: 'portrait' | 'landscape' = 'portrait'): string {
+  const { widthMm: w, heightMm: h } = a4(orientation);
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${w}mm" height="${h}mm" viewBox="0 0 ${w} ${h}">`,
     `<rect width="${w}" height="${h}" fill="#ffffff"/>`,
-    ...body,
+    ...body.map((el) => el.svg),
     '</svg>',
   ].join('\n');
-}
-
-/**
- * Oba listy (bez XML prologu) pro konec se špičkou na výšku – přesně to, co generátor zapisuje
- * do `opasek-sablona-<šířka>mm-1-prezka.svg` a `-2-spicka.svg`.
- */
-export function buildPages(end: BeltEndSpec, tip: BeltTipSpec): [string, string] {
-  return [page(buckleEndPage(end)), page(tipPage(tip, end))];
 }
 
 /** Id listů opasku v obsahu projektu (`patternSheets`) i ve vygenerované skupině. */
@@ -778,33 +982,26 @@ export interface BeltSheet {
   svg: string;
 }
 
-/**
- * Oba listy pro libovolnou platnou kombinaci (šířka, tloušťka, tvar konce, dírky). List 2
- * je na výšku, když se vejde, jinak na šířku; když se nevejde ani tak, vyhodí chybu (meze
- * hlídá `checkBeltConfig`). Rozměry musí projít kontrolami modelu – to hlídá volající.
- */
-const a4 = (o: 'portrait' | 'landscape') =>
-  o === 'portrait' ? { widthMm: 210, heightMm: 297 } : { widthMm: 297, heightMm: 210 };
-
-/**
- * List 1 (konec u přezky a poutko). Na tvaru konce ani dírkách nezávisí, takže se tiskne
- * i tehdy, když se list 2 na A4 nevejde.
- */
-export function buildBuckleSheet(end: BeltEndSpec): BeltSheet {
-  return {
-    id: BELT_SHEET_IDS.buckle,
-    title: 'List 1 – konec u přezky a poutko',
-    orientation: 'portrait',
-    ...a4('portrait'),
-    svg: page(buckleEndPage(end)),
-  };
+interface SheetPlan {
+  id: BeltSheet['id'];
+  title: string;
+  orientation: 'portrait' | 'landscape';
+  body: El[];
 }
 
-export function buildBeltSheets(
-  end: BeltEndSpec,
-  tip: BeltTipSpec,
-  shape: BeltTipShape,
-): [BeltSheet, BeltSheet, ...BeltSheet[]] {
+const BUCKLE_TITLE = 'List 1 – konec u přezky a poutko';
+
+/**
+ * Listy pro libovolnou platnou kombinaci (šířka, tloušťka, tvar konce, dírky): list 1 a list 2
+ * na výšku, když se vejde, jinak na šířku, jinak na dva listy na šířku (2a, 2b).
+ */
+function planSheets(end: BeltEndSpec, tip: BeltTipSpec, shape: BeltTipShape): SheetPlan[] {
+  const buckle: SheetPlan = {
+    id: BELT_SHEET_IDS.buckle,
+    title: BUCKLE_TITLE,
+    orientation: 'portrait',
+    body: buckleEndPage(end),
+  };
   const orientation = tipSheetOrientation(tip);
   if (orientation === null) {
     throw new Error('Dírky se nevejdou ani na dva listy A4 na šířku.');
@@ -812,33 +1009,88 @@ export function buildBeltSheets(
   if (orientation === 'split') {
     const endName = shape === 'round' ? 'zaoblený konec' : 'špička';
     return [
-      buildBuckleSheet(end),
+      buckle,
       {
         id: BELT_SHEET_IDS.tip,
         title: `List 2a – ${endName} a dírky k prostřední`,
         orientation: 'landscape',
-        ...a4('landscape'),
-        svg: page(tipPageSplit(tip, end, shape, 'a'), 'landscape'),
+        body: tipPageSplit(tip, end, shape, 'a'),
       },
       {
         id: BELT_SHEET_IDS.tipRest,
         title: 'List 2b – prostřední a zbylé dírky',
         orientation: 'landscape',
-        ...a4('landscape'),
-        svg: page(tipPageSplit(tip, end, shape, 'b'), 'landscape'),
+        body: tipPageSplit(tip, end, shape, 'b'),
       },
     ];
   }
-  const tipBody =
-    orientation === 'portrait' ? tipPage(tip, end, shape) : tipPageLandscape(tip, end, shape);
   return [
-    buildBuckleSheet(end),
+    buckle,
     {
       id: BELT_SHEET_IDS.tip,
       title: shape === 'round' ? 'List 2 – zaoblený konec a dírky' : 'List 2 – špička a dírky',
       orientation,
-      ...a4(orientation),
-      svg: page(tipBody, orientation),
+      body:
+        orientation === 'portrait' ? tipPage(tip, end, shape) : tipPageLandscape(tip, end, shape),
     },
   ];
+}
+
+const toSheet = (p: SheetPlan): BeltSheet => ({
+  id: p.id,
+  title: p.title,
+  orientation: p.orientation,
+  ...a4(p.orientation),
+  svg: page(p.body, p.orientation),
+});
+
+/**
+ * Oba listy (bez XML prologu) pro konec se špičkou na výšku – přesně to, co generátor zapisuje
+ * do `opasek-sablona-<šířka>mm-1-prezka.svg` a `-2-spicka.svg`.
+ */
+export function buildPages(end: BeltEndSpec, tip: BeltTipSpec): [string, string] {
+  return [page(buckleEndPage(end)), page(tipPage(tip, end))];
+}
+
+/**
+ * List 1 (konec u přezky a poutko). Na tvaru konce ani dírkách nezávisí, takže se tiskne
+ * i tehdy, když se list 2 na A4 nevejde.
+ */
+export function buildBuckleSheet(end: BeltEndSpec): BeltSheet {
+  return toSheet({
+    id: BELT_SHEET_IDS.buckle,
+    title: BUCKLE_TITLE,
+    orientation: 'portrait',
+    body: buckleEndPage(end),
+  });
+}
+
+/**
+ * Oba listy (případně 2a a 2b) pro platnou kombinaci; když se list 2 nevejde ani na dva listy,
+ * vyhodí chybu (meze hlídá `checkBeltConfig`). Rozměry musí projít kontrolami modelu – to hlídá
+ * volající.
+ */
+export function buildBeltSheets(
+  end: BeltEndSpec,
+  tip: BeltTipSpec,
+  shape: BeltTipShape,
+): [BeltSheet, BeltSheet, ...BeltSheet[]] {
+  const [first, second, ...rest] = planSheets(end, tip, shape).map(toSheet);
+  return [first!, second!, ...rest];
+}
+
+/**
+ * Co je na kterém listu nakreslené (obdélníky prvků v mm). Pro test bezpečné plochy
+ * a překryvů; stejná data, ze kterých vzniká SVG.
+ */
+export function beltSheetInk(
+  end: BeltEndSpec,
+  tip: BeltTipSpec,
+  shape: BeltTipShape,
+): { id: BeltSheet['id']; widthMm: number; heightMm: number; boxes: InkBox[] }[] {
+  return planSheets(end, tip, shape).map((p) => ({
+    id: p.id,
+    ...a4(p.orientation),
+    boxes: p.body.flatMap((el) => (el.box ? [el.box] : [])),
+  }));
 }

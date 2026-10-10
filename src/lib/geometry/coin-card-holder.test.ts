@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  A4_PORTRAIT,
   A4_SHEET,
-  CALIBRATION_GAP_MM,
+  MIN_TAB_FOR_TOP_BLOCK_MM,
+  PAS_LEGEND_MM,
+  PRINT_SAFE_MM,
   SEAM_LABEL_GAP_MM,
   DEFAULT_COIN_CARD_HOLDER,
-  LEGEND_HEIGHT_MM,
   NAMED_COINS,
   checkCoinCardHolder,
   foldSkiveFor,
@@ -246,13 +248,16 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     expect(L.pocketBandTopMm).toBe(L.tabEndOnFrontMm + spec.snapClearanceMm);
   });
 
-  it('pás se vejde na A4 na šířku nad kalibrační úsečku, kapsa na A4 na výšku', () => {
+  it('pás se vejde na A4 na šířku mezi okraje 13 mm nad legendu, kapsa na A4 na výšku', () => {
     const { widthMm: W, heightMm: H, marginMm: m } = A4_SHEET;
     expect(W).toBe(297);
-    const calY = H - m - LEGEND_HEIGHT_MM - CALIBRATION_GAP_MM;
+    expect(m).toBeGreaterThanOrEqual(PRINT_SAFE_MM);
+    expect(A4_PORTRAIT.marginMm).toBeGreaterThanOrEqual(PRINT_SAFE_MM);
     expect(m + L.tabLengthMm + L.panelHeightMm + SEAM_LABEL_GAP_MM + 1).toBeLessThanOrEqual(
-      calY - 3,
+      H - m - PAS_LEGEND_MM - 2,
     );
+    // Nad pásem vedle jazyka je kalibrační úsečka (PÁS) a sloupec poznámek (papírový model).
+    expect(L.tabLengthMm).toBeGreaterThanOrEqual(MIN_TAB_FOR_TOP_BLOCK_MM);
     expect(L.stripLengthMm + 2 * m).toBeLessThanOrEqual(W);
     // Delší rezerva jazyka se na list nevejde – kontrola to musí hlásit.
     expect(checkCoinCardHolder({ ...spec, tabFitReserveMm: 20 }).join(' ')).toMatch(/A4/);

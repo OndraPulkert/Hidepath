@@ -370,31 +370,31 @@ add('A','List 1: přeměřte čtverec','List 1 vytiskněte na 100 %. Kalibračn�
   let s=cam(c,()=>{
     const P='var(--print)',M='var(--print-m)',R='var(--print-r)';
     let q=`<rect x="0" y="0" width="210" height="297" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width="${f(sw(.3))}" ${SHADOW}/>`;
-    const sx=22,fy=132,cx=42;
-    q+=`<rect x="22" y="11" width="90" height="5" fill="${P}" opacity=".7"/><rect x="22" y="19" width="120" height="3" fill="${M}" opacity=".6"/>`;
-    q+=`<path d="M${sx} 42 V222 H${sx+40} V42" fill="none" stroke="${P}" stroke-width="1"/>`;
-    q+=`<path d="M${cx} 42 V222" stroke="${M}" stroke-width=".6" stroke-dasharray="3 3"/>`;
+    const sx=22,fy=126,cx=42;
+    q+=`<rect x="22" y="13" width="90" height="5" fill="${P}" opacity=".7"/><rect x="22" y="21" width="120" height="3" fill="${M}" opacity=".6"/>`;
+    q+=`<path d="M${sx} 36 V216 H${sx+40} V36" fill="none" stroke="${P}" stroke-width="1"/>`;
+    q+=`<path d="M${cx} 36 V216" stroke="${M}" stroke-width=".6" stroke-dasharray="3 3"/>`;
     q+=`<path d="M${sx-6} ${fy} H${sx+46}" stroke="${R}" stroke-width="1.2" stroke-dasharray="4 2.5"/>`;
     q+=`<path d="M${cx-3} ${fy-9.5} A3 3 0 0 1 ${cx+3} ${fy-9.5} V${fy+9.5} A3 3 0 0 1 ${cx-3} ${fy+9.5} Z" fill="none" stroke="${P}" stroke-width=".9"/>`;
     for(const off of RIV_OFF){q+=`<circle cx="${cx}" cy="${fy+off}" r="3" fill="none" stroke="${P}" stroke-width=".9"/>`;q+=`<circle cx="${cx}" cy="${fy-off}" r="3" fill="none" stroke="${M}" stroke-width=".9" stroke-dasharray="1.6 1.2"/>`}
-    q+=`<rect x="150" y="30" width="50" height="50" fill="none" stroke="${R}" stroke-width="1.2"/>`;
-    for(const x of [22,22+KEEP_LEN-KEEP_OV]) q+=`<rect x="${x}" y="232" width="${KEEP_OV}" height="${KEEP_W}" fill="${M}" opacity=".35"/>`;
-    q+=`<rect x="22" y="232" width="${KEEP_LEN}" height="${KEEP_W}" fill="none" stroke="${P}" stroke-width=".9"/>`;
-    for(let i=0;i<7;i++) q+=`<rect x="22" y="${258+i*4.2}" width="${120+((i*37)%50)}" height="1.8" fill="${M}" opacity=".5"/>`;
+    q+=`<rect x="146" y="24" width="50" height="50" fill="none" stroke="${R}" stroke-width="1.2"/>`;
+    for(const x of [22,22+KEEP_LEN-KEEP_OV]) q+=`<rect x="${x}" y="226" width="${KEEP_OV}" height="${KEEP_W}" fill="${M}" opacity=".35"/>`;
+    q+=`<rect x="22" y="226" width="${KEEP_LEN}" height="${KEEP_W}" fill="none" stroke="${P}" stroke-width=".9"/>`;
+    for(let i=0;i<7;i++) q+=`<rect x="22" y="${252+i*4.2}" width="${120+((i*37)%50)}" height="1.8" fill="${M}" opacity=".5"/>`;
     return q;
   });
   s=`<g opacity="${f(o)}">${s}</g>`;
   s+=`<g opacity="${f(seg(t,.12,.22))}">${pill(3,8,'list 1, A4 na 100 %','ts')}</g>`;
   // zvětšenina čtverce s pravítkem
-  const zc={cx:175,cy:55,k:1.02};
+  const zc={cx:171,cy:49,k:1.02};
   const rp=es(t,.3,.62);
   s+=zbox(66,5,67,80,'KALIBRAČNÍ ČTVEREC',zc,()=>{
-    let q=`<rect x="120" y="0" width="90" height="110" fill="var(--paper)"/>`;
-    q+=`<rect x="150" y="30" width="50" height="50" fill="none" stroke="var(--print-r)" stroke-width=".6"/>`;
+    let q=`<rect x="116" y="-6" width="90" height="110" fill="var(--paper)"/>`;
+    q+=`<rect x="146" y="24" width="50" height="50" fill="none" stroke="var(--print-r)" stroke-width=".6"/>`;
     // ocelové pravítko podél horní hrany, nula na levém rohu
-    const y0=L(10,30,rp);let tk='';for(let mm=0;mm<=56;mm++){const len=mm%10===0?4:mm%5===0?3:1.8;tk+=`M${150+mm} ${f(y0)} v${f(-len)} `}
-    q+=`<rect x="146" y="${f(y0-9)}" width="62" height="9" fill="var(--steel)" fill-opacity=".9" stroke="var(--steel-d)" stroke-width=".3"/><path d="${tk}" stroke="var(--steel-d)" stroke-width=".22"/>`;
-    q+=`<text x="150" y="${f(y0-5)}" font-size="2.6" fill="var(--steel-d)" text-anchor="middle" font-family="Albert Sans,sans-serif">0</text><text x="200" y="${f(y0-5)}" font-size="2.6" fill="var(--steel-d)" text-anchor="middle" font-family="Albert Sans,sans-serif">50</text>`;
+    const y0=L(4,24,rp);let tk='';for(let mm=0;mm<=56;mm++){const len=mm%10===0?4:mm%5===0?3:1.8;tk+=`M${146+mm} ${f(y0)} v${f(-len)} `}
+    q+=`<rect x="142" y="${f(y0-9)}" width="62" height="9" fill="var(--steel)" fill-opacity=".9" stroke="var(--steel-d)" stroke-width=".3"/><path d="${tk}" stroke="var(--steel-d)" stroke-width=".22"/>`;
+    q+=`<text x="146" y="${f(y0-5)}" font-size="2.6" fill="var(--steel-d)" text-anchor="middle" font-family="Albert Sans,sans-serif">0</text><text x="196" y="${f(y0-5)}" font-size="2.6" fill="var(--steel-d)" text-anchor="middle" font-family="Albert Sans,sans-serif">50</text>`;
     return q;
   },{op:seg(t,.22,.32)});
   if(t>.68){const o2=seg(t,.68,.8);s+=`<g opacity="${f(o2)}">${pill(99.5,76,'50 × 50 mm','tok','middle')}${tick(83,75,1)}</g>`}

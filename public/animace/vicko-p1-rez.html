@@ -668,7 +668,8 @@
     <script>
       (() => {
         // ---------- geometrie: souřadnice listů 1 a 2 výchozího střihu (docs/generated/penezenka-vicko-sablona.svg a -rub.svg), A4 na výšku, mm ----------
-        // v (po pásu od horní hrany F) = y − 22; x listu = x peněženky + 8; souměrné podle x 58,5 (osa 50,5)
+        // v (po pásu od horní hrany F) = y − 22; x = x peněženky + 8; souměrné podle x 58,5 (osa 50,5)
+        // rámec je posunutý proti listu: na listu leží díl na x 17, y 26 (13mm bezpečný okraj tisku), proto papír A4 začíná na (−9, −4)
         const OUT =
           "M8 24 A2 2 0 0 1 10 22 L52.5 22 A1 1 0 0 1 53.5 23 L53.5 29 A5 5 0 0 0 63.5 29 L63.5 23 A1 1 0 0 1 64.5 22 L107 22 A2 2 0 0 1 109 24 L109 192.999 A4 4 0 0 1 105 196.999 L72.5 196.999 A4 4 0 0 0 68.5 200.999 L68.5 253.659 L48.5 253.659 L48.5 200.999 A4 4 0 0 0 44.5 196.999 L12 196.999 A4 4 0 0 1 8 192.999 Z";
         // P1 po řezu: horní hrana F rovně přes výřez pro palec (výřez až v lekci 5), konec jazýčku rovný
@@ -709,17 +710,17 @@
         ];
         const KEEPC = CENT.filter((c) => c.d !== 8); // Ø 8 se vysekne hned, středy zmizí s odpadem
         const LICP = KEEPC.map((c) => [c.x, c.y]);
-        // list nahrubo: okraj 1–2 cm, vlevo jen okraj listu (obrys je 8 mm od okraje)
+        // list nahrubo: okraj 1–2 cm kolem obrysu (vlevo je obrys 17 mm od okraje listu)
         const ROUGHPTS = [
-          [0, 10],
+          [-4, 10],
           [122, 10],
           [122, 209],
           [80, 209],
           [80, 264],
           [37, 264],
           [37, 209],
-          [0, 209],
-          [0, 10],
+          [-4, 209],
+          [-4, 10],
         ];
         const ROUGH = "M" + ROUGHPTS.map((p) => p.join(" ")).join(" L") + " Z";
         // kus usně 20 × 50 cm (lekce 1): přířezy P1 110 × 240 obkreslené vedle sebe u jedné dlouhé hrany,
@@ -1374,7 +1375,7 @@
           return s;
         }
         function paperA4() {
-          return `<rect x="0" y="0" width="210" height="297" fill="var(--paper)" stroke="var(--paperedge)" stroke-width="${sw(0.3)}"/>`;
+          return `<rect x="-9" y="-4" width="210" height="297" fill="var(--paper)" stroke="var(--paperedge)" stroke-width="${sw(0.3)}"/>`;
         }
         function paperRough(sh) {
           return `<path d="${ROUGH}" fill="var(--paper)" stroke="var(--paperedge)" stroke-width="${sw(0.25)}" ${sh ? SHADOW : ""}/>`;
@@ -1386,7 +1387,7 @@
 
         // ---------- kamery (souřadnice listu → scéna 135 × 90) ----------
         const OV = { cx: 58.5, cy: 137.83, sx: 42, sy: 43, k: 0.33 };
-        const PAPER = { cx: 105, cy: 148.5, sx: 42, sy: 44.5, k: 0.27 };
+        const PAPER = { cx: 96, cy: 144.5, sx: 42, sy: 44.5, k: 0.27 };
         const EDGEL = { cx: 9, cy: 85.5, sx: 40, sy: 44, k: 4.2 };
         const JUNC = { cx: 58.5, cy: 206, sx: 42, sy: 42, k: 1.5 };
         const MIDJ = { cx: 58.5, cy: 214, sx: 42, sy: 40, k: 0.7 };
@@ -1485,7 +1486,6 @@
             return s;
           },
           null,
-          "Tip: vlevo je obrys jen 8 mm od okraje listu – tam okraj prostě zůstane.",
         );
 
         // A2 — na líc, páskou mimo čáru
@@ -2177,7 +2177,7 @@
               let b = matBg();
               b += fade(
                 kb * (1 - off),
-                `<rect x="-6" y="-6" width="222" height="309" rx="2" fill="var(--karton)" stroke="var(--kartonedge)" stroke-width="${sw(0.3)}" ${SHADOW}/>`,
+                `<rect x="-15" y="-10" width="222" height="309" rx="2" fill="var(--karton)" stroke="var(--kartonedge)" stroke-width="${sw(0.3)}" ${SHADOW}/>`,
               );
               b += fade(1 - off, paperA4() + printL2({ full: true }));
               if (off > 0)

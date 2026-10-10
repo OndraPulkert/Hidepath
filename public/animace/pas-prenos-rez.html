@@ -128,7 +128,8 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 <script>
 (()=>{
 // ---------- geometry (mm) ----------
-// T = souřadnice listu PÁS pro kůži 1,2 mm (docs/generated/pouzdro-mince-sablona-kuze-1-2mm.svg), A4 na šířku 297 × 210
+// T = souřadnice listu PÁS pro kůži 1,2 mm (docs/generated/pouzdro-mince-sablona-kuze-1-2mm.svg) posunuté o 3,5 mm doleva a nahoru
+// (na listu je kresba od 13,5 mm, bezpečný okraj tisku); papír A4 na šířku 297 × 210 proto začíná na (−3,5, −3,5)
 const STRIP="M10 20 A10 10 0 0 1 20 10 L33 10 A10 10 0 0 1 43 20 L43 53.07 A39 34 0 0 0 82 87.07 L97.69 87.07 A34 34 0 0 0 131.606 55.399 A2.5 2.5 0 0 1 134.1 53.07 L244.35 53.07 A6 6 0 0 1 250.35 59.07 L250.35 151.17 A6 6 0 0 1 244.35 157.17 L16 157.17 A6 6 0 0 1 10 151.17 Z";
 const FY=53.07, FB=157.17, PW=72, PH=104.1;
 const AX0=82, FX=97.69, BXF=169.69, IX0=178.35, MIRX=260.35;   // čáry ohybů; MIRX = zrcadlení přes střed pásu (10 + 250,35)
@@ -142,8 +143,8 @@ const FOLDE=[[AX0,85.07],[AX0,159.17],[FX,85.07],[FX,159.17],[BXF,51.07],[BXF,15
 const BDOTS=[];for(const x0 of [14,101.69,182.35])for(let i=0;i<17;i++)BDOTS.push([+(x0+4*i).toFixed(2),153.67]);
 const MARKS=[...FOLDE,SNAP,...BDOTS];                              // pořadí jako ve výčtu lekce 5
 const PART_MARKS=[SNAP,...BDOTS];                                  // co zůstane na vyříznutém pásu
-const ROUGH="M0 0 H58 V40 H264 V169 H0 Z";                         // šablona vystřižená nahrubo (vlevo a nahoře je okraj listu)
-const ROUGHPTS=[[0,0],[58,0],[58,40],[264,40],[264,169],[0,169],[0,0]];
+const ROUGH="M-3.5 -3.5 H58 V40 H264 V169 H-3.5 Z";                // šablona vystřižená nahrubo (vlevo a nahoře je okraj listu)
+const ROUGHPTS=[[-3.5,-3.5],[58,-3.5],[58,40],[264,40],[264,169],[-3.5,169],[-3.5,-3.5]];
 const LEA={x:-20,y:-25,w:300,h:210};                               // přířez A4 30 × 21 cm
 
 // ---------- helpers ----------
@@ -237,10 +238,10 @@ function printStrip(o={}){
   s+=tx(133.69,162.17,'ŠEV DNA 3,5 mm od hrany · 17 otvorů na panel',2.2,m);
   return s;
 }
-function paperFull(){ // celý list A4 s textem dole
-  let s=`<rect x="0" y="0" width="297" height="210" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".4"/>`;
-  s+=`<path d="M10 169 V173 M10 171 H60 M60 169 V173" stroke="var(--print)" stroke-width=".3" fill="none"/>`;
-  for(let i=0;i<7;i++) s+=`<rect x="10" y="${f(177.6+i*3.2)}" width="${i===6?140:i%2?250:270}" height="1.1" fill="var(--print-m)" opacity=".45"/>`;
+function paperFull(){ // celý list A4: úsečka 50 mm vpravo nahoře, text dole
+  let s=`<rect x="-3.5" y="-3.5" width="297" height="210" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".4"/>`;
+  s+=`<path d="M157.784 12 V16 M157.784 14 H207.784 M207.784 12 V16" stroke="var(--print)" stroke-width=".3" fill="none"/>`;
+  for(let i=0;i<8;i++) s+=`<rect x="10" y="${f(170+i*3)}" width="${i===7?140:i%2?250:270}" height="1.1" fill="var(--print-m)" opacity=".45"/>`;
   return s;
 }
 function paperRough(){return `<path d="${ROUGH}" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".4"/>`}

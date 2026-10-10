@@ -3,7 +3,10 @@ import { Link, useParams, useSearchParams } from 'react-router';
 
 import { PRINT_SHEET_PARAM, routes } from '@/app/routes';
 import { AssembledIllustration } from '@/components/illustrations/assembled';
-import { TemplateIllustration } from '@/components/illustrations/template';
+import {
+  TEMPLATE_PRINT_MARGIN_MM,
+  TemplateIllustration,
+} from '@/components/illustrations/template';
 import { BeltConfigGenerator } from '@/components/projects/belt-config-generator';
 import {
   type GeneratedPatternSheet,
@@ -93,7 +96,8 @@ function PiecesTemplate({
 }) {
   return (
     <div className="mx-auto max-w-[760px] print:max-w-none">
-      <style>{`@media print { @page { size: A4 portrait; margin: 12mm; } svg { break-inside: avoid; page-break-inside: avoid; } }`}</style>
+      {/* Okraj stránky = bezpečný okraj tiskárny, nic se netiskne blíž ke hraně papíru. */}
+      <style>{`@media print { @page { size: A4 portrait; margin: ${TEMPLATE_PRINT_MARGIN_MM}mm; } svg { break-inside: avoid; page-break-inside: avoid; } }`}</style>
       <BackAndPrint project={project} />
       <h1 className="mb-2 text-[clamp(24px,3vw,32px)] print:text-[18pt]">
         Šablona 1:1 · {project.title}

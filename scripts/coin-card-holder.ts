@@ -28,6 +28,8 @@ import {
   DEFAULT_COIN_CARD_HOLDER,
   LEGEND_HEIGHT_MM,
   NAMED_COINS,
+  PAS_LEGEND_MM,
+  PRINT_SAFE_MM,
   type CoinCardHolderLayout,
   type CoinCardHolderSpec,
   assertCoinCardHolder,
@@ -43,6 +45,7 @@ import {
 } from '../src/lib/geometry/coin-card-holder.ts';
 
 import { PRICK_OUTSIDE_MM, PRICK_R } from './coin-card-holder-practice.ts';
+import { estimateTextWidthMm } from './coin-card-holder-safe-area.ts';
 
 const f = (n: number): string => (Math.round(n * 1000) / 1000).toString();
 const cz = (n: number): string => f(n).replace('.', ',');
@@ -622,29 +625,19 @@ export function buildCoinHolderSheetSvg(
     );
   }
 
-  /* --- kalibrace a legenda --- */
-  const calX = m;
-  const calY = H - m - LEGEND_HEIGHT_MM - CALIBRATION_GAP_MM;
+  /* --- kalibrace a legenda šrafy: nad pásem na straně bez jazyka (dole je jen legenda) --- */
+  const calLabel = 'KONTROLA MĚŘÍTKA: tato úsečka musí měřit přesně 50 mm';
+  const glueLabel = `šrafa = kontaktní lepidlo jen sem: G1 kapsa (líc), G2 a G3 dno 0–${cz(so)} mm (strana je u pruhu)`;
+  // Šířka bloku: úsečka 50 + mezera 3 + popisek (odhad šířky z metrik Helvetiky, spíš větší).
+  const calW = 53 + estimateTextWidthMm(calLabel, 2.4);
+  const glueW = 8.5 + estimateTextWidthMm(glueLabel, 2.1);
+  const calX = mirror ? m : W - m - calW;
+  const calY = m + 4;
   out.push(
     `<path d="M${f(calX)} ${f(calY - 2)} V${f(calY + 2)} M${f(calX)} ${f(calY)} H${f(calX + 50)} M${f(calX + 50)} ${f(calY - 2)} V${f(calY + 2)}" stroke="${INK}" stroke-width="0.3" fill="none"/>`,
   );
-  out.push(
-    text(
-      calX + 53,
-      calY + 1,
-      'KONTROLA MĚŘÍTKA: tato úsečka musí měřit přesně 50 mm',
-      2.4,
-      'start',
-    ),
-  );
-  out.push(
-    glueLegend(
-      calX + 140,
-      calY,
-      `šrafa = kontaktní lepidlo jen sem: G1 kapsa (líc), G2 a G3 dno 0–${cz(so)} mm (strana je u pruhu)`,
-      2.1,
-    ),
-  );
+  out.push(text(calX + 53, calY + 1, calLabel, 2.4, 'start'));
+  out.push(glueLegend(mirror ? m : W - m - glueW, calY + 6.5, glueLabel, 2.1));
   const front = spec.tabSide === 'right' ? 'vpravo' : 'vlevo';
   const back = spec.tabSide === 'right' ? 'vlevo' : 'vpravo';
   const legend = [
@@ -658,7 +651,7 @@ export function buildCoinHolderSheetSvg(
     `· 7 klobouček podle obtisku patice se vším obsahem, pak jazyk zkrátit ${cz(spec.tabBeyondSnapMm)} mm za klobouček a zaoblit · 8 srazit a zaleštit hrany (vnitřní předem).`,
   ];
   const legendLine = 3;
-  let ly = H - m - LEGEND_HEIGHT_MM + 4;
+  let ly = H - m - PAS_LEGEND_MM + 2.4;
   for (const line of legend) {
     out.push(text(m, ly, line, 2.2, 'start', GUIDE));
     ly += legendLine;
@@ -897,9 +890,10 @@ export function buildCoinHolderPaperModelSvg(
       '0.8 1.2',
     ),
   );
-  // Co si při zkoušce zapsat (sloupec vpravo od pásu). Položky se číslují až tady, aby bez
-  // průchodky nevznikla díra v číslování.
-  const nx = m + L.stripLengthMm + 5;
+  // Co si při zkoušce zapsat (sloupec vpravo nahoře nad pásem, na straně bez jazyka – vpravo od
+  // pásu by u okraje 13 mm nezbylo místo). Položky se číslují až tady, aby bez průchodky nevznikla
+  // díra v číslování.
+  const notesGap = 3.4;
   const notes: string[][] = [
     ['klobouček: kolik mm od značky,', '+kterým směrem, kolik jazyka zbývá', '+(cíl 11 + rezerva)'],
     [`karta ve výřezu (cíl ${cz(L.cardExposedMm)} mm)`],
@@ -908,16 +902,25 @@ export function buildCoinHolderPaperModelSvg(
     ['konec jazyka ↔ kapsa (mm)'],
     ['počet karet a tloušťka bankovek'],
   ];
-  [
+  const noteLines = [
     'ZAPSAT PŘI ZKOUŠCE',
     ...notes.flatMap((lines, n) => lines.map((t, j) => (j === 0 ? `${n + 1} ${t}` : t))),
-  ].forEach((t, i) => {
+  ];
+  const notesW = Math.max(
+    ...noteLines.map((t, i) =>
+      t.startsWith('+')
+        ? 2.5 + estimateTextWidthMm(t.slice(1), 2.1)
+        : estimateTextWidthMm(t, i === 0 ? 2.3 : 2.1),
+    ),
+  );
+  const nx = mirror ? m : W - m - notesW;
+  noteLines.forEach((t, i) => {
     // „+“ = pokračování řádku: odsadit posunem x (mezery na začátku SVG text zahodí).
     const cont = t.startsWith('+');
     out.push(
       text(
         nx + (cont ? 2.5 : 0),
-        sy + 4 + i * 3.6,
+        m + 2 + i * notesGap,
         cont ? t.slice(1) : t,
         i === 0 ? 2.3 : 2.1,
         'start',
@@ -959,7 +962,7 @@ export function buildCoinHolderPaperModelSvg(
     `Prokáže: polohu jazyka a kloboučku, výřez, ${L.grommetXMm !== null ? 'průchodku, ' : ''}vytahování karty a místo pro kapsu. Neprokáže přídavky ohybů (papír je tenčí než kůže): ohyby jen přehnout do smyčky, nepřekládat na ostro.`,
     `☐ ① vnitřní panel dozadu za přední (ohyb B)   ☐ ② zadní přes všechno (ohyb A)   ☐ dno slepit páskou podél čáry švu   ☐ vložit ${cardsWord(spec.cardsCount)} vpředu a bankovky napůl vzadu`,
     `☐ přehnout jazyk přes horní hranu, patici propíchnout do jazyka a změřit odchylku od kloboučku${L.grommetXMm !== null ? '   ☐ průchodka je celá ve výřezu zepředu i zezadu' : ''}`,
-    '☐ palcem vysunout kartu výřezem   ☐ konec jazyka je nad místem pro kapsu   → výsledky zapsat vpravo, teprve pak řezat kůži (listy PÁS a KAPSA).',
+    '☐ palcem vysunout kartu výřezem   ☐ konec jazyka je nad místem pro kapsu   → výsledky zapsat vpravo nahoře, teprve pak řezat kůži (listy PÁS a KAPSA).',
   ];
   legend.forEach((t, i) =>
     out.push(text(m, H - m - LEGEND_HEIGHT_MM + 4 + i * 3.4, t, 2.3, 'start', GUIDE)),
@@ -1154,17 +1157,33 @@ export function buildCoinHolderPocketSvg(
  * zepředu a zezadu. Proporce dílů jsou z modelu (zmenšené); mince, nit a motiv jsou
  * ilustrativní. Není to výrobní soubor.
  */
+/**
+ * Mřížka listu postupu (A4 na šířku, 4 × 2 buňky): okraj `pad` = bezpečný okraj tisku 13 mm,
+ * pod buňkami pruh `footer` na patičku. Sdílí list postupu, výřezy kroků a testy.
+ */
+export const PROCESS_GRID = (() => {
+  const W = 297;
+  const H = 210;
+  const cols = 4;
+  const pad = PRINT_SAFE_MM;
+  const footer = 8;
+  return {
+    W,
+    H,
+    cols,
+    pad,
+    footer,
+    cellW: (W - 2 * pad) / cols,
+    cellH: (H - 2 * pad - footer) / 2,
+  } as const;
+})();
+
 export function buildCoinHolderProcessSvg(
   spec: CoinCardHolderSpec = DEFAULT_COIN_CARD_HOLDER,
 ): string {
   assertCoinCardHolder(spec);
   const L = coinCardHolderLayout(spec);
-  const W = 297;
-  const H = 210;
-  const cols = 4;
-  const pad = 8;
-  const cellW = (W - 2 * pad) / cols;
-  const cellH = (H - 2 * pad - 10) / 2;
+  const { W, H, cols, pad, cellW, cellH } = PROCESS_GRID;
   const LEATHER = '#3f6b4f';
   const LEATHER_DARK = '#2f5240';
   const FLESH = '#8fae97';
@@ -1190,7 +1209,7 @@ export function buildCoinHolderProcessSvg(
   const caption = (i: number, lines: string[]): string[] => {
     const [cx, cy] = cellOrigin(i);
     return lines.map((t, n) =>
-      text(cx + cellW / 2, cy + cellH - 4 - (lines.length - 1 - n) * 3.4, t, 2.2, 'middle', GUIDE),
+      text(cx + cellW / 2, cy + cellH - 3 - (lines.length - 1 - n) * 3.4, t, 2.2, 'middle', GUIDE),
     );
   };
   const stitches = (x0: number, y0: number, x1: number, y1: number, k: number): string => {
@@ -1376,7 +1395,7 @@ export function buildCoinHolderProcessSvg(
   /* 4 – přišít kapsu na přední panel */
   {
     const [cx, cy] = cellOrigin(3);
-    const k4 = Math.min(0.62, (cellH - 26) / L.panelHeightMm);
+    const k4 = Math.min(0.62, (cellH - 28) / L.panelHeightMm);
     const ox = cx + (cellW - L.panelWidthMm * k4) / 2;
     const oy = cy + 12;
     const b: string[] = [];
@@ -1401,8 +1420,9 @@ export function buildCoinHolderProcessSvg(
   {
     const [cx, cy] = cellOrigin(4);
     const b: string[] = [];
-    const k5 = (cellW - 34) / L.panelWidthMm;
-    const ox = cx + 17;
+    // Smyčka ohybu A vlevo potřebuje 11,2 mm, ohyb B vpravo 7 mm; zbytek šířky buňky je pás.
+    const k5 = (cellW - 30) / L.panelWidthMm;
+    const ox = cx + 15;
     const oy = cy + 32;
     const gapY = 7;
     const w = L.panelWidthMm * k5;
@@ -1491,7 +1511,7 @@ export function buildCoinHolderProcessSvg(
   /* 7 – hotovo zepředu */
   {
     const [cx, cy] = cellOrigin(6);
-    const k7 = Math.min(0.62, (cellH - 26) / L.panelHeightMm);
+    const k7 = Math.min(0.62, (cellH - 28) / L.panelHeightMm);
     const ox = cx + (cellW - L.panelWidthMm * k7) / 2;
     const oy = cy + 14;
     const b: string[] = [];
@@ -1550,7 +1570,7 @@ export function buildCoinHolderProcessSvg(
   /* 8 – hotovo zezadu */
   {
     const [cx, cy] = cellOrigin(7);
-    const k8 = Math.min(0.62, (cellH - 26) / L.panelHeightMm);
+    const k8 = Math.min(0.62, (cellH - 28) / L.panelHeightMm);
     const ox = cx + (cellW - L.panelWidthMm * k8) / 2;
     const oy = cy + 14;
     const b: string[] = [];
@@ -1602,7 +1622,7 @@ export function buildCoinHolderProcessSvg(
   out.push(
     text(
       W / 2,
-      H - 4,
+      H - pad - 1,
       'POUZDRO NA KARTY S VSAZENOU MINCÍ – postup skládání. Proporce dílů z modelu (zmenšeno), mince/nit/motiv ilustrativní. NENÍ výrobní soubor, není 1:1.',
       2.4,
       'middle',
@@ -1632,11 +1652,7 @@ export function buildCoinHolderProcessStepSvg(
   if (!Number.isInteger(step) || step < 1 || step > PROCESS_STEP_COUNT) {
     throw new Error(`Krok postupu musí být 1–${PROCESS_STEP_COUNT}, ne ${step}.`);
   }
-  const W = 297;
-  const H = 210;
-  const pad = 8;
-  const cellW = (W - 2 * pad) / 4;
-  const cellH = (H - 2 * pad - 10) / 2;
+  const { W, H, pad, cellW, cellH } = PROCESS_GRID;
   const i = step - 1;
   const x = pad + (i % 4) * cellW + 1;
   const y = pad + Math.floor(i / 4) * cellH + 1;

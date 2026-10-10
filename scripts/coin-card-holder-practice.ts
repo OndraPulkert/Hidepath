@@ -25,6 +25,7 @@ import {
   practiceStripLayout,
   type PracticeStripLayout,
 } from '../src/lib/geometry/coin-card-holder-practice.ts';
+import { SHEET_MARGIN_MM } from '../src/lib/geometry/coin-card-holder.ts';
 
 const f = (n: number): string => (Math.round(n * 1000) / 1000).toString();
 const cz = (n: number): string => f(n).replace('.', ',');
@@ -32,7 +33,8 @@ const cz = (n: number): string => f(n).replace('.', ',');
 const cz1 = (n: number): string => (Math.round(n * 10) / 10).toString().replace('.', ',');
 const esc = (s: string): string => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
-export const PRACTICE_SHEET = { widthMm: 210, heightMm: 297, marginMm: 10 } as const;
+/** A4 na výšku, okraj rozvržení = bezpečný okraj tisku 13 mm + 0,5 mm (viz SHEET_MARGIN_MM). */
+export const PRACTICE_SHEET = { widthMm: 210, heightMm: 297, marginMm: SHEET_MARGIN_MM } as const;
 export const CALIBRATION_MM = 50;
 /**
  * Papír na vystřižení = kus kůže z lekce 4 (`PRACTICE_STRIP.pieceLengthMm × pieceHeightMm`), proužek

@@ -1,70 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="210mm" height="297mm" viewBox="0 0 210 297">
 <rect width="210" height="297" fill="#ffffff"/>
-<text x="22" y="16" font-family="Helvetica, Arial, sans-serif" font-size="4.6" fill="#2b2b2b" text-anchor="start">Opasek 35 mm — strana 1: konec u přezky</text>
-<text x="22" y="22" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#6a6a6a" text-anchor="start">Měřítko 1:1 · tisk na A4 na 100 %, bez „přizpůsobit stránce“ · 4 otvory = 2 nýty</text>
-<text x="150" y="24" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#c0392b" text-anchor="start">KALIBRAČNÍ ČTVEREC</text>
-<text x="150" y="28" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#c0392b" text-anchor="start">po vytištění přeměřte 50 × 50 mm</text>
-<rect x="150" y="30" width="50" height="50" fill="none" stroke="#c0392b" stroke-width="0.4"/>
-<path d="M22 42 L22 222 L57 222 L57 42" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
-<line x1="39.5" y1="42" x2="39.5" y2="222" stroke="#b8b8b8" stroke-width="0.1" stroke-dasharray="3 3"/>
-<line x1="16" y1="132" x2="63" y2="132" stroke="#c0392b" stroke-width="0.4" stroke-dasharray="4 2.5"/>
-<circle cx="24" cy="132" r="1" fill="none" stroke="#c0392b" stroke-width="0.3"/><path d="M22.7 132 H25.3 M24 130.7 V133.3" stroke="#c0392b" stroke-width="0.2" fill="none"/>
-<circle cx="55" cy="132" r="1" fill="none" stroke="#c0392b" stroke-width="0.3"/><path d="M53.7 132 H56.3 M55 130.7 V133.3" stroke="#c0392b" stroke-width="0.2" fill="none"/>
-<path d="M36.5 122.5 A3 3 0 0 1 42.5 122.5 L42.5 141.5 A3 3 0 0 1 36.5 141.5 Z" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
-<path d="M35.6 122.5 H43.4 M39.5 118.6 V126.4" stroke="#2b2b2b" stroke-width="0.2" fill="none"/>
-<path d="M35.6 141.5 H43.4 M39.5 137.6 V145.4" stroke="#2b2b2b" stroke-width="0.2" fill="none"/>
-<circle cx="39.5" cy="157.5" r="3" fill="none" stroke="#2b2b2b" stroke-width="0.3"/><path d="M35.6 157.5 H43.4 M39.5 153.6 V161.4" stroke="#2b2b2b" stroke-width="0.2" fill="none"/>
-<circle cx="39.5" cy="106.5" r="3" fill="none" stroke="#6a6a6a" stroke-width="0.3" stroke-dasharray="1 0.8"/>
-<circle cx="39.5" cy="205.2" r="3" fill="none" stroke="#2b2b2b" stroke-width="0.3"/><path d="M35.6 205.2 H43.4 M39.5 201.3 V209.1" stroke="#2b2b2b" stroke-width="0.2" fill="none"/>
-<circle cx="39.5" cy="58.8" r="3" fill="none" stroke="#6a6a6a" stroke-width="0.3" stroke-dasharray="1 0.8"/>
-<line x1="61" y1="157.5" x2="61" y2="205.2" stroke="#1f6f43" stroke-width="0.3"/><line x1="59" y1="157.5" x2="63" y2="157.5" stroke="#1f6f43" stroke-width="0.3"/><line x1="59" y1="205.2" x2="63" y2="205.2" stroke="#1f6f43" stroke-width="0.3"/>
-<text x="71" y="59.8" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#2b2b2b" text-anchor="start">nýt ± 73,2 mm od ohybu</text>
-<text x="71" y="107.5" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#2b2b2b" text-anchor="start">nýt ± 25,5 mm od ohybu</text>
-<text x="71" y="117" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#2b2b2b" text-anchor="start">ovál 25 × 6 mm, ohyb ho půlí</text>
-<text x="71" y="133" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#c0392b" text-anchor="start">OHYB (příčka přezky) · propíchněte oba kroužky</text>
-<text x="71" y="149" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#1f6f43" text-anchor="start">můstek u oválu 10 mm</text>
-<text x="71" y="182.35" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#1f6f43" text-anchor="start">kapsa pro poutko 47,7 mm (světlá 37,7 mm)</text>
-<text x="71" y="223" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#2b2b2b" text-anchor="start">konec pásu 90 mm od ohybu</text>
-<text x="71" y="83.65" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#6a6a6a" text-anchor="start">šedé: 2. dvojice, značí se až skrz 1. dvojici</text>
-<text x="22" y="39" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#6a6a6a" text-anchor="start">sem pokračuje hlavní pás (nahoře neřezat)</text>
-<text x="22" y="228" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Poutko — pásek 110 × 12 mm, obepíná 3 vrstvy: přehnutý konec, pás pod ním a volný konec pásku</text>
-<text x="22" y="254" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">obvod 3 vrstev 91 mm + 3,8 mm na tloušťku poutka 1,2 mm + 15 mm přeplátování</text>
-<path d="M22 232 L22 232 M22 234.5 L24.5 232 M22 237 L27 232 M22 239.5 L29.5 232 M22 242 L32 232 M22.5 244 L34.5 232 M25 244 L37 232 M27.5 244 L37 234.5 M30 244 L37 237 M32.5 244 L37 239.5 M35 244 L37 242" stroke="#6a6a6a" stroke-width="0.2" fill="none"/>
-<path d="M117 232 L117 232 M117 234.5 L119.5 232 M117 237 L122 232 M117 239.5 L124.5 232 M117 242 L127 232 M117.5 244 L129.5 232 M120 244 L132 232 M122.5 244 L132 234.5 M125 244 L132 237 M127.5 244 L132 239.5 M130 244 L132 242" stroke="#6a6a6a" stroke-width="0.2" fill="none"/>
-<rect x="22" y="232" width="110" height="12" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
-<text x="135" y="237" font-family="Helvetica, Arial, sans-serif" font-size="2.8" fill="#6a6a6a" text-anchor="start">šrafy: přeplátování 15 mm</text>
-<text x="135" y="241.5" font-family="Helvetica, Arial, sans-serif" font-size="2.8" fill="#6a6a6a" text-anchor="start">vlevo na líci, vpravo na rubu</text>
-<line x1="22" y1="244" x2="22" y2="246" stroke="#7a7a7a" stroke-width="0.2"/>
-<text x="22" y="249.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">0</text>
-<line x1="32" y1="244" x2="32" y2="246" stroke="#7a7a7a" stroke-width="0.2"/>
-<text x="32" y="249.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">10</text>
-<line x1="42" y1="244" x2="42" y2="246" stroke="#7a7a7a" stroke-width="0.2"/>
-<text x="42" y="249.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">20</text>
-<line x1="52" y1="244" x2="52" y2="246" stroke="#7a7a7a" stroke-width="0.2"/>
-<text x="52" y="249.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">30</text>
-<line x1="62" y1="244" x2="62" y2="246" stroke="#7a7a7a" stroke-width="0.2"/>
-<text x="62" y="249.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">40</text>
-<line x1="72" y1="244" x2="72" y2="246" stroke="#7a7a7a" stroke-width="0.2"/>
-<text x="72" y="249.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">50</text>
-<line x1="82" y1="244" x2="82" y2="246" stroke="#7a7a7a" stroke-width="0.2"/>
-<text x="82" y="249.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">60</text>
-<line x1="92" y1="244" x2="92" y2="246" stroke="#7a7a7a" stroke-width="0.2"/>
-<text x="92" y="249.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">70</text>
-<line x1="102" y1="244" x2="102" y2="246" stroke="#7a7a7a" stroke-width="0.2"/>
-<text x="102" y="249.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">80</text>
-<line x1="112" y1="244" x2="112" y2="246" stroke="#7a7a7a" stroke-width="0.2"/>
-<text x="112" y="249.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">90</text>
-<line x1="122" y1="244" x2="122" y2="246" stroke="#7a7a7a" stroke-width="0.2"/>
-<text x="122" y="249.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">100</text>
-<line x1="132" y1="244" x2="132" y2="246" stroke="#7a7a7a" stroke-width="0.2"/>
-<text x="132" y="249.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">110</text>
-<text x="22" y="258" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">1. Na rub pásu propíchněte 2 černé otvory u konce, oba křížky oválu a 2 červené kroužky ohybu.</text>
-<text x="22" y="262.2" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">2. Vysekněte Ø 6 mm oba otvory a konce oválu, boky oválu řízněte nožem.</text>
-<text x="22" y="266.4" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">   Kroužky ohybu nesekejte: spojte je na rubu pravítkem, to je čára ohybu.</text>
-<text x="22" y="270.6" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">3. Navlékněte poutko na pás, ohněte konec kolem příčky přezky a poutko posuňte přes přehnutý konec.</text>
-<text x="22" y="274.8" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">4. Šedé otvory nepropichujte: vykružte je šídlem skrz vyseknuté, vysekněte, poutko vraťte mezi ně a sešroubujte nýty.</text>
-<text x="22" y="279" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Poutko: mimo šrafy přelepte páskou, šrafy zdrsněte (vlevo líc, vpravo rub), lepidlo jen do šraf. Nýty: 2, proto 4 otvory.</text>
-<text x="22" y="283.2" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Rozměry z šablony Black Flag Leather Goods (jeden zdroj, ať se nemíchají rozteče).</text>
-<text x="22" y="287.4" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Délka poutka je spočítaná, ne ověřená — ověřte na odřezku.</text>
+<text x="22" y="18" font-family="Helvetica, Arial, sans-serif" font-size="4.6" fill="#2b2b2b" text-anchor="start">Opasek 35 mm — strana 1: konec u přezky</text>
+<text x="22" y="24" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#6a6a6a" text-anchor="start">Měřítko 1:1 · tisk na A4 na 100 %, bez „přizpůsobit stránce“ · 4 otvory = 2 nýty</text>
+<text x="146" y="18" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#c0392b" text-anchor="start">KALIBRAČNÍ ČTVEREC</text>
+<text x="146" y="22" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#c0392b" text-anchor="start">po vytištění přeměřte 50 × 50 mm</text>
+<rect x="146" y="24" width="50" height="50" fill="none" stroke="#c0392b" stroke-width="0.4"/>
+<path d="M22 36 L22 216 L57 216 L57 36" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
+<line x1="39.5" y1="36" x2="39.5" y2="216" stroke="#b8b8b8" stroke-width="0.1" stroke-dasharray="3 3"/>
+<line x1="16" y1="126" x2="63" y2="126" stroke="#c0392b" stroke-width="0.4" stroke-dasharray="4 2.5"/>
+<circle cx="24" cy="126" r="1" fill="none" stroke="#c0392b" stroke-width="0.3"/><path d="M22.7 126 H25.3 M24 124.7 V127.3" stroke="#c0392b" stroke-width="0.2" fill="none"/>
+<circle cx="55" cy="126" r="1" fill="none" stroke="#c0392b" stroke-width="0.3"/><path d="M53.7 126 H56.3 M55 124.7 V127.3" stroke="#c0392b" stroke-width="0.2" fill="none"/>
+<path d="M36.5 116.5 A3 3 0 0 1 42.5 116.5 L42.5 135.5 A3 3 0 0 1 36.5 135.5 Z" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
+<path d="M35.6 116.5 H43.4 M39.5 112.6 V120.4" stroke="#2b2b2b" stroke-width="0.2" fill="none"/>
+<path d="M35.6 135.5 H43.4 M39.5 131.6 V139.4" stroke="#2b2b2b" stroke-width="0.2" fill="none"/>
+<circle cx="39.5" cy="151.5" r="3" fill="none" stroke="#2b2b2b" stroke-width="0.3"/><path d="M35.6 151.5 H43.4 M39.5 147.6 V155.4" stroke="#2b2b2b" stroke-width="0.2" fill="none"/>
+<circle cx="39.5" cy="100.5" r="3" fill="none" stroke="#6a6a6a" stroke-width="0.3" stroke-dasharray="1 0.8"/>
+<circle cx="39.5" cy="199.2" r="3" fill="none" stroke="#2b2b2b" stroke-width="0.3"/><path d="M35.6 199.2 H43.4 M39.5 195.3 V203.1" stroke="#2b2b2b" stroke-width="0.2" fill="none"/>
+<circle cx="39.5" cy="52.8" r="3" fill="none" stroke="#6a6a6a" stroke-width="0.3" stroke-dasharray="1 0.8"/>
+<line x1="61" y1="151.5" x2="61" y2="199.2" stroke="#1f6f43" stroke-width="0.3"/><line x1="59" y1="151.5" x2="63" y2="151.5" stroke="#1f6f43" stroke-width="0.3"/><line x1="59" y1="199.2" x2="63" y2="199.2" stroke="#1f6f43" stroke-width="0.3"/>
+<text x="71" y="53.8" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#2b2b2b" text-anchor="start">nýt ± 73,2 mm od ohybu</text>
+<text x="71" y="101.5" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#2b2b2b" text-anchor="start">nýt ± 25,5 mm od ohybu</text>
+<text x="71" y="111" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#2b2b2b" text-anchor="start">ovál 25 × 6 mm, ohyb ho půlí</text>
+<text x="71" y="127" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#c0392b" text-anchor="start">OHYB (příčka přezky) · propíchněte oba kroužky</text>
+<text x="71" y="143" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#1f6f43" text-anchor="start">můstek u oválu 10 mm</text>
+<text x="71" y="176.35" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#1f6f43" text-anchor="start">kapsa pro poutko 47,7 mm (světlá 37,7 mm)</text>
+<text x="71" y="217" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#2b2b2b" text-anchor="start">konec pásu 90 mm od ohybu</text>
+<text x="71" y="77.65" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#6a6a6a" text-anchor="start">šedé: 2. dvojice, značí se až skrz 1. dvojici</text>
+<text x="22" y="33" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#6a6a6a" text-anchor="start">sem pokračuje hlavní pás (nahoře neřezat)</text>
+<text x="22" y="222" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Poutko — pásek 110 × 12 mm, obepíná 3 vrstvy: přehnutý konec, pás pod ním a volný konec pásku</text>
+<text x="22" y="248" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">obvod 3 vrstev 91 mm + 3,8 mm na tloušťku poutka 1,2 mm + 15 mm přeplátování</text>
+<path d="M22 226 L22 226 M22 228.5 L24.5 226 M22 231 L27 226 M22 233.5 L29.5 226 M22 236 L32 226 M22.5 238 L34.5 226 M25 238 L37 226 M27.5 238 L37 228.5 M30 238 L37 231 M32.5 238 L37 233.5 M35 238 L37 236" stroke="#6a6a6a" stroke-width="0.2" fill="none"/>
+<path d="M117 226 L117 226 M117 228.5 L119.5 226 M117 231 L122 226 M117 233.5 L124.5 226 M117 236 L127 226 M117.5 238 L129.5 226 M120 238 L132 226 M122.5 238 L132 228.5 M125 238 L132 231 M127.5 238 L132 233.5 M130 238 L132 236" stroke="#6a6a6a" stroke-width="0.2" fill="none"/>
+<rect x="22" y="226" width="110" height="12" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
+<text x="135" y="231" font-family="Helvetica, Arial, sans-serif" font-size="2.8" fill="#6a6a6a" text-anchor="start">šrafy: přeplátování 15 mm</text>
+<text x="135" y="235.5" font-family="Helvetica, Arial, sans-serif" font-size="2.8" fill="#6a6a6a" text-anchor="start">vlevo na líci, vpravo na rubu</text>
+<line x1="22" y1="238" x2="22" y2="240" stroke="#7a7a7a" stroke-width="0.2"/>
+<text x="22" y="243.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">0</text>
+<line x1="32" y1="238" x2="32" y2="240" stroke="#7a7a7a" stroke-width="0.2"/>
+<text x="32" y="243.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">10</text>
+<line x1="42" y1="238" x2="42" y2="240" stroke="#7a7a7a" stroke-width="0.2"/>
+<text x="42" y="243.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">20</text>
+<line x1="52" y1="238" x2="52" y2="240" stroke="#7a7a7a" stroke-width="0.2"/>
+<text x="52" y="243.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">30</text>
+<line x1="62" y1="238" x2="62" y2="240" stroke="#7a7a7a" stroke-width="0.2"/>
+<text x="62" y="243.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">40</text>
+<line x1="72" y1="238" x2="72" y2="240" stroke="#7a7a7a" stroke-width="0.2"/>
+<text x="72" y="243.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">50</text>
+<line x1="82" y1="238" x2="82" y2="240" stroke="#7a7a7a" stroke-width="0.2"/>
+<text x="82" y="243.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">60</text>
+<line x1="92" y1="238" x2="92" y2="240" stroke="#7a7a7a" stroke-width="0.2"/>
+<text x="92" y="243.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">70</text>
+<line x1="102" y1="238" x2="102" y2="240" stroke="#7a7a7a" stroke-width="0.2"/>
+<text x="102" y="243.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">80</text>
+<line x1="112" y1="238" x2="112" y2="240" stroke="#7a7a7a" stroke-width="0.2"/>
+<text x="112" y="243.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">90</text>
+<line x1="122" y1="238" x2="122" y2="240" stroke="#7a7a7a" stroke-width="0.2"/>
+<text x="122" y="243.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">100</text>
+<line x1="132" y1="238" x2="132" y2="240" stroke="#7a7a7a" stroke-width="0.2"/>
+<text x="132" y="243.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">110</text>
+<text x="22" y="252.2" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">1. Na rub pásu propíchněte 2 černé otvory u konce, oba křížky oválu a 2 červené kroužky ohybu.</text>
+<text x="22" y="256.4" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">2. Vysekněte Ø 6 mm oba otvory a konce oválu, boky oválu řízněte nožem.</text>
+<text x="22" y="260.6" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">   Kroužky ohybu nesekejte: spojte je na rubu pravítkem, to je čára ohybu.</text>
+<text x="22" y="264.8" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">3. Navlékněte poutko na pás, ohněte konec kolem příčky přezky a poutko posuňte přes přehnutý konec.</text>
+<text x="22" y="269" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">4. Šedé otvory nepropichujte: vykružte je šídlem skrz vyseknuté, vysekněte, poutko vraťte mezi ně a sešroubujte nýty.</text>
+<text x="22" y="273.2" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Poutko: mimo šrafy přelepte páskou, šrafy zdrsněte (vlevo líc, vpravo rub), lepidlo jen do šraf. Nýty: 2, proto 4 otvory.</text>
+<text x="22" y="277.4" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Rozměry z šablony Black Flag Leather Goods (jeden zdroj, ať se nemíchají rozteče).</text>
+<text x="22" y="281.6" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Délka poutka je spočítaná, ne ověřená — ověřte na odřezku.</text>
 </svg>

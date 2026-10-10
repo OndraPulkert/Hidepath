@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  DEFAULT_LID_WALLET,
-  PRINT_SHEET,
-  SHEET_HEADER_MM,
-  fmt as cz,
-  lidWalletLayout,
-} from '../src/lib/geometry/lid-wallet.ts';
+import { DEFAULT_LID_WALLET, fmt as cz, lidWalletLayout } from '../src/lib/geometry/lid-wallet.ts';
+import { LID_PIECE_ORIGIN } from '../src/lib/patterns/lid-wallet-sheets.ts';
 import {
   HOLE_R,
   LAYERS,
@@ -25,8 +20,8 @@ const back = buildLidBackSvg();
 const parts = buildLidPartsSvg();
 const jigs = buildLidJigsSvg();
 const all = [sheet, back, parts, jigs];
-const ox = PRINT_SHEET.marginMm;
-const oy = PRINT_SHEET.marginMm + SHEET_HEADER_MM;
+const ox = LID_PIECE_ORIGIN.x;
+const oy = LID_PIECE_ORIGIN.y;
 
 function layer(svg: string, id: string): string {
   const m = new RegExp(`<g id="${id}"[^>]*>(.*?)</g>(?=<g id=|</svg>)`, 's').exec(svg);

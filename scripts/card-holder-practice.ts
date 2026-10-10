@@ -4,7 +4,8 @@
  *   pnpm pattern:card-holder-practice
  *
  * List A4 na výšku, 1:1, vrstvy CUT (plná čára řezu) a GUIDE (okraj na vystřižení, čárky konců,
- * popisky, kontrolní úsečka 50 mm). Tři malé tvary na vyzkoušení hlavního způsobu přenosu šablony
+ * popisky, kontrolní úsečka 50 mm). Vše leží aspoň `PRACTICE_SHEET.marginMm` = 13 mm od každé hrany
+ * papíru: tiskárna HP DeskJet 2700 netiskne 12,7 mm u spodní hrany (na výšku), ~3 mm u ostatních. Tři malé tvary na vyzkoušení hlavního způsobu přenosu šablony
  * z lekce 5 (vystřihnout nahrubo, přilepit páskou na rub, řezat skrz papír po čáře, nic
  * nepropichovat) na odřezku, ne na pouzdru:
  * 1. obdélník 60 × 40 mm – rovné řezy s pravítkem po vytištěné čáře,
@@ -23,7 +24,10 @@ const cz = (n: number): string => f(n).replace('.', ',');
 const esc = (s: string): string => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
 export const PRACTICE_FILE_STEM = 'pouzdro-karty-cvicna-sablona';
-export const PRACTICE_SHEET = { widthMm: 210, heightMm: 297, marginMm: 8 } as const;
+/** `marginMm` = bezpečný okraj: nic nekreslíme blíž k hraně papíru (test `practiceSheetBounds`). */
+export const PRACTICE_SHEET = { widthMm: 210, heightMm: 297, marginMm: 13 } as const;
+/** Od tohoto odsazení se kreslí; o 0,5 mm víc než okraj, aby se do něj nevešla ani tloušťka čar. */
+const INSET_MM = PRACTICE_SHEET.marginMm + 0.5;
 export const CALIBRATION_MM = 50;
 export const LAYERS = ['CUT', 'GUIDE'] as const;
 type Layer = (typeof LAYERS)[number];
@@ -57,30 +61,85 @@ export function offcutFootprint(): { widthMm: number; heightMm: number; paperHei
   };
 }
 
-const HEADER_MM = 14;
+const HEADER_MM = 13;
 const STEPS_MM = 21;
-const FOOTER_MM = 30;
+/** Patička: kontrolní úsečka, pokyn k tisku a legenda. Rozložení na odřezku je vedle tvaru 3. */
+const FOOTER_MM = 20;
+/** Řádkování postupu nahoře. */
+const STEPS_GAP_MM = 3.4;
 const BLOCK_GAP_MM = 3;
 /** Šířka bloku s okrajem na vystřižení. */
 export const BLOCK_W = PRACTICE_SHAPE.widthMm + 2 * ROUGH_MARGIN_MM;
 export const BLOCK_H = PRACTICE_SHAPE.heightMm + 2 * ROUGH_MARGIN_MM;
 /** Levý horní roh okraje (čárkovaného obdélníku) bloku i = 0, 1, 2. */
 export function blockOrigin(i: number): { x: number; y: number } {
-  const m = PRACTICE_SHEET.marginMm;
+  const m = INSET_MM;
   return { x: m, y: m + HEADER_MM + STEPS_MM + i * (BLOCK_H + BLOCK_GAP_MM) };
 }
 /** Horní hrana patičky (úsečka, legenda); bloky musí skončit nad ní. */
-export const FOOTER_TOP = PRACTICE_SHEET.heightMm - PRACTICE_SHEET.marginMm - FOOTER_MM;
-const TEXT_X = PRACTICE_SHEET.marginMm + BLOCK_W + 5;
+export const FOOTER_TOP = PRACTICE_SHEET.heightMm - INSET_MM - FOOTER_MM;
+const TEXT_X = INSET_MM + BLOCK_W + 5;
+
+/** Obdélník, který zabírá nakreslený prvek (čára i s polovinou tloušťky, text odhadem). */
+export interface Box {
+  x0: number;
+  y0: number;
+  x1: number;
+  y1: number;
+  /** Text nebo třída prvku, aby test řekl, co přečnívá. */
+  what: string;
+}
+
+/**
+ * Odhad šířky textu jako násobek velikosti písma na znak, záměrně spíš větší: Helvetica/Arial
+ * vychází v Chrome asi 0,43–0,6 velikosti na znak (velká tučná písmena nejvíc).
+ */
+const CHAR_EM = { regular: 0.56, bold: 0.66 } as const;
+/** Nad účařím sahá nejvýš háček nad velkým písmenem (~0,95 velikosti), pod něj ocásky (~0,25). */
+const ASCENT_EM = 0.95;
+const DESCENT_EM = 0.25;
+
+/** Body cesty z absolutních příkazů M/L/H/V/A (oblouky na listu leží uvnitř obrysu svých bodů). */
+function pathPoints(d: string): [number, number][] {
+  const pts: [number, number][] = [];
+  let x = 0;
+  let y = 0;
+  for (const m of d.matchAll(/([MLHVAZ])([^MLHVAZ]*)/g)) {
+    const n = m[2]
+      .trim()
+      .split(/[\s,]+/)
+      .filter(Boolean)
+      .map(Number);
+    if (m[1] === 'M' || m[1] === 'L') [x, y] = [n[0], n[1]];
+    else if (m[1] === 'H') x = n[0];
+    else if (m[1] === 'V') y = n[0];
+    else if (m[1] === 'A') [x, y] = [n[5], n[6]];
+    else continue;
+    pts.push([x, y]);
+  }
+  return pts;
+}
 
 class Sheet {
   private readonly layers: Record<Layer, string[]> = { CUT: [], GUIDE: [] };
+  readonly bounds: Box[] = [];
 
   add(layer: Layer, s: string): void {
     this.layers[layer].push(s);
   }
 
   path(layer: Layer, d: string, width: number, dash?: string, cls?: string): void {
+    const pts = pathPoints(d);
+    const xs = pts.map((p) => p[0]);
+    const ys = pts.map((p) => p[1]);
+    const h = width / 2;
+    this.bounds.push({
+      x0: Math.min(...xs) - h,
+      y0: Math.min(...ys) - h,
+      x1: Math.max(...xs) + h,
+      y1: Math.max(...ys) + h,
+      what: cls ?? `cesta ${d.slice(0, 30)}`,
+    });
     this.add(
       layer,
       `<path${cls ? ` class="${cls}"` : ''} d="${d}" fill="none" stroke="${COLORS[layer]}" stroke-width="${f(width)}"` +
@@ -101,6 +160,15 @@ class Sheet {
     anchor: Anchor = 'start',
     opts: { bold?: boolean; fill?: string } = {},
   ): void {
+    const w = s.length * size * CHAR_EM[opts.bold ? 'bold' : 'regular'];
+    const x0 = anchor === 'start' ? x : anchor === 'middle' ? x - w / 2 : x - w;
+    this.bounds.push({
+      x0,
+      y0: y - ASCENT_EM * size,
+      x1: x0 + w,
+      y1: y + DESCENT_EM * size,
+      what: s,
+    });
     this.add(
       'GUIDE',
       `<text x="${f(x)}" y="${f(y)}" font-family="Helvetica, Arial, sans-serif" font-size="${f(size)}"` +
@@ -230,8 +298,29 @@ const STEPS = [
 ];
 
 export function buildPracticeSheetSvg(): string {
+  return drawPracticeSheet().render('Cvičná šablona – pouzdro na karty, lekce 2');
+}
+
+/** Co na listu zabírá místo (pro test bezpečného okraje 13 mm). */
+export function practiceSheetBounds(): Box[] {
+  return drawPracticeSheet().bounds;
+}
+
+/** Rozložení tvarů na odřezku, vedle tvaru 3 pod jeho popisem (zalomené do pravého sloupce). */
+function offcutLines(): string[] {
+  const fp = offcutFootprint();
+  return [
+    '# Na odřezek',
+    'Zbytek juchtové A5 (asi 210 × 80 mm): tvary vedle sebe',
+    `po delší straně, ${cz(OFFCUT_LAYOUT.edgeMm)} mm od kraje, ${cz(OFFCUT_LAYOUT.gapMm)} mm od sebe`,
+    `= ${cz(fp.widthMm)} × ${cz(fp.heightMm)} mm kůže (s papírovým okrajem`,
+    `${cz(fp.paperHeightMm)} mm na výšku); jeden tvar po druhém.`,
+  ];
+}
+
+function drawPracticeSheet(): Sheet {
   const s = new Sheet();
-  const m = PRACTICE_SHEET.marginMm;
+  const m = INSET_MM;
 
   s.text(m, m + 5, 'CVIČNÁ ŠABLONA – ŘEZ PODLE PŘILEPENÉ ŠABLONY', 4.6, 'start', { bold: true });
   s.text(
@@ -240,7 +329,7 @@ export function buildPracticeSheetSvg(): string {
     'Pouzdro na karty · lekce 2 Rovný řez kůže · tři tvary na odřezek, ne díly pouzdra',
     2.5,
   );
-  column(s, m, m + HEADER_MM + 3, STEPS, 2.3, 3.6);
+  column(s, m, m + HEADER_MM + 3, STEPS, 2.3, STEPS_GAP_MM);
 
   BLOCKS.forEach((b, i) => {
     const o = blockOrigin(i);
@@ -283,7 +372,8 @@ export function buildPracticeSheetSvg(): string {
       const [pl] = notchEndPoints(x0, y0);
       s.text(pl.x - 2, y0 - 2, 'konec rovného řezu', 2, 'end', { fill: COLORS.GUIDE });
     }
-    column(s, TEXT_X, o.y + 8, [b.label, ...b.lines]);
+    const textEnd = column(s, TEXT_X, o.y + 8, [b.label, ...b.lines]);
+    if (b.notch) column(s, TEXT_X, textEnd + 4, offcutLines());
   });
 
   // Patička: kontrolní úsečka 50 mm, tisk 1:1, rozložení na odřezku, legenda vrstev.
@@ -291,9 +381,12 @@ export function buildPracticeSheetSvg(): string {
   s.line('GUIDE', m, y, m + CALIBRATION_MM, y, 0.4);
   s.line('GUIDE', m, y - 2.5, m, y + 2.5, 0.3);
   s.line('GUIDE', m + CALIBRATION_MM, y - 2.5, m + CALIBRATION_MM, y + 2.5, 0.3);
-  s.add(
+  s.path(
     'GUIDE',
-    `<path class="calibration" d="M${f(m)} ${f(y)} L${f(m + CALIBRATION_MM)} ${f(y)}" stroke="${COLORS.GUIDE}" stroke-width="0.01"/>`,
+    `M${f(m)} ${f(y)} L${f(m + CALIBRATION_MM)} ${f(y)}`,
+    0.01,
+    undefined,
+    'calibration',
   );
   s.text(m + CALIBRATION_MM / 2, y - 3.2, 'KONTROLNÍ ÚSEČKA 50 mm', 2.4, 'middle', { bold: true });
   s.text(m + CALIBRATION_MM + 6, y - 1.5, 'PRINT AT 100% / ACTUAL SIZE', 3.4, 'start', {
@@ -305,20 +398,7 @@ export function buildPracticeSheetSvg(): string {
     'Tisk na 100 % (skutečná velikost), vypnout „přizpůsobit stránce“ · měřítko 1:1',
     2.3,
   );
-  const fp = offcutFootprint();
-  s.text(
-    m,
-    y + 7.5,
-    `Na zbytek juchtové A5 (asi 210 × 80 mm): tvary vedle sebe po delší straně, ${cz(OFFCUT_LAYOUT.edgeMm)} mm od kraje,`,
-    2.3,
-  );
-  s.text(
-    m,
-    y + 11.5,
-    `${cz(OFFCUT_LAYOUT.gapMm)} mm od sebe = ${cz(fp.widthMm)} × ${cz(fp.heightMm)} mm kůže (s papírovým okrajem ${cz(fp.paperHeightMm)} mm na výšku); jeden tvar po druhém.`,
-    2.3,
-  );
-  const ly = y + 17;
+  const ly = y + 7.5;
   s.line('CUT', m, ly, m + 7, ly, 0.3);
   s.text(m + 8.5, ly + 0.8, 'CUT řez nožem', 2.2, 'start');
   s.line('GUIDE', m + 45, ly, m + 52, ly, 0.25, '3 2');
@@ -329,7 +409,7 @@ export function buildPracticeSheetSvg(): string {
   s.text(m + 127.5, ly + 0.8, 'krátká čárka = konec řezu, nepropichovat', 2.2, 'start', {
     fill: COLORS.GUIDE,
   });
-  return s.render('Cvičná šablona – pouzdro na karty, lekce 2');
+  return s;
 }
 
 async function main(): Promise<void> {

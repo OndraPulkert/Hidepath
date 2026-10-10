@@ -26,15 +26,45 @@ const GLUE_STROKE = '#6B5F57';
 const STITCH_STROKE = '#A85F32';
 
 /**
- * Šablona 1:1 vykreslená v milimetrech. V režimu print má SVG rozměr přímo v `mm`,
- * takže při tisku na 100 % odpovídá skutečné velikosti. Kontrolní úsečka slouží k ověření.
+ * Bezpečný okraj tiskové stránky šablony (`@page margin`): HP DeskJet 2700 netiskne 12,7 mm
+ * u spodní hrany A4 na výšku, proto nic nesmí ležet blíž než 13 mm k žádné hraně papíru.
  */
-export function TemplateIllustration({
-  template,
-  title,
-  mode = 'preview',
-  legend = mode === 'print',
-}: TemplateIllustrationProps) {
+export const TEMPLATE_PRINT_MARGIN_MM = 13;
+
+/** Text šablony v milimetrech (levý okraj `x`, účaří `y`). */
+export interface TemplateSheetText {
+  key: string;
+  x: number;
+  y: number;
+  sizeMm: number;
+  font: 'sans' | 'mono';
+  bold?: boolean;
+  fill: string;
+  text: string;
+}
+
+/** Obdélník, který zabírá nakreslený prvek (bez textů). */
+export interface TemplateSheetBox {
+  what: string;
+  x0: number;
+  y0: number;
+  x1: number;
+  y1: number;
+}
+
+const FONT = {
+  sans: 'Albert Sans, system-ui, sans-serif',
+  mono: 'ui-monospace, Menlo, monospace',
+} as const;
+const MUTED = '#6B5F57';
+const INK = '#2B211C';
+
+/**
+ * Rozložení šablony: rozměr SVG, umístění dílů, všechny texty a plochy značek, legendy a kontrolní
+ * úsečky. Z toho kreslí `TemplateIllustration` a test hlídá, že nic nepřesahuje SVG ani tiskovou
+ * stránku s okrajem `TEMPLATE_PRINT_MARGIN_MM`.
+ */
+export function templateSheetLayout(template: TemplateDefinition, legend: boolean) {
   const gap = 10;
   const margin = 12;
   const pieces = template.pieces;
@@ -56,8 +86,139 @@ export function TemplateIllustration({
     // Lepený pás leží na dílu pod kapsou; popisky začínají až za jeho tečkovanou čarou.
     glueBand: p.openEdge === 'top' && p.stitchUpToMm ? template.glueBandMm : undefined,
   }));
-  // Popisky začínají 2,5 mm za vnitřní čárou (lepený pás nebo linie stehu), ne na ní.
-  const textX = (p: (typeof placed)[number]) => p.x + (p.glueBand ?? p.stitchOffsetMm) + 2.5;
+
+  const texts: TemplateSheetText[] = [];
+  const boxes: TemplateSheetBox[] = [];
+  for (const p of placed) {
+    // Popisky začínají 2,5 mm za vnitřní čárou (lepený pás nebo linie stehu), ne na ní.
+    const x = p.x + (p.glueBand ?? p.stitchOffsetMm) + 2.5;
+    const y = p.y + p.labelOffset;
+    const note = (dy: number, text: string) =>
+      texts.push({
+        key: `${p.id}-${dy}`,
+        x,
+        y: y + dy,
+        sizeMm: 2.6,
+        font: 'mono',
+        fill: MUTED,
+        text,
+      });
+    texts.push({
+      key: `${p.id}-name`,
+      x,
+      y: y + 6,
+      sizeMm: 3.2,
+      font: 'sans',
+      bold: true,
+      fill: INK,
+      text: p.name,
+    });
+    note(
+      10.5,
+      `${mm(p.widthMm)} × ${mm(p.heightMm)} mm · ${p.quantity}× · steh ${mm(p.stitchOffsetMm)} mm od hrany` +
+        (p.openEdge === 'top' && !p.stitchUpToMm ? ' · vrch bez stehu' : ''),
+    );
+    if (p.stitchUpToMm) {
+      note(14.5, `vrch bez stehu, boky šité jen pod kapsou (výška ${mm(p.stitchUpToMm)} mm)`);
+    }
+    if (p.heightMark) {
+      note(18.5, `čárky na bocích = horní hrana kapsy (${mm(p.heightMark.fromBottomMm)} mm)`);
+    }
+    if (p.glueBand) note(22.5, `lepený pás ${mm(p.glueBand)} mm: zdrsnit jen pod horní kroužky`);
+    if (p.thumbCutout) {
+      note(14.5, `výřez na palec ${mm(p.thumbCutout.widthMm)} × ${mm(p.thumbCutout.depthMm)} mm`);
+    }
+    if (p.openEdge === 'top' && !p.stitchUpToMm) {
+      note(18.5, 'děrujte skrz papír přilepený na líci (lekce 6)');
+    }
+    boxes.push({ what: p.name, x0: p.x, y0: p.y, x1: p.x + p.widthMm, y1: p.y + p.heightMm });
+    for (const m of templateMarks(p)) {
+      boxes.push({
+        what: `${p.name}: ${m.kind}`,
+        x0: Math.min(m.x1, m.x2),
+        y0: Math.min(m.y1, m.y2),
+        x1: Math.max(m.x1, m.x2),
+        y1: Math.max(m.y1, m.y2),
+      });
+    }
+  }
+
+  const legendOrigin = { x: margin, y: height - 46 };
+  if (legend) {
+    const rows: [keyof typeof TEMPLATE_LEGEND, number, string][] = [
+      ['outline', 1, INK],
+      ['stitch', 6, '#7E4423'],
+      ['glue', 11, GLUE_STROKE],
+      ['tick', 16, INK],
+      ['prick', 21, INK],
+      ['punch', 26, '#7E4423'],
+    ];
+    for (const [id, dy, fill] of rows) {
+      texts.push({
+        key: `legend-${id}`,
+        x: legendOrigin.x + 10,
+        y: legendOrigin.y + dy,
+        sizeMm: 2.6,
+        font: 'mono',
+        fill,
+        text: TEMPLATE_LEGEND[id],
+      });
+    }
+    boxes.push({
+      what: 'značky legendy',
+      x0: legendOrigin.x,
+      y0: legendOrigin.y - 0.2,
+      x1: legendOrigin.x + 8,
+      y1: legendOrigin.y + 25 + PRICK_R + 0.1,
+    });
+  }
+
+  const calibration = { x: margin, y: height - 14 };
+  boxes.push({
+    what: 'kontrolní úsečka',
+    x0: calibration.x - 0.25,
+    y0: calibration.y - 2,
+    x1: calibration.x + template.calibrationMm + 0.25,
+    y1: calibration.y + 2,
+  });
+  texts.push(
+    {
+      key: 'calibration',
+      x: calibration.x,
+      y: calibration.y + 6,
+      sizeMm: 2.8,
+      font: 'mono',
+      fill: INK,
+      text: `kontrolní úsečka ${template.calibrationMm} mm`,
+    },
+    {
+      key: 'stitching',
+      x: calibration.x + contentWidth - 58,
+      y: calibration.y + 6,
+      sizeMm: 2.8,
+      font: 'mono',
+      fill: MUTED,
+      text: `${template.stitchSpacingLabel} · ${template.threadLabel}`,
+    },
+  );
+
+  return { width, height, contentWidth, placed, texts, boxes, legendOrigin, calibration };
+}
+
+/**
+ * Šablona 1:1 vykreslená v milimetrech. V režimu print má SVG rozměr přímo v `mm`,
+ * takže při tisku na 100 % odpovídá skutečné velikosti. Kontrolní úsečka slouží k ověření.
+ */
+export function TemplateIllustration({
+  template,
+  title,
+  mode = 'preview',
+  legend = mode === 'print',
+}: TemplateIllustrationProps) {
+  const { width, height, placed, texts, legendOrigin, calibration } = templateSheetLayout(
+    template,
+    legend,
+  );
 
   const sizeProps =
     mode === 'print'
@@ -139,95 +300,26 @@ export function TemplateIllustration({
               strokeWidth={0.35}
             />
           ))}
-          <text
-            x={textX(p)}
-            y={p.y + 6 + p.labelOffset}
-            fontFamily="Albert Sans, system-ui, sans-serif"
-            fontSize={3.2}
-            fill="#2B211C"
-            fontWeight={600}
-          >
-            {p.name}
-          </text>
-          <text
-            x={textX(p)}
-            y={p.y + 10.5 + p.labelOffset}
-            fontFamily="ui-monospace, Menlo, monospace"
-            fontSize={2.6}
-            fill="#6B5F57"
-          >
-            {mm(p.widthMm)} × {mm(p.heightMm)} mm · {p.quantity}× · steh {mm(p.stitchOffsetMm)} mm
-            od hrany
-            {p.openEdge === 'top' && !p.stitchUpToMm ? ' · vrch bez stehu' : ''}
-          </text>
-          {p.stitchUpToMm ? (
-            <text
-              x={textX(p)}
-              y={p.y + 14.5 + p.labelOffset}
-              fontFamily="ui-monospace, Menlo, monospace"
-              fontSize={2.6}
-              fill="#6B5F57"
-            >
-              vrch bez stehu, boky šité jen pod kapsou (výška {mm(p.stitchUpToMm)} mm)
-            </text>
-          ) : null}
-          {p.heightMark ? (
-            <text
-              x={textX(p)}
-              y={p.y + 18.5 + p.labelOffset}
-              fontFamily="ui-monospace, Menlo, monospace"
-              fontSize={2.6}
-              fill="#6B5F57"
-            >
-              čárky na bocích = horní hrana kapsy ({mm(p.heightMark.fromBottomMm)} mm)
-            </text>
-          ) : null}
-          {p.glueBand ? (
-            <text
-              x={textX(p)}
-              y={p.y + 22.5 + p.labelOffset}
-              fontFamily="ui-monospace, Menlo, monospace"
-              fontSize={2.6}
-              fill="#6B5F57"
-            >
-              lepený pás {mm(p.glueBand)} mm: zdrsnit jen pod horní kroužky
-            </text>
-          ) : null}
-          {p.thumbCutout ? (
-            <text
-              x={textX(p)}
-              y={p.y + 14.5 + p.labelOffset}
-              fontFamily="ui-monospace, Menlo, monospace"
-              fontSize={2.6}
-              fill="#6B5F57"
-            >
-              výřez na palec {mm(p.thumbCutout.widthMm)} × {mm(p.thumbCutout.depthMm)} mm
-            </text>
-          ) : null}
-          {p.openEdge === 'top' && !p.stitchUpToMm ? (
-            <text
-              x={textX(p)}
-              y={p.y + 18.5 + p.labelOffset}
-              fontFamily="ui-monospace, Menlo, monospace"
-              fontSize={2.6}
-              fill="#6B5F57"
-            >
-              děrujte skrz papír přilepený na líci (lekce 6)
-            </text>
-          ) : null}
         </g>
+      ))}
+      {texts.map((t) => (
+        <text
+          key={t.key}
+          x={t.x}
+          y={t.y}
+          fontFamily={FONT[t.font]}
+          fontSize={t.sizeMm}
+          fill={t.fill}
+          fontWeight={t.bold ? 600 : undefined}
+        >
+          {t.text}
+        </text>
       ))}
       {/* legenda */}
       {legend ? (
-        <g transform={`translate(${margin} ${height - 46})`}>
+        <g transform={`translate(${legendOrigin.x} ${legendOrigin.y})`}>
           <path d="M0 0 L8 0" stroke="#2B211C" strokeWidth={0.4} />
-          <LegendText y={1} fill="#2B211C">
-            {TEMPLATE_LEGEND.outline}
-          </LegendText>
           <path d="M0 5 L8 5" stroke="#A85F32" strokeWidth={0.3} strokeDasharray="1.2 0.8" />
-          <LegendText y={6} fill="#7E4423">
-            {TEMPLATE_LEGEND.stitch}
-          </LegendText>
           <path
             d="M0 10 L8 10"
             stroke={GLUE_STROKE}
@@ -235,25 +327,13 @@ export function TemplateIllustration({
             strokeDasharray="0.1 0.9"
             strokeLinecap="round"
           />
-          <LegendText y={11} fill={GLUE_STROKE}>
-            {TEMPLATE_LEGEND.glue}
-          </LegendText>
           <path d="M4 13 L4 17" stroke="#2B211C" strokeWidth={0.35} />
-          <LegendText y={16} fill="#2B211C">
-            {TEMPLATE_LEGEND.tick}
-          </LegendText>
           <circle cx={4} cy={20} r={PRICK_R} fill="none" stroke="#2B211C" strokeWidth={0.2} />
-          <LegendText y={21} fill="#2B211C">
-            {TEMPLATE_LEGEND.prick}
-          </LegendText>
           <circle cx={4} cy={25} r={PRICK_R} fill="none" stroke={STITCH_STROKE} strokeWidth={0.2} />
-          <LegendText y={26} fill="#7E4423">
-            {TEMPLATE_LEGEND.punch}
-          </LegendText>
         </g>
       ) : null}
       {/* kontrolní úsečka */}
-      <g transform={`translate(${margin} ${height - 14})`}>
+      <g transform={`translate(${calibration.x} ${calibration.y})`}>
         <path d={`M0 0 L${template.calibrationMm} 0`} stroke="#2B211C" strokeWidth={0.5} />
         <path d="M0 -2 L0 2" stroke="#2B211C" strokeWidth={0.5} />
         <path
@@ -261,28 +341,8 @@ export function TemplateIllustration({
           stroke="#2B211C"
           strokeWidth={0.5}
         />
-        <text x={0} y={6} fontFamily="ui-monospace, Menlo, monospace" fontSize={2.8} fill="#2B211C">
-          kontrolní úsečka {template.calibrationMm} mm
-        </text>
-        <text
-          x={contentWidth - 58}
-          y={6}
-          fontFamily="ui-monospace, Menlo, monospace"
-          fontSize={2.8}
-          fill="#6B5F57"
-        >
-          {template.stitchSpacingLabel} · {template.threadLabel}
-        </text>
       </g>
     </svg>
-  );
-}
-
-function LegendText({ y, fill, children }: { y: number; fill: string; children: string }) {
-  return (
-    <text x={10} y={y} fontFamily="ui-monospace, Menlo, monospace" fontSize={2.6} fill={fill}>
-      {children}
-    </text>
   );
 }
 

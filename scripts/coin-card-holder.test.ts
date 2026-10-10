@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  A4_SHEET,
   DEFAULT_COIN_CARD_HOLDER,
   GROMMET_FLANGE_MM,
   NAMED_COINS,
@@ -13,11 +14,15 @@ import {
   bandPrickPoints,
   stripTopEdgeYMm,
   buildCoinHolderSheetSvg,
+  PROCESS_GRID,
   coinHolderFileStem,
   coinHolderProcessFileStem,
   pocketGlueBand,
   skiveZones,
 } from './coin-card-holder.ts';
+
+/** Okraj listu PÁS a papírového modelu (bezpečný okraj tisku 13 mm + 0,5 mm). */
+const M = A4_SHEET.marginMm;
 
 /** Generátor pouzdra s mincí mimo výchozí variantu (golden test hlídá jen verzované soubory). */
 describe('generátor pouzdra s mincí – varianty', () => {
@@ -64,8 +69,8 @@ describe('generátor pouzdra s mincí – varianty', () => {
   it('výchozí listy jsou bez průchodky, --grommet ji vrátí se stejnou geometrií', () => {
     const G = { ...spec, grommet: true };
     const L = coinCardHolderLayout(G);
-    const X = (x: number): string => r3(10 + x);
-    const Y = (y: number): string => r3(10 + L.tabLengthMm + y);
+    const X = (x: number): string => r3(M + x);
+    const Y = (y: number): string => r3(M + L.tabLengthMm + y);
     const hole = `<circle cx="${X(L.grommetXMm!)}" cy="${Y(L.grommetYMm!)}" r="2.5"`;
     expect(buildCoinHolderSheetSvg(G)).toContain(hole);
     expect(buildCoinHolderSheetSvg(G)).toContain('průchodka Ø 5');
@@ -112,7 +117,7 @@ describe('generátor pouzdra s mincí – varianty', () => {
     const left = { ...spec, tabSide: 'left' as const, grommet: true };
     const L = coinCardHolderLayout(left);
     const svg = buildCoinHolderSheetSvg(left);
-    const m = 10;
+    const m = M;
     const X = (x: number): string => r3(m + L.stripLengthMm - x);
     const Y = (y: number): string => r3(m + L.tabLengthMm + y);
     const body = /<path d="(M[^"]+)" fill="none" stroke="#2b2b2b" stroke-width="0.3"/.exec(svg)![1];
@@ -150,11 +155,9 @@ describe('generátor pouzdra s mincí – varianty', () => {
   it('list postupu: pás v kroku 1, výřez předku vlevo, dno prošité skrz vrstvy', () => {
     const L = coinCardHolderLayout(spec);
     const svg = buildCoinHolderProcessSvg(spec);
-    const pad = 8;
-    const cellW = (297 - 2 * pad) / 4;
-    const cellH = (210 - 2 * pad - 10) / 2;
+    const { pad, cellW, cellH } = PROCESS_GRID;
     // Buňka 4 (přišití kapsy): přední panel začíná čtvrtkruhem výřezu v levém horním rohu.
-    const k4 = Math.min(0.62, (cellH - 26) / L.panelHeightMm);
+    const k4 = Math.min(0.62, (cellH - 28) / L.panelHeightMm);
     const ox4 = pad + 3 * cellW + (cellW - L.panelWidthMm * k4) / 2;
     const oy4 = pad + 12;
     const S4 = L.scoopRadiusMm * k4;
@@ -181,8 +184,8 @@ describe('generátor pouzdra s mincí – varianty', () => {
     const d = rc - spec.stitchOffsetMm;
     const inset = rc - Math.sqrt(rc * rc - d * d);
     expect(inset).toBeGreaterThan(0.5);
-    const y = r3(10 + L.tabLengthMm + L.bottomSeamYMm);
-    const line = `M${r3(10 + inset)} ${y} L${r3(10 + L.stripLengthMm - inset)} ${y}`;
+    const y = r3(M + L.tabLengthMm + L.bottomSeamYMm);
+    const line = `M${r3(M + inset)} ${y} L${r3(M + L.stripLengthMm - inset)} ${y}`;
     expect(buildCoinHolderSheetSvg(spec)).toContain(line);
     expect(buildCoinHolderPaperModelSvg(spec)).toContain(line);
   });
@@ -195,10 +198,8 @@ describe('generátor pouzdra s mincí – varianty', () => {
   it('list postupu: kování a jazyk na správných stranách v buňkách 6 a 7', () => {
     const L = coinCardHolderLayout(spec);
     const svg = buildCoinHolderProcessSvg({ ...spec, grommet: true });
-    const pad = 8;
-    const cellW = (297 - 2 * pad) / 4;
-    const cellH = (210 - 2 * pad - 10) / 2;
-    const k7 = Math.min(0.62, (cellH - 26) / L.panelHeightMm);
+    const { pad, cellW, cellH } = PROCESS_GRID;
+    const k7 = Math.min(0.62, (cellH - 28) / L.panelHeightMm);
     const ox7 = pad + 2 * cellW + (cellW - L.panelWidthMm * k7) / 2;
     const oy7 = pad + cellH + 14;
     // průchodka vlevo nahoře (strana výřezu), jazyk vpravo
@@ -225,7 +226,7 @@ describe('generátor pouzdra s mincí – varianty', () => {
     expect(paper).not.toMatch(/r="0.45"/);
     expect(paper).not.toMatch(/r="0.75"/);
     // Rámeček karty: šířka a výška karty, dolní hrana na švu dna, vystředěný na předním panelu.
-    const m = 10;
+    const m = M;
     const Y0 = m + L.tabLengthMm;
     const cx0 = m + L.frontX0Mm + (L.panelWidthMm - spec.cardWidthMm) / 2;
     expect(paper).toContain(
@@ -294,8 +295,8 @@ describe('generátor pouzdra s mincí – varianty', () => {
     const crosses = [...svg.matchAll(/<path d="M([\d.]+) ([\d.]+) L[\d.]+ [\d.]+ M/g)].map(
       ([, x, y]) => [Number(x) + 1.5, Number(y)],
     );
-    const sx = 10;
-    const sy = 10 + L.tabLengthMm;
+    const sx = M;
+    const sy = M + L.tabLengthMm;
     for (const [x, y] of [
       [L.snapXTabMm, L.snapYTabMm],
       [L.snapXFrontMm, L.snapYFrontMm],
@@ -338,8 +339,8 @@ describe('generátor pouzdra s mincí – varianty', () => {
     expect(rects.length).toBe(1);
     const z = zones[0];
     const r0 = rects[0];
-    expect(Number(r0[1])).toBeCloseTo(10 + z.x0, 2);
-    expect(Number(r0[2])).toBeCloseTo(10 + L.tabLengthMm + z.y0, 2);
+    expect(Number(r0[1])).toBeCloseTo(M + z.x0, 2);
+    expect(Number(r0[2])).toBeCloseTo(M + L.tabLengthMm + z.y0, 2);
     expect(Number(r0[3])).toBeCloseTo(z.x1 - z.x0, 2);
     expect(Number(r0[4])).toBeCloseTo(z.y1 - z.y0, 2);
     expect(zones[0].x1).toBeCloseTo(L.innerX0Mm! + mm, 9);
@@ -376,7 +377,7 @@ describe('generátor pouzdra s mincí – varianty', () => {
     const left = { ...spec, tabSide: 'left' as const };
     const lsvg = buildCoinHolderSheetSvg(left);
     const lr = /<rect class="skive-zone" x="([\d.]+)"/.exec(lsvg)!;
-    expect(Number(lr[1])).toBeCloseTo(10 + L.stripLengthMm - z.x1, 2);
+    expect(Number(lr[1])).toBeCloseTo(M + L.stripLengthMm - z.x1, 2);
     // Bez ztenčení žádná šrafa; nesmyslné hodnoty neprojdou kontrolou.
     expect(buildCoinHolderSheetSvg({ ...spec, foldSkiveThicknessMm: null })).not.toContain(
       'skive-zone',
@@ -401,9 +402,9 @@ describe('generátor pouzdra s mincí – varianty', () => {
       outline(buildCoinHolderSheetSvg(left)),
     );
     const cardX0 = L.frontX0Mm + (L.panelWidthMm - spec.cardWidthMm) / 2;
-    const xLeftEdge = 10 + L.stripLengthMm - (cardX0 + spec.cardWidthMm);
+    const xLeftEdge = M + L.stripLengthMm - (cardX0 + spec.cardWidthMm);
     expect(buildCoinHolderPaperModelSvg(left)).toContain(
-      `M${r3(xLeftEdge)} ${r3(10 + L.tabLengthMm + L.bottomSeamYMm - spec.cardHeightMm)} h${spec.cardWidthMm}`,
+      `M${r3(xLeftEdge)} ${r3(M + L.tabLengthMm + L.bottomSeamYMm - spec.cardHeightMm)} h${spec.cardWidthMm}`,
     );
     // Skloňování v kontrolním seznamu.
     expect(buildCoinHolderPaperModelSvg(spec)).toContain('vložit 4 karty');

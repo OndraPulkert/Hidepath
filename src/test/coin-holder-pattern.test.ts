@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  A4_PORTRAIT,
   A4_SHEET,
   DEFAULT_COIN_CARD_HOLDER,
   coinCardHolderLayout,
@@ -204,7 +205,7 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
     expect(Number(window![2])).toBeCloseTo(coin[0]!.cy, 2);
     // Střed mince v kapse podle modelu: kapsa je vystředěná v čárkovaném čtverci velikosti kusu
     // kůže (forma − 4 mm), který začíná na okraji listu 1,5 mm pod mezerou pro nadpis.
-    const m2 = 10;
+    const m2 = A4_PORTRAIT.marginMm;
     const piece = L.formPlateMm - 4;
     expect(coin[0]!.cx).toBeCloseTo(m2 + (piece - L.pocketWidthMm) / 2 + L.coinCentreXMm, 2);
     expect(coin[0]!.cy).toBeCloseTo(
@@ -222,8 +223,8 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
     // Konce os se propichují na LÍC; musí odpadnout s odřezkem, jinak by v (otevřené horní)
     // hraně kapsy zůstal zářez.
     const piece = L.formPlateMm - 4;
-    const kx = 10 + (piece - L.pocketWidthMm) / 2;
-    const ky = 10 + 4 + 1.5 + (piece - L.pocketHeightMm) / 2;
+    const kx = A4_PORTRAIT.marginMm + (piece - L.pocketWidthMm) / 2;
+    const ky = A4_PORTRAIT.marginMm + 4 + 1.5 + (piece - L.pocketHeightMm) / 2;
     const ax =
       /<path d="M([\d.]+) ([\d.]+) H([\d.]+) M([\d.]+) ([\d.]+) V([\d.]+)"[^>]*stroke-dasharray="3 1 0.6 1"/.exec(
         pocketSheet ?? '',

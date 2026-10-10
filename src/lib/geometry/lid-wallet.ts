@@ -355,10 +355,16 @@ export function lidWalletVariant(
   };
 }
 
-/** Tiskový list A4 na výšku a jeho okraj (P1 je dlouhý 226 mm, proto menší okraj a hlavička). */
-export const PRINT_SHEET = { widthMm: 210, heightMm: 297, marginMm: 8 } as const;
-export const SHEET_HEADER_MM = 14;
-export const SHEET_FOOTER_MM = 30;
+/**
+ * Tiskový list A4 na výšku. `marginMm` je bezpečný okraj: všechno, co list kreslí, leží aspoň
+ * 13 mm od každé hrany papíru. Tiskárna (HP DeskJet 2700) netiskne 12,7 mm u jedné kratší hrany,
+ * a list A4 na šířku ji má po straně; 13 mm platí proto u všech čtyř hran.
+ * SHEET_HEADER_MM = od horního okraje k horní hraně dílu (nadpis), SHEET_FOOTER_MM = místo
+ * pod dílem pro kontrolní úsečku a texty o tisku (P1 dlouhý až 237 mm se vejde, jako dřív).
+ */
+export const PRINT_SHEET = { widthMm: 210, heightMm: 297, marginMm: 13 } as const;
+export const SHEET_HEADER_MM = 13;
+export const SHEET_FOOTER_MM = 21;
 export const CALIBRATION_MM = 50;
 
 /** Obsah peněženky v jednom stavu (oddíl 7). */

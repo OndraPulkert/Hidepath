@@ -11,6 +11,7 @@ import {
   blockOrigin,
   buildPracticeSheetSvg,
   offcutFootprint,
+  practiceSheetBounds,
 } from './card-holder-practice.ts';
 
 const svg = buildPracticeSheetSvg();
@@ -102,6 +103,32 @@ describe('cvičná šablona k lekci 2 (pouzdro na karty)', () => {
       if (i > 0) expect(o.y).toBeGreaterThan(blockOrigin(i - 1).y + BLOCK_H);
     }
     expect(blockOrigin(2).y + BLOCK_H).toBeLessThanOrEqual(FOOTER_TOP);
+  });
+
+  it('vše (obrysy, čárky, texty, legenda, kontrolní úsečka) leží aspoň 13 mm od každé hrany A4', () => {
+    // HP DeskJet 2700 netiskne 12,7 mm u spodní hrany A4 na výšku; texty se počítají odhadem šířky.
+    const { widthMm: W, heightMm: H } = PRACTICE_SHEET;
+    const safe = 13;
+    expect(PRACTICE_SHEET.marginMm).toBeGreaterThanOrEqual(safe);
+    const bounds = practiceSheetBounds();
+    expect(bounds.length).toBeGreaterThan(50);
+    const outside = bounds.filter(
+      (b) => b.x0 < safe || b.y0 < safe || b.x1 > W - safe || b.y1 > H - safe,
+    );
+    expect(outside.map((b) => b.what)).toEqual([]);
+    expect(bounds.some((b) => b.what === 'calibration')).toBe(true);
+  });
+
+  it('texty se nepřekrývají navzájem', () => {
+    const texts = practiceSheetBounds().filter(
+      (b) => !b.what.startsWith('cesta ') && !/^[a-z-]+$/.test(b.what),
+    );
+    for (const [i, a] of texts.entries()) {
+      for (const b of texts.slice(i + 1)) {
+        const overlap = a.x0 < b.x1 && b.x0 < a.x1 && a.y0 < b.y1 && b.y0 < a.y1;
+        expect(overlap, `${a.what} × ${b.what}`).toBe(false);
+      }
+    }
   });
 
   it('na odřezku 210 × 80 mm zaberou tři tvary 210 × 40 mm, s okrajem papíru 70 mm na výšku', () => {

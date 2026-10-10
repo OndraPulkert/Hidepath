@@ -8,7 +8,6 @@ import {
   CALIBRATION_MM,
   DEFAULT_LID_WALLET,
   PRINT_SHEET,
-  SHEET_FOOTER_MM,
   SHEET_HEADER_MM,
   type GlueArea,
   type LidWalletLayout,
@@ -71,7 +70,192 @@ const STYLE = {
 
 const esc = (s: string): string => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
-/** Kreslicí plátno s pěti vrstvami. */
+/*
+ * Šířky znaků písma Helvetica (Arial má stejné), v tisícinách em, pro znaky 32–126; normální
+ * a tučné. Podle nich se zalamují dlouhé řádky a počítá, kam text na listu sahá.
+ */
+const HELVETICA = [
+  278, 278, 355, 556, 556, 889, 667, 191, 333, 333, 389, 584, 278, 333, 278, 278, 556, 556, 556,
+  556, 556, 556, 556, 556, 556, 556, 278, 278, 584, 584, 584, 556, 1015, 667, 667, 722, 722, 667,
+  611, 778, 722, 278, 500, 667, 556, 833, 722, 778, 667, 778, 722, 667, 611, 722, 667, 944, 667,
+  667, 611, 278, 278, 278, 469, 556, 333, 556, 556, 500, 556, 556, 278, 556, 556, 222, 222, 500,
+  222, 833, 556, 556, 556, 556, 333, 500, 278, 556, 500, 722, 500, 500, 500, 334, 260, 334, 584,
+] as const;
+const HELVETICA_BOLD = [
+  278, 333, 474, 556, 556, 889, 722, 238, 333, 333, 389, 584, 278, 333, 278, 278, 556, 556, 556,
+  556, 556, 556, 556, 556, 556, 556, 333, 333, 584, 584, 584, 611, 975, 722, 722, 722, 722, 667,
+  611, 778, 722, 278, 556, 722, 611, 833, 722, 778, 667, 778, 722, 667, 611, 722, 667, 944, 667,
+  667, 611, 333, 278, 333, 584, 556, 333, 556, 611, 556, 611, 556, 333, 611, 611, 278, 278, 556,
+  278, 889, 611, 611, 611, 611, 389, 556, 333, 611, 556, 778, 556, 556, 500, 389, 280, 389, 584,
+] as const;
+/** Znaky mimo ASCII, které listy píší (šipky a kroužkovaná čísla s rezervou). */
+const WIDE: Record<string, [number, number]> = {
+  '×': [584, 584],
+  '·': [278, 278],
+  '–': [556, 556],
+  '—': [1000, 1000],
+  '„': [333, 500],
+  '“': [333, 500],
+  '…': [1000, 1000],
+  '≥': [549, 549],
+  '≤': [549, 549],
+  '−': [584, 584],
+  '↔': [1000, 1000],
+  '→': [1000, 1000],
+  '↓': [1000, 1000],
+  Ø: [778, 778],
+};
+
+/**
+ * Šířka textu v mm (Helvetica / Arial) s rezervou 3 % na vyrovnání písma v prohlížeči (Chrome
+ * vykreslí řádek nejvýš o 1,2 % širší); neznámý znak se počítá jako 1 em.
+ */
+export function textWidthMm(s: string, size: number, bold = false): number {
+  let em = 0;
+  for (const ch of s) {
+    const wide = WIDE[ch];
+    if (wide) {
+      em += wide[bold ? 1 : 0];
+      continue;
+    }
+    // Česká písmena mají šířku základního písmene (č = c, Ř = R).
+    const base = ch.normalize('NFD')[0] ?? ch;
+    const code = base.charCodeAt(0);
+    const table = bold ? HELVETICA_BOLD : HELVETICA;
+    em += code >= 32 && code <= 126 ? table[code - 32]! : 1000;
+  }
+  return (em / 1000) * size * 1.03;
+}
+
+/** Nad účaří sahá písmeno s háčkem nebo čárkou (Č, Í) nejvýš 0,95 em, pod účaří 0,25 em. */
+const TEXT_ASCENT = 0.95;
+const TEXT_DESCENT = 0.25;
+
+/** Zalomí text po slovech tak, aby žádný řádek nebyl širší než `maxMm`. */
+export function wrapToWidth(s: string, size: number, maxMm: number, bold = false): string[] {
+  const lines: string[] = [];
+  for (const word of s.split(' ')) {
+    const last = lines[lines.length - 1];
+    if (last !== undefined && textWidthMm(`${last} ${word}`, size, bold) <= maxMm) {
+      lines[lines.length - 1] = `${last} ${word}`;
+    } else lines.push(word);
+  }
+  return lines;
+}
+
+/** Část listu: hlavička (nadpis), tělo (díly, popisky, legenda) a pata (úsečka 50 mm, tisk). */
+export type LidSheetZone = 'header' | 'body' | 'footer';
+
+/** Obdélník, který kreslený prvek zabírá na listu (mm, i s tloušťkou čáry a lemem písma). */
+export interface LidDrawnBox {
+  x0: number;
+  y0: number;
+  x1: number;
+  y1: number;
+  zone: LidSheetZone;
+  /** Krátký popis prvku pro hlášku testu (text nebo začátek značky). */
+  what: string;
+}
+
+type Bounds = [number, number, number, number];
+
+const attr = (el: string, name: string): string | undefined =>
+  new RegExp(`\\s${name}="([^"]*)"`).exec(el)?.[1];
+
+/** Obálka cesty z příkazů M, L, H, V, A a Z (velká i malá písmena), oblouky po bodech. */
+function pathBounds(d: string): Bounds {
+  const tokens = d.match(/[MLHVAZmlhvaz]|-?(?:\d+\.?\d*|\.\d+)(?:e-?\d+)?/g) ?? [];
+  let x = 0;
+  let y = 0;
+  let sx = 0;
+  let sy = 0;
+  let b: Bounds = [Infinity, Infinity, -Infinity, -Infinity];
+  const add = (px: number, py: number): void => {
+    b = [Math.min(b[0], px), Math.min(b[1], py), Math.max(b[2], px), Math.max(b[3], py)];
+  };
+  let cmd = 'M';
+  let i = 0;
+  const num = (): number => Number(tokens[i++]);
+  while (i < tokens.length) {
+    if (/[A-Za-z]/.test(tokens[i]!)) cmd = tokens[i++]!;
+    const rel = cmd === cmd.toLowerCase();
+    switch (cmd.toUpperCase()) {
+      case 'Z':
+        x = sx;
+        y = sy;
+        continue;
+      case 'M':
+      case 'L': {
+        const px = num() + (rel ? x : 0);
+        const py = num() + (rel ? y : 0);
+        if (cmd.toUpperCase() === 'M') {
+          sx = px;
+          sy = py;
+          cmd = rel ? 'l' : 'L';
+        }
+        x = px;
+        y = py;
+        break;
+      }
+      case 'H':
+        x = num() + (rel ? x : 0);
+        break;
+      case 'V':
+        y = num() + (rel ? y : 0);
+        break;
+      case 'A': {
+        const r0 = num();
+        num(); // ry = rx (jen kruhové oblouky)
+        num(); // natočení osy
+        const large = num();
+        const sweep = num();
+        const px = num() + (rel ? x : 0);
+        const py = num() + (rel ? y : 0);
+        // Střed oblouku podle SVG (F.6.5) pro kružnici; malý poloměr se zvětší.
+        const hx = (x - px) / 2;
+        const hy = (y - py) / 2;
+        const r = Math.max(r0, Math.hypot(hx, hy));
+        const k =
+          Math.sqrt(Math.max(0, (r * r - hx * hx - hy * hy) / (hx * hx + hy * hy || 1))) *
+          (large === sweep ? -1 : 1);
+        const cx = k * hy + (x + px) / 2;
+        const cy = -k * hx + (y + py) / 2;
+        const a0 = Math.atan2(y - cy, x - cx);
+        let da = Math.atan2(py - cy, px - cx) - a0;
+        if (sweep === 1 && da < 0) da += 2 * Math.PI;
+        if (sweep === 0 && da > 0) da -= 2 * Math.PI;
+        for (let t = 1; t < 32; t++) {
+          const a = a0 + (da * t) / 32;
+          add(cx + r * Math.cos(a), cy + r * Math.sin(a));
+        }
+        x = px;
+        y = py;
+        break;
+      }
+      default:
+        throw new Error(`Neznámý příkaz cesty „${cmd}“`);
+    }
+    add(x, y);
+  }
+  return b;
+}
+
+/** Obálka jednoho prvku SVG z kreslicích metod (path, rect, circle) i s polovinou tloušťky čáry. */
+function elementBounds(el: string): Bounds {
+  const tag = /^<([a-z]+)/.exec(el)?.[1];
+  const n = (name: string): number => Number(attr(el, name) ?? 0);
+  const stroke = attr(el, 'stroke');
+  const half = stroke === undefined || stroke === 'none' ? 0 : n('stroke-width') / 2;
+  let b: Bounds;
+  if (tag === 'path') b = pathBounds(attr(el, 'd') ?? '');
+  else if (tag === 'rect') b = [n('x'), n('y'), n('x') + n('width'), n('y') + n('height')];
+  else if (tag === 'circle')
+    b = [n('cx') - n('r'), n('cy') - n('r'), n('cx') + n('r'), n('cy') + n('r')];
+  else throw new Error(`Obálku prvku <${tag}> list neumí`);
+  return [b[0] - half, b[1] - half, b[2] + half, b[3] + half];
+}
+
+/** Kreslicí plátno s pěti vrstvami; u každého prvku si pamatuje, kam na listu sahá. */
 class Sheet {
   private readonly layers: Record<Layer, string[]> = {
     CUT: [],
@@ -81,14 +265,45 @@ class Sheet {
     GUIDE: [],
   };
   private readonly defs: string[] = [];
+  private readonly clips = new Map<string, Bounds>();
+  private readonly clipStack: Bounds[] = [];
+  /** Kam na listu sahají nakreslené prvky (pro kontrolu bezpečného okraje). */
+  readonly boxes: LidDrawnBox[] = [];
+  /** Část listu, do které se právě kreslí. */
+  zone: LidSheetZone = 'body';
+  title = '';
+
+  private record(b: Bounds, what: string): void {
+    let [x0, y0, x1, y1] = b;
+    // Prvek uvnitř ořezové masky nesahá dál než maska (celý mimo masku není vidět vůbec, počítá
+    // se jako maska, ať má každý prvek listu svůj obdélník).
+    for (const c of this.clipStack) {
+      [x0, y0, x1, y1] =
+        x1 < c[0] || x0 > c[2] || y1 < c[1] || y0 > c[3]
+          ? c
+          : [Math.max(x0, c[0]), Math.max(y0, c[1]), Math.min(x1, c[2]), Math.min(y1, c[3])];
+    }
+    this.boxes.push({ x0, y0, x1, y1, zone: this.zone, what });
+  }
 
   add(layer: Layer, s: string): void {
     this.layers[layer].push(s);
+    const clip = /^<g clip-path="url\(#([^)]+)\)">$/.exec(s);
+    if (clip) {
+      this.clipStack.push(this.clips.get(clip[1]!)!);
+      return;
+    }
+    if (s === '</g>') {
+      this.clipStack.pop();
+      return;
+    }
+    this.record(elementBounds(s), s.slice(0, 60));
   }
 
   /** Ořezová maska podle obrysu dílu: lepené plochy se nekreslí přes hranu. */
   clipPath(id: string, outlineD: string): void {
     this.defs.push(`<clipPath id="${id}"><path d="${outlineD}"/></clipPath>`);
+    this.clips.set(id, pathBounds(outlineD));
   }
 
   path(layer: Layer, d: string, width: number, dash?: string, extra = ''): void {
@@ -179,8 +394,28 @@ class Sheet {
     const halo = opts.halo
       ? ' stroke="#ffffff" stroke-width="0.7" stroke-linejoin="round" paint-order="stroke"'
       : '';
-    this.add(
-      layer,
+    {
+      const w = textWidthMm(s, size, opts.bold);
+      const pad = opts.halo ? 0.35 : 0;
+      const dx0 = (anchor === 'start' ? 0 : anchor === 'middle' ? -w / 2 : -w) - pad;
+      const dx1 = dx0 + w + 2 * pad;
+      const dy0 = -TEXT_ASCENT * size - pad;
+      const dy1 = TEXT_DESCENT * size + pad;
+      const a = ((opts.rotate ?? 0) * Math.PI) / 180;
+      const pts = [
+        [dx0, dy0],
+        [dx1, dy0],
+        [dx0, dy1],
+        [dx1, dy1],
+      ].map(([dx, dy]) => [
+        x + dx! * Math.cos(a) - dy! * Math.sin(a),
+        y + dx! * Math.sin(a) + dy! * Math.cos(a),
+      ]);
+      const xs = pts.map((q) => q[0]!);
+      const ys = pts.map((q) => q[1]!);
+      this.record([Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)], s);
+    }
+    this.layers[layer].push(
       `<text x="${f(x)}" y="${f(y)}" font-family="Helvetica, Arial, sans-serif" font-size="${f(size)}"` +
         `${opts.bold ? ' font-weight="bold"' : ''} text-anchor="${anchor}" fill="${opts.fill ?? COLORS[layer]}"${halo}${rot}>${esc(s)}</text>`,
     );
@@ -205,7 +440,7 @@ class Sheet {
     );
   }
 
-  render(title: string): string {
+  render(title = this.title): string {
     const { widthMm: W, heightMm: H } = PRINT_SHEET;
     const groups = LAYERS.map(
       (id) =>
@@ -224,11 +459,18 @@ class Sheet {
   }
 }
 
-/** Kontrolní úsečka 50 mm, texty o tisku a legenda vrstev (na každém listu). */
+/**
+ * Kontrolní úsečka 50 mm a texty o tisku (na každém listu), dole v bezpečném okraji: poslední
+ * řádek končí nad spodním okrajem 13 mm. Poznámka listu se zalomí na šířku listu.
+ */
 function footer(s: Sheet, note: string): void {
-  const { heightMm: H, marginMm: m } = PRINT_SHEET;
-  const y = H - m - SHEET_FOOTER_MM + 7;
-  const x0 = m;
+  const { widthMm: W, heightMm: H, marginMm: m } = PRINT_SHEET;
+  s.zone = 'footer';
+  const notes = wrapToWidth(note, 2.3, W - 2 * m);
+  // Účaří posledního řádku 1,5 mm nad okrajem (spodní kličky písmen sahají 0,6 mm pod něj).
+  const y = H - m - 1.5 - 11.5 - (notes.length - 1) * 3.6;
+  // Ryska na začátku úsečky má tloušťku 0,3: úsečka začíná kousek za okrajem.
+  const x0 = m + 0.5;
   s.line('GUIDE', x0, y, x0 + CALIBRATION_MM, y, 0.4);
   s.line('GUIDE', x0, y - 2.5, x0, y + 2.5, 0.3);
   s.line('GUIDE', x0 + CALIBRATION_MM, y - 2.5, x0 + CALIBRATION_MM, y + 2.5, 0.3);
@@ -255,12 +497,13 @@ function footer(s: Sheet, note: string): void {
   );
   s.text(
     'GUIDE',
-    x0,
+    m,
     y + 7.5,
     'Po tisku změř úsečku pravítkem: musí mít přesně 50 mm, jinak střih nepoužívej.',
     2.3,
   );
-  s.text('GUIDE', x0, y + 11.5, note, 2.3);
+  notes.forEach((ln, i) => s.text('GUIDE', m, y + 11.5 + i * 3.6, ln, 2.3));
+  s.zone = 'body';
 }
 
 /** Položky legendy: stejné pořadí, vzorek i text na všech listech; list ukáže jen ty, které kreslí. */
@@ -435,56 +678,82 @@ function assertFor(spec: LidWalletSpec, o: LidSheetOptions): void {
   assertLidWallet(spec, { allowThickness: outside(o).length > 0 });
 }
 
-/** Rozdělí položky do řádků po nejvýš `max` znacích (oddělovač „ · “). */
-function wrapItems(items: readonly string[], max: number): string[] {
-  const lines: string[] = [];
-  for (const item of items) {
-    const last = lines[lines.length - 1];
-    if (last !== undefined && last.length + 3 + item.length <= max) {
-      lines[lines.length - 1] = `${last} · ${item}`;
-    } else {
-      lines.push(item);
-    }
-  }
-  return lines;
-}
+/**
+ * Levý horní roh P1 (listy 1 a 2) a výchozí bod ostatních listů: 4 mm za bezpečným okrajem
+ * (vlevo od P1 jsou rysky osy ohybu a trojúhelníčky hrany vložky 3,5 mm), pod nadpisem.
+ */
+export const LID_PIECE_ORIGIN = {
+  x: PRINT_SHEET.marginMm + 4,
+  y: PRINT_SHEET.marginMm + SHEET_HEADER_MM,
+} as const;
+const PIECE_X = LID_PIECE_ORIGIN.x;
+const PIECE_Y = LID_PIECE_ORIGIN.y;
+/** Levý kraj varovného pruhu v hlavičce: vpravo od P1 (101 mm), rysek a kóty délky. */
+const HEADER_BAND_X = PIECE_X + 110;
 
-function header(s: Sheet, title: string, sub: string, o: LidSheetOptions = {}): void {
+/**
+ * Nadpis listu v bezpečném okraji. Varovný pruh „mimo ověřené meze“ je vpravo nahoře vedle dílu
+ * (od x HEADER_BAND_X, vpravo od kóty P1 na listech 1 a 2). Vrací y spodního kraje hlavičky
+ * v pásu vpravo, pod kterým může začít sloupec textu.
+ */
+function header(s: Sheet, title: string, sub: string, o: LidSheetOptions = {}): number {
   const m = PRINT_SHEET.marginMm;
-  s.text('GUIDE', m, m + 5, title, 4.6, 'start', { bold: true, fill: COLORS.CUT });
-  s.text('GUIDE', m, m + 10, sub, 2.5, 'start', { fill: COLORS.CUT });
+  s.zone = 'header';
+  s.text('GUIDE', m, m + 4.5, title, 4.6, 'start', { bold: true, fill: COLORS.CUT });
+  s.text('GUIDE', m, m + 9.5, sub, 2.5, 'start', { fill: COLORS.CUT });
   const limits = outside(o);
+  const x1 = PRINT_SHEET.widthMm - m;
   if (limits.length === 0) {
-    s.text('GUIDE', PRINT_SHEET.widthMm - m, m + 5, 'NÁVRH – ověřit na prototypu', 2.6, 'end', {
+    s.text('GUIDE', x1, m + 4.5, 'NÁVRH – ověřit na prototypu', 2.6, 'end', {
       bold: true,
       fill: COLORS.STITCH,
     });
-    return;
+    s.zone = 'body';
+    return m + 4.5 + TEXT_DESCENT * 2.6;
   }
-  // Varovný pruh vpravo v hlavičce (nad díly, které začínají v PIECE_Y): nadpis a překročené
-  // hodnoty nejvýš na 3 řádcích.
-  const x1 = PRINT_SHEET.widthMm - m;
-  const x0 = x1 - 92;
-  const lines = wrapItems(limits, 80);
-  const shown = lines.length > 3 ? [...lines.slice(0, 2), `${lines[2]} …`] : lines;
-  const y0 = m - 0.5;
-  // Spodní okraj s rezervou pod posledním řádkem; při 3 řádcích končí pruh nad PIECE_Y.
+  // Varovný pruh: nadpis a překročené hodnoty nejvýš na 3 řádcích. Rámeček má čáru 0,5.
+  const x0 = HEADER_BAND_X;
+  const inner = x1 - 0.25 - x0 - 4;
+  const items = limits.flatMap((it) => wrapToWidth(it, 1.9, inner));
+  const lines: string[] = [];
+  for (const item of items) {
+    const last = lines[lines.length - 1];
+    if (last !== undefined && textWidthMm(`${last} · ${item}`, 1.9) <= inner) {
+      lines[lines.length - 1] = `${last} · ${item}`;
+    } else lines.push(item);
+  }
+  const shown = lines.slice(0, 3);
+  if (lines.length > 3) {
+    // Zbytek se nevejde: třetí řádek končí výpustkou (slova od konce pryč, dokud se nevejde).
+    let third = shown[2]!;
+    while (third.includes(' ') && textWidthMm(`${third} …`, 1.9) > inner) {
+      third = third.slice(0, third.lastIndexOf(' '));
+    }
+    shown[2] = `${third} …`;
+  }
+  const y0 = m + 0.25;
   const h = 5.6 + shown.length * 2.9;
   s.add(
     'GUIDE',
-    `<rect class="outside-limits" x="${f(x0)}" y="${f(y0)}" width="${f(x1 - x0)}" height="${f(h)}" fill="#fde8e6" stroke="${COLORS.STITCH}" stroke-width="0.5"/>`,
+    `<rect class="outside-limits" x="${f(x0)}" y="${f(y0)}" width="${f(x1 - 0.25 - x0)}" height="${f(h)}" fill="#fde8e6" stroke="${COLORS.STITCH}" stroke-width="0.5"/>`,
   );
-  s.text('GUIDE', x0 + 2, y0 + 3.9, LID_OUTSIDE_LIMITS_BAND, 2.6, 'start', {
+  s.text('GUIDE', x0 + 2, y0 + 3.9, LID_OUTSIDE_LIMITS_BAND, 2.4, 'start', {
     bold: true,
     fill: COLORS.STITCH,
   });
   shown.forEach((ln, i) => {
     s.text('GUIDE', x0 + 2, y0 + 7.1 + i * 2.9, ln, 1.9, 'start', { fill: COLORS.CUT });
   });
+  s.zone = 'body';
+  return y0 + h + 0.25;
 }
 
-/** Sloupec textu; řádek „# …“ je nadpis. Vrací y pod posledním řádkem. */
+/**
+ * Sloupec textu; řádek „# …“ je nadpis. Řádek širší než místo do pravého okraje listu se zalomí
+ * (pokračování odsazené). Vrací y pod posledním řádkem.
+ */
 function column(s: Sheet, x: number, y: number, lines: string[], size = 2.1, gap = 3.1): number {
+  const maxW = PRINT_SHEET.widthMm - PRINT_SHEET.marginMm - x;
   let yy = y;
   for (const ln of lines) {
     if (ln === '') {
@@ -492,17 +761,20 @@ function column(s: Sheet, x: number, y: number, lines: string[], size = 2.1, gap
       continue;
     }
     const bold = ln.startsWith('# ');
-    s.text('GUIDE', x, yy, bold ? ln.slice(2) : ln, bold ? size + 0.3 : size, 'start', {
-      bold,
-      fill: COLORS.CUT,
+    const text = bold ? ln.slice(2) : ln;
+    const sz = bold ? size + 0.3 : size;
+    const indent = /^ */.exec(text)![0];
+    const parts = wrapToWidth(text.trimStart(), sz, maxW - textWidthMm(`${indent}  `, sz), bold);
+    parts.forEach((part, i) => {
+      s.text('GUIDE', x, yy, `${indent}${i > 0 ? '  ' : ''}${part}`, sz, 'start', {
+        bold,
+        fill: COLORS.CUT,
+      });
+      yy += gap;
     });
-    yy += gap;
   }
   return yy;
 }
-
-const PIECE_X = PRINT_SHEET.marginMm;
-const PIECE_Y = PRINT_SHEET.marginMm + SHEET_HEADER_MM;
 
 /** Mapování pásu P1 (x, v) na list; `mirror` = pohled na rub (x_rub = W − x). */
 interface Frame {
@@ -756,17 +1028,14 @@ function thumbNotchMarks(s: Sheet, L: LidWalletLayout, fr: Frame, template: bool
 }
 
 /** List 1: pás P1 z líce. */
-export function buildLidSheetSvg(
-  spec: LidWalletSpec = DEFAULT_LID_WALLET,
-  options: LidSheetOptions = {},
-): string {
+function drawLidSheet(spec: LidWalletSpec, options: LidSheetOptions): Sheet {
   assertFor(spec, options);
   const L = lidWalletLayout(spec);
   const s = new Sheet();
   const fr = p1Frame(L, PIECE_X, PIECE_Y, false);
   const { X, V, vF, vB } = fr;
   const W = L.widthMm;
-  header(
+  const headBottom = header(
     s,
     'VÍČKO · P1 PÁS · LÍC',
     `1 ks · useň ${czT(spec.leatherMm)} mm · přířez ${cz(W)} × ${cz(L.p1LengthMm)} mm · list 1/4`,
@@ -824,6 +1093,8 @@ export function buildLidSheetSvg(
       `${q.id} ${q.holes.length}`,
       1.8,
       x < L.axisX ? 'end' : 'start',
+      // Lem: v záloze B2 vede pod popiskem čára náběhu ztenčení závěsu.
+      { halo: true },
     );
   }
 
@@ -916,7 +1187,8 @@ export function buildLidSheetSvg(
     s.text(
       'GUIDE',
       X(1),
-      V(L.v.hingeBand[0] - spec.skiveTaperMm) - 0.6,
+      // Mezi čárou náběhu a pásem (nad čárou je popisek S2).
+      V(L.v.hingeBand[0]) - 0.5,
       `oranžově: náběh ${cz(spec.skiveTaperMm)} mm vně pásu závěsu`,
       1.5,
       'start',
@@ -935,7 +1207,8 @@ export function buildLidSheetSvg(
   s.text(
     'FOLD',
     X(9),
-    V(L.v.hingeBand[1]) + 2.4,
+    // V záloze B2 pod čárou náběhu vně pásu, ať ji písmo nepřekryje.
+    V(L.v.hingeBand[1] + (spec.hingeSkiveMm !== null ? spec.skiveTaperMm : 0)) + 2.4,
     'ZÁVĚS · 2 přehyby, tvarovat zavřený přes obsah stavu B',
     1.6,
     'start',
@@ -1005,9 +1278,19 @@ export function buildLidSheetSvg(
     bold: true,
   });
   s.text('GUIDE', X(L.axisX), V(vB(10)), 'B · ZADNÍ STĚNA', 2.4, 'middle', { bold: true });
-  s.text('GUIDE', X(L.axisX), V((L.v.hingeEnd + L.v.bandEnd) / 2) + 1, 'PÁS VÍČKA', 2.4, 'middle', {
-    bold: true,
-  });
+  // V záloze B2 níž: nad ním je posunutý popisek závěsu.
+  const bandLabelDy = spec.hingeSkiveMm !== null ? 4 : 1;
+  s.text(
+    'GUIDE',
+    X(L.axisX),
+    V((L.v.hingeEnd + L.v.bandEnd) / 2) + bandLabelDy,
+    'PÁS VÍČKA',
+    2.4,
+    'middle',
+    {
+      bold: true,
+    },
+  );
   s.text('GUIDE', X(L.axisX), V(L.v.bandEnd + 14), 'JAZÝČEK', 2.2, 'middle', {
     bold: true,
     rotate: -90,
@@ -1034,7 +1317,7 @@ export function buildLidSheetSvg(
   const x = X(W) + 11;
   const tb = L.v;
   const tn = L.thumbNotch;
-  const colEnd = column(s, x, PIECE_Y + 2, [
+  const colEnd = column(s, x, Math.max(PIECE_Y + 2, headBottom + 3.5), [
     '# P1 PÁS – 1 ks',
     `useň ${czT(spec.leatherMm)} mm, třísločiněná, pevná`,
     `přířez ${cz(W)} × ${cz(L.p1LengthMm)}, líc nahoru`,
@@ -1133,21 +1416,19 @@ export function buildLidSheetSvg(
     s,
     'P1 z LÍCE. Lepení se značí na RUBU podle listu 2. D1, D2, L1, K2: list 3. Šablony: list 4.',
   );
-  return s.render('VÍČKO – P1 pás, líc');
+  s.title = 'VÍČKO – P1 pás, líc';
+  return s;
 }
 
 /** List 2: pás P1 z rubu s lepenými plochami a polohou D1, D2 a plíšku. */
-export function buildLidBackSvg(
-  spec: LidWalletSpec = DEFAULT_LID_WALLET,
-  options: LidSheetOptions = {},
-): string {
+function drawLidBack(spec: LidWalletSpec, options: LidSheetOptions): Sheet {
   assertFor(spec, options);
   const L = lidWalletLayout(spec);
   const s = new Sheet();
   const fr = p1Frame(L, PIECE_X, PIECE_Y, true);
   const { X, V, vF, vB } = fr;
   const W = L.widthMm;
-  header(
+  const headBottom = header(
     s,
     'VÍČKO · P1 PÁS · RUB (lepení)',
     `pohled na rub, díl je souměrný podle osy x ${cz(W / 2)} · list 2/4`,
@@ -1366,7 +1647,7 @@ export function buildLidBackSvg(
     'a na rubu B. Díl je souměrný, šikmé',
     'otvory určuje jen pravidlo v lekci 6.',
   ];
-  const colEnd = column(s, X(0) + 11, PIECE_Y + 2, lines, 1.95, 2.9);
+  const colEnd = column(s, X(0) + 11, Math.max(PIECE_Y + 2, headBottom + 3.5), lines, 1.95, 2.9);
   legend(s, X(0) + 11, colEnd + 3, LID_SHEET_PARTS[2], [
     'cut',
     'cutLater',
@@ -1389,7 +1670,8 @@ export function buildLidBackSvg(
     'P1 z RUBU. Obrys se řeže podle listu 1 (líc). Na rubu se jen značí lepení a poloha dílů. ' +
       'Švy S1–S3 a S6 se na rub neznačí: přenášejí se z líce (list 1, lekce 6 a 8).',
   );
-  return s.render('VÍČKO – P1 pás, rub');
+  s.title = 'VÍČKO – P1 pás, rub';
+  return s;
 }
 
 /** Kroužek u hrany dílu leží o tolik dovnitř, aby jehla nešla do hrany. */
@@ -1424,10 +1706,7 @@ function dividerGluePricks(
 }
 
 /** List 3: přepážky D1, D2, podšívka L1 a plíšek K2. */
-export function buildLidPartsSvg(
-  spec: LidWalletSpec = DEFAULT_LID_WALLET,
-  options: LidSheetOptions = {},
-): string {
+function drawLidParts(spec: LidWalletSpec, options: LidSheetOptions): Sheet {
   assertFor(spec, options);
   const L = lidWalletLayout(spec);
   const s = new Sheet();
@@ -1727,14 +2006,12 @@ export function buildLidPartsSvg(
     s,
     'D1 a D2 z RUBU (lepení šrafovaně). Otvory S1–S3: z listu 1, nebo ze šablony D2 na tomto listu (lekce 6).',
   );
-  return s.render('VÍČKO – D1, D2, L1, K2');
+  s.title = 'VÍČKO – D1, D2, L1, K2';
+  return s;
 }
 
 /** List 4: šablony a přípravky. */
-export function buildLidJigsSvg(
-  spec: LidWalletSpec = DEFAULT_LID_WALLET,
-  options: LidSheetOptions = {},
-): string {
+function drawLidJigs(spec: LidWalletSpec, options: LidSheetOptions): Sheet {
   assertFor(spec, options);
   const L = lidWalletLayout(spec);
   const s = new Sheet();
@@ -2227,22 +2504,75 @@ export function buildLidJigsSvg(
     s,
     'Šablony se lepí na tvrdý papír a vyříznou. Poloha magnetu se určuje až na hotovém kusu (lekce 11).',
   );
-  return s.render('VÍČKO – šablony a přípravky');
+  s.title = 'VÍČKO – šablony a přípravky';
+  return s;
+}
+
+/** List 1: pás P1 z líce. */
+export function buildLidSheetSvg(
+  spec: LidWalletSpec = DEFAULT_LID_WALLET,
+  options: LidSheetOptions = {},
+): string {
+  return drawLidSheet(spec, options).render();
+}
+
+/** List 2: pás P1 z rubu s lepenými plochami a polohou D1, D2 a plíšku. */
+export function buildLidBackSvg(
+  spec: LidWalletSpec = DEFAULT_LID_WALLET,
+  options: LidSheetOptions = {},
+): string {
+  return drawLidBack(spec, options).render();
+}
+
+/** List 3: přepážky D1, D2, podšívka L1 a plíšek K2. */
+export function buildLidPartsSvg(
+  spec: LidWalletSpec = DEFAULT_LID_WALLET,
+  options: LidSheetOptions = {},
+): string {
+  return drawLidParts(spec, options).render();
+}
+
+/** List 4: šablony a přípravky. */
+export function buildLidJigsSvg(
+  spec: LidWalletSpec = DEFAULT_LID_WALLET,
+  options: LidSheetOptions = {},
+): string {
+  return drawLidJigs(spec, options).render();
 }
 
 export const LID_FILE_STEM = 'penezenka-vicko';
+
+const LID_SHEET_DRAW = [
+  ['sablona', drawLidSheet],
+  ['rub', drawLidBack],
+  ['dily', drawLidParts],
+  ['pripravky', drawLidJigs],
+] as const;
 
 /** Všechny listy s názvy souborů (bez přípony). */
 export function buildLidSheets(
   spec: LidWalletSpec = DEFAULT_LID_WALLET,
   options: LidSheetOptions = {},
 ): { name: string; svg: string }[] {
-  return [
-    { name: `${LID_FILE_STEM}-sablona`, svg: buildLidSheetSvg(spec, options) },
-    { name: `${LID_FILE_STEM}-rub`, svg: buildLidBackSvg(spec, options) },
-    { name: `${LID_FILE_STEM}-dily`, svg: buildLidPartsSvg(spec, options) },
-    { name: `${LID_FILE_STEM}-pripravky`, svg: buildLidJigsSvg(spec, options) },
-  ];
+  return LID_SHEET_DRAW.map(([id, draw]) => ({
+    name: `${LID_FILE_STEM}-${id}`,
+    svg: draw(spec, options).render(),
+  }));
+}
+
+/**
+ * Kam na listech sahá každý nakreslený prvek (obrysy, značky, texty i s odhadem šířky písma,
+ * úsečka 50 mm). Test podle toho hlídá bezpečný okraj 13 mm a že se hlavička a pata nepřekrývají
+ * s dílem.
+ */
+export function lidSheetBoxes(
+  spec: LidWalletSpec = DEFAULT_LID_WALLET,
+  options: LidSheetOptions = {},
+): { name: string; boxes: readonly LidDrawnBox[] }[] {
+  return LID_SHEET_DRAW.map(([id, draw]) => ({
+    name: `${LID_FILE_STEM}-${id}`,
+    boxes: draw(spec, options).boxes,
+  }));
 }
 
 /** Rozsah tloušťky P1 (mm), který generátor přijme (`--p1`, pole v aplikaci). */

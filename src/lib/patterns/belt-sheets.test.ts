@@ -1,9 +1,15 @@
 import { describe, expect, it } from 'vitest';
 
-import { DEFAULT_BELT_END, DEFAULT_BELT_TIP } from '../geometry/belt-end';
+import { type BeltTipShape, DEFAULT_BELT_END, DEFAULT_BELT_TIP } from '../geometry/belt-end';
+import { BELT_LIMITS, type BeltConfigInput, beltSpecsFor, checkBeltConfig } from './belt-config';
 import {
+  BUCKLE_FOLD_Y_MM,
+  BUCKLE_STRAP_X_MM,
+  type InkBox,
+  SHEET_SAFE_MARGIN_MM,
   TIP_LANDSCAPE_MAX_REACH_MM,
   TIP_PORTRAIT_MAX_REACH_MM,
+  beltSheetInk,
   buildBeltSheets,
   buildPages,
   tipSheetOrientation,
@@ -26,7 +32,7 @@ describe('tiskové listy opasku', () => {
   });
 
   it('výchozích 5 dírek se vejde na výšku, 7 dírek jde na šířku', () => {
-    expect(TIP_PORTRAIT_MAX_REACH_MM).toBeCloseTo(195.6, 1);
+    expect(TIP_PORTRAIT_MAX_REACH_MM).toBeCloseTo(199.6, 1);
     expect(TIP_LANDSCAPE_MAX_REACH_MM).toBe(258);
     expect(tipSheetOrientation(DEFAULT_BELT_TIP)).toBe('portrait');
     expect(tipSheetOrientation({ ...DEFAULT_BELT_TIP, holeCount: 7 })).toBe('landscape');
@@ -53,8 +59,8 @@ describe('tiskové listy opasku', () => {
     for (const w of [28, 40, 45]) {
       const { end, tip } = at(w);
       const [p1] = buildPages(end, tip);
-      const foldY = 132;
-      for (const x of [22 + 2, 22 + w - 2]) {
+      const foldY = BUCKLE_FOLD_Y_MM;
+      for (const x of [BUCKLE_STRAP_X_MM + 2, BUCKLE_STRAP_X_MM + w - 2]) {
         expect(p1).toContain(`<circle cx="${x}" cy="${foldY}" r="1" fill="none" stroke="#c0392b"`);
       }
       expect(p1).toContain('propíchněte oba kroužky');
@@ -172,10 +178,10 @@ describe('tiskové listy opasku – nálezy kontroly (2026-10-08)', () => {
     expect(Math.abs(middle - spacing)).toBeGreaterThanOrEqual(6);
   });
 
-  it('list 2 na výšku: žádný text nezačíná v nepotisknutelném okraji (< 8 mm)', () => {
+  it('list 2 na výšku: žádný text nezačíná v nepotisknutelném okraji (< 13 mm)', () => {
     // Regrese: kóta „94,3 mm“ byla zarovnaná doprava na x = 13 a začínala na 1,4 mm, tiskárna
     // ji ořízla (např. na „4,3 mm“). Šířka textu odhadem 0,6 × velikost písma na znak.
-    const MIN_X = 8;
+    const MIN_X = SHEET_SAFE_MARGIN_MM;
     for (const [w, shape] of [
       [40, 'point'],
       [35, 'round'],
@@ -256,14 +262,114 @@ describe('list 1: značky jen tam, kde jsou potřeba', () => {
     const [near, far] = DEFAULT_BELT_END.rivetOffsetsMm;
     for (const off of [near, far]) {
       expect(p1).toContain(
-        `cy="${Math.round((132 - off) * 1000) / 1000}" r="3" fill="none" stroke="#6a6a6a"`,
+        `cy="${Math.round((BUCKLE_FOLD_Y_MM - off) * 1000) / 1000}" r="3" fill="none" stroke="#6a6a6a"`,
       );
       expect(p1).toContain(
-        `cy="${Math.round((132 + off) * 1000) / 1000}" r="3" fill="none" stroke="#2b2b2b"`,
+        `cy="${Math.round((BUCKLE_FOLD_Y_MM + off) * 1000) / 1000}" r="3" fill="none" stroke="#2b2b2b"`,
       );
     }
     expect(p1).toContain('šedé: 2. dvojice, značí se až skrz 1. dvojici');
     expect(p1).toContain('propíchněte 2 černé otvory u konce');
     expect(p1).toContain(`šrafy: přeplátování ${DEFAULT_BELT_END.keeperOverlapMm} mm`);
+  });
+});
+
+describe('bezpečná plocha listů: 13 mm od každé hrany A4', () => {
+  // HP DeskJet 2700 nepotiskne 12,7 mm u jedné kratší hrany A4; list na šířku ji má vlevo
+  // nebo vpravo. Obdélníky prvků dává generátor sám (`beltSheetInk`), text odhaduje z metrik
+  // Helvetiky s rezervou (porovnáno s getBBox v Chrome).
+  const shapes: Record<BeltConfigInput['tip'], BeltTipShape> = { hrot: 'point', zaobleny: 'round' };
+  const variants = (): { name: string; input: BeltConfigInput }[] => {
+    const out: { name: string; input: BeltConfigInput }[] = [];
+    for (const widthMm of [BELT_LIMITS.widthMm.min, 31, 35, 40, BELT_LIMITS.widthMm.max])
+      for (const thicknessMm of [BELT_LIMITS.thicknessMm.min, BELT_LIMITS.thicknessMm.max])
+        for (const tip of ['hrot', 'zaobleny'] as const)
+          for (const holeCount of BELT_LIMITS.holeCounts)
+            for (const holeSpacingMm of [10.5, 15, 25, 27, 40, BELT_LIMITS.holeSpacingMaxMm])
+              for (const apexToFirstHoleMm of [undefined, 31, 60, BELT_LIMITS.apexToFirstHoleMaxMm])
+                for (const holeDiameterMm of [
+                  BELT_LIMITS.holeDiameterMm.min,
+                  BELT_LIMITS.holeDiameterMm.max,
+                ]) {
+                  const input = {
+                    widthMm,
+                    thicknessMm,
+                    tip,
+                    holeCount,
+                    holeSpacingMm,
+                    apexToFirstHoleMm,
+                    holeDiameterMm,
+                  };
+                  if (checkBeltConfig(input).length > 0) continue;
+                  out.push({ name: JSON.stringify(input), input });
+                }
+    return out;
+  };
+
+  const all = variants();
+  const sheets = all.flatMap(({ name, input }) => {
+    const { end, tip } = beltSpecsFor(input);
+    return beltSheetInk(end, tip, shapes[input.tip]).map((sheet) => ({ name, ...sheet }));
+  });
+
+  it('varianty pokrývají list na výšku, na šířku i rozdělený na 2a a 2b', () => {
+    const kinds = new Set(
+      all.map(({ input }) => tipSheetOrientation(beltSpecsFor(input).tip) ?? 'null'),
+    );
+    expect([...kinds].sort()).toEqual(['landscape', 'portrait', 'split']);
+    expect(all.length).toBeGreaterThan(300);
+  });
+
+  it('všechno nakreslené leží v [13, šířka − 13] × [13, výška − 13]', () => {
+    const M = SHEET_SAFE_MARGIN_MM;
+    const outside: string[] = [];
+    for (const sheet of sheets) {
+      expect(sheet.boxes.length).toBeGreaterThan(10);
+      for (const b of sheet.boxes) {
+        if (b.x0 < M || b.y0 < M || b.x1 > sheet.widthMm - M || b.y1 > sheet.heightMm - M) {
+          outside.push(
+            `${sheet.name} ${sheet.id}: ${b.label} [${b.x0.toFixed(1)}, ${b.y0.toFixed(1)} – ${b.x1.toFixed(1)}, ${b.y1.toFixed(1)}]`,
+          );
+        }
+      }
+    }
+    expect(outside).toEqual([]);
+  });
+
+  it('každý list má celý kalibrační čtverec 50 × 50 mm a texty se nepřekrývají', () => {
+    // Obdélník textu je o rezervu vyšší než písmo; za překryv se bere průnik vyšší než 0,5 mm
+    // (řádky po 4 mm se tak nepočítají). Kóty mají popis těsně nad sebou, ty se vynechávají.
+    const overlap = (a: InkBox, b: InkBox): boolean =>
+      a.x0 < b.x1 && b.x0 < a.x1 && Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0) > 0.5;
+    const problems: string[] = [];
+    for (const sheet of sheets) {
+      const where = `${sheet.name} ${sheet.id}`;
+      const calibration = sheet.boxes.filter((b) => b.kind === 'calibration');
+      const c = calibration[0];
+      if (
+        calibration.length !== 1 ||
+        !c ||
+        Math.abs(c.x1 - c.x0 - 50.4) > 1e-9 ||
+        Math.abs(c.y1 - c.y0 - 50.4) > 1e-9
+      ) {
+        problems.push(`${where}: kalibrační čtverec`);
+      }
+      const texts = sheet.boxes.filter((b) => b.kind === 'text');
+      const others = sheet.boxes.filter((b) => b.kind !== 'text' && b.label !== 'kóta');
+      texts.forEach((a, i) => {
+        for (const b of [...texts.slice(i + 1), ...others]) {
+          if (overlap(a, b)) problems.push(`${where}: „${a.label}“ × „${b.label}“`);
+        }
+      });
+    }
+    expect(problems).toEqual([]);
+  });
+
+  it('listy pro výchozí 35 a 40 mm: list 1 i list 2 na výšku', () => {
+    for (const w of [35, 40]) {
+      const { end, tip } = at(w);
+      const sheets = buildBeltSheets(end, tip, 'point');
+      expect(sheets.map((s) => s.orientation)).toEqual(['portrait', 'portrait']);
+    }
   });
 });

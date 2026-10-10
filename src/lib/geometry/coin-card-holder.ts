@@ -220,16 +220,43 @@ export const NAMED_COINS = {
   '5kc': 23,
 } as const satisfies Record<string, number>;
 
+/**
+ * Bezpečný okraj tištěných listů (mm): všechno nakreslené leží aspoň tak daleko od každé hrany A4.
+ * Tiskárna uživatele (HP DeskJet 2700) netiskne 12,7 mm u dolní hrany listu na výšku; na šířku
+ * ten pruh padne vlevo nebo vpravo, proto stejný okraj na všech stranách a v obou orientacích.
+ */
+export const PRINT_SAFE_MM = 13;
+/**
+ * Okraj rozvržení listů (mm): bezpečný okraj + 0,5 mm, aby se do něj nedostala ani polovina
+ * tloušťky čáry u hrany ani horní dotah písma u prvního řádku.
+ */
+export const SHEET_MARGIN_MM = PRINT_SAFE_MM + 0.5;
 /** List pásu: A4 na šířku (pás je přes 200 mm dlouhý), okraj a mezera mezi díly. */
-export const A4_SHEET = { widthMm: 297, heightMm: 210, marginMm: 10, gapMm: 6 } as const;
+export const A4_SHEET = {
+  widthMm: 297,
+  heightMm: 210,
+  marginMm: SHEET_MARGIN_MM,
+  gapMm: 6,
+} as const;
 /** Výška legendy pod díly, se kterou kontrola rozvržení počítá. */
 export const LEGEND_HEIGHT_MM = 25;
+/**
+ * Legenda listu PÁS (8 řádků po 3 mm) dole: tolik mm nad spodním bezpečným okrajem začíná.
+ * Kalibrační úsečka je na listu PÁS vpravo nahoře (nad pásem vedle jazyka), aby se pás
+ * s popiskem šva a legendou vešel mezi okraje 13 mm.
+ */
+export const PAS_LEGEND_MM = 24;
+/**
+ * Nejkratší jazyk (mm), nad kterým se vedle jazyka vejde blok u horního okraje: kalibrační úsečka
+ * s legendou šrafy a popisky ohybů (list PÁS), sloupec ZAPSAT PŘI ZKOUŠCE (papírový model).
+ */
+export const MIN_TAB_FOR_TOP_BLOCK_MM = 40;
 /** Svislé mezery pravého sloupce střihu (nadpis nad dílem, popisky pod dílem). */
 export const SHEET_TITLE_GAP_MM = 4;
 export const SHEET_CAPTION_MM = 10;
 /** List kapsy s mincí a otvoru formy: A4 na výšku. */
-export const A4_PORTRAIT = { widthMm: 210, heightMm: 297, marginMm: 10 } as const;
-/** Kalibrační úsečka na listu pásu: kolik mm nad legendou (její y = H − m − legenda − tato hodnota). */
+export const A4_PORTRAIT = { widthMm: 210, heightMm: 297, marginMm: SHEET_MARGIN_MM } as const;
+/** Kalibrační úsečka na papírovém modelu a listu KAPSA: kolik mm nad legendou (y = H − m − legenda − tato hodnota). */
 export const CALIBRATION_GAP_MM = 4;
 /** Popisek šva dna pod pásem: odsazení od dolní hrany pásu. */
 export const SEAM_LABEL_GAP_MM = 5;
@@ -665,13 +692,19 @@ export function checkCoinCardHolder(spec: CoinCardHolderSpec = DEFAULT_COIN_CARD
   if (spec.pocketTopRadiusMm < so) {
     p.push('pocketTopRadiusMm musí být aspoň stitchOffsetMm, jinak šev začíná v oblouku.');
   }
-  // List pásu (A4 na šířku): jazyk + pás + popisek šva musí skončit nad kalibrační úsečkou.
+  // List pásu (A4 na šířku, okraj 13 mm): jazyk + pás + popisek šva musí skončit nad legendou,
+  // a jazyk musí být tak dlouhý, aby nad pásem zbylo místo na kalibrační úsečku (vedle jazyka).
   const { heightMm: H, widthMm: W, marginMm: m } = A4_SHEET;
-  const calY = H - m - LEGEND_HEIGHT_MM - CALIBRATION_GAP_MM;
+  const legendTop = H - m - PAS_LEGEND_MM;
   const stripBottom = m + L.tabLengthMm + L.panelHeightMm + SEAM_LABEL_GAP_MM + 1;
-  if (stripBottom > calY - 3) {
+  if (stripBottom > legendTop - 2) {
     p.push(
-      `Pás s jazykem končí v ${fmt(stripBottom)} mm, kalibrační úsečka je v ${fmt(calY)} – na A4 na šířku se nevejde.`,
+      `Pás s jazykem končí v ${fmt(stripBottom)} mm, legenda začíná v ${fmt(legendTop)} – na A4 na šířku se nevejde.`,
+    );
+  }
+  if (L.tabLengthMm < MIN_TAB_FOR_TOP_BLOCK_MM) {
+    p.push(
+      `Jazyk ${fmt(L.tabLengthMm)} mm je moc krátký: nad pásem by se nevešla kalibrační úsečka a poznámky (A4 na šířku).`,
     );
   }
   if (L.stripLengthMm + 2 * m > W) {

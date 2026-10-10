@@ -502,20 +502,20 @@ function sheetPrint(){let s=`<path d="${pd(HROT_TR)}" fill="none" stroke="var(--
   for(const x of HOLES){const col=x===MID?'var(--accent)':'var(--print)';s+=`<circle cx="${x}" cy="0" r="${HD/2}" fill="none" stroke="${col}" stroke-width="${sw(x===MID?.4:.25)}"/><path d="M${x-1.6} 0 h3.2 M${x} -1.6 v3.2" stroke="${col}" stroke-width="${sw(.2)}"/>`;}
   return s}
 add('D','Vytiskněte list 2','Když tabulka „Váš pásek“ ukazuje u této řady „ne“, nebo destička neprošla kontrolou, vytiskněte list 2 pro váš pásek na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm. List vystřihněte po obrysu konce. Řádek „List 2“ v tabulce „Váš pásek“ ukazuje, jestli list vyjde na výšku, na šířku, nebo když se na jeden list nevejde, na 2 listy na šířku (2a a 2b).',10000,t=>{
-  // A4 na výšku jako vygenerovaný list 2: pás vlevo (x 22–62 mm), vrchol 45 mm od horní hrany, čtverec vpravo nahoře; měřítko 0,27
+  // A4 na výšku jako vygenerovaný list 2: pás vlevo (x 26–66 mm), vrchol 32 mm od horní hrany, čtverec vpravo nahoře; měřítko 0,27
   const k=.27, ox=14, oy=4;
   let s=`<rect x="${ox}" y="${oy}" width="${f(210*k)}" height="${f(297*k)}" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3" ${SHADOW}/>`;
-  const page=`translate(${f(ox+(22+H)*k)} ${f(oy+(APEX+45)*k)}) scale(${k}) rotate(-90)`;
+  const page=`translate(${f(ox+(26+H)*k)} ${f(oy+(APEX+32)*k)}) scale(${k}) rotate(-90)`;
   CK=k; const pr=sheetPrint(); CK=1;
   const cut=es(t,.5,.9);
   s+=G(page,pr+(cut>0?`<path d="${pd(ppart([[SHEET_END,-H],[FAR,-H],...HROT_TR.slice(1,-1),[FAR,H],[SHEET_END,H]],cut))}" fill="none" stroke="var(--accent)" stroke-width="${(.5/k).toFixed(2)}"/>`:''));
   // kalibrační čtverec
-  const qx=ox+150*k, qy=oy+30*k, q=50*k;
+  const qx=ox+146*k, qy=oy+24*k, q=50*k;
   s+=`<rect x="${f(qx)}" y="${f(qy)}" width="${f(q)}" height="${f(q)}" fill="none" stroke="var(--print)" stroke-width=".3"/>`+lbl(qx+q/2,qy+q/2+1,'50 × 50','tpm','middle');
   s+=lbl(ox+3,oy+6,'List 2','tp');
   const mo=seg(t,.12,.4);
   if(mo>0){s+=fade(mo,`<rect x="${f(qx-1)}" y="${f(qy+q+1)}" width="${f(q+2)}" height="3.4" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".25"/>`)+fade(seg(t,.3,.38),tick(qx+q+4,qy+q+2.6,.7))}
-  if(t>.5&&t<.92){const P=[[SHEET_END,-H],[FAR,-H],...HROT_TR.slice(1,-1),[FAR,H],[SHEET_END,H]];const p=ptAt(P,cut);const x=ox+(22+H)*k+p[1]*k, y=oy+(APEX+45)*k-p[0]*k;
+  if(t>.5&&t<.92){const P=[[SHEET_END,-H],[FAR,-H],...HROT_TR.slice(1,-1),[FAR,H],[SHEET_END,H]];const p=ptAt(P,cut);const x=ox+(26+H)*k+p[1]*k, y=oy+(APEX+32)*k-p[0]*k;
     s+=`<g transform="translate(${f(x)} ${f(y)}) rotate(-90)"><path d="M0 0 L-6 -1.2 M0 0 L-6 1.2" stroke="var(--steel-d)" stroke-width=".7" stroke-linecap="round"/><circle cx="-8" cy="-2.4" r="1.6" fill="none" stroke="var(--accent)" stroke-width=".6"/><circle cx="-8" cy="2.4" r="1.6" fill="none" stroke="var(--accent)" stroke-width=".6"/></g>`;}
   let ib='';
   ib+=fade(seg(t,.02,.1),lbl(97,17,'tisk 100 %','t')+lbl(97,22,'bez přizpůsobení','ts'));
