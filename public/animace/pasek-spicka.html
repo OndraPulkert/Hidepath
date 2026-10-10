@@ -410,7 +410,7 @@ add('A','Stačí pás?','Od značky ke konci pásu musí zbýt aspoň vzdálenos
 },{v:'LÍC'});
 
 // B1 — volba řady
-add('B','Řada 1 nebo 2, nebo list 2','Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když tabulka „Váš pásek“ ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo destička neprošla kontrolou, vytiskněte list 2 pro váš pásek na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm. Řádek „List 2“ v tabulce „Váš pásek“ ukazuje, jestli list vyjde na výšku, na šířku, nebo když se na jeden list nevejde, na 2 listy na šířku (2a a 2b).',9000,t=>{
+add('B','Řada 1 nebo 2, nebo list 2','Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když tabulka „Váš pásek“ ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo destička neprošla kontrolou, vytiskněte list 2 pro váš pásek na tvrdý papír na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm. Řádek „List 2“ v tabulce „Váš pásek“ ukazuje, jestli list vyjde na výšku, na šířku, nebo když se na jeden list nevejde, na 2 listy na šířku (2a a 2b).',9000,t=>{
   const c=CAM_PL;
   let s=withCam(c,()=>`<rect x="-120" y="-120" width="500" height="430" fill="var(--board)"/>`+plate(0)+
     fade(seg(t,.08,.16)*(1-seg(t,.4,.46)),`<rect x="2" y="${ROW1-29}" width="211" height="58" rx="3" fill="none" stroke="var(--accent)" stroke-width="${sw(.6)}"/>`)+
@@ -422,7 +422,7 @@ add('B','Řada 1 nebo 2, nebo list 2','Hrot: řada 1. Zaoblený konec: řada 2, 
   let ib='';
   ib+=fade(seg(t,.1,.18),lbl(97,17,'Hrot','t')+lbl(97,22,'→ řada 1','ts'));
   ib+=fade(seg(t,.44,.52),lbl(97,31,'Zaoblený','t')+lbl(97,36,'→ řada 2,','ts')+lbl(97,41,'oblouk 40 a 30','ts'));
-  ib+=fade(seg(t,.76,.84),lbl(97,51,'„ne“ v tabulce','ta')+lbl(97,56,'nebo jen listy','ts')+lbl(97,61,'→ list 2, tisk 100 %','ts')+
+  ib+=fade(seg(t,.76,.84),lbl(97,51,'„ne“ v tabulce','ta')+lbl(97,56,'nebo jen listy','ts')+lbl(97,61,'→ list 2 na tvrdý papír','ts')+
     `<rect x="98" y="66" width="8" height="8" fill="var(--paper)" stroke="var(--print)" stroke-width=".3"/>`+lbl(108,72,'50 × 50','ts'));
   s+=inset('VOLBA',ib);
   return s;
@@ -501,7 +501,7 @@ function sheetShape(){return `M${X0} ${-H} L${f(FAR)} ${-H} L${f(APEX-TF)} ${f(-
 function sheetPrint(){let s=`<path d="${pd(HROT_TR)}" fill="none" stroke="var(--print)" stroke-width="${sw(.3)}"/><path d="M${SHEET_END} ${-H} H${f(FAR)} M${SHEET_END} ${H} H${f(FAR)}" stroke="var(--print)" stroke-width="${sw(.3)}"/>`;
   for(const x of HOLES){const col=x===MID?'var(--accent)':'var(--print)';s+=`<circle cx="${x}" cy="0" r="${HD/2}" fill="none" stroke="${col}" stroke-width="${sw(x===MID?.4:.25)}"/><path d="M${x-1.6} 0 h3.2 M${x} -1.6 v3.2" stroke="${col}" stroke-width="${sw(.2)}"/>`;}
   return s}
-add('D','Vytiskněte list 2','Když tabulka „Váš pásek“ ukazuje u této řady „ne“, nebo destička neprošla kontrolou, vytiskněte list 2 pro váš pásek na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm. List vystřihněte po obrysu konce. Řádek „List 2“ v tabulce „Váš pásek“ ukazuje, jestli list vyjde na výšku, na šířku, nebo když se na jeden list nevejde, na 2 listy na šířku (2a a 2b).',10000,t=>{
+add('D','Vytiskněte list 2','Když tabulka „Váš pásek“ ukazuje u této řady „ne“, nebo destička neprošla kontrolou, vytiskněte list 2 pro váš pásek na tvrdý papír na 100 % a zkontrolujte kalibrační čtverec 50 × 50 mm. List vystřihněte po obrysu konce. Řádek „List 2“ v tabulce „Váš pásek“ ukazuje, jestli list vyjde na výšku, na šířku, nebo když se na jeden list nevejde, na 2 listy na šířku (2a a 2b).',10000,t=>{
   // A4 na výšku jako vygenerovaný list 2: pás vlevo (x 26–66 mm), vrchol 32 mm od horní hrany, čtverec vpravo nahoře; měřítko 0,27
   const k=.27, ox=14, oy=4;
   let s=`<rect x="${ox}" y="${oy}" width="${f(210*k)}" height="${f(297*k)}" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3" ${SHADOW}/>`;
@@ -518,7 +518,7 @@ add('D','Vytiskněte list 2','Když tabulka „Váš pásek“ ukazuje u této �
   if(t>.5&&t<.92){const P=[[SHEET_END,-H],[FAR,-H],...HROT_TR.slice(1,-1),[FAR,H],[SHEET_END,H]];const p=ptAt(P,cut);const x=ox+(26+H)*k+p[1]*k, y=oy+(APEX+32)*k-p[0]*k;
     s+=`<g transform="translate(${f(x)} ${f(y)}) rotate(-90)"><path d="M0 0 L-6 -1.2 M0 0 L-6 1.2" stroke="var(--steel-d)" stroke-width=".7" stroke-linecap="round"/><circle cx="-8" cy="-2.4" r="1.6" fill="none" stroke="var(--accent)" stroke-width=".6"/><circle cx="-8" cy="2.4" r="1.6" fill="none" stroke="var(--accent)" stroke-width=".6"/></g>`;}
   let ib='';
-  ib+=fade(seg(t,.02,.1),lbl(97,17,'tisk 100 %','t')+lbl(97,22,'bez přizpůsobení','ts'));
+  ib+=fade(seg(t,.02,.1),lbl(97,17,'tisk 100 %','t')+lbl(97,22,'na tvrdý papír','ts'));
   ib+=fade(seg(t,.3,.38),lbl(97,32,'čtverec','t')+lbl(97,37,'50 × 50 mm','ts'));
   ib+=fade(seg(t,.5,.58),lbl(97,47,'vystřihněte','t')+lbl(97,52,'po obrysu konce','ts'));
   ib+=lbl(97,80,'schéma listu','ts');

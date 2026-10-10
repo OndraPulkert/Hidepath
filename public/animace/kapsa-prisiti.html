@@ -101,7 +101,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 <header>
 <a class="backlink" href="/" data-back>← Zpět do lekce</a>
 <h1>Přišití kapsy na pouzdro</h1>
-<p class="lead">Projekt 02, mince 50 Kč, kůže 1,2 mm. Šablona s okénkem z 2. výtisku listu PÁS, lepení, prosekání skrz obě vrstvy a šití (lekce 6).</p>
+<p class="lead">Projekt 02, mince 50 Kč, kůže 1,2 mm. Šablona s okénkem z 2. výtisku listu PÁS na tvrdém papíře, lepení, prosekání skrz obě vrstvy a šití (lekce 6).</p>
 </header>
 
 <section class="card" aria-label="Animace postupu">
@@ -282,7 +282,7 @@ const S=[];
 const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,side,tip});
 
 // A1 okénko z 2. výtisku listu PÁS
-add('A','Vystřihněte okénko z 2. výtisku PÁS','Vezměte 2. výtisk listu PÁS z lekce 5. Vystřihněte ho přesně po obrysu pásu. Pak v něm nožem vyřízněte okénko po vnějším obrysu kapsy na předním panelu: nahoře po čárkované čáře, po bocích a dole po vnějším okraji zelené šrafy G1.',8600,t=>{
+add('A','Vystřihněte okénko z 2. výtisku PÁS','Vezměte 2. výtisk listu PÁS z lekce 5 (tvrdý papír). Vystřihněte ho přesně po obrysu pásu. Pak v něm nožem vyřízněte okénko po vnějším obrysu kapsy na předním panelu: nahoře po čárkované čáře, po bocích a dole po vnějším okraji zelené šrafy G1.',8600,t=>{
   const o1=es(t,.05,.28), w1=es(t,.32,.5), o2=es(t,.55,.72), w2=es(t,.76,.92);
   let inner=`<rect x="-30" y="-40" width="320" height="250" fill="var(--board)"/>`;
   const waste=`<path d="M${PAPER.x} ${PAPER.y} h${PAPER.w} v${PAPER.h} h${-PAPER.w} Z ${STRIP}" fill-rule="evenodd" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3"/>`;
@@ -292,7 +292,7 @@ add('A','Vystřihněte okénko z 2. výtisku PÁS','Vezměte 2. výtisk listu P�
   if(o1>0&&w1<1) inner+=`<path d="${STRIP}" fill="none" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 2" opacity="${f(o1*(1-w1))}"/>`;
   if(o2>0&&w2<1) inner+=`<path d="${OUTL}" transform="${POCK_T}" fill="none" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 2" opacity="${f(o2*(1-w2))}"/>`;
   let s=clipMain('ca1',G(camT(STRIPC),inner));
-  s+=inset('OKÉNKO',notes([['2. výtisk PÁS','tw'],['z lekce 5'],['obrys pásu:','t'],['přesně po čáře'],['okénko:','t'],['po vnějším'],['obrysu kapsy'],['rohy bez vpichů','tok']]));
+  s+=inset('OKÉNKO',notes([['2. výtisk PÁS','tw'],['z lekce 5'],['tvrdý papír'],['obrys pásu:','t'],['přesně po čáře'],['okénko:','t'],['po vnějším'],['obrysu kapsy'],['rohy bez vpichů','tok']]));
   s+=pill(4,86,t<.32?'vystřihnout po obrysu pásu':t<.55?'odpad pryč':t<.92?'okénko po obrysu kapsy':'šablona s okénkem hotová',t>=.92?'tok':'t');
   return s;
 },null);

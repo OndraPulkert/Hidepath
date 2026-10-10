@@ -421,7 +421,9 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
         '2:kapsa×1',
         '2:kapsa-okno-18×1?',
         '4:cvicny-prouzek-kuze-1-2×1',
-        '5:sablona-kuze-1-2×2',
+        // PÁS: 1. výtisk na kůži, 2. na tvrdý papír na okénko pro kapsu.
+        '5:sablona-kuze-1-2×1',
+        '5:sablona-kuze-1-2×1',
         // Výtisk na značky jen, když nezůstal z lekce 2 (list KAPSA celkem 3×).
         '6:kapsa×1?',
         // Jen šablona s oknem (forma je hotová z lekce 2): 1 výtisk, když chybí.

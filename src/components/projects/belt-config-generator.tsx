@@ -47,6 +47,7 @@ import {
   parseBeltConfigForm,
   parseNumber,
 } from '@/lib/patterns/belt-config';
+import { BELT_SHEET_IDS } from '@/lib/patterns/belt-sheets';
 import {
   OFFERED_STRAP_COLORS,
   STRAP_AVAILABILITY_LABELS,
@@ -139,18 +140,23 @@ export function BeltConfigGenerator({
     if (!built.ok) return;
     const variant = `Váš pásek: ${built.label}`;
     onGenerated(
-      built.sheets.map((s) => ({
-        id: generatedSheetId(s.id),
-        title: s.title,
-        note: typo(
-          `Vygenerováno v aplikaci pro váš pásek. ${baseSheets.some((b) => b.id === s.id) ? 'Nahrazuje výchozí list.' : ''}`.trim(),
-        ),
-        orientation: s.orientation,
-        widthMm: s.widthMm,
-        heightMm: s.heightMm,
-        variant,
-        url: svgDataUrl(s.svg),
-      })),
+      built.sheets.map((s) => {
+        // List 2b je pokračování listu 2: podklad výtisku (štítek) přebírá od něj.
+        const base = s.id === BELT_SHEET_IDS.tipRest ? BELT_SHEET_IDS.tip : s.id;
+        return {
+          id: generatedSheetId(s.id),
+          ...(baseSheets.some((b) => b.id === base) ? { variantOf: base } : {}),
+          title: s.title,
+          note: typo(
+            `Vygenerováno v aplikaci pro váš pásek. ${baseSheets.some((b) => b.id === s.id) ? 'Nahrazuje výchozí list.' : ''}`.trim(),
+          ),
+          orientation: s.orientation,
+          widthMm: s.widthMm,
+          heightMm: s.heightMm,
+          variant,
+          url: svgDataUrl(s.svg),
+        };
+      }),
     );
     setDone(
       built.sheets.length === 1

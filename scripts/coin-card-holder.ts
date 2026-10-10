@@ -641,7 +641,7 @@ export function buildCoinHolderSheetSvg(
   const front = spec.tabSide === 'right' ? 'vpravo' : 'vlevo';
   const back = spec.tabSide === 'right' ? 'vlevo' : 'vpravo';
   const legend = [
-    `POUZDRO NA KARTY S VSAZENOU MINCÍ – LIST PÁS. Tisk 2× na A4 NA ŠÍŘKU na 100 % (bez „přizpůsobit stránce“): 1. na kůži (lekce 5), 2. okénko pro kapsu (lekce 6). Kapsa s mincí a forma jsou na listu KAPSA. NÁVRH k ověření na papíru.`,
+    `POUZDRO NA KARTY S VSAZENOU MINCÍ – LIST PÁS. Tisk 2× na A4 NA ŠÍŘKU na 100 % (bez „přizpůsobit stránce“): 1. na kůži (lekce 5), 2. na tvrdý papír, okénko pro kapsu (lekce 6). Kapsa s mincí a forma jsou na listu KAPSA. NÁVRH k ověření na papíru.`,
     `Karty ${cz(spec.cardWidthMm)} × ${cz(spec.cardHeightMm)} (${spec.cardsCount} ks) vepředu, bankovky složené napůl vzadu, mince Ø ${cz(spec.coinDiameterMm)}, kůže tělo ${cz(spec.bodyThicknessMm)} mm.`,
     `Jeden pás: ZADNÍ + ohyb A + PŘEDNÍ + ohyb B + VNITŘNÍ panel. Po složení jsou obě boční hrany OHYBY, šije se jen dno (skrz všechny vrstvy), horní hrana zůstává otevřená.`,
     `PÁS PŘILEPIT PÁSKOU NA LÍC, propíchnout značky, kroužky spojit na rubu a pak řezat skrz papír po čáře (lekce 5) – přední panel je nakreslený tak, jak bude vidět. Jazyk vyjde zepředu ${front} (zezadu ${back}), výřez na prst naproti němu.`,
@@ -750,7 +750,7 @@ export function bandPrickPoints(
 
 /**
  * Papírový model (A4 na šířku, 1:1): stejný obrys pásu jako list 1, bez otvorů a perforací, s čísly
- * kroků u ohybů, rámečkem pro kartu a kontrolním seznamem. Vystřihnout z tvrdšího papíru, složit,
+ * kroků u ohybů, rámečkem pro kartu a kontrolním seznamem. Vytisknout na čtvrtku, vystřihnout, složit,
  * vložit karty a bankovky a ověřit jazyk a výřez (u varianty s průchodkou i ji) dřív, než se řeže kůže.
  */
 export function buildCoinHolderPaperModelSvg(
@@ -956,7 +956,7 @@ export function buildCoinHolderPaperModelSvg(
   );
   out.push(text(m + 53, calY + 1, 'KONTROLA MĚŘÍTKA: 50 mm', 2.4, 'start'));
   const legend = [
-    `PAPÍROVÝ MODEL – NE z kůže. Tisk na A4 NA ŠÍŘKU na 100 %, obrys je stejný jako list pásu. Vytisknout na papír 160 g a nalepit na tenkou lepenku (krabice od cereálií), aby byl tuhý.`,
+    `PAPÍROVÝ MODEL – NE z kůže. Tisk na A4 NA ŠÍŘKU na 100 %, obrys je stejný jako list pásu. Vytisknout na čtvrtku, aby model po složení a naplnění držel tvar.`,
     // Stejný údaj jako na listu PÁS: výtisky pro 1,5 a 1,2 mm se liší jen o pár mm a na stole by nešly rozlišit.
     `Model pro: mince Ø ${cz(spec.coinDiameterMm)}, kůže tělo ${cz(spec.bodyThicknessMm)} mm${spec.foldSkiveThicknessMm !== null ? ` (ohyb B ztenčit na ${cz(spec.foldSkiveThicknessMm)} mm)` : ' (bez ztenčení)'}.`,
     `Prokáže: polohu jazyka a kloboučku, výřez, ${L.grommetXMm !== null ? 'průchodku, ' : ''}vytahování karty a místo pro kapsu. Neprokáže přídavky ohybů (papír je tenčí než kůže): ohyby jen přehnout do smyčky, nepřekládat na ostro.`,
@@ -1059,7 +1059,7 @@ export function buildCoinHolderPocketSvg(
   const lines = [
     `${cz(L.pocketWidthMm)} × ${cz(L.pocketHeightMm)} mm`,
     `čárkovaný čtverec ${cz(piece)} × ${cz(piece)} = kus kůže:`,
-    'výtisk na značky vystřihnout po něm',
+    'výtisk na značky (tvrdý papír) vystřihnout po něm',
     'šablona s oknem: výtisk nalepit na tenkou lepenku,',
     'vystřihnout po obrysu, vyseknout okno (lekce 2 a 6)',
     `okno Ø ${cz(L.windowDiameterMm)} (plná čára)`,

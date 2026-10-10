@@ -649,7 +649,7 @@ export const lessons: readonly LessonDefinition[] = [
       'sandpaper',
       'masking-tape',
     ],
-    recommendedEquipment: ['scratch-awl', 'edge-burnisher'],
+    recommendedEquipment: ['edge-burnisher'],
     prerequisiteLessons: [L2, L3, L4],
     prints: [
       {
@@ -708,12 +708,6 @@ export const lessons: readonly LessonDefinition[] = [
             status: 'planned',
           },
         ],
-      },
-      {
-        id: 'transfer-other',
-        title: 'Jiný způsob: obkreslení',
-        body: 'Šablonu vystřihněte přesně po plné čáře, přilepte na rub a obkreslete obrys šídlem, tupou jehlou nebo tužkou. Pak řežte po obkreslené čáře, rovné strany podle pravítka. Řez skrz papír po vytištěné čáře je ale přesnější.',
-        media: [],
       },
       {
         id: 'cut-parts',
@@ -1299,8 +1293,7 @@ export const cardHolderProject: ProjectDefinition = {
     {
       equipmentSlug: 'scratch-awl',
       priority: 'recommended',
-      reason:
-        'Rýsování linií (lekce 2 a 3), obkreslení šablony (lekce 5) a propíchnutí kroužků lepeného pásu (lekce 6).',
+      reason: 'Rýsování linií (lekce 2 a 3) a propíchnutí kroužků lepeného pásu (lekce 6).',
       specification: 'Kulaté rýsovací šídlo s hruškovitou rukojetí.',
       alternatives: ['Tupá sedlářská jehla', 'Tužka na rub kůže'],
     },

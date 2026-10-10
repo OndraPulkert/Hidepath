@@ -25,8 +25,12 @@ const badgeTexts = (root: HTMLElement) =>
 const withMounts = projects.filter((p) => mountedPrints(p).length > 0);
 
 describe('štítek podkladu výtisku (lepenka, čtvrtka, tvrdý papír)', () => {
-  it('podklad mají jen projekty 02 a 03; 01 a pásek tisknou na obyčejný papír', () => {
-    expect(withMounts.map((p) => p.slug).sort()).toEqual(['coin-card-holder', 'lid-wallet']);
+  it('podklad mají projekty 02, 03 a pásek; 01 tiskne na obyčejný papír', () => {
+    expect(withMounts.map((p) => p.slug).sort()).toEqual([
+      'belt',
+      'coin-card-holder',
+      'lid-wallet',
+    ]);
   });
 
   describe.each(withMounts.map((p) => [p.slug, p] as const))('%s', (_slug, project) => {
@@ -73,9 +77,13 @@ describe('štítek podkladu výtisku (lepenka, čtvrtka, tvrdý papír)', () => 
     const text = (id: string) =>
       sheetMounts(coinCardHolderProject, 'pattern-sheets', sheet(id))?.groups.map((g) => g.text);
     expect(text('kapsa-40mm')).toEqual(text('kapsa'));
-    expect(text('papirovy-model')).toEqual(['Nalepit na tenkou lepenku']);
-    // PÁS se rozřeže / přilepí páskou: obyčejný papír.
-    expect(text('sablona-kuze-1-2')).toBeUndefined();
-    expect(text('sablona')).toBeUndefined();
+    expect(text('papirovy-model')).toEqual([
+      'Tisknout na čtvrtku – model musí po složení a naplnění držet tvar',
+    ]);
+    // PÁS: 1. výtisk se rozřeže (obyčejný papír), 2. je šablona s okénkem (tvrdý papír).
+    expect(text('sablona')).toEqual(text('sablona-kuze-1-2'));
+    expect(text('sablona-kuze-1-2')).toEqual([
+      'Tisknout na tvrdý papír – okénko je doraz pro polohu kapsy',
+    ]);
   });
 });

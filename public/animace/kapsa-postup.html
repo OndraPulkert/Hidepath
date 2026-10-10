@@ -319,7 +319,7 @@ const S=[];
 const add=(part,title,body,dur,draw,side)=>S.push({part,title,body,dur,draw,side});
 
 // A1
-add('A','Vystřihněte výkres OTVOR FORMY','List KAPSA vytiskněte 3× na 100 % a zkontrolujte úsečku 50 mm: výtisk na formu, na značky a na šablonu. Z výtisku na formu vystřihněte výkres „OTVOR FORMY PRO DŮLEK“ (kružnice Ø 31,5 mm s osami) po čárkovaném čtverci 5 × 5 cm (u mince 40 mm 6 × 6 cm). Křížek os je v jeho středu. Kružnici nevystřihujte.',4200,t=>{
+add('A','Vystřihněte výkres OTVOR FORMY','List KAPSA vytiskněte 3× na 100 % a zkontrolujte úsečku 50 mm: výtisk na formu, na značky (na tvrdý papír) a na šablonu. Z výtisku na formu vystřihněte výkres „OTVOR FORMY PRO DŮLEK“ (kružnice Ø 31,5 mm s osami) po čárkovaném čtverci 5 × 5 cm (u mince 40 mm 6 × 6 cm). Křížek os je v jeho středu. Kružnici nevystřihujte.',4200,t=>{
   const k=.5, ox=6, oy=8; let s='';
   const fade=1-.7*es(t,.72,.95);
   let sheet=`${paperRect(0,0,210,150)}${G(`translate(0 ${SHEET_DY})`,printKapsa())}`;
@@ -425,7 +425,7 @@ function paper1(pr=0){let s=paperRect(P1.x,P1.y,P1.w,P1.h)+printKapsa();if(pr){c
 const pan=(s)=>s; // placeholder
 function rightNote(lines){return lines.map((l,i)=>lbl(90,14+i*6,l[0],l[1]||'t')).join('')}
 
-add('B','Vystřihněte výtisk na značky po čtverci','Výtisk listu KAPSA na značky vystřihněte po čárkovaném čtverci kolem kapsy: 57,5 × 57,5 mm (u mince 40 mm 70 × 70 mm), stejně jako kus kůže.',3800,t=>{
+add('B','Vystřihněte výtisk na značky po čtverci','Výtisk listu KAPSA na značky (tvrdý papír) vystřihněte po čárkovaném čtverci kolem kapsy: 57,5 × 57,5 mm (u mince 40 mm 70 × 70 mm), stejně jako kus kůže.',3800,t=>{
   let s=G(LVw,leather({side:'lic'}));
   const c=es(t,.1,.7), fade=1-es(t,.7,.9);
   // bigger sheet piece floating
@@ -437,7 +437,7 @@ add('B','Vystřihněte výtisk na značky po čtverci','Výtisk listu KAPSA na z
   const lift=1-es(t,.75,1);
   s+=G(LVw+` translate(${f(lift*4)} ${f(-lift*3)})`,sheet,SHADOW);
   if(c>0&&c<1){const [vxx,vyy]=vx(cur[0]+lift*4,cur[1]-lift*3);s+=scissors(vxx,vyy,c<.25?0:c<.5?90:c<.75?180:270)}
-  s+=G('',rightNote([['výtisk na značky','tw'],['po čárkovaném čtverci','ts'],['= kus kůže 57,5 mm','ts']]).replace(/x="90"/g,'x="92"'),`opacity="${f(seg(t,.8,1))}"`);
+  s+=G('',rightNote([['výtisk na značky','tw'],['(tvrdý papír)','ts'],['po čárkovaném čtverci','ts'],['= kus kůže 57,5 mm','ts']]).replace(/x="90"/g,'x="92"'),`opacity="${f(seg(t,.8,1))}"`);
   return s;
 },'lic');
 add('B','Přilepte ho maskovací páskou na LÍC','List položte na LÍC kůže hranami na hrany. V rozích ho přelepte maskovací páskou přes hranu papíru i kůže a pásku přehněte na rub; konce os nechte volné. Pásku nejdřív zkuste na kousku téže kůže.',3600,t=>{
