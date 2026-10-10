@@ -415,7 +415,10 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
       );
       expect(prints).toEqual([
         '1:papirovy-model-kuze-1-2×1',
-        '2:kapsa×3',
+        // Forma, značky a šablona s oknem: list KAPSA celkem 3×.
+        '2:kapsa×1',
+        '2:kapsa×1',
+        '2:kapsa×1',
         '2:kapsa-okno-18×1?',
         '4:cvicny-prouzek-kuze-1-2×1',
         '5:sablona-kuze-1-2×2',

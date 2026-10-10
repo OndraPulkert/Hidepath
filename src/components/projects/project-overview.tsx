@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { appLinkHref } from '@/app/app-links';
 import { LESSON_ANCHORS, PROJECT_OVERVIEW_ANCHOR, routes } from '@/app/routes';
 import { GlossaryText } from '@/components/glossary/glossary-term';
+import { PrintMountBadge } from '@/components/projects/print-mount-badge';
 import { Card } from '@/components/ui/card';
 import { type ProjectDefinition } from '@/content/schema';
 import {
@@ -71,6 +72,7 @@ function OverviewPrints({ project, lessons }: { project: ProjectDefinition; less
                 {typo(r.purpose)}
                 {r.paper ? ` (${typo(r.paper)})` : ''}
                 {r.condition && !shared ? ` – ${typo(r.condition)}` : ''}
+                {r.mount ? <PrintMountBadge text={r.mount} className="mt-1 flex w-fit" /> : null}
               </li>
             ))}
           </ul>

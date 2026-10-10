@@ -65,7 +65,7 @@ export const animationPages = {
         'Vysekněte okno do výtisku na šablonu',
         'Položte šablonu na rub a zarovnejte na osy',
         'Obtáhněte obrys šídlem nebo tužkou',
-        'Obtáhněte kružnici okna v otvoru papíru',
+        'Obtáhněte kružnici okna v otvoru šablony',
         'Obrys teď neřežte',
       ],
       D: [

@@ -14,6 +14,7 @@ import {
 } from '@/components/projects/generated-sheet';
 import { LidWalletSheetGenerator } from '@/components/projects/lid-wallet-sheet-generator';
 import { groupPatternSheets } from '@/components/projects/pattern-sheet-list';
+import { PrintMountBadge } from '@/components/projects/print-mount-badge';
 import { Button } from '@/components/ui/button';
 import { findProject } from '@/content/projects';
 import { patternSheetUrlsFor } from '@/content/projects/pattern-sheets';
@@ -30,6 +31,7 @@ import { lidFormInitial, resolveLidSheets } from '@/features/lid-wallet/lid-shee
 import { useLidSheets } from '@/features/lid-wallet/use-lid-sheets';
 import { type LessonRecordEntry } from '@/features/notebook/types';
 import { useLessonRecords } from '@/features/notebook/use-lesson-records';
+import { sheetMounts } from '@/features/prep/print-mount';
 import { NotFoundPage } from '@/pages/not-found-page';
 
 /**
@@ -60,6 +62,7 @@ export function PracticeSheetsPrintPage() {
     <PatternSheetsPrint
       project={project}
       definition={project.practiceSheets}
+      source="practice-sheets"
       heading="Cvičné listy 1:1"
     />
   );
@@ -234,11 +237,14 @@ function useNotebookPrefill(
 export function PatternSheetsPrint({
   project,
   definition,
+  source = 'pattern-sheets',
   heading = 'Listy střihu 1:1',
   mode = 'print',
 }: {
   project: ProjectDefinition;
   definition: PatternSheetsDefinition;
+  /** Odkud listy jsou – podle toho se k listu hledají výtisky lekcí (podklad). */
+  source?: 'pattern-sheets' | 'practice-sheets';
   heading?: string;
   /**
    * `print` = tisková stránka; formulář „Váš pásek“ tu není, jen odkaz na jeho stránku.
@@ -394,6 +400,7 @@ export function PatternSheetsPrint({
                   <span>
                     <span className="font-medium">{typo(sheet.title)}</span>
                     <span className="block text-meta text-ink-2">{typo(sheet.note)}</span>
+                    <SheetMountNote project={project} source={source} sheet={sheet} />
                   </span>
                 </label>
               ))}
@@ -426,6 +433,41 @@ export function PatternSheetsPrint({
         ))}
       </div>
     </div>
+  );
+}
+
+/** Na jaký podklad který výtisk listu patří (z `mount` výtisků lekcí); bez podkladu nic. */
+function SheetMountNote({
+  project,
+  source,
+  sheet,
+}: {
+  project: ProjectDefinition;
+  source: 'pattern-sheets' | 'practice-sheets';
+  sheet: PatternSheet;
+}) {
+  const mounts = sheetMounts(project, source, sheet);
+  if (!mounts) return null;
+  return (
+    <span className="mt-1 flex flex-col gap-1">
+      {mounts.groups.map((g) => (
+        <span key={g.text} className="flex flex-col gap-0.5">
+          <PrintMountBadge text={g.text} />
+          <span className="text-meta text-ink-2">
+            {g.uses
+              .map(
+                (u) =>
+                  `Lekce ${u.lessonOrder}: ${u.purpose}${u.condition ? ` (jen když ${u.condition})` : ''}`,
+              )
+              .map(typo)
+              .join(' · ')}
+          </span>
+        </span>
+      ))}
+      {mounts.plainToo ? (
+        <span className="text-meta text-ink-2">Ostatní výtisky listu: obyčejný papír.</span>
+      ) : null}
+    </span>
   );
 }
 

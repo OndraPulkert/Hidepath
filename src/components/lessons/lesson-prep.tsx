@@ -1,6 +1,7 @@
 import { type ReactNode, useId, useMemo, useRef } from 'react';
 import { Link } from 'react-router';
 
+import { PrintMountBadge } from '@/components/projects/print-mount-badge';
 import { ProgressBar } from '@/components/ui/progress-bar';
 import { Tag } from '@/components/ui/tag';
 import { equipmentCatalog } from '@/content/equipment';
@@ -271,6 +272,7 @@ function PrintRow({ item, disabled, onToggle }: RowProps<PrepPrintItem>) {
       <Link to={item.href} className="self-start text-leather hover:text-cognac">
         {typo(item.title)} <span aria-hidden>→</span>
       </Link>
+      {item.mount ? <PrintMountBadge text={item.mount} /> : null}
       {details.length > 0 || item.purpose ? (
         <Meta>
           {details.join(' · ')}

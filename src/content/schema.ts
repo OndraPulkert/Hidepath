@@ -382,6 +382,23 @@ export type PhaseDefinition = z.infer<typeof phaseDefinitionSchema>;
  * Co si před lekcí vytisknout. `sheetId` je id listu z `patternSheets` / `practiceSheets`
  * (povinné kromě `template`, kde se tiskne celá šablona projektu).
  */
+/**
+ * Na jaký tužší podklad výtisk patří (`nalepit` = výtisk nalepit na podklad, `tisknout` = tisknout
+ * rovnou na něj). Výtisk bez `mount` zůstává obyčejný papír. Text štítku skládá
+ * `src/features/prep/print-mount.ts`, v obsahu se neopakuje.
+ */
+export const printMountSchema = z
+  .object({
+    material: z.enum(['lepenka', 'ctvrtka', 'tvrdy-papir']),
+    method: z.enum(['nalepit', 'tisknout']),
+    /** Proč, krátce (např. „podle ní obkreslujete obrys a okno“). */
+    reason: z.string().min(1).optional(),
+  })
+  .refine((m) => !(m.method === 'tisknout' && m.material === 'lepenka'), {
+    message: 'Na lepenku se netiskne, jen nalepuje',
+  });
+export type PrintMount = z.infer<typeof printMountSchema>;
+
 export const lessonPrintSchema = z.object({
   source: z.enum(['pattern-sheets', 'practice-sheets', 'template']),
   sheetId: slug.optional(),
@@ -392,6 +409,8 @@ export const lessonPrintSchema = z.object({
   paper: z.string().min(1).optional(),
   /** Kdy tisknout, např. „jen když zkouška okna nevyšla“. */
   condition: z.string().min(1).optional(),
+  /** Tužší podklad (lepenka, čtvrtka, tvrdý papír); bez něj obyčejný papír. */
+  mount: printMountSchema.optional(),
 });
 export type LessonPrint = z.infer<typeof lessonPrintSchema>;
 
@@ -490,6 +509,11 @@ export const patternSheetSchema = z.object({
   heightMm: z.number().positive(),
   /** Např. „mince 40 mm (předloha)“; bez varianty = výchozí střih. */
   variant: z.string().min(1).optional(),
+  /**
+   * Id listu výchozího střihu, místo kterého se tento list tiskne (varianta, list pro změřenou
+   * kůži). Tisková stránka k němu ukáže podklad z výtisků lekcí, které míří na výchozí list.
+   */
+  variantOf: slug.optional(),
 });
 export type PatternSheet = z.infer<typeof patternSheetSchema>;
 
@@ -815,6 +839,7 @@ export const projectDefinitionSchema = z
       }
     }
     checkRecords(project.lessons, ctx);
+    checkSheetVariants(project, ctx);
     if (project.overview) checkOverview(project, project.overview, ctx);
   });
 export type ProjectDefinition = z.infer<typeof projectDefinitionSchema>;
@@ -856,6 +881,22 @@ function checkLessonPrints(project: ProjectShape, lesson: LessonDefinition, ctx:
         code: 'custom',
         message: `Lekce ${lesson.slug}: list ${print.sheetId} v ${print.source} neexistuje`,
       });
+    }
+  }
+}
+
+/** `variantOf` míří na výchozí list (bez vlastního `variantOf`) ve stejné sadě listů. */
+function checkSheetVariants(project: ProjectShape, ctx: Ctx) {
+  for (const def of [project.patternSheets, project.practiceSheets]) {
+    for (const sheet of def?.sheets ?? []) {
+      if (sheet.variantOf === undefined) continue;
+      const base = def?.sheets.find((s) => s.id === sheet.variantOf);
+      if (!base || base.id === sheet.id || base.variantOf !== undefined) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `List ${sheet.id}: variantOf ${sheet.variantOf} není výchozí list téže sady`,
+        });
+      }
     }
   }
 }

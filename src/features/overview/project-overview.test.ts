@@ -122,8 +122,13 @@ describe('Postup v kostce – Víčko', () => {
       'List 4 3×',
     ]);
     const cut = groups.find((g) => g.lessonOrder === 4)!;
-    expect(cut.rows.find((r) => r.sheetId === 'sablona')).toMatchObject({ copies: 2 });
-    expect(cut.rows.find((r) => r.sheetId === 'dily')).toMatchObject({ copies: 2 });
+    // První výtisk listů 1 a 3 na řez (obyčejný papír), druhý jako šablona na tvrdém papíře.
+    for (const id of ['sablona', 'dily']) {
+      expect(cut.rows.filter((r) => r.sheetId === id).map((r) => [r.copies, r.mount])).toEqual([
+        [1, undefined],
+        [1, 'Nalepit na tvrdý papír'],
+      ]);
+    }
     expect(text('tape-sheet-1').text).toContain('První výtisk listu 1');
     expect(text('cut-prints').text).toContain('Druhý výtisk listů 1 a 3');
   });

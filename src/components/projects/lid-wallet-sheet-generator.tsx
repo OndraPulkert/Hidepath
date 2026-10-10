@@ -173,6 +173,7 @@ function toPrintSheets(
     return [
       {
         id: generatedSheetId(base.id),
+        variantOf: base.id,
         title: base.title,
         note,
         orientation: base.orientation,

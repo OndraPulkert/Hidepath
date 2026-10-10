@@ -5,6 +5,7 @@ import {
   type ProjectOverview,
 } from '@/content/schema';
 import { printHref } from '@/features/prep/lesson-prep';
+import { mountText } from '@/features/prep/print-mount';
 
 /**
  * „Postup v kostce“: číslování bodů, cíl odkazu do lekce a výtisky převzaté z `prints` lekcí.
@@ -124,6 +125,8 @@ export interface OverviewPrintRow {
   /** Kde se list tiskne (u pásku „Váš pásek“ s listy pro uložený pásek). */
   href: string;
   paper?: string;
+  /** Štítek tužšího podkladu z `mount` výtisku. */
+  mount?: string;
   condition?: string;
 }
 
@@ -179,6 +182,7 @@ export function overviewPrints(
             print.source === 'template' ? undefined : print.sheetId,
           ),
           ...(print.paper ? { paper: print.paper } : {}),
+          ...(print.mount ? { mount: mountText(print.mount) } : {}),
           ...(print.condition ? { condition: print.condition } : {}),
         };
       }),

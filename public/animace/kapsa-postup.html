@@ -15,7 +15,7 @@
   --lic:#b8773f;--lic-d:#8a5228;--lic-hi:#d39a63;
   --rub:#dcc4a2;--rub-d:#b99a72;--rub-fib:#c7a87f;
   --wood:#e4c794;--wood-d:#b8935a;--wood-g:#cfae76;--wood-side:#caa66c;
-  --hole:#2b2018;--paper:#fcfbf7;--paper-edge:#cfc8bb;--print:#2b2b2b;--print-m:#7a7a7a;
+  --hole:#2b2018;--paper:#fcfbf7;--paper-edge:#cfc8bb;--board:#b9935f;--print:#2b2b2b;--print-m:#7a7a7a;
   --graphite:#4f545a;--steel:#a3abb3;--steel-d:#5c656e;--tape:#eedc95;
   --coin-o:#c4683f;--coin-o-d:#7a3a1c;--coin-i:#dcb94f;--coin-i-d:#93752a;--foil:#9fc3dc;--card:#b9a88c;--chip-lic:#b8773f;--chip-rub:#dcc4a2;
   --wet:rgba(70,35,10,.38);--night:rgba(20,24,48,.0);
@@ -28,7 +28,7 @@
   --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
   --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;
   --wood:#c9ab78;--wood-d:#9c7a45;--wood-g:#b5955f;--wood-side:#ad8c56;
-  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--graphite:#3f4449;
+  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--board:#9a7b52;--graphite:#3f4449;
   --steel:#9099a2;--steel-d:#4d555d;--tape:#d9c67d;--card:#a29275;
   --wet:rgba(30,15,5,.42);
   --pb:#7f877c;--pb-d:#565d53;--mallet:#c4b291;--mallet-d:#7a6744;
@@ -40,7 +40,7 @@
   --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
   --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;
   --wood:#c9ab78;--wood-d:#9c7a45;--wood-g:#b5955f;--wood-side:#ad8c56;
-  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--graphite:#3f4449;
+  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--board:#9a7b52;--graphite:#3f4449;
   --steel:#9099a2;--steel-d:#4d555d;--tape:#d9c67d;--card:#a29275;
   --wet:rgba(30,15,5,.42);
   --pb:#7f877c;--pb-d:#565d53;--mallet:#c4b291;--mallet-d:#7a6744;
@@ -515,19 +515,20 @@ add('C','Otočte kůži a narýsujte osy na rubu','Kůži otočte rubem nahoru. 
 },'flip');
 // Výtisk na šablonu vystřižený přesně po obrysu; s hole=1 má vyseknuté okno Ø 20 (otvor přesně na vytištěné kružnici).
 const WIN_SUB=`M${CX+R_WIN} ${CY} A${R_WIN} ${R_WIN} 0 1 0 ${CX-R_WIN} ${CY} A${R_WIN} ${R_WIN} 0 1 0 ${CX+R_WIN} ${CY} Z`;
+// Šablona s oknem: výtisk nalepený na tenké lepence (hnědá hrana).
 function tmpl(hole=0){
   const d=hole?`${OUT} ${WIN_SUB}`:OUT, id=nid('tp');
-  return `<clipPath id="${id}"><path d="${d}" clip-rule="evenodd"/></clipPath><path d="${d}" fill="var(--paper)" fill-rule="evenodd" stroke="var(--paper-edge)" stroke-width=".25"/>`+G('',printKapsa({axClip:1}),`clip-path="url(#${id})"`);
+  return `<clipPath id="${id}"><path d="${d}" clip-rule="evenodd"/></clipPath><path d="${d}" fill="var(--paper)" fill-rule="evenodd" stroke="var(--board)" stroke-width=".6"/>`+G('',printKapsa({axClip:1}),`clip-path="url(#${id})"`);
 }
 // Kruhový výsečník v řezu (spodní břit v y = 0) a palička nad ním.
 function punchSide(){return `<path d="M-10 0 L-10 -10 L-9.1 -10 L-9.1 -.8 Z M10 0 L10 -10 L9.1 -10 L9.1 -.8 Z" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-10.4" y="-12" width="20.8" height="2" rx=".4" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-3" y="-26" width="6" height="14" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-4.5" y="-28" width="9" height="2.4" rx=".6" fill="var(--steel-d)"/>`}
 function malletSide(){return `<path d="M7 -3.5 L24 -6" stroke="var(--mallet-d)" stroke-width="1.6" stroke-linecap="round"/><rect x="-8" y="-7" width="16" height="7" rx="1.6" fill="var(--mallet)" stroke="var(--mallet-d)" stroke-width=".25"/>`}
-add('C','Vysekněte okno do výtisku na šablonu','Výtisk na šablonu vystřihněte přesně po obrysu kapsy (plná čára se zaoblenými rohy). Na děrovací desce do něj vysekněte okno výsečníkem Ø 20 mm (u mince 40 mm Ø 32 mm), břit přesně na vytištěné kružnici. Pro záložní okno Ø 18 mm vytiskněte list Kapsa – záložní okno Ø 18 mm a vysekněte Ø 18 mm. V lekci 6 použijte šablonu z lekce 2 – když ji máte, krok přeskočte.',7600,t=>{
+add('C','Vysekněte okno do výtisku na šablonu','Výtisk na šablonu nalepte lepidlem v tyčince na tenkou lepenku – podle šablony budete obkreslovat obrys i okno. Vystřihněte ho přesně po obrysu kapsy (plná čára se zaoblenými rohy). Na děrovací desce do něj vysekněte okno výsečníkem Ø 20 mm (u mince 40 mm Ø 32 mm), břit přesně na vytištěné kružnici. Pro záložní okno Ø 18 mm vytiskněte list Kapsa – záložní okno Ø 18 mm, nalepte ho na tenkou lepenku a vysekněte Ø 18 mm. V lekci 6 použijte šablonu z lekce 2 – když ji máte, krok přeskočte.',7600,t=>{
   const m=es(t,0,.2), c=es(t,.22,.44), dn=es(t,.46,.52), hit=es(t,.52,.6), cut=t>.6, up=es(t,.66,.76), slug=es(t,.74,.92);
   let s=`<rect x="6" y="9" width="77" height="74" rx="2" fill="var(--pb)" stroke="var(--pb-d)" stroke-width=".35"/>`;
   s+=G(LVw+` translate(0 ${f(L(-70,0,m))})`,tmpl(cut?1:0),m<1?SHADOW:'');
-  if(cut&&slug<1){ // vyseknutý papírový kotouček
-    s+=G(LVw+` translate(${f(slug*30)} ${f(-slug*26)})`,`<circle cx="${CX}" cy="${CY}" r="${R_WIN}" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".25"/><path d="M${CX-R_WIN} ${CY} H${CX+R_WIN} M${CX} ${CY-R_WIN} V${CY+R_WIN}" stroke="var(--print-m)" stroke-width=".2" stroke-dasharray="3 1 .6 1"/>`,`opacity="${f(1-slug)}"`);
+  if(cut&&slug<1){ // vyseknutý kotouček (výtisk na lepence)
+    s+=G(LVw+` translate(${f(slug*30)} ${f(-slug*26)})`,`<circle cx="${CX}" cy="${CY}" r="${R_WIN}" fill="var(--paper)" stroke="var(--board)" stroke-width=".6"/><path d="M${CX-R_WIN} ${CY} H${CX+R_WIN} M${CX} ${CY-R_WIN} V${CY+R_WIN}" stroke="var(--print-m)" stroke-width=".2" stroke-dasharray="3 1 .6 1"/>`,`opacity="${f(1-slug)}"`);
   }
   // výsečník shora: kroužek břitu
   const pa=seg(t,.2,.26)*(1-up);
@@ -563,7 +564,7 @@ add('C','Obtáhněte obrys šídlem nebo tužkou','Obrys obtáhněte šídlem ne
   s+=rightNote([['obrys na RUB','tw'],['kolem okraje papíru','ts'],['ne na líc – škrábnutí','ts'],['na líci zůstane vidět','ts']]);
   return s;
 },'rub');
-add('C','Obtáhněte kružnici okna v otvoru papíru','Tužkou lehce objeďte vnitřní hranu okna v šabloně. Podle této kružnice pak okno vystředíte.',5400,t=>{
+add('C','Obtáhněte kružnici okna v otvoru šablony','Tužkou lehce objeďte vnitřní hranu okna v šabloně. Podle této kružnice pak okno vystředíte.',5400,t=>{
   const cir=es(t,.06,.68), off=es(t,.74,.94);
   let s=G(LVw,leather({side:'rub',axPricks:1,slits:23,rubAxes:1,outline:1,circle:cir}));
   s+=G(LVw+` translate(${f(off*48)} ${f(-off*10)})`,tmpl(1),`opacity="${f(1-off)}"`);

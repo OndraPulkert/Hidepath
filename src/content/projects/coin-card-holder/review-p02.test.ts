@@ -101,4 +101,32 @@ describe('pouzdro s mincí – rozhodnutí autora 8. 10. 2026', () => {
     expect(body).not.toContain('odřezku z lekce 4');
     expect(body).toContain('novém cvičném proužku');
   });
+
+  it('L2 a L6: šablona s oknem na tenké lepence, forma, značky a PÁS na obyčejném papíře', () => {
+    expect(stepOf(2, 'trace-template').body).toContain(
+      'Výtisk na šablonu nalepte lepidlem v tyčince na tenkou lepenku',
+    );
+    expect(stepOf(2, 'test-window-retention').body).toMatch(
+      /Kapsa – záložní okno Ø 18 mm[^.]*nalepte ho na tenkou lepenku/,
+    );
+    expect(stepOf(6, 'trace-pocket-template').body).toContain(
+      'nalepte ho lepidlem v tyčince na tenkou lepenku',
+    );
+    expect(lesson(2).materials.join(' ')).toMatch(/lepenka.*šablonu s oknem/);
+    expect(lesson(6).materials.join(' ')).toMatch(/lepenka.*šablonu s oknem nemáte z lekce 2/);
+    for (const n of [2, 6]) {
+      for (const p of lesson(n).prints!) {
+        const windowTemplate = /šablon[aou] s oknem/.test(p.purpose);
+        expect(p.mount?.material, `${n} ${p.purpose}`).toBe(windowTemplate ? 'lepenka' : undefined);
+      }
+    }
+    // Forma, značky, šablona s oknem: list KAPSA v lekci 2 třikrát, podklad jen u šablony.
+    expect(
+      lesson(2)
+        .prints!.filter((p) => p.sheetId === 'kapsa')
+        .map((p) => p.mount?.material ?? 'papír'),
+    ).toEqual(['papír', 'papír', 'lepenka']);
+    expect(lesson(1).prints![0]!.mount).toEqual({ material: 'lepenka', method: 'nalepit' });
+    for (const n of [4, 5]) for (const p of lesson(n).prints!) expect(p.mount).toBeUndefined();
+  });
 });

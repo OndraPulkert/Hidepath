@@ -315,7 +315,10 @@ describe('hlavní cesta: zápisník, příprava a dílenský režim', () => {
     const prep = (await screen.findByRole('heading', { level: 2, name: 'Připravte si' })).closest(
       'section',
     )!;
-    const toggle = within(prep).getByRole('button', { name: 'Mám: Kapsa s mincí a otvor formy' });
+    // List KAPSA má v lekci 2 tři výtisky (forma, značky, šablona s oknem); první je na formu.
+    const toggle = within(prep).getAllByRole('button', {
+      name: 'Mám: Kapsa s mincí a otvor formy',
+    })[0]!;
     await waitFor(() => expect(toggle).toBeEnabled());
     const before = within(prep).getByText(/^Připraveno \d+\/\d+$/).textContent;
     await user.click(toggle);
@@ -329,13 +332,15 @@ describe('hlavní cesta: zápisník, příprava a dílenský režim', () => {
     )!;
     await waitFor(() =>
       expect(
-        within(again).getByRole('button', { name: 'Mám: Kapsa s mincí a otvor formy' }),
+        within(again).getAllByRole('button', { name: 'Mám: Kapsa s mincí a otvor formy' })[0],
       ).toHaveAttribute('aria-pressed', 'true'),
     );
 
     // Tisk začíná nahoře stránky, ne v místě, kde byl seznam v lekci.
     const scrollTo = vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
-    await user.click(within(again).getByRole('link', { name: /^Kapsa s.mincí a.otvor formy/ }));
+    await user.click(
+      within(again).getAllByRole('link', { name: /^Kapsa s.mincí a.otvor formy/ })[0]!,
+    );
     await waitFor(() => expect(scrollTo).toHaveBeenLastCalledWith(0, 0));
     scrollTo.mockRestore();
     await waitFor(() => expect(router.state.location.pathname).toBe(routes.template(coin.slug)));

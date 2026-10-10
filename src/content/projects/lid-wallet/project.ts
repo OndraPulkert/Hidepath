@@ -157,8 +157,14 @@ const sheet = (
   sheetId: 'sablona' | 'rub' | 'dily' | 'pripravky',
   copies: number,
   purpose: string,
-  extra: Pick<LessonPrint, 'paper' | 'condition'> = {},
+  extra: Pick<LessonPrint, 'paper' | 'condition' | 'mount'> = {},
 ): LessonPrint => ({ source: 'pattern-sheets', sheetId, copies, purpose, ...extra });
+
+/** Listy 1–3 papírového modelu P0 (lekce 1 a 2). */
+const ON_CARD = { material: 'ctvrtka', method: 'tisknout' } as const;
+
+/** Šablony z listů (lekce 2 a 4): výtisk nalepit na tvrdý papír a vyříznout. */
+const ON_HARD_PAPER = { material: 'tvrdy-papir', method: 'nalepit' } as const;
 
 const L1 = '01-measure-and-sheets';
 const L2 = '02-paper-model';
@@ -281,12 +287,10 @@ export const lessons: readonly LessonDefinition[] = [
     safety: [],
     prints: [
       sheet('sablona', 1, 'Kontrola měřítka (úsečka 50 mm, kóta P1) a papírový model v lekci 2', {
-        paper: 'tvrdší papír (čtvrtka)',
+        mount: ON_CARD,
       }),
-      sheet('rub', 1, 'Papírový model v lekci 2', { paper: 'tvrdší papír (čtvrtka)' }),
-      sheet('dily', 1, 'Přepážky D1 a D2 papírového modelu v lekci 2', {
-        paper: 'tvrdší papír (čtvrtka)',
-      }),
+      sheet('rub', 1, 'Papírový model v lekci 2', { mount: ON_CARD }),
+      sheet('dily', 1, 'Přepážky D1 a D2 papírového modelu v lekci 2', { mount: ON_CARD }),
       sheet('pripravky', 1, 'Rámeček „Čísla pro postup“ (kóta P1), vložka dna a proužek V12'),
     ],
     media: [photo('lw-l1-hero', 'Vytištěné listy 1–4 peněženky Víčko, posuvka měří kótu P1')],
@@ -480,13 +484,10 @@ export const lessons: readonly LessonDefinition[] = [
       sheet(
         'pripravky',
         1,
-        'Šablona konce jazýčku (z platných listů, když P0 něco změnil, z nových): nalepit na tvrdý papír a vyříznout',
+        'Šablona konce jazýčku (z platných listů, když P0 něco změnil, z nových)',
+        { mount: ON_HARD_PAPER },
       ),
-      sheet(
-        'sablona',
-        1,
-        'Šablona výřezu pro palec (z platných listů): nalepit na tvrdý papír a vyříznout',
-      ),
+      sheet('sablona', 1, 'Šablona výřezu pro palec (z platných listů)', { mount: ON_HARD_PAPER }),
     ],
     requires: [
       {
@@ -774,25 +775,22 @@ export const lessons: readonly LessonDefinition[] = [
       'Prsty držící výsečník mějte u spodku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',
     ],
     prints: [
-      sheet(
-        'sablona',
-        2,
-        'První výtisk na řez P1 skrz papír, druhý jako šablona otvorů S1–S3 a S6',
-        {
-          paper: PLAIN_PAPER,
-        },
-      ),
-      sheet('rub', 1, 'Značení na rub P1: nalepit na tvrdý papír a vyříznout', {
+      sheet('sablona', 1, 'První výtisk na řez P1 skrz papír', { paper: PLAIN_PAPER }),
+      sheet('sablona', 1, 'Druhý výtisk jako šablona otvorů S1–S3 a S6', {
         paper: PLAIN_PAPER,
+        mount: ON_HARD_PAPER,
       }),
-      sheet('dily', 2, 'První výtisk na řez D1, D2 a L1 skrz papír, druhý jako šablona D2', {
+      sheet('rub', 1, 'Značení na rub P1', { paper: PLAIN_PAPER, mount: ON_HARD_PAPER }),
+      sheet('dily', 1, 'První výtisk na řez D1, D2 a L1 skrz papír', { paper: PLAIN_PAPER }),
+      sheet('dily', 1, 'Druhý výtisk jako šablona D2', {
         paper: PLAIN_PAPER,
+        mount: ON_HARD_PAPER,
       }),
       sheet(
         'pripravky',
         1,
-        'Šablony okének mincí a bankovek, plíšku, proužek otvorů S4/S5 a druhá šablona konce jazýčku: nalepit na tvrdý papír',
-        { paper: PLAIN_PAPER },
+        'Šablony okének mincí a bankovek, plíšku, proužek otvorů S4/S5 a druhá šablona konce jazýčku',
+        { paper: PLAIN_PAPER, mount: ON_HARD_PAPER },
       ),
     ],
     media: [
@@ -1897,18 +1895,24 @@ export const lessons: readonly LessonDefinition[] = [
       sheet('dily', 1, 'Řez D1, D2 a L1 finálního kusu skrz papír', { paper: PLAIN_PAPER }),
       sheet('sablona', 1, 'Nová šablona otvorů S1–S3 a S6', {
         paper: PLAIN_PAPER,
+        mount: ON_HARD_PAPER,
         condition: LISTS_CHANGED,
       }),
-      sheet('dily', 1, 'Nová šablona D2', { paper: PLAIN_PAPER, condition: LISTS_CHANGED }),
+      sheet('dily', 1, 'Nová šablona D2', {
+        paper: PLAIN_PAPER,
+        mount: ON_HARD_PAPER,
+        condition: LISTS_CHANGED,
+      }),
       sheet('rub', 1, 'Značení na rub P1 finálního kusu', {
         paper: PLAIN_PAPER,
+        mount: ON_HARD_PAPER,
         condition: LISTS_CHANGED,
       }),
       sheet(
         'pripravky',
         1,
         'Nové šablony okének a plíšku, proužek S4/S5, druhá šablona konce jazýčku a Čísla pro postup',
-        { paper: PLAIN_PAPER, condition: LISTS_CHANGED },
+        { paper: PLAIN_PAPER, mount: ON_HARD_PAPER, condition: LISTS_CHANGED },
       ),
     ],
     media: [
@@ -2316,7 +2320,7 @@ export const lidWalletProject: ProjectDefinition = {
       {
         id: 'rub',
         title: 'List 2 – pás P1 z rubu',
-        note: 'Rub P1: lepené plochy G1–G4, poloha D1, D2 a plíšku, pořadí lepení a značky L. Nalepit na tvrdý papír a propíchnout body na rub kůže.',
+        note: 'Rub P1: lepené plochy G1–G4, poloha D1, D2 a plíšku, pořadí lepení a značky L. Body se propichují na rub kůže.',
         orientation: 'portrait',
         widthMm: 210,
         heightMm: 297,

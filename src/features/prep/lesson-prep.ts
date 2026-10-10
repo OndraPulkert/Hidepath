@@ -9,6 +9,7 @@ import {
   type ShoppingPlan,
 } from '@/content/schema';
 import { getEquipmentStatus, type InventoryState } from '@/features/inventory/types';
+import { mountText } from '@/features/prep/print-mount';
 import { type PrepCheckRecord } from '@/features/prep/types';
 import { type ProgressState } from '@/features/progress/types';
 import { resolveShoppingPlan } from '@/features/shopping/plan';
@@ -36,6 +37,8 @@ export interface PrepPrintItem {
   copies?: number;
   purpose?: string;
   paper?: string;
+  /** Štítek tužšího podkladu („Nalepit na tenkou lepenku – …“); bez něj obyčejný papír. */
+  mount?: string;
   /** Tisk jen za podmínky – položka je volitelná a nepočítá se do „Připraveno“. */
   condition?: string;
   /** Kroky lekce (od 1), pod kterými je odkaz na tisk – jen u náhrady z `printLink`. */
@@ -216,6 +219,7 @@ function buildPrints(
         copies: p.copies,
         purpose: p.purpose,
         ...(p.paper ? { paper: p.paper } : {}),
+        ...(p.mount ? { mount: mountText(p.mount) } : {}),
         ...(p.condition ? { condition: p.condition } : {}),
         href: printHref(project, p.source, sheetId),
         checked: isChecked(key),

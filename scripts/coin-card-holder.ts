@@ -1060,6 +1060,8 @@ export function buildCoinHolderPocketSvg(
     `${cz(L.pocketWidthMm)} × ${cz(L.pocketHeightMm)} mm`,
     `čárkovaný čtverec ${cz(piece)} × ${cz(piece)} = kus kůže:`,
     'výtisk na značky vystřihnout po něm',
+    'šablona s oknem: výtisk nalepit na tenkou lepenku,',
+    'vystřihnout po obrysu, vyseknout okno (lekce 2 a 6)',
     `okno Ø ${cz(L.windowDiameterMm)} (plná čára)`,
     `prstenec ${cz(L.coinRingMm)} mm – držení ověřit na odřezku`,
     `mince Ø ${cz(spec.coinDiameterMm)} (čárkovaně)`,
