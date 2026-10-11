@@ -5,7 +5,7 @@ import {
   type ProjectOverview,
 } from '@/content/schema';
 import { printHref } from '@/features/prep/lesson-prep';
-import { mountText } from '@/features/prep/print-mount';
+import { CARDBOARD_NOTE, mountText } from '@/features/prep/print-mount';
 
 /**
  * „Postup v kostce“: číslování bodů, cíl odkazu do lekce a výtisky převzaté z `prints` lekcí.
@@ -125,7 +125,7 @@ export interface OverviewPrintRow {
   /** Kde se list tiskne (u pásku „Váš pásek“ s listy pro uložený pásek). */
   href: string;
   paper?: string;
-  /** Štítek tužšího podkladu z `mount` výtisku. */
+  /** Štítek podkladu (tenký karton) z `mount` výtisku. */
   mount?: string;
   condition?: string;
 }
@@ -158,10 +158,14 @@ function sheetLabel(project: ProjectPrints, print: LessonPrint): string {
   return clash ? title : short(title);
 }
 
-/** Výtisky lekcí z `printsFrom` bodu, v pořadí lekcí, převzaté z jejich „Vytisknout“. */
+/**
+ * Výtisky lekcí (u bodu přehledu z `printsFrom`), v pořadí lekcí, převzaté z jejich „Vytisknout“.
+ * Se `source` jen výtisky z jednoho zdroje (tisková stránka listů střihu, cvičných listů, šablony).
+ */
 export function overviewPrints(
   project: ProjectPrints,
   lessonSlugs: readonly string[],
+  { source }: { source?: LessonPrint['source'] } = {},
 ): OverviewPrintGroup[] {
   return project.lessons
     .filter((l) => lessonSlugs.includes(l.slug) && l.prints)
@@ -169,50 +173,94 @@ export function overviewPrints(
     .map((lesson) => ({
       lessonSlug: lesson.slug,
       lessonOrder: lesson.order,
-      rows: (lesson.prints ?? []).map((print) => {
-        const label = sheetLabel(project, print);
-        return {
-          sheetLabel: label,
-          sheetId: print.sheetId ?? 'template',
-          copies: print.copies,
-          purpose: purposeWithoutLabel(print.purpose, label),
-          href: printHref(
-            project,
-            print.source,
-            print.source === 'template' ? undefined : print.sheetId,
-          ),
-          ...(print.paper ? { paper: print.paper } : {}),
-          ...(print.mount ? { mount: mountText(print.mount) } : {}),
-          ...(print.condition ? { condition: print.condition } : {}),
-        };
-      }),
-    }));
+      rows: (lesson.prints ?? [])
+        .filter((print) => source === undefined || print.source === source)
+        .map((print) => {
+          const label = sheetLabel(project, print);
+          return {
+            sheetLabel: label,
+            sheetId: print.sheetId ?? 'template',
+            copies: print.copies,
+            purpose: purposeWithoutLabel(print.purpose, label),
+            href: printHref(
+              project,
+              print.source,
+              print.source === 'template' ? undefined : print.sheetId,
+            ),
+            ...(print.paper ? { paper: print.paper } : {}),
+            ...(print.mount ? { mount: mountText(print.mount) } : {}),
+            ...(print.condition ? { condition: print.condition } : {}),
+          };
+        }),
+    }))
+    .filter((g) => g.rows.length > 0);
 }
 
-/**
- * Podmínka, kterou mají všechny výtisky (u pásku: listy jen za řadu destičky s „ne“). Výpis ji
- * pak napíše jednou pod seznam, ne u každého řádku. Jinak `undefined`.
- */
-export function sharedPrintCondition(groups: readonly OverviewPrintGroup[]): string | undefined {
-  const conditions = new Set(groups.flatMap((g) => g.rows).map((r) => r.condition));
-  const [only] = [...conditions];
-  return conditions.size === 1 ? only : undefined;
+export interface PrintTotal {
+  sheetLabel: string;
+  sheetId: string;
+  copies: number;
 }
 
-/**
- * Součet výtisků po listech, seřazený podle názvu listu. Bez podmíněných výtisků; s
- * `includeConditional` i s nimi (nejvyšší možný počet, když jsou všechny výtisky podmíněné).
- */
-export function printTotals(
-  groups: readonly OverviewPrintGroup[],
-  { includeConditional = false }: { includeConditional?: boolean } = {},
-): { sheetLabel: string; sheetId: string; copies: number }[] {
-  const totals: { sheetLabel: string; sheetId: string; copies: number }[] = [];
+/** Součet výtisků po listech v pořadí prvního výtisku (pořadí lekcí). Podmíněné se nepočítají. */
+export function printTotals(groups: readonly OverviewPrintGroup[]): PrintTotal[] {
+  const totals: PrintTotal[] = [];
   for (const row of groups.flatMap((g) => g.rows)) {
-    if (row.condition && !includeConditional) continue;
+    if (row.condition) continue;
     const total = totals.find((t) => t.sheetId === row.sheetId);
     if (total) total.copies += row.copies;
     else totals.push({ sheetLabel: row.sheetLabel, sheetId: row.sheetId, copies: row.copies });
   }
-  return totals.sort((a, b) => a.sheetLabel.localeCompare(b.sheetLabel, 'cs', { numeric: true }));
+  return totals;
+}
+
+/** Podmíněný výtisk s číslem lekce (výpis „Jen v případě potřeby“ lekce neseskupuje). */
+export type ConditionalPrintRow = OverviewPrintRow & { condition: string; lessonOrder: number };
+
+/** Podmíněné výtisky se stejnou podmínkou (u pásku mají všechny listy jednu). */
+export interface ConditionalPrintGroup {
+  condition: string;
+  rows: ConditionalPrintRow[];
+}
+
+export interface PrintList {
+  /** Výtisky, které jsou potřeba vždy, po lekcích (lekce jen s podmíněnými výtisky chybí). */
+  required: OverviewPrintGroup[];
+  /** Součet povinných výtisků po listech („Celkem vytisknout“). */
+  totals: PrintTotal[];
+  /** Výtisky jen za podmínky, seskupené podle podmínky v pořadí lekcí; do součtu se nepočítají. */
+  conditional: ConditionalPrintGroup[];
+  /** Co je tenký karton ({@link CARDBOARD_NOTE}), když má některý výtisk štítek podkladu. */
+  cardboardNote?: string;
+}
+
+/**
+ * Výpis tisku rozdělený na povinné výtisky (po lekcích, se součtem) a výtisky jen v případě
+ * potřeby (s podmínkou). Stejně pro „Postup v kostce“ i tiskovou stránku.
+ */
+export function splitPrintList(groups: readonly OverviewPrintGroup[]): PrintList {
+  const required = groups
+    .map((g) => ({ ...g, rows: g.rows.filter((r) => !r.condition) }))
+    .filter((g) => g.rows.length > 0);
+  const conditional: ConditionalPrintGroup[] = [];
+  for (const g of groups) {
+    for (const row of g.rows) {
+      if (!row.condition) continue;
+      const item: ConditionalPrintRow = {
+        ...row,
+        condition: row.condition,
+        lessonOrder: g.lessonOrder,
+      };
+      const group = conditional.find((c) => c.condition === row.condition);
+      if (group) group.rows.push(item);
+      else conditional.push({ condition: row.condition, rows: [item] });
+    }
+  }
+  const mounted = groups.some((g) => g.rows.some((r) => r.mount));
+  return {
+    required,
+    totals: printTotals(groups),
+    conditional,
+    ...(mounted ? { cardboardNote: CARDBOARD_NOTE } : {}),
+  };
 }

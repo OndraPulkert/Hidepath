@@ -84,21 +84,21 @@ const SHEETS_CONDITION =
 const YOUR_BELT = { to: 'belt-config', label: 'Váš pásek' } as const;
 
 /**
- * List střihu pásku (id podle `BELT_SHEET_IDS`; vygenerované listy mají stejný základ). S `mount`
- * na tvrdý papír, když se podél hrany listu rýsuje šídlem; jinak obyčejný papír.
+ * List střihu pásku (id podle `BELT_SHEET_IDS`; vygenerované listy mají stejný základ). Každý list
+ * se přikládá hranou k pásu, proto vždy `mount`: nalepit na tenký karton.
  */
 const sheet = (
   sheetId: 'prezka' | 'spicka',
   purpose: string,
-  mount?: LessonPrint['mount'],
+  mount: NonNullable<LessonPrint['mount']>,
 ): LessonPrint => ({
   source: 'pattern-sheets',
   sheetId,
   copies: 1,
   purpose,
-  paper: mount ? 'A4, 100 %' : 'obyčejný papír A4, 100 %',
+  paper: 'A4, 100 %',
   condition: SHEETS_CONDITION,
-  ...(mount ? { mount } : {}),
+  mount,
 });
 
 const KNIFE = 'Nůž veďte tahem od prstů volné ruky.';
@@ -278,7 +278,7 @@ export const lessons: readonly LessonDefinition[] = [
     goal: 'Na odřezku stejného pásu vyzkoušet řez, značení, výsečníky, ovál, ohyb, nýt, hrany, u barevného pásku barvu na hrany a balzám dřív, než se pustíte do pásku.',
     materials: [
       'odřezek pásu asi 15 cm (viz první krok)',
-      'destička MK Plexi (řada 3), nebo list 1 vytištěný na tvrdý papír',
+      'destička MK Plexi (řada 3), nebo list 1, tenký karton (krabice od cereálií) a lepidlo v tyčince',
       SCISSORS_MATERIAL,
       SHIMS_MATERIAL,
       'voda a houbička',
@@ -314,7 +314,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'cut',
         title: 'Kolmý řez',
-        body: 'Konec odřezku srovnejte kolmo. Odřezek položte rubem nahoru. Destičku přiložte kousek od konce, hrany odřezku na linky vaší šířky (šířka bez linky: podle příčné stupnice), přidržte ji rukou nad pásem a šídlem narýsujte čáru podél levé hrany destičky přes celou šířku. Destičku odložte, ocelové pravítko přiložte na čáru a řízněte ve 2–3 tazích, nůž svisle; nikdy ne podél destičky, čepel by akrylát poškodila. Kontrola: destičku přiložte znovu, hrany odřezku na linky: levá hrana destičky se konce dotýká po celé šířce, bez mezery v rohu. S listem 1: vytiskněte ho na tvrdý papír na 100 % (odkaz pod krokem), zkontrolujte kalibrační čtverec 50 × 50 mm a vystřihněte ho po obrysu pásu. Spodní hranu (konec pásu) nestříhejte: odřízněte ji nožem podél ocelového pravítka přesně po čáře, nůžky by ji nechaly křivou. Boky listu přiložte na hrany odřezku a čáru veďte podél spodní hrany listu.',
+        body: 'Konec odřezku srovnejte kolmo. Odřezek položte rubem nahoru. Destičku přiložte kousek od konce, hrany odřezku na linky vaší šířky (šířka bez linky: podle příčné stupnice), přidržte ji rukou nad pásem a šídlem narýsujte čáru podél levé hrany destičky přes celou šířku. Destičku odložte, ocelové pravítko přiložte na čáru a řízněte ve 2–3 tazích, nůž svisle; nikdy ne podél destičky, čepel by akrylát poškodila. Kontrola: destičku přiložte znovu, hrany odřezku na linky: levá hrana destičky se konce dotýká po celé šířce, bez mezery v rohu. S listem 1: vytiskněte ho na 100 % (odkaz pod krokem), zkontrolujte kalibrační čtverec 50 × 50 mm, nalepte ho na tenký karton (krabice od cereálií) a po zaschnutí ho vystřihněte po obrysu pásu. Spodní hranu (konec pásu) nestříhejte: odřízněte ji nožem podél ocelového pravítka přesně po čáře, nůžky by ji nechaly křivou. Boky listu přiložte na hrany odřezku a čáru veďte podél spodní hrany listu.',
         printLink: 'pattern-sheets',
         printSheetId: 'prezka',
         media: [],
@@ -527,8 +527,6 @@ export const lessons: readonly LessonDefinition[] = [
     safety: [KNIFE, PUNCH],
     prints: [
       sheet('prezka', 'List 1: značení odřezku místo řady 3 destičky', {
-        material: 'tvrdy-papir',
-        method: 'tisknout',
         reason: 'podél spodní hrany rýsujete šídlem, list použijete i v lekci 3',
       }),
     ],
@@ -543,7 +541,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 120,
     goal: 'Srovnat konec u přezky, zkosit, u barevného pásku obarvit a zaleštit dlouhé hrany kromě posledních 30 cm a pás natřít balzámem.',
     materials: [
-      'destička MK Plexi, nebo list 1 z lekce 2 (tvrdý papír)',
+      'destička MK Plexi, nebo list 1 z lekce 2 (na tenkém kartonu)',
       'plátno na leštění',
       'kousek papírové pásky delší, než je šířka pásu, na značku 30 cm',
     ],
@@ -659,7 +657,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 120,
     goal: 'Označit a vyseknout konec u přezky, vyrobit poutko a přezku přišroubovat dvěma nýty.',
     materials: [
-      'destička MK Plexi (řada 3), nebo vytištěný list 1',
+      'destička MK Plexi (řada 3), nebo list 1, tenký karton (krabice od cereálií) a lepidlo v tyčince',
       SCISSORS_MATERIAL,
       SHIMS_MATERIAL,
       'odřezek kůže na poutko v barvě pásu, klidně tenčí než pás',
@@ -716,7 +714,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'mark',
         title: 'Označte konec u přezky',
-        body: 'Destičku přiložte levou hranou přesně na konec pásu, obě hrany pásu na dvojici linek vaší šířky (šířka bez linky: podle příčné stupnice). Šídlem označte jen 2 otvory pro nýty blíž ke konci, 2 značky ohybu a obtáhněte ovál. Druhé 2 otvory v přímce neznačte: druhou dvojici označíte po ohnutí skrz první. V otvorech kružte po stěně, u obou značek ohybu nakloňte šídlo stejným směrem. Dívejte se svisle. Destičku nikdy neobracejte. Dva otvory mimo přímku jsou značky ohybu: do nich nic nesekejte. S listem 1: list vystřihněte po obrysu pásu, spodní hranu přiložte přesně na konec pásu, boky na hrany pásu a přilepte papírovou páskou. Šídlem propíchněte středy 2 černých otvorů u konce, oba křížky oválu a oba červené kroužky na čáře ohybu. Šedé otvory nepropichujte.',
+        body: 'Destičku přiložte levou hranou přesně na konec pásu, obě hrany pásu na dvojici linek vaší šířky (šířka bez linky: podle příčné stupnice). Šídlem označte jen 2 otvory pro nýty blíž ke konci, 2 značky ohybu a obtáhněte ovál. Druhé 2 otvory v přímce neznačte: druhou dvojici označíte po ohnutí skrz první. V otvorech kružte po stěně, u obou značek ohybu nakloňte šídlo stejným směrem. Dívejte se svisle. Destičku nikdy neobracejte. Dva otvory mimo přímku jsou značky ohybu: do nich nic nesekejte. S listem 1: list nalepte na tenký karton (krabice od cereálií) a po zaschnutí ho vystřihněte po obrysu pásu, spodní hranu odřízněte nožem podél ocelového pravítka přesně po čáře. Spodní hranu přiložte přesně na konec pásu, boky na hrany pásu a list přilepte papírovou páskou. Šídlem propíchněte středy 2 černých otvorů u konce, oba křížky oválu a oba červené kroužky na čáře ohybu. Šedé otvory nepropichujte.',
         animationLinks: [
           animationLink('beltBuckleEnd', 'B2'),
           animationLink('beltBuckleEnd', 'B3'),
@@ -856,7 +854,11 @@ export const lessons: readonly LessonDefinition[] = [
       PUNCH,
       'Kontaktní lepidlo používejte ve větrané místnosti a podle návodu na obalu.',
     ],
-    prints: [sheet('prezka', 'List 1: konec u přezky místo řady 3 destičky')],
+    prints: [
+      sheet('prezka', 'List 1: konec u přezky místo řady 3 destičky', {
+        reason: 'spodní hranu přikládáte na konec pásu',
+      }),
+    ],
     requires: [
       {
         id: 'strap-edged',
@@ -960,7 +962,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 90,
     goal: 'V jednom přiložení označit dírky a konec, vyseknout je, uříznout konec a dokončit hrany.',
     materials: [
-      'destička MK Plexi (řada 1 nebo 2), nebo list 2 vytištěný na tvrdý papír',
+      'destička MK Plexi (řada 1 nebo 2), nebo list 2, tenký karton (krabice od cereálií) a lepidlo v tyčince',
       SCISSORS_MATERIAL,
       SHIMS_MATERIAL,
       'plátno na leštění',
@@ -985,7 +987,7 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Řada 1 nebo 2, nebo list 2',
         printLink: 'pattern-sheets',
         printSheetId: 'spicka',
-        body: `Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když ${TABLE} ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo destička neprošla kontrolou, vytiskněte list 2 pro váš pásek na tvrdý papír na 100 % (odkaz pod krokem) a zkontrolujte kalibrační čtverec 50 × 50 mm. Řádek „List 2“ ${IN_TABLE} ukazuje, jestli list vyjde na výšku, na šířku, nebo když se na jeden list nevejde, na 2 listy na šířku (2a a 2b).`,
+        body: `Hrot: řada 1. Zaoblený konec: řada 2, oblouk je jen pro 40 a 30 mm. Když ${TABLE} ukazuje u této řady „ne“ (šířka bez oblouku, jiný počet dírek, rozteč nebo odstup), nebo destička neprošla kontrolou, vytiskněte list 2 pro váš pásek na 100 % (odkaz pod krokem), zkontrolujte kalibrační čtverec 50 × 50 mm a list nalepte na tenký karton (krabice od cereálií). Řádek „List 2“ ${IN_TABLE} ukazuje, jestli list vyjde na výšku, na šířku, nebo když se na jeden list nevejde, na 2 listy na šířku (2a a 2b).`,
         animationLinks: [animationLink('beltHolesTip', 'B1'), animationLink('beltHolesTip', 'D1')],
         media: [],
         beltRecalls: ['tip', 'marking'],
@@ -1096,11 +1098,7 @@ export const lessons: readonly LessonDefinition[] = [
       sheet(
         'spicka',
         'List 2: dírky a konec místo řady 1 nebo 2 destičky (případně 2 listy, 2a a 2b)',
-        {
-          material: 'tvrdy-papir',
-          method: 'tisknout',
-          reason: 'po okraji listu obtahujete šídlem tvar konce',
-        },
+        { reason: 'po okraji listu obtahujete šídlem tvar konce' },
       ),
     ],
     requires: [
@@ -1632,7 +1630,7 @@ export const beltProject: ProjectDefinition = {
       },
     ],
     alsoNeeded: [
-      'destička MK Plexi (máte ji), nebo tiskárna A4 na listy 1 a 2 a tvrdý papír (lekce 2 a 6)',
+      'destička MK Plexi (máte ji), nebo tiskárna A4 na listy 1 a 2, tenký karton (krabice od cereálií) a lepidlo v tyčince (lekce 2 a 6)',
       'krejčovský metr, když nemáte pásek na změření obvodu',
       'dvě lišty nebo odřezky stejně silné jako pás, oboustranná lepicí páska pod ně (lekce 2, 4 a 6)',
       'nůžky na vystřižení listů 1 a 2 (jen s listy)',

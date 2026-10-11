@@ -176,6 +176,8 @@ function printKapsa(o={}){
   return s;
 }
 function paperRect(x,y,w,h,extra=''){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".25" ${extra}/>`}
+// Výtisk nalepený na tenkém kartonu: hnědá hrana jako u šablony s oknem.
+function cardRect(x,y,w,h){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="var(--paper)" stroke="var(--board)" stroke-width=".6"/>`}
 const SHADOW='filter="url(#sh)"';
 
 // ---------- leather piece (sheet coords) ----------
@@ -319,7 +321,7 @@ const S=[];
 const add=(part,title,body,dur,draw,side)=>S.push({part,title,body,dur,draw,side});
 
 // A1
-add('A','Vystřihněte výkres OTVOR FORMY','List KAPSA vytiskněte 3× na 100 % a zkontrolujte úsečku 50 mm: výtisk na formu, na značky (na tvrdý papír) a na šablonu. Z výtisku na formu vystřihněte výkres „OTVOR FORMY PRO DŮLEK“ (kružnice Ø 31,5 mm s osami) po čárkovaném čtverci 5 × 5 cm (u mince 40 mm 6 × 6 cm). Křížek os je v jeho středu. Kružnici nevystřihujte.',4200,t=>{
+add('A','Vystřihněte výkres OTVOR FORMY','List KAPSA vytiskněte 3× na 100 % a zkontrolujte úsečku 50 mm: výtisk na formu, na značky a na šablonu. Výtisk na značky nalepte na tenký karton (krabice od cereálií). Z výtisku na formu vystřihněte výkres „OTVOR FORMY PRO DŮLEK“ (kružnice Ø 31,5 mm s osami) po čárkovaném čtverci 5 × 5 cm (u mince 40 mm 6 × 6 cm). Křížek os je v jeho středu. Kružnici nevystřihujte.',4200,t=>{
   const k=.5, ox=6, oy=8; let s='';
   const fade=1-.7*es(t,.72,.95);
   let sheet=`${paperRect(0,0,210,150)}${G(`translate(0 ${SHEET_DY})`,printKapsa())}`;
@@ -421,15 +423,15 @@ const LVw=LV(); // standard leather view transform
 // páska v rozích přes hranu papíru i kůže (přehnutá na rub), mimo konce os uprostřed stran
 const TAPE_PTS=[[P1.x+1,P1.y+1,-45],[P1.x+P1.w-1,P1.y+1,45],[P1.x+1,P1.y+P1.h-1,45],[P1.x+P1.w-1,P1.y+P1.h-1,-45]];
 function tapes(lift=0){const pts=TAPE_PTS;return pts.map(([x,y,a],i)=>{const l=cl(lift*1.4-i*.12);return `<rect x="${x-6}" y="${y-2.4}" width="12" height="4.8" fill="var(--tape)" opacity="${f(.85*(1-l))}" transform="rotate(${a} ${x} ${y}) translate(0 ${f(-l*6)})"/>`}).join('')}
-function paper1(pr=0){let s=paperRect(P1.x,P1.y,P1.w,P1.h)+printKapsa();if(pr){const n=pr;s+=DOTS.slice(0,Math.min(n,23)).map(([x,y])=>`<circle cx="${x}" cy="${y}" r=".75" fill="none" stroke="var(--accent)" stroke-width=".3"/>`).join('')+AXE.slice(0,Math.max(0,n-23)).map(([x,y])=>`<circle cx="${x}" cy="${y}" r=".9" fill="none" stroke="var(--accent)" stroke-width=".35"/>`).join('')}return s}
+function paper1(pr=0){let s=cardRect(P1.x,P1.y,P1.w,P1.h)+printKapsa();if(pr){const n=pr;s+=DOTS.slice(0,Math.min(n,23)).map(([x,y])=>`<circle cx="${x}" cy="${y}" r=".75" fill="none" stroke="var(--accent)" stroke-width=".3"/>`).join('')+AXE.slice(0,Math.max(0,n-23)).map(([x,y])=>`<circle cx="${x}" cy="${y}" r=".9" fill="none" stroke="var(--accent)" stroke-width=".35"/>`).join('')}return s}
 const pan=(s)=>s; // placeholder
 function rightNote(lines){return lines.map((l,i)=>lbl(90,14+i*6,l[0],l[1]||'t')).join('')}
 
-add('B','Vystřihněte výtisk na značky po čtverci','Výtisk listu KAPSA na značky (tvrdý papír) vystřihněte po čárkovaném čtverci kolem kapsy: 57,5 × 57,5 mm (u mince 40 mm 70 × 70 mm), stejně jako kus kůže.',3800,t=>{
+add('B','Vystřihněte výtisk na značky po čtverci','Výtisk listu KAPSA na značky (nalepený na tenkém kartonu) vystřihněte po čárkovaném čtverci kolem kapsy: 57,5 × 57,5 mm (u mince 40 mm 70 × 70 mm), stejně jako kus kůže.',3800,t=>{
   let s=G(LVw,leather({side:'lic'}));
   const c=es(t,.1,.7), fade=1-es(t,.7,.9);
   // bigger sheet piece floating
-  let sheet=`<g opacity="${f(fade)}">${paperRect(0,-6,110,90)}</g>`+G('',paperRect(P1.x,P1.y,P1.w,P1.h)+printKapsa());
+  let sheet=`<g opacity="${f(fade)}">${cardRect(0,-6,110,90)}</g>`+G('',cardRect(P1.x,P1.y,P1.w,P1.h)+printKapsa());
   sheet+=`<g opacity="${f(fade)}">`;for(let i=0;i<12;i++)sheet+=`<rect x="66" y="${10+i*3.6}" width="${30+((i*37)%14)}" height="1.1" fill="#cfcac0"/>`;sheet+=`</g>`;
   const pts=[[P1.x,P1.y],[P1.x+P1.w,P1.y],[P1.x+P1.w,P1.y+P1.h],[P1.x,P1.y+P1.h],[P1.x,P1.y]];let rem=c*4*P1.w,d=`M${P1.x} ${P1.y}`,cur=[P1.x,P1.y];const sl=[P1.w,P1.h,P1.w,P1.h];
   for(let i=0;i<4&&rem>0;i++){const a=pts[i],b=pts[i+1],u=Math.min(1,rem/sl[i]);cur=[L(a[0],b[0],u),L(a[1],b[1],u)];d+=` L${f(cur[0])} ${f(cur[1])}`;rem-=sl[i];}
@@ -437,7 +439,7 @@ add('B','Vystřihněte výtisk na značky po čtverci','Výtisk listu KAPSA na z
   const lift=1-es(t,.75,1);
   s+=G(LVw+` translate(${f(lift*4)} ${f(-lift*3)})`,sheet,SHADOW);
   if(c>0&&c<1){const [vxx,vyy]=vx(cur[0]+lift*4,cur[1]-lift*3);s+=scissors(vxx,vyy,c<.25?0:c<.5?90:c<.75?180:270)}
-  s+=G('',rightNote([['výtisk na značky','tw'],['(tvrdý papír)','ts'],['po čárkovaném čtverci','ts'],['= kus kůže 57,5 mm','ts']]).replace(/x="90"/g,'x="92"'),`opacity="${f(seg(t,.8,1))}"`);
+  s+=G('',rightNote([['výtisk na značky','tw'],['(na tenkém kartonu)','ts'],['po čárkovaném čtverci','ts'],['= kus kůže 57,5 mm','ts']]).replace(/x="90"/g,'x="92"'),`opacity="${f(seg(t,.8,1))}"`);
   return s;
 },'lic');
 add('B','Přilepte ho maskovací páskou na LÍC','List položte na LÍC kůže hranami na hrany. V rozích ho přelepte maskovací páskou přes hranu papíru i kůže a pásku přehněte na rub; konce os nechte volné. Pásku nejdřív zkuste na kousku téže kůže.',3600,t=>{
@@ -515,7 +517,7 @@ add('C','Otočte kůži a narýsujte osy na rubu','Kůži otočte rubem nahoru. 
 },'flip');
 // Výtisk na šablonu vystřižený přesně po obrysu; s hole=1 má vyseknuté okno Ø 20 (otvor přesně na vytištěné kružnici).
 const WIN_SUB=`M${CX+R_WIN} ${CY} A${R_WIN} ${R_WIN} 0 1 0 ${CX-R_WIN} ${CY} A${R_WIN} ${R_WIN} 0 1 0 ${CX+R_WIN} ${CY} Z`;
-// Šablona s oknem: výtisk nalepený na tenké lepence (hnědá hrana).
+// Šablona s oknem: výtisk nalepený na tenkém kartonu (hnědá hrana).
 function tmpl(hole=0){
   const d=hole?`${OUT} ${WIN_SUB}`:OUT, id=nid('tp');
   return `<clipPath id="${id}"><path d="${d}" clip-rule="evenodd"/></clipPath><path d="${d}" fill="var(--paper)" fill-rule="evenodd" stroke="var(--board)" stroke-width=".6"/>`+G('',printKapsa({axClip:1}),`clip-path="url(#${id})"`);
@@ -523,11 +525,11 @@ function tmpl(hole=0){
 // Kruhový výsečník v řezu (spodní břit v y = 0) a palička nad ním.
 function punchSide(){return `<path d="M-10 0 L-10 -10 L-9.1 -10 L-9.1 -.8 Z M10 0 L10 -10 L9.1 -10 L9.1 -.8 Z" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-10.4" y="-12" width="20.8" height="2" rx=".4" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-3" y="-26" width="6" height="14" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-4.5" y="-28" width="9" height="2.4" rx=".6" fill="var(--steel-d)"/>`}
 function malletSide(){return `<path d="M7 -3.5 L24 -6" stroke="var(--mallet-d)" stroke-width="1.6" stroke-linecap="round"/><rect x="-8" y="-7" width="16" height="7" rx="1.6" fill="var(--mallet)" stroke="var(--mallet-d)" stroke-width=".25"/>`}
-add('C','Vysekněte okno do výtisku na šablonu','Výtisk na šablonu nalepte lepidlem v tyčince na tenkou lepenku – podle šablony budete obkreslovat obrys i okno. Vystřihněte ho přesně po obrysu kapsy (plná čára se zaoblenými rohy). Na děrovací desce do něj vysekněte okno výsečníkem Ø 20 mm (u mince 40 mm Ø 32 mm), břit přesně na vytištěné kružnici. Pro záložní okno Ø 18 mm vytiskněte list Kapsa – záložní okno Ø 18 mm, nalepte ho na tenkou lepenku a vysekněte Ø 18 mm. V lekci 6 použijte šablonu z lekce 2 – když ji máte, krok přeskočte.',7600,t=>{
+add('C','Vysekněte okno do výtisku na šablonu','Výtisk na šablonu nalepte lepidlem v tyčince na tenký karton (krabice od cereálií) – podle šablony budete obkreslovat obrys i okno. Vystřihněte ho přesně po obrysu kapsy (plná čára se zaoblenými rohy). Na děrovací desce do něj vysekněte okno výsečníkem Ø 20 mm (u mince 40 mm Ø 32 mm), břit přesně na vytištěné kružnici. Pro záložní okno Ø 18 mm vytiskněte list Kapsa – záložní okno Ø 18 mm, nalepte ho na tenký karton a vysekněte Ø 18 mm. V lekci 6 použijte šablonu z lekce 2 – když ji máte, krok přeskočte.',7600,t=>{
   const m=es(t,0,.2), c=es(t,.22,.44), dn=es(t,.46,.52), hit=es(t,.52,.6), cut=t>.6, up=es(t,.66,.76), slug=es(t,.74,.92);
   let s=`<rect x="6" y="9" width="77" height="74" rx="2" fill="var(--pb)" stroke="var(--pb-d)" stroke-width=".35"/>`;
   s+=G(LVw+` translate(0 ${f(L(-70,0,m))})`,tmpl(cut?1:0),m<1?SHADOW:'');
-  if(cut&&slug<1){ // vyseknutý kotouček (výtisk na lepence)
+  if(cut&&slug<1){ // vyseknutý kotouček (výtisk na kartonu)
     s+=G(LVw+` translate(${f(slug*30)} ${f(-slug*26)})`,`<circle cx="${CX}" cy="${CY}" r="${R_WIN}" fill="var(--paper)" stroke="var(--board)" stroke-width=".6"/><path d="M${CX-R_WIN} ${CY} H${CX+R_WIN} M${CX} ${CY-R_WIN} V${CY+R_WIN}" stroke="var(--print-m)" stroke-width=".2" stroke-dasharray="3 1 .6 1"/>`,`opacity="${f(1-slug)}"`);
   }
   // výsečník shora: kroužek břitu

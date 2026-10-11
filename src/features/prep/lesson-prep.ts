@@ -9,7 +9,7 @@ import {
   type ShoppingPlan,
 } from '@/content/schema';
 import { getEquipmentStatus, type InventoryState } from '@/features/inventory/types';
-import { mountText } from '@/features/prep/print-mount';
+import { CARDBOARD_NOTE, firstCardboardLesson, mountText } from '@/features/prep/print-mount';
 import { type PrepCheckRecord } from '@/features/prep/types';
 import { type ProgressState } from '@/features/progress/types';
 import { resolveShoppingPlan } from '@/features/shopping/plan';
@@ -37,7 +37,7 @@ export interface PrepPrintItem {
   copies?: number;
   purpose?: string;
   paper?: string;
-  /** Štítek tužšího podkladu („Nalepit na tenkou lepenku – …“); bez něj obyčejný papír. */
+  /** Štítek podkladu („Nalepit na tenký karton (krabice od cereálií) – …“); bez něj papír. */
   mount?: string;
   /** Tisk jen za podmínky – položka je volitelná a nepočítá se do „Připraveno“. */
   condition?: string;
@@ -103,8 +103,21 @@ export interface PrepRequirementItem {
 
 export type PrepItem = PrepPrintItem | PrepEquipmentItem | PrepMaterialItem | PrepRequirementItem;
 
+/** Součet povinných výtisků jednoho listu v lekci („Celkem vytisknout: …“). */
+export interface PrepPrintTotal {
+  title: string;
+  copies: number;
+}
+
 export interface LessonPrepView {
   prints: readonly PrepPrintItem[];
+  /** Součet povinných výtisků (bez podmíněných) po listech; bez známého počtu prázdný. */
+  printTotals: readonly PrepPrintTotal[];
+  /**
+   * Co je tenký karton a jak na něj výtisk nalepit – jen v první lekci projektu, která výtisk na
+   * kartonu potřebuje (jinde to vysvětlí nápověda štítku).
+   */
+  cardboardNote?: string;
   equipment: readonly PrepEquipmentItem[];
   materials: readonly PrepMaterialItem[];
   requires: readonly PrepRequirementItem[];
@@ -132,6 +145,43 @@ export interface BuildLessonPrepInput {
     /** Název položky podle sestavy (např. výsečník Ø 4,5 mm místo katalogového 5 mm). */
     equipmentNames?: Readonly<Record<string, string>>;
   } | null;
+}
+
+/** Úvod podmíněného výtisku: „Jen když výtisk na značky nemáte z lekce 2:“. */
+export function conditionLead(condition: string): string {
+  return `Jen když ${condition}:`;
+}
+
+/** Skupina podmíněných výtisků se stejnou podmínkou (podmínka se vypíše jednou nad nimi). */
+export interface PrintConditionGroup<T> {
+  condition?: string;
+  items: T[];
+}
+
+/** Výtisky seskupené podle podmínky, v pořadí prvního výskytu podmínky. */
+export function groupByCondition<T extends { condition?: string }>(
+  items: readonly T[],
+): PrintConditionGroup<T>[] {
+  const groups: PrintConditionGroup<T>[] = [];
+  for (const item of items) {
+    const group = groups.find((g) => g.condition === item.condition);
+    if (group) group.items.push(item);
+    else groups.push({ ...(item.condition ? { condition: item.condition } : {}), items: [item] });
+  }
+  return groups;
+}
+
+/** Součet povinných výtisků po listech (stejný list ve více řádcích se sečte), v pořadí lekce. */
+export function prepPrintTotals(prints: readonly PrepPrintItem[]): PrepPrintTotal[] {
+  const totals = new Map<string, PrepPrintTotal>();
+  for (const p of prints) {
+    if (p.optional || p.copies === undefined) continue;
+    const id = `${p.source}:${p.sheetId ?? ''}`;
+    const total = totals.get(id);
+    if (total) total.copies += p.copies;
+    else totals.set(id, { title: p.title, copies: p.copies });
+  }
+  return [...totals.values()];
 }
 
 /** Klíč zaškrtnutí výtisku. */
@@ -362,8 +412,11 @@ export function buildLessonPrep(input: BuildLessonPrepInput): LessonPrepView {
   const requires = buildRequires(input, isChecked);
 
   const counted = [...prints, ...equipment, ...materials, ...requires].filter((i) => !i.optional);
+  const cardboard = lesson.slug === firstCardboardLesson(project);
   return {
     prints,
+    printTotals: prepPrintTotals(prints),
+    ...(cardboard ? { cardboardNote: CARDBOARD_NOTE } : {}),
     equipment,
     materials,
     requires,

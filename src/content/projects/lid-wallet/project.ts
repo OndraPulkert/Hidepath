@@ -160,11 +160,11 @@ const sheet = (
   extra: Pick<LessonPrint, 'paper' | 'condition' | 'mount'> = {},
 ): LessonPrint => ({ source: 'pattern-sheets', sheetId, copies, purpose, ...extra });
 
-/** Listy 1–3 papírového modelu P0 (lekce 1 a 2). */
-const ON_CARD = { material: 'ctvrtka', method: 'tisknout' } as const;
+/** Listy 1 a 3 papírového modelu P0 (tisk v lekci 1, lepí se v lekci 2): nalepit na tenký karton. */
+const MODEL_ON_CARDBOARD = { reason: 'v lekci 2, papírový model musí držet tvar' } as const;
 
-/** Šablony z listů (lekce 2 a 4): výtisk nalepit na tvrdý papír a vyříznout. */
-const ON_HARD_PAPER = { material: 'tvrdy-papir', method: 'nalepit' } as const;
+/** Šablony z listů (lekce 2, 4 a 12): výtisk nalepit na tenký karton a vyříznout. */
+const TEMPLATE_ON_CARDBOARD = { reason: 'šablonu přikládáte opakovaně, musí držet tvar' } as const;
 
 const L1 = '01-measure-and-sheets';
 const L2 = '02-paper-model';
@@ -190,7 +190,7 @@ export const lessons: readonly LessonDefinition[] = [
     materials: [
       'kůže: useň P1 20 × 50 cm, nebarvená kozinka (D1 a L1), čokoládová kozinka (D2)',
       'papír a tužka na jednotlivá měření',
-      'tiskárna A4, papír a tvrdší papír (čtvrtka) na papírový model a šablony',
+      'tiskárna A4 a papír A4 (nejlépe 120 g) na listy',
       '4 staré karty a lepicí páska na vložku dna',
       'nůžky na karty',
     ],
@@ -287,10 +287,12 @@ export const lessons: readonly LessonDefinition[] = [
     safety: [],
     prints: [
       sheet('sablona', 1, 'Kontrola měřítka (úsečka 50 mm, kóta P1) a papírový model v lekci 2', {
-        mount: ON_CARD,
+        mount: MODEL_ON_CARDBOARD,
       }),
-      sheet('rub', 1, 'Papírový model v lekci 2', { mount: ON_CARD }),
-      sheet('dily', 1, 'Přepážky D1 a D2 papírového modelu v lekci 2', { mount: ON_CARD }),
+      sheet('rub', 1, 'Papírový model v lekci 2'),
+      sheet('dily', 1, 'Přepážky D1 a D2 papírového modelu v lekci 2', {
+        mount: MODEL_ON_CARDBOARD,
+      }),
       sheet('pripravky', 1, 'Rámeček „Čísla pro postup“ (kóta P1), vložka dna a proužek V12'),
     ],
     media: [photo('lw-l1-hero', 'Vytištěné listy 1–4 peněženky Víčko, posuvka měří kótu P1')],
@@ -304,7 +306,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 90,
     goal: 'Slepit papírový model 1:1 a se skutečným obsahem ověřit, že se vejde 6 karet, bankovky napůl a 4 mince, víčko se zavře a výřez pro palec funguje.',
     materials: [
-      'čtvrtka a lepidlo na papír (šablony)',
+      'tenký karton (krabice od cereálií) a lepidlo v tyčince (model a šablony)',
       'lepicí páska místo švů a lepení, nůžky, nůž a pravítko, jehla na propichování',
       '6 karet, bankovky 100–5000 Kč (které máte) a 4 mince 50 Kč',
       'papír a tužka na zápis výsledků',
@@ -317,7 +319,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'glue-model',
         title: 'Slepte model',
         printLink: 'pattern-sheets',
-        body: 'Z tvrdšího papíru vystřihněte podle listů 1–3 P1, D1 a D2. P1 přehněte na ose ohybu dna a v pásu závěsu. Vyřízněte i čárkované tvary z listu 1: obě okénka mincí, okénko bankovek (skrz P1 i D2) a výřez pro palec. Přepážky lepte páskou jen na šrafovaná místa z listu 2: D2 na záda (G3), D1 na přední stěnu (G2 a G2b). Sloupce mincí a kapsa karet musí zůstat volné. Boky slepte páskou místo švů S4 a S5.',
+        body: 'Listy 1 a 3 nalepte na tenký karton (krabice od cereálií) a po zaschnutí z nich vystřihněte P1, D1 a D2. P1 přehněte na ose ohybu dna a v pásu závěsu. Vyřízněte i čárkované tvary z listu 1: obě okénka mincí, okénko bankovek (skrz P1 i D2) a výřez pro palec. Přepážky lepte páskou jen na šrafovaná místa z listu 2: D2 na záda (G3), D1 na přední stěnu (G2 a G2b). Sloupce mincí a kapsa karet musí zůstat volné. Boky slepte páskou místo švů S4 a S5.',
         media: [photo('lw-l2-model', 'Slepený papírový model peněženky Víčko s vloženými kartami')],
       },
       {
@@ -443,7 +445,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'templates',
         title: 'Vyřízněte šablonu konce jazýčku a výřezu pro palec',
         printLink: 'pattern-sheets',
-        body: 'List 4 a list 1 z platných listů (když P0 něco změnil, z nových) vytiskněte znovu (odkaz pod krokem; A4 na výšku, 100 %, úsečka 50 mm), nalepte je na tvrdý papír a vyřízněte: (1) šablonu konce jazýčku z listu 4 po plném obrysu; kroužek středu magnetu a 8 červených otvorů S7 propíchněte jehlou; (2) šablonu výřezu pro palec z listu 1 po tečkovaném obdélníku 30 × 20 mm a výřez U v ní (křížek středu odpadne s ním; střed na kůži propíchnete v lekci 4). Na variantě z V12 nezávisí, poslouží zkušebnímu i finálnímu kusu.',
+        body: 'List 4 a list 1 z platných listů (když P0 něco změnil, z nových) vytiskněte znovu (odkaz pod krokem; A4 na výšku, 100 %, úsečka 50 mm), nalepte je na tenký karton (krabice od cereálií) a po zaschnutí vyřízněte: (1) šablonu konce jazýčku z listu 4 po plném obrysu; kroužek středu magnetu a 8 červených otvorů S7 propíchněte jehlou; (2) šablonu výřezu pro palec z listu 1 po tečkovaném obdélníku 30 × 20 mm a výřez U v ní (křížek středu odpadne s ním; střed na kůži propíchnete v lekci 4). Na variantě z V12 nezávisí, poslouží zkušebnímu i finálnímu kusu.',
         media: [],
       },
     ],
@@ -463,7 +465,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         slug: 'templates-cut',
         title:
-          'Šablony konce jazýčku (list 4) a výřezu pro palec (list 1) jsou z platných listů vyříznuté z tvrdého papíru.',
+          'Šablony konce jazýčku (list 4) a výřezu pro palec (list 1) jsou z platných listů, nalepené na tenkém kartonu a vyříznuté.',
         required: true,
       },
       {
@@ -485,15 +487,17 @@ export const lessons: readonly LessonDefinition[] = [
         'pripravky',
         1,
         'Šablona konce jazýčku (z platných listů, když P0 něco změnil, z nových)',
-        { mount: ON_HARD_PAPER },
+        { mount: TEMPLATE_ON_CARDBOARD },
       ),
-      sheet('sablona', 1, 'Šablona výřezu pro palec (z platných listů)', { mount: ON_HARD_PAPER }),
+      sheet('sablona', 1, 'Šablona výřezu pro palec (z platných listů)', {
+        mount: TEMPLATE_ON_CARDBOARD,
+      }),
     ],
     requires: [
       {
         id: 'model-sheets',
         fromLesson: L1,
-        label: 'Listy 1–3 pro změřenou kůži vytištěné 1:1 na tvrdší papír',
+        label: 'Listy 1–3 pro změřenou kůži vytištěné 1:1',
         note: 'na papírový model',
       },
     ],
@@ -628,7 +632,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 120,
     goal: 'Vyříznout díly zkušebního kusu (P1, D1, D2, přířez L1 a plíšek K2) a přenést na rub P1 čáry z listu 2.',
     materials: [
-      'tvrdý papír, lepidlo na papír a nůžky (šablony, listy nahrubo)',
+      'tenký karton (krabice od cereálií), lepidlo v tyčince a nůžky (šablony, listy nahrubo)',
       'bezbarvý lak na nehty (hrany plíšku)',
       'jehla na propichování (rýsovací šídlo dělá větší vpich – ověřte na odřezku), tužka',
     ],
@@ -657,7 +661,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'valid-sheets',
         title: 'Platné listy a šablony',
         printLink: 'pattern-sheets',
-        body: 'Pokud P0, V12 nebo zkušební kus něco změnily, vygenerujte listy znovu (lekce 1). Tiskněte A4 na výšku, 100 %, nejlépe na matný papír 120 g pro inkoustové tiskárny, jinak na obyčejný; na každém výtisku změřte úsečku 50 mm, na listu 1 i kótu P1. List 1 a list 3 vytiskněte dvakrát: první výtisk při řezání rozřežete, druhý nalepte na tvrdý papír a vyřízněte jako šablonu (šablona D2 v lekcích 5 a 6, otvory S1–S3 v lekci 6, S6 v lekci 8). Z listu 4 nalepte na tvrdý papír a vyřízněte šablony okének mincí a bankovek, plíšku, proužek S4/S5 a druhou šablonu konce jazýčku (doraz L1 v lekci 11). Křížky středů na šablonách okének propíchněte jehlou, ať je přes ně vidět vpich v kůži. Listy 1 a 3 na finální kus vytisknete znovu v lekci 12 (když se listy změní, i šablony). Listy s pruhem „MIMO OVĚŘENÉ MEZE“ platí jen pro zkušební kus.',
+        body: 'Pokud P0, V12 nebo zkušební kus něco změnily, vygenerujte listy znovu (lekce 1). Tiskněte A4 na výšku, 100 %, nejlépe na matný papír 120 g pro inkoustové tiskárny, jinak na obyčejný; na každém výtisku změřte úsečku 50 mm, na listu 1 i kótu P1. List 1 a list 3 vytiskněte dvakrát: první výtisk při řezání rozřežete, druhý nalepte na tenký karton (krabice od cereálií) a vyřízněte jako šablonu (šablona D2 v lekcích 5 a 6, otvory S1–S3 v lekci 6, S6 v lekci 8). List 4 nalepte na tenký karton a vyřízněte z něj šablony okének mincí a bankovek, plíšku, proužek S4/S5 a druhou šablonu konce jazýčku (doraz L1 v lekci 11). Křížky středů na šablonách okének propíchněte jehlou, ať je přes ně vidět vpich v kůži. Listy 1 a 3 na finální kus vytisknete znovu v lekci 12 (když se listy změní, i šablony). Listy s pruhem „MIMO OVĚŘENÉ MEZE“ platí jen pro zkušební kus.',
         media: [],
         appLinks: [EDIT_SHEETS],
         lidSheetRecalls: ['variant', 'sheets'],
@@ -667,7 +671,7 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'List 1 přilepte na líc',
         animationLinks: [animationLink('lidP1Cut', 'A1'), animationLink('lidP1Cut', 'A2')],
         printLink: 'pattern-sheets',
-        body: 'První výtisk listu 1 vystřihněte nahrubo s okrajem 1–2 cm kolem obrysu P1. List 1 je P1 z líce: položte ho na líc usně a přilepte maskovací páskou z několika stran, jen mimo čáru řezu. Pásku nejdřív vyzkoušejte na odřezku – může na líci nechat lesklou stopu nebo vytrhnout vlákna. (Jde to i podle šablony vyříznuté přesně z tvrdého papíru, řez po vytištěné čáře je ale přesnější.)',
+        body: 'První výtisk listu 1 vystřihněte nahrubo s okrajem 1–2 cm kolem obrysu P1. List 1 je P1 z líce: položte ho na líc usně a přilepte maskovací páskou z několika stran, jen mimo čáru řezu. Pásku nejdřív vyzkoušejte na odřezku – může na líci nechat lesklou stopu nebo vytrhnout vlákna. (Jde to i podle šablony nalepené na tenkém kartonu a vyříznuté přesně po čáře, řez po vytištěné čáře je ale přesnější.)',
         media: [],
       },
       {
@@ -734,7 +738,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidP1Cut', 'E4'),
           animationLink('lidP1Cut', 'E5'),
         ],
-        body: 'List 2 nalepte na tvrdý papír, vyřízněte po obrysu a přiložte na rub P1. Propíchněte jehlou všechny kroužky na listu 2 (rohy šrafovaných ploch a konce čar) jen do rubu: hrot nesmí projít na líc, vpich by na hotové peněžence zůstal vidět (sílu zkuste na odřezku P1). Šablonu sejměte a vpichy spojte tužkou u pravítka – nic nezařezávejte. Tak přenesete osu ohybu dna, čáru hrany vložky (případně posunutou podle V12, zápis pod krokem), plochy lepení G1–G4, polohu D1 a D2 a osu na rubu F i B (kroužky na ryskách „osa“ a na horní hraně G3c, na každé stěně dva vpichy spojte v jednu čáru). Osu ohybu a hranu vložky označte i ryskami na obou bocích. Závěs a rub víčka neznačte: zůstávají vidět. Na rub F a na rub B napište „L“ tam, kde je na listu 2. Čáry švů S1–S3 a S6 ani okénko bankovek na rub nekreslete: otvory švů se přenesou později z líce přes šablonu z listu 1 – propíchnou se jehlou a děrují vidličkou (S1–S3 v lekci 6, S6 v lekci 8).',
+        body: 'List 2 nalepte na tenký karton (krabice od cereálií), vyřízněte po obrysu a přiložte na rub P1. Propíchněte jehlou všechny kroužky na listu 2 (rohy šrafovaných ploch a konce čar) jen do rubu: hrot nesmí projít na líc, vpich by na hotové peněžence zůstal vidět (sílu zkuste na odřezku P1). Šablonu sejměte a vpichy spojte tužkou u pravítka – nic nezařezávejte. Tak přenesete osu ohybu dna, čáru hrany vložky (případně posunutou podle V12, zápis pod krokem), plochy lepení G1–G4, polohu D1 a D2 a osu na rubu F i B (kroužky na ryskách „osa“ a na horní hraně G3c, na každé stěně dva vpichy spojte v jednu čáru). Osu ohybu a hranu vložky označte i ryskami na obou bocích. Závěs a rub víčka neznačte: zůstávají vidět. Na rub F a na rub B napište „L“ tam, kde je na listu 2. Čáry švů S1–S3 a S6 ani okénko bankovek na rub nekreslete: otvory švů se přenesou později z líce přes šablonu z listu 1 – propíchnou se jehlou a děrují vidličkou (S1–S3 v lekci 6, S6 v lekci 8).',
         media: [],
         recalls: v12LineRecalls,
       },
@@ -778,19 +782,19 @@ export const lessons: readonly LessonDefinition[] = [
       sheet('sablona', 1, 'První výtisk na řez P1 skrz papír', { paper: PLAIN_PAPER }),
       sheet('sablona', 1, 'Druhý výtisk jako šablona otvorů S1–S3 a S6', {
         paper: PLAIN_PAPER,
-        mount: ON_HARD_PAPER,
+        mount: TEMPLATE_ON_CARDBOARD,
       }),
-      sheet('rub', 1, 'Značení na rub P1', { paper: PLAIN_PAPER, mount: ON_HARD_PAPER }),
+      sheet('rub', 1, 'Značení na rub P1', { paper: PLAIN_PAPER, mount: TEMPLATE_ON_CARDBOARD }),
       sheet('dily', 1, 'První výtisk na řez D1, D2 a L1 skrz papír', { paper: PLAIN_PAPER }),
       sheet('dily', 1, 'Druhý výtisk jako šablona D2', {
         paper: PLAIN_PAPER,
-        mount: ON_HARD_PAPER,
+        mount: TEMPLATE_ON_CARDBOARD,
       }),
       sheet(
         'pripravky',
         1,
         'Šablony okének mincí a bankovek, plíšku, proužek otvorů S4/S5 a druhá šablona konce jazýčku',
-        { paper: PLAIN_PAPER, mount: ON_HARD_PAPER },
+        { paper: PLAIN_PAPER, mount: TEMPLATE_ON_CARDBOARD },
       ),
     ],
     media: [
@@ -957,7 +961,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'notch-template',
         fromLesson: L2,
-        label: 'Šablona výřezu pro palec z listu 1 na tvrdém papíře',
+        label: 'Šablona výřezu pro palec z listu 1 (na tenkém kartonu)',
       },
       { id: 'coin-window-template', fromLesson: L4, label: 'Šablona okénka mincí z listu 4' },
       {
@@ -1895,24 +1899,24 @@ export const lessons: readonly LessonDefinition[] = [
       sheet('dily', 1, 'Řez D1, D2 a L1 finálního kusu skrz papír', { paper: PLAIN_PAPER }),
       sheet('sablona', 1, 'Nová šablona otvorů S1–S3 a S6', {
         paper: PLAIN_PAPER,
-        mount: ON_HARD_PAPER,
+        mount: TEMPLATE_ON_CARDBOARD,
         condition: LISTS_CHANGED,
       }),
       sheet('dily', 1, 'Nová šablona D2', {
         paper: PLAIN_PAPER,
-        mount: ON_HARD_PAPER,
+        mount: TEMPLATE_ON_CARDBOARD,
         condition: LISTS_CHANGED,
       }),
       sheet('rub', 1, 'Značení na rub P1 finálního kusu', {
         paper: PLAIN_PAPER,
-        mount: ON_HARD_PAPER,
+        mount: TEMPLATE_ON_CARDBOARD,
         condition: LISTS_CHANGED,
       }),
       sheet(
         'pripravky',
         1,
         'Nové šablony okének a plíšku, proužek S4/S5, druhá šablona konce jazýčku a Čísla pro postup',
-        { paper: PLAIN_PAPER, mount: ON_HARD_PAPER, condition: LISTS_CHANGED },
+        { paper: PLAIN_PAPER, mount: TEMPLATE_ON_CARDBOARD, condition: LISTS_CHANGED },
       ),
     ],
     media: [
@@ -1953,7 +1957,7 @@ const overview: ProjectOverview = {
           id: 'sheets',
           lessonSlug: L1,
           stepId: 'print-check',
-          text: 'Vygenerujte listy a vytiskněte listy 1–4 (1–3 na čtvrtku). Kóta P1 na listu 1 musí sedět s rámečkem na listu 4.',
+          text: 'Vygenerujte listy a vytiskněte listy 1–4. Kóta P1 na listu 1 musí sedět s rámečkem na listu 4.',
         },
         {
           id: 'spacer',
@@ -1965,7 +1969,7 @@ const overview: ProjectOverview = {
           id: 'paper-model',
           lessonSlug: L2,
           stepId: 'glue-model',
-          text: 'Ze čtvrtky vystřihněte podle listů 1–3 P1, D1 a D2 a slepte papírový model P0 páskou.',
+          text: 'Listy 1 a 3 nalepte na tenký karton, vystřihněte z nich P1, D1 a D2 a slepte papírový model P0 páskou.',
         },
         {
           id: 'p0-test',
@@ -1977,7 +1981,7 @@ const overview: ProjectOverview = {
           id: 'templates',
           lessonSlug: L2,
           stepId: 'templates',
-          text: 'List 4 a list 1 nalepte na tvrdý papír. Vyřízněte šablonu konce jazýčku a šablonu výřezu pro palec.',
+          text: 'List 4 a list 1 nalepte na tenký karton. Vyřízněte šablonu konce jazýčku a šablonu výřezu pro palec.',
         },
         {
           id: 'v12',
@@ -1995,7 +1999,7 @@ const overview: ProjectOverview = {
           id: 'cut-prints',
           lessonSlug: L4,
           stepId: 'valid-sheets',
-          text: 'Vytiskněte listy pro řez (bod 1, lekce 4). Druhý výtisk listů 1 a 3 a list 4 nalepte na tvrdý papír a vyřízněte jako šablony.',
+          text: 'Vytiskněte listy pro řez (bod 1, lekce 4). Druhý výtisk listů 1 a 3 a list 4 nalepte na tenký karton a vyřízněte jako šablony.',
         },
         {
           id: 'tape-sheet-1',
@@ -2035,7 +2039,7 @@ const overview: ProjectOverview = {
           id: 'mark-back',
           lessonSlug: L4,
           stepId: 'mark-back',
-          text: 'List 2 nalepte na tvrdý papír, vyřízněte a přiložte na rub P1. Propíchněte kroužky a vpichy spojte tužkou: ohyb dna, hrana vložky, plochy lepení G1–G4, poloha D1 a D2. Závěs a rub víčka neznačte.',
+          text: 'List 2 nalepte na tenký karton, vyřízněte a přiložte na rub P1. Propíchněte kroužky a vpichy spojte tužkou: ohyb dna, hrana vložky, plochy lepení G1–G4, poloha D1 a D2. Závěs a rub víčka neznačte.',
           later: 'otvory švů – z líce přes šablonu z listu 1 (lekce 6 a 8).',
         },
         {
@@ -2095,7 +2099,7 @@ const overview: ProjectOverview = {
           id: 'final-piece',
           lessonSlug: L12,
           stepId: 'final-piece',
-          text: 'Lekce 4–12 zopakujte na druhém přířezu P1 s tím, co na zkušebním kuse fungovalo. Řežte jen z listů, které platí po zkušebním kuse; změnily-li se, vytiskněte je a vyřízněte šablony znovu jako v lekci 4. Změnila-li se varianta, postavte raději další zkušební kus.',
+          text: 'Lekce 4–12 zopakujte na druhém přířezu P1 s tím, co na zkušebním kuse fungovalo. Listy 1 a 3 na řez vytiskněte znovu z listů, které platí po zkušebním kuse; změnily-li se, vyřízněte znovu i šablony jako v lekci 4. Změnila-li se varianta, postavte raději další zkušební kus.',
         },
       ],
     },
@@ -2584,7 +2588,7 @@ export const lidWalletProject: ProjectDefinition = {
     alsoNeeded: [
       'lepicí páska (vložka dna, papírový model)',
       'bezbarvý lak na nehty na hrany plíšku (lekce 4)',
-      'tvrdší papír nebo čtvrtka na papírový model a šablony (lekce 2 a 4)',
+      'tenký karton (krabice od cereálií) a lepidlo v tyčince na papírový model a šablony (lekce 2 a 4)',
       'dřevěný kolík Ø 8 mm a aku vrtačka na broušení a leštění vydutých hran (lekce 5)',
       'potravinová fólie, houbička a 2 hladká prkénka (lekce 3, 7 a 10)',
       '6 starých karet (4 na vložku dna, 2 na tvarování závěsu), párátka, jehla na propichování',

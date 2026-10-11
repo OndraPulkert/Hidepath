@@ -503,7 +503,7 @@ add('B','Zkontrolujte značky','Dva otvory mimo přímku jsou značky ohybu: do 
 // B6 — s listem 1
 const BEND_IN=2;                                                    // kroužky ohybu 2 mm od hran pásu (belt-sheets.ts)
 const SHEET_PTS=[...HOLES.slice(0,2).map(x=>[x,0]),[OV_END[0],0],[OV_END[1],0],[FOLD,-BW/2+BEND_IN],[FOLD,BW/2-BEND_IN]];
-add('B','S listem 1','List vystřihněte po obrysu pásu, spodní hranu přiložte přesně na konec pásu, boky na hrany pásu a přilepte papírovou páskou. Šídlem propíchněte středy 2 černých otvorů u konce, oba křížky oválu a oba červené kroužky na čáře ohybu. Šedé otvory nepropichujte.',9400,t=>{
+add('B','S listem 1','List nalepte na tenký karton (krabice od cereálií) a po zaschnutí ho vystřihněte po obrysu pásu, spodní hranu odřízněte nožem podél ocelového pravítka přesně po čáře. Spodní hranu přiložte přesně na konec pásu, boky na hrany pásu a list přilepte papírovou páskou. Šídlem propíchněte středy 2 černých otvorů u konce, oba křížky oválu a oba červené kroužky na čáře ohybu. Šedé otvory nepropichujte.',9400,t=>{
   const c=CAM_MID;const so=1-.75*seg(t,.86,.96);const n=SHEET_PTS.length;const span=.72/n;
   const done=SHEET_PTS.filter((_,i)=>t>.08+span*(i+1)-.02);
   let s=cam(c,()=>{
@@ -525,7 +525,7 @@ add('B','S listem 1','List vystřihněte po obrysu pásu, spodní hranu přilož
   });
   const i=Math.min(n-1,Math.floor((t-.08)/span));
   if(t>.08&&t<.08+span*n){const lt=seg(t,.08+span*i,.08+span*(i+1));const [x,y]=at(c,...SHEET_PTS[i]);s+=awl(x,y,18,lt<.3?lt/.3:lt>.8?1-(lt-.8)/.2:1)}
-  s+=`<g opacity="${f(seg(t,.02,.1))}">${pill(4,14,'list 1 vystřižený po obrysu','ts')}</g>`;
+  s+=`<g opacity="${f(seg(t,.02,.1))}">${pill(4,14,'list 1 na kartonu, vystřižený po obrysu','ts')}</g>`;
   s+=`<g opacity="${f(seg(t,.8,.9))}">${pill(67.5,79,'2 otvory · 2 křížky oválu · 2 kroužky ohybu','t','middle')}</g>`;
   return s;
 },RUB);

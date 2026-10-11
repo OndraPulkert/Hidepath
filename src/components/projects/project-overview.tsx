@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { appLinkHref } from '@/app/app-links';
 import { LESSON_ANCHORS, PROJECT_OVERVIEW_ANCHOR, routes } from '@/app/routes';
 import { GlossaryText } from '@/components/glossary/glossary-term';
-import { PrintMountBadge } from '@/components/projects/print-mount-badge';
+import { PrintListView } from '@/components/projects/print-list';
 import { Card } from '@/components/ui/card';
 import { type ProjectDefinition } from '@/content/schema';
 import {
@@ -16,8 +16,7 @@ import {
   overviewAroundLesson,
   overviewPrints,
   pointNumbersForLesson,
-  printTotals,
-  sharedPrintCondition,
+  splitPrintList,
 } from '@/features/overview/project-overview';
 import { cn } from '@/lib/utils/cn';
 import { initiallyOpenOnWide } from '@/lib/utils/disclosure';
@@ -48,48 +47,9 @@ function Summary({ kicker, title }: { kicker: string; title: string }) {
   );
 }
 
-/**
- * Výtisky z „Vytisknout“ lekcí a součet po listech. Podmínku společnou všem výtiskům napíše
- * jednou; když je každý výtisk podmíněný, součet je „nejvýš“.
- */
+/** Výtisky z „Vytisknout“ lekcí: povinné se součtem, pod nimi jen v případě potřeby. */
 function OverviewPrints({ project, lessons }: { project: ProjectDefinition; lessons: string[] }) {
-  const groups = overviewPrints(project, lessons);
-  const shared = sharedPrintCondition(groups);
-  const totals = printTotals(groups);
-  const allConditional = totals.length === 0;
-  const shown = allConditional ? printTotals(groups, { includeConditional: true }) : totals;
-  return (
-    <div className="mt-2 flex flex-col gap-2 rounded-md border border-line bg-canvas px-3 py-2">
-      {groups.map((g) => (
-        <div key={g.lessonSlug}>
-          <p className="text-meta font-semibold">Lekce {g.lessonOrder}</p>
-          <ul className="flex flex-col gap-1 text-meta text-ink-2">
-            {g.rows.map((r, i) => (
-              <li key={`${r.sheetId}-${i}`}>
-                <Link to={r.href} className="font-semibold whitespace-nowrap text-leather">
-                  {r.sheetLabel} · {r.copies}×
-                </Link>{' '}
-                {typo(r.purpose)}
-                {r.paper ? ` (${typo(r.paper)})` : ''}
-                {r.condition && !shared ? ` – ${typo(r.condition)}` : ''}
-                {r.mount ? <PrintMountBadge text={r.mount} className="mt-1 flex w-fit" /> : null}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-      {shared ? (
-        <p className="text-meta text-ink-2">
-          <span className="font-semibold">Tiskněte jen, když </span>
-          {typo(shared)}.
-        </p>
-      ) : null}
-      <p className="border-t border-dashed border-line pt-2 text-meta">
-        <span className="font-semibold">{allConditional ? 'Celkem nejvýš: ' : 'Celkem: '}</span>
-        {shown.map((t) => `${t.sheetLabel} ${t.copies}×`).join(', ')}
-      </p>
-    </div>
-  );
+  return <PrintListView list={splitPrintList(overviewPrints(project, lessons))} className="mt-2" />;
 }
 
 function PointItem({

@@ -431,7 +431,7 @@ add('B','Přiložte šablonu na propíchnuté středy','Nejdřív 1 h po lepení
   MIR=false;
   let s=wallB('lic',{marks:false,d2behind:true});
   M.billC.forEach(y=>{s+=prick(50.5,y,'var(--slitB)',.42)});
-  // šablona okénka z listu 4: tvar okénka vyříznutý z tvrdého papíru, křížky na středech, čárkovaná osa;
+  // šablona okénka z listu 4: tvar okénka vyříznutý z výtisku na tenkém kartonu, křížky na středech, čárkovaná osa;
   // kreslená průsvitně, aby byly vidět vpichy pod křížky. Přijíždí shora, na konci se sejme.
   const p=es(t,.15,.6),dy=(1-p)*-26-es(t,.84,.97)*22;
   const [cx]=pt(50.5,47.5);
@@ -482,7 +482,7 @@ add('B','Zkoste a vyleštěte okénko','Okénko <span class="num">14 × 45</span
 },SIDE.licB);
 
 // C1 — způsob (a): šablona P1 z listu 1 na líc B, jehla
-add('C','Způsob (a): propíchněte přes list 1','Způsob (a): šablonu z listu 1 (druhý výtisk na tvrdém papíře) přiložte na líc B podle obrysu. Červené tečky S1–S3 propíchněte jehlou skrz B i D2. Oba způsoby nejdřív vyzkoušejte na odřezku D2 + B.',10000,t=>{
+add('C','Způsob (a): propíchněte přes list 1','Způsob (a): šablonu z listu 1 (druhý výtisk nalepený na tenkém kartonu) přiložte na líc B podle obrysu. Červené tečky S1–S3 propíchněte jehlou skrz B i D2. Oba způsoby nejdřív vyzkoušejte na odřezku D2 + B.',10000,t=>{
   MIR=false;
   let s=wallB('lic',{marks:false,bill:true,d2behind:true});
   // šablona: P1 kolem zad (papír), otvory S1–S3 vytištěné

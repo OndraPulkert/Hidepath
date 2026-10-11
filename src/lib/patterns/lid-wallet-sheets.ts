@@ -510,7 +510,7 @@ function footer(s: Sheet, note: string): void {
 const LEGEND = {
   cut: 'řez nožem po čáře',
   cutLater: 'řez později – lekce je u popisku',
-  templateCut: 'řez jen v šabloně (výtisk na tvrdém papíře)',
+  templateCut: 'řez jen v šabloně (výtisk na tenkém kartonu)',
   prick: 'propíchnout jehlou skrz papír',
   punch: 'střed výsečníku: propíchnout, pak vyseknout',
   punchDia: 'průměr výsečníku',
@@ -2502,7 +2502,7 @@ function drawLidJigs(spec: LidWalletSpec, options: LidSheetOptions): Sheet {
   ]);
   footer(
     s,
-    'Šablony se lepí na tvrdý papír a vyříznou. Poloha magnetu se určuje až na hotovém kusu (lekce 11).',
+    'Šablony se lepí na tenký karton (krabice od cereálií) a vyříznou. Poloha magnetu se určuje až na hotovém kusu (lekce 11).',
   );
   s.title = 'VÍČKO – šablony a přípravky';
   return s;

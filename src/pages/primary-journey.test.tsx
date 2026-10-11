@@ -317,7 +317,7 @@ describe('hlavní cesta: zápisník, příprava a dílenský režim', () => {
     )!;
     // List KAPSA má v lekci 2 tři výtisky (forma, značky, šablona s oknem); první je na formu.
     const toggle = within(prep).getAllByRole('button', {
-      name: 'Mám: Kapsa s mincí a otvor formy',
+      name: /^Mám: Kapsa s mincí a otvor formy – /,
     })[0]!;
     await waitFor(() => expect(toggle).toBeEnabled());
     const before = within(prep).getByText(/^Připraveno \d+\/\d+$/).textContent;
@@ -332,7 +332,7 @@ describe('hlavní cesta: zápisník, příprava a dílenský režim', () => {
     )!;
     await waitFor(() =>
       expect(
-        within(again).getAllByRole('button', { name: 'Mám: Kapsa s mincí a otvor formy' })[0],
+        within(again).getAllByRole('button', { name: /^Mám: Kapsa s mincí a otvor formy – / })[0],
       ).toHaveAttribute('aria-pressed', 'true'),
     );
 

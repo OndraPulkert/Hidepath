@@ -14,8 +14,10 @@ import {
   overviewPrints,
   pointNumbersForLesson,
   printTotals,
-  sharedPrintCondition,
+  splitPrintList,
 } from '@/features/overview/project-overview';
+import { conditionLead } from '@/features/prep/lesson-prep';
+import { CARDBOARD_NOTE } from '@/features/prep/print-mount';
 
 describe('Postup v kostce – pomocné funkce', () => {
   it('souvislé úseky čísel', () => {
@@ -122,11 +124,14 @@ describe('Postup v kostce – Víčko', () => {
       'List 4 3×',
     ]);
     const cut = groups.find((g) => g.lessonOrder === 4)!;
-    // První výtisk listů 1 a 3 na řez (obyčejný papír), druhý jako šablona na tvrdém papíře.
+    // První výtisk listů 1 a 3 na řez (papír), druhý jako šablona nalepená na tenkém kartonu.
     for (const id of ['sablona', 'dily']) {
       expect(cut.rows.filter((r) => r.sheetId === id).map((r) => [r.copies, r.mount])).toEqual([
         [1, undefined],
-        [1, 'Nalepit na tvrdý papír'],
+        [
+          1,
+          'Nalepit na tenký karton (krabice od cereálií) – šablonu přikládáte opakovaně, musí držet tvar',
+        ],
       ]);
     }
     expect(text('tape-sheet-1').text).toContain('První výtisk listu 1');
@@ -196,9 +201,9 @@ describe('Postup v kostce – pouzdro s mincí', () => {
   it('výtisky: KAPSA 3×, PÁS 2× (na kůži a okénko), ostatní listy 1×; lekce 6 tiskne jen podmíněně', () => {
     const groups = overviewPrints(project, points[0]!.point.printsFrom!);
     expect(printTotals(groups).map((t) => `${t.sheetLabel} ${t.copies}×`)).toEqual([
-      'Cvičný proužek pro lekci 4 1×',
-      'Kapsa s mincí a otvor formy 3×',
       'Papírový model 1×',
+      'Kapsa s mincí a otvor formy 3×',
+      'Cvičný proužek pro lekci 4 1×',
       'Pás (šablona) 2×',
     ]);
     const l6 = groups.find((g) => g.lessonOrder === 6)!;
@@ -314,11 +319,16 @@ describe('Postup v kostce – pásek', () => {
     // Název listu se v účelu neopakuje („List 1: …“ → „…“).
     expect(rows[0]!.purpose).toBe('značení odřezku místo řady 3 destičky');
     expect(rows[2]!.href).toBe(routes.beltConfig(project.slug, 'spicka'));
-    expect(sharedPrintCondition(groups)).toContain('neprošla kontrolou');
-    expect(printTotals(groups)).toEqual([]);
+    // Všechny listy jsou jen za podmínky: povinné nic, celé „Jen v případě potřeby“ s jednou
+    // společnou podmínkou.
+    const list = splitPrintList(groups);
+    expect(list.required).toEqual([]);
+    expect(list.totals).toEqual([]);
+    expect(list.conditional).toHaveLength(1);
+    expect(list.conditional[0]!.condition).toContain('neprošla kontrolou');
     expect(
-      printTotals(groups, { includeConditional: true }).map((t) => `${t.sheetLabel} ${t.copies}×`),
-    ).toEqual(['List 1 2×', 'List 2 1×']);
+      list.conditional[0]!.rows.map((r) => `${r.sheetLabel} · lekce ${r.lessonOrder}`),
+    ).toEqual(['List 1 · lekce 2', 'List 1 · lekce 4', 'List 2 · lekce 6']);
   });
 
   it('teď × později: obvod teď, tloušťka po dodání; konec, 30 cm a druhá dvojice později', () => {
@@ -428,14 +438,41 @@ describe('Postup v kostce – pouzdro na karty', () => {
 });
 
 describe('Postup v kostce – výtisky a odkazy', () => {
-  it('společná podmínka jen tehdy, když ji mají všechny výtisky', () => {
-    // Lekce 6 pouzdra: tři výtisky, každý s jinou podmínkou; lekce 1: bez podmínky.
-    expect(
-      sharedPrintCondition(overviewPrints(coinCardHolderProject, ['06-coin-pocket-and-hardware'])),
-    ).toBeUndefined();
-    expect(
-      sharedPrintCondition(overviewPrints(coinCardHolderProject, ['01-paper-model'])),
-    ).toBeUndefined();
+  it('výpis tisku pouzdra s mincí: povinné po lekcích se součtem, podmíněné zvlášť mimo součet', () => {
+    const lessons = coinCardHolderProject.lessons.map((l) => l.slug);
+    const list = splitPrintList(overviewPrints(coinCardHolderProject, lessons));
+    expect(list.required.map((g) => g.lessonOrder)).toEqual([1, 2, 4, 5]);
+    for (const g of list.required) for (const r of g.rows) expect(r.condition).toBeUndefined();
+    expect(list.totals.map((t) => `${t.sheetLabel} ${t.copies}×`)).toEqual([
+      'Papírový model 1×',
+      'Kapsa s mincí a otvor formy 3×',
+      'Cvičný proužek pro lekci 4 1×',
+      'Pás (šablona) 2×',
+    ]);
+    // Každá podmínka zvlášť, v pořadí lekcí; záložní okno 18 mm z lekce 2 je mezi nimi.
+    expect(list.conditional.map((c) => c.rows.map((r) => [r.lessonOrder, r.sheetId]))).toEqual([
+      [[2, 'kapsa-okno-18']],
+      [[6, 'kapsa']],
+      [[6, 'kapsa']],
+      [[6, 'kapsa-okno-18']],
+      [[6, 'sablona-kuze-1-2']],
+    ]);
+    expect(conditionLead('výtisk na značky nemáte z lekce 2')).toBe(
+      'Jen když výtisk na značky nemáte z lekce 2:',
+    );
+  });
+
+  it('výpis tisku s výběrem zdroje (tisková stránka): jen listy z toho zdroje', () => {
+    const lessons = coinCardHolderProject.lessons.map((l) => l.slug);
+    const practice = overviewPrints(coinCardHolderProject, lessons, { source: 'practice-sheets' });
+    expect(practice.flatMap((g) => g.rows).map((r) => r.sheetId)).toEqual([
+      'cvicny-prouzek-kuze-1-2',
+    ]);
+    const pattern = overviewPrints(coinCardHolderProject, lessons, { source: 'pattern-sheets' });
+    expect(pattern.map((g) => g.lessonOrder)).toEqual([1, 2, 5, 6]);
+    expect(pattern.flatMap((g) => g.rows).map((r) => r.sheetId)).not.toContain(
+      'cvicny-prouzek-kuze-1-2',
+    );
   });
 
   it('schéma odmítne odkaz bodu na stránku, kterou projekt nemá', () => {
@@ -461,5 +498,19 @@ describe('Postup v kostce – výtisky a odkazy', () => {
     const messages =
       projectDefinitionSchema.safeParse(withLink).error?.issues.map((i) => i.message) ?? [];
     expect(messages.join()).toContain('kterou projekt nemá');
+  });
+});
+
+describe('výpis tisku – vysvětlení tenkého kartonu', () => {
+  it('jen když má některý výtisk štítek podkladu', () => {
+    const all = (p: typeof coinCardHolderProject) =>
+      splitPrintList(
+        overviewPrints(
+          p,
+          p.lessons.map((l) => l.slug),
+        ),
+      );
+    expect(all(coinCardHolderProject).cardboardNote).toBe(CARDBOARD_NOTE);
+    expect(all(cardHolderProject).cardboardNote).toBeUndefined();
   });
 });

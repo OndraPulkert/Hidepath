@@ -16,6 +16,9 @@ import { type InventoryState } from '@/features/inventory/types';
 import { useUpdateInventoryItem } from '@/features/inventory/use-inventory';
 import {
   buildLessonPrep,
+  conditionLead,
+  groupByCondition,
+  type LessonPrepView,
   type PrepEquipmentItem,
   type PrepMaterialItem,
   type PrepPrintItem,
@@ -100,16 +103,11 @@ export function LessonPrep({ project, lesson, inventory }: LessonPrepProps) {
       </div>
 
       {view.prints.length > 0 ? (
-        <PrepGroup title="Vytisknout">
-          {view.prints.map((item) => (
-            <PrintRow
-              key={item.key}
-              item={item}
-              disabled={checksLoading}
-              onToggle={(checked) => toggleCheck(item.key, checked)}
-            />
-          ))}
-        </PrepGroup>
+        <PrintGroup
+          view={view}
+          disabled={checksLoading}
+          onToggle={(key, checked) => toggleCheck(key, checked)}
+        />
       ) : null}
 
       {view.equipment.length > 0 ? (
@@ -197,6 +195,76 @@ function PrepGroup({
   );
 }
 
+/**
+ * „Vytisknout“: povinné výtisky se součtem „Celkem vytisknout“, pod nimi tlumeně výtisky jen
+ * v případě potřeby (s podmínkou, mimo součet i mimo „Připraveno“).
+ */
+function PrintGroup({
+  view,
+  disabled,
+  onToggle,
+}: {
+  view: LessonPrepView;
+  disabled: boolean;
+  onToggle: (key: string, checked: boolean) => void;
+}) {
+  const id = useId();
+  const conditionalId = useId();
+  const required = view.prints.filter((p) => !p.optional);
+  const conditional = view.prints.filter((p) => p.optional);
+  const row = (item: PrepPrintItem) => (
+    <PrintRow
+      key={item.key}
+      item={item}
+      disabled={disabled}
+      onToggle={(checked) => onToggle(item.key, checked)}
+    />
+  );
+  return (
+    <div>
+      <h3 id={id} className="text-step font-semibold">
+        Vytisknout
+      </h3>
+      {view.cardboardNote ? (
+        <p className="text-meta text-ink-2" data-cardboard-note="">
+          {typo(view.cardboardNote)}
+        </p>
+      ) : null}
+      {required.length > 0 ? (
+        <ul aria-labelledby={id} className="divide-y divide-dashed divide-line">
+          {required.map(row)}
+        </ul>
+      ) : null}
+      {view.printTotals.length > 0 ? (
+        <p className="border-t border-dashed border-line pt-2 text-meta" data-print-total="">
+          <span className="font-semibold">Celkem vytisknout: </span>
+          {view.printTotals.map((t) => typo(`${t.title} ${t.copies}×`)).join(', ')}
+        </p>
+      ) : null}
+      {conditional.length > 0 ? (
+        <div
+          data-print-conditional=""
+          className="mt-3 rounded-md border border-dashed border-line px-3 pt-2 text-ink-2"
+        >
+          <p id={conditionalId} className="text-meta font-semibold">
+            Jen v případě potřeby (do součtu se nepočítá)
+          </p>
+          {groupByCondition(conditional).map((g) => (
+            <div key={g.condition ?? ''} className="pt-2" data-print-condition="">
+              {g.condition ? (
+                <p className="text-meta font-semibold">{typo(conditionLead(g.condition))}</p>
+              ) : null}
+              <ul aria-labelledby={conditionalId} className="divide-y divide-dashed divide-line">
+                {g.items.map(row)}
+              </ul>
+            </div>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 interface RowProps<T> {
   item: T;
   disabled: boolean;
@@ -268,29 +336,26 @@ function PrintRow({ item, disabled, onToggle }: RowProps<PrepPrintItem>) {
     item.paper ? typo(item.paper) : null,
   ].filter(Boolean);
   return (
-    <PrepRow name={item.title} checked={item.checked} disabled={disabled} onToggle={onToggle}>
+    <PrepRow
+      name={item.purpose ? `${item.title} – ${item.purpose}` : item.title}
+      checked={item.checked}
+      disabled={disabled}
+      onToggle={onToggle}
+    >
       <Link to={item.href} className="self-start text-leather hover:text-cognac">
         {typo(item.title)} <span aria-hidden>→</span>
       </Link>
-      {item.mount ? <PrintMountBadge text={item.mount} /> : null}
       {details.length > 0 || item.purpose ? (
         <Meta>
-          {details.join(' · ')}
-          {details.length > 0 && item.purpose ? ' · ' : ''}
           {item.purpose ? typo(item.purpose) : ''}
+          {details.length > 0 && item.purpose ? ' · ' : ''}
+          {details.join(' · ')}
         </Meta>
       ) : null}
+      {item.mount ? <PrintMountBadge text={item.mount} /> : null}
       {item.fromSteps ? (
         <Meta>
           {item.fromSteps.length === 1 ? 'Krok' : 'Kroky'} {item.fromSteps.join(', ')}
-        </Meta>
-      ) : null}
-      {item.condition ? (
-        <Meta>
-          <Tag tone="optional" className="mr-2 px-2 py-0.5">
-            Jen když
-          </Tag>
-          {typo(item.condition)}
         </Meta>
       ) : null}
     </PrepRow>

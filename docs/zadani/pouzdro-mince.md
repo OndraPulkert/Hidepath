@@ -209,11 +209,11 @@ kůže jako tělo. Juchtová A5 1,2 mm jen na dva odřezky 57,5 × 57,5 pro tvar
 
 ## Postup
 
-0. **Papírový model:** vytisknout na čtvrtku (po složení a naplnění musí držet tvar),
+0. **Papírový model:** vytisknout, nalepit na tenký karton (krabice od cereálií; po složení a naplnění musí držet tvar),
    vystřihnout, ohyby jen přehnout do smyčky (nepřekládat na ostro), vložit karty a
    bankovky, projít kontrolní seznam a zapsat výsledky. Papír prokáže polohu jazyka a kloboučku,
    výřez, vytahování karty a místo pro kapsu; přídavky ohybů neprokáže (je tenčí).
-1. **Pás:** list PÁS vytisknout 2× (1. na kůži, 2. na tvrdý papír: šablona s okénkem pro kapsu v kroku 4).
+1. **Pás:** list PÁS vytisknout 2× (1. na kůži, 2. nalepit na tenký karton: šablona s okénkem pro kapsu v kroku 4).
    Šablonu přilepit páskou na líc, šídlem přes list přenést na kůži kroužky ohybů A i B za čarou
    řezu, střed patice (u varianty i průchodky) a všechny tečky dna, kroužky před řezem spojit na
    rubu (viz níže), pak vyříznout skrz papír (výřez plynule; rovné strany podle ocelového pravítka položeného na pás, ne na odpad –
@@ -250,7 +250,7 @@ kůže jako tělo. Juchtová A5 1,2 mm jen na dva odřezky 57,5 × 57,5 pro tvar
    Předtím na odřezku z tvarovací zkoušky vyseknout okno Ø 20 a ověřit, že prstenec 3,75 mm
    minci udrží (zatřesení oknem dolů, zatlačení z rubu); když ne, okno menší (Ø 18 mm na druhém
    odřezku a k tomu nová šablona: list „Kapsa – záložní okno Ø 18 mm“, `--window 18`). List KAPSA
-   tedy 3× (forma, značky na líci na tvrdý papír, šablona s oknem na lepenku), při záložním okně Ø 18 mm navíc 1× záložní
+   tedy 3× (forma na papír; značky na líci a šablona s oknem nalepené na tenký karton), při záložním okně Ø 18 mm navíc 1× záložní
    list. Když minci neudrží ani Ø 18 mm, do kapsy se okno nesekne a na dalším odřezku se zkusí
    hlubší důlek (ověřit). Výsečník Ø 18 mm je v nákupním plánu jako volitelný řádek mimo součet
    (CraftPoint, varianta 18 mm, 57 Kč, skladem 8. 10. 2026). Dost hluboký důlek: číslo model nemá (tloušťku mince nepočítá); mince vložená z rubu nemá

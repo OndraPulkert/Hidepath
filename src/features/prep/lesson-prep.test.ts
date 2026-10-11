@@ -7,6 +7,7 @@ import { type LessonDefinition, type ProjectDefinition } from '@/content/schema'
 import {
   type BuildLessonPrepInput,
   buildLessonPrep,
+  groupByCondition,
   materialItemKeys,
   PREP_ITEM_KEY_MAX,
   printHref,
@@ -106,6 +107,34 @@ describe('buildLessonPrep – Vytisknout', () => {
       href: `/projects/${project.slug}/practice-sheets?list=cvicny-prouzek-kuze-1-2`,
       optional: true,
     });
+  });
+
+  it('součet „Celkem vytisknout“ jen z povinných výtisků, stejný list sečte', () => {
+    expect(buildLessonPrep(input()).printTotals).toEqual([
+      { title: 'Kapsa s mincí a otvor formy', copies: 3 },
+    ]);
+    // Lekce 2 skutečného obsahu: list KAPSA 3× (forma, značky, šablona), záložní okno jen podmíněně.
+    const real2 = buildLessonPrep({ ...input(), project: coinCardHolderProject, lesson: second });
+    expect(real2.printTotals).toEqual([{ title: 'Kapsa s mincí a otvor formy', copies: 3 }]);
+    expect(real2.prints.filter((p) => p.optional).map((p) => p.sheetId)).toEqual(['kapsa-okno-18']);
+  });
+
+  it('vysvětlení tenkého kartonu jen v první lekci, která výtisk na kartonu potřebuje', () => {
+    const lessonsWithNote = (p: ProjectDefinition) =>
+      p.lessons
+        .filter(
+          (l) => buildLessonPrep({ ...input(), project: p, lesson: l }).cardboardNote !== undefined,
+        )
+        .map((l) => l.order);
+    expect(lessonsWithNote(coinCardHolderProject)).toEqual([1]);
+    expect(lessonsWithNote(cardHolderProject)).toEqual([]);
+    const note = buildLessonPrep({
+      ...input(),
+      project: coinCardHolderProject,
+      lesson: coinLessons[0]!,
+    }).cardboardNote!;
+    expect(note).toContain('krabice od cereálií, čaje nebo sušenek');
+    expect(note).toContain('ne vlnitý karton z přepravních krabic');
   });
 
   it('šablona má klíč print:template a odkaz bez předvýběru', () => {
@@ -409,4 +438,18 @@ describe('klíče položek', () => {
       }
     },
   );
+});
+
+describe('groupByCondition', () => {
+  it('stejnou podmínku vypíše jednou, skupiny v pořadí prvního výskytu', () => {
+    const groups = groupByCondition([
+      { id: 1, condition: 'A' },
+      { id: 2, condition: 'B' },
+      { id: 3, condition: 'A' },
+    ]);
+    expect(groups.map((g) => [g.condition, g.items.map((i) => i.id)])).toEqual([
+      ['A', [1, 3]],
+      ['B', [2]],
+    ]);
+  });
 });

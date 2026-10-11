@@ -383,20 +383,14 @@ export type PhaseDefinition = z.infer<typeof phaseDefinitionSchema>;
  * (povinné kromě `template`, kde se tiskne celá šablona projektu).
  */
 /**
- * Na jaký tužší podklad výtisk patří (`nalepit` = výtisk nalepit na podklad, `tisknout` = tisknout
- * rovnou na něj). Výtisk bez `mount` zůstává obyčejný papír. Text štítku skládá
+ * Výtisk se nalepí na tenký karton (krabice od cereálií) a teprve pak vystřihne. Tiskne se vždy na
+ * papír, karton do tiskárny nepatří. Výtisk bez `mount` zůstává papír. Text štítku skládá
  * `src/features/prep/print-mount.ts`, v obsahu se neopakuje.
  */
-export const printMountSchema = z
-  .object({
-    material: z.enum(['lepenka', 'ctvrtka', 'tvrdy-papir']),
-    method: z.enum(['nalepit', 'tisknout']),
-    /** Proč, krátce (např. „podle ní obkreslujete obrys a okno“). */
-    reason: z.string().min(1).optional(),
-  })
-  .refine((m) => !(m.method === 'tisknout' && m.material === 'lepenka'), {
-    message: 'Na lepenku se netiskne, jen nalepuje',
-  });
+export const printMountSchema = z.object({
+  /** Proč, krátce (např. „podle ní obkreslujete obrys a okno“). */
+  reason: z.string().min(1),
+});
 export type PrintMount = z.infer<typeof printMountSchema>;
 
 export const lessonPrintSchema = z.object({
@@ -405,11 +399,11 @@ export const lessonPrintSchema = z.object({
   copies: z.number().int().positive(),
   /** K čemu výtisk slouží v lekci. */
   purpose: z.string().min(1),
-  /** Např. „čtvrtka“, „obyčejný papír A4“. */
+  /** Např. „nejlépe matný papír 120 g, A4, 100 %“. */
   paper: z.string().min(1).optional(),
   /** Kdy tisknout, např. „jen když zkouška okna nevyšla“. */
   condition: z.string().min(1).optional(),
-  /** Tužší podklad (lepenka, čtvrtka, tvrdý papír); bez něj obyčejný papír. */
+  /** Nalepit na tenký karton; bez něj obyčejný papír. */
   mount: printMountSchema.optional(),
 });
 export type LessonPrint = z.infer<typeof lessonPrintSchema>;
@@ -645,7 +639,7 @@ export const shoppingPlanSchema = z.object({
   skipped: z.array(z.object({ equipmentSlug: slug, reason: z.string().min(1) })),
   /**
    * Drobnosti z domácnosti, papírnictví nebo hobby marketu, které postup potřebuje, ale katalog
-   * je nevede a cenu neověřujeme (maskovací páska, čtvrtka…). Do součtu se nepočítají.
+   * je nevede a cenu neověřujeme (maskovací páska, tenký karton…). Do součtu se nepočítají.
    */
   alsoNeeded: z.array(z.string().min(1)).optional(),
 });

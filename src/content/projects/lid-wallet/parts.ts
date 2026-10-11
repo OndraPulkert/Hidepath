@@ -240,7 +240,7 @@ const entries: GlossaryEntry[] = [
     term: 'P0',
     name: 'papírový model',
     description:
-      'Model 1:1 z tvrdšího papíru s kartami, bankovkami a mincemi; P0-1 až P0-9 jsou jeho kontroly.',
+      'Model 1:1 z listů nalepených na tenký karton, s kartami, bankovkami a mincemi; P0-1 až P0-9 jsou jeho kontroly.',
     where: 'Lekce 2, podle listů 1–3.',
     group: 'tests',
   },

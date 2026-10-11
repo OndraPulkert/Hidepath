@@ -24,7 +24,7 @@ const badgeTexts = (root: HTMLElement) =>
 
 const withMounts = projects.filter((p) => mountedPrints(p).length > 0);
 
-describe('štítek podkladu výtisku (lepenka, čtvrtka, tvrdý papír)', () => {
+describe('štítek podkladu výtisku (tenký karton)', () => {
   it('podklad mají projekty 02, 03 a pásek; 01 tiskne na obyčejný papír', () => {
     expect(withMounts.map((p) => p.slug).sort()).toEqual([
       'belt',
@@ -71,6 +71,20 @@ describe('štítek podkladu výtisku (lepenka, čtvrtka, tvrdý papír)', () => 
     });
   });
 
+  it('tisková stránka pouzdra s mincí: povinné se součtem, podmíněné zvlášť mimo součet', async () => {
+    renderApp(routes.template(coinCardHolderProject.slug));
+    const plan = (await screen.findByText('Kolik vytisknout')).closest('[data-print-plan]')!;
+    const flat = (el: Element) => (el.textContent ?? '').replace(/\s/g, ' ');
+    expect(flat(plan)).toContain(
+      'Celkem vytisknout: Papírový model 1×, Kapsa s mincí a otvor formy 3×, Pás (šablona) 2×',
+    );
+    const extra = plan.querySelector('[data-print-conditional]')!;
+    expect(flat(extra)).toMatch(/^Jen v případě potřeby \(do součtu se nepočítá\)Jen když /);
+    expect(flat(extra)).toContain('Jen když výtisk na značky nemáte z lekce 2:');
+    // Cvičný proužek je na stránce cvičných listů, ne tady.
+    expect(plan.textContent).not.toContain('Cvičný proužek');
+  });
+
   it('variantu listu (mince 40 mm, kůže 1,5 mm) tisková stránka značí jako výchozí list', () => {
     const sheets = coinCardHolderProject.patternSheets!.sheets;
     const sheet = (id: string) => sheets.find((s) => s.id === id)!;
@@ -78,12 +92,12 @@ describe('štítek podkladu výtisku (lepenka, čtvrtka, tvrdý papír)', () => 
       sheetMounts(coinCardHolderProject, 'pattern-sheets', sheet(id))?.groups.map((g) => g.text);
     expect(text('kapsa-40mm')).toEqual(text('kapsa'));
     expect(text('papirovy-model')).toEqual([
-      'Tisknout na čtvrtku – model musí po složení a naplnění držet tvar',
+      'Nalepit na tenký karton (krabice od cereálií) – model musí po složení a naplnění držet tvar',
     ]);
-    // PÁS: 1. výtisk se rozřeže (obyčejný papír), 2. je šablona s okénkem (tvrdý papír).
+    // PÁS: 1. výtisk se rozřeže (papír), 2. je šablona s okénkem (na kartonu).
     expect(text('sablona')).toEqual(text('sablona-kuze-1-2'));
     expect(text('sablona-kuze-1-2')).toEqual([
-      'Tisknout na tvrdý papír – okénko je doraz pro polohu kapsy',
+      'Nalepit na tenký karton (krabice od cereálií) – okénko je doraz pro polohu kapsy',
     ]);
   });
 });

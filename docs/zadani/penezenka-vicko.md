@@ -978,7 +978,7 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
    nedělají (závěs se tvaruje přes obsah, krok 16). Šablonu konce jazýčku z listu 4 (R10 s magnetem, ztenčením špičky, ryskou horní
    hrany L1 a otvory S7) a šablonu výřezu pro palec z listu 1 (obdélník asi 30 mm široký uprostřed horní hrany F a 20 mm
    vysoký, horní hranou je horní hrana F, s vyříznutým výřezem U 10 × 12; křížek středu odpadne s ním,
-   střed výřezu se propíchne na kůži v kroku 2) nalep na tvrdý papír a vyřízni **až po
+   střed výřezu se propíchne na kůži v kroku 2) nalep na tenký karton (krabice od cereálií) a vyřízni **až po
    P0** (krok 0(c)): na variantě z V12 nezávisí, ale P0-4 může změnit výřez a P0-6 výšku. Když P0
    změnil vstupy, vyřízni je z nově vytištěných listů. Použiješ je na zkušebním i finálním kusu.
    (c) **Povinný krok 1 – papírový model P0** z vytištěných listů (oddíl 11, P0): vejde se 6 karet,
@@ -1009,7 +1009,7 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
    se spustí stejný příkaz. Formulář „Listy pro vaši kůži“ v aplikaci je má (část „Výsledky P0 a jiný
    magnet“): k, zvednutí karet Δ_k a mincí Δ_c, bankovky a tloušťku magnetu (`magnetThicknessMm`) dosadí
    do stejných polí (`src/lib/patterns/lid-wallet-input.ts`: k nad k max → `kDesign` = `kMax` = k;
-   δ = větší z Δ_k / (n_k · t_k) a Δ_c / t_c). Teprve pak nalep na tvrdý papír a vyřízni šablony z listu 1 (obrys pásu
+   δ = větší z Δ_k / (n_k · t_k) a Δ_c / t_c). Teprve pak nalep na tenký karton a vyřízni šablony z listu 1 (obrys pásu
    s okénky a otvory švů; použije se v krocích 9 a 13) a zbylé šablony z listu 4 (okénka – kontrola
    polohy okének mincí v kroku 5 a okénka bankovek v kroku 8, plíšek – rozměr na plech v kroku 2,
    proužek otvorů S4/S5 v kroku 14).
@@ -1031,7 +1031,7 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
    tedy to, co kreslí list 2. Čáry švů S1–S3 a S6 ani okénko bankovek na rub nepatří: list 2 je nekreslí,
    středy okénka bankovek jsou na líci z kroku 2 a švy se přenášejí z líce (kroky 9 a 13). Papír se na kůži
    obkreslit skrz nedá, proto: list 2
-   nalep na tvrdý papír a vyřízni po obrysu, přilož ho na rub, rohy lepených ploch a konce čar
+   nalep na tenký karton a vyřízni po obrysu, přilož ho na rub, rohy lepených ploch a konce čar
    propíchni jehlou **jen do rubu** (hrot nesmí projít na líc, vpich by zůstal vidět; sílu zkusit na
    odřezku) a tečky spoj tužkou u pravítka. Osu ohybu dna, čáru hrany vložky dna (z rámečku na listu 4, výchozí 64,18; posunutou podle V12,
    oddíl 5.8; použije se v kroku 11) vyznač navíc ryskou na obou bocích dílu. Závěs a rub víčka se
@@ -1385,7 +1385,7 @@ harmonogram (9.1) na ně nečeká a žádný krok postupu na nich nezávisí.
 
 ### P0 – papírový model 1:1 (povinný, 2. večer přípravy)
 
-Z tvrdšího papíru podle listů 1–3 slep P1, D1 a D2 (lepicí páska místo švů), dovnitř skutečné karty,
+Z listů 1 a 3 nalepených na tenký karton slep P1, D1 a D2 (lepení podle listu 2) (lepicí páska místo švů), dovnitř skutečné karty,
 bankovky a mince. **Minimum:** vejde se 6 karet (P0-7), bankovky složené napůl (P0-1, P0-2), 4 mince
 (P0-5, P0-7), víčko se zavře (P0-3, P0-8) a výřez pro palec funguje (P0-4).
 

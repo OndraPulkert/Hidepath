@@ -14,6 +14,7 @@ import {
 } from '@/components/projects/generated-sheet';
 import { LidWalletSheetGenerator } from '@/components/projects/lid-wallet-sheet-generator';
 import { groupPatternSheets } from '@/components/projects/pattern-sheet-list';
+import { PrintListView } from '@/components/projects/print-list';
 import { PrintMountBadge } from '@/components/projects/print-mount-badge';
 import { Button } from '@/components/ui/button';
 import { findProject } from '@/content/projects';
@@ -25,6 +26,7 @@ import {
   type TemplateDefinition,
 } from '@/content/schema';
 import { typo } from '@/lib/utils/format';
+import { overviewPrints, splitPrintList } from '@/features/overview/project-overview';
 import { resolveActiveBelt } from '@/features/belt/active-belt';
 import { beltFormInitial } from '@/features/belt/belt-prefill';
 import { lidFormInitial, resolveLidSheets } from '@/features/lid-wallet/lid-sheets-state';
@@ -109,6 +111,7 @@ function PiecesTemplate({
         {template.printNote} V dialogu tisku nechte měřítko na 100 % („Výchozí“), papír A4 a výchozí
         okraje.
       </p>
+      <PrintPlan project={project} source="template" />
       <div className="overflow-x-auto rounded-md border border-line bg-white p-2 print:break-inside-avoid print:overflow-visible print:border-0 print:p-0">
         <TemplateIllustration
           template={template}
@@ -381,6 +384,7 @@ export function PatternSheetsPrint({
             onGenerated={onGenerated}
           />
         ) : null}
+        <PrintPlan project={project} source={source} />
         <fieldset className="mb-8 flex flex-col gap-4">
           <legend className="mb-2 kicker">Co vytisknout</legend>
           {groups.map((group) => (
@@ -433,6 +437,33 @@ export function PatternSheetsPrint({
         ))}
       </div>
     </div>
+  );
+}
+
+/**
+ * Kolik čeho vytisknout podle „Vytisknout“ všech lekcí (jen listy z této stránky): povinné po
+ * lekcích se součtem, pod nimi jen v případě potřeby. Bez výtisků nic.
+ */
+function PrintPlan({
+  project,
+  source,
+}: {
+  project: ProjectDefinition;
+  source: 'pattern-sheets' | 'practice-sheets' | 'template';
+}) {
+  const list = splitPrintList(
+    overviewPrints(
+      project,
+      project.lessons.map((l) => l.slug),
+      { source },
+    ),
+  );
+  if (list.required.length === 0 && list.conditional.length === 0) return null;
+  return (
+    <section className="mb-6 print:hidden" aria-label="Kolik vytisknout" data-print-plan="">
+      <p className="mb-2 kicker">Kolik vytisknout</p>
+      <PrintListView list={list} />
+    </section>
   );
 }
 

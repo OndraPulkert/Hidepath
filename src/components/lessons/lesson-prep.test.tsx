@@ -28,7 +28,7 @@ const lesson: LessonDefinition = {
       sheetId: 'sablona-kuze-1-2',
       copies: 1,
       purpose: 'záloha',
-      condition: 'jen když se první výtisk pomačká',
+      condition: 'se první výtisk pomačká',
     },
   ],
   requires: [{ id: 'kapsa-suche', fromLesson: earlier.slug, label: 'Vyschlá kapsa' }],
@@ -76,8 +76,15 @@ describe('Připravte si', () => {
     renderPrep();
     const link = await screen.findByRole('link', { name: /Kapsa s.mincí a.otvor formy/ });
     expect(link).toHaveAttribute('href', `/projects/${project.slug}/template?list=kapsa`);
-    expect(screen.getByText(/3 výtisky · forma a šablona/)).toBeInTheDocument();
-    expect(screen.getByText('Jen když')).toBeInTheDocument();
+    expect(screen.getByText(/^forma a šablona · 3 výtisky/)).toBeInTheDocument();
+    // Součet jen z povinných výtisků; podmíněný výtisk je zvlášť a začíná podmínkou.
+    expect(screen.getByText(/Celkem vytisknout:/).closest('p')).toHaveTextContent(
+      /^Celkem vytisknout: Kapsa s.mincí a.otvor formy 3×$/,
+    );
+    const extra = screen
+      .getByText('Jen v případě potřeby (do součtu se nepočítá)')
+      .closest('[data-print-conditional]')!;
+    expect(extra).toHaveTextContent('Jen když se první výtisk pomačká:');
   });
 
   it('„Mám“ u materiálu a dílu uloží zaškrtnutí, změní souhrn a přežije nové vykreslení', async () => {
@@ -210,7 +217,7 @@ describe('Připravte si na stránce lekce', () => {
       'href',
       `/projects/${cardHolderProject.slug}/practice-sheets?list=${print.sheetId}`,
     );
-    expect(within(section).getByText(/^1 výtisk · /)).toBeInTheDocument();
+    expect(within(section).getByText(/(^| · )1 výtisk( · |$)/)).toBeInTheDocument();
     expect(within(section).getByText(/^Připraveno 0\/\d+$/)).toBeInTheDocument();
   });
 });

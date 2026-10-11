@@ -612,7 +612,12 @@ describe('obsah – peněženka Víčko', () => {
 
     it('drobnosti mimo katalog jsou v seznamu „mějte doma nebo dokupte“', () => {
       const also = plan.alsoNeeded!.join(' ');
-      for (const thing of ['lepicí páska', 'lak na nehty', 'kolík Ø 8', 'čtvrtka']) {
+      for (const thing of [
+        'lepicí páska',
+        'lak na nehty',
+        'kolík Ø 8',
+        'tenký karton (krabice od cereálií)',
+      ]) {
         expect(also, thing).toContain(thing);
       }
       // Maskovací páska je v katalogu (masking-tape) a v plánu, ne mezi drobnostmi.
@@ -626,5 +631,13 @@ describe('obsah – peněženka Víčko', () => {
       for (const e of unknown) expect(e.priceRange).toEqual({ minCents: 0, maxCents: 0 });
       expect(plan.lines.some((l) => l.equipmentSlug === 'veg-tan-leather-0-8')).toBe(false);
     });
+  });
+});
+
+describe('Víčko – podklad listů papírového modelu', () => {
+  it('na karton jen listy 1 a 3 (z nich se vystřihuje), list 2 je jen předloha lepení', () => {
+    const l1 = lidWalletProject.lessons.find((l) => l.order === 1)!;
+    const mounted = (l1.prints ?? []).filter((p) => p.mount).map((p) => p.sheetId);
+    expect(mounted).toEqual(['sablona', 'dily']);
   });
 });

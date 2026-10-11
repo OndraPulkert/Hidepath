@@ -646,7 +646,7 @@
         <span><i style="--c: var(--kuze)"></i>useň P1 1,0, líc</span>
         <span><i style="--c: var(--rub)"></i>rub P1</span>
         <span><i style="--c: var(--paper)"></i>list (papír)</span>
-        <span><i style="--c: var(--karton)"></i>tvrdý papír</span>
+        <span><i style="--c: var(--karton)"></i>tenký karton</span>
         <span><i style="--c: var(--tape)"></i>maskovací páska</span>
         <span><i style="--c: var(--board)"></i>tvrdá deska pod děrování</span>
         <span><i class="dot" style="--c: var(--hole)"></i>vpich jehlou</span>
@@ -2165,7 +2165,7 @@
         add(
           "E",
           "Vyřízněte šablonu z listu 2",
-          "List 2 nalepte na tvrdý papír a vyřízněte po obrysu. To je šablona na rub P1.",
+          "List 2 nalepte na tenký karton (krabice od cereálií) a vyřízněte po obrysu. To je šablona na rub P1.",
           10000,
           (t) => {
             const z = es(t, 0.84, 0.98);
@@ -2202,14 +2202,14 @@
               const [x, y] = tv(c, 212, 40);
               s += fade(
                 seg(t, 0.08, 0.16) * (1 - seg(t, 0.26, 0.3)),
-                lead(78, 20, x, y) + pill(83, 18, "tvrdý papír", "t", "end"),
+                lead(78, 20, x, y) + pill(83, 18, "tenký karton", "t", "end"),
               );
             }
             s += inset(
               "LIST 2 · RUB P1",
               notes([
                 ["list 2 na", "t"],
-                ["tvrdý papír"],
+                ["tenký karton"],
                 ["vyříznout", "t"],
                 ["po obrysu"],
                 ["na listu 2:", "t"],

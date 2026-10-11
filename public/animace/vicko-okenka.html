@@ -150,7 +150,7 @@ svg .coin{fill:color-mix(in srgb,var(--steel) 70%,transparent);stroke:var(--jige
   <span><i style="--c:var(--kuzeplan)"></i>useň P1 1,0, pohled na líc</span>
   <span><i style="--c:var(--d2)"></i>D2</span>
   <span><i style="--c:var(--pe)"></i>tvrdá deska pod děrování</span>
-  <span><i style="--c:var(--paper)"></i>šablona (tvrdý papír)</span>
+  <span><i style="--c:var(--paper)"></i>šablona (na tenkém kartonu)</span>
   <span><i class="dot" style="--c:var(--ink)"></i>propíchnutý střed (lekce 4)</span>
   <span><i class="ln" style="--c:var(--lic)"></i>řez nožem</span>
   <span><i class="ln" style="--c:var(--ok)"></i>tečna, správně</span>
@@ -294,7 +294,7 @@ function windowDraw(s, st) {
   return o;
 }
 function prick(s, st) { const [c0, c1] = ends(s); let o = ''; [c0, c1].forEach((c, i) => { if (!(st.h && st.h[i])) o += dot(s.cx, c); }); return o; }
-// šablona okénka z listu 4: tvar okénka z tvrdého papíru, křížky na středech, čárkovaná osa (±2 přes konce)
+// šablona okénka z listu 4: tvar okénka z výtisku na tenkém kartonu, křížky na středech, čárkovaná osa (±2 přes konce)
 function slotTemplate(s, dx = 0, dy = 0, o = 1) {
   if (o <= 0.01) return '';
   const sh = { ...s, cx: s.cx + dx, y0: s.y0 + dy, y1: s.y1 + dy }, [c0, c1] = ends(sh);

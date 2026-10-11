@@ -6,30 +6,36 @@ import {
 } from '@/content/schema';
 
 /**
- * Tužší podklad výtisku (`LessonPrint.mount`): text štítku a přehled podkladů k listu na tiskové
- * stránce. Jediný zdroj je `mount` u výtisku v lekci, odsud se skládá text pro „Připravte si“,
- * tiskovou stránku i „Postup v kostce“.
+ * Podklad výtisku (`LessonPrint.mount`): výtisk se nalepí na tenký karton. Text štítku a přehled
+ * podkladů k listu na tiskové stránce. Jediný zdroj je `mount` u výtisku v lekci, odsud se skládá
+ * text pro „Připravte si“, tiskovou stránku i „Postup v kostce“. Tiskne se vždy na papír.
  */
 
-const MATERIAL_ACCUSATIVE: Record<PrintMount['material'], string> = {
-  lepenka: 'tenkou lepenku',
-  ctvrtka: 'čtvrtku',
-  'tvrdy-papir': 'tvrdý papír',
-};
+/** Text štítku bez důvodu. */
+export const MOUNT_LABEL = 'Nalepit na tenký karton (krabice od cereálií)';
 
-const METHOD_VERB: Record<PrintMount['method'], string> = {
-  nalepit: 'Nalepit na',
-  tisknout: 'Tisknout na',
-};
+/**
+ * Co je tenký karton a jak výtisk nalepit. Jednou v „Připravte si“ první lekce, která karton
+ * potřebuje, a v nápovědě štítku – v textech lekcí se neopakuje.
+ */
+export const CARDBOARD_NOTE =
+  'Tenký karton = krabice od cereálií, čaje nebo sušenek; ne vlnitý karton z přepravních krabic. Výtisk natřete lepidlem v tyčince po celé ploše, nalepte, nechte zaschnout a pak vystřihněte.';
 
-/** „Nalepit na tenkou lepenku“, „Tisknout na čtvrtku“. */
-export function mountLabel(mount: PrintMount): string {
-  return `${METHOD_VERB[mount.method]} ${MATERIAL_ACCUSATIVE[mount.material]}`;
+/** Text štítku: podklad a krátce proč („Nalepit na tenký karton (krabice od cereálií) – …“). */
+export function mountText(mount: PrintMount): string {
+  return `${MOUNT_LABEL} – ${mount.reason}`;
 }
 
-/** Text štítku: podklad a krátce proč („Nalepit na tenkou lepenku – podle ní…“). */
-export function mountText(mount: PrintMount): string {
-  return mount.reason ? `${mountLabel(mount)} – ${mount.reason}` : mountLabel(mount);
+/**
+ * Slug první lekce (podle pořadí), která má výtisk na kartonu – tam „Připravte si“ vysvětlí, co
+ * je tenký karton ({@link CARDBOARD_NOTE}). Bez takové lekce `undefined`.
+ */
+export function firstCardboardLesson(
+  project: Pick<ProjectDefinition, 'lessons'>,
+): string | undefined {
+  return [...project.lessons]
+    .sort((a, b) => a.order - b.order)
+    .find((l) => l.prints?.some((p) => p.mount))?.slug;
 }
 
 export interface SheetMountUse {

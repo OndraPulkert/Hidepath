@@ -102,45 +102,48 @@ describe('pouzdro s mincí – rozhodnutí autora 8. 10. 2026', () => {
     expect(body).toContain('novém cvičném proužku');
   });
 
-  it('L2 a L6: šablona s oknem na tenké lepence, forma, značky a PÁS na obyčejném papíře', () => {
+  it('L1, L2, L5 a L6: šablony a model nalepené na tenký karton, forma a 1. PÁS na papíře', () => {
+    const CARD = 'tenký karton (krabice od cereálií)';
     expect(stepOf(2, 'trace-template').body).toContain(
-      'Výtisk na šablonu nalepte lepidlem v tyčince na tenkou lepenku',
+      `Výtisk na šablonu nalepte lepidlem v tyčince na ${CARD}`,
     );
     expect(stepOf(2, 'test-window-retention').body).toMatch(
-      /Kapsa – záložní okno Ø 18 mm[^.]*nalepte ho na tenkou lepenku/,
+      /Kapsa – záložní okno Ø 18 mm[^.]*nalepte ho na tenký karton/,
     );
     expect(stepOf(6, 'trace-pocket-template').body).toContain(
-      'nalepte ho lepidlem v tyčince na tenkou lepenku',
+      `nalepte ho lepidlem v tyčince na ${CARD}`,
     );
-    expect(lesson(2).materials.join(' ')).toMatch(/lepenka.*šablonu s oknem/);
-    expect(lesson(6).materials.join(' ')).toMatch(/lepenka.*šablonu s oknem nemáte z lekce 2/);
-    // Šablona s oknem (obkresluje se) na lepenku, výtisk na značky (propichuje se opakovaně)
-    // a šablona s okénkem (doraz kapsy) na tvrdý papír, ostatní obyčejný papír.
-    const expectedMount = (purpose: string) =>
-      /šablon[aou] s oknem/.test(purpose)
-        ? 'lepenka'
-        : /na značky|s okénkem/.test(purpose)
-          ? 'tvrdy-papir'
-          : undefined;
+    expect(lesson(2).materials.join(' ')).toMatch(/tenký karton.*šablonu s oknem/);
+    expect(lesson(6).materials.join(' ')).toMatch(/tenký karton.*šablonu s oknem/);
+    // Šablona s oknem (obkresluje se), výtisk na značky (propichuje se opakovaně) a šablona
+    // s okénkem (doraz kapsy) na kartonu, ostatní papír.
+    const needsCard = (purpose: string) => /šablon[aou] s oknem|na značky|s okénkem/.test(purpose);
     for (const n of [2, 6]) {
       for (const p of lesson(n).prints!) {
-        expect(p.mount?.material, `${n} ${p.purpose}`).toBe(expectedMount(p.purpose));
+        expect(p.mount !== undefined, `${n} ${p.purpose}`).toBe(needsCard(p.purpose));
       }
     }
     // Forma, značky, šablona s oknem: list KAPSA v lekci 2 třikrát.
     expect(
       lesson(2)
         .prints!.filter((p) => p.sheetId === 'kapsa')
-        .map((p) => p.mount?.material ?? 'papír'),
-    ).toEqual(['papír', 'tvrdy-papir', 'lepenka']);
-    // Papírový model se skládá a plní: čtvrtka.
-    expect(lesson(1).prints![0]!.mount).toMatchObject({ material: 'ctvrtka', method: 'tisknout' });
-    expect(stepOf(1, 'glue-and-cut').body).not.toMatch(/lepenk/);
+        .map((p) => (p.mount ? 'karton' : 'papír')),
+    ).toEqual(['papír', 'karton', 'karton']);
+    // Papírový model se skládá a plní: na kartonu.
+    expect(lesson(1).prints![0]!.mount?.reason).toContain('držet tvar');
+    expect(stepOf(1, 'glue-and-cut').body).toContain('tenký karton');
     for (const p of lesson(4).prints!) expect(p.mount).toBeUndefined();
-    // PÁS: 1. výtisk se rozřeže (papír), 2. výtisk je šablona s okénkem (tvrdý papír).
-    expect(lesson(5).prints!.map((p) => [p.copies, p.mount?.material ?? 'papír'])).toEqual([
+    // PÁS: 1. výtisk se rozřeže (papír), 2. výtisk je šablona s okénkem (karton).
+    expect(lesson(5).prints!.map((p) => [p.copies, p.mount ? 'karton' : 'papír'])).toEqual([
       [1, 'papír'],
-      [1, 'tvrdy-papir'],
+      [1, 'karton'],
     ]);
+    // Lekce 5 už nenabízí obkreslení PÁS z papíru.
+    expect(lesson(5).steps.some((s) => s.id === 'transfer-other')).toBe(false);
+    // Nic se netiskne přímo na karton.
+    for (const l of [1, 2, 5, 6]) {
+      for (const st of lesson(l).steps)
+        expect(st.body, st.id).not.toMatch(/(tisk\w*) na (tenký )?karton/);
+    }
   });
 });

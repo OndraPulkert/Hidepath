@@ -562,3 +562,11 @@ describe('pásek – vpichy jen tam, kde zmizí (2026-10-09)', () => {
     expect(step(4, 'keeper').body).toContain('Hranici 15 mm na kůži neznačte');
   });
 });
+
+describe('pásek – podklad listů', () => {
+  it('každý výtisk listu se přikládá hranou k pásu, proto je na tenkém kartonu', () => {
+    const prints = beltProject.lessons.flatMap((l) => l.prints ?? []);
+    expect(prints.length).toBeGreaterThan(0);
+    for (const p of prints) expect(p.mount, p.purpose).toBeDefined();
+  });
+});
