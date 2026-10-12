@@ -89,7 +89,13 @@ describe('kontrola animací proti lekcím', () => {
     expect(stepSource(spicka, 'F', 2)).toContain('jen když balzám na odřezku vyhověl');
     const prezka = page('pasek-prezka');
     expect(stepSource(prezka, 'C', 4)).toContain('u barevného pásku obarvěte');
-    expect(stepSource(prezka, 'D', 1)).toContain('délkou poutka aktivního pásku pod krokem');
+    expect(stepSource(prezka, 'D', 1)).toContain('Délku spočítá kalkulačka pod krokem');
+    // Poutko z téhož řemene: klín, lepení klín na klín a steh přeplátování jako v lekci 4.
+    expect(stepSource(prezka, 'D', 4)).toContain(
+      'Horní (vnější) konec z rubu, spodní konec z líce',
+    );
+    expect(stepSource(prezka, 'D', 5)).toContain('rub horního konce na líc spodního');
+    expect(stepSource(prezka, 'D', 6)).toContain('2 krátké řady napříč');
     expect(stepSource(page('pasek-sirka-konec'), 'D', 1)).toContain('U „Barva“ zvolte');
   });
 

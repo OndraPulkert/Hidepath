@@ -21,6 +21,7 @@ import {
   beltPurchase,
   purchaseLines,
   recommendedOfferText,
+  strapLengthText,
 } from '@/features/belt/belt-purchase';
 import {
   type SavedBelt,
@@ -48,6 +49,7 @@ import {
   parseBeltConfigForm,
   parseNumber,
 } from '@/lib/patterns/belt-config';
+import { KEEPER_OTHER_LEATHER_MM, keeperStripText } from '@/lib/patterns/belt-keeper';
 import { BELT_SHEET_IDS } from '@/lib/patterns/belt-sheets';
 import {
   OFFERED_STRAP_COLORS,
@@ -282,6 +284,14 @@ export function BeltConfigGenerator({
               </span>
             </span>
           </label>
+          <KeeperOption
+            id={`${id}-keeper`}
+            fromStrap={form.keeperFromStrap}
+            thickness={form.keeperThickness}
+            onFromStrap={set('keeperFromStrap')}
+            onThickness={set('keeperThickness')}
+            pieceCm={evaluated.ok ? evaluated.result.keeper.pieceCm : null}
+          />
           <ChoiceRow label="Konec">
             {(
               [
@@ -470,6 +480,11 @@ function PurchaseSummary({
               </>
             ) : null}
           </p>
+          {purchase.lengthWarnings.map((w) => (
+            <p key={w} role="note" className="text-body font-medium text-cognac-deep">
+              {typo(w)}
+            </p>
+          ))}
           {purchase.minLengthCm === null ? (
             <p className="text-meta text-ink-2">
               {typo('Zadejte obvod: bez něj délku pásu nespočítám.')}
@@ -518,6 +533,63 @@ function NumberField({
         {typo(hint)}
       </p>
       {extra}
+    </div>
+  );
+}
+
+/**
+ * „Poutko z téhož řemene“ (výchozí): proužek 12 mm ze zbytku pásu, pás o kus delší. Vypnuté:
+ * poutko z jiné kůže, zadá se její tloušťka (výchozí 1,2 mm) a pás se neprodlužuje.
+ */
+function KeeperOption({
+  id,
+  fromStrap,
+  thickness,
+  onFromStrap,
+  onThickness,
+  pieceCm,
+}: {
+  id: string;
+  fromStrap: boolean;
+  thickness: string;
+  onFromStrap: (v: boolean) => void;
+  onThickness: (v: string) => void;
+  /** Kus pásu na poutko z výpočtu; `null`, když pásek nejde spočítat. */
+  pieceCm: number | null;
+}) {
+  return (
+    <div className="flex flex-col gap-2">
+      <label className="flex min-h-touch items-start gap-3 text-body">
+        <input
+          type="checkbox"
+          className="mt-1.5 size-4"
+          checked={fromStrap}
+          onChange={(e) => onFromStrap(e.target.checked)}
+        />
+        <span>
+          {typo(
+            `Poutko z téhož řemene: proužek 12 mm ze zbytku pásu${pieceCm ? `, pás o ${pieceCm} cm delší` : ''}`,
+          )}
+          <span className="block text-meta text-ink-2">
+            {typo(
+              fromStrap
+                ? 'Poutko má barvu i tloušťku pásu, konce se ztenčí do klínu (lekce 4). Bez zaškrtnutí je poutko z jiné, tenčí kůže.'
+                : 'Poutko z jiné kůže v barvě pásu: zadejte její tloušťku. Pás se neprodlužuje.',
+            )}
+          </span>
+        </span>
+      </label>
+      {fromStrap ? null : (
+        <div className="max-w-xs">
+          <NumberField
+            id={id}
+            label="Tloušťka kůže na poutko, mm"
+            value={thickness}
+            onChange={onThickness}
+            hint={`Změřte posuvkou. Prázdné = ${formatDecimal(KEEPER_OTHER_LEATHER_MM)} mm.`}
+          />
+        </div>
+      )}
     </div>
   );
 }
@@ -582,8 +654,8 @@ function BeltResults({
     [
       'Pás k nákupu',
       r.strap.minLengthCm === null
-        ? `obvod + ${mm(r.strap.allowanceMm)} (zadejte obvod)`
-        : `aspoň ${r.strap.minLengthCm} cm (obvod + ${mm(r.strap.allowanceMm)})`,
+        ? `obvod + ${mm(r.strap.allowanceMm)}${r.keeper.fromStrap ? ` + ${r.keeper.pieceCm} cm na poutko` : ''} (zadejte obvod)`
+        : `${strapLengthText(purchase.plan)} (pásek = obvod + ${mm(r.strap.allowanceMm)})`,
     ],
     [
       r.input.tip === 'hrot' ? 'Hrot' : 'Zaoblený konec',
@@ -599,7 +671,12 @@ function BeltResults({
       'Prostřední dírka',
       `${mm(r.holes.middleFromApexMm)} od konce · nastavení ± ${mm(r.holes.adjustmentMm)}`,
     ],
-    ['Poutko', `${mm(r.keeper.lengthMm)} × ${mm(r.keeper.widthMm)}`],
+    [
+      'Poutko',
+      r.keeper.fromStrap
+        ? `proužek ${keeperStripText(r.keeper)} z téhož řemene (π × ${mm(r.keeper.thicknessMm)}), konce ztenčit do klínu ${mm(r.keeper.skive!.wedgeMm)}`
+        : `proužek ${keeperStripText(r.keeper)} z jiné kůže ${mm(r.keeper.thicknessMm)}`,
+    ],
     ['Nýty', rivetText(r)],
     [
       'Ovál pro trn',
@@ -658,7 +735,7 @@ function BeltResults({
                 <span className="block text-meta text-ink-2">
                   {typo(
                     line.offers && purchase.scrapFromStrap && purchase.neededCm !== null
-                      ? `${line.detail}; s odřezkem na trénink aspoň ${purchase.neededCm} cm`
+                      ? `${line.detail}; s odřezkem na trénink aspoň ${purchase.neededCm} cm${purchase.scrapDropped ? ' (nabídky níže jsou bez odřezku, ten se nevejde)' : ''}`
                       : line.detail,
                   )}
                 </span>

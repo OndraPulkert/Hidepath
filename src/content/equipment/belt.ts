@@ -562,7 +562,7 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
     englishName: 'Veg-tan belt strap',
     category: 'material',
     shortDescription:
-      'Pás z třísločiněné kůže v šířce přezky. Z něj je celý pásek; poutko je z odřezku.',
+      'Pás z třísločiněné kůže v šířce přezky. Z něj je celý pásek i poutko: pás je o kus na poutko delší (nebo je poutko z jiné kůže).',
     purpose:
       'Hotový pás (řemen) s rovnými hranami ušetří řezání dlouhého pruhu. Šířka pásu = vnitřní světlost přezky. Délku spočítá tabulka „Váš pásek“ z obvodu: obvod + přehnutí u přezky + vzdálenost od prostřední dírky ke konci (pro 5 dírek po 25 mm obvod + 234,3 mm).',
     buyingGuide: [

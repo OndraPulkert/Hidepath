@@ -868,7 +868,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       {
         label: 'Které archy koupit',
         value:
-          'pouzdro na karty a pouzdro s mincí: 180 (zdrsnění) a 240 (hrany); Víčko navíc 120 na plíšek a 80 jen pro zálohu B; pásek vystačí s 180',
+          'pouzdro na karty a pouzdro s mincí: 180 (zdrsnění) a 240 (hrany); Víčko navíc 120 na plíšek a 80 jen pro zálohu B; pásek 180, s poutkem z téhož řemene i 80 na ztenčení jeho konců',
       },
       { label: 'Množství', value: 'jeden arch stačí na několik projektů' },
     ],

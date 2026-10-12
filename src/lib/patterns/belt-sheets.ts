@@ -408,8 +408,23 @@ function buckleEndPage(spec: BeltEndSpec): El[] {
     svg: `<rect x="${f(strapX)}" y="${f(keeperY)}" width="${f(len)}" height="${f(spec.keeperWidthMm)}" fill="none" stroke="${INK}" stroke-width="0.3"/>`,
     box: shapeBox(strapX, keeperY, strapX + len, keeperY + spec.keeperWidthMm, 0.3, 'poutko'),
   });
-  out.push(text(strapX + len + 3, keeperY + 5, `šrafy: přeplátování ${ov} mm`, 2.8, GREY));
-  out.push(text(strapX + len + 3, keeperY + 9.5, 'vlevo na líci, vpravo na rubu', 2.8, GREY));
+  const skived = spec.keeperSkived === true;
+  out.push(
+    text(
+      strapX + len + 3,
+      keeperY + 5,
+      skived ? `šrafy: klín ${ov} mm` : `šrafy: přeplátování ${ov} mm`,
+      2.8,
+      GREY,
+    ),
+  );
+  if (skived) {
+    // Poutko z pásu je delší: popisek na tři krátké řádky, ať zůstane 13 mm od pravé hrany.
+    out.push(text(strapX + len + 3, keeperY + 9.5, 'ztenčit: vlevo líc,', 2.8, GREY));
+    out.push(text(strapX + len + 3, keeperY + 14, 'vpravo rub', 2.8, GREY));
+  } else {
+    out.push(text(strapX + len + 3, keeperY + 9.5, 'vlevo na líci, vpravo na rubu', 2.8, GREY));
+  }
   for (let mm = 0; mm <= len; mm += 10) {
     const x = strapX + mm;
     const tickY = keeperY + spec.keeperWidthMm;
@@ -427,7 +442,9 @@ function buckleEndPage(spec: BeltEndSpec): El[] {
       '   Kroužky ohybu nesekejte: spojte je na rubu pravítkem, to je čára ohybu.',
       '3. Navlékněte poutko na pás, ohněte konec kolem příčky přezky a poutko posuňte přes přehnutý konec.',
       '4. Šedé otvory nepropichujte: vykružte je šídlem skrz vyseknuté, vysekněte, poutko vraťte mezi ně a sešroubujte nýty.',
-      'Poutko: mimo šrafy přelepte páskou, šrafy zdrsněte (vlevo líc, vpravo rub), lepidlo jen do šraf. Nýty: 2, proto 4 otvory.',
+      skived
+        ? 'Poutko z pásu: šrafy ztenčete do klínu (vlevo líc, vpravo rub), lepidlo jen na klíny. Nýty: 2, proto 4 otvory.'
+        : 'Poutko: mimo šrafy přelepte páskou, šrafy zdrsněte (vlevo líc, vpravo rub), lepidlo jen do šraf. Nýty: 2, proto 4 otvory.',
       'Rozměry z šablony Black Flag Leather Goods (jeden zdroj, ať se nemíchají rozteče).',
       'Délka poutka je spočítaná, ne ověřená — ověřte na odřezku.',
     ]),

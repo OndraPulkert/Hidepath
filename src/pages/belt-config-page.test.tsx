@@ -244,8 +244,8 @@ describe('vstupy do „Váš pásek“', () => {
     renderApp(routes.lesson(SLUG, '04-buckle-end'), { repositories });
     const card = await screen.findByRole('region', { name: 'Aktivní pásek' });
     await within(card).findByText('Široký', { selector: 'p' });
-    expect(card).toHaveTextContent(/Poutko\s*120 × 12\smm/);
-    expect(card).toHaveTextContent(/Pás\s*aspoň 119\scm/);
+    expect(card).toHaveTextContent(/Poutko\s*12 × 127\smm, z téhož řemene \(3,5\smm\), kus 14\scm/);
+    expect(card).toHaveTextContent(/Pás\s*aspoň 119\scm \+ 14\scm na poutko = 133\scm/);
     expect(within(card).getByRole('link', { name: /Změnit/ })).toHaveAttribute(
       'href',
       routes.beltConfig(SLUG),
@@ -257,11 +257,29 @@ describe('vstupy do „Váš pásek“', () => {
     expect(await within(card).findByText(/30 mm · 3,5 mm · hrot/)).toBeInTheDocument();
     const records = await repositories.lessonRecords.list();
     expect(resolveActiveBelt(records, SLUG).active?.name).toBe('Úzký');
-    // Krok s poutkem bere číslo z aktivního pásku.
+    // Kroky lepení a stehu poutka berou špalík z aktivního pásku (užší než pás 30 mm).
     const recalls = screen.getAllByRole('list', { name: 'Z aktivního pásku: Úzký' });
     expect(
-      recalls.some((l) => /Poutko \(Váš pásek\):\s*100\s×\s12\smm/.test(l.textContent ?? '')),
+      recalls.some((l) =>
+        /Špalík do poutka \(Váš pásek\):\s*asi 25\smm široký/.test(l.textContent ?? ''),
+      ),
     ).toBe(true);
+    // Kalkulačka pod krokem: šířka a tloušťka z aktivního pásku, rozpis a příklad.
+    const calc = screen.getByRole('region', { name: 'Kalkulačka poutka' });
+    expect(calc).toHaveTextContent(/Z aktivního pásku: šířka 30\smm, tloušťka 3,5\smm/);
+    expect(calc).toHaveTextContent(/Proužek:\s*12 × 107\smm/);
+    expect(calc).toHaveTextContent(/Obvod 3 vrstev:\s*81\smm/);
+    expect(calc).toHaveTextContent(/Příklad: pás 40 × 3,5\smm/);
+    // Změřený obvod přepíše spočítaný (jediné vlastní pole kalkulačky, zápis kroku).
+    await user.type(
+      within(calc).getByRole('textbox', { name: /Obvod 3 vrstev změřený/ }),
+      '85{Enter}',
+    );
+    await waitFor(() => expect(calc).toHaveTextContent(/Proužek:\s*12 × 111\smm/));
+    expect(calc).toHaveTextContent(/změřený proužkem; spočítaný 81\smm/);
+    // Nákup a list 1 počítají se spočítaným obvodem: kalkulačka to řekne.
+    expect(calc).toHaveTextContent(/Nákup, list 1 a lekce 2 počítají se spočítaným obvodem/);
+    expect(calc).toHaveTextContent(/Kus pásu 13\scm je delší než 12\scm/);
   });
 
   it('„Připravte si“: list k tisku vede na „Váš pásek“', async () => {

@@ -5,7 +5,7 @@ import {
   type ShoppingPlanLine,
 } from '@/content/schema';
 import { resolveActiveBelt } from '@/features/belt/active-belt';
-import { beltPurchase, screwDetail } from '@/features/belt/belt-purchase';
+import { beltPurchase, screwDetail, strapLengthText } from '@/features/belt/belt-purchase';
 import { type BudgetPriceOverride } from '@/features/shopping/budget';
 import { findPlanExample } from '@/features/shopping/plan';
 import { type LessonRecordEntry } from '@/features/notebook/types';
@@ -104,10 +104,8 @@ function strapPick(
   const purchase = beltPurchase(r, { scrapFromStrap });
   const length =
     purchase.neededCm === null
-      ? `délka = obvod + ${cz(r.strap.allowanceMm)} mm`
-      : scrapFromStrap
-        ? `aspoň ${purchase.neededCm} cm (s odřezkem na trénink)`
-        : `aspoň ${purchase.neededCm} cm`;
+      ? `délka = obvod + ${cz(r.strap.allowanceMm)} mm${r.keeper.fromStrap ? ` + ${r.keeper.pieceCm} cm na poutko` : ''}`
+      : strapLengthText(purchase.plan);
   // Výchozí nabídku vybírá výpočet (výběr uživatele, jinak CraftPoint, jinak nejlevnější skladem
   // s ověřeným činěním); na objednávku a vyprodané se nikdy nevybere samo.
   const pick = purchase.offer;

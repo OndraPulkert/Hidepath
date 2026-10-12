@@ -52,6 +52,13 @@ const savedBeltValueSchema = z.object({
    * verze) se čte jako přírodní, aby se pásek neztratil.
    */
   color: z.enum(STRAP_COLORS).optional().catch(undefined),
+  /**
+   * Poutko z téhož řemene; chybí = ano (pásky uložené před touto volbou počítají s výchozí
+   * volbou). Ukládá se jen `false`. Poškozená hodnota = výchozí.
+   */
+  keeperFromStrap: z.boolean().optional().catch(undefined),
+  /** Tloušťka poutka z jiné kůže, mm (jen s `keeperFromStrap: false`). */
+  keeperThicknessMm: z.number().optional().catch(undefined),
   /** Pomůcky bez vlivu na výpočet; poškozená hodnota se zahodí, pásek zůstane. */
   prongMm: z.number().optional().catch(undefined),
   scrapFromStrap: z.boolean().optional().catch(undefined),
@@ -90,6 +97,15 @@ export function serializeSavedBelt(
     ...(input.holeDiameterMm !== undefined ? { holeDiameterMm: input.holeDiameterMm } : {}),
     // Přírodní se neukládá: JSON zůstane krátký a starší pásky bez barvy čtou totéž.
     ...(input.color !== undefined && input.color !== 'prirodni' ? { color: input.color } : {}),
+    // Poutko z téhož řemene je výchozí, ukládá se jen opak (a k němu tloušťka jiné kůže).
+    ...(input.keeperFromStrap === false
+      ? {
+          keeperFromStrap: false,
+          ...(input.keeperThicknessMm !== undefined
+            ? { keeperThicknessMm: input.keeperThicknessMm }
+            : {}),
+        }
+      : {}),
     ...(extras.prongMm !== undefined ? { prongMm: extras.prongMm } : {}),
     ...(extras.scrapFromStrap ? { scrapFromStrap: true } : {}),
   };
@@ -107,9 +123,27 @@ export function parseSavedBeltValue(raw: unknown): Omit<SavedBelt, 'fieldId' | '
   }
   const parsed = savedBeltValueSchema.safeParse(json);
   if (!parsed.success) return null;
-  const { name, waistSource, v: _v, color, prongMm, scrapFromStrap, ...rest } = parsed.data;
-  const input: BeltConfigInput =
-    color === undefined || color === 'prirodni' ? rest : { ...rest, color };
+  const {
+    name,
+    waistSource,
+    v: _v,
+    color,
+    prongMm,
+    scrapFromStrap,
+    keeperFromStrap,
+    keeperThicknessMm,
+    ...rest
+  } = parsed.data;
+  const input: BeltConfigInput = {
+    ...rest,
+    ...(color === undefined || color === 'prirodni' ? {} : { color }),
+    ...(keeperFromStrap === false
+      ? {
+          keeperFromStrap: false,
+          ...(keeperThicknessMm !== undefined ? { keeperThicknessMm } : {}),
+        }
+      : {}),
+  };
   return {
     name,
     waistSource,

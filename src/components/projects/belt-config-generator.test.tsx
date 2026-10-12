@@ -27,7 +27,9 @@ describe('Váš pásek', () => {
   it('výchozí 40 × 3,5 mm: čísla z podkladů a destička ano', async () => {
     setup();
     const table = await screen.findByRole('table', { name: /Vaše čísla/ });
-    expect(table).toHaveTextContent(/Poutko\s*120\smm\s×\s12\smm/);
+    expect(table).toHaveTextContent(
+      /Poutko\s*proužek 12 × 127\smm z téhož řemene \(π × 3,5\smm\), konce ztenčit do klínu 15\smm/,
+    );
     expect(table).toHaveTextContent(/94,3 \/ 119,3 \/ 144,3 \/ 169,3 \/ 194,3\smm/);
     expect(table).toHaveTextContent(/dřík\s6\smm/);
     expect(screen.getByText('Destička: ano')).toBeInTheDocument();
@@ -44,9 +46,10 @@ describe('Váš pásek', () => {
 
   it('obvod spočítá délku pásu a nabídky z podkladů', async () => {
     const { user } = setup();
-    await user.type(field(/Obvod, cm/), '95');
+    // Pásek uživatele: obvod 90 cm → pásek 114 cm + 14 cm na poutko z téhož řemene.
+    await user.type(field(/Obvod, cm/), '90');
     expect(screen.getByRole('table', { name: /Vaše čísla/ })).toHaveTextContent(
-      /aspoň 119\scm \(obvod \+ 234,3\smm\)/,
+      /aspoň 114\scm \+ 14\scm na poutko = 128\scm \(pásek = obvod \+ 234,3\smm\)/,
     );
     expect(screen.getByRole('link', { name: /CraftPoint/ })).toHaveAttribute(
       'href',
@@ -154,6 +157,8 @@ describe('Váš pásek', () => {
         apexToFirst: '',
         holeDiameter: '6,5',
         color: 'prirodni',
+        keeperFromStrap: true,
+        keeperThickness: '1,2',
       },
       prong: '5,8',
       scrapFromStrap: false,
@@ -217,7 +222,7 @@ describe('Váš pásek', () => {
     ]);
 
     await user.click(within(colors).getByRole('button', { name: 'Černá' }));
-    await user.type(field(/Obvod, cm/), '95');
+    await user.type(field(/Obvod, cm/), '90');
     expect(screen.queryByRole('alert')).toBeNull();
     expect(screen.getByRole('table', { name: /Vaše čísla/ })).toHaveTextContent(/· černá/);
     expect(screen.getByText(/Barevný pás \(černá\) 40\smm/)).toBeInTheDocument();
@@ -370,6 +375,8 @@ describe('Váš pásek', () => {
         apexToFirst: '',
         holeDiameter: '',
         color: 'prirodni',
+        keeperFromStrap: true,
+        keeperThickness: '1,2',
       },
       prong: '',
       scrapFromStrap: false,
@@ -392,28 +399,59 @@ describe('Váš pásek', () => {
     const { user } = setup();
     const summary = screen.getByRole('region', { name: 'Koupit' });
     expect(summary).toHaveTextContent(/délka: zadejte obvod/);
-    await user.type(field(/Obvod, cm/), '95');
+    await user.type(field(/Obvod, cm/), '90');
     expect(summary).toHaveTextContent(
-      /Řemen: 40\smm široký, tloušťka 3,5\smm \(postup: 3–4\smm\), délka aspoň 119\scm → objednejte 130\scm/,
+      /Řemen: 40\smm široký, tloušťka 3,5\smm \(postup: 3–4\smm\), délka aspoň 114\scm \+ 14\scm na poutko = 128\scm → objednejte 130\scm/,
     );
+    expect(summary).toHaveTextContent(/Poutko: z téhož řemene: kus 14\scm, proužek 12 × 127\smm/);
     expect(summary).toHaveTextContent(/Přezka: 40\smm, jednotrnová/);
     expect(summary).toHaveTextContent(/Šrouby chicago: 2 ks, dřík 6\smm/);
     expect(summary).toHaveTextContent(/Výsečník: Ø 5 a Ø 6\smm/);
     expect(summary).toHaveTextContent(/Doporučeno: CraftPoint, 130\scm, 284\sKč/);
     expect(within(summary).getByRole('link', { name: 'další obchody níže' })).toBeInTheDocument();
 
-    // Trénink na odřezku téhož řemene: + 15 cm. CraftPoint (130 cm) nestačí a skladem
-    // s ověřeným činěním nic delšího pro 3,5 mm není: poctivě bez „objednejte“.
+    // Trénink na odřezku téhož řemene: + 15 cm k pásku i poutku. 143 cm: pás 130 ani 140 cm
+    // nestačí, souhrn varuje a doporučí pás 130 cm na pásek a poutko (odřezek zvlášť).
     await user.click(screen.getByRole('checkbox', { name: /Trénink na odřezku téhož řemene/ }));
-    expect(summary).toHaveTextContent(/aspoň 119\scm \+ 15\scm na odřezek = 134\scm/);
-    expect(summary).not.toHaveTextContent(/objednejte/);
-    expect(summary).toHaveTextContent(/Doporučený obchod není/);
+    expect(summary).toHaveTextContent(
+      /aspoň 114\scm \+ 14\scm na poutko \+ 15\scm na odřezek = 143\scm → objednejte 130\scm \(bez odřezku na trénink, ten se nevejde\)/,
+    );
+    expect(summary).toHaveTextContent(
+      /S odřezkem na trénink 15\scm potřebujete 143\scm: pás 130 ani 140\scm nestačí\. Trénujte na samostatném odřezku/,
+    );
+    expect(summary).toHaveTextContent(/Doporučeno: CraftPoint, 130\scm/);
+    // Tabulka „Vaše čísla“ ukazuje stejnou délku jako souhrn, i s odřezkem.
+    expect(screen.getByRole('table', { name: /Vaše čísla/ })).toHaveTextContent(
+      /aspoň 114\scm \+ 14\scm na poutko \+ 15\scm na odřezek = 143\scm/,
+    );
 
-    // Pás 3,9 mm (Leatory řeže 130 / 140 / 150 cm): objedná se nejbližší delší, 140 cm.
+    // Pás 3,9 mm (Leatory řeže 130 / 140 / 150 cm): silnější poutko je delší (kus 15 cm),
+    // 144 cm, objedná se nejbližší delší, 150 cm.
     await user.clear(field(/Tloušťka/));
     await user.type(field(/Tloušťka/), '3,9');
-    expect(summary).toHaveTextContent(/= 134\scm → objednejte 140\scm/);
-    expect(summary).toHaveTextContent(/Doporučeno: Leatory, 140\scm/);
+    expect(summary).toHaveTextContent(
+      /\+ 15\scm na poutko \+ 15\scm na odřezek = 144\scm → objednejte 150\scm/,
+    );
+    expect(summary).toHaveTextContent(/Doporučeno: Leatory, 150\scm/);
+  });
+
+  it('poutko z jiné kůže: tloušťka kůže, poutko 120 mm, pás bez kusu na poutko', async () => {
+    const { user } = setup();
+    await user.type(field(/Obvod, cm/), '90');
+    const keeper = screen.getByRole('checkbox', { name: /Poutko z\s+téhož řemene/ });
+    expect(keeper).toBeChecked();
+    expect(keeper).toHaveAccessibleName(/pás o\s14\scm delší/);
+    expect(screen.queryByRole('textbox', { name: /Tloušťka kůže na poutko/ })).toBeNull();
+    await user.click(keeper);
+    expect(field(/Tloušťka kůže na poutko/)).toHaveValue('1,2');
+    const table = screen.getByRole('table', { name: /Vaše čísla/ });
+    expect(table).toHaveTextContent(/Poutko\s*proužek 12 × 120\smm z jiné kůže 1,2\smm/);
+    expect(table).toHaveTextContent(/aspoň 114\scm \(pásek = obvod \+ 234,3\smm\)/);
+    const summary = screen.getByRole('region', { name: 'Koupit' });
+    expect(summary).toHaveTextContent(/délka aspoň 114\scm → objednejte 130\scm/);
+    await user.clear(field(/Tloušťka kůže na poutko/));
+    await user.type(field(/Tloušťka kůže na poutko/), '2');
+    expect(table).toHaveTextContent(/proužek 12 × 122\smm z jiné kůže 2\smm/);
   });
 
   it('trn přezky vyplní Ø dírky (trn + 0,5 mm nahoru na výsečník)', async () => {

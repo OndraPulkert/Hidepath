@@ -1,8 +1,10 @@
+import { KeeperCalculator } from '@/components/belt/keeper-calculator';
 import { StepBeltRecalls } from '@/components/belt/step-belt-recalls';
 import { StepLidSheetRecalls } from '@/components/lid-wallet/step-lid-sheet-recalls';
 import { StepRecalls } from '@/components/notebook/step-recalls';
 import { StepRecordFields } from '@/components/notebook/step-record-fields';
 import { StepTimers } from '@/components/workshop/step-timers';
+import { KEEPER_WRAP_FIELD_ID } from '@/content/projects';
 import { type LessonDefinition, type LessonStep, type ProjectDefinition } from '@/content/schema';
 import { type TimerOrigin } from '@/features/timers/timers';
 
@@ -23,12 +25,21 @@ export interface StepExtrasProps {
  * i dílenský režim.
  */
 export function StepExtras({ project, lesson, step, timerOrigin }: StepExtrasProps) {
-  if (!step.recalls && !step.beltRecalls && !step.lidSheetRecalls && !step.records && !step.waits) {
+  if (
+    !step.recalls &&
+    !step.beltRecalls &&
+    !step.beltCalculator &&
+    !step.lidSheetRecalls &&
+    !step.records &&
+    !step.waits
+  ) {
     return null;
   }
+  const keeperCalculator = step.beltCalculator === 'keeper';
   return (
     <div className="flex flex-col gap-3">
       {step.beltRecalls ? <StepBeltRecalls project={project} keys={step.beltRecalls} /> : null}
+      {keeperCalculator ? <KeeperCalculator project={project} lesson={lesson} step={step} /> : null}
       {step.lidSheetRecalls ? (
         <StepLidSheetRecalls project={project} keys={step.lidSheetRecalls} />
       ) : null}
@@ -39,7 +50,12 @@ export function StepExtras({ project, lesson, step, timerOrigin }: StepExtrasPro
         step={step}
         {...(timerOrigin ? { timerOrigin } : {})}
       />
-      <StepRecordFields project={project} lesson={lesson} step={step} />
+      <StepRecordFields
+        project={project}
+        lesson={lesson}
+        step={step}
+        exclude={keeperCalculator ? [KEEPER_WRAP_FIELD_ID] : []}
+      />
     </div>
   );
 }

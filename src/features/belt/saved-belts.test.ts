@@ -191,3 +191,45 @@ describe('Moje pásky', () => {
     });
   });
 });
+
+describe('uložený pásek – poutko', () => {
+  it('poutko z téhož řemene je výchozí a neukládá se; starý pásek bez pole ho dostane', () => {
+    const raw = serializeSavedBelt('Modrý', input, 'pasek');
+    expect(JSON.parse(raw)).not.toHaveProperty('keeperFromStrap');
+    expect(parseSavedBeltValue(raw)!.input.keeperFromStrap).toBeUndefined();
+    // Pásek uložený před volbou poutka (bez pole) se přečte beze změny.
+    const old = JSON.stringify({
+      v: 1,
+      name: 'Starý',
+      widthMm: 40,
+      thicknessMm: 3.5,
+      tip: 'hrot',
+      waistSource: 'pasek',
+    });
+    expect(parseSavedBeltValue(old)!.input).toEqual({ widthMm: 40, thicknessMm: 3.5, tip: 'hrot' });
+  });
+
+  it('poutko z jiné kůže: uloží se volba i tloušťka a přečte se zpět', () => {
+    const other: BeltConfigInput = { ...input, keeperFromStrap: false, keeperThicknessMm: 1.4 };
+    const raw = serializeSavedBelt('Jiná', other, 'pasek');
+    expect(JSON.parse(raw)).toMatchObject({ keeperFromStrap: false, keeperThicknessMm: 1.4 });
+    expect(parseSavedBeltValue(raw)!.input).toEqual(other);
+    // Tloušťka bez vypnuté volby se neukládá ani nečte (platí tloušťka pásu).
+    const stray = serializeSavedBelt('X', { ...input, keeperThicknessMm: 1.4 }, 'pasek');
+    expect(JSON.parse(stray)).not.toHaveProperty('keeperThicknessMm');
+  });
+
+  it('poškozená hodnota poutka pásek neztratí (výchozí volba)', () => {
+    const raw = JSON.stringify({
+      v: 1,
+      name: 'Poškozený',
+      widthMm: 40,
+      thicknessMm: 3.5,
+      tip: 'hrot',
+      waistSource: 'pasek',
+      keeperFromStrap: 'ano',
+      keeperThicknessMm: 'x',
+    });
+    expect(parseSavedBeltValue(raw)!.input).toEqual({ widthMm: 40, thicknessMm: 3.5, tip: 'hrot' });
+  });
+});

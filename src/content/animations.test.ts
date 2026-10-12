@@ -740,7 +740,11 @@ describe('animace postupu – pásek: konec s přezkou, dírky a špička', () =
     [4, 'oval', [prezka('C2'), prezka('C3'), prezka('C4')]],
     // Poutko se navléká před ohnutím (smyčka kolem obou vrstev, opasek-postup.md krok 7).
     [4, 'keeper', [prezka('D1'), prezka('D2')]],
-    [4, 'bend', [prezka('D3'), prezka('E1')]],
+    [4, 'keeper-edges', [prezka('D3')]],
+    [4, 'keeper-skive', [prezka('D4')]],
+    [4, 'keeper-glue', [prezka('D5')]],
+    [4, 'keeper-stitch', [prezka('D6')]],
+    [4, 'bend', [prezka('D7'), prezka('E1')]],
     [4, 'second-pair', [prezka('E2'), prezka('E3')]],
     [4, 'screws', [prezka('E4'), prezka('E5'), prezka('E6'), prezka('E7')]],
     // Lekce 5: zkouška na těle.

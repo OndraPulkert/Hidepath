@@ -153,8 +153,11 @@ describe('hodnoty aktivního pásku', () => {
     expect(fact('tip')).toBe('hrot');
     expect(fact('color')).toBe('hnědá');
     expect(fact('holeDiameter')).toBe('5 mm (trn 4,5 mm)');
-    expect(fact('strapLength')).toBe('aspoň 119 cm + 15 cm na odřezek');
-    expect(fact('keeper')).toBe('120 × 12 mm');
+    expect(fact('strapLength')).toBe('aspoň 119 cm + 14 cm na poutko + 15 cm na odřezek = 148 cm');
+    expect(fact('keeper')).toBe('12 × 127 mm, z téhož řemene (3,5 mm), kus 14 cm');
+    expect(fact('keeperSkive')).toBe(
+      'klín 15 mm, na samém konci 0,5–1 mm, v polovině asi 2,2 mm; spoj na sucho nejvýš asi 4,5 mm',
+    );
     expect(fact('rivet')).toBe('2 ks, dřík 6 mm (rozsah 5,5–6 mm)');
     expect(fact('holes')).toBe('94,3 / 119,3 / 144,3 / 169,3 / 194,3 mm · 5 × Ø 5 mm');
     expect(fact('middleHole')).toBe('144,3 mm');
@@ -173,6 +176,68 @@ describe('hodnoty aktivního pásku', () => {
       expect(ACTIVE_BELT_SUMMARY_KEYS).not.toContain(key);
       expect(beltFact(key, active, null).value).toBeNull();
     }
+  });
+
+  it('lekce 2: odřezek z pásu podle délky, kterou objednat, a poutka', () => {
+    // S odřezkem 148 cm nestačí ani 140 cm: kontrola počítá s pásem na pásek a poutko (133 cm,
+    // tedy 140 cm), ne s délkou i s odřezkem, a řekne „neřežte“.
+    expect(fact('scrapCut')).toBe(
+      'Z pásu 140 cm po pásku 119 cm a poutku 14 cm zbývá 7 cm: konec na trénink neřežte, je na poutko. Trénujte na samostatném odřezku.',
+    );
+    expect(fact('keeperBlock')).toBe(
+      'asi 35 mm široký (užší než pás), nejvýš 10 mm silný (vnitřek poutka jsou 3 vrstvy pásu); spoj asi 4,5 mm',
+    );
+    const mine = resolveActiveBelt(
+      [
+        entry(
+          newSavedBeltFieldId(),
+          serializeSavedBelt(
+            'Modrý',
+            { widthMm: 40, thicknessMm: 3.5, tip: 'hrot', waistMm: 900, color: 'modra' },
+            'pasek',
+          ),
+        ),
+      ],
+      SLUG,
+    ).active!;
+    const r = activeBeltOutcome(mine)!;
+    expect(beltFact('scrapCut', mine, r.ok ? r.result : null).value).toBe(
+      'Z pásu 130 cm po pásku 114 cm a poutku 14 cm zbývá 2 cm: konec na trénink neřežte, je na poutko. Trénujte na samostatném odřezku.',
+    );
+    // Totéž i se zapnutým odřezkem z téhož pásu (143 cm nestačí ani 140 cm): věta se spočítá.
+    const mineScrap = { ...mine, scrapFromStrap: true };
+    expect(beltFact('scrapCut', mineScrap, r.ok ? r.result : null).value).toBe(
+      'Z pásu 130 cm po pásku 114 cm a poutku 14 cm zbývá 2 cm: konec na trénink neřežte, je na poutko. Trénujte na samostatném odřezku.',
+    );
+    const other = resolveActiveBelt(
+      [
+        entry(
+          newSavedBeltFieldId(),
+          serializeSavedBelt(
+            'Jiná kůže',
+            {
+              widthMm: 40,
+              thicknessMm: 3.5,
+              tip: 'hrot',
+              waistMm: 900,
+              color: 'modra',
+              keeperFromStrap: false,
+              keeperThicknessMm: 1.4,
+            },
+            'pasek',
+          ),
+        ),
+      ],
+      SLUG,
+    ).active!;
+    expect(other.input).toMatchObject({ keeperFromStrap: false, keeperThicknessMm: 1.4 });
+    const o = activeBeltOutcome(other)!;
+    const oResult = o.ok ? o.result : null;
+    expect(beltFact('keeper', other, oResult).value).toBe('12 × 120 mm, z jiné kůže 1,4 mm');
+    expect(beltFact('keeperSkive', other, oResult).value).toBe(
+      'poutko z jiné kůže 1,4 mm: neztenčujte, krok vynechte',
+    );
+    expect(beltFact('scrapCut', other, oResult).value).toMatch(/zbývá 16 cm: odřezek 15 cm/);
   });
 
   it('bez výpočtu jen zadání; spočítaná čísla chybí', () => {

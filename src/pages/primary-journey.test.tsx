@@ -473,9 +473,9 @@ describe('hlavní cesta – pásek přes „Váš pásek“', () => {
     const width = await screen.findByRole('textbox', { name: /Šířka = přezka/ });
     await user.clear(width);
     await user.type(width, '35');
-    await user.type(screen.getByRole('textbox', { name: /Obvod, cm/ }), '95');
+    await user.type(screen.getByRole('textbox', { name: /Obvod, cm/ }), '90');
     expect(screen.getByRole('region', { name: 'Koupit' })).toHaveTextContent(
-      /Řemen: 35\smm široký.*délka aspoň 119\scm → objednejte 130\scm/,
+      /Řemen: 35\smm široký.*délka aspoň 114\scm \+ 13\scm na poutko = 127\scm → objednejte 130\scm/,
     );
     await user.type(screen.getByRole('textbox', { name: 'Název pásku' }), 'Hnědý 35');
     await user.click(screen.getByRole('button', { name: 'Uložit do Mých pásků' }));
@@ -489,7 +489,7 @@ describe('hlavní cesta – pásek přes „Váš pásek“', () => {
     const card = await screen.findByRole('region', { name: 'Aktivní pásek' });
     expect(await within(card).findByText('Hnědý 35')).toBeInTheDocument();
     expect(card).toHaveTextContent(/35\smm · 3,5\smm · hrot · 5 dírek/);
-    expect(card).toHaveTextContent(/Obvod\s*95\scm/);
+    expect(card).toHaveTextContent(/Obvod\s*90\scm/);
 
     await act(() => router.navigate(routes.shopping));
     expect(

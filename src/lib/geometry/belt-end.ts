@@ -49,12 +49,23 @@ export interface BeltEndSpec {
    */
   keeperThicknessMm: number;
   /**
+   * Poutko z téhož řemene se konce ztenčí do klínu (šrafy na listu 1 jsou pak klíny, ne
+   * zdrsněný líc). Chybí = poutko z tenké kůže (výchozí listy v repozitáři).
+   */
+  keeperSkived?: boolean;
+  /**
    * Nejmenší přijatelný můstek kůže mezi otvory a mezi otvorem a hranou.
    * Volba této šablony: jeden průměr otvoru. Ohyb je nejzatíženější místo pásku,
    * takže tenký můstek je právě tam, kde by se pásek utrhl.
    */
   minLigamentMm: number;
 }
+
+/**
+ * Nejsilnější pás, se kterým postup počítá (`BELT_LIMITS.thicknessMm.max`). Poutko z téhož
+ * řemene má jeho tloušťku, proto ho potřebuje i kontrola pravítka (`maxKeeperStripMm`).
+ */
+export const STRAP_MAX_THICKNESS_MM = 4;
 
 export const DEFAULT_BELT_END: BeltEndSpec = {
   beltWidthMm: 40,
@@ -628,7 +639,10 @@ export interface BeltPlateLayout {
   rulerEndXMm: number;
   /** Použitelný rozsah pravítka, tedy kolik mm se na něm dá odečíst. */
   rulerLengthMm: number;
-  /** Nejdelší pásek na poutko, který může být potřeba (nejširší pás, tloušťka 5 mm). */
+  /**
+   * Nejdelší pásek na poutko, který může být potřeba: nejširší pás a delší ze dvou možností,
+   * pás 5 mm s poutkem z tenké kůže, nebo poutko z téhož řemene nejsilnějšího pásu z postupu.
+   */
   maxKeeperStripMm: number;
   /** Vodicí linky: šířka pásu a její odsazení od osy. */
   guides: { beltWidthMm: number; offsetMm: number }[];
@@ -710,11 +724,19 @@ export function beltPlateLayout(
     // Celé milimetry: rysky se kreslí po 1 mm, takže poslední ryska je na
     // floor(konec − počátek) a to je zároveň nejvyšší čitelná hodnota.
     rulerLengthMm: Math.floor(Math.min(plateWidth - m, farX - 4) - plate.rulerX0Mm),
-    maxKeeperStripMm: keeperStripLengthMm({
-      ...end,
-      beltWidthMm: plate.maxBeltWidthMm,
-      beltThicknessMm: plate.maxBeltThicknessMm,
-    }),
+    maxKeeperStripMm: Math.max(
+      keeperStripLengthMm({
+        ...end,
+        beltWidthMm: plate.maxBeltWidthMm,
+        beltThicknessMm: plate.maxBeltThicknessMm,
+      }),
+      keeperStripLengthMm({
+        ...end,
+        beltWidthMm: plate.maxBeltWidthMm,
+        beltThicknessMm: STRAP_MAX_THICKNESS_MM,
+        keeperThicknessMm: STRAP_MAX_THICKNESS_MM,
+      }),
+    ),
     guides: [...plate.guideWidthsMm]
       .sort((a, b) => b - a)
       .map((bw) => ({ beltWidthMm: bw, offsetMm: bw / 2 })),

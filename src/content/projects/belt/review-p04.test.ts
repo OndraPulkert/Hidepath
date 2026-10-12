@@ -44,12 +44,11 @@ describe('pásek – opravy z kontroly p04', () => {
     expect(cp.title).toContain('boky hrotu podél ocelového pravítka');
   });
 
-  it('L4: délka poutka podle skutečné tloušťky odřezku (π × tloušťka), líc pod spojem zdrsnit', () => {
+  it('L4: délka poutka podle skutečné tloušťky poutka (π × tloušťka), líc pod spojem zdrsnit', () => {
     const body = stepOf(4, 'keeper').body;
     expect(body).toContain('π × tloušťka poutka');
-    for (const t of [1.2, 3, 3.5]) {
-      expect(body).toContain(`asi ${Math.round(Math.PI * t)} mm u odřezku ${cz(t)} mm`);
-    }
+    // Tloušťku a délku počítá kalkulačka pod krokem z aktivního pásku, text je nepíše pro každou.
+    expect(stepOf(4, 'keeper').beltCalculator).toBe('keeper');
     // 35 × 3,0 s odřezkem téhož pásu: 112 mm, ne 107.
     expect(keeperStripLengthMm({ ...DEFAULT_BELT_END, beltWidthMm: 35, beltThicknessMm: 3 })).toBe(
       107,
@@ -62,10 +61,11 @@ describe('pásek – opravy z kontroly p04', () => {
         keeperThicknessMm: 3,
       }),
     ).toBe(112);
-    expect(body).toContain('počítá s odřezkem 1,2 mm');
-    expect(body).toContain('zdrsněte');
+    // Poutko z jiné kůže: líc pod přeplátováním zdrsnit; z pásu jsou drsné ztenčené klíny.
+    expect(stepOf(4, 'keeper-glue').body).toContain('Líc pod ním zdrsněte smirkem 180');
+    expect(stepOf(4, 'keeper-glue').body).toContain('nic dalšího nezdrsňujte');
     const hint = stepOf(4, 'keeper').records!.find((r) => r.id)!.hint!;
-    expect(hint).toContain('π × tloušťka poutka');
+    expect(hint).toContain('kalkulačka');
     expect(caption(page('pasek-prezka'), 'Změřte poutko proužkem')).toContain(
       'π × tloušťka poutka',
     );
@@ -215,7 +215,8 @@ describe('pásek – volitelná lekce 7 (ozdobný steh)', () => {
       [
         4,
         '04-buckle-end',
-        'plate-or-sheet,secure,mark,first-pair,oval,keeper,bend,second-pair,screws',
+        // Poutko z téhož řemene (2026-10-12): proužek, hrany, klín, lepení a steh přeplátování.
+        'plate-or-sheet,secure,mark,first-pair,oval,keeper,keeper-edges,keeper-skive,keeper-glue,keeper-stitch,bend,second-pair,screws',
       ],
       [5, '05-fit-and-middle-hole', 'try-on,measure,transfer,length-check'],
       [6, '06-holes-and-tip', 'row,place,mark,punch-holes,cut-tip,finish,try'],

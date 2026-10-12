@@ -297,7 +297,10 @@ export const BELT_RECALL_KEYS = [
   'color',
   'holeDiameter',
   'strapLength',
+  'scrapCut',
   'keeper',
+  'keeperSkive',
+  'keeperBlock',
   'rivet',
   'holes',
   'middleHole',
@@ -360,6 +363,12 @@ export const lessonStepSchema = z.object({
   appLinks: z.array(appLinkSchema).min(1).optional(),
   /** Hodnoty aktivního pásku z „Váš pásek“, které se v kroku hodí (pásek, projekt 04). */
   beltRecalls: z.array(z.enum(BELT_RECALL_KEYS)).min(1).optional(),
+  /**
+   * Kalkulačka pod krokem (pásek, projekt 04): `keeper` = délka poutka z aktivního pásku
+   * a obvodu změřeného proužkem. Obvod je pole zápisníku kroku (`KEEPER_WRAP_FIELD_ID`),
+   * které kalkulačka ukáže místo „Zapište si“.
+   */
+  beltCalculator: z.literal('keeper').optional(),
   /**
    * Hodnoty z formuláře „Listy pro vaši kůži“ (Víčko), které se v kroku hodí. Krok musí mít
    * i odkaz `lid-sheets`, kde se hodnoty mění.

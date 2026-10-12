@@ -442,8 +442,9 @@ describe('plochá destička pro všechny šířky', () => {
 
   it('podélné pravítko pokryje i nejdelší pásek na poutko', () => {
     expect(L.rulerLengthMm).toBeGreaterThanOrEqual(L.maxKeeperStripMm);
-    // 45 × 5 mm, 3 vrstvy: 2 × (45 + 15) + π × 1,2 + 15 ≈ 139 mm; pravítko má 145 mm.
-    expect(L.maxKeeperStripMm).toBe(139);
+    // 45 × 5 mm s poutkem 1,2 mm: 2 × (45 + 15) + π × 1,2 + 15 ≈ 139 mm; poutko z téhož
+    // řemene 45 × 4 mm: 2 × (45 + 12) + π × 4 + 15 ≈ 142 mm. Pravítko má 145 mm.
+    expect(L.maxKeeperStripMm).toBe(142);
     expect(L.rulerLengthMm).toBe(145);
     // Přehnaně velký výřez špičky posune jeho široký konec doleva a pravítko zkrátí.
     const huge = { ...DEFAULT_BELT_PLATE, tipCutoutOversizeMm: 40 };

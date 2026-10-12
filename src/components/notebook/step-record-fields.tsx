@@ -20,9 +20,18 @@ import { typo } from '@/lib/utils/format';
  * se uloží při opuštění pole (nebo Enterem), volba hned po klepnutí; opětovné klepnutí na
  * vybranou možnost ji zruší. Zápisy jsou v zařízení, s účtem se synchronizují.
  */
-export function StepRecordFields({ project, lesson, step }: StepExtrasProps) {
+export function StepRecordFields({
+  project,
+  lesson,
+  step,
+  exclude = [],
+}: StepExtrasProps & {
+  /** Pole, která pod krokem ukazuje jiný doplněk (kalkulačka poutka). */
+  exclude?: readonly string[];
+}) {
   const records = useLessonRecords(project.slug);
-  if (!step.records) return null;
+  const fields = (step.records ?? []).filter((f) => !exclude.includes(f.id));
+  if (fields.length === 0) return null;
   const latest = latestEntriesByField(records.data ?? [], project.slug);
   return (
     <section
@@ -30,7 +39,7 @@ export function StepRecordFields({ project, lesson, step }: StepExtrasProps) {
       className="flex flex-col gap-4 rounded-md border border-line bg-paper p-4"
     >
       <p className="kicker">Zapište si</p>
-      {step.records.map((field) => (
+      {fields.map((field) => (
         <RecordFieldInput
           key={field.id}
           project={project}
@@ -43,14 +52,15 @@ export function StepRecordFields({ project, lesson, step }: StepExtrasProps) {
   );
 }
 
-interface RecordFieldInputProps {
+export interface RecordFieldInputProps {
   project: ProjectDefinition;
   lesson: LessonDefinition;
   field: RecordField;
   entry: LessonRecordEntry | undefined;
 }
 
-function RecordFieldInput(props: RecordFieldInputProps) {
+/** Jedno pole zápisníku (číslo, text, nebo volba); používá ho i kalkulačka poutka. */
+export function RecordFieldInput(props: RecordFieldInputProps) {
   return props.field.kind === 'choice' ? (
     <ChoiceField {...props} field={props.field} />
   ) : (

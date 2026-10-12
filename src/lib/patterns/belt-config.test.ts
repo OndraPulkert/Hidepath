@@ -22,7 +22,17 @@ import {
 } from './belt-config';
 import { beltStitchPlan } from './belt-stitch';
 
-const base: BeltConfigInput = { widthMm: 40, thicknessMm: 3.5, tip: 'hrot' };
+/**
+ * Většina testů hlídá pás samotný (délka, nabídky, dírky): poutko z jiné kůže 1,2 mm, pás se
+ * kvůli němu neprodlužuje. Výchozí poutko z téhož řemene hlídá `describe('… poutko …')`.
+ */
+const base: BeltConfigInput = {
+  widthMm: 40,
+  thicknessMm: 3.5,
+  tip: 'hrot',
+  keeperFromStrap: false,
+};
+const strapKeeper: BeltConfigInput = { widthMm: 40, thicknessMm: 3.5, tip: 'hrot' };
 
 const derive = (input: BeltConfigInput) => {
   const out = deriveBeltConfig(input);
@@ -40,7 +50,7 @@ describe('parametrický pásek – výpočet', () => {
     expect(r.holes.middleFromApexMm).toBe(144.3);
     expect(r.holes.adjustmentMm).toBe(50);
     expect(r.tipLengthMm).toBe(38.5);
-    expect(r.keeper).toEqual({ lengthMm: 120, widthMm: 12 });
+    expect(r.keeper).toMatchObject({ lengthMm: 120, widthMm: 12, fromStrap: false, pieceCm: 0 });
     expect(r.rivet).toMatchObject({ minMm: 5.5, maxMm: 6, postMm: 6 });
     expect(r.rivet.verified).toMatch(/10\/6/);
     expect(r.buckleEnd.rivetHolesFromEndMm).toEqual([16.8, 64.5, 115.5, 163.2]);
@@ -499,5 +509,94 @@ describe('parametrický pásek – ozdobný steh', () => {
       const r = derive(input);
       expect(r.stitch).toEqual(beltStitchPlan(r.end, r.tip, r.shape, r.strap.lengthMm));
     }
+  });
+});
+
+describe('parametrický pásek – poutko z téhož řemene (výchozí)', () => {
+  it('pásek uživatele: 40 × 3,5 mm, obvod 90 cm → pásek 114 cm, poutko 127 mm, pás aspoň 128 cm', () => {
+    const r = derive({ ...strapKeeper, waistMm: 900 });
+    expect(r.strap.lengthMm).toBe(1134.3);
+    expect(r.strap.minLengthCm).toBe(114);
+    expect(r.keeper).toMatchObject({
+      fromStrap: true,
+      thicknessMm: 3.5,
+      lengthMm: 127,
+      widthMm: 12,
+      pieceCm: 14,
+    });
+    expect(r.keeper.skive).toMatchObject({ wedgeMm: 15, midMm: 2.2, jointMaxMm: 4.5 });
+    expect(r.strap.keeperPieceCm).toBe(14);
+    expect(r.strap.neededCm).toBe(128);
+    expect(r.shopping[0]!.detail).toBe(
+      'aspoň 128 cm (pásek 114 cm = obvod + 234,3 mm, poutko 14 cm)',
+    );
+    // Nabídky jsou pro pásek i s poutkem.
+    expect(r.shopping[0]!.offers!.every((o) => o.lengthCm >= 128)).toBe(true);
+    expect(r.warnings.join(' ')).toMatch(/Ztenčení konců poutka .* Ověřte na odřezku/);
+  });
+
+  it('výchozí je poutko z téhož řemene; vypnuté = jiná kůže a pás bez přídavku', () => {
+    expect(derive(strapKeeper).keeper.fromStrap).toBe(true);
+    const other = derive({ ...strapKeeper, waistMm: 900, keeperFromStrap: false });
+    expect(other.keeper).toMatchObject({
+      fromStrap: false,
+      thicknessMm: 1.2,
+      lengthMm: 120,
+      pieceCm: 0,
+    });
+    expect(other.strap.neededCm).toBe(114);
+    expect(other.shopping[0]!.detail).toBe('aspoň 114 cm (obvod + 234,3 mm)');
+    expect(other.warnings.join(' ')).not.toMatch(/Ztenčení konců/);
+  });
+
+  it('list 1 kreslí poutko pro zvolenou tloušťku', () => {
+    expect(derive(strapKeeper).end).toMatchObject({ keeperThicknessMm: 3.5, keeperSkived: true });
+    expect(
+      derive({ ...strapKeeper, keeperFromStrap: false, keeperThicknessMm: 2 }).end,
+    ).toMatchObject({
+      keeperThicknessMm: 2,
+      keeperSkived: false,
+    });
+    const built = beltSheetsFor(strapKeeper);
+    if (!built.ok) throw new Error('listy');
+    expect(built.sheets[0]!.svg).toContain('Poutko — pásek 127 × 12 mm');
+    expect(built.sheets[0]!.svg).toContain('šrafy: klín 15 mm');
+  });
+
+  it('tloušťka poutka z jiné kůže: mez a čtení z formuláře', () => {
+    expect(
+      checkBeltConfig({ ...strapKeeper, keeperFromStrap: false, keeperThicknessMm: 0.3 }),
+    ).toEqual(['Tloušťka poutka z jiné kůže musí být 0,8–4 mm (např. 1,2).']);
+    // S poutkem z pásu se tloušťka jiné kůže nekontroluje (pole je skryté).
+    expect(checkBeltConfig({ ...strapKeeper, keeperThicknessMm: 0.3 })).toEqual([]);
+    expect(DEFAULT_BELT_FORM).toMatchObject({ keeperFromStrap: true, keeperThickness: '1,2' });
+    const on = parseBeltConfigForm({ ...DEFAULT_BELT_FORM, keeperThickness: '2' });
+    expect('input' in on && on.input.keeperFromStrap).toBeUndefined();
+    const off = parseBeltConfigForm({
+      ...DEFAULT_BELT_FORM,
+      keeperFromStrap: false,
+      keeperThickness: '1,4',
+    });
+    expect('input' in off && off.input).toMatchObject({
+      keeperFromStrap: false,
+      keeperThicknessMm: 1.4,
+    });
+    const bad = parseBeltConfigForm({
+      ...DEFAULT_BELT_FORM,
+      keeperFromStrap: false,
+      keeperThickness: 'x',
+    });
+    expect(bad).toEqual({ problems: ['Tloušťku poutka zadejte v mm (např. 1,2).'] });
+    // Zpět na formulář.
+    expect(
+      beltConfigToForm({ ...strapKeeper, keeperFromStrap: false, keeperThicknessMm: 1.4 }, 'pasek'),
+    ).toMatchObject({
+      keeperFromStrap: false,
+      keeperThickness: '1,4',
+    });
+    expect(beltConfigToForm(strapKeeper, 'pasek')).toMatchObject({
+      keeperFromStrap: true,
+      keeperThickness: '1,2',
+    });
   });
 });

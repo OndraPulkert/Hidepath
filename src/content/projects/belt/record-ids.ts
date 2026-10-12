@@ -54,3 +54,10 @@ export const BELT_PLATE_CHECK = { ok: 'ok', deviation: 'deviation' } as const;
  */
 export const LEGACY_BELT_MARKING_ID = 'belt-marking';
 export const LEGACY_BELT_MARKING = { plate: 'plate', sheets: 'sheets' } as const;
+
+/**
+ * Lekce 4, krok `keeper`: obvod 3 vrstev pásu změřený papírovým proužkem, mm. Kalkulačka poutka
+ * ho použije místo spočítaného obvodu. (Dřív se zapisovala hotová délka poutka `belt-keeper-length`;
+ * tu teď počítá kalkulačka.)
+ */
+export const KEEPER_WRAP_FIELD_ID = 'belt-keeper-wrap';

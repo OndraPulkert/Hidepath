@@ -21,8 +21,8 @@ import {
   checkBeltTipSpec,
   foldedSlotOpeningMm,
   holeOffsetsFromApexMm,
-  keeperStripLengthMm,
   middleHoleIndex,
+  STRAP_MAX_THICKNESS_MM,
   rivetPostRangeMm,
   tipShapeLengthMm,
   totalStrapLengthMm,
@@ -35,6 +35,13 @@ import {
   cz,
   tipSheetOrientation,
 } from './belt-sheets';
+import {
+  KEEPER_OTHER_LEATHER_MM,
+  KEEPER_THICKNESS_LIMITS,
+  type KeeperCalculation,
+  keeperCalculation,
+  keeperThicknessFor,
+} from './belt-keeper';
 import { type BeltStitchPlan, beltStitchPlan } from './belt-stitch';
 import {
   EDGE_PAINT_URLS,
@@ -79,6 +86,15 @@ export interface BeltConfigInput {
   holeDiameterMm?: number | undefined;
   /** Barva pásu; chybí = přírodní (starší uložené pásky barvu nemají). */
   color?: StrapColor | undefined;
+  /**
+   * Poutko z téhož řemene: proužek 12 mm uříznutý podélně ze zbytku pásu, tloušťka poutka =
+   * tloušťka pásu a pás je o kus na poutko delší. Chybí = ano (výchozí volba).
+   */
+  keeperFromStrap?: boolean | undefined;
+  /**
+   * Tloušťka poutka z jiné kůže, mm; platí jen s `keeperFromStrap: false`. Chybí = 1,2 mm.
+   */
+  keeperThicknessMm?: number | undefined;
 }
 
 /**
@@ -88,7 +104,7 @@ export interface BeltConfigInput {
 export const BELT_LIMITS = {
   widthMm: { min: 28, max: 45 },
   /** Pás z postupu (krok 3); změřená hodnota se nezaokrouhluje, dřík se počítá z ní. */
-  thicknessMm: { min: 3, max: 4 },
+  thicknessMm: { min: 3, max: STRAP_MAX_THICKNESS_MM },
   waistMm: { min: 600, max: 1500 },
   holeCounts: [3, 5, 7] as const,
   /** Dolní mez rozteče počítá model (Ø + můstek), tady jen pojistka proti překlepu. */
@@ -97,6 +113,8 @@ export const BELT_LIMITS = {
   apexToFirstHoleMaxMm: 100,
   /** 4,5 mm CraftPoint, 5 mm postup, 6 mm výsečník na nýty. */
   holeDiameterMm: { min: 4.5, max: 6, step: 0.5 },
+  /** Poutko z jiné kůže; jen pojistka proti překlepu. */
+  keeperThicknessMm: KEEPER_THICKNESS_LIMITS,
 } as const;
 
 /** Výchozí hodnoty z podkladů: 5 dírek po 25 mm, Ø 5 mm (postup a `DEFAULT_BELT_TIP`). */
@@ -137,8 +155,15 @@ export function effectiveApexToFirstHoleMm(input: BeltConfigInput): number {
 
 /** Specifikace modelu pro zadání. Konec u přezky je pevný (BFLG), mění se šířka a tloušťka. */
 export function beltSpecsFor(input: BeltConfigInput): { end: BeltEndSpec; tip: BeltTipSpec } {
+  const keeperFromStrap = input.keeperFromStrap !== false;
   return {
-    end: { ...DEFAULT_BELT_END, beltWidthMm: input.widthMm, beltThicknessMm: input.thicknessMm },
+    end: {
+      ...DEFAULT_BELT_END,
+      beltWidthMm: input.widthMm,
+      beltThicknessMm: input.thicknessMm,
+      keeperThicknessMm: keeperThicknessFor(keeperInputOf(input)),
+      keeperSkived: keeperFromStrap,
+    },
     tip: {
       ...DEFAULT_BELT_TIP,
       beltWidthMm: input.widthMm,
@@ -147,6 +172,16 @@ export function beltSpecsFor(input: BeltConfigInput): { end: BeltEndSpec; tip: B
       holeDiameterMm: input.holeDiameterMm ?? DEFAULT_HOLE_DIAMETER_MM,
       apexToFirstHoleMm: effectiveApexToFirstHoleMm(input),
     },
+  };
+}
+
+/** Zadání poutka pro `keeperCalculation` (šířka a tloušťka pásu, volba poutka). */
+export function keeperInputOf(input: BeltConfigInput) {
+  return {
+    beltWidthMm: input.widthMm,
+    beltThicknessMm: input.thicknessMm,
+    fromStrap: input.keeperFromStrap !== false,
+    otherThicknessMm: input.keeperThicknessMm,
   };
 }
 
@@ -200,6 +235,15 @@ export function checkBeltConfig(input: BeltConfigInput): string[] {
     !onStep(d, L.holeDiameterMm.step)
   ) {
     problems.push('Ø dírky musí být 4,5, 5,0, 5,5 nebo 6,0 mm.');
+  }
+  if (input.keeperFromStrap === false && input.keeperThicknessMm !== undefined) {
+    const k = input.keeperThicknessMm;
+    const lim = L.keeperThicknessMm;
+    if (!Number.isFinite(k) || k < lim.min - EPS || k > lim.max + EPS) {
+      problems.push(
+        `Tloušťka poutka z jiné kůže musí být ${cz(lim.min)}–${cz(lim.max)} mm (např. ${cz(KEEPER_OTHER_LEATHER_MM)}).`,
+      );
+    }
   }
   const apex = effectiveApexToFirstHoleMm(input);
   if (!(apex > 0) || apex > L.apexToFirstHoleMaxMm + EPS) {
@@ -521,8 +565,12 @@ export interface BeltConfigResult {
     lengthMm: number | null;
     /** Co se k obvodu přičítá (výchozí 234,3 mm). */
     allowanceMm: number;
-    /** Nejkratší celé cm, které stačí; `null` bez obvodu. */
+    /** Nejkratší celé cm, které stačí na pásek; `null` bez obvodu. */
     minLengthCm: number | null;
+    /** Kus pásu na poutko z téhož řemene, cm (u poutka z jiné kůže 0). */
+    keeperPieceCm: number;
+    /** Pásek + kus na poutko, cm: kolik pás musí mít (bez odřezku na trénink); `null` bez obvodu. */
+    neededCm: number | null;
   };
   /** Délka tvarovaného konce: hrot, nebo poloměr půlkruhu. */
   tipLengthMm: number;
@@ -537,7 +585,11 @@ export interface BeltConfigResult {
     /** ± kolik jde pásek povolit nebo utáhnout. */
     adjustmentMm: number;
   };
-  keeper: { lengthMm: number; widthMm: number };
+  /**
+   * Poutko: proužek `widthMm` × `lengthMm`, z téhož řemene (`fromStrap`, pak `pieceCm` = kus pásu
+   * na poutko a `skive` = klín na koncích), nebo z jiné kůže tloušťky `thicknessMm`.
+   */
+  keeper: KeeperCalculation;
   rivet: ReturnType<typeof rivetPostMm>;
   buckleEnd: {
     /** Ovál pro trn: délka × šířka; ohyb ho půlí. */
@@ -628,7 +680,8 @@ export function deriveBeltConfig(input: BeltConfigInput): BeltConfigOutcome {
   const buckles = verifiedBuckles(input.widthMm);
   const buckleVerified = buckles.length > 0;
   const orientation = tipSheetOrientation(tip);
-  const keeper = { lengthMm: keeperStripLengthMm(end), widthMm: end.keeperWidthMm };
+  const keeper = keeperCalculation(keeperInputOf(input), end);
+  const neededCm = minLengthCm === null ? null : minLengthCm + keeper.pieceCm;
 
   const warnings: string[] = [];
   if (tip.holeCount !== DEFAULT_BELT_TIP.holeCount) {
@@ -651,6 +704,11 @@ export function deriveBeltConfig(input: BeltConfigInput): BeltConfigOutcome {
     warnings.push('Zaoblený konec je spočítaný, ne vyzkoušený. Ověřte na odřezku.');
   }
   warnings.push('Délka poutka je spočítaná, ne vyzkoušená. Ověřte na odřezku.');
+  if (keeper.fromStrap) {
+    warnings.push(
+      'Ztenčení konců poutka do klínu a steh přeplátování nikdo zatím nevyzkoušel. Ověřte na odřezku.',
+    );
+  }
   const color: StrapColor = input.color ?? 'prirodni';
   const dyed = isDyedStrap(color);
   const colorLabel = STRAP_COLOR_LABELS[color];
@@ -661,7 +719,7 @@ export function deriveBeltConfig(input: BeltConfigInput): BeltConfigOutcome {
   }
 
   const shopping: BeltShoppingLine[] = [];
-  const offers = strapOffers(input.widthMm, input.thicknessMm, minLengthCm, color);
+  const offers = strapOffers(input.widthMm, input.thicknessMm, neededCm, color);
   const defaultOffer = defaultStrapOffer(offers);
   shopping.push({
     item: dyed
@@ -670,8 +728,10 @@ export function deriveBeltConfig(input: BeltConfigInput): BeltConfigOutcome {
     quantity: 1,
     detail:
       minLengthCm === null
-        ? `délka = obvod + ${cz(allowanceMm)} mm (zadejte obvod)`
-        : `aspoň ${minLengthCm} cm (obvod + ${cz(allowanceMm)} mm)`,
+        ? `délka = obvod + ${cz(allowanceMm)} mm${keeper.fromStrap ? ` + ${keeper.pieceCm} cm na poutko` : ''} (zadejte obvod)`
+        : keeper.fromStrap
+          ? `aspoň ${neededCm} cm (pásek ${minLengthCm} cm = obvod + ${cz(allowanceMm)} mm, poutko ${keeper.pieceCm} cm)`
+          : `aspoň ${minLengthCm} cm (obvod + ${cz(allowanceMm)} mm)`,
     status: defaultOffer ? 'overeno' : 'overte',
     offers,
     defaultOffer,
@@ -732,7 +792,7 @@ export function deriveBeltConfig(input: BeltConfigInput): BeltConfigOutcome {
       end,
       tip,
       label: beltConfigLabel(input),
-      strap: { lengthMm, allowanceMm, minLengthCm },
+      strap: { lengthMm, allowanceMm, minLengthCm, keeperPieceCm: keeper.pieceCm, neededCm },
       tipLengthMm: r1(tipShapeLengthMm(tip, shape)),
       holes: {
         count: tip.holeCount,
@@ -807,6 +867,10 @@ export interface BeltConfigForm {
   holeDiameter: string;
   /** Barva pásu; `''` = barevný, ale barva ještě nevybraná. */
   color: StrapColor | '';
+  /** Poutko z téhož řemene (výchozí). */
+  keeperFromStrap: boolean;
+  /** mm; tloušťka poutka z jiné kůže (jen bez `keeperFromStrap`), prázdné = 1,2 */
+  keeperThickness: string;
 }
 
 export const DEFAULT_BELT_FORM: BeltConfigForm = {
@@ -820,6 +884,8 @@ export const DEFAULT_BELT_FORM: BeltConfigForm = {
   apexToFirst: '',
   holeDiameter: '',
   color: 'prirodni',
+  keeperFromStrap: true,
+  keeperThickness: cz(KEEPER_OTHER_LEATHER_MM),
 };
 
 /** Číslo z pole formuláře (čárka i tečka); `undefined`, když to číslo není. */
@@ -856,6 +922,9 @@ export function parseBeltConfigForm(
   const holeSpacingMm = optional(form.holeSpacing, 'Rozteč zadejte v mm (např. 25).');
   const apexToFirstHoleMm = optional(form.apexToFirst, 'Odstup zadejte v mm (např. 94,3).');
   const holeDiameterMm = optional(form.holeDiameter, 'Ø dírky zadejte v mm (např. 5).');
+  const keeperThicknessMm = form.keeperFromStrap
+    ? undefined
+    : optional(form.keeperThickness, 'Tloušťku poutka zadejte v mm (např. 1,2).');
   if (form.color === '') problems.push('Vyberte barvu pásu.');
   if (problems.length > 0 || widthMm === undefined || thicknessMm === undefined) {
     return { problems };
@@ -871,6 +940,12 @@ export function parseBeltConfigForm(
       apexToFirstHoleMm,
       holeDiameterMm,
       color: form.color === '' || form.color === 'prirodni' ? undefined : form.color,
+      ...(form.keeperFromStrap
+        ? {}
+        : {
+            keeperFromStrap: false,
+            ...(keeperThicknessMm !== undefined ? { keeperThicknessMm } : {}),
+          }),
     },
   };
 }
@@ -889,5 +964,7 @@ export function beltConfigToForm(input: BeltConfigInput, waistSource: WaistSourc
     apexToFirst: num(input.apexToFirstHoleMm),
     holeDiameter: num(input.holeDiameterMm),
     color: input.color ?? 'prirodni',
+    keeperFromStrap: input.keeperFromStrap !== false,
+    keeperThickness: cz(input.keeperThicknessMm ?? KEEPER_OTHER_LEATHER_MM),
   };
 }

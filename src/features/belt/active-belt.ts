@@ -6,7 +6,14 @@ import {
   legacyBeltOffer,
   newerLegacyPrefill,
 } from '@/features/belt/belt-prefill';
-import { SCRAP_ALLOWANCE_CM } from '@/features/belt/belt-purchase';
+import {
+  beltPurchase,
+  scrapCheckStrapCm,
+  scrapCutCheck,
+  scrapCutText,
+  strapLengthPlan,
+  strapLengthText,
+} from '@/features/belt/belt-purchase';
 import {
   type SavedBelt,
   type SavedBeltExtras,
@@ -24,6 +31,7 @@ import {
   type WaistSource,
   deriveBeltConfig,
 } from '@/lib/patterns/belt-config';
+import { keeperBlockText, keeperSkiveText, keeperStripText } from '@/lib/patterns/belt-keeper';
 import { THREAD_SPOOL_M } from '@/lib/patterns/belt-stitch';
 import { STRAP_COLOR_LABELS } from '@/lib/patterns/belt-strap-offers';
 
@@ -159,18 +167,42 @@ export function beltFact(
       return { key, label: 'Ø dírek pro trn', value: `${mm(d)}${prong}` };
     }
     case 'strapLength': {
-      const min = result?.strap.minLengthCm ?? null;
-      const scrap = active.scrapFromStrap ? ` + ${SCRAP_ALLOWANCE_CM} cm na odřezek` : '';
-      return { key, label: 'Pás', value: min === null ? null : `aspoň ${min} cm${scrap}` };
+      if (!result) return { key, label: 'Pás', value: null };
+      const plan = strapLengthPlan(result, { scrapFromStrap: active.scrapFromStrap === true });
+      return { key, label: 'Pás', value: plan.beltCm === null ? null : strapLengthText(plan) };
     }
-    case 'keeper':
+    case 'scrapCut': {
+      if (!result) return { key, label: 'Odřezek z pásu', value: null };
+      const purchase = beltPurchase(result, { scrapFromStrap: active.scrapFromStrap === true });
+      const check = scrapCutCheck(result, scrapCheckStrapCm(purchase));
+      return { key, label: 'Odřezek z pásu', value: check ? scrapCutText(check) : null };
+    }
+    case 'keeper': {
+      const k = result?.keeper;
       return {
         key,
         label: 'Poutko',
-        value: result
-          ? `${formatDecimal(result.keeper.lengthMm)} × ${mm(result.keeper.widthMm)}`
+        value: k
+          ? `${keeperStripText(k)}, ${k.fromStrap ? `z téhož řemene (${mm(k.thicknessMm)}), kus ${k.pieceCm} cm` : `z jiné kůže ${mm(k.thicknessMm)}`}`
           : null,
       };
+    }
+    case 'keeperSkive': {
+      const k = result?.keeper;
+      return {
+        key,
+        label: 'Konce poutka',
+        value: k
+          ? k.skive
+            ? keeperSkiveText(k.skive)
+            : `poutko z jiné kůže ${mm(k.thicknessMm)}: neztenčujte, krok vynechte`
+          : null,
+      };
+    }
+    case 'keeperBlock': {
+      const k = result?.keeper;
+      return { key, label: 'Špalík do poutka', value: k ? keeperBlockText(k) : null };
+    }
     case 'rivet': {
       if (!result) return { key, label: 'Šrouby chicago', value: null };
       const { rivet } = result;

@@ -73,7 +73,18 @@ describe('obsah – pásek', () => {
 
 describe('obsah – pásek: čísla jsou příklad z modelu', () => {
   it('příklad 40 × 3,5 mm odpovídá výpočtu „Váš pásek“', () => {
-    expect(example.keeper).toEqual({ lengthMm: 120, widthMm: 12 });
+    // Výchozí poutko z téhož řemene: 12 × 127 mm, kus pásu 14 cm.
+    expect(example.keeper).toMatchObject({
+      lengthMm: 127,
+      widthMm: 12,
+      fromStrap: true,
+      pieceCm: 14,
+    });
+    expect(lessonText(4)).toContain(`např. ${example.keeper.pieceCm} cm`);
+    expect(lessonText(4)).toContain(
+      `u ${cz(3.5)} mm v polovině klínu asi ${cz(example.keeper.skive!.midMm)} mm`,
+    );
+    expect(lessonText(4)).toContain(`(u 3,5 mm asi ${cz(example.keeper.skive!.jointMaxMm)} mm)`);
     expect(lessonText(4)).toContain(`např. ${example.keeper.lengthMm} mm pro 40 × 3,5 mm`);
     expect(lessonText(4)).toContain(`proužek ${example.keeper.widthMm} mm`);
     expect(lessonText(5)).toContain(`např. ${cz(example.holes.middleFromApexMm)} mm`);
@@ -107,6 +118,21 @@ describe('obsah – pásek: čísla jsou příklad z modelu', () => {
     expect(at(106.5)).toBe(130);
     expect(at(106.6)).toBe(131);
     expect(step(1, 'order').body).toContain('pás 130 cm stačí do obvodu 106,5 cm');
+    // S poutkem z téhož řemene (výchozí) je pás o kus na poutko delší: 130 cm do 92,5 cm.
+    const needed = (waistCm: number) => {
+      const r = deriveBeltConfig({
+        widthMm: 40,
+        thicknessMm: 3.5,
+        tip: 'hrot',
+        waistMm: waistCm * 10,
+      });
+      return r.ok ? r.result.strap.neededCm : null;
+    };
+    expect(needed(92.5)).toBe(130);
+    expect(needed(92.6)).toBe(131);
+    expect(step(1, 'order').body).toContain(
+      'u 40 × 3,5 mm o 14 cm, pás 130 cm pak stačí do obvodu 92,5 cm',
+    );
   });
 
   it('lekce nepíšou čísla 40 mm bez „např.“ (kromě pevného konce u přezky)', () => {
@@ -134,7 +160,7 @@ describe('obsah – pásek: zápisník, „Připravte si“ a destička', () => 
       'scrap-bend',
       'scrap-bend-stain',
       'scrap-screw',
-      'belt-keeper-length',
+      'belt-keeper-wrap',
       'belt-fit-waist',
       'belt-fit-result',
       'belt-stitch-line',
@@ -149,9 +175,14 @@ describe('obsah – pásek: zápisník, „Připravte si“ a destička', () => 
   it('kroky, které potřebují čísla pásku, je berou z aktivního pásku', () => {
     expect(step(1, 'your-belt').beltRecalls).toEqual(['waist', 'width', 'tip', 'color']);
     expect(step(1, 'check-numbers').beltRecalls).toEqual(['thickness', 'holeDiameter', 'rivet']);
-    expect(step(2, 'get-scrap').beltRecalls).toEqual(['strapLength']);
+    expect(step(2, 'get-scrap').beltRecalls).toEqual(['strapLength', 'scrapCut']);
     expect(step(2, 'try-edge-paint').beltRecalls).toEqual(['color']);
-    expect(step(4, 'keeper').beltRecalls).toEqual(['keeper']);
+    // Pod krokem je jen kalkulačka: řádek „Poutko“ by se se změřeným obvodem rozcházel.
+    expect(step(4, 'keeper').beltRecalls).toBeUndefined();
+    expect(step(4, 'keeper').beltCalculator).toBe('keeper');
+    expect(step(4, 'keeper-glue').beltRecalls).toEqual(['keeperBlock']);
+    expect(step(4, 'keeper-stitch').beltRecalls).toEqual(['keeperBlock']);
+    expect(step(4, 'keeper-skive').beltRecalls).toEqual(['thickness', 'keeperSkive']);
     expect(step(4, 'screws').beltRecalls).toEqual(['thickness', 'rivet']);
     expect(step(5, 'measure').beltRecalls).toEqual(['waist']);
     expect(step(5, 'length-check').beltRecalls).toEqual(['middleHole']);
@@ -244,12 +275,20 @@ describe('obsah – pásek: zápisník, „Připravte si“ a destička', () => 
   });
 
   it('lepení poutka má časovač podle návodu lepidla', () => {
-    expect(step(4, 'keeper').waits).toEqual([
-      // Hrany poutka u barevného pásku: barva podle zápisu z lekce 2.
+    // Hrany poutka u barevného pásku: barva podle zápisu z lekce 2.
+    expect(step(4, 'keeper-edges').waits).toEqual([
       expect.objectContaining({ id: 'edge-paint-dry', initialFromField: 'edge-paint-dry-minutes' }),
-      expect.objectContaining({ minutes: 10, maxMinutes: 15, basis: 'manufacturer' }),
     ]);
-    expect(step(4, 'keeper').body).toContain('podle návodu na obalu');
+    // Zavadnutí před spojením a zaschnutí před prosekáním stehu (čerstvý spoj by vidlička rozrazila).
+    expect(step(4, 'keeper-glue').waits).toEqual([
+      expect.objectContaining({ minutes: 10, maxMinutes: 15, basis: 'manufacturer' }),
+      expect.objectContaining({
+        id: 'keeper-glue-dry',
+        basis: 'manufacturer',
+        blocksStepId: 'keeper-stitch',
+      }),
+    ]);
+    expect(step(4, 'keeper-glue').body).toContain('podle návodu na obalu');
   });
 });
 
@@ -294,8 +333,26 @@ describe('obsah – pásek: nákup', () => {
     for (const color of STRAP_COLORS) {
       for (let widthMm = 28; widthMm <= 45; widthMm++) {
         for (const thicknessMm of [3, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.75, 3.8, 3.9, 4]) {
-          for (const waistMm of [900, 1000, 1070, 1150, 1250, 1450]) {
-            const r = deriveBeltConfig({ widthMm, thicknessMm, tip: 'hrot', waistMm, color });
+          for (const [waistMm, keeperFromStrap] of [
+            [900, true],
+            [1000, true],
+            [1070, true],
+            [1150, true],
+            [1250, true],
+            [1450, true],
+            // Poutko z jiné kůže: pás bez přídavku, i nejkratší pásy (125 cm).
+            [900, false],
+            [1000, false],
+            [1070, false],
+          ] as const) {
+            const r = deriveBeltConfig({
+              widthMm,
+              thicknessMm,
+              tip: 'hrot',
+              waistMm,
+              color,
+              keeperFromStrap,
+            });
             expect(r.ok).toBe(true);
             if (!r.ok) continue;
             for (const o of r.result.shopping[0]!.offers!) {
@@ -560,7 +617,7 @@ describe('pásek – vpichy jen tam, kde zmizí (2026-10-09)', () => {
     expect(step(4, 'screws').body).not.toContain('ignorujte');
     expect(step(3, 'mark-30').body).toContain('na rub kousek papírové pásky');
     expect(step(3, 'balm').body).toContain('do ztracena');
-    expect(step(4, 'keeper').body).toContain('Hranici 15 mm na kůži neznačte');
+    expect(step(4, 'keeper-glue').body).toContain('Hranici 15 mm na kůži neznačte');
   });
 });
 

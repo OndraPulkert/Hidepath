@@ -363,7 +363,7 @@ add('A','Pár stehů a kontrola','Ušijte pár stehů nití 60 cm jako v projekt
 },{v:'LÍC',sub:'odřezek'});
 
 // B1 — rozložit konec u přezky
-add('B','Rozšroubujte konec a sundejte poutko','Hlavičku nýtu na líci přidržte palcem a šroubek z druhé strany povolte plochým šroubovákem. Protáčí-li se hlavička, chyťte ji kleštěmi přes hadřík, ať se líc nepoškrábe. Drží-li zajišťovač nebo lak, povolujte pomalu větší silou, nebo podle návodu na obalu zajišťovače. Přezku sundejte a konec rozložte. Poutko stáhněte z konce u přezky. Šijete jen jednu vrstvu: přes ohyb ani přes obě vrstvy se nešije, jinak by nýty nešly povolit.',13000,t=>{
+add('B','Rozšroubujte konec a sundejte poutko','Hlavičku nýtu na líci přidržte palcem a šroubek z druhé strany povolte plochým šroubovákem. Protáčí-li se hlavička, chyťte ji kleštěmi přes hadřík, ať se líc nepoškrábe. Drží-li zajišťovač nebo lak, povolujte pomalu větší silou, nebo podle návodu na obalu zajišťovače. Přezku sundejte a konec rozložte. Poutko stáhněte z konce u přezky; jeho přeplátování (prošité, pokud jste ho v lekci 4 prošili) nechte, jak je. Šijete jen jednu vrstvu: přes ohyb ani přes obě vrstvy se nešije, jinak by nýty nešly povolit.',13000,t=>{
   const c=CAM_END;let s=boardBg();
   const so=1-seg(t,.18,.26), sx=L(-1,1,es(t,.42,.66)), bo=1-seg(t,.3,.38), kx=L(KEEP,-40,es(t,.7,.86)), ko=1-seg(t,.84,.9);
   s+=withCam(c,()=>{let w=buckle(TAIL,-L(0,40,seg(t,.3,.38)),bo)+buckleEnd({sx,foldLine:seg(t,.66,.72)*(1-seg(t,.9,.96))});

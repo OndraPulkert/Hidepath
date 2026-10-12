@@ -91,7 +91,14 @@ describe('nákup podle pásku', () => {
   });
 
   it('odřezek z téhož pásu: pás o 15 cm delší, nejbližší délka, kterou obchod prodává', () => {
-    const input = { widthMm: 40, thicknessMm: 3.5, tip: 'hrot', waistMm: 950 } as const;
+    // Poutko z jiné kůže: tady jde jen o odřezek (poutko z pásu hlídá další test).
+    const input = {
+      widthMm: 40,
+      thicknessMm: 3.5,
+      tip: 'hrot',
+      waistMm: 950,
+      keeperFromStrap: false,
+    } as const;
     const plain = prepPlan([saved('Bez', input)]);
     expect(lineOf(plain.plan, 'belt-strap')[0]!.purpose).toMatch(/aspoň 119 cm$/);
     const withScrap = prepPlan([
@@ -109,6 +116,35 @@ describe('nákup podle pásku', () => {
     ).toMatch(/134 cm/);
   });
 
+  it('poutko z téhož pásu (výchozí): pás o kus na poutko delší, obojí s odřezkem', () => {
+    // Pásek uživatele: modrý 40 × 3,5 mm, obvod 90 cm → 114 cm + 14 cm na poutko.
+    const input = {
+      widthMm: 40,
+      thicknessMm: 3.5,
+      tip: 'hrot',
+      waistMm: 900,
+      color: 'modra',
+    } as const;
+    const out = prepPlan([saved('Modrý', input)]);
+    expect(lineOf(out.plan, 'belt-strap')[0]!.purpose).toMatch(
+      /aspoň 114 cm \+ 14 cm na poutko = 128 cm/,
+    );
+    expect(lineOf(out.plan, 'belt-strap')[0]!.url).toBe(
+      'https://andexnite.cz/produkt/hovezi-kuze-na-opasek-modra-130-cm-3-5-3-7-mm/',
+    );
+    const withScrap = prepPlan([
+      entry(
+        newSavedBeltFieldId(),
+        serializeSavedBelt('S', input, 'pasek', { scrapFromStrap: true }),
+      ),
+    ]);
+    const strap = lineOf(withScrap.plan, 'belt-strap');
+    expect(
+      strap[0]?.purpose ??
+        withScrap.plan.skipped.find((x) => x.equipmentSlug === 'belt-strap')!.reason,
+    ).toMatch(/143 cm/);
+  });
+
   it('bez uloženého pásku čísla ze starých zápisů lekce 1 (převod)', () => {
     const basis = beltPlanBasis([entry(BELT_RECORD_IDS.width, 35)], SLUG);
     expect(basis).toMatchObject({ name: LEGACY_BELT_NAME, source: 'notebook' });
@@ -117,7 +153,13 @@ describe('nákup podle pásku', () => {
 
   it('35 mm × 3,5 mm: pás ve variantě 35 mm, mosazná přezka 35 mm, nýt 10/6 černý nikl', () => {
     const out = prepPlan([
-      saved('Hnědý', { widthMm: 35, thicknessMm: 3.5, tip: 'hrot', waistMm: 950 }),
+      saved('Hnědý', {
+        widthMm: 35,
+        thicknessMm: 3.5,
+        tip: 'hrot',
+        waistMm: 950,
+        keeperFromStrap: false,
+      }),
     ]);
     expect(out.basis).toBe('podle pásku: Hnědý (35 mm · 3,5 mm · hrot · 5 dírek)');
     expect(lineOf(out.plan, 'belt-strap')).toEqual([
@@ -168,7 +210,13 @@ describe('nákup podle pásku', () => {
 
   it('4 mm, 40 mm, obvod 110 cm: Leatory v délce 140 cm', () => {
     const out = prepPlan([
-      saved('Silný', { widthMm: 40, thicknessMm: 4, tip: 'hrot', waistMm: 1100 }),
+      saved('Silný', {
+        widthMm: 40,
+        thicknessMm: 4,
+        tip: 'hrot',
+        waistMm: 1100,
+        keeperFromStrap: false,
+      }),
     ]);
     expect(lineOf(out.plan, 'belt-strap')).toEqual([
       expect.objectContaining({ variant: '40 mm, 140 cm' }),
@@ -343,7 +391,14 @@ describe('nákup podle barvy pásku', () => {
 
   it('černý: černý pás, Edge Kote černá hned za balzámem, balzám jen když na odřezku vyhoví', () => {
     const out = prepPlan([
-      saved('Černý', { widthMm: 40, thicknessMm: 3.5, tip: 'hrot', waistMm: 950, color: 'cerna' }),
+      saved('Černý', {
+        widthMm: 40,
+        thicknessMm: 3.5,
+        tip: 'hrot',
+        waistMm: 950,
+        color: 'cerna',
+        keeperFromStrap: false,
+      }),
     ]);
     expect(out.basis).toBe('podle pásku: Černý (40 mm · 3,5 mm · hrot · 5 dírek · černá)');
     expect(lineOf(out.plan, 'belt-strap')).toEqual([

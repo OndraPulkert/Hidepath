@@ -17,6 +17,7 @@ import {
   strapOffers,
   strapOfferCaveat,
 } from '@/lib/patterns/belt-strap-offers';
+import { type KeeperCalculation, keeperStripText } from '@/lib/patterns/belt-keeper';
 import { formatCzk } from '@/lib/utils/format';
 
 /**
@@ -31,14 +32,160 @@ import { formatCzk } from '@/lib/utils/format';
  */
 export const SCRAP_ALLOWANCE_CM = 15;
 
+/** Délky hotových pásů, které obchody prodávají nejčastěji (130 cm, Andexnite i 140 cm). */
+export const COMMON_STRAP_LENGTHS_CM = [130, 140] as const;
+
+/**
+ * Z čeho se skládá délka pásu: pásek, kus na poutko z téhož řemene a odřezek na trénink.
+ * Obojí navíc se přičítá; `null` bez obvodu.
+ */
+export interface StrapLengthPlan {
+  beltCm: number | null;
+  /** Kus na poutko z téhož řemene (0 = poutko z jiné kůže). */
+  keeperCm: number;
+  /** Odřezek na trénink z téhož řemene (0 = samostatný odřezek). */
+  scrapCm: number;
+  /** Pásek + poutko. */
+  beltAndKeeperCm: number | null;
+  /** Pásek + poutko + odřezek: kolik pás musí mít. */
+  neededCm: number | null;
+}
+
+export function strapLengthPlan(
+  result: BeltConfigResult,
+  { scrapFromStrap = false }: { scrapFromStrap?: boolean } = {},
+): StrapLengthPlan {
+  const beltCm = result.strap.minLengthCm;
+  const keeperCm = result.strap.keeperPieceCm;
+  const scrapCm = scrapFromStrap ? SCRAP_ALLOWANCE_CM : 0;
+  return {
+    beltCm,
+    keeperCm,
+    scrapCm,
+    beltAndKeeperCm: beltCm === null ? null : beltCm + keeperCm,
+    neededCm: beltCm === null ? null : beltCm + keeperCm + scrapCm,
+  };
+}
+
+/** Nejkratší běžná délka pásu (130 / 140 cm), která pokryje `cm`; `null`, když žádná. */
+export function shortestCommonStrapCm(cm: number): number | null {
+  return COMMON_STRAP_LENGTHS_CM.find((len) => cm <= len) ?? null;
+}
+
+/** „pás 130 cm nestačí“ / „pás 130 ani 140 cm nestačí“; `null`, když stačí 130 cm. */
+function shortStrapText(cm: number): string | null {
+  const [short, long] = COMMON_STRAP_LENGTHS_CM;
+  if (cm <= short) return null;
+  return cm <= long
+    ? `pás ${short} cm nestačí, ${long} cm ano`
+    : `pás ${short} ani ${long} cm nestačí`;
+}
+
+/**
+ * Varování, když běžný pás 130 / 140 cm nepokryje pásek s poutkem z téhož řemene, nebo
+ * k tomu odřezek na trénink. Jen když se k pásku něco přičítá (poutko nebo odřezek).
+ */
+export function strapLengthWarnings(plan: StrapLengthPlan): string[] {
+  const { beltCm, beltAndKeeperCm, neededCm } = plan;
+  if (beltCm === null || beltAndKeeperCm === null || neededCm === null) return [];
+  const warnings: string[] = [];
+  if (plan.keeperCm > 0) {
+    const short = shortStrapText(beltAndKeeperCm);
+    if (short) {
+      warnings.push(
+        `Pásek ${beltCm} cm a poutko ${plan.keeperCm} cm potřebují ${beltAndKeeperCm} cm: ${short}.` +
+          (beltAndKeeperCm > COMMON_STRAP_LENGTHS_CM[1]
+            ? ' Kupte delší pás, nebo poutko udělejte z jiné kůže (vypněte „Poutko z téhož řemene“).'
+            : ''),
+      );
+    }
+  }
+  if (plan.scrapCm > 0) {
+    const short = shortStrapText(neededCm);
+    if (short) {
+      const without = shortestCommonStrapCm(beltAndKeeperCm);
+      const what = plan.keeperCm > 0 ? 'pásek a poutko' : 'pásek';
+      warnings.push(
+        `S odřezkem na trénink ${plan.scrapCm} cm potřebujete ${neededCm} cm: ${short}.` +
+          (neededCm > COMMON_STRAP_LENGTHS_CM[1]
+            ? without !== null
+              ? ` Trénujte na samostatném odřezku (vypněte trénink na odřezku téhož řemene): na ${what} stačí pás ${without} cm.`
+              : ' Trénujte na samostatném odřezku, nebo kupte delší pás.'
+            : ''),
+      );
+    }
+  }
+  return warnings;
+}
+
+/**
+ * Lekce 2: smí se odřezek na trénink uříznout z konce pásu? Zbytek = pás − pásek − poutko
+ * z téhož řemene; na odřezek musí zbýt aspoň 15 cm. `strapCm` = délka pásu, který máte
+ * (`scrapCheckStrapCm`); `null` bez obvodu nebo bez délky pásu.
+ */
+export interface ScrapCutCheck {
+  strapCm: number;
+  beltCm: number;
+  keeperCm: number;
+  leftoverCm: number;
+  /** Zbude aspoň 15 cm. */
+  canCut: boolean;
+}
+
+export function scrapCutCheck(
+  result: BeltConfigResult,
+  strapCm: number | null,
+): ScrapCutCheck | null {
+  const plan = strapLengthPlan(result);
+  if (plan.beltCm === null || plan.beltAndKeeperCm === null || strapCm === null) return null;
+  const leftoverCm = strapCm - plan.beltAndKeeperCm;
+  return {
+    strapCm,
+    beltCm: plan.beltCm,
+    keeperCm: plan.keeperCm,
+    leftoverCm,
+    canCut: leftoverCm >= SCRAP_ALLOWANCE_CM,
+  };
+}
+
+/**
+ * Délka pásu pro kontrolu odřezku v lekci 2: objednaná délka z „Koupit“ (i když se do ní odřezek
+ * nevejde, `beltPurchase` doporučí pás na pásek a poutko), jinak nejkratší běžná délka 130 / 140 cm,
+ * která pokryje pásek a poutko. `null` bez obvodu, nebo když nestačí ani 140 cm.
+ */
+export function scrapCheckStrapCm(p: BeltPurchase): number | null {
+  if (p.orderCm !== null) return p.orderCm;
+  return p.plan.beltAndKeeperCm === null ? null : shortestCommonStrapCm(p.plan.beltAndKeeperCm);
+}
+
+/** Věta pro lekci 2 (pod krokem): kolik zbývá a jestli konec řezat. */
+export function scrapCutText(c: ScrapCutCheck): string {
+  const keeper = c.keeperCm > 0 ? ` a poutku ${c.keeperCm} cm` : '';
+  const rest = `Z pásu ${c.strapCm} cm po pásku ${c.beltCm} cm${keeper} zbývá ${c.leftoverCm} cm`;
+  return c.canCut
+    ? `${rest}: odřezek ${SCRAP_ALLOWANCE_CM} cm z konce u špičky uříznout můžete.`
+    : `${rest}: konec na trénink neřežte${c.keeperCm > 0 ? ', je na poutko' : ''}. Trénujte na samostatném odřezku.`;
+}
+
 export interface BeltPurchase {
   widthMm: number;
   thicknessMm: number;
   /** Nejkratší délka pásu pro pásek; `null` bez obvodu. */
   minLengthCm: number | null;
-  /** Kolik pás musí mít: nejkratší délka, případně + 15 cm na odřezek. */
+  /** Kolik pás musí mít: nejkratší délka + kus na poutko z téhož řemene + případně 15 cm na odřezek. */
   neededCm: number | null;
   scrapFromStrap: boolean;
+  /**
+   * Odřezek na trénink z téhož řemene je zapnutý, ale s ním nestačí ani pás 140 cm a doporučená
+   * nabídka není: doporučená nabídka a `orderCm` jsou pak jen pro pásek a poutko (bez odřezku).
+   */
+  scrapDropped: boolean;
+  /** Skladba délky (pásek, poutko, odřezek). */
+  plan: StrapLengthPlan;
+  /** Pás 130 / 140 cm nepokryje pásek s poutkem (nebo s odřezkem). */
+  lengthWarnings: string[];
+  /** Poutko: z téhož řemene, nebo z jiné kůže. */
+  keeper: KeeperCalculation;
   /**
    * Doporučená nabídka (výběr uživatele, jinak CraftPoint, jinak nejlevnější skladem s ověřeným
    * činěním; `defaultStrapOffer`).
@@ -84,9 +231,22 @@ export function beltPurchase(
   const { input } = result;
   const color = input.color ?? 'prirodni';
   const minLengthCm = result.strap.minLengthCm;
-  const neededCm =
-    minLengthCm === null ? null : minLengthCm + (scrapFromStrap ? SCRAP_ALLOWANCE_CM : 0);
-  const offers = strapOffers(input.widthMm, input.thicknessMm, neededCm, color);
+  const plan = strapLengthPlan(result, { scrapFromStrap });
+  const { neededCm } = plan;
+  const withScrap = strapOffers(input.widthMm, input.thicknessMm, neededCm, color);
+  // S odřezkem nestačí ani běžný pás 140 cm a doporučená nabídka není: doporučit pás na pásek
+  // a poutko, ať souhrn neztratí nabídku, která na pásek stačí (trénuje se pak na samostatném
+  // odřezku, varování to řekne).
+  const fallback =
+    scrapFromStrap &&
+    defaultStrapOffer(withScrap) === null &&
+    neededCm !== null &&
+    neededCm > COMMON_STRAP_LENGTHS_CM[1] &&
+    plan.beltAndKeeperCm !== null
+      ? strapOffers(input.widthMm, input.thicknessMm, plan.beltAndKeeperCm, color)
+      : null;
+  const scrapDropped = fallback !== null && defaultStrapOffer(fallback) !== null;
+  const offers = scrapDropped && fallback ? fallback : withScrap;
   const offer = defaultStrapOffer(offers);
   const [screw, ...alsoFit] = result.rivet.options;
   const punches = [result.holes.diameterMm, result.buckleEnd.rivetHoleMm].sort((a, b) => a - b);
@@ -97,6 +257,10 @@ export function beltPurchase(
     minLengthCm,
     neededCm,
     scrapFromStrap,
+    scrapDropped,
+    plan,
+    lengthWarnings: strapLengthWarnings(plan),
+    keeper: result.keeper,
     offer,
     orderCm: neededCm === null ? null : (offer?.lengthCm ?? null),
     offers,
@@ -151,20 +315,40 @@ export function screwDetail(p: BeltPurchase): string {
   return parts.join('; ');
 }
 
+/**
+ * „aspoň 114 cm + 14 cm na poutko + 15 cm na odřezek = 143 cm“; bez přídavků „aspoň 114 cm“.
+ * Bez obvodu prázdné.
+ */
+export function strapLengthText(plan: StrapLengthPlan): string {
+  if (plan.beltCm === null) return '';
+  const parts = [
+    ...(plan.keeperCm > 0 ? [`${plan.keeperCm} cm na poutko`] : []),
+    ...(plan.scrapCm > 0 ? [`${plan.scrapCm} cm na odřezek`] : []),
+  ];
+  return parts.length === 0
+    ? `aspoň ${plan.beltCm} cm`
+    : `aspoň ${plan.beltCm} cm + ${parts.join(' + ')} = ${plan.neededCm} cm`;
+}
+
 /** Souhrn k zobrazení, česky a krátce. */
 export function purchaseLines(p: BeltPurchase): PurchaseLine[] {
   const { min, max } = BELT_LIMITS.thicknessMm;
   const length =
-    p.minLengthCm === null
-      ? 'délka: zadejte obvod'
-      : p.scrapFromStrap
-        ? `délka aspoň ${p.minLengthCm} cm + ${SCRAP_ALLOWANCE_CM} cm na odřezek = ${p.neededCm} cm`
-        : `délka aspoň ${p.minLengthCm} cm`;
-  const order = p.orderCm === null ? '' : ` → objednejte ${p.orderCm} cm`;
+    p.minLengthCm === null ? 'délka: zadejte obvod' : `délka ${strapLengthText(p.plan)}`;
+  const order =
+    p.orderCm === null
+      ? ''
+      : ` → objednejte ${p.orderCm} cm${p.scrapDropped ? ' (bez odřezku na trénink, ten se nevejde)' : ''}`;
   const lines: PurchaseLine[] = [
     {
       what: p.dyedColor ? `Řemen (${p.dyedColor})` : 'Řemen',
       detail: `${mm(p.widthMm)} široký, tloušťka ${mm(p.thicknessMm)} (postup: ${formatDecimal(min)}–${mm(max)}), ${length}${order}`,
+    },
+    {
+      what: 'Poutko',
+      detail: p.keeper.fromStrap
+        ? `z téhož řemene: kus ${p.keeper.pieceCm} cm, proužek ${keeperStripText(p.keeper)}`
+        : `z jiné kůže ${mm(p.keeper.thicknessMm)} v barvě pásu: proužek ${keeperStripText(p.keeper)}, pás se neprodlužuje`,
     },
     {
       what: 'Přezka',

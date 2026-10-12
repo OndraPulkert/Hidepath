@@ -3,6 +3,8 @@ import { Link } from 'react-router';
 import { routes } from '@/app/routes';
 import { type BeltRecallKey, type ProjectDefinition } from '@/content/schema';
 import { activeBeltOutcome, beltFact } from '@/features/belt/active-belt';
+import { COMMON_STRAP_LENGTHS_CM, SCRAP_ALLOWANCE_CM } from '@/features/belt/belt-purchase';
+import { type BeltConfigResult } from '@/lib/patterns/belt-config';
 import { beltMarking, plateCheckFromRecords } from '@/features/belt/belt-marking';
 import { useSavedBelts } from '@/features/belt/use-saved-belts';
 import { useLessonRecords } from '@/features/notebook/use-lesson-records';
@@ -52,13 +54,7 @@ export function StepBeltRecalls({
           <li key={key}>
             <span className="text-ink-2">{typo(fact.label)} (Váš pásek): </span>
             {fact.value === null ? (
-              <span className="text-ink-2">
-                {key === 'strapLength' ||
-                key === 'waist' ||
-                (result !== null && (key === 'stitchHoles' || key === 'stitchThread'))
-                  ? 'zadejte obvod'
-                  : 'pásek nejde spočítat'}
-              </span>
+              <span className="text-ink-2">{typo(missingText(key, result))}</span>
             ) : (
               <strong className="font-semibold text-leather">{typo(fact.value)}</strong>
             )}
@@ -68,4 +64,18 @@ export function StepBeltRecalls({
       <li>{change}</li>
     </ul>
   );
+}
+
+/** Proč hodnota chybí: bez obvodu, bez ověřeného pásu té délky, nebo pásek nejde spočítat. */
+function missingText(key: BeltRecallKey, result: BeltConfigResult | null): string {
+  if (key === 'waist') return 'zadejte obvod';
+  if (key === 'strapLength') return result ? 'zadejte obvod' : 'pásek nejde spočítat';
+  if (result === null) return 'pásek nejde spočítat';
+  if (key === 'stitchHoles' || key === 'stitchThread') return 'zadejte obvod';
+  if (key === 'scrapCut') {
+    return result.strap.neededCm === null
+      ? 'zadejte obvod'
+      : `pás ${COMMON_STRAP_LENGTHS_CM.join(' ani ')} cm na pásek a poutko nestačí: od délky svého pásu odečtěte ${result.strap.neededCm} cm (pásek a poutko), na odřezek musí zbýt ${SCRAP_ALLOWANCE_CM} cm`;
+  }
+  return 'pásek nejde spočítat';
 }

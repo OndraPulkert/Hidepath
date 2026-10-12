@@ -560,7 +560,15 @@ export const animationPages = {
         'Boky oválu nožem',
         'Zaleštěte hranu oválu',
       ],
-      D: ['Změřte poutko proužkem', 'Vyřízněte a slepte poutko', 'Navlékněte poutko na pás'],
+      D: [
+        'Změřte poutko proužkem',
+        'Vyřízněte proužek',
+        'Dokončete hrany poutka',
+        'Ztenčete konce poutka',
+        'Slepte poutko',
+        'Prošijte přeplátování',
+        'Navlékněte poutko na pás',
+      ],
       E: [
         'Ohněte konec kolem příčky',
         'Posuňte poutko na přehnutý konec',
