@@ -54,6 +54,25 @@ describe('Váš pásek', () => {
     );
   });
 
+  it('ozdobný steh (volitelná lekce 7): linie hned, otvory a nit až s obvodem', async () => {
+    const { user } = setup();
+    await screen.findByRole('table', { name: /Vaše čísla/ });
+    const stitchBlock = () =>
+      screen.getByText('Ozdobný steh (volitelná lekce 7)').closest('details')!;
+    let block = stitchBlock();
+    expect(block).not.toHaveAttribute('open');
+    expect(block).toHaveTextContent(
+      /4\smm od hrany · od nýtu blíž k ohybu do 43\smm od konce špičky/,
+    );
+    expect(within(block).getAllByText('zadejte obvod')).toHaveLength(2);
+    await user.type(field(/Obvod, cm/), '95');
+    block = stitchBlock();
+    expect(block).toHaveTextContent(/Otvory na hranu:\s*asi 257 \(šev asi 102,4\scm\)/);
+    expect(block).toHaveTextContent(
+      /asi 5,5\sm na hranu, celkem 11,6\sm i se zkouškou · 1\scívka 20\sm/,
+    );
+  });
+
   it('zaoblený 45 mm: destička jen pro řadu 3, důvod u řady 2; přezku ověřte', async () => {
     const { user } = setup();
     await user.click(screen.getByRole('button', { name: 'Zaoblený' }));

@@ -13,6 +13,7 @@ import { Tag } from '@/components/ui/tag';
 import { animationLink } from '@/content/animations';
 import { BELT_ILLUSTRATION, BELT_ILLUSTRATION_CAPTION } from '@/content/projects';
 import { type PatternSheet, type ProjectDefinition } from '@/content/schema';
+import { BELT_STITCH_KEYS, beltStitchFact } from '@/features/belt/active-belt';
 import { type BeltFormInitial, punchForProngMm } from '@/features/belt/belt-prefill';
 import {
   type BeltPurchase,
@@ -671,6 +672,7 @@ function BeltResults({
           })}
         </ul>
       </div>
+      <StitchSummary result={r} />
       {r.warnings.length > 0 ? (
         <div role="note">
           <p className="mb-1 font-medium">Ověřte na odřezku</p>
@@ -682,6 +684,32 @@ function BeltResults({
         </div>
       ) : null}
     </div>
+  );
+}
+
+/** Ozdobný steh (volitelná lekce 7): linie, otvory a nit z výpočtu, sbalené. */
+function StitchSummary({ result }: { result: BeltConfigResult }) {
+  return (
+    <details className="rounded-control border border-line px-4 py-2">
+      <summary className="min-h-touch cursor-pointer text-body font-medium">
+        Ozdobný steh (volitelná lekce 7)
+      </summary>
+      <ul className="mt-2 flex flex-col gap-1 pb-2 text-body">
+        {BELT_STITCH_KEYS.map((key) => {
+          const fact = beltStitchFact(key, result);
+          return (
+            <li key={key}>
+              <span className="text-ink-2">{typo(fact.label)}: </span>
+              {fact.value === null ? (
+                <span className="text-ink-2">zadejte obvod</span>
+              ) : (
+                <strong className="font-semibold text-leather">{typo(fact.value)}</strong>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </details>
   );
 }
 

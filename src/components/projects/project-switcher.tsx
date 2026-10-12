@@ -11,6 +11,7 @@ import { type EnrollmentRecord, isEnrolled } from '@/features/progress/types';
 import { useEnrollments } from '@/features/progress/use-progress';
 import { useSwitchProject } from '@/features/projects/use-switch-project';
 import { cn } from '@/lib/utils/cn';
+import { lessonCountLabel } from '@/features/progress/lesson-count';
 
 const statusLabels = {
   active: 'Rozpracovaný',
@@ -77,7 +78,7 @@ export function ProjectSwitcher({ activeProject }: { activeProject: ProjectDefin
                   {project.title}
                 </Link>
                 <p className="text-meta text-ink-2">
-                  {difficultyLabels[project.difficulty]} · {project.lessons.length} lekcí
+                  {difficultyLabels[project.difficulty]} · {lessonCountLabel(project)}
                 </p>
               </div>
               {isActive ? null : status === 'none' ? (

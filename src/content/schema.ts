@@ -302,6 +302,9 @@ export const BELT_RECALL_KEYS = [
   'holes',
   'middleHole',
   'marking',
+  'stitchLine',
+  'stitchHoles',
+  'stitchThread',
 ] as const;
 export type BeltRecallKey = (typeof BELT_RECALL_KEYS)[number];
 
@@ -442,6 +445,8 @@ export const lessonDefinitionSchema = z.object({
   prints: z.array(lessonPrintSchema).min(1).optional(),
   /** „Připravte si → Z předchozích lekcí“. */
   requires: z.array(lessonRequirementSchema).min(1).optional(),
+  /** Volitelná lekce: nepočítá se do fáze ani do aktuální lekce. */
+  optional: z.literal(true).optional(),
 });
 export type LessonDefinition = z.infer<typeof lessonDefinitionSchema>;
 
@@ -773,6 +778,11 @@ export const projectDefinitionSchema = z
             code: 'custom',
             message: `Lekce ${lesson.slug}: prerekvizita ${p} musí předcházet`,
           });
+        } else if (target.optional && !lesson.optional) {
+          ctx.addIssue({
+            code: 'custom',
+            message: `Lekce ${lesson.slug}: povinná lekce nesmí čekat na volitelnou ${p}`,
+          });
         }
       }
       for (const e of [...lesson.requiredEquipment, ...lesson.recommendedEquipment]) {
@@ -957,6 +967,11 @@ function checkLessonRequires(
       ctx.addIssue({
         code: 'custom',
         message: `Lekce ${lesson.slug}: požadavek ${req.id} musí být z dřívější lekce`,
+      });
+    } else if (from.optional && !lesson.optional) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `Lekce ${lesson.slug}: povinná lekce nesmí potřebovat výsledek volitelné ${req.fromLesson}`,
       });
     }
   }

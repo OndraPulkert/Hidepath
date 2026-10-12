@@ -53,7 +53,9 @@ export function StepBeltRecalls({
             <span className="text-ink-2">{typo(fact.label)} (Váš pásek): </span>
             {fact.value === null ? (
               <span className="text-ink-2">
-                {key === 'strapLength' || key === 'waist'
+                {key === 'strapLength' ||
+                key === 'waist' ||
+                (result !== null && (key === 'stitchHoles' || key === 'stitchThread'))
                   ? 'zadejte obvod'
                   : 'pásek nejde spočítat'}
               </span>

@@ -20,6 +20,7 @@ import {
   plateCompatibility,
   rivetPostMm,
 } from './belt-config';
+import { beltStitchPlan } from './belt-stitch';
 
 const base: BeltConfigInput = { widthMm: 40, thicknessMm: 3.5, tip: 'hrot' };
 
@@ -485,5 +486,18 @@ describe('parametrický pásek – nálezy kontroly pásku (2026-10-08, kolo 2)'
     const r35 = derive({ ...base, widthMm: 35, thicknessMm: 3.8 }).shopping[0]!;
     expect(r35.offers!.map((o) => o.shop)).not.toContain('CraftPoint');
     expect(r35.defaultOffer!.shop).toBe('Leatory');
+  });
+});
+
+describe('parametrický pásek – ozdobný steh', () => {
+  it('výsledek nese plán stehu z beltStitchPlan (jediný zdroj čísel)', () => {
+    for (const input of [
+      { ...base, waistMm: 950 },
+      { ...base, tip: 'zaobleny' as const, waistMm: 1000 },
+      { ...base, widthMm: 35 },
+    ]) {
+      const r = derive(input);
+      expect(r.stitch).toEqual(beltStitchPlan(r.end, r.tip, r.shape, r.strap.lengthMm));
+    }
   });
 });

@@ -35,6 +35,7 @@ import {
   cz,
   tipSheetOrientation,
 } from './belt-sheets';
+import { type BeltStitchPlan, beltStitchPlan } from './belt-stitch';
 import {
   EDGE_PAINT_URLS,
   STRAP_COLOR_LABELS,
@@ -562,6 +563,8 @@ export interface BeltConfigResult {
   /** Jdou vytisknout listy A4? Když ne, `message` říká proč a čím značit. */
   sheets: BeltSheetsAvailability;
   shopping: BeltShoppingLine[];
+  /** Ozdobný steh (volitelná lekce 7): linie, otvory a nit; bez obvodu jen linie. */
+  stitch: BeltStitchPlan;
   /** Co podklady neověřují. Výpočet platí, jen to vyzkoušejte. */
   warnings: string[];
 }
@@ -756,6 +759,7 @@ export function deriveBeltConfig(input: BeltConfigInput): BeltConfigOutcome {
       tipSheetOrientation: orientation,
       sheets: beltSheetsAvailability(input),
       shopping,
+      stitch: beltStitchPlan(end, tip, shape, lengthMm),
       warnings,
     },
   };

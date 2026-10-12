@@ -93,6 +93,22 @@ describe('kontrola animací proti lekcím', () => {
     expect(stepSource(page('pasek-sirka-konec'), 'D', 1)).toContain('U „Barva“ zvolte');
   });
 
+  it('ozdobný steh (pásek, lekce 7): popisky kroků říkají totéž co lekce', () => {
+    const steh = page('pasek-steh');
+    expect(stepSource(steh, 'C', 2)).toContain('prvním hrotem v posledním otvoru');
+    expect(stepSource(steh, 'B', 2)).toContain('nic nevpichujte');
+    expect(stepSource(steh, 'D', 3)).toContain('jen na rubu');
+    expect(stepSource(steh, 'B', 2)).toContain('vaše číslo je pod krokem');
+    expect(stepSource(steh, 'C', 3)).toContain('ověřte na odřezku');
+    expect(stepOf('belt', 7, 'punch').body).toContain('prvním hrotem v posledním otvoru');
+    expect(stepOf('belt', 7, 'endpoints').body).toContain('nic nevpichujte');
+    expect(stepOf('belt', 7, 'sew').body).toContain('jen na rubu');
+    // Kresba počítá se stejnou linií jako výpočet (příklad 40 × 3,5 mm, hrot).
+    expect(steh).toContain(
+      'const W=40, H=W/2, OFFSET=4, SPACING=4, START_FROM_FOLD=25.5, STOP_FROM_APEX=43;',
+    );
+  });
+
   it('Víčko: magnet B2 říká, kam zadat tloušťku; závěs kreslí papír mezi D1 a D2', () => {
     expect(stepSource(page('vicko-magnet'), 'B', 2)).toContain('„Listy pro vaši kůži“');
     const ohyby = page('vicko-ohyby');

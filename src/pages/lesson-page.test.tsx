@@ -16,4 +16,19 @@ describe('LessonPage', () => {
       '/projects/card-holder',
     );
   });
+
+  it('volitelná lekce pásku má pruh „Volitelná lekce“ a říká, po které lekci je pásek hotový', async () => {
+    renderApp('/projects/belt/lessons/07-decorative-stitch');
+    const note = (await screen.findByText('Volitelná lekce.')).closest('[role="note"]');
+    expect(note).toHaveTextContent(
+      'Volitelná lekce. Pásek je hotový po lekci 6; přeskočte ji, když nešijete.',
+    );
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Ozdobný steh');
+  });
+
+  it('povinná lekce pruh volitelné lekce nemá', async () => {
+    renderApp('/projects/belt/lessons/06-holes-and-tip');
+    await screen.findByRole('heading', { level: 1 });
+    expect(screen.queryByText(/Volitelná lekce\./)).not.toBeInTheDocument();
+  });
 });

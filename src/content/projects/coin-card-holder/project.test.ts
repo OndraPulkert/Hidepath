@@ -488,16 +488,23 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
     'horizontalni-palicka-na-kuzi',
     'vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu',
   ];
+  const RECHECKED_2026_10_12 = [
+    'nite-slam-bezova-beige-20m',
+    'wing-divider-sedlarske-kruzitko-150-mm',
+  ];
+  const recheckedOct12 = (url: string) =>
+    url.startsWith('https://craft-point.cz/') && RECHECKED_2026_10_12.some((h) => url.endsWith(h));
   const rechecked = (url: string) =>
     url.startsWith('https://craft-point.cz/') && RECHECKED_2026_10_08.some((h) => url.endsWith(h));
 
   describe('nákupní plán „Co koupit“', () => {
     const plan = coinCardHolderProject.shoppingPlan!;
 
-    it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10., sada korunek Extol na Alze a ceny CraftPointu znovu 8. 10. 2026)', () => {
+    it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10., sada korunek Extol na Alze a ceny CraftPointu znovu 8. 10. 2026, nit Slam a kružítko 12. 10. 2026)', () => {
       const checkedAtFor = (line: (typeof plan.lines)[number]) => {
         if (line.equipmentSlug === 'masking-tape') return '2026-10-01';
         if (line.url.startsWith('https://www.alza.cz/')) return '2026-10-08';
+        if (recheckedOct12(line.url)) return '2026-10-12';
         if (rechecked(line.url)) return '2026-10-08';
         return '2026-09-29';
       };

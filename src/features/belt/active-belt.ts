@@ -24,6 +24,7 @@ import {
   type WaistSource,
   deriveBeltConfig,
 } from '@/lib/patterns/belt-config';
+import { THREAD_SPOOL_M } from '@/lib/patterns/belt-stitch';
 import { STRAP_COLOR_LABELS } from '@/lib/patterns/belt-strap-offers';
 
 /**
@@ -199,6 +200,56 @@ export function beltFact(
       };
     case 'marking':
       return { key, label: 'Čím značíte', value: marking };
+    case 'stitchLine':
+    case 'stitchHoles':
+    case 'stitchThread':
+      return beltStitchFact(key, result);
+  }
+}
+
+/** Klíče ozdobného stehu (volitelná lekce 7): řádky bloku ve „Váš pásek“ i připomínky v krocích. */
+export const BELT_STITCH_KEYS = ['stitchLine', 'stitchHoles', 'stitchThread'] as const;
+export type BeltStitchKey = (typeof BELT_STITCH_KEYS)[number];
+
+const spoolsText = (n: number): string =>
+  `${n} ${n === 1 ? 'cívka' : n < 5 ? 'cívky' : 'cívek'} ${formatDecimal(THREAD_SPOOL_M)} m`;
+
+/**
+ * Ozdobný steh z výpočtu pásku (`result.stitch`). Otvory a nit závisí na délce pásu z obvodu,
+ * proto „asi“ a bez obvodu `null`.
+ */
+export function beltStitchFact(key: BeltStitchKey, result: BeltConfigResult | null): BeltFact {
+  const s = result?.stitch ?? null;
+  switch (key) {
+    case 'stitchLine':
+      return {
+        key,
+        label: 'Linie stehu',
+        value: s
+          ? `${mm(s.offsetMm)} od hrany · od nýtu blíž k ohybu do ${mm(s.stopFromApexMm)} od konce špičky`
+          : null,
+      };
+    case 'stitchHoles': {
+      const e = s?.perEdge ?? null;
+      return {
+        key,
+        label: 'Otvory na hranu',
+        value: e ? `asi ${e.holes} (šev asi ${formatDecimal(e.seamMm / 10)} cm)` : null,
+      };
+    }
+    case 'stitchThread': {
+      const e = s?.perEdge ?? null;
+      const total = s?.totalThreadM ?? null;
+      const spools = s?.spools ?? null;
+      return {
+        key,
+        label: 'Nit',
+        value:
+          e && total !== null && spools !== null
+            ? `asi ${formatDecimal(e.threadM)} m na hranu, celkem ${formatDecimal(total)} m i se zkouškou · ${spoolsText(spools)}`
+            : null,
+      };
+    }
   }
 }
 

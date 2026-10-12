@@ -27,6 +27,7 @@ export interface JourneyProgress {
   currentPhaseNumber: number;
   /** Celá cesta: splněné povinné úkoly / všechny povinné úkoly. */
   overallRatio: number;
+  /** Hotové / všechny povinné lekce (volitelné se nepočítají). */
   completedLessons: number;
   totalLessons: number;
   lessonViews: readonly LessonView[];
@@ -73,8 +74,10 @@ export function computeJourney(project: ProjectDefinition, input: JourneyInput):
           project.lessons.filter((l) => l.phaseSlug === phase.slug).map((l) => l.slug),
         );
         lessons = lessonViews.filter((v) => slugs.has(v.slug));
-        total = lessons.reduce((sum, v) => sum + v.totalRequiredCheckpoints, 0);
-        done = lessons.reduce(
+        // Volitelné lekce se v seznamu fáze ukážou, ale do postupu ani do „hotovo“ se nepočítají.
+        const required = lessons.filter((v) => !v.optional);
+        total = required.reduce((sum, v) => sum + v.totalRequiredCheckpoints, 0);
+        done = required.reduce(
           (sum, v) =>
             sum +
             (v.status === 'completed'
@@ -82,8 +85,8 @@ export function computeJourney(project: ProjectDefinition, input: JourneyInput):
               : v.completedRequiredCheckpoints),
           0,
         );
-        const completedLessons = lessons.filter((v) => v.status === 'completed').length;
-        detail = `${completedLessons} ${lessons.length === 1 ? 'z 1 lekce' : `ze ${lessons.length} lekcí`}`;
+        const completedLessons = required.filter((v) => v.status === 'completed').length;
+        detail = `${completedLessons} ${required.length === 1 ? 'z 1 lekce' : `ze ${required.length} lekcí`}`;
         break;
       }
       case 'completion':
@@ -96,7 +99,9 @@ export function computeJourney(project: ProjectDefinition, input: JourneyInput):
     const ratio = total === 0 ? 1 : done / total;
     // Fáze lekcí je hotová až dokončením lekcí (tlačítko Dokončit), ne pouhým odškrtáním bodů.
     const isComplete =
-      phase.kind === 'lessons' ? lessons.every((v) => v.status === 'completed') : ratio >= 1;
+      phase.kind === 'lessons'
+        ? lessons.every((v) => v.optional || v.status === 'completed')
+        : ratio >= 1;
     return {
       slug: phase.slug,
       code: phase.code,
@@ -133,8 +138,8 @@ export function computeJourney(project: ProjectDefinition, input: JourneyInput):
     currentPhase,
     currentPhaseNumber: phases.indexOf(currentPhase) + 1,
     overallRatio: totalTasks === 0 ? 0 : doneTasks / totalTasks,
-    completedLessons: lessonViews.filter((v) => v.status === 'completed').length,
-    totalLessons: lessonViews.length,
+    completedLessons: lessonViews.filter((v) => !v.optional && v.status === 'completed').length,
+    totalLessons: lessonViews.filter((v) => !v.optional).length,
     lessonViews,
   };
 }

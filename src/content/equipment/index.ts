@@ -663,9 +663,9 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         url: 'https://craft-point.cz/products/nite-slam-bezova-beige-20m',
         variant: '0,6 mm',
         priceCents: 4_000,
-        note: 'Splétaný voskovaný polyester C.T.Point; vyberte tloušťku 0,6 mm. Tmavší odstín schová první nepřesnosti. Tloušťka 0,6 mm skladem (29. 9. 2026), stejně jako 0,8 mm (42 Kč) a 1,0 mm (44 Kč).',
+        note: 'Splétaný voskovaný polyester C.T.Point; vyberte tloušťku 0,6 mm. Tmavší odstín schová první nepřesnosti. Tloušťka 0,6 mm za 40 Kč skladem (12. 10. 2026), stejně jako 0,8 mm (42 Kč) a 1,0 mm (44 Kč).',
         availability: 'in_stock',
-        checkedAt: '2026-09-29',
+        checkedAt: '2026-10-12',
       },
       {
         title: 'Voskované polyesterové nitě 0,65 mm, 67 m',
@@ -1116,7 +1116,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         reason: 'na rovné hrany pouzdra stačí; rohy se dokreslí podle šablony',
       },
     ],
-    priceRange: { minCents: 22_300, maxCents: 46_000 },
+    priceRange: { minCents: 22_200, maxCents: 46_000 },
     priceSource: 'verified',
     priceNote: VERIFIED_NOTE,
     alsoUsedFor: ['Všechny šité projekty'],
@@ -1125,10 +1125,10 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         title: 'Wing divider / sedlářské kružítko 150 mm',
         shop: 'CraftPoint',
         url: 'https://craft-point.cz/products/wing-divider-sedlarske-kruzitko-150-mm',
-        priceCents: 22_300,
+        priceCents: 22_200,
         note: 'Ocelové kružítko s aretací ramen. Pro první projekt nejlepší poměr ceny a užitku.',
         availability: 'in_stock',
-        checkedAt: '2026-09-29',
+        checkedAt: '2026-10-12',
       },
       {
         title: 'Trasovací kružítko CraftPoint 150 mm',
@@ -1155,6 +1155,72 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         id: 'wing-divider-main',
         kind: 'photo',
         caption: 'Kovové rýsovací kružítko vedené po hraně kůže, viditelná jemná linie stehu',
+        status: 'planned',
+      },
+    ],
+  }),
+
+  draft({
+    slug: 'stitching-groover',
+    name: 'Drážkovač s nastavitelným dorazem',
+    englishName: 'Adjustable stitching groover',
+    category: 'stitching',
+    shortDescription:
+      'Vyřízne podél hrany mělkou drážku, do které se uloží steh. Nit pak leží pod povrchem a méně se odírá.',
+    purpose:
+      'Doraz drážkovače jede po hraně kůže a čepel vyřízne ve stálé vzdálenosti od ní mělkou drážku pro šev. Nit se v drážce schová pod líc kůže, takže je chráněná před prodřením při každodenním používání. Na silné kůži, jako je pásek, drážka zároveň vede vidličky.',
+    buyingGuide: [
+      { label: 'Doraz', value: 'nastavitelný, aspoň na 4 mm od hrany' },
+      { label: 'Čepel', value: 'ocelová' },
+    ],
+    cautions: [
+      'Drážkujte suchou kůži, nenavlhčenou.',
+      'Drážka má být mělká, jen aby se nit usadila; hloubku ověřte na odřezku.',
+      'Vzdálenost od hrany nastavte podle pravítka a zkuste na odřezku.',
+      'CraftPoint u svého drážkovače rozsah dorazu neuvádí: že jde nastavit na 4 mm, ověřte po dodání.',
+    ],
+    avoid: [
+      {
+        title: 'Drážka na tenké kůži 1,2–1,5 mm',
+        reason: 'kůži zeslabí; tam stačí rýsovaná linie kružítkem',
+      },
+    ],
+    alternatives: [
+      {
+        title: 'Rýsovací kružítko',
+        reason: 'linii jen vyrýsuje, nit pak leží na povrchu a víc se odírá',
+      },
+    ],
+    priceRange: { minCents: 27_800, maxCents: 47_600 },
+    priceSource: 'verified',
+    priceNote: VERIFIED_NOTE,
+    alsoUsedFor: ['Šité projekty z kůže nad 2 mm'],
+    examples: [
+      {
+        title: 'Groover s nastavitelnou šířkou čepele',
+        shop: 'CraftPoint',
+        url: 'https://craft-point.cz/products/groover-s-nastavitelnou-sirkou-cepele',
+        priceCents: 27_800,
+        note: 'Dřevo a ocel, 13,5 cm, 54 g. Obchod uvádí plynulé nastavení vzdálenosti od hrany, rozsah dorazu neuvádí.',
+        availability: 'in_stock',
+        checkedAt: '2026-10-12',
+      },
+      {
+        title: 'Drážkovač s nastavitelným dorazem (Tandy 8069-00)',
+        shop: 'Leatory',
+        url: 'https://www.leatory.cz/rucni-siti/drazkovac-s-nastavitelnym-dorazem/',
+        priceCents: 47_600,
+        note: 'Obchod uvádí drážku 1,5–38 mm od okraje; náhradní břit 8070-00 lze přikoupit.',
+        availability: 'in_stock',
+        checkedAt: '2026-10-12',
+      },
+    ],
+    commonlyAtHome: false,
+    media: [
+      {
+        id: 'stitching-groover-main',
+        kind: 'photo',
+        caption: 'Drážkovač s dorazem na hraně pásku, za čepelí mělká drážka pro steh',
         status: 'planned',
       },
     ],

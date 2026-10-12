@@ -174,6 +174,7 @@ describe('animace postupu – stránky v public/animace', () => {
     ['pasek-prezka', 'beltBuckleEnd', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['pasek-spicka', 'beltHolesTip', ['A', 'B', 'C', 'D', 'E', 'F'], 'G'],
     ['pasek-sirka-konec', 'beltWidthTip', ['A', 'B', 'C', 'D'], 'E'],
+    ['pasek-steh', 'beltStitch', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['vrtani-formy', 'drillForm', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['posuvka', 'caliper', ['A', 'B', 'C', 'D'], 'E'],
   ] as const)(
@@ -197,7 +198,7 @@ describe('animace postupu – stránky v public/animace', () => {
     'steps' in page ? [{ key, path: page.path, sections: page.sections, steps: page.steps }] : [],
   );
 
-  it('kroky mají čtyři stránky kapsy, dvě stránky pásu, sedlářský steh, hrany, šest stránek Víčka, tři stránky pásku, posuvku a vrtání formy', () => {
+  it('kroky mají čtyři stránky kapsy, dvě stránky pásu, sedlářský steh, hrany, šest stránek Víčka, čtyři stránky pásku, posuvku a vrtání formy', () => {
     expect(steppedPages.map((p) => p.key)).toEqual([
       'kapsa',
       'pocketAttach',
@@ -216,6 +217,7 @@ describe('animace postupu – stránky v public/animace', () => {
       'beltBuckleEnd',
       'beltHolesTip',
       'beltWidthTip',
+      'beltStitch',
       'caliper',
       'drillForm',
     ]);

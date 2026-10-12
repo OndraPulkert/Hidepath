@@ -183,3 +183,144 @@ describe('pásek – opravy z kontroly p04', () => {
     expect(lesson(5).title).toBe('Zkouška na těle a prostřední dírka');
   });
 });
+
+describe('pásek – volitelná lekce 7 (ozdobný steh)', () => {
+  const l7 = lesson(7);
+
+  it('lekce 7 je volitelná, až za lekcí 6 a čeká jen na ni', () => {
+    expect(l7.optional).toBe(true);
+    expect(l7.order).toBe(7);
+    expect(l7.prerequisiteLessons).toEqual([lesson(6).slug]);
+    expect(l7.requires?.map((r) => r.fromLesson)).toEqual([lesson(6).slug]);
+    expect(beltProject.lessons.filter((l) => l.optional).map((l) => l.order)).toEqual([7]);
+  });
+
+  it('lekce 1–6 zůstaly beze změny: slugy, pořadí a id kroků', () => {
+    expect(
+      beltProject.lessons
+        .filter((l) => !l.optional)
+        .map((l) => [l.order, l.slug, l.steps.map((s) => s.id).join(',')]),
+    ).toEqual([
+      [
+        1,
+        '01-design-and-measure',
+        'waist,width-and-tip,your-belt,order,measure-strap,check-numbers,plate-check,plate-or-sheets',
+      ],
+      [
+        2,
+        '02-scrap-training',
+        'get-scrap,cut,mark,punch,edge-bevel,try-edge-paint,edges-balm,bend,screw',
+      ],
+      [3, '03-long-edges', 'square-end,mark-30,bevel,edge-paint,burnish,balm'],
+      [
+        4,
+        '04-buckle-end',
+        'plate-or-sheet,secure,mark,first-pair,oval,keeper,bend,second-pair,screws',
+      ],
+      [5, '05-fit-and-middle-hole', 'try-on,measure,transfer,length-check'],
+      [6, '06-holes-and-tip', 'row,place,mark,punch-holes,cut-tip,finish,try'],
+    ]);
+  });
+
+  it('do líce se nevpichuje: koncové body jen páskou, žádné šídlo, jediné otvory jsou otvory švu', () => {
+    expect(l7.requiredEquipment).not.toContain('scratch-awl');
+    expect(l7.recommendedEquipment).not.toContain('scratch-awl');
+    expect(stepOf(7, 'endpoints').body).toContain('papírovou pásku');
+    expect(stepOf(7, 'endpoints').body).toContain('Do kůže nic nevpichujte.');
+    for (const s of l7.steps) expect(s.body, s.id).not.toMatch(/šídl|propích|důlek/);
+    // Linie začíná u otvoru pro nýt: začátek nitě zmizí pod přehnutým koncem, šije se jedna vrstva.
+    expect(stepOf(7, 'take-apart').body).toContain('Šijete jen jednu vrstvu');
+    expect(stepOf(7, 'sew').body).toContain('Zatavujte jen na rubu');
+  });
+
+  it('lekce 7 nic netiskne a nic nesuší', () => {
+    expect(l7.prints).toBeUndefined();
+    expect(l7.steps.flatMap((s) => s.waits ?? [])).toEqual([]);
+    expect(l7.steps.some((s) => s.printLink)).toBe(false);
+  });
+
+  it('co podklady neověřují, je „ověřte na odřezku“ nebo zkouška na odřezku', () => {
+    const scrap = stepOf(7, 'scrap-test').body;
+    expect(scrap).toContain('na odřezku');
+    expect(scrap).toContain('mělká');
+    expect(scrap).toContain('světlejší než pás');
+    expect(scrap).toContain('Odřel doraz zaleštěnou hranu');
+    expect(scrap).toContain('Na rubu musí vyjít všechny');
+    expect(stepOf(7, 'punch').body).toContain('(ověřte na odřezku)');
+  });
+
+  it('animace ozdobného stehu má popisky kroků doslova z lekce 7', () => {
+    const html = page('pasek-steh');
+    const body = (id: string) => stepOf(7, id).body;
+    for (const [title, id] of [
+      ['Nastavte drážkovač na 4 mm', 'scrap-test'],
+      ['Drážka a otvory na odřezku', 'scrap-test'],
+      ['Pár stehů a kontrola', 'scrap-test'],
+      ['Rozšroubujte konec a sundejte poutko', 'take-apart'],
+      ['Označte začátek a konec páskou', 'endpoints'],
+      ['Vyrýsujte drážku', 'groove'],
+      ['Prosekejte otvory', 'punch'],
+      ['Dorovnejte konec linie', 'punch'],
+      ['Zkontrolujte rub', 'punch'],
+      ['Odměřte nit a navlékněte jehly', 'sew'],
+      ['Šijte od přezky ke špičce', 'sew'],
+      ['Konce na rubu', 'sew'],
+      ['Zatlučte steh', 'set'],
+      ['Složte konec zpět', 'reassemble'],
+    ] as const) {
+      const text = caption(html, title);
+      expect(text, title).not.toBe('');
+      expect(body(id), title).toContain(text);
+    }
+    const done = caption(html, 'Hotový pásek');
+    for (const slug of ['stitch-line', 'stitch-reassembled']) {
+      expect(done).toContain(checkpoint(7, slug).title);
+    }
+  });
+});
+
+describe('pásek – lekce 7: opravy z kontroly ozdobného stehu (12. 10. 2026)', () => {
+  const lessonBodies: Record<string, string> = import.meta.glob(
+    '/src/content/projects/belt/lessons/*.mdx',
+    { query: '?raw', import: 'default', eager: true },
+  );
+
+  it('dlouhá nit: výjimka z „přes 1,5 m šev rozdělte“ je vysvětlená v lekci i v animaci délky nitě', () => {
+    expect(stepOf(7, 'sew').body).toContain('Tady ho nedělte');
+    expect(stepOf(7, 'sew').body).toContain('namotejte na kousek kartonu');
+    expect(page('delka-nite')).toContain('Výjimka: ozdobný steh na jedné vrstvě');
+  });
+
+  it('konce nitě: jako v projektu 01, asi 2 mm od kůže, zatavit a přimáčknout', () => {
+    for (const id of ['scrap-test', 'sew']) {
+      expect(stepOf(7, id).body).toContain('odstřihněte asi 2 mm od kůže');
+      expect(stepOf(7, id).body).toContain('hned přimáčkněte');
+    }
+  });
+
+  it('odřená hrana barevného pásku se natře znovu, pak přeleští (lekce 3, část H)', () => {
+    const set = stepOf(7, 'set');
+    expect(set.body).toContain('natřete znovu');
+    expect(set.animationLinks?.map((l) => l.href)).toEqual(
+      expect.arrayContaining([expect.stringContaining('hrany.html#H3')]),
+    );
+    expect(lesson(7).recommendedEquipment).toContain('edge-paint');
+  });
+
+  it('povolení nýtů: hlavičku přidržet, zajišťovač nebo lak jako v lekci 4', () => {
+    expect(stepOf(7, 'take-apart').body).toContain('přidržte palcem');
+    expect(lesson(7).materials).toContain('zajišťovač závitů nebo lak (jako v lekci 4)');
+  });
+
+  it('konec linie: posledních 10 mm až po jednohrotu na konci drážky', () => {
+    expect(stepOf(7, 'punch').body).toContain('Posledních asi 10 mm drážky vidličkou nesekejte');
+    expect(stepOf(7, 'punch').body).toContain('lícem nahoru, vraťte vidličku');
+  });
+
+  it('bez nedoložené délky hrotu; MDX neopakuje pruh „Volitelná lekce“', () => {
+    const chisels = beltProject.equipment.find((e) => e.equipmentSlug === 'stitching-chisels')!;
+    expect(chisels.specification).not.toContain('8,5 mm');
+    const mdx = lessonBodies['/src/content/projects/belt/lessons/07-decorative-stitch.mdx']!;
+    expect(mdx).not.toContain('Volitelná lekce');
+  });
+});

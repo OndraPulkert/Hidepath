@@ -264,17 +264,39 @@ describe('Postup v kostce – pásek', () => {
   const points = flatOverview(sections);
   const point = (id: string) => points.find((p) => p.point.id === id)!.point;
 
-  it('15–28 krátkých bodů ve třech oddílech, nejvýš 3 věty na bod', () => {
-    expect(points.length).toBeGreaterThanOrEqual(15);
-    expect(points.length).toBeLessThanOrEqual(28);
+  it('15–28 krátkých bodů ve třech povinných oddílech a volitelný oddíl, nejvýš 3 věty na bod', () => {
+    const required = sections.filter((s) => !s.title.startsWith('Volitelně'));
+    const requiredPoints = required.flatMap((s) => s.points);
+    expect(requiredPoints.length).toBeGreaterThanOrEqual(15);
+    expect(requiredPoints.length).toBeLessThanOrEqual(28);
     expect(sections.map((s) => s.title)).toEqual([
       'Příprava',
       'Trénink na odřezku',
       'Stavba pásku',
+      'Volitelně: ozdobný steh',
     ]);
     for (const p of points) {
       const sentences = p.point.text.split(/[.!?](?:\s|$)/).filter((s) => s.trim()).length;
       expect(sentences, p.point.id).toBeLessThanOrEqual(3);
+    }
+  });
+
+  it('volitelný oddíl: jen lekce 7 (volitelná), s poznámkou, že pásek je hotový po lekci 6', () => {
+    const optional = sections.at(-1)!;
+    expect(optional.note).toBe('Lekce 7, jen když chcete šít; pásek je hotový po lekci 6.');
+    const lesson7 = project.lessons.find((l) => l.order === 7)!;
+    expect(lesson7.optional).toBe(true);
+    expect(optional.points.map((p) => [p.point.id, p.point.lessonSlug, p.point.stepId])).toEqual([
+      ['stitch-scrap', lesson7.slug, 'scrap-test'],
+      ['stitch-mark', lesson7.slug, 'endpoints'],
+      ['stitch-groove-punch', lesson7.slug, 'punch'],
+      ['stitch-sew', lesson7.slug, 'sew'],
+      ['stitch-set', lesson7.slug, 'set'],
+      ['stitch-reassemble', lesson7.slug, 'reassemble'],
+    ]);
+    // Povinné oddíly do volitelné lekce nevedou.
+    for (const s of sections.slice(0, -1)) {
+      for (const p of s.points) expect(p.point.lessonSlug, p.point.id).not.toBe(lesson7.slug);
     }
   });
 

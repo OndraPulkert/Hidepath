@@ -466,3 +466,43 @@ describe('obsah – čekání a „Připravte si“ ve skutečných lekcích', (
     expect(duplicates).toEqual([]);
   });
 });
+
+describe('obsah – volitelná lekce', () => {
+  const lessons = cardHolderProject.lessons;
+  const withOptional = (index: number, patch: (l: LessonDefinition[]) => LessonDefinition[]) => ({
+    ...cardHolderProject,
+    lessons: patch(lessons.map((l, i) => (i === index ? { ...l, optional: true as const } : l))),
+  });
+
+  it('pásek má jedinou volitelnou lekci, poslední, s povinnými kontrolními body', () => {
+    const optional = projects.flatMap((p) => p.lessons.filter((l) => l.optional));
+    expect(optional.map((l) => l.slug)).toEqual(['07-decorative-stitch']);
+    expect(optional[0]!.checkpoints.every((c) => c.required)).toBe(true);
+  });
+
+  it('volitelná lekce smí čekat na povinnou, povinná ale ne na volitelnou', () => {
+    const last = lessons.length - 1;
+    expect(issuesOf(withOptional(last, (l) => l))).toBe('');
+    const second = lessons[1]!;
+    // Lekce 2 je volitelná a lekce 3 na ni čeká přes prerekvizitu.
+    expect(issuesOf(withOptional(1, (l) => l))).toContain(
+      `povinná lekce nesmí čekat na volitelnou ${second.slug}`,
+    );
+    // Totéž přes „Z předchozích lekcí“.
+    expect(
+      issuesOf(
+        withOptional(1, (l) =>
+          l.map((x, i) =>
+            i === 2
+              ? {
+                  ...x,
+                  prerequisiteLessons: [],
+                  requires: [{ id: 'z-volitelne', fromLesson: second.slug, label: 'Díl' }],
+                }
+              : x,
+          ),
+        ),
+      ),
+    ).toContain(`povinná lekce nesmí potřebovat výsledek volitelné ${second.slug}`);
+  });
+});

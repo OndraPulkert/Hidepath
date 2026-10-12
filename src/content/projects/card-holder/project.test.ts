@@ -208,13 +208,19 @@ const RECHECKED_2026_10_08 = [
   'horizontalni-palicka-na-kuzi',
   'vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu',
 ];
+const RECHECKED_2026_10_12 = [
+  'nite-slam-bezova-beige-20m',
+  'wing-divider-sedlarske-kruzitko-150-mm',
+];
+const recheckedOct12 = (url: string) =>
+  url.startsWith('https://craft-point.cz/') && RECHECKED_2026_10_12.some((h) => url.endsWith(h));
 const rechecked = (url: string) =>
   url.startsWith('https://craft-point.cz/') && RECHECKED_2026_10_08.some((h) => url.endsWith(h));
 
 describe('obsah – pouzdro na karty: nákupní plán „Co koupit“', () => {
   const plan = cardHolderProject.shoppingPlan!;
 
-  it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10. 2026, ceny CraftPointu znovu 8. 10. 2026)', () => {
+  it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10. 2026, ceny CraftPointu znovu 8. 10. 2026, nit Slam a kružítko 12. 10. 2026)', () => {
     for (const line of plan.lines) {
       const example = findPlanExample(line, equipmentCatalog);
       expect(example, `${line.equipmentSlug} ${line.url} ${line.variant ?? ''}`).toBeDefined();
@@ -222,9 +228,11 @@ describe('obsah – pouzdro na karty: nákupní plán „Co koupit“', () => {
       expect(example!.checkedAt, line.url).toBe(
         line.equipmentSlug === 'masking-tape'
           ? '2026-10-01'
-          : rechecked(line.url)
-            ? '2026-10-08'
-            : '2026-09-29',
+          : recheckedOct12(line.url)
+            ? '2026-10-12'
+            : rechecked(line.url)
+              ? '2026-10-08'
+              : '2026-09-29',
       );
     }
   });
@@ -276,19 +284,19 @@ describe('obsah – pouzdro na karty: nákupní plán „Co koupit“', () => {
     }
   });
 
-  it('součet po obchodech: CraftPoint 2 878 Kč + IKEA 118 Kč + OBI 139 Kč = 3 135 Kč', () => {
+  it('součet po obchodech: CraftPoint 2 877 Kč + IKEA 118 Kč + OBI 139 Kč = 3 134 Kč', () => {
     const resolved = resolveShoppingPlan(cardHolderProject, equipmentCatalog, {})!;
     const lines = resolved.shops.flatMap((s) => s.lines);
     expect(lines).toHaveLength(plan.lines.length);
     expect(resolved.shops.map((s) => [s.shop, s.totalCents])).toEqual([
-      ['CraftPoint', 287_800],
+      ['CraftPoint', 287_700],
       ['IKEA', 11_800],
       ['OBI', 13_900],
     ]);
-    expect(resolved.totalCents).toBe(313_500);
+    expect(resolved.totalCents).toBe(313_400);
     expect(resolved.notInStockCount).toBe(0);
     expect(resolved.checkedFrom).toBe('2026-09-29');
-    expect(resolved.checkedTo).toBe('2026-10-08');
+    expect(resolved.checkedTo).toBe('2026-10-12');
   });
 });
 

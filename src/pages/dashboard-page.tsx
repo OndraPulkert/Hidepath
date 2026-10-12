@@ -20,6 +20,7 @@ import { useCompleteProject, useEnrollments } from '@/features/progress/use-prog
 import { useActiveProject } from '@/features/projects/use-active-project';
 import { useProjectState } from '@/features/projects/use-project-state';
 import { formatCzk, formatPercent, pluralizeCs, typo } from '@/lib/utils/format';
+import { lessonCountLabel } from '@/features/progress/lesson-count';
 
 export function DashboardPage() {
   const project = useActiveProject();
@@ -133,7 +134,7 @@ export function DashboardPage() {
               <p className="font-serif text-h2 font-medium">{project.title}</p>
               <p className="text-meta text-ink-2">
                 {difficultyLabels[project.difficulty]} · {project.estimatedHours.min}–
-                {project.estimatedHours.max} h · {project.lessons.length} lekcí ·{' '}
+                {project.estimatedHours.max} h · {lessonCountLabel(project)} ·{' '}
                 {project.template ? 'šablona 1:1' : 'listy střihu 1:1'}
               </p>
             </div>

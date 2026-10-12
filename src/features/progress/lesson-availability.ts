@@ -22,7 +22,9 @@ export interface LessonView {
   slug: string;
   order: number;
   status: LessonStatus;
-  /** První lekce, která není hotová a je dostupná (nebo rozpracovaná). */
+  /** Volitelná lekce (`optional` v obsahu): nikdy není aktuální a nepočítá se do fáze. */
+  optional: boolean;
+  /** První povinná lekce, která není hotová a je dostupná (nebo rozpracovaná). */
   isCurrent: boolean;
   blockers: LessonBlockers;
   completedRequiredCheckpoints: number;
@@ -91,6 +93,7 @@ export function computeLessonViews(
         slug: lesson.slug,
         order: lesson.order,
         status,
+        optional: lesson.optional === true,
         isCurrent: false,
         blockers,
         completedRequiredCheckpoints: completedRequired,
@@ -101,7 +104,9 @@ export function computeLessonViews(
       };
     });
 
-  const current = views.find((v) => v.status === 'available' || v.status === 'in_progress');
+  const current = views.find(
+    (v) => !v.optional && (v.status === 'available' || v.status === 'in_progress'),
+  );
   if (current) current.isCurrent = true;
   return views;
 }
@@ -110,7 +115,7 @@ export function findCurrentLesson(views: readonly LessonView[]): LessonView | un
   return views.find((v) => v.isCurrent);
 }
 
-/** První nehotová lekce bez ohledu na zámek – pro „čeká na …“ hlášky. */
+/** První nehotová povinná lekce bez ohledu na zámek – pro „čeká na …“ hlášky. */
 export function findNextUnfinishedLesson(views: readonly LessonView[]): LessonView | undefined {
-  return views.find((v) => v.status !== 'completed');
+  return views.find((v) => !v.optional && v.status !== 'completed');
 }

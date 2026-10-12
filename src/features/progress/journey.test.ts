@@ -1,3 +1,4 @@
+import { beltProject } from '@/content/projects/belt/project';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { computeJourney } from '@/features/progress/journey';
 import {
@@ -131,5 +132,53 @@ describe('computeJourney', () => {
     expect(finished.overallRatio).toBe(1);
     expect(finished.currentPhase.slug).toBe('review');
     expect(finished.currentPhaseNumber).toBe(6);
+  });
+});
+
+describe('computeJourney – volitelná lekce (pásek, lekce 7)', () => {
+  const belt = beltProject;
+  const owned = inventoryOf(
+    ...belt.equipment
+      .filter((e) => e.priority === 'required')
+      .map((e) => item(e.equipmentSlug, 'owned')),
+  );
+  const required = belt.lessons.filter((l) => !l.optional);
+  const optional = belt.lessons.find((l) => l.optional)!;
+  const doneAll = (lessons: typeof belt.lessons): ProgressState => ({
+    lessons: Object.fromEntries(lessons.map((l) => [l.slug, lessonDone(belt.slug, l.slug)])),
+    checkpoints: Object.fromEntries(
+      lessons.flatMap((l) =>
+        l.checkpoints.map((c) => [
+          checkpointKey(l.slug, c.slug),
+          checkpointDone(belt.slug, l.slug, c.slug),
+        ]),
+      ),
+    ),
+  });
+
+  it('fáze „Stavba pásku“ je hotová i bez volitelné lekce a počítá jen povinné lekce', () => {
+    const j = computeJourney(belt, {
+      enrollment: enrollmentOf(belt.slug),
+      inventory: owned,
+      progress: doneAll(required),
+    });
+    const build = j.phases.find((p) => p.slug === 'build')!;
+    expect(build.lessons.map((v) => v.slug)).toContain(optional.slug);
+    expect(build.isComplete).toBe(true);
+    expect(build.ratio).toBe(1);
+    expect(build.detail).toBe('4 ze 4 lekcí');
+    expect(j.totalLessons).toBe(6);
+    expect(j.completedLessons).toBe(6);
+    expect(j.currentPhase.kind).toBe('completion');
+  });
+
+  it('hotová volitelná lekce se do „x ze y“ nepřičte', () => {
+    const j = computeJourney(belt, {
+      enrollment: enrollmentOf(belt.slug),
+      inventory: owned,
+      progress: doneAll(belt.lessons),
+    });
+    expect(j.phases.find((p) => p.slug === 'build')!.detail).toBe('4 ze 4 lekcí');
+    expect(j.completedLessons).toBe(6);
   });
 });

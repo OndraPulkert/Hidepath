@@ -161,6 +161,20 @@ describe('hodnoty aktivního pásku', () => {
     expect(ACTIVE_BELT_SUMMARY_KEYS).toEqual(['waist', 'strapLength', 'keeper', 'rivet', 'holes']);
   });
 
+  it('ozdobný steh (lekce 7): linie, otvory a nit z výpočtu, ne v souhrnu lekce', () => {
+    expect(fact('stitchLine')).toBe(
+      '4 mm od hrany · od nýtu blíž k ohybu do 43 mm od konce špičky',
+    );
+    expect(fact('stitchHoles')).toBe('asi 257 (šev asi 102,4 cm)');
+    expect(fact('stitchThread')).toBe(
+      'asi 5,5 m na hranu, celkem 11,6 m i se zkouškou · 1 cívka 20 m',
+    );
+    for (const key of ['stitchLine', 'stitchHoles', 'stitchThread'] as const) {
+      expect(ACTIVE_BELT_SUMMARY_KEYS).not.toContain(key);
+      expect(beltFact(key, active, null).value).toBeNull();
+    }
+  });
+
   it('bez výpočtu jen zadání; spočítaná čísla chybí', () => {
     expect(beltFact('keeper', active, null).value).toBeNull();
     expect(beltFact('width', active, null).value).toBe('40 mm');

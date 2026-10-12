@@ -1,5 +1,10 @@
+import { beltProject } from '@/content/projects/belt/project';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
-import { computeLessonViews, findCurrentLesson } from '@/features/progress/lesson-availability';
+import {
+  computeLessonViews,
+  findCurrentLesson,
+  findNextUnfinishedLesson,
+} from '@/features/progress/lesson-availability';
 import { checkpointKey, EMPTY_PROGRESS, type ProgressState } from '@/features/progress/types';
 import { checkpointDone, inventoryOf, item, lessonDone } from '@/test/factories';
 
@@ -145,5 +150,44 @@ describe('computeLessonViews – kontrolní body a canComplete', () => {
     expect(view.canComplete).toBe(true);
     expect(view.completedCheckpoints).toBe(required.length);
     expect(view.totalCheckpoints).toBe(l1.checkpoints.length);
+  });
+});
+
+describe('computeLessonViews – volitelná lekce (pásek, lekce 7)', () => {
+  const belt = beltProject;
+  const beltOwned = inventoryOf(
+    ...belt.equipment
+      .filter((e) => e.priority === 'required')
+      .map((e) => item(e.equipmentSlug, 'owned')),
+  );
+  const required = belt.lessons.filter((l) => !l.optional).map((l) => l.slug);
+  const optional = belt.lessons.find((l) => l.optional)!;
+  const beltDone = (...slugs: string[]): ProgressState => ({
+    lessons: Object.fromEntries(slugs.map((s) => [s, lessonDone(belt.slug, s)])),
+    checkpoints: {},
+  });
+
+  it('volitelná lekce je poslední (7) a nikdy není aktuální', () => {
+    expect(optional.order).toBe(7);
+    const views = computeLessonViews(belt, beltOwned, beltDone(...required.slice(0, 5)));
+    expect(views.find((v) => v.slug === optional.slug)!.optional).toBe(true);
+    expect(findCurrentLesson(views)?.order).toBe(6);
+    const after = computeLessonViews(belt, beltOwned, beltDone(...required));
+    expect(after.find((v) => v.slug === optional.slug)!.status).toBe('available');
+    expect(findCurrentLesson(after)).toBeUndefined();
+    expect(findNextUnfinishedLesson(after)).toBeUndefined();
+  });
+
+  it('rozpracovaná volitelná lekce také není aktuální', () => {
+    const progress: ProgressState = {
+      lessons: {
+        ...beltDone(...required).lessons,
+        [optional.slug]: { ...lessonDone(belt.slug, optional.slug), status: 'in_progress' },
+      },
+      checkpoints: {},
+    };
+    const views = computeLessonViews(belt, beltOwned, progress);
+    expect(views.find((v) => v.slug === optional.slug)!.status).toBe('in_progress');
+    expect(findCurrentLesson(views)).toBeUndefined();
   });
 });

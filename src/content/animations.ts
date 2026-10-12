@@ -22,6 +22,8 @@ import { type AnimationLink } from '@/content/schema';
  *   příklad 40 × 3,5 mm, čísla pro vlastní pásek jsou v tabulce „Váš pásek“,
  * - vrtani-formy (`#A`–`#E`): stejně jako kapsa-prisiti; korunka Ø 32 na unášeči, vrtačka,
  *   upnutí desky a vrtání formy z lekce 2 pouzdra s mincí.
+ * - pasek-steh (`#A`–`#E`): stejně jako kapsa-prisiti; ozdobný steh podél obou hran (volitelná
+ *   lekce 7 pásku), kresba je příklad 40 × 3,5 mm, hrot, čísla jsou ve „Váš pásek“.
  * - pasek-sirka-konec (`#A`–`#D`): stejně jako kapsa-prisiti; šířka podle přezky, hrot, nebo
  *   zaoblený konec, co zvládne destička a zadání na stránce „Váš pásek“ (lekce 1 pásku).
  * - posuvka (`#A`–`#D`): stejně jako kapsa-prisiti; analogová posuvka s noniem 0,1 mm, měření
@@ -626,6 +628,24 @@ export const animationPages = {
         'Štítek „Destička“ pod zadáním',
         'Nahoře souhrn „Koupit“',
       ],
+    },
+  },
+  beltStitch: {
+    path: '/animace/pasek-steh.html',
+    title: 'Pásek: ozdobný steh',
+    sections: {
+      A: 'Část A – zkouška na odřezku',
+      B: 'Část B – příprava pásku',
+      C: 'Část C – drážka a otvory',
+      D: 'Část D – šití',
+      E: 'Část E – dokončení',
+    },
+    steps: {
+      A: ['Nastavte drážkovač na 4 mm', 'Drážka a otvory na odřezku', 'Pár stehů a kontrola'],
+      B: ['Rozšroubujte konec a sundejte poutko', 'Označte začátek a konec páskou'],
+      C: ['Vyrýsujte drážku', 'Prosekejte otvory', 'Dorovnejte konec linie', 'Zkontrolujte rub'],
+      D: ['Odměřte nit a navlékněte jehly', 'Šijte od přezky ke špičce', 'Konce na rubu'],
+      E: ['Zatlučte steh', 'Složte konec zpět', 'Hotový pásek'],
     },
   },
   caliper: {

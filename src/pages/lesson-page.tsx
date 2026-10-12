@@ -21,6 +21,7 @@ import { lessonBodiesFor } from '@/content/projects/lesson-bodies';
 import { type ProjectDefinition } from '@/content/schema';
 import { isBeltConfigProject } from '@/features/belt/active-belt';
 import { hasOverview } from '@/features/overview/project-overview';
+import { nextLessonAfterFinish } from '@/features/progress/lesson-count';
 import { isCheckpointCompleted } from '@/features/progress/types';
 import { useCompleteLesson, useToggleCheckpoint } from '@/features/progress/use-progress';
 import { useProjectState } from '@/features/projects/use-project-state';
@@ -62,16 +63,20 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
   const index = ordered.findIndex((l) => l.slug === lesson.slug);
   const prev = ordered[index - 1];
   const next = ordered[index + 1];
-  const nextView = next ? journey.lessonViews.find((v) => v.slug === next.slug) : undefined;
   const Body = lessonBodiesFor(project.slug)[lesson.slug];
 
   const finish = async () => {
     if (!view.canComplete) return;
     await complete.mutateAsync(lesson.slug);
-    // Po dokončení dál jen tam, kde jde pokračovat: na další lekci, pokud není zamčená, jinak na přehled projektu.
-    const nextUnlocked = nextView?.blockers.missingEquipment.length === 0;
+    // Po dokončení dál jen tam, kde jde pokračovat: na další povinnou lekci, pokud není zamčená,
+    // jinak na přehled projektu (po poslední povinné lekci tam čeká dokončení projektu).
+    const after = nextLessonAfterFinish(project.lessons, lesson.slug);
+    const afterView = after ? journey.lessonViews.find((v) => v.slug === after.slug) : undefined;
+    const afterUnlocked = afterView?.blockers.missingEquipment.length === 0;
     await navigate(
-      next && nextUnlocked ? routes.lesson(project.slug, next.slug) : routes.project(project.slug),
+      after && afterUnlocked
+        ? routes.lesson(project.slug, after.slug)
+        : routes.project(project.slug),
     );
   };
 
@@ -94,6 +99,11 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
 
       <header className="flex flex-col gap-3">
         <div>
+          {lesson.optional ? (
+            <Tag tone="optional" className="mr-2">
+              Volitelná
+            </Tag>
+          ) : null}
           {view.status === 'completed' ? (
             <Tag tone="done">✓ Hotovo</Tag>
           ) : locked ? (
@@ -128,6 +138,16 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
           ) : null}
         </div>
       </header>
+
+      {lesson.optional ? (
+        <p
+          role="note"
+          className="rounded-md border border-line bg-parchment px-4 py-3 text-body text-ink-2"
+        >
+          <strong className="text-leather">Volitelná lekce.</strong>{' '}
+          {typo(optionalLessonNote(project, lesson.order))}
+        </p>
+      ) : null}
 
       {hasOverview(project) ? (
         <LessonOverviewBox project={project} lessonSlug={lesson.slug} />
@@ -242,7 +262,7 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
                 to={routes.lesson(project.slug, next.slug)}
                 className="text-white no-underline hover:text-white"
               >
-                Další lekce →
+                {next.optional ? `Volitelná lekce ${next.order} →` : 'Další lekce →'}
               </Link>
             ) : (
               'Hotovo'
@@ -261,4 +281,15 @@ function LessonView({ project, lessonSlug }: { project: ProjectDefinition; lesso
       </StickyActionBar>
     </article>
   );
+}
+
+/**
+ * „Pásek je hotový po lekci 6; přeskočte ji, když nešijete.“ Číslo poslední povinné lekce před
+ * volitelnou se bere z obsahu projektu, ne z textu.
+ */
+function optionalLessonNote(project: ProjectDefinition, order: number): string {
+  const lastRequired = project.lessons
+    .filter((l) => !l.optional && l.order < order)
+    .reduce((max, l) => Math.max(max, l.order), 0);
+  return `${project.title} je hotový po lekci ${lastRequired}; přeskočte ji, když nešijete.`;
 }

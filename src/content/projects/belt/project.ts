@@ -116,6 +116,10 @@ const L3 = '03-long-edges';
 const L4 = '04-buckle-end';
 const L5 = '05-fit-and-middle-hole';
 const L6 = '06-holes-and-tip';
+const L7 = '07-decorative-stitch';
+
+/** Lekce 7: výsledek zkoušky drážky na odřezku (drážka, nebo jen rýsovaná linie). */
+const STITCH_LINE_ID = 'belt-stitch-line';
 
 export const lessons: readonly LessonDefinition[] = [
   draft({
@@ -1106,6 +1110,181 @@ export const lessons: readonly LessonDefinition[] = [
     ],
     media: [photo('belt-l6-hero', 'Hotový pásek: hrot, pět dírek, přezka na dvou nýtech')],
   }),
+
+  draft({
+    slug: L7,
+    title: 'Ozdobný steh',
+    order: 7,
+    phaseSlug: 'build',
+    optional: true,
+    // Hrubý odhad: asi 550 otvorů a 1 100 průtahů nití.
+    estimatedMinutes: 300,
+    goal: 'Volitelně prošít obě dlouhé hrany sedlářským stehem 4 mm od hrany.',
+    materials: [
+      'odřezek pásu z lekce 2, nebo zbytek uříznutý v lekci 6',
+      'papírová páska',
+      'zapalovač na zatavení konců nitě',
+      'plochý šroubovák podle drážky šroubku nýtu',
+      'kleště a hadřík, jen když se hlavička nýtu protáčí',
+      'zajišťovač závitů nebo lak (jako v lekci 4)',
+      'kousek kartonu na namotání nitě',
+    ],
+    requiredEquipment: [
+      'stitching-groover',
+      'stitching-chisels',
+      'harness-needles',
+      'waxed-thread',
+      'mallet',
+      'punching-board',
+      'steel-ruler',
+      'edge-burnisher',
+    ],
+    recommendedEquipment: ['wing-divider', 'stitching-pony', 'clamps', 'edge-paint'],
+    prerequisiteLessons: [L6],
+    steps: [
+      {
+        id: 'scrap-test',
+        title: 'Vyzkoušejte na odřezku',
+        body: 'Všechno nejdřív vyzkoušejte na odřezku. Drážkovač nastavte podle pravítka na 4 mm. Kůže musí být suchá, nevlhčete ji. Doraz tlačte k hraně a vyrýsujte na líci 10 cm drážky. Drážka má být mělká, jen aby se do ní nit usadila. Je drážka světlejší než pás? Odřel doraz zaleštěnou hranu? Když ano, na pásku ji opravíte po šití v kroku „Zatlučte steh“. Odřezek položte lícem nahoru na tvrdou desku. Vidličku postavte kolmo, prvním hrotem na drážku, a prosekejte asi 10 otvorů, poslední jednohrotem. Odřezek otočte. Na rubu musí vyjít všechny, v jedné řadě. Ušijte pár stehů nití 60 cm jako v projektu 01. Konce vyveďte na rub, odstřihněte asi 2 mm od kůže, krátce je přibližte k plameni zapalovače a hned přimáčkněte. Steh poklepejte paličkou. Výsledek zapište.',
+        animationLinks: [
+          animationLink('beltStitch', 'A1'),
+          animationLink('beltStitch', 'A2'),
+          animationLink('beltStitch', 'A3'),
+        ],
+        media: [photo('belt-l7-scrap', 'Odřezek pásu s drážkou, řadou otvorů a několika stehy')],
+        records: [
+          {
+            kind: 'choice',
+            id: STITCH_LINE_ID,
+            label: 'Drážka na odřezku',
+            hint: 'Bez drážky leží nit na povrchu a víc se odírá.',
+            options: [
+              { value: 'groove', label: 'Drážka vyhověla' },
+              { value: 'divider', label: 'Drážka je světlá: jen rýsovat kružítkem' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'take-apart',
+        title: 'Rozložte konec u přezky',
+        body: 'Hlavičku nýtu na líci přidržte palcem a šroubek z druhé strany povolte plochým šroubovákem. Protáčí-li se hlavička, chyťte ji kleštěmi přes hadřík, ať se líc nepoškrábe. Drží-li zajišťovač nebo lak, povolujte pomalu větší silou, nebo podle návodu na obalu zajišťovače. Přezku sundejte a konec rozložte. Poutko stáhněte z konce u přezky. Šijete jen jednu vrstvu: přes ohyb ani přes obě vrstvy se nešije, jinak by nýty nešly povolit.',
+        animationLinks: [animationLink('beltStitch', 'B1')],
+        media: [],
+      },
+      {
+        id: 'endpoints',
+        title: 'Označte začátek a konec',
+        body: 'Pás položte lícem nahoru. Začátek: přes líc nalepte papírovou pásku napříč, hranou přes střed třetího otvoru pro nýt od konce (první otvor za ohybem). Páska leží na straně konce u přezky. Konec: od konce špičky odměřte vzdálenost z „Linie stehu“ (např. 43 mm; vaše číslo je pod krokem). Pásku nalepte hranou na tuto míru, na straně špičky. Linie vede mezi páskami po obou hranách. Do kůže nic nevpichujte.',
+        animationLinks: [animationLink('beltStitch', 'B2')],
+        media: [],
+        beltRecalls: ['stitchLine'],
+      },
+      {
+        id: 'groove',
+        title: 'Vyrýsujte drážku',
+        body: 'Pás přidržte papírovou páskou za koncem u přezky. Doraz tlačte k hraně a táhněte dlouhými tahy od pásky k pásce, po obou hranách, jen na líci. Za pásku drážku nevyjíždějte. Když drážka na odřezku nevyhověla, linii jen lehce vyrýsujte kružítkem na 4 mm.',
+        animationLinks: [animationLink('beltStitch', 'C1')],
+        media: [photo('belt-l7-groove', 'Drážkovač s dorazem na hraně pásu, drážka končí u pásky')],
+        recalls: [{ fieldId: STITCH_LINE_ID, label: 'Drážka na odřezku (tato lekce)' }],
+      },
+      {
+        id: 'punch',
+        title: 'Prosekejte otvory',
+        body: 'Pás položte na tvrdou desku lícem nahoru. První hrot vidličky dejte na začátek drážky. Na rovinkách sekejte šesti- nebo čtyřhrotem, vždy prvním hrotem v posledním otvoru, a vidličku držte kolmo. Kolik otvorů asi vyjde, je pod krokem. Posledních asi 10 mm drážky vidličkou nesekejte. Nejdřív udělejte jednohrotem otvor přesně na konci drážky. Mezeru doplňte jednohrotem po 4 mm. Vyšla-li by poslední mezera pod 2 mm, rozdělte dvě poslední mezery rovnoměrně (ověřte na odřezku). Pás otočte a zkontrolujte rub. Kde hrot nevyšel, označte místo tužkou. Pás otočte zpět lícem nahoru, vraťte vidličku do stejných otvorů a udeřte znovu.',
+        animationLinks: [
+          animationLink('beltStitch', 'C2'),
+          animationLink('beltStitch', 'C3'),
+          animationLink('beltStitch', 'C4'),
+        ],
+        media: [],
+        beltRecalls: ['stitchHoles'],
+      },
+      {
+        id: 'sew',
+        title: 'Ušijte obě hrany',
+        body: 'Na každou hranu odměřte nit podle „Nit“ (např. 5,5 m; vaše číslo je pod krokem). Nit přes 1,5 m se plete a třepí, proto se jinde šev dělí. Tady ho nedělte: napojení by na jedné vrstvě bylo vidět. Na oba konce nitě navlékněte jehlu jako v projektu 01. Obě ramena nitě namotejte na kousek kartonu a odmotávejte jen tolik, kolik právě potřebujete. Pás upněte do sedlářského koníka nebo svěrky, zbytek ať leží stočený. Šijte od přezky ke špičce jako v projektu 01 a každý steh dotáhněte. Na začátku i na konci prošijte 2 otvory zpět. Konce vyveďte na rub, odstřihněte asi 2 mm od kůže, krátce je přibližte k plameni zapalovače a hned přimáčkněte. Zatavujte jen na rubu.',
+        animationLinks: [
+          animationLink('beltStitch', 'D1'),
+          animationLink('beltStitch', 'D2'),
+          animationLink('beltStitch', 'D3'),
+          animationLink('saddleStitch', 'D'),
+          animationLink('saddleStitch', 'E'),
+          animationLink('saddleStitch', 'F'),
+        ],
+        media: [photo('belt-l7-sew', 'Pás v sedlářském koníku, dvě jehly a steh v drážce')],
+        beltRecalls: ['stitchThread'],
+      },
+      {
+        id: 'set',
+        title: 'Zatlučte steh',
+        body: 'Pás položte na tvrdou desku. Steh z líce i z rubu poklepejte paličkou, ať zapadne. Kde doraz odřel hranu, u barevného pásku ji natřete znovu jako v lekci 3 (vrstvy a schnutí podle záznamu z lekce 2) a nechte zaschnout. Pak hranu přeleštěte jako v lekci 3.',
+        animationLinks: [
+          animationLink('beltStitch', 'E1'),
+          animationLink('edges', 'H2'),
+          animationLink('edges', 'H3'),
+        ],
+        media: [],
+        recalls: edgePaintRecalls,
+      },
+      {
+        id: 'reassemble',
+        title: 'Složte konec zpět',
+        body: 'Poutko navlékněte od konce u přezky a posuňte ho dál než 180 mm od konce. Přezku nasaďte jako v lekci 4: trn oválem, ozdobnou stranou k líci. Konec ohněte zpět kolem příčky a poutko vraťte do kapsy, spojem na přehnutý konec. Nýty sešroubujte s novou kapkou zajišťovače závitů nebo laku, jako v lekci 4.',
+        animationLinks: [
+          animationLink('beltStitch', 'E2'),
+          animationLink('beltBuckleEnd', 'E5'),
+          animationLink('beltBuckleEnd', 'E6'),
+          animationLink('beltStitch', 'E3'),
+        ],
+        media: [],
+      },
+    ],
+    checkpoints: [
+      {
+        slug: 'stitch-scrap',
+        title: 'Na odřezku prošly všechny otvory na rub a drážka (nebo rýsovaná linie) vyhověla.',
+        required: true,
+      },
+      {
+        slug: 'stitch-line',
+        title:
+          'Obě linie jsou 4 mm od hrany, začínají u nýtu blíž k ohybu a končí před tvarem konce; drážka nepřesahuje první ani poslední otvor.',
+        required: true,
+      },
+      {
+        slug: 'stitch-ends',
+        title: 'Konce nitě jsou na rubu, zatavené a steh je zatlučený.',
+        required: true,
+      },
+      {
+        slug: 'stitch-reassembled',
+        title: 'Nýty jsou utažené a poutko je mezi nimi.',
+        required: true,
+      },
+    ],
+    commonMistakes: [
+      'Drážka vyjetá za koncovou pásku: zůstane vidět.',
+      'Šití přes ohyb nebo přes obě vrstvy: nýty pak nejdou povolit.',
+      'Vidlička držená šikmo: otvory na rubu vyjdou mimo linii.',
+      'Navlhčená kůže: modrá barva se může otřít do béžové nitě.',
+      'Konec nitě na líci.',
+      'Důlek šídlem na líci: zůstane vidět.',
+    ],
+    safety: [
+      PUNCH,
+      'Čepel drážkovače je ostrá: táhněte od ruky.',
+      'Zatavujte jen konec nitě, plamen ke kůži nepřibližujte.',
+    ],
+    requires: [
+      {
+        id: 'finished-belt',
+        fromLesson: L6,
+        label: 'Hotový pásek se zaleštěnými hranami',
+      },
+    ],
+    media: [photo('belt-l7-hero', 'Hotový pásek s béžovým stehem podél obou dlouhých hran')],
+  }),
 ];
 
 /**
@@ -1315,6 +1494,49 @@ const overview: ProjectOverview = {
         },
       ],
     },
+    {
+      title: 'Volitelně: ozdobný steh',
+      note: 'Lekce 7, jen když chcete šít; pásek je hotový po lekci 6.',
+      points: [
+        {
+          id: 'stitch-scrap',
+          lessonSlug: L7,
+          stepId: 'scrap-test',
+          text: 'Na odřezku nastavte drážkovač na 4 mm, na suché kůži vyrýsujte drážku, prosekejte pár otvorů a ušijte pár stehů. Drážka světlejší než pás: linii jen rýsujte kružítkem.',
+        },
+        {
+          id: 'stitch-mark',
+          lessonSlug: L7,
+          stepId: 'endpoints',
+          appLinks: [YOUR_BELT],
+          text: 'Nýty vyšroubujte, přezku a poutko sundejte. Začátek a konec linie označte papírovou páskou přes líc: u třetího otvoru pro nýt od konce a před tvarem konce podle „Váš pásek“. Do kůže nic nevpichujte.',
+        },
+        {
+          id: 'stitch-groove-punch',
+          lessonSlug: L7,
+          stepId: 'punch',
+          text: 'Drážku táhněte od pásky k pásce po obou hranách, jen na líci. Otvory sekejte vidličkou kolmo, vždy prvním hrotem v posledním otvoru. Posledních asi 10 mm nejdřív jednohrot na konci drážky, pak mezeru doplňte jednohrotem.',
+        },
+        {
+          id: 'stitch-sew',
+          lessonSlug: L7,
+          stepId: 'sew',
+          text: 'Každou hranu ušijte jednou nití od přezky ke špičce (šev nedělte, napojení by bylo vidět), na obou koncích 2 otvory zpět. Konce na rubu odstřihněte asi 2 mm od kůže a zatavte.',
+        },
+        {
+          id: 'stitch-set',
+          lessonSlug: L7,
+          stepId: 'set',
+          text: 'Steh z líce i z rubu poklepejte paličkou. Odřenou hranu u barevného pásku natřete znovu a po zaschnutí přeleštěte jako v lekci 3.',
+        },
+        {
+          id: 'stitch-reassemble',
+          lessonSlug: L7,
+          stepId: 'reassemble',
+          text: 'Poutko navlékněte, přezku nasaďte, konec ohněte zpět, poutko vraťte do kapsy a nýty sešroubujte s kapkou zajišťovače závitů nebo laku.',
+        },
+      ],
+    },
   ],
 };
 
@@ -1325,7 +1547,7 @@ export const beltProject: ProjectDefinition = {
   summary:
     'Pásek z hotového pásu třísločiněné kůže: šířku, tloušťku, délku a konec si volíte, čísla a listy spočítá aplikace.',
   description:
-    'Čtvrtý projekt: pásek bez šití z hotového pásu 3–4 mm. Přezka drží na dvou šroubovacích nýtech, poutko je z odřezku, konec je hrot nebo zaoblený. Pásek není jeden výrobek: ve formuláři „Váš pásek“ zadáte šířku podle přezky, změřenou tloušťku, obvod a konec a aplikace spočítá délku pásu, dírky, poutko, nýt, nákup a řekne, jestli stačí destička, nebo si vytisknete listy. Nikdo pásek podle tohoto postupu zatím nepostavil: co podklady neověřují, vyzkoušejte na odřezku. Časy lekcí jsou hrubý odhad.',
+    'Čtvrtý projekt: pásek bez povinného šití; ozdobný steh je volitelná lekce 7 (několik hodin navíc). Pásek je z hotového pásu 3–4 mm. Přezka drží na dvou šroubovacích nýtech, poutko je z odřezku, konec je hrot nebo zaoblený. Pásek není jeden výrobek: ve formuláři „Váš pásek“ zadáte šířku podle přezky, změřenou tloušťku, obvod a konec a aplikace spočítá délku pásu, dírky, poutko, nýt, nákup a řekne, jestli stačí destička, nebo si vytisknete listy. Nikdo pásek podle tohoto postupu zatím nepostavil: co podklady neověřují, vyzkoušejte na odřezku. Časy lekcí jsou hrubý odhad.',
   difficulty: 'intermediate',
   estimatedHours: { min: 6, max: 10 },
   skills: [
@@ -1335,6 +1557,7 @@ export const beltProject: ProjectDefinition = {
     'Ohyb silné kůže a registrace otvorů skrz přehnutí',
     'Šroubovací nýty podle tloušťky',
     'Hrany dlouhého pásu',
+    'Ozdobný sedlářský steh (volitelně)',
   ],
   phases: [...phases],
   equipment: [
@@ -1457,6 +1680,51 @@ export const beltProject: ProjectDefinition = {
       reason: 'Vrchol hrotu R4 podle ocelového lobu Ø 8 mm.',
       specification: 'Ocelová „květina“; akrylová se jako vodítko nože nehodí.',
       alternatives: ['vrchol R4 říznout od ruky'],
+    },
+    {
+      equipmentSlug: 'stitching-groover',
+      priority: 'recommended',
+      reason: 'Jen volitelná lekce 7: drážka pro steh.',
+      specification: 'Doraz na 4 mm; nastavení ověřit na odřezku.',
+    },
+    {
+      equipmentSlug: 'stitching-chisels',
+      priority: 'recommended',
+      reason: 'Jen volitelná lekce 7: otvory pro steh.',
+      specification:
+        '4 mm, 1 + 2 + 4 + 6 hrotů (WUTA Type B z projektu 01). Že hroty projdou pásem až na rub, ověřte na odřezku.',
+    },
+    {
+      equipmentSlug: 'harness-needles',
+      priority: 'recommended',
+      reason: 'Jen volitelná lekce 7: sedlářský steh dvěma jehlami.',
+      specification: 'Sedlářské jehly k niti 0,6 mm, jako v projektu 01.',
+    },
+    {
+      equipmentSlug: 'waxed-thread',
+      priority: 'recommended',
+      reason: 'Jen volitelná lekce 7: nit na steh.',
+      specification: '0,6 mm béžová; množství ve „Váš pásek“.',
+    },
+    {
+      equipmentSlug: 'wing-divider',
+      priority: 'recommended',
+      reason: 'Jen volitelná lekce 7: záloha, když drážka na odřezku zesvětlá.',
+      specification: 'Kružítko s aretací, linie 4 mm od hrany.',
+      alternatives: ['drážkovač, když drážka na odřezku vyhoví'],
+    },
+    {
+      equipmentSlug: 'stitching-pony',
+      priority: 'recommended',
+      reason: 'Jen volitelná lekce 7: drží pás při šití.',
+      specification: 'Sedlářský koník z projektu 01, nebo svěrka.',
+      alternatives: ['svěrka a dvě destičky'],
+    },
+    {
+      equipmentSlug: 'clamps',
+      priority: 'recommended',
+      reason: 'Jen volitelná lekce 7: upnutí pásu při šití bez koníka.',
+      specification: 'Svěrka z dřívějších projektů.',
     },
     {
       equipmentSlug: 'belt-end-punch',
@@ -1624,6 +1892,36 @@ export const beltProject: ProjectDefinition = {
           'Pro jeden pásek se nevyplatí: konec uříznete nožem podle destičky nebo listu 2. Tvar hrotu výsečníku ověřte proti destičce.',
       },
       {
+        equipmentSlug: 'stitching-groover',
+        reason: 'Jen pro volitelnou lekci 7 (Ozdobný steh). Ověřené příklady jsou v katalogu.',
+      },
+      {
+        equipmentSlug: 'waxed-thread',
+        reason:
+          'Jen pro volitelnou lekci 7. Kolik nitě, ukazuje „Váš pásek“; jedna nová cívka Slam 20 m stačí, zbytek z dřívějších projektů stačit nemusí.',
+      },
+      {
+        equipmentSlug: 'stitching-chisels',
+        reason: 'Jen pro volitelnou lekci 7; vidličky 4 mm z projektu 01.',
+      },
+      {
+        equipmentSlug: 'harness-needles',
+        reason: 'Jen pro volitelnou lekci 7; jehly z projektu 01.',
+      },
+      {
+        equipmentSlug: 'wing-divider',
+        reason:
+          'Jen pro volitelnou lekci 7, když drážka na odřezku zesvětlá; kružítko z projektu 01.',
+      },
+      {
+        equipmentSlug: 'stitching-pony',
+        reason: 'Jen pro volitelnou lekci 7, máte-li ho; jinak stačí svěrka.',
+      },
+      {
+        equipmentSlug: 'clamps',
+        reason: 'Jen pro volitelnou lekci 7, máte-li je z dřívějších projektů.',
+      },
+      {
         equipmentSlug: 'edge-paint',
         reason:
           'Jen u barevného pásku. Ověřenou modrou barvu na hrany nemáme: odstín ověřte u prodejce a na odřezku. U hnědé, tmavě hnědé a černé ji „Připravte si“ a „Co koupit“ přidají podle barvy z „Váš pásek“.',
@@ -1635,10 +1933,11 @@ export const beltProject: ProjectDefinition = {
       'dvě lišty nebo odřezky stejně silné jako pás, oboustranná lepicí páska pod ně (lekce 2, 4 a 6)',
       'nůžky na vystřižení listů 1 a 2 (jen s listy)',
       'odřezek kůže na poutko v barvě pásu a papírový proužek na jeho změření (lekce 4)',
-      'papírová páska a tužka: přidržení pásu a listů, značky bez vpichu (lekce 2–6)',
-      'zajišťovač závitů nebo lak na nýty (lekce 4)',
-      'plochý šroubovák podle drážky šroubku nýtu (lekce 2 a 4)',
+      'papírová páska a tužka: přidržení pásu a listů, značky bez vpichu (lekce 2–6, volitelně 7)',
+      'zajišťovač závitů nebo lak na nýty (lekce 4, volitelně 7)',
+      'plochý šroubovák podle drážky šroubku nýtu (lekce 2, 4, volitelně 7)',
       'voda a houbička na ohyb, plátno na leštění',
+      'zapalovač na zatavení konců nitě, kousek kartonu na namotání nitě, kleště a hadřík na protáčivou hlavičku nýtu (jen volitelná lekce 7)',
     ],
   },
   overview,

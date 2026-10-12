@@ -1,3 +1,4 @@
+import { beltProject } from '@/content/projects/belt/project';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { computeEquipmentReadiness } from '@/features/inventory/readiness';
 import {
@@ -101,5 +102,38 @@ describe('computeNextAction', () => {
     expect(next(inventory, all, { ...enrollment, status: 'completed' })).toEqual({
       kind: 'project_completed',
     });
+  });
+});
+
+describe('computeNextAction – volitelná lekce (pásek, lekce 7)', () => {
+  const belt = beltProject;
+  const owned = inventoryOf(
+    ...belt.equipment
+      .filter((e) => e.priority === 'required')
+      .map((e) => item(e.equipmentSlug, 'owned')),
+  );
+  const doneBelt = (...orders: number[]): ProgressState => {
+    const lessons = belt.lessons.filter((l) => orders.includes(l.order));
+    return {
+      lessons: Object.fromEntries(lessons.map((l) => [l.slug, lessonDone(belt.slug, l.slug)])),
+      checkpoints: Object.fromEntries(
+        lessons.flatMap((l) =>
+          l.checkpoints.map((c) => [
+            checkpointKey(l.slug, c.slug),
+            checkpointDone(belt.slug, l.slug, c.slug),
+          ]),
+        ),
+      ),
+    };
+  };
+  const nextBelt = (progress: ProgressState) => {
+    const enr = enrollmentOf(belt.slug);
+    const journey = computeJourney(belt, { enrollment: enr, inventory: owned, progress });
+    return computeNextAction(belt, journey, computeEquipmentReadiness(belt, owned), true);
+  };
+
+  it('po hotové lekci 6 je další krok dokončit projekt, ne volitelná lekce 7', () => {
+    expect(nextBelt(doneBelt(1, 2, 3, 4, 5))).toMatchObject({ kind: 'continue_lesson', order: 6 });
+    expect(nextBelt(doneBelt(1, 2, 3, 4, 5, 6))).toEqual({ kind: 'complete_project' });
   });
 });

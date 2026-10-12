@@ -17,6 +17,7 @@ import { useSession } from '@/features/auth/session-provider';
 import { useEnrollment, useEnrollProject } from '@/features/progress/use-progress';
 import { cn } from '@/lib/utils/cn';
 import { typo } from '@/lib/utils/format';
+import { lessonCountLabel } from '@/features/progress/lesson-count';
 
 /**
  * Onboarding: 1) výběr projektu, 2) „Co už máte doma?“ – běžné věci se rovnou označí jako Mám.
@@ -103,7 +104,7 @@ export function OnboardingPage() {
                   </div>
                   <div>
                     <dt className="text-[11px] tracking-[0.06em] uppercase">Lekce</dt>
-                    <dd className="font-semibold text-leather">{project.lessons.length}</dd>
+                    <dd className="font-semibold text-leather">{lessonCountLabel(project)}</dd>
                   </div>
                 </dl>
               </button>

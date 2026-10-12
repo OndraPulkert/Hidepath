@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 
 import { routes } from '@/app/routes';
 import { equipmentCatalog } from '@/content/equipment';
+import { Tag } from '@/components/ui/tag';
 import { type ProjectDefinition } from '@/content/schema';
 import { type LessonView } from '@/features/progress/lesson-availability';
 import { cn } from '@/lib/utils/cn';
@@ -48,6 +49,11 @@ export function LessonList({
                   )}
                 >
                   {lesson.title}
+                  {view.optional ? (
+                    <Tag tone="optional" className="ml-2 px-2 py-0.5 align-middle">
+                      Volitelná
+                    </Tag>
+                  ) : null}
                 </span>
                 <span className="block text-meta text-ink-2">{typo(subtitle)}</span>
               </span>
@@ -62,8 +68,15 @@ export function LessonList({
   );
 }
 
+/** Podtitulek volitelné lekce (dostupné i rozpracované), aby bylo jasné, že ji jde přeskočit. */
+export const OPTIONAL_LESSON_SUBTITLE = 'Volitelná · přeskočte, když nešijete';
+
 function describe(view: LessonView, goal: string): string {
   if (view.status === 'completed') return 'Hotovo';
+  if (view.optional && view.status === 'available') return OPTIONAL_LESSON_SUBTITLE;
+  if (view.optional && view.status === 'in_progress') {
+    return `Volitelná · rozpracováno · ${view.completedRequiredCheckpoints} z ${view.totalRequiredCheckpoints} bodů`;
+  }
   if (view.status === 'locked') {
     const m = view.blockers.missingEquipment[0];
     if (m) {

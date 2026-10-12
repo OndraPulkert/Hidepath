@@ -137,6 +137,7 @@ describe('obsah – pásek: zápisník, „Připravte si“ a destička', () => 
       'belt-keeper-length',
       'belt-fit-waist',
       'belt-fit-result',
+      'belt-stitch-line',
     ]);
     // Připomínky parametrů jsou z aktivního pásku, ne ze zápisníku.
     const recalled = beltProject.lessons.flatMap((l) =>
@@ -471,7 +472,7 @@ describe('pásek – nálezy kontroly lekcí (2026-10-08, kolo 2)', () => {
       expect(lesson(order).materials).toContain('plochý šroubovák podle drážky šroubku nýtu');
     }
     expect(beltProject.shoppingPlan!.alsoNeeded).toContain(
-      'plochý šroubovák podle drážky šroubku nýtu (lekce 2 a 4)',
+      'plochý šroubovák podle drážky šroubku nýtu (lekce 2, 4, volitelně 7)',
     );
     expect(step(4, 'screws').body).toContain('hlavičku s dutým dříkem z líce pásu');
     expect(step(2, 'screw').body).toContain('hlavičku s dutým dříkem z líce');
@@ -568,5 +569,63 @@ describe('pásek – podklad listů', () => {
     const prints = beltProject.lessons.flatMap((l) => l.prints ?? []);
     expect(prints.length).toBeGreaterThan(0);
     for (const p of prints) expect(p.mount, p.purpose).toBeDefined();
+  });
+});
+
+describe('pásek – volitelná lekce 7: ozdobný steh', () => {
+  const withWaist = (() => {
+    const outcome = deriveBeltConfig({ widthMm: 40, thicknessMm: 3.5, tip: 'hrot', waistMm: 950 });
+    if (!outcome.ok) throw new Error(outcome.problems.join(' '));
+    return outcome.result;
+  })();
+
+  it('příklady v textu odpovídají výpočtu beltStitchPlan (40 × 3,5 mm, hrot, obvod 95 cm)', () => {
+    const plan = withWaist.stitch;
+    expect(step(7, 'endpoints').body).toContain(`např. ${plan.stopFromApexMm} mm`);
+    expect(step(7, 'sew').body).toContain(`např. ${cz(plan.perEdge!.threadM)} m`);
+    expect(step(7, 'scrap-test').body).toContain(`na ${plan.offsetMm} mm`);
+    expect(lesson(7).goal).toContain(`${plan.offsetMm} mm od hrany`);
+    // Bez obvodu se linie spočítá stejně (příklad bez obvodu).
+    expect(example.stitch.stopFromApexMm).toBe(plan.stopFromApexMm);
+  });
+
+  it('čísla linie, otvorů a nitě bere z aktivního pásku, nic se nezapisuje dvakrát', () => {
+    expect(step(7, 'endpoints').beltRecalls).toEqual(['stitchLine']);
+    expect(step(7, 'punch').beltRecalls).toEqual(['stitchHoles']);
+    expect(step(7, 'sew').beltRecalls).toEqual(['stitchThread']);
+    expect(lessonText(7)).not.toMatch(/257|1024|102,4|11,6/);
+  });
+
+  it('vybavení lekce 7 je jen doporučené: fázi Vybavení nezamkne', () => {
+    for (const slug of [
+      'stitching-groover',
+      'stitching-chisels',
+      'harness-needles',
+      'waxed-thread',
+      'wing-divider',
+      'stitching-pony',
+      'clamps',
+    ]) {
+      const req = beltProject.equipment.find((e) => e.equipmentSlug === slug)!;
+      expect(req.priority, slug).toBe('recommended');
+    }
+    const plan = beltProject.shoppingPlan!;
+    expect(plan.skipped.find((s) => s.equipmentSlug === 'stitching-groover')!.reason).toBe(
+      'Jen pro volitelnou lekci 7 (Ozdobný steh). Ověřené příklady jsou v katalogu.',
+    );
+    expect(plan.skipped.find((s) => s.equipmentSlug === 'waxed-thread')!.reason).toContain(
+      'jedna nová cívka Slam 20 m stačí',
+    );
+  });
+
+  it('drážkovač v katalogu: ověřené příklady CraftPoint a Leatory z 12. 10. 2026', () => {
+    const groover = equipmentCatalog['stitching-groover']!;
+    expect(
+      groover.examples.map((e) => [e.shop, e.priceCents, e.availability, e.checkedAt]),
+    ).toEqual([
+      ['CraftPoint', 27_800, 'in_stock', '2026-10-12'],
+      ['Leatory', 47_600, 'in_stock', '2026-10-12'],
+    ]);
+    expect(groover.cautions.join(' ')).toContain('ověřte po dodání');
   });
 });
