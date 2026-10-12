@@ -267,7 +267,8 @@ describe('vstupy do „Váš pásek“', () => {
     // Kalkulačka pod krokem: šířka a tloušťka z aktivního pásku, rozpis a příklad.
     const calc = screen.getByRole('region', { name: 'Kalkulačka poutka' });
     expect(calc).toHaveTextContent(/Z aktivního pásku: šířka 30\smm, tloušťka 3,5\smm/);
-    expect(calc).toHaveTextContent(/Proužek:\s*12 × 107\smm/);
+    expect(calc).toHaveTextContent(/uřízněte napříč kus 12\scm/);
+    expect(calc).toHaveTextContent(/podélně proužek 12 × 107\smm/);
     expect(calc).toHaveTextContent(/Obvod 3 vrstev:\s*81\smm/);
     expect(calc).toHaveTextContent(/Příklad: pás 40 × 3,5\smm/);
     // Změřený obvod přepíše spočítaný (jediné vlastní pole kalkulačky, zápis kroku).
@@ -275,7 +276,7 @@ describe('vstupy do „Váš pásek“', () => {
       within(calc).getByRole('textbox', { name: /Obvod 3 vrstev změřený/ }),
       '85{Enter}',
     );
-    await waitFor(() => expect(calc).toHaveTextContent(/Proužek:\s*12 × 111\smm/));
+    await waitFor(() => expect(calc).toHaveTextContent(/podélně proužek 12 × 111\smm/));
     expect(calc).toHaveTextContent(/změřený proužkem; spočítaný 81\smm/);
     // Nákup a list 1 počítají se spočítaným obvodem: kalkulačka to řekne.
     expect(calc).toHaveTextContent(/Nákup, list 1 a lekce 2 počítají se spočítaným obvodem/);
