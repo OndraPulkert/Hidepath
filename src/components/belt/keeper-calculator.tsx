@@ -88,20 +88,45 @@ export function KeeperCalculator({
       ) : null}
       {calc ? (
         <>
-          <p className="text-body">
-            <span className="text-ink-2">Proužek: </span>
-            <strong className="font-semibold text-leather">{typo(keeperStripText(calc))}</strong>
-            {calc.fromStrap ? (
-              <span className="text-ink-2">
-                {typo(` · kus pásu ${calc.pieceCm} cm (délka + 10 mm rezerva)`)}
-              </span>
-            ) : null}
-          </p>
+          <div className="flex flex-col gap-1">
+            <p className="text-meta font-medium text-ink-2">Co uříznout</p>
+            {calc.fromStrap && input ? (
+              <ol className="list-decimal pl-5 text-body">
+                <li>
+                  {typo('Z konce řemene uřízněte napříč kus ')}
+                  <strong className="font-semibold text-leather">
+                    {typo(`${calc.pieceCm} cm`)}
+                  </strong>
+                  {typo(
+                    ` (celá šířka ${mm(input.widthMm)}; je o kousek delší než poutko, rezerva na zkoušku na sucho a srovnání).`,
+                  )}
+                </li>
+                <li>
+                  {typo('Z tohoto kusu vyřízněte podélně proužek ')}
+                  <strong className="font-semibold text-leather">
+                    {typo(keeperStripText(calc))}
+                  </strong>
+                  {typo(' – to je poutko.')}
+                </li>
+              </ol>
+            ) : (
+              <p className="text-body">
+                {typo('Z kůže na poutko vyřízněte proužek ')}
+                <strong className="font-semibold text-leather">
+                  {typo(keeperStripText(calc))}
+                </strong>
+                {typo('.')}
+              </p>
+            )}
+          </div>
           {ignored || diff ? (
             <p role="note" className="text-body font-medium text-cognac-deep">
               {typo(ignored ?? diff ?? '')}
             </p>
           ) : null}
+          <p className="text-meta font-medium text-ink-2">
+            {typo(`Jak vyšla délka proužku ${mm(calc.lengthMm)}`)}
+          </p>
           <dl className="flex flex-col gap-1 text-body">
             {keeperBreakdown(calc).map((line) => (
               <div key={line.label} className="flex flex-wrap gap-x-2">
