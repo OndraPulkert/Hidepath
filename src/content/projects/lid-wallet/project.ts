@@ -1715,6 +1715,7 @@ export const lessons: readonly LessonDefinition[] = [
     materials: [
       'karty, bankovky a mince na stavy A, B a C, 1 Kč na zkoušku retence',
       'papír na upozornění',
+      'jen když se po zkušebním kuse změnila varianta nebo listy: tenký karton (krabice od cereálií) a lepidlo v tyčince na nové šablony',
       'jen při výměně magnetu: malé nůžky nebo páráček, kousek nebarvené kozinky na novou L1, podložka s otvorem z lekce 11, jehla na propichování',
     ],
     requiredEquipment: [],

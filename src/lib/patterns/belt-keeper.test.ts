@@ -117,7 +117,7 @@ describe('poutko: změřený obvod, špalík a spoj', () => {
     expect(typo.measuredWrapMm).toBeNull();
     expect(typo.measuredIgnoredMm).toBe(10);
     expect(typo.lengthMm).toBe(127);
-    expect(measuredIgnoredText(typo)).toMatch(/liší o víc než 15 %: počítám se spočítaným/);
+    expect(measuredIgnoredText(typo)).toMatch(/liší o víc než 15\u00a0%: počítám se spočítaným/);
     // Obvod změřený na pásu 40 mm u pásku 30 × 3,0 mm (spočítaný 78 mm) je o víc než 15 % jiný.
     expect(
       keeperCalculation({ beltWidthMm: 30, beltThicknessMm: 3, measuredWrapMm: 101 })

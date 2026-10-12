@@ -313,8 +313,9 @@ describe('pásek – lekce 7: opravy z kontroly ozdobného stehu (12. 10. 2026)'
     expect(lesson(7).materials).toContain('zajišťovač závitů nebo lak (jako v lekci 4)');
   });
 
-  it('konec linie: posledních 10 mm až po jednohrotu na konci drážky', () => {
-    expect(stepOf(7, 'punch').body).toContain('Posledních asi 10 mm drážky vidličkou nesekejte');
+  it('konec linie: asi 20 mm před koncem jednohrot na konec, mezera na stejné díly', () => {
+    expect(stepOf(7, 'punch').body).toContain('Asi 20 mm před koncem drážky vidličkou přestaňte');
+    expect(stepOf(7, 'punch').body).toContain('na stejné díly co nejblíž 4 mm');
     expect(stepOf(7, 'punch').body).toContain('lícem nahoru, vraťte vidličku');
   });
 

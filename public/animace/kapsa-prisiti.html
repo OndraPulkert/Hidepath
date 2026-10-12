@@ -14,7 +14,7 @@
   --accent:#b3261e;--ok:#2f6b3a;--btn:#2a211b;--btn-ink:#fffdf9;
   --lic:#b8773f;--lic-d:#8a5228;--lic-hi:#d39a63;
   --rub:#dcc4a2;--rub-d:#b99a72;--rub-fib:#c7a87f;
-  --hole:#2b2018;--paper:#fcfbf7;--paper-edge:#cfc8bb;--print:#2b2b2b;--print-m:#7a7a7a;
+  --hole:#2b2018;--paper:#fcfbf7;--paper-edge:#cfc8bb;--karton:#b9935f;--print:#2b2b2b;--print-m:#7a7a7a;
   --graphite:#4f545a;--steel:#a3abb3;--steel-d:#5c656e;--tape:#eedc95;--tape-d:#c9b46a;
   --coin-o:#c4683f;--coin-o-d:#7a3a1c;--coin-i:#dcb94f;--coin-i-d:#93752a;--chip-lic:#b8773f;--chip-rub:#dcc4a2;
   --glue:#e0ad35;--board:#eceff1;--board-d:#aab2ba;--thread:#f6efdc;--thread-d:#8f8166;--thread2:#7aa6cf;
@@ -26,7 +26,7 @@
   --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
   --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
   --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;
-  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--graphite:#3f4449;
+  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--karton:#9a7b52;--graphite:#3f4449;
   --steel:#9099a2;--steel-d:#4d555d;--tape:#d9c67d;--tape-d:#a8964f;
   --glue:#c8962a;--board:#a9b1b8;--board-d:#6c747c;--thread:#efe6cf;--thread-d:#7d705a;--thread2:#86b0d6;
   --sand:#b8935f;--sand-d:#7a5d33;--skin:#d6a684;--skin-d:#a57454;
@@ -37,7 +37,7 @@
   --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
   --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
   --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;
-  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--graphite:#3f4449;
+  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--karton:#9a7b52;--graphite:#3f4449;
   --steel:#9099a2;--steel-d:#4d555d;--tape:#d9c67d;--tape-d:#a8964f;
   --glue:#c8962a;--board:#a9b1b8;--board-d:#6c747c;--thread:#efe6cf;--thread-d:#7d705a;--thread2:#86b0d6;
   --sand:#b8935f;--sand-d:#7a5d33;--skin:#d6a684;--skin-d:#a57454;
@@ -230,8 +230,8 @@ const TT=[[60,157.17,0],[200,157.17,0],[250.35,110,90],[10,110,90],[215,53.07,0]
 function tapesTmpl(p=1){return TT.map(([x,y,a],i)=>tape(x,y,a,.85*cl(p*TT.length-i))).join('')}
 function winTemplate(op=1,peel=0,o={}){if(op<=0)return '';
   const body=`<mask id="wm"><path d="${STRIP}" fill="#fff"/><path d="${OUTL}" transform="${POCK_T}" fill="#000"/></mask>`+
-    `<g mask="url(#wm)"><path d="${STRIP}" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3"/>${printStrip()}</g>`+
-    `<path d="${OUTL}" transform="${POCK_T}" fill="none" stroke="var(--paper-edge)" stroke-width=".35"/>`+(o.tapes===false?'':tapesTmpl(o.tapes??1));
+    `<g mask="url(#wm)"><path d="${STRIP}" fill="var(--paper)" stroke="var(--karton)" stroke-width=".6"/>${printStrip()}</g>`+
+    `<path d="${OUTL}" transform="${POCK_T}" fill="none" stroke="var(--karton)" stroke-width=".6"/>`+(o.tapes===false?'':tapesTmpl(o.tapes??1));
   return G(`translate(${f(peel*40)} ${f(-peel*70)})`,body,`opacity="${f(op*(1-peel))}" ${peel>0?SHADOW:''}`)}
 function glueBand(p,dry){return `<path d="${BANDL}" fill="none" stroke="var(--glue)" stroke-width="3.5" opacity="${f(L(.92,.6,dry))}" pathLength="1" stroke-dasharray="${f(p)} 2"/><path d="${BANDL}" fill="none" stroke="#fff" stroke-width=".55" opacity="${f(.55*(1-dry))}" pathLength="1" stroke-dasharray="${f(p)} 2"/>`}
 
@@ -285,9 +285,9 @@ const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,
 add('A','Vystřihněte okénko z 2. výtisku PÁS','Vezměte 2. výtisk listu PÁS z lekce 5 (nalepený na tenkém kartonu). Vystřihněte ho přesně po obrysu pásu. Pak v něm nožem vyřízněte okénko po vnějším obrysu kapsy na předním panelu: nahoře po čárkované čáře, po bocích a dole po vnějším okraji zelené šrafy G1.',8600,t=>{
   const o1=es(t,.05,.28), w1=es(t,.32,.5), o2=es(t,.55,.72), w2=es(t,.76,.92);
   let inner=`<rect x="-30" y="-40" width="320" height="250" fill="var(--board)"/>`;
-  const waste=`<path d="M${PAPER.x} ${PAPER.y} h${PAPER.w} v${PAPER.h} h${-PAPER.w} Z ${STRIP}" fill-rule="evenodd" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3"/>`;
+  const waste=`<path d="M${PAPER.x} ${PAPER.y} h${PAPER.w} v${PAPER.h} h${-PAPER.w} Z ${STRIP}" fill-rule="evenodd" fill="var(--paper)" stroke="var(--karton)" stroke-width=".6"/>`;
   if(w1<1) inner+=G(`translate(0 ${f(w1*20)})`,waste,`opacity="${f(1-w1)}"`);
-  if(w2<1) inner+=G('',`<path d="${STRIP}" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3"/>`+printStrip(),`opacity="${f(1-w2)}"`);
+  if(w2<1) inner+=G('',`<path d="${STRIP}" fill="var(--paper)" stroke="var(--karton)" stroke-width=".6"/>`+printStrip(),`opacity="${f(1-w2)}"`);
   if(w2>0) inner+=winTemplate(w2,0,{tapes:false});
   if(o1>0&&w1<1) inner+=`<path d="${STRIP}" fill="none" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 2" opacity="${f(o1*(1-w1))}"/>`;
   if(o2>0&&w2<1) inner+=`<path d="${OUTL}" transform="${POCK_T}" fill="none" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 2" opacity="${f(o2*(1-w2))}"/>`;

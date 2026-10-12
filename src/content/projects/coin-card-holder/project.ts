@@ -2414,7 +2414,7 @@ export const coinCardHolderProject: ProjectDefinition = {
     ],
     calibrationMm: 50,
     printNote:
-      'Tisk na A4 bez přizpůsobení velikosti (100 %). Kontrolní úsečka na okraji musí měřit 50 mm. Předem zaškrtnutý výchozí střih je pro minci 50 Kč a kůži těla 1,2 mm (bez ztenčení ohybu B); listy pro kůži 1,5 mm jsou varianta níže. Jak přenést šablonu PÁS na kůži: vystřihnout nahrubo s okrajem 1–2 cm, přilepit páskou na líc, propíchnout značky, kroužky za čarou řezu spojit na rubu a řezat skrz papír po čáře (lekce 5). List PÁS vytiskněte 2×: 1 na kůži (rozřeže se, na každý pás novou), 1 na šablonu s okénkem pro kapsu (lekce 6). List KAPSA vytiskněte 3×: 1 na vrtání formy, 1 na značky na líci (lekce 2 a 6), 1 na šablonu na rub – vystřihne se přesně po obrysu kapsy a vysekne se do ní okno (lekce 2 a 6). Když v lekci 2 přejdete na menší okno Ø 18 mm, vytiskněte ještě list Kapsa – záložní okno Ø 18 mm na šablonu s oknem Ø 18 mm.',
+      'Tisk na A4 bez přizpůsobení velikosti (100 %). Kontrolní úsečka na okraji musí měřit 50 mm. Předem zaškrtnutý výchozí střih je pro minci 50 Kč a kůži těla 1,2 mm (bez ztenčení ohybu B); listy pro kůži 1,5 mm jsou varianta níže. Jak přenést šablonu PÁS na kůži: vystřihnout nahrubo s okrajem 1–2 cm, přilepit páskou na líc, propíchnout značky, kroužky za čarou řezu spojit na rubu a řezat skrz papír po čáře (lekce 5). Kolik výtisků kterého listu a k čemu, ukazuje výpis „Kolik vytisknout“.',
     defaultVariantLabel: 'Výchozí střih – mince 50 Kč, kůže 1,2 mm (bez ztenčení)',
     variantsNote:
       'V aplikaci jsou listy pro výchozí minci 50 Kč s kůží 1,2 mm (např. Blu nebo Verde; platí pro třísločiněnou kůži 1,2 mm z jakékoli nabídky), záložní list kapsy s oknem Ø 18 mm, listy pro kůži 1,5 mm se ztenčením ohybu B a pro minci 40 mm z předlohy s oběma tloušťkami. Jiná mince mění jen místo kapsy, okno a otvor formy, ne ohyby ani jazyk; tloušťka kůže naopak mění ohyby i jazyk. Jiný počet karet ani jiná tloušťka kůže než 1,2 a 1,5 mm v aplikaci zatím nejsou.',
@@ -2634,7 +2634,8 @@ export const coinCardHolderProject: ProjectDefinition = {
       },
       {
         equipmentSlug: 'corner-template',
-        reason: 'Tentokrát ne: R10 a R6 obtáhnete podle mince nebo víčka.',
+        reason:
+          'Tentokrát ne: rohy v lekci 5 řežete po čáře šablony PÁS, R10 na konci jazyka v lekci 8 obtáhnete podle mince nebo víčka.',
       },
     ],
     alsoNeeded: [

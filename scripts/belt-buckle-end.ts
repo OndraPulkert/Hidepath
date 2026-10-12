@@ -36,6 +36,7 @@ import {
   tipTangentPoint,
 } from '../src/lib/geometry/belt-end.ts';
 import { GREY, INK, buildPages, cz, f } from '../src/lib/patterns/belt-sheets.ts';
+import { staticSheetEndFor } from '../src/lib/patterns/belt-config.ts';
 
 /** Řezací soubor pro laser: řez černě, gravírování modře (běžná konvence řezáren). */
 const LASER = {
@@ -1319,11 +1320,16 @@ function widthFromArgs(): number {
   return v;
 }
 
+/** Konec u přezky pro předem připravené listy: výchozí „Váš pásek“ (`staticSheetEndFor`). */
+export const sheetEndFor = staticSheetEndFor;
+
 async function main(): Promise<void> {
   const beltWidthMm = widthFromArgs();
-  const end: BeltEndSpec = { ...DEFAULT_BELT_END, beltWidthMm };
+  const plateEnd: BeltEndSpec = { ...DEFAULT_BELT_END, beltWidthMm };
+  const end: BeltEndSpec = sheetEndFor(beltWidthMm);
   const tip: BeltTipSpec = { ...DEFAULT_BELT_TIP, beltWidthMm };
   assertBeltEndSpec(end);
+  assertBeltEndSpec(plateEnd);
   assertBeltTipSpec(tip);
 
   const here = dirname(fileURLToPath(import.meta.url));
@@ -1345,9 +1351,9 @@ async function main(): Promise<void> {
 
   if (process.argv.includes('--multi')) {
     const platePath = resolve(outDir, 'opasek-desticka.svg');
-    const svg = buildBeltPlateSvg(end, tip);
+    const svg = buildBeltPlateSvg(plateEnd, tip);
     writeFileSync(platePath, svg, 'utf8');
-    const L = beltPlateLayout(end, tip);
+    const L = beltPlateLayout(plateEnd, tip);
     console.log(`Zapsáno ${platePath}`);
 
     // Papírová kontrola před objednáním akrylátu: vytisknout na A4 na šířku na 100 %
@@ -1376,16 +1382,24 @@ async function main(): Promise<void> {
       return v;
     })();
     const areaSvg = resolve(outDir, 'opasek-desticka-plochy.svg');
-    writeFileSync(areaSvg, buildBeltPlateAreaSvg(end, tip, DEFAULT_BELT_PLATE, areaWidth), 'utf8');
+    writeFileSync(
+      areaSvg,
+      buildBeltPlateAreaSvg(plateEnd, tip, DEFAULT_BELT_PLATE, areaWidth),
+      'utf8',
+    );
     const areaDxf = resolve(outDir, 'opasek-desticka-plochy.dxf');
-    writeFileSync(areaDxf, buildBeltPlateAreaDxf(end, tip, DEFAULT_BELT_PLATE, areaWidth), 'utf8');
+    writeFileSync(
+      areaDxf,
+      buildBeltPlateAreaDxf(plateEnd, tip, DEFAULT_BELT_PLATE, areaWidth),
+      'utf8',
+    );
     console.log(`Zapsáno ${areaSvg} a ${areaDxf} (gravírování jako plochy ${areaWidth} mm)`);
 
     const dxfPath = resolve(outDir, 'opasek-desticka.dxf');
-    writeFileSync(dxfPath, buildBeltPlateDxf(end, tip), 'utf8');
+    writeFileSync(dxfPath, buildBeltPlateDxf(plateEnd, tip), 'utf8');
     console.log(`Zapsáno ${dxfPath} (2 vrstvy, mm, oblouky jako ARC)`);
     const dxfCutPath = resolve(outDir, 'opasek-desticka-rez.dxf');
-    writeFileSync(dxfCutPath, buildBeltPlateDxf(end, tip, DEFAULT_BELT_PLATE, true), 'utf8');
+    writeFileSync(dxfCutPath, buildBeltPlateDxf(plateEnd, tip, DEFAULT_BELT_PLATE, true), 'utf8');
     console.log(`Zapsáno ${dxfCutPath} (jen řez, pro automatické kalkulačky)`);
 
     // Náhledy hotového konce: odpověď na „jak to bude ve skutečnosti vypadat".
@@ -1400,7 +1414,7 @@ async function main(): Promise<void> {
     }
 
     const legendPath = resolve(outDir, 'opasek-desticka-vysvetlivky.svg');
-    writeFileSync(legendPath, buildPlateLegendSvg(end, tip), 'utf8');
+    writeFileSync(legendPath, buildPlateLegendSvg(plateEnd, tip), 'utf8');
     console.log(`Zapsáno ${legendPath} (vysvětlivky – NEposílat řezárně)`);
 
     const platePdf = resolve(outDir, 'opasek-desticka-kontrolni-tisk.pdf');

@@ -28,13 +28,14 @@
 <text x="76" y="217" font-family="Helvetica, Arial, sans-serif" font-size="3.2" fill="#2b2b2b" text-anchor="start">konec pásu 90 mm od ohybu</text>
 <text x="76" y="77.65" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#6a6a6a" text-anchor="start">šedé: 2. dvojice, značí se až skrz 1. dvojici</text>
 <text x="22" y="33" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#6a6a6a" text-anchor="start">sem pokračuje hlavní pás (nahoře neřezat)</text>
-<text x="22" y="222" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Poutko — pásek 120 × 12 mm, obepíná 3 vrstvy: přehnutý konec, pás pod ním a volný konec pásku</text>
-<text x="22" y="248" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">obvod 3 vrstev 101 mm + 3,8 mm na tloušťku poutka 1,2 mm + 15 mm přeplátování</text>
+<text x="22" y="222" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Poutko — pásek 127 × 12 mm, obepíná 3 vrstvy: přehnutý konec, pás pod ním a volný konec pásku</text>
+<text x="22" y="248" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">obvod 3 vrstev 101 mm + 11 mm na tloušťku poutka 3,5 mm + 15 mm přeplátování</text>
 <path d="M22 226 L22 226 M22 228.5 L24.5 226 M22 231 L27 226 M22 233.5 L29.5 226 M22 236 L32 226 M22.5 238 L34.5 226 M25 238 L37 226 M27.5 238 L37 228.5 M30 238 L37 231 M32.5 238 L37 233.5 M35 238 L37 236" stroke="#6a6a6a" stroke-width="0.2" fill="none"/>
-<path d="M127 226 L127 226 M127 228.5 L129.5 226 M127 231 L132 226 M127 233.5 L134.5 226 M127 236 L137 226 M127.5 238 L139.5 226 M130 238 L142 226 M132.5 238 L142 228.5 M135 238 L142 231 M137.5 238 L142 233.5 M140 238 L142 236" stroke="#6a6a6a" stroke-width="0.2" fill="none"/>
-<rect x="22" y="226" width="120" height="12" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
-<text x="145" y="231" font-family="Helvetica, Arial, sans-serif" font-size="2.8" fill="#6a6a6a" text-anchor="start">šrafy: přeplátování 15 mm</text>
-<text x="145" y="235.5" font-family="Helvetica, Arial, sans-serif" font-size="2.8" fill="#6a6a6a" text-anchor="start">vlevo na líci, vpravo na rubu</text>
+<path d="M134 226 L134 226 M134 228.5 L136.5 226 M134 231 L139 226 M134 233.5 L141.5 226 M134 236 L144 226 M134.5 238 L146.5 226 M137 238 L149 226 M139.5 238 L149 228.5 M142 238 L149 231 M144.5 238 L149 233.5 M147 238 L149 236" stroke="#6a6a6a" stroke-width="0.2" fill="none"/>
+<rect x="22" y="226" width="127" height="12" fill="none" stroke="#2b2b2b" stroke-width="0.3"/>
+<text x="152" y="231" font-family="Helvetica, Arial, sans-serif" font-size="2.8" fill="#6a6a6a" text-anchor="start">šrafy: klín 15 mm</text>
+<text x="152" y="235.5" font-family="Helvetica, Arial, sans-serif" font-size="2.8" fill="#6a6a6a" text-anchor="start">ztenčit: vlevo líc,</text>
+<text x="152" y="240" font-family="Helvetica, Arial, sans-serif" font-size="2.8" fill="#6a6a6a" text-anchor="start">vpravo rub</text>
 <line x1="22" y1="238" x2="22" y2="240" stroke="#7a7a7a" stroke-width="0.2"/>
 <text x="22" y="243.2" font-family="Helvetica, Arial, sans-serif" font-size="2.6" fill="#7a7a7a" text-anchor="middle">0</text>
 <line x1="32" y1="238" x2="32" y2="240" stroke="#7a7a7a" stroke-width="0.2"/>
@@ -66,7 +67,7 @@
 <text x="22" y="260.6" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">   Kroužky ohybu nesekejte: spojte je na rubu pravítkem, to je čára ohybu.</text>
 <text x="22" y="264.8" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">3. Navlékněte poutko na pás, ohněte konec kolem příčky přezky a poutko posuňte přes přehnutý konec.</text>
 <text x="22" y="269" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">4. Šedé otvory nepropichujte: vykružte je šídlem skrz vyseknuté, vysekněte, poutko vraťte mezi ně a sešroubujte nýty.</text>
-<text x="22" y="273.2" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Poutko: mimo šrafy přelepte páskou, šrafy zdrsněte (vlevo líc, vpravo rub), lepidlo jen do šraf. Nýty: 2, proto 4 otvory.</text>
+<text x="22" y="273.2" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Poutko z pásu: šrafy ztenčete do klínu (vlevo líc, vpravo rub), lepidlo jen na klíny. Nýty: 2, proto 4 otvory.</text>
 <text x="22" y="277.4" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Rozměry z šablony Black Flag Leather Goods (jeden zdroj, ať se nemíchají rozteče).</text>
 <text x="22" y="281.6" font-family="Helvetica, Arial, sans-serif" font-size="3" fill="#2b2b2b" text-anchor="start">Délka poutka je spočítaná, ne ověřená — ověřte na odřezku.</text>
 </svg>

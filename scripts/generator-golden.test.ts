@@ -20,6 +20,7 @@ import {
   buildLaserSvg,
   buildPages,
   buildPlateLegendSvg,
+  sheetEndFor,
 } from './belt-buckle-end.ts';
 import { buildObvodMetremSvg, buildObvodNaPaskuSvg } from './belt-illustrations.ts';
 import { buildPracticeSheetSvg } from './card-holder-practice.ts';
@@ -220,7 +221,7 @@ describe('zapsané soubory odpovídají generátoru', () => {
   }
 
   for (const mm of [35, 40]) {
-    const w = width(mm);
+    const w = { end: sheetEndFor(mm), tip: width(mm).tip };
     it(`tiskové listy pro ${mm} mm jsou aktuální`, () => {
       // Tiskové listy se na disk zapisují s XML prologem, buildPages ho nevrací.
       const prolog = '<?xml version="1.0" encoding="UTF-8"?>\n';

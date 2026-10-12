@@ -212,7 +212,7 @@ export function keeperCalculation(
 export function measuredIgnoredText(c: KeeperCalculation): string | null {
   if (c.measuredIgnoredMm === null) return null;
   const pct = Math.round(MEASURED_WRAP_TOLERANCE * 100);
-  return `Zapsaný obvod ${mm(c.measuredIgnoredMm)} se od spočítaného ${mm(c.computedWrapMm)} liší o víc než ${pct} %: počítám se spočítaným. Překlep, nebo obvod z jiného pásku? Změřte znovu a zapište.`;
+  return `Zapsaný obvod ${mm(c.measuredIgnoredMm)} se od spočítaného ${mm(c.computedWrapMm)} liší o víc než ${pct}\u00a0%: počítám se spočítaným. Překlep, nebo obvod z jiného pásku? Změřte znovu a zapište.`;
 }
 
 /**
@@ -223,7 +223,9 @@ export function measuredDiffText(c: KeeperCalculation, base: KeeperCalculation):
   if (c.measuredWrapMm === null || c.lengthMm === base.lengthMm) return null;
   const piece =
     c.fromStrap && c.pieceCm !== base.pieceCm
-      ? ` Kus pásu ${c.pieceCm} cm je ${c.pieceCm > base.pieceCm ? 'delší' : 'kratší'} než ${base.pieceCm} cm v nákupu a v lekci 2: ověřte, že vám pás stačí.`
+      ? c.pieceCm > base.pieceCm
+        ? ` Kus pásu ${c.pieceCm} cm je delší než ${base.pieceCm} cm v nákupu a v lekci 2: ověřte, že vám pás stačí.`
+        : ` Kus pásu ${c.pieceCm} cm je kratší než ${base.pieceCm} cm v nákupu a v lekci 2.`
       : '';
   return `Se změřeným obvodem je proužek ${keeperStripText(c)}. Nákup, list 1 a lekce 2 počítají se spočítaným obvodem (${keeperStripText(base)}).${piece} Proužek řežte podle změřeného.`;
 }

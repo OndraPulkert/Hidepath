@@ -81,8 +81,13 @@ describe('štítek podkladu výtisku (tenký karton)', () => {
     const extra = plan.querySelector('[data-print-conditional]')!;
     expect(flat(extra)).toMatch(/^Jen v případě potřeby \(do součtu se nepočítá\)Jen když /);
     expect(flat(extra)).toContain('Jen když výtisk na značky nemáte z lekce 2:');
-    // Cvičný proužek je na stránce cvičných listů, ne tady.
-    expect(plan.textContent).not.toContain('Cvičný proužek');
+    // Cvičný proužek je na stránce cvičných listů: do součtu ne, jen odkaz „Tiskne se jinde“.
+    expect(flat(plan.querySelector('[data-print-conditional]')!)).not.toContain('Cvičný proužek');
+    const elsewhere = plan.querySelector('[data-print-elsewhere]')!;
+    expect(flat(elsewhere)).toBe('Tiskne se jinde: Cvičný proužek pro lekci 4 1×');
+    expect(elsewhere.querySelector('a')?.getAttribute('href')).toMatch(
+      new RegExp(`^${routes.practiceSheets(coinCardHolderProject.slug)}\\?`),
+    );
   });
 
   it('variantu listu (mince 40 mm, kůže 1,5 mm) tisková stránka značí jako výchozí list', () => {

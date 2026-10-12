@@ -179,6 +179,7 @@ function NextActionContent({
 }) {
   const project = useActiveProject();
   const { data: enrollments } = useEnrollments();
+  const optionalLessons = (project?.lessons ?? []).filter((l) => l.optional);
   // Je ještě nezačatý projekt, na který se dá přejít?
   const hasOtherProjects = projects.some(
     (p) => !(enrollments ?? []).some((e) => e.projectSlug === p.slug && isEnrolled(e)),
@@ -205,7 +206,7 @@ function NextActionContent({
         <>
           <Kicker className="text-brass">Co udělat právě teď</Kicker>
           <h2 className="max-w-[22ch] text-[clamp(26px,3vw,34px)] text-canvas">
-            Projděte si, co budete k pouzdru potřebovat.
+            Projděte si, co budete k projektu potřebovat.
           </h2>
           <p className="max-w-[52ch] text-body text-canvas-soft">
             Nákupní seznam rozdělí vybavení na nezbytné, doporučené a to, co stačí koupit později.
@@ -293,12 +294,27 @@ function NextActionContent({
         <>
           <Kicker className="text-brass">Poslední krok</Kicker>
           <h2 className="max-w-[22ch] text-[clamp(26px,3vw,34px)] text-canvas">
-            Všechny lekce máte hotové.
+            {optionalLessons.length > 0
+              ? 'Všechny povinné lekce máte hotové.'
+              : 'Všechny lekce máte hotové.'}
           </h2>
           <p className="max-w-[52ch] text-body text-canvas-soft">
-            Prohlédněte si pouzdro, vložte karty a označte projekt za dokončený. Postup zůstane
-            uložený.
+            Prohlédněte si hotový výrobek a označte projekt za dokončený. Postup zůstane uložený.
           </p>
+          {project && optionalLessons.length > 0 ? (
+            <ul className="flex flex-col gap-1 text-body">
+              {optionalLessons.map((l) => (
+                <li key={l.slug}>
+                  <Link
+                    to={routes.lesson(project.slug, l.slug)}
+                    className="text-canvas underline hover:text-canvas-soft"
+                  >
+                    {typo(`Volitelně: lekce ${l.order} ${l.title}`)} <span aria-hidden>→</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : null}
           <div className="relative mt-auto">
             <Button variant="forest" onClick={onCompleteProject}>
               Označit projekt za hotový

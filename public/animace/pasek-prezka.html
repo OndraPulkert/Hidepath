@@ -14,7 +14,7 @@
   --accent:#b3261e;--ok:#2f6b3a;--btn:#2a211b;--btn-ink:#fffdf9;
   --lic:#b8773f;--lic-d:#8a5228;--lic-hi:#d39a63;
   --rub:#dcc4a2;--rub-d:#b99a72;--rub-fib:#c7a87f;--chip-lic:#b8773f;--chip-rub:#dcc4a2;
-  --hole:#2b2018;--mark:#4a2c14;--paper:#fcfbf7;--paper-edge:#cfc8bb;--print:#2b2b2b;--print-m:#8a8a8a;--print-r:#c0392b;
+  --hole:#2b2018;--mark:#4a2c14;--paper:#fcfbf7;--paper-edge:#cfc8bb;--karton:#b9935f;--print:#2b2b2b;--print-m:#8a8a8a;--print-r:#c0392b;
   --steel:#a3abb3;--steel-d:#5c656e;--tape:#eedc95;--glue:#e0ad35;--wet:#3a2414;
   --board:#e4e7ea;--board-d:#aab2ba;--shim:#c9ab84;--shim-d:#9a7b55;--wood:#9a6b3f;--wood-d:#6b4626;
   --acryl:#bfe3ee;--acryl-e:#6f98a8;--engrave:#4d6b78;--keeper:#a8692f;--keeper-d:#7a4a1f;
@@ -26,7 +26,7 @@
   --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
   --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
   --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;
-  --hole:#0e0a08;--mark:#2a170a;--paper:#ece9e1;--paper-edge:#a9a296;
+  --hole:#0e0a08;--mark:#2a170a;--paper:#ece9e1;--paper-edge:#a9a296;--karton:#9a7b52;
   --steel:#9099a2;--steel-d:#4d555d;--tape:#d9c67d;--glue:#c8962a;--wet:#140b05;
   --board:#a9b1b8;--board-d:#6c747c;--shim:#b3966f;--shim-d:#86684a;--wood:#8a5f37;--wood-d:#5c3b1f;
   --acryl:#9fd0e0;--acryl-e:#b8dbe7;--engrave:#eaf6fb;--keeper:#9a5f2a;--keeper-d:#6c3f17;
@@ -38,7 +38,7 @@
   --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
   --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
   --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;
-  --hole:#0e0a08;--mark:#2a170a;--paper:#ece9e1;--paper-edge:#a9a296;
+  --hole:#0e0a08;--mark:#2a170a;--paper:#ece9e1;--paper-edge:#a9a296;--karton:#9a7b52;
   --steel:#9099a2;--steel-d:#4d555d;--tape:#d9c67d;--glue:#c8962a;--wet:#140b05;
   --board:#a9b1b8;--board-d:#6c747c;--shim:#b3966f;--shim-d:#86684a;--wood:#8a5f37;--wood-d:#5c3b1f;
   --acryl:#9fd0e0;--acryl-e:#b8dbe7;--engrave:#eaf6fb;--keeper:#9a5f2a;--keeper-d:#6c3f17;
@@ -335,7 +335,7 @@ function foldedTop(o={}){
   if(o.screws) o.screws.forEach((p,i)=>{if(p>0)s+=screwHead(HOLES[2+i],0,p)});
   return s;
 }
-function keeperTop(cx){const h=BW/2+KT;return `<rect x="${f(cx-KEEP_W/2)}" y="${f(-h)}" width="${KEEP_W}" height="${f(2*h)}" rx="1" fill="url(#keepG)" stroke="var(--keeper-d)" stroke-width="${f(sw(.35))}" ${SHADOW}/><path d="M${f(cx-KEEP_W/2)} ${-BW/2} H${f(cx+KEEP_W/2)} M${f(cx-KEEP_W/2)} ${BW/2} H${f(cx+KEEP_W/2)}" stroke="var(--keeper-d)" stroke-width="${f(sw(.25))}" opacity=".6"/>`}
+function keeperTop(cx,seam=false){const h=BW/2+KT;const sm=seam?`<rect x="${f(cx-KEEP_W/2)}" y="${f(-KEEP_OV/2)}" width="${KEEP_W}" height="${KEEP_OV}" fill="var(--keeper-d)" opacity=".35"/><path d="M${f(cx-KEEP_W/2)} ${f(-KEEP_OV/2)} H${f(cx+KEEP_W/2)}" stroke="var(--keeper-d)" stroke-width="${f(sw(.35))}"/>`:'';return `<rect x="${f(cx-KEEP_W/2)}" y="${f(-h)}" width="${KEEP_W}" height="${f(2*h)}" rx="1" fill="url(#keepG)" stroke="var(--keeper-d)" stroke-width="${f(sw(.35))}" ${SHADOW}/><path d="M${f(cx-KEEP_W/2)} ${-BW/2} H${f(cx+KEEP_W/2)} M${f(cx-KEEP_W/2)} ${BW/2} H${f(cx+KEEP_W/2)}" stroke="var(--keeper-d)" stroke-width="${f(sw(.25))}" opacity=".6"/>${sm}`}
 function screwHead(x,y,p){const a=L(-70,25,p);return `<g opacity="${f(cl(p*3))}"><circle cx="${x}" cy="${y}" r="${HEAD_D/2}" fill="var(--steel)" stroke="var(--steel-d)" stroke-width="${f(sw(.35))}" ${SHADOW}/><circle cx="${x}" cy="${y}" r="${HEAD_D/2-1}" fill="none" stroke="var(--steel-d)" stroke-width="${f(sw(.2))}" opacity=".6"/>${G(`translate(${x} ${y}) rotate(${f(a)})`,`<rect x="-3" y="-.45" width="6" height=".9" rx=".3" fill="var(--steel-d)"/>`)}</g>`}
 
 // ---------- kamery ----------
@@ -352,7 +352,7 @@ const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,
 const RUB={v:'RUB',sub:'pás rubem nahoru'};
 
 // A1 — destička, řada 3
-add('A','Řada 3, nebo list 1','Řada 3 destičky platí pro šířky 28–45 mm. Když tabulka „Váš pásek“ ukazuje u řady 3 „ne“, nebo destička neprošla kontrolou, vytiskněte list 1 pro váš pásek na 100 %.',8200,t=>{
+add('A','Řada 3, nebo list 1','Řada 3 destičky platí pro šířky 28–45 mm. Když tabulka „Váš pásek“ ukazuje u řady 3 „ne“, nebo destička neprošla kontrolou, použijte list 1 z lekce 2. Nemáte ho: vytiskněte list 1 pro váš pásek na 100 %, kalibrační čtverec musí měřit 50 × 50 mm, a připravte ho jako v lekci 2 (krok „Kolmý řez“).',8200,t=>{
   const c={cx:107.5,cy:92,sx:48.5,sy:46,k:.425};
   const hi=seg(t,.15,.3)*(1-.35*Math.max(0,Math.sin((t-.3)*14))*(t<.6?1:0));
   let s=cam(c,()=>plateSvg({hiRow3:hi,shadow:true}));
@@ -509,14 +509,14 @@ add('B','Zkontrolujte značky','Dva otvory mimo přímku jsou značky ohybu: do 
 // B6 — s listem 1
 const BEND_IN=2;                                                    // kroužky ohybu 2 mm od hran pásu (belt-sheets.ts)
 const SHEET_PTS=[...HOLES.slice(0,2).map(x=>[x,0]),[OV_END[0],0],[OV_END[1],0],[FOLD,-BW/2+BEND_IN],[FOLD,BW/2-BEND_IN]];
-add('B','S listem 1','List nalepte na tenký karton (krabice od cereálií) a po zaschnutí ho vystřihněte po obrysu pásu, spodní hranu odřízněte nožem podél ocelového pravítka přesně po čáře. Spodní hranu přiložte přesně na konec pásu, boky na hrany pásu a list přilepte papírovou páskou. Šídlem propíchněte středy 2 černých otvorů u konce, oba křížky oválu a oba červené kroužky na čáře ohybu. Šedé otvory nepropichujte.',9400,t=>{
+add('B','S listem 1','S listem 1 z lekce 2: spodní hranu přiložte přesně na konec pásu, boky na hrany pásu a list přilepte papírovou páskou. Šídlem propíchněte středy 2 černých otvorů u konce, oba křížky oválu a oba červené kroužky na čáře ohybu. Šedé otvory nepropichujte.',9400,t=>{
   const c=CAM_MID;const so=1-.75*seg(t,.86,.96);const n=SHEET_PTS.length;const span=.72/n;
   const done=SHEET_PTS.filter((_,i)=>t>.08+span*(i+1)-.02);
   let s=cam(c,()=>{
     let q=board()+strapRub();
     q+=done.map(p=>dot(p[0],p[1])).join('');
     const P='var(--print)',R='var(--print-r)',M='var(--print-m)';
-    let sh=`<rect x="0" y="${-BW/2}" width="180" height="${BW}" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width="${f(sw(.3))}"/>`;
+    let sh=`<rect x="0" y="${-BW/2}" width="180" height="${BW}" fill="var(--paper)" stroke="var(--karton)" stroke-width="${f(sw(.8))}"/>`;
     sh+=`<path d="M0 0 H180" stroke="${M}" stroke-width="${f(sw(.25))}" stroke-dasharray="3 3"/><path d="M${FOLD} ${-BW/2} V${BW/2}" stroke="${R}" stroke-width="${f(sw(.35))}" stroke-dasharray="4 2.5"/>`;
     sh+=`<path d="${stad(SL0,SL1,0,SLOT_W)}" fill="none" stroke="${P}" stroke-width="${f(sw(.3))}"/>`;
     for(const x of OV_END) sh+=`<path d="M${x-3.9} 0 H${x+3.9} M${x} -3.9 V3.9" stroke="${P}" stroke-width="${f(sw(.2))}"/>`;
@@ -531,7 +531,7 @@ add('B','S listem 1','List nalepte na tenký karton (krabice od cereálií) a po
   });
   const i=Math.min(n-1,Math.floor((t-.08)/span));
   if(t>.08&&t<.08+span*n){const lt=seg(t,.08+span*i,.08+span*(i+1));const [x,y]=at(c,...SHEET_PTS[i]);s+=awl(x,y,18,lt<.3?lt/.3:lt>.8?1-(lt-.8)/.2:1)}
-  s+=`<g opacity="${f(seg(t,.02,.1))}">${pill(4,14,'list 1 na kartonu, vystřižený po obrysu','ts')}</g>`;
+  s+=`<g opacity="${f(seg(t,.02,.1))}">${pill(131,8,'list 1 z lekce 2: na kartonu, vystřižený','ts','end')}</g>`;
   s+=`<g opacity="${f(seg(t,.8,.9))}">${pill(67.5,79,'2 otvory · 2 křížky oválu · 2 kroužky ohybu','t','middle')}</g>`;
   return s;
 },RUB);
@@ -641,7 +641,7 @@ add('D','Změřte poutko proužkem','Poutkem bude procházet i volný konec pás
 },null,'Tip: '+Math.round(KEEP_BEND)+' mm je přídavek na tloušťku poutka v ohybech (π × 3,5 mm u poutka z téhož řemene); tloušťky jsou kreslené v měřítku příkladu.');
 
 // D2 — kus z konce pásu u špičky, z něj podélně proužek 12 mm: rýhy na rubu odpadnou s řezem
-add('D','Vyřízněte proužek','Poutko z téhož řemene: z konce pásu u špičky uřízněte kolmo kus podle kalkulačky (např. '+KEEP_PIECE+' cm), jen když pás bude i bez něj aspoň tak dlouhý jako pásek ve „Váš pásek“. Nebude: ve „Váš pásek“ vypněte „Poutko z téhož řemene“, zadejte tloušťku jiné kůže, pásek uložte a poutko udělejte z ní, bez ztenčení. Poutko z jiné kůže: vyberte odřezek v barvě pásu. Z kusu vyřízněte podélně proužek 12 mm × délku z kalkulačky: na rubu ho narýsujte šídlem podél ocelového pravítka a řežte přesně po rýhách, odpadnou s řezem.',10400,u=>{
+add('D','Vyřízněte proužek','Poutko z téhož řemene: z konce pásu u špičky uřízněte kolmo kus podle kalkulačky (např. '+KEEP_PIECE+' cm), jen když pás bude i bez něj aspoň tak dlouhý jako pásek ve „Váš pásek“. Nebude: ve „Váš pásek“ vypněte „Poutko z téhož řemene“, zadejte tloušťku jiné kůže, pásek uložte a poutko udělejte z ní, bez ztenčení. Poutko z jiné kůže: vyberte odřezek v barvě pásu. Z kusu vyřízněte podélně proužek 12 mm na celou délku kusu (z jiné kůže asi o 10 mm delší, než ukazuje kalkulačka): na rubu ho narýsujte šídlem podél ocelového pravítka a řežte přesně po rýhách, odpadnou s řezem. Zbytek kusu si schovejte: je to odřezek téhož pásu na zkoušku klínu a lepení (a pro lekci 7). Délka je spočítaná, ne vyzkoušená. Proužek proto obtočte na sucho lícem ven kolem 3 vrstev: při délce z kalkulačky se konce musí překrývat o 15 mm a třetí vrstva musí projít. Překrývají se méně: nechte ho o tolik delší. Pak ho kolmo zkraťte.',13000,u=>{
   const k=.9;let s='';
   // 1) konec pásu u špičky, rub nahoru: kolmý řez KEEP_PIECE cm od konce (měřítko 0,6)
   if(u<.3){
@@ -655,24 +655,31 @@ add('D','Vyřízněte proužek','Poutko z téhož řemene: z konce pásu u špi�
     s+=`<g opacity="${f(seg(u,.14,.22))}">${pill(67.5,74,'jen když pás bude i bez něj aspoň','ta','middle')}${pill(67.5,80,'tak dlouhý jako pásek ve „Váš pásek“','ta','middle')}</g>`;
     return s;
   }
-  // 2) z kusu podélně proužek 12 mm: rýhy šídlem podél pravítka, řez po rýhách
+  // 2) z kusu podélně proužek 12 mm na celou délku kusu: rýhy šídlem podél pravítka, řez po rýhách
   const t=seg(u,.3,1);
-  const x0=13,x1=x0+KEEP_LEN*k,y0=12,y1=12+KEEP_W,mv=es(t,.78,.9)*14;
-  const c1=es(t,.08,.3),c2=es(t,.3,.52),c3=es(t,.52,.62),c4=es(t,.62,.72);
+  const x0=6,x1=x0+KEEP_PIECE*10*k,y0=12,y1=12+KEEP_W,mv=es(t,.56,.66)*14;
+  const c1=es(t,.06,.28),c2=es(t,.3,.52);
   s+=`<rect x="6" y="6" width="${f(KEEP_PIECE*10*k)}" height="${f(BW*.65)}" rx="1" fill="url(#rubP)" stroke="var(--rub-d)" stroke-width=".35"/>`;
-  s+=`<g opacity="${f(1-seg(t,.78,.86))}">${pill(131,62,'kus pásu, rub nahoru','ts','end')}</g>`;
+  s+=`<g opacity="${f(1-seg(t,.56,.62))}">${pill(131,62,'kus pásu, rub nahoru','ts','end')}</g>`;
   const sy=12+mv;
-  if(t>.08&&t<=.78){let d='';if(c1>0)d+=`M${x0} ${y0} H${f(L(x0,x1,c1))} `;if(c2>0)d+=`M${x0} ${y1} H${f(L(x0,x1,c2))} `;if(c3>0)d+=`M${x0} ${y0} V${f(L(y0,y1,c3))} `;if(c4>0)d+=`M${f(x1)} ${y0} V${f(L(y0,y1,c4))} `;s+=`<path d="${d}" stroke="var(--hole)" stroke-width=".35"/>`}
-  if(t>.78) s+=`<rect x="${x0}" y="12" width="${f(KEEP_LEN*k)}" height="${KEEP_W}" fill="var(--hole)" opacity=".55"/><rect x="${x0}" y="${f(sy)}" width="${f(KEEP_LEN*k)}" height="${KEEP_W}" fill="url(#keepG)" stroke="var(--keeper-d)" stroke-width=".35" ${SHADOW}/>`;
-  if(t>.06&&t<.76){
-    const vr=x=>`<rect x="${f(x)}" y="${y0-4}" width="7" height="${KEEP_W+8}" fill="var(--steel)" fill-opacity=".92" stroke="var(--steel-d)" stroke-width=".3" ${SHADOW}/>`;
-    if(t<.3) s+=rulerH(x0-5,x1+5,y0+.15,8,1)+knife(L(x0,x1,c1),y0-.2,0);
-    else if(t<.52) s+=rulerH(x0-5,x1+5,y1-8.15,8,1)+knife(L(x0,x1,c2),y1+.2,180);
-    else if(t<.62) s+=vr(x0+.15)+knife(x0-.2,L(y0,y1,c3),-90);
-    else s+=vr(x1-7.15)+knife(x1+.2,L(y0,y1,c4),90);
+  if(t>.06&&t<=.56){let d='';if(c1>0)d+=`M${x0} ${y0} H${f(L(x0,x1,c1))} `;if(c2>0)d+=`M${x0} ${y1} H${f(L(x0,x1,c2))} `;s+=`<path d="${d}" stroke="var(--hole)" stroke-width=".35"/>`}
+  if(t>.56) s+=`<rect x="${x0}" y="12" width="${f(x1-x0)}" height="${KEEP_W}" fill="var(--hole)" opacity=".55"/><rect x="${x0}" y="${f(sy)}" width="${f(x1-x0)}" height="${KEEP_W}" fill="url(#keepG)" stroke="var(--keeper-d)" stroke-width=".35" ${SHADOW}/>`;
+  if(t>.06&&t<.54){
+    if(t<.3) s+=rulerH(x0-2,x1+2,y0+.15,8,1)+knife(L(x0,x1,c1),y0-.2,0);
+    else s+=rulerH(x0-2,x1+2,y1-8.15,8,1)+knife(L(x0,x1,c2),y1+.2,180);
   }
-  s+=`<g opacity="${f(seg(t,.06,.14)*(1-seg(t,.7,.76)))}">${pill(67.5,50,'rýhy šídlem po pravítku = řez, odpadnou','t','middle')}</g>`;
-  s+=`<g opacity="${f(seg(t,.86,.94))}">${pill(x0+KEEP_LEN*k/2,sy+KEEP_W+5,'proužek 12 × '+KEEP_LEN+' mm (např.)','t','middle')}${pill(67.5,72,'z jiné kůže: odřezek v barvě pásu','ts','middle')}</g>`;
+  s+=`<g opacity="${f(seg(t,.06,.14)*(1-seg(t,.5,.56)))}">${pill(67.5,50,'rýhy šídlem po pravítku = řez, odpadnou','t','middle')}</g>`;
+  s+=`<g opacity="${f(seg(t,.62,.68))}">${pill(67.5,sy+KEEP_W+5,'proužek 12 mm na celou délku kusu','t','middle')}</g>`;
+  // 3) zkouška na sucho: proužek lícem ven kolem 3 vrstev, překryv aspoň 15 mm, pak zkrátit
+  const dz=seg(t,.72,.8);
+  if(dz>0){const kk=.55,cx=34,cy=64,w=BW*kk,h=3*BT*kk,g=KEEP_T*kk;
+    let q=`<rect x="${f(cx-w/2)}" y="${f(cy-h/2)}" width="${f(w)}" height="${f(h)}" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".25"/>`;
+    q+=`<path d="M${f(cx-w/2)} ${f(cy-h/2+h/3)} H${f(cx+w/2)} M${f(cx-w/2)} ${f(cy-h/2+2*h/3)} H${f(cx+w/2)}" stroke="var(--rub-d)" stroke-width=".2"/>`;
+    q+=`<rect x="${f(cx-w/2-g)}" y="${f(cy-h/2-g)}" width="${f(w+2*g)}" height="${f(h+2*g)}" rx="${f(g)}" fill="none" stroke="var(--keeper-d)" stroke-width="${f(g)}" opacity=".85"/>`;
+    q+=`<rect x="${f(cx-KEEP_OV*kk/2)}" y="${f(cy-h/2-2*g)}" width="${f(KEEP_OV*kk)}" height="${f(g)}" fill="url(#keepG)" stroke="var(--keeper-d)" stroke-width=".25"/>`;
+    q+=pill(cx+w/2+4,cy-h/2-g,'překryv 15 mm','ta')+pill(cx+w/2+4,cy+2,'třetí vrstva projde','t')+pill(cx+w/2+4,cy+h/2+g+3,'pak kolmo zkraťte (např. '+KEEP_LEN+' mm)','tok');
+    s+=`<g opacity="${f(dz)}">${q}${pill(4,52,'NA SUCHO, LÍCEM VEN · ŘEZ','ts')}</g>`;
+  }
   return s;
 },null,'Tip: kus pásu je v druhé části kreslený užší než ve skutečnosti; délky jsou v měřítku příkladu.');
 
@@ -694,7 +701,7 @@ add('D','Dokončete hrany poutka','Dlouhé hrany proužku zaoblete brusným pap�
 },null,'Tip: leštítko je kreslené schematicky.');
 
 // D4 — ztenčení konců do klínu 15 mm (podélný řez proužkem; tloušťka kreslená zvětšeně), pak zkouška spoje na sucho
-add('D','Ztenčete konce poutka','Jen poutko z téhož řemene, poutko z jiné kůže neztenčujte. Nejdřív na odřezku pásu. Každý konec ztenčete do klínu 15 mm: od plné tloušťky na 0,5–1 mm na samém konci (u 3,5 mm v polovině klínu asi 2,2 mm). Horní (vnější) konec z rubu, spodní konec z líce: líc, který zůstane vidět, je celý. Na listu 1 jsou klíny šrafy: vlevo líc, vpravo rub. Brusný papír 80 na rovném hranolku, plnou část přidržte prsty nebo svěrkou. Tahejte rovně podél proužku jen jedním směrem: od plné části ke konci a přes konec ven, ne zpět. Ke konci ubírejte víc. Dohlaďte papírem 180. Posuvkou měřte konec a polovinu klínu; konec ne tenčí než 0,5 mm. Oba konce přiložte na sucho na sebe, rub horního na líc spodního: spoj nejvýš asi tloušťka pásu + 1 mm (u 3,5 mm asi 4,5 mm). Volitelně ztenčovač (safety skiver) jen na horní, rubový klín, i ten nejdřív na odřezku; spodní klín na líci brusným papírem.',15400,t=>{
+add('D','Ztenčete konce poutka','Jen poutko z téhož řemene, poutko z jiné kůže neztenčujte. Nejdřív na odřezku pásu (zbytek kusu na poutko). Každý konec ztenčete do klínu 15 mm: od plné tloušťky na 0,5–1 mm na samém konci (u 3,5 mm v polovině klínu asi 2,2 mm). Horní (vnější) konec z rubu, spodní konec z líce: líc, který zůstane vidět, je celý. Na listu 1 jsou klíny šrafy: vlevo líc, vpravo rub. Brusný papír 80 na rovném hranolku, plnou část přidržte prsty nebo svěrkou. Tahejte rovně podél proužku jen jedním směrem: od plné části ke konci a přes konec ven, ne zpět. Ke konci ubírejte víc. Dohlaďte papírem 180. Posuvkou měřte konec a polovinu klínu; konec ne tenčí než 0,5 mm. Oba konce přiložte na sucho na sebe, rub horního na líc spodního: spoj nejvýš asi tloušťka pásu + 1 mm (u 3,5 mm asi 4,5 mm). Volitelně ztenčovač (safety skiver) jen na horní, rubový klín, i ten nejdřív na odřezku; spodní klín na líci brusným papírem.',15400,t=>{
   const kx=.9,ky=3,x0=13,x1=x0+KEEP_LEN*kx,yc=40,wl=KEEP_OV*kx,eEnd=.75;
   // klín: p = postup 0–1, y = tloušťka v mm na vzdálenosti d od konce
   const th=(d,p)=>{if(d>=KEEP_OV)return BT;const e=L(BT,eEnd,p);return e+(BT-e)*d/KEEP_OV};
@@ -789,7 +796,7 @@ add('D','Slepte poutko','Poutko z téhož řemene: ztenčené plochy jsou po bru
 },null,'Tip: tloušťka je kreslená 3× zvětšeně, špalík schematicky; boky spoje jsou kolmo k řezu, proto nejsou vidět. Poutko z jiné kůže (páska a smirek 180) kreslené není.');
 
 // D6 — špalík v poutku pod přeplátováním, 2 řady po 2 otvorech, steh, konce uvnitř
-add('D','Prošijte přeplátování','Doporučeno, hlavně u poutka z pásu. Až lepidlo zaschne, vsuňte do poutka pod přeplátování tvrdý špalík ze dřeva nebo plastu, užší než pás a nejvýš tak silný jako vnitřek poutka (u 40 × 3,5 mm asi 35 × 10 mm): bez špalíku by vidlička propíchla i druhou stranu. Udělejte 2 krátké řady napříč, každou ze 2 otvorů: asi 3 mm od každého konce přeplátování, otvory 4 mm od hran a 4 mm od sebe. Dvouhrotou vidličkou prosekejte obě vrstvy až do špalíku; když spojem neprojde (tloušťka pásu + 1 mm, u 3,5 mm asi 4,5 mm), otvory dokončete diamantovým šídlem. Každou řadu šijte zvlášť sedlářským stehem jako v projektu 01: nit středem do otvoru 1, obě jehly proti sobě otvorem 2, jehlu, která vyšla venku, vraťte otvorem 1 dovnitř. Oba konce jsou uvnitř poutka: odstřihněte a zatavte. Spoj pak půjde na rub pásku, k tělu. Nejdřív na odřezku.',13600,t=>{
+add('D','Prošijte přeplátování','Doporučeno, hlavně u poutka z pásu. Až lepidlo zaschne, vsuňte do poutka pod přeplátování špalík z plastu nebo měkkého dřeva, užší než pás a nejvýš tak silný jako vnitřek poutka (u 40 × 3,5 mm asi 35 × 10 mm): bez špalíku by vidlička propíchla i druhou stranu. Poutko položte na hladkou desku na vysekávání, přeplátování leží na špalíku, horní konec navrchu. Udělejte 2 krátké řady napříč, každou ze 2 otvorů: 3 mm a 12 mm od špičky horního konce (přeplátování 15 mm), otvory 4 mm od hran a 4 mm od sebe. Dvouhrotou vidličkou prosekejte obě vrstvy až do špalíku; když spojem neprojde (tloušťka pásu + 1 mm, u 3,5 mm asi 4,5 mm), otvory dokončete diamantovým šídlem. Každou řadu šijte zvlášť sedlářským stehem jako v projektu 01: nit středem do otvoru 1, obě jehly proti sobě otvorem 2, jehlu, která vyšla venku, vraťte otvorem 1 dovnitř. Oba konce jsou uvnitř poutka: odstřihněte a zatavte. Spoj pak půjde na rub pásku, k tělu. Nejdřív na odřezku.',13600,t=>{
   let s='';
   // vlevo: řez poutkem napříč se špalíkem pod přeplátováním
   const k=.9,cx=34,cy=46,w=(BW+2*BT)*k,h=(3*BT)*k*2.2,kt=BT*k*.9;
@@ -808,11 +815,11 @@ add('D','Prošijte přeplátování','Doporučeno, hlavně u poutka z pásu. Až
   const z=2.8,ox=72,oy=26,L0=KEEP_OV*z,W0=KEEP_W*z;
   s+=`<rect x="${f(ox-6)}" y="${oy}" width="${f(L0+12)}" height="${f(W0)}" fill="url(#keepG)" stroke="var(--keeper-d)" stroke-width=".3"/>`;
   s+=`<path d="M${f(ox)} ${oy} V${f(oy+W0)} M${f(ox+L0)} ${oy} V${f(oy+W0)}" stroke="var(--keeper-d)" stroke-width=".35" stroke-dasharray="1 .7"/>`;
-  s+=pill(ox+L0/2,oy-2,'přeplátování 15 mm, shora','ts','middle');
+  s+=pill(ox+L0/2,oy-2,'přeplátování 15 mm, shora','ts','middle')+pill(ox-1,oy+W0/2+1,'špička horního konce','ts','end');
   const rowX=[ox+3*z,ox+L0-3*z],holeY=[oy+4*z,oy+8*z];
   const hp=seg(t,.3,.46);
   rowX.forEach((x,ri)=>holeY.forEach(y=>{if(hp>(ri?.5:0))s+=`<path d="M${f(x-1.1)} ${f(y-.6)} L${f(x+1.1)} ${f(y+.6)}" stroke="var(--hole)" stroke-width="1"/>`}));
-  s+=`<g opacity="${f(seg(t,.26,.32))}">${dimV(ox+L0+8,oy,holeY[0],'4')}${dimV(ox+L0+8,holeY[0],holeY[1],'4')}${dimH(ox,rowX[0],oy+W0+4,'3')}${dimH(rowX[1],ox+L0,oy+W0+4,'3')}</g>`;
+  s+=`<g opacity="${f(seg(t,.26,.32))}">${dimV(ox+L0+8,oy,holeY[0],'4')}${dimV(ox+L0+8,holeY[0],holeY[1],'4')}${dimH(ox,rowX[0],oy+W0+4,'3')}${dimH(ox,rowX[1],oy+W0+11,'12')}</g>`;
   // diamantové šídlo, když vidlička neprojde
   s+=`<g opacity="${f(seg(t,.48,.52)*(1-seg(t,.6,.64)))}">${pill(67.5,84,'neprojde ~'+cz(SK_JOINT)+' mm? dokončete diamantovým šídlem','ta','middle')}</g>`;
   // steh: v každé řadě přes oba otvory, nit přes obě vrstvy
@@ -828,13 +835,13 @@ add('D','Prošijte přeplátování','Doporučeno, hlavně u poutka z pásu. Až
 },null,'Tip: řez poutkem a vidlička jsou schematické; pohled shora je zvětšený 2,8×.');
 
 // D7 — navlékněte poutko na pás (před ohnutím)
-add('D','Navlékněte poutko na pás','Poutko navlékněte na pás od konce u přezky a posuňte ho dál, než po ohnutí dosáhne konec pásu (180 mm od konce). Teď, dokud je konec rovný: po ohnutí by šlo poutko navléknout jen z druhého konce pásu.',8400,t=>{
+add('D','Navlékněte poutko na pás','Pás leží rubem nahoru. Poutko navlékněte na pás od konce u přezky spojem nahoru, na rub pásu, a posuňte ho dál, než po ohnutí dosáhne konec pásu (180 mm od konce). Teď, dokud je konec rovný: po ohnutí by šlo poutko navléknout jen z druhého konce pásu.',8400,t=>{
   const c={cx:118,cy:0,sx:67.5,sy:30,k:.5};const kx=L(-14,KEEP_PARK,es(t,.1,.7));
-  let s=cam(c,()=>board()+strapRub(0,330)+marks({h:['hole','hole',null,null],fold:1,foldLine:1,oval:1})+keeperTop(kx));
+  let s=cam(c,()=>board()+strapRub(0,330)+marks({h:['hole','hole',null,null],fold:1,foldLine:1,oval:1})+keeperTop(kx,true));
   if(t<.72){const [x,y]=at(c,kx+KEEP_W/2+4,-BW/2-5);s+=arrow(x-6,y,x+4,y)}
   const o=seg(t,.72,.84);
   if(o>0){const [x0,y]=at(c,0,BW/2+6),[x1]=at(c,2*TAIL,0);s+=`<g opacity="${f(o)}"><path d="M${f(x0)} ${f(y)} H${f(x1)}" stroke="var(--ok)" stroke-width=".4" marker-start="url(#arG)" marker-end="url(#arG)"/>${pill((x0+x1)/2,y+6,'180 mm: sem dosáhne konec po ohnutí','tok','middle')}</g>`}
-  s+=`<g opacity="${f(seg(t,.86,.96))}">${(()=>{const [a,b]=at(c,KEEP_PARK,-BW/2-KT);return pill(a+4,b-4,'poutko na pásu','t','end')})()}</g>`;
+  s+=`<g opacity="${f(seg(t,.86,.96))}">${(()=>{const [a,b]=at(c,KEEP_PARK,-BW/2-KT);return pill(a+4,b-4,'poutko na pásu, spoj nahoru','t','end')})()}</g>`;
   return s;
 },RUB,'Tip: tloušťka poutka je kreslená schematicky.');
 
@@ -925,7 +932,7 @@ add('E','Ohněte zpět a vraťte poutko','Konec ohněte zpět kolem příčky s 
 },{v:'LÍC',sub:'přehnutý konec'});
 
 // E6 — sešroubovat
-add('E','Sešroubujte nýty','Nýty sešroubujte: hlavičku s dutým dříkem z líce pásu, šroubek z druhé strany, na přehnutém konci (strana k tělu), utáhněte plochým šroubovákem. Na závit dejte kapku zajišťovače závitů nebo laku: nýty v nejzatíženějším místě se povolují.',8600,t=>{
+add('E','Sešroubujte nýty','Nýty sešroubujte: hlavičku s dutým dříkem z líce pásu, šroubek z druhé strany, na přehnutém konci (strana k tělu), utáhněte plochým šroubovákem. Na závit dejte kapku rozebíratelného zajišťovače závitů (střední pevnost) nebo laku: nýty v nejzatíženějším místě se povolují. Trvalý zajišťovač ne: nýty by pak nešly povolit.',8600,t=>{
   const c=CAM_FT;const s1=es(t,.38,.62),s2=es(t,.64,.88);
   let s=cam(c,()=>foldedTop({keeper:KEEP_C,screws:[s1,s2]}));
   // kapka na závit (bokem)

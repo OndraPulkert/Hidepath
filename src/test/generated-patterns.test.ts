@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import { staticSheetEndFor } from '@/lib/patterns/belt-config';
+
 import {
   DEFAULT_BELT_END,
   DEFAULT_BELT_TIP,
@@ -102,7 +104,7 @@ describe('vygenerované šablony opasku', () => {
 
   it('popisky konce u přezky odpovídají modelu pro danou šířku', () => {
     for (const { path, svg, width } of sheets.filter((s) => s.page === 1)) {
-      const end = { ...DEFAULT_BELT_END, beltWidthMm: width };
+      const end = staticSheetEndFor(width);
       const [near, far] = end.rivetOffsetsMm;
       expect(svg, path).toContain(`nýt ± ${cz(far)} mm od ohybu`);
       expect(svg, path).toContain(`nýt ± ${cz(near)} mm od ohybu`);
@@ -178,7 +180,7 @@ describe('řezací soubor pro laser', () => {
 
   it('otvory konce u přezky leží symetricky k zářezu ohybu', () => {
     for (const { path, svg, width } of lasers) {
-      const end = { ...DEFAULT_BELT_END, beltWidthMm: width };
+      const end = staticSheetEndFor(width);
       const axis = 10 + width / 2; // střednice prvního dílu podle rozvržení
       const ys = [...svg.matchAll(/<circle cx="([-\d.]+)" cy="([-\d.]+)" r="([\d.]+)"/g)]
         .filter((m) => Number(m[1]) === axis && Number(m[3]) === 1)
@@ -216,7 +218,7 @@ describe('řezací soubor pro laser', () => {
 
   it('pásek na poutko má délku podle šířky a tloušťky pásu', () => {
     for (const { path, svg, width } of lasers) {
-      const end = { ...DEFAULT_BELT_END, beltWidthMm: width };
+      const end = staticSheetEndFor(width);
       const rect = /<rect[^>]*width="([\d.]+)" height="([\d.]+)"/.exec(svg);
       expect(rect, path).not.toBeNull();
       expect(Number(rect![1]), path).toBeCloseTo(keeperStripLengthMm(end), 6);
@@ -226,7 +228,7 @@ describe('řezací soubor pro laser', () => {
 
   it('drážka pro trn je vyříznutá 25 × 6 mm a ohyb ji půlí', () => {
     for (const { path, svg, width } of lasers) {
-      const end = { ...DEFAULT_BELT_END, beltWidthMm: width };
+      const end = staticSheetEndFor(width);
       const cut = svg.split('<g id="cut"')[1]?.split('</g>')[0] ?? '';
       // Stadion: dva oblouky a jedna spojnice.
       const slot = [...cut.matchAll(/<path d="([^"]+)"/g)]

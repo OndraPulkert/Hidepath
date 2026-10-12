@@ -14,7 +14,7 @@
   --accent:#b3261e;--ok:#2f6b3a;--btn:#2a211b;--btn-ink:#fffdf9;
   --lic:#b8773f;--lic-d:#8a5228;--lic-hi:#d39a63;
   --rub:#dcc4a2;--rub-d:#b99a72;--rub-fib:#c7a87f;--chip-lic:#b8773f;--chip-rub:#dcc4a2;
-  --hole:#2b2018;--paper:#fcfbf7;--paper-edge:#cfc8bb;--print:#2b2b2b;--print-m:#7a7a7a;
+  --hole:#2b2018;--paper:#fcfbf7;--paper-edge:#cfc8bb;--karton:#b9935f;--print:#2b2b2b;--print-m:#7a7a7a;
   --steel:#a3abb3;--steel-d:#5c656e;--tape:#eedc95;--tape-d:#b9a24a;
   --board:#e4ddd2;--board-d:#bdb3a4;--mat:#5f8f73;--mat-d:#3f6b55;--pad:#e9e4da;--pad-d:#b8ae9c;
   --wood:#c79a63;--wood-d:#8a6436;--skin:#e9b996;--skin-d:#b98563;
@@ -27,7 +27,7 @@
   --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
   --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
   --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;--chip-lic:#a96c38;--chip-rub:#c9b190;
-  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--print:#2b2b2b;--print-m:#6a6a6a;
+  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--karton:#9a7b52;--print:#2b2b2b;--print-m:#6a6a6a;
   --steel:#9099a2;--steel-d:#4d555d;--tape:#d9c67d;--tape-d:#9c8a3c;
   --board:#3a332c;--board-d:#544a40;--mat:#4d7a61;--mat-d:#335a46;--pad:#cfc8b8;--pad-d:#8f8573;
   --wood:#b38955;--wood-d:#7a582e;--skin:#d6a684;--skin-d:#a57454;
@@ -40,7 +40,7 @@
   --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
   --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
   --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;--chip-lic:#a96c38;--chip-rub:#c9b190;
-  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--print:#2b2b2b;--print-m:#6a6a6a;
+  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--karton:#9a7b52;--print:#2b2b2b;--print-m:#6a6a6a;
   --steel:#9099a2;--steel-d:#4d555d;--tape:#d9c67d;--tape-d:#9c8a3c;
   --board:#3a332c;--board-d:#544a40;--mat:#4d7a61;--mat-d:#335a46;--pad:#cfc8b8;--pad-d:#8f8573;
   --wood:#b38955;--wood-d:#7a582e;--skin:#d6a684;--skin-d:#a57454;
@@ -504,10 +504,13 @@ function sheetPrint(){let s=`<path d="${pd(HROT_TR)}" fill="none" stroke="var(--
 add('D','Vytiskněte list 2','Když tabulka „Váš pásek“ ukazuje u této řady „ne“, nebo destička neprošla kontrolou, vytiskněte list 2 pro váš pásek na 100 %, zkontrolujte kalibrační čtverec 50 × 50 mm, list nalepte na tenký karton (krabice od cereálií) a po zaschnutí ho vystřihněte po obrysu konce. Řádek „List 2“ v tabulce „Váš pásek“ ukazuje, jestli list vyjde na výšku, na šířku, nebo když se na jeden list nevejde, na 2 listy na šířku (2a a 2b).',10000,t=>{
   // A4 na výšku jako vygenerovaný list 2: pás vlevo (x 26–66 mm), vrchol 32 mm od horní hrany, čtverec vpravo nahoře; měřítko 0,27
   const k=.27, ox=14, oy=4;
+  const mo2=seg(t,.42,.5);
   let s=`<rect x="${ox}" y="${oy}" width="${f(210*k)}" height="${f(297*k)}" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".3" ${SHADOW}/>`;
+  // nalepit na tenký karton: hnědá hrana kartonu pod listem
+  if(mo2>0) s=`<rect x="${f(ox-.7)}" y="${f(oy-.7)}" width="${f(210*k+1.4)}" height="${f(297*k+1.4)}" fill="var(--karton)" opacity="${f(mo2)}" ${SHADOW}/>`+s.replace(' '+SHADOW,'');
   const page=`translate(${f(ox+(26+H)*k)} ${f(oy+(APEX+32)*k)}) scale(${k}) rotate(-90)`;
   CK=k; const pr=sheetPrint(); CK=1;
-  const cut=es(t,.5,.9);
+  const cut=es(t,.52,.9);
   s+=G(page,pr+(cut>0?`<path d="${pd(ppart([[SHEET_END,-H],[FAR,-H],...HROT_TR.slice(1,-1),[FAR,H],[SHEET_END,H]],cut))}" fill="none" stroke="var(--accent)" stroke-width="${(.5/k).toFixed(2)}"/>`:''));
   // kalibrační čtverec
   const qx=ox+146*k, qy=oy+24*k, q=50*k;
@@ -535,7 +538,7 @@ add('D','Přiložte list a propíchněte','S listem 2: list vystřihněte po obr
   const tu=es(t,.6,.92);
   let s=withCam(c,()=>{const id=uid('sc');
     let w=boardBg()+belt({mid:true});
-    w+=`<g transform="translate(0 ${f(-60*sl)})" opacity="${f(seg(t,0,.06))}"><clipPath id="${id}"><rect x="${SHEET_END}" y="-40" width="260" height="80"/></clipPath><g clip-path="url(#${id})"><path d="${sheetShape()}" fill="var(--paper)" fill-opacity=".93" stroke="var(--paper-edge)" stroke-width="${sw(.3)}" ${SHADOW}/>${sheetPrint()}</g></g>`;
+    w+=`<g transform="translate(0 ${f(-60*sl)})" opacity="${f(seg(t,0,.06))}"><clipPath id="${id}"><rect x="${SHEET_END}" y="-40" width="260" height="80"/></clipPath><g clip-path="url(#${id})"><path d="${sheetShape()}" fill="var(--paper)" fill-opacity=".93" stroke="var(--karton)" stroke-width="${sw(.8)}" ${SHADOW}/>${sheetPrint()}</g></g>`;
     if(t>.2) w+=fade(seg(t,.2,.24),[-4,100,150].map(x=>`<rect x="${x}" y="${-H-4}" width="7" height="${W+8}" fill="var(--tape)" opacity=".75" stroke="var(--tape-d)" stroke-width="${sw(.2)}"/>`).join(''));
     for(const [x,p] of pricks) if(p>=1) w+=`<circle cx="${x}" cy="0" r=".6" fill="var(--hole)"/>`;
     w+=marks({trace:{P:HROT_TR,u:tu}});

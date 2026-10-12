@@ -311,11 +311,7 @@ describe('Postup v kostce – pásek', () => {
     ]);
     expect(point('order').text).toContain('souhrnu „Koupit“');
     expect(point('order').appLinks?.map((l) => l.to)).toEqual(['belt-config', 'shopping']);
-    expect(point('sheets').printsFrom).toEqual([
-      '02-scrap-training',
-      '04-buckle-end',
-      '06-holes-and-tip',
-    ]);
+    expect(point('sheets').printsFrom).toEqual(['02-scrap-training', '06-holes-and-tip']);
     expect(point('sheets').text).toContain('Vygenerovat listy A4');
   });
 
@@ -333,14 +329,14 @@ describe('Postup v kostce – pásek', () => {
     }
   });
 
-  it('výtisky: listy z „Váš pásek“, jen za podmínky, nejvýš list 1 2× a list 2 1×', () => {
+  it('výtisky: listy z „Váš pásek“, jen za podmínky, list 1 jednou (lekce 2, znovu v 3 a 4) a list 2 1×', () => {
     const groups = overviewPrints(project, point('sheets').printsFrom!);
-    expect(groups.map((g) => g.lessonOrder)).toEqual([2, 4, 6]);
+    expect(groups.map((g) => g.lessonOrder)).toEqual([2, 6]);
     const rows = groups.flatMap((g) => g.rows);
-    expect(rows.map((r) => r.sheetLabel)).toEqual(['List 1', 'List 1', 'List 2']);
+    expect(rows.map((r) => r.sheetLabel)).toEqual(['List 1', 'List 2']);
     // Název listu se v účelu neopakuje („List 1: …“ → „…“).
     expect(rows[0]!.purpose).toBe('značení odřezku místo řady 3 destičky');
-    expect(rows[2]!.href).toBe(routes.beltConfig(project.slug, 'spicka'));
+    expect(rows[1]!.href).toBe(routes.beltConfig(project.slug, 'spicka'));
     // Všechny listy jsou jen za podmínky: povinné nic, celé „Jen v případě potřeby“ s jednou
     // společnou podmínkou.
     const list = splitPrintList(groups);
@@ -350,7 +346,7 @@ describe('Postup v kostce – pásek', () => {
     expect(list.conditional[0]!.condition).toContain('neprošla kontrolou');
     expect(
       list.conditional[0]!.rows.map((r) => `${r.sheetLabel} · lekce ${r.lessonOrder}`),
-    ).toEqual(['List 1 · lekce 2', 'List 1 · lekce 4', 'List 2 · lekce 6']);
+    ).toEqual(['List 1 · lekce 2', 'List 2 · lekce 6']);
   });
 
   it('teď × později: obvod teď, tloušťka po dodání; konec, 30 cm a druhá dvojice později', () => {

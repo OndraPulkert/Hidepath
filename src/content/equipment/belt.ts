@@ -577,10 +577,13 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
         label: 'Tloušťka',
         value: '3,0–4,0 mm; po dodání změřte na řezu a podle ní vyberte dřík nýtu',
       },
-      { label: 'Délka', value: 'aspoň „nejkratší délka“ z tabulky Váš pásek' },
+      {
+        label: 'Délka',
+        value: 'aspoň délka ze souhrnu „Koupit“ ve „Váš pásek“ (pásek + poutko z téhož řemene)',
+      },
     ],
     cautions: [
-      'Pás 130 cm stačí do obvodu 106,5 cm (5 dírek po 25 mm). Na větší obvod kupte delší.',
+      'Pás 130 cm stačí do obvodu 106,5 cm (5 dírek po 25 mm), s poutkem z téhož řemene u 40 × 3,5 mm do 92,5 cm. Na větší obvod kupte delší.',
       'CraftPoint slibuje 130–140 cm; s 140 cm nepočítejte.',
       'Činění uvádí CraftPoint (kromě latiga Buffalo), Leatory, Ecocase a u Dvou pásovců přírodní a hnědý bark. U ostatních barev Dvou pásovců, Imaga, Křupsonu, Andexnite a Sedlářského nářadí ho ověřte u prodejce.',
       'Barevný pás bývá barvený jen na povrchu: řezaná hrana je světlá. Probarvení uvádí jen Leatory, Dva pásovci (bark) a Imago.',

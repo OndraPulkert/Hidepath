@@ -459,10 +459,31 @@ function PrintPlan({
     ),
   );
   if (list.required.length === 0 && list.conditional.length === 0) return null;
+  // Povinné výtisky z jiných tiskových stránek projektu (např. cvičný proužek): „Celkem
+  // vytisknout“ tady počítá jen listy této stránky, tak ať se na ně nezapomene.
+  const elsewhere = splitPrintList(
+    overviewPrints(
+      project,
+      project.lessons.map((l) => l.slug),
+    ),
+  )
+    .required.flatMap((g) => g.rows)
+    .filter((row) => !list.required.some((g) => g.rows.some((r) => r.href === row.href)));
   return (
     <section className="mb-6 print:hidden" aria-label="Kolik vytisknout" data-print-plan="">
       <p className="mb-2 kicker">Kolik vytisknout</p>
       <PrintListView list={list} />
+      {elsewhere.length > 0 ? (
+        <p className="mt-2 text-meta text-ink-2" data-print-elsewhere="">
+          Tiskne se jinde:{' '}
+          {elsewhere.map((row, i) => (
+            <span key={`${row.href}-${row.sheetId}-${i}`}>
+              {i > 0 ? ' · ' : null}
+              <Link to={row.href}>{typo(`${row.sheetLabel} ${row.copies}×`)}</Link>
+            </span>
+          ))}
+        </p>
+      ) : null}
     </section>
   );
 }

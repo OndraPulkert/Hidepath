@@ -49,7 +49,12 @@ export function parseRecordInput(field: RecordField, raw: string): ParseRecordRe
   switch (field.kind) {
     case 'number': {
       const parsed = parseDecimal(trimmed);
-      if (parsed === undefined) return { ok: false, error: 'Zadejte číslo, např. 0,85.' };
+      if (parsed === undefined) {
+        return {
+          ok: false,
+          error: field.decimals === 0 ? 'Zadejte celé číslo.' : 'Zadejte číslo, např. 0,85.',
+        };
+      }
       if (field.decimals === 0 && !Number.isInteger(parsed)) {
         return { ok: false, error: 'Zadejte celé číslo.' };
       }

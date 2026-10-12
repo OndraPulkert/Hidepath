@@ -175,6 +175,18 @@ export function beltSpecsFor(input: BeltConfigInput): { end: BeltEndSpec; tip: B
   };
 }
 
+/**
+ * Konec u přezky pro předem připravené tiskové listy a řezací soubor (docs/generated): výchozí
+ * „Váš pásek“ v dané šířce, tedy poutko z téhož řemene (tloušťka pásu, ztenčené konce).
+ */
+export function staticSheetEndFor(beltWidthMm: number): BeltEndSpec {
+  return beltSpecsFor({
+    widthMm: beltWidthMm,
+    thicknessMm: DEFAULT_BELT_END.beltThicknessMm,
+    tip: 'hrot',
+  }).end;
+}
+
 /** Zadání poutka pro `keeperCalculation` (šířka a tloušťka pásu, volba poutka). */
 export function keeperInputOf(input: BeltConfigInput) {
   return {

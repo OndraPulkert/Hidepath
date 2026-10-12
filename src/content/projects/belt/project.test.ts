@@ -238,13 +238,12 @@ describe('obsah – pásek: zápisník, „Připravte si“ a destička', () => 
     expect(outcome.result.plate.usable).toBe(false);
   });
 
-  it('listy se tisknou jen tam, kde destička nejde (lekce 4 a 6)', () => {
+  it('listy se tisknou jen tam, kde destička nejde (lekce 2 a 6; lekce 3 a 4 berou list 1 z lekce 2)', () => {
     const prints = beltProject.lessons.flatMap((l) =>
       (l.prints ?? []).map((p) => ({ order: l.order, ...p })),
     );
     expect(prints.map((p) => [p.order, p.sheetId])).toEqual([
       [2, BELT_SHEET_IDS.buckle],
-      [4, BELT_SHEET_IDS.buckle],
       [6, BELT_SHEET_IDS.tip],
     ]);
     for (const p of prints) expect(p.condition).toMatch(/„ne“/);

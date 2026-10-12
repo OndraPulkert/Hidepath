@@ -283,7 +283,7 @@ describe('vstupy do „Váš pásek“', () => {
   });
 
   it('„Připravte si“: list k tisku vede na „Váš pásek“', async () => {
-    renderApp(routes.lesson(SLUG, '04-buckle-end'));
+    renderApp(routes.lesson(SLUG, '02-scrap-training'));
     const link = await screen.findByRole('link', { name: /List 1 – konec u\spřezky/ });
     expect(link).toHaveAttribute('href', routes.beltConfig(SLUG, 'prezka'));
   });

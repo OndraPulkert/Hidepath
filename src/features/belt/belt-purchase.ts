@@ -85,7 +85,10 @@ function shortStrapText(cm: number): string | null {
  * Varování, když běžný pás 130 / 140 cm nepokryje pásek s poutkem z téhož řemene, nebo
  * k tomu odřezek na trénink. Jen když se k pásku něco přičítá (poutko nebo odřezek).
  */
-export function strapLengthWarnings(plan: StrapLengthPlan): string[] {
+export function strapLengthWarnings(
+  plan: StrapLengthPlan,
+  { orderCm = null }: { orderCm?: number | null } = {},
+): string[] {
   const { beltCm, beltAndKeeperCm, neededCm } = plan;
   if (beltCm === null || beltAndKeeperCm === null || neededCm === null) return [];
   const warnings: string[] = [];
@@ -108,9 +111,11 @@ export function strapLengthWarnings(plan: StrapLengthPlan): string[] {
       warnings.push(
         `S odřezkem na trénink ${plan.scrapCm} cm potřebujete ${neededCm} cm: ${short}.` +
           (neededCm > COMMON_STRAP_LENGTHS_CM[1]
-            ? without !== null
-              ? ` Trénujte na samostatném odřezku (vypněte trénink na odřezku téhož řemene): na ${what} stačí pás ${without} cm.`
-              : ' Trénujte na samostatném odřezku, nebo kupte delší pás.'
+            ? orderCm !== null && orderCm >= neededCm
+              ? ` Objednejte delší pás (${orderCm} cm).`
+              : without !== null
+                ? ` Trénujte na samostatném odřezku (vypněte trénink na odřezku téhož řemene): na ${what} stačí pás ${without} cm.`
+                : ' Trénujte na samostatném odřezku, nebo kupte delší pás.'
             : ''),
       );
     }
@@ -259,7 +264,9 @@ export function beltPurchase(
     scrapFromStrap,
     scrapDropped,
     plan,
-    lengthWarnings: strapLengthWarnings(plan),
+    lengthWarnings: strapLengthWarnings(plan, {
+      orderCm: neededCm === null ? null : (offer?.lengthCm ?? null),
+    }),
     keeper: result.keeper,
     offer,
     orderCm: neededCm === null ? null : (offer?.lengthCm ?? null),
@@ -333,12 +340,17 @@ export function strapLengthText(plan: StrapLengthPlan): string {
 /** Souhrn k zobrazení, česky a krátce. */
 export function purchaseLines(p: BeltPurchase): PurchaseLine[] {
   const { min, max } = BELT_LIMITS.thicknessMm;
+  // Odřezek se nevejde (`scrapDropped`): řádek ukáže jen pásek a poutko, ať nežádá víc, než
+  // se pak objednává; že trénink na téže kůži nejde, řekne poznámka v závorce.
+  const shownPlan: StrapLengthPlan = p.scrapDropped
+    ? { ...p.plan, scrapCm: 0, neededCm: p.plan.beltAndKeeperCm }
+    : p.plan;
   const length =
-    p.minLengthCm === null ? 'délka: zadejte obvod' : `délka ${strapLengthText(p.plan)}`;
+    p.minLengthCm === null ? 'délka: zadejte obvod' : `délka ${strapLengthText(shownPlan)}`;
   const order =
     p.orderCm === null
       ? ''
-      : ` → objednejte ${p.orderCm} cm${p.scrapDropped ? ' (bez odřezku na trénink, ten se nevejde)' : ''}`;
+      : ` → objednejte ${p.orderCm} cm${p.scrapDropped ? ' (odřezek na trénink se nevejde, trénujte na samostatném)' : ''}`;
   const lines: PurchaseLine[] = [
     {
       what: p.dyedColor ? `Řemen (${p.dyedColor})` : 'Řemen',

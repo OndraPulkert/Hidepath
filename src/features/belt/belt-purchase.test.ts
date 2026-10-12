@@ -255,7 +255,7 @@ describe('poutko z téhož řemene a odřezek: délka pásu', () => {
       'S odřezkem na trénink 15 cm potřebujete 143 cm: pás 130 ani 140 cm nestačí. Trénujte na samostatném odřezku (vypněte trénink na odřezku téhož řemene): na pásek a poutko stačí pás 130 cm.',
     ]);
     expect(purchaseLines(p)[0]!.detail).toContain(
-      'délka aspoň 114 cm + 14 cm na poutko + 15 cm na odřezek = 143 cm → objednejte 130 cm (bez odřezku na trénink, ten se nevejde)',
+      'délka aspoň 114 cm + 14 cm na poutko = 128 cm → objednejte 130 cm (odřezek na trénink se nevejde, trénujte na samostatném)',
     );
     // Doporučení pásu 130 cm, který na pásek a poutko stačí, se neztratí.
     expect(p.scrapDropped).toBe(true);

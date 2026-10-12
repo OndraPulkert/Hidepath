@@ -123,6 +123,12 @@ const L5 = '05-fit-and-middle-hole';
 const L6 = '06-holes-and-tip';
 const L7 = '07-decorative-stitch';
 
+/** Odkaz z lekce 7 na krok animace lekce 4 (konec u přezky), v popisku poznat, že jde o jinou animaci. */
+const lesson4Animation = (section: 'E5' | 'E6') => {
+  const link = animationLink('beltBuckleEnd', section);
+  return { ...link, label: `${link.label} (animace lekce 4)` };
+};
+
 /** Lekce 7: výsledek zkoušky drážky na odřezku (drážka, nebo jen rýsovaná linie). */
 const STITCH_LINE_ID = 'belt-stitch-line';
 
@@ -252,7 +258,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         slug: 'belt-chosen',
         title:
-          'Šířka, konec a barva jsou zadané a pásek je uložený v „Moje pásky“; pás je aspoň tak dlouhý jako nejkratší délka z „Váš pásek“.',
+          'Šířka, konec a barva jsou zadané a pásek je uložený v „Moje pásky“; pás je aspoň tak dlouhý jako délka ze souhrnu „Koupit“ ve „Váš pásek“.',
         required: true,
       },
       {
@@ -271,7 +277,7 @@ export const lessons: readonly LessonDefinition[] = [
     commonMistakes: [
       'Obvod pasu z krejčovské tabulky místo délky od ohybu u přezky k dírce.',
       'Obvod měřený od konce trnu, ne od ohybu.',
-      'Pás objednaný kratší, než je nejkratší délka z tabulky.',
+      'Pás objednaný kratší, než ukazuje souhrn „Koupit“ (pásek a poutko z téhož řemene).',
       'Nýt 10/6 k pásu, který nemá 3,5–3,75 mm.',
     ],
     safety: [],
@@ -316,7 +322,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'get-scrap',
         title: 'Odřízněte odřezek',
-        body: `Trénujte na odřezku téhož pásu. Odřízněte asi 15 cm z konce, kde bude špička, jen když pod krokem stojí „uříznout můžete“: tam je, kolik z pásu po pásku a poutku zbývá. Z téhož konce je i kus na poutko z téhož řemene (lekce 4), ten má přednost. Máte jinou délku pásu, než ukazuje souhrn: odečtěte od ní pásek a poutko (obě čísla jsou v řádku „Odřezek z pásu“ pod krokem, odřezek do nich nepočítejte); musí zbýt aspoň 15 cm. 15 cm stačí na ohyb 90 mm a jeden nýt: otvor 64,5 mm se po přehnutí dostane na 115,5 mm. Když pás na odřezek nestačí, trénujte na samostatném odřezku třísločiněné kůže co nejbližší tloušťky (např. zbytky třísločiněné hlazenice, tloušťku ověřte u prodejce); nýt pak vyzkoušejte až na pásku.`,
+        body: `Trénujte na odřezku téhož pásu. Odřízněte asi 15 cm z jednoho konce (ten bude špička, lekce 3), jen když pod krokem stojí „uříznout můžete“: tam je, kolik z pásu po pásku a poutku zbývá. Z téhož konce je i kus na poutko z téhož řemene (lekce 4), ten má přednost. Máte jinou délku pásu, než ukazuje souhrn: odečtěte od ní pásek a poutko (obě čísla jsou v řádku „Odřezek z pásu“ pod krokem, odřezek do nich nepočítejte); musí zbýt aspoň 15 cm. 15 cm stačí na ohyb 90 mm a jeden nýt: otvor 64,5 mm se po přehnutí dostane na 115,5 mm. Když pás na odřezek nestačí, trénujte na samostatném odřezku třísločiněné kůže co nejbližší tloušťky (např. zbytky třísločiněné hlazenice, tloušťku ověřte u prodejce); nýt pak vyzkoušejte až na pásku.`,
         media: [],
         beltRecalls: ['strapLength', 'scrapCut'],
       },
@@ -536,7 +542,7 @@ export const lessons: readonly LessonDefinition[] = [
     safety: [KNIFE, PUNCH],
     prints: [
       sheet('prezka', 'List 1: značení odřezku místo řady 3 destičky', {
-        reason: 'podél spodní hrany rýsujete šídlem, list použijete i v lekci 3',
+        reason: 'podél spodní hrany rýsujete šídlem, list použijete i v lekcích 3 a 4',
       }),
     ],
     media: [photo('belt-l2-hero', 'Odřezek pásu s oválem, otvory a nýtem vedle přezky')],
@@ -578,7 +584,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'square-end',
         title: 'Srovnejte konec u přezky',
-        body: 'Vyberte konec, kde bude přezka; druhý konec bude špička. Pás položte rubem nahoru. Destičku přiložte kousek od konce, hrany pásu na linky vaší šířky (šířka bez linky: podle příčné stupnice), přidržte ji rukou nad pásem a šídlem narýsujte čáru podél levé hrany destičky přes celou šířku. Destičku odložte, ocelové pravítko přiložte na čáru a řízněte ve 2–3 tazích, nůž svisle; nikdy ne podél destičky, čepel by akrylát poškodila. Kontrola: destičku přiložte znovu, hrany pásu na linky: levá hrana destičky se konce dotýká po celé šířce, bez mezery v rohu. S listem 1 z lekce 2: boky listu na hrany pásu, čáru veďte podél spodní hrany listu. O tuto hranu se opírá řada 3 destičky i list 1.',
+        body: 'Vyberte konec, kde bude přezka; druhý konec bude špička. Uřízli jste v lekci 2 odřezek z pásu: ten konec bude špička. Pás položte rubem nahoru. Destičku přiložte kousek od konce, hrany pásu na linky vaší šířky (šířka bez linky: podle příčné stupnice), přidržte ji rukou nad pásem a šídlem narýsujte čáru podél levé hrany destičky přes celou šířku. Destičku odložte, ocelové pravítko přiložte na čáru a řízněte ve 2–3 tazích, nůž svisle; nikdy ne podél destičky, čepel by akrylát poškodila. Kontrola: destičku přiložte znovu, hrany pásu na linky: levá hrana destičky se konce dotýká po celé šířce, bez mezery v rohu. S listem 1 z lekce 2: boky listu na hrany pásu, čáru veďte podél spodní hrany listu. O tuto hranu se opírá řada 3 destičky i list 1.',
         media: [],
       },
       {
@@ -666,18 +672,18 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 180,
     goal: 'Označit a vyseknout konec u přezky, vyrobit poutko a přezku přišroubovat dvěma nýty.',
     materials: [
-      'destička MK Plexi (řada 3), nebo list 1, tenký karton (krabice od cereálií) a lepidlo v tyčince',
-      SCISSORS_MATERIAL,
+      'destička MK Plexi (řada 3), nebo list 1 z lekce 2 (na tenkém kartonu)',
+      'jen bez listu 1 z lekce 2: tenký karton (krabice od cereálií), lepidlo v tyčince a nůžky',
       SHIMS_MATERIAL,
       'zbytek pásu na poutko (kus podle kalkulačky), nebo odřezek jiné kůže v barvě pásu',
       'papírový proužek na změření poutka',
       'rovný hranolek pod brusný papír (ztenčení konců poutka z pásu)',
-      'tvrdý špalík ze dřeva nebo plastu do poutka (lepení a steh): užší než pás a nejvýš tak silný jako 3 vrstvy pásu, např. lišta 35 × 10 mm u 40 × 3,5 mm; rozměr pro váš pásek je pod krokem',
+      'špalík z plastu nebo měkkého dřeva do poutka (lepení a steh): užší než pás a nejvýš tak silný jako 3 vrstvy pásu, např. lišta 35 × 10 mm u 40 × 3,5 mm; rozměr pro váš pásek je pod krokem',
       'diamantové šídlo, jen když vidlička spojem neprojde (v katalogu není, ověřte u prodejce)',
       'zapalovač na zatavení konců nitě (steh přeplátování)',
       'papírová páska na přelepení poutka mimo přeplátování (jen poutko z jiné kůže)',
       'voda a houbička',
-      'zajišťovač závitů nebo lak',
+      'rozebíratelný zajišťovač závitů (střední pevnost, podle obalu), nebo lak',
       'plátno na leštění',
       'plochý šroubovák podle drážky šroubku nýtu',
     ],
@@ -713,7 +719,7 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Řada 3, nebo list 1',
         printLink: 'pattern-sheets',
         printSheetId: 'prezka',
-        body: `Řada 3 destičky platí pro šířky 28–45 mm. Když ${TABLE} ukazuje u řady 3 „ne“, nebo destička neprošla kontrolou, vytiskněte list 1 pro váš pásek na 100 % (odkaz pod krokem). Kalibrační čtverec musí měřit 50 × 50 mm.`,
+        body: `Řada 3 destičky platí pro šířky 28–45 mm. Když ${TABLE} ukazuje u řady 3 „ne“, nebo destička neprošla kontrolou, použijte list 1 z lekce 2. Nemáte ho: vytiskněte list 1 pro váš pásek na 100 % (odkaz pod krokem), kalibrační čtverec musí měřit 50 × 50 mm, a připravte ho jako v lekci 2 (krok „Kolmý řez“).`,
         animationLinks: [
           animationLink('beltBuckleEnd', 'A1'),
           animationLink('beltBuckleEnd', 'A2'),
@@ -736,7 +742,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'mark',
         title: 'Označte konec u přezky',
-        body: 'Destičku přiložte levou hranou přesně na konec pásu, obě hrany pásu na dvojici linek vaší šířky (šířka bez linky: podle příčné stupnice). Šídlem označte jen 2 otvory pro nýty blíž ke konci, 2 značky ohybu a obtáhněte ovál. Druhé 2 otvory v přímce neznačte: druhou dvojici označíte po ohnutí skrz první. V otvorech kružte po stěně, u obou značek ohybu nakloňte šídlo stejným směrem. Dívejte se svisle. Destičku nikdy neobracejte. Dva otvory mimo přímku jsou značky ohybu: do nich nic nesekejte. S listem 1: list nalepte na tenký karton (krabice od cereálií) a po zaschnutí ho vystřihněte po obrysu pásu, spodní hranu odřízněte nožem podél ocelového pravítka přesně po čáře. Spodní hranu přiložte přesně na konec pásu, boky na hrany pásu a list přilepte papírovou páskou. Šídlem propíchněte středy 2 černých otvorů u konce, oba křížky oválu a oba červené kroužky na čáře ohybu. Šedé otvory nepropichujte.',
+        body: 'Destičku přiložte levou hranou přesně na konec pásu, obě hrany pásu na dvojici linek vaší šířky (šířka bez linky: podle příčné stupnice). Šídlem označte jen 2 otvory pro nýty blíž ke konci, 2 značky ohybu a obtáhněte ovál. Druhé 2 otvory v přímce neznačte: druhou dvojici označíte po ohnutí skrz první. V otvorech kružte po stěně, u obou značek ohybu nakloňte šídlo stejným směrem. Dívejte se svisle. Destičku nikdy neobracejte. Dva otvory mimo přímku jsou značky ohybu: do nich nic nesekejte. S listem 1 z lekce 2: spodní hranu přiložte přesně na konec pásu, boky na hrany pásu a list přilepte papírovou páskou. Šídlem propíchněte středy 2 černých otvorů u konce, oba křížky oválu a oba červené kroužky na čáře ohybu. Šedé otvory nepropichujte.',
         animationLinks: [
           animationLink('beltBuckleEnd', 'B2'),
           animationLink('beltBuckleEnd', 'B3'),
@@ -769,7 +775,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'keeper',
         title: 'Vyřízněte proužek na poutko',
-        body: `Poutkem bude procházet i volný konec pásku, takže obepíná 3 vrstvy. Délku spočítá kalkulačka pod krokem z aktivního pásku: obvod 3 vrstev + π × tloušťka poutka + 15 mm přeplátování (např. ${KEEPER_EXAMPLE_MM} mm pro 40 × 3,5 mm a poutko z téhož řemene). Obvod si ověřte: konec pásu přeložte volně na dvojo, zatím bez ohybu kolem příčky, a přiložte k němu třetí vrstvu: druhý konec pásu nebo odřezek z lekce 2. Papírový proužek obtočte kolem všech 3 vrstev, označte, kde se potká se svým začátkem, a obvod odečtěte na pravítku destičky (nula vlevo) nebo na ocelovém pravítku. Zapište ho do kalkulačky, délka se přepočítá. Poutko z téhož řemene: z konce pásu u špičky uřízněte kolmo kus podle kalkulačky (např. ${KEEPER_PIECE_EXAMPLE_CM} cm), jen když pás bude i bez něj aspoň tak dlouhý jako pásek ve „Váš pásek“ (odkaz pod krokem). Nebude: ve „Váš pásek“ vypněte „Poutko z téhož řemene“, zadejte tloušťku jiné kůže a pásek uložte; poutko pak udělejte z ní, bez ztenčení. Poutko z jiné kůže: vyberte odřezek v barvě pásu, poutko je na líci vidět. Z kusu vyřízněte podélně proužek 12 mm × délku z kalkulačky: na rubu ho narýsujte šídlem podél ocelového pravítka a řežte přesně po rýhách, odpadnou s řezem. Délka poutka je spočítaná, ne vyzkoušená: ověřte ji proužkem.`,
+        body: `Poutkem bude procházet i volný konec pásku, takže obepíná 3 vrstvy. Délku spočítá kalkulačka pod krokem z aktivního pásku: obvod 3 vrstev + π × tloušťka poutka + 15 mm přeplátování (např. ${KEEPER_EXAMPLE_MM} mm pro 40 × 3,5 mm a poutko z téhož řemene). Obvod si ověřte: konec pásu přeložte volně na dvojo, zatím bez ohybu kolem příčky, a přiložte k němu třetí vrstvu: druhý konec pásu nebo odřezek z lekce 2. Papírový proužek obtočte kolem všech 3 vrstev, označte, kde se potká se svým začátkem, a obvod odečtěte na pravítku destičky (nula vlevo) nebo na ocelovém pravítku. Zapište ho do kalkulačky, délka se přepočítá. Poutko z téhož řemene: z konce pásu u špičky uřízněte kolmo kus podle kalkulačky (např. ${KEEPER_PIECE_EXAMPLE_CM} cm), jen když pás bude i bez něj aspoň tak dlouhý jako pásek ve „Váš pásek“ (odkaz pod krokem). Nebude: ve „Váš pásek“ vypněte „Poutko z téhož řemene“, zadejte tloušťku jiné kůže a pásek uložte; poutko pak udělejte z ní, bez ztenčení. Poutko z jiné kůže: vyberte odřezek v barvě pásu, poutko je na líci vidět. Z kusu vyřízněte podélně proužek 12 mm na celou délku kusu (z jiné kůže asi o 10 mm delší, než ukazuje kalkulačka): na rubu ho narýsujte šídlem podél ocelového pravítka a řežte přesně po rýhách, odpadnou s řezem. Zbytek kusu si schovejte: je to odřezek téhož pásu na zkoušku klínu a lepení (a pro lekci 7). Délka je spočítaná, ne vyzkoušená. Proužek proto obtočte na sucho lícem ven kolem 3 vrstev: při délce z kalkulačky se konce musí překrývat o 15 mm a třetí vrstva musí projít. Překrývají se méně: nechte ho o tolik delší. Pak ho kolmo zkraťte.`,
         animationLinks: [
           animationLink('beltBuckleEnd', 'D1'),
           animationLink('beltBuckleEnd', 'D2'),
@@ -782,6 +788,8 @@ export const lessons: readonly LessonDefinition[] = [
             label: 'Obvod 3 vrstev změřený proužkem (nepovinné)',
             hint: 'Prázdné = kalkulačka počítá se spočítaným obvodem.',
             unit: 'mm',
+            min: 30,
+            max: 200,
             decimals: 0,
           },
         ],
@@ -800,7 +808,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'keeper-skive',
         title: 'Ztenčete konce poutka',
-        body: 'Jen poutko z téhož řemene. Poutko z jiné kůže (pod krokem „neztenčujte“) neztenčujte, krok vynechte. Nejdřív vše vyzkoušejte na odřezku pásu. Každý konec ztenčete do klínu dlouhého 15 mm: od plné tloušťky na 0,5–1 mm na samém konci (u 3,5 mm v polovině klínu asi 2,2 mm; vaše čísla jsou pod krokem). Horní (vnější) konec ztenčete z rubu, spodní konec z líce: líc, který zůstane vidět, je celý. Na listu 1 jsou klíny šrafy: vlevo líc, vpravo rub. Brusný papír 80 napněte na rovný hranolek. Proužek položte na desku a plnou část přidržte prsty nebo svěrkou, ne klín. Hranolkem tahejte rovně podél proužku jen jedním směrem: od plné části ke konci a přes konec ven, ne zpět, tenký konec by se ohnul nebo natrhl. Ke konci ubírejte víc. Dohlaďte papírem 180. Posuvkou měřte konec a polovinu klínu; konec nesmí být tenčí než 0,5 mm. Oba konce přiložte na sucho na sebe, rub horního na líc spodního: spoj má mít nejvýš asi tloušťku pásu + 1 mm (u 3,5 mm asi 4,5 mm). Volitelně jde horní (rubový) klín seřezat ztenčovačem (safety skiver) z katalogu, i ten nejdřív na odřezku. Spodní klín je na líci: ten brusným papírem, ztenčovač na líci jen po zkoušce na odřezku. Klín nikdo zatím nevyzkoušel: ověřte na odřezku.',
+        body: 'Jen poutko z téhož řemene. Poutko z jiné kůže (pod krokem „neztenčujte“) neztenčujte, krok vynechte. Nejdřív vše vyzkoušejte na odřezku pásu (zbytek kusu na poutko). Každý konec ztenčete do klínu dlouhého 15 mm: od plné tloušťky na 0,5–1 mm na samém konci (u 3,5 mm v polovině klínu asi 2,2 mm; vaše čísla jsou pod krokem). Horní (vnější) konec ztenčete z rubu, spodní konec z líce: líc, který zůstane vidět, je celý. Na listu 1 jsou klíny šrafy: vlevo líc, vpravo rub. Brusný papír 80 napněte na rovný hranolek. Proužek položte na desku a plnou část přidržte prsty nebo svěrkou, ne klín. Hranolkem tahejte rovně podél proužku jen jedním směrem: od plné části ke konci a přes konec ven, ne zpět, tenký konec by se ohnul nebo natrhl. Ke konci ubírejte víc. Dohlaďte papírem 180. Posuvkou měřte konec a polovinu klínu; konec nesmí být tenčí než 0,5 mm. Oba konce přiložte na sucho na sebe, rub horního na líc spodního: spoj má mít nejvýš asi tloušťku pásu + 1 mm (u 3,5 mm asi 4,5 mm). Volitelně jde horní (rubový) klín seřezat ztenčovačem (safety skiver) z katalogu, i ten nejdřív na odřezku. Spodní klín je na líci: ten jen brusným papírem. Klín nikdo zatím nevyzkoušel: ověřte na odřezku.',
         animationLinks: [animationLink('beltBuckleEnd', 'D4')],
         media: [
           photo('belt-l4-keeper-skive', 'Konec poutka ztenčený do klínu, posuvka měří konec'),
@@ -834,7 +842,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'keeper-stitch',
         title: 'Prošijte přeplátování (doporučeno)',
-        body: 'Doporučeno, hlavně u poutka z pásu. Až lepidlo zaschne podle návodu na obalu, vsuňte do poutka pod přeplátování tvrdý špalík ze dřeva nebo plastu, užší než pás a nejvýš tak silný jako vnitřek poutka (rozměr pod krokem). Bez špalíku by vidlička propíchla i druhou stranu poutka. Přeplátování leží na špalíku, horní konec navrchu. Udělejte 2 krátké řady napříč, každou ze 2 otvorů: asi 3 mm od každého konce přeplátování, otvory 4 mm od hran a 4 mm od sebe. Dvouhrotou vidličkou prosekejte obě vrstvy až do špalíku. Když vidlička spojem neprojde (z pásu tloušťka pásu + 1 mm, u 3,5 mm asi 4,5 mm; vaše číslo pod krokem), otvory dokončete diamantovým šídlem. Každou řadu šijte zvlášť sedlářským stehem jako v projektu 01: nit středem do otvoru 1, obě jehly proti sobě otvorem 2, pak jehlu, která vyšla venku, vraťte otvorem 1 dovnitř. Oba konce jsou uvnitř poutka: odstřihněte je asi 2 mm od kůže a zatavte zapalovačem. Spoj pak půjde na rub pásku, k tělu: steh na líci pásku není vidět. Nejdřív vyzkoušejte na odřezku.',
+        body: 'Doporučeno, hlavně u poutka z pásu. Až lepidlo zaschne podle návodu na obalu, vsuňte do poutka pod přeplátování špalík z plastu nebo měkkého dřeva, užší než pás a nejvýš tak silný jako vnitřek poutka (rozměr pod krokem). Bez špalíku by vidlička propíchla i druhou stranu poutka. Poutko položte na hladkou desku na vysekávání, přeplátování leží na špalíku, horní konec navrchu. Udělejte 2 krátké řady napříč, každou ze 2 otvorů: 3 mm a 12 mm od špičky horního konce (přeplátování 15 mm), otvory 4 mm od hran a 4 mm od sebe. Dvouhrotou vidličkou prosekejte obě vrstvy až do špalíku. Když vidlička spojem neprojde (z pásu tloušťka pásu + 1 mm, u 3,5 mm asi 4,5 mm; vaše číslo pod krokem), otvory dokončete diamantovým šídlem. Každou řadu šijte zvlášť sedlářským stehem jako v projektu 01: nit středem do otvoru 1, obě jehly proti sobě otvorem 2, pak jehlu, která vyšla venku, vraťte otvorem 1 dovnitř. Oba konce jsou uvnitř poutka: odstřihněte je asi 2 mm od kůže a zatavte zapalovačem. Spoj pak půjde na rub pásku, k tělu: steh na líci pásku není vidět. Nejdřív vyzkoušejte na odřezku.',
         animationLinks: [animationLink('beltBuckleEnd', 'D6')],
         media: [
           photo(
@@ -847,7 +855,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'bend',
         title: 'Navlékněte poutko a ohněte konec',
-        body: 'Poutko navlékněte na pás od konce u přezky a posuňte ho dál, než po ohnutí dosáhne konec pásu (180 mm od konce). Teď, dokud je konec rovný: po ohnutí by šlo poutko navléknout jen z druhého konce pásu. Trn přezky prostrčte oválem: přezku nasaďte ozdobnou stranou na stranu líce pásu, trn pak leží na rámu přezky zvenku. Zónu ohybu navlhčete z rubu vlhkou houbičkou, jen pruh mezi konci oválu, líc nepromáčejte, a konec ohněte nahoru přes rub, rubem k rubu, kolem příčky přezky, ne přes hranu, tak jako na odřezku v lekci 2. Líc zůstane venku a přehnutý konec leží na rubu pásu (při nošení u těla).',
+        body: 'Pás leží rubem nahoru. Poutko navlékněte na pás od konce u přezky spojem nahoru, na rub pásu, a posuňte ho dál, než po ohnutí dosáhne konec pásu (180 mm od konce). Teď, dokud je konec rovný: po ohnutí by šlo poutko navléknout jen z druhého konce pásu. Trn přezky prostrčte oválem: přezku nasaďte ozdobnou stranou na stranu líce pásu, trn pak leží na rámu přezky zvenku. Zónu ohybu navlhčete z rubu vlhkou houbičkou, jen pruh mezi konci oválu, líc nepromáčejte, a konec ohněte nahoru přes rub, rubem k rubu, kolem příčky přezky, ne přes hranu, tak jako na odřezku v lekci 2. Líc zůstane venku a přehnutý konec leží na rubu pásu (při nošení u těla).',
         animationLinks: [
           animationLink('beltBuckleEnd', 'D7'),
           animationLink('beltBuckleEnd', 'E1'),
@@ -874,7 +882,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'screws',
         title: 'Vysekněte a sešroubujte',
-        body: 'Poutko odsuňte ke špičce dál než 180 mm od konce, pak konec rozložte. Druhou dvojici vysekněte Ø 6 mm: výsečník postavte přesně na vykroužený kroužek. Konec ohněte zpět kolem příčky s trnem v oválu a poutko posuňte zpět přes přehnutý konec do kapsy, spojem na přehnutý konec. Nýty sešroubujte: hlavičku s dutým dříkem z líce pásu, šroubek z druhé strany, na přehnutém konci (strana k tělu), utáhněte plochým šroubovákem. Na závit dejte kapku zajišťovače závitů nebo laku: nýty v nejzatíženějším místě se povolují. Poutko je v kapse mezi nýty. Před zkouškou v lekci 5 nechte ohyb úplně proschnout.',
+        body: 'Poutko odsuňte ke špičce dál než 180 mm od konce, pak konec rozložte. Druhou dvojici vysekněte Ø 6 mm: výsečník postavte přesně na vykroužený kroužek. Konec ohněte zpět kolem příčky s trnem v oválu a poutko posuňte zpět přes přehnutý konec do kapsy, spojem na přehnutý konec. Nýty sešroubujte: hlavičku s dutým dříkem z líce pásu, šroubek z druhé strany, na přehnutém konci (strana k tělu), utáhněte plochým šroubovákem. Na závit dejte kapku rozebíratelného zajišťovače závitů (střední pevnost) nebo laku: nýty v nejzatíženějším místě se povolují. Trvalý zajišťovač ne: nýty by pak nešly povolit. Poutko je v kapse mezi nýty. Před zkouškou v lekci 5 nechte ohyb úplně proschnout.',
         animationLinks: [
           animationLink('beltBuckleEnd', 'E4'),
           animationLink('beltBuckleEnd', 'E5'),
@@ -938,12 +946,13 @@ export const lessons: readonly LessonDefinition[] = [
       'Ztenčovač veďte od prstů volné ruky.',
       'Zatavujte jen konec nitě, plamen ke kůži nepřibližujte.',
     ],
-    prints: [
-      sheet('prezka', 'List 1: konec u přezky místo řady 3 destičky', {
-        reason: 'spodní hranu přikládáte na konec pásu',
-      }),
-    ],
     requires: [
+      {
+        id: 'sheet-1',
+        fromLesson: L2,
+        label: 'List 1 vystřižený po obrysu pásu',
+        note: 'Jen když značíte listem místo řady 3 destičky.',
+      },
       {
         id: 'strap-edged',
         fromLesson: L3,
@@ -1120,7 +1129,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'finish',
         title: 'Dokončete hrany',
-        body: 'Pásku z rubu (značka 30 cm z lekce 3) sundejte. Srazte hrany posledních 30 cm a hranu nového konce. U barevného pásku je obarvěte jako v lekci 3 a nechte zaschnout. Pak je zaleštěte a natřete balzámem zbytek pásu, přes přechod z lekce 3 do ztracena, jen když balzám na odřezku vyhověl (jako v lekci 3).',
+        body: 'Srazte neopracované hrany od pásky na rubu (značka z lekce 3) ke konci a hranu nového konce. Pak pásku sundejte. U barevného pásku je obarvěte jako v lekci 3 a nechte zaschnout. Pak je zaleštěte a natřete balzámem zbytek pásu, přes přechod z lekce 3 do ztracena, jen když balzám na odřezku vyhověl (jako v lekci 3).',
         animationLinks: [
           animationLink('beltHolesTip', 'F1'),
           animationLink('beltHolesTip', 'F2'),
@@ -1201,7 +1210,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 300,
     goal: 'Volitelně prošít obě dlouhé hrany sedlářským stehem 4 mm od hrany.',
     materials: [
-      'odřezek pásu z lekce 2, nebo zbytek uříznutý v lekci 6',
+      'odřezek téhož pásu aspoň 10 cm: zbytek kusu na poutko z lekce 4, odřezek z lekce 2 (je-li z téhož pásu), nebo zbytek uříznutý v lekci 6',
       'papírová páska',
       'zapalovač na zatavení konců nitě',
       'plochý šroubovák podle drážky šroubku nýtu',
@@ -1225,7 +1234,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'scrap-test',
         title: 'Vyzkoušejte na odřezku',
-        body: 'Všechno nejdřív vyzkoušejte na odřezku. Drážkovač nastavte podle pravítka na 4 mm. Kůže musí být suchá, nevlhčete ji. Doraz tlačte k hraně a vyrýsujte na líci 10 cm drážky. Drážka má být mělká, jen aby se do ní nit usadila. Je drážka světlejší než pás? Odřel doraz zaleštěnou hranu? Když ano, na pásku ji opravíte po šití v kroku „Zatlučte steh“. Odřezek položte lícem nahoru na tvrdou desku. Vidličku postavte kolmo, prvním hrotem na drážku, a prosekejte asi 10 otvorů, poslední jednohrotem. Odřezek otočte. Na rubu musí vyjít všechny, v jedné řadě. Ušijte pár stehů nití 60 cm jako v projektu 01. Konce vyveďte na rub, odstřihněte asi 2 mm od kůže, krátce je přibližte k plameni zapalovače a hned přimáčkněte. Steh poklepejte paličkou. Výsledek zapište.',
+        body: 'Všechno nejdřív vyzkoušejte na odřezku téhož pásu. Hranu odřezku, která není zaleštěná, nejdřív srazte, u barevného pásku obarvěte a zaleštěte jako v lekci 3. Drážkovač nastavte podle pravítka na 4 mm. Kůže musí být suchá, nevlhčete ji. Doraz tlačte k hraně a vyrýsujte na líci 10 cm drážky. Drážka má být mělká, jen aby se do ní nit usadila. Je drážka světlejší než pás? Odřel doraz zaleštěnou hranu? Když ano, na pásku ji opravíte po šití v kroku „Zatlučte steh“. Odřezek položte lícem nahoru na tvrdou desku. Vidličku postavte kolmo, prvním hrotem na drážku, a prosekejte asi 10 otvorů, poslední jednohrotem. Odřezek otočte. Na rubu musí vyjít všechny, v jedné řadě. Kde hrot nevyšel, odřezek otočte zpět, vraťte vidličku do stejných otvorů a udeřte znovu. Nevyšly ani tak: lekci vynechte, pásek je hotový po lekci 6. Ušijte pár stehů nití 60 cm jako v projektu 01. Konce vyveďte na rub, odstřihněte asi 2 mm od kůže, krátce je přibližte k plameni zapalovače a hned přimáčkněte. Steh poklepejte paličkou. Výsledek zapište.',
         animationLinks: [
           animationLink('beltStitch', 'A1'),
           animationLink('beltStitch', 'A2'),
@@ -1263,7 +1272,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'groove',
         title: 'Vyrýsujte drážku',
-        body: 'Pás přidržte papírovou páskou za koncem u přezky. Doraz tlačte k hraně a táhněte dlouhými tahy od pásky k pásce, po obou hranách, jen na líci. Za pásku drážku nevyjíždějte. Když drážka na odřezku nevyhověla, linii jen lehce vyrýsujte kružítkem na 4 mm.',
+        body: 'Konec u přezky (mezi koncem a startovní páskou) přilepte papírovou páskou k desce. Doraz tlačte k hraně a táhněte dlouhými tahy od pásky k pásce, po obou hranách, jen na líci. Za pásku drážku nevyjíždějte. Když drážka na odřezku nevyhověla, linii jen lehce vyrýsujte kružítkem na 4 mm.',
         animationLinks: [animationLink('beltStitch', 'C1')],
         media: [photo('belt-l7-groove', 'Drážkovač s dorazem na hraně pásu, drážka končí u pásky')],
         recalls: [{ fieldId: STITCH_LINE_ID, label: 'Drážka na odřezku (tato lekce)' }],
@@ -1271,7 +1280,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'punch',
         title: 'Prosekejte otvory',
-        body: 'Pás položte na tvrdou desku lícem nahoru. První hrot vidličky dejte na začátek drážky. Na rovinkách sekejte šesti- nebo čtyřhrotem, vždy prvním hrotem v posledním otvoru, a vidličku držte kolmo. Kolik otvorů asi vyjde, je pod krokem. Posledních asi 10 mm drážky vidličkou nesekejte. Nejdřív udělejte jednohrotem otvor přesně na konci drážky. Mezeru doplňte jednohrotem po 4 mm. Vyšla-li by poslední mezera pod 2 mm, rozdělte dvě poslední mezery rovnoměrně (ověřte na odřezku). Pás otočte a zkontrolujte rub. Kde hrot nevyšel, označte místo tužkou. Pás otočte zpět lícem nahoru, vraťte vidličku do stejných otvorů a udeřte znovu.',
+        body: 'Pás položte na tvrdou desku lícem nahoru. První hrot vidličky dejte na začátek drážky. Na rovinkách sekejte šesti- nebo čtyřhrotem, vždy prvním hrotem v posledním otvoru, a vidličku držte kolmo. Kolik otvorů asi vyjde, je pod krokem. Asi 20 mm před koncem drážky vidličkou přestaňte. Pak udělejte jednohrotem otvor přesně na konci drážky. Změřte mezeru od posledního otvoru k němu a rozdělte ji na stejné díly co nejblíž 4 mm (např. 21 mm = 5 × 4,2 mm). Ocelové pravítko přiložte podél drážky a podle něj mezeru doplňte jednohrotem. Na líci nic neznačte (ověřte na odřezku). Pás otočte a zkontrolujte rub. Kde hrot nevyšel, označte místo tužkou. Pás otočte zpět lícem nahoru, vraťte vidličku do stejných otvorů a udeřte znovu.',
         animationLinks: [
           animationLink('beltStitch', 'C2'),
           animationLink('beltStitch', 'C3'),
@@ -1283,7 +1292,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'sew',
         title: 'Ušijte obě hrany',
-        body: 'Na každou hranu odměřte nit podle „Nit“ (např. 5,5 m; vaše číslo je pod krokem). Nit přes 1,5 m se plete a třepí, proto se jinde šev dělí. Tady ho nedělte: napojení by na jedné vrstvě bylo vidět. Na oba konce nitě navlékněte jehlu jako v projektu 01. Obě ramena nitě namotejte na kousek kartonu a odmotávejte jen tolik, kolik právě potřebujete. Pás upněte do sedlářského koníka nebo svěrky, zbytek ať leží stočený. Šijte od přezky ke špičce jako v projektu 01 a každý steh dotáhněte. Na začátku i na konci prošijte 2 otvory zpět. Konce vyveďte na rub, odstřihněte asi 2 mm od kůže, krátce je přibližte k plameni zapalovače a hned přimáčkněte. Zatavujte jen na rubu.',
+        body: 'Na každou hranu odměřte nit podle „Nit“ (např. 5,5 m pro obvod 95 cm; vaše číslo je pod krokem). Nit přes 1,5 m se plete a třepí, proto se jinde šev dělí. Tady ho nedělte: napojení by na jedné vrstvě bylo vidět. Na oba konce nitě navlékněte jehlu jako v projektu 01. Obě ramena nitě namotejte na kousek kartonu a odmotávejte jen tolik, kolik právě potřebujete. Pás upněte do sedlářského koníka, nebo mezi dvě dřevěné destičky do svěrky; svěrku nikdy přímo na líc. Zbytek ať leží stočený. Šijte od přezky ke špičce jako v projektu 01 a každý steh dotáhněte. Na začátku i na konci prošijte 2 otvory zpět. Konce vyveďte na rub, odstřihněte asi 2 mm od kůže, krátce je přibližte k plameni zapalovače a hned přimáčkněte. Zatavujte jen na rubu.',
         animationLinks: [
           animationLink('beltStitch', 'D1'),
           animationLink('beltStitch', 'D2'),
@@ -1310,11 +1319,11 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'reassemble',
         title: 'Složte konec zpět',
-        body: 'Poutko navlékněte od konce u přezky a posuňte ho dál než 180 mm od konce. Přezku nasaďte jako v lekci 4: trn oválem, ozdobnou stranou k líci. Konec ohněte zpět kolem příčky a poutko vraťte do kapsy, spojem na přehnutý konec. Nýty sešroubujte s novou kapkou zajišťovače závitů nebo laku, jako v lekci 4.',
+        body: 'Pás položte rubem nahoru. Poutko navlékněte od konce u přezky spojem nahoru, na rub pásu, a posuňte ho dál než 180 mm od konce. Přezku nasaďte jako v lekci 4: trn oválem, ozdobnou stranou k líci. Konec ohněte zpět kolem příčky a poutko vraťte do kapsy, spojem na přehnutý konec. Nýty sešroubujte s novou kapkou zajišťovače závitů nebo laku, jako v lekci 4.',
         animationLinks: [
           animationLink('beltStitch', 'E2'),
-          animationLink('beltBuckleEnd', 'E5'),
-          animationLink('beltBuckleEnd', 'E6'),
+          lesson4Animation('E5'),
+          lesson4Animation('E6'),
           animationLink('beltStitch', 'E3'),
         ],
         media: [],
@@ -1347,7 +1356,7 @@ export const lessons: readonly LessonDefinition[] = [
       'Drážka vyjetá za koncovou pásku: zůstane vidět.',
       'Šití přes ohyb nebo přes obě vrstvy: nýty pak nejdou povolit.',
       'Vidlička držená šikmo: otvory na rubu vyjdou mimo linii.',
-      'Navlhčená kůže: modrá barva se může otřít do béžové nitě.',
+      'Navlhčená kůže: barva pásu se může otřít do nitě.',
       'Konec nitě na líci.',
       'Důlek šídlem na líci: zůstane vidět.',
     ],
@@ -1422,7 +1431,7 @@ const overview: ProjectOverview = {
           id: 'sheets',
           lessonSlug: L1,
           stepId: 'plate-or-sheets',
-          printsFrom: [L2, L4, L6],
+          printsFrom: [L2, L6],
           appLinks: [YOUR_BELT],
           text: 'U každé řady destičky ukazuje „Váš pásek“ „ano“, nebo „ne“; za řadu s „ne“ tisknete list: list 1 za řadu 3, list 2 za řadu 1 nebo 2. Vygenerované listy se neukládají: v lekci, která list chce, stiskněte ve „Váš pásek“ „Vygenerovat listy A4“ a tiskněte A4 na 100 %, kalibrační čtverec musí měřit 50 × 50 mm. Když se list 2 nevejde na jeden list A4, vyjde na 2 listy (2a a 2b), každý se přikládá prostřední dírkou na značku.',
         },
@@ -1437,7 +1446,7 @@ const overview: ProjectOverview = {
           lessonSlug: L2,
           stepId: 'get-scrap',
           appLinks: [YOUR_BELT],
-          text: 'Odřízněte asi 15 cm z konce, kde bude špička, jen když pod krokem stojí „uříznout můžete“: kus na poutko z téhož řemene (lekce 4) má přednost. Jinak trénujte na samostatném odřezku; nýt pak vyzkoušíte až na pásku.',
+          text: 'Odřízněte asi 15 cm z jednoho konce (bude špička), jen když pod krokem stojí „uříznout můžete“: kus na poutko z téhož řemene (lekce 4) má přednost. Jinak trénujte na samostatném odřezku; nýt pak vyzkoušíte až na pásku.',
         },
         {
           id: 'scrap-cut',
@@ -1526,19 +1535,19 @@ const overview: ProjectOverview = {
           lessonSlug: L4,
           stepId: 'keeper',
           appLinks: [YOUR_BELT],
-          text: 'Délku poutka spočítá kalkulačka v kroku (obvod 3 vrstev + π × tloušťka poutka + 15 mm), obvod můžete změřit proužkem a zapsat. Z kusu z konce pásu u špičky (nebo z odřezku jiné kůže v barvě pásu) vyřízněte podélně proužek 12 mm × délku, rýhy na rubu po pravítku. Dlouhé hrany zaoblete, u barevného pásku obarvěte, a zaleštěte.',
+          text: 'Délku poutka spočítá kalkulačka v kroku (obvod 3 vrstev + π × tloušťka poutka + 15 mm), obvod můžete změřit proužkem a zapsat. Z kusu z konce pásu u špičky (nebo z odřezku jiné kůže v barvě pásu) vyřízněte podélně proužek 12 mm na celou délku kusu, rýhy na rubu po pravítku, na sucho ho obtočte kolem 3 vrstev (překryv 15 mm) a kolmo zkraťte. Dlouhé hrany zaoblete, u barevného pásku obarvěte, a zaleštěte.',
         },
         {
           id: 'keeper-skive',
           lessonSlug: L4,
           stepId: 'keeper-skive',
-          text: 'Poutko z pásu, nejdřív na odřezku: konce ztenčete brusným papírem 80 a 180 na hranolku do klínu 15 mm (na konci 0,5–1 mm), horní z rubu, spodní z líce, a kontaktním lepidlem jen na klínech slepte rub horního konce na líc spodního. Z jiné kůže přeplátování 15 mm jen zdrsněte a slepte přes pásku, bez ztenčení. Doporučeno: po zaschnutí na špalíku v poutku prosekejte 2 řady po 2 otvorech a ušijte sedlářský steh, konce uvnitř poutka.',
+          text: 'Poutko z pásu, nejdřív na zbytku kusu: konce ztenčete brusným papírem 80 a 180 na hranolku do klínu 15 mm (na konci 0,5–1 mm), horní z rubu, spodní z líce, a kontaktním lepidlem jen na klínech slepte rub horního konce na líc spodního. Z jiné kůže přeplátování 15 mm jen zdrsněte a slepte přes pásku, bez ztenčení. Doporučeno: po zaschnutí na špalíku v poutku prosekejte 2 řady po 2 otvorech (3 a 12 mm od špičky horního konce) a ušijte sedlářský steh, konce uvnitř poutka.',
         },
         {
           id: 'bend',
           lessonSlug: L4,
           stepId: 'bend',
-          text: 'Poutko navlékněte na pás teď, před ohnutím, a posuňte ho dál než 180 mm od konce. Přezku nasaďte ozdobnou stranou k líci pásu a trn prostrčte oválem. Zónu ohybu navlhčete z rubu a konec ohněte kolem příčky rubem k rubu.',
+          text: 'Poutko navlékněte na pás teď, před ohnutím, spojem na rub pásu, a posuňte ho dál než 180 mm od konce. Přezku nasaďte ozdobnou stranou k líci pásu a trn prostrčte oválem. Zónu ohybu navlhčete z rubu a konec ohněte kolem příčky rubem k rubu.',
         },
         {
           id: 'second-pair',
@@ -1550,7 +1559,7 @@ const overview: ProjectOverview = {
           id: 'screws',
           lessonSlug: L4,
           stepId: 'screws',
-          text: 'Poutko odsuňte ke špičce dál než 180 mm od konce, konec rozložte a druhou dvojici vysekněte Ø 6 mm na vykroužené kroužky. Konec ohněte zpět s trnem v oválu a poutko vraťte do kapsy, spojem na přehnutý konec. Nýty sešroubujte hlavičkou z líce, s kapkou zajišťovače závitů, a ohyb nechte před zkouškou na těle proschnout.',
+          text: 'Poutko odsuňte ke špičce dál než 180 mm od konce, konec rozložte a druhou dvojici vysekněte Ø 6 mm na vykroužené kroužky. Konec ohněte zpět s trnem v oválu a poutko vraťte do kapsy, spojem na přehnutý konec. Nýty sešroubujte hlavičkou z líce, s kapkou rozebíratelného zajišťovače závitů, a ohyb nechte před zkouškou na těle proschnout.',
         },
         {
           id: 'fit',
@@ -1576,7 +1585,7 @@ const overview: ProjectOverview = {
           id: 'finish',
           lessonSlug: L6,
           stepId: 'finish',
-          text: 'Pásku 30 cm sundejte, hrany posledních 30 cm a nového konce srazte a zaleštěte; u barevného pásku je předtím obarvěte jako v lekci 3 a leštěte až zaschlou barvu. Zbytek pásu natřete balzámem do ztracena přes přechod, jen když na odřezku vyhověl (jako v lekci 3), a vyzkoušejte všechny dírky.',
+          text: 'Neopracované hrany od pásky (značka z lekce 3) ke konci a hranu nového konce srazte a zaleštěte, pak pásku sundejte; u barevného pásku je předtím obarvěte jako v lekci 3 a leštěte až zaschlou barvu. Zbytek pásu natřete balzámem do ztracena přes přechod, jen když na odřezku vyhověl (jako v lekci 3), a vyzkoušejte všechny dírky.',
         },
       ],
     },
@@ -1588,7 +1597,7 @@ const overview: ProjectOverview = {
           id: 'stitch-scrap',
           lessonSlug: L7,
           stepId: 'scrap-test',
-          text: 'Na odřezku nastavte drážkovač na 4 mm, na suché kůži vyrýsujte drážku, prosekejte pár otvorů a ušijte pár stehů. Drážka světlejší než pás: linii jen rýsujte kružítkem.',
+          text: 'Na odřezku téhož pásu (např. zbytek kusu na poutko) nastavte drážkovač na 4 mm, na suché kůži vyrýsujte drážku, prosekejte pár otvorů a ušijte pár stehů. Drážka světlejší než pás: linii jen rýsujte kružítkem.',
         },
         {
           id: 'stitch-mark',
@@ -1601,7 +1610,7 @@ const overview: ProjectOverview = {
           id: 'stitch-groove-punch',
           lessonSlug: L7,
           stepId: 'punch',
-          text: 'Drážku táhněte od pásky k pásce po obou hranách, jen na líci. Otvory sekejte vidličkou kolmo, vždy prvním hrotem v posledním otvoru. Posledních asi 10 mm nejdřív jednohrot na konci drážky, pak mezeru doplňte jednohrotem.',
+          text: 'Drážku táhněte od pásky k pásce po obou hranách, jen na líci. Otvory sekejte vidličkou kolmo, vždy prvním hrotem v posledním otvoru. Asi 20 mm před koncem jednohrot na konec drážky, mezeru rozdělte na stejné díly co nejblíž 4 mm a doplňte jednohrotem podle pravítka.',
         },
         {
           id: 'stitch-sew',
@@ -1619,7 +1628,7 @@ const overview: ProjectOverview = {
           id: 'stitch-reassemble',
           lessonSlug: L7,
           stepId: 'reassemble',
-          text: 'Poutko navlékněte, přezku nasaďte, konec ohněte zpět, poutko vraťte do kapsy a nýty sešroubujte s kapkou zajišťovače závitů nebo laku.',
+          text: 'Poutko navlékněte spojem na rub pásu, přezku nasaďte, konec ohněte zpět, poutko vraťte do kapsy a nýty sešroubujte s kapkou zajišťovače závitů nebo laku.',
         },
       ],
     },
@@ -1650,9 +1659,10 @@ export const beltProject: ProjectDefinition = {
     {
       equipmentSlug: 'belt-strap',
       priority: 'required',
-      reason: 'Celý pásek; odřezek na trénink, jen když je pás o 15 cm delší než nejkratší délka.',
+      reason:
+        'Celý pásek a poutko z téhož řemene; odřezek na trénink, jen když je pás o 15 cm delší.',
       specification:
-        'Třísločiněný pás 3,0–4,0 mm, přírodní nebo barevný, v šířce přezky, aspoň nejkratší délka z tabulky „Váš pásek“ (+ 15 cm na odřezek k tréninku). Po dodání změřit.',
+        'Třísločiněný pás 3,0–4,0 mm, přírodní nebo barevný, v šířce přezky, aspoň délka ze souhrnu „Koupit“ ve „Váš pásek“ (pásek + poutko z téhož řemene, případně + 15 cm na odřezek). Po dodání změřit.',
     },
     {
       equipmentSlug: 'belt-buckle',
@@ -1869,7 +1879,7 @@ export const beltProject: ProjectDefinition = {
         variant: '40 mm',
         quantity: 1,
         purpose:
-          'modrý pás 40 mm, 130 cm (poslední kus 9. 10. 2026); činění neuvedeno, ověřte u prodejce. 130 cm stačí do obvodu 106,5 cm. Andexnite: doprava do 500 Kč 120 Kč, od 501 Kč 80 Kč, od 1 500 Kč zdarma',
+          'modrý pás 40 mm, 130 cm (poslední kus 9. 10. 2026); činění neuvedeno, ověřte u prodejce. 130 cm stačí do obvodu 92,5 cm s poutkem z téhož řemene (s poutkem z jiné kůže do 106,5 cm). Andexnite: doprava do 500 Kč 120 Kč, od 501 Kč 80 Kč, od 1 500 Kč zdarma',
       },
       {
         equipmentSlug: 'belt-buckle',
@@ -2045,10 +2055,10 @@ export const beltProject: ProjectDefinition = {
       'dvě lišty nebo odřezky stejně silné jako pás, oboustranná lepicí páska pod ně (lekce 2, 4 a 6)',
       'nůžky na vystřižení listů 1 a 2 (jen s listy)',
       'papírový proužek na změření poutka; jen s poutkem z jiné kůže odřezek v barvě pásu (lekce 4)',
-      'rovný hranolek pod brusný papír a tvrdý špalík do poutka, užší než pás a nejvýš tak silný jako 3 vrstvy pásu (např. 35 × 10 mm u 40 × 3,5 mm; lekce 4)',
+      'rovný hranolek pod brusný papír a špalík z plastu nebo měkkého dřeva do poutka, užší než pás a nejvýš tak silný jako 3 vrstvy pásu (např. 35 × 10 mm u 40 × 3,5 mm; lekce 4)',
       'diamantové šídlo, jen když vidlička spojem poutka neprojde (lekce 4; v katalogu není)',
       'papírová páska a tužka: přidržení pásu a listů, značky bez vpichu (lekce 2–6, volitelně 7)',
-      'zajišťovač závitů nebo lak na nýty (lekce 4, volitelně 7)',
+      'rozebíratelný zajišťovač závitů (střední pevnost) nebo lak na nýty (lekce 4, volitelně 7)',
       'plochý šroubovák podle drážky šroubku nýtu (lekce 2, 4, volitelně 7)',
       'voda a houbička na ohyb, plátno na leštění',
       'zapalovač na zatavení konců nitě (steh poutka v lekci 4, lekce 7), kousek kartonu na namotání nitě, kleště a hadřík na protáčivou hlavičku nýtu (jen volitelná lekce 7)',

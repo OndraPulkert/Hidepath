@@ -414,7 +414,7 @@ describe('Váš pásek', () => {
     // nestačí, souhrn varuje a doporučí pás 130 cm na pásek a poutko (odřezek zvlášť).
     await user.click(screen.getByRole('checkbox', { name: /Trénink na odřezku téhož řemene/ }));
     expect(summary).toHaveTextContent(
-      /aspoň 114\scm \+ 14\scm na poutko \+ 15\scm na odřezek = 143\scm → objednejte 130\scm \(bez odřezku na trénink, ten se nevejde\)/,
+      /aspoň 114\scm \+ 14\scm na poutko = 128\scm → objednejte 130\scm \(odřezek na trénink se nevejde, trénujte na samostatném\)/,
     );
     expect(summary).toHaveTextContent(
       /S odřezkem na trénink 15\scm potřebujete 143\scm: pás 130 ani 140\scm nestačí\. Trénujte na samostatném odřezku/,

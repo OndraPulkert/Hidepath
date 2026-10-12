@@ -12,7 +12,7 @@ formátu A4 v měřítku 1:1** se šablonou obou konců koženého opasku:
   a kapsou pro poutko; navíc pásek na poutko jako samostatný díl.
 - **Strana 2** – konec se špičkou: anglická špička a pět dírek pro trn přezky.
 
-Šablona se tiskne, nalepí na tvrdý podklad a vyřízne. Podle ní se pak přenášejí značky na kůži.
+Šablona se tiskne, nalepí na tenký karton (krabice od cereálií) a vyřízne. Podle ní se pak přenášejí značky na kůži.
 
 ## 2. Vstupy
 
