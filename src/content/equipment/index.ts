@@ -24,14 +24,14 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     category: 'material',
     shortDescription: 'Z ní pouzdro vzniká. Tloušťka 1,2–1,5 mm se dobře řeže i šije a drží tvar.',
     purpose:
-      'Třísločiněná (vegetabilně činěná) hovězina je pevná, drží tvar a dá se u ní zaleštit hrana. Pro pouzdro na karty stačí kus zhruba velikosti A4 a několik odřezků na trénink.',
+      'Třísločiněná (vegetabilně činěná) hovězina je pevná, drží tvar a dá se u ní zaleštit hrana. Pro pouzdro na karty stačí přířez A5 a několik odřezků na trénink.',
     buyingGuide: [
       { label: 'Činění', value: 'třísločiněná („veg-tan“), ne chromočiněná' },
       { label: 'Tloušťka', value: '1,2–1,5 mm (karty se vejdou, pouzdro není tlusté)' },
       {
         label: 'Množství',
         value:
-          'přířez A4 na pouzdro (oba díly se vejdou i s rezervou) + 2× A5 téže kůže na trénink lekcí 1–4',
+          '1× A5 na pouzdro (oba díly se vejdou pod sebe, rezerva asi 1 cm na stranu) + 2× A5 téže kůže na trénink lekcí 1–4',
       },
       {
         label: 'Barva',
@@ -62,10 +62,10 @@ export const equipmentList: readonly EquipmentDefinition[] = [
           'na trénink stačí; dílny a obchody je často prodávají po balíčcích za desítky korun',
       },
     ],
-    // A4 182–250 Kč podle odstínu + 2× A5 à 57 Kč na trénink (CraftPoint, ověřeno 2026-10-08).
-    priceRange: { minCents: 29_600, maxCents: 36_400 },
+    // 3× A5 à 57 Kč: 1 na pouzdro, 2 na trénink (CraftPoint, ověřeno 2026-10-08).
+    priceRange: { minCents: 17_100, maxCents: 17_100 },
     priceSource: 'verified',
-    priceNote: `${VERIFIED_NOTE} Přířez A4 plus dvě A5 na trénink.`,
+    priceNote: `${VERIFIED_NOTE} Tři přířezy A5: jeden na pouzdro, dva na trénink.`,
     alsoUsedFor: ['Pouzdro na karty', 'Klíčenka', 'Peněženka bifold', 'Pouzdro s mincí'],
     examples: [
       {
@@ -75,7 +75,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         priceCents: 18_200,
         variant: 'A4 (30 × 21 cm)',
         priceNote: 'větší přířez A3 za 364 Kč',
-        note: 'Nejlevnější odstín téže kůže. Na pouzdro A4, na trénink lekcí 1–4 přihoďte 2× A5 – stejná kůže, stejné chování, bez dalšího poštovného. U pouzdra s mincí pro ni platí listy pro kůži 1,2 mm (bez ztenčení ohybu B).',
+        note: 'Nejlevnější odstín téže kůže. Na pouzdro na karty stačí A5; A4 jen s větší rezervou na kazy. U pouzdra s mincí pro ni platí listy pro kůži 1,2 mm (bez ztenčení ohybu B).',
         availability: 'in_stock',
         checkedAt: '2026-10-08',
       },
@@ -85,7 +85,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         url: 'https://craft-point.cz/products/hovezi-kuze-licova-juchtova-trislocinena-1-2-mm',
         priceCents: 5_700,
         variant: 'A5 (21 × 15 cm)',
-        note: 'Levný přířez na trénink: u pouzdra s mincí na tvarovací zkoušku v lekci 2 (dva kusy 57,5 × 57,5 mm), zkoušku druku v lekci 3 a lepení a steh v lekci 4.',
+        note: 'Na pouzdro na karty (oba díly pod sebe) i na trénink lekcí 1–4; ze zbytku tréninkové A5 i odřezky 57,5 × 57,5 mm na zkoušku důlku u pouzdra s mincí (lekce 2).',
         availability: 'in_stock',
         checkedAt: '2026-10-08',
       },
@@ -96,7 +96,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         priceCents: 25_000,
         variant: 'A4 (30 × 21 cm)',
         priceNote: 'větší přířez A3 za 500 Kč',
-        note: 'Modře probarvená lícová useň 1,2 mm. U pouzdra s mincí se do A4 vejde pás těla 240,35 × 104,1 mm (listy pro kůži 1,2 mm, bez ztenčení ohybu B).',
+        note: 'Modře probarvená lícová useň 1,2 mm. U pouzdra s mincí se do A4 vejde pás těla 240,35 × 104,1 mm a vedle sebe pod něj kapsa 57,5 × 57,5 mm a cvičný proužek 130 × 50 mm (listy pro kůži 1,2 mm, bez ztenčení ohybu B).',
         availability: 'in_stock',
         checkedAt: '2026-10-08',
       },
@@ -116,7 +116,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         url: 'https://craft-point.cz/products/hovezi-licova-kuze-trislocinena-1-2-mm-whisky',
         priceCents: 25_000,
         priceNote: 'A4; A5 57 Kč, A3 500 Kč. Stejné ceny mají odstíny karamelová a t. moro.',
-        note: 'Lícová kůže 1,2 mm probarvená do odstínu whisky, tedy spodní hranice doporučené tloušťky. Na pouzdro stačí A4. U pouzdra s mincí pro ni platí listy pro kůži 1,2 mm (bez ztenčení ohybu B).',
+        note: 'Lícová kůže 1,2 mm probarvená do odstínu whisky, tedy spodní hranice doporučené tloušťky. Na pouzdro na karty stačí A5. U pouzdra s mincí pro ni platí listy pro kůži 1,2 mm (bez ztenčení ohybu B).',
         availability: 'in_stock',
         checkedAt: '2026-10-08',
       },

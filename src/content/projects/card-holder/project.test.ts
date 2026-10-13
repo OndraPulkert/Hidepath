@@ -246,12 +246,9 @@ describe('obsah – pouzdro na karty: nákupní plán „Co koupit“', () => {
     expect(plan.skipped).toEqual([]);
   });
 
-  it('kůže: A4 na pouzdro a 2× A5 téže kůže 1,2 mm na trénink lekcí 1–4', () => {
+  it('kůže: 3× A5 téže kůže 1,2 mm, jedna na pouzdro a dvě na trénink lekcí 1–4', () => {
     const leather = plan.lines.filter((l) => l.equipmentSlug === 'veg-tan-leather');
-    expect(leather.map((l) => [l.variant, l.quantity])).toEqual([
-      ['A4 (30 × 21 cm)', 1],
-      ['A5 (21 × 15 cm)', 2],
-    ]);
+    expect(leather.map((l) => [l.variant, l.quantity])).toEqual([['A5 (21 × 15 cm)', 3]]);
     expect(new Set(leather.map((l) => l.url)).size).toBe(1);
     expect(findPlanExample(leather[0]!, equipmentCatalog)!.title).toContain('1,2 mm');
     expect(leather[0]!.purpose).toContain('100 × 70 mm');
@@ -284,16 +281,16 @@ describe('obsah – pouzdro na karty: nákupní plán „Co koupit“', () => {
     }
   });
 
-  it('součet po obchodech: CraftPoint 2 877 Kč + IKEA 118 Kč + OBI 139 Kč = 3 134 Kč', () => {
+  it('součet po obchodech: CraftPoint 2 752 Kč + IKEA 118 Kč + OBI 139 Kč = 3 009 Kč', () => {
     const resolved = resolveShoppingPlan(cardHolderProject, equipmentCatalog, {})!;
     const lines = resolved.shops.flatMap((s) => s.lines);
     expect(lines).toHaveLength(plan.lines.length);
     expect(resolved.shops.map((s) => [s.shop, s.totalCents])).toEqual([
-      ['CraftPoint', 287_700],
+      ['CraftPoint', 275_200],
       ['IKEA', 11_800],
       ['OBI', 13_900],
     ]);
-    expect(resolved.totalCents).toBe(313_400);
+    expect(resolved.totalCents).toBe(300_900);
     expect(resolved.notInStockCount).toBe(0);
     expect(resolved.checkedFrom).toBe('2026-09-29');
     expect(resolved.checkedTo).toBe('2026-10-12');

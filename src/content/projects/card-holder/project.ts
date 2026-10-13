@@ -637,7 +637,7 @@ export const lessons: readonly LessonDefinition[] = [
     goal: 'Mít dva přesné díly pouzdra vyříznuté podle šablony 1:1 a hotovou horní hranu kapsy.',
     materials: [
       'nůžky na vystřižení šablony nahrubo (s okrajem 1–2 cm)',
-      'kůže A4 na pouzdro (1,2–1,5 mm)',
+      'kůže na pouzdro: třetí juchtová A5 (1,2 mm), na trénink nepoužitá; oba díly pod sebou zaberou 100 × 128 mm, rezerva asi 1 cm na stranu',
       'tužka nebo tenké dřívko a rovná destička na smirek',
       'trochu vody a čistý hadřík',
     ],
@@ -1279,7 +1279,7 @@ export const cardHolderProject: ProjectDefinition = {
       reason:
         'Finální díly pouzdra (lekce 5 a 6). Na trénink v lekcích 1 a 3 stačí levné odřezky; zkoušku pásky a cvičnou šablonu v lekci 2 a lepení v lekci 4 dělejte na lícové kůži téže kůže jako pouzdro.',
       specification:
-        'Třísločiněná lícová kůže 1,2–1,5 mm, přířez A4; na trénink 2× A5 téže kůže nebo levné odřezky.',
+        'Třísločiněná lícová kůže 1,2–1,5 mm: 1× A5 na pouzdro (oba díly se vejdou pod sebe) a 2× A5 téže kůže na trénink lekcí 1–4.',
     },
     {
       equipmentSlug: 'sandpaper',
@@ -1410,22 +1410,15 @@ export const cardHolderProject: ProjectDefinition = {
   },
   shoppingPlan: {
     title:
-      'Sestava: juchtová kůže 1,2 mm (A4 na pouzdro, 2× A5 na trénink), nářadí z CraftPointu, prkénko z IKEA',
+      'Sestava: juchtová kůže 1,2 mm (3× A5: 1 na pouzdro, 2 na trénink), nářadí z CraftPointu, prkénko z IKEA',
     lines: [
       {
         equipmentSlug: 'veg-tan-leather',
         url: 'https://craft-point.cz/products/hovezi-kuze-licova-juchtova-trislocinena-1-2-mm',
-        variant: 'A4 (30 × 21 cm)',
-        quantity: 1,
-        purpose: 'zadní díl 100 × 70 mm a přední kapsa 100 × 56 mm (lekce 5 a 6), s rezervou',
-      },
-      {
-        equipmentSlug: 'veg-tan-leather',
-        url: 'https://craft-point.cz/products/hovezi-kuze-licova-juchtova-trislocinena-1-2-mm',
         variant: 'A5 (21 × 15 cm)',
-        quantity: 2,
+        quantity: 3,
         purpose:
-          'trénink lekcí 1–4 ze stejné kůže: zkušební údery, pás asi 210 × 70 mm na rovný řez (lekce 2), zbytek asi 210 × 80 mm na cvičnou šablonu a tři odřezky asi 40 × 80 mm na lepení a steh',
+          '1 ks na pouzdro: zadní díl 100 × 70 mm a přední kapsa 100 × 56 mm pod sebou (lekce 5 a 6), rezerva asi 1 cm na stranu, na trénink ji nepoužívejte. 2 ks na trénink lekcí 1–4: zkušební údery, pás asi 210 × 70 mm na rovný řez (lekce 2), zbytek asi 210 × 80 mm na cvičnou šablonu a tři odřezky asi 40 × 80 mm na lepení a steh; ze zbytku druhé A5 i odřezky 57,5 × 57,5 mm na zkoušku důlku u pouzdra s mincí',
       },
       {
         equipmentSlug: 'cutting-mat',
