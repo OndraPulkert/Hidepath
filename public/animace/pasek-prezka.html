@@ -101,6 +101,11 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 .backlink{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--ink);font-weight:600;font-size:15px;text-decoration:none;justify-self:start}
 .backlink:hover{text-decoration:underline}
 .backlink:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+/* klik na obdélníček časové osy = přehrát od toho kroku; větší plocha pro prst */
+.pseg .bars span{overflow:visible;cursor:pointer}
+.pseg .bars span b{border-radius:inherit}
+.pseg .bars span::after{content:"";position:absolute;left:0;right:0;top:-9px;bottom:-9px}
 </style>
 </head>
 <body>
@@ -996,7 +1001,7 @@ const prog=document.getElementById('prog');
 const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const partKeys=Object.keys(PARTS);const barEls=[];const segEls={};
 partKeys.forEach(k=>{const b=document.createElement('button');b.className='pseg';b.type='button';b.setAttribute('aria-label',`Část ${k}: ${PARTS[k]}`);
-  const bars=document.createElement('div');bars.className='bars';S.forEach((st,i)=>{if(st.part===k){const sp=document.createElement('span');const bb=document.createElement('b');sp.appendChild(bb);bars.appendChild(sp);barEls[i]=bb;}});
+  const bars=document.createElement('div');bars.className='bars';S.forEach((st,i)=>{if(st.part===k){const sp=document.createElement('span');const bb=document.createElement('b');sp.appendChild(bb);sp.title='Přehrát od kroku '+k+(bars.children.length+1);sp.addEventListener('click',e=>{e.stopPropagation();stepGo(i)});bars.appendChild(sp);barEls[i]=bb;}});
   const pl=document.createElement('div');pl.className='pl';pl.innerHTML=`<b>${k}</b><span> · ${PARTS[k]}</span>`;b.append(bars,pl);prog.appendChild(b);segEls[k]=b;
   b.addEventListener('click',()=>{setPlay(false);go(S.findIndex(s=>s.part===k),1)});});
 let idx=0,tt=1,playing=false,last=0,raf=0;
@@ -1020,6 +1025,7 @@ function render(){
   barEls.forEach((b,i)=>{b.style.transform=`scaleX(${i<idx?1:i===idx?tt:0})`});
   partKeys.forEach(k=>segEls[k].classList.toggle('on',k===st.part));
 }
+function stepGo(i){if(typeof auto!=='undefined')auto=true;setPlay(false);go(i,0);setPlay(true);}
 function go(i,t=0){idx=Math.max(0,Math.min(S.length-1,i));tt=reduce?1:t;hold=0;render();}
 function setPlay(p){playing=p;document.getElementById('playIcon').innerHTML=p?'<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';document.getElementById('bPlay').setAttribute('aria-label',p?'Pozastavit':'Přehrát');if(p){last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}}
 let hold=0;

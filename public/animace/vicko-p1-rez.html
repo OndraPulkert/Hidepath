@@ -543,7 +543,12 @@
         outline-offset: 2px;
         border-radius: 4px;
       }
-    </style>
+    
+/* klik na obdélníček časové osy = přehrát od toho kroku; větší plocha pro prst */
+.pseg .bars span{overflow:visible;cursor:pointer}
+.pseg .bars span b{border-radius:inherit}
+.pseg .bars span::after{content:"";position:absolute;left:0;right:0;top:-9px;bottom:-9px}
+</style>
   </head>
   <body>
     <div class="wrap">
@@ -2571,7 +2576,7 @@
             if (st.part === k) {
               const sp = document.createElement("span");
               const bb = document.createElement("b");
-              sp.appendChild(bb);
+              sp.appendChild(bb);sp.title='Přehrát od kroku '+k+(bars.children.length+1);sp.addEventListener('click',e=>{e.stopPropagation();stepGo(i)});
               bars.appendChild(sp);
               barEls[i] = bb;
             }
@@ -2662,6 +2667,7 @@
             segEls[k].classList.toggle("on", k === st.part),
           );
         }
+        function stepGo(i){if(typeof auto!=='undefined')auto=true;setPlay(false);go(i,0);setPlay(true);}
         function go(i, t = 0) {
           idx = Math.max(0, Math.min(S.length - 1, i));
           tt = reduce ? 1 : t;
