@@ -552,14 +552,18 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'why-scrap-first',
         title: 'Připravte si druk a návod',
         body: 'Druk nejdřív celý vyzkoušejte na odřezku: obchod ho uvádí pro jemnou kůži a třísločiněná je tužší (ověřte na odřezku). Mějte po ruce návod z obalu. Druk je čtyřdílný: dřík a hlavička jdou na přední panel (spolu jim říkáme patice, tak se jmenuje i značka na listech), zdířka a klobouček na jazyk (skladbu ověřte podle obalu). Každá polovina svírá jen jednu vrstvu kůže.',
-        animationLinks: [animationLink('snap', 'A1')],
+        animationLinks: [animationLink('snap', 'A1'), animationLink('snapSetter', 'A1')],
         media: [],
       },
       {
         id: 'punch-post-hole',
         title: 'Otvor pro dřík druku (pokud ho návod vyžaduje)',
         body: 'Šídlem označte na odřezku bod 9,5 mm od okraje – stejně daleko bude dřík od horní hrany předního panelu. Když návod vyžaduje otvor, řiďte se jím. Když velikost neuvádí, vysekněte otvor výsečníkem 2 mm a přiložte dřík: má projít těsně. Když neprojde, zkuste 3 mm. V moc velkém otvoru se dřík viklá.',
-        animationLinks: [animationLink('snap', 'A2'), animationLink('snap', 'A3')],
+        animationLinks: [
+          animationLink('snap', 'A2'),
+          animationLink('snap', 'A3'),
+          animationLink('snapSetter', 'B1'),
+        ],
         media: [],
         records: [
           {
@@ -579,7 +583,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'set-snap-post',
         title: 'Osaďte dřík druku',
         body: 'Dřík s hlavičkou osaďte na značku aplikátorem a paličkou na tvrdé podložce, kolmo: dřík z rubu, hlavička na líci; pořadí dílů podle návodu. Zkontrolujte, že sedí naplocho a pevně a kůže kolem nepopraskala. Když ne, zkuste to na dalším odřezku (v balení je 10 ks). Když to nevyjde ani napodruhé, tento druk na pás neosazujte a vyzkoušejte alternativu z vybavení (Stoklasa Ø 13,5 mm, ověřte na odřezku).',
-        animationLinks: [animationLink('snap', 'A4')],
+        animationLinks: [animationLink('snap', 'A4'), animationLink('snapSetter', 'B2')],
         media: [
           {
             id: 'cch-l3-snap',
@@ -593,13 +597,19 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'practice-imprint',
         title: 'Vyzkoušejte obtisk patice na druhém odřezku',
         body: 'Druhý odřezek položte rubem na hlavičku osazenou na prvním a pevně přitiskněte, aby se na rubu obtiskla. Střed obtisku propíchněte šídlem skrz, aby byl vidět i na líci – tam půjde klobouček. Jak silně přitlačit, zjistíte jen zkouškou. Stejně budete v lekci 8 hledat místo kloboučku na jazyku.',
+        animationLinks: [animationLink('snapSetter', 'C1')],
         media: [],
       },
       {
         id: 'practice-snap-cap',
         title: 'Osaďte kloboučkovou polovinu',
         body: 'Na druhém odřezku osaďte klobouček se zdířkou do propíchnutého bodu, aplikátorem a paličkou jako dřík: klobouček na líc, zdířku na rub. Když návod vyžaduje otvor a neuvádí velikost, začněte výsečníkem 2 mm, a jen když trn neprojde, vezměte 3 mm. Zacvakněte druk na dřík a zkontrolujte, že drží, jde zavřít i otevřít a okraje odřezků sedí jako při obtisku. Zapište si, který výsečník sedl (nebo žádný).',
-        animationLinks: [animationLink('snap', 'A5')],
+        animationLinks: [
+          animationLink('snap', 'A5'),
+          animationLink('snapSetter', 'C2'),
+          animationLink('snapSetter', 'C3'),
+          animationLink('snapSetter', 'D1'),
+        ],
         records: [
           {
             kind: 'choice',
@@ -628,7 +638,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'measure-flange',
         title: 'Změřte přírubu patice',
         body: 'Na rubu prvního odřezku změřte průměr příruby dříku (měřítkem nebo pravítkem). Smí mít nejvýš 11 mm, jinak by na rubu tlačila na karty. Když má víc, tento druk na pás neosazujte a vyzkoušejte alternativu z vybavení (Stoklasa Ø 13,5 mm): osaďte ji na odřezek a změřte i její přírubu (ověřte na odřezku).',
-        animationLinks: [animationLink('snap', 'A7')],
+        animationLinks: [animationLink('snap', 'A7'), animationLink('snapSetter', 'D2')],
         media: [],
         records: [
           {
@@ -1424,7 +1434,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'set-snap-post',
         title: 'Osaďte dřík druku',
         body: 'Dřík s hlavičkou osaďte na značku aplikátorem a paličkou na tvrdé podložce, jako v lekci 3. Dřík jde z rubu předního panelu, hlavička zůstane na jeho líci. Udělejte to teď – po složení pásu už na něj nedosáhnete.',
-        animationLinks: [animationLink('snap', 'B3')],
+        animationLinks: [animationLink('snap', 'B3'), animationLink('snapSetter', 'B2')],
         media: [
           {
             id: 'ilustrace-druk-l6',
@@ -1809,7 +1819,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'set-cap',
         title: 'Osaďte klobouček',
         body: 'Jazyk narovnejte nahoru a pouzdro položte zadním panelem na tvrdou desku, aby pod jazykem nebyl přední panel. Klobouček se zdířkou osaďte přesně na obtisknuté místo aplikátorem a paličkou. Klobouček jde na líc jazyka, zdířka na jeho rub (k přednímu panelu); pořadí dílů podle návodu, jako v lekci 3.',
-        animationLinks: [animationLink('snap', 'C4')],
+        animationLinks: [animationLink('snap', 'C4'), animationLink('snapSetter', 'C3')],
         media: [
           {
             id: 'ilustrace-druk-l8',

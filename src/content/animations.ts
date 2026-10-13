@@ -9,6 +9,8 @@ import { type AnimationLink } from '@/content/schema';
  * - kapsa-postup: `#A`–`#E` skočí na první krok dané části a přehrává od ní,
  * - kapsa-prisiti: `#A`–`#D` otevře první krok dané části (zastavený, přehrání tlačítkem),
  * - kapsa-skladani (`#A`–`#E`) a kapsa-druk (`#A`–`#D`): stejně jako kapsa-prisiti,
+ * - druk-aplikator (`#A`–`#D`): stejně jako kapsa-prisiti; díly druku ve 3/4 pohledu a osazení
+ *   aplikátorem a paličkou na odřezku (lekce 3), tvar a strana nástavců jen schematicky (podle karty),
  * - pas-prenos-rez a pas-otvory-dna (obě `#A`–`#E`): stejně jako kapsa-prisiti,
  * - sedlarsky-steh (`#A`–`#G`) a hrany (`#A`–`#H`, `#H` pásek): stejně jako kapsa-prisiti,
  *   společné pro všechny projekty,
@@ -183,6 +185,38 @@ export const animationPages = {
         'Zkraťte jazyk 11 mm za střed kloboučku',
       ],
       D: ['Kontrola: druk drží', 'Kontrola: jazyk končí asi 21 mm nad kapsou'],
+    },
+  },
+  snapSetter: {
+    path: '/animace/druk-aplikator.html',
+    title: 'Druk a aplikátor názorně',
+    buttonText: 'Druk a aplikátor názorně',
+    sections: {
+      A: 'Část A – díly druku',
+      B: 'Část B – dřík s hlavičkou',
+      C: 'Část C – klobouček se zdířkou',
+      D: 'Část D – zacvaknout a zkontrolovat',
+    },
+    steps: {
+      A: [
+        'Čtyři díly druku',
+        'Patice: dřík z rubu, hlavička na líc',
+        'Klobouček na líc, zdířka na rub',
+      ],
+      B: [
+        'Odřezek se značkou, otvor jen podle návodu',
+        'Dřík z rubu, hlavička na líc',
+        'Dřík: razník kolmo, pár úderů paličkou',
+        'Zvedněte a zkontrolujte dřík',
+      ],
+      C: [
+        'Obtiskněte hlavičku na druhý odřezek',
+        'Otvor ve středu obtisku jen podle návodu',
+        'Zdířka z rubu, klobouček na líc',
+        'Klobouček: razník kolmo, pár úderů paličkou',
+        'Zvedněte a zkontrolujte klobouček',
+      ],
+      D: ['Zacvakněte a zase rozepněte', 'Změřte přírubu dříku: nejvýš Ø 11 mm'],
     },
   },
   stripTransfer: {

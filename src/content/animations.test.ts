@@ -167,6 +167,7 @@ describe('animace postupu – stránky v public/animace', () => {
   it.each([
     ['kapsa-skladani', 'pouchFold', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['kapsa-druk', 'snap', ['A', 'B', 'C', 'D'], 'E'],
+    ['druk-aplikator', 'snapSetter', ['A', 'B', 'C', 'D'], 'E'],
     ['pas-prenos-rez', 'stripTransfer', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['pas-otvory-dna', 'bottomHoles', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['sedlarsky-steh', 'saddleStitch', ['A', 'B', 'C', 'D', 'E', 'F', 'G'], 'H'],
@@ -198,12 +199,13 @@ describe('animace postupu – stránky v public/animace', () => {
     'steps' in page ? [{ key, path: page.path, sections: page.sections, steps: page.steps }] : [],
   );
 
-  it('kroky mají čtyři stránky kapsy, dvě stránky pásu, sedlářský steh, hrany, šest stránek Víčka, čtyři stránky pásku, posuvku a vrtání formy', () => {
+  it('kroky mají pět stránek kapsy a druku, dvě stránky pásu, sedlářský steh, hrany, šest stránek Víčka, čtyři stránky pásku, posuvku a vrtání formy', () => {
     expect(steppedPages.map((p) => p.key)).toEqual([
       'kapsa',
       'pocketAttach',
       'pouchFold',
       'snap',
+      'snapSetter',
       'stripTransfer',
       'bottomHoles',
       'saddleStitch',
@@ -339,6 +341,7 @@ describe('animace postupu – složení pouzdra a druk v lekcích', () => {
       ?.animationLinks?.map((l) => l.href);
   const skladani = (anchor: string) => `/animace/kapsa-skladani.html#${anchor}`;
   const druk = (anchor: string) => `/animace/kapsa-druk.html#${anchor}`;
+  const apl = (anchor: string) => `/animace/druk-aplikator.html#${anchor}`;
   const thread = animationPages.threadLength.path;
 
   it('lekce 4 a 7: ohyby, lepení dna a šev otevírají přesný krok skládání', () => {
@@ -374,17 +377,19 @@ describe('animace postupu – složení pouzdra a druk v lekcích', () => {
   });
 
   it('lekce 3, 6 a 8: každý krok druku otevírá svůj krok animace', () => {
-    expect(hrefOf(3, 'why-scrap-first')).toEqual([druk('A1')]);
-    expect(hrefOf(3, 'punch-post-hole')).toEqual([druk('A2'), druk('A3')]);
-    expect(hrefOf(3, 'set-snap-post')).toEqual([druk('A4')]);
-    expect(hrefOf(3, 'practice-snap-cap')).toEqual([druk('A5')]);
-    expect(hrefOf(3, 'measure-flange')).toEqual([druk('A7')]);
+    // Vedle průřezu „Druk krok za krokem“ i názorná animace dílů a aplikátoru ve 3/4 pohledu.
+    expect(hrefOf(3, 'why-scrap-first')).toEqual([druk('A1'), apl('A1')]);
+    expect(hrefOf(3, 'punch-post-hole')).toEqual([druk('A2'), druk('A3'), apl('B1')]);
+    expect(hrefOf(3, 'set-snap-post')).toEqual([druk('A4'), apl('B2')]);
+    expect(hrefOf(3, 'practice-imprint')).toEqual([apl('C1')]);
+    expect(hrefOf(3, 'practice-snap-cap')).toEqual([druk('A5'), apl('C2'), apl('C3'), apl('D1')]);
+    expect(hrefOf(3, 'measure-flange')).toEqual([druk('A7'), apl('D2')]);
     expect(hrefOf(6, 'punch-post-hole')).toEqual([druk('B2')]);
-    expect(hrefOf(6, 'set-snap-post')).toEqual([druk('B3')]);
+    expect(hrefOf(6, 'set-snap-post')).toEqual([druk('B3'), apl('B2')]);
     expect(hrefOf(8, 'insert-content')).toEqual([druk('C1')]);
     expect(hrefOf(8, 'imprint-cap-position')).toEqual([druk('C2')]);
     expect(hrefOf(8, 'punch-cap-hole')).toEqual([druk('C3')]);
-    expect(hrefOf(8, 'set-cap')).toEqual([druk('C4')]);
+    expect(hrefOf(8, 'set-cap')).toEqual([druk('C4'), apl('C3')]);
     expect(hrefOf(8, 'shorten-tongue')).toEqual([druk('C5')]);
   });
 
