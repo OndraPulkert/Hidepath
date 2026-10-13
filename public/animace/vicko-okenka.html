@@ -848,7 +848,7 @@ const partKeys = Object.keys(PARTS); const barEls = []; const segEls = {};
 partKeys.forEach((k) => {
   const b = document.createElement('button'); b.className = 'pseg'; b.type = 'button'; b.setAttribute('aria-label', `Část ${k}: ${PARTS[k]}`);
   const bars = document.createElement('div'); bars.className = 'bars';
-  S.forEach((st, i) => { if (st.part === k) { const sp = document.createElement('span'); const bb = document.createElement('b'); sp.appendChild(bb);sp.title='Přehrát od kroku '+k+(bars.children.length+1);sp.addEventListener('click',e=>{e.stopPropagation();stepGo(i)}); bars.appendChild(sp); barEls[i] = bb; } });
+  S.forEach((st, i) => { if (st.part === k) { const sp = document.createElement('span'); const bb = document.createElement('b'); sp.appendChild(bb);sp.title='Přehrát od kroku '+k+(bars.children.length+1);sp.tabIndex=0;sp.setAttribute('role','button');sp.setAttribute('aria-label',sp.title);sp.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();stepGo(i)}});sp.addEventListener('click',e=>{e.stopPropagation();stepGo(i)}); bars.appendChild(sp); barEls[i] = bb; } });
   const pl = document.createElement('div'); pl.className = 'pl'; pl.innerHTML = `<b>${k}</b><span> · ${PARTS[k]}</span>`; b.append(bars, pl); prog.appendChild(b); segEls[k] = b;
   b.addEventListener('click', () => { auto = true; setPlay(false); go(S.findIndex((s) => s.part === k), 1); history.replaceState(null, '', '#' + k); });
 });
@@ -886,7 +886,7 @@ function setPlay(p) {
   if (p) { last = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); } else cancelAnimationFrame(raf);
 }
 function loop(now) {
-  if (!playing) return; const dt = Math.min(100, now - last); last = now;
+  if (!playing) return; const dt = Math.max(0, Math.min(100, now - last)); last = now;
   if (reduce) { hold += dt; if (hold > S[idx].dur) { hold = 0; if (idx < S.length - 1) { go(idx + 1, 1); } else { setPlay(false); return; } } }
   else { tt += dt / S[idx].dur; if (tt >= 1) { tt = 1; render(); hold += dt; if (hold > 900) { hold = 0; if (idx < S.length - 1) { idx++; tt = 0; } else { setPlay(false); return; } } } else render(); }
   raf = requestAnimationFrame(loop);

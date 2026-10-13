@@ -2576,7 +2576,7 @@
             if (st.part === k) {
               const sp = document.createElement("span");
               const bb = document.createElement("b");
-              sp.appendChild(bb);sp.title='Přehrát od kroku '+k+(bars.children.length+1);sp.addEventListener('click',e=>{e.stopPropagation();stepGo(i)});
+              sp.appendChild(bb);sp.title='Přehrát od kroku '+k+(bars.children.length+1);sp.tabIndex=0;sp.setAttribute('role','button');sp.setAttribute('aria-label',sp.title);sp.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();stepGo(i)}});sp.addEventListener('click',e=>{e.stopPropagation();stepGo(i)});
               bars.appendChild(sp);
               barEls[i] = bb;
             }
@@ -2690,7 +2690,7 @@
         }
         function loop(now) {
           if (!playing) return;
-          const dt = now - last;
+          const dt = Math.max(0, now - last);
           last = now;
           if (reduce) {
             hold += dt;

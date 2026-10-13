@@ -734,9 +734,9 @@ const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 // progress bar
 const partKeys=Object.keys(PARTS);const barEls=[];const segEls={};
 partKeys.forEach(k=>{const b=document.createElement('button');b.className='pseg';b.type='button';b.setAttribute('aria-label',`Část ${k}: ${PARTS[k]}`);
-  const bars=document.createElement('div');bars.className='bars';S.forEach((st,i)=>{if(st.part===k){const sp=document.createElement('span');const bb=document.createElement('b');sp.appendChild(bb);sp.title='Přehrát od kroku '+k+(bars.children.length+1);sp.addEventListener('click',e=>{e.stopPropagation();stepGo(i)});bars.appendChild(sp);barEls[i]=bb;}});
+  const bars=document.createElement('div');bars.className='bars';S.forEach((st,i)=>{if(st.part===k){const sp=document.createElement('span');const bb=document.createElement('b');sp.appendChild(bb);sp.title='Přehrát od kroku '+k+(bars.children.length+1);sp.tabIndex=0;sp.setAttribute('role','button');sp.setAttribute('aria-label',sp.title);sp.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();stepGo(i)}});sp.addEventListener('click',e=>{e.stopPropagation();stepGo(i)});bars.appendChild(sp);barEls[i]=bb;}});
   const pl=document.createElement('div');pl.className='pl';pl.innerHTML=`<b>${k}</b><span> · ${PARTS[k]}</span>`;b.append(bars,pl);prog.appendChild(b);segEls[k]=b;
-  b.addEventListener('click',()=>{go(S.findIndex(s=>s.part===k),0,true)});});
+  b.addEventListener('click',()=>{auto=true;go(S.findIndex(s=>s.part===k),0,true)});});
 let idx=0,tt=1,playing=false,last=0,raf=0;
 function numInPart(i){const p=S[i].part;return S.slice(0,i+1).filter(s=>s.part===p).length}
 function setSide(st,t){
@@ -761,23 +761,23 @@ function render(){
   partKeys.forEach(k=>segEls[k].classList.toggle('on',k===st.part));
 }
 function stepGo(i){if(typeof auto!=='undefined')auto=true;setPlay(false);go(i,0);setPlay(true);}
-function go(i,t=0,user=false){idx=Math.max(0,Math.min(S.length-1,i));tt=reduce?1:t;render();}
-function setPlay(p){playing=p;document.getElementById('playIcon').innerHTML=p?'<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';document.getElementById('bPlay').setAttribute('aria-label',p?'Pozastavit':'Přehrát');if(p){last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}}
 let hold=0;
-function loop(now){if(!playing)return;const dt=now-last;last=now;
+function go(i,t=0,user=false){idx=Math.max(0,Math.min(S.length-1,i));tt=reduce?1:t;hold=0;render();}
+function setPlay(p){playing=p;document.getElementById('playIcon').innerHTML=p?'<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';document.getElementById('bPlay').setAttribute('aria-label',p?'Pozastavit':'Přehrát');if(p){last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}}
+function loop(now){if(!playing)return;const dt=Math.max(0,now-last);last=now;
   if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
   else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
   raf=requestAnimationFrame(loop)}
-document.getElementById('bPlay').onclick=()=>{if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} if(!playing&&tt>=1&&!reduce&&idx<S.length-1){/* continue */} setPlay(!playing)};
-document.getElementById('bRestart').onclick=()=>{go(0,0);setPlay(true)};
-document.getElementById('bPrev').onclick=()=>{setPlay(false);go(idx-1,1)};
-document.getElementById('bNext').onclick=()=>{setPlay(false);go(idx+1,1)};
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} if(!playing&&tt>=1&&!reduce&&idx<S.length-1){/* continue */} setPlay(!playing)};
+document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
+document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
+document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};
 // Hidepath: deep link na část (#A–#E) skočí na její první krok, na krok (#B3) přímo na ten krok,
 // a přehrává od něj; bez kotvy jako dřív.
 function stepFromHash(){const m=/^([A-Z])([0-9]+)?$/.exec(decodeURIComponent((location.hash||'').slice(1)).trim().toUpperCase());if(!m||!Object.prototype.hasOwnProperty.call(PARTS,m[1]))return -1;const ix=[];S.forEach((s,i)=>{if(s.part===m[1])ix.push(i)});const n=m[2]===undefined?1:+m[2];return n>=1&&n<=ix.length?ix[n-1]:-1}
 // first frame: meaningful still
 {const i=stepFromHash();go(i>=0?i:0,1);}
-addEventListener('hashchange',()=>{const i=stepFromHash();if(i<0)return;setPlay(false);go(i,0);if(!reduce)setPlay(true);});
+addEventListener('hashchange',()=>{const i=stepFromHash();if(i<0)return;auto=true;setPlay(false);go(i,0);if(!reduce)setPlay(true);});
 // expose for testing
 window.__kapsa={go:(i,t)=>{setPlay(false);idx=i;tt=t;render()},steps:S.length,DOTS,R_WIN,R_FOOT,R_COIN};
 // autoplay once when in view

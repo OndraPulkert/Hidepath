@@ -22,7 +22,7 @@ import { type AnimationLink } from '@/content/schema';
  *   a vicko-telo-s4s5 (`#A`–`#E`): stejně jako kapsa-prisiti,
  * - pasek-prezka (`#A`–`#E`) a pasek-spicka (`#A`–`#F`): stejně jako kapsa-prisiti; kresba je
  *   příklad 40 × 3,5 mm, čísla pro vlastní pásek jsou v tabulce „Váš pásek“,
- * - vrtani-formy (`#A`–`#E`): stejně jako kapsa-prisiti; korunka Ø 32 na unášeči, vrtačka,
+ * - vrtani-formy (`#A`–`#E`): stejně jako kapsa-postup (přehrává od kotvy); korunka Ø 32 na unášeči, vrtačka,
  *   upnutí desky a vrtání formy z lekce 2 pouzdra s mincí.
  * - pasek-steh (`#A`–`#E`): stejně jako kapsa-prisiti; ozdobný steh podél obou hran (volitelná
  *   lekce 7 pásku), kresba je příklad 40 × 3,5 mm, hrot, čísla jsou ve „Váš pásek“.
