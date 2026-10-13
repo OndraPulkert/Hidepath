@@ -149,6 +149,11 @@ describe('animace postupu – stránky v public/animace', () => {
       for (const anchor of Object.keys(page.sections)) {
         expect(hasAnchor(source!, anchor), `${page.path}#${anchor}`).toBe(true);
       }
+      // Časová osa: klik na obdélníček kroku přehraje animaci od toho kroku.
+      if (source!.includes('barEls')) {
+        expect(source, `${page.path}: klik na krok`).toMatch(/function stepGo\(i\)/);
+        expect(source, `${page.path}: klik na krok`).toMatch(/stepGo\(i\)\}\);/);
+      }
     },
   );
 
