@@ -130,7 +130,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
     <button id="bPrev" aria-label="Předchozí krok" title="Předchozí krok"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg></button>
     <button id="bPlay" class="play" aria-label="Přehrát" title="Přehrát / pozastavit"><svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg></button>
     <button id="bNext" aria-label="Další krok" title="Další krok"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
-    <span class="counter" id="counter">krok 1 / 18</span>
+    <span class="counter" id="counter">krok 1 / 19</span>
   </div>
   <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
 </section>
@@ -234,8 +234,11 @@ function anvil(y,h=1.5){return `<rect x="-6" y="${f(y)}" width="12" height="${h}
 function rodSec(yTip){return `<path d="M-3.4 ${f(yTip-6.5)} L3.4 ${f(yTip-6.5)} L3.4 ${f(yTip)} L1.6 ${f(yTip)} Q0 ${f(yTip-.6)} -1.6 ${f(yTip)} L-3.4 ${f(yTip)} Z" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".18"/><rect x="-3.4" y="${f(yTip-6.5)}" width="1.3" height="6.3" fill="#fff" opacity=".18"/>`}
 function malletSec(yFace,a=0){return G(`translate(0 ${f(yFace)}) rotate(${f(a)} 12 -3)`,`<path d="M3.6 -2.4 L17 -5.2" stroke="var(--wood)" stroke-width="1.2" stroke-linecap="round"/><rect x="-4" y="-4.6" width="8" height="4.6" rx="1.2" fill="var(--mallet)" stroke="var(--mallet-d)" stroke-width=".22"/><path d="M-4 -.9 H4" stroke="var(--mallet-d)" stroke-width=".18" opacity=".6"/>`)}
 
-// osazení jedné poloviny druku (řez): kind 'post' = dřík+hlavička, 'cap' = klobouček+zdířka
+// osazení jedné poloviny druku (řez): kind 'post' = dřík+hlavička (líc nahoře),
+// 'cap' = klobouček kopulí dolů ve spodním dílu, kůže lícem dolů, zdířka nahoře (jako narovnaný jazyk v lekci 8)
 const SK=3.6, SOX=48, SOY=56;
+const FLIP='translate(0 1.2) scale(1 -1)';
+function anvilCup(y){return `<rect x="-7" y="${f(y)}" width="14" height="2.2" rx=".3" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".15"/><path d="M-6.4 ${f(y)} Q-6 ${f(y+1.1)} 0 ${f(y+1.1)} Q6 ${f(y+1.1)} 6.4 ${f(y)} Z" fill="var(--steel-d)" opacity=".45"/>`}
 function setSection(t,kind){
   const inA=es(t,0,.22), rodIn=es(t,.24,.36), lift=es(t,.84,.96);
   // údery
@@ -246,14 +249,13 @@ function setSection(t,kind){
     mal= t>=.8?1: (fr<.5? Math.cos(fr*Math.PI) : 0);
     mal= t>=.8?1: Math.abs(Math.cos(fr*Math.PI));
     hitFlash= t<.8 && Math.abs(fr-.5)<.08 ? 1:0;}
-  const topH = kind==='post'?3.3:2.7, botY = kind==='post'?1.75:3.6;
+  const topH = kind==='post'?3.3:2.4, botY = kind==='post'?1.75:2.8;
   const yTip=-topH;
-  let s=boardSec(-14,14,botY+1.5,4)+anvil(botY);
-  const lh=leatherSec(-14,14,0,{gap:1});
+  let s= kind==='post' ? boardSec(-14,14,botY+1.5,4)+anvil(botY) : boardSec(-14,14,botY+2.2,4)+anvilCup(botY);
   // spodní díl přijede zleva, vrchní shora
   const bx=L(-16,0,inA), ty=L(-10,0,inA);
-  if(kind==='post'){s+=lh+G(`translate(${f(bx)} 0)`,postSec(set))+G(`translate(0 ${f(ty)})`,studSec());}
-  else {s+=lh+G(`translate(${f(bx)} 0)`,socketSec())+G(`translate(0 ${f(ty)})`,capSec(set));}
+  if(kind==='post'){s+=leatherSec(-14,14,0,{gap:1})+G(`translate(${f(bx)} 0)`,postSec(set))+G(`translate(0 ${f(ty)})`,studSec());}
+  else {s+=leatherSec(-14,14,0,{gap:1,licTop:false})+G(`translate(${f(bx)} 0)`,G(FLIP,capSec(set)))+G(`translate(0 ${f(ty)})`,G(FLIP,socketSec()));}
   // aplikátor + palička
   if(rodIn>0&&lift<1){const ry=yTip-L(10,0,rodIn)-L(0,10,lift);
     s+=`<g opacity="${f(1-lift)}">${rodSec(ry)}`;
@@ -264,8 +266,8 @@ function setSection(t,kind){
 }
 
 function setLabels(t,kind,top,bot,leatherName){
-  const lo=seg(t,.18,.26), x=SOX-6.4*SK, yTop=SOY-(kind==='post'?1.9:1.5)*SK, yBot=SOY+(kind==='post'?1.5:2.6)*SK;
-  return fade(lo*(1-seg(t,.34,.4)),pill(x,yTop+1.4,top,'t','end')+pill(x,yBot+1.4,bot,'t','end'))+fade(lo,pill(83,SOY-1.6,leatherName,'ts','end'));
+  const lo=seg(t,.18,.26), x=SOX-6.4*SK, yTop=SOY-(kind==='post'?1.9:1.3)*SK, yBot=SOY+(kind==='post'?1.5:2.9)*SK;
+  return fade(lo*(1-seg(t,.34,.4)),pill(x,yTop+1.4,top,'t','end')+pill(x,yBot+1.4,bot,'t','end'))+fade(lo,pill(83,SOY-1.6,leatherName,'ts','end')+(kind==='cap'?pill(83,SOY+1.2*SK+3.6,'líc dolů','ts','end'):''));
 }
 // ---------- strip (T) ----------
 function pricks(pts,r=.5){return pts.map(([x,y])=>`<circle cx="${f(x)}" cy="${f(y)}" r="${r}" fill="var(--hole)"/>`).join('')}
@@ -464,7 +466,7 @@ add('A','Osaďte dřík s hlavičkou','Dřík s hlavičkou osaďte na značku ap
   s+=setLabels(t,'post','hlavička','dřík','odřezek');
   if(t>.4&&t<.84) s+=pill(4,86,'úder kolmo','t');
   if(t>.9) s+=pill(4,86,'roznýtovaný dřík','tok');
-  const ck=[['naplocho',.86],['pevně',.9],['kůže nepopraskala',.94]];
+  const ck=[['naplocho',.86],['pevně',.9],['bez prasklin',.94]];
   let ib=notes([['aplikátor z balení','t'],['palička, tvrdá'],['podložka'],['kolmo, na značku']],16,5.4);
   ib+=lbl(89,41,'Pořadí dílů a','ta')+lbl(89,46,'stranu aplikátoru','ts')+lbl(89,50.5,'podle obalu','ts');
   ck.forEach(([tx,at],i)=>{ib+=fade(seg(t,at,at+.05),tick(91.5,59+i*7)+lbl(96,60.5+i*7,tx,'t'))});
@@ -472,14 +474,41 @@ add('A','Osaďte dřík s hlavičkou','Dřík s hlavičkou osaďte na značku ap
   return s;
 },null);
 
-add('A','Osaďte klobouček na druhém odřezku','Na druhém odřezku osaďte klobouček se zdířkou do propíchnutého středu obtisku, aplikátorem a paličkou jako dřík: klobouček na líc, zdířku na rub. Když návod vyžaduje otvor a neuvádí velikost, začněte výsečníkem 2 mm; 3 mm jen když trn neprojde.',10000,t=>{
+add('A','Obtiskněte hlavičku na druhý odřezek','Druhý odřezek položte rubem na hlavičku osazenou na prvním a pevně přitiskněte, aby se na rubu obtiskla. Střed obtisku propíchněte šídlem skrz, aby byl vidět i na líci – tam půjde klobouček. Jak silně přitlačit, zjistíte jen zkouškou.',9500,t=>{
+  let s='';
+  if(t<.55){
+    const dn=es(t,.04,.3), pr=seg(t,.3,.46), bump=Math.sin(pr*Math.PI), up=es(t,.46,.55);
+    const k=3.2, ox=42, oy=58, y2=L(-16,-4.5,dn)+L(0,-8,up)+bump*.25;
+    let g=boardSec(-14,14,1.75,4)+leatherSec(-14,14,0,{gap:1})+postSec(1)+studSec();
+    g+=`<g opacity="${f(L(.5,1,dn))}">${leatherSec(-14,14,y2,{gap:0})}</g>`;
+    s+=clipMain('a5i',G(`translate(${ox} ${oy}) scale(${k})`,g))+secTag();
+    if(pr>0&&pr<1) s+=finger(ox,oy+y2*k-3.4);
+    s+=fade(seg(t,.06,.14),pill(64,30,'2. odřezek','ts')+pill(64,72,'1. odřezek','ts'));
+    s+=pill(4,86,t<.3?'2. odřezek rubem na hlavičku':'pevně přitisknout','t');
+  } else {
+    const cam={cx:22,cy:11,sx:42,sy:46,k:3.3}, fl=es(t,.55,.62), aw=seg(t,.7,.9);
+    let m=offcut(true)+`<circle cx="${MK[0]}" cy="${MK[1]}" r="3.5" fill="none" stroke="var(--rub-d)" stroke-width=".5"/><circle cx="${MK[0]}" cy="${MK[1]}" r="2.2" fill="var(--rub-d)" opacity=".5"/>`;
+    if(aw>.5) m+=pricks([MK],.45);
+    s+=clipMain('a5i',G(`translate(0 ${cam.sy}) scale(1 ${f(Math.max(.02,fl))}) translate(0 ${-cam.sy})`,G(camT(cam),m)));
+    const [mx,my]=tv(cam,...MK);
+    if(aw>0&&aw<1) s+=awl(mx,my,aw<.5?aw*2:2-aw*2);
+    if(t>.62&&t<.72) s+=fade(seg(t,.62,.66),lead(mx+16,my-12,mx+3.5*cam.k*.7,my-3.5*cam.k*.7)+pill(mx+16.5,my-10.6,'obtisk hlavičky','t'));
+    s+=pill(4,8,'2. odřezek rubem nahoru','ts');
+    s+=pill(4,86,t<.7?'obtisk na rubu':'střed šídlem skrz na líc','t');
+  }
+  s+=inset('OBTISK',notes([['2. odřezek','tw'],['rubem na hlavičku'],['pevně přitisknout'],['střed obtisku'],['šídlem skrz na líc']],18,5.4)+
+    notes([['tam půjde','tok'],['klobouček']],50,5.2)+fade(seg(t,.8,.92),notes([['jak silně:','ta'],['jen zkouškou']],64,5.2)));
+  return s;
+},null);
+
+add('A','Osaďte klobouček na druhém odřezku','Na druhém odřezku osaďte klobouček se zdířkou do propíchnutého středu obtisku, aplikátorem a paličkou jako dřík: klobouček na líc, zdířku na rub. Na schématu leží klobouček kopulí dolů ve spodním dílu aplikátoru, odřezek lícem dolů a zdířka shora; který nástavec kam, ukazuje obrázek na kartě. Když návod vyžaduje otvor a neuvádí velikost, začněte výsečníkem 2 mm; 3 mm jen když trn neprojde.',10000,t=>{
   const {g}=setSection(t,'cap');
   let s=clipMain('a5',g)+secTag();
-  s+=setLabels(t,'cap','klobouček','zdířka','2. odřezek');
+  s+=setLabels(t,'cap','zdířka','klobouček','2. odřezek');
   if(t>.4&&t<.84) s+=pill(4,86,'úder kolmo','t');
   if(t>.9) s+=pill(4,86,'klobouček osazený','tok');
-  s+=inset('KLOBOUČEK',notes([['2. odřezek','tw'],['otvor jen podle'],['návodu: 2 mm,'],['3 mm jen když'],['trn neprojde'],['stejně jako dřík:'],['aplikátor, palička']])+
-    fade(seg(t,.86,.95),notes([['Ø ověřte na','tok'],['odřezku, ne až'],['na jazyku']],63,5.2)));
+  s+=inset('KLOBOUČEK',notes([['2. odřezek','tw'],['lícem dolů,'],['klobouček kopulí'],['dolů ve spodním'],['dílu, zdířka shora'],['otvor jen podle'],['návodu: 2 mm,'],['3 mm jen když'],['trn neprojde']],17.5,4.9)+
+    fade(seg(t,.86,.95),notes([['Ø ověřte na','tok'],['odřezku, ne až'],['na jazyku']],67,4.9)));
   return s;
 },null);
 
@@ -520,7 +549,7 @@ add('A','Změřte přírubu patice: nejvýš Ø 11 mm','Na rubu prvního odřezk
   ib+=`<circle cx="${cx}" cy="${f(yy(9.5))}" r="${f(5.5*k*.5)}" fill="var(--metal)" stroke="var(--metal-d)" stroke-width=".25"/>`;
   ib+=`<path d="M${x0} ${f(yy(15))} H${x0+36}" stroke="var(--card-d)" stroke-width=".5" stroke-dasharray="1 .7"/>`;
   ib+=`<path d="M${x0+33} ${y0} V${f(yy(9.5))}" stroke="var(--accent)" stroke-width=".3" marker-start="url(#ar)" marker-end="url(#ar)"/>`;
-  ib+=lbl(x0,y0-2,'horní hrana','ts')+lbl(x0+31.5,f(yy(5)),'9,5','ta','end')+lbl(x0+1,f(yy(15)+3.6),'karty','ts');
+  ib+=lbl(x0,y0-2,'horní hrana','ts')+pill(x0+31.5,yy(5)+1.4,'9,5','ta','end')+pill(x0+2,yy(15)+4.2,'karty','t');
   ib+=notes([['karty od 15 mm','ts'],['2 × (15 − 9,5)','t'],['= Ø 11 mm max.'],['větší → tlačí'],['na karty'],['kresba: Ø 10']],53,5);
   s+=inset('PROČ 11',ib);
   return s;
@@ -603,7 +632,7 @@ add('C','Vložte obsah a přehněte jazyk','Vložte karty i bankovky, které nos
   // průřez: jazyk se ohýbá přes obsah
   const k=1.85, ox=96, oy=22;
   const sec= fp<.97 ? sideSection({tongue:{th:fp*Math.PI},len:30,yb:30}) : sideSection({tongue:'drape',yb:30});
-  let ib=`<clipPath id="c1i"><rect x="87" y="9" width="45" height="74"/></clipPath><g clip-path="url(#c1i)">`+G(`translate(${ox} ${oy}) scale(${k})`,sec)+`</g>`;
+  let ib=`<clipPath id="c1i"><rect x="87" y="13.5" width="45" height="69.5"/></clipPath><g clip-path="url(#c1i)">`+G(`translate(${ox} ${oy}) scale(${k})`,sec)+`</g>`;
   ib+=lbl(89,80,'zadní','ts')+lbl(130,80,'přední','ts','end');
   s+=inset('PRŮŘEZ',ib);
   return s;
@@ -646,10 +675,10 @@ add('C','Vysekněte otvor pro klobouček, pokud ho návod vyžaduje','Když náv
   return s;
 },{v:'RUB',sub:'jazyk narovnaný'});
 
-add('C','Osaďte klobouček se zdířkou','Jazyk narovnejte nahoru a pouzdro položte zadním panelem na tvrdou desku, aby pod jazykem nebyl přední panel. Klobouček se zdířkou osaďte přesně na obtisknuté místo aplikátorem a paličkou. Klobouček jde na líc jazyka, zdířka na rub (k přednímu panelu); pořadí dílů podle návodu.',10500,t=>{
+add('C','Osaďte klobouček se zdířkou','Jazyk narovnejte nahoru a pouzdro položte zadním panelem na tvrdou desku, aby pod jazykem nebyl přední panel. Klobouček se zdířkou osaďte přesně na obtisknuté místo aplikátorem a paličkou. Klobouček jde na líc jazyka, zdířka na rub (k přednímu panelu); pořadí dílů podle návodu. Na schématu leží klobouček kopulí dolů ve spodním dílu aplikátoru pod jazykem (jazyk lícem dolů) a zdířka shora.',10500,t=>{
   const {g}=setSection(t,'cap');
   let s=clipMain('c4',g)+secTag();
-  s+=setLabels(t,'cap','klobouček','zdířka','jazyk');
+  s+=setLabels(t,'cap','zdířka','klobouček','jazyk');
   if(t>.4&&t<.84) s+=pill(4,86,'úder kolmo','t');
   if(t>.9) s+=pill(4,86,'klobouček na obtisku','tok');
   // mini řez zavřeného druku
@@ -837,7 +866,7 @@ function loop(now){if(!playing)return;const dt=Math.max(0,now-last);last=now;
   if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
   else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
   raf=requestAnimationFrame(loop)}
-document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} else if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
 document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
 document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
 document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};

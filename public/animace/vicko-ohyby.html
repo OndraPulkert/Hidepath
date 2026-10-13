@@ -163,8 +163,12 @@ svg .book{fill:var(--wood);stroke:var(--woodedge);stroke-width:1.2;vector-effect
 .astage.hz{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
 .astage figure{margin:0;min-width:0}
 @media (max-width:700px){.astage,.astage.hz{grid-template-columns:minmax(0,1fr)}.astage .aside{max-width:150px;width:100%;margin:0 auto}.astage.hz .aside{max-width:none}}
-.aprog{height:4px;background:var(--line);border-radius:2px;overflow:hidden}
-.aprog i{display:block;height:100%;width:0;background:var(--accent)}
+.aprog{display:flex;gap:2px;height:6px}
+/* klik na obdélníček kroku = přehrát od toho kroku; větší plocha pro prst */
+.aprog span{flex:1;background:var(--line);border-radius:2px;position:relative;cursor:pointer}
+.aprog span b{position:absolute;inset:0;background:var(--lic);border-radius:inherit;transform-origin:left;transform:scaleX(0)}
+.aprog span::after{content:"";position:absolute;left:0;right:0;top:-9px;bottom:-9px}
+.aprog span:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .acap{font-size:14.5px;min-height:4.8em;max-width:80ch}
 .acap b{font-weight:600}
 .abtn button[data-a=play]{min-width:96px}
@@ -228,7 +232,7 @@ svg .book{fill:var(--wood);stroke:var(--woodedge);stroke-width:1.2;vector-effect
       <figure class="amain"><div class="fig"><div data-fig="aFold"></div></div><figcaption>Řez napříč ohybem, 1:1. Nářadí je schematické.</figcaption></figure>
       <figure class="aside"><div class="fig"><div data-fig="aFoldPlan"></div></div><figcaption>Pohled shora na rub, 1:1.</figcaption></figure>
     </div>
-    <div class="aprog" aria-hidden="true"><i></i></div>
+    <div class="aprog" role="group" aria-label="Kroky animace"></div>
     <p class="acap" aria-live="polite"></p>
     <div class="btnrow abtn">
       <button type="button" data-a="restart" aria-label="Přehrát od začátku">↺ Znovu</button>
@@ -269,7 +273,7 @@ svg .book{fill:var(--wood);stroke:var(--woodedge);stroke-width:1.2;vector-effect
           <input id="phi" type="range" min="0" max="180" step="1" value="180"></label>
         <div class="btnrow"><button type="button" data-phi="0">0°</button><button type="button" data-phi="90">90°</button><button type="button" data-phi="180">180°</button></div>
         <div class="radio" role="radiogroup" aria-label="Poloha hrany vložky">
-          <label><input type="radio" name="edge" value="model" checked> hrana vložky o 1,96 dál, v v 64,18 (správně)</label>
+          <label><input type="radio" name="edge" value="model" checked> hrana vložky o 1,96 dál, na v 64,18 (správně)</label>
           <label><input type="radio" name="edge" value="spec"> hrana vložky přímo na rýze (střed ohybu se posune)</label>
         </div>
         <div class="readout" id="foldOut" aria-live="polite"></div>
@@ -324,7 +328,7 @@ svg .book{fill:var(--wood);stroke:var(--woodedge);stroke-width:1.2;vector-effect
       <figure class="amain"><div class="fig"><div data-fig="aHinge"></div></div><figcaption>Řez ve středu šířky, 1:1, jen y 57–122. Obsah je zjednodušený. Palec, houbička, fólie a kniha jsou schematické.</figcaption></figure>
       <figure class="aside"><div class="fig"><div data-fig="aHingeFront"></div></div><figcaption>Pohled zepředu, 1:1.</figcaption></figure>
     </div>
-    <div class="aprog" aria-hidden="true"><i></i></div>
+    <div class="aprog" role="group" aria-label="Kroky animace"></div>
     <p class="acap" aria-live="polite"></p>
     <div class="btnrow abtn">
       <button type="button" data-a="restart" aria-label="Přehrát od začátku">↺ Znovu</button>
@@ -524,7 +528,7 @@ function foldReadout() {
   const apexV = vEdge() - HALF;
   const shift = M.v.foldAxis - apexV;
   const html = [`<div><b>Úhel ${deg}°</b>, vnitřní poloměr ${f(RI_F, 2)}, oblouk po střednici ${f(PI * RF, 2)}.</div>`];
-  html.push(`<div>Hrana vložky v v ${f(vEdge(), 2)}. Střed ohybu po přehnutí v v ${f(apexV, 2)}, rýha v ${f(M.v.foldAxis, 2)}.</div>`);
+  html.push(`<div>Hrana vložky na v ${f(vEdge(), 2)}. Střed ohybu po přehnutí na v ${f(apexV, 2)}, rýha na v ${f(M.v.foldAxis, 2)}.</div>`);
   if (Math.abs(shift) > 0.01) html.push(`<div style="color:var(--warn)"><b>Rýha skončí ${f(shift, 2)} od středu ohybu</b>, u spodní hrany vložky. F vyjde o ${f(shift, 2)} nižší, B o ${f(shift, 2)} vyšší (ověřit na odřezku V12).</div>`);
   else html.push(`<div style="color:var(--ok)"><b>Rýha skončí uprostřed ohybu</b>, jak počítá model (F do v 60,25, B od v 64,18).</div>`);
   return html.join('');
@@ -718,10 +722,9 @@ function figHinge() {
   s += T(5, 71, 'B', {}) + Ln(4.6, 71.4, 0.5, 71.4);
   if (k > 0.5) s += T(-16.5, 75, 'víčko', {}) + Ln(-11.4, 75.4, -M.TB - M.t / 2, 75.4);
   if (k < 0.12) {
-    const top = pts[nearest(pts, 34)];
-    s += T(top.x - 2.5, top.y, 'otevřené víčko', { a: 'end' });
+    // popisek vpravo od víčka, palec je vlevo a popisek by zakryl
     s += thumbOn(pts, 22, 9, 1, 20);
-    s += T(39, 80, 'samo nestojí,', { a: 'end' }) + T(39, 80 - FS * 1.25, 'drží ho palec', { a: 'end', c: 'm' });
+    s += T(39, 80 + FS * 1.25, 'otevřené víčko', { a: 'end' }) + T(39, 80, 'samo nestojí,', { a: 'end' }) + T(39, 80 - FS * 1.25, 'drží ho palec', { a: 'end', c: 'm' });
   }
   s += T(39, 58.5, 'řez 1:1', { a: 'end', c: 'm' });
   return svgWrap(vb, s, 'Řez horní částí peněženky se závěsem');
@@ -868,7 +871,11 @@ function foldState(i, u) {
 const BT = 4, FOILY = 0.14, BTOP0 = M.t + M.spacer + M.t + 0.22;  // tloušťka prkénka, spodní líc horního prkénka
 function figAFold() {
   const S = foldState(AF.i, AF.u);
-  const vb = [-12, -7.6, 36, 17.6];
+  // Na telefonu je řez uříznutý vpravo (pás pokračuje), aby kůže nebyla drobná; popisky vpravo se drží okraje.
+  const nar = FS > 12.5 * 48 / 520, XR = nar ? 26 : 36;
+  if (nar) FS *= (XR + 12) / 48;
+  const vb = [-12, -7.6, XR, 17.6];
+  const TL3 = (x, y, lines) => lines.map((l, j) => T(x, y - j * FS * 1.1, l, {})).join('');
   const pts = foldPts(S.phi, -38, S.phi * RF + 42, 0.06);
   let s = `<g opacity="${r3(1 - S.lowB)}">${hatch(-12, -1.2, 36, 0, 1.4)}${Ln(-12, 0, 36, 0, 'tline')}</g>`;
   const bx1 = 20 - M.flatFromY;                                  // spodních 20 od dna
@@ -897,7 +904,7 @@ function figAFold() {
   if (S.pen > 0.01) {
     const x = FXC, y0 = M.t - 0.2 * SM(0.12, 0.2, AF.u) * (1 - SM(0.86, 0.95, AF.u)) + S.penLift;
     const pen = Poly([[x - 0.35, y0 + 0.5], [x + 0.35, y0 + 0.5], [x + 1.3, y0 + 4], [x + 1.3, 19], [x - 1.3, 19], [x - 1.3, y0 + 4]], 'pen') + `<circle cx="${r3(x)}" cy="${r3(-(y0 + 0.45))}" r="0.45" class="pen"/>`;
-    s += `<g opacity="${r3(S.pen)}">${pen}${T(x - 2, 12.5, 'tupý hrot', { a: 'end' })}${T(35.6, 15.8, 'hrot jede po celé šířce (pohled shora)', { a: 'end', c: 'm', k: 0.9 })}</g>`;
+    s += `<g opacity="${r3(S.pen)}">${pen}${nar ? T(x + 1.7, 11.6, 'tupý hrot') + T(x + 1.7, 15.8, 'hrot jede po celé šířce', { c: 'm', k: 0.9 }) + T(x + 1.7, 15.8 - FS * 1.1, '(pohled shora)', { c: 'm', k: 0.9 }) : T(x - 2, 12.5, 'tupý hrot', { a: 'end' }) + T(XR - 0.4, 15.8, 'hrot jede po celé šířce (pohled shora)', { a: 'end', c: 'm', k: 0.9 })}</g>`;
   }
   if (AF.i === 0) s += T(FXC, -3.2, `osa v ${f(M.v.foldAxis, 2)}`, { a: 'middle', c: 'm', k: 0.9 });
   if (S.sponge > 0.01) {
@@ -909,20 +916,23 @@ function figAFold() {
   if (S.dim > 0.01) {
     const yd = M.t + M.spacer + 1.1;
     s += `<g opacity="${r3(S.dim)}">${Ln(FXC, M.t + 0.2, FXC, yd + 0.5, 'guide')}${Ln(0, M.t + M.spacer, 0, yd + 0.5, 'guide')}${dimH(yd, FXC, 0, '', true)}`;
-    s += T(-11.6, 9.6, '1,96', { c: 'w' }) + T(-11.6, 9.6 - FS * 1.25, '(čára hrany vložky)', { c: 'w', k: 0.9 }) + Ln(-4.5, 9.6 - FS * 1.25 - FS * 0.35, FXC / 2, yd + 0.1) + T(26.4, 1.75, 'vložka 1,5', { bl: 'middle' }) + '</g>';
+    s += T(-11.6, 9.6, '1,96', { c: 'w' }) + T(-11.6, 9.6 - FS * 1.25, '(čára hrany vložky)', { c: 'w', k: 0.9 }) + Ln(-4.5, 9.6 - FS * 1.25 - FS * 0.35, FXC / 2, yd + 0.1) + (nar ? T(13, M.t + M.spacer + 0.6, 'vložka 1,5', { a: 'middle' }) : T(26.4, 1.75, 'vložka 1,5', { bl: 'middle' })) + '</g>';
   }
-  if (AF.i === 9) s += `<g opacity="${r3(SM(0.4, 0.5, AF.u) * (1 - SM(0.95, 1, AF.u)))}">${T(35.6, 15.8, 'vložka ven bokem (pohled shora)', { a: 'end', c: 'm', k: 0.9 })}</g>`;
-  if (S.night > 0.01) s += `<g opacity="${r3(S.night)}">${moonIcon(24, 12.6)}${clockIcon(24 + FS * 2.8, 12.6, AF.u * 2 * PI * 6)}${T(24 + FS * 4.4, 12.6, 'přes noc', { bl: 'middle' })}${T(24 + FS * 4.4, 12.6 - FS * 1.2, '12–24 h', { bl: 'middle', c: 'm' })}</g>`;
+  if (AF.i === 9) s += `<g opacity="${r3(SM(0.4, 0.5, AF.u) * (1 - SM(0.95, 1, AF.u)))}">${T(XR - 0.4, 15.8, 'vložka ven bokem (pohled shora)', { a: 'end', c: 'm', k: 0.9 })}</g>`;
+  if (S.night > 0.01) {
+    const nx = nar ? 10.5 : 24, ny = nar ? 16 : 12.6;
+    s += `<g opacity="${r3(S.night)}">${moonIcon(nx, ny)}${clockIcon(nx + FS * 2.8, ny, AF.u * 2 * PI * 6)}${T(nx + FS * 4.4, ny, 'přes noc', { bl: 'middle' })}${T(nx + FS * 4.4, ny - FS * 1.2, '12–24 h', { bl: 'middle', c: 'm' })}</g>`;
+  }
   if (AF.i === 4 && AF.u > 0.9 || AF.i === 10) {
     const op = AF.i === 10 ? 1 : SM(0.9, 1, AF.u);
-    s += `<g opacity="${r3(op)}">${T(-11.6, 7.4, 'rýha uprostřed ohybu', {})}${Ln(-6, 7.4 - FS * 0.35, -1.2, 2.1)}</g>`;
+    s += `<g opacity="${r3(op)}">${nar ? TL3(-11.6, 9.8, ['rýha', 'uprostřed', 'ohybu']) + Ln(-5.6, 6.9, -1.2, 2.1) : T(-11.6, 7.4, 'rýha uprostřed ohybu', {}) + Ln(-6, 7.4 - FS * 0.35, -1.2, 2.1)}</g>`;
   }
-  if (AF.i === 10) s += `<g opacity="${r3(SM(0.35, 0.45, AF.u) * (1 - SM(0.75, 0.85, AF.u)))}">${T(-3.6, 13, 'F odklopit asi o 90°', { a: 'end' })}</g>`;
-  if (S.done > 0) s += checkIcon(26, 9.2, S.done) + `<g opacity="${r3(S.done)}">${T(26 + FS * 1.9, 9.2, 'hotové U', { bl: 'middle' })}</g>`;
+  if (AF.i === 10) s += `<g opacity="${r3(SM(0.35, 0.45, AF.u) * (1 - SM(0.75, 0.85, AF.u)))}">${nar ? T(-11.6, 14.8, 'F odklopit') + T(-11.6, 14.8 - FS * 1.2, 'asi o 90°') : T(-3.6, 13, 'F odklopit asi o 90°', { a: 'end' })}</g>`;
+  if (S.done > 0) s += checkIcon(nar ? 12 : 26, 9.2, S.done) + `<g opacity="${r3(S.done)}">${T((nar ? 12 : 26) + FS * 1.9, 9.2, 'hotové U', { bl: 'middle' })}</g>`;
   // F a B
   if (S.phi < 0.3) s += T(-9.5, M.t + 1.6, 'F', { a: 'middle' });
-  else if (S.phi > 2.6) s += T(32, 3.5 + FS * 0.9, 'F', { a: 'middle' });
-  s += T(31, -3.2, 'B, líc dole', { a: 'middle', c: 'm' });
+  else if (S.phi > 2.6) s += T(XR - 4, 3.5 + FS * 0.9, 'F', { a: 'middle' });
+  s += nar ? T(XR - 0.4, -6.2, 'B, líc dole', { a: 'end', c: 'm' }) : T(31, -3.2, 'B, líc dole', { a: 'middle', c: 'm' });
   return svgWrap(vb, s, 'Animace ohybu dna, řez');
 }
 function figAFoldPlan() {
@@ -1016,7 +1026,7 @@ function figAHinge() {
     if (S.book > 0.98) b += arrowTo(bx0 + 1.2, 66, bx1 - 1.2, 66) + arrowTo(bx0 + 1.2, 90, bx1 - 1.2, 90);
     s += `<g opacity="${r3(Math.min(1, S.book * 1.6))}" transform="translate(${r3(dx)},0)">${b}</g>`;
   }
-  if (S.table > 0.01) s += `<g opacity="${r3(S.table)}">${T(5, 76, 'stůl', { bl: 'middle' })}${T(39, 117, 'kreslené nastojato', { a: 'end', c: 'm' })}${T(39, 117 - FS * 1.25, 've skutečnosti leží na zádech', { a: 'end', c: 'm', k: 0.9 })}</g>`;
+  if (S.table > 0.01) s += `<g opacity="${r3(S.table)}">${T(5, 90, 'stůl', { bl: 'middle' })}${T(39, 117, 'kreslené nastojato', { a: 'end', c: 'm' })}${T(39, 117 - FS * 1.25, 've skutečnosti leží na zádech', { a: 'end', c: 'm', k: 0.9 })}</g>`;
   // prsty
   const gw = 9;
   if (S.press > 0.01) {
@@ -1108,13 +1118,15 @@ function figAHingeFront() {
 const RM = window.matchMedia ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
 function makeAnim(root, A, part, figs) {
   const steps = STEPS[part];
-  const cap = root.querySelector('.acap'), bar = root.querySelector('.aprog i'), bPlay = root.querySelector('[data-a=play]');
+  const cap = root.querySelector('.acap'), prog = root.querySelector('.aprog'), bPlay = root.querySelector('[data-a=play]');
   const n = steps.length;
   let raf = 0, last = 0, one = false, lastCap = -1, auto = false;
   A.playing = false;
+  prog.innerHTML = steps.map((_, k) => `<span tabindex="0" role="button" title="Přehrát od kroku ${part}${k + 1}" aria-label="Přehrát od kroku ${part}${k + 1}"><b></b></span>`).join('');
+  const bars = [...prog.querySelectorAll('b')];
   function ui() {
     if (lastCap !== A.i) { cap.innerHTML = `<b>Krok ${part}${A.i + 1} z ${n}: ${steps[A.i].t}.</b> ${steps[A.i].c}`; lastCap = A.i; }
-    bar.style.width = (((A.i + A.u) / n) * 100).toFixed(2) + '%';
+    bars.forEach((b, k) => { b.style.transform = `scaleX(${k < A.i ? 1 : k > A.i ? 0 : Math.min(1, A.u).toFixed(3)})`; });
     const lbl = A.playing ? '❚❚ Pauza' : '▶ Přehrát';
     if (bPlay.textContent !== lbl) bPlay.textContent = lbl;
     bPlay.setAttribute('aria-label', A.playing ? 'Pozastavit animaci' : 'Přehrát animaci');
@@ -1132,7 +1144,9 @@ function makeAnim(root, A, part, figs) {
   }
   function play(single) { cancelAnimationFrame(raf); A.playing = true; one = single; last = 0; raf = requestAnimationFrame(tick); ui(); }
   const act = {
-    play() { if (A.playing) return stop(); if (A.i === n - 1 && A.u >= 1) { A.i = 0; A.u = 0; } play(false); },
+    // Zastavený krok na konci (kotva #A5, Zpět) se přehraje znovu, i poslední; od začátku je ↺ Znovu.
+    play() { if (A.playing) return stop(); if (A.u >= 1) A.u = 0; play(false); },
+    from(k) { stop(); auto = true; A.i = k; A.u = 0; if (RM.matches) { A.u = 1; draw(); } else { draw(); play(false); } },
     next() {
       stop();
       if (A.u >= 1) { if (A.i >= n - 1) return; A.i++; A.u = 0; }
@@ -1142,6 +1156,10 @@ function makeAnim(root, A, part, figs) {
     restart() { stop(); A.i = 0; A.u = 0; draw(); if (!RM.matches) play(false); },
   };
   root.querySelectorAll('[data-a]').forEach((b) => b.addEventListener('click', () => act[b.dataset.a]()));
+  prog.querySelectorAll('span').forEach((sp, k) => {
+    sp.addEventListener('click', () => act.from(k));
+    sp.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act.from(k); } });
+  });
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((es) => { es.forEach((e) => { if (e.isIntersecting && !auto) { auto = true; io.disconnect(); if (!RM.matches && !A.playing && A.i === 0 && A.u === 0) play(false); } }); }, { threshold: 0.5 });
     io.observe(root.querySelector('.astage'));

@@ -66,6 +66,8 @@ a{color:var(--accent)}
 .legend i.dash{height:0;border:0;border-top:3px dashed var(--c);border-radius:0}
 /* scéna a ovládání (jako kapsa-skladani) */
 .stagewrap{position:relative;background:var(--canvas);border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+/* telefon: plátno přes celou šířku (okraj stránky 16 + karta 12 + rámeček 1), ať je text v panelu čitelný */
+@media (max-width:480px){.stagewrap{margin-inline:-29px;border-radius:0;border-inline:0}}
 #stage{display:block;width:100%;height:auto;aspect-ratio:3/2}
 .badge{position:absolute;top:8px;left:8px;display:flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-weight:700;font-size:13px;letter-spacing:.04em}
 .badge i{width:16px;height:16px;border-radius:50%;display:block;border:1px solid var(--line)}
@@ -479,8 +481,12 @@ add('B','Zkoste a vyleštěte okénko','Okénko <span class="num">14 × 45</span
   MIR=false;
   let s=wallB('lic',{marks:false,bill:true,d2behind:true});
   s+=`<path d="${slotD(M.bill)}" fill="none" stroke="var(--d2)" stroke-width=".55"/>`;
+  // hrana okénka se postupně obtáhne dokola (zkosit a vyleštit B i D2 najednou)
+  const hp=es(t,.15,.8);
+  if(hp>0) s+=`<path d="${slotD(M.bill)}" fill="none" stroke="var(--accent)" stroke-width=".9" stroke-linecap="round" pathLength="100" stroke-dasharray="${f(hp*100)} 100"/>`;
   const [cx]=pt(50.5,47.5);
   s+=op(seg(t,.05,.2),pill(cx,PY(70)-3,'svazek B + D2','t','middle'));
+  s+=op(seg(t,.82,.92),pill(cx,PY(22)+6,'hrana hotová dokola','tok','middle'));
   let ib=notes([['zkosit, leštit','t'],['jako svazek'],['',''],['postup hran:','t'],['animace Hrany,'],['část G4']],17,5.4);
   s+=inset('OKÉNKO',ib);
   return s;
@@ -720,7 +726,7 @@ function loop(now){if(!playing)return;const dt=Math.max(0,now-last);last=now;
   if(reduce()){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
   else{tt+=dt/S[idx].dur;if(tt>=1){tt=1;render();hold+=dt;if(hold>700){hold=0;if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}}}else render();}
   raf=requestAnimationFrame(loop)}
-document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)}else if(!playing&&tt>=1&&!reduce()){go(idx,0)}setPlay(!playing)};
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&tt>=1&&!reduce()){go(idx,0)}setPlay(!playing)};
 document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
 document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
 document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};

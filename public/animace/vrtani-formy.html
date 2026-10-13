@@ -538,7 +538,7 @@ function rigTop(o={}){
     if(o.crossHl) b+=`<circle cx="${HOLE_X}" cy="0" r="${f(o.crossHl)}" fill="none" stroke="var(--ok)" stroke-width="1.6"/>`;
     s+=G(`translate(0 0)`,b,`opacity="${f(o.fbOp??1)}"`);
   }
-  if(o.keep) s+=`<g opacity="${f(o.keep)}"><circle cx="${HOLE_X}" cy="0" r="${KEEP_R}" fill="var(--accent)" fill-opacity=".08" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="5 3.5"/></g>`;
+  if(o.keep) s+=`<g opacity="${f(o.keep)}"><circle cx="${HOLE_X}" cy="0" r="${KEEP_R}" fill="var(--accent)" fill-opacity=".14" stroke="var(--saw-d)" stroke-width="2.4"/><circle cx="${HOLE_X}" cy="0" r="${KEEP_R}" fill="none" stroke="var(--accent)" stroke-width="1.4" stroke-dasharray="5 3.5"/></g>`;
   if(o.saw) s+=`<circle cx="${HOLE_X}" cy="0" r="${SAW_R}" fill="none" stroke="var(--saw)" stroke-width="1.6" stroke-dasharray="3.5 2.4" opacity="${f(o.saw)}"/>`;
   if((o.clOp??0)>0) s+=G(`translate(${f(o.clDx||0)} 0)`,CL_Y.map(cy=>clampTop(cy,{hl:o.clHl})).join(''),`opacity="${f(o.clOp)}"`);
   return s;
@@ -561,7 +561,7 @@ add('D','Připravte stůl, odpadní prkno a 2 svěrky','Desku upnete svěrkou ke
   b+=`<rect x="${f(X(10))}" y="${f(Y(24))}" width="${f(70*k)}" height="${f(70*k)}" fill="var(--paper)" stroke="var(--paper-edge)" stroke-width=".25"/>`;
   b+=`<path d="M${x0} ${f(hy)} H${f(X(280))} M${f(hx)} ${y0} V${f(Y(118))}" stroke="var(--graphite)" stroke-width=".3"/><circle cx="${f(hx)}" cy="${f(hy)}" r="${f(15.75*k)}" fill="none" stroke="var(--print)" stroke-width=".25"/>`;
   s+=b;
-  s+=G('',`<circle cx="${f(hx)}" cy="${f(hy)}" r="${f(SAW_R*k)}" fill="none" stroke="var(--saw)" stroke-width=".45" stroke-dasharray="1 .7"/>`+lead(hx+12,y0+5,hx+SAW_R*k*.75,hy-SAW_R*k*.7)+lbl(hx+13,y0+5.5,'Ø 32','ta'),a(0));
+  s+=G('',`<circle cx="${f(hx)}" cy="${f(hy)}" r="${f(SAW_R*k)}" fill="none" stroke="var(--saw)" stroke-width=".45" stroke-dasharray="1 .7"/>`+lead(hx+12,y0+5,hx+SAW_R*k*.75,hy-SAW_R*k*.7)+lbl(hx+13,y0+5.5,'Ø 32','ta').replace('class="ta"','class="ta" style="paint-order:stroke;stroke:var(--panel);stroke-width:.6px;stroke-linejoin:round"'),a(0));
   s+=G('',dimH(x0,hx,14.4)+lbl((x0+hx)/2,12.9,'45','ta','middle'),a(1));
   s+=G('',dimV(5.8,y0,Y(118))+`<text x="4.3" y="${f((y0+Y(118))/2)}" class="ta" text-anchor="middle" transform="rotate(-90 4.3 ${f((y0+Y(118))/2)})">118</text>`,a(2));
   // z boku: tloušťka
@@ -577,7 +577,7 @@ add('D','Připravte stůl, odpadní prkno a 2 svěrky','Desku upnete svěrkou ke
   const ck=.2;
   ins+=G('',lbl(89,51,'2 svěrky','t')+G(`translate(116 49) scale(${ck})`,`<rect x="-6" y="-24" width="40" height="5" rx="1" fill="var(--steel)" stroke="var(--steel-d)" stroke-width="1"/><rect x="26" y="-24" width="5" height="44" fill="var(--steel)" stroke="var(--steel-d)" stroke-width="1"/><rect x="-6" y="10" width="37" height="5" rx="1" fill="var(--steel)" stroke="var(--steel-d)" stroke-width="1"/><rect x="2" y="15" width="10" height="16" rx="3" fill="var(--grip)"/>`)+G(`translate(124 49) scale(${ck})`,`<rect x="-6" y="-24" width="40" height="5" rx="1" fill="var(--steel)" stroke="var(--steel-d)" stroke-width="1"/><rect x="26" y="-24" width="5" height="44" fill="var(--steel)" stroke="var(--steel-d)" stroke-width="1"/><rect x="-6" y="10" width="37" height="5" rx="1" fill="var(--steel)" stroke="var(--steel-d)" stroke-width="1"/><rect x="2" y="15" width="10" height="16" rx="3" fill="var(--grip)"/>`)+tipLines(89,56.5,['rychlosvěrky','nebo šroubové']),r(2));
   ins+=G('',tipLines(89,71,['Tip: desku stolu chraňte,','vrtá se jen do odpadu'],'ts'),r(3));
-  s+=inset('BUDETE POTŘEBOVAT',ins);
+  s+=inset('POTŘEBUJETE',ins);
   return s;
 });
 // D2
@@ -750,7 +750,7 @@ add('E','Otočte desku a dokončete z druhé strany','Desku otočte, znovu upně
   if(done) s+=lbl(4,86,'průchozí otvor Ø 32','tok');
   s+=WASTE_L;
   // inset
-  let ins=lbl(89,16,'1. strana: než projde vrták','t')+lbl(89,22,'2. strana: dokončit','t');
+  let ins=lbl(89,15.5,'1. strana:','t')+lbl(89,20.5,'než projde vrták','ts')+lbl(89,27,'2. strana:','t')+lbl(89,32,'dokončit','ts');
   ins+=G('translate(109.5 44) scale(.55)',boardSec({W:30,kerfTop:flip>=.5?c*CUT2:CUT1,kerfBot:flip>=.5?CUT1:0,pilotHole:1}));
   ins+=lbl(109.5,62,'řezy se potkají','ta','middle');
   ins+=G('',lbl(109.5,70,'papír je teď dole','ts','middle'),`opacity="${f(seg(t,.26,.38))}"`);
@@ -820,7 +820,7 @@ function loop(now){if(!playing)return;const dt=Math.max(0,now-last);last=now;
   if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
   else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
   raf=requestAnimationFrame(loop)}
-document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} setPlay(!playing)};
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
 document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
 document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
 document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};

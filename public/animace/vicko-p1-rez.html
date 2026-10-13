@@ -510,6 +510,13 @@
         stroke-width: 0.3;
         opacity: 0.95;
       }
+      /* telefon: plátno přes celou šířku (okraj stránky 16 + karta 12 + rámeček 1), ať je text v panelu čitelný */
+      @media (max-width: 480px) {
+        .stagewrap {
+          margin-inline: -29px;
+          border-radius: 0;
+        }
+      }
       @media (max-width: 560px) {
         .badge small {
           display: none;
@@ -924,6 +931,10 @@
           [12, 22, 93, 60, "D1"],
           [8, 102.427, 101, 63.5, "D2"],
         ];
+        // osa x 58,5 (na listu „osa 50,5“): kroužky pod výřezem pro palec a nad ohybem dna (F),
+        // nad G3a a na hraně G3c u závěsu (B); na každé stěně se dva vpichy spojí v jednu čáru
+        const AXF = [36, 81.425],
+          AXB = [97.177, 164.993];
         const RUBSEG = [];
         [Y_AXIS, Y_EDGE].forEach((y) =>
           RUBSEG.push([
@@ -969,6 +980,12 @@
             });
           });
         }
+        [AXF, AXB].forEach(([y0, y1]) =>
+          RUBSEG.push([
+            [58.5, y0],
+            [58.5, y1],
+          ]),
+        );
         const RUBP = RUBSEG.map(([a, b]) => lineP(a, b));
         const PENCIL = [...RUBP];
         const PENL = PENCIL.reduce((s, P) => s + P.L, 0);
@@ -1313,6 +1330,24 @@
               "var(--printm)",
               0.25,
             );
+          // ryska osy na F, u ohybu dna a na B, kroužky na koncích obou čar osy
+          s +=
+            ln(
+              "M58.5 34.5 V37.5 M58.5 95.677 V98.677 M58.5 80.75 V82.1",
+              "var(--printm)",
+              0.3,
+            ) +
+            txt(59.5, 36.6, "osa 50,5", 1.5, "var(--printm)", { a: "start" }) +
+            txt(59.5, 97.777, "osa 50,5", 1.5, "var(--printm)", {
+              a: "start",
+            }) +
+            txt(59.5, 82, "osa", 1.4, "var(--printm)", { a: "start" }) +
+            [...AXF, ...AXB]
+              .map(
+                (y) =>
+                  `<circle cx="58.5" cy="${y}" r=".7" fill="none" stroke="var(--print)" stroke-width="${f(Math.max(0.12, 0.12 / CK))}"/>`,
+              )
+              .join("");
           s +=
             txt(58.5, 70.95, "G1", 2, "var(--pglue)", { b: 1 }) +
             txt(27, 70.7, "G2", 2, "var(--pglue)", { b: 1 }) +
@@ -2331,6 +2366,7 @@
                 ["ploch G1–G4"],
                 ["konce čar:", "t"],
                 ["osa, hrana vložky"],
+                ["osa 50,5: F a B", "t"],
                 ["rohy D1 a D2", "t"],
                 ["závěs a víčko ne", "twa"],
                 ["jehlou přes šablonu", "t"],
@@ -2347,7 +2383,6 @@
             return s;
           },
           "rub",
-          "Tip: stačí tolik vpichů, aby šly všechny čáry spojit.",
         );
 
         // E4 — spojit tužkou u pravítka
@@ -2436,6 +2471,7 @@
                 ["vložka v 64,18", "t"],
                 ["(posunutá z V12)"],
                 ["G1–G4, D1 a D2", "t"],
+                ["osa 50,5: F a B", "t"],
                 ["závěs, víčko: nic", "twa"],
                 ["záloha A:", "twa"],
                 ["61,76 · 63,56"],
@@ -2725,9 +2761,7 @@
         }
         document.getElementById("bPlay").onclick = () => {
           auto = true;
-          if (!playing && idx === S.length - 1 && tt >= 1) {
-            go(0, 0);
-          } else if (!playing && tt >= 1 && !reduce) {
+          if (!playing && tt >= 1 && !reduce) {
             go(idx, 0);
           }
           setPlay(!playing);

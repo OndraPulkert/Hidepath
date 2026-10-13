@@ -365,13 +365,33 @@ function frontView(o={}){
   return s;
 }
 
+// ---------- back view: pouzdro zezadu, líc zadního panelu (souřadnice T – dvojí zrcadlení se ruší) ----------
+const BACKC={cx:(BX0-OUT_B+AX0+OUT_A)/2,cy:118,sx:42,sy:45,k:.98};
+function backView(o={}){
+  let s='';
+  // za výřezem na prst je vidět líc vnitřního panelu
+  s+=`<rect x="${BX0}" y="${FY}" width="${PW}" height="${PH}" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".4"/>`;
+  // smyčky ohybů: A vpravo, B vlevo
+  s+=`<path d="M${AX0} 87.07 H${f(AX0+OUT_A-2)} Q${f(AX0+OUT_A)} 87.07 ${f(AX0+OUT_A)} 89.07 V${f(FB-2)} Q${f(AX0+OUT_A)} ${FB} ${f(AX0+OUT_A-2)} ${FB} H${AX0} Z" fill="url(#loopB)" stroke="var(--lic-d)" stroke-width=".4"/>`;
+  s+=`<path d="M${BX0} ${FY} H${f(BX0-OUT_B+1.5)} Q${f(BX0-OUT_B)} ${FY} ${f(BX0-OUT_B)} ${f(FY+1.5)} V${f(FB-1.5)} Q${f(BX0-OUT_B)} ${FB} ${f(BX0-OUT_B+1.5)} ${FB} H${BX0} Z" fill="url(#loopA)" stroke="var(--lic-d)" stroke-width=".4"/>`;
+  s+=clipX(0,AX0,`<path d="${STRIP}" fill="url(#licS)" stroke="var(--lic-d)" stroke-width=".4"/>`);
+  s+=HB.map(x=>slit(x,SEAM_Y,'\\',.5,.45)).join('');
+  // otvor HF[i] vpředu = HB[16−i] vzadu
+  const bx=i=>HB[NH-1-i];
+  const n=o.moves??0;
+  for(let j=0;j<Math.min(n,MOVES.length);j++){const [a,b]=MOVES[j];const x1=bx(a),x2=bx(b),dx=Math.sign(x2-x1)*.55;
+    s+=`<path d="M${f(x1+dx)} ${SEAM_Y} L${f(x2-dx)} ${SEAM_Y}" stroke="var(--thread-d)" stroke-width="1.05" stroke-linecap="round"/><path d="M${f(x1+dx)} ${SEAM_Y} L${f(x2-dx)} ${SEAM_Y}" stroke="var(--thread)" stroke-width=".75" stroke-linecap="round"/>`;}
+  if(o.row) s+=`<path d="M${f(HB[0]-2)} ${f(SEAM_Y+2.4)} H${f(HB[NH-1]+2)}" stroke="var(--ok)" stroke-width=".45" stroke-dasharray="1.6 1" opacity="${f(o.row)}"/>`;
+  return s;
+}
+
 // ---------- steps ----------
 const PARTS={A:'Pás a otvory dna',B:'Ohyby za mokra',C:'Lepení dna',D:'Šev dna',E:'Kontrola'};
 const S=[];
 const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,side,tip});
 
 // A1 — which panel is which
-add('A','Přehled: tři panely, dva ohyby','Pás leží lícem nahoru: zadní panel s jazykem, ohyb A (15,69 mm), přední panel s kapsou a dříkem, ohyb B (8,66 mm) a vnitřní panel. Panely mají 72 × 104,1 mm. U kůže 1,2 mm se ohyb B neztenčuje.',7600,t=>{
+add('A','Přehled: tři panely, dva ohyby','Pás leží lícem nahoru: zadní panel s jazykem, ohyb A (15,69 mm), přední panel s kapsou a dříkem, ohyb B (8,66 mm) a vnitřní panel. Panely mají 72 × 104,1 mm. Šířky ohybů platí pro kůži 1,2 mm (u 1,5 mm podle listu PÁS). U kůže 1,2 mm se ohyb B neztenčuje.',7600,t=>{
   const c=STRIPC; let inner=planBack()+planMid()+planInner()+zones(.6);
   let s=G(camT(c),inner);
   const L5=[['ZADNÍ',46,108,'t'],['ohyb A',CA,128,'ta'],['PŘEDNÍ',133.69,147,'t'],['ohyb B',CB,128,'ta'],['VNITŘNÍ',214.35,108,'t']];
@@ -478,7 +498,7 @@ add('B','Přeložte zadní panel ohybem A','Zabalené bankovky položte na líc 
   return s;
 },null);
 
-add('B','Přitiskněte a nechte zaschnout','Přejeďte rozhrnovačkou. Sponky s podložkou nasaďte na panely těsně vedle ohybů, ne na smyčku. Než necháte zaschnout, zkontrolujte, že otvory dna na sousedních panelech lícují. Když ne, dokud je kůže vlhká, ohyb rozevřete a přeložte se smyčkou posunutou tak, aby seděly (stále mezi čarami). Malý zbytek srovnáte při lepení jehlami. Nechte zaschnout. Když se nesrovnaly ani tak, nelepte: po zaschnutí změřte posun otvorů a ohyb s ním vyzkoušejte na novém cvičném proužku postupem z lekce 4.',9000,t=>{
+add('B','Přitiskněte a nechte zaschnout','Přejeďte rozhrnovačkou. Sponky s podložkou nasaďte na panely těsně vedle ohybů, ne na smyčku. Než necháte zaschnout, zkontrolujte, že otvory dna na sousedních panelech lícují. Když ne, dokud je kůže vlhká, ohyb rozevřete a přeložte se smyčkou posunutou tak, aby seděly (stále mezi čarami). Malý zbytek srovnáte při lepení jehlami. Nechte úplně zaschnout, nejlépe přes noc: kůže má zase původní barvu a na dotyk není chladná. Když se nesrovnaly ani tak, nelepte: po zaschnutí změřte posun otvorů a ohyb s ním vyzkoušejte na novém cvičném proužku postupem z lekce 4.',9000,t=>{
   const cam=CAM_FOLD, g=secGeom(Math.PI,Math.PI), w=wOf(cam);
   const dry=es(t,.66,.95);
   let s=leatherSec(cam,g,{wet:1-dry});
@@ -492,7 +512,7 @@ add('B','Přitiskněte a nechte zaschnout','Přejeďte rozhrnovačkou. Sponky s 
     s+=`<g opacity="${f(o)}">${pill(...toS(cam,12,top+7),'sponka s podložkou','ts','middle')}${pill(...toS(cam,60,top+7),'přes obsah','ts','middle')}</g>`;
     const [ax,ay]=toS(cam,-OUT_A,SEPA/2),[bx,by]=toS(cam,PW+OUT_B,SEPB/2);
     s+=`<g opacity="${f(o)}">${cross(ax+2,ay,1.4,.55)}${cross(bx-1.6,by,1.4,.55)}</g>`;}
-  if(t>.64){s+=clock(124,74,seg(t,.66,.95))+pill(117,75.5,'zaschnout','t','end')}
+  if(t>.64){s+=clock(124,74,seg(t,.66,.95))+pill(117,75.5,'přes noc','t','end')}
   if(t<.36&&t>.04) s+=pill(4,87,'přejeďte rozhrnovačkou','t');
   else if(t>.4&&t<.64) s+=pill(4,87,'otvory dna lícují?','t');
   else if(t>=.64) s+=pill(4,87,'sponky ne na smyčku ohybu','ta');
@@ -667,21 +687,34 @@ add('D','Prošijte dno skrz tři vrstvy','Prošijte dno sedlářským stehem skr
   return s;
 },{v:'LÍC',sub:'přední panel'});
 
-add('D','Zajistěte konec a zkontrolujte rub','Na konci ušijte dva zpětné stehy. Zkontrolujte rub (zadní panel): bývá méně pravidelný než líc, to je normální. Stehy ale musí být stejně utažené, v jedné řadě a bez smyček. Křivé otvory na rubu znamenají, že vidličky nebyly kolmo.',7600,t=>{
-  const u=es(t,.04,.5)*2, n=18+Math.floor(u), fr=u-Math.floor(u);
-  let inner=frontView({moves:Math.min(20,n+(t>.5?1:0)),backHi:1});
-  let s=clipMain(G(camT(FRONTC),inner));
-  if(t<.5){const j=Math.min(19,n);const [a,b]=MOVES[j];const [x,y]=tv(FRONTC,HF[b],SEAM_Y);
-    s+=needle(x,y,330-fr*20)+needle(x,y,30+fr*20,.55);}
-  const [x0,y0]=tv(FRONTC,HF[14],SEAM_Y),[x1]=tv(FRONTC,HF[16],SEAM_Y);
-  if(t>.3) s+=pill((x0+x1)/2,y0-4,'zpětné','ta','middle');
-  const ck=[['zpětné stehy',.55],['na začátku i konci',.55],['rub: v řadě, utažený',.7],['stejný sklon',.82]];
+add('D','Zajistěte konec a zkontrolujte rub','Na konci ušijte dva zpětné stehy. Zkontrolujte rub (zadní panel): bývá méně pravidelný než líc, to je normální. Stehy ale musí být stejně utažené, v jedné řadě a bez smyček. Křivé otvory na rubu znamenají, že vidličky nebyly kolmo.',10500,t=>{
+  // 1. polovina: zpětné stehy na konci (zepředu); 2. polovina: pouzdro otočené, rub švu na zadním panelu
+  const u=es(t,.04,.4)*2, n=18+Math.floor(u), fr=u-Math.floor(u);
+  const fl=seg(t,.44,.58), sx=Math.max(.03,Math.abs(Math.cos(Math.PI*fl))), back=fl>=.5;
+  const flipT=b=>`translate(42 0) scale(${f(sx)} 1) translate(-42 0) `+b;
+  let s;
+  if(!back){
+    const inner=frontView({moves:Math.min(20,n+(t>.4?1:0)),backHi:1});
+    s=clipMain(G(flipT(camT(FRONTC)),inner));
+    if(t<.4){const j=Math.min(19,n);const [a,b]=MOVES[j];const [x,y]=tv(FRONTC,HF[b],SEAM_Y);
+      s+=needle(x,y,330-fr*20)+needle(x,y,30+fr*20,.55);}
+    const [x0,y0]=tv(FRONTC,HF[14],SEAM_Y),[x1]=tv(FRONTC,HF[16],SEAM_Y);
+    if(t>.28&&t<.44) s+=pill((x0+x1)/2,y0-4,'zpětné','ta','middle');
+    if(fl>0) s+=pill(4,87,'otočte pouzdro','t');
+  } else {
+    const inner=backView({moves:20,row:seg(t,.72,.8)});
+    s=clipMain(G(flipT(camT(BACKC)),inner));
+    if(t>.62){const o=seg(t,.62,.7);
+      const [x0,y0]=tv(BACKC,HB[0],SEAM_Y),[x1]=tv(BACKC,HB[2],SEAM_Y),[x2]=tv(BACKC,HB[14],SEAM_Y),[x3]=tv(BACKC,HB[16],SEAM_Y);
+      s+=`<g opacity="${f(o)}">${pill((x0+x1)/2,y0-4,'zpětné','ta','middle')}${pill((x2+x3)/2,y0-4,'zpětné','ta','middle')}</g>`;}
+    s+=pill(4,87,t>.8?'rub: v řadě, utažený, bez smyček':'rub švu na zadním panelu',t>.8?'tok':'t');
+  }
+  const ck=[['zpětné stehy',.3],['na začátku i konci',.3],['rub v jedné řadě',.8],['stejně utažený',.84],['bez smyček',.88]];
   let ib='';ck.forEach(([tx,at],i)=>{const o=seg(t,at,at+.08);ib+=`<g opacity="${f(o)}">${i===1?'':tick(91.5,17.5+i*7)}${lbl(96,19+i*7,tx,'t')}</g>`});
-  ib+=notes([['dva zpětné','t'],['stehy na začátku'],['i na konci']],52,5.2);
+  ib+=`<g opacity="${f(seg(t,.9,.98))}">${notes([['rub bývá méně','t'],['pravidelný – to je'],['normální; křivé'],['otvory = vidličky'],['nebyly kolmo']],54,5.2)}</g>`;
   s+=inset('KONEC',ib);
-  if(t>.92) s+=pill(4,87,'dno prošité skrz tři vrstvy','tok');
   return s;
-},{v:'LÍC',sub:'přední panel'});
+},t=>t<.51?{v:'LÍC',sub:'přední panel'}:{v:'LÍC',sub:'zadní panel · rub švu'});
 
 // ---------- E: checkpoints ----------
 add('E','Kontrola: ohyby, lepení a šev','Oba ohyby drží tvar smyčky, líc bez prasklin. Dno je slepené a zarovnané, otvory lícují. Dno je prošité skrz tři vrstvy, začátek i konec zajištěný zpětnými stehy.',9000,t=>{
@@ -726,7 +759,7 @@ partKeys.forEach(k=>{const b=document.createElement('button');b.className='pseg'
 let idx=0,tt=1,playing=false,last=0,raf=0;
 function numInPart(i){const p=S[i].part;return S.slice(0,i+1).filter(s=>s.part===p).length}
 function setSide(st){
-  const side=st.side; if(!side){badge.hidden=true;return}
+  const side=typeof st.side==='function'?st.side(tt):st.side; if(!side){badge.hidden=true;return}
   badge.hidden=false; let v,sb='';
   if(typeof side==='object'){v=side.v;sb=side.sub||''} else {v=side==='rub'?'RUB':'LÍC'}
   sideEl.textContent=v; chip.style.background=v==='LÍC'?'var(--chip-lic)':'var(--chip-rub)'; sub.textContent=sb;
@@ -752,7 +785,7 @@ function loop(now){if(!playing)return;const dt=Math.max(0,now-last);last=now;
   if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
   else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
   raf=requestAnimationFrame(loop)}
-document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} else if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
 document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
 document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
 document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};

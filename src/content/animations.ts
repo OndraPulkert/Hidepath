@@ -167,6 +167,7 @@ export const animationPages = {
         'Označte dřík 9,5 mm od okraje',
         'Vysekněte otvor, pokud ho návod vyžaduje',
         'Osaďte dřík s hlavičkou',
+        'Obtiskněte hlavičku na druhý odřezek',
         'Osaďte klobouček na druhém odřezku',
         'Zacvakněte, zavřete a znovu otevřete',
         'Změřte přírubu patice: nejvýš Ø 11 mm',

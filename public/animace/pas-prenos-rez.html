@@ -539,7 +539,7 @@ add('E','Sejměte šablonu a zkontrolujte značky','Pásku strhávejte pomalu po
   const lst=[['střed dříku','1'],['tečky dna','51'],['jiný vpich na líci','0']];
   let ib=notes([['páska: pomalu,','t'],['pod ostrým úhlem,'],['skoro rovnoběžně'],['s kůží']],18,5.2);
   ib+=lst.map(([tx,k],i)=>fade(seg(t,.8+i*.03,.86+i*.03),tick(91.5,i*6.2+43,.75)+lbl(94.5,i*6.2+44,`${k} · ${tx}`,'t'))).join('');
-  ib+=fade(ck,notes([['chybí? přes rozřezanou','ta'],['šablonu už přesně ne','ta']],70,5));
+  ib+=fade(ck,notes([['chybí značka?','ta'],['rozřezaná šablona','ta'],['už přesně nesedí','ta']],68.5,4.8));
   s+=inset('SEJMOUT',ib);
   s+=pill(4,87,t<.42?'pásku pomalu, skoro rovnoběžně':t<.6?'odpad pryč i s vpichy kroužků':t<.8?'šablonu z pásu sejmout':'všechny značky na místě?',t>=.8?'tok':'t');
   return s;
@@ -608,7 +608,7 @@ function loop(now){if(!playing)return;const dt=Math.max(0,now-last);last=now;
   if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
   else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
   raf=requestAnimationFrame(loop)}
-document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} else if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
 document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
 document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
 document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};

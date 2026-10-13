@@ -104,8 +104,8 @@ describe('animace postupu – schéma odkazu', () => {
       href: '/animace/kapsa-skladani.html#B3',
       label: 'Krok B3 – Přeložte zadní panel ohybem A',
     });
-    expect(animationLinkSchema.safeParse(animationLink('snap', 'A7')).success).toBe(true);
-    expect(() => animationLink('snap', 'A8')).toThrow(/nemá kotvu #A8/);
+    expect(animationLinkSchema.safeParse(animationLink('snap', 'A8')).success).toBe(true);
+    expect(() => animationLink('snap', 'A9')).toThrow(/nemá kotvu #A9/);
     expect(() => animationLink('pouchFold', 'F1' as 'E1')).toThrow(/nemá kotvu #F1/);
     expect(animationStepTitle('snap', 'C5')).toBe('Zkraťte jazyk 11 mm za střed kloboučku');
     expect(animationStepTitle('snap', 'C0')).toBeUndefined();
@@ -153,6 +153,10 @@ describe('animace postupu – stránky v public/animace', () => {
       if (source!.includes('barEls')) {
         expect(source, `${page.path}: klik na krok`).toMatch(/function stepGo\(i\)/);
         expect(source, `${page.path}: klik na krok`).toMatch(/stepGo\(i\)\}\);/);
+        // Přehrát na posledním kroku přehraje ten krok (odkaz z lekce), od začátku je ↺.
+        expect(source, `${page.path}: Přehrát na posledním kroku`).not.toMatch(
+          /idx\s*===\s*S?T?\.?S?\.?length\s*-\s*1\s*&&\s*tt\s*>=\s*1/,
+        );
       }
     },
   );
@@ -386,9 +390,15 @@ describe('animace postupu – složení pouzdra a druk v lekcích', () => {
     expect(hrefOf(3, 'why-scrap-first')).toEqual([druk('A1'), apl('A1')]);
     expect(hrefOf(3, 'punch-post-hole')).toEqual([druk('A2'), druk('A3'), apl('B1')]);
     expect(hrefOf(3, 'set-snap-post')).toEqual([druk('A4'), apl('B2')]);
-    expect(hrefOf(3, 'practice-imprint')).toEqual([apl('C1')]);
-    expect(hrefOf(3, 'practice-snap-cap')).toEqual([druk('A5'), apl('C2'), apl('C3'), apl('D1')]);
-    expect(hrefOf(3, 'measure-flange')).toEqual([druk('A7'), apl('D2')]);
+    expect(hrefOf(3, 'practice-imprint')).toEqual([druk('A5'), apl('C1')]);
+    expect(hrefOf(3, 'practice-snap-cap')).toEqual([
+      druk('A6'),
+      druk('A7'),
+      apl('C2'),
+      apl('C3'),
+      apl('D1'),
+    ]);
+    expect(hrefOf(3, 'measure-flange')).toEqual([druk('A8'), apl('D2')]);
     expect(hrefOf(6, 'punch-post-hole')).toEqual([druk('B2')]);
     expect(hrefOf(6, 'set-snap-post')).toEqual([druk('B3'), apl('B2')]);
     expect(hrefOf(8, 'insert-content')).toEqual([druk('C1')]);
@@ -425,7 +435,7 @@ describe('animace postupu – přenos, řez a otvory dna pásu v lekcích 4 a 5'
     [4, 'cut-practice-strip', [prenos('A3'), prenos('B2'), prenos('C1')]],
     [4, 'punch-flat', [otvory('E1'), otvory('A3'), otvory('D2')]],
     // Lekce 5: každý krok přenosu, řezu, čar ohybů a otvorů dna.
-    [5, 'transfer-face', [prenos('A2'), prenos('A1')]],
+    [5, 'transfer-face', [prenos('A1'), prenos('A2')]],
     [5, 'draw-fold-lines', [prenos('B1'), prenos('B2')]],
     [5, 'cut-strip', [prenos('C1'), prenos('D1'), prenos('D2'), prenos('D3'), prenos('C3')]],
     [5, 'peel-template', [prenos('E1')]],
@@ -488,7 +498,7 @@ describe('animace postupu – sedlářský steh a hrany ve všech projektech', (
     ['lid-wallet', 5, 'tokonole', [hrany('G2')]],
     ['lid-wallet', 6, 'bill-window', [...okenka('C2', 'C3', 'C4', 'C5'), hrany('G4')]],
     ['lid-wallet', 6, 'stitch-s1-s3', [...zada('D1', 'D2', 'D3', 'D4'), steh('E2'), thread]],
-    ['lid-wallet', 8, 's6', [steh('E2'), thread]],
+    ['lid-wallet', 8, 's6', [magnet('A6'), steh('E2'), thread]],
     [
       'lid-wallet',
       9,
@@ -532,6 +542,7 @@ describe('animace postupu – magnet Víčka v lekcích 8, 11 a 12', () => {
     [8, 'g1', [magnet('A1'), magnet('A2')]],
     [8, 'g2', [magnet('A3'), magnet('A4')]],
     [8, 'check-d1', [magnet('A5')]],
+    [8, 's6', [magnet('A6')]],
     [11, 'find-plate', [magnet('B1')]],
     [11, 'magnet-dry-test', [magnet('B2')]],
     [11, 'epoxy', [magnet('B3'), magnet('B4')]],
@@ -540,6 +551,7 @@ describe('animace postupu – magnet Víčka v lekcích 8, 11 a 12', () => {
     [11, 'trim-tip', [magnet('B8'), magnet('B9')]],
     [11, 's7', [magnet('B10'), magnet('B11')]],
     [12, 'magnet-swap', [magnet('vymena')]],
+    [12, 'z1', [magnet('B12')]],
   ] as const)('lekce %i, krok %s otevírá přesný krok animace', (order, stepId, expected) => {
     expect(hrefsOf(order, stepId)).toEqual(expected);
   });
@@ -591,7 +603,7 @@ describe('animace postupu – ohyby Víčka v lekcích 5, 7 a 10', () => {
     [7, 'wet', ['A2', 'A3']],
     [7, 'place-spacer', ['A4']],
     [7, 'fold-clamp', ['A5', 'A6', 'A7', 'A8', 'A9']],
-    [7, 'remove-spacer', ['A10']],
+    [7, 'remove-spacer', ['A10', 'A11']],
     [10, 'contents-b', ['B1']],
     [10, 'wet-close', ['B2', 'B3']],
     [10, 'overnight', ['B4', 'B5']],
@@ -781,7 +793,7 @@ describe('animace postupu – pásek: konec s přezkou, dírky a špička', () =
         .steps.find((s) => s.id === stepId)
         ?.animationLinks?.map((l) => l.label);
     expect(labelsOf('mark')).toEqual([
-      'Krok B1 – Upevněte pás a destičku',
+      'Krok B1 – Upevněte pás a destičku (na pásku; na odřezku páska dál než 120 mm)',
       'Krok B2 – Přiložte řadu 3',
     ]);
     expect(labelsOf('punch')).toEqual(['Krok C2 – Konce oválu Ø 6', 'Krok C3 – Boky oválu nožem']);

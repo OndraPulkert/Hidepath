@@ -610,7 +610,7 @@ add('D','Změřte přírubu dříku: nejvýš Ø 11 mm','Na rubu prvního odřez
   ib+=`<circle cx="${mx}" cy="${f(yy(9.5))}" r="${f(5.5*k*.5)}" fill="var(--bn)" stroke="var(--bn-e)" stroke-width=".25"/>`;
   ib+=`<path d="M${x0} ${f(yy(15))} H${x0+36}" stroke="var(--card-d)" stroke-width=".5" stroke-dasharray="1 .7"/>`;
   ib+=`<path d="M${x0+33} ${y0} V${f(yy(9.5))}" stroke="var(--accent)" stroke-width=".3" marker-start="url(#ar)" marker-end="url(#ar)"/>`;
-  ib+=lbl(x0,y0-2,'horní hrana','ts')+lbl(x0+31.5,f(yy(5)),'9,5','ta','end')+lbl(x0+1,f(yy(15)+3.6),'karty','ts');
+  ib+=lbl(x0,y0-2,'horní hrana','ts')+pill(x0+31.5,yy(5)+1.4,'9,5','ta','end')+pill(x0+2,yy(15)+4.2,'karty','t');
   ib+=notes([['karty od 15 mm','ts'],['2 × (15 − 9,5)','t'],['= Ø 11 mm max.'],['větší → tlačí'],['na karty']],53,5);
   s+=inset('PROČ 11',ib);
   return s;
@@ -670,7 +670,7 @@ function loop(now){if(!playing)return;const dt=Math.max(0,now-last);last=now;
   if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
   else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
   raf=requestAnimationFrame(loop)}
-document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} else if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
 document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
 document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
 document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};

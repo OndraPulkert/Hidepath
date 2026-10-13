@@ -335,7 +335,7 @@ function lupa(r,op){
   const v=view({x:79,y:13,w:34,h:46,s:15,fx:EDGE,fy:mY(n+k),ax:96,ay:36});
   let hl=hlV(r,k,'var(--m-ok)',15,1.3)+hlM(n+k,'var(--m-ok)',15,1.3);
   let lb='';
-  for(const j of [k-1,k,k+1]){if(j<0||j>10)continue;const y=v.Y(vY(r,j))+1.3;lb+=j===k?lbl(115,y,k===0?'nula: přesně':`${k}.: přesně`,'tok'):lbl(115,y,'nesedí','ts')}
+  for(const j of [k-1,k,k+1]){if(j<0||j>10)continue;const y=v.Y(vY(r,j))+1.3;lb+=j===k?lbl(115,y,k===0?'nula sedí':`${k}. sedí`,'tok'):lbl(115,y,'nesedí','ts')}
   return O(op,lbl(79,11,'lupa','ts')+zoom(v,caliper(r,{k:15})+hl,{stroke:'var(--ok)'})+lb);
 }
 function result(l1,l2,op){return O(op,`<rect x="78" y="63" width="55" height="23" rx="2" class="panelbox"/>`+lbl(81,71,l1,'t')+lbl(81,81.5,l2,'tbig'))}
@@ -428,7 +428,7 @@ function loop(now){if(!playing)return;const dt=Math.max(0,now-last);last=now;
   if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
   else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
   raf=requestAnimationFrame(loop)}
-document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} setPlay(!playing)};
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
 document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
 document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
 document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};

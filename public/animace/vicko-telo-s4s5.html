@@ -63,6 +63,8 @@ p{margin:0}
 .parts>b:first-child{flex-basis:100%;font-size:12.5px;color:var(--muted);font-weight:600}
 .parts span b{font-family:var(--mono);font-weight:500;color:var(--accent)}
 .stagewrap{position:relative;background:var(--canvas);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+/* telefon: plátno přes celou šířku (okraj stránky 16 + karta 12 + rámeček 1), ať je text v panelu čitelný */
+@media (max-width:480px){.stagewrap{margin-inline:-29px;border-radius:0;border-inline:0}}
 #stage{display:block;width:100%;height:auto;aspect-ratio:3/2}
 .controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .controls button{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);width:44px;height:44px;border-radius:10px;display:grid;place-items:center;cursor:pointer;padding:0}
@@ -338,13 +340,22 @@ function frontLabels(){
 /* ---------- vložky ---------- */
 function miniFront(o={}){ // celá peněženka zepředu, 0,4 mm/j
   const k=.4,x0=89.6,yb=52;const X=x=>x0+x*k,Y=y=>yb-y*k;
-  let s=`<rect x="${f(X(0))}" y="${f(Y(YTOP))}" width="${f(101*k)}" height="${f((YTOP-82)*k)}" fill="var(--rub)"/>`;
+  const yr=o.fOpen?0:82; // F odklopená: zepředu je vidět rub B i pod D2
+  let s=`<rect x="${f(X(0))}" y="${f(Y(YTOP))}" width="${f(101*k)}" height="${f((YTOP-yr)*k)}" fill="var(--rub)"/>`;
   s+=`<rect x="${f(X(-1))}" y="${f(Y(82))}" width="${f(103*k)}" height="${f(64*k)}" class="d2f"/>`;
-  s+=`<rect x="${f(X(0))}" y="${f(Y(62))}" width="${f(101*k)}" height="${f(62*k)}" class="kzp"/>`;
-  if(o.g4){for(const [a,b] of [[0,4],[97,101]]) s+=`<rect x="${f(X(a))}" y="${f(Y(62))}" width="${f(4*k)}" height="${f(60.25*k)}" class="glue" opacity="${f(o.g4)}"/><path d="M${f(X(a))} ${f(Y(18))} h${f(4*k)}" stroke="var(--ink)" stroke-width=".25"/>`}
+  if(o.fOpen){
+    // líc D2: pás 5 mm od hrany D2, páska z nanečisto nad ním, svislá páska na vnitřní hranici
+    if(o.g4){for(const a of [-1,97]) s+=`<rect x="${f(X(a))}" y="${f(Y(62))}" width="${f(5*k)}" height="${f(44*k)}" class="glue" opacity="${f(o.g4)}"/>`;
+      const gb=o.g4b??o.g4; // rub B pod D2 má vlastní časování (jako v řezu)
+      if(gb>0) for(const a of [0,97]) s+=`<rect x="${f(X(a))}" y="${f(Y(18))}" width="${f(4*k)}" height="${f(16.25*k)}" class="glue" opacity="${f(gb)}"/>`}
+    for(const a of [-1,89]) s+=`<rect x="${f(X(a))}" y="${f(Y(68))}" width="${f(14*k)}" height="${f(6*k)}" class="tape"/>`;
+    if(o.tapeV>0){const pe=o.peel||0;
+      for(const [a,d] of [[4,1],[91,-1]]) s+=`<rect x="${f(X(a)+d*pe*4)}" y="${f(Y(62)-pe*3)}" width="${f(6*k)}" height="${f(44*k*o.tapeV)}" class="tape" opacity="${f(1-pe)}"/>`}
+  } else s+=`<rect x="${f(X(0))}" y="${f(Y(62))}" width="${f(101*k)}" height="${f(62*k)}" class="kzp"/>`;
+  if(o.g4&&!o.fOpen){for(const [a,b] of [[0,4],[97,101]]) s+=`<rect x="${f(X(a))}" y="${f(Y(62))}" width="${f(4*k)}" height="${f(60.25*k)}" class="glue" opacity="${f(o.g4)}"/><path d="M${f(X(a))} ${f(Y(18))} h${f(4*k)}" stroke="var(--ink)" stroke-width=".25"/>`}
   if(o.pocket){s+=`<g opacity="${f(o.pocket)}"><path d="M${f(X(4))} ${f(Y(40))} H${f(X(97))}" stroke="var(--ink)" stroke-width=".35" marker-start="url(#ar)" marker-end="url(#ar)"/>${lbl(X(50.5),Y(40)-1.4,'kapsa 93','t','middle')}</g>`}
   if(o.seam){for(const x of [3,98]) s+=`<path d="M${f(X(x))} ${f(Y(8))} V${f(Y(76))}" class="seamln" opacity="${f(o.seam)}"/>`}
-  s+=lbl(X(50.5),Y(-2)+3.6,'zepředu','ts','middle');
+  s+=lbl(X(50.5),Y(YTOP)-1.6,o.fOpen?'zepředu, F odklopená':'zepředu','ts','middle');
   return s;
 }
 function zoneList(y0){
@@ -434,13 +445,13 @@ add('B','Zdrsněte líc D2','Lepte jen šrafované boční pásy G4 (list 2; hra
   if(r>0&&r<1){const y=18+44*r;s+=sandpaper(sx(d2Lic(y))-3.4,sy(y))}
   s+=secLabelsL(fr);
   s=clipMain(s)+tag(r<1?'zdrsnit líc D2 pod páskou':'líc D2 zdrsněný');
-  s+=inset('G4 · BOČNÍ PÁSY',miniFront({g4:.5})+notes([['pásy x 0–4','t'],['a 97–101'],['líc D2: 5 mm'],['od hrany D2,'],['jen pod páskou']],60,5.2));
+  s+=inset('G4 · BOČNÍ PÁSY',miniFront({g4:.5,fOpen:1})+notes([['pásy x 0–4','t'],['a 97–101'],['líc D2: 5 mm'],['od hrany D2,'],['jen pod páskou']],60,5.2));
   return s;
 });
 
 // B2
-add('B','Naneste lepidlo a nechte zavadnout','Vnitřní hranici pásu přelepte na líci D2 svislou maskovací páskou hranou 5 mm od hrany D2 (odměřte pravítkem dole i nahoře), od spodní hrany D2 k pásce z nanečisto. Kontaktní lepidlo naneste jen do bočních pásů G4: na rub F, na líc D2 mezi pásky a pod D2 na rub B. Svislou pásku strhněte hned po nanesení lepidla, pomalu směrem od lepené plochy (zůstala by pod D1). Nechte zavadnout 10–15 min (jako u G3 v lekci 6).',9000,t=>{
-  const gd=es(t,.05,.35),gb=es(t,.3,.45),gf=es(t,.45,.75),dry=es(t,.78,.98);
+add('B','Naneste lepidlo a nechte zavadnout','Vnitřní hranici pásu přelepte na líci D2 svislou maskovací páskou hranou 5 mm od hrany D2 (odměřte pravítkem dole i nahoře), od spodní hrany D2 k pásce z nanečisto. Kontaktní lepidlo naneste jen do bočních pásů G4: na rub F, na líc D2 mezi pásky a pod D2 na rub B. Svislou pásku strhněte hned po nanesení lepidla, pomalu směrem od lepené plochy (zůstala by pod D1). Nechte zavadnout 10–15 min (jako u G3 v lekci 6).',10000,t=>{
+  const tv=es(t,.02,.12),gd=es(t,.14,.4),gb=es(t,.38,.5),gf=es(t,.5,.72),peel=es(t,.73,.81),dry=es(t,.82,.98);
   const fr=mkF(1.75,OPEN);
   let s=section({c:1.75,open:OPEN,rough:1,glue:{d2:gd,b:gb,f:gf,op:L(1,.7,dry)}})+tapeD2();
   if(gd>0&&gd<1){const y=18+44*gd;s+=brush(sx(d2Lic(y))-.3,sy(y))}
@@ -449,8 +460,8 @@ add('B','Naneste lepidlo a nechte zavadnout','Vnitřní hranici pásu přelepte 
   s+=secLabelsL(fr,{marks:false});
   s=clipMain(s);
   if(dry>0) s+=clock(70,72,dry,4)+pill(64,79.5,'10–15 min','t','middle');
-  s+=tag(t<.78?'lepidlo na obě plochy':'nechat zavadnout');
-  s+=inset('KAM LEPIDLO',miniFront({g4:1})+notes([['rub F: y 1,75–62','t'],['líc D2: y 18–62','t'],['rub B: y 1,75–18','t'],['jen pásy x 0–4'],['a 97–101']],60,5));
+  s+=tag(t<.13?'svislá páska 5 mm od hrany D2':t<.72?'lepidlo na obě plochy':t<.82?'svislou pásku hned strhnout':'nechat zavadnout');
+  s+=inset('KAM LEPIDLO',miniFront({g4:gd,g4b:gb,fOpen:1,tapeV:tv,peel})+notes([['rub F: y 1,75–62','t'],['líc D2: y 18–62','t'],['rub B: y 1,75–18','t'],['jen pásy x 0–4'],['a 97–101']],60,5));
   return s;
 });
 
@@ -569,7 +580,7 @@ add('D','Děrujte y 72–76 z líce D2','Úsek (3): y 72–76 z líce D2. Pravý
 },'Tip: animace kreslí dvouzubou vidličku. Nad y 76 nesmí být žádný otvor.');
 
 // E1
-add('E','Odměřte nit: 5 × šev + 25–30 cm','Nit 0,6 mm odměřte 5 × délka švu + 25–30 cm, šev jde přes tři vrstvy. Tip: šev S4 od y 8 do 76 má 68 mm, tedy 5 × 6,8 = 34 cm a 25–30 cm navíc, asi 59–64 cm na jeden bok.',8600,t=>{
+add('E','Odměřte nit: 5 × šev + 25–30 cm','Nit 0,6 mm odměřte 5 × délka švu + 25–30 cm, šev jde přes tři vrstvy.',8600,t=>{
   let s=section({c:62,open:0,holes:M.holes});
   const p=es(t,.05,.45);
   s+=`<path d="M${f(sx(2.6)+3)} ${f(sy(8))} V${f(sy(L(8,76,p)))}" stroke="var(--accent)" stroke-width=".8" stroke-linecap="round"/>`;
@@ -582,7 +593,7 @@ add('E','Odměřte nit: 5 × šev + 25–30 cm','Nit 0,6 mm odměřte 5 × délk
   ib+=`<g opacity="${f(seg(t,.9,1))}"><path d="M${f(xa)} ${y-2.5} v5 M${f(xc)} ${y-2.5} v5" stroke="var(--muted)" stroke-width=".3"/>${lbl(x0,y-4,'5 × 6,8','ts')}${lbl(xc,y+7,'59–64 cm','ts','end')}${lbl(x0,y+13,'nit 0,6 mm','ts')}</g>`;
   s+=inset('NIT',ib);
   return s;
-});
+},'Tip: šev S4 od y 8 do 76 má 68 mm, tedy 5 × 6,8 = 34 cm a 25–30 cm navíc, asi 59–64 cm na jeden bok.');
 
 function sewStep(t,m0,m1,label){
   const u=es(t,.04,.9)*(m1-m0),n=m0+Math.floor(u),fr=u-Math.floor(u);
@@ -629,9 +640,9 @@ add('E','Zkontrolujte a ušijte druhý bok','Zkontrolujte: S4 je ušitý od y 76
   let s=section({c:62,open:0,holes:M.holes,thread:{moves:MOVES.length,part:0}});
   s+=secLabelsL(mkF(62,0),{marks:false});
   s=clipMain(s)+tag('S4 hotový');
-  const ck=[['ušito od 76 dolů',.15],['steh 60–64 zdvojený',.3],['konce 2 otvory zpět',.45],['S5 v x 98 stejně',.6]];
+  const ck=[['ušito od 76 dolů',.15],['60–64 zdvojený',.3],['konce 2 otvory zpět',.45],['S5 v x 98 stejně',.6]];
   let ib=miniFront({seam:1});
-  ck.forEach(([tx,at],i)=>{const o=seg(t,at,at+.1);ib+=`<g opacity="${f(o)}">${tick(91.5,62+i*5.4,.8)}${lbl(95,63+i*5.4,tx,'t')}</g>`});
+  ck.forEach(([tx,at],i)=>{const o=seg(t,at,at+.1);ib+=`<g opacity="${f(o)}">${tick(90.6,62+i*5.4,.8)}${lbl(93.6,63+i*5.4,tx,'ts')}</g>`});
   s+=inset('KONTROLA',ib);
   return s;
 });
@@ -669,7 +680,7 @@ function loop(now){if(!playing)return;const dt=Math.max(0,now-last);last=now;
   if(RM.matches){hold+=dt;if(hold>ST[idx].dur){hold=0;if(idx<ST.length-1){go(idx+1,1)}else{setPlay(false);return}}}
   else{tt+=dt/ST[idx].dur;if(tt>=1){tt=1;render();hold+=dt;if(hold>700){hold=0;if(idx<ST.length-1){idx++;tt=0}else{setPlay(false);return}}}else render()}
   raf=requestAnimationFrame(loop)}
-document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===ST.length-1&&tt>=1){go(0,0)}else if(!playing&&tt>=1&&!RM.matches){go(idx,0)}setPlay(!playing)};
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&tt>=1&&!RM.matches){go(idx,0)}setPlay(!playing)};
 document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
 document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
 document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};

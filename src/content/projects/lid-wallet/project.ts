@@ -1157,7 +1157,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'remove-spacer',
         title: 'Vysuňte vložku',
-        animationLinks: [animationLink('lidBends', 'A10')],
+        animationLinks: [animationLink('lidBends', 'A10'), animationLink('lidBends', 'A11')],
         body: 'Po vyschnutí vysuňte vložku bokem. Boky ještě nejsou slepené, takže F jde odklopit na lepení plíšku a D1 v příští lekci. Mírné odpružení ohybu nevadí, udrží ho lepení G4 a boční švy.',
         media: [],
       },
@@ -1259,7 +1259,11 @@ export const lessons: readonly LessonDefinition[] = [
         id: 's6',
         title: 'Šev dna karet S6',
         body: 'Po lepení počkejte aspoň 1 h. F položte lícem nahoru na tvrdou desku u hrany stolu a B nechte viset přes hranu (ohyb dna na hraně desky). Šablonu z listu 1 přiložte na líc F podle obrysu a červené tečky S6 (dvakrát 8, střed kolem plíšku šev vynechává) propíchněte jehlou. Děrujte vidličkou do vpichů (při pohledu na líc F horní hranou od sebe). Šijte sedlovým stehem, konce 2 otvory zpět.',
-        animationLinks: [animationLink('saddleStitch', 'E2'), animationLink('threadLength')],
+        animationLinks: [
+          animationLink('lidMagnet', 'A6'),
+          animationLink('saddleStitch', 'E2'),
+          animationLink('threadLength'),
+        ],
         media: [
           ill(
             'lw-l8-section',
@@ -1756,6 +1760,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'z1',
         title: 'Z-1 Magnet',
         body: 'Ve stavech A, B a C víčko zavřete, zatřeste a otočte dnem vzhůru, pak ho otevřete jedním prstem za špičku. Projde, když víčko zůstane zavřené (i proti pružení závěsu) a otevře se jedním prstem. Když drží slabě nebo moc silně, vyměňte magnet za silnější nebo slabší Ø 8 (další krok) a zkuste znovu. Když nepomůže ani to, dejte do finálního kusu plíšek z pozinkovaného plechu 0,8 mm místo 0,5 (rozměr z listu 3 platí, listy se negenerují; peněženka je u magnetu o 0,3 mm tlustší). Plech 0,8 v nákupním plánu není, vyzkoušejte ho v obchodě magnetem. Na zkušebním kuse to vyzkoušet nejde – ověřte to nejlépe dalším zkušebním kusem.',
+        animationLinks: [animationLink('lidMagnet', 'B12')],
         media: [],
         records: [
           testResult('z1-result', 'Výsledek Z-1', [

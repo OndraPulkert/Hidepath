@@ -30,7 +30,9 @@ input,select{font:inherit;padding:8px 10px;border:1px solid var(--line);border-r
 .res{font-size:1.25rem;font-weight:700;font-variant-numeric:tabular-nums}
 .small{font-size:13px;color:var(--muted)}
 ul{margin:0;padding-left:18px;display:grid;gap:4px}
-@media (max-width:520px){.lbl{font-size:18px}.sm{font-size:16px}}
+@media (max-width:520px){.lbl{font-size:18px}.sm{font-size:16px}
+/* široké nákresy (viewBox 640): na telefonu větší písmo, ať je čitelné */
+.wide .lbl{font-size:28px}.wide .sm{font-size:24px}}
 /* Hidepath: návrat do lekce */
 .backlink{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--ink);font-weight:600;font-size:15px;text-decoration:none;justify-self:start}
 .backlink:hover{text-decoration:underline}
@@ -72,22 +74,22 @@ ul{margin:0;padding-left:18px;display:grid;gap:4px}
 <h2>Vynásobte 4 × a přidejte 25–30 cm</h2>
 <p class="small">Příklad: šev 18 cm → 4 × 18 = 72 cm + 25–30 cm = <b>asi 1 m nitě</b>. Kalkulačka počítá s 30 cm.</p>
 </div></div>
-<svg viewBox="0 0 640 120" role="img" aria-label="Pruh nitě rozdělený na čtyři délky švu a rezervu">
+<svg class="wide" viewBox="0 0 640 120" role="img" aria-label="Pruh nitě rozdělený na čtyři délky švu a rezervu">
   <g font-family="Albert Sans,sans-serif">
-  <rect x="20" y="40" width="110" height="22" rx="4" fill="var(--thread)" stroke="var(--thread-d)"/>
-  <rect x="134" y="40" width="110" height="22" rx="4" fill="var(--thread)" stroke="var(--thread-d)"/>
-  <rect x="248" y="40" width="110" height="22" rx="4" fill="var(--thread)" stroke="var(--thread-d)"/>
-  <rect x="362" y="40" width="110" height="22" rx="4" fill="var(--thread)" stroke="var(--thread-d)"/>
-  <rect x="476" y="40" width="144" height="22" rx="4" fill="none" stroke="var(--thread-d)" stroke-dasharray="5 4"/>
+  <rect x="20" y="34" width="110" height="34" rx="4" fill="var(--thread)" stroke="var(--thread-d)"/>
+  <rect x="134" y="34" width="110" height="34" rx="4" fill="var(--thread)" stroke="var(--thread-d)"/>
+  <rect x="248" y="34" width="110" height="34" rx="4" fill="var(--thread)" stroke="var(--thread-d)"/>
+  <rect x="362" y="34" width="110" height="34" rx="4" fill="var(--thread)" stroke="var(--thread-d)"/>
+  <rect x="476" y="34" width="144" height="34" rx="4" fill="none" stroke="var(--thread-d)" stroke-dasharray="5 4"/>
   </g>
-  <text x="75" y="56" text-anchor="middle" class="sm" style="fill:#5a4520">1× šev</text>
-  <text x="189" y="56" text-anchor="middle" class="sm" style="fill:#5a4520">2× šev</text>
-  <text x="303" y="56" text-anchor="middle" class="sm" style="fill:#5a4520">3× šev</text>
-  <text x="417" y="56" text-anchor="middle" class="sm" style="fill:#5a4520">4× šev</text>
-  <text x="548" y="56" text-anchor="middle" class="sm">+ 25–30 cm</text>
-  <text x="246" y="28" text-anchor="middle" class="lbl">4 × délka švu</text>
-  <text x="548" y="28" text-anchor="middle" class="lbl">rezerva</text>
-  <text x="320" y="96" text-anchor="middle" class="sm">rezerva na navlečení jehel a zpětné stehy</text>
+  <text x="75" y="51" dominant-baseline="central" text-anchor="middle" class="sm" style="fill:#5a4520">1× šev</text>
+  <text x="189" y="51" dominant-baseline="central" text-anchor="middle" class="sm" style="fill:#5a4520">2× šev</text>
+  <text x="303" y="51" dominant-baseline="central" text-anchor="middle" class="sm" style="fill:#5a4520">3× šev</text>
+  <text x="417" y="51" dominant-baseline="central" text-anchor="middle" class="sm" style="fill:#5a4520">4× šev</text>
+  <text x="548" y="51" dominant-baseline="central" text-anchor="middle" class="sm">+ 25–30 cm</text>
+  <text x="246" y="24" text-anchor="middle" class="lbl">4 × délka švu</text>
+  <text x="548" y="24" text-anchor="middle" class="lbl">rezerva</text>
+  <text x="320" y="102" text-anchor="middle" class="sm">rezerva na navlečení jehel a zpětné stehy</text>
 </svg>
 </section>
 
@@ -96,7 +98,7 @@ ul{margin:0;padding-left:18px;display:grid;gap:4px}
 <h2>Navlékněte obě jehly a nit vyrovnejte napůl</h2>
 <p class="small">Nit protáhněte prvním otvorem tak, aby na obou stranách zůstala stejná délka.</p>
 </div></div>
-<svg viewBox="0 0 640 130" role="img" aria-label="Nit se dvěma jehlami, uprostřed první otvor v kůži">
+<svg class="wide" viewBox="0 0 640 130" role="img" aria-label="Nit se dvěma jehlami, uprostřed první otvor v kůži">
   <rect x="270" y="40" width="100" height="50" rx="6" fill="var(--leather)" stroke="var(--leather-d)"/>
   <circle cx="320" cy="65" r="4" fill="var(--bg)" stroke="var(--leather-d)"/>
   <path d="M40 65 H316 M324 65 H600" stroke="var(--thread-d)" stroke-width="3" fill="none"/>
@@ -134,9 +136,10 @@ ul{margin:0;padding-left:18px;display:grid;gap:4px}
 <script>
 const len=document.getElementById('len'),lay=document.getElementById('lay'),out=document.getElementById('out'),note=document.getElementById('note');
 const cz=n=>n.toLocaleString('cs-CZ',{maximumFractionDigits:0});
+const cz1=n=>n.toLocaleString('cs-CZ',{maximumFractionDigits:2});
 function upd(){const l=parseFloat(String(len.value).replace(',','.'));if(!(l>0)){out.textContent='–';note.textContent='';return;}
 const k=+lay.value,t=l*k+30;out.textContent=cz(t)+' cm';
-note.textContent=cz(l)+' × '+k+' = '+cz(l*k)+' cm + 30 cm rezerva'+(t>150?' · přes 1,5 m – zvažte rozdělení švu':'');}
+note.textContent=cz1(l)+' × '+k+' = '+cz1(l*k)+' cm + 30 cm rezerva'+(t>150?' · přes 1,5 m – zvažte rozdělení švu':'');}
 len.addEventListener('input',upd);lay.addEventListener('change',upd);upd();
 </script>
 <script>

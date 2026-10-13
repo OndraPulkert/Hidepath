@@ -560,7 +560,7 @@ add('D','Přiložte list a propíchněte','S listem 2: list vystřihněte po obr
 },{v:'RUB',sub:'list 2'});
 
 // E1 — vysekání dírek
-add('E','Vysekněte dírky','Dírky vysekněte výsečníkem s Ø dírek z aktivního pásku (např. 5 mm, vaše číslo je pod krokem). Tip: prsty držící výsečník mějte u spodku, palička dopadá na horní konec. Tip: děrujte jen na tvrdé desce.',10000,t=>{
+add('E','Vysekněte dírky','Dírky vysekněte výsečníkem s Ø dírek z aktivního pásku (např. 5 mm, vaše číslo je pod krokem). Prsty držící výsečník mějte u spodku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',10000,t=>{
   const c=CAM_HOLES;const order=[...HOLES].reverse();
   const n=order.length,u=seg(t,.08,.92)*n,i=Math.min(n-1,Math.floor(u)),p=u-i;
   const done=order.filter((x,j)=>j<i||(j===i&&p>.62));
@@ -623,21 +623,24 @@ add('E','Uřízněte zaoblený konec','Zaoblený konec řežte od ruky po rýze 
   s+=pill(131,86,'ověřte na odřezku','ts','end');
   // druhá možnost: výsečník na konec opasku (obrys ostří)
   const o=seg(t,.8,.88);
-  if(o>0){const [x,y]=tv(c,RC,0);s+=fade(o,pill(131,14.5,'nebo výsečník na konec opasku','t','end')+`<path d="M${f(x)} ${f(y-H*c.k-1.2)} A${f(H*c.k+1.2)} ${f(H*c.k+1.2)} 0 0 1 ${f(x)} ${f(y+H*c.k+1.2)}" fill="none" stroke="var(--steel-d)" stroke-width="1" stroke-dasharray="2 1.2" opacity=".8"/>`)}
+  if(o>0){const [x,y]=tv(c,RC,0);s+=fade(o,pill(131,8,'nebo výsečník na konec opasku','t','end')+`<path d="M${f(x)} ${f(y-H*c.k-1.2)} A${f(H*c.k+1.2)} ${f(H*c.k+1.2)} 0 0 1 ${f(x)} ${f(y+H*c.k+1.2)}" fill="none" stroke="var(--steel-d)" stroke-width="1" stroke-dasharray="2 1.2" opacity=".8"/>`)}
   return s;
 },{v:'RUB',sub:'zaoblený'});
 
 // F1 — hrany
-add('F','Dokončete hrany','Pásku z rubu (značka 30 cm z lekce 3) sundejte. Srazte hrany posledních 30 cm a hranu nového konce. U barevného pásku je obarvěte jako v lekci 3 a nechte zaschnout. Pak je zaleštěte.',11000,t=>{
-  const c=camL(CAM_F,CAM_TIP,es(t,.4,.5)*(1-es(t,.84,.92)));
-  const fin=es(t,.1,.82);
-  let s=withCam(c,()=>matBg(-200,280,-60,60)+belt({shape:'hrot',holes:HOLES,finish:fin,tape30:1-seg(t,.02,.09)}));
-  if(t<.1){const [tx,ty]=tv(c,LAST30,-H-3);s+=fade(1-seg(t,.07,.1),pill(tx,ty-12,'pásku 30 cm sundejte','ta','middle')+lead(tx,ty-11,tx,ty-.5))}
+add('F','Dokončete hrany','Srazte neopracované hrany od pásky na rubu (značka 30 cm z lekce 3) ke konci a hranu nového konce. Pak pásku sundejte. U barevného pásku je obarvěte jako v lekci 3 a nechte zaschnout. Pak je zaleštěte.',11000,t=>{
+  // nejdřív srazit hrany (páska drží značku), pak pásku sundat, pak leštit
+  const c=camL(CAM_F,CAM_TIP,es(t,.6,.66)*(1-es(t,.74,.8)))  // přiblížení, když leštítko jde přes vrchol;
+  const fin=es(t,.06,.4),pol=es(t,.54,.84);
+  let s=withCam(c,()=>matBg(-200,280,-60,60)+belt({shape:'hrot',holes:HOLES,finish:fin,tape30:1-seg(t,.44,.5)}));
+  if(t>.4&&t<.54){const [tx,ty]=tv(c,LAST30,-H-3);s+=fade(seg(t,.4,.43)*(1-seg(t,.5,.54)),pill(tx,ty-12,'pak pásku sundejte','ta','middle')+lead(tx,ty-11,tx,ty-.5))}
   const [ax,ay]=tv(c,LAST30,H),[bx]=tv(c,APEX,H);
   if(c.k<.5){s+=fade(1-seg(t,.84,.9),`<path d="M${f(ax)} ${f(ay+4)} V${f(ay+6)} H${f(bx)} V${f(ay+4)}" fill="none" stroke="var(--accent)" stroke-width=".4"/>`+pill((ax+bx)/2,ay+11,'posledních 30 cm','ta','middle'));
     const [lx,ly]=tv(c,-150,-H);s+=fade(seg(t,.1,.14),pill(Math.max(lx,2),ly-3,'hotové z lekce 3','ts'));}
-  if(t>.05&&t<.84){const P=[[LAST30,-H],...HROT_TR,[LAST30,H]];const q=ptAt(P,fin),[x,y]=tv(c,q[0],q[1]);s+=t<.45?beveler(x,y):slicker(x,y)}
-  if(t<.86) s+=pill(131,8,t<.45?'srazte hrany':'zaleštěte hrany','t','end');
+  {const P=[[LAST30,-H],...HROT_TR,[LAST30,H]];
+    if(t>.05&&t<.41){const q=ptAt(P,fin),[x,y]=tv(c,q[0],q[1]);s+=beveler(x,y)}
+    if(t>.53&&t<.85){const q=ptAt(P,pol),[x,y]=tv(c,q[0],q[1]);s+=slicker(x,y)}}
+  if(t<.86&&(t<.42||t>.52)) s+=pill(131,8,t<.42?'srazte hrany od pásky':'zaleštěte hrany','t','end');
   return s;
 },{v:'RUB'},'Tip: podrobný postup je v animaci Dokončení hran, část H. Hranu oválu jste zaleštili už v lekci 4.');
 
@@ -717,7 +720,7 @@ function loop(now){if(!playing)return;const dt=Math.max(0,now-last);last=now;
   if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
   else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
   raf=requestAnimationFrame(loop)}
-document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} else if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
 document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
 document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
 document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};

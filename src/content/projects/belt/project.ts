@@ -341,7 +341,11 @@ export const lessons: readonly LessonDefinition[] = [
         printLink: 'pattern-sheets',
         printSheetId: 'prezka',
         animationLinks: [
-          animationLink('beltBuckleEnd', 'B1'),
+          animationLink(
+            'beltBuckleEnd',
+            'B1',
+            'Krok B1 – Upevněte pás a destičku (na pásku; na odřezku páska dál než 120 mm)',
+          ),
           animationLink('beltBuckleEnd', 'B2'),
         ],
         media: [

@@ -513,8 +513,8 @@ add('F','Obarvěte a zaleštěte hrany kapsy',
   inner+=`<path d="${WINL}" fill="none" stroke="var(--ok)" stroke-width="${f(1.1/s)}" pathLength="1" stroke-dasharray="${f(p2)} 1"/>`;
   let o=G(`translate(${ox} ${oy}) scale(${s})`,inner);
   if(p1>.9) o+=pill(ox+42.5*s+2,oy+30*s,'obrys','tok');
-  if(p2>.9) o+=pill(ox+21.25*s,oy+20.75*s+1.5,'okno Ø 20','tok','middle');
-  o+=pill(4,87,t<.88?'kapsa 42,5 × 42 mm, naplocho':'obarvit, zaleštit, pak přišít','t');
+  if(p2>.9) o+=pill(ox+21.25*s,oy+20.75*s+1.5,'okno','tok','middle');
+  o+=pill(4,87,t<.88?'kresleno pro 50 Kč: kapsa 42,5 × 42, okno Ø 20':'obarvit, zaleštit, pak přišít','t');
   let ib=notes([['před přišitím','t'],[''],['obrys a okno:','t'],['obarvit'],['(u barvené kůže)'],['zaleštit']],16,5.2);
   return o+inset('KAPSA',ib);
  },P2);
@@ -532,7 +532,7 @@ add('F','Přebruste a zaoblete dno, zaleštěte hrany',
   o+=pill(6,y0-3.6*K-5,'přední','ts')+pill(6,y0+6,'zadní','ts')+sideTag(x0,y0-1.8*K,'vnitřní');
   o+=scaleBar(8,80,K)+zoomTag();
   o+=pill(4,87,'3 vrstvy, kresleno po 1,2 mm','t');
-  const ck=[['dno do roviny',.24],['zaoblit z obou stran',.48],['obarvit',.7],['(u barvené kůže)',.7,'-'],['zaleštit',.94]];
+  const ck=[['dno do roviny',.24],['zaoblit z obou',.48],['stran',.48,'-'],['obarvit',.7],['(u barvené kůže)',.7,'-'],['zaleštit',.94]];
   let ib=checklist(ck,t,17,6.2);
   ib+=notes([['všechny vnější','t'],['hrany i nový'],['konec jazyka']],60,5);
   return o+inset('LEKCE 8',ib);
@@ -540,7 +540,7 @@ add('F','Přebruste a zaoblete dno, zaleštěte hrany',
 
 // G1
 add('G','Dokončete hrany před sestavením',
- 'Horní hranu F i s výřezem, spodní hranu a boky pásu víčka a boky jazýčku vybruste smirkem 220–400 na rovné destičce, zkoste z líce a vyleštěte (voda nebo Tokonole jen mimo lepená místa, leštítko nebo plátno). Horní hrany D1 a D2 jen vybruste a vyleštěte, horní hranu D2 lehce zaoblete. Výřez pro palec zaoblete z líce i z rubu, o rubovou hranu by se zachytila karta. Vnitřek výřezu vybruste a vyleštěte kolíkem Ø 8 v aku vrtačce.',
+ 'Horní hranu F i s výřezem, spodní hranu a boky pásu víčka, boky závěsu a boky jazýčku vybruste smirkem 220–400 na rovné destičce, zkoste z líce a vyleštěte (voda nebo Tokonole jen mimo lepená místa, leštítko nebo plátno). Horní hrany D1 a D2 jen vybruste a vyleštěte, horní hranu D2 lehce zaoblete (vede přes ni závěs). Výřez pro palec zaoblete z líce i z rubu, o rubovou hranu by se zachytila karta. Vnitřek výřezu vybruste a vyleštěte kolíkem Ø 8 v aku vrtačce.',
  11000,t=>{
   const sd=es(t,.06,.32), bv=es(t,.36,.6), bu=es(t,.64,.92);
   const ls=[{t:1.0,lic:'top',kind:'kas'}];
@@ -555,7 +555,7 @@ add('G','Dokončete hrany před sestavením',
   o+=prof({x:x0,y:72,k:kk,len:3,layers:ls,bevT:.35*vp,bevB:.35*vp,round:vb*.7,burn:vb});
   o+=pill(6,54,'výřez pro palec: z líce i z rubu','ts');
   o+=scaleBar(60,82,kk)+zoomTag();
-  let ib=notes([['vybrousit, zkosit','t'],['z líce, vyleštit:'],['· horní hrana F'],['· pás víčka'],['· boky jazýčku'],[''],['D1, D2: jen brousit','t'],['a vyleštit'],[''],['výřez: z líce','t'],['i z rubu']],16,5.2);
+  let ib=notes([['vybrousit, zkosit','t'],['z líce, vyleštit:'],['· horní hrana F'],['· pás víčka'],['· boky závěsu'],['· boky jazýčku'],['D1, D2: jen brousit','t'],['a vyleštit'],[''],['výřez: z líce','t'],['i z rubu']],16,5.2);
   return o+inset('PŘED SESTAVENÍM',ib);
  },P3,'Tip: řez je kreslený pro 1,0 mm, skutečnou tloušťku změříte v lekci 1.');
 
@@ -620,7 +620,7 @@ add('G','Dokončete hrany okének, D2 a jazýčku',
   o+=pill(cx,cy-h/2-13,'okénko mincí 12 × 48 mm','t','middle');
   o+=pill(cx,cy+h/2+15,'konce: papír na kolíku Ø 8','ts','middle');
   o+=pill(4,87,'konce vybrousit, zkosit z líce, vyleštit','t');
-  const ck=[['okénka mincí',.15,'.'],['(lekce 5)',.15,'-'],['okénko bankovek',.3,'.'],['jako svazek (L6)',.3,'-'],['klín špičky jazýčku',.45,'.'],['do rysky 2,5 mm',.45,'-'],['jazýček po S7',.6,'.'],['(L11, znovu v L12)',.6,'-'],['spodní hrana D2',.8,'.'],['klín po kroužky, z líce',.8,'-']];
+  const ck=[['okénka mincí',.15,'.'],['(lekce 5)',.15,'-'],['okénko bankovek',.3,'.'],['jako svazek (L6)',.3,'-'],['klín špičky jazýčku',.45,'.'],['do rysky 2,5 mm',.45,'-'],['jazýček po S7',.6,'.'],['(L11, znovu v L12)',.6,'-'],['spodní hrana D2',.8,'.'],['klín po kroužky,',.8,'-'],['z líce',.8,'-']];
   let ib=checklist(ck,t,17,6.4);
   return o+inset('DALŠÍ HRANY',ib);
  },P3);
@@ -728,7 +728,7 @@ function loop(now){if(!playing)return;const dt=Math.max(0,now-last);last=now;
   if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
   else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
   raf=requestAnimationFrame(loop)}
-document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} else if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
 document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
 document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
 document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};

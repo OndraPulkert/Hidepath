@@ -468,17 +468,19 @@ add('C','Dorovnejte konec linie','Asi 20 mm před koncem drážky vidličkou př
 },{v:'LÍC'});
 // C4 — kontrola rubu: na rubu označit, opravit z líce do stejných otvorů
 add('C','Zkontrolujte rub','Pás otočte a zkontrolujte rub. Kde hrot nevyšel, označte místo tužkou. Pás otočte zpět lícem nahoru, vraťte vidličku do stejných otvorů a udeřte znovu.',13000,t=>{
-  const c=CAM_C2;let s=boardBg();
   const miss=START+36, lic=t>=.38&&t<.7, fixed=t>=.7;
+  // pás otočený přes dlouhou hranu: na rubu je řada otvorů zrcadlově, i šikmina průrazu (jako v A2)
+  const Y=lic?-LY:LY,c=lic?CAM_C2:{...CAM_C2,cy:LY};let s=boardBg();
+  const sl=x=>lic?slit(x,Y):`<path d="M${f(x-.45)} ${f(Y-.45)} L${f(x+.45)} ${f(Y+.45)}" stroke="var(--hole)" stroke-width="${sw(.42)}" stroke-linecap="round"/>`;
   s+=withCam(c,()=>{let w=`<rect x="60" y="-60" width="160" height="120" fill="var(--pad)"/>`+beltFlat({face:lic?'lic':'rub'});
     if(lic)w+=`<path d="${lineD(START,START+70,-LY)}" stroke="var(--lic-d)" stroke-width="${sw(.55)}"/>`;
-    HOLES_S.filter(u=>u<START+70).forEach(u=>{if(u!==miss||lic||fixed)w+=slit(X(u),-LY)});
-    if(!lic&&!fixed&&t>.12)w+=fade(seg(t,.12,.18),`<circle cx="${f(X(miss))}" cy="${-LY}" r="1.6" fill="none" stroke="var(--accent)" stroke-width="${sw(.3)}"/>`);
-    if(!lic&&!fixed&&t>.24)w+=fade(seg(t,.24,.3),`<path d="M${f(X(miss)-1)} ${f(-LY+2.4)} l2 0" stroke="var(--ink)" stroke-width="${sw(.35)}" stroke-linecap="round"/>`);
+    HOLES_S.filter(u=>u<START+70).forEach(u=>{if(u!==miss||lic||fixed)w+=sl(X(u))});
+    if(!lic&&!fixed&&t>.12)w+=fade(seg(t,.12,.18),`<circle cx="${f(X(miss))}" cy="${Y}" r="1.6" fill="none" stroke="var(--accent)" stroke-width="${sw(.3)}"/>`);
+    if(!lic&&!fixed&&t>.24)w+=fade(seg(t,.24,.3),`<path d="M${f(X(miss)-1)} ${f(Y+2.4)} l2 0" stroke="var(--ink)" stroke-width="${sw(.35)}" stroke-linecap="round"/>`);
     if(lic){const p=seg(t,.44,.64);if(p>0&&p<1)w+=chisel(X(START+24),-LY,6,p<.5?L(5,0,p*2):L(0,5,(p-.5)*2))}
-    if(fixed)w+=fade(seg(t,.7,.76),`<circle cx="${f(X(miss))}" cy="${-LY}" r="1.6" fill="none" stroke="var(--ok)" stroke-width="${sw(.3)}"/>`);
+    if(fixed)w+=fade(seg(t,.7,.76),`<circle cx="${f(X(miss))}" cy="${Y}" r="1.6" fill="none" stroke="var(--ok)" stroke-width="${sw(.3)}"/>`);
     return w});
-  const [mx,my]=tv(c,miss,-LY);
+  const [mx,my]=tv(c,miss,Y);
   if(t>.12&&t<.38)s+=fade(seg(t,.14,.2),lead(mx+6,my+16,mx,my+2)+pill(mx+6.5,my+19,'hrot nevyšel','ta'));
   if(t>.24&&t<.38)s+=pill(4,84,'místo označte tužkou','ta');
   const p=seg(t,.52,.6);if(p>0&&p<1)s+=bang(mx,my,p,8);
@@ -640,7 +642,7 @@ function loop(now){if(!playing)return;const dt=Math.max(0,now-last);last=now;
   if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
   else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
   raf=requestAnimationFrame(loop)}
-document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} else if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
 document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
 document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
 document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};

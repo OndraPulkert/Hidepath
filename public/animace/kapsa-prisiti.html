@@ -144,6 +144,8 @@ const DOTS_K=[[13.5,29.177],[13.5,33.177],[13.5,37.177],[13.5,41.177],[13.5,45.1
  [49,53.177],[49,49.177],[49,45.177],[49,41.177],[49,37.177],[49,33.177],[49,29.177]];
 const DOTSL=DOTS_K.map(([x,y])=>[+(x-10).toFixed(3),+(y-18).toFixed(3)]);
 // glue / roughening band: seam allowance 3.5 mm along sides and bottom, top edge free
+// šrafa G1 na listu PÁS (pocket-local): pruh 3,5 mm uvnitř obrysu kapsy po bocích a dole
+const G1L="M0 10 L0 36 A6 6 0 0 0 6 42 L36.5 42 A6 6 0 0 0 42.5 36 L42.5 10 L39 10 L39 36 A2.5 2.5 0 0 1 36.5 38.5 L6 38.5 A2.5 2.5 0 0 1 3.5 36 L3.5 10 Z";
 const BANDL="M1.75 10 L1.75 36 A4.25 4.25 0 0 0 6 40.25 L36.5 40.25 A4.25 4.25 0 0 0 40.75 36 L40.75 10";
 const SNAP=[153.19,62.57];
 const BDOTS=[];for(const x0 of [14,101.69,182.35])for(let i=0;i<17;i++)BDOTS.push([+(x0+4*i).toFixed(2),153.67]);
@@ -206,7 +208,10 @@ function printStrip(){
   s+=BDOTS.map(([x,y])=>`<circle cx="${x}" cy="${y}" r=".45" fill="${ink}"/>`).join('');
   s+=`<circle cx="26.5" cy="26" r="6" fill="none" stroke="${sn}" stroke-width=".2" stroke-dasharray="1.5 1"/><path d="M25 26 H28 M26.5 24.5 V27.5" stroke="${ink}" stroke-width=".25"/>`;
   s+=`<circle cx="${SNAP[0]}" cy="${SNAP[1]}" r="6" fill="none" stroke="${sn}" stroke-width=".2" stroke-dasharray="1.5 1"/><path d="M151.69 62.57 H154.69 M153.19 61.07 V64.07" stroke="${ink}" stroke-width=".25"/>`;
-  s+=`<path d="${OUTL}" transform="${POCK_T}" fill="none" stroke="${m}" stroke-width=".2" stroke-dasharray="1 1"/>`;
+  // vnější obrys kapsy: nahoře čárkovaně, po bocích a dole vnější okraj zelené šrafy G1 (pruh 3,5 mm, lepit na líc)
+  s+=G(POCK_T,`<path d="M0 10 A10 10 0 0 1 10 0 L32.5 0 A10 10 0 0 1 42.5 10" fill="none" stroke="${m}" stroke-width=".2" stroke-dasharray="1 1"/>`+
+    `<path d="${G1L}" fill="url(#g1P)" stroke="#2e7d32" stroke-width=".25"/>`+
+    `<text x="21.25" y="40.85" text-anchor="middle" style="font:600 1.8px 'Albert Sans',sans-serif;fill:#2e7d32;stroke:#fff;stroke-width:.5;paint-order:stroke">G1 · lepit na LÍC</text>`);
   s+=tx(26.5,36.5,'JAZYK',2.4)+tx(46,105.12,'ZADNÍ PANEL',2.8)+tx(214.35,105.12,'VNITŘNÍ PANEL',2.8)+tx(89.845,50.07,'OHYB A',2.2,m)+tx(174.02,50.07,'OHYB B',2.2,m);
   s+=tx(89.845,57.07,'VÝŘEZ NA PRST R34',2.4,m)+tx(153.19,71.57,'druk – patice',2.1,sn);
   s+=tx(133.69,107.87,'PŘEDNÍ PANEL',2.8)+tx(133.69,111.27,'sem přišít kapsu s mincí (na líc)',2.2,m)+tx(133.69,114.27,'41,8 mm od horní hrany,',2.2,m)+tx(133.69,117.07,'14,75 mm od boků',2.2,m)+tx(133.69,120.47,'otevřená hrana kapsy nahoru',2.2,m);
@@ -297,7 +302,7 @@ add('A','Vystřihněte okénko z 2. výtisku PÁS','Vezměte 2. výtisk listu P�
   if(o1>0&&w1<1) inner+=`<path d="${STRIP}" fill="none" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 2" opacity="${f(o1*(1-w1))}"/>`;
   if(o2>0&&w2<1) inner+=`<path d="${OUTL}" transform="${POCK_T}" fill="none" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 2" opacity="${f(o2*(1-w2))}"/>`;
   let s=clipMain('ca1',G(camT(STRIPC),inner));
-  s+=inset('OKÉNKO',notes([['2. výtisk PÁS','tw'],['z lekce 5'],['na tenkém kartonu'],['obrys pásu:','t'],['přesně po čáře'],['okénko:','t'],['po vnějším'],['obrysu kapsy'],['rohy bez vpichů','tok']]));
+  s+=inset('OKÉNKO',notes([['2. výtisk PÁS','tw'],['z lekce 5'],['na tenkém kartonu'],['obrys pásu:','t'],['přesně po čáře'],['okénko:','t'],['nahoře čárkovaně,'],['jinde vnější okraj'],['zelené šrafy G1'],['rohy bez vpichů','tok']]));
   s+=pill(4,86,t<.32?'vystřihnout po obrysu pásu':t<.55?'odpad pryč':t<.92?'okénko po obrysu kapsy':'šablona s okénkem hotová',t>=.92?'tok':'t');
   return s;
 },null);
@@ -468,7 +473,7 @@ add('C','Řez: otvory lícují skrz obě vrstvy','Vidlička jde stejným otvorem
   const k=5.2, ox=6+3*k, oy=58;
   let s=G(`translate(${f(ox)} ${oy}) scale(${k})`,`<clipPath id="cs4"><rect x="-3" y="-8" width="15" height="12"/></clipPath><g clip-path="url(#cs4)">${secPocket({x0:-3,x1:12,bh:3,glue:1,holes:[3.5],thru:1})}</g>`+
     `<path d="M3.5 -7 V3" stroke="var(--ok)" stroke-width=".18" stroke-dasharray=".5 .35" opacity="${f(a)}"/>`);
-  s+=`<g opacity="${f(b)}">${lead(14,20,ox+1.5*k,oy-2.1*k)}${pill(4,19,'kapsa 1,2 mm','ts')}${lead(56,80,ox+6*k,oy-.6*k)}${pill(40,84.5,'přední panel 1,2 mm','ts')}${lead(8,74,ox+1.2*k,oy-1.25*k)}${pill(3,78,'lepidlo','ts')}${pill(ox+9*k,oy+2.3*k,'deska','ts','middle')}</g>`;
+  s+=`<g opacity="${f(b)}">${lead(14,20,ox+1.5*k,oy-2.1*k)}${pill(4,19,'kapsa 1,2 mm','ts')}${lead(56,80,ox+6*k,oy-.6*k)}${pill(34,84.5,'přední panel (1,2 / 1,5 mm)','ts')}${lead(8,74,ox+1.2*k,oy-1.25*k)}${pill(3,78,'lepidlo','ts')}${pill(ox+9*k,oy+2.3*k,'deska','ts','middle')}</g>`;
   s+=`<g opacity="${f(a)}">${pill(ox+3.5*k+2.5,27,'otvory nad sebou','tok')}</g>`;
   // inset: same side vs opposite side (top view of slits)
   const sl=(x,y,dir,col,w=.9)=>{const d=3;return `<path d="M${x-d} ${dir>0?y+d:y-d} L${x+d} ${dir>0?y-d:y+d}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`};
@@ -508,7 +513,13 @@ add('D','Přišijte kapsu sedlářským stehem','Přišijte kapsu sedlářským 
   if(t<.93){const i=Math.min(22,n);const [x,y]=tv(POCKC,PX+DOTSL[i][0],PY+DOTSL[i][1]);
     const nb=Math.min(22,i+1);const dir=Math.atan2(DOTSL[nb][1]-DOTSL[i][1],DOTSL[nb][0]-DOTSL[i][0])*180/Math.PI;
     s+=needle(x,y,dir+150-fr*20)+needle(x,y,dir+210+fr*20,.55);}
-  s+=pill(4,86,t<.93?`stehy: ${n} / 22`:'horní hrana volná','t');
+  // dva zpětné stehy na začátku (otvory 1–3) a na konci (21–23)
+  const bk=(i0,o)=>{const [x1,y1]=DOTSL[i0],[x2,y2]=DOTSL[i0+2];const sg=x1<20?-1:1;
+    const [a,b]=tv(POCKC,PX+x1+sg*1.5,PY+y1),[c,d]=tv(POCKC,PX+x2+sg*1.5,PY+y2);
+    return `<g opacity="${f(o)}"><path d="M${f(a)} ${f(b)} L${f(c)} ${f(d)}" stroke="var(--accent)" stroke-width=".5" stroke-linecap="round"/>${pill(sg<0?a-2:a+2,(b+d)/2+1.4,'zpětné',"ta",sg<0?'end':'start')}</g>`};
+  if(n>=2) s+=bk(0,seg(t,.1,.16));
+  if(n>=22) s+=bk(20,seg(t,.88,.93));
+  s+=pill(4,86,t>=.93?'horní hrana volná':n<2?'začátek: 2 zpětné stehy':n>=20?'konec: 2 zpětné stehy':`stehy: ${n} / 22`,n<2||(n>=20&&t<.93)?'ta':'t');
   // saddle stitch diagram
   const hx=[92,98,104,110,116,122,128], yT=31, yB=39, kk=Math.min(6,Math.floor(n/22*6.99));
   // dvě vrstvy: nahoře kapsa (líc nahoru), pod ní přední panel (líc nahoru); tenký pruh = líc
@@ -518,7 +529,7 @@ add('D','Přišijte kapsu sedlářským stehem','Přišijte kapsu sedlářským 
   for(let i=0;i<kk;i++){const a=hx[i],b=hx[i+1];const c1=i%2?'var(--thread2)':'var(--thread-d)', c2=i%2?'var(--thread-d)':'var(--thread2)';
     ib+=`<path d="M${a} ${yT} H${b}" stroke="${c1}" stroke-width=".8"/><path d="M${a} ${yB} H${b}" stroke="${c2}" stroke-width=".8"/><path d="M${b-.25} ${yT} V${yB} M${b+.25} ${yT} V${yB}" stroke="${c1}" stroke-width=".35"/>`;}
   ib+=lbl(89,27.5,'líc kapsy','ts')+lbl(89,45.5,'rub panelu','ts');
-  ib+=notes([['dvě jehly proti','t'],['sobě, každým'],['otvorem'],['stejné pořadí'],['i utažení']],55,5.4);
+  ib+=notes([['dvě jehly proti','t'],['sobě, stejné'],['pořadí i utažení'],['2 zpětné stehy','ta'],['na začátku i konci']],55,5.4);
   s+=inset('SEDLÁŘSKÝ STEH',ib);
   return s;
 },'lic');
@@ -549,6 +560,7 @@ const DEFS=`<defs>
 <radialGradient id="dimR"><stop offset="0" stop-color="#000" stop-opacity=".22"/><stop offset=".85" stop-color="#000" stop-opacity=".12"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
 <radialGradient id="dimL" cx=".4" cy=".38"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset=".8" stop-color="#fff" stop-opacity=".05"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></radialGradient>
 <marker id="ar" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--accent)"/></marker>
+<pattern id="g1P" width="1.2" height="1.2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0 V1.2" stroke="#2e7d32" stroke-width=".15" stroke-opacity=".7"/></pattern>
 <marker id="arOk" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--ok)"/></marker>
 </defs>`;
 const badge=document.getElementById('badge'),sideEl=document.getElementById('side'),chip=document.getElementById('chip'),sub=document.getElementById('sidesub');
@@ -589,7 +601,7 @@ function loop(now){if(!playing)return;const dt=Math.max(0,now-last);last=now;
   if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
   else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
   raf=requestAnimationFrame(loop)}
-document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} else if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
 document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
 document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
 document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};

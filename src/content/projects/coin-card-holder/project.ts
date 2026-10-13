@@ -597,7 +597,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'practice-imprint',
         title: 'Vyzkoušejte obtisk patice na druhém odřezku',
         body: 'Druhý odřezek položte rubem na hlavičku osazenou na prvním a pevně přitiskněte, aby se na rubu obtiskla. Střed obtisku propíchněte šídlem skrz, aby byl vidět i na líci – tam půjde klobouček. Jak silně přitlačit, zjistíte jen zkouškou. Stejně budete v lekci 8 hledat místo kloboučku na jazyku.',
-        animationLinks: [animationLink('snapSetter', 'C1')],
+        animationLinks: [animationLink('snap', 'A5'), animationLink('snapSetter', 'C1')],
         media: [],
       },
       {
@@ -605,7 +605,8 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Osaďte kloboučkovou polovinu',
         body: 'Na druhém odřezku osaďte klobouček se zdířkou do propíchnutého bodu, aplikátorem a paličkou jako dřík: klobouček na líc, zdířku na rub. Když návod vyžaduje otvor a neuvádí velikost, začněte výsečníkem 2 mm, a jen když trn neprojde, vezměte 3 mm. Zacvakněte druk na dřík a zkontrolujte, že drží, jde zavřít i otevřít a okraje odřezků sedí jako při obtisku. Zapište si, který výsečník sedl (nebo žádný).',
         animationLinks: [
-          animationLink('snap', 'A5'),
+          animationLink('snap', 'A6'),
+          animationLink('snap', 'A7'),
           animationLink('snapSetter', 'C2'),
           animationLink('snapSetter', 'C3'),
           animationLink('snapSetter', 'D1'),
@@ -638,7 +639,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'measure-flange',
         title: 'Změřte přírubu patice',
         body: 'Na rubu prvního odřezku změřte průměr příruby dříku (měřítkem nebo pravítkem). Smí mít nejvýš 11 mm, jinak by na rubu tlačila na karty. Když má víc, tento druk na pás neosazujte a vyzkoušejte alternativu z vybavení (Stoklasa Ø 13,5 mm): osaďte ji na odřezek a změřte i její přírubu (ověřte na odřezku).',
-        animationLinks: [animationLink('snap', 'A7'), animationLink('snapSetter', 'D2')],
+        animationLinks: [animationLink('snap', 'A8'), animationLink('snapSetter', 'D2')],
         media: [],
         records: [
           {
@@ -1030,8 +1031,8 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'transfer-face',
         title: 'Přilepte šablonu na líc',
         animationLinks: [
-          animationLink('stripTransfer', 'A2'),
           animationLink('stripTransfer', 'A1'),
+          animationLink('stripTransfer', 'A2'),
         ],
         body: 'Šablonu vystřihněte nahrubo s okrajem 1–2 cm. Položte ji na LÍC kůže – jinak než u pouzdra na karty, kde ležela na rubu. Přilepte ji maskovací páskou z několika stran, jen na okrajích mimo čáru řezu. Pásku nejdřív zkuste na odřezku – na líci může nechat stopu. Šablona se rozřeže, na každý pás vytiskněte novou (odkaz pod krokem).',
         printLink: 'pattern-sheets',

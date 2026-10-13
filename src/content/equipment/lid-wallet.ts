@@ -589,7 +589,7 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
     ],
     cautions: [
       'Kůži měřte na několika místech kusu (krok 0 postupu).',
-      'Analogová: celé milimetry čtěte na stupnici vlevo od nuly nonia, desetiny u čárky nonia, která se kryje s čárkou stupnice. Ukazuje to animace „Jak měřit posuvkou“ u lekce 1.',
+      'Analogová: celé milimetry udává poslední čárka hlavní stupnice, kterou nula nonia minula, desetiny u čárky nonia, která se kryje s čárkou stupnice. Ukazuje to animace „Jak měřit posuvkou“ u lekce 1.',
       'Rozložené bankovky jsou delší než 150 mm: délku měřte ocelovým pravítkem, posuvkou jen tloušťku a rozměry složené bankovky.',
     ],
     avoid: [],

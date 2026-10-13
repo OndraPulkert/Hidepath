@@ -516,7 +516,7 @@ add('D','3. Obě nitě utáhněte stejnou silou','Obě nitě utáhněte stejnou 
   let s=clipMain(piece('lic')+elevMove(FWD,0,u)+secBase()+tpath(P([HX(0),RB],[HX(0),MID]),1)+tpath(P([HX(0),MID],[HX(0),LF]),0)+secMove(FWD,0,u))+secTag();
   s+=viewTag('POHLED NA LÍC · v měřítku');
   const pa=seg(t,.15,.7);
-  if(pa>0&&pa<1){s+=arrow(HX(1)+5,LF+12,HX(1)+10,LF+16,'var(--accent)',.5)+arrow(HX(1)+5,RB-12,HX(1)+10,RB-16,'var(--accent)',.5)}
+  if(pa>0&&pa<1){s+=arrow(HX(1)+5,LF+11,HX(1)+11,LF+12.5,'var(--accent)',.5)+arrow(HX(1)+5,RB-11,HX(1)+11,RB-12.5,'var(--accent)',.5)}
   if(t>.75) s+=pill(4,87,'oba stehy dotažené, bez smyčky','tok');
   // malá ukázka smyčky
   let ib=notes([['stejnou silou','t'],['na obě nitě','t']],16,5.2);
@@ -673,7 +673,7 @@ add('G','Kontrola: rovná řada na rubu','Otočte díl. Rub bývá méně pravid
 add('G','Kontrola: slepené díly a šev','Díly jsou slepené a hrany lícují bez posunu. Stehy na líci jsou stejně skloněné a stejně utažené, žádný netvoří smyčku. Konec je ukončený zpětnými stehy a nit odstřižená na rubu. V projektu 01 pak totéž na pouzdře v lekci 6.',9000,t=>{
   let s=clipMain(piece('lic',{leftEnd:true})+(()=>{let r='';for(let j=0;j<7;j++){const [a,b]=FWD[j];r+=stitchLic(a,b,j%2)}return r})())+viewTag('LÍC · hotový šev');
   s+=`<g opacity="${f(seg(t,.1,.2))}">${pill(42,SEAM+14,'stejný sklon · stejné utažení','tok','middle')}</g>`;
-  const ck=[['slepené, hrany',.25,1],['lícují',.25,0],['stejný sklon',.4,1],['stejné utažení,',.55,1],['bez smyčky',.55,0],['konec: zpětné',.7,1],['stehy, nit',.7,0],['odstřižená na rubu',.7,0]];
+  const ck=[['slepené, hrany',.25,1],['lícují',.25,0],['stejný sklon',.4,1],['stejné utažení,',.55,1],['bez smyčky',.55,0],['konec: zpětné',.7,1],['stehy, na rubu',.7,0],['nit odstřižená',.7,0]];
   let ib='';ck.forEach(([tx,at,tk],i)=>{const o=seg(t,at,at+.08);ib+=`<g opacity="${f(o)}">${tk?tick(91.5,16+i*5.6):''}${lbl(96,17.5+i*5.6,tx,'t')}</g>`});
   ib+=`<g opacity="${f(seg(t,.86,.96))}">${notes([['projekt 01, dál:','t'],['lekce 6 pouzdro']],66,5.2)}</g>`;
   s+=inset('KONTROLA',ib);
@@ -726,7 +726,7 @@ function loop(now){if(!playing)return;const dt=Math.max(0,now-last);last=now;
   if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
   else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
   raf=requestAnimationFrame(loop)}
-document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&idx===S.length-1&&tt>=1){go(0,0)} else if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
 document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
 document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
 document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};

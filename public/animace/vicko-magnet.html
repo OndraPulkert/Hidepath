@@ -145,8 +145,12 @@ svg .brush{fill:var(--glue);stroke:var(--woodedge);stroke-width:1;vector-effect:
 .astage{display:grid;gap:10px;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);align-items:start}
 .astage figure{margin:0;min-width:0}
 @media (max-width:760px){.astage{grid-template-columns:minmax(0,1fr)}}
-.aprog{height:4px;background:var(--line);border-radius:2px;overflow:hidden}
-.aprog i{display:block;height:100%;width:0;background:var(--accent)}
+.aprog{display:flex;gap:2px;height:6px}
+/* klik na obdélníček kroku = přehrát od toho kroku; větší plocha pro prst */
+.aprog span{flex:1;background:var(--line);border-radius:2px;position:relative;cursor:pointer}
+.aprog span b{position:absolute;inset:0;background:var(--lic);border-radius:inherit;transform-origin:left;transform:scaleX(0)}
+.aprog span::after{content:"";position:absolute;left:0;right:0;top:-9px;bottom:-9px}
+.aprog span:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .acap{font-size:14.5px;min-height:4.8em;max-width:80ch}
 .acap b{font-weight:600}
 .abtn button[data-a=play]{min-width:96px}
@@ -193,7 +197,7 @@ svg .brush{fill:var(--glue);stroke:var(--woodedge);stroke-width:1;vector-effect:
       <figure><div class="fig"><div data-fig="aTop"></div></div><figcaption>Shora na rub F na tvrdé desce, v měřítku. B stojí nahoru, je vidět jen její hrana.</figcaption></figure>
       <figure><div class="fig"><div data-fig="aSide"></div></div><figcaption>Z boku: F rubem nahoru na desce, B s D2 stojí nahoru. <b>Tloušťky zvětšené 3×</b>, pomůcky schematické.</figcaption></figure>
     </div>
-    <div class="aprog" aria-hidden="true"><i></i></div>
+    <div class="aprog" role="group" aria-label="Kroky animace"></div>
     <p class="acap" aria-live="polite"></p>
     <div class="btnrow abtn">
       <button type="button" data-a="restart" aria-label="Přehrát od začátku">↺ Znovu</button>
@@ -213,7 +217,7 @@ svg .brush{fill:var(--glue);stroke:var(--woodedge);stroke-width:1;vector-effect:
       <figure><div class="fig"><div data-fig="bTop"></div></div><figcaption>Konec jazýčku shora, v měřítku (šířka 20). Nářadí je schematické.</figcaption></figure>
       <figure><div class="fig"><div data-fig="bSec"></div></div><figcaption id="bSecCap">Řez v ose jazýčku. <b>Tloušťky zvětšené 3×</b>.</figcaption></figure>
     </div>
-    <div class="aprog" aria-hidden="true"><i></i></div>
+    <div class="aprog" role="group" aria-label="Kroky animace"></div>
     <p class="acap" aria-live="polite"></p>
     <div class="btnrow abtn">
       <button type="button" data-a="restart" aria-label="Přehrát od začátku">↺ Znovu</button>
@@ -394,7 +398,7 @@ function figATop() {
   const vb = [-9, -12, 110, 88];
   const P_ = M.plate, W = M.W;
   let s = '';
-  s += Rect(0, -3.2, W, 0, 'kzp', 'opacity=".55"') + T(W / 2, -1.6, 'ohyb dna, B stojí nahoru', { a: 'middle', bl: 'middle', c: 'm', k: 0.85 });
+  s += Rect(0, -3.2, W, 0, 'kzp', 'opacity=".55"') + T(W / 2, -4.2, 'ohyb dna, B stojí nahoru', { a: 'middle', bl: 'hanging', c: 'm', k: 0.85 });
   s += Rect(-5, 0, W + 5, M.frontTopY + 3, 'pe');
   s += Poly(fPoly(), 'rubf');
   if (at(3, 0.08, 0.6) < 0.3) s += T(12, M.frontTopY - 4, 'rub F', { c: 'm' });
@@ -427,7 +431,7 @@ function figATop() {
     s += G(SM(0.1, 0.25, u), TL(8, 18, ['G2 x 4–97', 'y 2–26,', 'přes plíšek'], { c2: 'm' }));
     s += G(SM(0.35, 0.5, u), TL(9, 48, ['G2b 1 mm', 'páska z obou', 'stran, párátko'], { c2: 'm' }) + Ln(8.5, 49, 5, 49));
     s += G(SM(0.35, 0.5, u), T(92, 48, 'G2b', { a: 'end' }) + Ln(92.5, 49, 96, 49));
-    s += G(SM(0.55, 0.7, u), TL(55, 41, ['Totéž na rubu D1', '(list 3): G2 24 mm', 'zdola, G2b 1 mm'], { c2: 'm' }));
+    s += G(SM(0.55, 0.7, u), TL(54.5, 42, ['Totéž na rubu D1', '(list 3): G2 24 mm', 'zdola, G2b 1 mm'], { c2: 'm', k: 0.85 }));
   }
   // D1
   if (dP > 0.01) {
@@ -923,13 +927,15 @@ function figBDrySec() {
 /* ---------- ovládání animací ---------- */
 const RM = window.matchMedia ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
 function makeAnim(root, A, steps, figs, part) {
-  const cap = root.querySelector('.acap'), bar = root.querySelector('.aprog i'), bPlay = root.querySelector('[data-a=play]');
+  const cap = root.querySelector('.acap'), prog = root.querySelector('.aprog'), bPlay = root.querySelector('[data-a=play]');
   const n = steps.length;
   let raf = 0, last = 0, one = false, lastCap = -1, auto = false;
   A.playing = false;
+  prog.innerHTML = steps.map((_, k) => `<span tabindex="0" role="button" title="Přehrát od kroku ${part}${k + 1}" aria-label="Přehrát od kroku ${part}${k + 1}"><b></b></span>`).join('');
+  const bars = [...prog.querySelectorAll('b')];
   function ui() {
     if (lastCap !== A.i) { cap.innerHTML = `<b>Krok ${part}${A.i + 1} z ${n}: ${steps[A.i].t}.</b> ${steps[A.i].c}`; lastCap = A.i; }
-    bar.style.width = (((A.i + A.u) / n) * 100).toFixed(2) + '%';
+    bars.forEach((b, k) => { b.style.transform = `scaleX(${k < A.i ? 1 : k > A.i ? 0 : Math.min(1, A.u).toFixed(3)})`; });
     const lbl = A.playing ? '❚❚ Pauza' : '▶ Přehrát';
     if (bPlay.textContent !== lbl) bPlay.textContent = lbl;
     bPlay.setAttribute('aria-label', A.playing ? 'Pozastavit animaci' : 'Přehrát animaci');
@@ -947,7 +953,9 @@ function makeAnim(root, A, steps, figs, part) {
   }
   function play(single) { cancelAnimationFrame(raf); A.playing = true; one = single; last = 0; raf = requestAnimationFrame(tick); ui(); }
   const act = {
-    play() { if (A.playing) return stop(); if (A.i === n - 1 && A.u >= 1) { A.i = 0; A.u = 0; } play(false); },
+    // Zastavený krok na konci (kotva #A5, Zpět) se přehraje znovu, i poslední; od začátku je ↺ Znovu.
+    play() { if (A.playing) return stop(); if (A.u >= 1) A.u = 0; play(false); },
+    from(k) { stop(); auto = true; A.i = k; A.u = 0; if (RM.matches) { A.u = 1; draw(); } else { draw(); play(false); } },
     next() {
       stop();
       if (A.u >= 1) { if (A.i >= n - 1) return; A.i++; A.u = 0; }
@@ -957,6 +965,10 @@ function makeAnim(root, A, steps, figs, part) {
     restart() { stop(); A.i = 0; A.u = 0; draw(); if (!RM.matches) play(false); },
   };
   root.querySelectorAll('[data-a]').forEach((b) => b.addEventListener('click', () => act[b.dataset.a]()));
+  prog.querySelectorAll('span').forEach((sp, k) => {
+    sp.addEventListener('click', () => act.from(k));
+    sp.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act.from(k); } });
+  });
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((es) => { es.forEach((e) => { if (e.isIntersecting && !auto) { auto = true; io.disconnect(); if (!RM.matches && !A.playing && A.i === 0 && A.u === 0) play(false); } }); }, { threshold: 0.5 });
     io.observe(root.querySelector('.astage'));
