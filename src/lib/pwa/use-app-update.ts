@@ -1,5 +1,7 @@
 import { useRegisterSW } from 'virtual:pwa-register/react';
 
+import { applyUpdate } from '@/lib/pwa/apply-update';
+
 export interface AppUpdateState {
   /** Service worker má připravenou novou verzi a čeká na potvrzení. */
   updateAvailable: boolean;
@@ -27,7 +29,15 @@ export function useAppUpdate(): AppUpdateState {
   return {
     updateAvailable: needRefresh,
     offlineReady,
-    applyUpdate: () => updateServiceWorker(true),
+    applyUpdate: () =>
+      applyUpdate({
+        getWaiting: async () =>
+          'serviceWorker' in navigator
+            ? (await navigator.serviceWorker.getRegistration())?.waiting
+            : null,
+        skipWaiting: () => updateServiceWorker(true),
+        reload: () => window.location.reload(),
+      }),
     dismissOfflineReady: () => {
       setOfflineReady(false);
     },
