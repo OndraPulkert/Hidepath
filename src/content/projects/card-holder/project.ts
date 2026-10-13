@@ -82,7 +82,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'check-chisels',
         title: 'Zkontrolujte vidličky (pokud už je máte)',
-        body: 'Kroky 3 až 5 udělejte, až budete mít vidličky, jehly a nit doma; do té doby pokračujte lekcí 2. Přiložte nejdelší vidličky (se 4 nebo 6 hroty) hroty na odřezek a přitiskněte rukou, bez paličky. Pravítkem změřte vzdálenost první a poslední značky a vydělte ji počtem mezer mezi značkami: musí vyjít 3,85–4 mm. Odchylku asi do 0,1 mm způsobí měření pravítkem, ne vidlička.',
+        body: 'Kroky 3 až 5 udělejte, až budete mít vidličky, jehly a nit doma; do té doby pokračujte lekcí 2. Nic neřežte, vše zkoušejte v rohu druhé tréninkové A5, asi 2 cm od hran (první A5 nechte celou na lekci 2). Přiložte nejdelší vidličky (se 4 nebo 6 hroty) hroty na kůži a přitiskněte rukou, bez paličky. Pravítkem změřte vzdálenost první a poslední značky a vydělte ji počtem mezer mezi značkami: musí vyjít 3,85–4 mm. Odchylku asi do 0,1 mm způsobí měření pravítkem, ne vidlička.',
         records: [
           {
             kind: 'number',
@@ -122,7 +122,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'first-strike',
         title: 'Zkuste jeden úder',
-        body: 'Odřezek položte lícem nahoru na tvrdou desku, vidličky postavte kolmo, držte je u spodku a jednou pevně udeřte paličkou. Hroty musí projít skrz. Jde jen o to vyzkoušet, kolik síly je potřeba.',
+        body: 'Ve stejném rohu druhé tréninkové A5, vedle značek z kroku 3: kůži položte lícem nahoru na tvrdou desku na ručníku, vidličky postavte kolmo, držte je u spodku a jednou pevně udeřte paličkou. Hroty musí projít skrz. Jde jen o to vyzkoušet, kolik síly je potřeba.',
         media: [],
       },
     ],
@@ -146,7 +146,7 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         slug: 'first-strike-done',
-        title: 'Jedním úderem prošly hroty skrz odřezek.',
+        title: 'Jedním úderem prošly hroty skrz kůži.',
         required: false,
       },
     ],
