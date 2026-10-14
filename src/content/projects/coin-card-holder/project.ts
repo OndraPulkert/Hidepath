@@ -280,7 +280,7 @@ export const lessons: readonly LessonDefinition[] = [
       'mince, na kterou stavíte (výchozí 50 Kč)',
       'tenký karton (krabice od cereálií) a lepidlo v tyčince na výtisk na značky a šablonu s oknem',
       'potravinová fólie',
-      'houbička a voda',
+      'houbička nebo rozprašovač a voda',
       'tužka HB nebo 2B',
       'špalík pod důlek s rovným koncem: užší než otvor formy (pod 31,5 mm, u mince 40 mm pod 44 mm) a širší než okno (přes 20 mm, u mince 40 mm přes 32 mm); u mince 50 Kč třeba kus kulaté tyčky o průměru 21–31 mm (průměr změřte), zkrácený tak, aby se dna důlku na formě jen dotýkal (ověřte na odřezku)',
     ],
@@ -339,7 +339,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'wet',
         title: 'Navlhčete kůži',
-        body: 'Kůži navlhčete houbičkou, nemáčejte ji. Tvarujte, až povrch začne znovu mírně světlat.',
+        body: 'Kůži navlhčete houbičkou nebo jemnou mlhou z rozprašovače, celý kus rovnoměrně, nemáčejte ji. Tvarujte, až povrch začne znovu mírně světlat.',
         animationLinks: [animationLink('kapsa', 'D1')],
         media: [],
       },
@@ -1251,7 +1251,7 @@ export const lessons: readonly LessonDefinition[] = [
       'kůže 1,2 mm na kapsu, aspoň 57,5 × 57,5 mm (u mince 40 mm 70 × 70 mm), i když je pás z 1,5 mm',
       'mince (výchozí 50 Kč) a potravinová fólie',
       'nit 0,6 mm, asi 0,8 m (23 otvorů, u mince 40 mm 31)',
-      'houbička a voda',
+      'houbička nebo rozprašovač a voda',
       'tužka HB nebo 2B',
       'tenký karton (krabice od cereálií) a lepidlo v tyčince, jen když šablonu s oknem nebo výtisk na značky z lekce 2 nebo 2. výtisk listu PÁS z lekce 5 nemáte',
     ],
@@ -1301,7 +1301,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'form-dimple',
         title: 'Vytvarujte důlek na formě',
-        body: 'Jako v lekci 2: minci zabalte do fólie, kůži navlhčete houbičkou a počkejte, až povrch začne znovu mírně světlat. Položte ji lícem dolů na formu (zaoblenou hranou otvoru nahoru), osy na rubu na osy desky, a minci na rub nad otvor. Přiklopte víkem a rovnoměrně stáhněte dvěma svěrkami proti sobě. Nechte úplně zaschnout, nejlépe přes noc. Zkontrolujte: okraj důlku je bez zvrásnění a mince vložená z rubu nad okolní rub nevyčnívá.',
+        body: 'Jako v lekci 2: minci zabalte do fólie, kůži navlhčete houbičkou nebo jemnou mlhou z rozprašovače (celý kus rovnoměrně) a počkejte, až povrch začne znovu mírně světlat. Položte ji lícem dolů na formu (zaoblenou hranou otvoru nahoru), osy na rubu na osy desky, a minci na rub nad otvor. Přiklopte víkem a rovnoměrně stáhněte dvěma svěrkami proti sobě. Nechte úplně zaschnout, nejlépe přes noc. Zkontrolujte: okraj důlku je bez zvrásnění a mince vložená z rubu nad okolní rub nevyčnívá.',
         animationLinks: [animationLink('kapsa', 'D1')],
         waits: [
           {
