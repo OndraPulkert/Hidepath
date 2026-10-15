@@ -205,7 +205,8 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'place-ruler',
         title: 'Přiložte pravítko',
-        body: 'Hranu pravítka položte přesně na linii, pravítkem zakryjte díl, který chcete zachovat. Když nůž ujede, poškodí jen odpad. Pravítko přitlačte roztaženými prsty, daleko od hrany.',
+        body: 'Pravítko položte na díl, který chcete zachovat – když nůž ujede, poškodí jen odpad. Nastavte ho čepelí, ne od oka: hrot nože zapíchněte do linie na začátku a pravítko k čepeli přisuňte, totéž na konci linie. Pravítko přitlačte roztaženými prsty, daleko od hrany.',
+        animationLinks: [animationLink('rulerCut', 'B1')],
         media: [
           {
             id: 'l2-ruler-hand',
@@ -219,7 +220,8 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'cut',
         title: 'Řežte na dva až tři tahy',
-        body: 'Čepel opřete o hranu pravítka. Nůž sklopte asi na 45° ve směru tahu, do strany ho nenaklánějte. První tah veďte lehce, jen prořízne líc. Druhým, případně třetím tahem dořízněte. Řežte od volné ruky, nikdy k prstům na pravítku.',
+        body: 'Čepel opřete o hranu pravítka. Nůž sklopte asi na 45° ve směru tahu, do strany ho nenaklánějte. První tah veďte lehce, jen nařízne povrch. Druhým, případně třetím tahem dořízněte. Řežte od volné ruky, nikdy k prstům na pravítku.',
+        animationLinks: [animationLink('rulerCut', 'C1')],
         media: [
           {
             id: 'l2-cut-video',

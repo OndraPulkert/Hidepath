@@ -26,20 +26,14 @@ export function BladeAngleIllustration({ title }: { title: string }) {
         <path d="M110 88 L70 48 L90 40 L122 72" fill="#FBF8F2" />
       </g>
       {/* úhel 45° */}
-      <path d="M150 128 L200 128" stroke="#2B211C" strokeWidth="1" strokeDasharray="3 3" />
-      <path d="M180 128 A30 30 0 0 0 171 107" stroke="#7E4423" strokeWidth="1.5" fill="none" />
-      <text
-        x="186"
-        y="112"
-        fontFamily="ui-monospace, Menlo, monospace"
-        fontSize="11"
-        fill="#7E4423"
-      >
+      <path d="M150 128 L100 128" stroke="#2B211C" strokeWidth="1" strokeDasharray="3 3" />
+      <path d="M120 128 A30 30 0 0 1 128.8 106.8" stroke="#7E4423" strokeWidth="1.5" fill="none" />
+      <text x="92" y="120" fontFamily="ui-monospace, Menlo, monospace" fontSize="11" fill="#7E4423">
         45°
       </text>
       {/* směr řezu */}
       <path
-        d="M230 100 L268 100"
+        d="M268 100 L230 100"
         stroke="#33483B"
         strokeWidth="2"
         strokeLinecap="round"
@@ -68,7 +62,7 @@ export function BladeAngleIllustration({ title }: { title: string }) {
         </marker>
       </defs>
       {/* kolmost – pohled zepředu (malý inset) */}
-      <g transform="translate(24 20)">
+      <g transform="translate(226 14)">
         <rect
           x="0"
           y="0"

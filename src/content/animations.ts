@@ -31,6 +31,8 @@ import { type AnimationLink } from '@/content/schema';
  * - posuvka (`#A`–`#D`): stejně jako kapsa-prisiti; analogová posuvka s noniem 0,1 mm, měření
  *   tloušťky kůže a průměr z více míst (příklad z Víčka). Odkazují na ni kroky, kde se posuvkou
  *   měří tloušťka kůže, a pole tloušťky ve „Váš pásek“.
+ * - rez-nozem (`#A`–`#C`): stejně jako kapsa-prisiti; řez odlamovacím nožem podle ocelového
+ *   pravítka, pravítko nastavené čepelí (lekce 2 pouzdra na karty), společné pro všechny projekty.
  * - ctverec-forma (`#A`–`#C`): stejně jako kapsa-prisiti; čtverec 70 × 70 kolem vyvrtaného otvoru
  *   formy jen pravítkem (lekce 2 pouzdra s mincí), příklad otvor Ø 32 mm.
  *
@@ -764,6 +766,26 @@ export const animationPages = {
       A: ['Změřte průměr otvoru', 'Spočítejte odstup od otvoru'],
       B: ['Udělejte značky na osách', 'Odměřte rohy'],
       C: ['Spojte rohy', 'Zkontrolujte úhlopříčky'],
+    },
+  },
+  rulerCut: {
+    path: '/animace/rez-nozem.html',
+    title: 'Řez podle pravítka',
+    buttonText: 'Jak řezat podle pravítka',
+    sections: {
+      A: 'Část A – proč řez ujede',
+      B: 'Část B – pravítko podle čepele',
+      C: 'Část C – řez',
+    },
+    steps: {
+      A: ['Pravítko od oka', 'Nůž nakloněný do strany'],
+      B: [
+        'Hrot do čáry na začátku',
+        'Přisuňte pravítko k čepeli',
+        'Totéž na konci čáry',
+        'Přitlačte pravítko',
+      ],
+      C: ['Držení nože', 'První lehký tah a kontrola', 'Dořízněte'],
     },
   },
 } as const satisfies Record<
