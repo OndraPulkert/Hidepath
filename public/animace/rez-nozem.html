@@ -270,7 +270,7 @@ function sideView(op=1){
   s+=arrow(126,40.5,100,40.5,'var(--accent)',.45)+lbl(100,45.5,'směr tahu','ts');
   return O(op,s);
 }
-add('C','Držení nože','Čepel opřete o hranu pravítka. Nůž sklopte asi na 45° ve směru tahu (rukojeť jde napřed), do strany ho nenaklánějte – čepel je k podložce kolmo. Zápěstí držte pevně a táhněte celou paží, pomalu a stejnou rychlostí. Hranu pravítka mějte dobře osvětlenou, ne ve stínu.',11000,t=>{
+add('C','Držení nože','Plochou stranu čepele přiložte k boku pravítka a celý tah ji k němu lehce přitlačujte. Nůž sklopte asi na 45° ve směru tahu (rukojeť jde napřed), do strany ho nenaklánějte – čepel je k podložce kolmo. Zápěstí držte pevně a táhněte celou paží, pomalu a stejnou rychlostí. Hranu pravítka mějte dobře osvětlenou, ne ve stínu.',11000,t=>{
   let s=mat()+leather()+line()+rulerTop(LX-.6,LX-.6)+hand(LX-8,36)+knifeTop(LX,TOP+6);
   let p=lbl(90.5,12,'Z BOKU','ts')+sideView(seg(t,.08,.2));
   // řez napříč: kolmo

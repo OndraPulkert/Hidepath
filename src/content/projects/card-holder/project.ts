@@ -220,7 +220,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'cut',
         title: 'Řežte na dva až tři tahy',
-        body: 'Čepel opřete o hranu pravítka. Nůž sklopte asi na 45° ve směru tahu, do strany ho nenaklánějte. První tah veďte lehce, jen nařízne povrch. Druhým, případně třetím tahem dořízněte. Zápěstí držte pevně, táhněte celou paží, pomalu a stejnou rychlostí; hranu pravítka mějte dobře osvětlenou. Řežte od volné ruky, nikdy k prstům na pravítku.',
+        body: 'Plochou stranu čepele přiložte k boku pravítka a celý tah ji k němu lehce přitlačujte. Nůž sklopte asi na 45° ve směru tahu, do strany ho nenaklánějte. První tah veďte lehce, jen nařízne povrch. Druhým, případně třetím tahem dořízněte. Zápěstí držte pevně, táhněte celou paží, pomalu a stejnou rychlostí; hranu pravítka mějte dobře osvětlenou. Řežte od volné ruky, nikdy k prstům na pravítku.',
         animationLinks: [animationLink('rulerCut', 'C1')],
         media: [
           {
