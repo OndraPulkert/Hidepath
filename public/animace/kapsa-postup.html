@@ -127,7 +127,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
   </div>
   <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
 </section>
-<p class="note">Lekce 2 (forma a zkouška na odřezku) a lekce 6 (kapsa z kůže 1,2 mm) – postup je stejný. Okno Ø 20 do kapsy sekejte, jen když vám v lekci 2 vyšla zkouška.</p>
+<p class="note">Lekce 2 (forma a zkouška na odřezku) a lekce 6 (kapsa z kůže 1,2 mm) – postup je stejný. Okno Ø 22 do kapsy sekejte, jen když vám v lekci 2 vyšla zkouška.</p>
 </div>
 
 <script>
@@ -138,7 +138,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 // List v A1 a B1 se kreslí posunutý o (20 − P1.x, 20 − P1.y). Konce os 4 mm vně obrysu.
 const OUT="M20 14 L42.5 14 A10 10 0 0 1 52.5 24 L52.5 50 A6 6 0 0 1 46.5 56 L16 56 A6 6 0 0 1 10 50 L10 24 A10 10 0 0 1 20 14 Z";
 const SEAM="M13.5 24 L13.5 50 A2.5 2.5 0 0 0 16 52.5 L46.5 52.5 A2.5 2.5 0 0 0 49 50 L49 24";
-const CX=31.25, CY=34.75, R_WIN=10, R_COIN=13.75, R_FOOT=15.75;
+const CX=31.25, CY=34.75, R_WIN=11, R_COIN=13.75, R_FOOT=15.75;
 const AXE=[[6,34.75],[56.5,34.75],[31.25,10],[31.25,60]];
 // 23 seam dots in seam order (left side down, bottom, right side up)
 const DOTS=[[13.5,25.177],[13.5,29.177],[13.5,33.177],[13.5,37.177],[13.5,41.177],[13.5,45.177],[13.5,49.177],[15.261,52.388],
@@ -295,7 +295,7 @@ function sec(o){
     const cid=nid('w');
     const p=`M${x0} -.6 L-17 -.6 C-15.2 -.6 -15.4 ${f(d)} -13.2 ${f(d)} L13.2 ${f(d)} C15.4 ${f(d)} 15.2 -.6 17 -.6 L${x1} -.6`;
     let clip='';
-    if(l.window){s+=`<clipPath id="${cid}"><rect x="-99" y="-50" width="${99-10}" height="100"/><rect x="10" y="-50" width="89" height="100"/></clipPath>`;clip=`clip-path="url(#${cid})"`}
+    if(l.window){s+=`<clipPath id="${cid}"><rect x="-99" y="-50" width="${99-R_WIN}" height="100"/><rect x="${R_WIN}" y="-50" width="${99-R_WIN}" height="100"/></clipPath>`;clip=`clip-path="url(#${cid})"`}
     const col=l.side==='rubUp'?'var(--rub)':'var(--lic)';
     s+=`<g ${clip}><path d="${p}" fill="none" stroke="var(--lic-d)" stroke-width="1.5"/><path d="${p}" fill="none" stroke="var(--rub)" stroke-width="1.2"/><path d="${p}" fill="none" stroke="var(--lic)" stroke-width=".55" transform="translate(0 .32)"/>${l.wet?`<path d="${p}" fill="none" stroke="var(--wet)" stroke-width="1.2" opacity="${f(l.wet)}"/>`:''}</g>`;
   }
@@ -310,7 +310,7 @@ function sec(o){
       s+=`<rect x="${xl-.6}" y="${T}" width="1.2" height="${f(4+ (1-o.clamps)*3)}" fill="var(--steel)"/><rect x="${xl-6}" y="${f(T+(1-o.clamps)*3)}" width="12" height="1.4" fill="var(--steel)"/>`;
       s+=`<rect x="${xl-4}" y="${T+8}" width="8" height="1.6" rx=".5" fill="var(--steel-d)"/>`;
     }}
-  if(o.punch){const p=o.punch;s+=`<path d="M-10 ${f(p.y)} L-10 ${f(p.y-10)} L-9.1 ${f(p.y-10)} L-9.1 ${f(p.y-.8)} Z M10 ${f(p.y)} L10 ${f(p.y-10)} L9.1 ${f(p.y-10)} L9.1 ${f(p.y-.8)} Z" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-10.4" y="${f(p.y-12)}" width="20.8" height="2" rx=".4" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-3" y="${f(p.y-26)}" width="6" height="14" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-4.5" y="${f(p.y-28)}" width="9" height="2.4" rx=".6" fill="var(--steel-d)"/>`}
+  if(o.punch){const p=o.punch;s+=`<path d="M-11 ${f(p.y)} L-11 ${f(p.y-10)} L-10.1 ${f(p.y-10)} L-10.1 ${f(p.y-.8)} Z M11 ${f(p.y)} L11 ${f(p.y-10)} L10.1 ${f(p.y-10)} L10.1 ${f(p.y-.8)} Z" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-11.4" y="${f(p.y-12)}" width="22.8" height="2" rx=".4" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-3" y="${f(p.y-26)}" width="6" height="14" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-4.5" y="${f(p.y-28)}" width="9" height="2.4" rx=".6" fill="var(--steel-d)"/>`}
   return s;
 }
 function inset(title,body,{x=86,y=6,w=47,h=78}={}){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" class="panelbox"/><text x="${x+3}" y="${y+5.5}" class="ts" style="font-weight:700;letter-spacing:.06em">${title}</text>${body}`}
@@ -531,7 +531,7 @@ add('C','Otočte kůži a narýsujte osy na rubu','Kůži otočte rubem nahoru. 
   s+=G('',rightNote([['otočit na RUB','tw'],['spojit konce os','ts'],['pravítko + tužka','ts'],['HB/2B, lehce,','ts'],['až k okrajům kůže','ts']]),`opacity="${f(seg(t,.25,.35))}"`);
   return s;
 },'flip');
-// Výtisk na šablonu vystřižený přesně po obrysu; s hole=1 má vyseknuté okno Ø 20 (otvor přesně na vytištěné kružnici).
+// Výtisk na šablonu vystřižený přesně po obrysu; s hole=1 má vyseknuté okno Ø 22 (otvor přesně na vytištěné kružnici).
 const WIN_SUB=`M${CX+R_WIN} ${CY} A${R_WIN} ${R_WIN} 0 1 0 ${CX-R_WIN} ${CY} A${R_WIN} ${R_WIN} 0 1 0 ${CX+R_WIN} ${CY} Z`;
 // Šablona s oknem: výtisk nalepený na tenkém kartonu (hnědá hrana).
 function tmpl(hole=0){
@@ -539,7 +539,7 @@ function tmpl(hole=0){
   return `<clipPath id="${id}"><path d="${d}" clip-rule="evenodd"/></clipPath><path d="${d}" fill="var(--paper)" fill-rule="evenodd" stroke="var(--board)" stroke-width=".6"/>`+G('',printKapsa({axClip:1}),`clip-path="url(#${id})"`);
 }
 // Kruhový výsečník v řezu (spodní břit v y = 0) a palička nad ním.
-function punchSide(){return `<path d="M-10 0 L-10 -10 L-9.1 -10 L-9.1 -.8 Z M10 0 L10 -10 L9.1 -10 L9.1 -.8 Z" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-10.4" y="-12" width="20.8" height="2" rx=".4" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-3" y="-26" width="6" height="14" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-4.5" y="-28" width="9" height="2.4" rx=".6" fill="var(--steel-d)"/>`}
+function punchSide(){return `<path d="M-11 0 L-11 -10 L-10.1 -10 L-10.1 -.8 Z M11 0 L11 -10 L10.1 -10 L10.1 -.8 Z" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-11.4" y="-12" width="22.8" height="2" rx=".4" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-3" y="-26" width="6" height="14" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-4.5" y="-28" width="9" height="2.4" rx=".6" fill="var(--steel-d)"/>`}
 function malletSide(){return `<path d="M7 -3.5 L24 -6" stroke="var(--mallet-d)" stroke-width="1.6" stroke-linecap="round"/><rect x="-8" y="-7" width="16" height="7" rx="1.6" fill="var(--mallet)" stroke="var(--mallet-d)" stroke-width=".25"/>`}
 // C2, 1. fáze: výtisk nalepit na tenký karton a vystřihnout přesně po obrysu kapsy (u = 0…1)
 function tmplCut(u){
@@ -559,7 +559,7 @@ function tmplCut(u){
   return s;
 }
 function notes2(lines,y0,step){return lines.map((l,i)=>lbl(89,y0+i*step,l[0],l[1]||'ts')).join('')}
-add('C','Vysekněte okno do výtisku na šablonu','Výtisk na šablonu nalepte lepidlem v tyčince na tenký karton (krabice od cereálií) – podle šablony budete obkreslovat obrys i okno. Vystřihněte ho přesně po obrysu kapsy (plná čára se zaoblenými rohy). Na děrovací desce do něj vysekněte okno výsečníkem Ø 20 mm (u mince 40 mm Ø 32 mm), břit přesně na vytištěné kružnici. Pro záložní okno Ø 18 mm vytiskněte list Kapsa – záložní okno Ø 18 mm, nalepte ho na tenký karton a vysekněte Ø 18 mm. V lekci 6 použijte šablonu z lekce 2 – když ji máte, krok přeskočte.',11000,T0=>{
+add('C','Vysekněte okno do výtisku na šablonu','Výtisk na šablonu nalepte lepidlem v tyčince na tenký karton (krabice od cereálií) – podle šablony budete obkreslovat obrys i okno. Vystřihněte ho přesně po obrysu kapsy (plná čára se zaoblenými rohy). Na děrovací desce do něj vysekněte okno výsečníkem Ø 22 mm (u mince 40 mm Ø 32 mm), břit přesně na vytištěné kružnici. Pro záložní okno Ø 20 mm vytiskněte list Kapsa – záložní okno Ø 20 mm, nalepte ho na tenký karton a vysekněte Ø 20 mm. V lekci 6 použijte šablonu z lekce 2 – když ji máte, krok přeskočte.',11000,T0=>{
   // 1. fáze (T0 < .3): výtisk na karton a vystřihnout po obrysu; pak sekání okna (t = 0…1 jako dřív)
   if(T0<.3) return tmplCut(T0/.3);
   const t=seg(T0,.3,1);
@@ -576,13 +576,13 @@ add('C','Vysekněte okno do výtisku na šablonu','Výtisk na šablonu nalepte l
   // řez: papír na desce, výsečník, palička
   const py=L(-7,0,dn)-up*9;
   let sec2=`<rect x="-22" y=".3" width="44" height="6" fill="var(--pb)" stroke="var(--pb-d)" stroke-width=".25"/>`;
-  sec2+= cut? `<path d="M-22 0 H-10 M10 0 H22" stroke="var(--paper-edge)" stroke-width=".6"/>`+(slug<.3?`<path d="M-9.1 0 H9.1" stroke="var(--paper-edge)" stroke-width=".6" opacity="${f(1-slug/.3)}"/>`:'') : `<path d="M-22 0 H22" stroke="var(--paper-edge)" stroke-width=".6"/>`;
+  sec2+= cut? `<path d="M-22 0 H-11 M11 0 H22" stroke="var(--paper-edge)" stroke-width=".6"/>`+(slug<.3?`<path d="M-10.1 0 H10.1" stroke="var(--paper-edge)" stroke-width=".6" opacity="${f(1-slug/.3)}"/>`:'') : `<path d="M-22 0 H22" stroke="var(--paper-edge)" stroke-width=".6"/>`;
   if(up<1) sec2+=G(`translate(0 ${f(py)})`,punchSide(),`opacity="${f(seg(t,.2,.26))}"`);
   if(t>.44&&t<.68) sec2+=G(`translate(0 ${f(py-28-L(9,0,hit)+(t>.6?L(0,9,seg(t,.6,.68)):0))})`,malletSide());
   let body=G('translate(109.5 46) scale(.8)',sec2);
-  body+=lbl(89,59,'výsečník Ø 20','t')+lbl(89,64.5,'na kružnici okna,','ts')+lbl(89,69,'osy pomůžou','ts')+lbl(89,75,'děrovací deska','ts');
+  body+=lbl(89,59,'výsečník Ø 22','t')+lbl(89,64.5,'na kružnici okna,','ts')+lbl(89,69,'osy pomůžou','ts')+lbl(89,75,'děrovací deska','ts');
   s+=inset('ŘEZ',body);
-  if(cut) s+=G('',lbl(8,88,'otvor Ø 20 = velikost výsečníku','tok'),`opacity="${f(seg(t,.62,.7))}"`);
+  if(cut) s+=G('',lbl(8,88,'otvor Ø 22 = velikost výsečníku','tok'),`opacity="${f(seg(t,.62,.7))}"`);
   return s;
 },null);
 add('C','Položte šablonu na rub a zarovnejte na osy','Šablonu položte na RUB a zarovnejte její osy na osy na kůži. Tip: osy na kůži se mají křížit uprostřed otvoru okna.',4400,t=>{
@@ -610,7 +610,7 @@ add('C','Obtáhněte kružnici okna v otvoru šablony','Tužkou lehce objeďte v
   if(off===0) s+=G(LVw,`<circle cx="${CX}" cy="${CY}" r="${R_WIN}" fill="none" stroke="var(--graphite)" stroke-width=".35" pathLength="1" stroke-dasharray="${cir>=.999?'none':f(cir)+' 2'}" transform="rotate(-90 ${CX} ${CY})"/>`);
   if(t>.04&&cir<1){const a=-Math.PI/2+cir*2*Math.PI;s+=pencil(...vx(CX+(R_WIN-.1)*Math.cos(a),CY+(R_WIN-.1)*Math.sin(a)))}
   s+=rightNote([['kružnice okna','tw'],['tužka HB/2B, lehce,','ts'],['po vnitřní hraně','ts'],['otvoru šablony','ts']]);
-  s+=G('',lbl(90,42,'celá kružnice Ø 20','t')+lbl(90,47,'= velikost výsečníku','ts'),`opacity="${f(seg(t,.68,.78))}"`);
+  s+=G('',lbl(90,42,'celá kružnice Ø 22','t')+lbl(90,47,'= velikost výsečníku','ts'),`opacity="${f(seg(t,.68,.78))}"`);
   return s;
 },'rub');
 add('C','Obrys teď neřežte','Obrys teď neřežte – řeže se až po vytvarování. Orýsujte všechno teď, přes vytvarovaný důlek už šablona neleží rovně. Šablonu si schovejte: po tvarování podle ní jen obtáhnete rozmazané čáry.',4200,t=>{
@@ -734,31 +734,31 @@ add('E','Vyřízněte obrys 2–3 lehkými tahy','Rozmazané čáry nejdřív ob
   s+=inset('ŘEZ',G('translate(110 32) scale(.95)',body)+lbl(91,50,'~5 mm','ta')+lbl(88.5,56,'nůž nad dřevem,','t')+lbl(88.5,61.5,'ne nad důlkem','ts')+lbl(88.5,68,'čárkovaně: karton','ts')+lbl(88.5,72.5,'s otvorem Ø 32','ts')+lbl(88.5,77,'(volitelně)','ts'));
   return s;
 },'rubTop');
-add('E','Podložte důlek, vysekněte okno Ø 20','Formu položte na děrovací desku. Pod důlek podložte špalík užší než otvor formy (pod 31,5 mm) a širší než okno (přes 20 mm). Dna se jen dotýká, nenadzvedává ho (ověřte na odřezku). Výsečník Ø 20 mm postavte na narýsovanou kružnici. Zkontrolujte, že prstenec kolem důlku je po celém obvodu stejně široký, a vysekněte okno.',7200,t=>{
+add('E','Podložte důlek, vysekněte okno Ø 22','Formu položte na děrovací desku. Pod důlek podložte špalík užší než otvor formy (pod 31,5 mm) a širší než okno (přes 22 mm). Dna se jen dotýká, nenadzvedává ho (ověřte na odřezku). Výsečník Ø 22 mm postavte na narýsovanou kružnici. Zkontrolujte, že prstenec kolem důlku je po celém obvodu stejně široký, a vysekněte okno.',7200,t=>{
   const b=es(t,.03,.3), pd=es(t,.38,.62), hit=t>.62, back=es(t,.7,.9);
   const win=t>.62;
   const pyy= t<.62? L(-45,2.6,pd) : L(2.6,-45,back);
-  let s=G('translate(52 42) scale(1.3)',sec({W:34,hole:'through',round:1,table:'var(--pb)',leather:{d:1.9,side:'rubUp',x0:-21.25,x1:21.25,window:win},block:{y:L(19,2.5,b)},punch:{y:pyy}})+(win&&back>0?`<rect x="-9.1" y="${f(pyy-1.25)}" width="18.2" height="1.2" fill="var(--rub)" stroke="var(--lic-d)" stroke-width=".2" opacity="${f(1-back)}"/>`:''));
-  s+=G('',lead(14,80,42,58),`opacity="${f(seg(t,.2,.32))}"`)+lbl(4,85,'špalík: užší než 31,5, širší než 20','ts')+lbl(60,79,'děrovací deska pod formou','ts');
+  let s=G('translate(52 42) scale(1.3)',sec({W:34,hole:'through',round:1,table:'var(--pb)',leather:{d:1.9,side:'rubUp',x0:-21.25,x1:21.25,window:win},block:{y:L(19,2.5,b)},punch:{y:pyy}})+(win&&back>0?`<rect x="-10.1" y="${f(pyy-1.25)}" width="20.2" height="1.2" fill="var(--rub)" stroke="var(--lic-d)" stroke-width=".2" opacity="${f(1-back)}"/>`:''));
+  s+=G('',lead(14,80,42,58),`opacity="${f(seg(t,.2,.32))}"`)+lbl(4,85,'špalík: užší než 31,5, širší než 22','ts')+lbl(60,79,'děrovací deska pod formou','ts');
   // top inset: centring on drawn circle
   const k=1; const ins=G(`translate(115 30) scale(${k}) translate(${-CX} ${-CY})`,`<circle cx="${CX}" cy="${CY}" r="13" fill="url(#rubP)"/><circle cx="${CX}" cy="${CY}" r="${R_WIN}" fill="none" stroke="var(--graphite)" stroke-width=".3"/>`+(win?`<circle cx="${CX}" cy="${CY}" r="${R_WIN}" fill="var(--hole)"/>`:'')+(t<.62?`<circle cx="${f(CX+L(5,0,es(t,.3,.5)))}" cy="${CY}" r="${R_WIN}" fill="none" stroke="var(--steel-d)" stroke-width=".7"/>`:''));
-  s+=`<rect x="99" y="10" width="32" height="40" rx="2" class="panelbox"/>`+ins+lbl(115,47,t<.6?'na kružnici':'okno Ø 20','t','middle');
-  s+=lbl(69,16,'výsečník Ø 20','t');
+  s+=`<rect x="99" y="10" width="32" height="40" rx="2" class="panelbox"/>`+ins+lbl(115,47,t<.6?'na kružnici':'okno Ø 22','t','middle');
+  s+=lbl(69,16,'výsečník Ø 22','t');
   return s;
 },'rubTop');
-add('E','Vyzkoušejte, že mince nepropadne','Minci vložte z rubu, kus otočte oknem dolů a zatřeste – nesmí vypadnout. Zatlačte na ni z rubu palcem – oknem nesmí projít. Prstenec (3,75 mm) nesmí být natržený. Když mince projde, Ø 20 mm do kapsy zatím nesekejte. Byl-li důlek mělký, na druhém odřezku vytvarujte hlubší a zkuste znovu Ø 20 mm. Teprve když mince projde i tak, nebo byl důlek dost hluboký už napoprvé, zkuste na dalším odřezku okno Ø 18 mm (lekce 2).',5200,t=>{
+add('E','Vyzkoušejte, že mince nepropadne','Minci vložte z rubu, kus otočte oknem dolů a zatřeste – nesmí vypadnout. Zatlačte na ni z rubu palcem – oknem nesmí projít. Prstenec (2,75 mm) nesmí být natržený. Když mince projde, Ø 22 mm do kapsy zatím nesekejte. Byl-li důlek mělký, na druhém odřezku vytvarujte hlubší a zkuste znovu Ø 22 mm. Teprve když mince projde i tak, nebo byl důlek dost hluboký už napoprvé, zkuste na dalším odřezku okno Ø 20 mm (lekce 2).',5200,t=>{
   const cin=es(t,.05,.35); const sh=t>.45? Math.sin((t-.45)*60)*1.8*(1-seg(t,.85,1)):0;
   // piece only (cut), window down, coin inside
   const tr=`translate(${f(56+sh)} 38) scale(1.6)`;
   // build manually to avoid board
   const d=1.9;const p=`M-21.25 -.6 L-17 -.6 C-15.2 -.6 -15.4 ${d} -13.2 ${d} L13.2 ${d} C15.4 ${d} 15.2 -.6 17 -.6 L21.25 -.6`;
-  let pc=`<clipPath id="wn"><rect x="-99" y="-50" width="89" height="100"/><rect x="10" y="-50" width="89" height="100"/></clipPath><g clip-path="url(#wn)"><path d="${p}" fill="none" stroke="var(--lic-d)" stroke-width="1.5"/><path d="${p}" fill="none" stroke="var(--rub)" stroke-width="1.2"/><path d="${p}" fill="none" stroke="var(--lic)" stroke-width=".55" transform="translate(0 .32)"/></g>`;
+  let pc=`<clipPath id="wn"><rect x="-99" y="-50" width="88" height="100"/><rect x="11" y="-50" width="88" height="100"/></clipPath><g clip-path="url(#wn)"><path d="${p}" fill="none" stroke="var(--lic-d)" stroke-width="1.5"/><path d="${p}" fill="none" stroke="var(--rub)" stroke-width="1.2"/><path d="${p}" fill="none" stroke="var(--lic)" stroke-width=".55" transform="translate(0 .32)"/></g>`;
   const cy=L(-14,1.3,cin);
   pc+=`<rect x="-13.75" y="${f(cy-2.5)}" width="27.5" height="2.5" rx=".5" fill="var(--coin-o)" stroke="var(--coin-o-d)" stroke-width=".2"/><rect x="-8.5" y="${f(cy-2.5)}" width="17" height="2.5" fill="var(--coin-i)"/>`;
   let s=G(tr,pc);
-  if(t>.4){s+=`<path d="M${f(56-10*1.6)} 48 H${f(56+10*1.6)}" stroke="var(--accent)" stroke-width=".3" marker-start="url(#ar)" marker-end="url(#ar)"/>`+lbl(56,54,'okno Ø 20','ta','middle');
+  if(t>.4){s+=`<path d="M${f(56-11*1.6)} 48 H${f(56+11*1.6)}" stroke="var(--accent)" stroke-width=".3" marker-start="url(#ar)" marker-end="url(#ar)"/>`+lbl(56,54,'okno Ø 22','ta','middle');
     s+=`<path d="M${f(56-13.75*1.6)} 26 H${f(56+13.75*1.6)}" stroke="var(--muted)" stroke-width=".3" marker-start="url(#ar)" marker-end="url(#ar)"/>`+lbl(56,23,'mince Ø 27,5','t','middle');
-    s+=lead(30,64,37.6,42.2)+lbl(6,69,'prstenec 3,75 mm','t')+lbl(6,74,'drží minci','ts');}
+    s+=lead(30,64,36.6,42.2)+lbl(6,69,'prstenec 2,75 mm','t')+lbl(6,74,'drží minci','ts');}
   if(t>.45) s+=lbl(56,84,'oknem dolů, zatřást','t','middle');
   if(t>.86) s+=tick(86,82.5)+lbl(90,84,'mince drží','tok');
   // view from below: lic with coin visible through window

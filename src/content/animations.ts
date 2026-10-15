@@ -82,7 +82,7 @@ export const animationPages = {
       E: [
         'Vraťte kůži lícem dolů na formu',
         'Vyřízněte obrys 2–3 lehkými tahy',
-        'Podložte důlek, vysekněte okno Ø 20',
+        'Podložte důlek, vysekněte okno Ø 22',
         'Vyzkoušejte, že mince nepropadne',
       ],
     },

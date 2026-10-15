@@ -1867,13 +1867,13 @@ export const equipmentList: readonly EquipmentDefinition[] = [
 
   draft({
     slug: 'round-punch-32mm',
-    name: 'Kruhový výsečník na okno Ø 20 mm',
+    name: 'Kruhový výsečník na okno Ø 22 mm',
     englishName: 'Round hollow punch, window',
     category: 'cutting',
     shortDescription:
-      'Vyseknutí okna kapsy, kterým je vidět mince: Ø 20 mm pro výchozí minci 50 Kč. Dutý výsečník, ne plný průbojník.',
+      'Vyseknutí okna kapsy, kterým je vidět mince: Ø 22 mm pro výchozí minci 50 Kč. Dutý výsečník, ne plný průbojník.',
     purpose:
-      'Okno (kruh kůže uprostřed kapsy) se vyseká jedním úderem dutého kruhového výsečníku Ø 20 mm pro výchozí minci 50 Kč (27,5 mm); kolem něj zůstává prstenec kůže 3,75 mm, který drží minci, aby oknem nevypadla. Prstenec je od v4.11 užší než dřív (4 mm) – že minci udrží, ověříte na odřezku z tvarovací zkoušky (lekce 2) dřív, než vyseknete okno do skutečné kapsy. Jen pro variantu s mincí 40 mm z předlohy je potřeba Ø 32 mm (prstenec 4 mm).',
+      'Okno (kruh kůže uprostřed kapsy) se vyseká jedním úderem dutého kruhového výsečníku Ø 22 mm pro výchozí minci 50 Kč (27,5 mm), stejný poměr jako na předloze (okno 32 mm u mince 40 mm); kolem něj zůstává prstenec kůže 2,75 mm, který drží minci, aby oknem nevypadla. Prstenec je úzký – že minci udrží, ověříte na odřezku z tvarovací zkoušky (lekce 2) dřív, než vyseknete okno do skutečné kapsy. Jen pro variantu s mincí 40 mm z předlohy je potřeba Ø 32 mm (prstenec 4 mm).',
     buyingGuide: [
       {
         label: 'Typ',
@@ -1882,12 +1882,12 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       {
         label: 'Průměr',
         value:
-          '20 mm pro výchozí minci 50 Kč (prstenec 3,75 mm); volitelně 32 mm pro minci 40 mm (prstenec 4 mm)',
+          '22 mm pro výchozí minci 50 Kč (prstenec 2,75 mm); volitelně 32 mm pro minci 40 mm (prstenec 4 mm)',
       },
       {
         label: 'Záloha',
         value:
-          'volitelně Ø 18 mm (CraftPoint, 57 Kč) pro případ, že zkouška Ø 20 mm na odřezku nevyjde – stojí za to přihodit do stejné objednávky',
+          'volitelně Ø 20 mm (CraftPoint, 69 Kč) pro případ, že zkouška Ø 22 mm na odřezku nevyjde – stojí za to přihodit do objednávky u CraftPointu',
       },
       {
         label: 'Podložka',
@@ -1895,39 +1895,47 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       },
     ],
     cautions: [
-      'Prstenec 3,75 mm je užší, než s jakým střih počítal dřív (4 mm). Na odřezku z tvarovací zkoušky (lekce 2) vyseknutým oknem ověřte, že mince v důlku drží: zatřesení oknem dolů a zatlačení na minci směrem k oknu. Když oknem projde, zapište to a Ø 20 mm do skutečné kapsy nesekejte: na dalším odřezku zkuste menší průměr (stejná nabídka CraftPointu má i Ø 18 mm, 8. 10. 2026 za 57 Kč skladem; prstenec pak 4,75 mm) – ověřit na odřezku. Když neudrží ani Ø 18 mm, do kapsy nesekejte a na dalším odřezku zkuste hlubší důlek (ověřte).',
+      'Prstenec 2,75 mm je úzký. Na odřezku z tvarovací zkoušky (lekce 2) vyseknutým oknem ověřte, že mince v důlku drží: zatřesení oknem dolů a zatlačení na minci směrem k oknu. Když oknem projde, zapište to a Ø 22 mm do skutečné kapsy nesekejte: u mělkého důlku nejdřív zkuste hlubší důlek, pak na dalším odřezku menší průměr (CraftPoint má Ø 20 mm, 15. 10. 2026 za 69 Kč skladem; prstenec pak 3,75 mm) – ověřit na odřezku. Když neudrží ani Ø 20 mm, do kapsy nesekejte a na dalším odřezku zkuste hlubší důlek (ověřte).',
       'Sekejte kolmo, vystředěné podle kružnice okna narýsované na rubu kapsy před tvarováním (nebo podle stejně širokého prstence kůže kolem důlku).',
-      'Kapsu při vysekávání okna položte lícem dolů zpátky na formu (nad otvorem) a pod důlek podložte špalík užší než otvor formy (pod 31,5 mm, u mince 40 mm pod 44 mm) a zároveň širší než okno (přes 20 mm, u mince 40 mm přes 32 mm) – má se dotýkat jen dna důlku zespodu, ne ho nadzvedávat.',
+      'Kapsu při vysekávání okna položte lícem dolů zpátky na formu (nad otvorem) a pod důlek podložte špalík užší než otvor formy (pod 31,5 mm, u mince 40 mm pod 44 mm) a zároveň širší než okno (přes 22 mm, u mince 40 mm přes 32 mm) – má se dotýkat jen dna důlku zespodu, ne ho nadzvedávat.',
       'Jestli výsečník čistě prosekne kůži 1,2 mm jedním úderem, ověřte na odřezku.',
       'Jen pro minci 40 mm: Stoklasa prodává výsečník v několika průměrech na jedné stránce (25/26/28/32 mm) – v košíku zkontrolujte, že je vybraný a skladem právě 32 mm. Pro výchozí minci 50 Kč ho nekupujte.',
     ],
     avoid: [{ title: 'Plný průbojník na kov', reason: 'kůži jen promáčkne, díru neudělá.' }],
     alternatives: [],
-    priceRange: { minCents: 6_900, maxCents: 6_900 },
+    priceRange: { minCents: 35_000, maxCents: 47_024 },
     priceSource: 'verified',
-    priceNote: `${VERIFIED_NOTE} Cena je za Ø 20 mm pro výchozí minci 50 Kč (CraftPoint, 69 Kč). Ø 32 mm pro variantu s mincí 40 mm (704–745 Kč) je níže jako varianta a do ceny se nepočítá – kupuje se jen jeden z nich.`,
+    priceNote: `${VERIFIED_NOTE} Cena je za Ø 22 mm pro výchozí minci 50 Kč (Format, 350–470 Kč podle obchodu; CraftPoint má výsečníky jen do 20 mm). Ø 32 mm pro variantu s mincí 40 mm (704–745 Kč) je níže jako varianta a do ceny se nepočítá – kupuje se jen jeden z nich.`,
     alsoUsedFor: [],
     examples: [
       {
-        title: 'Výsečníky na kůži 2–20 mm, průměr dle výběru (varianta Ø 20 mm)',
-        shop: 'CraftPoint',
-        url: 'https://craft-point.cz/products/vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu',
-        priceCents: 6_900,
-        priceNote: 'za kus (varianta 20 mm)',
-        note: 'Ø 20 mm pro okno výchozí mince 50 Kč. Výsečník na kůži; v nabídce vyberte průměr 20 mm.',
+        title: 'Výsečník kruhový 22 mm FORMAT',
+        shop: 'BO-Import',
+        url: 'https://www.bo-import.cz/vysecnik-kruhovy-22-mm-format-p1481997/',
+        priceCents: 35_000,
+        note: 'Ø 22 mm pro okno výchozí mince 50 Kč. Podle prodejce na kůži, pryž, plsť a pěnové materiály (DIN 7200 A); skladem externě, expedice do 48 hodin. Jestli čistě prosekne kůži 1,2 mm, ověřte na odřezku.',
         availability: 'in_stock',
-        checkedAt: '2026-10-08',
+        checkedAt: '2026-10-15',
+      },
+      {
+        title: 'Výsečník kruhový 22mm FORMAT',
+        shop: 'Boukal',
+        url: 'https://www.boukal.cz/format-71200022-vysecnik-kruhovy-22-mm-ede71200022',
+        priceCents: 47_024,
+        note: 'Stejný výsečník Format 22 mm (DIN 7200 A) v jiném obchodě; skladem 2 ks.',
+        availability: 'in_stock',
+        checkedAt: '2026-10-15',
       },
       {
         title: 'Výsečníky na kůži 2–20 mm, průměr dle výběru',
         shop: 'CraftPoint',
         url: 'https://craft-point.cz/products/vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu',
-        variant: 'Ø 18 mm',
-        priceCents: 5_700,
-        priceNote: 'za kus (varianta 18 mm)',
-        note: 'Záloha pro výchozí minci 50 Kč: jen když okno Ø 20 mm na odřezku minci neudrží (lekce 2); prstenec 4,75 mm. V nabídce vyberte průměr 18 mm.',
+        variant: 'Ø 20 mm',
+        priceCents: 6_900,
+        priceNote: 'za kus (varianta 20 mm)',
+        note: 'Záloha pro výchozí minci 50 Kč: jen když okno Ø 22 mm na odřezku minci neudrží (lekce 2); prstenec 3,75 mm. V nabídce vyberte průměr 20 mm.',
         availability: 'in_stock',
-        checkedAt: '2026-10-08',
+        checkedAt: '2026-10-15',
       },
       {
         title: 'Kruhový výsečník Format 32 mm',

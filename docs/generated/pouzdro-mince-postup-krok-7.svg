@@ -34,17 +34,17 @@
 <text x="158.5" y="19.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" text-anchor="start" fill="#2b2b2b">Vyříznout kapsu a vyseknout okno</text>
 <path d="M172.813 25 L191.938 25 A8.5 8.5 0 0 1 200.438 33.5 L200.438 55.6 A5.1 5.1 0 0 1 195.338 60.7 L169.413 60.7 A5.1 5.1 0 0 1 164.313 55.6 L164.313 33.5 A8.5 8.5 0 0 1 172.813 25 Z" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.5"/>
 <circle cx="182.375" cy="42.638" r="13.388" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.4"/>
-<circle cx="182.375" cy="42.638" r="8.5" fill="#fbfaf7" stroke="#2f5240" stroke-width="0.4"/>
+<circle cx="182.375" cy="42.638" r="9.35" fill="#fbfaf7" stroke="#2f5240" stroke-width="0.4"/>
 <text x="182.375" y="91.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">po zaschnutí vyříznout obrys kapsy podle orýsování</text>
-<text x="182.375" y="94.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">okno Ø 20: kapsa lícem dolů na formě, pod dno špalík</text>
-<text x="182.375" y="98" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">prstenec 3,75 mm drží minci – ověřit na odřezku</text>
+<text x="182.375" y="94.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">okno Ø 22: kapsa lícem dolů na formě, pod dno špalík</text>
+<text x="182.375" y="98" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">prstenec 2,75 mm drží minci – ověřit na odřezku</text>
 <rect x="217.25" y="14" width="65.75" height="86" rx="2" fill="#fbfaf7" stroke="#ddd" stroke-width="0.3"/>
 <text x="220.25" y="19.5" font-family="Helvetica, Arial, sans-serif" font-size="6" text-anchor="start" fill="#a2471f">4</text>
 <text x="226.25" y="19.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" text-anchor="start" fill="#2b2b2b">Přišít kapsu, osadit kování</text>
 <path d="M229.376 44.597 A19.597 19.597 0 0 0 248.972 25 L267.416 25 A3.458 3.458 0 0 1 270.874 28.458 L270.874 81.542 A3.458 3.458 0 0 1 267.416 85 L232.834 85 A3.458 3.458 0 0 1 229.376 81.542 Z" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.4"/>
 <path d="M243.641 49.092 L256.609 49.092 A5.764 5.764 0 0 1 262.373 54.856 L262.373 69.841 A3.458 3.458 0 0 1 258.915 73.3 L241.335 73.3 A3.458 3.458 0 0 1 237.877 69.841 L237.877 54.856 A5.764 5.764 0 0 1 243.641 49.092 Z" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.5"/>
 <circle cx="250.125" cy="61.052" r="7.925" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.3"/>
-<circle cx="250.125" cy="61.052" r="5.764" fill="#9a9a9a" stroke="#666" stroke-width="0.3"/>
+<circle cx="250.125" cy="61.052" r="6.34" fill="#9a9a9a" stroke="#666" stroke-width="0.3"/>
 <path d="M239.894 55.202 L239.894 56.816 M239.894 57.507 L239.894 59.121 M239.894 59.813 L239.894 61.427 M239.894 62.118 L239.894 63.732 M239.894 64.424 L239.894 66.037 M239.894 66.729 L239.894 68.343 M239.894 69.035 L239.894 70.648" stroke="#efe3c2" stroke-width="0.634" stroke-linecap="round" fill="none"/>
 <path d="M240.24 71.282 L241.854 71.282 M242.546 71.282 L244.16 71.282 M244.851 71.282 L246.465 71.282 M247.157 71.282 L248.771 71.282 M249.462 71.282 L251.076 71.282 M251.768 71.282 L253.381 71.282 M254.073 71.282 L255.687 71.282 M256.379 71.282 L257.992 71.282" stroke="#efe3c2" stroke-width="0.634" stroke-linecap="round" fill="none"/>
 <path d="M260.356 70.937 L260.356 69.323 M260.356 68.631 L260.356 67.017 M260.356 66.326 L260.356 64.712 M260.356 64.02 L260.356 62.406 M260.356 61.715 L260.356 60.101 M260.356 59.409 L260.356 57.795 M260.356 57.104 L260.356 55.49" stroke="#efe3c2" stroke-width="0.634" stroke-linecap="round" fill="none"/>
@@ -78,7 +78,7 @@
 <path d="M96.642 137.984 A16.984 16.984 0 0 0 113.626 121 L129.611 121 A2.997 2.997 0 0 1 132.608 123.997 L132.608 170.003 A2.997 2.997 0 0 1 129.611 173 L99.639 173 A2.997 2.997 0 0 1 96.642 170.003 Z" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.4"/>
 <path d="M109.005 141.88 L120.245 141.88 A4.995 4.995 0 0 1 125.24 146.875 L125.24 159.863 A2.997 2.997 0 0 1 122.243 162.86 L107.007 162.86 A2.997 2.997 0 0 1 104.01 159.863 L104.01 146.875 A4.995 4.995 0 0 1 109.005 141.88 Z" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.5"/>
 <circle cx="114.625" cy="152.245" r="6.868" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.3"/>
-<circle cx="114.625" cy="152.245" r="4.995" fill="#9a9a9a" stroke="#666" stroke-width="0.3"/>
+<circle cx="114.625" cy="152.245" r="5.495" fill="#9a9a9a" stroke="#666" stroke-width="0.3"/>
 <path d="M105.759 147.175 L105.759 148.573 M105.759 149.173 L105.759 150.572 M105.759 151.171 L105.759 152.57 M105.759 153.169 L105.759 154.568 M105.759 155.167 L105.759 156.566 M105.759 157.165 L105.759 158.564 M105.759 159.163 L105.759 160.562" stroke="#efe3c2" stroke-width="0.549" stroke-linecap="round" fill="none"/>
 <path d="M106.058 161.111 L107.457 161.111 M108.056 161.111 L109.455 161.111 M110.054 161.111 L111.453 161.111 M112.052 161.111 L113.451 161.111 M114.051 161.111 L115.449 161.111 M116.049 161.111 L117.447 161.111 M118.047 161.111 L119.445 161.111 M120.045 161.111 L121.443 161.111" stroke="#efe3c2" stroke-width="0.549" stroke-linecap="round" fill="none"/>
 <path d="M123.491 160.812 L123.491 159.413 M123.491 158.814 L123.491 157.415 M123.491 156.816 L123.491 155.417 M123.491 154.817 L123.491 153.419 M123.491 152.819 L123.491 151.421 M123.491 150.821 L123.491 149.423 M123.491 148.823 L123.491 147.425" stroke="#efe3c2" stroke-width="0.549" stroke-linecap="round" fill="none"/>
@@ -93,7 +93,7 @@
 <path d="M161.626 134.597 A19.597 19.597 0 0 0 181.222 115 L199.666 115 A3.458 3.458 0 0 1 203.124 118.458 L203.124 171.542 A3.458 3.458 0 0 1 199.666 175 L165.084 175 A3.458 3.458 0 0 1 161.626 171.542 Z" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.4"/>
 <path d="M175.891 139.092 L188.859 139.092 A5.764 5.764 0 0 1 194.623 144.856 L194.623 159.841 A3.458 3.458 0 0 1 191.165 163.3 L173.585 163.3 A3.458 3.458 0 0 1 170.127 159.841 L170.127 144.856 A5.764 5.764 0 0 1 175.891 139.092 Z" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.5"/>
 <circle cx="182.375" cy="151.052" r="7.925" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.3"/>
-<circle cx="182.375" cy="151.052" r="5.764" fill="#9a9a9a" stroke="#666" stroke-width="0.3"/>
+<circle cx="182.375" cy="151.052" r="6.34" fill="#9a9a9a" stroke="#666" stroke-width="0.3"/>
 <path d="M172.144 145.202 L172.144 146.816 M172.144 147.507 L172.144 149.121 M172.144 149.813 L172.144 151.427 M172.144 152.118 L172.144 153.732 M172.144 154.424 L172.144 156.037 M172.144 156.729 L172.144 158.343 M172.144 159.035 L172.144 160.648" stroke="#efe3c2" stroke-width="0.634" stroke-linecap="round" fill="none"/>
 <path d="M172.49 161.282 L174.104 161.282 M174.796 161.282 L176.41 161.282 M177.101 161.282 L178.715 161.282 M179.407 161.282 L181.021 161.282 M181.712 161.282 L183.326 161.282 M184.018 161.282 L185.631 161.282 M186.323 161.282 L187.937 161.282 M188.629 161.282 L190.242 161.282" stroke="#efe3c2" stroke-width="0.634" stroke-linecap="round" fill="none"/>
 <path d="M192.606 160.937 L192.606 159.323 M192.606 158.631 L192.606 157.017 M192.606 156.326 L192.606 154.712 M192.606 154.02 L192.606 152.406 M192.606 151.715 L192.606 150.101 M192.606 149.409 L192.606 147.795 M192.606 147.104 L192.606 145.49" stroke="#efe3c2" stroke-width="0.634" stroke-linecap="round" fill="none"/>

@@ -209,9 +209,9 @@ describe('Postup v kostce – pouzdro s mincí', () => {
     const l6 = groups.find((g) => g.lessonOrder === 6)!;
     expect(l6.rows.every((r) => r.condition)).toBe(true);
     // Záložní list nesmí splynout s hlavním listem KAPSA pod zkráceným názvem „Kapsa“.
-    const backup = groups.flatMap((g) => g.rows).filter((r) => r.sheetId === 'kapsa-okno-18');
+    const backup = groups.flatMap((g) => g.rows).filter((r) => r.sheetId === 'kapsa-okno-20');
     expect(backup.length).toBeGreaterThan(0);
-    for (const r of backup) expect(r.sheetLabel).toBe('Kapsa – záložní okno Ø 18 mm');
+    for (const r of backup) expect(r.sheetLabel).toBe('Kapsa – záložní okno Ø 20 mm');
     expect(text('prints').text).toContain('schovejte na kapsu v lekci 6');
   });
 
@@ -467,12 +467,12 @@ describe('Postup v kostce – výtisky a odkazy', () => {
       'Cvičný proužek pro lekci 4 1×',
       'Pás (šablona) 2×',
     ]);
-    // Každá podmínka zvlášť, v pořadí lekcí; záložní okno 18 mm z lekce 2 je mezi nimi.
+    // Každá podmínka zvlášť, v pořadí lekcí; záložní okno 20 mm z lekce 2 je mezi nimi.
     expect(list.conditional.map((c) => c.rows.map((r) => [r.lessonOrder, r.sheetId]))).toEqual([
-      [[2, 'kapsa-okno-18']],
+      [[2, 'kapsa-okno-20']],
       [[6, 'kapsa']],
       [[6, 'kapsa']],
-      [[6, 'kapsa-okno-18']],
+      [[6, 'kapsa-okno-20']],
       [[6, 'sablona-kuze-1-2']],
     ]);
     expect(conditionLead('výtisk na značky nemáte z lekce 2')).toBe(

@@ -136,7 +136,7 @@ const FX=97.69, FY=53.07, PW=72, PH=104.1;           // front panel (between fol
 const PX=112.44, PY=94.87, PKW=42.5, PKH=42;          // pocket place on the front panel (T)
 // pocket-local = list KAPSA (pouzdro-mince-kapsa.svg) posunutý o -10,-18 (obrys kapsy tam začíná v 10,18)
 const OUTL="M10 0 L32.5 0 A10 10 0 0 1 42.5 10 L42.5 36 A6 6 0 0 1 36.5 42 L6 42 A6 6 0 0 1 0 36 L0 10 A10 10 0 0 1 10 0 Z";
-const CXL=21.25, CYL=20.75, R_WIN=10, R_COIN=13.75, R_FOOT=15.75;
+const CXL=21.25, CYL=20.75, R_WIN=11, R_COIN=13.75, R_FOOT=15.75;
 const circ=(cx,cy,r)=>`M${cx+r} ${cy} A${r} ${r} 0 1 0 ${cx-r} ${cy} A${r} ${r} 0 1 0 ${cx+r} ${cy} Z`;
 const WINL=circ(CXL,CYL,R_WIN);
 const DOTS_K=[[13.5,29.177],[13.5,33.177],[13.5,37.177],[13.5,41.177],[13.5,45.177],[13.5,49.177],[13.5,53.177],[15.261,56.388],
@@ -276,7 +276,7 @@ function secPocket(o={}){
   s+=`<rect x="${x0}" y="0" width="${x1-x0}" height="${o.bh??4}" fill="var(--board)" stroke="var(--board-d)" stroke-width=".15"/>`;
   s+=`<rect x="${x0}" y="-1.2" width="${x1-x0}" height="1.2" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".08"/><rect x="${x0}" y="-1.2" width="${x1-x0}" height=".32" fill="var(--lic)"/>`;
   if(o.glue) s+=`<path d="M0 -1.25 H3.5 M39 -1.25 H42.5" stroke="var(--glue)" stroke-width=".26"/>`;
-  const pa=`M0 -1.8 L5.5 -1.8 C7 -1.8 7 ${DTOP} 8.5 ${DTOP} L11.25 ${DTOP}`, pb=`M31.25 ${DTOP} L34 ${DTOP} C35.5 ${DTOP} 35.5 -1.8 37 -1.8 L42.5 -1.8`;
+  const pa=`M0 -1.8 L5.5 -1.8 C7 -1.8 7 ${DTOP} 8.5 ${DTOP} L10.25 ${DTOP}`, pb=`M32.25 ${DTOP} L34 ${DTOP} C35.5 ${DTOP} 35.5 -1.8 37 -1.8 L42.5 -1.8`;
   for(const p of [pa,pb]) s+=`<path d="${p}" fill="none" stroke="var(--rub-d)" stroke-width="1.3"/><path d="${p}" fill="none" stroke="var(--rub)" stroke-width="1.1"/><path d="${p}" fill="none" stroke="var(--lic)" stroke-width=".34" transform="translate(0 -.42)"/>`;
   for(const x of (o.holes||[])){
     s+=`<rect x="${x-.35}" y="-2.5" width=".7" height="1.32" fill="var(--hole)"/>`;
@@ -437,7 +437,7 @@ add('C','Položte pás na děrovací desku','Pás s nalepenou kapsou položte na
   let s=clipMain('cc2',G(camT(PANELC),inner));
   const k=.85;
   let ib=G(`translate(${89+4*k} 42) scale(${k})`,secPocket({glue:1,holes:[3.5,39]})+
-    `<g opacity="${f(seg(t,.5,.65))}"><path d="M9.8 ${DTOP-.9} V${DTOP-7}" stroke="var(--ok)" stroke-width=".6" marker-end="url(#arOk)"/><path d="M32.7 ${DTOP-.9} V${DTOP-7}" stroke="var(--ok)" stroke-width=".6" marker-end="url(#arOk)"/></g><text x="${CXL}" y="${DTOP+.9}" text-anchor="middle" style="font:500 3px 'Albert Sans',sans-serif;fill:var(--muted)">okno</text>`);
+    `<g opacity="${f(seg(t,.5,.65))}"><path d="M9.4 ${DTOP-.9} V${DTOP-7}" stroke="var(--ok)" stroke-width=".6" marker-end="url(#arOk)"/><path d="M33.1 ${DTOP-.9} V${DTOP-7}" stroke="var(--ok)" stroke-width=".6" marker-end="url(#arOk)"/></g><text x="${CXL}" y="${DTOP+.9}" text-anchor="middle" style="font:500 3px 'Albert Sans',sans-serif;fill:var(--muted)">okno</text>`);
   ib+=lbl(109.5,52,'děrovací deska','ts','middle');
   ib+=`<g opacity="${f(seg(t,.5,.65))}">${notes([['důlek míří nahoru,','tok'],['deska ho nemačká']],60,5.4)}</g>`;
   ib+=`<g opacity="${f(seg(t,.7,.8))}">${notes([['Tip: rukou se','ta'],['o důlek neopírejte']],72,5.2)}</g>`;

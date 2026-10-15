@@ -181,10 +181,10 @@ describe('zapsané soubory odpovídají generátoru', () => {
           foldSkiveThicknessMm: foldSkiveFor(1.2),
         }),
     ],
-    // Záložní okno Ø 18 mm (lekce 2 a 6), jak ho nastaví --window 18; v aplikaci jen list KAPSA.
+    // Záložní okno Ø 20 mm (lekce 2 a 6), jak ho nastaví --window 20; v aplikaci jen list KAPSA.
     [
-      'pouzdro-mince-kapsa-okno-18mm.svg',
-      () => buildCoinHolderPocketSvg({ ...DEFAULT_COIN_CARD_HOLDER, windowDiameterMm: 18 }),
+      'pouzdro-mince-kapsa-okno-20mm.svg',
+      () => buildCoinHolderPocketSvg({ ...DEFAULT_COIN_CARD_HOLDER, windowDiameterMm: 20 }),
     ],
     // Cvičný proužek k lekci 4: kůže 1,5 mm bez přípony, 1,2 mm s příponou (jako listy pásu).
     ['pouzdro-mince-cvicny-prouzek.svg', () => buildCoinHolderPracticeSvg(1.5)],

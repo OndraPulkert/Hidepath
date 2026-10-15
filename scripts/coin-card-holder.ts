@@ -5,11 +5,11 @@
  *   pnpm pattern:coin-holder                 # mince 50 Kč, 27,5 mm (výchozí od v4.10)
  *   pnpm pattern:coin-holder --coin 40       # mince 40 mm z předlohy („decision coin“, i --coin decision)
  *   pnpm pattern:coin-holder --coin 20kc     # další české mince: 20kc/10kc/5kc, nebo průměr v mm
- *   pnpm pattern:coin-holder --window 18     # průměr okna = výsečník, který máš (jinak odvozeno)
+ *   pnpm pattern:coin-holder --window 20     # průměr okna = výsečník, který máš (jinak odvozeno)
  *   pnpm pattern:coin-holder --thickness 1.2 # kůže těla 1,2 mm (bez ztenčení ohybu)
  *   pnpm pattern:coin-holder --grommet       # volitelná průchodka ve vnitřním panelu (od v4.11 není ve výchozím)
  *
- * Varianty jdou do vlastních souborů (…-mince-40mm, …-okno-18mm, …-kuze-1-2mm, …-pruchodka); list postupu
+ * Varianty jdou do vlastních souborů (…-mince-40mm, …-okno-20mm, …-kuze-1-2mm, …-pruchodka); list postupu
  * se generuje jen pro výchozí střih a pro kůži 1,2 mm (pouzdro-mince-postup-kuze-1-2mm, výchozí v aplikaci). Neznámý přepínač je chyba, aby překlep nepřepsal verzované soubory.
  *
  * Výstup: docs/generated/pouzdro-mince-sablona.svg/.pdf (pás, A4 NA ŠÍŘKU),
@@ -1678,7 +1678,7 @@ export function buildCoinHolderProcessStepSvg(
 
 /**
  * Název souboru podle odchylek od výchozího střihu, aby varianta nepřepsala verzovaný soubor:
- * jiná mince než 50 Kč → „-mince-40mm“, vlastní okno → „-okno-18mm“, jazyk na druhé straně → „-jazyk-vlevo“,
+ * jiná mince než 50 Kč → „-mince-40mm“, vlastní okno → „-okno-20mm“, jazyk na druhé straně → „-jazyk-vlevo“,
  * volitelná průchodka → „-pruchodka“.
  */
 export function coinHolderFileStem(spec: CoinCardHolderSpec): string {

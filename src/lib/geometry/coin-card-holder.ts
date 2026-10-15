@@ -27,7 +27,7 @@
  *
  * Rozměry NEJSOU odměřené z cizího střihu. Odvozují se z rozměru platební karty, průměru mince
  * a přídavků; poměry (šířka jazyka, poloměr výřezu, poloha druku) jsou odhad z fotek s mincí
- * 40 mm jako měřítkem. Výchozí mince je od v4.10 česká padesátikoruna (27,5 mm; od v4.11 okno Ø 20 mm),
+ * 40 mm jako měřítkem. Výchozí mince je od v4.10 česká padesátikoruna (27,5 mm; od v4.16 okno Ø 22 mm),
  * mince 40 mm z předlohy zůstává jako varianta (`--coin 40`). Hodnoty označené „volba“ ověřit
  * na papírovém modelu a odřezku.
  */
@@ -131,11 +131,11 @@ export interface CoinCardHolderSpec {
   /** Průměr mince. Výchozí 27,5 mm = česká padesátikoruna (mince 40 mm z předlohy jako varianta). */
   coinDiameterMm: number;
   /**
-   * Průměr okna = průměr kruhového výsečníku, který máš. `null` = odvodit z mince tak, aby
-   * prstenec kůže kolem okna byl aspoň `minCoinRingMm`, zaokrouhleno na celé mm dolů.
-   * Nejmenší prstenec je od v4.11 3,75 mm (dřív 4): u mince 50 Kč z něj vyjde okno Ø 20 mm
-   * (rozhodnutí autora, výsečník 20 mm je běžně k dostání), u mince 40 mm dál Ø 32 (prstenec 4).
-   * Že prstenec 3,75 mm minci udrží, je nutné ověřit na odřezku z tvarovací zkoušky.
+   * Průměr okna = průměr kruhového výsečníku, který máš. `null` = odvodit z mince: okno má
+   * `WINDOW_COIN_RATIO` průměru mince jako na předloze (32 / 40), prstenec kůže kolem okna aspoň
+   * `minCoinRingMm`, zaokrouhleno na celé mm dolů. Od v4.16 (rozhodnutí autora, okno Ø 20 působilo
+   * malé) u mince 50 Kč Ø 22 mm s prstencem 2,75 mm, u mince 40 mm dál Ø 32 (prstenec 4).
+   * Že prstenec 2,75 mm minci udrží, je nutné ověřit na odřezku z tvarovací zkoušky.
    */
   windowDiameterMm: number | null;
   minCoinRingMm: number;
@@ -160,6 +160,9 @@ export interface CoinCardHolderSpec {
   /** Nejmenší přijatelný můstek kůže mezi otvory a mezi otvorem a hranou. */
   minLigamentMm: number;
 }
+
+/** Průměr okna vůči minci jako na předloze (okno 32 mm u mince 40 mm), viz `windowDiameterMm`. */
+export const WINDOW_COIN_RATIO = 0.8;
 
 export const DEFAULT_COIN_CARD_HOLDER: CoinCardHolderSpec = {
   cardWidthMm: 54,
@@ -196,7 +199,7 @@ export const DEFAULT_COIN_CARD_HOLDER: CoinCardHolderSpec = {
   cornerRadiusMm: 6,
   coinDiameterMm: 27.5,
   windowDiameterMm: null,
-  minCoinRingMm: 3.75,
+  minCoinRingMm: 2.75,
   formHoleClearanceMm: 1.6,
   formPlateThicknessMm: 8,
   pocketFlatMm: 2,
@@ -446,7 +449,15 @@ export function coinCardHolderLayout(
 
   // Okno, forma, kapsa.
   const windowDiameter =
-    spec.windowDiameterMm ?? Math.floor(spec.coinDiameterMm - 2 * spec.minCoinRingMm);
+    spec.windowDiameterMm ??
+    Math.floor(
+      round(
+        Math.min(
+          spec.coinDiameterMm * WINDOW_COIN_RATIO,
+          spec.coinDiameterMm - 2 * spec.minCoinRingMm,
+        ),
+      ),
+    );
   const coinRing = round((spec.coinDiameterMm - windowDiameter) / 2);
   const formHole = round(
     spec.coinDiameterMm + 2 * spec.pocketThicknessMm + spec.formHoleClearanceMm,

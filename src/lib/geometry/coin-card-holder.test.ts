@@ -9,6 +9,7 @@ import {
   SEAM_LABEL_GAP_MM,
   DEFAULT_COIN_CARD_HOLDER,
   NAMED_COINS,
+  WINDOW_COIN_RATIO,
   checkCoinCardHolder,
   foldSkiveFor,
   coinCardHolderLayout,
@@ -191,15 +192,24 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     expect(NAMED_COINS.decision).toBe(40);
   });
 
-  it('výchozí mince je 50 Kč: okno Ø 20 (výsečník), prstenec 3,75, otvor formy 31,5, kapsa 42,5 × 42', () => {
+  it('výchozí mince je 50 Kč: okno Ø 22 (0,8 × mince), prstenec 2,75, otvor formy 31,5, kapsa 42,5 × 42', () => {
     expect(spec.coinDiameterMm).toBe(NAMED_COINS['50kc']);
-    expect(spec.minCoinRingMm).toBe(3.75);
-    expect(L.windowDiameterMm).toBe(20);
-    expect(L.coinRingMm).toBe(3.75);
+    expect(spec.minCoinRingMm).toBe(2.75);
+    expect(WINDOW_COIN_RATIO).toBe(0.8);
+    expect(L.windowDiameterMm).toBe(22);
+    expect(L.coinRingMm).toBe(2.75);
     // Okno o 1 mm větší by prstenec zúžilo pod minimum – kontrola to hlásí.
-    expect(checkCoinCardHolder({ ...spec, windowDiameterMm: 21 }).join(' ')).toMatch(
-      /Prstenec kolem okna je 3,25 mm, minimum 3,75 mm/,
+    expect(checkCoinCardHolder({ ...spec, windowDiameterMm: 23 }).join(' ')).toMatch(
+      /Prstenec kolem okna je 2,25 mm, minimum 2,75 mm/,
     );
+    // Záložní okno Ø 20 (lekce 2): prstenec 3,75.
+    expect(coinCardHolderLayout({ ...spec, windowDiameterMm: 20 }).coinRingMm).toBe(3.75);
+    // Ostatní české mince: 20 Kč Ø 20, 10 Kč Ø 19, 5 Kč Ø 17 (prstenec aspoň 2,75).
+    expect(
+      (['20kc', '10kc', '5kc'] as const).map(
+        (c) => coinCardHolderLayout({ ...spec, coinDiameterMm: NAMED_COINS[c] }).windowDiameterMm,
+      ),
+    ).toEqual([20, 19, 17]);
     expect(L.formHoleDiameterMm).toBe(31.5);
     expect(L.pocketWidthMm).toBe(42.5);
     expect(L.pocketHeightMm).toBe(42);
@@ -311,8 +321,8 @@ describe('pouzdro s vsazenou mincí – model (pás tří panelů, ohyby na boc�
     expect(L.pocketYMm).toBeCloseTo(L.pocketBandTopMm + slack / 2, 1);
     // Hlášky používají desetinnou čárku.
     expect(
-      checkCoinCardHolder({ ...spec, coinDiameterMm: 40, windowDiameterMm: 33 }).join(' '),
-    ).toMatch(/3,5 mm/);
+      checkCoinCardHolder({ ...spec, coinDiameterMm: 40, windowDiameterMm: 35 }).join(' '),
+    ).toMatch(/2,5 mm/);
   });
 
   it('kontroly odhalí kolize a špatné parametry', () => {

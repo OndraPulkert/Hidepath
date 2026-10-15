@@ -116,7 +116,7 @@ describe('buildLessonPrep – Vytisknout', () => {
     // Lekce 2 skutečného obsahu: list KAPSA 3× (forma, značky, šablona), záložní okno jen podmíněně.
     const real2 = buildLessonPrep({ ...input(), project: coinCardHolderProject, lesson: second });
     expect(real2.printTotals).toEqual([{ title: 'Kapsa s mincí a otvor formy', copies: 3 }]);
-    expect(real2.prints.filter((p) => p.optional).map((p) => p.sheetId)).toEqual(['kapsa-okno-18']);
+    expect(real2.prints.filter((p) => p.optional).map((p) => p.sheetId)).toEqual(['kapsa-okno-20']);
   });
 
   it('vysvětlení tenkého kartonu jen v první lekci, která výtisk na kartonu potřebuje', () => {

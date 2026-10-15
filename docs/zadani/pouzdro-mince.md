@@ -1,4 +1,4 @@
-# Pouzdro na karty s vsazenou mincí – střih (NÁVRH v4.14)
+# Pouzdro na karty s vsazenou mincí – střih (NÁVRH v4.16)
 
 Stav: **návrh k ověření na papíru a odřezku**, ne lekce. Vznikl 2026-09-18 na přání autora podle
 produktu, videa a fotek Red Forest Leather (rozbor v `docs/content/notes-vybaveni.md`, „Námět:
@@ -19,14 +19,14 @@ prvního), až bude první pouzdro fyzicky hotové.
   - `pouzdro-mince-postup.svg/.pdf` – postup skládání v 8 krocích (ilustrace, ne 1:1).
   - `pouzdro-mince-vse.pdf` – **všechno v jednom PDF** (A4 na šířku: papírový model, pás, kapsa
     otočená o 90° – měřítko zůstává 1:1 –, postup).
-- **Výchozí mince je od v4.10 česká padesátikoruna (27,5 mm); od v4.11 okno Ø 20 mm, druk
-  12 mm a bez průchodky.** Mince 40 mm z předlohy je varianta.
+- **Výchozí mince je od v4.10 česká padesátikoruna (27,5 mm); od v4.16 okno Ø 22 mm (od v4.11 druk
+  12 mm a bez průchodky).** Mince 40 mm z předlohy je varianta.
 - Přepínače (`pnpm pattern:coin-holder …`): `--coin 40` (mince 40 mm z předlohy, totéž
-  `--coin decision`; dále `50kc`, `20kc`, `10kc`, `5kc` nebo číslo v mm), `--window 18` (průměr
+  `--coin decision`; dále `50kc`, `20kc`, `10kc`, `5kc` nebo číslo v mm), `--window 20` (průměr
   okna podle výsečníku), `--cards 6` (počet karet v přední kapse, 1–6), `--thickness 1.2`
   (tloušťka kůže těla; pod 1,3 mm se ztenčení ohybu vypne), `--grommet` (bez hodnoty: vrátí
   volitelnou průchodku ve vnitřním panelu se stejnou geometrií jako do v4.10). Každá odchylka jde
-  do vlastních souborů (`…-mince-40mm`, `…-okno-18mm`, `…-karty-6`, `…-kuze-1-2mm`,
+  do vlastních souborů (`…-mince-40mm`, `…-okno-20mm`, `…-karty-6`, `…-kuze-1-2mm`,
   `…-pruchodka`); verzovaný výchozí střih se nepřepíše. Neznámý nebo zdvojený přepínač je chyba.
   PDF se v repu neverzují, vzniknou lokálně tímto příkazem.
 - **Generátor bez přepínačů kreslí minci 50 Kč a kůži 1,5 mm** (soubory bez přípony). **V aplikaci
@@ -34,8 +34,8 @@ prvního), až bude první pouzdro fyzicky hotové.
   Verde, bez ztenčení ohybu B; soubory `…-kuze-1-2mm` z `pnpm pattern:coin-holder --thickness 1.2`);
   listy pro 1,5 mm jsou v aplikaci varianta. List KAPSA je pro obě tloušťky stejný (kapsa je
   vždycky z 1,2 mm). Verzované varianty: `--thickness 1.2`, `--coin 40`, `--coin 40 --thickness
-1.2` a záložní list kapsy `--window 18` (jen `pouzdro-mince-kapsa-okno-18mm.svg`, v aplikaci
-  nezaškrtnutý list „Kapsa – záložní okno Ø 18 mm“).
+1.2` a záložní list kapsy `--window 20` (jen `pouzdro-mince-kapsa-okno-20mm.svg`, v aplikaci
+  nezaškrtnutý list „Kapsa – záložní okno Ø 20 mm“).
 - Cvičný list k lekci 4 (`scripts/coin-card-holder-practice.ts`, `pnpm pattern:coin-holder-practice`,
   geometrie `src/lib/geometry/coin-card-holder-practice.ts`): **cvičný proužek** (A4 na výšku, 1:1,
   úsečka 50 mm) – tři panely po 30 mm × 40 mm, ohyby A a B z modelu pásu pro danou tloušťku
@@ -75,7 +75,7 @@ Jeden pás:
 | Průchodka       | jen volitelně (`--grommet`): Ø 5, 9 mm od hran  | výchozí listy ji nemají; s ní po složení v rohu s výřezem, 16 mm uvnitř oblouku, nad kartami        |
 | Druk            | klobouček Ø 12, patice 9,5 mm pod hranou předku | u pravého boku na ose jazyka; příruba patice smí mít nejvýš Ø 11 (končí 15 mm, karty začínají v 15) |
 | Kapsa s mincí   | 42,5 × 42 mm, horní rohy R10, dolní R6          | list kapsy; na předek 41,8 mm pod horní hranou, 14,75 mm od boků (mince 40: 55 × 54,5, 35,55 / 8,5) |
-| Okno            | Ø 20 (výsečník po celých mm)                    | prstenec 3,75 mm – držení ověřit na odřezku (mince 40: Ø 32, prstenec 4)                            |
+| Okno            | Ø 22 (0,8 × mince, po celých mm)                | prstenec 2,75 mm – držení ověřit na odřezku (mince 40: Ø 32, prstenec 4)                            |
 | Forma pro důlek | otvor Ø 31,5, deska ≥ 74 × 74, tl. ≥ 8 mm       | mince + 2 × 1,2 + vůle 1,6; hranu otvoru zaoblit (mince 40: Ø 44, deska ≥ 74 × 74)                  |
 
 Skládání: vnitřní panel ohybem B za přední, zadní panel ohybem A přes všechno. Vrstvy odpředu:
@@ -107,7 +107,7 @@ shora je vidět jen schodek ≈ 2,6 mm na horní hraně.
   výřez a průchodka.
 - Tloušťku bankovek (2 mm) a počet karet (4) ověřit na papírovém modelu s tím, co nosíš.
 - Průchodka z předlohy je od v4.11 jen volitelná (`--grommet`), výchozí pouzdro ji nemá.
-- Prstenec kolem okna 3,75 mm (okno Ø 20 u mince 50 Kč) je užší než dřívější minimum 4 mm. Jestli
+- Prstenec kolem okna 2,75 mm (okno Ø 22 u mince 50 Kč) je užší než dřívějších 3,75 mm (původně 4). Jestli
   minci udrží, se nedá spočítat – **ověřit na odřezku z tvarovací zkoušky** (mince v důlku,
   vyseknuté okno, zatřesení oknem dolů a zatlačení na minci z rubu; lekce 2).
 
@@ -143,8 +143,9 @@ shora je vidět jen schodek ≈ 2,6 mm na horní hraně.
 - Průchodka jen volitelně (`--grommet`): dvoudílná s podložkou do otvoru 5 mm, na jednu vrstvu
   kůže; osazovač s kovadlinkou nebo mini lis, výsečník 5 mm. Hezčí strana průchodky na rub
   vnitřního panelu (ten je vidět zepředu výřezem). Ve výchozím vybavení není.
-- Kruhový výsečník **20 mm** na okno výchozí mince 50 Kč (CraftPoint, 69 Kč; 32 mm jen pro minci
-  40 mm; nebo `--window` podle toho, co seženeš).
+- Kruhový výsečník **22 mm** na okno výchozí mince 50 Kč (Format, BO-Import 350 Kč nebo Boukal
+  470 Kč, ověřeno 15. 10. 2026; CraftPoint má jen do 20 mm; 32 mm jen pro minci 40 mm; nebo
+  `--window` podle toho, co seženeš).
 - Forma: překližka/HDPE ≥ 8 mm s otvorem Ø 31,5 (korunka 32 mm na unášeči ze sady Extol; u mince 40 mm Ø 44), rovná
   přítlačná deska, 2–4 svěrky.
   Co koupit, jak formu vyvrtat aku vrtačkou a otvory pro další mince:
@@ -254,15 +255,15 @@ sebe = 124 × 80 a roh se zkušebními údery).
    výsečník přesně na vytištěné kružnici, vystředit pomůžou osy); kružnice se obtáhne tužkou po
    vnitřní hraně otvoru, takže má přesně velikost výsečníku. Šablona se schová – po tvarování se
    podle ní rozmazaná čára obtáhne znovu (přes důlek neleží rovně, jen pomoc).
-   Předtím na odřezku z tvarovací zkoušky vyseknout okno Ø 20 a ověřit, že prstenec 3,75 mm
-   minci udrží (zatřesení oknem dolů, zatlačení z rubu); když ne, okno menší (Ø 18 mm na druhém
-   odřezku a k tomu nová šablona: list „Kapsa – záložní okno Ø 18 mm“, `--window 18`). List KAPSA
-   tedy 3× (forma na papír; značky na líci a šablona s oknem nalepené na tenký karton), při záložním okně Ø 18 mm navíc 1× záložní
-   list. Když minci neudrží ani Ø 18 mm, do kapsy se okno nesekne a na dalším odřezku se zkusí
-   hlubší důlek (ověřit). Výsečník Ø 18 mm je v nákupním plánu jako volitelný řádek mimo součet
-   (CraftPoint, varianta 18 mm, 57 Kč, skladem 8. 10. 2026). Dost hluboký důlek: číslo model nemá (tloušťku mince nepočítá); mince vložená z rubu nemá
+   Předtím na odřezku z tvarovací zkoušky vyseknout okno Ø 22 a ověřit, že prstenec 2,75 mm
+   minci udrží (zatřesení oknem dolů, zatlačení z rubu); když ne, u mělkého důlku nejdřív hlubší důlek,
+   pak okno menší (Ø 20 mm na dalším odřezku a k tomu nová šablona: list „Kapsa – záložní okno Ø 20 mm“, `--window 20`). List KAPSA
+   tedy 3× (forma na papír; značky na líci a šablona s oknem nalepené na tenký karton), při záložním okně Ø 20 mm navíc 1× záložní
+   list. Když minci neudrží ani Ø 20 mm, do kapsy se okno nesekne a na dalším odřezku se zkusí
+   hlubší důlek (ověřit). Výsečník Ø 20 mm je v nákupním plánu jako volitelný řádek mimo součet
+   (CraftPoint, varianta 20 mm, 69 Kč, skladem 15. 10. 2026). Dost hluboký důlek: číslo model nemá (tloušťku mince nepočítá); mince vložená z rubu nemá
    nad okolní rub vyčnívat – ověřit na odřezku. Špalík pod důlek (tip, ověřit): kus kulaté
-   dřevěné tyčky Ø 21–31 mm s rovným koncem.
+   dřevěné tyčky Ø 23–31 mm s rovným koncem.
 3. Vyříznout obrys kapsy podle orýsování (forma vystředěná na křížek, aby důlek seděl s otvory) a vyseknout okno (kapsa lícem dolů na formě, pod dno
    špalík; výsečník na narýsovanou kružnici, rozhoduje ale prstenec kůže kolem důlku stejně široký
    po celém obvodu).
@@ -439,3 +440,11 @@ doplnit ručně, do generátoru to nepatří.
   minci 50 Kč (dřív 57,5 = deska − 4); `POCKET_PIECE_MIN_MM = 70`, kus = max(70, otvor + 26),
   deska formy = kus + 4 = 74 × 74. Kapsa sama beze změny (42,5 × 42). Na listu KAPSA leží
   čárkované čtverce 20 mm od levé hrany a čtverec kapsy 20 mm od horní (papír na držení a pásku).
+- v4.16 (2026-10-15, rozhodnutí autora – okno Ø 20 působilo vůči minci malé): **okno Ø 22 mm**
+  pro minci 50 Kč, prstenec 2,75 mm. Okno se odvozuje jako `min(0,8 × mince, mince − 2 × 2,75)`
+  dolů na celé mm (`WINDOW_COIN_RATIO = 0,8` = poměr předlohy 32 / 40), `minCoinRingMm` 2,75.
+  Mince 40 mm dál Ø 32 (prstenec 4); 20 Kč Ø 20 místo 18 (prstenec 3), 10 Kč Ø 19 místo 17
+  (prstenec 2,75), 5 Kč Ø 17 místo 15 (prstenec 3). Kapsa, forma a pás beze změny. Záložní okno je Ø 20 mm (prstenec 3,75,
+  CraftPoint 69 Kč, `--window 20`) místo Ø 18. Výsečník Ø 22 mm CraftPoint nemá: Format 22 mm
+  (DIN 7200 A, podle prodejce na kůži) BO-Import 350 Kč, Boukal 470 Kč (ověřeno 15. 10. 2026).
+  Držení mince prstencem 2,75 mm z kůže 1,2 mm nikdo nezkoušel – ověřit na odřezku (lekce 2).

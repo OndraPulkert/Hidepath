@@ -97,11 +97,15 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
     expect(JSON.stringify(punch.buyingGuide)).toContain(
       `volitelně ${big.windowDiameterMm} mm pro minci 40 mm`,
     );
-    // Rozpočet počítá střed rozsahu: u výchozí mince se nesmí míchat nabídky jen pro minci 40 mm.
-    const window19 = punch.examples.find((x) => x.title.includes(`${def.windowDiameterMm} mm`))!;
+    // Rozpočet počítá střed rozsahu: u výchozí mince se nesmí míchat nabídky jen pro minci 40 mm
+    // ani záložní okno.
+    const main = punch.examples
+      .filter((x) => !x.variant && x.title.includes(` ${def.windowDiameterMm}`))
+      .map((x) => x.priceCents);
+    expect(main.length).toBeGreaterThan(0);
     expect(punch.priceRange).toEqual({
-      minCents: window19.priceCents,
-      maxCents: window19.priceCents,
+      minCents: Math.min(...main),
+      maxCents: Math.max(...main),
     });
   });
 
@@ -118,13 +122,13 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
     expect(thick.variant).toContain('kůže 1,5 mm');
     expect(thick.sheets.map((x) => x.id)).toContain('postup');
     expect(coinCardHolderProject.patternSheets!.defaultVariantLabel).toContain('kůže 1,2 mm');
-    // Záložní okno Ø 18 mm: vlastní skupina (nezaškrtnutá), prstenec podle modelu.
-    const w18 = coinCardHolderLayout({ ...DEFAULT_COIN_CARD_HOLDER, windowDiameterMm: 18 });
-    const sheet18 = coinCardHolderProject.patternSheets!.sheets.find(
-      (x) => x.id === 'kapsa-okno-18',
+    // Záložní okno Ø 20 mm: vlastní skupina (nezaškrtnutá), prstenec podle modelu.
+    const w20 = coinCardHolderLayout({ ...DEFAULT_COIN_CARD_HOLDER, windowDiameterMm: 20 });
+    const sheet20 = coinCardHolderProject.patternSheets!.sheets.find(
+      (x) => x.id === 'kapsa-okno-20',
     )!;
-    expect(sheet18.variant).toBeDefined();
-    expect(sheet18.note).toContain(`prstenec ${cz(w18.coinRingMm)} mm`);
+    expect(sheet20.variant).toBeDefined();
+    expect(sheet20.note).toContain(`prstenec ${cz(w20.coinRingMm)} mm`);
   });
 
   it('kroky, které říkají „vytiskněte list“, odkazují na listy střihu', () => {
@@ -419,7 +423,7 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
         '2:kapsa×1',
         '2:kapsa×1',
         '2:kapsa×1',
-        '2:kapsa-okno-18×1?',
+        '2:kapsa-okno-20×1?',
         '4:cvicny-prouzek-kuze-1-2×1',
         // PÁS: 1. výtisk na kůži, 2. nalepený na tenký karton na okénko pro kapsu.
         '5:sablona-kuze-1-2×1',
@@ -428,7 +432,7 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
         '6:kapsa×1?',
         // Jen šablona s oknem (forma je hotová z lekce 2): 1 výtisk, když chybí.
         '6:kapsa×1?',
-        '6:kapsa-okno-18×1?',
+        '6:kapsa-okno-20×1?',
         '6:sablona-kuze-1-2×1?',
       ]);
       const l6 = coinCardHolderProject.lessons.find((l) => l.order === 6)!;
@@ -441,8 +445,8 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
       for (const l of coinCardHolderProject.lessons) {
         for (const p of l.prints ?? []) {
           const sheet = sheets.find((s) => s.id === p.sheetId)!;
-          // Výchozí skupina (bez varianty); záložní okno Ø 18 mm má jen jednu variantu.
-          if (p.sheetId !== 'kapsa-okno-18') expect(sheet.variant, p.sheetId).toBeUndefined();
+          // Výchozí skupina (bez varianty); záložní okno Ø 20 mm má jen jednu variantu.
+          if (p.sheetId !== 'kapsa-okno-20') expect(sheet.variant, p.sheetId).toBeUndefined();
         }
         // Každá lekce s odkazem na tisk pod krokem má i výtisk v „Připravte si“.
         const linked = new Set(l.steps.flatMap((s) => (s.printLink ? [s.printLink] : [])));
@@ -500,9 +504,10 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
   describe('nákupní plán „Co koupit“', () => {
     const plan = coinCardHolderProject.shoppingPlan!;
 
-    it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10., sada korunek Extol na Alze a ceny CraftPointu znovu 8. 10. 2026, nit Slam a kružítko 12. 10. 2026)', () => {
+    it('každý řádek míří na právě jeden ověřený příklad skladem z 29. 9. 2026 (maskovací páska z 1. 10., sada korunek Extol na Alze a ceny CraftPointu znovu 8. 10. 2026, nit Slam a kružítko 12. 10. 2026, výsečníky okna 15. 10. 2026)', () => {
       const checkedAtFor = (line: (typeof plan.lines)[number]) => {
         if (line.equipmentSlug === 'masking-tape') return '2026-10-01';
+        if (line.equipmentSlug === 'round-punch-32mm') return '2026-10-15';
         if (line.url.startsWith('https://www.alza.cz/')) return '2026-10-08';
         if (recheckedOct12(line.url)) return '2026-10-12';
         if (rechecked(line.url)) return '2026-10-08';
@@ -540,7 +545,9 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
       expect(
         plan.lines.some(
           (l) =>
-            l.url.includes('vysecniky') && l.purpose?.includes(`${cz(def.windowDiameterMm)} mm`),
+            l.equipmentSlug === 'round-punch-32mm' &&
+            !l.optional &&
+            l.purpose?.includes(`Ø ${cz(def.windowDiameterMm)} mm`),
         ),
       ).toBe(true);
       expect(
@@ -559,8 +566,8 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
       expect(resolved.totalCents).toBe(
         lines.filter((l) => !l.optional).reduce((s, l) => s + l.example.priceCents * l.quantity, 0),
       );
-      // Záložní výsečník Ø 18 mm je jen volitelný řádek mimo součet.
-      expect(lines.filter((l) => l.optional).map((l) => l.example.variant)).toEqual(['Ø 18 mm']);
+      // Záložní výsečník Ø 20 mm je jen volitelný řádek mimo součet.
+      expect(lines.filter((l) => l.optional).map((l) => l.example.variant)).toEqual(['Ø 20 mm']);
       expect(resolved.notInStockCount).toBe(0);
     });
   });

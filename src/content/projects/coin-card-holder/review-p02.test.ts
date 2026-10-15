@@ -63,7 +63,7 @@ describe('pouzdro s mincí – opravy z kontroly p02', () => {
     expect(l6.requiredEquipment).toContain('sandpaper');
     expect(l6.recommendedEquipment).not.toContain('sandpaper');
     expect(l6.prints!.every((p) => p.condition !== undefined)).toBe(true);
-    expect(stepOf(6, 'trace-pocket-template').body).toContain('Kapsa – záložní okno Ø 18 mm');
+    expect(stepOf(6, 'trace-pocket-template').body).toContain('Kapsa – záložní okno Ø 20 mm');
   });
 
   it('bezpečnost lepidla je podmíněná (nákup je lepidlo na vodní bázi)', () => {
@@ -86,12 +86,12 @@ describe('pouzdro s mincí – rozhodnutí autora 8. 10. 2026', () => {
     expect(lesson(2).materials.join(' ')).toContain('Extol Premium');
   });
 
-  it('L2: když neudrží ani Ø 18 mm, do kapsy nesekat a zkusit hlubší důlek', () => {
+  it('L2: když neudrží ani Ø 20 mm, do kapsy nesekat a zkusit hlubší důlek', () => {
     const body = stepOf(2, 'test-window-retention').body;
     expect(body).toContain('volitelný řádek');
     expect(body).toContain('hlubší důlek');
     const plan = coinCardHolderProject.shoppingPlan!;
-    const backup = plan.lines.find((l) => l.variant === 'Ø 18 mm')!;
+    const backup = plan.lines.find((l) => l.variant === 'Ø 20 mm')!;
     expect(backup.optional).toBe(true);
     expect(backup.equipmentSlug).toBe('round-punch-32mm');
   });
@@ -108,7 +108,7 @@ describe('pouzdro s mincí – rozhodnutí autora 8. 10. 2026', () => {
       `Výtisk na šablonu nalepte lepidlem v tyčince na ${CARD}`,
     );
     expect(stepOf(2, 'test-window-retention').body).toMatch(
-      /Kapsa – záložní okno Ø 18 mm[^.]*nalepte ho na tenký karton/,
+      /Kapsa – záložní okno Ø 20 mm[^.]*nalepte ho na tenký karton/,
     );
     expect(stepOf(6, 'trace-pocket-template').body).toContain(
       `nalepte ho lepidlem v tyčince na ${CARD}`,

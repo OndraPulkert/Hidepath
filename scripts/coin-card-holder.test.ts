@@ -61,7 +61,7 @@ describe('generátor pouzdra s mincí – varianty', () => {
       'pouzdro-mince-postup-kuze-1-2mm',
     );
     expect(coinHolderProcessFileStem({ ...spec, coinDiameterMm: NAMED_COINS.decision })).toBeNull();
-    expect(coinHolderProcessFileStem({ ...spec, windowDiameterMm: 18 })).toBeNull();
+    expect(coinHolderProcessFileStem({ ...spec, windowDiameterMm: 20 })).toBeNull();
     expect(coinHolderProcessFileStem({ ...spec, grommet: true })).toBeNull();
   });
 
@@ -411,8 +411,8 @@ describe('generátor pouzdra s mincí – varianty', () => {
   });
 
   it('vlastní okno se propíše jen přes spec', () => {
-    expect(buildCoinHolderPocketSvg({ ...spec, windowDiameterMm: 18 })).toContain('okno Ø 18');
-    expect(buildCoinHolderPocketSvg(spec)).toContain('okno Ø 20');
+    expect(buildCoinHolderPocketSvg({ ...spec, windowDiameterMm: 20 })).toContain('okno Ø 20');
+    expect(buildCoinHolderPocketSvg(spec)).toContain('okno Ø 22');
     expect(buildCoinHolderPocketSvg(spec)).toContain('prstenec');
     expect(buildCoinHolderPocketSvg({ ...spec, coinDiameterMm: 40 })).toContain('okno Ø 32');
   });

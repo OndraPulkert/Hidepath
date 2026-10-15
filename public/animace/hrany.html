@@ -274,7 +274,7 @@ const HL_TONGUE='M10 53.07 L10 20 A10 10 0 0 1 20 10 L33 10 A10 10 0 0 1 43 20 L
 const HL_NOTCH='M43 53.07 A39 34 0 0 0 82 87.07 L97.69 87.07 A34 34 0 0 0 131.606 55.399 A2.5 2.5 0 0 1 134.1 53.07';
 const HL_INNER='M178.35 53.07 L244.35 53.07 A6 6 0 0 1 250.35 59.07 L250.35 151.17';
 const OUTL="M10 0 L32.5 0 A10 10 0 0 1 42.5 10 L42.5 36 A6 6 0 0 1 36.5 42 L6 42 A6 6 0 0 1 0 36 L0 10 A10 10 0 0 1 10 0 Z";
-const WINL="M31.25 20.75 A10 10 0 1 0 11.25 20.75 A10 10 0 1 0 31.25 20.75 Z";
+const WINL="M32.25 20.75 A11 11 0 1 0 10.25 20.75 A11 11 0 1 0 32.25 20.75 Z";
 
 // ---------- steps ----------
 const PARTS={A:'Srovnání',B:'Zkosení',C:'Barva',D:'Zaleštění',E:'Kontrola',F:'Pouzdro s mincí',G:'Víčko',H:'Pásek'};
@@ -514,7 +514,7 @@ add('F','Obarvěte a zaleštěte hrany kapsy',
   let o=G(`translate(${ox} ${oy}) scale(${s})`,inner);
   if(p1>.9) o+=pill(ox+42.5*s+2,oy+30*s,'obrys','tok');
   if(p2>.9) o+=pill(ox+21.25*s,oy+20.75*s+1.5,'okno','tok','middle');
-  o+=pill(4,87,t<.88?'kresleno pro 50 Kč: kapsa 42,5 × 42, okno Ø 20':'obarvit, zaleštit, pak přišít','t');
+  o+=pill(4,87,t<.88?'kresleno pro 50 Kč: kapsa 42,5 × 42, okno Ø 22':'obarvit, zaleštit, pak přišít','t');
   let ib=notes([['před přišitím','t'],[''],['obrys a okno:','t'],['obarvit'],['(u barvené kůže)'],['zaleštit']],16,5.2);
   return o+inset('KAPSA',ib);
  },P2);

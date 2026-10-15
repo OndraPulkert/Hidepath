@@ -293,7 +293,7 @@ describe('tisk – pouzdro s vsazenou mincí', () => {
       screen.getByRole('checkbox', { name: /^Pás \(šablona\)\s–\skůže 1,5\smm/ }),
     ).not.toBeChecked();
     expect(
-      screen.getByRole('checkbox', { name: /^Kapsa\s–\száložní okno Ø\s18\smm/ }),
+      screen.getByRole('checkbox', { name: /^Kapsa\s–\száložní okno Ø\s20\smm/ }),
     ).not.toBeChecked();
   });
 

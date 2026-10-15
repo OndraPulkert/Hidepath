@@ -137,14 +137,14 @@ Dvě svěrky dát proti sobě (z každé strany jednu), aby se víko nenaklonilo
    dvěma svěrkami proti sobě rovnoměrně stáhnout.
 5. Nechat úplně zaschnout (jistější přes noc).
 6. Vyříznout obrys podle orýsování, kapsu lícem dolů zpět na formu, pod důlek špalík a vyseknout
-   okno (u mince 50 Kč Ø 20 mm, u mince 40 mm Ø 32 mm).
+   okno (u mince 50 Kč Ø 22 mm, u mince 40 mm Ø 32 mm).
 
-Nejdřív celé zkusit na odřezku – **včetně okna**. Od v4.11 je u mince 50 Kč okno Ø 20 mm
-a prstenec kůže kolem něj jen 3,75 mm (dřív minimum 4 mm). Na zaschlém zkušebním odřezku proto
+Nejdřív celé zkusit na odřezku – **včetně okna**. Od v4.16 je u mince 50 Kč okno Ø 22 mm
+a prstenec kůže kolem něj jen 2,75 mm (dřív 3,75 mm, původně 4 mm). Na zaschlém zkušebním odřezku proto
 vyseknout okno a vyzkoušet: mince vložená z rubu do důlku nesmí vypadnout, když se odřezek otočí
 oknem dolů a zatřese, ani projít oknem, když se na ni z rubu zatlačí palcem; prstenec má být po
-celém obvodu stejně široký. Když mince projde, okno Ø 20 do skutečné kapsy nesekat a zkusit na
-dalším odřezku menší (např. Ø 18) – ověřit na odřezku.
+celém obvodu stejně široký. Když mince projde, okno Ø 22 do skutečné kapsy nesekat; u mělkého
+důlku nejdřív hlubší důlek, pak na dalším odřezku menší (Ø 20) – ověřit na odřezku.
 
 Mělký nebo na okraji zvrásněný důlek = kůže málo vlhká nebo slabě
 stažená; kůže moc ztenčená = moc mokrá nebo přetažená.
