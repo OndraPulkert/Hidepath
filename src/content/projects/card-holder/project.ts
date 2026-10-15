@@ -205,7 +205,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'place-ruler',
         title: 'Přiložte pravítko',
-        body: 'Pravítko položte na díl, který chcete zachovat – když nůž ujede, poškodí jen odpad. Nastavte ho čepelí, ne od oka: hrot nože zapíchněte do linie na začátku a pravítko k čepeli přisuňte, totéž na konci linie. Pravítko přitlačte roztaženými prsty, daleko od hrany.',
+        body: 'Pravítko položte na díl, který chcete zachovat – když nůž ujede, poškodí jen odpad. Nastavte ho čepelí, ne od oka: hrot nože zapíchněte do linie na začátku a pravítko k čepeli přisuňte, totéž na konci linie. Pravítko přitlačte roztaženými prsty, daleko od hrany. Palec nebo konečky prstů nechte přes druhý okraj pravítka na kůži – ucítíte, kdyby ujelo. Když pravítko klouže, použijte pravítko s korkem zespodu, nebo mu spodní stranu podlepte tenkým korkem.',
         animationLinks: [animationLink('rulerCut', 'B1')],
         media: [
           {
@@ -220,7 +220,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'cut',
         title: 'Řežte na dva až tři tahy',
-        body: 'Čepel opřete o hranu pravítka. Nůž sklopte asi na 45° ve směru tahu, do strany ho nenaklánějte. První tah veďte lehce, jen nařízne povrch. Druhým, případně třetím tahem dořízněte. Řežte od volné ruky, nikdy k prstům na pravítku.',
+        body: 'Čepel opřete o hranu pravítka. Nůž sklopte asi na 45° ve směru tahu, do strany ho nenaklánějte. První tah veďte lehce, jen nařízne povrch. Druhým, případně třetím tahem dořízněte. Zápěstí držte pevně, táhněte celou paží, pomalu a stejnou rychlostí; hranu pravítka mějte dobře osvětlenou. Řežte od volné ruky, nikdy k prstům na pravítku.',
         animationLinks: [animationLink('rulerCut', 'C1')],
         media: [
           {

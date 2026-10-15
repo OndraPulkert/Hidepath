@@ -111,7 +111,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
   </div>
   <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
 </section>
-<p class="note">Vlevo pohled shora: kůže rubem nahoru na řezací podložce, čára narýsovaná na rubu, pravítko na dílu, který zůstane (vlevo). Vpravo řez napříč čarou, silně zvětšený – tloušťky pravítka, čepele i posuny jsou přehnané, aby byly vidět. Nastavení pravítka čepelí: rada z fóra leatherworker.net („Put the knife right on the line, bring the ruler over to it“); úhel 45°, kolmá čepel a dva až tři lehké tahy jsou z lekce 2 pouzdra na karty.</p>
+<p class="note">Vlevo pohled shora: kůže rubem nahoru na řezací podložce, čára narýsovaná na rubu, pravítko na dílu, který zůstane (vlevo). Vpravo řez napříč čarou, silně zvětšený – tloušťky pravítka, čepele i posuny jsou přehnané, aby byly vidět. Nastavení pravítka čepelí: rada z fóra leatherworker.net („Put the knife right on the line, bring the ruler over to it“); úhel 45°, kolmá čepel a dva až tři lehké tahy jsou z lekce 2 pouzdra na karty. Korek pod pravítkem, prsty přes okraj, pevné zápěstí a světlo na hraně: rady z fóra leatherworker.net a blogu Tandy Leather.</p>
 </div>
 
 <script>
@@ -249,12 +249,15 @@ add('B','Totéž na konci čáry','Nůž přeneste na konec čáry: hrot do čá
   return s;
 });
 
-add('B','Přitlačte pravítko','Nůž odložte a pravítko přitlačte roztaženými prsty, daleko od hrany. Od teď s ním nehýbejte.',7000,t=>{
+add('B','Přitlačte pravítko','Nůž odložte a pravítko přitlačte roztaženými prsty, daleko od hrany, po které povedete nůž. Palec nebo konečky prstů nechte přesahovat přes druhý okraj pravítka na kůži – ucítíte, kdyby pravítko ujelo. Od teď s ním nehýbejte. Když pravítko klouže, použijte pravítko s korkem zespodu, nebo mu spodní stranu podlepte tenkým korkem.',11000,t=>{
   let s=mat()+leather()+line()+rulerTop(LX-.6,LX-.6);
   s+=O(es(t,.1,.45),hand(LX-8,36));
   let p=lbl(90.5,17,'pravítko','t')+lbl(90.5,22,'už neposouvat','t');
   p+=O(seg(t,.45,.55),lbl(90.5,35,'prsty roztažené,','tok')+lbl(90.5,40,'daleko od hrany','tok'));
-  p+=O(seg(t,.65,.75),lbl(90.5,57,'prsty mimo','ta')+lbl(90.5,62,'dráhu čepele','ta'));
+  p+=O(seg(t,.55,.65),lbl(90.5,50,'palec přes druhý','ts')+lbl(90.5,54.5,'okraj na kůži:','ts')+lbl(90.5,59,'ucítíte skluz','ts'));
+  p+=O(seg(t,.65,.75),lbl(90.5,67,'prsty mimo','ta')+lbl(90.5,71.5,'dráhu čepele','ta'));
+  p+=O(seg(t,.78,.88),lbl(90.5,79,'klouže? korek zespodu','ts'));
+  s+=O(seg(t,.55,.65),`<ellipse cx="${LX-18}" cy="42" rx="3.2" ry="4" fill="none" stroke="var(--ok)" stroke-width=".45"/>`);
   s+=inset('RUKA',p);
   return s;
 });
@@ -267,7 +270,7 @@ function sideView(op=1){
   s+=arrow(126,40.5,100,40.5,'var(--accent)',.45)+lbl(100,45.5,'směr tahu','ts');
   return O(op,s);
 }
-add('C','Držení nože','Čepel opřete o hranu pravítka. Nůž sklopte asi na 45° ve směru tahu (rukojeť jde napřed), do strany ho nenaklánějte – čepel je k podložce kolmo.',9000,t=>{
+add('C','Držení nože','Čepel opřete o hranu pravítka. Nůž sklopte asi na 45° ve směru tahu (rukojeť jde napřed), do strany ho nenaklánějte – čepel je k podložce kolmo. Zápěstí držte pevně a táhněte celou paží, pomalu a stejnou rychlostí. Hranu pravítka mějte dobře osvětlenou, ne ve stínu.',11000,t=>{
   let s=mat()+leather()+line()+rulerTop(LX-.6,LX-.6)+hand(LX-8,36)+knifeTop(LX,TOP+6);
   let p=lbl(90.5,12,'Z BOKU','ts')+sideView(seg(t,.08,.2));
   // řez napříč: kolmo
