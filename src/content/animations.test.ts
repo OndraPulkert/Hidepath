@@ -208,7 +208,7 @@ describe('animace postupu – stránky v public/animace', () => {
     'steps' in page ? [{ key, path: page.path, sections: page.sections, steps: page.steps }] : [],
   );
 
-  it('kroky mají pět stránek kapsy a druku, dvě stránky pásu, sedlářský steh, hrany, šest stránek Víčka, čtyři stránky pásku, posuvku a vrtání formy', () => {
+  it('kroky mají pět stránek kapsy a druku, dvě stránky pásu, sedlářský steh, hrany, šest stránek Víčka, čtyři stránky pásku, posuvku, vrtání formy a čtverec na formě', () => {
     expect(steppedPages.map((p) => p.key)).toEqual([
       'kapsa',
       'pocketAttach',
@@ -231,6 +231,7 @@ describe('animace postupu – stránky v public/animace', () => {
       'beltStitch',
       'caliper',
       'drillForm',
+      'formSquare',
     ]);
   });
 
@@ -302,6 +303,7 @@ describe('animace postupu – odkazy z lekcí', () => {
         '/animace/vrtani-formy.html#C1',
         '/animace/vrtani-formy.html#D1',
         '/animace/vrtani-formy.html#E1',
+        '/animace/ctverec-forma.html#A1',
       ],
       [`${lessonOf(2)}/mark-outline`]: kapsa('B1'),
       [`${lessonOf(2)}/wet`]: kapsa('D1'),

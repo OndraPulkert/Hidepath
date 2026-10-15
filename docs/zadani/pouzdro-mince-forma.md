@@ -125,6 +125,10 @@ Dvě svěrky dát proti sobě (z každé strany jednu), aby se víko nenaklonilo
    minci 40 mm je pro 14,4 V nejnáročnější, 32 mm je snazší). Vykružovákem vrtat, dokud špička středicího vrtáku nevyjde zespodu z desky
    (korunka je pak zhruba v půlce), desku otočit a dokončit z druhé strany podle dírky středicího vrtáku. Vykružovák občas vytáhnout kvůli pilinám.
 4. Horní hranu otvoru zaoblit smirkem (ostrá hrana by v kůži udělala rýhu).
+   Kolem otvoru narýsovat tužkou čtverec 70 × 70 se středem v otvoru, jen pravítkem (animace
+   `ctverec-forma`): značky na osách (70 − průměr) : 2 od hrany otvoru, přes ně svisle 35 mm na rohy,
+   kontrola úhlopříček ~99 mm. Odřezek 70 × 70 se na něj při lisování klade hranami; když nesedí
+   hrany i osy zároveň, platí osy.
 5. Bez vykružováku: navrtat dokola díry 5–6 mm těsně uvnitř čáry, střed vylomit, dopilovat na
    čáru (pilník nebo smirk kolem lahve).
 
@@ -133,7 +137,7 @@ Dvě svěrky dát proti sobě (z každé strany jednu), aby se víko nenaklonilo
 1. Třísločiněná kůže 1,2 mm ≥ 70 × 70; orýsovat obrys a prosekat otvory švu **před** navlhčením.
 2. Minci zabalit do potravinové fólie (mokrá třísločiněná kůže může od kovu tmavě zabarvit).
 3. Navlhčit houbičkou (nemáčet), počkat, až začne zase světlat.
-4. Kůži lícem dolů na formu, křížek nad středem otvoru; minci na rub nad otvor; přiklopit víkem;
+4. Kůži lícem dolů na formu, křížek nad středem otvoru (je-li odřezek 70 × 70, hranami na čtverec); minci na rub nad otvor; přiklopit víkem;
    dvěma svěrkami proti sobě rovnoměrně stáhnout.
 5. Nechat úplně zaschnout (jistější přes noc).
 6. Vyříznout obrys podle orýsování, kapsu lícem dolů zpět na formu, pod důlek špalík a vyseknout

@@ -31,6 +31,8 @@ import { type AnimationLink } from '@/content/schema';
  * - posuvka (`#A`–`#D`): stejně jako kapsa-prisiti; analogová posuvka s noniem 0,1 mm, měření
  *   tloušťky kůže a průměr z více míst (příklad z Víčka). Odkazují na ni kroky, kde se posuvkou
  *   měří tloušťka kůže, a pole tloušťky ve „Váš pásek“.
+ * - ctverec-forma (`#A`–`#C`): stejně jako kapsa-prisiti; čtverec 70 × 70 kolem vyvrtaného otvoru
+ *   formy jen pravítkem (lekce 2 pouzdra s mincí), příklad otvor Ø 32 mm.
  *
  * `steps` = názvy kroků každé části ve stejném pořadí jako na stránce (`add('B', 'název', …)`).
  * Stránky kapsy umí otevřít i jednotlivý krok: `#B3` = třetí krok části B, stejně jako ho
@@ -748,6 +750,20 @@ export const animationPages = {
         'Vypáčte špunt z korunky',
         'Zaoblete hranu otvoru',
       ],
+    },
+  },
+  formSquare: {
+    path: '/animace/ctverec-forma.html',
+    title: 'Čtverec 70 × 70 na formě',
+    sections: {
+      A: 'Část A – změřte otvor',
+      B: 'Část B – značky a rohy',
+      C: 'Část C – spojte a zkontrolujte',
+    },
+    steps: {
+      A: ['Změřte průměr otvoru', 'Spočítejte odstup od otvoru'],
+      B: ['Udělejte značky na osách', 'Odměřte rohy'],
+      C: ['Spojte rohy', 'Zkontrolujte úhlopříčky'],
     },
   },
 } as const satisfies Record<

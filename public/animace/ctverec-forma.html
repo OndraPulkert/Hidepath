@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Čtverec 70 × 70 na formě</title>
+<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+<!-- Self-hostované fonty aplikace (public/fonts), aby stránka fungovala i offline v PWA. -->
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f3efe9;--panel:#fffdf9;--stage:#f7f2ea;--ink:#2a211b;--muted:#6c6158;--line:#ddd5cc;
+  --accent:#b3261e;--ok:#2f6b3a;--btn:#2a211b;--btn-ink:#fffdf9;--amber:#a85f00;
+  --rub:#dcc4a2;--rub-d:#b99a72;
+  --wood:#e4c794;--wood-d:#b8935a;--wood-g:#cfae76;--wood-side:#caa66c;
+  --hole:#2b2018;--graphite:#4f545a;
+  --pb:var(--panel);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
+  --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;--amber:#f2b84b;
+  --rub:#c9b190;--rub-d:#a3865f;
+  --wood:#c9ab78;--wood-d:#9c7a45;--wood-g:#b5955f;--wood-side:#ad8c56;
+  --hole:#0e0a08;--graphite:#3f4449;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
+  --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;--amber:#f2b84b;
+  --rub:#c9b190;--rub-d:#a3865f;
+  --wood:#c9ab78;--wood-d:#9c7a45;--wood-g:#b5955f;--wood-side:#ad8c56;
+  --hole:#0e0a08;--graphite:#3f4449;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 "Albert Sans",system-ui,sans-serif;padding:22px 16px 44px;overflow-x:hidden}
+.wrap{max-width:860px;margin:0 auto;display:grid;gap:16px}
+h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
+.lead{color:var(--muted);margin:6px 0 0;max-width:70ch}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:10px;min-width:0}
+.stagewrap{position:relative;background:var(--stage);border-radius:8px;overflow:hidden}
+#stage{display:block;width:100%;height:auto;aspect-ratio:3/2}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.controls button{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);width:40px;height:40px;border-radius:10px;display:grid;place-items:center;cursor:pointer;padding:0}
+.controls button.play{background:var(--btn);color:var(--btn-ink);border-color:var(--btn)}
+.controls button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.controls svg{width:18px;height:18px;fill:currentColor}
+.counter{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+.prog{display:flex;gap:6px;align-items:stretch}
+.pseg{flex:1;display:grid;gap:4px;min-width:0;cursor:pointer;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left}
+.pseg .bars{display:flex;gap:2px;height:6px}
+.pseg .bars span{flex:1;background:var(--line);border-radius:2px;position:relative;overflow:hidden}
+.pseg .bars span b{position:absolute;inset:0;background:var(--accent);transform-origin:left;transform:scaleX(0)}
+.pseg .pl{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:520px){.pl span{display:none}}
+.pseg.on .pl{color:var(--ink);font-weight:600}
+.cap{min-height:6.6em}
+.cap .no{display:inline-block;font-weight:700;color:var(--accent);margin-right:6px;font-variant-numeric:tabular-nums}
+.cap h2{display:inline;font-size:1.05rem;margin:0}
+.cap p{margin:4px 0 0;color:var(--ink)}
+.note{font-size:13px;color:var(--muted);margin:0}
+/* svg text */
+.t{font:600 4.1px "Albert Sans",sans-serif;fill:var(--ink)}
+.ts{font:500 3.7px "Albert Sans",sans-serif;fill:var(--muted)}
+.tw{font:700 5.6px "Albert Sans",sans-serif;fill:var(--ink)}
+.ta{font:700 4.1px "Albert Sans",sans-serif;fill:var(--accent)}
+.tok{font:700 4.1px "Albert Sans",sans-serif;fill:var(--ok)}
+.tam{font:700 4.1px "Albert Sans",sans-serif;fill:var(--amber)}
+.tbig{font:800 7px "Albert Sans",sans-serif;fill:var(--ok)}
+.tsa{font:700 3.6px "Albert Sans",sans-serif;fill:var(--accent)}
+.lead-l{stroke:var(--muted);stroke-width:.25;fill:none}
+@media (min-width:700px){.t,.ta,.tok,.tam{font-size:2.9px}.ts{font-size:2.6px}.tw{font-size:4.2px}.tbig{font-size:5.6px}.tsa{font-size:2.8px}}
+.panelbox{fill:var(--panel);stroke:var(--line);stroke-width:.35}
+@media (max-width:520px){.cap{min-height:11em}.counter{width:100%;margin-left:0;order:9}}
+/* Hidepath: návrat do lekce */
+.backlink{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--ink);font-weight:600;font-size:15px;text-decoration:none;justify-self:start}
+.backlink:hover{text-decoration:underline}
+.backlink:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+/* klik na obdélníček časové osy = přehrát od toho kroku; větší plocha pro prst */
+.pseg .bars span{overflow:visible;cursor:pointer}
+.pseg .bars span b{border-radius:inherit}
+.pseg .bars span::after{content:"";position:absolute;left:0;right:0;top:-9px;bottom:-9px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+<a class="backlink" href="/" data-back>← Zpět do lekce</a>
+<h1>Čtverec 70 × 70 na formě</h1>
+<p class="lead">Jen pravítkem a tužkou: čtverec 70 × 70 mm kolem vyvrtaného otvoru formy, se středem v otvoru. Kůži 70 × 70 pak při lisování položíte hranami na jeho čáry.</p>
+</header>
+
+<section class="card" aria-label="Animace postupu">
+  <div class="stagewrap">
+    <svg id="stage" viewBox="0 0 135 90" role="img" aria-label="Animovaný postup: změření otvoru, výpočet odstupu, značky na osách, rohy, spojení a kontrola úhlopříček"></svg>
+  </div>
+  <div class="prog" id="prog"></div>
+  <div class="controls">
+    <button id="bRestart" aria-label="Od začátku" title="Od začátku"><svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/></svg></button>
+    <button id="bPrev" aria-label="Předchozí krok" title="Předchozí krok"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg></button>
+    <button id="bPlay" class="play" aria-label="Přehrát" title="Přehrát / pozastavit"><svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg></button>
+    <button id="bNext" aria-label="Další krok" title="Další krok"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
+    <span class="counter" id="counter">krok 1 / 6</span>
+  </div>
+  <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
+</section>
+<p class="note">Kresba je v měřítku: otvor Ø 32 mm (korunka 32 mm, mince 50 Kč) na prkénku z animace kapsy, osy narýsované před vrtáním. Rozměry jsou příklad – počítejte s průměrem, který naměříte na svém otvoru.</p>
+</div>
+
+<script>
+(()=>{
+// ---------- helpers ----------
+const cl=t=>Math.max(0,Math.min(1,t));
+const seg=(t,a,b)=>cl((t-a)/(b-a));
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const es=(t,a,b)=>ease(seg(t,a,b));
+const L=(a,b,t)=>a+(b-a)*t;
+const f=n=>(+n).toFixed(3).replace(/\.?0+$/,'')||'0';
+const G=(tr,s,extra='')=>`<g transform="${tr}" ${extra}>${s}</g>`;
+const O=(op,s)=>op<=0.001?'':`<g opacity="${f(op)}">${s}</g>`;
+let uid=0;
+function inset(title,body,{x=88,y=6,w=45,h=78}={}){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" class="panelbox"/>${title?`<text x="${x+2.5}" y="${y+5}" class="ts" style="font-weight:700;letter-spacing:.06em">${title}</text>`:''}${body}`}
+function lbl(x,y,t,cls='t',anchor='start'){return `<text x="${f(x)}" y="${f(y)}" class="${cls}" text-anchor="${anchor}">${t}</text>`}
+function tick(x,y,s=1,c='var(--ok)'){return `<path d="M${f(x-1.6*s)} ${f(y)} l${f(1.2*s)} ${f(1.2*s)} l${f(2.4*s)} -${f(2.6*s)}" stroke="${c}" stroke-width="${f(.7*s)}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`}
+
+// ---------- prkénko (mm, shora; stejné jako v animaci kapsy) ----------
+// Počátek = levý horní roh prkénka, y dolů. Otvor formy uprostřed šířky, 45 mm od konce.
+const HX=45, HY=59, D=32, R=D/2, SQ=70, H=SQ/2, A=(SQ-D)/2;   // A = odstup hrany otvoru od strany čtverce
+const K=.7, X=v=>3+v*K, Y=v=>3+v*K;                            // mm prkénka -> souřadnice obrázku
+const CAM=`translate(3 3) scale(${K})`;
+// Značky na osách (středy stran) a rohy čtverce
+const MARKS=[[HX+H,HY],[HX-H,HY],[HX,HY-H],[HX,HY+H]];
+const CORNERS={tl:[HX-H,HY-H],tr:[HX+H,HY-H],br:[HX+H,HY+H],bl:[HX-H,HY+H]};
+
+function board(){
+  let s=`<clipPath id="bclip"><rect x="-2" y="-2" width="119" height="124"/></clipPath><g clip-path="url(#bclip)">`;
+  s+=`<path d="M8 0 H230 V39 H262 A20 20 0 0 1 262 79 H230 V118 H8 A8 8 0 0 1 0 110 V8 A8 8 0 0 1 8 0 Z" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".8"/>`;
+  for(let i=0;i<7;i++){const y=10+i*16;s+=`<path d="M4 ${y} C60 ${y+4} 120 ${y-5} 226 ${y+2}" stroke="var(--wood-g)" stroke-width=".7" fill="none"/>`}
+  s+=`<circle cx="${HX}" cy="${HY}" r="${R}" fill="var(--hole)"/><circle cx="${HX}" cy="${HY}" r="${f(R-.6)}" fill="none" stroke="var(--wood-side)" stroke-width="1.2" opacity=".9"/>`;
+  s+=`<path d="M0 ${HY} H${HX-R} M${HX+R} ${HY} H130 M${HX} 0 V${HY-R} M${HX} ${HY+R} V118" stroke="var(--graphite)" stroke-width=".55"/>`;
+  return s+'</g>';
+}
+// ocelové pravítko: měřicí hrana z (x,y) ve směru úhlu, nula v (x,y); side = na kterou stranu hrany leží tělo
+function ruler(x,y,ang,len,side=1,hl=[]){
+  let s=`<rect x="-2" y="${side>0?0:-9}" width="${len+2}" height="9" rx=".6" fill="#dfe6ec" fill-opacity=".9" stroke="#7f8a94" stroke-width=".25"/>`;
+  let d='';for(let i=0;i<=len;i++){const l=i%10===0?3.4:i%5===0?2.5:1.5;d+=`M${i} 0 V${f(side*l)}`}
+  s+=`<path d="${d}" stroke="#5c6670" stroke-width=".18"/>`;
+  hl.forEach(v=>{s+=`<path d="M${v} ${f(-side*.6)} V${f(side*5)}" stroke="var(--accent)" stroke-width=".55"/>`});
+  return G(`translate(${f(x)} ${f(y)}) rotate(${f(ang)})`,s);
+}
+function pencil(x,y){return G(`translate(${f(x)} ${f(y)}) rotate(32)`,`<path d="M0 0 L1.1 -3 L-1.1 -3 Z" fill="#e8c9a0"/><path d="M0 0 L.4 -1.1 L-.4 -1.1Z" fill="#333"/><rect x="-1.1" y="-18" width="2.2" height="15" fill="#e3b33c" stroke="#9a7520" stroke-width=".2"/><rect x="-1.1" y="-20" width="2.2" height="2" fill="#c96f6f"/>`)}
+function markAt(i){const [x,y]=MARKS[i];return i<2?`<path d="M${x} ${y-3} V${y+3}" stroke="var(--graphite)" stroke-width=".6"/>`:`<path d="M${x-3} ${y} H${x+3}" stroke="var(--graphite)" stroke-width=".6"/>`}
+function dot([x,y]){return `<circle cx="${x}" cy="${y}" r=".9" fill="var(--graphite)"/>`}
+const SIDES=[['tl','tr'],['tr','br'],['br','bl'],['bl','tl']];
+function sideLine(i,p=1){const [a,b]=SIDES[i].map(k=>CORNERS[k]);return p<=0?'':`<path d="M${a[0]} ${a[1]} L${f(L(a[0],b[0],p))} ${f(L(a[1],b[1],p))}" stroke="var(--graphite)" stroke-width=".5" stroke-linecap="round"/>`}
+// celý stav prkénka: kolik značek, rohů a stran už je hotových
+function scene(o={}){
+  let s=board();
+  for(let i=0;i<(o.marks||0);i++) s+=markAt(i);
+  (o.corners||[]).forEach(k=>{s+=dot(CORNERS[k])});
+  for(let i=0;i<(o.sides||0);i++) s+=sideLine(i);
+  return s;
+}
+const ALL={marks:4,corners:['tl','tr','br','bl']};
+
+// ---------- kroky ----------
+const PARTS={A:'Změřte otvor',B:'Značky a rohy',C:'Spojte a zkontrolujte'};
+const S=[];
+const add=(part,title,body,dur,draw)=>S.push({part,title,body,dur,draw});
+
+add('A','Změřte průměr otvoru','Pravítko položte přes otvor podél osy – osa vede středem, tam je otvor nejširší. Nulu dejte na jednu hranu otvoru a odečtěte druhou hranu – na horní straně, vždy od viditelného okraje sražení (stejně pak měřte i odstup). V příkladu 32 mm; změřte svůj otvor.',9000,t=>{
+  const m=es(t,.05,.35);
+  let inner=scene()+G(`translate(${f(L(-60,0,m))} 0)`,ruler(HX-R,HY,0,40,1,t>.45?[0,D]:[]));
+  let s=G(CAM,inner);
+  s+=O(seg(t,.45,.55),lbl(X(HX-R),Y(HY+14),'0','ta','middle')+lbl(X(HX+R),Y(HY+14),'32','ta','middle'));
+  let p=lbl(90.5,17,'od hrany','t')+lbl(90.5,22,'k hraně otvoru','t');
+  p+=O(seg(t,.55,.65),lbl(90.5,36,'průměr','ts')+lbl(90.5,45,'32 mm','tbig'));
+  p+=O(seg(t,.7,.8),lbl(90.5,60,'příklad –','ts')+lbl(90.5,64.5,'změřte svůj otvor','ts'));
+  s+=inset('PRŮMĚR',p);
+  return s;
+});
+
+add('A','Spočítejte odstup od otvoru','Čtverec má 70 mm a otvor z toho zabere 32 mm. Zbytek se rozdělí na obě strany: (70 − 32) : 2 = 19 mm od hrany otvoru ke straně čtverce. Se svým průměrem počítejte stejně (u mince 40 mm s otvorem 44 mm vyjde 13 mm).',10000,t=>{
+  let inner=scene();
+  inner+=O(seg(t,.05,.2),`<rect x="${HX-H}" y="${HY-H}" width="${SQ}" height="${SQ}" fill="none" stroke="var(--accent)" stroke-width=".45" stroke-dasharray="2 1.4"/>`);
+  let s=G(CAM,inner);
+  const dim=(x1,x2,y,txt,op)=>O(op,`<path d="M${f(X(x1))} ${f(Y(y))} H${f(X(x2))}" stroke="var(--accent)" stroke-width=".35" marker-start="url(#ar)" marker-end="url(#ar)"/>`+lbl((X(x1)+X(x2))/2,Y(y)-1.4,txt,'ta','middle'));
+  s+=dim(HX-H,HX+H,HY-H-6,'70',seg(t,.2,.3));
+  const DY=HY+R+7, ext=(x,y0,op)=>O(op,`<path d="M${f(X(x))} ${f(Y(y0))} V${f(Y(DY)+1.2)}" stroke="var(--accent)" stroke-width=".22" stroke-dasharray=".8 .6"/>`);
+  s+=ext(HX-R,HY,seg(t,.32,.42))+ext(HX+R,HY,seg(t,.32,.42))+dim(HX-R,HX+R,DY,'32',seg(t,.32,.42));
+  s+=dim(HX-H,HX-R,DY,'19',seg(t,.5,.6))+dim(HX+R,HX+H,DY,'19',seg(t,.5,.6));
+  let p=lbl(90.5,17,'(70 − 32) : 2','t');
+  p+=O(seg(t,.5,.6),lbl(90.5,27,'= 19 mm','tbig'));
+  p+=O(seg(t,.62,.72),lbl(90.5,37,'od hrany otvoru','ts')+lbl(90.5,41.5,'ke straně čtverce','ts'));
+  p+=O(seg(t,.76,.86),lbl(90.5,56,'mince 40 mm:','ts')+lbl(90.5,61,'(70 − 44) : 2','t')+lbl(90.5,66,'= 13 mm','t'));
+  s+=inset('ODSTUP',p);
+  return s;
+});
+
+// B1: 4 ramena os, na každém pravítko od hrany otvoru a čárka u 19 mm
+const ARMS=[
+  {x:HX+R,y:HY,ang:0,side:1},     // vpravo
+  {x:HX-R,y:HY,ang:180,side:-1},  // vlevo
+  {x:HX,y:HY-R,ang:-90,side:1},   // nahoru
+  {x:HX,y:HY+R,ang:90,side:-1},   // dolů
+];
+add('B','Udělejte značky na osách','Nulu pravítka dejte na hranu otvoru, pravítko podél osy. U 19 mm udělejte tužkou krátkou čárku přes osu. Totéž na všech čtyřech osách. Značky jsou středy stran čtverce.',13000,t=>{
+  const n=4, w=.92/n;
+  let done=0, act='';
+  for(let i=0;i<n;i++){
+    const u=seg(t,.04+i*w,.04+(i+1)*w);
+    if(u>=1){done=i+1;continue}
+    if(u>0){
+      const a=ARMS[i], [mx,my]=MARKS[i];
+      act+=O(seg(u,0,.2),ruler(a.x,a.y,a.ang,30,a.side,u>.3?[0,A]:[]));
+      const pp=es(u,.3,.6);
+      if(u>.7) act+=markAt(i);
+      act+=O(seg(u,.2,.3)*(1-seg(u,.9,1)),pencil(L(mx+12,mx,pp),L(my-10,my,pp)));
+    }
+    break;
+  }
+  let s=G(CAM,scene({marks:done})+act);
+  let p=lbl(90.5,17,'nula na hraně','t')+lbl(90.5,22,'otvoru','t');
+  p+=lbl(90.5,33,'čárka u','ts')+lbl(90.5,42,'19 mm','tbig');
+  p+=lbl(90.5,55,`značky: ${Math.min(4,done)} / 4`,'t');
+  p+=O(seg(t,.9,.97),lbl(90.5,66,'= středy stran,','ts')+lbl(90.5,70.5,'35 mm od středu','ts')+lbl(90.5,75,'otvoru','ts'));
+  s+=inset('ZNAČKY',p);
+  return s;
+});
+
+// B2: pravítko svisle přes levou a pravou značku, 35 mm na značce, tečky u 0 a 70
+const VR=[{x:HX-H,side:-1,k:['bl','tl']},{x:HX+H,side:1,k:['br','tr']}];
+add('B','Odměřte rohy','Pravítko přiložte svisle přes levou značku tak, aby na ní bylo 35 mm, rovnoběžně se svislou osou (stačí od oka). U 0 a u 70 mm udělejte tečky – to jsou rohy. Totéž přes pravou značku.',12000,t=>{
+  let corners=[], act='';
+  for(let i=0;i<2;i++){
+    const u=seg(t,.05+i*.45,.5+i*.45), v=VR[i];
+    if(u>=1){corners.push(...v.k);continue}
+    if(u>0){
+      act+=O(seg(u,0,.18),ruler(v.x,HY+H,-90,SQ+4,v.side,u>.25?[0,H,SQ]:[]));
+      if(u>.55) corners.push(v.k[0]);
+      if(u>.8) corners.push(v.k[1]);
+      const yy=u<.55?L(HY,HY+H,es(u,.3,.5)):L(HY+H,HY-H,es(u,.58,.78));
+      act+=O(seg(u,.25,.32)*(1-seg(u,.9,1)),pencil(v.x,yy));
+    }
+    break;
+  }
+  let s=G(CAM,scene({marks:4,corners})+act);
+  if(t>.05&&t<.95){const v=VR[t<.5?0:1], sx=v.side<0?-1:1;
+    s+=O(seg(t,.12,.18)*(1-seg(t,.9,.95)),lbl(X(v.x)+sx*7.5,Y(HY)+1.3,'35','ta','middle')+lbl(X(v.x)+sx*7.5,Y(HY+H)+1.3,'0','ta','middle')+lbl(X(v.x)+sx*7.5,Y(HY-H)+1.3,'70','ta','middle'))}
+  let p=lbl(90.5,17,'35 mm na značce','t');
+  p+=lbl(90.5,27,'tečky u 0','t')+lbl(90.5,32,'a u 70 mm','t');
+  p+=lbl(90.5,45,'pravítko','ts')+lbl(90.5,49.5,'rovnoběžně se','ts')+lbl(90.5,54,'svislou osou','ts');
+  p+=lbl(90.5,66,`rohy: ${corners.length} / 4`,'t');
+  s+=inset('ROHY',p);
+  return s;
+});
+
+// C1: spojit rohy, čára musí projít značkou
+const SR=[ // pravítko podél strany, tělo vně čtverce
+  {x:HX-H-4,y:HY-H,ang:0},{x:HX+H,y:HY-H-4,ang:90},{x:HX+H+4,y:HY+H,ang:180},{x:HX-H,y:HY+H+4,ang:-90},
+];
+add('C','Spojte rohy','Pravítko přiložte na dvě sousední tečky a spojte je tenkou čarou. Čára musí projít značkou na ose; když ji mine, tečky přeměřte.',12000,t=>{
+  const w=.92/4; let done=0, act='', ok=0;
+  for(let i=0;i<4;i++){
+    const u=seg(t,.04+i*w,.04+(i+1)*w);
+    if(u>=1){done=i+1;continue}
+    if(u>0){
+      const r=SR[i]; act+=O(seg(u,0,.2),ruler(r.x,r.y,r.ang,SQ+8,-1));
+      const p=es(u,.25,.8); act+=sideLine(i,p);
+      const [a,b]=SIDES[i].map(k=>CORNERS[k]);
+      act+=O(seg(u,.2,.25)*(1-seg(u,.9,1)),pencil(L(a[0],b[0],p),L(a[1],b[1],p)));
+      if(p>.5) ok=1;
+    }
+    break;
+  }
+  let s=G(CAM,scene({...ALL,sides:done})+act);
+  // zvýraznit značku, kterou právě strana prošla
+  const cur=Math.min(3,done);
+  if(ok||done>cur){const mi=[2,0,3,1][cur], [mx,my]=MARKS[mi];s+=`<circle cx="${f(X(mx))}" cy="${f(Y(my))}" r="2.6" fill="none" stroke="var(--ok)" stroke-width=".5"/>`}
+  let p=lbl(90.5,17,'tečka – tečka','t')+lbl(90.5,22,'tenkou čarou','t');
+  p+=lbl(90.5,35,'čára prochází','ts')+lbl(90.5,39.5,'značkou na ose','ts')+tick(124,37.5);
+  p+=lbl(90.5,52,'mine ji?','ts')+lbl(90.5,56.5,'tečky přeměřte','ta');
+  p+=lbl(90.5,70,`strany: ${done} / 4`,'t');
+  s+=inset('STRANY',p);
+  return s;
+});
+
+add('C','Zkontrolujte úhlopříčky','Změřte strany (70 mm) a obě úhlopříčky – mají být stejné, kolem 99 mm. Když se liší o víc než 1 mm, rohy nejsou pravé: přeměřte tečky. Při lisování pak kůži 70 × 70 položíte hranami na čáry a osy na rubu na osy desky.',11000,t=>{
+  const {tl,tr,br,bl}=CORNERS;
+  let inner=scene({...ALL,sides:4});
+  const d1=es(t,.08,.3), d2=es(t,.32,.54);
+  inner+=`<path d="M${tl[0]} ${tl[1]} L${f(L(tl[0],br[0],d1))} ${f(L(tl[1],br[1],d1))}" stroke="var(--accent)" stroke-width=".45" stroke-dasharray="2 1.2"/>`;
+  if(d2>0) inner+=`<path d="M${tr[0]} ${tr[1]} L${f(L(tr[0],bl[0],d2))} ${f(L(tr[1],bl[1],d2))}" stroke="var(--accent)" stroke-width=".45" stroke-dasharray="2 1.2"/>`;
+  // kůže 70 × 70 rubem nahoru, osy na osy
+  const lp=es(t,.7,.88);
+  if(lp>0) inner+=O(lp,`<rect x="${HX-H}" y="${f(HY-H-L(30,0,lp))}" width="${SQ}" height="${SQ}" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".4"/><path d="M${HX-H} ${f(HY-L(30,0,lp))} H${HX+H} M${HX} ${f(HY-H-L(30,0,lp))} V${f(HY+H-L(30,0,lp))}" stroke="var(--graphite)" stroke-width=".4"/>`);
+  let s=G(CAM,inner);
+  s+=O(seg(t,.3,.36)*(1-seg(t,.66,.7)),lbl(X(HX-19),Y(HY-24),'99','ta','middle'));
+  s+=O(seg(t,.54,.6)*(1-seg(t,.66,.7)),lbl(X(HX+19),Y(HY-24),'99','ta','middle'));
+  let p=lbl(90.5,17,'strany 70 mm','t');
+  p+=O(seg(t,.3,.4),lbl(90.5,27,'úhlopříčky','t')+lbl(90.5,32,'obě ~99 mm','tok')+tick(127,30.5));
+  p+=O(seg(t,.56,.66),lbl(90.5,43,'liší se o víc','ts')+lbl(90.5,47.5,'než 1 mm?','ts')+lbl(90.5,52,'přeměřte tečky','ta'));
+  p+=O(seg(t,.72,.82),lbl(90.5,64,'kůže 70 × 70:','ts')+lbl(90.5,68.5,'hrany na čáry,','ts')+lbl(90.5,73,'osy na osy','ts'));
+  s+=inset('KONTROLA',p);
+  return s;
+});
+
+// ---------- engine ----------
+const svg=document.getElementById('stage');
+const DEFS=`<defs>
+<marker id="ar" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--accent)"/></marker>
+</defs>`;
+const capNo=document.getElementById('capNo'),capT=document.getElementById('capT'),capB=document.getElementById('capB'),counter=document.getElementById('counter');
+const prog=document.getElementById('prog');
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const partKeys=Object.keys(PARTS);const barEls=[];const segEls={};
+partKeys.forEach(k=>{const b=document.createElement('button');b.className='pseg';b.type='button';b.setAttribute('aria-label',`Část ${k}: ${PARTS[k]}`);
+  const bars=document.createElement('div');bars.className='bars';S.forEach((st,i)=>{if(st.part===k){const sp=document.createElement('span');const bb=document.createElement('b');sp.appendChild(bb);sp.title='Přehrát od kroku '+k+(bars.children.length+1);sp.tabIndex=0;sp.setAttribute('role','button');sp.setAttribute('aria-label',sp.title);sp.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();stepGo(i)}});sp.addEventListener('click',e=>{e.stopPropagation();stepGo(i)});bars.appendChild(sp);barEls[i]=bb;}});
+  const pl=document.createElement('div');pl.className='pl';pl.innerHTML=`<b>${k}</b><span> · ${PARTS[k]}</span>`;b.append(bars,pl);prog.appendChild(b);segEls[k]=b;
+  b.addEventListener('click',()=>{auto=true;go(S.findIndex(s=>s.part===k),0,true)});});
+let idx=0,tt=1,playing=false,last=0,raf=0;
+function numInPart(i){const p=S[i].part;return S.slice(0,i+1).filter(s=>s.part===p).length}
+function render(){
+  const st=S[idx]; uid=0;
+  let body='';
+  try{ body=st.draw(tt);}catch(e){console.error(e)}
+  svg.innerHTML=DEFS+body;
+  capNo.textContent=`${st.part}${numInPart(idx)}`; capT.textContent=st.title; capB.textContent=st.body;
+  counter.textContent=`krok ${idx+1} / ${S.length}`;
+  barEls.forEach((b,i)=>{b.style.transform=`scaleX(${i<idx?1:i===idx?tt:0})`});
+  partKeys.forEach(k=>segEls[k].classList.toggle('on',k===st.part));
+}
+function stepGo(i){if(typeof auto!=='undefined')auto=true;setPlay(false);go(i,0);setPlay(true);}
+let hold=0;
+function go(i,t=0,user=false){idx=Math.max(0,Math.min(S.length-1,i));tt=reduce?1:t;hold=0;render();}
+function setPlay(p){playing=p;document.getElementById('playIcon').innerHTML=p?'<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';document.getElementById('bPlay').setAttribute('aria-label',p?'Pozastavit':'Přehrát');if(p){last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}}
+function loop(now){if(!playing)return;const dt=Math.max(0,now-last);last=now;
+  if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
+  else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
+  raf=requestAnimationFrame(loop)}
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
+document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
+document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
+document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};
+// Hidepath: deep link na část (#A–#D) skočí na její první krok, na krok (#C3) přímo na ten krok.
+function stepFromHash(){const m=/^([A-Z])([0-9]+)?$/.exec(decodeURIComponent((location.hash||'').slice(1)).trim().toUpperCase());if(!m||!Object.prototype.hasOwnProperty.call(PARTS,m[1]))return -1;const ix=[];S.forEach((s,i)=>{if(s.part===m[1])ix.push(i)});const n=m[2]===undefined?1:+m[2];return n>=1&&n<=ix.length?ix[n-1]:-1}
+{const i=stepFromHash();go(i>=0?i:0,1);}
+addEventListener('hashchange',()=>{const i=stepFromHash();if(i<0)return;auto=true;setPlay(false);go(i,0);if(!reduce)setPlay(true);});
+window.__ctverec={go:(i,t)=>{setPlay(false);idx=i;tt=t;render()},steps:S.length};
+let auto=false;
+if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!auto){auto=true;io.disconnect();const i=stepFromHash();go(i>=0?i:0,0);setPlay(true)}})},{threshold:.45});io.observe(svg)}
+})();
+</script>
+<script>
+// Hidepath: „Zpět do lekce“ = krok zpět v historii, když se sem přišlo z aplikace; jinak úvod aplikace.
+(function(){var a=document.querySelector('[data-back]');if(!a)return;a.addEventListener('click',function(e){var o='';try{o=document.referrer?new URL(document.referrer).origin:'';}catch(_){}if(o===location.origin&&history.length>1){e.preventDefault();history.back();}});})();
+</script>
+</body>
+</html>
