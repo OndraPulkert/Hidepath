@@ -185,8 +185,8 @@ obchod neuvádí (návod v balení, nebo zkouška od nejmenšího výsečníku).
 
 ## Materiál (ověřeno 2026-09-18, CraftPoint, skladem)
 
-Pás 243 × 149 mm (s jazykem) potřebuje arch A4 (297 × 210). Kůže na kapsu ≥ 70 × 70
-se pod pás 1,2 mm vejde (3 + 104,1 + 2 + 70 = 179,1 ≤ 210), rozvržení ověřit na arši. Barvené třísločiněné lícové usně 1,2 mm
+Pás s jazykem 240,35 × 147,17 mm u kůže 1,2 mm (242,55 × 148,59 u 1,5 mm) potřebuje přířez A4
+(CraftPoint 300 × 210). Kapsa ≥ 70 × 70 se pod pás 1,2 mm vejde, rozvržení níže; ověřit na kůži. Barvené třísločiněné lícové usně 1,2 mm
 z italské koželužny, A4 = 250 Kč, A5 = 57 Kč:
 
 | Barva                                                                                                                                     | Poznámka                                                                                             |
@@ -202,11 +202,15 @@ ztenčování odpadá. Listy pak vygenerovat `pnpm pattern:coin-holder --thickne
 ohyb B 8,7, jazyk 43,1 mm). Tvarování za mokra nejdřív zkusit na A5 stejné barvy.
 
 Sestava nákupního plánu v aplikaci (podle objednávky autora): **Blu 1,2 mm A4** na celé pouzdro –
-rozvržení na rubu (A4 na šířku, 3 mm od krajů, mezery 2 mm): pás x 3–243,35, y 3–107,1, jazyk
-33 × 43,07 u levého konce dolů (x 3–36, y –150,17); proužek 50 × 130 na výšku vpravo (x 245,35–295,35,
-y 3–133); pod pásem kapsa (x 38–108) a třetí zkušební odřezek (x 110–180), y 109,1–179,1; odřezky
-na druk z pravého dolního rohu (x 182–297, y 135–207). Na líci je to otočené: šablona jazykem dolů.
-Dva zkušební odřezky 70 × 70 (lekce 2) z druhé tréninkové juchtové A5 projektu 01 (na šířku,
+rozvržení na rubu (přířez 300 × 210 na šířku, mezery 2 mm): pás x 3–243,35, y 5–109,1 (5 mm od
+horní hrany: kroužky ohybů 2 mm za dolní hranou pásu, y 3, musí ležet na kůži), jazyk 33 × 43,07
+u levého konce dolů (x 3–36, y 109,1–152,17); proužek 50 × 130 na výšku vpravo (x 245,35–295,35,
+y 5–135; vpravo zbude 4,65 mm); pod pásem s mezerou 4 mm (kroužky ohybu B 2 mm za otevřenou hranou,
+y 111,1, x 162,69 a 171,35) kapsa (x 38–108) a třetí zkušební odřezek (x 110–180), y 113,1–183,1;
+kroužky ohybu A (y 77,1) leží ve výřezu na prst, v odpadu pásu; odřezky na druk z pravého dolního
+rohu (x 182–297, y 137–207). Lekce 5: kůži otočit lícem nahoru přes kratší hranu, šablona jazykem
+dolů 5 mm od horní a 3 mm od pravé hrany (rub x = 3 + x pásu, y = 109,1 − y pásu).
+Dva zkušební odřezky 70 × 70 (lekce 2) z druhé tréninkové juchtové A5 projektu 01 (na šířku lícem nahoru,
 u pravé hrany pod sebou: 3 + 70 + 2 + 70 = 145 ≤ 150; vlevo tři odřezky 40 × 80 na výšku vedle
 sebe = 124 × 80 a roh se zkušebními údery).
 

@@ -72,7 +72,9 @@ export function templateSheetLayout(template: TemplateDefinition, legend: boolea
   const contentWidth = Math.max(...pieces.map((p) => p.widthMm));
   const contentHeight = pieces.reduce((s, p) => s + p.heightMm, 0) + gap * (pieces.length - 1);
   const width = contentWidth + margin * 2;
-  const height = contentHeight + margin * 2 + 54;
+  // Pod díly legenda (od 10 mm pod posledním dílem) a kontrolní úsečka; celé SVG se s nadpisem
+  // vejde na A4 s rezervou asi 12 mm (test template.test.tsx).
+  const height = contentHeight + margin * 2 + 44;
 
   const placed = pieces.map((p, index) => ({
     ...p,

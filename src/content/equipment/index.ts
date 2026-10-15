@@ -31,7 +31,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       {
         label: 'Množství',
         value:
-          '1× A5 na pouzdro (oba díly se vejdou pod sebe, rezerva asi 1 cm na stranu) + 2× A5 téže kůže na trénink lekcí 1–4',
+          '1× A5 na pouzdro (oba díly vedle sebe, rezerva asi 3 cm a 2,5 cm) + 2× A5 téže kůže na trénink lekcí 1–4',
       },
       {
         label: 'Barva',
@@ -85,7 +85,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         url: 'https://craft-point.cz/products/hovezi-kuze-licova-juchtova-trislocinena-1-2-mm',
         priceCents: 5_700,
         variant: 'A5 (21 × 15 cm)',
-        note: 'Na pouzdro na karty (oba díly pod sebe) i na trénink lekcí 1–4; z druhé tréninkové A5 i dva čtverce 70 × 70 mm na zkoušku důlku u pouzdra s mincí (lekce 2).',
+        note: 'Na pouzdro na karty (oba díly vedle sebe) i na trénink lekcí 1–4; z druhé tréninkové A5 i dva čtverce 70 × 70 mm na zkoušku důlku u pouzdra s mincí (lekce 2).',
         availability: 'in_stock',
         checkedAt: '2026-10-08',
       },

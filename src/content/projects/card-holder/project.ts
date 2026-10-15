@@ -44,7 +44,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 20,
     goal: 'Připravit stůl, na kterém se dá bezpečně řezat a děrovat, a vyzkoušet si každý nástroj.',
     materials: [
-      'odřezek kůže: levý dolní roh druhé tréninkové A5 položené na šířku (zbytek patří na lekci 4 a zkoušky u pouzdra s mincí; první A5 nechte celou na lekci 2)',
+      'odřezek kůže: levý dolní roh druhé tréninkové A5 položené na šířku lícem nahoru (zbytek patří na lekci 4 a zkoušky u pouzdra s mincí; první A5 nechte celou na lekci 2)',
       'složený ručník pod desku',
       'dobré světlo',
       'nůžky na nit',
@@ -82,7 +82,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'check-chisels',
         title: 'Zkontrolujte vidličky (pokud už je máte)',
-        body: 'Kroky 3 až 5 udělejte, až budete mít vidličky, jehly a nit doma; do té doby pokračujte lekcí 2. Nic neřežte, vše zkoušejte v levém dolním rohu druhé tréninkové A5 položené na šířku, asi 2 cm od hran (první A5 nechte celou na lekci 2). Přiložte nejdelší vidličky (se 4 nebo 6 hroty) hroty na kůži a přitiskněte rukou, bez paličky. Pravítkem změřte vzdálenost první a poslední značky a vydělte ji počtem mezer mezi značkami: musí vyjít 3,85–4 mm. Odchylku asi do 0,1 mm způsobí měření pravítkem, ne vidlička.',
+        body: 'Kroky 3 až 5 udělejte, až budete mít vidličky, jehly a nit doma; do té doby pokračujte lekcí 2. Nic neřežte, vše zkoušejte v levém dolním rohu druhé tréninkové A5 položené na šířku lícem nahoru, asi 2 cm od hran (první A5 nechte celou na lekci 2). Přiložte nejdelší vidličky (se 4 nebo 6 hroty) hroty na kůži a přitiskněte rukou, bez paličky. Pravítkem změřte vzdálenost první a poslední značky a vydělte ji počtem mezer mezi značkami: musí vyjít 3,85–4 mm. Odchylku asi do 0,1 mm způsobí měření pravítkem, ne vidlička.',
         records: [
           {
             kind: 'number',
@@ -442,7 +442,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 45,
     goal: 'Slepit dva odřezky, proděrovat je najednou a sešít sedlářským stehem, který je na obou stranách rovný.',
     materials: [
-      'ze druhé tréninkové A5 (na šířku): 3 odřezky asi 40 × 80 mm vedle sebe na výšku od levého horního rohu (jeden na zkoušku zdrsnění); pruh 70 mm u pravé hrany nechte na dva čtverce 70 × 70 mm pro pouzdro s mincí',
+      'ze druhé tréninkové A5 (na šířku lícem nahoru): 3 odřezky asi 40 × 80 mm vedle sebe na výšku od levého horního rohu (jeden na zkoušku zdrsnění); pruh 70 mm u pravé hrany nechte na dva čtverce 70 × 70 mm pro pouzdro s mincí',
       'nit asi 60 cm',
       'lepidlo nebo oboustranná páska',
       'nůžky na nit',
@@ -637,7 +637,7 @@ export const lessons: readonly LessonDefinition[] = [
     goal: 'Mít dva přesné díly pouzdra vyříznuté podle šablony 1:1 a hotovou horní hranu kapsy.',
     materials: [
       'nůžky na vystřižení šablony nahrubo (s okrajem 1–2 cm)',
-      'kůže na pouzdro: třetí juchtová A5 (1,2 mm), na trénink nepoužitá; oba díly pod sebou zaberou 100 × 128 mm, rezerva asi 1 cm na stranu',
+      'kůže na pouzdro: třetí juchtová A5 (1,2 mm), na trénink nepoužitá; oba díly vedle sebe, stranou 100 mm podél kratší hrany A5, asi 2 cm od sebe: zaberou asi 146 × 100 mm, rezerva asi 3 cm po stranách a 2,5 cm nahoře i dole',
       'tužka nebo tenké dřívko a rovná destička na smirek',
       'trochu vody a čistý hadřík',
     ],
@@ -690,7 +690,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'choose-area',
         title: 'Vyberte místo na kůži',
-        body: 'Prohlédněte kůži proti světlu a vyberte plochu bez jizev, žilek a měkkých míst. Oba díly položte delší stranou stejným směrem.',
+        body: 'Prohlédněte kůži proti světlu a vyberte plochu bez jizev, žilek a měkkých míst. Oba díly položte vedle sebe, delší stranou (100 mm) stejným směrem, podél kratší hrany A5, asi 2 cm od sebe.',
         media: [],
       },
       {
@@ -1279,7 +1279,7 @@ export const cardHolderProject: ProjectDefinition = {
       reason:
         'Finální díly pouzdra (lekce 5 a 6). Na trénink v lekcích 1 a 3 stačí levné odřezky; zkoušku pásky a cvičnou šablonu v lekci 2 a lepení v lekci 4 dělejte na lícové kůži téže kůže jako pouzdro.',
       specification:
-        'Třísločiněná lícová kůže 1,2–1,5 mm: 1× A5 na pouzdro (oba díly se vejdou pod sebe) a 2× A5 téže kůže na trénink lekcí 1–4.',
+        'Třísločiněná lícová kůže 1,2–1,5 mm: 1× A5 na pouzdro (oba díly se vejdou vedle sebe) a 2× A5 téže kůže na trénink lekcí 1–4.',
     },
     {
       equipmentSlug: 'sandpaper',
@@ -1418,7 +1418,7 @@ export const cardHolderProject: ProjectDefinition = {
         variant: 'A5 (21 × 15 cm)',
         quantity: 3,
         purpose:
-          '1 ks na pouzdro: zadní díl 100 × 70 mm a přední kapsa 100 × 56 mm pod sebou (lekce 5 a 6), rezerva asi 1 cm na stranu, na trénink ji nepoužívejte. 2 ks na trénink lekcí 1–4: zkušební údery, pás asi 210 × 70 mm na rovný řez (lekce 2), zbytek asi 210 × 80 mm na cvičnou šablonu a tři odřezky asi 40 × 80 mm na lepení a steh; druhá A5 na šířku: odřezky 40 × 80 vedle sebe vlevo nahoře, roh vlevo dole na zkušební údery, u pravé hrany pod sebou dva čtverce 70 × 70 mm na zkoušku důlku u pouzdra s mincí',
+          '1 ks na pouzdro: zadní díl 100 × 70 mm a přední kapsa 100 × 56 mm vedle sebe (lekce 5 a 6), rezerva asi 3 cm a 2,5 cm, na trénink ji nepoužívejte. 2 ks na trénink lekcí 1–4: zkušební údery, pás asi 210 × 70 mm na rovný řez (lekce 2), zbytek asi 210 × 80 mm na cvičnou šablonu a tři odřezky asi 40 × 80 mm na lepení a steh; druhá A5 na šířku lícem nahoru: odřezky 40 × 80 vedle sebe vlevo nahoře, roh vlevo dole na zkušební údery, u pravé hrany pod sebou dva čtverce 70 × 70 mm na zkoušku důlku u pouzdra s mincí',
       },
       {
         equipmentSlug: 'cutting-mat',

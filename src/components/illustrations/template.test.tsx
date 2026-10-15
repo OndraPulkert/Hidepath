@@ -42,7 +42,8 @@ describe.each(withTemplate.flatMap((p) => [true, false].map((legend) => ({ p, le
     it('SVG se vejde do tiskové plochy A4 bez okraje 13 mm, i s nadpisem nad ním', () => {
       expect(TEMPLATE_PRINT_MARGIN_MM).toBeGreaterThanOrEqual(SAFE_MM);
       expect(layout.width).toBeLessThanOrEqual(A4.widthMm - 2 * TEMPLATE_PRINT_MARGIN_MM);
-      expect(layout.height + PAGE_HEADER_MM).toBeLessThanOrEqual(
+      // Rezerva aspoň 8 mm na odchylky vykreslení nadpisu.
+      expect(layout.height + PAGE_HEADER_MM + 8).toBeLessThanOrEqual(
         A4.heightMm - 2 * TEMPLATE_PRINT_MARGIN_MM,
       );
     });
