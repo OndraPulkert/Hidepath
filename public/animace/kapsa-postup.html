@@ -466,7 +466,7 @@ add('B','Přilepte ho maskovací páskou na LÍC','List položte na LÍC kůže 
   s+=rightNote([['hranami na hrany','tw'],['páska v rozích','ts'],['přes hranu na rub','ts'],['konce os volné','ts']]);
   return s;
 },'lic');
-add('B','Šídlem propíchněte 23 teček a 4 konce os','Šídlem propíchněte všechny tečky švu a 4 konce os (vlevo, vpravo, nahoře, dole).',7000,t=>{
+add('B','Šídlem propíchněte 23 teček a 4 konce os','Šídlem propíchněte všechny tečky švu a 4 konce os (vlevo, vpravo, nahoře, dole). Dírky v kartonu udělejte předem mimo kůži; pak hrot jen zasuňte a přitlačte.',7000,t=>{
   const P=[...DOTS,...AXE]; const u=seg(t,.05,.92)*P.length; const n=Math.min(P.length,Math.floor(u)); const fr=u-Math.floor(u);
   let s=G(LVw,leather({side:'lic'})+paper1(n)+tapes(0));
   if(n<P.length){const [x,y]=P[n];const [a,b]=vx(x,y);s+=awl(a,b,fr<.5?fr*2:2-fr*2)}
