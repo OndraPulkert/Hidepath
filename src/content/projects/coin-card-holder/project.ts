@@ -274,9 +274,9 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 30,
     goal: 'Vyvrtat formu, vytvarovat na odřezku důlek na minci a vyzkoušet, že prstenec 3,75 mm kolem okna Ø 20 mm minci udrží.',
     materials: [
-      'dvě desky na formu a víko, aspoň 61,5 × 61,5 mm (ideálně 8 × 8 cm; u mince 40 mm aspoň 74 × 74 mm) a aspoň 8 mm silné (překližka, tvrdý plast nebo bukové prkénko; jak široké smí být, viz první krok), a odpadní prkno pod vrtání',
+      'dvě desky na formu a víko, aspoň 74 × 74 mm (ideálně 8 × 8 cm) a aspoň 8 mm silné (překližka, tvrdý plast nebo bukové prkénko; jak široké smí být, viz první krok), a odpadní prkno pod vrtání',
       'aku vrtačka a korunka Ø 32 mm se středicím vrtákem (např. ze sady Extol Premium 19–76 mm na unášeči, nebo samostatný Wolfcraft Ø 32 mm se stopkou rovnou do sklíčidla), u mince 40 mm Ø 44 nebo 45 mm; Forstnerův vrták jen Ø 32 mm (30 ani 35 mm ze sady nesedí)',
-      '2 odřezky třísločiněné kůže 1,2 mm, každý aspoň 57,5 × 57,5 mm (u mince 40 mm 70 × 70 mm); druhý na případné opakování zkoušky okna. Třetí stejný odřezek jen tehdy, když mince projde oknem Ø 20 mm i podruhé (u sestavy z nákupního plánu jsou všechny tři ze zbytku druhé tréninkové juchtové A5 z projektu 01)',
+      '2 odřezky třísločiněné kůže 1,2 mm, každý aspoň 70 × 70 mm; druhý na případné opakování zkoušky okna. Třetí stejný odřezek jen tehdy, když mince projde oknem Ø 20 mm i podruhé. U sestavy z nákupního plánu jsou první dva z druhé tréninkové juchtové A5 z projektu 01: A5 položte na šířku, čtverce vyřízněte u pravé hrany pod sebou (vlevo nahoře zůstává místo na tři odřezky 40 × 80 mm z lekce 4 projektu 01, vlevo dole roh se zkušebními údery z lekce 1); třetí z Blu A4, viz poslední krok',
       'mince, na kterou stavíte (výchozí 50 Kč)',
       'tenký karton (krabice od cereálií) a lepidlo v tyčince na výtisk na značky a šablonu s oknem',
       'potravinová fólie',
@@ -319,7 +319,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'mark-outline',
         title: 'Přeneste značky na líc a prosekejte šev',
-        body: 'Výtisk na značky vystřihněte po čárkovaném čtverci kolem kapsy (57,5 × 57,5 mm, u mince 40 mm 70 × 70 mm – velikost odřezku). Položte ho na LÍC odřezku hranami na hrany (u většího odřezku kapsu vystřeďte) a v rozích přelepte maskovací páskou přes hranu papíru i kůže, pásku přehněte na rub; konce os nechte volné (pásku nejdřív zkuste na kousku téže kůže). Šídlem propíchněte všechny tečky švu a 4 konce os. Pásku strhněte pomalu pod ostrým úhlem a zkontrolujte, že jsou propíchnuté všechny značky. Na líc nic nekreslete – čára by na hotové kapse zůstala vidět. Vidličkami 4 mm prosekejte naplocho na děrovací desce otvory švu z líce podle teček: rovné úseky vidličkou se 4 hroty, oba dolní rohy dvojhrotem po jednom otvoru, první hrot vždy v posledním otvoru. Výtisk na značky si schovejte na kapsu v lekci 6.',
+        body: 'Výtisk na značky vystřihněte po čárkovaném čtverci kolem kapsy (70 × 70 mm – velikost odřezku). Položte ho na LÍC odřezku hranami na hrany (u většího odřezku kapsu vystřeďte) a v rozích přelepte maskovací páskou přes hranu papíru i kůže, pásku přehněte na rub; konce os nechte volné (pásku nejdřív zkuste na kousku téže kůže). Šídlem propíchněte všechny tečky švu a 4 konce os. Pásku strhněte pomalu pod ostrým úhlem a zkontrolujte, že jsou propíchnuté všechny značky. Na líc nic nekreslete – čára by na hotové kapse zůstala vidět. Vidličkami 4 mm prosekejte naplocho na děrovací desce otvory švu z líce podle teček: rovné úseky vidličkou se 4 hroty, oba dolní rohy dvojhrotem po jednom otvoru, první hrot vždy v posledním otvoru. Výtisk na značky si schovejte na kapsu v lekci 6.',
         animationLinks: [animationLink('kapsa', 'B1')],
         media: [],
       },
@@ -393,7 +393,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'test-window-retention',
         title: 'Vysekněte zkušební okno a vyzkoušejte, že mince drží',
-        body: 'Zaschlý odřezek položte lícem dolů zpátky na formu: důlek do otvoru, osy na osy. Rozmazané čáry nejdřív obtáhněte podle šablony. Obrys vyřízněte nožem 2–3 lehkými tahy, kůži přidržujte na rovné části (desku můžete chránit kartonem s otvorem Ø 32 mm, u mince 40 mm Ø 44 mm). Formu položte na děrovací desku a do otvoru pod důlek postavte špalík (užší než otvor, širší než okno), zkrácený tak, aby se dna důlku jen dotýkal a nenadzvedával ho (ověřte na odřezku). Výsečník Ø 20 mm (u mince 40 mm Ø 32 mm) postavte na narýsovanou kružnici, zkontrolujte, že prstenec kolem důlku je po celém obvodu stejně široký, a vysekněte okno. Vyzkoušejte: (1) minci vložte z rubu, odřezek otočte oknem dolů a zatřeste – nesmí vypadnout; (2) zatlačte na ni z rubu palcem – nesmí oknem projít; (3) prstenec nesmí být natržený. Když mince projde, Ø 20 mm do kapsy zatím nesekejte. Když byl důlek mělký (mince vyčnívala nad rub), na druhém odřezku zopakujte orýsování, tvarování a schnutí s hlubším důlkem (kůže vlhčí, svěrky utažené pevněji, ale rovnoměrně – ověřte na odřezku) a vyzkoušejte znovu okno Ø 20 mm. Teprve když mince projde i tentokrát, nebo když byl důlek dost hluboký už napoprvé, vyzkoušejte okno Ø 18 mm (prstenec 4,75 mm) na dalším odřezku: zopakujte na něm značky, orýsování se šablonou s oknem Ø 18 mm, tvarování a schnutí přes noc a pak vysekněte okno Ø 18 mm. Záložní okno Ø 18 mm je jen pro minci 50 Kč; u mince 40 mm v tom případě do kapsy okno nesekejte a na dalším odřezku zkuste ještě hlubší důlek (ověřte na odřezku). Třetí odřezek u sestavy z nákupního plánu vyřízněte ze zbytku druhé tréninkové juchtové A5, Blu A4 nechte na pouzdro. Jako šablonu na rub vytiskněte list Kapsa – záložní okno Ø 18 mm na 100 % (odkaz pod krokem), nalepte ho na tenký karton (krabice od cereálií), po zaschnutí vystřihněte přesně po obrysu a vysekněte do něj okno Ø 18 mm; výtisk na značky (s dírkami) použijte znovu. Výsečník Ø 18 mm je v nákupním plánu jako volitelný řádek mimo součet – je levný, můžete ho přihodit do první objednávky. Do kapsy pak sekejte průměrem, se kterým zkouška vyšla. Když mince projde i oknem Ø 18 mm, do kapsy žádné okno nesekejte a na dalším odřezku zkuste ještě hlubší důlek (ověřte na odřezku).',
+        body: 'Zaschlý odřezek položte lícem dolů zpátky na formu: důlek do otvoru, osy na osy. Rozmazané čáry nejdřív obtáhněte podle šablony. Obrys vyřízněte nožem 2–3 lehkými tahy, kůži přidržujte na rovné části (desku můžete chránit kartonem s otvorem Ø 32 mm, u mince 40 mm Ø 44 mm). Formu položte na děrovací desku a do otvoru pod důlek postavte špalík (užší než otvor, širší než okno), zkrácený tak, aby se dna důlku jen dotýkal a nenadzvedával ho (ověřte na odřezku). Výsečník Ø 20 mm (u mince 40 mm Ø 32 mm) postavte na narýsovanou kružnici, zkontrolujte, že prstenec kolem důlku je po celém obvodu stejně široký, a vysekněte okno. Vyzkoušejte: (1) minci vložte z rubu, odřezek otočte oknem dolů a zatřeste – nesmí vypadnout; (2) zatlačte na ni z rubu palcem – nesmí oknem projít; (3) prstenec nesmí být natržený. Když mince projde, Ø 20 mm do kapsy zatím nesekejte. Když byl důlek mělký (mince vyčnívala nad rub), na druhém odřezku zopakujte orýsování, tvarování a schnutí s hlubším důlkem (kůže vlhčí, svěrky utažené pevněji, ale rovnoměrně – ověřte na odřezku) a vyzkoušejte znovu okno Ø 20 mm. Teprve když mince projde i tentokrát, nebo když byl důlek dost hluboký už napoprvé, vyzkoušejte okno Ø 18 mm (prstenec 4,75 mm) na dalším odřezku: zopakujte na něm značky, orýsování se šablonou s oknem Ø 18 mm, tvarování a schnutí přes noc a pak vysekněte okno Ø 18 mm. Záložní okno Ø 18 mm je jen pro minci 50 Kč; u mince 40 mm v tom případě do kapsy okno nesekejte a na dalším odřezku zkuste ještě hlubší důlek (ověřte na odřezku). Třetí odřezek u sestavy z nákupního plánu vezměte z Blu A4: nejdřív si na její rub (na šířku) tužkou obkreslete rozvržení popsané v materiálu lekce 3 (pás s jazykem, proužek, kapsa) a odřezek 70 × 70 mm vyřízněte pod pásem vedle kapsy. Jako šablonu na rub vytiskněte list Kapsa – záložní okno Ø 18 mm na 100 % (odkaz pod krokem), nalepte ho na tenký karton (krabice od cereálií), po zaschnutí vystřihněte přesně po obrysu a vysekněte do něj okno Ø 18 mm; výtisk na značky (s dírkami) použijte znovu. Výsečník Ø 18 mm je v nákupním plánu jako volitelný řádek mimo součet – je levný, můžete ho přihodit do první objednávky. Do kapsy pak sekejte průměrem, se kterým zkouška vyšla. Když mince projde i oknem Ø 18 mm, do kapsy žádné okno nesekejte a na dalším odřezku zkuste ještě hlubší důlek (ověřte na odřezku).',
         printLink: 'pattern-sheets',
         printSheetId: 'kapsa-okno-18',
         animationLinks: [animationLink('kapsa', 'E1')],
@@ -509,7 +509,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 35,
     goal: 'Vyzkoušet osazení druku na odřezku stejné kůže jako tělo; u kůže 1,5 mm navíc ztenčit ohyb na 1 mm.',
     materials: [
-      '2–3 odřezky stejné kůže jako tělo, u kůže 1,5 mm ještě jeden na ztenčení; u sestavy z nákupního plánu si na rub Blu A4 nejdřív tužkou obkreslete obdélník pásu 240,35 × 104,1 mm podél jedné dlouhé hrany, 3 mm od krajů, pod něj vedle sebe kapsu 57,5 × 57,5 mm a cvičný proužek 130 × 50 mm a odřezky berte jen ze zbytku',
+      '2–3 odřezky stejné kůže jako tělo, u kůže 1,5 mm ještě jeden na ztenčení; u sestavy z nákupního plánu si na rub Blu A4 (na šířku) nejdřív tužkou obkreslete obdélník pásu 240,35 × 104,1 mm podél horní hrany od levého kraje, 3 mm od krajů, a u jeho levého konce dolů jazyk 33 × 43 mm; vpravo vedle pásu cvičný proužek 50 × 130 mm na výšku; pod pásem vpravo od jazyka kapsu 70 × 70 mm a vedle ní místo na třetí zkušební odřezek 70 × 70 mm (pokud už není vyříznutý v lekci 2); odřezky berte jen z pravého dolního rohu',
       'návod z obalu druku (u Prym Anorak 12 mm je aplikátor v balení)',
       'výsečník 2 mm, případně 3 mm – jen když návod druku vyžaduje otvor',
       'kus dřeva nebo tvrdé desky pod kování',
@@ -1000,7 +1000,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 50,
     goal: 'Vyříznout pás podle šablony na líci, narýsovat čáry ohybů (u kůže 1,5 mm i ztenčení) a prosekat otvory dna.',
     materials: [
-      'kůže na pás, aspoň A4: třísločiněná 1,2 mm (výchozí, např. Blu nebo Verde), nebo 1,5 mm (pak se ohyb B ztenčuje); u sestavy z nákupního plánu Blu A4, pás podél dlouhé hrany, kde jste v lekci 3 nechali místo',
+      'kůže na pás, aspoň A4: třísločiněná 1,2 mm (výchozí, např. Blu nebo Verde), nebo 1,5 mm (pak se ohyb B ztenčuje); u sestavy z nákupního plánu Blu A4: pás tam, kde jste ho v lekci 3 obkreslili (šablona na líci otočená jazykem dolů)',
       'tenký karton (krabice od cereálií) a lepidlo v tyčince na 2. výtisk listu PÁS (okénko pro kapsu)',
       'tužka HB nebo 2B',
       'Tokonole nebo gum tragacanth na zapečetění rubu',
@@ -1248,7 +1248,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 60,
     goal: 'Vytvarovat kapsu s mincí z kůže 1,2 mm, vyseknout okno, přišít kapsu na přední panel a osadit dřík druku.',
     materials: [
-      'kůže 1,2 mm na kapsu, aspoň 57,5 × 57,5 mm (u mince 40 mm 70 × 70 mm), i když je pás z 1,5 mm',
+      'kůže 1,2 mm na kapsu, aspoň 70 × 70 mm, i když je pás z 1,5 mm',
       'mince (výchozí 50 Kč) a potravinová fólie',
       'nit 0,6 mm, asi 0,8 m (23 otvorů, u mince 40 mm 31)',
       'houbička nebo rozprašovač a voda',
@@ -2127,7 +2127,7 @@ export const coinCardHolderProject: ProjectDefinition = {
       reason:
         'Pás těla (lekce 5–7) i samostatný list kapsy s mincí (lekce 6) potřebují jiný kus kůže než pouzdro na karty.',
       specification:
-        'Tělo: třísločiněná lícová 1,2 mm (výchozí, např. Blu nebo Verde – bez ztenčení ohybu B), přířez A4; nebo 1,5 mm, pak se ohyb B ztenčuje. Kapsa: samostatný kus 1,2 mm, aspoň 57,5 × 57,5 mm (u mince 40 mm 70 × 70 mm), i když je tělo z 1,5 mm. K tomu odřezky na trénink v lekcích 2–4.',
+        'Tělo: třísločiněná lícová 1,2 mm (výchozí, např. Blu nebo Verde – bez ztenčení ohybu B), přířez A4; nebo 1,5 mm, pak se ohyb B ztenčuje. Kapsa: samostatný kus 1,2 mm, aspoň 70 × 70 mm, i když je tělo z 1,5 mm. K tomu odřezky na trénink v lekcích 2–4.',
     },
     {
       equipmentSlug: 'coin-forming-block',
@@ -2467,7 +2467,7 @@ export const coinCardHolderProject: ProjectDefinition = {
         variant: 'A4 (30 × 21 cm)',
         quantity: 1,
         purpose:
-          'celé pouzdro: pás těla 240,35 × 104,1 mm (list Pás – kůže 1,2 mm) podél jedné dlouhé hrany, ze zbylého pruhu vedle sebe kapsa 57,5 × 57,5 mm (lekce 6) a cvičný proužek asi 130 × 50 mm (lekce 4), ze zbytku odřezky na zkoušku druku (lekce 3) a barvy na hrany (lekce 4)',
+          'celé pouzdro (rozvržení na rubu, lekce 3): pás 240,35 × 104,1 mm s jazykem 33 × 43 mm (list Pás – kůže 1,2 mm) podél horní hrany, jazyk vlevo dolů; vpravo vedle pásu cvičný proužek 50 × 130 mm na výšku (lekce 4); pod pásem vedle jazyka kapsa 70 × 70 mm (lekce 6) a místo na případný třetí zkušební odřezek (lekce 2); z pravého dolního rohu odřezky na druk (lekce 3) a barvu na hrany (lekce 4)',
       },
       {
         equipmentSlug: 'veg-tan-leather',
@@ -2475,7 +2475,7 @@ export const coinCardHolderProject: ProjectDefinition = {
         variant: 'A5 (21 × 15 cm)',
         quantity: 1,
         purpose:
-          'trénink: 2–3 odřezky 57,5 × 57,5 mm na tvarovací zkoušku a zkušební okno (lekce 2); s projektem 01 ji nekupujte, odřezky vezměte ze zbytku jeho druhé tréninkové A5',
+          'trénink: 2–3 odřezky 70 × 70 mm na tvarovací zkoušku a zkušební okno (lekce 2); s projektem 01 ji nekupujte, dva čtverce vezměte z jeho druhé tréninkové A5 (u pravé hrany pod sebou) a třetí z Blu A4',
       },
       {
         equipmentSlug: 'utility-knife',
@@ -2612,7 +2612,7 @@ export const coinCardHolderProject: ProjectDefinition = {
         url: 'https://www.hornbach.cz/p/preklizka-borova-10-x-600-x-1200-mm/6571171/',
         quantity: 1,
         purpose:
-          'dvě desky 61,5 × 61,5 mm (ideálně 8 × 8 cm) na formu a víko; celá deska je zbytečně velká – levnější je odřezek z přířezu nebo kus překližky, který už máte',
+          'dvě desky 74 × 74 mm (ideálně 8 × 8 cm) na formu a víko; celá deska je zbytečně velká – levnější je odřezek z přířezu nebo kus překližky, který už máte',
       },
       {
         equipmentSlug: 'masking-tape',

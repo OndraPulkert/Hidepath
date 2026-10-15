@@ -44,7 +44,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 20,
     goal: 'Připravit stůl, na kterém se dá bezpečně řezat a děrovat, a vyzkoušet si každý nástroj.',
     materials: [
-      'odřezek kůže: roh druhé tréninkové A5 (první A5 nechte celou na lekci 2)',
+      'odřezek kůže: levý dolní roh druhé tréninkové A5 položené na šířku (zbytek patří na lekci 4 a zkoušky u pouzdra s mincí; první A5 nechte celou na lekci 2)',
       'složený ručník pod desku',
       'dobré světlo',
       'nůžky na nit',
@@ -82,7 +82,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'check-chisels',
         title: 'Zkontrolujte vidličky (pokud už je máte)',
-        body: 'Kroky 3 až 5 udělejte, až budete mít vidličky, jehly a nit doma; do té doby pokračujte lekcí 2. Nic neřežte, vše zkoušejte v rohu druhé tréninkové A5, asi 2 cm od hran (první A5 nechte celou na lekci 2). Přiložte nejdelší vidličky (se 4 nebo 6 hroty) hroty na kůži a přitiskněte rukou, bez paličky. Pravítkem změřte vzdálenost první a poslední značky a vydělte ji počtem mezer mezi značkami: musí vyjít 3,85–4 mm. Odchylku asi do 0,1 mm způsobí měření pravítkem, ne vidlička.',
+        body: 'Kroky 3 až 5 udělejte, až budete mít vidličky, jehly a nit doma; do té doby pokračujte lekcí 2. Nic neřežte, vše zkoušejte v levém dolním rohu druhé tréninkové A5 položené na šířku, asi 2 cm od hran (první A5 nechte celou na lekci 2). Přiložte nejdelší vidličky (se 4 nebo 6 hroty) hroty na kůži a přitiskněte rukou, bez paličky. Pravítkem změřte vzdálenost první a poslední značky a vydělte ji počtem mezer mezi značkami: musí vyjít 3,85–4 mm. Odchylku asi do 0,1 mm způsobí měření pravítkem, ne vidlička.',
         records: [
           {
             kind: 'number',
@@ -442,7 +442,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 45,
     goal: 'Slepit dva odřezky, proděrovat je najednou a sešít sedlářským stehem, který je na obou stranách rovný.',
     materials: [
-      'ze druhé tréninkové A5: 3 odřezky asi 40 × 80 mm (jeden na zkoušku zdrsnění)',
+      'ze druhé tréninkové A5 (na šířku): 3 odřezky asi 40 × 80 mm vedle sebe na výšku od levého horního rohu (jeden na zkoušku zdrsnění); pruh 70 mm u pravé hrany nechte na dva čtverce 70 × 70 mm pro pouzdro s mincí',
       'nit asi 60 cm',
       'lepidlo nebo oboustranná páska',
       'nůžky na nit',
@@ -1055,7 +1055,7 @@ const overview: ProjectOverview = {
           id: 'tools',
           lessonSlug: L1,
           stepId: 'check-chisels',
-          text: 'Až budete mít vidličky, jehly a nit doma, změřte rozteč vidliček: musí vyjít 3,85–4 mm. Navlékněte nit do obou jehel a na rohu druhé tréninkové A5 položeném lícem nahoru na tvrdé desce zkuste jeden úder paličkou. Do té doby pokračujte lekcí 2; první A5 na ni nechte celou.',
+          text: 'Až budete mít vidličky, jehly a nit doma, změřte rozteč vidliček: musí vyjít 3,85–4 mm. Navlékněte nit do obou jehel a na levém dolním rohu druhé tréninkové A5 položeném lícem nahoru na tvrdé desce zkuste jeden úder paličkou. Do té doby pokračujte lekcí 2; první A5 na ni nechte celou.',
         },
       ],
     },
@@ -1418,7 +1418,7 @@ export const cardHolderProject: ProjectDefinition = {
         variant: 'A5 (21 × 15 cm)',
         quantity: 3,
         purpose:
-          '1 ks na pouzdro: zadní díl 100 × 70 mm a přední kapsa 100 × 56 mm pod sebou (lekce 5 a 6), rezerva asi 1 cm na stranu, na trénink ji nepoužívejte. 2 ks na trénink lekcí 1–4: zkušební údery, pás asi 210 × 70 mm na rovný řez (lekce 2), zbytek asi 210 × 80 mm na cvičnou šablonu a tři odřezky asi 40 × 80 mm na lepení a steh; ze zbytku druhé A5 i odřezky 57,5 × 57,5 mm na zkoušku důlku u pouzdra s mincí',
+          '1 ks na pouzdro: zadní díl 100 × 70 mm a přední kapsa 100 × 56 mm pod sebou (lekce 5 a 6), rezerva asi 1 cm na stranu, na trénink ji nepoužívejte. 2 ks na trénink lekcí 1–4: zkušební údery, pás asi 210 × 70 mm na rovný řez (lekce 2), zbytek asi 210 × 80 mm na cvičnou šablonu a tři odřezky asi 40 × 80 mm na lepení a steh; druhá A5 na šířku: odřezky 40 × 80 vedle sebe vlevo nahoře, roh vlevo dole na zkušební údery, u pravé hrany pod sebou dva čtverce 70 × 70 mm na zkoušku důlku u pouzdra s mincí',
       },
       {
         equipmentSlug: 'cutting-mat',

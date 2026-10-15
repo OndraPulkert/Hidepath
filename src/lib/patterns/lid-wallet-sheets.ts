@@ -686,6 +686,12 @@ export const LID_PIECE_ORIGIN = {
   x: PRINT_SHEET.marginMm + 4,
   y: PRINT_SHEET.marginMm + SHEET_HEADER_MM,
 } as const;
+/**
+ * List 3 (D1, D2, L1, K2) od `LID_PIECE_ORIGIN`: D1 posun, D2 o `d2X` vlevo od D1 (osy pod sebou),
+ * mezery mezi díly. Díly se vystřihují nahrubo a lepí páskou na kozinku: D2 leží 20 mm od levé
+ * hrany listu a mezery dávají každému dílu papír na okraj.
+ */
+export const LID_PARTS_LAYOUT = { d1X: 8, d1Y: 6, d2X: -5, gapD1D2: 18, gapD2L1: 13 } as const;
 const PIECE_X = LID_PIECE_ORIGIN.x;
 const PIECE_Y = LID_PIECE_ORIGIN.y;
 /** Levý kraj varovného pruhu v hlavičce: vpravo od P1 (101 mm), rysek a kóty délky. */
@@ -1716,12 +1722,13 @@ function drawLidParts(spec: LidWalletSpec, options: LidSheetOptions): Sheet {
     `D1 ${cz(L.d1.x1 - L.d1.x0)} × ${cz(L.d1.y1 - L.d1.y0)} · D2 ${cz(L.d2.x1 - L.d2.x0)} × ${cz(L.d2.y1 - L.d2.y0)} · useň ${cz(spec.dividerMm)} · list 3/4`,
     options,
   );
-  const ox = PIECE_X + 4;
+  const P = LID_PARTS_LAYOUT;
+  const ox = PIECE_X + P.d1X;
   /* D1 – pohled na RUB (lepí se rubem na rub F). y dolů = shora dolů. */
   const d1 = L.d1;
   const d1w = d1.x1 - d1.x0;
   const d1h = d1.y1 - d1.y0;
-  const oy1 = PIECE_Y + 6;
+  const oy1 = PIECE_Y + P.d1Y;
   const Y1 = (y: number): number => oy1 + (d1.y1 - y);
   const X1 = (x: number): number => ox + (x - d1.x0);
   const r3 = spec.d1CornerRadiusMm;
@@ -1776,9 +1783,9 @@ function drawLidParts(spec: LidWalletSpec, options: LidSheetOptions): Sheet {
   const d2 = L.d2;
   const d2w = d2.x1 - d2.x0;
   const d2h = d2.y1 - d2.y0;
-  const oy2 = oy1 + d1h + 12;
+  const oy2 = oy1 + d1h + P.gapD1D2;
   const Y2 = (y: number): number => oy2 + (d2.y1 - y);
-  const X2 = (x: number): number => ox - 5 + (x - d2.x0);
+  const X2 = (x: number): number => ox + P.d2X + (x - d2.x0);
   const d2Path = `M${f(X2(d2.x0))} ${f(Y2(d2.y1))} h${f(d2w)} v${f(d2h)} h${f(-d2w)} Z`;
   s.path('CUT', d2Path, 0.3, undefined, ' class="d2"');
   s.clipPath('clip-d2', d2Path);
@@ -1930,7 +1937,7 @@ function drawLidParts(spec: LidWalletSpec, options: LidSheetOptions): Sheet {
   s.prick(X2(L.axisX), Y2(bw.y1 - bw.width / 2));
 
   /* L1 a K2 */
-  const oy3 = oy2 + d2h + 10;
+  const oy3 = oy2 + d2h + P.gapD2L1;
   const lw = spec.liningBlankWidthMm;
   const lh = spec.liningBlankHeightMm;
   s.rect('CUT', ox, oy3, lw, lh, 0.3);

@@ -238,6 +238,18 @@ export const A4_SHEET = {
   marginMm: SHEET_MARGIN_MM,
   gapMm: 6,
 } as const;
+/**
+ * Šablona, která se přilepuje na kůži, leží aspoň tolik mm od hrany listu, kde to místo dovolí:
+ * kolem obrysu zbude papír na vystřižení s okrajem a na pásku (bezpečný okraj tisku je 13 mm).
+ */
+export const TAPED_TEMPLATE_EDGE_MM = 20;
+/**
+ * List KAPSA: čárkované čtverce (kus kůže na kapsu, papír na desku formy) leží tolik mm od levé
+ * hrany listu a čtverec kapsy tolik mm od horní hrany.
+ */
+export const POCKET_SHEET_INSET_MM = TAPED_TEMPLATE_EDGE_MM;
+/** Nejmenší kus kůže na kapsu s mincí (čárkovaný čtverec listu KAPSA), mm. */
+export const POCKET_PIECE_MIN_MM = 70;
 /** Výška legendy pod díly, se kterou kontrola rozvržení počítá. */
 export const LEGEND_HEIGHT_MM = 25;
 /**
@@ -345,6 +357,9 @@ export interface CoinCardHolderLayout {
   windowDiameterMm: number;
   coinRingMm: number;
   formHoleDiameterMm: number;
+  /** Kus kůže na kapsu (= čárkovaný čtverec na listu KAPSA), strana v mm. */
+  pocketPieceMm: number;
+  /** Deska formy: kus kůže + 4 mm (konce os narýsované na desce zůstanou vidět). */
   formPlateMm: number;
   /** Poloha kapsy na předním panelu: levý horní roh od levé hrany panelu a od horní hrany. */
   pocketXMm: number;
@@ -436,6 +451,9 @@ export function coinCardHolderLayout(
   const formHole = round(
     spec.coinDiameterMm + 2 * spec.pocketThicknessMm + spec.formHoleClearanceMm,
   );
+  // Kus kůže na kapsu: aspoň POCKET_PIECE_MIN_MM (dost kůže kolem důlku na přilepení výtisku
+  // a na stažení do formy) a aspoň 13 mm kolem otvoru formy, aby ho svěrky přes víko přitlačily.
+  const pocketPiece = round(Math.max(POCKET_PIECE_MIN_MM, formHole + 26));
   const pocketWidth = round(formHole + 2 * (spec.pocketFlatMm + spec.stitchOffsetMm));
   const pocketHeight = round(
     spec.stitchOffsetMm + spec.pocketFlatMm + formHole + spec.coinTopOverlapMm,
@@ -506,12 +524,26 @@ export function coinCardHolderLayout(
     windowDiameterMm: windowDiameter,
     coinRingMm: coinRing,
     formHoleDiameterMm: formHole,
-    // Deska formy: 15 mm materiálu kolem otvoru, aby měly čelisti svěrek kam dosednout.
-    formPlateMm: round(formHole + 30),
+    pocketPieceMm: pocketPiece,
+    formPlateMm: round(pocketPiece + 4),
     pocketXMm: pocketX,
     pocketYMm: pocketY,
     pocketSeamTopMm: spec.pocketTopRadiusMm,
   };
+}
+
+/**
+ * Levý horní roh obrysu na listu PÁS (A4 na šířku; y = horní konec jazyka). Pás se odsune od
+ * okraje 13 mm až na `TAPED_TEMPLATE_EDGE_MM`, kolik dovolí místo: vodorovně do půlky volné
+ * šířky, svisle nad popiskem šva a legendou (2 mm rezerva).
+ */
+export function pasSheetOrigin(L: CoinCardHolderLayout): { x: number; y: number } {
+  const { widthMm: W, heightMm: H, marginMm: m } = A4_SHEET;
+  const want = TAPED_TEMPLATE_EDGE_MM - m;
+  const dx = Math.min(want, Math.max(0, (W - 2 * m - L.stripLengthMm) / 2));
+  const stripBottom = m + L.tabLengthMm + L.panelHeightMm + SEAM_LABEL_GAP_MM + 1;
+  const dy = Math.min(want, Math.max(0, H - m - PAS_LEGEND_MM - 2 - stripBottom));
+  return { x: round(m + dx), y: round(m + dy) };
 }
 
 /** Kontroly. Prázdný seznam = v pořádku. */

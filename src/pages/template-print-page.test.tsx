@@ -198,14 +198,14 @@ describe('tisk – pouzdro na karty: šablona a cvičná šablona', () => {
     renderApp(routes.template(cardHolderProject.slug));
     const svg = await screen.findByRole('img', { name: /^Šablona 1:1: Pouzdro na karty/ });
     const ticks = [...svg.querySelectorAll('path[data-mark]')];
-    // Rozložení: okraj 12 mm, zadní díl 100 × 70 nahoře, přední kapsa o 10 mm níž (y 92).
+    // Rozložení: okraj 12 mm, zadní díl 100 × 70 nahoře, přední kapsa o 20 mm níž (y 102).
     expect(ticks.map((m) => [m.getAttribute('data-mark'), m.getAttribute('d')])).toEqual([
       ['glue-band', 'M17 32 L17 76 A1 1 0 0 0 18 77 L106 77 A1 1 0 0 0 107 76 L107 32'],
       ['height', 'M12 26 L20 26'],
       ['height', 'M112 26 L104 26'],
-      ['thumb-cutout-end', 'M42 92 L42 89'],
-      ['thumb-cutout-end', 'M82 92 L82 89'],
-      ['thumb-cutout-bottom', 'M62 104 L62 101'],
+      ['thumb-cutout-end', 'M42 102 L42 99'],
+      ['thumb-cutout-end', 'M82 102 L82 99'],
+      ['thumb-cutout-bottom', 'M62 114 L62 111'],
     ]);
     const circles = [...svg.querySelectorAll('circle[data-mark]')].map((c) => [
       c.getAttribute('data-mark'),
@@ -213,15 +213,15 @@ describe('tisk – pouzdro na karty: šablona a cvičná šablona', () => {
       Number(c.getAttribute('cy')),
     ]);
     // Zadní díl: konce pásu 50 mm od spodku (y 32) a rohy; kapsa: začátek a konec řady 6 mm
-    // pod vrchem (y 98); v rozích kapsy kroužky nejsou, vede tam vytištěný oblouk.
+    // pod vrchem (y 108); v rozích kapsy kroužky nejsou, vede tam vytištěný oblouk.
     expect(circles.filter(([k]) => k === 'glue-end')).toEqual([
       ['glue-end', 17, 32],
       ['glue-end', 107, 32],
     ]);
     expect(circles.filter(([k]) => k === 'glue-corner')).toHaveLength(2);
     expect(circles.filter(([k]) => k === 'stitch-end')).toEqual([
-      ['stitch-end', 15.5, 98],
-      ['stitch-end', 108.5, 98],
+      ['stitch-end', 15.5, 108],
+      ['stitch-end', 108.5, 108],
     ]);
     expect(circles.filter(([k]) => k === 'stitch-corner')).toHaveLength(0);
     expect(svg).toHaveTextContent(TEMPLATE_LEGEND.tick);
@@ -232,7 +232,7 @@ describe('tisk – pouzdro na karty: šablona a cvičná šablona', () => {
       p.getAttribute('d'),
     );
     expect(stitch).toContain(
-      'M15.5 98 L15.5 142 A2.5 2.5 0 0 0 18 144.5 L106 144.5 A2.5 2.5 0 0 0 108.5 142 L108.5 98',
+      'M15.5 108 L15.5 152 A2.5 2.5 0 0 0 18 154.5 L106 154.5 A2.5 2.5 0 0 0 108.5 152 L108.5 108',
     );
   });
 

@@ -22,8 +22,8 @@ export const PRACTICE_STRIP = {
   pieceLengthMm: 130,
   /**
    * Výška kusu: proužek a nahoře i dole 5 mm odpadu, kam padnou kroužky konců čar ohybů
-   * (2 mm za čarou řezu, jako na listu PÁS). Vejde se do pruhu 57,5 mm podél hrany přířezu
-   * (kapsa 57,5 × 57,5 vedle proužku, nákupní plán).
+   * (2 mm za čarou řezu, jako na listu PÁS). Na Blu A4 z nákupního plánu leží na výšku
+   * vpravo vedle pásu (3 + 240,35 + 2 + 50 = 295,35 ≤ 297).
    */
   pieceHeightMm: 50,
 } as const;

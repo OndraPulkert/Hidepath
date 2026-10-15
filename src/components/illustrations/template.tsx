@@ -65,7 +65,8 @@ const INK = '#2B211C';
  * stránku s okrajem `TEMPLATE_PRINT_MARGIN_MM`.
  */
 export function templateSheetLayout(template: TemplateDefinition, legend: boolean) {
-  const gap = 10;
+  // Mezera mezi díly: díl se vystřihne nahrubo s okrajem (středem mezery), tedy 1 cm papíru na pásku.
+  const gap = 20;
   const margin = 12;
   const pieces = template.pieces;
   const contentWidth = Math.max(...pieces.map((p) => p.widthMm));

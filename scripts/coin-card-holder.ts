@@ -26,6 +26,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
   A4_SHEET,
   DEFAULT_COIN_CARD_HOLDER,
+  POCKET_SHEET_INSET_MM,
+  pasSheetOrigin,
   LEGEND_HEIGHT_MM,
   NAMED_COINS,
   PAS_LEGEND_MM,
@@ -356,8 +358,9 @@ export function buildCoinHolderSheetSvg(
   const mirror = spec.tabSide === 'left';
   const out: string[] = [];
 
-  const sx = m;
-  const sy = m + L.tabLengthMm;
+  const origin = pasSheetOrigin(L);
+  const sx = origin.x;
+  const sy = origin.y + L.tabLengthMm;
   const X = (x: number): number => sx + (mirror ? L.stripLengthMm - x : x);
   const Y = (y: number): number => sy + y;
   const S = L.scoopRadiusMm;
@@ -762,8 +765,10 @@ export function buildCoinHolderPaperModelSvg(
   const rc = spec.cornerRadiusMm;
   const mirror = spec.tabSide === 'left';
   const out: string[] = [];
-  const sx = m;
-  const sy = m + L.tabLengthMm;
+  // Stejné umístění jako list PÁS: papírový model se přikládá na list pásu obrys na obrys.
+  const origin = pasSheetOrigin(L);
+  const sx = origin.x;
+  const sy = origin.y + L.tabLengthMm;
   const X = (x: number): number => sx + (mirror ? L.stripLengthMm - x : x);
   const Y = (y: number): number => sy + y;
   const S = L.scoopRadiusMm;
@@ -979,8 +984,8 @@ export function buildCoinHolderPaperModelSvg(
 /** O kolik konce os na listu KAPSA přesahují obrys kapsy (mm). */
 export const POCKET_AXIS_OVERRUN_MM = 4;
 
-/** Kus kůže na kapsu (= čárkovaný čtverec na listu KAPSA), mm: deska formy bez 4 mm. */
-export const pocketPieceMm = (L: CoinCardHolderLayout): number => L.formPlateMm - 4;
+/** Kus kůže na kapsu (= čárkovaný čtverec na listu KAPSA), mm – z modelu (`pocketPieceMm`). */
+export const pocketPieceMm = (L: CoinCardHolderLayout): number => L.pocketPieceMm;
 
 /**
  * Čtverec na vystřižení výkresu otvoru formy (mm): kružnice s osami a aspoň 4 mm papíru kolem
@@ -1015,10 +1020,11 @@ export function buildCoinHolderPocketSvg(
   // kusu hranami na hrany a páska se přehne přes hranu na rub (papír větší než kůže by páska
   // ke kůži nepřidržela). Kapsa je v něm vystředěná, konce os leží uvnitř.
   const piece = pocketPieceMm(L);
-  const sqTop = cy + SHEET_TITLE_GAP_MM + 1.5;
-  const kx = m + (piece - L.pocketWidthMm) / 2;
+  const sx = POCKET_SHEET_INSET_MM;
+  const sqTop = Math.max(POCKET_SHEET_INSET_MM, cy + SHEET_TITLE_GAP_MM + 1.5);
+  const kx = sx + (piece - L.pocketWidthMm) / 2;
   const ky = sqTop + (piece - L.pocketHeightMm) / 2;
-  out.push(paperCutSquare('paper-cut-kapsa', m, sqTop, piece));
+  out.push(paperCutSquare('paper-cut-kapsa', sx, sqTop, piece));
   out.push(cut(roundedRect(kx, ky, L.pocketWidthMm, L.pocketHeightMm, spec.pocketTopRadiusMm, rc)));
   const seam = pocketSeam(
     kx + so,
@@ -1055,7 +1061,7 @@ export function buildCoinHolderPocketSvg(
       '3 1 0.6 1',
     ),
   );
-  const tx = m + piece + 5;
+  const tx = sx + piece + 8;
   const lines = [
     `${cz(L.pocketWidthMm)} × ${cz(L.pocketHeightMm)} mm`,
     `čárkovaný čtverec ${cz(piece)} × ${cz(piece)} = kus kůže:`,
@@ -1101,8 +1107,8 @@ export function buildCoinHolderPocketSvg(
   const fy = cy + SHEET_TITLE_GAP_MM + 1.5;
   // Čárkovaný čtverec se středem v křížku os: vystřihnout po něm a křížek dát doprostřed šířky desky.
   const fSq = formPaperMm(L);
-  out.push(paperCutSquare('paper-cut-forma', m, fy, fSq));
-  const fcx = m + fSq / 2;
+  out.push(paperCutSquare('paper-cut-forma', sx, fy, fSq));
+  const fcx = sx + fSq / 2;
   const fcy = fy + fSq / 2;
   out.push(ring(fcx, fcy, L.formHoleDiameterMm / 2));
   out.push(cross(fcx, fcy));
@@ -1123,7 +1129,7 @@ export function buildCoinHolderPocketSvg(
     'kůže LÍCEM DOLŮ na formu, osy na rubu na osy desky,',
     'mince na rub, přiklopit deskou, svěrky',
   ];
-  flines.forEach((t, i) => out.push(text(m + fSq + 5, fy + 6 + i * 3.6, t, 2.4, 'start', GUIDE)));
+  flines.forEach((t, i) => out.push(text(sx + fSq + 8, fy + 6 + i * 3.6, t, 2.4, 'start', GUIDE)));
 
   const calY = H - m - LEGEND_HEIGHT_MM - CALIBRATION_GAP_MM;
   out.push(
@@ -1133,7 +1139,7 @@ export function buildCoinHolderPocketSvg(
   const legend = [
     'POUZDRO NA KARTY S VSAZENOU MINCÍ – LIST KAPSA A FORMA.',
     'Tisk na A4 na 100 % (bez „přizpůsobit stránce“); samostatný list na výšku.',
-    `Kapsa ze samostatné kůže ${cz(spec.pocketThicknessMm)} mm (i když je pás silnější); kus ≥ ${cz(L.formPlateMm - 4)} × ${cz(L.formPlateMm - 4)} mm.`,
+    `Kapsa ze samostatné kůže ${cz(spec.pocketThicknessMm)} mm (i když je pás silnější); kus ≥ ${cz(L.pocketPieceMm)} × ${cz(L.pocketPieceMm)} mm.`,
     'Plná čára = řez, tečky = otvory stehu, čárkovaně/tečkovaně = pomocné kružnice, čárkovaný čtverec = vystřihnout papír.',
   ];
   legend.forEach((t, i) =>
@@ -1285,7 +1291,7 @@ export function buildCoinHolderProcessSvg(
         ),
       );
     }
-    const blank = L.formPlateMm - 4;
+    const blank = L.pocketPieceMm;
     b.push(
       `<rect x="${f(ox)}" y="${f(oy + (L.panelHeightMm + 6) * k1)}" width="${f(blank * k1)}" height="${f(blank * k1)}" fill="${LEATHER}" stroke="${LEATHER_DARK}" stroke-width="0.4" stroke-dasharray="1 0.8"/>`,
     );

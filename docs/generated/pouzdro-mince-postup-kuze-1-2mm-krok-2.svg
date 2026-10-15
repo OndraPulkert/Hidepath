@@ -9,8 +9,8 @@
 <path d="M39.881 43.594 L39.881 58.687" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1.2 1"/>
 <path d="M55.383 36.273 L55.383 58.687" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1.2 1"/>
 <path d="M57.248 36.273 L57.248 58.687" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1.2 1"/>
-<rect x="21" y="59.979" width="12.38" height="12.38" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.4" stroke-dasharray="1 0.8"/>
-<text x="35.38" y="66.169" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">kůže 1,2 mm na kapsu ≥ 57,5 × 57,5</text>
+<rect x="21" y="59.979" width="15.072" height="15.072" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.4" stroke-dasharray="1 0.8"/>
+<text x="38.072" y="67.515" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="start" fill="#7a7a7a">kůže 1,2 mm na kapsu ≥ 70 × 70</text>
 <text x="46.875" y="87.8" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">pás 240,35 × 104,1 mm + jazyk 43,07 (s rezervou 5)</text>
 <text x="46.875" y="91.2" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">po zkoušce na papíře: přilepit na LÍC, řezat skrz papír,</text>
 <text x="46.875" y="94.6" font-family="Helvetica, Arial, sans-serif" font-size="2.2" text-anchor="middle" fill="#7a7a7a">kůže 1,2 mm: ohyby neztenčovat, prosekat otvory dna,</text>
@@ -18,9 +18,9 @@
 <rect x="81.75" y="14" width="65.75" height="86" rx="2" fill="#fbfaf7" stroke="#ddd" stroke-width="0.3"/>
 <text x="84.75" y="19.5" font-family="Helvetica, Arial, sans-serif" font-size="6" text-anchor="start" fill="#a2471f">2</text>
 <text x="90.75" y="19.5" font-family="Helvetica, Arial, sans-serif" font-size="3.1" text-anchor="start" fill="#2b2b2b">Vytvarovat důlek za mokra</text>
-<path d="M88.75 47 h12.622 v6 h-12.622 Z M127.878 47 h12.622 v6 h-12.622 Z" fill="#d9c7a0" stroke="#8a7a55" stroke-width="0.4"/>
-<path d="M92.75 47 L101.372 47 Q102.372 49.6 104.372 49.6 L124.878 49.6 Q126.878 49.6 127.878 47 L136.5 47 v-1.4 L127.878 45.6 Q126.878 48.2 124.878 48.2 L104.372 48.2 Q102.372 48.2 101.372 45.6 L92.75 45.6 Z" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.3"/>
-<rect x="103.055" y="45.8" width="23.14" height="2.4" fill="#9a9a9a" stroke="#666" stroke-width="0.3"/>
+<path d="M88.75 47 h14.861 v6 h-14.861 Z M125.639 47 h14.861 v6 h-14.861 Z" fill="#d9c7a0" stroke="#8a7a55" stroke-width="0.4"/>
+<path d="M92.75 47 L103.611 47 Q104.611 49.6 106.611 49.6 L122.639 49.6 Q124.639 49.6 125.639 47 L136.5 47 v-1.4 L125.639 45.6 Q124.639 48.2 122.639 48.2 L106.611 48.2 Q104.611 48.2 103.611 45.6 L92.75 45.6 Z" fill="#3f6b4f" stroke="#2f5240" stroke-width="0.3"/>
+<rect x="105.009" y="45.8" width="19.231" height="2.4" fill="#9a9a9a" stroke="#666" stroke-width="0.3"/>
 <rect x="88.75" y="42.8" width="51.75" height="3" fill="#cfd8dc" stroke="#78909c" stroke-width="0.4"/>
 <path d="M94.75 29 v6 M93.25 33 l1.5 2 l1.5 -2" stroke="#a2471f" stroke-width="0.5" fill="none"/>
 <path d="M134.5 29 v6 M133 33 l1.5 2 l1.5 -2" stroke="#a2471f" stroke-width="0.5" fill="none"/>

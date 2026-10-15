@@ -59,8 +59,8 @@ Alternativy k vykružovací sadě OBI (jen pro minci 40 mm – na výchozí 50 K
 
 ### Překližka
 
-Tloušťka **10–12 mm** (min. 8 mm). Potřebuješ jen dva kusy ≥ 61,5 × 61,5 mm pro výchozí minci
-50 Kč (≥ 74 × 74 mm pro minci 40 mm), forma a víko, ideálně 8 × 8 cm.
+Tloušťka **10–12 mm** (min. 8 mm). Potřebuješ jen dva kusy ≥ 74 × 74 mm (mince 50 Kč i 40 mm),
+forma a víko, ideálně 8 × 8 cm.
 
 - Nejlevněji: zeptat se v přířezu na **odřezek**. Přířez mají
   [HORNBACH](https://www.hornbach.cz/sluzby/prirez/) (ne na všech prodejnách – předem zavolat),
@@ -130,7 +130,7 @@ Dvě svěrky dát proti sobě (z každé strany jednu), aby se víko nenaklonilo
 
 ## Tvarování důlku
 
-1. Třísločiněná kůže 1,2 mm ≥ 57,5 × 57,5 (u mince 40 mm ≥ 70 × 70); orýsovat obrys a prosekat otvory švu **před** navlhčením.
+1. Třísločiněná kůže 1,2 mm ≥ 70 × 70; orýsovat obrys a prosekat otvory švu **před** navlhčením.
 2. Minci zabalit do potravinové fólie (mokrá třísločiněná kůže může od kovu tmavě zabarvit).
 3. Navlhčit houbičkou (nemáčet), počkat, až začne zase světlat.
 4. Kůži lícem dolů na formu, křížek nad středem otvoru; minci na rub nad otvor; přiklopit víkem;

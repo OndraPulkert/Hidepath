@@ -85,7 +85,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         url: 'https://craft-point.cz/products/hovezi-kuze-licova-juchtova-trislocinena-1-2-mm',
         priceCents: 5_700,
         variant: 'A5 (21 × 15 cm)',
-        note: 'Na pouzdro na karty (oba díly pod sebe) i na trénink lekcí 1–4; ze zbytku tréninkové A5 i odřezky 57,5 × 57,5 mm na zkoušku důlku u pouzdra s mincí (lekce 2).',
+        note: 'Na pouzdro na karty (oba díly pod sebe) i na trénink lekcí 1–4; z druhé tréninkové A5 i dva čtverce 70 × 70 mm na zkoušku důlku u pouzdra s mincí (lekce 2).',
         availability: 'in_stock',
         checkedAt: '2026-10-08',
       },
@@ -96,7 +96,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         priceCents: 25_000,
         variant: 'A4 (30 × 21 cm)',
         priceNote: 'větší přířez A3 za 500 Kč',
-        note: 'Modře probarvená lícová useň 1,2 mm. U pouzdra s mincí se do A4 vejde pás těla 240,35 × 104,1 mm a vedle sebe pod něj kapsa 57,5 × 57,5 mm a cvičný proužek 130 × 50 mm (listy pro kůži 1,2 mm, bez ztenčení ohybu B).',
+        note: 'Modře probarvená lícová useň 1,2 mm. U pouzdra s mincí se do A4 vejde pás těla 240,35 × 104,1 mm s jazykem, cvičný proužek 50 × 130 mm vedle pásu a pod pásem kapsa 70 × 70 mm (listy pro kůži 1,2 mm, bez ztenčení ohybu B).',
         availability: 'in_stock',
         checkedAt: '2026-10-08',
       },
@@ -106,7 +106,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         url: 'https://craft-point.cz/products/trislocinena-hovezi-kuze-licova-usen-1-2-mm-blu',
         priceCents: 5_700,
         variant: 'A5 (21 × 15 cm)',
-        note: 'Stejná kůže jako pás: do A5 se vejde kapsa 57,5 × 57,5 mm i cvičný proužek na ohyby asi 130 × 50 mm z lekce 4.',
+        note: 'Stejná kůže jako pás: do A5 se vejde kapsa 70 × 70 mm i cvičný proužek na ohyby asi 130 × 50 mm z lekce 4.',
         availability: 'in_stock',
         checkedAt: '2026-10-08',
       },
@@ -1479,7 +1479,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       {
         label: 'Velikost',
         value:
-          'dva kusy aspoň 61,5 × 61,5 mm pro výchozí minci 50 Kč (74 × 74 mm pro minci 40 mm), forma i víko; ideálně 8 × 8 cm kvůli vyložení svěrek',
+          'dva kusy aspoň 74 × 74 mm (mince 50 Kč i 40 mm), forma i víko; ideálně 8 × 8 cm kvůli vyložení svěrek',
       },
       {
         label: 'Otvor',

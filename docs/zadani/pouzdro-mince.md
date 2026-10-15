@@ -76,7 +76,7 @@ Jeden pás:
 | Druk            | klobouček Ø 12, patice 9,5 mm pod hranou předku | u pravého boku na ose jazyka; příruba patice smí mít nejvýš Ø 11 (končí 15 mm, karty začínají v 15) |
 | Kapsa s mincí   | 42,5 × 42 mm, horní rohy R10, dolní R6          | list kapsy; na předek 41,8 mm pod horní hranou, 14,75 mm od boků (mince 40: 55 × 54,5, 35,55 / 8,5) |
 | Okno            | Ø 20 (výsečník po celých mm)                    | prstenec 3,75 mm – držení ověřit na odřezku (mince 40: Ø 32, prstenec 4)                            |
-| Forma pro důlek | otvor Ø 31,5, deska ≥ 61,5 × 61,5, tl. ≥ 8 mm   | mince + 2 × 1,2 + vůle 1,6; hranu otvoru zaoblit (mince 40: Ø 44, deska ≥ 74 × 74)                  |
+| Forma pro důlek | otvor Ø 31,5, deska ≥ 74 × 74, tl. ≥ 8 mm       | mince + 2 × 1,2 + vůle 1,6; hranu otvoru zaoblit (mince 40: Ø 44, deska ≥ 74 × 74)                  |
 
 Skládání: vnitřní panel ohybem B za přední, zadní panel ohybem A přes všechno. Vrstvy odpředu:
 přední (líc ven, kapsa s mincí) – karty – vnitřní – bankovky – zadní (líc ven, motiv). Obě boční
@@ -185,9 +185,8 @@ obchod neuvádí (návod v balení, nebo zkouška od nejmenšího výsečníku).
 
 ## Materiál (ověřeno 2026-09-18, CraftPoint, skladem)
 
-Pás 243 × 149 mm (s jazykem) potřebuje arch A4 (297 × 210). Kůže na kapsu ≥ 57,5 × 57,5
-(u mince 40 mm ≥ 70 × 70) se pod pás vejde jen těsně (zbývá pruh ≈ 61 mm, rozvržení ověřit na
-arši); jistější je ještě kus A5. Barvené třísločiněné lícové usně 1,2 mm
+Pás 243 × 149 mm (s jazykem) potřebuje arch A4 (297 × 210). Kůže na kapsu ≥ 70 × 70
+se pod pás 1,2 mm vejde (3 + 104,1 + 2 + 70 = 179,1 ≤ 210), rozvržení ověřit na arši. Barvené třísločiněné lícové usně 1,2 mm
 z italské koželužny, A4 = 250 Kč, A5 = 57 Kč:
 
 | Barva                                                                                                                                     | Poznámka                                                                                             |
@@ -202,10 +201,14 @@ Doporučení: **Verde 1,2 mm** – šev dna jde skrz tři vrstvy, s 1,2 mm je to
 ztenčování odpadá. Listy pak vygenerovat `pnpm pattern:coin-holder --thickness 1.2` (ohyb A 15,7,
 ohyb B 8,7, jazyk 43,1 mm). Tvarování za mokra nejdřív zkusit na A5 stejné barvy.
 
-Sestava nákupního plánu v aplikaci: **Blu 1,2 mm** – A4 na pás; A5 na kapsu 57,5 × 57,5 a cvičný
-proužek 130 × 50 (lekce 4) vedle sebe podél jedné hrany (zaberou 187,5 × 57,5), ze zbylého pruhu
-≈ 210 × 92 odřezky na zkoušku druku a obtisku patice (lekce 3) a barvy na hrany (lekce 4) – stejná
-kůže jako tělo. Juchtová A5 1,2 mm jen na dva odřezky 57,5 × 57,5 pro tvarovací zkoušku (lekce 2).
+Sestava nákupního plánu v aplikaci (podle objednávky autora): **Blu 1,2 mm A4** na celé pouzdro –
+rozvržení na rubu (A4 na šířku, 3 mm od krajů, mezery 2 mm): pás x 3–243,35, y 3–107,1, jazyk
+33 × 43,07 u levého konce dolů (x 3–36, y –150,17); proužek 50 × 130 na výšku vpravo (x 245,35–295,35,
+y 3–133); pod pásem kapsa (x 38–108) a třetí zkušební odřezek (x 110–180), y 109,1–179,1; odřezky
+na druk z pravého dolního rohu (x 182–297, y 135–207). Na líci je to otočené: šablona jazykem dolů.
+Dva zkušební odřezky 70 × 70 (lekce 2) z druhé tréninkové juchtové A5 projektu 01 (na šířku,
+u pravé hrany pod sebou: 3 + 70 + 2 + 70 = 145 ≤ 150; vlevo tři odřezky 40 × 80 na výšku vedle
+sebe = 124 × 80 a roh se zkušebními údery).
 
 ## Postup
 
@@ -220,7 +223,7 @@ kůže jako tělo. Juchtová A5 1,2 mm jen na dva odřezky 57,5 × 57,5 pro tvar
    když nůž ujede, poškodí odpad; rohy přesně podle šablony, ne do ostra: 2× R10 na konci jazyka,
    vypouklé R2,5 u výřezu na předku a 3× R6 – dole na zadním panelu, nahoře i dole na volném konci
    vnitřního; po čáře pomalu bez pravítka, krátkými tahy, jako rohy pouzdra na karty). Kapsa se
-   dělá ze samostatného kusu kůže 1,2 mm ≥ 57,5 × 57,5 (forma Ø 31,5 počítá s 1,2 mm; i když je
+   dělá ze samostatného kusu kůže 1,2 mm ≥ 70 × 70 (forma Ø 31,5 počítá s 1,2 mm; i když je
    pás z 1,5 mm).
    **Čáry ohybů na rub (před řezem):** kůži i se šablonou otočit a propíchnuté kroužky všech 4 čar
    ohybů spojit na rubu tužkou podle pravítka přes celý pás; podle nich se v kroku 5 navlhčí pásma
@@ -428,3 +431,7 @@ doplnit ručně, do generátoru to nepatří.
   vidět (rovná horní hrana u ohybu B, krajní otvory dna), krok 4 doplněn o vpichy čáry švu pod
   kapsou a zkoušku zasunutí mince. Schnutí ohybů přes noc (lekce 4 a 7). Obtisk kloboučku se
   propichuje z rubu narovnaného jazyka; zkrácení jazyka a rohy R10 se kreslí na pásku.
+- v4.15 (2026-10-15, přání autora po zkoušce na odřezku): **kus kůže na kapsu 70 × 70 mm** i pro
+  minci 50 Kč (dřív 57,5 = deska − 4); `POCKET_PIECE_MIN_MM = 70`, kus = max(70, otvor + 26),
+  deska formy = kus + 4 = 74 × 74. Kapsa sama beze změny (42,5 × 42). Na listu KAPSA leží
+  čárkované čtverce 20 mm od levé hrany a čtverec kapsy 20 mm od horní (papír na držení a pásku).

@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
 import {
-  A4_PORTRAIT,
   A4_SHEET,
   DEFAULT_COIN_CARD_HOLDER,
+  POCKET_SHEET_INSET_MM,
+  pasSheetOrigin,
   coinCardHolderLayout,
 } from '@/lib/geometry/coin-card-holder';
 
@@ -39,10 +40,10 @@ const circles = (s: string): Circle[] =>
 describe('střih pouzdra s mincí (pás tří panelů)', () => {
   const spec = DEFAULT_COIN_CARD_HOLDER;
   const L = coinCardHolderLayout(spec);
-  const m = A4_SHEET.marginMm;
-  // Soustava pásu v listu: x = m + xStrip (jazyk vpravo = bez zrcadlení), y = m + tabLength + y.
-  const X = (x: number): number => m + x;
-  const Y = (y: number): number => m + L.tabLengthMm + y;
+  // Soustava pásu v listu: x = o.x + xStrip (jazyk vpravo = bez zrcadlení), y = o.y + tabLength + y.
+  const o = pasSheetOrigin(L);
+  const X = (x: number): number => o.x + x;
+  const Y = (y: number): number => o.y + L.tabLengthMm + y;
   const P = (x: number, y: number): string => `${fmt(X(x))} ${fmt(Y(y))}`;
 
   it('existuje a je to A4 na šířku v milimetrech', () => {
@@ -204,14 +205,11 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
     expect(Number(window![1]) - coin[0]!.cx).toBeCloseTo(rw, 2);
     expect(Number(window![2])).toBeCloseTo(coin[0]!.cy, 2);
     // Střed mince v kapse podle modelu: kapsa je vystředěná v čárkovaném čtverci velikosti kusu
-    // kůže (forma − 4 mm), který začíná na okraji listu 1,5 mm pod mezerou pro nadpis.
-    const m2 = A4_PORTRAIT.marginMm;
-    const piece = L.formPlateMm - 4;
+    // kůže (L.pocketPieceMm), který leží POCKET_SHEET_INSET_MM od levé i horní hrany listu.
+    const m2 = POCKET_SHEET_INSET_MM;
+    const piece = L.pocketPieceMm;
     expect(coin[0]!.cx).toBeCloseTo(m2 + (piece - L.pocketWidthMm) / 2 + L.coinCentreXMm, 2);
-    expect(coin[0]!.cy).toBeCloseTo(
-      m2 + 4 + 1.5 + (piece - L.pocketHeightMm) / 2 + L.coinCentreYMm,
-      2,
-    );
+    expect(coin[0]!.cy).toBeCloseTo(m2 + (piece - L.pocketHeightMm) / 2 + L.coinCentreYMm, 2);
     const seamHoles = Number(/šev (\d+) otvorů od středu dna/.exec(pocketSheet ?? '')?.[1]);
     expect(seamHoles % 2).toBe(1);
     expect(cs.filter((c) => near(c.r, 0.45)).length).toBe(seamHoles);
@@ -222,9 +220,9 @@ describe('střih pouzdra s mincí (pás tří panelů)', () => {
   it('list kapsy: 4 konce os leží ≥ 3 mm vně obrysu kapsy a uvnitř odřezku i listu', () => {
     // Konce os se propichují na LÍC; musí odpadnout s odřezkem, jinak by v (otevřené horní)
     // hraně kapsy zůstal zářez.
-    const piece = L.formPlateMm - 4;
-    const kx = A4_PORTRAIT.marginMm + (piece - L.pocketWidthMm) / 2;
-    const ky = A4_PORTRAIT.marginMm + 4 + 1.5 + (piece - L.pocketHeightMm) / 2;
+    const piece = L.pocketPieceMm;
+    const kx = POCKET_SHEET_INSET_MM + (piece - L.pocketWidthMm) / 2;
+    const ky = POCKET_SHEET_INSET_MM + (piece - L.pocketHeightMm) / 2;
     const ax =
       /<path d="M([\d.]+) ([\d.]+) H([\d.]+) M([\d.]+) ([\d.]+) V([\d.]+)"[^>]*stroke-dasharray="3 1 0.6 1"/.exec(
         pocketSheet ?? '',

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { DEFAULT_LID_WALLET, fmt as cz, lidWalletLayout } from '../src/lib/geometry/lid-wallet.ts';
-import { LID_PIECE_ORIGIN } from '../src/lib/patterns/lid-wallet-sheets.ts';
+import { LID_PARTS_LAYOUT, LID_PIECE_ORIGIN } from '../src/lib/patterns/lid-wallet-sheets.ts';
 import {
   HOLE_R,
   LAYERS,
@@ -405,7 +405,7 @@ describe('generátor peněženky VÍČKO', () => {
   });
 
   it('list 3: osa x 50,5 má rysku u spodní hrany D1 a u obou hran D2 (horní hrana D1 je vidět)', () => {
-    const X = ox + L.axisX;
+    const X = ox + LID_PARTS_LAYOUT.d1X + (L.axisX - L.d1.x0);
     const marks = [
       ...layer(parts, 'GUIDE').matchAll(new RegExp(`M${X} (-?[\\d.]+) L${X} (-?[\\d.]+)`, 'g')),
     ];
@@ -461,12 +461,13 @@ describe('generátor peněženky VÍČKO', () => {
 
   it('list 3: kroužky hranic lepení G2/G2b (D1), G3 (D2), klínu D2 a horní hrany G4 z modelu', () => {
     // Stejné mapování jako buildLidPartsSvg: D1 a D2 z rubu, y nahoru.
-    const px = ox + 4;
-    const oy1 = oy + 6;
+    const P = LID_PARTS_LAYOUT;
+    const px = ox + P.d1X;
+    const oy1 = oy + P.d1Y;
     const X1 = (x: number) => px + (x - L.d1.x0);
     const Y1 = (y: number) => oy1 + (L.d1.y1 - y);
-    const oy2 = oy1 + (L.d1.y1 - L.d1.y0) + 12;
-    const X2 = (x: number) => px - 5 + (x - L.d2.x0);
+    const oy2 = oy1 + (L.d1.y1 - L.d1.y0) + P.gapD1D2;
+    const X2 = (x: number) => px + P.d2X + (x - L.d2.x0);
     const Y2 = (y: number) => oy2 + (L.d2.y1 - y);
     const [g2bL, g2bR] = L.glue.filter((g) => g.id === 'G2b');
     for (const x of [g2bL.x1, g2bR.x0]) {
