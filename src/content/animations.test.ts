@@ -208,7 +208,7 @@ describe('animace postupu – stránky v public/animace', () => {
     'steps' in page ? [{ key, path: page.path, sections: page.sections, steps: page.steps }] : [],
   );
 
-  it('kroky mají pět stránek kapsy a druku, dvě stránky pásu, sedlářský steh, hrany, šest stránek Víčka, čtyři stránky pásku, posuvku, vrtání formy, čtverec na formě a řez podle pravítka', () => {
+  it('kroky mají pět stránek kapsy a druku, dvě stránky pásu, sedlářský steh, hrany, šest stránek Víčka, čtyři stránky pásku, posuvku, vrtání formy, čtverec na formě, řez podle pravítka a řez oblouků', () => {
     expect(steppedPages.map((p) => p.key)).toEqual([
       'kapsa',
       'pocketAttach',
@@ -233,6 +233,7 @@ describe('animace postupu – stránky v public/animace', () => {
       'drillForm',
       'formSquare',
       'rulerCut',
+      'curveCut',
     ]);
   });
 

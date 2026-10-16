@@ -257,7 +257,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'practice-template',
         title: 'Vyzkoušejte řez podle přilepené šablony',
-        body: 'Takhle budete v lekci 5 řezat díly pouzdra. Cvičnou šablonu vytiskněte (odkaz pod krokem) na A4 bez přizpůsobení velikosti (100 %) a změřte kontrolní úsečku: musí mít přesně 50 mm. Tři tvary vystřihněte nůžkami po čárkované čáře (okraj asi 1,5 cm). Tvary dělejte jeden po druhém na pásu 80 mm, vedle sebe podél delší strany, 5 mm od kraje a 10 mm od sebe. Tvar položte na rub pásu a přilepte maskovací páskou z několika stran, jen na okrajích mimo plnou čáru. Nic nepropichujte. Řežte skrz papír i kůži po plné čáře na dva až tři lehké tahy: rovné strany podle ocelového pravítka položeného na čáru (u tvaru 3 jen po krátké čárky nad výřezem), roh pomalu bez pravítka. Výřez řežte až nakonec: oblouk nasekejte několika krátkými rovnými řezy, každý začněte i skončete přesně na čáře, nůž kolmo, volnou rukou otáčejte kůží. Dobroušení smirkem přijde až v lekci 5. Pásku strhávejte pomalu, skoro rovnoběžně s kůží. Nakonec nalepte kousek pásky na líc odřezku, strhněte ho a zkontrolujte, že nenechal lesklou stopu.',
+        body: 'Takhle budete v lekci 5 řezat díly pouzdra. Cvičnou šablonu vytiskněte (odkaz pod krokem) na A4 bez přizpůsobení velikosti (100 %) a změřte kontrolní úsečku: musí mít přesně 50 mm. Tři tvary vystřihněte nůžkami po čárkované čáře (okraj asi 1,5 cm). Tvary dělejte jeden po druhém na pásu 80 mm, vedle sebe podél delší strany, 5 mm od kraje a 10 mm od sebe. Tvar položte na rub pásu a přilepte maskovací páskou z několika stran, jen na okrajích mimo plnou čáru. Nic nepropichujte. Řežte skrz papír i kůži po plné čáře na dva až tři lehké tahy: rovné strany podle ocelového pravítka položeného na čáru (u tvaru 3 jen po krátké čárky nad výřezem), roh pomalu bez pravítka. Výřez řežte až nakonec: oblouk nasekejte několika krátkými rovnými řezy, každý začněte i skončete přesně na čáře, nůž do strany nenaklánějte, volnou rukou otáčejte kůží. Dobroušení smirkem přijde až v lekci 5. Pásku strhávejte pomalu, skoro rovnoběžně s kůží. Nakonec nalepte kousek pásky na líc odřezku, strhněte ho a zkontrolujte, že nenechal lesklou stopu.',
         records: [
           {
             kind: 'number',
@@ -280,6 +280,7 @@ export const lessons: readonly LessonDefinition[] = [
         ],
         media: [],
         printLink: 'practice-sheets',
+        animationLinks: [animationLink('curveCut', 'A1')],
       },
     ],
     checkpoints: [
@@ -714,7 +715,8 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'cut-parts',
         title: 'Řežte skrz papír po čáře',
-        body: 'Řežte skrz papír i kůži přesně po plné čáře, nůž do strany nenaklánějte, vždy na dva až tři lehké tahy. Výřez na palec zatím vynechte: rovný řez horní hrany přední kapsy veďte z každé strany jen ke krátké čárce nad koncem výřezu. Nic nepropichujte, vpich na čáře by v hraně nechal zoubek. Rovné strany řežte podle ocelového pravítka položeného na čáru (jako v lekci 2), zaoblené rohy pomalu bez pravítka, krátkými tahy. Když řez začne třepit papír nebo kůži, odlomte článek čepele.',
+        body: 'Řežte skrz papír i kůži přesně po plné čáře, nůž do strany nenaklánějte, vždy na dva až tři lehké tahy. Výřez na palec zatím vynechte: rovný řez horní hrany přední kapsy veďte z každé strany jen ke krátké čárce nad koncem výřezu. Nic nepropichujte, vpich na čáře by v hraně nechal zoubek. Rovné strany řežte podle ocelového pravítka položeného na čáru (jako v lekci 2), zaoblené rohy R6 pomalu bez pravítka, krátkými tahy: nůž strměji, mezi tahy otáčejte kůží, ne zápěstím. Když řez začne třepit papír nebo kůži, odlomte článek čepele.',
+        animationLinks: [animationLink('curveCut', 'B1')],
         media: [
           {
             id: 'l5-corner-cut',
@@ -729,7 +731,8 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'thumb-cutout',
         title: 'Vyřízněte výřez na palec',
-        body: 'Výřez je jen na přední kapse, uprostřed horní hrany: 40 mm široký a 12 mm hluboký. Řežte ho s přilepenou šablonou. Oblouk nasekejte pěti až šesti krátkými rovnými řezy, každý začněte i skončete přesně na čáře, nůž kolmo, volnou rukou otáčejte kůží. Jeden roh mezi řezy dejte do dna: tam, kde prostřední čárka sahá na oblouk, 12 mm pod horní hranou. Rovný řez mezi dvěma body oblouku vede sám v odpadu, takže kůže na dobroušení zbude. Rohy mezi řezy zůstanou na čáře a po sejmutí šablony ukážou, kam brousit.',
+        body: 'Výřez je jen na přední kapse, uprostřed horní hrany: 40 mm široký a 12 mm hluboký. Řežte ho s přilepenou šablonou. Oblouk nasekejte pěti až šesti krátkými rovnými řezy, každý začněte i skončete přesně na čáře, nůž do strany nenaklánějte, volnou rukou otáčejte kůží. Jeden roh mezi řezy dejte do dna: tam, kde prostřední čárka sahá na oblouk, 12 mm pod horní hranou. Rovný řez mezi dvěma body oblouku vede sám v odpadu, takže kůže na dobroušení zbude. Rohy mezi řezy zůstanou na čáře a po sejmutí šablony ukážou, kam brousit.',
+        animationLinks: [animationLink('curveCut', 'C1')],
         media: [
           {
             id: 'l5-thumb-cutout',

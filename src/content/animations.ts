@@ -31,6 +31,8 @@ import { type AnimationLink } from '@/content/schema';
  * - posuvka (`#A`–`#D`): stejně jako kapsa-prisiti; analogová posuvka s noniem 0,1 mm, měření
  *   tloušťky kůže a průměr z více míst (příklad z Víčka). Odkazují na ni kroky, kde se posuvkou
  *   měří tloušťka kůže, a pole tloušťky ve „Váš pásek“.
+ * - rez-oblouky (`#A`–`#C`): stejně jako kapsa-prisiti; zaoblené rohy a výřez nožem bez pravítka
+ *   (lekce 2 a 5 pouzdra na karty), společné pro všechny projekty.
  * - rez-nozem (`#A`–`#C`): stejně jako kapsa-prisiti; řez odlamovacím nožem podle ocelového
  *   pravítka, pravítko nastavené čepelí (lekce 2 pouzdra na karty), společné pro všechny projekty.
  * - ctverec-forma (`#A`–`#C`): stejně jako kapsa-prisiti; čtverec 70 × 70 kolem vyvrtaného otvoru
@@ -786,6 +788,26 @@ export const animationPages = {
         'Přitlačte pravítko',
       ],
       C: ['Držení nože', 'První lehký tah a kontrola', 'Dořízněte'],
+    },
+  },
+  curveCut: {
+    path: '/animace/rez-oblouky.html',
+    title: 'Řez oblouků a rohů',
+    buttonText: 'Jak řezat oblouky a rohy',
+    sections: {
+      A: 'Část A – příprava',
+      B: 'Část B – vypouklý roh',
+      C: 'Část C – vydutý oblouk',
+    },
+    steps: {
+      A: ['Nejdřív rovné strany', 'Nůž strměji, řeže hrot'],
+      B: [
+        'Krátký tah, pak otočte kůží',
+        'První tah lehce, pak dořízněte',
+        'Malý roh: krátké rovné řezy',
+        'Dobruste plošky na čáru',
+      ],
+      C: ['Vydutý oblouk: krátké rovné řezy', 'Dobruste smirkem kolem tužky'],
     },
   },
 } as const satisfies Record<
