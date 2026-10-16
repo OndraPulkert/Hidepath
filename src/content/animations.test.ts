@@ -208,7 +208,7 @@ describe('animace postupu – stránky v public/animace', () => {
     'steps' in page ? [{ key, path: page.path, sections: page.sections, steps: page.steps }] : [],
   );
 
-  it('kroky mají pět stránek kapsy a druku, dvě stránky pásu, sedlářský steh, hrany, šest stránek Víčka, čtyři stránky pásku, posuvku, vrtání formy, čtverec na formě, řez podle pravítka a řez oblouků', () => {
+  it('kroky mají pět stránek kapsy a druku, dvě stránky pásu, sedlářský steh, hrany, šest stránek Víčka, čtyři stránky pásku, posuvku, vrtání formy, čtverec na formě, řez podle pravítka, řez oblouků a dírky pásku', () => {
     expect(steppedPages.map((p) => p.key)).toEqual([
       'kapsa',
       'pocketAttach',
@@ -234,6 +234,7 @@ describe('animace postupu – stránky v public/animace', () => {
       'formSquare',
       'rulerCut',
       'curveCut',
+      'beltHoleCenter',
     ]);
   });
 
@@ -782,7 +783,7 @@ describe('animace postupu – pásek: konec s přezkou, dírky a špička', () =
     [6, 'row', [spicka('B1'), spicka('D1')]],
     [6, 'place', [spicka('B2'), spicka('C1'), spicka('D2')]],
     [6, 'mark', [spicka('B3'), spicka('C2'), spicka('D2')]],
-    [6, 'punch-holes', [spicka('E1')]],
+    [6, 'punch-holes', ['/animace/pasek-dirky.html#A1']],
     [6, 'cut-tip', [spicka('E2'), spicka('E3'), spicka('E4')]],
     [6, 'finish', [spicka('F1'), spicka('F2'), hrany('H1'), hrany('H2'), hrany('H3')]],
     [6, 'try', [spicka('F3')]],

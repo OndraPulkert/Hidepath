@@ -31,6 +31,8 @@ import { type AnimationLink } from '@/content/schema';
  * - posuvka (`#A`–`#D`): stejně jako kapsa-prisiti; analogová posuvka s noniem 0,1 mm, měření
  *   tloušťky kůže a průměr z více míst (příklad z Víčka). Odkazují na ni kroky, kde se posuvkou
  *   měří tloušťka kůže, a pole tloušťky ve „Váš pásek“.
+ * - pasek-dirky (`#A`–`#B`): stejně jako kapsa-prisiti; výsečník na tečku z destičky přes střednici,
+ *   křížek a zkušební otisk (lekce 6 pásku).
  * - rez-oblouky (`#A`–`#C`): stejně jako kapsa-prisiti; zaoblené rohy a výřez nožem bez pravítka
  *   (lekce 2 a 5 pouzdra na karty), společné pro všechny projekty.
  * - rez-nozem (`#A`–`#C`): stejně jako kapsa-prisiti; řez odlamovacím nožem podle ocelového
@@ -808,6 +810,19 @@ export const animationPages = {
         'Dobruste plošky na čáru',
       ],
       C: ['Vydutý oblouk: krátké rovné řezy', 'Dobruste smirkem kolem tužky'],
+    },
+  },
+  beltHoleCenter: {
+    path: '/animace/pasek-dirky.html',
+    title: 'Dírky pásku na střed',
+    buttonText: 'Jak trefit střed dírky',
+    sections: {
+      A: 'Část A – značky',
+      B: 'Část B – výsečník',
+    },
+    steps: {
+      A: ['Spojte značky střednicí', 'Přes každou značku křížek'],
+      B: ['Výsečník doprostřed křížku', 'Zkušební otisk', 'Vysekněte', 'Všech pět stejně'],
     },
   },
 } as const satisfies Record<

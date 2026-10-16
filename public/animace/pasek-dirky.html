@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dírky pásku na střed</title>
+<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+<!-- Self-hostované fonty aplikace (public/fonts), aby stránka fungovala i offline v PWA. -->
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f3efe9;--panel:#fffdf9;--stage:#f7f2ea;--ink:#2a211b;--muted:#6c6158;--line:#ddd5cc;
+  --accent:#b3261e;--ok:#2f6b3a;--btn:#2a211b;--btn-ink:#fffdf9;
+  --lic:#b8773f;--lic-d:#8a5228;--lic-hi:#d39a63;
+  --rub:#dcc4a2;--rub-d:#b99a72;--rub-fib:#c7a87f;--chip-lic:#b8773f;--chip-rub:#dcc4a2;
+  --hole:#2b2018;--paper:#fcfbf7;--paper-edge:#cfc8bb;--karton:#b9935f;--print:#2b2b2b;--print-m:#7a7a7a;
+  --graphite:#4f545a;--steel:#a3abb3;--steel-d:#5c656e;--tape:#eedc95;--tape-d:#b9a24a;
+  --board:#e4ddd2;--board-d:#bdb3a4;--mat:#5f8f73;--mat-d:#3f6b55;--pad:#e9e4da;--pad-d:#b8ae9c;
+  --wood:#c79a63;--wood-d:#8a6436;--skin:#e9b996;--skin-d:#b98563;
+  --acryl:#cfe7ef;--acryl-d:#6f9aab;--engr:#2f5f73;
+  --cloth:#7f93ad;--cloth-d:#56677e;--balm:#7a4a22;--burn:#5a3416;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
+  --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
+  --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
+  --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;--chip-lic:#a96c38;--chip-rub:#c9b190;
+  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--karton:#9a7b52;--print:#2b2b2b;--print-m:#6a6a6a;
+  --graphite:#3f4449;--steel:#9099a2;--steel-d:#4d555d;--tape:#d9c67d;--tape-d:#9c8a3c;
+  --board:#3a332c;--board-d:#544a40;--mat:#4d7a61;--mat-d:#335a46;--pad:#cfc8b8;--pad-d:#8f8573;
+  --wood:#b38955;--wood-d:#7a582e;--skin:#d6a684;--skin-d:#a57454;
+  --acryl:#a9d0de;--acryl-d:#86b4c5;--engr:#d8f1fa;
+  --cloth:#5d7090;--cloth-d:#3e4c63;--balm:#5e3818;--burn:#3f230c;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#16120f;--panel:#1f1915;--stage:#241d18;--ink:#ece4dc;--muted:#a89a8e;--line:#3a3029;
+  --accent:#ff8a80;--ok:#7cc28a;--btn:#ece4dc;--btn-ink:#16120f;
+  --lic:#a96c38;--lic-d:#7a4822;--lic-hi:#c08654;
+  --rub:#c9b190;--rub-d:#a3865f;--rub-fib:#b39470;--chip-lic:#a96c38;--chip-rub:#c9b190;
+  --hole:#0e0a08;--paper:#ece9e1;--paper-edge:#a9a296;--karton:#9a7b52;--print:#2b2b2b;--print-m:#6a6a6a;
+  --graphite:#3f4449;--steel:#9099a2;--steel-d:#4d555d;--tape:#d9c67d;--tape-d:#9c8a3c;
+  --board:#3a332c;--board-d:#544a40;--mat:#4d7a61;--mat-d:#335a46;--pad:#cfc8b8;--pad-d:#8f8573;
+  --wood:#b38955;--wood-d:#7a582e;--skin:#d6a684;--skin-d:#a57454;
+  --acryl:#a9d0de;--acryl-d:#86b4c5;--engr:#d8f1fa;
+  --cloth:#5d7090;--cloth-d:#3e4c63;--balm:#5e3818;--burn:#3f230c;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 "Albert Sans",system-ui,sans-serif;padding:22px 16px 44px;overflow-x:hidden}
+.wrap{max-width:860px;margin:0 auto;display:grid;gap:16px}
+h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
+.lead{color:var(--muted);margin:6px 0 0;max-width:70ch}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:10px;min-width:0}
+.stagewrap{position:relative;background:var(--stage);border-radius:8px;overflow:hidden}
+#stage{display:block;width:100%;height:auto;aspect-ratio:3/2}
+.badge{position:absolute;top:8px;left:8px;display:flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-weight:700;font-size:13px;letter-spacing:.06em;transition:opacity .2s}
+.badge i{width:16px;height:16px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.2)}
+.badge small{font-weight:500;letter-spacing:0;color:var(--muted);font-size:12px}
+.badge[hidden]{display:none}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.controls button{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);width:40px;height:40px;border-radius:10px;display:grid;place-items:center;cursor:pointer;padding:0}
+.controls button.play{background:var(--btn);color:var(--btn-ink);border-color:var(--btn)}
+.controls button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.controls svg{width:18px;height:18px;fill:currentColor}
+.counter{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+.prog{display:flex;gap:6px;align-items:stretch}
+.pseg{flex:1;display:grid;gap:4px;min-width:0;cursor:pointer;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left}
+.pseg .bars{display:flex;gap:2px;height:6px}
+.pseg .bars span{flex:1;background:var(--line);border-radius:2px;position:relative;overflow:hidden}
+.pseg .bars span b{position:absolute;inset:0;background:var(--lic);transform-origin:left;transform:scaleX(0)}
+.pseg .pl{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:520px){.pl span{display:none}}
+.pseg.on .pl{color:var(--ink);font-weight:600}
+.cap{min-height:6.6em}
+.cap .no{display:inline-block;font-weight:700;color:var(--lic-d);margin-right:6px;font-variant-numeric:tabular-nums}
+:root[data-theme="dark"] .cap .no{color:var(--lic-hi)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cap .no{color:var(--lic-hi)}}
+.cap h2{display:inline;font-size:1.05rem;margin:0}
+.cap p{margin:4px 0 0;color:var(--ink)}
+.cap .tip{display:block;margin-top:6px;color:var(--muted);font-size:14px}
+.cap .tip b{color:var(--accent);font-weight:700}
+.note{font-size:13px;color:var(--muted);margin:0}
+.note a{color:inherit}
+/* svg text */
+.t{font:600 4.1px "Albert Sans",sans-serif;fill:var(--ink)}
+.ts{font:500 3.7px "Albert Sans",sans-serif;fill:var(--muted)}
+.tw{font:700 4.6px "Albert Sans",sans-serif;fill:var(--ink)}
+.ta{font:700 4.1px "Albert Sans",sans-serif;fill:var(--accent)}
+.tok{font:700 4.1px "Albert Sans",sans-serif;fill:var(--ok)}
+.tp{font:600 3.2px "Albert Sans",sans-serif;fill:var(--print)}
+.tpm{font:500 2.6px "Albert Sans",sans-serif;fill:var(--print-m)}
+.lead-l{stroke:var(--muted);stroke-width:.25;fill:none}
+@media (min-width:700px){.t,.ta,.tok{font-size:2.8px}.ts{font-size:2.5px}.tw{font-size:3.2px}.tp{font-size:2.6px}.tpm{font-size:2.1px}}
+.panelbox{fill:var(--panel);stroke:var(--line);stroke-width:.35}
+.pillbg{fill:var(--panel);stroke:var(--line);stroke-width:.3;opacity:.95}
+@media (max-width:520px){.badge small{display:none}.cap{min-height:12em}.counter{width:100%;margin-left:0;order:9}}
+/* Hidepath: návrat do lekce */
+.backlink{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--ink);font-weight:600;font-size:15px;text-decoration:none;justify-self:start}
+.backlink:hover{text-decoration:underline}
+.backlink:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+/* klik na obdélníček časové osy = přehrát od toho kroku; větší plocha pro prst */
+.pseg .bars span{overflow:visible;cursor:pointer}
+.pseg .bars span b{border-radius:inherit}
+.pseg .bars span::after{content:"";position:absolute;left:0;right:0;top:-9px;bottom:-9px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+<a class="backlink" href="/" data-back>← Zpět do lekce</a>
+<h1>Dírky pásku na střed</h1>
+<p class="lead">Jak postavit výsečník přesně na značku z destičky: střednice a křížek, které vykukují zpod výsečníku, zkušební otisk a úder.</p>
+</header>
+
+<section class="card" aria-label="Animace postupu">
+  <div class="stagewrap">
+    <svg id="stage" viewBox="0 0 135 90" role="img" aria-label="Animovaný postup: střednice přes značky, křížky, vystředění výsečníku podle čar, zkušební otisk, úder a řada pěti dírek"></svg>
+  </div>
+  <div class="prog" id="prog"></div>
+  <div class="controls">
+    <button id="bRestart" aria-label="Od začátku" title="Od začátku"><svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/></svg></button>
+    <button id="bPrev" aria-label="Předchozí krok" title="Předchozí krok"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg></button>
+    <button id="bPlay" class="play" aria-label="Přehrát" title="Přehrát / pozastavit"><svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg></button>
+    <button id="bNext" aria-label="Další krok" title="Další krok"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
+    <span class="counter" id="counter">krok 1 / 6</span>
+  </div>
+  <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
+</section>
+<p class="note">Příklad: pás 40 mm, dírky Ø 5 mm po 25 mm, pohled na rub. Tělo výsečníku je kreslené schematicky. Zdroje: lekce 6 pásku (značky šídlem kroužením v otvorech destičky, výsečník s Ø dírek, tvrdá deska, prsty u spodku); střednice přes značky a zarovnání podle okraje výsečníku místo značky, kterou výsečník zakryje – fórum leatherworker.net (Rawhide, Frank, Jordan, TwinOaks); zkušební otisk lehkým přitlačením před úderem – tamtéž (JohnD). Postavit výsečník podle křížku je odvozené z těchto rad.</p>
+</div>
+
+<script>
+(()=>{
+// ---------- helpers ----------
+const cl=t=>Math.max(0,Math.min(1,t));
+const seg=(t,a,b)=>cl((t-a)/(b-a));
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const es=(t,a,b)=>ease(seg(t,a,b));
+const L=(a,b,t)=>a+(b-a)*t;
+const f=n=>(+n).toFixed(3).replace(/\.?0+$/,'')||'0';
+const G=(tr,s,extra='')=>`<g transform="${tr}" ${extra}>${s}</g>`;
+const O=(op,s)=>op<=0.001?'':`<g opacity="${f(op)}">${s}</g>`;
+let uid=0;
+function inset(title,body,{x=88,y=6,w=45,h=78}={}){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" class="panelbox"/>${title?`<text x="${x+2.5}" y="${y+5}" class="ts" style="font-weight:700;letter-spacing:.06em">${title}</text>`:''}${body}`}
+function lbl(x,y,t,cls='t',anchor='start'){return `<text x="${f(x)}" y="${f(y)}" class="${cls}" text-anchor="${anchor}">${t}</text>`}
+function tick(x,y,s=1,c='var(--ok)'){return `<path d="M${f(x-1.6*s)} ${f(y)} l${f(1.2*s)} ${f(1.2*s)} l${f(2.4*s)} -${f(2.6*s)}" stroke="${c}" stroke-width="${f(.7*s)}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`}
+function cross(x,y,s=1,c='var(--accent)'){return `<path d="M${f(x-1.3*s)} ${f(y-1.3*s)} l${f(2.6*s)} ${f(2.6*s)} M${f(x+1.3*s)} ${f(y-1.3*s)} l${f(-2.6*s)} ${f(2.6*s)}" stroke="${c}" stroke-width="${f(.6*s)}" stroke-linecap="round"/>`}
+function arrow(x1,y1,x2,y2,c='var(--accent)',w=.5){return `<path d="M${f(x1)} ${f(y1)} L${f(x2)} ${f(y2)}" stroke="${c}" stroke-width="${w}" fill="none" marker-end="url(#ar)"/>`}
+function eye(x,y,rot=0,s=1){return G(`translate(${f(x)} ${f(y)}) rotate(${f(rot)}) scale(${s})`,`<path d="M-4 0 Q0 -3.2 4 0 Q0 3.2 -4 0 Z" fill="var(--panel)" stroke="var(--ink)" stroke-width=".45"/><circle r="1.45" fill="var(--ink)"/><circle cx=".45" cy="-.45" r=".4" fill="var(--panel)"/>`)}
+
+
+// ---------- kresba ----------
+// Pásek rubem nahoru na tvrdé desce, vodorovně. Tečky dírek po 25 mm na střednici (příklad: pás 40 mm, dírky Ø 5 mm).
+// Přehled: měřítko KO; detail jedné dírky: měřítko KD.
+const BW=40, SP=25, HD=5, NH=5;
+const KO=.62, OX=6, OY=45;                       // přehled: x mm od 1. tečky − 8, y mm od střednice
+const ox=x=>OX+(x+8)*KO, oy=y=>OY+y*KO;
+const KD=3.2, DX=43, DY=45;                      // detail: střed dírky v (DX, DY)
+const dx=x=>DX+x*KD, dy=y=>DY+y*KD;
+const BR=HD/2*1.7;                               // vnější poloměr tělesa výsečníku (kreslený, schematicky)
+// značky: kroužky Ø 2 mm ze šídla (kroužení po stěně otvoru destičky Ø 2 mm)
+const DOTS=[0,1,2,3,4].map(i=>i*SP);
+function board(){return `<rect x="2" y="2" width="82" height="86" rx="2" fill="var(--board)"/>`}
+function beltO(){return `<rect x="${f(ox(-8))}" y="${f(oy(-BW/2))}" width="${f(ox((NH-1)*SP+8)-ox(-8))}" height="${f(BW*KO)}" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".3"/>`}
+function dotO(x){return `<circle cx="${f(ox(x))}" cy="${f(oy(0))}" r="${f(1*KO)}" fill="none" stroke="var(--print)" stroke-width=".3"/>`}
+function centerO(p=1){return p<=0?'':`<path d="M${f(ox(-4))} ${f(oy(0))} H${f(ox(L(-4,(NH-1)*SP+4,p)))}" stroke="var(--graphite)" stroke-width=".3"/>`}
+const CL=10;                                     // příčná čárka: 10 mm na každou stranu (přečnívá zpod výsečníku)
+function crossO(x,p=1){return p<=0?'':`<path d="M${f(ox(x))} ${f(oy(-CL*p))} V${f(oy(CL*p))}" stroke="var(--graphite)" stroke-width=".3"/>`}
+function holeO(x){return `<circle cx="${f(ox(x))}" cy="${f(oy(0))}" r="${f(HD/2*KO)}" fill="var(--board)" stroke="var(--rub-d)" stroke-width=".2"/>`}
+function ruler(x1,y1,x2,y2){const a=Math.atan2(y2-y1,x2-x1)*180/Math.PI,len=Math.hypot(x2-x1,y2-y1);
+  let d='';for(let i=1;i<len-.5;i+=1.5)d+=`M${f(i)} 0 V${i%7.5<1.5?-2.4:-1.4}`;
+  return G(`translate(${f(x1)} ${f(y1)}) rotate(${f(a)})`,`<rect x="0" y="-6" width="${f(len)}" height="6" rx=".5" fill="var(--steel)" fill-opacity=".85" stroke="var(--steel-d)" stroke-width=".25"/><path d="${d}" stroke="var(--steel-d)" stroke-width=".15"/>`)}
+function awlTip(x,y){return G(`translate(${f(x)} ${f(y)}) rotate(28)`,`<path d="M0 0 L-.5 -8 L.5 -8 Z" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".2"/><rect x="-.9" y="-9.4" width="1.8" height="1.6" rx=".3" fill="var(--steel-d)"/><ellipse cx="0" cy="-14" rx="2.1" ry="4.8" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".25"/>`)}
+// detail jedné dírky
+function beltD(){return `<rect x="2" y="${f(dy(-BW/2))}" width="82" height="${f(BW*KD)}" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".3"/>`}
+function marksD(o={}){let s=`<path d="M2 ${DY} H84" stroke="var(--graphite)" stroke-width=".35"/><path d="M${DX} ${f(dy(-CL))} V${f(dy(CL))}" stroke="var(--graphite)" stroke-width=".35"/>`;
+  s+=`<circle cx="${DX}" cy="${DY}" r="${f(1*KD)}" fill="none" stroke="var(--print)" stroke-width=".45"/>`;
+  if(o.ring) s+=O(o.ring,`<circle cx="${f(dx(o.rx||0))}" cy="${f(dy(o.ry||0))}" r="${f(HD/2*KD)}" fill="none" stroke="var(--rub-d)" stroke-width=".7"/>`);
+  if(o.hole) s+=`<circle cx="${DX}" cy="${DY}" r="${f(HD/2*KD)}" fill="var(--board)" stroke="var(--rub-d)" stroke-width=".3"/>`;
+  return s}
+// výsečník shora: střed (x, y) v mm detailu
+function punchD(x,y,op=1){return O(op,`<circle cx="${f(dx(x))}" cy="${f(dy(y))}" r="${f(BR*KD+1)}" fill="#000" opacity=".12"/><circle cx="${f(dx(x))}" cy="${f(dy(y))}" r="${f(BR*KD)}" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".4"/><circle cx="${f(dx(x))}" cy="${f(dy(y))}" r="${f(BR*KD*.55)}" fill="none" stroke="var(--steel-d)" stroke-width=".3" opacity=".6"/>`)}
+// viditelné konce příčné čárky nad a pod výsečníkem (délka ukazuje, jestli sedí napříč) a směr čar ke středu
+function endsD(x,y,good){const c=good?'var(--ok)':'var(--accent)';
+  const top=Math.sqrt(Math.max(0,BR*BR-x*x));       // kde čárka x=0 vyleze zpod kruhu se středem (x,y)
+  const yT=y-top, yB=y+top;
+  let s=`<path d="M${DX} ${f(dy(-CL))} V${f(dy(yT))} M${DX} ${f(dy(yB))} V${f(dy(CL))}" stroke="${c}" stroke-width="1" stroke-linecap="round"/>`;
+  return s}
+// boční pohled (panel): deska, pásek, výsečník, palička
+function sideD(o={}){const bx=110.5, top=64, th=3.6;
+  let s=`<rect x="90" y="${top+th}" width="41" height="6" fill="var(--board)" stroke="var(--board-d)" stroke-width=".3"/><rect x="90" y="${top}" width="41" height="${th}" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".3"/>`;
+  if(o.hole) s+=`<rect x="${bx-2.6}" y="${top-.1}" width="5.2" height="${th+.2}" fill="var(--board)"/>`;
+  const lift=o.lift||0, dep=o.dep||0, tw=o.twist||0;
+  const py=top-lift+dep;
+  s+=G(`translate(${bx} ${f(py)})`,`<path d="M-2.6 0 L-3.6 -4 L-3.6 -24 L3.6 -24 L3.6 -4 L2.6 0 Z" fill="var(--steel)" stroke="var(--steel-d)" stroke-width=".3"/><rect x="-4.2" y="-30" width="8.4" height="6" rx="1" fill="var(--steel-d)"/>`+(tw?`<path d="M-6 -16 A7 3 0 0 0 6 -16" fill="none" stroke="var(--accent)" stroke-width=".4" marker-end="url(#ar)" opacity="${f(tw)}"/>`:''));
+  if(o.finger) s+=`<ellipse cx="${bx-5}" cy="${f(py-6)}" rx="2.4" ry="3.4" fill="var(--skin)" stroke="var(--skin-d)" stroke-width=".3"/>`;
+  if(o.mallet!==undefined){const my=py-30-L(14,0,o.mallet);s+=`<rect x="${bx-9}" y="${f(my-8)}" width="18" height="8" rx="2" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".3"/><rect x="${bx+9}" y="${f(my-5)}" width="12" height="2.4" rx="1" fill="var(--wood-d)"/>`}
+  return s}
+
+// ---------- kroky ----------
+const PARTS={A:'Značky',B:'Výsečník'};
+const S=[];
+const add=(part,title,body,dur,draw)=>S.push({part,title,body,dur,draw});
+
+add('A','Spojte značky střednicí','Destičku nebo list sundejte. Značky jsou malé kroužky ze šídla. Ocelové pravítko přiložte přes střed prvního a posledního kroužku a všechny značky spojte tenkou čarou šídlem nebo tužkou. Čára má projít středy všech kroužků. Je na rubu, vidět nebude.',10000,t=>{
+  const p=es(t,.3,.8);
+  let s=board()+beltO();
+  DOTS.forEach(x=>s+=dotO(x));
+  s+=centerO(p);
+  s+=O(seg(t,.06,.2)*(1-seg(t,.86,.94)),ruler(ox(-6),oy(0),ox((NH-1)*SP+6),oy(0)));
+  if(t>.3&&t<.82) s+=awlTip(ox(L(-4,(NH-1)*SP+4,p)),oy(0));
+  s+=O(seg(t,.82,.9),lbl(ox(0),oy(-BW/2)-2.5,'střednice středy všech kroužků','tok'));
+  let q=lbl(90.5,17,'pravítko přes první','t')+lbl(90.5,22,'a poslední kroužek','t');
+  q+=lbl(90.5,35,'tenká čára','ts')+lbl(90.5,39.5,'šídlem nebo tužkou','ts');
+  q+=O(seg(t,.82,.9),lbl(90.5,53,'všechny kroužky','tok')+lbl(90.5,58,'na čáře','tok')+tick(127,56));
+  q+=lbl(90.5,72,'na rubu – nebude','ts')+lbl(90.5,76.5,'vidět','ts');
+  s+=inset('STŘEDNICE',q);
+  return s;
+});
+
+add('A','Přes každou značku křížek','Středem každé značky narýsujte krátkou čárku napříč pásem, kolmo na střednici, asi 1 cm na každou stranu. Musí přečnívat zpod výsečníku – podle jejích konců ho pak vystředíte.',10000,t=>{
+  let s=board()+beltO()+centerO(1);
+  DOTS.forEach((x,i)=>{s+=dotO(x)+crossO(x,es(t,.08+i*.15,.2+i*.15))});
+  const i=Math.min(4,Math.floor(seg(t,.08,.83)*5));
+  if(t>.08&&t<.83) s+=awlTip(ox(DOTS[i]),oy(L(-CL,CL,seg(t,.08+i*.15,.2+i*.15))));
+  s+=O(seg(t,.84,.92),`<path d="M${f(ox(DOTS[2])+2)} ${f(oy(-CL))} H${f(ox(DOTS[2])+5)} M${f(ox(DOTS[2])+3.5)} ${f(oy(-CL))} V${f(oy(0))}" stroke="var(--accent)" stroke-width=".3"/>`+lbl(ox(DOTS[2])+5.5,oy(-CL/2)+1,'1 cm','ta'));
+  let q=lbl(90.5,17,'čárka napříč,','t')+lbl(90.5,22,'kolmo na střednici','t');
+  q+=lbl(90.5,35,'asi 1 cm','ts')+lbl(90.5,39.5,'na každou stranu','ts');
+  q+=lbl(90.5,53,'musí přečnívat','tok')+lbl(90.5,58,'zpod výsečníku','tok');
+  s+=inset('KŘÍŽKY',q);
+  return s;
+});
+
+add('B','Výsečník doprostřed křížku','Na značku se nedívejte, výsečník ji zakryje. Postavte ho svisle a posouvejte, až střednice i čárka míří přesně do jeho středu a čárka vykukuje nahoře i dole stejně daleko.',11000,t=>{
+  // výsečník přijede mimo střed a doladí se
+  const k=es(t,.08,.35), fx=es(t,.45,.75);
+  const px=L(L(14,3.2,k),0,fx), py=L(L(-9,2.4,k),0,fx);
+  let s=`<clipPath id="stc"><rect x="2" y="2" width="82" height="86" rx="2"/></clipPath>`+board()+`<g clip-path="url(#stc)">`+beltD()+marksD()+punchD(px,py)+(t>.35?endsD(px,py,fx>=1):'');
+  s+='</g>';
+  s+=O(seg(t,.38,.45)*(1-seg(t,.72,.76)),lbl(DX,10,'čárka nevykukuje stejně','ta','middle'));
+  s+=O(seg(t,.78,.86),lbl(DX,10,'nahoře i dole stejně','tok','middle'));
+  let q=lbl(90.5,17,'značka je pod','t')+lbl(90.5,22,'výsečníkem','t');
+  q+=lbl(90.5,35,'čáry míří','ts')+lbl(90.5,39.5,'do středu','ts');
+  q+=O(seg(t,.78,.86),lbl(90.5,53,'čárka vykukuje','tok')+lbl(90.5,58,'stejně daleko','tok')+tick(127,56));
+  q+=lbl(90.5,72,'shora, svisle','ts');
+  s+=inset('VYSTŘEDĚNÍ',q);
+  return s;
+});
+
+add('B','Zkušební otisk','Výsečník jen lehce přitlačte, ještě bez paličky. Zvedněte ho: malý kroužek ze šídla má být uprostřed otisku. Když není, postavte výsečník znovu a otisk zopakujte.',12000,t=>{
+  const press=es(t,.05,.25)*(1-es(t,.45,.6)), lifted=t>.5;
+  // první otisk mírně mimo, druhý ve středu
+  const second=t>.66, rx=second?0:.9, ry=second?0:-.6;
+  let s=`<clipPath id="stc"><rect x="2" y="2" width="82" height="86" rx="2"/></clipPath>`+board()+`<g clip-path="url(#stc)">`+beltD()+marksD({ring:lifted?1:0,rx:second?0:.9,ry:second?0:-.6});
+  s+='</g>';
+  if(!lifted||t>.62&&t<.82) s+=punchD(t>.62?L(.9,0,es(t,.62,.72)):rx,t>.62?L(-.6,0,es(t,.62,.72)):ry,t>.62&&t<.82?1-seg(t,.78,.82):1);
+  if(t>.5&&t<.62) s+=O(1,lbl(DX,84,'značka mimo střed otisku → znovu','ta','middle'));
+  s+=O(seg(t,.84,.92),lbl(DX,84,'značka uprostřed otisku','tok','middle'));
+  const press2=es(t,.66,.72)*(1-es(t,.76,.8));
+  let q=sideD({lift:(lifted&&t<.62)||t>.8?6:0,dep:(press+press2)*.6,twist:0});
+  q+=lbl(90.5,17,'lehce přitlačit','t')+lbl(90.5,22,'bez paličky','t');
+  q+=O(seg(t,.5,.6),lbl(90.5,80.5,'zvednout, zkontrolovat','ts'));
+  s+=inset('OTISK',q);
+  return s;
+});
+
+add('B','Vysekněte','Výsečník postavte zpátky přesně do otisku, svisle. Prsty držte u spodku, palička dopadá na horní konec. Děrujte na tvrdé desce.',10000,t=>{
+  const hit=es(t,.3,.42), done=t>.62;
+  let s=`<clipPath id="stc"><rect x="2" y="2" width="82" height="86" rx="2"/></clipPath>`+board()+`<g clip-path="url(#stc)">`+beltD()+marksD({ring:done?0:1,hole:done});
+  s+='</g>';
+  if(!done) s+=punchD(0,0);
+  if(t>.4&&t<.5) s+=`<circle cx="${DX}" cy="${DY}" r="${f(BR*KD+3)}" fill="none" stroke="var(--accent)" stroke-width=".5" opacity="${f(1-seg(t,.4,.5))}"/>`;
+  s+=O(seg(t,.66,.74),lbl(DX,84,'dírka přesně na křížku','tok','middle'));
+  let q=sideD({mallet:t<.3?es(t,.05,.3)*0:hit,dep:hit*3.4,finger:!done,hole:done,lift:done?14:0});
+  q+=lbl(90.5,79,'svisle, tvrdá deska','t')+lbl(90.5,83,'prsty u spodku','ts');
+  s+=inset('ÚDER',q);
+  return s;
+});
+
+add('B','Všech pět stejně','Stejně postupujte u všech dírek: výsečník podle čar, zkušební otisk, úder. Hotové dírky leží na střednici ve stejných roztečích.',8000,t=>{
+  let s=board()+beltO()+centerO(1);
+  const n=Math.floor(seg(t,.05,.75)*5.999);
+  DOTS.forEach((x,i)=>{s+=crossO(x,1)+(i<n?holeO(x):dotO(x))});
+  s+=O(seg(t,.78,.86),lbl(ox(0),oy(-BW/2)-2.5,'dírky na střednici, po 25 mm','tok'));
+  let q=lbl(90.5,17,`dírek: ${Math.min(5,n)} / 5`,'t');
+  q+=lbl(90.5,30,'u každé stejně:','ts')+lbl(90.5,35,'čáry, otisk,','ts')+lbl(90.5,39.5,'úder','ts');
+  s+=inset('ŘADA',q);
+  return s;
+});
+
+// ---------- engine ----------
+const svg=document.getElementById('stage');
+const DEFS=`<defs>
+<marker id="ar" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0 L6 3 L0 6z" fill="var(--accent)"/></marker>
+</defs>`;
+const capNo=document.getElementById('capNo'),capT=document.getElementById('capT'),capB=document.getElementById('capB'),counter=document.getElementById('counter');
+const prog=document.getElementById('prog');
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const partKeys=Object.keys(PARTS);const barEls=[];const segEls={};
+partKeys.forEach(k=>{const b=document.createElement('button');b.className='pseg';b.type='button';b.setAttribute('aria-label',`Část ${k}: ${PARTS[k]}`);
+  const bars=document.createElement('div');bars.className='bars';S.forEach((st,i)=>{if(st.part===k){const sp=document.createElement('span');const bb=document.createElement('b');sp.appendChild(bb);sp.title='Přehrát od kroku '+k+(bars.children.length+1);sp.tabIndex=0;sp.setAttribute('role','button');sp.setAttribute('aria-label',sp.title);sp.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();stepGo(i)}});sp.addEventListener('click',e=>{e.stopPropagation();stepGo(i)});bars.appendChild(sp);barEls[i]=bb;}});
+  const pl=document.createElement('div');pl.className='pl';pl.innerHTML=`<b>${k}</b><span> · ${PARTS[k]}</span>`;b.append(bars,pl);prog.appendChild(b);segEls[k]=b;
+  b.addEventListener('click',()=>{auto=true;go(S.findIndex(s=>s.part===k),0,true)});});
+let idx=0,tt=1,playing=false,last=0,raf=0;
+function numInPart(i){const p=S[i].part;return S.slice(0,i+1).filter(s=>s.part===p).length}
+function render(){
+  const st=S[idx]; uid=0;
+  let body='';
+  try{ body=st.draw(tt);}catch(e){console.error(e)}
+  svg.innerHTML=DEFS+body;
+  capNo.textContent=`${st.part}${numInPart(idx)}`; capT.textContent=st.title; capB.textContent=st.body;
+  counter.textContent=`krok ${idx+1} / ${S.length}`;
+  barEls.forEach((b,i)=>{b.style.transform=`scaleX(${i<idx?1:i===idx?tt:0})`});
+  partKeys.forEach(k=>segEls[k].classList.toggle('on',k===st.part));
+}
+function stepGo(i){if(typeof auto!=='undefined')auto=true;setPlay(false);go(i,0);setPlay(true);}
+let hold=0;
+function go(i,t=0,user=false){idx=Math.max(0,Math.min(S.length-1,i));tt=reduce?1:t;hold=0;render();}
+function setPlay(p){playing=p;document.getElementById('playIcon').innerHTML=p?'<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>';document.getElementById('bPlay').setAttribute('aria-label',p?'Pozastavit':'Přehrát');if(p){last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}}
+function loop(now){if(!playing)return;const dt=Math.max(0,now-last);last=now;
+  if(reduce){hold+=dt;if(hold>S[idx].dur){hold=0;if(idx<S.length-1){go(idx+1,1)}else{setPlay(false);return}}}
+  else{tt+=dt/S[idx].dur; if(tt>=1){ tt=1; render(); hold+=dt; if(hold>700){hold=0; if(idx<S.length-1){idx++;tt=0}else{setPlay(false);return}} } else render();}
+  raf=requestAnimationFrame(loop)}
+document.getElementById('bPlay').onclick=()=>{auto=true;if(!playing&&tt>=1&&!reduce){go(idx,0)} setPlay(!playing)};
+document.getElementById('bRestart').onclick=()=>{auto=true;go(0,0);setPlay(true)};
+document.getElementById('bPrev').onclick=()=>{auto=true;setPlay(false);go(idx-1,1)};
+document.getElementById('bNext').onclick=()=>{auto=true;setPlay(false);go(idx+1,1)};
+// Hidepath: deep link na část (#A–#D) skočí na její první krok, na krok (#C3) přímo na ten krok.
+function stepFromHash(){const m=/^([A-Z])([0-9]+)?$/.exec(decodeURIComponent((location.hash||'').slice(1)).trim().toUpperCase());if(!m||!Object.prototype.hasOwnProperty.call(PARTS,m[1]))return -1;const ix=[];S.forEach((s,i)=>{if(s.part===m[1])ix.push(i)});const n=m[2]===undefined?1:+m[2];return n>=1&&n<=ix.length?ix[n-1]:-1}
+{const i=stepFromHash();go(i>=0?i:0,1);}
+addEventListener('hashchange',()=>{const i=stepFromHash();if(i<0)return;auto=true;setPlay(false);go(i,0);if(!reduce)setPlay(true);});
+window.__dirky={go:(i,t)=>{setPlay(false);idx=i;tt=t;render()},steps:S.length};
+let auto=false;
+if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!auto){auto=true;io.disconnect();const i=stepFromHash();go(i>=0?i:0,0);setPlay(true)}})},{threshold:.45});io.observe(svg)}
+})();
+</script>
+<script>
+// Hidepath: „Zpět do lekce“ = krok zpět v historii, když se sem přišlo z aplikace; jinak úvod aplikace.
+(function(){var a=document.querySelector('[data-back]');if(!a)return;a.addEventListener('click',function(e){var o='';try{o=document.referrer?new URL(document.referrer).origin:'';}catch(_){}if(o===location.origin&&history.length>1){e.preventDefault();history.back();}});})();
+</script>
+</body>
+</html>

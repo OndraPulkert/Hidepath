@@ -1114,8 +1114,8 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'punch-holes',
         title: 'Vysekněte dírky',
-        body: 'Dírky vysekněte výsečníkem s Ø dírek z aktivního pásku (např. 5 mm, vaše číslo je pod krokem).',
-        animationLinks: [animationLink('beltHolesTip', 'E1')],
+        body: 'Výsečník neklaďte na značku od oka, zakryje ji. Destičku nebo list sundejte, značky spojte na rubu střednicí podle ocelového pravítka a přes každou narýsujte čárku napříč, asi 1 cm na každou stranu. Výsečník postavte na křížek, lehce přitlačte bez paličky a zkontrolujte, že je značka uprostřed otisku. Pak vysekněte výsečníkem s Ø dírek z aktivního pásku (např. 5 mm, vaše číslo je pod krokem).',
+        animationLinks: [animationLink('beltHoleCenter', 'A1')],
         media: [],
         beltRecalls: ['holeDiameter'],
       },
