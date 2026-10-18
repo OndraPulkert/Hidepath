@@ -373,8 +373,10 @@ describe('obsah – peněženka Víčko', () => {
       const expected: Record<keyof typeof LID_RECORD_IDS, string> = {
         v12Offset: '3/inspect',
         v12Result: '3/decide',
+        magnetScrap: '3/magnet-scrap',
         magnetMarkY: '11/find-plate',
         z2Result: '12/z2',
+        z5Result: '12/z5',
       };
       for (const [key, at] of Object.entries(expected)) {
         const id = LID_RECORD_IDS[key as keyof typeof LID_RECORD_IDS];
@@ -415,7 +417,7 @@ describe('obsah – peněženka Víčko', () => {
         '11/magnet-dry-test: magnet',
         '12/magnet-swap: magnet',
         '12/z2: variant',
-        '12/final-piece: variant sheets magnet',
+        '12/final-piece: variant sheets magnet k',
       ]);
       for (const { step } of allSteps.filter(({ step }) => step.lidSheetRecalls)) {
         expect(

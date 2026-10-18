@@ -11,6 +11,10 @@ export const LID_RECORD_IDS = {
    * pole drželo i zvolenou variantu, aby staré zápisy platily dál.
    */
   v12Result: 'v12-variant',
+  /** Lekce 3, krok `magnet-scrap`: orientační zkouška magnetu přes odřezky (M0). */
+  magnetScrap: 'magnet-scrap',
+  /** Lekce 12, krok `z5`: výsledek zkoušky nošení. */
+  z5Result: 'z5-result',
   /** Lekce 11, krok `find-plate`: přeměřená značka magnetu od spodní hrany, mm. */
   magnetMarkY: 'magnet-mark-y',
   /** Lekce 12, krok `z2`: výsledek zkoušky závěsu (`LID_Z2_RESULTS`). */

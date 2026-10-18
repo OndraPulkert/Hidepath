@@ -287,6 +287,13 @@ const entries: GlossaryEntry[] = [
     group: 'tests',
   },
   {
+    term: 'Z-5',
+    name: 'zkouška nošení',
+    description: 'Po dni v kapse a 50 otevřeních víčko drží a nic nevypadne.',
+    where: 'Zkušební kus, lekce 12.',
+    group: 'tests',
+  },
+  {
     term: 'k',
     name: 'posun víčka',
     description:

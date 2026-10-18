@@ -521,9 +521,10 @@ export const lessons: readonly LessonDefinition[] = [
       'tupý hrot na rýhu (třeba vypsaná propiska, ověřte na odřezku), tužka',
       'nůžky a jehla na propichování (proužek V12)',
       'lupa nebo mobil s makrem',
+      'na orientační zkoušku magnetu: druhý odřezek usně P1 asi 20 × 20 mm a odřezek nebarvené kozinky asi 20 × 20 mm',
     ],
     requiredEquipment: ['veg-tan-leather-1mm', 'steel-ruler', 'digital-caliper'],
-    recommendedEquipment: ['clamps'],
+    recommendedEquipment: ['clamps', 'neodymium-magnet', 'steel-sheet'],
     prerequisiteLessons: [L1],
     steps: [
       {
@@ -551,6 +552,24 @@ export const lessons: readonly LessonDefinition[] = [
         body: 'Odřezek stáhněte mezi prkénky svěrkami a nechte přes noc vyschnout (12–24 h, ne u topení). Bez svěrek prkénka zatižte knihami nebo stáhněte silnými gumičkami či klipy (tlak ověřte na odřezku).',
         media: [],
         waits: [overnight('Schnutí odřezku V12', 'inspect')],
+      },
+      {
+        id: 'magnet-scrap',
+        title: 'Zatímco schne: magnet přes odřezky',
+        body: 'Orientační zkouška, rozhoduje až Z-1 na zkušebním kuse. Na celý plech z nákupu (plíšek z něj vyříznete až v lekci 4) položte odřezek usně P1 lícem nahoru a na něj odřezek kozinky: stejné vrstvy jako mezi magnetem a plíškem na hotovém kusu (mezera 1,6 mm). Navrch přiložte postupně magnety Ø 8 × 1, 8 × 1,5 a 8 × 2. U každého zkuste, jak silně drží proti odtržení kolmo a jestli se dá prstem posunout do strany. Velký plech drží o něco líp než malý plíšek a chybí pružení závěsu, takže výsledek berte jako odhad. Když nedrží znatelně ani 8 × 2, víte to ještě před řezem dílů: zkušební kus stavte dál s plíškem 0,5 mm, ale plech 0,8 mm na finální kus (lekce 12, Z-1) si sežeňte předem.',
+        media: [],
+        records: [
+          {
+            kind: 'choice',
+            id: LID_RECORD_IDS.magnetScrap,
+            label: 'Magnet přes odřezky',
+            options: [
+              { value: 'ok-15', label: 'Ø 8 × 1,5 drží znatelně' },
+              { value: 'need-2', label: 'Znatelně drží až 8 × 2' },
+              { value: 'weak-all', label: 'Slabě drží i 8 × 2' },
+            ],
+          },
+        ],
       },
       {
         id: 'inspect',
@@ -714,7 +733,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'plate',
         title: 'Plíšek K2',
-        body: 'Rozměr plíšku přeneste na plech ze šablony plíšku z listu 4. Vyřízněte jeden plíšek pro zkušební kus z pozinkovaného plechu 0,5 mm, který jste v obchodě vyzkoušeli magnetem: pilkou na kov, nebo plech nařízněte nožem u pravítka a v rýze zlomte ohýbáním (ověřte na odřezku plechu). Rohy R3 a otřep zabruste brusným papírem 120 na desce. Hrany přelakujte bezbarvým lakem na nehty – železo dělá na vlhké usni tmavé skvrny. Jestli na plechu drží kontaktní lepidlo, ověří zkušební kus; chcete-li to vědět dřív, přilepte odstřižek plechu na odřezek usně a po 24 h zkuste, jestli drží.',
+        body: 'Rozměr plíšku přeneste na plech ze šablony plíšku z listu 4. Vyřízněte jeden plíšek pro zkušební kus z pozinkovaného plechu 0,5 mm, který jste v obchodě vyzkoušeli magnetem: pilkou na kov, nebo plech nařízněte nožem u pravítka a v rýze zlomte ohýbáním (ověřte na odřezku plechu). Délku a šířku přeměřte posuvkou proti šabloně plíšku na listu 4; raději o kousek delší než kratší, přesah dobruste. Rohy R3 a otřep zabruste brusným papírem 120 na desce. Hrany přelakujte bezbarvým lakem na nehty – železo dělá na vlhké usni tmavé skvrny. Jestli na plechu drží kontaktní lepidlo, ověří zkušební kus; chcete-li to vědět dřív, přilepte odstřižek plechu na odřezek usně a po 24 h zkuste, jestli drží.',
         waits: [
           {
             id: 'plate-glue-test',
@@ -1214,7 +1233,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'g1',
         title: 'G1: plíšek na rub přední stěny',
-        body: 'F položte rubem nahoru celou na tvrdou desku, ohyb dna u hrany desky; B stojí nad ohybem nahoru. Vyschlý ohyb táhne B zpátky k F: opřete ji zezadu o knihu nebo krabičku a horní hranu přichyťte kolíčkem nebo páskou, ať nespadne na lepidlo. Plíšek přilepte kontaktním lepidlem na rub F do šrafované plochy G1 (list 2); přilnavost k oceli ověří zkušební kus. Pak už plíšek vyměnit nejde, magnet ano.',
+        body: 'F položte rubem nahoru celou na tvrdou desku, ohyb dna u hrany desky; B stojí nad ohybem nahoru. Vyschlý ohyb táhne B zpátky k F: opřete ji zezadu o knihu nebo krabičku a horní hranu přichyťte kolíčkem nebo páskou, ať nespadne na lepidlo. Plíšek přilepte kontaktním lepidlem na rub F do šrafované plochy G1 (list 2), horní hranou přesně na horní hranici šrafy: nahoře je rezerva magnetu nejmenší; přilnavost k oceli ověří zkušební kus. Pak už plíšek vyměnit nejde, magnet ano.',
         waits: [tack('tack', 'Zavadnutí lepidla G1 (plíšek)', 'manufacturer')],
         animationLinks: [animationLink('lidMagnet', 'A1'), animationLink('lidMagnet', 'A2')],
         media: [],
@@ -1563,7 +1582,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'find-plate',
         title: 'Najděte plíšek a označte polohu magnetu',
-        body: 'Vložte obsah stavu B jako v lekci 10 (2 staré karty, papír 0,7 mm nebo bankovku, ne kartu, bez mincí). Zkušebním magnetem najděte po líci F hrany plíšku. Značku magnetu (rámeček na listu 4, výchozí y 11,9) odměřte posuvkou od spodní hrany, označte páskou a po nalepení pásky přeměřte. Musí ležet v okně lepení: ve výchozím střihu 11,73–12,13, pro vaše listy ho ukazuje souhrn pod krokem. Zavřete víčko a značku přeneste ryskami na boky jazýčku.',
+        body: 'Vložte obsah stavu B jako v lekci 10 (2 staré karty, papír 0,7 mm nebo bankovku, ne kartu, bez mincí). Zkušebním magnetem najděte po líci F horní i spodní hranu plíšku a posuvkou změřte od spodní hrany peněženky, kde leží; střed plíšku je mezi nimi. Značku magnetu (rámeček na listu 4, výchozí y 11,9) odměřte posuvkou od spodní hrany, označte páskou a po nalepení pásky přeměřte. Musí ležet v okně lepení: ve výchozím střihu 11,73–12,13, pro vaše listy ho ukazuje souhrn pod krokem. Leží-li střed plíšku zřetelně níž (víc než 0,3 mm), než vychází z polohy plíšku na listu 4, posuňte značku o tolik dolů, ale jen v okně lepení. Hledání hrany magnetem přes kůži je jen přibližné, ověřte ho na zkušebním kuse. Zavřete víčko a značku přeneste ryskami na boky jazýčku.',
         appLinks: [EDIT_SHEETS],
         lidSheetRecalls: ['magnetWindow'],
         records: [
@@ -1759,7 +1778,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'z1',
         title: 'Z-1 Magnet',
-        body: 'Ve stavech A, B a C víčko zavřete, zatřeste a otočte dnem vzhůru, pak ho otevřete jedním prstem za špičku. Projde, když víčko zůstane zavřené (i proti pružení závěsu) a otevře se jedním prstem. Když drží slabě nebo moc silně, vyměňte magnet za silnější nebo slabší Ø 8 (další krok) a zkuste znovu. Když nepomůže ani to, dejte do finálního kusu plíšek z pozinkovaného plechu 0,8 mm místo 0,5 (rozměr z listu 3 platí, listy se negenerují; peněženka je u magnetu o 0,3 mm tlustší). Plech 0,8 v nákupním plánu není, vyzkoušejte ho v obchodě magnetem. Na zkušebním kuse to vyzkoušet nejde – ověřte to nejlépe dalším zkušebním kusem.',
+        body: 'Ve stavech A, B a C (i se 2 × 50 Kč jen v jednom sloupci, druhý prázdný) víčko zavřete, zatřeste a otočte dnem vzhůru, pak ho otevřete jedním prstem za špičku. Projde, když víčko zůstane zavřené (i proti pružení závěsu) a otevře se jedním prstem. Když drží slabě nebo moc silně, vyměňte magnet za silnější nebo slabší Ø 8 (další krok) a zkuste znovu. Když nepomůže ani to, dejte do finálního kusu plíšek z pozinkovaného plechu 0,8 mm místo 0,5 (rozměr z listu 3 platí, listy se negenerují; peněženka je u magnetu o 0,3 mm tlustší). Plech 0,8 v nákupním plánu není, vyzkoušejte ho v obchodě magnetem. Na zkušebním kuse to vyzkoušet nejde – ověřte to nejlépe dalším zkušebním kusem.',
         animationLinks: [animationLink('lidMagnet', 'B12')],
         media: [],
         records: [
@@ -1846,6 +1865,18 @@ export const lessons: readonly LessonDefinition[] = [
         ],
       },
       {
+        id: 'z5',
+        title: 'Z-5 Nošení (doporučená)',
+        body: 'Doporučená zkouška navíc. Zkušební kus ve stavu B noste den v zadní kapse a sedejte si s ním, 20× ho zasuňte a vytáhněte. Víčko 50× otevřete a zavřete. Pak zopakujte Z-1 ve stavu C. Projde, když se víčko v kapse samo neotevře, nic nevypadne a Z-1 projde i potom. Když se víčko otevírá: silnější magnet (výměna výše) a Z-1 znovu. Když něco vypadlo: postup ze Z-4.',
+        media: [],
+        records: [
+          testResult(LID_RECORD_IDS.z5Result, 'Výsledek Z-5', [
+            { value: 'opened', label: 'Víčko se v kapse otevřelo: silnější magnet' },
+            { value: 'lost', label: 'Něco vypadlo: postup ze Z-4' },
+          ]),
+        ],
+      },
+      {
         id: 'final-piece',
         title: 'Finální kus',
         body: 'Finální kus postavte stejným postupem s tím, co na zkušebním kuse fungovalo (vyměněný magnet, jiná varianta, upravený výřez, D1 nebo D2 o 0,5 mm výš, zkrácená okénka mincí). Když se varianta změnila až po zkušebním kuse, je v ní finální kus neověřený – nejlépe postavte další zkušební kus; useň na další přířez P1 110 × 240 mm nákupní plán nepočítá. V záloze A useň 0,8 změřte, zadejte ve formuláři listů a listy vygenerujte znovu. Byly-li listy zkušebního kusu mimo ověřené meze (lekce 1), řežte finální kus jen z listů v mezích. Listy 1 a 3 na řez finálního kusu vytiskněte znovu z listů, které platí po zkušebním kuse (odkaz pod krokem). Změnila-li se varianta nebo listy, vytiskněte listy 1 a 3 dvakrát a listy 2 a 4 jednou a všechny šablony z lekce 4 vyřízněte znovu (lekce 4, „Platné listy a šablony“): šablony ze zkušebního kusu by vedly švy, okénka a magnet podle starých listů. Šablony konce jazýčku a výřezu pro palec z lekce 2 platí dál. Na finálním kuse stačí zkontrolovat, že víčko drží, otevře se jedním prstem a otevřené jde palcem udržet.',
@@ -1857,9 +1888,12 @@ export const lessons: readonly LessonDefinition[] = [
           { fieldId: LID_RECORD_IDS.z2Result, label: 'Z-2 závěs' },
           { fieldId: 'z3-result', label: 'Z-3 výřez pro palec' },
           { fieldId: 'z4-result', label: 'Z-4 retence' },
+          { fieldId: LID_RECORD_IDS.z5Result, label: 'Z-5 nošení' },
+          { fieldId: LID_RECORD_IDS.magnetScrap, label: 'Magnet přes odřezky (lekce 3)' },
+          { fieldId: LID_RECORD_IDS.magnetMarkY, label: 'Značka magnetu (lekce 11)' },
         ],
         appLinks: [EDIT_SHEETS],
-        lidSheetRecalls: ['variant', 'sheets', 'magnet'],
+        lidSheetRecalls: ['variant', 'sheets', 'magnet', 'k'],
       },
     ],
     checkpoints: [
@@ -1883,6 +1917,11 @@ export const lessons: readonly LessonDefinition[] = [
         slug: 'z4-retention',
         title: 'Z-4: po zatřesení se nic nepřesune do jiného oddílu ani nevypadne.',
         required: true,
+      },
+      {
+        slug: 'z5-carry',
+        title: 'Z-5: po dni v kapse a 50 otevřeních víčko drží a nic nevypadlo.',
+        required: false,
       },
       {
         slug: 'final-check',

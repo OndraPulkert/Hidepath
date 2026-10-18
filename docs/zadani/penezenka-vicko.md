@@ -771,14 +771,50 @@ Předpoklad (ne změřeno): ruční řez ±0,5, tloušťka usně v kusu ±0,1, r
 | sloupec 31,0               | mezi okraji G3                     | 30,5–31,5                   | 30,5 ≥ Ø + t = 30,0. Na P0 ověřit, že 50 Kč volně klouže.                                                                                                                |
 | strop 82,5 vs. bankovka 74 | vůle 6,5                           | ±1                          | ≥ 5,5 zůstává                                                                                                                                                            |
 | posun karet 0,24 (C)       | strop − horní hrana karty na klínu | závisí na Δ_k (P0-6)        | Když karty sedí výš (δ 1,0 → horní hrana 84,5), tlačí na závěs a víčko ujede nahoru. Pak čáru G2/S6 posunout dolů o (Δ_k − 2,28).                                        |
-| dno karet 26,0             | hranice G2 + S6                    | ±0,5                        | Posune vyčnívání karet a odstup proužku (≥ 13,2).                                                                                                                        |
+| dno karet 26,0             | hranice G2 + S6                    | ±0,5                        | Posune vyčnívání karet, odstup proužku (≥ 13,2) a posun karet 0,24 (C), tedy i magnet nahoře (6.1).                                                                      |
 | poloha magnetu             | lepí se na hotovém kusu ve stavu B | zbývá nejistota k a plnosti | plíšek 20,5 mm; rezerva nad povinnými 0,5 nahoře 1,66 (k 1,0) a 0,23 (k 1,24), dole 0,58 (k 1,24); obalí magnet v celém okně lepení 11,73–12,13 (oddíl 4.3, SF1, Kolo 7) |
 | hrana pásu víčka (C)       | y_fe = y_m + 44,66 = 62,5          | ±1                          | 61,5–63,5: přesah na F do 0,5 nebo mezera do 1,5                                                                                                                         |
 | délka závěsu               | 6,13 (B)                           | –                           | vyrovná ořez špičky jazýčku (rezerva 5)                                                                                                                                  |
 | stažení stehem             | –                                  | ~0,2–0,5 na šev (ověřit)    | Boky se zarovnávají až po šití, D2 má +1 na stranu.                                                                                                                      |
 | vytahání kůže              | –                                  | kapsy se uvolní             | Retence nezávisí na sevření. Širší sloupec víc cinká (P2-8).                                                                                                             |
 
-Nic nefunguje jen při ±0,1 mm. Jediné citlivé místo (magnet vůči plíšku) se nastavuje na hotovém kusu.
+Každý rozměr v tabulce snese **samostatnou** odchylku ruční práce. Nejtěsnější místa jsou magnet vůči
+plíšku (nahoře rezerva 0,23 nad povinnými 0,5, stav C při k 1,24) a posun karet 0,24 (stav C). Odchylky
+se ale mohou sejít; co se pak stane, počítá oddíl 6.1. Magnet se sice nastavuje na hotovém kusu, ale
+plíšek je nalepený dřív (krok 12) podle značek, takže jeho poloha do souběhu vstupuje.
+
+### 6.1 Souběh odchylek (Kolo 17)
+
+Počítá se nejhorší případ: odchylky se sečtou ve stejném směru (ne statisticky). Vstupy: rýsování
+±0,3 (oddíl 6), okno lepení magnetu 11,73–12,13 (oddíl 4.3, značka se přeměřuje posuvkou, krok 17),
+k 1,0–1,24 už je v číslech oddílu 4.3. **Vzdálenost** níže je od okraje magnetu k okraji plíšku
+(povinná rezerva 0,5 je v ní obsažená). Sloupce „nahoře“ a „dole“ jsou dva různé nejhorší případy
+(plíšek posunutý dolů, nebo nahoru), ne jeden stav.
+
+| Případ                                           | Vzdálenost nahoře (C, k 1,24) | Vzdálenost dole (A, k 1,24) |
+| ------------------------------------------------ | ----------------------------- | --------------------------- |
+| návrh (značka 11,9, plíšek přesně)               | 24,0 − 23,27 = **0,73**       | 4,58 − 3,5 = **1,08**       |
+| značka na kraji okna (12,13 nahoře / 11,73 dole) | 0,50                          | 0,91                        |
+| + plíšek posunutý o rýsování 0,3 proti magnetu   | **0,20**                      | **0,61**                    |
+
+Tabulka ale nezahrnuje další odchylky, které se nahoře přičtou: délku ručně řezaného plíšku (řez ±0,5;
+kratší plíšek přiložený zdola posune horní hranu dolů), polohu ohybu dna vůči značkám na P1 (V12
+toleruje 0,3) a posun karet (níže). V úplně nejhorším lineárním souběhu tak magnet ve stavu C při k 1,24
+**může plíšek nahoře přečnívat** (řádově o desetiny mm). Že se všechny odchylky sejdou ve stejném
+směru, je málo pravděpodobné, výpočtem se to ale vyloučit nedá. Dále neověřené: vytahání kůže (posun
+víčka, oddíl 6), k nad 1,24 (lekce 10 pak generuje listy znovu) a zvednutí karet na klínu nad odhad.
+**Opatření:** plíšek se po řezu přeměří (raději delší, lekce 4) a lepí se horní hranou přesně na horní
+hranici G1 (lekce 8); v kroku 17 se hledacím magnetem najde horní i spodní hrana plíšku a porovná se
+střed (systematická chyba hledání se tím vyruší); leží-li zřetelně níž (víc než 0,3), posune se značka
+o tolik dolů, ale jen v okně lepení (od výchozích 11,9 pohltí nejvýš 0,17). Přesnost hledání hrany
+magnetem přes useň 1,0 je neověřená. O skutečném držení rozhoduje Z-1 ve stavu C a dřívější
+orientační zkouška magnetu na odřezcích (M0, oddíl 11).
+
+**Posun karet 0,24 (C):** dno karet ±0,5 (tabulka výše) ho může změnit na −0,26, tedy karty o tolik
+zvednou závěs a víčko ujede nahoru. Zvednutý závěs posune nahoru i víčko s magnetem, takže se tato odchylka přičte i k magnetu nahoře.
+Část vlivu se vyruší, protože G1 i G2 jsou na stejném listu a posunou se spolu. Projeví se ve stavu C
+na zkušebním kusu (Z-1, P2-5); úprava je v tabulce (čára G2/S6 dolů). Výpočtem se tu nic víc zaručit
+nedá.
 
 ---
 
@@ -1420,10 +1456,18 @@ z listu. Podle rozhodnutí kola 8 zkouška pokrývá
 | popraská i záloha         | zkusit jinou useň do P1 (ověřit), neřezat                                                                                                                                                                                                                     |
 | ohyb po vyschnutí odpruží | **není důvod k záloze** (Kolo 8): ohyb udrží lepení G4 a švy S4/S5; odpružení jen zapsat, jestli G4 u ohybu nepovoluje, ukáže zkušební kus (P2-2)                                                                                                             |
 
+### M0 – magnet přes odřezky (orientační, Kolo 17)
+
+Při zkoušce V12 (lekce 3), ještě před řezem dílů: na kus pozinkovaného plechu 0,5 položit odřezek usně
+P1 a na něj odřezek kozinky L1 (mezera magnet–plíšek 1,6 jako na hotovém kusu), přiložit postupně
+magnety Ø 8 × 1, 8 × 1,5 a 8 × 2, porovnat odtržení kolmo a posun do strany a zapsat. Je to jen
+orientace (velký plech drží líp než plíšek 14 × 20,5, chybí pružení závěsu); rozhoduje Z-1. Když
+nedrží znatelně ani 8 × 2, ví se to před řezem: počítat s plíškem 0,8 (oddíl 5.4) a ověřit V4.
+
 ### Zkušební kus (povinný)
 
 Celá peněženka podle kroků 1–21 ve variantě z V12, ze stejné usně P1 jako finální kus (10.1;
-tloušťku ověřit posuvkou), s plíškem 0,5. Nejdřív čtyři povinné zkoušky, pak podle chuti další testy P2 níže.
+tloušťku ověřit posuvkou), s plíškem 0,5. Nejdřív čtyři povinné zkoušky Z-1 až Z-4, doporučená Z-5, pak podle chuti další testy P2 níže.
 **Finální kus se řídí tím, co tady fungovalo.**
 
 | #   | Co ověřit                                                                                                                                                                                                                 | Projde                                                                        | Když ne                                                                                                                                                                                                                  |
@@ -1432,6 +1476,7 @@ tloušťku ověřit posuvkou), s plíškem 0,5. Nejdřív čtyři povinné zkou�
 | Z-2 | **Závěs:** otevřené víčko jde palcem držící ruky udržet tak, že bankovka jde okénkem vysunout a mince vzít (P0-8, P2-10; samo stát nemusí, Kolo 9); po několika dnech běžného používání prohlédnout líc a rub pásu závěsu | jde, žádná prasklina                                                          | praskliny → finální kus v záloze A (`--p1 0.8`), až když ani ta nestačí, záloha B (`--skive-hinge 0.6`, oddíl 5.8); palec víčko neudrží → úkony z konce oddílu 5.8                                                       |
 | Z-3 | **Výřez pro palec:** gesta z P0-4 v kůži (vysunout přední kartu, zadní po vyndání předních), zavírání ve stavu A, s 1 kartou a s jazýčkem posunutým o 3 mm; po dnech používání odklopení hrany F a důlek (P2-7)           | špička se nezachytí ani nezajede pod F, hrana F se neodklopí, důlek nevznikne | upravit v mezích oddílu 4.6 (zaoblit, zkosit rub dna U, zúžit), nebo výřez ve finálním kusu vynechat                                                                                                                     |
 | Z-4 | **Retence (P2-1):** stav B zavřít, 30× prudce zatřást dnem vzhůru; 1 Kč za D2 ve stavu A i B; 0 karet + 1 × 5000 Kč                                                                                                       | nic se nepřesune do jiného oddílu ani nevypadne                               | úpravy z oddílu 7 (D1 nebo D2 o 0,5 výš, až na strop)                                                                                                                                                                    |
+| Z-5 | **Nošení (doporučená, P2-3 a P2-7/P2-9 zkráceně):** den v zadní kapse se sezením, 20× zasunout a vytáhnout; víčko 50× otevřít a zavřít; pak Z-1 ve stavu C, i se 2 × 50 Kč jen v jednom sloupci (druhý prázdný)           | víčko se v kapse samo neotevře, nic nevypadne, Z-1 projde i potom             | víčko se otevírá → silnější magnet (oddíl 5.4) a Z-1 znovu; něco vypadlo → postup Z-4                                                                                                                                    |
 
 Když se varianta změní až po zkušebním kusu (Z-2), je finální kus v nové variantě neověřený – ověřit
 na prototypu, nejlépe dalším zkušebním kusem.
@@ -1442,7 +1487,7 @@ na prototypu, nejlépe dalším zkušebním kusem.
 | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
 | P2-1  | V1: stav B (2 karty, 100 Kč napůl, 1 Kč), zavřít, 30× prudce zatřást dnem vzhůru, 10× pád z 30 cm. Navíc: 1 Kč za D2 ve stavu A i B (nepřelezla do bankovek?); 0 karet + 1 × 5000 Kč (nepřelezla D1?)                                                                    | co se kam posunulo           |
 | P2-2  | V2: totéž se 4 × 50 Kč a stavem C; vzhled prázdné (oblost vrchu), hranatých spodních rohů a očka ohybu dna na bocích; G4 u ohybu dna nepovoluje                                                                                                                          | totéž, foto                  |
-| P2-3  | V3: den v zadní kapse se sezením, 20× zasunout a vytáhnout (dnem i vrchem napřed)                                                                                                                                                                                        | zvedla látka špičku?         |
+| P2-3  | V3 (viz Z-5): den v zadní kapse se sezením, 20× zasunout a vytáhnout (dnem i vrchem napřed)                                                                                                                                                                              | zvedla látka špičku?         |
 | P2-4  | posuvkou tloušťka po zónách K, S a dole ve stavech A, B, C                                                                                                                                                                                                               | porovnat s oddílem 7         |
 | P2-5  | poloha hrany pásu víčka a magnetu ve stavech A, C (se 2 + 2 mincemi), zvlášť nad sloupci a nad středem                                                                                                                                                                   | k (potvrdit P0-3), zkroucení |
 | P2-6  | V7: každá bankovka okénkem, vyčnívání                                                                                                                                                                                                                                    | mm                           |
@@ -1953,6 +1998,19 @@ Rozměry, model ani listy se nemění.
 | Záloha B2 po záloze A                 | P1 zase 1,0, ztenčuje se jen pás závěsu (V6(c)), useň 0,8 se neztenčuje; po A kvůli V12 obojí. Krok 4, lekce 5 a 12, nápověda formuláře; předvyplnění formuláře ze Z-2.                                                                                     | dokument + lekce + aplikace |
 | Kdy listy generovat znovu             | I po k nad 1,24 (lekce 10) a jiném magnetu (lekce 11), ne „jen“ P0 a zálohy. Krok 1.                                                                                                                                                                        | dokument + lekce            |
 | Strana klínu spodní hrany D2          | Z líce D2 (k bankovkám), rub D2 je přilepený na B (G3). Tabulky 5.2 a 5.5, krok 4, lekce 5, animace hran G4 bez „ověřte stranu“.                                                                                                                            | dokument + lekce + animace  |
+
+### Kolo 17 – souběh odchylek, dřívější zkouška magnetu a protokol (kontrola 18. 10. 2026)
+
+Nezávislá recenze upozornila, že rezervy u magnetu (0,23) a karet (0,24) jsou malé proti toleranci
+ruční práce a věta „Nic nefunguje jen při ±0,1 mm“ byla příliš sebejistá. Rozměry, model ani listy se
+nemění.
+
+| Nález                                           | Co se změnilo                                                                                                                                               |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| souběh odchylek nespočítaný                     | oddíl 6.1: v nejhorším lineárním souběhu (i s délkou plíšku, ohybem dna a posunem karet) může magnet ve stavu C plíšek nahoře přečnívat; rozhoduje Z-1      |
+| poloha plíšku v souběhu                         | plíšek přeměřit (lekce 4), lepit horní hranou na hranici G1 (lekce 8); lekce 11: obě hrany plíšku, značka dolů o posun středu, jen v okně lepení            |
+| magnet se poprvé zkouší až na hotovém kusu      | M0 v lekci 3 (orientačně na odřezcích), oddíl 11                                                                                                            |
+| nerovnoměrné mince, nošení, opakované otevírání | Z-5 (doporučená) v lekci 12, Z-1 i se 2 × 50 Kč jen v jednom sloupci (druhý prázdný); výsledky M0, k, značky magnetu a Z-1 až Z-5 souhrnně u finálního kusu |
 
 ### Co zůstává neověřené
 
