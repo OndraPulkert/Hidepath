@@ -25,11 +25,12 @@ const badgeTexts = (root: HTMLElement) =>
 const withMounts = projects.filter((p) => mountedPrints(p).length > 0);
 
 describe('štítek podkladu výtisku (tenký karton)', () => {
-  it('podklad mají projekty 02, 03 a pásek; 01 tiskne na obyčejný papír', () => {
+  it('podklad mají projekty 02, 03, pásek a OBRAT; 01 tiskne na obyčejný papír', () => {
     expect(withMounts.map((p) => p.slug).sort()).toEqual([
       'belt',
       'coin-card-holder',
       'lid-wallet',
+      'obrat-wallet',
     ]);
   });
 

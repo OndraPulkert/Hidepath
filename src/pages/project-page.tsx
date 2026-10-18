@@ -78,7 +78,9 @@ function ProjectView({ project }: { project: ProjectDefinition }) {
             <div>
               <dt className="kicker">Čas výroby</dt>
               <dd className="font-serif text-h2 font-medium">
-                {project.estimatedHours.min}–{project.estimatedHours.max}&nbsp;hodin
+                {project.difficulty === 'development'
+                  ? 'Doba neověřena'
+                  : `${project.estimatedHours.min}–${project.estimatedHours.max} h`}
               </dd>
             </div>
             <div>

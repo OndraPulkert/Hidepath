@@ -1,0 +1,230 @@
+{
+  "revision": "R09",
+  "status": "pattern-unverified",
+  "physicalVerification": "not-performed",
+  "material": {
+    "nominalMm": 1.2,
+    "screeningMaxMm": 1.3,
+    "types": 1
+  },
+  "closed": {
+    "width": 108,
+    "height": 90
+  },
+  "parts": [
+    {
+      "id": "T1",
+      "name": "Záda a klopa",
+      "face": "rub",
+      "width": 108,
+      "height": 144,
+      "count": 1
+    },
+    {
+      "id": "T2",
+      "name": "Přední stěna",
+      "face": "líc",
+      "width": 108,
+      "height": 74,
+      "count": 1
+    },
+    {
+      "id": "P",
+      "name": "Pás a víčko",
+      "face": "rub",
+      "width": 110,
+      "height": 66,
+      "count": 1
+    },
+    {
+      "id": "T3",
+      "name": "Předek mincí",
+      "face": "líc",
+      "width": 95.5,
+      "height": 39,
+      "count": 1
+    },
+    {
+      "id": "K",
+      "name": "Kryt patice",
+      "face": "rub",
+      "width": 13,
+      "height": 13,
+      "count": 2
+    }
+  ],
+  "cells": [
+    {
+      "left": 24,
+      "right": 60,
+      "seamSpan": 36,
+      "usableWidth": 34,
+      "usableDepth": 34
+    },
+    {
+      "left": 60,
+      "right": 96,
+      "seamSpan": 36,
+      "usableWidth": 34,
+      "usableDepth": 34
+    }
+  ],
+  "testSets": [
+    {
+      "label": "3 mince s 50 Kč",
+      "cells": [["50"], ["20", "10"]],
+      "fits": [
+        {
+          "need": 32.2,
+          "stackThickness": 2.6,
+          "widthReserve": 1.8,
+          "depthReserve": 1.8,
+          "passesEnvelope": true,
+          "physicallyVerified": false
+        },
+        {
+          "need": 33.3,
+          "stackThickness": 5.2,
+          "widthReserve": 0.7,
+          "depthReserve": 0.7,
+          "passesEnvelope": true,
+          "physicallyVerified": false
+        }
+      ]
+    },
+    {
+      "label": "4 mince",
+      "cells": [
+        ["20", "10"],
+        ["5", "1"]
+      ],
+      "fits": [
+        {
+          "need": 33.3,
+          "stackThickness": 5.2,
+          "widthReserve": 0.7,
+          "depthReserve": 0.7,
+          "passesEnvelope": true,
+          "physicallyVerified": false
+        },
+        {
+          "need": 29.06,
+          "stackThickness": 3.96,
+          "widthReserve": 4.94,
+          "depthReserve": 4.94,
+          "passesEnvelope": true,
+          "physicallyVerified": false
+        }
+      ]
+    },
+    {
+      "label": "4 drobné",
+      "cells": [
+        ["2", "1"],
+        ["2", "1"]
+      ],
+      "fits": [
+        {
+          "need": 27.56,
+          "stackThickness": 3.96,
+          "widthReserve": 6.44,
+          "depthReserve": 6.44,
+          "passesEnvelope": true,
+          "physicallyVerified": false
+        },
+        {
+          "need": 27.56,
+          "stackThickness": 3.96,
+          "widthReserve": 6.44,
+          "depthReserve": 6.44,
+          "passesEnvelope": true,
+          "physicallyVerified": false
+        }
+      ]
+    }
+  ],
+  "capacity": {
+    "threeCoins": {
+      "total": 56,
+      "pass": 50
+    },
+    "fourCoins": {
+      "total": 126,
+      "pass": 70
+    },
+    "fourWith50": "žádná čtveřice s 50 Kč (nejvýš 2 mince v dutině)"
+  },
+  "layers": {
+    "with50": {
+      "coinZone": {
+        "leatherLayers": 5,
+        "nominalMm": 12.69
+      },
+      "snapB": {
+        "leatherLayers": 5,
+        "nominalMm": 10.14,
+        "snapHeightMm": null
+      },
+      "snapA": {
+        "leatherLayers": 4,
+        "nominalMm": 8.94,
+        "snapHeightMm": null
+      },
+      "snapC": {
+        "leatherLayers": 4,
+        "nominalMm": 5.9,
+        "snapHeightMm": null
+      },
+      "hingeSeam": {
+        "leatherLayers": 3,
+        "nominalMm": 3.6
+      },
+      "measuredMaximum": null
+    },
+    "with20and10": {
+      "coinZone": {
+        "leatherLayers": 5,
+        "nominalMm": 15.24
+      },
+      "snapB": {
+        "leatherLayers": 5,
+        "nominalMm": 10.14,
+        "snapHeightMm": null
+      },
+      "snapA": {
+        "leatherLayers": 4,
+        "nominalMm": 8.94,
+        "snapHeightMm": null
+      },
+      "snapC": {
+        "leatherLayers": 4,
+        "nominalMm": 5.9,
+        "snapHeightMm": null
+      },
+      "hingeSeam": {
+        "leatherLayers": 3,
+        "nominalMm": 3.6
+      },
+      "measuredMaximum": null
+    }
+  },
+  "leatherLayout": {
+    "sheet": {
+      "width": 210,
+      "height": 297
+    },
+    "gap": 4,
+    "columnHeight": 292,
+    "sideWidth": 96,
+    "fits": true
+  },
+  "errors": [],
+  "openPhysicalChecks": [
+    "délka klopy přes obsah: seříznutí v lekci 9",
+    "druk Prym Anorak 12 mm v jedné vrstvě 1,2 mm a výška zapnutého druku (lekce 4)",
+    "retence mincí pod ohnutým víčkem s B na volném konci, i při otevřeném A (lekce 6)",
+    "lepený jazýček B při opakovaném rozepínání (lekce 6)",
+    "ohyb závěsu pásu a víčka v konkrétní usni (lekce 3 a 8)",
+    "skutečná tloušťka a nošení (lekce 10)"
+  ]
+}

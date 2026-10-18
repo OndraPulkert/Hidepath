@@ -1,3 +1,5 @@
+import { obratWalletProject } from '@/content/projects/obrat-wallet/project';
+import { lessonBodies as obratLessonBodies } from '@/content/projects/obrat-wallet/lesson-bodies';
 import { type ComponentType } from 'react';
 
 import { lessonBodies as beltLessonBodies } from '@/content/projects/belt/lesson-bodies';
@@ -15,6 +17,7 @@ import { lidWalletProject } from '@/content/projects/lid-wallet/project';
  * řádkem tady, ne úpravou stránky.
  */
 const registry: Readonly<Record<string, Readonly<Record<string, ComponentType>>>> = {
+  [obratWalletProject.slug]: obratLessonBodies,
   [cardHolderProject.slug]: cardHolderLessonBodies,
   [coinCardHolderProject.slug]: coinCardHolderLessonBodies,
   [lidWalletProject.slug]: lidWalletLessonBodies,

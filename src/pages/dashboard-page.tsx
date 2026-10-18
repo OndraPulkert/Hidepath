@@ -133,9 +133,16 @@ export function DashboardPage() {
               <Kicker>Projekt {project.code}</Kicker>
               <p className="font-serif text-h2 font-medium">{project.title}</p>
               <p className="text-meta text-ink-2">
-                {difficultyLabels[project.difficulty]} · {project.estimatedHours.min}–
-                {project.estimatedHours.max} h · {lessonCountLabel(project)} ·{' '}
-                {project.template ? 'šablona 1:1' : 'listy střihu 1:1'}
+                {difficultyLabels[project.difficulty]} ·{' '}
+                {project.difficulty === 'development'
+                  ? 'Doba neověřena'
+                  : `${project.estimatedHours.min}–${project.estimatedHours.max} h`}{' '}
+                · {lessonCountLabel(project)} ·{' '}
+                {project.difficulty === 'development'
+                  ? 'zkušební podklady'
+                  : project.template
+                    ? 'šablona 1:1'
+                    : 'listy střihu 1:1'}
               </p>
             </div>
           </Card>

@@ -1,3 +1,4 @@
+import { obratWalletProject } from '@/content/projects/obrat-wallet/project';
 import { beltProject } from '@/content/projects/belt/project';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
@@ -47,6 +48,7 @@ export const projects: readonly ProjectDefinition[] = [
   coinCardHolderProject,
   lidWalletProject,
   beltProject,
+  obratWalletProject,
 ];
 
 /**
@@ -63,6 +65,7 @@ export function findProject(slug: string): ProjectDefinition | undefined {
 }
 
 export const difficultyLabels: Record<ProjectDefinition['difficulty'], string> = {
+  development: 'Vývojový — neověřený',
   beginner: 'Začátečník',
   intermediate: 'Mírně pokročilý',
   advanced: 'Pokročilý',

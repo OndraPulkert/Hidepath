@@ -1,0 +1,398 @@
+{
+  "compact": {
+    "revision": "R08-screening",
+    "material": {
+      "nominalMm": 1.2,
+      "screeningMaxMm": 1.3,
+      "numberOfLeatherTypes": 1
+    },
+    "outline": {
+      "width": 108,
+      "height": 90
+    },
+    "nominalMainSeamLayers": 2,
+    "mainSeamThicknessAtScreeningMax": 2.6,
+    "cells": [
+      {
+        "left": 24,
+        "right": 62,
+        "seamSpan": 38,
+        "usableWidth": 36,
+        "usableDepth": 34
+      },
+      {
+        "left": 62,
+        "right": 100,
+        "seamSpan": 38,
+        "usableWidth": 36,
+        "usableDepth": 34
+      }
+    ],
+    "geometricErrors": [],
+    "capacitySamples": [
+      {
+        "cell": 0,
+        "coins": ["1", "2"],
+        "need": 27.56,
+        "stackThickness": 3.96,
+        "widthReserve": 8.44,
+        "depthReserve": 6.44,
+        "passesEnvelope": true,
+        "physicallyVerified": false
+      },
+      {
+        "cell": 1,
+        "coins": ["1", "2"],
+        "need": 27.56,
+        "stackThickness": 3.96,
+        "widthReserve": 8.44,
+        "depthReserve": 6.44,
+        "passesEnvelope": true,
+        "physicallyVerified": false
+      },
+      {
+        "cell": 0,
+        "coins": ["50"],
+        "need": 32.2,
+        "stackThickness": 2.6,
+        "widthReserve": 3.8,
+        "depthReserve": 1.8,
+        "passesEnvelope": true,
+        "physicallyVerified": false
+      },
+      {
+        "cell": 1,
+        "coins": ["50"],
+        "need": 32.2,
+        "stackThickness": 2.6,
+        "widthReserve": 3.8,
+        "depthReserve": 1.8,
+        "passesEnvelope": true,
+        "physicallyVerified": false
+      }
+    ],
+    "compactSmallCoinSample": [
+      {
+        "need": 27.56,
+        "stackThickness": 3.96,
+        "widthReserve": 8.44,
+        "depthReserve": 6.44,
+        "passesEnvelope": true,
+        "physicallyVerified": false
+      },
+      {
+        "need": 27.56,
+        "stackThickness": 3.96,
+        "widthReserve": 8.44,
+        "depthReserve": 6.44,
+        "passesEnvelope": true,
+        "physicallyVerified": false
+      }
+    ],
+    "layersWithOne50": {
+      "revisedWithLid": 12.69,
+      "revisedBelowLid": 11.49,
+      "previousWithDivider": 13.89,
+      "savedByRemovingDivider": 1.2,
+      "hardwareZones": {
+        "A": {
+          "nominalLeatherAndContents": 8.94,
+          "hardwareHeightMm": null
+        },
+        "B": {
+          "nominalLeatherAndContents": 8.94,
+          "hardwareHeightMm": null,
+          "outerBackplateMm": null
+        },
+        "C": {
+          "nominalLeatherAndContents": 8.94,
+          "hardwareHeightMm": null
+        }
+      },
+      "measuredMaximum": null
+    },
+    "layersWithTwoSmallCoins": {
+      "revisedWithLid": 13.84,
+      "revisedBelowLid": 12.64,
+      "previousWithDivider": 15.04,
+      "savedByRemovingDivider": 1.2,
+      "hardwareZones": {
+        "A": {
+          "nominalLeatherAndContents": 8.94,
+          "hardwareHeightMm": null
+        },
+        "B": {
+          "nominalLeatherAndContents": 8.94,
+          "hardwareHeightMm": null,
+          "outerBackplateMm": null
+        },
+        "C": {
+          "nominalLeatherAndContents": 8.94,
+          "hardwareHeightMm": null
+        }
+      },
+      "measuredMaximum": null
+    },
+    "status": "dimensional-screening-only",
+    "physicalVerification": "not-performed",
+    "unresolved": [
+      "skutečný druk a jeho montážní tloušťka, výška a ovládací síla",
+      "rozvinutí bočního a horního ohybu přes naplněný kus",
+      "kolize a výměna části délky ohybů za vůle při naplnění",
+      "retence krajních mincí a přístup do společné kapsy",
+      "skutečné maximum tloušťky a jeho přijetí autorem",
+      "postup ověřený fyzickou stavbou a začátečníkem"
+    ]
+  },
+  "threeCells": {
+    "revision": "R08-screening",
+    "material": {
+      "nominalMm": 1.2,
+      "screeningMaxMm": 1.3,
+      "numberOfLeatherTypes": 1
+    },
+    "outline": {
+      "width": 128,
+      "height": 90
+    },
+    "nominalMainSeamLayers": 2,
+    "mainSeamThicknessAtScreeningMax": 2.6,
+    "cells": [
+      {
+        "left": 24,
+        "right": 54.5,
+        "seamSpan": 30.5,
+        "usableWidth": 28.5,
+        "usableDepth": 34
+      },
+      {
+        "left": 54.5,
+        "right": 89,
+        "seamSpan": 34.5,
+        "usableWidth": 32.5,
+        "usableDepth": 34
+      },
+      {
+        "left": 89,
+        "right": 120.5,
+        "seamSpan": 31.5,
+        "usableWidth": 29.5,
+        "usableDepth": 34
+      }
+    ],
+    "geometricErrors": [],
+    "capacitySamples": [
+      {
+        "cell": 0,
+        "coins": ["1", "2"],
+        "need": 27.56,
+        "stackThickness": 3.96,
+        "widthReserve": 0.94,
+        "depthReserve": 6.44,
+        "passesEnvelope": true,
+        "physicallyVerified": false
+      },
+      {
+        "cell": 1,
+        "coins": ["50"],
+        "need": 32.2,
+        "stackThickness": 2.6,
+        "widthReserve": 0.3,
+        "depthReserve": 1.8,
+        "passesEnvelope": true,
+        "physicallyVerified": false
+      },
+      {
+        "cell": 2,
+        "coins": ["10"],
+        "need": 29.2,
+        "stackThickness": 2.6,
+        "widthReserve": 0.3,
+        "depthReserve": 4.8,
+        "passesEnvelope": true,
+        "physicallyVerified": false
+      }
+    ],
+    "compactSmallCoinSample": null,
+    "layersWithOne50": {
+      "revisedWithLid": 12.69,
+      "revisedBelowLid": 11.49,
+      "previousWithDivider": 13.89,
+      "savedByRemovingDivider": 1.2,
+      "hardwareZones": {
+        "A": {
+          "nominalLeatherAndContents": 8.94,
+          "hardwareHeightMm": null
+        },
+        "B": {
+          "nominalLeatherAndContents": 8.94,
+          "hardwareHeightMm": null,
+          "outerBackplateMm": null
+        },
+        "C": {
+          "nominalLeatherAndContents": 8.94,
+          "hardwareHeightMm": null
+        }
+      },
+      "measuredMaximum": null
+    },
+    "layersWithTwoSmallCoins": {
+      "revisedWithLid": 13.84,
+      "revisedBelowLid": 12.64,
+      "previousWithDivider": 15.04,
+      "savedByRemovingDivider": 1.2,
+      "hardwareZones": {
+        "A": {
+          "nominalLeatherAndContents": 8.94,
+          "hardwareHeightMm": null
+        },
+        "B": {
+          "nominalLeatherAndContents": 8.94,
+          "hardwareHeightMm": null,
+          "outerBackplateMm": null
+        },
+        "C": {
+          "nominalLeatherAndContents": 8.94,
+          "hardwareHeightMm": null
+        }
+      },
+      "measuredMaximum": null
+    },
+    "status": "dimensional-screening-only",
+    "physicalVerification": "not-performed",
+    "unresolved": [
+      "skutečný druk a jeho montážní tloušťka, výška a ovládací síla",
+      "rozvinutí bočního a horního ohybu přes naplněný kus",
+      "kolize a výměna části délky ohybů za vůle při naplnění",
+      "retence krajních mincí a přístup do společné kapsy",
+      "skutečné maximum tloušťky a jeho přijetí autorem",
+      "postup ověřený fyzickou stavbou a začátečníkem"
+    ]
+  },
+  "historical108ThreeCells": {
+    "revision": "R08-screening",
+    "material": {
+      "nominalMm": 1.2,
+      "screeningMaxMm": 1.3,
+      "numberOfLeatherTypes": 1
+    },
+    "outline": {
+      "width": 108,
+      "height": 90
+    },
+    "nominalMainSeamLayers": 2,
+    "mainSeamThicknessAtScreeningMax": 2.6,
+    "cells": [
+      {
+        "left": 24,
+        "right": 49.333333,
+        "seamSpan": 25.333,
+        "usableWidth": 23.333,
+        "usableDepth": 34
+      },
+      {
+        "left": 49.333333,
+        "right": 74.666667,
+        "seamSpan": 25.333,
+        "usableWidth": 23.333,
+        "usableDepth": 34
+      },
+      {
+        "left": 74.666667,
+        "right": 100,
+        "seamSpan": 25.333,
+        "usableWidth": 23.333,
+        "usableDepth": 34
+      }
+    ],
+    "geometricErrors": [],
+    "capacitySamples": [
+      {
+        "cell": 0,
+        "coins": ["1", "2"],
+        "need": 27.56,
+        "stackThickness": 3.96,
+        "widthReserve": -4.227,
+        "depthReserve": 6.44,
+        "passesEnvelope": false,
+        "physicallyVerified": false
+      },
+      {
+        "cell": 1,
+        "coins": ["50"],
+        "need": 32.2,
+        "stackThickness": 2.6,
+        "widthReserve": -8.867,
+        "depthReserve": 1.8,
+        "passesEnvelope": false,
+        "physicallyVerified": false
+      },
+      {
+        "cell": 2,
+        "coins": ["10"],
+        "need": 29.2,
+        "stackThickness": 2.6,
+        "widthReserve": -5.867,
+        "depthReserve": 4.8,
+        "passesEnvelope": false,
+        "physicallyVerified": false
+      }
+    ],
+    "compactSmallCoinSample": null,
+    "layersWithOne50": {
+      "revisedWithLid": 12.69,
+      "revisedBelowLid": 11.49,
+      "previousWithDivider": 13.89,
+      "savedByRemovingDivider": 1.2,
+      "hardwareZones": {
+        "A": {
+          "nominalLeatherAndContents": 8.94,
+          "hardwareHeightMm": null
+        },
+        "B": {
+          "nominalLeatherAndContents": 8.94,
+          "hardwareHeightMm": null,
+          "outerBackplateMm": null
+        },
+        "C": {
+          "nominalLeatherAndContents": 8.94,
+          "hardwareHeightMm": null
+        }
+      },
+      "measuredMaximum": null
+    },
+    "layersWithTwoSmallCoins": {
+      "revisedWithLid": 13.84,
+      "revisedBelowLid": 12.64,
+      "previousWithDivider": 15.04,
+      "savedByRemovingDivider": 1.2,
+      "hardwareZones": {
+        "A": {
+          "nominalLeatherAndContents": 8.94,
+          "hardwareHeightMm": null
+        },
+        "B": {
+          "nominalLeatherAndContents": 8.94,
+          "hardwareHeightMm": null,
+          "outerBackplateMm": null
+        },
+        "C": {
+          "nominalLeatherAndContents": 8.94,
+          "hardwareHeightMm": null
+        }
+      },
+      "measuredMaximum": null
+    },
+    "status": "dimensional-screening-only",
+    "physicalVerification": "not-performed",
+    "unresolved": [
+      "skutečný druk a jeho montážní tloušťka, výška a ovládací síla",
+      "rozvinutí bočního a horního ohybu přes naplněný kus",
+      "kolize a výměna části délky ohybů za vůle při naplnění",
+      "retence krajních mincí a přístup do společné kapsy",
+      "skutečné maximum tloušťky a jeho přijetí autorem",
+      "postup ověřený fyzickou stavbou a začátečníkem"
+    ],
+    "note": "Neúspěch pro deklarovanou jednu 50 Kč; úspěšná obecná geometrie neznamená vyhovující mincovní kapacitu."
+  }
+}

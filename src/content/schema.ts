@@ -666,7 +666,7 @@ export const projectDefinitionSchema = z
     title: z.string().min(1),
     summary: z.string().min(1),
     description: z.string().min(1),
-    difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
+    difficulty: z.enum(['beginner', 'intermediate', 'advanced', 'development']),
     estimatedHours: z.object({ min: z.number().positive(), max: z.number().positive() }),
     /** „Naučíte se“. */
     skills: z.array(z.string().min(1)),

@@ -99,7 +99,9 @@ export function OnboardingPage() {
                   <div>
                     <dt className="text-[11px] tracking-[0.06em] uppercase">Čas</dt>
                     <dd className="font-semibold text-leather">
-                      {project.estimatedHours.min}–{project.estimatedHours.max} h
+                      {project.difficulty === 'development'
+                        ? 'Doba neověřena'
+                        : `${project.estimatedHours.min}–${project.estimatedHours.max} h`}
                     </dd>
                   </div>
                   <div>

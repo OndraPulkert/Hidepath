@@ -45,6 +45,12 @@ import { type AnimationLink } from '@/content/schema';
  * stránka čísluje v popisku kroku. Test hlídá, že se názvy shodují se stránkou.
  */
 export const animationPages = {
+  obratOverview: {
+    path: '/animace/obrat-prehled.html',
+    title: 'OBRAT — tři druky',
+    buttonText: 'Jak se OBRAT otevírá',
+    sections: {},
+  },
   kapsa: {
     path: '/animace/kapsa-postup.html',
     title: 'Kapsa na minci krok za krokem',

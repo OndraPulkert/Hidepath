@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="210mm" height="297mm" viewBox="0 0 210 297">
+<style>text{font-family:Arial,sans-serif;fill:#202020;font-size:3.3px}.cut{fill:none;stroke:#111;stroke-width:.25}.guide{fill:none;stroke:#444;stroke-width:.2;stroke-dasharray:1 1}.position{fill:none;stroke:#37748a;stroke-width:.2;stroke-dasharray:3 1 .5 1}</style>
+<text x="15" y="20" style="font-size:5px">OBRAT R08-screening — ZKOUŠKA DUTIN, 1 : 1</text>
+<text x="15" y="28">Jediná useň 1,2 mm. Není to střih celé peněženky.</text>
+<text x="15" y="35">Bez klopy a druků: tento vzorek neověřuje zavírání ani retenci.</text>
+<text x="15" y="47">ZADNÍ ZKUŠEBNÍ DÍL: 108 × 42 mm</text>
+<rect class="cut" x="15" y="52" width="108" height="42"/>
+<rect class="position" x="35.5" y="55" width="83" height="39"/>
+<text x="18" y="65">VOLNÝ</text><text x="18" y="71">LEM</text><text x="18" y="78">NEŠÍT</text>
+<text x="15" y="106">PŘEDNÍ DÍL: 83 × 39 mm; horní hrana otevřená</text>
+<rect class="cut" x="15" y="112" width="83" height="39"/>
+<path class="guide" d="M18.5 113V147.5"/><path class="guide" d="M56.5 113V147.5"/><path class="guide" d="M94.5 113V147.5"/>
+<path class="guide" d="M18.5 147.5H94.5"/>
+<text x="15" y="164">1. Rovné obrysy vyříznout; horní hranu předku dokončit před šitím.</text>
+<text x="15" y="171">2. Předek přiložit do čárkovaného obrysu na zadním dílu.</text>
+<text x="15" y="178">3. Lepit jen úzké pásy švů; nedostat lepidlo dál do dutin.</text>
+<text x="15" y="185">4. Děrovat přes skutečnou sestavu. Rozteč přibližně 4 mm.</text>
+<text x="15" y="192">5. Sešít boky, dno a prostřední dělicí řadu; nahoře nešít.</text>
+<text x="15" y="199">6. Zkusit jednu 50 Kč v každé komoře, potom 1+2 Kč / 1+2 Kč.</text>
+<text x="15" y="206">7. Zapsat odpor, možné zachytávání a skutečnou šířku i hloubku.</text>
+<text x="15" y="219">Legenda: plná = řez; krátké čárky = šev; čerchovaná = poloha.</text>
+<text x="15" y="226">Líc předku k vám; jeho rub k líci zadního vzorku. Neotáčet na nosič!</text>
+<path class="cut" d="M180 190V240M178 190H182M178 240H182"/><text x="145" y="248">Svisle 50 mm</text>
+<text x="15" y="237">D + tloušťka + vůle je jen vstupní obálka, ne záruka vhodnosti usně.</text>
+<path class="cut" d="M15 258H65M15 256V260M65 256V260"/>
+<text x="15" y="267">Kontrola 50 mm. Tisk 100 %, skutečná velikost, bez přizpůsobení.</text>
+<text x="15" y="278">Rovné rohy jsou pro izolovanou zkoušku. Nic neztenčovat ani netvarovat.</text>
+</svg>

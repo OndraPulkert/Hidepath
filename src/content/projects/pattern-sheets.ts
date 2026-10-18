@@ -1,3 +1,6 @@
+import { obratWalletProject } from '@/content/projects/obrat-wallet/project';
+import obratDily from '../../../docs/generated/obrat-list-2-dily.svg?url';
+import obratTelo from '../../../docs/generated/obrat-list-1-telo.svg?url';
 import { beltProject } from '@/content/projects/belt/project';
 import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { coinCardHolderProject } from '@/content/projects/coin-card-holder/project';
@@ -31,6 +34,7 @@ import sablona40 from '../../../docs/generated/pouzdro-mince-sablona-mince-40mm.
  * soubory bere odsud podle slugu z trasy, druhý generovaný projekt se přidá řádkem tady.
  */
 const registry: Readonly<Record<string, Readonly<Record<string, string>>>> = {
+  [obratWalletProject.slug]: { telo: obratTelo, dily: obratDily },
   [cardHolderProject.slug]: {
     'cvicna-sablona': cvicnaSablona,
   },
