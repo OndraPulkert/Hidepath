@@ -430,7 +430,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
 
   draft({
     slug: 'stitching-chisels',
-    name: 'Děrovací vidličky',
+    name: 'Děrovací vidličky 3,85–4 mm',
     englishName: 'Pricking irons / stitching chisels',
     category: 'stitching',
     shortDescription: 'Prorazí řadu pravidelných otvorů pro steh. Bez nich nejde ručně šít rovně.',
@@ -439,8 +439,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     buyingGuide: [
       {
         label: 'Rozteč',
-        value:
-          '3,85 nebo 4 mm (rozdíl začátečník nepozná; k oběma patří nit 0,6 mm); na pouzdro na karty stačí i 3 mm s tenčí nití 0,4–0,5 mm',
+        value: '3,85 nebo 4 mm (rozdíl začátečník nepozná; k oběma patří nit 0,6 mm)',
       },
       {
         label: 'Sada',
@@ -470,7 +469,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       {
         title: 'Rozteč 3 mm s nití 0,6 mm',
         reason:
-          'k jemné rozteči patří tenčí nit 0,4–0,5 mm; když teprve kupujete, vezměte 3,85–4 mm a nit 0,6 mm',
+          'k jemné rozteči patří tenčí nit 0,4–0,5 mm; pro první projekt zůstaňte u 3,85–4 mm a 0,6 mm',
       },
       { title: 'Sady s jediným hrotem', reason: 'otvory nevyjdou rovnoměrně' },
     ],
