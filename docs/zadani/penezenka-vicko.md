@@ -1286,11 +1286,12 @@ Zkušební i finální kus se stavějí stejným rozpisem, žádný večer neče
 
 **Materiál** (zkušební i finální kus; odškrtni, co máš):
 
-- [ ] **kůže, dvě objednávky z 10.1:** hnědá třísločiněná useň 20 × 50 cm (P1 zkušebního i finálního
-      kusu, odřezky na V12, krok 4(d) a podložku S7) a čokoládová kozinka 5 dm² (D2) ze Šijeme z kůže,
-      nebarvená kozinka 0,6–0,8 celý list (D1 a L1) z Lederversand Berlin; po dodání změřit (krok 0(0))
+- [ ] **kůže, tři objednávky z 10.1:** hnědá třísločiněná hlazenice, kus 50 × 25 cm, z Andexnite
+      (P1 zkušebního i finálního kusu, odřezky na V12, krok 4(d) a podložku S7), čokoládová kozinka
+      5 dm² (D2) ze Šijeme z kůže, nebarvená kozinka 0,6–0,8 celý list (D1 a L1) z Lederversand
+      Berlin; po dodání změřit (krok 0(0))
 - [ ] useň 0,8 **jen v záloze A**, kupuje se až podle V12. Záloha A platí pro zkušební i finální kus,
-      proto stejně jako u usně 1,0 kus 20 × 50 cm (2 × přířez P1 110 × 240 a odřezek 30 × 40 na
+      proto stejně jako u usně 1,0 kus 50 × 25 cm (2 × přířez P1 110 × 240 a odřezek 30 × 40 na
       zopakování V12); kus 11 × 24 cm stačí jen na jeden P1
 - [ ] magnet Ø 8 × 1,5 axiální: **3 ks** (zkušební kus, finální kus, hledací na krok 17) + po
       **2 silnějších a 2 slabších** stejného Ø 8 na výměnu (oddíl 5.4): vyměněný zůstane zalepený na
@@ -1343,23 +1344,26 @@ tužka, maskovací páska, párátka · nůžky (karty vložky dna) ·
 ### 10.1 Nákup kůže (zkušební a finální kus)
 
 Jediné místo dokumentu s obchody, odkazy a cenami kůže; odpovídá nákupnímu plánu aplikace
-(`shoppingPlan` v `src/content/projects/lid-wallet/project.ts`). **Od 9. 10. 2026 dvě objednávky ve
-dvou obchodech**, které pokryjí zkušební i finální kus: kaštan 0,9–1 mm Šijeme z kůže stáhl z nabídky
-(stránka p4698 vrací 404, ověřeno 9. 10. 2026) a nebarvenou kozinku nejvýš 0,9 mm česká nabídka nemá
-(nebarvená kozinka ze Šijeme z kůže je k 7. 10. 2026 jen 0,8–1,3 mm). Ceny s DPH, bez poštovného (u
-Šijeme z kůže neověřené). Ceny i sklad se mění, před objednávkou je znovu zkontrolujte. Kůži na dm²
-Šijeme z kůže nařeže na míru; nařezaná na míru se podle obchodu nedá vrátit.
+(`shoppingPlan` v `src/content/projects/lid-wallet/project.ts`). **Od 18. 10. 2026 tři objednávky ve
+třech obchodech**, které pokryjí zkušební i finální kus: hnědá useň 1–1,2 mm ze Šijeme z kůže (p4704)
+je vyprodaná, proto P1 z Andexnite (ověřeno 18. 10. 2026); kaštan 0,9–1 mm Šijeme z kůže stáhl
+z nabídky už dřív (p4698 vrací 404, 9. 10. 2026) a nebarvenou kozinku nejvýš 0,9 mm česká nabídka
+nemá (nebarvená kozinka ze Šijeme z kůže je k 7. 10. 2026 jen 0,8–1,3 mm). Ceny s DPH, bez
+poštovného (u Andexnite a Šijeme z kůže neověřené). Ceny i sklad se mění, před objednávkou je znovu
+zkontrolujte. Kůži na dm² Šijeme z kůže nařeže na míru; nařezaná na míru se podle obchodu nedá
+vrátit.
 
-| Co                 | Obchod a produkt                                                                                                                                                                           | Cena                                                                   | Množství                                                                                                                 | Na co                                                                                                     |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
-| P1, useň kolem 1,0 | Šijeme z kůže: [Třísločiněná kůže hnědá – 3 různé síly](https://www.sijemezkuze.cz/trislocinena-kuze-hneda-3-ruzne-sily-p4704-8013), varianta 1–1,2 mm                                     | 19,50 Kč/dm² (ověřeno 9. 10. 2026)                                     | 10 dm² = **195 Kč**; do poznámky: „Prosím v jednom kuse jako obdélník 20 × 50 cm, z pevné části kůže, co nejblíž 1,0 mm“ | P1 zkušebního i finálního kusu (2 × přířez 110 × 240) a odřezky na V12 (30 × 40), krok 4(d) a podložku S7 |
-| D2                 | Šijeme z kůže: [Kozinka třísločiněná čokoládová 0,7–0,9 mm](https://www.sijemezkuze.cz/kozinka-trislocinena-cokoladova-0-7-0-9-mm-p4851)                                                   | 13,50 Kč/dm² (ověřeno 29. 9. 2026)                                     | 5 dm² = **67,50 Kč**; do poznámky: „kusy nejvýš 0,9 mm, nejlépe 0,7–0,8 mm“                                              | 2 × D2 103 × 64 a odřezek                                                                                 |
-| D1 + L1            | Lederversand Berlin: [Ziegenleder pflanzlich gegerbt natur-braun 0,6–0,8 mm #z125](https://www.lederversand-berlin.de/Ziegennappa-z125), list 0,55 m² (levnější 2. jakost #z125b, 0,45 m²) | 38,50 € (2. jakost 27,00 €), s německou DPH 19 % (ověřeno 7. 10. 2026) | celý list (jinak se neprodává); poštovné do Česka 16,99 € (Economy, objednávka do 99,99 €) nebo 19,99 € (DHL)            | 2 × D1 93 × 79,5, 3 × L1 24 × 22 (i náhradní), zkouška barvy                                              |
+| Co                 | Obchod a produkt                                                                                                                                                                           | Cena                                                                   | Množství                                                                                                                      | Na co                                                                                                                                                      |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| P1, useň kolem 1,0 | Andexnite: [Hovězí kůže – třísločiněná hlazenice – hnědá – 1,0–1,2 mm](https://andexnite.cz/produkt/hovezi-kuze-trislocinena-hlazenice-hneda-1-0-1-2mm/), varianta 50x25cm                 | 240 Kč za kus (30 × 40 cm 230 Kč; ověřeno 18. 10. 2026)                | 1 kus 50 × 25 cm = **240 Kč**; při objednávce požádat o kus co nejblíž 1,0 mm (jiný rozměr obchod nabízí na tel. 777 547 038) | P1 zkušebního i finálního kusu (2 × přířez 110 × 240 za sebou podél delší strany) a z pruhu 140 mm vedle odřezky na V12 (30 × 40), krok 4(d) a podložku S7 |
+| D2                 | Šijeme z kůže: [Kozinka třísločiněná čokoládová 0,7–0,9 mm](https://www.sijemezkuze.cz/kozinka-trislocinena-cokoladova-0-7-0-9-mm-p4851)                                                   | 13,50 Kč/dm² (ověřeno 29. 9. 2026)                                     | 5 dm² = **67,50 Kč**; do poznámky: „kusy nejvýš 0,9 mm, nejlépe 0,7–0,8 mm“                                                   | 2 × D2 103 × 64 a odřezek                                                                                                                                  |
+| D1 + L1            | Lederversand Berlin: [Ziegenleder pflanzlich gegerbt natur-braun 0,6–0,8 mm #z125](https://www.lederversand-berlin.de/Ziegennappa-z125), list 0,55 m² (levnější 2. jakost #z125b, 0,45 m²) | 38,50 € (2. jakost 27,00 €), s německou DPH 19 % (ověřeno 7. 10. 2026) | celý list (jinak se neprodává); poštovné do Česka 16,99 € (Economy, objednávka do 99,99 €) nebo 19,99 € (DHL)                 | 2 × D1 93 × 79,5, 3 × L1 24 × 22 (i náhradní), zkouška barvy                                                                                               |
 
-**Tloušťka P1 rozhoduje o kozinkách:** obchod prodává useň jako 1–1,2 mm, ale tlustší P1 snižuje
+**Tloušťka P1 rozhoduje o kozinkách:** obchod prodává useň jako 1,0–1,2 mm, ale tlustší P1 snižuje
 hranici přepážek (P1 1,1 → nejvýš 0,80, 1,2 → 0,60; tabulka níže). Při P1 nad 1,05 tak čokoládová
-kozinka 0,7–0,9 nemusí projít, proto do poznámky „co nejblíž 1,0 mm“ a P1 obkreslit na místě kusu
-nejblíž 1,0 (krok 0(0)).
+kozinka 0,7–0,9 nemusí projít, proto při objednávce požádat o kus „co nejblíž 1,0 mm“ a P1 obkreslit
+na místě kusu nejblíž 1,0 (krok 0(0)). Pevnost a tuhost hlazenice obchod neuvádí (jen „může mít
+škrábance a výpalky“); ověří je V12 a zkušební kus.
 
 **Výsečníky (Kolo 11, jen kdo je nemá):** [CraftPoint – Výsečníky na kůži 2-20mm](https://craft-point.cz/products/vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu),
 průměr dle výběru. Ověřeno **29. 9. 2026** přes `…/products/vysecniky-na-kuzi-2-20mm-prumer-dle-vyberu.js`
@@ -1370,7 +1374,7 @@ poštovného (neověřené). Kvalitu a ostrost ověřit na odřezku.
 Kontrast D1 / D2 dává přírodní světlá proti čokoládové (R4). Barvu na horní hranu D1 zvolit v tónu
 D2. Useň 0,8 na zálohu A se kupuje až po neúspěšné V12 (příloha níže).
 
-**Po dodání změřit posuvkou** P1 a obě kozinky na několika místech kusu (1–1,2, 0,6–0,8 a 0,7–0,9
+**Po dodání změřit posuvkou** P1 a obě kozinky na několika místech kusu (1,0–1,2, 0,6–0,8 a 0,7–0,9
 jsou rozsahy z názvů produktů, skutečnou tloušťku určí až měření). Pak vygenerovat listy pro naměřenou
 tloušťku: `pnpm pattern:wallet-lid --divider <větší z D1 a D2> --lining <L1>` (krok 0(a), oddíl 12.4).
 **P1 změř taky:** když se liší od 1,0 o 0,05 a víc, přidej `--p1 <změřená>` (oblouk ohybu a závěs
@@ -1396,13 +1400,13 @@ a závěsu (krok 16), závěs bez prasklin (Z-2) a magnet přes mezeru L1 + F (Z
 ze stejné kůže (jedna V12 stačí, zkušební kus ověří přesně finální materiál) a tloušťku změřit
 posuvkou (oblouk v oddílu 5.3 je počítaný pro 1,0; jinou tloušťku zadej `--p1`, viz výše).
 
-**Na co se zeptat prodejce (Šijeme z kůže, do poznámky k objednávce):** „Dobrý den, prosím
-třísločiněnou hnědou useň v jednom kuse jako obdélník 20 × 50 cm, pokud možno z pevné části kůže bez
-vad a co nejblíž 1,0 mm. U čokoládové kozinky prosím kusy nejvýš 0,9 mm, nejlépe 0,7–0,8 mm (silnější
-nepoužiji). Je kozinka čistě třísločiněná?“
+**Na co se zeptat prodejců:** Andexnite (při objednávce, tel. 777 547 038): „Dobrý den, prosím
+hlazenici hnědou 1,0–1,2 mm v kuse 50 × 25 cm, pokud možno bez škrábanců a výpalků a co nejblíž
+1,0 mm.“ Šijeme z kůže (do poznámky k objednávce): „U čokoládové kozinky prosím kusy nejvýš 0,9 mm,
+nejlépe 0,7–0,8 mm (silnější nepoužiji). Je kozinka čistě třísločiněná?“
 
 **Příloha – dřívější průzkum (29. 9. 2026, jen pro případ, že objednávka nevyjde):** náhradní P1,
-kdyby hnědá 1–1,2 došla: Šijeme z kůže, Pull Up Crazy horse 0,8–1,2 (22,50 Kč/dm², od 5 dm²; lehce
+kdyby hlazenice z Andexnite došla: Šijeme z kůže, Pull Up Crazy horse 0,8–1,2 (22,50 Kč/dm², od 5 dm², skladem 18. 10. 2026; 10 dm² jako obdélník 20 × 50 cm; lehce
 změkčená, tvar ověří V12 a zkušební kus), nebo Kůže Vlček, hovězí světle hnědá 1–1,2 lícová (A4 112 Kč; může být měkčí, ověřit u prodejce).
 Záloha A (useň 0,8): pevnou třísločiněnou 0,8 v kusu aspoň 11 × 24 cm se ověřit nepodařilo; kandidát
 je Pull Up Crazy Horse 0,8–1,2 ze Šijeme z kůže (22,50 Kč/dm², ověřit u prodejce), jinak záloha B

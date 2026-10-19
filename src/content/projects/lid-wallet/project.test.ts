@@ -562,7 +562,7 @@ describe('obsah – peněženka Víčko', () => {
   describe('nákupní plán „Co koupit“', () => {
     const plan = lidWalletProject.shoppingPlan!;
 
-    it('každý řádek míří na právě jeden ověřený příklad z 29. 9. 2026 (maskovací páska z 1. 10. 2026, Lederversand Berlin ze 7. 10., useň P1 z 9. 10., ceny CraftPointu znovu 8. 10. 2026, nit Slam a kružítko 12. 10. 2026); skladem vše kromě výsečníku Ø 10', () => {
+    it('každý řádek míří na právě jeden ověřený příklad z 29. 9. 2026 (maskovací páska z 1. 10. 2026, Lederversand Berlin ze 7. 10., useň P1 z 18. 10., ceny CraftPointu znovu 8. 10. 2026, nit Slam a kružítko 12. 10. 2026); skladem vše kromě výsečníku Ø 10', () => {
       for (const line of plan.lines) {
         const example = findPlanExample(line, equipmentCatalog);
         expect(example, `${line.equipmentSlug} ${line.url} ${line.variant ?? ''}`).toBeDefined();
@@ -573,7 +573,7 @@ describe('obsah – peněženka Víčko', () => {
           line.equipmentSlug === 'masking-tape'
             ? '2026-10-01'
             : line.equipmentSlug === 'veg-tan-leather-1mm'
-              ? '2026-10-09'
+              ? '2026-10-18'
               : example!.shop === 'Lederversand Berlin'
                 ? '2026-10-07'
                 : recheckedOct12(line.url)
@@ -596,18 +596,19 @@ describe('obsah – peněženka Víčko', () => {
       }
     });
 
-    it('kůže 1 203,06 Kč (oddíl 10.1, nebarvená kozinka z Lederversand Berlin) a výsečníky 150 Kč', () => {
+    it('kůže 1 248,06 Kč (oddíl 10.1, useň P1 z Andexnite, nebarvená kozinka z Lederversand Berlin) a výsečníky 150 Kč', () => {
       const resolved = resolveShoppingPlan(lidWalletProject, equipmentCatalog, {})!;
       const lines = resolved.shops.flatMap((s) => s.lines);
       const sum = (slugs: string[]) =>
         lines.filter((l) => slugs.includes(l.equipmentSlug)).reduce((s, l) => s + l.lineCents, 0);
-      expect(sum(['veg-tan-leather-1mm', 'thin-goatskin'])).toBe(120_306);
+      expect(sum(['veg-tan-leather-1mm', 'thin-goatskin'])).toBe(124_806);
       expect(sum(['round-punches-8-14'])).toBe(15_000);
-      // Součty po obchodech napevno (ceny z 29. 9., 7. 10., 8. 10., 9. 10. a 12. 10. 2026): změna ceny nebo množství v katalogu
+      // Součty po obchodech napevno (ceny z 29. 9., 7. 10., 8. 10., 12. 10. a 18. 10. 2026): změna ceny nebo množství v katalogu
       // se tu musí projevit vědomě. Pořadí obchodů = pořadí první zmínky v plánu.
       expect(resolved.shops.map((g) => [g.shop, g.totalCents])).toEqual([
-        ['Šijeme z kůže', 26_250],
+        ['Andexnite', 24_000],
         ['Lederversand Berlin', 94_056],
+        ['Šijeme z kůže', 6_750],
         ['CraftPoint', 323_900],
         ['ELIDIS', 1_212],
         ['Orodian', 1_640],
@@ -615,7 +616,7 @@ describe('obsah – peněženka Víčko', () => {
         ['UNI HOBBY', 89_900],
         ['IKEA', 11_800],
       ]);
-      expect(resolved.totalCents).toBe(614_258);
+      expect(resolved.totalCents).toBe(618_758);
       expect(lines).toHaveLength(plan.lines.length);
       expect(resolved.notInStockCount).toBe(1);
     });

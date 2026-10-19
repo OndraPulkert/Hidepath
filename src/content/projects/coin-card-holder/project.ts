@@ -276,7 +276,7 @@ export const lessons: readonly LessonDefinition[] = [
     materials: [
       'dvě desky na formu a víko, aspoň 74 × 74 mm (ideálně 8 × 8 cm) a aspoň 8 mm silné (překližka, tvrdý plast nebo bukové prkénko; jak široké smí být, viz první krok), a odpadní prkno pod vrtání',
       'aku vrtačka a korunka Ø 32 mm se středicím vrtákem (např. ze sady Extol Premium 19–76 mm na unášeči, nebo samostatný Wolfcraft Ø 32 mm se stopkou rovnou do sklíčidla), u mince 40 mm Ø 44 nebo 45 mm; Forstnerův vrták jen Ø 32 mm (30 ani 35 mm ze sady nesedí)',
-      '2 odřezky třísločiněné kůže 1,2 mm, každý aspoň 70 × 70 mm; druhý na případné opakování zkoušky okna. Třetí stejný odřezek jen tehdy, když mince projde oknem Ø 22 mm i podruhé. U sestavy z nákupního plánu jsou první dva z druhé tréninkové juchtové A5 z projektu 01: A5 položte na šířku lícem nahoru, čtverce vyřízněte u pravé hrany pod sebou (vlevo nahoře zůstává místo na tři odřezky 40 × 80 mm z lekce 4 projektu 01, vlevo dole roh se zkušebními údery z lekce 1); třetí z Blu A4, viz poslední krok',
+      '2 odřezky třísločiněné kůže 1,2 mm, každý aspoň 70 × 70 mm; druhý na případné opakování zkoušky okna. Třetí stejný odřezek jen tehdy, když mince projde oknem Ø 22 mm i podruhé. U sestavy z nákupního plánu jsou první dva z druhé tréninkové juchtové A5 z projektu 01: A5 položte na šířku lícem nahoru, čtverce vyřízněte u pravé hrany pod sebou (vlevo dole roh se zkušebními údery z lekce 1); třetí z Blu A4, viz poslední krok',
       'mince, na kterou stavíte (výchozí 50 Kč)',
       'tenký karton (krabice od cereálií) a lepidlo v tyčince na výtisk na značky a šablonu s oknem',
       'potravinová fólie',

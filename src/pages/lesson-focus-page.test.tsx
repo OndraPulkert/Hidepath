@@ -56,7 +56,7 @@ describe('LessonFocusPage', () => {
       name: /^krok 1:\s*slepte díly podél hrany$/i,
     });
     expect(heading).toHaveFocus();
-    expect(screen.getByText('Krok 1 / 7')).toBeInTheDocument();
+    expect(screen.getByText('Krok 1 / 8')).toBeInTheDocument();
 
     await user.keyboard('{ArrowRight}');
     expect(router.state.location.search).toBe('?krok=2');
@@ -65,8 +65,8 @@ describe('LessonFocusPage', () => {
   });
 
   it('?krok=N otevře přímo daný krok; poslední krok vede ke kontrolním bodům', async () => {
-    setup(focusUrl(7));
-    expect(await screen.findByText('Krok 7 / 7')).toBeInTheDocument();
+    setup(focusUrl(8));
+    expect(await screen.findByText('Krok 8 / 8')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Ke kontrolním bodům' })).toHaveAttribute(
       'href',
       `${LESSON}#kontrolni-body`,
@@ -74,14 +74,14 @@ describe('LessonFocusPage', () => {
     // Ukončit vrátí na právě otevřený krok v lekci, ne na její začátek.
     expect(screen.getByRole('link', { name: /ukončit/i })).toHaveAttribute(
       'href',
-      `${LESSON}#krok-7`,
+      `${LESSON}#krok-8`,
     );
   });
 
   it('„Ke kontrolním bodům“ otevře lekci posunutou na kontrolní body', async () => {
     const scrollIntoView = vi.fn();
     Element.prototype.scrollIntoView = scrollIntoView;
-    const { user } = setup(focusUrl(7));
+    const { user } = setup(focusUrl(8));
     await user.click(await screen.findByRole('link', { name: 'Ke kontrolním bodům' }));
     const heading = await screen.findByRole('heading', { level: 2, name: 'Kontrolní body' });
     expect(scrollIntoView).toHaveBeenCalled();
@@ -90,7 +90,7 @@ describe('LessonFocusPage', () => {
 
   it('šipky nepřebíjí psaní do pole', async () => {
     const { user, router } = setup(focusUrl(1));
-    await screen.findByText('Krok 1 / 7');
+    await screen.findByText('Krok 1 / 8');
     const input = document.createElement('input');
     document.body.append(input);
     input.focus();

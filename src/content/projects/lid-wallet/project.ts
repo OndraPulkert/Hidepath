@@ -20,7 +20,7 @@ import {
 } from '@/content/schema';
 
 /**
- * Projekt 03 – Peněženka Víčko. Obsah je NÁVRH (draft), stejně jako střih sám
+ * Projekt 05 – Peněženka Víčko. Obsah je NÁVRH (draft), stejně jako střih sám
  * (docs/zadani/penezenka-vicko.md, po Kole 12). Čísla v textu jsou pro výchozí střih (P1 1,0 mm,
  * přepážky D1/D2 a podšívka L1 0,6 mm) a počítá je `src/lib/geometry/lid-wallet.ts`; test
  * `project.test.ts` hlídá, že odpovídají modelu. S koupenou kůží jiné tloušťky platí čísla
@@ -188,7 +188,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 90,
     goal: 'Změřit kůži, vytisknout listy pro její tloušťku, zkontrolovat měřítko a slepit vložku dna ze starých karet.',
     materials: [
-      'kůže: useň P1 20 × 50 cm, nebarvená kozinka (D1 a L1), čokoládová kozinka (D2)',
+      'kůže: useň P1 50 × 25 cm, nebarvená kozinka (D1 a L1), čokoládová kozinka (D2)',
       'papír a tužka na jednotlivá měření',
       'tiskárna A4 a papír A4 (nejlépe 120 g) na listy',
       '4 staré karty a lepicí páska na vložku dna',
@@ -2153,7 +2153,7 @@ const overview: ProjectOverview = {
 
 export const lidWalletProject: ProjectDefinition = {
   slug: PROJECT_SLUG,
-  code: '03',
+  code: '05',
   title: 'Peněženka Víčko',
   summary:
     'Peněženka do zadní kapsy 101 × 83,5 mm: karty, bankovky napůl a dva sloupce mincí pod víčkem s magnetem.',
@@ -2176,7 +2176,7 @@ export const lidWalletProject: ProjectDefinition = {
       priority: 'required',
       reason: 'Pás P1 zkušebního i finálního kusu a odřezky na zkoušku ohybu V12 a podložku S7.',
       specification:
-        'Pevná třísločiněná useň co nejblíž 1,0 mm (obchod ji prodává jako 1–1,2 mm), 10 dm² jako obdélník 20 × 50 cm (2 × přířez P1 110 × 240 mm). Po dodání změřit: P1 nad 1,05 mm snižuje hranici přepážek (1,1 → 0,80 mm, 1,2 → 0,60 mm).',
+        'Pevná třísločiněná useň co nejblíž 1,0 mm (obchod ji prodává jako 1,0–1,2 mm), kus 50 × 25 cm (2 × přířez P1 110 × 240 mm za sebou podél delší strany). Po dodání změřit: P1 nad 1,05 mm snižuje hranici přepážek (1,1 → 0,80 mm, 1,2 → 0,60 mm).',
     },
     {
       equipmentSlug: 'thin-goatskin',
@@ -2191,7 +2191,7 @@ export const lidWalletProject: ProjectDefinition = {
       reason:
         'Jen záloha A, když ve zkoušce ohybu V12 popraská líc usně 1,0: P1 zkušebního i finálního kusu a odřezek na zopakování V12.',
       specification:
-        'Pevná třísločiněná useň 0,8 mm jako u usně 1,0 v jednom kuse 20 × 50 cm (2 × přířez P1 110 × 240 mm za sebou podél delší strany, odřezek 30 × 40 mm na V12 z pruhu vedle nich); kupuje se až podle V12.',
+        'Pevná třísločiněná useň 0,8 mm jako u usně 1,0 v jednom kuse 50 × 25 cm (2 × přířez P1 110 × 240 mm za sebou podél delší strany, odřezek 30 × 40 mm na V12 z pruhu vedle nich); kupuje se až podle V12.',
     },
     {
       equipmentSlug: 'digital-caliper',
@@ -2401,15 +2401,15 @@ export const lidWalletProject: ProjectDefinition = {
   },
   shoppingPlan: {
     title:
-      'Sestava: kůže ze dvou obchodů (pevná hnědá třísločiněná useň 1–1,2 mm a čokoládová kozinka 0,7–0,9 mm ze Šijeme z kůže, nebarvená kozinka 0,6–0,8 mm z Lederversand Berlin), listy vygenerované v aplikaci pro změřenou tloušťku, zkušební i finální kus, magnet Ø 8 × 1,5, plíšek 0,5 mm',
+      'Sestava: kůže ze tří obchodů (hnědá třísločiněná hlazenice 1,0–1,2 mm z Andexnite, nebarvená kozinka 0,6–0,8 mm z Lederversand Berlin, čokoládová kozinka 0,7–0,9 mm ze Šijeme z kůže), listy vygenerované v aplikaci pro změřenou tloušťku, zkušební i finální kus, magnet Ø 8 × 1,5, plíšek 0,5 mm',
     lines: [
       {
         equipmentSlug: 'veg-tan-leather-1mm',
-        url: 'https://www.sijemezkuze.cz/trislocinena-kuze-hneda-3-ruzne-sily-p4704-8013',
-        variant: '1–1,2 mm',
-        quantity: 10,
+        url: 'https://andexnite.cz/produkt/hovezi-kuze-trislocinena-hlazenice-hneda-1-0-1-2mm/',
+        variant: '50x25cm',
+        quantity: 1,
         purpose:
-          '10 dm² v jednom kuse 20 × 50 cm: P1 zkušebního i finálního kusu, odřezky na V12 a podložku S7; do poznámky „co nejblíž 1,0 mm“: P1 1,1 pustí přepážky jen do 0,80 mm, 1,2 do 0,60 a čokoládová kozinka 0,7–0,9 by pak neprošla; tloušťku po dodání změřit',
+          'kus 50 × 25 cm: P1 zkušebního i finálního kusu (2 × přířez 110 × 240 za sebou podél delší strany), z pruhu vedle odřezky na V12 a podložku S7; obchod prodává 1,0–1,2 mm, při objednávce požádat (tel. 777 547 038) o kus co nejblíž 1,0 mm: P1 1,1 pustí přepážky jen do 0,80 mm, 1,2 do 0,60 a čokoládová kozinka 0,7–0,9 by pak neprošla; tloušťku po dodání změřit',
       },
       {
         equipmentSlug: 'thin-goatskin',

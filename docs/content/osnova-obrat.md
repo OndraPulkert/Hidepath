@@ -4,7 +4,7 @@
 
 **Po auditu R08:** označení obtížnosti je Vývojový — neověřený; lekce 6–10 jsou pevně zablokované nezávisle na uloženém postupu. Výrobní čas se u vývojových projektů nezobrazuje. Viz [náprava](../design/obrat/iterace-08-audit-a-naprava.md).
 
-**Historická aktualizace:** OBRAT je nyní registrovaný jako `obrat-wallet`, kód 05, vývojový projekt. Má deset lekcí s kroky, zápisy a kontrolami, tisk izolovaných dutin a interaktivní přehled zapínání. Finální rozvinutí, kompletní výrobní střih a začátečnické ověření nadále chybějí. Níže uvedená osnova popisuje i budoucí cílový stav, nikoli hotový ověřený kurz.
+**Historická aktualizace:** OBRAT je nyní registrovaný jako `obrat-wallet`, kód 03, vývojový projekt. Má deset lekcí s kroky, zápisy a kontrolami, tisk izolovaných dutin a interaktivní přehled zapínání. Finální rozvinutí, kompletní výrobní střih a začátečnické ověření nadále chybějí. Níže uvedená osnova popisuje i budoucí cílový stav, nikoli hotový ověřený kurz.
 
 > **Vzhled:** autor po animaci R06 preferuje původní produktový pohled iterace 03. Dvoukomorová R06 není přijatá jako jeho náhrada. Další konstrukce se řídí [zapsanou preferencí](../design/obrat/rozhodnuti-vzhled-po-r06.md); technické výsledky R06 nepozbývají platnost.
 

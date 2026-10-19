@@ -1,5 +1,5 @@
 /**
- * Instruktážní ilustrace pro lekce projektu 03 (peněženka Víčko, docs/zadani/penezenka-vicko.md).
+ * Instruktážní ilustrace pro lekce projektu 05 (peněženka Víčko, docs/zadani/penezenka-vicko.md).
  * Nejsou to střihy 1:1 jako `lid-wallet.ts` – jsou to schematické nákresy, ale všechny polohy
  * (výšky y, šířky x, délky podél pásu v) berou z modelu `lidWalletLayout(spec)` v
  * `src/lib/geometry/lid-wallet.ts`. Tloušťky vrstev jsou v řezech zvětšené, aby byly vidět.

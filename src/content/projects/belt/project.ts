@@ -1943,7 +1943,7 @@ export const beltProject: ProjectDefinition = {
         url: 'https://craft-point.cz/products/brusny-arch-na-platne-230x280-mm-ruzne-zrnitosti',
         variant: 'zrnitost 80',
         quantity: 1,
-        purpose: 'ztenčení konců poutka z pásu (lekce 4); z projektu 03, jinak přihoďte',
+        purpose: 'ztenčení konců poutka z pásu (lekce 4); pokud ho ještě nemáte, přihoďte',
       },
       {
         equipmentSlug: 'contact-cement',

@@ -57,6 +57,7 @@ Stejné: široká zaoblená klopa se šikmou hranou, C vpravo, mezera nad pásem
 | Lepený jazýček B při opakovaném rozepínání           | Lekce 6 (30× B)                        |
 | Ohyb závěsu pásu a víčka v konkrétní usni            | Lekce 3 a 8                            |
 | Délka klopy přes obsah                               | Lekce 5 (model) a 9 (seříznutí)        |
+| A hned vedle vyvýšeného místa s B (výška druku B)    | Lekce 6 (zkouška místa pro A), lekce 9 |
 | Přídavek pásu 2 mm přes plné dutiny (odhad zkrácení) | Lekce 5 (papír), rozhodne kožený kus   |
 | Skutečná tloušťka, nošení                            | Lekce 10                               |
 

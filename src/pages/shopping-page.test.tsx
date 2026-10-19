@@ -122,11 +122,11 @@ describe('přehled – orientační rozpočet pouzdra na karty', () => {
   });
 });
 
-/** Projekt 03: nejvíc obchodů a jako jediný ceny v haléřích. */
-describe('nákupní seznam – peněženka Víčko (projekt 03)', () => {
+/** Projekt 05 (Víčko): nejvíc obchodů a jako jediný ceny v haléřích. */
+describe('nákupní seznam – peněženka Víčko (projekt 05)', () => {
   afterEach(() => setActiveProjectPreference(null));
 
-  it('ukáže plán s 8 obchody, haléřové ceny a „zbývá koupit“; řádky se sečtou na součet obchodu', async () => {
+  it('ukáže plán s 9 obchody, haléřové ceny a „zbývá koupit“; řádky se sečtou na součet obchodu', async () => {
     const repositories = createTestRepositories();
     await repositories.enrollments.upsert({
       ...enrollment(lidWalletProject.slug),
@@ -136,7 +136,7 @@ describe('nákupní seznam – peněženka Víčko (projekt 03)', () => {
     const plan = resolveShoppingPlan(lidWalletProject, equipmentCatalog, {
       mallet: item('mallet', 'owned'),
     })!;
-    expect(plan.shops).toHaveLength(8);
+    expect(plan.shops).toHaveLength(9);
 
     setActiveProjectPreference(lidWalletProject.slug);
     renderApp('/shopping', { repositories });
@@ -147,9 +147,9 @@ describe('nákupní seznam – peněženka Víčko (projekt 03)', () => {
     await waitFor(() =>
       expect(planText()).toContain(`zbývá koupit ${norm(formatCzk(plan.remainingCents))}`),
     );
-    expect(planText()).toContain(`${norm(formatCzk(plan.totalCents))}celkem v 8 obchodech`);
-    // Haléřové ceny se nezaokrouhlují: 10 × 19,50 Kč = 195 Kč, 5 × 13,50 Kč = 67,50 Kč.
-    expect(planText()).toContain('10 × 19,50 Kč195 Kč');
+    expect(planText()).toContain(`${norm(formatCzk(plan.totalCents))}celkem v 9 obchodech`);
+    // Useň P1 za kus (1 × 240 Kč); haléřové ceny se nezaokrouhlují: 5 × 13,50 Kč = 67,50 Kč.
+    expect(planText()).toContain('1 × 240 Kč240 Kč');
     expect(planText()).toContain('5 × 13,50 Kč67,50 Kč');
     expect(planText()).toContain('2 × 4,80 Kč9,60 Kč');
     expect(within(planCard()).getByText(/Mějte doma nebo dokupte/)).toBeInTheDocument();
@@ -162,7 +162,7 @@ describe('nákupní seznam – peněženka Víčko (projekt 03)', () => {
           .replace(',', '.'),
       );
     const groups = within(planCard()).getAllByRole('group');
-    expect(groups).toHaveLength(8);
+    expect(groups).toHaveLength(9);
     for (const group of groups) {
       const summary = group.querySelector('summary')!;
       const shopTotal = parse(summary.lastElementChild!.textContent ?? '');

@@ -212,8 +212,8 @@ kroužky ohybu A (y 77,1) leží ve výřezu na prst, v odpadu pásu; odřezky n
 rohu (x 182–297, y 137–207). Lekce 5: kůži otočit lícem nahoru přes kratší hranu, šablona jazykem
 dolů 5 mm od horní a 3 mm od pravé hrany (rub x = 3 + x pásu, y = 109,1 − y pásu).
 Dva zkušební odřezky 70 × 70 (lekce 2) z druhé tréninkové juchtové A5 projektu 01 (na šířku lícem nahoru,
-u pravé hrany pod sebou: 3 + 70 + 2 + 70 = 145 ≤ 150; vlevo tři odřezky 40 × 80 na výšku vedle
-sebe = 124 × 80 a roh se zkušebními údery).
+u pravé hrany pod sebou: 3 + 70 + 2 + 70 = 145 ≤ 150; vlevo roh se zkušebními údery, zbytek je
+rezerva).
 
 ## Postup
 

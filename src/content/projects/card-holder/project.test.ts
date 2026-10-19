@@ -186,9 +186,10 @@ describe('obsah – pouzdro na karty: časovače, zápisník a „Připravte si�
 
   it('z předchozích lekcí: proužek do lekce 4, díly a papírový zadní díl do lekce 6', () => {
     expect(lesson(4).requires!.map((r) => [r.id, r.fromLesson])).toEqual([
+      ['practice-shapes', '02-straight-cut'],
       ['practice-strip', '02-straight-cut'],
     ]);
-    expect(step(4, 'glue').body).toContain('přilepte na něj proužek z lekce 2');
+    expect(step(4, 'glue').body).toContain('přilepte na něj kus proužku z lekce 2');
     expect(lesson(6).requires!.map((r) => [r.id, r.fromLesson])).toEqual([
       ['leather-parts', '05-transfer-and-cut'],
       ['paper-back', '05-transfer-and-cut'],

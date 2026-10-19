@@ -495,7 +495,7 @@ describe('animace postupu – sedlářský steh a hrany ve všech projektech', (
     ['coin-card-holder', 6, 'dye-burnish-pocket-edges', [hrany('F2')]],
     ['coin-card-holder', 8, 'sand-flat-bottom', [hrany('F3'), hrany('B1')]],
     ['coin-card-holder', 8, 'dye-and-burnish-edges', [hrany('F3'), hrany('C1')]],
-    // Projekt 03: všechny švy (konce 2 otvory zpět) a hrany.
+    // Projekt 05 (Víčko): všechny švy (konce 2 otvory zpět) a hrany.
     ['lid-wallet', 5, 'd2-edge', [hrany('G4')]],
     ['lid-wallet', 5, 'coin-windows', [...okenka('A2', 'A3', 'A4', 'A5'), hrany('G4')]],
     ['lid-wallet', 5, 'edges', [hrany('G1')]],

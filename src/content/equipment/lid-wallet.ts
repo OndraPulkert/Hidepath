@@ -1,8 +1,8 @@
 import { type EquipmentDefinition } from '@/content/schema';
 
 /**
- * Položky katalogu, které přibyly s projektem 03 (peněženka Víčko, docs/zadani/penezenka-vicko.md,
- * oddíl 10 a 10.1). Každý příklad je ze stránky načtené 29. 9. 2026 (useň P1 9. 10. 2026; CraftPoint přes `…/products/
+ * Položky katalogu, které přibyly s projektem 05 (peněženka Víčko, docs/zadani/penezenka-vicko.md,
+ * oddíl 10 a 10.1). Každý příklad je ze stránky načtené 29. 9. 2026 (useň P1 18. 10. 2026; CraftPoint přes `…/products/
  * <handle>.js`, ostatní obchody přes HTML). Co stránka neuvádí, je v textu označené „ověřit“.
  * Texty jsou NÁVRH (reviewStatus: draft).
  */
@@ -30,17 +30,17 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
       {
         label: 'Tloušťka',
         value:
-          'co nejblíž 1,0 mm (obchod ji prodává jako 1–1,2 mm); tlustší P1 snižuje hranici přepážek; po dodání změřit posuvkou na několika místech',
+          'co nejblíž 1,0 mm (obchod ji prodává jako 1,0–1,2 mm); tlustší P1 snižuje hranici přepážek; po dodání změřit posuvkou na několika místech',
       },
       {
         label: 'Množství',
         value:
-          '10 dm² jako obdélník 20 × 50 cm: dva přířezy P1 110 × 240 mm (zkušební a finální kus) a odřezky na zkoušku ohybu V12 a podložku pro šev S7',
+          'kus 50 × 25 cm: dva přířezy P1 110 × 240 mm (zkušební a finální kus) za sebou podél delší strany, z pruhu 140 mm vedle nich odřezky na zkoušku ohybu V12 a podložku pro šev S7',
       },
     ],
     cautions: [
       'Když se změřená tloušťka liší od 1,0 o 0,05 mm a víc, listy se musí vygenerovat pro změřenou tloušťku (přepínač --p1), jinak nesedí oblouk ohybu dna ani délka závěsu.',
-      'Obchod kůži na dm² nařeže na míru a požadovaný rozměr přijímá v poznámce k objednávce (v poradně sám uvádí příklad „20 × 50 cm“). Dodané množství může upravit a rozdíl promítne do ceny. Od objednávky kůže řezané na míru nejde odstoupit (§ 1837 občanského zákoníku) a při nepřevzetí obchod účtuje storno 50 % hodnoty kůže. Zdroj: poradna obchodu „Řezání kůže na míru – počet dodaných dm2 a jakosti kůže“ (sijemezkuze.cz/poradna), načteno 29. 9. 2026.',
+      'Pevnost a tuhost usně ani skutečnou tloušťku obchod neuvádí: ověří je zkouška ohybu V12 a zkušební kus. Obchod upozorňuje, že kůže může mít škrábance a výpalky; přířezy P1 obkreslit mimo ně.',
     ],
     avoid: [
       {
@@ -50,24 +50,24 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
       { title: 'Štípenka', reason: 'nemá líc' },
     ],
     alternatives: [],
-    // 10 dm² × 19,50 Kč (Šijeme z kůže, třísločiněná hnědá 1–1,2 mm, ověřeno 9. 10. 2026) až 10 dm² ×
-    // 22,50 Kč (pull-up 0,8–1,2 mm, ověřeno 9. 10. 2026). Kaštan 0,9–1 mm p4698 obchod stáhl (stránka
-    // vrací 404, hledání „kaštan“ nabízí jen usně 1,3 mm a silnější).
-    priceRange: { minCents: 19_500, maxCents: 22_500 },
+    // 10 dm² × 22,50 Kč (záloha pull-up 0,8–1,2 mm, Šijeme z kůže) až kus 50 × 25 cm za 240 Kč
+    // (Andexnite, hlazenice 1,0–1,2 mm); obojí ověřeno 18. 10. 2026. Hnědá 1–1,2 mm p4704 ze Šijeme
+    // z kůže je vyprodaná, kaštan 0,9–1 mm p4698 obchod stáhl dřív.
+    priceRange: { minCents: 22_500, maxCents: 24_000 },
     priceSource: 'verified',
-    priceNote: `${VERIFIED_NOTE} 10 dm² × 19,50–22,50 Kč/dm², bez poštovného (poštovné neověřené). Obchod může dodané množství upravit podle skutečného kusu a rozdíl promítne do ceny.`,
+    priceNote: `${VERIFIED_NOTE} Kus 50 × 25 cm za 240 Kč (Andexnite), záloha 10 dm² × 22,50 Kč/dm² (Šijeme z kůže), bez poštovného (poštovné neověřené).`,
     alsoUsedFor: [],
     examples: [
       {
-        title: 'Třísločiněná kůže hnědá – 3 různé síly',
-        shop: 'Šijeme z kůže',
-        url: 'https://www.sijemezkuze.cz/trislocinena-kuze-hneda-3-ruzne-sily-p4704-8013',
-        variant: '1–1,2 mm',
-        priceCents: 1_950,
-        priceNote: 'za dm² (16,12 Kč bez DPH)',
-        note: 'Náhrada za kaštan 0,9–1 mm (staženo z nabídky). Obchod ji uvádí jako pevnou, tuhou a tvarově stálou, vhodnou na peněženky a tvarování za mokra. P1 zkušebního i finálního kusu. Objednat 10 dm² a do poznámky napsat „Prosím v jednom kuse jako obdélník 20 × 50 cm, z pevné části kůže, co nejblíž 1,0 mm“. Tloušťku po dodání změřit a listy vygenerovat pro změřenou P1. Tlustší P1 snižuje hranici přepážek (P1 1,1 → nejvýš 0,80 mm, 1,2 → 0,60 mm): formulář listů ji ukáže. U P1 1,1 a víc pak čokoládová kozinka 0,7–0,9 mm na D2 nemusí projít.',
+        title: 'Hovězí kůže – třísločiněná hlazenice – hnědá – 1,0–1,2 mm',
+        shop: 'Andexnite',
+        url: 'https://andexnite.cz/produkt/hovezi-kuze-trislocinena-hlazenice-hneda-1-0-1-2mm/',
+        variant: '50x25cm',
+        priceCents: 24_000,
+        priceNote: 'za kus 50 × 25 cm (30 × 40 cm za 230 Kč)',
+        note: 'Náhrada za vyprodanou hnědou 1–1,2 mm ze Šijeme z kůže. Obchod ji uvádí jako třísločiněnou hlazenici pro sedlářské, řemenářské a brašnářské výrobky; pevnost a tuhost neuvádí, ověří je zkouška ohybu V12 a zkušební kus. P1 zkušebního i finálního kusu (2 × přířez 110 × 240 mm za sebou podél delší strany). Jiný rozměr obchod nabízí po telefonu (777 547 038): při objednávce požádat o kus co nejblíž 1,0 mm. Tloušťku po dodání změřit a listy vygenerovat pro změřenou P1. Tlustší P1 snižuje hranici přepážek (P1 1,1 → nejvýš 0,80 mm, 1,2 → 0,60 mm): formulář listů ji ukáže. U P1 1,1 a víc pak čokoládová kozinka 0,7–0,9 mm na D2 nemusí projít.',
         availability: 'in_stock',
-        checkedAt: '2026-10-09',
+        checkedAt: '2026-10-18',
       },
       {
         title: 'Pull Up Crazy horse třísločiněný 0,8–1,2 mm hnědý (varianta od 5 dm²)',
@@ -75,9 +75,9 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
         url: 'https://www.sijemezkuze.cz/pull-up-crazy-horse-trislocineny-0-8-1-2-mm-hnedy-top-kvalita-od-5-dm2-nebo-cely-kus-za-zvyhodnenou-cenu-p4777-8033',
         priceCents: 2_250,
         priceNote: 'za dm² (18,60 Kč bez DPH), minimální odběr 5 dm²',
-        note: 'Záloha, když 1–1,2 mm dojde. Obchod ji uvádí jako lehce změkčenou a voskovanou (pull-up, v ohybu světlá): pás ohybu a závěsu nemusí držet tvar, ověří to zkouška ohybu V12 a zkušební kus. Lepidlo a barvu hran nejdřív zkusit na odřezku. Tloušťku po dodání změřit.',
+        note: 'Záloha, když hlazenice z Andexnite dojde (10 dm² jako obdélník 20 × 50 cm). Obchod ji uvádí jako lehce změkčenou a voskovanou (pull-up, v ohybu světlá): pás ohybu a závěsu nemusí držet tvar, ověří to zkouška ohybu V12 a zkušební kus. Lepidlo a barvu hran nejdřív zkusit na odřezku. Tloušťku po dodání změřit.',
         availability: 'in_stock',
-        checkedAt: '2026-10-09',
+        checkedAt: '2026-10-18',
       },
     ],
     commonlyAtHome: false,
@@ -85,7 +85,7 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
       {
         id: 'veg-tan-leather-1mm-main',
         kind: 'photo',
-        caption: 'Obdélník třísločiněné usně 20 × 50 cm s vyznačenými přířezy P1',
+        caption: 'Kus třísločiněné usně 50 × 25 cm s vyznačenými přířezy P1',
         status: 'planned',
       },
     ],
@@ -105,7 +105,7 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
       {
         label: 'Kus',
         value:
-          'záloha A platí pro zkušební i finální kus: jako u usně 1,0 jeden kus 20 × 50 cm (2 přířezy P1 110 × 240 mm vedle sebe a z pruhu vedle nich odřezek 30 × 40 mm na zopakování V12); jeden P1 potřebuje kus aspoň 11 × 24 cm',
+          'záloha A platí pro zkušební i finální kus: jako u usně 1,0 jeden kus 50 × 25 cm (2 přířezy P1 110 × 240 mm za sebou podél delší strany a z pruhu vedle nich odřezek 30 × 40 mm na zopakování V12); jeden P1 potřebuje kus aspoň 11 × 24 cm',
       },
     ],
     cautions: [

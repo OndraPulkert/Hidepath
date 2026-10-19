@@ -96,7 +96,7 @@ describe('více projektů', () => {
       coinCardHolderProject.patternSheets!.sheets.filter((s) => !s.variant).length,
     );
   });
-  it('třetí projekt (peněženka Víčko) je v přepínači a tiskne 4 listy výchozího střihu', async () => {
+  it('peněženka Víčko (projekt 05) je v přepínači a tiskne 4 listy výchozího střihu', async () => {
     const repositories = createTestRepositories();
     await repositories.enrollments.upsert({
       ...enrollment(cardHolderProject.slug),
@@ -106,7 +106,7 @@ describe('více projektů', () => {
     expect(
       await screen.findByRole('button', { name: `Začít projekt ${lidWalletProject.title}` }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/Projekt 03 ·/)).toBeInTheDocument();
+    expect(screen.getByText(/Projekt 05 ·/)).toBeInTheDocument();
   });
 
   it('tisková stránka peněženky Víčko nabízí všechny 4 listy zaškrtnuté', async () => {

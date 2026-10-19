@@ -1,6 +1,6 @@
 # OBRAT — integrace do aplikace
 
-18. 10. 2026, R09. Projekt `obrat-wallet`, kód 05, obtížnost `development` („Vývojový — neověřený“, doba výroby se nezobrazuje).
+18. 10. 2026, R09. Projekt `obrat-wallet`, kód 03 (před páskem 04 a Víčkem 05), obtížnost `development` („Vývojový — neověřený“, doba výroby se nezobrazuje).
 
 - Lekce 1–10 v `src/content/projects/obrat-wallet/`: obsah, kůže a druky, nácvik, zkouška druku, papírový model, mincovní modul, tělo, sestavení, objímky, zkoušky.
 - Listy `telo` a `dily` z `scripts/obrat-wallet.ts` (registr `pattern-sheets.ts`), model `src/lib/geometry/obrat-wallet.ts`.

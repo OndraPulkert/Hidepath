@@ -735,10 +735,10 @@
           [-4, 10],
         ];
         const ROUGH = "M" + ROUGHPTS.map((p) => p.join(" ")).join(" L") + " Z";
-        // kus usně 20 × 50 cm (lekce 1): přířezy P1 110 × 240 obkreslené vedle sebe u jedné dlouhé hrany,
-        // vedle nich pruh asi 90 mm na odřezky. P1 leží uprostřed svého přířezu (4,5 mm od dlouhé hrany kusu),
+        // kus usně 50 × 25 cm (lekce 1): přířezy P1 110 × 240 obkreslené za sebou podél jedné dlouhé hrany,
+        // vedle nich pruh 140 mm na odřezky. P1 leží uprostřed svého přířezu (4,5 mm od dlouhé hrany kusu),
         // nad ním 20 mm rezervy, pod ním druhý přířez P1 (zůstává celý).
-        const LEA = { x: 3.5, y: -2.17, w: 200, h: 500 };
+        const LEA = { x: 3.5, y: -2.17, w: 250, h: 500 };
         // páska jen na okrajích listu, mimo čáru řezu; vlevo list přečnívá přes hranu kusu, tam páska není
         const TAPES = [
           [58.5, 10, 90],

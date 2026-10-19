@@ -46,9 +46,9 @@ export {
 export const projects: readonly ProjectDefinition[] = [
   cardHolderProject,
   coinCardHolderProject,
-  lidWalletProject,
-  beltProject,
   obratWalletProject,
+  beltProject,
+  lidWalletProject,
 ];
 
 /**

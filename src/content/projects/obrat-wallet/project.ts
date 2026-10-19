@@ -83,7 +83,7 @@ export const lessons: readonly LessonDefinition[] = [
     phaseSlug: 'workspace',
     estimatedMinutes: 20,
     goal: 'Mám jednu useň 1,2 mm a tři druky a znám jejich míry.',
-    materials: ['Kus třísločiněné usně 1,2 mm, nejlépe 220 × 300 mm, a odřezky téže kůže.'],
+    materials: ['Kus třísločiněné usně 1,2 mm A3 (300 × 420 mm).'],
     requiredEquipment: ['digital-caliper'],
     recommendedEquipment: [],
     prerequisiteLessons: ['01-design'],
@@ -91,7 +91,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'leather',
         title: 'Jedna kůže na všechno',
-        body: 'Všechny díly řežte z jedné usně 1,2 mm. Na peněženku stačí kus 220 × 300 mm (na A4 se díly vejdou jen těsně), na zkoušky odřezky stejné kůže. Kůži neztenčujte a nenamáčejte.',
+        body: 'Všechny díly řežte z jedné usně 1,2 mm. Kupte kus A3 (300 × 420 mm): díly zaberou 220 × 300 mm, ze zbytku jsou zkoušky a druhý P a T3, kdyby zkouška modulu v lekci 6 nevyšla. Na A4 se díly vejdou jen těsně a na nic dalšího nezbude. Kůži neztenčujte a nenamáčejte.',
         media: [],
       },
       {
@@ -428,9 +428,27 @@ export const lessons: readonly LessonDefinition[] = [
         ],
       },
       {
+        id: 'a-step',
+        title: 'Zkouška místa pro A',
+        body: 'Mince 50 | 20 + 10 nechte v dutinách a B zavřené. Modul položte víčkem na desku. Pás v místě A (asi 13 mm nad dnem a 14 mm od volného konce) přitiskněte prstem k desce a pusťte. Musí dosednout lehkým tlakem. Když dosedne jen silou nebo se hned zvedá, A by se mohl sám rozepínat.',
+        media: [],
+        records: [
+          {
+            kind: 'choice',
+            id: 'obrat-06-a-step',
+            label: 'Pás v místě A',
+            options: [
+              { value: 'light', label: 'Dosedne lehkým tlakem' },
+              { value: 'force', label: 'Dosedne jen silou' },
+              { value: 'lifts', label: 'Hned se zvedá' },
+            ],
+          },
+        ],
+      },
+      {
         id: 'fail',
         title: 'Když zkouška nevyjde',
-        body: 'Modul neopravujte další vrstvou ani lepidlem. Zapište, kde mince vyklouzla nebo co se odlepilo, a dál nepokračujte. Střih se upraví a modul se ušije znovu.',
+        body: 'Modul neopravujte další vrstvou ani lepidlem. Zapište, kde mince vyklouzla, co se odlepilo nebo že pás v místě A nedosedne lehce, a dál nepokračujte. Střih se upraví a modul se ušije znovu.',
         media: [],
       },
     ],
@@ -694,7 +712,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'check',
         title: 'Zkontrolujte zapínání',
-        body: 'Zapněte všechny tři druky. Otevřete jen C: pás zůstane zavřený. Otevřete jen A: klopa zůstane zavřená. Klopa se nesmí opírat o pás.',
+        body: 'Zapněte všechny tři druky. Otevřete jen C: pás zůstane zavřený. Otevřete jen A: klopa zůstane zavřená. Klopa se nesmí opírat o pás. S mincemi 50 | 20 + 10 peněženku 30× stiskněte v dlani a ohněte jako v kapse: A ani B se nesmí samo rozepnout.',
         media: [],
         animationLinks: [animationLink('obratOverview')],
       },
@@ -776,7 +794,7 @@ export const lessons: readonly LessonDefinition[] = [
 
 export const obratWalletProject: ProjectDefinition = {
   slug: 'obrat-wallet',
-  code: '05',
+  code: '03',
   title: 'Peněženka OBRAT',
   summary:
     'Kompaktní peněženka se šikmou klopou: karty a bankovky pod druhem C, mince v bočním pásu pod A a B.',
@@ -821,7 +839,7 @@ export const obratWalletProject: ProjectDefinition = {
       equipmentSlug: 'veg-tan-leather',
       priority: 'required',
       reason: 'Jediný materiál pro všechny díly.',
-      specification: 'Třísločiněná useň 1,2 mm, kus aspoň A4 (210 × 297 mm) a odřezky na zkoušky.',
+      specification: 'Třísločiněná useň 1,2 mm, kus A3 (300 × 420 mm), nejméně 220 × 300 mm.',
     },
     {
       equipmentSlug: 'snap-fastener',
