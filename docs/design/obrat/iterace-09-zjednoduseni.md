@@ -29,7 +29,7 @@ Kontrola po prvním návrhu R09 zamítla B uprostřed na dělicím švu: lepený
 | T3 předek mincí | 95,5 × 39 | líc          | Dutiny 36 + 36 mm mezi švy, jazýček s paticí B (12; 59)                                           |
 | K kryt          | Ø 13, 2 × | rub          | Přes patice A a C uvnitř kapsy                                                                    |
 
-Souřadnice jsou v zavřeném čelním pohledu (x zleva, y od ohybu klopy). Lepidlo pod T3 jen v pásech 4 mm od okraje (0,5 mm za šev) a na celém jazýčku, pod dělicím švem ne. Pás se ohýbá na kraji šrafy (x 102); víčko i T3 končí před ní. Kontroly v modelu: rezervy druků od hran, švů, výkusu a šikmé klopy; příruba B pod jazýčkem; víčko kryje objímku B; nic nezasahuje do ohybu závěsu; zkušební skladby mincí projdou obálkou; díly se vejdou na A4.
+Rohy: klopa R8, tělo R6, víčko R4, T3 R2 (u ústí R1), zářez P R1 a R1,5; na listech jsou popsané, šablona rohu klopy R8 je na listu 1 (karton, lekce 9). Souřadnice jsou v zavřeném čelním pohledu (x zleva, y od ohybu klopy). Lepidlo pod T3 jen v pásech 4 mm od okraje (0,5 mm za šev) a na celém jazýčku, pod dělicím švem ne. Pás se ohýbá na kraji šrafy (x 102); víčko i T3 končí před ní. Kontroly v modelu: rezervy druků od hran, švů, výkusu a šikmé klopy; příruba B pod jazýčkem; víčko kryje objímku B; nic nezasahuje do ohybu závěsu; zkušební skladby mincí projdou obálkou; díly se vejdou na A4.
 
 ## Pořadí výroby (vše naplocho)
 

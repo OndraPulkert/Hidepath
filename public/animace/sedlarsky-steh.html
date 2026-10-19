@@ -110,7 +110,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 <header>
 <a class="backlink" href="/" data-back>← Zpět do lekce</a>
 <h1>Sedlářský steh</h1>
-<p class="lead">Dvě jehly, jedna nit, každým otvorem proti sobě. Šije se v projektu 01 (lekce 4 a 6), 02 (lekce 4, 6 a 7) a 03, kde se mu říká sedlový steh (lekce 6, 8, 9, 11 a 12). Kolik nitě odměřit: <a href="/animace/delka-nite.html">Kolik nitě na šev</a>.</p>
+<p class="lead">Dvě jehly, jedna nit, každým otvorem proti sobě. Šije se v projektu 01 (lekce 3 a 5), 02 (lekce 4, 6 a 7) a 05, kde se mu říká sedlový steh (lekce 6, 8, 9, 11 a 12). Kolik nitě odměřit: <a href="/animace/delka-nite.html">Kolik nitě na šev</a>.</p>
 </header>
 
 <section class="card" aria-label="Animace postupu">
@@ -133,10 +133,10 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 <section class="card diff" aria-label="Rozdíly mezi projekty">
 <h2>Co se mezi projekty liší</h2>
 <ul>
-<li><b>Nit:</b> projekt 01 asi 60 cm na cvičné tvary (lekce 4), asi 1 m na pouzdro (lekce 6). Projekt 02 asi 0,8 m na každý šev. Projekt 05 4 × délka švu + 25–30 cm, boky S4 a S5 (tři vrstvy) 5 × (lekce 9).</li>
-<li><b>Zpětné stehy:</b> všude dva na začátku i dva na konci. Výjimka: odřezek v lekci 4 projektu 01 začíná bez nich. Projekt 05, boky S4 a S5: steh 60–64 navíc zdvojte (jak, ověřte na zkušebním kuse).</li>
+<li><b>Nit:</b> projekt 01 asi 60 cm na cvičné tvary (lekce 3), asi 1 m na pouzdro (lekce 5). Projekt 02 asi 0,8 m na každý šev. Projekt 05 4 × délka švu + 25–30 cm, boky S4 a S5 (tři vrstvy) 5 × (lekce 9).</li>
+<li><b>Zpětné stehy:</b> všude dva na začátku i dva na konci. Výjimka: cvičné tvary v lekci 3 projektu 01 začínají bez nich. Projekt 05, boky S4 a S5: steh 60–64 navíc zdvojte (jak, ověřte na zkušebním kuse).</li>
 <li><b>Rub:</b> bývá méně pravidelný než líc, to je normální. Stehy ale musí být stejně utažené, v jedné řadě a bez smyček. Křivé otvory na rubu znamenají, že vidličky nebyly kolmo.</li>
-<li><b>Konce nitě:</b> odstřihnout těsně u kůže, nebo nechat 2 mm a zatavit. Popisuje to jen projekt 01 (lekce 4 a 6).</li>
+<li><b>Konce nitě:</b> odstřihnout těsně u kůže, nebo nechat 2 mm a zatavit. Popisuje to jen projekt 01 (lekce 3 a 5).</li>
 <li><b>Vrstvy a rozteč:</b> projekt 01 dvě vrstvy, rozteč 3,85–4 mm. Projekt 02 kapsa dvě vrstvy, odřezek a dno tři, rozteč 4 mm. Projekt 05 rozteč přesně 4 mm, části švů přes tři vrstvy.</li>
 <li><b>Jehly:</b> tupé nebo poloostré sedlářské (např. John James 004). Projekty 01 a 02 4 kusy (dvě do zálohy), projekt 05 2 kusy.</li>
 </ul>
@@ -326,7 +326,7 @@ const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,
 const FWD=Array.from({length:NV-1},(_,i)=>[i,i+1]);   // tahy 0→1 … 6→7
 
 // ---------- A: nit a jehly ----------
-add('A','Odměřte nit','Na nácvik (lekce 1) a cvičné tvary (lekce 4) ustřihněte asi 60 cm voskované nitě 0,6 mm, na pouzdro (lekce 6) asi 1 m. Pravidlo: 4 × délka švu + 25–30 cm, přes tři vrstvy 5 ×.',7600,t=>{
+add('A','Odměřte nit','Na nácvik (lekce 1) a cvičné tvary (lekce 3) ustřihněte asi 60 cm voskované nitě 0,6 mm, na pouzdro (lekce 5) asi 1 m. Pravidlo: 4 × délka švu + 25–30 cm, přes tři vrstvy 5 ×.',7600,t=>{
   const k=.075, x0=6;   // 1 cm = 0,75 j. (obě řady ve stejném měřítku)
   let s='';
   const row=(y,seamCm,lessonCm,title,lessonTxt,p)=>{
@@ -454,7 +454,7 @@ add('B','Nebo ho upněte svěrkou','Pohodlnější je sevřít díl mezi dvě d�
 },null,'Tip: obrázek ukazuje jedno z možných uspořádání.');
 
 // ---------- C: začátek ----------
-add('C','Vyrovnejte nit v prvním otvoru','Jehlu protáhněte prvním otvorem tak, aby na obou stranách zůstala stejná délka nitě. Máte jednu jehlu vpředu a jednu vzadu. Na odřezku začněte bez zpětných stehů; na pouzdře v lekci 6 je přidáte i na začátek (krok E2).',9000,t=>{
+add('C','Vyrovnejte nit v prvním otvoru','Jehlu protáhněte prvním otvorem tak, aby na obou stranách zůstala stejná délka nitě. Máte jednu jehlu vpředu a jednu vzadu. Na odřezku začněte bez zpětných stehů; na pouzdře v lekci 5 je přidáte i na začátek (krok E2).',9000,t=>{
   const p=es(t,.05,.55), eq=es(t,.6,.9);
   let el=piece('lic',{line:true});
   let sc=secBase();
@@ -564,12 +564,12 @@ add('E','Na konci prošijte zpět dva otvory','Na konci řady prošijte zpět dv
   s+=viewTag('POHLED NA LÍC · konec řady');
   if(n>=8||fr>.6) s+=pill((HX(5)+HX(7))/2,SEAM-4.5,'zpět 2 otvory','ta','middle');
   s+=pill(4,87,n>=9?'konec zpevněný 2 zpětnými stehy':'konec řady → zpět','t');
-  let ib=notes([['projekt 01,','t'],['odřezek (L4):','t'],['2 zpět na konci','ts'],['','ts'],['ostatní švy:','t'],['2 zpět na začátku','ts'],['i na konci','ts']],16,5.2);
+  let ib=notes([['projekt 01,','t'],['tvary (L3):','t'],['2 zpět na konci','ts'],['','ts'],['ostatní švy:','t'],['2 zpět na začátku','ts'],['i na konci','ts']],16,5.2);
   return s+inset('ZPĚTNÉ STEHY',ib);
 },{v:'LÍC',sub:'konec řady'},'Tip: zpět šijte stejným rytmem, jen opačným směrem. Zpětné stehy leží přes hotové.');
 
 const STARTM=[[2,1],[1,0],...FWD];
-add('E','Zajistěte začátek i konec švu','Pouzdro (lekce 6): nit vyrovnejte ve třetím otvoru od horního konce, ušijte dva stehy zpět k prvnímu otvoru a šijte dopředu přes ně, souvisle bok, spodek, bok. Otvory v rozích prošijte jako všechny ostatní. Na konci udělejte dva zpětné stehy. Projekty 02 a 05: dva zpětné stehy na začátku i na konci každého švu. Projekt 05, boky S4 a S5: steh 60–64 navíc zdvojte (jak, ověřte na zkušebním kuse).',13000,t=>{
+add('E','Zajistěte začátek i konec švu','Pouzdro (lekce 5): nit vyrovnejte ve třetím otvoru od horního konce, ušijte dva stehy zpět k prvnímu otvoru a šijte dopředu přes ně, souvisle bok, spodek, bok. Otvory v rozích prošijte jako všechny ostatní. Na konci udělejte dva zpětné stehy. Projekty 02 a 05: dva zpětné stehy na začátku i na konci každého švu. Projekt 05, boky S4 a S5: steh 60–64 navíc zdvojte (jak, ověřte na zkušebním kuse).',13000,t=>{
   const v=es(t,.04,.92)*5, n=Math.floor(v), fr=v-n;
   let s=seamScene(STARTM,Math.min(n,5),n<5?Math.max(fr,.001):0,{hiBack:[0,1]});
   s+=viewTag('POHLED NA LÍC · začátek švu');
@@ -670,12 +670,12 @@ add('G','Kontrola: rovná řada na rubu','Otočte díl. Rub bývá méně pravid
   return clipMain(s)+inset('RUB',ib);
 },{v:'RUB',sub:'kontrola'},null);
 
-add('G','Kontrola: slepené díly a šev','Díly jsou slepené a hrany lícují bez posunu. Stehy na líci jsou stejně skloněné a stejně utažené, žádný netvoří smyčku. Konec je ukončený zpětnými stehy a nit odstřižená na rubu. V projektu 01 pak totéž na pouzdře v lekci 6.',9000,t=>{
+add('G','Kontrola: slepené díly a šev','Díly jsou slepené a hrany lícují bez posunu. Stehy na líci jsou stejně skloněné a stejně utažené, žádný netvoří smyčku. Konec je ukončený zpětnými stehy a nit odstřižená na rubu. V projektu 01 pak totéž na pouzdře v lekci 5.',9000,t=>{
   let s=clipMain(piece('lic',{leftEnd:true})+(()=>{let r='';for(let j=0;j<7;j++){const [a,b]=FWD[j];r+=stitchLic(a,b,j%2)}return r})())+viewTag('LÍC · hotový šev');
   s+=`<g opacity="${f(seg(t,.1,.2))}">${pill(42,SEAM+14,'stejný sklon · stejné utažení','tok','middle')}</g>`;
   const ck=[['slepené, hrany',.25,1],['lícují',.25,0],['stejný sklon',.4,1],['stejné utažení,',.55,1],['bez smyčky',.55,0],['konec: zpětné',.7,1],['stehy, na rubu',.7,0],['nit odstřižená',.7,0]];
   let ib='';ck.forEach(([tx,at,tk],i)=>{const o=seg(t,at,at+.08);ib+=`<g opacity="${f(o)}">${tk?tick(91.5,16+i*5.6):''}${lbl(96,17.5+i*5.6,tx,'t')}</g>`});
-  ib+=`<g opacity="${f(seg(t,.86,.96))}">${notes([['projekt 01, dál:','t'],['lekce 6 pouzdro']],66,5.2)}</g>`;
+  ib+=`<g opacity="${f(seg(t,.86,.96))}">${notes([['projekt 01, dál:','t'],['lekce 5 pouzdro']],66,5.2)}</g>`;
   s+=inset('KONTROLA',ib);
   if(t>.95) s+=`<circle cx="42" cy="66" r="5.5" fill="var(--panel)" stroke="var(--ok)" stroke-width=".7"/>`+tick(42,66.5,1.3);
   return s;

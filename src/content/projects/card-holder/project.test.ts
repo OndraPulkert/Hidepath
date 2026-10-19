@@ -9,77 +9,77 @@ describe('obsah – pouzdro na karty: steh', () => {
     cardHolderProject.lessons.find((l) => l.order === order)!.steps.find((s) => s.id === id)!.body;
 
   it('konce nitě: bez zatavení těsně u kůže, k zatavení asi 2 mm', () => {
-    expect(step(4, 'finish-stitch')).toContain(
+    expect(step(3, 'finish-stitch')).toContain(
       'Když konce nezatavujete, odstřihněte je těsně u kůže',
     );
-    expect(step(4, 'finish-stitch')).toContain('vyčnívaly asi 2 mm');
-    expect(step(6, 'stitch')).toContain('nechte asi 2 mm dlouhé a zatavte');
+    expect(step(3, 'finish-stitch')).toContain('vyčnívaly asi 2 mm');
+    expect(step(5, 'stitch')).toContain('nechte asi 2 mm dlouhé a zatavte');
   });
 
   it('spodní roh: řada po zaoblení 3,5 mm od hrany, ne v průsečíku rovných linií', () => {
-    expect(step(6, 'punch-sides')).toContain(
+    expect(step(5, 'punch-sides')).toContain(
       'do horního kroužku na linii stehu, 6 mm pod horní hranou kapsy',
     );
-    expect(step(6, 'punch-sides')).toContain('nejblíž hornímu kroužku na tomto boku');
-    expect(step(6, 'punch-sides')).toContain('i tam 3,5 mm od hrany, ne do průsečíku');
-    expect(step(6, 'punch-sides')).toContain('(ověřte na odřezku)');
+    expect(step(5, 'punch-sides')).toContain('nejblíž hornímu kroužku na tomto boku');
+    expect(step(5, 'punch-sides')).toContain('i tam 3,5 mm od hrany, ne do průsečíku');
+    expect(step(5, 'punch-sides')).toContain('(ověřte na odřezku)');
   });
 
   it('vpichy jen tam, kde zmizí: kroužky pásu pod kapsou; výřez a linie stehu bez vpichů', () => {
-    const l5 = cardHolderProject.lessons.find((l) => l.order === 5)!;
-    expect(l5.steps.map((s) => s.id)).not.toContain('prick-marks');
-    expect(l5.checkpoints.map((c) => c.slug)).not.toContain('marks-transferred');
-    expect(step(5, 'cut-parts')).toContain('z každé strany jen ke krátké čárce nad koncem výřezu');
-    expect(step(5, 'cut-parts')).toContain('Nic nepropichujte');
-    expect(step(5, 'thumb-cutout')).toContain(
+    const l4 = cardHolderProject.lessons.find((l) => l.order === 4)!;
+    expect(l4.steps.map((s) => s.id)).not.toContain('prick-marks');
+    expect(l4.checkpoints.map((c) => c.slug)).not.toContain('marks-transferred');
+    expect(step(4, 'cut-parts')).toContain('z každé strany jen ke krátké čárce nad koncem výřezu');
+    expect(step(4, 'cut-parts')).toContain('Nic nepropichujte');
+    expect(step(4, 'thumb-cutout')).toContain(
       'kde prostřední čárka sahá na oblouk, 12 mm pod horní hranou',
     );
-    for (const s of l5.steps) expect(s.body, s.id).not.toMatch(/propíchn/);
-    expect(step(6, 'mark-stitch-lines')).toContain('nic nerýsujte ani nepropichujte');
-    expect(step(6, 'punch-sides')).toContain('skrz přilepený papír');
-    expect(step(6, 'mark-glue-area')).toContain('propíchněte čtyři kroužky na tečkované čáře pásu');
-    expect(step(6, 'mark-glue-area')).toContain('kapsa je zakryje');
-    const l6 = cardHolderProject.lessons.find((l) => l.order === 6)!.steps.map((s) => s.id);
-    expect(l6.indexOf('mark-stitch-lines')).toBe(l6.indexOf('glue-parts') + 1);
-    expect(l6.indexOf('punch-sides')).toBe(l6.indexOf('mark-stitch-lines') + 1);
+    for (const s of l4.steps) expect(s.body, s.id).not.toMatch(/propíchn/);
+    expect(step(5, 'mark-stitch-lines')).toContain('nic nerýsujte ani nepropichujte');
+    expect(step(5, 'punch-sides')).toContain('skrz přilepený papír');
+    expect(step(5, 'mark-glue-area')).toContain('propíchněte čtyři kroužky na tečkované čáře pásu');
+    expect(step(5, 'mark-glue-area')).toContain('kapsa je zakryje');
+    const l5 = cardHolderProject.lessons.find((l) => l.order === 5)!.steps.map((s) => s.id);
+    expect(l5.indexOf('mark-stitch-lines')).toBe(l5.indexOf('glue-parts') + 1);
+    expect(l5.indexOf('punch-sides')).toBe(l5.indexOf('mark-stitch-lines') + 1);
     const back = cardHolderProject.template!.pieces.find((p) => p.id === 'back')!;
     expect(back.heightMark).toEqual({ fromBottomMm: 56, lengthMm: 8 });
   });
 
-  it('lepený pás 5 mm jako v lekci 4: kapsa 100 mm nechá kartě 85,6 mm volnou šířku', () => {
+  it('lepený pás 5 mm jako v lekci 3: kapsa 100 mm nechá kartě 85,6 mm volnou šířku', () => {
     const front = cardHolderProject.template!.pieces.find((p) => p.id === 'front')!;
     const band = cardHolderProject.template!.glueBandMm!;
-    expect(step(6, 'mark-glue-area')).toContain(`pás asi ${band} mm`);
-    expect(step(4, 'glue')).toContain(`pás lepidla asi ${band} mm`);
+    expect(step(5, 'mark-glue-area')).toContain(`pás asi ${band} mm`);
+    expect(step(3, 'glue')).toContain(`pás lepidla asi ${band} mm`);
     expect(front.widthMm - 2 * band).toBeGreaterThan(85.6);
-    expect(step(6, 'mark-glue-area')).not.toMatch(/\b8 mm/);
+    expect(step(5, 'mark-glue-area')).not.toMatch(/\b8 mm/);
     // Schéma: karta leží na pásu 5 mm → horní hrana 59 mm, ve výřezu (56 − 12) odkryje 15 mm.
     expect(exposedCardHeightMm(front.heightMm, 54 + band, front.thumbCutout)).toBe(15);
     // Páska nesmí vést k zdrsnění rohu nad kapsou (R6): u boků končí na horních kroužcích 56 − 6 = 50 mm.
     expect(front.heightMm - front.cornerRadiusMm).toBe(50);
-    expect(step(6, 'mark-glue-area')).toContain('nahoře na bocích, 50 mm od spodku');
-    expect(step(6, 'mark-glue-area')).toContain('těsně nad horní kroužky');
-    expect(step(6, 'mark-glue-area')).not.toContain('těsně nad vpichy maskovací pásku');
+    expect(step(5, 'mark-glue-area')).toContain('nahoře na bocích, 50 mm od spodku');
+    expect(step(5, 'mark-glue-area')).toContain('těsně nad horní kroužky');
+    expect(step(5, 'mark-glue-area')).not.toContain('těsně nad vpichy maskovací pásku');
   });
 
   it('výřez na palec: řezy začínají a končí na čáře, brousí se k rohům mezi nimi, hloubka 12 mm', () => {
-    expect(step(5, 'thumb-cutout')).toContain('každý začněte i skončete přesně na čáře');
-    expect(step(5, 'thumb-cutout')).not.toContain('kousek vedle čáry');
-    expect(step(5, 'peel-template')).toContain('uprostřed přes roh ve dně 12 mm hluboko');
+    expect(step(4, 'thumb-cutout')).toContain('každý začněte i skončete přesně na čáře');
+    expect(step(4, 'thumb-cutout')).not.toContain('kousek vedle čáry');
+    expect(step(4, 'peel-template')).toContain('uprostřed přes roh ve dně 12 mm hluboko');
     const media = cardHolderProject.lessons
-      .find((l) => l.order === 5)!
+      .find((l) => l.order === 4)!
       .steps.find((s) => s.id === 'thumb-cutout')!.media;
     expect(media[0]!.caption).not.toContain('narýsovaným');
   });
 
-  it('cvičení v lekci 2 řeže výřez stejně jako lekce 5 (krátké rovné řezy od čáry k čáře)', () => {
+  it('cvičení v lekci 2 řeže výřez stejně jako lekce 4 (krátké rovné řezy od čáry k čáře)', () => {
     expect(step(2, 'practice-template')).toContain('každý začněte i skončete přesně na čáře');
     expect(step(2, 'practice-template')).not.toContain('roh a výřez pomalu bez pravítka');
   });
 
   it('šití pouzdra odkazuje na zakončení i zatavení konců (E2, F2, F3)', () => {
     const stitch = cardHolderProject.lessons
-      .find((l) => l.order === 6)!
+      .find((l) => l.order === 5)!
       .steps.find((s) => s.id === 'stitch')!;
     expect(stitch.animationLinks!.map((l) => l.href)).toEqual([
       '/animace/sedlarsky-steh.html#E2',
@@ -89,8 +89,8 @@ describe('obsah – pouzdro na karty: steh', () => {
   });
 
   it('rub: méně pravidelný je normální, ale utažený, v řadě a bez smyček', () => {
-    expect(step(4, 'compare')).toContain('stejně utažené, v jedné řadě a bez smyček');
-    expect(step(4, 'compare')).toContain('vidličky nebyly při děrování kolmo (lekce 3)');
+    expect(step(3, 'compare')).toContain('stejně utažené, v jedné řadě a bez smyček');
+    expect(step(3, 'compare')).toContain('vidličky nebyly při děrování kolmo');
   });
 });
 
@@ -102,10 +102,10 @@ describe('obsah – pouzdro na karty: časovače, zápisník a „Připravte si�
     const withWaits = cardHolderProject.lessons.flatMap((l) =>
       l.steps.filter((s) => s.waits).map((s) => `${l.order}:${s.id}`),
     );
-    expect(withWaits).toEqual(['4:glue', '6:glue-parts']);
+    expect(withWaits).toEqual(['3:glue', '5:glue-parts']);
     for (const [order, id] of [
-      [4, 'glue'],
-      [6, 'glue-parts'],
+      [3, 'glue'],
+      [5, 'glue-parts'],
     ] as const) {
       expect(step(order, id).body).toContain('odvětrat podle návodu');
       expect(step(order, id).waits).toEqual([
@@ -129,8 +129,8 @@ describe('obsah – pouzdro na karty: časovače, zápisník a „Připravte si�
       '1:check-chisels:chisel-spacing',
       '2:practice-template:practice-sheet-calibration',
       '2:practice-template:tape-mark',
-      '4:glue:roughened-grip',
-      '5:print-check:template-calibration',
+      '3:glue:roughened-grip',
+      '4:print-check:template-calibration',
     ]);
     const spacing = step(1, 'check-chisels').records![0]!;
     // Cíl 3,85–4 mm plus tolerance měření pravítkem (±0,5 mm / 5 mezer ≈ ±0,1 mm): vidlička 4 mm
@@ -140,42 +140,42 @@ describe('obsah – pouzdro na karty: časovače, zápisník a „Připravte si�
     expect(step(1, 'check-chisels').body).toContain('nejdelší vidličky');
     for (const [order, id] of [
       [2, 'practice-template'],
-      [5, 'print-check'],
+      [4, 'print-check'],
     ] as const) {
       expect(step(order, id).body).toContain('musí mít přesně 50 mm');
       expect(step(order, id).records![0]).toMatchObject({ target: { min: 50, max: 50 } });
     }
   });
 
-  it('páska z lekce 2 se připomene tam, kde jde na líc (lekce 6) i kde drží šablonu (lekce 5)', () => {
-    expect(step(6, 'mark-glue-area').recalls).toEqual([
+  it('páska z lekce 2 se připomene tam, kde jde na líc (lekce 5) i kde drží šablonu (lekce 4)', () => {
+    expect(step(5, 'mark-glue-area').recalls).toEqual([
       { fieldId: 'tape-mark', label: 'Páska v lekci 2' },
     ]);
-    expect(step(6, 'mark-glue-area').body).toContain(
+    expect(step(5, 'mark-glue-area').body).toContain(
       'Použijte pásku, která v lekci 2 nenechala na líci stopu',
     );
-    expect(step(5, 'transfer').body).toContain(
+    expect(step(4, 'transfer').body).toContain(
       'Použijte pásku, která v lekci 2 nenechala na líci stopu',
     );
-    expect(step(5, 'transfer').recalls).toEqual([
+    expect(step(4, 'transfer').recalls).toEqual([
       { fieldId: 'tape-mark', label: 'Páska v lekci 2' },
     ]);
   });
 
-  it('tisk: cvičná šablona v lekci 2, šablona v lekci 5, v lekci 6 jen když chybí papírový díl', () => {
+  it('tisk: cvičná šablona v lekci 2, šablona v lekci 4, v lekci 5 jen když chybí papírový díl', () => {
     expect(lesson(2).prints).toMatchObject([
       { source: 'practice-sheets', sheetId: 'cvicna-sablona', copies: 1 },
     ]);
-    expect(lesson(5).prints).toMatchObject([{ source: 'template', copies: 1 }]);
-    expect(lesson(5).prints![0]!.paper).toContain('matný papír 120 g');
-    expect(lesson(6).prints).toMatchObject([
-      { source: 'template', copies: 1, condition: 'nemáte papírové díly z lekce 5' },
+    expect(lesson(4).prints).toMatchObject([{ source: 'template', copies: 1 }]);
+    expect(lesson(4).prints![0]!.paper).toContain('matný papír 120 g');
+    expect(lesson(5).prints).toMatchObject([
+      { source: 'template', copies: 1, condition: 'nemáte papírové díly z lekce 4' },
     ]);
-    expect(step(6, 'mark-glue-area').body).toContain('nebo novou šablonu vystřiženou po plné čáře');
-    expect(step(6, 'mark-stitch-lines').body).toContain(
+    expect(step(5, 'mark-glue-area').body).toContain('nebo novou šablonu vystřiženou po plné čáře');
+    expect(step(5, 'mark-stitch-lines').body).toContain(
       'nebo novou šablonu vystřiženou po plné čáře',
     );
-    expect(step(6, 'mark-stitch-lines').printLink).toBe('template');
+    expect(step(5, 'mark-stitch-lines').printLink).toBe('template');
     for (const l of cardHolderProject.lessons) {
       expect(
         l.materials.some((m) => m.includes('vytištěn')),
@@ -184,20 +184,20 @@ describe('obsah – pouzdro na karty: časovače, zápisník a „Připravte si�
     }
   });
 
-  it('z předchozích lekcí: proužek do lekce 4, díly a papírový zadní díl do lekce 6', () => {
-    expect(lesson(4).requires!.map((r) => [r.id, r.fromLesson])).toEqual([
+  it('z předchozích lekcí: proužek do lekce 3, díly a papírový zadní díl do lekce 5', () => {
+    expect(lesson(3).requires!.map((r) => [r.id, r.fromLesson])).toEqual([
       ['practice-shapes', '02-straight-cut'],
       ['practice-strip', '02-straight-cut'],
     ]);
-    expect(step(4, 'glue').body).toContain('přilepte na něj kus proužku z lekce 2');
-    expect(lesson(6).requires!.map((r) => [r.id, r.fromLesson])).toEqual([
+    expect(step(3, 'glue').body).toContain('přilepte na něj kus proužku z lekce 2');
+    expect(lesson(5).requires!.map((r) => [r.id, r.fromLesson])).toEqual([
       ['leather-parts', '05-transfer-and-cut'],
       ['paper-back', '05-transfer-and-cut'],
     ]);
-    expect(step(5, 'peel-template').body).toContain('si schovejte na lekci 6');
-    expect(step(5, 'transfer').body).not.toContain('zničí');
-    expect(step(5, 'transfer').body).toContain('budete je potřebovat v lekci 6');
-    expect(lesson(6).materials).not.toContain('díly z lekce 5');
+    expect(step(4, 'peel-template').body).toContain('si schovejte na lekci 5');
+    expect(step(4, 'transfer').body).not.toContain('zničí');
+    expect(step(4, 'transfer').body).toContain('budete je potřebovat v lekci 5');
+    expect(lesson(5).materials).not.toContain('díly z lekce 4');
   });
 });
 
@@ -247,7 +247,7 @@ describe('obsah – pouzdro na karty: nákupní plán „Co koupit“', () => {
     expect(plan.skipped).toEqual([]);
   });
 
-  it('kůže: 3× A5 téže kůže 1,2 mm, jedna na pouzdro a dvě na trénink lekcí 1–4', () => {
+  it('kůže: 3× A5 téže kůže 1,2 mm, jedna na pouzdro a dvě na trénink lekcí 1–3', () => {
     const leather = plan.lines.filter((l) => l.equipmentSlug === 'veg-tan-leather');
     expect(leather.map((l) => [l.variant, l.quantity])).toEqual([['A5 (21 × 15 cm)', 3]]);
     expect(new Set(leather.map((l) => l.url)).size).toBe(1);
@@ -303,19 +303,19 @@ describe('obsah – pouzdro na karty: vyrobitelnost', () => {
   const step = (order: number, id: string) => lesson(order).steps.find((s) => s.id === id)!.body;
 
   it('horní hrana kapsy a výřez se dokončí před lepením, po sešití se jich nikdo nedotkne', () => {
-    const l5 = lesson(5).steps.map((s) => s.id);
-    expect(l5.indexOf('pocket-top-edge')).toBeGreaterThan(l5.indexOf('peel-template'));
-    expect(step(6, 'edges')).toContain('Horní hranu kapsy a výřez máte hotové z lekce 5');
-    expect(step(6, 'edges')).not.toContain('oblouk výřezu');
+    const l4 = lesson(4).steps.map((s) => s.id);
+    expect(l4.indexOf('pocket-top-edge')).toBeGreaterThan(l4.indexOf('peel-template'));
+    expect(step(5, 'edges')).toContain('Horní hranu kapsy a výřez máte hotové z lekce 4');
+    expect(step(5, 'edges')).not.toContain('oblouk výřezu');
   });
 
   it('kontaktní lepidlo: pás vyznačený i na rubu kapsy, přikládá se od spodní hrany', () => {
-    expect(step(6, 'glue-parts')).toContain('Stejný pás vyznačte na rubu kapsy');
-    expect(step(6, 'glue-parts')).toContain('nejdřív přiložte spodní hranu');
+    expect(step(5, 'glue-parts')).toContain('Stejný pás vyznačte na rubu kapsy');
+    expect(step(5, 'glue-parts')).toContain('nejdřív přiložte spodní hranu');
   });
 
   it('maskovací páska je nutná tam, kde drží papír na líci a ohraničí zdrsnění', () => {
-    for (const order of [2, 5, 6])
+    for (const order of [2, 4, 5])
       expect(lesson(order).requiredEquipment).toContain('masking-tape');
     const tape = cardHolderProject.equipment.find((e) => e.equipmentSlug === 'masking-tape')!;
     expect(tape.priority).toBe('required');
@@ -323,11 +323,11 @@ describe('obsah – pouzdro na karty: vyrobitelnost', () => {
 
   it('nesliboval víc karet, než lekce zkouší', () => {
     expect(cardHolderProject.summary).not.toMatch(/šest|4–6/);
-    expect(step(6, 'test-cards')).toContain('čtyři karty');
+    expect(step(5, 'test-cards')).toContain('čtyři karty');
   });
 
   it('nit na pouzdro je v kroku šití, ne jen v Postupu v kostce', () => {
-    expect(step(6, 'stitch')).toContain('Ustřihněte asi 1 m nitě');
+    expect(step(5, 'stitch')).toContain('Ustřihněte asi 1 m nitě');
   });
 });
 
@@ -337,15 +337,16 @@ describe('obsah – pouzdro na karty: konec řady dvojhrotem', () => {
 
   it('neslibuje otvor přesně na značce, řada končí nejbližším otvorem bez posouvání', () => {
     for (const [order, id] of [
-      [3, 'corners'],
-      [6, 'punch-sides'],
+      [3, 'continue-row'],
+      [5, 'punch-sides'],
     ] as const) {
       const body = step(order, id);
       expect(body).not.toContain('přesně na značku');
       expect(body).not.toContain('ve stejné výšce');
       expect(body).toContain('nejblíž');
       expect(body).toContain('neposouvejte');
-      expect(body).toContain('ověřte na odřezku');
     }
+    // Lekce 3 se děruje přímo na odřezku, ověření na odřezku platí jen pro pouzdro.
+    expect(step(5, 'punch-sides')).toContain('ověřte na odřezku');
   });
 });

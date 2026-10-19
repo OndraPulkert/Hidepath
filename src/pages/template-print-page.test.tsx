@@ -236,11 +236,11 @@ describe('tisk – pouzdro na karty: šablona a cvičná šablona', () => {
     );
   });
 
-  it('lekce 5 odkazuje z kontroly tisku na tisk šablony', () => {
-    const lesson5 = cardHolderProject.lessons.find((l) => l.order === 5)!;
+  it('lekce 4 odkazuje z kontroly tisku na tisk šablony', () => {
+    const lesson4 = cardHolderProject.lessons.find((l) => l.order === 4)!;
     renderWithProviders(
       <StepList
-        steps={lesson5.steps.filter((s) => s.id === 'print-check')}
+        steps={lesson4.steps.filter((s) => s.id === 'print-check')}
         template={undefined}
         projectSlug={cardHolderProject.slug}
       />,

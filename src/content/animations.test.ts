@@ -481,13 +481,13 @@ describe('animace postupu – sedlářský steh a hrany ve všech projektech', (
   it.each([
     // Projekt 01: navlékání, uchycení, steh, ukončení, kontrola, šití pouzdra a hrany.
     ['card-holder', 1, 'thread-needles', [steh('A1')]],
-    ['card-holder', 4, 'hold-work', [steh('B1')]],
-    ['card-holder', 4, 'start-stitch', [steh('C1'), thread]],
-    ['card-holder', 4, 'stitch-rhythm', [steh('D1')]],
-    ['card-holder', 4, 'finish-stitch', [steh('E1'), steh('F1')]],
-    ['card-holder', 4, 'compare', [steh('G1')]],
-    ['card-holder', 6, 'stitch', [steh('E2'), steh('F2'), steh('F3')]],
-    ['card-holder', 6, 'edges', [hrany('A2'), hrany('D1')]],
+    ['card-holder', 3, 'hold-work', [steh('B1')]],
+    ['card-holder', 3, 'start-stitch', [steh('C1'), thread]],
+    ['card-holder', 3, 'stitch-rhythm', [steh('D1')]],
+    ['card-holder', 3, 'finish-stitch', [steh('E1'), steh('F1')]],
+    ['card-holder', 3, 'compare', [steh('G1')]],
+    ['card-holder', 5, 'stitch', [steh('E2'), steh('F2'), steh('F3')]],
+    ['card-holder', 5, 'edges', [hrany('A2'), hrany('D1')]],
     // Projekt 02: steh a hrany lekcí 4–8 (šev dna a kapsa ověřují testy výše).
     ['coin-card-holder', 4, 'saddle-stitch-reminder', [steh('D1')]],
     ['coin-card-holder', 4, 'try-edge-paint', [hrany('C1'), hrany('D1')]],

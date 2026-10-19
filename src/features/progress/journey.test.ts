@@ -86,11 +86,11 @@ describe('computeJourney', () => {
     const j = computeJourney(project, { enrollment, inventory: ownedAll, progress });
     const practice = j.phases.find((p) => p.slug === 'practice')!;
     expect(practice.isCurrent).toBe(true);
-    expect(practice.detail).toBe('1 ze 3 lekcí');
+    expect(practice.detail).toBe('1 ze 2 lekcí');
     expect(practice.ratio).toBeGreaterThan(0);
     expect(practice.ratio).toBeLessThan(1);
     expect(j.completedLessons).toBe(2);
-    expect(j.totalLessons).toBe(6);
+    expect(j.totalLessons).toBe(5);
   });
 
   it('odškrtané body bez stisknutí Dokončit fázi lekcí neuzavřou', () => {

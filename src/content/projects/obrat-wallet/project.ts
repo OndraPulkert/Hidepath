@@ -680,7 +680,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'trim',
         title: 'Seřízněte klopu',
-        body: 'Seříznout = 6 mm minus naměřená mezera (např. mezera 2 mm → 4 mm, přesah −1 mm → 7 mm). Když vyjde 0 nebo méně, neřežte. Klopu narovnejte nahoru a položte na podložku. Kružítkem nastaveným na tuto hodnotu veďte čáru podél celé šikmé hrany na rubu. Řežte podle pravítka. Rohy znovu zaoblete podle rohu klopy vystřiženého z listu 1.',
+        body: 'Seříznout = 6 mm minus naměřená mezera (např. mezera 2 mm → 4 mm, přesah −1 mm → 7 mm). Když vyjde 0 nebo méně, neřežte. Klopu narovnejte nahoru a položte na podložku. Kružítkem nastaveným na tuto hodnotu veďte čáru podél celé šikmé hrany na rubu. Řežte podle pravítka. Oba rohy klopy znovu zaoblete na R8: šablonu rohu z listu 1 přiložte rovnými hranami na bok a novou hranu klopy, oblouk obkreslete na rubu a řežte krátkými tahy.',
         media: [],
         printLink: 'pattern-sheets',
         printSheetId: 'telo',

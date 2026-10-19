@@ -81,9 +81,9 @@ describe('zápisník – Co jsem zjistil', () => {
       [
         `Co jsem zjistil – ${notebookProject.title} (2026-10-07)`,
         '',
-        '04 Lepení, děrování dvou vrstev a sedlářský steh\n- Jak drží spoj: Líp – krok 1',
+        '03 Lepení, děrování a sedlářský steh\n- Jak drží spoj: Líp – krok 1',
         '',
-        `05 Přenesení šablony a řezání dílů\n- Kontrolní úsečka: 51${NBSP}mm (mimo cíl: cíl 50 mm) – krok 1`,
+        `04 Přenesení šablony a řezání dílů\n- Kontrolní úsečka: 51${NBSP}mm (mimo cíl: cíl 50 mm) – krok 1`,
       ].join('\n'),
     );
     expect(formatFindingsText(notebookProject, [])).toBe('');

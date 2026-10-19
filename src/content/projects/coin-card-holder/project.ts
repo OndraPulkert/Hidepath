@@ -862,7 +862,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'saddle-stitch-reminder',
         title: 'Připomeňte si sedlářský steh',
         animationLinks: [animationLink('saddleStitch', 'D1')],
-        body: 'Steh je stejný jako u pouzdra na karty: dvě jehly proti sobě, stále stejné pořadí a utažení. Rytmus si případně zopakujte v lekci 4 prvního projektu.',
+        body: 'Steh je stejný jako u pouzdra na karty: dvě jehly proti sobě, stále stejné pořadí a utažení. Rytmus si případně zopakujte v lekci 3 prvního projektu.',
         media: [
           {
             id: 'cch-l4-saddle-stitch',

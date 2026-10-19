@@ -60,7 +60,7 @@ describe('computeLessonViews – zámky podle vybavení', () => {
       inventory,
       completed('01-prepare-workspace', '02-straight-cut'),
     );
-    const l3 = views.find((v) => v.slug === '03-stitching-chisels')!;
+    const l3 = views.find((v) => v.slug === '04-saddle-stitch')!;
     expect(l3.status).toBe('locked');
     expect(l3.blockers.missingEquipment).toEqual([
       { equipmentSlug: 'stitching-chisels', status: 'ordered' },
@@ -82,7 +82,6 @@ describe('computeLessonViews – prerekvizity a aktuální lekce', () => {
       'locked',
       'locked',
       'locked',
-      'locked',
     ]);
     expect(views[1]!.blockers.incompletePrerequisites).toEqual(['01-prepare-workspace']);
     expect(findCurrentLesson(views)?.slug).toBe('01-prepare-workspace');
@@ -95,15 +94,15 @@ describe('computeLessonViews – prerekvizity a aktuální lekce', () => {
     expect(findCurrentLesson(views)?.slug).toBe('02-straight-cut');
   });
 
-  it('lekce 5 vyžaduje hotové lekce 2, 3 i 4', () => {
+  it('lekce 4 vyžaduje hotové lekce 2 i 3', () => {
     const views = computeLessonViews(
       project,
       ownedAll,
-      completed('01-prepare-workspace', '02-straight-cut', '03-stitching-chisels'),
+      completed('01-prepare-workspace', '02-straight-cut'),
     );
-    const l5 = views.find((v) => v.slug === '05-transfer-and-cut')!;
-    expect(l5.status).toBe('locked');
-    expect(l5.blockers.incompletePrerequisites).toEqual(['04-saddle-stitch']);
+    const l4 = views.find((v) => v.slug === '05-transfer-and-cut')!;
+    expect(l4.status).toBe('locked');
+    expect(l4.blockers.incompletePrerequisites).toEqual(['04-saddle-stitch']);
   });
 
   it('dokončená lekce zůstane hotová, i když uživatel později položku odznačí', () => {

@@ -203,7 +203,7 @@ describe('Co jsem zjistil', () => {
     const lessons = await within(card).findAllByRole('heading', { level: 3 });
     expect(lessons.map((h) => h.textContent?.replace(/\u00a0/g, ' '))).toEqual([
       '01 · Příprava pracovního místa a seznámení s nástroji',
-      '05 · Přenesení šablony a řezání dílů',
+      '04 · Přenesení šablony a řezání dílů',
     ]);
     expect(within(card).getByText(/^3,85\smm$/)).toBeInTheDocument();
     expect(within(card).getByText(/mimo cíl \(cíl 50/)).toBeInTheDocument();

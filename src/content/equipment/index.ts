@@ -31,7 +31,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       {
         label: 'Množství',
         value:
-          '1× A5 na pouzdro (oba díly vedle sebe, rezerva asi 3 cm a 2,5 cm) + 2× A5 téže kůže na trénink lekcí 1–4',
+          '1× A5 na pouzdro (oba díly vedle sebe, rezerva asi 3 cm a 2,5 cm) + 2× A5 téže kůže na trénink lekcí 1–3',
       },
       {
         label: 'Barva',
@@ -41,7 +41,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     ],
     cautions: [
       'Přířezy A5–A2 v této tloušťce prodává CraftPoint; jinde je často potřeba přířez poptat, celá kůže stojí tisíce korun.',
-      'Na trénink děrování a zkušební údery (lekce 1 a 3) a rovné proužky v lekci 2 stačí levné odřezky, i štípenka (spodní vrstva kůže bez líce). Zkoušku pásky na líci a cvičnou šablonu v lekci 2 a lepení a steh v lekci 4 dělejte na lícové kůži téže kůže jako pouzdro – nejjednodušší jsou dvě A5. Finální díly řežte z lícové kůže, štípenka se chová jinak.',
+      'Na zkušební údery (lekce 1) a rovné proužky v lekci 2 stačí levné odřezky, i štípenka (spodní vrstva kůže bez líce). Zkoušku pásky na líci a cvičnou šablonu v lekci 2 a lepení, děrování a steh v lekci 3 dělejte na lícové kůži téže kůže jako pouzdro – nejjednodušší jsou dvě A5. Finální díly řežte z lícové kůže, štípenka se chová jinak.',
       'Kůže má lícovou (hladkou) a rubovou (vláknitou) stranu. U pouzdra na karty se šablona kreslí na rub; u pouzdra s vsazenou mincí se pás kreslí na líc – kresba je tam pohled zvenku.',
     ],
     avoid: [
@@ -85,7 +85,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         url: 'https://craft-point.cz/products/hovezi-kuze-licova-juchtova-trislocinena-1-2-mm',
         priceCents: 5_700,
         variant: 'A5 (21 × 15 cm)',
-        note: 'Na pouzdro na karty (oba díly vedle sebe) i na trénink lekcí 1–4 (lekce 4 na tvarech z cvičné šablony); z druhé tréninkové A5 i dva čtverce 70 × 70 mm na zkoušku důlku u pouzdra s mincí (lekce 2).',
+        note: 'Na pouzdro na karty (oba díly vedle sebe) i na trénink lekcí 1–3 (lekce 3 na tvarech z cvičné šablony); z druhé tréninkové A5 i dva čtverce 70 × 70 mm na zkoušku důlku u pouzdra s mincí (lekce 2).',
         availability: 'in_stock',
         checkedAt: '2026-10-08',
       },
@@ -126,7 +126,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         url: 'https://sedlarskenaradi.cz/kozene-odrezky-stipenka/',
         priceCents: 3_500,
         priceNote: 'za 100 g',
-        note: 'Jen na zkušební údery, rovné proužky a děrování (lekce 1–3). Zkouška pásky na líci a cvičná šablona v lekci 2 a lepení a steh v lekci 4 chtějí lícovou kůži téže kůže jako pouzdro; na finální díly ne, štípenka se chová jinak než lícová kůže.',
+        note: 'Jen na zkušební údery a rovné proužky (lekce 1 a 2). Zkouška pásky na líci a cvičná šablona v lekci 2 a lepení, děrování a steh v lekci 3 chtějí lícovou kůži téže kůže jako pouzdro; na finální díly ne, štípenka se chová jinak než lícová kůže.',
         availability: 'in_stock',
         checkedAt: '2026-09-07',
       },

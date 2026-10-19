@@ -26,8 +26,7 @@ const withStep = (
   steps: lesson.steps.map((s) => (s.id === stepId ? { ...s, ...extra } : s)),
 });
 
-const [l1, l2, l3, l4, l5, ...rest] = projectWithoutNotebook.lessons as [
-  LessonDefinition,
+const [l1, l2, l3, l4, ...rest] = projectWithoutNotebook.lessons as [
   LessonDefinition,
   LessonDefinition,
   LessonDefinition,
@@ -44,9 +43,8 @@ export const notebookProject: ProjectDefinition = {
       ],
     }),
     l2,
-    l3,
     withStep(
-      withStep(l4, 'glue', {
+      withStep(l3, 'glue', {
         records: [
           {
             kind: 'choice',
@@ -64,7 +62,7 @@ export const notebookProject: ProjectDefinition = {
       { recalls: [{ fieldId: 'glue-hold', label: 'Spoj z kroku 1' }] },
     ),
     withStep(
-      withStep(l5, 'print-check', {
+      withStep(l4, 'print-check', {
         records: [
           {
             kind: 'number',

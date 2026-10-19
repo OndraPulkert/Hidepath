@@ -8,7 +8,7 @@ import { renderApp } from '@/test/render';
 
 /**
  * Obsah zatím čekání nemá (doplní ho obsahové balíky), proto test přidá dvě čekání do
- * kroku „glue“ lekce 4 pouzdra na karty. Druhé blokuje krok „hold-work“ (krok 3).
+ * kroku „glue“ lekce 3 pouzdra na karty. Druhé blokuje krok „hold-work“ (krok 6).
  */
 vi.mock('@/content/projects', async (importOriginal) => {
   const actual = await importOriginal<typeof ProjectsModule>();
@@ -56,7 +56,7 @@ describe('LessonFocusPage', () => {
       name: /^krok 1:\s*slepte díly podél hrany$/i,
     });
     expect(heading).toHaveFocus();
-    expect(screen.getByText('Krok 1 / 8')).toBeInTheDocument();
+    expect(screen.getByText('Krok 1 / 11')).toBeInTheDocument();
 
     await user.keyboard('{ArrowRight}');
     expect(router.state.location.search).toBe('?krok=2');
@@ -65,8 +65,8 @@ describe('LessonFocusPage', () => {
   });
 
   it('?krok=N otevře přímo daný krok; poslední krok vede ke kontrolním bodům', async () => {
-    setup(focusUrl(8));
-    expect(await screen.findByText('Krok 8 / 8')).toBeInTheDocument();
+    setup(focusUrl(11));
+    expect(await screen.findByText('Krok 11 / 11')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Ke kontrolním bodům' })).toHaveAttribute(
       'href',
       `${LESSON}#kontrolni-body`,
@@ -74,14 +74,14 @@ describe('LessonFocusPage', () => {
     // Ukončit vrátí na právě otevřený krok v lekci, ne na její začátek.
     expect(screen.getByRole('link', { name: /ukončit/i })).toHaveAttribute(
       'href',
-      `${LESSON}#krok-8`,
+      `${LESSON}#krok-11`,
     );
   });
 
   it('„Ke kontrolním bodům“ otevře lekci posunutou na kontrolní body', async () => {
     const scrollIntoView = vi.fn();
     Element.prototype.scrollIntoView = scrollIntoView;
-    const { user } = setup(focusUrl(8));
+    const { user } = setup(focusUrl(11));
     await user.click(await screen.findByRole('link', { name: 'Ke kontrolním bodům' }));
     const heading = await screen.findByRole('heading', { level: 2, name: 'Kontrolní body' });
     expect(scrollIntoView).toHaveBeenCalled();
@@ -90,7 +90,7 @@ describe('LessonFocusPage', () => {
 
   it('šipky nepřebíjí psaní do pole', async () => {
     const { user, router } = setup(focusUrl(1));
-    await screen.findByText('Krok 1 / 8');
+    await screen.findByText('Krok 1 / 11');
     const input = document.createElement('input');
     document.body.append(input);
     input.focus();
@@ -226,7 +226,7 @@ describe('LessonFocusPage', () => {
   });
 
   it('krok blokovaný čekáním upozorní a nabídne cestu zpět ke kroku s čekáním', async () => {
-    const { user, router } = setup(focusUrl(2));
+    const { user, router } = setup(focusUrl(5));
     expect(await screen.findByText(/další krok čeká na „test: zatuhnutí spoje“/i)).toBeVisible();
     await user.click(screen.getByRole('button', { name: /další/i }));
     const note = screen.getByRole('note', { name: 'Ještě se čeká' });
@@ -238,8 +238,7 @@ describe('LessonFocusPage', () => {
 
     const card = await screen.findByRole('region', { name: /test: zatuhnutí spoje/i });
     await user.click(within(card).getByRole('button', { name: /spustit 1/i }));
-    await user.click(screen.getByRole('button', { name: /další/i }));
-    await user.click(screen.getByRole('button', { name: /další/i }));
+    for (let i = 0; i < 5; i++) await user.click(screen.getByRole('button', { name: /další/i }));
     expect(screen.getByRole('note', { name: 'Ještě se čeká' })).toHaveTextContent(
       /počkejte, až doběhne „test: zatuhnutí spoje“ \(ještě (1:00:00|59:\d\d)\)/i,
     );

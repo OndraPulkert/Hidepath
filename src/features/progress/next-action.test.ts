@@ -90,7 +90,7 @@ describe('computeNextAction', () => {
     const action = next(inventory, done('01-prepare-workspace', '02-straight-cut'));
     expect(action).toMatchObject({
       kind: 'wait_for_equipment',
-      lessonSlug: '03-stitching-chisels',
+      lessonSlug: '04-saddle-stitch',
       missing: [{ equipmentSlug: 'stitching-chisels', status: 'ordered' }],
     });
   });

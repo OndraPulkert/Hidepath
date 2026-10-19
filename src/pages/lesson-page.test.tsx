@@ -4,7 +4,7 @@ import { renderApp } from '@/test/render';
 
 describe('LessonPage', () => {
   it('má spodní lištu se třemi akcemi a odkaz zpět na projekt', async () => {
-    renderApp('/projects/card-holder/lessons/03-stitching-chisels');
+    renderApp('/projects/card-holder/lessons/04-saddle-stitch');
 
     const toolbar = await screen.findByRole('group', { name: 'Akce lekce' });
     expect(toolbar).toHaveTextContent('Zpět');

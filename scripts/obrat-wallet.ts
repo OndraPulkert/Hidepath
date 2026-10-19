@@ -90,6 +90,27 @@ function calibration(x: number, y: number): string {
   ].join('');
 }
 
+/** Popisek poloměru vně rohu (dx, dy = směr ven z dílu). */
+function cornerR(x: number, y: number, r: number, dx: -1 | 1, dy: -1 | 1): string {
+  return text(
+    x + dx * 1.2,
+    y + (dy > 0 ? 3.6 : -1.2),
+    `R${fmt(r)}`,
+    'xs',
+    dx < 0 ? 'end' : 'start',
+  );
+}
+
+/** Šablona rohu klopy: čtverec s jedním rohem o poloměru r, ryska na začátku oblouku. */
+function cornerTemplate(x: number, y: number, r: number, size = 24): string {
+  const d = `M${x + r} ${y}H${x + size}V${y + size}H${x}V${y + r}A${r} ${r} 0 0 1 ${x + r} ${y}Z`;
+  return [
+    `<path class="cut" d="${d}"/>`,
+    `<path class="cross" d="M${x + r} ${y}v2.5M${x} ${y + r}h2.5"/>`,
+    text(x + size / 2 + 2, y + size / 2 + 2, `R${fmt(r)}`, 'h', 'middle'),
+  ].join('');
+}
+
 function legend(x: number, y: number): string {
   const row = (dy: number, el: string, t: string) => el + text(x + 14, y + dy + 1, t);
   return [
@@ -146,6 +167,24 @@ export function buildObratSheets(spec: ObratSpec = OBRAT): { telo: string; dily:
         'List přiložte na RUB kůže (šikmá hrana klopy pak stoupá doprava, jak má).',
       ]),
       drawPart(T1, 51, 36, spec, ['RUB nahoru', 'záda + klopa, 1 ×'], { x: 54, y: 100 }),
+      cornerR(51, 36, spec.flapCornerR, -1, -1),
+      cornerR(
+        51 + T1.width,
+        36 + flapEdgeY(spec, 0) - flapEdgeY(spec, spec.width),
+        spec.flapCornerR,
+        1,
+        -1,
+      ),
+      cornerR(51, 36 + T1.height, spec.bodyCornerR, -1, 1),
+      cornerR(51 + T1.width, 36 + T1.height, spec.bodyCornerR, 1, 1),
+      text(166, 44, 'Šablona rohu klopy', 'h'),
+      text(166, 48, 'karton, vystřihnout po plné', 'xs'),
+      text(166, 51, 'čáře; lekce 9: oba rohy', 'xs'),
+      text(166, 54, 'klopy po seříznutí', 'xs'),
+      cornerTemplate(168, 58, spec.flapCornerR),
+      text(166, 87, 'Ryska = začátek oblouku.', 'xs'),
+      text(166, 90, 'Rovné hrany na bok', 'xs'),
+      text(166, 93, 'a hranu klopy.', 'xs'),
       text(
         51 + 54,
         36 + T1.height + 6,
@@ -181,6 +220,19 @@ export function buildObratSheets(spec: ObratSpec = OBRAT): { telo: string; dily:
         { x: 101, y: 30, t: 'konec P', anchor: 'end' },
         { x: 54, y: 52, t: 'rub: lepené pásy 6 mm podél švu jako na T1', anchor: 'middle' },
       ]),
+      cornerR(15, 36 + parts.T2.height, spec.bodyCornerR, -1, 1),
+      cornerR(15 + parts.T2.width, 36 + parts.T2.height, spec.bodyCornerR, 1, 1),
+      cornerR(15 + parts.P.width, 122, spec.lidCornerR, 1, -1),
+      cornerR(15 + parts.P.width, 122 + parts.P.height, spec.bodyCornerR, 1, 1),
+      cornerR(15, 122 + parts.P.height, spec.bodyCornerR, -1, 1),
+      text(
+        15 + parts.P.width / 2,
+        122 + parts.P.height + 4.5,
+        'P: rohy u zářezu R1 a R1,5',
+        'xs',
+        'middle',
+      ),
+      text(15 + parts.T3.width + 3, 199 + parts.T3.height - 1, 'T3: rohy R2, u ústí R1', 'xs'),
       drawPart(parts.P, 15, 122, spec, ['RUB nahoru · pás + víčko, 1 ×'], { x: 30, y: 7 }, [
         { x: 104, y: 10, t: 'VÍČKO · objímka B podle obtisku', anchor: 'end' },
         { x: 106, y: 62, t: 'A podle obtisku', anchor: 'end' },

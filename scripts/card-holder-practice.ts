@@ -6,7 +6,7 @@
  * List A4 na výšku, 1:1, vrstvy CUT (plná čára řezu) a GUIDE (okraj na vystřižení, čárky konců,
  * popisky, kontrolní úsečka 50 mm). Vše leží aspoň `PRACTICE_SHEET.marginMm` = 13 mm od každé hrany
  * papíru: tiskárna HP DeskJet 2700 netiskne 12,7 mm u spodní hrany (na výšku), ~3 mm u ostatních. Tři malé tvary na vyzkoušení hlavního způsobu přenosu šablony
- * z lekce 5 (vystřihnout nahrubo, přilepit páskou na rub, řezat skrz papír po čáře, nic
+ * z lekce 4 (vystřihnout nahrubo, přilepit páskou na rub, řezat skrz papír po čáře, nic
  * nepropichovat) na odřezku, ne na pouzdru:
  * 1. obdélník 60 × 40 mm – rovné řezy s pravítkem po vytištěné čáře,
  * 2. obdélník 60 × 40 mm s jedním rohem R10 – přechod z rovné do vypuklého oblouku bez pravítka,
@@ -283,14 +283,14 @@ const BLOCKS: Block[] = [
       'horní hrany veďte s pravítkem jen k nim.',
       'Nic nepropichujte: vpich na čáře nechá v hraně zoubek.',
       'Výřez až nakonec, nasekejte ho na',
-      'krátké rovné řezy, každý od čáry k čáře (lekce 5).',
+      'krátké rovné řezy, každý od čáry k čáře (lekce 4).',
     ],
     notch: true,
   },
 ];
 
 const STEPS = [
-  '# Postup – stejně jako u šablony pouzdra v lekci 5',
+  '# Postup – stejně jako u šablony pouzdra v lekci 4',
   '1. Tiskněte na 100 % a změřte kontrolní úsečku dole: přesně 50 mm.  2. Každý tvar vystřihněte nůžkami',
   'nahrubo po čárkované čáře.  3. Položte ho na rub odřezku a přilepte maskovací páskou na okraji, mimo plnou čáru,',
   'z několika stran.  4. Řežte nožem skrz papír i kůži po plné čáře, 2–3 lehké tahy: rovné strany s pravítkem,',

@@ -34,7 +34,7 @@ import { type AnimationLink } from '@/content/schema';
  * - pasek-dirky (`#A`–`#B`): stejně jako kapsa-prisiti; výsečník na tečku z destičky přes střednici,
  *   křížek a zkušební otisk (lekce 6 pásku).
  * - rez-oblouky (`#A`–`#C`): stejně jako kapsa-prisiti; zaoblené rohy a výřez nožem bez pravítka
- *   (lekce 2 a 5 pouzdra na karty), společné pro všechny projekty.
+ *   (lekce 2 a 4 pouzdra na karty), společné pro všechny projekty.
  * - rez-nozem (`#A`–`#C`): stejně jako kapsa-prisiti; řez odlamovacím nožem podle ocelového
  *   pravítka, pravítko nastavené čepelí (lekce 2 pouzdra na karty), společné pro všechny projekty.
  * - ctverec-forma (`#A`–`#C`): stejně jako kapsa-prisiti; čtverec 70 × 70 kolem vyvrtaného otvoru

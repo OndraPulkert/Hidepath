@@ -387,7 +387,7 @@ describe('Postup v kostce – pouzdro na karty', () => {
     }
   });
 
-  it('bod 1 je tisk z lekcí 2, 5 a 6: cvičná šablona 1×, šablona 1×, v lekci 6 jen podmíněně', () => {
+  it('bod 1 je tisk z lekcí 2, 4 a 5: cvičná šablona 1×, šablona 1×, v lekci 5 jen podmíněně', () => {
     expect(points[0]!.point.id).toBe('prints');
     expect(points[0]!.point.printsFrom).toEqual([
       '02-straight-cut',
@@ -399,20 +399,20 @@ describe('Postup v kostce – pouzdro na karty', () => {
       'Cvičná šablona: řez podle přilepené šablony 1×',
       'Šablona 1:1 1×',
     ]);
-    const l6 = groups.find((g) => g.lessonOrder === 6)!;
-    expect(l6.rows.every((r) => r.condition)).toBe(true);
-    expect(point('prints').text).toContain('Oba papírové díly z lekce 5 si schovejte');
-    expect(point('peel-template').text).toContain('Oba papírové díly si schovejte na lekci 6');
+    const l5 = groups.find((g) => g.lessonOrder === 5)!;
+    expect(l5.rows.every((r) => r.condition)).toBe(true);
+    expect(point('prints').text).toContain('Oba papírové díly z lekce 4 si schovejte');
+    expect(point('peel-template').text).toContain('Oba papírové díly si schovejte na lekci 5');
   });
 
-  it('teď × později: nástroje až doma, dobroušení v lekci 5, výřez po obvodu, zpětné stehy v lekci 6', () => {
+  it('teď × později: nástroje až doma, dobroušení v lekci 4, výřez po obvodu, zpětné stehy v lekci 5', () => {
     expect(point('tools').text).toMatch(/^Až budete mít vidličky, jehly a nit doma/);
     expect(point('tools').text).toContain('roh');
     expect(point('tools').text).toContain('druhé tréninkové A5');
     expect(point('tools').text).toContain('pokračujte lekcí 2');
-    expect(point('practice-template').later).toContain('lekce 5');
+    expect(point('practice-template').later).toContain('lekce 4');
     expect(point('cut-parts').later).toContain('výřez na palec');
-    expect(point('stitch-practice').later).toContain('lekci 6');
+    expect(point('stitch-practice').later).toContain('lekci 5');
   });
 
   it('míry sedí s lekcemi a šablonou', () => {
@@ -433,11 +433,11 @@ describe('Postup v kostce – pouzdro na karty', () => {
     expect(stepBody('punch-sides')).toContain(
       'horního kroužku na linii stehu, 6 mm pod horní hranou',
     );
-    const l6 = project.lessons.find((l) => l.slug === point('glue-parts').lessonSlug)!;
-    const wait = l6.steps.find((s) => s.id === 'glue-parts')!.waits![0]!;
+    const l5 = project.lessons.find((l) => l.slug === point('glue-parts').lessonSlug)!;
+    const wait = l5.steps.find((s) => s.id === 'glue-parts')!.waits![0]!;
     expect(point('glue-parts').text).toContain(`(${wait.minutes}–${wait.maxMinutes} min)`);
     expect(point('stitch').text).toContain('asi 1 m nitě');
-    expect(l6.materials).toContain('nit asi 1 m');
+    expect(l5.materials).toContain('nit asi 1 m');
     expect(point('stitch').text).toContain('ve třetím otvoru od horního konce');
     expect(stepBody('stitch')).toContain('ve třetím otvoru od horního konce');
     expect(point('edges').text).toContain('boky zadního dílu nad kapsou');

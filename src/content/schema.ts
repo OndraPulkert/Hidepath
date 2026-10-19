@@ -492,7 +492,7 @@ export const templateDefinitionSchema = z.object({
   stitchSpacingLabel: z.string().min(1),
   threadLabel: z.string().min(1),
   /**
-   * Šířka lepeného pásu podél spodku a boků (lekce 4 a 6 projektu 01). Karta leží na pásu u spodku,
+   * Šířka lepeného pásu podél spodku a boků (lekce 3 a 5 projektu 01). Karta leží na pásu u spodku,
    * takže schéma sestavení podle něj kreslí výšku karty v kapse.
    */
   glueBandMm: z.number().positive().optional(),
