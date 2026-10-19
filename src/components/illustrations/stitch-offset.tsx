@@ -1,4 +1,4 @@
-/** Schéma: hrana kůže, linie stehu 3,5 mm, otvory v rozteči 3,85–4 mm. */
+/** Schéma: hrana kůže, linie stehu 3,5 mm, otvory v rozteči vidliček (číslo je v popisku). */
 export function StitchOffsetIllustration({ title }: { title: string }) {
   const holes = Array.from({ length: 9 }, (_, i) => 60 + i * 26);
   return (
@@ -42,7 +42,7 @@ export function StitchOffsetIllustration({ title }: { title: string }) {
         <path d="M138 80 L138 88" />
       </g>
       <text x="96" y="102" fontFamily="ui-monospace, Menlo, monospace" fontSize="11" fill="#33483B">
-        rozteč 3,85–4 mm
+        rozteč
       </text>
       <text
         x="40"

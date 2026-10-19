@@ -44,9 +44,9 @@ Celkem 55 slotů · k natočení 49 · hotovo 6.
 | Vybavení · Kovové pravítko 30 cm | foto | Ocelové pravítko 30 cm položené na kůži, hrana připravená pro řez |  |
 | Vybavení · Řezací podložka A3 | foto | Řezací podložka A3 s mřížkou, na ní kůže a pravítko |  |
 | Vybavení · Tvrdá deska pod děrování | foto | Bílá HDPE deska na stole, na ní odřezek kůže a vidličky připravené k úderu |  |
-| Vybavení · Děrovací vidličky 3,85–4 mm | foto | Sada děrovacích vidliček se 2 a 6 hroty položená na kůži |  |
-| Vybavení · Děrovací vidličky 3,85–4 mm | foto | Detail leštěných hrotů vidliček zblízka, viditelný šikmý tvar |  |
-| Vybavení · Děrovací vidličky 3,85–4 mm | foto | Vidličky držené kolmo na kůži, palička nad nimi, ruka mimo dráhu úderu |  |
+| Vybavení · Děrovací vidličky | foto | Sada děrovacích vidliček se 2 a 6 hroty položená na kůži |  |
+| Vybavení · Děrovací vidličky | foto | Detail leštěných hrotů vidliček zblízka, viditelný šikmý tvar |  |
+| Vybavení · Děrovací vidličky | foto | Vidličky držené kolmo na kůži, palička nad nimi, ruka mimo dráhu úderu |  |
 | Vybavení · Sedlářské jehly | foto | Dvě sedlářské jehly s navlečenou nití, detail očka a tupé špičky |  |
 | Vybavení · Voskovaná nit 0,6 mm | foto | Cívka voskované nitě 0,6 mm v přírodní barvě vedle hotového stehu |  |
 | Vybavení · Palička | foto | Kožařská palička ležící na stole vedle vidliček |  |

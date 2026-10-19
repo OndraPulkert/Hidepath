@@ -7,7 +7,7 @@ import {
 } from '@/content/schema';
 
 /**
- * Projekt 01 – Pouzdro na karty. Obsah je NÁVRH (draft); odborné údaje (rozteč 3,85–4 mm,
+ * Projekt 01 – Pouzdro na karty. Obsah je NÁVRH (draft); odborné údaje (rozteč 3 mm nebo 3,85–4 mm,
  * nit 0,6 mm, kůže 1,2–1,5 mm, steh 3,5 mm od hrany) projdou korekturou před publikací.
  * Osnova lekcí: docs/milestones/02-plan.md, média: docs/decisions/001-media-v-lekcich.md.
  */
@@ -81,7 +81,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'check-chisels',
         title: 'Zkontrolujte vidličky (pokud už je máte)',
-        body: 'Kroky 3 až 5 udělejte, až budete mít vidličky, jehly a nit doma; do té doby pokračujte lekcí 2. Nic neřežte, vše zkoušejte v levém dolním rohu druhé tréninkové A5 položené na šířku lícem nahoru, asi 2 cm od hran (první A5 nechte celou na lekci 2). Přiložte nejdelší vidličky (se 4 nebo 6 hroty) hroty na kůži a přitiskněte rukou, bez paličky. Pravítkem změřte vzdálenost první a poslední značky a vydělte ji počtem mezer mezi značkami: musí vyjít 3,85–4 mm. Odchylku asi do 0,1 mm způsobí měření pravítkem, ne vidlička.',
+        body: 'Kroky 3 až 5 udělejte, až budete mít vidličky, jehly a nit doma; do té doby pokračujte lekcí 2. Nic neřežte, vše zkoušejte v levém dolním rohu druhé tréninkové A5 položené na šířku lícem nahoru, asi 2 cm od hran (první A5 nechte celou na lekci 2). Přiložte nejdelší vidličky (se 4 nebo 6 hroty) hroty na kůži a přitiskněte rukou, bez paličky. Pravítkem změřte vzdálenost první a poslední značky a vydělte ji počtem mezer mezi značkami: musí vyjít rozteč uvedená na sadě (3 mm, nebo 3,85–4 mm). Odchylku asi do 0,1 mm způsobí měření pravítkem, ne vidlička.',
         records: [
           {
             kind: 'number',
@@ -90,7 +90,11 @@ export const lessons: readonly LessonDefinition[] = [
             hint: 'Vzdálenost první a poslední značky vydělená počtem mezer.',
             unit: 'mm',
             decimals: 2,
-            target: { min: 3.75, max: 4.1, label: 'cíl 3,85–4 mm (± 0,1 mm měření)' },
+            target: {
+              min: 2.9,
+              max: 4.1,
+              label: 'cíl 3 mm, nebo 3,85–4 mm podle sady (± 0,1 mm měření)',
+            },
           },
         ],
         media: [
@@ -334,7 +338,7 @@ export const lessons: readonly LessonDefinition[] = [
     order: 3,
     phaseSlug: 'practice',
     estimatedMinutes: 95,
-    goal: 'Z tvarů 3 a 1 slepit rubem k sobě malou kapsu, zmenšeninu pouzdra, proděrovat ji po spodku a bocích s roztečí 3,85–4 mm, 3,5 mm od hrany, sešít sedlářským stehem, který je na obou stranách rovný, a zaleštit hrany.',
+    goal: 'Z tvarů 3 a 1 slepit rubem k sobě malou kapsu, zmenšeninu pouzdra, proděrovat ji po spodku a bocích s roztečí vašich vidliček (3 nebo 4 mm), 3,5 mm od hrany, sešít sedlářským stehem, který je na obou stranách rovný, a zaleštit hrany.',
     materials: [
       'složený ručník pod tvrdou desku',
       'nit asi 80 cm',
@@ -424,7 +428,8 @@ export const lessons: readonly LessonDefinition[] = [
           {
             id: 'l3-stitch-offset',
             kind: 'illustration',
-            caption: 'Schéma: hrana kůže, linie stehu 3,5 mm od hrany, otvory v rozteči 3,85–4 mm',
+            caption:
+              'Schéma: hrana kůže, linie stehu 3,5 mm od hrany, otvory v rozteči vidliček (3 nebo 4 mm)',
             status: 'available',
             illustration: 'stitch-offset',
           },
@@ -461,7 +466,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('pouchPunch', 'D3'),
         ],
         title: 'Navazujte řadu',
-        body: 'Vidličky posuňte tak, aby první hrot zapadl do posledního hotového otvoru. Tak zůstane rozteč stejná a řada rovná. Před každým úderem zkontrolujte kolmost. Vidličky držte stále stejnou stranou k hraně, i za rohem, jinak se změní sklon otvorů. Boky děrujte od rohu nahoru a u horní hrany řadu dokončete dvojhrotem, skončete otvorem nejblíž pod značkou konce, nad ni nejděte, otvory neposouvejte. Spodek děrujte od obou rohů ke středu. Když mezi řadami zbývá asi 20 mm, vidličkami přestaňte. Mezeru změřte a rozdělte na stejné díly co nejblíž rozteči (u 4 mm např. 17 mm = 4 × 4,25 mm). Ocelové pravítko přiložte podél linie a podle něj mezeru doplňte jednohrotem. Dvojhrot použijete i v lekci 5 na koncích řady a v zaoblených rozích.',
+        body: 'Vidličky posuňte tak, aby první hrot zapadl do posledního hotového otvoru. Tak zůstane rozteč stejná a řada rovná. Před každým úderem zkontrolujte kolmost. Boky děrujte od rohu nahoru a u horní hrany řadu dokončete dvojhrotem, skončete otvorem nejblíž pod značkou konce, nad ni nejděte, otvory neposouvejte. Spodek děrujte od obou rohů ke středu. Když mezi řadami zbývá asi 20 mm, vidličkami přestaňte. Mezeru změřte a rozdělte na stejné díly co nejblíž rozteči (např. 17 mm: u 4 mm je to 4 × 4,25 mm, u 3 mm 6 × 2,83 mm). Ocelové pravítko přiložte podél linie a podle něj mezeru doplňte jednohrotem. Dvojhrot použijete i v lekci 5 na koncích řady a v zaoblených rozích.',
         media: [
           {
             id: 'l3-overlap',
@@ -1060,7 +1065,7 @@ const overview: ProjectOverview = {
           id: 'tools',
           lessonSlug: L1,
           stepId: 'check-chisels',
-          text: 'Až budete mít vidličky, jehly a nit doma, změřte rozteč vidliček: musí vyjít 3,85–4 mm. Navlékněte nit do obou jehel a na levém dolním rohu druhé tréninkové A5 položeném lícem nahoru na tvrdé desce zkuste jeden úder paličkou. Do té doby pokračujte lekcí 2; první A5 na ni nechte celou.',
+          text: 'Až budete mít vidličky, jehly a nit doma, změřte rozteč vidliček: musí vyjít rozteč uvedená na sadě (3 mm, nebo 3,85–4 mm). Navlékněte nit do obou jehel a na levém dolním rohu druhé tréninkové A5 položeném lícem nahoru na tvrdé desce zkuste jeden úder paličkou. Do té doby pokračujte lekcí 2; první A5 na ni nechte celou.',
         },
       ],
     },
@@ -1091,7 +1096,7 @@ const overview: ProjectOverview = {
           id: 'punch-two-layers',
           lessonSlug: L4,
           stepId: 'mark-stitch-line',
-          text: 'Na líc tvaru 3 narýsujte linii 3,5 mm od spodku a boků, nejdřív dvojhrotem proražte rohy a obě vrstvy děrujte na tvrdé desce pevným úderem. Boky od rohu nahoru, spodek od rohů ke středu, při navazování první hrot do posledního otvoru a vidličky stále stejnou stranou k hraně; posledních asi 20 mm uprostřed spodku rozdělte na stejné díly a doplňte jednohrotem podle pravítka. Na rubu musí být otvory stejně rovné jako na líci.',
+          text: 'Na líc tvaru 3 narýsujte linii 3,5 mm od spodku a boků, nejdřív dvojhrotem proražte rohy a obě vrstvy děrujte na tvrdé desce pevným úderem. Boky od rohu nahoru, spodek od rohů ke středu, při navazování první hrot do posledního otvoru; posledních asi 20 mm uprostřed spodku rozdělte na stejné díly a doplňte jednohrotem podle pravítka. Na rubu musí být otvory stejně rovné jako na líci.',
         },
         {
           id: 'stitch-practice',
@@ -1251,7 +1256,7 @@ export const cardHolderProject: ProjectDefinition = {
       equipmentSlug: 'stitching-chisels',
       priority: 'required',
       reason: 'Otvory pro sedlářský steh.',
-      specification: 'Rozteč 3,85–4 mm, sada 2 + 4/6 hrotů.',
+      specification: 'Rozteč 3 mm, nebo 3,85–4 mm; sada 1 + 2 + 4 + 6 hrotů.',
       alternatives: ['Půjčené vidličky se stejnou roztečí'],
     },
     {
@@ -1264,13 +1269,13 @@ export const cardHolderProject: ProjectDefinition = {
       equipmentSlug: 'harness-needles',
       priority: 'required',
       reason: 'Sedlářský steh dvěma jehlami.',
-      specification: 'Tupé nebo poloostré sedlářské, k niti 0,6 mm, 4 ks.',
+      specification: 'Tupé nebo poloostré sedlářské, k tloušťce nitě, 4 ks.',
     },
     {
       equipmentSlug: 'waxed-thread',
       priority: 'required',
       reason: 'Steh.',
-      specification: 'Voskovaný polyester 0,6 mm, 20 m.',
+      specification: 'Voskovaný polyester 0,6 mm, 20 m; k vidličkám 3 mm tenčí, 0,4–0,5 mm.',
     },
     {
       equipmentSlug: 'veg-tan-leather',
@@ -1384,8 +1389,8 @@ export const cardHolderProject: ProjectDefinition = {
         quantity: 1,
       },
     ],
-    stitchSpacingLabel: 'rozteč 3,85–4 mm',
-    threadLabel: 'nit 0,6 mm',
+    stitchSpacingLabel: 'rozteč 3 nebo 4 mm',
+    threadLabel: 'nit 0,4–0,6 mm',
     glueBandMm: 5,
     calibrationMm: 50,
     printNote:

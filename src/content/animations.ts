@@ -792,7 +792,7 @@ export const animationPages = {
       E: 'Část E – kontrola',
     },
     steps: {
-      A: ['Kapsa na tvrdé desce', 'Stejná strana vidliček k hraně'],
+      A: ['Kapsa na tvrdé desce', 'Vidličky podél linie a kolmo'],
       B: ['Proražte levý roh dvojhrotem', 'Stejně pravý roh'],
       C: ['Levý bok od rohu nahoru', 'Konec boku dvojhrotem', 'Stejně pravý bok'],
       D: [

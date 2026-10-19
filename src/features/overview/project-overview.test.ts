@@ -423,7 +423,9 @@ describe('Postup v kostce – pouzdro na karty', () => {
         .steps.find((s) => s.id === p.stepId)!.body;
     };
     expect(point('tools').text).toContain('3,85–4 mm');
+    expect(point('tools').text).toContain('3 mm');
     expect(stepBody('tools')).toContain('3,85–4 mm');
+    expect(stepBody('tools')).toContain('3 mm');
     expect(point('glue-area').text).toContain('asi 5 mm');
     expect(project.template?.glueBandMm).toBe(5);
     expect(point('glue-area').text).toContain('50 mm od spodku');

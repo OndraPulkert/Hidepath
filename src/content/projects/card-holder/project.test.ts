@@ -143,10 +143,12 @@ describe('obsah – pouzdro na karty: časovače, zápisník a „Připravte si�
       '4:print-check:template-calibration',
     ]);
     const spacing = step(1, 'check-chisels').records![0]!;
-    // Cíl 3,85–4 mm plus tolerance měření pravítkem (±0,5 mm / 5 mezer ≈ ±0,1 mm): vidlička 4 mm
+    // Cíl 3 mm (sada 3 mm) nebo 3,85–4 mm plus tolerance měření pravítkem (±0,5 mm / 5 mezer ≈ ±0,1 mm): vidlička 4 mm
     // naměřená jako 20,5 / 5 = 4,1 mm nesmí vyjít „mimo cíl“.
-    expect(spacing).toMatchObject({ unit: 'mm', target: { min: 3.75, max: 4.1 } });
-    expect(step(1, 'check-chisels').body).toContain('musí vyjít 3,85–4 mm');
+    expect(spacing).toMatchObject({ unit: 'mm', target: { min: 2.9, max: 4.1 } });
+    expect(step(1, 'check-chisels').body).toContain(
+      'musí vyjít rozteč uvedená na sadě (3 mm, nebo 3,85–4 mm)',
+    );
     expect(step(1, 'check-chisels').body).toContain('nejdelší vidličky');
     for (const [order, id] of [
       [2, 'practice-template'],

@@ -109,7 +109,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
   </div>
   <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
 </section>
-<p class="note">Kresba je v měřítku: tvary 60 × 40 mm z cvičné šablony, linie 3,5 mm od hrany, vidličky s roztečí 4 mm (sada 1 + 2 + 4 + 6 hrotů). Kolik otvorů vyjde a jak velký zbytek zůstane uprostřed spodku, záleží na vaší rozteči a linii.</p>
+<p class="note">Kresba je v měřítku: tvary 60 × 40 mm z cvičné šablony, linie 3,5 mm od hrany, vidličky s roztečí 4 mm (sada 1 + 2 + 4 + 6 hrotů). S vidličkami 3 mm postupujete stejně, jen vyjde víc otvorů: bok 33 mm je 11 roztečí a poslední otvor padne přesně na značku konce, zbytek uprostřed spodku dělte na díly co nejblíž 3 mm (např. 17 mm = 6 × 2,83 mm).</p>
 </div>
 
 <script>
@@ -141,9 +141,9 @@ const BOT=H-OFF, LX=OFF, RX=W-OFF, TOPM=OFF;        // linie: x 3,5 a 56,5, spod
 const SIDE_LEN=BOT-TOPM, BOT_LEN=RX-LX;             // 33 mm a 53 mm
 // bod na linii: L = levý bok od rohu nahoru, R = pravý bok od rohu nahoru, B = spodek zleva doprava
 const P=(s,d)=>s==='L'?[LX,BOT-d]:s==='R'?[RX,BOT-d]:[LX+d,BOT];
-// směr šití bok–spodek–bok (stupně, y dolů): kosočtverce mají vůči linii stále stejný sklon
+// směr šití bok–spodek–bok (stupně, y dolů): kosočtverec je středově souměrný, sklon vůči linii
+// dává vidlička sama, otočení o 180° ho nezmění
 const TAN={L:90,B:0,R:-90};
-const NOR={L:[-1,0],B:[0,1],R:[1,0]};               // ven k hraně: tam míří značka na vidličkách
 const SLANT=35;
 
 function shape3(){
@@ -187,10 +187,9 @@ function holes(n,col){
   return s;
 }
 function chisel(st,op=1,ghost=false){
-  const ds=st.p, a=Math.min(...ds), b=Math.max(...ds), c=P(st.s,(a+b)/2), len=b-a+3.6, n=NOR[st.s];
+  const ds=st.p, a=Math.min(...ds), b=Math.max(...ds), c=P(st.s,(a+b)/2), len=b-a+3.6;
   let s=`<g transform="translate(${f(c[0])} ${f(c[1])}) rotate(${TAN[st.s]})"><rect x="${f(-len/2)}" y="-2" width="${f(len)}" height="4" rx=".6" fill="${ghost?'none':'#c9d1d8'}" fill-opacity=".72" stroke="${ghost?'var(--amber)':'#7f8a94'}" stroke-width=".3" ${ghost?'stroke-dasharray="1 .6"':''}/></g>`;
   ds.forEach(d=>{const pt=P(st.s,d);s+=`<path d="M-1.1 0 L0 .4 L1.1 0 L0 -.4 Z" fill="none" stroke="${ghost?'var(--amber)':'#4d5761'}" stroke-width=".22" transform="translate(${f(pt[0])} ${f(pt[1])}) rotate(${TAN[st.s]+SLANT})"/>`});
-  if(!st.one) s+=`<circle cx="${f(c[0]+n[0]*1.25)}" cy="${f(c[1]+n[1]*1.25)}" r=".55" fill="var(--accent)"/>`;
   return O(op,s);
 }
 function flash(st,u){
@@ -230,16 +229,15 @@ add('A','Kapsa na tvrdé desce','Slepenou kapsu položte tvarem 3 nahoru na tvrd
   return s;
 });
 
-add('A','Stejná strana vidliček k hraně','Vidličky držte u spodku, kolmo ke kůži zepředu i z boku. Hroty jsou šikmé: aby měly všechny otvory stejný sklon, držte vidličky celou dobu stejnou stranou k hraně (tady červená značka). Za rohem je otočte o 90°, značka zůstane u hrany.',11000,t=>{
-  // vidličky jedou po spodku k levému rohu a otočí se na bok; značka stále ven
+add('A','Vidličky podél linie a kolmo','Vidličky držte u spodku, kolmo ke kůži zepředu i z boku, a všechny hroty postavte na linii. Kterou stranou vidličky míří k hraně, je jedno: šikmý hrot vypadá po otočení o 180° stejně. Za rohem je otočte o 90° podél nové linie, sklon otvorů vůči ní zůstane stejný.',11000,t=>{
+  // vidličky jedou po spodku k levému rohu a otočí se o 90° na bok
   const u=es(t,.1,.45), r=es(t,.5,.75);
-  let st, ex='';
-  if(r<=0){st={s:'B',p:[0,4,8,12].map(d=>d+L(20,0,u))}; ex=chisel(st,seg(t,.02,.1));}
+  let ex='';
+  if(r<=0){ex=chisel({s:'B',p:[0,4,8,12].map(d=>d+L(20,0,u))},seg(t,.02,.1));}
   else{
     const ang=L(0,90,r), c=[L(LX+6,LX,r),L(BOT,BOT-6,r)];
     ex=`<g transform="translate(${f(c[0])} ${f(c[1])}) rotate(${f(ang)})"><rect x="-7.8" y="-2" width="15.6" height="4" rx=".6" fill="#c9d1d8" fill-opacity=".72" stroke="#7f8a94" stroke-width=".3"/>`+
-      [-6,-2,2,6].map(d=>`<path d="M-1.1 0 L0 .4 L1.1 0 L0 -.4 Z" fill="none" stroke="#4d5761" stroke-width=".22" transform="translate(${d} 0) rotate(${SLANT})"/>`).join('')+
-      `<circle cx="0" cy="1.25" r=".55" fill="var(--accent)"/></g>`;
+      [-6,-2,2,6].map(d=>`<path d="M-1.1 0 L0 .4 L1.1 0 L0 -.4 Z" fill="none" stroke="#4d5761" stroke-width=".22" transform="translate(${d} 0) rotate(${SLANT})"/>`).join('')+`</g>`;
   }
   let s=scene(0,ex);
   // bokorys: kolmo × šikmo
@@ -248,7 +246,9 @@ add('A','Stejná strana vidliček k hraně','Vidličky držte u spodku, kolmo ke
   p+=`<rect x="98" y="21" width="2" height="16" fill="#c9d1d8" stroke="#7f8a94" stroke-width=".25"/>`;
   p+=`<g transform="rotate(16 118 37)"><rect x="117" y="21" width="2" height="16" fill="#c9d1d8" stroke="#7f8a94" stroke-width=".25"/></g>`;
   p+=tick(102,45)+`<path d="M116 43 l4 4 M120 43 l-4 4" stroke="var(--accent)" stroke-width=".5"/>`;
-  p+=O(seg(t,.45,.6),`<circle cx="92" cy="58" r=".9" fill="var(--accent)"/>`+lbl(94.5,59.3,'značka','t')+lbl(90.5,64,'stále u hrany,','ts')+lbl(90.5,68.5,'i za rohem','ts'));
+  // hrot otočený o 180° je stejný
+  const dm=(x,rot)=>`<path d="M-2.2 0 L0 .8 L2.2 0 L0 -.8 Z" fill="var(--hole)" transform="translate(${x} 60) rotate(${rot})"/>`;
+  p+=O(seg(t,.45,.6),lbl(90.5,53,'otočeno o 180°:','ts')+dm(98,SLANT)+lbl(98,67,'0°','ts','middle')+dm(114,SLANT+180)+lbl(114,67,'180°','ts','middle')+lbl(90.5,74,'stejný otvor','tok'));
   s+=inset('VIDLIČKY',p);
   return s;
 });
@@ -262,7 +262,7 @@ add('B','Proražte levý roh dvojhrotem','Jeden hrot dvojhrotu postavte přesně
   return s;
 });
 
-add('B','Stejně pravý roh','Stejně proražte pravý roh: jeden hrot na průsečík, druhý na linii pravého boku, značka vidliček k hraně.',6500,t=>{
+add('B','Stejně pravý roh','Stejně proražte pravý roh: jeden hrot na průsečík, druhý na linii pravého boku.',6500,t=>{
   const {done,act}=strikes(t,1,2,.08,.9);
   let s=scene(done,act);
   s+=inset('ROHY',lbl(90.5,17,`rohy: ${done>=2?2:1} / 2`,'t')+O(seg(t,.6,.8),tick(94,30)+lbl(98,31,'oba rohy','tok')));
@@ -293,7 +293,7 @@ add('C','Konec boku dvojhrotem','U horní hrany dokončete řadu dvojhrotem, prv
   return s;
 });
 
-add('C','Stejně pravý bok','Pravý bok děrujte stejně: od rohu nahoru, první hrot vždy v posledním otvoru, konec dvojhrotem pod značkou. Značka vidliček zůstává u hrany.',11000,t=>{
+add('C','Stejně pravý bok','Pravý bok děrujte stejně: od rohu nahoru, první hrot vždy v posledním otvoru, konec dvojhrotem pod značkou.',11000,t=>{
   const {done,act}=strikes(t,6,10);
   let s=scene(done,act);
   s+=inset('BOK',lbl(90.5,17,'od rohu nahoru','t')+lbl(90.5,22,'konec dvojhrotem','t')+lbl(90.5,40,`otvory: ${count(done)}`,'t'));
