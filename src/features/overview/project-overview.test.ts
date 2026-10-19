@@ -405,12 +405,12 @@ describe('Postup v kostce – pouzdro na karty', () => {
     expect(point('peel-template').text).toContain('Oba papírové díly si schovejte na lekci 5');
   });
 
-  it('teď × později: nástroje až doma, dobroušení v lekci 4, výřez po obvodu, zpětné stehy v lekci 5', () => {
+  it('teď × později: nástroje až doma, kapsa v lekci 3, výřez po obvodu, zpětné stehy v lekci 5', () => {
     expect(point('tools').text).toMatch(/^Až budete mít vidličky, jehly a nit doma/);
     expect(point('tools').text).toContain('roh');
     expect(point('tools').text).toContain('druhé tréninkové A5');
     expect(point('tools').text).toContain('pokračujte lekcí 2');
-    expect(point('practice-template').later).toContain('lekce 4');
+    expect(point('practice-template').later).toContain('lekci 3 do kapsy');
     expect(point('cut-parts').later).toContain('výřez na palec');
     expect(point('stitch-practice').later).toContain('lekci 5');
   });

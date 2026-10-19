@@ -81,7 +81,7 @@ describe('zápisník – Co jsem zjistil', () => {
       [
         `Co jsem zjistil – ${notebookProject.title} (2026-10-07)`,
         '',
-        '03 Lepení, děrování a sedlářský steh\n- Jak drží spoj: Líp – krok 1',
+        '03 Lepení, děrování a sedlářský steh\n- Jak drží spoj: Líp – krok 2',
         '',
         `04 Přenesení šablony a řezání dílů\n- Kontrolní úsečka: 51${NBSP}mm (mimo cíl: cíl 50 mm) – krok 1`,
       ].join('\n'),

@@ -8,7 +8,7 @@ import { renderApp } from '@/test/render';
 
 /**
  * Obsah zatím čekání nemá (doplní ho obsahové balíky), proto test přidá dvě čekání do
- * kroku „glue“ lekce 3 pouzdra na karty. Druhé blokuje krok „hold-work“ (krok 6).
+ * kroku „glue“ lekce 3 pouzdra na karty. Druhé blokuje krok „hold-work“ (krok 7).
  */
 vi.mock('@/content/projects', async (importOriginal) => {
   const actual = await importOriginal<typeof ProjectsModule>();
@@ -53,10 +53,10 @@ describe('LessonFocusPage', () => {
     expect(router.state.location.search).toBe('?krok=1');
     const heading = await screen.findByRole('heading', {
       level: 2,
-      name: /^krok 1:\s*slepte díly podél hrany$/i,
+      name: /^krok 1:\s*dokončete hrany ústí$/i,
     });
     expect(heading).toHaveFocus();
-    expect(screen.getByText('Krok 1 / 11')).toBeInTheDocument();
+    expect(screen.getByText('Krok 1 / 12')).toBeInTheDocument();
 
     await user.keyboard('{ArrowRight}');
     expect(router.state.location.search).toBe('?krok=2');
@@ -65,8 +65,8 @@ describe('LessonFocusPage', () => {
   });
 
   it('?krok=N otevře přímo daný krok; poslední krok vede ke kontrolním bodům', async () => {
-    setup(focusUrl(11));
-    expect(await screen.findByText('Krok 11 / 11')).toBeInTheDocument();
+    setup(focusUrl(12));
+    expect(await screen.findByText('Krok 12 / 12')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Ke kontrolním bodům' })).toHaveAttribute(
       'href',
       `${LESSON}#kontrolni-body`,
@@ -74,14 +74,14 @@ describe('LessonFocusPage', () => {
     // Ukončit vrátí na právě otevřený krok v lekci, ne na její začátek.
     expect(screen.getByRole('link', { name: /ukončit/i })).toHaveAttribute(
       'href',
-      `${LESSON}#krok-11`,
+      `${LESSON}#krok-12`,
     );
   });
 
   it('„Ke kontrolním bodům“ otevře lekci posunutou na kontrolní body', async () => {
     const scrollIntoView = vi.fn();
     Element.prototype.scrollIntoView = scrollIntoView;
-    const { user } = setup(focusUrl(11));
+    const { user } = setup(focusUrl(12));
     await user.click(await screen.findByRole('link', { name: 'Ke kontrolním bodům' }));
     const heading = await screen.findByRole('heading', { level: 2, name: 'Kontrolní body' });
     expect(scrollIntoView).toHaveBeenCalled();
@@ -89,18 +89,18 @@ describe('LessonFocusPage', () => {
   });
 
   it('šipky nepřebíjí psaní do pole', async () => {
-    const { user, router } = setup(focusUrl(1));
-    await screen.findByText('Krok 1 / 11');
+    const { user, router } = setup(focusUrl(2));
+    await screen.findByText('Krok 2 / 12');
     const input = document.createElement('input');
     document.body.append(input);
     input.focus();
     await user.keyboard('{ArrowRight}');
-    expect(router.state.location.search).toBe('?krok=1');
+    expect(router.state.location.search).toBe('?krok=2');
     input.remove();
   });
 
   it('bez Wake Lock API řekne, že obrazovku rozsvícenou neudrží', async () => {
-    setup(focusUrl(1));
+    setup(focusUrl(2));
     expect(
       await screen.findByText(/tento prohlížeč neumí nechat obrazovku rozsvícenou/i),
     ).toBeInTheDocument();
@@ -116,7 +116,7 @@ describe('LessonFocusPage', () => {
       },
     });
     try {
-      const { unmount } = setup(focusUrl(1));
+      const { unmount } = setup(focusUrl(2));
       expect(await screen.findByText('Obrazovka zůstane rozsvícená.')).toBeInTheDocument();
       unmount();
       expect(release).toHaveBeenCalled();
@@ -126,7 +126,7 @@ describe('LessonFocusPage', () => {
   });
 
   it('spuštěný časovač odpočítává a přežije remount (reload)', async () => {
-    const first = setup(focusUrl(1));
+    const first = setup(focusUrl(2));
     const card = await screen.findByRole('region', { name: /test: zavadnutí lepidla/i });
     expect(within(card).getByText(/podle lekce: 10–15/i)).toBeInTheDocument();
 
@@ -139,7 +139,7 @@ describe('LessonFocusPage', () => {
     first.unmount();
 
     act(() => vi.advanceTimersByTime(2 * MIN));
-    setup(focusUrl(1));
+    setup(focusUrl(2));
     const again = await screen.findByRole('region', { name: /test: zavadnutí lepidla/i });
     expect(within(again).getByRole('timer')).toHaveTextContent('5:00');
     expect(JSON.parse(localStorage.getItem(TIMERS_STORAGE_KEY)!)).toHaveLength(1);
@@ -147,7 +147,7 @@ describe('LessonFocusPage', () => {
 
   it('doběhlý časovač ohlásí jednou (i po remountu), upozornění zmizí po „Rozumím“', async () => {
     const beep = vi.spyOn(appBeeper, 'beep').mockImplementation(() => undefined);
-    const first = setup(focusUrl(1));
+    const first = setup(focusUrl(2));
     const card = await screen.findByRole('region', { name: /test: zavadnutí lepidla/i });
     await first.user.click(within(card).getByRole('button', { name: /spustit 10/i }));
 
@@ -163,10 +163,10 @@ describe('LessonFocusPage', () => {
     expect(beep).toHaveBeenCalledTimes(1);
 
     first.unmount();
-    const second = setup(focusUrl(2));
+    const second = setup(focusUrl(3));
     const again = await screen.findByRole('alert');
     expect(again).toHaveTextContent('Hotovo: Test: zavadnutí lepidla');
-    expect(again).toHaveTextContent('Krok 1');
+    expect(again).toHaveTextContent('Krok 2');
     expect(again).toHaveTextContent(/doběhlo před 5/);
     expect(beep).toHaveBeenCalledTimes(1);
 
@@ -203,7 +203,7 @@ describe('LessonFocusPage', () => {
         },
       ]),
     );
-    setup(focusUrl(1));
+    setup(focusUrl(2));
     const card = await screen.findByRole('region', { name: /test: zavadnutí lepidla/i });
     act(() => vi.advanceTimersByTime(10 * MIN + 400));
     expect(await within(card).findByRole('status')).toHaveTextContent('Hotovo');
@@ -213,28 +213,28 @@ describe('LessonFocusPage', () => {
 
   it('časovač doběhlý při zavřené aplikaci se ohlásí po návratu', async () => {
     const beep = vi.spyOn(appBeeper, 'beep').mockImplementation(() => undefined);
-    const first = setup(focusUrl(1));
+    const first = setup(focusUrl(2));
     const card = await screen.findByRole('region', { name: /test: zavadnutí lepidla/i });
     await first.user.click(within(card).getByRole('button', { name: /spustit 10/i }));
     first.unmount();
 
     act(() => vi.advanceTimersByTime(30 * MIN));
     expect(beep).not.toHaveBeenCalled();
-    setup(focusUrl(2));
+    setup(focusUrl(3));
     expect(await screen.findByRole('alert')).toHaveTextContent(/doběhlo před 20/);
     expect(beep).toHaveBeenCalledTimes(1);
   });
 
   it('krok blokovaný čekáním upozorní a nabídne cestu zpět ke kroku s čekáním', async () => {
-    const { user, router } = setup(focusUrl(5));
+    const { user, router } = setup(focusUrl(6));
     expect(await screen.findByText(/další krok čeká na „test: zatuhnutí spoje“/i)).toBeVisible();
     await user.click(screen.getByRole('button', { name: /další/i }));
     const note = screen.getByRole('note', { name: 'Ještě se čeká' });
     expect(note).toHaveTextContent(
-      'Nejdřív spusťte a nechte doběhnout „Test: zatuhnutí spoje“ v kroku 1.',
+      'Nejdřív spusťte a nechte doběhnout „Test: zatuhnutí spoje“ v kroku 2.',
     );
-    await user.click(within(note).getByRole('button', { name: 'Ke kroku 1' }));
-    expect(router.state.location.search).toBe('?krok=1');
+    await user.click(within(note).getByRole('button', { name: 'Ke kroku 2' }));
+    expect(router.state.location.search).toBe('?krok=2');
 
     const card = await screen.findByRole('region', { name: /test: zatuhnutí spoje/i });
     await user.click(within(card).getByRole('button', { name: /spustit 1/i }));
@@ -264,17 +264,17 @@ describe('Dílenský režim z lekce a pruh časovačů v aplikaci', () => {
     // Běžící časovač je vidět i v pruhu aplikace s odkazem na krok – v lekci, odkud se
     // spustil (ne v dílenském režimu, který uživatel neotevřel).
     const bar = screen.getByRole('navigation', { name: 'Běžící časovače' });
-    expect(within(bar).getByRole('link')).toHaveAttribute('href', `${LESSON}#krok-1`);
+    expect(within(bar).getByRole('link')).toHaveAttribute('href', `${LESSON}#krok-2`);
     expect(bar).toHaveTextContent('10:00');
   });
 
   it('časovač spuštěný v dílenském režimu vede zpět do dílenského režimu', async () => {
-    const first = setup(focusUrl(1));
+    const first = setup(focusUrl(2));
     const card = await screen.findByRole('region', { name: /test: zavadnutí lepidla/i });
     await first.user.click(within(card).getByRole('button', { name: /spustit 10/i }));
     first.unmount();
     setup('/dashboard');
     const bar = await screen.findByRole('navigation', { name: 'Běžící časovače' });
-    expect(within(bar).getByRole('link')).toHaveAttribute('href', `${LESSON}/focus?krok=1`);
+    expect(within(bar).getByRole('link')).toHaveAttribute('href', `${LESSON}/focus?krok=2`);
   });
 });

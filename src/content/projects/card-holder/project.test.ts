@@ -16,6 +16,16 @@ describe('obsah – pouzdro na karty: steh', () => {
     expect(step(5, 'stitch')).toContain('nechte asi 2 mm dlouhé a zatavte');
   });
 
+  it('lekce 3: cvičná kapsa z tvarů 3 a 1, hrany ústí před lepením, rohy proražené první', () => {
+    const l3 = cardHolderProject.lessons.find((l) => l.order === 3)!.steps.map((s) => s.id);
+    expect(l3.indexOf('opening-edges')).toBe(l3.indexOf('glue') - 1);
+    expect(step(3, 'opening-edges')).toContain('Tvar 3 s výřezem a tvar 1 slepíte rubem k sobě');
+    expect(step(3, 'glue')).toContain('Střed nechte suchý');
+    expect(step(3, 'glue')).toContain('vyzkoušejte na tvaru 2');
+    expect(step(3, 'punch-two-layers')).toContain('Nejdřív proražte oba rohy');
+    expect(step(3, 'continue-row')).toContain('Spodek děrujte od obou rohů ke středu');
+  });
+
   it('spodní roh: řada po zaoblení 3,5 mm od hrany, ne v průsečíku rovných linií', () => {
     expect(step(5, 'punch-sides')).toContain(
       'do horního kroužku na linii stehu, 6 mm pod horní hranou kapsy',

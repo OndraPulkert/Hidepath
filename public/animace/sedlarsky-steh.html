@@ -133,8 +133,8 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 <section class="card diff" aria-label="Rozdíly mezi projekty">
 <h2>Co se mezi projekty liší</h2>
 <ul>
-<li><b>Nit:</b> projekt 01 asi 60 cm na cvičné tvary (lekce 3), asi 1 m na pouzdro (lekce 5). Projekt 02 asi 0,8 m na každý šev. Projekt 05 4 × délka švu + 25–30 cm, boky S4 a S5 (tři vrstvy) 5 × (lekce 9).</li>
-<li><b>Zpětné stehy:</b> všude dva na začátku i dva na konci. Výjimka: cvičné tvary v lekci 3 projektu 01 začínají bez nich. Projekt 05, boky S4 a S5: steh 60–64 navíc zdvojte (jak, ověřte na zkušebním kuse).</li>
+<li><b>Nit:</b> projekt 01 asi 80 cm na cvičnou kapsu (lekce 3), asi 1 m na pouzdro (lekce 5). Projekt 02 asi 0,8 m na každý šev. Projekt 05 4 × délka švu + 25–30 cm, boky S4 a S5 (tři vrstvy) 5 × (lekce 9).</li>
+<li><b>Zpětné stehy:</b> všude dva na začátku i dva na konci. Výjimka: cvičná kapsa v lekci 3 projektu 01 začíná bez nich. Projekt 05, boky S4 a S5: steh 60–64 navíc zdvojte (jak, ověřte na zkušebním kuse).</li>
 <li><b>Rub:</b> bývá méně pravidelný než líc, to je normální. Stehy ale musí být stejně utažené, v jedné řadě a bez smyček. Křivé otvory na rubu znamenají, že vidličky nebyly kolmo.</li>
 <li><b>Konce nitě:</b> odstřihnout těsně u kůže, nebo nechat 2 mm a zatavit. Popisuje to jen projekt 01 (lekce 3 a 5).</li>
 <li><b>Vrstvy a rozteč:</b> projekt 01 dvě vrstvy, rozteč 3,85–4 mm. Projekt 02 kapsa dvě vrstvy, odřezek a dno tři, rozteč 4 mm. Projekt 05 rozteč přesně 4 mm, části švů přes tři vrstvy.</li>
@@ -326,7 +326,7 @@ const add=(part,title,body,dur,draw,side,tip)=>S.push({part,title,body,dur,draw,
 const FWD=Array.from({length:NV-1},(_,i)=>[i,i+1]);   // tahy 0→1 … 6→7
 
 // ---------- A: nit a jehly ----------
-add('A','Odměřte nit','Na nácvik (lekce 1) a cvičné tvary (lekce 3) ustřihněte asi 60 cm voskované nitě 0,6 mm, na pouzdro (lekce 5) asi 1 m. Pravidlo: 4 × délka švu + 25–30 cm, přes tři vrstvy 5 ×.',7600,t=>{
+add('A','Odměřte nit','Na nácvik (lekce 1) ustřihněte asi 60 cm voskované nitě 0,6 mm, na cvičnou kapsu (lekce 3) asi 80 cm, na pouzdro (lekce 5) asi 1 m. Pravidlo: 4 × délka švu + 25–30 cm, přes tři vrstvy 5 ×.',7600,t=>{
   const k=.075, x0=6;   // 1 cm = 0,75 j. (obě řady ve stejném měřítku)
   let s='';
   const row=(y,seamCm,lessonCm,title,lessonTxt,p)=>{
@@ -340,11 +340,11 @@ add('A','Odměřte nit','Na nácvik (lekce 1) a cvičné tvary (lekce 3) ustřih
     if(p>.99) r+=`<path d="M${f(lx)} ${y-4} v8" stroke="var(--ok)" stroke-width=".55"/>`+lbl(lx,y-5,lessonTxt,'tok','end');
     return r;
   };
-  s+=row(24,6,60,'cvičné tvary: šev 6 cm','60 cm',es(t,.05,.35));
+  s+=row(24,12,80,'cvičná kapsa: tři strany asi 12 cm','80 cm',es(t,.05,.35));
   s+=row(56,18,100,'pouzdro: tři strany asi 18 cm','1 m',es(t,.4,.7));
-  let ib=notes([['projekt 01','t'],['cvičné tvary 60 cm'],['pouzdro 1 m'],['','ts'],['projekt 02','t'],['0,8 m'],['','ts'],['projekt 05','t'],['4 × šev + 25–30'],['S4, S5: 5 ×']],16,5.2);
+  let ib=notes([['projekt 01','t'],['cvičná kapsa 80 cm'],['pouzdro 1 m'],['','ts'],['projekt 02','t'],['0,8 m'],['','ts'],['projekt 05','t'],['4 × šev + 25–30'],['S4, S5: 5 ×']],16,5.2);
   return s+inset('NIT 0,6 MM',ib);
-},null,'Tip: šev podél delší hrany cvičných tvarů 60 × 40 mm měří 6 cm. Tři šité strany pouzdra měří asi 18 cm.');
+},null,'Tip: tři šité strany cvičné kapsy 60 × 40 mm měří asi 12 cm, pouzdra asi 18 cm.');
 
 // jehla 48 mm vodorovně, hrot vlevo; 1 mm = 1,15 j.
 const NK=1.15, NTIP=6, NBUTT=NTIP+48*NK, NY=40, EYEX=NBUTT-3.2, TAIL=40*NK;
@@ -454,7 +454,7 @@ add('B','Nebo ho upněte svěrkou','Pohodlnější je sevřít díl mezi dvě d�
 },null,'Tip: obrázek ukazuje jedno z možných uspořádání.');
 
 // ---------- C: začátek ----------
-add('C','Vyrovnejte nit v prvním otvoru','Jehlu protáhněte prvním otvorem tak, aby na obou stranách zůstala stejná délka nitě. Máte jednu jehlu vpředu a jednu vzadu. Na odřezku začněte bez zpětných stehů; na pouzdře v lekci 5 je přidáte i na začátek (krok E2).',9000,t=>{
+add('C','Vyrovnejte nit v prvním otvoru','Jehlu protáhněte prvním otvorem tak, aby na obou stranách zůstala stejná délka nitě. Máte jednu jehlu vpředu a jednu vzadu. Na cvičné kapse (lekce 3) začněte bez zpětných stehů; na pouzdře v lekci 5 je přidáte i na začátek (krok E2).',9000,t=>{
   const p=es(t,.05,.55), eq=es(t,.6,.9);
   let el=piece('lic',{line:true});
   let sc=secBase();
@@ -564,7 +564,7 @@ add('E','Na konci prošijte zpět dva otvory','Na konci řady prošijte zpět dv
   s+=viewTag('POHLED NA LÍC · konec řady');
   if(n>=8||fr>.6) s+=pill((HX(5)+HX(7))/2,SEAM-4.5,'zpět 2 otvory','ta','middle');
   s+=pill(4,87,n>=9?'konec zpevněný 2 zpětnými stehy':'konec řady → zpět','t');
-  let ib=notes([['projekt 01,','t'],['tvary (L3):','t'],['2 zpět na konci','ts'],['','ts'],['ostatní švy:','t'],['2 zpět na začátku','ts'],['i na konci','ts']],16,5.2);
+  let ib=notes([['projekt 01,','t'],['kapsa (L3):','t'],['2 zpět na konci','ts'],['','ts'],['ostatní švy:','t'],['2 zpět na začátku','ts'],['i na konci','ts']],16,5.2);
   return s+inset('ZPĚTNÉ STEHY',ib);
 },{v:'LÍC',sub:'konec řady'},'Tip: zpět šijte stejným rytmem, jen opačným směrem. Zpětné stehy leží přes hotové.');
 
