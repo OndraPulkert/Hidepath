@@ -37,6 +37,8 @@ import { type AnimationLink } from '@/content/schema';
  *   (lekce 2 a 4 pouzdra na karty), společné pro všechny projekty.
  * - rez-nozem (`#A`–`#C`): stejně jako kapsa-prisiti; řez odlamovacím nožem podle ocelového
  *   pravítka, pravítko nastavené čepelí (lekce 2 pouzdra na karty), společné pro všechny projekty.
+ * - derovani-kapsa (`#A`–`#E`): stejně jako kapsa-prisiti; děrování cvičné kapsy z tvarů 3 a 1
+ *   (lekce 3 pouzdra na karty): rohy dvojhrotem, boky, spodek ke středu, zbytek jednohrotem.
  * - ctverec-forma (`#A`–`#C`): stejně jako kapsa-prisiti; čtverec 70 × 70 kolem vyvrtaného otvoru
  *   formy jen pravítkem (lekce 2 pouzdra s mincí), příklad otvor Ø 32 mm.
  *
@@ -117,7 +119,7 @@ export const animationPages = {
         'Propíchněte čáru švu do panelu',
         'Zdrsněte pruh po čáru švu',
         'Naneste lepidlo do pruhu po čáru švu',
-        'Nechte lepidlo odvětrat',
+        'Lepidlo na obou dílech',
         'Přitiskněte kapsu a sejměte šablonu',
       ],
       C: [
@@ -524,7 +526,7 @@ export const animationPages = {
         'Výchozí stav: rub B s čarami',
         'Hranici lepení přelepte maskovací páskou',
         'Naneste lepidlo jen do pásů',
-        'Nechte zavadnout 10–15 min',
+        'Díly přiložte hned za mokra',
         'Přiložte D2 rubem na rub B',
         'Přitlačte, děrujte nejdřív za 1 h',
       ],
@@ -562,7 +564,7 @@ export const animationPages = {
       A: ['Výchozí stav: řez bokem', 'Nanečisto složte a zkontrolujte'],
       B: [
         'Zdrsněte líc D2',
-        'Naneste lepidlo a nechte zavadnout',
+        'Naneste lepidlo tence na obě plochy',
         'Přikládejte od ohybu dna nahoru',
         'Kontrola: kapsa 93 mm',
       ],
@@ -776,6 +778,29 @@ export const animationPages = {
       A: ['Změřte průměr otvoru', 'Spočítejte odstup od otvoru'],
       B: ['Udělejte značky na osách', 'Odměřte rohy'],
       C: ['Spojte rohy', 'Zkontrolujte úhlopříčky'],
+    },
+  },
+  pouchPunch: {
+    path: '/animace/derovani-kapsa.html',
+    title: 'Děrování cvičné kapsy',
+    buttonText: 'Jak děrovat cvičnou kapsu',
+    sections: {
+      A: 'Část A – příprava',
+      B: 'Část B – rohy',
+      C: 'Část C – boky',
+      D: 'Část D – spodek',
+      E: 'Část E – kontrola',
+    },
+    steps: {
+      A: ['Kapsa na tvrdé desce', 'Stejná strana vidliček k hraně'],
+      B: ['Proražte levý roh dvojhrotem', 'Stejně pravý roh'],
+      C: ['Levý bok od rohu nahoru', 'Konec boku dvojhrotem', 'Stejně pravý bok'],
+      D: [
+        'Spodek od obou rohů ke středu',
+        'Změřte zbytek a rozdělte ho',
+        'Doplňte jednohrotem podle pravítka',
+      ],
+      E: ['Otočte kapsu a prohlédněte rub'],
     },
   },
   rulerCut: {

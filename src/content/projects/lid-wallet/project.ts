@@ -59,18 +59,9 @@ const photo = (id: string, caption: string): MediaSlot => ({
 
 /*
  * Časovače, zápisník a „Připravte si“. Doby čekání jsou jen z textu lekcí a z tabulky 9.1
- * zadání (docs/zadani/penezenka-vicko.md): kde je lekce neuvádí a zadání je bere „podle návodu
- * lepidla“, je `basis: 'manufacturer'`.
+ * zadání (docs/zadani/penezenka-vicko.md): kde je lekce neuvádí a zadání je bere „podle návodu“,
+ * je `basis: 'manufacturer'`; zaschnutí lepidla (výrobce dobu neuvádí) je `basis: 'estimate'`.
  */
-
-/** Zavadnutí kontaktního lepidla 10–15 min (lekce 6; tabulka 9.1 zadání „podle návodu“). */
-const tack = (id: string, label: string, basis: StepWait['basis']): StepWait => ({
-  id,
-  label,
-  minutes: 10,
-  maxMinutes: 15,
-  basis,
-});
 
 /** Mezi lepením a děrováním aspoň 1 h (lekce 6, 8 a 9). */
 const beforePunching = (id: string, label: string, blocksStepId: string): StepWait => ({
@@ -733,7 +724,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'plate',
         title: 'Plíšek K2',
-        body: 'Rozměr plíšku přeneste na plech ze šablony plíšku z listu 4. Vyřízněte jeden plíšek pro zkušební kus z pozinkovaného plechu 0,5 mm, který jste v obchodě vyzkoušeli magnetem: pilkou na kov, nebo plech nařízněte nožem u pravítka a v rýze zlomte ohýbáním (ověřte na odřezku plechu). Délku a šířku přeměřte posuvkou proti šabloně plíšku na listu 4; raději o kousek delší než kratší, přesah dobruste. Rohy R3 a otřep zabruste brusným papírem 120 na desce. Hrany přelakujte bezbarvým lakem na nehty – železo dělá na vlhké usni tmavé skvrny. Jestli na plechu drží kontaktní lepidlo, ověří zkušební kus; chcete-li to vědět dřív, přilepte odstřižek plechu na odřezek usně a po 24 h zkuste, jestli drží.',
+        body: 'Rozměr plíšku přeneste na plech ze šablony plíšku z listu 4. Vyřízněte jeden plíšek pro zkušební kus z pozinkovaného plechu 0,5 mm, který jste v obchodě vyzkoušeli magnetem: pilkou na kov, nebo plech nařízněte nožem u pravítka a v rýze zlomte ohýbáním (ověřte na odřezku plechu). Délku a šířku přeměřte posuvkou proti šabloně plíšku na listu 4; raději o kousek delší než kratší, přesah dobruste. Rohy R3 a otřep zabruste brusným papírem 120 na desce. Hrany přelakujte bezbarvým lakem na nehty – železo dělá na vlhké usni tmavé skvrny. Jestli na plechu drží lepidlo, ověří zkušební kus; chcete-li to vědět dřív, přilepte odstřižek plechu na odřezek usně a po 24 h zkuste, jestli drží.',
         waits: [
           {
             id: 'plate-glue-test',
@@ -1026,12 +1017,9 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidBackD2', 'A5'),
           animationLink('lidBackD2', 'A6'),
         ],
-        body: 'D2 lepte rubem na rub B jen na šrafovaných pásech G3 (dno mincí, boky a střed mezi sloupci; list 2 a 3). Sloupce mincí a horní okraj D2 nad koncem šrafy (začíná tam závěs) nelepte. Na rubu B máte hranice z lekce 4. Na rub D2 je přeneste ze šablony D2 (2. výtisk listu 3): přiložte ji na rub D2 podle hran, kroužky v rozích zelené šrafy G3 propíchněte jehlou jen do rubu (hrot nesmí projít na líc, sílu zkuste na odřezku kozinky) a spojte tužkou u pravítka. Hranice na B i na D2 přelepte maskovací páskou, kontaktní lepidlo naneste na obě strany a pásku hned strhněte. Nechte zavadnout 10–15 min. D2 přiložte do jejího čárkovaného obdélníku na rubu B: osa na osu (vpichy osy D2 jsou v okénku bankovek), spodní hrana na spodní čáru, na každém boku přesah 1 mm. Přitlačte. Okénko sekejte a děrujte nejdřív za 1 h.',
+        body: 'D2 lepte rubem na rub B jen na šrafovaných pásech G3 (dno mincí, boky a střed mezi sloupci; list 2 a 3). Sloupce mincí a horní okraj D2 nad koncem šrafy (začíná tam závěs) nelepte. Na rubu B máte hranice z lekce 4. Na rub D2 je přeneste ze šablony D2 (2. výtisk listu 3): přiložte ji na rub D2 podle hran, kroužky v rozích zelené šrafy G3 propíchněte jehlou jen do rubu (hrot nesmí projít na líc, sílu zkuste na odřezku kozinky) a spojte tužkou u pravítka. Hranice na B i na D2 přelepte maskovací páskou, lepidlo naneste tence na obě strany a pásku hned strhněte. D2 hned za mokra přiložte do jejího čárkovaného obdélníku na rubu B: osa na osu (vpichy osy D2 jsou v okénku bankovek), spodní hrana na spodní čáru, na každém boku přesah 1 mm; za mokra se dá ještě kousek posunout. Přebytek hned setřete vlhkým hadříkem (nikdy ne na líc). Přitlačte přes hadřík a nechte pod závažím zaschnout; okénko a otvory nejdřív za 1 h, nejlépe druhý den.',
         media: [],
-        waits: [
-          tack('tack', 'Zavadnutí lepidla G3', 'text'),
-          beforePunching('cure', 'Lepení G3 před okénkem a děrováním', 'bill-window'),
-        ],
+        waits: [beforePunching('cure', 'Lepení G3 před okénkem a děrováním', 'bill-window')],
       },
       {
         id: 'bill-window',
@@ -1103,7 +1091,7 @@ export const lessons: readonly LessonDefinition[] = [
     safety: [
       'Nůž veďte tahem od prstů volné ruky.',
       'Prsty držící výsečník nebo vidličku mějte u spodku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',
-      'Kontaktní lepidlo používejte ve větrané místnosti a podle návodu na obalu.',
+      'Lepidlo používejte ve větrané místnosti a podle návodu na obalu.',
     ],
     requires: [
       {
@@ -1233,19 +1221,15 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'g1',
         title: 'G1: plíšek na rub přední stěny',
-        body: 'F položte rubem nahoru celou na tvrdou desku, ohyb dna u hrany desky; B stojí nad ohybem nahoru. Vyschlý ohyb táhne B zpátky k F: opřete ji zezadu o knihu nebo krabičku a horní hranu přichyťte kolíčkem nebo páskou, ať nespadne na lepidlo. Plíšek přilepte kontaktním lepidlem na rub F do šrafované plochy G1 (list 2), horní hranou přesně na horní hranici šrafy: nahoře je rezerva magnetu nejmenší; přilnavost k oceli ověří zkušební kus. Pak už plíšek vyměnit nejde, magnet ano.',
-        waits: [tack('tack', 'Zavadnutí lepidla G1 (plíšek)', 'manufacturer')],
+        body: 'F položte rubem nahoru celou na tvrdou desku, ohyb dna u hrany desky; B stojí nad ohybem nahoru. Vyschlý ohyb táhne B zpátky k F: opřete ji zezadu o knihu nebo krabičku a horní hranu přichyťte kolíčkem nebo páskou, ať nespadne na lepidlo. Plíšek přilepte lepidlem na rub F do šrafované plochy G1 (list 2), horní hranou přesně na horní hranici šrafy: nahoře je rezerva magnetu nejmenší; přilnavost k oceli ověří zkušební kus. Přitiskněte. Pak už plíšek vyměnit nejde, magnet ano.',
         animationLinks: [animationLink('lidMagnet', 'A1'), animationLink('lidMagnet', 'A2')],
         media: [],
       },
       {
         id: 'g2',
         title: 'G2 a G2b: přepážka D1',
-        body: 'D1 přilepte rubem na rub F do šrafovaných ploch G2 (přes plíšek) a G2b (boky 1 mm). D1 nemá žádnou vůli: přikládejte ji vpichy osy na osu rubu F z lekce 4, zdola od spodní čáry obdélníku D1. Kontaktní lepidlo jde na obě strany, hranice proto vyznačte i na rubu D1: vpichy G2 a G2b z lekce 4 spojte tužkou u pravítka (spodní pás G2 a boční proužky G2b). Plochy, které se nelepí, zakryjte maskovací páskou hranou přesně na čáru (na rubu F pásy G2b z obou stran, na D1 zevnitř), hranu pásky přejeďte nehtem. Pásku nejdřív zkuste na odřezku rubu kozinky. Lepidlo nanášejte tahy z pásky do šrafy, na proužky G2b párátkem. Pásky strhněte hned po nanesení lepidla, pomalu a směrem od lepené plochy, ještě než lepidlo zavadne a než přiložíte D1. Přetok nad G2 hned setřete.',
-        waits: [
-          tack('tack', 'Zavadnutí lepidla G2 (D1)', 'manufacturer'),
-          beforePunching('cure', 'Lepení G1 a G2 před děrováním S6', 's6'),
-        ],
+        body: 'D1 přilepte rubem na rub F do šrafovaných ploch G2 (přes plíšek) a G2b (boky 1 mm). D1 nemá žádnou vůli: přikládejte ji vpichy osy na osu rubu F z lekce 4, zdola od spodní čáry obdélníku D1. Lepidlo jde tence na obě strany, hranice proto vyznačte i na rubu D1: vpichy G2 a G2b z lekce 4 spojte tužkou u pravítka (spodní pás G2 a boční proužky G2b). Plochy, které se nelepí, zakryjte maskovací páskou hranou přesně na čáru (na rubu F pásy G2b z obou stran, na D1 zevnitř), hranu pásky přejeďte nehtem. Pásku nejdřív zkuste na odřezku rubu kozinky. Lepidlo nanášejte tahy z pásky do šrafy, na proužky G2b párátkem. Pásky strhněte hned po nanesení lepidla, pomalu a směrem od lepené plochy, a D1 hned za mokra přiložte. Přetok nad G2 hned setřete vlhkým hadříkem (nikdy ne na líc), D1 přitiskněte přes hadřík a nechte pod závažím zaschnout.',
+        waits: [beforePunching('cure', 'Lepení G1 a G2 před děrováním S6', 's6')],
         animationLinks: [animationLink('lidMagnet', 'A3'), animationLink('lidMagnet', 'A4')],
         media: [],
       },
@@ -1314,7 +1298,7 @@ export const lessons: readonly LessonDefinition[] = [
     ],
     safety: [
       'Prsty držící vidličku mějte u spodku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',
-      'Kontaktní lepidlo používejte ve větrané místnosti a podle návodu na obalu.',
+      'Lepidlo používejte ve větrané místnosti a podle návodu na obalu.',
     ],
     requires: [
       { id: 'plate', fromLesson: L4, label: 'Plíšek K2 s přelakovanými hranami' },
@@ -1357,7 +1341,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'dry-fit',
         title: 'Nanečisto',
         animationLinks: [animationLink('lidBodySides', 'A2')],
-        body: 'Díl nejdřív složte nanečisto a zkontrolujte, že boky F a B lícují a D2 přesahuje na každém boku 1 mm. Na líc D2 u obou boků nalepte kousek maskovací pásky spodní hranou přesně na horní hranu F (pásku nejdřív zkuste na odřezku líce D2). Teprve pak lepte – kontaktní lepidlo chytne hned při dotyku.',
+        body: 'Díl nejdřív složte nanečisto a zkontrolujte, že boky F a B lícují a D2 přesahuje na každém boku 1 mm. Na líc D2 u obou boků nalepte kousek maskovací pásky spodní hranou přesně na horní hranu F (pásku nejdřív zkuste na odřezku líce D2). Teprve pak lepte; za mokra se díly dají ještě kousek posunout a srovnat.',
         media: [],
       },
       {
@@ -1369,11 +1353,8 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('lidBodySides', 'B3'),
           animationLink('lidBodySides', 'B4'),
         ],
-        body: 'Lepte šrafované boční pásy G4 z listu 2: rub F na líc D2 a pod D2 rub F na rub B. Líc D2 v šedé šrafě G4 (list 3) zdrsněte jen pod páskou z nanečisto, v pásu 5 mm od hrany D2 (4 mm od boku F a přesah D2 1 mm), nic nekreslete; nad hranou F je líc D2 vidět. Vnitřní hranici pásu přelepte na líci D2 svislou maskovací páskou hranou 5 mm od hrany D2 (odměřte pravítkem dole i nahoře), od spodní hrany D2 k pásce z nanečisto. Lepidlo naneste mezi pásky. Svislou pásku strhněte hned po nanesení lepidla, pomalu směrem od lepené plochy (zůstala by pod D1), horní až po přiložení F. Přikládejte od ohybu dna nahoru a F rovnejte podle boků B. Mezi pásy G4 zůstane kapsa 93 mm.',
-        waits: [
-          tack('tack', 'Zavadnutí lepidla G4', 'manufacturer'),
-          beforePunching('cure', 'Lepení G4 před děrováním boků', 'punch-sew'),
-        ],
+        body: 'Lepte šrafované boční pásy G4 z listu 2: rub F na líc D2 a pod D2 rub F na rub B. Líc D2 v šedé šrafě G4 (list 3) zdrsněte jen pod páskou z nanečisto, v pásu 5 mm od hrany D2 (4 mm od boku F a přesah D2 1 mm), nic nekreslete; nad hranou F je líc D2 vidět. Vnitřní hranici pásu přelepte na líci D2 svislou maskovací páskou hranou 5 mm od hrany D2 (odměřte pravítkem dole i nahoře), od spodní hrany D2 k pásce z nanečisto. Lepidlo naneste tence mezi pásky. Svislou pásku strhněte hned po nanesení lepidla, pomalu směrem od lepené plochy (zůstala by pod D1), horní až po přiložení F. Přikládejte hned za mokra od ohybu dna nahoru a F rovnejte podle boků B. Přebytek setřete vlhkým hadříkem (nikdy ne na líc), přitiskněte přes hadřík a nechte pod závažím nebo v kolíčcích přes hadřík zaschnout. Mezi pásy G4 zůstane kapsa 93 mm.',
+        waits: [beforePunching('cure', 'Lepení G4 před děrováním boků', 'punch-sew')],
         media: [],
       },
       {
@@ -1422,7 +1403,7 @@ export const lessons: readonly LessonDefinition[] = [
       },
     ],
     commonMistakes: [
-      'Lepení G4 bez zkoušky nanečisto: kontaktní lepidlo po dotyku nejde posunout.',
+      'Lepení G4 bez zkoušky nanečisto: po zaschnutí lepidla už díly neposunete.',
       'V úseku y 56–68 víc nových otvorů najednou: tady vždy jen jeden.',
       'Čára švu odměřená od přečnívající D2: otvory pak po zarovnání boku leží jen 2,0 mm od hrany.',
       'Čára švu kružidlem po celé délce boku: pod y 8 a nad y 76 zůstane vidět.',
@@ -1430,7 +1411,7 @@ export const lessons: readonly LessonDefinition[] = [
     safety: [
       'Nůž veďte tahem od prstů volné ruky.',
       'Prsty držící vidličku mějte u spodku, palička dopadá na horní konec. Děrujte jen na tvrdé desce.',
-      'Kontaktní lepidlo používejte ve větrané místnosti a podle návodu na obalu.',
+      'Lepidlo používejte ve větrané místnosti a podle návodu na obalu.',
     ],
     requires: [{ id: 'side-strip', fromLesson: L4, label: 'Proužek otvorů S4/S5 z listu 4' }],
     media: [photo('lw-l9-hero', 'Sešité tělo peněženky zepředu, víčko zatím otevřené')],
@@ -1626,8 +1607,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'lining',
         title: 'Podšívka L1 přes magnet',
-        body: 'Horní hrana L1 leží 10 mm nad středem magnetu, na rubu se neznačí (nad L1 je rub vidět). Druhou šablonu konce jazýčku (z lekce 4) zkraťte po černé tečkované čáře horní hrany L1 a v ní soustředně s kroužkem magnetu vysekněte otvor výsečníkem Ø 10 (větší než magnet, ať šablona přes magnet a epoxid dosedne naplocho). Po ztuhnutí epoxidu ji přiložte na rub boky na boky jazýčku, otvorem přes magnet. Nad její horní hranu nalepte maskovací pásku hranou přesně na hranu šablony a šablonu sejměte. Natřete kontaktním lepidlem rub jazýčku pod páskou kolem magnetu i L1, nechte zavadnout a L1 přiložte horní hranou k pásce. Přitlačte prsty nebo převalujte kolíkem, pak pásku pomalu strhněte. Přes magnet paličkou netlučte – neodym se může odštípnout.',
-        waits: [tack('tack', 'Zavadnutí lepidla pod L1', 'manufacturer')],
+        body: 'Horní hrana L1 leží 10 mm nad středem magnetu, na rubu se neznačí (nad L1 je rub vidět). Druhou šablonu konce jazýčku (z lekce 4) zkraťte po černé tečkované čáře horní hrany L1 a v ní soustředně s kroužkem magnetu vysekněte otvor výsečníkem Ø 10 (větší než magnet, ať šablona přes magnet a epoxid dosedne naplocho). Po ztuhnutí epoxidu ji přiložte na rub boky na boky jazýčku, otvorem přes magnet. Nad její horní hranu nalepte maskovací pásku hranou přesně na hranu šablony a šablonu sejměte. Natřete lepidlem tence rub jazýčku pod páskou kolem magnetu i L1, L1 hned za mokra přiložte horní hranou k pásce. Přitlačte prsty nebo převalujte kolíkem, pak pásku pomalu strhněte. Přes magnet paličkou netlučte – neodym se může odštípnout.',
         animationLinks: [animationLink('lidMagnet', 'B5'), animationLink('lidMagnet', 'B6')],
         media: [
           ill(
@@ -1700,7 +1680,7 @@ export const lessons: readonly LessonDefinition[] = [
       'Přes magnet paličkou netlučte: neodym se může odštípnout.',
       'Vidlička i jehly jsou ocelové a magnet je přitahuje: děrujte opatrně, s jazýčkem pevně na podložce, nejdřív na odřezku.',
       'Dvousložkový epoxid míchejte a používejte podle návodu a bezpečnostních pokynů výrobce na obalu.',
-      'Kontaktní lepidlo používejte ve větrané místnosti a podle návodu na obalu.',
+      'Lepidlo používejte ve větrané místnosti a podle návodu na obalu.',
       'Nůž veďte tahem od prstů volné ruky.',
       'Prsty držící výsečník nebo vidličku mějte u spodku, palička dopadá na horní konec.',
     ],
@@ -1791,7 +1771,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'magnet-swap',
         title: 'Výměna magnetu (jen když Z-1 neprojde)',
-        body: 'Postup je neověřený, zkuste ho napřed na zkušebním kuse. Plíšek vyměnit nejde, magnet ano. (1) Stehy S7 na líci přestřihněte malými nůžkami nebo páráčkem (kůži nenařízněte) a nit vytáhněte; otvory použijete znovu. (2) L1 pomalu odlepte od horní hrany ke špičce; počítejte s novou L1 z nebarvené kozinky (přířez z listu 3), stará se nejspíš roztrhne. (3) Magnet sundejte bez tlučení a bez páčení ostrou hranou, neodym je křehký. Zbytky lepidla opatrně obruste a rub znovu zdrsněte. (4) Nový magnet Ø 8: silnější (vyšší třída nebo tlustší), nebo slabší (nižší třída nebo tenčí); třídu, tloušťku a sílu ověřte u prodejce. Má-li jinou tloušťku než 1,5 mm, před lepením ji zadejte ve formuláři „Listy pro vaši kůži“ (odkaz pod krokem) a lepte, až když aplikace listy vytvoří. (5) Magnet přilepte epoxidem na stejné místo, nechte ztuhnout a přilepte novou L1 kontaktním lepidlem s přesahem, horní hranou k pásce podle zkrácené šablony jako v lekci 11 (přes magnet netlučte). L1 ořízněte podle hran jazýčku (jazýček znovu neřežte), rysky klínu přeneste ze šablony na hranu jako v lekci 11 a znovu zbruste klín jen mezi ryskou a špičkou. (6) Po 24 h propíchněte z líce jehlou starými otvory S7 i skrz L1 a ušijte S7 znovu; u tlustšího magnetu zesilte podložku o rozdíl tloušťky. Hrany jazýčku dokončete jako v lekci 5. Pak zopakujte Z-1 a po několika dnech používání prohlédněte šev S7.',
+        body: 'Postup je neověřený, zkuste ho napřed na zkušebním kuse. Plíšek vyměnit nejde, magnet ano. (1) Stehy S7 na líci přestřihněte malými nůžkami nebo páráčkem (kůži nenařízněte) a nit vytáhněte; otvory použijete znovu. (2) L1 pomalu odlepte od horní hrany ke špičce; počítejte s novou L1 z nebarvené kozinky (přířez z listu 3), stará se nejspíš roztrhne. (3) Magnet sundejte bez tlučení a bez páčení ostrou hranou, neodym je křehký. Zbytky lepidla opatrně obruste a rub znovu zdrsněte. (4) Nový magnet Ø 8: silnější (vyšší třída nebo tlustší), nebo slabší (nižší třída nebo tenčí); třídu, tloušťku a sílu ověřte u prodejce. Má-li jinou tloušťku než 1,5 mm, před lepením ji zadejte ve formuláři „Listy pro vaši kůži“ (odkaz pod krokem) a lepte, až když aplikace listy vytvoří. (5) Magnet přilepte epoxidem na stejné místo, nechte ztuhnout a přilepte novou L1 lepidlem s přesahem, horní hranou k pásce podle zkrácené šablony jako v lekci 11 (přes magnet netlučte). L1 ořízněte podle hran jazýčku (jazýček znovu neřežte), rysky klínu přeneste ze šablony na hranu jako v lekci 11 a znovu zbruste klín jen mezi ryskou a špičkou. (6) Po 24 h propíchněte z líce jehlou starými otvory S7 i skrz L1 a ušijte S7 znovu; u tlustšího magnetu zesilte podložku o rozdíl tloušťky. Hrany jazýčku dokončete jako v lekci 5. Pak zopakujte Z-1 a po několika dnech používání prohlédněte šev S7.',
         recalls: [{ fieldId: 'z1-result', label: 'Výsledek Z-1' }],
         appLinks: [EDIT_SHEETS],
         lidSheetRecalls: ['magnet'],
@@ -1936,7 +1916,7 @@ export const lessons: readonly LessonDefinition[] = [
     safety: [
       'Jen při výměně magnetu: magnet sundávejte bez tlučení a páčení, neodym se může odštípnout.',
       'Dvousložkový epoxid míchejte a používejte podle návodu a bezpečnostních pokynů výrobce na obalu.',
-      'Kontaktní lepidlo používejte ve větrané místnosti a podle návodu na obalu.',
+      'Lepidlo používejte ve větrané místnosti a podle návodu na obalu.',
       'Nůž veďte tahem od prstů volné ruky.',
     ],
     prints: [
@@ -2261,7 +2241,7 @@ export const lidWalletProject: ProjectDefinition = {
       priority: 'required',
       reason: 'Lepení G1–G4 a podšívky L1.',
       specification:
-        'Kontaktní lepidlo na kůži; na obě strany, zavadnout 10–15 min, děrovat nejdřív za 1 h.',
+        "Fiebing's Leather Craft Cement (vodní báze); tence na obě strany, spojit za mokra, pod závažím; výrobce dobu neuvádí, děrovat nejdřív za 1 h.",
     },
     {
       equipmentSlug: 'sandpaper',
@@ -2287,7 +2267,7 @@ export const lidWalletProject: ProjectDefinition = {
     {
       equipmentSlug: 'epoxy-glue',
       priority: 'required',
-      reason: 'Magnet na zdrsněný rub jazýčku; kontaktní lepidlo drží na niklu špatně.',
+      reason: 'Magnet na zdrsněný rub jazýčku; lepidlo na kůži drží na niklu špatně.',
       specification: 'Rychlý dvousložkový epoxid; 24 h před zatížením.',
     },
     {

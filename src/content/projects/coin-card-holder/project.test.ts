@@ -305,16 +305,14 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
       expect(waits.map((x) => x.at)).toEqual([
         '2/dry-and-inspect/dry-overnight',
         '4/fold-around-content/fold-dry',
-        '4/unfold-roughen-glue/glue-front-inner',
-        '4/unfold-roughen-glue/glue-inner-back',
+        '4/unfold-roughen-glue/glue-dry',
         '4/try-edge-paint/edge-paint-dry',
         '5/dye-burnish-and-seal/edge-paint-dry',
         '6/form-dimple/dry-overnight',
         '6/dye-burnish-pocket-edges/edge-paint-dry',
         '6/glue-pocket/glue-pocket',
         '7/press-and-clamp/fold-dry',
-        '7/roughen-and-glue-bottom/glue-front-inner',
-        '7/roughen-and-glue-bottom/glue-inner-back',
+        '7/roughen-and-glue-bottom/glue-dry',
         '8/dye-and-burnish-edges/edge-paint-dry',
       ]);
       for (const { at, body, w } of waits) {
@@ -323,9 +321,9 @@ describe('obsah – pouzdro s vsazenou mincí', () => {
           expect(body, at).toContain('přes noc');
           expect([w.minutes, w.maxMinutes, w.basis], at).toEqual([720, undefined, 'estimate']);
         } else if (w.id.startsWith('glue')) {
-          // Lekce říká „odvětrat podle návodu“; výchozí doba je jen orientační (UI to říká).
-          expect(body, at).toMatch(/odvětr/);
-          expect([w.minutes, w.maxMinutes, w.basis], at).toEqual([10, 15, 'manufacturer']);
+          // Výrobce dobu neuvádí: 1 h je jen odhad k úpravě.
+          expect(body, at).toMatch(/za mokra/);
+          expect([w.minutes, w.maxMinutes, w.basis], at).toEqual([60, undefined, 'estimate']);
         } else {
           expect(body, at).toMatch(/obarv|barv/);
           expect([w.minutes, w.maxMinutes, w.basis], at).toEqual([20, 30, 'manufacturer']);

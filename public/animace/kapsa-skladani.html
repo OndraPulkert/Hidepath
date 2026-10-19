@@ -586,14 +586,14 @@ function joint(n,t,rough,glue){
   s+=secTag(cam,84,6);
   return s;
 }
-add('C','Zdrsněte a natřete spoj 1','Spoje lepte po jednom. Nejdřív spoj G2, přední s vnitřním: v pruhu 0–3,5 mm od hrany (ne výš než čára švu; na listu PÁS zelená šrafa) zdrsněte rub předního i rub vnitřního panelu. Naneste kontaktní lepidlo v tenké rovnoměrné vrstvě. Lepte ve větrané místnosti.',9000,t=>{
+add('C','Zdrsněte a natřete spoj 1','Spoje lepte po jednom. Nejdřív spoj G2, přední s vnitřním: v pruhu 0–3,5 mm od hrany (ne výš než čára švu; na listu PÁS zelená šrafa) zdrsněte rub předního i rub vnitřního panelu. Naneste lepidlo v tenké rovnoměrné vrstvě na obě plochy.',9000,t=>{
   const r=es(t,.06,.45), g=es(t,.5,.92);
   let s=joint(1,t,r,g);
   return s;
 },null);
 
-add('C','Přeložte, zarovnejte a přitiskněte','Lepidlo nechte odvětrat podle návodu. Přeložte, zarovnejte jehlami přes otvory a přitiskněte – po dotyku už nejde posunout.',9800,t=>{
-  const dry=es(t,.03,.22), app=es(t,.24,.5), nd=es(t,.52,.7), pr=es(t,.74,.88);
+add('C','Přeložte, zarovnejte a přitiskněte','Přeložte hned za mokra, zarovnejte jehlami přes otvory a přitiskněte. Přebytek setřete vlhkým hadříkem.',9800,t=>{
+  const dry=0, app=es(t,.24,.5), nd=es(t,.52,.7), pr=es(t,.74,.88);
   const du=L(12,1.6,app)*(1-pr)+0*pr;
   let s=sideFrame();
   s+=sideLayer(uFront,0,false,{glue:['R'],gop:L(1,.65,dry)});
@@ -604,22 +604,22 @@ add('C','Přeložte, zarovnejte a přitiskněte','Lepidlo nechte odvětrat podle
   s=clipMain(s)+pill(lx-1,ly,'přední','t','end');
   if(du<4) s+=pill(ix+1.5,iy,'vnitřní','t');
   s+=pill(83,9,'ŘEZ DNEM · SPOJ 1','ta','end')+pill(83,15,'zadní zatím odklopený','ts','end');
-  let ib=clock(96,22,dry)+lbl(104,21,'odvětrat','t')+lbl(104,26,'podle obalu','ts');
-  ib+=notes([['přeložit zpátky','t'],['jehly skrz otvory'],['obou vrstev'],['teprve pak'],['přitisknout'],['po dotyku už','ta'],['nejde posunout','ta']],37,5.4);
+  let ib=lbl(96,21,'přiložit hned','t')+lbl(96,26,'za mokra','ts');
+  ib+=notes([['přeložit zpátky','t'],['jehly skrz otvory'],['obou vrstev'],['teprve pak'],['přitisknout'],['za mokra jde','ta'],['ještě srovnat','ta']],37,5.4);
   s+=inset('PŘILOŽIT',ib);
   if(t>.9) s+=pill(4,87,'spoj 1 slepený, otvory lícují','tok');
   else if(nd>0&&pr===0) s+=pill(4,87,'jehla prochází oběma otvory','t');
   return s;
 },null);
 
-add('C','Stejně připravte spoj 2','Stejně druhý spoj G3: líc vnitřního a rub zadního panelu v pruhu 0–3,5 mm zdrsněte, natřete a nechte odvětrat.',8600,t=>{
+add('C','Stejně připravte spoj 2','Stejně druhý spoj G3: líc vnitřního a rub zadního panelu v pruhu 0–3,5 mm zdrsněte a natřete.',8600,t=>{
   const r=es(t,.06,.45), g=es(t,.5,.92);
   let s=joint(2,t,r,g);
   return s;
 },null);
 
 add('C','Přeložte zadní panel a přitiskněte','Přeložte zadní panel, zarovnejte jehlami přes otvory skrz všechny tři vrstvy a přitiskněte.',9400,t=>{
-  const dry=es(t,.03,.2), app=es(t,.22,.48), nd=es(t,.5,.7), pr=es(t,.74,.88);
+  const dry=0, app=es(t,.22,.48), nd=es(t,.5,.7), pr=es(t,.74,.88);
   const du=L(12,1.6,app)*(1-pr);
   let s=sideFrame();
   s+=sideLayer(uFront,0,false,{glue:['R'],gop:.65});
@@ -632,7 +632,7 @@ add('C','Přeložte zadní panel a přitiskněte','Přeložte zadní panel, zaro
   if(du<4) s+=pill(bx+1.5,by,'zadní','t');
   s+=pill(83,9,'ŘEZ DNEM · SPOJ 2','ta','end');
   const dt=seg(t,.88,.96);
-  let ib=clock(96,22,dry)+lbl(104,21,'odvětrat','t')+lbl(104,26,'podle obalu','ts');
+  let ib=lbl(96,21,'přiložit hned','t')+lbl(96,26,'za mokra','ts');
   ib+=notes([['přeložit zadní','t'],['jehly skrz'],['tři vrstvy'],['přitisknout']],37,5.4);
   ib+=`<g opacity="${f(dt)}">${lbl(89,63,'pohled zepředu:','ts')}${slit(97,73,'/',3.4,1.5,'var(--lic-d)')}${slit(101,73,'/',3.4,1.1,'var(--ok)')}${slit(105,73,'/',3.4,.8,'var(--hole)')}${lbl(110,74.5,'P V Z','tok')}</g>`;
   s+=inset('PŘILOŽIT',ib);

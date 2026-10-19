@@ -435,7 +435,8 @@ describe('Postup v kostce – pouzdro na karty', () => {
     );
     const l5 = project.lessons.find((l) => l.slug === point('glue-parts').lessonSlug)!;
     const wait = l5.steps.find((s) => s.id === 'glue-parts')!.waits![0]!;
-    expect(point('glue-parts').text).toContain(`(${wait.minutes}–${wait.maxMinutes} min)`);
+    expect(wait.minutes).toBe(60);
+    expect(point('glue-parts').text).toContain('děrujte nejdřív za 1 h');
     expect(point('stitch').text).toContain('asi 1 m nitě');
     expect(l5.materials).toContain('nit asi 1 m');
     expect(point('stitch').text).toContain('ve třetím otvoru od horního konce');

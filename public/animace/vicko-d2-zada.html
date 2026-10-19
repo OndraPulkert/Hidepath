@@ -366,7 +366,7 @@ add('A','Hranici lepení přelepte maskovací páskou','Na rub D2 přeneste hran
 },SIDE.rubB);
 
 // A3 — lepidlo na obě strany
-add('A','Naneste lepidlo jen do pásů','Kontaktní lepidlo naneste na rub B i na rub D2, jen do šrafovaných pásů G3: dno mincí, boky a střed mezi sloupci. Pásku hned strhněte.',10000,t=>{
+add('A','Naneste lepidlo jen do pásů','Lepidlo naneste tence na rub B i na rub D2, jen do šrafovaných pásů G3: dno mincí, boky a střed mezi sloupci. Pásku hned strhněte.',10000,t=>{
   MIR=true;
   const strip=es(t,.84,.97);
   let s=wallB('rub')+pencilB(1)+op(1-strip,tapes(true))+glueBands(G3,es(t,.05,.5));
@@ -386,11 +386,11 @@ add('A','Naneste lepidlo jen do pásů','Kontaktní lepidlo naneste na rub B i n
   return s;
 },SIDE.rubB);
 
-// A4 — zavadnout
-add('A','Nechte zavadnout 10–15 min','Lepidlo nechte zavadnout <span class="num">10–15</span> min, pak díly spojte.',5200,t=>{
+// A4 — přiložit za mokra
+add('A','Díly přiložte hned za mokra','Lepidlo je tence na B i na D2. Díly přiložte hned, dokud je lepidlo mokré.',5200,t=>{
   MIR=true;
-  let s=wallB('rub')+pencilB(1)+glueBands(G3,1,L(1,.8,es(t,.1,.9)));
-  s+=inset('ZAVADNOUT',clock(109.5,36,es(t,.05,.9)*.25,'10–15 min')+notes([['na B i na D2','t'],['až pak spojit']],60,5.4));
+  let s=wallB('rub')+pencilB(1)+glueBands(G3,1,1);
+  s+=inset('ZA MOKRA',notes([['na B i na D2','t'],['lepidlo mokré,','t'],['spojit hned']],60,5.4));
   return s;
 },SIDE.rubB);
 
@@ -410,10 +410,10 @@ add('A','Přiložte D2 rubem na rub B','D2 přiložte rubem na rub B do jejího 
   let ib=notes([['D2 103 × 64','t'],['y 18–82'],['x −1 až 102'],['přesah 1 mm','ta'],['na každé straně'],['',''],['rubem na rub B,','t'],['líc D2 nahoře']],17,5.4);
   s+=inset('SPOJIT',ib);
   return s;
-},SIDE.licD2,'Tip: lepidlo chytne hned při dotyku – D2 nejdřív srovnejte nad B a pak už neposouvejte.');
+},SIDE.licD2,'Tip: za mokra jde D2 ještě kousek posunout a srovnat. Přebytek hned setřete vlhkým hadříkem, ne na líc.');
 
 // A6 — přitlačit, sloupce volné
-add('A','Přitlačte, děrujte nejdřív za 1 h','Spoj přitlačte v lepených pásech. Sloupce mincí zůstávají nelepené. Děrujte nejdřív za <span class="num">1</span> h.',9400,t=>{
+add('A','Přitlačte, děrujte nejdřív za 1 h','Spoj přitlačte v lepených pásech a nechte pod závažím zaschnout. Sloupce mincí zůstávají nelepené. Výrobce dobu neuvádí: děrujte nejdřív za <span class="num">1</span> h.',9400,t=>{
   MIR=true;
   let s=wallB('rub')+d2Part('lic',{coinHidden:true});
   // prst projíždí lepené pásy

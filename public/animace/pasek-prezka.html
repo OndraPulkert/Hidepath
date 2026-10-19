@@ -768,8 +768,8 @@ add('D','Ztenčete konce poutka','Jen poutko z téhož řemene, poutko z jiné k
   return s;
 },null,'Tip: tloušťka je kreslená 3× zvětšeně, klín jako rovná čára. Ztenčovač (safety skiver) není kreslený.');
 
-// D5 — lepidlo jen na klíny, zavadnout, spojit rub horního konce na líc spodního, stisknout
-add('D','Slepte poutko','Poutko z téhož řemene: ztenčené plochy jsou po brusném papíru drsné, nic dalšího nezdrsňujte. Kontaktním lepidlem natřete jen oba klíny, nechte zavadnout podle návodu na obalu a spojte: rub horního konce na líc spodního, klín na klín, hrany proužku v jedné rovině. Do poutka vsuňte pod přeplátování špalík a spoj na něm pevně stiskněte, případně poklepejte paličkou; ověřte na odřezku. Poutko z jiné kůže: líc pod přeplátováním zdrsněte smirkem 180, mimo volných 15 mm přelepte páskou, natřete, pásku sundejte, nechte zavadnout a slepte. Až lepidlo zaschne podle obalu: boky spoje srovnejte papírem 180, u barevného pásku obarvěte a zaleštěte. Líc poutka z pásu natřete balzámem jako pás, jen když na odřezku vyhověl.',14800,t=>{
+// D5 — lepidlo jen na klíny, spojit za mokra, spojit rub horního konce na líc spodního, stisknout
+add('D','Slepte poutko','Poutko z téhož řemene: ztenčené plochy jsou po brusném papíru drsné, nic dalšího nezdrsňujte. Lepidlo naneste tence jen na oba klíny a díly přiložte hned za mokra: rub horního konce na líc spodního, klín na klín, hrany proužku v jedné rovině. Přebytek hned setřete vlhkým hadříkem. Do poutka vsuňte pod přeplátování špalík a spoj na něm pevně stiskněte přes hadřík, případně poklepejte paličkou; ověřte na odřezku. Poutko z jiné kůže: líc pod přeplátováním zdrsněte smirkem 180, mimo volných 15 mm přelepte páskou, natřete, pásku sundejte a slepte za mokra. Spoj nechte zaschnout pod závažím. Až lepidlo zaschne: boky spoje srovnejte papírem 180, u barevného pásku obarvěte a zaleštěte. Líc poutka z pásu natřete balzámem jako pás, jen když na odřezku vyhověl.',14800,t=>{
   const ky=3,kx=2.2,eEnd=.75,wl=KEEP_OV*kx;let s='';
   // dva konce v řezu: spodní (klín na líci, nahoře) a horní (klín na rubu, dole)
   const join=es(t,.56,.78);
@@ -790,7 +790,7 @@ add('D','Slepte poutko','Poutko z téhož řemene: ztenčené plochy jsou po bru
   s+=`<g opacity="${f(seg(t,.04,.1)*(1-seg(t,.36,.4)))}">${pill(67.5,84,'lepidlo jen na oba klíny','ta','middle')}</g>`;
   s+=`<g opacity="${f(1-seg(t,.66,.7))}">${pill(xB0+wl+ext/2,yB+7,'spodní konec, líc nahoru','ts','middle')}</g>`;
   s+=`<g opacity="${f(1-seg(t,.5,.6))}">${pill(xT1+3,topY+3,'horní konec, rub dolů','ts')}</g>`;
-  if(t>.38&&t<.56){s+=`<g opacity="${f(seg(t,.38,.42))}">${clock(112,76,seg(t,.4,.54))}${pill(104,77.5,'zavadnout podle obalu','t','end')}</g>`}
+  if(t>.38&&t<.56){s+=`<g opacity="${f(seg(t,.38,.42))}">${pill(104,77.5,'přiložit za mokra','t','end')}</g>`}
   if(t>.6&&t<.8) s+=arrow(xT1-wl/2,topY-8,xT1-wl/2,topY-2,'var(--accent)',.5);
   // špalík v poutku pod přeplátováním: na něm se spoj stiskne
   const bk=seg(t,.7,.76)*(1-seg(t,.9,.93));
@@ -799,14 +799,14 @@ add('D','Slepte poutko','Poutko z téhož řemene: ztenčené plochy jsou po bru
   if(pr>0) s+=`<g opacity="${f(pr)}">${arrow(xB0+wl/2,yB-(BT+eEnd)*ky-10,xB0+wl/2,yB-(BT+eEnd)*ky-3)}${pill(xB0+wl+3,yB-(BT+eEnd)*ky-6,'stiskněte na špalíku','t')}</g>`;
   s+=`<g opacity="${f(seg(t,.8,.86)*(1-seg(t,.9,.92)))}">${pill(67.5,17,'rub horního konce na líc spodního, klín na klín','t','middle')}</g>`;
   // po zaschnutí: boky spoje papírem 180, barva, leštění; líc z pásu balzámem
-  if(t>.9){const o=seg(t,.9,.93);s+=`<g opacity="${f(o)}">${clock(112,24,seg(t,.9,.96))}${pill(104,25.5,'zaschnout podle obalu','t','end')}</g>`;
+  if(t>.9){const o=seg(t,.9,.93);s+=`<g opacity="${f(o)}">${pill(104,25.5,'zaschnout pod závažím','t','end')}</g>`;
     s+=`<g opacity="${f(seg(t,.95,.98))}">${pill(67.5,78,'boky spoje: papír 180, u barevného barva a leštění','t','middle')}${pill(67.5,84,'líc poutka z pásu: balzám, když na odřezku vyhověl','ts','middle')}</g>`}
   s+=pill(4,6,'ŘEZ PŘEPLÁTOVÁNÍM · tloušťka 3× zvětšená','ts');
   return s;
 },null,'Tip: tloušťka je kreslená 3× zvětšeně, špalík schematicky; boky spoje jsou kolmo k řezu, proto nejsou vidět. Poutko z jiné kůže (páska a smirek 180) kreslené není.');
 
 // D6 — špalík v poutku pod přeplátováním, 2 řady po 2 otvorech, steh, konce uvnitř
-add('D','Prošijte přeplátování','Doporučeno, hlavně u poutka z pásu. Až lepidlo zaschne, vsuňte do poutka pod přeplátování špalík z plastu nebo měkkého dřeva, užší než pás a nejvýš tak silný jako vnitřek poutka (u 40 × 3,5 mm asi 35 × 10 mm): bez špalíku by vidlička propíchla i druhou stranu. Poutko položte na hladkou desku na vysekávání, přeplátování leží na špalíku, horní konec navrchu. Udělejte 2 krátké řady napříč, každou ze 2 otvorů: 3 mm a 12 mm od špičky horního konce (přeplátování 15 mm), otvory 4 mm od hran a 4 mm od sebe. Dvouhrotou vidličkou prosekejte obě vrstvy až do špalíku; když spojem neprojde (tloušťka pásu + 1 mm, u 3,5 mm asi 4,5 mm), otvory dokončete diamantovým šídlem. Každou řadu šijte zvlášť sedlářským stehem jako v projektu 01: nit středem do otvoru 1, obě jehly proti sobě otvorem 2, jehlu, která vyšla venku, vraťte otvorem 1 dovnitř. Oba konce jsou uvnitř poutka: odstřihněte a zatavte. Spoj pak půjde na rub pásku, k tělu. Nejdřív na odřezku.',13600,t=>{
+add('D','Prošijte přeplátování','Doporučeno, hlavně u poutka z pásu. Až lepidlo zaschne (nejdřív za 1 h, nejlépe druhý den), vsuňte do poutka pod přeplátování špalík z plastu nebo měkkého dřeva, užší než pás a nejvýš tak silný jako vnitřek poutka (u 40 × 3,5 mm asi 35 × 10 mm): bez špalíku by vidlička propíchla i druhou stranu. Poutko položte na hladkou desku na vysekávání, přeplátování leží na špalíku, horní konec navrchu. Udělejte 2 krátké řady napříč, každou ze 2 otvorů: 3 mm a 12 mm od špičky horního konce (přeplátování 15 mm), otvory 4 mm od hran a 4 mm od sebe. Dvouhrotou vidličkou prosekejte obě vrstvy až do špalíku; když spojem neprojde (tloušťka pásu + 1 mm, u 3,5 mm asi 4,5 mm), otvory dokončete diamantovým šídlem. Každou řadu šijte zvlášť sedlářským stehem jako v projektu 01: nit středem do otvoru 1, obě jehly proti sobě otvorem 2, jehlu, která vyšla venku, vraťte otvorem 1 dovnitř. Oba konce jsou uvnitř poutka: odstřihněte a zatavte. Spoj pak půjde na rub pásku, k tělu. Nejdřív na odřezku.',13600,t=>{
   let s='';
   // vlevo: řez poutkem napříč se špalíkem pod přeplátováním
   const k=.9,cx=34,cy=46,w=(BW+2*BT)*k,h=(3*BT)*k*2.2,kt=BT*k*.9;

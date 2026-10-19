@@ -523,7 +523,7 @@ const LEGEND = {
   hingeEdge: 'začátek a konec závěsu',
   insert: 'hrana vložky dna (u boků)',
   band: 'pás ohybu a závěsu: nelepit, nešít',
-  glue: 'lepit kontaktním lepidlem (tato strana)',
+  glue: 'lepit lepidlem na kůži (tato strana)',
   glueOther: 'lepí se druhá strana (líc D2): zdrsnit',
   glueEdge: 'hranice lepení – lepí se na rubu (list 2)',
   pencil: 'tužkou na rub: poloha dílu',
@@ -1603,8 +1603,8 @@ function drawLidBack(spec: LidWalletSpec, options: LidSheetOptions): Sheet {
   lengthDim(s, X(0) + 5.5, V(0), V(L.v.cutEnd), `P1 = ${cz(L.p1LengthMm)} mm`);
 
   const lines = [
-    '# Lepení – kontaktní lepidlo',
-    'oba povrchy, šrafované plochy;',
+    '# Lepení – lepidlo na kůži',
+    'tence na oba povrchy, šrafované plochy;',
     'lícové plochy k lepení zdrsnit;',
     'hrany ploch olepit maskovací páskou',
     '',

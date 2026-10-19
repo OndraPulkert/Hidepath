@@ -527,9 +527,9 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
     englishName: 'Two-part epoxy',
     category: 'gluing',
     shortDescription:
-      'Přilepí magnet na zdrsněný rub jazýčku. Kontaktní lepidlo na niklu drží špatně.',
+      'Přilepí magnet na zdrsněný rub jazýčku. Lepidlo na kůži drží na niklu špatně.',
     purpose:
-      'Magnet se lepí rychlým dvousložkovým epoxidem na zdrsněný rub jazýčku. Podšívka L1 se přes něj lepí kontaktním lepidlem, až když epoxid ztuhne. Před zatížením víčka (zavírání, zkouška držení) se nechá 24 h vytvrdit.',
+      'Magnet se lepí rychlým dvousložkovým epoxidem na zdrsněný rub jazýčku. Podšívka L1 se přes něj lepí lepidlem na kůži, až když epoxid ztuhne. Před zatížením víčka (zavírání, zkouška držení) se nechá 24 h vytvrdit.',
     buyingGuide: [
       { label: 'Typ', value: 'dvousložkový epoxid, rychletuhnoucí' },
       { label: 'Množství', value: 'nejmenší balení stačí' },

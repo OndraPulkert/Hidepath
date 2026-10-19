@@ -390,8 +390,17 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'glue',
         title: 'Přilepte T3 na P',
-        body: 'Na rub T3 narýsujte levý šev dutin podle listu: od dna k rohu jazýčku kružítkem 3,5 mm, dál rovně podle pravítka. Lepidlo naneste na rub T3 do pásů 4 mm podél boků a dna a na jazýček až 0,5 mm za levý šev. Na P do stejné šrafy v zelené poloze. Pod dělicí šev lepidlo nedávejte. Po zavadnutí T3 přiložte do polohy a přitlačte.',
+        body: 'Na rub T3 narýsujte levý šev dutin podle listu: od dna k rohu jazýčku kružítkem 3,5 mm, dál rovně podle pravítka. Lepidlo naneste tence na rub T3 do pásů 4 mm podél boků a dna a na jazýček až 0,5 mm za levý šev. Na P do stejné šrafy v zelené poloze. Pod dělicí šev lepidlo nedávejte. T3 přiložte do polohy hned za mokra, přebytek setřete vlhkým hadříkem, přitlačte přes hadřík a nechte pod závažím zaschnout.',
         media: [],
+        waits: [
+          {
+            id: 'glue-dry',
+            label: 'Zaschnutí lepidla pod závažím',
+            minutes: 60,
+            basis: 'estimate',
+            blocksStepId: 'sew',
+          },
+        ],
       },
       {
         id: 'sew',
@@ -564,14 +573,23 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'glue',
         title: 'Naneste lepidlo',
-        body: 'Lepidlo do pásů 6 mm podél boků a dna na rub T1 a rub T2. Šrafu vpravo na líci T2 nejdřív zdrsněte smirkem, pak do ní naneste lepidlo. Lepidlo i na šrafu na rubu konce P. Nechte zavadnout.',
+        body: 'Lepidlo do pásů 6 mm podél boků a dna na rub T1 a rub T2. Šrafu vpravo na líci T2 nejdřív zdrsněte smirkem, pak do ní naneste lepidlo. Lepidlo i na šrafu na rubu konce P. Lepidlo tence, díly přiložte hned za mokra.',
         media: [],
       },
       {
         id: 'join',
         title: 'Slepte tělo a konec pásu',
-        body: 'T2 přiložte na T1 rubem k rubu, hrany zarovnejte a přitlačte. Pás zavřete přes T2, víčkem k T2. Jeho pravý konec přitlačte na šrafu tak, aby pravá a spodní hrana P lícovaly s tělem.',
+        body: 'T2 přiložte na T1 rubem k rubu, hrany zarovnejte a přitlačte. Pás zavřete přes T2, víčkem k T2. Jeho pravý konec přitlačte na šrafu tak, aby pravá a spodní hrana P lícovaly s tělem. Za mokra jde ještě srovnat, přebytek setřete vlhkým hadříkem. Nechte pod závažím zaschnout.',
         media: [],
+        waits: [
+          {
+            id: 'glue-dry',
+            label: 'Zaschnutí lepidla pod závažím',
+            minutes: 60,
+            basis: 'estimate',
+            blocksStepId: 'punch-right',
+          },
+        ],
       },
       {
         id: 'punch-right',

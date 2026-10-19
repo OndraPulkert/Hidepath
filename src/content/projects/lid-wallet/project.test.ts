@@ -310,7 +310,7 @@ describe('obsah – peněženka Víčko', () => {
       l.steps.map((step) => ({ lesson: l, step })),
     );
 
-    it('čekání: doby jen z textu lekcí (nebo tabulky 9.1 zadání u lepidla podle návodu)', () => {
+    it('čekání: doby jen z textu lekcí (zaschnutí lepidla je odhad, výrobce dobu neuvádí)', () => {
       const waits = allSteps.flatMap(({ lesson, step }) =>
         (step.waits ?? []).map(
           (w) =>
@@ -322,18 +322,13 @@ describe('obsah – peněženka Víčko', () => {
         '3/dry/overnight 720–1440 text → inspect',
         '4/plate/plate-glue-test 1440 text',
         '5/d1-paint/coat 20–30 text',
-        '6/g3/tack 10–15 text',
         '6/g3/cure 60 text → bill-window',
         '7/wet/dampen 5–10 text',
         '7/fold-clamp/overnight 720–1440 text → remove-spacer',
-        '8/g1/tack 10–15 manufacturer',
-        '8/g2/tack 10–15 manufacturer',
         '8/g2/cure 60 text → s6',
-        '9/g4/tack 10–15 manufacturer',
         '9/g4/cure 60 text → punch-sew',
         '10/overnight/overnight 720–1440 text → measure-k',
         '11/epoxy/set 30 manufacturer → lining',
-        '11/lining/tack 10–15 manufacturer',
         '11/cure/cure 1440 text → s7',
         '12/magnet-swap/set 30 manufacturer',
         '12/magnet-swap/cure 1440 text',
@@ -351,17 +346,16 @@ describe('obsah – peněženka Víčko', () => {
       }
       expect(stepAt(4, 'plate').body).toContain('po 24 h');
       expect(stepAt(5, 'd1-paint').body).toContain('mezi nimi 20–30 min');
-      expect(stepAt(6, 'g3').body).toContain('zavadnout 10–15 min');
-      expect(stepAt(6, 'g3').body).toContain('Okénko sekejte a děrujte nejdřív za 1 h');
+      expect(stepAt(6, 'g3').body).toContain('okénko a otvory nejdřív za 1 h');
       expect(stepAt(8, 's6').body).toContain('Po lepení počkejte aspoň 1 h');
       expect(stepAt(9, 'punch-sew').body).toContain('Po lepení G4 počkejte aspoň 1 h');
       expect(stepAt(11, 'epoxy').body).toContain('podle návodu (orientačně 30 min, ověřte)');
       expect(stepAt(11, 'cure').body).toContain('Nechte 24 h vytvrdit, teprve pak šijte S7');
       expect(stepAt(12, 'magnet-swap').body).toContain('Po 24 h');
-      // Zavadnutí v lekcích 8, 9 a 11 lekce nečísluje: tabulka 9.1 zadání, „podle návodu“.
+      // Výrobce dobu schnutí neuvádí: 1 h je odhad, děrovat nejdřív za 1 h.
       expect(
         lidWalletProject.equipment.find((e) => e.equipmentSlug === 'contact-cement')!.specification,
-      ).toContain('zavadnout 10–15 min, děrovat nejdřív za 1 h');
+      ).toContain('výrobce dobu neuvádí, děrovat nejdřív za 1 h');
     });
 
     it('zápisník: jen výsledky zkoušek; hodnoty pro listy jen ve formuláři (souhrn a odkaz)', () => {

@@ -422,7 +422,7 @@ describe('generátor peněženky VÍČKO', () => {
     // List 1 se klade na líc: nic na něm se nepropichuje kroužkem (jen středy výsečníků).
     for (const svg of [back, parts, jigs]) expect(svg).toContain('propíchnout jehlou skrz papír');
     expect(sheet).not.toContain('propíchnout jehlou skrz papír');
-    expect(back).toContain('lepit kontaktním lepidlem (tato strana)');
+    expect(back).toContain('lepit lepidlem na kůži (tato strana)');
     expect(parts).toContain('lepí se druhá strana (líc D2): zdrsnit');
     expect(sheet).toContain('řez později – lekce je u popisku');
   });

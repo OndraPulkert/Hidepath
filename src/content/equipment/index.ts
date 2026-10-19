@@ -441,7 +441,10 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         label: 'Rozteč',
         value: '3,85 nebo 4 mm (rozdíl začátečník nepozná; k oběma patří nit 0,6 mm)',
       },
-      { label: 'Sada', value: '2 hroty na rohy + 4 nebo 6 hrotů na rovné úseky' },
+      {
+        label: 'Sada',
+        value: '1 hrot na doplnění mezery, 2 hroty na rohy + 4 nebo 6 hrotů na rovné úseky',
+      },
       { label: 'Tvar hrotu', value: 'diamantový nebo šikmý „francouzský“, leštěný' },
       { label: 'Materiál', value: 'nástrojová ocel, ne pozink' },
       { label: 'Podložka', value: 'tvrdý plast (HDPE) pod kůži, ne řezací podložka' },
@@ -482,7 +485,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       {
         title: 'Kupovat vidličky po jednom kusu',
         reason:
-          'některé obchody je prodávají jednotlivě; na pouzdro stačí dvojhrot a šesti- nebo čtyřhrot, sada s jednohrotem není nutná',
+          'některé obchody je prodávají jednotlivě; na pouzdro potřebujete jednohrot, dvojhrot a čtyř- nebo šestihrot, sada 1 + 2 + 4 + 6 je obvykle výhodnější',
       },
     ],
     priceRange: { minCents: 33_700, maxCents: 120_000 },
@@ -767,8 +770,8 @@ export const equipmentList: readonly EquipmentDefinition[] = [
 
   draft({
     slug: 'contact-cement',
-    name: 'Kontaktní lepidlo na kůži',
-    englishName: 'Contact cement',
+    name: 'Lepidlo na kůži',
+    englishName: 'Leather cement',
     category: 'gluing',
     shortDescription:
       'Přidrží díly u sebe před děrováním, aby se neposunuly. Jde nahradit oboustrannou páskou.',
@@ -778,7 +781,12 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       {
         label: 'Typ',
         value:
-          'kontaktní na vodní bázi (nanáší se na obě plochy, chvíli odvětrá, přitiskne); rozpouštědlové jen jako nouzovka',
+          "na kůži, vodní báze (Fiebing's Leather Craft Cement); rozpouštědlové kontaktní jen jako nouzovka",
+      },
+      {
+        label: 'Použití',
+        value:
+          'lahvičku protřepat, tence na obě plochy, díly přiložit hned za mokra (jde ještě srovnat), přebytek setřít vlhkým hadříkem, přitisknout a nechat pod závažím zaschnout. Výrobce dobu neuvádí: děrovat nejdřív za 1 h, nejlépe druhý den',
       },
       { label: 'Množství', value: 'malá tuba 35–50 ml vydrží na několik projektů' },
     ],
@@ -844,7 +852,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
       {
         id: 'contact-cement-main',
         kind: 'photo',
-        caption: 'Tuba kontaktního lepidla a špachtle, tenký pás lepidla podél hrany kůže',
+        caption: 'Lepidlo na kůži a špachtle, tenký pás lepidla podél hrany kůže',
         status: 'planned',
       },
     ],

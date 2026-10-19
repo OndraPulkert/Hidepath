@@ -363,21 +363,18 @@ describe('hlavní cesta: zápisník, příprava a dílenský režim', () => {
       const url = routes.lessonFocus(cardHolderProject.slug, lesson4.slug, glueStep);
 
       const first = renderApp(url);
-      const card = await screen.findByRole('region', { name: /odvětrání lepidla/i });
-      expect(card).toHaveTextContent(
-        'Výchozí doba je jen orientační – nastavte ji podle návodu na obalu.',
-      );
-      await user.click(within(card).getByRole('button', { name: /^Spustit 10/ }));
-      expect(within(card).getByRole('timer')).toHaveTextContent('10:00');
+      const card = await screen.findByRole('region', { name: /zaschnutí lepidla/i });
+      await user.click(within(card).getByRole('button', { name: /^Spustit 1/ }));
+      expect(within(card).getByRole('timer')).toHaveTextContent('1:00:00');
       act(() => vi.advanceTimersByTime(3 * 60_000));
       first.unmount();
 
       act(() => vi.advanceTimersByTime(60_000));
       renderApp(url);
-      const again = await screen.findByRole('region', { name: /odvětrání lepidla/i });
-      expect(within(again).getByRole('timer')).toHaveTextContent('6:00');
+      const again = await screen.findByRole('region', { name: /zaschnutí lepidla/i });
+      expect(within(again).getByRole('timer')).toHaveTextContent('56:00');
       act(() => vi.advanceTimersByTime(60_000));
-      expect(within(again).getByRole('timer')).toHaveTextContent('5:00');
+      expect(within(again).getByRole('timer')).toHaveTextContent('55:00');
     } finally {
       vi.useRealTimers();
       localStorage.clear();

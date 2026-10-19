@@ -454,11 +454,11 @@ nad mincemi a pruh 12,36 nevzniká.
 
 ### 5.4 Kování – poloha a zapuštění
 
-| Prvek       | Poloha                                                                                | Jak se zapouští                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| ----------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| K2 plíšek   | rub F, x 43,5–57,5, y 3,5–24,0 (v 38,0–58,5)                                          | Nalepí se kontaktním lepidlem (přilnavost k oceli ověřit na odřezku) **až po mokrém ohybu dna** a přelepí se D1 (G2). Bez vybrání, vytvoří hrbolek 0,5 do oddílu bankovek. Hrany zabrousit a přelakovat (železo s vlhkou třísločiněnou usní dává tmavé skvrny). Šířka plíšku = Ø magnetu + 2 × 3 mm boční tolerance (oddíl 12.2), délka obaluje magnet v celém rozsahu k 1,0–1,24 (SF1) a v celém okně lepení magnetu, s rezervou 0,5 nahoře i dole (Kolo 7).                                                                                                                                                                                                                                                                                                                                                                                                      |
-| K1 magnet   | rub jazýčku, střed na ose x 50,5, **7,0 nad špičkou**; na peněžence ve stavu B y 11,9 | Poloha se určí **na hotové peněžence** (krok 17): najít plíšek zkušebním magnetem, označit y_m,B z rámečku „Čísla pro postup“ na listu 4 (výchozí střih 11,9), přenést na rub jazýčku ryskami na bocích. Přilepit (krok 18, G5) spolu s L1 (G6). Magnet drží sevření pod L1 (≥ 6 mm lepení do stran, ≥ 3 mm ke špičce) a **šev S7 kolem L1** (výchozí od Kola 6, oddíl 5.6). Kontaktní lepidlo drží na niklu podle kontroly kola 5 špatně, proto se magnet lepí dvousložkovým epoxidem na zdrsněný rub jazýčku a L1 přes něj kontaktním lepidlem, **až když epoxid ztuhne** (krok 18; přilnavost ověří zkušební kus, volitelně V4(b) na odřezku). Magnet je přitahovaný do L1, takže L1 nese při každém otevření 2–4 N – výdrž ověří zkušební kus (volitelně cyklická V4(b) na odřezku se švem S7). Magnet se dá na hotovém kusu vyměnit (níže, „Výměna magnetu“). |
-| L1 podšívka | rub konce jazýčku, horní hrana 10 nad středem magnetu (17 nad špičkou)                | Přířez 24 × 22 z usně 0,6 se přilepí přes magnet (přitlačit prsty nebo převalovat hladkým kolíkem, **přes magnet paličkou netlouct**, krok 18), dole přesahuje budoucí špičku o 5. Po zaschnutí se **jazýček i L1 seříznou najednou** podle šablony konce jazýčku (R10, krok 19) a obšijí švem **S7** (krok 20): 8 otvorů do U kolem magnetu, 2,1 mm od jeho kraje, ke špičce otevřené. Nemůže přečnívat.                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Prvek       | Poloha                                                                                | Jak se zapouští                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ----------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| K2 plíšek   | rub F, x 43,5–57,5, y 3,5–24,0 (v 38,0–58,5)                                          | Nalepí se lepidlem (přilnavost k oceli ověřit na odřezku) **až po mokrém ohybu dna** a přelepí se D1 (G2). Bez vybrání, vytvoří hrbolek 0,5 do oddílu bankovek. Hrany zabrousit a přelakovat (železo s vlhkou třísločiněnou usní dává tmavé skvrny). Šířka plíšku = Ø magnetu + 2 × 3 mm boční tolerance (oddíl 12.2), délka obaluje magnet v celém rozsahu k 1,0–1,24 (SF1) a v celém okně lepení magnetu, s rezervou 0,5 nahoře i dole (Kolo 7).                                                                                                                                                                                                                                                                                                                                                                                                            |
+| K1 magnet   | rub jazýčku, střed na ose x 50,5, **7,0 nad špičkou**; na peněžence ve stavu B y 11,9 | Poloha se určí **na hotové peněžence** (krok 17): najít plíšek zkušebním magnetem, označit y_m,B z rámečku „Čísla pro postup“ na listu 4 (výchozí střih 11,9), přenést na rub jazýčku ryskami na bocích. Přilepit (krok 18, G5) spolu s L1 (G6). Magnet drží sevření pod L1 (≥ 6 mm lepení do stran, ≥ 3 mm ke špičce) a **šev S7 kolem L1** (výchozí od Kola 6, oddíl 5.6). Lepidlo na kůži drží na niklu podle kontroly kola 5 špatně, proto se magnet lepí dvousložkovým epoxidem na zdrsněný rub jazýčku a L1 přes něj lepidlem na kůži, **až když epoxid ztuhne** (krok 18; přilnavost ověří zkušební kus, volitelně V4(b) na odřezku). Magnet je přitahovaný do L1, takže L1 nese při každém otevření 2–4 N – výdrž ověří zkušební kus (volitelně cyklická V4(b) na odřezku se švem S7). Magnet se dá na hotovém kusu vyměnit (níže, „Výměna magnetu“). |
+| L1 podšívka | rub konce jazýčku, horní hrana 10 nad středem magnetu (17 nad špičkou)                | Přířez 24 × 22 z usně 0,6 se přilepí přes magnet (přitlačit prsty nebo převalovat hladkým kolíkem, **přes magnet paličkou netlouct**, krok 18), dole přesahuje budoucí špičku o 5. Po zaschnutí se **jazýček i L1 seříznou najednou** podle šablony konce jazýčku (R10, krok 19) a obšijí švem **S7** (krok 20): 8 otvorů do U kolem magnetu, 2,1 mm od jeho kraje, ke špičce otevřené. Nemůže přečnívat.                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 Přídržná síla není spočtená, protože závisí na třídě magnetu a na mezeře **1,6** (L1 0,6 + F 1,0; se
 L1 0,4 byla 1,4 – větší mezera sílu zmenší, o kolik, ukáže až zkušební kus). **Kritérium domácích
@@ -500,7 +500,7 @@ silně (jedním prstem nejde otevřít, L1 se odtrhává), postupuje se takto. C
 
 1. **Vypárat S7:** stehy na líci jazýčku přestřihnout malými nůžkami nebo páráčkem (kůži
    nenaříznout) a nit vytáhnout. Otvory S7 v jazýčku zůstanou a použijí se znovu.
-2. **Odlepit L1** (kontaktní lepidlo po celé ploše): pomalu odloupnout od horní hrany ke špičce.
+2. **Odlepit L1** (lepidlo po celé ploše): pomalu odloupnout od horní hrany ke špičce.
    **Počítej s novou L1:** L1 a jazýček jsou v posledních 2,5 mm zbroušené do společného klínu
    0,5–0,7 (krok 19), takže L1 se ve špičce při odloupnutí nejspíš roztrhne. Jestli jde L1 sundat bez
    poškození rubu jazýčku, ověřit na prototypu. Nová L1 se vyřízne z nebarvené kozinky jako D1 (přířez 24 × 22).
@@ -515,7 +515,7 @@ silně (jedním prstem nejde otevřít, L1 se odtrhává), postupuje se takto. C
    `magnetThicknessMm` (oddíl 12.1), spustit `pnpm pattern:wallet-lid` a přečíst kontroly. Magnet
    s jiným Ø (třeba Ø 10 × 2) je jiná záloha s přepočtem (výše), na hotový kus nepasuje.
 5. **Znovu lepit a šít:** magnet epoxidem na stejné místo (osa x 50,5, 7,0 nad špičkou; místo
-   ohraničují otvory S7), nechat ztuhnout, pak L1 kontaktním lepidlem (krok 18, přes magnet
+   ohraničují otvory S7), nechat ztuhnout, pak L1 lepidlem (krok 18, přes magnet
    netlouct). Novou L1 přilepit s přesahem a oříznout podle hran hotového jazýčku (jazýček se
    znovu neřeže). Potom znovu zbrousit klín posledních 2,5 mm špičky jako v kroku 19 (brusným papírem
    na hranolku, jen mezi špičkou a ryskou 2,5 mm od špičky, hrana na konci asi 0,5–0,7), jinak zůstane
@@ -596,7 +596,7 @@ jen uvedené pravidlo.** Značka „L“ se dává na rub F a na rub B zvlášť
 
 ### 5.7 Lepení
 
-Kontaktní lepidlo na kůži. Lepená místa na lícové straně se nejdřív zdrsní brusným papírem.
+Lepidlo na kůži (Fiebing's Leather Craft Cement, vodní báze). Lepená místa na lícové straně se nejdřív zdrsní brusným papírem.
 **Tokonole** se nanáší jen mimo lepená místa (brání přilnutí lepidla), hranice lepení je třeba
 přelepit páskou. Na plochu se dává na rub pásu víčka (list 2), ne na rub konce jazýčku (G5, G6). Souřadnice y jsou v peněžence (list 2 je kreslí na rubu P1).
 
@@ -936,7 +936,7 @@ není). Odstup od proužku 13,7 (k 1,24: 12,27).
 
 | #   | Otázka                          | Odpověď                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | --- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Dá se vyrobit ručně?            | Ano, i v domácí dílně s náhradami z oddílu 10. Nůž, výsečníky Ø 8/10/12/14, vidličky 4 mm, **nic se neztenčuje** (ztenčení pásů je jen záloha B, krok 4), kontaktní lepidlo a epoxid, pilový list na kov na plíšek, vložka dna ze starých karet (jediný přípravek, Kolo 9), posuvka. Nejsložitější je lepit magnet na hotovém kusu a obšít L1 kolem něj (kroky 17–20).                                                                               |
+| 1   | Dá se vyrobit ručně?            | Ano, i v domácí dílně s náhradami z oddílu 10. Nůž, výsečníky Ø 8/10/12/14, vidličky 4 mm, **nic se neztenčuje** (ztenčení pásů je jen záloha B, krok 4), lepidlo na kůži a epoxid, pilový list na kov na plíšek, vložka dna ze starých karet (jediný přípravek, Kolo 9), posuvka. Nejsložitější je lepit magnet na hotovém kusu a obšít L1 kolem něj (kroky 17–20).                                                                                 |
 | 2   | Potřebujeme všechny díly?       | P1 ano. D1 tvoří dno karet a odděluje je od bankovek. D2 je stěna mincí. L1 kryje magnet. Kování nese zámek (priorita 1). Nic navíc.                                                                                                                                                                                                                                                                                                                 |
 | 3   | Potřebujeme všechny švy?        | S2 až S5 ano (hranice oddílů). S1 a **S6** nesou dna mincí a karet, která by samotné lepení drželo jen na odlupování (mince narážejí, karty působí jako klín do spáry). Oba zůstávají. **S7** drží L1 kolem magnetu, který L1 při každém otevření odtrhává (rozhodnutí kola 6).                                                                                                                                                                      |
 | 4   | Nemůže něco vypadnout?          | Při zavřeném víčku ne (oddíl 7B, ověřit P2-1). Při otevřeném a obráceném vypadnou volné karty, bankovky a mince (R6). Magnet ve smyku a proti pružení závěsu nutně ověřit na zkušebním kusu (zatřást, otočit dnem vzhůru; volitelně V4).                                                                                                                                                                                                             |
@@ -1144,7 +1144,7 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
     a boky x 4–5 / 96–97, výchozí do y 61), přes plíšek. Po tomto kroku už plíšek vyměnit nejde (magnet ano, oddíl 5.4). D1 má šířku přesně 93 bez montážní vůle, proto: na D1 i na
     rub F vyznačit osu x 50,5 a D1 přikládat podle osy (chyba se rozdělí na obě strany), zdola od y 2
     nahoru. Pásy G2b (1 mm) ohraničit maskovací páskou z obou stran a lepidlo nanášet párátkem, aby
-    nepřeteklo do kapsy karet. **Pásku strhnout hned po nanesení lepidla**, ještě než zavadne a než se
+    nepřeteklo do kapsy karet. **Pásku strhnout hned po nanesení lepidla**, a než se
     přiloží D1, jinak zůstane zalepená pod D1. Po přiložení změřit: kapsa mezi pásy G2b ≥ 90,5 a D1 od hrany F
     ≥ 3,5 mm (jinak zasáhne do S4 na x 3). Přitlačit paličkou přes desku položenou na D1 (F leží
     na PE desce, takže úder má oporu).
@@ -1155,7 +1155,7 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
     líc F s horní hranou od sebe. Šít, konce 2 zpět.
 14. **G4** (boční pásy F–D2 a F–B): díl nejdřív nanečisto složit a zkontrolovat, teprve pak nanést
     lepidlo. Vnitřní hranici pásu na líci D2 (5 mm od hrany D2) přelepit svislou maskovací páskou a
-    strhnout ji hned po nanesení lepidla (pod D1 by zůstala). Kontaktní lepidlo chytne hned při dotyku, proto přikládat **od ohybu dna nahoru** a F
+    strhnout ji hned po nanesení lepidla (pod D1 by zůstala). Lepidlo přikládat hned za mokra **od ohybu dna nahoru** a F
     přitom rovnat podle boků B. Na slepeném kusu narýsuj **čáru švu 3,0 od hrany** (kružidlem nebo
     rýhovačem 3,0, bez nich tužkou u pravítka podle proužku z listu 4, oddíl 5.6) a otvory **S4, S5**
     přenes z papírového proužku otvorů (list 4), počítáno od **76** dolů. **Děrovat S4, S5** zepředu
@@ -1193,8 +1193,8 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
     středem magnetu a na rubu se neznačí (nad L1 je rub vidět): druhou šablonu konce jazýčku (list 4)
     zkrátit po horní hraně L1, soustředně s kroužkem magnetu v ní vyseknout otvor Ø 10, přiložit ji boky
     na boky jazýčku otvorem přes magnet, nad její horní hranu nalepit maskovací pásku a šablonu sejmout.
-    Teprve pak natřít rub jazýčku pod páskou kolem magnetu a L1 (nebarvená kozinka) kontaktním lepidlem,
-    nechat zavadnout a L1 přiložit horní hranou k pásce. Přitlačit prsty nebo převalovat hladkým
+    Teprve pak natřít rub jazýčku pod páskou kolem magnetu a L1 (nebarvená kozinka) lepidlem,
+    L1 hned za mokra přiložit horní hranou k pásce. Přitlačit prsty nebo převalovat hladkým
     kolíkem, **přes magnet paličkou netlouct** (neodym se může odštípnout). Peněženku polož
     na záda, víčko narovnej nahoru (v přímce se zády, ne přehnuté na záda) a pás víčka zatiž knihou
     mimo magnet. Magnet musí být aspoň pár cm od plíšku, jinak ho plíšek přitáhne. Víčko se samo
@@ -1236,13 +1236,13 @@ jen 11,50–11,63 (0,13 mm), v záloze A jen 11,53–11,63 (asi 0,1 mm), ne 11,7
 
 Hodnoty jsou orientační, **ověřit podle návodu konkrétního lepidla a barvy** a na odřezku.
 
-| Úkon                                | Jak a jak dlouho                                                                                                         |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| kontaktní lepidlo (G1–G4, G6)       | nanést na obě strany, nechat zavadnout 10–15 min, spojit a přitlačit; děrovat a šít nejdřív za 1 h, plně zatížit za 24 h |
-| epoxid magnetu (G5)                 | dvousložkový epoxid (doba zpracování podle obalu); než se víčko zatíží zavíráním nebo zkouškou držení, 24 h              |
-| barva na hrany                      | 2 tenké vrstvy, mezi nimi 20–30 min                                                                                      |
-| navlhčení třísločiněné usně         | houbičkou, pak počkat, až se barva usně skoro vrátí k suché (5–10 min), teprve potom ohnout nebo tvarovat                |
-| ohyb dna (krok 11), závěs (krok 16) | sušit přes noc (12–24 h), ne u topení                                                                                    |
+| Úkon                                | Jak a jak dlouho                                                                                                                                                                                                                      |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| lepidlo na kůži (G1–G4, G6)         | tence na obě strany, spojit hned za mokra (jde ještě srovnat), přebytek setřít vlhkým hadříkem, přitlačit a nechat pod závažím zaschnout; výrobce dobu neuvádí: děrovat a šít nejdřív za 1 h, nejlépe druhý den, plně zatížit za 24 h |
+| epoxid magnetu (G5)                 | dvousložkový epoxid (doba zpracování podle obalu); než se víčko zatíží zavíráním nebo zkouškou držení, 24 h                                                                                                                           |
+| barva na hrany                      | 2 tenké vrstvy, mezi nimi 20–30 min                                                                                                                                                                                                   |
+| navlhčení třísločiněné usně         | houbičkou, pak počkat, až se barva usně skoro vrátí k suché (5–10 min), teprve potom ohnout nebo tvarovat                                                                                                                             |
+| ohyb dna (krok 11), závěs (krok 16) | sušit přes noc (12–24 h), ne u topení                                                                                                                                                                                                 |
 
 **Harmonogram (orientační; časy lepidel podle návodu, ověřit; počty večerů jsou odhad, ne
 změřené).** Před prvním kusem jsou **2 večery přípravy** a noc schnutí V12. Jeden kus pak podle
@@ -1299,7 +1299,7 @@ Zkušební i finální kus se stavějí stejným rozpisem, žádný večer neče
 - [ ] pozinkovaný ocelový plech 0,5 na **2 plíšky** (rozměr z listu 3, výchozí 14 × 20,5; magnetem ověřit v obchodě);
       plech 0,8 (oddíl 5.4) jen když na zkušebním kusu nepomůže ani výměna magnetu, kupuje se až pak
 - [ ] bezbarvý lak (na nehty) na hrany plíšku
-- [ ] kontaktní lepidlo na kůži
+- [ ] lepidlo na kůži (Fiebing's Leather Craft Cement)
 - [ ] dvousložkový epoxid (doba zpracování podle obalu) na magnet
 - [ ] barva na hrany v tónu D2 (horní hrana D1, přilnavost ověřit)
 - [ ] Tokonole

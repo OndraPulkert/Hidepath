@@ -273,21 +273,21 @@ describe('obsah – pásek: zápisník, „Připravte si“ a destička', () => 
     expect(step(2, 'mark').beltRecalls).toEqual(['marking']);
   });
 
-  it('lepení poutka má časovač podle návodu lepidla', () => {
+  it('lepení poutka má časovač zaschnutí', () => {
     // Hrany poutka u barevného pásku: barva podle zápisu z lekce 2.
     expect(step(4, 'keeper-edges').waits).toEqual([
       expect.objectContaining({ id: 'edge-paint-dry', initialFromField: 'edge-paint-dry-minutes' }),
     ]);
-    // Zavadnutí před spojením a zaschnutí před prosekáním stehu (čerstvý spoj by vidlička rozrazila).
+    // Lepidlo se spojuje za mokra; zaschnutí před prosekáním stehu (čerstvý spoj by vidlička rozrazila).
     expect(step(4, 'keeper-glue').waits).toEqual([
-      expect.objectContaining({ minutes: 10, maxMinutes: 15, basis: 'manufacturer' }),
       expect.objectContaining({
         id: 'keeper-glue-dry',
-        basis: 'manufacturer',
+        minutes: 60,
+        basis: 'estimate',
         blocksStepId: 'keeper-stitch',
       }),
     ]);
-    expect(step(4, 'keeper-glue').body).toContain('podle návodu na obalu');
+    expect(step(4, 'keeper-glue').body).toContain('hned za mokra');
   });
 });
 

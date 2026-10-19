@@ -677,7 +677,7 @@ export const lessons: readonly LessonDefinition[] = [
     goal: 'Označit a vyseknout konec u přezky, vyrobit poutko a přezku přišroubovat dvěma nýty.',
     materials: [
       'destička MK Plexi (řada 3), nebo list 1 z lekce 2 (na tenkém kartonu)',
-      'jen bez listu 1 z lekce 2: tenký karton (krabice od cereálií), lepidlo v tyčince a nůžky',
+      'jen bez listu 1 z lekce 2: tenký karton (krabice od cereálií), lepicí tyčinka a nůžky',
       SHIMS_MATERIAL,
       'zbytek pásu na poutko (kus podle kalkulačky), nebo odřezek jiné kůže v barvě pásu',
       'papírový proužek na změření poutka',
@@ -822,22 +822,15 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'keeper-glue',
         title: 'Slepte poutko',
-        body: 'Poutko z téhož řemene: ztenčené plochy jsou po brusném papíru drsné, nic dalšího nezdrsňujte. Kontaktním lepidlem natřete jen oba klíny, nechte zavadnout podle návodu na obalu a spojte: rub horního konce na líc spodního, klín na klín, hrany proužku v jedné rovině. Do poutka vsuňte pod přeplátování špalík (rozměr pod krokem) a spoj na něm pevně stiskněte, případně poklepejte paličkou: proužek z pásu pruží a bez opory se klíny mohou rozlepit. Ověřte na odřezku. Poutko z jiné kůže: v přeplátování 15 mm leží rub jednoho konce na líci druhého. Líc pod ním zdrsněte smirkem 180, z hladkého líce lepidlo pouští. Hranici 15 mm na kůži neznačte: papírovou páskou přelepte líc tak, aby od konce zůstalo volných 15 mm (odměřte pravítkem; na listu 1 jsou to šrafy), a stejně rub druhého konce. Zdrsněte a natřete jen volná místa, pásku hned sundejte, nechte zavadnout a slepte. Až lepidlo zaschne podle návodu na obalu: boky spoje srovnejte papírem 180 na hranolku, u barevného pásku je obarvěte a zaleštěte jako v kroku „Dokončete hrany poutka“. Poutko z pásu je z konce, který v lekci 3 zůstal bez balzámu: jeho líc natřete balzámem jako pás, jen když na odřezku vyhověl.',
+        body: 'Poutko z téhož řemene: ztenčené plochy jsou po brusném papíru drsné, nic dalšího nezdrsňujte. Lepidlo naneste tence jen na oba klíny a díly přiložte hned za mokra: rub horního konce na líc spodního, klín na klín, hrany proužku v jedné rovině. Za mokra je ještě kousek posuňte a srovnejte, přebytek hned setřete vlhkým hadříkem. Do poutka vsuňte pod přeplátování špalík (rozměr pod krokem) a spoj na něm pevně stiskněte přes hadřík, případně poklepejte paličkou: proužek z pásu pruží a bez opory se klíny mohou rozlepit. Ověřte na odřezku. Poutko z jiné kůže: v přeplátování 15 mm leží rub jednoho konce na líci druhého. Líc pod ním zdrsněte smirkem 180, z hladkého líce lepidlo pouští. Hranici 15 mm na kůži neznačte: papírovou páskou přelepte líc tak, aby od konce zůstalo volných 15 mm (odměřte pravítkem; na listu 1 jsou to šrafy), a stejně rub druhého konce. Zdrsněte a natřete jen volná místa, pásku hned sundejte a slepte za mokra. Spoj nechte zaschnout pod závažím. Až lepidlo zaschne: boky spoje srovnejte papírem 180 na hranolku, u barevného pásku je obarvěte a zaleštěte jako v kroku „Dokončete hrany poutka“. Poutko z pásu je z konce, který v lekci 3 zůstal bez balzámu: jeho líc natřete balzámem jako pás, jen když na odřezku vyhověl.',
         animationLinks: [animationLink('beltBuckleEnd', 'D5')],
         media: [],
         waits: [
           {
-            id: 'keeper-glue',
-            label: 'Zavadnutí lepidla na poutku',
-            minutes: 10,
-            maxMinutes: 15,
-            basis: 'manufacturer',
-          },
-          {
             id: 'keeper-glue-dry',
-            label: 'Zaschnutí lepidla na poutku (podle obalu)',
+            label: 'Zaschnutí lepidla pod závažím',
             minutes: 60,
-            basis: 'manufacturer',
+            basis: 'estimate',
             blocksStepId: 'keeper-stitch',
           },
         ],
@@ -846,7 +839,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'keeper-stitch',
         title: 'Prošijte přeplátování (doporučeno)',
-        body: 'Doporučeno, hlavně u poutka z pásu. Až lepidlo zaschne podle návodu na obalu, vsuňte do poutka pod přeplátování špalík z plastu nebo měkkého dřeva, užší než pás a nejvýš tak silný jako vnitřek poutka (rozměr pod krokem). Bez špalíku by vidlička propíchla i druhou stranu poutka. Poutko položte na hladkou desku na vysekávání, přeplátování leží na špalíku, horní konec navrchu. Udělejte 2 krátké řady napříč, každou ze 2 otvorů: 3 mm a 12 mm od špičky horního konce (přeplátování 15 mm), otvory 4 mm od hran a 4 mm od sebe. Dvouhrotou vidličkou prosekejte obě vrstvy až do špalíku. Když vidlička spojem neprojde (z pásu tloušťka pásu + 1 mm, u 3,5 mm asi 4,5 mm; vaše číslo pod krokem), otvory dokončete diamantovým šídlem. Každou řadu šijte zvlášť sedlářským stehem jako v projektu 01: nit středem do otvoru 1, obě jehly proti sobě otvorem 2, pak jehlu, která vyšla venku, vraťte otvorem 1 dovnitř. Oba konce jsou uvnitř poutka: odstřihněte je asi 2 mm od kůže a zatavte zapalovačem. Spoj pak půjde na rub pásku, k tělu: steh na líci pásku není vidět. Nejdřív vyzkoušejte na odřezku.',
+        body: 'Doporučeno, hlavně u poutka z pásu. Až lepidlo zaschne (nejdřív za 1 h, nejlépe druhý den), vsuňte do poutka pod přeplátování špalík z plastu nebo měkkého dřeva, užší než pás a nejvýš tak silný jako vnitřek poutka (rozměr pod krokem). Bez špalíku by vidlička propíchla i druhou stranu poutka. Poutko položte na hladkou desku na vysekávání, přeplátování leží na špalíku, horní konec navrchu. Udělejte 2 krátké řady napříč, každou ze 2 otvorů: 3 mm a 12 mm od špičky horního konce (přeplátování 15 mm), otvory 4 mm od hran a 4 mm od sebe. Dvouhrotou vidličkou prosekejte obě vrstvy až do špalíku. Když vidlička spojem neprojde (z pásu tloušťka pásu + 1 mm, u 3,5 mm asi 4,5 mm; vaše číslo pod krokem), otvory dokončete diamantovým šídlem. Každou řadu šijte zvlášť sedlářským stehem jako v projektu 01: nit středem do otvoru 1, obě jehly proti sobě otvorem 2, pak jehlu, která vyšla venku, vraťte otvorem 1 dovnitř. Oba konce jsou uvnitř poutka: odstřihněte je asi 2 mm od kůže a zatavte zapalovačem. Spoj pak půjde na rub pásku, k tělu: steh na líci pásku není vidět. Nejdřív vyzkoušejte na odřezku.',
         animationLinks: [animationLink('beltBuckleEnd', 'D6')],
         media: [
           photo(
@@ -946,7 +939,7 @@ export const lessons: readonly LessonDefinition[] = [
     safety: [
       KNIFE,
       PUNCH,
-      'Kontaktní lepidlo používejte ve větrané místnosti a podle návodu na obalu.',
+      'Lepidlo používejte ve větrané místnosti.',
       'Ztenčovač veďte od prstů volné ruky.',
       'Zatavujte jen konec nitě, plamen ke kůži nepřibližujte.',
     ],
@@ -1545,7 +1538,7 @@ const overview: ProjectOverview = {
           id: 'keeper-skive',
           lessonSlug: L4,
           stepId: 'keeper-skive',
-          text: 'Poutko z pásu, nejdřív na zbytku kusu: konce ztenčete brusným papírem 80 a 180 na hranolku do klínu 15 mm (na konci 0,5–1 mm), horní z rubu, spodní z líce, a kontaktním lepidlem jen na klínech slepte rub horního konce na líc spodního. Z jiné kůže přeplátování 15 mm jen zdrsněte a slepte přes pásku, bez ztenčení. Doporučeno: po zaschnutí na špalíku v poutku prosekejte 2 řady po 2 otvorech (3 a 12 mm od špičky horního konce) a ušijte sedlářský steh, konce uvnitř poutka.',
+          text: 'Poutko z pásu, nejdřív na zbytku kusu: konce ztenčete brusným papírem 80 a 180 na hranolku do klínu 15 mm (na konci 0,5–1 mm), horní z rubu, spodní z líce, a lepidlem jen na klínech slepte za mokra rub horního konce na líc spodního. Z jiné kůže přeplátování 15 mm jen zdrsněte a slepte přes pásku, bez ztenčení. Doporučeno: po zaschnutí na špalíku v poutku prosekejte 2 řady po 2 otvorech (3 a 12 mm od špičky horního konce) a ušijte sedlářský steh, konce uvnitř poutka.',
         },
         {
           id: 'bend',
@@ -1753,7 +1746,7 @@ export const beltProject: ProjectDefinition = {
       equipmentSlug: 'contact-cement',
       priority: 'required',
       reason: 'Přeplátování poutka.',
-      specification: 'Kontaktní lepidlo na kůži, na obě strany, zavadnout podle návodu.',
+      specification: 'Lepidlo na kůži (vodní báze), tence na obě strany, spojit za mokra.',
     },
     {
       equipmentSlug: 'leather-balm',

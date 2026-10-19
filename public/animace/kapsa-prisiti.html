@@ -369,7 +369,7 @@ add('B','Zdrsněte pruh po čáru švu','Lepí se jen pruh G1: od okraje okénka
   return s;
 },'lic');
 
-add('B','Naneste lepidlo do pruhu po čáru švu','Kontaktní lepidlo naneste jen do pruhu G1 (na listech PÁS a KAPSA zelená šrafa): na líci předního panelu od okraje okénka po vpichy a na rubu kapsy od okraje po otvory švu, po bocích od nejvyššího otvoru dolů a přes dno (šířku pruhu ověřte na odřezku). Horní hranu kapsy ani horní zaoblené rohy nelepte – tudy se zasouvá mince.',8400,t=>{
+add('B','Naneste lepidlo do pruhu po čáru švu','Lepidlo naneste tence jen do pruhu G1 (na listech PÁS a KAPSA zelená šrafa): na líci předního panelu od okraje okénka po vpichy a na rubu kapsy od okraje po otvory švu, po bocích od nejvyššího otvoru dolů a přes dno (šířku pruhu ověřte na odřezku). Horní hranu kapsy ani horní zaoblené rohy nelepte – tudy se zasouvá mince.',8400,t=>{
   const g1=es(t,.05,.45), g2=es(t,.5,.9), nt=seg(t,.9,1);
   let inner=stripLeather({rough:1,glue:g2,ghost:.6,tape:1,seam:1});
   inner+=G(POCK_T,noTop(seg(t,.88,.96)));
@@ -384,21 +384,21 @@ add('B','Naneste lepidlo do pruhu po čáru švu','Kontaktní lepidlo naneste je
   return s;
 },{v:'LÍC',sub:'panel · vpravo rub kapsy'});
 
-add('B','Nechte lepidlo odvětrat','Lepidlo na obou dílech nechte odvětrat podle návodu na obalu.',4800,t=>{
-  const d=es(t,.1,.85);
+add('B','Lepidlo na obou dílech','Lepidlo je na obou dílech. Kapsu přiložte hned za mokra, dokud jde ještě srovnat.',4800,t=>{
+  const d=0;
   let inner=stripLeather({rough:1,glue:1,dry:d,ghost:.6,tape:1,seam:1});
   let s=clipMain('cb4',G(camT(POCKC),inner));
   let ib=G(insetPocketT(),pocketRub({glue:1,dry:d}));
-  ib+=clock(97,68,seg(t,.05,.9))+lbl(105,67,'odvětrat','t')+lbl(105,72,'podle obalu','ts');
+  ib+=lbl(97,67,'přiložit hned','t')+lbl(97,72,'za mokra','ts');
   s+=inset('RUB KAPSY',ib);
   return s;
 },{v:'LÍC',sub:'panel · vpravo rub kapsy'});
 
-add('B','Přitiskněte kapsu a sejměte šablonu','Kapsu přitiskněte přesně do okénka, otevřenou hranou nahoru. Po dotyku už nejde posunout. Šablonu pomalu sejměte, pásku strhávejte pod ostrým úhlem.',9400,t=>{
+add('B','Přitiskněte kapsu a sejměte šablonu','Kapsu přiložte za mokra a přitiskněte přesně do okénka, otevřenou hranou nahoru. Přebytek lepidla hned setřete vlhkým hadříkem. Šablonu pomalu sejměte, pásku strhávejte pod ostrým úhlem.',9400,t=>{
   const m=es(t,.04,.45), press=seg(t,.48,.8), peel=es(t,.82,.96);
   let s=clipMain('cb5',G(camT(POCKC),stripLeather({rough:1,glue:1,dry:1,tape:1,peel,seam:1})));
   // texty se objeví, až kapsa z výřezu odletí (jinak by ji na začátku překrývaly)
-  s+=inset('PŘITISKNOUT',`<g opacity="${f(seg(t,.3,.42))}">`+notes([['přesně do okénka','tw'],['po dotyku už'],['nejde posunout'],['tlačit po okraji,'],['kde je lepidlo']])+'</g>'+
+  s+=inset('PŘITISKNOUT',`<g opacity="${f(seg(t,.3,.42))}">`+notes([['přesně do okénka','tw'],['za mokra jde'],['ještě srovnat'],['tlačit po okraji,'],['kde je lepidlo']])+'</g>'+
     `<g opacity="${f(seg(t,.6,.7))}">${lbl(89,52,'Tip:','ta')}${notes([['důlek nemačkat']],57.5,5.2)}</g>`);
   // pocket travels from inset (rub up) to the panel (líc up)
   const c0=[89.5+CXL*.95,IPY+21*.95], c1=tv(POCKC,PX+CXL,PY+21);

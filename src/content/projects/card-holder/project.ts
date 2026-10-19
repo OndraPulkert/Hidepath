@@ -338,7 +338,7 @@ export const lessons: readonly LessonDefinition[] = [
     materials: [
       'složený ručník pod tvrdou desku',
       'nit asi 80 cm',
-      'lepidlo nebo oboustranná páska',
+      'oboustranná páska, když nelepíte lepidlem',
       'tužka',
       'nůžky na nit',
       'zapalovač, jen když konce zatavujete',
@@ -384,14 +384,14 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'glue',
         title: 'Slepte kapsu do U',
-        body: 'Na rub tvaru 3 i tvaru 1 narýsujte tužkou podle pravítka podél spodku a obou boků pás lepidla asi 5 mm, horní hrana zůstane volná. Rub na rubu drží i bez zdrsnění, zdrsňuje se jen hladký líc. Stěrkou naneste na oba pásy tenkou vrstvu lepidla a nechte odvětrat podle návodu. Lepidlo chytí hned při dotyku: přiložte nejdřív spodní hrany a rohy přesně na sebe, pak spusťte boky a přitiskněte. Střed nechte suchý, jinak se kapsa slepí. S oboustrannou páskou: nalepte ji na pás na rubu tvaru 3, sejměte krycí fólii a přitiskněte. Lepidlo drží díly jen pomocně. Zdrsnění líce, které vás čeká na pouzdře, vyzkoušejte na tvaru 2 podél delší hrany bez zaobleného rohu: na líci zdrsněte smirkem 180 jen polovinu pásu, přilepte na něj kus proužku z lekce 2 a druhý den, nejpozději před lekcí 4, ho zkuste na obou polovinách odtrhnout.',
+        body: 'Na rub tvaru 3 i tvaru 1 narýsujte tužkou podle pravítka podél spodku a obou boků pás lepidla asi 5 mm, horní hrana zůstane volná. Rub na rubu drží i bez zdrsnění, zdrsňuje se jen hladký líc. Stěrkou naneste na oba pásy tenkou vrstvu lepidla a díly přiložte hned za mokra: nejdřív spodní hrany a rohy přesně na sebe, pak spusťte boky a přitiskněte. Za mokra jde kapsu ještě srovnat, přebytek hned setřete vlhkým hadříkem. Nechte pod závažím zaschnout a děrujte nejdřív za 1 h, nejlépe druhý den. Střed nechte suchý, jinak se kapsa slepí. S oboustrannou páskou: nalepte ji na pás na rubu tvaru 3, sejměte krycí fólii a přitiskněte. Lepidlo drží díly jen pomocně. Zdrsnění líce, které vás čeká na pouzdře, vyzkoušejte na tvaru 2 podél delší hrany bez zaobleného rohu: na líci zdrsněte smirkem 180 jen polovinu pásu, přilepte na něj kus proužku z lekce 2 a druhý den, nejpozději před lekcí 4, ho zkuste na obou polovinách odtrhnout.',
         waits: [
           {
-            id: 'glue-open',
-            label: 'Odvětrání lepidla (s páskou nečekáte)',
-            minutes: 10,
-            maxMinutes: 15,
-            basis: 'manufacturer',
+            id: 'glue-dry',
+            label: 'Zaschnutí lepidla pod závažím (s páskou nečekáte)',
+            minutes: 60,
+            basis: 'estimate',
+            blocksStepId: 'punch-two-layers',
           },
         ],
         records: [
@@ -432,6 +432,11 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         id: 'punch-two-layers',
+        animationLinks: [
+          animationLink('pouchPunch', 'A1'),
+          animationLink('pouchPunch', 'B1'),
+          animationLink('pouchPunch', 'B2'),
+        ],
         title: 'Proděrujte obě vrstvy najednou',
         body: 'Kapsu položte tvarem 3 nahoru na tvrdou desku na ručníku. Nejdřív proražte oba rohy: jeden hrot dvojhrotu přesně na průsečík linií, druhý na linii boku. Pak vidličky se 4 nebo 6 hroty postavte první hrot do rohového otvoru, ostatní na linii boku, kolmo ve všech směrech, a držte je pevně u spodku. Jednou pevně udeřte paličkou, přes dvě vrstvy silněji než při zkušebním úderu. Když všechny hroty neprošly, udeřte ještě jednou, bez pohnutí vidliček.',
         media: [
@@ -447,8 +452,16 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         id: 'continue-row',
+        animationLinks: [
+          animationLink('pouchPunch', 'A2'),
+          animationLink('pouchPunch', 'C1'),
+          animationLink('pouchPunch', 'C2'),
+          animationLink('pouchPunch', 'D1'),
+          animationLink('pouchPunch', 'D2'),
+          animationLink('pouchPunch', 'D3'),
+        ],
         title: 'Navazujte řadu',
-        body: 'Vidličky posuňte tak, aby první hrot zapadl do posledního hotového otvoru. Tak zůstane rozteč stejná a řada rovná. Před každým úderem zkontrolujte kolmost. Boky děrujte od rohu nahoru a u horní hrany řadu dokončete dvojhrotem, skončete otvorem nejblíž pod značkou konce, nad ni nejděte, otvory neposouvejte. Spodek děrujte od obou rohů ke středu. Než se řady potkají, vidličky jen přiložte: když zbylá mezera nevychází na celé rozteče, rozdělte rozdíl dvojhrotem na dva až tři poslední otvory, každý posuňte jen nepatrně. Dvojhrot použijete i v lekci 5 na koncích řady a v zaoblených rozích.',
+        body: 'Vidličky posuňte tak, aby první hrot zapadl do posledního hotového otvoru. Tak zůstane rozteč stejná a řada rovná. Před každým úderem zkontrolujte kolmost. Vidličky držte stále stejnou stranou k hraně, i za rohem, jinak se změní sklon otvorů. Boky děrujte od rohu nahoru a u horní hrany řadu dokončete dvojhrotem, skončete otvorem nejblíž pod značkou konce, nad ni nejděte, otvory neposouvejte. Spodek děrujte od obou rohů ke středu. Když mezi řadami zbývá asi 20 mm, vidličkami přestaňte. Mezeru změřte a rozdělte na stejné díly co nejblíž rozteči (u 4 mm např. 17 mm = 4 × 4,25 mm). Ocelové pravítko přiložte podél linie a podle něj mezeru doplňte jednohrotem. Dvojhrot použijete i v lekci 5 na koncích řady a v zaoblených rozích.',
         media: [
           {
             id: 'l3-overlap',
@@ -461,8 +474,9 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         id: 'inspect',
+        animationLinks: [animationLink('pouchPunch', 'E1')],
         title: 'Prohlédněte rub',
-        body: 'Otočte kapsu. Otvory na rubu mají být stejně rovné jako na líci, v jedné řadě. Šikmé otvory znamenají, že vidličky nebyly kolmo.',
+        body: 'Otočte kapsu. Otvory na rubu mají být stejně rovné jako na líci, v jedné řadě. Otvory vybočené z řady nebo prošlé nakřivo znamenají, že vidličky nebyly kolmo.',
         media: [
           {
             id: 'l3-good-bad-row',
@@ -812,7 +826,7 @@ export const lessons: readonly LessonDefinition[] = [
     goal: 'Sešít oba díly po třech stranách sedlářským stehem a zaleštit hrany: pouzdro na čtyři karty.',
     materials: [
       'nit asi 1 m',
-      'lepidlo nebo páska',
+      'páska, když nelepíte lepidlem',
       'čistý hadřík',
       'trochu vody',
       'nůžky na nit',
@@ -872,14 +886,14 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'glue-parts',
         title: 'Slepte díly',
-        body: 'Vyznačený pás na zadním dílu zdrsněte smirkem 180, z hladkého líce lepidlo pouští. Smirek omotejte kolem hranolku asi 1–2 cm širokého, pás tak udržíte v mezích lépe než prsty. Stejný pás vyznačte na rubu kapsy: papírový zadní díl přiložte na rub kapsy, spodek a boky na hrany, propíchněte čtyři kroužky a spojte je tužkou podle pravítka. Rub kapsy je uvnitř, vpichy tam nevadí. Stěrkou naneste tenký pás lepidla na oba pásy a nechte odvětrat podle návodu. Lepidlo chytí hned při dotyku, kapsu pak už neposunete. Kapsu držte lícem nahoru mírně prohnutou, nejdřív přiložte spodní hranu na spodní hranu zadního dílu, srovnejte rohy a teprve pak spusťte boky. Přitiskněte přes hadřík. Střed nechte suchý, jinak se kapsa slepí a karta do ní nevejde. Oboustrannou pásku nalepte jen na vyznačený pás na rubu kapsy, zdrsňovat pak nemusíte.',
+        body: 'Vyznačený pás na zadním dílu zdrsněte smirkem 180, z hladkého líce lepidlo pouští. Smirek omotejte kolem hranolku asi 1–2 cm širokého, pás tak udržíte v mezích lépe než prsty. Stejný pás vyznačte na rubu kapsy: papírový zadní díl přiložte na rub kapsy, spodek a boky na hrany, propíchněte čtyři kroužky a spojte je tužkou podle pravítka. Rub kapsy je uvnitř, vpichy tam nevadí. Stěrkou naneste tenký pás lepidla na oba pásy a kapsu přiložte hned za mokra, dokud jde ještě srovnat. Kapsu držte lícem nahoru mírně prohnutou, nejdřív přiložte spodní hranu na spodní hranu zadního dílu, srovnejte rohy a teprve pak spusťte boky. Přitiskněte přes hadřík, přebytek hned setřete vlhkým hadříkem a nechte pod závažím zaschnout, děrujte nejdřív za 1 h, nejlépe druhý den. Střed nechte suchý, jinak se kapsa slepí a karta do ní nevejde. Oboustrannou pásku nalepte jen na vyznačený pás na rubu kapsy, zdrsňovat pak nemusíte.',
         waits: [
           {
-            id: 'glue-open',
-            label: 'Odvětrání lepidla (s páskou nečekáte)',
-            minutes: 10,
-            maxMinutes: 15,
-            basis: 'manufacturer',
+            id: 'glue-dry',
+            label: 'Zaschnutí lepidla pod závažím (s páskou nečekáte)',
+            minutes: 60,
+            basis: 'estimate',
+            blocksStepId: 'punch-sides',
           },
         ],
         media: [
@@ -1077,7 +1091,7 @@ const overview: ProjectOverview = {
           id: 'punch-two-layers',
           lessonSlug: L4,
           stepId: 'mark-stitch-line',
-          text: 'Na líc tvaru 3 narýsujte linii 3,5 mm od spodku a boků, nejdřív dvojhrotem proražte rohy a obě vrstvy děrujte na tvrdé desce pevným úderem. Boky od rohu nahoru, spodek od rohů ke středu, při navazování první hrot do posledního otvoru; zbylý rozdíl uprostřed spodku rozdělte nepatrně na dva až tři otvory. Na rubu musí být otvory stejně rovné jako na líci.',
+          text: 'Na líc tvaru 3 narýsujte linii 3,5 mm od spodku a boků, nejdřív dvojhrotem proražte rohy a obě vrstvy děrujte na tvrdé desce pevným úderem. Boky od rohu nahoru, spodek od rohů ke středu, při navazování první hrot do posledního otvoru a vidličky stále stejnou stranou k hraně; posledních asi 20 mm uprostřed spodku rozdělte na stejné díly a doplňte jednohrotem podle pravítka. Na rubu musí být otvory stejně rovné jako na líci.',
         },
         {
           id: 'stitch-practice',
@@ -1151,7 +1165,7 @@ const overview: ProjectOverview = {
           id: 'glue-parts',
           lessonSlug: L6,
           stepId: 'glue-parts',
-          text: 'Pás zdrsněte smirkem 180 jen k pásce a stejný pás vyznačte podle papírového zadního dílu i na rubu kapsy. Lepidlo naneste na oba pásy, střed nechte suchý, a po odvětrání (10–15 min) přiložte nejdřív spodní hranu kapsy, srovnejte rohy, pak boky; lepidlo chytí hned. S oboustrannou páskou na rubu kapsy nezdrsňujte ani nečekejte.',
+          text: 'Pás zdrsněte smirkem 180 jen k pásce a stejný pás vyznačte podle papírového zadního dílu i na rubu kapsy. Lepidlo naneste na oba pásy, střed nechte suchý, a hned za mokra přiložte nejdřív spodní hranu kapsy, srovnejte rohy, pak boky, pod závažím nechte zaschnout (děrujte nejdřív za 1 h). S oboustrannou páskou na rubu kapsy nezdrsňujte ani nečekejte.',
         },
         {
           id: 'stitch-lines',

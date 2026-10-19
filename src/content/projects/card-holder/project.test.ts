@@ -108,24 +108,24 @@ describe('obsah – pouzdro na karty: časovače, zápisník a „Připravte si�
   const lesson = (order: number) => cardHolderProject.lessons.find((l) => l.order === order)!;
   const step = (order: number, id: string) => lesson(order).steps.find((s) => s.id === id)!;
 
-  it('čekání jen tam, kde text říká „odvětrat podle návodu“: orientačně 10–15 min, upravitelné', () => {
+  it('čekání jen u lepení: zaschnutí pod závažím 1 h (odhad), blokuje děrování', () => {
     const withWaits = cardHolderProject.lessons.flatMap((l) =>
       l.steps.filter((s) => s.waits).map((s) => `${l.order}:${s.id}`),
     );
     expect(withWaits).toEqual(['3:glue', '5:glue-parts']);
-    for (const [order, id] of [
-      [3, 'glue'],
-      [5, 'glue-parts'],
+    for (const [order, id, blocksStepId] of [
+      [3, 'glue', 'punch-two-layers'],
+      [5, 'glue-parts', 'punch-sides'],
     ] as const) {
-      expect(step(order, id).body).toContain('odvětrat podle návodu');
+      expect(step(order, id).body).toContain('za mokra');
       expect(step(order, id).waits).toEqual([
         {
-          id: 'glue-open',
+          id: 'glue-dry',
           // S oboustrannou páskou se nečeká – časovač je jen pro lepidlo.
-          label: 'Odvětrání lepidla (s páskou nečekáte)',
-          minutes: 10,
-          maxMinutes: 15,
-          basis: 'manufacturer',
+          label: 'Zaschnutí lepidla pod závažím (s páskou nečekáte)',
+          minutes: 60,
+          basis: 'estimate',
+          blocksStepId,
         },
       ]);
     }

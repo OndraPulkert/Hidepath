@@ -421,7 +421,7 @@ add('A','Výchozí stav: řez bokem','Řez bokem v čáře švu x 3. D2 je přil
 });
 
 // A2
-add('A','Nanečisto složte a zkontrolujte','Díl nejdřív složte nanečisto a zkontrolujte, že boky F a B lícují a D2 přesahuje na každém boku 1 mm. Na líc D2 u obou boků nalepte kousek maskovací pásky spodní hranou přesně na horní hranu F (pásku nejdřív zkuste na odřezku líce D2). Teprve pak lepte – kontaktní lepidlo chytne hned při dotyku.',8000,t=>{
+add('A','Nanečisto složte a zkontrolujte','Díl nejdřív složte nanečisto a zkontrolujte, že boky F a B lícují a D2 přesahuje na každém boku 1 mm. Na líc D2 u obou boků nalepte kousek maskovací pásky spodní hranou přesně na horní hranu F (pásku nejdřív zkuste na odřezku líce D2). Teprve pak lepte; za mokra se díly dají ještě kousek posunout a srovnat.',8000,t=>{
   const cl2=es(t,.08,.4)*(1-es(t,.78,.96));
   const open=OPEN*(1-cl2);
   const fr=mkF(1.75,open);
@@ -450,23 +450,22 @@ add('B','Zdrsněte líc D2','Lepte jen šrafované boční pásy G4 (list 2; hra
 });
 
 // B2
-add('B','Naneste lepidlo a nechte zavadnout','Vnitřní hranici pásu přelepte na líci D2 svislou maskovací páskou hranou 5 mm od hrany D2 (odměřte pravítkem dole i nahoře), od spodní hrany D2 k pásce z nanečisto. Kontaktní lepidlo naneste jen do bočních pásů G4: na rub F, na líc D2 mezi pásky a pod D2 na rub B. Svislou pásku strhněte hned po nanesení lepidla, pomalu směrem od lepené plochy (zůstala by pod D1). Nechte zavadnout 10–15 min (jako u G3 v lekci 6).',10000,t=>{
-  const tv=es(t,.02,.12),gd=es(t,.14,.4),gb=es(t,.38,.5),gf=es(t,.5,.72),peel=es(t,.73,.81),dry=es(t,.82,.98);
+add('B','Naneste lepidlo tence na obě plochy','Vnitřní hranici pásu přelepte na líci D2 svislou maskovací páskou hranou 5 mm od hrany D2 (odměřte pravítkem dole i nahoře), od spodní hrany D2 k pásce z nanečisto. Lepidlo naneste tence jen do bočních pásů G4: na rub F, na líc D2 mezi pásky a pod D2 na rub B. Svislou pásku strhněte hned po nanesení lepidla, pomalu směrem od lepené plochy (zůstala by pod D1). F přiložte hned za mokra.',10000,t=>{
+  const tv=es(t,.02,.12),gd=es(t,.14,.4),gb=es(t,.38,.5),gf=es(t,.5,.72),peel=es(t,.73,.81);
   const fr=mkF(1.75,OPEN);
-  let s=section({c:1.75,open:OPEN,rough:1,glue:{d2:gd,b:gb,f:gf,op:L(1,.7,dry)}})+tapeD2();
+  let s=section({c:1.75,open:OPEN,rough:1,glue:{d2:gd,b:gb,f:gf,op:1}})+tapeD2();
   if(gd>0&&gd<1){const y=18+44*gd;s+=brush(sx(d2Lic(y))-.3,sy(y))}
   if(gb>0&&gb<1){const y=1.75+16.25*gb;s+=brush(sx(1.6)-.3,sy(y))}
   if(gf>0&&gf<1){const y=1.75+60.25*gf;s+=`<g transform="translate(${f(sx(fr(y))+.3)} ${f(sy(y))}) scale(-1 1)">${brush(0,0)}</g>`}
   s+=secLabelsL(fr,{marks:false});
   s=clipMain(s);
-  if(dry>0) s+=clock(70,72,dry,4)+pill(64,79.5,'10–15 min','t','middle');
-  s+=tag(t<.13?'svislá páska 5 mm od hrany D2':t<.72?'lepidlo na obě plochy':t<.82?'svislou pásku hned strhnout':'nechat zavadnout');
+  s+=tag(t<.13?'svislá páska 5 mm od hrany D2':t<.72?'lepidlo na obě plochy':t<.82?'svislou pásku hned strhnout':'hned přikládat za mokra');
   s+=inset('KAM LEPIDLO',miniFront({g4:gd,g4b:gb,fOpen:1,tapeV:tv,peel})+notes([['rub F: y 1,75–62','t'],['líc D2: y 18–62','t'],['rub B: y 1,75–18','t'],['jen pásy x 0–4'],['a 97–101']],60,5));
   return s;
 });
 
 // B3
-add('B','Přikládejte od ohybu dna nahoru','F přikládejte od ohybu dna nahoru a rovnejte ji podle boků B – po dotyku už nejde posunout. Rub F padne dole na rub B, výš na líc D2. Horní pásku strhněte až po přiložení F.',9600,t=>{
+add('B','Přikládejte od ohybu dna nahoru','F přikládejte hned za mokra od ohybu dna nahoru a rovnejte ji podle boků B; za mokra se dá ještě kousek posunout. Rub F padne dole na rub B, výš na líc D2. Horní pásku strhněte až po přiložení F. Přebytek setřete vlhkým hadříkem (ne na líc), přitiskněte přes hadřík a nechte zaschnout.',9600,t=>{
   const c=L(1.75,62,es(t,.06,.82));
   const fr=mkF(c,OPEN);
   let s=section({c,open:OPEN,rough:1,glue:{d2:1,b:1,f:1,op:.7}})+tapeD2(1-seg(t,.86,.96));
@@ -474,7 +473,7 @@ add('B','Přikládejte od ohybu dna nahoru','F přikládejte od ohybu dna nahoru
   if(c>2.5&&c<61){s+=arrow(sx(fr(c+10)-1)-5,sy(c+4),sx(fr(c+10)-1)-5,sy(c+12),'var(--accent)',.5)}
   s=clipMain(s);
   s+=tag(c<61?`přiloženo do y ${Math.round(c)}`:t<.86?'F přiložená až k horní hraně':'pásku pomalu strhnout');
-  s+=inset('OD OHYBU NAHORU',notes([['přikládat od','tw'],['ohybu dna nahoru'],['',''],['F rovnat podle','t'],['boků B'],['',''],['po dotyku','twn'],['nejde posunout']],18,5.6));
+  s+=inset('OD OHYBU NAHORU',notes([['přikládat od','tw'],['ohybu dna nahoru'],['',''],['F rovnat podle','t'],['boků B'],['',''],['za mokra','twn'],['jde srovnat']],18,5.6));
   return s;
 });
 
