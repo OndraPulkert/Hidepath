@@ -2107,7 +2107,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
     englishName: 'Corner radius template',
     category: 'cutting',
     shortDescription:
-      'Vede nůž nebo šídlo při zaoblování rohů na daný poloměr. Pro tento střih se hodí lob R6 a R10.',
+      'Vede nůž nebo šídlo při zaoblování rohů na daný poloměr. Pro tento střih se hodí lob 12 (R6) a lob 20 (R10).',
     purpose:
       'Kovová nebo akrylová šablona s několika oblouky různého poloměru na jednom kotouči (loby, číslované podle průměru). Přiložením správného lobu obtáhnete nebo vedete nůž po stejném rádiusu na všech rozích. Pro tento střih se hodí lob 12 (R6, dolní rohy kapsy) a lob 20 (R10, jazyk, horní rohy kapsy).',
     buyingGuide: [

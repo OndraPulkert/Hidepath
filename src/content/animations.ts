@@ -39,6 +39,8 @@ import { type AnimationLink } from '@/content/schema';
  *   pravítka, pravítko nastavené čepelí (lekce 2 pouzdra na karty), společné pro všechny projekty.
  * - derovani-kapsa (`#A`–`#E`): stejně jako kapsa-prisiti; děrování cvičné kapsy z tvarů 3 a 1
  *   (lekce 3 pouzdra na karty): rohy dvojhrotem, boky, spodek ke středu, zbytek jednohrotem.
+ * - rohova-sablona (`#A`–`#B`): stejně jako kapsa-prisiti; ocelová rohová šablona „květina“: lob podle
+ *   poloměru (číslo = průměr) a štěrbina R15 (vnější hrana), společné pro všechny projekty.
  * - ctverec-forma (`#A`–`#C`): stejně jako kapsa-prisiti; čtverec 70 × 70 kolem vyvrtaného otvoru
  *   formy jen pravítkem (lekce 2 pouzdra s mincí), příklad otvor Ø 32 mm.
  *
@@ -841,6 +843,25 @@ export const animationPages = {
         'Dobruste plošky na čáru',
       ],
       C: ['Vydutý oblouk: krátké rovné řezy', 'Dobruste smirkem kolem tužky'],
+    },
+  },
+  cornerTemplate: {
+    path: '/animace/rohova-sablona.html',
+    title: 'Rohová šablona',
+    buttonText: 'Jak zaoblit roh podle šablony',
+    sections: {
+      A: 'Část A – lob',
+      B: 'Část B – štěrbina R15',
+    },
+    steps: {
+      A: ['Vyberte lob podle poloměru', 'Přiložte lob do rohu', 'Řízněte podél lobu'],
+      B: [
+        'R15 je vnější hrana štěrbiny',
+        'Označte body napojení',
+        'Přiložte štěrbinu na čárky',
+        'Řízněte ve štěrbině',
+        'Zkontrolujte roh',
+      ],
     },
   },
   beltHoleCenter: {
