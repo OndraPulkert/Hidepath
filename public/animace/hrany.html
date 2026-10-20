@@ -136,7 +136,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
   </div>
   <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
 </section>
-<p class="note">Části A–E: pouzdro na karty (zkosení a barvu nemá, ukazují je projekty 02 a 05). Část F: pouzdro s mincí, část G: Víčko, část H: pásek. Řezy hranou jsou zvětšené, s úsečkou 1 mm; díly jsou v měřítku. „Tip“ označuje, co lekce neuvádí.</p>
+<p class="note">Části A–E: pouzdro na karty (zkosení ořezávačem je volitelné, barvu nemá, ukazují ji projekty 02 a 05). Část F: pouzdro s mincí, část G: Víčko, část H: pásek. Řezy hranou jsou zvětšené, s úsečkou 1 mm; díly jsou v měřítku. „Tip“ označuje, co lekce neuvádí.</p>
 </div>
 
 <script>
@@ -328,7 +328,7 @@ add('A','Srovnejte hrany smirkem',
 
 // B1
 add('B','Zaoblete hrany dna',
- 'Pouzdro na karty se nezkosuje. Pouzdro s mincí (lekce 8): dno přebruste smirkem 220–400 na rovné destičce do roviny přes tři vrstvy. Hrany dna zaoblete z obou vnějších stran (přední i zadní panel) brusným papírem na hranolku, nebo ořezávačem hran, máte-li ho.',
+ 'Pouzdro na karty (lekce 3 až 5): máte-li ořezávač hran, srazte po srovnání smirkem jen vnější hrany sešité vrstvy (líc kapsy a rub zadního dílu), ne slepený šev, před leštěním; hrany jedné vrstvy z líce i z rubu. Pouzdro s mincí (lekce 8): dno přebruste smirkem 220–400 na rovné destičce do roviny přes tři vrstvy. Hrany dna zaoblete z obou vnějších stran (přední i zadní panel) brusným papírem na hranolku, nebo ořezávačem hran, máte-li ho.',
  11000,t=>{
   const ls=[{t:1.2,lic:'bot'},{t:1.2,lic:'bot'},{t:1.2,lic:'top'}];
   const bt=.55*es(t,.12,.45), bb=.55*es(t,.55,.88);
@@ -341,14 +341,14 @@ add('B','Zaoblete hrany dna',
   o+=pill(6,y0-H*K-5,'přední (líc)','ts')+pill(6,y0+6,'zadní (líc)','ts');
   o+=scaleBar(8,80,K)+zoomTag();
   o+=pill(4,87,t<.5?'zaoblit přední hranu':t<.92?'zaoblit zadní hranu':'zaobleno z obou stran','t');
-  let ib=notes([['01','t'],['nezkosuje se'],[''],['02 lekce 8','t'],['z obou stran,'],['brusný papír'],['na hranolku'],[''],['ořezávač hran','ta'],['jen máte-li ho']],16,5.2);
+  let ib=notes([['01','t'],['vnější hrany'],[''],['02 lekce 8','t'],['z obou stran,'],['brusný papír'],['na hranolku'],[''],['ořezávač hran','ta'],['jen máte-li ho']],16,5.2);
   return o+inset('KDO ZKOSUJE',ib);
  },P2,'Tip: ořezávač zkuste nejdřív na odřezku – hluboký záběr hranu nevratně ztenčí.');
 
 // B2
 const L03side=(dD2=0)=>[{t:1.0,lic:'bot',kind:'kas'},{t:.8,lic:'bot',kind:'cok',dx:dD2},{t:1.0,lic:'top',kind:'kas'}];
 add('B','Zkoste nebo zaoblete hrany',
- 'Víčko: hrany zkoste zkosovačem, nebo zaoblete brusným papírem na hranolku. Jednotlivé hrany z líce, výřez pro palec z líce i z rubu, boky těla jako jeden svazek z obou líců.',
+ 'Víčko: hrany zkoste ořezávačem hran, máte-li ho, nebo zaoblete brusným papírem na hranolku. Jednotlivé hrany z líce, výřez pro palec z líce i z rubu, boky těla jako jeden svazek z obou líců.',
  10000,t=>{
   const ls=L03side();const H=H_(ls);
   const rT=es(t,.1,.45), rB=es(t,.52,.88);
@@ -361,8 +361,8 @@ add('B','Zkoste nebo zaoblete hrany',
   o+=sideTag(x0,y0-1.4*kk,'D2');
   o+=scaleBar(8,82,kk)+zoomTag();
   o+=pill(4,88,t<.92?'brusný papír na hranolku':'zaobleno z obou líců','t');
-  let ib=notes([['03 Víčko','t'],['zkosovač, nebo'],['brusný papír'],['na hranolku'],[''],['boky těla:','t'],['z obou líců'],[''],['kresleno:','ts'],['1,0 + 0,8 + 1,0 mm']],16,5.2);
-  return o+inset('BEZ NÁSTROJE',ib);
+  let ib=notes([['03 Víčko','t'],['ořezávač, nebo'],['brusný papír'],['na hranolku'],[''],['boky těla:','t'],['z obou líců'],[''],['kresleno:','ts'],['1,0 + 0,8 + 1,0 mm']],16,5.2);
+  return o+inset('ČÍM ZKOSIT',ib);
  },P3,'Tip: skutečné tloušťky změříte v lekci 1; řez je kreslený pro 1,0 / 0,8 / 1,0 mm.');
 
 // C1

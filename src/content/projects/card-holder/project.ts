@@ -357,6 +357,7 @@ export const lessons: readonly LessonDefinition[] = [
       'scratch-awl',
       'sandpaper',
       'edge-burnisher',
+      'edge-beveler',
     ],
     prerequisiteLessons: [L2],
     requires: [
@@ -378,7 +379,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'opening-edges',
         title: 'Dokončete hrany ústí',
         animationLinks: [animationLink('edges', 'D1'), animationLink('edges', 'D2')],
-        body: 'Tvar 3 s výřezem a tvar 1 slepíte rubem k sobě do malé kapsy: výřez nahoře, steh po spodku a obou bocích. Horní hrany obou tvarů zůstanou bez stehu a tvoří ústí, dokončete je teď, jako horní hranu kapsy v lekci 4. Rovné části srovnejte smirkem 220–400 na rovné destičce, výřez smirkem 240 omotaným kolem tužky. Hranu navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezaleskne. Před lepením nechte hrany zaschnout.',
+        body: 'Tvar 3 s výřezem a tvar 1 slepíte rubem k sobě do malé kapsy: výřez nahoře, steh po spodku a obou bocích. Horní hrany obou tvarů zůstanou bez stehu a tvoří ústí, dokončete je teď, jako horní hranu kapsy v lekci 4. Rovné části srovnejte smirkem 220–400 na rovné destičce, výřez smirkem 240 omotaným kolem tužky. Máte-li ořezávač hran, srazte před leštěním hrany ústí z líce i z rubu. Hranu navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezaleskne. Před lepením nechte hrany zaschnout.',
         media: [],
       },
       {
@@ -566,7 +567,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'edges',
         title: 'Srovnejte a zalešte hrany',
-        body: 'Sešité hrany, spodek a oba boky, srovnejte do jedné roviny smirkem 220–400 na rovné destičce, destičku držte kolmo k líci. Hranu navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezaleskne. Slepené hrany se brousí až po šití: teprve pak se obě vrstvy srovnají spolu. Hrany ústí už nebruste. Stejně to uděláte na pouzdře v lekci 5.',
+        body: 'Sešité hrany, spodek a oba boky, srovnejte do jedné roviny smirkem 220–400 na rovné destičce, destičku držte kolmo k líci. Máte-li ořezávač hran, srazte jen dvě vnější hrany, líc tvaru 3 a líc tvaru 1, ne slepený šev, a smirkem je lehce přejeďte. Hranu navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezaleskne. Slepené hrany se brousí až po šití: teprve pak se obě vrstvy srovnají spolu. Hrany ústí už nebruste. Stejně to uděláte na pouzdře v lekci 5.',
         media: [],
       },
     ],
@@ -652,7 +653,7 @@ export const lessons: readonly LessonDefinition[] = [
       'sandpaper',
       'masking-tape',
     ],
-    recommendedEquipment: ['edge-burnisher'],
+    recommendedEquipment: ['edge-burnisher', 'edge-beveler'],
     prerequisiteLessons: [L2, L4],
     prints: [
       {
@@ -759,7 +760,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'pocket-top-edge',
         title: 'Dokončete horní hranu kapsy',
         animationLinks: [animationLink('edges', 'D1'), animationLink('edges', 'D2')],
-        body: 'Horní hranu kapsy i s výřezem dokončete teď. Po přišití pod ní leží líc zadního dílu a smirek, voda i leštítko by ho odřely nebo zašpinily. Rovné části srovnejte smirkem 220–400 na rovné destičce, výřez smirkem kolem tužky. Hranu navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezaleskne.',
+        body: 'Horní hranu kapsy i s výřezem dokončete teď. Po přišití pod ní leží líc zadního dílu a smirek, voda i leštítko by ho odřely nebo zašpinily. Rovné části srovnejte smirkem 220–400 na rovné destičce, výřez smirkem kolem tužky. Máte-li ořezávač hran, srazte horní hranu kapsy z líce i z rubu. Hranu navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezaleskne.',
         media: [],
       },
       {
@@ -845,7 +846,7 @@ export const lessons: readonly LessonDefinition[] = [
       'sandpaper',
       'masking-tape',
     ],
-    recommendedEquipment: ['contact-cement', 'edge-burnisher', 'scratch-awl'],
+    recommendedEquipment: ['contact-cement', 'edge-burnisher', 'edge-beveler', 'scratch-awl'],
     prerequisiteLessons: [L5],
     prints: [
       {
@@ -960,7 +961,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'edges',
         title: 'Srovnejte a zalešte hrany',
         animationLinks: [animationLink('edges', 'A2'), animationLink('edges', 'D1')],
-        body: 'Sešité hrany srovnejte do jedné roviny smirkem 220–400 na rovné destičce. Hranu navlhčete vodou nebo pastou a třete leštítkem nebo plátnem, dokud se nezaleskne. Stejně upravte horní hranu a boky zadního dílu nad kapsou. Horní hranu kapsy a výřez máte hotové z lekce 4, smirkem ani leštítkem na ně nesahejte: pod nimi je líc zadního dílu.',
+        body: 'Sešité hrany srovnejte do jedné roviny smirkem 220–400 na rovné destičce. Máte-li ořezávač hran, srazte jen vnější hrany: líc kapsy a rub zadního dílu, ne slepený šev, a smirkem je lehce přejeďte. Hranu navlhčete vodou nebo pastou a třete leštítkem nebo plátnem, dokud se nezaleskne. Stejně upravte horní hranu a boky zadního dílu nad kapsou; je tam jedna vrstva, takže ji ořezávačem, máte-li ho, srazte z líce i z rubu. Horní hranu kapsy a výřez máte hotové z lekce 4, smirkem ani leštítkem na ně nesahejte: pod nimi je líc zadního dílu.',
         media: [
           {
             id: 'l6-edges',
@@ -1085,7 +1086,7 @@ const overview: ProjectOverview = {
           id: 'glue',
           lessonSlug: L4,
           stepId: 'glue',
-          text: 'Horní hrany tvarů 3 (s výřezem) a 1 srovnejte smirkem a zalešte, pak tvary slepte rubem k sobě v pásu asi 5 mm podél spodku a boků, střed nechte suchý. Rub na rubu drží bez zdrsnění. Na tvaru 2 zdrsněte na líci jen polovinu pásu, přilepte na něj proužek z lekce 2 a druhý den ho na obou polovinách zkuste odtrhnout.',
+          text: 'Horní hrany tvarů 3 (s výřezem) a 1 srovnejte smirkem, případně srazte ořezávačem hran, a zalešte, pak tvary slepte rubem k sobě v pásu asi 5 mm podél spodku a boků, střed nechte suchý. Rub na rubu drží bez zdrsnění. Na tvaru 2 zdrsněte na líci jen polovinu pásu, přilepte na něj proužek z lekce 2 a druhý den ho na obou polovinách zkuste odtrhnout.',
         },
         {
           id: 'punch-two-layers',
@@ -1104,7 +1105,7 @@ const overview: ProjectOverview = {
           id: 'finish-practice',
           lessonSlug: L4,
           stepId: 'finish-stitch',
-          text: 'Na konci prošijte dva otvory zpět a konce vyveďte na rub; odstřihněte je, nebo polyesterovou nit zatavte jen na rubu. Na líci mají být stehy stejně skloněné, na rubu stejně utažené a bez smyček. Až po šití srovnejte sešité hrany smirkem 220–400 a zalešte.',
+          text: 'Na konci prošijte dva otvory zpět a konce vyveďte na rub; odstřihněte je, nebo polyesterovou nit zatavte jen na rubu. Na líci mají být stehy stejně skloněné, na rubu stejně utažené a bez smyček. Až po šití srovnejte sešité hrany smirkem 220–400, případně je srazte ořezávačem z vnějších stran, a zalešte.',
         },
       ],
     },
@@ -1153,7 +1154,7 @@ const overview: ProjectOverview = {
           id: 'pocket-top-edge',
           lessonSlug: L5,
           stepId: 'pocket-top-edge',
-          text: 'Horní hranu kapsy i s výřezem srovnejte smirkem a zaleštěte teď, po přišití by pod ní byl líc zadního dílu. Rub zadního dílu (zadní strana pouzdra) můžete uhladit pastou, nejdřív na odřezku.',
+          text: 'Horní hranu kapsy i s výřezem srovnejte smirkem (případně srazte ořezávačem z líce i z rubu) a zaleštěte teď, po přišití by pod ní byl líc zadního dílu. Rub zadního dílu (zadní strana pouzdra) můžete uhladit pastou, nejdřív na odřezku.',
         },
         {
           id: 'glue-area',
@@ -1189,7 +1190,7 @@ const overview: ProjectOverview = {
           id: 'edges',
           lessonSlug: L6,
           stepId: 'edges',
-          text: 'Sešité hrany srovnejte smirkem 220–400 na destičce, pak navlhčete a leštěte do lesku. Stejně upravte horní hranu a boky zadního dílu nad kapsou, horní hrany kapsy a výřezu se už nedotýkejte.',
+          text: 'Sešité hrany srovnejte smirkem 220–400 na destičce, případně srazte vnější hrany ořezávačem, pak navlhčete a leštěte do lesku. Stejně upravte horní hranu a boky zadního dílu nad kapsou, horní hrany kapsy a výřezu se už nedotýkejte.',
         },
         {
           id: 'test-cards',
@@ -1329,7 +1330,8 @@ export const cardHolderProject: ProjectDefinition = {
     {
       equipmentSlug: 'edge-beveler',
       priority: 'later',
-      reason: 'U tenké kůže malý efekt; až na pásek nebo peněženku.',
+      reason:
+        'Nepovinný: srazí hrany pouzdra (lekce 3 až 5), jinak stačí smirek. Víc se hodí na pásek nebo peněženku.',
       specification: 'Velikost 0–1.',
     },
     {

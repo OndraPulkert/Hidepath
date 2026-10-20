@@ -346,7 +346,7 @@ export const lessons: readonly LessonDefinition[] = [
       'snap-fastener',
       'sandpaper',
     ],
-    recommendedEquipment: ['edge-burnisher'],
+    recommendedEquipment: ['edge-burnisher', 'edge-beveler'],
     prerequisiteLessons: ['05-paper-model'],
     prints: [
       {
@@ -375,8 +375,8 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         id: 'edges',
-        title: 'Dokončete hrany ústí a víčka',
-        body: 'Horní hranu T3, hrany víčka, volný konec a dno P zbruste a zaleštěte. Po sešití se k nim hůř dostanete.',
+        title: 'Dokončete hrany T3 a víčka',
+        body: 'Hrany T3 kromě dna, hrany víčka a volný konec P zbruste; máte-li ořezávač hran, srazte je z líce i z rubu, boky a jazýček T3 jen z líce (rubem leží na P). Pak zaleštěte. Po přilepení se k nim hůř dostanete.',
         media: [],
         animationLinks: [animationLink('edges', 'A')],
       },
@@ -408,6 +408,13 @@ export const lessons: readonly LessonDefinition[] = [
         body: 'Kružítkem veďte linii 3,5 mm od pravého boku a dna T3. Levý šev veďte od dna k rohu jazýčku kružítkem a dál rovně podle pravítka. Dělicí šev narýsujte podle listu. Všechny švy začínají 3 mm pod ústím. Prorazte vidličkami a ušijte. Konce švů u ústí zajistěte dvojitým stehem.',
         media: [],
         animationLinks: [animationLink('saddleStitch', 'A1')],
+      },
+      {
+        id: 'bottom-edge',
+        title: 'Dokončete dno',
+        body: 'Dno T3 a P zbruste do roviny. Máte-li ořezávač hran, srazte jen líc T3 a líc P, ne slepený šev, a smirkem lehce přejeďte. Pak zaleštěte.',
+        media: [],
+        animationLinks: [animationLink('edges', 'A2'), animationLink('edges', 'D1')],
       },
       {
         id: 'lid',
@@ -490,7 +497,7 @@ export const lessons: readonly LessonDefinition[] = [
       'contact-cement',
       'sandpaper',
     ],
-    recommendedEquipment: ['edge-burnisher'],
+    recommendedEquipment: ['edge-burnisher', 'edge-beveler'],
     prerequisiteLessons: ['06-coin-module'],
     prints: [
       {
@@ -526,7 +533,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'edge',
         title: 'Dokončete horní hranu T2',
-        body: 'Ramena a výkus T2 zbruste a zaleštěte.',
+        body: 'Ramena a výkus T2 zbruste; máte-li ořezávač hran, srazte je z líce i z rubu. Pak zaleštěte.',
         media: [],
         animationLinks: [animationLink('edges', 'A')],
       },
@@ -567,7 +574,7 @@ export const lessons: readonly LessonDefinition[] = [
       'waxed-thread',
       'sandpaper',
     ],
-    recommendedEquipment: ['edge-burnisher'],
+    recommendedEquipment: ['edge-burnisher', 'edge-beveler'],
     prerequisiteLessons: ['07-body-parts'],
     steps: [
       {
@@ -613,7 +620,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'edges',
         title: 'Hrany po obvodu',
-        body: 'Boky a dno srovnejte smirkem a zaleštěte. Pás otevřete a zavřete: musí se ohýbat u pravého švu bez zadrhávání.',
+        body: 'Boky a dno srovnejte smirkem; máte-li ořezávač hran, srazte jen vnější hrany, ne lepený šev, a smirkem je lehce přejeďte. Pak zaleštěte. Pás otevřete a zavřete: musí se ohýbat u pravého švu bez zadrhávání.',
         media: [],
         animationLinks: [animationLink('edges', 'A')],
         records: [text('obrat-08-notes', 'Poznámky k sestavení')],
@@ -651,7 +658,7 @@ export const lessons: readonly LessonDefinition[] = [
       'snap-fastener',
       'sandpaper',
     ],
-    recommendedEquipment: ['edge-burnisher'],
+    recommendedEquipment: ['edge-burnisher', 'edge-beveler'],
     prerequisiteLessons: ['08-assembly'],
     prints: [
       {
@@ -708,7 +715,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'flap-seam',
         title: 'Ozdobný šev a hrany klopy',
-        body: 'Kružítkem veďte linii 3,5 mm od boků a šikmé hrany klopy, od ohybu k ohybu. Prorazte a ušijte jednou vrstvou. Hrany klopy zbruste a zaleštěte.',
+        body: 'Kružítkem veďte linii 3,5 mm od boků a šikmé hrany klopy, od ohybu k ohybu. Prorazte a ušijte jednou vrstvou. Hrany klopy zbruste; máte-li ořezávač hran, srazte je z líce i z rubu. Pak zaleštěte.',
         media: [],
         animationLinks: [animationLink('edges', 'A')],
       },
@@ -845,6 +852,7 @@ export const obratWalletProject: ProjectDefinition = {
         'wing-divider',
         'sandpaper',
         'edge-burnisher',
+        'edge-beveler',
       ].includes(e.equipmentSlug),
     ),
     {

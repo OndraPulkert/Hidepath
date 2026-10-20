@@ -1248,6 +1248,11 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         label: 'Velikost',
         value: 'nejmenší nabízená (č. 0–1; u značení S/M/L velikost S) pro kůži 1,2–1,5 mm',
       },
+      {
+        label: 'Použití',
+        value:
+          'držte jako tužku, drážku přiložte na roh hrany asi pod 45° a tlačte od sebe jedním plynulým tahem s lehkým tlakem, z obou vnějších stran hrany; po srovnání smirkem, před leštěním, pak hranu smirkem lehce přejeďte. Drhne nebo trhá: je tupý, nebo ho držíte moc strmě.',
+      },
     ],
     cautions: [
       'Vyžaduje ostrý nástroj a cvik; tupý ořezávač hranu trhá. Levné kusy se často musí nejdřív nabrousit.',

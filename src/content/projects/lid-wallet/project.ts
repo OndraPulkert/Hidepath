@@ -904,7 +904,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'edges',
         title: 'Předběžné dokončení hran',
         animationLinks: [animationLink('edges', 'G1')],
-        body: 'Horní hranu F i s výřezem, spodní hranu a boky pásu víčka, boky závěsu a boky jazýčku vybruste smirkem 220–400 na rovné destičce, zkoste z líce (zkosovačem, nebo zaoblete brusným papírem na hranolku) a vyleštěte: navlhčete vodou nebo Tokonole (jen mimo lepená místa) a třete leštítkem nebo kusem plátna, až se hrana zaleskne. Horní hrany D1 a D2 jen vybruste a vyleštěte; horní hranu D2 lehce zaoblete, vede přes ni závěs. Výřez pro palec zaoblete z líce i z rubu, o rubovou hranu by se zachytila karta. Vnitřek výřezu vybruste a vyleštěte kolíkem Ø 8 v aku vrtačce.',
+        body: 'Horní hranu F i s výřezem, spodní hranu a boky pásu víčka, boky závěsu a boky jazýčku vybruste smirkem 220–400 na rovné destičce, zkoste z líce před leštěním (ořezávačem hran, máte-li ho, nebo zaoblete brusným papírem na hranolku) a vyleštěte: navlhčete vodou nebo Tokonole (jen mimo lepená místa) a třete leštítkem nebo kusem plátna, až se hrana zaleskne. Horní hrany D1 a D2 jen vybruste a vyleštěte; horní hranu D2 lehce zaoblete, vede přes ni závěs. Výřez pro palec zaoblete z líce i z rubu, o rubovou hranu by se zachytila karta. Vnitřek výřezu vybruste a vyleštěte kolíkem Ø 8 v aku vrtačce.',
         media: [],
       },
       {
@@ -1384,7 +1384,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'edges',
         title: 'Zarovnat a vyleštit boky',
         animationLinks: [animationLink('edges', 'G3')],
-        body: 'Boky zarovnejte nožem na 101,0 mm (D2 přečnívá), spodní rohy nechte hranaté. Boky dokončete jako hrany v lekci 5: vybruste, zkoste z obou líců a vyleštěte jako jeden svazek, i u ohybu dna.',
+        body: 'Boky zarovnejte nožem na 101,0 mm (D2 přečnívá), spodní rohy nechte hranaté. Boky dokončete jako hrany v lekci 5: vybruste, zkoste z obou vnějších líců (ořezávačem hran, máte-li ho, jinak brusným papírem na hranolku), smirkem lehce přejeďte a vyleštěte jako jeden svazek, i u ohybu dna.',
         media: [
           photo('lw-l9-edges', 'Vyleštěný bok peněženky s bočním švem a hranatým spodním rohem'),
         ],
