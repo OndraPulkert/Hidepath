@@ -1831,7 +1831,7 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Zkraťte jazyk a zaoblete rohy',
         body: 'Jazyk narovnejte lícem nahoru na řezací podložku. Na líc nic nekreslete ani nepropichujte – čáry patří na pásku. Přes konec jazyka nalepte maskovací pásku tak, aby přesahovala přes klobouček kousek za jeho střed, a kolem kloboučku ji přitiskněte (pásku nejdřív zkuste na odřezku). Pravítkem odměřte na líci jazyka 11 mm od středu kloboučku směrem ke konci jazyka a po obou stranách kloboučku si to vyznačte tužkou na pásce. Pravítko položte na odřezávanou část (na ponechané by leželo na kloboučku), hranou přes obě značky a s přesahem přes konec jazyka na podložku, aby leželo stabilně, a čáru narýsujte. Rohy R10 narýsujte na pásku taky: rohovou šablonu (lob 20) nebo kulatý předmět Ø 20 mm (minci, víčko) přiložte k čáře a k boku jazyka a obtáhněte. Jazyk uřízněte skrz pásku podle pravítka kolmo k bokům: řežte pomalu a čepel tiskněte k hraně pravítka, tedy od kloboučku (ověřte na odřezku). Rohy řízněte po čáře bez pravítka, krátkými tahy. Pásku pomalu strhněte.',
 
-        animationLinks: [animationLink('snap', 'C5')],
+        animationLinks: [animationLink('snap', 'C5'), animationLink('cornerTemplate', 'A2')],
         media: [
           {
             id: 'postup-7',

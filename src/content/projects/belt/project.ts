@@ -1120,6 +1120,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('beltHolesTip', 'E2'),
           animationLink('beltHolesTip', 'E3'),
           animationLink('beltHolesTip', 'E4'),
+          animationLink('cornerTemplate', 'A3'),
         ],
         media: [photo('belt-l6-cut', 'Nůž u ocelového pravítka řeže bok hrotu, destička odložená')],
       },

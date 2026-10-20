@@ -412,7 +412,7 @@ describe('animace postupu – složení pouzdra a druk v lekcích', () => {
     expect(hrefOf(8, 'imprint-cap-position')).toEqual([druk('C2')]);
     expect(hrefOf(8, 'punch-cap-hole')).toEqual([druk('C3')]);
     expect(hrefOf(8, 'set-cap')).toEqual([druk('C4'), apl('C3')]);
-    expect(hrefOf(8, 'shorten-tongue')).toEqual([druk('C5')]);
+    expect(hrefOf(8, 'shorten-tongue')).toEqual([druk('C5'), '/animace/rohova-sablona.html#A2']);
   });
 
   it('pouzdro s mincí odkazuje na kapsu jen kotvou kroku, ne celé části', () => {
@@ -786,7 +786,7 @@ describe('animace postupu – pásek: konec s přezkou, dírky a špička', () =
     [6, 'place', [spicka('B2'), spicka('C1'), spicka('D2')]],
     [6, 'mark', [spicka('B3'), spicka('C2'), spicka('D2')]],
     [6, 'punch-holes', ['/animace/pasek-dirky.html#A1']],
-    [6, 'cut-tip', [spicka('E2'), spicka('E3'), spicka('E4')]],
+    [6, 'cut-tip', [spicka('E2'), spicka('E3'), spicka('E4'), '/animace/rohova-sablona.html#A3']],
     [6, 'finish', [spicka('F1'), spicka('F2'), hrany('H1'), hrany('H2'), hrany('H3')]],
     [6, 'try', [spicka('F3')]],
   ] as const)('lekce %i, krok %s otevírá přesné kroky animace', (order, stepId, expected) => {
