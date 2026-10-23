@@ -8,6 +8,8 @@
 <path d="M179.69 60.4 L179.69 164.5" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
 <path d="M188.35 60.4 L188.35 164.5" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="3 2"/>
 <text x="184.02" y="57.4" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#a2471f">① OHYB B: vnitřní za přední</text>
+<text x="108.29" y="163.7" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="start" fill="#a2471f">← sem okraj vnitřního panelu (①)</text>
+<text x="179.09" y="163.7" font-family="Helvetica, Arial, sans-serif" font-size="1.9" text-anchor="end" fill="#a2471f">sem okraj zadního panelu (②) →</text>
 <path d="M116.69 75.4 h54 v85.6 h-54 Z" fill="none" stroke="#7a7a7a" stroke-width="0.2" stroke-dasharray="1.5 1"/>
 <text x="143.69" y="118.2" font-family="Helvetica, Arial, sans-serif" font-size="2.4" text-anchor="middle" fill="#7a7a7a">KARTA sem (za přední panel)</text>
 <text x="143.69" y="121.6" font-family="Helvetica, Arial, sans-serif" font-size="2.1" text-anchor="middle" fill="#7a7a7a">54 × 85,6 mm,</text>
@@ -41,7 +43,7 @@
 <text x="13.5" y="175.5" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#7a7a7a">PAPÍROVÝ MODEL – NE z kůže. Tisk na A4 NA ŠÍŘKU na 100 %, obrys je stejný jako list pásu. Výtisk nalepit na tenký karton (krabice od cereálií), aby model po složení a naplnění držel tvar.</text>
 <text x="13.5" y="178.9" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#7a7a7a">Model pro: mince Ø 27,5, kůže tělo 1,2 mm (bez ztenčení).</text>
 <text x="13.5" y="182.3" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#7a7a7a">Prokáže: polohu jazyka a kloboučku, výřez, vytahování karty a místo pro kapsu. Neprokáže přídavky ohybů (papír je tenčí než kůže): ohyby jen přehnout do smyčky, nepřekládat na ostro.</text>
-<text x="13.5" y="185.7" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#7a7a7a">☐ ① vnitřní panel dozadu za přední (ohyb B)   ☐ ② zadní přes všechno (ohyb A)   ☐ dno slepit páskou podél čáry švu   ☐ vložit 4 karty vpředu a bankovky napůl vzadu</text>
+<text x="13.5" y="185.7" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#7a7a7a">☐ ① vnitřní panel dozadu za přední (ohyb B)   ☐ ② zadní přes všechno (ohyb A); volný okraj vždy na čáru se šipkou, dno na dno   ☐ dno slepit páskou podél čáry švu   ☐ vložit 4 karty vpředu a bankovky napůl vzadu</text>
 <text x="13.5" y="189.1" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#7a7a7a">☐ přehnout jazyk přes horní hranu, patici propíchnout do jazyka a změřit odchylku od kloboučku</text>
 <text x="13.5" y="192.5" font-family="Helvetica, Arial, sans-serif" font-size="2.3" text-anchor="start" fill="#7a7a7a">☐ palcem vysunout kartu výřezem   ☐ konec jazyka je nad místem pro kapsu   → výsledky zapsat vpravo nahoře, teprve pak řezat kůži (listy PÁS a KAPSA).</text>
 </svg>

@@ -96,7 +96,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'fold-loop',
         title: 'Přehněte ohyby do smyčky',
-        body: 'Nejdřív přehněte vnitřní panel za přední (ohyb B, na listu ①), pak zadní přes všechno (ohyb A, ②). Ohyby jen přehněte do měkké smyčky, nepřekládejte je na ostro.',
+        body: 'Nejdřív přehněte vnitřní panel za přední (ohyb B, na listu ①): jeho volný okraj dosedne zezadu přesně pod čáru ohybu A, u které je šipka „sem okraj vnitřního panelu“. Pak zadní panel přes všechno (ohyb A, ②): jeho okraj dosedne pod čáru ohybu B se šipkou „sem okraj zadního panelu“. Dno vždy lícuje s dnem, kontrolujte na dolní hraně. Ohyby jen přehněte do měkké smyčky, nepřekládejte je na ostro.',
         media: [],
       },
       {
@@ -798,7 +798,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'fold-around-content',
         title: 'Přeložte kolem obsahu',
-        body: 'Zabalené karty položte na rub předního (prostředního) panelu a přeložte přes ně vnitřní panel ohybem B. Na líc vnitřního panelu položte přeložený papír místo bankovek a přes všechno přeložte zadní panel ohybem A (pořadí: přední – karty – vnitřní – bankovky – zadní). Ohyby tvarujte do smyčky, ne na ostro – nasucho nebo na ostro líc praská. Přejeďte rozhrnovačkou a sepněte sponkami přes podložku. Než necháte zaschnout, zkontrolujte, že otvory na sousedních panelech lícují. Když ne, dokud je kůže vlhká, ohyb rozevřete a přeložte se smyčkou posunutou tak, aby seděly; malý zbytek srovnáte při lepení jehlami. Když nesedí ani pak, zapište si, o kolik mm a u kterého ohybu (příčinou bývá odměření teček; co s větším posunem, ověřte na odřezku). Zapište si i, jak tuhý je ohyb A. Nechte úplně zaschnout, nejlépe přes noc: kůže má zase původní barvu a na dotyk není chladná. Vlhký ohyb by se při rozevření zdeformoval.',
+        body: 'Zabalené karty položte na rub předního (prostředního) panelu a přeložte přes ně vnitřní panel ohybem B, volný okraj na čáru ohybu A u předního panelu. Na líc vnitřního panelu položte přeložený papír místo bankovek a přes všechno přeložte zadní panel ohybem A, volný okraj ke smyčce ohybu B (pořadí: přední – karty – vnitřní – bankovky – zadní). U obou ohybů dno lícuje s dnem. Ohyby tvarujte do smyčky, ne na ostro – nasucho nebo na ostro líc praská. Přejeďte rozhrnovačkou a sepněte sponkami přes podložku. Než necháte zaschnout, zkontrolujte, že otvory na sousedních panelech lícují. Když ne, dokud je kůže vlhká, ohyb rozevřete a přeložte se smyčkou posunutou tak, aby seděly; malý zbytek srovnáte při lepení jehlami. Když nesedí ani pak, zapište si, o kolik mm a u kterého ohybu (příčinou bývá odměření teček; co s větším posunem, ověřte na odřezku). Zapište si i, jak tuhý je ohyb A. Nechte úplně zaschnout, nejlépe přes noc: kůže má zase původní barvu a na dotyk není chladná. Vlhký ohyb by se při rozevření zdeformoval.',
         animationLinks: [animationLink('pouchFold', 'B2'), animationLink('bottomHoles', 'E2')],
         waits: [
           {
@@ -1596,14 +1596,14 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'fold-inner-b',
         title: 'Přeložte vnitřní panel ohybem B',
-        body: 'Zabalené karty položte na rub předního panelu a přeložte přes ně vnitřní panel ohybem B.',
+        body: 'Zabalené karty položte na rub předního panelu a přeložte přes ně vnitřní panel ohybem B. Jeho volný okraj dosedne na čáru ohybu A u předního panelu (tužkou na rubu), dno lícuje s dnem.',
         animationLinks: [animationLink('pouchFold', 'B2')],
         media: [],
       },
       {
         id: 'fold-back-a',
         title: 'Přeložte zadní panel ohybem A',
-        body: 'Zabalené bankovky položte na líc vnitřního panelu. Přes všechno přeložte zadní panel ohybem A. Pořadí vrstev odpředu: přední – karty – vnitřní – bankovky – zadní.',
+        body: 'Zabalené bankovky položte na líc vnitřního panelu. Přes všechno přeložte zadní panel ohybem A. Jeho volný okraj skončí u smyčky ohybu B, dno lícuje s dnem. Pořadí vrstev odpředu: přední – karty – vnitřní – bankovky – zadní.',
         animationLinks: [animationLink('pouchFold', 'B3')],
         media: [
           {

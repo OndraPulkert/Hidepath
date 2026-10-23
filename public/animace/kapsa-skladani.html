@@ -455,7 +455,7 @@ add('B','Navlhčete pásma obou ohybů','Houbičkou navlhčete jen pásma obou o
   return s;
 },'lic','Tip: stranu lekce neurčuje, animace ukazuje líc.');
 
-add('B','Přeložte vnitřní panel ohybem B','Zabalené karty položte na rub předního panelu a přeložte přes ně vnitřní panel ohybem B. Ohyb tvarujte do smyčky, ne na ostro.',10500,t=>{
+add('B','Přeložte vnitřní panel ohybem B','Zabalené karty položte na rub předního panelu a přeložte přes ně vnitřní panel ohybem B. Volný okraj dosedne na čáru ohybu A u předního panelu, dno lícuje s dnem. Ohyb tvarujte do smyčky, ne na ostro.',10500,t=>{
   const cam=camL(CAM_FLAT,CAM_B,es(t,.4,.9));
   const thB=Math.PI*es(t,.42,.88);
   const g=secGeom(0,thB), w=wOf(cam);
@@ -482,7 +482,7 @@ function foldedLabels(cam,o={}){
   }
   return s;
 }
-add('B','Přeložte zadní panel ohybem A','Zabalené bankovky položte na líc vnitřního panelu. Přes všechno přeložte zadní panel ohybem A. Pořadí odpředu: přední – karty – vnitřní – bankovky – zadní.',10500,t=>{
+add('B','Přeložte zadní panel ohybem A','Zabalené bankovky položte na líc vnitřního panelu. Přes všechno přeložte zadní panel ohybem A. Volný okraj skončí u smyčky ohybu B, dno lícuje s dnem. Pořadí odpředu: přední – karty – vnitřní – bankovky – zadní.',10500,t=>{
   const cam=camL(CAM_B,CAM_FOLD,es(t,.36,.95));
   const thA=Math.PI*es(t,.38,.85);
   const g=secGeom(thA,Math.PI), w=wOf(cam);
