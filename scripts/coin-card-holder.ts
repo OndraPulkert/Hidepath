@@ -812,7 +812,12 @@ export function buildCoinHolderPaperModelSvg(
       text(X(x) + dir * 0.6, Y(L.panelHeightMm) - 0.8, s, 1.9, dir > 0 ? 'start' : 'end', ACCENT),
     );
   };
-  if (L.innerX0Mm !== null) landing(L.frontX0Mm, 1, 'sem okraj vnitřního panelu (①)');
+  if (L.innerX0Mm !== null) {
+    landing(L.frontX0Mm, 1, 'sem okraj vnitřního panelu (①)');
+    // Vnitřní panel jde dozadu, kde je karton: čáru přenést propíchnutím dvou křížků.
+    out.push(cross(X(L.frontX0Mm), Y(S + 4)));
+    out.push(cross(X(L.frontX0Mm), Y(L.bottomSeamYMm - 4)));
+  }
   landing(L.frontX1Mm, -1, 'sem okraj zadního panelu (②)');
   // rámeček karty na předním panelu (karta stojí na švu dna)
   const cardX0 = L.frontX0Mm + (L.panelWidthMm - spec.cardWidthMm) / 2;
@@ -977,7 +982,8 @@ export function buildCoinHolderPaperModelSvg(
     // Stejný údaj jako na listu PÁS: výtisky pro 1,5 a 1,2 mm se liší jen o pár mm a na stole by nešly rozlišit.
     `Model pro: mince Ø ${cz(spec.coinDiameterMm)}, kůže tělo ${cz(spec.bodyThicknessMm)} mm${spec.foldSkiveThicknessMm !== null ? ` (ohyb B ztenčit na ${cz(spec.foldSkiveThicknessMm)} mm)` : ' (bez ztenčení)'}.`,
     `Prokáže: polohu jazyka a kloboučku, výřez, ${L.grommetXMm !== null ? 'průchodku, ' : ''}vytahování karty a místo pro kapsu. Neprokáže přídavky ohybů (papír je tenčí než kůže): ohyby jen přehnout do smyčky, nepřekládat na ostro.`,
-    `☐ ① vnitřní panel dozadu za přední (ohyb B)   ☐ ② zadní přes všechno (ohyb A); volný okraj vždy na čáru se šipkou, dno na dno   ☐ dno slepit páskou podél čáry švu   ☐ vložit ${cardsWord(spec.cardsCount)} vpředu a bankovky napůl vzadu`,
+    `☐ ① vnitřní panel dozadu za přední (ohyb B)   ☐ ② zadní přes všechno (ohyb A); dno na dno   ☐ dno slepit páskou podél čáry švu   ☐ vložit ${cardsWord(spec.cardsCount)} vpředu a bankovky napůl vzadu`,
+    `☐ před ohybem ① propíchnout oba křížky u šipky a na kartonu je spojit tužkou: na tu čáru dosedne okraj vnitřního panelu   ☐ okraj zadního panelu ke smyčce ohybu B`,
     `☐ přehnout jazyk přes horní hranu, patici propíchnout do jazyka a změřit odchylku od kloboučku${L.grommetXMm !== null ? '   ☐ průchodka je celá ve výřezu zepředu i zezadu' : ''}`,
     '☐ palcem vysunout kartu výřezem   ☐ konec jazyka je nad místem pro kapsu   → výsledky zapsat vpravo nahoře, teprve pak řezat kůži (listy PÁS a KAPSA).',
   ];

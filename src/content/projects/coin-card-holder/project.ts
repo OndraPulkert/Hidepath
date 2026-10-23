@@ -83,7 +83,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'glue-and-cut',
         title: 'Vystřihněte model',
-        body: 'Výtisk nalepte na tenký karton (krabice od cereálií) a po zaschnutí ho nůžkami vystřihněte podle obrysu. Ještě před skládáním propíchněte šídlem křížek patice na předním panelu – po přehnutí jazyka by byla zakrytá (patice = dřík s hlavičkou, spodní polovina druku na předním panelu). Propichujte na podložce, ne v ruce.',
+        body: 'Výtisk nalepte na tenký karton (krabice od cereálií) a po zaschnutí ho nůžkami vystřihněte podle obrysu. Ještě před skládáním propíchněte šídlem křížek patice na předním panelu – po přehnutí jazyka by byla zakrytá (patice = dřík s hlavičkou, spodní polovina druku na předním panelu). Propíchněte i oba křížky na čáře se šipkou „sem okraj vnitřního panelu“ a na kartonu je spojte tužkou podle pravítka: vnitřní panel se přehýbá dozadu, kde potištěná čára není vidět. Propichujte na podložce, ne v ruce.',
         media: [
           {
             id: 'cch-l1-cut',
@@ -96,7 +96,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'fold-loop',
         title: 'Přehněte ohyby do smyčky',
-        body: 'Nejdřív přehněte vnitřní panel za přední (ohyb B, na listu ①): jeho volný okraj dosedne zezadu přesně pod čáru ohybu A, u které je šipka „sem okraj vnitřního panelu“. Pak zadní panel přes všechno (ohyb A, ②): jeho okraj dosedne pod čáru ohybu B se šipkou „sem okraj zadního panelu“. Dno vždy lícuje s dnem, kontrolujte na dolní hraně. Ohyby jen přehněte do měkké smyčky, nepřekládejte je na ostro.',
+        body: 'Model otočte kartonem k sobě. Nejdřív přehněte vnitřní panel přes přední (ohyb B, na listu ①) tak, aby jeho volný okraj dosedl na čáru tužkou na kartonu. Pak přes všechno zadní panel (ohyb A, ②): jeho okraj skončí u smyčky ohybu B. Dno vždy lícuje s dnem. Ohyby jen přehněte do měkké smyčky, nepřekládejte je na ostro.',
         media: [],
       },
       {
