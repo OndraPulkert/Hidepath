@@ -16,15 +16,15 @@ import {
   obratReview,
 } from './obrat-wallet';
 
-describe('OBRAT R09 – zjednodušená konstrukce', () => {
+describe('OBRAT R10 – zjednodušená konstrukce s rezervami', () => {
   it('výchozí střih projde všemi kontrolami a vejde se na A4 kůže', () => {
     expect(checkObrat(OBRAT)).toEqual([]);
     expect(obratLeatherLayout(OBRAT).fits).toBe(true);
   });
 
-  it('má pět druhů dílů z jedné usně, T1 a P s jedním ohybem', () => {
+  it('má šest dílů z jedné usně, T1 a P s jedním ohybem', () => {
     const parts = obratParts(OBRAT);
-    expect(parts.map((p) => p.id)).toEqual(['T1', 'T2', 'P', 'T3', 'K']);
+    expect(parts.map((p) => p.id)).toEqual(['T1', 'T2', 'P', 'T3', 'K', 'KC']);
     const by = Object.fromEntries(parts.map((p) => [p.id, p]));
     expect(by.T1!.lines.filter((l) => l.kind === 'fold')).toHaveLength(1);
     expect(by.P!.lines.filter((l) => l.kind === 'fold')).toHaveLength(1);
@@ -33,7 +33,8 @@ describe('OBRAT R09 – zjednodušená konstrukce', () => {
       OBRAT.height + OBRAT.flapFoldAllowance + OBRAT.flapTrimReserve + OBRAT.flapEndY,
     );
     expect(by.T3!.width).toBe(95.5);
-    expect(by.K!.count).toBe(2);
+    expect(by.K!.width).toBe(13);
+    expect(by.KC!.width).toBe(17);
   });
 
   it('patice jsou na rozměrech listu, objímky až podle obtisku', () => {
@@ -48,6 +49,19 @@ describe('OBRAT R09 – zjednodušená konstrukce', () => {
     );
     expect(checkObrat({ ...OBRAT, coinTab: { left: 4, bottomY: 64 } })).toContain(
       'Příruba patice B není celá pod jazýčkem.',
+    );
+  });
+
+  it('rezervy z kontroly vyrobitelnosti (R10): C 3 mm od švu klopy, kryt A mimo lepené pásy', () => {
+    const c = OBRAT.snapC;
+    expect(flapEdgeY(OBRAT, c.x) - OBRAT.seamOffset - (c.y + OBRAT.coverRadius)).toBeGreaterThan(3);
+    const a = OBRAT.snapA;
+    expect(a.y - OBRAT.coverRadius - OBRAT.lidBottomY).toBeGreaterThanOrEqual(2.5);
+    expect(checkObrat({ ...OBRAT, snapA: { x: 11, y: 77.25 } })).toContain(
+      'Kryt A zasahuje do lepeného pásu boku.',
+    );
+    expect(checkObrat({ ...OBRAT, snapC: { x: 86, y: 25.5 } })).toContain(
+      'Kryt C zasahuje do výkusu.',
     );
   });
 

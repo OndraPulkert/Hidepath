@@ -1,11 +1,11 @@
 /**
- * OBRAT R09 – listy střihu 1:1 (A4 na výšku), konstrukční nákres a kontrolní výstup.
+ * OBRAT R10 – listy střihu 1:1 (A4 na výšku), konstrukční nákres a kontrolní výstup.
  *
  *   pnpm pattern:wallet-obrat
  *
  * 1. docs/generated/obrat-list-1-telo.svg – T1 záda + klopa (RUB nahoru)
  * 2. docs/generated/obrat-list-2-dily.svg – T2 přední stěna (LÍC), P pás + víčko (RUB),
- *    T3 předek mincí (LÍC), 2 × K kryt
+ *    T3 předek mincí (LÍC), kryty K (A) a KC (C)
  * 3. public/projekty/obrat/konstrukce.svg – nákres pro aplikaci (ne střih)
  * 4. docs/design/obrat/obrat-r09-kontrola.json – kontroly a součty z modelu
  *
@@ -74,7 +74,8 @@ function drawPart(
       out.push(`<circle class="hole" cx="${m.x}" cy="${m.y}" r="${spec.reliefHoleDiameter / 2}"/>`);
     }
   }
-  out.push(text(labelAt.x, labelAt.y + 2, part.id, 'id', 'middle'));
+  // Oba kryty se na listu jmenují K (lekce o nich mluví společně), liší se průměrem.
+  out.push(text(labelAt.x, labelAt.y + 2, part.id === 'KC' ? 'K' : part.id, 'id', 'middle'));
   label.forEach((t, i) => out.push(text(labelAt.x, labelAt.y + 7 + i * 3.6, t, 's', 'middle')));
   for (const note of notes) out.push(text(note.x, note.y, note.t, 'xs', note.anchor ?? 'start'));
   out.push('</g>');
@@ -202,9 +203,13 @@ export function buildObratSheets(spec: ObratSpec = OBRAT): { telo: string; dily:
       text(
         15,
         209,
-        `3. Klopu seřízněte až přes obsah (lekce 9): mezera nad pásem ${gapL} mm vlevo, ${gapR} mm vpravo.`,
+        `3. Nejdřív obtisk C, pak klopu seřízněte přes obsah (lekce 9): mezera nad pásem ${gapL} mm vlevo, ${gapR} mm vpravo.`,
       ),
-      text(15, 213, '4. Potom ozdobný šev klopy 3,5 mm od hrany a objímka C podle obtisku.'),
+      text(
+        15,
+        213,
+        '4. Potom ozdobný šev klopy 3,5 mm od hrany (3 mm před ohybem končí) a objímka C.',
+      ),
       legend(15, 228),
       calibration(122, 280),
     ].join(''),
@@ -214,11 +219,17 @@ export function buildObratSheets(spec: ObratSpec = OBRAT): { telo: string; dily:
     [
       header('LIST 2 · T2, P, T3, K', [
         'Tisk A4 na výšku, 100 %, bez přizpůsobení. Obě kontrolní úsečky musí měřit 50 mm.',
-        'T2 a T3 přiložte na LÍC, P a K na RUB. Otvory patic vysekněte skrz list i kůži.',
+        'T2 a T3 přiložte na LÍC, P a K na RUB. Otvory patic vysekněte skrz list i kůži,',
+        'nebo jen propíchněte (lekce 4); kroužek v zářezu P vždy vysekněte.',
       ]),
       drawPart(parts.T2, 15, 36, spec, ['LÍC nahoru', 'přední stěna, 1 ×'], { x: 54, y: 34 }, [
         { x: 101, y: 30, t: 'konec P', anchor: 'end' },
-        { x: 54, y: 52, t: 'rub: lepené pásy 6 mm podél švu jako na T1', anchor: 'middle' },
+        {
+          x: 54,
+          y: 52,
+          t: 'rub: lepené pásy jako na T1 (bok a dno 5 mm, vpravo 6 mm)',
+          anchor: 'middle',
+        },
       ]),
       cornerR(15, 36 + parts.T2.height, spec.bodyCornerR, -1, 1),
       cornerR(15 + parts.T2.width, 36 + parts.T2.height, spec.bodyCornerR, 1, 1),
@@ -242,19 +253,21 @@ export function buildObratSheets(spec: ObratSpec = OBRAT): { telo: string; dily:
       text(15 + 108, 122 - 1.5, 'volný konec · A', 'xs', 'end'),
       drawPart(parts.T3, 15, 199, spec, ['LÍC nahoru', 'předek mincí, 1 ×'], { x: 21, y: 16 }),
       drawPart(parts.K, 15, 244, spec, []),
-      drawPart(parts.K, 32, 244, spec, []),
-      text(49, 252, 'K – kryt patice, 2 × (lekce 7)', 'xs'),
+      drawPart(parts.KC, 32, 242, spec, []),
+      text(53, 249, 'K – kryty patic: Ø 13 na A, Ø 17 na C (lekce 7);', 'xs'),
+      text(53, 253, 'menší kolečko K slouží i na kontrolu objímek', 'xs'),
       text(130, 40, 'Pořadí', 'h'),
       ...[
-        '1. P a T3 vyříznout, otvory vyseknout.',
+        '1. Kroužek v zářezu P vyseknout, B vyseknout',
+        '    nebo propíchnout (lekce 4), pak P a T3 vyříznout.',
         '2. Ústí T3 a víčko: hrany dokončit.',
         '3. Patice B do jazýčku T3.',
-        '4. T3 přilepit na rub P do zelené',
-        '    polohy, jen do šrafy.',
-        '5. Šít U-šev a dělicí šev T3.',
+        '4. T3 přilepit do polohy na rubu P,',
+        '    lepidlo v pásech 4 mm a na jazýček.',
+        '5. Šít švy dutin T3.',
         '6. Víčko ohnout k T3, B podle obtisku.',
         '7. T2: patice A a C, kryty K.',
-        '8. Tělo: konec P na šrafu T2.',
+        '8. Tělo: konec P na zdrsněný pruh T2.',
         '',
         'Na líci nic nepropichujte:',
         'polohy a ohyby jen na rubu,',
@@ -392,7 +405,7 @@ export function buildObratDrawing(spec: ObratSpec = OBRAT): string {
     `<text x="40" y="${y0}" class="h">04 · díly a pořadí</text>`,
   );
   [
-    'T1 záda + klopa (1 ohyb) · T2 přední stěna s výkusem · P pás + víčko (1 ohyb) · T3 předek mincí · 2 × K kryt.',
+    'T1 záda + klopa (1 ohyb) · T2 přední stěna s výkusem · P pás + víčko (1 ohyb) · T3 předek mincí · kryty K (Ø 13 a 17).',
     'Všechny díly z jedné usně 1,2 mm, rovné řezy a zaoblené rohy; všechny švy se šijí naplocho.',
     '1. Mincovní modul: patice B do jazýčku T3 → T3 přilepit a přišít na P → ohnout víčko → objímka B obtiskem.',
     '2. Patice A a C do T2, kryty K na rub. 3. T2 na T1, konec P do pravého švu, šít U-šev.',
@@ -421,7 +434,7 @@ function main() {
     JSON.stringify(obratReview(OBRAT), null, 2) + '\n',
     'utf8',
   );
-  console.log('OBRAT R09: listy 1–2, nákres a kontrola uloženy. Fyzické ověření neprovedeno.');
+  console.log('OBRAT R10: listy 1–2, nákres a kontrola uloženy. Fyzické ověření neprovedeno.');
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) main();

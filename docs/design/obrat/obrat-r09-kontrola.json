@@ -1,5 +1,5 @@
 {
-  "revision": "R09",
+  "revision": "R10",
   "status": "pattern-unverified",
   "physicalVerification": "not-performed",
   "material": {
@@ -17,7 +17,7 @@
       "name": "Záda a klopa",
       "face": "rub",
       "width": 108,
-      "height": 144,
+      "height": 146,
       "count": 1
     },
     {
@@ -25,7 +25,7 @@
       "name": "Přední stěna",
       "face": "líc",
       "width": 108,
-      "height": 74,
+      "height": 75,
       "count": 1
     },
     {
@@ -41,16 +41,24 @@
       "name": "Předek mincí",
       "face": "líc",
       "width": 95.5,
-      "height": 39,
+      "height": 40,
       "count": 1
     },
     {
       "id": "K",
-      "name": "Kryt patice",
+      "name": "Kryt patice A",
       "face": "rub",
       "width": 13,
       "height": 13,
-      "count": 2
+      "count": 1
+    },
+    {
+      "id": "KC",
+      "name": "Kryt patice C",
+      "face": "rub",
+      "width": 17,
+      "height": 17,
+      "count": 1
     }
   ],
   "cells": [
@@ -59,14 +67,14 @@
       "right": 60,
       "seamSpan": 36,
       "usableWidth": 34,
-      "usableDepth": 34
+      "usableDepth": 35
     },
     {
       "left": 60,
       "right": 96,
       "seamSpan": 36,
       "usableWidth": 34,
-      "usableDepth": 34
+      "usableDepth": 35
     }
   ],
   "testSets": [
@@ -78,7 +86,7 @@
           "need": 32.2,
           "stackThickness": 2.6,
           "widthReserve": 1.8,
-          "depthReserve": 1.8,
+          "depthReserve": 2.8,
           "passesEnvelope": true,
           "physicallyVerified": false
         },
@@ -86,7 +94,7 @@
           "need": 33.3,
           "stackThickness": 5.2,
           "widthReserve": 0.7,
-          "depthReserve": 0.7,
+          "depthReserve": 1.7,
           "passesEnvelope": true,
           "physicallyVerified": false
         }
@@ -103,7 +111,7 @@
           "need": 33.3,
           "stackThickness": 5.2,
           "widthReserve": 0.7,
-          "depthReserve": 0.7,
+          "depthReserve": 1.7,
           "passesEnvelope": true,
           "physicallyVerified": false
         },
@@ -111,7 +119,7 @@
           "need": 29.06,
           "stackThickness": 3.96,
           "widthReserve": 4.94,
-          "depthReserve": 4.94,
+          "depthReserve": 5.94,
           "passesEnvelope": true,
           "physicallyVerified": false
         }
@@ -128,7 +136,7 @@
           "need": 27.56,
           "stackThickness": 3.96,
           "widthReserve": 6.44,
-          "depthReserve": 6.44,
+          "depthReserve": 7.44,
           "passesEnvelope": true,
           "physicallyVerified": false
         },
@@ -136,7 +144,7 @@
           "need": 27.56,
           "stackThickness": 3.96,
           "widthReserve": 6.44,
-          "depthReserve": 6.44,
+          "depthReserve": 7.44,
           "passesEnvelope": true,
           "physicallyVerified": false
         }
@@ -214,7 +222,7 @@
       "height": 297
     },
     "gap": 4,
-    "columnHeight": 292,
+    "columnHeight": 295,
     "sideWidth": 96,
     "fits": true
   },

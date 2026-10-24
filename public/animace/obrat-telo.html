@@ -100,7 +100,7 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
 <header>
 <a class="backlink" href="/" data-back>← Zpět do lekce</a>
 <h1>OBRAT: tělo, patice A a C</h1>
-<p class="lead">Lekce 7: list 1 na rub, T2 na líc a kryty na rub, otvory A a C, řez, čára ohybu klopy, horní hrana T2, patice a kryty.</p>
+<p class="lead">Lekce 7: T1 z rubu, pak T2 na líc a kryty na rub, otvory A a C, čára ohybu klopy, horní hrana T2, patice a kryty.</p>
 </header>
 
 <section class="card" aria-label="Animace postupu">
@@ -113,11 +113,11 @@ h1{font-size:1.55rem;line-height:1.2;margin:0;text-wrap:balance}
     <button id="bPrev" aria-label="Předchozí krok" title="Předchozí krok"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM9.5 12 18 6v12z"/></svg></button>
     <button id="bPlay" class="play" aria-label="Přehrát" title="Přehrát / pozastavit"><svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg></button>
     <button id="bNext" aria-label="Další krok" title="Další krok"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
-    <span class="counter" id="counter">krok 1 / 13</span>
+    <span class="counter" id="counter">krok 1 / 14</span>
   </div>
   <div class="cap" aria-live="polite"><span class="no" id="capNo">A1</span><h2 id="capT"></h2><p id="capB"></p></div>
 </section>
-<p class="note">Pohled shora na řezací podložku, rozměry podle listů 1 a 2 (OBRAT R09). Tmavá = líc, světlá = rub. Na listu je T1 kreslený z rubu, T2 z líce. Tužka a vpichy jen na rubu. Druk je kreslený schematicky.</p>
+<p class="note">Pohled shora na řezací podložku, rozměry podle listů 1 a 2 (OBRAT R10). Tmavá = líc, světlá = rub. Na listu je T1 kreslený z rubu, T2 z líce. Tužka a vpichy jen na rubu. Druk je kreslený schematicky.</p>
 </div>
 
 <script>
@@ -134,6 +134,7 @@ const O=(op,s)=>op<=0.001?'':`<g opacity="${f(op)}">${s}</g>`;
 let uid=0;
 function inset(title,body,{x=88,y=6,w=45,h=78}={}){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" class="panelbox"/>${title?`<text x="${x+2.5}" y="${y+5}" class="ts" style="font-weight:700;letter-spacing:.06em">${title}</text>`:''}${body}`}
 function lbl(x,y,t,cls='t',anchor='start'){return `<text x="${f(x)}" y="${f(y)}" class="${cls}" text-anchor="${anchor}">${t}</text>`}
+function tickB(x,y){return `<circle cx="${f(x+.2)}" cy="${f(y-.1)}" r="2.7" fill="var(--panel)" stroke="var(--line)" stroke-width=".2"/>`+tick(x,y)}
 function tick(x,y,s=1,c='var(--ok)'){return `<path d="M${f(x-1.6*s)} ${f(y)} l${f(1.2*s)} ${f(1.2*s)} l${f(2.4*s)} -${f(2.6*s)}" stroke="${c}" stroke-width="${f(.7*s)}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`}
 function cross(x,y,s=1,c='var(--accent)'){return `<path d="M${f(x-1.3*s)} ${f(y-1.3*s)} l${f(2.6*s)} ${f(2.6*s)} M${f(x+1.3*s)} ${f(y-1.3*s)} l${f(-2.6*s)} ${f(2.6*s)}" stroke="${c}" stroke-width="${f(.6*s)}" stroke-linecap="round"/>`}
 function arrow(x1,y1,x2,y2,c='var(--accent)',w=.5){return `<path d="M${f(x1)} ${f(y1)} L${f(x2)} ${f(y2)}" stroke="${c}" stroke-width="${w}" fill="none" marker-end="url(#ar)"/>`}
@@ -151,25 +152,27 @@ const sw=(v,w)=>f(w/v.k);
 const rectD=(x,y,w,h)=>`M${f(x)} ${f(y)}H${f(x+w)}V${f(y+h)}H${f(x)}Z`;
 const mmPath=p=>p.map((q,i)=>(i?'L':'M')+f(q[0])+' '+f(q[1])).join('');
 
-// ---- OBRAT R09 (src/lib/geometry/obrat-wallet.ts, listy 1 a 2), mm ----
-// T1 rubem nahoru, klopa nahoře, ohyb y 54; klopa vlevo 54, vpravo 50 mm od ohybu
-const T1_OUT='M0 8 Q0 0 7.995 0.296 L100.005 3.704 Q108 4 108 12 L108 138 Q108 144 102 144 L6 144 Q0 144 0 138 Z';
-const T1_SEAM='M3.5 73 L3.5 138 Q3.5 140.5 6 140.5 L102 140.5 Q104.5 140.5 104.5 138 L104.5 73';
-const FOLD=54;
-// T2 lícem nahoru: ramena y 0 (= y 16 zavřeného předku), výkus do 22, patice A (12,5; 61), C (88; 11)
-const T2_OUT='M0 0 H30 C36 0 34 22 40 22 H68 C74 22 72 0 78 0 H108 V68 Q108 74 102 74 H6 Q0 74 0 68 Z';
-const T2_SEAM='M3.5 3 L3.5 68 Q3.5 70.5 6 70.5 L102 70.5 Q104.5 70.5 104.5 68 L104.5 3';
-const SA={x:12.5,y:61}, SC={x:88,y:11};
-const KR=6.5; // kryt K Ø 13
+// ---- OBRAT R10 (src/lib/geometry/obrat-wallet.ts, listy 1 a 2), mm ----
+// T1 rubem nahoru, klopa nahoře, ohyb y 56; klopa vlevo 56, vpravo 52 mm od ohybu (rezerva 6 mm)
+const T1_OUT='M0 8 Q0 0 7.995 0.296 L100.005 3.704 Q108 4 108 12 L108 140 Q108 146 102 146 L6 146 Q0 146 0 140 Z';
+const T1_SEAM='M3.5 74 L3.5 140 Q3.5 142.5 6 142.5 L102 142.5 Q104.5 142.5 104.5 140 L104.5 74';
+const FOLD=56, T1H=146;
+// T2 lícem nahoru: ramena y 0 (= y 15 zavřeného předku), výkus do 23, patice A (12; 62,25), C (88; 10,5)
+const T2_OUT='M0 0 H30 C36 0 34 23 40 23 H68 C74 23 72 0 78 0 H108 V69 Q108 75 102 75 H6 Q0 75 0 69 Z';
+const T2_SEAM='M3.5 3 L3.5 69 Q3.5 71.5 6 71.5 L102 71.5 Q104.5 71.5 104.5 69 L104.5 3';
+const SA={x:12,y:62.25}, SC={x:88,y:10.5};
+// kryty K: Ø 13 na A, Ø 17 na C (coverRadius 6,5, coverRadiusC 8,5)
+const KS=[{c:[6.5,8.5],r:6.5,s:'A'},{c:[26,8.5],r:8.5,s:'C'}];
+const KR_A=6.5, KR_C=8.5;
 const qb=(a,c,b,n=8)=>{const p=[];for(let i=1;i<=n;i++){const u=i/n,w=1-u;p.push([w*w*a[0]+2*w*u*c[0]+u*u*b[0],w*w*a[1]+2*w*u*c[1]+u*u*b[1]])}return p};
 const cb=(a,c,d,b,n=12)=>{const p=[];for(let i=1;i<=n;i++){const u=i/n,w=1-u;p.push([w*w*w*a[0]+3*w*w*u*c[0]+3*w*u*u*d[0]+u*u*u*b[0],w*w*w*a[1]+3*w*w*u*c[1]+3*w*u*u*d[1]+u*u*u*b[1]])}return p};
-const T1_PTS=[[0,8],...qb([0,8],[0,0],[7.995,.296]),[100.005,3.704],...qb([100.005,3.704],[108,4],[108,12]),[108,138],...qb([108,138],[108,144],[102,144]),[6,144],...qb([6,144],[0,144],[0,138]),[0,8]];
 const T1_FLAP=[[0,FOLD],[0,8],...qb([0,8],[0,0],[7.995,.296]),[100.005,3.704],...qb([100.005,3.704],[108,4],[108,12]),[108,FOLD]];
-const T1_BODY=[[108,FOLD],[108,138],...qb([108,138],[108,144],[102,144]),[6,144],...qb([6,144],[0,144],[0,138]),[0,FOLD]];
-const NOTCH=[[30,0],...cb([30,0],[36,0],[34,22],[40,22]),[68,22],...cb([68,22],[74,22],[72,0],[78,0])];
-const T2_REST=[[78,0],[108,0],[108,68],...qb([108,68],[108,74],[102,74]),[6,74],...qb([6,74],[0,74],[0,68]),[0,0],[30,0]];
+const T1_BODY=[[108,FOLD],[108,140],...qb([108,140],[108,146],[102,146]),[6,146],...qb([6,146],[0,146],[0,140]),[0,FOLD]];
+const NOTCH=[[30,0],...cb([30,0],[36,0],[34,23],[40,23]),[68,23],...cb([68,23],[74,23],[72,0],[78,0])];
+const T2_REST=[[78,0],[108,0],[108,69],...qb([108,69],[108,75],[102,75]),[6,75],...qb([6,75],[0,75],[0,69]),[0,0],[30,0]];
 const T2_TOP=[[0,0],...NOTCH,[108,0]];
-const KCIRC=c=>{const p=[];for(let i=0;i<=48;i++){const a=-Math.PI/2+i/48*2*Math.PI;p.push([c[0]+KR*Math.cos(a),c[1]+KR*Math.sin(a)])}return p};
+const KCIRC=(c,r)=>{const p=[];for(let i=0;i<=48;i++){const a=-Math.PI/2+i/48*2*Math.PI;p.push([c[0]+r*Math.cos(a),c[1]+r*Math.sin(a)])}return p};
+const circD=(c,r)=>`M${c[0]-r} ${c[1]}A${r} ${r} 0 1 0 ${c[0]+r} ${c[1]}A${r} ${r} 0 1 0 ${c[0]-r} ${c[1]}Z`;
 // průběh po lomené čáře (0–1): hotová část, hrot a směr
 function along(p,u){const Ls=[0];for(let i=1;i<p.length;i++)Ls.push(Ls[i-1]+Math.hypot(p[i][0]-p[i-1][0],p[i][1]-p[i-1][1]));const d=cl(u)*Ls[Ls.length-1],out=[p[0]];
   for(let i=1;i<p.length;i++){if(Ls[i]<d){out.push(p[i]);continue}const r=(d-Ls[i-1])/((Ls[i]-Ls[i-1])||1),q=[L(p[i-1][0],p[i][0],r),L(p[i-1][1],p[i][1],r)];out.push(q);return {pts:out,head:q,dir:Math.atan2(p[i][1]-p[i-1][1],p[i][0]-p[i-1][0])}}
@@ -182,13 +185,12 @@ const hide=(v,d,face,extra='')=>`<path d="${d}" ${FACE[face]} stroke-width="${sw
 const paper=(v,d,extra='')=>`<path d="${d}" fill="var(--paper)" stroke="var(--paper-e)" stroke-width="${sw(v,.25)}" ${extra}/>`;
 function printT1(v){return `<path d="${T1_OUT}" fill="none" stroke="var(--print)" stroke-width="${sw(v,.28)}"/>`
   +`<path d="M0 ${FOLD}H108" stroke="var(--pfold)" stroke-width="${sw(v,.34)}" stroke-dasharray="${sw(v,2)} ${sw(v,.6)} ${sw(v,.5)} ${sw(v,.6)}"/>`
-  +`<path d="M0 4L108 8" stroke="var(--ptrim)" stroke-width="${sw(v,.28)}" stroke-dasharray="${sw(v,1.4)} ${sw(v,.9)}"/>`
+  +`<path d="M0 6L108 10" stroke="var(--ptrim)" stroke-width="${sw(v,.28)}" stroke-dasharray="${sw(v,1.4)} ${sw(v,.9)}"/>`
   +`<path d="${T1_SEAM}" fill="none" stroke="var(--print-m)" stroke-width="${sw(v,.22)}" stroke-dasharray="${sw(v,.6)} ${sw(v,.6)}"/>`}
 function crossMark(v,p){const a=3;return `<circle cx="${p.x}" cy="${p.y}" r="6" fill="none" stroke="var(--pmark)" stroke-width="${sw(v,.2)}" stroke-dasharray="${sw(v,.6)} ${sw(v,.5)}"/><path d="M${p.x-a} ${p.y}H${p.x+a}M${p.x} ${p.y-a}V${p.y+a}" stroke="var(--pmark)" stroke-width="${sw(v,.22)}"/>`}
-function printT2(v){return `<rect x="102" y="32" width="6" height="42" fill="var(--print-m)" opacity=".18"/><path d="${T2_OUT}" fill="none" stroke="var(--print)" stroke-width="${sw(v,.28)}"/>`
+function printT2(v){return `<rect x="102" y="33" width="6" height="42" fill="var(--print-m)" opacity=".18"/><path d="${T2_OUT}" fill="none" stroke="var(--print)" stroke-width="${sw(v,.28)}"/>`
   +`<path d="${T2_SEAM}" fill="none" stroke="var(--print-m)" stroke-width="${sw(v,.22)}" stroke-dasharray="${sw(v,.6)} ${sw(v,.6)}"/>`+crossMark(v,SA)+crossMark(v,SC)}
-const KC=[[6.5,6.5],[24.5,6.5]];
-const printK=v=>KC.map(c=>`<circle cx="${c[0]}" cy="${c[1]}" r="${KR}" fill="none" stroke="var(--print)" stroke-width="${sw(v,.28)}"/>`).join('');
+const printK=v=>KS.map(k=>`<circle cx="${k.c[0]}" cy="${k.c[1]}" r="${k.r}" fill="none" stroke="var(--print)" stroke-width="${sw(v,.28)}"/>`).join('');
 const hole=(v,p,op=1)=>O(op,`<circle cx="${f(v.x(p.x))}" cy="${f(v.y(p.y))}" r="${f(Math.max(.55,1*v.k))}" fill="var(--hole)"/>`);
 function tape(x,y,a=0,op=1){return O(op,`<rect x="${f(x-3.6)}" y="${f(y-1.3)}" width="7.2" height="2.6" fill="var(--tape)" stroke="var(--tape-d)" stroke-width=".15" opacity=".92" transform="rotate(${a} ${f(x)} ${f(y)})"/>`)}
 const tapes=(v,x0,y0,x1,y1,op)=>op<=0?'':[[x0,y0,-40],[x1,y0,40],[x0,y1,40],[x1,y1,-40]].map(([x,y,a])=>tape(v.x(x),v.y(y),a,op)).join('');
@@ -210,51 +212,72 @@ const S=[];
 const add=(part,title,body,dur,draw)=>S.push({part,title,body,dur,draw});
 const VT1=V(17,8,.48);
 
-add('A','List 1 na rub kůže','List 1 (T1 záda a klopa) položte potiskem nahoru na rub kůže a rohy přichyťte páskou. List se řeže spolu s kůží.',8000,t=>{
+add('A','List 1 na rub kůže','List 1 přiložte na rub kůže nad P a přichyťte páskou. List se řeže spolu s kůží.',8000,t=>{
   const v=VT1, d=es(t,.12,.5);
-  let b=inV(v,hide(v,rectD(-5,-5,118,160),'rub'));
+  let b=inV(v,hide(v,rectD(-5,-5,118,T1H+11),'rub'));
   b+=O(1-seg(t,.2,.4),lbl(v.x(54),v.y(72),'rub kůže','t halo','middle'));
-  b+=G(`translate(0 ${f(-88*(1-d))})`,inV(v,paper(v,rectD(-3,-3,114,150))+printT1(v))+lbl(v.x(54),v.y(102),'T1','tp','middle'));
-  b+=tapes(v,-3,-3,111,147,seg(t,.55,.72));
-  let s=STAGE+mat()+CLIP(b)+lbl(43,86.6,'kůže rubem nahoru','ts halo','middle');
-  const p=lines([[17,'potiskem nahoru'],[22,'na RUB kůže','ta'],[32,'rohy páskou','t',seg(t,.55,.7)],[42,'list se řeže','t',seg(t,.7,.85)],[47,'spolu s kůží','t',seg(t,.7,.85)],[60,'T1 = záda + klopa','ts']]);
+  b+=G(`translate(0 ${f(-88*(1-d))})`,inV(v,paper(v,rectD(-3,-3,114,T1H+6))+printT1(v))+lbl(v.x(54),v.y(102),'T1','tp','middle'));
+  b+=tapes(v,-3,-3,111,T1H+3,seg(t,.55,.72));
+  let s=STAGE+mat()+CLIP(b)+lbl(43,86.6,'kůže rubem nahoru, pod ní P','ts halo','middle');
+  const p=lines([[17,'potiskem nahoru'],[22,'na RUB kůže','ta'],[27,'nad P','t'],[37,'rohy páskou','t',seg(t,.55,.7)],[47,'list se řeže','t',seg(t,.7,.85)],[52,'spolu s kůží','t',seg(t,.7,.85)],[64,'T1 = záda + klopa','ts']]);
   return s+inset('LIST 1',p);
 });
 
-add('A','Proč list 1 na rub','List ukazuje T1 z rubu: klopa vlevo 54, vpravo 50 mm. Na listu hrana klesá doprava, po přehnutí přes předek stoupá doprava. Na líci by byl díl zrcadlově.',12000,t=>{
+add('A','Proč list 1 na rub','List ukazuje T1 z rubu: klopa vlevo 56, vpravo 52 mm. Na listu hrana klesá doprava, po přehnutí přes předek stoupá doprava. Na líci by byl díl zrcadlově.',12000,t=>{
   const v=VT1, u=es(t,.32,.66), sc=Math.cos(u*Math.PI), id='fc'+(uid++);
-  let b=inV(v,`<clipPath id="${id}b"><rect x="-1" y="${FOLD}" width="110" height="91"/></clipPath><clipPath id="${id}f"><rect x="-1" y="-1" width="110" height="${FOLD+1}"/></clipPath>`
+  let b=inV(v,`<clipPath id="${id}b"><rect x="-1" y="${FOLD}" width="110" height="${T1H-FOLD+1}"/></clipPath><clipPath id="${id}f"><rect x="-1" y="-1" width="110" height="${FOLD+1}"/></clipPath>`
     +hide(v,T1_OUT,'rub',`clip-path="url(#${id}b)"`)
     +`<g transform="translate(0 ${FOLD}) scale(1 ${f(Math.abs(sc)<.02?.02*Math.sign(sc||1):sc)}) translate(0 ${-FOLD})">`+hide(v,T1_OUT,sc>=0?'rub':'lic',`clip-path="url(#${id}f)"`)+`</g>`
     +`<path d="M0 ${FOLD}H108" stroke="var(--graphite)" stroke-width="${sw(v,.35)}"/>`);
   const m=1-seg(t,.24,.32);
-  b+=O(seg(t,.06,.16)*m,arrow(v.x(-3),v.y(FOLD),v.x(-3),v.y(.6))+arrow(v.x(111),v.y(FOLD),v.x(111),v.y(4.6))+lbl(v.x(-4.5),v.y(27),'54','ta halo','end')+lbl(v.x(112.5),v.y(29),'50','ta halo'));
-  b+=O(seg(t,.06,.16)*m,lbl(v.x(54),v.y(30),'klopa (rub)','t halo','middle'));
-  const e=seg(t,.7,.82);
-  b+=O(e,`<path d="M${f(v.x(4))} ${f(v.y(108-.15))}L${f(v.x(104))} ${f(v.y(104-.15))}" stroke="var(--ok)" stroke-width=".8"/>`+lbl(v.x(54),v.y(96),'stoupá doprava','tok halo','middle')+lbl(v.x(54),v.y(80),'klopa (líc)','t halo','middle'));
+  b+=O(seg(t,.06,.16)*m,arrow(v.x(-3),v.y(FOLD),v.x(-3),v.y(.6))+arrow(v.x(111),v.y(FOLD),v.x(111),v.y(4.6))+lbl(v.x(-4.5),v.y(28),'56','ta halo','end')+lbl(v.x(112.5),v.y(30),'52','ta halo'));
+  b+=O(seg(t,.06,.16)*m,lbl(v.x(54),v.y(31),'klopa (rub)','t halo','middle'));
+  b+=O(seg(t,.1,.18)*(1-seg(t,.3,.33)),`<path d="M${f(v.x(4))} ${f(v.y(.15))}L${f(v.x(104))} ${f(v.y(3.85))}" stroke="var(--accent)" stroke-width=".8"/>`);
+  const e=seg(t,.7,.82), F2=2*FOLD;
+  b+=O(e,`<path d="M${f(v.x(4))} ${f(v.y(F2-.15))}L${f(v.x(104))} ${f(v.y(F2-4+.15))}" stroke="var(--ok)" stroke-width=".8"/>`+lbl(v.x(54),v.y(F2-12),'stoupá doprava','tok halo','middle')+lbl(v.x(54),v.y(F2-28),'klopa (líc)','t halo','middle'));
   let s=STAGE+mat()+CLIP(b)+lbl(43,86.6,'ukázka – teď neohýbejte','ts halo','middle');
-  let p=lines([[17,'list = pohled'],[22,'na rub T1'],[30,'klopa vlevo 54,','ts'],[34.5,'vpravo 50 mm','ts']]);
-  p+=O(seg(t,.06,.16)*m,lbl(90.5,42,'na listu klesá','ta'));
+  let p=lines([[17,'list = pohled'],[22,'na rub T1'],[30,'klopa vlevo 56,','ts'],[34.5,'vpravo 52 mm','ts']]);
+  p+=O(seg(t,.06,.16)*(1-seg(t,.3,.33)),lbl(90.5,42,'na listu klesá','ta'));
   p+=O(seg(t,.74,.86),lbl(90.5,43,'zavřená zepředu:','ts')+miniWallet(91,47,true)+miniWallet(112,47,false)+tick(94,67)+lbl(97.5,68,'na rub','tok')+cross(115,66.4,.9)+lbl(118.5,68,'na líc','ta'));
   p+=O(seg(t,.86,.96),lbl(90.5,76,'na líci zrcadlově','ts'));
   return s+inset('RUB, NE LÍC',p);
 });
 
-add('A','T2 na líc, kryty na rub','Z listu 2 přiložte T2 na líc kůže a oba kryty K (Ø 13 mm) na rub. Přichyťte páskou.',8500,t=>{
-  const v=V(12,8,.55), vk=V(22,61,1.2), d1=es(t,.1,.4), d2=es(t,.38,.62);
-  let b=inV(v,hide(v,rectD(-4,-4,116,82),'lic'))+inV(vk,hide(vk,rectD(-3,-3,36,19),'rub'));
-  b+=G(`translate(0 ${f(-60*(1-d1))})`,inV(v,paper(v,rectD(-2,-2,112,78))+printT2(v))+lbl(v.x(54),v.y(46),'T2','tp','middle'));
-  b+=G(`translate(${f(70*(1-d2))} 0)`,inV(vk,paper(vk,rectD(-1.5,-1.5,33,16))+printK(vk))+lbl(vk.x(15.5),vk.y(8.2),'K','tpk','middle'));
-  b+=tapes(v,-2,-2,110,76,seg(t,.62,.78))+O(seg(t,.62,.78),tape(vk.x(-1.5),vk.y(-1.5),-40)+tape(vk.x(31.5),vk.y(14.5),-40));
-  let s=STAGE+mat()+CLIP(b)+lbl(79,29,'líc','t halo','middle')+lbl(72,70,'rub','t halo','middle');
-  const p=lines([[17,'T2 → na LÍC','ta'],[22,'(tmavá strana)','ts'],[32,'K 2× → na RUB','t',seg(t,.38,.5)],[37,'(Ø 13 mm)','ts',seg(t,.38,.5)],[48,'rohy páskou','t',seg(t,.62,.75)]]);
-  return s+inset('LIST 2',p);
+add('A','Vyřízněte T1','T1 vyřízněte po plné čáře, klopu i s rezervou pomalu, krátkými tahy. List nechte na dílu.',11000,t=>{
+  const v=VT1, sf=strokes(seg(t,.04,.5),7), ub=seg(t,.52,.8), off=es(t,.84,.97);
+  const af=along(T1_FLAP,sf.done), ab=along(T1_BODY,ub), a=ub>0?ab:af;
+  let b=G(`translate(${f(-30*off)} 0)`,O(1-off,inV(v,`<path d="${rectD(-5,-5,118,T1H+11)} ${T1_OUT}" fill-rule="evenodd" fill="var(--rub)" stroke="var(--rub-d)" stroke-width="${sw(v,.3)}"/><path d="${rectD(-3,-3,114,T1H+6)} ${T1_OUT}" fill-rule="evenodd" fill="var(--paper)" stroke="none"/>`)));
+  b+=inV(v,hide(v,T1_OUT,'rub')+paper(v,T1_OUT)+printT1(v));
+  if(sf.done>0) b+=O(1-off,inV(v,`<path d="${mmPath(af.pts)}${ub>0?mmPath(ab.pts).replace(/^M/,'L'):''}" fill="none" stroke="var(--cut)" stroke-width="${sw(v,.45)}"/>`));
+  b+=lbl(v.x(54),v.y(102),'T1','tp','middle');
+  if(sf.on||(ub>0&&ub<1)) b+=knifeTop(v.x(a.head[0]),v.y(a.head[1]),KD(a.dir));
+  let s=STAGE+mat()+CLIP(b);
+  s+=O(seg(t,.86,.97),tickB(40,86.2)+lbl(44,87,'T1 vyříznutý, list zůstává','ts halo'));
+  const p=lines([[17,'po plné čáře'],[22,'klopa i s'],[27,'rezervou 6 mm'],[32,'pomalu, krátce','ts',seg(t,.04,.12)],[41,'čárkovaně: hrana','ts'],[45.5,'po seříznutí','ts'],[50,'(lekce 9)','ts']]);
+  return s+inset('ŘEZ T1',p+`<path d="M91 58H101" stroke="var(--ptrim)" stroke-width=".4" stroke-dasharray="1.4 .9"/>`+lbl(103,59,'orientační','ts'));
 });
 
-add('A','Otvory A a C před řezem','Než začnete řezat, vysekněte na T2 otvory A a C ve středech křížků výsečníkem z lekce 4, skrz list i kůži. Když druk v lekci 4 otvor nepotřeboval, středy křížků jen propíchněte šídlem.',9000,t=>{
-  const v=V(9,22,.62);
-  let b=inV(v,hide(v,rectD(-4,-4,116,82),'lic')+paper(v,rectD(-2,-2,112,78))+printT2(v));
-  b+=hole(v,SA,seg(t,.36,.38))+hole(v,SC,seg(t,.74,.76));
+add('A','Kůži otočte, T2 na líc','Pak kůži otočte lícem nahoru a T2 z listu 2 přichyťte páskou do volného místa.',9500,t=>{
+  // schéma: kůže nad P s otvorem po T1, volné místo pod ním
+  const v=V(23,5,.33), u=es(t,.08,.4), sx=Math.cos(u*Math.PI), cx=v.x(60), face=sx>=0?'rub':'lic';
+  const hole1=`M6 8 Q6 0 13.995 0.296 L106.005 3.704 Q114 4 114 12 L114 140 Q114 146 108 146 L12 146 Q6 146 6 140 Z`;
+  const sheet=inV(v,`<path d="${rectD(0,-4,120,248)} ${hole1}" fill-rule="evenodd" ${FACE[face]} stroke-width="${sw(v,.3)}"/>`);
+  let b=G(`translate(${f(cx)} 0) scale(${f(Math.abs(sx)<.03?.03:sx)} 1) translate(${f(-cx)} 0)`,sheet);
+  b+=O(1-seg(t,.04,.1),lbl(v.x(60),v.y(196),'rub','t halo','middle'));
+  b+=O(seg(t,.38,.44)*(1-seg(t,.5,.56)),lbl(v.x(60),v.y(196),'líc','t halo','middle'));
+  const d=es(t,.48,.72), ty=153;
+  b+=G(`translate(0 ${f(-60*(1-d))})`,O(Math.min(1,d*4),inV(v,paper(v,rectD(4,ty-2,112,79))+`<g transform="translate(6 ${ty})">${printT2(v)}</g>`)+lbl(v.x(60),v.y(ty+46),'T2','tp','middle')));
+  b+=tapes(v,4,ty-2,116,ty+77,seg(t,.74,.86));
+  b+=O(seg(t,.1,.2),lbl(v.x(60),v.y(75),'po T1','ts halo','middle'));
+  let s=STAGE+mat()+CLIP(b)+lbl(43,86.6,'schéma, P je pod tímto kusem','ts halo','middle');
+  const p=lines([[17,'kůži otočte'],[22,'lícem nahoru','ta'],[32,'T2 z listu 2','t',seg(t,.48,.6)],[37,'do volného místa','t',seg(t,.48,.6)],[47,'rohy páskou','t',seg(t,.74,.86)]]);
+  return s+inset('T2 NA LÍC',p);
+});
+
+add('A','Otvory A a C','Na T2 nejdřív vysekněte otvory A a C ve středech křížků výsečníkem z lekce 4; když druk v lekci 4 otvor nepotřeboval, středy křížků jen propíchněte šídlem.',9000,t=>{
+  const v=V(9,20,.62);
+  let b=inV(v,hide(v,rectD(-4,-4,116,83),'lic')+paper(v,rectD(-2,-2,112,79))+printT2(v));
+  b+=tapes(v,-2,-2,110,77,1)+hole(v,SA,seg(t,.36,.38))+hole(v,SC,seg(t,.74,.76));
   const pa=seg(t,.12,.42), pc=seg(t,.5,.8);
   const lift=w=>3.5*Math.abs(Math.sin(w*Math.PI*3));
   let tool='';
@@ -266,37 +289,40 @@ add('A','Otvory A a C před řezem','Než začnete řezat, vysekněte na T2 otvo
   return s+inset('OTVORY',p);
 });
 
-add('A','Vyřízněte T1','Řežte po plné čáře, klopu i s rezervou 4 mm pomalu, krátkými tahy. Čárkovaná čára u horní hrany je jen orientační hrana po seříznutí v lekci 9. List nechte na dílu.',11000,t=>{
-  const v=VT1, sf=strokes(seg(t,.04,.5),7), ub=seg(t,.52,.8), off=es(t,.84,.97);
-  const af=along(T1_FLAP,sf.done), ab=along(T1_BODY,ub), a=ub>0?ab:af, u=ub>=1?1:.5;
-  let b=inV(v,hide(v,T1_OUT,'rub')+paper(v,T1_OUT));
-  b+=G(`translate(${f(-30*off)} 0)`,O(1-off,inV(v,`<path d="${rectD(-5,-5,118,160)} ${T1_OUT}" fill-rule="evenodd" fill="var(--rub)" stroke="var(--rub-d)" stroke-width="${sw(v,.3)}"/><path d="${rectD(-3,-3,114,150)} ${T1_OUT}" fill-rule="evenodd" fill="var(--paper)" stroke="none"/>`)));
-  b+=inV(v,printT1(v));
-  if(sf.done>0) b+=O(1-off,inV(v,`<path d="${mmPath(af.pts)}${ub>0?mmPath(ab.pts).replace(/^M/,'L'):''}" fill="none" stroke="var(--cut)" stroke-width="${sw(v,.45)}"/>`));
-  b+=lbl(v.x(54),v.y(102),'T1','tp','middle');
-  if(sf.on||(ub>0&&ub<1)) b+=knifeTop(v.x(a.head[0]),v.y(a.head[1]),KD(a.dir));
-  let s=STAGE+mat()+CLIP(b);
-  s+=O(seg(t,.86,.97),tick(40,86.2)+lbl(44,87,'T1 vyříznutý, list zůstává','ts halo'));
-  const p=lines([[17,'po plné čáře'],[22,'klopa i s'],[27,'rezervou 4 mm'],[32,'pomalu, krátce','ts',seg(t,.04,.12)],[41,'čárkovaně: hrana','ts'],[45.5,'po seříznutí','ts'],[50,'(lekce 9)','ts']]);
-  return s+inset('ŘEZ T1',p+`<path d="M91 58H101" stroke="var(--ptrim)" stroke-width=".4" stroke-dasharray="1.4 .9"/>`+lbl(103,59,'orientační','ts'));
-});
-
-add('A','Vyřízněte T2 a kryty','T2 a kryty K řežte po plné čáře, výkus a kolečka pomalu, krátkými tahy.',12000,t=>{
-  const v=V(12,8,.55), vk=V(22,61,1.2);
-  let b=inV(v,hide(v,rectD(-4,-4,116,82),'lic')+paper(v,rectD(-2,-2,112,78))+printT2(v))+hole(v,SA)+hole(v,SC);
-  b+=inV(vk,hide(vk,rectD(-3,-3,36,19),'rub')+paper(vk,rectD(-1.5,-1.5,33,16))+printK(vk));
-  const cutP=(vv,pts)=>inV(vv,`<path d="${mmPath(pts)}" fill="none" stroke="var(--cut)" stroke-width="${sw(vv,.45)}"/>`);
-  const ur=seg(t,.04,.3), sn=strokes(seg(t,.32,.6),6), k1=strokes(seg(t,.62,.77),6), k2=strokes(seg(t,.78,.93),6);
-  const ar=along(T2_REST,ur), an=along(NOTCH,sn.done), a1=along(KCIRC(KC[0]),k1.done), a2=along(KCIRC(KC[1]),k2.done);
-  if(ur>0) b+=cutP(v,ar.pts); if(sn.done>0) b+=cutP(v,an.pts); if(k1.done>0) b+=cutP(vk,a1.pts); if(k2.done>0) b+=cutP(vk,a2.pts);
+add('A','Vyřízněte T2','Pak T2 vyřízněte, výkus pomalu.',10000,t=>{
+  const v=V(9,20,.62), off=es(t,.84,.96);
+  const wl=`<path d="${rectD(-4,-4,116,83)} ${T2_OUT}" fill-rule="evenodd" ${FACE.lic} stroke-width="${sw(v,.3)}"/><path d="${rectD(-2,-2,112,79)} ${T2_OUT}" fill-rule="evenodd" fill="var(--paper)"/>`;
+  let b=O(1-off,G(`translate(${f(-12*off)} ${f(-6*off)})`,inV(v,wl)+tapes(v,-2,-2,110,77,1)));
+  b+=inV(v,hide(v,T2_OUT,'lic')+paper(v,T2_OUT)+printT2(v))+hole(v,SA)+hole(v,SC);
+  const cutP=pts=>inV(v,`<path d="${mmPath(pts)}" fill="none" stroke="var(--cut)" stroke-width="${sw(v,.45)}"/>`);
+  const ur=seg(t,.04,.36), sn=strokes(seg(t,.4,.8),6), ar=along(T2_REST,ur), an=along(NOTCH,sn.done);
+  let cuts='';if(ur>0) cuts+=cutP(ar.pts); if(sn.done>0) cuts+=cutP(an.pts);
+  b+=O(1-off,cuts);
   let kn='';
   if(ur>0&&ur<1) kn=knifeTop(v.x(ar.head[0]),v.y(ar.head[1]),KD(ar.dir));
   else if(sn.on) kn=knifeTop(v.x(an.head[0]),v.y(an.head[1]),KD(an.dir));
-  else if(k1.on) kn=knifeTop(vk.x(a1.head[0]),vk.y(a1.head[1]),KD(a1.dir));
-  else if(k2.on) kn=knifeTop(vk.x(a2.head[0]),vk.y(a2.head[1]),KD(a2.dir));
-  let s=STAGE+mat()+CLIP(b+kn)+lbl(79,29,'líc','t halo','middle')+lbl(72,70,'rub','t halo','middle');
-  const p=lines([[17,'po plné čáře'],[27,'výkus T2'],[32,'kolečka K'],[37,'pomalu,','ta'],[42,'krátkými tahy','ta']]);
-  return s+inset('ŘEZ T2 A K',p);
+  let s=STAGE+mat()+CLIP(b+kn)+O(1-seg(t,.84,.9),lbl(43,86.6,'T2 lícem nahoru','ts halo','middle'))+O(seg(t,.88,.97),tickB(34,86.2)+lbl(38,87,'T2 vyříznutý','ts halo'));
+  const p=lines([[17,'po plné čáře'],[27,'výkus pomalu,','ta',seg(t,.38,.46)],[32,'krátkými tahy','ta',seg(t,.38,.46)]]);
+  return s+inset('ŘEZ T2',p);
+});
+
+add('A','Kryty K na rub','Nakonec oba kryty K (Ø 13 a 17) přiložte na rub a vyřízněte pomalu, krátkými tahy.',11000,t=>{
+  const v=V(10,24,1.4), d=es(t,.06,.3), off=es(t,.86,.96), KD2=KS.map(k=>circD(k.c,k.r)).join(' ');
+  let b=O(1-off,G(`translate(${f(10*off)} ${f(6*off)})`,inV(v,`<path d="${rectD(-3,-3,51,23)} ${KD2}" fill-rule="evenodd" ${FACE.rub} stroke-width="${sw(v,.3)}"/>`)));
+  b+=inV(v,hide(v,KD2,'rub'));
+  const ps=O(1-off,inV(v,`<path d="${rectD(-1.5,-1.5,38,20)} ${off>0?KD2:''}" fill-rule="evenodd" fill="var(--paper)" stroke="var(--paper-e)" stroke-width="${sw(v,.25)}"/>`)+tapes(v,-1.5,-1.5,36.5,18.5,seg(t,.32,.42)));
+  b+=G(`translate(0 ${f(-50*(1-d))})`,ps+O(Math.max(off,d>0?1:0),inV(v,paper(v,KD2)+printK(v))));
+  const cutP=pts=>inV(v,`<path d="${mmPath(pts)}" fill="none" stroke="var(--cut)" stroke-width="${sw(v,.45)}"/>`);
+  const s1=strokes(seg(t,.44,.62),6), s2=strokes(seg(t,.64,.84),7), a1=along(KCIRC(KS[0].c,KS[0].r),s1.done), a2=along(KCIRC(KS[1].c,KS[1].r),s2.done);
+  let cuts='';if(s1.done>0) cuts+=cutP(a1.pts); if(s2.done>0) cuts+=cutP(a2.pts);
+  b+=O(1-off,cuts);
+  let kn='';
+  if(s1.on) kn=knifeTop(v.x(a1.head[0]),v.y(a1.head[1]),KD(a1.dir));
+  else if(s2.on) kn=knifeTop(v.x(a2.head[0]),v.y(a2.head[1]),KD(a2.dir));
+  b+=O(seg(t,.3,.4),lbl(v.x(KS[0].c[0]),v.y(20)+16,'Ø 13 → A','t halo','middle')+lbl(v.x(KS[1].c[0]),v.y(20)+16,'Ø 17 → C','t halo','middle'));
+  let s=STAGE+mat()+CLIP(b+kn)+lbl(43,86.6,'kůže rubem nahoru','ts halo','middle');
+  const p=lines([[17,'kryty K'],[22,'na RUB kůže','ta'],[32,'Ø 13 → na A'],[37,'Ø 17 → na C'],[47,'pomalu,','ta',seg(t,.44,.5)],[52,'krátkými tahy','ta',seg(t,.44,.5)]]);
+  return s+inset('KRYTY K',p);
 });
 
 add('B','Propíchněte konce ohybu','List na T1 ještě nechte. Šídlem propíchněte oba konce čáry ohybu skrz list do rubu T1.',9000,t=>{
@@ -349,7 +375,7 @@ add('C','Dokončete horní hranu T2','Ramena a výkus T2 zbruste. Máte-li ořez
   return s+inset('HORNÍ HRANA',p);
 });
 
-add('C','Patice A a C','Do A a C osaďte patice: hlavička na líc T2, dřík z rubu. Spojte je jako v lekci 4.',10000,t=>{
+add('C','Patice A a C','Osaďte patice A a C: hlavička na líc T2, dřík z rubu.',10000,t=>{
   const v=VT2;
   let b=t2(v,'lic')+inV(v,`<path d="${mmPath(T2_TOP)}" fill="none" stroke="var(--lic-d)" stroke-width="${sw(v,.5)}"/>`)+hole(v,SA)+hole(v,SC);
   const ha=seg(t,.15,.35), hc=seg(t,.45,.65);
@@ -367,49 +393,53 @@ add('C','Patice A a C','Do A a C osaďte patice: hlavička na líc T2, dřík z 
   return s+inset('PATICE',p);
 });
 
-add('D','Zaoblete okraj krytů','Okraj obou krytů K zaoblete smirkem dokola.',9000,t=>{
+add('D','Zaoblete okraj krytů','Okraj krytů K zaoblete smirkem.',9000,t=>{
   const cx=43, cy=45, R=30, u=seg(t,.1,.85), a=-Math.PI/2+u*2*Math.PI*1.5;
   let b=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="var(--lic)" stroke="var(--lic-d)" stroke-width=".4"/>`;
   b+=O(seg(t,.15,.85),`<circle cx="${cx}" cy="${cy}" r="${R-1.3}" fill="none" stroke="var(--rub)" stroke-width="2.4" opacity=".45"/>`);
   b+=lbl(cx,cy+2,'K','tw halo','middle');
   if(u>0&&u<1) b+=block(cx+(R+.4)*Math.cos(a),cy+(R+.4)*Math.sin(a),a*180/Math.PI-90+180);
-  let s=STAGE+mat()+CLIP(b)+lbl(43,86.6,'kryt K zvětšený (Ø 13 mm)','ts halo','middle');
+  let s=STAGE+mat()+CLIP(b)+lbl(43,86.6,'kryt K zvětšený','ts halo','middle');
   const pr=(x,y,r)=>`<rect x="${x}" y="${y}" width="16" height="3.2" rx="${r}" fill="var(--lic)"/><rect x="${x}" y="${y+1.6}" width="16" height="1.6" fill="var(--rub)" opacity=".9"/><rect x="${x}" y="${y}" width="16" height="3.2" rx="${r}" fill="none" stroke="var(--lic-d)" stroke-width=".2"/>`;
   let p=lines([[17,'okraj krytů K'],[22,'smirkem dokola'],[32,'profil hrany:','ts']]);
   p+=pr(91,37,0)+lbl(99,45,'před','ts','middle')+O(seg(t,.5,.7),pr(112,37,1.5)+lbl(120,45,'po','tok','middle'));
-  p+=O(seg(t,.85,.95),lbl(90.5,58,'obě kolečka','t'));
+  p+=O(seg(t,.85,.95),lbl(90.5,58,'Ø 13 i Ø 17','t'));
   return s+inset('KRYTY K',p);
 });
 
 const MIR=p=>({x:108-p.x,y:p.y}); // T2 rubem nahoru: A a C zrcadlově
-add('D','Kryty na rub T2','T2 otočte rubem nahoru. Kryty K přilepte rubem na rub T2 přes obě patice, lícem ke kartám.',10000,t=>{
-  const v=VT2, A=MIR(SA), C=MIR(SC), r=KR*v.k;
+add('D','Kryty na rub T2','Menší kryt (Ø 13) patří na A, větší (Ø 17) na C. Kryty přilepte rubem na rub T2 přes patice, lícem ke kartám, a nechte pod závažím zaschnout.',12000,t=>{
+  const v=VT2, A=MIR(SA), C=MIR(SC), rA=KR_A*v.k, rC=KR_C*v.k;
   let b=t2(v,'rub');
   b+=flangeTop(v.x(A.x),v.y(A.y),5*v.k)+flangeTop(v.x(C.x),v.y(C.y),5*v.k);
-  b+=O(seg(t,.12,.22)*(1-seg(t,.7,.8)),[A,C].map(p=>`<circle cx="${f(v.x(p.x))}" cy="${f(v.y(p.y))}" r="${f(r)}" fill="var(--amber)" opacity=".28"/>`).join('')+lbl(v.x(C.x),v.y(C.y)+r+4.2,'lepidlo','ts halo','middle')+lbl(v.x(A.x),v.y(A.y)+r+3.6,'lepidlo','ts halo','middle'));
-  const kc=es(t,.25,.48), ka=es(t,.5,.73);
-  const disc=(p,m)=>O(Math.min(1,m*3),G(`translate(${f(70*(1-m))} ${f(-10*(1-m))})`,`<circle cx="${f(v.x(p.x))}" cy="${f(v.y(p.y))}" r="${f(r)}" fill="var(--lic)" stroke="var(--lic-d)" stroke-width=".3"/>`));
-  b+=disc(C,kc)+disc(A,ka);
-  b+=lbl(v.x(A.x)-r-1,v.y(A.y)+1.2,'A','t halo','end')+lbl(v.x(C.x)+r+1,v.y(C.y)+1.2,'C','t halo');
-  b+=O(seg(t,.04,.14)*(1-seg(t,.24,.3)),lbl(v.x(A.x),v.y(A.y)-r-1.5,'příruba','ts halo','middle'));
+  b+=O(seg(t,.12,.22)*(1-seg(t,.66,.74)),`<circle cx="${f(v.x(A.x))}" cy="${f(v.y(A.y))}" r="${f(rA)}" fill="var(--amber)" opacity=".28"/><circle cx="${f(v.x(C.x))}" cy="${f(v.y(C.y))}" r="${f(rC)}" fill="var(--amber)" opacity=".28"/>`+lbl(v.x(C.x),v.y(C.y)+rC+3.8,'lepidlo','ts halo','middle')+lbl(v.x(A.x)-rA-1,v.y(A.y)-rA-.5,'lepidlo','ts halo','end'));
+  const kc=es(t,.25,.44), ka=es(t,.46,.65), gk=seg(t,.12,.22);
+  const disc=(p,r,m,sx)=>{const x=L(sx,v.x(p.x),m), y=L(76,v.y(p.y),m), fl=Math.max(.06,Math.abs(Math.cos(Math.PI*m))), up=m>=.5;
+    return G(`translate(${f(x)} ${f(y)}) scale(${f(fl)} 1)`,`<circle r="${f(r)}" ${up?FACE.lic:FACE.rub} stroke-width=".3"/>`+(up?'':O(gk,`<circle r="${f(r)}" fill="var(--amber)" opacity=".35"/>`)))};
+  b+=disc(C,rC,kc,22)+disc(A,rA,ka,38);
+  b+=O(gk*(1-seg(t,.24,.3)),lbl(46,77.2,'lepidlo i na rub K','ts halo'));
+  b+=lbl(v.x(A.x)-rA-1,v.y(A.y)+1.2,'A','t halo','end')+lbl(v.x(C.x)+rC+1,v.y(C.y)+1.2,'C','t halo');
+  b+=O(seg(t,.04,.14)*(1-seg(t,.24,.3)),lbl(v.x(A.x),v.y(A.y)+rA+3.6,'příruba','ts halo','middle'));
+  const w=es(t,.74,.86);
+  b+=O(w,G(`translate(0 ${f(-12*(1-w))})`,`<rect x="${f(v.x(-3))}" y="${f(v.y(-6))}" width="${f(114*v.k)}" height="${f(86*v.k)}" rx="1.2" fill="var(--card-d)" stroke="var(--steel-d)" stroke-width=".4" opacity=".9"/><path d="M${f(v.x(-3))} ${f(v.y(30))}H${f(v.x(111))}" stroke="var(--steel-d)" stroke-width=".3"/>`+lbl(v.x(54),v.y(20),'knihy jako závaží','t halo','middle')));
   let s=STAGE+mat()+CLIP(b)+lbl(43,86.6,'T2 rubem nahoru: A vpravo, C vlevo','ts halo','middle');
-  const p=lines([[17,'T2 rubem nahoru'],[27,'kryt rubem','t',seg(t,.25,.35)],[32,'na rub T2','t',seg(t,.25,.35)],[42,'líc krytu','t',seg(t,.5,.6)],[47,'ke kartám','t',seg(t,.5,.6)],[57,'přes obě patice','ts',seg(t,.75,.85)]]);
+  const p=lines([[17,'T2 rubem nahoru'],[24,'Ø 13 → A, Ø 17 → C','ts'],[32,'kryt rubem','t',seg(t,.25,.35)],[37,'na rub T2','t',seg(t,.25,.35)],[45,'líc ke kartám','t',seg(t,.46,.56)],[55,'pod závažím','t',seg(t,.76,.86)],[60,'zaschnout','t',seg(t,.76,.86)]]);
   return s+inset('KRYTY',p);
 });
 
-add('D','Zkouška kartou','Přejeďte kartou přes oba kryty. Nesmí se zachytit.',8500,t=>{
-  const v=VT2, A=MIR(SA), C=MIR(SC), r=KR*v.k, m=es(t,.1,.75);
+add('D','Zkouška kartou','Pak 20× zasuňte a vysuňte kartu: nesmí se zachytit a kryty se nesmí odlepit.',10000,t=>{
+  const v=VT2, A=MIR(SA), C=MIR(SC), m=seg(t,.08,.82), ph=(1-Math.cos(2*Math.PI*3*m))/2;
   let b=t2(v,'rub');
-  b+=[A,C].map(p=>`<circle cx="${f(v.x(p.x))}" cy="${f(v.y(p.y))}" r="${f(r)}" fill="var(--lic)" stroke="var(--lic-d)" stroke-width=".3"/>`).join('');
-  const cy=L(-60,20,m);
+  b+=`<circle cx="${f(v.x(A.x))}" cy="${f(v.y(A.y))}" r="${f(KR_A*v.k)}" ${FACE.lic} stroke-width=".3"/><circle cx="${f(v.x(C.x))}" cy="${f(v.y(C.y))}" r="${f(KR_C*v.k)}" ${FACE.lic} stroke-width=".3"/>`;
+  const cy=L(-82,20,ph), dn=Math.sin(2*Math.PI*3*m)>=0;
   b+=`<rect x="${f(v.x(16))}" y="${f(v.y(cy))}" width="${f(85.6*v.k)}" height="${f(54*v.k)}" rx="${f(3*v.k)}" fill="var(--card)" stroke="var(--card-d)" stroke-width=".3" opacity=".82"/>`;
-  b+=arrow(v.x(58.8),v.y(cy)+6,v.x(58.8),v.y(cy)+14,'var(--ink)',.4);
+  if(m>0&&m<1) b+=dn?arrow(v.x(58.8),v.y(cy)+6,v.x(58.8),v.y(cy)+14,'var(--ink)',.4):arrow(v.x(58.8),v.y(cy)+14,v.x(58.8),v.y(cy)+6,'var(--ink)',.4);
   let s=STAGE+mat()+CLIP(b);
-  s+=O(seg(t,.8,.92),tick(30,86.2)+lbl(34,87,'karta nezachytí','tok halo'));
-  const p=lines([[17,'přejeďte kartou'],[22,'přes oba kryty'],[32,'nesmí se'],[37,'zachytit']])+O(seg(t,.8,.92),tick(93,50)+lbl(97,51,'patice drží','ts'));
+  s+=O(seg(t,.84,.94),tickB(22,86.2)+lbl(26,87,'nezachytí se, kryty drží','tok halo'));
+  const n=Math.min(20,Math.floor(m*20+.0001));
+  const p=lines([[17,'20× kartu'],[22,'zasuňte a vysuňte']])+lbl(90.5,34,`${n} / 20`,'tw')+lines([[45,'nesmí se zachytit','ts'],[50,'kryty se nesmí','ts'],[54.5,'odlepit','ts']])+O(seg(t,.84,.94),tick(93,64)+lbl(97,65,'drží','tok'));
   return s+inset('ZKOUŠKA',p);
 });
-
 
 // ---------- engine ----------
 const svg=document.getElementById('stage');

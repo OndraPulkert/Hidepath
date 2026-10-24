@@ -875,6 +875,7 @@ export const animationPages = {
       B: 'Část B – složení',
       C: 'Část C – kontrola',
     },
+
     steps: {
       A: ['Vytiskněte a změřte', 'Nalepte listy na karton', 'Vystřihněte T1, T2 a P'],
       B: [
@@ -899,6 +900,7 @@ export const animationPages = {
       E: 'Část E – víčko',
       F: 'Část F – zkouška',
     },
+
     steps: {
       A: ['Přiložte listy na kůži', 'Nejdřív vysekněte otvory', 'Řežte po plné čáře'],
       B: ['Propíchněte body skrz list', 'Spojte body tužkou'],
@@ -909,8 +911,8 @@ export const animationPages = {
         'Přiložte T3 za mokra',
       ],
       D: ['Narýsujte švy', 'Prorazte a ušijte', 'Dokončete dno'],
-      E: ['Ohněte víčko přes ústí', 'Objímka B podle obtisku'],
-      F: ['Zkouška třesením', 'B 30× a mince prsty', 'Zkouška místa pro A'],
+      E: ['Navlhčete a ohněte víčko', 'Zarovnejte víčko s jazýčkem', 'Objímka B podle obtisku'],
+      F: ['Zkouška třesením', 'B 50× a mince prsty', 'Zkouška místa pro A'],
     },
   },
 
@@ -924,14 +926,16 @@ export const animationPages = {
       C: 'Část C – T2 a patice',
       D: 'Část D – kryty',
     },
+
     steps: {
       A: [
         'List 1 na rub kůže',
         'Proč list 1 na rub',
-        'T2 na líc, kryty na rub',
-        'Otvory A a C před řezem',
         'Vyřízněte T1',
-        'Vyřízněte T2 a kryty',
+        'Kůži otočte, T2 na líc',
+        'Otvory A a C',
+        'Vyřízněte T2',
+        'Kryty K na rub',
       ],
       B: ['Propíchněte konce ohybu', 'Spojte vpichy tužkou'],
       C: ['Dokončete horní hranu T2', 'Patice A a C'],
@@ -947,21 +951,22 @@ export const animationPages = {
       B: 'Část B – prorážení',
       C: 'Část C – šev a kontrola',
     },
+
     steps: {
       A: [
-        'Lepidlo do U na T1 a T2',
-        'Šrafa: smirek, pak lepidlo',
+        'Zdrsněte pruh na T2',
+        'Naneste lepidlo',
         'T2 na T1 rubem k rubu',
-        'Pás zavřete na šrafu',
+        'Pás víčkem dolů na pruh',
         'Setřete přebytek, nechte zaschnout',
       ],
       B: [
-        'Linie 3,5 mm se zavřeným pásem',
-        'Prorazte pravý bok',
+        'Prorazte pravý bok se zavřeným pásem',
+        'Ušijte pravý bok se zavřeným pásem',
         'Odklopte pás doprava',
-        'Prorazte zbytek dna a levý bok',
+        'Prorazte dno a levý bok',
       ],
-      C: ['U-šev jednou nití', 'Hrany po obvodu', 'Zkontrolujte pás a šev'],
+      C: ['Ušijte levý bok a dno', 'Hrany po obvodu', 'Zkontrolujte pás a šev'],
     },
   },
   obratClosures: {
@@ -970,29 +975,29 @@ export const animationPages = {
     buttonText: 'Jak seříznout klopu a osadit objímky',
     sections: {
       A: 'Část A – objímka A',
-      B: 'Část B – klopa na míru',
-      C: 'Část C – šev a objímka C',
-      D: 'Část D – kontrola',
+      B: 'Část B – míra klopy',
+      C: 'Část C – seříznutí',
+      D: 'Část D – šev a objímka C',
+      E: 'Část E – kontrola',
     },
+
     steps: {
       A: ['Obtiskněte hlavičku A', 'Přiložte kolečko K', 'Propíchněte a osaďte objímku'],
       B: [
         'Změřte mezeru vlevo',
+        'Obtiskněte hlavičku C',
+        'Změřte od kolečka K k hraně',
         'Spočítejte, kolik seříznout',
+      ],
+      C: [
         'Narýsujte čáru kružítkem',
         'Seřízněte podle pravítka',
         'Obkreslete roh podle šablony R8',
         'Zaoblete oba rohy',
+        'Když C nedovolí seříznout dost',
       ],
-      C: [
-        'Narýsujte a ušijte ozdobný šev',
-        'Hrany klopy',
-        'Obtiskněte hlavičku C',
-        'Přiložte kolečko K',
-        'Propíchněte a osaďte objímku',
-        'Když odstup nevyjde',
-      ],
-      D: ['Otevřete jen C', 'Otevřete jen A', '30× stiskněte a ohněte'],
+      D: ['Narýsujte a ušijte ozdobný šev', 'Hrany klopy', 'Objímka C na klopě'],
+      E: ['Otevřete jen C', 'Otevřete jen A', '30× stiskněte a ohněte'],
     },
   },
 

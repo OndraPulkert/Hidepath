@@ -1,6 +1,6 @@
 # OBRAT R09 — zjednodušená konstrukce pro začátečníka
 
-18. 10. 2026. Autor schválil zjednodušení: hlavní je vyrobitelnost začátečníkem, vzhled stejný nebo podobný předloze [iterace 03](obrat-iterace-03-nezavisla-klopa.png). Nahrazuje R06–R08. **Střih je úplný, prototyp zatím neušitý.**
+18. 10. 2026. Rozměry upravuje [iterace 10](iterace-10-rezervy.md) (R10, rezervy z kontroly vyrobitelnosti). Autor schválil zjednodušení: hlavní je vyrobitelnost začátečníkem, vzhled stejný nebo podobný předloze [iterace 03](obrat-iterace-03-nezavisla-klopa.png). Nahrazuje R06–R08. **Střih je úplný, prototyp zatím neušitý.**
 
 - Model a kontroly: `src/lib/geometry/obrat-wallet.ts` (testy vedle).
 - Listy 1:1: `pnpm pattern:wallet-obrat` → `docs/generated/obrat-list-1-telo.svg`, `obrat-list-2-dily.svg`.
@@ -35,8 +35,8 @@ Rohy: klopa R8, tělo R6, víčko R4, T3 R2 (u ústí R1), zářez P R1 a R1,5; 
 
 1. Mincovní modul: otvory, hrany ústí a víčka, patice B do jazýčku T3, T3 lepit a šít na rub P, ohnout víčko, objímka B obtiskem. **Zkouška třesením a 30× B před řezem těla.**
 2. T1 (s rezervou), T2, K: otvory, horní hrana T2, patice A a C, kryty K.
-3. T2 na T1, konec P na zdrsněnou šrafu T2. Se zavřeným pásem prorazit pravý bok, roh a dno po konec šrafy; s odklopeným pásem zbytek dna a levý bok. Jeden U-šev.
-4. Objímka A obtiskem; klopu se zapnutým A seříznout přes obsah na mezeru 6 mm vlevo; ozdobný šev a hrany klopy; objímka C obtiskem. Před vyseknutím objímek kontrola papírovým kolečkem K: aspoň 1,5 mm od hrany a švu.
+3. T2 na T1, konec P na zdrsněnou šrafu T2. Se zavřeným pásem prorazit pravý bok, roh a dno po konec šrafy; s odklopeným pásem zbytek dna a levý bok. U-šev dvěma nitěmi: levý bok a dno s odklopeným pásem, roh a pravý bok se zavřeným (nit pod pásem se přes závěs na líc P nedostane).
+4. Objímka A obtiskem; klopu se zapnutým A seříznout přes obsah na mezeru 6 mm vlevo; ozdobný šev a hrany klopy; objímka C obtiskem. Před osazením objímek kontrola papírovým kolečkem K: aspoň 1,5 mm od hrany a švu.
 
 ## Kapacita a tloušťka (výpočet, ne měření)
 

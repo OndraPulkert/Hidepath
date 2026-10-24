@@ -1,5 +1,6 @@
 /**
- * OBRAT R09 – zjednodušená konstrukce pro začátečníka (docs/design/obrat/iterace-09-zjednoduseni.md).
+ * OBRAT R10 – zjednodušená konstrukce pro začátečníka (docs/design/obrat/iterace-09-zjednoduseni.md)
+ * s rezervami z kontroly vyrobitelnosti (docs/design/obrat/iterace-10-rezervy.md).
  *
  * Souřadnice „zavřeného předku“: x zleva, y shora od ohybu klopy, mm. Jedna useň 1,2 mm.
  * Díly: T1 záda + klopa (jeden ohyb), T2 přední stěna, P pás + víčko (ohyb), T3 předek mincí
@@ -9,7 +10,7 @@
  * polovina v jedné vrstvě, objímky podle obtisku. Klopa se řeže s rezervou a na délku se
  * seřízne přes skutečný obsah. Rozměry mincí ČNB (ověřeno 18. 10. 2026). Fyzicky NEOVĚŘENO.
  */
-export const OBRAT_REVISION = 'R09';
+export const OBRAT_REVISION = 'R10';
 
 export const OBRAT_COINS = {
   '1': { diameter: 20, thickness: 1.85, diameterTolerance: 0.1, thicknessTolerance: 0.13 },
@@ -78,7 +79,9 @@ export interface ObratSpec {
   snapA: Point;
   snapB: Point;
   snapC: Point;
+  /** Kryt K patice A (uvnitř kapsy u lepeného rohu) a větší kryt patice C. */
   coverRadius: number;
+  coverRadiusC: number;
   /** Lepidlo, které zasáhne za linii švu do dutiny (glueBand − seamOffset). */
   glueIntrusion: number;
   cavityLoss: number;
@@ -99,34 +102,37 @@ export const OBRAT: ObratSpec = {
   flapEndY: 42,
   flapRise: 4,
   flapFoldAllowance: 8,
-  flapTrimReserve: 4,
-  frontTopY: 16,
+  flapTrimReserve: 6,
+  frontTopY: 15,
   notch: { start: 30, bottomStart: 40, bottomEnd: 68, end: 78, bottomY: 38 },
   bandTopY: 48,
-  coinMouthY: 51,
+  coinMouthY: 50,
   cellSeams: [24, 60, 96],
-  coinTab: { left: 4, bottomY: 69 },
+  coinTab: { left: 4, bottomY: 68 },
   lidEndX: 100.5,
-  lidBottomY: 69,
-  lidFoldAllowance: 3,
+  lidBottomY: 68,
+  lidFoldAllowance: 4,
   reliefHoleDiameter: 2,
   bandEndAllowance: 2,
   glueBand: 4,
   snapCap: 12,
   snapFlangeMax: 11,
   hardwareGap: 2,
-  snapA: { x: 12.5, y: 77 },
-  snapB: { x: 12, y: 59 },
-  snapC: { x: 88, y: 27 },
+  snapA: { x: 12, y: 77.25 },
+  snapB: { x: 12, y: 58 },
+  snapC: { x: 88, y: 25.5 },
   coverRadius: 6.5,
+  coverRadiusC: 8.5,
   glueIntrusion: 0.5,
   cavityLoss: 1,
   handlingAllowance: 2,
   billFoldedThickness: 1.1,
 };
 
-/** Šířka lepeného pásu konce P na líci T2 (pás se ohýbá na jeho kraji). */
+/** Šířka lepeného pásu konce P na líci T2 a pravého boku těla (pás se ohýbá na jeho kraji). */
 export const HINGE_GLUE = 6;
+/** Lepený pás těla u levého boku a dna (užší, aby kryt K patice A nezasahoval do lepidla). */
+export const BODY_GLUE = 5;
 
 const round = (n: number): number => Math.round(n * 1000) / 1000;
 
@@ -260,7 +266,7 @@ export interface PartMark {
   label: string;
 }
 export interface ObratPart {
-  id: 'T1' | 'T2' | 'P' | 'T3' | 'K';
+  id: 'T1' | 'T2' | 'P' | 'T3' | 'K' | 'KC';
   name: string;
   /** Kterou stranou nahoru se list přikládá na kůži. */
   face: 'líc' | 'rub';
@@ -346,11 +352,12 @@ function bodyUSeam(spec: ObratSpec, dy: number): string {
 
 /** Lepené pásy podél U-švu těla. */
 function glueU(spec: ObratSpec, dy: number): string {
-  const g = HINGE_GLUE;
+  const g = BODY_GLUE;
+  const gr = HINGE_GLUE;
   const W = spec.width;
   const t = dy + spec.frontTopY;
   const yb = dy + spec.height;
-  return `M0 ${n(t)} V${n(yb)} H${n(W)} V${n(t)} H${n(W - g)} V${n(yb - g)} H${n(g)} V${n(t)} Z`;
+  return `M0 ${n(t)} V${n(yb)} H${n(W)} V${n(t)} H${n(W - gr)} V${n(yb - g)} H${n(g)} V${n(t)} Z`;
 }
 
 /** Délka klopy od ohybu po volnou hranu po seříznutí (rozvinutá) v místě x. */
@@ -538,16 +545,27 @@ export function obratParts(spec: ObratSpec): ObratPart[] {
 
   const K: ObratPart = {
     id: 'K',
-    name: 'Kryt patice',
+    name: 'Kryt patice A',
     face: 'rub',
     width: 2 * spec.coverRadius,
     height: 2 * spec.coverRadius,
     outline: circlePath(spec.coverRadius, spec.coverRadius, spec.coverRadius),
     lines: [],
     marks: [],
-    count: 2,
+    count: 1,
   };
-  return [T1, T2, P, T3, K];
+  const KC: ObratPart = {
+    id: 'KC',
+    name: 'Kryt patice C',
+    face: 'rub',
+    width: 2 * spec.coverRadiusC,
+    height: 2 * spec.coverRadiusC,
+    outline: circlePath(spec.coverRadiusC, spec.coverRadiusC, spec.coverRadiusC),
+    lines: [],
+    marks: [],
+    count: 1,
+  };
+  return [T1, T2, P, T3, K, KC];
 }
 
 function circlePath(cx: number, cy: number, r: number): string {
@@ -574,11 +592,11 @@ export function obratLeatherLayout(spec: ObratSpec) {
   const sheet = { width: 210, height: 297 };
   const column = by.T1.height + by.T2.height + by.P.height + 2 * gap;
   const side = sheet.width - Math.max(by.T1.width, by.T2.width, by.P.width) - gap;
-  // T3 na výšku (39 mm široký) vedle sloupce, pod ním kryty.
+  // T3 na výšku (40 mm široký) vedle sloupce, pod ním kryty.
   const fits =
     column <= sheet.height &&
     by.T3.height <= side &&
-    by.T3.width + gap + 2 * by.K.height + gap <= sheet.height;
+    by.T3.width + gap + by.K.height + gap + by.KC.height + gap <= sheet.height;
   return { sheet, gap, columnHeight: round(column), sideWidth: round(side), fits };
 }
 
@@ -627,8 +645,9 @@ export function checkObrat(spec: ObratSpec): string[] {
   const c = spec.snapC;
   if (c.y - r < spec.frontTopY + g) e.push('C je moc blízko horní hrany přední stěny.');
   if (c.x - r < spec.notch.end + g) e.push('C zasahuje do výkusu.');
-  if (c.x + spec.coverRadius > W - HINGE_GLUE) e.push('Kryt C zasahuje do lepeného pásu.');
-  if (c.y - spec.coverRadius < spec.frontTopY + 1)
+  if (c.x + spec.coverRadiusC > W - HINGE_GLUE) e.push('Kryt C zasahuje do lepeného pásu.');
+  if (c.x - spec.coverRadiusC < spec.notch.end + 1) e.push('Kryt C zasahuje do výkusu.');
+  if (c.y - spec.coverRadiusC < spec.frontTopY + 1)
     e.push('Kryt C přečnívá horní hranu přední stěny.');
   if (c.y + r + g > flapEdgeY(spec, c.x) - s) e.push('C nemá rezervu od švu klopy.');
 
@@ -646,8 +665,8 @@ export function checkObrat(spec: ObratSpec): string[] {
   if (a.x + r + g > spec.cellSeams[0] - s) e.push('A zasahuje do předku mincí.');
   if (a.y - r < Math.max(spec.lidBottomY, spec.coinTab.bottomY) + g)
     e.push('A koliduje s víčkem nebo jazýčkem.');
-  if (a.y + spec.coverRadius > H - HINGE_GLUE) e.push('Kryt A zasahuje do lepeného pásu dna.');
-  if (a.x - spec.coverRadius < HINGE_GLUE) e.push('Kryt A zasahuje do lepeného pásu boku.');
+  if (a.y + spec.coverRadius > H - BODY_GLUE) e.push('Kryt A zasahuje do lepeného pásu dna.');
+  if (a.x - spec.coverRadius < BODY_GLUE) e.push('Kryt A zasahuje do lepeného pásu boku.');
 
   // B v jazýčku T3 na volném konci
   const b = spec.snapB;

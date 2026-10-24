@@ -5,7 +5,7 @@ import { findProject } from '@/content/projects';
 import { patternSheetUrlsFor } from '@/content/projects/pattern-sheets';
 import { equipmentCatalog } from '@/content/equipment';
 
-describe('OBRAT R09 v aplikaci', () => {
+describe('OBRAT R10 v aplikaci', () => {
   it('má platné schéma, registraci, těla lekcí a oba listy', () => {
     expect(projectDefinitionSchema.safeParse(obratWalletProject)).toMatchObject({ success: true });
     expect(findProject('obrat-wallet')).toBe(obratWalletProject);
