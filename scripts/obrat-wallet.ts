@@ -164,7 +164,7 @@ export function buildObratSheets(spec: ObratSpec = OBRAT): { telo: string; dily:
     [
       header('LIST 1 · T1 záda a klopa', [
         'Tisk A4 na výšku, 100 %, bez přizpůsobení. Obě kontrolní úsečky musí měřit 50 mm.',
-        'List přiložte na RUB kůže (šikmá hrana klopy pak stoupá doprava, jak má).',
+        'List přiložte na RUB kůže. Šikmá hrana klopy pak po přehnutí stoupá doprava, jak má.',
       ]),
       drawPart(T1, 51, 36, spec, ['RUB nahoru', 'záda + klopa, 1 ×'], { x: 54, y: 100 }),
       cornerR(51, 36, spec.flapCornerR, -1, -1),

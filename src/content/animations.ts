@@ -41,6 +41,8 @@ import { type AnimationLink } from '@/content/schema';
  *   (lekce 3 pouzdra na karty): rohy dvojhrotem, boky, spodek ke středu, zbytek jednohrotem.
  * - rohova-sablona (`#A`–`#B`): stejně jako kapsa-prisiti; ocelová rohová šablona „květina“: lob podle
  *   poloměru (číslo = průměr) a štěrbina R15 (vnější hrana), společné pro všechny projekty.
+ * - obrat-papirovy-model (`#A`–`#C`): stejně jako kapsa-prisiti; papírový model OBRATu (lekce 5):
+ *   listy na karton, T2 páskou na T1, obsah, víčko, mince, pás přes mince, kontrola pásu a klopy.
  * - ctverec-forma (`#A`–`#C`): stejně jako kapsa-prisiti; čtverec 70 × 70 kolem vyvrtaného otvoru
  *   formy jen pravítkem (lekce 2 pouzdra s mincí), příklad otvor Ø 32 mm.
  *
@@ -864,6 +866,136 @@ export const animationPages = {
       ],
     },
   },
+  obratPaperModel: {
+    path: '/animace/obrat-papirovy-model.html',
+    title: 'OBRAT – papírový model',
+    buttonText: 'Jak složit papírový model',
+    sections: {
+      A: 'Část A – listy a díly',
+      B: 'Část B – složení',
+      C: 'Část C – kontrola',
+    },
+    steps: {
+      A: ['Vytiskněte a změřte', 'Nalepte listy na karton', 'Vystřihněte T1, T2 a P'],
+      B: [
+        'T2 páskou na T1',
+        'Vložte karty a bankovky',
+        'Ohněte víčko',
+        'Položte mince',
+        'Přilepte pás přes mince',
+      ],
+      C: ['Zkontrolujte konec pásu', 'Zkontrolujte klopu', 'Když je klopa krátká'],
+    },
+  },
+  obratCoinModule: {
+    path: '/animace/obrat-mincovni-modul.html',
+    title: 'OBRAT – mincovní modul',
+    buttonText: 'Jak vyrobit mincovní modul',
+    sections: {
+      A: 'Část A – řez',
+      B: 'Část B – rub P',
+      C: 'Část C – hrany, B, lepení',
+      D: 'Část D – šití',
+      E: 'Část E – víčko',
+      F: 'Část F – zkouška',
+    },
+    steps: {
+      A: ['Přiložte listy na kůži', 'Nejdřív vysekněte otvory', 'Řežte po plné čáře'],
+      B: ['Propíchněte body skrz list', 'Spojte body tužkou'],
+      C: [
+        'Dokončete hrany',
+        'Patice B do jazýčku T3',
+        'Naneste lepidlo do pásů',
+        'Přiložte T3 za mokra',
+      ],
+      D: ['Narýsujte švy', 'Prorazte a ušijte', 'Dokončete dno'],
+      E: ['Ohněte víčko přes ústí', 'Objímka B podle obtisku'],
+      F: ['Zkouška třesením', 'B 30× a mince prsty', 'Zkouška místa pro A'],
+    },
+  },
+
+  obratBody: {
+    path: '/animace/obrat-telo.html',
+    title: 'OBRAT – tělo a patice',
+    buttonText: 'Jak vyříznout a připravit tělo',
+    sections: {
+      A: 'Část A – řez',
+      B: 'Část B – ohyb klopy',
+      C: 'Část C – T2 a patice',
+      D: 'Část D – kryty',
+    },
+    steps: {
+      A: [
+        'List 1 na rub kůže',
+        'Proč list 1 na rub',
+        'T2 na líc, kryty na rub',
+        'Otvory A a C před řezem',
+        'Vyřízněte T1',
+        'Vyřízněte T2 a kryty',
+      ],
+      B: ['Propíchněte konce ohybu', 'Spojte vpichy tužkou'],
+      C: ['Dokončete horní hranu T2', 'Patice A a C'],
+      D: ['Zaoblete okraj krytů', 'Kryty na rub T2', 'Zkouška kartou'],
+    },
+  },
+  obratAssembly: {
+    path: '/animace/obrat-sestaveni.html',
+    title: 'OBRAT – sestavení',
+    buttonText: 'Jak sestavit tělo s pásem',
+    sections: {
+      A: 'Část A – lepení',
+      B: 'Část B – prorážení',
+      C: 'Část C – šev a kontrola',
+    },
+    steps: {
+      A: [
+        'Lepidlo do U na T1 a T2',
+        'Šrafa: smirek, pak lepidlo',
+        'T2 na T1 rubem k rubu',
+        'Pás zavřete na šrafu',
+        'Setřete přebytek, nechte zaschnout',
+      ],
+      B: [
+        'Linie 3,5 mm se zavřeným pásem',
+        'Prorazte pravý bok',
+        'Odklopte pás doprava',
+        'Prorazte zbytek dna a levý bok',
+      ],
+      C: ['U-šev jednou nití', 'Hrany po obvodu', 'Zkontrolujte pás a šev'],
+    },
+  },
+  obratClosures: {
+    path: '/animace/obrat-klopa.html',
+    title: 'OBRAT – klopa na míru',
+    buttonText: 'Jak seříznout klopu a osadit objímky',
+    sections: {
+      A: 'Část A – objímka A',
+      B: 'Část B – klopa na míru',
+      C: 'Část C – šev a objímka C',
+      D: 'Část D – kontrola',
+    },
+    steps: {
+      A: ['Obtiskněte hlavičku A', 'Přiložte kolečko K', 'Propíchněte a osaďte objímku'],
+      B: [
+        'Změřte mezeru vlevo',
+        'Spočítejte, kolik seříznout',
+        'Narýsujte čáru kružítkem',
+        'Seřízněte podle pravítka',
+        'Obkreslete roh podle šablony R8',
+        'Zaoblete oba rohy',
+      ],
+      C: [
+        'Narýsujte a ušijte ozdobný šev',
+        'Hrany klopy',
+        'Obtiskněte hlavičku C',
+        'Přiložte kolečko K',
+        'Propíchněte a osaďte objímku',
+        'Když odstup nevyjde',
+      ],
+      D: ['Otevřete jen C', 'Otevřete jen A', '30× stiskněte a ohněte'],
+    },
+  },
+
   beltHoleCenter: {
     path: '/animace/pasek-dirky.html',
     title: 'Dírky pásku na střed',
