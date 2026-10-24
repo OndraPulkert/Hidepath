@@ -74,6 +74,9 @@ describe('OBRAT R10 – zjednodušená konstrukce s rezervami', () => {
 
   it('víčko ani předek mincí nezasahují do ohybu závěsu, lepidlo odpovídá dutinám', () => {
     expect(checkObrat({ ...OBRAT, lidEndX: 102 })).toContain('Víčko zasahuje do ohybu závěsu.');
+    expect(checkObrat({ ...OBRAT, lidEndTaper: 4 })).toContain(
+      'Šikmý konec víčka nekryje pravý šev dutin.',
+    );
     expect(checkObrat({ ...OBRAT, glueBand: 5 })).toContain(
       'Lepený pás T3 nesouhlasí s průnikem lepidla do dutin.',
     );

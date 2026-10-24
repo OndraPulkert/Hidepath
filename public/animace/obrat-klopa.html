@@ -244,8 +244,8 @@ function bandOpen(v,{imp=1,k=0,hole=0,sock=false,prick=0}={}){
   // T3 (líc) pod víčkem, levý okraj jazýčku u = 87,5
   s+=`<path d="M${X(87.5)} ${Y(65)}V${Y(88)}A${f(2*v.k)} ${f(2*v.k)} 0 0 1 ${X(85.5)} ${Y(H)}H${X(0)}V${Y(65)}Z" ${LEATHER_L}/>`;
   s+=stitch(`M${X(84)} ${Y(65)}V${Y(86.5)}H${X(0)}`);
-  // víčko ohnuté přes ústí (líc), roh R4
-  s+=`<path d="${rpoly(v,[[7.5,BT],[PE,BT],[PE,LID],[7.5,LID]],[0,0,4,0])}" ${LEATHER_L}/>`;
+  // víčko ohnuté přes ústí (líc), roh R4; u závěsu šikmý konec (x 100,5 u ohybu → 98 u volné hrany, roh R4)
+  s+=`<path d="${rpoly(v,[[7.5,BT],[PE,BT],[PE,LID],[10,LID]],[0,0,4,4])}" ${LEATHER_L}/>`;
   s+=capTop(v,{x:W-SB.x,y:SB.y})+lbl(v.x(W-SB.x),v.y(SB.y)+12.5*v.k*.5+1.2,'B','ts halo','middle');
   const A={x:W-SA.x,y:SA.y};
   if(!hole&&!sock) s+=imprint(v,A,imp);

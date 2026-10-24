@@ -149,8 +149,9 @@ const T2_PATH='M0 15H30C36 15 34 38 40 38H68C74 38 72 15 78 15H108V84Q108 90 102
 const P_FULL='M-2 48H107Q108 48 108 49V84Q108 90 102 90H4Q-2 90 -2 84Z';
 const P_FREE='M-2 48H102V90H4Q-2 90 -2 84Z';
 const P_STRIP='M102 48H107Q108 48 108 49V84Q108 90 102 90Z';
-const LID='M-2 48H100.5V66.5Q100.5 68 99 68H2Q-2 68 -2 64Z';
-const T3L='M20.5 68H99.5V88Q99.5 90 97.5 90H22.5Q20.5 90 20.5 88Z';
+// víčko: konec u závěsu šikmo z x 100,5 (ohyb, y 48) na x 98 (volná hrana, y 68), roh R4
+const LID='M-2 48H100.5L98.496 64.032Q98 68 94 68H2Q-2 68 -2 64Z';
+const T3L='M4 50H99.5V88Q99.5 90 97.5 90H22.5Q20.5 90 20.5 88V68H4Z'; // T3 celé (jazýček schovaný pod víčkem)
 const HATCH='M102 48H108V84Q108 90 102 90Z';
 const GLUE_F='M0 15V84Q0 90 6 90H102Q108 90 108 84V15H102V85H5V15Z'; // lepené U: 5 mm vlevo a dole, 6 mm vpravo
 const GLUE_C='M2.5 15V87.5H105V15'; // dráha nanášení (maska)
@@ -186,9 +187,9 @@ function pLic(v,path=P_FULL){return `<path d="${path}" ${LICF(v)}/>`}
 // pás P z rubu (v souřadnicích zavřeného předku; zobrazuje se zrcadlově): víčko, spodek T3 se švy, objímka B
 function pRub(v,{free=false,glue=0}={}){
   let s=`<path d="${free?P_FREE:P_FULL}" ${RUBF(v)}/>`;
-  s+=`<path d="${LID}" ${LICF(v)}/>`;
   s+=`<path d="${T3L}" ${LICF(v)}/>`;
-  s+=`<path d="M96 68V86.5H24V68M60 68V86.5" fill="none" stroke="var(--thread)" stroke-width="${sw(v,.35)}" stroke-dasharray="${sw(v,.9)} ${sw(v,.6)}"/>`;
+  s+=`<path d="M96 53V86.5H24V53M60 53V86.5" fill="none" stroke="var(--thread)" stroke-width="${sw(v,.35)}" stroke-dasharray="${sw(v,.9)} ${sw(v,.6)}"/>`;
+  s+=`<path d="${LID}" ${LICF(v)}/>`;
   s+=`<circle cx="12" cy="58" r="6" fill="var(--steel-l)" stroke="var(--steel-d)" stroke-width=".5"/><circle cx="12" cy="58" r="2" fill="none" stroke="var(--steel-d)" stroke-width=".4"/>`;
   if(!free){
     s+=`<path d="${HATCH}" fill="none" stroke="var(--ink)" stroke-width="${sw(v,.25)}" stroke-dasharray="${sw(v,.8)} ${sw(v,.6)}"/>`;

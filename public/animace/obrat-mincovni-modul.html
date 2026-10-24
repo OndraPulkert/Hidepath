@@ -158,8 +158,10 @@ function pencilTop(x,y){return G(`translate(${f(x)} ${f(y)}) rotate(-35)`,`<path
 // P rubem nahoru jako na listu: u = 108 − x (závěs vlevo u 0, volný konec vpravo u 110),
 // y 0 = horní hrana víčka, ohyb víčka y 24, pás y 24–66. Zavřený předek: y = y_P + 24.
 const FOLD=24;
-const P_PTS=[[7.5,24],[7.5,0],[110,0],[110,66],[0,66],[0,24]], P_R=[0,1.5,4,6,6,1];
-const LID_PTS=[[7.5,24],[7.5,0],[110,0],[110,24]], LID_R=[0,1.5,4,0];
+// konec víčka u závěsu je šikmý (lidEndTaper 2,5): u ohybu u 7,5, u volné hrany u 10, roh R4
+const P_PTS=[[7.5,24],[10,0],[110,0],[110,66],[0,66],[0,24]], P_R=[0,4,4,6,6,1];
+const lidEndU=y=>7.5+2.5*(24-y)/24;
+const LID_PTS=[[7.5,24],[10,0],[110,0],[110,24]], LID_R=[0,4,4,0];
 const BAND_PTS=[[0,24],[110,24],[110,66],[0,66]], BAND_R=[1,0,6,6];
 // T3 R10 (ústí y 26 = 50, jazýček u 87,5–104 do y 44 = 68, dno y 66 = 90)
 const T3_PTS=[[104,26],[8.5,26],[8.5,66],[87.5,66],[87.5,44],[104,44]], T3_R=[1,1,2,2,2,2];
@@ -221,7 +223,7 @@ function drawP(v,{flat=true,fold=0,pos=0,glue=0,pricks=0}={}){
 // víčko: s = 1 rozložené (rub nahoru), záporné = ohnuté přes ústí (líc nahoru); trim = seříznutá rezerva
 function drawLid(v,s,{trim=0,imp=0,prick=0,hole=0,snap=0}={}){
   const Y=v.y(FOLD), cx=v.x(SB[0]), cy=v.y(trim+IMP_D);
-  let g=`<path d="${shape(v,[[7.5,24],[7.5,trim],[110,trim],[110,24]],[0,1.5,trim?1:4,0])}" ${s>=0?RUB:LIC}/>`;
+  let g=`<path d="${shape(v,[[7.5,24],[lidEndU(trim),trim],[110,trim],[110,24]],[0,trim?1:4,trim?1:4,0])}" ${s>=0?RUB:LIC}/>`;
   if(s>0){
     if(imp) g+=O(imp,`<circle cx="${f(cx)}" cy="${f(cy)}" r="${f(4.5*v.k)}" fill="none" stroke="var(--rub-d)" stroke-width=".5"/><circle cx="${f(cx)}" cy="${f(cy)}" r="${f(2*v.k)}" fill="none" stroke="var(--rub-d)" stroke-width=".3"/>`);
     if(prick) g+=O(prick,`<circle cx="${f(cx)}" cy="${f(cy)}" r=".35" fill="var(--graphite)"/>`);
@@ -386,7 +388,7 @@ add('C','Dokončete hrany','Hrany T3 kromě dna, hrany víčka, volný konec P a
   const E=(v,p,op,st)=>O(op,`<path d="${pp(v,p)}" fill="none" ${st}/>`);
   s+=E(VT,[[8.5,26],[87.5,26]],a,BOTH);
   s+=E(VT,[[8.5,26],[8.5,66]],b,LICO)+E(VT,[[87.5,26],[104,26],[104,44],[87.5,44],[87.5,66]],b,LICO);
-  s+=E(VP2,[[7.5,24],[7.5,0],[110,0],[110,62]],c,BOTH)+E(VP2,[[1,24],[7.5,24]],c,BOTH);
+  s+=E(VP2,[[7.5,24],[10,0],[110,0],[110,62]],c,BOTH)+E(VP2,[[1,24],[7.5,24]],c,BOTH);
   s+=O(seg(t,.8,.9),`<path d="${pp(VT,[[10,66],[86,66]])}" stroke="var(--muted)" stroke-width=".6" stroke-dasharray=".6 .6"/>`+lbl(VT.x(48),VT.y(66)+4.2,'dno až po šití','ts halo','middle'));
   s+=lbl(72.5,12,'T3','t halo')+lbl(72.5,16.5,'líc','ts halo')+lbl(76,46,'P','t halo')+lbl(76,50.5,'rub','ts halo');
   let p=`<path d="M91 16H97" ${BOTH}/>`+lbl(99,17.4,'líc i rub','ts');
@@ -537,12 +539,12 @@ add('E','Zarovnejte víčko s jazýčkem','Víčko má na ohyb rezervu: když sa
   } else {
     const lid=Math.min(.9999,L(-LID_K,1,op)), tr=off>0?X:0;
     s+=moduleBack(v,{lid:Math.abs(lid)<.02?.02:lid,trim:tr});
-    if(off>0) s+=O(1-off,G(`translate(0 ${f(-off*10)})`,`<rect x="${f(v.x(7.5))}" y="${f(v.y(0))}" width="${f(102.5*v.k)}" height="${f(X*v.k)}" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".3"/>`));
+    if(off>0) s+=O(1-off,G(`translate(0 ${f(-off*10)})`,`<path d="${pp(v,[[10,0],[110,0],[110,X],[lidEndU(X),X]])}Z" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".3"/>`));
     const rl=seg(t,.48,.54)*(1-seg(t,.84,.9));
     s+=O(rl,ruler(v.x(4),v.x(114),v.y(X),7)+lbl(v.x(98),v.y(X)-1.6,'x','ta halo','middle'));
-    s+=part(v,[[7.5,X],[110,X]],kc,'stroke="var(--cut)" stroke-width=".45"');
-    if(kc>0&&kc<1) s+=knifeTop(v.x(L(7.5,110,kc)),v.y(X),-30);
-    s+=O(ed,`<path d="${pp(v,[[7.5,X],[110,X]])}" stroke="var(--accent)" stroke-width=".9"/>`+lbl(v.x(58),v.y(X)+5.5,'nová hrana','ta halo','middle'));
+    s+=part(v,[[lidEndU(X),X],[110,X]],kc,'stroke="var(--cut)" stroke-width=".45"');
+    if(kc>0&&kc<1) s+=knifeTop(v.x(L(lidEndU(X),110,kc)),v.y(X),-30);
+    s+=O(ed,`<path d="${pp(v,[[lidEndU(X),X],[110,X]])}" stroke="var(--accent)" stroke-width=".9"/>`+lbl(v.x(58),v.y(X)+5.5,'nová hrana','ta halo','middle'));
   }
   s+=endLabels(v,79);
   let p=lbl(90.5,17,'sahá víčko níž','t')+lbl(90.5,22,'než jazýček?','t');

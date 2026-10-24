@@ -63,6 +63,8 @@ export interface ObratSpec {
   coinTab: { left: number; bottomY: number };
   /** Víčko sahá od volného konce (x 0) po tuto souřadnici; dál je pás bez víčka (závěs). */
   lidEndX: number;
+  /** O kolik je konec víčka u závěsu kratší na volné hraně víčka (šikmý konec, aby nedrhl při zavírání). */
+  lidEndTaper: number;
   /** Spodní hrana zavřeného víčka. */
   lidBottomY: number;
   /** Přídavek víčka na ohyb přes předek mincí. */
@@ -110,6 +112,7 @@ export const OBRAT: ObratSpec = {
   cellSeams: [24, 60, 96],
   coinTab: { left: 4, bottomY: 68 },
   lidEndX: 100.5,
+  lidEndTaper: 2.5,
   lidBottomY: 68,
   lidFoldAllowance: 4,
   reliefHoleDiameter: 2,
@@ -470,12 +473,12 @@ export function obratParts(spec: ObratSpec): ObratPart[] {
       [
         { x: 0, y: lid },
         { x: slitU, y: lid },
-        { x: slitU, y: 0 },
+        { x: slitU + spec.lidEndTaper, y: 0 },
         { x: pEnd, y: 0 },
         { x: pEnd, y: lid + bandH },
         { x: 0, y: lid + bandH },
       ],
-      [1, 0, 1.5, spec.lidCornerR, spec.bodyCornerR, spec.bodyCornerR],
+      [1, 0, spec.lidCornerR, spec.lidCornerR, spec.bodyCornerR, spec.bodyCornerR],
     ),
     lines: [
       { d: rect(0, lid, HINGE_GLUE, bandH), kind: 'glue', label: 'na T2' },
@@ -683,6 +686,8 @@ export function checkObrat(spec: ObratSpec): string[] {
   const flex = W - HINGE_GLUE;
   if (spec.lidEndX > flex - 1) e.push('Víčko zasahuje do ohybu závěsu.');
   if (spec.lidEndX < spec.cellSeams[2] + s + 0.5) e.push('Víčko nepřekrývá pravý okraj T3.');
+  if (spec.lidEndX - spec.lidEndTaper < spec.cellSeams[2] + 1.5)
+    e.push('Šikmý konec víčka nekryje pravý šev dutin.');
   if (spec.cellSeams[2] + s > flex - 2) e.push('Předek mincí je moc blízko ohybu závěsu.');
 
   for (const cell of obratCells(spec))

@@ -179,7 +179,7 @@ function pOwn(v,lid=0){const e=ease(cl(lid));const vy=w=>24+(w-24)*L(1,-1,e);let
   s+=shp(rp(v,[[0,24],[110,24],[110,66],[0,66]],[1,0,6,6]));
   s+=hatch(v,0,24,6,42)+line(v,3.5,27,3.5,62.5,'var(--seam)','1 .8',.25);
   s+=`<path d="${rp(v,[[104,26],[8.5,26],[8.5,66],[87.5,66],[87.5,44],[104,44]],[0,0,0,0,0,0])}" fill="none" stroke="var(--pos)" stroke-width=".25" stroke-dasharray="2 .8 .5 .8"/>`;
-  if(Math.abs(vy(0)-24)>.3){const top=vy(0);s+=shp(rp(v,[[7.5,24],[7.5,top],[110,top],[110,24]],e<.5?[0,1.5,4,0]:[0,1.5,4,0]),e<.5);}
+  if(Math.abs(vy(0)-24)>.3){const top=vy(0);s+=shp(rp(v,[[7.5,24],[10,top],[110,top],[110,24]],[0,4,4,0]),e<.5);}
   s+=line(v,7.5,24,110,24,'var(--fold)','2 .8 .5 .8');
   s+=`<circle cx="${f(v.x(7.5))}" cy="${f(v.y(23))}" r="${f(1*v.k)}" fill="none" stroke="var(--accent)" stroke-width=".2"/>`;
   return s}
@@ -197,7 +197,7 @@ function sheet(x,y,k,which,board=0){const v=view(x,y,k);let s=`<rect x="${f(x)}"
   if(which===1){s+=`<path d="${rp(view(x+51*k,y+36*k+56*k,k),[[0,-56],[108,-52],[108,90],[0,90]],[8,8,6,6])}" fill="none" stroke="var(--ink)" stroke-width=".25"/>`;
     s+=lbl(x+75*k,y+130*k,'T1','tsheet','middle')+`<rect x="${f(x+168*k)}" y="${f(y+58*k)}" width="${f(24*k)}" height="${f(24*k)}" fill="none" stroke="var(--ink)" stroke-width=".2"/>`;}
   else{s+=`<path d="${t2Path(view(x+15*k,y+20*k,k))}" fill="none" stroke="var(--ink)" stroke-width=".25"/>`+lbl(x+69*k,y+80*k,'T2','tsheet','middle');
-    s+=`<path d="${rp(view(x+15*k,y+122*k,k),[[0,24],[7.5,24],[7.5,0],[110,0],[110,66],[0,66]],[1,0,1.5,4,6,6])}" fill="none" stroke="var(--ink)" stroke-width=".25"/>`+lbl(x+70*k,y+170*k,'P','tsheet','middle');
+    s+=`<path d="${rp(view(x+15*k,y+122*k,k),[[0,24],[7.5,24],[10,0],[110,0],[110,66],[0,66]],[1,0,4,4,6,6])}" fill="none" stroke="var(--ink)" stroke-width=".25"/>`+lbl(x+70*k,y+170*k,'P','tsheet','middle');
     s+=`<rect x="${f(x+15*k)}" y="${f(y+199*k)}" width="${f(95.5*k)}" height="${f(40*k)}" rx="1" fill="none" stroke="var(--muted)" stroke-width=".2"/>`+lbl(x+60*k,y+222*k,'T3','tsheetm','middle');
     s+=`<circle cx="${f(x+21.5*k)}" cy="${f(y+250.5*k)}" r="${f(6.5*k)}" fill="none" stroke="var(--muted)" stroke-width=".2"/><circle cx="${f(x+40.5*k)}" cy="${f(y+250.5*k)}" r="${f(8.5*k)}" fill="none" stroke="var(--muted)" stroke-width=".2"/>`;}
   // kontrolní úsečky 50 mm: vodorovná a svislá
@@ -239,7 +239,7 @@ add('A','Vystřihněte T1, T2 a P','Vystřihněte T1, T2 a P po plné čáře. V
   const v2=view(46,L(13,10,sep),.32);
   s+=`<path d="${t2Path(v2)}" ${PAPER}/>`+hatch(v2,102,48,6,42)+lbl(v2.x(54),v2.y(64),'T2','tsheet','middle');
   const v3=view(46,L(58,62,sep),.32);
-  s+=shp(rp(v3,[[0,24],[7.5,24],[7.5,0],[110,0],[110,66],[0,66]],[1,0,1.5,4,6,6]))+line(v3,7.5,24,110,24,'var(--fold)','2 .8 .5 .8')+hatch(v3,0,24,6,42)+lbl(v3.x(56),v3.y(52),'P','tsheet','middle');
+  s+=shp(rp(v3,[[0,24],[7.5,24],[10,0],[110,0],[110,66],[0,66]],[1,0,4,4,6,6]))+line(v3,7.5,24,110,24,'var(--fold)','2 .8 .5 .8')+hatch(v3,0,24,6,42)+lbl(v3.x(56),v3.y(52),'P','tsheet','middle');
   // nůžky po výkusu T2
   const u=seg(t,.08,.5);if(u>0&&u<1){const px=L(30,78,u),py=u<.2?L(16,38,u/.2):u>.8?L(38,16,(u-.8)/.2):38;s+=scissors(v2.x(px),v2.y(py),u<.2?60:u>.8?-60:0)}
   s+=O(seg(t,.25,.5),lbl(v2.x(54),v2.y(-1.5),'výkus také','tsa halo','middle'));

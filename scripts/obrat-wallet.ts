@@ -239,7 +239,7 @@ export function buildObratSheets(spec: ObratSpec = OBRAT): { telo: string; dily:
       text(
         15 + parts.P.width / 2,
         122 + parts.P.height + 4.5,
-        'P: rohy u zářezu R1 a R1,5',
+        'P: rohy u zářezu R1 a R4, konec víčka šikmo',
         'xs',
         'middle',
       ),
