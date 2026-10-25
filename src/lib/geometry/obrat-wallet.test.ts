@@ -17,7 +17,6 @@ import {
   obratLidEndX,
   obratParts,
   obratReview,
-  obratTopGlueSpans,
 } from './obrat-wallet';
 
 describe('OBRAT R11 – přišitá kapsa na mince', () => {
@@ -125,21 +124,21 @@ describe('OBRAT R11 – přišitá kapsa na mince', () => {
     );
   });
 
-  it('lepené pásy: tělo 5 mm, modul 4 mm, horní pás za P přerušený kolem příruby B', () => {
+  it('lepení: tělo 5 mm, modul 4 mm, P na T2 celou plochou od y 52', () => {
     expect(OBRAT.bodyGlue).toBe(5);
-    expect(obratTopGlueSpans(OBRAT)).toEqual([
-      [5, 46],
-      [62, 103],
-    ]);
-    const k = obratClearances(OBRAT);
-    expect(k.reliefToTopGlue).toBe(1);
-    expect(k.topGlueGap).toBe(16);
-    expect(checkObrat({ ...OBRAT, topGlue: { top: 51.5, bottom: 57, flangeGap: 2.5 } })).toContain(
-      'Horní lepený pás zasahuje k odlehčovacímu otvoru.',
+    expect(OBRAT.faceGlueTop).toBe(52);
+    expect(obratClearances(OBRAT).reliefToFaceGlue).toBe(1);
+    expect(checkObrat({ ...OBRAT, faceGlueTop: 51.5 })).toContain(
+      'Lepená plocha P–T2 zasahuje k odlehčovacímu otvoru.',
     );
-    expect(checkObrat({ ...OBRAT, topGlue: { top: 52, bottom: 57, flangeGap: 5 } })).toContain(
-      'Mezerou v horním lepeném pásu projde mince.',
+    expect(checkObrat({ ...OBRAT, faceGlueTop: 57 })).toContain(
+      'Mezi ústím a lepenou plochou P–T2 zůstává škvíra, kam zapadne mince.',
     );
+  });
+
+  it('vyboulení jen dopředu: 20 + 10 potřebuje vytvarovat T3, samotná 50 ne', () => {
+    expect(obratCoinFit(OBRAT, 1, ['20', '10']).needsForming).toBe(true);
+    expect(obratCoinFit(OBRAT, 0, ['50']).needsForming).toBe(false);
     expect(checkObrat({ ...OBRAT, glueBand: 5 })).toContain(
       'Lepený pás P–T3 nesouhlasí s průnikem lepidla do dutin.',
     );

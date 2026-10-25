@@ -3,7 +3,7 @@ import { cardHolderProject } from '@/content/projects/card-holder/project';
 import { type LessonDefinition, type LessonPrint, type ProjectDefinition } from '@/content/schema';
 
 /**
- * OBRAT R11 – přišitá kapsa na mince (docs/design/obrat/iterace-11-prisita-kapsa.md).
+ * Šikmina (interně OBRAT) R11 – přišitá kapsa na mince (docs/design/obrat/iterace-11-prisita-kapsa.md).
  * Rozměry jsou jen na listech 1 a 2 (generátor `pnpm pattern:wallet-obrat`, model
  * src/lib/geometry/obrat-wallet.ts); lekce na ně odkazují. Prototyp zatím neověřený.
  */
@@ -36,7 +36,7 @@ const text = (id: string, label: string, hint?: string) => ({
 export const lessons: readonly LessonDefinition[] = [
   {
     slug: '01-design',
-    title: 'Jak OBRAT funguje a co do něj patří',
+    title: 'Jak Šikmina funguje a co do ní patří',
     order: 1,
     phaseSlug: 'workspace',
     estimatedMinutes: 15,
@@ -48,21 +48,21 @@ export const lessons: readonly LessonDefinition[] = [
     steps: [
       {
         id: 'closures',
-        title: 'Dva druky, dva přístupy',
-        body: 'Druk C zavírá klopu nad kartami a bankovkami. Na předku je přes celou šířku přišitá kapsa na mince se dvěma dutinami. Zavírá ji víčko, ohnutý horní okraj zadního dílu kapsy, a na něm druk B uprostřed. Karty vyndáte bez otevření mincí a naopak.',
+        title: 'Pochopte, co zavírá B a C',
+        body: 'Druk C zavírá klopu nad kartami a bankovkami. Na předku je přes celou šířku přišitá kapsa na mince se dvěma dutinami. Kapsu zavírá víčko s drukem B uprostřed. Víčko je ohnutý horní okraj zadního dílu kapsy. Karty vyndáte bez otevření mincí a naopak.',
         media: [],
         animationLinks: [animationLink('obratOverview')],
       },
       {
         id: 'contents',
         title: 'Připravte obsah',
-        body: 'Do každé ze dvou dutin patří nejvýš dvě mince. Spočítané skladby (levá | pravá dutina): 50 | 20 + 10, 20 + 10 | 5 + 1, 2 + 1 | 2 + 1. Lekce 6 zkouší tu s padesátikorunou. S padesátikorunou se vejdou jen tři mince. Padesátikoruna patří do dutiny vždy sama.',
+        body: 'Do každé ze dvou dutin dejte nejvýš dvě mince. Padesátikorunu dávejte do dutiny vždy samotnou. Spočítané skladby: vlevo 50 – vpravo 20 + 10; vlevo 20 + 10 – vpravo 5 + 1; vlevo 2 + 1 – vpravo 2 + 1. Lekce 6 zkouší skladbu s padesátikorunou.',
         media: [],
       },
       {
         id: 'prototype',
-        title: 'Stavíte první prototyp',
-        body: 'Střih je spočítaný, ale ještě nikdo podle něj peněženku neušil. Co nesedí nebo není jasné, zapište hned v kroku, kde se to stalo. Podle zápisů se střih a návod opraví.',
+        title: 'Zapisujte, co nesedí',
+        body: 'Střih je spočítaný, ale podle něj ještě nikdo peněženku neušil. Co nesedí nebo není jasné, zapište hned v kroku, kde se to stalo. Podle zápisů se opraví střih i návod.',
         media: [],
         records: [text('obrat-01-notes', 'Poznámky k návrhu')],
       },
@@ -90,8 +90,14 @@ export const lessons: readonly LessonDefinition[] = [
     steps: [
       {
         id: 'leather',
-        title: 'Jedna kůže na všechno',
-        body: 'Všechny díly řežte z jedné usně 1,2 mm. Kupte kus A3 (300 × 420 mm): díly zaberou asi 152 × 295 mm, ze zbytku jsou zkoušky a druhý P a T3, kdyby zkouška modulu v lekci 6 nevyšla. Na A4 se díly vejdou jen těsně a na nic dalšího nezbude. Kůži neztenčujte a celou nenamáčejte; navlhčuje se jen ohyb víčka (lekce 3 a 6).',
+        title: 'Kupte jednu useň A3',
+        body: 'Všechny díly řežte z jedné usně 1,2 mm. Kupte kus A3 (300 × 420 mm). Díly zaberou asi 152 × 295 mm. Ze zbytku budou zkoušky a druhý P a T3, kdyby zkouška kapsy v lekci 6 nevyšla. Na A4 se díly vejdou jen těsně a na nic dalšího nezbude.',
+        media: [],
+      },
+      {
+        id: 'leather-care',
+        title: 'Neztenčujte kůži ani ji nenamáčejte',
+        body: 'Kůži neztenčujte ani nenamáčejte celou. Navlhčujte jen víčko z rubu a líc T3 při tvarování dutin (lekce 3 a 6).',
         media: [],
       },
       {
@@ -113,7 +119,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'snaps',
         title: 'Připravte druky',
-        body: 'Druk Prym Anorak 12 mm s aplikátorem (stejný jako u pouzdra na mince). Na výrobek potřebujete dva celé druky (B a C) a jeden na zkoušku. Posuvkou změřte přírubu patice: nejvýš 11 mm.',
+        body: 'Připravte druky Prym Anorak 12 mm s aplikátorem, stejné jako u pouzdra na mince. Potřebujete dva celé druky na výrobek (B a C) a jeden na zkoušku. Posuvkou změřte přírubu patice (plochý kruhový okraj patice): nejvýš 11 mm.',
         media: [],
         records: [
           {
@@ -137,11 +143,11 @@ export const lessons: readonly LessonDefinition[] = [
     title: 'Nácvik švu, čtyř vrstev, dutiny a ohybu',
     order: 3,
     phaseSlug: 'practice',
-    estimatedMinutes: 120,
+    estimatedMinutes: 150,
     goal: 'Šev drží přes dvě i čtyři vrstvy, lepený pás líc na líc drží, mince projdou zkušební dutinou a víte, jak ohnout víčko.',
     materials: [
       'Odřezky stejné usně: čtyři proužky 70 × 25 mm, šest proužků 40 × 25 mm, kus 44 × 40 mm a kus 55 × 45 mm na dutinu.',
-      'Mince 50, 20 a 10 Kč, karta, tužka, houbička, svíčka, knihy jako závaží.',
+      'Mince 50, 20 a 10 Kč, karta, tužka, houbička, potravinová fólie, tuhý karton, utěrka, svíčka, knihy jako závaží.',
     ],
     requiredEquipment: [
       'cutting-mat',
@@ -158,30 +164,58 @@ export const lessons: readonly LessonDefinition[] = [
       'sandpaper',
       'masking-tape',
       'digital-caliper',
+      'scratch-awl',
     ],
     recommendedEquipment: [],
     prerequisiteLessons: ['02-material'],
     steps: [
       {
         id: 'two-layers',
-        title: 'Šev přes dvě vrstvy',
-        body: 'Dva proužky 70 × 25 mm slepte rubem k sobě jen v pásu 5 mm u dlouhé hrany a nechte zaschnout. Kružítkem narýsujte linii 3,5 mm od hrany. Prorazte vidličkami a ušijte sedlářským stehem.',
+        title: 'Slepte dvě vrstvy',
+        body: 'Dva proužky 70 × 25 mm slepte rubem k sobě. Lepidlo dejte jen do pásu 5 mm u jedné dlouhé hrany. Nechte zaschnout.',
         media: [],
-        animationLinks: [animationLink('saddleStitch', 'A1')],
         waits: [
           {
             id: 'practice-glue-dry',
             label: 'Zaschnutí lepidla',
             minutes: 60,
             basis: 'estimate',
-            blocksStepId: 'four-glue',
+            blocksStepId: 'two-layers-sew',
           },
         ],
       },
       {
+        id: 'two-layers-sew',
+        title: 'Ušijte dvě vrstvy',
+        body: 'Kružítkem narýsujte linii 3,5 mm od slepené hrany. Prorazte vidličkami. Ušijte sedlářským stehem.',
+        media: [],
+        animationLinks: [animationLink('saddleStitch', 'A1')],
+      },
+      {
         id: 'four-glue',
-        title: 'Slepte čtyři vrstvy',
-        body: 'Tak se šije kapsa na mince: T1, T2, P a T3. Ušitý pár slepte rubem k sobě i u druhé dlouhé hrany v pásu 5 mm (T1 + T2). Druhé dva proužky slepte rubem k sobě v pásu 4 mm (P + T3). Jeden konec obou párů zakulaťte na R6. Po hodině narýsujte na P + T3 linii 3,5 mm od hrany i kolem oblouku a prorazte jen tento pár, roh dvojhrotem. Nešijte. Na líci obou párů zdrsněte smirkem pás 5 mm u hrany a páry v něm slepte lícem k sobě za mokra, hrany zarovnané.',
+        title: 'Slepte dva páry',
+        body: 'Teď si vyzkoušíte čtyři vrstvy jako u kapsy na mince: T1, T2, P a T3. Ušitý pár slepte i podél druhé dlouhé hrany (pás 5 mm). To je T1 + T2. Zbylé dva proužky 70 × 25 mm slepte rubem k sobě v pásu 4 mm. To je P + T3. Jeden konec obou párů zakulaťte na R6 (zaoblení s poloměrem 6 mm). Nechte 1 h zaschnout.',
+        media: [],
+        waits: [
+          {
+            id: 'four-pair-dry',
+            label: 'Páry zaschnou (hodina)',
+            minutes: 60,
+            basis: 'text',
+            blocksStepId: 'four-punch-top',
+          },
+        ],
+      },
+      {
+        id: 'four-punch-top',
+        title: 'Prorazte jen pár P + T3',
+        body: 'Na P + T3 narýsujte linii 3,5 mm od hrany, i kolem oblouku. Prorazte jen tento pár, roh dvojhrotem. Nešijte.',
+        media: [],
+      },
+      {
+        id: 'four-face',
+        title: 'Slepte páry lícem k sobě',
+        body: 'Na líci obou párů zdrsněte smirkem pás 5 mm podél hrany, kde bude šev. Na P + T3 je to proražená hrana. Na T1 + T2 je to druhá, ještě neušitá hrana. Páry v tomto pásu slepte lícem k sobě za mokra. Hrany zarovnejte. Nechte do druhého dne pod závažím.',
         media: [],
         waits: [
           {
@@ -195,10 +229,9 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         id: 'four-layers',
-        title: 'Šev přes čtyři vrstvy',
-        body: 'Zkuste páry od sebe odloupnout nehtem: musí držet. Díry horního páru projeďte šídlem, ať nejsou zalepené. Hroty vidličky natřete svíčkou, vložte je do děr horního páru (P + T3) a prorazte všechny čtyři vrstvy, roh dvojhrotem. Posuvkou změřte tloušťku stohu a délku hrotů: jen rovnou část v plné šířce, bez zúžené špičky. Porovnejte velikost děr na horní a na spodní (čtvrté) vrstvě. Ušijte.',
+        title: 'Prorazte čtyři vrstvy',
+        body: 'Nejdřív zkontrolujte: páry od sebe nejdou odloupnout nehtem. Díry horního páru (P + T3) projeďte šídlem, ať nejsou zalepené. Hroty vidličky natřete svíčkou. Vložte je do děr horního páru a prorazte všechny čtyři vrstvy. Roh prorazte dvojhrotem.',
         media: [],
-        animationLinks: [animationLink('saddleStitch', 'A1')],
         records: [
           {
             kind: 'choice',
@@ -210,6 +243,15 @@ export const lessons: readonly LessonDefinition[] = [
               { value: 'shifted', label: 'Vrstvy se posunuly' },
             ],
           },
+        ],
+      },
+      {
+        id: 'four-sew',
+        title: 'Změřte a ušijte čtyři vrstvy',
+        body: 'Posuvkou změřte tloušťku stohu. Změřte délku hrotů: jen rovnou část v plné šířce, bez zúžené špičky. Porovnejte velikost děr na horní a na spodní (čtvrté) vrstvě. Ušijte. Pozor: když hroty nejsou aspoň o 2 mm delší než stoh, opatřete si před lekcí 6 vidličky s delšími hroty.',
+        media: [],
+        animationLinks: [animationLink('saddleStitch', 'A1')],
+        records: [
           {
             kind: 'number',
             id: 'obrat-03-stack',
@@ -223,21 +265,73 @@ export const lessons: readonly LessonDefinition[] = [
             label: 'Délka hrotů vidličky',
             unit: 'mm',
             decimals: 1,
-            hint: 'Hroty mají být aspoň o 2 mm delší, než je tloušťka stohu.',
+            hint: 'Hroty mají být aspoň o 2 mm delší než stoh.',
           },
           text('obrat-03-holes', 'Díry nahoře a na spodní vrstvě'),
         ],
       },
       {
         id: 'cell',
-        title: 'Zkušební dutina',
-        body: 'Kus 44 × 40 mm položte rubem na kus 55 × 45 mm: spodní hrany lícují, boky vystředěné (po 5,5 mm). Přilepte ho jen v pásech 4 mm podél obou boků a dna menšího kusu; okraje pásů si ohraničte maskovací páskou. Po zaschnutí narýsujte kružítkem linii 3,5 mm od boků a dna menšího kusu a ušijte. Mezi švy je 37 mm jako v dutině peněženky. Horní hrana zůstane otevřená. Vložte 20 + 10 Kč na sebe, pak 50 Kč: obě skladby musí jít vložit i vyndat prsty a uvnitř nesmí být lepidlo.',
+        title: 'Slepte zkušební dutinu',
+        body: 'Větší kus 55 × 45 mm položte rubem nahoru. Menší kus 44 × 40 mm na něj položte rubem dolů, rub na rub. Spodní hrany lícují (jsou zarovnané), boky vystřeďte (po 5,5 mm). Obrys menšího kusu obkreslete na větší. Na obou kusech ohraničte páskou pás 4 mm uvnitř podél boků a dna. Lepidlo dejte jen do těchto pásů. Kusy slepte. Nechte 1 h zaschnout.',
+        media: [],
+        waits: [
+          {
+            id: 'cell-glue-dry',
+            label: 'Dutina zaschne (hodina)',
+            minutes: 60,
+            basis: 'text',
+            blocksStepId: 'cell-sew',
+          },
+        ],
+      },
+      {
+        id: 'cell-sew',
+        title: 'Ušijte zkušební dutinu',
+        body: 'Kružítkem narýsujte linii 3,5 mm od boků a dna menšího kusu. Prorazte a ušijte. Horní hranu nechte otevřenou. Mezi švy je 37 mm jako v dutině peněženky.',
         media: [],
       },
       {
+        id: 'cell-form',
+        title: 'Vytvarujte dutinu',
+        body: 'Z maskovací pásky stočte smyčky lepivou stranou ven. Dejte je pod větší kus a přilepte ho jimi na tuhý karton. Dutina se pak vyboulí jen dopředu. Ke dnu dutiny vložte po jedné 20 a 10 Kč ve fólii. Líc menšího kusu lehce navlhčete. Prsty ho obtiskněte kolem mincí. Navrch dejte na 2 h utěrku a závaží. Stejně budete tvarovat dutiny v lekci 6.',
+        media: [],
+        waits: [
+          {
+            id: 'cell-press',
+            label: 'Utěrka a závaží (2 h)',
+            minutes: 120,
+            basis: 'text',
+            blocksStepId: 'cell-dry',
+          },
+        ],
+      },
+      {
+        id: 'cell-dry',
+        title: 'Nechte dutinu schnout',
+        body: 'Utěrku a závaží sundejte. Dutinu s mincemi nechte volně schnout do druhého dne.',
+        media: [],
+        waits: [
+          {
+            id: 'cell-forming-dry',
+            label: 'Vytvarovaná dutina do druhého dne',
+            minutes: 720,
+            basis: 'estimate',
+            blocksStepId: 'cell-test',
+          },
+        ],
+      },
+      {
+        id: 'cell-test',
+        title: 'Vyzkoušejte dutinu',
+        body: 'Mince vyndejte. Po jedné vložte 20 + 10 Kč, pak 50 Kč. Obě skladby musí jít vložit i vyndat prsty. Uvnitř nesmí být lepidlo. Porovnejte barvu navlhčeného líce s ostatní usní.',
+        media: [],
+        records: [text('obrat-03-forming', 'Tvarování dutiny a barva po navlhčení')],
+      },
+      {
         id: 'face-glue',
-        title: 'Zkouška lepeného pásu',
-        body: 'Tak drží P na líci T2. Na rubu jednoho proužku 40 × 25 mm narýsujte tužkou čáru ohybu 20 mm od konce. Na líci obou proužků zdrsněte smirkem pás 5 mm, který začíná 4 mm od čáry ohybu směrem od konce, a v něm proužky slepte lícem k sobě za mokra. Nechte do druhého dne pod závažím. Pak konec 100× otevřete na 90° a zavřete jako víčko: pás se nesmí začít odlupovat. Když se odlupuje, na pásy P–T2 v lekci 8 použijte rozpouštědlové kontaktní lepidlo (např. Pattex Butapren) a zkoušku s ním zopakujte. Kontaktní lepidlo se nanáší na obě plochy, nechá zavadnout podle návodu na obalu a díly se přikládají napoprvé přesně: posunout už nejdou.',
+        title: 'Slepte zkušební pás líc na líc',
+        body: 'Takhle bude držet P na líci T2. Na rubu jednoho proužku 40 × 25 mm narýsujte tužkou čáru ohybu 20 mm od konce. Konec za čarou je víčko. Pás 5 mm leží na druhé části proužku. Začíná 4 mm za čarou ohybu. Na líci obou proužků zdrsněte smirkem tento pás. Proužky v tomto pásu slepte lícem k sobě za mokra. Nechte do druhého dne pod závažím.',
         media: [],
         waits: [
           {
@@ -245,8 +339,15 @@ export const lessons: readonly LessonDefinition[] = [
             label: 'Lepený pás do druhého dne',
             minutes: 720,
             basis: 'estimate',
+            blocksStepId: 'face-glue-test',
           },
         ],
+      },
+      {
+        id: 'face-glue-test',
+        title: 'Vyzkoušejte lepený pás',
+        body: 'Konec za čarou ohybu 100× odklopte naplno a zavřete jako víčko. Pás se nesmí začít odlupovat. Když se odlupuje: v lekci 8 použijte na plochu P–T2 rozpouštědlové kontaktní lepidlo (např. Pattex Butapren). Zkoušku s ním zopakujte. Kontaktní lepidlo naneste na obě plochy. Nechte ho zavadnout (zaschnout, až nelepí na prst) podle návodu na obalu. Díly přiložte napoprvé přesně: posunout už nejdou.',
+        media: [],
         records: [
           {
             kind: 'choice',
@@ -261,8 +362,14 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         id: 'bend',
-        title: 'Ohyb víčka nasucho a navlhko',
-        body: 'Na dvou proužcích 40 × 25 mm narýsujte tužkou na rubu čáru ohybu 20 mm od konce. 2 mm od čáry ohybu směrem od konce a 7,5 mm od boku vysekněte otvor 2 mm. Vyřízněte obdélník mezi otvorem, bokem a ohýbaným koncem, jako zářez P. Pod každý dejte další proužek tak, aby jeho horní hrana ležela na středu otvoru, jako ústí T3. Konec prvního přehněte po čáře rubem dovnitř přes spodní proužek a přimáčkněte. Totéž s druhým, ale ohyb nejdřív navlhčete houbičkou z rubu. Obě dvojice nechte do druhého dne pod závažím. Pak každé víčko 50× otevřete na 90° a zavřete: líc v ohybu ani u otvoru nesmí prasknout a víčko se má vracet.',
+        title: 'Připravte dva vzorky víčka',
+        body: 'Vezměte dva proužky 40 × 25 mm. Na rubu každého narýsujte tužkou čáru ohybu 20 mm od konce. Vysekněte otvor 2 mm: 2 mm od čáry ohybu směrem od konce a 7,5 mm od boku. Vyřízněte obdélníček mezi otvorem, bokem a koncem proužku. Pod každý vzorek dejte další proužek 40 × 25 mm tak, aby jeho horní hrana procházela středem otvoru.',
+        media: [],
+      },
+      {
+        id: 'bend-fold',
+        title: 'Ohněte nasucho a navlhko',
+        body: 'Konec prvního vzorku přehněte po čáře rubem dovnitř přes spodní proužek. Přimáčkněte. U druhého vzorku nejdřív navlhčete houbičkou z rubu celý ohýbaný konec. Pak ho přehněte a přimáčkněte stejně. Obě dvojice nechte do druhého dne pod závažím.',
         media: [],
         waits: [
           {
@@ -270,8 +377,15 @@ export const lessons: readonly LessonDefinition[] = [
             label: 'Ohyb pod závažím do druhého dne',
             minutes: 720,
             basis: 'estimate',
+            blocksStepId: 'bend-test',
           },
         ],
+      },
+      {
+        id: 'bend-test',
+        title: 'Vyzkoušejte ohyb',
+        body: 'Každé víčko 50× odklopte naplno a zavřete. Líc v ohybu ani u otvoru nesmí prasknout. Víčko se má vracet.',
+        media: [],
         records: [text('obrat-03-result', 'Jak drží šev, čtyři vrstvy, dutina a ohyb')],
       },
     ],
@@ -291,7 +405,7 @@ export const lessons: readonly LessonDefinition[] = [
     order: 4,
     phaseSlug: 'practice',
     estimatedMinutes: 50,
-    goal: 'Umím osadit patici, najít objímku obtiskem, znám výšku zapnutého druku a vím, že patice v lepeném poli vydrží.',
+    goal: 'Umím osadit patici, najít objímku obtiskem, znám výšku zapnutého druku a vím, že patice v lepeném poli (lepená plocha mezi čarami 40 a 68 mm) vydrží.',
     materials: [
       'Tři odřezky stejné usně asi 40 × 40 mm, jeden zkušební druk, karta, knihy jako závaží.',
     ],
@@ -302,27 +416,28 @@ export const lessons: readonly LessonDefinition[] = [
       'snap-fastener',
       'scratch-awl',
       'contact-cement',
+      'digital-caliper',
     ],
-    recommendedEquipment: ['digital-caliper'],
+    recommendedEquipment: [],
     prerequisiteLessons: ['03-stitch'],
     steps: [
       {
         id: 'stud',
         title: 'Osaďte patici',
-        body: 'Řiďte se návodem v balení druku. Když vyžaduje otvor, vysekněte do prvního odřezku otvor 2 mm, a jen když dřík neprojde, 3 mm. Dřík prostrčte z rubu, hlavičku nasaďte na líc a aplikátorem s paličkou je spojte.',
+        body: 'Řiďte se návodem v balení druku. Když druk potřebuje otvor, vysekněte do prvního odřezku otvor 2 mm. Otvor 3 mm použijte jen tehdy, když dřík neprojde. Dřík prostrčte z rubu, hlavičku nasaďte na líc. Spojte je aplikátorem a paličkou.',
         media: [],
         animationLinks: [animationLink('snapSetter', 'B')],
       },
       {
         id: 'imprint',
         title: 'Najděte místo objímky obtiskem',
-        body: 'Druhý odřezek položte rubem na hlavičku a pevně přitiskněte, až se obtiskne. Střed obtisku propíchněte šídlem na líc. Stejně najdete objímky B a C na peněžence.',
+        body: 'Druhý odřezek položte rubem na hlavičku. Pevně přitiskněte, až se obtiskne. Střed obtisku propíchněte šídlem na líc. Stejně později najdete objímky B a C na peněžence.',
         media: [],
       },
       {
         id: 'socket',
         title: 'Osaďte objímku a vyzkoušejte',
-        body: 'V propíchnutém místě postupujte stejně jako u patice. Osaďte objímku: klobouček na líc, zdířku z rubu. Druk 20× zapněte a rozepněte. Nesmí se protáčet ani trhat kůži.',
+        body: 'V propíchnutém místě osaďte objímku stejně jako patici: klobouček na líc, zdířku z rubu. Druk 20× zapněte a rozepněte. Nesmí se protáčet ani trhat kůži. Změřte výšku zapnutého druku i s odřezky.',
         media: [],
         animationLinks: [animationLink('snapSetter', 'C')],
         records: [
@@ -338,8 +453,8 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         id: 'glued-tab',
-        title: 'Zkouška patice v lepeném poli',
-        body: 'Druk rozepněte. Odřezek s paticí přilepte rubem na třetí odřezek, přes přírubu patice. Tak drží patice B v poli mezi dutinami (T3 přilepený na P) i kryt K přes patici C. Vedle druku podložte z obou stran odřezky vyšší než druk, ať závaží tlačí na lepené místo, a nechte do druhého dne. Pak druk 50× zapněte a rozepněte a 20× přejeďte kartou přes třetí odřezek nad přírubou: nic se nesmí odlepit.',
+        title: 'Přilepte patici do lepeného pole',
+        body: 'Druk rozepněte. Odřezek s paticí přilepte rubem na třetí odřezek, přes přírubu patice. Tak se později lepí patice B a kryt K. Vedle druku podložte z obou stran odřezky vyšší než druk. Na ně dejte závaží, ať tlačí na lepené místo. Nechte do druhého dne.',
         media: [],
         waits: [
           {
@@ -347,8 +462,15 @@ export const lessons: readonly LessonDefinition[] = [
             label: 'Lepené pole do druhého dne',
             minutes: 720,
             basis: 'estimate',
+            blocksStepId: 'glued-tab-test',
           },
         ],
+      },
+      {
+        id: 'glued-tab-test',
+        title: 'Vyzkoušejte lepené pole',
+        body: 'Druk 50× zapněte a rozepněte. Kartou 20× přejeďte přes rub třetího odřezku nad přírubou. Nic se nesmí odlepit.',
+        media: [],
         records: [text('obrat-04-tab', 'Jak drží patice v lepeném poli')],
       },
     ],
@@ -382,7 +504,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'print',
         title: 'Vytiskněte a změřte',
-        body: 'Listy 1 a 2 vytiskněte na A4 v měřítku 100 %. Obě kontrolní úsečky musí měřit 50 mm. Když neměří, nastavte tisk znovu.',
+        body: 'Listy 1 a 2 vytiskněte na A4 v měřítku 100 %. Změřte obě kontrolní úsečky: musí mít 50 mm. Když nemají, nastavte tisk znovu.',
         media: [],
         printLink: 'pattern-sheets',
         printSheetId: ['telo', 'dily'],
@@ -391,28 +513,39 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'cut-model',
         title: 'Vystřihněte model',
-        body: 'Listy nalepte na tenký karton a vystřihněte T1, T2, P a T3 po plné čáře. Výkus T2 a zářezy P vystřihněte také. Kryt K model nepotřebuje.',
+        body: 'Listy nalepte na tenký karton. Vystřihněte T1, T2, P a T3 po plné čáře. Vystřihněte i výkus T2 a zářezy P. Kryt K pro model nepotřebujete.',
         media: [],
-        animationLinks: [animationLink('obratPaperModel', 'A2')],
+        animationLinks: [
+          animationLink('obratPaperModel', 'A2'),
+          animationLink('obratPaperModel', 'A3'),
+        ],
       },
       {
         id: 'module',
         title: 'Složte kapsu na mince',
-        body: 'P položte potiskem nahoru. T3 na něj položte potiskem nahoru: boky a dno lícují s P, horní hrana na čáře ústí. Přilepte páskou po bocích a dole. Do pravé dutiny (vpravo od pravého dělicího švu na T3) zasuňte mince 20 + 10 na sebe. Víčko ohněte po čáře dopředu přes T3, potiskem k T3. Druk B je uprostřed, na křížku T3.',
+        body: 'P položte potiskem nahoru. T3 na něj položte také potiskem nahoru: boky a dno lícují s P, horní hrana T3 (ústí) leží na čáře mezi kroužky na P. Přilepte T3 páskou po bocích a dole. Do pravé dutiny (vpravo od pravého dělicího švu na T3) zasuňte mince 20 + 10 na sebe. Víčko ohněte po čáře dopředu přes T3, potiskem k T3. Druk B je uprostřed, na křížku T3.',
         media: [],
-        animationLinks: [animationLink('obratPaperModel', 'B1')],
+        animationLinks: [
+          animationLink('obratPaperModel', 'B1'),
+          animationLink('obratPaperModel', 'B2'),
+          animationLink('obratPaperModel', 'B3'),
+        ],
       },
       {
         id: 'assemble',
         title: 'Složte model s obsahem',
-        body: 'T1 i T2 potiskem nahoru: T2 položte na T1 tak, aby boky a dno lícovaly, a přilepte páskou po bocích a dole. Vložte karty a bankovky. Kapsu položte víčkem k horní hraně, P nepotištěnou stranou na T2: boky a dno lícují s tělem. Přilepte ji páskou po bocích a dole.',
+        body: 'T1 položte potiskem nahoru. T2 na něj položte také potiskem nahoru, boky a dno lícují. Přilepte T2 páskou po bocích a dole. Vložte karty a bankovky. Kapsu položte nepotištěnou stranou P na T2, víčkem k horní hraně: boky a dno lícují s tělem. Přilepte kapsu páskou po bocích a dole.',
         media: [],
-        animationLinks: [animationLink('obratPaperModel', 'C1')],
+        animationLinks: [
+          animationLink('obratPaperModel', 'C1'),
+          animationLink('obratPaperModel', 'C2'),
+          animationLink('obratPaperModel', 'C3'),
+        ],
       },
       {
         id: 'check',
         title: 'Zkontrolujte klopu',
-        body: 'Klopu ohněte po čáře ohybu přes obsah a přidržte. Klopa má rezervu, takže může sahat až k víčku nebo přes něj. Musí zakrýt horní hranu karet i dno výkusu. Mezeru mezi hranou klopy a hřbetem ohybu víčka změřte 15 mm od levého boku.',
+        body: 'Klopu ohněte po čáře ohybu přes obsah a přidržte. Klopa musí zakrýt horní hranu karet i dno výkusu. Má rezervu, takže smí sahat až k víčku nebo přes něj. Změřte mezeru mezi hranou klopy a ohnutou hranou víčka, 15 mm od levého boku. Mezera smí být nejvýš 6,5 mm.',
         media: [],
         animationLinks: [animationLink('obratPaperModel', 'D1')],
         records: [
@@ -431,7 +564,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'lid',
         title: 'Otevřete víčko pod zavřenou klopou',
-        body: 'Klopu držte zavřenou. Víčko zvedněte asi na 90° a mince z pravé dutiny vyndejte prsty. Konce víčka u ohybu jsou asi 4 mm od linie švu na T3, ne méně než 3,5 mm.',
+        body: 'Klopu držte zavřenou. Víčko odklopte nahoru naplno, až se lehce opře o klopu. Mince z pravé dutiny vyndejte prsty. Když víčko otevřete jen do pravého úhlu, překáží nad ústím. Zkontrolujte konce víčka u ohybu: jsou asi 4 mm od čárkované linie švu u boku T3, ne méně než 3,5 mm.',
         media: [],
         animationLinks: [animationLink('obratPaperModel', 'D2')],
         records: [
@@ -440,7 +573,7 @@ export const lessons: readonly LessonDefinition[] = [
             id: 'obrat-05-lid',
             label: 'Víčko pod zavřenou klopou',
             options: [
-              { value: 'ok', label: 'Zvedne se na 90° a mince jdou vyndat' },
+              { value: 'ok', label: 'Odklopí se naplno a mince jdou vyndat' },
               { value: 'blocked', label: 'Klopa víčko nepustí nebo mince nejdou vyndat' },
             ],
           },
@@ -449,7 +582,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'short',
         title: 'Když klopa nebo víčko nesedí',
-        body: 'Klopa končí vlevo víc než 6,5 mm nad víčkem, nebo víčko nejde pod zavřenou klopou otevřít: zapište o kolik nebo co brání a dál nepokračujte. Střih se upraví.',
+        body: 'Platí, když klopa končí vlevo víc než 6,5 mm nad víčkem, nebo víčko nejde pod zavřenou klopou otevřít. Zapište, o kolik nebo co brání. Dál nepokračujte. Střih se upraví.',
         media: [],
         animationLinks: [animationLink('obratPaperModel', 'D3')],
       },
@@ -469,10 +602,13 @@ export const lessons: readonly LessonDefinition[] = [
     title: 'Kapsa na mince: P, T3 a víčko',
     order: 6,
     phaseSlug: 'build',
-    estimatedMinutes: 120,
+    estimatedMinutes: 180,
     goal: 'Kapsa drží mince při třesení, konce víčka neodstávají a mince jdou vyndat prsty.',
     materials: [
-      'Kůže z lekce 2, tužka, houbička, potravinová fólie, měkká podložka, dva odřezky, karta, vlhký hadřík, knihy jako závaží, mince ze skladby, miska.',
+      'Kůže z lekce 2, papírový model z lekce 5, odřezky.',
+      'Mince 50, 2 × 20, 2 × 10 a 2 × 1 Kč, potravinová fólie, miska, karta.',
+      'Na tvarování: tuhý karton, proužek tuhého kartonu, pomocná nit, houbička, pečicí papír, měkká podložka (složená utěrka), knihy jako závaží.',
+      'Dále: tužka, nůžky, vlhký hadřík.',
     ],
     requiredEquipment: [
       'masking-tape',
@@ -504,89 +640,176 @@ export const lessons: readonly LessonDefinition[] = [
     steps: [
       {
         id: 'cut',
-        title: 'Vyřízněte P a T3',
-        body: 'List 2 nahrubo rozstříhejte na díly. P položte ke spodnímu okraji kůže na rub, T3 vedle P na líc, mimo pruh nad P. Na A3 položte T3 stejným směrem jako P, na A4 se vejde jen na výšku. Nad P nechte nejméně 230 mm pro T1 a T2. Přichyťte páskou. Nejdřív vysekněte otvory: oba odlehčovací kroužky v rozích zářezů P výsečníkem 2 mm a otvor B ve středu křížku na T3 výsečníkem z lekce 4. Když druk v lekci 4 otvor nepotřeboval, střed křížku jen propíchněte šídlem. Pak řežte po plné čáře.',
+        title: 'Přiložte P a T3 na kůži',
+        body: 'List 2 nahrubo rozstříhejte na díly. P položte na rub kůže, ke spodnímu okraji. Nad P nechte nejméně 230 mm pro T1 a T2. Kůži otočte lícem nahoru. T3 přiložte vedle místa P, ne nad něj (tam budou T1 a T2). Na A3 otočte T3 stejně jako P, na A4 ho dejte na výšku. Díly přichyťte páskou.',
         media: [],
         printLink: 'pattern-sheets',
         printSheetId: 'dily',
+        animationLinks: [animationLink('obratCoinModule', 'A1')],
+      },
+      {
+        id: 'cut-holes',
+        title: 'Vysekněte otvory a vyřízněte P a T3',
+        body: 'Nejdřív vysekněte otvory. V rozích zářezů P vysekněte oba odlehčovací kroužky výsečníkem 2 mm (otvory v rozích, aby se kůže dál nenatrhla). Otvor B ve středu křížku na T3 vysekněte výsečníkem z lekce 4. Když druk v lekci 4 otvor nepotřeboval, střed křížku jen propíchněte šídlem. Pak P i T3 vyřízněte po plné čáře.',
+        media: [],
         recalls: [{ fieldId: 'obrat-04-punch', label: 'Výsečník z lekce 4' }],
-        animationLinks: [animationLink('obratCoinModule', 'A1'), animationLink('rulerCut', 'C1')],
+        animationLinks: [
+          animationLink('obratCoinModule', 'A2'),
+          animationLink('obratCoinModule', 'A3'),
+          animationLink('rulerCut', 'C1'),
+        ],
       },
       {
         id: 'mark',
-        title: 'Přeneste čáry',
-        body: 'Rub P: konce čáry ohybu víčka propíchněte skrz list šídlem a spojte tužkou podle pravítka. Čára ústí T3 vede středy obou odlehčovacích otvorů. Pole pro lepidlo vyznačte svisle 40 a 68 mm od levé hrany, od ústí po dno, stejně i na rubu T3. Líc T3: konce obou dělicích švů propíchněte skrz list, vpichy budou krajní díry švu. Na líci P nic nepropichujte. List sundejte.',
+        title: 'Přeneste ohyb a ústí na rub P',
+        body: 'Konce čáry ohybu víčka propíchněte šídlem skrz list na rub P. List z P sundejte. Vpichy spojte tužkou podle pravítka. Čáru ústí T3 narýsujte přes středy obou odlehčovacích otvorů. Obě čáry táhněte jen lehce: při otevřeném víčku je část vidět.',
         media: [],
         animationLinks: [animationLink('obratCoinModule', 'B1')],
       },
       {
+        id: 'mark-field',
+        title: 'Vyznačte pole pro lepidlo na rub P',
+        body: 'Na rub P narýsujte svislé čáry 40 a 68 mm od levé hrany, od ústí po dno. Plocha mezi nimi je pole pro lepidlo.',
+        media: [],
+        animationLinks: [animationLink('obratCoinModule', 'B2')],
+      },
+      {
+        id: 'mark-t3',
+        title: 'Přeneste čáry na T3',
+        body: 'Pole pro lepidlo vyznačte stejně i na rubu T3. Na líci T3 propíchněte skrz list konce obou dělicích švů. Vpichy budou krajní díry švu. Do P nepropichujte. List sundejte.',
+        media: [],
+        animationLinks: [animationLink('obratCoinModule', 'B3')],
+      },
+      {
         id: 'rough-p',
         title: 'Zdrsněte líc P',
-        body: 'Na líc P se v lekci 8 lepí T2 a lepidlo drží jen na zdrsněném líci. Teď je P rovné. Na líci P narýsujte tužkou pásy 5 mm podél boků a dna, boky do 40 mm nad dno, a horní pás 33–38 mm nad dnem, 5 mm od boků, s mezerou 16 mm uprostřed. Čáry u boků končete 1 mm pod horní hranou P, ať nejsou vidět. Pásy zdrsněte smirkem.',
+        body: 'Na líc P se v lekci 8 lepí T2. Lepidlo drží jen na zdrsněném líci. Papírový T2 z listu 2 vystřihněte nůžkami po plné čáře. Přiložte ho potiskem nahoru na líc P: dno a boky lícují. Rohy šrafy (šrafovaná plocha pro lepidlo) označte šídlem jen důlkem, neprorážejte. Důlky u boků dejte 1 mm pod horní hranu P, ať nejsou vidět. Důlky spojte tužkou. Celou plochu šrafy zdrsněte smirkem, u boků až k horní hraně P.',
         media: [],
         animationLinks: [animationLink('obratCoinModule', 'B4')],
       },
       {
         id: 'edges',
         title: 'Dokončete hrany ústí, zářezů a víčka',
-        body: 'Horní hranu T3 (ústí), hrany zářezů P a hrany víčka zbruste; máte-li ořezávač hran, srazte ústí T3 jen z líce (rubem leží na P), zářezy a víčko z líce i z rubu. Pak zaleštěte. Po přilepení se k nim hůř dostanete. Boky a dno se dokončí až s tělem.',
+        body: 'Zbruste horní hranu T3 (ústí), hrany zářezů P a hrany víčka. Máte-li ořezávač hran, ústí T3 srazte jen z líce (rub bude přilepený na P). Zářezy a víčko srazte z líce i z rubu. Pak zaleštěte. Po přilepení se k těmto hranám hůř dostanete. Boky a dno dokončíte až s tělem.',
         media: [],
         animationLinks: [animationLink('obratCoinModule', 'C1'), animationLink('edges', 'A')],
       },
       {
         id: 'stud-b',
-        title: 'Patice B do T3',
+        title: 'Osaďte patici B do T3',
         body: 'Osaďte patici B: hlavička na líc T3, dřík z rubu.',
         media: [],
         animationLinks: [animationLink('obratCoinModule', 'C2'), animationLink('snapSetter', 'B')],
       },
       {
         id: 'glue',
-        title: 'Přilepte T3 na P',
-        body: 'Lepidlo naneste tence na rub T3 a rub P do pásů 4 mm podél boků a dna a do celého pole mezi čarami 40 a 68 mm, přes přírubu B. Pod dutiny lepidlo nedávejte. Okraje pásů a pole si ohraničte maskovací páskou, ať lepidlo nevyteče do dutin ani k otvorům; pásku sundejte, než T3 přiložíte. T3 přiložte hned za mokra: boky a dno lícují s P, horní hrana na čáře ústí. Přebytek setřete vlhkým hadříkem a přitlačte přes hadřík. Po stranách hlavičky B položte podél pásů a pole odřezky vyšší než hlavička, na ně závaží, a nechte do druhého dne.',
+        title: 'Naneste lepidlo na T3 a P',
+        body: 'Okraje pásů a pole ohraničte maskovací páskou, ať lepidlo nevyteče do dutin ani k otvorům. Lepidlo naneste tence na rub T3 i rub P. Dejte ho do pásů 4 mm podél boků a dna a do celého pole mezi čarami 40 a 68 mm, přes přírubu B. Pod dutiny lepidlo nedávejte. Pásku sundejte.',
         media: [],
-        animationLinks: [
-          animationLink('obratCoinModule', 'C3'),
-          animationLink('obratCoinModule', 'C4'),
-        ],
+        animationLinks: [animationLink('obratCoinModule', 'C3')],
+      },
+      {
+        id: 'glue-place',
+        title: 'Přiložte T3 a zatižte',
+        body: 'T3 přiložte hned za mokra: boky a dno lícují s P, horní hrana na čáře ústí. Přebytek setřete vlhkým hadříkem. Přitlačte přes hadřík. Po stranách hlavičky B položte podél pásů a pole odřezky vyšší než hlavička. Na ně dejte závaží a nechte do druhého dne.',
+        media: [],
+        animationLinks: [animationLink('obratCoinModule', 'C4')],
         waits: [
           {
             id: 'glue-dry',
             label: 'Lepidlo pod závažím do druhého dne',
             minutes: 720,
             basis: 'estimate',
-            blocksStepId: 'sew',
+            blocksStepId: 'top-edges',
           },
         ],
       },
       {
+        id: 'top-edges',
+        title: 'Srovnejte horní hrany u boků',
+        body: 'Krátké horní hrany kapsy u boků (P + T3) srovnejte smirkem. Pak je zaleštěte.',
+        media: [],
+        animationLinks: [animationLink('edges', 'A')],
+      },
+      {
         id: 'sew',
+        title: 'Prorazte dělicí švy',
+        body: 'Na líci T3 nekreslete tužkou: je to předek peněženky. Pravítko přiložte k oběma vpichům švu a vidličku o něj opřete. Vpichy jsou první a poslední díra. Šev má 28 mm (7 roztečí; rozteč je vzdálenost mezi sousedními dírami). S U-švem (šev podél boků a dna, narýsujete ho v dalším kroku) nemá společnou díru. Prorazte oba švy.',
+        media: [],
+        animationLinks: [animationLink('obratCoinModule', 'D1')],
+      },
+      {
+        id: 'sew-stitch',
         title: 'Ušijte dělicí švy',
-        body: 'Na líci T3 spojte vpichy každého dělicího švu podle pravítka; vpichy jsou krajní díry. Šev vede od 3 mm pod ústím do 5,5 mm nad linií dna: 28 mm, 7 roztečí. S U-švem nemá společnou díru. Prorazte vidličkami a ušijte. Oba konce zajistěte dvojitým stehem.',
+        body: 'Na každý šev odměřte asi 40 cm nitě a ušijte ho. Oba konce zajistěte dvojitým stehem. Stehy na líci P poklepejte paličkou přes odřezek. Mají být v lepené ploše co nejnižší.',
         media: [],
         animationLinks: [
-          animationLink('obratCoinModule', 'D1'),
+          animationLink('obratCoinModule', 'D2'),
           animationLink('saddleStitch', 'A1'),
         ],
       },
       {
         id: 'punch',
-        title: 'Prorazte U-linii, nešijte',
-        body: 'Na líci T3 narýsujte kružítkem linii 3,5 mm od boků a dna. Pod kapsu podložte dva odřezky stejné usně, větší než kapsa, ať hroty projdou stejně hluboko jako v lekci 8. Každou vidličku označte z jedné strany páskou (tato strana k hraně) a stejně ji držte i v lekci 8. Začněte dírou 2 mm pod ústím na boku a prorážejte dolů čtyřhrotem, roh dvojhrotem, dno, druhý roh a druhý bok nahoru k díře 2 mm pod ústím. Rozteč dorovnejte uprostřed dna jednohrotem. Prorážíte P i T3, asi 43 děr. Nešijte: dírami se v lekci 8 ušije celé tělo.',
+        title: 'Narýsujte U-linii a připravte vidličky',
+        body: 'Na líci T3 narýsujte kružítkem linii 3,5 mm od boků a dna. Pod kapsu podložte dva odřezky stejné usně, větší než kapsa. Hroty tak projdou stejně hluboko jako v lekci 8. Každou vidličku označte z jedné strany páskou. Tuto stranu držte k hraně, teď i v lekci 8.',
         media: [],
-        animationLinks: [animationLink('obratCoinModule', 'D2')],
+        animationLinks: [animationLink('obratCoinModule', 'D3')],
+      },
+      {
+        id: 'punch-holes',
+        title: 'Prorazte U-linii, nešijte',
+        body: 'Začněte dírou 2 mm pod ústím na boku. Prorážejte dolů čtyřhrotem. Pokračujte rohem dvojhrotem, dnem, druhým rohem a druhým bokem nahoru k díře 2 mm pod ústím. Rozteč dorovnejte uprostřed dna jednohrotem. Prorážíte P i T3, asi 43 děr. Nešijte: dírami se v lekci 8 ušije celé tělo.',
+        media: [],
+        animationLinks: [animationLink('obratCoinModule', 'D4')],
       },
       {
         id: 'lid-fold',
-        title: 'Navlhčete a ohněte víčko',
-        body: 'Celé víčko včetně čáry ohybu navlhčete rovnoměrně houbičkou z rubu, pod čáru ohybu ne. Mezi víčko a T3 dejte potravinovou fólii. Víčko ohněte po čáře dopředu přes ústí na T3, rubem dovnitř. Na víčko dejte měkkou podložku kvůli hlavičce B, na ni závaží, a nechte do druhého dne.',
+        title: 'Provlékněte pomocnou nit',
+        body: 'Dírami po celé U-linii provlékněte pomocnou nit jednou jehlou, jednoduchým stehem. Konce zavažte. Nit drží boky a dno dutin při tvarování. Vytáhnete ji až po zkoušce.',
         media: [],
         animationLinks: [animationLink('obratCoinModule', 'E1')],
+      },
+      {
+        id: 'mount',
+        title: 'Připevněte kapsu na karton',
+        body: 'Z maskovací pásky stočte smyčky lepivou stranou ven. Dejte je pod P a přilepte jimi kapsu na tuhý karton. Dutiny se pak vyboulí jen dopředu.',
+        media: [],
+        animationLinks: [animationLink('obratCoinModule', 'E2')],
+      },
+      {
+        id: 'form',
+        title: 'Obtiskněte dutiny kolem mincí',
+        body: 'Do každé dutiny vložte ke dnu po jedné 20 a 10 Kč zabalené v potravinové fólii. Konec fólie nechte vyčnívat z ústí. Celý líc T3 lehce a rovnoměrně navlhčete houbičkou, nenamáčejte. Prsty líc obtiskněte kolem mincí.',
+        media: [],
+        animationLinks: [animationLink('obratCoinModule', 'E3')],
+      },
+      {
+        id: 'lid-bend',
+        title: 'Ohněte víčko',
+        body: 'Celé víčko včetně čáry ohybu navlhčete z rubu. Pod čarou ohybu (na straně kapsy) nevlhčete. Mezi víčko a T3 dejte pečicí papír. Víčko ohněte po čáře dopředu přes ústí na T3, rubem dovnitř. Ohyb pevně přetáhněte hranou pravítka přes papír. Na ohyb položte úzký proužek tuhého kartonu. Přes celou kapsu dejte na 2 h měkkou podložku (složenou utěrku) a závaží.',
+        media: [],
+        animationLinks: [animationLink('obratCoinModule', 'E4')],
+        waits: [
+          {
+            id: 'lid-press',
+            label: 'Utěrka a závaží na víčku (2 h)',
+            minutes: 120,
+            basis: 'text',
+            blocksStepId: 'lid-dry',
+          },
+        ],
+      },
+      {
+        id: 'lid-dry',
+        title: 'Nechte dutiny a víčko schnout',
+        body: 'Utěrku i závaží sundejte. Na proužek kartonu položte ocelové pravítko. Pravítko zatižte až za kapsou, ať netlačí na dutiny. Dutiny s mincemi nechte volně schnout asi 24 hodin, dokud líc T3 nezesvětlá.',
+        media: [],
+        animationLinks: [animationLink('obratCoinModule', 'E5')],
         waits: [
           {
             id: 'lid-overnight',
-            label: 'Víčko pod závažím do druhého dne',
-            minutes: 720,
+            label: 'Dutiny a víčko schnou (asi 24 h)',
+            minutes: 1440,
             basis: 'estimate',
             blocksStepId: 'lid',
           },
@@ -594,34 +817,56 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         id: 'lid',
-        title: 'Seřízněte víčko na 20 mm',
-        body: 'Víčko má na ohyb rezervu 4 mm. Na ohnutém víčku změřte od hřbetu ohybu k volné hraně a zapište, o kolik je víc než 20 mm. Víčko narovnejte a kružítkem nastaveným na tento rozdíl veďte čáru na rubu podél volné hrany. Řežte podle pravítka. Oba rohy znovu zaoblete na R4: roh víčka papírového P vyříznutého s kůží přiložte na šikmý konec a novou hranu, oblouk obkreslete na rubu a řežte krátkými tahy. Novou hranu a rohy zbruste a zaleštěte.',
+        title: 'Vyndejte mince a změřte víčko',
+        body: 'Mince vyndejte. Ústí T3 a šikmé konce víčka přeleštěte. Víčko má na ohyb rezervu 4 mm. Na ohnutém víčku změřte vzdálenost od hřbetu ohybu (ohnuté hrany víčka) k volné hraně. Zapište, o kolik je víc než 20 mm.',
         media: [],
-        animationLinks: [animationLink('obratCoinModule', 'E2'), animationLink('rulerCut', 'C1')],
+        animationLinks: [animationLink('obratCoinModule', 'E6')],
         records: [
           {
             kind: 'number',
             id: 'obrat-06-lid-trim',
-            label: 'Víčko seříznuté o',
+            label: 'O kolik je víčko delší než 20 mm',
             unit: 'mm',
             decimals: 1,
           },
         ],
       },
       {
-        id: 'socket-b',
-        title: 'Objímka B podle obtisku',
-        body: 'Víčko ohněte přes T3 a přitiskněte na hlavičku B, ať se obtiskne. Víčko narovnejte a položte na podložku. Střed obtisku propíchněte na líc víčka, otvor jen, když ho druk potřebuje (jako u patice), a osaďte objímku: klobouček na líc víčka.',
+        id: 'lid-trim',
+        title: 'Seřízněte víčko na 20 mm',
+        body: 'Víčko narovnejte. Kapsa může zůstat na kartonu. Kružítko nastavte na zapsaný rozdíl a veďte čáru na rubu podél volné hrany. Řežte podle pravítka. Oba rohy znovu zaoblete na R4 (zaoblení s poloměrem 4 mm). Vezměte kartonový P z modelu (lekce 5). Jeho roh víčka přiložte k šikmému konci a nové hraně. Oblouk obkreslete na rubu a řežte krátkými tahy. Novou hranu a rohy zbruste a zaleštěte.',
         media: [],
-        animationLinks: [animationLink('obratCoinModule', 'E4'), animationLink('snapSetter', 'C')],
+        recalls: [{ fieldId: 'obrat-06-lid-trim', label: 'O kolik je víčko delší než 20 mm' }],
+        animationLinks: [
+          animationLink('obratCoinModule', 'E7'),
+          animationLink('obratCoinModule', 'E8'),
+          animationLink('rulerCut', 'C1'),
+        ],
+      },
+      {
+        id: 'socket-b',
+        title: 'Osaďte objímku B podle obtisku',
+        body: 'Víčko ohněte přes T3 a přitiskněte na hlavičku B, ať se obtiskne. Víčko narovnejte. Pod víčko dejte tvrdou prorážecí podložku, kapsa může zůstat na kartonu. Střed obtisku propíchněte na líc víčka. Otvor vysekněte jen, když ho druk potřebuje (jako u patice). Osaďte objímku: klobouček na líc víčka.',
+        media: [],
+        animationLinks: [animationLink('obratCoinModule', 'E9'), animationLink('snapSetter', 'C')],
         recalls: [{ fieldId: 'obrat-04-punch', label: 'Výsečník z lekce 4' }],
       },
       {
         id: 'test',
-        title: 'Zkouška s pomocnou nití',
-        body: 'Dírami po celé U-linii provlékněte pomocnou nit jednou jehlou, jednoduchým stehem, a konce zavažte. Dutiny mají teď konečný rozměr. Vložte skladbu 50 | 20 + 10 a zavřete B. Kapsu otočte ústím dolů nad miskou a 30× zatřeste. Opakujte s 1 Kč | 1 Kč. Nic nesmí vypadnout a konce víčka s mincemi nesmí odstávat: karta (0,76 mm) se pod konec víčka nesmí zasunout. Pak B 50× rozepněte a zapněte: pole s paticí se nesmí odlepit. Mince vyndejte prsty a pomocnou nit vytáhněte.',
+        title: 'Zatřeste kapsou s mincemi',
+        body: 'Pomocnou nit nechte v dírách. Kapsu nechte přichycenou na kartonu, jako by už byla na těle. Po jedné vložte mince vlevo 50, vpravo 20 + 10 a zavřete B. Kapsu i s kartonem otočte ústím dolů nad miskou a 30× zatřeste. Totéž zopakujte s 1 Kč vlevo, 1 Kč vpravo. Nic nesmí vypadnout. Pod konec víčka s mincemi se nesmí zasunout karta (0,76 mm).',
         media: [],
-        animationLinks: [animationLink('obratCoinModule', 'F1')],
+        animationLinks: [
+          animationLink('obratCoinModule', 'F1'),
+          animationLink('obratCoinModule', 'F2'),
+        ],
+      },
+      {
+        id: 'test-snap',
+        title: 'Vyzkoušejte B a vyndejte mince',
+        body: 'B 50× rozepněte a zapněte. Pole s paticí se nesmí odlepit. Mince vyndejte prsty. Pomocnou nit vytáhněte. Zapište výsledek celé zkoušky.',
+        media: [],
+        animationLinks: [animationLink('obratCoinModule', 'F3')],
         records: [
           {
             kind: 'choice',
@@ -641,7 +886,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'fail',
         title: 'Když zkouška nevyjde',
-        body: 'Kapsu neopravujte další vrstvou ani lepidlem. Zapište, kde mince vyklouzla, který konec víčka odstává nebo co se odlepilo, a dál nepokračujte. Střih se upraví a P s T3 se vyrobí znovu.',
+        body: 'Kapsu neopravujte další vrstvou ani lepidlem. Zapište, kde mince vyklouzla, který konec víčka odstává nebo co se odlepilo. Dál nepokračujte. Střih se upraví a P s T3 vyrobíte znovu.',
         media: [],
       },
     ],
@@ -662,7 +907,7 @@ export const lessons: readonly LessonDefinition[] = [
     phaseSlug: 'build',
     estimatedMinutes: 75,
     goal: 'T1 a T2 jsou vyříznuté a na T2 drží patice C s krytem.',
-    materials: ['Kůže z lekce 2, tužka, karta, knihy jako závaží.'],
+    materials: ['Kůže z lekce 2, tužka, karta, odřezky, vlhký hadřík, knihy jako závaží.'],
     requiredEquipment: [
       'masking-tape',
       'cutting-mat',
@@ -689,55 +934,84 @@ export const lessons: readonly LessonDefinition[] = [
         source: 'pattern-sheets',
         sheetId: 'dily',
         copies: 1,
-        purpose: 'řez T2 a krytu K (papírový T2 se hodí v lekci 8)',
+        purpose: 'řez T2 a krytu K (v lekci 8 použijete papírový T2 z lekce 6)',
       },
     ],
     steps: [
       {
         id: 'cut',
-        title: 'Vyřízněte T1, T2 a kryt',
-        body: 'List 1 přiložte na rub kůže nad P, přichyťte páskou a T1 vyřízněte po plné čáře, klopu i s rezervou pomalu, krátkými tahy. Pak kůži otočte lícem nahoru a T2 z listu 2 přichyťte do volného místa. Na T2 nejdřív vysekněte otvor C ve středu křížku výsečníkem z lekce 4; když druk v lekci 4 otvor nepotřeboval, střed křížku jen propíchněte šídlem. Pak T2 vyřízněte, výkus pomalu. Nakonec kryt K (Ø 17) přiložte na rub a vyřízněte pomalu, krátkými tahy. Tečkované kolečko Ø 13 z kůže neřežte, je to jen papírová měrka.',
+        title: 'Vyřízněte T1',
+        body: 'List 1 přiložte na rub kůže nad místo, odkud jste vyřízli P. Přichyťte ho páskou. T1 vyřízněte po plné čáře. Klopu i s rezervou řežte pomalu, krátkými tahy.',
         media: [],
         printLink: 'pattern-sheets',
         printSheetId: ['telo', 'dily'],
+        animationLinks: [
+          animationLink('obratBody', 'A1'),
+          animationLink('obratBody', 'A2'),
+          animationLink('obratBody', 'A3'),
+          animationLink('curveCut', 'C1'),
+        ],
+      },
+      {
+        id: 'cut-t2',
+        title: 'Vyřízněte T2 a kryt K',
+        body: 'Kůži otočte lícem nahoru. T2 z listu 2 přichyťte do volného místa. Nejdřív vysekněte otvor C ve středu křížku výsečníkem z lekce 4. Když druk v lekci 4 otvor nepotřeboval, střed křížku jen propíchněte šídlem. Pak T2 vyřízněte, výkus pomalu. Kůži znovu otočte rubem nahoru a přiložte kryt K (Ø 17). Vyřízněte ho pomalu, krátkými tahy. Tečkované kolečko Ø 13 z kůže neřežte, je to jen papírová měrka.',
+        media: [],
         recalls: [{ fieldId: 'obrat-04-punch', label: 'Výsečník z lekce 4' }],
-        animationLinks: [animationLink('obratBody', 'A1'), animationLink('curveCut', 'C1')],
+        animationLinks: [
+          animationLink('obratBody', 'A4'),
+          animationLink('obratBody', 'A5'),
+          animationLink('obratBody', 'A6'),
+          animationLink('obratBody', 'A7'),
+        ],
       },
       {
         id: 'mark',
-        title: 'Ohyb klopy na rub T1',
-        body: 'Konce čáry ohybu propíchněte skrz list na rub T1 a spojte tužkou podle pravítka.',
+        title: 'Přeneste ohyb klopy na rub T1',
+        body: 'Konce čáry ohybu propíchněte skrz list na rub T1. List sundejte. Vpichy spojte tužkou podle pravítka.',
         media: [],
-        animationLinks: [animationLink('obratBody', 'B1')],
+        animationLinks: [animationLink('obratBody', 'B1'), animationLink('obratBody', 'B2')],
       },
       {
         id: 'edge',
         title: 'Dokončete horní hranu T2',
-        body: 'Ramena a výkus T2 zbruste; máte-li ořezávač hran, srazte je z líce i z rubu. Pak zaleštěte.',
+        body: 'Zbruste ramena a výkus T2. Máte-li ořezávač hran, srazte je z líce i z rubu. Pak zaleštěte.',
         media: [],
         animationLinks: [animationLink('obratBody', 'C1'), animationLink('edges', 'A')],
       },
       {
         id: 'stud-c',
-        title: 'Patice C',
+        title: 'Osaďte patici C',
         body: 'Osaďte patici C: hlavička na líc T2, dřík z rubu.',
         media: [],
         animationLinks: [animationLink('obratBody', 'C2'), animationLink('snapSetter', 'B')],
       },
       {
         id: 'cover',
-        title: 'Kryt přes patici C',
-        body: 'Okraj krytu K zaoblete smirkem. Kryt přilepte rubem na rub T2 přes patici C, lícem ke kartám. T2 položte lícem dolů a vedle hlavičky C podložte odřezky, ať závaží kryt přitlačí; nebo kryt přes hadřík poklepejte paličkou. Nechte do druhého dne. Pak 20× zasuňte a vysuňte kartu: nesmí se zachytit a kryt se nesmí odlepit.',
+        title: 'Přilepte kryt přes patici C',
+        body: 'Okraj krytu K zaoblete smirkem. Kryt přilepte rubem na rub T2 přes patici C. T2 položte lícem dolů na odřezky vyšší než hlavička C, vedle ní. Na kryt dejte závaží. Nechte do druhého dne.',
         media: [],
-        animationLinks: [animationLink('obratBody', 'D1')],
+        animationLinks: [
+          animationLink('obratBody', 'D1'),
+          animationLink('obratBody', 'D2'),
+          animationLink('obratBody', 'D3'),
+        ],
         waits: [
           {
             id: 'cover-dry',
             label: 'Kryt do druhého dne',
             minutes: 720,
             basis: 'estimate',
+            blocksStepId: 'cover-test',
           },
         ],
+      },
+      {
+        id: 'cover-test',
+        title: 'Vyzkoušejte kryt kartou',
+        body: 'Kartu 20× zasuňte a vysuňte. Nesmí se zachytit a kryt se nesmí odlepit.',
+        media: [],
+        animationLinks: [animationLink('obratBody', 'D4')],
       },
     ],
     checkpoints: [
@@ -750,10 +1024,13 @@ export const lessons: readonly LessonDefinition[] = [
     title: 'Sestavení naplocho',
     order: 8,
     phaseSlug: 'build',
-    estimatedMinutes: 90,
+    estimatedMinutes: 180,
     goal: 'Tělo i kapsa na mince jsou sešité jednou nití po celé U-linii.',
     materials: [
-      'Kapsa na mince z lekce 6, díly z lekce 7 i papírový T2, svíčka, odřezky, vlhký hadřík, knihy jako závaží.',
+      'Kapsa na mince z lekce 6, díly z lekce 7 a papírový T2 z lekce 6.',
+      '2 × 20 Kč a 2 × 10 Kč, potravinová fólie.',
+      'Na zatížení: měkká podložka (složená utěrka), rovná destička velikosti kapsy, knihy jako závaží.',
+      'Dále: tužka, svíčka, odřezky, vlhký hadřík, pro zálohu pečicí papír.',
     ],
     requiredEquipment: [
       'masking-tape',
@@ -774,16 +1051,22 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'rough',
         title: 'Zdrsněte líc T2',
-        body: 'P se lepí lícem na líc T2. Rohy šrafy z papírového T2 propíchněte na líc T2 a spojte tužkou: pásy 5 mm podél dna a boků do 40 mm nad dno a horní pás 33–38 mm nad dnem, 5 mm od boků, s mezerou 16 mm uprostřed. Vpichy u boků dejte 1 mm pod horní hranu P, ať je P zakryje. Pásy zdrsněte smirkem. Líc P je zdrsněný z lekce 6.',
+        body: 'Kapsu sundejte z kartonu. Z líce P opatrně odstraňte smyčky maskovací pásky z lekce 6. Líc P je zdrsněný z lekce 6, teď zdrsněte líc T2. Papírový T2 z lekce 6 přiložte na líc T2. Rohy šrafy označte šídlem jen důlkem, neprorážejte. U boků dejte důlky 1 mm pod horní roh šrafy, ať je P zakryje. Důlky spojte tužkou jako na P v lekci 6. Celou plochu šrafy zdrsněte smirkem. U boků zdrsněte až k hornímu rohu šrafy.',
         media: [],
-        animationLinks: [animationLink('obratAssembly', 'A1')],
+        animationLinks: [
+          animationLink('obratAssembly', 'A1'),
+          animationLink('obratAssembly', 'A2'),
+        ],
       },
       {
         id: 'body',
         title: 'Slepte T1 a T2',
-        body: 'Lepidlo tence na rub T1 a rub T2 do pásů 5 mm podél boků a dna, na T1 jen do výšky ramen T2 (15 mm pod čarou ohybu). T2 přiložte na T1 rubem k rubu, hrany zarovnejte, přebytek setřete vlhkým hadříkem. Vedle patice C podložte podél pásů odřezky vyšší než ona, na ně závaží, a nechte do druhého dne.',
+        body: 'Lepidlo naneste tence na rub T1 a rub T2 do pásů 5 mm podél boků a dna. Na T1 jen do výšky ramen T2 (15 mm pod čarou ohybu). T2 přiložte na T1 rubem k rubu a zarovnejte hrany. Přebytek setřete vlhkým hadříkem. Vedle patice C podložte podél pásů odřezky vyšší než patice. Na ně dejte závaží a nechte do druhého dne.',
         media: [],
-        animationLinks: [animationLink('obratAssembly', 'A3')],
+        animationLinks: [
+          animationLink('obratAssembly', 'A3'),
+          animationLink('obratAssembly', 'A4'),
+        ],
         waits: [
           {
             id: 'body-glue-dry',
@@ -796,11 +1079,56 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         id: 'pocket',
-        title: 'Přilepte kapsu na T2',
-        body: 'Okraje pásů u otvorů Ø 2 a u mezery uprostřed horního pásu ohraničte maskovací páskou na T2 i na P. Lepidlo naneste tence na zdrsněné pásy líce T2 a líce P, na víčko nesmí. Pásku sundejte. Kapsu se zavřeným víčkem hned za mokra přiložte lícem P na líc T2: boky a dno lícují s tělem. Díry kapsy jsou 3,5 mm od hrany, srovnejte hrany, dokud je lepidlo mokré. Přebytek setřete. Na víčko vedle kloboučku B, na kapsu podél boků a dna pod volnou hranou víčka a na tělo vedle patice C položte odřezky vyšší než zavřený druk B, vrchy srovnané do jedné výšky. Na ně dejte knihy jako závaží a nechte do druhého dne. Když se v lekci 3 lepený pás odlupoval, použijte rozpouštědlové kontaktní lepidlo (např. Pattex Butapren): naneste ho na pásy P i T2, nechte zavadnout podle návodu na obalu a kapsu přiložte napoprvé přesně, posunout už nepůjde.',
+        title: 'Zvolte lepidlo',
+        body: 'Lepidlo zvolte podle zkoušky v lekci 3. Když se lepený pás odlupoval, vezměte rozpouštědlové kontaktní lepidlo (např. Pattex Butapren). Pak lepte podle kroku „Jen kontaktní lepidlo“.',
         media: [],
         animationLinks: [animationLink('obratAssembly', 'A5')],
         recalls: [{ fieldId: 'obrat-03-face-glue', label: 'Lepený pás v lekci 3' }],
+      },
+      {
+        id: 'pocket-tape',
+        title: 'Ohraničte lepenou plochu páskou',
+        body: 'Na P i na T2 veďte maskovací pásku po tužkové čáře šrafy, u boků o 1 mm výš (až k ústí). Pásku dejte nad čáru, mimo šrafu. Na P zakryjte oba otvory Ø 2.',
+        media: [],
+        animationLinks: [animationLink('obratAssembly', 'A6')],
+      },
+      {
+        id: 'pocket-coins',
+        title: 'Vložte mince do dutin',
+        body: 'Do obou dutin vložte po jedné 20 a 10 Kč ve fólii jako v lekci 6. Mince udrží tvar dutin a přenesou tlak na lepenou plochu.',
+        media: [],
+        animationLinks: [animationLink('obratAssembly', 'A7')],
+      },
+      {
+        id: 'pocket-contact',
+        title: 'Jen kontaktní lepidlo: přilepte kapsu',
+        body: 'Tento krok dělejte jen s kontaktním lepidlem, jinak ho přeskočte. Lepidlo naneste na celou zdrsněnou plochu líce P i T2, na víčko ne. Pásku sundejte. Lepidlo nechte zavadnout podle návodu na obalu. Zapněte B, víčko zůstane zavřené. Přiložená kapsa už nepůjde posunout: na T2 proto položte pečicí papír a na něj kapsu. Srovnejte dno a boky s tělem a papír postupně vytahujte. Pak kapsu pevně přitlačte. Pokračujte krokem „Zatižte kapsu do druhého dne“.',
+        media: [],
+        animationLinks: [animationLink('obratAssembly', 'A8')],
+      },
+      {
+        id: 'pocket-glue',
+        title: 'Běžné lepidlo: přilepte kapsu',
+        body: 'Lepidlo naneste tence a rychle na celou zdrsněnou plochu líce T2 a líce P. Na víčko lepidlo nesmí. Pásku sundejte. Zapněte B, víčko zůstane zavřené. Kapsu hned za mokra přiložte lícem P na líc T2: boky a dno lícují s tělem. Dokud je lepidlo mokré, srovnejte hrany přesně: díry kapsy jsou 3,5 mm od hrany.',
+        media: [],
+        animationLinks: [
+          animationLink('obratAssembly', 'A9'),
+          animationLink('obratAssembly', 'A10'),
+        ],
+      },
+      {
+        id: 'pocket-squeeze',
+        title: 'Běžné lepidlo: vytlačte přebytek',
+        body: 'B rozepněte a víčko odklopte. Celou kapsu přejeďte palcem přes T3 shora dolů, ať přebytek vyjde u boků a dna. Přebytek setřete. Víčko zase zapněte na B.',
+        media: [],
+        animationLinks: [animationLink('obratAssembly', 'A11')],
+      },
+      {
+        id: 'pocket-press',
+        title: 'Zatižte kapsu do druhého dne',
+        body: 'Přes kapsu dejte potravinovou fólii. Na ni položte měkkou podložku (složenou utěrku), rovnou destičku velikosti kapsy a knihy jako závaží. Nechte do druhého dne.',
+        media: [],
+        animationLinks: [animationLink('obratAssembly', 'A12')],
         waits: [
           {
             id: 'glue-dry',
@@ -813,10 +1141,20 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         id: 'punch',
-        title: 'Prorazte U-šev',
-        body: 'Víčko nechte zavřené. Hroty natřete svíčkou a díry kapsy nejdřív projeďte šídlem, ať nejsou zalepené. Kapsa: stejné vidličky jako v lekci 6 (rovné úseky čtyřhrot, rohy dvojhrot, dorovnání jednohrot), stejně otočené, strana s páskou k hraně. Hroty vložte do děr kapsy a prorazte T2 a T1. Začněte horní dírou na jednom boku, pokračujte dolů, dnem a druhým bokem nahoru. Nad kapsou narýsujte kružítkem na T2 linii 3,5 mm od boků. První díru odměřte 4 mm nad horní dírou kapsy, zub do díry kapsy tu nedávejte. Od ní prorážejte nahoru jen T2 a T1, poslední díra 3–5 mm pod ramenem, první zub vždy v poslední proražené díře. Když vidlička čtyřmi vrstvami neprojde nebo nejde vytáhnout, prorazte T2 a T1 dírami kapsy dvojhrotem nebo jednohrotem: méně zubů projde snáz.',
+        title: 'Připravte díry a vidličky',
+        body: 'Mince z dutin vyndejte a víčko zase zapněte na B. Díry kapsy projeďte šídlem, ať nejsou zalepené. Hroty natřete svíčkou. Vezměte stejné vidličky jako v lekci 6: rovné úseky čtyřhrot, rohy dvojhrot, dorovnání jednohrot. Držte je stejně otočené, strana s páskou k hraně.',
         media: [],
         animationLinks: [animationLink('obratAssembly', 'B1')],
+      },
+      {
+        id: 'punch-pocket',
+        title: 'Prorazte U-šev kapsou',
+        body: 'Hroty vložte do děr kapsy a prorazte T2 a T1. Začněte horní dírou na jednom boku. Pokračujte dolů, dnem a druhým bokem nahoru. Když vidlička čtyřmi vrstvami neprojde nebo nejde vytáhnout, prorazte T2 a T1 dírami kapsy dvojhrotem nebo jednohrotem. Méně zubů projde snáz.',
+        media: [],
+        animationLinks: [
+          animationLink('obratAssembly', 'B2'),
+          animationLink('obratAssembly', 'B4'),
+        ],
         recalls: [
           { fieldId: 'obrat-03-four-layers', label: 'Čtyři vrstvy v lekci 3' },
           { fieldId: 'obrat-03-prong', label: 'Délka hrotů vidličky' },
@@ -834,18 +1172,29 @@ export const lessons: readonly LessonDefinition[] = [
         ],
       },
       {
+        id: 'punch-above',
+        title: 'Prorazte linii nad kapsou',
+        body: 'Nad kapsou narýsujte kružítkem na T2 linii 3,5 mm od boků. Na linii označte šídlem první díru, 4 mm nad horní dírou kapsy. První díru nad kapsou udělejte na značce, ne v díře kapsy. Pak posouvejte nahoru: první zub vždy vložte do poslední proražené díry. Prorážíte jen T2 a T1. Poslední díra je 3–5 mm pod ramenem.',
+        media: [],
+        animationLinks: [animationLink('obratAssembly', 'B3')],
+      },
+      {
         id: 'sew',
         title: 'Ušijte U-šev jednou nití',
-        body: 'Odměřte asi 1,5 m nitě: U-šev má asi 240 mm a u kapsy jde přes čtyři vrstvy. Jednou nití šijte od horního konce linie jedním bokem dolů, dnem a druhým bokem nahoru. Steh mezi horní dírou kapsy a dírou nad ní ušijte na obou bocích dvakrát. Oba konce zajistěte dvojitým stehem.',
+        body: 'Odměřte asi 2 m nitě: U-šev má asi 240 mm a u kapsy jde přes čtyři vrstvy. Šijte jednou nití od horního konce linie jedním bokem dolů, dnem a druhým bokem nahoru. Steh mezi horní dírou kapsy a dírou nad ní ušijte na obou bocích dvakrát. Oba konce zajistěte dvojitým stehem.',
         media: [],
         animationLinks: [animationLink('obratAssembly', 'C1'), animationLink('saddleStitch', 'E2')],
       },
       {
         id: 'edges',
-        title: 'Hrany po obvodu',
-        body: 'Boky a dno srovnejte smirkem; u kapsy jsou to čtyři vrstvy, nad ní dvě. Máte-li ořezávač hran, srazte jen vnější hrany, ne lepené spoje, smirkem lehce přejeďte a zaleštěte. Víčko otevřete asi na 90° a zavřete na B: nesmí drhnout o šev.',
+        title: 'Dokončete hrany po obvodu',
+        body: 'Boky a dno srovnejte smirkem. U kapsy jsou to čtyři vrstvy, nad ní dvě. Máte-li ořezávač hran, srazte jen vnější hrany, ne lepené spoje. Smirkem lehce přejeďte a zaleštěte. Víčko odklopte naplno a zavřete na B: nesmí drhnout o šev.',
         media: [],
-        animationLinks: [animationLink('obratAssembly', 'C2'), animationLink('edges', 'A')],
+        animationLinks: [
+          animationLink('obratAssembly', 'C2'),
+          animationLink('obratAssembly', 'C3'),
+          animationLink('edges', 'A'),
+        ],
         records: [text('obrat-08-notes', 'Poznámky k sestavení')],
       },
     ],
@@ -866,7 +1215,7 @@ export const lessons: readonly LessonDefinition[] = [
     estimatedMinutes: 75,
     goal: 'Klopa končí nad víčkem mincí, B i C drží a každý se otevírá zvlášť.',
     materials: [
-      '4 karty, bankovky, mince 50 | 20 + 10, tenký karton, lepidlo v tyčince, nůžky, knihy nebo deska jako podložka.',
+      '4 karty, bankovky, mince 50, 20 a 10 Kč, tužka, tenký karton, lepidlo v tyčince, nůžky, odřezky vyšší než druky, knihy nebo deska jako podložka.',
     ],
     requiredEquipment: [
       'cutting-mat',
@@ -904,7 +1253,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'measure',
         title: 'Změřte přesah klopy',
-        body: 'Vložte karty, bankovky a mince 50 | 20 + 10, zavřete B. Klopu ohněte po čáře přes obsah a přidržte. Mezeru mezi hranou klopy a hřbetem ohybu víčka změřte vlevo, 15 mm od levého boku, pravítkem kolmo k víčku. Cíl je 6,5 mm. Když klopa přes víčko přesahuje, změřte přesah jako zápornou mezeru.',
+        body: 'Vložte karty a bankovky. Po jedné vložte mince vlevo 50, vpravo 20 + 10. Zavřete B. Klopu ohněte po čáře přes obsah a přidržte. Změřte mezeru mezi hranou klopy a ohnutou hranou víčka: vlevo, 15 mm od levého boku, pravítkem kolmo k víčku. Cíl je 6,5 mm. Když klopa přes víčko přesahuje, změřte přesah jako zápornou mezeru.',
         media: [],
         animationLinks: [animationLink('obratClosures', 'A1')],
         records: [
@@ -921,11 +1270,14 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'c-mark',
         title: 'Obtiskněte C před seříznutím',
-        body: 'Klopu zavřete přes obsah a přitiskněte na hlavičku C, ať se obtiskne. Klopu narovnejte nahoru a položte na podložku. Střed obtisku hned označte tužkou na rubu. Papírové kolečko Ø 13 z listu 2 přiložte středem na obtisk a změřte, kolik zbývá od jeho okraje k hraně klopy.',
+        body: 'Klopu zavřete přes obsah a přitiskněte na hlavičku C, ať se obtiskne. Klopu narovnejte nahoru a položte na podložku. Střed obtisku hned označte tužkou na rubu. Papírové kolečko Ø 13 z listu 2 přiložte středem na obtisk. Změřte, kolik zbývá od okraje kolečka k hraně klopy.',
         media: [],
         printLink: 'pattern-sheets',
         printSheetId: 'dily',
-        animationLinks: [animationLink('obratClosures', 'A2')],
+        animationLinks: [
+          animationLink('obratClosures', 'A2'),
+          animationLink('obratClosures', 'A3'),
+        ],
         records: [
           {
             kind: 'number',
@@ -938,50 +1290,84 @@ export const lessons: readonly LessonDefinition[] = [
       },
       {
         id: 'trim',
-        title: 'Seřízněte klopu',
-        body: 'Seříznout = 6,5 mm minus naměřená mezera (např. mezera 0 → 6,5 mm, přesah −1 mm → 7,5 mm). Když vyjde 0 nebo méně, neřežte. Kvůli C smíte seříznout nejvýš (zbývá − 5) mm, kde „zbývá“ je vzdálenost od kolečka k hraně klopy (zbývá 12 mm → nejvýš 7 mm). Klopu narovnejte nahoru a položte na podložku. Kružítkem nastaveným na tuto hodnotu veďte čáru podél celé šikmé hrany na rubu. Řežte podle pravítka. Oba rohy klopy znovu zaoblete na R8: šablonu rohu z listu 1 přiložte rovnými hranami na bok a novou hranu klopy, oblouk obkreslete na rubu a řežte krátkými tahy.',
+        title: 'Spočítejte, kolik seříznout',
+        body: '1. A = 6,5 mm − naměřená mezera. Když vyjde 0 nebo méně, neřežte. 2. B = zbývá − 5 mm (zbývá = od kolečka k hraně klopy). 3. Seřízněte menší z A a B. Příklad: mezera 0 mm a zbývá 12 mm → A = 6,5, B = 7 → seřízněte 6,5 mm. Když klopa víčko o 1 mm překrývá, mezera je −1 → A = 7,5.',
         media: [],
-        printLink: 'pattern-sheets',
-        printSheetId: 'telo',
         recalls: [
           { fieldId: 'obrat-09-gap', label: 'Naměřená mezera' },
           { fieldId: 'obrat-09-c-edge', label: 'Kolečko Ø 13 u C k hraně klopy' },
         ],
+        animationLinks: [animationLink('obratClosures', 'A4')],
+      },
+      {
+        id: 'trim-cut',
+        title: 'Seřízněte klopu',
+        body: 'Klopu narovnejte nahoru a položte na podložku. Kružítko nastavte na spočítanou hodnotu. Veďte čáru podél celé šikmé hrany na rubu. Řežte podle pravítka. Oba rohy klopy znovu zaoblete na R8 (zaoblení s poloměrem 8 mm): šablonu rohu z listu 1 přiložte rovnými hranami na bok a novou hranu klopy. Oblouk obkreslete na rubu a řežte krátkými tahy.',
+        media: [],
+        printLink: 'pattern-sheets',
+        printSheetId: 'telo',
         animationLinks: [
-          animationLink('obratClosures', 'A4'),
           animationLink('obratClosures', 'B1'),
+          animationLink('obratClosures', 'B2'),
+          animationLink('obratClosures', 'B3'),
+          animationLink('obratClosures', 'B4'),
           animationLink('rulerCut', 'C1'),
         ],
       },
       {
         id: 'clearance',
         title: 'Když C nedovolí seříznout dost',
-        body: 'Když kvůli C smíte seříznout méně, než vyšlo z mezery, seřízněte jen tolik, kolik smíte. Klopa pak končí blíž k víčku, mezera bude menší než 6,5 mm. Zapište o kolik, střih se upraví.',
+        body: 'Platí, když B vyšlo menší než A. Seřízněte jen B. Klopa pak končí blíž k víčku a mezera bude menší než 6,5 mm. Zapište, o kolik. Střih se upraví.',
         media: [],
         animationLinks: [animationLink('obratClosures', 'B5')],
         records: [text('obrat-09-notes', 'Odstup objímky C a poznámky')],
       },
       {
         id: 'flap-seam',
-        title: 'Ozdobný šev a hrany klopy',
-        body: 'Peněženku položte předkem dolů a pod klopu podložte prorážecí podložku do výšky těla. Pod tělo vedle druků B a C podložte odřezky vyšší než druky, vrchy srovnané do jedné výšky: tělo se nesmí kolébat. Z líce veďte kružítkem linii 3,5 mm od boků a šikmé hrany klopy; začněte a skončete 3 mm od horní hrany těla (čáry ohybu). Prorazte z líce a ušijte jednou vrstvou. Hrany klopy zbruste; máte-li ořezávač hran, srazte je z líce i z rubu. Pak zaleštěte.',
+        title: 'Podložte peněženku',
+        body: 'Peněženku položte předkem dolů. Pod tělo vedle druků B a C podložte odřezky vyšší než druky i vyboulení dutin. Vrchy odřezků srovnejte do jedné výšky: tělo se nesmí kolébat. Pod klopu dejte prorážecí podložku tak vysokou, aby klopa ležela rovně s tělem.',
         media: [],
-        animationLinks: [animationLink('obratClosures', 'C1'), animationLink('edges', 'A')],
+        animationLinks: [animationLink('obratClosures', 'C1')],
+      },
+      {
+        id: 'flap-stitch',
+        title: 'Narýsujte, prorazte a ušijte ozdobný šev',
+        body: 'Z líce narýsujte kružítkem linii 3,5 mm od boků a šikmé hrany klopy. Začněte a skončete 3 mm od horní hrany těla (čáry ohybu). Prorazte z líce. Ušijte jednou vrstvou, asi 1,2 m nitě.',
+        media: [],
+        animationLinks: [animationLink('obratClosures', 'C2')],
+      },
+      {
+        id: 'flap-edges',
+        title: 'Dokončete hrany klopy',
+        body: 'Hrany klopy zbruste. Máte-li ořezávač hran, srazte je z líce i z rubu. Pak zaleštěte.',
+        media: [],
+        animationLinks: [animationLink('obratClosures', 'C3'), animationLink('edges', 'A')],
       },
       {
         id: 'c',
-        title: 'Objímka C na klopě',
-        body: 'Klopu narovnejte nahoru a položte na podložku. Střed obtisku C propíchněte na líc, otvor jen, když ho druk potřebuje (jako u patice), a osaďte objímku: klobouček na líc klopy.',
+        title: 'Osaďte objímku C na klopu',
+        body: 'Klopu narovnejte nahoru a položte na tvrdou prorážecí podložku. Střed obtisku C propíchněte na líc. Otvor vysekněte jen, když ho druk potřebuje (jako u patice). Osaďte objímku: klobouček na líc klopy.',
         media: [],
         recalls: [{ fieldId: 'obrat-04-punch', label: 'Výsečník z lekce 4' }],
-        animationLinks: [animationLink('obratClosures', 'C3'), animationLink('snapSetter', 'C')],
+        animationLinks: [animationLink('obratClosures', 'C4'), animationLink('snapSetter', 'C')],
       },
       {
         id: 'check',
         title: 'Zkontrolujte zapínání',
-        body: 'Zapněte B i C. Otevřete jen C: víčko zůstane zavřené. Otevřete jen B: klopa zůstane zavřená a víčko jde zvednout asi na 90°. Dál ho proti klopě netlačte, klobouček B by klopu otlačil. S mincemi 50 | 20 + 10 peněženku 30× stiskněte v dlani a ohněte jako v kapse: B se nesmí samo rozepnout a konce víčka nesmí odstávat.',
+        body: 'Zapněte B i C. Otevřete jen C: víčko zůstane zavřené. Otevřete jen B: klopa zůstane zavřená. Víčko odklopte nahoru, až se klobouček B lehce opře o klopu. Teprve tak jdou mince vyndat. Na klopu ho netiskněte, otlačil by její hranu a ozdobný šev.',
         media: [],
-        animationLinks: [animationLink('obratClosures', 'D1'), animationLink('obratOverview')],
+        animationLinks: [
+          animationLink('obratClosures', 'D1'),
+          animationLink('obratClosures', 'D2'),
+          animationLink('obratOverview'),
+        ],
+      },
+      {
+        id: 'check-squeeze',
+        title: 'Stiskněte a ohněte peněženku',
+        body: 'V dutinách nechte mince vlevo 50, vpravo 20 + 10. Zapněte B i C. Peněženku 30× stiskněte v dlani a ohněte jako v kapse. B se nesmí samo rozepnout a konce víčka nesmí odstávat.',
+        media: [],
+        animationLinks: [animationLink('obratClosures', 'D3')],
       },
     ],
     checkpoints: [
@@ -1007,15 +1393,15 @@ export const lessons: readonly LessonDefinition[] = [
     steps: [
       {
         id: 'access',
-        title: 'Samostatný přístup',
-        body: 'S plným obsahem 20× otevřete jen C a vyndejte kartu i bankovku. Pak 20× otevřete jen B a vyndejte minci. Druhé zapínání musí zůstat zavřené.',
+        title: 'Otevírejte B a C zvlášť',
+        body: 'Vložte plný obsah. 20× otevřete jen C a vyndejte kartu i bankovku. Pak 20× otevřete jen B a vyndejte minci. Druhé zapínání musí pokaždé zůstat zavřené.',
         media: [],
         records: [text('obrat-10-access', 'Jak šlo vyndávání')],
       },
       {
         id: 'shake',
-        title: 'Třesení',
-        body: 'Zavřenou peněženku otočte nad miskou a 30× zatřeste všemi směry. Jednou s plným obsahem, jednou jen s jednou kartou a jednou korunou. Nic nesmí vypadnout.',
+        title: 'Zatřeste peněženkou',
+        body: 'Zavřenou peněženku otočte nad miskou a 30× zatřeste všemi směry. Udělejte to jednou s plným obsahem a jednou jen s jednou kartou a jednou korunou. Nic nesmí vypadnout.',
         media: [],
         records: [
           {
@@ -1032,7 +1418,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'thickness',
         title: 'Změřte tloušťku',
-        body: 'Posuvkou bez stlačení změřte nejtlustší místo s plným obsahem: přes mince i přes druky. Výpočet bez kování dává 12,7–15,2 mm, druky přidají.',
+        body: 'S plným obsahem změřte posuvkou bez stlačení nejtlustší místo, přes mince i přes druky. Výpočet bez kování dává 12,7–15,2 mm, druky přidají.',
         media: [],
         records: [
           {
@@ -1062,7 +1448,7 @@ export const lessons: readonly LessonDefinition[] = [
 export const obratWalletProject: ProjectDefinition = {
   slug: 'obrat-wallet',
   code: '03',
-  title: 'Peněženka OBRAT',
+  title: 'Peněženka Šikmina',
   summary:
     'Kompaktní peněženka se šikmou klopou: karty a bankovky pod druhem C, mince v přišité kapse pod víčkem s drukem B.',
   description:
@@ -1090,13 +1476,19 @@ export const obratWalletProject: ProjectDefinition = {
         'harness-needles',
         'waxed-thread',
         'scratch-awl',
-        'contact-cement',
         'wing-divider',
         'sandpaper',
         'edge-burnisher',
         'edge-beveler',
       ].includes(e.equipmentSlug),
     ),
+    {
+      equipmentSlug: 'contact-cement',
+      priority: 'required',
+      reason: 'Nosné spoje: pole s paticí B, kapsa na tělo, kryt K a tělo T1 + T2.',
+      specification:
+        'Lepidlo na kůži v malé tubě, které se přikládá za mokra; lekce 3 ho vyzkouší. Oboustranná páska nestačí. Když lepený pás v lekci 3 neprojde: rozpouštědlové kontaktní lepidlo (např. Pattex Butapren).',
+    },
     {
       equipmentSlug: 'masking-tape',
       priority: 'required',
@@ -1154,7 +1546,7 @@ export const obratWalletProject: ProjectDefinition = {
     ],
   },
   glossary: {
-    title: 'Díly OBRATu',
+    title: 'Díly Šikminy',
     entries: [
       {
         term: 'T1',
@@ -1216,11 +1608,11 @@ export const obratWalletProject: ProjectDefinition = {
     {
       id: 'obrat-construction',
       kind: 'illustration',
-      caption: 'OBRAT R11: zavřená peněženka, otevřené jen C a otevřené jen B. Nákres, ne střih.',
+      caption: 'Šikmina: zavřená peněženka, otevřené jen C a otevřené jen B. Nákres, ne střih.',
       status: 'available',
       src: '/projekty/obrat/konstrukce.svg',
     },
   ],
-  contentVersion: 3,
+  contentVersion: 4,
   reviewStatus: 'draft',
 };

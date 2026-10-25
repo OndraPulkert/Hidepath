@@ -86,8 +86,8 @@ export interface ObratSpec {
   glueBand: number;
   /** Lepený pás těla: T1–T2 a P–T2 (líc na líc) podél boků a dna. */
   bodyGlue: number;
-  /** Horní lepený pás P–T2 za kapsou; přerušený kolem příruby B o `flangeGap`. */
-  topGlue: { top: number; bottom: number; flangeGap: number };
+  /** Lepená plocha P–T2 (líc na líc): celá od `faceGlueTop` dolů; u boků pásy `bodyGlue` už od ústí. */
+  faceGlueTop: number;
   /** Klobouček druku (Prym Anorak 12 mm) a největší dovolená příruba patice. */
   snapCap: number;
   snapFlangeMax: number;
@@ -131,7 +131,7 @@ export const OBRAT: ObratSpec = {
   reliefHoleDiameter: 2,
   glueBand: 4,
   bodyGlue: 5,
-  topGlue: { top: 52, bottom: 57, flangeGap: 2.5 },
+  faceGlueTop: 52,
   snapCap: 12,
   snapFlangeMax: 11,
   hardwareGap: 2,
@@ -172,13 +172,13 @@ export function obratGlueField(spec: ObratSpec): [number, number] {
   return [round(d0 - spec.glueIntrusion), round(d1 + spec.glueIntrusion)];
 }
 
-/** Úseky horního lepeného pásu P–T2 (x od–do), přerušené kolem příruby B. */
-export function obratTopGlueSpans(spec: ObratSpec): [number, number][] {
-  const half = spec.snapFlangeMax / 2 + spec.topGlue.flangeGap;
-  return [
-    [spec.bodyGlue, round(spec.snapB.x - half)],
-    [round(spec.snapB.x + half), spec.width - spec.bodyGlue],
-  ];
+/** Obrys lepené plochy P–T2 posunutý o dy: celá plocha od faceGlueTop, boky už od ústí. */
+function faceGlueArea(spec: ObratSpec, dy: number): string {
+  const W = spec.width;
+  const g = spec.bodyGlue;
+  const m = dy + spec.coinMouthY;
+  const t = dy + spec.faceGlueTop;
+  return `M0 ${n(m)} V${n(dy + spec.height)} H${n(W)} V${n(m)} H${n(W - g)} V${n(t)} H${n(g)} V${n(m)} Z`;
 }
 
 /** Dvě krajní dutiny: vnějším bokem je linie bočního švu těla, vnitřním dělicí šev. */
@@ -213,8 +213,12 @@ export function obratCoinFit(spec: ObratSpec, cellIndex: number, stack: readonly
     0,
   );
   const need = round(diameter + thickness + spec.handlingAllowance);
+  // P je přilepený na T2, dutina se vyboulí jen dopředu: T3 musí obejít průměr a dvakrát stoh.
+  const frontOnlyNeed = round(diameter + 2 * thickness + spec.handlingAllowance);
   return {
     need,
+    frontOnlyNeed,
+    needsForming: frontOnlyNeed > cell.usableWidth,
     stackThickness: round(thickness),
     widthReserve: round(cell.usableWidth - need),
     depthReserve: round(cell.usableDepth - need),
@@ -463,11 +467,10 @@ export function obratParts(spec: ObratSpec): ObratPart[] {
     count: 1,
   };
 
-  // T2 – LÍC nahoru, souřadnice zavřeného předku posunuté o frontTopY. Na líci rámeček pro P.
+  // T2 – LÍC nahoru, souřadnice zavřeného předku posunuté o frontTopY. Na líci lepená plocha pro P.
   const t = spec.frontTopY;
   const nb = spec.notch.bottomY - t;
   const N = spec.notch;
-  const tg = spec.topGlue;
   const T2: ObratPart = {
     id: 'T2',
     name: 'Přední stěna',
@@ -485,12 +488,7 @@ export function obratParts(spec: ObratSpec): ObratPart[] {
     ].join(' '),
     lines: [
       {
-        d: [
-          glueU(spec, spec.coinMouthY, spec.bodyGlue, -t),
-          ...obratTopGlueSpans(spec).map(([a, b]) =>
-            rect(a, tg.top - t, b - a, tg.bottom - tg.top),
-          ),
-        ].join(' '),
+        d: faceGlueArea(spec, -t),
         kind: 'glue',
         label: 'P: zdrsnit + lepidlo',
       },
@@ -634,7 +632,6 @@ export function obratClearances(spec: ObratSpec) {
   const rh = spec.reliefHoleDiameter / 2;
   const [f0, f1] = obratGlueField(spec);
   const capLid = obratLidEndX(spec, b.y + r);
-  const spans = obratTopGlueSpans(spec);
   return {
     lidFoldToSeam: round(spec.lidInset - s),
     lidFreeEdgeToSeam: round(obratLidEndX(spec, spec.lidBottomY) - s),
@@ -643,7 +640,7 @@ export function obratClearances(spec: ObratSpec) {
     reliefToSeam: round(spec.lidInset - rh - s),
     reliefToModuleGlue: round(spec.lidInset - rh - spec.glueBand),
     reliefToBodyGlue: round(spec.lidInset - rh - spec.bodyGlue),
-    reliefToTopGlue: round(spec.topGlue.top - spec.coinMouthY - rh),
+    reliefToFaceGlue: round(spec.faceGlueTop - spec.coinMouthY - rh),
     capToMouth: round(b.y - r - spec.coinMouthY),
     capToLidFreeEdge: round(spec.lidBottomY - b.y - r),
     capToDivider: round(Math.min(...spec.dividerSeams.map((d) => Math.abs(d - b.x))) - r),
@@ -651,7 +648,6 @@ export function obratClearances(spec: ObratSpec) {
     capToFlapEdge: round(b.y - r - flapEdgeY(spec, b.x)),
     flangeToGlueField: round(Math.min(b.x - fl - f0, f1 - (b.x + fl))),
     flangeToMouth: round(b.y - fl - spec.coinMouthY),
-    topGlueGap: round(spans[1]![0] - spans[0]![1]),
     dividerToMouth: spec.seamEndGap,
     dividerToBottomSeam: spec.dividerBottomGap,
     dividerLength: round(
@@ -760,12 +756,10 @@ export function checkObrat(spec: ObratSpec): string[] {
   if (lt(k.reliefToModuleGlue, 1) || lt(k.reliefToBodyGlue, 1))
     e.push('Odlehčovací otvor zasahuje k lepenému pásu.');
 
-  // Horní lepený pás P–T2
-  const tg = spec.topGlue;
-  if (tg.bottom <= tg.top) e.push('Horní lepený pás nemá kladnou výšku.');
-  if (lt(k.reliefToTopGlue, 1)) e.push('Horní lepený pás zasahuje k odlehčovacímu otvoru.');
-  if (lt(tg.flangeGap, 2)) e.push('Horní lepený pás je blíž než 2 mm k přírubě B.');
-  if (!lt(k.topGlueGap, SMALLEST_COIN)) e.push('Mezerou v horním lepeném pásu projde mince.');
+  // Lepená plocha P–T2
+  if (lt(k.reliefToFaceGlue, 1)) e.push('Lepená plocha P–T2 zasahuje k odlehčovacímu otvoru.');
+  if (spec.faceGlueTop - spec.coinMouthY > 3)
+    e.push('Mezi ústím a lepenou plochou P–T2 zůstává škvíra, kam zapadne mince.');
 
   if (!obratLeatherLayout(spec).fits) e.push('Díly se nevejdou na jednu A4 kůže.');
   return e;
@@ -801,7 +795,7 @@ export function obratReview(spec: ObratSpec) {
       bodyMm: spec.bodyGlue,
       moduleMm: spec.glueBand,
       field: obratGlueField(spec),
-      topBand: { y: [spec.topGlue.top, spec.topGlue.bottom], x: obratTopGlueSpans(spec) },
+      faceArea: { fromY: spec.faceGlueTop, sidesFromY: spec.coinMouthY },
     },
     cells: obratCells(spec),
     clearances: obratClearances(spec),
@@ -824,9 +818,9 @@ export function obratReview(spec: ObratSpec) {
       'druk Prym Anorak 12 mm v jedné vrstvě 1,2 mm a výška zapnutého druku (lekce 4)',
       'prorážení U-švu vidličkami přes 4 vrstvy (≈ 5,5 mm s lepidlem): délka hrotů, vytažení, posun vrstev (lekce 3 a 8)',
       'lepení líc na líc: P na zdrsněný líc T2 (lekce 3)',
-      'ohyb víčka navlhko a 50× otevření na 90° bez praskání u odlehčovacích otvorů (lekce 3 a 6)',
+      'ohyb víčka navlhko a 50× odklopení naplno bez praskání u odlehčovacích otvorů (lekce 3 a 6)',
       'retence mincí pod víčkem s B uprostřed, konce víčka neodstávají; zkouška s pomocnou nití v předem proražených dírách (lekce 6)',
-      'víčko otevřené za 90°: klobouček B může otlačit klopu (lekce 9)',
+      'víčko odklopené naplno: klobouček B se opře o klopu a může ji otlačit (lekce 9)',
       'skutečná tloušťka a nošení (lekce 10)',
     ],
   };

@@ -41,7 +41,7 @@ import { type AnimationLink } from '@/content/schema';
  *   (lekce 3 pouzdra na karty): rohy dvojhrotem, boky, spodek ke středu, zbytek jednohrotem.
  * - rohova-sablona (`#A`–`#B`): stejně jako kapsa-prisiti; ocelová rohová šablona „květina“: lob podle
  *   poloměru (číslo = průměr) a štěrbina R15 (vnější hrana), společné pro všechny projekty.
- * - obrat-papirovy-model (`#A`–`#D`): stejně jako kapsa-prisiti; papírový model OBRATu (lekce 5):
+ * - obrat-papirovy-model (`#A`–`#D`): stejně jako kapsa-prisiti; papírový model Šikminy (lekce 5):
  *   listy na karton, T3 páskou na P, mince, víčko, T2 na T1, obsah, kapsa na T2, kontrola klopy a víčka.
  * - ctverec-forma (`#A`–`#C`): stejně jako kapsa-prisiti; čtverec 70 × 70 kolem vyvrtaného otvoru
  *   formy jen pravítkem (lekce 2 pouzdra s mincí), příklad otvor Ø 32 mm.
@@ -53,8 +53,8 @@ import { type AnimationLink } from '@/content/schema';
 export const animationPages = {
   obratOverview: {
     path: '/animace/obrat-prehled.html',
-    title: 'OBRAT — dva druky',
-    buttonText: 'Jak se OBRAT otevírá',
+    title: 'Šikmina — dva druky',
+    buttonText: 'Jak se Šikmina otevírá',
     sections: {},
   },
   kapsa: {
@@ -868,7 +868,7 @@ export const animationPages = {
   },
   obratPaperModel: {
     path: '/animace/obrat-papirovy-model.html',
-    title: 'OBRAT – papírový model',
+    title: 'Šikmina – papírový model',
     buttonText: 'Jak složit papírový model',
     sections: {
       A: 'Část A – listy a díly',
@@ -890,45 +890,55 @@ export const animationPages = {
   },
   obratCoinModule: {
     path: '/animace/obrat-mincovni-modul.html',
-    title: 'OBRAT – mincovní modul',
-    buttonText: 'Jak vyrobit mincovní modul',
+    title: 'Šikmina – kapsa na mince',
+    buttonText: 'Jak vyrobit kapsu na mince',
     sections: {
       A: 'Část A – řez',
       B: 'Část B – čáry, líc P',
       C: 'Část C – hrany, B, lepení',
       D: 'Část D – švy a díry',
-      E: 'Část E – víčko',
+      E: 'Část E – dutiny a víčko',
       F: 'Část F – zkouška',
     },
 
     steps: {
-      A: ['Přiložte listy na kůži', 'Nejdřív vysekněte otvory', 'Řežte po plné čáře'],
+      A: ['Přiložte P a T3 na kůži', 'Vysekněte otvory', 'Řežte po plné čáře'],
       B: [
-        'Čára ohybu a ústí na rub P',
-        'Pole pro lepidlo',
-        'Konce dělicích švů na líc T3',
+        'Přeneste ohyb a ústí na rub P',
+        'Vyznačte pole pro lepidlo na rub P',
+        'Přeneste čáry na T3',
         'Zdrsněte líc P',
       ],
       C: [
         'Dokončete hrany ústí, zářezů a víčka',
-        'Patice B do T3',
-        'Naneste lepidlo',
-        'Přiložte T3 za mokra',
+        'Osaďte patici B do T3',
+        'Naneste lepidlo na T3 a P',
+        'Přiložte T3 a zatižte',
       ],
-      D: ['Ušijte dělicí švy', 'Prorazte U-linii, nešijte'],
+      D: [
+        'Prorazte dělicí švy',
+        'Ušijte dělicí švy',
+        'Narýsujte U-linii a připravte vidličky',
+        'Prorazte U-linii, nešijte',
+      ],
       E: [
-        'Navlhčete a ohněte víčko',
+        'Provlékněte pomocnou nit',
+        'Připevněte kapsu na karton',
+        'Obtiskněte dutiny kolem mincí',
+        'Ohněte víčko',
+        'Nechte dutiny a víčko schnout',
+        'Vyndejte mince a změřte víčko',
         'Seřízněte víčko na 20 mm',
         'Zaoblete rohy víčka',
-        'Objímka B podle obtisku',
+        'Osaďte objímku B podle obtisku',
       ],
-      F: ['Provlékněte pomocnou nit', 'Zkouška třesením', 'B 50× a mince prsty'],
+      F: ['Nechte nit a karton', 'Zatřeste kapsou s mincemi', 'Vyzkoušejte B a vyndejte mince'],
     },
   },
 
   obratBody: {
     path: '/animace/obrat-telo.html',
-    title: 'OBRAT – tělo a patice',
+    title: 'Šikmina – tělo a patice',
     buttonText: 'Jak vyříznout a připravit tělo',
     sections: {
       A: 'Část A – řez',
@@ -939,22 +949,27 @@ export const animationPages = {
 
     steps: {
       A: [
-        'List 1 na rub kůže',
-        'Proč list 1 na rub',
+        'Přiložte list 1 na rub kůže',
+        'Nedávejte list 1 na líc',
         'Vyřízněte T1',
-        'Kůži otočte, T2 na líc',
-        'Otvor C',
+        'Otočte kůži, T2 na líc',
+        'Vysekněte otvor C',
         'Vyřízněte T2',
-        'Kryt K na rub',
+        'Vyřízněte kryt K',
       ],
       B: ['Propíchněte konce ohybu', 'Spojte vpichy tužkou'],
-      C: ['Dokončete horní hranu T2', 'Patice C'],
-      D: ['Zaoblete okraj krytu', 'Kryt na rub T2', 'Přitlačte kryt', 'Zkouška kartou'],
+      C: ['Dokončete horní hranu T2', 'Osaďte patici C'],
+      D: [
+        'Zaoblete okraj krytu',
+        'Přilepte kryt na rub T2',
+        'Přitlačte kryt',
+        'Vyzkoušejte kryt kartou',
+      ],
     },
   },
   obratAssembly: {
     path: '/animace/obrat-sestaveni.html',
-    title: 'OBRAT – sestavení',
+    title: 'Šikmina – sestavení',
     buttonText: 'Jak sestavit tělo s kapsou na mince',
     sections: {
       A: 'Část A – lepení',
@@ -965,20 +980,34 @@ export const animationPages = {
     steps: {
       A: [
         'Přeneste šrafu na T2',
-        'Zdrsněte pásy',
-        'Lepidlo na rub T1 a T2',
-        'T2 na T1 rubem k rubu',
-        'Lepidlo na pásy, ne na víčko',
-        'Přiložte kapsu za mokra',
-        'Pod závažím do druhého dne',
+        'Zdrsněte líc T2',
+        'Naneste lepidlo na rub T1 a T2',
+        'Přiložte T2 na T1 rubem k rubu',
+        'Zvolte lepidlo',
+        'Ohraničte lepenou plochu páskou',
+        'Vložte mince do dutin',
+        'Jen kontaktní lepidlo: přilepte kapsu',
+        'Běžné lepidlo: naneste ho na kapsu a T2',
+        'Běžné lepidlo: přiložte kapsu',
+        'Běžné lepidlo: vytlačte přebytek',
+        'Zatižte kapsu do druhého dne',
       ],
-      B: ['Připravte díry', 'Prorazte kapsu', 'Nad kapsou jen T2 a T1', 'Když vidlička neprojde'],
-      C: ['Ušijte U-šev jednou nití', 'Hrany po obvodu', 'Víčko otevřete a zavřete'],
+      B: [
+        'Připravte díry a vidličky',
+        'Prorazte U-šev kapsou',
+        'Prorazte linii nad kapsou',
+        'Když vidlička neprojde',
+      ],
+      C: [
+        'Ušijte U-šev jednou nití',
+        'Dokončete hrany po obvodu',
+        'Odklopte víčko naplno a zavřete',
+      ],
     },
   },
   obratClosures: {
     path: '/animace/obrat-klopa.html',
-    title: 'OBRAT – klopa na míru',
+    title: 'Šikmina – klopa na míru',
     buttonText: 'Jak seříznout klopu a osadit objímku C',
     sections: {
       A: 'Část A – míra klopy',
@@ -1001,8 +1030,13 @@ export const animationPages = {
         'Zaoblete oba rohy',
         'Když C nedovolí seříznout dost',
       ],
-      C: ['Narýsujte a ušijte ozdobný šev', 'Hrany klopy', 'Objímka C na klopě'],
-      D: ['Otevřete jen C', 'Otevřete jen B', '30× stiskněte a ohněte'],
+      C: [
+        'Podložte peněženku',
+        'Narýsujte, prorazte a ušijte ozdobný šev',
+        'Dokončete hrany klopy',
+        'Osaďte objímku C na klopu',
+      ],
+      D: ['Otevřete jen C', 'Otevřete jen B', 'Stiskněte a ohněte peněženku'],
     },
   },
 

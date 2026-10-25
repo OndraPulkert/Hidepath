@@ -72,12 +72,9 @@
     "bodyMm": 5,
     "moduleMm": 4,
     "field": [40, 68],
-    "topBand": {
-      "y": [52, 57],
-      "x": [
-        [5, 46],
-        [62, 103]
-      ]
+    "faceArea": {
+      "fromY": 52,
+      "sidesFromY": 50
     }
   },
   "cells": [
@@ -104,7 +101,7 @@
     "reliefToSeam": 3,
     "reliefToModuleGlue": 2.5,
     "reliefToBodyGlue": 1.5,
-    "reliefToTopGlue": 1,
+    "reliefToFaceGlue": 1,
     "capToMouth": 2,
     "capToLidFreeEdge": 4,
     "capToDivider": 7.5,
@@ -112,7 +109,6 @@
     "capToFlapEdge": 12,
     "flangeToGlueField": 8.5,
     "flangeToMouth": 2.5,
-    "topGlueGap": 16,
     "dividerToMouth": 3,
     "dividerToBottomSeam": 5.5,
     "dividerLength": 28,
@@ -131,6 +127,8 @@
       "fits": [
         {
           "need": 32.2,
+          "frontOnlyNeed": 34.8,
+          "needsForming": false,
           "stackThickness": 2.6,
           "widthReserve": 2.8,
           "depthReserve": 2.8,
@@ -139,6 +137,8 @@
         },
         {
           "need": 33.3,
+          "frontOnlyNeed": 38.5,
+          "needsForming": true,
           "stackThickness": 5.2,
           "widthReserve": 1.7,
           "depthReserve": 1.7,
@@ -156,6 +156,8 @@
       "fits": [
         {
           "need": 33.3,
+          "frontOnlyNeed": 38.5,
+          "needsForming": true,
           "stackThickness": 5.2,
           "widthReserve": 1.7,
           "depthReserve": 1.7,
@@ -164,6 +166,8 @@
         },
         {
           "need": 29.06,
+          "frontOnlyNeed": 33.02,
+          "needsForming": false,
           "stackThickness": 3.96,
           "widthReserve": 5.94,
           "depthReserve": 5.94,
@@ -181,6 +185,8 @@
       "fits": [
         {
           "need": 27.56,
+          "frontOnlyNeed": 31.52,
+          "needsForming": false,
           "stackThickness": 3.96,
           "widthReserve": 7.44,
           "depthReserve": 7.44,
@@ -189,6 +195,8 @@
         },
         {
           "need": 27.56,
+          "frontOnlyNeed": 31.52,
+          "needsForming": false,
           "stackThickness": 3.96,
           "widthReserve": 7.44,
           "depthReserve": 7.44,
@@ -305,9 +313,9 @@
     "druk Prym Anorak 12 mm v jedné vrstvě 1,2 mm a výška zapnutého druku (lekce 4)",
     "prorážení U-švu vidličkami přes 4 vrstvy (≈ 5,5 mm s lepidlem): délka hrotů, vytažení, posun vrstev (lekce 3 a 8)",
     "lepení líc na líc: P na zdrsněný líc T2 (lekce 3)",
-    "ohyb víčka navlhko a 50× otevření na 90° bez praskání u odlehčovacích otvorů (lekce 3 a 6)",
+    "ohyb víčka navlhko a 50× odklopení naplno bez praskání u odlehčovacích otvorů (lekce 3 a 6)",
     "retence mincí pod víčkem s B uprostřed, konce víčka neodstávají; zkouška s pomocnou nití v předem proražených dírách (lekce 6)",
-    "víčko otevřené za 90°: klobouček B může otlačit klopu (lekce 9)",
+    "víčko odklopené naplno: klobouček B se opře o klopu a může ji otlačit (lekce 9)",
     "skutečná tloušťka a nošení (lekce 10)"
   ]
 }

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>OBRAT — dva druky</title>
+    <title>Šikmina — dva druky</title>
     <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
     <link rel="stylesheet" href="/fonts/fonts.css" />
     <style>
@@ -64,6 +64,11 @@
         stroke-width: 1.4;
         stroke-dasharray: 5 4;
       }
+      .rub {
+        fill: #dcc4a2;
+        stroke: #5e3519;
+        stroke-width: 2;
+      }
       .snap {
         fill: #d8b66b;
         stroke: #765a27;
@@ -100,8 +105,8 @@
   <body>
     <main>
       <a href="/projects/obrat-wallet" data-back>← Zpět do lekce</a>
-      <h1>OBRAT · dva druky</h1>
-      <p>Schéma R11 podle rozměrů střihu. Pohyb je názorný, ohyb kůže nesimuluje.</p>
+      <h1>Šikmina · dva druky</h1>
+      <p>Schéma podle rozměrů střihu. Pohyb je názorný, ohyb kůže nesimuluje.</p>
       <div role="group" aria-label="Stav peněženky">
         <button data-state="closed" aria-pressed="true">Zavřená</button
         ><button data-state="cards" aria-pressed="false">Otevřené C</button
@@ -135,12 +140,6 @@
           <circle cx="169.6" cy="269.2" r="6" class="hole" />
           <text x="188" y="276" font-size="18">B</text>
         </g>
-        <!-- víčko zvednuté asi kolmo (zkrácený pohled) -->
-        <g id="lid-open" class="state" opacity="0">
-          <path d="M58 245.2H281.2L278 236H61Z" class="inner" />
-          <text x="306" y="244" font-size="16">víčko</text>
-          <text x="188" y="276" font-size="16">B</text>
-        </g>
         <!-- klopa T1 (zavřená), ohyb na y 130 -->
         <g id="flap">
           <path
@@ -151,20 +150,31 @@
           <circle cx="251.2" cy="191.2" r="14.4" class="snap" />
           <circle cx="251.2" cy="191.2" r="6" class="hole" id="c-hole" opacity="0" />
         </g>
+        <!-- víčko odklopené naplno (asi 155°, klobouček B se lehce opře o klopu): nad ohybem y 48 zkrácené až k y ≈ 30
+             přes zavřenou klopu, je vidět rub a zadní strana objímky B (y ≈ 39); na klopu se netiskne, klobouček B by
+             otlačil její hranu a ozdobný šev -->
+        <g id="lid-open" class="state" opacity="0">
+          <path d="M58 245.2H281.2L276.4 210.5Q275.2 201.7 265.6 201.7H73.6Q64 201.7 62.8 210.5Z" class="rub" />
+          <ellipse cx="169.6" cy="223.4" rx="10" ry="9" class="snap" />
+          <ellipse cx="169.6" cy="223.4" rx="4" ry="3.6" class="hole" />
+          <text x="76" y="227" font-size="14">víčko (rub)</text>
+          <text x="188" y="276" font-size="16">B</text>
+        </g>
         <text x="270" y="198" font-size="20" id="c-label">C</text>
       </svg>
       <p id="caption" aria-live="polite">
-        Zapnuté B i C. Klopa se šikmou hranou končí nad víčkem kapsy na mince.
+        Zapnuté B i C. C zavírá klopu nad kartami a bankovkami. Vepředu je přišitá kapsa na mince, zavírá ji víčko s drukem B.
       </p>
       <p><a href="/projekty/obrat/konstrukce.svg">Konstrukční nákres</a></p>
     </main>
     <script>
       const captions = {
-        closed: 'Zapnuté B i C. Klopa se šikmou hranou končí nad víčkem kapsy na mince.',
+        closed:
+          'Zapnuté B i C. C zavírá klopu nad kartami a bankovkami. Vepředu je přišitá kapsa na mince, zavírá ji víčko s drukem B.',
         cards:
-          'Otevřete jen C. Karty a bankovky vyndáte z kapsy s výkusem. Kapsa na mince zůstává zavřená.',
+          'Otevřete jen C. Karty a bankovky vyndejte z kapsy s výkusem. Kapsa na mince zůstane zavřená.',
         coins:
-          'Otevřete jen B a zvedněte víčko asi do kolmé polohy (víc k vyndání mincí není potřeba). Mince jsou ve dvou dutinách vlevo a vpravo od B. C zůstává zapnutý.',
+          'Otevřete jen B. Víčko odklopte nahoru, až se klobouček B lehce opře o klopu. Na klopu ho netiskněte. Mince jsou ve dvou dutinách vlevo a vpravo od B. C zůstane zapnutý.',
       };
       const svg = document.querySelector('svg');
       const show = (id, on) => (document.getElementById(id).style.opacity = on ? 1 : 0);

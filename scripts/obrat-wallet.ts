@@ -1,5 +1,5 @@
 /**
- * OBRAT R11 – listy střihu 1:1 (A4 na výšku), konstrukční nákres a kontrolní výstup.
+ * Šikmina (interně OBRAT) R11 – listy střihu 1:1 (A4 na výšku), konstrukční nákres a kontrolní výstup.
  *
  *   pnpm pattern:wallet-obrat
  *
@@ -28,9 +28,6 @@ import {
   obratParts,
   obratReview,
 } from '../src/lib/geometry/obrat-wallet.ts';
-
-/** Zvednuté víčko v pohledu zepředu: zkrácená hloubka pásu nad ohybem (mm, jen nákres). */
-const LIFTED_LID_DEPTH = 6;
 
 const STYLE = `<style>
 text{font-family:Arial,Helvetica,sans-serif;fill:#1d1d1d}
@@ -163,7 +160,7 @@ function legend(x: number, y: number, holes: boolean): string {
 }
 
 const header = (title: string, rows: string[]) =>
-  [text(15, 19, `OBRAT ${OBRAT_REVISION} · ${title}`, 't'), lines(15, 25, rows)].join('');
+  [text(15, 19, `ŠIKMINA · ${title}`, 't'), lines(15, 25, rows)].join('');
 
 const svgA4 = (body: string) =>
   `<svg xmlns="http://www.w3.org/2000/svg" width="210mm" height="297mm" viewBox="0 0 210 297">${STYLE}<rect width="210" height="297" fill="#fff"/>${body}</svg>\n`;
@@ -178,8 +175,6 @@ export function buildObratSheets(spec: ObratSpec = OBRAT): { telo: string; dily:
   const T1 = parts.T1;
   const flapL = fmt(spec.flapFoldAllowance + spec.flapTrimReserve + spec.flapEndY);
   const flapR = fmt(spec.flapFoldAllowance + spec.flapTrimReserve + flapEdgeY(spec, spec.width));
-  const gap15 = fmt(spec.lidFoldY - flapEdgeY(spec, 15));
-  const gapR = fmt(spec.lidFoldY - flapEdgeY(spec, spec.width));
 
   const tx = 20;
   const telo = svgA4(
@@ -221,7 +216,7 @@ export function buildObratSheets(spec: ObratSpec = OBRAT): { telo: string; dily:
         `1. Řežte po plné čáře, klopa má rezervu. Ohyb a lepené pásy (${fmt(spec.bodyGlue)} mm) rýsujte jen na rubu.`,
         '2. Linii stehu veďte kružítkem 3,5 mm od hrany.',
         '3. Nejdřív obtisk C, pak klopu seřízněte přes obsah (lekce 9). Mezera mezi hranou klopy',
-        `  a hřbetem ohybu víčka: 15 mm od levého boku ${gap15} mm, u pravého boku ${gapR} mm.`,
+        '  a hřbetem ohybu víčka: cíl 6,5 mm, 15 mm od levého boku (lekce 9).',
         '4. Potom ozdobný šev klopy 3,5 mm od hrany (3 mm před ohybem končí) a objímka C.',
       ]),
       legend(20, 236, false),
@@ -333,23 +328,22 @@ export function buildObratSheets(spec: ObratSpec = OBRAT): { telo: string; dily:
         '1. Kroužky v rozích zářezů P a B',
         '  vyseknout (nebo propíchnout, lekce 4),',
         '  pak P a T3 vyříznout.',
-        '2. Rub P: ohyb a ústí T3 přenést; hrany',
-        '  ústí T3, zářezů a víčka dokončit.',
-        '3. Líc P zdrsnit v pásech pro T2 (boky,',
-        '  dno, horní pás) – před dělicími švy.',
+        '2. Rub P: ohyb a ústí T3 přenést.',
+        '3. Líc P zdrsnit podle šrafy T2; pak',
+        '  hrany ústí T3, zářezů a víčka.',
         '4. Patice B do T3; T3 lepit na rub P jen',
         '  na šrafu (pásy 4 mm, pole s B), přes noc.',
         '5. Dělicí švy ušít, U-linii jen prorazit.',
-        '6. Víčko ohnout navlhko, seříznout,',
-        '  objímka B podle obtisku.',
+        '6. Dutiny navlhko vytvarovat přes mince,',
+        '  víčko ohnout, seříznout, objímka B.',
         '7. Zkouška s pomocnou nití (lekce 6).',
         '8. T2: patice C, kryt K na rub.',
         '9. Lekce 8: líc T2 zdrsnit; T2 na T1,',
-        '  přes noc; pak modul na T2, přes noc;',
+        '  přes noc; pak kapsu na T2, přes noc;',
         '  U-šev jednou nití.',
         '',
         'Polohy a ohyby jen na rubu. Na líci jen',
-        'linie stehu a pásy, které zakryje P.',
+        'linie stehu a plocha, kterou zakryje P.',
       ]),
       legend(136, 142, true),
       calibration(122, 276),
@@ -423,18 +417,18 @@ export function buildObratDrawing(spec: ObratSpec = OBRAT): string {
     }
     return out.join('');
   };
-  /** Víčko zvednuté asi na 90°: zkrácený pás nad ohybem (vnitřní strana), objímka B jako elipsa. */
+  /** Víčko odklopené naplno (~155°, klobouček B se opře o klopu): zkrácené nad ohybem rubem nahoru. */
   const liftedLid = (x0: number, y0: number) => {
     const X = (x: number) => x0 + x * k;
     const yf = y0 + spec.lidFoldY * k;
-    const depth = LIFTED_LID_DEPTH * k;
+    const depth = (spec.lidBottomY - spec.lidFoldY) * Math.cos((25 * Math.PI) / 180) * k;
     const xa = obratLidEndX(spec, spec.lidFoldY);
     const xb = obratLidEndX(spec, spec.lidBottomY);
     const bY = yf - ((spec.snapB.y - spec.lidFoldY) / (spec.lidBottomY - spec.lidFoldY)) * depth;
     const r = (spec.snapCap / 2) * k;
     const f = depth / ((spec.lidBottomY - spec.lidFoldY) * k);
     return [
-      `<path class="lid" d="M${X(xa)} ${yf}L${X(xb) + 3} ${yf - depth}H${X(spec.width - xb) - 3}L${X(spec.width - xa)} ${yf}Z"/>`,
+      `<path class="lid" d="M${X(xa)} ${yf}L${X(xb)} ${yf - depth}H${X(spec.width - xb)}L${X(spec.width - xa)} ${yf}Z"/>`,
       `<ellipse cx="${X(spec.snapB.x)}" cy="${bY}" rx="${r}" ry="${r * f}" class="snap"/>`,
       `<ellipse cx="${X(spec.snapB.x)}" cy="${bY}" rx="5" ry="${5 * f}" fill="#4a3620"/>`,
       `<text x="${x0 + W + 16}" y="${bY + 5}" class="s">B – objímka</text>`,
@@ -450,7 +444,7 @@ export function buildObratDrawing(spec: ObratSpec = OBRAT): string {
     `<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="820" viewBox="0 0 1320 820">`,
     `<style>text{font-family:Arial,sans-serif;fill:#342a23}.h{font-size:22px;font-weight:bold}.t{font-size:16px}.s{font-size:14px}.cut{fill:#a9672f;stroke:#5e3519;stroke-width:2}.in{fill:#c58a52;stroke:#5e3519;stroke-width:2}.lid{fill:#b8783e;stroke:#5e3519;stroke-width:2}.st{fill:none;stroke:#f2d6ab;stroke-width:1.4;stroke-dasharray:5 4}.snap{fill:#d8b66b;stroke:#765a27;stroke-width:2}.coin{fill:#cfc4a0;stroke:#6f6a55;stroke-width:1.5}</style>`,
     `<rect width="1320" height="820" fill="#faf6ef"/>`,
-    `<text x="40" y="44" class="h">OBRAT ${OBRAT_REVISION} · přišitá kapsa na mince</text>`,
+    `<text x="40" y="44" class="h">Šikmina · přišitá kapsa na mince</text>`,
     `<text x="40" y="70" class="t">Zavřená ${spec.width} × ${spec.height} mm · jedna useň ${fmt(spec.leather)} mm · střih 1:1 na listech 1 a 2 · prototyp zatím neověřený</text>`,
   ];
   // 01 zavřená
@@ -494,8 +488,8 @@ export function buildObratDrawing(spec: ObratSpec = OBRAT): string {
     flap(x0, y0),
     snap(x0 + spec.snapC.x * k, y0 + spec.snapC.y * k, 'C'),
     liftedLid(x0, y0),
-    `<text x="${x0 + W + 16}" y="${y0 + (spec.lidFoldY - 18) * k}" class="s">víčko zvednuté</text>`,
-    `<text x="${x0 + W + 16}" y="${y0 + (spec.lidFoldY - 18) * k + 18}" class="s">(stačí asi na 90°)</text>`,
+    `<text x="${x0 + W + 16}" y="${y0 + 8 * k}" class="s">víčko odklopené</text>`,
+    `<text x="${x0 + W + 16}" y="${y0 + 8 * k + 18}" class="s">naplno, B se opře o klopu</text>`,
     `<text x="${x0 + W + 16}" y="${y0 + 74 * k}" class="s">dvě dutiny 37 mm,</text>`,
     `<text x="${x0 + W + 16}" y="${y0 + 74 * k + 18}" class="s">mezi nimi pole s B</text>`,
   );
@@ -509,8 +503,8 @@ export function buildObratDrawing(spec: ObratSpec = OBRAT): string {
   [
     'T1 záda + klopa (1 ohyb) · T2 přední stěna s výkusem · P zadní díl kapsy + víčko (1 ohyb) · T3 předek kapsy · kryt K Ø 17.',
     'Všechny díly z jedné usně 1,2 mm, rovné řezy a zaoblené rohy; všechny švy se šijí naplocho.',
-    '1. Modul: patice B do T3 → T3 přilepit na rub P → dělicí švy ušít, U-linii jen prorazit → víčko ohnout → objímka B.',
-    '2. Patice C do T2, kryt K na rub. 3. T2 na T1, modul na líc T2, U-šev těla jednou nití přes díry modulu.',
+    '1. Kapsa na mince: patice B do T3 → T3 přilepit na rub P → dělicí švy ušít, U-linii jen prorazit → dutiny vytvarovat přes mince, víčko ohnout → objímka B.',
+    '2. Patice C do T2, kryt K na rub. 3. T2 na T1, kapsu na líc T2, U-šev těla jednou nití přes díry kapsy.',
     '4. Objímka C podle obtisku. 5. Zkoušky: C samo, B samo, třesení, tloušťka.',
     'Zavřený řez nad mincí: záda → obsah → T2 → P → mince → T3 → víčko (5 vrstev usně).',
     'Proti předloze 03: stejná klopa se šikmou hranou a C; kapsa na mince přes celou šířku, B uprostřed.',
