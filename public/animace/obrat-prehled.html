@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>OBRAT — tři druky</title>
+    <title>OBRAT — dva druky</title>
     <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
     <link rel="stylesheet" href="/fonts/fonts.css" />
     <style>
@@ -100,102 +100,81 @@
   <body>
     <main>
       <a href="/projects/obrat-wallet" data-back>← Zpět do lekce</a>
-      <h1>OBRAT · tři druky</h1>
-      <p>Schéma R10 podle rozměrů střihu. Pohyb je názorný, ohyb kůže nesimuluje.</p>
+      <h1>OBRAT · dva druky</h1>
+      <p>Schéma R11 podle rozměrů střihu. Pohyb je názorný, ohyb kůže nesimuluje.</p>
       <div role="group" aria-label="Stav peněženky">
         <button data-state="closed" aria-pressed="true">Zavřená</button
         ><button data-state="cards" aria-pressed="false">Otevřené C</button
-        ><button data-state="coins" aria-pressed="false">Otevřené A</button
-        ><button data-state="lid" aria-pressed="false">Otevřené A a B</button>
+        ><button data-state="coins" aria-pressed="false">Otevřené B</button>
       </div>
-      <svg viewBox="0 20 600 370" role="img" aria-labelledby="caption" class="closed">
+      <svg viewBox="0 20 360 370" role="img" aria-labelledby="caption" class="closed">
         <!-- záda T1 (zavřený pohled; 1 mm = 2,4 px, tělo x 40–299, y 130–346) -->
         <path d="M40 130H299.2V332Q299.2 346 285 346H54Q40 346 40 332Z" class="leather" />
         <!-- bankovky a karty v kapse -->
         <rect x="66.7" y="156.4" width="205.8" height="181.2" fill="#ddd3b5" stroke="#9e947a" />
         <rect x="66.9" y="208" width="205.4" height="129.6" rx="6" fill="#4c6976" stroke="#e7edea" />
-        <!-- T2 s výkusem -->
+        <!-- T2 s výkusem a C -->
         <path
           class="inner"
           d="M40 166H112C126.4 166 121.6 221.2 136 221.2H203.2C217.6 221.2 212.8 166 227.2 166H299.2V332Q299.2 346 285 346H54Q40 346 40 332Z"
         />
-        <path class="seam" d="M48.4 173V337.6H290.8V173" />
         <circle cx="251.2" cy="191.2" r="14.4" class="snap" />
-        <circle cx="68.8" cy="315.4" r="14.4" class="snap" opacity="0" id="a-stud" />
-
-        <!-- pás P zavřený (líc) -->
-        <g id="band-closed" class="state">
-          <path d="M40 245.2H299.2V331.6Q299.2 346 284.8 346H49.6Q40 346 40 336.4Z" class="leather" />
-          <path class="seam" d="M97.6 257.2V337.6H270.4V257.2M184 257.2V337.6M290.8 252.4V337.6" />
-          <circle cx="68.8" cy="315.4" r="14.4" class="snap" />
-          <text x="89" y="322" font-size="20">A</text>
+        <!-- kapsa na mince přes celou šířku (P + T3, y 50–90), všitá do U-švu těla -->
+        <path d="M40 250H299.2V332Q299.2 346 285 346H54Q40 346 40 332Z" class="t3" />
+        <path class="seam" d="M137.2 257.2V324.4M202 257.2V324.4" />
+        <g id="coins" class="state" opacity="0">
+          <circle cx="92.8" cy="300.4" r="33" fill="#cfc4a0" />
+          <circle cx="246.4" cy="300.4" r="31.2" fill="#cfc4a0" />
         </g>
-
-        <!-- pás P otevřený doprava (rub, závěs u pravého švu) -->
-        <g id="band-open" class="state" opacity="0">
-          <path d="M282.4 245.2H541.6V336.4Q541.6 346 532 346H296.8Q282.4 346 282.4 331.6Z" class="inner" />
-          <path class="seam" d="M290.8 252.4V337.6" />
-          <path class="t3" d="M532 250H302.8V346H492.4V293.2H532Z" />
-          <circle cx="354.4" cy="305" r="30" fill="#cfc4a0" opacity=".45" />
-          <circle cx="440" cy="305" r="30" fill="#cfc4a0" opacity=".45" />
-          <path class="seam" d="M311.2 257.2V337.6H484V257.2M397.6 257.2V337.6" />
-          <circle cx="512.8" cy="269.2" r="14.4" class="snap" />
-          <circle cx="512.8" cy="315.4" r="14.4" class="snap" />
-          <circle cx="512.8" cy="315.4" r="6" class="hole" />
-          <text x="532" y="366" font-size="20">A</text>
-          <!-- víčko zavřené přes ústí -->
-          <g id="lid-closed" class="state">
-            <path d="M300.4 245.2H541.6V283.6Q541.6 293.2 532 293.2H315.8Q306.4 293.2 305.6 288.4Z" class="leather" />
-            <circle cx="512.8" cy="269.2" r="14.4" class="snap" />
-            <text x="470" y="278" font-size="20">B</text>
-          </g>
-          <!-- víčko otevřené nahoru -->
-          <g id="lid-open" class="state" opacity="0">
-            <path d="M305.6 202Q306.4 197.2 315.8 197.2H532Q541.6 197.2 541.6 206.8V245.2H300.4Z" class="inner" />
-            <circle cx="512.8" cy="221.2" r="14.4" class="snap" />
-            <circle cx="512.8" cy="221.2" r="6" class="hole" />
-            <text x="390" y="226" font-size="18">B – objímka</text>
-            <text x="404" y="278" font-size="18">B – patice</text>
-          </g>
-          <text x="282" y="384" font-size="18">závěs = pravý šev těla</text>
+        <circle cx="169.6" cy="269.2" r="14.4" class="snap" id="b-stud" opacity="0" />
+        <path class="seam" d="M48.4 173V337.6H290.8V173" />
+        <!-- víčko zavřené: ohyb y 48, volná hrana y 68, oba konce šikmo -->
+        <g id="lid-closed" class="state">
+          <path d="M58 245.2H281.2L275.2 283.6Q275.2 293.2 265.6 293.2H73.6Q64 293.2 64 283.6Z" class="leather" />
+          <circle cx="169.6" cy="269.2" r="14.4" class="snap" />
+          <circle cx="169.6" cy="269.2" r="6" class="hole" />
+          <text x="188" y="276" font-size="18">B</text>
         </g>
-
+        <!-- víčko zvednuté asi kolmo (zkrácený pohled) -->
+        <g id="lid-open" class="state" opacity="0">
+          <path d="M58 245.2H281.2L278 236H61Z" class="inner" />
+          <text x="306" y="244" font-size="16">víčko</text>
+          <text x="188" y="276" font-size="16">B</text>
+        </g>
         <!-- klopa T1 (zavřená), ohyb na y 130 -->
         <g id="flap">
           <path
             class="leather"
             d="M40 130H299.2V202Q299.2 221.2 280 221.6L59 230.4Q40 230.8 40 211.6Z"
           />
-          <path class="seam" d="M48.4 130V222.4L290.8 212.8V130" />
+          <path class="seam" d="M48.4 137.2V222.4L290.8 212.8V137.2" />
           <circle cx="251.2" cy="191.2" r="14.4" class="snap" />
           <circle cx="251.2" cy="191.2" r="6" class="hole" id="c-hole" opacity="0" />
         </g>
-        <text x="270" y="197.4" font-size="20" id="c-label">C</text>
+        <text x="270" y="198" font-size="20" id="c-label">C</text>
       </svg>
       <p id="caption" aria-live="polite">
-        Zapnuté A, B i C. Klopa se šikmou hranou končí nad pásem s mincemi.
+        Zapnuté B i C. Klopa se šikmou hranou končí nad víčkem kapsy na mince.
       </p>
       <p><a href="/projekty/obrat/konstrukce.svg">Konstrukční nákres</a></p>
     </main>
     <script>
       const captions = {
-        closed: 'Zapnuté A, B i C. Klopa se šikmou hranou končí nad pásem s mincemi.',
+        closed: 'Zapnuté B i C. Klopa se šikmou hranou končí nad víčkem kapsy na mince.',
         cards:
-          'Otevřete jen C. Karty a bankovky vyndáte z kapsy s výkusem. Pás s mincemi zůstává zapnutý.',
+          'Otevřete jen C. Karty a bankovky vyndáte z kapsy s výkusem. Kapsa na mince zůstává zavřená.',
         coins:
-          'Otevřete A: pás se otočí doprava kolem pravého švu. Víčko mincí drží zavřené druk B na volném konci pásu. C zůstává zapnutý.',
-        lid: 'Otevřete B a odklopte víčko. Mince jsou ve dvou dutinách, nejvýš dvě v každé.',
+          'Otevřete jen B a zvedněte víčko asi do kolmé polohy (víc k vyndání mincí není potřeba). Mince jsou ve dvou dutinách vlevo a vpravo od B. C zůstává zapnutý.',
       };
       const svg = document.querySelector('svg');
       const show = (id, on) => (document.getElementById(id).style.opacity = on ? 1 : 0);
       function setState(state) {
         svg.setAttribute('class', state);
-        const open = state === 'coins' || state === 'lid';
-        show('band-closed', !open);
-        show('band-open', open);
-        show('a-stud', open);
-        show('lid-closed', state === 'coins');
-        show('lid-open', state === 'lid');
+        const open = state === 'coins';
+        show('lid-closed', !open);
+        show('lid-open', open);
+        show('coins', open);
+        show('b-stud', open);
         show('c-hole', state === 'cards');
         document.getElementById('c-label').textContent = state === 'cards' ? '' : 'C';
         document.getElementById('caption').textContent = captions[state];

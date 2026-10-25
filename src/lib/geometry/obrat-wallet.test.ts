@@ -3,102 +3,169 @@ import { describe, expect, it } from 'vitest';
 import {
   OBRAT,
   OBRAT_COINS,
+  OBRAT_REVISION,
   OBRAT_TEST_SETS,
   checkObrat,
   flapEdgeY,
   obratCapacityAudit,
   obratCells,
+  obratClearances,
   obratCoinFit,
+  obratGlueField,
   obratLayerStacks,
   obratLeatherLayout,
+  obratLidEndX,
   obratParts,
-  obratBandRetraction,
   obratReview,
+  obratTopGlueSpans,
 } from './obrat-wallet';
 
-describe('OBRAT R10 – zjednodušená konstrukce s rezervami', () => {
+describe('OBRAT R11 – přišitá kapsa na mince', () => {
   it('výchozí střih projde všemi kontrolami a vejde se na A4 kůže', () => {
+    expect(OBRAT_REVISION).toBe('R11');
     expect(checkObrat(OBRAT)).toEqual([]);
-    expect(obratLeatherLayout(OBRAT).fits).toBe(true);
+    const layout = obratLeatherLayout(OBRAT);
+    expect(layout.fits).toBe(true);
+    expect(layout.columnHeight).toBe(295);
+    expect(layout.sideWidth).toBe(98);
   });
 
-  it('má šest dílů z jedné usně, T1 a P s jedním ohybem', () => {
+  it('má pět dílů z jedné usně: T1 a P s jedním ohybem, P a T3 přes celou šířku', () => {
     const parts = obratParts(OBRAT);
-    expect(parts.map((p) => p.id)).toEqual(['T1', 'T2', 'P', 'T3', 'K', 'KC']);
+    expect(parts.map((p) => p.id)).toEqual(['T1', 'T2', 'P', 'T3', 'K']);
     const by = Object.fromEntries(parts.map((p) => [p.id, p]));
+    expect(parts.map((p) => [p.id, p.face, p.width, p.height])).toEqual([
+      ['T1', 'rub', 108, 146],
+      ['T2', 'líc', 108, 75],
+      ['P', 'rub', 108, 66],
+      ['T3', 'líc', 108, 40],
+      ['K', 'rub', 17, 17],
+    ]);
     expect(by.T1!.lines.filter((l) => l.kind === 'fold')).toHaveLength(1);
     expect(by.P!.lines.filter((l) => l.kind === 'fold')).toHaveLength(1);
     expect(by.T1!.lines.filter((l) => l.kind === 'trim')).toHaveLength(1);
-    expect(by.T1!.height).toBeCloseTo(
-      OBRAT.height + OBRAT.flapFoldAllowance + OBRAT.flapTrimReserve + OBRAT.flapEndY,
-    );
-    expect(by.T3!.width).toBe(95.5);
-    expect(by.K!.width).toBe(13);
-    expect(by.KC!.width).toBe(17);
   });
 
-  it('patice jsou na rozměrech listu, objímky až podle obtisku', () => {
-    const marks = obratParts(OBRAT).flatMap((p) => p.marks.map((m) => `${p.id}:${m.label}`));
-    expect(marks).toEqual(['T2:A – patice', 'T2:C – patice', 'P:odlehčení', 'T3:B – patice']);
+  it('patice B na T3, C na T2, dva odlehčovací otvory v rozích zářezů P; A ani závěs už nejsou', () => {
+    const marks = obratParts(OBRAT).flatMap((p) =>
+      p.marks.map((m) => `${p.id}:${m.label}:${m.x};${m.y}`),
+    );
+    expect(marks).toEqual([
+      'T2:C – patice:88;10.5',
+      'P:odlehčení:7.5;26',
+      'P:odlehčení:100.5;26',
+      'T3:B – patice:54;8',
+    ]);
+    expect(OBRAT).not.toHaveProperty('snapA');
+    expect(OBRAT).not.toHaveProperty('bandEndAllowance');
   });
 
-  it('B je na volném konci v jazýčku T3, mimo dutiny', () => {
-    expect(OBRAT.snapB.x).toBeLessThan(OBRAT.cellSeams[0] - OBRAT.seamOffset);
-    expect(checkObrat({ ...OBRAT, snapB: { x: 18, y: 59 } })).toContain(
-      'B zasahuje k levému švu dutin.',
+  it('B je uprostřed v lepeném poli mezi dutinami', () => {
+    expect(OBRAT.snapB).toEqual({ x: 54, y: 58 });
+    expect(OBRAT.snapB.x).toBe(OBRAT.width / 2);
+    expect(obratGlueField(OBRAT)).toEqual([40, 68]);
+    const k = obratClearances(OBRAT);
+    expect(k.capToDivider).toBe(7.5);
+    expect(k.capToMouth).toBe(2);
+    expect(k.capToLidFreeEdge).toBe(4);
+    expect(k.capToLidEnd).toBe(38.5);
+    expect(k.flangeToGlueField).toBe(8.5);
+    expect(checkObrat({ ...OBRAT, snapB: { x: 30, y: 58 } })).toContain(
+      'B není v poli mezi dutinami.',
     );
-    expect(checkObrat({ ...OBRAT, coinTab: { left: 4, bottomY: 64 } })).toContain(
-      'Příruba patice B není celá pod jazýčkem.',
+    expect(checkObrat({ ...OBRAT, snapB: { x: 46, y: 58 } })).toContain(
+      'B zasahuje k dělicímu švu.',
+    );
+    expect(checkObrat({ ...OBRAT, snapB: { x: 54, y: 56 } })).toContain(
+      'Příruba patice B není celá v lepeném poli pod T3.',
+    );
+    expect(checkObrat({ ...OBRAT, snapB: { x: 54, y: 60 } })).toContain(
+      'Víčko nepřesahuje objímku B o 3 mm.',
     );
   });
 
-  it('rezervy z kontroly vyrobitelnosti (R10): C 3 mm od švu klopy, kryt A mimo lepené pásy', () => {
-    const c = OBRAT.snapC;
-    expect(flapEdgeY(OBRAT, c.x) - OBRAT.seamOffset - (c.y + OBRAT.coverRadius)).toBeGreaterThan(3);
-    const a = OBRAT.snapA;
-    expect(a.y - OBRAT.coverRadius - OBRAT.lidBottomY).toBeGreaterThanOrEqual(2.5);
-    expect(checkObrat({ ...OBRAT, snapA: { x: 11, y: 77.25 } })).toContain(
-      'Kryt A zasahuje do lepeného pásu boku.',
+  it('víčko má oba konce šikmé zrcadlově o 2,5 mm, od linie švu 4 mm u ohybu', () => {
+    expect(obratLidEndX(OBRAT, OBRAT.lidFoldY)).toBe(7.5);
+    expect(obratLidEndX(OBRAT, OBRAT.lidBottomY)).toBe(10);
+    const review = obratReview(OBRAT);
+    expect(review.lid.atFold).toEqual([7.5, 100.5]);
+    expect(review.lid.atFreeEdge).toEqual([10, 98]);
+    const P = obratParts(OBRAT).find((p) => p.id === 'P')!;
+    // obrys P je souměrný podle svislé osy
+    const xs = [...P.outline.matchAll(/([\d.]+) ([\d.]+)/g)].map((m) => Number(m[1]));
+    for (const x of xs) expect(xs.some((o) => Math.abs(o - (OBRAT.width - x)) < 1e-6)).toBe(true);
+    expect(obratClearances(OBRAT).lidFoldToSeam).toBe(4);
+    expect(checkObrat({ ...OBRAT, lidInset: 6.5 })).toContain(
+      'Konec víčka u ohybu je blíž než 3,5 mm k linii švu.',
+    );
+    expect(checkObrat({ ...OBRAT, lidInset: 14 })).toContain(
+      'Víčko nechává u boku nekryté ústí, kudy projde mince.',
+    );
+  });
+
+  it('dutiny 37 + 37 mm pojmou zkušební skladby, všechny trojice i čtveřice', () => {
+    expect(OBRAT_COINS['5']).toMatchObject({ diameter: 23, thickness: 1.85 });
+    expect(obratCells(OBRAT).map((c) => [c.left, c.right, c.seamSpan, c.usableWidth])).toEqual([
+      [3.5, 40.5, 37, 35],
+      [67.5, 104.5, 37, 35],
+    ]);
+    for (const set of OBRAT_TEST_SETS)
+      set.cells.forEach((stack, i) =>
+        expect(obratCoinFit(OBRAT, i, stack).passesEnvelope).toBe(true),
+      );
+    expect(obratCoinFit(OBRAT, 1, ['20', '10']).widthReserve).toBe(1.7);
+    expect(obratCapacityAudit(OBRAT, 3).every((r) => r.split)).toBe(true);
+    expect(obratCapacityAudit(OBRAT, 4).every((r) => r.split)).toBe(true);
+    expect(obratClearances(OBRAT).dividerLength).toBe(28);
+    expect(checkObrat({ ...OBRAT, dividerBottomGap: 3.5 })).toContain(
+      'Dělicí šev nevychází na celé rozteče vidliček.',
+    );
+    expect(checkObrat({ ...OBRAT, dividerSeams: [35.5, 72.5] })).toContain(
+      'Zkušební skladba „3 mince s 50 Kč“ neprojde obálkou.',
+    );
+  });
+
+  it('lepené pásy: tělo 5 mm, modul 4 mm, horní pás za P přerušený kolem příruby B', () => {
+    expect(OBRAT.bodyGlue).toBe(5);
+    expect(obratTopGlueSpans(OBRAT)).toEqual([
+      [5, 46],
+      [62, 103],
+    ]);
+    const k = obratClearances(OBRAT);
+    expect(k.reliefToTopGlue).toBe(1);
+    expect(k.topGlueGap).toBe(16);
+    expect(checkObrat({ ...OBRAT, topGlue: { top: 51.5, bottom: 57, flangeGap: 2.5 } })).toContain(
+      'Horní lepený pás zasahuje k odlehčovacímu otvoru.',
+    );
+    expect(checkObrat({ ...OBRAT, topGlue: { top: 52, bottom: 57, flangeGap: 5 } })).toContain(
+      'Mezerou v horním lepeném pásu projde mince.',
+    );
+    expect(checkObrat({ ...OBRAT, glueBand: 5 })).toContain(
+      'Lepený pás P–T3 nesouhlasí s průnikem lepidla do dutin.',
+    );
+  });
+
+  it('klopa, C a kryt K Ø 17 zůstávají jako v R10', () => {
+    expect(flapEdgeY(OBRAT, 108)).toBe(38);
+    expect(OBRAT.snapC).toEqual({ x: 88, y: 25.5 });
+    const k = obratClearances(OBRAT);
+    expect(k.lidFoldToFlap15).toBeCloseTo(6.56, 2);
+    expect(k.coverCToBodyGlue).toBe(6.5);
+    expect(checkObrat({ ...OBRAT, snapC: { x: 88, y: 29 } })).toContain(
+      'C nemá rezervu od švu klopy.',
     );
     expect(checkObrat({ ...OBRAT, snapC: { x: 86, y: 25.5 } })).toContain(
       'Kryt C zasahuje do výkusu.',
     );
   });
 
-  it('C respektuje šikmou hranu klopy i ozdobný šev', () => {
-    expect(flapEdgeY(OBRAT, 108)).toBe(38);
-    expect(checkObrat({ ...OBRAT, snapC: { x: 88, y: 29 } })).toContain(
-      'C nemá rezervu od švu klopy.',
-    );
-  });
-
-  it('víčko ani předek mincí nezasahují do ohybu závěsu, lepidlo odpovídá dutinám', () => {
-    expect(checkObrat({ ...OBRAT, lidEndX: 102 })).toContain('Víčko zasahuje do ohybu závěsu.');
-    expect(checkObrat({ ...OBRAT, lidEndTaper: 4 })).toContain(
-      'Šikmý konec víčka nekryje pravý šev dutin.',
-    );
-    expect(checkObrat({ ...OBRAT, glueBand: 5 })).toContain(
-      'Lepený pás T3 nesouhlasí s průnikem lepidla do dutin.',
-    );
-  });
-
-  it('kapacita: 5 Kč podle ČNB, zkušební skladby projdou, čtveřice s 50 Kč ne', () => {
-    expect(OBRAT_COINS['5']).toMatchObject({ diameter: 23, thickness: 1.85 });
-    expect(obratCells(OBRAT).map((c) => c.usableWidth)).toEqual([34, 34]);
-    for (const set of OBRAT_TEST_SETS)
-      set.cells.forEach((stack, i) =>
-        expect(obratCoinFit(OBRAT, i, stack).passesEnvelope).toBe(true),
-      );
-    const four = obratCapacityAudit(OBRAT, 4);
-    expect(four).toHaveLength(126);
-    expect(four.filter((r) => r.coins.includes('50')).every((r) => r.split === null)).toBe(true);
-    expect(obratCoinFit(OBRAT, 0, ['50', '20']).passesEnvelope).toBe(false);
-  });
-
-  it('tloušťky jsou nominální součty, výška druků zůstává neznámá', () => {
+  it('tloušťky jsou nominální součty, U-šev kapsy jde přes 4 vrstvy', () => {
     const l = obratLayerStacks(OBRAT, ['50']);
     expect(l.coinZone.nominalMm).toBeCloseTo(12.69);
-    expect(obratLayerStacks(OBRAT, ['20', '10']).coinZone.nominalMm).toBeCloseTo(15.24);
+    const l2 = obratLayerStacks(OBRAT, ['20', '10']);
+    expect(l2.coinZone.nominalMm).toBeCloseTo(15.24);
+    expect(l2.coinZoneBelowLid.nominalMm).toBeCloseTo(14.04);
+    expect(l.pocketSeam).toMatchObject({ leatherLayers: 4, nominalMm: 4.8, withGlueMm: 5.5 });
     expect(l.snapB.snapHeightMm).toBeNull();
     expect(l.measuredMaximum).toBeNull();
   });
@@ -110,14 +177,6 @@ describe('OBRAT R10 – zjednodušená konstrukce s rezervami', () => {
     const review = obratReview(OBRAT);
     expect(review.physicalVerification).toBe('not-performed');
     expect(review.errors).toEqual([]);
-  });
-
-  it('pás má přídavek na vyboulení přes mince a objímka A zůstane od jeho konce', () => {
-    expect(obratBandRetraction(OBRAT, [])).toBeLessThan(1);
-    expect(obratBandRetraction(OBRAT, ['20', '10'])).toBeCloseTo(3.605);
-    expect(obratParts(OBRAT).find((p) => p.id === 'P')!.width).toBe(110);
-    expect(checkObrat({ ...OBRAT, bandEndAllowance: 0 })).toContain(
-      'Plný pás nedosáhne do 2 mm od levé hrany.',
-    );
+    expect(review.openPhysicalChecks.some((t) => t.includes('4 vrstvy'))).toBe(true);
   });
 });

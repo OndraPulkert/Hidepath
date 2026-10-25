@@ -1,5 +1,5 @@
 {
-  "revision": "R10",
+  "revision": "R11",
   "status": "pattern-unverified",
   "physicalVerification": "not-performed",
   "material": {
@@ -30,30 +30,22 @@
     },
     {
       "id": "P",
-      "name": "Pás a víčko",
+      "name": "Zadní díl kapsy a víčko",
       "face": "rub",
-      "width": 110,
+      "width": 108,
       "height": 66,
       "count": 1
     },
     {
       "id": "T3",
-      "name": "Předek mincí",
+      "name": "Předek kapsy na mince",
       "face": "líc",
-      "width": 95.5,
+      "width": 108,
       "height": 40,
       "count": 1
     },
     {
       "id": "K",
-      "name": "Kryt patice A",
-      "face": "rub",
-      "width": 13,
-      "height": 13,
-      "count": 1
-    },
-    {
-      "id": "KC",
       "name": "Kryt patice C",
       "face": "rub",
       "width": 17,
@@ -61,22 +53,77 @@
       "count": 1
     }
   ],
+  "snaps": {
+    "B": {
+      "x": 54,
+      "y": 58
+    },
+    "C": {
+      "x": 88,
+      "y": 25.5
+    }
+  },
+  "lid": {
+    "atFold": [7.5, 100.5],
+    "atFreeEdge": [10, 98],
+    "atCutEdgeWithAllowance": [10.5, 97.5]
+  },
+  "glue": {
+    "bodyMm": 5,
+    "moduleMm": 4,
+    "field": [40, 68],
+    "topBand": {
+      "y": [52, 57],
+      "x": [
+        [5, 46],
+        [62, 103]
+      ]
+    }
+  },
   "cells": [
     {
-      "left": 24,
-      "right": 60,
-      "seamSpan": 36,
-      "usableWidth": 34,
+      "left": 3.5,
+      "right": 40.5,
+      "seamSpan": 37,
+      "usableWidth": 35,
       "usableDepth": 35
     },
     {
-      "left": 60,
-      "right": 96,
-      "seamSpan": 36,
-      "usableWidth": 34,
+      "left": 67.5,
+      "right": 104.5,
+      "seamSpan": 37,
+      "usableWidth": 35,
       "usableDepth": 35
     }
   ],
+  "clearances": {
+    "lidFoldToSeam": 4,
+    "lidFreeEdgeToSeam": 6.5,
+    "lidFreeEdgeWidth": 88,
+    "uncoveredMouthAtSide": 4.25,
+    "reliefToSeam": 3,
+    "reliefToModuleGlue": 2.5,
+    "reliefToBodyGlue": 1.5,
+    "reliefToTopGlue": 1,
+    "capToMouth": 2,
+    "capToLidFreeEdge": 4,
+    "capToDivider": 7.5,
+    "capToLidEnd": 38.5,
+    "capToFlapEdge": 12,
+    "flangeToGlueField": 8.5,
+    "flangeToMouth": 2.5,
+    "topGlueGap": 16,
+    "dividerToMouth": 3,
+    "dividerToBottomSeam": 5.5,
+    "dividerLength": 28,
+    "lidFoldToFlapLeft": 6,
+    "lidFoldToFlap15": 6.556,
+    "lidFoldToFlapRight": 10,
+    "coverCToBodyGlue": 6.5,
+    "coverCToShoulder": 2,
+    "cardEdgeToBodyGlue": 6.2,
+    "pocketClearWidth": 98
+  },
   "testSets": [
     {
       "label": "3 mince s 50 Kč",
@@ -85,7 +132,7 @@
         {
           "need": 32.2,
           "stackThickness": 2.6,
-          "widthReserve": 1.8,
+          "widthReserve": 2.8,
           "depthReserve": 2.8,
           "passesEnvelope": true,
           "physicallyVerified": false
@@ -93,7 +140,7 @@
         {
           "need": 33.3,
           "stackThickness": 5.2,
-          "widthReserve": 0.7,
+          "widthReserve": 1.7,
           "depthReserve": 1.7,
           "passesEnvelope": true,
           "physicallyVerified": false
@@ -110,7 +157,7 @@
         {
           "need": 33.3,
           "stackThickness": 5.2,
-          "widthReserve": 0.7,
+          "widthReserve": 1.7,
           "depthReserve": 1.7,
           "passesEnvelope": true,
           "physicallyVerified": false
@@ -118,7 +165,7 @@
         {
           "need": 29.06,
           "stackThickness": 3.96,
-          "widthReserve": 4.94,
+          "widthReserve": 5.94,
           "depthReserve": 5.94,
           "passesEnvelope": true,
           "physicallyVerified": false
@@ -135,7 +182,7 @@
         {
           "need": 27.56,
           "stackThickness": 3.96,
-          "widthReserve": 6.44,
+          "widthReserve": 7.44,
           "depthReserve": 7.44,
           "passesEnvelope": true,
           "physicallyVerified": false
@@ -143,7 +190,7 @@
         {
           "need": 27.56,
           "stackThickness": 3.96,
-          "widthReserve": 6.44,
+          "widthReserve": 7.44,
           "depthReserve": 7.44,
           "passesEnvelope": true,
           "physicallyVerified": false
@@ -154,13 +201,12 @@
   "capacity": {
     "threeCoins": {
       "total": 56,
-      "pass": 50
+      "pass": 56
     },
     "fourCoins": {
       "total": 126,
-      "pass": 70
-    },
-    "fourWith50": "žádná čtveřice s 50 Kč (nejvýš 2 mince v dutině)"
+      "pass": 126
+    }
   },
   "layers": {
     "with50": {
@@ -168,14 +214,13 @@
         "leatherLayers": 5,
         "nominalMm": 12.69
       },
+      "coinZoneBelowLid": {
+        "leatherLayers": 4,
+        "nominalMm": 11.49
+      },
       "snapB": {
         "leatherLayers": 5,
         "nominalMm": 10.14,
-        "snapHeightMm": null
-      },
-      "snapA": {
-        "leatherLayers": 4,
-        "nominalMm": 8.94,
         "snapHeightMm": null
       },
       "snapC": {
@@ -183,9 +228,23 @@
         "nominalMm": 5.9,
         "snapHeightMm": null
       },
-      "hingeSeam": {
-        "leatherLayers": 3,
-        "nominalMm": 3.6
+      "pocketSeam": {
+        "leatherLayers": 4,
+        "nominalMm": 4.8,
+        "maxLeatherMm": 5.2,
+        "withGlueMm": 5.5
+      },
+      "sideSeamAbovePocket": {
+        "leatherLayers": 2,
+        "nominalMm": 2.4,
+        "maxLeatherMm": 2.6,
+        "withGlueMm": 2.7
+      },
+      "moduleSeam": {
+        "leatherLayers": 2,
+        "nominalMm": 2.4,
+        "maxLeatherMm": 2.6,
+        "withGlueMm": 2.7
       },
       "measuredMaximum": null
     },
@@ -194,14 +253,13 @@
         "leatherLayers": 5,
         "nominalMm": 15.24
       },
+      "coinZoneBelowLid": {
+        "leatherLayers": 4,
+        "nominalMm": 14.04
+      },
       "snapB": {
         "leatherLayers": 5,
         "nominalMm": 10.14,
-        "snapHeightMm": null
-      },
-      "snapA": {
-        "leatherLayers": 4,
-        "nominalMm": 8.94,
         "snapHeightMm": null
       },
       "snapC": {
@@ -209,9 +267,23 @@
         "nominalMm": 5.9,
         "snapHeightMm": null
       },
-      "hingeSeam": {
-        "leatherLayers": 3,
-        "nominalMm": 3.6
+      "pocketSeam": {
+        "leatherLayers": 4,
+        "nominalMm": 4.8,
+        "maxLeatherMm": 5.2,
+        "withGlueMm": 5.5
+      },
+      "sideSeamAbovePocket": {
+        "leatherLayers": 2,
+        "nominalMm": 2.4,
+        "maxLeatherMm": 2.6,
+        "withGlueMm": 2.7
+      },
+      "moduleSeam": {
+        "leatherLayers": 2,
+        "nominalMm": 2.4,
+        "maxLeatherMm": 2.6,
+        "withGlueMm": 2.7
       },
       "measuredMaximum": null
     }
@@ -223,16 +295,19 @@
     },
     "gap": 4,
     "columnHeight": 295,
-    "sideWidth": 96,
+    "sideWidth": 98,
+    "sideColumnHeight": 129,
     "fits": true
   },
   "errors": [],
   "openPhysicalChecks": [
     "délka klopy přes obsah: seříznutí v lekci 9",
     "druk Prym Anorak 12 mm v jedné vrstvě 1,2 mm a výška zapnutého druku (lekce 4)",
-    "retence mincí pod ohnutým víčkem s B na volném konci, i při otevřeném A (lekce 6)",
-    "lepený jazýček B při opakovaném rozepínání (lekce 6)",
-    "ohyb závěsu pásu a víčka v konkrétní usni (lekce 3 a 8)",
+    "prorážení U-švu vidličkami přes 4 vrstvy (≈ 5,5 mm s lepidlem): délka hrotů, vytažení, posun vrstev (lekce 3 a 8)",
+    "lepení líc na líc: P na zdrsněný líc T2 (lekce 3)",
+    "ohyb víčka navlhko a 50× otevření na 90° bez praskání u odlehčovacích otvorů (lekce 3 a 6)",
+    "retence mincí pod víčkem s B uprostřed, konce víčka neodstávají; zkouška s pomocnou nití v předem proražených dírách (lekce 6)",
+    "víčko otevřené za 90°: klobouček B může otlačit klopu (lekce 9)",
     "skutečná tloušťka a nošení (lekce 10)"
   ]
 }

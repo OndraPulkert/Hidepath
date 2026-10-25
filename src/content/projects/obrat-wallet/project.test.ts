@@ -5,7 +5,7 @@ import { findProject } from '@/content/projects';
 import { patternSheetUrlsFor } from '@/content/projects/pattern-sheets';
 import { equipmentCatalog } from '@/content/equipment';
 
-describe('OBRAT R10 v aplikaci', () => {
+describe('OBRAT R11 v aplikaci', () => {
   it('má platné schéma, registraci, těla lekcí a oba listy', () => {
     expect(projectDefinitionSchema.safeParse(obratWalletProject)).toMatchObject({ success: true });
     expect(findProject('obrat-wallet')).toBe(obratWalletProject);
@@ -46,5 +46,19 @@ describe('OBRAT R10 v aplikaci', () => {
         for (const r of step.recalls ?? []) expect(seen.has(r.fieldId)).toBe(true);
         for (const r of step.records ?? []) seen.add(r.id);
       }
+  });
+
+  it('R11 nemá závěs ani druk A', () => {
+    const texts = obratWalletProject.lessons.flatMap((l) => [
+      l.title,
+      l.goal,
+      ...l.materials,
+      ...l.checkpoints.map((c) => c.title),
+      ...l.steps.flatMap((s) => [s.title, s.body]),
+    ]);
+    for (const t of texts) {
+      expect(t).not.toMatch(/závěs|(druk|patice|objímka|objímku|místo|místa) A\b|\bA, B/);
+      expect(t).not.toMatch(/dvě(ma)? nit/);
+    }
   });
 });

@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 import { buildObratDrawing, buildObratSheets } from './obrat-wallet';
 
-describe('OBRAT R10 – generátor listů', () => {
+describe('OBRAT R11 – generátor listů', () => {
   const { telo, dily } = buildObratSheets();
 
   it('listy jsou A4 1:1 s oběma kontrolními úsečkami a legendou', () => {
@@ -20,8 +20,12 @@ describe('OBRAT R10 – generátor listů', () => {
   it('každý díl říká, kterou stranou přiložit', () => {
     expect(telo).toContain('RUB nahoru');
     expect(dily).toMatch(/T2[\s\S]*LÍC nahoru/);
-    expect(dily).toContain('RUB nahoru · pás + víčko');
-    expect(dily).toContain('K – kryty patic: Ø 13 na A, Ø 17 na C');
+    expect(dily).toContain('RUB nahoru · zadní díl + víčko');
+    expect(dily).toMatch(/T3[\s\S]*LÍC nahoru/);
+    expect(dily).toContain('K – kryt patice C, Ø 17');
+    expect(dily).toContain('B – patice');
+    expect(dily).toContain('C – patice');
+    expect(dily).not.toMatch(/A – patice|závěs/);
   });
 
   it('uložené soubory odpovídají generátoru', () => {

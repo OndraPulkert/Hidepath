@@ -41,8 +41,8 @@ import { type AnimationLink } from '@/content/schema';
  *   (lekce 3 pouzdra na karty): rohy dvojhrotem, boky, spodek ke středu, zbytek jednohrotem.
  * - rohova-sablona (`#A`–`#B`): stejně jako kapsa-prisiti; ocelová rohová šablona „květina“: lob podle
  *   poloměru (číslo = průměr) a štěrbina R15 (vnější hrana), společné pro všechny projekty.
- * - obrat-papirovy-model (`#A`–`#C`): stejně jako kapsa-prisiti; papírový model OBRATu (lekce 5):
- *   listy na karton, T2 páskou na T1, obsah, víčko, mince, pás přes mince, kontrola pásu a klopy.
+ * - obrat-papirovy-model (`#A`–`#D`): stejně jako kapsa-prisiti; papírový model OBRATu (lekce 5):
+ *   listy na karton, T3 páskou na P, mince, víčko, T2 na T1, obsah, kapsa na T2, kontrola klopy a víčka.
  * - ctverec-forma (`#A`–`#C`): stejně jako kapsa-prisiti; čtverec 70 × 70 kolem vyvrtaného otvoru
  *   formy jen pravítkem (lekce 2 pouzdra s mincí), příklad otvor Ø 32 mm.
  *
@@ -53,7 +53,7 @@ import { type AnimationLink } from '@/content/schema';
 export const animationPages = {
   obratOverview: {
     path: '/animace/obrat-prehled.html',
-    title: 'OBRAT — tři druky',
+    title: 'OBRAT — dva druky',
     buttonText: 'Jak se OBRAT otevírá',
     sections: {},
   },
@@ -872,20 +872,20 @@ export const animationPages = {
     buttonText: 'Jak složit papírový model',
     sections: {
       A: 'Část A – listy a díly',
-      B: 'Část B – složení',
-      C: 'Část C – kontrola',
+      B: 'Část B – kapsa na mince',
+      C: 'Část C – složení',
+      D: 'Část D – kontrola',
     },
 
     steps: {
-      A: ['Vytiskněte a změřte', 'Nalepte listy na karton', 'Vystřihněte T1, T2 a P'],
-      B: [
-        'T2 páskou na T1',
-        'Vložte karty a bankovky',
-        'Ohněte víčko',
-        'Položte mince',
-        'Přilepte pás přes mince',
+      A: ['Vytiskněte a změřte', 'Nalepte listy na karton', 'Vystřihněte T1, T2, P a T3'],
+      B: ['T3 páskou na P', 'Mince do pravé dutiny', 'Ohněte víčko'],
+      C: ['T2 páskou na T1', 'Vložte karty a bankovky', 'Kapsu na T2'],
+      D: [
+        'Zkontrolujte klopu',
+        'Otevřete víčko pod zavřenou klopou',
+        'Když klopa nebo víčko nesedí',
       ],
-      C: ['Zkontrolujte konec pásu', 'Zkontrolujte klopu', 'Když je klopa krátká'],
     },
   },
   obratCoinModule: {
@@ -894,25 +894,35 @@ export const animationPages = {
     buttonText: 'Jak vyrobit mincovní modul',
     sections: {
       A: 'Část A – řez',
-      B: 'Část B – rub P',
+      B: 'Část B – čáry, líc P',
       C: 'Část C – hrany, B, lepení',
-      D: 'Část D – šití',
+      D: 'Část D – švy a díry',
       E: 'Část E – víčko',
       F: 'Část F – zkouška',
     },
 
     steps: {
       A: ['Přiložte listy na kůži', 'Nejdřív vysekněte otvory', 'Řežte po plné čáře'],
-      B: ['Propíchněte body skrz list', 'Spojte body tužkou'],
+      B: [
+        'Čára ohybu a ústí na rub P',
+        'Pole pro lepidlo',
+        'Konce dělicích švů na líc T3',
+        'Zdrsněte líc P',
+      ],
       C: [
-        'Dokončete hrany',
-        'Patice B do jazýčku T3',
-        'Naneste lepidlo do pásů',
+        'Dokončete hrany ústí, zářezů a víčka',
+        'Patice B do T3',
+        'Naneste lepidlo',
         'Přiložte T3 za mokra',
       ],
-      D: ['Narýsujte švy', 'Prorazte a ušijte', 'Dokončete dno'],
-      E: ['Navlhčete a ohněte víčko', 'Zarovnejte víčko s jazýčkem', 'Objímka B podle obtisku'],
-      F: ['Zkouška třesením', 'B 50× a mince prsty', 'Zkouška místa pro A'],
+      D: ['Ušijte dělicí švy', 'Prorazte U-linii, nešijte'],
+      E: [
+        'Navlhčete a ohněte víčko',
+        'Seřízněte víčko na 20 mm',
+        'Zaoblete rohy víčka',
+        'Objímka B podle obtisku',
+      ],
+      F: ['Provlékněte pomocnou nit', 'Zkouška třesením', 'B 50× a mince prsty'],
     },
   },
 
@@ -923,8 +933,8 @@ export const animationPages = {
     sections: {
       A: 'Část A – řez',
       B: 'Část B – ohyb klopy',
-      C: 'Část C – T2 a patice',
-      D: 'Část D – kryty',
+      C: 'Část C – T2 a patice C',
+      D: 'Část D – kryt',
     },
 
     steps: {
@@ -933,19 +943,19 @@ export const animationPages = {
         'Proč list 1 na rub',
         'Vyřízněte T1',
         'Kůži otočte, T2 na líc',
-        'Otvory A a C',
+        'Otvor C',
         'Vyřízněte T2',
-        'Kryty K na rub',
+        'Kryt K na rub',
       ],
       B: ['Propíchněte konce ohybu', 'Spojte vpichy tužkou'],
-      C: ['Dokončete horní hranu T2', 'Patice A a C'],
-      D: ['Zaoblete okraj krytů', 'Kryty na rub T2', 'Zkouška kartou'],
+      C: ['Dokončete horní hranu T2', 'Patice C'],
+      D: ['Zaoblete okraj krytu', 'Kryt na rub T2', 'Přitlačte kryt', 'Zkouška kartou'],
     },
   },
   obratAssembly: {
     path: '/animace/obrat-sestaveni.html',
     title: 'OBRAT – sestavení',
-    buttonText: 'Jak sestavit tělo s pásem',
+    buttonText: 'Jak sestavit tělo s kapsou na mince',
     sections: {
       A: 'Část A – lepení',
       B: 'Část B – prorážení',
@@ -954,50 +964,45 @@ export const animationPages = {
 
     steps: {
       A: [
-        'Zdrsněte pruh na T2',
-        'Naneste lepidlo',
+        'Přeneste šrafu na T2',
+        'Zdrsněte pásy',
+        'Lepidlo na rub T1 a T2',
         'T2 na T1 rubem k rubu',
-        'Pás víčkem dolů na pruh',
-        'Setřete přebytek, nechte zaschnout',
+        'Lepidlo na pásy, ne na víčko',
+        'Přiložte kapsu za mokra',
+        'Pod závažím do druhého dne',
       ],
-      B: [
-        'Prorazte pravý bok se zavřeným pásem',
-        'Ušijte pravý bok se zavřeným pásem',
-        'Odklopte pás doprava',
-        'Prorazte dno a levý bok',
-      ],
-      C: ['Ušijte levý bok a dno', 'Hrany po obvodu', 'Zkontrolujte pás a šev'],
+      B: ['Připravte díry', 'Prorazte kapsu', 'Nad kapsou jen T2 a T1', 'Když vidlička neprojde'],
+      C: ['Ušijte U-šev jednou nití', 'Hrany po obvodu', 'Víčko otevřete a zavřete'],
     },
   },
   obratClosures: {
     path: '/animace/obrat-klopa.html',
     title: 'OBRAT – klopa na míru',
-    buttonText: 'Jak seříznout klopu a osadit objímky',
+    buttonText: 'Jak seříznout klopu a osadit objímku C',
     sections: {
-      A: 'Část A – objímka A',
-      B: 'Část B – míra klopy',
-      C: 'Část C – seříznutí',
-      D: 'Část D – šev a objímka C',
-      E: 'Část E – kontrola',
+      A: 'Část A – míra klopy',
+      B: 'Část B – seříznutí',
+      C: 'Část C – šev a objímka C',
+      D: 'Část D – kontrola',
     },
 
     steps: {
-      A: ['Obtiskněte hlavičku A', 'Přiložte kolečko K', 'Propíchněte a osaďte objímku'],
-      B: [
+      A: [
         'Změřte mezeru vlevo',
         'Obtiskněte hlavičku C',
-        'Změřte od kolečka K k hraně',
+        'Označte střed a změřte k hraně',
         'Spočítejte, kolik seříznout',
       ],
-      C: [
+      B: [
         'Narýsujte čáru kružítkem',
         'Seřízněte podle pravítka',
         'Obkreslete roh podle šablony R8',
         'Zaoblete oba rohy',
         'Když C nedovolí seříznout dost',
       ],
-      D: ['Narýsujte a ušijte ozdobný šev', 'Hrany klopy', 'Objímka C na klopě'],
-      E: ['Otevřete jen C', 'Otevřete jen A', '30× stiskněte a ohněte'],
+      C: ['Narýsujte a ušijte ozdobný šev', 'Hrany klopy', 'Objímka C na klopě'],
+      D: ['Otevřete jen C', 'Otevřete jen B', '30× stiskněte a ohněte'],
     },
   },
 

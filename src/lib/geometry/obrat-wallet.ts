@@ -1,16 +1,18 @@
 /**
- * OBRAT R10 – zjednodušená konstrukce pro začátečníka (docs/design/obrat/iterace-09-zjednoduseni.md)
- * s rezervami z kontroly vyrobitelnosti (docs/design/obrat/iterace-10-rezervy.md).
+ * OBRAT R11 – přišitá kapsa na mince (docs/design/obrat/iterace-11-prisita-kapsa.md), vychází
+ * z R10 (iterace-09-zjednoduseni.md, iterace-10-rezervy.md).
  *
  * Souřadnice „zavřeného předku“: x zleva, y shora od ohybu klopy, mm. Jedna useň 1,2 mm.
- * Díly: T1 záda + klopa (jeden ohyb), T2 přední stěna, P pás + víčko (ohyb), T3 předek mincí
- * s jazýčkem pro patici B, K kryty patic. Pás P je pravým koncem všitý do pravého švu těla
- * a otevírá se doprava (A); víčko je ohnutý horní okraj pásu a zavírá ho B na volném konci.
- * Karty a bankovky zavírá C na klopě. Druk Prym Anorak 12 mm (katalog `snap-fastener`), každá
- * polovina v jedné vrstvě, objímky podle obtisku. Klopa se řeže s rezervou a na délku se
- * seřízne přes skutečný obsah. Rozměry mincí ČNB (ověřeno 18. 10. 2026). Fyzicky NEOVĚŘENO.
+ * Díly: T1 záda + klopa (jeden ohyb), T2 přední stěna, P zadní díl kapsy na mince s víčkem
+ * (ohnutý horní okraj), T3 předek kapsy, K kryt patice C. P a T3 jsou přes celou šířku těla
+ * a všijí se do jednoho U-švu těla (jedna nit). Dva dělicí švy dělají dvě krajní dutiny, mezi
+ * nimi je slepené pole s paticí B. Víčko (P přehnutý dopředu přes ústí T3) má oba konce šikmé
+ * a zavírá ho B uprostřed. Karty a bankovky zavírá C na klopě. Druk Prym Anorak 12 mm
+ * (katalog `snap-fastener`), každá polovina v jedné vrstvě, objímky podle obtisku. Klopa i víčko
+ * se řežou s rezervou a seříznou se přes skutečný obsah. Rozměry mincí ČNB (ověřeno
+ * 18. 10. 2026). Fyzicky NEOVĚŘENO.
  */
-export const OBRAT_REVISION = 'R10';
+export const OBRAT_REVISION = 'R11';
 
 export const OBRAT_COINS = {
   '1': { diameter: 20, thickness: 1.85, diameterTolerance: 0.1, thicknessTolerance: 0.13 },
@@ -25,6 +27,11 @@ export type ObratCoin = keyof typeof OBRAT_COINS;
 /** Bankovka ČNB 5000 Kč 170 × 74 (±1,5) přeložená napůl; karta ISO 85,60 × 53,98 × 0,76. */
 const NOTE_FOLDED = { width: 85.75, height: 75.5 };
 const CARD = { width: 85.6, height: 53.98, thickness: 0.76 };
+const SMALLEST_COIN = Math.min(...Object.values(OBRAT_COINS).map((c) => c.diameter));
+/** Rozteč vidliček (mm). */
+export const STITCH_PITCH = 4;
+/** Předpoklad: film lepidla na jeden spoj (mm). */
+const GLUE_FILM = 0.1;
 
 export interface Point {
   x: number;
@@ -53,37 +60,42 @@ export interface ObratSpec {
   /** Horní hrana přední stěny (ramena) a výkus pro palec. */
   frontTopY: number;
   notch: { start: number; bottomStart: number; bottomEnd: number; end: number; bottomY: number };
-  /** Horní hrana pásu = ohyb víčka. */
-  bandTopY: number;
-  /** Horní hrana předku mincí (ústí dutin). */
+  /** Ohyb víčka (hřbet) na zadním dílu P. */
+  lidFoldY: number;
+  /** Horní hrana T3 (ústí dutin) = horní hrana P vedle víčka. */
   coinMouthY: number;
-  /** Svislé švy dutin (zleva): levý, dělicí, pravý. */
-  cellSeams: readonly [number, number, number];
-  /** Jazýček T3 vlevo od dutin pro patici B (lepí se celý na P). */
-  coinTab: { left: number; bottomY: number };
-  /** Víčko sahá od volného konce (x 0) po tuto souřadnici; dál je pás bez víčka (závěs). */
-  lidEndX: number;
-  /** O kolik je konec víčka u závěsu kratší na volné hraně víčka (šikmý konec, aby nedrhl při zavírání). */
+  /** Svislé dělicí švy (zleva); vnějším bokem dutin je boční šev těla. */
+  dividerSeams: readonly [number, number];
+  /**
+   * Dělicí šev končí tolik nad linií dna (samostatný šev, bez společné díry s U-švem);
+   * délka švu od ústí + seamEndGap musí vyjít na celé rozteče vidliček.
+   */
+  dividerBottomGap: number;
+  /** První díra U-linie modulu (P + T3) pod ústím. */
+  moduleSeamTopGap: number;
+  /** Konec víčka u ohybu od hrany těla (oba konce, zrcadlově). */
+  lidInset: number;
+  /** O kolik je každý konec víčka kratší na volné hraně po seříznutí (šikmý konec). */
   lidEndTaper: number;
-  /** Spodní hrana zavřeného víčka. */
+  /** Spodní hrana zavřeného víčka (volná hrana po seříznutí). */
   lidBottomY: number;
-  /** Přídavek víčka na ohyb přes předek mincí. */
+  /** Přídavek víčka na ohyb; seřízne se v lekci 6. */
   lidFoldAllowance: number;
   reliefHoleDiameter: number;
-  /** Pás P je u volného konce delší o tento přídavek na vyboulení přes mince. */
-  bandEndAllowance: number;
-  /** Šířka lepeného pásu na okraji dílů (těla i T3); pás se ohýbá na jeho kraji. */
+  /** Lepený pás P–T3 (rub na rub) u boků a dna; pole mezi dutinami se lepí celé. */
   glueBand: number;
+  /** Lepený pás těla: T1–T2 a P–T2 (líc na líc) podél boků a dna. */
+  bodyGlue: number;
+  /** Horní lepený pás P–T2 za kapsou; přerušený kolem příruby B o `flangeGap`. */
+  topGlue: { top: number; bottom: number; flangeGap: number };
   /** Klobouček druku (Prym Anorak 12 mm) a největší dovolená příruba patice. */
   snapCap: number;
   snapFlangeMax: number;
   hardwareGap: number;
-  snapA: Point;
   snapB: Point;
   snapC: Point;
-  /** Kryt K patice A (uvnitř kapsy u lepeného rohu) a větší kryt patice C. */
+  /** Kryt K patice C (rub T2). */
   coverRadius: number;
-  coverRadiusC: number;
   /** Lepidlo, které zasáhne za linii švu do dutiny (glueBand − seamOffset). */
   glueIntrusion: number;
   cavityLoss: number;
@@ -107,35 +119,30 @@ export const OBRAT: ObratSpec = {
   flapTrimReserve: 6,
   frontTopY: 15,
   notch: { start: 30, bottomStart: 40, bottomEnd: 68, end: 78, bottomY: 38 },
-  bandTopY: 48,
+  lidFoldY: 48,
   coinMouthY: 50,
-  cellSeams: [24, 60, 96],
-  coinTab: { left: 4, bottomY: 68 },
-  lidEndX: 100.5,
+  dividerSeams: [40.5, 67.5],
+  dividerBottomGap: 5.5,
+  moduleSeamTopGap: 2,
+  lidInset: 7.5,
   lidEndTaper: 2.5,
   lidBottomY: 68,
   lidFoldAllowance: 4,
   reliefHoleDiameter: 2,
-  bandEndAllowance: 2,
   glueBand: 4,
+  bodyGlue: 5,
+  topGlue: { top: 52, bottom: 57, flangeGap: 2.5 },
   snapCap: 12,
   snapFlangeMax: 11,
   hardwareGap: 2,
-  snapA: { x: 12, y: 77.25 },
-  snapB: { x: 12, y: 58 },
+  snapB: { x: 54, y: 58 },
   snapC: { x: 88, y: 25.5 },
-  coverRadius: 6.5,
-  coverRadiusC: 8.5,
+  coverRadius: 8.5,
   glueIntrusion: 0.5,
   cavityLoss: 1,
   handlingAllowance: 2,
   billFoldedThickness: 1.1,
 };
-
-/** Šířka lepeného pásu konce P na líci T2 a pravého boku těla (pás se ohýbá na jeho kraji). */
-export const HINGE_GLUE = 6;
-/** Lepený pás těla u levého boku a dna (užší, aby kryt K patice A nezasahoval do lepidla). */
-export const BODY_GLUE = 5;
 
 const round = (n: number): number => Math.round(n * 1000) / 1000;
 
@@ -148,14 +155,42 @@ export function flapEdgeY(spec: ObratSpec, x: number): number {
   return spec.flapEndY - (spec.flapRise * x) / spec.width;
 }
 
+/** Délka klopy od ohybu po volnou hranu po seříznutí (rozvinutá) v místě x. */
+export function flapLength(spec: ObratSpec, x: number): number {
+  return spec.flapFoldAllowance + flapEdgeY(spec, x);
+}
+
+/** Levý konec víčka ve výšce y (zavřené víčko, od ohybu dolů); pravý je zrcadlově W − x. */
+export function obratLidEndX(spec: ObratSpec, y: number): number {
+  const len = spec.lidBottomY - spec.lidFoldY;
+  return spec.lidInset + (spec.lidEndTaper * (y - spec.lidFoldY)) / len;
+}
+
+/** Lepené pole mezi dutinami (P–T3): 0,5 mm za dělicí švy. */
+export function obratGlueField(spec: ObratSpec): [number, number] {
+  const [d0, d1] = spec.dividerSeams;
+  return [round(d0 - spec.glueIntrusion), round(d1 + spec.glueIntrusion)];
+}
+
+/** Úseky horního lepeného pásu P–T2 (x od–do), přerušené kolem příruby B. */
+export function obratTopGlueSpans(spec: ObratSpec): [number, number][] {
+  const half = spec.snapFlangeMax / 2 + spec.topGlue.flangeGap;
+  return [
+    [spec.bodyGlue, round(spec.snapB.x - half)],
+    [round(spec.snapB.x + half), spec.width - spec.bodyGlue],
+  ];
+}
+
+/** Dvě krajní dutiny: vnějším bokem je linie bočního švu těla, vnitřním dělicí šev. */
 export function obratCells(spec: ObratSpec) {
-  const [a, b, c] = spec.cellSeams;
+  const [d0, d1] = spec.dividerSeams;
+  const s = spec.seamOffset;
   const usableDepth = round(
-    spec.height - spec.seamOffset - spec.coinMouthY - spec.glueIntrusion - spec.cavityLoss,
+    spec.height - s - spec.coinMouthY - spec.glueIntrusion - spec.cavityLoss,
   );
   return [
-    [a, b],
-    [b, c],
+    [s, d0],
+    [d1, spec.width - s],
   ].map(([left, right]) => ({
     left: left!,
     right: right!,
@@ -232,24 +267,36 @@ export const OBRAT_TEST_SETS: readonly { label: string; cells: [ObratCoin[], Obr
 
 /**
  * Nominální lokální součty (mm): useň + obsah. Výška zapnutého druku `null` = neznámá, změřit
- * v lekci 4. Lepidlo, nit a vyklenutí nejsou zahrnuté; maximum peněženky se měří v lekci 10.
+ * v lekci 4. Lepidlo, nit a vyklenutí nejsou zahrnuté (kromě `withGlueMm` u švů, předpoklad
+ * 0,1 mm na spoj); maximum peněženky se měří v lekci 10.
  */
 export function obratLayerStacks(spec: ObratSpec, coins: readonly ObratCoin[]) {
   const l = spec.leather;
+  const lMax = spec.measuredLeatherMax;
   const cards = 4 * CARD.thickness;
   const notes = spec.billFoldedThickness;
   const coinT = coins.reduce((s, id) => s + OBRAT_COINS[id].thickness, 0);
+  const seam = (layers: number) => ({
+    leatherLayers: layers,
+    nominalMm: round(layers * l),
+    maxLeatherMm: round(layers * lMax),
+    withGlueMm: round(layers * lMax + (layers - 1) * GLUE_FILM),
+  });
   return {
-    /** záda, T2, víčko, T3, pás + obsah + mince */
+    /** záda, T2, P, T3, víčko + karty + bankovky + mince (pod víčkem, y 50–68) */
     coinZone: { leatherLayers: 5, nominalMm: round(5 * l + cards + notes + coinT) },
-    /** záda, T2, víčko, jazýček T3, pás + karty + bankovky + zapnutý B */
+    /** záda, T2, P, T3 + karty + bankovky + mince (pod víčkem níž, y 68–86) */
+    coinZoneBelowLid: { leatherLayers: 4, nominalMm: round(4 * l + cards + notes + coinT) },
+    /** záda, T2, P, T3, víčko + karty + bankovky + zapnutý B (pole mezi dutinami) */
     snapB: { leatherLayers: 5, nominalMm: round(5 * l + cards + notes), snapHeightMm: null },
-    /** záda, T2, kryt K, pás + karty + bankovky + zapnutý A */
-    snapA: { leatherLayers: 4, nominalMm: round(4 * l + cards + notes), snapHeightMm: null },
     /** záda, T2, kryt K, klopa + bankovky (karty začínají níž) + zapnutý C */
     snapC: { leatherLayers: 4, nominalMm: round(4 * l + notes), snapHeightMm: null },
-    /** pravý šev se závěsem pásu */
-    hingeSeam: { leatherLayers: 3, nominalMm: round(3 * l) },
+    /** U-šev těla: dno a boky kapsy (T1, T2, P, T3) */
+    pocketSeam: seam(4),
+    /** U-šev těla: boky nad kapsou (T1, T2) */
+    sideSeamAbovePocket: seam(2),
+    /** modul P + T3 při proražení U-linie v lekci 6 */
+    moduleSeam: seam(2),
     measuredMaximum: null,
   };
 }
@@ -269,7 +316,7 @@ export interface PartMark {
   label: string;
 }
 export interface ObratPart {
-  id: 'T1' | 'T2' | 'P' | 'T3' | 'K' | 'KC';
+  id: 'T1' | 'T2' | 'P' | 'T3' | 'K';
   name: string;
   /** Kterou stranou nahoru se list přikládá na kůži. */
   face: 'líc' | 'rub';
@@ -336,57 +383,52 @@ function roundedPolyline(pts: readonly Point[], radii: readonly number[]): strin
 const rect = (x: number, y: number, w: number, h: number) =>
   `M${n(x)} ${n(y)} H${n(x + w)} V${n(y + h)} H${n(x)} Z`;
 
-/** U-šev těla (levý bok, dno, pravý bok); `dy` posune souřadnice zavřeného předku. */
-function bodyUSeam(spec: ObratSpec, dy: number): string {
+/** U-šev od výšky `top` (souřadnice zavřeného předku) dolů; `dy` posune souřadnice. */
+function uSeam(spec: ObratSpec, top: number, dy: number): string {
   const s = spec.seamOffset;
-  const top = dy + spec.frontTopY + spec.seamEndGap;
   const yb = dy + spec.height - s;
   const r = Math.max(spec.bodyCornerR - s, 0.5);
   return roundedPolyline(
     [
-      { x: s, y: top },
+      { x: s, y: dy + top },
       { x: s, y: yb },
       { x: spec.width - s, y: yb },
-      { x: spec.width - s, y: top },
+      { x: spec.width - s, y: dy + top },
     ],
     [r, r],
   );
 }
 
-/** Lepené pásy podél U-švu těla. */
-function glueU(spec: ObratSpec, dy: number): string {
-  const g = BODY_GLUE;
-  const gr = HINGE_GLUE;
+/** U-šev těla (od ramen T2). */
+const bodyUSeam = (spec: ObratSpec, dy: number) =>
+  uSeam(spec, spec.frontTopY + spec.seamEndGap, dy);
+/** U-linie modulu P + T3 (proráží se v lekci 6, šije se až s tělem). */
+const moduleUSeam = (spec: ObratSpec, dy: number) =>
+  uSeam(spec, spec.coinMouthY + spec.moduleSeamTopGap, dy);
+
+/** Dělicí švy dutin (souřadnice zavřeného předku posunuté o dy). */
+function dividerSeams(spec: ObratSpec, dy: number): string {
+  const top = dy + spec.coinMouthY + spec.seamEndGap;
+  const bottom = dy + spec.height - spec.seamOffset - spec.dividerBottomGap;
+  return spec.dividerSeams.map((x) => `M${n(x)} ${n(top)} V${n(bottom)}`).join(' ');
+}
+
+/** Lepený pás podél boků (od výšky `top`) a dna, šířka g; `dy` posune souřadnice. */
+function glueU(spec: ObratSpec, top: number, g: number, dy: number): string {
   const W = spec.width;
-  const t = dy + spec.frontTopY;
+  const t = dy + top;
   const yb = dy + spec.height;
-  return `M0 ${n(t)} V${n(yb)} H${n(W)} V${n(t)} H${n(W - gr)} V${n(yb - g)} H${n(g)} V${n(t)} Z`;
+  return `M0 ${n(t)} V${n(yb)} H${n(W)} V${n(t)} H${n(W - g)} V${n(yb - g)} H${n(g)} V${n(t)} Z`;
 }
 
-/** Délka klopy od ohybu po volnou hranu po seříznutí (rozvinutá) v místě x. */
-export function flapLength(spec: ObratSpec, x: number): number {
-  return spec.flapFoldAllowance + flapEdgeY(spec, x);
-}
-
-/** Obrys T3 v souřadnicích zavřeného předku (jazýček vlevo nahoře). */
-function coinFrontPoints(spec: ObratSpec): Point[] {
-  const s = spec.seamOffset;
-  const [c0, , c2] = spec.cellSeams;
-  const tab = spec.coinTab;
-  return [
-    { x: tab.left, y: spec.coinMouthY },
-    { x: c2 + s, y: spec.coinMouthY },
-    { x: c2 + s, y: spec.height },
-    { x: c0 - s, y: spec.height },
-    { x: c0 - s, y: tab.bottomY },
-    { x: tab.left, y: tab.bottomY },
-  ];
+/** Konec víčka u ohybu s rezervou na seříznutí: šikmá hrana prodloužená za volnou hranu. */
+function lidCutEndX(spec: ObratSpec): number {
+  return obratLidEndX(spec, spec.lidBottomY + spec.lidFoldAllowance);
 }
 
 export function obratParts(spec: ObratSpec): ObratPart[] {
   const W = spec.width;
   const H = spec.height;
-  const s = spec.seamOffset;
 
   // T1 – RUB nahoru, klopa rozložená nahoru, řez s rezervou. Ohyb na y = fold.
   const fold = flapLength(spec, 0) + spec.flapTrimReserve;
@@ -408,7 +450,7 @@ export function obratParts(spec: ObratSpec): ObratPart[] {
       [spec.flapCornerR, spec.flapCornerR, spec.bodyCornerR, spec.bodyCornerR],
     ),
     lines: [
-      { d: glueU(spec, fold), kind: 'glue' },
+      { d: glueU(spec, spec.frontTopY, spec.bodyGlue, fold), kind: 'glue' },
       { d: `M0 ${n(fold)} H${n(W)}`, kind: 'fold', label: 'ohyb klopy' },
       { d: bodyUSeam(spec, fold), kind: 'seam' },
       {
@@ -421,10 +463,11 @@ export function obratParts(spec: ObratSpec): ObratPart[] {
     count: 1,
   };
 
-  // T2 – LÍC nahoru, souřadnice zavřeného předku posunuté o frontTopY.
+  // T2 – LÍC nahoru, souřadnice zavřeného předku posunuté o frontTopY. Na líci rámeček pro P.
   const t = spec.frontTopY;
   const nb = spec.notch.bottomY - t;
   const N = spec.notch;
+  const tg = spec.topGlue;
   const T2: ObratPart = {
     id: 'T2',
     name: 'Přední stěna',
@@ -441,114 +484,107 @@ export function obratParts(spec: ObratSpec): ObratPart[] {
       `H${n(spec.bodyCornerR)} Q0 ${n(H - t)} 0 ${n(H - t - spec.bodyCornerR)} Z`,
     ].join(' '),
     lines: [
-      { d: rect(W - HINGE_GLUE, spec.bandTopY - t, HINGE_GLUE, H - spec.bandTopY), kind: 'glue' },
+      {
+        d: [
+          glueU(spec, spec.coinMouthY, spec.bodyGlue, -t),
+          ...obratTopGlueSpans(spec).map(([a, b]) =>
+            rect(a, tg.top - t, b - a, tg.bottom - tg.top),
+          ),
+        ].join(' '),
+        kind: 'glue',
+        label: 'P: zdrsnit + lepidlo',
+      },
       { d: bodyUSeam(spec, -t), kind: 'seam' },
     ],
-    marks: [
-      { x: spec.snapA.x, y: spec.snapA.y - t, kind: 'stud-hole', label: 'A – patice' },
-      { x: spec.snapC.x, y: spec.snapC.y - t, kind: 'stud-hole', label: 'C – patice' },
-    ],
+    marks: [{ x: spec.snapC.x, y: spec.snapC.y - t, kind: 'stud-hole', label: 'C – patice' }],
     count: 1,
   };
 
-  // P – RUB nahoru, rozložený doprava: u = W − x (závěs vlevo, volný konec vpravo).
-  const lid = spec.lidBottomY - spec.bandTopY + spec.lidFoldAllowance;
-  const bandH = H - spec.bandTopY;
-  const slitU = W - spec.lidEndX;
-  const u = (x: number) => W - x;
-  const v = (y: number) => lid + y - spec.bandTopY;
-  const [c0, c1, c2] = spec.cellSeams;
+  // P – RUB nahoru, x jako na zavřeném předku. Víčko rozložené nahoru: y = 0 je volná hrana
+  // víčka s rezervou, py(y) převádí souřadnice zavřeného předku pod ohybem.
+  const lidCut = spec.lidBottomY - spec.lidFoldY + spec.lidFoldAllowance;
+  const py = (y: number) => lidCut + y - spec.lidFoldY;
+  const li = spec.lidInset;
+  const cutEnd = lidCutEndX(spec);
   const g = spec.glueBand;
-  const t3 = coinFrontPoints(spec).map((p) => ({ x: u(p.x), y: v(p.y) }));
-  const t3Left = u(c2 + s);
-  const t3Right = u(spec.coinTab.left);
-  const pEnd = W + spec.bandEndAllowance;
+  const [f0, f1] = obratGlueField(spec);
+  const rh = spec.reliefHoleDiameter / 2;
   const P: ObratPart = {
     id: 'P',
-    name: 'Pás a víčko',
+    name: 'Zadní díl kapsy a víčko',
     face: 'rub',
-    width: pEnd,
-    height: lid + bandH,
+    width: W,
+    height: lidCut + H - spec.lidFoldY,
     outline: roundedPolygon(
       [
-        { x: 0, y: lid },
-        { x: slitU, y: lid },
-        { x: slitU + spec.lidEndTaper, y: 0 },
-        { x: pEnd, y: 0 },
-        { x: pEnd, y: lid + bandH },
-        { x: 0, y: lid + bandH },
+        { x: cutEnd, y: 0 },
+        { x: W - cutEnd, y: 0 },
+        { x: W - li, y: py(spec.lidFoldY) },
+        { x: W - li, y: py(spec.coinMouthY) },
+        { x: W, y: py(spec.coinMouthY) },
+        { x: W, y: py(H) },
+        { x: 0, y: py(H) },
+        { x: 0, y: py(spec.coinMouthY) },
+        { x: li, y: py(spec.coinMouthY) },
+        { x: li, y: py(spec.lidFoldY) },
       ],
-      [1, 0, spec.lidCornerR, spec.lidCornerR, spec.bodyCornerR, spec.bodyCornerR],
+      [spec.lidCornerR, spec.lidCornerR, 0, 0, 1, spec.bodyCornerR, spec.bodyCornerR, 1, 0, 0],
     ),
     lines: [
-      { d: rect(0, lid, HINGE_GLUE, bandH), kind: 'glue', label: 'na T2' },
-      // Lepidlo pod T3: pásy u boků a dna dutin + celý jazýček s paticí B.
-      { d: rect(t3Left, v(spec.coinMouthY), g, bandH - 3), kind: 'glue' },
-      { d: rect(t3Left, lid + bandH - g, u(c0 - s) - t3Left, g), kind: 'glue' },
-      { d: rect(u(c0 - s) - g, v(spec.coinMouthY), g, bandH - 3), kind: 'glue' },
       {
-        d: rect(
-          u(c0 - s) - g,
-          v(spec.coinMouthY),
-          t3Right - u(c0 - s) + g,
-          spec.coinTab.bottomY - spec.coinMouthY,
-        ),
+        d: [
+          glueU(spec, spec.coinMouthY, g, py(0)),
+          rect(f0, py(spec.coinMouthY), f1 - f0, H - spec.coinMouthY - g),
+        ].join(' '),
         kind: 'glue',
-        label: 'jazýček B',
-      },
-      { d: `M${n(slitU)} ${n(lid)} H${n(pEnd)}`, kind: 'fold', label: 'ohyb víčka' },
-      {
-        d: `M${n(s)} ${n(v(spec.bandTopY + spec.seamEndGap))} V${n(v(H - s))}`,
-        kind: 'seam',
-        label: 'závěs = pravý šev těla',
-      },
-      {
-        d: `M${t3.map((p) => `${n(p.x)} ${n(p.y)}`).join(' L')} Z`,
-        kind: 'position',
         label: 'T3',
       },
-    ],
-    marks: [
+      { d: `M${n(li)} ${n(py(spec.lidFoldY))} H${n(W - li)}`, kind: 'fold', label: 'ohyb víčka' },
       {
-        x: slitU,
-        y: lid - spec.reliefHoleDiameter / 2,
-        kind: 'relief-hole',
-        label: 'odlehčení',
+        d: `M${n(li + rh)} ${n(py(spec.coinMouthY))} H${n(W - li - rh)}`,
+        kind: 'position',
+        label: 'ústí T3',
       },
+      { d: moduleUSeam(spec, py(0)), kind: 'seam' },
+      { d: dividerSeams(spec, py(0)), kind: 'seam' },
     ],
+    marks: [li, W - li].map((x) => ({
+      x,
+      y: py(spec.coinMouthY),
+      kind: 'relief-hole' as const,
+      label: 'odlehčení',
+    })),
     count: 1,
   };
 
-  // T3 – LÍC nahoru, stejné otočení jako P (u). Jazýček vpravo nahoře.
-  const t3W = t3Right - t3Left;
-  const t3H = H - spec.coinMouthY;
-  const lx = (x: number) => u(x) - t3Left;
+  // T3 – LÍC nahoru, x jako na zavřeném předku, y od ústí.
   const ly = (y: number) => y - spec.coinMouthY;
-  const seamTop = spec.seamEndGap;
   const T3: ObratPart = {
     id: 'T3',
-    name: 'Předek mincí',
+    name: 'Předek kapsy na mince',
     face: 'líc',
-    width: t3W,
-    height: t3H,
+    width: W,
+    height: H - spec.coinMouthY,
     outline: roundedPolygon(
-      coinFrontPoints(spec).map((p) => ({ x: lx(p.x), y: ly(p.y) })),
-      [1, 1, 2, 2, 2, 2],
+      [
+        { x: 0, y: 0 },
+        { x: W, y: 0 },
+        { x: W, y: ly(H) },
+        { x: 0, y: ly(H) },
+      ],
+      [1, 1, spec.bodyCornerR, spec.bodyCornerR],
     ),
     lines: [
-      {
-        d: `M${n(lx(c2))} ${n(seamTop)} V${n(ly(H - s))} H${n(lx(c0))} V${n(seamTop)}`,
-        kind: 'seam',
-      },
-      { d: `M${n(lx(c1))} ${n(seamTop)} V${n(ly(H - s))}`, kind: 'seam' },
+      { d: moduleUSeam(spec, -spec.coinMouthY), kind: 'seam' },
+      { d: dividerSeams(spec, -spec.coinMouthY), kind: 'seam' },
     ],
-    marks: [{ x: lx(spec.snapB.x), y: ly(spec.snapB.y), kind: 'stud-hole', label: 'B – patice' }],
+    marks: [{ x: spec.snapB.x, y: ly(spec.snapB.y), kind: 'stud-hole', label: 'B – patice' }],
     count: 1,
   };
 
   const K: ObratPart = {
     id: 'K',
-    name: 'Kryt patice A',
+    name: 'Kryt patice C',
     face: 'rub',
     width: 2 * spec.coverRadius,
     height: 2 * spec.coverRadius,
@@ -557,34 +593,11 @@ export function obratParts(spec: ObratSpec): ObratPart[] {
     marks: [],
     count: 1,
   };
-  const KC: ObratPart = {
-    id: 'KC',
-    name: 'Kryt patice C',
-    face: 'rub',
-    width: 2 * spec.coverRadiusC,
-    height: 2 * spec.coverRadiusC,
-    outline: circlePath(spec.coverRadiusC, spec.coverRadiusC, spec.coverRadiusC),
-    lines: [],
-    marks: [],
-    count: 1,
-  };
-  return [T1, T2, P, T3, K, KC];
+  return [T1, T2, P, T3, K];
 }
 
 function circlePath(cx: number, cy: number, r: number): string {
   return `M${n(cx - r)} ${n(cy)} A${n(r)} ${n(r)} 0 1 0 ${n(cx + r)} ${n(cy)} A${n(r)} ${n(r)} 0 1 0 ${n(cx - r)} ${n(cy)} Z`;
-}
-
-/**
- * Pracovní odhad, o kolik se volný konec pásu přitáhne k závěsu, když pás přechází přes vyboulení:
- * u závěsu vystoupá o T3 + víčko + mince na předpokládaném vodorovném úseku 6 mm (přímka, ne
- * mechanika ohybu). Úsek 6 mm není změřený; skutečný konec pásu změří papírový model (lekce 5)
- * a rozhodne kožený kus.
- */
-export function obratBandRetraction(spec: ObratSpec, coins: readonly ObratCoin[]): number {
-  const rise = 2 * spec.leather + coins.reduce((sum, id) => sum + OBRAT_COINS[id].thickness, 0);
-  const run = 6;
-  return round(Math.hypot(run, rise) - run);
 }
 
 /** Rozložení dílů na jednu A4 kůže (210 × 297, mezera 4 mm). */
@@ -595,15 +608,64 @@ export function obratLeatherLayout(spec: ObratSpec) {
   const sheet = { width: 210, height: 297 };
   const column = by.T1.height + by.T2.height + by.P.height + 2 * gap;
   const side = sheet.width - Math.max(by.T1.width, by.T2.width, by.P.width) - gap;
-  // T3 na výšku (40 mm široký) vedle sloupce, pod ním kryty.
-  const fits =
-    column <= sheet.height &&
-    by.T3.height <= side &&
-    by.T3.width + gap + by.K.height + gap + by.KC.height + gap <= sheet.height;
-  return { sheet, gap, columnHeight: round(column), sideWidth: round(side), fits };
+  // T3 na výšku (40 mm široký) vedle sloupce, pod ním kryt K.
+  const sideColumn = by.T3.width + gap + by.K.height;
+  const fits = column <= sheet.height && by.T3.height <= side && sideColumn <= sheet.height;
+  return {
+    sheet,
+    gap,
+    columnHeight: round(column),
+    sideWidth: round(side),
+    sideColumnHeight: round(sideColumn),
+    fits,
+  };
 }
 
 // ---------------------------------------------------------------------------------------------
+
+/** Vůle R11 (mm) – tabulka „Kolize a vůle“ v iteraci 11; kontroly je porovnávají s požadavky. */
+export function obratClearances(spec: ObratSpec) {
+  const s = spec.seamOffset;
+  const r = spec.snapCap / 2;
+  const fl = spec.snapFlangeMax / 2;
+  const W = spec.width;
+  const b = spec.snapB;
+  const c = spec.snapC;
+  const rh = spec.reliefHoleDiameter / 2;
+  const [f0, f1] = obratGlueField(spec);
+  const capLid = obratLidEndX(spec, b.y + r);
+  const spans = obratTopGlueSpans(spec);
+  return {
+    lidFoldToSeam: round(spec.lidInset - s),
+    lidFreeEdgeToSeam: round(obratLidEndX(spec, spec.lidBottomY) - s),
+    lidFreeEdgeWidth: round(W - 2 * obratLidEndX(spec, spec.lidBottomY)),
+    uncoveredMouthAtSide: round(obratLidEndX(spec, spec.coinMouthY) - s),
+    reliefToSeam: round(spec.lidInset - rh - s),
+    reliefToModuleGlue: round(spec.lidInset - rh - spec.glueBand),
+    reliefToBodyGlue: round(spec.lidInset - rh - spec.bodyGlue),
+    reliefToTopGlue: round(spec.topGlue.top - spec.coinMouthY - rh),
+    capToMouth: round(b.y - r - spec.coinMouthY),
+    capToLidFreeEdge: round(spec.lidBottomY - b.y - r),
+    capToDivider: round(Math.min(...spec.dividerSeams.map((d) => Math.abs(d - b.x))) - r),
+    capToLidEnd: round(Math.min(b.x - r - capLid, W - capLid - (b.x + r))),
+    capToFlapEdge: round(b.y - r - flapEdgeY(spec, b.x)),
+    flangeToGlueField: round(Math.min(b.x - fl - f0, f1 - (b.x + fl))),
+    flangeToMouth: round(b.y - fl - spec.coinMouthY),
+    topGlueGap: round(spans[1]![0] - spans[0]![1]),
+    dividerToMouth: spec.seamEndGap,
+    dividerToBottomSeam: spec.dividerBottomGap,
+    dividerLength: round(
+      spec.height - s - spec.dividerBottomGap - spec.coinMouthY - spec.seamEndGap,
+    ),
+    lidFoldToFlapLeft: round(spec.lidFoldY - flapEdgeY(spec, 0)),
+    lidFoldToFlap15: round(spec.lidFoldY - flapEdgeY(spec, 15)),
+    lidFoldToFlapRight: round(spec.lidFoldY - flapEdgeY(spec, W)),
+    coverCToBodyGlue: round(W - spec.bodyGlue - (c.x + spec.coverRadius)),
+    coverCToShoulder: round(c.y - spec.coverRadius - spec.frontTopY),
+    cardEdgeToBodyGlue: round((W - CARD.width) / 2 - spec.bodyGlue),
+    pocketClearWidth: round(W - 2 * spec.bodyGlue),
+  };
+}
 
 export function checkObrat(spec: ObratSpec): string[] {
   const e: string[] = [];
@@ -617,21 +679,27 @@ export function checkObrat(spec: ObratSpec): string[] {
   });
   if (values.some((x) => !Number.isFinite(x) || x < 0))
     return ['Hodnoty musejí být konečné a nezáporné.'];
+  const eps = 1e-9;
+  const lt = (a: number, b: number) => a < b - eps;
   const s = spec.seamOffset;
   const r = spec.snapCap / 2;
   const fl = spec.snapFlangeMax / 2;
   const g = spec.hardwareGap;
   const W = spec.width;
   const H = spec.height;
+  const k = obratClearances(spec);
+  const [d0, d1] = spec.dividerSeams;
+
   if (spec.measuredLeatherMax < spec.leather)
     e.push('Změřené maximum usně je menší než jmenovitá tloušťka.');
   if (spec.coverRadius < fl + 1) e.push('Kryt K nepřekryje přírubu patice o 1 mm.');
   if (Math.abs(spec.glueBand - s - spec.glueIntrusion) > 0.01)
-    e.push('Lepený pás T3 nesouhlasí s průnikem lepidla do dutin.');
+    e.push('Lepený pás P–T3 nesouhlasí s průnikem lepidla do dutin.');
 
-  // Hlavní kapsa
-  if (W - 2 * s < NOTE_FOLDED.width + 4) e.push('Kapsa nemá šířkovou rezervu 4 mm pro bankovky.');
-  if (W - 2 * s < CARD.width + 4) e.push('Kapsa nemá šířkovou rezervu 4 mm pro karty.');
+  // Kapsa na karty a bankovky (světlost mezi lepenými pásy těla)
+  if (lt(k.pocketClearWidth, NOTE_FOLDED.width + 4))
+    e.push('Kapsa nemá šířkovou rezervu 4 mm pro bankovky.');
+  if (lt(k.pocketClearWidth, CARD.width + 4)) e.push('Kapsa nemá šířkovou rezervu 4 mm pro karty.');
   if (H - s - NOTE_FOLDED.height < 4) e.push('Bankovka napůl nemá 4 mm pod ohybem klopy.');
   const cardTop = H - s - CARD.height;
   if (spec.notch.bottomY - cardTop < 5) e.push('Výkus neodkrývá kartu alespoň o 5 mm.');
@@ -644,52 +712,22 @@ export function checkObrat(spec: ObratSpec): string[] {
   if (flapEdgeY(spec, W) - cardTop < 4) e.push('Klopa nepřekrývá horní hranu karet o 4 mm.');
 
   // Klopa a C
-  if (spec.bandTopY - spec.flapEndY < 6) e.push('Mezi klopou a pásem chybí 6 mm.');
+  if (lt(k.lidFoldToFlapLeft, 6)) e.push('Mezi klopou a ohybem víčka chybí 6 mm.');
   const c = spec.snapC;
   if (c.y - r < spec.frontTopY + g) e.push('C je moc blízko horní hrany přední stěny.');
   if (c.x - r < spec.notch.end + g) e.push('C zasahuje do výkusu.');
-  if (c.x + spec.coverRadiusC > W - HINGE_GLUE) e.push('Kryt C zasahuje do lepeného pásu.');
-  if (c.x - spec.coverRadiusC < spec.notch.end + 1) e.push('Kryt C zasahuje do výkusu.');
-  if (c.y - spec.coverRadiusC < spec.frontTopY + 1)
-    e.push('Kryt C přečnívá horní hranu přední stěny.');
+  if (lt(k.coverCToBodyGlue, 0)) e.push('Kryt C zasahuje do lepeného pásu.');
+  if (c.x - spec.coverRadius < spec.notch.end + 1) e.push('Kryt C zasahuje do výkusu.');
+  if (lt(k.coverCToShoulder, 1)) e.push('Kryt C přečnívá horní hranu přední stěny.');
   if (c.y + r + g > flapEdgeY(spec, c.x) - s) e.push('C nemá rezervu od švu klopy.');
 
-  // A na volném konci pásu
-  const a = spec.snapA;
-  if (a.x - r < s) e.push('A přečnívá levý okraj.');
-  const shrinkEmpty = obratBandRetraction(spec, []);
-  const shrinkFull = Math.max(
-    ...OBRAT_TEST_SETS.flatMap((set) => set.cells.map((c) => obratBandRetraction(spec, c))),
-  );
-  if (spec.bandEndAllowance - shrinkEmpty > 2) e.push('Prázdný pás přečnívá tělo o víc než 2 mm.');
-  if (shrinkFull - spec.bandEndAllowance > 2) e.push('Plný pás nedosáhne do 2 mm od levé hrany.');
-  if (a.x - r - (shrinkFull - spec.bandEndAllowance) < 2)
-    e.push('Objímka A je u plného pásu blíž než 2 mm k jeho konci.');
-  if (a.x + r + g > spec.cellSeams[0] - s) e.push('A zasahuje do předku mincí.');
-  if (a.y - r < Math.max(spec.lidBottomY, spec.coinTab.bottomY) + g)
-    e.push('A koliduje s víčkem nebo jazýčkem.');
-  if (a.y + spec.coverRadius > H - BODY_GLUE) e.push('Kryt A zasahuje do lepeného pásu dna.');
-  if (a.x - spec.coverRadius < BODY_GLUE) e.push('Kryt A zasahuje do lepeného pásu boku.');
-
-  // B v jazýčku T3 na volném konci
-  const b = spec.snapB;
-  const tab = spec.coinTab;
-  if (b.x - r < tab.left + g / 2) e.push('B přečnívá jazýček vlevo.');
-  if (b.x + r + g > spec.cellSeams[0] - s / 2) e.push('B zasahuje k levému švu dutin.');
-  if (b.x - fl < tab.left + 1 || b.y + fl > tab.bottomY - 1)
-    e.push('Příruba patice B není celá pod jazýčkem.');
-  if (b.y - r < spec.coinMouthY + g) e.push('B je moc blízko horní hrany jazýčku.');
-  if (b.y + r + 3 > spec.lidBottomY) e.push('Víčko nepřesahuje objímku B o 3 mm.');
-  if (spec.lidBottomY - spec.coinMouthY < 12) e.push('Víčko nepřekrývá ústí alespoň o 12 mm.');
-
-  // Závěs pásu: ohýbá se na kraji lepeného pásu
-  const flex = W - HINGE_GLUE;
-  if (spec.lidEndX > flex - 1) e.push('Víčko zasahuje do ohybu závěsu.');
-  if (spec.lidEndX < spec.cellSeams[2] + s + 0.5) e.push('Víčko nepřekrývá pravý okraj T3.');
-  if (spec.lidEndX - spec.lidEndTaper < spec.cellSeams[2] + 1.5)
-    e.push('Šikmý konec víčka nekryje pravý šev dutin.');
-  if (spec.cellSeams[2] + s > flex - 2) e.push('Předek mincí je moc blízko ohybu závěsu.');
-
+  // Dutiny a dělicí švy
+  if (!(s < d0 && d0 < d1 && d1 < W - s)) e.push('Dělicí švy nejsou mezi boky těla.');
+  if (lt(spec.dividerBottomGap, 3)) e.push('Dělicí šev nemá 3 mm od linie dna.');
+  const dividerLength = spec.height - s - spec.dividerBottomGap - spec.coinMouthY - spec.seamEndGap;
+  if (Math.abs(dividerLength / STITCH_PITCH - Math.round(dividerLength / STITCH_PITCH)) > 0.01)
+    e.push('Dělicí šev nevychází na celé rozteče vidliček.');
+  if (lt(spec.moduleSeamTopGap, 1.5)) e.push('Horní díra U-linie modulu je moc blízko ústí.');
   for (const cell of obratCells(spec))
     if (cell.usableWidth <= 0 || cell.usableDepth <= 0) e.push('Dutina nemá kladný prostor.');
   for (const set of OBRAT_TEST_SETS)
@@ -697,6 +735,38 @@ export function checkObrat(spec: ObratSpec): string[] {
       if (!obratCoinFit(spec, i, stack).passesEnvelope)
         e.push(`Zkušební skladba „${set.label}“ neprojde obálkou.`);
     });
+
+  // B v poli mezi dutinami
+  const b = spec.snapB;
+  if (!(d0 < b.x && b.x < d1)) e.push('B není v poli mezi dutinami.');
+  else if (lt(k.capToDivider, g + s / 2)) e.push('B zasahuje k dělicímu švu.');
+  if (lt(k.flangeToGlueField, 1) || lt(k.flangeToMouth, 1))
+    e.push('Příruba patice B není celá v lepeném poli pod T3.');
+  if (lt(k.capToMouth, g)) e.push('B je moc blízko ústí T3.');
+  if (lt(k.capToLidFreeEdge, 3)) e.push('Víčko nepřesahuje objímku B o 3 mm.');
+  if (lt(k.capToLidEnd, g)) e.push('B je moc blízko konce víčka.');
+  if (lt(k.capToFlapEdge, g)) e.push('Klopa zasahuje ke kloboučku B.');
+
+  // Víčko
+  if (spec.lidBottomY - spec.coinMouthY < 12) e.push('Víčko nepřekrývá ústí alespoň o 12 mm.');
+  if (spec.lidBottomY <= spec.lidFoldY || spec.coinMouthY <= spec.lidFoldY)
+    e.push('Ohyb víčka musí být nad ústím i nad volnou hranou víčka.');
+  if (lt(k.lidFoldToSeam, 3.5)) e.push('Konec víčka u ohybu je blíž než 3,5 mm k linii švu.');
+  if (k.lidFreeEdgeWidth < 2 * spec.lidCornerR + 10)
+    e.push('Volná hrana víčka je kvůli šikmým koncům moc krátká.');
+  if (!lt(k.uncoveredMouthAtSide, SMALLEST_COIN / 2))
+    e.push('Víčko nechává u boku nekryté ústí, kudy projde mince.');
+  if (lt(k.reliefToSeam, 2)) e.push('Odlehčovací otvor je blíž než 2 mm k linii švu.');
+  if (lt(k.reliefToModuleGlue, 1) || lt(k.reliefToBodyGlue, 1))
+    e.push('Odlehčovací otvor zasahuje k lepenému pásu.');
+
+  // Horní lepený pás P–T2
+  const tg = spec.topGlue;
+  if (tg.bottom <= tg.top) e.push('Horní lepený pás nemá kladnou výšku.');
+  if (lt(k.reliefToTopGlue, 1)) e.push('Horní lepený pás zasahuje k odlehčovacímu otvoru.');
+  if (lt(tg.flangeGap, 2)) e.push('Horní lepený pás je blíž než 2 mm k přírubě B.');
+  if (!lt(k.topGlueGap, SMALLEST_COIN)) e.push('Mezerou v horním lepeném pásu projde mince.');
+
   if (!obratLeatherLayout(spec).fits) e.push('Díly se nevejdou na jednu A4 kůže.');
   return e;
 }
@@ -718,7 +788,23 @@ export function obratReview(spec: ObratSpec) {
       height: round(p.height),
       count: p.count,
     })),
+    snaps: { B: spec.snapB, C: spec.snapC },
+    lid: {
+      atFold: [spec.lidInset, round(spec.width - spec.lidInset)],
+      atFreeEdge: [
+        round(obratLidEndX(spec, spec.lidBottomY)),
+        round(spec.width - obratLidEndX(spec, spec.lidBottomY)),
+      ],
+      atCutEdgeWithAllowance: [round(lidCutEndX(spec)), round(spec.width - lidCutEndX(spec))],
+    },
+    glue: {
+      bodyMm: spec.bodyGlue,
+      moduleMm: spec.glueBand,
+      field: obratGlueField(spec),
+      topBand: { y: [spec.topGlue.top, spec.topGlue.bottom], x: obratTopGlueSpans(spec) },
+    },
     cells: obratCells(spec),
+    clearances: obratClearances(spec),
     testSets: OBRAT_TEST_SETS.map((s) => ({
       ...s,
       fits: s.cells.map((stack, i) => obratCoinFit(spec, i, stack)),
@@ -726,9 +812,6 @@ export function obratReview(spec: ObratSpec) {
     capacity: {
       threeCoins: { total: three.length, pass: three.filter((r) => r.split).length },
       fourCoins: { total: four.length, pass: four.filter((r) => r.split).length },
-      fourWith50: four.filter((r) => r.coins.includes('50')).every((r) => !r.split)
-        ? 'žádná čtveřice s 50 Kč (nejvýš 2 mince v dutině)'
-        : 'některé projdou',
     },
     layers: {
       with50: obratLayerStacks(spec, ['50']),
@@ -739,9 +822,11 @@ export function obratReview(spec: ObratSpec) {
     openPhysicalChecks: [
       'délka klopy přes obsah: seříznutí v lekci 9',
       'druk Prym Anorak 12 mm v jedné vrstvě 1,2 mm a výška zapnutého druku (lekce 4)',
-      'retence mincí pod ohnutým víčkem s B na volném konci, i při otevřeném A (lekce 6)',
-      'lepený jazýček B při opakovaném rozepínání (lekce 6)',
-      'ohyb závěsu pásu a víčka v konkrétní usni (lekce 3 a 8)',
+      'prorážení U-švu vidličkami přes 4 vrstvy (≈ 5,5 mm s lepidlem): délka hrotů, vytažení, posun vrstev (lekce 3 a 8)',
+      'lepení líc na líc: P na zdrsněný líc T2 (lekce 3)',
+      'ohyb víčka navlhko a 50× otevření na 90° bez praskání u odlehčovacích otvorů (lekce 3 a 6)',
+      'retence mincí pod víčkem s B uprostřed, konce víčka neodstávají; zkouška s pomocnou nití v předem proražených dírách (lekce 6)',
+      'víčko otevřené za 90°: klobouček B může otlačit klopu (lekce 9)',
       'skutečná tloušťka a nošení (lekce 10)',
     ],
   };
