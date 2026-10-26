@@ -187,6 +187,7 @@ describe('animace postupu – stránky v public/animace', () => {
     ['pasek-steh', 'beltStitch', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['vrtani-formy', 'drillForm', ['A', 'B', 'C', 'D', 'E'], 'F'],
     ['posuvka', 'caliper', ['A', 'B', 'C', 'D'], 'E'],
+    ['kruzitko', 'wingDivider', ['A', 'B', 'C'], 'D'],
   ] as const)(
     '%s: samostatná stránka s favicon, návratem do lekce a kotvami svých částí',
     (name, key, anchors, missing) => {
@@ -208,7 +209,7 @@ describe('animace postupu – stránky v public/animace', () => {
     'steps' in page ? [{ key, path: page.path, sections: page.sections, steps: page.steps }] : [],
   );
 
-  it('kroky mají pět stránek kapsy a druku, dvě stránky pásu, sedlářský steh, hrany, šest stránek Víčka, čtyři stránky pásku, posuvku, vrtání formy, čtverec na formě, děrování cvičné kapsy, řez podle pravítka, řez oblouků, rohovou šablonu, papírový model OBRATu a dírky pásku', () => {
+  it('kroky mají pět stránek kapsy a druku, dvě stránky pásu, sedlářský steh, hrany, šest stránek Víčka, čtyři stránky pásku, posuvku, vrtání formy, čtverec na formě, děrování cvičné kapsy, řez podle pravítka, řez oblouků, rohovou šablonu, papírový model OBRATu, dírky pásku a rýsování kružítkem', () => {
     expect(steppedPages.map((p) => p.key)).toEqual([
       'kapsa',
       'pocketAttach',
@@ -242,6 +243,7 @@ describe('animace postupu – stránky v public/animace', () => {
       'obratAssembly',
       'obratClosures',
       'beltHoleCenter',
+      'wingDivider',
     ]);
   });
 

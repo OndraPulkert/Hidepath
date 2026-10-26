@@ -753,7 +753,7 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Narýsujte U-linii a připravte vidličky',
         body: 'Na líci T3 narýsujte kružítkem linii 3,5 mm od boků a dna. Pod kapsu podložte dva odřezky stejné usně, větší než kapsa. Hroty tak projdou stejně hluboko jako v lekci 8. Každou vidličku označte z jedné strany páskou. Tuto stranu držte k hraně, teď i v lekci 8.',
         media: [],
-        animationLinks: [animationLink('obratCoinModule', 'D3')],
+        animationLinks: [animationLink('obratCoinModule', 'D3'), animationLink('wingDivider')],
       },
       {
         id: 'punch-holes',
@@ -1176,7 +1176,7 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Prorazte linii nad kapsou',
         body: 'Nad kapsou narýsujte kružítkem na T2 linii 3,5 mm od boků. Na linii označte šídlem první díru, 4 mm nad horní dírou kapsy. První díru nad kapsou udělejte na značce, ne v díře kapsy. Pak posouvejte nahoru: první zub vždy vložte do poslední proražené díry. Prorážíte jen T2 a T1. Poslední díra je 3–5 mm pod ramenem.',
         media: [],
-        animationLinks: [animationLink('obratAssembly', 'B3')],
+        animationLinks: [animationLink('obratAssembly', 'B3'), animationLink('wingDivider')],
       },
       {
         id: 'sew',
@@ -1334,7 +1334,7 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Narýsujte, prorazte a ušijte ozdobný šev',
         body: 'Z líce narýsujte kružítkem linii 3,5 mm od boků a šikmé hrany klopy. Začněte a skončete 3 mm od horní hrany těla (čáry ohybu). Prorazte z líce. Ušijte jednou vrstvou, asi 1,2 m nitě.',
         media: [],
-        animationLinks: [animationLink('obratClosures', 'C2')],
+        animationLinks: [animationLink('obratClosures', 'C2'), animationLink('wingDivider')],
       },
       {
         id: 'flap-edges',

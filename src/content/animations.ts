@@ -45,6 +45,8 @@ import { type AnimationLink } from '@/content/schema';
  *   listy na karton, T3 páskou na P, mince, víčko, T2 na T1, obsah, kapsa na T2, kontrola klopy a víčka.
  * - ctverec-forma (`#A`–`#C`): stejně jako kapsa-prisiti; čtverec 70 × 70 kolem vyvrtaného otvoru
  *   formy jen pravítkem (lekce 2 pouzdra s mincí), příklad otvor Ø 32 mm.
+ * - kruzitko (`#A`–`#C`): stejně jako kapsa-prisiti; linie stehu rýsovacím kružítkem na líci:
+ *   rozteč, držení, vodicí hrot u hrany, lehké tahy, oblouk, začátek a konec a odbočka; společné pro všechny projekty.
  *
  * `steps` = názvy kroků každé části ve stejném pořadí jako na stránce (`add('B', 'název', …)`).
  * Stránky kapsy umí otevřít i jednotlivý krok: `#B3` = třetí krok části B, stejně jako ho
@@ -1051,6 +1053,31 @@ export const animationPages = {
     steps: {
       A: ['Spojte značky střednicí', 'Přes každou značku křížek'],
       B: ['Výsečník doprostřed křížku', 'Zkušební otisk', 'Vysekněte', 'Všech pět stejně'],
+    },
+  },
+  wingDivider: {
+    path: '/animace/kruzitko.html',
+    title: 'Rýsování kružítkem',
+    buttonText: 'Jak rýsovat linii kružítkem',
+    sections: {
+      A: 'Část A – příprava',
+      B: 'Část B – tah',
+      C: 'Část C – rohy a chyby',
+    },
+    steps: {
+      A: ['Nastavte rozteč', 'Přidržte díl'],
+      B: [
+        'Vodicí hrot přitlačte k hraně',
+        'Proč hrot ujíždí',
+        'Nakloňte a táhněte k sobě',
+        'Dva až tři lehké tahy',
+      ],
+      C: [
+        'Zaoblený roh: otáčejte kůží',
+        'Začátek a konec linie',
+        'Když hrot ujede',
+        'Nejdřív na odřezku',
+      ],
     },
   },
 } as const satisfies Record<
