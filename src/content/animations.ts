@@ -213,6 +213,7 @@ export const animationPages = {
   snapSetter: {
     path: '/animace/druk-aplikator.html',
     title: 'Druk a aplikátor názorně',
+    technique: true,
     buttonText: 'Druk a aplikátor názorně',
     sections: {
       A: 'Část A – díly druku',
@@ -301,6 +302,7 @@ export const animationPages = {
   saddleStitch: {
     path: '/animace/sedlarsky-steh.html',
     title: 'Sedlářský steh',
+    technique: true,
     buttonText: 'Jak šít sedlářský steh',
     sections: {
       A: 'Část A – nit a jehly',
@@ -343,6 +345,7 @@ export const animationPages = {
   edges: {
     path: '/animace/hrany.html',
     title: 'Dokončení hran',
+    technique: true,
     buttonText: 'Jak na hrany',
     sections: {
       A: 'Část A – srovnání',
@@ -385,6 +388,7 @@ export const animationPages = {
   threadLength: {
     path: '/animace/delka-nite.html',
     title: 'Kolik nitě na šev',
+    technique: true,
     buttonText: 'Jak odměřit nit',
     sections: {},
   },
@@ -716,6 +720,7 @@ export const animationPages = {
   caliper: {
     path: '/animace/posuvka.html',
     title: 'Jak měřit posuvkou',
+    technique: true,
     buttonText: 'Jak měřit posuvkou',
     sections: {
       A: 'Část A – posuvka',
@@ -812,6 +817,7 @@ export const animationPages = {
   rulerCut: {
     path: '/animace/rez-nozem.html',
     title: 'Řez podle pravítka',
+    technique: true,
     buttonText: 'Jak řezat podle pravítka',
     sections: {
       A: 'Část A – proč řez ujede',
@@ -832,6 +838,7 @@ export const animationPages = {
   curveCut: {
     path: '/animace/rez-oblouky.html',
     title: 'Řez oblouků a rohů',
+    technique: true,
     buttonText: 'Jak řezat oblouky a rohy',
     sections: {
       A: 'Část A – příprava',
@@ -852,6 +859,7 @@ export const animationPages = {
   cornerTemplate: {
     path: '/animace/rohova-sablona.html',
     title: 'Rohová šablona',
+    technique: true,
     buttonText: 'Jak zaoblit roh podle šablony',
     sections: {
       A: 'Část A – lob',
@@ -1058,6 +1066,7 @@ export const animationPages = {
   wingDivider: {
     path: '/animace/kruzitko.html',
     title: 'Rýsování kružítkem',
+    technique: true,
     buttonText: 'Jak rýsovat linii kružítkem',
     sections: {
       A: 'Část A – příprava',
@@ -1087,6 +1096,8 @@ export const animationPages = {
     title: string;
     /** Text tlačítka v kroku; bez něj „Animace postupu“. */
     buttonText?: string;
+    /** Obecná technika pro všechny projekty: v Návodech mezi technikami, ne u projektu. */
+    technique?: true;
     sections: Record<string, string>;
     steps?: Record<string, readonly string[]>;
   }

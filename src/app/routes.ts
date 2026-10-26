@@ -30,6 +30,8 @@ export const routes = {
   account: '/account',
   shopping: '/shopping',
   workshop: '/workshop',
+  /** Návody: všechny animace s hledáním (`?q=`). */
+  guides: '/navody',
   offline: '/offline',
   /** S `projectSlug` detail ukáže požadavek toho projektu (např. z lekce neaktivního projektu). */
   shoppingItem: (toolSlug: string, projectSlug?: string) =>
@@ -108,7 +110,7 @@ export interface NavItem {
 }
 
 /**
- * Hlavní navigace shellu – čtyři položky podle schváleného prototypu. „Projekt a lekce“
+ * Hlavní navigace shellu – čtyři položky podle schváleného prototypu a Návody. „Projekt a lekce“
  * vede na aktivní projekt (volba z přehledu), proto se položky skládají podle jeho slugu.
  */
 export function primaryNavItemsFor(activeProjectSlug: string): readonly NavItem[] {
@@ -121,6 +123,7 @@ export function primaryNavItemsFor(activeProjectSlug: string): readonly NavItem[
       label: 'Projekt a lekce',
       matchPrefixes: ['/projects'],
     },
+    { to: routes.guides, label: 'Návody', matchPrefixes: [routes.guides] },
   ];
 }
 

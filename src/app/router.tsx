@@ -8,6 +8,7 @@ import { AccountPage } from '@/pages/account-page';
 import { AuthCallbackPage } from '@/pages/auth-callback-page';
 import { BeltConfigPage } from '@/pages/belt-config-page';
 import { DashboardPage } from '@/pages/dashboard-page';
+import { GuidesPage } from '@/pages/guides-page';
 import { HomeRoute } from '@/pages/home-route';
 import { LessonFocusPage } from '@/pages/lesson-focus-page';
 import { LessonPage } from '@/pages/lesson-page';
@@ -50,6 +51,7 @@ export const appRoutes: RouteObject[] = [
               { path: routes.shopping, element: <ShoppingPage /> },
               { path: routePatterns.shoppingItem, element: <ShoppingItemPage /> },
               { path: routes.workshop, element: <WorkshopPage /> },
+              { path: routes.guides, element: <GuidesPage /> },
               { path: routePatterns.project, element: <ProjectPage /> },
               { path: routePatterns.lesson, element: <LessonPage /> },
               { path: routePatterns.template, element: <TemplatePrintPage /> },

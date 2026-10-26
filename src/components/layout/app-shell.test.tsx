@@ -7,7 +7,7 @@ describe('AppShell', () => {
     setOnline(true);
   });
 
-  it('vykreslí brand, čtyři položky navigace a zvýrazní aktivní', async () => {
+  it('vykreslí brand, pět položek navigace a zvýrazní aktivní', async () => {
     renderApp('/shopping/veg-tan-leather');
 
     const nav = await screen.findByRole('navigation', { name: 'Hlavní navigace' });
@@ -17,6 +17,7 @@ describe('AppShell', () => {
       'Nákupy',
       'Dílna',
       'Projekt a lekce',
+      'Návody',
     ]);
     expect(within(nav).getByRole('link', { name: 'Nákupy' })).toHaveAttribute(
       'aria-current',
