@@ -955,7 +955,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'cut-t2',
         title: 'Vyřízněte T2 a kryt K',
-        body: 'Kůži otočte lícem nahoru. T2 z listu 2 přichyťte do volného místa. Nejdřív vysekněte otvor C ve středu křížku výsečníkem z lekce 4. Když druk v lekci 4 otvor nepotřeboval, střed křížku jen propíchněte šídlem. Pak T2 vyřízněte, výkus pomalu. Kůži znovu otočte rubem nahoru a přiložte kryt K (Ø 17). Vyřízněte ho pomalu, krátkými tahy. Tečkované kolečko Ø 13 z kůže neřežte, je to jen papírová měrka.',
+        body: 'Kůži otočte lícem nahoru. T2 z listu 2 přichyťte do volného místa. Nejdřív vysekněte otvor C ve středu křížku výsečníkem z lekce 4. Když druk v lekci 4 otvor nepotřeboval, střed křížku jen propíchněte šídlem. Pak T2 vyřízněte, výkus pomalu. Kůži znovu otočte rubem nahoru a přiložte kryt K (Ø 17). Vyřízněte ho pomalu, krátkými tahy. Máte-li kovovou kruhovou šablonu, můžete místo papírového K obříznout její kolečko Ø 18. Tečkované kolečko Ø 13 z kůže neřežte, je to jen papírová měrka.',
         media: [],
         recalls: [{ fieldId: 'obrat-04-punch', label: 'Výsečník z lekce 4' }],
         animationLinks: [

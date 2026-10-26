@@ -316,7 +316,7 @@ add('A','Vyřízněte T2','Pak T2 vyřízněte, výkus pomalu.',10000,t=>{
   return s+inset('ŘEZ T2',p);
 });
 
-add('A','Vyřízněte kryt K','Kůži znovu otočte rubem nahoru a přiložte kryt K (Ø 17). Vyřízněte ho pomalu, krátkými tahy. Tečkované kolečko Ø 13 z kůže neřežte, je to jen papírová měrka.',11000,t=>{
+add('A','Vyřízněte kryt K','Kůži znovu otočte rubem nahoru a přiložte kryt K (Ø 17). Vyřízněte ho pomalu, krátkými tahy. Máte-li kovovou kruhovou šablonu, můžete místo papírového K obříznout její kolečko Ø 18. Tečkované kolečko Ø 13 z kůže neřežte, je to jen papírová měrka.',11000,t=>{
   const v=V(12,24,1.6), d=es(t,.06,.3), off=es(t,.86,.96), KD1=circD(KK.c,KK.r);
   let b=O(1-off,G(`translate(${f(10*off)} ${f(6*off)})`,inV(v,`<path d="${rectD(-3,-3,42,23)} ${KD1}" fill-rule="evenodd" ${FACE.rub} stroke-width="${sw(v,.3)}"/>`)));
   b+=inV(v,hide(v,KD1,'rub'));
@@ -329,7 +329,7 @@ add('A','Vyřízněte kryt K','Kůži znovu otočte rubem nahoru a přiložte kr
   const kn=s1.on?knifeTop(v.x(a1.head[0]),v.y(a1.head[1]),KD(a1.dir)):'';
   b+=O(seg(t,.3,.4)*(1-off),lbl(v.x(KK.c[0]),v.y(20)+14,'kryt K Ø 17','t halo','middle')+lbl(v.x(GG.c[0]),v.y(20)+14,'Ø 13 neřezat','ta halo','middle'));
   let s=STAGE+mat()+CLIP(b+kn)+lbl(43,86.6,'kůže rubem nahoru','ts halo','middle');
-  const p=plan(t,[[0,['kůži rubem nahoru,','kryt K Ø 17']],[.3,['Ø 13 neřežte:','je to jen měrka'],'ta'],[.44,['řežte pomalu,','krátkými tahy']]]);
+  const p=plan(t,[[0,['kůži rubem nahoru,','kryt K Ø 17']],[.3,['Ø 13 neřežte:','je to jen měrka'],'ta'],[.44,['řežte pomalu,','krátkými tahy']],[.62,['máte kovovou šablonu?','kolečko Ø 18 místo K']]]);
   return s+inset('KRYT K',p);
 });
 
