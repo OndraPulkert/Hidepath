@@ -320,14 +320,14 @@ add('A','Přeneste šrafu na T2','Kapsu sundejte z kartonu. Z líce P opatrně o
   return s+inset('ŠRAFA NA T2',p);
 });
 
-add('A','Zdrsněte líc T2','Líc P je zdrsněný z lekce 6, teď zdrsněte líc T2. Celou plochu šrafy zdrsněte smirkem. U boků zdrsněte až k hornímu rohu šrafy.',8000,t=>{
+add('A','Zdrsněte líc T2','Líc P je zdrsněný z lekce 6, teď zdrsněte líc T2. Celou plochu šrafy zdrsněte smirkem 180 omotaným kolem hranolku, až líc zmatní a nikde se neleskne. U boků zdrsněte až k hornímu rohu šrafy. Prach smeťte a zdrsněné plochy se nedotýkejte prsty.',8000,t=>{
   const r=seg(t,.08,.75);
   let s=MM(VC,`<path d="${T2_PATH}" ${LICF(VC)}/>`+stud(88,25.5));
   if(r>0) s+=MM(VC,`<clipPath id="cRough"><rect x="-1" y="50" width="110" height="${f(41*r)}"/></clipPath><g clip-path="url(#cRough)">${zone(VC,{rough:1})}</g>`);
   s+=MM(VC,zone(VC,{pencil:1}));
   if(r>0&&r<1) s+=sandpaper(VC.x(54+46*Math.sin(r*Math.PI*9)),VC.y(51.5+37*r));
   s+=lbl(VC.x(54),VC.y(45),'T2 líc','t halo','middle');
-  let p=plan(t,[[0,['celou plochu šrafy','zdrsněte smirkem']],[.45,['u boků až k hornímu','rohu šrafy']]]);
+  let p=plan(t,[[0,['zdrsněte smirkem 180','na hranolku, do matu']],[.45,['u boků až k hornímu','rohu šrafy']]]);
   p+=O(seg(t,.78,.88),tick(93,45)+lbl(97,46,'líc P už je','ts')+lbl(97,50.5,'zdrsněný','ts'));
   return s+inset('ZDRSNĚNÍ',p);
 });
@@ -561,7 +561,7 @@ add('C','Ušijte U-šev jednou nití','Odměřte asi 2 m nitě: U-šev má asi 2
   return s+inset('U-ŠEV',p);
 });
 
-add('C','Dokončete hrany po obvodu','Boky a dno srovnejte smirkem. U kapsy jsou to čtyři vrstvy, nad ní dvě. Máte-li ořezávač hran, srazte jen vnější hrany, ne lepené spoje. Smirkem lehce přejeďte a zaleštěte.',10000,t=>{
+add('C','Dokončete hrany po obvodu','Boky a dno srovnejte smirkem 220–400 na rovné destičce, destičku držte kolmo k líci. U kapsy jsou to čtyři vrstvy, nad ní dvě. Máte-li ořezávač hran, srazte jen vnější hrany, ne lepené spoje, a smirkem je lehce přejeďte. Pak hrany navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezalesknou.',10000,t=>{
   let s=body(VC)+pocket(VC,{punched:1})+holes(VC,HOLES)+stitches(VC,HOLES);
   const run=u=>{const P=[[0,15],[0,90],[108,90],[108,15]];const q=u*3,i=Math.min(2,Math.floor(q)),w=q-i;return [L(P[i][0],P[i+1][0],w),L(P[i][1],P[i+1][1],w)]};
   const sd=seg(t,.05,.5), bu=seg(t,.55,.92);
@@ -569,7 +569,7 @@ add('C','Dokončete hrany po obvodu','Boky a dno srovnejte smirkem. U kapsy jsou
   if(sd>0&&sd<1){const [x,y]=run(sd);s+=sandpaper(VC.x(x),VC.y(y));}
   if(bu>0&&bu<1){const [x,y]=run(bu);s+=burnisher(VC.x(x),VC.y(y));}
   s+=O(seg(t,.1,.2),`<path d="M${f(VC.x(-2))} ${f(VC.y(15))}V${f(VC.y(49))}M${f(VC.x(-2))} ${f(VC.y(51))}V${f(VC.y(90))}" stroke="var(--accent)" stroke-width=".35"/>`);
-  const p=plan(t,[[0,['boky a dno','srovnejte smirkem']],[.1,['u kapsy 4 vrstvy,','nad ní 2']],[.3,['ořezávač jen na','vnější hrany']],[.55,'pak zaleštěte']]);
+  const p=plan(t,[[0,['boky a dno: smirek','220–400 na destičce']],[.1,['u kapsy 4 vrstvy,','nad ní 2']],[.3,['ořezávač jen na','vnější hrany']],[.55,'navlhčete a zaleštěte']]);
   return s+inset('HRANY',p);
 });
 

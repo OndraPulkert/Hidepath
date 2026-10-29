@@ -365,7 +365,7 @@ add('B','Spojte vpichy tužkou','List sundejte. Vpichy spojte tužkou podle prav
 
 const VT2=V(9,16,.62);
 function t2(v,face){return inV(v,hide(v,T2_OUT,face))}
-add('C','Dokončete horní hranu T2','Zbruste ramena a výkus T2. Máte-li ořezávač hran, srazte je z líce i z rubu. Pak zaleštěte.',11000,t=>{
+add('C','Dokončete horní hranu T2','Ramena T2 srovnejte smirkem 220–400 na rovné destičce, výkus smirkem 240 omotaným kolem tužky. Máte-li ořezávač hran, srazte je z líce i z rubu. Pak hrany navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezalesknou.',11000,t=>{
   const v=VT2, ph=[seg(t,.06,.36),seg(t,.4,.62),seg(t,.66,.92)];
   let b=t2(v,'lic')+hole(v,SC);
   const cur=ph.findIndex(x=>x>0&&x<1);
@@ -376,7 +376,7 @@ add('C','Dokončete horní hranu T2','Zbruste ramena a výkus T2. Máte-li ořez
     if(cur===1) b+=G(`translate(${f(x)} ${f(y)}) rotate(${f(a.dir*180/Math.PI)})`,`<path d="M-.8 0 L0 -1.6 L.8 0Z" fill="var(--blade)" stroke="var(--steel-d)" stroke-width=".15"/><rect x="-1.2" y="-12" width="2.4" height="10.5" rx="1" fill="var(--wood)" stroke="var(--wood-d)" stroke-width=".25"/>`);
     if(cur===2) b+=block(x,y+.6,a.dir*180/Math.PI,'var(--wood)','var(--wood-d)');}
   let s=STAGE+mat()+CLIP(b)+lbl(43,86.6,'ramena a výkus','ts halo','middle');
-  const p=plan(t,[[0,['zbruste ramena','a výkus T2']],[.4,['ořezávač, máte-li:','z líce i z rubu']],[.66,'pak zaleštěte']]);
+  const p=plan(t,[[0,['ramena: smirek na destičce,','výkus: kolem tužky']],[.4,['ořezávač, máte-li:','z líce i z rubu']],[.66,'navlhčete a zaleštěte']]);
   return s+inset('HORNÍ HRANA',p);
 });
 
@@ -397,7 +397,7 @@ add('C','Osaďte patici C','Osaďte patici C: hlavička na líc T2, dřík z rub
   return s+inset('PATICE C',p);
 });
 
-add('D','Zaoblete okraj krytu','Okraj krytu K zaoblete smirkem.',9000,t=>{
+add('D','Zaoblete okraj krytu','Okraj krytu K zaoblete smirkem 220–400.',9000,t=>{
   const cx=43, cy=45, R=30, u=seg(t,.1,.85), a=-Math.PI/2+u*2*Math.PI*1.5;
   let b=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="var(--lic)" stroke="var(--lic-d)" stroke-width=".4"/>`;
   b+=O(seg(t,.15,.85),`<circle cx="${cx}" cy="${cy}" r="${R-1.3}" fill="none" stroke="var(--rub)" stroke-width="2.4" opacity=".45"/>`);
@@ -405,7 +405,7 @@ add('D','Zaoblete okraj krytu','Okraj krytu K zaoblete smirkem.',9000,t=>{
   if(u>0&&u<1) b+=block(cx+(R+.4)*Math.cos(a),cy+(R+.4)*Math.sin(a),a*180/Math.PI-90+180);
   let s=STAGE+mat()+CLIP(b)+lbl(43,86.6,'kryt K zvětšený','ts halo','middle');
   const pr=(x,y,r)=>`<rect x="${x}" y="${y}" width="16" height="3.2" rx="${r}" fill="var(--lic)"/><rect x="${x}" y="${y+1.6}" width="16" height="1.6" fill="var(--rub)" opacity=".9"/><rect x="${x}" y="${y}" width="16" height="3.2" rx="${r}" fill="none" stroke="var(--lic-d)" stroke-width=".2"/>`;
-  let p=plan(t,[[0,['okraj krytu K','zaoblete smirkem']]])+lbl(90.5,32,'profil hrany:','ts');
+  let p=plan(t,[[0,['okraj krytu K zaoblete','smirkem 220–400']]])+lbl(90.5,32,'profil hrany:','ts');
   p+=pr(91,37,0)+lbl(99,45,'před','ts','middle')+O(seg(t,.5,.7),pr(112,37,1.5)+lbl(120,45,'po','tok','middle'));
   return s+inset('KRYT K',p);
 });

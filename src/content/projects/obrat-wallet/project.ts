@@ -215,7 +215,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'four-face',
         title: 'Slepte páry lícem k sobě',
-        body: 'Na líci obou párů zdrsněte smirkem pás 5 mm podél hrany, kde bude šev. Na P + T3 je to proražená hrana. Na T1 + T2 je to druhá, ještě neušitá hrana. Páry v tomto pásu slepte lícem k sobě za mokra. Hrany zarovnejte. Nechte do druhého dne pod závažím.',
+        body: 'Na líci obou párů zdrsněte pás 5 mm podél hrany, kde bude šev: smirkem 180 omotaným kolem hranolku asi 1–2 cm širokého, až líc zmatní. Na P + T3 je to proražená hrana. Na T1 + T2 je to druhá, ještě neušitá hrana. Páry v tomto pásu slepte lícem k sobě za mokra. Hrany zarovnejte. Nechte do druhého dne pod závažím.',
         media: [],
         waits: [
           {
@@ -331,7 +331,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'face-glue',
         title: 'Slepte zkušební pás líc na líc',
-        body: 'Takhle bude držet P na líci T2. Na rubu jednoho proužku 40 × 25 mm narýsujte tužkou čáru ohybu 20 mm od konce. Konec za čarou je víčko. Pás 5 mm leží na druhé části proužku. Začíná 4 mm za čarou ohybu. Na líci obou proužků zdrsněte smirkem tento pás. Proužky v tomto pásu slepte lícem k sobě za mokra. Nechte do druhého dne pod závažím.',
+        body: 'Takhle bude držet P na líci T2. Na rubu jednoho proužku 40 × 25 mm narýsujte tužkou čáru ohybu 20 mm od konce. Konec za čarou je víčko. Pás 5 mm leží na druhé části proužku. Začíná 4 mm za čarou ohybu. Na líci obou proužků zdrsněte tento pás smirkem 180 omotaným kolem hranolku, až líc zmatní. Proužky v tomto pásu slepte lícem k sobě za mokra. Nechte do druhého dne pod závažím.',
         media: [],
         waits: [
           {
@@ -683,14 +683,14 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'rough-p',
         title: 'Zdrsněte líc P',
-        body: 'Na líc P se v lekci 8 lepí T2. Lepidlo drží jen na zdrsněném líci. Papírový T2 z listu 2 vystřihněte nůžkami po plné čáře. Přiložte ho potiskem nahoru na líc P: dno a boky lícují. Rohy šrafy (šrafovaná plocha pro lepidlo) označte šídlem jen důlkem, neprorážejte. Důlky u boků dejte 1 mm pod horní hranu P, ať nejsou vidět. Důlky spojte tužkou. Celou plochu šrafy zdrsněte smirkem, u boků až k horní hraně P.',
+        body: 'Na líc P se v lekci 8 lepí T2. Lepidlo drží jen na zdrsněném líci. Papírový T2 z listu 2 vystřihněte nůžkami po plné čáře. Přiložte ho potiskem nahoru na líc P: dno a boky lícují. Rohy šrafy (šrafovaná plocha pro lepidlo) označte šídlem jen důlkem, neprorážejte. Důlky u boků dejte 1 mm pod horní hranu P, ať nejsou vidět. Důlky spojte tužkou. Celou plochu šrafy zdrsněte smirkem 180 omotaným kolem hranolku, u boků až k horní hraně P. Brušte, až líc zmatní a nikde se neleskne. Prach smeťte a zdrsněné plochy se nedotýkejte prsty.',
         media: [],
         animationLinks: [animationLink('obratCoinModule', 'B4')],
       },
       {
         id: 'edges',
         title: 'Dokončete hrany ústí, zářezů a víčka',
-        body: 'Zbruste horní hranu T3 (ústí), hrany zářezů P a hrany víčka. Máte-li ořezávač hran, ústí T3 srazte jen z líce (rub bude přilepený na P). Zářezy a víčko srazte z líce i z rubu. Pak zaleštěte. Po přilepení se k těmto hranám hůř dostanete. Boky a dno dokončíte až s tělem.',
+        body: 'Horní hranu T3 (ústí), hrany zářezů P a hrany víčka srovnejte smirkem 220–400 na rovné destičce. Máte-li ořezávač hran, ústí T3 srazte jen z líce (rub bude přilepený na P). Zářezy a víčko srazte z líce i z rubu. Pak hrany navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezalesknou. Po přilepení se k těmto hranám hůř dostanete. Boky a dno dokončíte až s tělem.',
         media: [],
         animationLinks: [animationLink('obratCoinModule', 'C1'), animationLink('edges', 'A')],
       },
@@ -727,7 +727,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'top-edges',
         title: 'Srovnejte horní hrany u boků',
-        body: 'Krátké horní hrany kapsy u boků (P + T3) srovnejte smirkem. Pak je zaleštěte.',
+        body: 'Krátké horní hrany kapsy u boků (P + T3) srovnejte smirkem 220–400 na rovné destičce. Pak je navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezalesknou.',
         media: [],
         animationLinks: [animationLink('edges', 'A')],
       },
@@ -818,7 +818,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'lid',
         title: 'Vyndejte mince a změřte víčko',
-        body: 'Mince vyndejte. Ústí T3 a šikmé konce víčka přeleštěte. Víčko má na ohyb rezervu 4 mm. Na ohnutém víčku změřte vzdálenost od hřbetu ohybu (ohnuté hrany víčka) k volné hraně. Zapište, o kolik je víc než 20 mm.',
+        body: 'Mince vyndejte. Ústí T3 a šikmé konce víčka přeleštěte leštítkem nebo plátnem. Víčko má na ohyb rezervu 4 mm. Na ohnutém víčku změřte vzdálenost od hřbetu ohybu (ohnuté hrany víčka) k volné hraně. Zapište, o kolik je víc než 20 mm.',
         media: [],
         animationLinks: [animationLink('obratCoinModule', 'E6')],
         records: [
@@ -834,7 +834,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'lid-trim',
         title: 'Seřízněte víčko na 20 mm',
-        body: 'Víčko narovnejte. Kapsa může zůstat na kartonu. Kružítko nastavte na zapsaný rozdíl a veďte čáru na rubu podél volné hrany. Řežte podle pravítka. Oba rohy znovu zaoblete na R4 (zaoblení s poloměrem 4 mm). Vezměte kartonový P z modelu (lekce 5). Jeho roh víčka přiložte k šikmému konci a nové hraně. Oblouk obkreslete na rubu a řežte krátkými tahy. Novou hranu a rohy zbruste a zaleštěte.',
+        body: 'Víčko narovnejte. Kapsa může zůstat na kartonu. Kružítko nastavte na zapsaný rozdíl a veďte čáru na rubu podél volné hrany. Řežte podle pravítka. Oba rohy znovu zaoblete na R4 (zaoblení s poloměrem 4 mm). Vezměte kartonový P z modelu (lekce 5). Jeho roh víčka přiložte k šikmému konci a nové hraně. Oblouk obkreslete na rubu a řežte krátkými tahy. Novou hranu a rohy srovnejte smirkem 220–400 na rovné destičce, pak je navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezalesknou.',
         media: [],
         recalls: [{ fieldId: 'obrat-06-lid-trim', label: 'O kolik je víčko delší než 20 mm' }],
         animationLinks: [
@@ -975,7 +975,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'edge',
         title: 'Dokončete horní hranu T2',
-        body: 'Zbruste ramena a výkus T2. Máte-li ořezávač hran, srazte je z líce i z rubu. Pak zaleštěte.',
+        body: 'Ramena T2 srovnejte smirkem 220–400 na rovné destičce, výkus smirkem 240 omotaným kolem tužky. Máte-li ořezávač hran, srazte je z líce i z rubu. Pak hrany navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezalesknou.',
         media: [],
         animationLinks: [animationLink('obratBody', 'C1'), animationLink('edges', 'A')],
       },
@@ -989,7 +989,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'cover',
         title: 'Přilepte kryt přes patici C',
-        body: 'Okraj krytu K zaoblete smirkem. Kryt přilepte rubem na rub T2 přes patici C. T2 položte lícem dolů na odřezky vyšší než hlavička C, vedle ní. Na kryt dejte závaží. Nechte do druhého dne.',
+        body: 'Okraj krytu K zaoblete smirkem 220–400. Kryt přilepte rubem na rub T2 přes patici C. T2 položte lícem dolů na odřezky vyšší než hlavička C, vedle ní. Na kryt dejte závaží. Nechte do druhého dne.',
         media: [],
         animationLinks: [
           animationLink('obratBody', 'D1'),
@@ -1051,7 +1051,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'rough',
         title: 'Zdrsněte líc T2',
-        body: 'Kapsu sundejte z kartonu. Z líce P opatrně odstraňte smyčky maskovací pásky z lekce 6. Líc P je zdrsněný z lekce 6, teď zdrsněte líc T2. Papírový T2 z lekce 6 přiložte na líc T2. Rohy šrafy označte šídlem jen důlkem, neprorážejte. U boků dejte důlky 1 mm pod horní roh šrafy, ať je P zakryje. Důlky spojte tužkou jako na P v lekci 6. Celou plochu šrafy zdrsněte smirkem. U boků zdrsněte až k hornímu rohu šrafy.',
+        body: 'Kapsu sundejte z kartonu. Z líce P opatrně odstraňte smyčky maskovací pásky z lekce 6. Líc P je zdrsněný z lekce 6, teď zdrsněte líc T2. Papírový T2 z lekce 6 přiložte na líc T2. Rohy šrafy označte šídlem jen důlkem, neprorážejte. U boků dejte důlky 1 mm pod horní roh šrafy, ať je P zakryje. Důlky spojte tužkou jako na P v lekci 6. Celou plochu šrafy zdrsněte smirkem 180 omotaným kolem hranolku, až líc zmatní a nikde se neleskne. U boků zdrsněte až k hornímu rohu šrafy. Prach smeťte a zdrsněné plochy se nedotýkejte prsty.',
         media: [],
         animationLinks: [
           animationLink('obratAssembly', 'A1'),
@@ -1188,7 +1188,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'edges',
         title: 'Dokončete hrany po obvodu',
-        body: 'Boky a dno srovnejte smirkem. U kapsy jsou to čtyři vrstvy, nad ní dvě. Máte-li ořezávač hran, srazte jen vnější hrany, ne lepené spoje. Smirkem lehce přejeďte a zaleštěte. Víčko odklopte naplno a zavřete na B: nesmí drhnout o šev.',
+        body: 'Boky a dno srovnejte smirkem 220–400 na rovné destičce, destičku držte kolmo k líci. U kapsy jsou to čtyři vrstvy, nad ní dvě. Máte-li ořezávač hran, srazte jen vnější hrany, ne lepené spoje, a smirkem je lehce přejeďte. Pak hrany navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezalesknou. Víčko odklopte naplno a zavřete na B: nesmí drhnout o šev.',
         media: [],
         animationLinks: [
           animationLink('obratAssembly', 'C2'),
@@ -1339,7 +1339,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'flap-edges',
         title: 'Dokončete hrany klopy',
-        body: 'Hrany klopy zbruste. Máte-li ořezávač hran, srazte je z líce i z rubu. Pak zaleštěte.',
+        body: 'Hrany klopy srovnejte smirkem 220–400 na rovné destičce. Máte-li ořezávač hran, srazte je z líce i z rubu. Pak hrany navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezalesknou.',
         media: [],
         animationLinks: [animationLink('obratClosures', 'C3'), animationLink('edges', 'A')],
       },

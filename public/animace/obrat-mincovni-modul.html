@@ -420,7 +420,7 @@ add('B','Přeneste čáry na T3','Pole pro lepidlo vyznačte stejně i na rubu T
   return CLIP(s)+inset('T3',p);
 });
 
-add('B','Zdrsněte líc P','Na líc P se v lekci 8 lepí T2. Lepidlo drží jen na zdrsněném líci. Papírový T2 z listu 2 vystřihněte nůžkami po plné čáře. Přiložte ho potiskem nahoru na líc P: dno a boky lícují. Rohy šrafy (šrafovaná plocha pro lepidlo) označte šídlem jen důlkem, neprorážejte. Důlky u boků dejte 1 mm pod horní hranu P, ať nejsou vidět. Důlky spojte tužkou. Celou plochu šrafy zdrsněte smirkem, u boků až k horní hraně P.',15000,t=>{
+add('B','Zdrsněte líc P','Na líc P se v lekci 8 lepí T2. Lepidlo drží jen na zdrsněném líci. Papírový T2 z listu 2 vystřihněte nůžkami po plné čáře. Přiložte ho potiskem nahoru na líc P: dno a boky lícují. Rohy šrafy (šrafovaná plocha pro lepidlo) označte šídlem jen důlkem, neprorážejte. Důlky u boků dejte 1 mm pod horní hranu P, ať nejsou vidět. Důlky spojte tužkou. Celou plochu šrafy zdrsněte smirkem 180 omotaným kolem hranolku, u boků až k horní hraně P. Brušte, až líc zmatní a nikde se neleskne. Prach smeťte a zdrsněné plochy se nedotýkejte prsty.',15000,t=>{
   const v=VM, fl=es(t,.02,.1), sc=seg(t,.12,.34), dr=es(t,.36,.44), pk=seg(t,.46,.6), off=es(t,.62,.67), ln=seg(t,.68,.78), rg=seg(t,.8,.95);
   // P obrácené lícem nahoru (díl je souměrný); šrafa P–T2 v souřadnicích P (v = y − 24): celá plocha od v 28, boky od v 26 (na papíru) / v 27 (vpichy)
   const T2P='M0 -9H30C36 -9 34 14 40 14H68C74 14 72 -9 78 -9H108V60Q108 66 102 66H6Q0 66 0 60Z';
@@ -453,11 +453,11 @@ add('B','Zdrsněte líc P','Na líc P se v lekci 8 lepí T2. Lepidlo drží jen 
   s+=O(seg(t,.48,.54)*(1-seg(t,.76,.8)),`<path d="M${f(v.x(-3))} ${f(v.y(26))}H${f(v.x(12))}" stroke="var(--accent)" stroke-width=".3" stroke-dasharray=".8 .5"/>`+lbl(v.x(13),v.y(26)+1.2,'1 mm pod hranou','ta halo'));
   s+=O(seg(t,.95,1),lbl(v.x(54),v.y(48),'celá plocha zdrsněná','tok halo','middle'));
   s+=sideLabels(v,70);
-  const p=plan(t,[[0,['P lícem nahoru:','sem se lepí T2']],[.12,['papírový T2','vystřihněte']],[.36,['přiložte na líc P,','dno a boky lícují']],[.46,['rohy šrafy šídlem,','jen důlek']],[.68,'důlky spojte tužkou'],[.8,['celou plochu','zdrsněte smirkem']]]);
+  const p=plan(t,[[0,['P lícem nahoru:','sem se lepí T2']],[.12,['papírový T2','vystřihněte']],[.36,['přiložte na líc P,','dno a boky lícují']],[.46,['rohy šrafy šídlem,','jen důlek']],[.68,'důlky spojte tužkou'],[.8,['zdrsněte smirkem 180','na hranolku, do matu']]]);
   return CLIP(s)+inset('LÍC P',p);
 });
 
-add('C','Dokončete hrany ústí, zářezů a víčka','Zbruste horní hranu T3 (ústí), hrany zářezů P a hrany víčka. Máte-li ořezávač hran, ústí T3 srazte jen z líce (rub bude přilepený na P). Zářezy a víčko srazte z líce i z rubu. Pak zaleštěte. Po přilepení se k těmto hranám hůř dostanete. Boky a dno dokončíte až s tělem.',10000,t=>{
+add('C','Dokončete hrany ústí, zářezů a víčka','Horní hranu T3 (ústí), hrany zářezů P a hrany víčka srovnejte smirkem 220–400 na rovné destičce. Máte-li ořezávač hran, ústí T3 srazte jen z líce (rub bude přilepený na P). Zářezy a víčko srazte z líce i z rubu. Pak hrany navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezalesknou. Po přilepení se k těmto hranám hůř dostanete. Boky a dno dokončíte až s tělem.',10000,t=>{
   const a=seg(t,.12,.3), c=seg(t,.36,.56);
   let s=BASE()+drawT3(VT)+drawP(VP2,{fold:1,mouth:1,field:1});
   const BOTH='stroke="var(--accent)" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round"', LICO='stroke="var(--amber)" stroke-width=".9" stroke-dasharray="1.4 .8"';
@@ -466,7 +466,7 @@ add('C','Dokončete hrany ústí, zářezů a víčka','Zbruste horní hranu T3 
   const lid=rpts([[7.5,24],[10.5,0],[97.5,0],[100.5,24]],[0,4,4,0]);
   s+=E(VP2,[[0.5,26],[7.5,26],[7.5,24]],c,BOTH)+E(VP2,lid,c,BOTH)+E(VP2,[[100.5,24],[100.5,26],[107.5,26]],c,BOTH);
   s+=lbl(77,12,'T3','t halo')+lbl(77,16.5,'líc','ts halo')+lbl(77,44,'P','t halo')+lbl(77,48.5,'rub','ts halo');
-  let p=plan(t,[[0,'zbruste hrany'],[.12,['ústí T3: srazit','jen z líce']],[.36,['zářezy a víčko:','z líce i z rubu']],[.6,'pak zaleštěte'],[.8,['boky a dno','až s tělem']]]);
+  let p=plan(t,[[0,['hrany smirkem 220–400','na destičce']],[.12,['ústí T3: srazit','jen z líce']],[.36,['zářezy a víčko:','z líce i z rubu']],[.6,'navlhčete a zaleštěte'],[.8,['boky a dno','až s tělem']]]);
   p+=`<path d="M91 70H97" ${BOTH}/>`+lbl(99,71.4,'líc i rub','ts')+`<path d="M91 77H97" ${LICO}/>`+lbl(99,78.4,'jen líc','ts');
   return CLIP(s)+inset('HRANY',p);
 });
@@ -712,11 +712,11 @@ add('E','Nechte dutiny a víčko schnout','Utěrku i závaží sundejte. Na prou
   return cellScene(T)+inset('SCHNUTÍ',p);
 });
 
-add('E','Vyndejte mince a změřte víčko','Mince vyndejte. Ústí T3 a šikmé konce víčka přeleštěte. Víčko má na ohyb rezervu 4 mm. Na ohnutém víčku změřte vzdálenost od hřbetu ohybu (ohnuté hrany víčka) k volné hraně. Zapište, o kolik je víc než 20 mm.',10000,t=>{
+add('E','Vyndejte mince a změřte víčko','Mince vyndejte. Ústí T3 a šikmé konce víčka přeleštěte leštítkem nebo plátnem. Víčko má na ohyb rezervu 4 mm. Na ohnutém víčku změřte vzdálenost od hřbetu ohybu (ohnuté hrany víčka) k volné hraně. Zapište, o kolik je víc než 20 mm.',10000,t=>{
   const T=L(.935,1,Math.min(1,t/.6)), v=VE;
   let s=cellScene(T);
   s+=O(seg(t,.62,.72),`<path d="M${f(v.x(104))} ${f(v.y(24))}V${f(v.y(44+LID_OVER))}" stroke="var(--accent)" stroke-width=".4" marker-start="url(#ar)" marker-end="url(#ar)"/>`+lbl(v.x(104)-1.4,v.y(36),'20 + přesah','ta halo','end'));
-  const p=plan(t,[[0,'mince vyndejte'],[.2,['přeleštěte ústí','a konce víčka']],[.62,['změřte od hřbetu','k volné hraně']],[.8,['zapište přesah:','o kolik víc než 20']]]);
+  const p=plan(t,[[0,'mince vyndejte'],[.2,['přeleštěte ústí a konce','víčka leštítkem']],[.62,['změřte od hřbetu','k volné hraně']],[.8,['zapište přesah:','o kolik víc než 20']]]);
   return s+inset('MĚŘENÍ VÍČKA',p);
 });
 
@@ -744,7 +744,7 @@ add('E','Seřízněte víčko na 20 mm','Víčko narovnejte. Kapsa může zůsta
   return CLIP(s)+inset('VÍČKO 20 MM',p);
 });
 
-add('E','Zaoblete rohy víčka','Oba rohy znovu zaoblete na R4 (zaoblení s poloměrem 4 mm). Vezměte kartonový P z modelu (lekce 5). Jeho roh víčka přiložte k šikmému konci a nové hraně. Oblouk obkreslete na rubu a řežte krátkými tahy. Novou hranu a rohy zbruste a zaleštěte.',10000,t=>{
+add('E','Zaoblete rohy víčka','Oba rohy znovu zaoblete na R4 (zaoblení s poloměrem 4 mm). Vezměte kartonový P z modelu (lekce 5). Jeho roh víčka přiložte k šikmému konci a nové hraně. Oblouk obkreslete na rubu a řežte krátkými tahy. Novou hranu a rohy srovnejte smirkem 220–400 na rovné destičce, pak je navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezalesknou.',10000,t=>{
   const v=VM, X=LID_OVER, tp=es(t,.06,.2)*(1-es(t,.4,.48)), tr=seg(t,.22,.36), ct=seg(t,.5,.72), ed=seg(t,.8,.92);
   const done=ct>=1;
   let s=BASE()+board(v)+loops(v)+moduleV(v,{lid:.9999,trim:X,r:done?4:0,tmp:1,formed:FORMED});
@@ -759,7 +759,7 @@ add('E','Zaoblete rohy víčka','Oba rohy znovu zaoblete na R4 (zaoblení s polo
   s+=O(ed,`<path d="${pp(v,rpts([[lidX(X+6),X+6],[lidX(X),X],[W-lidX(X),X],[W-lidX(X+6),X+6]],[0,4,4,0]).slice(0))}" fill="none" stroke="var(--accent)" stroke-width=".9"/>`+lbl(v.x(54),v.y(X)+5.5,'zbrousit, zaleštit','ta halo','middle'));
   s+=O(seg(t,.1,.2)*(1-seg(t,.4,.48)),lbl(cx-1,cy-2,'R4','ta halo','end'));
   s+=sideLabels(v,74);
-  const p=plan(t,[[0,['přiložte roh','kartonového P']],[.22,'obkreslete na rubu'],[.5,['řežte','krátkými tahy']],[.8,['hranu a rohy zbruste','a zaleštěte']]]);
+  const p=plan(t,[[0,['přiložte roh','kartonového P']],[.22,'obkreslete na rubu'],[.5,['řežte','krátkými tahy']],[.8,['smirek 220–400,','pak zaleštěte']]]);
   return CLIP(s)+inset('ROHY R4',p);
 });
 

@@ -472,13 +472,13 @@ add('C','Narýsujte, prorazte a ušijte ozdobný šev','Z líce narýsujte kruž
   return flapSeamScene(t)+inset('OZDOBNÝ ŠEV',p);
 });
 
-add('C','Dokončete hrany klopy','Hrany klopy zbruste. Máte-li ořezávač hran, srazte je z líce i z rubu. Pak zaleštěte.',8500,t=>{
+add('C','Dokončete hrany klopy','Hrany klopy srovnejte smirkem 220–400 na rovné destičce. Máte-li ořezávač hran, srazte je z líce i z rubu. Pak hrany navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezalesknou.',8500,t=>{
   const v=FV2, u=es(t,.1,.7);
   const ed=rpoly(v,[[0,0],[0,-dE(0)],[W,-dE(W)],[W,0]],[0,FR,FR,0],false);
   let body=front(v,{flap:-1,r:0,seam:true,impC:1})+`<path d="${ed}" fill="none" stroke="var(--amber)" stroke-width=".9" pathLength="1" stroke-dasharray="${f(u)} 2" stroke-linecap="round"/>`;
   let s=STAGE+mat()+CLIP(body);
   const sx=100, sy=44, ch=seg(t,.4,.6);
-  let p=plan(t,[[0,'hrany zbruste'],[.35,['ořezávač, máte-li:','z líce i z rubu']],[.75,'pak zaleštěte']]);
+  let p=plan(t,[[0,['hrany smirkem 220–400','na destičce']],[.35,['ořezávač, máte-li:','z líce i z rubu']],[.75,'navlhčete a zaleštěte']]);
   const c=1.8*ch;
   p+=`<path d="M${sx} ${sy}H${f(sx+24-c)}L${sx+24} ${f(sy+c)}V${f(sy+6-c)}L${f(sx+24-c)} ${sy+6}H${sx}Z" fill="var(--rub)" stroke="var(--rub-d)" stroke-width=".3"/><rect x="${sx}" y="${sy}" width="${f(24-c)}" height="1.2" fill="var(--lic)"/>`;
   p+=lbl(sx-1,sy+1.6,'líc','ts','end')+lbl(sx-1,sy+6.2,'rub','ts','end');
