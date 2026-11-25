@@ -382,7 +382,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'edge-bevel',
         title: 'Srazte hranu',
         body: 'Na kousku hrany vyzkoušejte zkosení ořezávačem (velikost pro váš pás ověřte na odřezku), nebo zaoblení brusným papírem na hranolku.',
-        animationLinks: [animationLink('edges', 'H1')],
+        animationLinks: [animationLink('edges', 'H1'), animationLink('bevelerSharpening')],
         media: [],
       },
       {
@@ -1108,7 +1108,7 @@ export const lessons: readonly LessonDefinition[] = [
         id: 'punch-holes',
         title: 'Vysekněte dírky',
         body: 'Výsečník neklaďte na značku od oka, zakryje ji. Destičku nebo list sundejte, značky spojte na rubu střednicí podle ocelového pravítka a přes každou narýsujte čárku napříč, asi 1 cm na každou stranu. Výsečník postavte na křížek, lehce přitlačte bez paličky a zkontrolujte, že je značka uprostřed otisku. Pak vysekněte výsečníkem s Ø dírek z aktivního pásku (např. 5 mm, vaše číslo je pod krokem).',
-        animationLinks: [animationLink('beltHoleCenter', 'A1')],
+        animationLinks: [animationLink('beltHoleCenter', 'A1'), animationLink('punchSharpening')],
         media: [],
         beltRecalls: ['holeDiameter'],
       },

@@ -99,6 +99,23 @@ export const productExampleSchema = z.object({
 });
 export type ProductExample = z.infer<typeof productExampleSchema>;
 
+/**
+ * Odkaz z kroku na animaci postupu: samostatná stránka v `public/animace` (precachovaná
+ * service workerem, funguje offline), volitelně s kotvou části (`#B`, `#anim-dno`).
+ * Odkazy se skládají přes `animationLink()` z `@/content/animations`, ne ručně.
+ */
+export const animationLinkSchema = z.object({
+  href: z
+    .string()
+    .regex(
+      /^\/animace\/[a-z0-9-]+\.html(#[A-Za-z0-9-]+)?$/,
+      'animationLink.href musí mířit na /animace/<soubor>.html, volitelně s kotvou',
+    ),
+  /** Která část animace se otevře, např. „Část B – značky na líc“. */
+  label: z.string().min(1),
+});
+export type AnimationLink = z.infer<typeof animationLinkSchema>;
+
 /** Nástroj nebo materiál – sdílený napříč projekty. */
 export const equipmentDefinitionSchema = z
   .object({
@@ -130,6 +147,11 @@ export const equipmentDefinitionSchema = z
     alsoUsedFor: z.array(z.string().min(1)),
     /** Ověřené příklady výrobků s odkazy do obchodů. */
     examples: z.array(productExampleSchema),
+    /**
+     * Tlačítka na detailu nástroje na animace, jak ho udržovat (např. ostření). Skládají se
+     * přes `animationLink()` z `@/content/animations`. Bez odkazů pole vynechte.
+     */
+    animationLinks: z.array(animationLinkSchema).min(1).optional(),
     /** Věc běžně v domácnosti – nabídne se v onboardingu „Co už máte doma?“. */
     commonlyAtHome: z.boolean(),
     media: z.array(mediaSlotSchema),
@@ -160,23 +182,6 @@ export const checkpointDefinitionSchema = z.object({
   required: z.boolean(),
 });
 export type CheckpointDefinition = z.infer<typeof checkpointDefinitionSchema>;
-
-/**
- * Odkaz z kroku na animaci postupu: samostatná stránka v `public/animace` (precachovaná
- * service workerem, funguje offline), volitelně s kotvou části (`#B`, `#anim-dno`).
- * Odkazy se skládají přes `animationLink()` z `@/content/animations`, ne ručně.
- */
-export const animationLinkSchema = z.object({
-  href: z
-    .string()
-    .regex(
-      /^\/animace\/[a-z0-9-]+\.html(#[A-Za-z0-9-]+)?$/,
-      'animationLink.href musí mířit na /animace/<soubor>.html, volitelně s kotvou',
-    ),
-  /** Která část animace se otevře, např. „Část B – značky na líc“. */
-  label: z.string().min(1),
-});
-export type AnimationLink = z.infer<typeof animationLinkSchema>;
 
 /**
  * Čekání v kroku (schnutí lepidla, přes noc pod zátěží…), ze kterého si uživatel spustí časovač.

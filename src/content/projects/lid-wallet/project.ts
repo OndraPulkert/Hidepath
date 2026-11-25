@@ -903,7 +903,7 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'edges',
         title: 'Předběžné dokončení hran',
-        animationLinks: [animationLink('edges', 'G1')],
+        animationLinks: [animationLink('edges', 'G1'), animationLink('bevelerSharpening')],
         body: 'Horní hranu F i s výřezem, spodní hranu a boky pásu víčka, boky závěsu a boky jazýčku vybruste smirkem 220–400 na rovné destičce, zkoste z líce před leštěním (ořezávačem hran, máte-li ho, nebo zaoblete brusným papírem na hranolku) a vyleštěte: navlhčete vodou nebo Tokonole (jen mimo lepená místa) a třete leštítkem nebo kusem plátna, až se hrana zaleskne. Horní hrany D1 a D2 jen vybruste a vyleštěte; horní hranu D2 lehce zaoblete, vede přes ni závěs. Výřez pro palec zaoblete z líce i z rubu, o rubovou hranu by se zachytila karta. Vnitřek výřezu vybruste a vyleštěte kolíkem Ø 8 v aku vrtačce.',
         media: [],
       },

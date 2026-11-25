@@ -1,3 +1,4 @@
+import { animationLink } from '@/content/animations';
 import { type EquipmentDefinition } from '@/content/schema';
 
 /**
@@ -289,6 +290,7 @@ export const lidWalletEquipment: readonly EquipmentDefinition[] = [
         checkedAt: '2026-10-08',
       },
     ],
+    animationLinks: [animationLink('punchSharpening')],
     commonlyAtHome: false,
     media: [
       {

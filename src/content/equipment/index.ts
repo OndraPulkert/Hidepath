@@ -1,3 +1,4 @@
+import { animationLink } from '@/content/animations';
 import { beltEquipment } from '@/content/equipment/belt';
 import { lidWalletEquipment } from '@/content/equipment/lid-wallet';
 import { type EquipmentCatalog, type EquipmentDefinition } from '@/content/schema';
@@ -1303,6 +1304,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         checkedAt: '2026-09-29',
       },
     ],
+    animationLinks: [animationLink('bevelerSharpening')],
     commonlyAtHome: false,
     media: [
       {
@@ -1970,6 +1972,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         checkedAt: '2026-09-29',
       },
     ],
+    animationLinks: [animationLink('punchSharpening')],
     commonlyAtHome: false,
     media: [
       {
@@ -2036,6 +2039,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         checkedAt: '2026-10-08',
       },
     ],
+    animationLinks: [animationLink('punchSharpening')],
     commonlyAtHome: false,
     media: [
       {
@@ -2090,6 +2094,7 @@ export const equipmentList: readonly EquipmentDefinition[] = [
         checkedAt: '2026-10-08',
       },
     ],
+    animationLinks: [animationLink('punchSharpening')],
     commonlyAtHome: false,
     media: [
       {

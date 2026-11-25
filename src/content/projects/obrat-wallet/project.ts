@@ -657,6 +657,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('obratCoinModule', 'A2'),
           animationLink('obratCoinModule', 'A3'),
           animationLink('rulerCut', 'C1'),
+          animationLink('punchSharpening'),
         ],
       },
       {
@@ -692,7 +693,11 @@ export const lessons: readonly LessonDefinition[] = [
         title: 'Dokončete hrany ústí, zářezů a víčka',
         body: 'Horní hranu T3 (ústí), hrany zářezů P a hrany víčka srovnejte smirkem 220–400 na rovné destičce. Máte-li ořezávač hran, ústí T3 srazte jen z líce (rub bude přilepený na P). Zářezy a víčko srazte z líce i z rubu. Pak hrany navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezalesknou. Po přilepení se k těmto hranám hůř dostanete. Boky a dno dokončíte až s tělem.',
         media: [],
-        animationLinks: [animationLink('obratCoinModule', 'C1'), animationLink('edges', 'A')],
+        animationLinks: [
+          animationLink('obratCoinModule', 'C1'),
+          animationLink('edges', 'A'),
+          animationLink('bevelerSharpening'),
+        ],
       },
       {
         id: 'stud-b',

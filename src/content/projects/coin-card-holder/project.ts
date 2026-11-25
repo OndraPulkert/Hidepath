@@ -564,6 +564,7 @@ export const lessons: readonly LessonDefinition[] = [
           animationLink('snap', 'A2'),
           animationLink('snap', 'A3'),
           animationLink('snapSetter', 'B1'),
+          animationLink('punchSharpening'),
         ],
         media: [],
         records: [
@@ -1846,7 +1847,11 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'sand-flat-bottom',
         title: 'Přebruste dno do roviny',
-        animationLinks: [animationLink('edges', 'F3'), animationLink('edges', 'B1')],
+        animationLinks: [
+          animationLink('edges', 'F3'),
+          animationLink('edges', 'B1'),
+          animationLink('bevelerSharpening'),
+        ],
         body: 'Dno přebruste smirkem 220–400 na rovné destičce do jedné roviny přes všechny tři vrstvy. Hrany dna zaoblete z obou vnějších stran (přední i zadní panel) brusným papírem na hranolku, nebo ořezávačem hran, máte-li ho.',
         media: [],
       },

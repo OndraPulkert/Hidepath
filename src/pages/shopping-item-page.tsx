@@ -4,6 +4,7 @@ import { routes } from '@/app/routes';
 import { PriorityTag } from '@/components/equipment/equipment-tags';
 import { ProductExamples } from '@/components/equipment/product-examples';
 import { StatusSegment } from '@/components/equipment/status-segment';
+import { AnimationLinkButtons } from '@/components/lessons/animation-link-buttons';
 import { MediaSlot } from '@/components/lessons/media-slot';
 import { Card } from '@/components/ui/card';
 import { Kicker } from '@/components/ui/kicker';
@@ -128,6 +129,13 @@ export function ShoppingItemPage() {
                 ))}
               </ul>
             </NoticeBox>
+          ) : null}
+
+          {definition.animationLinks ? (
+            <section>
+              <h2 className="mb-2 text-h2">Údržba</h2>
+              <AnimationLinkButtons links={definition.animationLinks} />
+            </section>
           ) : null}
 
           {definition.avoid.length > 0 ? (

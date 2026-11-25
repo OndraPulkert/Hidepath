@@ -1,3 +1,4 @@
+import { animationLink } from '@/content/animations';
 import { type EquipmentDefinition, type ProductExample } from '@/content/schema';
 
 /**
@@ -960,6 +961,7 @@ export const beltEquipment: readonly EquipmentDefinition[] = [
         checkedAt: CHECKED,
       },
     ],
+    animationLinks: [animationLink('punchSharpening')],
     commonlyAtHome: false,
     media: [
       {

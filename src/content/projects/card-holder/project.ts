@@ -378,7 +378,11 @@ export const lessons: readonly LessonDefinition[] = [
       {
         id: 'opening-edges',
         title: 'Dokončete hrany ústí',
-        animationLinks: [animationLink('edges', 'D1'), animationLink('edges', 'D2')],
+        animationLinks: [
+          animationLink('edges', 'D1'),
+          animationLink('edges', 'D2'),
+          animationLink('bevelerSharpening'),
+        ],
         body: 'Tvar 3 s výřezem a tvar 1 slepíte rubem k sobě do malé kapsy: výřez nahoře, steh po spodku a obou bocích. Horní hrany obou tvarů zůstanou bez stehu a tvoří ústí, dokončete je teď, jako horní hranu kapsy v lekci 4. Rovné části srovnejte smirkem 220–400 na rovné destičce, výřez smirkem 240 omotaným kolem tužky. Máte-li ořezávač hran, srazte před leštěním hrany ústí z líce i z rubu. Hranu navlhčete vodou nebo pastou, jen hranu, ne líc, a třete leštítkem nebo plátnem, dokud se nezaleskne. Před lepením nechte hrany zaschnout.',
         media: [],
       },

@@ -408,7 +408,13 @@ describe('animace postupu – složení pouzdra a druk v lekcích', () => {
   it('lekce 3, 6 a 8: každý krok druku otevírá svůj krok animace', () => {
     // Vedle průřezu „Druk krok za krokem“ i názorná animace dílů a aplikátoru ve 3/4 pohledu.
     expect(hrefOf(3, 'why-scrap-first')).toEqual([druk('A1'), apl('A1')]);
-    expect(hrefOf(3, 'punch-post-hole')).toEqual([druk('A2'), druk('A3'), apl('B1')]);
+    // Výsečník na otvor pro dřík: vedle druku i ostření výsečníku.
+    expect(hrefOf(3, 'punch-post-hole')).toEqual([
+      druk('A2'),
+      druk('A3'),
+      apl('B1'),
+      animationPages.punchSharpening.path,
+    ]);
     expect(hrefOf(3, 'set-snap-post')).toEqual([druk('A4'), apl('B2')]);
     expect(hrefOf(3, 'practice-imprint')).toEqual([druk('A5'), apl('C1')]);
     expect(hrefOf(3, 'practice-snap-cap')).toEqual([
@@ -508,12 +514,17 @@ describe('animace postupu – sedlářský steh a hrany ve všech projektech', (
     ['coin-card-holder', 4, 'try-edge-paint', [hrany('C1'), hrany('D1')]],
     ['coin-card-holder', 5, 'dye-burnish-and-seal', [hrany('F1')]],
     ['coin-card-holder', 6, 'dye-burnish-pocket-edges', [hrany('F2')]],
-    ['coin-card-holder', 8, 'sand-flat-bottom', [hrany('F3'), hrany('B1')]],
+    [
+      'coin-card-holder',
+      8,
+      'sand-flat-bottom',
+      [hrany('F3'), hrany('B1'), animationPages.bevelerSharpening.path],
+    ],
     ['coin-card-holder', 8, 'dye-and-burnish-edges', [hrany('F3'), hrany('C1')]],
     // Projekt 05 (Víčko): všechny švy (konce 2 otvory zpět) a hrany.
     ['lid-wallet', 5, 'd2-edge', [hrany('G4')]],
     ['lid-wallet', 5, 'coin-windows', [...okenka('A2', 'A3', 'A4', 'A5'), hrany('G4')]],
-    ['lid-wallet', 5, 'edges', [hrany('G1')]],
+    ['lid-wallet', 5, 'edges', [hrany('G1'), animationPages.bevelerSharpening.path]],
     ['lid-wallet', 5, 'd1-paint', [hrany('G2')]],
     ['lid-wallet', 5, 'tokonole', [hrany('G2')]],
     ['lid-wallet', 6, 'bill-window', [...okenka('C2', 'C3', 'C4', 'C5'), hrany('G4')]],
@@ -765,7 +776,7 @@ describe('animace postupu – pásek: konec s přezkou, dírky a špička', () =
     [2, 'mark', [prezka('B1'), prezka('B2')]],
     [2, 'punch', [prezka('C2'), prezka('C3')]],
     // Hrany pásku: vlastní část H (jedna vrstva 3–4 mm z líce i rubu), ne B2 Víčka.
-    [2, 'edge-bevel', [hrany('H1')]],
+    [2, 'edge-bevel', [hrany('H1'), animationPages.bevelerSharpening.path]],
     [2, 'try-edge-paint', [hrany('H2')]],
     [2, 'edges-balm', [hrany('H3')]],
     [2, 'bend', [prezka('E1')]],
@@ -798,7 +809,7 @@ describe('animace postupu – pásek: konec s přezkou, dírky a špička', () =
     [6, 'row', [spicka('B1'), spicka('D1')]],
     [6, 'place', [spicka('B2'), spicka('C1'), spicka('D2')]],
     [6, 'mark', [spicka('B3'), spicka('C2'), spicka('D2')]],
-    [6, 'punch-holes', ['/animace/pasek-dirky.html#A1']],
+    [6, 'punch-holes', ['/animace/pasek-dirky.html#A1', animationPages.punchSharpening.path]],
     [6, 'cut-tip', [spicka('E2'), spicka('E3'), spicka('E4'), '/animace/rohova-sablona.html#A3']],
     [6, 'finish', [spicka('F1'), spicka('F2'), hrany('H1'), hrany('H2'), hrany('H3')]],
     [6, 'try', [spicka('F3')]],

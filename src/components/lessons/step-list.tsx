@@ -2,10 +2,9 @@ import { type ReactNode } from 'react';
 
 import { LESSON_ANCHORS } from '@/app/routes';
 import { GlossaryText } from '@/components/glossary/glossary-term';
+import { AnimationLinkButtons } from '@/components/lessons/animation-link-buttons';
 import { MediaSlot } from '@/components/lessons/media-slot';
 import { StepLinks } from '@/components/lessons/step-links';
-import { Button } from '@/components/ui/button';
-import { animationButtonText, animationPages } from '@/content/animations';
 import {
   type Glossary,
   type LessonStep,
@@ -48,28 +47,7 @@ export function StepList({
               <GlossaryText text={typo(step.body)} entries={glossary?.entries} />
             </p>
             <StepLinks step={step} project={{ slug: projectSlug, patternSheets }} />
-            {step.animationLinks ? (
-              // Obyčejné odkazy, ne router <Link>: animace jsou statické stránky mimo SPA
-              // (public/animace, offline z precache service workeru).
-              <div className="flex flex-wrap gap-2">
-                {step.animationLinks.map((link) => (
-                  <Button
-                    key={link.href}
-                    asChild
-                    variant="secondary"
-                    className="h-auto flex-col items-start gap-0.5 py-2 text-left whitespace-normal"
-                  >
-                    <a href={link.href}>
-                      <span>
-                        <span aria-hidden>{isThreadGuide(link.href) ? '📏 ' : '▶ '}</span>
-                        {animationButtonText(link.href)}
-                      </span>
-                      <span className="text-[14px] font-normal text-ink-2">{typo(link.label)}</span>
-                    </a>
-                  </Button>
-                ))}
-              </div>
-            ) : null}
+            {step.animationLinks ? <AnimationLinkButtons links={step.animationLinks} /> : null}
             {renderStepExtras?.(step, index)}
             {step.media.map((m) => (
               <MediaSlot
@@ -85,5 +63,3 @@ export function StepList({
     </ol>
   );
 }
-
-const isThreadGuide = (href: string) => href.startsWith(animationPages.threadLength.path);
