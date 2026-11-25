@@ -47,6 +47,15 @@ import { type AnimationLink } from '@/content/schema';
  *   formy jen pravítkem (lekce 2 pouzdra s mincí), příklad otvor Ø 32 mm.
  * - kruzitko (`#A`–`#C`): stejně jako kapsa-prisiti; linie stehu rýsovacím kružítkem na líci:
  *   rozteč, držení, vodicí hrot u hrany, lehké tahy, oblouk, začátek a konec a odbočka; společné pro všechny projekty.
+ * - sablona-rohu (`#A`–`#D`): stejně jako kapsa-prisiti; vlastní šablona rohu z kartonu nebo plastu: obdélník
+ *   60 × 40 mm, oblouky R15 a R5 kružítkem, vystřižení, použití na díl a zaoblení kapsy s dílem až po slepení;
+ *   společné pro všechny projekty.
+ * - ostreni-hranorizku (`#A`–`#C`): stejně jako kapsa-prisiti; ostření ořezávače hran drátkem a jemným brusným
+ *   papírem ze sáčku: kdy a čím, drátek pod papírem, drážka na něm a tahy dozadu, stažení otřepu a zkouška na odřezku;
+ *   společné pro všechny projekty.
+ * - ostreni-vysecniku (`#A`–`#C`): stejně jako kapsa-prisiti; ostření kulatého dutého výsečníku: kdy ostřit,
+ *   ostří a úkos v řezu, úkos fixem a po papíře 400/800 s otáčením, otřep uvnitř špejlí s papírem, obtažení na kůži,
+ *   zkouška na odřezku, oprava zubu v ostří a podložka s uložením; společné pro všechny projekty.
  *
  * `steps` = názvy kroků každé části ve stejném pořadí jako na stránce (`add('B', 'název', …)`).
  * Stránky kapsy umí otevřít i jednotlivý krok: `#B3` = třetí krok části B, stejně jako ho
@@ -1087,6 +1096,66 @@ export const animationPages = {
         'Když hrot ujede',
         'Nejdřív na odřezku',
       ],
+    },
+  },
+  cornerTemplateDiy: {
+    path: '/animace/sablona-rohu.html',
+    title: 'Šablona rohu z kartonu',
+    technique: true,
+    buttonText: 'Jak si vyrobit šablonu rohu',
+    sections: {
+      A: 'Část A – příprava',
+      B: 'Část B – oblouk R15',
+      C: 'Část C – vystřižení',
+      D: 'Část D – použití',
+    },
+    steps: {
+      A: ['Materiál a nástroje', 'Obdélník 60 × 40 mm'],
+      B: [
+        'Střed 15 mm od obou hran',
+        'Kružítko na 15 mm',
+        'Čtvrtkruh od hrany k hraně',
+        'Druhý roh R5',
+      ],
+      C: ['Vystřihněte oblouk', 'Dobruste a zkontrolujte', 'Popište poloměry'],
+      D: [
+        'Přiložte šablonu do rohu',
+        'Obkreslete oblouk na rub',
+        'Řežte podle čáry',
+        'Kapsa a díl: až po slepení',
+      ],
+    },
+  },
+  bevelerSharpening: {
+    path: '/animace/ostreni-hranorizku.html',
+    title: 'Ostření ořezávače hran',
+    technique: true,
+    buttonText: 'Jak naostřit ořezávač hran',
+    sections: {
+      A: 'Část A – kdy a čím',
+      B: 'Část B – ostření',
+      C: 'Část C – kontrola',
+    },
+    steps: {
+      A: ['Co je v sáčku', 'Kdy ostřit'],
+      B: ['Drátek pod papír', 'Drážka na drátek', 'Táhněte dozadu', 'Stáhněte otřep'],
+      C: ['Zkušební tah na odřezku', 'Uložení'],
+    },
+  },
+  punchSharpening: {
+    path: '/animace/ostreni-vysecniku.html',
+    title: 'Ostření výsečníku',
+    technique: true,
+    buttonText: 'Jak naostřit výsečník',
+    sections: {
+      A: 'Část A – kdy a čím',
+      B: 'Část B – ostření',
+      C: 'Část C – kontrola',
+    },
+    steps: {
+      A: ['Kdy ostřit', 'Ostří zblízka'],
+      B: ['Úkos obarvěte fixem', 'Úkos po papíře', 'Otřep uvnitř', 'Obtažení na kůži'],
+      C: ['Zkouška na odřezku', 'Zub v ostří', 'Podložka a uložení'],
     },
   },
 } as const satisfies Record<
